@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Omit the build directory
+build/*
+
+# Omit temporaries
+*/*~
+*~
+
