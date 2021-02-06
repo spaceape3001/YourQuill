@@ -1,5 +1,7 @@
 # Other source control
 .svn
+
+# And these are experimental (not included in GIT)
 apix
 play
 
