@@ -1,0 +1,106 @@
+BODY {
+    font-size: large;
+}
+H2 {
+    margin-left: 2em;
+}
+H3 {
+    margin-left: 4em;
+}
+
+IMG.nh {
+    vertical-align: middle;
+    max-width: 2em;
+    max-height: 1.5em;
+}
+
+TABLE.nh {
+    color: var(--background-color);
+    background-color: var(--color);
+    font-size: xx-large;
+    text-align: left;
+    width:75%;
+    margin-left:auto;
+    margin-right:auto;
+    outline-width:0.2em;
+    outline-style:groove;
+    border-top-style:groove;
+    border-bottom-style:groove;
+}
+
+TR.nh {
+}
+
+TD.nh-icon {
+    text-align: center;
+}
+
+TD.nh-link {
+    font-weight: bold;
+}
+
+td.nh-link a {
+    color: var(--background-color);
+}
+
+TABLE.tabbar {
+    color: var(--background-color);
+    background-color: var(--color);
+    width:100%;
+    text-align: center;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+TABLE.roots {
+    color: var(--background-color);
+    background-color: var(--color);
+    text-align: center;
+    font-size: x-large;
+    font-weight: bold;
+    width:20%;
+    border-collapse: collapse;
+    border: 2px solid var(--background-color);
+}
+
+TD.tabbar {
+}
+
+td.tabbar a {
+    color: var(--background-color);
+}
+
+td.roots a {
+    color: var(--background-color);
+}
+
+TD.tb-select {
+}
+
+DIV.COL2 {
+    columns: 2 100em;
+}
+
+DIV.COL3 {
+    columns: 3 100em;
+}
+
+DIV.COL4 {
+    columns: 4 100em;
+}
+
+img.small {
+    max-width: 32px;
+    max-height: 24px;
+}
+
+img.medium {
+    max-width: 64px;
+    max-height: 48px;
+}
+
+img.large {
+    max-width: 128px;
+    max-height: 96px;
+}
+

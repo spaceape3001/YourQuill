@@ -1,9 +1,19 @@
 # Other source control
 .svn
+.svn0
+
+#  Old code dies here
+_dep
 
 # And these are experimental (not included in GIT)
+3rdx
 apix
+exex
 play
+pluginx
+sharex
+toolx
+testx
 
 # Prerequisites
 *.d
