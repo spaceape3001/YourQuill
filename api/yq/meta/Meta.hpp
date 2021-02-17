@@ -5,6 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+
+#include "MetaFwd.hpp"
 #include "yq/util/Map.hpp"
 #include "yq/util/Set.hpp"
 #include "yq/util/String.hpp"

@@ -140,7 +140,7 @@ namespace {
 }
 
 
-void    core_init()
+void    meta_init()
 {
     mvInvalid();
     mvVariant();
@@ -148,17 +148,17 @@ void    core_init()
 }
 
 /*! \brief Registers a hook to be called during the final freeze process */
-void    core_freeze_hook(void(*f)())
+void    meta_freeze_hook(void(*f)())
 {
     LOCK
     _r.freezers << f;
 }
 
-void    core_freeze()
+void    meta_freeze()
 {
     //  TODO Add freezers..... (and switch to atomic integer in lieu of openReg .... )
 
-    core_init();
+    meta_init();
     LOCK
     _r.openReg      = false;
 }

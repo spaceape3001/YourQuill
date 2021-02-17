@@ -1,0 +1,16 @@
+macro(mt_core name)
+    add_executable(test_${name} ${name}.cpp)
+    target_link_libraries(test_${name} yq ${TBB_LIBRARIES})
+endmacro()
+macro(coretest name)
+    mt_core(${name})
+    add_test(NAME ${name} COMMAND test_${name} ${ARGN})
+endmacro()
+
+add_subdirectory(char8)
+add_subdirectory(metavalue)
+add_subdirectory(string)
+add_subdirectory(variant)
+# add_subdirectory(workspace)
+add_subdirectory(xml)
+

@@ -1,0 +1,30 @@
+mt_core(char8_alnum)
+add_test(NAME char8_alnum_a COMMAND test_char8_alnum a1)
+add_test(NAME char8_alnum_A COMMAND test_char8_alnum A1)
+add_test(NAME char8_alnum_0 COMMAND test_char8_alnum 01)
+add_test(NAME char8_alnum_+ COMMAND test_char8_alnum +0)
+
+mt_core(char8_alpha)
+add_test(NAME char8_alpha_a COMMAND test_char8_alpha A1)
+add_test(NAME char8_alpha_1 COMMAND test_char8_alpha 10)
+add_test(NAME char8_alpha_+ COMMAND test_char8_alpha +0)
+
+mt_core(char8_digit)
+add_test(NAME char8_digit_0 COMMAND test_char8_digit 01)
+add_test(NAME char8_digit_A COMMAND test_char8_digit A0)
+add_test(NAME char8_digit_+ COMMAND test_char8_digit +0)
+
+mt_core(char8_lower)
+add_test(NAME char8_lower_0 COMMAND test_char8_lower 00)
+add_test(NAME char8_lower_A COMMAND test_char8_lower A0)
+add_test(NAME char8_lower_a COMMAND test_char8_lower a1)
+add_test(NAME char8_lower_z COMMAND test_char8_lower z1)
+add_test(NAME char8_lower_+ COMMAND test_char8_lower +0)
+
+mt_core(char8_upper)
+add_test(NAME char8_upper_0 COMMAND test_char8_upper 00)
+add_test(NAME char8_upper_A COMMAND test_char8_upper A1)
+add_test(NAME char8_upper_a COMMAND test_char8_upper a0)
+add_test(NAME char8_upper_z COMMAND test_char8_upper z0)
+add_test(NAME char8_upper_+ COMMAND test_char8_upper +0)
+

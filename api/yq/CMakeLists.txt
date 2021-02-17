@@ -5,6 +5,11 @@
 
 set(yq_sources
     ./Loggers.hpp
+    
+    ./bits/Access.hpp
+    ./bits/AssertDeny.hpp
+    ./bits/Enums.cpp
+    ./bits/Format.hpp
 
     ./io/AbstractFile.cpp
     ./io/AbstractFile.hpp
@@ -17,6 +22,8 @@ set(yq_sources
     ./io/Http.hpp
     ./io/Logging.cpp
     ./io/Logging.hpp
+    ./io/StdFile.cpp
+    ./io/StdFile.hpp
     ./io/Stream.hpp
     ./io/XmlFile.hpp
     ./io/XmlFwd.hpp
@@ -33,6 +40,7 @@ set(yq_sources
     ./meta/MetaValue.hpp
     ./meta/Object.cpp
     ./meta/Object.hpp
+    ./meta/StdTypes.cpp
     ./meta/Variant.cpp
     ./meta/Variant.hpp
 
