@@ -8,6 +8,8 @@ set(yq_sources
     
     ./bits/Access.hpp
     ./bits/AssertDeny.hpp
+    ./bits/Attribute.hpp
+    ./bits/Attribute.cpp
     ./bits/Enums.cpp
     ./bits/Format.hpp
 
