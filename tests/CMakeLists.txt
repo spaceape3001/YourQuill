@@ -7,6 +7,7 @@ macro(coretest name)
     add_test(NAME ${name} COMMAND test_${name} ${ARGN})
 endmacro()
 
+add_subdirectory(attr)
 add_subdirectory(char8)
 add_subdirectory(metavalue)
 add_subdirectory(string)

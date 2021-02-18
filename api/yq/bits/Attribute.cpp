@@ -397,6 +397,19 @@ const Attribute*    AttrTree::last(const Vector<String>& key) const
     return nullptr;
 }
 
+
+size_t              AttrTree::max_key_size(bool recursive) const
+{
+    size_t  mx  = 0;
+    for(auto& a : attrs){
+        mx      = std::max(mx, a.key.size());
+        if(recursive)
+            mx  = std::max(mx, a.max_key_size(true));
+    }
+    return mx;
+}
+
+
 Attribute*          AttrTree::set(const String&key, const String& data, bool purge)
 {
     if(purge)

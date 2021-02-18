@@ -6,6 +6,7 @@
 #include "yq/util/Reverse.hpp"
 #include <cctype>
 
+#include <iostream>
 
 void        StdFile::add_attr(Vector<Attribute>& datas, size_t& i, Attribute& v)
 {
@@ -22,9 +23,8 @@ void        StdFile::add_attr(Vector<Attribute>& datas, size_t& i, Attribute& v)
 
         if(i >= datas.size())
             break;
-            
         if(datas[i].indent < z)
-            return ;
+            break;
             
         v.attrs << std::move(datas[i]);
     }
@@ -257,8 +257,10 @@ bool        StdFile::read(Vector<char>&buffer, const std::string& fname)
         for(size_t i=0; i<datas.size(); ++i){
             if(datas[i].indent <= z){
                 attrs << std::move(datas[i]);
-            } else if(datas[i].indent > z){
+            } else {
                 add_attr(datas, i, attrs.back());
+                if(i<datas.size())
+                    attrs << std::move(datas[i]);
             }
         }
     } else {
@@ -274,34 +276,39 @@ void        StdFile::reset()
     body.clear();
 }
 
+namespace {
+    size_t      max_pad(const AttrTree& at)
+    {
+        size_t  a   = 0;
+        for(const Attribute& v : at.attrs){
+            if(v.empty())
+                continue;
+            if(v.cmd == "#")
+                continue;
+            size_t  b   = v.cmd.size() + v.id.size() + v.key.size();
+            if(!v.cmd.empty())
+                ++b;
+            if(!v.id.empty())
+                b += 3;
+            a   = std::max({a,b,max_pad(v)});
+        }
+        ++a;
+        return a;
+    }
+}
+
 
 bool        StdFile::write(Vector<char>& buffer) 
 {
     Stream  out(buffer);
-    write_out(out, attrs);
+    write_out(out, attrs, max_pad(*this));
     out << '\n' << body;
     return true;
 }
 
-void       StdFile::write_out(Stream& out, const Vector<Attribute>&datas, unsigned int depth) const
-{
-    size_t a = 0;
 
-        // metrics :)
-    for(const Attribute& v : datas){
-        if(v.empty())
-            continue;
-        if(v.cmd == "#")
-            continue;
-        size_t  b   = v.cmd.size() + v.id.size() + v.key.size();
-        if(!v.cmd.empty())
-            ++b;
-        if(!v.id.empty())
-            b += 3;
-        a   = std::max(a,b);
-    }
-    ++a;
-    
+void       StdFile::write_out(Stream& out, const Vector<Attribute>&datas, unsigned int mxval, unsigned int depth) const
+{
     for(const Attribute& v : datas){
         if(v.empty()){
             out << '\n';
@@ -314,7 +321,7 @@ void       StdFile::write_out(Stream& out, const Vector<Attribute>&datas, unsign
         if(v.cmd == "#"){
             out << "#" << v.data << '\n';
         } else {
-            size_t  tgt = a + out.column();
+            size_t  tgt = mxval + out.column();
             if(!v.cmd.empty())
                 out << v.cmd << ' ';
             if(!v.id.empty())
@@ -325,7 +332,7 @@ void       StdFile::write_out(Stream& out, const Vector<Attribute>&datas, unsign
                 out << ' ';
             out << v.data << '\n';
         }
-        write_out(out, v.attrs, depth+1);
+        write_out(out, v.attrs, mxval, depth+1);
     }
 }
 

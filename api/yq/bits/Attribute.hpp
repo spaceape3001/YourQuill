@@ -110,6 +110,8 @@ struct AttrTree {
     //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
     const Attribute*            last(const Vector<String>& keys) const;
     
+    size_t                      max_key_size(bool recursive=false) const;
+    
     //! \brief Sets the specified attribute
     //!
     //!  This sets the first attribute encountered to the specified value,   If the attribute does not exist, then
