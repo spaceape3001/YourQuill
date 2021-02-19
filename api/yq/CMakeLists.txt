@@ -6,20 +6,31 @@
 set(yq_sources
     ./Loggers.hpp
     
-    ./bits/Access.hpp
-    ./bits/AssertDeny.hpp
-    ./bits/Attribute.hpp
-    ./bits/Attribute.cpp
-    ./bits/CalSystem.hpp
-    ./bits/DataRole.hpp
-    ./bits/Enums.cpp
-    ./bits/Format.hpp
-    ./bits/Multiplicity.hpp
-    ./bits/Policy.cpp
-    ./bits/Policy.hpp
-    ./bits/Restriction.hpp
-    ./bits/Vcs.hpp
+    ./api/AProvider.hpp
+    
+    ./bit/Attribute.hpp
+    ./bit/Attribute.cpp
+    ./bit/Context.cpp
+    ./bit/Context.hpp
+    ./bit/Copyright.cpp
+    ./bit/Copyright.hpp
+    ./bit/Policy.cpp
+    ./bit/Policy.hpp
 
+    ./enum/Access.hpp
+    ./enum/AssertDeny.hpp
+    ./enum/CalSystem.hpp
+    ./enum/DataRole.hpp
+    ./enum/Enums.cpp
+    ./enum/Format.hpp
+    ./enum/Linkage.hpp
+    ./enum/Multiplicity.hpp
+    ./enum/Restriction.hpp
+    ./enum/SizeDesc.hpp
+    ./enum/Sorted.hpp
+    ./enum/Update.hpp
+    ./enum/Vcs.hpp
+    
     ./io/AbstractFile.cpp
     ./io/AbstractFile.hpp
     ./io/Curl.cpp

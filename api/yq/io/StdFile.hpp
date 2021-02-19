@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AbstractFile.hpp"
-#include "yq/bits/Attribute.hpp"
+#include "yq/bit/Attribute.hpp"
 
 class Stream;
 

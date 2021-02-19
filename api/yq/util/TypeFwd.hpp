@@ -38,6 +38,7 @@ class String;
 class Variant;
 
 class QByteArray;
+class QDir;
 class QString;
 class QStringList;
 class QVariant;
@@ -88,6 +89,8 @@ using StringPair            = std::pair<String,String>;
 using StringMap             = Map<String,String,IgCase>;
 using StringMultiMap        = MultiMap<String,String,IgCase>;
 using StringSet             = Set<String,IgCase>;
+
+using QDirVector            = Vector<QDir>;
 using QStringSet            = Set<QString,IgCase>;
 
 

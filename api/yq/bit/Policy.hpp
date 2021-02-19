@@ -1,7 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
-#include "Access.hpp"
-#include "DataRole.hpp"
+#include "yq/enum/Access.hpp"
+#include "yq/enum/DataRole.hpp"
 #include "yq/util/EnumMap.hpp"
 
 using PolicyMap     = EnumMap<DataRole,Access>;
