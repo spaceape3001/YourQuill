@@ -6,9 +6,9 @@
 
 #pragma once
 
+#include "MetaFwd.hpp"
 #include "MetaField.hpp"
 #include "MetaValue.hpp"
-#include "MetaFwd.hpp"
 #include "Variant.hpp"
 #include "yq/util/DelayInit.hpp"
 
@@ -316,13 +316,13 @@ private:
     }                                                                                   \
     template<> const MetaValue&         MetaValueImpl<type>::s_meta  = metaValue<type>();
 
-#define MV_IMPLEMENT(type, ...)                                                         \
-    MetaValueImpl<type>&     MetaValue::Binder<type>::editValue()                       \
+#define MV_IMPLEMENT(name, ...)                                                         \
+    MetaValueImpl<name>&     MetaValue::Binder<name>::editValue()                       \
     {                                                                                   \
-        static MetaValueImpl<type>  *s_ret = new MetaValueImpl<type>(__FILE__);         \
+        static MetaValueImpl<name>  *s_ret = new MetaValueImpl<name>(__FILE__);         \
         return *s_ret;                                                                  \
     }                                                                                   \
-    INTERNAL_MV_IMPLEMENT(type, __VA_ARGS__)
+    INTERNAL_MV_IMPLEMENT(name, __VA_ARGS__)
     
 
 

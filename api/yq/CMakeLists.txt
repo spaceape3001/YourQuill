@@ -10,8 +10,15 @@ set(yq_sources
     ./bits/AssertDeny.hpp
     ./bits/Attribute.hpp
     ./bits/Attribute.cpp
+    ./bits/CalSystem.hpp
+    ./bits/DataRole.hpp
     ./bits/Enums.cpp
     ./bits/Format.hpp
+    ./bits/Multiplicity.hpp
+    ./bits/Policy.cpp
+    ./bits/Policy.hpp
+    ./bits/Restriction.hpp
+    ./bits/Vcs.hpp
 
     ./io/AbstractFile.cpp
     ./io/AbstractFile.hpp

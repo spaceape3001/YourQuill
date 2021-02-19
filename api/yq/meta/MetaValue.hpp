@@ -154,13 +154,13 @@ struct MetaValue::Binder<Variant> {
     static const MetaValue&          metaValue() { return variant(); }
 };
 
-#define MV_DECLARE(name)                                                \
-    template <>                                                         \
+#define MV_DECLARE(name)                                                 \
+    template <>                                                          \
     struct MetaValue::Binder<name> {                                     \
-        enum { Defined = 1 };                                           \
-        static constexpr const char*    szDefName = #name;              \
-        static const MetaValue&          metaValue();                     \
-        static MetaValueImpl<name>&      editValue();                     \
+        enum { Defined = 1 };                                            \
+        static constexpr const char*    szDefName = #name;               \
+        static const MetaValue&         metaValue();                     \
+        static MetaValueImpl<name>&     editValue();                     \
     };
 
 template <typename T>
