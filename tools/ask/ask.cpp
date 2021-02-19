@@ -15,7 +15,7 @@ using namespace std;
 size_t  curl_write(char* ptr, size_t size, size_t nmbem, void*)
 {
     size_t  N   = size * nmbem;
-    (void) write(1, ptr, N);
+    (void) !write(1, ptr, N);
     return N;
 }
 

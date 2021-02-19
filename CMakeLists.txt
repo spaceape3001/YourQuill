@@ -106,6 +106,8 @@ endif()
 set(CMAKE_DEBUG_POSTFIX YQd)
 set(CMAKE_RELEASE_POSTFIX YQ)
 
+add_definitions(-Werror)
+
 add_subdirectory(res)
 add_subdirectory(api)
 if(EXISTS apix)

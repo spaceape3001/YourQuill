@@ -97,6 +97,13 @@ set(yq_sources
     ./util/Utilities.cpp
     ./util/Utilities.hpp
     ./util/Vector.hpp
+    
+    ./wksp/QuillFile.cpp
+    ./wksp/QuillFile.hpp
+    ./wksp/Root.hpp
+    ./wksp/RootFwd.hpp
+    #./wksp/Workspace.cpp
+    #./wksp/Workspace.hpp
 )
 
 add_library(yq SHARED ${yq_sources})
