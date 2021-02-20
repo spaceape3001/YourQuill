@@ -80,6 +80,8 @@ bool        StdFile::read(Vector<char>&buffer, const std::string& fname)
     };
     
     for(char ch : buffer){
+        if(!ch)
+            continue;
         switch(mode){
         case Mode::BODY:
             if(ch)

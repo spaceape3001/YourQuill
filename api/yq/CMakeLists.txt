@@ -42,6 +42,8 @@ set(yq_sources
     ./io/Http.hpp
     ./io/Logging.cpp
     ./io/Logging.hpp
+    ./io/ShareDir.cpp
+    ./io/ShareDir.hpp
     ./io/StdFile.cpp
     ./io/StdFile.hpp
     ./io/Stream.hpp
@@ -102,8 +104,8 @@ set(yq_sources
     ./wksp/QuillFile.hpp
     ./wksp/Root.hpp
     ./wksp/RootFwd.hpp
-    #./wksp/Workspace.cpp
-    #./wksp/Workspace.hpp
+    ./wksp/Workspace.cpp
+    ./wksp/Workspace.hpp
 )
 
 add_library(yq SHARED ${yq_sources})

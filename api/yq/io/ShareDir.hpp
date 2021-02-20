@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "CoreFwd.hpp"
+#include "yq/util/TypeFwd.hpp"
 
 class QDir;
 class QFileInfo;

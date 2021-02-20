@@ -12,6 +12,11 @@ String              QuillFile::abbreviation() const
     return value(zAbbr);
 }
 
+String              QuillFile::author() const
+{
+    return value(zAuthor);
+}
+
 Set<uint16_t>       QuillFile::aux_ports() const
 {
     Set<uint16_t>   ret;
@@ -21,6 +26,11 @@ Set<uint16_t>       QuillFile::aux_ports() const
             ret << r.value;
     }
     return ret;
+}
+
+String              QuillFile::cache() const
+{
+    return value(zCache);
 }
 
 Copyright           QuillFile::copyright() const
@@ -71,6 +81,12 @@ uint16_r            QuillFile::port() const
 {
     return value(zPort).to_ushort();
 }
+
+unsigned_r          QuillFile::read_timeout() const
+{
+    return value(zReadTimeout).to_uinteger();
+}
+
 
 Vector<QuillFile::RootInfo>    QuillFile::roots() const
 {

@@ -4,9 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "cCommon.hpp"
-#include "Utilities.hpp"
-#include "Vector.hpp"
+#include "ShareDir.hpp"
+//#include "Utilities.hpp"
+#include "yq/io/FileUtils.hpp"
+#include "yq/util/Vector.hpp"
 #include <QDir>
 #include <QFile>
 #include <QString>

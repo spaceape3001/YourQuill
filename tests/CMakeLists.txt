@@ -12,6 +12,6 @@ add_subdirectory(char8)
 add_subdirectory(metavalue)
 add_subdirectory(string)
 add_subdirectory(variant)
-# add_subdirectory(workspace)
+add_subdirectory(workspace)
 add_subdirectory(xml)
 

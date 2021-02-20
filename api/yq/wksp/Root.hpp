@@ -7,6 +7,7 @@
 #pragma once
 
 #include "RootFwd.hpp"
+#include "yq/bit/Policy.hpp"
 #include "yq/enum/Access.hpp"
 #include "yq/enum/Vcs.hpp"
 #include "yq/util/Flag.hpp"

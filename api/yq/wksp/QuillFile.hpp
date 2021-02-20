@@ -16,8 +16,6 @@ public:
 
     struct RootInfo;
     
-    static constexpr const char*    szFile  = ".yquill";
-    
     
     static constexpr Seq    zAbbr           = { "abbr", "abbreviation" };
     static constexpr Seq    zAuthor         = { "author" };
@@ -45,9 +43,13 @@ public:
     //! Abbrievation for the workspace/project
     String              abbreviation() const;
     
+    String              author() const;
+    
     //! Auxillary ports are suitable alternative ports to check before invoking the server
     Set<uint16_t>       aux_ports() const;
     //void                aux_ports(const Set<uint16_t>&);
+ 
+    String              cache() const;
  
     //! Copyright declaration
     Copyright           copyright() const;
@@ -70,6 +72,8 @@ public:
     
     //!  OUR port number (don't choose zero)
     uint16_r            port() const;
+    
+    unsigned_r          read_timeout() const;
     
     //!  List of declared roots
     Vector<RootInfo>    roots() const;
