@@ -1,0 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+#include <cstdint>
+
+struct Graph {
+    struct Info;
+    uint64_t  id = 0ULL;
+    constexpr auto    operator<=>(const Graph& rhs) const = default;
+    constexpr operator bool() const { return id != 0ULL; }
+};

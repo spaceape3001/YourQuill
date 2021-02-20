@@ -16,6 +16,11 @@ set(yq_sources
     ./bit/Copyright.hpp
     ./bit/Policy.cpp
     ./bit/Policy.hpp
+    
+    ./cache/FileSys.cpp
+    ./cache/FileSys.hpp
+    ./cache/Image.cpp
+    ./cache/Image.hpp
 
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp
