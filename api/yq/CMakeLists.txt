@@ -19,8 +19,13 @@ set(yq_sources
     
     ./cache/FileSys.cpp
     ./cache/FileSys.hpp
+    ./cache/Graph.cpp
+    ./cache/Graph.hpp
+    ./cache/GraphBuilder.cpp
+    ./cache/GraphBuilder.hpp
     ./cache/Image.cpp
     ./cache/Image.hpp
+    ./cache/NKI.hpp
 
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp
