@@ -17,15 +17,6 @@ set(yq_sources
     ./bit/Policy.cpp
     ./bit/Policy.hpp
     
-    ./cache/FileSys.cpp
-    ./cache/FileSys.hpp
-    ./cache/Graph.cpp
-    ./cache/Graph.hpp
-    ./cache/GraphBuilder.cpp
-    ./cache/GraphBuilder.hpp
-    ./cache/Image.cpp
-    ./cache/Image.hpp
-    ./cache/NKI.hpp
 
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp
@@ -41,6 +32,17 @@ set(yq_sources
     ./enum/Update.hpp
     ./enum/Vcs.hpp
     
+    ./file/FileSys.cpp
+    ./file/FileSys.hpp
+    
+    ./graph/Graph.cpp
+    ./graph/Graph.hpp
+    ./graph/GraphBuilder.cpp
+    ./graph/GraphBuilder.hpp
+    
+    ./image/Image.cpp
+    ./image/Image.hpp
+
     ./io/AbstractFile.cpp
     ./io/AbstractFile.hpp
     ./io/Curl.cpp
@@ -110,12 +112,14 @@ set(yq_sources
     ./util/Utilities.hpp
     ./util/Vector.hpp
     
+    ./wksp/CacheFwd.hpp
     ./wksp/QuillFile.cpp
     ./wksp/QuillFile.hpp
     ./wksp/Root.hpp
     ./wksp/RootFwd.hpp
     ./wksp/Workspace.cpp
     ./wksp/Workspace.hpp
+    ./wksp/NKI.hpp
 )
 
 add_library(yq SHARED ${yq_sources})

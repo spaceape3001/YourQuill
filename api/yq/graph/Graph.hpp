@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "CacheFwd.hpp"
+#include "yq/wksp/CacheFwd.hpp"
 
 struct Graph {
     uint64_t  id = 0ULL;

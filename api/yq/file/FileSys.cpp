@@ -5,11 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FileSys.hpp"
-#include "NKI.hpp"
 
 #include "yq/Loggers.hpp"
 #include "yq/io/FileUtils.hpp"
 #include "yq/sql/SqlQuery.hpp"
+#include "yq/wksp/NKI.hpp"
 #include "yq/wksp/Root.hpp"
 #include "yq/wksp/Workspace.hpp"
 

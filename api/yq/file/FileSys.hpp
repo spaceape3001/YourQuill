@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "CacheFwd.hpp"
-#include "Image.hpp"
 #include "yq/enum/DataRole.hpp"
 #include "yq/enum/Sorted.hpp"
+#include "yq/image/Image.hpp"
+#include "yq/wksp/CacheFwd.hpp"
 #include <QString>
 
 /*! \brief Directory in the cache

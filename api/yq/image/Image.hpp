@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "CacheFwd.hpp"
 #include "yq/enum/SizeDesc.hpp"
 #include "yq/io/Http.hpp"
+#include "yq/wksp/CacheFwd.hpp"
 
 struct Image {
     static constexpr const int kSmallWidth     =  24;

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CacheFwd.hpp"
-#include "Image.hpp"
+#include "yq/image/Image.hpp"
 #include <QString>
 
 namespace cdb {
