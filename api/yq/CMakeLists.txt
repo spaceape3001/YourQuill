@@ -34,6 +34,8 @@ set(yq_sources
     
     ./file/FileSys.cpp
     ./file/FileSys.hpp
+    ./file/FolderFile.cpp
+    ./file/FolderFile.hpp
     
     ./graph/Graph.cpp
     ./graph/Graph.hpp
@@ -65,6 +67,9 @@ set(yq_sources
     ./io/ZipReader.hpp
     ./io/ZipWriter.hpp
 
+    ./leaf/LeafFile.cpp
+    ./leaf/LeafFile.hpp
+
     ./meta/Global.hpp
     ./meta/GlobalImpl.hpp
     ./meta/InfoWriterImpl.hpp
@@ -82,6 +87,9 @@ set(yq_sources
     ./sql/SqlQuery.hpp
     ./sql/SqlUtils.cpp
     ./sql/SqlUtils.hpp
+    
+    ./tag/TagFile.cpp
+    ./tag/TagFile.hpp
 
     ./util/Array2.hpp
     ./util/Collections.cpp
