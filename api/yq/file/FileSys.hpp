@@ -48,8 +48,7 @@ struct Folder {
     static constexpr const uint64_t TOP     = 1ULL;
     static constexpr const uint64_t CONFIG  = 2ULL;
     static constexpr const uint64_t CLASSES = 3ULL;
-    static constexpr const uint64_t FIELDS  = 4ULL;
-    static constexpr const uint64_t TAGS    = 5ULL;
+    static constexpr const uint64_t TAGS    = 4ULL;
     constexpr operator bool() const { return id != 0ULL; }
 };
 

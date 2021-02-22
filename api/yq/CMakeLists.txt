@@ -8,6 +8,9 @@ set(yq_sources
     
     ./api/AProvider.hpp
     
+    ./atom/ClassFile.cpp
+    ./atom/ClassFile.hpp
+    
     ./bit/Attribute.hpp
     ./bit/Attribute.cpp
     ./bit/Context.cpp
@@ -21,10 +24,12 @@ set(yq_sources
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp
     ./enum/CalSystem.hpp
+    ./enum/Change.hpp
     ./enum/DataRole.hpp
     ./enum/Enums.cpp
     ./enum/Format.hpp
     ./enum/Linkage.hpp
+    ./enum/Match.hpp
     ./enum/Multiplicity.hpp
     ./enum/Restriction.hpp
     ./enum/SizeDesc.hpp
@@ -54,6 +59,8 @@ set(yq_sources
     ./io/FileUtils.hpp
     ./io/Http.cpp
     ./io/Http.hpp
+    ./io/LogFile.cpp
+    ./io/LogFile.hpp
     ./io/Logging.cpp
     ./io/Logging.hpp
     ./io/ShareDir.cpp
@@ -82,6 +89,9 @@ set(yq_sources
     ./meta/StdTypes.cpp
     ./meta/Variant.cpp
     ./meta/Variant.hpp
+    
+    ./net/Session.cpp
+    ./net/Session.hpp
 
     ./sql/SqlQuery.cpp
     ./sql/SqlQuery.hpp

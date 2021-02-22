@@ -91,8 +91,11 @@ unsigned_r          QuillFile::read_timeout() const
 Vector<QuillFile::RootInfo>    QuillFile::roots() const
 {
     Vector<RootInfo> ret;
-    for(const Attribute* a : all(zRoot))
+    for(const Attribute* a : all(zRoot)){
+        if(a->data.empty())
+            continue;
         ret << RootInfo(a);
+    }
     return ret;
 }
 
@@ -107,8 +110,11 @@ String              QuillFile::temp_dir() const
 Vector<QuillFile::RootInfo>    QuillFile::templates() const
 {
     Vector<RootInfo> ret;
-    for(const Attribute* a : all(zTemplate))
+    for(const Attribute* a : all(zTemplate)){
+        if(a->data.empty())
+            continue;
         ret << RootInfo(a);
+    }
     return ret;
 }
 

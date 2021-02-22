@@ -19,7 +19,7 @@ public:
     static constexpr Seq zBrief     = { "%desc", "%brief" };
     static constexpr Seq zNote      = { "%note", "%notes" };
     static constexpr Seq zTitle     = { "%", "%leaf", "%title" };
-    static constexpr Seq zClass     = { "%is", "%cls", "%class", "%use", "%as" };
+    static constexpr Seq zClass     = { "%is", "%cls", "%class", "%use", "%as", "%atom" };
     static constexpr Seq zTag       = { "%tag", "%tags" };
     static constexpr Seq zFormat    = { "%fmt", "%format" };
     static constexpr Format defFormat   = Format::Markdown;
