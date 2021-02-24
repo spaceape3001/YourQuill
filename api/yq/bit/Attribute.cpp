@@ -327,6 +327,64 @@ const Attribute*    AttrTree::first(const Vector<String>& key) const
     return nullptr;
 }
 
+    #if 0
+    namespace {
+        Vector<AttrData>::iterator      find(Vector<AttrData>& dst, const AttrData& ref)
+        {
+            for(auto i = dst.begin(); i != dst.end(); ++i){
+                if(!is_similar(i->key, ref.key))
+                    continue;
+                if(ref.id != i->id)
+                    continue;
+                if(!is_similar(ref.root, i->root))
+                    continue;
+            }
+            return dst.end();
+        }
+
+        void    fuse(Vector<AttrData>& dst, const Vector<AttrData>& src, const Root* rt)
+        {
+            for(const AttrData& a : src){
+                switch(a.action){
+                case Action::Add:
+                    dst << a;
+                    dst.back().root = rt -> key();
+                    break;
+                case Action::Modify: {
+                    auto i = find(dst, a);
+                    if(i != dst.end()){
+                        //  TODO
+                        fuse(i->sub, a.sub, rt);
+                    }
+                    break;
+                }
+                case Action::Remove: {
+                    auto i = find(dst, a);
+                    if(i != dst.end())
+                        dst.erase(i);
+                    break;
+                }
+                case Action::Existing: {
+                    auto i = find(dst, a);
+                    if(i != dst.end())
+                        fuse(i->sub, a.sub, rt);
+                    break;
+                }
+                }
+            }
+            
+        }
+    }
+    #endif
+
+
+void                AttrTree::fusion(const AttrTree&rhs) 
+{
+    //  TODO properly (LATER)
+    attrs    += rhs.attrs;
+}
+
+
 bool                AttrTree::has(const String&key) const
 {
     return first(key) != nullptr;

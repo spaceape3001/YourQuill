@@ -319,7 +319,6 @@ namespace cdb {
     QString                 name(Fragment);
 
     NKI                     nki(Document, bool autoKeyToName=false);
-    NKI                     nki(Field, bool autoKeyToName=false);
     NKI                     nki(Folder, bool autoKeyToName=false);
 
 

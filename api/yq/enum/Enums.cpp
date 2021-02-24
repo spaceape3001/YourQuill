@@ -16,6 +16,7 @@
 #include "Restriction.hpp"
 #include "SizeDesc.hpp"
 #include "Sorted.hpp"
+#include "SubmitLabel.hpp"
 #include "Update.hpp"
 #include "Vcs.hpp"
 #include "yq/meta/MetaValueImpl.hxx"
@@ -32,6 +33,7 @@ MV_IMPLEMENT(Match)
 MV_IMPLEMENT(Multiplicity)
 MV_IMPLEMENT(Restriction)
 MV_IMPLEMENT(SizeDesc)
+MV_IMPLEMENT(SubmitLabel)
 MV_IMPLEMENT(Update)
 MV_IMPLEMENT(Vcs)
 

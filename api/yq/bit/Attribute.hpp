@@ -89,6 +89,8 @@ struct AttrTree {
     //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
     const Attribute*            first(const Vector<String>& keys) const;
     
+    void                        fusion(const AttrTree&);
+    
     
     bool                        has(const String&) const;
     bool                        has(const char*) const;

@@ -13,6 +13,8 @@
 class ClassFile : public StdFile {
 public:
 
+    using Shared    = std::shared_ptr<ClassFile>;
+
     struct AttrInfo;
     struct ValueInfo;
 
