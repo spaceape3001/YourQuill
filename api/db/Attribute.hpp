@@ -4,12 +4,18 @@
 #include "util/Vector.hpp"
 
 struct Attribute;
+class Stream;
 
 /*! \brief Collection of attriubtes
 
     Attriubtes are stored as a tree.
 */
 struct AttrTree {
+
+    enum {
+        RECURSIVE   = 0x1,
+        BODY        = 0x2
+    };
 
     //! Initializer of const char*, used for faster declarations
     using Seq               = const std::initializer_list<const char*>;
@@ -229,6 +235,10 @@ struct AttrTree {
     AttrTree&                   operator+=(const AttrTree&);
     AttrTree&                   operator+=(Attribute&&);
     AttrTree&                   operator+=(const Attribute&);
+    
+    bool                        parse(const Vector<char>& buffer, String* body, bool recursive, const std::string& fname);
+    void                        write(Vector<char>&) const;
+    void                        write(Stream&) const;
 };
 
 //! \brief Attribute
