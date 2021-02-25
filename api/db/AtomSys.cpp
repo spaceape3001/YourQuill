@@ -379,7 +379,7 @@ namespace cdb {
             return fAllowEmpty ? std::make_shared<ClassFile>() : ClassFile::Shared();
             
         ClassFile::Shared  td = std::make_shared<ClassFile>();
-        if(!td->load(ch)){
+        if(!td->load(ch, path(f).toStdString())){
             yError() << "Unable to read " << path(f);
             return ClassFile::Shared();
         }

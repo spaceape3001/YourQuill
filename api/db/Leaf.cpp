@@ -264,11 +264,12 @@ namespace cdb {
         if(!f)
             return LeafFile::Shared();
 
-        if(!size(f))
+        Vector<char>    ch   = chars(f);
+        if(ch.empty())
             return fAllowEmpty ? std::make_shared<LeafFile>() : LeafFile::Shared();
         
         LeafFile::Shared     td  = std::make_shared<LeafFile>();
-        if(!td->load(path(f))){
+        if(!td->load(ch, path(f).toStdString())){
             yError() << "Unable to read " << path(f);
             return LeafFile::Shared();
         }

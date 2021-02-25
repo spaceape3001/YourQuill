@@ -277,7 +277,7 @@ namespace cdb {
             return fAllowEmpty ? std::make_shared<TagFile>() : TagFile::Shared();
         
         TagFile::Shared  td = std::make_shared<TagFile>();
-        if(!td->load(ch)){
+        if(!td->load(ch, path(f).toStdString())){
             yError() << "Unable to read " << path(f);
             return TagFile::Shared();
         }
