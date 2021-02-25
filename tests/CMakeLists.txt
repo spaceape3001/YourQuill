@@ -1,6 +1,6 @@
 macro(mt_core name)
     add_executable(test_${name} ${name}.cpp)
-    target_link_libraries(test_${name} yq ${TBB_LIBRARIES})
+    target_link_libraries(test_${name} PRIVATE yqdb yqmeta yqutil ${TBB_LIBRARIES})
 endmacro()
 macro(coretest name)
     mt_core(${name})

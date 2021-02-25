@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) --><svg height="128" id="svg2606" inkscape:output_extension="org.inkscape.output.svgz.inkscape" inkscape:version="0.45.1" sodipodi:docbase="/home/david/sandbox" sodipodi:docname="text-x-chdr.svgz" sodipodi:version="0.32" version="1.0" width="128" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <metadata>
+    <rdf:RDF xmlns:cc="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <cc:Work rdf:about="">
+        <dc:title></dc:title>
+        <dc:description></dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>unsorted</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://www.openclipart.org/">
+            <dc:title>Open Clip Art Library, Source: Oxygen Icons, Source: Oxygen Icons, Source: Oxygen Icons, Source: Oxygen Icons</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title></dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title></dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date></dc:date>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/ or http://creativecommons.org/licenses/LGPL/2.1/"/>
+        <dc:language>en</dc:language>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs id="defs2608">
+    <linearGradient id="linearGradient3206" inkscape:collect="always">
+      <stop id="stop2466" offset="0" style="stop-color:#000000;stop-opacity:1;"/>
+      <stop id="stop2468" offset="1" style="stop-color:#000000;stop-opacity:0;"/>
+    </linearGradient>
+    <linearGradient id="linearGradient10207">
+      <stop id="stop10209" offset="0" style="stop-color:#a2a2a2;stop-opacity:1;"/>
+      <stop id="stop10211" offset="1" style="stop-color:#ffffff;stop-opacity:1;"/>
+    </linearGradient>
+    <radialGradient cx="102" cy="112.3047" gradientUnits="userSpaceOnUse" id="XMLID_8_" r="139.55859">
+      <stop id="stop41" offset="0" style="stop-color:#b7b8b9;stop-opacity:1;"/>
+      <stop id="stop47" offset="0.18851049" style="stop-color:#ECECEC"/>
+      <stop id="stop49" offset="0.25718147" style="stop-color:#FAFAFA"/>
+      <stop id="stop51" offset="0.30111277" style="stop-color:#FFFFFF"/>
+      <stop id="stop53" offset="0.5313" style="stop-color:#FAFAFA"/>
+      <stop id="stop55" offset="0.8449" style="stop-color:#EBECEC"/>
+      <stop id="stop57" offset="1" style="stop-color:#E1E2E3"/>
+    </radialGradient>
+    <filter height="1.3839999" id="filter6697" inkscape:collect="always" width="1.3839999" x="-0.19200002" y="-0.19199999">
+      <feGaussianBlur id="feGaussianBlur6699" inkscape:collect="always" stdDeviation="1.9447689"/>
+    </filter>
+    <clipPath clipPathUnits="userSpaceOnUse" id="clipPath7084">
+      <path d="M 72,88 L 40,120 L 32,120 L 32,80 L 72,80 L 72,88 z" id="path7086" style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"/>
+    </clipPath>
+    <radialGradient cx="102" cy="112.3047" gradientTransform="matrix(1,0,0,0.9996653,2e-6,3.0160848e-3)" gradientUnits="userSpaceOnUse" id="radialGradient9437" inkscape:collect="always" r="139.55859" xlink:href="#XMLID_8_"/>
+    <linearGradient gradientUnits="userSpaceOnUse" id="linearGradient10213" inkscape:collect="always" x1="98.617439" x2="91.228737" xlink:href="#linearGradient10207" y1="106.41443" y2="99.254974"/>
+    <filter id="filter2770" inkscape:collect="always">
+      <feGaussianBlur id="feGaussianBlur2772" inkscape:collect="always" stdDeviation="2.0786429"/>
+    </filter>
+    <linearGradient gradientTransform="translate(0,-0.9716797)" gradientUnits="userSpaceOnUse" id="linearGradient2931" inkscape:collect="always" x1="99.934952" x2="110.38672" xlink:href="#linearGradient3206" y1="62.782482" y2="62.643799"/>
+  </defs>
+  <sodipodi:namedview bordercolor="#666666" borderopacity="1.0" gridempspacing="2" gridspacingx="4px" gridspacingy="4px" gridtolerance="50" height="128px" id="base" inkscape:current-layer="layer1" inkscape:cx="82.263249" inkscape:cy="78.77115" inkscape:document-units="px" inkscape:grid-points="false" inkscape:guide-bbox="true" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="692" inkscape:window-width="1016" inkscape:window-x="1" inkscape:window-y="1" inkscape:zoom="4" pagecolor="#ffffff" showgrid="true" showguides="true" width="128px"/>
+  <g id="layer1" inkscape:groupmode="layer" inkscape:label="Livello 1">
+    <path d="M 16,8 L 16,120 C 16,120 79.15625,120 79.15625,120 L 79.1875,120 C 79.187503,120 91.09375,110.09375 96.59375,104.59375 C 102.09375,99.09375 112,87.1875 112,87.1875 L 112,87.15625 L 112,8 L 16,8 z" id="path7865" sodipodi:nodetypes="csccscccc" style="opacity:0.5;fill:#000000;fill-opacity:1;filter:url(#filter2770)" transform="matrix(1.0416667,0,0,1.0267857,-2.6666667,-1.2142891)"/>
+    <path d="M 16.000001,8 L 16,120 C 16,120 79.146418,120 79.146418,120 L 112,87.14642 L 112,8 L 16.000001,8 z" id="path34" sodipodi:nodetypes="cccccc" style="fill:#ffffff;fill-opacity:1"/>
+    <path d="M 18.000002,9.0000034 C 17.449002,9.0000034 17.000002,9.4488534 17.000002,9.9996684 L 17.000002,117.96352 C 17.000002,118.51533 17.449002,118.96318 18.000002,118.96318 L 77.171999,118.96318 C 77.434999,118.96318 79.934679,119.08131 80.12068,118.89438 L 110.707,88.094202 C 110.894,87.907264 111,85.40942 111,85.146508 L 111,9.9996684 C 111,9.4488534 110.552,9.0000034 110,9.0000034 L 18.000002,9.0000034 z" id="path59" sodipodi:nodetypes="ccccccccccc" style="fill:url(#radialGradient9437);fill-opacity:1"/>
+    <text id="text2489" sodipodi:linespacing="100%" space="preserve" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:0.5;fill:url(#linearGradient2931);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Liberation Mono" x="23.868156" y="14.964844">
+      <tspan id="tspan2491" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="14.964844">#ifndef OXYGEN_STYLE_H</tspan>
+      <tspan id="tspan2252" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="18.964844">#define OXYGEN_STYLE_H</tspan>
+      <tspan id="tspan2254" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="22.964844"/>
+      <tspan id="tspan2256" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="26.964844">class QAbstractButton;</tspan>
+      <tspan id="tspan2260" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="30.964844">class QHeaderView;</tspan>
+      <tspan id="tspan2276" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="34.964844"/>
+      <tspan id="tspan2278" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="38.964844">#include &lt;QCache></tspan>
+      <tspan id="tspan2282" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="42.964844">#include &lt;QHash></tspan>
+      <tspan id="tspan2340" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="46.964844"/>
+      <tspan id="tspan2760" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="50.964844">namespace Oxygen {</tspan>
+      <tspan id="tspan2829" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="54.964844"/>
+      <tspan dx="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" id="tspan2831" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="58.964844">enum BGMode { Plain = 0, Scanlines,G</tspan>
+      <tspan id="tspan2835" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="62.964844">enum Acceleration { None = 0, QtGrad</tspan>
+      <tspan id="tspan2839" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="66.964844">enum TabTransition {Jump = 0, CrossF</tspan>
+      <tspan id="tspan2841" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="70.964844">{</tspan>
+      <tspan id="tspan2843" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="74.964844">   Q_OBJECT</tspan>
+      <tspan id="tspan2845" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="78.964844">public:</tspan>
+      <tspan id="tspan2847" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="82.964844">   bool eventFilter( QObject *objec</tspan>
+      <tspan id="tspan2849" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="86.964844">};</tspan>
+      <tspan id="tspan2851" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="90.964844"/>
+      <tspan id="tspan2853" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="94.964844">class OxygenStyle;</tspan>
+      <tspan id="tspan2855" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="98.964844"/>
+      <tspan id="tspan2857" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="102.96484">class HoverFadeInfo {</tspan>
+      <tspan id="tspan2885" sodipodi:role="line" style="font-size:4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2931);font-family:Liberation Mono" x="23.868156" y="106.96484">public:</tspan>
+    </text>
+    <path d="M 60,56 C 59.970847,56.054559 62.54026,48.913318 69.775599,47.939054 C 75.113307,47.210624 81.465578,48.979582 84.688672,53.954864 C 88.202851,59.147958 87.981196,65.923544 88,72 L 88,96 L 76,96 L 76,68 C 75.868049,64.101341 74.951417,59.192441 71.019535,57.92793 C 67.137277,56.582761 62.781356,58.867647 61.103631,62.755419 C 60,68 60.160118,74.832026 60,80 L 60,96 L 48.000003,96.000006 L 48.000003,32.000005 L 60.000002,32.000001 L 60,56 z " id="text2686" sodipodi:nodetypes="ccccccccccccccc" style="font-size:85.62039948px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#e20071;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Liberation Sans"/>
+    <g id="g2499">
+      <path clip-path="url(#clipPath7084)" d="M 41.879531,115.98249 C 41.879531,115.98249 66.18914,91.672876 66.18914,91.672876 C 66.18914,91.672876 56.836,94.586 46.586,94.586 C 46.586,104.836 41.879531,115.98249 41.879531,115.98249 z" id="path5540" sodipodi:nodetypes="cccc" style="opacity:0.4;fill:#000000;fill-opacity:1;filter:url(#filter6697)" transform="translate(40,0)"/>
+      <path d="M 79.172,120 C 79.172,120 91.086,110.086 96.586,104.586 C 102.086,99.086 112,87.172 112,87.172 C 112,87.172 98.25,96 88,96 C 88,106.25 79.172,120 79.172,120 z" id="path14523" sodipodi:nodetypes="csccc" style="fill:url(#linearGradient10213);fill-opacity:1"/>
+    </g>
+    <path d="M -13.435028 111.55977 A 10.783379 10.783379 0 1 1  -35.001785,111.55977 A 10.783379 10.783379 0 1 1  -13.435028 111.55977 z" id="path2692" sodipodi:cx="-24.218407" sodipodi:cy="111.55977" sodipodi:rx="10.783379" sodipodi:ry="10.783379" sodipodi:type="arc" style="opacity:1;fill:#e20071;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" transform="matrix(0.5564119,0,0,0.5564119,51.475409,27.926819)"/>
+  </g>
+</svg>

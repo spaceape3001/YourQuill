@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yq/meta/Variant.hpp"
+#include "meta/Variant.hpp"
 #include <iostream>
 
 bool    success()

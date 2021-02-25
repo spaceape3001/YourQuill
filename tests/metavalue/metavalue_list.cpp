@@ -1,10 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #include <iostream>
 #include <stdio.h>
 #include <algorithm>
 
-#include "yq/meta/MetaValue.hpp"
-#include "yq/meta/Variant.hpp"
-#include "yq/util/Vector.hpp"
+#include "meta/MetaValue.hpp"
+#include "meta/Variant.hpp"
+#include "util/Vector.hpp"
 //#include "math/MathFwd.hpp"
 
 

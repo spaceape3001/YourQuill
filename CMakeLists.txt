@@ -103,8 +103,8 @@ add_subdirectory(3rd)
 if(EXISTS 3rdx)
     add_subdirectory(3rdx)
 endif()
-set(CMAKE_DEBUG_POSTFIX YQd)
-set(CMAKE_RELEASE_POSTFIX YQ)
+set(CMAKE_DEBUG_POSTFIX D)
+#set(CMAKE_RELEASE_POSTFIX YQ)
 
 add_definitions(-Werror)
 

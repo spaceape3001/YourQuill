@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
-#include "yq/Loggers.hpp"
-#include "yq/meta/Meta.hpp"
-#include "yq/util/Utilities.hpp"
-#include "yq/wksp/Workspace.hpp"
+#include "util/Logging.hpp"
+#include "meta/Meta.hpp"
+#include "util/Utilities.hpp"
+#include "db/Workspace.hpp"
 #include <QCoreApplication>
 
 int main(int argc, char* argv[])

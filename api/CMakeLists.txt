@@ -3,5 +3,7 @@
 #
 #   Files should be listed alphabetically
 
-add_subdirectory(yq)
+add_subdirectory(util)
+add_subdirectory(meta)
+add_subdirectory(db)
 

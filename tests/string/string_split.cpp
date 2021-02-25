@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yq/util/String.hpp"
-#include "yq/util/Vector.hpp"
+#include "util/String.hpp"
+#include "util/Vector.hpp"
 #include <iostream>
 
 int main(int,char*[])

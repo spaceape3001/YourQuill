@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yq/meta/Variant.hpp"
+#include "meta/Variant.hpp"
 #include <stdlib.h>
 #include <iostream>
 

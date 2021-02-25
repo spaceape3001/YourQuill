@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yq/meta/Variant.hpp"
-#include "yq/util/String.hpp"
+#include "meta/Variant.hpp"
+#include "util/String.hpp"
 #include <iostream>
 
 int main(int argc, char* argv[])
