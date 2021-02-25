@@ -1,0 +1,26 @@
+#   This is an example YQuill file.  To use, relocate it to a
+#   directory with the simple filename of ".yquill".
+
+#   Name is the name of your story/universe
+name        MyFandomFanfic
+
+#   Author is YOUR penname
+author      MyPenName
+
+#   Short abbrievation for the story/universe
+abbr        FF
+
+#   Fanfiction can't assert copyright, so we issue a disclaimer
+disclaim    I don't own MyFandom's original material
+
+#   This is the port number the server will be listening on.  
+port        25505
+
+#   We're a story, so we have plot
+template    plot
+    key     P
+
+#   Referencing root "." is the directory of the file
+root        .
+    key     F
+
