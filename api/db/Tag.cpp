@@ -182,15 +182,13 @@ namespace cdb {
         return Leaf{};
     }
 
-    TagFile::Shared         merged(Tag t, unsigned int opts)
+    SharedTagData   merged(Tag t, unsigned int opts)
     {
-        TagFile::Shared      ret = std::make_shared<TagFile>();
+        SharedTagData  ret = std::make_shared<TagData>();
         for(auto& i :reads(t)){
             if(opts & IsUpdate)
                 update(i.first);
-            ret -> fusion(*(i.second));
-            //fusion_attrs(*ret, *(i.second));
-            //ret->merge(*(i.second), static_cast<bool>(opts&Override));
+            ret -> merge(*(i.second), static_cast<bool>(opts&Override));
         }
         return ret;
     }
@@ -289,18 +287,18 @@ namespace cdb {
 
     void    update(Tag t, UpdateFlags flags)
     {
-        TagFile::Shared  whole = merged(t, IsUpdate);
+        auto  whole = merged(t, IsUpdate);
         
         if(flags[Update::Interior]){
             static thread_local SqlQuery    u(wksp::cache(), "UPDATE Tags SET name=?,brief=? WHERE id=?");
             auto u_af = u.af();
-            u.bind(0, whole->name().qString());
-            u.bind(1, whole->brief().qString());
+            u.bind(0, whole->name.qString());
+            u.bind(1, whole->brief.qString());
             u.bind(2, t.id);
             u.exec();
         }
         if(flags[Update::Exterior]){
-            Leaf    l   = leaf(whole->leaf().qString());
+            Leaf    l   = leaf(whole->leaf.qString());
             static thread_local SqlQuery    u(wksp::cache(), "UPDATE Tags SET leaf=? WHERE id=?");
             auto u_af = u.af();
             u.bind(0, l.id);
@@ -308,8 +306,6 @@ namespace cdb {
             u.exec();
         }
     }
-
-
 
     
     TagFile::Shared         write(Tag t, const Root* rt)

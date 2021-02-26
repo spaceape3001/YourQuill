@@ -32,6 +32,8 @@ struct Tag::Info {
 };
     
 namespace cdb {
+    using SharedTagData     = std::shared_ptr<TagData>;
+
     Vector<Tag>             all_tags(Sorted sorted=Sorted());
     size_t                  all_tags_count();
     
@@ -57,7 +59,7 @@ namespace cdb {
     QString                 label(Tag);
     Leaf                    leaf(Tag t);
     
-    TagFile::Shared         merged(Tag, unsigned int opts=0);
+    SharedTagData           merged(Tag, unsigned int opts=0);
     
     QString                 name(Tag);
     

@@ -5,45 +5,59 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "TagFile.hpp"
+#include "Attribute.hpp"
 
-
-String          TagFile::brief() const
+TagData& TagData::merge(const TagData&b, bool fOverride)
 {
-    return value(zBrief);
+    leaf.set_if(b.leaf, fOverride);
+    name.set_if(b.name, fOverride);
+    brief.set_if(b.brief, fOverride);
+    notes.set_if(b.notes, fOverride);
+    return *this;
 }
 
-void            TagFile::brief(const String& s)
+void    TagData::reset() 
 {
-    set(zBrief, s, true);
+    name.clear();
+    leaf.clear();
+    brief.clear();
+    notes.clear();
 }
 
-String          TagFile::leaf() const
-{
-    return value(zLeaf);
-}
-
-void            TagFile::leaf(const String&s)
-{
-    set(zLeaf, s, true);
-}
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-String          TagFile::name() const
+void    TagFile::reset() 
 {
-    return value(zName);
+    TagData::reset();
 }
 
-void            TagFile::name(const String&s)
+bool    TagFile::read(Vector<char>&buffer, const std::string& fname) 
 {
-    set(zName, s, true);
+    AttrTree        attrs;
+    if(!attrs.parse(buffer, nullptr, true, fname))
+        return false;
+
+    name        = attrs.value({"%", "%tag", "tag", "%name", "name" });
+    notes       = attrs.value({"%note", "note", "notes", "%notes" });
+    brief       = attrs.value({"%desc", "brief", "desc", "%brief" });
+    leaf        = attrs.value({"%leaf", "leaf"});
+    return true;
 }
 
-String          TagFile::notes() const
+bool    TagFile::write(Vector<char>&chars) 
 {
-    return value(zNote);
+    AttrTree        attrs;
+    if(!name.empty())
+        attrs << Attribute("%", name);
+    if(!brief.empty())
+        attrs << Attribute("desc", brief);
+    if(!leaf.empty())
+        attrs << Attribute("leaf", leaf);
+    if(!notes.empty())
+        attrs << Attribute("note", notes);
+    attrs.write(chars);
+    return true;
 }
 
-void            TagFile::notes(const String& s)
-{
-    set(zNote, s, true);
-}
