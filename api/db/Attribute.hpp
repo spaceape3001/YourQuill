@@ -202,6 +202,8 @@ struct AttrTree {
     Attribute*                  set_set(const std::initializer_list<String>&, const StringSet&, const String& sep=", ");
     Attribute*                  set_set(const Vector<String>&, const StringSet&, const String& sep=", ");
     
+    Attribute*                  set_set(const std::initializer_list<const char*>&, const Set<uint16_t>&, const String& sep=", ");
+
     
     //! \brief First value for string, empty if not found (or empty w/in)
     String                      value(const String& key) const;
@@ -231,10 +233,15 @@ struct AttrTree {
     StringSet                   values_set(const std::initializer_list<String>&, const String& sep=",") const;
     StringSet                   values_set(const Vector<String>&, const String& sep=",") const;
     
+    Set<uint16_t>               values_set_u16(const std::initializer_list<const char*>&, const String& sep=",") const;
+    
     AttrTree&                   operator+=(AttrTree&&);
     AttrTree&                   operator+=(const AttrTree&);
     AttrTree&                   operator+=(Attribute&&);
     AttrTree&                   operator+=(const Attribute&);
+    
+    AttrTree&                   operator<<(Attribute&&);
+    AttrTree&                   operator<<(const Attribute&);
     
     bool                        parse(const Vector<char>& buffer, String* body, bool recursive, const std::string& fname);
     void                        write(Vector<char>&) const;
@@ -268,6 +275,12 @@ struct Attribute : public AttrTree {
     //! \brief Indent of the attribute
     //! Ignored on write, this is the original indentation value for the attribute from the file.
     unsigned int        indent = 0;
+
+
+    Attribute() = default;
+    Attribute(const String& k) : key(k) {}
+    Attribute(const String& k, const String& v) : key(k), data(v) {}
+    
 
     bool                empty() const;
 };

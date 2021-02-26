@@ -92,7 +92,6 @@ QString  join(const Set<uint16_t>& values, const QString& sep)
 }
 
 
-
 QByteArray     join(const Vector<QByteArray>&them, char sep)
 {
     bool        first = true;
@@ -192,6 +191,23 @@ QString     join(const QStringSet& them, QChar sep)
 {
     return QStringList(qt(makeList(them))).join(sep);
 }
+
+String          join_string(const Set<uint16_t>& values, const String& sep)
+{
+    String      ret;
+    bool        first = true;
+    for(uint16_t v  : values){
+        if(first)
+            first   = false;
+        else
+            ret += sep;
+            
+        ret += String::number(v);
+    }
+    return ret;
+}
+
+
 
 QByteArray  make_png(const QImage&img)
 {

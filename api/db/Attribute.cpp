@@ -643,6 +643,13 @@ Attribute*          AttrTree::set_set(const Vector<String>&key, const StringSet&
     return set(key, sep.join(vals), true);
 }
 
+Attribute*          AttrTree::set_set(const std::initializer_list<const char*>&key, const Set<uint16_t>&vals, const String& sep)
+{
+    StringSet       them;
+    for(uint16_t v : vals)
+        them << String::number(v);
+    return set_set(key,them,sep);
+}
     
 String              AttrTree::value(const String& key) const
 {
@@ -752,6 +759,17 @@ StringSet          AttrTree::values_set(const Vector<String>&key, const String& 
     return make_set(all(key), sep);
 }
 
+Set<uint16_t>   AttrTree::values_set_u16(const std::initializer_list<const char*>&key, const String& sep) const
+{
+    Set<uint16_t>   ret;
+    for(const String& s : values_set(key, sep)){
+        auto u  = s.to_uint16();
+        if(u.good)
+            ret << u.value;
+    }
+    return ret;
+}
+
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 AttrTree&          AttrTree::operator+=(Attribute&& v)
 {
@@ -778,6 +796,20 @@ AttrTree&          AttrTree::operator+=(const AttrTree&rhs)
     attrs += rhs.attrs;
     return *this;
 }
+
+AttrTree&           AttrTree::operator<<(Attribute&&v)
+{
+    attrs << std::move(v);
+    return *this;
+}
+
+AttrTree&           AttrTree::operator<<(const Attribute&v)
+{
+    attrs << v;
+    return *this;
+}
+
+
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

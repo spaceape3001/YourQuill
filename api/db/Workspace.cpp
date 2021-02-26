@@ -218,34 +218,30 @@ namespace wksp {
             m.quill_dir             = QDir(m.quill_dir_path);
             m.quill_key             = QFileInfo(m.quill_dir_path).fileName();
             
-            String      temp    = doc.temp_dir();
-            if(temp.empty()){
+            if(doc.temp_dir.empty()){
                 const char* tmpdir  = getenv("TMPDIR");
                 if(!tmpdir)
                     tmpdir          = "/tmp";
                 QDir    yqtemp      = QDir(tmpdir).absoluteFilePath("yquill");
                 m.temporary         = yqtemp.absoluteFilePath(m.quill_key);
             } else
-                m.temporary         = m.quill_dir.absoluteFilePath(temp.qString());
+                m.temporary         = m.quill_dir.absoluteFilePath(doc.temp_dir.qString());
             m.quill_dir.mkpath(m.temporary);
             m.temporary_dir         = QDir(m.temporary);
             
-            String      cache   = doc.cache();
-            if(cache.empty()){
+            if(doc.cache.empty()){
                 m.cache             = m.temporary_dir.absoluteFilePath("cache");
             } else
-                m.cache             = m.quill_dir.absoluteFilePath(cache.qString());
+                m.cache             = m.quill_dir.absoluteFilePath(doc.cache.qString());
             m.db_pid                = m.temporary_dir.absoluteFilePath("pid");
             
             //if(opts.is_set(Option::WIPE_CACHE) && QFile::exists(m.cache) )
                 //QFile::remove(m.cache);
-
-            String logdir           = doc.log_dir();
             
-            if(logdir.empty()){
+            if(doc.log_dir.empty()){
                 m.logs              = m.temporary_dir.absoluteFilePath("logs");
             } else
-                m.logs              = m.quill_dir.absoluteFilePath(logdir.qString());
+                m.logs              = m.quill_dir.absoluteFilePath(doc.log_dir.qString());
             m.quill_dir.mkpath(m.logs);
             m.log_dir               = QDir(m.logs);
             m.log_fragment          = m.log_dir.absoluteFilePath(QString("%1-%2.log").arg(m.app_name).arg(m.start));
@@ -253,34 +249,32 @@ namespace wksp {
             log_to_file(m.log_fragment.toStdString(), LogPriority::YQ_DBGREL(All,All));
             yInfo() << "Application '" << m.app_name << "' is initializing the workspace to '" << m.quill_dir_path << "'";
 
-            String  ini = doc.ini();
-            if(ini.empty()){
+            if(doc.ini.empty()){
                 m.ini               = m.temporary_dir.absoluteFilePath("ini");
             } else
-                m.ini               = m.quill_dir.absoluteFilePath(ini.qString());
+                m.ini               = m.quill_dir.absoluteFilePath(doc.ini.qString());
             
-            String luser            = doc.local_user();
-            if(luser.empty()){
+            if(doc.local_user.empty()){
                 m.local_user        = getlogin();
             } else 
-                m.local_user        = luser.qString();
+                m.local_user        = doc.local_user.qString();
                 
-            m.aux_ports             = doc.aux_ports();
-            m.port                  = doc.port();
+            m.aux_ports             = doc.aux_ports;
+            m.port                  = doc.port;
             if(!m.port)
                 m.port              = kDefaultPort;
-            m.read_timeout          = doc.read_timeout();
+            m.read_timeout          = doc.read_timeout;
             if(!m.read_timeout)
                 m.read_timeout      = kDefaultReadTimeout;
 
             SetSpots            spots;
-            m.abbreviation          = doc.abbreviation().qString();
+            m.abbreviation          = doc.abbr.qString();
             if(!m.abbreviation.isEmpty())
                 spots.abbr          = 0;
-            m.author                = doc.author().qString();
+            m.author                = doc.author.qString();
             if(!m.author.isEmpty())
                 spots.author        = 0;
-            m.copyright             = doc.copyright();
+            m.copyright             = doc.copyright;
             if(!m.copyright.from)
                 spots.copyfrom      = 0;
             if(!m.copyright.stance)
@@ -289,10 +283,10 @@ namespace wksp {
                 spots.copytext      = 0;
             if(!m.copyright.to)
                 spots.copyto        = 0;
-            m.home                  = doc.home().qString();
+            m.home                  = doc.home.qString();
             if(!m.home.isEmpty())
                 spots.home          = 0;
-            m.name                  = doc.name().qString();
+            m.name                  = doc.name.qString();
             if(!m.name.isEmpty())
                 spots.name          = 0;
             
@@ -415,7 +409,7 @@ namespace wksp {
         {
             M& m = impl();
             QDir        q(dirPathFor(doc.file()));
-            for(auto& rs : doc.templates()){
+            for(auto& rs : doc.templates){
                 QString rsPath  = rs.path.qString();
                 if(!tSeen.add(rsPath))
                     continue;
@@ -456,7 +450,7 @@ namespace wksp {
             }
             
             if(!fTemplate){
-                for(auto& rs : doc.roots()){
+                for(auto& rs : doc.roots){
                     QString     rsPath  = rs.path.qString();
                     QString     rpath   = q.absoluteFilePath(rsPath);
                     if(rsPath == ".")
@@ -503,42 +497,37 @@ namespace wksp {
                     }
                     
                     
-                    String  abbr            = sub.abbreviation();
-                    if((!abbr.empty()) && (depth < spots.abbr)){
-                        m.abbreviation      = abbr.qString();
+                    if((!sub.abbr.empty()) && (depth < spots.abbr)){
+                        m.abbreviation      = sub.abbr.qString();
                         spots.abbr          = depth;
                     }
-                    String  author          = sub.author();
-                    if((!author.empty()) && (depth < spots.author)){
-                        m.author            = author.qString();
+                    if((!sub.author.empty()) && (depth < spots.author)){
+                        m.author            = sub.author.qString();
                         spots.author        = depth;
                     }
-                    Copyright   copyright   = sub.copyright();
                     
-                    if(copyright.from && (depth < spots.copyfrom)){
-                        m.copyright.from    = copyright.from;
+                    if(sub.copyright.from && (depth < spots.copyfrom)){
+                        m.copyright.from    = sub.copyright.from;
                         spots.copyfrom      = depth;
                     }
-                    if((copyright.stance != AssertDeny()) && (depth < spots.copystance)){
-                        m.copyright.stance  = copyright.stance;
+                    if((sub.copyright.stance != AssertDeny()) && (depth < spots.copystance)){
+                        m.copyright.stance  = sub.copyright.stance;
                         spots.copystance    = depth;
                     }
-                    if((!copyright.text.empty()) && (depth < spots.copytext)){
-                        m.copyright.text    = copyright.text;
+                    if((!sub.copyright.text.empty()) && (depth < spots.copytext)){
+                        m.copyright.text    = sub.copyright.text;
                         spots.copytext      = depth;
                     }
-                    if(copyright.to && (depth < spots.copyto)){
-                        m.copyright.to      = copyright.to;
+                    if(sub.copyright.to && (depth < spots.copyto)){
+                        m.copyright.to      = sub.copyright.to;
                         spots.copyto        = depth;
                     }
-                    String home = sub.home();
-                    if((!home.empty()) && (depth < spots.home)){
-                        m.home              = home.qString();
+                    if((!sub.home.empty()) && (depth < spots.home)){
+                        m.home              = sub.home.qString();
                         spots.home          = depth;
                     }
-                    String  name = sub.name();
-                    if((!name.empty()) && (depth < spots.name)){
-                        m.name              = name.qString();
+                    if((!sub.name.empty()) && (depth < spots.name)){
+                        m.name              = sub.name.qString();
                         spots.name          = depth;
                     }
                     

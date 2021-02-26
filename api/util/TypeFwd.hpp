@@ -12,6 +12,7 @@
 #include <limits>
 #include <memory>
 #include <utility>
+#include <initializer_list>
 
 /*! \macro YQ_DBGREL
     \brief Simple macro for debug vs release
@@ -152,3 +153,6 @@ using qbytearray_r      = Result<QByteArray>;
 using qstring_r         = Result<QString>;
 
 unsigned int thread_id();
+
+using CharPSeq          = std::initializer_list<const char*>;
+

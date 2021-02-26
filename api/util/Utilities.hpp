@@ -54,6 +54,8 @@ QString         join(const Vector<QString>&, const QString&);
 String          join(const Vector<String>&, char);
 String          join(const Vector<String>&, const String&);
 
+String          join_string(const Set<uint16_t>& values, const String& sep);
+
 QByteArray      make_png(const QImage&);
 
 QString         sanitize_path(const QString&);
