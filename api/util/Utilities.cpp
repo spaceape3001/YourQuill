@@ -192,6 +192,21 @@ QString     join(const QStringSet& them, QChar sep)
     return QStringList(qt(makeList(them))).join(sep);
 }
 
+String          join(const StringSet&them, const String&sep)
+{
+    bool        first = true;
+    String  ret;
+    for(const String& t : them){
+        if(first){
+            first   = false;
+        } else {
+            ret += sep;
+        }
+        ret += t;
+    }
+    return ret;
+}
+
 String          join_string(const Set<uint16_t>& values, const String& sep)
 {
     String      ret;

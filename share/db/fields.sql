@@ -3,7 +3,8 @@
 CREATE TABLE Fields (
         -- ID is the document ID
     id          INTEGER PRIMARY KEY,
-    k           VARCHAR(255) NOT NULL COLLATE NOCASE UNIQUE,
+    class       INTEGER,
+    k           VARCHAR(255) NOT NULL,
         -- Atom class, not an atom itself
     icon        INTEGER NOT NULL DEFAULT 0,
     pkey        VARCHAR(255),
@@ -17,7 +18,9 @@ CREATE TABLE Fields (
     dbt         VARCHAR(255),
         -- SQL Table for values
     dbv         VARCHAR(255),
-	removed     BOOLEAN NOT NULL DEFAULT 0
+	removed     BOOLEAN NOT NULL DEFAULT 0,
+	
+	UNIQUE(class,k) ON CONFLICT IGNORE
 );
 
 

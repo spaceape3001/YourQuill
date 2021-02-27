@@ -100,6 +100,13 @@ struct AttrTree {
     //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
     const Attribute*            first(const Vector<String>& keys) const;
     
+    //! \brief First attribute w/o a command
+    const Attribute*            first_noncmd(const String& key) const;
+    const Attribute*            first_noncmd(const char* key) const;
+    const Attribute*            first_noncmd(const std::initializer_list<String>&) const;
+    const Attribute*            first_noncmd(const std::initializer_list<const char*>&) const;
+    const Attribute*            first_noncmd(const Vector<String>& keys) const;
+    
     void                        fusion(const AttrTree&);
     
     
@@ -206,15 +213,15 @@ struct AttrTree {
 
     
     //! \brief First value for string, empty if not found (or empty w/in)
-    String                      value(const String& key) const;
-    String                      value(const char* key) const;
+    String                      value(const String& key, bool excludeCmds=false) const;
+    String                      value(const char* key, bool excludeCmds=false) const;
     
     //! \brief First value for string, empty if not found (or empty w/in)
-    String                      value(const std::initializer_list<String>&) const;
-    String                      value(const std::initializer_list<const char*>&) const;
+    String                      value(const std::initializer_list<String>&, bool excludeCmds=false) const;
+    String                      value(const std::initializer_list<const char*>&, bool excludeCmds=false) const;
 
     //! \brief First value for string, empty if not found (or empty w/in)
-    String                      value(const Vector<String>&) const;
+    String                      value(const Vector<String>&, bool excludeCmds=false) const;
     
     //! \brief All non-empty values for string
     Vector<String>              values(const String& key) const;

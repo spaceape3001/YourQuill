@@ -36,16 +36,16 @@ namespace {
         if(cdb::fragments_count(c.doc) > 0){
             static thread_local SqlQuery    u(wksp::cache(), "UPDATE Classes SET name=?,plural=?,brief=?,removed=0 WHERE id=?");
             auto u_af   = u.af();
-            u.bind(0, whole->name());
-            u.bind(1, whole->plural());
-            u.bind(2, whole->brief());
+            u.bind(0, whole->name);
+            u.bind(1, whole->plural);
+            u.bind(2, whole->brief);
             u.bind(3, c.cls.id);
             u.exec();
         }
 
         c.fields.clear();
-        for(auto& j : whole->fields()){
-            Field   f   = cdb::db_field(c.cls, j.key.qString());
+        for(auto& j : whole->fields){
+            Field   f   = cdb::db_field(c.cls, j.first.qString());
             c.fields << f;
         }
     }
@@ -60,13 +60,13 @@ namespace {
         c.src.clear();
         c.tgt.clear();
         
-        for(auto j : whole->use())
+        for(auto j : whole->use)
             c.use << cdb::db_class(j.qString());
-        for(auto j : whole->source())
+        for(auto j : whole->sources)
             c.src << cdb::db_class(j.qString());
-        for(auto j : whole->target())
+        for(auto j : whole->targets)
             c.tgt << cdb::db_class(j.qString());
-        for(auto j : whole->reverse())
+        for(auto j : whole->reverse)
             c.rev << cdb::db_class(j.qString());
     }
     

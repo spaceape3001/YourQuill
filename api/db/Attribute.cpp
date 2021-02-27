@@ -371,6 +371,51 @@ const Attribute*  AttrTree::first(const std::initializer_list<const char*>&key, 
 
 
 
+const Attribute*    AttrTree::first_noncmd(const String& key) const
+{
+    for(const Attribute& a : attrs)
+        if(a.cmd.empty() && in(key, a.key))
+            return &a;
+    return nullptr;
+}
+
+
+
+const Attribute*    AttrTree::first_noncmd(const char* key) const
+{
+    assert(key && "KEY pointer cannot be null");
+    if(!key)
+        return nullptr;
+    for(const Attribute& a : attrs)
+        if(a.cmd.empty() && in(key, a.key))
+            return &a;
+    return nullptr;
+}
+
+const Attribute*    AttrTree::first_noncmd(const std::initializer_list<String>& key) const
+{
+    for(const Attribute& a : attrs)
+        if(a.cmd.empty() && in(key, a.key))
+            return &a;
+    return nullptr;
+}
+
+const Attribute*    AttrTree::first_noncmd(const std::initializer_list<const char*>& key) const
+{
+    for(const Attribute& a : attrs)
+        if(a.cmd.empty() && in(key, a.key))
+            return &a;
+    return nullptr;
+}
+
+const Attribute*    AttrTree::first_noncmd(const Vector<String>& key) const
+{
+    for(const Attribute& a : attrs)
+        if(a.cmd.empty() && in(key, a.key))
+            return &a;
+    return nullptr;
+}
+
     #if 0
     namespace {
         Vector<AttrData>::iterator      find(Vector<AttrData>& dst, const AttrData& ref)
@@ -651,34 +696,34 @@ Attribute*          AttrTree::set_set(const std::initializer_list<const char*>&k
     return set_set(key,them,sep);
 }
     
-String              AttrTree::value(const String& key) const
+String              AttrTree::value(const String& key, bool excludeCmds) const
 {
-    const Attribute*a   = first(key);
+    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const char* key) const
+String              AttrTree::value(const char* key, bool excludeCmds) const
 {
     assert(key && "KEY pointer cannot be null");
-    const Attribute*a   = first(key);
+    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const std::initializer_list<String>& key) const
+String              AttrTree::value(const std::initializer_list<String>& key, bool excludeCmds) const
 {
-    const Attribute*a   = first(key);
+    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const std::initializer_list<const char*>& key) const
+String              AttrTree::value(const std::initializer_list<const char*>& key, bool excludeCmds) const
 {
-    const Attribute*a   = first(key);
+    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const Vector<String>& key) const
+String              AttrTree::value(const Vector<String>& key, bool excludeCmds) const
 {
-    const Attribute*a   = first(key);
+    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 

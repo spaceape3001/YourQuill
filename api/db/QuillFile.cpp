@@ -27,15 +27,17 @@ void    QuillData::reset()
     templates.clear();
 }
 
+
+
 void    QuillFile::reset() 
 {
     QuillData::reset();
 }
 
 namespace {
-    QuillData::RootData    parse_root(const Attribute* a)
+    QuillData::Root    parse_root(const Attribute* a)
     {
-        QuillData::RootData ret;
+        QuillData::Root ret;
         ret.path    = a->data;
         ret.key     = a->value({ "key", "k" });
         ret.color   = a->value("color");
@@ -89,7 +91,7 @@ bool    QuillFile::read(Vector<char>&buffer, const std::string& fname)
 }
 
 namespace {
-    void    write_onto(Attribute& a, const QuillData::RootData& r)
+    void    write_onto(Attribute& a, const QuillData::Root& r)
     {
         a.data = r.path;
         if(!r.key.empty())

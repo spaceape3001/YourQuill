@@ -13,7 +13,7 @@
 struct Copyright;
 
 struct QuillData {
-    struct RootData;
+    struct Root;
 
     //! Abbreviation
     String                  abbr;
@@ -53,19 +53,19 @@ struct QuillData {
     unsigned int            read_timeout;
     
     //! Root data directories
-    Vector<RootData>        roots;
+    Vector<Root>            roots;
 
     //! Temporary directory is here
     String                  temp_dir;
     
     //! Root templates
-    Vector<RootData>        templates;
+    Vector<Root>            templates;
     
     void                    reset();
     
 };
 
-struct QuillData::RootData {
+struct QuillData::Root {
     String          key;
     String          name;
     String          path;
@@ -73,7 +73,7 @@ struct QuillData::RootData {
     Vcs             vcs;
     String          color;
     
-    RootData(){}
-    explicit RootData(const String&);
-    ~RootData(){}
+    Root(){}
+    explicit Root(const String& p) : path(p) {}
+    ~Root(){}
 };

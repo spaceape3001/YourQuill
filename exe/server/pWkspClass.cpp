@@ -67,10 +67,10 @@ namespace {
                 auto t = h.table();
                 h.key("Key")        << cdb::key(x_class);
                 h.key("ID")         << x_class.id;
-                h.key("Name")       << ILine("name", whole->name().qString());
-                h.key("Plural")     << ILine("plural", whole->plural().qString());
-                h.key("Brief")      << ILine("brief", whole->brief().qString());
-                h.key("Notes")      << IText("notes", whole->notes().qString());
+                h.key("Name")       << ILine("name", whole->name.qString());
+                h.key("Plural")     << ILine("plural", whole->plural.qString());
+                h.key("Brief")      << ILine("brief", whole->brief.qString());
+                h.key("Notes")      << IText("notes", whole->notes.qString());
             }
             
             h << SubmitLabel::Save << "\n";
@@ -80,16 +80,16 @@ namespace {
             auto _t = h.table();
             h.key("Key")        << cdb::key(x_class);
             h.key("ID")         << x_class.id;
-            h.key("Name")       << whole -> name();
-            h.key("Plural")     << whole -> plural();
-            h.key("Brief")      << whole -> brief();
-            h.key("Use")        << config(get_class_vector(whole->use()));
+            h.key("Name")       << whole -> name;
+            h.key("Plural")     << whole -> plural;
+            h.key("Brief")      << whole -> brief;
+            h.key("Use")        << config(get_class_vector(whole->use));
             if(!x_root)
                 h.key("Derives") << config(cdb::dependents(x_class, Linkage::Direct));
-            h.key("Sources")    << config(get_class_vector(whole->source()));
-            h.key("Targets")    << config(get_class_vector(whole->target()));
-            h.key("Reverse")    << config(get_class_vector(whole->reverse()));
-            h.key("Notes")      << whole -> notes();
+            h.key("Sources")    << config(get_class_vector(whole->sources));
+            h.key("Targets")    << config(get_class_vector(whole->targets));
+            h.key("Reverse")    << config(get_class_vector(whole->reverse));
+            h.key("Notes")      << whole -> notes;
             h.key("Fields")     << fields;
         }
     }
@@ -103,10 +103,10 @@ namespace {
         test(decode_root(), false);
         
         ClassFile::Shared   x = cdb::write(x_class, x_root);
-        x -> name(utf8(x_request -> getParameter("name")));
-        x -> plural(utf8(x_request -> getParameter("plural")));
-        x -> brief(utf8(x_request -> getParameter("brief")));
-        x -> notes(utf8(x_request -> getParameter("notes")));
+        x -> name   = utf8(x_request -> getParameter("name"));
+        x -> plural = utf8(x_request -> getParameter("plural"));
+        x -> brief  = utf8(x_request -> getParameter("brief"));
+        x -> notes  = utf8(x_request -> getParameter("notes"));
         x -> save();
         return_to_sender();
     }
@@ -132,15 +132,15 @@ namespace {
             ClassFile::Shared    p   = cdb::read(x_class, rt);
             if(!p)
                 continue;
-            for(auto& j : p->fields()){
-                FData&  f   = fields[j.key];
-                f.key       = j.key;
-                f.name.set_if(j.name);
-                f.brief.set_if(j.desc);
+            for(auto& j : p->fields){
+                FData&  f   = fields[j.first];
+                f.key       = j.first;
+                f.name.set_if(j.second.name);
+                f.brief.set_if(j.second.brief);
                 f.roots << rt;
                 f.direct    = true;
                 if(!f.field)
-                    f.field = cdb::field(x_class, j.key.qString());
+                    f.field = cdb::field(x_class, j.first.qString());
             }
         }
         
@@ -210,9 +210,9 @@ namespace {
         auto    p   = cdb::write(x_class, x_root);
         if(!p)
             throw HttpStatus::BadRequest;
-        auto  fd    = p -> field( x_key, true);
-        fd.name(x_key);
-        fd.plural(x_key + "s");
+        auto  &fd    = p -> fields[ x_key];
+        fd.name = x_key;
+        fd.plural = x_key + "s";
         p -> save();
 
         //if(x_edit_req){
@@ -242,9 +242,6 @@ namespace {
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
-            auto urev   = us->reverse();
-            auto wrev  = whole->reverse();
-            
             auto f = h.form("/wksp/class/edit/reverses", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id()));
 
             h.table(col_array_cols(all, x_columns), [&](Class c){
@@ -256,10 +253,10 @@ namespace {
                 QString     id  = "rev-" + k;
                 h << IHidden(id, "false") << "\n";
                 h << "<input type=\"checkbox\" id=\"" << id << "\" name=\"" << id << "\" value=\"true\"";
-                if(urev.has(k))
+                if(us->reverse.has(k))
                     h << " checked=\"true\"";
                 h << "><label for=\"" << id << "\">" << cdb::label(c) << "</label>";
-                if(wrev.has(k) && !urev.has(k))
+                if(whole->reverse.has(k) && !us->reverse.has(k))
                     h << "<br><i>(implicitly checked)</i>";
             });
             h << SubmitLabel::Save;
@@ -275,9 +272,14 @@ namespace {
             
         test(decode_class_prime(), false);
         test(decode_root(), false);
-        
-        StringSet   rev;
+
+    
         Vector<Class>   all = cdb::all_classes(Sorted::YES);
+        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        if(!x)
+            throw HttpStatus::BadRequest;
+
+        x -> reverse.clear();
         for(auto c : all){
             if(c == x_class)
                 continue;
@@ -285,13 +287,9 @@ namespace {
             QByteArray  id   = utf8("rev-" + k);
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
-                rev << k;
+                x->reverse << k;
         }
         
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
-        if(!x)
-            throw HttpStatus::BadRequest;
-        x -> reverse(rev);
         x -> save();
         return_to_sender();
     }
@@ -315,8 +313,6 @@ namespace {
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
-            auto usrc   = us->source();
-            auto wsrc   = whole->source();
             
             auto f = h.form("/wksp/class/edit/sources", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id()));
 
@@ -328,10 +324,10 @@ namespace {
                 QString     id  = "src-" + k;
                 h << IHidden(id, "false") << "\n";
                 h << "<input type=\"checkbox\" id=\"" << id << "\" name=\"" << id << "\" value=\"true\"";
-                if(usrc.has(k))
+                if(us->sources.has(k))
                     h << " checked=\"true\"";
                 h << "><label for=\"" << id << "\">" << cdb::label(c) << "</label>";
-                if(wsrc.has(k) && !usrc.has(k))
+                if(whole->sources.has(k) && !us->sources.has(k))
                     h << "<br><i>(implicitly checked)</i>";
             });
             h << SubmitLabel::Save;
@@ -351,6 +347,11 @@ namespace {
         StringSet src;
             
         Vector<Class>   all = cdb::all_classes();
+        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        if(!x)
+            throw HttpStatus::BadRequest;
+
+        x->sources.clear();
         for(auto c : all){
             if(c == x_class)
                 continue;
@@ -358,13 +359,9 @@ namespace {
             QByteArray  id   = utf8("src-" + k);
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
-                src << k;
+                x->sources << k;
         }
         
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
-        if(!x)
-            throw HttpStatus::BadRequest;
-        x -> source(src);
         x -> save();
         return_to_sender();
     }
@@ -385,8 +382,6 @@ namespace {
             ClassFile::Shared    us, whole;
             whole       = cdb::merged(x_class);
             us          = cdb::read(x_class, x_root);
-            auto utgt   = us->target();
-            auto wtgt   = whole->target();
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
@@ -400,10 +395,10 @@ namespace {
                 QString     id  = "tgt-" + k;
                 h << IHidden(id, "false") << "\n";
                 h << "<input type=\"checkbox\" id=\"" << id << "\" name=\"" << id << "\" value=\"true\"";
-                if(utgt.has(k))
+                if(us->targets.has(k))
                     h << " checked=\"true\"";
                 h << "><label for=\"" << id << "\">" << cdb::label(c) << "</label>";
-                if(wtgt.has(k) && !utgt.has(k))
+                if(whole->targets.has(k) && !us->targets.has(k))
                     h << "<br><i>(implicitly checked)</i>";
             });
             h << SubmitLabel::Save;
@@ -420,8 +415,12 @@ namespace {
         test(decode_class_prime(), false);
         test(decode_root(), false);
         
-        StringSet   tgt;
         Vector<Class>   all = cdb::all_classes();
+        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        if(!x)
+            throw HttpStatus::BadRequest;
+        x->targets.clear();
+
         for(auto c : all){
             if(c == x_class)
                 continue;
@@ -429,13 +428,9 @@ namespace {
             QByteArray  id   = utf8("tgt-" + k);
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
-                tgt << k;
+                x->targets << k;
         }
         
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
-        if(!x)
-            throw HttpStatus::BadRequest;
-        x -> target(tgt);
         x -> save();
         return_to_sender();
     }
@@ -456,8 +451,6 @@ namespace {
             whole       = cdb::merged(x_class);
             us          = cdb::read(x_class, x_root);
             
-            auto uuse   = us->use();
-            auto wuse   = whole->use();
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
@@ -476,8 +469,8 @@ namespace {
                 } else {
                     QString     id  = "use-" + nki.key;
                     h << IHidden(id, "false");
-                    h << ICheck(id, nki.name, uuse.has(nki.key));
-                    if(wuse.has(nki.key) && !uuse.has(nki.key))
+                    h << ICheck(id, nki.name, us->use.has(nki.key));
+                    if(whole->use.has(nki.key) && !us->use.has(nki.key))
                         h << "<br><i>(implicitly checked)</i>";
                     h << "\n";
                 }
@@ -504,7 +497,7 @@ namespace {
         ClassFile::Shared   x = cdb::write(x_class, x_root);
         if(!x)
             throw HttpStatus::BadRequest;
-        StringSet use;
+        x->use.clear();
         Vector<Class>   all = cdb::all_classes();
         for(auto c : all){
             if(c == x_class)
@@ -513,10 +506,9 @@ namespace {
             QByteArray  id   = utf8("use-" + k);
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
-                use << k;
+                x->use << k;
         }
         
-        x -> use(use);
         x -> save();
         return_to_sender();
     }

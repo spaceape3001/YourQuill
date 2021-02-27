@@ -1099,8 +1099,8 @@ namespace cdb {
             return c;
         
         ClassFile::Shared    td  = write(c, rt);
-        td -> name(k);
-        td -> plural(k + 's');
+        td -> name      = k;
+        td -> plural    = k + 's';
         td -> save();
         return c;
     }
@@ -1112,8 +1112,7 @@ namespace cdb {
         for(auto& i : reads(c)){
             if(opts & IsUpdate)
                 update(i.first);
-            ret->fusion(*(i.second));
-            //ret->merge(*(i.second), static_cast<bool>(opts&Override));
+            ret->merge(*(i.second), static_cast<bool>(opts&Override));
         }
         return ret;
     }
