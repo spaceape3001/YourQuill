@@ -6,7 +6,7 @@
 
 #pragma once
 #include <QWidget>
-#include "gui/UndoBase.hpp"
+#include "gui/undo/UndoBase.hpp"
 #include <optional>
 
 class LineEdit;

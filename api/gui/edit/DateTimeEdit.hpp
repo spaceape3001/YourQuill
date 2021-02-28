@@ -7,7 +7,7 @@
 #pragma once
 
 #include <QDateTimeEdit>
-#include "gui/UndoBase.hpp"
+#include "gui/undo/UndoBase.hpp"
 
 class DateTimeEdit : public QDateTimeEdit, public UndoBase {
     Q_OBJECT

@@ -1,20 +1,11 @@
 set(gui_sources
-    ./DrawRuler.cpp
-    ./DrawRuler.hpp
     ./FlowLayout.cpp
     ./FlowLayout.hpp
-    ./GridTickModel.cpp
-    ./GridTickModel.hpp
+
     ./SqlTableView.cpp
     ./SqlTableView.hpp
-    ./StandardGridTickModel.hpp
     ./UInt64Mapper.cpp
     ./UInt64Mapper.hpp
-    ./UndoAction.cpp
-    ./UndoAction.hpp
-    ./UndoBase.cpp
-    ./UndoBase.hpp
-    ./UndoCallback.hpp
 
     ./edit/CheckBox.cpp
     ./edit/CheckBox.hpp
@@ -50,6 +41,11 @@ set(gui_sources
     ./edit/TextEdit.cpp
     ./edit/TextEdit.hpp
 
+    ./undo/UndoAction.cpp
+    ./undo/UndoAction.hpp
+    ./undo/UndoBase.cpp
+    ./undo/UndoBase.hpp
+    ./undo/UndoCallback.hpp
 
     ./validator/IdentifierValidator.cpp
     ./validator/IdentifierValidator.hpp
@@ -59,6 +55,14 @@ set(gui_sources
     ./validator/NoSpacesValidator.hpp
     ./validator/XmlIdentifierValidator.cpp
     ./validator/XmlIdentifierValidator.hpp
+
+    ./widget/DrawRuler.cpp
+    ./widget/DrawRuler.hpp
+    ./widget/GridTickModel.cpp
+    ./widget/GridTickModel.hpp
+    ./widget/StandardGridTickModel.hpp
+    ./widget/TabWidgetBar.cpp
+    ./widget/TabWidgetBar.hpp
 )
 
 add_library(yqgui SHARED ${gui_sources})
