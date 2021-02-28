@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <QDateTimeEdit>
+#include "UndoBase.hpp"
+
+class DateTimeEdit : public QDateTimeEdit, public UndoBase {
+    Q_OBJECT
+public:
+    DateTimeEdit(QWidget*parent=nullptr);
+    ~DateTimeEdit();
+};

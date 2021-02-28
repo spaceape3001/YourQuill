@@ -5,5 +5,6 @@
 
 add_subdirectory(util)
 add_subdirectory(meta)
+add_subdirectory(gui)
 add_subdirectory(db)
 

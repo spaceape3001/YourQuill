@@ -28,7 +28,7 @@ option(Feature_UnitTests "Enable Unit Tests" ON)
 if(${Feature_QtGUI})
     set(ENABLE_QT ON)
 endif()
-set(ENABLE_GLM ON)
+set(ENABLE_GLM OFF)
 
 message( "Build Type is " ${CMAKE_BUILD_TYPE})
 
@@ -36,11 +36,11 @@ find_package(CURL)
 find_package(Log4cpp REQUIRED)
 find_package(TBB)
 find_package(Graphviz)
-find_package(SQLite3)
-find_package(libzip REQUIRED)
+# find_package(SQLite3)
+# find_package(libzip REQUIRED)
 find_package(Qt5 REQUIRED Core Gui Network Sql Svg  Widgets WebEngine WebEngineWidgets)
 
-find_package(nghttp2)
+# find_package(nghttp2)
 
 if(EXISTS play)
     set(VULKAN TRUE)

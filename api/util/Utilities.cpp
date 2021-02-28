@@ -236,6 +236,38 @@ QByteArray  make_png(const QImage&img)
     return buf.buffer();
 }
 
+StringSet       qt(const QStringSet& q)
+{
+    StringSet   ret;
+    for(const QString & s : q)
+        ret << s;
+    return ret;
+}
+
+QStringSet      qt(const StringSet&q)
+{
+    QStringSet  ret;
+    for(const String& s : q)
+        ret << s.qString();
+    return ret;
+}
+
+Vector<String>  qt(const Vector<QString>&q)
+{
+    Vector<String> ret;
+    for(const QString& s : q)
+        ret << s;
+    return ret;
+}
+
+Vector<QString> qt(const Vector<String>&q)
+{
+    Vector<QString> ret;
+    for(const String& s : q)
+        ret << s.qString();
+    return ret;
+}
+
 QString         sanitize_path(const QString& path)
 {
     return sanitize_path(path.split('/')).join('/');
@@ -282,3 +314,4 @@ std::ostream& operator<<(std::ostream&os, const QString& v)
 {
     return os << v.toStdString();
 }
+

@@ -1,0 +1,61 @@
+set(gui_sources
+    ./CheckBox.cpp
+    ./CheckBox.hpp
+    ./ColorChip.cpp
+    ./ColorChip.cpp
+    ./ComboBox.cpp
+    ./ComboBox.hpp
+    ./ColorCombo.cpp
+    ./ColorCombo.hpp
+    ./DateEdit.cpp
+    ./DateEdit.hpp
+    ./DateTimeEdit.cpp
+    ./DateTimeEdit.hpp
+    ./DateTimeWidget.cpp
+    ./DateTimeWidget.hpp
+    ./DateWidget.cpp
+    ./DateWidget.hpp
+    ./DirBox.cpp
+    ./DirBox.hpp
+    ./DoubleSpinBox.cpp
+    ./DoubleSpinBox.hpp
+    ./DrawRuler.cpp
+    ./DrawRuler.hpp
+    ./EnumCombo.cpp
+    ./EnumCombo.hpp
+    ./FileBox.cpp
+    ./FileBox.hpp
+    ./FlowLayout.cpp
+    ./FlowLayout.hpp
+    ./GenericEnumCombo.hpp
+    ./GridTickModel.cpp
+    ./GridTickModel.hpp
+    ./IdentifierValidator.cpp
+    ./IdentifierValidator.hpp
+    ./KeyValidator.cpp
+    ./KeyValidator.hpp
+    ./LineEdit.cpp
+    ./LineEdit.hpp
+    ./NoSpacesValidator.cpp
+    ./NoSpacesValidator.hpp
+    ./SpinBox.cpp
+    ./SpinBox.hpp
+    ./SqlTableView.cpp
+    ./SqlTableView.hpp
+    ./StandardGridTickModel.hpp
+    ./StringSetCheck.cpp
+    ./StringSetCheck.hpp
+    ./TextEdit.cpp
+    ./TextEdit.hpp
+    ./UndoAction.cpp
+    ./UndoAction.hpp
+    ./UndoBase.cpp
+    ./UndoBase.hpp
+    ./UndoCallback.hpp
+    ./XmlIdentifierValidator.cpp
+    ./XmlIdentifierValidator.hpp
+)
+
+add_library(yqgui SHARED ${gui_sources})
+target_link_libraries(yqgui PUBLIC yqutil Qt5::Gui Qt5::Widgets Qt5::Sql)
+

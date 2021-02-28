@@ -68,3 +68,9 @@ QString         utf8(const QByteArray&);
 QByteArray      utf8(const QString&);
 
 std::ostream& operator<<(std::ostream&, const QString&);
+
+StringSet       qt(const QStringSet&);
+QStringSet      qt(const StringSet&);
+
+Vector<String>  qt(const Vector<QString>&);
+Vector<QString> qt(const Vector<String>&);

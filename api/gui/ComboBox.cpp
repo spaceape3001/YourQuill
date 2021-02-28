@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "ComboBox.hpp"
+
+
+ComboBox::ComboBox(QWidget* parent) : QComboBox(parent)
+{
+}
+
+ComboBox::~ComboBox()
+{
+}
+
+void    ComboBox::reset()
+{
+    setCurrentIndex(-1);
+}
+
+
+#include "moc_ComboBox.cpp"

@@ -1,0 +1,23 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "DoubleSpinBox.hpp"
+
+
+DoubleSpinBox::DoubleSpinBox(QWidget*parent) : QDoubleSpinBox(parent)
+{
+}
+
+DoubleSpinBox::~DoubleSpinBox()
+{
+}
+
+void    DoubleSpinBox::reset()
+{
+    setValue(0);
+}
+
+#include "moc_DoubleSpinBox.cpp"
