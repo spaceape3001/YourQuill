@@ -2,6 +2,8 @@ set(dbgui_sources
     ./QuillApp.cpp
     ./QuillApp.hpp
     
+    ./wksp/RootComboBox.cpp
+    ./wksp/RootComboBox.hpp
     ./wksp/WkspSelectorDlg.cpp
     ./wksp/WkspSelectorDlg.hpp
 )
