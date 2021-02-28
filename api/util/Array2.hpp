@@ -47,6 +47,7 @@ public:
     int         size() const { return m_data.size(); }
     
     void        clear() { m_data.clear(); }
+    int         columnCount() const { return m_cols; }
     
     T&          operator()(int,int);
     const T&    operator()(int,int) const;
@@ -58,6 +59,8 @@ public:
     int         num_columns() const { return m_cols; }
     
     bool        isValid(int, int) const;
+    
+    int         rowCount() const { return m_rows; }
     
     void        append_rows(int cnt) ;
     

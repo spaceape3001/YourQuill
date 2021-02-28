@@ -79,6 +79,12 @@ bool is_main_thread()
     return QThread::currentThread() == QCoreApplication::instance()->thread();
 }
 
+bool isMainThread()
+{
+    return is_main_thread();
+}
+
+
 QString  join(const Set<uint16_t>& values, const QString& sep)
 {
     Comma       c(sep);

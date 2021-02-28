@@ -38,6 +38,7 @@ QIcon           fetch_icon(const QString&);
 
 
 bool            is_main_thread();
+bool            isMainThread();
 
 
 QString         join(const Set<uint16_t>& values, const QString& sep);

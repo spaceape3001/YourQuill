@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "gui/undo/UndoBase.hpp"
+#include <gui/undo/UndoBase.hpp>
 #include <QCheckBox>
 
 /*! \brief Undoable checkbox with boolean value

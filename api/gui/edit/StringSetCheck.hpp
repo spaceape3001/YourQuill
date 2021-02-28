@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "gui/undo/UndoBase.hpp"
-#include "util/Map.hpp"
+#include <gui/undo/UndoBase.hpp>
+#include <util/Map.hpp>
 #include <QWidget>
 
 class CheckBox;

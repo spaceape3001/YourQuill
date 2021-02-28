@@ -1,9 +1,5 @@
 set(gui_sources
-    ./FlowLayout.cpp
-    ./FlowLayout.hpp
 
-    ./SqlTableView.cpp
-    ./SqlTableView.hpp
     ./UInt64Mapper.cpp
     ./UInt64Mapper.hpp
 
@@ -41,6 +37,20 @@ set(gui_sources
     ./edit/TextEdit.cpp
     ./edit/TextEdit.hpp
 
+    ./layout/FlowLayout.cpp
+    ./layout/FlowLayout.hpp
+
+    ./main/MainWin.cpp
+    ./main/MainWin.hpp
+    ./main/SimpleEditor.cpp
+    ./main/SimpleEditor.hpp
+    ./main/SubWin.cpp
+    ./main/SubWin.hpp
+    ./main/UndoMain.cpp
+    ./main/UndoMain.hpp
+    ./main/UndoWin.cpp
+    ./main/UndoWin.hpp
+
     ./undo/UndoAction.cpp
     ./undo/UndoAction.hpp
     ./undo/UndoBase.cpp
@@ -56,13 +66,22 @@ set(gui_sources
     ./validator/XmlIdentifierValidator.cpp
     ./validator/XmlIdentifierValidator.hpp
 
+    ./view/SimpleTable.cpp
+    ./view/SimpleTable.hpp
+    ./view/SqlTableView.cpp
+    ./view/SqlTableView.hpp
+
+
     ./widget/DrawRuler.cpp
     ./widget/DrawRuler.hpp
     ./widget/GridTickModel.cpp
     ./widget/GridTickModel.hpp
     ./widget/StandardGridTickModel.hpp
+    ./widget/TabWidget.cpp
+    ./widget/TabWidget.hpp
     ./widget/TabWidgetBar.cpp
     ./widget/TabWidgetBar.hpp
+    
 )
 
 add_library(yqgui SHARED ${gui_sources})

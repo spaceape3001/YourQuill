@@ -39,6 +39,7 @@ set(util_sources
     ./Ref.hpp
     ./Safety.hpp
     ./Set.hpp
+    ./Span.hpp
     ./SqlQuery.cpp
     ./SqlQuery.hpp
     ./SqlUtils.cpp
