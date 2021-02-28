@@ -1,6 +1,8 @@
 set(gadget_sources
     ./DateGen.cpp
     ./DateGen.hpp
+    ./MonthView.cpp
+    ./MonthView.hpp
     ./SqlTool.cpp
     ./SqlTool.hpp
     ./TimeGen.cpp

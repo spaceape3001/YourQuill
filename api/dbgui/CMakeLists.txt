@@ -1,6 +1,9 @@
 set(dbgui_sources
     ./QuillApp.cpp
     ./QuillApp.hpp
+    
+    ./wksp/WkspSelectorDlg.cpp
+    ./wksp/WkspSelectorDlg.hpp
 )
 
 add_library(yqdbgui SHARED ${dbgui_sources})

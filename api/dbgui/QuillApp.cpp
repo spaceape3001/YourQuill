@@ -339,7 +339,7 @@ bool      QuillApp::init_local_workspace(const QString& path)
         //  start the scanner....
         //  FOR NOW, we're not detaching this.... eventually we'll smarten DB up.
         m.db_proc   = new QProcess(this);
-        m.db_proc -> setProgram(yq_exe("db"));
+        m.db_proc -> setProgram(yq_exe("serverYQ"));
         m.db_proc -> setArguments(QStringList() << qFile);
         m.db_proc -> start();
         
