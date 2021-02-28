@@ -578,7 +578,7 @@ Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(Text&))
 namespace {
     struct DirDispatcher : public Page {
         QDir        m_dir;
-        DirDispatcher(const String& path, const QDir& dir) : Page(hGet, path, true), m_dir(dir)
+        DirDispatcher(HttpOp hOp, const String& path, const QDir& dir) : Page(hOp, path, true), m_dir(dir)
         {
         }
         
@@ -591,5 +591,96 @@ namespace {
 
 Page::Writer    dispatcher(const String&path, const QDir&dir)
 {
-    return Page::Writer(new DirDispatcher(path, dir));
+    return Page::Writer(new DirDispatcher(hGet, path, dir));
 }
+
+Page::Writer    dispatcher(HttpOp hOp, const String&path, const QDir&dir)
+{
+    return Page::Writer(new DirDispatcher(hOp, path, dir));
+}
+
+namespace {
+    struct NoneDispatcher : public Page {
+        typedef void (*FN)(const String&);
+        FN          m_fn;
+        ContentType    handle(QByteArray& dst, const QByteArray&path) const override
+        {
+            m_fn(path);
+            throw HttpStatus::Teapot;
+        }
+        
+        NoneDispatcher(HttpOp op, const String& path, FN fn) : Page(op, path, false), m_fn(fn) {}
+    };
+}
+
+Page::Writer    dispatcher(HttpOp op, const String&path, void(*fn)(const String&))
+{
+    return Page::Writer(new NoneDispatcher(op, path, fn));
+}
+
+
+namespace {
+    struct HtmlDispatcher : public Page {
+        typedef void(*FN)(Html&, const String&);
+        FN      m_fn;
+        HtmlDispatcher(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, true), m_fn(fn)
+        {
+        }
+        
+        ContentType     handle(QByteArray& dst, const QByteArray& path) const override
+        {
+            Html    h;
+
+            if(!no_expand() && tabbar())
+                h << *tabbar();
+
+            m_fn(h, path);
+            h.flush();
+         
+            if(no_expand()){
+                dst         = h.steal();
+            } else {
+                x_content   = h.steal();
+                x_title     = h.title();
+                dst         = do_expand(def_page(), m_getters);
+            } 
+            return ContentType::html;
+        }
+    };
+}
+
+Page::Writer    dispatcher(HttpOp op, const String&path, void(*fn)(Html&, const String&))
+{
+    return Page::Writer(new HtmlDispatcher(op, path, fn));
+}
+
+namespace {
+    struct MarkdownDispatcher : public Page {
+        typedef void (*FN)(Markdown&, const String&);
+        FN m_fn;
+        MarkdownDispatcher(HttpOp hOp, const String& path, FN fn) : Page(hOp,  path, true), m_fn(fn)
+        {
+        }
+        
+        ContentType  handle(QByteArray& dst, const QByteArray&path) const override
+        {
+            Markdown    md;
+            m_fn(md, path);
+            md.flush();
+            auto ct = Markdown::exec(md.steal());
+            x_title = md.title();
+            if(x_title.isEmpty() && !ct.title.isEmpty())
+                x_title     = ct.title;
+            x_content   = std::move(ct.content);
+            dst         = do_expand(def_page(), m_getters);
+            return ContentType::html;
+        }
+    };
+}
+
+Page::Writer    dispatcher(HttpOp op, const String&path, void(*fn)(Markdown&, const String&))
+{
+    return Page::Writer(new MarkdownDispatcher(op, path, fn));
+}
+
+

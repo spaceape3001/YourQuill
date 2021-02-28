@@ -188,8 +188,10 @@ Page::Writer     page(HttpOp, const String&, QJsonObject (*)());
 Page::Writer     page(HttpOp, const String&, void (*)(QSvgGenerator&));
 
 Page::Writer    dispatcher(const String&, const QDir&);
-Page::Writer    dispatcher(const String&, void(*)(Html&, const String&));
-//Page::Writer    dispatcher(const String&, void(*)(Markdown&, const String&);
+Page::Writer    dispatcher(HttpOp, const String&, const QDir&);
+Page::Writer    dispatcher(HttpOp, const String&, void(*)(const String&));
+Page::Writer    dispatcher(HttpOp, const String&, void(*)(Html&, const String&));
+Page::Writer    dispatcher(HttpOp, const String&, void(*)(Markdown&, const String&));
 
 void             tabbar(std::initializer_list<Page::Writer>);
 
