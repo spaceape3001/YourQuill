@@ -49,6 +49,8 @@ public:
 
     //bool                            is_collection() const;
     
+    int                             qtType() const { return m_qtType; }
+    
     //const MetaKey*                  key(size_t) const;
     
     //Vector<const MetaKey*>           keys() const;
@@ -71,6 +73,7 @@ private:
 
     DataBlock                   m_defCopy;
     size_t                      m_size;
+    int                         m_qtType;
     bool                        m_small;
     //Vector<const MetaField*>    m_keys;
     

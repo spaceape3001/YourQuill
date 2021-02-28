@@ -35,6 +35,8 @@ set(util_sources
     ./Logging.hpp
     ./Map.hpp
     ./MultiMap.hpp
+    ./Random.cpp
+    ./Random.hpp
     ./Ref.cpp
     ./Ref.hpp
     ./Safety.hpp

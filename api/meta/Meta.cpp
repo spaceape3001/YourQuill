@@ -575,6 +575,7 @@ const MetaValue&  MetaValue::variant()
 
 MetaValue::MetaValue(const char*zName, const char* f, unsigned int i) : MetaType(zName, f, i),
     m_size(0),
+    m_qtType(0),
     m_small(false),
     m_copyB(nullptr),
     m_ctorCopyR(nullptr),
