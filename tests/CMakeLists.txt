@@ -7,11 +7,22 @@ macro(coretest name)
     add_test(NAME ${name} COMMAND test_${name} ${ARGN})
 endmacro()
 
+macro(mt_math name)
+    add_executable(test_${name} ${name}.cpp)
+    target_link_libraries(test_${name} PRIVATE yqmath yqmeta yqutil ${TBB_LIBRARIES})
+endmacro()
+macro(mathtest name)
+    mt_math(${name})
+    add_test(NAME ${name} COMMAND test_${name} ${ARGN})
+endmacro()
+
 add_subdirectory(attr)
 add_subdirectory(char8)
+add_subdirectory(fraction)
 add_subdirectory(metavalue)
 add_subdirectory(string)
 add_subdirectory(variant)
 add_subdirectory(workspace)
 add_subdirectory(xml)
+
 

@@ -9,7 +9,8 @@
 #include <meta/MetaValue.hpp>
 
 struct Fraction {
-    int         num, den;
+    int         num = 0;
+    int         den = 1;
     
     static constexpr int gcd(int a,int b);
     static int ipow(int base, unsigned int exp);
