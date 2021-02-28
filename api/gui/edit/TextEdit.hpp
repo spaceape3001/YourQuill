@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "UndoBase.hpp"
+#include "gui/UndoBase.hpp"
 #include <QTextEdit>
 
 #include <optional>

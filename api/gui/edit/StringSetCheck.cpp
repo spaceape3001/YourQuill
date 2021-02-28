@@ -6,7 +6,7 @@
 
 #include "StringSetCheck.hpp"
 #include "CheckBox.hpp"
-#include "FlowLayout.hpp"
+#include "gui/FlowLayout.hpp"
 #include "util/Set.hpp"
 #include "util/Utilities.hpp"
 #include "util/Vector.hpp"

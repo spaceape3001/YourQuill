@@ -6,36 +6,40 @@
 
 #pragma once
 #include <QWidget>
-#include "UndoBase.hpp"
+#include "gui/UndoBase.hpp"
 #include <optional>
 
 class LineEdit;
 class QToolButton;
 
-
-class DirBox : public QWidget, public UndoBase {
+class FileBox : public QWidget, public UndoBase {
     Q_OBJECT
 public:
-    DirBox(QWidget*parent=nullptr);
-    virtual ~DirBox();
+    FileBox(QWidget*parent=nullptr);
+    virtual ~FileBox();
+    
+    void    setFile(const QString&);
+    QString file() const;
     
     void                        set(const std::optional<QString>&);
     std::optional<QString>      get() const;
-
-    void    setDirPath(const QString&);
-    QString dirPath() const;
+    
+    void    setFilter(const QString&);
     void    setTitle(const QString&);
     
     //  eventually, get UNDO working....
 public slots:
     void        clear();
     void        setReadOnly(bool);
+    
 signals:
-    void        dirPathChanged(const QString&);    
+    void        fileChanged(const QString&);    
 private slots:
     void        browse();
 private:
     QString         m_title;
+    QString         m_filter;
     LineEdit*       m_edit;
     QToolButton*    m_button;
 };
+

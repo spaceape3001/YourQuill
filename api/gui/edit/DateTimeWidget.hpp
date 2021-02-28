@@ -7,7 +7,7 @@
 #pragma once
 
 #include <QWidget>
-#include "UndoBase.hpp"
+#include "gui/UndoBase.hpp"
 
 class CheckBox;
 class DateTimeEdit;
