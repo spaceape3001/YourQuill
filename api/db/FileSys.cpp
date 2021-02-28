@@ -5,13 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FileSys.hpp"
-
-#include "util/Logging.hpp"
-#include "util/FileUtils.hpp"
-#include "util/SqlQuery.hpp"
 #include "NKI.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
+
+#include <util/FileUtils.hpp>
+#include <util/Logging.hpp>
+#include <util/SqlQuery.hpp>
 
 #include <QSqlError>
 

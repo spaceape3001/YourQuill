@@ -6,14 +6,15 @@
 
 #include "Tag.hpp"
 
-#include "util/Logging.hpp"
 #include "Image.hpp"
-#include "util/FileUtils.hpp"
 #include "Leaf.hpp"
-#include "util/SqlQuery.hpp"
 #include "NKI.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
+
+#include <util/Logging.hpp>
+#include <util/FileUtils.hpp>
+#include <util/SqlQuery.hpp>
 
 #include <QSqlError>
 

@@ -7,8 +7,8 @@
 #pragma once
 
 #include "RootFwd.hpp"
-#include "util/Enum.hpp"
-#include "util/Flag.hpp"
+#include <util/Enum.hpp>
+#include <util/Flag.hpp>
 
 class QSqlDatabase;
 class QDateTime;

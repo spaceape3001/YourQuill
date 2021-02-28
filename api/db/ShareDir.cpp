@@ -5,9 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ShareDir.hpp"
-//#include "Utilities.hpp"
-#include "util/FileUtils.hpp"
-#include "util/Vector.hpp"
+
+#include <util/FileUtils.hpp>
+#include <util/Vector.hpp>
+
 #include <QDir>
 #include <QFile>
 #include <QString>

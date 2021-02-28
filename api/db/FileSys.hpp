@@ -6,10 +6,11 @@
 
 #pragma once
 
-#include "DataRole.hpp"
-#include "Sorted.hpp"
-#include "Image.hpp"
 #include "CacheFwd.hpp"
+#include "DataRole.hpp"
+#include "Image.hpp"
+#include "Sorted.hpp"
+
 #include <QString>
 
 /*! \brief Directory in the cache

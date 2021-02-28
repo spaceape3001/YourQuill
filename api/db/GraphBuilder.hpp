@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "util/Vector.hpp"
+#include <util/Vector.hpp>
 #include <QString>
 
 struct Graph;

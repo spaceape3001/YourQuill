@@ -13,9 +13,9 @@
 #include "Image.hpp"
 #include "Tag.hpp"
 
-#include "util/Logging.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Utilities.hpp"
+#include <util/Logging.hpp>
+#include <util/SqlQuery.hpp>
+#include <util/Utilities.hpp>
 
 #include <QSqlError>
 

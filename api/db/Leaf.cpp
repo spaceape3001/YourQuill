@@ -6,15 +6,16 @@
 
 #include "Leaf.hpp"
 
-#include "util/Logging.hpp"
 #include "AtomSys.hpp"
 #include "FileSys.hpp"
 #include "Image.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Utilities.hpp"
 #include "NKI.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
+
+#include <util/Logging.hpp>
+#include <util/SqlQuery.hpp>
+#include <util/Utilities.hpp>
 
 namespace cdb {
 

@@ -11,10 +11,10 @@
 #include "WkspLogging.hpp"
 #include "Copyright.hpp"
 #include "ShareDir.hpp"
-#include "meta/Global.hpp"
-#include "meta/GlobalImpl.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Utilities.hpp"
+#include <meta/Global.hpp>
+#include <meta/GlobalImpl.hpp>
+#include <util/DelayInit.hpp>
+#include <util/Utilities.hpp>
 
 #include <QCoreApplication>
 #include <QDateTime>

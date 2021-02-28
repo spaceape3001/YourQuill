@@ -19,7 +19,8 @@
 #include "SubmitLabel.hpp"
 #include "Update.hpp"
 #include "Vcs.hpp"
-#include "meta/MetaValueImpl.hxx"
+
+#include <meta/MetaValueImpl.hxx>
 
 
 MV_IMPLEMENT(Access)

@@ -7,10 +7,11 @@
 #include "Image.hpp"
 
 #include "FileSys.hpp"
-#include "util/Logging.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Utilities.hpp"
 #include "Workspace.hpp"
+
+#include <util/Logging.hpp>
+#include <util/SqlQuery.hpp>
+#include <util/Utilities.hpp>
 
 #include <QBuffer>
 #include <QImage>

@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "util/Enum.hpp"
-#include "meta/MetaValue.hpp"
+#include <meta/MetaValue.hpp>
+#include <util/Enum.hpp>
 
 
 YQ_ENUM(Format, , 

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "meta/MetaValue.hpp"
-#include "util/Enum.hpp"
+#include <meta/MetaValue.hpp>
+#include <util/Enum.hpp>
 
 /*! \enum AssertDeny
     \brief Assert/Deny something

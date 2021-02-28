@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "util/Enum.hpp"
-#include "util/Flag.hpp"
-#include "meta/MetaValue.hpp"
+#include <meta/MetaValue.hpp>
+#include <util/Enum.hpp>
+#include <util/Flag.hpp>
 
 YQ_ENUM(Update, ,
     Interior,   //<! Update any object-local data (no linkage)

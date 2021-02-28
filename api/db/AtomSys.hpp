@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "ClassFile.hpp"
 #include "CacheFwd.hpp"
-#include "Linkage.hpp"
+#include "ClassFile.hpp"
 #include "FileSys.hpp"
 #include "Graph.hpp"
 #include "Image.hpp"
+#include "Linkage.hpp"
 
 
 /*! \brief Atom in the cache

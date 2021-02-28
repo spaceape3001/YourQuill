@@ -5,12 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Graph.hpp"
-#include "util/Logging.hpp"
-#include "util/Execute.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Utilities.hpp"
-#include "util/Vector.hpp"
 #include "Workspace.hpp"
+
+#include <util/Execute.hpp>
+#include <util/Logging.hpp>
+#include <util/SqlQuery.hpp>
+#include <util/Utilities.hpp>
+#include <util/Vector.hpp>
 
 namespace cdb {
      

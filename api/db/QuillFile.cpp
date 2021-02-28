@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "QuillFile.hpp"
-#include "util/Utilities.hpp"
 
+#include <util/Utilities.hpp>
 
 void    QuillData::reset()
 {

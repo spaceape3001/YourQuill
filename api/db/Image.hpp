@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "SizeDesc.hpp"
-#include "util/Http.hpp"
 #include "CacheFwd.hpp"
+#include "SizeDesc.hpp"
+#include <util/Http.hpp>
 
 struct Image {
     static constexpr const int kSmallWidth     =  24;

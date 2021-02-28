@@ -5,13 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "StdFile.hpp"
-#include "util/Stream.hpp"
 
-#include "util/Logging.hpp"
-#include "util/Set.hpp"
-#include "util/Reverse.hpp"
+
+#include <util/Logging.hpp>
+#include <util/Reverse.hpp>
+#include <util/Set.hpp>
+#include <util/Stream.hpp>
+
 #include <cctype>
-
 #include <iostream>
 
 bool        StdFile::empty() const

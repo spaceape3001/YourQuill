@@ -6,12 +6,14 @@
 
 #pragma once
 
-#include "RootFwd.hpp"
-#include "Policy.hpp"
 #include "Access.hpp"
+#include "Policy.hpp"
+#include "RootFwd.hpp"
 #include "Vcs.hpp"
-#include "util/Flag.hpp"
-#include "util/EnumMap.hpp"
+
+#include <util/EnumMap.hpp>
+#include <util/Flag.hpp>
+
 #include <QDir>
 
 namespace wksp { struct Init; }

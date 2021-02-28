@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "util/TypeFwd.hpp"
+#include <util/TypeFwd.hpp>
 
 class QDir;
 class QFileInfo;

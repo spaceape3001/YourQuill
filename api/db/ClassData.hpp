@@ -1,10 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include "Multiplicity.hpp"
 #include "Restriction.hpp"
-#include "util/Map.hpp"
-#include "util/Set.hpp"
-#include "util/String.hpp"
+#include <util/Map.hpp>
+#include <util/Set.hpp>
+#include <util/String.hpp>
 
 
 struct ClassData {

@@ -6,7 +6,7 @@
 
 #pragma once
 #include "Format.hpp"
-#include "util/XmlFwd.hpp"
+#include <util/XmlFwd.hpp>
 
 struct Context {
     Format      format;

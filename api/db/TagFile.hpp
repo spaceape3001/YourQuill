@@ -7,7 +7,7 @@
 #pragma once
 
 #include "TagData.hpp"
-#include "util/AbstractFile.hpp"
+#include <util/AbstractFile.hpp>
 
 class TagFile : public AbstractFile, public TagData {
 public:
