@@ -69,7 +69,9 @@ target_link_libraries(yqutil
         ${LOG4CPP_LIBRARIES} 
         ${TBB_LIBRARIES}
         ${CURL_LIBRARIES}
-        Qt5::Core Qt5::Gui Qt5::Sql
+        Qt5::Core 
+        Qt5::Gui 
+        Qt5::Sql
 )
 
 

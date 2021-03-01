@@ -85,5 +85,12 @@ set(gui_sources
 )
 
 add_library(yqgui SHARED ${gui_sources})
-target_link_libraries(yqgui PUBLIC yqutil yqmeta Qt5::Gui Qt5::Widgets Qt5::Sql)
+target_link_libraries(yqgui 
+    PUBLIC 
+        yqutil 
+        yqmeta 
+        Qt5::Gui 
+        Qt5::Sql
+        Qt5::Widgets
+)
 

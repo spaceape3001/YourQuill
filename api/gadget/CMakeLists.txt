@@ -10,6 +10,12 @@ set(gadget_sources
 )
 
 add_library(yqgadget SHARED ${gadget_sources})
-target_link_libraries(yqgadget PUBLIC yqgui yqutil)
+target_link_libraries(yqgadget 
+    PUBLIC 
+        yqgui 
+        yqutil
+        Qt5::Core
+        Qt5::Widgets
+)
 
 
