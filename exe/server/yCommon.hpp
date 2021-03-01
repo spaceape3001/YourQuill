@@ -181,6 +181,9 @@ R     decode_leaf(const char* sz=sz_leaf);
 R     decode_leaf(Leaf&, const char* sz=sz_leaf);
 R     decode_leaf_prime();
 
+R     decode_leaf_string(Leaf& out, const String&);
+R     decode_leaf_prime(const String&);
+
 R     decode_root(const char* sz=sz_root);
 R     decode_root(const Root*&, const char* sz=sz_root);
 R     decode_root_prime();

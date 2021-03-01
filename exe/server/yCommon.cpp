@@ -520,6 +520,22 @@ R     decode_key()
     return R::OKAY;
 }
 
+R   decode_leaf_string(Leaf& out, const String& s)
+{
+    out     = cdb::leaf(s.qString());
+    if(out)
+        return R::OKAY;
+    auto id = s.to_uint64();
+    if(!id.good)
+        return R::NOT_FOUND;
+    out = cdb::leaf(id.value);
+    return out ? R::OKAY : R::NOT_FOUND;
+}
+
+R   decode_leaf_prime(const String&s)
+{
+    return decode_leaf_string(x_leaf, s);
+}
 
 R  decode_leaf(Leaf& out, const char* sz)
 {

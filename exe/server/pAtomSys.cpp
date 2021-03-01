@@ -93,10 +93,9 @@ namespace {
             
         h << "Under construction";
     }
-
-    void    page_leaf(Html&h)
+    
+    void    leaf_html(Html&h)
     {
-        test(decode_leaf_prime());
         auto m = cdb::merged(x_leaf);
         h.title(m->title());
         
@@ -105,6 +104,18 @@ namespace {
         
         h << H1("Context");
         _context(h, *m);
+    }
+
+    void    page_leaf(Html&h)
+    {
+        test(decode_leaf_prime());
+        leaf_html(h);
+    }
+    
+    void    dispatch_leaf(Html&h, const String& s)
+    {
+        test(decode_leaf_prime(s));
+        leaf_html(h);
     }
     
     void    page_leaf_attributes(Html& h)
@@ -135,6 +146,8 @@ namespace {
         page(hGet, "/atom", page_atom).description("Atom").id().key().label("Overview");
         page(hGet, "/class", page_class).description("Class").id().key().label("Overview");
         page(hGet, "/graph", page_graph).description("Graph").id().key();
+    
+        dispatcher(hGet, "w", dispatch_leaf);
     
         tabbar({
             page(hGet, "/leaf", page_leaf).description("Leaf").id().key().label("Overview"),
