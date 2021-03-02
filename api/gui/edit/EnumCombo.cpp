@@ -6,21 +6,46 @@
 
 #include "EnumCombo.hpp"
 
+namespace {
+    using EnumList = Vector<QStringIntPair>;
 
-GenericEnumCombo::GenericEnumCombo(const EnumDef*def, QWidget*parent) : ComboBox(parent), m_enum(def)
+    auto makePairs(const EnumDef* def)
+    {
+        EnumList  ret;
+        for(const String& s : def -> all_keys())
+            ret << QStringIntPair{ s.qString(), def -> value_of(s) };
+        return ret;
+    }
+    
+    const EnumList& autoPairs(const EnumDef* def)
+    {
+        static Map<const EnumDef*,EnumList> s_map;
+        EnumList&       l   = s_map[def];
+        if(def && l.empty())
+            l   = makePairs(def);
+        return l;
+    }
+}
+
+
+GenericEnumCombo::GenericEnumCombo(const EnumDef*def, const EnumList& values, QWidget*parent)  : ComboBox(parent), m_enum(def)
 {
     assert(def);
     
     int     i   = 0;
-    for(const String& k : m_enum -> all_keys()){
-        addItem(k.qString());
-        int val         = m_enum -> value_of(k);
-        m_idx2val[i]    = val;
-        m_val2idx[val]  = i;
+    for(auto& k : values){
+        addItem(k.first);
+        m_idx2val[i]            = k.second;
+        m_val2idx[k.second]     = i;
         ++i;
     }
     setIntValue(m_enum -> default_value());
 }
+
+GenericEnumCombo::GenericEnumCombo(const EnumDef*def, QWidget*parent) : GenericEnumCombo(def, autoPairs(def), parent)
+{
+}
+
 
 GenericEnumCombo::~GenericEnumCombo()
 {

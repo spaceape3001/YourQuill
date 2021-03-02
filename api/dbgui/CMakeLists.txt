@@ -2,6 +2,9 @@ set(dbgui_sources
     ./QuillApp.cpp
     ./QuillApp.hpp
     
+    ./edit/CopyrightEdit.cpp
+    ./edit/CopyrightEdit.hpp
+    
     ./web/WebBase.cpp
     ./web/WebBase.cpp
     

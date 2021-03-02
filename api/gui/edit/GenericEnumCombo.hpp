@@ -7,7 +7,7 @@
 #pragma once
 
 #include "ComboBox.hpp"
-#include "util/Enum.hpp"
+#include <util/Enum.hpp>
 #include <optional>
 
 
@@ -16,6 +16,7 @@ class GenericEnumCombo : public ComboBox {
 public:
     
     GenericEnumCombo(const EnumDef*, QWidget*parent=nullptr);
+    GenericEnumCombo(const EnumDef*, const Vector<QStringIntPair>& values, QWidget*parent=nullptr);
     virtual ~GenericEnumCombo();
     
     Enum    enumValue() const;

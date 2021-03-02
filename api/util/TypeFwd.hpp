@@ -90,9 +90,11 @@ using StringPair            = std::pair<String,String>;
 using StringMap             = Map<String,String,IgCase>;
 using StringMultiMap        = MultiMap<String,String,IgCase>;
 using StringSet             = Set<String,IgCase>;
+using StringIntPair         = std::pair<String,int>;
 
 using QDirVector            = Vector<QDir>;
 using QStringSet            = Set<QString,IgCase>;
+using QStringIntPair        = std::pair<QString,int>;
 
 
 #if defined(__APPLE__) || defined(WIN32)

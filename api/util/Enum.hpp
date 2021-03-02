@@ -134,6 +134,11 @@ class EnumImpl : public E {
 public:
     static_assert(E::isEnum, "E MUST be YQ_ENUM declared!");
     
+    using StringDesc        = std::pair<String, typename E::enum_t>;
+    using QStringDesc       = std::pair<QString, typename E::enum_t>;
+    using StringDescVec     = Vector<StringDesc>;
+    using QStringDescVec    = Vector<QStringDesc>;
+    
     static const Vector<String>&        all_keys();
     static Vector<EnumImpl>             all_values();
     static typename E::enum_t           default_value();
@@ -210,11 +215,12 @@ public:
         return *this;
     }
 
+    static Vector<EnumImpl>         to_values(const Vector<int>& vals);
+    static Vector<int>              to_ints(const Vector<EnumImpl>& vals);
+
 private:
     static Vector<String> calcOrderedKeys();
     static Vector<EnumImpl> calcAllValues();
-    static Vector<EnumImpl>  to_values(const Vector<int>& vals);
-    static Vector<int> to_ints(const Vector<EnumImpl>& vals);
 };
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

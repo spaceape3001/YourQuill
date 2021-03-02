@@ -12,10 +12,39 @@
 template <typename E>
 class EnumCombo : public GenericEnumCombo {
 public:
-    EnumCombo(QWidget*parent=nullptr) : GenericEnumCombo( E::staticEnumInfo() ) 
+    using StringDescVec  = typename E::StringDescVec;
+    using QStringDescVec = typename E::QStringDescVec;
+
+    static auto to_int(const QStringDescVec& them)
+    {
+        Vector<std::pair<QString,int>> ret;
+        for(auto& i : them)
+            ret << QStringIntPair{ i.first, (int) i.second };
+        return ret;
+    }
+
+    static auto to_int(const StringDescVec& them)
+    {
+        Vector<std::pair<QString,int>> ret;
+        for(auto& i : them)
+            ret << QStringIntPair{ i.first, (int) i.second.qString() };
+        return ret;
+    }
+
+    EnumCombo(QWidget*parent=nullptr) : GenericEnumCombo( E::staticEnumInfo(), parent ) 
     {
     }
     
+    EnumCombo(const QStringDescVec& values, QWidget*parent=nullptr) : 
+        GenericEnumCombo( E::staticEnumInfo(), to_int(values), parent ) 
+    {
+    }
+
+    EnumCombo(const StringDescVec& values, QWidget*parent=nullptr) : 
+        GenericEnumCombo( E::staticEnumInfo(), to_int(values), parent ) 
+    {
+    }
+
     virtual ~EnumCombo()
     {
     }
