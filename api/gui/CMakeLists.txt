@@ -2,6 +2,36 @@ set(gui_sources
 
     ./UInt64Mapper.cpp
     ./UInt64Mapper.hpp
+    
+    ./delegate/ColorComboDelegate.cpp
+    ./delegate/ColorComboDelegate.hpp
+    ./delegate/ColorDelegate.cpp
+    ./delegate/ColorDelegate.hpp
+    ./delegate/DateDelegate.cpp
+    ./delegate/DateDelegate.hpp
+    ./delegate/DateTimeDelegate.cpp
+    ./delegate/DateTimeDelegate.hpp
+    ./delegate/Delegate.cpp
+    ./delegate/Delegate.hpp
+    ./delegate/DelegateImpl.hpp
+    ./delegate/DirDelegate.cpp
+    ./delegate/DirDelegate.hpp
+    ./delegate/DoubleDelegate.cpp
+    ./delegate/DoubleDelegate.hpp
+    ./delegate/EnumDelegate.cpp
+    ./delegate/EnumDelegate.hpp
+    ./delegate/FileDelegate.cpp
+    ./delegate/FileDelegate.hpp
+    ./delegate/IconBarDelegate.cpp
+    ./delegate/IconBarDelegate.hpp
+    ./delegate/ImageDelegate.cpp
+    ./delegate/ImageDelegate.hpp
+    ./delegate/IntegerDelegate.cpp
+    ./delegate/IntegerDelegate.hpp
+    ./delegate/StringComboDelegate.cpp
+    ./delegate/StringComboDelegate.hpp
+    ./delegate/UIntegerDelegate.cpp
+    ./delegate/UIntegerDelegate.hpp
 
     ./edit/CheckBox.cpp
     ./edit/CheckBox.hpp
