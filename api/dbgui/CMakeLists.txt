@@ -5,6 +5,9 @@ set(dbgui_sources
     ./edit/CopyrightEdit.cpp
     ./edit/CopyrightEdit.hpp
     
+    ./quill/QuillDataEdit.cpp
+    ./quill/QuillDataEdit.hpp
+    
     ./web/WebBase.cpp
     ./web/WebBase.cpp
     

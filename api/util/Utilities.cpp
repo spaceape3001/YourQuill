@@ -213,6 +213,21 @@ String          join(const StringSet&them, const String&sep)
     return ret;
 }
 
+QString         join_qstring(const Set<uint16_t>& values, const QString& sep)
+{
+    QString     ret;
+    bool        first = true;
+    for(uint16_t v  : values){
+        if(first)
+            first   = false;
+        else
+            ret += sep;
+            
+        ret += QString::number(v);
+    }
+    return ret;
+}
+
 String          join_string(const Set<uint16_t>& values, const String& sep)
 {
     String      ret;

@@ -18,6 +18,9 @@ class LineEdit;
 class CopyrightEdit : public QWidget, public UndoBase {
     Q_OBJECT
 public:
+
+    static const AssertDeny::QStringDescVec&    comboValues();
+
     CopyrightEdit(QWidget*parent=nullptr);
     ~CopyrightEdit();
     

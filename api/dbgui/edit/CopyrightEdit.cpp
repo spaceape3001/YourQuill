@@ -27,6 +27,13 @@ namespace {
 }
 
 
+const AssertDeny::QStringDescVec&    CopyrightEdit::comboValues()
+{
+    static const auto ret    = makeCopyrightValues();
+    return ret;
+}
+
+
 CopyrightEdit::CopyrightEdit(QWidget*parent) : QWidget(parent), m_stance(nullptr), m_from(nullptr), m_to(nullptr), m_text(nullptr)
 {
     static int  year    = QDate::currentDate().year();
@@ -36,9 +43,7 @@ CopyrightEdit::CopyrightEdit(QWidget*parent) : QWidget(parent), m_stance(nullptr
     QLabel* dash    = new QLabel(tr("thru"), this);
     //dash -> setTextFormat(Qt::RichText);
     
-    static const auto values    = makeCopyrightValues();
-
-    m_stance  = new EnumCombo<AssertDeny>(values, this);
+    m_stance  = new EnumCombo<AssertDeny>(comboValues(), this);
     m_from    = new SpinBox(this);
     m_from -> setRange(0, year);
     m_from -> setSpecialValueText(tr("ancient"));

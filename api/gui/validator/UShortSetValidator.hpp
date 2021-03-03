@@ -8,15 +8,17 @@
 
 #include <QValidator>
 
-class XmlIdentifierValidator : public QValidator {
+/*! \brief Validaotr fora  line-edit of uhort strings
+*/
+class UShortSetValidator : public QValidator {
     Q_OBJECT
 public:
-    XmlIdentifierValidator(QObject*parent=nullptr);
-    ~XmlIdentifierValidator();
     
-    static bool     isValid(const QString&, int* pos=nullptr);
+    UShortSetValidator(QObject*parent=nullptr);
+    ~UShortSetValidator();
     
     void                fixup(QString&input) const override;
     QValidator::State   validate(QString& input, int& pos) const override;
+    
 };
 

@@ -36,6 +36,8 @@ set(gui_sources
     ./edit/StringSetCheck.hpp
     ./edit/TextEdit.cpp
     ./edit/TextEdit.hpp
+    ./edit/UShortSetEdit.cpp
+    ./edit/UShortSetEdit.hpp
 
     ./layout/FlowLayout.cpp
     ./layout/FlowLayout.hpp
@@ -63,6 +65,8 @@ set(gui_sources
     ./validator/KeyValidator.hpp
     ./validator/NoSpacesValidator.cpp
     ./validator/NoSpacesValidator.hpp
+    ./validator/UShortSetValidator.cpp
+    ./validator/UShortSetValidator.hpp
     ./validator/XmlIdentifierValidator.cpp
     ./validator/XmlIdentifierValidator.hpp
 
@@ -76,6 +80,8 @@ set(gui_sources
     ./widget/DrawRuler.hpp
     ./widget/GridTickModel.cpp
     ./widget/GridTickModel.hpp
+    ./widget/FormWidget.cpp
+    ./widget/FormWidget.hpp
     ./widget/StandardGridTickModel.hpp
     ./widget/TabWidget.cpp
     ./widget/TabWidget.hpp
