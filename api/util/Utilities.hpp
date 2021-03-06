@@ -15,7 +15,7 @@ class QRect;
 class QIcon;
 class QImage;
 class QString;
-
+class QStringList;
 
 
 
@@ -73,6 +73,8 @@ std::ostream& operator<<(std::ostream&, const QString&);
 
 StringSet       qt(const QStringSet&);
 QStringSet      qt(const StringSet&);
+QStringList     qt_list(const QStringSet&);
+QStringList     qt_list(const StringSet&);
 
 Vector<String>  qt(const Vector<QString>&);
 Vector<QString> qt(const Vector<String>&);

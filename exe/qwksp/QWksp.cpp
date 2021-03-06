@@ -7,10 +7,13 @@
 #include "QWksp.hpp"
 
 #include <db/QuillFile.hpp>
+#include <db/Workspace.hpp>
 #include <dbgui/quill/QuillEdit.hpp>
+#include <util/Utilities.hpp>
 
 #include <QApplication>
 #include <QFileDialog>
+#include <QInputDialog>
 
 QWksp::QWksp() : SimpleEditor(new QuillEdit), m_editor(nullptr)
 {
@@ -61,6 +64,14 @@ void        QWksp::cmdAddChain()
 
 void        QWksp::cmdAddTemplate()
 {
+    QStringSet       avail   = wksp::templates_available();
+    avail -= m_editor -> templates();
+    if(avail.empty())
+        return;
+    bool    ok  = false;
+    QString     txt = QInputDialog::getItem(this, tr("Chooser"), tr("Select template to add"), qt_list(avail), 0, false, &ok);
+    if(ok && !txt.isEmpty())
+        m_editor -> addTemplate(txt);
 }
 
 

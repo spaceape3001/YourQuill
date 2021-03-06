@@ -22,7 +22,7 @@ public:
 
     void            set(const QuillData&);
     void            get(QuillData&) const;
-    StringSet       templates() const;
+    QStringSet      templates() const;
 
 signals:
     void            cmdAddRootDir();

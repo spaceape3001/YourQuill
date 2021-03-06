@@ -76,9 +76,9 @@ void        QuillEdit::set(const QuillData&doc)
     m_templates -> set(doc.templates);
 }
 
-StringSet   QuillEdit::templates() const
+QStringSet   QuillEdit::templates() const
 {
-    StringSet   ret;
+    QStringSet   ret;
     for(QString s : m_templates -> dirs())
         ret << s;
     return ret;

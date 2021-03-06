@@ -85,6 +85,11 @@ namespace {
             if(!tmpdir)
                 tmpdir              = "/tmp";
             temporary_dir_default   = QDir(tmpdir).absoluteFilePath("yquill");
+
+            template_dirs = shared_dirs("template");
+            for(const QDir& d : template_dirs)
+                for(QString s : d.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+                    templates_avail << s;
         }
     };
     
@@ -193,10 +198,6 @@ namespace wksp {
             
             QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
             
-            m.template_dirs = shared_dirs("template");
-            for(const QDir& d : m.template_dirs)
-                for(QString s : d.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-                    m.templates_avail << s;
             
             m.quill_arg         = location;
             if(opts.is_set(Option::SEARCH)){

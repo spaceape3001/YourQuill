@@ -289,6 +289,22 @@ Vector<QString> qt(const Vector<String>&q)
     return ret;
 }
 
+QStringList     qt_list(const StringSet&q)
+{
+    QStringList     ret;
+    for(const String& s: q)
+        ret << s.qString();
+    return ret;
+}
+
+QStringList     qt_list(const QStringSet&q)
+{
+    QStringList     ret;
+    for(const QString& s: q)
+        ret << s;
+    return ret;
+}
+
 QString         sanitize_path(const QString& path)
 {
     return sanitize_path(path.split('/')).join('/');
