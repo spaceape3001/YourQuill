@@ -43,6 +43,7 @@ QuillDataEdit::QuillDataEdit(QWidget*parent) : FormWidget(parent),
 {
     setWindowTitle(tr("Quill Data Edit"));
     m_abbr          = new LineEdit;
+    m_abbr -> setPlaceholderText(tr("(abbr"));
     m_author        = new LineEdit;
     m_auxPorts      = new UShortSetEdit;
     m_cache         = new FileBox;
@@ -52,6 +53,7 @@ QuillDataEdit::QuillDataEdit(QWidget*parent) : FormWidget(parent),
     m_logDir        = new DirBox;
     m_home          = new LineEdit;
     m_name          = new LineEdit;
+    m_name -> setPlaceholderText(tr("(name)"));
     m_port          = new SpinBox;
     m_port -> setRange(0,65535);
     m_readTimeout   = new SpinBox;

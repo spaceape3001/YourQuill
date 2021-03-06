@@ -7,6 +7,10 @@ set(dbgui_sources
     
     ./quill/QuillDataEdit.cpp
     ./quill/QuillDataEdit.hpp
+    ./quill/QuillDirTable.cpp
+    ./quill/QuillDirTable.hpp
+    ./quill/QuillEdit.cpp
+    ./quill/QuillEdit.hpp
     
     ./web/WebBase.cpp
     ./web/WebBase.cpp

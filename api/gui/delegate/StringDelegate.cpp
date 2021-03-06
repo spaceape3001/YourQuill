@@ -6,7 +6,7 @@
 
 #include "StringDelegate.hpp"
 #include "DelegateImpl.hpp"
-#include <db/gui/LineEdit.hpp>
+#include <gui/edit/LineEdit.hpp>
 
 StringDelegate::StringDelegate(QObject*parent) : StringDelegate(nullptr, parent)
 {
@@ -22,7 +22,7 @@ StringDelegate::~StringDelegate()
 
 Compare     StringDelegate::compare(const QVariant&a, const QVariant&b) const
 {
-    return ::compareIgCase(a.toString(), b.toString());
+    return ::compare_igCase(a.toString(), b.toString());
 }
 
 QWidget*    StringDelegate::createEditor(QWidget* parent) const
@@ -49,6 +49,6 @@ void        StringDelegate::connectEditedSignal(QWidget*editor, QObject*other, c
     connect(editor, SIGNAL(textEdited(const QString&)), other, slot);
 }
 
-MO_DELEGATE(StringDelegate)
+MO_CONCRETE(StringDelegate)
 
 #include "moc_StringDelegate.cpp"

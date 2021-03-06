@@ -30,6 +30,8 @@ set(gui_sources
     ./delegate/IntegerDelegate.hpp
     ./delegate/StringComboDelegate.cpp
     ./delegate/StringComboDelegate.hpp
+    ./delegate/StringDelegate.cpp
+    ./delegate/StringDelegate.hpp
     ./delegate/UIntegerDelegate.cpp
     ./delegate/UIntegerDelegate.hpp
 
@@ -82,6 +84,8 @@ set(gui_sources
     ./main/UndoMain.hpp
     ./main/UndoWin.cpp
     ./main/UndoWin.hpp
+
+    ./model/StdTableModel.hpp
 
     ./undo/UndoAction.cpp
     ./undo/UndoAction.hpp

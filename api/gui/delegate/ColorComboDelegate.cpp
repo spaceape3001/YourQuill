@@ -9,6 +9,14 @@
 #include <gui/edit/ColorCombo.hpp>
 #include <QPainter>
 
+namespace {
+    QColor  colorFor(const QVariant&v){
+        if((QMetaType::Type) v.type() == QMetaType::QColor)
+            return v.value<QColor>();
+        return QColor(v.toString());
+    }
+}
+
 ColorComboDelegate::ColorComboDelegate(QObject* parent) : Delegate(parent)
 {
 }
@@ -26,7 +34,7 @@ QWidget*    ColorComboDelegate::createEditor(QWidget* parent) const
 bool        ColorComboDelegate::setEditorData(QWidget*editor, const QVariant&val) const
 {
     ColorCombo*       cc  = static_cast<ColorCombo*>(editor);
-    QColor      v   = val.value<QColor>();
+    QColor      v   = colorFor(val);
     if(v != cc->color())
         cc->setColor(v);
     return true;
@@ -39,7 +47,7 @@ QVariant    ColorComboDelegate::getEditorData(const QWidget*editor) const
 
 bool        ColorComboDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& val) const
 {
-    QColor  color   = val.value<QColor>();
+    QColor  color   = colorFor(val);
     if(!color.isValid()){
         painter->drawLine(QLine(option.rect.left(), option.rect.top(), option.rect.right(), option.rect.bottom()));
         painter->drawLine(QLine(option.rect.left(), option.rect.bottom(), option.rect.right(), option.rect.top()));
