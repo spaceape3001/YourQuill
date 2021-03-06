@@ -9,7 +9,7 @@
 #include "yPage.hpp"
 
 #include "db/Cache.hpp"
-#include "yNetLogging.hpp"
+#include "srv/SrvLogging.hpp"
 //#include "core/IOFormatters.hpp"
 
 #include "util/Execute.hpp"
@@ -39,7 +39,7 @@
         QFile   document(documentname);
         if(!document.open(QIODevice::ReadOnly)){
             if(!fSuppressMsg)
-                netError << "Unable to read document " << documentname;
+                srvError << "Unable to read document " << documentname;
             return false;
         }
         

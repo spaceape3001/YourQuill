@@ -18,6 +18,7 @@
 #include "util/Logging.hpp"
 #include "util/Guarded.hpp"
 #include "util/Ref.hpp"
+#include <util/Safety.hpp>
 #include "util/SqlUtils.hpp"
 #include "util/Utilities.hpp"
 
@@ -50,38 +51,8 @@ const char* const       kCookieName            = "QuillSessionId";
 const unsigned int      kCookieExpire          = 300;
 const unsigned int      kAutoLogoutInterval    = 900;
 
-thread_local HttpRequest*           x_request          = nullptr;
-thread_local HttpResponse*          x_response         = nullptr;
-thread_local QDateTime              x_at;
-thread_local QString                x_time;
-thread_local bool                   x_is_local         = false;
-thread_local bool                   x_can_edit         = false;
-thread_local QByteArray             x_client;
-thread_local HttpOp                 x_op;
-thread_local QByteArray             x_path;
-thread_local Session*               x_session          = nullptr;
-thread_local QByteArray             x_title;
-thread_local QByteArray             x_content;
-thread_local Vector<QByteArray>     x_scripts;
+bool                                g_can_remote        = true;
 
-bool                                x_can_remote        = true;
-
-thread_local Atom                   x_atom;
-thread_local Class                  x_class;
-thread_local Directory              x_directory;
-thread_local Document               x_document;
-thread_local Field                  x_field;
-thread_local Folder                 x_folder;
-thread_local Fragment               x_fragment;
-thread_local Graph                  x_graph;
-thread_local Image                  x_icon;
-thread_local Leaf                   x_leaf;
-thread_local const Page*            x_page              = nullptr;
-thread_local const Root*            x_root              = nullptr;
-thread_local Tag                    x_tag;
-thread_local bool                   x_edit_req          = false;
-thread_local QString                x_key;
-thread_local unsigned int           x_columns           = 0;
 
 
 namespace {
@@ -359,7 +330,6 @@ Page::Reply    do_dispatch()
         ret.status  = HttpStatus::InternalError;
         ret.content = statusMessage(ret.status);
     }
-    
     return ret;
 }
 
@@ -381,6 +351,9 @@ struct DBServer : public HttpRequestHandler {
         static thread_local LogFile* accessLog   = new LogFile(m_accessLog);
         
         try {
+                // ensure old stuff gets cleared, even in case of an exception
+            auto clear_tls  = safety([&](){ reset_tls(); });
+            
             x_request           = &req;
             x_response          = &resp;
             x_op                = HttpOp(req.getMethod().constData());
@@ -390,7 +363,7 @@ struct DBServer : public HttpRequestHandler {
             x_client            = peer.toString().toUtf8();
             x_is_local          = peer.isLoopback();
             
-            if((!x_is_local) && !x_can_remote)
+            if((!x_is_local) && !g_can_remote)
                 throw HttpStatus::Forbidden;
             
             Ref<Session>  dbs = sessionFor(req,resp);
@@ -415,13 +388,6 @@ struct DBServer : public HttpRequestHandler {
             accessLog -> line() << x_session->user << " -- " << x_client << " -- " << x_time << " -- " 
                 << req.getMethod() << " -- \"" << x_path << "\" -- " << rep.status.value();
 
-            // Clear out the old stuff....
-
-            x_session   = nullptr;
-            x_request   = nullptr;
-            x_response  = nullptr;
-            x_scripts.clear();
-            x_page      = nullptr;
         } catch(HttpStatus::enum_t e)
         {
             resp.setStatus((int) e, statusMessage(e));

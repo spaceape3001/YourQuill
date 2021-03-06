@@ -5,6 +5,9 @@
 
 #include "db/Enums.hpp"
 #include "util/Ref.hpp"
+#include "srv/Session.hpp"
+#include "srv/TLSGlobals.hpp"
+#include "srv/TypedBytes.hpp"
 
 #include <QByteArray>
 #include <initializer_list>
@@ -29,79 +32,9 @@ class Root;
 class Tag;
 class Html;
 class Session;
-class TypedBytes;
-
-
-namespace stefanfrings {
-    class HttpRequest;
-    class HttpResponse;
-};
-
-struct ID {
-    uint64_t        id;
-    int64_t         created;
-    uint64_t        magic[14];
-    
-    void            make();
-    void            newId();
-    QByteArray      net() const;;
-    bool            operator==(const ID&b) const;
-};
-
-//YQ_ENUM( IconSize, , Small, Medium, Large )
-
-struct Session : public ID, public RefCount {
-    QByteArray              user;
-    bool                        loggedIn;
-    int64_t                     accessed;
-    std::atomic<const Root*>    defRoot;
-    std::atomic<bool>           autoEdit;
-    SizeDesc                    iconSize;
-    bool                        inspectSubmit;
-    unsigned int                columns;
-    
-    Session();  // non-trivial
-};
-
-//!  Makes/create a session 
-Ref<Session>      sessionFor(const QByteArray& decl);
 
 
 
-
-using namespace stefanfrings;
-
-extern bool                             x_can_remote;
-extern thread_local HttpRequest*        x_request;
-extern thread_local HttpResponse*       x_response;
-extern thread_local QDateTime           x_at;
-extern thread_local QString             x_time;
-extern thread_local bool                x_is_local;
-extern thread_local bool                x_can_edit;
-extern thread_local QByteArray          x_client;
-extern thread_local HttpOp              x_op;
-extern thread_local QByteArray          x_path;
-extern thread_local Session*            x_session;
-extern thread_local QByteArray          x_title;
-extern thread_local QByteArray          x_content;
-extern thread_local Vector<QByteArray>  x_scripts;
-
-extern thread_local Atom                x_atom;
-extern thread_local Class               x_class;
-extern thread_local Directory           x_directory;
-extern thread_local Document            x_document;
-extern thread_local Field               x_field;
-extern thread_local Folder              x_folder;
-extern thread_local Fragment            x_fragment;
-extern thread_local Graph               x_graph;
-extern thread_local Image               x_icon;
-extern thread_local Leaf                x_leaf;
-extern thread_local const Page*         x_page;
-extern thread_local const Root*         x_root;
-extern thread_local Tag                 x_tag;
-extern thread_local bool                x_edit_req;
-extern thread_local QString             x_key;
-extern thread_local unsigned int        x_columns;
 
 enum class R : uint8_t {
     // parsed and found something
@@ -124,6 +57,7 @@ bool        test(R, bool fIncEmpty=false);
 static constexpr unsigned int   def_columns_mobile  = 2;
 static constexpr unsigned int   def_columns_normal  = 6;
 
+extern bool                                         g_can_remote;
 
 
 static constexpr const char*    sz_atom         = "atom";
@@ -195,17 +129,6 @@ R     decode_tag_prime();
 R     decode_edit();
 R     decode_key();
 
-
-struct TypedBytes {
-    QByteArray      content;
-    ContentType     type;
-    
-    TypedBytes(){}
-    TypedBytes(std::initializer_list<QString>,ContentType ct=ContentType());
-    TypedBytes(DataRole, std::initializer_list<QString>,ContentType ct=ContentType());
-    
-    bool    empty() const { return content.isEmpty(); }
-};
 
 
 bool        has_background();
