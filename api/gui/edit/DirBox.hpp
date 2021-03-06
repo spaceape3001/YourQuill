@@ -22,6 +22,7 @@ public:
     void                        set(const std::optional<QString>&);
     std::optional<QString>      get() const;
 
+    void    setPlaceholderText(const QString&);
     void    setDirPath(const QString&);
     QString dirPath() const;
     void    setTitle(const QString&);

@@ -66,6 +66,12 @@ void    DirBox::setDirPath(const QString&f)
     m_edit->setText(f);
 }
 
+void    DirBox::setPlaceholderText(const QString&txt)
+{
+    m_edit -> setPlaceholderText(txt);
+}
+
+
 void    DirBox::setReadOnly(bool f)
 {
     m_edit -> setReadOnly(f);

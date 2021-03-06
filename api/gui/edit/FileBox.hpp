@@ -26,6 +26,7 @@ public:
     
     void    setFilter(const QString&);
     void    setTitle(const QString&);
+    void    setPlaceholderText(const QString&);
     
     //  eventually, get UNDO working....
 public slots:

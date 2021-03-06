@@ -140,6 +140,8 @@ namespace wksp {
     
     const QDir&             temp_dir();
     
+    const QString&          temp_dir_default();
+
     const QString&          temp_dir_path();
     
     QString                 temp_resolve(const char*);

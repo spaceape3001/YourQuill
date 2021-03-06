@@ -94,8 +94,23 @@ protected:
     ColumnWriter        col(EnumMap<K,EnumImpl<V>> (T::*), K);
     template <typename K, typename V>
     ColumnWriter        col(const String&, EnumMap<K,EnumImpl<V>> (T::*), K);
+
+    //! Creates a custom read-only column using lambdas
+    template <typename Getter>
+    ColumnWriter        customRO(const String&, Getter);
     
+    //! Creates a custom read-only column using lambdas
+    template <typename Getter, typename Less>
+    ColumnWriter        customRO(const String&, Getter, Less);
     
+    //! Creates a custom read-write column using lambdas
+    template <typename Getter, typename Setter>
+    ColumnWriter        customRW(const String&, Getter, Setter);
+    
+    //! Creates a custom read-write column using lambdas
+    template <typename Getter, typename Setter, typename Less>
+    ColumnWriter        customRW(const String&, Getter, Setter, Less);
+
     //template <String (T::*)>
     //void                add(const String&, const QVariant&v=QVariant, Adder* a=nullptr)
     

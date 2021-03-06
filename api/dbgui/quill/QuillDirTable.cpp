@@ -58,11 +58,11 @@ QuillDirTable::QuillDirTable(bool fTemplates, const QString& title_, QWidget*par
     m_bar       = new QToolBar;
     m_bar -> setOrientation(Qt::Vertical);
     
-    m_bar -> addAction(QIcon(":/leaf/up.svg"), "^", this, &QuillDirTable::cmdMoveUp);
-    m_bar -> addAction(QIcon(":/leaf/down.svg"), "v", this, &QuillDirTable::cmdMoveDown);
+    m_bar -> addAction(QIcon(":/icon/up.svg"), "^", this, &QuillDirTable::cmdMoveUp);
+    m_bar -> addAction(QIcon(":/icon/down.svg"), "v", this, &QuillDirTable::cmdMoveDown);
     m_bar -> addSeparator();
-    m_bar -> addAction(QIcon(":/leaf/add.svg"), "+", this, &QuillDirTable::cmdAdd);
-    m_bar -> addAction(QIcon(":/leaf/remove.svg"), "-", this, &QuillDirTable::cmdRemove);
+    m_bar -> addAction(QIcon(":/icon/add.svg"), "+", this, &QuillDirTable::cmdAdd);
+    m_bar -> addAction(QIcon(":/icon/remove.svg"), "-", this, &QuillDirTable::cmdRemove);
 
 
     QVBoxLayout*    vlay    = new QVBoxLayout;
@@ -142,7 +142,12 @@ void        QuillDirTable::cmdMoveUp()
 QuillDirTable::Model::Model(bool fTemplates, QObject*parent) : Base(parent)
 {
     col("Key", &QuillData::Root::key).delegate<KeyValidator>();
-    col("Color", &QuillData::Root::color).delegate<ColorDelegate>();
+    customRW("Color", [](const QuillData::Root&r) -> QColor {
+        return QColor(r.color.qString());
+    }, [](QuillData::Root& r, const QColor& c){
+        r.color = c.name();
+        return true;
+    }).delegate<ColorDelegate>();
     
     for(DataRole dr : DataRole::all_values()){
         col(&QuillData::Root::policy, dr);
@@ -152,84 +157,6 @@ QuillDirTable::Model::Model(bool fTemplates, QObject*parent) : Base(parent)
     auto cw = col("Path", &QuillData::Root::path);
     if(!fTemplates)
         cw.delegate<DirDelegate>();
-    
-
-    //Column  col{};
-    
-    //col.k       = "key";
-    //col.label   = tr("Key");
-    //col.display = [](const Column&, const QuillData::Root& r) -> QVariant {
-        //return r.key.qString();
-    //};
-    //col.set     = [](const Column&, const QVariant& v, QuillData::Root& r) -> bool {
-        //r.key   = String(v.toString()).strip_spaces();
-        //return true;
-    //};
-    //col.less    = [](const Column&, const QuillData::Root& a, const QuillData::Root& b) -> bool {
-        //return is_less(compare_igCase(a.key, b.key));
-    //};
-    //addColumn(col);
-    
-    //col         = Column{};
-    //col.k       = "name";
-    //col.label   = tr("Name");
-    //col.display = [](const Column&, const QuillData::Root&r) -> QVariant {
-        //return r.name.qString();
-    //};
-    //col.set     = [](const Column&, const QVariant& v, QuillData::Root& r) -> bool {
-        //r.name  = String(v.toString()).strip_spaces();
-        //return true;
-    //};
-    //col.less    = [](const Column&, const QuillData::Root&a, const QuillData::Root& b) -> bool {
-        //return is_less(compare_igCase(a.name, b.name));
-    //};
-    
-    //col     = Column{};
-    //col.k       = "color";
-    //col.label   = tr("Color");
-    //col.display = [](const Column&, const QuillData::Root& r) -> QVariant {
-        //return r.color.qString();
-    //};
-    //col.set     = [](const Column&, const QVariant&v, QuillData::Root& r) -> bool {
-        //r.color = String(v.toString()).strip_spaces();
-        //return true;
-    //};
-    //addColumn(col);
-    
-    //for(DataRole dr : DataRole::all_values()){
-        //col = Column{};
-        //col.k       = dr.key().qString();
-        //col.label   = dr.key().qString();
-        //col.data    = Variant(dr);
-        //col.display = [](const Column& c, const QuillData::Root& r) -> QVariant {
-            //return QVariant::fromValue(r.policy[ c.data.value<DataRole>()]);
-        //};
-        //col.set    = [](const Column& c, const QVariant& v, QuillData::Root& r) -> bool {
-            //r.policy[c.data.value<DataRole>()] = v.value<Access>();
-            //return true;
-        //};
-        //col.less    = [](const Column&c, const QuillData::Root&a, const QuillData::Root&b) -> bool {
-            //DataRole    dr  = c.data.value<DataRole>();
-            //return a.policy[dr] < b.policy[dr];
-        //};
-        //addColumn(col);
-    //}
-    
-    //col         = Column{};
-    //col.k       = tr("path");
-    //col.label   = tr("Directory");
-    //col.display = [](const Column&, const QuillData::Root& r) -> QVariant {
-        //return r.path.qString();
-    //};
-    //col.set     = [](const Column&, const QVariant& v, QuillData::Root&r) -> bool {
-        //r.path  = String(v.toString()).strip_spaces();
-        //return true;
-    //};
-    //col.less    = [](const Column&, const QuillData::Root& a, const QuillData::Root& b) -> bool {
-        //return a.path < b.path; // TODO: Windows
-    //};
-    //addColumn(col);
-
 }
 
 QuillDirTable::Model::~Model()

@@ -75,10 +75,17 @@ namespace {
         
         QString             temporary;
         QDir                temporary_dir;
+        QString             temporary_dir_default;
         
         mutable tbb::spin_rw_mutex  mutex;
 
-        M() : init(false), port(0), read_timeout(0) {}
+        M() : init(false), port(0), read_timeout(0) 
+        {
+            const char* tmpdir  = getenv("TMPDIR");
+            if(!tmpdir)
+                tmpdir              = "/tmp";
+            temporary_dir_default   = QDir(tmpdir).absoluteFilePath("yquill");
+        }
     };
     
     M&  impl()
@@ -865,6 +872,11 @@ namespace wksp {
         return impl().temporary_dir;
     }
     
+    const QString&      temp_dir_default()
+    {
+        return impl().temporary_dir_default;
+    }
+
     const QString&      temp_dir_path()
     {
         return impl().temporary;

@@ -71,6 +71,11 @@ void    FileBox::setFilter(const QString&txt)
     m_filter    = txt;
 }
 
+void    FileBox::setPlaceholderText(const QString&txt)
+{
+    m_edit -> setPlaceholderText(txt);
+}
+
 void    FileBox::setReadOnly(bool b)
 {
     m_edit -> setReadOnly(b);

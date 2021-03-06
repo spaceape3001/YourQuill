@@ -50,6 +50,7 @@ set(util_sources
     ./Stream.hpp
     ./String.cpp
     ./String.hpp
+    ./TypeTraits.hpp
     ./Utilities.cpp
     ./Utilities.hpp
     ./Vector.hpp

@@ -12,6 +12,7 @@
 
 //#include "core/Set.hpp"
 
+#include <db/Workspace.hpp>
 #include <gui/edit/DirBox.hpp>
 //#include "gui/EnumDelegate.hpp"
 #include <gui/edit/FileBox.hpp>
@@ -43,14 +44,18 @@ QuillDataEdit::QuillDataEdit(QWidget*parent) : FormWidget(parent),
 {
     setWindowTitle(tr("Quill Data Edit"));
     m_abbr          = new LineEdit;
-    m_abbr -> setPlaceholderText(tr("(abbr"));
+    m_abbr -> setPlaceholderText(tr("(abbreviation)"));
     m_author        = new LineEdit;
     m_auxPorts      = new UShortSetEdit;
     m_cache         = new FileBox;
+    m_cache -> setPlaceholderText("(default is 'cache' the temp directory)");
     m_copyright     = new CopyrightEdit;
     m_ini           = new FileBox;
+    m_ini -> setPlaceholderText("(default is 'ini' in the temp directory)");
     m_localUser     = new LineEdit;
+    m_localUser -> setPlaceholderText("(developer use)");
     m_logDir        = new DirBox;
+    m_logDir -> setPlaceholderText("(default is 'logs' in the temp directory)");
     m_home          = new LineEdit;
     m_name          = new LineEdit;
     m_name -> setPlaceholderText(tr("(name)"));
@@ -59,19 +64,20 @@ QuillDataEdit::QuillDataEdit(QWidget*parent) : FormWidget(parent),
     m_readTimeout   = new SpinBox;
     m_readTimeout -> setRange(0,99999);
     m_tempDir       = new DirBox;
+    m_tempDir -> setPlaceholderText(tr("(default under '%1')").arg(wksp::temp_dir_default()));
     
     addRow(tr("Project"), {m_abbr, m_name}, true);
     addRow(tr("Author"), m_author);
     addRow(tr("Legal"), m_copyright);
     addSeparator();
     
-    addRow(tr("Cache<br><small>$TempDir/cache</small>"), m_cache);
-    addRow(tr("Ini File<br><small>$TempDir/ini</small>"), m_ini);
-    addRow(tr("Local User<br><small>Developer Use</small>"), m_localUser);
-    addRow(tr("Log Directory<br><small>$TempDir/logs</small>"), m_logDir);
-    addRow(tr("Port<br><small>Point your browser here</small>"), {m_port, m_auxPorts}, true);
+    addRow(tr("Cache"), m_cache);
+    addRow(tr("Ini File"), m_ini);
+    addRow(tr("Local User"), m_localUser);
+    addRow(tr("Log Directory"), m_logDir);
+    addRow(tr("Port"), {m_port, m_auxPorts}, true);
     addRow(tr("Read Timeout"), m_readTimeout);
-    addRow(tr("TempDir<br><small>(Default is under /tmp)"), m_tempDir);
+    addRow(tr("TempDir"), m_tempDir);
 }
 
 QuillDataEdit::~QuillDataEdit()

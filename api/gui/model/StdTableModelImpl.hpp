@@ -9,6 +9,7 @@
 #include "StdTableModel.hpp"
 #include <gui/delegate/StringDelegate.hpp>
 #include <gui/delegate/EnumDelegate.hpp>
+#include <util/TypeTraits.hpp>
 #include <QValidator>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,6 +176,8 @@ protected:
 //      VARIOUS COLUMNS
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! Simple String member variable column
     template <typename T>
     struct STMStringMVColumn : public StdTableModel<T>::Column {
         using Column    = typename StdTableModel<T>::Column;
@@ -207,7 +210,6 @@ protected:
         
     };
 
-
     template <typename T>
     StdTableModel<T>::ColumnWriter        StdTableModel<T>::col(const String&k, String(T::*p), bool cs)
     {
@@ -215,6 +217,8 @@ protected:
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! Enum member variable column
     template <typename T, typename E>
     struct STMEnumMVColumn : public StdTableModel<T>::Column {
         using Column    = typename StdTableModel<T>::Column;
@@ -255,6 +259,8 @@ protected:
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! Enum-Map (one of) member variable column
     template <typename T, typename K, typename V>
     struct  STMEnumMapMVColumn : public StdTableModel<T>::Column {
         using Column = StdTableModel<T>::Column;
@@ -299,6 +305,181 @@ protected:
     StdTableModel<T>::ColumnWriter         StdTableModel<T>::col(EnumMap<K,EnumImpl<V>> (T::*p), K e)
     {
         return col(new STMEnumMapMVColumn<T,K,EnumImpl<V>>(e.key(), e, p));
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! custom column
+    
+    template <typename T, typename Getter>
+    struct STMCustomROColumn : public StdTableModel<T>::Column {
+        using Column = StdTableModel<T>::Column;
+        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
+        
+        Getter      m_get;
+        
+        STMCustomROColumn(const String&k, Getter g) : Column(k), m_get(g) 
+        {
+            Column::m_sortable  = yq::has_less_v<Value>;
+        }
+        
+        ~STMCustomROColumn(){}
+        
+        QVariant    display(const T& d) const override
+        {
+            if constexpr(std::is_same_v<Value,QVariant>){
+                return m_get(d);
+            } else
+                return QVariant::fromValue(m_get(d));
+        }
+        
+        bool        less(const T&a, const T&b) const override
+        {
+            if constexpr (std::is_same_v<Value, QString>){
+                return compare_igCase(m_get(a), m_get(b));
+            } else if constexpr (std::is_same_v<Value, String>){
+                return compare_igCase(m_get(a), m_get(b));
+            } else if constexpr (yq::has_less_v<Value>){
+                return m_get(a) < m_get(b);
+            } else
+                return false;
+        }
+    };
+    
+    template <typename T>
+        template <typename Getter>
+    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRO(const String&k, Getter g)
+    {
+        return col(new STMCustomROColumn<T,Getter>(k, g));
+    }
+    
+    template <typename T, typename Getter, typename Less>
+    struct STMCustomROLColumn : public StdTableModel<T>::Column {
+        using Column = StdTableModel<T>::Column;
+        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
+        Getter      m_get;
+        Less        m_less;
+        
+        STMCustomROLColumn(const String&k, Getter g, Less l) : Column(k), m_get(g), m_less(l)
+        {
+            Column::m_sortable  = true;
+        }
+        
+        ~STMCustomROLColumn(){}
+        
+        QVariant    display(const T& d) const override
+        {
+            if constexpr(std::is_same_v<Value,QVariant>){
+                return m_get(d);
+            } else
+                return QVariant::fromValue(m_get(d));
+        }
+        
+        bool        less(const T&a, const T& b) const override
+        {
+            return m_less(a,b);
+        }
+    };
+    
+    template <typename T>
+        template <typename Getter, typename Less>
+    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRO(const String&k, Getter g, Less l)
+    {
+        return col(new STMCustomROLColumn(k,g,l));
+    }
+    
+
+    template <typename T, typename Getter, typename Setter>
+    struct STMCustomRWColumn : public StdTableModel<T>::Column {
+        using Column = StdTableModel<T>::Column;
+        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
+        Getter      m_get;
+        Setter      m_set;
+        
+        STMCustomRWColumn(const String&k, Getter g, Setter s) : Column(k), m_get(g), m_set(s)
+        {
+            Column::m_settable  = true;
+            Column::m_sortable  = yq::has_less_v<Value>;
+        }
+        
+        ~STMCustomRWColumn(){}
+        
+        QVariant    display(const T& d) const override
+        {
+            if constexpr(std::is_same_v<Value,QVariant>){
+                return m_get(d);
+            } else
+                return QVariant::fromValue(m_get(d));
+        }
+        
+        bool        set(T& d, const QVariant& v) const override
+        {
+            // TODO ... use template specialization to make this smarter....
+            return m_set(d,v.value<Value>());
+        }
+
+        bool        less(const T&a, const T&b) const override
+        {
+            if constexpr (std::is_same_v<Value, QString>){
+                return compare_igCase(m_get(a), m_get(b));
+            } else if constexpr (std::is_same_v<Value, String>){
+                return compare_igCase(m_get(a), m_get(b));
+            } else if constexpr (yq::has_less_v<Value>){
+                return m_get(a) < m_get(b);
+            } else
+                return false;
+        }
+    };
+    
+    
+    template <typename T>
+        template <typename Getter, typename Setter>
+    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRW(const String& k, Getter g, Setter s)
+    {
+        return col(new STMCustomRWColumn<T,Getter,Setter>(k,g,s));
+    }
+    
+    template <typename T, typename Getter, typename Setter, typename Less>
+    struct STMCustomRWLColumn : public StdTableModel<T>::Column {
+        using Column = StdTableModel<T>::Column;
+        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
+        Getter      m_get;
+        Setter      m_set;
+        Less        m_less;
+        
+        
+        STMCustomRWLColumn(const String& k, Getter g, Setter s, Less l) : Column(k), m_get(g), m_set(s), m_less(l)
+        {
+            Column::m_settable  = true;
+            Column::m_sortable  = true;
+        }
+        
+        QVariant    display(const T& d) const override
+        {
+            if constexpr(std::is_same_v<Value,QVariant>){
+                return m_get(d);
+            } else
+                return QVariant::fromValue(m_get(d));
+        }
+        
+        bool        set(T& d, const QVariant& v) const override
+        {
+            // TODO ... use template specialization to make this smarter....
+            return m_set(d,v.value<Value>());
+        }
+
+        bool        less(const T&a, const T& b) const override
+        {
+            return m_less(a,b);
+        }
+    };
+    
+
+    template <typename T>
+        template <typename Getter, typename Setter, typename Less>
+    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRW(const String&k, Getter g, Setter s, Less l)
+    {
+        return col(new STMCustomRWLColumn(k, g, s, l));
     }
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
