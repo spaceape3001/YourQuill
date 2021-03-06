@@ -20,7 +20,7 @@ add_executable(serverYQ
     pWkspClass.cpp
     pWorkspace.cpp
     
-    db.cpp
+    server.cpp
 )
 target_link_libraries(serverYQ yqdb yqmeta yqsrv yqutil Qt::Core  Qt::Gui Qt::Svg QtWebApp)
 
