@@ -112,11 +112,11 @@ namespace {
         leaf_html(h);
     }
     
-    void    dispatch_leaf(HtmlWriter&h, const String& s)
-    {
-        test(decode_leaf_prime(s));
-        leaf_html(h);
-    }
+    //void    dispatch_leaf(HtmlWriter&h, const String& s)
+    //{
+        //test(decode_leaf_prime(s));
+        //leaf_html(h);
+    //}
     
     void    page_leaf_attributes(HtmlWriter& h)
     {
@@ -145,7 +145,6 @@ namespace {
         reg_page(hGet, "/class", page_class).description("Class").id().key().label("Overview");
         reg_page(hGet, "/graph", page_graph).description("Graph").id().key();
     
-        reg_dispatcher(hGet, "w", dispatch_leaf);
     
         reg_tabbar({
             reg_page(hGet, "/leaf", page_leaf).description("Leaf").id().key().label("Overview"),

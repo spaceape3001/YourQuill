@@ -48,7 +48,7 @@ namespace {
                 return ;
             QString     url;
             if(Leaf l = cdb::leaf(a)){
-                url = QString("/leaf?id=%1").arg((quint64) l.id);
+                url = QString("/w/%1").arg(cdb::key(l));
             } else {
                 url = QString("/atom?id=%1").arg((quint64) a.id);
             }

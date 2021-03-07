@@ -498,6 +498,11 @@
         m_stream << "<U>" << u.txt.toHtmlEscaped() << "</U>\n";
     }
 
+    void    HtmlWriter::write(const Leaf& l)
+    {
+        m_stream << "<a href=\"/w/" << cdb::key(l) << "\">" << cdb::title(l) << "</a>";
+    }
+
 
     void    HtmlWriter::write(SubmitLabel sl)
     {
