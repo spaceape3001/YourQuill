@@ -11,6 +11,7 @@
 #include <db/Workspace.hpp>
 #include <dbgui/QuillApp.hpp>
 #include <gadget/DateGen.hpp>
+#include <gadget/SqlTool.hpp>
 #include <gadget/TimeGen.hpp>
 #include <util/Logging.hpp>
 #include <iostream>
@@ -23,7 +24,6 @@
 
 #include "gadget/Calculator.hpp"
 //#include "gadget/MonthView.hpp"
-#include "gadget/SqlTool.hpp"
 #include "gui/UInt64Mapper.hpp"
 
 //#include <QApplication>
@@ -40,7 +40,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
-    //addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
+    addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
     addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
     addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
     addAction("new_web", "New Web").connect(this, &YourQuill::cmdNewWeb);
@@ -129,12 +129,12 @@ void    YourQuill::cmdNewExplorer()
     //addDock(Qt::LeftDockWidgetArea, m);
 //}
 
+#endif
 void    YourQuill::cmdNewSqlTool()
 {
     SqlTool     *st = new SqlTool(wksp::cache());
     addWindow(st);
 }
-#endif
 
 void    YourQuill::cmdNewTagTable()
 {

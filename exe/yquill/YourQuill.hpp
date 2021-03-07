@@ -23,7 +23,7 @@ public slots:
     void            cmdNewDateGen();
     //void            cmdNewExplorer();
     ////void            cmdNewMonthView();
-    //void            cmdNewSqlTool();
+    void            cmdNewSqlTool();
     void            cmdNewTagTable();
     void            cmdNewTimeGen();
     void            cmdNewWeb();
