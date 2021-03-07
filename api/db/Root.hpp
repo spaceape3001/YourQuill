@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "Access.hpp"
-#include "Policy.hpp"
 #include "RootFwd.hpp"
-#include "Vcs.hpp"
+#include <db/bit/Policy.hpp>
+#include <db/enum/Access.hpp>
+#include <db/enum/Vcs.hpp>
 
 #include <util/EnumMap.hpp>
 #include <util/Flag.hpp>

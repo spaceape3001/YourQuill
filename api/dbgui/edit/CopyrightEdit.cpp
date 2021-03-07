@@ -6,7 +6,7 @@
 
 #include "CopyrightEdit.hpp"
 
-#include <db/Copyright.hpp>
+#include <db/bit/Copyright.hpp>
 #include <gui/edit/EnumCombo.hpp>
 #include <gui/edit/LineEdit.hpp>
 #include <gui/edit/SpinBox.hpp>

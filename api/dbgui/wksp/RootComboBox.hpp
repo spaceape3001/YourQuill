@@ -6,8 +6,8 @@
 
 #pragma once
 
+#include <db/enum/DataRole.hpp>
 #include <gui/edit/ComboBox.hpp>
-#include <db/DataRole.hpp>
 
 class Root;
 

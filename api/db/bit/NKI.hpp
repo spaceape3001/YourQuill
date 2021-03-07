@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "CacheFwd.hpp"
-#include "Image.hpp"
+#include <db/CacheFwd.hpp>
+#include <db/Image.hpp>
 #include <QString>
 
 namespace cdb {

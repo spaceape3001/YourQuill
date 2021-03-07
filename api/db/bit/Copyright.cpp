@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Copyright.hpp"
-#include "FileStrings.hpp"
+#include <db/FileStrings.hpp>
 #include <util/XmlUtils.hpp>
 
 bool    Copyright::empty() const

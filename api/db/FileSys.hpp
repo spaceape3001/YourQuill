@@ -7,9 +7,9 @@
 #pragma once
 
 #include "CacheFwd.hpp"
-#include "DataRole.hpp"
 #include "Image.hpp"
-#include "Sorted.hpp"
+#include <db/enum/DataRole.hpp>
+#include <db/enum/Sorted.hpp>
 
 #include <QString>
 

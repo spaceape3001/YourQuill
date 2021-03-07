@@ -11,7 +11,7 @@
 #include "FileSys.hpp"
 #include "Graph.hpp"
 #include "Image.hpp"
-#include "Linkage.hpp"
+#include <db/enum/Linkage.hpp>
 
 
 /*! \brief Atom in the cache

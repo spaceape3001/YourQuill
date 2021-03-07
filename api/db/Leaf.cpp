@@ -9,10 +9,10 @@
 #include "AtomSys.hpp"
 #include "FileSys.hpp"
 #include "Image.hpp"
-#include "NKI.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
 
+#include <db/bit/NKI.hpp>
 #include <util/Logging.hpp>
 #include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>

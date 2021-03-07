@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Multiplicity.hpp"
-#include "Restriction.hpp"
+#include <db/enum/Multiplicity.hpp>
+#include <db/enum/Restriction.hpp>
 #include <util/Map.hpp>
 #include <util/Set.hpp>
 #include <util/String.hpp>

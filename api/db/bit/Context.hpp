@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "Format.hpp"
+#include <db/enum/Format.hpp>
 #include <util/XmlFwd.hpp>
 
 struct Context {

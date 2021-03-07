@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Context.hpp"
-#include "FileStrings.hpp"
+#include <db/FileStrings.hpp>
 #include <util/XmlUtils.hpp>
 
 

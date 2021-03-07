@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Context.hpp"
-#include "Format.hpp"
+#include <db/bit/Context.hpp>
+#include <db/enum/Format.hpp>
 #include "StdFile.hpp"
 
 //! Leaf, the basis of all evil :)

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "AssertDeny.hpp"
+#include <db/enum/AssertDeny.hpp>
 #include <util/XmlFwd.hpp>
 
 struct Copyright {

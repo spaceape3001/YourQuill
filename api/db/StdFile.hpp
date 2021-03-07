@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "Attribute.hpp"
+#include <db/bit/Attribute.hpp>
 #include <util/AbstractFile.hpp>
 
 class Stream;

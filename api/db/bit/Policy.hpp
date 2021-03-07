@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Access.hpp"
-#include "DataRole.hpp"
+#include <db/enum/Access.hpp>
+#include <db/enum/DataRole.hpp>
 #include <util/EnumMap.hpp>
 
 using PolicyMap     = EnumMap<DataRole,Access>;

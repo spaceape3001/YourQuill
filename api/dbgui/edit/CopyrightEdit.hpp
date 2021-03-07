@@ -7,7 +7,7 @@
 #pragma once
 
 #include <QWidget>
-#include <db/AssertDeny.hpp>
+#include <db/enum/AssertDeny.hpp>
 #include <gui/undo/UndoBase.hpp>
 
 struct Copyright;

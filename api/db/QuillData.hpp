@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "Copyright.hpp"
-#include "Policy.hpp"
-#include "Vcs.hpp"
+#include <db/bit/Copyright.hpp>
+#include <db/bit/Policy.hpp>
+#include <db/enum/Vcs.hpp>
 
 struct Copyright;
 

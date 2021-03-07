@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CacheFwd.hpp"
-#include "SizeDesc.hpp"
+#include <db/enum/SizeDesc.hpp>
 #include <util/Http.hpp>
 
 struct Image {

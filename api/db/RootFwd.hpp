@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "DataRole.hpp"
+#include <db/enum/DataRole.hpp>
 
 class Root;
 template <typename E, typename V> class EnumMap;

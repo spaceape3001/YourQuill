@@ -8,10 +8,10 @@
 
 #include "Image.hpp"
 #include "Leaf.hpp"
-#include "NKI.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
 
+#include <db/bit/NKI.hpp>
 #include <util/Logging.hpp>
 #include <util/FileUtils.hpp>
 #include <util/SqlQuery.hpp>

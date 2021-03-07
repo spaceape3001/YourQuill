@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "TagFile.hpp"
-#include "Attribute.hpp"
+#include <db/bit/Attribute.hpp>
 
 TagData& TagData::merge(const TagData&b, bool fOverride)
 {

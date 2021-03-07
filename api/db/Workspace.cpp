@@ -9,8 +9,8 @@
 #include "Workspace.hpp"
 
 #include "WkspLogging.hpp"
-#include "Copyright.hpp"
 #include "ShareDir.hpp"
+#include <db/bit/Copyright.hpp>
 #include <meta/Global.hpp>
 #include <meta/GlobalImpl.hpp>
 #include <util/DelayInit.hpp>

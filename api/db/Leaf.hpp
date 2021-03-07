@@ -8,8 +8,8 @@
 
 #include "LeafFile.hpp"
 
-#include "Context.hpp"
 #include "FileSys.hpp"
+#include <db/bit/Context.hpp>
 #include <util/Map.hpp>
 
 class LeafFile;

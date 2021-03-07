@@ -14,6 +14,6 @@
 #include "Image.hpp"
 #include "Leaf.hpp"
 #include "Tag.hpp"
-#include "NKI.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
+#include <db/bit/NKI.hpp>

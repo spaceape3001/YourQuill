@@ -7,8 +7,8 @@
 #pragma once
 
 #include "TagFile.hpp"
-#include "Update.hpp"
 #include "FileSys.hpp"
+#include <db/enum/Update.hpp>
 
 class TagFile;
 

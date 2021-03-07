@@ -1,20 +1,9 @@
 set(db_sources
-    ./Access.hpp
-    ./AssertDeny.hpp
     ./AtomSys.cpp
     ./AtomSys.hpp
-    ./Attribute.hpp
-    ./Attribute.cpp
     ./Cache.hpp
-    ./CalSystem.hpp
-    ./Change.hpp
     ./ClassFile.cpp
     ./ClassFile.hpp
-    ./Context.cpp
-    ./Context.hpp
-    ./Copyright.cpp
-    ./Copyright.hpp
-    ./DataRole.hpp
     ./Enums.cpp
     ./Enums.hpp
     ./FileStrings.hpp
@@ -22,7 +11,6 @@ set(db_sources
     ./FileSys.hpp
     ./FolderFile.cpp
     ./FolderFile.hpp
-    ./Format.hpp
     ./Graph.cpp
     ./Graph.hpp
     ./GraphBuilder.cpp
@@ -34,32 +22,46 @@ set(db_sources
     ./Leaf.hpp
     ./LeafFile.cpp
     ./LeafFile.hpp
-    ./Linkage.hpp
-    ./Match.hpp
-    ./Multiplicity.hpp
-    ./NKI.hpp
-    ./Policy.cpp
-    ./Policy.hpp
     ./QuillData.hpp
     ./QuillFile.cpp
     ./QuillFile.hpp
-    ./Restriction.hpp
     ./Root.hpp
     ./RootFwd.hpp
     ./ShareDir.cpp
     ./ShareDir.hpp
-    ./SizeDesc.hpp
-    ./Sorted.hpp
     ./StdFile.cpp
     ./StdFile.hpp
     ./Tag.cpp
     ./Tag.hpp
     ./TagFile.cpp
     ./TagFile.hpp
-    ./Update.hpp
-    ./Vcs.hpp
     ./Workspace.cpp
     ./Workspace.hpp
+
+    ./bit/Attribute.hpp
+    ./bit/Attribute.cpp
+    ./bit/Context.cpp
+    ./bit/Context.hpp
+    ./bit/Copyright.cpp
+    ./bit/Copyright.hpp
+    ./bit/NKI.hpp
+    ./bit/Policy.cpp
+    ./bit/Policy.hpp
+
+    ./enum/Access.hpp
+    ./enum/AssertDeny.hpp
+    ./enum/CalSystem.hpp
+    ./enum/Change.hpp
+    ./enum/DataRole.hpp
+    ./enum/Format.hpp
+    ./enum/Linkage.hpp
+    ./enum/Match.hpp
+    ./enum/Multiplicity.hpp
+    ./enum/Restriction.hpp
+    ./enum/SizeDesc.hpp
+    ./enum/Sorted.hpp
+    ./enum/Update.hpp
+    ./enum/Vcs.hpp
 )
 
 add_library(yqdb SHARED ${db_sources})
