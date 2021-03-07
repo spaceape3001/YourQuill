@@ -65,8 +65,7 @@ CREATE TABLE Folders (
 INSERT INTO Folders (id,k,parent,sk,name) VALUES (1, '',         0, '',         'Root');
 INSERT INTO Folders (id,k,parent,sk,name) VALUES (2, '.config',  1, '.config',  'Config');
 INSERT INTO Folders (id,k,parent,sk,name) VALUES (3, '.classes', 1, '.classes', 'Classes');
-INSERT INTO Folders (id,k,parent,sk,name) VALUES (4, '.fields',  1, '.fields',  'Fields');
-INSERT INTO Folders (id,k,parent,sk,name) VALUES (5, '.tags',    1, '.tags',    'Tags');
+INSERT INTO Folders (id,k,parent,sk,name) VALUES (4, '.tags',    1, '.tags',    'Tags');
 
 
 

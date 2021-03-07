@@ -74,6 +74,9 @@ namespace cdb {
     Vector<Tag::FragDoc>    reads(Tag);
     Vector<Tag::FragDoc>    reads(Tag, class Root*);
     
+    bool                    set_brief(Tag, const String&, class Root* rt=nullptr);
+    bool                    set_name(Tag, const String&, class Root* rt=nullptr);
+    bool                    set_notes(Tag, const String&, class Root* rt=nullptr);
     
     
     Tag                     tag(const QString&);

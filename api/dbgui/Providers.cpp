@@ -7,7 +7,7 @@
 #include <db/Cache.hpp>
 #include <dbgui/tag/TagProvider.hpp>
 
-namespace provider {
+namespace {
     struct AllTags : public Provider<Tag> {
         AllTags(){}
         ~AllTags(){}
@@ -18,5 +18,12 @@ namespace provider {
             return cdb::make_tag(k,rt);
         }
     };
+}
+
+namespace provider {
+    TagProvider     all_tags()
+    {
+        return std::make_shared<AllTags>();
+    }
 }
 

@@ -10,63 +10,12 @@
 #include <util/Reverse.hpp>
 #include <util/Set.hpp>
 #include <util/Stream.hpp>
+#include <util/Utilities.hpp>
 
 #include <cctype>
 #include <iostream>
 
 namespace {
-    bool    in(const String& a, const String& b)
-    {
-        if(a.size() != b.size())
-            return false;
-        for(size_t n=0;n<a.size();++n)
-            if(tolower(a[n]) != tolower(b[n]))
-                return false;
-        return true;
-    }
-    
-    bool    in(const String& a, const char* b)
-    {
-        if(!b)
-            return false;
-        size_t  n;
-        for(n=0;n<a.size();++n){
-            if(!b[n])
-                return false;
-            if(tolower(a[n]) != tolower(b[n]))
-                return false;
-        }
-        return !b[n];
-    }
-    
-    bool    in(const char* a, const String& b)
-    {
-        return in(b,a);
-    }
-
-    bool    in(const Vector<String>& vec, const String& b)
-    {
-        for(const String& a : vec)
-            if(in(a,b))
-                return true;
-        return false;
-    }
-
-    bool    in(const std::initializer_list<String>& vec, const String& b)
-    {
-        for(const String& a : vec)
-            if(in(a,b))
-                return true;
-        return false;
-    }
-
-    bool    in(const std::initializer_list<const char*>& vec, const String& b)
-    {
-        for(const char* a : vec)
-            if(a && in(b,a))
-                return true;
-        return false;
-    }
 
     StringSet   make_set(const Vector<const Attribute*>&attrs, const String& sep)
     {
@@ -91,7 +40,7 @@ Vector<const Attribute*>    AttrTree::all(const char* key) const
     Vector<const Attribute*>    ret;
     if(key){
         for(const Attribute& a : attrs)
-            if(in(key, a.key))
+            if(is_in(key, a.key))
                 ret << &a;
     }
     return ret;
@@ -101,7 +50,7 @@ Vector<const Attribute*>    AttrTree::all(const String& key) const
 {
     Vector<const Attribute*>    ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
@@ -110,7 +59,7 @@ Vector<const Attribute*>    AttrTree::all(const std::initializer_list<String>& k
 {
     Vector<const Attribute*>    ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
@@ -119,7 +68,7 @@ Vector<const Attribute*>    AttrTree::all(const std::initializer_list<const char
 {
     Vector<const Attribute*>    ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
@@ -128,7 +77,7 @@ Vector<const Attribute*>    AttrTree::all(const Vector<String>&key) const
 {
     Vector<const Attribute*>    ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
@@ -141,7 +90,7 @@ bool                AttrTree::empty() const
 void                AttrTree::erase_all(const String& key)
 {
     attrs.erase_if([&](const Attribute& a) -> bool {
-        return in(key, a.key);
+        return is_in(key, a.key);
     });
 }
 
@@ -152,28 +101,28 @@ void                AttrTree::erase_all(const char* key)
         return ;
         
     attrs.erase_if([&](const Attribute& a) -> bool {
-        return in(key, a.key);
+        return is_in(key, a.key);
     });
 }
 
 void                AttrTree::erase_all(const std::initializer_list<String>& key)
 {
     attrs.erase_if([&](const Attribute& a) -> bool {
-        return in(key, a.key);
+        return is_in(key, a.key);
     });
 }
 
 void                AttrTree::erase_all(const std::initializer_list<const char*>&key)
 {
     attrs.erase_if([&](const Attribute& a) -> bool {
-        return in(key, a.key);
+        return is_in(key, a.key);
     });
 }
 
 void                AttrTree::erase_all(const Vector<String>& key)
 {
     attrs.erase_if([&](const Attribute& a) -> bool {
-        return in(key, a.key);
+        return is_in(key, a.key);
     });
 }
 
@@ -182,7 +131,7 @@ void                AttrTree::erase_seconds(const String& key)
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
     attrs.erase_if([&](const Attribute& a) -> bool {
-        if(in(key, a.key)){
+        if(is_in(key, a.key)){
             if(f)
                 return true;
             f = true;
@@ -200,7 +149,7 @@ void                AttrTree::erase_seconds(const char* key)
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
     attrs.erase_if([&](const Attribute& a) -> bool {
-        if(in(key, a.key)){
+        if(is_in(key, a.key)){
             if(f)
                 return true;
             f = true;
@@ -215,7 +164,7 @@ void                AttrTree::erase_seconds(const std::initializer_list<const ch
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
     attrs.erase_if([&](const Attribute& a) -> bool {
-        if(in(key, a.key)){
+        if(is_in(key, a.key)){
             if(f)
                 return true;
             f = true;
@@ -229,7 +178,7 @@ void                AttrTree::erase_seconds(const std::initializer_list<String>&
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
     attrs.erase_if([&](const Attribute& a) -> bool {
-        if(in(key, a.key)){
+        if(is_in(key, a.key)){
             if(f)
                 return true;
             f = true;
@@ -244,7 +193,7 @@ void                AttrTree::erase_seconds(const Vector<String>& key)
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
     attrs.erase_if([&](const Attribute& a) -> bool {
-        if(in(key, a.key)){
+        if(is_in(key, a.key)){
             if(f)
                 return true;
             f = true;
@@ -256,7 +205,7 @@ void                AttrTree::erase_seconds(const Vector<String>& key)
 Attribute*          AttrTree::first(const String& key)
 {
     for(Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -267,7 +216,7 @@ Attribute*          AttrTree::first(const char* key)
     if(!key)
         return nullptr;
     for(Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -275,7 +224,7 @@ Attribute*          AttrTree::first(const char* key)
 Attribute*          AttrTree::first(const std::initializer_list<String>& key)
 {
     for(Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -283,7 +232,7 @@ Attribute*          AttrTree::first(const std::initializer_list<String>& key)
 Attribute*          AttrTree::first(const std::initializer_list<const char*>& key)
 {
     for(Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -291,7 +240,7 @@ Attribute*          AttrTree::first(const std::initializer_list<const char*>& ke
 Attribute*          AttrTree::first(const Vector<String>& key)
 {
     for(Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -299,7 +248,7 @@ Attribute*          AttrTree::first(const Vector<String>& key)
 Attribute*          AttrTree::first(const std::initializer_list<const char*>&key, const String&val, bool fCreate)
 {
     for(Attribute& a : attrs){
-        if(in(key, a.key) && in(val, a.data))
+        if(is_in(key, a.key) && is_in(val, a.data))
             return &a;
     }
     if(fCreate && key.size()){
@@ -317,7 +266,7 @@ Attribute*          AttrTree::first(const std::initializer_list<const char*>&key
 const Attribute*    AttrTree::first(const String& key) const
 {
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -330,7 +279,7 @@ const Attribute*    AttrTree::first(const char* key) const
     if(!key)
         return nullptr;
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -338,7 +287,7 @@ const Attribute*    AttrTree::first(const char* key) const
 const Attribute*    AttrTree::first(const std::initializer_list<String>& key) const
 {
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -346,7 +295,7 @@ const Attribute*    AttrTree::first(const std::initializer_list<String>& key) co
 const Attribute*    AttrTree::first(const std::initializer_list<const char*>& key) const
 {
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -354,7 +303,7 @@ const Attribute*    AttrTree::first(const std::initializer_list<const char*>& ke
 const Attribute*    AttrTree::first(const Vector<String>& key) const
 {
     for(const Attribute& a : attrs)
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -362,7 +311,7 @@ const Attribute*    AttrTree::first(const Vector<String>& key) const
 const Attribute*  AttrTree::first(const std::initializer_list<const char*>&key, const String&val) const
 {
     for(const Attribute& a : attrs)
-        if(in(key, a.key) && in(val, a.data))
+        if(is_in(key, a.key) && is_in(val, a.data))
             return &a;
     return nullptr;
 }
@@ -372,7 +321,7 @@ const Attribute*  AttrTree::first(const std::initializer_list<const char*>&key, 
 const Attribute*    AttrTree::first_noncmd(const String& key) const
 {
     for(const Attribute& a : attrs)
-        if(a.cmd.empty() && in(key, a.key))
+        if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -385,7 +334,7 @@ const Attribute*    AttrTree::first_noncmd(const char* key) const
     if(!key)
         return nullptr;
     for(const Attribute& a : attrs)
-        if(a.cmd.empty() && in(key, a.key))
+        if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -393,7 +342,7 @@ const Attribute*    AttrTree::first_noncmd(const char* key) const
 const Attribute*    AttrTree::first_noncmd(const std::initializer_list<String>& key) const
 {
     for(const Attribute& a : attrs)
-        if(a.cmd.empty() && in(key, a.key))
+        if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -401,7 +350,7 @@ const Attribute*    AttrTree::first_noncmd(const std::initializer_list<String>& 
 const Attribute*    AttrTree::first_noncmd(const std::initializer_list<const char*>& key) const
 {
     for(const Attribute& a : attrs)
-        if(a.cmd.empty() && in(key, a.key))
+        if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -409,7 +358,7 @@ const Attribute*    AttrTree::first_noncmd(const std::initializer_list<const cha
 const Attribute*    AttrTree::first_noncmd(const Vector<String>& key) const
 {
     for(const Attribute& a : attrs)
-        if(a.cmd.empty() && in(key, a.key))
+        if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -500,7 +449,7 @@ bool                AttrTree::has(const Vector<String>&key) const
 const Attribute*    AttrTree::last(const String& key) const
 {
     for(const Attribute& a : reverse(attrs))
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -511,7 +460,7 @@ const Attribute*    AttrTree::last(const char* key) const
     if(!key)
         return nullptr;
     for(const Attribute& a : reverse(attrs))
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -521,7 +470,7 @@ const Attribute*    AttrTree::last(const char* key) const
 const Attribute*    AttrTree::last(const std::initializer_list<String>& key) const
 {
     for(const Attribute& a : reverse(attrs))
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -529,7 +478,7 @@ const Attribute*    AttrTree::last(const std::initializer_list<String>& key) con
 const Attribute*    AttrTree::last(const std::initializer_list<const char*>& key) const
 {
     for(const Attribute& a : reverse(attrs))
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -537,7 +486,7 @@ const Attribute*    AttrTree::last(const std::initializer_list<const char*>& key
 const Attribute*    AttrTree::last(const Vector<String>& key) const
 {
     for(const Attribute& a : reverse(attrs))
-        if(in(key, a.key))
+        if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
@@ -729,7 +678,7 @@ Vector<String>     AttrTree::values(const String& key) const
 {
     Vector<String>  ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key) && !a.data.empty())
+        if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }
@@ -740,7 +689,7 @@ Vector<String>     AttrTree::values(const char* key) const
     Vector<String>  ret;
     if(key){
         for(const Attribute& a : attrs)
-            if(in(key, a.key) && !a.data.empty())
+            if(is_in(key, a.key) && !a.data.empty())
                 ret << a.data;
     }
     return ret;
@@ -750,7 +699,7 @@ Vector<String>     AttrTree::values(const std::initializer_list<String>& key) co
 {
     Vector<String>  ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key) && !a.data.empty())
+        if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }
@@ -759,7 +708,7 @@ Vector<String>     AttrTree::values(const std::initializer_list<const char*>& ke
 {
     Vector<String>  ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key) && !a.data.empty())
+        if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }
@@ -769,7 +718,7 @@ Vector<String>     AttrTree::values(const Vector<String>& key) const
 {
     Vector<String>  ret;
     for(const Attribute& a : attrs)
-        if(in(key, a.key) && !a.data.empty())
+        if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }

@@ -18,6 +18,9 @@ set(dbgui_sources
     ./tag/TagEdit.cpp
     ./tag/TagEdit.hpp
     ./tag/TagProvider.hpp
+    ./tag/TagTableBase.cpp
+    ./tag/TagTableModel.hpp
+    ./tag/TagTableView.hpp
     
     ./web/WebBase.cpp
     ./web/WebBase.cpp
@@ -32,6 +35,7 @@ add_library(yqdbgui SHARED ${dbgui_sources})
 target_link_libraries(yqdbgui 
     PUBLIC 
         yqdb 
+        yqgui
         yqmeta 
         yqres
         yqutil 

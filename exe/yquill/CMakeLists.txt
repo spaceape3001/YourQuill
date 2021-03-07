@@ -11,12 +11,11 @@ add_executable(yquill
     #./LeafTable.hpp
     #./TagEditor.cpp
     #./TagEditor.hpp
-    #./TagTable.cpp
-    #./TagTable.hpp
-
+    
+    ./YTagTable.cpp
+    ./YTagTable.hpp
     ./YWeb.cpp
     ./YWeb.hpp
-
     ./YourQuill.cpp
     ./YourQuill.hpp
 )

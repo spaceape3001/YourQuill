@@ -10,9 +10,10 @@
 #include <gui/model/StdTableModel.hpp>
 #include <QTableView>
 
+template <typename T>
 class StdTableView : public QTableView {
 protected:
-    StdTableView(StdTableModel* m, QWidget* parent=nullptr) : QTableView(parent)
+    StdTableView(StdTableModel<T>* m, QWidget* parent=nullptr) : QTableView(parent)
     {
         setModel(m);
         for(auto c : m->columns()){

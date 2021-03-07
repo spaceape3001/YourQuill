@@ -24,7 +24,7 @@ public slots:
     //void            cmdNewExplorer();
     ////void            cmdNewMonthView();
     //void            cmdNewSqlTool();
-    //void            cmdNewTagTable();
+    void            cmdNewTagTable();
     void            cmdNewTimeGen();
     void            cmdNewWeb();
     

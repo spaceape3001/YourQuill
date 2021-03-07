@@ -73,8 +73,10 @@ namespace cdb {
     {
         if(wasCreated)
             *wasCreated = false;
-        if(folder(doc) != tags_folder())
+        if(folder(doc) != tags_folder()){
+            yError() << "Rejecting tag " << key(doc) << " due to not being in the '.tags' folder";        
             return Tag{};
+        }
         QString k   = base_key(doc);
         if(k.isEmpty())
             return Tag();
@@ -273,6 +275,33 @@ namespace cdb {
         return ret;
     }
     
+    bool                set_brief(Tag t, const String& k, class Root* rt)
+    {
+        auto tf = write(t, rt);
+        if(!tf)
+            return false;
+        tf -> brief     = k;
+        return tf -> save();
+    }
+    
+    bool                set_name(Tag t, const String& k, class Root* rt)
+    {
+        auto tf = write(t, rt);
+        if(!tf)
+            return false;
+        tf -> name     = k;
+        return tf -> save();
+    }
+    
+    bool                set_notes(Tag t, const String& k, class Root* rt)
+    {
+        auto tf = write(t, rt);
+        if(!tf)
+            return false;
+        tf -> notes      = k;
+        return tf -> save();
+    }
+    
     Tag                 tag(const QString& k)
     {
         static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Tags WHERE k=?");
@@ -336,14 +365,19 @@ namespace cdb {
         Document    d   = document(t);
         if(!d)
             return TagFile::Shared();
-        Fragment    f   = fragment(d);
+        if(rt && !rt->is_writable(DataRole::Tags))
+            return TagFile::Shared();
+        Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Tags);
         if(f)
             return tag_doc(f, true);
+
         Folder      fo  = folder(d);
         if((fo != cdb::top_folder()) && !exists(fo, rt))
             rt -> make_path(key(fo));
+
         TagFile::Shared ptr  = std::make_shared<TagFile>();
         ptr -> set_file( rt -> resolve(key(d)));
+        ptr -> reload();
         return ptr;
     }    
 }

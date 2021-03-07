@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "YTagTable.hpp"
 #include "YWeb.hpp"
 #include "YourQuill.hpp"
 
@@ -18,7 +19,6 @@
 #include "ClassEditor.hpp"
 #include "ClassTable.hpp"
 #include "Explorer.hpp"
-#include "TagTable.hpp"
 #include "YWeb.hpp"
 
 #include "gadget/Calculator.hpp"
@@ -41,9 +41,9 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
     //addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
-    //addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
+    addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
     addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
-    addAction("new_web", "New YWeb").connect(this, &YourQuill::cmdNewWeb);
+    addAction("new_web", "New Web").connect(this, &YourQuill::cmdNewWeb);
     
     addAction("refresh", "Refresh").shortcut("F5");
 
@@ -134,14 +134,14 @@ void    YourQuill::cmdNewSqlTool()
     SqlTool     *st = new SqlTool(wksp::cache());
     addWindow(st);
 }
+#endif
 
 void    YourQuill::cmdNewTagTable()
 {
-    TagTable*   tt  = new TagTable;
+    YTagTable*   tt  = new YTagTable;
     tt -> setAddEnable(true);
     addWindow(tt);
 }
-#endif
 
 void    YourQuill::cmdNewTimeGen()
 {
