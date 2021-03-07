@@ -183,6 +183,28 @@ namespace cdb {
         return Leaf{};
     }
 
+    Tag                     make_tag(const QString& k, const Root* rt)
+    {
+        if(!rt)
+            rt  = wksp::root_first(DataRole::Tags);
+        if(!rt){
+            yError() << "No root specified to create the tag in!";
+            return Tag{};
+        }
+        
+        Document    doc = db_document(tags_folder(), k + ".tag");
+        bool            was = false;
+        Tag         t   = db_tag(doc, &was);
+        if(!was)
+            return t;
+        if(fragments_count(doc))
+            return t;
+        TagFile::Shared td  = write(t, rt);
+        td -> name  = k;
+        td -> save();
+        return t;
+    }
+
     SharedTagData   merged(Tag t, unsigned int opts)
     {
         SharedTagData  ret = std::make_shared<TagData>();

@@ -17,7 +17,6 @@ set(db_sources
     ./GraphBuilder.hpp
     ./Image.cpp
     ./Image.hpp
-    ./IProvider.hpp
     ./Leaf.cpp
     ./Leaf.hpp
     ./LeafFile.cpp

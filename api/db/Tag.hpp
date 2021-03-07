@@ -59,6 +59,7 @@ namespace cdb {
     QString                 label(Tag);
     Leaf                    leaf(Tag t);
     
+    Tag                     make_tag(const QString&, const Root* rt=nullptr);
     SharedTagData           merged(Tag, unsigned int opts=0);
     
     QString                 name(Tag);

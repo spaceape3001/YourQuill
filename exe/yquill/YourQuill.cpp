@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Web.hpp"
+#include "YWeb.hpp"
 #include "YourQuill.hpp"
 
 #include <db/Workspace.hpp>
@@ -17,7 +17,7 @@
 #include "ClassTable.hpp"
 #include "Explorer.hpp"
 #include "TagTable.hpp"
-#include "Web.hpp"
+#include "YWeb.hpp"
 
 #include "gadget/Calculator.hpp"
 #include "gadget/DateGen.hpp"
@@ -43,7 +43,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     //addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
     //addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
     //addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
-    addAction("new_web", "New Web").connect(this, &YourQuill::cmdNewWeb);
+    addAction("new_web", "New YWeb").connect(this, &YourQuill::cmdNewWeb);
     
     addAction("refresh", "Refresh").shortcut("F5");
 
@@ -151,7 +151,7 @@ void    YourQuill::cmdNewTimeGen()
 
 void    YourQuill::cmdNewWeb()
 {
-    Web*        b   = new Web;
+    YWeb*        b   = new YWeb;
     addWindow(b);
     //  set - URL
 }
