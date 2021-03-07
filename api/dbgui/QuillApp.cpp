@@ -261,14 +261,14 @@ unsigned int     QuillApp::undo_stack_limit()
 
 QuillApp::QuillApp(int&argc, char**argv) : QApplication(argc, pre_init(argv)), m(impl())
 {
-    setOrganizationName("NakedPyro");
+    setOrganizationName("YourQuill");
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
     meta_init();
     s_app           = this;
     m.appName       = applicationName();
     m.appDirPath    = applicationDirPath();
     m.appDir        = QDir(m.appDirPath);
-    m.settings      = new QSettings("NakedPyro", "Quill", this);
+    m.settings      = new QSettings("YourQuill", "Quill", this);
 }
 
 QuillApp::~QuillApp()
@@ -339,7 +339,7 @@ bool      QuillApp::init_local_workspace(const QString& path)
         //  start the scanner....
         //  FOR NOW, we're not detaching this.... eventually we'll smarten DB up.
         m.db_proc   = new QProcess(this);
-        m.db_proc -> setProgram(yq_exe("serverYQ"));
+        m.db_proc -> setProgram(yq_exe("yserver"));
         m.db_proc -> setArguments(QStringList() << qFile);
         m.db_proc -> start();
         

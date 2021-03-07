@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "QWksp.hpp"
+#include "YWksp.hpp"
 
 #include <db/QuillFile.hpp>
 #include <db/Workspace.hpp>
@@ -15,26 +15,26 @@
 #include <QFileDialog>
 #include <QInputDialog>
 
-QWksp::QWksp() : SimpleEditor(new QuillEdit), m_editor(nullptr)
+YWksp::YWksp() : SimpleEditor(new QuillEdit), m_editor(nullptr)
 {
     m_editor    = static_cast<QuillEdit*>(editor());
-    connect(m_editor, &QuillEdit::cmdAddRootDir, this, &QWksp::cmdAddChain);
-    connect(m_editor, &QuillEdit::cmdAddTemplate, this, &QWksp::cmdAddTemplate);
-    //connect(m_editor, &WkspEditor::remReq, this, &QWksp::cmdRemChain);
+    connect(m_editor, &QuillEdit::cmdAddRootDir, this, &YWksp::cmdAddChain);
+    connect(m_editor, &QuillEdit::cmdAddTemplate, this, &YWksp::cmdAddTemplate);
+    //connect(m_editor, &WkspEditor::remReq, this, &YWksp::cmdRemChain);
     updateTitle();
 }
 
-QWksp::~QWksp()
+YWksp::~YWksp()
 {
 }
 
-bool        QWksp::newFile() 
+bool        YWksp::newFile() 
 {
     m_editor -> clear();
     return true;
 }
 
-bool        QWksp::openFile(const QString&fname) 
+bool        YWksp::openFile(const QString&fname) 
 {
     QuillFile data;
     if(data.load(QDir(fname).absoluteFilePath(".yquill"))){
@@ -45,7 +45,7 @@ bool        QWksp::openFile(const QString&fname)
         return false;
 }
 
-bool        QWksp::saveFile(const QString&fname) const 
+bool        YWksp::saveFile(const QString&fname) const 
 {
     QuillFile  data;
     m_editor -> get(data);
@@ -53,7 +53,7 @@ bool        QWksp::saveFile(const QString&fname) const
 }
 
 
-void        QWksp::cmdAddChain()
+void        YWksp::cmdAddChain()
 {
     QString newDir = QFileDialog::getExistingDirectory(this, tr("Select Quill Workspace"), 
         file().path(), QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
@@ -62,7 +62,7 @@ void        QWksp::cmdAddChain()
     m_editor -> addRoot(newDir);
 }
 
-void        QWksp::cmdAddTemplate()
+void        YWksp::cmdAddTemplate()
 {
     QStringSet       avail   = wksp::templates_available();
     avail -= m_editor -> templates();
@@ -76,7 +76,7 @@ void        QWksp::cmdAddTemplate()
 
 
 //  Override to alter open-file-dialog
-QString     QWksp::promptOpenFile()
+QString     YWksp::promptOpenFile()
 {
     return QFileDialog::getExistingDirectory(this, tr("Open Quill Workspace"), 
         file().path(), QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
@@ -84,7 +84,7 @@ QString     QWksp::promptOpenFile()
 
 
 //  Override to alter save-file-dialog
-QString     QWksp::promptSaveFile()
+QString     YWksp::promptSaveFile()
 {
     return QFileDialog::getExistingDirectory(this, tr("Save Quill Workspace"), 
         file().path(), QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
@@ -96,10 +96,10 @@ QString     QWksp::promptSaveFile()
 int main(int argc, char* argv[])
 {
     QApplication    app(argc, argv);
-    QWksp      mw;
+    YWksp      mw;
     mw.show();
     return app.exec();
 }
 
-#include "moc_QWksp.cpp"
+#include "moc_YWksp.cpp"
 

@@ -12,13 +12,13 @@
 class QUndoStack;
 class QuillEdit;
 
-class QWksp : public SimpleEditor {
+class YWksp : public SimpleEditor {
     Q_OBJECT
 public:
 
     using MainWin::addAction;
-    QWksp();
-    ~QWksp();
+    YWksp();
+    ~YWksp();
     
 public slots:
     void        cmdAddChain();
