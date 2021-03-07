@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/DataRole.hpp>
+#include <db/enum/DataRole.hpp>
 #include <util/Http.hpp>
 #include <QByteArray>
 #include <initializer_list>

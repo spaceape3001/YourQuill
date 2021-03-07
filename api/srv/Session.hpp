@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <db/SizeDesc.hpp>
+#include <db/enum/SizeDesc.hpp>
 #include <util/Ref.hpp>
 #include <QByteArray>
 #include <atomic>

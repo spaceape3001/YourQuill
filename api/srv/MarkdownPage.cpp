@@ -58,7 +58,7 @@ namespace {
             if(x_title.isEmpty() && !ct.title.isEmpty())
                 x_title     = ct.title;
             x_content   = std::move(ct.content);
-            dst         = do_expand(def_page(), m_getters);
+            dst         = do_expand(default_page(), m_getters);
             return ContentType::html;
         }
     };
@@ -88,7 +88,7 @@ namespace {
             if(x_title.isEmpty() && !ct.title.isEmpty())
                 x_title     = ct.title;
             x_content   = std::move(ct.content);
-            dst         = do_expand(def_page(), m_getters);
+            dst         = do_expand(default_page(), m_getters);
             return ContentType::html;
         }
     };

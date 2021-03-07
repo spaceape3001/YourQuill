@@ -4,32 +4,44 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yCommon.hpp"
+#include "ArgStrings.hpp"
+#include "Page.hpp"
+#include "TLSGlobals.hpp"
+
+#include <db/ShareDir.hpp>
+#include <util/EnumMap.hpp>
+#include <util/Guarded.hpp>
+#include <util/Vector.hpp>
+
+#include <QByteArray>
+#include <QUrl>
+//#include "yCommon.hpp"
 
 
-#include "yPage.hpp"
-#include "yNetWriter.hpp"
+//#include "yPage.hpp"
+//#include "yNetWriter.hpp"
 
-#include "db/ShareDir.hpp"
+//#include "db/ShareDir.hpp"
 
-#include "util/DelayInit.hpp"
-#include "util/EnumMap.hpp"
-#include "util/Guarded.hpp"
-#include "util/Map.hpp"
-#include "util/Utilities.hpp"
-#include "util/Vector.hpp"
+//#include "util/DelayInit.hpp"
+//#include "util/EnumMap.hpp"
+//#include "util/Guarded.hpp"
+//#include "util/Map.hpp"
+//#include "util/Utilities.hpp"
+//#include "util/Vector.hpp"
 
-#include "db/Workspace.hpp"
+//#include "db/Workspace.hpp"
 
-#include <QBuffer>
-#include <QDir>
-#include <QImage>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QString>
-#include <QSvgGenerator>
+//#include <QBuffer>
+//#include <QDir>
+//#include <QImage>
+//#include <QJsonArray>
+//#include <QJsonObject>
+//#include <QJsonDocument>
+//#include <QString>
+//#include <QSvgGenerator>
 
+#include <tbb/spin_rw_mutex.h>
 
 
 Redirect::Redirect(const QUrl& b ) : why(HttpStatus::TemporaryRedirect), where(b.toString().toUtf8())
@@ -40,20 +52,37 @@ Redirect::Redirect(HttpStatus a, const QUrl& b ) : why(a), where(b.toString().to
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-void        tabbar(std::initializer_list<Page::Writer> wlist)
-{
-    new html::TabBar(wlist);
-}
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-void            reg_page(Page*);
-
 namespace {
+    using PageMap =  Map<QByteArray,const Page*,IgCase>;
+    
+        /*
+            We're keeping "dispatchers' separate from pages.....  seems safer
+        */
+
     struct PageRepo {
         Vector<const Page*>                                 all;
+
+        EnumMap<HttpOp,PageMap>         pages;
+        GetMap                          getters;
+        Guarded<QByteArray>             t_page;             // not locked with the rest
+        //Map<String,QDir,IgCase>         dirs;
+        EnumMap<HttpOp,PageMap>         dispatchers;
+        mutable tbb::spin_rw_mutex      mutex;
+        volatile bool                   openReg;
+      
+        PageRepo() : t_page(shared_bytes("std/page")), openReg(true)
+        {
+            //  Only hook the dynamic ones here.....
+            getters[sz_body] = []()->QByteArray {
+                return x_content;
+            };
+            getters[sz_title] = []()->QByteArray {
+                return x_title;
+            };
+        }
     };
     
     PageRepo&   repo()
@@ -63,10 +92,65 @@ namespace {
     }
 };
 
+#define LOCK                                                    \
+    const PageRepo& _r = repo();                                \
+    tbb::spin_rw_mutex::scoped_lock     _lock;                  \
+    if(_r.openReg)                                              \
+        _lock.acquire(_r.mutex, false);
+
+#define WLOCK                                                   \
+    PageRepo& _r = repo();                                      \
+    tbb::spin_rw_mutex::scoped_lock     _lock(_r.mutex, true);
 
 const Vector<const Page*>&   Page::all()
 {
     return repo().all;
+}
+
+QByteArray      Page::default_page()
+{
+    return repo().t_page;
+}
+
+void            Page::default_page(const QByteArray&v)
+{
+    repo().t_page   = v;
+}
+
+const Page*     Page::find(HttpOp op, const QByteArray& p, bool fDispatcher)
+{
+    LOCK
+    return fDispatcher ? _r.dispatchers[op].get(p, nullptr) : _r.pages[op].get(p, nullptr);
+}
+
+void            Page::freeze()
+{
+    repo().openReg      = false;
+}
+
+bool            Page::frozen()
+{
+    return repo().openReg;
+}
+
+FNGet           Page::static_getter(const QByteArray&z)
+{
+    LOCK
+    return _r.getters.get(z, nullptr);
+}
+
+
+const GetMap&   Page::static_getters()
+{
+    return repo().getters;
+}
+
+
+void    reg_getter(const char*z, FNGet fn)
+{
+    WLOCK
+    if(z && fn && _r.openReg)
+        _r.getters[z]   = fn;
 }
 
 
@@ -78,8 +162,14 @@ Page::Page(HttpOp h, const String& path, bool fDisp): m_op(h), m_path(path), m_t
     m_loginReq(false), m_localOnly(false), 
     m_postAnon(false), m_noExpand(false), m_dispatch(fDisp)
 {
-    repo().all << this;
-    reg_page(this);
+    WLOCK
+    if(_r.openReg){
+        _r.all << this;
+        if(fDisp)
+            _r.dispatchers[h][path.qBytes()]    = this;
+        else
+            _r.pages[h][path.qBytes()]          = this;
+    }
 }
 
 Page::~Page()
@@ -88,10 +178,6 @@ Page::~Page()
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-Page::Writer::Writer(Page* h) : m_page(h)
-{
-}
 
 
 Page::Writer& Page::Writer::anonymous()
@@ -174,513 +260,4 @@ Page::Writer& Page::Writer::key()
     argument(sz_key, "Textual identifier to resource");
     return *this;
 }
-
-
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct NonePage : public Page {
-        typedef void (*FN)();
-        FN          m_fn;
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
-        {
-            m_fn();
-            throw HttpStatus::Teapot;
-        }
-        
-        NonePage(HttpOp op, const String& path, FN fn) : Page(op, path, false), m_fn(fn) {}
-    };
-}
-
-Page::Writer     page(HttpOp op, const String&path, void (*fn)())
-{
-    return Page::Writer(new NonePage(op, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct ControlPage : public Page {
-        typedef HttpStatus (*FN)();
-        FN                  m_fn;
-        
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
-        {
-            throw m_fn();
-        }
-        
-        ControlPage(HttpOp op, const String& path, FN fn) : Page(op, path, false), m_fn(fn) {}
-    };
-}
-
-Page::Writer     page(HttpOp op, const String&path, HttpStatus (*fn)())
-{
-    return Page::Writer(new ControlPage(op, path, fn));
-}
-
-namespace {
-    struct GenericPage : public Page {
-        typedef ContentType (*FN)(QByteArray&);
-        FN                  m_fn;
-        
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
-        {
-            return m_fn(dst);
-        }
-        
-        GenericPage(HttpOp op, const String& path, FN fn) : Page(op, path, false), m_fn(fn) {}
-    };
-}
-
-Page::Writer     page(HttpOp op, const String& path, ContentType (*fn)(QByteArray&))
-{
-    return Page::Writer(new GenericPage(op, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct CssPage : public Page {
-        typedef void (*FN)(Css&);
-        FN          m_fn;
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
-        {
-            Css css;
-            m_fn(css);
-            css.flush();
-            dst = css.steal();
-            return ContentType::css;;
-        }
-        
-        CssPage(HttpOp op, const String& path, FN fn) : Page(op, path, false), m_fn(fn) {}
-    };
-}
-
-
-Page::Writer     page(HttpOp op, const String& path, void (*fn)(Css&))
-{
-    return Page::Writer(new CssPage(op, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct HtmlPage : public Page {
-        typedef void (*FN)(Html&);
-        FN m_fn;
-        HtmlPage(HttpOp hOp,const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-        
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
-        {
-            Html    h;
-
-            if(!no_expand() && tabbar())
-                h << *tabbar();
-
-            m_fn(h);
-            h.flush();
-         
-            if(no_expand()){
-                dst         = h.steal();
-            } else {
-                x_content   = h.steal();
-                x_title     = h.title();
-                dst         = do_expand(def_page(), m_getters);
-            } 
-            return ContentType::html;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(Html&))
-{
-    return Page::Writer(new HtmlPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct ImagePage : public Page {
-        typedef void (*FN)(QImage&);
-        FN m_fn;
-        
-        ImagePage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
-        {
-            QImage    img;
-            m_fn(img);
-            dst         = make_png(img);
-            return ContentType::png; 
-        }
-    };
-}
-
-
-Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(QImage&))
-{
-    return Page::Writer(new ImagePage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct JsonArrPage : public Page {
-        typedef void (*FN)(QJsonArray&);
-        FN m_fn;
-        JsonArrPage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
-        {
-            QJsonDocument   doc;
-            QJsonArray      arr;
-            m_fn(arr);
-            doc.setArray(arr);
-            dst   = doc.toJson(QJsonDocument::Compact);
-            return ContentType::json;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(QJsonArray&))
-{
-    return Page::Writer(new JsonArrPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct JsonArrRetPage : public Page {
-        typedef QJsonArray (*FN)();
-        FN m_fn;
-        JsonArrRetPage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
-        {
-            QJsonDocument   doc;
-            doc.setArray(m_fn());
-            dst   = doc.toJson(QJsonDocument::Compact);
-            return ContentType::json;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, QJsonArray(*fn)())
-{
-    return Page::Writer(new JsonArrRetPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct JsonDocPage : public Page {
-        typedef void (*FN)(QJsonDocument&);
-        FN m_fn;
-        JsonDocPage(HttpOp hOp,  const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-        
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
-        {
-            QJsonDocument   doc;
-            m_fn(doc);
-            dst   = doc.toJson(QJsonDocument::Compact);
-            return ContentType::json;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(QJsonDocument&))
-{
-    return Page::Writer(new JsonDocPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct JsonDocRetPage : public Page {
-        typedef QJsonDocument (*FN)();
-        FN m_fn;
-        JsonDocRetPage(HttpOp hOp,  const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-        
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
-        {
-            dst   = (m_fn()).toJson(QJsonDocument::Compact);
-            return ContentType::json;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, QJsonDocument(*fn)())
-{
-    return Page::Writer(new JsonDocRetPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct JsonObjPage : public Page {
-        typedef void (*FN)(QJsonObject&);
-        FN m_fn;
-        JsonObjPage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-        
-        ContentType handle(QByteArray&dst, const QByteArray&) const override
-        {
-            QJsonDocument   doc;
-            QJsonObject     obj;
-            m_fn(obj);
-            doc.setObject(obj);
-            dst = doc.toJson(QJsonDocument::Compact);
-            return ContentType::json;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(QJsonObject&))
-{
-    return Page::Writer(new JsonObjPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct JsonObjRetPage : public Page {
-        typedef QJsonObject (*FN)();
-        FN m_fn;
-        JsonObjRetPage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-        
-        ContentType handle(QByteArray&dst, const QByteArray&) const override
-        {
-            QJsonDocument   doc;
-            doc.setObject(m_fn());
-            dst = doc.toJson(QJsonDocument::Compact);
-            return ContentType::json;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, QJsonObject(*fn)())
-{
-    return Page::Writer(new JsonObjRetPage(hOp, path, fn));
-}
-
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-//  MARKDOWN (TODO)
-
-
-namespace {
-    struct MarkdownPage : public Page {
-        typedef void (*FN)(Markdown&);
-        FN m_fn;
-        MarkdownPage(HttpOp hOp, const String& path, FN fn) : Page(hOp,  path, false), m_fn(fn)
-        {
-        }
-        
-        ContentType  handle(QByteArray& dst, const QByteArray&) const override
-        {
-            Markdown    md;
-            m_fn(md);
-            md.flush();
-            auto ct = Markdown::exec(md.steal());
-            x_title = md.title();
-            if(x_title.isEmpty() && !ct.title.isEmpty())
-                x_title     = ct.title;
-            x_content   = std::move(ct.content);
-            dst         = do_expand(def_page(), m_getters);
-            return ContentType::html;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, Match m, const QByteArray& path, void(*fn)(Markdown&))
-{
-    return Page::Writer(new MarkdownPage(hOp, path, fn));
-}
-
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-namespace {
-    struct SvgPage : public Page {
-        typedef void(*FN)(QSvgGenerator&);
-        SvgPage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn){}
-
-        ContentType    handle(QByteArray&dst, const QByteArray&) const override
-        {
-            QBuffer buf(&dst);
-            buf.open(QIODevice::ReadWrite);
-            {
-                QSvgGenerator   svg;
-                svg.setOutputDevice(&buf);
-                m_fn(svg);
-            }
-            buf.close();
-            return ContentType::svg;
-        }
-    private:
-        FN  m_fn;
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(QSvgGenerator&))
-{
-    return Page::Writer(new SvgPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct TextPage : public Page {
-        typedef void (*FN)(Text&);
-        FN m_fn;
-        TextPage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn)
-        {
-        }
-        
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
-        {
-            Text    txt;
-            m_fn(txt);
-            txt.flush();
-            x_title.clear();
-            x_content   = "<PRE>" + txt.steal() + "</PRE>";
-            dst         = do_expand(def_page(), m_getters);
-            return ContentType::html;
-        }
-    };
-}
-
-Page::Writer     page(HttpOp hOp, const String& path, void(*fn)(Text&))
-{
-    return Page::Writer(new TextPage(hOp, path, fn));
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-namespace {
-    struct DirDispatcher : public Page {
-        QDir        m_dir;
-        DirDispatcher(HttpOp hOp, const String& path, const QDir& dir) : Page(hOp, path, true), m_dir(dir)
-        {
-        }
-        
-        ContentType     handle(QByteArray& dst, const QByteArray& path) const override
-        {
-            return do_direct_file(dst, m_dir.absoluteFilePath(utf8(path)));
-        }
-    };
-}
-
-Page::Writer    dispatcher(const String&path, const QDir&dir)
-{
-    return Page::Writer(new DirDispatcher(hGet, path, dir));
-}
-
-Page::Writer    dispatcher(HttpOp hOp, const String&path, const QDir&dir)
-{
-    return Page::Writer(new DirDispatcher(hOp, path, dir));
-}
-
-namespace {
-    struct NoneDispatcher : public Page {
-        typedef void (*FN)(const String&);
-        FN          m_fn;
-        ContentType    handle(QByteArray& dst, const QByteArray&path) const override
-        {
-            m_fn(path);
-            throw HttpStatus::Teapot;
-        }
-        
-        NoneDispatcher(HttpOp op, const String& path, FN fn) : Page(op, path, false), m_fn(fn) {}
-    };
-}
-
-Page::Writer    dispatcher(HttpOp op, const String&path, void(*fn)(const String&))
-{
-    return Page::Writer(new NoneDispatcher(op, path, fn));
-}
-
-
-namespace {
-    struct HtmlDispatcher : public Page {
-        typedef void(*FN)(Html&, const String&);
-        FN      m_fn;
-        HtmlDispatcher(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, true), m_fn(fn)
-        {
-        }
-        
-        ContentType     handle(QByteArray& dst, const QByteArray& path) const override
-        {
-            Html    h;
-
-            if(!no_expand() && tabbar())
-                h << *tabbar();
-
-            m_fn(h, path);
-            h.flush();
-         
-            if(no_expand()){
-                dst         = h.steal();
-            } else {
-                x_content   = h.steal();
-                x_title     = h.title();
-                dst         = do_expand(def_page(), m_getters);
-            } 
-            return ContentType::html;
-        }
-    };
-}
-
-Page::Writer    dispatcher(HttpOp op, const String&path, void(*fn)(Html&, const String&))
-{
-    return Page::Writer(new HtmlDispatcher(op, path, fn));
-}
-
-namespace {
-    struct MarkdownDispatcher : public Page {
-        typedef void (*FN)(Markdown&, const String&);
-        FN m_fn;
-        MarkdownDispatcher(HttpOp hOp, const String& path, FN fn) : Page(hOp,  path, true), m_fn(fn)
-        {
-        }
-        
-        ContentType  handle(QByteArray& dst, const QByteArray&path) const override
-        {
-            Markdown    md;
-            m_fn(md, path);
-            md.flush();
-            auto ct = Markdown::exec(md.steal());
-            x_title = md.title();
-            if(x_title.isEmpty() && !ct.title.isEmpty())
-                x_title     = ct.title;
-            x_content   = std::move(ct.content);
-            dst         = do_expand(def_page(), m_getters);
-            return ContentType::html;
-        }
-    };
-}
-
-Page::Writer    dispatcher(HttpOp op, const String&path, void(*fn)(Markdown&, const String&))
-{
-    return Page::Writer(new MarkdownDispatcher(op, path, fn));
-}
-
 

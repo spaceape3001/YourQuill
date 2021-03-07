@@ -27,7 +27,7 @@ namespace {
             txt.flush();
             x_title.clear();
             x_content   = "<PRE>" + txt.steal() + "</PRE>";
-            dst         = do_expand(def_page(), m_getters);
+            dst         = do_expand(default_page(), m_getters);
             return ContentType::html;
         }
     };

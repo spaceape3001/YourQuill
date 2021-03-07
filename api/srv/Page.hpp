@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#define YQ__SERVER__PAGE_HPP
 
 #include "util/Http.hpp"
 #include <QByteArray>
@@ -40,7 +41,7 @@ struct Redirect {
 };
 
 
-namespace html { struct TabBar; }
+namespace html { class TabBar; }
 
 typedef QByteArray (*FNGet)();
 using GetMap    = Map<String,FNGet,IgCase>;
@@ -55,7 +56,26 @@ public:
     struct Session;
     
     
+    //! Not thread safe until freeze's been called.
     static const Vector<const Page*>&   all();
+
+    static QByteArray                   default_page();
+    static void                         default_page(const QByteArray&);
+
+    static const Page*                  find(HttpOp, const QByteArray&, bool fDispatcher);
+
+    static void                         freeze();
+    static bool                         frozen();
+    
+
+    static FNGet                        static_getter(const QByteArray&);
+
+
+    //! Not thread safe until freeze's been called.
+    static const GetMap&                static_getters();
+    
+
+
     //static void                         def_directory(const char*, const QDir&);
     //static void                         def_getter(const char*, FNGet);
     //static void                         def_page(const QByteArray&);
@@ -139,8 +159,6 @@ struct Page::Reply {
 
 
 struct Page::Writer {
-    explicit Writer(Page*);
-    
     Writer& login();
     Writer& description(const QByteArray&);
     Writer& argument(const QByteArray&, const QByteArray& d=QByteArray());
@@ -154,52 +172,22 @@ struct Page::Writer {
     Writer& id();
     Writer& key();
     
-private:
-    friend class html::TabBar;
-    Page*                m_page;
+    Page*   m_page;
 };
 
-namespace html {
-    class TabBar {
-    public:
-        TabBar(std::initializer_list<Page::Writer>);
-        const Vector<const Page*>&      pages() const { return m_pages; }
-    private:
-        Vector<const Page*>             m_pages;
-    };
-}
 
+//Page::Writer     reg_page(HttpOp, const char*, Redirect(*)());
+Page::Writer        reg_page(HttpOp, const String&, void (*)());
+Page::Writer        reg_page(HttpOp, const String&, HttpStatus (*)());
+Page::Writer        reg_page(HttpOp, const String&, ContentType (*)(QByteArray&));
 
-//Page::Writer     page(HttpOp, const char*, Redirect(*)());
-Page::Writer     page(HttpOp, const String&, void (*)());
-Page::Writer     page(HttpOp, const String&, HttpStatus (*)());
-Page::Writer     page(HttpOp, const String&, ContentType (*)(QByteArray&));
-Page::Writer     page(HttpOp, const String&, void (*)(Css&));
-Page::Writer     page(HttpOp, const String&, void (*)(Html&));
-Page::Writer     page(HttpOp, const String&, void (*)(Markdown&));
-Page::Writer     page(HttpOp, const String&, void (*)(Text&));
-Page::Writer     page(HttpOp, const String&, void (*)(QImage&));
-Page::Writer     page(HttpOp, const String&, void (*)(QJsonArray&));
-Page::Writer     page(HttpOp, const String&, QJsonArray (*)());
-Page::Writer     page(HttpOp, const String&, void (*)(QJsonDocument&));
-Page::Writer     page(HttpOp, const String&, QJsonDocument (*)());
-Page::Writer     page(HttpOp, const String&, void (*)(QJsonObject&));
-Page::Writer     page(HttpOp, const String&, QJsonObject (*)());
-Page::Writer     page(HttpOp, const String&, void (*)(QSvgGenerator&));
-
-Page::Writer    dispatcher(const String&, const QDir&);
-Page::Writer    dispatcher(HttpOp, const String&, const QDir&);
-Page::Writer    dispatcher(HttpOp, const String&, void(*)(const String&));
-Page::Writer    dispatcher(HttpOp, const String&, void(*)(Html&, const String&));
-Page::Writer    dispatcher(HttpOp, const String&, void(*)(Markdown&, const String&));
-
-void             tabbar(std::initializer_list<Page::Writer>);
+Page::Writer        reg_dispatcher(const String&, const QDir&);
+Page::Writer        reg_dispatcher(HttpOp, const String&, const QDir&);
+Page::Writer        reg_dispatcher(HttpOp, const String&, void(*)(const String&));
 
 //void            reg_directory(const char*z, const QDir& d);
-void            reg_getter(const char*z, FNGet fn);
-void            reg_def_page(const QByteArray& bytes);
-QByteArray      def_page();
-ContentType     do_direct_content(QByteArray&dst, const QByteArray&data, ContentType ret, const QByteArray&title=QByteArray());
-ContentType     do_direct_file(QByteArray& dst, const QString&file, bool fExpand=true);
-QByteArray      do_expand(const QByteArray&content, const GetMap&vars = GetMap());
-const GetMap&   static_getters();
+void                reg_getter(const char*z, FNGet fn);
+
+ContentType         do_direct_content(QByteArray&dst, const QByteArray&data, ContentType ret, const QByteArray&title=QByteArray());
+ContentType         do_direct_file(QByteArray& dst, const QString&file, bool fExpand=true);
+QByteArray          do_expand(const QByteArray&content, const GetMap&vars = GetMap());

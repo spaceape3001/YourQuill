@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "db/Change.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Flag.hpp"
-#include "util/TypeFwd.hpp"
+#include <db/enum/Change.hpp>
+#include <util/DelayInit.hpp>
+#include <util/Flag.hpp>
+#include <util/TypeFwd.hpp>
 
 #include <QRegularExpression>
 
@@ -65,7 +65,7 @@ struct Importer::Writer {
     explicit Writer(Importer*);
     
     Writer& description(const QByteArray&);
-    
+    Writer& depends(const QString&);            // <-- TODO
     
 private:
     Importer*                m_handler;
@@ -91,3 +91,7 @@ Importer::Writer    on_modify( const QString&, bool(*)(Fragment,Change));
 Importer::Writer    on_remove( const QString&, void(*)(Fragment));
 Importer::Writer    on_remove( const QString&, bool(*)(Fragment));
 Importer::Writer    on_remove( const QString&, bool(*)(Fragment,Change));
+
+Importer::Writer    on_startup( const QString&, void(*)(Fragment));
+Importer::Writer    on_startup( const QString&, bool(*)(Fragment));
+Importer::Writer    on_startup( const QString&, bool(*)(Fragment,Change));
