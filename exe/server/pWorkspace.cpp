@@ -4,32 +4,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yImporter.hpp"
-#include "yNetWriter.hpp"
-#include "yPage.hpp"
-#include "yScanner.hpp"
 #include "yCommon.hpp"
-
-#include "db/Cache.hpp"
-#include "db/Copyright.hpp"
-#include "util/Http.hpp"
-#include "util/Logging.hpp"
-#include "db/ShareDir.hpp"
-#include "util/Array2.hpp"
-#include "util/Compare.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Guarded.hpp"
-#include "util/Reverse.hpp"
-#include "util/Utilities.hpp"
-
-#include <httpserver/httprequest.h>
+#include <db/Workspace.hpp>
+#include <db/ShareDir.hpp>
+#include <db/bit/Copyright.hpp>
+#include <srv/ArgDecode.hpp>
+#include <srv/HtmlPage.hpp>
+#include <srv/JsonPage.hpp>
+#include <srv/Session.hpp>
+#include <srv/TLSGlobals.hpp>
+#include <srv/Utilities.hpp>
+#include <util/DelayInit.hpp>
+#include <util/Logging.hpp>
 
 #include <QCoreApplication>
-#include <QDate>
-#include <QDateTime>
-#include <QDir>
 #include <QJsonObject>
-#include <QString>
 
 namespace {
     using namespace html;
@@ -146,7 +135,7 @@ namespace {
             return_to_sender();
     }
     
-    void            wksp_classes(Html& h)
+    void            wksp_classes(HtmlWriter& h)
     {
         test(decode_columns(), true);
         h.title("'" + wksp::name() + "' Classes");
@@ -190,14 +179,14 @@ namespace {
         });
     }
     
-    void            wksp_classes_use_graph(Html&h)
+    void            wksp_classes_use_graph(HtmlWriter&h)
     {
         Graph   g   = cur_class_dep_graph();
         if(g)
             h << g;
     }
     
-    void            wksp_home(Html& h)
+    void            wksp_home(HtmlWriter& h)
     {
         h.title("'" + wksp::name() + "'");
         
@@ -211,7 +200,7 @@ namespace {
         h.key("Copyright") << wksp::copyright().text.qString();
     }
     
-    void            wksp_tags(Html& h)
+    void            wksp_tags(HtmlWriter& h)
     {
         Vector<Tag>     tags    = cdb::all_tags(Sorted::YES);
         h.title("'" + wksp::name() + "' Tags");
@@ -237,12 +226,12 @@ namespace {
     
     
             //  Register directories
-        dispatcher("img", shared_dir("www/img"));
-        dispatcher("dev", shared_dir("www/dev"));
-        dispatcher("help", shared_dir("www/help"));
-        dispatcher("icon", shared_dir("www/ico"));
-        dispatcher("js", shared_dir("www/js"));
-        dispatcher("markdown", shared_dir("www/markdown"));
+        reg_dispatcher("img", shared_dir("www/img"));
+        reg_dispatcher("dev", shared_dir("www/dev"));
+        reg_dispatcher("help", shared_dir("www/help"));
+        reg_dispatcher("icon", shared_dir("www/ico"));
+        reg_dispatcher("js", shared_dir("www/js"));
+        reg_dispatcher("markdown", shared_dir("www/markdown"));
         
             //  Register Getters
         reg_getter("abbr", []() -> QByteArray {
@@ -316,21 +305,21 @@ namespace {
         
             //  Register pages
     
-        page(hGet,  "/", index_page).description("Home page");
-        page(hGet, "/api/alive", api_alive).description("Simple health check");
-        page(hPost, "/api/quit", api_quit).local().description("Causes the server to quit.");
-        page(hGet, "/api/wksp/quill", api_wksp_quill).local().description("Quill Workspace Path");
-        page(hGet, "/api/wksp", api_workspace).description("Workspace Information");
-        page(hGet,  "/background", background_page).description("Background");
-        page(hGet,  "/css", css_page).description("Our style sheet!");
+        reg_page(hGet,  "/", index_page).description("Home page");
+        reg_page(hGet, "/api/alive", api_alive).description("Simple health check");
+        reg_page(hPost, "/api/quit", api_quit).local().description("Causes the server to quit.");
+        reg_page(hGet, "/api/wksp/quill", api_wksp_quill).local().description("Quill Workspace Path");
+        reg_page(hGet, "/api/wksp", api_workspace).description("Workspace Information");
+        reg_page(hGet,  "/background", background_page).description("Background");
+        reg_page(hGet,  "/css", css_page).description("Our style sheet!");
         
 
-        page(hPost, "/wksp/class/create", wksp_class_create).description("Creates a class!");
-        tabbar({
-            page(hGet, "/wksp", wksp_home).description("Home to the workspace").label("Overview"),
-            page(hGet, "/wksp/classes", wksp_classes).description("Classes for the workspace").label("Classes"),
-            page(hGet, "/wksp/classes/use", wksp_classes_use_graph).description("Use Class diagram for workspace").label("Use"),
-            page(hGet, "/wksp/tags", wksp_tags).description("Tags for the workspace").label("Tags")
+        reg_page(hPost, "/wksp/class/create", wksp_class_create).description("Creates a class!");
+        reg_tabbar({
+            reg_page(hGet, "/wksp", wksp_home).description("Home to the workspace").label("Overview"),
+            reg_page(hGet, "/wksp/classes", wksp_classes).description("Classes for the workspace").label("Classes"),
+            reg_page(hGet, "/wksp/classes/use", wksp_classes_use_graph).description("Use Class diagram for workspace").label("Use"),
+            reg_page(hGet, "/wksp/tags", wksp_tags).description("Tags for the workspace").label("Tags")
         });
         
     )

@@ -4,20 +4,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yNetWriter.hpp"
-#include "yPage.hpp"
 #include "yCommon.hpp"
 
-#include <httpserver/httprequest.h>
-
-#include "db/Cache.hpp"
-#include "util/Compare.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Utilities.hpp"
+#include <db/AtomSys.hpp>
+#include <db/FileSys.hpp>
+#include <db/Tag.hpp>
+#include <srv/ArgDecode.hpp>
+#include <srv/HtmlPage.hpp>
+#include <srv/TLSGlobals.hpp>
+#include <util/Compare.hpp>
+#include <util/DelayInit.hpp>
+#include <util/Utilities.hpp>
 
 namespace {
     using namespace html;
-    void    browse(Html&h)
+    void    browse(HtmlWriter&h)
     {
         test(decode_class(), true);
         test(decode_tag(), true);
@@ -55,7 +56,7 @@ namespace {
         });
     }
     
-    void    categories(Html&h)
+    void    categories(HtmlWriter&h)
     {
         test(decode_columns(), true);
         h.title("Categories");
@@ -69,8 +70,8 @@ namespace {
 
 
     INVOKE(
-        page(hGet, "/browse", browse);
-        page(hGet, "/categories", categories);
+        reg_page(hGet, "/browse", browse);
+        reg_page(hGet, "/categories", categories);
     )
 
 }

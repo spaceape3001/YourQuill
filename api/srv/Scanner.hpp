@@ -86,6 +86,7 @@ private:
     
     bool                m_primed;
     bool                m_first;
+    bool                m_startup;
     double              m_time;
     unsigned            m_nIter;
     uint64_t            m_nFragments;

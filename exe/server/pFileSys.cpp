@@ -4,14 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yPage.hpp"
-#include "yCommon.hpp"
-#include "yNetWriter.hpp"
-
-#include "db/Cache.hpp"
-#include "db/ShareDir.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Map.hpp"
+#include <db/FileSys.hpp>
+#include <db/ShareDir.hpp>
+#include <srv/ArgDecode.hpp>
+#include <srv/HtmlPage.hpp>
+#include <srv/TLSGlobals.hpp>
+#include <srv/Utilities.hpp>
+#include <util/DelayInit.hpp>
+#include <util/Map.hpp>
 
 #include <httpserver/httprequest.h>
 
@@ -37,7 +37,7 @@ namespace {
     }
 
     
-    void    folder(Html& h)
+    void    folder(HtmlWriter& h)
     {
         static const Map<QString,QString,IgCase>    xicons  = extension_icons();
 
@@ -100,8 +100,8 @@ namespace {
 
 
     INVOKE(
-        page(hGet, "/folder", folder).id().key().description("Folder!");
-        page(hGet, "/icon", get_icon).id().description("Icon!");
+        reg_page(hGet, "/folder", folder).id().key().description("Folder!");
+        reg_page(hGet, "/icon", get_icon).id().description("Icon!");
     )
 }
 

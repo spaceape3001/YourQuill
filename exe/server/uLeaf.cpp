@@ -5,18 +5,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "yUpdater.hpp"
-#include "yCommon.hpp"
-#include "yImporter.hpp"
+//#include "yCommon.hpp"
 
-#include "util/Guarded.hpp"
-#include "util/Logging.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Utilities.hpp"
+#include <db/Workspace.hpp>
+#include <srv/Importer.hpp>
+#include <util/SqlQuery.hpp>
 
-#include "db/Cache.hpp"
-#include "db/GraphBuilder.hpp"
+//#include "util/Guarded.hpp"
+//#include "util/Logging.hpp"
+//#include "util/Utilities.hpp"
 
-#include <QThreadPool>
+//#include "db/Cache.hpp"
+//#include "db/GraphBuilder.hpp"
+
+
+//#include <QThreadPool>
 
 namespace {
         
@@ -101,7 +104,6 @@ namespace {
     
 
 }
-
 
 void    init_leaf()
 {

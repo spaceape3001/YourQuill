@@ -202,7 +202,7 @@ void        Scanner::watch(const QString&f, void(*ch)())
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Scanner::Scanner() : m_timer(nullptr), m_primed(false), m_first(true), m_time(0.)
+Scanner::Scanner() : m_timer(nullptr), m_primed(false), m_first(true), m_startup(false), m_time(0.)
 {
     moveToThread(this);
 }
@@ -288,13 +288,17 @@ void        Scanner::scan()
         if(m_primed){
             if(m_first){
                 m_first         = false;
-            } else if(kScanMetrics){
-                sInfo << "Scanner found " << m_nFragments << " fragments in " <<  m_nIter << " (" << kScanTickInterval 
-                    << "ms) intervals using " << m_time << " milliseconds of CPU time.";
+                m_startup       = true;
+            } else {
+                m_startup       = false;
+                if(kScanMetrics){
+                    sInfo << "Scanner found " << m_nFragments << " fragments in " <<  m_nIter << " (" << kScanTickInterval 
+                        << "ms) intervals using " << m_time << " milliseconds of CPU time.";
 
-                m_time          = 0.;
-                m_nIter         = 0;
-                m_nFragments    = 0;
+                    m_time          = 0.;
+                    m_nIter         = 0;
+                    m_nFragments    = 0;
+                }
             }
         }
         
@@ -352,6 +356,11 @@ void        Scanner::scan()
 
             if(!m_primed){
                 f.update(sz.size, ns);
+                continue;
+            }
+            
+            if(m_startup){
+                f.chg           = Change::Startup;
                 continue;
             }
             

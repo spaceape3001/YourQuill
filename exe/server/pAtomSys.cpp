@@ -4,15 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yNetWriter.hpp"
-#include "yPage.hpp"
 #include "yCommon.hpp"
 
-#include <httpserver/httprequest.h>
-
-#include "db/Cache.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Utilities.hpp"
+#include <db/AtomSys.hpp>
+#include <db/Root.hpp>
+#include <db/Workspace.hpp>
+#include <srv/ArgDecode.hpp>
+#include <srv/HtmlPage.hpp>
+#include <srv/TLSGlobals.hpp>
+#include <util/DelayInit.hpp>
 
 namespace {
     using namespace html;
@@ -23,7 +23,7 @@ namespace {
         return QString("Class '%1'").arg(cdb::name(x_class));
     }
     
-    void    _context(Html& h, const Leaf::Merge& m)
+    void    _context(HtmlWriter& h, const Leaf::Merge& m)
     {
         if(m.context.empty()){
             h << "(no context provided)";
@@ -52,7 +52,7 @@ namespace {
         }
     }
     
-    void    _attributes(Html& h, const Vector<Attribute>& vdata)
+    void    _attributes(HtmlWriter& h, const Vector<Attribute>& vdata)
     {
         if(vdata.empty())
             return ;
@@ -65,7 +65,7 @@ namespace {
         h << "</ul>\n";
     }
 
-    void    page_atom(Html& h)
+    void    page_atom(HtmlWriter& h)
     {
         test(decode_atom_prime(), false);
         x_leaf      = cdb::leaf(x_atom);
@@ -86,7 +86,7 @@ namespace {
     }
     
     
-    void    page_class(Html&h)
+    void    page_class(HtmlWriter&h)
     {
         test(decode_class_prime(), false);
         h.title(cls_title());
@@ -94,7 +94,7 @@ namespace {
         h << "Under construction";
     }
     
-    void    leaf_html(Html&h)
+    void    leaf_html(HtmlWriter&h)
     {
         auto m = cdb::merged(x_leaf);
         h.title(m->title());
@@ -106,26 +106,26 @@ namespace {
         _context(h, *m);
     }
 
-    void    page_leaf(Html&h)
+    void    page_leaf(HtmlWriter&h)
     {
         test(decode_leaf_prime());
         leaf_html(h);
     }
     
-    void    dispatch_leaf(Html&h, const String& s)
+    void    dispatch_leaf(HtmlWriter&h, const String& s)
     {
         test(decode_leaf_prime(s));
         leaf_html(h);
     }
     
-    void    page_leaf_attributes(Html& h)
+    void    page_leaf_attributes(HtmlWriter& h)
     {
         test(decode_leaf_prime());
         auto m = cdb::merged(x_leaf);
         h.title(m->title() + " (Attributes)");
     }
     
-    void    page_leaf_context(Html& h)
+    void    page_leaf_context(HtmlWriter& h)
     {
         test(decode_leaf_prime());
         auto m = cdb::merged(x_leaf);
@@ -140,21 +140,17 @@ namespace {
         return ContentType::svg;
     }
     
+    INVOKE(
+        reg_page(hGet, "/atom", page_atom).description("Atom").id().key().label("Overview");
+        reg_page(hGet, "/class", page_class).description("Class").id().key().label("Overview");
+        reg_page(hGet, "/graph", page_graph).description("Graph").id().key();
     
-    void    reg_stuff()
-    {
-        page(hGet, "/atom", page_atom).description("Atom").id().key().label("Overview");
-        page(hGet, "/class", page_class).description("Class").id().key().label("Overview");
-        page(hGet, "/graph", page_graph).description("Graph").id().key();
+        reg_dispatcher(hGet, "w", dispatch_leaf);
     
-        dispatcher(hGet, "w", dispatch_leaf);
-    
-        tabbar({
-            page(hGet, "/leaf", page_leaf).description("Leaf").id().key().label("Overview"),
-            page(hGet, "/leaf/attributes", page_leaf_attributes).description("Leaf Attributes").argument("id").label("Attributes"),
-            page(hGet, "/leaf/context", page_leaf_context).description("Leaf Context").argument("id").label("Context")
+        reg_tabbar({
+            reg_page(hGet, "/leaf", page_leaf).description("Leaf").id().key().label("Overview"),
+            reg_page(hGet, "/leaf/attributes", page_leaf_attributes).description("Leaf Attributes").argument("id").label("Attributes"),
+            reg_page(hGet, "/leaf/context", page_leaf_context).description("Leaf Context").argument("id").label("Context")
         });
-    }
-    
-    INVOKE(reg_stuff(); )
+    )
 }

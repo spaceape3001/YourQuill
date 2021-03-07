@@ -4,18 +4,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yPage.hpp"
-#include "yCommon.hpp"
-#include "yNetWriter.hpp"
-
-#include "db/Cache.hpp"
-#include "db/Copyright.hpp"
-#include "meta/Global.hpp"
-#include "meta/Variant.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Compare.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Utilities.hpp"
+#include <db/Cache.hpp>
+#include <db/bit/Copyright.hpp>
+#include <meta/Global.hpp>
+#include <meta/Variant.hpp>
+#include <srv/ArgDecode.hpp>
+#include <srv/HtmlPage.hpp>
+#include <srv/Session.hpp>
+#include <srv/TLSGlobals.hpp>
+#include <util/Compare.hpp>
+#include <util/DelayInit.hpp>
+#include <util/SqlQuery.hpp>
+#include <util/Utilities.hpp>
 
 #include <httpserver/httprequest.h>
 
@@ -23,10 +23,13 @@
 #include <QSqlIndex>
 #include <QSqlRecord>
 
+
+
+
 namespace {
     using namespace html;
     
-    void    _atoms(Html& h, const std::vector<Atom>& atoms)
+    void    _atoms(HtmlWriter& h, const std::vector<Atom>& atoms)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Doc</th><th>Brief</th></tr>\n";
@@ -37,7 +40,7 @@ namespace {
         }
     }
 
-    void    _classes(Html& h, const std::vector<Class>& classes)
+    void    _classes(HtmlWriter& h, const std::vector<Class>& classes)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Doc</th><th>Brief</th></tr>\n";
@@ -49,7 +52,7 @@ namespace {
     }
     
     
-    void    _documents(Html& h, const std::vector<Document>& documents)
+    void    _documents(HtmlWriter& h, const std::vector<Document>& documents)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
@@ -60,7 +63,7 @@ namespace {
         }
     }
     
-    void    _directories(Html&h, const std::vector<Directory>& dirs)
+    void    _directories(HtmlWriter&h, const std::vector<Directory>& dirs)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Fragments</th><th>Children</th><th>Path</th></tr>\n";
@@ -69,7 +72,7 @@ namespace {
                 << cdb::fragments_count(d) << "</td><td>" << cdb::directories_count(d) << "</td><td>" << cdb::path(d) << "</td></tr>\n";
     }
     
-    void    _fields(Html& h, const std::vector<Field>&  fields)
+    void    _fields(HtmlWriter& h, const std::vector<Field>&  fields)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Class</th><th>Key</th><th>Brief</th>\n";
@@ -78,7 +81,7 @@ namespace {
                 << cdb::brief(f) <<"</td></tr>\n";
     }
 
-    void    _fragments(Html& h, const std::vector<Fragment>& fragments)
+    void    _fragments(HtmlWriter& h, const std::vector<Fragment>& fragments)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Name</th><th>Size</th><th>Path</th>\n";
@@ -89,7 +92,7 @@ namespace {
         }
     }
     
-    void    _folders(Html& h, const std::vector<Folder>&folders)
+    void    _folders(HtmlWriter& h, const std::vector<Folder>&folders)
     {
         auto t = h.table();
         h << "<tr><th><ID></th><th>key</th><th>Name</th><th>Documents</th><th>Children</th><th>Brief</th></tr>\n";
@@ -101,7 +104,7 @@ namespace {
         }
     }
     
-    void    _leafs(Html& h, const std::vector<Leaf>&leafs)
+    void    _leafs(HtmlWriter& h, const std::vector<Leaf>&leafs)
     {
         auto t=h.table();
         h << "<tr><th><ID></th><th>key</th><th>Title</th></tr>\n";
@@ -113,7 +116,7 @@ namespace {
     }
     
     
-    void    _roots(Html& h, const std::vector<const Root*>&roots)
+    void    _roots(HtmlWriter& h, const std::vector<const Root*>&roots)
     {
         auto t = h.table();
         h << "<tr><th><ID></th><th>Key</th><th>Name</th><th>Path</th></tr>\n";
@@ -125,7 +128,7 @@ namespace {
         }
     }
     
-    void    _tags(Html& h, const std::vector<Tag>&tags)
+    void    _tags(HtmlWriter& h, const std::vector<Tag>&tags)
     {
         auto ta = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Doc</th><th>Leaf</th><th>Brief</th></tr>\n";
@@ -136,7 +139,7 @@ namespace {
         }
     }
     
-    void    dev_atom(Html& h)
+    void    dev_atom(HtmlWriter& h)
     {
         test(decode_atom_prime());
         auto i = cdb::info(x_atom);
@@ -149,13 +152,13 @@ namespace {
         h.key("Key") << i.key;
     }
     
-    void    dev_atoms(Html& h)
+    void    dev_atoms(HtmlWriter& h)
     {
         h.title("Listing of Atoms");
         _atoms(h, cdb::all_atoms(Sorted::YES));
     }
     
-    void    dev_class(Html& h)
+    void    dev_class(HtmlWriter& h)
     {
         test(decode_class_prime());
         auto i = cdb::info(x_class,true);
@@ -173,49 +176,49 @@ namespace {
         h.key("Plural") << i.plural;
     }
     
-    void    dev_class_reverses(Html&h)
+    void    dev_class_reverses(HtmlWriter&h)
     {
         test(decode_class_prime());
         h.title("Class (" + cdb::key(x_class) + ") Reverses");
         _classes(h, cdb::reverses(x_class, Sorted::YES));
     }
     
-    void    dev_class_sources(Html&h)
+    void    dev_class_sources(HtmlWriter&h)
     {
         test(decode_class_prime());
         h.title("Class (" + cdb::key(x_class) + ") Sources");
         _classes(h, cdb::sources(x_class, Sorted::YES));
     }
 
-    void    dev_class_targets(Html&h)
+    void    dev_class_targets(HtmlWriter&h)
     {
         test(decode_class_prime());
         h.title("Class (" + cdb::key(x_class) + ") Targets");
         _classes(h, cdb::targets(x_class, Sorted::YES));
     }
 
-    void    dev_class_uses(Html&h)
+    void    dev_class_uses(HtmlWriter&h)
     {
         test(decode_class_prime());
         h.title("Class (" + cdb::key(x_class) + ") Uses");
         _classes(h, cdb::uses(x_class, Sorted::YES));
     }
 
-    void    dev_class_subs(Html&h)
+    void    dev_class_subs(HtmlWriter&h)
     {
         test(decode_class_prime());
         h.title("Class (" + cdb::key(x_class) + ") SubClasses");
         _classes(h, cdb::dependents(x_class, Sorted::YES));
     }
 
-    void    dev_classes(Html& h)
+    void    dev_classes(HtmlWriter& h)
     {
         h.title("Listing of Classes");
         _classes(h, cdb::all_classes(Sorted::YES));
     }
     
     
-    void    dev_document(Html& h)
+    void    dev_document(HtmlWriter& h)
     {
         test(decode_document_prime());
         x_leaf  = cdb::leaf(x_document);
@@ -237,33 +240,33 @@ namespace {
         h.key("Suffix") << i.suffix;
     }
     
-    void    dev_document_fragments(Html&h)
+    void    dev_document_fragments(HtmlWriter&h)
     {
         test(decode_document_prime());
         h.title("Document (" + cdb::key(x_document) + "): Fragments");
         _fragments(h, cdb::fragments(x_document, Sorted::YES));
     }
     
-    void    dev_document_roots(Html& h)
+    void    dev_document_roots(HtmlWriter& h)
     {
         test(decode_document_prime());
         h.title("Document (" + cdb::key(x_document) + "): Roots");
         _roots(h, cdb::roots(x_document));
     }
     
-    void    dev_documents(Html&h)
+    void    dev_documents(HtmlWriter&h)
     {
         h.title("Listing of Documents");
         _documents(h, cdb::all_documents(Sorted::YES));
     }
 
-    void    dev_directories(Html& h)
+    void    dev_directories(HtmlWriter& h)
     {
         h.title("Listing of Directories");
         _directories(h, cdb::all_directories(Sorted::YES));
     }
     
-    void    dev_directory(Html& h)
+    void    dev_directory(HtmlWriter& h)
     {
         test(decode_directory_prime());
         auto i = cdb::info(x_directory);
@@ -281,14 +284,14 @@ namespace {
         h.key("Removed") << i.removed;
     }
 
-    void    dev_directory_children(Html& h)
+    void    dev_directory_children(HtmlWriter& h)
     {
         test(decode_directory_prime());
         h.title("Directory (" + cdb::path(x_directory) + "): Directories");
         _directories(h, cdb::directories(x_directory, Sorted::YES));
     }
 
-    void    dev_directory_fragments(Html& h)
+    void    dev_directory_fragments(HtmlWriter& h)
     {
         test(decode_directory_prime());
         h.title("Directory (" + cdb::path(x_directory) + "): Fragments");
@@ -296,7 +299,7 @@ namespace {
     }
     
 
-    void    _echo(Html& h, bool canSubmit)
+    void    _echo(HtmlWriter& h, bool canSubmit)
     {
         h.title("Developer's Echo");
         h << H1("Hello World!");
@@ -348,17 +351,17 @@ namespace {
         h << x_request->getBody();
     }
 
-    void    dev_echo_get(Html& h)
+    void    dev_echo_get(HtmlWriter& h)
     {
         _echo(h, false);
     }
     
-    void    dev_echo_post(Html&h)
+    void    dev_echo_post(HtmlWriter&h)
     {
         _echo(h, true);
     }
     
-    void    dev_fields(Html&h)
+    void    dev_fields(HtmlWriter&h)
     {
         test(decode_class(), true);
         Vector<Field>       fields;
@@ -369,7 +372,7 @@ namespace {
         _fields(h, fields);
     }
     
-    void    dev_fragment(Html&h)
+    void    dev_fragment(HtmlWriter&h)
     {
         test(decode_fragment_prime());
         auto i = cdb::info(x_fragment);
@@ -388,13 +391,13 @@ namespace {
         h.key("Size") << i.size;
     }
 
-    void    dev_fragments(Html&h)
+    void    dev_fragments(HtmlWriter&h)
     {
         h.title("Listing of Fragments");
         _fragments(h, cdb::all_fragments(Sorted::YES));
     }
     
-    void    dev_folder(Html&h)
+    void    dev_folder(HtmlWriter&h)
     {
         test(decode_folder_prime());
         auto i = cdb::info(x_folder);
@@ -412,14 +415,14 @@ namespace {
         h.key("Documents") << cdb::documents_count(x_folder);
     }
     
-    void    dev_folder_documents(Html& h)
+    void    dev_folder_documents(HtmlWriter& h)
     {
         test(decode_folder_prime());
         h.title("Folder (" + cdb::key(x_folder) + "): Documents");
         _documents(h, cdb::documents(x_folder, Sorted::YES));
     }
 
-    void    dev_folder_children(Html& h)
+    void    dev_folder_children(HtmlWriter& h)
     {
         test(decode_folder_prime());
         h.title("Folder (" + cdb::key(x_folder) + "): Children");
@@ -427,35 +430,35 @@ namespace {
 
     }
     
-    void    dev_folder_directories(Html& h)
+    void    dev_folder_directories(HtmlWriter& h)
     {
         test(decode_folder_prime());
         h.title("Folder (" + cdb::key(x_folder) + "): Directories");
         _directories(h, cdb::directories(x_folder, Sorted::YES));
     }
     
-    void    dev_folder_fragments(Html& h)
+    void    dev_folder_fragments(HtmlWriter& h)
     {
         test(decode_folder_prime());
         h.title("Folder (" + cdb::key(x_folder) + "): Fragments");
         _fragments(h, cdb::fragments(x_folder, Sorted::YES));
     }
     
-    void    dev_folders(Html&h)
+    void    dev_folders(HtmlWriter&h)
     {
         h.title("Listing of Folders");
         _folders(h, cdb::all_folders(Sorted::YES));
     }
 
-    void    dev_getters(Html&h)
+    void    dev_getters(HtmlWriter&h)
     {
         h.title("Listing of Static Getters");
         auto t = h.table();
-        for(auto& ge : static_getters())
+        for(auto& ge : Page::static_getters())
             h.key(ge.first.qString()) << "<PRE>" << ge.second() << "</PRE>";
     }
     
-    void    dev_globals(Html&h)
+    void    dev_globals(HtmlWriter&h)
     {
         h.title("Listing of Globals");
         auto t = h.table();
@@ -465,7 +468,7 @@ namespace {
                 << g->description() << "</td></tr>\n";
     }
     
-    void    dev_leaf(Html& h)
+    void    dev_leaf(HtmlWriter& h)
     {
         test(decode_leaf_prime());
         auto i = cdb::info(x_leaf, true);
@@ -479,13 +482,13 @@ namespace {
         h.key("Title") << i.title;
     }
     
-    void    dev_leafs(Html& h)
+    void    dev_leafs(HtmlWriter& h)
     {
         h.title("Listing of Leafs");
         _leafs(h, cdb::all_leafs(Sorted::YES));
     }
     
-    void    dev_metas(Html& h)
+    void    dev_metas(HtmlWriter& h)
     {
         h.title("Listing of Metas");
         auto t = h.table();
@@ -494,7 +497,7 @@ namespace {
             h << "<tr><td>" << m->id() << "</td><td>" << m->name() << "</td><td>" << m->generic() << "</td><td>" << m->description() << "</td></tr>\n";
     }
 
-    void    dev_pages(Html& h)
+    void    dev_pages(HtmlWriter& h)
     {
         Vector<const Page*>  all = Page::all();
         all.sort(
@@ -523,7 +526,7 @@ namespace {
         h << "</TABLE>\n";
     }
     
-    void    dev_root(Html& h)
+    void    dev_root(HtmlWriter& h)
     {
         test(decode_root_prime());
         h.title("Root (" + x_root -> path() + ")");
@@ -538,27 +541,27 @@ namespace {
         h.key("Total Fragments") << cdb::all_fragments_count(x_root);
     }
     
-    void    dev_root_all_directories(Html&h)
+    void    dev_root_all_directories(HtmlWriter&h)
     {
         test(decode_root_prime());
         h.title("Root (" + x_root -> path() + "): All Directories" );
         _directories(h, cdb::all_directories(x_root, Sorted::YES));
     }
 
-    void    dev_root_all_fragments(Html&h)
+    void    dev_root_all_fragments(HtmlWriter&h)
     {
         test(decode_root_prime());
         h.title("Root (" + x_root -> path() + "): All Fragments" );
         _fragments(h, cdb::all_fragments(x_root, Sorted::YES));
     }
     
-    void    dev_roots(Html& h)
+    void    dev_roots(HtmlWriter& h)
     {
         h.title("Root Listing");
         _roots(h, wksp::roots());
     }
     
-    void    dev_server(Html& h)
+    void    dev_server(HtmlWriter& h)
     {
         h.title("Server Information");
         h << "<TABLE>";
@@ -568,7 +571,7 @@ namespace {
         h.key("Auxillary Ports") << join(wksp::aux_ports(), ", ");
         h.key("Cache") << wksp::cache_db();
         h.key("Dot") << wksp::dot();
-        h.key("Getters") << join(static_getters().keys(), ", ");
+        h.key("Getters") << join(Page::static_getters().keys(), ", ");
         h.key("GIT") << wksp::git();
         h.key("Home") << wksp::home();
         h.key("Host") << wksp::hostname();
@@ -607,7 +610,7 @@ namespace {
         h << "</TABLE>\n";
     }
     
-    void    dev_tables(Html& h)
+    void    dev_tables(HtmlWriter& h)
     {
         QSqlDatabase c  = wksp::cache();
         QStringList tables  = c.tables();
@@ -630,7 +633,7 @@ namespace {
         h << "</TABLE>\n";
    }
    
-   void dev_tag(Html& h)
+   void dev_tag(HtmlWriter& h)
    {
         test(decode_tag_prime());
         auto i = cdb::info(x_tag);
@@ -645,13 +648,13 @@ namespace {
         
    }
    
-   void dev_tags(Html& h)
+   void dev_tags(HtmlWriter& h)
    {
         h.title("Tag Listing");
         _tags(h, cdb::all_tags(Sorted::YES));
    }
    
-   void  dev_workspace(Html& h)
+   void  dev_workspace(HtmlWriter& h)
    {
         h.title("Workspace '" + wksp::name() + "'");
         
@@ -673,59 +676,59 @@ namespace {
  
  
     INVOKE(
-        page(hGet, "/dev/atom", dev_atom).description("Atom Information").id().key();
-        page(hGet, "/dev/atoms", dev_atoms).description("List of Atoms");
-        page(hGet, "/dev/cache/tables", dev_tables).description("Cache tables.");
-        tabbar({
-            page(hGet, "/dev/class", dev_class).description("Class Information").id().key().label("Overview"),
-            page(hGet, "/dev/class/reverses", dev_class_reverses).description("Class Uses").id().key().label("Reverses"),
-            page(hGet, "/dev/class/sources", dev_class_sources).description("Class Uses").id().key().label("Sources"),
-            page(hGet, "/dev/class/targets", dev_class_targets).description("Class Uses").id().key().label("Targets"),
-            page(hGet, "/dev/class/uses", dev_class_uses).description("Class Uses").id().key().label("Uses"),
-            page(hGet, "/dev/class/subs", dev_class_subs).description("Class Uses").id().key().label("Subs")
+        reg_page(hGet, "/dev/atom", dev_atom).description("Atom Information").id().key();
+        reg_page(hGet, "/dev/atoms", dev_atoms).description("List of Atoms");
+        reg_page(hGet, "/dev/cache/tables", dev_tables).description("Cache tables.");
+        reg_tabbar({
+            reg_page(hGet, "/dev/class", dev_class).description("Class Information").id().key().label("Overview"),
+            reg_page(hGet, "/dev/class/reverses", dev_class_reverses).description("Class Uses").id().key().label("Reverses"),
+            reg_page(hGet, "/dev/class/sources", dev_class_sources).description("Class Uses").id().key().label("Sources"),
+            reg_page(hGet, "/dev/class/targets", dev_class_targets).description("Class Uses").id().key().label("Targets"),
+            reg_page(hGet, "/dev/class/uses", dev_class_uses).description("Class Uses").id().key().label("Uses"),
+            reg_page(hGet, "/dev/class/subs", dev_class_subs).description("Class Uses").id().key().label("Subs")
         });
-        page(hGet, "/dev/classes", dev_classes).description("List of classes.");
-        page(hGet, "/dev/directories", dev_directories).description("List of directories");
-        tabbar({
-            page(hGet, "/dev/directory", dev_directory).description("Directory Information").id().label("Overview"),
-            page(hGet, "/dev/directory/children", dev_directory_children).description("Directory Children").id().label("Children"),
-            page(hGet, "/dev/directory/fragments", dev_directory_fragments).description("Directory Fragments").id().label("Fragments")
+        reg_page(hGet, "/dev/classes", dev_classes).description("List of classes.");
+        reg_page(hGet, "/dev/directories", dev_directories).description("List of directories");
+        reg_tabbar({
+            reg_page(hGet, "/dev/directory", dev_directory).description("Directory Information").id().label("Overview"),
+            reg_page(hGet, "/dev/directory/children", dev_directory_children).description("Directory Children").id().label("Children"),
+            reg_page(hGet, "/dev/directory/fragments", dev_directory_fragments).description("Directory Fragments").id().label("Fragments")
         });
-        page(hGet, "/dev/echo", dev_echo_get).description("Echo's the http request");
-        page(hPost, "/dev/echo", dev_echo_post).description("Echo's the http request");
-        tabbar({
-            page(hGet, "/dev/document", dev_document).description("Document Information").id().key().label("Overview"),
-            page(hGet, "/dev/document/fragments", dev_document_fragments).description("List of Document Fragments").id().key().label("Fragments"),
-            page(hGet, "/dev/document/roots", dev_document_roots).description("List of Document Roots").id().key().label("Roots")
+        reg_page(hGet, "/dev/echo", dev_echo_get).description("Echo's the http request");
+        reg_page(hPost, "/dev/echo", dev_echo_post).description("Echo's the http request");
+        reg_tabbar({
+            reg_page(hGet, "/dev/document", dev_document).description("Document Information").id().key().label("Overview"),
+            reg_page(hGet, "/dev/document/fragments", dev_document_fragments).description("List of Document Fragments").id().key().label("Fragments"),
+            reg_page(hGet, "/dev/document/roots", dev_document_roots).description("List of Document Roots").id().key().label("Roots")
         });
-        page(hGet, "/dev/documents", dev_documents).description("List of documents");
-        page(hGet, "/dev/fields", dev_fields).description("List of fields");
-        page(hGet, "/dev/fragment", dev_fragment).description("Fragment Information").id().key();
-        page(hGet, "/dev/fragments", dev_fragments).description("List of Fragments");
-        tabbar({
-            page(hGet, "/dev/folder", dev_folder).description("Folder Information").id().key().label("Overview"),
-            page(hGet, "/dev/folder/children", dev_folder_children).description("Folder Children").id().key().label("Children"),
-            page(hGet, "/dev/folder/directories", dev_folder_directories).description("Folder Directories").id().key().label("Directories"),
-            page(hGet, "/dev/folder/documents", dev_folder_documents).description("Folder Documents").id().key().label("Documents"),
-            page(hGet, "/dev/folder/fragments", dev_folder_fragments).description("Folder Fragments").id().key().label("Fragments")
+        reg_page(hGet, "/dev/documents", dev_documents).description("List of documents");
+        reg_page(hGet, "/dev/fields", dev_fields).description("List of fields");
+        reg_page(hGet, "/dev/fragment", dev_fragment).description("Fragment Information").id().key();
+        reg_page(hGet, "/dev/fragments", dev_fragments).description("List of Fragments");
+        reg_tabbar({
+            reg_page(hGet, "/dev/folder", dev_folder).description("Folder Information").id().key().label("Overview"),
+            reg_page(hGet, "/dev/folder/children", dev_folder_children).description("Folder Children").id().key().label("Children"),
+            reg_page(hGet, "/dev/folder/directories", dev_folder_directories).description("Folder Directories").id().key().label("Directories"),
+            reg_page(hGet, "/dev/folder/documents", dev_folder_documents).description("Folder Documents").id().key().label("Documents"),
+            reg_page(hGet, "/dev/folder/fragments", dev_folder_fragments).description("Folder Fragments").id().key().label("Fragments")
         });
-        page(hGet, "/dev/folders", dev_folders).description("List of folders");
-        page(hGet, "/dev/getters", dev_getters).description("List of (universal) getters");
-        page(hGet, "/dev/globals", dev_globals).description("List of Global Variables");
-        page(hGet, "/dev/leaf", dev_leaf).description("Leaf Information").id().key();
-        page(hGet, "/dev/leafs", dev_leafs).description("List of Leafs");
-        page(hGet, "/dev/metas", dev_metas).description("List of Metas");
-        page(hGet, "/dev/pages", dev_pages).description("List of Dynamic Pages");
-        tabbar({
-            page(hGet, "/dev/root", dev_root).description("Root Information").id().key().label("Overview"),
-            page(hGet, "/dev/root/all_directories", dev_root_all_directories).description("List of all directories in root").id().key().label("All Dirs"),
-            page(hGet, "/dev/root/all_fragments", dev_root_all_fragments).description("List of all fragments in root").id().key().label("All Fragments")
+        reg_page(hGet, "/dev/folders", dev_folders).description("List of folders");
+        reg_page(hGet, "/dev/getters", dev_getters).description("List of (universal) getters");
+        reg_page(hGet, "/dev/globals", dev_globals).description("List of Global Variables");
+        reg_page(hGet, "/dev/leaf", dev_leaf).description("Leaf Information").id().key();
+        reg_page(hGet, "/dev/leafs", dev_leafs).description("List of Leafs");
+        reg_page(hGet, "/dev/metas", dev_metas).description("List of Metas");
+        reg_page(hGet, "/dev/pages", dev_pages).description("List of Dynamic Pages");
+        reg_tabbar({
+            reg_page(hGet, "/dev/root", dev_root).description("Root Information").id().key().label("Overview"),
+            reg_page(hGet, "/dev/root/all_directories", dev_root_all_directories).description("List of all directories in root").id().key().label("All Dirs"),
+            reg_page(hGet, "/dev/root/all_fragments", dev_root_all_fragments).description("List of all fragments in root").id().key().label("All Fragments")
         });
-        page(hGet, "/dev/roots", dev_roots).description("List of Roots");
-        page(hGet, "/dev/server", dev_server).description("Server information.");
-        page(hGet, "/dev/tag", dev_tag).description("Tag Information").argument("id");
-        page(hGet, "/dev/tags", dev_tags).description("List of Tags");
-        page(hGet, "/dev/wksp", dev_workspace).description("Workspace Information");
+        reg_page(hGet, "/dev/roots", dev_roots).description("List of Roots");
+        reg_page(hGet, "/dev/server", dev_server).description("Server information.");
+        reg_page(hGet, "/dev/tag", dev_tag).description("Tag Information").argument("id");
+        reg_page(hGet, "/dev/tags", dev_tags).description("List of Tags");
+        reg_page(hGet, "/dev/wksp", dev_workspace).description("Workspace Information");
     );
 
 }

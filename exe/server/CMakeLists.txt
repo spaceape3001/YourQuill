@@ -1,13 +1,5 @@
 add_executable(serverYQ
-    yCommon.cpp
     yCommon.hpp
-    yImporter.hpp
-    yNetWriter.cpp
-    yNetWriter.hpp
-    yPage.cpp
-    yPage.hpp
-    yScanner.cpp
-    yScanner.hpp
     yUpdater.cpp
     
     uClass.cpp

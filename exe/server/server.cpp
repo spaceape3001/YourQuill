@@ -6,21 +6,19 @@
 
 #include <iostream>
 
-#include "yCommon.hpp"
-#include "yScanner.hpp"
-#include "yNetWriter.hpp"
-#include "yPage.hpp"
+#include <db/ShareDir.hpp>
+#include <db/Workspace.hpp>
 
-#include "db/Cache.hpp"
-#include "db/ShareDir.hpp"
-#include "util/FileUtils.hpp"
-#include "util/LogFile.hpp"
-#include "util/Logging.hpp"
-#include "util/Guarded.hpp"
-#include "util/Ref.hpp"
+#include <srv/Page.hpp>
+#include <srv/Scanner.hpp>
+#include <srv/Session.hpp>
+#include <srv/TLSGlobals.hpp>
+
+#include <util/FileUtils.hpp>
+#include <util/LogFile.hpp>
+#include <util/Logging.hpp>
 #include <util/Safety.hpp>
-#include "util/SqlUtils.hpp"
-#include "util/Utilities.hpp"
+#include <util/SqlUtils.hpp>
 
 #include <httpserver/httpcookie.h>
 #include <httpserver/httplistener.h>
@@ -29,24 +27,37 @@
 #include <httpserver/httpresponse.h>
 
 #include <QCoreApplication>
-#include <QDateTime>
 #include <QDir>
-#include <QHostAddress>
 #include <QSqlDatabase>
 #include <QThreadPool>
 #include <QUrl>
 
-#include <filesystem>
 #include <fstream>
+
 #include <signal.h>
 #include <unistd.h>
-#include <sys/random.h>
-#include <tbb/spin_rw_mutex.h>
+
+//#include "yCommon.hpp"
+//#include "yScanner.hpp"
+//#include "yNetWriter.hpp"
+//#include "yPage.hpp"
+
+//#include "db/Cache.hpp"
+//#include "util/Guarded.hpp"
+//#include "util/Ref.hpp"
+//#include "util/Utilities.hpp"
+
+//#include <QDateTime>
+//#include <QHostAddress>
+
+//#include <filesystem>
+//#include <sys/random.h>
+//#include <tbb/spin_rw_mutex.h>
 
 using namespace stefanfrings;
 
 const char* const       kCookieComment         = "Cookies are tasty!";
-const char* const       kCookieDomain          = "nakedpyro.com";
+const char* const       kCookieDomain          = "yquill.localhost";
 const char* const       kCookieName            = "QuillSessionId";  
 const unsigned int      kCookieExpire          = 300;
 const unsigned int      kAutoLogoutInterval    = 900;
@@ -55,67 +66,37 @@ bool                                g_can_remote        = true;
 
 
 
-namespace {
-    using PageMap =  Map<String,const Page*,IgCase>;
+//namespace {
+    //using PageMap =  Map<String,const Page*,IgCase>;
 
-    struct Repo {
-        EnumMap<HttpOp,PageMap>         pages;
-        GetMap                          getters;
-        Guarded<QByteArray>             t_page;
-        //Map<String,QDir,IgCase>         dirs;
-        PageMap                         dispatchers;
+    //struct Repo {
+        //EnumMap<HttpOp,PageMap>         pages;
+        //GetMap                          getters;
+        //Guarded<QByteArray>             t_page;
+        ////Map<String,QDir,IgCase>         dirs;
+        //PageMap                         dispatchers;
       
-        Repo() : t_page(shared_bytes("std/page"))
-        {
-            //  Only hook the dynamic ones here.....
-            getters["body"] = []()->QByteArray {
-                return x_content;
-            };
-            getters["title"] = []()->QByteArray {
-                return x_title;
-            };
-        }
-    };
+        //Repo() : t_page(shared_bytes("std/page"))
+        //{
+            ////  Only hook the dynamic ones here.....
+            //getters["body"] = []()->QByteArray {
+                //return x_content;
+            //};
+            //getters["title"] = []()->QByteArray {
+                //return x_title;
+            //};
+        //}
+    //};
     
-    Repo&   repo() 
-    { 
-        static Repo*    s_repo = new Repo;
-        return *s_repo;
-    }
-}
-
-QByteArray      def_page()
-{
-    return repo().t_page;
-}
-
-void    reg_page(Page* p)
-{
-    if(p->is_dispatcher())
-        repo().dispatchers[p->path()]           = p;
-    else
-        repo().pages[p->httpOp()][p->path()]    = p;
-}
-
-
-void    reg_getter(const char*z, FNGet fn)
-{
-    if(z && fn)
-        repo().getters[z]   = fn;
-}
-
-void    reg_def_page(const QByteArray& bytes)
-{
-    repo().t_page   =    bytes;
-}
+    //Repo&   repo() 
+    //{ 
+        //static Repo*    s_repo = new Repo;
+        //return *s_repo;
+    //}
+//}
 
 
 void    updater_init();
-
-const GetMap&   static_getters()
-{
-    return repo().getters;
-}
 
 
 Ref<Session>      sessionFor(HttpRequest& req, HttpResponse& resp)
@@ -137,113 +118,9 @@ Ref<Session>      sessionFor(HttpRequest& req, HttpResponse& resp)
 }
 
 
-QByteArray                   do_expand(const QByteArray&content, const GetMap&vars)
-{
-    static const Repo& r   = repo();
-
-    QByteArray      ret;
-    const char*     z   = content.constData();
-    int             n = 0;
-    int             i = 0;
-    while( (i = content.indexOf("{{", n)) >= 0){
-        ret.append(z+n, i-n);
-        n = i + 2;
-        i   = content.indexOf("}}", n);
-        if(i < 0){
-            n = i = -1;
-            break;
-        }
-        
-        QByteArray k    = QByteArray(z+n, i-n);
-        FNGet   fn  = vars.get(k,nullptr);
-        if(!fn)
-            fn  = r.getters.get(k,nullptr);
-        if(fn)
-            ret.append(fn());
-        n   = i + 2;
-    }
-    
-    if(n >= 0)
-        ret.append(z+n);
-    return ret;
-}
-
-
-ContentType                  do_direct_content(QByteArray&dst, const QByteArray&data, ContentType ret, const QByteArray&title)
-{
-    switch(ret){
-    case ContentType::html:
-        x_title     = title;
-        x_content   = data;
-        dst         = do_expand(repo().t_page);
-        return ContentType::html;
-    case ContentType::markdown:
-        {
-            auto ct     = Markdown::exec(data);
-            x_title     = ct.title;
-            if(x_title.isEmpty())
-                x_title = title;
-            x_content   = ct.content;
-            dst         = do_expand(repo().t_page);
-            return ContentType::html;
-        }
-        return ContentType::html;
-    case ContentType::text:
-        x_title     = title;
-        x_content   = "<PRE>" + data + "</PRE>";
-        dst         = do_expand(repo().t_page);
-        return ContentType::html;
-    default:
-        break;
-    };
-    dst     = data;
-    return ret;
-}
-
-
-ContentType                 do_direct_file(QByteArray& dst, const QString&file, bool fExpand)
-{
-    QByteArray  data    = file_bytes(file);
-    QFileInfo   fi(file);
-    ContentType ret = mimeTypeForExt(fi.suffix());
-    switch(ret){
-    case ContentType::html:
-        if(fExpand){
-            x_title     = fi.fileName().toUtf8();
-            x_content   = std::move(data);
-            dst         = do_expand(repo().t_page);
-            return ContentType::html;
-        }
-        break;
-    case ContentType::markdown:
-        if(fExpand){
-            auto ct     = Markdown::exec(data);
-            x_title     = ct.title;
-            if(x_title.isEmpty())
-                x_title = fi.fileName().toUtf8();
-            x_content   = ct.content;
-            dst         = do_expand(repo().t_page);
-            return ContentType::html;
-        }
-        break;
-    case ContentType::text:
-        if(fExpand){
-            x_content   = "<PRE>" + data + "</PRE>";
-            x_title     = fi.fileName().toUtf8();
-            dst         = do_expand(repo().t_page);
-            return ContentType::html;
-        }
-        break;
-    default:
-        break;
-    }
-    dst     = std::move(data);
-    return ret;
-}
-
 Page::Reply    do_dispatch()
 {
-    static Repo& _repo = repo();
+    //static Repo& _repo = repo();
     Page::Reply   ret;
 
     try {
@@ -272,12 +149,12 @@ Page::Reply    do_dispatch()
             }
                 
             QByteArray  k;
-            x_page      = _repo.pages[x_op].get(x_path, nullptr);
+            x_page      = Page::find(x_op, x_path, false);
             if(!x_page && (x_op == hGet)){
                 int i   = x_path.indexOf('/', 1);
                 if(i>0){
                     k           = x_path.mid(i+1);
-                    x_page      = _repo.dispatchers.get(x_path.mid(1,i-1), nullptr);
+                    x_page      = Page::find(x_op, x_path.mid(1,i-1), true);
                 }
             }
             

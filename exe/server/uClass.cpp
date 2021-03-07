@@ -4,16 +4,25 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yUpdater.hpp"
-#include "yImporter.hpp"
 #include "yCommon.hpp"
+#include "yUpdater.hpp"
+//#include "yImporter.hpp"
 
-#include "db/Cache.hpp"
-#include "db/GraphBuilder.hpp"
-#include "util/Logging.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Guarded.hpp"
-#include "util/Utilities.hpp"
+//#include "db/Cache.hpp"
+//#include "db/GraphBuilder.hpp"
+//#include "util/Logging.hpp"
+//#include "util/SqlQuery.hpp"
+//#include "util/Guarded.hpp"
+//#include "util/Utilities.hpp"
+
+#include <db/AtomSys.hpp>
+#include <db/Graph.hpp>
+#include <db/GraphBuilder.hpp>
+#include <db/Workspace.hpp>
+#include <srv/Importer.hpp>
+#include <util/Guarded.hpp>
+#include <util/Logging.hpp>
+#include <util/SqlQuery.hpp>
 
 #include <QTextStream>
 #include <QThreadPool>

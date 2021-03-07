@@ -4,33 +4,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "yImporter.hpp"
-#include "yNetWriter.hpp"
-#include "yPage.hpp"
-#include "yScanner.hpp"
-#include "yCommon.hpp"
-
-#include "db/Cache.hpp"
-#include "db/Copyright.hpp"
-#include "util/Http.hpp"
-#include "util/Logging.hpp"
-#include "db/ShareDir.hpp"
-#include "util/Array2.hpp"
-#include "util/Compare.hpp"
-#include "util/DelayInit.hpp"
-#include "util/Guarded.hpp"
-#include "util/Reverse.hpp"
-#include "util/Utilities.hpp"
-
+#include <db/AtomSys.hpp>
+#include <db/ClassFile.hpp>
+#include <srv/ArgDecode.hpp>
+#include <srv/HtmlPage.hpp>
+#include <srv/TLSGlobals.hpp>
+#include <srv/Utilities.hpp>
+#include <util/DelayInit.hpp>
+#include <util/Utilities.hpp>
 
 #include <httpserver/httprequest.h>
-
-#include <QCoreApplication>
-#include <QDate>
-#include <QDateTime>
-#include <QDir>
-#include <QJsonObject>
-#include <QString>
 
 namespace {
     using namespace html;
@@ -43,7 +26,7 @@ namespace {
     }
 
     
-    void    class_overview(Html&h)
+    void    class_overview(HtmlWriter&h)
     {
         test(decode_class_prime(), false);
         h.title(cls_title());
@@ -123,7 +106,7 @@ namespace {
         FData() : direct(false) {}
     };
 
-    void        class_fields(Html&h)
+    void        class_fields(HtmlWriter&h)
     {
         test(decode_class_prime(), false);
         test(decode_columns(), true);
@@ -225,7 +208,7 @@ namespace {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     
-    void    class_reverses(Html& h)
+    void    class_reverses(HtmlWriter& h)
     {
         test(decode_columns(), true);
         test(decode_class_prime(), false);
@@ -296,7 +279,7 @@ namespace {
     
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    void    class_sources(Html& h)
+    void    class_sources(HtmlWriter& h)
     {
         test(decode_columns(), true);
         test(decode_class_prime(), false);
@@ -369,7 +352,7 @@ namespace {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     
-    void    class_targets(Html& h)
+    void    class_targets(HtmlWriter& h)
     {
         test(decode_columns(), true);
         test(decode_class_prime(), false);
@@ -437,7 +420,7 @@ namespace {
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
-    void    class_use(Html& h)
+    void    class_use(HtmlWriter& h)
     {
         test(decode_columns(), true);
         test(decode_class_prime(), false);
@@ -516,19 +499,19 @@ namespace {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
     INVOKE(
-        tabbar({
-            page(hGet, "/wksp/class", class_overview).description("Class").id().key().label("Overview"),
-            page(hGet, "/wksp/class/fields", class_fields).description("Class Fields").id().key().label("Fields"),
-            page(hGet, "/wksp/class/dependency", class_use).description("Class Dependencies").id().key().label("Dependencies"),
-            page(hGet, "/wksp/class/sources", class_sources).description("Class Sources").id().key().label("Sources"),
-            page(hGet, "/wksp/class/targets", class_targets).description("Class Targets").id().key().label("Targets"),
-            page(hGet, "/wksp/class/reverses", class_reverses).description("Class Reverses").id().key().label("Reverses")
+        reg_tabbar({
+            reg_page(hGet, "/wksp/class", class_overview).description("Class").id().key().label("Overview"),
+            reg_page(hGet, "/wksp/class/fields", class_fields).description("Class Fields").id().key().label("Fields"),
+            reg_page(hGet, "/wksp/class/dependency", class_use).description("Class Dependencies").id().key().label("Dependencies"),
+            reg_page(hGet, "/wksp/class/sources", class_sources).description("Class Sources").id().key().label("Sources"),
+            reg_page(hGet, "/wksp/class/targets", class_targets).description("Class Targets").id().key().label("Targets"),
+            reg_page(hGet, "/wksp/class/reverses", class_reverses).description("Class Reverses").id().key().label("Reverses")
         });
-        page(hPost, "/wksp/class/edit", edit_class).description("Class Editing").id().key();
-        page(hPost, "/wksp/class/edit/use", edit_use).description("Class Use Editing").id().key();
-        page(hPost, "/wksp/class/edit/reverses", edit_reverses).description("Class Reverse  Editing").id().key();
-        page(hPost, "/wksp/class/edit/sources", edit_sources).description("Class Source Editing").id().key();
-        page(hPost, "/wksp/class/edit/targets", edit_targets).description("Class Target Editing").id().key();
-        page(hPost, "/wksp/field/create", field_create).description("Create Field").argument("cls", "Class").key();
+        reg_page(hPost, "/wksp/class/edit", edit_class).description("Class Editing").id().key();
+        reg_page(hPost, "/wksp/class/edit/use", edit_use).description("Class Use Editing").id().key();
+        reg_page(hPost, "/wksp/class/edit/reverses", edit_reverses).description("Class Reverse  Editing").id().key();
+        reg_page(hPost, "/wksp/class/edit/sources", edit_sources).description("Class Source Editing").id().key();
+        reg_page(hPost, "/wksp/class/edit/targets", edit_targets).description("Class Target Editing").id().key();
+        reg_page(hPost, "/wksp/field/create", field_create).description("Create Field").argument("cls", "Class").key();
     );
 }

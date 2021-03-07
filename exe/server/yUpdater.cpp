@@ -5,21 +5,32 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "yCommon.hpp"
-#include "yImporter.hpp"
-#include "yPage.hpp"
-#include "yScanner.hpp"
 #include "yUpdater.hpp"
 
-#include "db/Cache.hpp"
-#include "util/FileUtils.hpp"
-#include "util/Logging.hpp"
-#include "db/ShareDir.hpp"
-#include "util/SqlQuery.hpp"
-#include "util/Compare.hpp"
-#include "util/Guarded.hpp"
-#include "util/Map.hpp"
-#include "util/Utilities.hpp"
-#include "util/Vector.hpp"
+#include <db/Tag.hpp>
+#include <db/ShareDir.hpp>
+#include <db/Workspace.hpp>
+#include <srv/Importer.hpp>
+#include <srv/Page.hpp>
+#include <srv/Scanner.hpp>
+#include <util/FileUtils.hpp>
+#include <util/Guarded.hpp>
+#include <util/Utilities.hpp>
+
+//#include "yImporter.hpp"
+//#include "yScanner.hpp"
+//#include "yUpdater.hpp"
+
+//#include "db/Cache.hpp"
+//#include "util/FileUtils.hpp"
+//#include "util/Logging.hpp"
+//#include "db/ShareDir.hpp"
+//#include "util/SqlQuery.hpp"
+//#include "util/Compare.hpp"
+//#include "util/Guarded.hpp"
+//#include "util/Map.hpp"
+//#include "util/Utilities.hpp"
+//#include "util/Vector.hpp"
 
 
 using namespace cdb;
@@ -161,7 +172,7 @@ namespace {
     
     void    update_page()
     {
-        reg_def_page(shared_bytes("std/page"));
+        Page::default_page(shared_bytes("std/page"));
     }
     
     void    update_index()
