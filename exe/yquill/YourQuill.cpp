@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "YClassTable.hpp"
 #include "YTagTable.hpp"
 #include "YWeb.hpp"
 #include "YourQuill.hpp"
@@ -18,7 +19,7 @@
 
 #if 0
 #include "ClassEditor.hpp"
-#include "ClassTable.hpp"
+#include "YClassTable.hpp"
 #include "Explorer.hpp"
 #include "YWeb.hpp"
 
@@ -36,7 +37,7 @@
 YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
 {
     //addAction("new_calculator", "Calculator").connect(this, &YourQuill::cmdNewCalculator);
-    //addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
+    addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
     addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
@@ -101,14 +102,14 @@ void    YourQuill::cmdNewCalculator()
     Calculator* c   = new Calculator;
     addDock(Qt::LeftDockWidgetArea, c);
 }
+#endif
 
 void    YourQuill::cmdNewClassTable()
 {
-    ClassTable*     ct  = new ClassTable;
+    YClassTable*     ct  = new YClassTable;
     ct -> setAddEnable(true);
     addWindow(ct);
 }
-#endif
 
 void    YourQuill::cmdNewDateGen()
 {
@@ -159,7 +160,7 @@ void    YourQuill::cmdNewWeb()
 #if 0
 void    YourQuill::ctxClassTable(const QPoint& pt)
 {
-    ClassTable* ct  = qobject_cast<ClassTable*>(sender());
+    YClassTable* ct  = qobject_cast<YClassTable*>(sender());
     if(!ct)
         return ;
     
@@ -199,9 +200,9 @@ void    YourQuill::reconnect(QWidget*w)
     connect(w, &QWidget::windowTitleChanged, this, &YourQuill::subWindowTitleChanged);
     
 #if 0    
-    ClassTable* ct  = qobject_cast<ClassTable*>(w);
+    YClassTable* ct  = qobject_cast<YClassTable*>(w);
     if(ct)
-        connect(ct, &ClassTable::contextMenu, this, &YourQuill::ctxClassTable);
+        connect(ct, &YClassTable::contextMenu, this, &YourQuill::ctxClassTable);
 #endif
 }
 

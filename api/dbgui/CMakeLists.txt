@@ -7,6 +7,9 @@ set(dbgui_sources
     
     ./atomsys/AtomProvider.hpp
     ./atomsys/ClassProvider.hpp
+    ./atomsys/ClassTableBase.cpp
+    #./atomsys/ClassTableModel.hpp
+    #./atomsys/ClassTableView.hpp
     ./atomsys/FieldProvider.hpp
     
     

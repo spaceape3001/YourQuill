@@ -1,17 +1,16 @@
 add_executable(yquill
     #./ClassEditor.cpp
     #./ClassEditor.hpp
-    #./ClassTable.cpp
-    #./ClassTable.hpp
     #./Explorer.cpp
     #./Explorer.hpp
     #./LeafEditor.cpp
     #./LeafEditor.hpp
     #./LeafTable.cpp
     #./LeafTable.hpp
-    #./TagEditor.cpp
-    #./TagEditor.hpp
-    
+    #./YTagEditor.cpp
+    #./YTagEditor.hpp
+    ./YClassTable.cpp
+    ./YClassTable.hpp
     ./YTagTable.cpp
     ./YTagTable.hpp
     ./YWeb.cpp
