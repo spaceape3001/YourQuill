@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <db/FileSys.hpp>
+#include <dbgui/Provider.hpp>
+
+using DocumentProvider = std::shared_ptr<Provider<Document>>;
+
+namespace provider {
+    DocumentProvider    all_documents();
+}
+

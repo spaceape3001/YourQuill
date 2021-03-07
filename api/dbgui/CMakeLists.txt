@@ -5,8 +5,20 @@ set(dbgui_sources
     ./QuillApp.cpp
     ./QuillApp.hpp
     
+    ./atomsys/AtomProvider.hpp
+    ./atomsys/ClassProvider.hpp
+    ./atomsys/FieldProvider.hpp
+    
+    
     ./edit/CopyrightEdit.cpp
     ./edit/CopyrightEdit.hpp
+    
+    ./filesys/DirectoryProvider.hpp
+    ./filesys/DocumentProvider.hpp
+    ./filesys/FolderProvider.hpp
+    ./filesys/FragmentProvider.hpp
+    
+    ./leaf/LeafProvider.hpp
     
     ./quill/QuillDataEdit.cpp
     ./quill/QuillDataEdit.hpp
@@ -27,6 +39,7 @@ set(dbgui_sources
     
     ./wksp/RootComboBox.cpp
     ./wksp/RootComboBox.hpp
+    ./wksp/RootProvider.hpp
     ./wksp/WkspSelectorDlg.cpp
     ./wksp/WkspSelectorDlg.hpp
 )
