@@ -67,6 +67,7 @@ protected:
     MetaValue(const char*,const char*, unsigned int i);
     
     virtual void                    insert() override;
+    void                            qtType(int);
     
 private:
     friend class MetaField;
@@ -132,6 +133,12 @@ private:
     
     FNFormat                m_ioFormat;
     FNParse                 m_ioParse;
+    
+    typedef QVariant    (*FNToQVariant)(const DataBlock&);
+    FNToQVariant            m_toQVariant;
+    
+    typedef void        (*FNFromQVariant)(const DataBlock&, const QVariant&);
+    FNFromQVariant          m_fromQVariant;
     
 };
 
