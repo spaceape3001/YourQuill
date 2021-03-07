@@ -21,6 +21,11 @@ Importer::Repo& Importer::repo()
     return s_repo;
 }
 
+EnumMap<Change,Vector<const Importer*>>&     Importer::change_map()
+{
+    return repo().byChange;
+}
+
 
 Vector<const Importer*>  Importer::all()
 {

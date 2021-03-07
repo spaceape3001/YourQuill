@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include "yCommon.hpp"
-#include "util/Deque.hpp"
+#include <util/Deque.hpp>
 #include <QThread>
 
 class QTimer;
@@ -31,6 +30,10 @@ public:
 
         //  Primes the scanner so files/documents are all registered.
     void            prime();
+
+signals:
+        // Emitted once per cycle...  (queue, because this will happen async)
+    void            cycled();
 
 public slots:
 

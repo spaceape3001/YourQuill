@@ -53,6 +53,8 @@ private:
     
     struct Repo;
     static Repo& repo();
+
+    static EnumMap<Change,Vector<const Importer*>>&     change_map();
 };
 
 struct Importer::Writer {

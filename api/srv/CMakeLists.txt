@@ -20,6 +20,8 @@ set(srv_sources
     ./NetWriter.hpp
     ./Page.cpp
     ./Page.hpp
+    ./Scanner.cpp
+    ./Scanner.hpp
     ./Session.cpp
     ./Session.hpp
     ./SrvLogging.hpp
