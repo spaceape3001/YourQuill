@@ -310,7 +310,7 @@ namespace wksp {
 
             _load(doc, rSeen, tSeen, PolicyMap(Access::ReadWrite), 
                 PolicyMap(opts.is_set(Option::RO_TEMPLATE) ? Access::ReadOnly : Access::ReadWrite), spots, false, 1);
-            
+
             for(const auto &i : tSeen)
                 m.templates << i;
             
@@ -321,7 +321,7 @@ namespace wksp {
                     return a->depth() < b->depth();
                 return a->id() < b->id();
             });
-            
+
             Vector<Root*>  eroots  = _roots();
             for(Root* r2 : eroots){
                 QDir().mkpath(r2->resolve(szConfigDir));
@@ -339,6 +339,7 @@ namespace wksp {
                 keys << r2 -> key();
             }
             
+
                 //  make sure everything has a key, default is the number
             for(Root* r2 : eroots){
                 if(!r2 -> m_key.isEmpty())
@@ -354,6 +355,7 @@ namespace wksp {
                     if(!keys.has(k)){
                         r2 -> m_key = k.qString();
                         keys << k;
+                        break;
                     }
                 }
             }
