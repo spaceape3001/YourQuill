@@ -20,12 +20,12 @@ public:
 public slots:
     //void            cmdNewCalculator();
     //void            cmdNewClassTable();
-    //void            cmdNewDateGen();
+    void            cmdNewDateGen();
     //void            cmdNewExplorer();
     ////void            cmdNewMonthView();
     //void            cmdNewSqlTool();
     //void            cmdNewTagTable();
-    //void            cmdNewTimeGen();
+    void            cmdNewTimeGen();
     void            cmdNewWeb();
     
 protected:

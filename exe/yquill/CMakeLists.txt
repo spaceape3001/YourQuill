@@ -24,6 +24,7 @@ add_executable(yquill
 target_link_libraries(yquill PUBLIC
     yqdb
     yqdbgui 
+    yqgadget
     yqgui
     yqmeta
     yqutil

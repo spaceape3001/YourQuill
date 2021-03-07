@@ -9,6 +9,8 @@
 
 #include <db/Workspace.hpp>
 #include <dbgui/QuillApp.hpp>
+#include <gadget/DateGen.hpp>
+#include <gadget/TimeGen.hpp>
 #include <util/Logging.hpp>
 #include <iostream>
 
@@ -20,10 +22,8 @@
 #include "YWeb.hpp"
 
 #include "gadget/Calculator.hpp"
-#include "gadget/DateGen.hpp"
 //#include "gadget/MonthView.hpp"
 #include "gadget/SqlTool.hpp"
-#include "gadget/TimeGen.hpp"
 #include "gui/UInt64Mapper.hpp"
 
 //#include <QApplication>
@@ -37,12 +37,12 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
 {
     //addAction("new_calculator", "Calculator").connect(this, &YourQuill::cmdNewCalculator);
     //addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
-    //addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
+    addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
     //addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
     //addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
-    //addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
+    addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
     addAction("new_web", "New YWeb").connect(this, &YourQuill::cmdNewWeb);
     
     addAction("refresh", "Refresh").shortcut("F5");
@@ -108,7 +108,7 @@ void    YourQuill::cmdNewClassTable()
     ct -> setAddEnable(true);
     addWindow(ct);
 }
-
+#endif
 
 void    YourQuill::cmdNewDateGen()
 {
@@ -116,7 +116,7 @@ void    YourQuill::cmdNewDateGen()
     addDock(Qt::BottomDockWidgetArea, d);
 }
 
-
+#if 0
 void    YourQuill::cmdNewExplorer()
 {
     Explorer*   e   = new Explorer;
@@ -141,13 +141,13 @@ void    YourQuill::cmdNewTagTable()
     tt -> setAddEnable(true);
     addWindow(tt);
 }
+#endif
 
 void    YourQuill::cmdNewTimeGen()
 {
     TimeGen* t = new TimeGen;
     addDock(Qt::BottomDockWidgetArea, t);
 }
-#endif
 
 void    YourQuill::cmdNewWeb()
 {
