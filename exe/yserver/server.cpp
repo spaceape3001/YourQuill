@@ -339,6 +339,7 @@ int main(int argc, char* argv[])
     Scanner*fs      = new Scanner;
     fs -> prime();
     updater_init();
+    Page::freeze();
     
     fs -> start();
     DBServer  server;

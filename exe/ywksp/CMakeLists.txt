@@ -1,7 +1,6 @@
-set(ywksp_sources 
+add_executable(ywksp 
     ./YWksp.cpp
     ./YWksp.hpp
 )
-add_executable(ywksp ${ywksp_sources})
 target_link_libraries(ywksp PUBLIC yqdb yqdbgui yqgui yqres)
 

@@ -26,6 +26,7 @@ target_link_libraries(yqdbgui
     PUBLIC 
         yqdb 
         yqmeta 
+        yqres
         yqutil 
         Qt5::Widgets 
         Qt5::WebEngine 
