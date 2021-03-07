@@ -1,0 +1,2 @@
+% Enchantment
+plural Enchantments
