@@ -108,6 +108,7 @@ set(gui_sources
     ./view/SimpleTable.hpp
     ./view/SqlTableView.cpp
     ./view/SqlTableView.hpp
+    ./view/StdTableView.hpp
 
 
     ./widget/DrawRuler.cpp

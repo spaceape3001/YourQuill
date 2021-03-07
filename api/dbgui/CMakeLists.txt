@@ -15,6 +15,8 @@ set(dbgui_sources
     ./quill/QuillEdit.cpp
     ./quill/QuillEdit.hpp
     
+    ./tag/TagEdit.cpp
+    ./tag/TagEdit.hpp
     ./tag/TagProvider.hpp
     
     ./web/WebBase.cpp
