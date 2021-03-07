@@ -40,6 +40,13 @@ QIcon           fetch_icon(const QString&);
 bool            is_main_thread();
 bool            isMainThread();
 
+bool            is_in(const String& key, const String& b);
+bool            is_in(const String& key, const char* b);
+bool            is_in(const char* key, const String& b);
+bool            is_in(const Vector<String>& keys, const String& b);
+bool            is_in(const std::initializer_list<String>& keys, const String& b);
+bool            is_in(const std::initializer_list<const char*>& keys, const String& b);
+
 
 QString         join(const Set<uint16_t>& values, const QString& sep);
 

@@ -151,6 +151,7 @@ void    QuillDataEdit::setReadOnly(bool f)
     m_port -> setReadOnly(f);
     m_readTimeout -> setReadOnly(f);
     m_tempDir -> setReadOnly(f);
+    m_readOnly = f;
 }
 
 #include "moc_QuillDataEdit.cpp"

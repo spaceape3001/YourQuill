@@ -1095,9 +1095,9 @@ namespace cdb {
         Class           c   = db_class(doc, &was);
         if(!was)
             return c;
+            
         if(fragments_count(doc))
             return c;
-        
         ClassFile::Shared    td  = write(c, rt);
         td -> name      = k;
         td -> plural    = k + 's';

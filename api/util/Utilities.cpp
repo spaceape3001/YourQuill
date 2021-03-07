@@ -84,6 +84,59 @@ bool isMainThread()
     return is_main_thread();
 }
 
+bool    is_in(const String& a, const String& b)
+{
+    if(a.size() != b.size())
+        return false;
+    for(size_t n=0;n<a.size();++n)
+        if(tolower(a[n]) != tolower(b[n]))
+            return false;
+    return true;
+}
+
+bool    is_in(const String& a, const char* b)
+{
+    if(!b)
+        return false;
+    size_t  n;
+    for(n=0;n<a.size();++n){
+        if(!b[n])
+            return false;
+        if(tolower(a[n]) != tolower(b[n]))
+            return false;
+    }
+    return !b[n];
+}
+
+bool    is_in(const char* a, const String& b)
+{
+    return is_in(b,a);
+}
+
+bool    is_in(const Vector<String>& vec, const String& b)
+{
+    for(const String& a : vec)
+        if(is_in(a,b))
+            return true;
+    return false;
+}
+
+bool    is_in(const std::initializer_list<String>& vec, const String& b)
+{
+    for(const String& a : vec)
+        if(is_in(a,b))
+            return true;
+    return false;
+}
+
+bool    is_in(const std::initializer_list<const char*>& vec, const String& b)
+{
+    for(const char* a : vec)
+        if(a && is_in(b,a))
+            return true;
+    return false;
+}
+
 
 QString  join(const Set<uint16_t>& values, const QString& sep)
 {

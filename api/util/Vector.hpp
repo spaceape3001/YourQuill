@@ -75,6 +75,8 @@ public:
     */
     Vector&    erase_at(size_t pos);
 
+    Vector&     erase_at(size_t pos, size_t cnt);
+
     /*! \brief Erases from the current vector
     
         This will *DELETE* if the specified argument returns TRUE for the 
@@ -381,6 +383,18 @@ Vector<T>& Vector<T>::erase_at(size_t pos)
         base_vec::erase(base_vec::begin() + pos);
     return *this;
 }
+
+template <typename T>
+Vector<T>& Vector<T>::erase_at(size_t pos, size_t cnt)
+{
+    if(cnt && (pos < base_vec::size())){
+        if(cnt > base_vec::size() - pos)
+            cnt = base_vec::size() - pos;
+        base_vec::erase(base_vec::begin()+pos, base_vec::begin()+pos+cnt); 
+    }
+    return *this;
+}
+
 
 template <typename T>
     template <typename Pred>

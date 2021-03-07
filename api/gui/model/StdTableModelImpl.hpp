@@ -120,7 +120,7 @@ protected:
         ColumnWriter&   add(Adder* a)
         {
             if(m_column)
-                m_column -> m_add   = a;
+                m_column -> m_add.reset(a);
             return *this;
         }
         
@@ -141,7 +141,7 @@ protected:
         ColumnWriter&   delegate(Delegator* d)
         {
             if(m_column)
-                m_column -> m_delegate  = d;
+                m_column -> m_delegate.reset(d);
             return *this;
         }
         
@@ -499,6 +499,9 @@ StdTableModel<T>::~StdTableModel()
 }
 
 template <typename T>
+void                _all_changed();
+
+template <typename T>
 const StdTableModel<T>::Column*       StdTableModel<T>::_column(int c) const
 {
     return m_columns.value((size_t) c, nullptr);
@@ -542,6 +545,11 @@ const T*            StdTableModel<T>::_row(const QModelIndex& idx) const
     return _row(idx.row());
 }
 
+template <typename T>
+void                StdTableModel<T>::allChanged()
+{
+    dataChanged(createIndex(0,0), createIndex(m_rows.size(), m_columns.size()));
+}
 
 template <typename T>
 void                StdTableModel<T>::append(const T& item)
@@ -555,10 +563,17 @@ void                StdTableModel<T>::append(const T& item)
 }
 
 template <typename T>
-void                StdTableModel<T>::allChanged()
+void                StdTableModel<T>::append(const Vector<T>&items)
 {
-    dataChanged(createIndex(0,0), createIndex(m_rows.size(), m_columns.size()));
+    if(m_readOnly || items.empty())
+        return;
+    int n   = rowCount();
+    beginInsertRows(QModelIndex(), n, n+items.size());
+    m_rows += items;
+    endInsertRows();
 }
+
+
 
 template <typename T>
 StdTableModel<T>::ColumnWriter  StdTableModel<T>::col(Column* c)
@@ -590,6 +605,19 @@ int                 StdTableModel<T>::column(const String& k) const
         if(is_equal(compare_igCase(c->key(), k)))
             return c->id();
     return -1;
+}
+
+template <typename T>
+String              StdTableModel<T>::columnKey(int i) const
+{
+    const Column*c  = _column(i);
+    return c ? c -> key() : String();
+}
+
+template <typename T>
+String              StdTableModel<T>::columnKey(const QModelIndex&idx) const
+{
+    return columnKey(idx.column());
 }
 
 template <typename T>
@@ -668,6 +696,35 @@ void                StdTableModel<T>::removeRow(int n)
     beginRemoveRows(QModelIndex(), n, n);
     m_rows.erase_at(n);
     endRemoveRows();
+}
+
+template <typename T>
+    template <typename Pred>
+void                StdTableModel<T>::removeRowIf(Pred p)
+{
+    if(m_readOnly || m_rows.empty())
+        return ;
+    
+    int l   = -1;
+    int n   = -1;
+    for(n=m_rows.size()-1;n>=0;--n){
+        if(p(m_rows[n])){
+            if(l<0)
+                l   = n;
+        } else if(l>=0){
+            //  Got a bunch to remove
+            beginRemoveRows(QModelIndex(), n+1, l);
+            m_rows.erase_at((size_t) n+1, (size_t)(l-n));
+            endRemoveRows();
+            l = -1;
+        }
+    }
+    
+    if(l>=0){
+        beginRemoveRows(QModelIndex(), 0, l);
+        m_rows.erase_at(0, l+1);
+        endRemoveRows();
+    }
 }
 
 template <typename T>

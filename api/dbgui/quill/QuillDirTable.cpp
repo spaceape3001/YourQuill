@@ -139,6 +139,8 @@ void        QuillDirTable::cmdMoveUp()
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+template class StdTableModel<QuillData::Root>;
+
 QuillDirTable::Model::Model(bool fTemplates, QObject*parent) : Base(parent)
 {
     col("Key", &QuillData::Root::key).delegate<KeyValidator>();

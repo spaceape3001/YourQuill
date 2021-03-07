@@ -4,6 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+//  As a rule, this file should only be included by those source files that are actively using the MV_IMPLEMENT macro
+
 #pragma once
 
 #include "MetaFwd.hpp"
@@ -13,6 +15,8 @@
 #include "util/DelayInit.hpp"
 
 #include <type_traits>
+
+class QVariant;
 
 struct MetaField::Writer {
     Writer(MetaField* mf) : m_field(mf) {}
@@ -249,8 +253,6 @@ public:
         };
     }
     
-    
-    
 
 private:
     friend struct MetaValue::Binder<T>;
@@ -288,6 +290,11 @@ private:
         
         MetaValue::m_size          = sizeof(T);
         MetaValue::m_small         = MetaValue::m_size <= sizeof(DataBlock);
+        
+        #ifdef QMETATYPE_H
+        if constexpr(QMetaTypeId<T>::Defined)
+            qtType(QMetaTypeId<T>::qt_metatype_id());
+        #endif
     }
     
     ~MetaValueImpl() {}

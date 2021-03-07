@@ -11,10 +11,11 @@ add_executable(yquill
     #./LeafTable.hpp
     #./TagEditor.cpp
     #./TagEditor.hpp
-    #./TagTable.cpp
-    #./TagTable.hpp
-    ./Web.cpp
-    ./Web.hpp
+    
+    ./YTagTable.cpp
+    ./YTagTable.hpp
+    ./YWeb.cpp
+    ./YWeb.hpp
     ./YourQuill.cpp
     ./YourQuill.hpp
 )
@@ -22,6 +23,7 @@ add_executable(yquill
 target_link_libraries(yquill PUBLIC
     yqdb
     yqdbgui 
+    yqgadget
     yqgui
     yqmeta
     yqutil

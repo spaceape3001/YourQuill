@@ -4,19 +4,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Web.hpp"
+#include "YWeb.hpp"
 
-Web::Web(QWidget*parent) : WebBase(parent)
+YWeb::YWeb(QWidget*parent) : WebBase(parent)
 {
-    connect(this, &Web::titleChanged, this, &Web::update_title);
+    connect(this, &YWeb::titleChanged, this, &YWeb::update_title);
     goHome();
 }
 
-Web::~Web()
+YWeb::~YWeb()
 {
 }
 
-void    Web::update_title()
+void    YWeb::update_title()
 {
     QString     t   = title();
     if(t.isEmpty())
@@ -26,4 +26,4 @@ void    Web::update_title()
 }
 
 
-#include "moc_Web.cpp"
+#include "moc_YWeb.cpp"

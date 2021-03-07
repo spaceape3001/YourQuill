@@ -26,9 +26,10 @@ public:
     StdTableModel(QObject*parent=nullptr);
     virtual ~StdTableModel();
     
-    void                append(const T&);
+    virtual void        append(const T&);
+    virtual void        append(const Vector<T>&);
 
-    void                clear();
+    virtual void        clear();
     int                 column(const String&) const;
 
     int                 columnCount() const
@@ -40,19 +41,24 @@ public:
         return columnCount();
     }
     
+    String              columnKey(int) const;
+    String              columnKey(const QModelIndex&) const;
     
     virtual QVariant    data(const QModelIndex&, int) const override;
     
     Qt::ItemFlags       flags(const QModelIndex&) const override;
     QVariant            headerData(int, Qt::Orientation, int) const override;
     
-    void                moveRowUp(int);
-    void                moveRowDown(int);
+    virtual void        moveRowUp(int);
+    virtual void        moveRowDown(int);
     
     
     bool                readOnly() const { return m_readOnly; }
     
-    void                removeRow(int);
+    template <typename Pred>
+    void                removeRowIf(Pred);
+    
+    virtual void        removeRow(int);
     
     int                 rowCount() const;
     

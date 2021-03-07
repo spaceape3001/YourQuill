@@ -93,6 +93,8 @@ namespace {
         Vector<const MetaValue*>                values;
         Map<String,const MetaValue*,IgCase>     value;
         
+        Hash<int, const MetaValue*>             qtTypes;
+        
         Vector<void(*)()>                       freezers;
 
         Repo() : openReg(true)
@@ -586,7 +588,9 @@ MetaValue::MetaValue(const char*zName, const char* f, unsigned int i) : MetaType
     m_moveB(nullptr),
     m_print(nullptr),
     m_ioFormat(nullptr),
-    m_ioParse(nullptr)
+    m_ioParse(nullptr),
+    m_toQVariant(nullptr),
+    m_fromQVariant(nullptr)
 {   
     Meta::m_type |= isValue;
     LOCK
@@ -667,6 +671,16 @@ void        MetaValue::insert()
     //LOCK
     //return m_keys;
 //}
+
+void    MetaValue::qtType(int i)
+{
+    LOCK
+    if(_r.openReg && !m_qtType){
+        m_qtType        = i;
+        _r.qtTypes[i]   = this;
+    }
+}
+
 
 
 
