@@ -17,7 +17,7 @@ public:
     
     virtual YourQuill*  newMain() { return new YourQuill; }
     
-//public slots:
+public slots:
     //void            cmdNewCalculator();
     //void            cmdNewClassTable();
     //void            cmdNewDateGen();
@@ -26,7 +26,7 @@ public:
     //void            cmdNewSqlTool();
     //void            cmdNewTagTable();
     //void            cmdNewTimeGen();
-    //void            cmdNewWeb();
+    void            cmdNewWeb();
     
 protected:
     virtual void    reconnect(QWidget*) override;

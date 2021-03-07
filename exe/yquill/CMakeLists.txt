@@ -13,8 +13,8 @@ add_executable(yquill
     #./TagEditor.hpp
     #./TagTable.cpp
     #./TagTable.hpp
-    #./Web.cpp
-    #./Web.hpp
+    ./Web.cpp
+    ./Web.hpp
     ./YourQuill.cpp
     ./YourQuill.hpp
 )

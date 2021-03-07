@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "Web.hpp"
 #include "YourQuill.hpp"
 
 #include <db/Workspace.hpp>
@@ -34,17 +35,15 @@
 
 YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
 {
-/*
-    addAction("new_calculator", "Calculator").connect(this, &YourQuill::cmdNewCalculator);
-    addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
-    addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
-    addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
+    //addAction("new_calculator", "Calculator").connect(this, &YourQuill::cmdNewCalculator);
+    //addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
+    //addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
+    //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
-    addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
-    addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
-    addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
+    //addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
+    //addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
+    //addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
     addAction("new_web", "New Web").connect(this, &YourQuill::cmdNewWeb);
-*/
     
     addAction("refresh", "Refresh").shortcut("F5");
 
@@ -148,7 +147,7 @@ void    YourQuill::cmdNewTimeGen()
     TimeGen* t = new TimeGen;
     addDock(Qt::BottomDockWidgetArea, t);
 }
-
+#endif
 
 void    YourQuill::cmdNewWeb()
 {
@@ -157,6 +156,7 @@ void    YourQuill::cmdNewWeb()
     //  set - URL
 }
 
+#if 0
 void    YourQuill::ctxClassTable(const QPoint& pt)
 {
     ClassTable* ct  = qobject_cast<ClassTable*>(sender());
@@ -229,7 +229,7 @@ int main(int argc, char* argv[])
     log_to_std_error();
     QuillApp   app(argc, argv);
     meta_freeze();
-    //std::cout << "YourQuill Hello World!\n";
+
     QString wp;
     if(argc>1)
         wp  = argv[1];
@@ -239,10 +239,9 @@ int main(int argc, char* argv[])
     if(!app.init_local_workspace(wp))
         return -1;
     
-    //wksp::initialize(".");
     YourQuill   *qw = new YourQuill;
     qw -> show();
-    //qw -> cmdNewWeb();
+    qw -> cmdNewWeb();
     return app.exec();
 }
 
