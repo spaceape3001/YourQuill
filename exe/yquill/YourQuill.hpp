@@ -22,6 +22,7 @@ public slots:
     void            cmdNewClassTable();
     void            cmdNewDateGen();
     //void            cmdNewExplorer();
+    void            cmdNewLeafTable();
     ////void            cmdNewMonthView();
     void            cmdNewSqlTool();
     void            cmdNewTagTable();

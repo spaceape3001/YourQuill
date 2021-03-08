@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <dbgui/Provider.hpp>
+#include <gui/Provider.hpp>
 
 class Root;
 

@@ -7,26 +7,26 @@
 #pragma once
 
 #include <gui/main/SubWin.hpp>
-#include <dbgui/tag/TagProvider.hpp>
+#include <dbgui/leaf/LeafProvider.hpp>
 
 class QLineEdit;
 class QPushButton;
 class QToolBar;
 class QTimer;
-class Tag;
-class TagTableView;
-class TagTableModel;
+class Leaf;
+class LeafTableView;
+class LeafTableModel;
 
-class YTagTable : public SubWin {
+class YLeafTable : public SubWin {
     Q_OBJECT
 public:
     //class AddBar;
     
-    YTagTable(TagProvider stp = TagProvider{}, QWidget*parent=nullptr);
-    ~YTagTable();
+    YLeafTable(LeafProvider stp = LeafProvider{}, QWidget*parent=nullptr);
+    ~YLeafTable();
     
-    TagTableModel*  model() const { return m_model; }
-    TagTableView*   view() const { return m_view; }
+    LeafTableModel*  model() const { return m_model; }
+    LeafTableView*   view() const { return m_view; }
     
     bool            addEnabled() const { return m_addEnable; }
     void            setAddEnable(bool);
@@ -46,8 +46,8 @@ private slots:
     void            doubleClicked(const QModelIndex&);
     
 private:
-    TagTableModel*  m_model;
-    TagTableView*   m_view;
+    LeafTableModel*  m_model;
+    LeafTableView*   m_view;
     QLineEdit*      m_addKey;
     QPushButton*    m_addBtn;
     bool            m_addEnable;

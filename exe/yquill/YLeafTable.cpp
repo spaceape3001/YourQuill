@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "YTagTable.hpp"
-#include <dbgui/tag/TagTableModel.hpp>
-#include <dbgui/tag/TagTableView.hpp>
+#include "YLeafTable.hpp"
+#include <dbgui/leaf/LeafTableModel.hpp>
+#include <dbgui/leaf/LeafTableView.hpp>
 #include <gui/validator/KeyValidator.hpp>
 #include <util/Utilities.hpp>
 
@@ -18,15 +18,15 @@
 
 
 
-YTagTable::YTagTable(TagProvider stp, QWidget*parent) : SubWin(parent), m_model{}, m_view{}, m_addKey{}, m_addBtn{}, m_addEnable{}
+YLeafTable::YLeafTable(LeafProvider stp, QWidget*parent) : SubWin(parent), m_model{}, m_view{}, m_addKey{}, m_addBtn{}, m_addEnable{}
 {
     if(!stp)
-        stp     = provider::all_tags();
+        stp     = provider::all_leafs();
         
-    m_model     = new TagTableModel(stp, this);
+    m_model     = new LeafTableModel(stp, this);
     
     m_model -> setReadOnly(false);
-    m_view      = new TagTableView(m_model);
+    m_view      = new LeafTableView(m_model);
     
     QToolBar*   tb  = new QToolBar;
     m_addKey        = new QLineEdit;
@@ -34,10 +34,10 @@ YTagTable::YTagTable(TagProvider stp, QWidget*parent) : SubWin(parent), m_model{
     m_addBtn        = new QPushButton("+");
     setAddEnable(false);
     
-    connect(m_addKey, &QLineEdit::returnPressed, this, &YTagTable::cmdAdd);
-    connect(m_addBtn, &QPushButton::clicked, this, &YTagTable::cmdAdd);
+    connect(m_addKey, &QLineEdit::returnPressed, this, &YLeafTable::cmdAdd);
+    connect(m_addBtn, &QPushButton::clicked, this, &YLeafTable::cmdAdd);
     
-    connect(m_view, &QTableView::doubleClicked, this, &YTagTable::doubleClicked);
+    connect(m_view, &QTableView::doubleClicked, this, &YLeafTable::doubleClicked);
     
     tb->addWidget(m_addKey);
     tb->addWidget(m_addBtn);
@@ -48,47 +48,49 @@ YTagTable::YTagTable(TagProvider stp, QWidget*parent) : SubWin(parent), m_model{
     
     lay -> setContentsMargins(0,0,0,0);
     
-    setWindowTitle("Tags");
+    setWindowTitle("Leafs");
 }
 
-YTagTable::~YTagTable()
+YLeafTable::~YLeafTable()
 {
 }
 
-void    YTagTable::check() 
+void    YLeafTable::check() 
 {
     m_model -> check();
 }
 
-void      YTagTable::cmdAdd()
+void      YLeafTable::cmdAdd()
 {
     if(m_addEnable){
+    #if 0
         QString txt = m_addKey -> text().simplified();
         if(txt.isEmpty())
             return ;
-        Tag t   = cdb::make_tag(txt);
+        Leaf t   = cdb::make_tag(txt);
         if(t)
             m_model -> append(t);
+    #endif
     }
     
     m_addKey -> clear();
 }
 
-void      YTagTable::doubleClicked(const QModelIndex&idx)
+void      YLeafTable::doubleClicked(const QModelIndex&idx)
 {
     if(is_in({"Key", "ID"}, m_model->columnKey(idx))){
-        Tag t   = m_model -> get(idx.row());
+        Leaf t   = m_model -> get(idx.row());
         if(t)
             emit editReq(t.id);
     }
 }
 
-void            YTagTable::refresh()
+void            YLeafTable::refresh()
 {
     m_model -> refresh();
 }
 
-void            YTagTable::setAddEnable(bool f)
+void            YLeafTable::setAddEnable(bool f)
 {
     m_addEnable = f;
     m_addKey -> setEnabled(f);
@@ -96,7 +98,7 @@ void            YTagTable::setAddEnable(bool f)
 }
 
 
-void   YTagTable::setReadOnly(bool f)
+void   YLeafTable::setReadOnly(bool f)
 {
     m_model -> setReadOnly(f);
 }
@@ -104,4 +106,4 @@ void   YTagTable::setReadOnly(bool f)
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#include "moc_YTagTable.cpp"
+#include "moc_YLeafTable.cpp"

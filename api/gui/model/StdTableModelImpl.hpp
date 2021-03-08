@@ -486,7 +486,8 @@ protected:
 
 
 template <typename T>
-StdTableModel<T>::StdTableModel(QObject*parent) : QAbstractTableModel(parent), m_adders(0), m_readOnly(false), m_canAdd(false), m_dragReorder(false)
+StdTableModel<T>::StdTableModel(QObject*parent) : QAbstractTableModel(parent), 
+    m_adders(0), m_readOnly(false), m_canAdd(false), m_dragReorder(false), m_tickCol(-1)
 {
 }
 
@@ -514,7 +515,7 @@ const StdTableModel<T>::Column*       StdTableModel<T>::_column(const QModelInde
 }
 
 template <typename T>
-T*                  StdTableModel<T>::_row(int r) 
+StdTableModel<T>::Row*          StdTableModel<T>::_row(int r) 
 {
     if(r<0)
         return nullptr;
@@ -524,7 +525,7 @@ T*                  StdTableModel<T>::_row(int r)
 }
 
 template <typename T>
-const T*            StdTableModel<T>::_row(int r) const
+const StdTableModel<T>::Row*    StdTableModel<T>::_row(int r) const
 {
     if(r<0)
         return nullptr;
@@ -534,13 +535,13 @@ const T*            StdTableModel<T>::_row(int r) const
 }
 
 template <typename T>
-T*                  StdTableModel<T>::_row(const QModelIndex& idx) 
+StdTableModel<T>::Row*          StdTableModel<T>::_row(const QModelIndex& idx) 
 {   
     return _row(idx.row());
 }
 
 template <typename T>
-const T*            StdTableModel<T>::_row(const QModelIndex& idx) const
+const StdTableModel<T>::Row*    StdTableModel<T>::_row(const QModelIndex& idx) const
 {
     return _row(idx.row());
 }
@@ -558,7 +559,7 @@ void                StdTableModel<T>::append(const T& item)
         return;
     int n   = rowCount();
     beginInsertRows(QModelIndex(), n, n);
-    m_rows << item;
+    m_rows << Row{item, false};
     endInsertRows();
 }
 
@@ -569,7 +570,8 @@ void                StdTableModel<T>::append(const Vector<T>&items)
         return;
     int n   = rowCount();
     beginInsertRows(QModelIndex(), n, n+items.size());
-    m_rows += items;
+    for(auto t : items)
+        m_rows << Row{t,false};
     endInsertRows();
 }
 
@@ -624,14 +626,19 @@ template <typename T>
 QVariant            StdTableModel<T>::data(const QModelIndex&idx, int role) const
 {
     const Column* c = _column(idx);
-    const T*      r = _row(idx);
+    const Row*    r = _row(idx);
     if(!(c&&r))
         return QVariant();
     switch(role){
     case Qt::EditRole:
-        return c->edit(*r);
+        return c->edit(r->data);
     case Qt::DisplayRole:
-        return c->display(*r);
+        return c->display(r->data);
+    case Qt::CheckStateRole:
+        if(idx.column() == m_tickCol){
+            return r->tick ? Qt::Checked : Qt::Unchecked;
+        }
+        return QVariant();
     default:
         return QVariant();
     }
@@ -642,13 +649,19 @@ template <typename T>
 Qt::ItemFlags       StdTableModel<T>::flags(const QModelIndex&idx) const
 {
     const Column* c = _column(idx);
-    const T*      r = _row(idx);
-    if(!(c&&r))
+    const Row*    r = _row(idx);
+    if(!c)
+        return Qt::NoItemFlags;
+        
+            // factor in "ADD" later....
+    if(!r)
         return Qt::NoItemFlags;
     
     Qt::ItemFlags       ret = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     if(c->settable() && !m_readOnly)
         ret |= Qt::ItemIsEditable;
+    if(idx.column() == m_tickCol)
+        ret |= Qt::ItemIsUserCheckable;
     return ret;
 }
 
@@ -708,7 +721,7 @@ void                StdTableModel<T>::removeRowIf(Pred p)
     int l   = -1;
     int n   = -1;
     for(n=m_rows.size()-1;n>=0;--n){
-        if(p(m_rows[n])){
+        if(p(m_rows[n].data)){
             if(l<0)
                 l   = n;
         } else if(l>=0){
@@ -741,25 +754,35 @@ bool                StdTableModel<T>::setData(const QModelIndex&idx, const QVari
         return false;
         
     const Column* c = _column(idx);
-    T*            r = _row(idx);
+    Row*          r = _row(idx);
     if(!c)
         return false;
-    if(role != Qt::EditRole)
-        return false;
-    if(r){
-        if(!c->settable())
+    switch(role){
+    case Qt::EditRole:
+        if(r){
+            if(!c->settable())
+                return false;
+            bool f = c->set(r->data, var);
+            if(f)
+                emit dataChanged(idx, idx);
+            return f;
+        } else if(c->adder()){
+            auto  res   = c->adder()->make(var);
+            if(res.good)
+                append(res.value);
+            return res.good;
+        } else
             return false;
-        bool f = c->set(*r, var);
-        if(f)
+        break;
+    case Qt::CheckStateRole:
+        if(r && idx.column() == m_tickCol){
+            r->tick = var.value<Qt::CheckState>() != Qt::Unchecked;
             emit dataChanged(idx, idx);
-        return f;
-    } else if(c->adder()){
-        auto  res   = c->adder()->make(var);
-        if(res.good)
-            append(res.value);
-        return res.good;
-    } else
-        return false;
+            return true;
+        }
+        break;
+    }
+    return false;
 }
 
 template <typename T>
@@ -767,6 +790,22 @@ void                StdTableModel<T>::setReadOnly(bool f)
 {
     m_readOnly      = f;
 }
+
+template <typename T>
+void                StdTableModel<T>::setTickColumn(const String& k)
+{
+    int n   = column(k);
+    if(n>=0)
+        setTickColumn(n);
+}
+
+template <typename T>
+void                StdTableModel<T>::setTickColumn(int n)
+{
+    if(n>=-1 && n<(int)m_columns.size())
+        m_tickCol       = n;
+}
+
  
 template <typename T>
 void                StdTableModel<T>::sort(int col, Qt::SortOrder order) 
@@ -776,8 +815,8 @@ void                StdTableModel<T>::sort(int col, Qt::SortOrder order)
         return;
     if(!c->sortable())
         return ;
-    auto less   = [c](const T& a, const T&b)->bool {
-        return c->less(a,b);
+    auto less   = [c](const Row& a, const Row&b)->bool {
+        return c->less(a.data,b.data);
     };
     if(order == Qt::AscendingOrder){
         std::sort(m_rows.begin(), m_rows.end(), less);
@@ -785,5 +824,16 @@ void                StdTableModel<T>::sort(int col, Qt::SortOrder order)
         std::sort(m_rows.rbegin(), m_rows.rend(), less);
     }
     allChanged();
+}
+
+template <typename T>
+void                StdTableModel<T>::updateTickColumn()
+{
+    if(m_tickCol >= 0){
+        QAbstractTableModel::dataChanged(
+            QAbstractTableModel::createIndex(0,m_tickCol),
+            QAbstractTableModel::createIndex((int) m_rows.size(),m_tickCol)
+        );
+    }
 }
 

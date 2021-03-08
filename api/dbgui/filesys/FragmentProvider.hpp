@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/FileSys.hpp>
-#include <dbgui/Provider.hpp>
+#include <gui/Provider.hpp>
 
 using FragmentProvider = std::shared_ptr<Provider<Fragment>>;
 

@@ -8,14 +8,14 @@
 
     // I'd prefer it otherwise, but MOC's messing up
 #include <gui/model/U64TableModel.hpp>
-#include <db/AtomSys.hpp>
-#include <dbgui/atomsys/ClassProvider.hpp>
+#include <db/Leaf.hpp>
+#include <dbgui/leaf/LeafProvider.hpp>
 
 
-class ClassTableModel : public U64TableModel<Class> {
+class LeafTableModel : public U64TableModel<Leaf> {
     Q_OBJECT
 public:
     
-    ClassTableModel(ClassProvider ctp=ClassProvider(), QObject*parent=nullptr);
-    ~ClassTableModel();
+    LeafTableModel(LeafProvider ctp=LeafProvider(), QObject*parent=nullptr);
+    ~LeafTableModel();
 };

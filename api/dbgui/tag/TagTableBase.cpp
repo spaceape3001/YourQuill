@@ -6,20 +6,17 @@
 
 #include "TagTableModel.hpp"
 #include "TagTableView.hpp"
-#include <gui/model/StdTableModelImpl.hpp>
+#include <gui/model/U64TableModelImpl.hpp>
 #include <QHeaderView>
 
 template class StdTableModel<Tag>;  // explicitly instantiate the template here
+template class U64TableModel<Tag>;  // explicitly instantiate the template here
 template class StdTableView<Tag>;  // explicitly instantiate the template here
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TagTableModel::TagTableModel(TagProvider stp, QObject* parent) : StdTableModel<Tag>(parent), m_source(stp)
+TagTableModel::TagTableModel(TagProvider stp, QObject* parent) : U64TableModel<Tag>(stp ? stp : provider::all_tags(), parent)
 {
-    customRO("ID",  [](Tag t) -> auto {
-        return (quint64) t.id;
-    });
-    
     customRO("Key", [](Tag t) -> auto {
         return cdb::key(t);
     });
@@ -35,79 +32,10 @@ TagTableModel::TagTableModel(TagProvider stp, QObject* parent) : StdTableModel<T
     }, [](Tag& t, const QString& k) -> bool {
         return cdb::set_brief(t, k.simplified());
     });
-
-    _refresh();
 }
 
 TagTableModel::~TagTableModel()
 {
-}
-
-void        TagTableModel::_refresh()
-{
-    m_rows      = m_source -> all();
-    m_tags      = makeSet(m_rows);
-}
-
-void        TagTableModel::append(const Tag& t)
-{
-    if(t == Tag())
-        return ;
-    if(m_tags.has(t))
-        return ;
-    
-    m_tags << t;
-    Base::append(t);
-}
-
-void        TagTableModel::check()
-{
-    Vector<Tag> tags    = m_source -> all();
-    if(tags.empty()){       // nothing from nothing....
-        if(m_rows.empty())
-            return ;
-        clear();
-        return ;
-    }
-    
-    Set<Tag>    ctags   = makeSet(tags);
-    Set<Tag>    ntags   = ctags - m_tags;
-    Set<Tag>    rtags   = m_tags - ctags;
-    Set<Tag>    utags   = ctags & m_tags;
-    
-        // alright, setup the vector for *NEW* things
-    tags.erase_if([&](Tag t) -> bool { 
-        return m_tags.has(t);
-    });
-    
-    removeRowIf([&](Tag t) -> bool {
-        return rtags.has(t);
-    });
-    
-    allChanged();
-    
-    m_tags  = ctags;
-    Base::append(tags);
-}
-
-
-void        TagTableModel::refresh()
-{
-    beginResetModel();
-    _refresh();
-    endResetModel();
-}
-
-
-Tag         TagTableModel::tag(int r) const
-{
-    const Tag*  t   = _row(r); 
-    return t ? *t : Tag{};
-}
-
-Tag         TagTableModel::tag(const QModelIndex&idx) const
-{
-    return tag(idx.row());
 }
 
 

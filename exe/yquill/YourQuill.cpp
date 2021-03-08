@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "YClassTable.hpp"
+#include "YLeafTable.hpp"
 #include "YTagTable.hpp"
 #include "YWeb.hpp"
 #include "YourQuill.hpp"
@@ -40,6 +41,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
     addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
+    addAction("new_leaftable", "Leafs").connect(this, &YourQuill::cmdNewLeafTable);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
     addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
     addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
@@ -51,7 +53,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
 
     makeMenu("quill", "&YourQuill", QStringList() << "new_web" << "new_explorer");
     makeMenu("view", "&View", QStringList() << "refresh");
-    makeMenu("table", "&Table", QStringList() << "new_classtable" << "new_tagtable");
+    makeMenu("table", "&Table", QStringList() << "new_classtable" << "new_leaftable" << "new_tagtable");
     makeMenu("gadget", "&Gadgets", QStringList() << "new_calculator" << "new_dategen" << "new_timegen");
     makeMenu("debug", "&Debug", QStringList() << "new_sqltool" );
 
@@ -131,6 +133,14 @@ void    YourQuill::cmdNewExplorer()
 //}
 
 #endif
+
+void    YourQuill::cmdNewLeafTable()
+{
+    YLeafTable*     ct  = new YLeafTable;
+    //ct -> setAddEnable(true);
+    addWindow(ct);
+}
+
 void    YourQuill::cmdNewSqlTool()
 {
     SqlTool     *st = new SqlTool(wksp::cache());

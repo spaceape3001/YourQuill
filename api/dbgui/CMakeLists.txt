@@ -1,5 +1,4 @@
 set(dbgui_sources
-    ./Provider.hpp
     ./Providers.cpp
     
     ./QuillApp.cpp
@@ -22,6 +21,9 @@ set(dbgui_sources
     ./filesys/FragmentProvider.hpp
     
     ./leaf/LeafProvider.hpp
+    ./leaf/LeafTableBase.cpp
+    ./leaf/LeafTableModel.hpp
+    ./leaf/LeafTableView.hpp
     
     ./quill/QuillDataEdit.cpp
     ./quill/QuillDataEdit.hpp

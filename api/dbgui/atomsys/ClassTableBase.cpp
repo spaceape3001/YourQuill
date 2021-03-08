@@ -7,9 +7,11 @@
 #include "ClassTableModel.hpp"
 #include "ClassTableView.hpp"
 #include <gui/model/StdTableModelImpl.hpp>
+#include <gui/model/U64TableModelImpl.hpp>
 #include <QHeaderView>
 
 template class StdTableModel<Class>;
+template class U64TableModel<Class>;
 template class StdTableView<Class>;
 
 #if 0
@@ -114,12 +116,8 @@ namespace {
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-ClassTableModel::ClassTableModel(ClassProvider cpp, QObject*parent) : Base(parent), m_source(cpp)
+ClassTableModel::ClassTableModel(ClassProvider cpp, QObject*parent) : U64TableModel<Class>(cpp?cpp:provider::all_classes(), parent)
 {
-    if(!m_source)
-        m_source    = provider::all_classes();
-
-    customRO("ID", [](Class c) -> auto { return (quint64) c.id; });
     customRO("Key", [](Class c) -> auto { return cdb::key(c); });
     customRO("Name", [](Class c) -> QString {
         return cdb::name(c);
@@ -127,80 +125,11 @@ ClassTableModel::ClassTableModel(ClassProvider cpp, QObject*parent) : Base(paren
     customRO("Brief", [](Class c) -> QString {
         return cdb::brief(c);
     });
-    
-    _refresh();
 }
 
 ClassTableModel::~ClassTableModel()
 {
 }
-
-void            ClassTableModel::_refresh()
-{
-    m_rows      = m_source -> all();
-    m_classes   = makeSet(m_rows);
-}
-
-void            ClassTableModel::append(const Class& c)
-{
-    if(c == Class())
-        return ;
-    if(m_classes.has(c))
-        return ;
-        
-    m_classes << c;
-    Base::append(c);
-}
-
-void            ClassTableModel::check()
-{
-    Vector<Class> classes    = m_source -> all();
-    
-    if(classes.empty()){
-        if(m_rows.empty())
-            return;
-        clear();
-        return ;
-    }
-    
-    Set<Class>  ccls   = makeSet(classes);
-    Set<Class>  ncls   = ccls - m_classes;
-    Set<Class>  rcls   = m_classes - ccls;
-    Set<Class>  ucls    = ccls & m_classes;
-
-    classes.erase_if([&](Class c) -> bool {
-        return m_classes.has(c);
-    });
-    
-    removeRowIf([&](Class c) -> bool {
-        return rcls.has(c);
-    });
-    
-    allChanged();
-    m_classes   = ccls;
-    Base::append(classes);
-}
-
-Class           ClassTableModel::getClass(int r) const
-{
-    const Class* c  = _row(r);
-    return c ? *c : Class{};
-}
-
-Class           ClassTableModel::getClass(const QModelIndex& idx) const
-{
-    return getClass(idx.row());
-}
-
-
-
-void            ClassTableModel::refresh()
-{
-    beginResetModel();
-    _refresh();
-    endResetModel();
-}
-
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

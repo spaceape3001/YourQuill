@@ -69,25 +69,45 @@ public:
 
     bool                setData(const QModelIndex&, const QVariant&, int) override;
     void                setReadOnly(bool);
+    void                setTickColumn(const String&);
+    void                setTickColumn(int);
      
     void                sort(int, Qt::SortOrder) override;
+    
+    /*! \brief Column to be th e"tick"
+        \note -1 implies no tick (default)
+    */
+    int                 tickColumn() const { return m_tickCol; }
+    
+    void                updateTickColumn();
     
     class Adder;
     class Column;
     class Delegator;
+
+    struct Row {
+        T               data;
+        bool            tick;
+    };
     
     const Vector<Column*>&  columns() const { return m_columns; }
-    const Vector<T>&        rows() const { return m_rows; }
+    const Vector<Row>&      rows() const { return m_rows; }
+
+
+    //void                hideColumn
 
 protected:
     struct ColumnWriter;
+    
+    
 
     Vector<Column*>     m_columns;
-    Vector<T>           m_rows;
+    Vector<Row>         m_rows;
     size_t              m_adders;
     bool                m_readOnly;
     bool                m_canAdd;
     bool                m_dragReorder;  // pending...
+    int                 m_tickCol;
     
     void                allChanged();
     
@@ -124,12 +144,12 @@ protected:
     const Column*       _column(int c) const;
     const Column*       _column(const QModelIndex& idx) const;
 
-    T*                  _row(int r);
-    const T*            _row(int r) const;
+    Row*                _row(int r);
+    const Row*          _row(int r) const;
 
     //! Returns the pointer into the vector for the given index (or NULL if not good)
-    T*                  _row(const QModelIndex& idx);
+    Row*                _row(const QModelIndex& idx);
     //! Returns the pointer into the vector for the given index (or NULL if not good)
-    const T*            _row(const QModelIndex& idx) const;
+    const Row*          _row(const QModelIndex& idx) const;
     
 };

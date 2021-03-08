@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/FileSys.hpp>
-#include <dbgui/Provider.hpp>
+#include <gui/Provider.hpp>
 
 using FolderProvider = std::shared_ptr<Provider<Folder>>;
 

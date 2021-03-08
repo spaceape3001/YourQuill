@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/AtomSys.hpp>
-#include <dbgui/Provider.hpp>
+#include <gui/Provider.hpp>
 
 using ClassProvider = std::shared_ptr<Provider<Class>>;
 

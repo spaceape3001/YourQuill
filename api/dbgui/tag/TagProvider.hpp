@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/Tag.hpp>
-#include <dbgui/Provider.hpp>
+#include <gui/Provider.hpp>
 
 using TagProvider   = std::shared_ptr<Provider<Tag>>;
 

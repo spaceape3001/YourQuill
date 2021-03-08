@@ -170,14 +170,16 @@ Vector<QString>     QuillDirTable::Model::dirs() const
 {
     Vector<QString> ret;
     for(auto& r : m_rows)
-        ret << r.path.qString();
+        ret << r.data.path.qString();
     return ret;
 }
 
 
 void        QuillDirTable::Model::get(Vector<QuillData::Root>&data) const
 {
-    data  = m_rows;
+    data.clear();
+    for(auto& r : m_rows)
+        data << r.data;
 }
 
 
@@ -185,7 +187,7 @@ void        QuillDirTable::Model::get(Vector<QuillData::Root>&data) const
 void        QuillDirTable::Model::set(const Vector<QuillData::Root>&data)
 {
     beginResetModel();
-    m_rows = data;
+    Base::append(data);
     endResetModel();
 }
 

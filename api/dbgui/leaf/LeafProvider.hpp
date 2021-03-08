@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/Leaf.hpp>
-#include <dbgui/Provider.hpp>
+#include <gui/Provider.hpp>
 
 using LeafProvider = std::shared_ptr<Provider<Leaf>>;
 

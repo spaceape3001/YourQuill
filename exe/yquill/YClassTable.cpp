@@ -75,7 +75,7 @@ void   YClassTable::check()
 Class  YClassTable::classAt(const QPoint&pt) const
 {
     QModelIndex idx     = m_view -> indexAt(pt);
-    return m_model -> getClass(idx);
+    return m_model -> get(idx);
 }
 
 
@@ -102,7 +102,7 @@ void   YClassTable::cmdAdd()
 void      YClassTable::doubleClicked(const QModelIndex&idx)
 {
     if(is_in({"ID", "Key"}, m_model -> columnKey(idx))){
-        Class t   = m_model -> getClass(idx);
+        Class t   = m_model -> get(idx);
         if(t)
             emit editReq(t.id);
     }

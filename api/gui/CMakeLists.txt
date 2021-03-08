@@ -1,5 +1,6 @@
 set(gui_sources
 
+    ./Provider.hpp
     ./UInt64Mapper.cpp
     ./UInt64Mapper.hpp
     
@@ -86,6 +87,7 @@ set(gui_sources
     ./main/UndoWin.hpp
 
     ./model/StdTableModel.hpp
+    ./model/U64TableModel.hpp
 
     ./undo/UndoAction.cpp
     ./undo/UndoAction.hpp
