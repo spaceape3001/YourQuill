@@ -14,6 +14,22 @@ IMG.nh {
     max-height: 1.5em;
 }
 
+TABLE.attrs {
+    outline-style:groove;
+    width:40%;
+    
+}
+caption.attrs {
+    font-variant: small-caps;
+    font-size:    x-large;
+    font-weight:  bold;
+    text-align:   center;
+}
+
+TABLE.attrs_mobile {
+    border-style:groove;
+}
+
 TABLE.nh {
     color: var(--background-color);
     background-color: var(--color);

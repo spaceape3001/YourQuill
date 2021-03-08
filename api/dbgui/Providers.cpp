@@ -5,7 +5,164 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <db/Cache.hpp>
+#include <dbgui/atomsys/AtomProvider.hpp>
+#include <dbgui/atomsys/ClassProvider.hpp>
+#include <dbgui/atomsys/FieldProvider.hpp>
+#include <dbgui/filesys/DirectoryProvider.hpp>
+#include <dbgui/filesys/DocumentProvider.hpp>
+#include <dbgui/filesys/FolderProvider.hpp>
+#include <dbgui/filesys/FragmentProvider.hpp>
+#include <dbgui/leaf/LeafProvider.hpp>
 #include <dbgui/tag/TagProvider.hpp>
+#include <dbgui/wksp/RootProvider.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace {
+    struct AllAtoms : public Provider<Atom> {
+        AllAtoms() {}
+        ~AllAtoms(){}
+        virtual Vector<Atom>    all() const override { return cdb::all_atoms(); }
+    };
+}
+
+namespace provider {
+    AtomProvider    all_atoms()
+    {
+        return std::make_shared<AllAtoms>();
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllClasses : public Provider<Class> {
+        AllClasses(){}
+        ~AllClasses(){}
+        virtual Vector<Class>   all() const override { return cdb::all_classes(); }
+        virtual bool        can_create() const override { return true; }
+        virtual Class       create(const QString&k, const Root* rt) const override
+        {
+            return cdb::make_class(k,rt);
+        }
+    };
+}
+
+namespace provider {
+    ClassProvider       all_classes()
+    {
+        return std::make_shared<AllClasses>();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllDirectories : public Provider<Directory> {
+        AllDirectories(){}
+        ~AllDirectories(){}
+        virtual Vector<Directory>   all() const override { return cdb::all_directories(); }
+    };
+}
+
+namespace provider {
+    DirectoryProvider   all_directories()
+    {
+        return std::make_shared<AllDirectories>();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllDocuments : public Provider<Document> {
+        AllDocuments(){}
+        ~AllDocuments(){}
+        virtual Vector<Document>    all() const override { return cdb::all_documents(); }
+    };
+}
+
+namespace provider {
+    DocumentProvider    all_documents()
+    {
+        return std::make_shared<AllDocuments>();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllFolders : public Provider<Folder> {
+        AllFolders(){}
+        ~AllFolders(){}
+        virtual Vector<Folder>    all() const override { return cdb::all_folders(); }
+    };
+}
+
+namespace provider {
+    FolderProvider      all_folders()
+    {
+        return std::make_shared<AllFolders>();
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllFragments : public Provider<Fragment> {
+        AllFragments(){}
+        ~AllFragments(){}
+        virtual Vector<Fragment>    all() const override { return cdb::all_fragments(); }
+    };
+}
+
+namespace provider {
+    FragmentProvider      all_fragments()
+    {
+        return std::make_shared<AllFragments>();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllLeafs : public Provider<Leaf> {
+        AllLeafs(){}
+        ~AllLeafs(){}
+        virtual Vector<Leaf>       all() const override { return cdb::all_leafs(); }
+    };
+}
+
+
+namespace provider {
+    LeafProvider      all_leafs()
+    {
+        return std::make_shared<AllLeafs>();
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllRoots : public Provider<const Root*>{
+        AllRoots(){}
+        ~AllRoots(){}
+        virtual Vector<const Root*> all() const override { return wksp::roots(); }
+    };
+}
+
+namespace provider {
+    RootProvider      all_roots()
+    {
+        return std::make_shared<AllRoots>();
+    }
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace {
     struct AllTags : public Provider<Tag> {

@@ -94,7 +94,7 @@ public:
     
 protected:
     
-    Column(const String&k) : m_key(k), m_label(k.qString()), m_id(-1), m_settable(true), m_sortable(false)
+    Column(const String&k) : m_key(k), m_label(k.qString()), m_id(-1), m_settable(false), m_sortable(false)
     {
     }
     

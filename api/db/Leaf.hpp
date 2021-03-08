@@ -68,6 +68,8 @@ namespace cdb {
     Leaf                    leaf(Document);
     Leaf                    leaf(Folder);
 
+    Leaf                    leaf_by_title(const QString&);
+
     LeafFile::Shared        leaf_doc(Fragment, bool fAllowEmpty=false);
     
     Leaf::Merge::Shared     merged(Leaf, unsigned int opts=0);

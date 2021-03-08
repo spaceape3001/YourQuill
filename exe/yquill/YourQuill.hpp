@@ -19,11 +19,11 @@ public:
     
 public slots:
     //void            cmdNewCalculator();
-    //void            cmdNewClassTable();
+    void            cmdNewClassTable();
     void            cmdNewDateGen();
     //void            cmdNewExplorer();
     ////void            cmdNewMonthView();
-    //void            cmdNewSqlTool();
+    void            cmdNewSqlTool();
     void            cmdNewTagTable();
     void            cmdNewTimeGen();
     void            cmdNewWeb();

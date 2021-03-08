@@ -19,15 +19,6 @@ public:
     ~TagTableModel();
     
     void            append(const Tag&) override;
-    //int             columnCount(const QModelIndex&) const override;
-    //QVariant        data(const QModelIndex&, int) const override;
-    //size_t          dataSize() const;
-    //QVariant        headerData(int, Qt::Orientation, int) const override;
-    //Qt::ItemFlags   flags(const QModelIndex&) const override;
-    //bool            readOnly() const;
-    //int             rowCount(const QModelIndex&) const override;
-    //bool            setData(const QModelIndex&, const QVariant&, int) override;
-    //void            setReadOnly(bool);
     Tag             tag(int) const;
     Tag             tag(const QModelIndex&) const;
     

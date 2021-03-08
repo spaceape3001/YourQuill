@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "YClassTable.hpp"
 #include "YTagTable.hpp"
 #include "YWeb.hpp"
 #include "YourQuill.hpp"
@@ -11,19 +12,19 @@
 #include <db/Workspace.hpp>
 #include <dbgui/QuillApp.hpp>
 #include <gadget/DateGen.hpp>
+#include <gadget/SqlTool.hpp>
 #include <gadget/TimeGen.hpp>
 #include <util/Logging.hpp>
 #include <iostream>
 
 #if 0
 #include "ClassEditor.hpp"
-#include "ClassTable.hpp"
+#include "YClassTable.hpp"
 #include "Explorer.hpp"
 #include "YWeb.hpp"
 
 #include "gadget/Calculator.hpp"
 //#include "gadget/MonthView.hpp"
-#include "gadget/SqlTool.hpp"
 #include "gui/UInt64Mapper.hpp"
 
 //#include <QApplication>
@@ -36,11 +37,11 @@
 YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
 {
     //addAction("new_calculator", "Calculator").connect(this, &YourQuill::cmdNewCalculator);
-    //addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
+    addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
     addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
-    //addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
+    addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
     addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
     addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
     addAction("new_web", "New Web").connect(this, &YourQuill::cmdNewWeb);
@@ -101,14 +102,14 @@ void    YourQuill::cmdNewCalculator()
     Calculator* c   = new Calculator;
     addDock(Qt::LeftDockWidgetArea, c);
 }
+#endif
 
 void    YourQuill::cmdNewClassTable()
 {
-    ClassTable*     ct  = new ClassTable;
+    YClassTable*     ct  = new YClassTable;
     ct -> setAddEnable(true);
     addWindow(ct);
 }
-#endif
 
 void    YourQuill::cmdNewDateGen()
 {
@@ -129,12 +130,12 @@ void    YourQuill::cmdNewExplorer()
     //addDock(Qt::LeftDockWidgetArea, m);
 //}
 
+#endif
 void    YourQuill::cmdNewSqlTool()
 {
     SqlTool     *st = new SqlTool(wksp::cache());
     addWindow(st);
 }
-#endif
 
 void    YourQuill::cmdNewTagTable()
 {
@@ -159,7 +160,7 @@ void    YourQuill::cmdNewWeb()
 #if 0
 void    YourQuill::ctxClassTable(const QPoint& pt)
 {
-    ClassTable* ct  = qobject_cast<ClassTable*>(sender());
+    YClassTable* ct  = qobject_cast<YClassTable*>(sender());
     if(!ct)
         return ;
     
@@ -199,9 +200,9 @@ void    YourQuill::reconnect(QWidget*w)
     connect(w, &QWidget::windowTitleChanged, this, &YourQuill::subWindowTitleChanged);
     
 #if 0    
-    ClassTable* ct  = qobject_cast<ClassTable*>(w);
+    YClassTable* ct  = qobject_cast<YClassTable*>(w);
     if(ct)
-        connect(ct, &ClassTable::contextMenu, this, &YourQuill::ctxClassTable);
+        connect(ct, &YClassTable::contextMenu, this, &YourQuill::ctxClassTable);
 #endif
 }
 

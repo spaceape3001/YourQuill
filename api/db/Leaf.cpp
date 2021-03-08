@@ -259,6 +259,17 @@ namespace cdb {
         return leaf(key(f));
     }
 
+    Leaf                    leaf_by_title(const QString&k)
+    {
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Leafs WHERE title like ? LIMIT 1");
+        auto s_af   = s.af();
+        s.bind(0, k);
+        if(s.exec() && s.next())
+            return Leaf{ s.valueU64(0) };
+        return Leaf();
+    }
+    
+
 
     LeafFile::Shared         leaf_doc(Fragment f, bool fAllowEmpty)
     {

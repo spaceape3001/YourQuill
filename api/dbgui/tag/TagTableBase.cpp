@@ -10,6 +10,7 @@
 #include <QHeaderView>
 
 template class StdTableModel<Tag>;  // explicitly instantiate the template here
+template class StdTableView<Tag>;  // explicitly instantiate the template here
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -100,9 +101,8 @@ void        TagTableModel::refresh()
 
 Tag         TagTableModel::tag(int r) const
 {
-    if((r < 0) || (r >= (int) m_rows.size()))
-        return Tag{};
-    return m_rows[r];
+    const Tag*  t   = _row(r); 
+    return t ? *t : Tag{};
 }
 
 Tag         TagTableModel::tag(const QModelIndex&idx) const
