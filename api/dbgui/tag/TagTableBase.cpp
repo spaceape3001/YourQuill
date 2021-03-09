@@ -15,7 +15,8 @@ template class StdTableView<Tag>;  // explicitly instantiate the template here
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TagTableModel::TagTableModel(TagProvider stp, QObject* parent) : U64TableModel<Tag>(stp ? stp : provider::all_tags(), parent)
+TagTableModel::TagTableModel(TagProvider stp, QObject* parent) : 
+    U64TableModel<Tag>(stp ? stp : provider::all_tags(), parent)
 {
     customRO("Key", [](Tag t) -> auto {
         return cdb::key(t);

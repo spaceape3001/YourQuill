@@ -21,6 +21,7 @@ protected:
             if(d)
                 setItemDelegateForColumn(c->id(), d);
         }
+        setSortingEnabled(true);
     }
 
 };

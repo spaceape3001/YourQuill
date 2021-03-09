@@ -18,10 +18,16 @@ public:
     virtual YourQuill*  newMain() { return new YourQuill; }
     
 public slots:
+    void            cmdNewAtomTable();
     //void            cmdNewCalculator();
     void            cmdNewClassTable();
     void            cmdNewDateGen();
+    void            cmdNewDirectoryTable();
+    void            cmdNewDocumentTable();
     //void            cmdNewExplorer();
+    void            cmdNewFieldTable();
+    void            cmdNewFolderTable();
+    void            cmdNewFragmentTable();
     void            cmdNewLeafTable();
     ////void            cmdNewMonthView();
     void            cmdNewSqlTool();

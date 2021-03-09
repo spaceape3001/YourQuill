@@ -90,6 +90,24 @@ namespace provider {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace {
+    struct AllFields : public Provider<Field> {
+        AllFields(){}
+        ~AllFields(){}
+        virtual Vector<Field>   all() const override { return cdb::all_fields(); }
+    };
+}
+
+namespace provider {
+    FieldProvider       all_fields()
+    {   
+        return std::make_shared<AllFields>();
+    }
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace {
     struct AllFolders : public Provider<Folder> {

@@ -4,7 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "YAtomTable.hpp"
 #include "YClassTable.hpp"
+#include "YDirectoryTable.hpp"
+#include "YDocumentTable.hpp"
+#include "YFieldTable.hpp"
+#include "YFolderTable.hpp"
+#include "YFragmentTable.hpp"
 #include "YLeafTable.hpp"
 #include "YTagTable.hpp"
 #include "YWeb.hpp"
@@ -37,25 +43,64 @@
 
 YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
 {
+    addAction("classes", "Classes").connect(this, &YourQuill::cmdNewClassTable);
+
+    addAction("new_atomtable", "Atom Table").connect(this, &YourQuill::cmdNewAtomTable);
     //addAction("new_calculator", "Calculator").connect(this, &YourQuill::cmdNewCalculator);
-    addAction("new_classtable", "Classes").connect(this, &YourQuill::cmdNewClassTable);
+    addAction("new_classtable", "Class Table").connect(this, &YourQuill::cmdNewClassTable);
     addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
+    addAction("new_directorytable", "Directory Table").connect(this, &YourQuill::cmdNewDirectoryTable);
+    addAction("new_documenttable", "Document Table").connect(this, &YourQuill::cmdNewDocumentTable);
+    addAction("new_fieldstable", "Field Table").connect(this, &YourQuill::cmdNewFieldTable);
+    addAction("new_foldertable", "Folder Table").connect(this, &YourQuill::cmdNewFolderTable);
+    addAction("new_fragmenttable", "Fragment Table").connect(this, &YourQuill::cmdNewFragmentTable);
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
-    addAction("new_leaftable", "Leafs").connect(this, &YourQuill::cmdNewLeafTable);
+    addAction("new_leaftable", "Leaf Table").connect(this, &YourQuill::cmdNewLeafTable);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
     addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
-    addAction("new_tagtable", "Tags").connect(this, &YourQuill::cmdNewTagTable);
+    addAction("new_tagtable", "Tag Table").connect(this, &YourQuill::cmdNewTagTable);
     addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
     addAction("new_web", "New Web").connect(this, &YourQuill::cmdNewWeb);
     
+    addAction("quit", "Quit").icon(QIcon::fromTheme("application-exit")).connect(&QApplication::closeAllWindows);
+    
     addAction("refresh", "Refresh").shortcut("F5");
+    addAction("tags", "Tags").connect(this, &YourQuill::cmdNewTagTable);
 
 
-    makeMenu("quill", "&YourQuill", QStringList() << "new_web" << "new_explorer");
-    makeMenu("view", "&View", QStringList() << "refresh");
-    makeMenu("table", "&Table", QStringList() << "new_classtable" << "new_leaftable" << "new_tagtable");
-    makeMenu("gadget", "&Gadgets", QStringList() << "new_calculator" << "new_dategen" << "new_timegen");
-    makeMenu("debug", "&Debug", QStringList() << "new_sqltool" );
+    makeMenu("quill", "&YourQuill", QStringList() 
+        << "new_web" 
+        << "new_explorer"
+        << "--"
+        << "classes"
+        << "tags"
+        << "--"
+        << "quit"
+    );
+    makeMenu("view", "&View", 
+        QStringList() << "refresh"
+    );
+    makeMenu("gadget", "&Gadgets", 
+        QStringList() 
+            << "new_calculator" 
+            << "new_dategen" 
+            << "new_timegen" 
+    );
+    makeMenu("debug", "&Debug", 
+        QStringList() 
+            << "new_sqltool" 
+            << "--"
+            << "new_atomtable" 
+            << "new_classtable" 
+            << "new_directorytable"
+            << "new_documenttable" 
+            << "new_fieldstable"
+            << "new_foldertable"
+            << "new_fragmenttable"
+            << "new_leaftable" 
+            << "new_tagtable"
+        
+    );
 
 #if 0
     QStringList     edits, dels;
@@ -97,6 +142,13 @@ YourQuill::~YourQuill()
 {
 }
 
+
+void    YourQuill::cmdNewAtomTable()
+{
+    YAtomTable* ct  = new YAtomTable;
+    addWindow(ct);
+}
+
 #if 0
 
 void    YourQuill::cmdNewCalculator()
@@ -119,12 +171,46 @@ void    YourQuill::cmdNewDateGen()
     addDock(Qt::BottomDockWidgetArea, d);
 }
 
+void    YourQuill::cmdNewDirectoryTable()
+{
+    YDirectoryTable*    ct  = new YDirectoryTable;
+    addWindow(ct);
+}
+
+void    YourQuill::cmdNewDocumentTable()
+{
+    YDocumentTable*     ct = new YDocumentTable;
+    addWindow(ct);
+}
+
 #if 0
 void    YourQuill::cmdNewExplorer()
 {
     Explorer*   e   = new Explorer;
     addWindow(e);
 }
+#endif
+
+void    YourQuill::cmdNewFieldTable()
+{
+    YFieldTable*    ft  = new YFieldTable;
+    addWindow(ft);
+}
+
+void    YourQuill::cmdNewFolderTable()
+{
+    YFolderTable*   ft  = new YFolderTable;
+    addWindow(ft);
+}
+
+void    YourQuill::cmdNewFragmentTable()
+{
+    YFragmentTable* ft  = new YFragmentTable;
+    addWindow(ft);
+}
+
+
+#if 0
 
 //void    YourQuill::cmdNewMonthView()
 //{
@@ -133,6 +219,7 @@ void    YourQuill::cmdNewExplorer()
 //}
 
 #endif
+
 
 void    YourQuill::cmdNewLeafTable()
 {
@@ -166,6 +253,7 @@ void    YourQuill::cmdNewWeb()
     addWindow(b);
     //  set - URL
 }
+
 
 #if 0
 void    YourQuill::ctxClassTable(const QPoint& pt)

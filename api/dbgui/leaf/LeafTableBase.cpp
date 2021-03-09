@@ -15,7 +15,8 @@ template class StdTableView<Leaf>;  // explicitly instantiate the template here
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-LeafTableModel::LeafTableModel(LeafProvider stp, QObject* parent) : U64TableModel<Leaf>(stp ? stp : provider::all_leafs(), parent)
+LeafTableModel::LeafTableModel(LeafProvider stp, QObject* parent) : 
+    U64TableModel<Leaf>(stp ? stp : provider::all_leafs(), parent)
 {
     customRO("Key", [](Leaf t) -> auto {
         return cdb::key(t);

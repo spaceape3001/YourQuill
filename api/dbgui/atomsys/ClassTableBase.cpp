@@ -116,13 +116,14 @@ namespace {
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-ClassTableModel::ClassTableModel(ClassProvider cpp, QObject*parent) : U64TableModel<Class>(cpp?cpp:provider::all_classes(), parent)
+ClassTableModel::ClassTableModel(ClassProvider cpp, QObject*parent) : 
+    U64TableModel<Class>(cpp?cpp:provider::all_classes(), parent)
 {
     customRO("Key", [](Class c) -> auto { return cdb::key(c); });
     customRO("Name", [](Class c) -> QString {
         return cdb::name(c);
     });
-    customRO("Brief", [](Class c) -> QString {
+    customRO("Description", [](Class c) -> QString {
         return cdb::brief(c);
     });
 }
@@ -137,10 +138,8 @@ ClassTableModel::~ClassTableModel()
 
 ClassTableView::ClassTableView(ClassTableModel*ctm, QWidget*parent) : StdTableView<Class>(ctm, parent), m_model(ctm)
 {
-    setModel(ctm);
     horizontalHeader()->setStretchLastSection(true);
     setAlternatingRowColors(true);
-    setSortingEnabled(true);
 }
 
 ClassTableView::~ClassTableView()
