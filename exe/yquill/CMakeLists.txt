@@ -1,37 +1,39 @@
 add_executable(yquill
-    #./ClassEditor.cpp
-    #./ClassEditor.hpp
     #./Explorer.cpp
     #./Explorer.hpp
-    #./LeafEditor.cpp
-    #./LeafEditor.hpp
-    #./YTagEditor.cpp
-    #./YTagEditor.hpp
-    ./YAtomTable.cpp
-    ./YAtomTable.hpp
-    ./YClassTable.cpp
-    ./YClassTable.hpp
-    ./YDirectoryTable.cpp
-    ./YDirectoryTable.hpp
-    ./YDocumentTable.cpp
-    ./YDocumentTable.hpp
-    ./YFieldTable.cpp
-    ./YFieldTable.hpp
-    ./YFolderTable.cpp
-    ./YFolderTable.hpp
-    ./YFragmentTable.cpp
-    ./YFragmentTable.hpp
-    ./YLeafTable.cpp
-    ./YLeafTable.hpp
-    ./YTagTable.cpp
-    ./YTagTable.hpp
     ./YWeb.cpp
     ./YWeb.hpp
+
+    ./atomsys/YAtomTable.cpp
+    ./atomsys/YAtomTable.hpp
+    #./atomsys/YClassEditor.cpp
+    #./atomsys/YClassEditor.hpp
+    ./atomsys/YClassTable.cpp
+    ./atomsys/YClassTable.hpp
+    ./atomsys/YFieldTable.cpp
+    ./atomsys/YFieldTable.hpp
+    ./filesys/YDirectoryTable.cpp
+    ./filesys/YDirectoryTable.hpp
+    ./filesys/YDocumentTable.cpp
+    ./filesys/YDocumentTable.hpp
+    ./filesys/YFolderTable.cpp
+    ./filesys/YFolderTable.hpp
+    ./filesys/YFragmentTable.cpp
+    ./filesys/YFragmentTable.hpp
+    #./leaf/YLeafEditor.cpp
+    #./leaf/YLeafEditor.hpp
+    ./leaf/YLeafTable.cpp
+    ./leaf/YLeafTable.hpp
+    #./tag/YTagEditor.cpp
+    #./tag/YTagEditor.hpp
+    ./tag/YTagTable.cpp
+    ./tag/YTagTable.hpp
+
     ./YourQuill.cpp
     ./YourQuill.hpp
 )
 
-target_link_libraries(yquill PUBLIC
+target_link_libraries(yquill PRIVATE
     yqdb
     yqdbgui 
     yqgadget
@@ -39,5 +41,7 @@ target_link_libraries(yquill PUBLIC
     yqmeta
     yqutil
 )
+
+target_include_directories(yquill PRIVATE .)
 
 

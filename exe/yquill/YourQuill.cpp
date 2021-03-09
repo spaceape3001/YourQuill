@@ -4,15 +4,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "YAtomTable.hpp"
-#include "YClassTable.hpp"
-#include "YDirectoryTable.hpp"
-#include "YDocumentTable.hpp"
-#include "YFieldTable.hpp"
-#include "YFolderTable.hpp"
-#include "YFragmentTable.hpp"
-#include "YLeafTable.hpp"
-#include "YTagTable.hpp"
+#include "atomsys/YAtomTable.hpp"
+#include "atomsys/YClassTable.hpp"
+#include "atomsys/YFieldTable.hpp"
+
+#include "filesys/YDirectoryTable.hpp"
+#include "filesys/YDocumentTable.hpp"
+#include "filesys/YFolderTable.hpp"
+#include "filesys/YFragmentTable.hpp"
+
+#include "leaf/YLeafTable.hpp"
+#include "tag/YTagTable.hpp"
+
 #include "YWeb.hpp"
 #include "YourQuill.hpp"
 
