@@ -6,14 +6,6 @@
 
 #include "yCommon.hpp"
 #include "yUpdater.hpp"
-//#include "yImporter.hpp"
-
-//#include "db/Cache.hpp"
-//#include "db/GraphBuilder.hpp"
-//#include "util/Logging.hpp"
-//#include "util/SqlQuery.hpp"
-//#include "util/Guarded.hpp"
-//#include "util/Utilities.hpp"
 
 #include <db/AtomSys.hpp>
 #include <db/Graph.hpp>
@@ -26,6 +18,22 @@
 
 #include <QTextStream>
 #include <QThreadPool>
+
+/*
+    Quick notes: want auto edges to commence .... that's the WHOLE point of this..
+    
+    Roster ... auto back (typcially role name, or simply "name")
+    
+    If a leaf has an atom attribute ... if it's a non-edge, will create a (default) edge and instantiate the atom
+    
+    Allow edges to be defined in both ways
+    
+    Birth/Death become inherent events.... auto-sub will allow too.
+
+    Auto-sub-atom into the explorer.
+
+    Need to auto-sub-atom things too.
+*/
 
 namespace {
     using CPair = std::pair<Class,Class>;

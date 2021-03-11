@@ -24,8 +24,6 @@
 #include <QSqlRecord>
 
 
-
-
 namespace {
     using namespace html;
     

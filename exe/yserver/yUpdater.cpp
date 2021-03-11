@@ -17,21 +17,6 @@
 #include <util/Guarded.hpp>
 #include <util/Utilities.hpp>
 
-//#include "yImporter.hpp"
-//#include "yScanner.hpp"
-//#include "yUpdater.hpp"
-
-//#include "db/Cache.hpp"
-//#include "util/FileUtils.hpp"
-//#include "util/Logging.hpp"
-//#include "db/ShareDir.hpp"
-//#include "util/SqlQuery.hpp"
-//#include "util/Compare.hpp"
-//#include "util/Guarded.hpp"
-//#include "util/Map.hpp"
-//#include "util/Utilities.hpp"
-//#include "util/Vector.hpp"
-
 
 using namespace cdb;
 
@@ -69,16 +54,6 @@ uField&             uget(Field f)
         p       = new uField(f);
     return *p;
 }
-
-uLeaf&              uget(Leaf l)
-{
-    static Vector<uLeaf*>       data(8192, nullptr);
-    data.resize_if_under(l.id+1, 1024, nullptr);
-    uLeaf*& p = data[l.id];
-    if(!p)
-        p   = new uLeaf(l);
-    return *p;
-}
     
     
 
@@ -100,7 +75,7 @@ namespace {
 
     void    update_background()
     {
-        TypedBytes  n   = TypedBytes(DataRole::Image, {".background.jpg", ".backgorund.png", ".background.svg"});
+        TypedBytes  n   = TypedBytes(DataRole::Image, {".background.jpg", ".backgorund.png", ".background.svg", ".background.gif"});
         gBackground = n;
         if(gHasBackground != !n.content.isEmpty()){
             gHasBackground  = !n.content.isEmpty();

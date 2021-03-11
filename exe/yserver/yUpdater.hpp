@@ -24,8 +24,8 @@ struct uAtom {
 
 
 struct uClass {
-    Document        doc;
     Class           cls;
+    Document        doc;
     Set<Class>      use, src, tgt, rev;
     Map<Class,int>  base, derives, sources, targets, reverses;
     Set<Field>      fields;
@@ -42,18 +42,10 @@ struct uField {
     uField(Field f) : field(f) {}
 };
 
-struct uLeaf {
-    Document        doc;
-    Leaf            leaf;
-    
-    uLeaf(Leaf l) : leaf(l) {}
-};
-
 
 uAtom&          uget(Atom);
 uClass&         uget(Class);
 uField&         uget(Field);
-uLeaf&          uget(Leaf);
 
 void            init_leaf();
 void            init_class();
