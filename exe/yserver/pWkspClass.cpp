@@ -33,7 +33,7 @@ namespace {
         if(x_can_edit)
             test(decode_root(), true);
             
-        ClassFile::Shared   whole;
+        ClassData::Shared   whole;
         if(x_root)
             whole       = cdb::read(x_class, x_root);
         else
@@ -68,7 +68,7 @@ namespace {
             h.key("Brief")      << whole -> brief;
             h.key("Use")        << config(get_class_vector(whole->use));
             if(!x_root)
-                h.key("Derives") << config(cdb::dependents(x_class, Linkage::Direct));
+                h.key("Derives") << config(cdb::def_derived(x_class));
             h.key("Sources")    << config(get_class_vector(whole->sources));
             h.key("Targets")    << config(get_class_vector(whole->targets));
             h.key("Reverse")    << config(get_class_vector(whole->reverse));
@@ -219,9 +219,8 @@ namespace {
             h << ControlRoot();
             
         if(x_can_edit && x_root){
-            ClassFile::Shared    us, whole;
-            whole       = cdb::merged(x_class);
-            us          = cdb::read(x_class, x_root);
+            ClassData::Shared   whole = cdb::merged(x_class);
+            ClassFile::Shared   us    = cdb::read(x_class, x_root);
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
@@ -290,9 +289,8 @@ namespace {
             h << ControlRoot();
             
         if(x_can_edit && x_root){
-            ClassFile::Shared    us, whole;
-            whole       = cdb::merged(x_class);
-            us          = cdb::read(x_class, x_root);
+            ClassData::Shared   whole = cdb::merged(x_class);
+            ClassFile::Shared   us    = cdb::read(x_class, x_root);
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
@@ -362,9 +360,8 @@ namespace {
         if(x_can_edit)
             h << ControlRoot();
         if(x_can_edit && x_root){
-            ClassFile::Shared    us, whole;
-            whole       = cdb::merged(x_class);
-            us          = cdb::read(x_class, x_root);
+            ClassData::Shared   whole = cdb::merged(x_class);
+            ClassFile::Shared   us    = cdb::read(x_class, x_root);
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
@@ -430,9 +427,8 @@ namespace {
         if(x_can_edit)
             h << ControlRoot();
         if(x_can_edit && x_root){
-            ClassFile::Shared    us, whole;
-            whole       = cdb::merged(x_class);
-            us          = cdb::read(x_class, x_root);
+            ClassData::Shared   whole = cdb::merged(x_class);
+            ClassFile::Shared   us    = cdb::read(x_class, x_root);
             
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);

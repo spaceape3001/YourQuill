@@ -11,7 +11,7 @@
 #include "FileSys.hpp"
 #include "Graph.hpp"
 #include "Image.hpp"
-#include <db/enum/Linkage.hpp>
+
 
 
 /*! \brief Atom in the cache
@@ -95,6 +95,8 @@ namespace cdb {
     */
     QString                 abbreviation(Atom a);
 
+    QStringSet              aliases(Field);
+
     /*! \brief Returns all atoms in the cache database
         \param[in] sorted   Yes/no for sorting by key. (default is no)
         \return Vector of the found atoms
@@ -148,13 +150,6 @@ namespace cdb {
     */
     size_t                  all_atoms_count(Tag tag);
 
-    /*! \brief All DIRECT class dependencies
-    
-        This returns all direct class dependencies as a form of pairs (first depends on the second/base class).
-        \return Vector of pairs
-    */
-    Vector<ClassPair>       all_class_dependencies();
-
     /*! \brief All classes in the cache database
     
         \param[in]  sorted  Yes/No to sort by key (default is no)
@@ -188,12 +183,14 @@ namespace cdb {
     ClassFile::Shared       class_doc(Fragment, bool fAllowEmpty=false);
     
     Vector<Class>           classes(Atom, Sorted sorted=Sorted());
-    Vector<Class>           classes(Field, Linkage l=Linkage::Any);
+    Vector<Class>           classes(Field);
     Vector<Class>           classes(const StringSet&,Sorted sorted=Sorted());
     Vector<Class>           classes(const QStringSet&,Sorted sorted=Sorted());
     size_t                  classes_count(Atom);
     
+    Folder                  config_folder(Class);
     
+    QStringSet              data_types(Field);
     
     /*! \brief Creates an atom in the CACHE database
     
@@ -226,11 +223,16 @@ namespace cdb {
     //Field                   db_field(const QString&, bool *wasCreated=nullptr);
     //Field                   db_field(Document, bool *wasCreated=nullptr);
     
+    Vector<Class>           def_derived(Class);
+    Vector<Field>           def_fields(Class);
+    Vector<Class>           def_reverse(Class);
+    Vector<Class>           def_source(Class);
+    Vector<Class>           def_target(Class);
+    Vector<Class>           def_use(Class);
+    
     Graph                   dep_graph(Class);
 
-    Vector<Class>           dependents(Class, Linkage=Linkage::Any, Sorted sorted=Sorted());
-    Vector<Class>           dependents(Class, Sorted sorted);
-    Vector<Class>           dependents(Class, Sorted::Value sorted);
+    Vector<Class>           dependents(Class, Sorted sorted=Sorted{});
     
     Document                document(Atom);
     Document                document(Class);
@@ -248,8 +250,8 @@ namespace cdb {
 
     Field                   field(uint64_t);
     Field                   field(Class, const QString&);
-    Vector<Field>           fields(Class, Linkage l=Linkage::Any, Sorted sorted=Sorted());
-    size_t                  fields_count(Class, Linkage l=Linkage::Any);
+    Vector<Field>           fields(Class, Sorted sorted=Sorted());
+    size_t                  fields_count(Class);
 
     Image                   icon(Atom);
     Image                   icon(Class);
@@ -274,7 +276,7 @@ namespace cdb {
     
     //Leaf                    leaf(Atom
 
-    ClassFile::Shared       merged(Class, unsigned int opts=0);
+    ClassData::Shared       merged(Class, unsigned int opts=0);
     Class                   make_class(const QString&, const Root* rt=nullptr);
 
     QString                 name(Class);
@@ -295,6 +297,10 @@ namespace cdb {
     
     QString                 plural(Class);
     QString                 plural(Field);
+    
+    QList<QVariant>         qvar_list(const Set<Atom>&);
+    QList<QVariant>         qvar_list(const Set<Class>&);
+    QList<QVariant>         qvar_list(const Set<Field>&);
 
 
     //! \brief Returns the FIRST class fragment that qualifies
@@ -305,24 +311,22 @@ namespace cdb {
     Vector<Class::FragDoc>  reads(Class);
     Vector<Class::FragDoc>  reads(Class, class Root*);
 
-    Vector<Class>           reverses(Class, Linkage l=Linkage::Any,Sorted sorted=Sorted());
-    Vector<Class>           reverses(Class, Sorted sorted);
-    Vector<Class>           reverses(Class, Sorted::Value sorted);
+    Vector<Class>           reverses(Class, Sorted sorted=Sorted{});
     
 
     
-    Vector<Class>           sources(Class, Linkage l=Linkage::Any,Sorted sorted=Sorted());
-    Vector<Class>           sources(Class, Sorted sorted);
-    Vector<Class>           sources(Class, Sorted::Value sorted);
-    size_t                  sources_count(Class, Linkage l=Linkage::Any);
+    Vector<Class>           sources(Class, Sorted sorted=Sorted{});
+    size_t                  sources_count(Class);
     
-    Vector<Class>           targets(Class, Linkage l=Linkage::Any,Sorted sorted=Sorted());
-    Vector<Class>           targets(Class, Sorted sorted);
-    Vector<Class>           targets(Class, Sorted::Value sorted);
-    size_t                  targets_count(Class, Linkage l=Linkage::Any);
+    Vector<Class>           targets(Class, Sorted sorted=Sorted{});
+    size_t                  targets_count(Class);
     
     Vector<Tag>             tags(Atom,Sorted sorted=Sorted());
+    Vector<Tag>             tags(Class,Sorted sorted=Sorted());
+    Vector<Tag>             tags(Field,Sorted sorted=Sorted());
     size_t                  tags_count(Atom);
+    size_t                  tags_count(Class);
+    size_t                  tags_count(Field);
 
     bool                    tagged(Atom, Tag);
     bool                    tagged(Atom, std::initializer_list<Tag>);
@@ -330,10 +334,8 @@ namespace cdb {
 
     QString                 title(Atom);
 
-    Vector<Class>           uses(Class, Linkage l=Linkage::Any,Sorted sorted=Sorted());
-    Vector<Class>           uses(Class, Sorted sorted);
-    Vector<Class>           uses(Class, Sorted::Value sorted);
-    size_t                  uses_count(Class, Linkage l=Linkage::Any);
+    Vector<Class>           uses(Class, Sorted sorted=Sorted{});
+    size_t                  uses_count(Class);
 
 
     //!  \brief   Returns a writable document

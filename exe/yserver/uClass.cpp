@@ -10,14 +10,32 @@
 #include <db/AtomSys.hpp>
 #include <db/Graph.hpp>
 #include <db/GraphBuilder.hpp>
+#include <db/Tag.hpp>
 #include <db/Workspace.hpp>
+
 #include <srv/Importer.hpp>
 #include <util/Guarded.hpp>
 #include <util/Logging.hpp>
 #include <util/SqlQuery.hpp>
+#include <util/SqlUtils.hpp>
+#include <util/Utilities.hpp>
 
 #include <QTextStream>
 #include <QThreadPool>
+
+
+UClass::UClass(Class c) : key(cdb::key(c)),  id(c.id), // cls(c), doc{c.id}, 
+    folder(cdb::config_folder(c))
+{
+    ////  Add ourselves to ourselves ... 
+        //use.all += c;
+        //der.all += c;
+}
+
+
+UField::UField(Field f) : key(cdb::key(f)), id(f.id), implied(false)
+{
+}
 
 /*
     Quick notes: want auto edges to commence .... that's the WHOLE point of this..
@@ -39,98 +57,623 @@ namespace {
     using CPair = std::pair<Class,Class>;
     using FPair = std::pair<Class,Field>;
 
-    Guarded<Graph>          gClassDep;
+        //  Class depenedency generator
+    struct ClassDependencies {
+        Vector<Class>               all;
+        Vector<CPair>               pairs;
+        Map<Class,Set<Class>>       uses, deriveds;
+        
+        ClassDependencies()
+        {
+            all = cdb::all_classes();
+            for(Class c : all)
+                for(Class b : uget(c).use.def)
+            {
+                pairs.push_back({ c, b });
+                uses[c] << b;
+                deriveds[b] << c;
+            }
+        }
+        
+        void        eval(Class c, Set<Class>& classes, Set<cdb::ClassPair>& edges, unsigned int up, unsigned int down) 
+        {
+            if(up){
+                for(auto u : uses[c]){
+                    bool    f   = classes.add(u);
+                    bool    g   = edges.add({c,u});
+                    if(g&&f)
+                        eval(u,classes,edges,up-1, (down>1)?(down-2):0 );
+                }
+            }
+            
+            if(down){
+                for(auto d : deriveds[c]){
+                    bool    f   = classes.add(d);
+                    bool    g   = edges.add({d,c});
+                    if(g&&f)
+                        eval(d,classes,edges,up?(up-1):0,down-1);
+                }
+            }
+        }
+        
+        void        get(Class c, Vector<Class>& classes, Vector<cdb::ClassPair>& edges, unsigned int up, unsigned int down) 
+        {
+            Set<Class>          retClass;
+            Set<cdb::ClassPair>   retEdge;
+            retClass << c;
+            eval(c, retClass, retEdge, up, down);
+            classes     = makeVector(retClass);
+            edges       = makeVector(retEdge);
+        }
+        
+        using Ptr   = std::shared_ptr<ClassDependencies>;
+        
+    };
+
+
+    Guarded<Graph>                      gClassDepGraph;
+    Guarded<ClassDependencies::Ptr>     gClassDepInfo;
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  READING of the classes from the drive
+        
+   
 
+    struct UChanged {
+        bool    use, rev, src, tgt, tags, fields;
+    };
+    
+    
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  CLASS UPDATERS
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    
+    bool        update_source(UClass&u)
+    {
+        ClassSet   src;
+        for(const String& s : u.data->sources)
+            src << cdb::db_class(s.qString());
+        ClassSet    add        = src - u.src.def;
+        ClassSet    rem        = u.src.def - src;
+        if(!rem.empty()){
+            static thread_local SqlQuery    d(wksp::cache(), "DELETE FROM CSourcesDef WHERE class=? AND source=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(cdb::qvar_list(rem));
+            d.batch();
+        }
+        if(!add.empty()){
+            static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO CSourcesDef (class,source) VALUES (?,?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(cdb::qvar_list(add));
+            i.batch();
+        }
+        std::swap(u.src.def, src);
+        return u.src.def != src;
+    }
+    
+
+    bool    update_reverse(UClass&u)
+    {
+        ClassSet    rev;
+        for(const String& s : u.data->reverse)
+            rev << cdb::db_class(s.qString());
+        ClassSet    add        = rev - u.rev.def;
+        ClassSet    rem        = u.rev.def - rev;
+        if(!rem.empty()){
+            static thread_local SqlQuery    d(wksp::cache(), "DELETE FROM CReversesDef WHERE class=? AND reverse=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(cdb::qvar_list(rem));
+            d.batch();
+        }
+        if(!add.empty()){
+            static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO CReversesDef (class,reverse) VALUES (?,?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(cdb::qvar_list(add));
+            i.batch();
+        }
+        std::swap(rev, u.rev.def);
+        return rev != u.rev.def;
+    }
+    
+    bool    update_tags(UClass&u)
+    {
+        TagSet      tags;
+        for(const String& s : u.data -> tags)
+            tags << cdb::db_tag(s.qString());
+        TagSet      add    = tags - u.tags;
+        TagSet      rem    = u.tags - tags;
+        if(!rem.empty()){
+            static thread_local SqlQuery    d(wksp::cache(), "DELETE FROM CTags WHERE class=? AND tag=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(cdb::qvar_list(rem));
+            d.batch();
+        }
+        if(!add.empty()){
+            static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO CTags (class, tag) VALUES (?,?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(cdb::qvar_list(add));
+            i.batch();
+        }
+        std::swap(tags, u.tags);
+        return tags != u.tags;
+    }
+    
+    bool    update_target(UClass& u)
+    {
+        ClassSet   tgt;
+        for(const String& s : u.data->targets)
+            tgt << cdb::db_class(s.qString());
+        ClassSet    add        = tgt - u.tgt.def;
+        ClassSet    rem        = u.tgt.def - tgt;
+        if(!rem.empty()){
+            static thread_local SqlQuery    d(wksp::cache(), "DELETE FROM CTargetsDef WHERE class=? AND target=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(cdb::qvar_list(rem));
+            d.batch();
+        }
+        if(!add.empty()){
+            static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO CTargetsDef (class,target) VALUES (?,?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(cdb::qvar_list(add));
+            i.batch();
+        }
+        std::swap(tgt, u.tgt.def);
+        return u.tgt.def != tgt;
+    }
+
+    bool        update_use(UClass&c)
+    {
+        ClassSet   use;
+        for(const String& s : c.data->use)
+            use << cdb::db_class(s.qString());
+            
+        ClassSet    add    = use - c.use.def;
+        ClassSet    rem    = c.use.def - use;
+        if(!rem.empty()){
+            static thread_local SqlQuery    d(wksp::cache(), "DELETE FROM CDependsDef WHERE class=? AND base=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) c.id);
+            d.addBindValue(cdb::qvar_list(rem));
+            d.batch();
+        }
+        if(!add.empty()){
+            static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO CDependsDef (class,base) VALUES (?,?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) c.id);
+            i.addBindValue(cdb::qvar_list(add));
+            i.batch();
+        }
+        std::swap(c.use.def, use);
+        return  use != c.use.def;
+    }
+        
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  FIELD UPDATERS
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    bool    update_aliases(UField& u, const ClassData::Field& d)
+    {
+        StringSet   add        = d.aliases - u.aliases;
+        StringSet   rem        = u.aliases - d.aliases;
+        
+        if(!rem.empty()){
+            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM FAlias WHERE field=? AND alias=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(qvar_list(rem));
+            d.batch();
+        }
+        
+        if(!add.empty()){
+            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO FAlias (field, alias) VALUES (?, ?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(qvar_list(add));
+            i.batch();
+        }
+        
+        bool    changed = u.aliases != d.aliases;
+        u.aliases       = d.aliases;
+        return changed;
+    }
+    
+    bool    update_data_types(UField& u, const ClassData::Field& d)
+    {
+        StringSet   add     = d.types - u.types;
+        StringSet   rem     = u.types - d.types;
+        
+        if(!rem.empty()){
+            static thread_local SqlQuery    d(wksp::cache(), "DELETE FROM FDataTypes WHERE field=? AND type=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(qvar_list(rem));
+            d.batch();
+        }
+        
+        if(!add.empty()){
+            static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO FDataTypes (field, type) VALUES (?, ?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(qvar_list(add));
+            i.batch();
+        }
+        
+        bool    ret = u.types != d.types;
+        u.types = d.types;
+        return ret;
+    }
+
+
+    bool    update_tags(UField& u, const ClassData::Field& d)
+    {
+        TagSet  tags;
+        for(const String& s : d.tags)
+            tags << cdb::db_tag(s.qString());
+        
+        TagSet add    = tags - u.tags;
+        TagSet rem    = u.tags - tags;
+        
+        if(!rem.empty()){
+            static thread_local SqlQuery    d(wksp::cache(), "DELETE FROM FTags WHERE field=? AND tag=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(cdb::qvar_list(rem));
+            d.batch();
+        }
+        
+        if(add.empty()){
+            static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO FTags (field, tag) VALUES (?, ?)");
+            auto i_af = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(cdb::qvar_list(add));
+            i.batch();
+        }
+        std::swap(tags, u.tags);
+        return tags != u.tags;
+    }
+    
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
         //! Updates class data that does NOT refer to another class
-    void    on_interior_read(uClass& c)
+    UChanged    on_read(UClass& u)
     {
-        ClassFile ::Shared    whole = cdb::merged(c.cls);
+        UChanged    ret{};
+        if(cdb::fragments_count(u.doc) == 0)
+            return ret;
         
-        if(cdb::fragments_count(c.doc) > 0){
-            static thread_local SqlQuery    u(wksp::cache(), "UPDATE Classes SET name=?,plural=?,brief=?,removed=0 WHERE id=?");
-            auto u_af   = u.af();
-            u.bind(0, whole->name);
-            u.bind(1, whole->plural);
-            u.bind(2, whole->brief);
-            u.bind(3, c.cls.id);
-            u.exec();
-        }
+        u.data          = cdb::merged(u.cls);
+        u.icon          = icon_for(cdb::classes_folder(), u.key);
+        
+        static thread_local SqlQuery    u1(wksp::cache(), "UPDATE Classes SET name=?,plural=?,brief=?,icon=?,removed=0 WHERE id=?");
+        auto u1_af   = u1.af();
+        u1.bind(0, u.data->name);
+        u1.bind(1, u.data->plural);
+        u1.bind(2, u.data->brief);
+        u1.bind(3, u.icon.id);
+        u1.bind(4, u.id);
+        u1.exec();
 
-        c.fields.clear();
-        for(auto& j : whole->fields){
-            Field   f   = cdb::db_field(c.cls, j.first.qString());
-            c.fields << f;
+        ret.use     = update_use(u);
+        ret.src     = update_source(u);
+        ret.tgt     = update_target(u);
+        ret.rev     = update_reverse(u);
+        ret.tags    = update_tags(u);
+        
+        FieldSet    fields;
+        for(auto& j : u.data->fields){
+            UField& f   = uget(cdb::db_field(u.cls, j.first.qString()));
+            f.cls       = u.cls;
+            f.icon      = icon_for(u.folder, j.first.qString());
+            f.implied   = false;
+            
+            String      name    = j.second.name.empty() ? j.first : j.second.name;
+            String      plural  = j.second.plural.empty() ? (name + "s") : j.second.plural;
+            String      pkey    = j.second.pkey.empty() ? (j.first + "s") : j.second.pkey;   
+            f.db        = QString("Attr_%1_%2").arg(u.key).arg(f.key);
+            f.dbv       = QString("Values_%1_%2").arg(u.key).arg(f.key);
+            
+            if(!db_table_exists( f.db, wksp::cache())){
+                SqlQuery(wksp::cache(), QString(
+                    "CREATE TABLE %1 ( "
+                        "leaf INTEGER, "
+                        "attr VARCHAR(255) COLLATE NOCASE, "
+                        "value VARCHAR(255)"
+                    ")").arg(f.db)).exec();
+            }
+
+            if(!db_table_exists( f.dbv, wksp::cache())){
+                SqlQuery(wksp::cache(), QString(
+                    "CREATE TABLE %1 ( "
+                        "value VARCHAR(255) COLLATE NOCASE UNIQUE, "
+                        "brief VARCHAR(255)"
+                    ")").arg(f.dbv)).exec();
+            }
+            
+            static thread_local SqlQuery    u2(wksp::cache(), 
+                "UPDATE Fields SET name=?,pkey=?,plural=?,brief=?,multi=?,restrict=?,category=?,dbt=?,dbv=?,max=?,removed=0 WHERE id=?"
+            );
+            auto u2_af  = u2.af();
+            
+            u2.bind(0, name.qString());
+            u2.bind(1, pkey.qString());
+            u2.bind(2, plural.qString());
+            u2.bind(3, j.second.brief.qString());
+            u2.bind(4, j.second.multiplicity.key().qString());
+            u2.bind(5, j.second.restriction.key().qString());
+            u2.bind(6, j.second.category.qString());
+            u2.bind(7, f.db);
+            u2.bind(8, f.dbv);
+            u2.bind(9, (quint64) j.second.max_count);
+            u2.bind(10, f.id);
+            u2.exec();
+            
+            update_tags(f, j.second);
+            update_data_types(f, j.second);
+            update_aliases(f, j.second);
+            
+            
+            f.atoms.def.clear();
+            for(auto & s : j.second.atoms)
+                f.atoms.def << cdb::db_class(s.qString());
+            fields << f.field;
         }
+        
+        FieldSet    fadd    = fields - u.fields.def;
+        FieldSet    frem    = u.fields.def - fields;
+        ret.fields    = u.fields.def != fields;
+        std::swap(fields, u.fields.def);
+        if(!frem.empty()){
+            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CFieldsDef WHERE class=? AND field=?");
+            auto d_af = d.af();
+            d.addBindValue((quint64) u.id);
+            d.addBindValue(cdb::qvar_list(frem));
+            d.batch();
+        }
+        if(!fadd.empty()){
+            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CFieldsDef (class,field) VALUES (?,?)");
+            auto i_af   = i.af();
+            i.addBindValue((quint64) u.id);
+            i.addBindValue(cdb::qvar_list(fadd));
+            i.batch();
+        }
+        
+        return ret;
     }
 
-
-        //! Updates class data that does refer to another class
-    void    on_exterior_read(uClass& c)
+    
+    bool    analyze_fields()
     {
-        //  This routine updates whatever references another class
-        ClassFile::Shared        whole = cdb::merged(c.cls);
-        c.use.clear();
-        c.src.clear();
-        c.tgt.clear();
-        
-        for(auto j : whole->use)
-            c.use << cdb::db_class(j.qString());
-        for(auto j : whole->sources)
-            c.src << cdb::db_class(j.qString());
-        for(auto j : whole->targets)
-            c.tgt << cdb::db_class(j.qString());
-        for(auto j : whole->reverse)
-            c.rev << cdb::db_class(j.qString());
+        bool    changed = false;
+        for(Class c : cdb::all_classes()){
+            auto&       u     = uget(c);
+            FieldSet    tmp = u.fields.def;
+            for(Class b : u.use.all)
+                tmp += uget(b).fields.def;
+            FieldSet    add = tmp - u.fields.all;
+            FieldSet    rem = u.fields.all - tmp;
+            std::swap(tmp, u.fields.all);
+            
+            if(!rem.empty()){
+                changed = true;
+                
+                static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CFields WHERE class=? AND field=?");
+                auto d_af   = d.af();
+                d.addBindValue((quint64) c.id);
+                d.addBindValue(cdb::qvar_list(rem));
+                d.batch();
+            }
+
+            if(!add.empty()){
+                changed = true;
+                
+                static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CFields (class, field) VALUES (?, ?)");
+                auto i_af   = i.af();
+                i.addBindValue((quint64) c.id);
+                i.addBindValue(cdb::qvar_list(add));
+                i.batch();
+            } 
+        }
+        return changed;
     }
     
-        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        //  DATABASES
-
-    //void    db_leaf_table(uClass& c)
-    //{
-        //QString     stmt;
-        //{
-            //QTextStream txt(&stmt);
-            //txt << "CREATE TABLE " << c.db << " ( id PRIMARY KEY";
-            
-            
-            //txt << ")";
-            //txt.flush();
-        //}
-        //SqlQuery    ct(wksp::cache(), stmt);
-        //ct.exec();
-    //}
-
-    void    create_db(uClass& c)
+    void    analyze_reverses()
     {
-        for(Field ff : c.fields){
-            uField& f   = uget(ff);
+        for(Class c : cdb::all_classes()){
+            auto&         u = uget(c);
             
-            f.db        = QString("%1_%2").arg(cdb::key(c.cls)).arg(cdb::key(ff));
-            
-            SqlQuery(wksp::cache(), QString(
-                "CREATE TABLE %1 ( "
-                    "leaf INTEGER, "
-                    "attr VARCHAR(255) COLLATE NOCASE, "
-                    "value VARCHAR(255), "
-                    "UNIQUE(leaf,attr)"
-                ")").arg(f.db)).exec();
-        
-        }
+            u.reverses      = u.rev.def;
     
-        //db_leaf_table(c);
+            if(u.reverses.empty()){
+                for(Class b : u.use.def)
+                    u.reverses  += uget(b).rev.def;
+            }
+            
+            ClassSet tmp    = u.reverses;
+            for(Class t : u.reverses)
+                tmp        += uget(t).der.all;
+
+            ClassSet    add = tmp - u.rev.all;
+            ClassSet    rem = u.rev.all - tmp;
+            std::swap(tmp, u.rev.all);
+            
+            if(!rem.empty()){
+                static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CReverses WHERE class=? AND reverse=?");
+                auto d_af   = d.af();
+                d.addBindValue((quint64) c.id);
+                d.addBindValue(cdb::qvar_list(rem));
+                d.batch();
+            }
+            
+            
+            if(!add.empty()){
+                static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CReverses (class, reverse) VALUES (?, ?)");
+                auto i_af   = i.af();
+                i.addBindValue((quint64) c.id);
+                i.addBindValue(cdb::qvar_list(add));
+                i.batch();
+            } 
+        }
     }
 
+    void    analyze_sources()
+    {
+        for(Class c : cdb::all_classes()){
+            auto&         u = uget(c);
+            
+            u.sources       = u.src.def;
+    
+            if(u.sources.empty()){
+                for(Class b : u.use.def)
+                    u.sources += uget(b).src.def;
+            }
+            
+            ClassSet tmp    = u.sources;
+            for(Class t : u.sources)
+                tmp        += uget(t).der.all;
+
+            ClassSet    add = tmp - u.src.all;
+            ClassSet    rem = u.src.all - tmp;
+            std::swap(tmp, u.src.all);
+            
+            if(!rem.empty()){
+                static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CSources WHERE class=? AND source=?");
+                auto d_af   = d.af();
+                d.addBindValue((quint64) c.id);
+                d.addBindValue(cdb::qvar_list(rem));
+                d.batch();
+            }
+            
+            
+            if(!add.empty()){
+                static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CSources (class, source) VALUES (?, ?)");
+                auto i_af   = i.af();
+                i.addBindValue((quint64) c.id);
+                i.addBindValue(cdb::qvar_list(add));
+                i.batch();
+            } 
+        }
+    }
+    
+    void    analyze_targets()
+    {
+        for(Class c : cdb::all_classes()){
+            auto&         u = uget(c);
+            
+            u.targets       = u.tgt.def;
+    
+            if(u.targets.empty()){
+                for(Class b : u.use.def)
+                    u.targets  += uget(b).tgt.def;
+            }
+            
+            ClassSet tmp    = u.targets;
+            for(Class t : u.targets)
+                tmp        += uget(t).der.all;
+
+            ClassSet    add = tmp - u.tgt.all;
+            ClassSet    rem = u.tgt.all - tmp;
+            std::swap(tmp, u.tgt.all);
+            
+            if(!rem.empty()){
+                static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CTargets WHERE class=? AND target=?");
+                auto d_af   = d.af();
+                d.addBindValue((quint64) c.id);
+                d.addBindValue(cdb::qvar_list(rem));
+                d.batch();
+            }
+            
+            
+            if(!add.empty()){
+                static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CTargets (class, target) VALUES (?, ?)");
+                auto i_af   = i.af();
+                i.addBindValue((quint64) c.id);
+                i.addBindValue(cdb::qvar_list(add));
+                i.batch();
+            } 
+        }
+    }
+
+    void    analyze_dependencies(Set<CPair>& deps, Class c1, const Set<Class>& use)
+    {
+        for(Class c2 : use){
+            if(c1 == c2)                // catch circular dependencies
+                continue;
+            if(deps.add(CPair(c1,c2)))
+                analyze_dependencies(deps, c1, uget(c2).use.def);
+        }
+    }
+
+
+        //! \return TRUE if the any USE has changed....
+    bool    analyze_use()   
+    {
+        static Set<CPair>       last;
+        Set<CPair>              cur;
+
+        for(Class c : cdb::all_classes())
+            analyze_dependencies(cur, c, uget(c).use.def);
+
+        Set<CPair>          add = cur - last;
+        Set<CPair>          rem = last - cur;
+        
+        bool        changed     = false;
+        
+        if(!rem.empty()){
+            changed         = true;
+            QVariantList    id, base;
+            
+            for(auto i : rem){
+                id << (quint64) i.first.id;
+                base << (quint64) i.second.id;
+                uget(i.first).use.all -= i.second;
+                uget(i.second).der.all -= i.first;
+            }
+        
+            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CDepends WHERE class=? AND base=?");
+            auto d_af = d.af();
+            d.addBindValue(id);
+            d.addBindValue(base);
+            d.batch();
+        }
+        
+        if(!add.empty()){
+            changed         = true;
+            QVariantList    id, base;
+            for(auto i : add){
+                id   << (quint64) i.first.id;
+                base << (quint64) i.second.id;
+                uget(i.first).use.all += i.second;
+                uget(i.second).use.all += i.first;
+            }
+
+            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CDepends (class,base) VALUES (?,?)");
+            auto i_af   = i.af();
+            i.addBindValue(id);
+            i.addBindValue(base);
+            i.batch();
+        }
+        
+        std::swap(cur, last);
+        return changed;
+    }
+    
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  GRAPHS
     
 
-    Graph   draw_class_graph(const Vector<Class>& classes, const Vector<cdb::ClassPair>& edges, Class focus, const QString& url /* assumes class id to be appended&cls=? will */ )
+    Graph   draw_class_graph(const Vector<Class>& classes, const Vector<CPair>& edges, Class focus, const QString& url /* assumes class id to be appended&cls=? will */ )
     {
         GraphBuilder    gb("classGraph");
         bool            doUrl   = !url.isEmpty();
@@ -166,64 +709,19 @@ namespace {
 
 
     
-        //  Class depenedency generator
-    struct ClassDependencies {
-        Map<Class,Set<Class>>       uses, deriveds;
-        
-        ClassDependencies(const Vector<cdb::ClassPair>& allDeps)
-        {
-            for(auto i : allDeps){
-                uses[i.first] << i.second;
-                deriveds[i.second] << i.first;
-            }
-        }
-        
-        void        eval(Class c, Set<Class>& classes, Set<cdb::ClassPair>& edges, unsigned int up, unsigned int down) 
-        {
-            if(up){
-                for(auto u : uses[c]){
-                    bool    f   = classes.add(u);
-                    bool    g   = edges.add({c,u});
-                    if(g&&f)
-                        eval(u,classes,edges,up-1, (down>1)?(down-2):0 );
-                }
-            }
-            
-            if(down){
-                for(auto d : deriveds[c]){
-                    bool    f   = classes.add(d);
-                    bool    g   = edges.add({d,c});
-                    if(g&&f)
-                        eval(d,classes,edges,up?(up-1):0,down-1);
-                }
-            }
-        }
-        
-        void        get(Class c, Vector<Class>& classes, Vector<cdb::ClassPair>& edges, unsigned int up, unsigned int down) 
-        {
-            Set<Class>          retClass;
-            Set<cdb::ClassPair>   retEdge;
-            retClass << c;
-            eval(c, retClass, retEdge, up, down);
-            classes     = makeVector(retClass);
-            edges       = makeVector(retEdge);
-        }
-        
-    };
-
 
     void    gen_class_dep()
     {
         static thread_local SqlQuery u(wksp::cache(), "UPDATE Classes SET deps=? WHERE id=?");
-        Vector<Class>           allC    = cdb::all_classes();
-        Vector<cdb::ClassPair>  allU    = cdb::all_class_dependencies();
-        ClassDependencies       cdeps(allU);
+        ClassDependencies::Ptr  cpp = gClassDepInfo;
+        if(!cpp)
+            return;
         
-        gClassDep   = draw_class_graph(allC, allU, Class{}, "/wksp/class?cls=");
-        for(Class c : allC){
-            Vector<Class>               subC;
-            Vector<cdb::ClassPair>    subU;
-            cdeps.get(c, subC, subU, 1, 3);
+        gClassDepGraph   = draw_class_graph(cpp->all, cpp->pairs, Class{}, "/wksp/class?cls=");
+        for(Class c : cpp->all){
+            Vector<Class>       subC;
+            Vector<CPair>       subU;
+            cpp->get(c, subC, subU, 1, 3);
             
             Graph   g   = draw_class_graph(subC, subU, c, "/wksp/class/dependency?cls=");
             if(g){
@@ -235,387 +733,75 @@ namespace {
         }
     }
 
+    void    launch_graphs()
+    {   
+        gClassDepInfo           = std::make_shared<ClassDependencies>();
+        QThreadPool::globalInstance()->start(gen_class_dep);
+    }
+
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        //  DEPENDENCIES
-    
-    
-    void    analyze_dependencies(Map<cdb::ClassPair,int>& deps, Class c1, const Set<Class>& use, int depth)
-    {
-        for(Class c2 : use){
-            if(c1 == c2)                // catch circular dependencies
-                continue;
-            if(deps.has(CPair(c1,c2)))
-                continue;
-            deps[CPair(c1,c2)]  = depth;
-            analyze_dependencies(deps, c1, uget(c2).use, depth+1);
-        }
-    }
-
-
-    void    analyze_classes(bool doGraphs)
-    {
-        static Map<cdb::ClassPair,int>       s_depends;
-        static Map<cdb::ClassPair,int>       s_sources;
-        static Map<cdb::ClassPair,int>       s_targets;
-        static Map<cdb::ClassPair,int>       s_reverse;
-        static Map<FPair,int>       s_fields;
-    
-        std::vector<Class>  all             = cdb::all_classes();
-        Map<cdb::ClassPair,int>      depends, sources, targets, reverse;
-        Map<FPair,int>      fields;
-        
-        
-        //  First, handle the "dependencies", sources, targets, fields
-        for(Class c : all)
-            analyze_dependencies(depends, c, uget(c).use, 0);
-
-        //  Seed the others
-        for(Class c : all){
-            uClass& u   = uget(c);
-            for(Class c1 : u.src)
-                sources[CPair(c,c1)]    = 0;
-            for(Class c1 : u.tgt)
-                targets[CPair(c,c1)]    = 0;
-            for(Class c1 : u.rev)
-                reverse[CPair(c,c1)]    = 0;
-            for(Field f : u.fields)
-                fields[FPair(c,f)]      = 0;
-        }
-        
-
-        //  Now, merege the stuff together....
-        for(auto i : depends){
-            Class c0=i.first.first;
-            uClass& u = uget(i.first.second);
-            int k = i.second + 1;
-            for(Class c1 : u.src){
-                auto j = sources.find(CPair(c0,c1));
-                if(j != sources.end()){
-                    j->second   = std::min(j->second, k);
-                } else
-                    sources[CPair(c0,c1)]  = k;
-            }
-            for(Class c1 : u.tgt){
-                auto j = targets.find(CPair(c0,c1));
-                if(j != targets.end()){
-                    j->second   = std::min(j->second, k);
-                } else
-                    targets[CPair(c0,c1)]  = k;
-            }
-            for(Class c1 : u.rev){
-                auto j = reverse.find(CPair(c0, c1));
-                if(j != reverse.end()){
-                    j->second   = std::min(j->second,k);
-                } else
-                    reverse[CPair(c0,c1)]  = k;
-            }
-            for(Field f1 : u.fields){
-                auto j = fields.find(FPair(c0, f1));
-                if(j != fields.end()){
-                    j->second   = std::min(j->second, k);
-                } else
-                    fields[FPair(c0,f1)]   = k;
-            }
-        }
-
-        
-        MapReport<cdb::ClassPair>        d_depends, d_sources, d_targets, d_reverse;
-        MapReport<FPair>        d_fields;
-        
-        map_report(s_depends, depends, d_depends);
-        map_report(s_sources, sources, d_sources);
-        map_report(s_targets, targets, d_targets);
-        map_report(s_reverse, reverse, d_reverse);
-        map_report(s_fields,  fields, d_fields);
-        
-        if(!d_depends.removed.empty()){
-            QVariantList    id, base;
-            
-            for(auto i : d_depends.removed){
-                id << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CDepends WHERE id=? AND base=?");
-            auto d_af = d.af();
-            d.addBindValue(id);
-            d.addBindValue(base);
-            d.batch();
-        }
-        if(!d_depends.changed.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_depends.changed){
-                int j   = depends[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery u(wksp::cache(), "UPDATE CDepends SET hops=? WHERE id=? AND base=?");
-            auto u_af = u.af();
-            
-            u.addBindValue(hops);
-            u.addBindValue(id);
-            u.addBindValue(base);
-            u.batch();
-        }
-        if(!d_depends.added.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_depends.added){
-                int j   = depends[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-
-            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CDepends (id,base,hops) VALUES (?,?,?)");
-            auto i_af   = i.af();
-            i.addBindValue(id);
-            i.addBindValue(base);
-            i.addBindValue(hops);
-            i.batch();
-        }
-        if(!d_sources.removed.empty()){
-            QVariantList    id, base;
-            
-            for(auto i : d_sources.removed){
-                id << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CSources WHERE id=? AND src=?");
-            auto d_af = d.af();
-            d.addBindValue(id);
-            d.addBindValue(base);
-        }
-        if(!d_sources.changed.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_sources.changed){
-                int j   = sources[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery u(wksp::cache(), "UPDATE CSources SET hops=? WHERE id=? AND src=?");
-            auto u_af = u.af();
-            
-            u.addBindValue(hops);
-            u.addBindValue(id);
-            u.addBindValue(base);
-            u.batch();
-        }
-        if(!d_sources.added.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_sources.added){
-                int j   = sources[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-
-            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CSources (id,src,hops) VALUES (?,?,?)");
-            auto i_af   = i.af();
-            i.addBindValue(id);
-            i.addBindValue(base);
-            i.addBindValue(hops);
-            i.batch();
-        }
-        if(!d_targets.removed.empty()){
-            QVariantList    id, base;
-            
-            for(auto i : d_targets.removed){
-                id << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CTargets WHERE id=? AND tgt=?");
-            auto d_af = d.af();
-            d.addBindValue(id);
-            d.addBindValue(base);
-        }
-        if(!d_targets.changed.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_targets.changed){
-                int j   = targets[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery u(wksp::cache(), "UPDATE CTargets SET hops=? WHERE id=? AND tgt=?");
-            auto u_af = u.af();
-            
-            u.addBindValue(hops);
-            u.addBindValue(id);
-            u.addBindValue(base);
-            u.batch();
-        }
-        if(!d_targets.added.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_targets.added){
-                int j   = targets[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-
-            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CTargets (id,tgt,hops) VALUES (?,?,?)");
-            auto i_af   = i.af();
-            i.addBindValue(id);
-            i.addBindValue(base);
-            i.addBindValue(hops);
-            i.batch();
-        }
-        if(!d_reverse.removed.empty()){
-            QVariantList    id, base;
-            
-            for(auto i : d_reverse.removed){
-                id << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CReverses WHERE id=? AND rev=?");
-            auto d_af = d.af();
-            d.addBindValue(id);
-            d.addBindValue(base);
-        }
-        if(!d_reverse.changed.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_reverse.changed){
-                int j   = reverse[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery u(wksp::cache(), "UPDATE CReverses SET hops=? WHERE id=? AND rev=?");
-            auto u_af = u.af();
-            
-            u.addBindValue(hops);
-            u.addBindValue(id);
-            u.addBindValue(base);
-            u.batch();
-        }
-        if(!d_reverse.added.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_reverse.added){
-                int j   = reverse[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-
-            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CReverses (id,rev,hops) VALUES (?,?,?)");
-            auto i_af   = i.af();
-            i.addBindValue(id);
-            i.addBindValue(base);
-            i.addBindValue(hops);
-            i.batch();
-        }
-        if(!d_fields.removed.empty()){
-            QVariantList    id, base;
-            
-            for(auto i : d_fields.removed){
-                id << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CFields WHERE class=? AND field=?");
-            auto d_af = d.af();
-            d.addBindValue(id);
-            d.addBindValue(base);
-        }
-        if(!d_fields.changed.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_fields.changed){
-                int j   = fields[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-        
-            static thread_local SqlQuery u(wksp::cache(), "UPDATE CFields SET hops=? WHERE class=? AND field=?");
-            auto u_af = u.af();
-            
-            u.addBindValue(hops);
-            u.addBindValue(id);
-            u.addBindValue(base);
-            u.batch();
-        }
-        if(!d_fields.added.empty()){
-            QVariantList        hops, id, base;
-            for(auto i : d_fields.added){
-                int j   = fields[i];
-                hops << j;
-                id  << (quint64) i.first.id;
-                base << (quint64) i.second.id;
-            }
-
-            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CFields (class,field,hops) VALUES (?,?,?)");
-            auto i_af   = i.af();
-            i.addBindValue(id);
-            i.addBindValue(base);
-            i.addBindValue(hops);
-            i.batch();
-        }
-        
-        
-        s_depends   = std::move(depends);
-        s_sources   = std::move(sources);
-        s_targets   = std::move(targets);
-        s_reverse   = std::move(reverse);
-        s_fields    = std::move(fields);
-
-        if(doGraphs){
-            if(!d_depends.empty())
-                QThreadPool::globalInstance()->start(gen_class_dep);
-        }
-    }
     
     void        on_class_modify(Fragment fragment)
     {
-        static const Folder  cfg = cdb::classes_folder();
-        if(cdb::folder(fragment) != cfg){
+        if(cdb::folder(fragment) != cdb::classes_folder()){
             yWarning() << "Class document " << cdb::path(fragment) << " is not located in classes directory (ignored)";
             return ;
         }
+        
         Document        doc = cdb::document(fragment);
-        uClass& c = uget(cdb::db_class(doc));
-        c.doc       = doc;
-        on_interior_read(c);
-        on_exterior_read(c);
-        analyze_classes(true);
+        UChanged        chg = on_read(uget(cdb::db_class(doc)));
+
+        if(chg.use){
+            analyze_use();
+            chg.src = true;
+            chg.tgt = true;
+            chg.rev    = true;
+            chg.fields  = true;
+        }
+        
+        if(chg.src)
+            analyze_sources();
+        if(chg.tgt)
+            analyze_targets();
+        if(chg.rev)
+            analyze_reverses();
+        if(chg.fields)
+            analyze_fields();
+
+        if(chg.use)
+            launch_graphs();
         //yDebug() << "Class " << c.cls.name() << " updated";        
     }
 }
 
 Graph       cur_class_dep_graph()
 {
-    return gClassDep;
+    return gClassDepGraph;
 }
 
 
 void    init_class()
 {
-    Folder      cfg   = cdb::classes_folder();
-    for(Document d : cdb::documents_by_suffix(cfg, "cls"))
-        uget(cdb::db_class(d)).doc = d;
-    for(Document d : cdb::documents_by_suffix_excluding(cfg, "cls"))
+    for(Document d : cdb::documents_by_suffix_excluding(cdb::classes_folder(), "cls"))
         yWarning() << "Class document " << cdb::key(d) << " is NOT located in classes directory (ignored)!";
+        
+        //  Simply create the classes first
+    for(Document d : cdb::documents_by_suffix(cdb::classes_folder(), "cls"))    
+        cdb::db_class(d);
     for(Class c : cdb::all_classes())
-        on_interior_read(uget(c));
-    for(Class c : cdb::all_classes())
-        on_exterior_read(uget(c));
-    analyze_classes(false);
-    for(Class c : cdb::all_classes())
-        create_db(uget(c));
+        on_read(uget(c));
+    
+    analyze_use();
+    analyze_sources();
+    analyze_targets();
+    analyze_reverses();
+    analyze_fields();
     
     on_change({Change::Added, Change::Modified, Change::Removed}, "*.cls", on_class_modify);
 }
 
 void    init_class_graphs()
 {
-    QThreadPool::globalInstance()->start(gen_class_dep);
+            launch_graphs();
 }
 

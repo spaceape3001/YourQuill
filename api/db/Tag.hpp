@@ -66,6 +66,9 @@ namespace cdb {
     
     
     NKI                     nki(Tag, bool autoKeyToName=false);
+
+    QList<QVariant>         qvar_list(const Set<Tag>&);
+
         //! \brief Returns the FIRST trag fragment that qualifies
     //! 
     //!     Will not create a fragment, though (so can return NULL)

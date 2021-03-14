@@ -44,6 +44,8 @@ class QString;
 class QStringList;
 class QVariant;
 
+template <typename> class QList;
+
 
 /*! \brief Useful parameter for case-insensitive string keys in sets and maps
 */

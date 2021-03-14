@@ -246,6 +246,13 @@ namespace cdb {
         return NKI{};
     }
     
+    QList<QVariant>         qvar_list(const Set<Tag>&all)
+    {
+        QVariantList    ret;
+        for(const Tag t : all)
+            ret << (quint64) t.id;
+        return ret;
+    }
 
     TagFile::Shared          read(Tag t, const Root* rt)
     {

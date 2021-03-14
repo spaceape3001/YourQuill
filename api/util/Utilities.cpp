@@ -24,6 +24,7 @@
 #include <QImage>
 #include <QScreen>
 #include <QThread>
+#include <QVariant>
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -358,6 +359,23 @@ QStringList     qt_list(const QStringSet&q)
     return ret;
 }
 
+QVariantList    qvar_list(const StringSet& slist)
+{
+    QVariantList    ret;
+    for(const String& s : slist)
+        ret << s.qString();
+    return ret;
+}
+
+QVariantList    qvar_list(const QStringSet& slist)
+{
+    QVariantList    ret;
+    for(const QString& s : slist)
+        ret << s;
+    return ret;
+}
+
+
 QString         sanitize_path(const QString& path)
 {
     return sanitize_path(path.split('/')).join('/');
@@ -399,6 +417,7 @@ QByteArray      utf8(const QString&b)
 {
     return b.toUtf8();
 }
+
 
 std::ostream& operator<<(std::ostream&os, const QString& v)
 {

@@ -24,6 +24,7 @@ ClassData&      ClassData::merge(const ClassData&b, bool fOverride)
     suffixes += b.suffixes;
     prefixes += b.prefixes;
     aliases += b.aliases;
+    tags += b.tags;
 
     for(const auto& i : b.fields){
         auto j = fields.find(i.first);
@@ -53,6 +54,7 @@ void            ClassData::reset()
     fields.clear();
     triggers.clear();
     aliases.clear();
+    tags.clear();
 }
 
 
@@ -71,6 +73,7 @@ ClassData::Field& ClassData::Field::merge(const Field& b, bool fOverride)
     types += b.types;
     //atom.set_if(b.atom, fOverride);
     atoms += b.atoms;
+    tags += b.tags;
     expected.set_if(b.expected, fOverride);
     if((fOverride?b.multiplicity:multiplicity) != Multiplicity())
         multiplicity    = b.multiplicity;
@@ -145,6 +148,7 @@ namespace {
         f.expected      = a->value({"expected", "expect"});
         f.atoms         = a->values_set({"atom"});
         f.aliases       = a->values_set({"alias", "aka"});
+        f.tags          = a->values_set({"tag"});
         f.multiplicity  = Multiplicity(a->value("multiplicity"));
         f.restriction   = Restriction(a->value("restriction"));
         f.max_count     = a->value({"max_count", "count"}).to_uint64().value;
@@ -182,6 +186,7 @@ bool    ClassFile::read(Vector<char>&buffer, const std::string& fname)
     binding         = attrs.value({"binding"});
     prefixes        = attrs.values_set({"prefix"});
     suffixes        = attrs.values_set({"suffix"});
+    tags            = attrs.values_set({"tag"});
     
     for(const Attribute* a : attrs.all({"field"})){
         if(a->data.empty()){
@@ -245,6 +250,8 @@ namespace {
             a << Attribute("type", join(f.types, ", "));
         if(!f.atoms.empty())
             a << Attribute("atom", join(f.atoms, ", "));
+        if(!f.tags.empty())
+            a << Attribute("tag", join(f.tags, ", "));
         if(!f.expected.empty())
             a << Attribute("expected", f.expected);
         if(f.multiplicity != Multiplicity())
@@ -294,6 +301,8 @@ bool    ClassFile::write(Vector<char>& chars)
         attrs << Attribute("alias", join(aliases, ", "));
     if(!binding.empty())
         attrs << Attribute("binding", binding);
+    if(!tags.empty())
+        attrs << Attribute("tag", join(tags, ", "));
     for(auto& t : triggers){
         Attribute   a("trigger", t.type);
         write_trigger(a, t);

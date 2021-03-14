@@ -7,6 +7,7 @@
 #include "yCommon.hpp"
 #include "yUpdater.hpp"
 
+#include <db/Image.hpp>
 #include <db/Tag.hpp>
 #include <db/ShareDir.hpp>
 #include <db/Workspace.hpp>
@@ -15,6 +16,7 @@
 #include <srv/Scanner.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Guarded.hpp>
+#include <util/Hash.hpp>
 #include <util/Utilities.hpp>
 
 
@@ -25,36 +27,46 @@ using namespace cdb;
     This section is about maintaining the data graph, in memory, and it needs to remain lightweight.
 */
     
-uAtom&      uget(Atom a)
+//uAtom&      uget(Atom a)
+//{
+    //static Vector<uAtom*>       data(65536, nullptr);
+    //data.resize_if_under(a.id+1,2048,nullptr);
+    //uAtom*& p = data[a.id];
+    //if(!p)
+        //p   = new uAtom(a);
+    //return *p;
+//}
+
+UClass&            uget(Class c)
 {
-    static Vector<uAtom*>       data(65536, nullptr);
-    data.resize_if_under(a.id+1,2048,nullptr);
-    uAtom*& p = data[a.id];
-    if(!p)
-        p   = new uAtom(a);
+    static Hash<uint64_t, UClass*>  data;   // yes, hash, because class IDs will not be continuous
+    UClass* p   = data.get(c.id,nullptr);
+    if(!p){
+        p       = new UClass(c);
+        data[c.id]  = p;
+    }
     return *p;
 }
 
-uClass&            uget(Class c)
+UField&             uget(Field f)
 {
-    static Vector<uClass*>      data(512, nullptr);
-    data.resize_if_under(c.id+1, 64, nullptr);
-    uClass*& p = data[c.id];
-    if(!p)
-        p   = new uClass(c);
-    return *p;
-}
-
-uField&             uget(Field f)
-{
-    static Vector<uField*>      data(2048, nullptr);
+    static Vector<UField*>      data(20480, nullptr);
     data.resize_if_under(f.id+1,256,nullptr);
-    uField*& p = data[f.id];
+    UField*& p = data[f.id];
     if(!p)
-        p       = new uField(f);
+        p       = new UField(f);
     return *p;
 }
     
+Image            icon_for(Folder f, const QString&k)
+{
+    for(const char* z : kImages){
+        Image i = cdb::image(cdb::document(f, k + "." + z));
+        if(i)
+            return i;
+    }
+    return Image{};
+}
     
 
 namespace {

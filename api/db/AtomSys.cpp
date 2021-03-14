@@ -31,6 +31,19 @@ namespace cdb {
         return QString();
     }
     
+    QStringSet              aliases(Field f)
+    {
+        QStringSet      ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT alias FROM FAlias WHERE field=?");
+        auto s_af = s.af();
+        s.bind(0, f.id);
+        if(s.exec()){
+            while(s.next())
+                ret << s.valueString(0);
+        }
+        return ret;
+    }
+
     namespace {
         Vector<Atom>        all_atoms_sorted()
         {
@@ -161,17 +174,6 @@ namespace cdb {
         return 0;
     }
     
-    Vector<ClassPair>   all_class_dependencies()
-    {
-        Vector<ClassPair>   ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id,base FROM CDepends WHERE hops=0");
-        auto s_af = s.af();
-        if(s.exec()){
-            while(s.next())
-                ret << ClassPair{{s.valueU64(0)}, {s.valueU64(1)}};
-        }
-        return ret;
-    }
 
     namespace {
         Vector<Class>   all_classes_sorted()
@@ -389,8 +391,6 @@ namespace cdb {
     
 
     
-
-    
     namespace {
         //Vector<Class>       classes_sorted(Atom a)
         
@@ -415,60 +415,17 @@ namespace cdb {
         return classes_unsorted(a); // TODO: Sorted
     }
     
-    namespace {
-        Vector<Class>   classes_any(Field f)
-        {
-            Vector<Class> ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CFields WHERE field=?");
-            auto s_af = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class(s.valueU64(0));
-            }
-            return ret;
-        }
-        
-        Vector<Class>   classes_direct(Field f)
-        {
-            Vector<Class> ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CFields WHERE field=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class(s.valueU64(0));
-            }
-            return ret;
-        }
-        
-        Vector<Class>   classes_indirect(Field f)
-        {
-            Vector<Class> ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CFields WHERE field=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class(s.valueU64(0));
-            }
-            return ret;
-        }
-    }
-    
-    Vector<Class>       classes(Field f, Linkage l)
+    Vector<Class>       classes(Field f)
     {
-        switch(l){
-        case Linkage::Any:
-            return classes_any(f);
-        case Linkage::Direct:
-            return classes_direct(f);
-        case Linkage::Indirect:
-            return classes_indirect(f);
-        case Linkage::None:
-        default:
-            return Vector<Class>();
+        Vector<Class> ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CFields WHERE field=?");
+        auto s_af = s.af();
+        s.bind(0, f.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class(s.valueU64(0));
         }
+        return ret;
     }
 
     Vector<Class>       classes(const StringSet& sset)
@@ -497,6 +454,24 @@ namespace cdb {
         return 0;
     }    
     
+    Folder              config_folder(Class c)
+    {
+        return db_folder( classes_folder(), key(c));
+    }
+
+    QStringSet          data_types(Field f)
+    {
+        QStringSet   ret;
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT type FROM FDataTypes WHERE field=?");
+        auto s_af  = s.af();
+        s.bind(0, f.id);
+        if(s.exec()){
+            while(s.next())
+                ret << s.valueString(0);
+        }
+        return ret;
+    }
+
     Atom                db_atom(Document d, bool* wasCreated)
     {
         return db_atom(d, QString(), wasCreated);
@@ -572,8 +547,6 @@ namespace cdb {
     {
         if(wasCreated)
             *wasCreated = false;
-        if(!c)
-            return Field{};
         if(k.isEmpty())
             return Field{};
             
@@ -597,6 +570,84 @@ namespace cdb {
             return Field();
         }
     }
+
+    Vector<Class>           def_derived(Class c)
+    {   
+        Vector<Class>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CDependsDef WHERE base=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    Vector<Field>           def_fields(Class c)
+    {
+        Vector<Field>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT field FROM CFieldDef WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Field{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    Vector<Class>           def_reverse(Class c)
+    {   
+        Vector<Class>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT reverse FROM CReverseDef WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    Vector<Class>           def_source(Class c)
+    {
+        Vector<Class>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT source FROM CSourceDef WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    Vector<Class>           def_target(Class c)
+    {
+        Vector<Class>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT source FROM CTargetDef WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
+
+    Vector<Class>           def_use(Class c)
+    {
+        Vector<Class>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT base FROM CDependsDef WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
     
     Graph               dep_graph(Class c)
     {   
@@ -610,10 +661,10 @@ namespace cdb {
 
     namespace {
         //Vector<Class>   dependents_sorted(Class, Linkage);    // TODO (INNER JOIN)
-        Vector<Class>   dependents_unsorted_any(Class c)
+        Vector<Class>   dependents_unsorted(Class c)
         {
             Vector<Class> ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM CDepends WHERE base=?");
+            static thread_local SqlQuery    s(wksp::cache(), "SELECT class FROM CDepends WHERE base=?");
             auto s_af = s.af();
             s.bind(0, c.id);
             if(s.exec()){
@@ -622,65 +673,12 @@ namespace cdb {
             }
             return ret;
         }
-
-        Vector<Class>   dependents_unsorted_direct(Class c)
-        {
-            Vector<Class> ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM CDepends WHERE base=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{ s.valueU64(0) };
-            }
-            return ret;
-        }
-        
-        Vector<Class>   dependents_unsorted_indirect(Class c)
-        {
-            Vector<Class> ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM CDepends WHERE base=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{ s.valueU64(0) };
-            }
-            return ret;
-        }
-
-        Vector<Class>   dependents_unsorted(Class c, Linkage l)
-        {
-            switch(l){
-            case Linkage::Any:
-                return dependents_unsorted_any(c);
-            case Linkage::Direct:
-                return dependents_unsorted_direct(c);
-            case Linkage::Indirect:
-                return dependents_unsorted_indirect(c);
-            case Linkage::None:
-            default:
-                return Vector<Class>();
-            }
-        }
-    }
-
-    Vector<Class>       dependents(Class c, Linkage l, Sorted sorted)
-    {
-        return dependents_unsorted(c, l);   // TODO INNER JOIN
     }
 
     Vector<Class>       dependents(Class c, Sorted sorted)
     {
-        return dependents_unsorted_any(c);  // TODO
+        return dependents_unsorted(c);   // TODO INNER JOIN
     }
-
-    Vector<Class>       dependents(Class c, Sorted::Value sorted)
-    {
-        return dependents_unsorted_any(c);  // TODO
-    }
-
-    
 
     Document            document(Atom a)
     {
@@ -768,7 +766,7 @@ namespace cdb {
     
     Field               field(Class c, const QString&k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fields WHERE cls=? AND k=?");
+        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fields WHERE class=? AND k=?");
         auto s_af = s.af();
         s.bind(0, c.id);
         s.bind(1, k);
@@ -782,35 +780,12 @@ namespace cdb {
         
         #if 0
             //  TODO ... Requires INNER JOIN
-        Vector<Field>   fields_sorted_any(Class c)
+        Vector<Field>   fields_sorted(Class c)
         {
-        }
-        
-        Vector<Field>   fields_sorted_direct(Class c)
-        {
-        }
-
-        Vector<Field>   fields_sorted_indirect(Class c)
-        {
-        }
-    
-        Vector<Field>   fields_sorted(Class c, Linkage l)
-        {
-            switch(l){
-            case Linkage::Any:
-                return fields_sorted_any(c);
-            case Linkage::Direct:
-                return fields_sorted_direct(c);
-            case Linkage::Indirect:
-                return fields_sorted_indirect(c);
-            case Linkage::None:
-            default:
-                return Vector<Field>();
-            }
         }
         #endif
         
-        Vector<Field>   fields_unsorted_any(Class c)
+        Vector<Field>   fields_unsorted(Class c)
         {
             Vector<Field>   ret;
             static thread_local SqlQuery    s(wksp::cache(), "SELECT field FROM CFields WHERE class=?");
@@ -822,103 +797,25 @@ namespace cdb {
             }
             return ret;
         }
-        
-        Vector<Field>   fields_unsorted_direct(Class c)
-        {
-            Vector<Field>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT field FROM CFields WHERE class=? AND hops=0");
-            auto s_af   = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Field(s.valueU64(0));
-            }
-            return ret;
-        }
 
-        Vector<Field>   fields_unsorted_indirect(Class c)
-        {
-            Vector<Field>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT field FROM CFields WHERE class=? AND hops!=0");
-            auto s_af   = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Field(s.valueU64(0));
-            }
-            return ret;
-        }
-
-        Vector<Field>   fields_unsorted(Class c, Linkage l)
-        {
-            switch(l){
-            case Linkage::Any:
-                return fields_unsorted_any(c);
-            case Linkage::Direct:
-                return fields_unsorted_direct(c);
-            case Linkage::Indirect:
-                return fields_unsorted_indirect(c);
-            case Linkage::None:
-            default:
-                return Vector<Field>();
-            }
-        }
-    }
+   }
 
 
-    Vector<Field>       fields(Class c, Linkage l, Sorted sorted)
+    Vector<Field>       fields(Class c, Sorted sorted)
     {
-        return fields_unsorted(c,l);
+        return fields_unsorted(c);
         // TODO (get inner join working to perform sorted queries)
         //return sorted ? fields_sorted(c,l) : fields_unsorted(c,l);
     }
     
-    namespace {
-        size_t          fields_count_any(Class c)
-        {
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CFields WHERE class=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          fields_count_direct(Class c)
-        {
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CFields WHERE class=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          fields_count_indirect(Class c)
-        {
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CFields WHERE class=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-    }
-    
-    
-    size_t              fields_count(Class c, Linkage l)
+    size_t          fields_count(Class c)
     {
-        switch(l){
-        case Linkage::Any:
-            return fields_count_any(c);
-        case Linkage::Direct:
-            return fields_count_direct(c);
-        case Linkage::Indirect:
-            return fields_count_indirect(c);
-        case Linkage::None:
-        default:
-            return 0;
-        }
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CFields WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec() && s.next())
+            return (size_t) s.valueU64(0);
+        return 0;
     }
     
    
@@ -995,7 +892,7 @@ namespace cdb {
     Field::Info         info(Field f, bool autoKey)
     {
         Field::Info        ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k, cls, name, pkey, plural, brief FROM Fields WHERE id=?");
+        static thread_local SqlQuery s(wksp::cache(), "SELECT k, class, name, pkey, plural, brief FROM Fields WHERE id=?");
         auto s_af = s.af();
         s.bind(0, f.id);
         if(s.exec() && s.next()){
@@ -1106,9 +1003,9 @@ namespace cdb {
     }
     
 
-    ClassFile::Shared            merged(Class c, unsigned int opts)
+    ClassData::Shared            merged(Class c, unsigned int opts)
     {
-        ClassFile::Shared        ret = std::make_shared<ClassFile>();;
+        ClassData::Shared        ret = std::make_shared<ClassData>();;
         for(auto& i : reads(c)){
             if(opts & IsUpdate)
                 update(i.first);
@@ -1232,6 +1129,29 @@ namespace cdb {
         return QString();
     }
     
+    QList<QVariant>         qvar_list(const Set<Atom>&all)
+    {
+        QVariantList    ret;
+        for(const Atom t : all)
+            ret << (quint64) t.id;
+        return ret;
+    }
+    
+    QList<QVariant>         qvar_list(const Set<Class>&all)
+    {
+        QVariantList    ret;
+        for(const Class t : all)
+            ret << (quint64) t.id;
+        return ret;
+    }
+    
+    QList<QVariant>         qvar_list(const Set<Field>&all)
+    {
+        QVariantList    ret;
+        for(const Field t : all)
+            ret << (quint64) t.id;
+        return ret;
+    }
 
 
     ClassFile::Shared        read(Class c, const Root*rt)
@@ -1269,10 +1189,10 @@ namespace cdb {
     namespace {
         //Vector<Class>       reverses_sorted(Class, Linkage l);  // TODO once the INNER JOINS are good
 
-        Vector<Class>       reverses_unsorted_any(Class c)
+        Vector<Class>       reverses_unsorted(Class c)
         {
             Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT rev FROM CReverses WHERE id=?");
+            static thread_local SqlQuery    s(wksp::cache(), "SELECT reverse FROM CReverses WHERE class=?");
             auto s_af = s.af();
             s.bind(0, c.id);
             if(s.exec()){
@@ -1280,74 +1200,22 @@ namespace cdb {
                     ret << Class{s.valueU64(0)};
             }
             return ret;
-        }
-
-        Vector<Class>       reverses_unsorted_direct(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT rev FROM CReverses WHERE id=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-        
-        Vector<Class>       reverses_unsorted_indirect(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT rev FROM CReverses WHERE id=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-
-        Vector<Class>       reverses_unsorted(Class c, Linkage l)
-        {
-            switch(l){
-            case Linkage::Any:
-                return reverses_unsorted_any(c);
-            case Linkage::Direct:   
-                return reverses_unsorted_direct(c);
-            case Linkage::Indirect:
-                return reverses_unsorted_indirect(c);
-            case Linkage::None:
-            default:
-                return Vector<Class>();
-            }
         }
     }
     
-    Vector<Class>       reverses(Class c, Linkage l, Sorted sorted)
-    {
-        //  TODO (sorted, INNER JOIN)
-        return reverses_unsorted(c,l);
-    }
-
     Vector<Class>       reverses(Class c, Sorted sorted)
     {
-        return reverses_unsorted_any(c);    // TODO
+        //  TODO (sorted, INNER JOIN)
+        return reverses_unsorted(c);
     }
-    
-    Vector<Class>       reverses(Class c, Sorted::Value sorted)
-    {
-        return reverses_unsorted_any(c);    // TODO
-    }
-    
 
 
     namespace {
         //Vector<Class>   sources_sorted(Class, Linkage);     // TODO INNER JOIN
-        Vector<Class>       sources_unsorted_any(Class c)
+        Vector<Class>       sources_unsorted(Class c)
         {
             Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT src FROM CSources WHERE id=?");
+            static thread_local SqlQuery    s(wksp::cache(), "SELECT source FROM CSources WHERE class=?");
             auto s_af = s.af();
             s.bind(0, c.id);
             if(s.exec()){
@@ -1356,117 +1224,24 @@ namespace cdb {
             }
             return ret;
         }
-        
-        Vector<Class>       sources_unsorted_direct(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT src FROM CSources WHERE id=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-        
-        Vector<Class>       sources_unsorted_indirect(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT src FROM CSources WHERE id=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-
-        Vector<Class>       sources_unsorted(Class c, Linkage l)
-        {
-            switch(l){
-            case Linkage::Any:
-                return sources_unsorted_any(c);
-            case Linkage::Direct:
-                return sources_unsorted_direct(c);
-            case Linkage::Indirect:
-                return sources_unsorted_indirect(c);
-            case Linkage::None:
-            default:
-                return Vector<Class>();
-            }
-        }
-        
-    }
-    
-    Vector<Class>       sources(Class c, Linkage l, Sorted sorted)
-    {
-        return sources_unsorted(c,l);   // TODO 
     }
     
     Vector<Class>       sources(Class c, Sorted sorted)
     {
-        return sources_unsorted_any(c); // TODO
-    }
-
-    Vector<Class>       sources(Class c, Sorted::Value sorted)
-    {
-        return sources_unsorted_any(c); // TODO
-    }
-
-    namespace {
-        size_t          sources_count_any(Class c)
-        {
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CSources WHERE id=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          sources_count_direct(Class c)
-        {
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CSources WHERE id=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          sources_count_indirect(Class c)
-        {
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CSources WHERE id=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-    }
-
-    size_t              sources_count(Class c, Linkage l)
-    {
-        switch(l){
-        case Linkage::Any:
-            return sources_count_any(c);
-        case Linkage::Direct:
-            return sources_count_direct(c);
-        case Linkage::Indirect:
-            return sources_count_indirect(c);
-        case Linkage::None:
-        default:
-            return 0;
-        }
+        return sources_unsorted(c);   // TODO 
     }
     
-    Vector<Class>           targets(Class, Linkage l,Sorted sorted);
-    Vector<Class>           targets(Class, Sorted sorted);
-    Vector<Class>           targets(Class, Sorted::Value sorted);
-    size_t                  targets_count(Class, Linkage l);
-    
+
+    size_t          sources_count(Class c)
+    {
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CSources WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec() && s.next())
+            return (size_t) s.valueU64(0);
+        return 0;
+    }
+
 
 
     namespace {
@@ -1492,16 +1267,6 @@ namespace cdb {
         //  TODO sorted....
     }
 
-    size_t              tags_count(Atom a)
-    {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM ATags WHERE atom=?");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
-    }
-    
     bool                tagged(Atom a, Tag t)
     {
         static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM ATags WHERE atom=? AND tag=?");
@@ -1518,19 +1283,84 @@ namespace cdb {
                 return false;
         return true;
     }
-
-
-
     
+    namespace {
+        Vector<Tag>             tags_unsorted(Class c)
+        {
+            Vector<Tag>     ret;
+            static thread_local SqlQuery s(wksp::cache(), "SELECT tag FROM CTags WHERE class=?");
+            auto s_af  = s.af();
+            s.bind(0, c.id);
+            if(s.exec()){
+                while(s.next())
+                    ret << Tag{s.valueU64(0)};
+            }
+            return ret;
+        }
+   }
+
+    Vector<Tag>             tags(Class c,Sorted)
+    {
+        return tags_unsorted(c);    // TODO INNER JOIN
+    }
+    
+    namespace {
+        Vector<Tag>             tags_unsorted(Field f)
+        {
+            Vector<Tag>     ret;
+            static thread_local SqlQuery s(wksp::cache(), "SELECT tag FROM FTags WHERE field=?");
+            auto s_af  = s.af();
+            s.bind(0, f.id);
+            if(s.exec()){
+                while(s.next())
+                    ret << Tag{s.valueU64(0)};
+            }
+            return ret;
+        }
+   }
+
+    Vector<Tag>             tags(Field f,Sorted)
+    {
+        return tags_unsorted(f);    // TODO INNER JOIN
+    }
+
+    size_t              tags_count(Atom a)
+    {
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM ATags WHERE atom=?");
+        auto s_af   = s.af();
+        s.bind(0, a.id);
+        if(s.exec() && s.next())
+            return (size_t) s.valueU64(0);
+        return 0;
+    }
+    
+    size_t                  tags_count(Class c)
+    {
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CTags WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec() && s.next())
+            return (size_t) s.valueU64(0);
+        return 0;
+    }
+    
+    size_t                  tags_count(Field f)
+    {
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM FTags WHERE field=?");
+        auto s_af = s.af();
+        s.bind(0, f.id);
+        if(s.exec() && s.next())
+            return (size_t) s.valueU64(0);
+        return 0;
+    }
 
 
     namespace {
-        //Vector<Class>   targets_sorted(Class c, Linkage l);     // TODO (INNER JOIN)
-        
-        Vector<Class>   targets_unsorted_any(Class c)
+        //Vector<Class>   sources_sorted(Class, Linkage);     // TODO INNER JOIN
+        Vector<Class>       targets_unsorted(Class c)
         {
             Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT tgt FROM CTargets WHERE id=?");
+            static thread_local SqlQuery    s(wksp::cache(), "SELECT tgt FROM CTargets WHERE class=?");
             auto s_af = s.af();
             s.bind(0, c.id);
             if(s.exec()){
@@ -1539,110 +1369,21 @@ namespace cdb {
             }
             return ret;
         }
-
-        Vector<Class>   targets_unsorted_direct(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT tgt FROM CTargets WHERE id=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-        
-        Vector<Class>   targets_unsorted_indirect(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT tgt FROM CTargets WHERE id=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-
-        Vector<Class>   targets_unsorted(Class c, Linkage l)
-        {
-            switch(l){
-            case Linkage::Any:
-                return targets_unsorted_any(c);
-            case Linkage::Direct:
-                return targets_unsorted_direct(c);
-            case Linkage::Indirect:
-                return targets_unsorted_indirect(c);
-            case Linkage::None:
-            default:
-                return Vector<Class>();
-            }
-        }
-        
-    }
-
-    Vector<Class>       targets(Class c, Linkage l, Sorted sorted)
-    {
-        return targets_unsorted(c,l);   // TODO 
     }
     
     Vector<Class>       targets(Class c, Sorted sorted)
     {
-        return targets_unsorted_any(c); // TODO (INNER JOIN)
+        return targets_unsorted(c);   // TODO 
     }
 
-    Vector<Class>       targets(Class c, Sorted::Value sorted)
+    size_t          targets_count(Class c)
     {
-        return targets_unsorted_any(c); // TODO (INNER JOIN)
-    }
-
-    namespace {
-        size_t          targets_count_any(Class c)
-        {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CTargets WHERE id=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          targets_count_direct(Class c)
-        {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CTargets WHERE id=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          targets_count_indirect(Class c)
-        {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CTargets WHERE id=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-    }
-    
-    size_t              targets_count(Class c, Linkage l)
-    {
-        switch(l){
-        case Linkage::Any:
-            return targets_count_any(c);
-        case Linkage::Direct:
-            return targets_count_direct(c);
-        case Linkage::Indirect:
-            return targets_count_indirect(c);
-        case Linkage::None:
-        default:
-            return 0;
-        }
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CTargets WHERE class=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec() && s.next())
+            return (size_t) s.valueU64(0);
+        return 0;
     }
     
 
@@ -1658,10 +1399,10 @@ namespace cdb {
 
     namespace {
         //Vector<Class>   uses_sorted(Class c, Linkage l);    // TODO INNER JOIN
-        Vector<Class>   uses_unsorted_any(Class c)
+        Vector<Class>   uses_unsorted(Class c)
         {
             Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT base FROM CDepends WHERE id=?");
+            static thread_local SqlQuery    s(wksp::cache(), "SELECT base FROM CDepends WHERE class=?");
             auto s_af = s.af();
             s.bind(0, c.id);
             if(s.exec()){
@@ -1669,115 +1410,24 @@ namespace cdb {
                     ret << Class{s.valueU64(0)};
             }
             return ret;
-        }
-        
-        Vector<Class>   uses_unsorted_direct(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT base FROM CDepends WHERE id=? AND hops=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-        
-        Vector<Class>   uses_unsorted_indirect(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT base FROM CDepends WHERE id=? AND hops!=0");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-        
-        Vector<Class>   uses_unsorted(Class c, Linkage l)
-        {
-            switch(l){
-            case Linkage::Any:
-                return uses_unsorted_any(c);
-            case Linkage::Direct:
-                return uses_unsorted_direct(c);
-            case Linkage::Indirect:
-                return uses_unsorted_indirect(c);
-            case Linkage::None:
-            default:
-                return Vector<Class>();
-            }
         }
     }
     
-    Vector<Class>       uses(Class c, Linkage l, Sorted sorted)
+    Vector<Class>       uses(Class c, Sorted sorted)
     {
-        return uses_unsorted(c, l);
+        return uses_unsorted(c);
         //  TODO (FIX ON INNER JOIN)
     }
 
-    Vector<Class>       uses(Class c, Sorted sorted)
+    size_t              uses_count(Class c)
     {
-        //  TODO (once sorted is a thing)
-        return uses_unsorted_any(c);
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CDepends WHERE class=?");
+        auto s_af   = s.af();
+        s.bind(0,c.id);
+        if(s.exec() && s.next())
+            return (size_t) s.valueU64(0);
+        return 0;
     }
-
-    Vector<Class>       uses(Class c, Sorted::Value sorted)
-    {
-        //  TODO (once sorted is a thing)
-        return uses_unsorted_any(c);
-    }
-
-    namespace {
-        size_t          uses_count_any(Class c)
-        {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CDepends WHERE id=?");
-            auto s_af   = s.af();
-            s.bind(0,c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          uses_count_direct(Class c)
-        {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CDepends WHERE id=? AND hops=0");
-            auto s_af   = s.af();
-            s.bind(0,c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-
-        size_t          uses_count_indirect(Class c)
-        {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CDepends WHERE id=? AND hops!=0");
-            auto s_af   = s.af();
-            s.bind(0,c.id);
-            if(s.exec() && s.next())
-                return (size_t) s.valueU64(0);
-            return 0;
-        }
-    }
-
-    size_t              uses_count(Class c, Linkage l)
-    {
-        switch(l){
-        case Linkage::Any:
-            return uses_count_any(c);
-        case Linkage::Direct:
-            return uses_count_direct(c);
-        case Linkage::Indirect:
-            return uses_count_indirect(c);
-        case Linkage::None:
-        default:
-            return 0;
-        }
-    }
-
     
     ClassFile::Shared        write(Class c, const Root* rt)
     {

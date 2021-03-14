@@ -130,6 +130,11 @@ namespace cdb {
         return false;
     }
 
+    Image               image(const QString&k)
+    {
+        return image(document(k));
+    }
+
     Image               image(Document d)
     {
         return image(d.id);

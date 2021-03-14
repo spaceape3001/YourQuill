@@ -20,6 +20,8 @@ struct ClassData {
     
     using ValueMap  = Map<String,ValueInfo,IgCase>;
     using FieldMap  = Map<String,Field,IgCase>;
+    
+    using Shared    = std::shared_ptr<ClassData>;
 
     String                  name;           //!< Name of this (may or may not be a key)
     String                  plural;         //!< Plural
@@ -30,9 +32,10 @@ struct ClassData {
     StringSet               reverse;        //!< Known Reverse elements (won't trigger)
     StringSet               sources;        //!< Source classes (if edge)
     StringSet               targets;        //!< Target classes (if edge)
-    StringSet               prefixes;       //!< List of common prefixes (disabled due to complexity)
-    StringSet               suffixes;       //!< List of common suffixes (disabled due to complexity)
+    StringSet               prefixes;       //!< List of common prefixes
+    StringSet               suffixes;       //!< List of common suffixes
     StringSet               aliases;        //!< List of aliases
+    StringSet               tags;           //!< List of tags applied to this class
     String                  binding;        //!< Primary Column that binds for edges.   Empty will imply the key as default.
     Vector<Trigger>         triggers;
     FieldMap                fields;
@@ -68,6 +71,7 @@ struct ClassData::Field {
     StringSet               aliases;        //!< Aliases to this field name
     StringSet               types;          //!< Permitted data types
     StringSet               atoms;          //!< Atom types allowed here
+    StringSet               tags;           //!< Lis tof tags applied to this field
     String                  expected;       //!< Expected type
     
     Multiplicity            multiplicity;

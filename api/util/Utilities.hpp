@@ -18,7 +18,6 @@ class QString;
 class QStringList;
 
 
-
 uint64_t        randU64();
 
 /*! \brief Returns desktop parameters.
@@ -85,3 +84,6 @@ QStringList     qt_list(const StringSet&);
 
 Vector<String>  qt(const Vector<QString>&);
 Vector<QString> qt(const Vector<String>&);
+
+QList<QVariant>    qvar_list(const StringSet& slist);
+QList<QVariant>    qvar_list(const QStringSet& slist);

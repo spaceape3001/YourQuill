@@ -44,6 +44,8 @@ namespace cdb {
         //! Returns an image from a document, if it already exists in the cache
     Image                   image(Document);
 
+    Image                   image(const QString&);
+
         //! Returns an image from a document, if it already exists in the cache
     Image                   image(uint64_t);
 
