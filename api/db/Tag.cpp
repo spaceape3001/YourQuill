@@ -108,6 +108,22 @@ namespace cdb {
         return db_tag(db_document(tags_folder(), k+".tag"), wasCreated);
     }
     
+    Vector<Tag>             db_tags(const StringSet&all)
+    {
+        Vector<Tag>     ret;
+        for(const String& s:all)
+            ret << db_tag(s.qString());
+        return ret;
+    }
+    
+    Vector<Tag>             db_tags(const QStringSet& all)
+    {
+        Vector<Tag>     ret;
+        for(const QString& s:all)
+            ret << db_tag(s);
+        return ret;
+    }
+
     Document            document(Tag t)
     {
         return exists(t) ? Document{t.id} : Document{};

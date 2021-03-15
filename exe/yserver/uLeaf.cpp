@@ -10,67 +10,35 @@
 #include <srv/Importer.hpp>
 #include <util/SqlQuery.hpp>
 
+ULeaf::ULeaf(Leaf l) : key(cdb::key(l)), id(l.id), 
+    folder(cdb::detail_folder(l)), 
+    atom(cdb::db_atom(Document{l.id}))
+{
+    static thread_local SqlQuery u(wksp::cache(), "UPDATE Leafs SET atom=? WHERE id=?");
+    auto u_af = u.af();
+    u.bind(0, atom.id);
+    u.bind(1, id);
+    u.exec();
+
+}
+
 
 namespace {
         
-    void    on_interior_read(Leaf l)
+    void    on_read(ULeaf& u)
     {
-        auto m = cdb::merged(l, cdb::IsUpdate);
-
-        Atom a  = cdb::db_atom(cdb::document(l));
-        Set<Class> old = makeSet(cdb::classes(a));
-        
-        Set<Class> use;
-        for(String s : m->classes()){
-            Class c = cdb::db_class(s.qString());
-            use << c;
-            use |= makeSet(cdb::uses(c));
-        }
-        
-        static thread_local SqlQuery u(wksp::cache(), "UPDATE Leafs SET atom=?,title=? WHERE id=?");
-        auto u_af = u.af();
-        u.bind(0, a.id);
-        u.bind(1, m->title().qString());
-        u.bind(2, l.id);
-        u.exec();
+        u.data      = cdb::merged(u.leaf, cdb::IsUpdate|cdb::IgnoreContext);
+        UAtom a     = uget(cdb::db_atom(u.doc));
         
         
-        static thread_local SqlQuery u2(wksp::cache(), "UPDATE Atoms SET leaf=?,title=? WHERE id=?");
-        auto u2_af = u2.af();
-        u2.bind(0, l.id);
-        u2.bind(1, m->title().qString());
-        u2.bind(2, a.id);
-        u2.exec();
+        static thread_local SqlQuery u1(wksp::cache(), "UPDATE Leafs SET title=? WHERE id=?");
+        auto u1_af = u1.af();
+        u1.bind(0, u.data->title().qString());
+        u1.bind(1, u.id);
+        u1.exec();
         
-        Set<Class>  added   = use - old;
-        if(!added.empty()){
-            QVariantList    id, cls;
-            for(Class c : added){
-                id  << (quint64) a.id;
-                cls << (quint64) c.id;
-            }
-            
-            static thread_local SqlQuery i(wksp::cache(), "INSERT INTO AClasses (atom, class) VALUES (?,?)");
-            auto i_af = i.af();
-            i.addBindValue(id);
-            i.addBindValue(cls);
-            i.batch();
-        }
-        
-        Set<Class>  removed = old - use;
-        if(!removed.empty()){
-            QVariantList    id, cls;
-            for(Class c : removed){
-                id  << (quint64) a.id;
-                cls << (quint64) c.id;
-            }
-            
-            static thread_local SqlQuery d(wksp::cache(), "DELETE FROM AClasses WHERE atom=? AND class=?");
-            auto d_af = d.af();
-            d.addBindValue(id);
-            d.addBindValue(cls);
-            d.batch();
-        }
+        a.update_classes(u.data->classes());
+        a.update_tags(u.data->tags());
         
         
         //  MORE (TODO)
@@ -87,7 +55,7 @@ namespace {
     {
         Document    doc = cdb::document(fragment);
         Leaf        l   = cdb::db_leaf(doc);
-        on_interior_read(l);
+        on_read(uget(l));
         on_exterior_read(l);
     }
     
@@ -96,10 +64,12 @@ namespace {
 
 void    init_leaf()
 {
-    for(Document d : cdb::all_documents_suffix("y"))    // create leafs
+    for(Document d : cdb::all_documents_suffix("y")){    // create leafs
+        cdb::db_atom(d);
         cdb::db_leaf(d);
+    }
     for(Leaf l : cdb::all_leafs())
-        on_interior_read(l);
+        on_read(uget(l));
     for(Leaf l : cdb::all_leafs())
         on_exterior_read(l);
     on_change("*.y",   on_leaf_change);

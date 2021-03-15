@@ -50,6 +50,8 @@ namespace cdb {
 
     Leaf                    db_leaf(Document, bool*wasCreated=nullptr);
 
+    Folder                  detail_folder(Leaf);
+
     Document                document(Leaf);
     bool                    exists(Leaf);
     bool                    exists_leaf(uint64_t);
@@ -70,7 +72,7 @@ namespace cdb {
 
     Leaf                    leaf_by_title(const QString&);
 
-    LeafFile::Shared        leaf_doc(Fragment, bool fAllowEmpty=false);
+    LeafFile::Shared        leaf_doc(Fragment, unsigned int options=0);
     
     Leaf::Merge::Shared     merged(Leaf, unsigned int opts=0);
     NKI                     nki(Leaf, bool autoKeyToName=false);

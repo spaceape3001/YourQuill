@@ -41,7 +41,9 @@ namespace cdb {
         //! Ignore context
         IgnoreContext           = 0x4,
         
-        Override                = 0x8
+        Override                = 0x8,
+        
+        AllowEmpty              = 0x10
     };
 
 

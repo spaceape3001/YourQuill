@@ -42,6 +42,9 @@ namespace cdb {
     Tag                     db_tag(Document, bool* wasCreated=nullptr);
     Tag                     db_tag(Fragment, bool* wasCreated=nullptr);
     Tag                     db_tag(const QString&, bool* wasCreated=nullptr);
+    Vector<Tag>             db_tags(const StringSet&);
+    Vector<Tag>             db_tags(const QStringSet&);
+
 
     Document                document(Tag);
 

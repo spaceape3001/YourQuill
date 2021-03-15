@@ -147,7 +147,12 @@ namespace cdb {
         }
     }
 
-
+    Folder              detail_folder(Leaf l)
+    {
+        Folder  f   = folder(Document{l.id});
+        QString sk  = skeyb(Document{l.id});
+        return db_folder(f, sk+".d");
+    }
     
     Document            document(Leaf l)
     {
@@ -271,14 +276,14 @@ namespace cdb {
     
 
 
-    LeafFile::Shared         leaf_doc(Fragment f, bool fAllowEmpty)
+    LeafFile::Shared         leaf_doc(Fragment f, unsigned int options)
     {
         if(!f)
             return LeafFile::Shared();
 
         Vector<char>    ch   = chars(f);
         if(ch.empty())
-            return fAllowEmpty ? std::make_shared<LeafFile>() : LeafFile::Shared();
+            return (options & AllowEmpty) ? std::make_shared<LeafFile>() : LeafFile::Shared();
         
         LeafFile::Shared     td  = std::make_shared<LeafFile>();
         if(!td->load(ch, path(f).toStdString())){

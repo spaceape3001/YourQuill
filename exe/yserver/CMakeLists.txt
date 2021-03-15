@@ -2,6 +2,7 @@ add_executable(yserver
     yCommon.hpp
     yUpdater.cpp
     
+    uAtom.cpp
     uClass.cpp
     uLeaf.cpp
 

@@ -25,7 +25,7 @@
 
 
 UClass::UClass(Class c) : key(cdb::key(c)),  id(c.id), // cls(c), doc{c.id}, 
-    folder(cdb::config_folder(c))
+    folder(cdb::detail_folder(c)), edge(false)
 {
     ////  Add ourselves to ourselves ... 
         //use.all += c;
@@ -370,6 +370,7 @@ namespace {
         ret.rev     = update_reverse(u);
         ret.tags    = update_tags(u);
         
+        
         FieldSet    fields;
         for(auto& j : u.data->fields){
             UField& f   = uget(cdb::db_field(u.cls, j.first.qString()));
@@ -380,25 +381,7 @@ namespace {
             String      name    = j.second.name.empty() ? j.first : j.second.name;
             String      plural  = j.second.plural.empty() ? (name + "s") : j.second.plural;
             String      pkey    = j.second.pkey.empty() ? (j.first + "s") : j.second.pkey;   
-            f.db        = QString("Attr_%1_%2").arg(u.key).arg(f.key);
-            f.dbv       = QString("Values_%1_%2").arg(u.key).arg(f.key);
             
-            if(!db_table_exists( f.db, wksp::cache())){
-                SqlQuery(wksp::cache(), QString(
-                    "CREATE TABLE %1 ( "
-                        "leaf INTEGER, "
-                        "attr VARCHAR(255) COLLATE NOCASE, "
-                        "value VARCHAR(255)"
-                    ")").arg(f.db)).exec();
-            }
-
-            if(!db_table_exists( f.dbv, wksp::cache())){
-                SqlQuery(wksp::cache(), QString(
-                    "CREATE TABLE %1 ( "
-                        "value VARCHAR(255) COLLATE NOCASE UNIQUE, "
-                        "brief VARCHAR(255)"
-                    ")").arg(f.dbv)).exec();
-            }
             
             static thread_local SqlQuery    u2(wksp::cache(), 
                 "UPDATE Fields SET name=?,pkey=?,plural=?,brief=?,multi=?,restrict=?,category=?,dbt=?,dbv=?,max=?,removed=0 WHERE id=?"
@@ -668,6 +651,89 @@ namespace {
         return changed;
     }
     
+    void    analyze_edges()
+    {
+        for(Class c : cdb::all_classes()){
+            UClass&u    = uget(c);
+            
+            int         empty   = static_cast<int>(u.src.all.empty()) + static_cast<int>(u.tgt.all.empty());
+            if(empty == 1){
+                yWarning() << "Class " << u.key << " should have both sources and targets!";
+            }
+            
+            u.edge      = empty != 2;
+            static thread_local SqlQuery uc(wksp::cache(), "UPDATE Classes SET edge=? WHERE id=?");
+            auto uc_af = uc.af();
+            uc.bind(0, u.edge);
+            uc.bind(1, u.id);
+            uc.exec();
+        }
+    }
+    
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        //  GRAPHS
+    
+    void    db_check()
+    {
+        for(Class cc : cdb::all_classes()){
+            UClass& c   = uget(cc);
+            
+            for(Field ff : c.fields.def){
+                UField& f   = uget(ff);
+                f.db        = QString("A_%1_%2").arg(c.key).arg(f.key);
+                f.dbv       = QString("V_%1_%2").arg(c.key).arg(f.key);
+                if(!db_table_exists( f.db, wksp::cache())){
+                    if(f.types.has("charname")){
+                        SqlQuery(wksp::cache(), QString(
+                            "CREATE TABLE %1 ( "
+                                "leaf   INTEGER, "
+                                "attr   VARCHAR(255) COLLATE NOCASE, "   // the user defined "ID" from the attribute's line
+                                "no     INTEGER, "                       // The "number" for the particular attribute
+                                "value  VARCHAR(255), "
+                                "first  VARCHAR(255), "
+                                "last   VARCHAR(255), "
+                                "middle VARCHAR(255) "
+                            ")"
+                        ).arg(f.db)).exec();
+                    } else {
+                        SqlQuery(wksp::cache(), QString(
+                            "CREATE TABLE %1 ( "
+                                "leaf  INTEGER, "
+                                "attr  VARCHAR(255) COLLATE NOCASE, "   // the user defined "ID" from the attribute's line
+                                "no    INTEGER, "                       // The "number" for the particular attribute
+                                "value VARCHAR(255)"
+                            ")"
+                        ).arg(f.db)).exec();
+                    }
+                }
+
+                if(!db_table_exists( f.dbv, wksp::cache())){
+                    SqlQuery(wksp::cache(), QString(
+                        "CREATE TABLE %1 ( "
+                            "value VARCHAR(255) COLLATE NOCASE UNIQUE, "
+                            "brief VARCHAR(255)"
+                        ")").arg(f.dbv)).exec();
+                }
+            }
+            
+            if(c.edge){
+                c.db        = QString("E_%1").arg(c.key);
+                if(!db_table_exists(c.db, wksp::cache())){
+                    SqlQuery(wksp::cache(), QString(
+                        "CREATE TABLE %1 ( "
+                        "   edge     INTEGER, "
+                        "   source   INTEGER, "
+                        "   target   INTEGER, "
+                        "   reverse  INTEGER, "
+                        "   explicit INTEGER NOT NULL DEFAULT 0 "
+                        ")"
+                    ).arg(c.db)).exec();
+                }
+            }
+        }
+    }
+
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  GRAPHS
@@ -748,14 +814,15 @@ namespace {
             return ;
         }
         
+        bool            wasCreated = false;
         Document        doc = cdb::document(fragment);
-        UChanged        chg = on_read(uget(cdb::db_class(doc)));
-
-        if(chg.use){
+        Class           cc  = cdb::db_class(doc, &wasCreated);
+        UChanged        chg = on_read(uget(cc));
+        if(chg.use || wasCreated){
             analyze_use();
-            chg.src = true;
-            chg.tgt = true;
-            chg.rev    = true;
+            chg.src     = true;
+            chg.tgt     = true;
+            chg.rev     = true;
             chg.fields  = true;
         }
         
@@ -767,6 +834,9 @@ namespace {
             analyze_reverses();
         if(chg.fields)
             analyze_fields();
+        if(chg.use || chg.tgt || chg.src)
+            analyze_edges();
+        db_check();
 
         if(chg.use)
             launch_graphs();
@@ -796,12 +866,14 @@ void    init_class()
     analyze_targets();
     analyze_reverses();
     analyze_fields();
+    analyze_edges();
+    db_check();
     
     on_change({Change::Added, Change::Modified, Change::Removed}, "*.cls", on_class_modify);
 }
 
 void    init_class_graphs()
 {
-            launch_graphs();
+    launch_graphs();
 }
 

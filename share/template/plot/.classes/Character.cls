@@ -37,6 +37,8 @@ field   Imperfection
 field   Jewelry
 field   Maiden
     name    Maiden Surname
+field   Name
+    type    charname
 field   nick
     name    Nickname
 field   Occupation

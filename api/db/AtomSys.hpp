@@ -188,7 +188,6 @@ namespace cdb {
     Vector<Class>           classes(const QStringSet&,Sorted sorted=Sorted());
     size_t                  classes_count(Atom);
     
-    Folder                  config_folder(Class);
     
     QStringSet              data_types(Field);
     
@@ -207,7 +206,7 @@ namespace cdb {
     
     /*! \brief Creates an atom in the CACHE database
     
-        This method creates or returns an atom in teh cache database
+        This method creates or returns an atom in the cache database
         
         
         \param[in]      doc         Document to create the atom within
@@ -219,6 +218,9 @@ namespace cdb {
     
     Class                   db_class(const QString&, bool *wasCreated=nullptr);
     Class                   db_class(Document, bool *wasCreated=nullptr);
+    Vector<Class>           db_classes(const QStringSet&);
+    Vector<Class>           db_classes(const StringSet&);
+    
     Field                   db_field(Class c, const QString&k, bool *wasCreated=nullptr);
     //Field                   db_field(const QString&, bool *wasCreated=nullptr);
     //Field                   db_field(Document, bool *wasCreated=nullptr);
@@ -231,6 +233,7 @@ namespace cdb {
     Vector<Class>           def_use(Class);
     
     Graph                   dep_graph(Class);
+    Folder                  detail_folder(Class);
 
     Vector<Class>           dependents(Class, Sorted sorted=Sorted{});
     
@@ -239,6 +242,9 @@ namespace cdb {
     Document                document(Field);
 
     bool                    edge(Class);
+    
+    Vector<Class>           edges_in(Class);
+    Vector<Class>           edges_out(Class);
   
     bool                    exists(Atom);
     bool                    exists(Class);

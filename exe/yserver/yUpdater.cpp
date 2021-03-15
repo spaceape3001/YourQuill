@@ -27,15 +27,15 @@ using namespace cdb;
     This section is about maintaining the data graph, in memory, and it needs to remain lightweight.
 */
     
-//uAtom&      uget(Atom a)
-//{
-    //static Vector<uAtom*>       data(65536, nullptr);
-    //data.resize_if_under(a.id+1,2048,nullptr);
-    //uAtom*& p = data[a.id];
-    //if(!p)
-        //p   = new uAtom(a);
-    //return *p;
-//}
+UAtom&      uget(Atom a)
+{
+    static Vector<UAtom*>       data(65536, nullptr);
+    data.resize_if_under(a.id+1,2048,nullptr);
+    UAtom*& p = data[a.id];
+    if(!p)
+        p   = new UAtom(a);
+    return *p;
+}
 
 UClass&            uget(Class c)
 {
@@ -58,6 +58,17 @@ UField&             uget(Field f)
     return *p;
 }
     
+ULeaf&            uget(Leaf l)
+{
+    static Hash<uint64_t, ULeaf*>  data;   // yes, hash, because class IDs will not be continuous
+    ULeaf* p    = data.get(l.id,nullptr);
+    if(!p){
+        p       = new ULeaf(l);
+        data[l.id]  = p;
+    }
+    return *p;
+}
+
 Image            icon_for(Folder f, const QString&k)
 {
     for(const char* z : kImages){

@@ -454,10 +454,6 @@ namespace cdb {
         return 0;
     }    
     
-    Folder              config_folder(Class c)
-    {
-        return db_folder( classes_folder(), key(c));
-    }
 
     QStringSet          data_types(Field f)
     {
@@ -541,6 +537,22 @@ namespace cdb {
             yError() << "Unable to get the class from the database: " << k;
             return Class();
         }
+    }
+
+    Vector<Class>       db_classes(const QStringSet& all)
+    {
+        Vector<Class>   ret;
+        for(const QString& s: all)
+            ret << db_class(s);
+        return ret;
+    }
+    
+    Vector<Class>       db_classes(const StringSet&all)
+    {
+        Vector<Class>   ret;
+        for(const String& s: all)
+            ret << db_class(s.qString());
+        return ret;
     }
 
     Field               db_field(Class c, const QString&k, bool *wasCreated)
@@ -680,6 +692,11 @@ namespace cdb {
         return dependents_unsorted(c);   // TODO INNER JOIN
     }
 
+    Folder              detail_folder(Class c)
+    {
+        return db_folder( classes_folder(), key(c));
+    }
+
     Document            document(Atom a)
     {
         static thread_local SqlQuery s(wksp::cache(), "SELECT doc FROM Atoms WHERE id=?");
@@ -710,7 +727,31 @@ namespace cdb {
         return false;
     }
 
-    bool                exists(Atom a)
+    Vector<Class>      edges_in(Class c)
+    {
+        Vector<Class>   ret;
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT class FROM CTargets WHERE target=?");
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    Vector<Class>      edges_out(Class c)
+    {
+        Vector<Class>   ret;
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT class FROM CSources WHERE source=?");
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
+
+   bool                exists(Atom a)
     {
         return exists_atom(a.id);
     }
