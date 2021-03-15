@@ -22,4 +22,9 @@ CREATE TABLE ATags (
     UNIQUE(atom,tag) ON CONFLICT IGNORE
 );
 
+CREATE TABLE AEdges (
+    atom    INTEGER NOT NULL UNIQUE,
+    source  INTEGER,
+    target  INTEGER
+);
 

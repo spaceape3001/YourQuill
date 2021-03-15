@@ -113,6 +113,24 @@ namespace {
 
     Guarded<Graph>                      gClassDepGraph;
     Guarded<ClassDependencies::Ptr>     gClassDepInfo;
+    bool                                gClassInit      = false;
+    
+    
+    QVariantList            qvar_first(const Set<CPair>& all)
+    {
+        QVariantList    ret;
+        for(CPair v : all)
+            ret << (quint64) v.first.id;
+        return ret;
+    }
+    
+    QVariantList            qvar_second(const Set<CPair>& all)
+    {
+        QVariantList    ret;
+        for(CPair v : all)
+            ret << (quint64) v.second.id;
+        return ret;
+    }
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  READING of the classes from the drive
@@ -150,8 +168,10 @@ namespace {
             i.addBindValue(cdb::qvar_list(add));
             i.batch();
         }
-        std::swap(u.src.def, src);
-        return u.src.def != src;
+        if(add.empty() && rem.empty())
+            return false;
+        u.src.def = src;
+        return true;
     }
     
 
@@ -176,8 +196,10 @@ namespace {
             i.addBindValue(cdb::qvar_list(add));
             i.batch();
         }
-        std::swap(rev, u.rev.def);
-        return rev != u.rev.def;
+        if(add.empty() && rem.empty())
+            return false;
+        u.rev.def = rev;
+        return true;
     }
     
     bool    update_tags(UClass&u)
@@ -201,8 +223,10 @@ namespace {
             i.addBindValue(cdb::qvar_list(add));
             i.batch();
         }
-        std::swap(tags, u.tags);
-        return tags != u.tags;
+        if(add.empty() && rem.empty())
+            return false;
+        u.tags = tags;
+        return true;
     }
     
     bool    update_target(UClass& u)
@@ -226,8 +250,10 @@ namespace {
             i.addBindValue(cdb::qvar_list(add));
             i.batch();
         }
-        std::swap(tgt, u.tgt.def);
-        return u.tgt.def != tgt;
+        if(add.empty() && rem.empty())
+            return false;
+        u.tgt.def   = tgt;
+        return true;
     }
 
     bool        update_use(UClass&c)
@@ -252,8 +278,11 @@ namespace {
             i.addBindValue(cdb::qvar_list(add));
             i.batch();
         }
-        std::swap(c.use.def, use);
-        return  use != c.use.def;
+        
+        if(add.empty() && rem.empty())
+            return false;
+        c.use.def   = use;
+        return true;
     }
         
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -281,9 +310,10 @@ namespace {
             i.batch();
         }
         
-        bool    changed = u.aliases != d.aliases;
+        if(rem.empty() && add.empty())
+            return false;
         u.aliases       = d.aliases;
-        return changed;
+        return true;
     }
     
     bool    update_data_types(UField& u, const ClassData::Field& d)
@@ -307,9 +337,11 @@ namespace {
             i.batch();
         }
         
-        bool    ret = u.types != d.types;
+        if(add.empty() && rem.empty())
+            return false;
+
         u.types = d.types;
-        return ret;
+        return true;
     }
 
 
@@ -337,8 +369,11 @@ namespace {
             i.addBindValue(cdb::qvar_list(add));
             i.batch();
         }
-        std::swap(tags, u.tags);
-        return tags != u.tags;
+        
+        if(add.empty() && rem.empty())
+            return false;
+        u.tags  = tags;
+        return true;
     }
     
 
@@ -434,6 +469,64 @@ namespace {
         return ret;
     }
 
+    void    analyze_edges()
+    {
+        for(Class c : cdb::all_classes()){
+            UClass&u    = uget(c);
+            
+                //  EDGE FLAGS
+            
+            int         empty   = static_cast<int>(u.src.all.empty()) + static_cast<int>(u.tgt.all.empty());
+            if(empty == 1){
+                yWarning() << "Class " << u.key << " should have both sources and targets!";
+            }
+            
+            u.edge      = empty != 2;
+            static thread_local SqlQuery uc(wksp::cache(), "UPDATE Classes SET edge=? WHERE id=?");
+            auto uc_af = uc.af();
+            uc.bind(0, u.edge);
+            uc.bind(1, u.id);
+            uc.exec();
+            
+                //  CONNECTIONS
+
+            Set<CPair>      cxn;
+            for(Class s : u.src.all)
+                for(Class t : u.tgt.all)
+                    cxn << CPair(s,t);
+            Set<CPair>      add = cxn - u.cxn;
+            Set<CPair>      rem = u.cxn - cxn;
+            
+            if(!rem.empty()){
+                static thread_local SqlQuery d(wksp::cache(), "DELETE FROM CEdges WHERE class=? AND source=? AND target=?");
+                auto d_af = d.af();
+                d.addBindValue((quint64) u.id);
+                d.addBindValue(qvar_first(rem));
+                d.addBindValue(qvar_second(rem));
+                d.batch();
+                
+                for(auto& p : rem){
+                    uget(p.first).out[p.second] -= c;
+                    uget(p.second).in[p.first]  -= c;
+                }
+            }
+            if(!add.empty()){
+                static thread_local SqlQuery i(wksp::cache(), "INSERT INTO CEdges (class,source,target) VALUES (?,?,?)");
+                auto i_af = i.af();
+                i.addBindValue((quint64) u.id);
+                i.addBindValue(qvar_first(add));
+                i.addBindValue(qvar_second(add));
+                i.batch();
+                
+                for(auto& p : add){
+                    uget(p.first).out[p.second] += c;
+                    uget(p.second).in[p.first]  += c;
+                }
+            }
+        }
+    }
+ 
+ 
     
     bool    analyze_fields()
     {
@@ -586,7 +679,7 @@ namespace {
             } 
         }
     }
-
+    
     void    analyze_dependencies(Set<CPair>& deps, Class c1, const Set<Class>& use)
     {
         for(Class c2 : use){
@@ -651,24 +744,6 @@ namespace {
         return changed;
     }
     
-    void    analyze_edges()
-    {
-        for(Class c : cdb::all_classes()){
-            UClass&u    = uget(c);
-            
-            int         empty   = static_cast<int>(u.src.all.empty()) + static_cast<int>(u.tgt.all.empty());
-            if(empty == 1){
-                yWarning() << "Class " << u.key << " should have both sources and targets!";
-            }
-            
-            u.edge      = empty != 2;
-            static thread_local SqlQuery uc(wksp::cache(), "UPDATE Classes SET edge=? WHERE id=?");
-            auto uc_af = uc.af();
-            uc.bind(0, u.edge);
-            uc.bind(1, u.id);
-            uc.exec();
-        }
-    }
     
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -870,6 +945,7 @@ void    init_class()
     db_check();
     
     on_change({Change::Added, Change::Modified, Change::Removed}, "*.cls", on_class_modify);
+    gClassInit      = true;
 }
 
 void    init_class_graphs()

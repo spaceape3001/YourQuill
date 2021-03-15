@@ -891,6 +891,20 @@ namespace cdb {
         return Image{};
     }
     
+    //Vector<Atom>            inbound(Atom);
+    Vector<Class>           inbound(Class c)
+    {
+        Vector<Class>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CTargets WHERE target=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
+
     Atom::Info          info(Atom a)
     {
         Atom::Info    ret;
@@ -1131,6 +1145,19 @@ namespace cdb {
         return NKI{};
     }    
 
+    //Vector<Atom>            outbound(Atom);
+    Vector<Class>           outbound(Class c)
+    {
+        Vector<Class>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CSources WHERE source=?");
+        auto s_af = s.af();
+        s.bind(0, c.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Class{s.valueU64(0)};
+        }
+        return ret;
+    }
     
     Class               parent(Field f)
     {

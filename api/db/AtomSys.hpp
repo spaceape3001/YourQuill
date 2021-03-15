@@ -262,6 +262,9 @@ namespace cdb {
     Image                   icon(Atom);
     Image                   icon(Class);
     Image                   icon(Field);
+    
+    //Vector<Atom>            inbound(Atom);
+    Vector<Class>           inbound(Class);
 
     Atom::Info              info(Atom);
     Class::Info             info(Class, bool autoKeyToName=false);
@@ -296,6 +299,9 @@ namespace cdb {
     NKI                     nki(Atom a, bool autoKeyToName=false);
     NKI                     nki(Class, bool autoKeyToName=false);
     NKI                     nki(Field, bool autoKeyToName=false);
+    
+    //Vector<Atom>            outbound(Atom);
+    Vector<Class>           outbound(Class);
     
 
     Class                   parent(Field);

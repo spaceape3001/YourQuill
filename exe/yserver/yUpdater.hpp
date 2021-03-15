@@ -22,6 +22,7 @@ static constexpr const std::initializer_list<const char*>    kImages = { "svg", 
 using ClassSet      = Set<Class>;
 using FieldSet      = Set<Field>;
 using TagSet        = Set<Tag>;
+using CPair         = std::pair<Class,Class>;
 
 template <typename T>
 struct ADSet {
@@ -84,6 +85,8 @@ struct UClass {
     ADSet<Class>        use, der, src, tgt, rev;
     ADSet<Field>        fields;
     ClassSet            sources, targets, reverses; // "defined" list, either direct or inherited
+    Set<CPair>          cxn;                 // connections through this edge
+    Map<Class,ClassSet> in, out;                    // in/outbound class types
     bool                edge;
     QString             db; //!< For edges
     

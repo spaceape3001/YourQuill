@@ -25,6 +25,12 @@ CREATE TABLE CDependsDef (
     UNIQUE(class,base) ON CONFLICT IGNORE
 );
 
+CREATE TABLE CEdges (
+    class   INTEGER NOT NULL,
+    source  INTEGER NOT NULL,
+    target INTEGER NOT NULL,
+    UNIQUE(class,source,target) ON CONFLICT IGNORE
+);
 
 CREATE TABLE CFields (
     class       INTEGER NOT NULL,
