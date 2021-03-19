@@ -25,7 +25,6 @@ class Root {
 public:
 
 
-
     YQ_ENUM(G, , 
         Complain,
         Writable
@@ -70,6 +69,8 @@ public:
     bool                make_path(const QByteArray&) const;
     bool                make_path(const QString&) const;
 
+    //  From the quill-doc (relative)
+    const QString&      def_icon_file() const { return m_icon; }
     
     bool                is_readable(DataRole) const;
     bool                is_writable(DataRole) const;
@@ -126,7 +127,12 @@ private:
     QString                             m_key;
     QString                             m_name;
     QString                             m_color;
+    QString                             m_icon;     // file
     Flag<Vcs>                           m_vcs;
     uint64_t                            m_id;
     uint64_t                            m_depth;   // used by the workspace during load to shuffle into order
 };
+
+
+
+

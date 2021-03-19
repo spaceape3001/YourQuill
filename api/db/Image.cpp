@@ -7,6 +7,7 @@
 #include "Image.hpp"
 
 #include "FileSys.hpp"
+#include "Root.hpp"
 #include "Workspace.hpp"
 
 #include <util/Logging.hpp>
@@ -14,6 +15,7 @@
 #include <util/Utilities.hpp>
 
 #include <QBuffer>
+#include <QIcon>
 #include <QImage>
 #include <QImageReader>
 #include <QSqlError>
@@ -98,21 +100,21 @@ namespace cdb {
         }
     }
 
-    Image               db_image(Document doc, bool *wasCreated)
+    Image               db_image(Fragment frag, bool *wasCreated)
     {
         static thread_local SqlQuery i(wksp::cache(), "INSERT OR FAIL INTO Images (id,type) VALUES (?,?)");
         auto i_af   = i.af();
-        i.bind(0, doc.id);
-        i.bind(1, mimeTypeForExt(suffix(doc)));
+        i.bind(0, frag.id);
+        i.bind(1, mimeTypeForExt(suffix(frag)));
         bool    f   = i.exec(false);
         if(wasCreated)
             *wasCreated = f;
-        return exists_image(doc.id) ?  Image{doc.id} : Image{};
+        return Image{frag.id};
     }
 
     Document            document(Image i)
     {
-        return exists(i) ? Document{i.id} : Document{};
+        return document(fragment(i));
     }
 
     bool                exists(Image i)
@@ -130,6 +132,23 @@ namespace cdb {
         return false;
     }
 
+    Fragment            fragment(Image i)
+    {
+        return exists(i) ? Fragment{i.id} : Fragment{};
+    }
+    
+    Image               icon(const Root* rt)
+    {
+        if(!rt)
+            return Image();
+        static thread_local SqlQuery s(wksp::cache(), "SELECT icon FROM RootIcons WHERE root=?");
+        static auto s_af = s.af();
+        s.bind(0, rt->id());
+        if(s.exec() && s.next())
+            return Image{s.valueU64(0)};
+        return Image{};
+    }
+
     Image               image(const QString&k)
     {
         return image(document(k));
@@ -137,12 +156,39 @@ namespace cdb {
 
     Image               image(Document d)
     {
-        return image(d.id);
+        return image(first(d, DataRole::Image));
+    }
+
+    Image               image(Fragment f)
+    {
+        return exists_image(f.id) ? Image{f.id} : Image{};
     }
     
     Image               image(uint64_t i)
     {
         return exists_image(i) ? Image{i} : Image{};
+    }
+
+    QByteArray          image_bytes(Image img, SizeDesc sz)
+    {
+        switch(sz){
+        case SizeDesc::Large:
+            return bytes_large(img);
+        case SizeDesc::Medium:
+            return bytes_medium(img);
+        case SizeDesc::Small:
+            return bytes_small(img);
+        case SizeDesc::Original:
+        default:
+            return bytes_image(img);
+        }
+    }
+
+    QIcon               qIcon(Image img)
+    {
+        if(!img)
+            return QIcon();
+        return QIcon(path(Fragment{img.id}));
     }
 
     bool                raster(ContentType ct)
@@ -179,8 +225,8 @@ namespace cdb {
         if(!i.id)
             return ;
             
-        Document    doc(i.id);
-        Fragment    frag    = first(doc, DataRole::Image);
+        //Document    doc(i.id);
+        Fragment    frag{i.id}; //    = first(doc, DataRole::Image);
         QByteArray  byt     = bytes(frag);
         
         static thread_local SqlQuery u1(wksp::cache(), "UPDATE Images SET image=? WHERE id=?");
@@ -229,5 +275,17 @@ namespace cdb {
         u3.bind(2, bl.data());
         u3.bind(3, i.id);
         u3.exec();
+    }
+
+    void                    update_root(const Root*rt, Image img)
+    {
+        if(!rt)
+            return ;
+            
+        static thread_local SqlQuery r(wksp::cache(), "REPLACE INTO RootIcons (root, icon) VALUES (?, ?)");
+        auto r_af = r.af();
+        r.bind(0, rt->id());
+        r.bind(1, img.id);
+        r.exec();
     }
 }

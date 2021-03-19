@@ -43,6 +43,7 @@ namespace {
         ret.color   = a->value("color");
         ret.vcs     = Vcs(a->value("vcs"));
         ret.name    = a->value("name");
+        ret.icon    = a->value("icon");
         for(DataRole dr : DataRole::all_values())
             ret.policy[dr]  = Access(a->value(dr.key()));
         return ret;
@@ -100,6 +101,8 @@ namespace {
             a << Attribute("name", r.name);
         if(!r.color.empty())
             a << Attribute("color", r.color);
+        if(!r.icon.empty())
+            a << Attribute("icon", r.icon);
         if(r.vcs != Vcs())
             a << Attribute("vcs", r.vcs.key());
         for(DataRole dr : DataRole::all_values()){

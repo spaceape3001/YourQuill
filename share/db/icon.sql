@@ -1,5 +1,5 @@
 CREATE TABLE Images (
-    --  icon IDs are the document IDs
+    --  icon IDs are the fragment IDs
     id          INTEGER PRIMARY KEY,
     type        VARCHAR(255),
 
@@ -20,4 +20,8 @@ CREATE TABLE Graphs (
     svg         BLOB
 );
 
+CREATE TABLE RootIcons (
+    root        PRIMARY KEY,
+    icon        INTEGER
+);
 

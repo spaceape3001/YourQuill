@@ -4,6 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "uClass.hpp"
+#include "uField.hpp"
+
 #include "yCommon.hpp"
 #include "yUpdater.hpp"
 
@@ -15,6 +18,7 @@
 
 #include <srv/Importer.hpp>
 #include <util/Guarded.hpp>
+#include <util/Hash.hpp>
 #include <util/Logging.hpp>
 #include <util/SqlQuery.hpp>
 #include <util/SqlUtils.hpp>
@@ -24,18 +28,65 @@
 #include <QThreadPool>
 
 
+
 UClass::UClass(Class c) : key(cdb::key(c)),  id(c.id), // cls(c), doc{c.id}, 
     folder(cdb::detail_folder(c)), edge(false)
 {
-    ////  Add ourselves to ourselves ... 
-        //use.all += c;
-        //der.all += c;
 }
 
-
-UField::UField(Field f) : key(cdb::key(f)), id(f.id), implied(false)
+Image               UClass::calc_icon() const
 {
+    Set<Class>  seen;
+    Image   i   = explicit_icon();
+    if(i)
+        return i;
+    seen << cls;
+    
+    Set<Class>   next, search;
+    search      = use.def;
+    search -= cls;
+    while(!search.empty()){
+        for(Class c : search){
+            if(!seen.add(c))
+                continue;
+                
+            auto& u = uget(c);
+            i    = u.explicit_icon();
+            if(i)
+                return i;
+            next += u.use.def;
+        }
+        search  = next - seen;
+        next.clear();
+    }
+    
+    return Image{};
 }
+
+Image               UClass::explicit_icon() const
+{
+    for(const char* x : Image::kSupportedExtensions){
+        Document    d   = cdb::document(cdb::classes_folder(), key + "." + x);
+        if(d && cdb::fragments_count(d))
+            return cdb::image(d);
+    }
+    return Image{};
+}
+
+
+UClass&            uget(Class c)
+{
+    static Hash<uint64_t, UClass*>  data;   // yes, hash, because class IDs will not be continuous
+    UClass* p   = data.get(c.id,nullptr);
+    if(!p){
+        p       = new UClass(c);
+        data[c.id]  = p;
+    }
+    return *p;
+}
+
+
+
 
 /*
     Quick notes: want auto edges to commence .... that's the WHOLE point of this..
@@ -54,8 +105,6 @@ UField::UField(Field f) : key(cdb::key(f)), id(f.id), implied(false)
 */
 
 namespace {
-    using CPair = std::pair<Class,Class>;
-    using FPair = std::pair<Class,Field>;
 
         //  Class depenedency generator
     struct ClassDependencies {
@@ -134,8 +183,6 @@ namespace {
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  READING of the classes from the drive
-        
-   
 
     struct UChanged {
         bool    use, rev, src, tgt, tags, fields;
@@ -270,6 +317,9 @@ namespace {
             d.addBindValue((quint64) c.id);
             d.addBindValue(cdb::qvar_list(rem));
             d.batch();
+            
+            for(Class c2 : rem)
+                uget(c2).der.def -= c.cls;
         }
         if(!add.empty()){
             static thread_local SqlQuery    i(wksp::cache(), "INSERT INTO CDependsDef (class,base) VALUES (?,?)");
@@ -277,6 +327,9 @@ namespace {
             i.addBindValue((quint64) c.id);
             i.addBindValue(cdb::qvar_list(add));
             i.batch();
+            
+            for(Class c2 : add)
+                uget(c2).der.def += c.cls;
         }
         
         if(add.empty() && rem.empty())
@@ -388,15 +441,14 @@ namespace {
             return ret;
         
         u.data          = cdb::merged(u.cls);
-        u.icon          = icon_for(cdb::classes_folder(), u.key);
+        //u.icon          = icon_for(cdb::classes_folder(), u.key);
         
-        static thread_local SqlQuery    u1(wksp::cache(), "UPDATE Classes SET name=?,plural=?,brief=?,icon=?,removed=0 WHERE id=?");
+        static thread_local SqlQuery    u1(wksp::cache(), "UPDATE Classes SET name=?,plural=?,brief=?,removed=0 WHERE id=?");
         auto u1_af   = u1.af();
         u1.bind(0, u.data->name);
         u1.bind(1, u.data->plural);
         u1.bind(2, u.data->brief);
-        u1.bind(3, u.icon.id);
-        u1.bind(4, u.id);
+        u1.bind(3, u.id);
         u1.exec();
 
         ret.use     = update_use(u);
@@ -410,7 +462,7 @@ namespace {
         for(auto& j : u.data->fields){
             UField& f   = uget(cdb::db_field(u.cls, j.first.qString()));
             f.cls       = u.cls;
-            f.icon      = icon_for(u.folder, j.first.qString());
+            //f.icon      = icon_for(u.folder, j.first.qString());
             f.implied   = false;
             
             String      name    = j.second.name.empty() ? j.first : j.second.name;
@@ -924,6 +976,68 @@ Graph       cur_class_dep_graph()
     return gClassDepGraph;
 }
 
+#if 0
+Image       calc_icon_for(Class cls)
+{
+    Set<Class>  seen;
+    
+    Image   i   = icon_of(cls);
+    if(i)
+        return i;
+    seen << cls;
+    
+    Set<Class>   next, search;
+    search      = makeSet(cdb::def_use(cls));
+    search -= cls;
+    while(!search.empty()){
+        for(Class c : search){
+            if(!seen.add(c))
+                continue;
+            i   = icon_of(c);
+            if(i)
+                return i;
+            next += cdb::def_use(c);
+        }
+        search  = next - seen;
+        next.clear();
+    }
+    
+    return Image{};
+}
+#endif
+
+void        update_icon(Class c)
+{
+    static thread_local SqlQuery u(wksp::cache(), "UPDATE Classes SET icon=? WHERE id=?");
+    auto u_af = u.af();
+    u.bind(0, uget(c).calc_icon().id);
+    u.bind(1, c.id);
+    u.exec();
+}
+
+void        update_class_icon(Fragment frag)
+{
+    QString     ckey    = cdb::skeyb(frag);
+
+    Class   cls   = cdb::class_(ckey);
+    if(!cls)
+        return ;
+    update_icon(cls);
+    for(Class d : cdb::dependents(cls)){
+        if(d != cls)
+            update_icon(d);
+    }
+}
+
+void        update_icon(Field f)
+{
+}
+
+
+void        update_field_icon(Fragment frag)
+{
+}
+
 
 void    init_class()
 {
@@ -936,6 +1050,7 @@ void    init_class()
     for(Class c : cdb::all_classes())
         on_read(uget(c));
     
+    
     analyze_use();
     analyze_sources();
     analyze_targets();
@@ -943,6 +1058,12 @@ void    init_class()
     analyze_fields();
     analyze_edges();
     db_check();
+    
+    for(Class c : cdb::all_classes()){
+        update_icon(c);
+        for(Field f : cdb::fields(c))
+            update_icon(f);
+    }
     
     on_change({Change::Added, Change::Modified, Change::Removed}, "*.cls", on_class_modify);
     gClassInit      = true;

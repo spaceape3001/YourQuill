@@ -6,6 +6,9 @@ CREATE TABLE Fragments (
 
 	    -- full filename (no path)
 	name		VARCHAR(255) NOT NULL, 
+	
+	    -- file extension
+	suffix      VARCHAR(255) COLLATE NOCASE,
 
         -- Location/linkage
 	dir         INTEGER NOT NULL,

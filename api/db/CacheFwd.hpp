@@ -58,5 +58,4 @@ namespace cdb {
     using DocString     = std::pair<Document,QString>;
     using FoldString    = std::pair<Folder,QString>;
     using FragString    = std::pair<Fragment,QString>;
-
 }

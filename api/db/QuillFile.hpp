@@ -13,7 +13,7 @@
 class QuillFile : public AbstractFile, public QuillData {
 public:
 
-    struct RootInfo;
+    //struct RootInfo;
 
 protected:
     virtual void    reset() override;

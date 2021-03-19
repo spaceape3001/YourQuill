@@ -7,6 +7,7 @@
 #pragma once
 
 #include "RootFwd.hpp"
+#include <db/enum/SizeDesc.hpp>
 #include <util/Enum.hpp>
 #include <util/Flag.hpp>
 
@@ -70,7 +71,7 @@ namespace wksp {
     const QString&          home();
     
     const QString&          hostname();
-      
+
     const QString&          ini();
     
     bool                    initialize(const QString& dirOrFragment, Options opts={ Option::RO_TEMPLATE });

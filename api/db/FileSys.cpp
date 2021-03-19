@@ -313,6 +313,39 @@ namespace cdb {
         return 0;
     }
     
+    namespace {
+        Vector<Fragment>    all_fragments_suffix_sorted(const QString& sfx)
+        {
+            Vector<Fragment>    ret;
+            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
+            auto s_af   = s.af();
+            s.bind(0, sfx);
+            if(s.exec()){
+                while(s.next())
+                    ret << Fragment{s.valueU64(0)};
+            }
+            return ret;
+        }
+        
+        Vector<Fragment>    all_fragments_suffix_unsorted(const QString& sfx)
+        {
+            Vector<Fragment>    ret;
+            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE suffix=?");
+            auto s_af   = s.af();
+            s.bind(0, sfx);
+            if(s.exec()){
+                while(s.next())
+                    ret << Fragment{s.valueU64(0)};
+            }
+            return ret;
+        }
+    }
+
+    Vector<Fragment>    all_fragments_suffix(const QString&sfx, Sorted sorted)
+    {
+        return sorted ? all_fragments_suffix_sorted(sfx) : all_fragments_suffix_unsorted(sfx);
+    }
+
     QString             base_key(const QString& key)
     {
         int i   = key.lastIndexOf('/');
@@ -608,10 +641,11 @@ namespace cdb {
         Folder          f   = folder(dir);
         Document        a   = db_document(f, k);
         QString         p   = path(dir) + "/" + k;
+        QString         sfx = suffix(a);
         const Root*     rt  = root(dir);
         
         
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder) VALUES (?,?,?,?,?,?)");
+        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder,suffix) VALUES (?,?,?,?,?,?,?)");
         static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE path=?");
         auto s_lk   = s.af();
         auto i_lk   = i.af();
@@ -622,6 +656,7 @@ namespace cdb {
         i.bind(3,rt->id());
         i.bind(4,a.id);
         i.bind(5,f.id);
+        i.bind(6,sfx);
         
         if(i.exec(false)){
             if(wasCreated)
@@ -631,12 +666,12 @@ namespace cdb {
             s.bind(0,p);
             if(s.exec() && s.next())
                 return Fragment(s.valueU64(0));
-            yError() << "Sql Query error!" << s.lastError() << "  Unable to get fragment ID";
+            yError() << "Sql Query error!" << s.lastError() << "  Unable to make/get fragment ID on " << k;
             return Fragment{};
         }
     }
     
-    Fragment                db_fragment(Document, const Root*); // TODO
+    //Fragment                db_fragment(Document, const Root*); // TODO
 
     Directory           directory(uint64_t i)
     {
@@ -1181,6 +1216,32 @@ namespace cdb {
         if(s.exec() && s.next())
             return Folder{s.valueU64(0)};
         return Folder{};
+    }
+
+    Vector<Folder>      folder_path(Directory d)
+    {
+        return folder_path(folder(d));
+    }
+
+    Vector<Folder>      folder_path(Document doc)
+    {
+        Vector<Folder>  ret;
+        for(Folder f = parent(doc); f; f = parent(f))
+            ret << f;
+        return Vector<Folder>(ret.rbegin(), ret.rend());
+    }
+    
+    Vector<Folder>      folder_path(Folder folder)
+    {
+        Vector<Folder>  ret;
+        for(Folder f = parent(folder); f; f = parent(f))
+            ret << f;
+        return Vector<Folder>(ret.rbegin(), ret.rend());
+    }
+
+    Vector<Folder>      folder_path(Fragment f)
+    {
+        return folder_path(document(f));
     }
 
     namespace {
@@ -2136,6 +2197,16 @@ namespace cdb {
         return QString();
     }
 
+    QString             suffix(Fragment f)
+    {
+        static thread_local SqlQuery    s(wksp::cache(), "SELECT suffix FROM Fragments WHERE id=?");
+        auto s_af       = s.af();
+        s.bind(0, f.id);
+        if(s.exec() && s.next())
+            return s.valueString(0);
+        return QString();
+    }
+
     void                update(Fragment f)
     {
         String  p           = path(f);
@@ -2148,6 +2219,46 @@ namespace cdb {
         u.bind(2, !sz.exists);
         u.bind(3, f.id);
         u.exec();  
+    }
+
+    bool                within(Folder p, Directory d, bool recursive)
+    {
+        return within(p, folder(d), recursive);
+    }
+    
+    bool                within(Folder p, Document d, bool recursive)
+    {
+        if(!p || !d)    
+            return false;
+        Folder  c   = parent(d);
+        if(p == c)
+            return true;
+        if(recursive){
+            while((c = parent(c)))
+                if(p == c)
+                    return true;
+        }
+        return false;
+    }
+    
+    bool                within(Folder p, Folder f, bool recursive)
+    {
+        if(!p || !f)    
+            return false;
+        Folder  c   = parent(f);
+        if(p == c)
+            return true;
+        if(recursive){
+            while((c = parent(c)))
+                if(p == c)
+                    return true;
+        }
+        return false;
+    }
+    
+    bool                within(Folder p, Fragment f, bool recursive)
+    {
+        return within(p, document(f), true);
     }
 
     Fragment            writable(Document d, DataRole dr)

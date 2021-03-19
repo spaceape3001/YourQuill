@@ -72,6 +72,7 @@ struct QuillData::Root {
     PolicyMap       policy;
     Vcs             vcs;
     String          color;
+    String          icon;
     
     Root(){}
     explicit Root(const String& p) : path(p) {}

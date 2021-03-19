@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "Image.hpp"
 #include "Root.hpp"
 #include "QuillFile.hpp"
 #include "Workspace.hpp"
@@ -60,6 +61,7 @@ namespace {
         QString             quill_prime;
         unsigned int        read_timeout;
         RootVector          roots;
+        Vector<QString>     root_icons;
         RootMap             root_by_path;
         RoleMap             root_first;
         RoleVecMap          root_read;
@@ -409,11 +411,12 @@ namespace wksp {
                     }
                 }
             }
-            
-            
+
             m.init      = true;
             return ret;
         }
+        
+    
 
         static bool       _load(const QuillFile&doc, PathSet&rSeen, PathSet&tSeen, PolicyMap rPolicy, PolicyMap tPolicy, SetSpots&spots, bool fTemplate, size_t depth)
         {
@@ -442,6 +445,7 @@ namespace wksp {
                         rt->m_key       = rt->m_name;
                     rt->m_isTemplate    = true;
                     rt->m_color         = rs.color.qString();
+                    rt->m_icon          = rs.icon.qString();
                 
                     QString     qf  = quill_fragment_for_dir(t);
                     if(!QFile::exists(qf)){
@@ -490,6 +494,7 @@ namespace wksp {
                         rt -> m_vcs    |= rs.vcs;
                     rt -> m_isTemplate  = false;
                     rt->m_color         = rs.color.qString();
+                    rt->m_icon          = rs.icon.qString();
                     
                     if(!rcre)       // should only trigger for the root, avoid a nasty recursion
                         continue;
@@ -665,6 +670,7 @@ namespace wksp {
     {
         return impl().hostname;
     }
+    
       
     const QString&      ini()
     {

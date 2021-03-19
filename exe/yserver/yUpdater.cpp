@@ -6,10 +6,16 @@
 
 #include "yCommon.hpp"
 #include "yUpdater.hpp"
+#include "update/uAtom.hpp"
+#include "update/uClass.hpp"
+#include "update/uField.hpp"
+#include "update/uLeaf.hpp"
+#include "update/uTag.hpp"
 
 #include <db/Image.hpp>
 #include <db/Tag.hpp>
 #include <db/ShareDir.hpp>
+#include <db/Root.hpp>
 #include <db/Workspace.hpp>
 #include <srv/Importer.hpp>
 #include <srv/Page.hpp>
@@ -37,26 +43,6 @@ UAtom&      uget(Atom a)
     return *p;
 }
 
-UClass&            uget(Class c)
-{
-    static Hash<uint64_t, UClass*>  data;   // yes, hash, because class IDs will not be continuous
-    UClass* p   = data.get(c.id,nullptr);
-    if(!p){
-        p       = new UClass(c);
-        data[c.id]  = p;
-    }
-    return *p;
-}
-
-UField&             uget(Field f)
-{
-    static Vector<UField*>      data(20480, nullptr);
-    data.resize_if_under(f.id+1,256,nullptr);
-    UField*& p = data[f.id];
-    if(!p)
-        p       = new UField(f);
-    return *p;
-}
     
 ULeaf&            uget(Leaf l)
 {
@@ -69,15 +55,41 @@ ULeaf&            uget(Leaf l)
     return *p;
 }
 
-Image            icon_for(Folder f, const QString&k)
+Image            calc_icon_for(Folder f, const QString&k)
 {
-    for(const char* z : kImages){
+    for(const char* z : Image::kSupportedExtensions){
         Image i = cdb::image(cdb::document(f, k + "." + z));
         if(i)
             return i;
     }
     return Image{};
 }
+
+Image           calc_icon_for(const Root* rt)
+{
+    if(!rt)
+        return Image{};
+    
+    if(!rt->def_icon_file().isEmpty()){
+        Fragment    f   = cdb::fragment(rt->resolve(rt->def_icon_file()));
+        if(f)
+            return cdb::image(f);
+    }
+    
+    for(const char* z : { ".icon", ".root" }){
+        for(const char* y : Image::kSupportedExtensions){
+            QString     d   = QString(z) + "." + y;
+            Document    doc = cdb::document(d);
+            if(!doc)
+                continue;
+            Image       img = cdb::image(doc);
+            if(img)
+                return img;
+        }
+    }
+    return Image{};
+}
+
     
 
 namespace {
@@ -192,9 +204,23 @@ namespace {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //  OTHER STUFF
 
-    void    on_image_change(Fragment fragment)
+    void    update_image(Fragment frag)
     {
-        update(db_image(document(fragment)));
+        update(db_image(frag));
+    }
+
+    void    on_image_change(Fragment frag)
+    {
+        update_image(frag);
+        if(cdb::folder(frag) == cdb::top_folder()){
+            const Root* rt      = cdb::root(frag);
+            if(rt)
+                cdb::update_root(rt, calc_icon_for(rt));
+        } else if(cdb::folder(frag) == cdb::classes_folder()){
+            update_class_icon(frag);
+        } else if(cdb::within(cdb::classes_folder(), frag)){
+            update_field_icon(frag);
+        }
     }
 }
 
@@ -265,9 +291,9 @@ void        updater_init()
     on_change(all_set<Change>(), ".background.png", update_background);
     on_change(all_set<Change>(), ".background.svg", update_background);
 
-    for(const char* z : { "bmp", "gif", "jpg", "png", "svg", "tif", "tiff" }){
-        for(Document d : cdb::all_documents_suffix(z))
-            cdb::update( cdb::db_image(d));
+    for(const char* z : Image::kSupportedExtensions){
+        for(Fragment f : cdb::all_fragments_suffix(z))
+            update_image(f);
         on_change("*." + QString(z), on_image_change);
     }
     for(Document d : documents_by_suffix(cdb::tags_folder(), "tag"))

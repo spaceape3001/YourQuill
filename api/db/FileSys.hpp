@@ -147,6 +147,7 @@ namespace cdb {
     Vector<Fragment>        all_fragments(const Root*,Sorted sorted=Sorted());
     size_t                  all_fragments_count();
     size_t                  all_fragments_count(const Root*);
+    Vector<Fragment>        all_fragments_suffix(const QString&, Sorted sorted=Sorted());
 
     
     QString                 base_key(Document);         //!< key w/o final extensions
@@ -252,6 +253,11 @@ namespace cdb {
 
     Folder                  folder(uint64_t);
     Folder                  folder(const QString&);
+    
+    Vector<Folder>          folder_path(Directory);
+    Vector<Folder>          folder_path(Document);
+    Vector<Folder>          folder_path(Folder);
+    Vector<Folder>          folder_path(Fragment);
     
     Vector<Folder>          folders(Folder, Sorted sorted=Sorted());
     size_t                  folders_count(Folder);
@@ -367,11 +373,56 @@ namespace cdb {
     QString                 skeyb(Fragment);  //!< Key inside the directory (w/o extensions)
 
     QString                 suffix(Document);
+    QString                 suffix(Fragment);
 
     consteval Folder        tags_folder() { return Folder{Folder::TAGS}; }
     consteval Folder        top_folder() { return Folder{Folder::TOP}; }
 
     void                    update(Fragment);
+
+    /*! \brief Tests to see if directory is within the specified folder
+    
+        This tests to see if the spacified directory is within the folder.
+        
+        \param[in] parentFolder     Folder that we're checking
+        \param[in] theDirectory     Directory under test
+        \param[in] recursive        If TRUE, routine marches the path upward until top or parent is encountered.
+        \return TRUE if the directory is within the specified folder
+    */
+    bool                    within(Folder parentFolder, Directory theDirectory, bool recursive=true);
+
+    /*! \brief Tests to see if directory is within the specified folder
+    
+        This tests to see if the spacified directory is within the folder.
+        
+        \param[in] parentFolder     Folder that we're checking
+        \param[in] theDocument      Document under test
+        \param[in] recursive        If TRUE, routine marches the path upward until top or parent is encountered.
+        \return TRUE if the directory is within the specified folder
+    */
+    bool                    within(Folder parentFolder, Document theDocument, bool recursive=true);
+
+    /*! \brief Tests to see if directory is within the specified folder
+    
+        This tests to see if the spacified directory is within the folder.
+        
+        \param[in] parentFolder     Folder that we're checking
+        \param[in] theFolder        Folder under test
+        \param[in] recursive        If TRUE, routine marches the path upward until top or parent is encountered.
+        \return TRUE if the directory is within the specified folder
+    */
+    bool                    within(Folder parentFolder, Folder theFolder, bool recursive=true);
+
+    /*! \brief Tests to see if directory is within the specified folder
+    
+        This tests to see if the spacified directory is within the folder.
+        
+        \param[in] parentFolder     Folder that we're checking
+        \param[in] theFragment      Fragment under test
+        \param[in] recursive        If TRUE, routine marches the path upward until top or parent is encountered.
+        \return TRUE if the directory is within the specified folder
+    */
+    bool                    within(Folder parentFolder, Fragment theFragment, bool recursive=true);
 
     Fragment                writable(Document, DataRole);
 }
