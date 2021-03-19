@@ -9,6 +9,8 @@
 
 struct TagData {
 
+    using Shared    = std::shared_ptr<TagData>;
+
     String      leaf;
     String      name;
     String      brief;

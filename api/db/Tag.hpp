@@ -89,8 +89,6 @@ namespace cdb {
     Tag                     tag(uint64_t);
     
     TagFile::Shared         tag_doc(Fragment, bool fAllowEmpty=false);
-    
-    void                    update(Tag, UpdateFlags);
 
     //!  \brief   Returns a writable document
     //!

@@ -271,25 +271,15 @@ void        updater_init()
     on_change(all_set<Change>(), ".background.svg", update_background);
 
     UImage::init_scan();
-
-    for(Document d : documents_by_suffix(cdb::tags_folder(), "tag"))
-        cdb::update(cdb::db_tag(d), Update::Interior);
-
+    UTag::init_read();
+    
     init_class();
 
     ULeaf::init_read();
     ULeaf::init_link();
 
-    for(Tag  t : all_tags())
-        cdb::update(t, Update::Exterior);
-    
+    UTag::init_link();
 
     init_class_graphs();
-
-    on_change("*.tag", [](Fragment frag){
-        if(cdb::folder(frag) == cdb::tags_folder()){
-            cdb::update(cdb::db_tag(frag), { Update::Exterior, Update::Interior });
-        }
-    });
 }
 

@@ -16,6 +16,14 @@ struct UTag {
         const Tag           tag;
         const Document      doc;
     };
+    TagData::Shared         data;
+    Image                   icon;
+    
+    static void         init_read();
+    static void         init_link();
+    static void         on_tag_added(Fragment);
+    static void         on_tag_change(Fragment);
+    static void         on_image_change(Fragment);
     
     UTag(Tag);
 
@@ -28,6 +36,10 @@ struct UTag {
     UTag(UTag&&) = delete;
     UTag& operator=(const UTag&) = delete;
     UTag& operator=(UTag&&) = delete;
+
+    void    do_icon();
+    void    do_read();
+    void    do_link();
 };
 
 UTag&       uget(Tag);

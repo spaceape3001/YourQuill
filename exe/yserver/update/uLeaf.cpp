@@ -34,8 +34,11 @@ void         ULeaf::init_read()
         cdb::db_atom(d);
         cdb::db_leaf(d);
     }
-    for(Leaf l : cdb::all_leafs())
-        uget(l).do_read();
+    for(Leaf l : cdb::all_leafs()){
+        ULeaf& u = uget(l);
+        u.do_read();
+        u.do_icon();
+    }
  }
 
 void         ULeaf::init_link()
@@ -96,22 +99,26 @@ void                ULeaf::do_icon()
 
 void                ULeaf::do_link()
 {
-    //  TODO.... (massive)
+    if(data){
+        //  TODO.... (massive)
+    }
 }
 
 void                ULeaf::do_read()
 {
     data            = cdb::merged(leaf, cdb::IsUpdate|cdb::IgnoreContext);
-    UAtom& a        = uget(cdb::db_atom(doc));
-    
-    static thread_local SqlQuery u1(wksp::cache(), "UPDATE Leafs SET title=? WHERE id=?");
-    auto u1_af = u1.af();
-    u1.bind(0, data->title().qString());
-    u1.bind(1, id);
-    u1.exec();
-    
-    a.update_classes(data->classes());
-    a.update_tags(data->tags());
+    if(data){
+        UAtom& a        = uget(cdb::db_atom(doc));
+        
+        static thread_local SqlQuery u1(wksp::cache(), "UPDATE Leafs SET title=? WHERE id=?");
+        auto u1_af = u1.af();
+        u1.bind(0, data->title().qString());
+        u1.bind(1, id);
+        u1.exec();
+        
+        a.update_classes(data->classes());
+        a.update_tags(data->tags());
+    }
 }
 
 
