@@ -19,51 +19,12 @@
     /*
         These are the data structures to persist (non-DB) during a run.  They won't be deleted until next run.
         
-        (They're also a crutch until the dtabase gets super-good)
+        (They're also a crutch until the database gets super-good)
     */
-using ClassSet      = Set<Class>;
-using FieldSet      = Set<Field>;
-using TagSet        = Set<Tag>;
-
-
-struct UAtom {
-    const QString   key;
-    union {
-        const uint64_t  id;
-        const Atom      atom;
-    };
-    TagSet          tags;
-    ClassSet        classes;
-    Atom            src, tgt, rev;
-    
-    UAtom(Atom a);
-    
-    bool        update_classes(const StringSet&);
-    bool        update_tags(const StringSet&);
-};
-
 // These are our tracking data structures
 
 
-struct ULeaf {
-    const QString           key;
-    union {
-        const uint64_t      id;
-        const Leaf          leaf;
-        const Document      doc;
-    };
-    const Folder            folder;     // config/sub
-    const Atom              atom;
-    ClassSet                classes;
-    Leaf::Merge::Shared     data;       // this is attributes-only
-    Image                   icon;
-    TagSet                  tags;
-    ULeaf(Leaf);
-};
 
-
-UAtom&          uget(Atom);
-ULeaf&          uget(Leaf);
 
 void            init_leaf();
 

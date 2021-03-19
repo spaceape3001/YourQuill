@@ -70,3 +70,15 @@ bool        UAtom::update_tags(const StringSet& newtag)
     return !(add.empty() && rem.empty());
 }
 
+    
+UAtom&      uget(Atom a)
+{
+    static Vector<UAtom*>       data(65536, nullptr);
+    data.resize_if_under(a.id+1,2048,nullptr);
+    UAtom*& p = data[a.id];
+    if(!p)
+        p   = new UAtom(a);
+    return *p;
+}
+
+    

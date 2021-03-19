@@ -4,10 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "uAtom.hpp"
+#include "uLeaf.hpp"
 #include "yUpdater.hpp"
 
+#include <db/Image.hpp>
 #include <db/Workspace.hpp>
 #include <srv/Importer.hpp>
+#include <util/Hash.hpp>
 #include <util/SqlQuery.hpp>
 
 ULeaf::ULeaf(Leaf l) : key(cdb::key(l)), id(l.id), 
@@ -19,7 +23,27 @@ ULeaf::ULeaf(Leaf l) : key(cdb::key(l)), id(l.id),
     u.bind(0, atom.id);
     u.bind(1, id);
     u.exec();
+}
 
+Image               ULeaf::explicit_icon() const
+{
+    for(const char* x : Image::kSupportedExtensions){
+        Document    d   = cdb::document(key + "." + x);
+        if(d && cdb::fragments_count(d))
+            return cdb::image(d);
+    }
+    return Image{};
+}
+
+ULeaf&            uget(Leaf l)
+{
+    static Hash<uint64_t, ULeaf*>  data;   // yes, hash, because class IDs will not be continuous
+    ULeaf* p    = data.get(l.id,nullptr);
+    if(!p){
+        p       = new ULeaf(l);
+        data[l.id]  = p;
+    }
+    return *p;
 }
 
 
