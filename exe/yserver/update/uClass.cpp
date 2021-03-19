@@ -34,6 +34,7 @@ UClass::UClass(Class c) : key(cdb::key(c)),  id(c.id), // cls(c), doc{c.id},
 {
 }
 
+
 Image               UClass::calc_icon() const
 {
     Set<Class>  seen;

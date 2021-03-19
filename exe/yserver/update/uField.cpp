@@ -11,6 +11,10 @@ UField::UField(Field f) : key(cdb::key(f)), id(f.id), implied(false)
 {
 }
 
+//UField::~UField()
+//{
+//}
+
 UField&             uget(Field f)
 {
     static Vector<UField*>      data(20480, nullptr);

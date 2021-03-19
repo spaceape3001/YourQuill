@@ -16,7 +16,6 @@ UAtom::UAtom(Atom a) : key(cdb::key(a)), id(a.id)
 {
 }
 
-
 bool        UAtom::update_classes(const StringSet& newCls)
 {
     ClassSet    use;
@@ -45,6 +44,21 @@ bool        UAtom::update_classes(const StringSet& newCls)
 
     classes = use;
     return !(add.empty() && rem.empty());
+}
+
+Image       UAtom::update_icon(Image img)
+{
+    if(!img){
+        //  TODO
+    }
+
+    static thread_local SqlQuery u(wksp::cache(), "UPDATE Atoms SET icon=? WHERE id=?");
+    auto u_af = u.af();
+    u.bind(0, img.id);
+    u.bind(1, id);
+    u.exec();
+    
+    return img;
 }
 
 bool        UAtom::update_tags(const StringSet& newtag)

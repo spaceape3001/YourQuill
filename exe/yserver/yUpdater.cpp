@@ -9,6 +9,7 @@
 #include "update/uAtom.hpp"
 #include "update/uClass.hpp"
 #include "update/uField.hpp"
+#include "update/uImage.hpp"
 #include "update/uLeaf.hpp"
 #include "update/uTag.hpp"
 
@@ -182,24 +183,24 @@ namespace {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //  OTHER STUFF
 
-    void    update_image(Fragment frag)
-    {
-        update(db_image(frag));
-    }
+    //void    update_image(Fragment frag)
+    //{
+        //update(db_image(frag));
+    //}
 
-    void    on_image_change(Fragment frag)
-    {
-        update_image(frag);
-        if(cdb::folder(frag) == cdb::top_folder()){
-            const Root* rt      = cdb::root(frag);
-            if(rt)
-                cdb::update_root(rt, calc_icon_for(rt));
-        } else if(cdb::folder(frag) == cdb::classes_folder()){
-            update_class_icon(frag);
-        } else if(cdb::within(cdb::classes_folder(), frag)){
-            update_field_icon(frag);
-        }
-    }
+    //void    on_image_change(Fragment frag)
+    //{
+        //update_image(frag);
+        //if(cdb::folder(frag) == cdb::top_folder()){
+            //const Root* rt      = cdb::root(frag);
+            //if(rt)
+                //cdb::update_root(rt, calc_icon_for(rt));
+        //} else if(cdb::folder(frag) == cdb::classes_folder()){
+            //update_class_icon(frag);
+        //} else if(cdb::within(cdb::classes_folder(), frag)){
+            //update_field_icon(frag);
+        //}
+    //}
 }
 
 bool        has_background()
@@ -269,16 +270,15 @@ void        updater_init()
     on_change(all_set<Change>(), ".background.png", update_background);
     on_change(all_set<Change>(), ".background.svg", update_background);
 
-    for(const char* z : Image::kSupportedExtensions){
-        for(Fragment f : cdb::all_fragments_suffix(z))
-            update_image(f);
-        on_change("*." + QString(z), on_image_change);
-    }
+    UImage::init_scan();
+
     for(Document d : documents_by_suffix(cdb::tags_folder(), "tag"))
         cdb::update(cdb::db_tag(d), Update::Interior);
 
     init_class();
-    init_leaf();
+
+    ULeaf::init_read();
+    ULeaf::init_link();
 
     for(Tag  t : all_tags())
         cdb::update(t, Update::Exterior);

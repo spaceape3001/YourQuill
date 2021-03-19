@@ -14,26 +14,6 @@
 #include <util/Hash.hpp>
 #include <util/SqlQuery.hpp>
 
-ULeaf::ULeaf(Leaf l) : key(cdb::key(l)), id(l.id), 
-    folder(cdb::detail_folder(l)), 
-    atom(cdb::db_atom(Document{l.id}))
-{
-    static thread_local SqlQuery u(wksp::cache(), "UPDATE Leafs SET atom=? WHERE id=?");
-    auto u_af = u.af();
-    u.bind(0, atom.id);
-    u.bind(1, id);
-    u.exec();
-}
-
-Image               ULeaf::explicit_icon() const
-{
-    for(const char* x : Image::kSupportedExtensions){
-        Document    d   = cdb::document(key + "." + x);
-        if(d && cdb::fragments_count(d))
-            return cdb::image(d);
-    }
-    return Image{};
-}
 
 ULeaf&            uget(Leaf l)
 {
@@ -46,55 +26,113 @@ ULeaf&            uget(Leaf l)
     return *p;
 }
 
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-namespace {
-        
-    void    on_read(ULeaf& u)
-    {
-        u.data      = cdb::merged(u.leaf, cdb::IsUpdate|cdb::IgnoreContext);
-        UAtom a     = uget(cdb::db_atom(u.doc));
-        
-        
-        static thread_local SqlQuery u1(wksp::cache(), "UPDATE Leafs SET title=? WHERE id=?");
-        auto u1_af = u1.af();
-        u1.bind(0, u.data->title().qString());
-        u1.bind(1, u.id);
-        u1.exec();
-        
-        a.update_classes(u.data->classes());
-        a.update_tags(u.data->tags());
-        
-        
-        //  MORE (TODO)
-    }
-    
-    void    on_exterior_read(Leaf l)
-    {
-        auto m = cdb::merged(l, cdb::IsUpdate);
-//        auto m = l.leaf.merge(Leaf::OptUpdate | Leaf::OptAttributes);
-    }
-    
-
-    void    on_leaf_change(Fragment fragment)
-    {
-        Document    doc = cdb::document(fragment);
-        Leaf        l   = cdb::db_leaf(doc);
-        on_read(uget(l));
-        on_exterior_read(l);
-    }
-    
-
-}
-
-void    init_leaf()
+void         ULeaf::init_read()
 {
-    for(Document d : cdb::all_documents_suffix("y")){    // create leafs
+   for(Document d : cdb::all_documents_suffix("y")){    // create leafs
         cdb::db_atom(d);
         cdb::db_leaf(d);
     }
     for(Leaf l : cdb::all_leafs())
-        on_read(uget(l));
+        uget(l).do_read();
+ }
+
+void         ULeaf::init_link()
+{
     for(Leaf l : cdb::all_leafs())
-        on_exterior_read(l);
-    on_change("*.y",   on_leaf_change);
+        uget(l).do_link();
+    on_change("*.y", &ULeaf::on_leaf_change);
+    for(const char* x : Image::kSupportedExtensions){
+        on_add("*." + QString(x), &ULeaf::on_image_change);
+        on_remove("*." + QString(x), &ULeaf::on_image_change);
+    }
 }
+
+void         ULeaf::on_image_change(Fragment f)
+{
+    if(cdb::folder(f) == cdb::classes_folder()){
+        for(Leaf l : cdb::all_leafs()){
+            ULeaf& u = uget(l);
+            if(!u.icon)
+                u.push_icon();
+        }
+    } else {
+        Image   i{f.id};
+        Leaf    l   = cdb::leaf(cdb::base_key(f));
+        if(!l)
+            return ;
+        ULeaf&  u   = uget(l);
+        if(u.icon != i)
+            u.do_icon();
+    }
+}
+
+void         ULeaf::on_leaf_change(Fragment f)
+{
+    ULeaf&  l   = uget(cdb::db_leaf(cdb::document(f)));
+    l.do_read();
+    l.do_link();
+}
+
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ULeaf::ULeaf(Leaf l) : key(cdb::key(l)), id(l.id), 
+    folder(cdb::detail_folder(l)), 
+    atom(cdb::db_atom(Document{l.id}))
+{
+    static thread_local SqlQuery u(wksp::cache(), "UPDATE Leafs SET atom=? WHERE id=?");
+    auto u_af = u.af();
+    u.bind(0, atom.id);
+    u.bind(1, id);
+    u.exec();
+}
+
+void                ULeaf::do_icon()
+{
+    icon            = explicit_icon();
+    push_icon();
+}
+
+void                ULeaf::do_link()
+{
+    //  TODO.... (massive)
+}
+
+void                ULeaf::do_read()
+{
+    data            = cdb::merged(leaf, cdb::IsUpdate|cdb::IgnoreContext);
+    UAtom& a        = uget(cdb::db_atom(doc));
+    
+    static thread_local SqlQuery u1(wksp::cache(), "UPDATE Leafs SET title=? WHERE id=?");
+    auto u1_af = u1.af();
+    u1.bind(0, data->title().qString());
+    u1.bind(1, id);
+    u1.exec();
+    
+    a.update_classes(data->classes());
+    a.update_tags(data->tags());
+}
+
+
+Image               ULeaf::explicit_icon() const
+{
+    for(const char* x : Image::kSupportedExtensions){
+        Document    d   = cdb::document(key + "." + x);
+        if(d && cdb::fragments_count(d))
+            return cdb::image(d);
+    }
+    return Image{};
+}
+
+void                ULeaf::push_icon()
+{
+    Image i         = uget(atom).update_icon(icon);
+
+    static thread_local SqlQuery u(wksp::cache(), "UPDATE Leafs SET icon=? WHERE id=?");
+    auto u_af = u.af();
+    u.bind(0, i.id);
+    u.bind(1, id);
+    u.exec();
+}
+

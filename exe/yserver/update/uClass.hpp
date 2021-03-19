@@ -22,7 +22,7 @@ struct UClass {
         const Document      doc;
     };
     const Folder        folder;     // config/sub
-    //Image               icon;
+    Image               icon;
     ClassData::Shared   data;
     Set<Tag>            tags;
     
@@ -41,7 +41,14 @@ struct UClass {
     
     //!  Determines the icon that's *explicitly* tied to this class
     Image               explicit_icon() const;
-    
+
+
+    // DISABLE THESE
+    ~UClass() = delete;
+    UClass(const UClass&) = delete;
+    UClass(UClass&&) = delete;
+    UClass& operator=(const UClass&) = delete;
+    UClass& operator=(UClass&&) = delete;
 };
 
 UClass&         uget(Class);

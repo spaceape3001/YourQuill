@@ -26,8 +26,6 @@
 
 
 
-void            init_leaf();
-
 Image           calc_icon_for(Folder, const QString&);
 Image           calc_icon_for(Field);
 Image           calc_icon_for(const Root*);

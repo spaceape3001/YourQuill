@@ -29,6 +29,13 @@ struct UField {
     bool            implied;
     
     UField(Field f);
+
+    // Disable these
+    UField(const UField&) = delete;
+    UField(UField&&) = delete;
+    UField& operator=(const UField&) = delete;
+    UField& operator=(UField&&) = delete;
+    ~UField() = delete;
 };
 
 UField&         uget(Field);

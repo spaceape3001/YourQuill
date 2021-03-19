@@ -67,7 +67,6 @@ namespace cdb {
     bool                    raster(Image);
 
     ContentType             type(Image);
-    void                    update(Image);
     void                    update_root(const Root*, Image);
 }
 

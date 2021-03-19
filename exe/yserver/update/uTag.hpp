@@ -21,6 +21,13 @@ struct UTag {
 
     //! Deterimes the explicit icon for this tag
     Image               explicit_icon() const;
+    
+    // Disable these
+    ~UTag() = delete;
+    UTag(const UTag&) = delete;
+    UTag(UTag&&) = delete;
+    UTag& operator=(const UTag&) = delete;
+    UTag& operator=(UTag&&) = delete;
 };
 
 UTag&       uget(Tag);
