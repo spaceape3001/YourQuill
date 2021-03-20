@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Attribute.hpp"
+#include "KeyValue.hpp"
 
 #include <util/Logging.hpp>
 #include <util/Reverse.hpp>
@@ -17,10 +17,10 @@
 
 namespace {
 
-    StringSet   make_set(const Vector<const Attribute*>&attrs, const String& sep)
+    StringSet   make_set(const Vector<const KeyValue*>&subs, const String& sep)
     {
         StringSet       ret;
-        for(const Attribute* a : attrs){
+        for(const KeyValue* a : subs){
             if(!a)
                 continue;
             for(const String& s : a->data.split(sep)){
@@ -34,103 +34,103 @@ namespace {
     }
 }
 
-Vector<const Attribute*>    AttrTree::all(const char* key) const
+Vector<const KeyValue*>    KVTree::all(const char* key) const
 {
     assert(key && "KEY pointer cannot be null");
-    Vector<const Attribute*>    ret;
+    Vector<const KeyValue*>    ret;
     if(key){
-        for(const Attribute& a : attrs)
+        for(const KeyValue& a : subs)
             if(is_in(key, a.key))
                 ret << &a;
     }
     return ret;
 }
 
-Vector<const Attribute*>    AttrTree::all(const String& key) const
+Vector<const KeyValue*>    KVTree::all(const String& key) const
 {
-    Vector<const Attribute*>    ret;
-    for(const Attribute& a : attrs)
+    Vector<const KeyValue*>    ret;
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
 
-Vector<const Attribute*>    AttrTree::all(const std::initializer_list<String>& key) const
+Vector<const KeyValue*>    KVTree::all(const std::initializer_list<String>& key) const
 {
-    Vector<const Attribute*>    ret;
-    for(const Attribute& a : attrs)
+    Vector<const KeyValue*>    ret;
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
 
-Vector<const Attribute*>    AttrTree::all(const std::initializer_list<const char*>&key) const
+Vector<const KeyValue*>    KVTree::all(const std::initializer_list<const char*>&key) const
 {
-    Vector<const Attribute*>    ret;
-    for(const Attribute& a : attrs)
+    Vector<const KeyValue*>    ret;
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
 
-Vector<const Attribute*>    AttrTree::all(const Vector<String>&key) const
+Vector<const KeyValue*>    KVTree::all(const Vector<String>&key) const
 {
-    Vector<const Attribute*>    ret;
-    for(const Attribute& a : attrs)
+    Vector<const KeyValue*>    ret;
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             ret << &a;
     return ret;
 }
 
-bool                AttrTree::empty() const 
+bool                KVTree::empty() const 
 { 
-    return attrs.empty(); 
+    return subs.empty(); 
 }
 
-void                AttrTree::erase_all(const String& key)
+void                KVTree::erase_all(const String& key)
 {
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         return is_in(key, a.key);
     });
 }
 
-void                AttrTree::erase_all(const char* key)
+void                KVTree::erase_all(const char* key)
 {
     assert(key && "KEY pointer cannot be null");
     if(!key)
         return ;
         
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         return is_in(key, a.key);
     });
 }
 
-void                AttrTree::erase_all(const std::initializer_list<String>& key)
+void                KVTree::erase_all(const std::initializer_list<String>& key)
 {
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         return is_in(key, a.key);
     });
 }
 
-void                AttrTree::erase_all(const std::initializer_list<const char*>&key)
+void                KVTree::erase_all(const std::initializer_list<const char*>&key)
 {
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         return is_in(key, a.key);
     });
 }
 
-void                AttrTree::erase_all(const Vector<String>& key)
+void                KVTree::erase_all(const Vector<String>& key)
 {
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         return is_in(key, a.key);
     });
 }
 
-void                AttrTree::erase_seconds(const String& key)
+void                KVTree::erase_seconds(const String& key)
 {
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         if(is_in(key, a.key)){
             if(f)
                 return true;
@@ -140,7 +140,7 @@ void                AttrTree::erase_seconds(const String& key)
     });
 }
 
-void                AttrTree::erase_seconds(const char* key)
+void                KVTree::erase_seconds(const char* key)
 {
     assert(key && "KEY pointer cannot be null");
     if(!key)
@@ -148,7 +148,7 @@ void                AttrTree::erase_seconds(const char* key)
         
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         if(is_in(key, a.key)){
             if(f)
                 return true;
@@ -159,11 +159,11 @@ void                AttrTree::erase_seconds(const char* key)
 }
 
 
-void                AttrTree::erase_seconds(const std::initializer_list<const char*>& key)
+void                KVTree::erase_seconds(const std::initializer_list<const char*>& key)
 {
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         if(is_in(key, a.key)){
             if(f)
                 return true;
@@ -173,11 +173,11 @@ void                AttrTree::erase_seconds(const std::initializer_list<const ch
     });
 }
 
-void                AttrTree::erase_seconds(const std::initializer_list<String>& key)
+void                KVTree::erase_seconds(const std::initializer_list<String>& key)
 {
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         if(is_in(key, a.key)){
             if(f)
                 return true;
@@ -188,11 +188,11 @@ void                AttrTree::erase_seconds(const std::initializer_list<String>&
 }
 
 
-void                AttrTree::erase_seconds(const Vector<String>& key)
+void                KVTree::erase_seconds(const Vector<String>& key)
 {
     //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
     bool    f   = false;
-    attrs.erase_if([&](const Attribute& a) -> bool {
+    subs.erase_if([&](const KeyValue& a) -> bool {
         if(is_in(key, a.key)){
             if(f)
                 return true;
@@ -202,70 +202,70 @@ void                AttrTree::erase_seconds(const Vector<String>& key)
     });
 }
 
-Attribute*          AttrTree::first(const String& key)
+KeyValue*          KVTree::first(const String& key)
 {
-    for(Attribute& a : attrs)
+    for(KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-Attribute*          AttrTree::first(const char* key)
+KeyValue*          KVTree::first(const char* key)
 {
     assert(key && "KEY pointer cannot be null");
     if(!key)
         return nullptr;
-    for(Attribute& a : attrs)
+    for(KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-Attribute*          AttrTree::first(const std::initializer_list<String>& key)
+KeyValue*          KVTree::first(const std::initializer_list<String>& key)
 {
-    for(Attribute& a : attrs)
+    for(KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-Attribute*          AttrTree::first(const std::initializer_list<const char*>& key)
+KeyValue*          KVTree::first(const std::initializer_list<const char*>& key)
 {
-    for(Attribute& a : attrs)
+    for(KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-Attribute*          AttrTree::first(const Vector<String>& key)
+KeyValue*          KVTree::first(const Vector<String>& key)
 {
-    for(Attribute& a : attrs)
+    for(KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-Attribute*          AttrTree::first(const std::initializer_list<const char*>&key, const String&val, bool fCreate)
+KeyValue*          KVTree::first(const std::initializer_list<const char*>&key, const String&val, bool fCreate)
 {
-    for(Attribute& a : attrs){
+    for(KeyValue& a : subs){
         if(is_in(key, a.key) && is_in(val, a.data))
             return &a;
     }
     if(fCreate && key.size()){
-        Attribute n;
+        KeyValue n;
         n.key   = *(key.begin());
         n.data  = val;
-        attrs << n;
-        return &attrs.back();
+        subs << n;
+        return &subs.back();
     }
     
     return nullptr;
 }
 
 
-const Attribute*    AttrTree::first(const String& key) const
+const KeyValue*    KVTree::first(const String& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
@@ -273,44 +273,44 @@ const Attribute*    AttrTree::first(const String& key) const
 
 
 
-const Attribute*    AttrTree::first(const char* key) const
+const KeyValue*    KVTree::first(const char* key) const
 {
     assert(key && "KEY pointer cannot be null");
     if(!key)
         return nullptr;
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::first(const std::initializer_list<String>& key) const
+const KeyValue*    KVTree::first(const std::initializer_list<String>& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::first(const std::initializer_list<const char*>& key) const
+const KeyValue*    KVTree::first(const std::initializer_list<const char*>& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::first(const Vector<String>& key) const
+const KeyValue*    KVTree::first(const Vector<String>& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*  AttrTree::first(const std::initializer_list<const char*>&key, const String&val) const
+const KeyValue*  KVTree::first(const std::initializer_list<const char*>&key, const String&val) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key) && is_in(val, a.data))
             return &a;
     return nullptr;
@@ -318,9 +318,9 @@ const Attribute*  AttrTree::first(const std::initializer_list<const char*>&key, 
 
 
 
-const Attribute*    AttrTree::first_noncmd(const String& key) const
+const KeyValue*    KVTree::first_noncmd(const String& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
@@ -328,36 +328,36 @@ const Attribute*    AttrTree::first_noncmd(const String& key) const
 
 
 
-const Attribute*    AttrTree::first_noncmd(const char* key) const
+const KeyValue*    KVTree::first_noncmd(const char* key) const
 {
     assert(key && "KEY pointer cannot be null");
     if(!key)
         return nullptr;
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::first_noncmd(const std::initializer_list<String>& key) const
+const KeyValue*    KVTree::first_noncmd(const std::initializer_list<String>& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::first_noncmd(const std::initializer_list<const char*>& key) const
+const KeyValue*    KVTree::first_noncmd(const std::initializer_list<const char*>& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::first_noncmd(const Vector<String>& key) const
+const KeyValue*    KVTree::first_noncmd(const Vector<String>& key) const
 {
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(a.cmd.empty() && is_in(key, a.key))
             return &a;
     return nullptr;
@@ -414,52 +414,52 @@ const Attribute*    AttrTree::first_noncmd(const Vector<String>& key) const
     #endif
 
 
-void                AttrTree::fusion(const AttrTree&rhs) 
+void                KVTree::fusion(const KVTree&rhs) 
 {
     //  TODO properly (LATER)
-    attrs    += rhs.attrs;
+    subs    += rhs.subs;
 }
 
 
-bool                AttrTree::has(const String&key) const
+bool                KVTree::has(const String&key) const
 {
     return first(key) != nullptr;
 }
 
-bool                AttrTree::has(const char* key) const
+bool                KVTree::has(const char* key) const
 {
     return first(key) != nullptr;
 }
 
-bool                AttrTree::has(const std::initializer_list<String>& key) const
+bool                KVTree::has(const std::initializer_list<String>& key) const
 {
     return first(key) != nullptr;
 }
 
-bool                AttrTree::has(const std::initializer_list<const char*>& key) const
+bool                KVTree::has(const std::initializer_list<const char*>& key) const
 {
     return first(key) != nullptr;
 }
 
-bool                AttrTree::has(const Vector<String>&key) const
+bool                KVTree::has(const Vector<String>&key) const
 {
     return first(key) != nullptr;
 }
 
-const Attribute*    AttrTree::last(const String& key) const
+const KeyValue*    KVTree::last(const String& key) const
 {
-    for(const Attribute& a : reverse(attrs))
+    for(const KeyValue& a : reverse(subs))
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::last(const char* key) const
+const KeyValue*    KVTree::last(const char* key) const
 {
     assert(key && "KEY pointer cannot be null");
     if(!key)
         return nullptr;
-    for(const Attribute& a : reverse(attrs))
+    for(const KeyValue& a : reverse(subs))
         if(is_in(key, a.key))
             return &a;
     return nullptr;
@@ -467,35 +467,35 @@ const Attribute*    AttrTree::last(const char* key) const
 
 
 
-const Attribute*    AttrTree::last(const std::initializer_list<String>& key) const
+const KeyValue*    KVTree::last(const std::initializer_list<String>& key) const
 {
-    for(const Attribute& a : reverse(attrs))
+    for(const KeyValue& a : reverse(subs))
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::last(const std::initializer_list<const char*>& key) const
+const KeyValue*    KVTree::last(const std::initializer_list<const char*>& key) const
 {
-    for(const Attribute& a : reverse(attrs))
+    for(const KeyValue& a : reverse(subs))
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
-const Attribute*    AttrTree::last(const Vector<String>& key) const
+const KeyValue*    KVTree::last(const Vector<String>& key) const
 {
-    for(const Attribute& a : reverse(attrs))
+    for(const KeyValue& a : reverse(subs))
         if(is_in(key, a.key))
             return &a;
     return nullptr;
 }
 
 
-size_t              AttrTree::max_key_size(bool recursive) const
+size_t              KVTree::max_key_size(bool recursive) const
 {
     size_t  mx  = 0;
-    for(auto& a : attrs){
+    for(auto& a : subs){
         mx      = std::max(mx, a.key.size());
         if(recursive)
             mx  = std::max(mx, a.max_key_size(true));
@@ -504,25 +504,25 @@ size_t              AttrTree::max_key_size(bool recursive) const
 }
 
 
-Attribute*          AttrTree::set(const String&key, const String& data, bool purge)
+KeyValue*          KVTree::set(const String&key, const String& data, bool purge)
 {
     if(purge)
         erase_seconds(key);
     
-    Attribute*  a   = first(key);
+    KeyValue*  a   = first(key);
     if(a){
         a->data    = data;
         return a;
     }
     
-    Attribute   n;
+    KeyValue   n;
     n.key       = key;
     n.data     = data;
-    attrs.push_back(n);
-    return &attrs.back();
+    subs.push_back(n);
+    return &subs.back();
 }
 
-Attribute*          AttrTree::set(const char* key, const String& data, bool purge)
+KeyValue*          KVTree::set(const char* key, const String& data, bool purge)
 {
     assert(key && "KEY pointer cannot be null");
     if(!key)
@@ -531,41 +531,41 @@ Attribute*          AttrTree::set(const char* key, const String& data, bool purg
     if(purge)
         erase_seconds(key);
     
-    Attribute*  a   = first(key);
+    KeyValue*  a   = first(key);
     if(a){
         a->data    = data;
         return a;
     }
     
-    Attribute   n;
+    KeyValue   n;
     n.key       = key;
     n.data     = data;
-    attrs.push_back(n);
-    return &attrs.back();
+    subs.push_back(n);
+    return &subs.back();
 }
 
 
-Attribute*          AttrTree::set(const std::initializer_list<String>&key, const String& data, bool purge)
+KeyValue*          KVTree::set(const std::initializer_list<String>&key, const String& data, bool purge)
 {
     if(key.size() == 0)
         return nullptr;
     if(purge)
         erase_seconds(key);
     
-    Attribute*  a   = first(key);
+    KeyValue*  a   = first(key);
     if(a){
         a->data    = data;
         return a;
     }
     
-    Attribute   n;
+    KeyValue   n;
     n.key       = *(key.begin());
     n.data     = data;
-    attrs.push_back(n);
-    return &attrs.back();
+    subs.push_back(n);
+    return &subs.back();
 }
 
-Attribute*          AttrTree::set(const std::initializer_list<const char*>&key, const String& data, bool purge)
+KeyValue*          KVTree::set(const std::initializer_list<const char*>&key, const String& data, bool purge)
 {
     if(key.size() == 0)
         return nullptr;
@@ -575,67 +575,67 @@ Attribute*          AttrTree::set(const std::initializer_list<const char*>&key, 
     if(purge)
         erase_seconds(key);
     
-    Attribute*  a   = first(key);
+    KeyValue*  a   = first(key);
     if(a){
         a->data    = data;
         return a;
     }
     
-    Attribute   n;
+    KeyValue   n;
     n.key       = *(key.begin());
     n.data     = data;
-    attrs.push_back(n);
-    return &attrs.back();
+    subs.push_back(n);
+    return &subs.back();
 }
 
 
-Attribute*          AttrTree::set(const Vector<String>&key, const String& data, bool purge)
+KeyValue*          KVTree::set(const Vector<String>&key, const String& data, bool purge)
 {
     if(key.empty())
         return nullptr;
     if(purge)
         erase_seconds(key);
     
-    Attribute*  a   = first(key);
+    KeyValue*  a   = first(key);
     if(a){
         a->data    = data;
         return a;
     }
     
-    Attribute   n;
+    KeyValue   n;
     n.key       = *(key.begin());
     n.data     = data;
-    attrs.push_back(n);
-    return &attrs.back();
+    subs.push_back(n);
+    return &subs.back();
 }
 
-Attribute*          AttrTree::set_set(const char*key, const StringSet&vals, const String& sep)
+KeyValue*          KVTree::set_set(const char*key, const StringSet&vals, const String& sep)
 {
     assert(key && "KEY pointer cannot be null");
     return set(key, sep.join(vals), true);
 }
 
-Attribute*          AttrTree::set_set(const String&key, const StringSet&vals, const String& sep)
+KeyValue*          KVTree::set_set(const String&key, const StringSet&vals, const String& sep)
 {
     return set(key, sep.join(vals), true);
 }
 
-Attribute*          AttrTree::set_set(const std::initializer_list<const char*>&key, const StringSet& vals, const String& sep)
+KeyValue*          KVTree::set_set(const std::initializer_list<const char*>&key, const StringSet& vals, const String& sep)
 {
     return set(key, sep.join(vals), true);
 }
 
-Attribute*          AttrTree::set_set(const std::initializer_list<String>&key, const StringSet&vals, const String& sep)
+KeyValue*          KVTree::set_set(const std::initializer_list<String>&key, const StringSet&vals, const String& sep)
 {
     return set(key, sep.join(vals), true);
 }
 
-Attribute*          AttrTree::set_set(const Vector<String>&key, const StringSet&vals, const String& sep)
+KeyValue*          KVTree::set_set(const Vector<String>&key, const StringSet&vals, const String& sep)
 {
     return set(key, sep.join(vals), true);
 }
 
-Attribute*          AttrTree::set_set(const std::initializer_list<const char*>&key, const Set<uint16_t>&vals, const String& sep)
+KeyValue*          KVTree::set_set(const std::initializer_list<const char*>&key, const Set<uint16_t>&vals, const String& sep)
 {
     StringSet       them;
     for(uint16_t v : vals)
@@ -643,87 +643,87 @@ Attribute*          AttrTree::set_set(const std::initializer_list<const char*>&k
     return set_set(key,them,sep);
 }
     
-String              AttrTree::value(const String& key, bool excludeCmds) const
+String              KVTree::value(const String& key, bool excludeCmds) const
 {
-    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
+    const KeyValue*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const char* key, bool excludeCmds) const
+String              KVTree::value(const char* key, bool excludeCmds) const
 {
     assert(key && "KEY pointer cannot be null");
-    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
+    const KeyValue*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const std::initializer_list<String>& key, bool excludeCmds) const
+String              KVTree::value(const std::initializer_list<String>& key, bool excludeCmds) const
 {
-    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
+    const KeyValue*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const std::initializer_list<const char*>& key, bool excludeCmds) const
+String              KVTree::value(const std::initializer_list<const char*>& key, bool excludeCmds) const
 {
-    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
+    const KeyValue*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-String              AttrTree::value(const Vector<String>& key, bool excludeCmds) const
+String              KVTree::value(const Vector<String>& key, bool excludeCmds) const
 {
-    const Attribute*a   = excludeCmds ? first_noncmd(key) : first(key);
+    const KeyValue*a   = excludeCmds ? first_noncmd(key) : first(key);
     return a ? a->data : String();
 }
 
-Vector<String>     AttrTree::values(const String& key) const
+Vector<String>     KVTree::values(const String& key) const
 {
     Vector<String>  ret;
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }
 
-Vector<String>     AttrTree::values(const char* key) const
+Vector<String>     KVTree::values(const char* key) const
 {
     assert(key && "KEY pointer cannot be null");
     Vector<String>  ret;
     if(key){
-        for(const Attribute& a : attrs)
+        for(const KeyValue& a : subs)
             if(is_in(key, a.key) && !a.data.empty())
                 ret << a.data;
     }
     return ret;
 }
 
-Vector<String>     AttrTree::values(const std::initializer_list<String>& key) const
+Vector<String>     KVTree::values(const std::initializer_list<String>& key) const
 {
     Vector<String>  ret;
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }
 
-Vector<String>     AttrTree::values(const std::initializer_list<const char*>& key) const
+Vector<String>     KVTree::values(const std::initializer_list<const char*>& key) const
 {
     Vector<String>  ret;
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }
 
 
-Vector<String>     AttrTree::values(const Vector<String>& key) const
+Vector<String>     KVTree::values(const Vector<String>& key) const
 {
     Vector<String>  ret;
-    for(const Attribute& a : attrs)
+    for(const KeyValue& a : subs)
         if(is_in(key, a.key) && !a.data.empty())
             ret << a.data;
     return ret;
 }
 
-StringSet          AttrTree::values_set(const char* key, const String& sep) const
+StringSet          KVTree::values_set(const char* key, const String& sep) const
 {
     assert(key && "KEY pointer cannot be NULL");
     if(!key)    
@@ -731,27 +731,27 @@ StringSet          AttrTree::values_set(const char* key, const String& sep) cons
     return make_set(all(key), sep);
 }
 
-StringSet          AttrTree::values_set(const String&key, const String& sep) const
+StringSet          KVTree::values_set(const String&key, const String& sep) const
 {
     return make_set(all(key), sep);
 }
 
-StringSet          AttrTree::values_set(const std::initializer_list<const char*>&key, const String& sep) const
+StringSet          KVTree::values_set(const std::initializer_list<const char*>&key, const String& sep) const
 {
     return make_set(all(key), sep);
 }
 
-StringSet          AttrTree::values_set(const std::initializer_list<String>&key, const String& sep) const
+StringSet          KVTree::values_set(const std::initializer_list<String>&key, const String& sep) const
 {
     return make_set(all(key), sep);
 }
 
-StringSet          AttrTree::values_set(const Vector<String>&key, const String& sep) const
+StringSet          KVTree::values_set(const Vector<String>&key, const String& sep) const
 {
     return make_set(all(key), sep);
 }
 
-Set<uint16_t>   AttrTree::values_set_u16(const std::initializer_list<const char*>&key, const String& sep) const
+Set<uint16_t>   KVTree::values_set_u16(const std::initializer_list<const char*>&key, const String& sep) const
 {
     Set<uint16_t>   ret;
     for(const String& s : values_set(key, sep)){
@@ -763,41 +763,41 @@ Set<uint16_t>   AttrTree::values_set_u16(const std::initializer_list<const char*
 }
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-AttrTree&          AttrTree::operator+=(Attribute&& v)
+KVTree&          KVTree::operator+=(KeyValue&& v)
 {
-    attrs << std::move(v);
+    subs << std::move(v);
     return *this;
 }
 
-AttrTree&          AttrTree::operator+=(const Attribute& v)
+KVTree&          KVTree::operator+=(const KeyValue& v)
 {
-    attrs << v;
+    subs << v;
     return *this;
 }
 
-AttrTree&          AttrTree::operator+=(AttrTree&&rhs)
+KVTree&          KVTree::operator+=(KVTree&&rhs)
 {
     // FULL TODO (later)
-    attrs += std::move(rhs.attrs);
+    subs += std::move(rhs.subs);
     return *this;
 }
 
-AttrTree&          AttrTree::operator+=(const AttrTree&rhs)
+KVTree&          KVTree::operator+=(const KVTree&rhs)
 {
     // FULL TODO (later)
-    attrs += rhs.attrs;
+    subs += rhs.subs;
     return *this;
 }
 
-AttrTree&           AttrTree::operator<<(Attribute&&v)
+KVTree&           KVTree::operator<<(KeyValue&&v)
 {
-    attrs << std::move(v);
+    subs << std::move(v);
     return *this;
 }
 
-AttrTree&           AttrTree::operator<<(const Attribute&v)
+KVTree&           KVTree::operator<<(const KeyValue&v)
 {
-    attrs << v;
+    subs << v;
     return *this;
 }
 
@@ -807,31 +807,31 @@ AttrTree&           AttrTree::operator<<(const Attribute&v)
 
 namespace {
 
-    void    add_attr(Vector<Attribute>&datas, size_t&i, Attribute&v)
+    void    add_attr(Vector<KeyValue>&datas, size_t&i, KeyValue&v)
     {
         size_t      z   = datas[i].indent;
-        v.attrs << std::move(datas[i]);
+        v.subs << std::move(datas[i]);
         while( (++i) < datas.size()){
             if(datas[i].indent == z){
-                v.attrs << std::move(datas[i]);
+                v.subs << std::move(datas[i]);
                 continue;
             } 
             
             while((i < datas.size()) && (datas[i].indent > z))
-                add_attr(datas, i, v.attrs.back());
+                add_attr(datas, i, v.subs.back());
 
             if(i >= datas.size())
                 break;
             if(datas[i].indent < z)
                 break;
                 
-            v.attrs << std::move(datas[i]);
+            v.subs << std::move(datas[i]);
         }
     }
     
 }
 
-bool    AttrTree::parse(const Vector<char>& buffer, String* body, bool recursive, const std::string& fname)
+bool    KVTree::parse(const Vector<char>& buffer, String* body, bool recursive, const std::string& fname)
 {
     if(buffer.empty())
         return true;
@@ -851,10 +851,10 @@ bool    AttrTree::parse(const Vector<char>& buffer, String* body, bool recursive
     Mode            mode    = Mode::SPACE;
     if(body)
         body->reserve(buffer.size());
-    Attribute           val;
+    KeyValue           val;
     unsigned int    line    = 1;
     unsigned int    lident  = 0;
-    Vector<Attribute>   datas;
+    Vector<KeyValue>   datas;
 
     auto push   = [&](){
         if(!val.empty()){
@@ -863,7 +863,7 @@ bool    AttrTree::parse(const Vector<char>& buffer, String* body, bool recursive
                 val.data.pop_back();
             
             datas << std::move(val);
-            val     = Attribute();
+            val     = KeyValue();
         }
         mode    = Mode::SPACE;
     };
@@ -887,7 +887,7 @@ bool    AttrTree::parse(const Vector<char>& buffer, String* body, bool recursive
                     mode    = Mode::BODY;
                 } else {
                     //  No body means a new attriubte, clone the last indent
-                    Attribute   a;
+                    KeyValue   a;
                     a.indent    = lident;
                     datas << a;
                 }
@@ -1054,25 +1054,25 @@ bool    AttrTree::parse(const Vector<char>& buffer, String* body, bool recursive
         unsigned int        z   = datas[0].indent;
         for(size_t i=0; i<datas.size(); ++i){
             if(datas[i].indent <= z){
-                attrs << std::move(datas[i]);
+                subs << std::move(datas[i]);
             } else {
-                add_attr(datas, i, attrs.back());
+                add_attr(datas, i, subs.back());
                 if(i<datas.size())
-                    attrs << std::move(datas[i]);
+                    subs << std::move(datas[i]);
             }
         }
     } else {
-        attrs       = std::move(datas);
+        subs       = std::move(datas);
     }
     
     return true;
 }
 
 namespace {
-    size_t      max_pad(const AttrTree& at)
+    size_t      max_pad(const KVTree& at)
     {
         size_t  a   = 0;
-        for(const Attribute& v : at.attrs){
+        for(const KeyValue& v : at.subs){
             if(v.empty())
                 continue;
             if(v.cmd == "#")
@@ -1088,9 +1088,9 @@ namespace {
         return a;
     }
 
-    void       write_attrs(Stream& out, const Vector<Attribute>&datas, unsigned int mxval, unsigned int depth=0) 
+    void       write_subs(Stream& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
     {
-        for(const Attribute& v : datas){
+        for(const KeyValue& v : datas){
             if(v.empty()){
                 out << '\n';
                 continue;
@@ -1113,7 +1113,7 @@ namespace {
                     out << ' ';
                 out << v.data << '\n';
             }
-            write_attrs(out, v.attrs, mxval, depth+1);
+            write_subs(out, v.subs, mxval, depth+1);
         }
     }
 
@@ -1122,12 +1122,12 @@ namespace {
 
 
 
-void    AttrTree::write(Stream& out) const
+void    KVTree::write(Stream& out) const
 {
-    write_attrs(out, attrs, max_pad(*this));
+    write_subs(out, subs, max_pad(*this));
 }
 
-void    AttrTree::write(Vector<char>&buffer) const
+void    KVTree::write(Vector<char>&buffer) const
 {
     Stream  out(buffer);
     write(out);
@@ -1136,8 +1136,8 @@ void    AttrTree::write(Vector<char>&buffer) const
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-bool                Attribute::empty() const
+bool                KeyValue::empty() const
 {
-    return cmd.empty() && id.empty() && key.empty() && data.empty() && attrs.empty(); 
+    return cmd.empty() && id.empty() && key.empty() && data.empty() && subs.empty(); 
 }
 

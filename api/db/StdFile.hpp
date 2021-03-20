@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <db/bit/Attribute.hpp>
+#include <db/bit/KeyValue.hpp>
 #include <util/AbstractFile.hpp>
 
 class Stream;
 
 
-class StdFile : public AbstractFile, public AttrTree {
+class StdFile : public AbstractFile, public KVTree {
 public:
 
     String              body;

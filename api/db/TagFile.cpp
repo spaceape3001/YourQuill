@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "TagFile.hpp"
-#include <db/bit/Attribute.hpp>
+#include <db/bit/KeyValue.hpp>
 
 TagData& TagData::merge(const TagData&b, bool fOverride)
 {
@@ -35,7 +35,7 @@ void    TagFile::reset()
 
 bool    TagFile::read(Vector<char>&buffer, const std::string& fname) 
 {
-    AttrTree        attrs;
+    KVTree          attrs;
     if(!attrs.parse(buffer, nullptr, true, fname))
         return false;
 
@@ -48,15 +48,15 @@ bool    TagFile::read(Vector<char>&buffer, const std::string& fname)
 
 bool    TagFile::write(Vector<char>&chars) 
 {
-    AttrTree        attrs;
+    KVTree        attrs;
     if(!name.empty())
-        attrs << Attribute("%", name);
+        attrs << KeyValue("%", name);
     if(!brief.empty())
-        attrs << Attribute("desc", brief);
+        attrs << KeyValue("desc", brief);
     if(!leaf.empty())
-        attrs << Attribute("leaf", leaf);
+        attrs << KeyValue("leaf", leaf);
     if(!notes.empty())
-        attrs << Attribute("note", notes);
+        attrs << KeyValue("note", notes);
     attrs.write(chars);
     return true;
 }

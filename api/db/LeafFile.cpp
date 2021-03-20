@@ -46,7 +46,7 @@ Context     LeafFile::context() const
 
 Format      LeafFile::format() const
 {
-    const Attribute* a = first(zFormat);
+    const KeyValue* a = first(zFormat);
     if(!a)
         return defFormat;
     auto r = Format::value_for(a->data);

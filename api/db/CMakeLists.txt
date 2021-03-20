@@ -37,12 +37,12 @@ set(db_sources
     ./Workspace.cpp
     ./Workspace.hpp
 
-    ./bit/Attribute.hpp
-    ./bit/Attribute.cpp
     ./bit/Context.cpp
     ./bit/Context.hpp
     ./bit/Copyright.cpp
     ./bit/Copyright.hpp
+    ./bit/KeyValue.hpp
+    ./bit/KeyValue.cpp
     ./bit/NKI.hpp
     ./bit/Policy.cpp
     ./bit/Policy.hpp

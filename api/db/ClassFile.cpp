@@ -116,26 +116,26 @@ void    ClassFile::reset()
 
 
 namespace {
-    void        read_trigger(const Attribute* a, ClassData::Trigger& t)
+    void        read_trigger(const KeyValue* a, ClassData::Trigger& t)
     {
         t.type      = a->data;
         t.name      = a->value({"name"}, true);
         t.brief     = a->value({"brief", "desc"}, true);
         t.notes     = a->value({"note", "notes"}, true);
         
-        for(const Attribute& b : a->attrs){
+        for(const KeyValue& b : a->subs){
             if(b.cmd == "?")
                 t.args[b.key]  = b.data;
         }
     }
     
-    void        read_value(const Attribute* a, ClassData::ValueInfo& v)
+    void        read_value(const KeyValue* a, ClassData::ValueInfo& v)
     {
         v.brief     = a->value({"desc", "brief"});
         v.notes     = a->value({"notes", "note"});
     }
     
-    void        read_field(const Attribute* a, ClassData::Field&f)
+    void        read_field(const KeyValue* a, ClassData::Field&f)
     {
         f.pkey          = a->value("pkey");
         f.name          = a->value({"%", "name"});
@@ -152,14 +152,14 @@ namespace {
         f.multiplicity  = Multiplicity(a->value("multiplicity"));
         f.restriction   = Restriction(a->value("restriction"));
         f.max_count     = a->value({"max_count", "count"}).to_uint64().value;
-        for(const Attribute* b : a->all({"value", "val"})){
+        for(const KeyValue* b : a->all({"value", "val"})){
             if(b->data.empty()){
                 yNotice() << "Empty value in field, skipped.";
                 continue;
             }
             read_value(b, f.values[a->data]);
         }
-        for(const Attribute* b : a->all({"trigger"})){
+        for(const KeyValue* b : a->all({"trigger"})){
             ClassData::Trigger t;
             read_trigger(b, t);
             f.triggers << t;
@@ -169,7 +169,7 @@ namespace {
 
 bool    ClassFile::read(Vector<char>&buffer, const std::string& fname) 
 {
-    AttrTree        attrs;
+    KVTree        attrs;
     if(!attrs.parse(buffer, nullptr, true, fname))
         return false;
 
@@ -188,7 +188,7 @@ bool    ClassFile::read(Vector<char>&buffer, const std::string& fname)
     suffixes        = attrs.values_set({"suffix"});
     tags            = attrs.values_set({"tag"});
     
-    for(const Attribute* a : attrs.all({"field"})){
+    for(const KeyValue* a : attrs.all({"field"})){
         if(a->data.empty()){
             yNotice() << "Empty field key skipped.";
             continue;
@@ -196,7 +196,7 @@ bool    ClassFile::read(Vector<char>&buffer, const std::string& fname)
         read_field(a, fields[a->data]);
     }
 
-    for(const Attribute* a : attrs.all({"trigger"})){
+    for(const KeyValue* a : attrs.all({"trigger"})){
         Trigger     t;
         read_trigger(a, t);
         triggers << t;
@@ -207,66 +207,66 @@ bool    ClassFile::read(Vector<char>&buffer, const std::string& fname)
 }
 
 namespace {
-    void    write_trigger(Attribute& a, const ClassData::Trigger& t)
+    void    write_trigger(KeyValue& a, const ClassData::Trigger& t)
     {
         if(!t.name.empty())
-            a << Attribute("name", t.name);
+            a << KeyValue("name", t.name);
         if(!t.brief.empty())
-            a << Attribute("desc", t.brief);
+            a << KeyValue("desc", t.brief);
         if(!t.notes.empty())
-            a << Attribute("notes", t.notes);
+            a << KeyValue("notes", t.notes);
         for(auto& i : t.args){
-            Attribute b(i.first, i.second);
+            KeyValue b(i.first, i.second);
             b.cmd = "?";
             a << b;
         }
     }
     
-    void    write_value(Attribute& a, const ClassData::ValueInfo& v)
+    void    write_value(KeyValue& a, const ClassData::ValueInfo& v)
     {
         if(!v.brief.empty())
-            a << Attribute("desc", v.brief);
+            a << KeyValue("desc", v.brief);
         if(!v.notes.empty())
-            a << Attribute("notes", v.notes);
+            a << KeyValue("notes", v.notes);
     }
     
-    void    write_field(Attribute& a, const ClassData::Field& f)
+    void    write_field(KeyValue& a, const ClassData::Field& f)
     {
         if(!f.pkey.empty())
-            a << Attribute("pkey", f.pkey);
+            a << KeyValue("pkey", f.pkey);
         if(!f.name.empty())
-            a << Attribute("name", f.name);
+            a << KeyValue("name", f.name);
         if(!f.plural.empty())   
-            a << Attribute("plural", f.plural);
+            a << KeyValue("plural", f.plural);
         if(!f.brief.empty())
-            a << Attribute("desc", f.brief);
+            a << KeyValue("desc", f.brief);
         if(!f.notes.empty())
-            a << Attribute("notes", f.notes);
+            a << KeyValue("notes", f.notes);
         if(!f.category.empty())
-            a << Attribute("category", f.category);
+            a << KeyValue("category", f.category);
         if(!f.aliases.empty())
-            a << Attribute("alias", join(f.aliases, ", "));
+            a << KeyValue("alias", join(f.aliases, ", "));
         if(!f.types.empty())
-            a << Attribute("type", join(f.types, ", "));
+            a << KeyValue("type", join(f.types, ", "));
         if(!f.atoms.empty())
-            a << Attribute("atom", join(f.atoms, ", "));
+            a << KeyValue("atom", join(f.atoms, ", "));
         if(!f.tags.empty())
-            a << Attribute("tag", join(f.tags, ", "));
+            a << KeyValue("tag", join(f.tags, ", "));
         if(!f.expected.empty())
-            a << Attribute("expected", f.expected);
+            a << KeyValue("expected", f.expected);
         if(f.multiplicity != Multiplicity())
-            a << Attribute("multiplicity", f.multiplicity.key());
+            a << KeyValue("multiplicity", f.multiplicity.key());
         if(f.restriction != Restriction())
-            a << Attribute("restriction", f.restriction.key());
+            a << KeyValue("restriction", f.restriction.key());
         if(f.max_count)
-            a << Attribute("count", String::number(f.max_count));
+            a << KeyValue("count", String::number(f.max_count));
         for(auto& i : f.values){
-            Attribute   b("value", i.first);
+            KeyValue   b("value", i.first);
             write_value(b, i.second);
             a << b;
         }
         for(auto& j : f.triggers){
-            Attribute b("trigger", j.type);
+            KeyValue b("trigger", j.type);
             write_trigger(b, j);
             a << b;
         }
@@ -275,41 +275,41 @@ namespace {
 
 bool    ClassFile::write(Vector<char>& chars)  
 {
-    AttrTree        attrs;
+    KVTree        attrs;
     
     if(!name.empty())
-        attrs << Attribute("name", name);
+        attrs << KeyValue("name", name);
     if(!plural.empty())
-        attrs << Attribute("plural", plural);
+        attrs << KeyValue("plural", plural);
     if(!brief.empty())
-        attrs << Attribute("desc", brief);
+        attrs << KeyValue("desc", brief);
     if(!notes.empty())
-        attrs << Attribute("notes", notes);
+        attrs << KeyValue("notes", notes);
     if(!use.empty())
-        attrs << Attribute("use", join(use, ", "));
+        attrs << KeyValue("use", join(use, ", "));
     if(!reverse.empty())
-        attrs << Attribute("reverse", join(reverse, ", "));
+        attrs << KeyValue("reverse", join(reverse, ", "));
     if(!targets.empty())
-        attrs << Attribute("target", join(targets, ", "));
+        attrs << KeyValue("target", join(targets, ", "));
     if(!sources.empty())
-        attrs << Attribute("source", join(sources, ", "));
+        attrs << KeyValue("source", join(sources, ", "));
     if(!prefixes.empty())
-        attrs << Attribute("prefix", join(prefixes, ", "));
+        attrs << KeyValue("prefix", join(prefixes, ", "));
     if(!suffixes.empty())
-        attrs << Attribute("suffix", join(suffixes, ", "));
+        attrs << KeyValue("suffix", join(suffixes, ", "));
     if(!aliases.empty())
-        attrs << Attribute("alias", join(aliases, ", "));
+        attrs << KeyValue("alias", join(aliases, ", "));
     if(!binding.empty())
-        attrs << Attribute("binding", binding);
+        attrs << KeyValue("binding", binding);
     if(!tags.empty())
-        attrs << Attribute("tag", join(tags, ", "));
+        attrs << KeyValue("tag", join(tags, ", "));
     for(auto& t : triggers){
-        Attribute   a("trigger", t.type);
+        KeyValue   a("trigger", t.type);
         write_trigger(a, t);
         attrs << a;
     }
     for(auto& i : fields){
-        Attribute   a("field", i.first);
+        KeyValue   a("field", i.first);
         write_field(a, i.second);
         attrs << a;
     }

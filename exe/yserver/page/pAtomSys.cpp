@@ -52,7 +52,7 @@ namespace {
         }
     }
     
-    void    _attributes(HtmlWriter& h, const Vector<Attribute>& vdata)
+    void    _attributes(HtmlWriter& h, const Vector<KeyValue>& vdata)
     {
         if(vdata.empty())
             return ;
@@ -60,7 +60,7 @@ namespace {
         h << "<ul>\n";
         for(auto& a : vdata){
             h << "<li> <b>" << a.key << "</b> &mdash; " << a.data << "\n";
-            _attributes(h, a.attrs);
+            _attributes(h, a.subs);
         }
         h << "</ul>\n";
     }
@@ -100,7 +100,7 @@ namespace {
         h.title(m->title());
         
         h << H1("Attributes");
-        _attributes(h, m->attrs);
+        _attributes(h, m->subs);
         
         h << H1("Context");
         _context(h, *m);

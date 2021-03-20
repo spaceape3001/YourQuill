@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "QuillFile.hpp"
-
 #include <util/Utilities.hpp>
 
 void    QuillData::reset()
@@ -35,7 +34,7 @@ void    QuillFile::reset()
 }
 
 namespace {
-    QuillData::Root    parse_root(const Attribute* a)
+    QuillData::Root    parse_root(const KeyValue* a)
     {
         QuillData::Root ret;
         ret.path    = a->data;
@@ -52,7 +51,7 @@ namespace {
 
 bool    QuillFile::read(Vector<char>&buffer, const std::string& fname) 
 {
-    AttrTree        attrs;
+    KVTree        attrs;
     if(!attrs.parse(buffer, nullptr, true, fname))
         return false;
     
@@ -61,7 +60,7 @@ bool    QuillFile::read(Vector<char>&buffer, const std::string& fname)
     aux_ports       = attrs.values_set_u16({"aux"});
     cache           = attrs.value("cache");
     
-    const Attribute   *a  = nullptr;;
+    const KeyValue   *a  = nullptr;;
     if((a = attrs.first({"disclaimer", "disclaim"}))){
         copyright.stance  = AssertDeny::Deny;
     } else if((a = attrs.first("notice"))){
@@ -84,50 +83,50 @@ bool    QuillFile::read(Vector<char>&buffer, const std::string& fname)
     read_timeout    = attrs.value("timeout").to_uinteger().value;
     temp_dir        = attrs.value({"temp", "tmp", "tempdir", "temp_dir"});
     
-    for(const Attribute* a : attrs.all({"root", "r"}))
+    for(const KeyValue* a : attrs.all({"root", "r"}))
         roots << parse_root(a);
-    for(const Attribute* a : attrs.all({"template", "t"}))
+    for(const KeyValue* a : attrs.all({"template", "t"}))
         templates << parse_root(a);
     return true;
 }
 
 namespace {
-    void    write_onto(Attribute& a, const QuillData::Root& r)
+    void    write_onto(KeyValue& a, const QuillData::Root& r)
     {
         a.data = r.path;
         if(!r.key.empty())
-            a << Attribute("key", r.key);
+            a << KeyValue("key", r.key);
         if(!r.name.empty())
-            a << Attribute("name", r.name);
+            a << KeyValue("name", r.name);
         if(!r.color.empty())
-            a << Attribute("color", r.color);
+            a << KeyValue("color", r.color);
         if(!r.icon.empty())
-            a << Attribute("icon", r.icon);
+            a << KeyValue("icon", r.icon);
         if(r.vcs != Vcs())
-            a << Attribute("vcs", r.vcs.key());
+            a << KeyValue("vcs", r.vcs.key());
         for(DataRole dr : DataRole::all_values()){
             if(r.policy[dr] != Access())
-                a << Attribute(dr.key(), r.policy[dr].key());
+                a << KeyValue(dr.key(), r.policy[dr].key());
         }
     }
 }
 
 bool    QuillFile::write(Vector<char>&chars) 
 {
-    AttrTree        attrs;
+    KVTree        attrs;
 
     if(!name.empty())
-        attrs << Attribute("name", name);
+        attrs << KeyValue("name", name);
     if(!abbr.empty())
-        attrs << Attribute("abbr", abbr);
+        attrs << KeyValue("abbr", abbr);
     if(!author.empty())
-        attrs << Attribute("author", author);
+        attrs << KeyValue("author", author);
     if(!aux_ports.empty())
-        attrs << Attribute("aux", join_string(aux_ports, ", "));
+        attrs << KeyValue("aux", join_string(aux_ports, ", "));
     if(!cache.empty())
-        attrs << Attribute("cache", cache);
+        attrs << KeyValue("cache", cache);
     if(!copyright.empty()){
-        Attribute  a;
+        KeyValue  a;
         switch(copyright.stance){
         case AssertDeny::Neither:
             a.key   = "notice";
@@ -144,34 +143,34 @@ bool    QuillFile::write(Vector<char>&chars)
         if(!copyright.text.empty())
             a.data = copyright.text;
         if(copyright.from)
-            a << Attribute("from", String::number(copyright.from));
+            a << KeyValue("from", String::number(copyright.from));
         if(copyright.to)
-            a << Attribute("to", String::number(copyright.to));
+            a << KeyValue("to", String::number(copyright.to));
         attrs << a;
     }
     if(!home.empty())
-        attrs << Attribute("home", home);
+        attrs << KeyValue("home", home);
     if(!ini.empty())
-        attrs << Attribute("ini", ini);
+        attrs << KeyValue("ini", ini);
     if(!local_user.empty())
-        attrs << Attribute("local", local_user);
+        attrs << KeyValue("local", local_user);
     if(!log_dir.empty())
-        attrs << Attribute("logs", log_dir);
+        attrs << KeyValue("logs", log_dir);
     if(port)
-        attrs << Attribute("port", String::number(port));
+        attrs << KeyValue("port", String::number(port));
     if(read_timeout)
-        attrs << Attribute("timeout", String::number(read_timeout));
+        attrs << KeyValue("timeout", String::number(read_timeout));
     if(!temp_dir.empty())
-        attrs << Attribute("temp", temp_dir);
+        attrs << KeyValue("temp", temp_dir);
     
     for(const auto & r : roots){
-        Attribute   a;
+        KeyValue   a;
         a.key   = "root";
         write_onto(a, r);
         attrs << a;
     }
     for(const auto& r : templates){
-        Attribute   a;
+        KeyValue   a;
         a.key   = "template";
         write_onto(a, r);
         attrs << a;
