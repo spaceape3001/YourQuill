@@ -13,14 +13,13 @@
 #include "Image.hpp"
 
 
-
 /*! \brief Atom in the cache
     This structure represents an atom in the cache
 */
 struct Atom {
     struct Info;
     uint64_t  id  = 0ULL;
-    constexpr auto    operator<=>(const Atom&rhs) const = default; //  = default;
+    constexpr auto    operator<=>(const Atom&rhs) const = default; 
     constexpr operator bool() const { return id != 0ULL; }
 };
 
@@ -57,7 +56,7 @@ struct Atom::Info {
     QString     abbr;
     QString     brief;
     QString     key;
-    Document    doc;
+    //Document    doc;  // it's now "plrual"
     //Leaf        leaf; // causes circular dependencies.... 
     Image       icon;
     auto operator<=>(const Info&) const = default;
@@ -168,8 +167,10 @@ namespace cdb {
 
     Atom                    atom(uint64_t);
     Atom                    atom(const QString&);
-    
+    Vector<Atom>            atoms(Atom, Sorted sorted=Sorted{});
     Vector<Atom>            atoms(Document, Sorted sorted=Sorted());
+    
+    size_t                  atoms_count(Atom);
     size_t                  atoms_count(Document);
     
     QString                 brief(Atom);
@@ -237,9 +238,12 @@ namespace cdb {
 
     Vector<Class>           dependents(Class, Sorted sorted=Sorted{});
     
-    Document                document(Atom);
+    //Document                document(Atom);
     Document                document(Class);
     Document                document(Field);
+    
+    Vector<Document>        documents(Atom);
+    size_t                  documents_count(Atom);
 
     bool                    edge(Class);
     
@@ -303,6 +307,7 @@ namespace cdb {
     //Vector<Atom>            outbound(Atom);
     Vector<Class>           outbound(Class);
     
+    Atom                    parent(Atom);
 
     Class                   parent(Field);
     QString                 pkey(Field);    //!< Key for plurals

@@ -30,11 +30,11 @@ namespace {
     void    _atoms(HtmlWriter& h, const std::vector<Atom>& atoms)
     {
         auto t = h.table();
-        h << "<tr><th>ID</th><th>Key</th><th>Doc</th><th>Brief</th></tr>\n";
+        h << "<tr><th>ID</th><th>Key</th><th>Brief</th></tr>\n";
         for(Atom a : atoms){
             auto i = cdb::info(a);
             h << "<tr><td><a href=\"/dev/atom?id="<< a.id << "\">" << a.id << "</a></td><td>" 
-                << i.key << "</td><td>" << dev(i.doc) << "</td><td>" << i.brief << "</td></tr>\n";
+                << i.key << "</td><td>" << i.brief << "</td></tr>\n";
         }
     }
 
@@ -146,7 +146,7 @@ namespace {
         h.key("ID") << x_atom.id;
         h.key("Brief") << i.brief;
         //h.key("Leaf") << dev(i.leaf);
-        h.key("Document") << dev(i.doc);
+        //h.key("Document") << dev(i.doc);
         h.key("Key") << i.key;
     }
     

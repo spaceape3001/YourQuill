@@ -17,6 +17,7 @@ class QByteArray;
 class QString;
 
 struct Atom;
+struct Attribute;
 struct Class;
 struct Directory;
 struct Document;
@@ -59,3 +60,5 @@ namespace cdb {
     using FoldString    = std::pair<Folder,QString>;
     using FragString    = std::pair<Fragment,QString>;
 }
+
+

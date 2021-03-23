@@ -272,12 +272,37 @@ namespace cdb {
             return Atom{s.valueU64(0)};
         return Atom();
     }
+    
+    namespace {
+        //Vector<Atom>        atoms_sorted(Atom);
+        
+        Vector<Atom>        atoms_unsorted(Atom a)
+        {
+            Vector<Atom> ret;
+            static thread_local SqlQuery s(wksp::cache(), "SELECT  id FROM Atoms WHERE parent=?");
+            auto s_af = s.af();
+            s.bind(0, a.id);
+            if(s.exec()){
+                while(s.next())
+                    ret << Atom{s.valueU64(0)};
+            }
+            return ret;
+        }
+        
+    }
+
+    Vector<Atom>            atoms(Atom a, Sorted sorted)
+    {
+        //  TODO (INNER JOIN)
+        return atoms_unsorted(a);
+    }
 
     namespace {
+        #if 0
         Vector<Atom>    atoms_sorted(Document doc)
         {
             Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Atoms WHERE doc=? ORDER BY k");
+            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM ADocuments WHERE doc=?");
             auto s_af = s.af();
             s.bind(0, doc.id);
             if(s.exec()){
@@ -286,11 +311,12 @@ namespace cdb {
             }
             return ret;
         }
+        #endif
 
         Vector<Atom>    atoms_unsorted(Document doc)
         {
             Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Atoms WHERE doc=?");
+            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM ADocuments WHERE doc=?");
             auto s_af = s.af();
             s.bind(0, doc.id);
             if(s.exec()){
@@ -301,9 +327,10 @@ namespace cdb {
         }
     }
     
-    Vector<Atom>        atoms(Document doc, Sorted sorted)
+    Vector<Atom>        atoms(Document doc, Sorted )
     {
-        return sorted ? atoms_sorted(doc) : atoms_unsorted(doc);
+        //   TODO inner join (above)
+        return atoms_unsorted(doc); // sorted ? atoms_sorted(doc) : atoms_unsorted(doc);
     }
     
     size_t              atoms_count(Document doc)
@@ -697,16 +724,40 @@ namespace cdb {
         return db_folder( classes_folder(), key(c));
     }
 
-    Document            document(Atom a)
+    //Document            document(Atom a)
+    //{
+        //static thread_local SqlQuery s(wksp::cache(), "SELECT doc FROM Atoms WHERE id=?");
+        //auto s_af = s.af();
+        //s.bind(0, a.id);
+        //if(s.exec() && s.next())
+            //return Document{s.valueU64(0)};
+        //return Document();
+    //}
+    
+    Vector<Document>        documents(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT doc FROM Atoms WHERE id=?");
+        Vector<Document>    ret;
+        
+        static thread_local SqlQuery s(wksp::cache(), "SELECT doc FROM ADocuments WHERE id=?");
+        auto s_af = s.af();
+        s.bind(0, a.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Document{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    size_t                  documents_count(Atom a)
+    {
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM ADocuments WHERE id=?");
         auto s_af = s.af();
         s.bind(0, a.id);
         if(s.exec() && s.next())
-            return Document{s.valueU64(0)};
-        return Document();
+            return s.valueU64(0);
+        return 0;
     }
-    
+
     Document            document(Class c)
     {
         return exists(c) ? Document{c.id}  : Document{};
@@ -909,14 +960,14 @@ namespace cdb {
     {
         Atom::Info    ret;
         
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k, abbr, doc, brief FROM Atoms WHERE id=?");
+        static thread_local SqlQuery s(wksp::cache(), "SELECT k, abbr, brief FROM Atoms WHERE id=?");
         auto s_af = s.af();
         s.bind(0, a.id);
         if(s.exec() && s.next()){
             ret.key         = s.valueString(0);
             ret.abbr        = s.valueString(1);
-            ret.doc         = Document(s.valueU64(2));
-            ret.brief       = s.valueString(3);
+            //ret.doc         = Document(s.valueU64(2));
+            ret.brief       = s.valueString(2);
         }
         return ret;
     }
@@ -1157,6 +1208,16 @@ namespace cdb {
                 ret << Class{s.valueU64(0)};
         }
         return ret;
+    }
+
+    Atom                parent(Atom a)
+    {
+        static thread_local SqlQuery s(wksp::cache(), "SELECT parent FROM Atoms WHERE id=?");
+        auto s_af = s.af();
+        s.bind(0, a.id);
+        if(s.exec() && s.next())
+            return Atom{s.valueU64(0)};
+        return Atom{};
     }
     
     Class               parent(Field f)

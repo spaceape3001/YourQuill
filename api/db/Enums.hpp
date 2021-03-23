@@ -10,6 +10,7 @@
 
 #include <db/enum/Access.hpp>
 #include <db/enum/AssertDeny.hpp>
+#include <db/enum/AttrKind.hpp>
 #include <db/enum/CalSystem.hpp>
 #include <db/enum/Change.hpp>
 #include <db/enum/DataRole.hpp>
