@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <db/Fragment.hpp>
+#include <gui/Provider.hpp>
+
+using FragmentProvider = std::shared_ptr<Provider<Fragment>>;
+
+namespace provider {
+    FragmentProvider      all_fragments();
+}
+

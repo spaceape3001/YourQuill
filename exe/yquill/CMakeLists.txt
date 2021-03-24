@@ -4,22 +4,22 @@ add_executable(yquill
     ./YWeb.cpp
     ./YWeb.hpp
 
-    ./atomsys/YAtomTable.cpp
-    ./atomsys/YAtomTable.hpp
-    #./atomsys/YClassEditor.cpp
-    #./atomsys/YClassEditor.hpp
-    ./atomsys/YClassTable.cpp
-    ./atomsys/YClassTable.hpp
-    ./atomsys/YFieldTable.cpp
-    ./atomsys/YFieldTable.hpp
-    ./filesys/YDirectoryTable.cpp
-    ./filesys/YDirectoryTable.hpp
-    ./filesys/YDocumentTable.cpp
-    ./filesys/YDocumentTable.hpp
-    ./filesys/YFolderTable.cpp
-    ./filesys/YFolderTable.hpp
-    ./filesys/YFragmentTable.cpp
-    ./filesys/YFragmentTable.hpp
+    ./atom/YAtomTable.cpp
+    ./atom/YAtomTable.hpp
+    #./class/YClassEditor.cpp
+    #./class/YClassEditor.hpp
+    ./class/YClassTable.cpp
+    ./class/YClassTable.hpp
+    ./directory/YDirectoryTable.cpp
+    ./directory/YDirectoryTable.hpp
+    ./document/YDocumentTable.cpp
+    ./document/YDocumentTable.hpp
+    ./field/YFieldTable.cpp
+    ./field/YFieldTable.hpp
+    ./folder/YFolderTable.cpp
+    ./folder/YFolderTable.hpp
+    ./fragment/YFragmentTable.cpp
+    ./fragment/YFragmentTable.hpp
     #./leaf/YLeafEditor.cpp
     #./leaf/YLeafEditor.hpp
     ./leaf/YLeafTable.cpp

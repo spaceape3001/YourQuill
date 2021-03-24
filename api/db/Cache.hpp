@@ -8,7 +8,8 @@
 
 //  Conveinence handler to include what's generally needed for the cache database
 
-#include "AtomSys.hpp"
+#include "Atom.hpp"
+#include "Class.hpp"
 #include "FileSys.hpp"
 #include "Graph.hpp"
 #include "Image.hpp"

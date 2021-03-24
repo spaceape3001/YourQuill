@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <db/Directory.hpp>
+#include <gui/Provider.hpp>
+
+using DirectoryProvider = std::shared_ptr<Provider<Directory>>;
+
+namespace provider {
+    DirectoryProvider   all_directories();
+}
+

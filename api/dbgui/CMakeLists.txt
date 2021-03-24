@@ -4,38 +4,40 @@ set(dbgui_sources
     ./QuillApp.cpp
     ./QuillApp.hpp
     
-    ./atomsys/AtomProvider.hpp
-    ./atomsys/AtomTableBase.cpp
-    ./atomsys/AtomTableModel.hpp
-    ./atomsys/AtomTableView.hpp
-    ./atomsys/ClassProvider.hpp
-    ./atomsys/ClassTableBase.cpp
-    ./atomsys/ClassTableModel.hpp
-    ./atomsys/ClassTableView.hpp
-    ./atomsys/FieldProvider.hpp
-    ./atomsys/FieldTableBase.cpp
-    ./atomsys/FieldTableModel.hpp
-    ./atomsys/FieldTableView.hpp
+    ./atom/AtomProvider.hpp
+    ./atom/AtomTableBase.cpp
+    ./atom/AtomTableModel.hpp
+    ./atom/AtomTableView.hpp
+    ./class/ClassProvider.hpp
+    ./class/ClassTableBase.cpp
+    ./class/ClassTableModel.hpp
+    ./class/ClassTableView.hpp
     
+    ./directory/DirectoryProvider.hpp
+    ./directory/DirectoryTableBase.cpp
+    ./directory/DirectoryTableModel.hpp
+    ./directory/DirectoryTableView.hpp
+    ./document/DocumentProvider.hpp
+    ./document/DocumentTableBase.cpp
+    ./document/DocumentTableModel.hpp
+    ./document/DocumentTableView.hpp
+
     ./edit/CopyrightEdit.cpp
     ./edit/CopyrightEdit.hpp
     
-    ./filesys/DirectoryProvider.hpp
-    ./filesys/DirectoryTableBase.cpp
-    ./filesys/DirectoryTableModel.hpp
-    ./filesys/DirectoryTableView.hpp
-    ./filesys/DocumentProvider.hpp
-    ./filesys/DocumentTableBase.cpp
-    ./filesys/DocumentTableModel.hpp
-    ./filesys/DocumentTableView.hpp
-    ./filesys/FolderProvider.hpp
-    ./filesys/FolderTableBase.cpp
-    ./filesys/FolderTableModel.hpp
-    ./filesys/FolderTableView.hpp
-    ./filesys/FragmentProvider.hpp
-    ./filesys/FragmentTableBase.cpp
-    ./filesys/FragmentTableModel.hpp
-    ./filesys/FragmentTableView.hpp
+    ./field/FieldProvider.hpp
+    ./field/FieldTableBase.cpp
+    ./field/FieldTableModel.hpp
+    ./field/FieldTableView.hpp
+
+    ./folder/FolderProvider.hpp
+    ./folder/FolderTableBase.cpp
+    ./folder/FolderTableModel.hpp
+    ./folder/FolderTableView.hpp
+    ./fragment/FragmentProvider.hpp
+    ./fragment/FragmentTableBase.cpp
+    ./fragment/FragmentTableModel.hpp
+    ./fragment/FragmentTableView.hpp
     
     ./leaf/LeafProvider.hpp
     ./leaf/LeafTableBase.cpp

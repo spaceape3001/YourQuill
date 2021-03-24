@@ -10,7 +10,6 @@
 #include "yCommon.hpp"
 #include "yUpdater.hpp"
 
-#include <db/AtomSys.hpp>
 #include <db/Graph.hpp>
 #include <db/GraphBuilder.hpp>
 #include <db/Tag.hpp>

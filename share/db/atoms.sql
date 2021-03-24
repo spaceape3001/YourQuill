@@ -8,7 +8,7 @@ CREATE TABLE Atoms (
     parent      INTEGER DEFAULT 0,
 	icon        VARCHAR(255),
 	brief       VARCHAR(255),
-	title       VARCHAR(255)
+	name        VARCHAR(255)
 );
 
     --  All documents that instantiate this atom (can be plural)

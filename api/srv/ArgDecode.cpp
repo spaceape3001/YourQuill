@@ -9,7 +9,8 @@
 #include "TLSGlobals.hpp"
 #include "Utilities.hpp"
 
-#include <db/AtomSys.hpp>
+#include <db/Atom.hpp>
+#include <db/Class.hpp>
 #include <db/FileSys.hpp>
 #include <db/Image.hpp>
 #include <db/Graph.hpp>

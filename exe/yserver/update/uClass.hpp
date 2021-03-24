@@ -8,7 +8,7 @@
 
 #include "uFwd.hpp"
 
-#include <db/AtomSys.hpp>
+#include <db/Class.hpp>
 #include <db/Image.hpp>
 #include <db/Tag.hpp>
 

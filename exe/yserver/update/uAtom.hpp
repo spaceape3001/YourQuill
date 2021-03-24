@@ -7,7 +7,7 @@
 #pragma once
 
 #include "uFwd.hpp"
-#include <db/AtomSys.hpp>
+#include <db/Atom.hpp>
 #include <db/Tag.hpp>
 
 struct UAtom {

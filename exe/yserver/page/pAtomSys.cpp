@@ -6,7 +6,8 @@
 
 #include "yCommon.hpp"
 
-#include <db/AtomSys.hpp>
+#include <db/Atom.hpp>
+#include <db/Class.hpp>
 #include <db/Root.hpp>
 #include <db/Workspace.hpp>
 #include <srv/ArgDecode.hpp>

@@ -4,7 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <db/AtomSys.hpp>
+#include <db/Atom.hpp>
+#include <db/Class.hpp>
 #include <db/ClassFile.hpp>
 #include <srv/ArgDecode.hpp>
 #include <srv/HtmlPage.hpp>
@@ -85,7 +86,7 @@ namespace {
         test(decode_class_prime(), false);
         test(decode_root(), false);
         
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        ClassFile::Shared   x = cdb::writable(x_class, x_root);
         x -> name   = utf8(x_request -> getParameter("name"));
         x -> plural = utf8(x_request -> getParameter("plural"));
         x -> brief  = utf8(x_request -> getParameter("brief"));
@@ -190,7 +191,7 @@ namespace {
         if(!x_root)
             x_root      = def_root(DataRole::Classes);
         
-        auto    p   = cdb::write(x_class, x_root);
+        auto    p   = cdb::writable(x_class, x_root);
         if(!p)
             throw HttpStatus::BadRequest;
         auto  &fd    = p -> fields[ x_key];
@@ -257,7 +258,7 @@ namespace {
 
     
         Vector<Class>   all = cdb::all_classes(Sorted::YES);
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        ClassFile::Shared   x = cdb::writable(x_class, x_root);
         if(!x)
             throw HttpStatus::BadRequest;
 
@@ -328,7 +329,7 @@ namespace {
         StringSet src;
             
         Vector<Class>   all = cdb::all_classes();
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        ClassFile::Shared   x = cdb::writable(x_class, x_root);
         if(!x)
             throw HttpStatus::BadRequest;
 
@@ -396,7 +397,7 @@ namespace {
         test(decode_root(), false);
         
         Vector<Class>   all = cdb::all_classes();
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        ClassFile::Shared   x = cdb::writable(x_class, x_root);
         if(!x)
             throw HttpStatus::BadRequest;
         x->targets.clear();
@@ -473,7 +474,7 @@ namespace {
         test(decode_class_prime(), false);
         test(decode_root(), false);
         
-        ClassFile::Shared   x = cdb::write(x_class, x_root);
+        ClassFile::Shared   x = cdb::writable(x_class, x_root);
         if(!x)
             throw HttpStatus::BadRequest;
         x->use.clear();

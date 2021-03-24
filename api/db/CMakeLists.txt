@@ -1,16 +1,25 @@
 set(db_sources
-    ./AtomSys.cpp
-    ./AtomSys.hpp
+    ./Atom.cpp
+    ./Atom.hpp
+    ./Attribute.cpp
+    ./Attribute.hpp
     ./Cache.hpp
+    ./Class.cpp
+    ./Class.hpp
     ./ClassFile.cpp
     ./ClassFile.hpp
+    ./Directory.hpp
+    ./Document.hpp
     ./Enums.cpp
     ./Enums.hpp
+    ./Field.hpp
     ./FileStrings.hpp
     ./FileSys.cpp
     ./FileSys.hpp
+    ./Folder.hpp
     ./FolderFile.cpp
     ./FolderFile.hpp
+    ./Fragment.hpp
     ./Graph.cpp
     ./Graph.hpp
     ./GraphBuilder.cpp
@@ -36,7 +45,7 @@ set(db_sources
     ./TagFile.hpp
     ./Workspace.cpp
     ./Workspace.hpp
-
+     
     ./bit/Context.cpp
     ./bit/Context.hpp
     ./bit/Copyright.cpp
@@ -49,6 +58,7 @@ set(db_sources
 
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp
+    ./enum/AttrKind.hpp
     ./enum/CalSystem.hpp
     ./enum/Change.hpp
     ./enum/DataRole.hpp

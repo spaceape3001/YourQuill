@@ -5,13 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <db/Cache.hpp>
-#include <dbgui/atomsys/AtomProvider.hpp>
-#include <dbgui/atomsys/ClassProvider.hpp>
-#include <dbgui/atomsys/FieldProvider.hpp>
-#include <dbgui/filesys/DirectoryProvider.hpp>
-#include <dbgui/filesys/DocumentProvider.hpp>
-#include <dbgui/filesys/FolderProvider.hpp>
-#include <dbgui/filesys/FragmentProvider.hpp>
+#include <dbgui/atom/AtomProvider.hpp>
+#include <dbgui/class/ClassProvider.hpp>
+#include <dbgui/directory/DirectoryProvider.hpp>
+#include <dbgui/document/DocumentProvider.hpp>
+#include <dbgui/field/FieldProvider.hpp>
+#include <dbgui/folder/FolderProvider.hpp>
+#include <dbgui/fragment/FragmentProvider.hpp>
 #include <dbgui/leaf/LeafProvider.hpp>
 #include <dbgui/tag/TagProvider.hpp>
 #include <dbgui/wksp/RootProvider.hpp>
