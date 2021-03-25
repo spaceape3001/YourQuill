@@ -6,6 +6,7 @@
 
 #include <db/Cache.hpp>
 #include <dbgui/atom/AtomProvider.hpp>
+#include <dbgui/attribute/AttributeProvider.hpp>
 #include <dbgui/class/ClassProvider.hpp>
 #include <dbgui/directory/DirectoryProvider.hpp>
 #include <dbgui/document/DocumentProvider.hpp>
@@ -29,6 +30,41 @@ namespace provider {
     AtomProvider    all_atoms()
     {
         return std::make_shared<AllAtoms>();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllAttributes : public Provider<Attribute> {
+        AllAttributes() {}
+        ~AllAttributes(){}
+        virtual Vector<Attribute>   all() const override { return cdb::all_attributes(); }
+    };
+}
+
+namespace provider {
+    AttributeProvider   all_attributes()
+    {
+        return std::make_shared<AllAttributes>();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllAttributesDoc : public Provider<Attribute> {
+        Document        doc;
+        AllAttributesDoc(Document d) : doc(d) {}
+        ~AllAttributesDoc(){}
+        virtual Vector<Attribute>   all() const override { return cdb::all_attributes(doc); }
+    };
+}
+
+namespace provider {
+    AttributeProvider   all_attributes(Document d)
+    {
+        return std::make_shared<AllAttributesDoc>(d);
     }
 }
 
@@ -201,4 +237,40 @@ namespace provider {
         return std::make_shared<AllTags>();
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AttributesAttr : public Provider<Attribute> {
+        Attribute   attr;
+        AttributesAttr(Attribute a) : attr(a) {}
+        virtual Vector<Attribute>   all() const override { return cdb::attributes(attr); }
+    };
+}
+
+namespace provider {
+    AttributeProvider   attributes(Attribute a)
+    {
+        return std::make_shared<AttributesAttr>(a);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AttributesDoc : public Provider<Attribute> {
+        Document    doc;
+        AttributesDoc(Document d) : doc(d) {}
+        virtual Vector<Attribute>   all() const override { return cdb::attributes(doc); }
+    };
+}
+
+namespace provider {
+    AttributeProvider   attributes(Document d)
+    {
+        return std::make_shared<AttributesDoc>(d);
+    }
+}
+
+
 

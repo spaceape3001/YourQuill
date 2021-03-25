@@ -20,6 +20,12 @@ struct Attribute {
 namespace cdb {
 
 
+    Vector<Attribute>   all_attributes();
+    Vector<Attribute>   all_attributes(Document);
+    size_t              all_attributes_count();
+    size_t              all_attributes_count(Document);
+    
+
     //! Gets attributes (sub)
     Vector<Attribute>   attributes(Attribute);
 

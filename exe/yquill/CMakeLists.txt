@@ -6,6 +6,8 @@ add_executable(yquill
 
     ./atom/YAtomTable.cpp
     ./atom/YAtomTable.hpp
+    ./attribute/YAttributeTable.cpp
+    ./attribute/YAttributeTable.hpp
     #./class/YClassEditor.cpp
     #./class/YClassEditor.hpp
     ./class/YClassTable.cpp

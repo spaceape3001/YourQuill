@@ -19,6 +19,7 @@ public:
     
 public slots:
     void            cmdNewAtomTable();
+    void            cmdNewAttributeTable();
     //void            cmdNewCalculator();
     void            cmdNewClassTable();
     void            cmdNewDateGen();

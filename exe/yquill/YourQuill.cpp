@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "atom/YAtomTable.hpp"
+#include "attribute/YAttributeTable.hpp"
 #include "class/YClassTable.hpp"
 
 #include "directory/YDirectoryTable.hpp"
@@ -49,6 +50,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     addAction("classes", "Classes").connect(this, &YourQuill::cmdNewClassTable);
 
     addAction("new_atomtable", "Atom Table").connect(this, &YourQuill::cmdNewAtomTable);
+    addAction("new_attributetable", "Attribute Table").connect(this, &YourQuill::cmdNewAttributeTable);
     //addAction("new_calculator", "Calculator").connect(this, &YourQuill::cmdNewCalculator);
     addAction("new_classtable", "Class Table").connect(this, &YourQuill::cmdNewClassTable);
     addAction("new_dategen", "Date Generator").connect(this, &YourQuill::cmdNewDateGen);
@@ -94,6 +96,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
             << "new_sqltool" 
             << "--"
             << "new_atomtable" 
+            << "new_attributetable"
             << "new_classtable" 
             << "new_directorytable"
             << "new_documenttable" 
@@ -149,6 +152,13 @@ YourQuill::~YourQuill()
 void    YourQuill::cmdNewAtomTable()
 {
     YAtomTable* ct  = new YAtomTable;
+    addWindow(ct);
+}
+
+
+void    YourQuill::cmdNewAttributeTable()
+{
+    YAttributeTable* ct = new YAttributeTable;
     addWindow(ct);
 }
 

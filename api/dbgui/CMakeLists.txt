@@ -8,6 +8,13 @@ set(dbgui_sources
     ./atom/AtomTableBase.cpp
     ./atom/AtomTableModel.hpp
     ./atom/AtomTableView.hpp
+    
+    ./attribute/AttributeProvider.hpp
+    ./attribute/AttributeTableBase.cpp
+    ./attribute/AttributeTableModel.hpp
+    ./attribute/AttributeTableView.hpp
+    
+    
     ./class/ClassProvider.hpp
     ./class/ClassTableBase.cpp
     ./class/ClassTableModel.hpp

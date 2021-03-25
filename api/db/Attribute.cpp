@@ -14,6 +14,50 @@
 
 namespace cdb {
 
+    Vector<Attribute>   all_attributes()
+    {
+        Vector<Attribute>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attribute");
+        auto s_af = s.af();
+        if(s.exec()){
+            while(s.next())
+                ret << Attribute{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    Vector<Attribute>   all_attributes(Document d) 
+    {
+        Vector<Attribute>   ret;
+        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attribute WHERE doc=?");
+        auto s_af = s.af();
+        s.bind(0, d.id);
+        if(s.exec()){
+            while(s.next())
+                ret << Attribute{s.valueU64(0)};
+        }
+        return ret;
+    }
+    
+    size_t              all_attributes_count()
+    {
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attribute");
+        auto s_af = s.af();
+        if(s.exec() && s.next())
+            return s.valueU64(0);
+        return 0;
+    }
+    
+    size_t              all_attributes_count(Document d)
+    {
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attribute WHERE doc=?");
+        auto s_af = s.af();
+        s.bind(0, d.id);
+        if(s.exec() && s.next())
+            return s.valueU64(0);
+        return 0;
+    }
+
     //! Gets attributes (sub)
     Vector<Attribute>   attributes(Attribute a)
     {
