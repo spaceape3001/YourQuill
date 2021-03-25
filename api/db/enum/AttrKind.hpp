@@ -8,7 +8,8 @@
 #include <meta/MetaValue.hpp>
 #include <util/Enum.hpp>
 
-/*! \brief Kind of attribute
+/*! \enum AttrKind
+    \brief Kind of attribute
 
     This represents the general "Kind" of the attribute, not the specific.
 */

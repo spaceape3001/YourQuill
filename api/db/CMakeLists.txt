@@ -1,8 +1,8 @@
 set(db_sources
     ./Atom.cpp
     ./Atom.hpp
-    #./Attribute.cpp
-    #./Attribute.hpp
+    ./Attribute.cpp
+    ./Attribute.hpp
     ./Cache.hpp
     ./Class.cpp
     ./Class.hpp

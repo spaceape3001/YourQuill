@@ -51,6 +51,7 @@ namespace cdb {
     struct NKI;
 
     using DirOrFrag     = std::variant<bool,Directory,Fragment>;
+    using DocOrAttr     = std::variant<bool,Document,Attribute>;
     using DocOrFold     = std::variant<bool,Document,Folder>;
     using DirOrFragStr  = std::pair<DirOrFrag,QString>;
     using DocOrFoldStr  = std::pair<DocOrFold,QString>;

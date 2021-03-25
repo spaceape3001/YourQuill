@@ -8,4 +8,3 @@ CREATE TABLE Leafs (
 	title		VARCHAR(255) COLLATE NOCASE
 );
 
-
