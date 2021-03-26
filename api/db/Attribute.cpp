@@ -17,7 +17,7 @@ namespace cdb {
     Vector<Attribute>   all_attributes()
     {
         Vector<Attribute>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attribute");
+        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attributes");
         auto s_af = s.af();
         if(s.exec()){
             while(s.next())
@@ -29,7 +29,7 @@ namespace cdb {
     Vector<Attribute>   all_attributes(Document d) 
     {
         Vector<Attribute>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attribute WHERE doc=?");
+        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attributes WHERE doc=?");
         auto s_af = s.af();
         s.bind(0, d.id);
         if(s.exec()){
@@ -41,7 +41,7 @@ namespace cdb {
     
     size_t              all_attributes_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attribute");
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attributes");
         auto s_af = s.af();
         if(s.exec() && s.next())
             return s.valueU64(0);
@@ -50,7 +50,7 @@ namespace cdb {
     
     size_t              all_attributes_count(Document d)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attribute WHERE doc=?");
+        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attributes WHERE doc=?");
         auto s_af = s.af();
         s.bind(0, d.id);
         if(s.exec() && s.next())

@@ -3,6 +3,8 @@ CREATE TABLE Atoms (
     id          INTEGER PRIMARY KEY,
     k           VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE,
     abbr        VARCHAR(255),
+        -- left here until it's all switched over....
+    doc         INTEGER NOT NULL,
     leaf        INTEGER DEFAULT 0,
         -- Parent atom (for composition)
     parent      INTEGER DEFAULT 0,
