@@ -7,8 +7,7 @@
 #pragma once
 
 template <typename T>
-class IntRange {
-public:
+struct IntRange {
     class iterator {
     public:
     
@@ -34,9 +33,6 @@ public:
 
     typedef iterator const_iterator;
 
-    IntRange() : low(0), high(0) {}
-    IntRange(T _l, T _h) : low(_l), high(_h) {}
-
     iterator begin() const
     {
         return iterator(low);
@@ -46,9 +42,14 @@ public:
     {
         return iterator(high);
     }
+    
+    constexpr T     count() const { return high - low; }
+    
+    bool            empty() const { return low == high; }
+    bool            not_empty() const { return low != high; }
+    
 
-private:
-    T     low, high;
+    const T         low, high;
 };
 
 
@@ -56,6 +57,6 @@ private:
 template <typename T>
 IntRange<T> range(T a, T b)
 {
-    return IntRange<T>(a,b);
+    return IntRange<T>{a,b};
 }
 

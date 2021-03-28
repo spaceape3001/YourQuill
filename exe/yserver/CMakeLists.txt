@@ -4,6 +4,8 @@ add_executable(yserver
     
     ./update/uAtom.cpp
     ./update/uAtom.hpp
+    ./update/uAttribute.cpp
+    ./update/uAttribute.hpp
     ./update/uClass.cpp
     ./update/uClass.hpp
     ./update/uField.cpp

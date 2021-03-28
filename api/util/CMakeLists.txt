@@ -6,6 +6,7 @@
 set(util_sources
     ./AbstractFile.cpp
     ./AbstractFile.hpp
+    ./Array1.hpp
     ./Array2.hpp
     ./Collections.cpp
     ./Comma.hpp

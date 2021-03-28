@@ -6,14 +6,15 @@
 
 #include "uAtom.hpp"
 #include "uLeaf.hpp"
+#include "uAttribute.hpp"
 #include "yUpdater.hpp"
 
 #include <db/Image.hpp>
 #include <db/Workspace.hpp>
 #include <srv/Importer.hpp>
 #include <util/Hash.hpp>
+#include <util/Logging.hpp>
 #include <util/SqlQuery.hpp>
-
 
 ULeaf&            uget(Leaf l)
 {
@@ -101,8 +102,33 @@ void                ULeaf::do_link()
 {
     if(data){
         //  TODO.... (massive)
+        
+        //data        = {};   // clear it (temporary)
     }
 }
+
+#if 0
+    // LEFT IN FOR DEBUGGING USE
+void    print(const Vector<cdb::KVDiff>& items, size_t depth=1)
+{
+    for(const cdb::KVDiff& d : items){
+        yInfo() << String(depth*2, ' ') << d.key << " (" << d.value << ") " << d.nidx << " {attr " << d.attr.id << "}" 
+            << (d.added() ? " INSERT" : "") 
+            << (d.modified() ? " MODIFY" : "")
+            << (d.deleted() ? " DELETE" : "")
+            << (d.indexed() ? " INDEX" : "")
+            << (d.subchanged() ? " SUBS": "")
+        ;
+        
+        print(d.sub, depth+1);
+    }
+}
+
+void    print_tree(const cdb::KVReport& rep)
+{
+    print(rep.items);
+}
+#endif
 
 void                ULeaf::do_read()
 {
@@ -119,7 +145,9 @@ void                ULeaf::do_read()
         a.update_classes(data->classes());
         a.update_tags(data->tags());
         
+        auto kv     = attr_changes(doc, *data);
         // Recurssion (TODO)
+        execute_removals(kv);
     }
 }
 

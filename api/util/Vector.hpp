@@ -162,6 +162,8 @@ public:
     template <typename Pred>
     Vector&     unique_insert_sort(const T&, Pred);
 
+    bool        valid(size_t i) const { return i < base_vec::size(); }
+
     T           value(size_t, const T& def={}) const;
     
     struct CommaOp { 
