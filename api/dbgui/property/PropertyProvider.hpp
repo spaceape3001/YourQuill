@@ -1,0 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <db/Property.hpp>
+#include <gui/Provider.hpp>
+
+using PropertyProvider = std::shared_ptr<Provider<Property>>;
+
+namespace provider {
+    PropertyProvider    all_properties();
+}

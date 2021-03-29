@@ -30,6 +30,8 @@ set(db_sources
     ./Leaf.hpp
     ./LeafFile.cpp
     ./LeafFile.hpp
+    ./Property.cpp
+    ./Property.hpp
     ./QuillData.hpp
     ./QuillFile.cpp
     ./QuillFile.hpp

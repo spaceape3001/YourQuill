@@ -51,6 +51,11 @@ set(dbgui_sources
     ./leaf/LeafTableModel.hpp
     ./leaf/LeafTableView.hpp
     
+    ./property/PropertyProvider.hpp
+    ./property/PropertyTableBase.cpp
+    ./property/PropertyTableModel.hpp
+    ./property/PropertyTableView.hpp
+    
     ./quill/QuillDataEdit.cpp
     ./quill/QuillDataEdit.hpp
     ./quill/QuillDirTable.cpp

@@ -14,6 +14,7 @@
 #include <dbgui/folder/FolderProvider.hpp>
 #include <dbgui/fragment/FragmentProvider.hpp>
 #include <dbgui/leaf/LeafProvider.hpp>
+#include <dbgui/property/PropertyProvider.hpp>
 #include <dbgui/tag/TagProvider.hpp>
 #include <dbgui/wksp/RootProvider.hpp>
 
@@ -193,6 +194,23 @@ namespace provider {
     LeafProvider      all_leafs()
     {
         return std::make_shared<AllLeafs>();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+    struct AllProperties : public Provider<Property> {
+        AllProperties(){}
+        ~AllProperties(){}
+        virtual Vector<Property>    all() const override { return cdb::all_properties(); }
+    };
+}
+
+namespace provider {
+    PropertyProvider    all_properties()
+    {
+        return std::make_shared<AllProperties>();
     }
 }
 

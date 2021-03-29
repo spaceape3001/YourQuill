@@ -13,7 +13,7 @@
 #include "field/YFieldTable.hpp"
 #include "folder/YFolderTable.hpp"
 #include "fragment/YFragmentTable.hpp"
-
+#include "property/YPropertyTable.hpp"
 #include "leaf/YLeafTable.hpp"
 #include "tag/YTagTable.hpp"
 
@@ -62,6 +62,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     addAction("new_leaftable", "Leaf Table").connect(this, &YourQuill::cmdNewLeafTable);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
+    addAction("new_proptable", "Property Table").connect(this, &YourQuill::cmdNewPropertyTable);
     addAction("new_sqltool", "Sql Tool").connect(this, &YourQuill::cmdNewSqlTool);
     addAction("new_tagtable", "Tag Table").connect(this, &YourQuill::cmdNewTagTable);
     addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
@@ -104,6 +105,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
             << "new_foldertable"
             << "new_fragmenttable"
             << "new_leaftable" 
+            << "new_proptable"
             << "new_tagtable"
         
     );
@@ -222,6 +224,12 @@ void    YourQuill::cmdNewFragmentTable()
     addWindow(ft);
 }
 
+void    YourQuill::cmdNewLeafTable()
+{
+    YLeafTable*     lt  = new YLeafTable;
+    //lt -> setAddEnable(true);
+    addWindow(lt);
+}
 
 #if 0
 
@@ -233,12 +241,10 @@ void    YourQuill::cmdNewFragmentTable()
 
 #endif
 
-
-void    YourQuill::cmdNewLeafTable()
+void    YourQuill::cmdNewPropertyTable()
 {
-    YLeafTable*     ct  = new YLeafTable;
-    //ct -> setAddEnable(true);
-    addWindow(ct);
+    YPropertyTable* pt = new YPropertyTable;
+    addWindow(pt);
 }
 
 void    YourQuill::cmdNewSqlTool()

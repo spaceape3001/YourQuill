@@ -31,6 +31,7 @@ public slots:
     void            cmdNewFragmentTable();
     void            cmdNewLeafTable();
     ////void            cmdNewMonthView();
+    void            cmdNewPropertyTable();
     void            cmdNewSqlTool();
     void            cmdNewTagTable();
     void            cmdNewTimeGen();

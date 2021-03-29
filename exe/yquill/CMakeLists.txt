@@ -26,6 +26,8 @@ add_executable(yquill
     #./leaf/YLeafEditor.hpp
     ./leaf/YLeafTable.cpp
     ./leaf/YLeafTable.hpp
+    ./property/YPropertyTable.cpp
+    ./property/YPropertyTable.hpp
     #./tag/YTagEditor.cpp
     #./tag/YTagEditor.hpp
     ./tag/YTagTable.cpp
