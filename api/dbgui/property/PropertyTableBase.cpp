@@ -16,7 +16,6 @@ template class StdTableView<Property>;
 PropertyTableModel::PropertyTableModel(PropertyProvider ctp, QObject*parent) : 
     U64TableModel<Property>(ctp?ctp:provider::all_properties(), parent)
 {
-    customRO("ID", [](Property f) -> auto { return (quint64) f.id; });
     customRO("Key", [](Property f) -> auto { return cdb::key(f); });
     customRO("Value", [](Property f) -> auto { return cdb::value(f); });
     customRO("UID", [](Property f) -> auto { return cdb::uid(f); });
