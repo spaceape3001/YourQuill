@@ -407,6 +407,29 @@ QString         strip_extension(const QString& name)
     return name;
 }
 
+QIcon           theme_icon(const QString& icon)
+{
+    return theme_icon(icon, QString());
+}
+
+QIcon           theme_icon(const QString& icon, const QString& fallback)
+{
+    if(is_main_thread()){
+        QIcon   ico     = QIcon::fromTheme(icon);
+        if(!ico.isNull())
+            return ico;
+        if(!fallback.isEmpty()){
+            if(fallback.contains('%'))
+                ico     = fetch_icon(fallback);
+            else
+                ico     = QIcon(fallback);
+        }
+        return ico;
+    } else {
+        return QIcon();
+    }
+}
+
 
 QString         utf8(const QByteArray&b)
 {

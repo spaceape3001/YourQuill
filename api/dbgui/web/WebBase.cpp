@@ -6,6 +6,7 @@
 
 #include "WebBase.hpp"
 #include <dbgui/QuillApp.hpp>
+#include <gui/StdIcons.hpp>
 
 #include <QHBoxLayout>
 #include <QIcon>
@@ -31,10 +32,10 @@ WebBase::WebBase(QWidget*parent) : SubWin(parent), m_url{}, m_view{}
     
     QToolBar*       bar = new QToolBar;
     
-    bar -> addAction(QIcon(":icon/left.svg"), tr("Back"), m_view, &WebBase::View::back);
-    bar -> addAction(QIcon(":icon/right.svg"), tr("Fwd"), m_view, &WebBase::View::forward);
-    bar -> addAction(QIcon(":icon/refresh.svg"), tr("Reload"), m_view, &WebBase::View::reload);
-    bar -> addAction(QIcon(":icon/home.svg"), tr("Home"), this, &WebBase::goHome);
+    bar -> addAction(si_go_back(), tr("Back"), m_view, &WebBase::View::back);
+    bar -> addAction(si_go_forward(), tr("Fwd"), m_view, &WebBase::View::forward);
+    bar -> addAction(si_view_refresh(), tr("Reload"), m_view, &WebBase::View::reload);
+    bar -> addAction(si_go_home(), tr("Home"), this, &WebBase::goHome);
     bar -> addWidget(m_url);
     
     QVBoxLayout* vlay = new QVBoxLayout(this);

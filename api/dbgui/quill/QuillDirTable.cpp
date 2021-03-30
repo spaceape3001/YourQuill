@@ -6,8 +6,9 @@
 
 
 #include "QuillDirTable.hpp"
-#include <gui/model/StdTableModelImpl.hpp>
 
+#include <gui/StdIcons.hpp>
+#include <gui/model/StdTableModelImpl.hpp>
 
 #include <gui/delegate/ColorDelegate.hpp>
 #include <gui/delegate/DirDelegate.hpp>
@@ -58,11 +59,11 @@ QuillDirTable::QuillDirTable(bool fTemplates, const QString& title_, QWidget*par
     m_bar       = new QToolBar;
     m_bar -> setOrientation(Qt::Vertical);
     
-    m_bar -> addAction(QIcon(":/icon/up.svg"), "^", this, &QuillDirTable::cmdMoveUp);
-    m_bar -> addAction(QIcon(":/icon/down.svg"), "v", this, &QuillDirTable::cmdMoveDown);
+    m_bar -> addAction(si_list_up(), "^", this, &QuillDirTable::cmdMoveUp);
+    m_bar -> addAction(si_list_down(), "v", this, &QuillDirTable::cmdMoveDown);
     m_bar -> addSeparator();
-    m_bar -> addAction(QIcon(":/icon/add.svg"), "+", this, &QuillDirTable::cmdAdd);
-    m_bar -> addAction(QIcon(":/icon/remove.svg"), "-", this, &QuillDirTable::cmdRemove);
+    m_bar -> addAction(si_list_add(), "+", this, &QuillDirTable::cmdAdd);
+    m_bar -> addAction(si_list_remove(), "-", this, &QuillDirTable::cmdRemove);
 
 
     QVBoxLayout*    vlay    = new QVBoxLayout;

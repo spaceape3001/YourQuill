@@ -1,6 +1,8 @@
 set(gui_sources
 
     ./Provider.hpp
+    ./StdIcons.hpp
+    ./StdIcons.cpp
     ./UInt64Mapper.cpp
     ./UInt64Mapper.hpp
     

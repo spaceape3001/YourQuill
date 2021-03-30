@@ -36,6 +36,8 @@ QRect           desktop_screen_box();
 QIcon           fetch_icon(const QString&);
 
 
+
+
 bool            is_main_thread();
 bool            isMainThread();
 
@@ -87,3 +89,11 @@ Vector<QString> qt(const Vector<String>&);
 
 QList<QVariant>    qvar_list(const StringSet& slist);
 QList<QVariant>    qvar_list(const QStringSet& slist);
+
+QIcon           theme_icon(const QString& icon);
+
+/*! \brief Gets an icon from theme, or the filename as a fallback 
+
+    This is *BETTER* than QIcon's fromTheme because we won't do an unneccessary load of the fallback icon
+*/
+QIcon           theme_icon(const QString& icon, const QString& fallback);

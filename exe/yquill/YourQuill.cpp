@@ -25,6 +25,7 @@
 #include <gadget/DateGen.hpp>
 #include <gadget/SqlTool.hpp>
 #include <gadget/TimeGen.hpp>
+#include <gui/StdIcons.hpp>
 #include <util/Logging.hpp>
 #include <iostream>
 
@@ -68,9 +69,9 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     addAction("new_timegen", "Time Generator").connect(this, &YourQuill::cmdNewTimeGen);
     addAction("new_web", "New Web").connect(this, &YourQuill::cmdNewWeb);
     
-    addAction("quit", "Quit").icon(QIcon::fromTheme("application-exit")).connect(&QApplication::closeAllWindows);
+    addAction("quit", "Quit").icon(si_app_exit()).connect(&QApplication::closeAllWindows);
     
-    addAction("refresh", "Refresh").shortcut("F5");
+    addAction("refresh", "Refresh").shortcut("F5").icon(si_view_refresh());
     addAction("tags", "Tags").connect(this, &YourQuill::cmdNewTagTable);
 
 
