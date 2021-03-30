@@ -73,6 +73,11 @@ QIcon   si_edit_undo()
     return ret;
 }
 
+QIcon   si_folder()
+{
+    static thread_local QIcon   ret = theme_icon("folder");
+    return ret;
+}
 
 
 QIcon   si_go_back()

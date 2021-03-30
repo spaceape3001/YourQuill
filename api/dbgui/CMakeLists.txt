@@ -41,6 +41,10 @@ set(dbgui_sources
     ./folder/FolderTableBase.cpp
     ./folder/FolderTableModel.hpp
     ./folder/FolderTableView.hpp
+    ./folder/FolderTreeBase.cpp
+    ./folder/FolderTreeModel.hpp
+    ./folder/FolderTreeView.hpp
+    
     ./fragment/FragmentProvider.hpp
     ./fragment/FragmentTableBase.cpp
     ./fragment/FragmentTableModel.hpp

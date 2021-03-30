@@ -20,6 +20,8 @@ QIcon   si_edit_replace();
 QIcon   si_edit_select_all();
 QIcon   si_edit_undo();
 
+QIcon   si_folder();
+
 QIcon   si_go_back();
 QIcon   si_go_forward();
 QIcon   si_go_home();
