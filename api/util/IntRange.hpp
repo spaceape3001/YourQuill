@@ -48,6 +48,8 @@ struct IntRange {
     bool            empty() const { return low == high; }
     bool            not_empty() const { return low != high; }
     
+    
+    auto operator<=>(const IntRange&) const = default;
 
     const T         low, high;
 };

@@ -160,3 +160,10 @@ unsigned int thread_id();
 
 using CharPSeq          = std::initializer_list<const char*>;
 
+template <typename T>
+struct IntRange;
+
+using SSizeRange        = IntRange<ssize_t>;
+using SizeRange         = IntRange<size_t>;
+
+

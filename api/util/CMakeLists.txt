@@ -15,6 +15,7 @@ set(util_sources
     ./Curl.hpp
     ./DelayInit.cpp
     ./DelayInit.hpp
+    ./DiffEngine.hpp
     ./Enum.cpp
     ./Enum.hpp
     ./EnumMap.hpp
