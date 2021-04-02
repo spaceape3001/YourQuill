@@ -8,32 +8,53 @@
 
 #include "uFwd.hpp"
 #include <db/Atom.hpp>
+#include <db/Attribute.hpp>
 #include <db/Tag.hpp>
 
-struct UAtom {
-    const QString   key;
-    union {
-        const uint64_t  id;
-        const Atom      atom;
-    };
-    Image           icon;       // explicit icon
-    TagSet          tags;
-    ClassSet        classes;
-    Atom            src, tgt, rev;
-    
-    UAtom(Atom a);
-    
-    Image       update_icon(Image);
-    bool        update_classes(const StringSet&);
-    bool        update_tags(const StringSet&);
-
-
-        // DISABLE THESE....
-    ~UAtom() = delete;
-    UAtom(const UAtom&) = delete;
-    UAtom(UAtom&&) = delete;
-    UAtom& operator=(const UAtom&) = delete;
-    UAtom& operator=(UAtom&&) = delete;
+namespace cdb {
+    struct KVReport;
 };
 
-UAtom&          uget(Atom);
+//struct UAtom {
+    //const QString   key;
+    //union {
+        //const uint64_t  id;
+        //const Atom      atom;
+    //};
+    //Image           icon;       // explicit icon
+    //ClassSet        classes;
+    //Atom            src, tgt, rev;
+    
+    //UAtom(Atom a);
+    
+    //Image       update_icon(Image);
+    //bool        update_classes(const StringSet&);
+    //bool        update_tags(const StringSet&);
+
+    ///*! \brief Updates the attributes with what's changed in the specified document
+        //\param  attributes  Attributes for *THIS* atom
+        //\param  common      Common attributes within the file (ie, for a roster, etc)
+    //*/
+    //bool        update_properties(Document doc, const cdb::KVReport& attributes, const cdb::KVReport& common=cdb::KVReport());
+
+        //// DISABLE THESE....
+    //~UAtom() = delete;
+    //UAtom(const UAtom&) = delete;
+    //UAtom(UAtom&&) = delete;
+    //UAtom& operator=(const UAtom&) = delete;
+    //UAtom& operator=(UAtom&&) = delete;
+//};
+
+//UAtom&          uget(Atom);
+
+
+
+    //  return TRUE if tags were added/removed
+AddRem<Class>   uclasses(Atom, Document doc, const StringSet&);
+
+Image           uicon(Atom, Image);
+
+void            uproperties(Atom, Document, const cdb::KVReport& attributes);
+
+    //  returns TRUE if tags were added/removed
+AddRem<Tag>     utags(Atom, Document doc, const StringSet&);

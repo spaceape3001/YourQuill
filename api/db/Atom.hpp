@@ -49,7 +49,7 @@ namespace cdb {
         \param[in] sorted   Yes/no for sorting by key. (default is no)
         \return Vector of the found atoms
     */
-    Vector<Atom>            all_atoms(Sorted sorted=Sorted());
+    AtomVec                all_atoms(Sorted sorted=Sorted{});
     
     /*! \brief Returns all atoms in the cache database for given class
     
@@ -60,7 +60,7 @@ namespace cdb {
         \param[in] sorted   Yes/no for sorting by key (default is no)
         \return Vector of the found atoms
     */
-    Vector<Atom>            all_atoms(Class cls,Sorted sorted=Sorted());
+    AtomVec                 all_atoms(Class cls,Sorted sorted=Sorted());
     
     /*! \brief Returns all atoms in the cache database with the given tag
     
@@ -71,7 +71,7 @@ namespace cdb {
         \param[in] sorted   Yes/no for sorting by key (default is no)
         \return Vector of the found atoms
     */
-    Vector<Atom>            all_atoms(Tag tag,Sorted sorted=Sorted());
+    AtomVec                 all_atoms(Tag tag,Sorted sorted=Sorted());
     
     /*! \brief Counts the number of atoms in the database
         \return The count
@@ -104,13 +104,17 @@ namespace cdb {
     Vector<Atom>            atoms(Atom, Sorted sorted=Sorted{});
     Vector<Atom>            atoms(Document, Sorted sorted=Sorted());
     
+    AtomVec                 atoms_by_name(const QString&, Sorted sorted=Sorted{});
+    
     size_t                  atoms_count(Atom);
     size_t                  atoms_count(Document);
     
     QString                 brief(Atom);
     
-    Vector<Class>           classes(Atom, Sorted sorted=Sorted());
+    ClassVec                classes(Atom, Sorted sorted=Sorted{});
+    ClassVec                classes(Atom, Document, Sorted sorted=Sorted{});
     size_t                  classes_count(Atom);
+    size_t                  classes_count(Atom,Document);
     
     
     /*! \brief Creates an atom in the CACHE database
@@ -141,7 +145,7 @@ namespace cdb {
     
     //Document                document(Atom);
     
-    Vector<Document>        documents(Atom);
+    DocVec                  documents(Atom, Sorted sorted=Sorted{});
     size_t                  documents_count(Atom);
 
   
@@ -184,8 +188,10 @@ namespace cdb {
     QList<QVariant>         qvar_list(const Set<Atom>&);
 
     
-    Vector<Tag>             tags(Atom,Sorted sorted=Sorted());
+    TagVec                  tags(Atom, Sorted sorted=Sorted{});
+    TagVec                  tags(Atom, Document, Sorted sorted=Sorted{});
     size_t                  tags_count(Atom);
+    size_t                  tags_count(Atom, Document);
 
     bool                    tagged(Atom, Tag);
 

@@ -2285,7 +2285,13 @@ bool    is_similar(const QString&a, const QString&b)
     
 }
 
+
 bool	is_less_igCase(const std::string&a, const std::string&b)
+{
+    return is_less( compare_igCase(a,b));
+}
+
+bool	is_less_igCase(const QString&a, const QString&b)
 {
     return is_less( compare_igCase(a,b));
 }

@@ -5,12 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Attribute.hpp"
+#include "CacheUtil.hpp"
 #include "Document.hpp"
-#include "Workspace.hpp"
 
 #include <util/DiffEngine.hpp>
 #include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>
 #include <util/Vector.hpp>
 
@@ -18,94 +17,52 @@ namespace cdb {
 
     Vector<Attribute>   all_attributes()
     {
-        Vector<Attribute>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attributes");
-        auto s_af = s.af();
-        if(s.exec()){
-            while(s.next())
-                ret << Attribute{s.valueU64(0)};
-        }
-        return ret;
+        static thread_local SQ s("SELECT id FROM Attributes");
+        return s.vec<Attribute>();
     }
     
     Vector<Attribute>   all_attributes(Document d) 
     {
-        Vector<Attribute>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attributes WHERE doc=?");
-        auto s_af = s.af();
-        s.bind(0, d.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Attribute{s.valueU64(0)};
-        }
-        return ret;
+        static thread_local SQ s("SELECT id FROM Attributes WHERE doc=?");
+        return s.vec<Attribute>(d.id);
     }
     
     size_t              all_attributes_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attributes");
-        auto s_af = s.af();
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Attributes");
+        return s.size();
     }
     
     size_t              all_attributes_count(Document d)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attributes WHERE doc=?");
-        auto s_af = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Attributes WHERE doc=?");
+        return s.size(d.id);
     }
 
     //! Gets attributes (sub)
     Vector<Attribute>   attributes(Attribute a)
     {
-        Vector<Attribute>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attributes WHERE parent=? ORDER BY idx");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Attribute{s.valueU64(0)};
-        }
-        return ret;
+        static thread_local SQ s("SELECT id FROM Attributes WHERE parent=? ORDER BY idx");
+        return s.vec<Attribute>(a.id);
     }
 
     //! Gets top-level attirbutes
     Vector<Attribute>   attributes(Document d)
     {
-        Vector<Attribute>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Attributes WHERE doc=? AND parent=0 ORDER BY idx");
-        auto s_af   = s.af();
-        s.bind(0, d.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Attribute{s.valueU64(0)};
-        }
-        return ret;
+        static thread_local SQ s("SELECT id FROM Attributes WHERE doc=? AND parent=0 ORDER BY idx");
+        return s.vec<Attribute>(d.id);
     }
     
     size_t              attributes_count(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attributes WHERE parent=?");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Attributes WHERE parent=?");
+        return s.size(a.id);
     }
     
     size_t              attributes_count(Document d)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Attributes WHERE doc=? AND parent=0");
-        auto s_af   = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Attributes WHERE doc=? AND parent=0");
+        return s.size(d.id);
     }
 
     namespace {
@@ -246,12 +203,8 @@ namespace cdb {
 
     Document            document(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT doc FROM Attributes WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return Document{s.valueU64(0)};
-        return Document{};
+        static thread_local SQ s("SELECT doc FROM Attributes WHERE id=?");
+        return s.as<Document>(a.id);
     }
     
     bool                exists(Attribute a)
@@ -261,39 +214,27 @@ namespace cdb {
     
     bool                exists_attribute(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Attributes WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Attributes WHERE id=?");
+        return s.present(i);
     }
 
     //! Index in the file's list
     uint64_t            index(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT idx FROM Attributes WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT idx FROM Attributes WHERE id=?");
+        return s.u64(a.id);
     }
     
 
     QString             key(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k FROM Attributes WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return 0;
+        static thread_local SQ s("SELECT k FROM Attributes WHERE id=?");
+        return s.str(a.id);
     }
     
     KVU                 kvu(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k,value,uid FROM Attributes WHERE id=?");
+        static thread_local SQ s("SELECT k,value,uid FROM Attributes WHERE id=?");
         auto s_af = s.af();
         s.bind(0, a.id);
         if(s.exec() && s.next())
@@ -305,7 +246,7 @@ namespace cdb {
     {
         Vector<KVUA>    ret;
         if(a){
-            static thread_local SqlQuery s(wksp::cache(), "SELECT k,value,uid,id,idx FROM Attributes WHERE parent=? ORDER BY idx");
+            static thread_local SQ s("SELECT k,value,uid,id,idx FROM Attributes WHERE parent=? ORDER BY idx");
             auto s_af = s.af();
             s.bind(0, a.id);
             if(s.exec()){
@@ -326,7 +267,7 @@ namespace cdb {
     Vector<KVUA>        kvua(Document d)
     {
         Vector<KVUA>    ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k,value,uid,id,idx FROM Attributes WHERE doc=? AND parent=0 ORDER BY idx");
+        static thread_local SQ s("SELECT k,value,uid,id,idx FROM Attributes WHERE doc=? AND parent=0 ORDER BY idx");
         auto s_af = s.af();
         s.bind(0, d.id);
         if(s.exec()){
@@ -345,7 +286,7 @@ namespace cdb {
 
     DocOrAttr           parent(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT parent,doc FROM Attributes WHERE id=?");
+        static thread_local SQ s("SELECT parent,doc FROM Attributes WHERE id=?");
         auto s_af   = s.af();
         s.bind(0, a.id);
         if(s.exec() && s.next()){
@@ -359,21 +300,13 @@ namespace cdb {
     
     QString             uid(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT uid FROM Attributes WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT uid FROM Attributes WHERE id=?");
+        return s.str(a.id);
     }
     
     QString             value(Attribute a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT value FROM Attributes WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT value FROM Attributes WHERE id=?");
+        return s.str(a.id);
     }
 }

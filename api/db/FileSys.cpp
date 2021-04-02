@@ -5,13 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FileSys.hpp"
+
+#include "CacheUtil.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
 
 #include <db/bit/NKI.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
 
 #include <QSqlError>
 
@@ -19,26 +20,14 @@ namespace cdb {
     namespace {
         Vector<Directory>   all_directories_sorted()
         {
-            Vector<Directory>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories ORDER BY path");
-            auto s_lk   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories ORDER BY path");
+            return s.vec<Directory>();
         }
         
         Vector<Directory>   all_directories_unsorted()
         {
-            Vector<Directory>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories");
-            auto s_lk   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories");
+            return s.vec<Directory>();
         }
     }
     
@@ -51,28 +40,14 @@ namespace cdb {
     namespace {
         Vector<Directory>   all_directories_sorted(const Root* rt)
         {
-            Vector<Directory>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE root=? ORDER BY path");
-            auto s_lk   = s.af();
-            s.bind(0, rt->id());
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories WHERE root=? ORDER BY path");
+            return s.vec<Directory>(rt->id());
         }
         
         Vector<Directory>   all_directories_unsorted(const Root*rt)
         {
-            Vector<Directory>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE root=?");
-            auto s_lk   = s.af();
-            s.bind(0, rt->id());
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories WHERE root=?");
+            return s.vec<Directory>(rt->id());
         }
    }
     
@@ -86,11 +61,8 @@ namespace cdb {
     
     size_t              all_directories_count()
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Directories");
-        auto s_lk = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Directories");
+        return s.size();
     }
     
     size_t              all_directories_count(const Root*rt)
@@ -98,37 +70,21 @@ namespace cdb {
         if(!rt)
             return 0;
 
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Directories WHERE root=?");
-        auto s_lk = s.af();
-        s.bind(0, rt->id());
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0ULL;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE root=?");
+        return s.size(rt->id());
     }
     
     namespace {
         Vector<Document>    all_documents_sorted()
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents ORDER BY k");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Document{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents ORDER BY k");
+            return s.vec<Document>();
         }
         
         Vector<Document>    all_documents_unsorted()
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Document{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents");
+            return s.vec<Document>();
         }
     }
     
@@ -140,38 +96,21 @@ namespace cdb {
     
     size_t              all_documents_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Documents");
-        auto s_af   = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Documents");
+        return s.size();
     }
     
     namespace {
         Vector<Document>    all_documents_suffix_sorted(const QString&sfx)
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE suffix=? ORDER BY k");
-            auto s_af   = s.af();
-            s.bind(0, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
+            return s.vec<Document>(sfx);
         }
 
         Vector<Document>    all_documents_suffix_unsorted(const QString&sfx)
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE suffix=?");
-            auto s_af   = s.af();
-            s.bind(0, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=?");
+            return s.vec<Document>(sfx);
         }
     }
     
@@ -184,26 +123,14 @@ namespace cdb {
    namespace {
         Vector<Folder>  all_folders_sorted()
         {
-            Vector<Folder>  ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Folders ORDER BY k");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Folder{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Folders ORDER BY k");
+            return s.vec<Folder>();
         }
 
         Vector<Folder>  all_folders_unsorted()
         {
-            Vector<Folder>  ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Folders");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Folder{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Folders");
+            return s.vec<Folder>();
         }
     }
 
@@ -214,36 +141,21 @@ namespace cdb {
     
     size_t              all_folders_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(id) FROM Folders");
-        auto s_af   =  s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Folders");
+        return s.size();
     }
     
     namespace {
         Vector<Fragment>    all_fragments_sorted()
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments ORDER BY path");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fragments ORDER BY path");
+            return s.vec<Fragment>();
         }
         
         Vector<Fragment>    all_fragments_unsorted()
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fragments");
+            return s.vec<Fragment>();
         }
     }
     
@@ -256,32 +168,14 @@ namespace cdb {
     namespace {
         Vector<Fragment>    all_fragments_sorted(const Root* rt)
         {
-            Vector<Fragment>    ret;
-            if(rt){
-                static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE root=? ORDER BY path");
-                auto s_af   = s.af();
-                s.bind(0, rt->id());
-                if(s.exec()){
-                    while(s.next())
-                        ret << Fragment{s.valueU64(0)};
-                }
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fragments WHERE root=? ORDER BY path");
+            return s.vec<Fragment>(rt->id());
         }
 
         Vector<Fragment>    all_fragments_unsorted(const Root* rt)
         {
-            Vector<Fragment>    ret;
-            if(rt){
-                static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE root=?");
-                auto s_af   = s.af();
-                s.bind(0, rt->id());
-                if(s.exec()){
-                    while(s.next())
-                        ret << Fragment{s.valueU64(0)};
-                }
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fragments WHERE root=?");
+            return s.vec<Fragment>(rt->id());
         }
     }
     
@@ -294,50 +188,29 @@ namespace cdb {
     
     size_t              all_fragments_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Fragments");
-        auto s_af   = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Fragments");
+        return s.size();
     }
     
     size_t              all_fragments_count(const Root*rt)
     {
         if(!rt)
             return 0;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Fragments WHERE root=?");
-        auto s_af   = s.af();
-        s.bind(0, rt->id());
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Fragments WHERE root=?");
+        return s.size(rt->id());
     }
     
     namespace {
         Vector<Fragment>    all_fragments_suffix_sorted(const QString& sfx)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
-            auto s_af   = s.af();
-            s.bind(0, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
+            return s.vec<Fragment>(sfx);
         }
         
         Vector<Fragment>    all_fragments_suffix_unsorted(const QString& sfx)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE suffix=?");
-            auto s_af   = s.af();
-            s.bind(0, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=?");
+            return s.vec<Fragment>(sfx);
         }
     }
 
@@ -364,12 +237,8 @@ namespace cdb {
 
     QString             base_key(Document doc)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT base FROM Documents WHERE id=?");
-        auto s_af       = s.af();
-        s.bind(0, doc.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT base FROM Documents WHERE id=?");
+        return s.str(doc.id);
     }
     
     QString             base_key(Fragment f)
@@ -379,12 +248,8 @@ namespace cdb {
 
     QString             brief(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT brief FROM Folders WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT brief FROM Folders WHERE id=?");
+        return s.str(f.id);
     }
     
     QByteArray          bytes(Fragment f)
@@ -489,8 +354,8 @@ namespace cdb {
         if(!rt)
             return Directory();
             
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE path=?");
+        static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
+        static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
         auto s_lk   = s.af();
         auto i_lk   = i.af();
         i.bind(0, rt->path());
@@ -521,8 +386,8 @@ namespace cdb {
         if(!f || !rt)
             return Directory();
             
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Directories (path,root,folder,parent,name) VALUES (?,?,?,?,?)");
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE path=?");
+        static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent,name) VALUES (?,?,?,?,?)");
+        static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
         auto s_lk   = s.af();
         auto i_lk   = i.af();
 
@@ -565,8 +430,8 @@ namespace cdb {
         QString     sfx     = (x > 0) ? ak.mid(x+1) : QString();
         QString     base    = (y > 0) ? ak.mid(0,y) : ak;
             
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base) VALUES (?,?,?,?,?,?)");
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE k=?");
+        static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base) VALUES (?,?,?,?,?,?)");
+        static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
         
         auto s_lk   = s.af();
         auto i_lk   = i.af();
@@ -607,8 +472,8 @@ namespace cdb {
         } else 
             k   = k + '/' + ck;
             
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Folders (k,sk,name,parent,hidden) VALUES (?,?,?,?,?)");
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Folders WHERE k=?");
+        static thread_local SQ    i("INSERT OR FAIL INTO Folders (k,sk,name,parent,hidden) VALUES (?,?,?,?,?)");
+        static thread_local SQ    s("SELECT id FROM Folders WHERE k=?");
 
         auto s_lk   = s.af();
         auto i_lk   = i.af();
@@ -645,8 +510,8 @@ namespace cdb {
         const Root*     rt  = root(dir);
         
         
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder,suffix) VALUES (?,?,?,?,?,?,?)");
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE path=?");
+        static thread_local SQ    i("INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder,suffix) VALUES (?,?,?,?,?,?,?)");
+        static thread_local SQ    s("SELECT id FROM Fragments WHERE path=?");
         auto s_lk   = s.af();
         auto i_lk   = i.af();
         
@@ -682,33 +547,20 @@ namespace cdb {
     {
         if(path.isEmpty())
             return Directory();
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE path=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, path);
-        if(s.exec() && s.next())
-            return Directory(s.valueU64(0));
-        return Directory{};
+        static thread_local SQ    s("SELECT id FROM Directories WHERE path=? LIMIT 1");
+        return s.as<Directory>(path);
     }
     
     Directory           directory(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT dir FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return Directory(s.valueU64(0));
-        return Directory{};
+        static thread_local SQ    s("SELECT dir FROM Fragments WHERE id=?");
+        return s.as<Directory>(f.id);
     }
     
     Directory           directory(Directory d, const QString&k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Directories WHERE parent=? AND name=?");
-        auto s2_af  = s.af();
-        s.bind(0, d.id);
-        s.bind(1, k);
-        if(s.exec() && s.next())
-            return Directory{s.valueU64(0)};
-        return Directory();
+        static thread_local SQ s("SELECT id FROM Directories WHERE parent=? AND name=?");
+        return s.as<Directory>(d.id, k);
     }
 
     Directory           directory(const Root*rt)
@@ -722,28 +574,14 @@ namespace cdb {
     namespace {
         Vector<Directory>   directories_sorted(Directory d)
         {
-            Vector<Directory>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE parent=? ORDER BY name");
-            auto s_lk   = s.af();
-            s.bind(0, d.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories WHERE parent=? ORDER BY name");
+            return s.vec<Directory>(d.id);
         }
 
         Vector<Directory>   directories_unsorted(Directory d)
         {
-            Vector<Directory>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE parent=?");
-            auto s_lk   = s.af();
-            s.bind(0, d.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories WHERE parent=?");
+            return s.vec<Directory>(d.id);
         }
     }
     
@@ -756,28 +594,14 @@ namespace cdb {
     namespace {
         Vector<Directory>   directories_sorted(Folder f)
         {
-            Vector<Directory>           ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE folder=? ORDER BY name");
-            auto s_lk   = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories WHERE folder=? ORDER BY name");
+            return s.vec<Directory>(f.id);
         }
         
         Vector<Directory>   directories_unsorted(Folder f)
         {
-            Vector<Directory>           ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE folder=?");
-            auto s_lk   = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Directory(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Directories WHERE folder=?");
+            return s.vec<Directory>(f.id);
         }
     }
     
@@ -790,54 +614,36 @@ namespace cdb {
     {
         if(!rt)
             return Vector<Directory>();
-        Vector<Directory>   ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Directories WHERE parent=0 AND root=?");
-        auto s_af   = s.af();
-        s.bind(0, rt->id());
-        if(s.exec()){
-            while(s.next())
-                ret << Directory{s.valueU64(0)};
-        }
-        return ret;
+            
+        static thread_local SQ    s("SELECT id FROM Directories WHERE parent=0 AND root=?");
+        return s.vec<Directory>(rt->id());
     }
 
     size_t              directories_count(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Directories WHERE parent=?");
-        auto s_lk   = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE parent=?");
+        return s.size(d.id);
     }
     
     size_t              directories_count(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Directories WHERE folder=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0U;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE folder=?");
+        return s.size(f.id);
     }
     
     size_t              directories_count(const Root* rt)
     {
         if(!rt)
             return 0;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Directories WHERE parent=0 AND root=?");
-        auto s_lk   = s.af();
-        s.bind(0, rt->id());
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE parent=0 AND root=?");
+        return s.size(rt->id());
     }
 
     namespace {
         Vector<DirString>   directories_with_names_sorted(Directory dir)
         {
             Vector<DirString>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id,name FROM Directories WHERE parent=?");
+            static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=?");
             auto s_lk   = s.af();
             s.bind(0,dir.id);
             if(s.exec()){
@@ -850,7 +656,7 @@ namespace cdb {
         Vector<DirString>   directories_with_names_unsorted(Directory dir)
         {
             Vector<DirString>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
+            static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
             auto s_lk   = s.af();
             s.bind(0,dir.id);
             if(s.exec()){
@@ -869,33 +675,20 @@ namespace cdb {
     
     Document            document(Folder f, const QString& k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Documents WHERE folder=? AND sk=?");
-        auto s_af  = s.af();
-        s.bind(0, f.id);
-        s.bind(1, k);
-        if(s.exec() && s.next())
-            return Document{s.valueU64(0)};
-        return Document();
+        static thread_local SQ s("SELECT id FROM Documents WHERE folder=? AND sk=?");
+        return s.as<Document>(f.id, k);
     }
 
     Document            document(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT document FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return Document(s.valueU64(0));
-        return Document{};
+        static thread_local SQ    s("SELECT document FROM Fragments WHERE id=?");
+        return s.as<Document>(f.id);
     }
 
     Document            document(const QString& k)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE k=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,k);
-        if(s.exec() && s.next())
-            return Document{s.valueU64(0)};
-        return Document();
+        static thread_local SQ    s("SELECT id FROM Documents WHERE k=? LIMIT 1");
+        return s.as<Document>(k);
     }
     
     Document            document(uint64_t i)
@@ -910,31 +703,16 @@ namespace cdb {
     namespace {
         Vector<Document>    documents_sorted(Folder f)
         {
-            Vector<Document>           ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE folder=? ORDER BY sk");
-            auto s_lk   = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? ORDER BY sk");
+            return s.vec<Document>(f.id);
         }
         
         Vector<Document>    documents_unsorted(Folder f)
         {
-            Vector<Document>           ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE folder=?");
-            auto s_lk   = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE folder=?");
+            return s.vec<Document>(f.id);
         }
     }
-    
     
     Vector<Document>    documents(Folder f, Sorted sorted)
     {
@@ -943,41 +721,21 @@ namespace cdb {
     
     size_t              documents_count(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Documents WHERE folder=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Documents WHERE folder=?");
+        return s.size(f.id);
     }
     
     namespace {
         Vector<Document>    documents_by_suffix_sorted(Folder f, const QString&sfx)
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
-            auto s_lk       = s.af();
-            s.bind(0, f.id);
-            s.bind(1, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
+            return s.vec<Document>(f.id, sfx);
         }
 
         Vector<Document>    documents_by_suffix_unsorted(Folder f, const QString&sfx)
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE folder=? AND suffix=?");
-            auto s_lk       = s.af();
-            s.bind(0, f.id);
-            s.bind(1, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=?");
+            return s.vec<Document>(f.id, sfx);
         }
     }
     
@@ -990,30 +748,14 @@ namespace cdb {
     namespace {
         Vector<Document>    documents_by_suffix_excluding_sorted(Folder f, const QString&sfx)
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE folder!=? AND suffix=? ORDER BY k");
-            auto s_lk       = s.af();
-            s.bind(0, f.id);
-            s.bind(1, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=? ORDER BY k");
+            return s.vec<Document>(f.id, sfx);
         }
         
         Vector<Document>    documents_by_suffix_excluding_unsorted(Folder f, const QString&sfx)
         {
-            Vector<Document>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Documents WHERE folder!=? AND suffix=?");
-            auto s_lk       = s.af();
-            s.bind(0, f.id);
-            s.bind(1, sfx);
-            if(s.exec()){
-                while(s.next())
-                    ret << Document(s.valueU64(0));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=?");
+            return s.vec<Document>(f.id, sfx);
         }
     }
     
@@ -1042,13 +784,8 @@ namespace cdb {
         if(!rt)
             return false;
             
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Directories WHERE folder=? AND root=? LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, fo.id);
-        s.bind(1, rt->id());
-        if(s.exec() && s.next())    
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Directories WHERE folder=? AND root=? LIMIT 1");
+        return s.present(fo.id, rt->id());
     }
     
     bool                exists(Fragment f)
@@ -1089,65 +826,40 @@ namespace cdb {
     
     bool                exists_directory(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Directories WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Directories WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     bool                exists_document(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Documents WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Documents WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     bool                exists_folder(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Folders WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Folders WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     bool                exists_fragment(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Fragments WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Fragments WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     Fragment            first(Document d)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE document=? ORDER BY root LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return Fragment{s.valueU64(0)};
-        return Fragment{};
+        static thread_local SQ s("SELECT id FROM Fragments WHERE document=? ORDER BY root LIMIT 1");
+        return s.as<Fragment>(d.id);
     }
     
     Fragment            first(Document d, const Root*rt)
     {
         if(!rt)
             return Fragment{};
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, d.id);
-        s.bind(1, rt->id());
-        if(s.exec() && s.next())
-            return Fragment{s.valueU64(0)};
-        return Fragment{};
+        static thread_local SQ s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
+        return s.as<Fragment>(d.id, rt->id());
     }
 
     Fragment            first(Document d, DataRole dr)
@@ -1162,43 +874,26 @@ namespace cdb {
 
     Folder              folder(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT folder FROM Directories WHERE id=?");
-        auto s_lk   = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return Folder(s.valueU64(0));
-        return Folder{};
+        static thread_local SQ    s("SELECT folder FROM Directories WHERE id=?");
+        return s.as<Folder>(d.id);
     }
     
     Folder              folder(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT folder FROM Documents WHERE id=? LIMIT 1");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return Folder{s.valueU64(0)};
-        return Folder{};
+        static thread_local SQ    s("SELECT folder FROM Documents WHERE id=? LIMIT 1");
+        return s.as<Folder>(d.id);
     }
     
     Folder              folder(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT folder FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return Folder(s.valueU64(0));
-        return Folder{};
+        static thread_local SQ    s("SELECT folder FROM Fragments WHERE id=?");
+        return s.as<Folder>(f.id);
     }
     
     Folder              folder(Folder f, const QString&ck)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Folders WHERE parent=? AND ck=? LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        s.bind(1, ck);
-        if(s.exec() && s.next())
-            return Folder{s.valueU64(0)};
-        return Folder{};
+        static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND ck=? LIMIT 1");
+        return s.as<Folder>(f.id, ck);
     }
     
 
@@ -1209,13 +904,8 @@ namespace cdb {
     
     Folder              folder(const QString&k)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Folders WHERE k=? LIMIT 1");
-        auto s_af   = s.af();
-        
-        s.bind(0,k);
-        if(s.exec() && s.next())
-            return Folder{s.valueU64(0)};
-        return Folder{};
+        static thread_local SQ    s("SELECT id FROM Folders WHERE k=? LIMIT 1");
+        return s.as<Folder>(k);
     }
 
     Vector<Folder>      folder_path(Directory d)
@@ -1247,28 +937,14 @@ namespace cdb {
     namespace {
         Vector<Folder>  folders_sorted(Folder f)
         {
-            Vector<Folder>      ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Folders WHERE parent=? ORDER BY sk");
-            auto s_af = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Folder{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? ORDER BY sk");
+            return s.vec<Folder>(f.id);
         }
         
         Vector<Folder>  folders_unsorted(Folder f)
         {
-            Vector<Folder>      ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Folders WHERE parent=?");
-            auto s_af = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Folder{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Folders WHERE parent=?");
+            return s.vec<Folder>(f.id);
         }
     }
     
@@ -1280,23 +956,14 @@ namespace cdb {
     
     size_t              folders_count(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Folders WHERE parent=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Folders WHERE parent=?");
+        return s.size(f.id);
     }
 
     Fragment            fragment(const QString& k)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE path=? LIMIT 1");
-        auto s_af   = s.af();
-        
-        s.bind(0,k);
-        if(s.exec() && s.next())
-            return Fragment(s.valueU64(0));
-        return Fragment{};
+        static thread_local SQ    s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
+        return s.as<Fragment>(k);
     }
     
     Fragment            fragment(uint64_t i)
@@ -1334,36 +1001,22 @@ namespace cdb {
     
     Fragment            fragment(Directory d, const QString& k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, d.id);
-        s.bind(1, k);
-        if(s.exec() && s.next())
-            return Fragment{s.valueU64(0)};
-        return Fragment{};
+        static thread_local SQ s("SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
+        return s.as<Fragment>(d.id, k);
     }
     
     Fragment            fragment(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE document=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return Fragment(s.valueU64(0));
-        return Fragment{};
+        static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? LIMIT 1");
+        return s.as<Fragment>(d.id);
     }
     
     Fragment            fragment(Document d, const Root* rt)
     {
         if(!rt)
             return Fragment{};
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0, d.id);
-        s.bind(1,rt->id());
-        if(s.exec() && s.next())
-            return Fragment(s.valueU64(0));
-        return Fragment{};
+        static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
+        return s.as<Fragment>(d.id, rt->id());
     }
     
     Fragment            fragment(Document d, DataRole dr)
@@ -1380,28 +1033,14 @@ namespace cdb {
     namespace {
         Vector<Fragment>    fragments_sorted(Document d)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE document=? ORDER BY path");
-            auto s_af   = s.af();
-            s.bind(0, d.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? ORDER BY path");
+            return s.vec<Fragment>(d.id);
         }
 
         Vector<Fragment>    fragments_unsorted(Document d)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE document=?");
-            auto s_af   = s.af();
-            s.bind(0, d.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE document=?");
+            return s.vec<Fragment>(d.id);
         }
     }
 
@@ -1418,38 +1057,14 @@ namespace cdb {
     namespace {
         Vector<Fragment>    fragments_sorted(Document d, const Root* rt)
         {
-            if(!rt)
-                return Vector<Fragment>();
-
-            Vector<Fragment>    ret;
-                
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
-            auto s_af   = s.af();
-            s.bind(0, d.id);
-            s.bind(1, rt->id());
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
+            return s.vec<Fragment>(d.id, rt->id());
         }
 
         Vector<Fragment>    fragments_unsorted(Document d, const Root* rt)
         {
-            if(!rt)
-                return Vector<Fragment>();
-
-            Vector<Fragment>    ret;
-                
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE document=? AND root=?");
-            auto s_af   = s.af();
-            s.bind(0, d.id);
-            s.bind(1, rt->id());
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=?");
+            return s.vec<Fragment>(d.id, rt->id());
         }
     }
     
@@ -1476,28 +1091,14 @@ namespace cdb {
     namespace {
         Vector<Fragment>    fragments_sorted(Directory d)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE dir=? ORDER BY path");
-            auto s_lk = s.af();
-            s.bind(0, d.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment(s.valueU64(0));
-            } 
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
+            return s.vec<Fragment>(d.id);
         }
 
         Vector<Fragment>    fragments_unsorted(Directory d)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE dir=?");
-            auto s_lk = s.af();
-            s.bind(0, d.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment(s.valueU64(0));
-            } 
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
+            return s.vec<Fragment>(d.id);
         }
     }
     
@@ -1509,28 +1110,14 @@ namespace cdb {
     namespace {
         Vector<Fragment>    fragments_sorted(Folder f)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE folder=? ORDER BY path");
-            auto s_lk = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment(s.valueU64(0));
-            } 
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE folder=? ORDER BY path");
+            return s.vec<Fragment>(f.id);
         }
 
         Vector<Fragment>    fragments_unsorted(Folder f)
         {
-            Vector<Fragment>    ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Fragments WHERE folder=?");
-            auto s_lk = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Fragment(s.valueU64(0));
-            } 
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE folder=?");
+            return s.vec<Fragment>(f.id);
         }
     }
     
@@ -1556,90 +1143,58 @@ namespace cdb {
 
     size_t              fragments_count(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Fragments WHERE document=?");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Fragments WHERE document=?");
+        return s.size(d.id);
     }
     
     size_t              fragments_count(Document d, const Root*rt)
     {
         if(!rt)
             return 0;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Fragments WHERE document=? AND root=?");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        s.bind(1, rt->id());
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+            
+        static thread_local SQ    s("SELECT COUNT(1) FROM Fragments WHERE document=? AND root=?");
+        return s.size(d.id, rt->id());
     }
     
     size_t              fragments_count(Directory d)
     {
-        static thread_local SqlQuery        s(wksp::cache(), "SELECT COUNT(1) FROM Fragments WHERE dir=?");
-        auto s_af = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ        s("SELECT COUNT(1) FROM Fragments WHERE dir=?");
+        return s.size(d.id);
     }
     
     size_t              fragments_count(Folder f)
     {
-        static thread_local SqlQuery        s(wksp::cache(), "SELECT COUNT(1) FROM Fragments WHERE folder=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ        s("SELECT COUNT(1) FROM Fragments WHERE folder=?");
+        return s.size(f.id);
     }
 
     bool                hidden(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT hidden FROM Directories WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0,d.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT hidden FROM Directories WHERE id=?");
+        return s.boolean(d.id);
     }
     
     bool                hidden(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT hidden FROM Documents WHERE id=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,d.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT hidden FROM Documents WHERE id=? LIMIT 1");
+        return s.boolean(d.id);
     }
     
     bool                hidden(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT hidden FROM Folders WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0,f.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT hidden FROM Folders WHERE id=?");
+        return s.boolean(f.id);
     }
     
     bool                hidden(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT hidden FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0,f.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT hidden FROM Fragments WHERE id=?");
+        return s.boolean(f.id);
     }
     
     void                hide(Document d)
     {
-        static thread_local SqlQuery u(wksp::cache(), "UPDATE Documents SET hidden=1 WHERE id=?");
+        static thread_local SQ u("UPDATE Documents SET hidden=1 WHERE id=?");
         auto u_af   = u.af();
         u.bind(0, d.id);
         u.exec();
@@ -1647,28 +1202,20 @@ namespace cdb {
     
     Image               icon(Document d) 
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT icon FROM Documents WHERE id=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,d.id);
-        if(s.exec() && s.next())
-            return Image{s.valueU64(0)};
-        return Image();
+        static thread_local SQ    s("SELECT icon FROM Documents WHERE id=? LIMIT 1");
+        return s.as<Image>(d.id);
     }
 
     Image               icon(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT icon FROM Folders WHERE id=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,f.id);
-        if(s.exec() && s.next())
-            return Image{s.valueU64(0)};
-        return Image();
+        static thread_local SQ    s("SELECT icon FROM Folders WHERE id=? LIMIT 1");
+        return s.as<Image>(f.id);
     }
 
     Directory::Info     info(Directory d)
     {
         Directory::Info        ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT folder, name, parent, path, removed, root, hidden FROM Directories WHERE id=?");
+        static thread_local SQ    s("SELECT folder, name, parent, path, removed, root, hidden FROM Directories WHERE id=?");
         auto s_lk   = s.af();
         s.bind(0, d.id);
         if(s.exec() && s.next()){
@@ -1686,7 +1233,7 @@ namespace cdb {
     Document::Info      info(Document d)
     {
         Document::Info        ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT k, sk, name, base, folder, suffix, removed, hidden, icon FROM Documents WHERE id=?");
+        static thread_local SQ    s("SELECT k, sk, name, base, folder, suffix, removed, hidden, icon FROM Documents WHERE id=?");
         auto s_af       = s.af();
         s.bind(0, d.id);
         if(s.exec() && s.next()){
@@ -1706,7 +1253,7 @@ namespace cdb {
     Folder::Info        info(Folder f)
     {
         Folder::Info        ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT k, sk, parent, name, brief, hidden, removed, icon FROM Folders WHERE id=?");
+        static thread_local SQ    s("SELECT k, sk, parent, name, brief, hidden, removed, icon FROM Folders WHERE id=?");
         auto s_af   = s.af();
         s.bind(0,f.id);
         if(s.exec() && s.next()){
@@ -1726,7 +1273,7 @@ namespace cdb {
     {
         Fragment::Info        ret;
 
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT document, dir, folder, modified, name, path, removed, rescan, bytes, hidden, root FROM Fragments WHERE id=?");
+        static thread_local SQ    s("SELECT document, dir, folder, modified, name, path, removed, rescan, bytes, hidden, root FROM Fragments WHERE id=?");
         auto s_af   = s.af();
         s.bind(0, f.id);
         if(s.exec() && s.next()){
@@ -1752,22 +1299,14 @@ namespace cdb {
     
     QString             key(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT k FROM Documents WHERE id=? LIMIT 1");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT k FROM Documents WHERE id=? LIMIT 1");
+        return s.str(d.id);
     }
 
     QString             key(Folder f) 
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT k FROM Folders WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT k FROM Folders WHERE id=?");
+        return s.str(f.id);
     }
     
     QString             key(Fragment f)
@@ -1801,57 +1340,37 @@ namespace cdb {
 
     uint64_t            modified(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT modified FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0ULL;
+        static thread_local SQ    s("SELECT modified FROM Fragments WHERE id=?");
+        return s.u64(f.id);
     }
 
     QString             name(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Directories WHERE id=?");
-        auto s_lk   = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Directories WHERE id=?");
+        return s.str(d.id);
     }
     
     QString             name(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Documents WHERE id=? LIMIT 1");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Documents WHERE id=? LIMIT 1");
+        return s.str(d.id);
     }
 
     QString             name(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Folders WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Folders WHERE id=?");
+        return s.str(f.id);
     }
     
     QString             name(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
+        return s.str(f.id);
     }
 
     NKI                 nki(Document d, bool autoKey)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name,icon,k FROM Documents WHERE id=?");
+        static thread_local SQ    s("SELECT name,icon,k FROM Documents WHERE id=?");
         auto s_af = s.af();
         s.bind(0, d.id);
         if(s.exec() && s.next()){
@@ -1868,7 +1387,7 @@ namespace cdb {
 
     NKI                 nki(Folder f, bool autoKey)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name,icon,k FROM Folders WHERE id=?");
+        static thread_local SQ    s("SELECT name,icon,k FROM Folders WHERE id=?");
         auto s_af = s.af();
         s.bind(0, f.id);
         if(s.exec() && s.next()){
@@ -1885,12 +1404,8 @@ namespace cdb {
 
     Directory           parent(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT parent FROM Directories WHERE id=?");
-        auto s_lk   = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return Directory(s.valueU64(0));
-        return Directory();
+        static thread_local SQ    s("SELECT parent FROM Directories WHERE id=?");
+        return s.as<Directory>(d.id);
     }
     
     Folder              parent(Document d)
@@ -1900,12 +1415,8 @@ namespace cdb {
     
     Folder              parent(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT parent FROM Folders WHERE id=?");
-        auto s_lk   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return Folder(s.valueU64(0));
-        return Folder();
+        static thread_local SQ    s("SELECT parent FROM Folders WHERE id=?");
+        return s.as<Folder>(f.id);
     }
     
     Directory           parent(Fragment f)
@@ -1915,22 +1426,14 @@ namespace cdb {
 
     QString             path(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT path FROM Directories WHERE id=?");
-        auto s_lk   = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT path FROM Directories WHERE id=?");
+        return s.str(d.id);
     }
     
     QString             path(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT path FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT path FROM Fragments WHERE id=?");
+        return s.str(f.id);
     }
     
     QString             path(const Root*rt, const char*z, bool fMakePath)
@@ -1980,47 +1483,31 @@ namespace cdb {
     
     bool                removed(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT removed FROM Directories WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT removed FROM Directories WHERE id=?");
+        return s.boolean(d.id);
     }
     
     bool                removed(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT removed FROM Documents WHERE id=?");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT removed FROM Documents WHERE id=?");
+        return s.boolean(d.id);
     }
     
     bool                removed(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT removed FROM Folders WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT removed FROM Folders WHERE id=?");
+        return s.boolean(f.id);
     }
     
     bool                removed(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT removed FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ    s("SELECT removed FROM Fragments WHERE id=?");
+        return s.boolean(f.id);
     }
     
     void                rescan(Fragment f)
     {
-        static thread_local SqlQuery    u(wksp::cache(), "UPDATE Fragments SET rescan=1 WHERE id=?");
+        static thread_local SQ    u("UPDATE Fragments SET rescan=1 WHERE id=?");
         auto u_af   = u.af();
         u.bind(0, f.id);
         u.exec();
@@ -2028,17 +1515,13 @@ namespace cdb {
     
     bool                rescanning(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT rescan FROM Fragments WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
-    }    bool                    rescanning(Fragment);
+        static thread_local SQ    s("SELECT rescan FROM Fragments WHERE id=?");
+        return s.boolean(f.id);
+    }
 
     const Root*         root(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT root FROM Directories WHERE id=?");
+        static thread_local SQ    s("SELECT root FROM Directories WHERE id=?");
         auto s_lk   = s.af();
         s.bind(0, d.id);
         if(s.exec() && s.next())
@@ -2048,7 +1531,7 @@ namespace cdb {
     
     const Root*         root(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT root FROM Fragments WHERE id=?");
+        static thread_local SQ    s("SELECT root FROM Fragments WHERE id=?");
         auto s_af   = s.af();
         s.bind(0, f.id);
         if(s.exec() && s.next())
@@ -2059,7 +1542,7 @@ namespace cdb {
     Vector<const Root*> roots(Document d)
     {
         Vector<const Root*> ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT DISTINCT root FROM Fragments WHERE document=?");
+        static thread_local SQ    s("SELECT DISTINCT root FROM Fragments WHERE document=?");
         auto s_af       = s.af();
         s.bind(0, d.id);
         if(s.exec()){
@@ -2075,7 +1558,7 @@ namespace cdb {
     Vector<const Root*> roots(Folder f)
     {
         Vector<const Root*> ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT DISTINCT root FROM Directories WHERE folder=?");
+        static thread_local SQ    s("SELECT DISTINCT root FROM Directories WHERE folder=?");
         auto s_af       = s.af();
         s.bind(0, f.id);
         if(s.exec()){
@@ -2091,27 +1574,19 @@ namespace cdb {
 
     size_t              roots_count(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(DISTINCT root) FROM Fragments WHERE document=?");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0ULL;
+        static thread_local SQ    s("SELECT COUNT(DISTINCT root) FROM Fragments WHERE document=?");
+        return s.size(d.id);
     }
     
     size_t              roots_count(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(DISTINCT root) FROM Directories WHERE folder=?");
-        auto s_af       = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0ULL;
+        static thread_local SQ    s("SELECT COUNT(DISTINCT root) FROM Directories WHERE folder=?");
+        return s.size(f.id);
     }
     
     void                show(Document d)
     {
-        static thread_local SqlQuery u(wksp::cache(), "UPDATE Documents SET hidden=0 WHERE id=?");
+        static thread_local SQ u("UPDATE Documents SET hidden=0 WHERE id=?");
         auto u_af   = u.af();
         u.bind(0, d.id);
         u.exec();
@@ -2119,52 +1594,32 @@ namespace cdb {
 
     size_t              size(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT bytes FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0ULL;
+        static thread_local SQ    s("SELECT bytes FROM Fragments WHERE id=?");
+        return s.size(f.id);
     }
 
     QString             skey(Directory d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Documents WHERE id=?");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Documents WHERE id=?");
+        return s.str(d.id);
     }
     
     QString             skey(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT sk FROM Documents WHERE id=?");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT sk FROM Documents WHERE id=?");
+        return s.str(d.id);
     }
     
     QString             skey(Folder f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT sk FROM Folders WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT sk FROM Folders WHERE id=?");
+        return s.str(f.id);
     }
     
     QString             skey(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Fragments WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
+        return s.str(f.id);
     }
 
     QString             skeyb(Directory d)
@@ -2189,22 +1644,14 @@ namespace cdb {
     
     QString             suffix(Document d)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT suffix FROM Documents WHERE id=?");
-        auto s_af       = s.af();
-        s.bind(0, d.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT suffix FROM Documents WHERE id=?");
+        return s.str(d.id);
     }
 
     QString             suffix(Fragment f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT suffix FROM Fragments WHERE id=?");
-        auto s_af       = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT suffix FROM Fragments WHERE id=?");
+        return s.str(f.id);
     }
 
     void                update(Fragment f)
@@ -2212,7 +1659,7 @@ namespace cdb {
         String  p           = path(f);
         SizeTimestamp   sz  = file_size_and_timestamp(p.c_str());
     
-        static thread_local SqlQuery    u(wksp::cache(), "UPDATE Fragments SET bytes=?,modified=?,removed=?,rescan=0 WHERE id=?");
+        static thread_local SQ    u("UPDATE Fragments SET bytes=?,modified=?,removed=?,rescan=0 WHERE id=?");
         auto u_af = u.af();
         u.bind(0, sz.size);
         u.bind(1, sz.nanoseconds());

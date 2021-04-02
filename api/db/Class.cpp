@@ -5,62 +5,62 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Class.hpp"
+
+#include "CacheUtil.hpp"
 #include "Root.hpp"
-#include "Workspace.hpp"
 #include "Graph.hpp"
 #include "Image.hpp"
 #include "Tag.hpp"
+#include "Workspace.hpp"
 
 #include <db/bit/NKI.hpp>
 #include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>
 
 #include <QSqlError>
+
+
+
+bool Class::less_key(Class a, Class b)
+{
+    return is_less_igCase(cdb::key(a), cdb::key(b));
+}
+
+bool Class::less_label(Class a, Class b)
+{
+    return is_less_igCase(cdb::label(a), cdb::label(b));
+}
+
+bool Class::less_name(Class a, Class b)
+{
+    return is_less_igCase(cdb::name(a), cdb::name(b));
+}
+
 
 namespace cdb {
 
     QStringSet              aliases(Field f)
     {
-        QStringSet      ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT alias FROM FAlias WHERE field=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec()){
-            while(s.next())
-                ret << s.valueString(0);
-        }
-        return ret;
+        static thread_local SQ s("SELECT alias FROM FAlias WHERE field=?");
+        return s.sset(f.id);
     }
-
 
     namespace {
-        Vector<Class>   all_classes_sorted()
+        ClassVec    all_classes_sorted()
         {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Classes ORDER BY name");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Classes ORDER BY K");
+            return s.vec<Class>();
         }
         
-        Vector<Class>   all_classes_unsorted()
+        ClassVec    all_classes_unsorted()
         {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Classes");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Classes");
+            return s.vec<Class>();
         }
     }
 
-    Vector<Class>       all_classes(Sorted sorted)
+
+    ClassVec       all_classes(Sorted sorted)
     {
         return sorted ? all_classes_sorted() : all_classes_unsorted();
     }
@@ -68,84 +68,53 @@ namespace cdb {
     
     size_t              all_classes_count()
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM Classes");
-        auto s_af = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM Classes");
+        return s.size();
     }
     
     namespace {
-        Vector<Field>       all_fields_sorted()
+        FieldVec    all_fields_sorted()
         {
-            Vector<Field>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fields ORDER BY k");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Field{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fields ORDER BY k");
+            return s.vec<Field>();
         }
-
-        Vector<Field>       all_fields_unsorted()
+        
+        FieldVec    all_fields_unsorted()
         {
-            Vector<Field>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fields");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Field{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Fields");
+            return s.vec<Field>();
         }
     }
     
-
-    Vector<Field>       all_fields(Sorted sorted)
+    FieldVec           all_fields(Sorted sorted)
     {
         return sorted ? all_fields_sorted() : all_fields_unsorted();
     }
     
     size_t              all_fields_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Fields");
-        auto s_af = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Fields");
+        return s.size();
     }
     
     
     
     QString             brief(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT brief FROM Classes WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT brief FROM Classes WHERE id=?");
+        return s.str(c.id);
     }
     
     QString             brief(Field f)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT brief FROM Fields WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT brief FROM Fields WHERE id=?");
+        return s.str(f.id);
     }
     
     Class               class_(Field f)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM Fields WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return Class(s.valueU64(0));
-        return Class{};
+        static thread_local SQ s("SELECT class FROM Fields WHERE id=?");
+        return s.as<Class>(f.id);
     }
 
     Class               class_(uint64_t i)
@@ -155,12 +124,8 @@ namespace cdb {
     
     Class               class_(const QString& k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Classes WHERE k=?");
-        auto s_af = s.af();
-        s.bind(0, k);
-        if(s.exec() && s.next())
-            return Class{s.valueU64(0)};
-        return Class{};
+        static thread_local SQ s("SELECT id FROM Classes WHERE k=?");
+        return s.as<Class>(k);
     }
 
     ClassFile::Shared        class_doc(Fragment f, bool fAllowEmpty)
@@ -181,29 +146,35 @@ namespace cdb {
         return td;
     }
     
-    
-    Vector<Class>       classes(Field f)
-    {
-        Vector<Class> ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CFields WHERE field=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class(s.valueU64(0));
+    namespace {
+        ClassVec       classes_sorted(Field f)
+        {
+            static thread_local SQ s("SELECT class FROM CFields INNER JOIN Classes ON CFields.class=Classes.id WHERE field=? ORDER BY Classes.k");
+            return s.vec<Class>(f.id);
         }
-        return ret;
+
+        ClassVec       classes_unsorted(Field f)
+        {
+            static thread_local SQ s("SELECT class FROM CFields WHERE field=?");
+            return s.vec<Class>(f.id);
+        }
+    }
+    
+    
+    ClassVec       classes(Field f, Sorted sorted)
+    {
+        return sorted ? classes_sorted(f) : classes_unsorted(f);
     }
 
-    Vector<Class>       classes(const StringSet& sset)
+    ClassVec       classes(const StringSet& sset)
     {
-        Vector<Class>   ret;
+        ClassVec   ret;
         for(String s : sset)
             ret << db_class(s.qString());
         return ret;
     }
     
-    Vector<Class>       classes(const QStringSet& sset)
+    ClassVec       classes(const QStringSet& sset)
     {
         Vector<Class>   ret;
         for(QString s : sset)
@@ -214,15 +185,8 @@ namespace cdb {
 
     QStringSet          data_types(Field f)
     {
-        QStringSet   ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT type FROM FDataTypes WHERE field=?");
-        auto s_af  = s.af();
-        s.bind(0, f.id);
-        if(s.exec()){
-            while(s.next())
-                ret << s.valueString(0);
-        }
-        return ret;
+        static thread_local SQ    s("SELECT type FROM FDataTypes WHERE field=?");
+        return s.sset(f.id);
     }
 
     Class               db_class(const QString&k, bool *wasCreated)
@@ -240,7 +204,7 @@ namespace cdb {
         if(k.isEmpty())
             return Class();
         
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Classes (k,id) VALUES (?,?)");
+        static thread_local SQ    i("INSERT OR FAIL INTO Classes (k,id) VALUES (?,?)");
         auto i_lk   = i.af();
 
         i.bind(0, k);
@@ -257,17 +221,17 @@ namespace cdb {
         }
     }
 
-    Vector<Class>       db_classes(const QStringSet& all)
+    ClassVec            db_classes(const QStringSet& all)
     {
-        Vector<Class>   ret;
+        ClassVec   ret;
         for(const QString& s: all)
             ret << db_class(s);
         return ret;
     }
     
-    Vector<Class>       db_classes(const StringSet&all)
+    ClassVec            db_classes(const StringSet&all)
     {
-        Vector<Class>   ret;
+        ClassVec   ret;
         for(const String& s: all)
             ret << db_class(s.qString());
         return ret;
@@ -280,8 +244,8 @@ namespace cdb {
         if(k.isEmpty())
             return Field{};
             
-        static thread_local SqlQuery i(wksp::cache(), "INSERT INTO Fields (class, k) VALUES (?,?)");
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fields WHERE class=? AND k=?");
+        static thread_local SQ i("INSERT INTO Fields (class, k) VALUES (?,?)");
+        static thread_local SQ s("SELECT id FROM Fields WHERE class=? AND k=?");
         auto i_af = i.af();
         auto s_af = s.af();
         i.bind(0, c.id);
@@ -300,114 +264,146 @@ namespace cdb {
             return Field();
         }
     }
+    
+    namespace {
+        ClassVec           def_derived_sorted(Class c)
+        {   
+            static thread_local SQ s("SELECT class FROM CDependsDef INNER JOIN Classes ON CDependsDef.class=Classes.id WHERE base=? ORDER BY Classes.k");
+            return s.vec<Class>();
+        }
 
-    Vector<Class>           def_derived(Class c)
-    {   
-        Vector<Class>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CDependsDef WHERE base=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
+        ClassVec           def_derived_unsorted(Class c)
+        {   
+            static thread_local SQ s("SELECT class FROM CDependsDef WHERE base=?");
+            return s.vec<Class>();
         }
-        return ret;
     }
     
-    Vector<Field>           def_fields(Class c)
+    ClassVec                def_derived(Class c, Sorted sorted)
     {
-        Vector<Field>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT field FROM CFieldDef WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Field{s.valueU64(0)};
-        }
-        return ret;
-    }
-    
-    Vector<Class>           def_reverse(Class c)
-    {   
-        Vector<Class>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT reverse FROM CReverseDef WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
-        }
-        return ret;
-    }
-    
-    Vector<Class>           def_source(Class c)
-    {
-        Vector<Class>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT source FROM CSourceDef WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
-        }
-        return ret;
-    }
-    
-    Vector<Class>           def_target(Class c)
-    {
-        Vector<Class>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT source FROM CTargetDef WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
-        }
-        return ret;
+        return sorted ? def_derived_sorted(c) : def_derived_unsorted(c);
     }
 
-    Vector<Class>           def_use(Class c)
-    {
-        Vector<Class>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT base FROM CDependsDef WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
+    namespace {
+        FieldVec           def_fields_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT field FROM CFieldDef INNER JOIN Fields ON CFieldsDef.field=Fields.id WHERE class=? ORDER BY Fields.k");
+            return s.vec<Field>(c.id);
         }
-        return ret;
+
+        FieldVec           def_fields_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT field FROM CFieldDef WHERE class=?");
+            return s.vec<Field>(c.id);
+        }
+    }
+    
+    FieldVec                def_fields(Class c, Sorted sorted)
+    {
+        return sorted ? def_fields_sorted(c) : def_fields_unsorted(c);
+    }
+    
+    namespace {
+        ClassVec        def_reverse_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT reverse FROM CReverseDef INNER JOIN Classes ON CReverseDef.reverse=Classes.id WHERE class=? ORDER BY Classes.k");
+            return s.vec<Class>(c.id);
+        }
+
+        ClassVec        def_reverse_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT reverse FROM CReverseDef WHERE class=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+    
+    ClassVec           def_reverse(Class c, Sorted sorted)
+    {   
+        return sorted ? def_reverse_sorted(c) : def_reverse_unsorted(c);
+    }
+    
+    namespace {
+        ClassVec        def_source_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT source FROM CSourceDef INNER JOIN Classes ON CSourceDef.source=Classes.id WHERE class=? ORDER BY Classes.k");
+            return s.vec<Class>(c.id);
+        }
+
+        ClassVec        def_source_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT source FROM CSourceDef WHERE class=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+
+    ClassVec           def_source(Class c, Sorted sorted)
+    {
+        return sorted ? def_source_sorted(c) : def_source_unsorted(c);
+    }
+    
+    namespace {
+        ClassVec        def_target_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT target FROM CTargetDef INNER JOIN Classes ON CTargetDef.target=Classes.id WHERE class=? ORDER BY Classes.k");
+            return s.vec<Class>(c.id);
+        }
+
+        ClassVec        def_target_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT target FROM CTargetDef WHERE class=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+    
+    
+    ClassVec           def_target(Class c, Sorted sorted)
+    {
+        return sorted ? def_target_sorted(c) : def_target_unsorted(c);
+    }
+
+    namespace {
+        ClassVec        def_use_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT base FROM CDependsDef INNER JOIN Classes ON CDependsDef.base=Classes.id WHERE class=? ORDER BY Classes.k");
+            return s.vec<Class>(c.id);
+        }
+
+        ClassVec        def_use_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT base FROM CDependsDef WHERE class=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+
+    ClassVec           def_use(Class c, Sorted sorted)
+    {
+        return sorted ? def_use_sorted(c) : def_use_unsorted(c);
     }
     
     Graph               dep_graph(Class c)
     {   
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT deps FROM Classes WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return Graph{ s.valueU64(0)};
-        return Graph{};
+        static thread_local SQ    s("SELECT deps FROM Classes WHERE id=?");
+        return s.as<Graph>(c.id);
     }
-
+    
     namespace {
-        //Vector<Class>   dependents_sorted(Class, Linkage);    // TODO (INNER JOIN)
-        Vector<Class>   dependents_unsorted(Class c)
+        ClassVec        dependents_sorted(Class c)
         {
-            Vector<Class> ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT class FROM CDepends WHERE base=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{ s.valueU64(0) };
-            }
-            return ret;
+            static thread_local SQ    s("SELECT class FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY Classes.k");
+            return s.vec<Class>(c.id);
+        }
+        
+        ClassVec        dependents_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT class FROM CDepends WHERE base=?");
+            return s.vec<Class>(c.id);
         }
     }
+    
 
-    Vector<Class>       dependents(Class c, Sorted sorted)
+    ClassVec       dependents(Class c, Sorted sorted)
     {
-        return dependents_unsorted(c);   // TODO INNER JOIN
+        return sorted ? dependents_sorted(c) : dependents_unsorted(c);
     }
 
     Folder              detail_folder(Class c)
@@ -428,36 +424,47 @@ namespace cdb {
 
     bool                edge(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT edge FROM Classes WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
-    }
-
-    Vector<Class>      edges_in(Class c)
-    {
-        Vector<Class>   ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT class FROM CTargets WHERE target=?");
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
-        }
-        return ret;
+        static thread_local SQ    s("SELECT edge FROM Classes WHERE id=?");
+        return s.boolean(c.id);
     }
     
-    Vector<Class>      edges_out(Class c)
-    {
-        Vector<Class>   ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT class FROM CSources WHERE source=?");
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
+    namespace {
+        ClassVec    edges_in_sorted(Class c)
+        {
+            static thread_local SQ    s("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY Classes.K");
+            return s.vec<Class>(c.id);
         }
-        return ret;
+
+        ClassVec    edges_in_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT class FROM CTargets WHERE target=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+    
+
+    ClassVec      edges_in(Class c, Sorted sorted)
+    {
+        return sorted ? edges_in_sorted(c) : edges_in_unsorted(c);
+    }
+    
+    namespace {
+        ClassVec    edges_out_sorted(Class c)
+        {
+            static thread_local SQ    s("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
+            return s.vec<Class>(c.id);
+        }
+        
+        ClassVec    edges_out_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT class FROM CSources WHERE source=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+    
+    ClassVec      edges_out(Class c, Sorted sorted)
+    {
+        return sorted ? edges_out_sorted(c) : edges_out_unsorted(c);
     }
 
     bool                exists(Class c)
@@ -474,23 +481,15 @@ namespace cdb {
 
     bool                exists_class(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Classes WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Classes WHERE id=?");
+        return s.present(i);
     }
 
 
     bool                exists_field(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Fields WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Fields WHERE id=?");
+        return s.present(i);
     }
 
     Field               field(uint64_t i)
@@ -500,97 +499,73 @@ namespace cdb {
     
     Field               field(Class c, const QString&k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Fields WHERE class=? AND k=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        s.bind(1, k);
-        if(s.exec() && s.next())
-            return Field{s.valueU64(0)};
-        return Field{};
+        static thread_local SQ s("SELECT id FROM Fields WHERE class=? AND k=?");
+        return s.as<Field>(c.id, k);
+    }
+    
+    namespace {
+        FieldVec    fields_sorted(Class c)
+        {
+            static thread_local SQ    s("SELECT field FROM CFields INNER JOIN Fields ON CFields.field=Fields.id WHERE class=? ORDER BY Fields.K");
+            return s.vec<Field>(c.id);
+        }
+
+        FieldVec    fields_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT field FROM CFields WHERE class=?");
+            return s.vec<Field>(c.id);
+        }
     }
     
 
-    namespace {
-        
-        #if 0
-            //  TODO ... Requires INNER JOIN
-        Vector<Field>   fields_sorted(Class c)
-        {
-        }
-        #endif
-        
-        Vector<Field>   fields_unsorted(Class c)
-        {
-            Vector<Field>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT field FROM CFields WHERE class=?");
-            auto s_af   = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Field(s.valueU64(0));
-            }
-            return ret;
-        }
-
-   }
-
-
-    Vector<Field>       fields(Class c, Sorted sorted)
+    FieldVec       fields(Class c, Sorted sorted)
     {
-        return fields_unsorted(c);
-        // TODO (get inner join working to perform sorted queries)
-        //return sorted ? fields_sorted(c,l) : fields_unsorted(c,l);
+        return sorted ? fields_sorted(c) : fields_unsorted(c);
     }
     
     size_t          fields_count(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CFields WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM CFields WHERE class=?");
+        return s.size(c.id);
     }
     
     
     Image               icon(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT icon FROM Classes WHERE id=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,c.id);
-        if(s.exec() && s.next())
-            return Image{s.valueU64(0)};
-        return Image();
+        static thread_local SQ    s("SELECT icon FROM Classes WHERE id=? LIMIT 1");
+        return s.as<Image>(c.id);
     }
     
     
     Image               icon(Field f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT icon FROM Fields WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return Image(s.valueU64(0));
-        return Image{};
+        static thread_local SQ    s("SELECT icon FROM Fields WHERE id=?");
+        return s.as<Image>(f.id);
     }
     
-    Vector<Class>           inbound(Class c)
-    {
-        Vector<Class>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CTargets WHERE target=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
+    namespace {
+        ClassVec        inbound_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.cleass=Classes.id WHERE target=? ORDER BY Classes.K");
+            return s.vec<Class>(c.id);
         }
-        return ret;
+        
+        ClassVec        inbound_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT class FROM CTargets WHERE target=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+    
+    ClassVec           inbound(Class c, Sorted sorted)
+    {
+        return sorted ? inbound_sorted(c) : inbound_unsorted(c);
     }
     
     Class::Info         info(Class c, bool autoKey)
     {
         Class::Info    ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT k, edge, name, plural, brief, icon, deps FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps FROM Classes WHERE id=?");
         auto s_af = s.af();
         s.bind(0, c.id);
         if(s.exec() && s.next()){
@@ -613,7 +588,7 @@ namespace cdb {
     Field::Info         info(Field f, bool autoKey)
     {
         Field::Info        ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k, class, name, pkey, plural, brief FROM Fields WHERE id=?");
+        static thread_local SQ s("SELECT k, class, name, pkey, plural, brief FROM Fields WHERE id=?");
         auto s_af = s.af();
         s.bind(0, f.id);
         if(s.exec() && s.next()){
@@ -631,11 +606,8 @@ namespace cdb {
     
     bool                is(Class d, Class b)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT 1 FROM CDepends WHERE class=? AND base=?");
-        auto s_af   = s.af();
-        s.bind(0, d.id);
-        s.bind(1, b.id);
-        return s.exec() && s.next();
+        static thread_local SQ    s("SELECT 1 FROM CDepends WHERE class=? AND base=?");
+        return s.present(d.id, b.id);
     }
     
     //bool                is_all(Class d, std::initializer_list<Class> b)
@@ -658,23 +630,15 @@ namespace cdb {
     
     QString             key(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT k FROM Classes WHERE id=? LIMIT 1");
-        auto s_af       = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT k FROM Classes WHERE id=? LIMIT 1");
+        return s.str(c.id);
     }
     
     
     QString             key(Field f)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k FROM Fields WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT k FROM Fields WHERE id=?");
+        return s.str(f.id);
     }
     
     
@@ -691,7 +655,7 @@ namespace cdb {
     }
     
 
-    Class                       make_class(const QString&k, const Root* rt)
+    Class                make_class(const QString&k, const Root* rt)
     {
         if(!rt)
             rt      = wksp::root_first(DataRole::Classes);
@@ -731,28 +695,20 @@ namespace cdb {
 
     QString             name(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Classes WHERE id=? LIMIT 1");
-        auto s_af       = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Classes WHERE id=?");
+        return s.str(c.id);
     }
 
     
     QString             name(Field f)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Fields WHERE id=? LIMIT 1");
-        auto s_af       = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Fields WHERE id=?");
+        return s.str(f.id);
     }
 
     NKI                 nki(Class c, bool autoKey)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name,icon,k FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT name,icon,k FROM Classes WHERE id=?");
         auto s_af = s.af();
         s.bind(0, c.id);
         if(s.exec() && s.next()){
@@ -770,7 +726,7 @@ namespace cdb {
     
     NKI                 nki(Field f, bool autoKey)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name,icon,k FROM Fields WHERE id=?");
+        static thread_local SQ    s("SELECT name,icon,k FROM Fields WHERE id=?");
         auto s_af = s.af();
         s.bind(0, f.id);
         if(s.exec() && s.next()){
@@ -784,18 +740,24 @@ namespace cdb {
         }
         return NKI{};
     }    
-
-    Vector<Class>           outbound(Class c)
-    {
-        Vector<Class>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM CSources WHERE source=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Class{s.valueU64(0)};
+    
+    namespace {
+        ClassVec    outbound_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
+            return s.vec<Class>(c.id);
         }
-        return ret;
+
+        ClassVec    outbound_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT class FROM CSources WHERE source=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+
+    ClassVec           outbound(Class c, Sorted sorted)
+    {
+        return sorted ? outbound_sorted(c) : outbound_unsorted(c);
     }
 
     
@@ -807,32 +769,20 @@ namespace cdb {
     
     QString             pkey(Field f)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT pkey FROM Fields WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT pkey FROM Fields WHERE id=?");
+        return s.str(f.id);
     }
     
     QString             plural(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT plural FROM Classes WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT plural FROM Classes WHERE id=?");
+        return s.str(c.id);
     }
     
     QString             plural(Field f)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT plural FROM Fields WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT plural FROM Fields WHERE id=?");
+        return s.str(f.id);
     }
     
     
@@ -880,205 +830,158 @@ namespace cdb {
         return ret;
     }
     
-
-
-
-
-    
     namespace {
-        //Vector<Class>       reverses_sorted(Class, Linkage l);  // TODO once the INNER JOINS are good
-
-        Vector<Class>       reverses_unsorted(Class c)
+        ClassVec    reverses_sorted(Class c)
         {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT reverse FROM CReverses WHERE class=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT reverse FROM CReverses INNER JOIN Classes ON CReverses.reverse=Classes.id WHERE class=? ORDER BY Classes.K");
+            return s.vec<Class>(c.id);
+        }
+
+        ClassVec    reverses_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT reverse FROM CReverses WHERE class=?");
+            return s.vec<Class>(c.id);
         }
     }
     
-    Vector<Class>       reverses(Class c, Sorted sorted)
-    {
-        //  TODO (sorted, INNER JOIN)
-        return reverses_unsorted(c);
-    }
-
-
-    namespace {
-        //Vector<Class>   sources_sorted(Class, Linkage);     // TODO INNER JOIN
-        Vector<Class>       sources_unsorted(Class c)
-        {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT source FROM CSources WHERE class=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
-        }
-    }
     
-    Vector<Class>       sources(Class c, Sorted sorted)
+    ClassVec       reverses(Class c, Sorted sorted)
     {
-        return sources_unsorted(c);   // TODO 
-    }
-    
-
-    size_t          sources_count(Class c)
-    {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CSources WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
-    }
-
-
-
-
-
-    bool                tagged(Class c, Tag t)
-    {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM CTags WHERE class=? AND tag=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        s.bind(1, t.id);
-        return s.exec() && s.next();
-    }
-    
-    
-    namespace {
-        Vector<Tag>             tags_unsorted(Class c)
-        {
-            Vector<Tag>     ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT tag FROM CTags WHERE class=?");
-            auto s_af  = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Tag{s.valueU64(0)};
-            }
-            return ret;
-        }
-   }
-
-    Vector<Tag>             tags(Class c,Sorted)
-    {
-        return tags_unsorted(c);    // TODO INNER JOIN
+        return sorted ? reverses_sorted(c) : reverses_unsorted(c);
     }
     
     namespace {
-        Vector<Tag>             tags_unsorted(Field f)
+        ClassVec    sources_sorted(Class c)
         {
-            Vector<Tag>     ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT tag FROM FTags WHERE field=?");
-            auto s_af  = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Tag{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT source FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY Classes.K");
+            return s.vec<Class>(c.id);
         }
-   }
 
-    Vector<Tag>             tags(Field f,Sorted)
+        ClassVec    sources_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT source FROM CSources WHERE class=?");
+            return s.vec<Class>(c.id);
+        }
+    }
+
+    ClassVec  sources(Class c, Sorted sorted)
     {
-        return tags_unsorted(f);    // TODO INNER JOIN
+        return sorted ? sources_sorted(c) : sources_unsorted(c);
+    }
+
+    size_t  sources_count(Class c)
+    {
+        static thread_local SQ    s("SELECT COUNT(1) FROM CSources WHERE class=?");
+        return s.size(c.id);
+    }
+
+    bool  tagged(Class c, Tag t)
+    {
+        static thread_local SQ s("SELECT 1 FROM CTags WHERE class=? AND tag=?");
+        return s.present(c.id, t.id);
+    }
+
+    namespace {
+        TagVec  tags_sorted(Class c)
+        {
+            static thread_local SQ s("SELECT tag FROM CTags INNER JOIN Tags ON CTags.tag=Tags.id WHERE class=? ORDER BY Tags.K");
+            return s.vec<Tag>(c.id);
+        }
+
+        TagVec  tags_unsorted(Class c)
+        {
+            static thread_local SQ s("SELECT tag FROM CTags WHERE class=?");
+            return s.vec<Tag>(c.id);
+        }
+    }
+
+    TagVec  tags(Class c, Sorted sorted)
+    {
+        return sorted ? tags_sorted(c) : tags_unsorted(c);
+    }
+    
+    namespace {
+        TagVec  tags_sorted(Field f)
+        {
+            static thread_local SQ s("SELECT tag FROM FTags INNER JOIN Tags ON FTags.tag=Tags.id WHERE field=? ORDER BY Tags.K");
+            return s.vec<Tag>(f.id);
+        }
+        
+        TagVec  tags_unsorted(Field f)
+        {
+            static thread_local SQ s("SELECT tag FROM FTags WHERE field=?");
+            return s.vec<Tag>(f.id);
+        }
+    }
+    
+    TagVec  tags(Field f, Sorted sorted)
+    {
+        return sorted ? tags_sorted(f) : tags_unsorted(f);
     }
 
     
-    size_t                  tags_count(Class c)
+    size_t  tags_count(Class c)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CTags WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM CTags WHERE class=?");
+        return s.size(c.id);
     }
     
-    size_t                  tags_count(Field f)
+    size_t  tags_count(Field f)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM FTags WHERE field=?");
-        auto s_af = s.af();
-        s.bind(0, f.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM FTags WHERE field=?");
+        return s.size(f.id);
     }
 
 
     namespace {
-        //Vector<Class>   sources_sorted(Class, Linkage);     // TODO INNER JOIN
-        Vector<Class>       targets_unsorted(Class c)
+        ClassVec    targets_sorted(Class c)
         {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT tgt FROM CTargets WHERE class=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT target FROM CTargets INNER JOIN Classes ON CTargets.target=Classes.id WHERE class=? ORDER BY Classes.k");
+            return s.vec<Class>(c.id);
+        }
+
+        ClassVec    targets_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT target FROM CTargets WHERE class=?");
+            return s.vec<Class>(c.id);
         }
     }
     
-    Vector<Class>       targets(Class c, Sorted sorted)
+    ClassVec       targets(Class c, Sorted sorted)
     {
-        return targets_unsorted(c);   // TODO 
+        return sorted ? targets_sorted(c) : targets_unsorted(c);
     }
 
     size_t          targets_count(Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT COUNT(1) FROM CTargets WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ    s("SELECT COUNT(1) FROM CTargets WHERE class=?");
+        return s.size(c.id);
     }
     
-
     namespace {
-        //Vector<Class>   uses_sorted(Class c, Linkage l);    // TODO INNER JOIN
-        Vector<Class>   uses_unsorted(Class c)
+        ClassVec    uses_sorted(Class c)
         {
-            Vector<Class>   ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT base FROM CDepends WHERE class=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT base FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? ORDER BY Classes.k");
+            return s.vec<Class>(c.id);
+        }
+
+        ClassVec    uses_unsorted(Class c)
+        {
+            static thread_local SQ    s("SELECT base FROM CDepends WHERE class=?");
+            return s.vec<Class>(c.id);
         }
     }
     
-    Vector<Class>       uses(Class c, Sorted sorted)
-    {
-        return uses_unsorted(c);
-        //  TODO (FIX ON INNER JOIN)
-    }
 
+    ClassVec   uses(Class c, Sorted sorted)
+    {
+        return sorted ? uses_sorted(c) : uses_unsorted(c);
+    }
+    
     size_t              uses_count(Class c)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM CDepends WHERE class=?");
-        auto s_af   = s.af();
-        s.bind(0,c.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM CDepends WHERE class=?");
+        return s.size(c.id);
     }
     
     ClassFile::Shared        writable(Class c, const Root* rt)

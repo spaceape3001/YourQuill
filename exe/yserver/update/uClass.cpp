@@ -1039,6 +1039,19 @@ void        update_field_icon(Fragment frag)
 }
 
 
+ClassSet    uresolve(const ClassSet& spec)
+{
+    ClassSet    ret = spec;
+    for(Class c : spec)
+        ret += cdb::uses(c);
+    return ret;
+}
+
+ClassSet    uresolve(const ClassVec& spec)
+{
+    return uresolve(makeSet(spec));
+}
+
 void    init_class()
 {
     for(Document d : cdb::documents_by_suffix_excluding(cdb::classes_folder(), "cls"))
@@ -1073,4 +1086,5 @@ void    init_class_graphs()
 {
     launch_graphs();
 }
+
 

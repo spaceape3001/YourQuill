@@ -4,6 +4,9 @@ set(db_sources
     ./Attribute.cpp
     ./Attribute.hpp
     ./Cache.hpp
+    ./CacheFwd.hpp
+    ./CacheUtil.cpp
+    ./CacheUtil.hpp
     ./Class.cpp
     ./Class.hpp
     ./ClassFile.cpp

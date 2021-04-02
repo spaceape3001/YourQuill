@@ -23,6 +23,10 @@ struct Class {
     struct Info;
     using FragDoc       = std::pair<Fragment, ClassFile::Shared>;
 
+    static bool less_key(Class a, Class b);
+    static bool less_label(Class a, Class b);
+    static bool less_name(Class a, Class b);
+
     uint64_t  id  = 0ULL;
     constexpr auto    operator<=>(const Class&rhs) const = default;
     constexpr operator bool() const { return id != 0ULL; }
@@ -66,7 +70,6 @@ struct Field::Info {
 
 namespace cdb {
     
-
     QStringSet              aliases(Field);
 
     /*! \brief All classes in the cache database
@@ -74,14 +77,14 @@ namespace cdb {
         \param[in]  sorted  Yes/No to sort by key (default is no)
         \return vector of classes
     */
-    Vector<Class>           all_classes(Sorted sorted=Sorted());
+    ClassVec                all_classes(Sorted sorted=Sorted{});
     
     /*! \brief Count of all classes declared in the cache
     */
     size_t                  all_classes_count();
 
 
-    Vector<Field>           all_fields(Sorted sorted=Sorted());
+    FieldVec                all_fields(Sorted sorted=Sorted());
     size_t                  all_fields_count();
 
     QString                 brief(Class);
@@ -93,33 +96,33 @@ namespace cdb {
 
     ClassFile::Shared       class_doc(Fragment, bool fAllowEmpty=false);
     
-    Vector<Class>           classes(Field);
-    Vector<Class>           classes(const StringSet&,Sorted sorted=Sorted());
-    Vector<Class>           classes(const QStringSet&,Sorted sorted=Sorted());
+    ClassVec                classes(Field, Sorted sorted=Sorted());
+    ClassVec                classes(const StringSet&);
+    ClassVec                classes(const QStringSet&);
     
     
     QStringSet              data_types(Field);
         
     Class                   db_class(const QString&, bool *wasCreated=nullptr);
     Class                   db_class(Document, bool *wasCreated=nullptr);
-    Vector<Class>           db_classes(const QStringSet&);
-    Vector<Class>           db_classes(const StringSet&);
+    ClassVec                db_classes(const QStringSet&);
+    ClassVec                db_classes(const StringSet&);
     
     Field                   db_field(Class c, const QString&k, bool *wasCreated=nullptr);
     //Field                   db_field(const QString&, bool *wasCreated=nullptr);
     //Field                   db_field(Document, bool *wasCreated=nullptr);
     
-    Vector<Class>           def_derived(Class);
-    Vector<Field>           def_fields(Class);
-    Vector<Class>           def_reverse(Class);
-    Vector<Class>           def_source(Class);
-    Vector<Class>           def_target(Class);
-    Vector<Class>           def_use(Class);
+    ClassVec                def_derived(Class, Sorted sorted=Sorted());
+    FieldVec                def_fields(Class, Sorted sorted=Sorted());
+    ClassVec                def_reverse(Class, Sorted sorted=Sorted());
+    ClassVec                def_source(Class, Sorted sorted=Sorted());
+    ClassVec                def_target(Class, Sorted sorted=Sorted());
+    ClassVec                def_use(Class, Sorted sorted=Sorted());
     
     Graph                   dep_graph(Class);
     Folder                  detail_folder(Class);
 
-    Vector<Class>           dependents(Class, Sorted sorted=Sorted{});
+    Vector<Class>           dependents(Class, Sorted sorted=Sorted());
     
     //Document                document(Atom);
     Document                document(Class);
@@ -127,8 +130,8 @@ namespace cdb {
 
     bool                    edge(Class);
     
-    Vector<Class>           edges_in(Class);
-    Vector<Class>           edges_out(Class);
+    ClassVec                edges_in(Class, Sorted sorted=Sorted());
+    ClassVec                edges_out(Class, Sorted sorted=Sorted());
   
     bool                    exists(Class);
     bool                    exists(Field);
@@ -138,14 +141,14 @@ namespace cdb {
 
     Field                   field(uint64_t);
     Field                   field(Class, const QString&);
-    Vector<Field>           fields(Class, Sorted sorted=Sorted());
+    FieldVec                fields(Class, Sorted sorted=Sorted());
     size_t                  fields_count(Class);
 
     Image                   icon(Class);
     Image                   icon(Field);
     
     //Vector<Atom>            inbound(Atom);
-    Vector<Class>           inbound(Class);
+    ClassVec                inbound(Class, Sorted sorted=Sorted());
 
     Class::Info             info(Class, bool autoKeyToName=false);
     Field::Info             info(Field, bool autoKeyToName=false);
@@ -172,7 +175,7 @@ namespace cdb {
     NKI                     nki(Field, bool autoKeyToName=false);
     
     //Vector<Atom>            outbound(Atom);
-    Vector<Class>           outbound(Class);
+    ClassVec                outbound(Class, Sorted sorted=Sorted());
     
 
     Class                   parent(Field);
@@ -193,25 +196,23 @@ namespace cdb {
     Vector<Class::FragDoc>  reads(Class);
     Vector<Class::FragDoc>  reads(Class, class Root*);
 
-    Vector<Class>           reverses(Class, Sorted sorted=Sorted{});
+    ClassVec                reverses(Class, Sorted sorted=Sorted());
     
-
-    
-    Vector<Class>           sources(Class, Sorted sorted=Sorted{});
+    ClassVec                sources(Class, Sorted sorted=Sorted());
     size_t                  sources_count(Class);
     
-    Vector<Class>           targets(Class, Sorted sorted=Sorted{});
+    ClassVec                targets(Class, Sorted sorted=Sorted());
     size_t                  targets_count(Class);
     
-    Vector<Tag>             tags(Class,Sorted sorted=Sorted());
-    Vector<Tag>             tags(Field,Sorted sorted=Sorted());
+    TagVec                  tags(Class, Sorted sorted=Sorted());
+    TagVec                  tags(Field, Sorted sorted=Sorted());
     size_t                  tags_count(Class);
     size_t                  tags_count(Field);
 
     bool                    tagged(Class, Tag);
     bool                    tagged(Field, Tag);
 
-    Vector<Class>           uses(Class, Sorted sorted=Sorted{});
+    ClassVec                uses(Class, Sorted sorted=Sorted());
     size_t                  uses_count(Class);
 
 

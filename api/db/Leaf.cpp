@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Leaf.hpp"
+#include "CacheUtil.hpp"
 
 #include "Atom.hpp"
 #include "FileSys.hpp"
@@ -14,7 +15,6 @@
 
 #include <db/bit/NKI.hpp>
 #include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>
 
 namespace cdb {
@@ -23,26 +23,14 @@ namespace cdb {
     namespace {
         Vector<Atom>    all_leaf_atoms_sorted()
         {
-            Vector<Atom>   ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Atoms WHERE isLeaf=1 ORDER BY k");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Atoms WHERE isLeaf=1 ORDER BY k");
+            return s.vec<Atom>();
         }
         
         Vector<Atom>    all_leaf_atoms_unsorted()
         {
-            Vector<Atom>   ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Atoms WHERE leaf!=0");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Atoms WHERE leaf!=0");
+            return s.vec<Atom>();
         }
     }
     
@@ -54,36 +42,21 @@ namespace cdb {
     
     size_t              all_leaf_atoms_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Atoms WHERE leaf!=0");
-        auto s_af   = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Atoms WHERE leaf!=0");
+        return s.size();
     }
     
     namespace {
         Vector<Leaf>    all_leafs_sorted()
         {
-            Vector<Leaf>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Leafs ORDER BY k");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Leaf{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Leafs ORDER BY k");
+            return s.vec<Leaf>();
         }
 
         Vector<Leaf>    all_leafs_unsorted()
         {
-            Vector<Leaf>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Leafs");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Leaf{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Leafs");
+            return s.vec<Leaf>();
         }
     }
     
@@ -94,27 +67,17 @@ namespace cdb {
     
     size_t              all_leafs_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Leafs");
-        auto s_af = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Leafs");
+        return s.size();
     }
     
 
-    
     Atom                atom(Leaf l)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM Leafs WHERE id=? LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, l.id);
-        if(s.exec() && s.next())
-            return Atom{s.valueU64(0)};
-        return Atom();
+        static thread_local SQ s("SELECT atom FROM Leafs WHERE id=? LIMIT 1");
+        return s.as<Atom>(l.id);
     }
     
-   
-
     
     Leaf                db_leaf(Document doc, bool*wasCreated)
     {
@@ -131,7 +94,7 @@ namespace cdb {
             return Leaf();
         }
         
-        static thread_local SqlQuery i(wksp::cache(), "INSERT INTO Leafs (id,k) VALUES (?,?)");
+        static thread_local SQ i("INSERT INTO Leafs (id,k) VALUES (?,?)");
         auto i_af   = i.af();
         i.bind(0,doc.id);
         i.bind(1, k);
@@ -167,12 +130,8 @@ namespace cdb {
 
     bool                exists_leaf(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Leafs WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Leafs WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     Folder              folder(Leaf l)
@@ -183,19 +142,15 @@ namespace cdb {
     
     Image               icon(Leaf l)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT icon FROM Leafs WHERE id=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,l.id);
-        if(s.exec() && s.next())
-            return Image{s.valueU64(0)};
-        return Image();
+        static thread_local SQ    s("SELECT icon FROM Leafs WHERE id=? LIMIT 1");
+        return s.as<Image>(l.id);
     }
     
 
     Leaf::Info          info(Leaf l, bool autoKey)
     {
         Leaf::Info    ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k, title FROM Leafs WHERE id=?");
+        static thread_local SQ s("SELECT k, title FROM Leafs WHERE id=?");
         auto s_af = s.af();
         s.bind(0, l.id);
         if(s.exec() && s.next()){
@@ -213,12 +168,8 @@ namespace cdb {
     
     QString             key(Leaf l)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k FROM Leafs WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, l.id);
-        if(s.exec() && s.next())    
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT k FROM Leafs WHERE id=?");
+        return s.str(l.id);
     }
 
     QString             label(Leaf l)
@@ -235,22 +186,14 @@ namespace cdb {
 
     Leaf                leaf(const QString& k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Leafs WHERE k=?");
-        auto s_af = s.af();
-        s.bind(0, k);
-        if(s.exec() && s.next())
-            return Leaf(s.valueU64(0));
-        return Leaf{};
+        static thread_local SQ s("SELECT id FROM Leafs WHERE k=?");
+        return s.as<Leaf>(k);
     }
 
     Leaf                leaf(Atom a)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT leaf FROM Atoms WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return Leaf{ s.valueU64(0) };
-        return Leaf();
+        static thread_local SQ    s("SELECT leaf FROM Atoms WHERE id=?");
+        return s.as<Leaf>(a.id);
     }
     
     
@@ -266,16 +209,10 @@ namespace cdb {
 
     Leaf                    leaf_by_title(const QString&k)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Leafs WHERE title like ? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0, k);
-        if(s.exec() && s.next())
-            return Leaf{ s.valueU64(0) };
-        return Leaf();
+        static thread_local SQ    s("SELECT id FROM Leafs WHERE title like ? LIMIT 1");
+        return s.as<Leaf>(k);
     }
     
-
-
     LeafFile::Shared         leaf_doc(Fragment f, unsigned int options)
     {
         if(!f)
@@ -320,7 +257,7 @@ namespace cdb {
     
     NKI                 nki(Leaf l, bool autoKey)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT title,icon,k FROM Leafs WHERE id=?");
+        static thread_local SQ    s("SELECT title,icon,k FROM Leafs WHERE id=?");
         auto s_af = s.af();
         s.bind(0, l.id);
         if(s.exec() && s.next()){
@@ -364,12 +301,8 @@ namespace cdb {
 
     QString             title(Leaf l)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT title FROM Leafs WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, l.id);
-        if(s.exec() && s.next())    
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT title FROM Leafs WHERE id=?");
+        return s.str(l.id);
     }
 
     LeafFile::Shared         write(Leaf l, const Root* rt)

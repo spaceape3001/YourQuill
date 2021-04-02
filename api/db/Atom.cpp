@@ -4,18 +4,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Atom.hpp"
-#include "Class.hpp"
 
+#include "Atom.hpp"
+#include "CacheUtil.hpp"
+
+#include "Class.hpp"
 #include "Root.hpp"
-#include "Workspace.hpp"
 #include "Graph.hpp"
 #include "Image.hpp"
 #include "Tag.hpp"
 
 #include <db/bit/NKI.hpp>
 #include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>
 
 #include <QSqlError>
@@ -24,142 +24,85 @@ namespace cdb {
 
     QString             abbreviation(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT abbr FROM Atoms WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT abbr FROM Atoms WHERE id=?");
+        return s.str(a.id);
     }
 
     namespace {
-        Vector<Atom>        all_atoms_sorted()
+        AtomVec        all_atoms_sorted()
         {
-            Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Atoms ORDER BY k");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Atoms ORDER BY k");
+            return s.vec<Atom>();
         }
 
-        Vector<Atom>        all_atoms_unsorted()
+        AtomVec        all_atoms_unsorted()
         {
-            Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Atoms");
-            auto s_af = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Atoms");
+            return s.vec<Atom>();
         }
     }
     
 
-    Vector<Atom>        all_atoms(Sorted sorted)
+    AtomVec        all_atoms(Sorted sorted)
     {
         return sorted ? all_atoms_sorted() : all_atoms_unsorted();
     }
     
     namespace {
-        Vector<Atom>    all_atoms_sorted(Class c)
+        AtomVec    all_atoms_sorted(Class c)
         {
-            Vector<Atom>    ret;
                     // I think this SQL is right.....
-            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id "
-                                "WHERE class=? ORDER BY Classes.k");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT atom FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE class=? ORDER BY Classes.k");
+            return s.vec<Atom>(c.id);
         }
 
-        Vector<Atom>    all_atoms_unsorted(Class c)
+        AtomVec    all_atoms_unsorted(Class c)
         {
-            Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM AClasses WHERE class=?");
-            auto s_af = s.af();
-            s.bind(0, c.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT atom FROM AClasses WHERE class=?");
+            return s.vec<Atom>(c.id);
         }
     }
     
-    Vector<Atom>        all_atoms(Class c,Sorted sorted)
+    AtomVec        all_atoms(Class c,Sorted sorted)
     {
         return sorted ? all_atoms_sorted(c) : all_atoms_unsorted(c);
     }
     
     namespace {
-        Vector<Atom>    all_atoms_sorted(Tag t)
+        AtomVec    all_atoms_sorted(Tag t)
         {
-            Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id "
-                            "WHERE tag=? ORDER BY Tags.k");
-            auto s_af = s.af();
-            s.bind(0, t.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT atom FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE tag=? ORDER BY Tags.k");
+            return s.vec<Atom>(t.id);
         }
 
-        Vector<Atom>    all_atoms_unsorted(Tag t)
+        AtomVec    all_atoms_unsorted(Tag t)
         {
-            Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM ATags WHERE tag=?");
-            auto s_af = s.af();
-            s.bind(0, t.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT atom FROM ATags WHERE tag=?");
+            return s.vec<Atom>(t.id);
         }
     }
     
-    Vector<Atom>        all_atoms(Tag t,Sorted sorted)
+    AtomVec        all_atoms(Tag t,Sorted sorted)
     {
         return sorted ? all_atoms_sorted(t) : all_atoms_unsorted(t);
     }
     
     size_t              all_atoms_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Atoms");
-        auto s_af = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Atoms");
+        return s.size();
     }
     
     size_t              all_atoms_count(Class c)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM AClasses WHERE class=?");
-        auto s_af = s.af();
-        s.bind(0, c.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM AClasses WHERE class=?");
+        return s.size(c.id);
     }
     
     size_t              all_atoms_count(Tag t)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM ATags WHERE tag=?");
-        auto s_af = s.af();
-        s.bind(0, t.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM ATags WHERE tag=?");
+        return s.size(t.id);
     }
     
     
@@ -170,130 +113,132 @@ namespace cdb {
     
     Atom                atom(const QString& k)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Atoms WHERE k=? LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, k);
-        if(s.exec() && s.next())
-            return Atom{s.valueU64(0)};
-        return Atom();
+        static thread_local SQ s("SELECT id FROM Atoms WHERE k=? LIMIT 1");
+        return s.as<Atom>(k);
     }
     
     namespace {
-        //Vector<Atom>        atoms_sorted(Atom);
-        
-        Vector<Atom>        atoms_unsorted(Atom a)
+        AtomVec        atoms_sorted(Atom a)
         {
-            Vector<Atom> ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT  id FROM Atoms WHERE parent=?");
-            auto s_af = s.af();
-            s.bind(0, a.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT id FROM Atoms WHERE parent=? ORDER BY k");
+            return s.vec<Atom>(a.id);
+        }
+        
+        AtomVec        atoms_unsorted(Atom a)
+        {
+            static thread_local SQ s("SELECT id FROM Atoms WHERE parent=?");
+            return s.vec<Atom>(a.id);
         }
         
     }
 
-    Vector<Atom>            atoms(Atom a, Sorted sorted)
+    AtomVec            atoms(Atom a, Sorted sorted)
     {
-        //  TODO (INNER JOIN)
-        return atoms_unsorted(a);
+        return sorted ? atoms_sorted(a) : atoms_unsorted(a);
     }
 
     namespace {
-        #if 0
-        Vector<Atom>    atoms_sorted(Document doc)
+        AtomVec    atoms_sorted(Document doc)
         {
-            Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM ADocuments WHERE doc=?");
-            auto s_af = s.af();
-            s.bind(0, doc.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT atom FROM ADocuments INNER JOIN Atoms ON ADocuments.atom=Atoms.id WHERE doc=? ORDER BY Atoms.k");
+            return s.vec<Atom>(doc.id);
         }
-        #endif
 
-        Vector<Atom>    atoms_unsorted(Document doc)
+        AtomVec    atoms_unsorted(Document doc)
         {
-            Vector<Atom>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT atom FROM ADocuments WHERE doc=?");
-            auto s_af = s.af();
-            s.bind(0, doc.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Atom{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT atom FROM ADocuments WHERE doc=?");
+            return s.vec<Atom>(doc.id);
         }
     }
     
-    Vector<Atom>        atoms(Document doc, Sorted )
+    AtomVec        atoms(Document doc, Sorted sorted)
     {
-        //   TODO inner join (above)
-        return atoms_unsorted(doc); // sorted ? atoms_sorted(doc) : atoms_unsorted(doc);
+        return sorted ? atoms_sorted(doc) : atoms_unsorted(doc);
     }
     
+    namespace {
+        AtomVec     atoms_by_name_sorted(const QString& n)
+        {
+            static thread_local SQ s("SELECT id FROM Atoms WHERE name=? ORDER BY k");
+            return s.vec<Atom>(n);
+        }
+        
+        AtomVec     atoms_by_name_unsorted(const QString& n)
+        {
+            static thread_local SQ s("SELECT id FROM Atoms WHERE name=?");
+            return s.vec<Atom>(n);
+        }
+    }
+    
+    
+    AtomVec             atoms_by_name(const QString& n, Sorted sorted)
+    {
+        return sorted ? atoms_by_name_sorted(n) : atoms_by_name_unsorted(n);
+        AtomVec     ret;
+    }
+
     size_t              atoms_count(Document doc)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Atoms WHERE doc=?");
-        auto s_af = s.af();
-        s.bind(0, doc.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Atoms WHERE doc=?");
+        return s.size(doc);
     }
     
     QString             brief(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT brief FROM Atoms WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT brief FROM Atoms WHERE id=?");
+        return s.str(a.id);
     }
-    
     
     namespace {
-        //Vector<Class>       classes_sorted(Atom a)
-        
-        Vector<Class>       classes_unsorted(Atom a)
+        ClassVec    classes_sorted(Atom a)
         {
-            Vector<Class>   ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT class FROM AClasses WHERE atom=?");
-            auto s_af = s.af();
-            s.bind(0, a.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Class{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? ORDER BY Classes.k");
+            return s.vec<Class>(a.id);
         }
         
+        ClassVec    classes_unsorted(Atom a)
+        {
+            static thread_local SQ s("SELECT class FROM AClasses WHERE atom=?");
+            return s.vec<Class>(a.id);
+        }
     }
     
     
-    Vector<Class>       classes(Atom a, Sorted sorted)
+    ClassVec       classes(Atom a, Sorted sorted)
     {
-        return classes_unsorted(a); // TODO: Sorted
+        return sorted ? classes_sorted(a) : classes_unsorted(a);
     }
     
+    namespace {
+        ClassVec    classes_sorted(Atom a, Document d)
+        {
+            static thread_local SQ s("SELECT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? AND doc=? ORDER BY Classes.k");
+            return s.vec<Class>(a.id, d.id);
+        }
+
+        ClassVec    classes_unsorted(Atom a, Document d)
+        {
+            static thread_local SQ s("SELECT class FROM AClasses WHERE atom=? AND doc=?");
+            return s.vec<Class>(a.id, d.id);
+        }
+    }
+    
+    ClassVec       classes(Atom a, Document d, Sorted sorted)
+    {
+        return sorted ? classes_sorted(a,d) : classes_unsorted(a,d);
+    }
     
     size_t              classes_count(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM AClasses WHERE atom=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(DISTINCT class) FROM AClasses WHERE atom=?");
+        return s.size(a.id);
     }    
     
+    size_t              classes_count(Atom a, Document d)
+    {
+        static thread_local SQ s("SELECT COUNT(1) FROM AClasses WHERE atom=? AND doc=?");
+        return s.size(a.id, d.id);
+    }    
 
 
     Atom                db_atom(Document d, bool* wasCreated)
@@ -315,8 +260,8 @@ namespace cdb {
         if(!ck.isEmpty())
             dk      += "#" + ck;
         
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Atoms (k,doc) VALUES (?,?)");
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Atoms WHERE k=?");
+        static thread_local SQ    i("INSERT OR FAIL INTO Atoms (k,doc) VALUES (?,?)");
+        static thread_local SQ    s("SELECT id FROM Atoms WHERE k=?");
         auto i_af   = i.af();
         auto s_af   = s.af();
         i.bind(0, dk);
@@ -337,7 +282,7 @@ namespace cdb {
     
     //Document            document(Atom a)
     //{
-        //static thread_local SqlQuery s(wksp::cache(), "SELECT doc FROM Atoms WHERE id=?");
+        //static thread_local SQ s("SELECT doc FROM Atoms WHERE id=?");
         //auto s_af = s.af();
         //s.bind(0, a.id);
         //if(s.exec() && s.next())
@@ -345,28 +290,30 @@ namespace cdb {
         //return Document();
     //}
     
-    Vector<Document>        documents(Atom a)
-    {
-        Vector<Document>    ret;
-        
-        static thread_local SqlQuery s(wksp::cache(), "SELECT doc FROM ADocuments WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec()){
-            while(s.next())
-                ret << Document{s.valueU64(0)};
+    namespace {
+        DocVec  documents_sorted(Atom a)
+        {
+            static thread_local SQ  s("SELECT doc FROM ADocuments INNER JOIN Documents ON ADocuments.doc=Documents.id WHERE id=? ORDER BY Documents.k");
+            return s.vec<Document>(a.id);
         }
-        return ret;
+        
+        DocVec  documents_unsorted(Atom a)
+        {
+            static thread_local SQ  s("SELECT doc FROM ADocuments WHERE id=?");
+            return s.vec<Document>(a.id);
+        }
+        
+    }
+    
+    DocVec        documents(Atom a, Sorted sorted)
+    {
+        return sorted ? documents_sorted(a) : documents_unsorted(a);
     }
     
     size_t                  documents_count(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM ADocuments WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM ADocuments WHERE id=?");
+        return s.size(a.id);
     }
 
    bool                exists(Atom a)
@@ -377,33 +324,25 @@ namespace cdb {
    
     bool                exists_atom(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Atoms WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Atoms WHERE id=?");
+        return s.present(i);
     }
 
     
    
     Image               icon(Atom a) 
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT icon FROM Atoms WHERE id=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,a.id);
-        if(s.exec() && s.next())
-            return Image{s.valueU64(0)};
-        return Image();
+        static thread_local SQ s("SELECT icon FROM Atoms WHERE id=?");
+        return s.as<Image>(a.id);
     }
     
-    //Vector<Atom>            inbound(Atom);
+    //AtomVec            inbound(Atom);
 
     Atom::Info          info(Atom a)
     {
         Atom::Info    ret;
         
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k, abbr, brief, name FROM Atoms WHERE id=?");
+        static thread_local SQ s("SELECT k, abbr, brief, name FROM Atoms WHERE id=?");
         auto s_af = s.af();
         s.bind(0, a.id);
         if(s.exec() && s.next()){
@@ -419,11 +358,8 @@ namespace cdb {
     
     bool                is(Atom a, Class c)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT 1 FROM AClasses WHERE atom=? AND class=?");
-        auto s_af       = s.af();
-        s.bind(0, a.id);
-        s.bind(1, c.id);
-        return s.exec() && s.next();
+        static thread_local SQ    s("SELECT 1 FROM AClasses WHERE atom=? AND class=?");
+        return s.present(a.id, c.id);
     }
     
     //bool                is_all(Atom a, std::initializer_list<Class>cs)
@@ -445,12 +381,8 @@ namespace cdb {
  
     QString             key(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT k FROM Atoms WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT k FROM Atoms WHERE id=?");
+        return s.str(a.id);
     }
     
     QString             label(Atom a)
@@ -466,18 +398,14 @@ namespace cdb {
 
     QString             name(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT name FROM Atoms WHERE id=? LIMIT 1");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT name FROM Atoms WHERE id=?");
+        return s.str(a.id);
     }
 
     
     NKI                 nki(Atom a, bool autoKey)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name,icon,k FROM Atoms WHERE id=?");
+        static thread_local SQ    s("SELECT name,icon,k FROM Atoms WHERE id=?");
         auto s_af = s.af();
         s.bind(0, a.id);
         if(s.exec() && s.next()){
@@ -493,16 +421,12 @@ namespace cdb {
     }
     
 
-    //Vector<Atom>            outbound(Atom);
+    //AtomVec            outbound(Atom);
 
     Atom                parent(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT parent FROM Atoms WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return Atom{s.valueU64(0)};
-        return Atom{};
+        static thread_local SQ s("SELECT parent FROM Atoms WHERE id=?");
+        return s.as<Atom>(a.id);
     }
     
     
@@ -513,49 +437,62 @@ namespace cdb {
             ret << (quint64) t.id;
         return ret;
     }
-    
-
 
     namespace {
-        // Vector<Tag>     tags_sorted(Atom a);     // TODO (INNER JOIN)
-        Vector<Tag>     tags_unsorted(Atom a)
+        TagVec          tags_sorted(Atom a)
         {
-            Vector<Tag>    ret;
-            static thread_local SqlQuery s(wksp::cache(), "SELECT tag FROM ATags WHERE atom=?");
-            auto s_af = s.af();
-            s.bind(0, a.id);
-            if(s.exec()){
-                while(s.next())
-                    ret << Tag{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ s("SELECT DISTINCT tag FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE atom=? ORDER BY Tags.k");
+            return s.vec<Tag>(a.id);
+        }
+
+        TagVec          tags_unsorted(Atom a)
+        {
+            static thread_local SQ s("SELECT DISTINCT tag FROM ATags WHERE atom=?");
+            return s.vec<Tag>(a.id);
         }
     }
     
-    
-    Vector<Tag>         tags(Atom a, Sorted sorted)
+    TagVec              tags(Atom a, Sorted sorted)
     {
-        return tags_unsorted(a);
-        //  TODO sorted....
+        return sorted ? tags_sorted(a) : tags_unsorted(a);
+    }
+    
+    namespace {
+        TagVec          tags_sorted(Atom a, Document d)
+        {
+            static thread_local SQ s("SELECT tag FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE atom=? AND doc=? ORDER BY Tags.k");
+            return s.vec<Tag>(a.id,d.id);
+        }
+
+        TagVec          tags_unsorted(Atom a, Document d)
+        {
+            static thread_local SQ s("SELECT tag FROM ATags WHERE atom=? AND doc=?");
+            return s.vec<Tag>(a.id,d.id);
+        }
+    }
+    
+
+    TagVec              tags(Atom a, Document d, Sorted sorted)
+    {
+        return sorted ? tags_sorted(a,d) : tags_unsorted(a,d);
     }
 
     bool                tagged(Atom a, Tag t)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM ATags WHERE atom=? AND tag=?");
-        auto s_af = s.af();
-        s.bind(0, a.id);
-        s.bind(1, t.id);
-        return s.exec() && s.next();
+        static thread_local SQ s("SELECT 1 FROM ATags WHERE atom=? AND tag=? LIMIT 1");
+        return s.present(a.id, t.id);
     }
     
     size_t              tags_count(Atom a)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM ATags WHERE atom=?");
-        auto s_af   = s.af();
-        s.bind(0, a.id);
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(DISTINCT tag) FROM ATags WHERE atom=?");
+        return s.size(a.id);
+    }
+
+    size_t              tags_count(Atom a, Document d)
+    {
+        static thread_local SQ s("SELECT COUNT(1) FROM ATags WHERE atom=? AND doc=?");
+        return s.size(a.id, d.id);
     }
 
     QString             title(Atom a)

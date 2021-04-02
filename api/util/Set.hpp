@@ -21,6 +21,7 @@ class Set : public std::set<T,C> {
 public:
 
     typedef std::set<T,C> base_set;
+    typedef std::vector<T>  base_vec;
     
     Set(){}
     Set(const base_set&);

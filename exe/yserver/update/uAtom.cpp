@@ -12,87 +12,91 @@
 #include <db/Workspace.hpp>
 #include <util/SqlQuery.hpp>
 
-UAtom::UAtom(Atom a) : key(cdb::key(a)), id(a.id)
-{
+#if 0
+namespace {
+    struct PropInfo {
+        Vector<Field>   field;
+        Class           class_;
+    };
 }
+#endif
 
-bool        UAtom::update_classes(const StringSet& newCls)
+AddRem<Class>       uclasses(Atom a, Document doc, const StringSet& ncls)
 {
-    ClassSet    use;
-    for(Class c : cdb::db_classes(newCls)){
-        use += c;
-        use += uget(c).use.all;
-    }
+    ClassVec        old = cdb::classes(a);
+    AddRem<Class>   delta(cdb::classes(a,doc), uresolve(cdb::db_classes(ncls)));
     
-    ClassSet    add = use - classes;
-    ClassSet    rem = classes - use;
-    if(!rem.empty()){
-        static thread_local SqlQuery d(wksp::cache(), "DELETE FROM AClasses WHERE atom=? AND class=?");
+    if(!delta.rem.empty()){
+        static thread_local SqlQuery d(wksp::cache(), "DELETE FROM AClasses WHERE atom=? AND doc=? AND class=?");
         auto d_af = d.af();
-        d.addBindValue((quint64) id);
-        d.addBindValue(cdb::qvar_list(rem));
+        d.addBindValue((quint64) a.id);
+        d.addBindValue((quint64) doc.id);
+        d.addBindValue(cdb::qvar_list(delta.rem));
         d.batch();
     }
     
-    if(!add.empty()){
-        static thread_local SqlQuery i(wksp::cache(), "INSERT INTO AClasses (atom, class) VALUES (?,?)");
+    if(!delta.add.empty()){
+        static thread_local SqlQuery i(wksp::cache(), "INSERT INTO AClasses (atom, doc, class) VALUES (?,?,?)");
         auto i_af = i.af();
-        i.addBindValue((quint64) id);
-        i.addBindValue(cdb::qvar_list(add));
+        i.addBindValue((quint64) a.id);
+        i.addBindValue((quint64) doc.id);
+        i.addBindValue(cdb::qvar_list(delta.add));
         i.batch();
     }
-
-    classes = use;
-    return !(add.empty() && rem.empty());
+    return AddRem<Class>(old, cdb::classes(a));
 }
 
-Image       UAtom::update_icon(Image img)
+
+Image   uicon(Atom a, Image img)
 {
-    if(!img){
-        //  TODO
-    }
+    Image   old = cdb::icon(a);
+    if(old == img)
+        return img;
 
     static thread_local SqlQuery u(wksp::cache(), "UPDATE Atoms SET icon=? WHERE id=?");
     auto u_af = u.af();
     u.bind(0, img.id);
-    u.bind(1, id);
+    u.bind(1, a.id);
     u.exec();
     
     return img;
 }
 
-bool        UAtom::update_tags(const StringSet& newtag)
+void            uproperties(Atom atom, Document doc, const cdb::KVReport& attributes)
 {
-    TagSet      them    = makeSet(cdb::db_tags(newtag));
-    TagSet      add     = them - tags;
-    TagSet      rem     = tags - them;
-    if(!rem.empty()){
-        static thread_local SqlQuery d(wksp::cache(), "DELETE FROM ATags WHERE atom=? AND tag=?");
-        auto d_af = d.af();
-        d.addBindValue((quint64) id);
-        d.addBindValue(cdb::qvar_list(rem));
-        d.batch();
-    }
-    if(!add.empty()){
-        static thread_local SqlQuery i(wksp::cache(), "INSERT INTO ATags (atom, tag) VALUES (?,?)");
-        auto i_af = i.af();
-        i.addBindValue((quint64) id);
-        i.addBindValue(cdb::qvar_list(add));
-        i.batch();
-    }
-    tags    = them;
-    return !(add.empty() && rem.empty());
+//    Map<QString,PropInfo>   infos;  //  this is a cache.... as needed.....
+    
+    
 }
 
-    
-UAtom&      uget(Atom a)
+AddRem<Tag>     utags(Atom a, Document doc, const StringSet& ntags)
 {
-    static Vector<UAtom*>       data(65536, nullptr);
-    data.resize_if_under(a.id+1,2048,nullptr);
-    UAtom*& p = data[a.id];
-    if(!p)
-        p   = new UAtom(a);
-    return *p;
+    if(!a || !doc)
+        return {};
+    
+    TagVec      old = cdb::tags(a);
+    AddRem<Tag> delta(cdb::tags(a,doc), cdb::db_tags(ntags));
+    if(!delta.rem.empty()){
+        static thread_local SqlQuery d(wksp::cache(), "DELETE FROM ATags WHERE atom=? AND tag=?");
+        auto d_af = d.af();
+        d.addBindValue((quint64) a.id);
+        d.addBindValue((quint64) doc.id);
+        d.addBindValue(cdb::qvar_list(delta.rem));
+        d.batch();
+    }
+    if(!delta.add.empty()){
+        static thread_local SqlQuery i(wksp::cache(), "INSERT INTO ATags (atom, tag) VALUES (?,?)");
+        auto i_af = i.af();
+        i.addBindValue((quint64) a.id);
+        i.addBindValue((quint64) doc.id);
+        i.addBindValue(cdb::qvar_list(delta.add));
+        i.batch();
+    }
+    return AddRem<Tag>(old, cdb::tags(a));
 }
+
+
+
+
 
     

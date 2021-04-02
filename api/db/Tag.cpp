@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Tag.hpp"
+#include "CacheUtil.hpp"
 
 #include "Image.hpp"
 #include "Leaf.hpp"
@@ -14,59 +15,39 @@
 #include <db/bit/NKI.hpp>
 #include <util/Logging.hpp>
 #include <util/FileUtils.hpp>
-#include <util/SqlQuery.hpp>
 
 #include <QSqlError>
 
 namespace cdb {
     namespace {
-        Vector<Tag>     all_tags_sorted()
+        TagVec     all_tags_sorted()
         {
-            Vector<Tag>  ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Tags ORDER BY k");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Tag{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Tags ORDER BY k");
+            return s.vec<Tag>();
         }
         
-        Vector<Tag>     all_tags_unsorted()
+        TagVec     all_tags_unsorted()
         {
-            Vector<Tag>  ret;
-            static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Tags");
-            auto s_af   = s.af();
-            if(s.exec()){
-                while(s.next())
-                    ret << Tag{s.valueU64(0)};
-            }
-            return ret;
+            static thread_local SQ    s("SELECT id FROM Tags");
+            return s.vec<Tag>();
         }
     }
 
-    Vector<Tag>         all_tags(Sorted sorted)
+    TagVec         all_tags(Sorted sorted)
     {
         return sorted ? all_tags_sorted() : all_tags_unsorted();
     }
     
     size_t              all_tags_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Tags");
-        auto s_af = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Tags");
+        return s.size();
     }
 
     QString             brief(Tag t)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT brief FROM Tags WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, t.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT brief FROM Tags WHERE id=?");
+        return s.str(t.id);
     }
 
     Tag                 db_tag(Document doc, bool* wasCreated)
@@ -81,7 +62,7 @@ namespace cdb {
         if(k.isEmpty())
             return Tag();
         
-        static thread_local SqlQuery    i(wksp::cache(), "INSERT OR FAIL INTO Tags (k,id) VALUES (?,?)");
+        static thread_local SQ    i("INSERT OR FAIL INTO Tags (k,id) VALUES (?,?)");
         auto i_lk   = i.af();
         
         i.bind(0, k);
@@ -108,17 +89,17 @@ namespace cdb {
         return db_tag(db_document(tags_folder(), k+".tag"), wasCreated);
     }
     
-    Vector<Tag>             db_tags(const StringSet&all)
+    TagVec             db_tags(const StringSet&all)
     {
-        Vector<Tag>     ret;
+        TagVec     ret;
         for(const String& s:all)
             ret << db_tag(s.qString());
         return ret;
     }
     
-    Vector<Tag>             db_tags(const QStringSet& all)
+    TagVec             db_tags(const QStringSet& all)
     {
-        Vector<Tag>     ret;
+        TagVec     ret;
         for(const QString& s:all)
             ret << db_tag(s);
         return ret;
@@ -138,29 +119,21 @@ namespace cdb {
 
     bool                exists_tag(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Tags WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Tags WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     Image               icon(Tag t)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT icon FROM Tags WHERE id=? LIMIT 1");
-        auto s_af   = s.af();
-        s.bind(0,t.id);
-        if(s.exec() && s.next())
-            return Image{s.valueU64(0)};
-        return Image();
+        static thread_local SQ    s("SELECT icon FROM Tags WHERE id=? LIMIT 1");
+        return s.as<Image>(t.id);
     }
     
     
     Tag::Info           info(Tag t, bool autoKey)
     {
         Tag::Info    ret;
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT brief,k,name FROM Tags WHERE id=?");
+        static thread_local SQ    s("SELECT brief,k,name FROM Tags WHERE id=?");
         auto s_af = s.af();
         s.bind(0, t.id);
         if(s.exec() && s.next()){
@@ -177,12 +150,8 @@ namespace cdb {
 
     QString             key(Tag t)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT k FROM Tags WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, t.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT k FROM Tags WHERE id=?");
+        return s.str(t.id);
     }
     
     QString             label(Tag t)
@@ -193,12 +162,8 @@ namespace cdb {
     
     Leaf                leaf(Tag t)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT leaf FROM Tags WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, t.id);
-        if(s.exec() && s.next())    
-            return Leaf{s.valueU64(0)};
-        return Leaf{};
+        static thread_local SQ    s("SELECT leaf FROM Tags WHERE id=?");
+        return s.as<Leaf>(t.id);
     }
 
     Tag                     make_tag(const QString& k, const Root* rt)
@@ -236,18 +201,14 @@ namespace cdb {
     
     QString             name(Tag t)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name FROM Tags WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, t.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ    s("SELECT name FROM Tags WHERE id=?");
+        return s.str(t.id);
     }
     
     
     NKI                 nki(Tag t, bool autoKey)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT name,icon,k FROM Tags WHERE id=?");
+        static thread_local SQ    s("SELECT name,icon,k FROM Tags WHERE id=?");
         auto s_af = s.af();
         s.bind(0, t.id);
         if(s.exec() && s.next()){
@@ -327,12 +288,8 @@ namespace cdb {
     
     Tag                 tag(const QString& k)
     {
-        static thread_local SqlQuery    s(wksp::cache(), "SELECT id FROM Tags WHERE k=?");
-        auto s_lk   = s.af();
-        s.bind(0,k);
-        if(s.exec() && s.next())
-            return Tag(s.valueU64(0));
-        return Tag();
+        static thread_local SQ    s("SELECT id FROM Tags WHERE k=?");
+        return s.as<Tag>(k);
     }
     
     Tag                 tag(uint64_t i)

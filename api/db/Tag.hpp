@@ -34,7 +34,7 @@ struct Tag::Info {
 namespace cdb {
     using SharedTagData     = std::shared_ptr<TagData>;
 
-    Vector<Tag>             all_tags(Sorted sorted=Sorted());
+    TagVec                  all_tags(Sorted sorted=Sorted());
     size_t                  all_tags_count();
     
     QString                 brief(Tag);
@@ -42,8 +42,8 @@ namespace cdb {
     Tag                     db_tag(Document, bool* wasCreated=nullptr);
     Tag                     db_tag(Fragment, bool* wasCreated=nullptr);
     Tag                     db_tag(const QString&, bool* wasCreated=nullptr);
-    Vector<Tag>             db_tags(const StringSet&);
-    Vector<Tag>             db_tags(const QStringSet&);
+    TagVec                  db_tags(const StringSet&);
+    TagVec                  db_tags(const QStringSet&);
 
 
     Document                document(Tag);

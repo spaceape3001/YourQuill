@@ -21,20 +21,29 @@ CREATE TABLE ADocuments (
 );
 
 CREATE TABLE AClasses (
+        -- atom of interest
     atom    INTEGER NOT NULL,
+        -- document where this was defined
+    doc     INTEGER NOT NULL,
+        -- class of interest
     class   INTEGER NOT NULL,
-    UNIQUE(atom,class) ON CONFLICT IGNORE
+    UNIQUE(atom,doc,class) ON CONFLICT IGNORE
 );
 
 CREATE TABLE ATags (
+        -- atom of interest
     atom    INTEGER NOT NULL,
+        -- document this was defined
+    doc     INTEGER NOT NULL,
+        -- tag of interest
     tag     INTEGER NOT NULL,
-    UNIQUE(atom,tag) ON CONFLICT IGNORE
+    UNIQUE(atom,doc,tag) ON CONFLICT IGNORE
 );
 
+    --  note, the edge's parent is the source, always defined
 CREATE TABLE AEdges (
     atom    INTEGER NOT NULL UNIQUE,
-    source  INTEGER,
-    target  INTEGER
+    target  VARCHAR(255),
+    tgtid   INTEGER
 );
 

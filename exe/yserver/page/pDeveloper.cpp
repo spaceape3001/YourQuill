@@ -49,7 +49,6 @@ namespace {
         }
     }
     
-    
     void    _documents(HtmlWriter& h, const std::vector<Document>& documents)
     {
         auto t = h.table();
@@ -199,7 +198,7 @@ namespace {
     {
         test(decode_class_prime());
         h.title("Class (" + cdb::key(x_class) + ") Uses");
-        _classes(h, cdb::uses(x_class, Sorted::YES));
+        _classes(h, cdb::uses(x_class));
     }
 
     void    dev_class_subs(HtmlWriter&h)

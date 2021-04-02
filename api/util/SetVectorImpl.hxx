@@ -10,7 +10,6 @@
     #error "Do NOT directly include this file!"
 #endif
 
-
 template <typename T>
 Set<T>          makeSet(const std::vector<T>&src)
 {

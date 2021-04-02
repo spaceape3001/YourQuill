@@ -5,11 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Graph.hpp"
+#include "CacheUtil.hpp"
 #include "Workspace.hpp"
 
 #include <util/Execute.hpp>
 #include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>
 #include <util/Vector.hpp>
 
@@ -17,23 +17,14 @@ namespace cdb {
      
     Vector<Graph>       all_graphs()
     {
-        Vector<Graph>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Graphs");
-        auto s_af = s.af();
-        if(s.exec()){
-            while(s.next())
-                ret << Graph{ s.valueU64(0) };
-        }
-        return ret;
+        static thread_local SQ s("SELECT id FROM Graphs");
+        return s.vec<Graph>();
     }
     
     size_t              all_graphs_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Graphs");
-        auto s_af   = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Graphs");
+        return s.size();
     }
 
     Graph               db_graph(const QString&dot_data, const QString& name)
@@ -43,7 +34,7 @@ namespace cdb {
         QByteArray  html    = executeProcess(dot_exe, QStringList() << "-Tcmapx", dot_data.toUtf8(), 500);
         QByteArray  svg     = executeProcess(dot_exe, QStringList() << "-Tsvg", dot_data.toUtf8(), 500);
      
-        static thread_local SqlQuery i(wksp::cache(), "INSERT INTO Graphs (name, dot, html, svg) VALUES (?,?,?,?)");
+        static thread_local SQ i("INSERT INTO Graphs (name, dot, html, svg) VALUES (?,?,?,?)");
         auto i_af = i.af();
         i.bind(0, name);
         i.bind(1, dot_data);
@@ -59,12 +50,8 @@ namespace cdb {
 
     QString             dot(Graph g)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT dot FROM Graphs WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, g.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT dot FROM Graphs WHERE id=?");
+        return s.str(g.id);
     }
 
 
@@ -75,12 +62,8 @@ namespace cdb {
 
     bool                exists_graph(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Graphs WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Graphs WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     Graph               graph(uint64_t i)
@@ -90,27 +73,19 @@ namespace cdb {
 
     QString             html(Graph g)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT html FROM Graphs WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, g.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT html FROM Graphs WHERE id=?");
+        return s.str(g.id);
     }
 
     QString             name(Graph g)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT name FROM Graphs WHERE id=?");
-        auto s_af = s.af();
-        s.bind(0, g.id);
-        if(s.exec() && s.next())
-            return s.valueString(0);
-        return QString();
+        static thread_local SQ s("SELECT name FROM Graphs WHERE id=?");
+        return s.str(g.id);
     }
 
     QByteArray          svg(Graph g)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT svg FROM Graphs WHERE id=?");
+        static thread_local SQ s("SELECT svg FROM Graphs WHERE id=?");
         auto s_af = s.af();
         s.bind(0, g.id);
         if(s.exec() && s.next())

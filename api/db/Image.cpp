@@ -6,12 +6,12 @@
 
 #include "Image.hpp"
 
+#include "CacheUtil.hpp"
 #include "FileSys.hpp"
 #include "Root.hpp"
 #include "Workspace.hpp"
 
 #include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>
 
 #include <QIcon>
@@ -20,30 +20,21 @@
 namespace cdb {
     Vector<Image>           all_images()
     {
-        Vector<Image>   ret;
-        static thread_local SqlQuery s(wksp::cache(), "SELECT id FROM Images");
-        auto s_af = s.af();
-        if(s.exec()){
-            while(s.next())
-                ret << Image{ s.valueU64(0) };
-        }
-        return ret;
+        static thread_local SQ s("SELECT id FROM Images");
+        return s.vec<Image>();
     }
     
     size_t                  all_images_count()
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT COUNT(1) FROM Images");
-        auto s_af   = s.af();
-        if(s.exec() && s.next())
-            return (size_t) s.valueU64(0);
-        return 0;
+        static thread_local SQ s("SELECT COUNT(1) FROM Images");
+        return s.size();
     }
 
     namespace {
     
         QByteArray          bytes_image(Image img)
         {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT image FROM Images WHERE id=?");
+            static thread_local SQ s("SELECT image FROM Images WHERE id=?");
             auto s_af   = s.af();
             s.bind(0, img.id);
             if(s.exec() && s.next())
@@ -53,7 +44,7 @@ namespace cdb {
         
         QByteArray          bytes_large(Image img)
         {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT large FROM Images WHERE id=?");
+            static thread_local SQ s("SELECT large FROM Images WHERE id=?");
             auto s_af   = s.af();
             s.bind(0, img.id);
             if(s.exec() && s.next())
@@ -63,7 +54,7 @@ namespace cdb {
 
         QByteArray          bytes_medium(Image img)
         {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT medium FROM Images WHERE id=?");
+            static thread_local SQ s("SELECT medium FROM Images WHERE id=?");
             auto s_af   = s.af();
             s.bind(0, img.id);
             if(s.exec() && s.next())
@@ -73,7 +64,7 @@ namespace cdb {
 
         QByteArray          bytes_small(Image img)
         {
-            static thread_local SqlQuery s(wksp::cache(), "SELECT small FROM Images WHERE id=?");
+            static thread_local SQ s("SELECT small FROM Images WHERE id=?");
             auto s_af   = s.af();
             s.bind(0, img.id);
             if(s.exec() && s.next())
@@ -99,7 +90,7 @@ namespace cdb {
 
     Image               db_image(Fragment frag, bool *wasCreated)
     {
-        static thread_local SqlQuery i(wksp::cache(), "INSERT OR FAIL INTO Images (id,type) VALUES (?,?)");
+        static thread_local SQ i("INSERT OR FAIL INTO Images (id,type) VALUES (?,?)");
         auto i_af   = i.af();
         i.bind(0, frag.id);
         i.bind(1, mimeTypeForExt(suffix(frag)));
@@ -121,12 +112,8 @@ namespace cdb {
 
     bool                exists_image(uint64_t i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT 1 FROM Images WHERE id=? LIMIT 1");
-        auto s_lk   = s.af();
-        s.bind(0, i);
-        if(s.exec() && s.next())
-            return s.valueAs<bool>(0);
-        return false;
+        static thread_local SQ s("SELECT 1 FROM Images WHERE id=? LIMIT 1");
+        return s.present(i);
     }
 
     Fragment            fragment(Image i)
@@ -138,12 +125,8 @@ namespace cdb {
     {
         if(!rt)
             return Image();
-        static thread_local SqlQuery s(wksp::cache(), "SELECT icon FROM RootIcons WHERE root=?");
-        static auto s_af = s.af();
-        s.bind(0, rt->id());
-        if(s.exec() && s.next())
-            return Image{s.valueU64(0)};
-        return Image{};
+        static thread_local SQ s("SELECT icon FROM RootIcons WHERE root=?");
+        return s.as<Image>(rt->id());
     }
 
     Image               image(const QString&k)
@@ -209,12 +192,8 @@ namespace cdb {
 
     ContentType         type(Image i)
     {
-        static thread_local SqlQuery s(wksp::cache(), "SELECT type FROM Images WHERE id=?");
-        auto s_af   = s.af();
-        s.bind(0, i.id);
-        if(s.exec() && s.next())
-            return ContentType(s.valueString(0));
-        return ContentType();
+        static thread_local SQ s("SELECT type FROM Images WHERE id=?");
+        return ContentType(s.str(i.id));
     }
 
     void                    update_root(const Root*rt, Image img)
@@ -222,7 +201,7 @@ namespace cdb {
         if(!rt)
             return ;
             
-        static thread_local SqlQuery r(wksp::cache(), "REPLACE INTO RootIcons (root, icon) VALUES (?, ?)");
+        static thread_local SQ r("REPLACE INTO RootIcons (root, icon) VALUES (?, ?)");
         auto r_af = r.af();
         r.bind(0, rt->id());
         r.bind(1, img.id);

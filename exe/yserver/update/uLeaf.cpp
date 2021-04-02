@@ -134,7 +134,7 @@ void                ULeaf::do_read()
 {
     data            = cdb::merged(leaf, cdb::IsUpdate|cdb::IgnoreContext);
     if(data){
-        UAtom& a        = uget(cdb::db_atom(doc));
+        Atom   a        = cdb::db_atom(doc);
         
         static thread_local SqlQuery u1(wksp::cache(), "UPDATE Leafs SET title=? WHERE id=?");
         auto u1_af = u1.af();
@@ -142,10 +142,12 @@ void                ULeaf::do_read()
         u1.bind(1, id);
         u1.exec();
         
-        a.update_classes(data->classes());
-        a.update_tags(data->tags());
-        
         auto kv     = attr_changes(doc, *data);
+
+        uclasses(a, doc, data->classes());
+        utags(a, doc, data->tags());
+        uproperties(a, doc, kv);
+        
         // Recurssion (TODO)
         execute_removals(kv);
     }
@@ -164,7 +166,7 @@ Image               ULeaf::explicit_icon() const
 
 void                ULeaf::push_icon()
 {
-    Image i         = uget(atom).update_icon(icon);
+    Image i         = uicon(atom, icon);
 
     static thread_local SqlQuery u(wksp::cache(), "UPDATE Leafs SET icon=? WHERE id=?");
     auto u_af = u.af();

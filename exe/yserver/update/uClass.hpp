@@ -57,3 +57,7 @@ void            init_class();
 void            init_class_graphs();
 Image           calc_icon_for(Class);
 void            update_class_icon(Fragment);
+
+ClassSet        uresolve(const ClassSet&);
+ClassSet        uresolve(const ClassVec&);
+

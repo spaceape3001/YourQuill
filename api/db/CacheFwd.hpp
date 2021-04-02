@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <utility>
 #include <variant>
+#include <util/TypeFwd.hpp>
 
 template <typename> class Vector;
 
@@ -30,6 +31,17 @@ struct Leaf;
 struct Tag;
 
 class Root;
+
+using AtomSet       = Set<Atom>;
+using ClassSet      = Set<Class>;
+using FieldSet      = Set<Field>;
+using TagSet        = Set<Tag>;
+
+using AtomVec       = Vector<Atom>;
+using ClassVec      = Vector<Class>;
+using DocVec        = Vector<Document>;
+using FieldVec      = Vector<Field>;
+using TagVec        = Vector<Tag>;
 
 namespace cdb {
 

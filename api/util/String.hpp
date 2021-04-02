@@ -407,6 +407,7 @@ bool        is_similar(const std::string&, const std::string&);
 bool        is_similar(const QString&, const QString&);
 //bool	      isLessIgCase(const QByteArray&, const QByteArray&);
 bool	    is_less_igCase(const std::string&, const std::string&);
+bool	    is_less_igCase(const QString&, const QString&);
 //bool	      isLessIgCase(const std::string&, const std::string&);
 //bool	      isGreaterIgCase(const QByteArray&, const QByteArray&);
 //bool	      isGreaterIgCase(const std::string&, const std::string&);
