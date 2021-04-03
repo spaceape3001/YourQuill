@@ -17,7 +17,7 @@ struct Property {
 
 namespace cdb {
     Vector<Property>        all_properties();
-    uint64_t                all_properties_count();
+    size_t                  all_properties_count();
     
     Atom                    atom(Property);
     
