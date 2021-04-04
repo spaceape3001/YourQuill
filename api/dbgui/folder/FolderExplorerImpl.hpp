@@ -83,6 +83,7 @@ public:
     int             columnCount(const QModelIndex&) const override;
     QVariant        data(const QModelIndex&, int) const override;
     Folder          folder(const QModelIndex&) const;
+    QVariant        headerData(int,Qt::Orientation,int) const override;
     QModelIndex     index(Folder) const;
     QModelIndex     index(int row, int column, const QModelIndex&) const override;
     QModelIndex     parent(const QModelIndex&) const;

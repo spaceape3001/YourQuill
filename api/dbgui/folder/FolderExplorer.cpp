@@ -7,6 +7,7 @@
 #include "FolderExplorerBase.hpp"
 #include "FolderExplorerImpl.hpp"
 
+#include <db/Workspace.hpp>
 #include <gui/StdIcons.hpp>
 #include <util/DiffEngine.hpp>
 #include <util/Reverse.hpp>
@@ -31,6 +32,7 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
 {
     m_url       = new QComboBox;
     m_url -> setEditable(true);
+    m_url -> setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     
     m_listModel     = new ListModel(this);
     m_listView      = new ListView(m_listModel);
@@ -59,6 +61,7 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     QVBoxLayout*    vlay    = new QVBoxLayout(this);
     vlay -> addWidget(bar, 0);
     vlay -> addWidget(split, 1);
+    vlay -> setContentsMargins(0,0,0,0);
     
     changeTo(cdb::top_folder());
 }
@@ -67,7 +70,7 @@ FolderExplorerBase::~FolderExplorerBase()
 {
 }
 
-void    FolderExplorerBase::changeTo(Folder)
+void    FolderExplorerBase::changeTo(Folder f)
 {
 }
 
@@ -161,9 +164,9 @@ struct FolderExplorerBase::TreeModel::Node {
     TreeModel*              const  ftm;
     const Folder            folder;
     const Folder            parent;
+    const QString           label;
     Image                   icoImg;
     QIcon                   icon;
-    QString                 label;
     Vector<Folder>          children;
     
     enum {
@@ -172,7 +175,7 @@ struct FolderExplorerBase::TreeModel::Node {
     };
     
     
-    Node(TreeModel* m, Folder f) : ftm(m), folder(f), parent(cdb::parent(f))
+    Node(TreeModel* m, Folder f) : ftm(m), folder(f), parent(cdb::parent(f)), label((f == cdb::top_folder()) ? wksp::name() : cdb::skey(f))
     {
     }
 
@@ -205,20 +208,15 @@ struct FolderExplorerBase::TreeModel::Node {
         }
         
         Image ni        = cdb::icon(folder);
-        QString nl      = cdb::label(folder);
-        bool        chg = (ni != icoImg) || (nl != label);
-        
         if(ni!=icoImg){
             icoImg      = ni;
             icon        = cdb::qIcon(ni);
             if(icon.isNull())
                 icon    = si_folder();
-        }
-        if(nl != label)
-            label       = nl;
-        if(chg){
-            QModelIndex i   = ftm -> index(folder);
-            ftm -> dataChanged(i,i);
+            if(chgSignal & CHG_DATA){
+                QModelIndex i   = ftm -> index(folder);
+                ftm -> dataChanged(i,i);
+            }
         }
     }
     
@@ -237,7 +235,7 @@ struct FolderExplorerBase::TreeModel::Node {
 
 Folder   FolderExplorerBase::TreeModel::folder(const QModelIndex&idx) const
 {
-    return Folder{reinterpret_cast<uint64_t>(idx.internalPointer())};
+    return idx.isValid() ? Folder{reinterpret_cast<uint64_t>(idx.internalPointer())} : cdb::top_folder();
 }
 
 FolderExplorerBase::TreeModel::TreeModel(QObject*parent) : QAbstractItemModel(parent)
@@ -273,6 +271,12 @@ QVariant    FolderExplorerBase::TreeModel::data(const QModelIndex& idx, int role
     return QVariant();
 }
 
+QVariant    FolderExplorerBase::TreeModel::headerData(int,Qt::Orientation,int) const 
+{
+    return QVariant();
+}
+
+
 QModelIndex FolderExplorerBase::TreeModel::index(Folder f) const
 {
     const Node*n    = node(f);
@@ -302,8 +306,8 @@ FolderExplorerBase::TreeModel::Node*          FolderExplorerBase::TreeModel::nod
     Node* n         = m_nodes.get(f,nullptr);
     if(f && !n){
         n   = new Node(this, f);
-        n -> refresh(0);
         m_nodes[f]  = n;
+        n -> refresh(0);
     }
     return n;
 }
