@@ -37,13 +37,13 @@ set(dbgui_sources
     ./field/FieldTableModel.hpp
     ./field/FieldTableView.hpp
 
+    ./folder/FolderExplorer.cpp
+    ./folder/FolderExplorerBase.hpp
+    ./folder/FolderExplorerImpl.hpp
     ./folder/FolderProvider.hpp
     ./folder/FolderTableBase.cpp
     ./folder/FolderTableModel.hpp
     ./folder/FolderTableView.hpp
-    ./folder/FolderTreeBase.cpp
-    ./folder/FolderTreeModel.hpp
-    ./folder/FolderTreeView.hpp
     
     ./fragment/FragmentProvider.hpp
     ./fragment/FragmentTableBase.cpp

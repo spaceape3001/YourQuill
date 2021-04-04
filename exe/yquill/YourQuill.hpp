@@ -25,7 +25,7 @@ public slots:
     void            cmdNewDateGen();
     void            cmdNewDirectoryTable();
     void            cmdNewDocumentTable();
-    //void            cmdNewExplorer();
+    void            cmdNewExplorer();
     void            cmdNewFieldTable();
     void            cmdNewFolderTable();
     void            cmdNewFragmentTable();

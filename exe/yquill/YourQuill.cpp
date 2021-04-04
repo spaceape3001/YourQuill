@@ -17,6 +17,7 @@
 #include "leaf/YLeafTable.hpp"
 #include "tag/YTagTable.hpp"
 
+#include "YExplorer.hpp"
 #include "YWeb.hpp"
 #include "YourQuill.hpp"
 
@@ -32,8 +33,6 @@
 #if 0
 #include "ClassEditor.hpp"
 #include "YClassTable.hpp"
-#include "Explorer.hpp"
-#include "YWeb.hpp"
 
 #include "gadget/Calculator.hpp"
 //#include "gadget/MonthView.hpp"
@@ -43,7 +42,6 @@
 #include <QCursor>
 #include <QMenu>
 #include <QSignalMapper>
-#include <QString>
 #endif
 
 YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
@@ -60,7 +58,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     addAction("new_fieldstable", "Field Table").connect(this, &YourQuill::cmdNewFieldTable);
     addAction("new_foldertable", "Folder Table").connect(this, &YourQuill::cmdNewFolderTable);
     addAction("new_fragmenttable", "Fragment Table").connect(this, &YourQuill::cmdNewFragmentTable);
-    //addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
+    addAction("new_explorer", "New Explorer").connect(this, &YourQuill::cmdNewExplorer);
     addAction("new_leaftable", "Leaf Table").connect(this, &YourQuill::cmdNewLeafTable);
     //addAction("new_month", "Month Calendar").connect(this, &YourQuill::cmdNewMonthView);
     addAction("new_proptable", "Property Table").connect(this, &YourQuill::cmdNewPropertyTable);
@@ -199,13 +197,11 @@ void    YourQuill::cmdNewDocumentTable()
     addWindow(ct);
 }
 
-#if 0
 void    YourQuill::cmdNewExplorer()
 {
-    Explorer*   e   = new Explorer;
+    YExplorer*   e   = new YExplorer;
     addWindow(e);
 }
-#endif
 
 void    YourQuill::cmdNewFieldTable()
 {

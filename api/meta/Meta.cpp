@@ -62,7 +62,6 @@ namespace {
     static constexpr const unsigned int         kReserve        = 8192;
     
 
-
     template <typename T>
     void    set_and_reserve(Vector<T>& vec, size_t idx, size_t inc, const T& val, const T& def)
     {
@@ -124,14 +123,14 @@ namespace {
 
     const MetaValue&    mvInvalid()
     {
-        static EmptyMetaValue  s_ret("void", MV_Invalid);
-        return s_ret;
+        static EmptyMetaValue*  s_ret = new EmptyMetaValue("void", MV_Invalid);
+        return *s_ret;
     }
     
     const MetaValue&    mvVariant()
     {
-        static EmptyMetaValue  s_ret("variant", MV_Variant);
-        return s_ret;
+        static EmptyMetaValue*  s_ret = new EmptyMetaValue("variant", MV_Variant);
+        return *s_ret;
     }
     
     #define LOCK                                                                                \

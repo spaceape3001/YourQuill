@@ -21,16 +21,16 @@
     INTERNAL_MO_IMPLEMENT(ObjectClass, __VA_ARGS__)                                                     \
     const ObjectClass::Meta&    ObjectClass::static_meta()                                              \
     {                                                                                                   \
-        static AbstractMetaObject<ObjectClass>     ret(__FILE__);                                       \
-        return ret;                                                                                     \
+        static AbstractMetaObject<ObjectClass>*    ret = new AbstractMetaObject<ObjectClass>(__FILE__); \
+        return *ret;                                                                                    \
     }
 
 #define MO_CONCRETE(ObjectClass, ...)                                                                   \
     INTERNAL_MO_IMPLEMENT(ObjectClass, __VA_ARGS__)                                                     \
     const ObjectClass::Meta&    ObjectClass::static_meta()                                              \
     {                                                                                                   \
-        static ConcreteMetaObject<ObjectClass>     ret(__FILE__);                                       \
-        return ret;                                                                                     \
+        static ConcreteMetaObject<ObjectClass>*    ret = new ConcreteMetaObject<ObjectClass>(__FILE__); \
+        return *ret;                                                                                    \
     }
     
 #include "MetaObject.hpp"

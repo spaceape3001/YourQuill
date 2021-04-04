@@ -1,6 +1,6 @@
 add_executable(yquill
-    #./Explorer.cpp
-    #./Explorer.hpp
+    ./YExplorer.cpp
+    ./YExplorer.hpp
     ./YWeb.cpp
     ./YWeb.hpp
 
@@ -47,5 +47,4 @@ target_link_libraries(yquill PRIVATE
 )
 
 target_include_directories(yquill PRIVATE .)
-
 

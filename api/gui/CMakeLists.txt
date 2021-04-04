@@ -88,7 +88,9 @@ set(gui_sources
     ./main/UndoWin.cpp
     ./main/UndoWin.hpp
 
+    ./model/StdColumn.hpp
     ./model/StdTableModel.hpp
+    ./model/StdTableModelImpl.hpp
     ./model/U64TableModel.hpp
 
     ./undo/UndoAction.cpp
@@ -113,7 +115,6 @@ set(gui_sources
     ./view/SqlTableView.cpp
     ./view/SqlTableView.hpp
     ./view/StdTableView.hpp
-
 
     ./widget/DrawRuler.cpp
     ./widget/DrawRuler.hpp

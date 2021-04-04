@@ -7,482 +7,7 @@
 #pragma once
 
 #include "StdTableModel.hpp"
-#include <gui/delegate/StringDelegate.hpp>
-#include <gui/delegate/EnumDelegate.hpp>
-#include <util/TypeTraits.hpp>
-#include <QValidator>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//      ADDER
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    template <typename T>
-    class StdTableModel<T>::Adder {
-    public:
-
-        const QVariant&     message() const { return m_message; }
-        virtual Result<T>   make(const QVariant&) = 0;
-        virtual ~Adder(){}
-
-    protected:
-        Adder(const QVariant&m) : m_message(m) {}
-    private:
-        QVariant            m_message;
-    };
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//      DELEGATORS
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    template <typename T>
-    class StdTableModel<T>::Delegator {
-    public:
-        virtual Delegate*   create(QObject*)  = 0;
-        virtual ~Delegator(){}
-    };
-
-    template <typename T, class D>
-    class STMSimpleDelegator : public StdTableModel<T>::Delegator {
-    public:
-        virtual ~STMSimpleDelegator(){}
-        virtual Delegate*   create(QObject*par) override
-        {
-            return new D(par);
-        }
-    };
-
-    template <typename T, class D>
-    class STMValidatorDelegator : public StdTableModel<T>::Delegator {
-    public:
-        ~STMValidatorDelegator(){}
-        virtual Delegate*   create(QObject* par) override
-        {
-            return new StringDelegate( new D(par), par);
-        }
-    };
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//      COLUMN
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-template <typename T>
-class StdTableModel<T>::Column {
-public:
-
-    Adder*              adder() const { return m_add.get(); }
-    
-    Delegate*           delegate(QObject*obj) const
-    {
-        return m_delegate ? m_delegate->create(obj) : nullptr;
-    }
-
-    int                 id() const { return m_id; }
-    bool                settable() const { return m_settable; }
-    const String&       key() const { return m_key; }
-    const QVariant&     label() const { return m_label; }
-
-    virtual QVariant    display(const T&) const = 0;
-    virtual QVariant    edit(const T&v) const { return display(v); }
-    virtual bool        set(T&, const QVariant&) const { return false; }
-    
-    bool                sortable() const { return m_sortable; }
-    virtual bool        less(const T&, const T&) const { return false; }
-    virtual ~Column(){}
-    
-protected:
-    
-    Column(const String&k) : m_key(k), m_label(k.qString()), m_id(-1), m_settable(false), m_sortable(false)
-    {
-    }
-    
-    friend class StdTableModel;
-    friend struct ColumnWriter;
-    
-    std::unique_ptr<Adder>      m_add;
-    std::unique_ptr<Delegator>  m_delegate;
-    String                      m_key;
-    QVariant                    m_label;
-    int                         m_id;
-    bool                        m_settable;
-    bool                        m_sortable;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//      COLUMN WRITER
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    template <typename T>
-    struct StdTableModel<T>::ColumnWriter {
-        
-        ColumnWriter&   add(Adder* a)
-        {
-            if(m_column)
-                m_column -> m_add.reset(a);
-            return *this;
-        }
-        
-        ColumnWriter&   label(const QVariant& v)
-        {
-            if(m_column)
-                m_column -> m_label = v;
-            return *this;
-        }
-        
-        ColumnWriter&   readOnly() 
-        {
-            if(m_column)
-                m_column -> m_settable  = false;
-            return *this;
-        }
-        
-        ColumnWriter&   delegate(Delegator* d)
-        {
-            if(m_column)
-                m_column -> m_delegate.reset(d);
-            return *this;
-        }
-        
-        ColumnWriter&   unsortable()
-        {
-            if(m_column)
-                m_column -> m_sortable  = false;
-            return *this;
-        }
-        
-
-        template <class D>
-        ColumnWriter&  delegate()
-        {
-            if(m_column){
-                if constexpr (std::is_base_of_v<Delegate, D>){
-                    m_column -> m_delegate.reset(new STMSimpleDelegator<T,D>);
-                } else if constexpr(std::is_base_of_v<QValidator, D>){
-                    m_column -> m_delegate.reset(new STMValidatorDelegator<T,D>);
-                }
-            }
-            return *this;
-        }
-        
-        
-        Column*         m_column;
-    };
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//      VARIOUS COLUMNS
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //! Simple String member variable column
-    template <typename T>
-    struct STMStringMVColumn : public StdTableModel<T>::Column {
-        using Column    = typename StdTableModel<T>::Column;
-        typedef String  (T::*Ptr);
-        Ptr                 m_ptr;
-        bool                m_cs;
-
-        STMStringMVColumn(const String&k, Ptr p, bool cs) : Column(k), m_ptr(p), m_cs(cs) 
-        {
-            Column::m_sortable  = true;
-        }
-        
-        ~STMStringMVColumn(){}
-
-        QVariant    display(const T&d) const override
-        {
-            return (d.*m_ptr).qString();
-        }
-        
-        bool        set(T& d, const QVariant& v) const override
-        {
-            d.*m_ptr    = String(v.toString()).trimmed();
-            return true;
-        }
-        
-        bool        less(const T& a, const T& b) const override
-        {
-            return is_less( m_cs ? compare(a.*m_ptr,b.*m_ptr) : compare_igCase(a.*m_ptr,b.*m_ptr));
-        }
-        
-    };
-
-    template <typename T>
-    StdTableModel<T>::ColumnWriter        StdTableModel<T>::col(const String&k, String(T::*p), bool cs)
-    {
-        return col(new STMStringMVColumn(k, p, cs));
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //! Enum member variable column
-    template <typename T, typename E>
-    struct STMEnumMVColumn : public StdTableModel<T>::Column {
-        using Column    = typename StdTableModel<T>::Column;
-        typedef E (T::*Ptr);
-        Ptr         m_ptr;
-        
-        STMEnumMVColumn(const String& k, Ptr p) : Column(k), m_ptr(p)
-        {
-            Column::m_sortable  = true;
-            Column::m_delegate.reset(new STMSimpleDelegator<T, EnumDelegate<E>>);
-        }
-        
-        ~STMEnumMVColumn(){}
-        
-        QVariant    display(const T&d) const override
-        {
-            return QVariant::fromValue(d.*m_ptr);
-        }
-        
-        bool        set(T& d, const QVariant& v) const override
-        {
-            d.*m_ptr    = v.value<E>();
-            return true;
-        }
-        
-        bool        less(const T& a, const T& b) const override
-        {
-            return a.*m_ptr < b.*m_ptr;
-        }
-    };
-        
-
-    template <typename T>
-        template <typename E>
-    StdTableModel<T>::ColumnWriter        StdTableModel<T>::col(const String&k, EnumImpl<E> (T::*p))
-    {
-        return col(new STMEnumMVColumn<T,EnumImpl<E>>(k, p));
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //! Enum-Map (one of) member variable column
-    template <typename T, typename K, typename V>
-    struct  STMEnumMapMVColumn : public StdTableModel<T>::Column {
-        using Column = StdTableModel<T>::Column;
-        typedef EnumMap<K,V>    (T::*Ptr);
-        Ptr             m_ptr;
-        K               m_ekey;
-        
-        STMEnumMapMVColumn(const String&k, K e, Ptr p) : Column(k), m_ptr(p), m_ekey(e) 
-        {
-            Column::m_sortable  = true;
-            Column::m_delegate.reset(new STMSimpleDelegator<T, EnumDelegate<V>>);
-        }
-        ~STMEnumMapMVColumn(){}
-        
-        QVariant    display(const T&d) const override
-        {
-            return QVariant::fromValue((d.*m_ptr)[m_ekey]);
-        }
-
-        bool        set(T& d, const QVariant& v) const override
-        {
-            (d.*m_ptr)[m_ekey]    = v.value<V>();
-            return true;
-        }
-        
-        bool        less(const T& a, const T& b) const override
-        {
-            return (a.*m_ptr)[m_ekey] < (b.*m_ptr)[m_ekey];
-        }
-    };
-
-
-    template <typename T>
-        template <typename K, typename V>
-    StdTableModel<T>::ColumnWriter         StdTableModel<T>::col(const String& k, EnumMap<K,EnumImpl<V>> (T::*p), K e)
-    {
-        return col(new STMEnumMapMVColumn<T,K,EnumImpl<V>>(k, e, p));
-    }
-
-    template <typename T>
-        template <typename K, typename V>
-    StdTableModel<T>::ColumnWriter         StdTableModel<T>::col(EnumMap<K,EnumImpl<V>> (T::*p), K e)
-    {
-        return col(new STMEnumMapMVColumn<T,K,EnumImpl<V>>(e.key(), e, p));
-    }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //! custom column
-    
-    template <typename T, typename Getter>
-    struct STMCustomROColumn : public StdTableModel<T>::Column {
-        using Column = StdTableModel<T>::Column;
-        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
-        
-        Getter      m_get;
-        
-        STMCustomROColumn(const String&k, Getter g) : Column(k), m_get(g) 
-        {
-            Column::m_sortable  = yq::has_less_v<Value>;
-        }
-        
-        ~STMCustomROColumn(){}
-        
-        QVariant    display(const T& d) const override
-        {
-            if constexpr(std::is_same_v<Value,QVariant>){
-                return m_get(d);
-            } else
-                return QVariant::fromValue(m_get(d));
-        }
-        
-        bool        less(const T&a, const T&b) const override
-        {
-            if constexpr (std::is_same_v<Value, QString>){
-                return compare_igCase(m_get(a), m_get(b));
-            } else if constexpr (std::is_same_v<Value, String>){
-                return compare_igCase(m_get(a), m_get(b));
-            } else if constexpr (yq::has_less_v<Value>){
-                return m_get(a) < m_get(b);
-            } else
-                return false;
-        }
-    };
-    
-    template <typename T>
-        template <typename Getter>
-    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRO(const String&k, Getter g)
-    {
-        return col(new STMCustomROColumn<T,Getter>(k, g));
-    }
-    
-    template <typename T, typename Getter, typename Less>
-    struct STMCustomROLColumn : public StdTableModel<T>::Column {
-        using Column = StdTableModel<T>::Column;
-        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
-        Getter      m_get;
-        Less        m_less;
-        
-        STMCustomROLColumn(const String&k, Getter g, Less l) : Column(k), m_get(g), m_less(l)
-        {
-            Column::m_sortable  = true;
-        }
-        
-        ~STMCustomROLColumn(){}
-        
-        QVariant    display(const T& d) const override
-        {
-            if constexpr(std::is_same_v<Value,QVariant>){
-                return m_get(d);
-            } else
-                return QVariant::fromValue(m_get(d));
-        }
-        
-        bool        less(const T&a, const T& b) const override
-        {
-            return m_less(a,b);
-        }
-    };
-    
-    template <typename T>
-        template <typename Getter, typename Less>
-    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRO(const String&k, Getter g, Less l)
-    {
-        return col(new STMCustomROLColumn(k,g,l));
-    }
-    
-
-    template <typename T, typename Getter, typename Setter>
-    struct STMCustomRWColumn : public StdTableModel<T>::Column {
-        using Column = StdTableModel<T>::Column;
-        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
-        Getter      m_get;
-        Setter      m_set;
-        
-        STMCustomRWColumn(const String&k, Getter g, Setter s) : Column(k), m_get(g), m_set(s)
-        {
-            Column::m_settable  = true;
-            Column::m_sortable  = yq::has_less_v<Value>;
-        }
-        
-        ~STMCustomRWColumn(){}
-        
-        QVariant    display(const T& d) const override
-        {
-            if constexpr(std::is_same_v<Value,QVariant>){
-                return m_get(d);
-            } else
-                return QVariant::fromValue(m_get(d));
-        }
-        
-        bool        set(T& d, const QVariant& v) const override
-        {
-            // TODO ... use template specialization to make this smarter....
-            return m_set(d,v.value<Value>());
-        }
-
-        bool        less(const T&a, const T&b) const override
-        {
-            if constexpr (std::is_same_v<Value, QString>){
-                return compare_igCase(m_get(a), m_get(b));
-            } else if constexpr (std::is_same_v<Value, String>){
-                return compare_igCase(m_get(a), m_get(b));
-            } else if constexpr (yq::has_less_v<Value>){
-                return m_get(a) < m_get(b);
-            } else
-                return false;
-        }
-    };
-    
-    
-    template <typename T>
-        template <typename Getter, typename Setter>
-    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRW(const String& k, Getter g, Setter s)
-    {
-        return col(new STMCustomRWColumn<T,Getter,Setter>(k,g,s));
-    }
-    
-    template <typename T, typename Getter, typename Setter, typename Less>
-    struct STMCustomRWLColumn : public StdTableModel<T>::Column {
-        using Column = StdTableModel<T>::Column;
-        using Value  = std::decay_t<std::invoke_result_t<Getter,T>>;
-        Getter      m_get;
-        Setter      m_set;
-        Less        m_less;
-        
-        
-        STMCustomRWLColumn(const String& k, Getter g, Setter s, Less l) : Column(k), m_get(g), m_set(s), m_less(l)
-        {
-            Column::m_settable  = true;
-            Column::m_sortable  = true;
-        }
-        
-        QVariant    display(const T& d) const override
-        {
-            if constexpr(std::is_same_v<Value,QVariant>){
-                return m_get(d);
-            } else
-                return QVariant::fromValue(m_get(d));
-        }
-        
-        bool        set(T& d, const QVariant& v) const override
-        {
-            // TODO ... use template specialization to make this smarter....
-            return m_set(d,v.value<Value>());
-        }
-
-        bool        less(const T&a, const T& b) const override
-        {
-            return m_less(a,b);
-        }
-    };
-    
-
-    template <typename T>
-        template <typename Getter, typename Setter, typename Less>
-    StdTableModel<T>::ColumnWriter        StdTableModel<T>::customRW(const String&k, Getter g, Setter s, Less l)
-    {
-        return col(new STMCustomRWLColumn(k, g, s, l));
-    }
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#include "StdColumn.hpp"
 
 
 template <typename T>
@@ -500,16 +25,13 @@ StdTableModel<T>::~StdTableModel()
 }
 
 template <typename T>
-void                _all_changed();
-
-template <typename T>
-const StdTableModel<T>::Column*       StdTableModel<T>::_column(int c) const
+const StdColumn<T>*       StdTableModel<T>::_column(int c) const
 {
     return m_columns.value((size_t) c, nullptr);
 }
 
 template <typename T>
-const StdTableModel<T>::Column*       StdTableModel<T>::_column(const QModelIndex& idx) const
+const StdColumn<T>*       StdTableModel<T>::_column(const QModelIndex& idx) const
 {
     return _column(idx.column());
 }
@@ -576,9 +98,18 @@ void                StdTableModel<T>::append(const Vector<T>&items)
 }
 
 
+template <typename T>
+void                StdTableModel<T>::clear()
+{
+    if(m_readOnly)
+        return;
+    beginRemoveRows(QModelIndex(), 0, m_rows.size());
+    m_rows.clear();
+    endRemoveRows();
+}
 
 template <typename T>
-StdTableModel<T>::ColumnWriter  StdTableModel<T>::col(Column* c)
+StdColumnWriter<T>  StdTableModel<T>::col(Column* c)
 {
     if(!c)
         return ColumnWriter{};
@@ -589,14 +120,32 @@ StdTableModel<T>::ColumnWriter  StdTableModel<T>::col(Column* c)
     return ColumnWriter{c};
 }
     
+
 template <typename T>
-void                StdTableModel<T>::clear()
+StdColumnWriter<T>        StdTableModel<T>::col(const String&k, String(T::*p), bool cs)
 {
-    if(m_readOnly)
-        return;
-    beginRemoveRows(QModelIndex(), 0, m_rows.size());
-    m_rows.clear();
-    endRemoveRows();
+    return col(new SCMStringMV(k, p, cs));
+}
+
+template <typename T>
+    template <typename E>
+StdColumnWriter<T>        StdTableModel<T>::col(const String&k, EnumImpl<E> (T::*p))
+{
+    return col(new SCMEnumMV<T,EnumImpl<E>>(k, p));
+}
+
+template <typename T>
+    template <typename K, typename V>
+StdColumnWriter<T>         StdTableModel<T>::col(const String& k, EnumMap<K,EnumImpl<V>> (T::*p), K e)
+{
+    return col(new SCMEnumMapMV<T,K,EnumImpl<V>>(k, e, p));
+}
+
+template <typename T>
+    template <typename K, typename V>
+StdColumnWriter<T>         StdTableModel<T>::col(EnumMap<K,EnumImpl<V>> (T::*p), K e)
+{
+    return col(new SCMEnumMapMV<T,K,EnumImpl<V>>(e.key(), e, p));
 }
 
 
@@ -622,6 +171,38 @@ String              StdTableModel<T>::columnKey(const QModelIndex&idx) const
     return columnKey(idx.column());
 }
 
+
+template <typename T>
+    template <typename Getter>
+StdColumnWriter<T>        StdTableModel<T>::customRO(const String&k, Getter g)
+{
+    return col(new SCMCustomRO<T,Getter>(k, g));
+}
+
+template <typename T>
+    template <typename Getter, typename Less>
+StdColumnWriter<T>        StdTableModel<T>::customRO(const String&k, Getter g, Less l)
+{
+    return col(new SCMCustomROL<T,Getter,Less>(k,g,l));
+}
+
+
+template <typename T>
+    template <typename Getter, typename Setter>
+StdColumnWriter<T>        StdTableModel<T>::customRW(const String& k, Getter g, Setter s)
+{
+    return col(new SCMCustomRW<T,Getter,Setter>(k,g,s));
+}
+
+
+template <typename T>
+    template <typename Getter, typename Setter, typename Less>
+StdColumnWriter<T>        StdTableModel<T>::customRW(const String&k, Getter g, Setter s, Less l)
+{
+    return col(new SCMCustomRWL<T,Getter,Setter,Less>(k, g, s, l));
+}
+
+
 template <typename T>
 QVariant            StdTableModel<T>::data(const QModelIndex&idx, int role) const
 {
@@ -634,11 +215,33 @@ QVariant            StdTableModel<T>::data(const QModelIndex&idx, int role) cons
         return c->edit(r->data);
     case Qt::DisplayRole:
         return c->display(r->data);
+    case Qt::DecorationRole:
+        return c->decoration(r->data);
     case Qt::CheckStateRole:
         if(idx.column() == m_tickCol){
             return r->tick ? Qt::Checked : Qt::Unchecked;
         }
         return QVariant();
+    case Qt::ToolTipRole:
+        return c->toolTip(r->data);
+    case Qt::StatusTipRole: 
+        return c->statusTip(r->data);
+    case Qt::WhatsThisRole:
+        return c->whatsThis(r->data);
+    case Qt::SizeHintRole:
+        return c->sizeHint(r->data);
+    case Qt::FontRole:
+        return c->font(r->data);
+    case Qt::TextAlignmentRole:
+        return c->textAlign(r->data);
+    case Qt::BackgroundRole:
+        return c->background(r->data);
+    case Qt::ForegroundRole:
+        return c->foreground(r->data);
+    case Qt::AccessibleTextRole:
+        return c->accText(r->data);
+    case Qt::AccessibleDescriptionRole:
+        return c->accDesc(r->data);
     default:
         return QVariant();
     }

@@ -7,6 +7,7 @@
 #include "Utilities.hpp"
 
 #include "Comma.hpp"
+#include "DiffEngine.hpp"
 #include "List.hpp"
 #include "Set.hpp"
 #include "String.hpp"
@@ -28,6 +29,14 @@
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+bool        any_changes(const Vector<DEResult>& results)
+{
+    for(auto& de : results)
+        if(de.mode != DEResult::Same)
+            return true;
+    return false;
+}
 
 uint64_t        randU64()
 {

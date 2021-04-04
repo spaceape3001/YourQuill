@@ -173,8 +173,8 @@ struct DEResult {
     Mode        mode;
 };
 
-template <typename T, typename CEQ>
-Vector<DEResult>    diff_it(const Vector<T>& Old, const Vector<T>& New, CEQ cmp = std::equal_to<T>())
+template <typename T, typename CEQ = std::equal_to<T>>
+Vector<DEResult>    diff_it(const Vector<T>& Old, const Vector<T>& New, CEQ cmp = CEQ())
 {
     Vector<DEResult>   ret;
     diff_it( Old, New, cmp, [&](SSizeRange Y){
@@ -186,4 +186,7 @@ Vector<DEResult>    diff_it(const Vector<T>& Old, const Vector<T>& New, CEQ cmp 
     });
     return ret;
 }
+
+bool        any_changes(const Vector<DEResult>&);
+
 

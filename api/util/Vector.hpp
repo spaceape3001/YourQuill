@@ -28,7 +28,6 @@ public:
 
     typedef std::vector<T> base_vec;
     
-    using base_vec::insert;
 
     Vector(){}
     Vector(const base_vec& toCopy);
@@ -85,6 +84,8 @@ public:
     template <typename Pred>
     Vector&    erase_if(Pred);
     
+    Vector&    erase_range(size_t low, size_t high);
+
     /*! \brief Filters the current vector
     
         This will *KEEP* if the argument returns TRUE for the specified item.
@@ -109,6 +110,9 @@ public:
     size_t      first_index_of(const T&) const;
     
     bool        has(const T&) const;
+    
+    // pull the STL ones forward
+    using       base_vec::insert;
     
     Vector&     insert(size_t before, T&&);
     Vector&     insert(size_t before, const T&);
@@ -407,6 +411,15 @@ Vector<T>& Vector<T>::erase_if(Pred p)
         base_vec::resize(itr-base_vec::begin());
     return *this;
 }
+
+template <typename T>
+Vector<T>&    Vector<T>::erase_range(size_t low, size_t high)
+{
+    if(low < high)
+        base_vec::erase(base_vec::begin()+low, base_vec::end()+high);
+    return *this;
+}
+
 
 
 template <typename T>
