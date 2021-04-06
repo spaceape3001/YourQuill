@@ -465,7 +465,7 @@ namespace wksp {
             
             if(!fTemplate){
                 for(auto& rs : doc.roots){
-                    QString     rsPath  = rs.path.qString();
+                    QString     rsPath  = rs.path.qString().trimmed();
                     QString     rpath   = q.absoluteFilePath(rsPath);
                     if(rsPath == ".")
                         rpath          = q.absolutePath();

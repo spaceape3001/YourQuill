@@ -5,10 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
-#include "util/Logging.hpp"
-#include "meta/Meta.hpp"
-#include "util/Utilities.hpp"
-#include "db/Workspace.hpp"
+
+#include <db/Root.hpp>
+#include <db/Workspace.hpp>
+#include <meta/Meta.hpp>
+#include <util/Logging.hpp>
+#include <util/Utilities.hpp>
+
 #include <QCoreApplication>
 
 int main(int argc, char* argv[])
@@ -27,11 +30,22 @@ int main(int argc, char* argv[])
     std::cout 
         << "Workspace Report:\n"
         << "-------------------\n"
-        << "Name: " << wksp::name() << "\n"
-        << "Author: " << wksp::author() << "\n"
+        << "Name     : " << wksp::name() << "\n"
+        << "Author   : " << wksp::author() << "\n"
         << "Templates: " << join(wksp::templates(), ", ") << "\n"
         << "Available: " << join(wksp::templates_available(), ", ") << "\n"
+        << "\n"
+        << "Cache    : " << wksp::cache_db() << "\n"
+        << "Hostname : " << wksp::hostname() << "\n"
+        << "Logs     : " << wksp::log_dir_path() << "\n"
+        << "Temp Dir : " << wksp::temp_dir_path() << "\n"
+        << "\n"
+        << "Roots:\n"
+        << "-------------------\n"
     ;
+    
+    for(const Root* rt : wksp::roots())
+        std::cout << rt->id() << " [" << rt->key() << "] " << rt->path() << "\n";
     
     return 0;
 }

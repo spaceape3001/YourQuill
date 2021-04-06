@@ -41,6 +41,8 @@
 static constexpr const bool         kScanMetrics        = false;
 static constexpr const unsigned int kScanTickInterval   = 100;
 static const StringSet              kIgnore({ 
+    ".",
+    "..",
     ".bench", 
     ".cache", 
     ".git", 
