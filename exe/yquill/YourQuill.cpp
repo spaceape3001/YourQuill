@@ -73,6 +73,7 @@ YourQuill::YourQuill() //: m_ctxClassMenu(nullptr)
     addAction("tags", "Tags").connect(this, &YourQuill::cmdNewTagTable);
 
 
+
     makeMenu("quill", "&YourQuill", QStringList() 
         << "new_web" 
         << "new_explorer"
@@ -356,7 +357,7 @@ int main(int argc, char* argv[])
     
     YourQuill   *qw = new YourQuill;
     qw -> show();
-    qw -> cmdNewWeb();
+    qw -> cmdNewExplorer();
     return app.exec();
 }
 

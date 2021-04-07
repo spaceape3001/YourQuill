@@ -11,8 +11,7 @@
 
 
 template <typename T>
-StdTableModel<T>::StdTableModel(QObject*parent) : QAbstractTableModel(parent), 
-    m_adders(0), m_readOnly(false), m_canAdd(false), m_dragReorder(false), m_tickCol(-1)
+StdTableModel<T>::StdTableModel(QObject*parent) : QAbstractTableModel(parent)
 {
 }
 
@@ -349,6 +348,15 @@ int                 StdTableModel<T>::rowCount() const
     return static_cast<int>(m_canAdd && !m_readOnly) + (int) m_rows.size();
 }
 
+template <typename T>
+void                StdTableModel<T>::setAllData(const std::vector<T>& newVals)
+{
+    beginResetModel();
+    m_rows.clear();
+    for(auto& t : newVals)
+        m_rows << Row{ t, false };
+    endResetModel();
+}
 
 template <typename T>
 bool                StdTableModel<T>::setData(const QModelIndex&idx, const QVariant&var, int role) 

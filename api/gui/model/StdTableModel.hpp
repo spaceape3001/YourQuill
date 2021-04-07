@@ -71,6 +71,8 @@ public:
     {
         return rowCount();
     }
+    
+    void                setAllData(const std::vector<T>&);
 
     bool                setData(const QModelIndex&, const QVariant&, int) override;
     void                setReadOnly(bool);
@@ -106,11 +108,11 @@ protected:
 
     Vector<Column*>     m_columns;
     Vector<Row>         m_rows;
-    size_t              m_adders;
-    bool                m_readOnly;
-    bool                m_canAdd;
-    bool                m_dragReorder;  // pending...
-    int                 m_tickCol;
+    size_t              m_adders        = 0;
+    bool                m_readOnly      = false;
+    bool                m_canAdd        = false;
+    bool                m_dragReorder   = false;  // pending...
+    int                 m_tickCol       = -1;
     
     void                allChanged();
     

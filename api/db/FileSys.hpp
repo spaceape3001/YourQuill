@@ -131,7 +131,8 @@ namespace cdb {
         \param[in]  sorted  Yes/No to sort by path (default is no)
         \return Vector of directories
     */
-    Vector<Directory>       all_directories(Sorted sorted=Sorted());
+    Vector<Directory>       all_directories(unsigned opts=0);
+    Vector<Directory>       all_directories(Sorted sorted);
     Vector<Directory>       all_directories(const Root*, Sorted sorted=Sorted());
     size_t                  all_directories_count();
     size_t                  all_directories_count(const Root*);
@@ -221,8 +222,9 @@ namespace cdb {
     Document                document(uint64_t);
 
         //Vector<Document>      documents(Directory);   // TODO
-    Vector<Document>        documents(Folder, Sorted sorted=Sorted());
-    size_t                  documents_count(Folder);
+    Vector<Document>        documents(Folder, unsigned opts=0);
+    Vector<Document>        documents(Folder, Sorted sorted);
+    size_t                  documents_count(Folder, unsigned opts=0);
     Vector<Document>        documents_by_suffix(Folder, const QString&, Sorted sorted=Sorted());
     Vector<Document>        documents_by_suffix_excluding(Folder, const QString&, Sorted sorted=Sorted());
 
@@ -259,8 +261,9 @@ namespace cdb {
     Vector<Folder>          folder_path(Folder);
     Vector<Folder>          folder_path(Fragment);
     
-    Vector<Folder>          folders(Folder, Sorted sorted=Sorted());
-    size_t                  folders_count(Folder);
+    Vector<Folder>          folders(Folder, unsigned int opts=0);
+    Vector<Folder>          folders(Folder, Sorted sorted);
+    size_t                  folders_count(Folder, unsigned int opts=0);
 
     Fragment                fragment(const QString&);
     Fragment                fragment(uint64_t);

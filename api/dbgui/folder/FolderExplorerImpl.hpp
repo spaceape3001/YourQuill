@@ -24,10 +24,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct FolderExplorerBase::Entry {
-    Type            type;
-    uint64_t        id;
+    Type            type    = Type::None;
+    uint64_t        id      = 0;
     QIcon           icon;
     QString         label;
+    
+    Entry(){}
+    Entry(Folder);
+    Entry(Document);
+    Entry(cdb::DocOrFold);
+    
+    void        set(Document);
+    void        set(Folder);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,11 +43,14 @@ struct FolderExplorerBase::Entry {
 class FolderExplorerBase::ListModel : public StdListModel<Entry> {
     Q_OBJECT
 public:
-    ListModel(QObject*parent=nullptr);
+    ListModel(FolderExplorerBase* parent);
     ~ListModel();
     
+public slots:
+    void                refresh();
+
 private:
-    Folder      m_folder;
+    FolderExplorerBase* m_fx;
 };
 
 
@@ -55,10 +66,14 @@ public:
 class FolderExplorerBase::TableModel : public StdTableModel<Entry> {
     Q_OBJECT
 public:
-    TableModel(QObject*parent=nullptr);
+    TableModel(FolderExplorerBase* parent);
     ~TableModel();
+
+public slots:
+    void        refresh();
+
 private:    
-    Folder      m_folder;
+    FolderExplorerBase* m_fx;
 };
 
 
@@ -77,7 +92,7 @@ class FolderExplorerBase::TreeModel : public QAbstractItemModel {
     Q_OBJECT
 public:
 
-    TreeModel(QObject* parent=nullptr);
+    TreeModel(FolderExplorerBase* parent=nullptr);
     ~TreeModel();
     
     int             columnCount(const QModelIndex&) const override;
@@ -90,15 +105,20 @@ public:
     int             rowCount(const QModelIndex&) const override;
     
     //  TODO ... refresh comes later
+public slots:
+    void        refresh();
     
 private:
     struct Node;
+
     Map<Folder,Node*>           m_nodes;
+    FolderExplorerBase*         m_fx;
     
     Node*                       node(Folder);
     const Node*                 node(Folder) const;
     Node*                       node(const QModelIndex&);
     const Node*                 node(const QModelIndex&) const;
+    bool        m_showHidden    = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +132,10 @@ public:
     
     TreeModel*          model() { return m_model; }
     const TreeModel*    model() const { return m_model; }
+
+    Folder              currentFolder() const;
+    void                setCurrentFolder(Folder);
+    
 private:
     TreeModel*      m_model;
 };

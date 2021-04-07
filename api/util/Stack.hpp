@@ -30,6 +30,8 @@ public:
     T           pop(const T& def={});
     T           top(const T& def={}) const;
     
+    /*! \brief Pops the stack until the size is beneath the argument */
+    void        pop_to(size_t sz);
     
 };
 
@@ -124,6 +126,14 @@ T           Stack<T>::pop(const T& def)
     base_stack::pop_back();
     return val;
 }
+
+template <typename T>
+void        Stack<T>::pop_to(size_t sz)
+{
+    if(sz < base_stack::size())
+        base_stack::erase(base_stack::begin()+sz, base_stack::end());
+}
+
 
 template <typename T>
 T           Stack<T>::top(const T&def) const

@@ -36,6 +36,7 @@ public:
     int                 rowCount() const;
     int                 rowCount(const QModelIndex&) const override { return rowCount(); }
 
+    void                setAllData(const std::vector<T>&);
     bool                setData(const QModelIndex&, const QVariant&, int) override;
     void                setReadOnly(bool);
     void                setTickable(bool);
@@ -62,11 +63,11 @@ protected:
     StdColumn<T>*       m_column;
     StdColumn<T>*       m_header;
     QVariant            m_label;
-    bool                m_adder;
-    bool                m_readOnly;
-    bool                m_canAdd;
-    bool                m_dragReorder;  // pending
-    bool                m_tickable;
+    bool                m_adder         = false;
+    bool                m_readOnly      = false;
+    bool                m_canAdd        = false;
+    bool                m_dragReorder   = false;  // pending
+    bool                m_tickable      = false;
 
     StdListModel(QObject* parent=nullptr);
     virtual ~StdListModel();

@@ -75,26 +75,32 @@ QIcon   si_edit_undo()
 
 QIcon   si_folder()
 {
-    static thread_local QIcon   ret = theme_icon("folder");
+    static thread_local QIcon   ret = theme_icon("folder", ":icon/folder.svg");
     return ret;
 }
 
 
 QIcon   si_go_back()
 {
-    static thread_local QIcon ret(":icon/left.svg");
+    static thread_local QIcon ret = theme_icon("go-previous", ":icon/left.svg");
     return ret;
 }
 
 QIcon   si_go_forward()
 {
-    static thread_local QIcon ret(":icon/right.svg");
+    static thread_local QIcon ret = theme_icon("go-next", ":icon/right.svg");
     return ret;
 }
 
 QIcon   si_go_home()
 {
     static thread_local QIcon   ret = theme_icon("go-home", ":icon/home.svg");
+    return ret;
+}
+
+QIcon   si_go_up()
+{
+    static thread_local QIcon ret   = theme_icon("go-up", ":icon/up.svg");
     return ret;
 }
 

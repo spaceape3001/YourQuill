@@ -349,6 +349,15 @@ int                 StdListModel<T>::rowCount() const
     return static_cast<int>(m_canAdd && !m_readOnly) + (int) m_rows.size();
 }
 
+template <typename T>
+void                StdListModel<T>::setAllData(const std::vector<T>& newVals)
+{
+    beginResetModel();
+    m_rows.clear();
+    for(auto& t : newVals)
+        m_rows << Row{ t, false };
+    endResetModel();
+}
 
 template <typename T>
 bool                StdListModel<T>::setData(const QModelIndex& idx, const QVariant& var, int role) 

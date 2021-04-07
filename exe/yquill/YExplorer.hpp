@@ -13,4 +13,7 @@ class YExplorer : public FolderExplorerBase {
 public:
     YExplorer(QWidget* parent=nullptr);
     ~YExplorer();
+    
+private slots:
+    void        updateTitle();
 };

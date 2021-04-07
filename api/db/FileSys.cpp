@@ -17,26 +17,32 @@
 #include <QSqlError>
 
 namespace cdb {
-    namespace {
-        Vector<Directory>   all_directories_sorted()
-        {
-            static thread_local SQ    s("SELECT id FROM Directories ORDER BY path");
-            return s.vec<Directory>();
-        }
-        
-        Vector<Directory>   all_directories_unsorted()
-        {
-            static thread_local SQ    s("SELECT id FROM Directories");
-            return s.vec<Directory>();
+    Vector<Directory>   all_directories(unsigned opts)
+    {
+        if(opts & BestSort){
+            if(opts & Hidden){
+                static thread_local SQ    s("SELECT id FROM Directories ORDER BY path");
+                return s.vec<Directory>();
+            } else {
+                static thread_local SQ    s("SELECT id FROM Directories WHERE hidden=0 ORDER BY path");
+                return s.vec<Directory>();
+            }
+        } else {
+            if(opts & Hidden){
+                static thread_local SQ    s("SELECT id FROM Directories");
+                return s.vec<Directory>();
+            } else {
+                static thread_local SQ    s("SELECT id FROM Directories WHERE hidden=0");
+                return s.vec<Directory>();
+            }
         }
     }
     
-
     Vector<Directory>   all_directories(Sorted sorted)
     {
-        return sorted ? all_directories_sorted() : all_directories_unsorted();
+        return all_directories(Hidden | (sorted ? BestSort : 0));
     }
-    
+
     namespace {
         Vector<Directory>   all_directories_sorted(const Root* rt)
         {
@@ -430,7 +436,7 @@ namespace cdb {
         QString     sfx     = (x > 0) ? ak.mid(x+1) : QString();
         QString     base    = (y > 0) ? ak.mid(0,y) : ak;
             
-        static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base) VALUES (?,?,?,?,?,?)");
+        static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base,hidden) VALUES (?,?,?,?,?,?,?)");
         static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
         
         auto s_lk   = s.af();
@@ -442,6 +448,7 @@ namespace cdb {
         i.bind(3,f.id);
         i.bind(4,sfx);
         i.bind(5,base);
+        i.bind(6,ak.at(0) == '.');
         
         if(i.exec(false)){
             if(wasCreated)
@@ -481,7 +488,7 @@ namespace cdb {
         i.bind(1,ck);
         i.bind(2,ck);
         i.bind(3,f.id);
-        i.bind(4,ck.contains('.'));
+        i.bind(4,(ck.at(0) == '.') || ck.contains('.'));
         if(i.exec(false)){
             if(wasCreated)
                 *wasCreated = true;
@@ -698,31 +705,42 @@ namespace cdb {
 
 
     //Vector<Document>    documents(Directory);
-
     
-    namespace {
-        Vector<Document>    documents_sorted(Folder f)
-        {
-            static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? ORDER BY sk");
-            return s.vec<Document>(f.id);
-        }
-        
-        Vector<Document>    documents_unsorted(Folder f)
-        {
-            static thread_local SQ    s("SELECT id FROM Documents WHERE folder=?");
-            return s.vec<Document>(f.id);
+    Vector<Document>    documents(Folder f, unsigned opts)
+    {
+        if(opts & BestSort){
+            if(opts & Hidden){
+                static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? ORDER BY sk");
+                return s.vec<Document>(f.id);
+            } else {
+                static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND hidden=0 ORDER BY sk");
+                return s.vec<Document>(f.id);
+            }
+        } else {
+            if(opts & Hidden){
+                static thread_local SQ    s("SELECT id FROM Documents WHERE folder=?");
+                return s.vec<Document>(f.id);
+            } else {
+                static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND hidden=0");
+                return s.vec<Document>(f.id);
+            }
         }
     }
     
     Vector<Document>    documents(Folder f, Sorted sorted)
     {
-        return sorted ? documents_sorted(f) : documents_unsorted(f);
+        return documents(f, Hidden | (sorted ? BestSort : 0));
     }
-    
-    size_t              documents_count(Folder f)
+
+    size_t              documents_count(Folder f, unsigned opts)
     {
-        static thread_local SQ    s("SELECT COUNT(1) FROM Documents WHERE folder=?");
-        return s.size(f.id);
+        if(opts & Hidden){
+            static thread_local SQ    s("SELECT COUNT(1) FROM Documents WHERE folder=?");
+            return s.size(f.id);
+        } else {
+            static thread_local SQ    s("SELECT COUNT(1) FROM Documents WHERE folder=? AND hidden=0");
+            return s.size(f.id);
+        }
     }
     
     namespace {
@@ -933,31 +951,43 @@ namespace cdb {
     {
         return folder_path(document(f));
     }
-
-    namespace {
-        Vector<Folder>  folders_sorted(Folder f)
-        {
-            static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? ORDER BY sk");
-            return s.vec<Folder>(f.id);
-        }
-        
-        Vector<Folder>  folders_unsorted(Folder f)
-        {
-            static thread_local SQ    s("SELECT id FROM Folders WHERE parent=?");
-            return s.vec<Folder>(f.id);
+    
+    Vector<Folder>      folders(Folder f, unsigned opts)
+    {
+        if(opts & BestSort){
+            if(opts & Hidden){
+                static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? ORDER BY sk");
+                return s.vec<Folder>(f.id);
+            } else {
+                static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk");
+                return s.vec<Folder>(f.id);
+            }
+        } else {
+            if(opts & Hidden){
+                static thread_local SQ    s("SELECT id FROM Folders WHERE parent=?");
+                return s.vec<Folder>(f.id);
+            } else {
+                static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND hidden=0");
+                return s.vec<Folder>(f.id);
+            }
         }
     }
-    
+
     Vector<Folder>      folders(Folder f, Sorted sorted)
     {
-        return sorted ? folders_sorted(f) : folders_unsorted(f);
+        return folders(f, Hidden | (sorted ? BestSort : 0));
     }
     
     
-    size_t              folders_count(Folder f)
+    size_t              folders_count(Folder f, unsigned opts)
     {
-        static thread_local SQ    s("SELECT COUNT(1) FROM Folders WHERE parent=?");
-        return s.size(f.id);
+        if(opts & Hidden){
+            static thread_local SQ    s("SELECT COUNT(1) FROM Folders WHERE parent=?");
+            return s.size(f.id);
+        } else {
+            static thread_local SQ    s("SELECT COUNT(1) FROM Folders WHERE parent=? AND hidden=0");
+            return s.size(f.id);
+        }
     }
 
     Fragment            fragment(const QString& k)

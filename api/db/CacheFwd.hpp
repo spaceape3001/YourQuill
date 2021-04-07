@@ -46,6 +46,9 @@ using TagVec        = Vector<Tag>;
 namespace cdb {
 
     enum {
+    
+        // Update flags
+        
         //! Consider this an "update" so reset the fragment to "updated" 
         //! \note Only the scanner should be using this, may cause issues for otherrs to set this
         IsUpdate                = 0x1,
@@ -56,7 +59,17 @@ namespace cdb {
         
         Override                = 0x8,
         
-        AllowEmpty              = 0x10
+        AllowEmpty              = 0x10,
+        
+            
+        //  Search Flags
+
+        //! Include hidden things
+        Hidden                  = 0x01,
+
+        //! Best sort available (equiv to Sorted::YES)
+        BestSort                = 0x02
+        
     };
 
 

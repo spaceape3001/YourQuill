@@ -8,6 +8,7 @@
     <file alias="icon/down.svg">openIcon/arrow-down-3.svg</file>
     <file alias="icon/download.svg">openIcon/go-bottom-4.svg</file>
     <file alias="icon/find.svg">openIcon/edit-find-3.svg</file>
+    <file alias="icon/folder.svg">openIcon/inode-directory.svg</file>
     <file alias="icon/fullscreen.svg">openIcon/view-fullscreen-4.svg</file>
     <file alias="icon/home.svg">openIcon/go-home-5.svg</file>
     <file alias="icon/left.svg">openIcon/arrow-left-3.svg</file>

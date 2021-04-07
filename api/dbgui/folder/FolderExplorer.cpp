@@ -44,11 +44,15 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     m_stacked       = new QStackedWidget;
     m_listPos       = m_stacked -> addWidget(m_listView);
     m_tablePos      = m_stacked -> addWidget(m_tableView);
+    
+    m_stacked -> setCurrentWidget(m_listView);
 
     QToolBar*       bar = new QToolBar;
-    bar -> addAction(si_go_back(), tr("Back"), this, &FolderExplorerBase::cmdGoBack);
-    bar -> addAction(si_go_forward(), tr("Fwd"), this, &FolderExplorerBase::cmdGoForward);
-    //bar -> addAction(si_view_refresh(), tr("Reload"), m_view, &WebBase::View::reload);
+    m_backAct       = bar -> addAction(si_go_back(), tr("Back"), this, &FolderExplorerBase::cmdGoBack);
+    m_forwardAct    = bar -> addAction(si_go_forward(), tr("Fwd"), this, &FolderExplorerBase::cmdGoForward);
+    m_upAct         = bar -> addAction(si_go_up(), tr("Up"), this, &FolderExplorerBase::cmdGoUp);
+    
+    bar -> addAction(si_view_refresh(), tr("Reload"), this, &FolderExplorerBase::cmdReload);
     //bar -> addAction(si_go_home(), tr("Home"), this, &WebBase::goHome);
     bar -> addWidget(m_url);
     
@@ -63,7 +67,6 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     vlay -> addWidget(split, 1);
     vlay -> setContentsMargins(0,0,0,0);
     
-    changeTo(cdb::top_folder());
 }
 
 FolderExplorerBase::~FolderExplorerBase()
@@ -72,6 +75,14 @@ FolderExplorerBase::~FolderExplorerBase()
 
 void    FolderExplorerBase::changeTo(Folder f)
 {
+    if(f == m_folder)
+        return ;
+        
+    m_folder    = f;
+
+    m_treeView -> setCurrentFolder(f);
+    m_listModel -> refresh();
+    m_tableModel -> refresh();
 }
 
 void    FolderExplorerBase::cmdGoBack()
@@ -84,6 +95,97 @@ void    FolderExplorerBase::cmdGoForward()
 
 void    FolderExplorerBase::cmdGoUp()
 {
+}
+
+void    FolderExplorerBase::cmdNavigageTo(Folder f)
+{
+    if(f == m_folder)
+        return ;
+    changeTo(f);
+}
+
+void    FolderExplorerBase::cmdReload()
+{
+}
+
+void    FolderExplorerBase::refresh()
+{
+    m_treeModel -> refresh();
+    m_tableModel -> refresh();
+    m_listModel -> refresh();
+}
+
+unsigned FolderExplorerBase::searchOpts() const
+{
+    return (m_showHidden ? cdb::Hidden : 0) | cdb::BestSort;
+}
+
+void    FolderExplorerBase::setShowHidden(bool f)
+{
+    if(f != m_showHidden){
+        m_showHidden        = f;
+        refresh();
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Vector<FolderExplorerBase::Entry>    FolderExplorerBase::makeEntries(const Vector<Document>& items)
+{
+    return Vector<Entry>(items.begin(), items.end());
+}
+
+Vector<FolderExplorerBase::Entry>    FolderExplorerBase::makeEntries(const Vector<Folder>& items)
+{
+    return Vector<Entry>(items.begin(), items.end());
+}
+
+Vector<FolderExplorerBase::Entry>    FolderExplorerBase::makeEntries(const Vector<cdb::DocOrFold>& items)
+{
+    return Vector<Entry>(items.begin(), items.end());
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+FolderExplorerBase::Entry::Entry(Folder f) 
+{
+    set(f);
+}
+
+FolderExplorerBase::Entry::Entry(Document d)
+{
+    set(d);
+}
+
+FolderExplorerBase::Entry::Entry(cdb::DocOrFold df)
+{
+    Document*   d = std::get_if<Document>(&df);
+    if(d)
+        set(*d);
+    Folder*     f = std::get_if<Folder>(&df);
+    if(f)
+        set(*f);
+}
+
+void  FolderExplorerBase::Entry::set(Document d)
+{
+    type    = Type::Doc;
+    id      = d.id;
+    icon    = cdb::qIcon(cdb::icon(d));
+    if(icon.isNull())
+        icon    = si_view_refresh();    // placeholder
+    label   = cdb::skey(d);
+}
+
+void  FolderExplorerBase::Entry::set(Folder f)
+{
+    type    = Type::Fold;
+    id      = f.id;
+    icon    = si_folder();
+    label   = cdb::skey(f);
 }
 
 
@@ -108,7 +210,7 @@ struct FolderExplorerBase::NameCol : public StdColumn<Entry> {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FolderExplorerBase::ListModel::ListModel(QObject*parent) : StdListModel<Entry>(parent)
+FolderExplorerBase::ListModel::ListModel(FolderExplorerBase* parent) : StdListModel<Entry>(parent), m_fx(parent)
 {
     col(new NameCol);
 }
@@ -117,12 +219,20 @@ FolderExplorerBase::ListModel::~ListModel()
 {
 }
 
+void  FolderExplorerBase::ListModel::refresh()
+{
+    unsigned int        opts    = m_fx -> searchOpts();
+    setAllData(makeEntries(cdb::folders(m_fx->m_folder, opts)) + makeEntries(cdb::documents(m_fx->m_folder, opts)));
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 FolderExplorerBase::ListView::ListView(ListModel* lm, QWidget* parent) : StdListView<Entry>(lm, parent)
 {
+    setViewMode(IconMode);
 }
 
 FolderExplorerBase::ListView::~ListView()
@@ -134,7 +244,7 @@ FolderExplorerBase::ListView::~ListView()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FolderExplorerBase::TableModel::TableModel(QObject*parent) : StdTableModel<Entry>(parent)
+FolderExplorerBase::TableModel::TableModel(FolderExplorerBase* parent) : StdTableModel<Entry>(parent), m_fx(parent)
 {
     col(new NameCol);
 }
@@ -142,6 +252,13 @@ FolderExplorerBase::TableModel::TableModel(QObject*parent) : StdTableModel<Entry
 FolderExplorerBase::TableModel::~TableModel()
 {
 }
+
+void  FolderExplorerBase::TableModel::refresh()
+{
+    unsigned int        opts    = m_fx -> searchOpts();
+    setAllData(makeEntries(cdb::folders(m_fx -> m_folder, opts)) + makeEntries(cdb::documents(m_fx->m_folder, opts)));
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,7 +298,7 @@ struct FolderExplorerBase::TreeModel::Node {
 
     void    refresh(unsigned chgSignal = 3)
     {
-        Vector<Folder>  nc  = cdb::folders(folder, Sorted::YES);
+        Vector<Folder>  nc  = cdb::folders(folder, ftm->m_fx->searchOpts());
         if(chgSignal&CHG_CHILDREN){
             auto chg    = diff_it(children, nc);
             if(any_changes(chg)){
@@ -238,7 +355,7 @@ Folder   FolderExplorerBase::TreeModel::folder(const QModelIndex&idx) const
     return idx.isValid() ? Folder{reinterpret_cast<uint64_t>(idx.internalPointer())} : cdb::top_folder();
 }
 
-FolderExplorerBase::TreeModel::TreeModel(QObject*parent) : QAbstractItemModel(parent)
+FolderExplorerBase::TreeModel::TreeModel(FolderExplorerBase* parent) : QAbstractItemModel(parent), m_fx(parent)
 {
 }
 
@@ -346,6 +463,11 @@ QModelIndex FolderExplorerBase::TreeModel::parent(const QModelIndex& idx) const
     return createIndex(row, idx.column(), (void*) n->parent.id);
 }
 
+void        FolderExplorerBase::TreeModel::refresh()
+{
+    //  TODO
+}
+
 int         FolderExplorerBase::TreeModel::rowCount(const QModelIndex&idx) const 
 {
     const Node* n   = node(idx);
@@ -363,11 +485,24 @@ int         FolderExplorerBase::TreeModel::rowCount(const QModelIndex&idx) const
 FolderExplorerBase::TreeView::TreeView(TreeModel*ftm, QWidget*parent) : QTreeView(parent), m_model(ftm)
 {
     setModel(ftm);
+    setHeaderHidden(true);
+    setSelectionBehavior(SelectRows);
+    setSelectionMode(SingleSelection);
 }
 
 FolderExplorerBase::TreeView::~TreeView()
 {
 
+}
+
+Folder  FolderExplorerBase::TreeView::currentFolder() const
+{
+    return m_model -> folder(currentIndex());
+}
+
+void    FolderExplorerBase::TreeView::setCurrentFolder(Folder f)
+{
+    setCurrentIndex(m_model -> index(f));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

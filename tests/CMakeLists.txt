@@ -24,5 +24,5 @@ add_subdirectory(string)
 add_subdirectory(variant)
 add_subdirectory(workspace)
 add_subdirectory(xml)
-
+add_subdirectory(qt)
 
