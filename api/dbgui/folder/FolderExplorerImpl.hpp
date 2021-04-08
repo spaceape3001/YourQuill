@@ -13,6 +13,7 @@
 #include <QString>
 #include <QTreeView>
 
+#include <db/CacheQMetaType.hpp>
 #include <db/Folder.hpp>
 #include <gui/model/StdColumn.hpp>
 #include <gui/model/StdListModelImpl.hpp>
@@ -21,7 +22,11 @@
 #include <gui/view/StdTableView.hpp>
 #include <util/Map.hpp>
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 struct FolderExplorerBase::Entry {
     Type            type    = Type::None;
@@ -59,6 +64,31 @@ class FolderExplorerBase::ListView : public StdListView<Entry> {
 public:
     ListView(ListModel*, QWidget* parent=nullptr);
     ~ListView();
+    
+public slots:
+    void        zoomIn();
+    void        zoomOut();
+
+signals:
+    void        dblClickDoc(Document);
+    void        dblClickFolder(Folder);
+
+private slots:
+    void        cmdDoubleClicked(const QModelIndex&);
+
+protected:
+    virtual void    resizeEvent(QResizeEvent*) override;
+    virtual void    showEvent(QShowEvent*) override;
+    virtual void    wheelEvent(QWheelEvent*) override;
+    
+    void        zoomBy(double);
+    void        applyLayout();
+    
+    
+private:
+    ListModel*  m_model;
+    double      m_zoom      = 1.0;
+    bool        m_firstShow = true;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,6 +114,16 @@ class FolderExplorerBase::TableView : public StdTableView<Entry> {
 public:
     TableView(TableModel*, QWidget*parent=nullptr);
     ~TableView();
+
+signals:
+    void        dblClickDoc(Document);
+    void        dblClickFolder(Folder);
+
+private slots:
+    void        cmdDoubleClicked(const QModelIndex&);
+
+private:
+    TableModel*     m_model;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,6 +175,11 @@ public:
 
     Folder              currentFolder() const;
     void                setCurrentFolder(Folder);
+    
+private slots:
+    void                cmdActivated(const QModelIndex&);
+signals:
+    void                activatedFolder(Folder);
     
 private:
     TreeModel*      m_model;

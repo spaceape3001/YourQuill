@@ -8,7 +8,7 @@
 
 YExplorer::YExplorer(QWidget* parent)
 {
-    cmdNavigageTo(cdb::top_folder());
+    cmdNavigateTo(cdb::top_folder());
     updateTitle();
     connect(this, &FolderExplorerBase::folderChanged, this, &YExplorer::updateTitle);
 }

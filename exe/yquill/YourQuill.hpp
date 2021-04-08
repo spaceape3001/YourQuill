@@ -7,7 +7,7 @@
 #pragma once
 
 #include <gui/main/MainWin.hpp>
-
+#include <db/CacheQMetaType.hpp>
 
 class YourQuill : public MainWin {
     Q_OBJECT
@@ -35,7 +35,10 @@ public slots:
     void            cmdNewSqlTool();
     void            cmdNewTagTable();
     void            cmdNewTimeGen();
+    
     void            cmdNewWeb();
+
+    void            openRequest(Document);
     
 protected:
     virtual void    reconnect(QWidget*) override;

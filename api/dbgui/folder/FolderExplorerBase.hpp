@@ -34,10 +34,11 @@ public:
     
     bool            isShowHiddenEnabled() const { return m_showHidden; }
     
-    void            cmdNavigageTo(Folder);
+    void            cmdNavigateTo(Folder);
 
 signals:
     void            folderChanged();
+    void            openRequest(Document);
     
 public slots:
     void            cmdGoBack();

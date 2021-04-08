@@ -65,6 +65,11 @@ public:
     
     virtual void        removeRow(int);
     
+    T*                  row(int);
+    const T*            row(int) const;
+    T*                  row(const QModelIndex&);
+    const T*            row(const QModelIndex&) const;
+
     int                 rowCount() const;
     
     virtual int         rowCount(const QModelIndex&) const override

@@ -308,11 +308,18 @@ void    YourQuill::ctxCmdDelete(uint64_t i)
 
 #endif
 
+void    YourQuill::openRequest(Document doc)
+{
+}
 
 void    YourQuill::reconnect(QWidget*w)
 {
     MainWin::reconnect(w);
     connect(w, &QWidget::windowTitleChanged, this, &YourQuill::subWindowTitleChanged);
+    
+    YExplorer*  ex  = qobject_cast<YExplorer*>(w);
+    if(ex)
+        connect(ex, &YExplorer::openRequest, this, &YourQuill::openRequest);
     
 #if 0    
     YClassTable* ct  = qobject_cast<YClassTable*>(w);

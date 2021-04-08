@@ -13,12 +13,16 @@
 #include <util/Reverse.hpp>
 #include <util/Vector.hpp>
 
+#include <QAction>
 #include <QComboBox>
 #include <QHBoxLayout>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QToolBar>
 #include <QToolButton>
+#include <QWheelEvent>
+
+#include <cmath>
 
 static_assert(sizeof(void*) >= sizeof(uint64_t), "MUST BE at laest 64-bit code!");
 
@@ -26,6 +30,22 @@ template class StdListModel<FolderExplorerBase::Entry>;
 template class StdListView<FolderExplorerBase::Entry>;
 template class StdTableModel<FolderExplorerBase::Entry>;
 template class StdTableView<FolderExplorerBase::Entry>;
+
+namespace {
+    QIcon   icon_for(Document d)
+    {
+        QIcon ret    = cdb::qIcon(cdb::icon(d));
+        if(ret.isNull())
+            ret    = si_view_refresh();    // placeholder
+        return ret;
+    }
+
+    QIcon   icon_for(Folder f)
+    {
+        return si_folder();
+    }
+    
+}
 
 
 FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
@@ -56,6 +76,12 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     //bar -> addAction(si_go_home(), tr("Home"), this, &WebBase::goHome);
     bar -> addWidget(m_url);
     
+    connect(m_listView, &FolderExplorerBase::ListView::dblClickFolder, this, &FolderExplorerBase::cmdNavigateTo);
+    connect(m_tableView, &FolderExplorerBase::TableView::dblClickFolder, this, &FolderExplorerBase::cmdNavigateTo);
+    connect(m_treeView, &FolderExplorerBase::TreeView::activatedFolder, this, &FolderExplorerBase::cmdNavigateTo);
+    connect(m_listView, &FolderExplorerBase::ListView::dblClickDoc, this, &FolderExplorerBase::openRequest);
+    connect(m_tableView, &FolderExplorerBase::TableView::dblClickDoc, this, &FolderExplorerBase::openRequest);
+    
     QSplitter   *split  = new QSplitter(Qt::Horizontal);
     split -> addWidget(m_treeView);
     split -> addWidget(m_stacked);
@@ -77,30 +103,60 @@ void    FolderExplorerBase::changeTo(Folder f)
 {
     if(f == m_folder)
         return ;
-        
+    
     m_folder    = f;
-
     m_treeView -> setCurrentFolder(f);
     m_listModel -> refresh();
     m_tableModel -> refresh();
+    m_upAct -> setEnabled( f != cdb::top_folder() );
+    m_backAct -> setEnabled( !m_history.empty() && m_histPos );
+    m_forwardAct -> setEnabled( (m_histPos >= 0) && (m_histPos < (int) m_history.size()));
 }
 
 void    FolderExplorerBase::cmdGoBack()
 {
+    if(m_history.empty())
+        return ;
+    m_history << m_folder;
+    if(m_histPos < 0){
+        m_histPos   = (int) m_history.size() - 2;
+    } else if(m_histPos > 0){
+        --m_histPos;
+    } else
+        return ;
+        
+    changeTo(m_history[m_histPos]);
 }
 
 void    FolderExplorerBase::cmdGoForward()
 {
+    if(m_history.empty())
+        return ;
+    if(m_histPos < 0)
+        return;
+    if(m_histPos >= (int) m_history.size() - 1)
+        return;
+    ++m_histPos;
+    changeTo(m_history[m_histPos]);
 }
 
 void    FolderExplorerBase::cmdGoUp()
 {
+    cmdNavigateTo(cdb::parent(m_folder));
 }
 
-void    FolderExplorerBase::cmdNavigageTo(Folder f)
+void    FolderExplorerBase::cmdNavigateTo(Folder f)
 {
-    if(f == m_folder)
+    if(!f || (f == m_folder))
         return ;
+
+    if(m_histPos >= 0){
+        m_history.pop_to(m_histPos);
+        m_histPos   = -1;
+    }
+    if(m_folder)
+        m_history << m_folder;
+        
     changeTo(f);
 }
 
@@ -174,9 +230,7 @@ void  FolderExplorerBase::Entry::set(Document d)
 {
     type    = Type::Doc;
     id      = d.id;
-    icon    = cdb::qIcon(cdb::icon(d));
-    if(icon.isNull())
-        icon    = si_view_refresh();    // placeholder
+    icon    = icon_for(d);
     label   = cdb::skey(d);
 }
 
@@ -184,7 +238,7 @@ void  FolderExplorerBase::Entry::set(Folder f)
 {
     type    = Type::Fold;
     id      = f.id;
-    icon    = si_folder();
+    icon    = icon_for(f);
     label   = cdb::skey(f);
 }
 
@@ -226,19 +280,93 @@ void  FolderExplorerBase::ListModel::refresh()
 }
 
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FolderExplorerBase::ListView::ListView(ListModel* lm, QWidget* parent) : StdListView<Entry>(lm, parent)
+static const double kZoomDelta  = pow(2.0, 1.0/8.0);
+static const double kZoomMax    = 4.0;
+static const double kZoomMin    = pow(0.5, 2.);
+
+
+FolderExplorerBase::ListView::ListView(ListModel* lm, QWidget* parent) : StdListView<Entry>(lm, parent), m_model(lm)
 {
     setViewMode(IconMode);
+    connect(this, &QListView::doubleClicked, this, &FolderExplorerBase::ListView::cmdDoubleClicked);
 }
 
 FolderExplorerBase::ListView::~ListView()
 {
 }
 
+void    FolderExplorerBase::ListView::applyLayout()
+{
+    int     iz  = (int)(0.5 + std::max(16., m_zoom*48.0));
+    setIconSize(QSize(iz, iz));
+    
+    //  TODO: Make this a uniform grid based on contents
+}
+
+void    FolderExplorerBase::ListView::cmdDoubleClicked(const QModelIndex& idx)
+{
+    const Entry*    e   = m_model -> row(idx);
+    if(e){
+        switch(e->type){
+        case Type::Doc:
+            emit dblClickDoc(Document{e->id});
+            break;
+        case Type::Fold:
+            emit dblClickFolder(Folder{e->id});
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+
+void    FolderExplorerBase::ListView::resizeEvent(QResizeEvent*evt)
+{
+    QListView::resizeEvent(evt);
+    applyLayout();
+}
+
+void    FolderExplorerBase::ListView::showEvent(QShowEvent*evt)
+{
+    QListView::showEvent(evt);
+    if(m_firstShow){
+        m_firstShow = false;
+        applyLayout();
+    }
+}
+
+
+void    FolderExplorerBase::ListView::wheelEvent(QWheelEvent*evt)
+{
+    if(evt->modifiers() & Qt::ControlModifier){
+        zoomBy( pow(kZoomDelta, evt->angleDelta().y() / 120.));
+        evt -> accept();
+        return;
+    } 
+    return QListView::wheelEvent(evt);
+}
+
+void    FolderExplorerBase::ListView::zoomBy(double amt)
+{
+    
+    m_zoom  = std::min(kZoomMax, std::max(kZoomMin, m_zoom * amt));
+    applyLayout();
+}
+
+
+void    FolderExplorerBase::ListView::zoomIn()
+{
+    zoomBy(kZoomDelta);
+}
+
+void    FolderExplorerBase::ListView::zoomOut()
+{
+    zoomBy(1./kZoomDelta);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -264,14 +392,31 @@ void  FolderExplorerBase::TableModel::refresh()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FolderExplorerBase::TableView::TableView(TableModel*tm, QWidget*parent) : StdTableView<Entry>(tm, parent)
+FolderExplorerBase::TableView::TableView(TableModel*tm, QWidget*parent) : StdTableView<Entry>(tm, parent), m_model(tm)
 {
+    connect(this, &QTableView::doubleClicked, this, &FolderExplorerBase::TableView::cmdDoubleClicked);
 }
 
 FolderExplorerBase::TableView::~TableView()
 {
 }
 
+void        FolderExplorerBase::TableView::cmdDoubleClicked(const QModelIndex&idx)
+{
+    const Entry*    e   = m_model -> row(idx);
+    if(e){
+        switch(e->type){
+        case Type::Doc:
+            emit dblClickDoc(Document{e->id});
+            break;
+        case Type::Fold:
+            emit dblClickFolder(Folder{e->id});
+            break;
+        default:
+            break;
+        }
+    }
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,10 +437,11 @@ struct FolderExplorerBase::TreeModel::Node {
     };
     
     
-    Node(TreeModel* m, Folder f) : ftm(m), folder(f), parent(cdb::parent(f)), label((f == cdb::top_folder()) ? wksp::name() : cdb::skey(f))
+    Node(TreeModel* m, Folder f) : ftm(m), folder(f), parent(cdb::parent(f)), 
+        label((f == cdb::top_folder()) ? wksp::name() : cdb::skey(f)), icon(si_folder())
     {
     }
-
+    
     void    refresh(unsigned chgSignal = 3)
     {
         Vector<Folder>  nc  = cdb::folders(folder, ftm->m_fx->searchOpts());
@@ -488,11 +634,20 @@ FolderExplorerBase::TreeView::TreeView(TreeModel*ftm, QWidget*parent) : QTreeVie
     setHeaderHidden(true);
     setSelectionBehavior(SelectRows);
     setSelectionMode(SingleSelection);
+    setEditTriggers(NoEditTriggers);
+    connect(this, &QTreeView::activated, this, &FolderExplorerBase::TreeView::cmdActivated);
 }
 
 FolderExplorerBase::TreeView::~TreeView()
 {
 
+}
+
+void    FolderExplorerBase::TreeView::cmdActivated(const QModelIndex& idx)
+{
+    Folder  f   = m_model -> folder(idx);
+    if(f)
+        emit activatedFolder(f);
 }
 
 Folder  FolderExplorerBase::TreeView::currentFolder() const

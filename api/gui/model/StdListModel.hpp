@@ -33,9 +33,14 @@ public:
     
     virtual void        removeRow(int);
 
+    T*                  row(int);
+    const T*            row(int) const;
+    T*                  row(const QModelIndex&);
+    const T*            row(const QModelIndex&) const;
+
     int                 rowCount() const;
     int                 rowCount(const QModelIndex&) const override { return rowCount(); }
-
+    
     void                setAllData(const std::vector<T>&);
     bool                setData(const QModelIndex&, const QVariant&, int) override;
     void                setReadOnly(bool);

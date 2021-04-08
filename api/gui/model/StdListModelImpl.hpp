@@ -344,6 +344,35 @@ void                StdListModel<T>::removeRowIf(Pred p)
 }
 
 template <typename T>
+T*                  StdListModel<T>::row(int r)
+{
+    if((r<0) || (r>=(int) m_rows.size()))
+        return nullptr;
+    return &m_rows[r].data;
+}
+
+template <typename T>
+const T*            StdListModel<T>::row(int r) const
+{
+    if((r<0) || (r>=(int) m_rows.size()))
+        return nullptr;
+    return &m_rows[r].data;
+}
+
+template <typename T>
+T*                  StdListModel<T>::row(const QModelIndex& idx)
+{
+    return row(idx.row());
+}
+
+template <typename T>
+const T*            StdListModel<T>::row(const QModelIndex& idx) const
+{
+    return row(idx.row());
+}
+
+
+template <typename T>
 int                 StdListModel<T>::rowCount() const
 {
     return static_cast<int>(m_canAdd && !m_readOnly) + (int) m_rows.size();
