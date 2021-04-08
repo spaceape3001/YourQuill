@@ -13,8 +13,6 @@
 #include <QString>
 #include <QTreeView>
 
-#include <db/CacheQMetaType.hpp>
-#include <db/Folder.hpp>
 #include <gui/model/StdColumn.hpp>
 #include <gui/model/StdListModelImpl.hpp>
 #include <gui/model/StdTableModelImpl.hpp>

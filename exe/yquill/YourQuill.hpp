@@ -7,7 +7,7 @@
 #pragma once
 
 #include <gui/main/MainWin.hpp>
-#include <db/CacheQMetaType.hpp>
+#include <dbgui/document/DocumentQ.hpp>
 
 class YourQuill : public MainWin {
     Q_OBJECT

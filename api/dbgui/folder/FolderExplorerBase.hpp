@@ -8,11 +8,13 @@
 
 #include <gui/main/SubWin.hpp>
 #include <db/FileSys.hpp>
-#include <util/Stack.hpp>
+#include <dbgui/document/DocumentQ.hpp>
+#include <dbgui/folder/FolderQ.hpp>
 
 class QAction;
 class QComboBox;
 class QStackedWidget;
+class QUndoStack;
 
 class FolderExplorerBase : public SubWin {
     Q_OBJECT
@@ -54,13 +56,16 @@ protected:
     
 private:
 
+    class ChgFolder;
+
+    //  TODO Want to add middle button & context menu support
+
     QAction*        m_backAct       = nullptr;
     QAction*        m_forwardAct    = nullptr;
     QAction*        m_upAct         = nullptr;
 
     Folder          m_folder        = Folder{};
-    Stack<Folder>   m_history;
-    int             m_histPos       = -1;
+    QUndoStack*     m_history       = nullptr;
     
     ListModel*      m_listModel     = nullptr;
     int             m_listPos       = -1;

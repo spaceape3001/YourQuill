@@ -5,26 +5,31 @@ set(dbgui_sources
     ./QuillApp.hpp
     
     ./atom/AtomProvider.hpp
+    ./atom/AtomQ.hpp
     ./atom/AtomTableBase.cpp
     ./atom/AtomTableModel.hpp
     ./atom/AtomTableView.hpp
     
     ./attribute/AttributeProvider.hpp
+    ./attribute/AttributeQ.hpp
     ./attribute/AttributeTableBase.cpp
     ./attribute/AttributeTableModel.hpp
     ./attribute/AttributeTableView.hpp
     
     
     ./class/ClassProvider.hpp
+    ./class/ClassQ.hpp
     ./class/ClassTableBase.cpp
     ./class/ClassTableModel.hpp
     ./class/ClassTableView.hpp
     
     ./directory/DirectoryProvider.hpp
+    ./directory/DirectoryQ.hpp
     ./directory/DirectoryTableBase.cpp
     ./directory/DirectoryTableModel.hpp
     ./directory/DirectoryTableView.hpp
     ./document/DocumentProvider.hpp
+    ./document/DocumentQ.hpp
     ./document/DocumentTableBase.cpp
     ./document/DocumentTableModel.hpp
     ./document/DocumentTableView.hpp
@@ -33,6 +38,7 @@ set(dbgui_sources
     ./edit/CopyrightEdit.hpp
     
     ./field/FieldProvider.hpp
+    ./field/FieldQ.hpp
     ./field/FieldTableBase.cpp
     ./field/FieldTableModel.hpp
     ./field/FieldTableView.hpp
@@ -41,21 +47,29 @@ set(dbgui_sources
     ./folder/FolderExplorerBase.hpp
     ./folder/FolderExplorerImpl.hpp
     ./folder/FolderProvider.hpp
+    ./folder/FolderQ.hpp
     ./folder/FolderTableBase.cpp
     ./folder/FolderTableModel.hpp
     ./folder/FolderTableView.hpp
     
     ./fragment/FragmentProvider.hpp
+    ./fragment/FragmentQ.hpp
     ./fragment/FragmentTableBase.cpp
     ./fragment/FragmentTableModel.hpp
     ./fragment/FragmentTableView.hpp
     
+    ./graph/GraphQ.hpp
+    
+    ./image/ImageQ.hpp
+    
     ./leaf/LeafProvider.hpp
+    ./leaf/LeafQ.hpp
     ./leaf/LeafTableBase.cpp
     ./leaf/LeafTableModel.hpp
     ./leaf/LeafTableView.hpp
     
     ./property/PropertyProvider.hpp
+    ./property/PropertyQ.hpp
     ./property/PropertyTableBase.cpp
     ./property/PropertyTableModel.hpp
     ./property/PropertyTableView.hpp
@@ -70,6 +84,7 @@ set(dbgui_sources
     ./tag/TagEdit.cpp
     ./tag/TagEdit.hpp
     ./tag/TagProvider.hpp
+    ./tag/TagQ.hpp
     ./tag/TagTableBase.cpp
     ./tag/TagTableModel.hpp
     ./tag/TagTableView.hpp

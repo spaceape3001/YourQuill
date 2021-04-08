@@ -12,7 +12,6 @@
 #include "Graph.hpp"
 #include "Image.hpp"
 
-
 /*! \brief Atom in the cache
     This structure represents an atom in the cache
 */
@@ -22,7 +21,6 @@ struct Atom {
     constexpr auto    operator<=>(const Atom&rhs) const = default; 
     constexpr operator bool() const { return id != 0ULL; }
 };
-
 
 struct Atom::Info {
     QString     abbr;
@@ -34,7 +32,6 @@ struct Atom::Info {
     Image       icon;
     auto operator<=>(const Info&) const = default;
 };
-
 
 namespace cdb {
     

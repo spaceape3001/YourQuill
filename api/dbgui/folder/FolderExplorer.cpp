@@ -20,6 +20,8 @@
 #include <QStackedWidget>
 #include <QToolBar>
 #include <QToolButton>
+#include <QUndoCommand>
+#include <QUndoStack>
 #include <QWheelEvent>
 
 #include <cmath>
@@ -47,12 +49,28 @@ namespace {
     
 }
 
+class FolderExplorerBase::ChgFolder : public QUndoCommand {
+public:
+    FolderExplorerBase* m_fx;
+    Folder              m_old, m_new;
+    
+
+    ChgFolder(FolderExplorerBase* fx, Folder nf) : m_fx(fx), m_old(fx->m_folder), m_new(nf)
+    {
+    }
+    
+    void    undo() override { m_fx -> changeTo(m_old); }
+    void    redo() override { m_fx -> changeTo(m_new); }
+};
+
 
 FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
 {
     m_url       = new QComboBox;
     m_url -> setEditable(true);
     m_url -> setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    
+    m_history       = new QUndoStack(this);
     
     m_listModel     = new ListModel(this);
     m_listView      = new ListView(m_listModel);
@@ -68,9 +86,13 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     m_stacked -> setCurrentWidget(m_listView);
 
     QToolBar*       bar = new QToolBar;
-    m_backAct       = bar -> addAction(si_go_back(), tr("Back"), this, &FolderExplorerBase::cmdGoBack);
-    m_forwardAct    = bar -> addAction(si_go_forward(), tr("Fwd"), this, &FolderExplorerBase::cmdGoForward);
+    
+    
+    m_backAct       = bar -> addAction(si_go_back(), tr("Back"), m_history, &QUndoStack::undo);
+    m_forwardAct    = bar -> addAction(si_go_forward(), tr("Fwd"), m_history, &QUndoStack::redo);
     m_upAct         = bar -> addAction(si_go_up(), tr("Up"), this, &FolderExplorerBase::cmdGoUp);
+    connect(m_history, &QUndoStack::canUndoChanged, m_backAct, &QAction::setEnabled);
+    connect(m_history, &QUndoStack::canRedoChanged, m_forwardAct, &QAction::setEnabled);
     
     bar -> addAction(si_view_refresh(), tr("Reload"), this, &FolderExplorerBase::cmdReload);
     //bar -> addAction(si_go_home(), tr("Home"), this, &WebBase::goHome);
@@ -101,7 +123,7 @@ FolderExplorerBase::~FolderExplorerBase()
 
 void    FolderExplorerBase::changeTo(Folder f)
 {
-    if(f == m_folder)
+    if(f == m_folder || !f)
         return ;
     
     m_folder    = f;
@@ -109,35 +131,16 @@ void    FolderExplorerBase::changeTo(Folder f)
     m_listModel -> refresh();
     m_tableModel -> refresh();
     m_upAct -> setEnabled( f != cdb::top_folder() );
-    m_backAct -> setEnabled( !m_history.empty() && m_histPos );
-    m_forwardAct -> setEnabled( (m_histPos >= 0) && (m_histPos < (int) m_history.size()));
 }
 
 void    FolderExplorerBase::cmdGoBack()
 {
-    if(m_history.empty())
-        return ;
-    m_history << m_folder;
-    if(m_histPos < 0){
-        m_histPos   = (int) m_history.size() - 2;
-    } else if(m_histPos > 0){
-        --m_histPos;
-    } else
-        return ;
-        
-    changeTo(m_history[m_histPos]);
+    m_history -> undo();
 }
 
 void    FolderExplorerBase::cmdGoForward()
 {
-    if(m_history.empty())
-        return ;
-    if(m_histPos < 0)
-        return;
-    if(m_histPos >= (int) m_history.size() - 1)
-        return;
-    ++m_histPos;
-    changeTo(m_history[m_histPos]);
+    m_history -> redo();
 }
 
 void    FolderExplorerBase::cmdGoUp()
@@ -149,15 +152,7 @@ void    FolderExplorerBase::cmdNavigateTo(Folder f)
 {
     if(!f || (f == m_folder))
         return ;
-
-    if(m_histPos >= 0){
-        m_history.pop_to(m_histPos);
-        m_histPos   = -1;
-    }
-    if(m_folder)
-        m_history << m_folder;
-        
-    changeTo(f);
+    m_history -> push(new ChgFolder(this, f));
 }
 
 void    FolderExplorerBase::cmdReload()
