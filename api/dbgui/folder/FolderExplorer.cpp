@@ -22,6 +22,7 @@
 #include <QToolButton>
 #include <QUndoCommand>
 #include <QUndoStack>
+#include <QVBoxLayout>
 #include <QWheelEvent>
 
 #include <cmath>
@@ -37,7 +38,31 @@ namespace {
     QIcon   icon_for(Document d)
     {
         QIcon ret    = cdb::qIcon(cdb::icon(d));
-        if(ret.isNull())
+        if(!ret.isNull())
+            return ret;
+            
+        QString sfx = cdb::suffix(d).toLower();
+        if(sfx == "bmp"){
+            ret = si_mime_bmp();
+        } else if(sfx == "css"){
+            ret = si_mime_css();
+        } else if(sfx == "gif"){
+            ret = si_mime_gif();
+        } else if(sfx == "htm"){
+            ret = si_mime_html();
+        } else if(sfx == "html"){
+            ret = si_mime_html();
+        } else if(sfx == "jpg"){
+            ret = si_mime_jpg();
+        } else if(sfx == "png"){
+            ret = si_mime_png();
+        } else if(sfx == "rtf"){
+            ret = si_mime_rtf();
+        } else if(sfx == "txt"){
+            ret = si_mime_txt();
+        } else if(sfx == "y"){
+            ret = si_mime_wiki();
+        } else 
             ret    = si_view_refresh();    // placeholder
         return ret;
     }
@@ -79,24 +104,32 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     m_treeModel     = new TreeModel(this);
     m_treeView      = new TreeView(m_treeModel);
     
+    
     m_stacked       = new QStackedWidget;
     m_listPos       = m_stacked -> addWidget(m_listView);
     m_tablePos      = m_stacked -> addWidget(m_tableView);
-    
-    m_stacked -> setCurrentWidget(m_listView);
 
-    QToolBar*       bar = new QToolBar;
+    QWidget*    left = new QWidget;
+    m_left          = new QVBoxLayout(left);
+    m_left -> addWidget(m_treeView, 1);
     
+    QWidget*    right   = new QWidget;
+    m_right         = new QVBoxLayout(right);
+    m_right -> addWidget(m_stacked, 1);
     
-    m_backAct       = bar -> addAction(si_go_back(), tr("Back"), m_history, &QUndoStack::undo);
-    m_forwardAct    = bar -> addAction(si_go_forward(), tr("Fwd"), m_history, &QUndoStack::redo);
-    m_upAct         = bar -> addAction(si_go_up(), tr("Up"), this, &FolderExplorerBase::cmdGoUp);
+    m_stacked -> setCurrentIndex(m_listPos);
+
+    m_navbar        = new QToolBar;
+    
+    m_backAct       = m_navbar -> addAction(si_go_back(), tr("Back"), m_history, &QUndoStack::undo);
+    m_forwardAct    = m_navbar -> addAction(si_go_forward(), tr("Fwd"), m_history, &QUndoStack::redo);
+    m_upAct         = m_navbar -> addAction(si_go_up(), tr("Up"), this, &FolderExplorerBase::cmdGoUp);
     connect(m_history, &QUndoStack::canUndoChanged, m_backAct, &QAction::setEnabled);
     connect(m_history, &QUndoStack::canRedoChanged, m_forwardAct, &QAction::setEnabled);
     
-    bar -> addAction(si_view_refresh(), tr("Reload"), this, &FolderExplorerBase::cmdReload);
+    m_navbar -> addAction(si_view_refresh(), tr("Reload"), this, &FolderExplorerBase::cmdReload);
     //bar -> addAction(si_go_home(), tr("Home"), this, &WebBase::goHome);
-    bar -> addWidget(m_url);
+    m_navbar -> addWidget(m_url);
     
     connect(m_listView, &FolderExplorerBase::ListView::dblClickFolder, this, &FolderExplorerBase::cmdNavigateTo);
     connect(m_tableView, &FolderExplorerBase::TableView::dblClickFolder, this, &FolderExplorerBase::cmdNavigateTo);
@@ -105,13 +138,13 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     connect(m_tableView, &FolderExplorerBase::TableView::dblClickDoc, this, &FolderExplorerBase::openRequest);
     
     QSplitter   *split  = new QSplitter(Qt::Horizontal);
-    split -> addWidget(m_treeView);
-    split -> addWidget(m_stacked);
+    split -> addWidget(left);
+    split -> addWidget(right);
     split -> setStretchFactor(0, 1);
     split -> setStretchFactor(1, 4);
     
     QVBoxLayout*    vlay    = new QVBoxLayout(this);
-    vlay -> addWidget(bar, 0);
+    vlay -> addWidget(m_navbar, 0);
     vlay -> addWidget(split, 1);
     vlay -> setContentsMargins(0,0,0,0);
     
@@ -120,6 +153,27 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
 FolderExplorerBase::~FolderExplorerBase()
 {
 }
+
+void    FolderExplorerBase::addLeft(QWidget*w, int stretch)
+{
+    m_left -> addWidget(w, stretch);
+}
+
+void    FolderExplorerBase::addNavBar(QWidget*w)
+{
+    m_navbar -> addWidget(w);
+}
+
+void    FolderExplorerBase::addNavSeparator()
+{
+    m_navbar -> addSeparator();
+}
+
+void    FolderExplorerBase::addRight(QWidget*w, int stretch)
+{
+    m_right -> addWidget(w, stretch);
+}
+
 
 void    FolderExplorerBase::changeTo(Folder f)
 {
@@ -178,6 +232,18 @@ void    FolderExplorerBase::setShowHidden(bool f)
         refresh();
     }
 }
+
+void    FolderExplorerBase::showList()
+{
+    m_stacked -> setCurrentIndex(m_listPos);
+}
+
+void    FolderExplorerBase::showTable()
+{
+    m_stacked -> setCurrentIndex(m_tablePos);
+}
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

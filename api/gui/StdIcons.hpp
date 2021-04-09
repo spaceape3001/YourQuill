@@ -32,4 +32,15 @@ QIcon   si_list_down();
 QIcon   si_list_remove();
 QIcon   si_list_up();
 
+QIcon   si_mime_bmp();
+QIcon   si_mime_css();
+QIcon   si_mime_gif();
+QIcon   si_mime_html();
+QIcon   si_mime_jpg();
+QIcon   si_mime_png();
+QIcon   si_mime_rtf();
+QIcon   si_mime_tif();
+QIcon   si_mime_txt();
+QIcon   si_mime_wiki();
+
 QIcon   si_view_refresh();

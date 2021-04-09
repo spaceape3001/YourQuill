@@ -128,6 +128,67 @@ QIcon   si_list_up()
     return ret;
 }
 
+QIcon   si_mime_bmp()
+{
+    static thread_local QIcon ret(":mime/bmp.svg");
+    return ret;
+}
+
+QIcon   si_mime_css()
+{
+    static thread_local QIcon ret(":mime/css.svg");
+    return ret;
+}
+
+QIcon   si_mime_gif()
+{
+    static thread_local QIcon ret(":mime/gif.svg");
+    return ret;
+}
+
+QIcon   si_mime_html()
+{
+    static thread_local QIcon ret(":mime/html.svg");
+    return ret;
+}
+
+QIcon   si_mime_jpg()
+{
+    static thread_local QIcon ret(":mime/jpg.svg");
+    return ret;
+}
+
+QIcon   si_mime_png()
+{
+    static thread_local QIcon ret(":mime/png.svg");
+    return ret;
+}
+
+QIcon   si_mime_rtf()
+{
+    static thread_local QIcon ret(":mime/rtf.svg");
+    return ret;
+}
+
+QIcon   si_mime_tif()
+{
+    static thread_local QIcon ret(":mime/tif.svg");
+    return ret;
+}
+
+QIcon   si_mime_txt()
+{
+    static thread_local QIcon ret(":mime/txt.svg");
+    return ret;
+}
+
+QIcon   si_mime_wiki()
+{
+    static thread_local QIcon ret(":mime/wiki.svg");
+    return ret;
+}
+
+
 QIcon   si_view_refresh()
 {
     static thread_local QIcon   ret = theme_icon("view-refresh", ":icon/refresh.svg");

@@ -14,7 +14,9 @@
 class QAction;
 class QComboBox;
 class QStackedWidget;
+class QToolBar;
 class QUndoStack;
+class QVBoxLayout;
 
 class FolderExplorerBase : public SubWin {
     Q_OBJECT
@@ -53,6 +55,13 @@ public slots:
     void            refresh();
 
 protected:
+
+    void        addLeft(QWidget*, int stretch=0);
+    void        addRight(QWidget*, int stretch=0);
+    void        addNavBar(QWidget*);
+    void        addNavSeparator();
+    void        showTable();
+    void        showList();
     
 private:
 
@@ -78,6 +87,9 @@ private:
     TreeView*       m_treeView      = nullptr;
     QComboBox*      m_url           = nullptr;
     bool            m_showHidden    = false;
+    QVBoxLayout*    m_left          = nullptr;
+    QVBoxLayout*    m_right         = nullptr;
+    QToolBar*       m_navbar        = nullptr;
     
     void            changeTo(Folder);
     

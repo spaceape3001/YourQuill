@@ -22,6 +22,19 @@
     <file alias="icon/save.svg">openIcon/document-save-5.svg</file>
     <file alias="icon/undo.svg">openIcon/edit-undo-3.svg</file>
     <file alias="icon/up.svg">openIcon/arrow-up-3.svg</file>
+    
+    <file alias="mime/bmp.svg">../share/www/ico/ext/bmp.svg</file>
+    <file alias="mime/css.svg">../share/www/ico/ext/css.svg</file>
+    <file alias="mime/gif.svg">../share/www/ico/ext/gif.svg</file>
+    <file alias="mime/html.svg">../share/www/ico/ext/html.svg</file>
+    <file alias="mime/jpg.svg">../share/www/ico/ext/jpg.svg</file>
+    <file alias="mime/png.svg">../share/www/ico/ext/png.svg</file>
+    <file alias="mime/rtf.svg">../share/www/ico/ext/rtf.svg</file>
+    <file alias="mime/tif.svg">../share/www/ico/ext/tif.svg</file>
+    <file alias="mime/txt.svg">../share/www/ico/ext/txt.svg</file>
+    <file alias="mime/wiki.svg">../share/www/ico/wiki.svg</file>
+    
+    
 </qresource>
 </RCC>
 
