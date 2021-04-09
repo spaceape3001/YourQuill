@@ -112,10 +112,12 @@ FolderExplorerBase::FolderExplorerBase(QWidget*parent) : SubWin(parent)
     QWidget*    left = new QWidget;
     m_left          = new QVBoxLayout(left);
     m_left -> addWidget(m_treeView, 1);
+    m_left -> setContentsMargins(0,0,0,0);
     
     QWidget*    right   = new QWidget;
     m_right         = new QVBoxLayout(right);
     m_right -> addWidget(m_stacked, 1);
+    m_right -> setContentsMargins(0,0,0,0);
     
     m_stacked -> setCurrentIndex(m_listPos);
 
