@@ -4,19 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "TLSGlobals.hpp"
-
-#include <db/Atom.hpp>
-#include <db/Class.hpp>
-#include <db/FileSys.hpp>
-#include <db/Graph.hpp>
-#include <db/Image.hpp>
-#include <db/Leaf.hpp>
-#include <db/Tag.hpp>
-#include <util/Vector.hpp>
-
-#include <QByteArray>
-#include <QDateTime>
+#pragma once
 
 namespace {
     struct TLSVars {

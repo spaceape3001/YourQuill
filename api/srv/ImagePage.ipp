@@ -4,9 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ImagePage.hpp"
-#include <util/Utilities.hpp>
-#include <QImage>
+#pragma once
 
 namespace {
     struct ImageArgPage : public Page {

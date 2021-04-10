@@ -1,42 +1,44 @@
 set(srv_sources
-    ./ArgDecode.cpp
     ./ArgDecode.hpp
-    ./CssPage.cpp
+    ./ArgDecode.ipp
     ./CssPage.hpp
+    ./CssPage.ipp
     ./CssWriter.hpp
-    ./HtmlPage.cpp
     ./HtmlPage.hpp
+    ./HtmlPage.ipp
     ./HtmlWriter.hpp
-    ./ImagePage.cpp
     ./ImagePage.hpp
-    ./Importer.cpp
+    ./ImagePage.ipp
     ./Importer.hpp
-    ./JsonPage.cpp
+    ./Importer.ipp
     ./JsonPage.hpp
-    ./MarkdownPage.cpp
+    ./JsonPage.ipp
     ./MarkdownPage.hpp
+    ./MarkdownPage.ipp
     ./MarkdownWriter.hpp
-    ./NetWriter.cpp
+    ./NetPageUnity.cpp
     ./NetWriter.hpp
-    ./Page.cpp
+    ./NetWriter.ipp
     ./Page.hpp
-    ./Scanner.cpp
+    ./Page.ipp
     ./Scanner.hpp
-    ./Session.cpp
+    ./Scanner.ipp
     ./Session.hpp
+    ./Session.ipp
     ./SrvLogging.hpp
-    ./StdPage.cpp
-    ./SvgPage.cpp
+    ./SrvUnity.cpp
+    ./StdPage.ipp
     ./SvgPage.hpp
-    ./TextPage.cpp
+    ./SvgPage.ipp
     ./TextPage.hpp
+    ./TextPage.ipp
     ./TextWriter.hpp
-    ./TLSGlobals.cpp
     ./TLSGlobals.hpp
-    ./TypedBytes.cpp
+    ./TLSGlobals.ipp
     ./TypedBytes.hpp
-    ./Utilities.cpp
+    ./TypedBytes.ipp
     ./Utilities.hpp
+    ./Utilities.ipp
 )
 
 add_library(yqsrv SHARED ${srv_sources})

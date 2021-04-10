@@ -5,26 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Importer.hpp"
-#include "Scanner.hpp"
 
-#include <db/FileSys.hpp>
-#include <db/Root.hpp>
-#include <db/Workspace.hpp>
-//#include <util/EnumMap.hpp>
-#include <util/FileUtils.hpp>
-#include <util/Logging.hpp>
-#include <util/SqlQuery.hpp>
-//#include "util/Set.hpp"
-//#include "util/Utilities.hpp"
-//#include "util/Vector.hpp"
-
-#include <QCoreApplication>
-#include <QDateTime>
-#include <QFileInfo>
-#include <QTimer>
-
-
-#include <QRegularExpressionMatch>
 
 
 #define sAlert           yAlert("scanner")
@@ -404,4 +385,3 @@ void        Scanner::scan()
 }
 
 
-#include "moc_Scanner.cpp"

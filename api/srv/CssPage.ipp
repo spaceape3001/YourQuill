@@ -4,8 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "CssPage.hpp"
-
+#pragma once
 
 CssWriter::CssWriter() = default;
 CssWriter::~CssWriter() = default;

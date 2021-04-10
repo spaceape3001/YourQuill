@@ -4,45 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ArgStrings.hpp"
-#include "Page.hpp"
-#include "TLSGlobals.hpp"
-
-#include <db/ShareDir.hpp>
-#include <util/EnumMap.hpp>
-#include <util/Guarded.hpp>
-#include <util/Vector.hpp>
-
-#include <QByteArray>
-#include <QUrl>
-//#include "yCommon.hpp"
-
-
-//#include "yPage.hpp"
-//#include "yNetWriter.hpp"
-
-//#include "db/ShareDir.hpp"
-
-//#include "util/DelayInit.hpp"
-//#include "util/EnumMap.hpp"
-//#include "util/Guarded.hpp"
-//#include "util/Map.hpp"
-//#include "util/Utilities.hpp"
-//#include "util/Vector.hpp"
-
-//#include "db/Workspace.hpp"
-
-//#include <QBuffer>
-//#include <QDir>
-//#include <QImage>
-//#include <QJsonArray>
-//#include <QJsonObject>
-//#include <QJsonDocument>
-//#include <QString>
-//#include <QSvgGenerator>
-
-#include <tbb/spin_rw_mutex.h>
-
+#pragma once
 
 Redirect::Redirect(const QUrl& b ) : why(HttpStatus::TemporaryRedirect), where(b.toString().toUtf8())
 {

@@ -4,10 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "MarkdownPage.hpp"
-#include "TLSGlobals.hpp"
-#include <db/Workspace.hpp>
-#include <util/Execute.hpp>
+#pragma once
 
 MarkdownWriter::CT        MarkdownWriter::exec(const QByteArray&buf)
 {

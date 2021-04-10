@@ -4,12 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Importer.hpp"
-
-#include <db/FileSys.hpp>
-#include <util/EnumMap.hpp>
-#include <util/Vector.hpp>
-
 struct Importer::Repo {
     Vector<const Importer*>                 all;
     EnumMap<Change,Vector<const Importer*>> byChange;

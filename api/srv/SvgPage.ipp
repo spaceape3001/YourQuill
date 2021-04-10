@@ -4,9 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "SvgPage.hpp"
-#include <QBuffer>
-#include <QSvgGenerator>
+#pragma once
+
 
 namespace {
     struct SvgPage : public Page {

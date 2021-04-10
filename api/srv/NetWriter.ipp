@@ -4,18 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "NetWriter.hpp"
-#include "SrvLogging.hpp"
-
-#include <util/Utilities.hpp>
-
-#include <QColor>
-#include <QDir>
-#include <QFile>
-#include <QRect>
-#include <QUrl>
-#include <stdio.h>
-
+#pragma once
 
 NetWriter::NetWriter() : m_stream(&m_bytes)
 {

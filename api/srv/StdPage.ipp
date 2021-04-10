@@ -4,19 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Page.hpp"
-#include "MarkdownWriter.hpp"
-#include "TLSGlobals.hpp"
-
-#include <util/FileUtils.hpp>
-#include <util/Utilities.hpp>
-
-#include <QDir>
-#include <QFileInfo>
-
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+#pragma once
 
 QByteArray                   do_expand(const QByteArray&content, const GetMap&vars)
 {

@@ -1,26 +1,26 @@
 set(QtWebApp_SOURCES
-    httpserver/httpconnectionhandler.cpp
+    httpserver/httpconnectionhandler.ipp
     httpserver/httpconnectionhandler.h
-    httpserver/httpconnectionhandlerpool.cpp
+    httpserver/httpconnectionhandlerpool.ipp
     httpserver/httpconnectionhandlerpool.h
-    httpserver/httpcookie.cpp
+    httpserver/httpcookie.ipp
     httpserver/httpcookie.h
-    httpserver/httpglobal.cpp
+    httpserver/httpglobal.ipp
     httpserver/httpglobal.h
-    httpserver/httplistener.cpp
+    httpserver/httplistener.ipp
     httpserver/httplistener.h
-    httpserver/httprequest.cpp
+    httpserver/httprequest.ipp
     httpserver/httprequest.h
-    httpserver/httprequesthandler.cpp
+    httpserver/httprequesthandler.ipp
     httpserver/httprequesthandler.h
-    httpserver/httpresponse.cpp
+    httpserver/httpresponse.ipp
     httpserver/httpresponse.h
-    httpserver/httpserver.pri
-    httpserver/httpsession.cpp
+    httpserver/httpsession.ipp
     httpserver/httpsession.h
-    httpserver/httpsessionstore.cpp
+    httpserver/httpsessionstore.ipp
     httpserver/httpsessionstore.h
-    httpserver/staticfilecontroller.cpp
+    httpserver/httpunity.cpp
+    httpserver/staticfilecontroller.ipp
     httpserver/staticfilecontroller.h
 )
 

@@ -4,24 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ArgDecode.hpp"
-#include "Session.hpp"
-#include "TLSGlobals.hpp"
-#include "Utilities.hpp"
-
-#include <db/Atom.hpp>
-#include <db/Class.hpp>
-#include <db/FileSys.hpp>
-#include <db/Image.hpp>
-#include <db/Graph.hpp>
-#include <db/Leaf.hpp>
-#include <db/Tag.hpp>
-#include <db/Root.hpp>
-#include <db/Workspace.hpp>
-#include <util/Utilities.hpp>
-
-#include <httpserver/httprequest.h>
-
+#pragma once
 
 R  decode_atom(Atom& out, const char* sz)
 {

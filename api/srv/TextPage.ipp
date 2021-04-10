@@ -4,8 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "TextPage.hpp"
-#include "TLSGlobals.hpp"
+#pragma once
 
 TextWriter::TextWriter() = default;
 TextWriter::~TextWriter() = default;

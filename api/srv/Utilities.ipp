@@ -4,20 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Page.hpp"
-#include "Session.hpp"
-#include "TLSGlobals.hpp"
-#include "Utilities.hpp"
-
-#include <db/Class.hpp>
-#include <db/Workspace.hpp>
-#include <util/Utilities.hpp>
-
-#include <httpserver/httprequest.h>
-
-#include <QByteArray>
-#include <QUrl>
-
+#pragma once
 
 bool        auto_edit()
 {

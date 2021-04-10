@@ -4,11 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "JsonPage.hpp"
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
-
+#pragma once
 
 namespace {
     struct JsonArrPage : public Page {

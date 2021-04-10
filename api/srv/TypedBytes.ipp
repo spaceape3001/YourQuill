@@ -4,9 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "TypedBytes.hpp"
-#include <db/FileSys.hpp>
-#include <db/Workspace.hpp>
+#pragma once
 
 TypedBytes::TypedBytes(std::initializer_list<QString> keys, ContentType ct)
 {

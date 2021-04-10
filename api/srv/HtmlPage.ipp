@@ -4,23 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "HtmlPage.hpp"
-#include "MarkdownWriter.hpp"
-#include "SrvLogging.hpp"
-#include "TLSGlobals.hpp"
-#include "Utilities.hpp"
-
-#include <db/Cache.hpp>
-
-#include <httpserver/httprequest.h>
-
-
-#include <QColor>
-#include <QDir>
-#include <QFile>
-#include <QRect>
-#include <QUrl>
-#include <stdio.h>
+#pragma once
 
     namespace html {
         TabBar::TabBar(std::initializer_list<Page::Writer> wlist)

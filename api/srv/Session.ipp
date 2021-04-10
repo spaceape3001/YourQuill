@@ -4,11 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Session.hpp"
-#include <util/Utilities.hpp>
-#include <sys/random.h>
-#include <tbb/spin_rw_mutex.h>
-#include <QDateTime>
+#pragma once
 
 void    ID::make()
 {
