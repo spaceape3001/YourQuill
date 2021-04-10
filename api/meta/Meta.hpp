@@ -7,6 +7,7 @@
 #pragma once
 
 #include "MetaFwd.hpp"
+#include "util/IgCase.hpp"
 #include "util/Map.hpp"
 #include "util/Set.hpp"
 #include "util/String.hpp"

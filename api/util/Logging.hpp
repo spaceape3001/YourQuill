@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "DebugRel.hpp"
 #include "Enum.hpp"
 #include <log4cpp/Category.hh>
 #include <log4cpp/CategoryStream.hh>

@@ -7,7 +7,11 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__MAP__H__
 
-#include "TypeFwd.hpp"
+#include "ListFwd.hpp"
+#include "MapFwd.hpp"
+#include "Result.hpp"
+#include "VectorFwd.hpp"
+//#include "TypeFwd.hpp"
 #include <map>
 
 

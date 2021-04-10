@@ -4,11 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "LogFile.hpp"
-#include "Logging.hpp"
-#include "TypeFwd.hpp"
-#include <QTimer>
-
 LogFile::LogFile(const QString& path) : 
     m_fpath(path.arg(thread_id())),
     m_file(m_fpath), 

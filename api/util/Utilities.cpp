@@ -8,9 +8,11 @@
 
 #include "Comma.hpp"
 #include "DiffEngine.hpp"
+#include "IgCase.hpp"
 #include "List.hpp"
 #include "Set.hpp"
 #include "String.hpp"
+#include "ThreadId.hpp"
 #include "Vector.hpp"
 
 #include <iostream>
@@ -437,6 +439,13 @@ QIcon           theme_icon(const QString& icon, const QString& fallback)
     } else {
         return QIcon();
     }
+}
+
+unsigned int thread_id()
+{
+    static std::atomic<unsigned int>    sNext{0};
+    static thread_local unsigned int    sRet    = sNext++;
+    return sRet;
 }
 
 

@@ -8,6 +8,7 @@
 
 #include "Array1.hpp"
 #include "IntRange.hpp"
+#include "IntRangeFwd.hpp"
 #include "Vector.hpp"
 #include <algorithm>
 

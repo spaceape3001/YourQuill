@@ -7,7 +7,6 @@
 #pragma once
 
 #include <QDialog>
-#include <util/TypeFwd.hpp>
 
 class CheckBox;
 class ComboBox;

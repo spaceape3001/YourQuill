@@ -5,13 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include "SqlLogging.hpp"
-#include "FileUtils.hpp"
-#include "SqlUtils.hpp"
-
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QStringList>
 
 bool            db_run_script(const String&data, QSqlDatabase db)
 {

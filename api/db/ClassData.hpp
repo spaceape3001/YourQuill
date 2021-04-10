@@ -11,6 +11,7 @@
 #include <util/Map.hpp>
 #include <util/Set.hpp>
 #include <util/String.hpp>
+#include <memory>
 
 
 struct ClassData {

@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include "util/TypeFwd.hpp"
+#include "util/MapFwd.hpp"
+#include "util/ResultFwd.hpp"
 
 union DataBlock;
 class Global;

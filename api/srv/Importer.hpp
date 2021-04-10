@@ -8,8 +8,9 @@
 
 #include <db/enum/Change.hpp>
 #include <util/DelayInit.hpp>
+#include <util/EnumMapFwd.hpp>
 #include <util/Flag.hpp>
-#include <util/TypeFwd.hpp>
+
 
 #include <QRegularExpression>
 

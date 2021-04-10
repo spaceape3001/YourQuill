@@ -4,26 +4,28 @@
 #   Files should be listed alphabetically
 
 set(util_sources
-    ./AbstractFile.cpp
+    ./AbstractFile.ipp
     ./AbstractFile.hpp
     ./Array1.hpp
     ./Array2.hpp
-    ./Collections.cpp
     ./Comma.hpp
     ./Compare.hpp
     ./Curl.cpp
     ./Curl.hpp
     ./DelayInit.cpp
     ./DelayInit.hpp
+    ./Deque.hpp
     ./DiffEngine.hpp
     ./Enum.cpp
     ./Enum.hpp
     ./EnumMap.hpp
     ./Execute.cpp
     ./Execute.hpp
-    ./FileName.cpp
     ./FileName.hpp
+    ./FileName.ipp
+    ./FileUnity.cpp
     ./FileUtils.hpp
+    ./FileUtils.ipp
     ./Flag.hpp
     ./Guarded.hpp
     ./Hash.hpp
@@ -31,8 +33,8 @@ set(util_sources
     ./Http.hpp
     ./IntRange.hpp
     ./List.hpp
-    ./LogFile.cpp
     ./LogFile.hpp
+    ./LogFile.ipp
     ./Logging.cpp
     ./Logging.hpp
     ./Map.hpp
@@ -44,9 +46,10 @@ set(util_sources
     ./Safety.hpp
     ./Set.hpp
     ./Span.hpp
-    ./SqlQuery.cpp
+    ./SqlQuery.ipp
     ./SqlQuery.hpp
-    ./SqlUtils.cpp
+    ./SqlUnity.cpp
+    ./SqlUtils.ipp
     ./SqlUtils.hpp
     ./Stack.hpp
     ./Stream.hpp
@@ -57,7 +60,10 @@ set(util_sources
     ./Utilities.hpp
     ./Vector.hpp
     ./XmlFile.hpp
+    ./XmlFile.ipp
     ./XmlFwd.hpp
+    ./XmlUtils.hpp
+    ./XmlUtils.ipp
     ./ZipFile.cpp
     ./ZipReader.hpp
     ./ZipWriter.hpp

@@ -6,9 +6,10 @@
 
 #pragma once
 
-#include "Vector.hpp"
+#include "IgCase.hpp"
 #include "Map.hpp"
 #include "String.hpp"
+#include "Vector.hpp"
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

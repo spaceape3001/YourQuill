@@ -9,6 +9,7 @@
 #include "StdTableModel.hpp"
 #include <gui/Provider.hpp>
 #include <util/Set.hpp>
+#include <memory>
 
 /*! \brief U64 ID Table Model
 

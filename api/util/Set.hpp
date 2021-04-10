@@ -7,11 +7,14 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__SET__H__
 
-#include "TypeFwd.hpp"
+#include "SetFwd.hpp"
+#include "ListFwd.hpp"
+#include "VectorFwd.hpp"
+
+#include <cassert>
 #include <set>
 #include <list>
 #include <vector>
-
 
 
 /*! \brief Set container

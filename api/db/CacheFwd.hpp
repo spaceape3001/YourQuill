@@ -6,11 +6,12 @@
 
 #pragma once
 
+#include <stdint.h>
 #include <compare>
-#include <cstdint>
 #include <utility>
 #include <variant>
-#include <util/TypeFwd.hpp>
+#include <util/SetFwd.hpp>
+#include <util/VectorFwd.hpp>
 
 template <typename> class Vector;
 

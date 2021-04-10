@@ -6,9 +6,14 @@
 
 
 #pragma once
-#include <filesystem>
+#include <bits/fs_fwd.h>
+#include <bits/fs_path.h>
 #include <iosfwd>
-#include "TypeFwd.hpp"
+#include "VectorFwd.hpp"
+//#include "TypeFwd.hpp"
+
+class String;
+class QString;
 
 /*! \brief Root of SMALL files
 

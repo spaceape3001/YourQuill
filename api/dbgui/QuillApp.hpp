@@ -8,7 +8,6 @@
 
 #include <QApplication>
 #include <memory>
-#include <util/TypeFwd.hpp>
 #include <util/Map.hpp>
 #include <QVariant>
 

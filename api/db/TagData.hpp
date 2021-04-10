@@ -6,6 +6,7 @@
 
 #pragma once
 #include <util/String.hpp>
+#include <memory>
 
 struct TagData {
 

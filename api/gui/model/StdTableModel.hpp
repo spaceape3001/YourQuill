@@ -10,6 +10,7 @@
 
 #include <meta/Variant.hpp>
 #include <util/Compare.hpp>
+#include <util/EnumMapFwd.hpp>
 #include <util/Vector.hpp>
 
 #include <QVariant>
@@ -109,19 +110,6 @@ public:
 
     //void                hideColumn
 
-protected:
-
-    Vector<Column*>     m_columns;
-    Vector<Row>         m_rows;
-    size_t              m_adders        = 0;
-    bool                m_readOnly      = false;
-    bool                m_canAdd        = false;
-    bool                m_dragReorder   = false;  // pending...
-    int                 m_tickCol       = -1;
-    
-    void                allChanged();
-    
-    
     ColumnWriter        col(Column* c);
     ColumnWriter        col(const String&, String(T::*), bool cs=false);
     template <typename E>
@@ -146,6 +134,19 @@ protected:
     //! Creates a custom read-write column using lambdas
     template <typename Getter, typename Setter, typename Less>
     ColumnWriter        customRW(const String&, Getter, Setter, Less);
+
+protected:
+
+    Vector<Column*>     m_columns;
+    Vector<Row>         m_rows;
+    size_t              m_adders        = 0;
+    bool                m_readOnly      = false;
+    bool                m_canAdd        = false;
+    bool                m_dragReorder   = false;  // pending...
+    int                 m_tickCol       = -1;
+    
+    void                allChanged();
+    
 
     //template <String (T::*)>
     //void                add(const String&, const QVariant&v=QVariant, Adder* a=nullptr)

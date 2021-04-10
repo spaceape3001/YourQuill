@@ -6,12 +6,15 @@
 
 #pragma once
 
-#include "TypeFwd.hpp"
+#include "UInt128.hpp"
+#include "VectorFwd.hpp"
 
-#include <cstdint>
+#include <stdint.h>
 #include <iosfwd>
 
 class QByteArray;
+class QString;
+class String;
 
 bool            file_backup(const char*, const char* suffix="bck");
 QByteArray      file_bytes(const char*);

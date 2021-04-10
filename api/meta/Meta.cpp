@@ -23,6 +23,7 @@
 #include "util/Vector.hpp"
 
 #include <atomic>
+#include <cassert>
 
 #include <tbb/spin_mutex.h>
 

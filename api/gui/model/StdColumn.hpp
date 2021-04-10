@@ -8,7 +8,8 @@
 
 #include <gui/delegate/StringDelegate.hpp>
 #include <gui/delegate/EnumDelegate.hpp>
-#include <util/TypeFwd.hpp>
+#include <util/EnumMap.hpp>
+#include <util/EnumMapFwd.hpp>
 #include <util/TypeTraits.hpp>
 #include <QValidator>
 #include <QVariant>

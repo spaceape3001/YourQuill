@@ -10,7 +10,7 @@
 #pragma once
 
 #include <QStringList>
-#include "TypeFwd.hpp"
+#include "VectorFwd.hpp"
 
 class QByteArray;
 

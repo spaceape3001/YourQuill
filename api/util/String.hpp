@@ -6,7 +6,12 @@
 
 #pragma once
 
-#include "TypeFwd.hpp"
+#include "ListFwd.hpp"
+#include "Result.hpp"
+#include "ResultFwd.hpp"
+#include "SetFwd.hpp"
+#include "VectorFwd.hpp"
+
 #include <string>
 #include <cwchar>
 #include <cuchar>

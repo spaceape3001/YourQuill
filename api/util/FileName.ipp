@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "FileName.hpp"
-#include <QFileInfo>
 
 FileName::FileName() = default;
 FileName::FileName(const FileName&) = default;

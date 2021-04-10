@@ -6,6 +6,7 @@
 
 #include "Compare.hpp"
 #include "List.hpp"
+#include "NaN.hpp"
 #include "Set.hpp"
 #include "String.hpp"
 #include "Vector.hpp"

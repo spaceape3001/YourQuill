@@ -19,6 +19,7 @@ template <typename T> class MetaValueImpl;
 
 struct MetaField;
 struct MetaKey;
+class QVariant;
 
 class MetaValue : public MetaType {
     friend class Variant;

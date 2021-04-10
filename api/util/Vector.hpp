@@ -7,10 +7,10 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__VECTOR__H__
 
-#include "TypeFwd.hpp"
+#include <cassert>
 #include <vector>
 #include <algorithm>
-
+#include "ListFwd.hpp"
 
 
 /*! \brief Our vector container type

@@ -8,10 +8,11 @@
 #include <QAction>
 #include <QMainWindow>
 
-#include "util/Hash.hpp"
-#include "util/Map.hpp"
-#include "util/Set.hpp"
-#include "util/Vector.hpp"
+#include <util/Hash.hpp>
+#include <util/IgCase.hpp>
+#include <util/Map.hpp>
+#include <util/Set.hpp>
+#include <util/Vector.hpp>
 
 class QMenu;
 class QMenuBar;

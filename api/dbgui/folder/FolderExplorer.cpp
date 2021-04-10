@@ -354,6 +354,7 @@ static const double kZoomMin    = pow(0.5, 2.);
 FolderExplorerBase::ListView::ListView(ListModel* lm, QWidget* parent) : StdListView<Entry>(lm, parent), m_model(lm)
 {
     setViewMode(IconMode);
+    setItemAlignment(Qt::AlignLeft);
     connect(this, &QListView::doubleClicked, this, &FolderExplorerBase::ListView::cmdDoubleClicked);
 }
 

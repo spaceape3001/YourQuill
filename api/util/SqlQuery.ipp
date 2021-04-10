@@ -4,11 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "SqlQuery.hpp"
-#include "SqlLogging.hpp"
-#include "Set.hpp"
-#include "String.hpp"
-#include "Vector.hpp"
 
 #include <QSqlError>
 

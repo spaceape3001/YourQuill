@@ -5,7 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Enum.hpp"
+#include "StringPair.hpp"
 #include "Vector.hpp"
+#include <cassert>
 
 namespace {
     void    clean_it(String& text)

@@ -29,6 +29,7 @@ if(${Feature_QtGUI})
     set(ENABLE_QT ON)
 endif()
 set(ENABLE_GLM OFF)
+option(Feature_BuildTime "Print out build times" ON)
 
 message( "Build Type is " ${CMAKE_BUILD_TYPE})
 
@@ -82,6 +83,10 @@ if(Feature_ApiDocumentation)
 endif()
 
 enable_testing()
+
+if(Feature_BuildTime)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
+endif()
 
 include_directories(3rd/QtWebApp-1.7.11/QtWebApp)
 include_directories(${TBB_INCLUDE_DIR})

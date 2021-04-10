@@ -7,7 +7,6 @@
 #pragma once
 
 #include <QTabWidget>
-#include <util/TypeFwd.hpp>
 
 class QuillDataEdit;
 class QuillDirTable;

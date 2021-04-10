@@ -7,6 +7,7 @@
 #pragma once
 
 #include "LineEdit.hpp"
+#include <util/SetFwd.hpp>
 
 class UShortSetEdit : public LineEdit {
     Q_OBJECT

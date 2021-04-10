@@ -7,6 +7,7 @@
 #include "ShareDir.hpp"
 
 #include <util/FileUtils.hpp>
+#include <util/Result.hpp>
 #include <util/Vector.hpp>
 
 #include <QDir>

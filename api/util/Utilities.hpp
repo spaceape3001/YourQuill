@@ -6,16 +6,20 @@
 
 #pragma once
 
-#include "TypeFwd.hpp"
-#include <cstdint>
+#include <stdint.h>
 #include <iosfwd>
+#include "ListFwd.hpp"
+#include "SetFwd.hpp"
+#include "VectorFwd.hpp"
 
+class QByteArray;
 class QChar;
 class QRect;
 class QIcon;
 class QImage;
 class QString;
 class QStringList;
+class QVariant;
 
 
 uint64_t        randU64();

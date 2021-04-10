@@ -8,6 +8,7 @@
 
 #include "ComboBox.hpp"
 #include <util/Enum.hpp>
+#include <util/StringPair.hpp>
 #include <optional>
 
 

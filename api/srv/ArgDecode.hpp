@@ -7,7 +7,7 @@
 #pragma once
 
 #include "ArgStrings.hpp"
-#include <util/TypeFwd.hpp>
+#include <stdint.h>
 
 class Atom;
 class Class;
@@ -22,7 +22,7 @@ class Leaf;
 class Page;
 class Root;
 class Tag;
-
+class String;
 
 
 

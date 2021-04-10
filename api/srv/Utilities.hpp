@@ -8,7 +8,7 @@
 
 #include <db/enum/DataRole.hpp>
 #include <db/enum/SizeDesc.hpp>
-#include <util/TypeFwd.hpp>
+
 
 class Class;
 class Root;

@@ -15,6 +15,7 @@
 #include <meta/Global.hpp>
 #include <meta/GlobalImpl.hpp>
 #include <util/DelayInit.hpp>
+#include <util/ThreadId.hpp>
 #include <util/Utilities.hpp>
 
 #include <QCoreApplication>

@@ -10,6 +10,7 @@
 #include <db/enum/SizeDesc.hpp>
 #include <util/Enum.hpp>
 #include <util/Flag.hpp>
+#include <util/QDirVectorFwd.hpp>
 
 class QSqlDatabase;
 class QDateTime;
