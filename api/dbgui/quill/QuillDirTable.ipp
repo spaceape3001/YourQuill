@@ -224,4 +224,3 @@ int         QuillDirTable::View::selectedRow() const
     return s.front().row();
 }
 
-#include "moc_QuillDirTable.cpp"

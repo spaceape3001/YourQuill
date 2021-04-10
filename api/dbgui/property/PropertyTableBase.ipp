@@ -4,10 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "PropertyTableModel.hpp"
-#include "PropertyTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
 
 template class StdTableModel<Property>;
 template class U64TableModel<Property>;
@@ -36,8 +32,4 @@ PropertyTableView::~PropertyTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#include "moc_PropertyTableModel.cpp"
-#include "moc_PropertyTableView.cpp"

@@ -4,10 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DocumentTableModel.hpp"
-#include "DocumentTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
 
 template class StdTableModel<Document>;
 template class U64TableModel<Document>;
@@ -36,8 +32,3 @@ DocumentTableView::~DocumentTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#include "moc_DocumentTableModel.cpp"
-#include "moc_DocumentTableView.cpp"

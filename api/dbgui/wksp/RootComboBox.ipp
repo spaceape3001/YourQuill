@@ -64,4 +64,3 @@ void        RootComboBox::_update()
         setCurrentRoot(wksp::root_first(m_role));
 }
 
-#include "moc_RootComboBox.cpp"

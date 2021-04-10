@@ -154,4 +154,3 @@ void    QuillDataEdit::setReadOnly(bool f)
     m_readOnly = f;
 }
 
-#include "moc_QuillDataEdit.cpp"

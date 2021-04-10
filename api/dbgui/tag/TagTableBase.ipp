@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "TagTableModel.hpp"
-#include "TagTableView.hpp"
 #include <gui/model/U64TableModelImpl.hpp>
 #include <QHeaderView>
 
@@ -54,7 +52,3 @@ TagTableView::~TagTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#include "moc_TagTableModel.cpp"
-#include "moc_TagTableView.cpp"

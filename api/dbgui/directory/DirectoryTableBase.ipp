@@ -4,10 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "DirectoryTableModel.hpp"
-#include "DirectoryTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
+#pragma once
 
 template class StdTableModel<Directory>;
 template class U64TableModel<Directory>;
@@ -37,8 +34,3 @@ DirectoryTableView::~DirectoryTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#include "moc_DirectoryTableModel.cpp"
-#include "moc_DirectoryTableView.cpp"

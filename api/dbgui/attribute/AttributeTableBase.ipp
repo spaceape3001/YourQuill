@@ -4,11 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "AttributeTableModel.hpp"
-#include "AttributeTableView.hpp"
-#include <gui/model/StdTableModelImpl.hpp>
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
 
 template class StdTableModel<Attribute>;
 template class U64TableModel<Attribute>;
@@ -39,5 +34,3 @@ AttributeTableView::~AttributeTableView()
 {
 }
 
-#include "moc_AttributeTableModel.cpp"
-#include "moc_AttributeTableView.cpp"

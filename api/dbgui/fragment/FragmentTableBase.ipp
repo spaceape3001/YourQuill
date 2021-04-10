@@ -4,10 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "FragmentTableModel.hpp"
-#include "FragmentTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
 
 template class StdTableModel<Fragment>;
 template class U64TableModel<Fragment>;
@@ -35,8 +31,4 @@ FragmentTableView::~FragmentTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#include "moc_FragmentTableModel.cpp"
-#include "moc_FragmentTableView.cpp"

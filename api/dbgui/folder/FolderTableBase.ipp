@@ -4,10 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "FolderTableModel.hpp"
-#include "FolderTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
+#pragma once
 
 template class StdTableModel<Folder>;
 template class U64TableModel<Folder>;
@@ -38,8 +35,3 @@ FolderTableView::~FolderTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#include "moc_FolderTableModel.cpp"
-#include "moc_FolderTableView.cpp"

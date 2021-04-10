@@ -4,10 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "AtomTableModel.hpp"
-#include "AtomTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
+#pragma once
 
 template class StdTableModel<Atom>;
 template class U64TableModel<Atom>;
@@ -36,8 +33,4 @@ AtomTableView::~AtomTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#include "moc_AtomTableModel.cpp"
-#include "moc_AtomTableView.cpp"

@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "QuillDataEdit.hpp"
-#include "QuillDirTable.hpp"
+#include "QuillDataEdit.ipp"
+#include "QuillDirTable.ipp"
 #include "QuillEdit.hpp"
 
 
@@ -87,3 +87,5 @@ QStringSet   QuillEdit::templates() const
 
 
 #include "moc_QuillEdit.cpp"
+#include "moc_QuillDataEdit.cpp"
+#include "moc_QuillDirTable.cpp"

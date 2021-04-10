@@ -123,4 +123,3 @@ void    WkspSelectorDlg::setPath(const QString&s)
     
 }
 
-#include "moc_WkspSelectorDlg.cpp"

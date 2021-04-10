@@ -4,33 +4,36 @@ set(dbgui_sources
     ./QuillApp.cpp
     ./QuillApp.hpp
     
+    ./TableUnity.cpp
+    
     ./atom/AtomProvider.hpp
     ./atom/AtomQ.hpp
-    ./atom/AtomTableBase.cpp
+    ./atom/AtomTableBase.ipp
     ./atom/AtomTableModel.hpp
     ./atom/AtomTableView.hpp
     
     ./attribute/AttributeProvider.hpp
     ./attribute/AttributeQ.hpp
-    ./attribute/AttributeTableBase.cpp
+    ./attribute/AttributeTableBase.ipp
     ./attribute/AttributeTableModel.hpp
     ./attribute/AttributeTableView.hpp
     
     
     ./class/ClassProvider.hpp
     ./class/ClassQ.hpp
-    ./class/ClassTableBase.cpp
+    ./class/ClassTableBase.ipp
     ./class/ClassTableModel.hpp
     ./class/ClassTableView.hpp
     
     ./directory/DirectoryProvider.hpp
     ./directory/DirectoryQ.hpp
-    ./directory/DirectoryTableBase.cpp
+    ./directory/DirectoryTableBase.ipp
     ./directory/DirectoryTableModel.hpp
     ./directory/DirectoryTableView.hpp
+    
     ./document/DocumentProvider.hpp
     ./document/DocumentQ.hpp
-    ./document/DocumentTableBase.cpp
+    ./document/DocumentTableBase.ipp
     ./document/DocumentTableModel.hpp
     ./document/DocumentTableView.hpp
 
@@ -39,7 +42,7 @@ set(dbgui_sources
     
     ./field/FieldProvider.hpp
     ./field/FieldQ.hpp
-    ./field/FieldTableBase.cpp
+    ./field/FieldTableBase.ipp
     ./field/FieldTableModel.hpp
     ./field/FieldTableView.hpp
 
@@ -48,13 +51,13 @@ set(dbgui_sources
     ./folder/FolderExplorerImpl.hpp
     ./folder/FolderProvider.hpp
     ./folder/FolderQ.hpp
-    ./folder/FolderTableBase.cpp
+    ./folder/FolderTableBase.ipp
     ./folder/FolderTableModel.hpp
     ./folder/FolderTableView.hpp
     
     ./fragment/FragmentProvider.hpp
     ./fragment/FragmentQ.hpp
-    ./fragment/FragmentTableBase.cpp
+    ./fragment/FragmentTableBase.ipp
     ./fragment/FragmentTableModel.hpp
     ./fragment/FragmentTableView.hpp
     
@@ -64,19 +67,19 @@ set(dbgui_sources
     
     ./leaf/LeafProvider.hpp
     ./leaf/LeafQ.hpp
-    ./leaf/LeafTableBase.cpp
+    ./leaf/LeafTableBase.ipp
     ./leaf/LeafTableModel.hpp
     ./leaf/LeafTableView.hpp
     
     ./property/PropertyProvider.hpp
     ./property/PropertyQ.hpp
-    ./property/PropertyTableBase.cpp
+    ./property/PropertyTableBase.ipp
     ./property/PropertyTableModel.hpp
     ./property/PropertyTableView.hpp
     
-    ./quill/QuillDataEdit.cpp
+    ./quill/QuillDataEdit.ipp
     ./quill/QuillDataEdit.hpp
-    ./quill/QuillDirTable.cpp
+    ./quill/QuillDirTable.ipp
     ./quill/QuillDirTable.hpp
     ./quill/QuillEdit.cpp
     ./quill/QuillEdit.hpp
@@ -85,18 +88,19 @@ set(dbgui_sources
     ./tag/TagEdit.hpp
     ./tag/TagProvider.hpp
     ./tag/TagQ.hpp
-    ./tag/TagTableBase.cpp
+    ./tag/TagTableBase.ipp
     ./tag/TagTableModel.hpp
     ./tag/TagTableView.hpp
     
     ./web/WebBase.cpp
     ./web/WebBase.cpp
     
-    ./wksp/RootComboBox.cpp
+    ./wksp/RootComboBox.ipp
     ./wksp/RootComboBox.hpp
     ./wksp/RootProvider.hpp
-    ./wksp/WkspSelectorDlg.cpp
+    ./wksp/WkspSelectorDlg.ipp
     ./wksp/WkspSelectorDlg.hpp
+    ./wksp/WkspUnity.cpp
 )
 
 add_library(yqdbgui SHARED ${dbgui_sources})

@@ -4,11 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ClassTableModel.hpp"
-#include "ClassTableView.hpp"
-#include <gui/model/StdTableModelImpl.hpp>
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
+#pragma once
 
 template class StdTableModel<Class>;
 template class U64TableModel<Class>;
@@ -146,8 +142,3 @@ ClassTableView::~ClassTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#include "moc_ClassTableModel.cpp"
-#include "moc_ClassTableView.cpp"

@@ -4,10 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "LeafTableModel.hpp"
-#include "LeafTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
 
 template class StdTableModel<Leaf>;  // explicitly instantiate the template here
 template class U64TableModel<Leaf>;  // explicitly instantiate the template here
@@ -48,7 +44,3 @@ LeafTableView::~LeafTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#include "moc_LeafTableModel.cpp"
-#include "moc_LeafTableView.cpp"

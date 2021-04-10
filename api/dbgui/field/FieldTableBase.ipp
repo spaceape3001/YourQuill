@@ -4,10 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "FieldTableModel.hpp"
-#include "FieldTableView.hpp"
-#include <gui/model/U64TableModelImpl.hpp>
-#include <QHeaderView>
+#pragma once
 
 template class StdTableModel<Field>;
 template class U64TableModel<Field>;
@@ -36,8 +33,3 @@ FieldTableView::~FieldTableView()
 {
 }
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#include "moc_FieldTableModel.cpp"
-#include "moc_FieldTableView.cpp"
