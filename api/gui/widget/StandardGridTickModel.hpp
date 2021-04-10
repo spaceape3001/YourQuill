@@ -39,9 +39,9 @@ public:
 //	virtual void        modelChanged();
     
 private:
-    Map<uint64_t, QColor> m_ticks;
-    QString					    m_posFormat;
-    QString					    m_negFormat;
-    uint64_t					m_tickToUnitPitch;
+    Map<uint64_t, QColor>   m_ticks;
+    QString					m_posFormat;
+    QString					m_negFormat;
+    uint64_t				m_tickToUnitPitch;
 };
 

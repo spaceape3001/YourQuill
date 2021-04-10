@@ -8,9 +8,14 @@
 
 #include <QWidget>
 #include <QColor>
-#include <QList>
-#include <QSize>
-#include <QtGlobal>
+
+#include <stdint.h>
+
+class QSize;
+
+//#include <QList>
+//#include <QSize>
+//#include <QtGlobal>
 
 class GridTickModel;
 

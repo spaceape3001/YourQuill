@@ -7,10 +7,9 @@
 #pragma once
 
 #include <QObject>
-#include <QColor>
+#include "util/VectorFwd.hpp"
 
-#include "util/Map.hpp"
-#include "util/Vector.hpp"
+class QColor;
 
 /*!	\brief Single dimension grid and tick model 
 

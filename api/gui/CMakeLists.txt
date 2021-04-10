@@ -6,128 +6,134 @@ set(gui_sources
     ./UInt64Mapper.cpp
     ./UInt64Mapper.hpp
     
-    ./delegate/ColorComboDelegate.cpp
     ./delegate/ColorComboDelegate.hpp
-    ./delegate/ColorDelegate.cpp
+    ./delegate/ColorComboDelegate.ipp
     ./delegate/ColorDelegate.hpp
-    ./delegate/DateDelegate.cpp
+    ./delegate/ColorDelegate.ipp
     ./delegate/DateDelegate.hpp
-    ./delegate/DateTimeDelegate.cpp
+    ./delegate/DateDelegate.ipp
     ./delegate/DateTimeDelegate.hpp
-    ./delegate/Delegate.cpp
+    ./delegate/DateTimeDelegate.ipp
     ./delegate/Delegate.hpp
+    ./delegate/Delegate.ipp
     ./delegate/DelegateImpl.hpp
-    ./delegate/DirDelegate.cpp
+    ./delegate/DelegateUnity.cpp
     ./delegate/DirDelegate.hpp
-    ./delegate/DoubleDelegate.cpp
+    ./delegate/DirDelegate.ipp
     ./delegate/DoubleDelegate.hpp
-    ./delegate/EnumDelegate.cpp
+    ./delegate/DoubleDelegate.ipp
     ./delegate/EnumDelegate.hpp
-    ./delegate/FileDelegate.cpp
+    ./delegate/EnumDelegate.ipp
     ./delegate/FileDelegate.hpp
-    ./delegate/IconBarDelegate.cpp
+    ./delegate/FileDelegate.ipp
     ./delegate/IconBarDelegate.hpp
-    ./delegate/ImageDelegate.cpp
+    ./delegate/IconBarDelegate.ipp
     ./delegate/ImageDelegate.hpp
-    ./delegate/IntegerDelegate.cpp
+    ./delegate/ImageDelegate.ipp
     ./delegate/IntegerDelegate.hpp
-    ./delegate/StringComboDelegate.cpp
+    ./delegate/IntegerDelegate.ipp
     ./delegate/StringComboDelegate.hpp
-    ./delegate/StringDelegate.cpp
+    ./delegate/StringComboDelegate.ipp
     ./delegate/StringDelegate.hpp
-    ./delegate/UIntegerDelegate.cpp
+    ./delegate/StringDelegate.ipp
     ./delegate/UIntegerDelegate.hpp
+    ./delegate/UIntegerDelegate.ipp
 
-    ./edit/CheckBox.cpp
     ./edit/CheckBox.hpp
-    ./edit/ColorChip.cpp
-    ./edit/ColorChip.cpp
-    ./edit/ComboBox.cpp
+    ./edit/CheckBox.ipp
+    ./edit/ColorChip.hpp
+    ./edit/ColorChip.ipp
     ./edit/ComboBox.hpp
-    ./edit/ColorCombo.cpp
+    ./edit/ComboBox.ipp
     ./edit/ColorCombo.hpp
-    ./edit/DateEdit.cpp
+    ./edit/ColorCombo.ipp
     ./edit/DateEdit.hpp
-    ./edit/DateTimeEdit.cpp
+    ./edit/DateEdit.ipp
     ./edit/DateTimeEdit.hpp
-    ./edit/DateTimeWidget.cpp
+    ./edit/DateTimeEdit.ipp
     ./edit/DateTimeWidget.hpp
-    ./edit/DateWidget.cpp
+    ./edit/DateTimeWidget.ipp
     ./edit/DateWidget.hpp
-    ./edit/DirBox.cpp
+    ./edit/DateWidget.ipp
     ./edit/DirBox.hpp
-    ./edit/DoubleSpinBox.cpp
+    ./edit/DirBox.ipp
     ./edit/DoubleSpinBox.hpp
-    ./edit/EnumCombo.cpp
+    ./edit/DoubleSpinBox.ipp
+    ./edit/EditUnity.cpp
     ./edit/EnumCombo.hpp
-    ./edit/FileBox.cpp
+    ./edit/EnumCombo.ipp
     ./edit/FileBox.hpp
+    ./edit/FileBox.ipp
     ./edit/GenericEnumCombo.hpp
-    ./edit/LineEdit.cpp
     ./edit/LineEdit.hpp
-    ./edit/SpinBox.cpp
+    ./edit/LineEdit.ipp
     ./edit/SpinBox.hpp
-    ./edit/StringSetCheck.cpp
+    ./edit/SpinBox.ipp
     ./edit/StringSetCheck.hpp
-    ./edit/TextEdit.cpp
+    ./edit/StringSetCheck.ipp
     ./edit/TextEdit.hpp
-    ./edit/UShortSetEdit.cpp
+    ./edit/TextEdit.ipp
     ./edit/UShortSetEdit.hpp
+    ./edit/UShortSetEdit.ipp
 
     ./layout/FlowLayout.cpp
     ./layout/FlowLayout.hpp
 
-    ./main/MainWin.cpp
+    ./main/MainUnity.cpp
     ./main/MainWin.hpp
-    ./main/SimpleEditor.cpp
+    ./main/MainWin.ipp
     ./main/SimpleEditor.hpp
-    ./main/SubWin.cpp
+    ./main/SimpleEditor.ipp
     ./main/SubWin.hpp
-    ./main/UndoMain.cpp
+    ./main/SubWin.ipp
     ./main/UndoMain.hpp
-    ./main/UndoWin.cpp
+    ./main/UndoMain.ipp
     ./main/UndoWin.hpp
+    ./main/UndoWin.ipp
 
     ./model/StdColumn.hpp
     ./model/StdTableModel.hpp
     ./model/StdTableModelImpl.hpp
     ./model/U64TableModel.hpp
 
-    ./undo/UndoAction.cpp
     ./undo/UndoAction.hpp
-    ./undo/UndoBase.cpp
+    ./undo/UndoAction.ipp
     ./undo/UndoBase.hpp
+    ./undo/UndoBase.ipp
     ./undo/UndoCallback.hpp
+    ./undo/UndoUnity.cpp
 
-    ./validator/IdentifierValidator.cpp
     ./validator/IdentifierValidator.hpp
-    ./validator/KeyValidator.cpp
+    ./validator/IdentifierValidator.ipp
     ./validator/KeyValidator.hpp
-    ./validator/NoSpacesValidator.cpp
+    ./validator/KeyValidator.ipp
     ./validator/NoSpacesValidator.hpp
-    ./validator/UShortSetValidator.cpp
+    ./validator/NoSpacesValidator.ipp
     ./validator/UShortSetValidator.hpp
-    ./validator/XmlIdentifierValidator.cpp
+    ./validator/UShortSetValidator.ipp
+    ./validator/ValidatorUnity.cpp
     ./validator/XmlIdentifierValidator.hpp
+    ./validator/XmlIdentifierValidator.ipp
 
     ./view/SimpleTable.cpp
     ./view/SimpleTable.hpp
     ./view/SqlTableView.cpp
     ./view/SqlTableView.hpp
+    ./view/StdListView.hpp
     ./view/StdTableView.hpp
 
-    ./widget/DrawRuler.cpp
     ./widget/DrawRuler.hpp
-    ./widget/GridTickModel.cpp
+    ./widget/DrawRuler.ipp
     ./widget/GridTickModel.hpp
-    ./widget/FormWidget.cpp
+    ./widget/GridTickModel.ipp
     ./widget/FormWidget.hpp
+    ./widget/FormWidget.ipp
     ./widget/StandardGridTickModel.hpp
-    ./widget/TabWidget.cpp
     ./widget/TabWidget.hpp
-    ./widget/TabWidgetBar.cpp
+    ./widget/TabWidget.ipp
     ./widget/TabWidgetBar.hpp
-    
+    ./widget/TabWidgetBar.ipp
+    ./widget/WidgetUnity.cpp
 )
 
 add_library(yqgui SHARED ${gui_sources})
