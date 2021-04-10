@@ -4,16 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ShareDir.hpp"
-
-#include <util/FileUtils.hpp>
-#include <util/Result.hpp>
-#include <util/Vector.hpp>
-
-#include <QDir>
-#include <QFile>
-#include <QString>
-
+#pragma once
 
 const char*                build_dir_path()
 {

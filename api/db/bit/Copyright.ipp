@@ -4,9 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Copyright.hpp"
-#include <db/FileStrings.hpp>
-#include <util/XmlUtils.hpp>
+#pragma once
 
 bool    Copyright::empty() const
 {

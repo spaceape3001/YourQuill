@@ -9,6 +9,7 @@
 #include <db/bit/Copyright.hpp>
 #include <db/bit/Policy.hpp>
 #include <db/enum/Vcs.hpp>
+#include <util/EnumMap.hpp>
 
 struct Copyright;
 

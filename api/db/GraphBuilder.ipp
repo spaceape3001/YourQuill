@@ -4,9 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Graph.hpp"
-#include "GraphBuilder.hpp"
-#include <QTextStream>
+#pragma once
 
 GraphBuilder::GraphBuilder(const QString&n) : m_name(n), m_rank("LR")
 {

@@ -4,10 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Context.hpp"
-#include <db/FileStrings.hpp>
-#include <util/XmlUtils.hpp>
-
+#pragma once
 
 Context     x_context(const XmlNode* xn)
 {

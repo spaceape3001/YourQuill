@@ -4,9 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "LeafFile.hpp"
-#include <util/Set.hpp>
-
+#pragma once
 
 String      LeafFile::abbr() const
 {

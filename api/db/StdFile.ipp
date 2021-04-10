@@ -4,16 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "StdFile.hpp"
-
-
-#include <util/Logging.hpp>
-#include <util/Reverse.hpp>
-#include <util/Set.hpp>
-#include <util/Stream.hpp>
-
-#include <cctype>
-#include <iostream>
+#pragma once
 
 bool        StdFile::empty() const
 {

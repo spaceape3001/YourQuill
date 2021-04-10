@@ -4,19 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Tag.hpp"
-#include "CacheUtil.hpp"
-
-#include "Image.hpp"
-#include "Leaf.hpp"
-#include "Root.hpp"
-#include "Workspace.hpp"
-
-#include <db/bit/NKI.hpp>
-#include <util/Logging.hpp>
-#include <util/FileUtils.hpp>
-
-#include <QSqlError>
+#pragma once
 
 namespace cdb {
     namespace {

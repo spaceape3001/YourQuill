@@ -4,9 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ClassFile.hpp"
-#include <util/Logging.hpp>
-#include <util/Utilities.hpp>
+#pragma once
 
 ClassData&      ClassData::merge(const ClassData&b, bool fOverride)
 {

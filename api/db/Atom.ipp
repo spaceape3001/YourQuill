@@ -4,21 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
-#include "Atom.hpp"
-#include "CacheUtil.hpp"
-
-#include "Class.hpp"
-#include "Root.hpp"
-#include "Graph.hpp"
-#include "Image.hpp"
-#include "Tag.hpp"
-
-#include <db/bit/NKI.hpp>
-#include <util/Logging.hpp>
-#include <util/Utilities.hpp>
-
-#include <QSqlError>
+#pragma once
 
 namespace cdb {
 

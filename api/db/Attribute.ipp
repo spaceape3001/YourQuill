@@ -4,14 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Attribute.hpp"
-#include "CacheUtil.hpp"
-#include "Document.hpp"
-
-#include <util/DiffEngine.hpp>
-#include <util/Logging.hpp>
-#include <util/Utilities.hpp>
-#include <util/Vector.hpp>
+#pragma once
 
 namespace cdb {
 

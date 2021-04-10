@@ -4,22 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Class.hpp"
-
-#include "CacheUtil.hpp"
-#include "Root.hpp"
-#include "Graph.hpp"
-#include "Image.hpp"
-#include "Tag.hpp"
-#include "Workspace.hpp"
-
-#include <db/bit/NKI.hpp>
-#include <util/Logging.hpp>
-#include <util/Utilities.hpp>
-
-#include <QSqlError>
-
-
+#pragma once
 
 bool Class::less_key(Class a, Class b)
 {

@@ -4,14 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Graph.hpp"
-#include "CacheUtil.hpp"
-#include "Workspace.hpp"
-
-#include <util/Execute.hpp>
-#include <util/Logging.hpp>
-#include <util/Utilities.hpp>
-#include <util/Vector.hpp>
+#pragma once
 
 namespace cdb {
      

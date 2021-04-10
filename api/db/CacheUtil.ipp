@@ -4,8 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "CacheUtil.hpp"
-#include "Workspace.hpp"
+#pragma once
 
 namespace cdb {
     SQ::SQ(const QString& stmt) : SqlQuery(wksp::cache(), stmt)

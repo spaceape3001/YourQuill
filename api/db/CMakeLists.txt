@@ -1,65 +1,68 @@
 set(db_sources
-    ./Atom.cpp
     ./Atom.hpp
-    ./Attribute.cpp
+    ./Atom.ipp
     ./Attribute.hpp
+    ./Attribute.ipp
     ./Cache.hpp
     ./CacheFwd.hpp
-    ./CacheUtil.cpp
     ./CacheUtil.hpp
-    ./Class.cpp
+    ./CacheUtil.ipp
     ./Class.hpp
-    ./ClassFile.cpp
+    ./Class.ipp
     ./ClassFile.hpp
+    ./ClassFile.ipp
+    ./DBUnity.cpp
     ./Directory.hpp
     ./Document.hpp
     ./Enums.cpp
     ./Enums.hpp
     ./Field.hpp
     ./FileStrings.hpp
-    ./FileSys.cpp
     ./FileSys.hpp
+    ./FileSys.ipp
+    ./FileUnity.cpp
     ./Folder.hpp
-    ./FolderFile.cpp
     ./FolderFile.hpp
+    ./FolderFile.ipp
     ./Fragment.hpp
-    ./Graph.cpp
     ./Graph.hpp
-    ./GraphBuilder.cpp
+    ./Graph.ipp
     ./GraphBuilder.hpp
-    ./Image.cpp
+    ./GraphBuilder.ipp
     ./Image.hpp
-    ./Leaf.cpp
+    ./Image.ipp
     ./Leaf.hpp
-    ./LeafFile.cpp
+    ./Leaf.ipp
     ./LeafFile.hpp
+    ./LeafFile.ipp
     ./Property.cpp
     ./Property.hpp
     ./QuillData.hpp
-    ./QuillFile.cpp
     ./QuillFile.hpp
+    ./QuillFile.ipp
     ./Root.hpp
     ./RootFwd.hpp
-    ./ShareDir.cpp
     ./ShareDir.hpp
-    ./StdFile.cpp
+    ./ShareDir.ipp
     ./StdFile.hpp
-    ./Tag.cpp
+    ./StdFile.ipp
     ./Tag.hpp
-    ./TagFile.cpp
+    ./Tag.ipp
     ./TagFile.hpp
+    ./TagFile.ipp
     ./Workspace.cpp
     ./Workspace.hpp
      
-    ./bit/Context.cpp
+    ./bit/BitUnity.cpp
     ./bit/Context.hpp
-    ./bit/Copyright.cpp
+    ./bit/Context.ipp
     ./bit/Copyright.hpp
+    ./bit/Copyright.ipp
     ./bit/KeyValue.hpp
-    ./bit/KeyValue.cpp
+    ./bit/KeyValue.ipp
     ./bit/NKI.hpp
-    ./bit/Policy.cpp
     ./bit/Policy.hpp
+    ./bit/Policy.ipp
 
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp

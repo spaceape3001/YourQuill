@@ -4,19 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "KeyValue.hpp"
-
-#include <util/Logging.hpp>
-#include <util/Reverse.hpp>
-#include <util/Set.hpp>
-#include <util/Stream.hpp>
-#include <util/Utilities.hpp>
-
-#include <cctype>
-#include <iostream>
+#pragma once
 
 namespace {
-
     StringSet   make_set(const Vector<const KeyValue*>&subs, const String& sep)
     {
         StringSet       ret;

@@ -4,18 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Leaf.hpp"
-#include "CacheUtil.hpp"
-
-#include "Atom.hpp"
-#include "FileSys.hpp"
-#include "Image.hpp"
-#include "Root.hpp"
-#include "Workspace.hpp"
-
-#include <db/bit/NKI.hpp>
-#include <util/Logging.hpp>
-#include <util/Utilities.hpp>
+#pragma once
 
 namespace cdb {
 

@@ -4,8 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "TagFile.hpp"
-#include <db/bit/KeyValue.hpp>
+#pragma once
 
 TagData& TagData::merge(const TagData&b, bool fOverride)
 {

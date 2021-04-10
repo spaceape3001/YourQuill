@@ -4,18 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Image.hpp"
-
-#include "CacheUtil.hpp"
-#include "FileSys.hpp"
-#include "Root.hpp"
-#include "Workspace.hpp"
-
-#include <util/Logging.hpp>
-#include <util/Utilities.hpp>
-
-#include <QIcon>
-#include <QSqlError>
+#pragma once
 
 namespace cdb {
     Vector<Image>           all_images()

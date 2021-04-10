@@ -4,17 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "FileSys.hpp"
-
-#include "CacheUtil.hpp"
-#include "Root.hpp"
-#include "Workspace.hpp"
-
-#include <db/bit/NKI.hpp>
-#include <util/FileUtils.hpp>
-#include <util/Logging.hpp>
-
-#include <QSqlError>
+#pragma once
 
 namespace cdb {
     Vector<Directory>   all_directories(unsigned opts)

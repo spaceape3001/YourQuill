@@ -8,7 +8,7 @@
 
 #include <db/enum/Access.hpp>
 #include <db/enum/DataRole.hpp>
-#include <util/EnumMap.hpp>
+#include <util/EnumMapFwd.hpp>
 
 using PolicyMap     = EnumMap<DataRole,Access>;
 

@@ -4,8 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "QuillFile.hpp"
-#include <util/Utilities.hpp>
+#pragma once
 
 void    QuillData::reset()
 {
