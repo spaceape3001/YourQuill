@@ -1,12 +1,13 @@
 set(gadget_sources
-    ./DateGen.cpp
     ./DateGen.hpp
-    ./MonthView.cpp
+    ./DateGen.ipp
+    ./GadgetUnity.cpp
     ./MonthView.hpp
-    ./SqlTool.cpp
+    ./MonthView.ipp
     ./SqlTool.hpp
-    ./TimeGen.cpp
+    ./SqlTool.ipp
     ./TimeGen.hpp
+    ./TimeGen.ipp
 )
 
 add_library(yqgadget SHARED ${gadget_sources})

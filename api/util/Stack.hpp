@@ -7,7 +7,6 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__STACK__H__
 
-#include "TypeFwd.hpp"
 #include <vector>
 
 

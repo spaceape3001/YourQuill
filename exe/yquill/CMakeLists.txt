@@ -1,37 +1,38 @@
 add_executable(yquill
     ./YExplorer.cpp
     ./YExplorer.hpp
+    ./YTableUnity.cpp
     ./YWeb.cpp
     ./YWeb.hpp
 
-    ./atom/YAtomTable.cpp
     ./atom/YAtomTable.hpp
-    ./attribute/YAttributeTable.cpp
+    ./atom/YAtomTable.ipp
     ./attribute/YAttributeTable.hpp
+    ./attribute/YAttributeTable.ipp
     #./class/YClassEditor.cpp
     #./class/YClassEditor.hpp
-    ./class/YClassTable.cpp
     ./class/YClassTable.hpp
-    ./directory/YDirectoryTable.cpp
+    ./class/YClassTable.ipp
     ./directory/YDirectoryTable.hpp
-    ./document/YDocumentTable.cpp
+    ./directory/YDirectoryTable.ipp
     ./document/YDocumentTable.hpp
-    ./field/YFieldTable.cpp
+    ./document/YDocumentTable.ipp
     ./field/YFieldTable.hpp
-    ./folder/YFolderTable.cpp
+    ./field/YFieldTable.ipp
     ./folder/YFolderTable.hpp
-    ./fragment/YFragmentTable.cpp
+    ./folder/YFolderTable.ipp
     ./fragment/YFragmentTable.hpp
+    ./fragment/YFragmentTable.ipp
     #./leaf/YLeafEditor.cpp
     #./leaf/YLeafEditor.hpp
-    ./leaf/YLeafTable.cpp
     ./leaf/YLeafTable.hpp
-    ./property/YPropertyTable.cpp
+    ./leaf/YLeafTable.ipp
     ./property/YPropertyTable.hpp
+    ./property/YPropertyTable.ipp
     #./tag/YTagEditor.cpp
     #./tag/YTagEditor.hpp
-    ./tag/YTagTable.cpp
     ./tag/YTagTable.hpp
+    ./tag/YTagTable.ipp
 
     ./YourQuill.cpp
     ./YourQuill.hpp

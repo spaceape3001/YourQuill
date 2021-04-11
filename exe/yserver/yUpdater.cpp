@@ -6,28 +6,60 @@
 
 #include "yCommon.hpp"
 #include "yUpdater.hpp"
-#include "update/uAtom.hpp"
-#include "update/uClass.hpp"
-#include "update/uField.hpp"
-#include "update/uImage.hpp"
-#include "update/uLeaf.hpp"
-#include "update/uTag.hpp"
 
+#include "uFwd.hpp"
+
+#include "uAtom.hpp"
+#include "uAttribute.hpp"
+#include "uClass.hpp"
+#include "uField.hpp"
+#include "uImage.hpp"
+#include "uLeaf.hpp"
+#include "uTag.hpp"
+
+#include <db/Atom.hpp>
+#include <db/Attribute.hpp>
+#include <db/CacheUtil.hpp>
+#include <db/FileSys.hpp>
+#include <db/Graph.hpp>
+#include <db/GraphBuilder.hpp>
 #include <db/Image.hpp>
-#include <db/Tag.hpp>
-#include <db/ShareDir.hpp>
+#include <db/Leaf.hpp>
+#include <db/Property.hpp>
 #include <db/Root.hpp>
+#include <db/ShareDir.hpp>
+#include <db/Tag.hpp>
 #include <db/Workspace.hpp>
+
 #include <srv/Importer.hpp>
 #include <srv/Page.hpp>
 #include <srv/Scanner.hpp>
+
 #include <util/FileUtils.hpp>
 #include <util/Guarded.hpp>
 #include <util/Hash.hpp>
+#include <util/Logging.hpp>
+#include <util/Set.hpp>
+#include <util/SqlQuery.hpp>
+#include <util/SqlUtils.hpp>
+#include <util/String.hpp>
 #include <util/Utilities.hpp>
 
 
-using namespace cdb;
+#include <QBuffer>
+#include <QIcon>
+#include <QImage>
+#include <QImageReader>
+#include <QTextStream>
+#include <QThreadPool>
+
+#include "uAtom.ipp"
+#include "uAttribute.ipp"
+#include "uClass.ipp"
+#include "uField.ipp"
+#include "uImage.ipp"
+#include "uLeaf.ipp"
+#include "uTag.ipp"
 
 
 /*

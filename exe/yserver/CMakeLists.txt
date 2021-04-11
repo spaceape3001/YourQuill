@@ -2,28 +2,30 @@ add_executable(yserver
     ./yCommon.hpp
     ./yUpdater.cpp
     
-    ./update/uAtom.cpp
-    ./update/uAtom.hpp
-    ./update/uAttribute.cpp
-    ./update/uAttribute.hpp
-    ./update/uClass.cpp
-    ./update/uClass.hpp
-    ./update/uField.cpp
-    ./update/uField.hpp
-    ./update/uFwd.hpp
-    ./update/uImage.cpp
-    ./update/uImage.hpp
-    ./update/uLeaf.cpp
-    ./update/uLeaf.hpp
-    ./update/uTag.cpp
-    ./update/uTag.hpp
+    ./uAtom.ipp
+    ./uAtom.hpp
+    ./uAttribute.ipp
+    ./uAttribute.hpp
+    ./uClass.ipp
+    ./uClass.hpp
+    ./uField.ipp
+    ./uField.hpp
+    ./uFwd.hpp
+    ./uImage.ipp
+    ./uImage.hpp
+    ./uLeaf.ipp
+    ./uLeaf.hpp
+    ./uTag.ipp
+    ./uTag.hpp
+    
+    ./pages.cpp
 
-    ./page/pAtomSys.cpp
-    ./page/pBrowser.cpp
-    ./page/pDeveloper.cpp
-    ./page/pFileSys.cpp
-    ./page/pWkspClass.cpp
-    ./page/pWorkspace.cpp
+    ./pAtomSys.ipp
+    ./pBrowser.ipp
+    ./pDeveloper.ipp
+    ./pFileSys.ipp
+    ./pWkspClass.ipp
+    ./pWorkspace.ipp
     
     ./server.cpp
 )

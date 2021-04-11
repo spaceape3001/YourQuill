@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "update/uFwd.hpp"
+#include "uFwd.hpp"
 
 //#include <db/Atom.hpp>
 //#include <db/Class.hpp>

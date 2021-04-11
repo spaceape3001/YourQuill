@@ -10,38 +10,39 @@ set(util_sources
     ./Array2.hpp
     ./Comma.hpp
     ./Compare.hpp
-    ./Curl.cpp
+    ./CoreUnity.cpp
+    ./Curl.ipp
     ./Curl.hpp
-    ./DelayInit.cpp
+    ./DelayInit.ipp
     ./DelayInit.hpp
     ./Deque.hpp
     ./DiffEngine.hpp
-    ./Enum.cpp
+    ./Enum.ipp
     ./Enum.hpp
     ./EnumMap.hpp
-    ./Execute.cpp
+    ./Execute.ipp
     ./Execute.hpp
     ./FileName.hpp
     ./FileName.ipp
-    ./FileUnity.cpp
     ./FileUtils.hpp
     ./FileUtils.ipp
     ./Flag.hpp
     ./Guarded.hpp
     ./Hash.hpp
-    ./Http.cpp
+    ./Http.ipp
     ./Http.hpp
     ./IntRange.hpp
+    ./IOUnity.cpp
     ./List.hpp
     ./LogFile.hpp
     ./LogFile.ipp
-    ./Logging.cpp
     ./Logging.hpp
+    ./Logging.ipp
     ./Map.hpp
     ./MultiMap.hpp
-    ./Random.cpp
+    ./Random.ipp
     ./Random.hpp
-    ./Ref.cpp
+    ./Ref.ipp
     ./Ref.hpp
     ./Safety.hpp
     ./Set.hpp
@@ -53,10 +54,10 @@ set(util_sources
     ./SqlUtils.hpp
     ./Stack.hpp
     ./Stream.hpp
-    ./String.cpp
+    ./String.ipp
     ./String.hpp
     ./TypeTraits.hpp
-    ./Utilities.cpp
+    ./Utilities.ipp
     ./Utilities.hpp
     ./Vector.hpp
     ./XmlFile.hpp
@@ -64,9 +65,11 @@ set(util_sources
     ./XmlFwd.hpp
     ./XmlUtils.hpp
     ./XmlUtils.ipp
-    ./ZipFile.cpp
-    ./ZipReader.hpp
-    ./ZipWriter.hpp
+    
+    #   Disabled until needed
+    #./ZipFile.cpp
+    #./ZipReader.hpp
+    #./ZipWriter.hpp
 
 )
 

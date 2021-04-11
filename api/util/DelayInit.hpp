@@ -5,8 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
-
+#include "Concat.hpp"
 
 /*! \brief Simple API to permit a delayed initialization
 
@@ -53,5 +52,5 @@ struct DelayInit::Ctor : public DelayInit {
 /*! \brief Macro to invoke code at program startup */
 #define INVOKE(...) \
     namespace { \
-        static DelayInit::Ctor   s_invoke_##__COUNTER__ ( []() { __VA_ARGS__ } ); \
+        static DelayInit::Ctor   CONCAT(s_invoke_, __COUNTER__) ( []() { __VA_ARGS__ } ); \
     }

@@ -6,4 +6,6 @@
 
 #pragma once
 
-#define CONCAT(a, b) a##b
+//  To use preprocessor right, for concatenation, the double-invoke is required (nuiance)
+#define CONCAT_IMPL(a, b) a##b
+#define CONCAT(a, b) CONCAT_IMPL(a,b)
