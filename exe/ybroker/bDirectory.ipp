@@ -38,6 +38,6 @@ void  makeLogFile()
     time(&n);
     strftime(buffer, sizeof(buffer), "%Y%m%d-%H%M%S", localtime(&n));
     buffer[255] = '\0';
-    std::string fname   = gLogDir + "/ybroker-" + buffer + ".log";
+    std::string fname   = gLogDir + "/broker-" + buffer + ".log";
     log_to_file(fname, LogPriority::Debug);
 }

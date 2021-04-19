@@ -6,10 +6,14 @@
 
 #include <stdint.h>
 #include <string>
+
+#include "ipc/DirWatcher.hpp"
+#include "ipc/ipcSocket.hpp"
 #include "util/Logging.hpp"
 #include "util/String.hpp"
 #include "util/Vector.hpp"
 
+#include <poll.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <time.h>
@@ -64,6 +68,33 @@ void    sigRestart(int)
     gQuit   = Quit::Restart;
 }
 
+class BSocket : public ipc::Socket {
+public:
+    BSocket() : ipc::Socket( gIpcDir + "/broker", true) {}
+
+    void    rxPrint(const std::string_view& s) override
+    {
+        std::cout << "rx> " << s << "\n";
+    }
+    
+    void    rxRestart() override
+    {
+        gQuit       = Quit::Restart;
+    }
+    
+    void    rxShutdown() override 
+    {
+        gQuit       = Quit::Stop;
+    }
+};
+
+
+class BWatcher : public ipc::DirWatcher {
+public:
+    BWatcher()
+    {
+    }
+};
 
 #include "bDirectory.ipp"
 
@@ -72,18 +103,38 @@ int execMain(int argc, char* argv[])
 {
     log_to_std_error(LogPriority::Info);
     if(!makeDirectories()){
-        yFatal() << "Cannot create temporary directories under: " << gTmpRoot;
+        yCritical() << "Cannot create temporary directories under: " << gTmpRoot;
         return -1;
     }
     makeLogFile();
     
     yNotice() << "Starting up the broker!";
     
-
-    int i   = 0;
+    BSocket         sock;
+    if(sock.fd() == 1){
+        yCritical() << "Cannot create inbound pipe!";
+        return -1;
+    }
+    
+    BWatcher      dwatch;
+    if(dwatch.fd()  == 1){
+        yCritical() << "Cannot create inotify instance";
+        return -1;
+    }
+    
+    pollfd  fds[2] = {{ sock.fd(), POLLIN, 0 }, { dwatch.fd(), POLLIN, 0 }};
     while(gQuit == Quit::No){
-        std::chrono::steady_clock::now();
-        ++i;
+        int pn  = poll(fds, 2, 100);
+        if(pn == -1){
+            yCritical() << "Error in polling";
+            return -1;
+        }
+        if(pn > 0){
+            if(fds[0].revents & POLLIN)
+                sock.process();
+            if(fds[1].revents & POLLIN)
+                dwatch.process();
+        }
     }
     return 0;
 }

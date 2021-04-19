@@ -15,20 +15,8 @@
     
     PIDs are used for App IDs.   Special PIDs are, 0 (origin app) or 0xFFFFFFFF (target app)
     
+    MAX_PACKET is 1024, and one string PER packet
     
-    App IDs ... Running instance ID for an application.
-    
-    Workspace 0x0000 is NO workspace,
-    Workspace 0xFFFF is for ALL workspaces
-    
-    App ID 0x0000 is wildcard for either the broker (wksp #0) or the updator
-    App ID 0xFFFF is wildcard for ALL apps
-    
-    So, wksp=FFFF, tgt=0000, broadcasts to all updaters
-    And
-        wksp=FFFF, tgt=FFFF, brodcasts to EVERYBODY
-    And
-        wksp=(id), tgt=FFFF, brodcasts to everybody using that particular workspace
 */
 
 namespace ipc {
@@ -36,15 +24,19 @@ namespace ipc {
     static constexpr const uint32_t     ME              = 0x00000000;
     static constexpr const uint32_t     YOU             = 0xFFFFFFFF;
 
-
     /*! \brief IPC Header
         
         This is the header that precedees EVERY packet.
     */
     struct Packet {
-        uint32_t        origin;     // originating PID
-        uint16_t        opcode;     // the OPCODE
-        uint16_t        payload;    // payload size, number of QWORDS (including structures), so limit is 512k
+        uint16_t        origin;
+        uint8_t         opcode;     // the OPCODE
+        uint8_t         len;        // payload size
+    };
+
+
+    struct Print {
+        static constexpr const uint16_t OPCODE         = 0;
     };
 
 
@@ -52,28 +44,44 @@ namespace ipc {
         Nice thing, everything's implied by the origin PID... :)
     */
     struct Starting {
-        static constexpr const uint16_t     OPCODE      = 0x0011;
+        static constexpr const uint8_t     OPCODE      = 1;
         uint64_t        token;      // OUR application token, needed for subsequenet (powerful) commands
+        uint32_t        pid;
+        
+        //  "name"  after this
     };
+    
+    struct StartInfo {
+        static constexpr const uint8_t      OPCODE      = 2;
+        uint32_t        server;
+        uint32_t        updater;
+        uint16_t        yourId;
+        uint16_t        wkspId;
+    };
+    
 
     /*! \brief Application is stopping (should be final)
     */
     struct Stopping {
-        static constexpr const uint16_t     OPCODE      = 0x0012;
+        static constexpr const uint8_t     OPCODE      = 3;
     };
 
 
     /*! \brief Request for a shutdown, sent to the application
     */
-    struct ShutdownCmd {
-        static constexpr const uint16_t     OPCODE      = 0x0013;
+    struct Shutdown {
+        static constexpr const uint8_t     OPCODE      = 4;
+    };
+    
+    struct Restart {
+        static constexpr const uint8_t     OPCODE      = 5;
     };
 
         /*! \brief Request to RESTART a particular application
         
         */
     struct RestartReq {
-        static constexpr const uint16_t     OPCODE      = 0x0014;
+        static constexpr const uint8_t    OPCODE       = 6;
         
         //! \brief App to restart.  (YOU is invalid)
         uint32_t    app;
@@ -83,17 +91,7 @@ namespace ipc {
     };
     
     
-    struct StartingInfo  {
-        static constexpr const uint16_t     OPCODE      = 0x001C;
-        //!     Server PID
-        uint32_t        server;
-        //!     Updater PID
-        uint32_t        updater;
-        //!     Workspace ID
-        uint32_t        wksp;
-        //!     Number of other running apps in workspace
-        uint32_t        apps;
-    };
+    
     
     //struct WkspLookupReq {
         //static constexpr const uint16_t     OPCODE      = 0x1001;
@@ -110,5 +108,7 @@ namespace ipc {
         //uint32_t        server, updater;
         
     //};
+    
+    
 
 }
