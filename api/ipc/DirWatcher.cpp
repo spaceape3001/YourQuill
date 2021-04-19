@@ -11,7 +11,6 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/inotify.h>
 
 namespace ipc {
     DirWatcher::DirWatcher()
@@ -21,12 +20,21 @@ namespace ipc {
 
     DirWatcher::~DirWatcher()
     {
+        m_name2id.clear();
+        m_id2wd.clear();
     }
 
-
-    void        DirWatcher::dispatch(const inotify_event&, const std::string_view&)
+    int         DirWatcher::descriptor(const std::string&k)
     {
-        //  TODO.....
+        auto i = m_name2id.find(k);
+        if(i != m_name2id.end())
+            return i->second;
+        return -1;
+    }
+
+    void        DirWatcher::diag_print(const std::string& watchedFile, const std::string_view& name)
+    {
+        yInfo() << "File change detected: " << watchedFile << "/" << name;
     }
 
     bool        DirWatcher::process()
@@ -56,10 +64,29 @@ namespace ipc {
 
             for(char* p = buffer.begin(); p<buffer.end(); p += sizeof(inotify_event)+evt->len){
                 evt   = (const inotify_event*) p;
-                dispatch(*evt, std::string_view(evt->name, evt->len));
+                auto j = m_id2wd.find(evt->wd);
+                if(j != m_id2wd.end())
+                    dispatch(j->second.path, *evt, std::string_view(evt->name, evt->len));
             }
         }
         return false;
     }
 
+    int         DirWatcher::watch(const std::string& k, uint32_t mask)
+    {
+        auto i  = m_name2id.find(k);
+        if(i != m_name2id.end())
+            return i->second;
+            
+        int j   = inotify_add_watch(m_fd, k.c_str(), mask);
+        if(j == -1)
+            return -1;
+            
+        Watch w;
+        w.path  = k;
+        w.mask  = mask;
+        m_name2id[k]    = j;
+        m_id2wd[j]      = w;
+        return j;
+    }
 }

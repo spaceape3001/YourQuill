@@ -7,11 +7,13 @@
 #include <stdint.h>
 #include <string>
 
-#include "ipc/DirWatcher.hpp"
-#include "ipc/ipcSocket.hpp"
-#include "util/Logging.hpp"
-#include "util/String.hpp"
-#include "util/Vector.hpp"
+#include <ipc/DirWatcher.hpp>
+#include <ipc/ipcSocket.hpp>
+#include <util/FileUtils.hpp>
+#include <util/Logging.hpp>
+#include <util/Safety.hpp>
+#include <util/String.hpp>
+#include <util/Vector.hpp>
 
 #include <poll.h>
 #include <signal.h>
@@ -21,6 +23,7 @@
 
 #include <sys/stat.h>
 
+#include <fstream>
 #include <iostream>
 
 #include <chrono>
@@ -94,58 +97,125 @@ public:
     BWatcher()
     {
     }
+
+    void    dispatch(const std::string& watchedFile, const inotify_event& event, const std::string_view& name) override 
+    {
+        diag_print(watchedFile, name);
+    }
 };
 
-#include "bDirectory.ipp"
+
+bool    makeDirectories()
+{
+   //  Make the basics, which, for now, is hardcoded
+   
+    const char*   tmpdir  = getenv("TMPDIR");
+    if(!tmpdir)
+        tmpdir          = "/tmp";
+
+
+    gTmpRoot        = std::string(tmpdir) + "/yquill";
+    gLogDir         = gTmpRoot + "/logs";
+    gIpcDir         = gTmpRoot + "/ipc";
+    gPidDir         = gTmpRoot + "/pid";
+    gCacheDir       = gTmpRoot + "/cache";
+
+    Vector<String>  dirs({ gTmpRoot, gLogDir, gIpcDir, gCacheDir, gPidDir });
+    
+    bool    okay    = true;
+    for(const String& s : dirs){
+        if(mkdir(s.c_str(), 0755) && (errno != EEXIST))
+            yError() << "Unable to create directory: " << s;
+    }
+    return okay;
+}
+
+void  makeLogFile()
+{
+    char        buffer[256];
+    time_t      n;  
+    time(&n);
+    strftime(buffer, sizeof(buffer), "%Y%m%d-%H%M%S", localtime(&n));
+    buffer[255] = '\0';
+    std::string fname   = gLogDir + "/broker-" + buffer + ".log";
+    log_to_file(fname, LogPriority::Debug);
+}
 
 
 int execMain(int argc, char* argv[])
 {
-    log_to_std_error(LogPriority::Info);
-    if(!makeDirectories()){
-        yCritical() << "Cannot create temporary directories under: " << gTmpRoot;
-        return -1;
-    }
-    makeLogFile();
+    //  Configure logging and the directories 
     
-    yNotice() << "Starting up the broker!";
-    
-    BSocket         sock;
-    if(sock.fd() == 1){
-        yCritical() << "Cannot create inbound pipe!";
-        return -1;
-    }
-    
-    BWatcher      dwatch;
-    if(dwatch.fd()  == 1){
-        yCritical() << "Cannot create inotify instance";
-        return -1;
-    }
-    
-    pollfd  fds[2] = {{ sock.fd(), POLLIN, 0 }, { dwatch.fd(), POLLIN, 0 }};
-    while(gQuit == Quit::No){
-        int pn  = poll(fds, 2, 100);
-        if(pn == -1){
-            yCritical() << "Error in polling";
+        log_to_std_error(LogPriority::Info);
+        if(!makeDirectories()){
+            yCritical() << "Cannot create temporary directories under: " << gTmpRoot;
             return -1;
         }
-        if(pn > 0){
-            if(fds[0].revents & POLLIN)
-                sock.process();
-            if(fds[1].revents & POLLIN)
-                dwatch.process();
+        makeLogFile();
+    
+    
+    //  Check for existing broker, bail if found
+    
+        std::string     pidFile = gPidDir + "/broker";
+        if(file_exists(pidFile.c_str())){
+            yCritical() << "Existing broker detected, kill it first";
+            return 0;
         }
-    }
+        {
+            std::ofstream   p(pidFile);
+            p << getpid();
+        }
+        auto rmPid  = safety([&](){ remove(pidFile.c_str()); });
+        
+    //  Establish sockets
+
+        BSocket         sock;
+        if(sock.fd() == 1){
+            yCritical() << "Cannot create inbound pipe!";
+            return -1;
+        }
+        
+        BWatcher      dwatch;
+        if(dwatch.fd()  == 1){
+            yCritical() << "Cannot create inotify instance";
+            return -1;
+        }
+        if(dwatch.watch(gIpcDir, IN_CREATE | IN_DELETE) == -1){
+            yError() << "Unable to watch IPC directory!";
+        }
+
+    //  Register the signal handlers
+    
+        signal(SIGQUIT, sigQuit);
+        signal(SIGTERM, sigQuit);
+        signal(SIGHUP, sigRestart);
+
+    //  And ... the main loop, poll between the sockets.
+    
+        yNotice() << "Starting up the broker!";
+        
+        pollfd  fds[2] = {{ sock.fd(), POLLIN, 0 }, { dwatch.fd(), POLLIN, 0 }};
+        while(gQuit == Quit::No){
+            int pn  = poll(fds, 2, 100);
+            if(pn == -1){
+                yCritical() << "Error in polling";
+                return -1;
+            }
+            if(pn > 0){
+                if(fds[0].revents & POLLIN)
+                    sock.process();
+                if(fds[1].revents & POLLIN)
+                    dwatch.process();
+            }
+        }
+        
+    //  Done
     return 0;
 }
 
 
 int main(int argc, char* argv[])
 {
-    signal(SIGQUIT, sigQuit);
-    signal(SIGTERM, sigQuit);
-    signal(SIGHUP, sigRestart);
-
     int r = execMain(argc, argv);
     if((r == 0) && (gQuit == Quit::Restart)){
         yNotice() << "Restart requested.";
