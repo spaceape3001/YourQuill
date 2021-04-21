@@ -4,16 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ipcBuffer.hpp"
-#include "ipcSocket.hpp"
-
-#include <util/Logging.hpp>
-
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
+#pragma once
 
 namespace ipc {
 

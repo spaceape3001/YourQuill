@@ -8,7 +8,10 @@
 #include <string>
 
 #include <ipc/DirWatcher.hpp>
+#include <ipc/PidFile.hpp>
+#include <ipc/TmpDirs.hpp>
 #include <ipc/ipcSocket.hpp>
+
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
 #include <util/Safety.hpp>
@@ -55,11 +58,6 @@ enum class Quit {
 };
 
 Quit        gQuit = Quit::No;
-String      gTmpRoot;
-String      gLogDir;
-String      gIpcDir;
-String      gPidDir;
-String      gCacheDir;
 
 void    sigQuit(int)
 {
@@ -92,7 +90,7 @@ public:
 };
 
 
-class BWatcher : public ipc::DirWatcher {
+class BWatcher : public DirWatcher {
 public:
     BWatcher()
     {
@@ -105,30 +103,6 @@ public:
 };
 
 
-bool    makeDirectories()
-{
-   //  Make the basics, which, for now, is hardcoded
-   
-    const char*   tmpdir  = getenv("TMPDIR");
-    if(!tmpdir)
-        tmpdir          = "/tmp";
-
-
-    gTmpRoot        = std::string(tmpdir) + "/yquill";
-    gLogDir         = gTmpRoot + "/logs";
-    gIpcDir         = gTmpRoot + "/ipc";
-    gPidDir         = gTmpRoot + "/pid";
-    gCacheDir       = gTmpRoot + "/cache";
-
-    Vector<String>  dirs({ gTmpRoot, gLogDir, gIpcDir, gCacheDir, gPidDir });
-    
-    bool    okay    = true;
-    for(const String& s : dirs){
-        if(mkdir(s.c_str(), 0755) && (errno != EEXIST))
-            yError() << "Unable to create directory: " << s;
-    }
-    return okay;
-}
 
 void  makeLogFile()
 {
@@ -147,7 +121,7 @@ int execMain(int argc, char* argv[])
     //  Configure logging and the directories 
     
         log_to_std_error(LogPriority::Info);
-        if(!makeDirectories()){
+        if(!makeTempDirectories()){
             yCritical() << "Cannot create temporary directories under: " << gTmpRoot;
             return -1;
         }
@@ -156,16 +130,11 @@ int execMain(int argc, char* argv[])
     
     //  Check for existing broker, bail if found
     
-        std::string     pidFile = gPidDir + "/broker";
-        if(file_exists(pidFile.c_str())){
+        PidFile         pidFile(gPidDir + "/broker");
+        if(!pidFile.first()){
             yCritical() << "Existing broker detected, kill it first";
             return 0;
         }
-        {
-            std::ofstream   p(pidFile);
-            p << getpid();
-        }
-        auto rmPid  = safety([&](){ remove(pidFile.c_str()); });
         
     //  Establish sockets
 
@@ -183,7 +152,7 @@ int execMain(int argc, char* argv[])
         if(dwatch.watch(gIpcDir, IN_CREATE | IN_DELETE) == -1){
             yError() << "Unable to watch IPC directory!";
         }
-
+        
     //  Register the signal handlers
     
         signal(SIGQUIT, sigQuit);

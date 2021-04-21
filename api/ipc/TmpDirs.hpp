@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+class String;
+
+extern String      gTmpRoot;
+extern String      gLogDir;
+extern String      gIpcDir;
+extern String      gPidDir;
+extern String      gCacheDir;
+
+bool        makeTempDirectories();
+
+
