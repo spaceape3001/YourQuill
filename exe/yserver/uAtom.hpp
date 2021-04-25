@@ -9,6 +9,7 @@
 #include "uFwd.hpp"
 #include <db/Atom.hpp>
 #include <db/Attribute.hpp>
+#include <db/Property.hpp>
 #include <db/Tag.hpp>
 
 namespace cdb {
@@ -17,10 +18,6 @@ namespace cdb {
 
 //struct UAtom {
     //const QString   key;
-    //union {
-        //const uint64_t  id;
-        //const Atom      atom;
-    //};
     //Image           icon;       // explicit icon
     //ClassSet        classes;
     //Atom            src, tgt, rev;
@@ -50,11 +47,11 @@ namespace cdb {
 
 
     //  return TRUE if tags were added/removed
-AddRem<Class>   uclasses(Atom, Document doc, const StringSet&);
+AddRem<Class>       uclasses(Atom, Document doc, const StringSet&);
 
-Image           uicon(Atom, Image);
+Image               uicon(Atom, Image);
 
-void            uproperties(Atom, Document, const cdb::KVReport& attributes);
+Vector<Property>    uproperties(Atom, Document doc, const cdb::KVReport& attributes);
 
     //  returns TRUE if tags were added/removed
-AddRem<Tag>     utags(Atom, Document doc, const StringSet&);
+AddRem<Tag>         utags(Atom, Document doc, const StringSet&);

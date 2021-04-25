@@ -7,6 +7,19 @@
 #pragma once
 
 namespace cdb {
+    namespace {
+        QString     full_key(Document d, const QString& ck)
+        {
+            QString     dk = strip_extension(key(d));
+            if(dk.isEmpty())    
+                return QString();
+
+            if(!ck.isEmpty())
+                dk      += "#" + ck;
+            return dk;
+        }
+    }
+
 
     QString             abbreviation(Atom a)
     {
@@ -102,6 +115,12 @@ namespace cdb {
         static thread_local SQ s("SELECT id FROM Atoms WHERE k=? LIMIT 1");
         return s.as<Atom>(k);
     }
+
+    Atom                atom(Document doc, const QString& ck)
+    {
+        return atom(full_key(doc, ck));
+    }
+    
     
     namespace {
         AtomVec        atoms_sorted(Atom a)
@@ -237,21 +256,21 @@ namespace cdb {
         if(wasCreated)
             *wasCreated = false;
 
-        QString     dk = strip_extension(key(d));
+
+
+        QString     dk = full_key(d, ck);
         if(dk.isEmpty()){
             yError() << "Cannot create to an empty key!";
             return Atom();
         }
 
-        if(!ck.isEmpty())
-            dk      += "#" + ck;
-        
-        static thread_local SQ    i("INSERT OR FAIL INTO Atoms (k,doc) VALUES (?,?)");
+        static thread_local SQ    i("INSERT OR FAIL INTO Atoms (k,doc,sk) VALUES (?,?,?)");
         static thread_local SQ    s("SELECT id FROM Atoms WHERE k=?");
         auto i_af   = i.af();
         auto s_af   = s.af();
         i.bind(0, dk);
         i.bind(1, d.id);
+        i.bind(2, ck);
         
         if(i.exec(false)){
             if(wasCreated)
@@ -422,6 +441,12 @@ namespace cdb {
         for(const Atom t : all)
             ret << (quint64) t.id;
         return ret;
+    }
+
+    QString             skey(Atom a) 
+    {
+        static thread_local SQ s("SELECT sk FROM Atoms WHERE id=?");
+        return s.str(a.id);
     }
 
     namespace {

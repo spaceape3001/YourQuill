@@ -15,7 +15,7 @@
 #include "Property.hpp"
 #include "Root.hpp"
 #include "Tag.hpp"
-#include "Workspace.hpp"
+#include "Wksp.hpp"
 
 #include "CacheUtil.hpp"
 

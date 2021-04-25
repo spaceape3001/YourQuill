@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include <db/Root.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <meta/Meta.hpp>
 #include <util/Logging.hpp>
 #include <util/Utilities.hpp>

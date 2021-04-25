@@ -17,7 +17,7 @@
 #include "property/YPropertyTable.hpp"
 #include "tag/YTagTable.hpp"
 
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 
 #include <dbgui/atom/AtomTableModel.hpp>
 #include <dbgui/atom/AtomTableView.hpp>

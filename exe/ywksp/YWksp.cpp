@@ -7,7 +7,7 @@
 #include "YWksp.hpp"
 
 #include <db/QuillFile.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <dbgui/quill/QuillEdit.hpp>
 #include <util/Utilities.hpp>
 

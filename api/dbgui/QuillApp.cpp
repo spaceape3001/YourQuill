@@ -7,7 +7,7 @@
 #include "QuillApp.hpp"
 
 #include <db/QuillFile.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <meta/Meta.hpp>
 #include <util/Curl.hpp>
 #include <util/Execute.hpp>

@@ -15,7 +15,7 @@
 #include <db/Leaf.hpp>
 #include <db/Root.hpp>
 #include <db/Tag.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <db/ShareDir.hpp>
 #include <db/bit/Copyright.hpp>
 

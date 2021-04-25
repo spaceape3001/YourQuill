@@ -56,17 +56,117 @@ Image   uicon(Atom a, Image img)
     return img;
 }
 
-void            uproperties(Atom atom, Document doc, const cdb::KVReport& attributes)
+
+namespace {
+    struct UAtom {
+        const Atom          atom;
+        const Document      doc;
+        QString             sk;
+        ClassSet            classes;
+        
+        UAtom(Atom a, Document d) : atom(a), doc(d), sk(cdb::skey(a)), classes(makeSet(cdb::classes(a)))
+        {
+        }
+
+        Property    add_property(const cdb::KVDiff& kv, AttrKind kind, const QString& type=QString(), uint64_t rid=0ULL)
+        {
+            static thread_local cdb::SQ i("INSERT INTO Properties (atom, uid, k, value, kind, type, rid) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            auto i_af = i.af();
+            i.bind(0, atom.id);
+            i.bind(1, kv.uid);
+            i.bind(2, kv.key);
+            i.bind(3, kv.value.trimmed());
+            i.bind(4, (int) kind.value());
+            i.bind(5, type);
+            i.bind(6, rid);
+            i.exec();
+            
+            Property    prop{i.lastInsertIdU64()};
+            static thread_local cdb::SQ i2("INSERT OR REPLACE INTO PAttribute (prop, attr, implied) VALUES (?, ?, 0");
+            auto i2_af = i.af();
+            i2.bind(0, prop.id);
+            i2.bind(1, kv.attr.id);
+            i2.exec();
+            return prop;
+        }
+
+
+        Property     add_value(const cdb::KVDiff& kv)
+        {
+            return  add_property(kv, AttrKind::Value);
+        }
+        
+        std::pair<Property,Atom>    add_atom(const cdb::KVDiff& kv)
+        {
+            //static const uint64_t   cnt = 0;
+            QString     k   = sk + '#' + kv.key + '.' + kv.value;
+            if(!kv.uid.isEmpty())
+                k += '.' + kv.uid;
+            Atom        a   = cdb::db_atom(doc, k);
+            Property    p   = add_property(kv, AttrKind::Atom, QString(), a.id);
+            return {p,a};
+        }
+    };
+
+    //struct PropInfo {
+        //bool        hasInit = false;
+        //PropInfo&   init()
+        //{
+            //if(!hasInit){
+                //hasInit = true;
+            //}
+            //return *this;
+        //}
+    //};
+
+
+    //struct PropInfoDB {
+        //Map<QString,PropInfo>   props;
+        //Atom                    atom;
+        //Document                doc;
+        
+        //PropInfoDB(Atom a, Document d, const ClassSet& cs) : atom(a), doc(d), classes(cs) {}
+        
+        //PropInfo&   info(const QString& k) 
+        //{   
+            //return props[k].init();
+        //}
+        
+        //Property    addProperty(const 
+        
+    //};
+}
+
+Vector<Property>           uproperties(Atom atom, Document doc, const Vector<cdb::KVDiff>& items)
 {
+    UAtom                   u(atom, doc);
+    Vector<Property>        ret;
+    
 //    Map<QString,PropInfo>   infos;  //  this is a cache.... as needed.....
-    for(auto & kv : attributes.items){
+    for(auto & kv : items){
+        Atom            a;
         if(kv.added()){
+            if(kv.sub.empty()){ 
+                ret << u.add_value(kv);
+            } else {
+                auto p  = u.add_atom(kv);
+                ret << p.first;
+                ret += uproperties(p.second, doc, kv.sub);
+            }
         } else if(kv.modified()){
+            
         } else if(kv.deleted()){
+            
         } 
         if(kv.subchanged()){
         }
     }
+    return ret;
+}
+
+Vector<Property>           uproperties(Atom atom, Document doc, const cdb::KVReport& attributes)
+{
+    return uproperties(atom, doc, attributes.items);
 }
 
 AddRem<Tag>     utags(Atom a, Document doc, const StringSet& ntags)

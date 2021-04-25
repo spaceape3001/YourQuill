@@ -17,5 +17,5 @@
 #include "Leaf.hpp"
 #include "Tag.hpp"
 #include "Root.hpp"
-#include "Workspace.hpp"
+#include "Wksp.hpp"
 #include <db/bit/NKI.hpp>

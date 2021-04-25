@@ -29,7 +29,9 @@
 #include <db/Root.hpp>
 #include <db/ShareDir.hpp>
 #include <db/Tag.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
+
+#include <db/enum/AttrKind.hpp>
 
 #include <srv/Importer.hpp>
 #include <srv/Page.hpp>

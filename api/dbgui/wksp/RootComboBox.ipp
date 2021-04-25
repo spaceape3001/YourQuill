@@ -7,7 +7,7 @@
 #include "RootComboBox.hpp"
 #include <db/FileSys.hpp>
 #include <db/Root.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 
 RootComboBox::RootComboBox(QWidget*parent) : ComboBox(parent), m_writable(false)
 {

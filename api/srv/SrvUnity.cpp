@@ -24,7 +24,7 @@
 #include <db/Tag.hpp>
 #include <db/Root.hpp>
 #include <db/ShareDir.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <util/EnumMap.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>

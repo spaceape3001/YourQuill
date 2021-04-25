@@ -1,6 +1,6 @@
 #include "ClassEditor.hpp"
 #include "edit/ClassEdit.hpp"
-#include "leaf/Workspace.hpp"
+#include "leaf/Wksp.hpp"
 #include <QLabel>
 #include <QTabWidget>
 #include <QVBoxLayout>

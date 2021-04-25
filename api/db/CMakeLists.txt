@@ -50,8 +50,8 @@ set(db_sources
     ./Tag.ipp
     ./TagFile.hpp
     ./TagFile.ipp
-    ./Workspace.cpp
-    ./Workspace.hpp
+    ./Wksp.cpp
+    ./Wksp.hpp
      
     ./bit/BitUnity.cpp
     ./bit/Context.hpp

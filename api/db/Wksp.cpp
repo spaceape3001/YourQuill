@@ -7,7 +7,7 @@
 #include "Image.hpp"
 #include "Root.hpp"
 #include "QuillFile.hpp"
-#include "Workspace.hpp"
+#include "Wksp.hpp"
 
 #include "WkspLogging.hpp"
 #include "ShareDir.hpp"

@@ -12,7 +12,7 @@
 
 //#include "core/Set.hpp"
 
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <gui/edit/DirBox.hpp>
 //#include "gui/EnumDelegate.hpp"
 #include <gui/edit/FileBox.hpp>

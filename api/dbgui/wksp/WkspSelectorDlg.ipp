@@ -6,7 +6,7 @@
 
 #include "WkspSelectorDlg.hpp"
 
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <gui/edit/CheckBox.hpp>
 #include <gui/edit/ComboBox.hpp>
 

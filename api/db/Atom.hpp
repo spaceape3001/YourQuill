@@ -98,6 +98,7 @@ namespace cdb {
 
     Atom                    atom(uint64_t);
     Atom                    atom(const QString&);
+    Atom                    atom(Document, const QString&);
     Vector<Atom>            atoms(Atom, Sorted sorted=Sorted{});
     Vector<Atom>            atoms(Document, Sorted sorted=Sorted());
     
@@ -183,6 +184,8 @@ namespace cdb {
     Atom                    parent(Atom);
 
     QList<QVariant>         qvar_list(const Set<Atom>&);
+
+    QString                 skey(Atom);
 
     
     TagVec                  tags(Atom, Sorted sorted=Sorted{});

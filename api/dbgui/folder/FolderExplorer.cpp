@@ -7,7 +7,7 @@
 #include "FolderExplorerBase.hpp"
 #include "FolderExplorerImpl.hpp"
 
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <gui/StdIcons.hpp>
 #include <util/DiffEngine.hpp>
 #include <util/Reverse.hpp>

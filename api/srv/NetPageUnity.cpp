@@ -19,7 +19,7 @@
 #include "Utilities.hpp"
 
 #include <db/Cache.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <util/Execute.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Utilities.hpp>

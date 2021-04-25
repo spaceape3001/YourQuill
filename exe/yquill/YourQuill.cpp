@@ -21,7 +21,7 @@
 #include "YWeb.hpp"
 #include "YourQuill.hpp"
 
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 #include <dbgui/QuillApp.hpp>
 #include <gadget/DateGen.hpp>
 #include <gadget/SqlTool.hpp>

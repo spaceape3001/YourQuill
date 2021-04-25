@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include <db/ShareDir.hpp>
-#include <db/Workspace.hpp>
+#include <db/Wksp.hpp>
 
 #include <srv/Page.hpp>
 #include <srv/Scanner.hpp>

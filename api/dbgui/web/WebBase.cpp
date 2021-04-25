@@ -31,7 +31,6 @@ WebBase::WebBase(QWidget*parent) : SubWin(parent), m_url{}, m_view{}
     page -> setUrlRequestInterceptor( new Filter(this));
     
     QToolBar*       bar = new QToolBar;
-    
     bar -> addAction(si_go_back(), tr("Back"), m_view, &WebBase::View::back);
     bar -> addAction(si_go_forward(), tr("Fwd"), m_view, &WebBase::View::forward);
     bar -> addAction(si_view_refresh(), tr("Reload"), m_view, &WebBase::View::reload);
