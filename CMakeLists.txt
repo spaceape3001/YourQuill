@@ -15,7 +15,8 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 set(CMAKE_CONFIGURATION_TYPES Debug;Release)
 
-set(CMAKE_CXX_STANDARD 20)                  # C++20 is the standard (may be bumped in the future)
+set(CMAKE_CXX_STANDARD 23)                  # C++20 is the standard (may be bumped in the future)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/bin)

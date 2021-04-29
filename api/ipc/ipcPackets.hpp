@@ -48,15 +48,15 @@ namespace ipc {
         uint64_t        token;      // OUR application token, needed for subsequenet (powerful) commands
         uint32_t        pid;
         
-        //  "name"  after this
+        //  "socket back"  after this
     };
     
     struct StartInfo {
         static constexpr const uint8_t      OPCODE      = 2;
-        uint32_t        server;
-        uint32_t        updater;
         uint16_t        yourId;
-        uint16_t        wkspId;
+        //uint32_t        server;
+        //uint32_t        updater;
+        //uint16_t        wkspId;
     };
     
 

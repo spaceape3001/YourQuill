@@ -8,7 +8,8 @@
 #include "ipcBuffer.hpp"
 #include "ipcSocket.hpp"
 #include "PidFile.hpp"
-#include "TmpDirs.hpp"
+
+#include <db/CommonDirs.hpp>
 
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
@@ -24,7 +25,6 @@
 
 #include <fstream>
 
-#include "DirWatcher.inl"
-#include "PidFile.inl"
-#include "ipcSocket.inl"
-#include "TmpDirs.inl"
+#include "DirWatcher.ipp"
+#include "PidFile.ipp"
+#include "ipcSocket.ipp"

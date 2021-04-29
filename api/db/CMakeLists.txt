@@ -11,7 +11,10 @@ set(db_sources
     ./Class.ipp
     ./ClassFile.hpp
     ./ClassFile.ipp
+    ./CommonDirs.hpp
+    ./CommonDirs.ipp
     ./DBUnity.cpp
+    ./DBUnity2.cpp
     ./Directory.hpp
     ./Document.hpp
     ./Enums.cpp
@@ -52,6 +55,8 @@ set(db_sources
     ./TagFile.ipp
     ./Wksp.cpp
     ./Wksp.hpp
+    ./Workspace.hpp
+    ./Workspace.ipp
      
     ./bit/BitUnity.cpp
     ./bit/Context.hpp

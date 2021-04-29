@@ -53,6 +53,11 @@ namespace ipc {
         return m_fd != -1;
     }
 
+    bool        Socket::open_rx()
+    {
+        String      us  = gDir.ipc + "/" + String::number(getpid());
+        return open_rx(us);
+    }
 
     bool        Socket::open_rx(const char* z)
     {

@@ -1,13 +1,11 @@
 SET(ipc_sources
     ./DirWatcher.hpp
-    ./DirWatcher.inl
+    ./DirWatcher.ipp
     ./ipcPackets.hpp
     ./ipcSocket.hpp
-    ./ipcSocket.inl
+    ./ipcSocket.ipp
     ./PidFile.hpp
-    ./PidFile.inl
-    ./TmpDirs.hpp
-    ./TmpDirs.inl
+    ./PidFile.ipp
     ./ipcUnity.cpp
 )
 add_library(yqipc SHARED ${ipc_sources})

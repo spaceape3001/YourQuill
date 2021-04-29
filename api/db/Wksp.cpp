@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "CommonDirs.hpp"
 #include "Image.hpp"
 #include "Root.hpp"
 #include "QuillFile.hpp"
@@ -184,6 +185,11 @@ namespace wksp {
             m.start_time    = QDateTime::currentDateTimeUtc();
             m.start         = m.start_time.toString("yyyyMMdd-HHmmss");
             m.app_name      = QCoreApplication::applicationName();
+            
+            if(!CommonDir::init()){
+                wkspError << "Unable to create temporary directories!";
+                return false;
+            }
             
             char        hname[HOST_NAME_MAX+1];
             gethostname(hname, sizeof(hname));

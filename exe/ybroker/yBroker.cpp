@@ -7,9 +7,9 @@
 #include <stdint.h>
 #include <string>
 
+#include <db/CommonDirs.hpp>
 #include <ipc/DirWatcher.hpp>
 #include <ipc/PidFile.hpp>
-#include <ipc/TmpDirs.hpp>
 #include <ipc/ipcSocket.hpp>
 
 #include <util/FileUtils.hpp>
@@ -71,7 +71,7 @@ void    sigRestart(int)
 
 class BSocket : public ipc::Socket {
 public:
-    BSocket() : ipc::Socket( gIpcDir + "/broker", true) {}
+    BSocket() : ipc::Socket( gDir.ipc + "/broker", true) {}
 
     void    rxPrint(const std::string_view& s) override
     {
@@ -111,7 +111,7 @@ void  makeLogFile()
     time(&n);
     strftime(buffer, sizeof(buffer), "%Y%m%d-%H%M%S", localtime(&n));
     buffer[255] = '\0';
-    std::string fname   = gLogDir + "/broker-" + buffer + ".log";
+    std::string fname   = gDir.log + "/broker-" + buffer + ".log";
     log_to_file(fname, LogPriority::Debug);
 }
 
@@ -121,8 +121,8 @@ int execMain(int argc, char* argv[])
     //  Configure logging and the directories 
     
         log_to_std_error(LogPriority::Info);
-        if(!makeTempDirectories()){
-            yCritical() << "Cannot create temporary directories under: " << gTmpRoot;
+        if(!CommonDir::init()){
+            yCritical() << "Cannot create temporary directories under: " << gDir.tmp;
             return -1;
         }
         makeLogFile();
@@ -130,7 +130,7 @@ int execMain(int argc, char* argv[])
     
     //  Check for existing broker, bail if found
     
-        PidFile         pidFile(gPidDir + "/broker");
+        PidFile         pidFile(gDir.pid + "/broker");
         if(!pidFile.first()){
             yCritical() << "Existing broker detected, kill it first";
             return 0;
@@ -149,7 +149,7 @@ int execMain(int argc, char* argv[])
             yCritical() << "Cannot create inotify instance";
             return -1;
         }
-        if(dwatch.watch(gIpcDir, IN_CREATE | IN_DELETE) == -1){
+        if(dwatch.watch(gDir.ipc, IN_CREATE | IN_DELETE) == -1){
             yError() << "Unable to watch IPC directory!";
         }
         

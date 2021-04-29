@@ -14,24 +14,26 @@ namespace ipc {
     class Socket {
     public:
 
-        virtual     ~Socket();
-        bool        process();
-        int         fd() const { return m_fd; }
-        
-        bool        open_rx(const char*);
-        bool        open_tx(const char*);
-        bool        open_rx(const std::string&);
-        bool        open_tx(const std::string&);
+        virtual         ~Socket();
+        bool            process();
+        int             fd() const { return m_fd; }
 
-        void        close();
+            // uses current process ID in IPC dir
+        bool            open_rx();
+        bool            open_rx(const char*);
+        bool            open_tx(const char*);
+        bool            open_rx(const std::string&);
+        bool            open_tx(const std::string&);
 
-        void        txPrint(const std::string_view&);
-        void        txRestart();
-        void        txRestartReq(uint32_t app, uint32_t delay);
-        void        txStarting(uint64_t token, const std::string_view& wksp);
-        void        txStartingInfo(uint32_t serverPid, uint32_t updaterPid, uint32_t wkspId);
-        void        txStopping();
-        void        txShutdown();
+        void            close();
+
+        void            txPrint(const std::string_view&);
+        void            txRestart();
+        void            txRestartReq(uint32_t app, uint32_t delay);
+        void            txStarting(uint64_t token, const std::string_view& wksp);
+        void            txStartingInfo(uint32_t serverPid, uint32_t updaterPid, uint32_t wkspId);
+        void            txStopping();
+        void            txShutdown();
 
         Socket();      
         Socket(const char*z, bool isRead);
@@ -39,9 +41,9 @@ namespace ipc {
 
 
     protected:
-        bool        open(const char* z, unsigned int mode);
-        uint16_t    origin() const { return m_packet.origin; }
-        uint8_t     opcode() const { return m_packet.opcode; }
+        bool            open(const char* z, unsigned int mode);
+        uint16_t        origin() const { return m_packet.origin; }
+        uint8_t         opcode() const { return m_packet.opcode; }
         
     
         virtual void    rxPrint(const std::string_view&) {}

@@ -7,6 +7,7 @@
 #include "Atom.hpp"
 #include "Attribute.hpp"
 #include "Class.hpp"
+#include "CommonDirs.hpp"
 #include "FileSys.hpp"
 #include "Graph.hpp"
 #include "GraphBuilder.hpp"
