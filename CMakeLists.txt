@@ -1,9 +1,15 @@
-cmake_minimum_required(VERSION 3.19.0)      # Modern CMake please
+cmake_minimum_required(VERSION 3.20.0)      # Modern CMake please
 project(YourQuill VERSION 0.0.0.1)
+
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    if(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "11.0.0")
+        message(FATAL_ERROR "GCC version is obsolete, upgrade.")
+    endif()
+endif()
 
 if( "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
         # Mixing source and binary output is asking for trouble, best to avoid it
-    message(send_error "Building into the source directory is NOT recommended, choose another destination.")
+    message(SEND_ERROR "Building into the source directory is NOT recommended, choose another destination.")
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -39,7 +45,7 @@ find_package(CURL)
 find_package(Log4cpp REQUIRED)
 find_package(TBB)
 find_package(Graphviz)
-# find_package(SQLite3)
+find_package(SQLite3)
 # find_package(libzip REQUIRED)
 find_package(Qt5 REQUIRED Core Gui Network Sql Svg  Widgets WebEngine WebEngineWidgets)
 
