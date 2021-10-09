@@ -2277,8 +2277,13 @@ bool    is_similar(const std::string&a, const char*b)
 bool    is_similar(const std::string&a, const std::string&b)
 {
     return is_equal( compare_igCase(a, b));
-    
 }
+
+bool    is_similar(const char*a, const char*b)
+{
+    return is_equal( compare_igCase(a, b));
+}
+
 
 bool    is_similar(const QString&a, const QString&b)
 {
@@ -2333,3 +2338,11 @@ bool    RevIgCase::operator()(const QByteArray&a, const QByteArray&b) const
 {
     return is_greater( compare_igCase(a,b));
 }
+
+String      operator+(const std::string&a, const std::string_view&b)
+{
+    String  ret(a);
+    ret += b;
+    return ret;
+}
+

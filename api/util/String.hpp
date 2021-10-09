@@ -407,6 +407,7 @@ bool        is_blank(const String&);
 
 
 bool        is_similar(const std::string&, const char*);
+bool        is_similar(const char*, const char*);
 bool        is_similar(const std::string&, const std::string&);
 //bool        is_similar(const QByteArray&, const QByteArray&);
 bool        is_similar(const QString&, const QString&);
@@ -580,6 +581,7 @@ ushort_r    to_ushort(const std::string_view&);
 ushort_r    to_ushort(const QByteArray&);
 ushort_r    to_ushort(const QString&);
 
+String      operator+(const std::string&, const std::string_view&);
 
 class String::Join {
 public:
