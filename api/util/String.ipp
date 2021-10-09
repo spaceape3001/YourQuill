@@ -4,25 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Compare.hpp"
-#include "List.hpp"
-#include "NaN.hpp"
-#include "Set.hpp"
-#include "String.hpp"
-#include "Vector.hpp"
 
-#include <cctype>
-#include <charconv>
-#include <locale>
-#include <optional>
-#include <string.h>
 
-#include <QByteArray>
-#include <QString>
-
-namespace {
-    static constexpr const size_t   kStdBuf = 63;
-};
 
     /*
         Sprinkled thorughout this source file is char <-> char8_t blind casts.  Data wise, this should be 
@@ -37,61 +20,6 @@ namespace {
     //}
 //}
 
-namespace {
-    void    trim_ws(const char*& s, size_t& n)
-    {
-        while(s && *s && isspace(*s) && n)
-            ++s, --n;
-        while(s && n && isspace(s[n-1]))
-            --n;
-    }
-
-    bool    is_same(const char*a, size_t n, const char *b)
-    {
-        if(a && b){
-            for(;*a && *b && n; ++a, ++b, --n){
-                if(::tolower(*a) != *b)
-                    return false;
-            }
-            return !(*b || n);
-        }
-        return false;
-    }
-
-    static constexpr const auto bTRUE     = boolean_r( true, true );
-    static constexpr const auto bFALSE    = boolean_r( true, false );
-    static constexpr const auto bFAIL     = boolean_r(false, false);
-    
-    static constexpr const auto dFAIL     = double_r(false, NaN);
-    static constexpr const auto dZERO     = double_r(false, 0.);
-    
-    static constexpr const auto fFAIL     = float_r(false, NaNf);
-    static constexpr const auto fZERO     = float_r(false, 0.f);
-    
-    static constexpr const auto iFAIL     = int_r(false, 0);
-    static constexpr const auto i8FAIL    = int8_r(false, 0);
-    static constexpr const auto i16FAIL   = int16_r(false, 0);
-    static constexpr const auto i32FAIL   = int32_r(false, 0);
-    static constexpr const auto i64FAIL   = int64_r(false, 0);
-    
-    static constexpr const auto sFAIL     = short_r(false, 0);
-
-    static constexpr const auto uFAIL     = unsigned_r(false, 0.);
-    static constexpr const auto u8FAIL    = uint8_r(false, 0);
-    static constexpr const auto u16FAIL   = uint16_r(false, 0);
-    static constexpr const auto u32FAIL   = uint32_r(false, 0);
-    static constexpr const auto u64FAIL   = uint64_r(false, 0);
-    
-    static constexpr const auto usFAIL    = ushort_r(false, 0);
-    
-    template <typename T>
-    Result<T>   int_from_chars(const char*s, size_t n, int base=10)
-    {
-        T    res = 0;
-        auto [p,ec] = std::from_chars(s, s+n, res, base);
-        return Result<T>(ec == std::errc(), res);
-    }
-}
 
 //#ifdef ENABLE_QT
     //QString     qString(const String&s)
@@ -1092,153 +1020,10 @@ ushort_r    to_ushort(const QString&s)
 
 
 
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-bool        Char8::is_alnum() const
-{
-    return ::isalnum(m_code);
-}
-
-bool        Char8::is_alpha() const
-{
-    return ::isalpha(m_code);
-}
-
-bool        Char8::is_blank() const
-{
-    return ::isblank(m_code);
-}
-
-bool        Char8::is_control() const
-{
-    return ::iscntrl(m_code);
-}
-
-bool        Char8::is_digit() const
-{
-    return ::isdigit(m_code);
-}
-
-bool        Char8::is_graph() const
-{
-    return ::isgraph(m_code);
-}
-
-bool        Char8::is_lower() const
-{
-    return ::islower(m_code);
-}
-
-bool        Char8::is_print() const
-{
-    return ::isprint(m_code);
-}
-
-bool        Char8::is_punct() const
-{
-    return ::ispunct(m_code);
-}
-
-bool        Char8::is_space() const
-{
-    return ::isspace(m_code);
-}
-
-bool        Char8::is_upper() const
-{
-    return ::isupper(m_code);
-}
-
-bool        Char8::is_xdigit() const
-{
-    return ::isxdigit(m_code);
-}
-
-char        Char8::to_lower() const
-{
-    return ::tolower(m_code);
-}
-
-char        Char8::to_upper() const
-{
-    return ::toupper(m_code);
-}
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-bool        Char32::is_alnum() const
-{
-    return ::iswalnum(m_code);
-}
-
-bool        Char32::is_alpha() const
-{
-    return ::iswalpha(m_code);
-}
-
-bool        Char32::is_blank() const
-{
-    return ::iswblank(m_code);
-}
-
-bool        Char32::is_control() const
-{
-    return ::iswcntrl(m_code);
-}
-
-bool        Char32::is_digit() const
-{
-    return ::iswdigit(m_code);
-}
-
-bool        Char32::is_graph() const
-{
-    return ::iswgraph(m_code);
-}
-
-bool        Char32::is_lower() const
-{
-    return ::iswlower(m_code);
-}
-
-bool        Char32::is_print() const
-{
-    return ::iswprint(m_code);
-}
-
-bool        Char32::is_punct() const
-{
-    return ::iswpunct(m_code);
-}
-
-bool        Char32::is_space() const
-{
-    return ::iswspace(m_code);
-}
-
-bool        Char32::is_upper() const
-{
-    return ::iswupper(m_code);
-}
-
-bool        Char32::is_xdigit() const
-{
-    return ::iswxdigit(m_code);
-}
-
-char32_t    Char32::to_lower() const
-{
-    return ::towlower(m_code);
-}
-
-char32_t    Char32::to_upper() const
-{
-    return ::towupper(m_code);
-}
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2307,37 +2092,6 @@ bool    is_greater_igCase(const std::string&a, const std::string&b)
     return is_greater(compare_igCase(a,b));
 }
 
-
-bool    IgCase::operator()(const String&a, const String&b) const
-{
-    return is_less( compare_igCase(a,b));
-}
-
-bool    IgCase::operator()(const QString&a, const QString&b) const
-{
-    return is_less( compare_igCase(a,b));
-}
-
-bool    IgCase::operator()(const QByteArray&a, const QByteArray&b) const
-{
-    return is_less( compare_igCase(a,b));
-}
-
-
-bool    RevIgCase::operator()(const String&a, const String&b) const
-{
-    return is_greater( compare_igCase(a,b));
-}
-
-bool    RevIgCase::operator()(const QString&a, const QString&b) const
-{
-    return is_greater( compare_igCase(a,b));
-}
-
-bool    RevIgCase::operator()(const QByteArray&a, const QByteArray&b) const
-{
-    return is_greater( compare_igCase(a,b));
-}
 
 String      operator+(const std::string&a, const std::string_view&b)
 {

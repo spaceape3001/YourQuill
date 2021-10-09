@@ -19,83 +19,11 @@
 class QByteArray;
 class QString;
 
+class Char8;
+class Char32;
+
 using u32string_r   = Result<std::u32string>;
 using wstring_r     = Result<std::wstring>;
-
-class Char8 {
-public:
-    constexpr Char8() : m_code(0) {}
-    constexpr Char8(char c) : m_code(c) {}
-    constexpr Char8(char8_t c) : m_code((char) c) {}
-    
-    operator char () const { return m_code; }
-    char        code() const { return m_code; }
-    bool        good() const { return m_code != 0; }
-    
-    bool        operator==(Char8 b) { return m_code == b.m_code; }
-    bool        operator!=(Char8 b) { return m_code != b.m_code; }
-    bool        operator<(Char8 b) { return m_code < b.m_code; }
-    bool        operator<=(Char8 b) { return m_code <= b.m_code; }
-    bool        operator>(Char8 b) { return m_code > b.m_code; }
-    bool        operator>=(Char8 b) { return m_code >= b.m_code; }
-    
-    bool        is_alnum() const;
-    bool        is_alpha() const;
-    bool        is_blank() const;
-    bool        is_control() const;
-    bool        is_digit() const;
-    bool        is_graph() const;
-    bool        is_lower() const;
-    bool        is_print() const;
-    bool        is_punct() const;
-    bool        is_space() const;
-    bool        is_upper() const;
-    bool        is_xdigit() const;
-    
-    char        to_lower() const;
-    char        to_upper() const;
-    
-private:
-    char        m_code;
-};
-
-
-class Char32 {
-public:
-    Char32() : m_code(0) {}
-    Char32(char32_t c) : m_code(c) {}
-
-    operator char32_t () const { return m_code; }
-    
-    char32_t    code() const { return m_code; }
-    bool        good() const { return m_code != 0; }
-    
-    //bool        operator==(Char32 b) { return m_code == b.m_code; }
-    //bool        operator!=(Char32 b) { return m_code != b.m_code; }
-    //bool        operator<(Char32 b) { return m_code < b.m_code; }
-    //bool        operator<=(Char32 b) { return m_code <= b.m_code; }
-    //bool        operator>(Char32 b) { return m_code > b.m_code; }
-    //bool        operator>=(Char32 b) { return m_code >= b.m_code; }
-
-    bool        is_alnum() const;
-    bool        is_alpha() const;
-    bool        is_blank() const;
-    bool        is_control() const;
-    bool        is_digit() const;
-    bool        is_graph() const;
-    bool        is_lower() const;
-    bool        is_print() const;
-    bool        is_punct() const;
-    bool        is_space() const;
-    bool        is_upper() const;
-    bool        is_xdigit() const;
-    
-    char32_t    to_lower() const;
-    char32_t    to_upper() const;
-    
-private:
-    char32_t    m_code;
-};
 
 
 /*! \brief UTF-8 String
@@ -350,11 +278,14 @@ public:
     Vector<String>      split(const char*z,unsigned int) const;
     Vector<String>      split(const std::string& s) const;
     Vector<String>      split(const std::string& s,unsigned int) const;
+    Vector<String>      split(const std::string_view& s) const;
+    Vector<String>      split(const std::string_view& s,unsigned int) const;
     
     /*! \brief Removes ALL spaces */
     String              strip_spaces() const;
 
     bool                starts_with(const std::string&) const;
+    bool                starts_with(const std::string_view&) const;
     bool                starts_with(const char*) const;
     
     String              trimmed() const;

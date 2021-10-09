@@ -8,6 +8,10 @@ set(util_sources
     ./AbstractFile.hpp
     ./Array1.hpp
     ./Array2.hpp
+    ./Char8.hpp
+    ./Char8.ipp
+    ./Char32.hpp
+    ./Char32.ipp
     ./CmdArgs.cpp
     ./CmdArgs.hpp
     ./Comma.hpp
@@ -33,6 +37,8 @@ set(util_sources
     ./Hash.hpp
     ./Http.ipp
     ./Http.hpp
+    ./IgCase.hpp
+    ./IgCase.ipp
     ./IntRange.hpp
     ./IOUnity.cpp
     ./List.hpp
@@ -58,6 +64,10 @@ set(util_sources
     ./Stream.hpp
     ./String.ipp
     ./String.hpp
+    ./StringUtil.ipp
+    ./StringUtil.hpp
+    ./StringView.ipp
+    ./StringView.hpp
     ./TypeTraits.hpp
     ./Utilities.ipp
     ./Utilities.hpp
