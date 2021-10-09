@@ -8,6 +8,8 @@ set(util_sources
     ./AbstractFile.hpp
     ./Array1.hpp
     ./Array2.hpp
+    ./CmdArgs.cpp
+    ./CmdArgs.hpp
     ./Comma.hpp
     ./Compare.hpp
     ./CoreUnity.cpp
