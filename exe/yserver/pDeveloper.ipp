@@ -195,6 +195,56 @@ namespace {
         _classes(h, cdb::all_classes(Sorted::YES));
     }
     
+    void    dev_db_tables(HtmlWriter& h)
+    {
+        h.title("Listing of DB Tables");
+        h << "<table>\n";
+        for(QString s : wksp::cache().tables()){
+            h << "</tr><td>" << s << "</td></tr>\n";
+        }
+        h << "</table>\n";
+    }
+    
+
+    void    dev_directories(HtmlWriter& h)
+    {
+        h.title("Listing of Directories");
+        _directories(h, cdb::all_directories(Sorted::YES));
+    }
+    
+    void    dev_directory(HtmlWriter& h)
+    {
+        test(decode_directory_prime());
+        auto i = cdb::info(x_directory);
+        h.title("Directory (" + i.path + ")");
+        auto t = h.table();
+        h.key("ID") << x_directory.id;
+        h.key("Directories") << cdb::directories_count(x_directory);
+        h.key("Fragments") << cdb::fragments_count(x_directory);
+        h.key("Folder") << dev(i.folder);
+        h.key("Hidden") << i.hidden;
+        h.key("Name") << i.name;
+        h.key("Parent") << dev(i.parent);
+        h.key("Path") << i.path;
+        h.key("Root") << dev(i.root);
+        h.key("Removed") << i.removed;
+    }
+
+    void    dev_directory_children(HtmlWriter& h)
+    {
+        test(decode_directory_prime());
+        h.title("Directory (" + cdb::path(x_directory) + "): Directories");
+        _directories(h, cdb::directories(x_directory, Sorted::YES));
+    }
+
+    void    dev_directory_fragments(HtmlWriter& h)
+    {
+        test(decode_directory_prime());
+        h.title("Directory (" + cdb::path(x_directory) + "): Fragments");
+        _fragments(h, cdb::fragments(x_directory, Sorted::YES));
+    }
+    
+
     
     void    dev_document(HtmlWriter& h)
     {
@@ -237,45 +287,6 @@ namespace {
         h.title("Listing of Documents");
         _documents(h, cdb::all_documents(Sorted::YES));
     }
-
-    void    dev_directories(HtmlWriter& h)
-    {
-        h.title("Listing of Directories");
-        _directories(h, cdb::all_directories(Sorted::YES));
-    }
-    
-    void    dev_directory(HtmlWriter& h)
-    {
-        test(decode_directory_prime());
-        auto i = cdb::info(x_directory);
-        h.title("Directory (" + i.path + ")");
-        auto t = h.table();
-        h.key("ID") << x_directory.id;
-        h.key("Directories") << cdb::directories_count(x_directory);
-        h.key("Fragments") << cdb::fragments_count(x_directory);
-        h.key("Folder") << dev(i.folder);
-        h.key("Hidden") << i.hidden;
-        h.key("Name") << i.name;
-        h.key("Parent") << dev(i.parent);
-        h.key("Path") << i.path;
-        h.key("Root") << dev(i.root);
-        h.key("Removed") << i.removed;
-    }
-
-    void    dev_directory_children(HtmlWriter& h)
-    {
-        test(decode_directory_prime());
-        h.title("Directory (" + cdb::path(x_directory) + "): Directories");
-        _directories(h, cdb::directories(x_directory, Sorted::YES));
-    }
-
-    void    dev_directory_fragments(HtmlWriter& h)
-    {
-        test(decode_directory_prime());
-        h.title("Directory (" + cdb::path(x_directory) + "): Fragments");
-        _fragments(h, cdb::fragments(x_directory, Sorted::YES));
-    }
-    
 
     void    _echo(HtmlWriter& h, bool canSubmit)
     {
@@ -666,6 +677,7 @@ namespace {
             reg_page(hGet, "/dev/class/subs", dev_class_subs).description("Class Uses").id().key().label("Subs")
         });
         reg_page(hGet, "/dev/classes", dev_classes).description("List of classes.");
+        reg_page(hGet, "/dev/db/tables", dev_db_tables).description("List of DB Tables.");
         reg_page(hGet, "/dev/directories", dev_directories).description("List of directories");
         reg_tabbar({
             reg_page(hGet, "/dev/directory", dev_directory).description("Directory Information").id().label("Overview"),

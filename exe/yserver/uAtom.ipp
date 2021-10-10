@@ -82,7 +82,7 @@ namespace {
             i.exec();
             
             Property    prop{i.lastInsertIdU64()};
-            static thread_local cdb::SQ i2("INSERT OR REPLACE INTO PAttribute (prop, attr, implied) VALUES (?, ?, 0");
+            static thread_local cdb::SQ i2("INSERT OR REPLACE INTO PAttribute (prop, attr, implied) VALUES (?, ?, 0)");
             auto i2_af = i.af();
             i2.bind(0, prop.id);
             i2.bind(1, kv.attr.id);

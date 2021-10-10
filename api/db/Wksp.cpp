@@ -9,6 +9,7 @@
 #include "Root.hpp"
 #include "QuillFile.hpp"
 #include "Wksp.hpp"
+#include "Workspace.hpp"
 
 #include "WkspLogging.hpp"
 #include "ShareDir.hpp"
@@ -41,19 +42,18 @@ namespace {
         QString             db_pid;
         QString             cache;
         Copyright           copyright;
-        QString             dot;
-        QString             git;
+        //QString             dot;
+        //QString             git;
         QString             home;
-        QString             hostname;
         QString             ini;
         bool                init;
         QString             local_user;
         QDir                log_dir;
         QString             log_fragment;
         QString             logs;
-        QString             markdown;
+        //QString             markdown;
         QString             name;
-        QString             perl;
+        //QString             perl;
         unsigned short      port;
         QString             quill_arg;
         QDir                quill_dir;
@@ -68,10 +68,10 @@ namespace {
         RoleMap             root_first;
         RoleVecMap          root_read;
         RoleVecMap          root_write;
-        QString             smartypants;
+        //QString             smartypants;
         QString             start;
         QDateTime           start_time;
-        QString             subversion;
+        //QString             subversion;
         
         QDirVector          template_dirs;
         QStringSet          templates;
@@ -167,6 +167,12 @@ namespace wksp {
         static bool _init(const QString& location, Options opts)
         {
             bool    ret     = true;
+            
+            if(!Workspace::init(location.toStdString())){
+                wkspError << "Other init failed...bye.";
+                return false;
+            }
+            
             M&  m = impl();
             tbb::spin_rw_mutex::scoped_lock    _lock(m.mutex, true);
             
@@ -191,19 +197,8 @@ namespace wksp {
                 return false;
             }
             
-            char        hname[HOST_NAME_MAX+1];
-            gethostname(hname, sizeof(hname));
-            hname[HOST_NAME_MAX]    = '\0';
-            m.hostname      = QString(hname);
             
             //  Right now, hardcode these
-            m.dot           = "/usr/bin/dot";
-            m.git           = "/usr/bin/git";
-            m.perl          = "/usr/bin/perl";
-            m.subversion    = "/usr/bin/svn";
-            
-            m.markdown      = shared_file("perl/Markdown.pl").value;
-            m.smartypants   = shared_file("perl/SmartyPants.pl").value;
             
             QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
             
@@ -652,15 +647,15 @@ namespace wksp {
         return impl().db_pid;
     }
     
-    const QString&      dot()
+    QString             dot()
     {
-        return impl().dot;
+        return QString::fromStdString(gWksp.dot.string());
     }
 
     
-    const QString&      git()
+    QString             git()
     {
-        return impl().git;
+        return QString::fromStdString(gWksp.git.string());
     }
 
     bool                has_init()
@@ -673,9 +668,9 @@ namespace wksp {
         return impl().home;
     }
     
-    const QString&      hostname()
+    QString             hostname()
     {
-        return impl().hostname;
+        return QString::fromStdString(gWksp.host);
     }
     
       
@@ -699,9 +694,9 @@ namespace wksp {
         return impl().logs;
     }
     
-    const QString&      markdown()
+    QString             markdown()
     {
-        return impl().markdown;
+        return QString::fromStdString(gWksp.markdown.string());
     }
     
     const QString&      name()
@@ -709,9 +704,9 @@ namespace wksp {
         return impl().name;
     }
     
-    const QString&      perl()
+    QString             perl()
     {
-        return impl().perl;
+        return QString::fromStdString(gWksp.perl.string());
     }
 
     unsigned short      port()
@@ -819,9 +814,9 @@ namespace wksp {
         return impl().roots;
     }
     
-    const QString&      smartypants()
+    QString             smartypants()
     {
-        return impl().smartypants;
+        return QString::fromStdString(gWksp.smartypants.string());
     }
     
     const QString&      start()
@@ -834,9 +829,9 @@ namespace wksp {
         return impl().start_time;
     }
     
-    const QString&      subversion()
+    QString             subversion()
     {
-        return impl().subversion;
+        return QString::fromStdString(gWksp.subversion.string());
     }
 
     

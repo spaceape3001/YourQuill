@@ -6,7 +6,8 @@ CREATE TABLE Properties (
     value   VARCHAR(255),
     kind    INTEGER,
     type    VARCHAR(255),
-    rid     INTEGER
+        -- resolved ID (for the kind)
+    rid     INTEGER DEFAULT 0
 );
 
 CREATE TABLE PAttribute (

@@ -16,6 +16,7 @@
 #include <util/EnumMap.hpp>
 #include <util/SetFwd.hpp>
 
+#include <filesystem>
 #include <stdint.h>
 #include <string_view>
 
@@ -26,11 +27,9 @@ struct Copyright;
 
 struct Workspace {
 
-    struct Root;
-    
-    using RootVec      = Vector<Root*>;
-    using RootMap      = EnumMap<DataRole, Root*>;
-    using RootMapVec   = EnumMap<DataRole,RootVec>;
+    using fspath = std::filesystem::path;
+
+    static constexpr const char*    szQuillFile = ".yquill";
 
     enum {
         SEARCH          = 0x1,  //  Search upward for quill fragment
@@ -38,52 +37,61 @@ struct Workspace {
         INIT_LOG        = 0x4
     };
 
-    String              author;
-    String              abbr;
-    Set<uint16_t>       aux;
-    String              cache;      // default (for blank tmp) is /tmp/yquill/cache/${qkey}.db
-    Copyright           copyright;
-    String              ini;        // default (for blank tmp) is /tmp/yquill/ini/${qkey}.ini
-    String              logs;       // default (for blank tmp) is /tmp/yquill/logs/${qkey}-${tmp}.log
-    String              luser;
-    String              name;
-    String              pid;
-    uint16_t            port        = 0;
-    String              qkey;
-    String              qfile;
-    String              qdir;
-    StringSet           templates;
-    RootVec             roots;
-    RootMap             rfirst;
-    RootMapVec          rread;
-    RootMapVec          rwrite;
-    String              tmp;        // will not override IPC & PIDs (which remain in /tmp/yquill), but will override cache & logs
+    struct Root;        // will be replaced by the other one
+    using RootVec       = Vector<const Root*>;
+    using RootMap       = Map<String,const Root*, IgCase>;
+    using RoleMap       = EnumMap<DataRole, const Root*>;
+    using RoleVecMap    = EnumMap<DataRole, RootVec>;
     
-    bool                init(const std::string_view&, unsigned opts = SEARCH|INIT_LOG);
-    String              resolve(const std::string_view&) const;
-    
-    static String       dot;
-    static String       git;
-    static String       hostname;
-    static String       markdown;
-    static String       smartypants;
-    static String       perl;
-    static String       subversion;
-    static StringSet    available;  // templates
 
-private:    
-    static bool         sinit();
+    String              abbr;           //!< Abbrievation of the workspace
+    String              author;         //!< Author of the workspace
+    Set<uint16_t>       aux;            //!< Auxilary ports
+    StringSet           available;      //!< Available templates
+    fspath              cache;          //!< Cache DB location
+    Copyright           copyright;      //!< Copyright information
+    fspath              dot;            //!< DOT executable location
+    fspath              git;            //!< GIT file location
+    String              host;           //!< This hostname
+    fspath              ini;            //!< INI location
+    fspath              logs;           //!< Log files
+    String              luser;          //!< Local user
+    fspath              markdown;       //!< Location of the markdown scrtip
+    String              name;           //!< Workspace name
+    fspath              perl;           //!< Perl executable location
+    fspath              pid;            //!< PID File location
+    uint16_t            port = 0;       //!< Port number
+    fspath              qdir;           //!< Total directory for th equill file
+    fspath              qfile;          //!< Quill path file (full)
+    String              qkey;           //!< Workspace's Quill Key (directory it's contained in
+    fspath              qspec;          //!< The provided argument for the quill
+    RootVec             roots;          //!< ALL roots active in this wokrspace
+    RoleMap             rfirst;         //!< First-write roots (will be the first item in rwrite
+    RootMap             rkey;           //!< Root by key
+    RoleVecMap          rread;          //!< Root read order based on the data role
+    unsigned int        rtimeout = 0;   //!< Read timeout on HTTP server
+    RoleVecMap          rwrite;         //!< Root write order based on the data role
+    fspath              smartypants;    //!< Smarthpants script location
+    fspath              subversion;     //!< Subversion executable location
+    StringSet           templates;      //!< Templates in use
+    
+    fspath              resolve(const fspath&) const;
+    bool                load(const fspath&, unsigned opts = SEARCH|INIT_LOG);
+    static bool         init(const fspath&, unsigned opts = SEARCH|INIT_LOG);
+    
+    /*! \brief Best guess of a quill file for the given path
+    */
+    static std::filesystem::path       best_guess(const std::filesystem::path&);
 };
 
 struct Workspace::Root {
-    String                      path;
+    fspath                      path;
     EnumMap<DataRole,Access>    access;
     String                      key;
     String                      name, color,icon;
     uint16_t                    id  = 0;
     bool                        is_template = false;
-    
 };
 
 
-extern Workspace        gWksp;
+extern const Workspace&        gWksp;

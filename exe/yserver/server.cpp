@@ -14,6 +14,7 @@
 #include <srv/Session.hpp>
 #include <srv/TLSGlobals.hpp>
 
+#include <util/CmdArgs.hpp>
 #include <util/FileUtils.hpp>
 #include <util/LogFile.hpp>
 #include <util/Logging.hpp>
@@ -279,6 +280,8 @@ int main(int argc, char* argv[])
         std::cerr << "Usage: " << argv[0] << " (workspace)\n";
         return -1;
     }
+    
+    CmdArgs     cargs(argc, argv);
     
     log_to_std_error();
     QCoreApplication    app(argc, argv);

@@ -31,6 +31,7 @@
 #include <QIcon>
 #include <QSqlError>
 #include <QTextStream>
+#include <string_view>
 
 
 #include "Atom.ipp"

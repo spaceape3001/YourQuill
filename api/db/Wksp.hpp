@@ -63,15 +63,15 @@ namespace wksp {
     
     const QString&          db_pid();
 
-    const QString&          dot();
+    QString                 dot();
 
-    const QString&          git();
+    QString                 git();
 
     bool                    has_init();
 
     const QString&          home();
     
-    const QString&          hostname();
+    QString                 hostname();
 
     const QString&          ini();
     
@@ -81,11 +81,11 @@ namespace wksp {
     
     const QString&          log_dir_path();
     
-    const QString&          markdown();
+    QString                 markdown();
     
     const QString&          name();
     
-    const QString&          perl();
+    QString                 perl();
     
     unsigned short          port();
     
@@ -116,12 +116,12 @@ namespace wksp {
     const RootVector&       root_writes(DataRole);
     const RootVector&       roots();
     
-    const QString&          smartypants();
+    QString                 smartypants();
     const QString&          start();
     
     QDateTime               start_time();
     
-    const QString&          subversion();
+    QString                 subversion();
     
     //TagPtr                  tag(const QString&);
     //uint64_t                tag_count();

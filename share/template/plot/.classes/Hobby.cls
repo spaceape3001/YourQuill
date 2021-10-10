@@ -1,0 +1,2 @@
+% Hobby
+plural Hobbies

@@ -2,6 +2,8 @@
 CREATE TABLE Atoms (
     id          INTEGER PRIMARY KEY,
     k           VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE,
+        -- portion that's not part of the document
+    sk          VARCHAR(255) COLLATE NOCASE,
     abbr        VARCHAR(255),
         -- left here until it's all switched over....
     doc         INTEGER NOT NULL,
