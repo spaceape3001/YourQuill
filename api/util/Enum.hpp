@@ -9,6 +9,7 @@
 #include "IgCase.hpp"
 #include "Map.hpp"
 #include "String.hpp"
+#include "StringView.hpp"
 #include "Vector.hpp"
 
 

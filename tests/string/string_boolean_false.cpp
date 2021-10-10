@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/String.hpp"
+#include "util/Strings.hpp"
 #include <iostream>
 
 int main(int argc, char* argv[])

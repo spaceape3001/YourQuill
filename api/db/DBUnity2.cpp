@@ -12,7 +12,7 @@
 #include <util/Compare.hpp>
 #include <util/Logging.hpp>
 #include <util/FileUtils.hpp>
-#include <util/String.hpp>
+#include <util/Strings.hpp>
 
 
 #include <pwd.h>

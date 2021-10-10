@@ -25,6 +25,7 @@
 #include <util/Execute.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
+#include <util/Strings.hpp>
 #include <util/Utilities.hpp>
 #include <util/Vector.hpp>
 

@@ -12,6 +12,7 @@
 template <typename> struct Result;
 
 class String;
+class StringView;
 class QByteArray;
 class QString;
 
@@ -28,6 +29,7 @@ using int64_r           = Result<int64_t>;
 using short_r           = Result<short>;
 using size_r            = Result<size_t>;
 using string_r          = Result<String>;
+using string_view_r     = Result<StringView>;
 //using string_map_r      = Result<StringMap>;
 //using string_set_r      = Result<StringSet>;
 using uint8_r           = Result<uint8_t>;

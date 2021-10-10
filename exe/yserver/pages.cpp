@@ -34,6 +34,7 @@
 #include <util/Logging.hpp>
 #include <util/Map.hpp>
 #include <util/SqlQuery.hpp>
+#include <util/Strings.hpp>
 #include <util/Utilities.hpp>
 
 #include <QCoreApplication>

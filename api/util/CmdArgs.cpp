@@ -1,11 +1,12 @@
 #include "CmdArgs.hpp"
+#include "StringView.hpp"
 #include "ThreadId.hpp"
 #include <span>
 
 struct CmdArgs::Repo {
     CmdArgs*                app = nullptr;
     std::span<const char*>  args;
-    std::string_view        exe;
+    StringView              exe;
 };
 
 CmdArgs::Repo& CmdArgs::repo()

@@ -12,7 +12,7 @@
 #include "Http.hpp"
 #include "LogFile.hpp"
 #include "Logging.hpp"
-#include "String.hpp"
+#include "Strings.hpp"
 #include "ThreadId.hpp"
 #include "Vector.hpp"
 #include "XmlFile.hpp"

@@ -10,7 +10,7 @@
 #include "SqlLogging.hpp"
 #include "SqlQuery.hpp"
 #include "SqlUtils.hpp"
-#include "String.hpp"
+#include "Strings.hpp"
 #include "Vector.hpp"
 
 #include <QSqlError>

@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/String.hpp"
+#include "util/Strings.hpp"
 #include "util/Vector.hpp"
 #include <iostream>
 

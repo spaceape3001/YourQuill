@@ -53,6 +53,7 @@ inline Compare merge(const Vector<Compare>& cs)
 
 //Compare compare(const QVariant& a, const QVariant& b);
 Compare compare(const std::string& a, const std::string& b);
+Compare compare_igCase(const std::string_view& a, const std::string_view& b);
 Compare compare_igCase(const std::string& a, const std::string& b);
 
 Compare compare(const QString& a, const QString& b);
