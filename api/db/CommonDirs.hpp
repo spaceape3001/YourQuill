@@ -13,13 +13,13 @@
 struct CommonDir {
     using fspath = std::filesystem::path;
     fspath          build;
-    fspath          cache;
-    fspath          ipc;
-    fspath          ini;
-    fspath          log;
-    fspath          pid;
-    Vector<fspath>  share;
-    fspath          tmp;
+    fspath          cache;      // global non-quill cache
+    fspath          ipc;        // global non-quill IPC
+    fspath          ini;        // global non-quill INI location
+    fspath          log;        // global non-quill LOG file location
+    fspath          pid;        // global non-quill PID location
+    Vector<fspath>  share;      // SHARE path 9global)
+    fspath          tmp;        // global temp
 
     static bool     init();
 };

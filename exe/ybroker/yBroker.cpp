@@ -12,6 +12,7 @@
 #include <ipc/PidFile.hpp>
 #include <ipc/ipcSocket.hpp>
 
+#include <util/CmdArgs.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
 #include <util/Safety.hpp>
@@ -185,6 +186,7 @@ int execMain(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+    CmdArgs args(argc, argv);
     int r = execMain(argc, argv);
     if((r == 0) && (gQuit == Quit::Restart)){
         yNotice() << "Restart requested.";

@@ -6,9 +6,11 @@
 
 #pragma once
 #include "ipcPackets.hpp"
+#include <filesystem>
 #include <string>
 
 namespace ipc {
+    using fspath =  std::filesystem::path;
     template <size_t> class Buffer;
 
     class Socket {
@@ -20,10 +22,8 @@ namespace ipc {
 
             // uses current process ID in IPC dir
         bool            open_rx();
-        bool            open_rx(const char*);
-        bool            open_tx(const char*);
-        bool            open_rx(const std::string&);
-        bool            open_tx(const std::string&);
+        bool            open_rx(const fspath&);
+        bool            open_tx(const fspath&);
 
         void            close();
 
@@ -35,13 +35,14 @@ namespace ipc {
         void            txStopping();
         void            txShutdown();
 
+        const fspath&   path() const { return m_path; }
+
         Socket();      
-        Socket(const char*z, bool isRead);
-        Socket(const std::string& z, bool isRead);
+        Socket(const fspath&, bool isRead);
 
 
     protected:
-        bool            open(const char* z, unsigned int mode);
+        bool            open(const fspath&, unsigned int mode);
         uint16_t        origin() const { return m_packet.origin; }
         uint8_t         opcode() const { return m_packet.opcode; }
         
@@ -60,6 +61,7 @@ namespace ipc {
         uint16_t        m_origin    = 0;
         bool            m_reading   = false;
         Packet          m_packet;
+        fspath          m_path;
         
         using W         = Buffer<256>;
         

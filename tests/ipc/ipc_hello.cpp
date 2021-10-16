@@ -4,16 +4,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <db/CommonDirs.hpp>
+#include <util/CmdArgs.hpp>
+#include <util/Logging.hpp>
 #include <ipc/ipcSocket.hpp>
 #include <stdlib.h>
+#include <iostream>
 
-int main(int, char*[])
+int main(int argc, char* argv[])
 {
-    const char*       tmp = getenv("TMPDIR");
-    if(!tmp)
-        tmp = "/tmp";
-    ipc::Socket     out(std::string(tmp) + "/yquill/ipc/broker", false);
+    CmdArgs args(argc, argv);
+    log_to_std_error();
+    CommonDir::init();
+    ipc::Socket     out(gDir.ipc / "broker", false);
     out.txPrint("Hello World!");
     return 0;
 }
-

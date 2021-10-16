@@ -9,11 +9,11 @@ int main(int argc, char* argv[])
     CommonDir::init();
     std::cout << "Common Dir Info:\n"
               << "build: " << gDir.build << "\n"
-              << "cache: " << gDir.cache << "\n"
-              << "ipc:   " << gDir.ipc << "\n"
-              << "ini:   " << gDir.ini << "\n"
-              << "log:   " << gDir.log << "\n"
-              << "pid:   " << gDir.pid << "\n"
+              //<< "cache: " << gDir.cache << "\n"
+              //<< "ipc:   " << gDir.ipc << "\n"
+              //<< "ini:   " << gDir.ini << "\n"
+              //<< "log:   " << gDir.log << "\n"
+              //<< "pid:   " << gDir.pid << "\n"
               << "tmp:   " << gDir.tmp << "\n"
               << "share:\n";
     for(const auto&fs : gDir.share)

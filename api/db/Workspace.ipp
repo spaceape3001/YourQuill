@@ -9,6 +9,12 @@
 
 namespace {
     Workspace           sWksp;
+    
+    std::filesystem::path   absolute_proximate(const String& spec, const std::filesystem::path& base)
+    {
+        std::error_code ec1, ec2;
+        return std::filesystem::absolute(std::filesystem::proximate(spec.c_str(), base, ec1), ec2);
+    }
 }
 
 const Workspace&    gWksp   = sWksp;
@@ -41,7 +47,7 @@ bool                Workspace::load(const std::filesystem::path& spec, unsigned 
         if(getcwd(cwd, PATH_MAX) != cwd)
             return false;
         cwd[PATH_MAX]   = '\0';
-        q   = path(cwd) / spec;
+        q   = path(cwd) / spec.c_str();
     }
     q = q.lexically_normal();
     
@@ -87,11 +93,13 @@ bool                Workspace::load(const std::filesystem::path& spec, unsigned 
     
     qdir            = qfile.parent_path();
     qkey            = qdir.filename().c_str();
+    if(doc.temp_dir.empty()){
+        tmp = gDir.tmp / qkey.c_str();
+    } else 
+        tmp = absolute_proximate(doc.temp_dir, qdir);
+    
     
     //  TODO (LATER)
-
-    wkspInfo << "Initializing to quill file " << qfile;
-    wkspInfo << "Key is " << qkey;
 
 
     return true;

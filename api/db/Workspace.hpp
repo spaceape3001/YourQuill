@@ -74,6 +74,7 @@ struct Workspace {
     fspath              smartypants;    //!< Smarthpants script location
     fspath              subversion;     //!< Subversion executable location
     StringSet           templates;      //!< Templates in use
+    fspath              tmp;            //!< Temporary directory
     
     fspath              resolve(const fspath&) const;
     bool                load(const fspath&, unsigned opts = SEARCH|INIT_LOG);

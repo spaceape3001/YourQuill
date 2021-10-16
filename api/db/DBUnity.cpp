@@ -32,6 +32,8 @@
 #include <QIcon>
 #include <QSqlError>
 #include <QTextStream>
+
+#include <filesystem>
 #include <string_view>
 
 

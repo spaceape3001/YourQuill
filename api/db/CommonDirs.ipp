@@ -34,14 +34,15 @@ namespace {
 
         dirs.build      = kBuildDir;
         dirs.tmp        = path(tmpdir) / "yquill";
-        dirs.log        = dirs.tmp / "logs";
-        dirs.ipc        = dirs.tmp / "ipc";
-        dirs.ini        = dirs.tmp / "ini";
-        dirs.pid        = dirs.tmp / "pid";
-        dirs.cache      = dirs.tmp / "cache";
+        dirs.log        = dirs.tmp / ".log";
+        dirs.ipc        = dirs.tmp / ".ipc";
+        dirs.ini        = dirs.tmp / ".ini";
+        dirs.pid        = dirs.tmp / ".pid";
+        dirs.cache      = dirs.tmp / ".cache";
         path  lHomeDir;
 
-        Vector<path>  ndirs({ dirs.tmp, dirs.log, dirs.ipc, dirs.cache, dirs.pid, dirs.ini });
+        Vector<path>  ndirs;
+        ndirs << dirs.tmp << dirs.ipc << dirs.log << dirs.cache << dirs.pid << dirs.ini;
 
         //  And user home dir...
         const char*     hdir    = homeDir();

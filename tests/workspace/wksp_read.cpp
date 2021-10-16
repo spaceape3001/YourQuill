@@ -6,13 +6,11 @@
 
 #include <iostream>
 
-#include <db/Root.hpp>
-#include <db/Wksp.hpp>
+#include <db/Workspace.hpp>
 #include <meta/Meta.hpp>
+#include <util/CmdArgs.hpp>
 #include <util/Logging.hpp>
 #include <util/Utilities.hpp>
-
-#include <QCoreApplication>
 
 int main(int argc, char* argv[])
 {
@@ -20,32 +18,36 @@ int main(int argc, char* argv[])
         std::cerr << "Usage: wksp_read (workspace)\n";
         return -1;
     }
-
+    
+    CmdArgs args(argc, argv);
     log_to_std_error();
-    QCoreApplication    app(argc, argv);
+    
     meta_init();
     meta_freeze();
-    wksp::initialize(argv[1], wksp::Option::SEARCH);
+    Workspace::init(argv[1], Workspace::SEARCH);
     
     std::cout 
         << "Workspace Report:\n"
         << "-------------------\n"
-        << "Name     : " << wksp::name() << "\n"
-        << "Author   : " << wksp::author() << "\n"
-        << "Templates: " << join(wksp::templates(), ", ") << "\n"
-        << "Available: " << join(wksp::templates_available(), ", ") << "\n"
+        << "File     : " << gWksp.qfile << "\n"
+        << "Key      : " << gWksp.qkey << "\n"
+        << "Name     : " << gWksp.name << "\n"
+        << "Author   : " << gWksp.author << "\n"
+        << "Port     : " << gWksp.port << "\n"
+        << "Templates: " << join(gWksp.templates, ", ") << "\n"
+        << "Available: " << join(gWksp.available, ", ") << "\n"
         << "\n"
-        << "Cache    : " << wksp::cache_db() << "\n"
-        << "Hostname : " << wksp::hostname() << "\n"
-        << "Logs     : " << wksp::log_dir_path() << "\n"
-        << "Temp Dir : " << wksp::temp_dir_path() << "\n"
+        << "Cache    : " << gWksp.cache << "\n"
+        << "Hostname : " << gWksp.host << "\n"
+        << "Logs     : " << gWksp.logs << "\n"
+        << "Temp Dir : " << gWksp.tmp << "\n"
         << "\n"
         << "Roots:\n"
         << "-------------------\n"
     ;
     
-    for(const Root* rt : wksp::roots())
-        std::cout << rt->id() << " [" << rt->key() << "] " << rt->path() << "\n";
+    for(const Workspace::Root* rt : gWksp.roots)
+        std::cout << rt->id << " [" << rt->key << "] " << rt->path << "\n";
     
     return 0;
 }

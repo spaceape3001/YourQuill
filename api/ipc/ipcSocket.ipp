@@ -12,7 +12,7 @@ namespace ipc {
     {
     }
 
-    Socket::Socket(const char*z, bool isRead) : Socket()
+    Socket::Socket(const fspath& z, bool isRead) : Socket()
     {
         if(isRead)
             open_rx(z);
@@ -20,9 +20,6 @@ namespace ipc {
             open_tx(z);
     }
     
-    Socket::Socket(const std::string& z, bool isRead) : Socket(z.c_str(), isRead)
-    {
-    }
 
     Socket::~Socket()
     {
@@ -37,29 +34,32 @@ namespace ipc {
         }
     }
 
-    bool        Socket::open(const char* z, unsigned int mode)
+    bool        Socket::open(const fspath& z, unsigned int mode)
     {
         if(m_fd != -1){
             yError() << "Socket is already open!";
             return false;
         }
         
-        if(mkfifo(z, 0666) && (errno != EEXIST)){
+        if(mkfifo(z.c_str(), 0666) && (errno != EEXIST)){
             yError() << "Unable to make FIFO, aborting.";
             return false;
         }
         
-        m_fd        = ::open(z, mode);
-        return m_fd != -1;
+        m_fd        = ::open(z.c_str(), mode);
+        if(m_fd != -1){
+            m_path  = z;
+            return true;
+        } else
+            return false;
     }
 
     bool        Socket::open_rx()
     {
-        String      us  = gDir.ipc + "/" + String::number(getpid());
-        return open_rx(us);
+        return open_rx(gDir.ipc / String::number(getpid()).c_str());
     }
 
-    bool        Socket::open_rx(const char* z)
+    bool        Socket::open_rx(const fspath& z)
     {
         m_reading   = true;
         if(!open(z, O_RDONLY|O_NONBLOCK))
@@ -69,20 +69,11 @@ namespace ipc {
         return true;
     }
 
-    bool        Socket::open_rx(const std::string&s)
-    {
-        return open_rx(s.c_str());
-    }
 
-    bool        Socket::open_tx(const char* z)
-    {
-        m_reading   = false;
-        return open(z, O_WRONLY);
-    }
-
-    bool        Socket::open_tx(const std::string&s)
+    bool        Socket::open_tx(const fspath&s)
     {   
-        return open_tx(s.c_str());
+        m_reading   = false;
+        return open(s, O_WRONLY);
     }
 
     bool        Socket::process()
