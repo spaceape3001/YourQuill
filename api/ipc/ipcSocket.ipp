@@ -121,6 +121,9 @@ namespace ipc {
                 case Print::OPCODE:
                     rxPrint(std::string_view(t, evt->len));
                     break;
+                case PrintWkspListReq::OPCODE:
+                    rxPrintWkspListing();
+                    break;
                 case Restart::OPCODE:
                     rxRestart();
                     break;
@@ -175,6 +178,11 @@ namespace ipc {
         });
     }
 
+    void        Socket::txPrintWkspListing()
+    {
+        tx(PrintWkspListReq::OPCODE);
+    }
+
     void        Socket::txRestart()
     {
         tx(Restart::OPCODE);
@@ -208,5 +216,7 @@ namespace ipc {
     {
         tx(Shutdown::OPCODE);
     }
+
+    
 
 }

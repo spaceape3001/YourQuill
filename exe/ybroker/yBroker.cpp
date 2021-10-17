@@ -15,6 +15,7 @@
 #include <util/CmdArgs.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
+#include <util/Map.hpp>
 #include <util/Safety.hpp>
 #include <util/String.hpp>
 #include <util/Vector.hpp>
@@ -37,19 +38,20 @@
     The Broker is meant to be an intermediary for coordination
 */
 
-struct WorkspaceInfo;
+struct WkspInfo;
 
 struct AppInfo {
-    pid_t           pid;
-    WorkspaceInfo*  wksp;
+    pid_t           pid     = 0;
+    WkspInfo*       wksp    = nullptr;
     std::string     path;
 };
 
-struct WorkspaceInfo {
-    uint32_t                id;
-    std::string             name, path, temp;
-    pid_t                   updater, server;
+struct WkspInfo {
+    std::string             key, name, path, temp;
     std::vector<AppInfo*>   apps;
+    pid_t                   updater = 0, server = 0;
+    uint16_t                id  = 0;
+    uint16_t                port = 0;
 };
 
 enum class Quit {
@@ -58,7 +60,33 @@ enum class Quit {
     Restart
 };
 
-Quit        gQuit = Quit::No;
+Quit                                gQuit = Quit::No;
+
+namespace G {
+    Vector<WkspInfo*>               all;
+    Map<String,WkspInfo*,IgCase>    byKey;
+    
+    WkspInfo*       create(const StringView& sv)
+    {
+        WkspInfo*   r  = byKey.get(sv, nullptr);
+        if(r)
+            return r;
+        
+        r           = new WkspInfo;
+        r -> key    = sv;
+        
+        byKey[sv]   = r;
+        all << r;
+        r -> id     = (uint16_t) all.size();
+        return r;
+    }
+    
+    WkspInfo*       get(const StringView& sv)
+    {
+        return byKey.get(sv, nullptr);
+    }
+};
+
 
 void    sigQuit(int)
 {
@@ -87,6 +115,26 @@ public:
     void    rxShutdown() override 
     {
         gQuit       = Quit::Stop;
+    }
+    
+    static void printOut(const WkspInfo& wi)
+    {
+        std::cout << wi.id << " (" << wi.key << ")\n";
+        std::cout << "  name: '" << wi.name << "'\n";
+        std::cout << "  path: '" << wi.path << "'\n";
+        std::cout << "  port: '" << wi.port << "'\n";
+        std::cout << "  updr: '" << wi.updater << "\n";
+        std::cout << "  srvr: '" << wi.server << "\n";
+        std::cout << "  apps: '" << wi.apps.size() << "'\n";
+        std::cout << "\n";
+    }
+    
+    void    rxPrintWkspListing() override
+    {
+        std::cout << "Workspace REPORT!\n";
+        std::cout << "=================\n";
+        for(const WkspInfo* wi : G::all)
+            printOut(*wi);
     }
 };
 
@@ -163,6 +211,9 @@ int execMain(int argc, char* argv[])
     //  And ... the main loop, poll between the sockets.
     
         yNotice() << "Starting up the broker!";
+        
+        G::create("");      // create the root;
+        
         
         pollfd  fds[2] = {{ sock.fd(), POLLIN, 0 }, { dwatch.fd(), POLLIN, 0 }};
         while(gQuit == Quit::No){

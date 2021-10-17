@@ -36,7 +36,7 @@ namespace ipc {
 
 
     struct Print {
-        static constexpr const uint16_t OPCODE         = 0;
+        static constexpr const uint16_t     OPCODE         = 0;
     };
 
 
@@ -44,7 +44,7 @@ namespace ipc {
         Nice thing, everything's implied by the origin PID... :)
     */
     struct Starting {
-        static constexpr const uint8_t     OPCODE      = 1;
+        static constexpr const uint8_t      OPCODE      = 1;
         uint64_t        token;      // OUR application token, needed for subsequenet (powerful) commands
         uint32_t        pid;
         
@@ -63,25 +63,25 @@ namespace ipc {
     /*! \brief Application is stopping (should be final)
     */
     struct Stopping {
-        static constexpr const uint8_t     OPCODE      = 3;
+        static constexpr const uint8_t      OPCODE      = 3;
     };
 
 
     /*! \brief Request for a shutdown, sent to the application
     */
     struct Shutdown {
-        static constexpr const uint8_t     OPCODE      = 4;
+        static constexpr const uint8_t      OPCODE      = 4;
     };
     
     struct Restart {
-        static constexpr const uint8_t     OPCODE      = 5;
+        static constexpr const uint8_t      OPCODE      = 5;
     };
 
         /*! \brief Request to RESTART a particular application
         
         */
     struct RestartReq {
-        static constexpr const uint8_t    OPCODE       = 6;
+        static constexpr const uint8_t      OPCODE       = 6;
         
         //! \brief App to restart.  (YOU is invalid)
         uint32_t    app;
@@ -90,7 +90,9 @@ namespace ipc {
         uint32_t    delay;
     };
     
-    
+    struct PrintWkspListReq {
+        static constexpr const uint8_t      OPCODE      = 7;
+    };
     
     
     //struct WkspLookupReq {

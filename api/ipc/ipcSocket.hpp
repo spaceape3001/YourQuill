@@ -28,6 +28,7 @@ namespace ipc {
         void            close();
 
         void            txPrint(const std::string_view&);
+        void            txPrintWkspListing();
         void            txRestart();
         void            txRestartReq(uint32_t app, uint32_t delay);
         void            txStarting(uint64_t token, const std::string_view& wksp);
@@ -48,6 +49,7 @@ namespace ipc {
         
     
         virtual void    rxPrint(const std::string_view&) {}
+        virtual void    rxPrintWkspListing(){}
         virtual void    rxRestart() {}
         virtual void    rxRestartReq(uint32_t app, uint32_t delay) {}
         virtual void    rxStarting(uint64_t token, uint32_t pid, const std::string_view&) {}
