@@ -261,7 +261,7 @@ endif ()
 # same directory and is searched for separately as part of the "tbb" and "malloc"
 # component search. The TBB_INCLUDE_DIR is then used as HINTS.
 find_path(TBB_INCLUDE_DIR
-  NAMES tbb/tbb_stddef.h
+  NAMES tbb/tbb.h
   HINTS ${TBB_ROOT}
   PATH_SUFFIXES ${_TBB_INC_PATH_SUFFIXES}
 )
@@ -460,7 +460,7 @@ if (TBB_INCLUDE_DIR)
       NOT DEFINED TBB_VERSION_MINOR OR
       NOT DEFINED TBB_INTERFACE_VERSION OR
       NOT DEFINED TBB_COMPATIBLE_INTERFACE_VERSION)
-    file(READ "${TBB_INCLUDE_DIR}/tbb/tbb_stddef.h" _TBB_VERSION_CONTENTS LIMIT 2048)
+    file(READ "${TBB_INCLUDE_DIR}/oneapi/tbb/version.h" _TBB_VERSION_CONTENTS LIMIT 2048)
     string(REGEX REPLACE
       ".*#define TBB_VERSION_MAJOR ([0-9]+).*" "\\1"
       TBB_VERSION_MAJOR "${_TBB_VERSION_CONTENTS}"
