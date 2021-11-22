@@ -52,11 +52,7 @@ namespace {
     static constexpr const mode_t   kDirMode        = 0755;
     
 
-    #ifdef WIN32
-    using path_set      = Set<String,IgCase>;
-    #else
-    using path_set      = Set<String>;
-    #endif
+    using path_set      = Set<path,IgCase>;
     
     const char* homeDir()
     {
@@ -75,24 +71,17 @@ namespace {
         std::error_code ec1, ec2;
         return absolute(proximate(spec.c_str(), base, ec1), ec2);
     }
-
-
-    template <typename T>
-    struct Spot {
-        T           data;
-        unsigned    count   = 0;
-    };
     
     
-    struct QuillSpots {
-        Spot<String>        abbr;
-        Spot<String>        author;
-        Spot<unsigned>      copyfrom;
-        Spot<unsigned>      copyto;
-        Spot<AssertDeny>    copystance;
-        Spot<String>        copytext;
-        Spot<String>        home;
-        Spot<String>        name;
+    struct SetSpots {
+        unsigned int    abbr        = ~0;
+        unsigned int    author      = ~0;
+        unsigned int    copyfrom    = ~0;
+        unsigned int    copystance  = ~0;
+        unsigned int    copytext    = ~0;
+        unsigned int    copyto      = ~0;
+        unsigned int    home        = ~0;
+        unsigned int    name        = ~0;
     };
 
     enum DirType {
@@ -160,7 +149,7 @@ namespace {
         //Vector<String>          ricons;
         RootMap                 rkey;
         RootVector              roots;
-        RootMap                 rpath;
+        RootPathMap             rpath;
         RoleVecMap              rread;
         RoleVecMap              rwrite;
         path                    smartypants;
@@ -385,7 +374,7 @@ namespace wksp {
                 
                 
             if(!doc.log_dir.empty())
-                m.logs        = absolute_proximate(doc.log_dir.c_str(), m.tmp);
+                m.logs        = absolute_proximate(doc.log_dir, m.tmp);
             else
                 m.logs        = m.tmp / "log";
             make_path(m.logs);
@@ -398,33 +387,44 @@ namespace wksp {
             }
             
             if(!doc.cache.empty())
-                m.cache       = absolute_proximate(doc.cache.c_str(), m.tmp);
+                m.cache       = absolute_proximate(doc.cache, m.tmp);
             else
                 m.cache       = m.tmp / "cache";
                 
 
-            path_set        rSeen, tSeen;
+            StringSet        rSeen;
             Root*           rt  = new Root(m.qdir, PolicyMap(Access::ReadWrite));
             m.roots << rt;
             m.rpath["."]              = rt;
             m.rpath[m.qdir.c_str()]   = rt;
             m.rkey["."]             = rt;
 
-            QuillSpots  qs  = make_root(doc, rSeen, tSeen, PolicyMap(Access::ReadWrite), 
-                PolicyMap((opts&TEMPLATES_RO) ? Access::ReadOnly : Access::ReadWrite), false, 0);
+            SetSpots        qs;
+            m.abbr                  = doc.abbr;
+            if(!m.abbr.empty())
+                qs.abbr             = 0;
+            m.author                = doc.author;
+            if(!m.author.empty())
+                qs.author           = 0;
+            m.copyright             = doc.copyright;
+            if(!m.copyright.from)
+                qs.copyfrom         = 0;
+            if(!m.copyright.stance)
+                qs.copystance       = 0;
+            if(!m.copyright.text.empty())
+                qs.copytext         = 0;
+            if(!m.copyright.to)
+                qs.copyto           = 0;
+            m.home                  = doc.home;
+            if(!m.home.empty())
+                qs.home            = 0;
+            m.name                  = doc.name;
+            if(!m.name.empty())
+                qs.name          = 0;
             
-            m.abbr              = qs.abbr.data;
-            m.author            = qs.author.data;
-            m.copyright.from    = qs.copyfrom.data;
-            m.copyright.to      = qs.copyto.data;
-            m.copyright.stance  = qs.copystance.data;
-            m.copyright.text    = qs.copytext.data;
-            m.home              = qs.home.data;
-            m.name              = qs.name.data;
+             _load(doc, rSeen, PolicyMap(Access::ReadWrite), PolicyMap((opts&TEMPLATES_RO) ? Access::ReadOnly : Access::ReadWrite), false, 0, qs);
+            
 
-            for(auto& i : tSeen)
-                m.templates << i;
-            
             m.roots.sort([](const Root* a, const Root* b){
                 if(a->is_template != b->is_template)
                     return a->is_template < b->is_template;
@@ -516,433 +516,156 @@ namespace wksp {
             return true;
         }
 
-#if 0
-            bool    ret     = true;
             
-            unsigned int            opts2 = 0;
-            if(opts.is_set(Option::SEARCH))
-                opts2 |= Workspace::SEARCH;
-            
-            
-            if(!Workspace::init(location.toStdString(), opts2)){
-                wkspError << "Other init failed...bye.";
-                return false;
-            }
-            
-            
-            if(m.init){
-                wkspError << "Workspace is already initialized!";
-                return false;
-            }
-            
-
-            //yInfo() << "wksp::Init::_init('" << location << "')";
-            
-            m.start_time    = QDateTime::currentDateTimeUtc();
-            m.start         = m.start_time.toString("yyyyMMdd-HHmmss");
-            m.app_name      = QCoreApplication::applicationName();
-            
-            //if(!CommonDir::init()){
-                //wkspError << "Unable to create temporary directories!";
-                //return false;
-            //}
-            
-            
-            //  Right now, hardcode these
-            
-            //QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
-            
-            
-            m.quill_arg         = location;
-            m.quill_prime       = gWksp.qfile.c_str();
-            //if(opts.is_set(Option::SEARCH)){
-                //m.quill_prime   = best_guess(location);
-            //} else {
-                //QFileInfo   fi(location);
-                //if(fi.fileName() == szQuillFile){
-                    //m.quill_prime   = location;
-                //} else if(fi.isDir()){
-                    //m.quill_prime    = QDir(location).absoluteFilePath(szQuillFile);
-                //}
-            //}
-            
-            //if(m.quill_prime.isEmpty()){
-                //wkspError << "No " << szQuillFile << " fragment at specified location, REQUIRED!";
-                //return false;
-            //}
-            
-            QuillFile        doc;
-            if(!doc.load(m.quill_prime.toStdString())){
-                wkspError << "Unable to load the Quill fragment.";
-                return false;
-            }
-            
-            m.quill_dir_path        = gWksp.qdir.c_str();
-            m.quill_dir             = QDir(m.quill_dir_path);
-            m.quill_key             = gWksp.qkey.c_str()
-            m.temporary             = gWksp.tmp.c_str();
-            
-            //if(doc.temp_dir.empty()){
-                //const char* tmpdir  = getenv("TMPDIR");
-                //if(!tmpdir)
-                    //tmpdir          = "/tmp";
-                //QDir    yqtemp      = QDir(tmpdir).absoluteFilePath("yquill");
-                //m.temporary         = yqtemp.absoluteFilePath(m.quill_key);
-            //} else
-                //m.temporary         = m.quill_dir.absoluteFilePath(doc.temp_dir.qString());
-            m.quill_dir.mkpath(m.temporary);
-            m.temporary_dir         = QDir(m.temporary);
-            
-            m.cache                 = gWksp.cache.c_str();
-            
-            //if(doc.cache.empty()){
-                //m.cache             = m.temporary_dir.absoluteFilePath("cache");
-            //} else
-                //m.cache             = m.quill_dir.absoluteFilePath(doc.cache.qString());
-            m.db_pid                = m.temporary_dir.absoluteFilePath("pid");
-            
-            //if(opts.is_set(Option::WIPE_CACHE) && QFile::exists(m.cache) )
-                //QFile::remove(m.cache);
-            
-            //if(doc.log_dir.empty()){
-                //m.logs              = m.temporary_dir.absoluteFilePath("logs");
-            //} else
-                //m.logs              = m.quill_dir.absoluteFilePath(doc.log_dir.qString());
-            m.logs                  = gWksp.logs.c_str()
-            m.quill_dir.mkpath(m.logs);
-            m.log_dir               = QDir(m.logs);
-            m.log_fragment          = m.log_dir.absoluteFilePath(QString("%1-%2.log").arg(m.app_name).arg(m.start));
-
-            log_to_file(m.log_fragment.toStdString(), LogPriority::YQ_DBGREL(All,All));
-            yInfo() << "Application '" << m.app_name << "' is initializing the workspace to '" << m.quill_dir_path << "'";
-
-            if(doc.ini.empty()){
-                m.ini               = m.temporary_dir.absoluteFilePath("ini");
-            } else
-                m.ini               = m.quill_dir.absoluteFilePath(doc.ini.qString());
-            
-            if(doc.local_user.empty()){
-                m.local_user        = getlogin();
-            } else 
-                m.local_user        = doc.local_user.qString();
-                
-            m.aux_ports             = doc.aux_ports;
-            m.port                  = doc.port;
-            if(!m.port)
-                m.port              = kDefaultPort;
-            m.read_timeout          = doc.read_timeout;
-            if(!m.read_timeout)
-                m.read_timeout      = kDefaultReadTimeout;
-
-            SetSpots            spots;
-            m.abbreviation          = doc.abbr.qString();
-            if(!m.abbreviation.isEmpty())
-                spots.abbr          = 0;
-            m.author                = doc.author.qString();
-            if(!m.author.isEmpty())
-                spots.author        = 0;
-            m.copyright             = doc.copyright;
-            if(!m.copyright.from)
-                spots.copyfrom      = 0;
-            if(!m.copyright.stance)
-                spots.copystance    = 0;
-            if(!m.copyright.text.empty())
-                spots.copytext      = 0;
-            if(!m.copyright.to)
-                spots.copyto        = 0;
-            m.home                  = doc.home.qString();
-            if(!m.home.isEmpty())
-                spots.home          = 0;
-            m.name                  = doc.name.qString();
-            if(!m.name.isEmpty())
-                spots.name          = 0;
-            
-            PathSet                 rSeen, tSeen;
-            
-            //  The first root (the quill)
-            Root*               rt           = new Root(m.quill_dir_path, PolicyMap(Access::ReadWrite));
-            rt -> m_id                       = 0;
-            rt -> m_depth                    = 0;
-            m.roots << rt;
-            m.root_by_path["."]              = rt;
-            m.root_by_path[m.quill_dir_path] = rt;
-
-            _load(doc, rSeen, tSeen, PolicyMap(Access::ReadWrite), 
-                PolicyMap(opts.is_set(Option::RO_TEMPLATE) ? Access::ReadOnly : Access::ReadWrite), spots, false, 1);
-
-            for(const auto &i : tSeen)
-                m.templates << i;
-            
-            m.roots.sort([](const Root* a, const Root* b){
-                if(a->is_template() != b->is_template())
-                    return a->is_template() < b->is_template();
-                if(a->depth() != b->depth())
-                    return a->depth() < b->depth();
-                return a->id() < b->id();
-            });
-
-            Vector<Root*>  eroots  = _roots();
-            for(Root* r2 : eroots){
-                QDir().mkpath(r2->resolve(szConfigDir));
-            }
-                
-            StringSet   keys;
-            
-            uint64_t        i   = 0;
-            for(Root* r2 : eroots){
-                r2 -> m_id      = i++;      // Re-ID everybody with the new order
-                if(!Root::is_good_dir(r2->path(), Root::G::Writable)){
-                    for(DataRole dr : DataRole::all_values())
-                        r2 -> m_roles[dr].access    = moderate(r2 -> m_roles[dr].access, Access::ReadOnly);
-                }
-                keys << r2 -> key();
-            }
-            
-
-                //  make sure everything has a key, default is the number
-            for(Root* r2 : eroots){
-                if(!r2 -> m_key.isEmpty())
-                    continue;
-                String s   = String::number(r2->id());
-                if(!keys.has(s)){
-                    r2 -> m_key = s.qString();
-                    keys << s;
-                }
-                s += '_';
-                for(i=0;; ++i){
-                    String  k   = s + String::number(i);
-                    if(!keys.has(k)){
-                        r2 -> m_key = k.qString();
-                        keys << k;
-                        break;
-                    }
-                }
-            }
-            
-            //  Sort out the writers
-            for(DataRole dr : DataRole::all_values()){
-                bool    hasFirst    = false;
-                for(Root* r3 : eroots){
-                    if(r3->m_roles[dr].access == Access::WriteFirst){
-                        if(hasFirst)    
-                            r3->m_roles[dr].access   = Access::ReadWrite;
-                        else
-                            hasFirst    = true;
-                    }
-                }
-                
-                if(!hasFirst){
-                    for(Root* r3 : eroots){
-                        if(r3->m_roles[dr].access == Access::WriteFirst) {
-                            r3 -> m_roles[dr].access    = Access::WriteFirst;
-                            hasFirst    = true;
-                            break;
-                        }
-                    }
-                }
-                
-                if(!hasFirst)
-                    m.root_first[dr]     = nullptr;
-                
-                //  now the read/write order
-                
-                uint64_t        ro  = 0;
-                uint64_t        wo  = 0;
-                
-                for(Root* r3 : eroots){
-                    switch(r3->m_roles[dr].access){
-                    case Access::WriteFirst:
-                        m.root_first[dr]     = r3;
-                        /* fall through */
-                    case Access::ReadWrite:
-                        m.root_write[dr] << r3;
-                        r3->m_roles[dr].writeOrder  = wo++;
-                        /* fall through */
-                    case Access::ReadOnly:
-                        m.root_read[dr] << r3;
-                        r3->m_roles[dr].readOrder   = ro++;
-                        /* fall through */
-                    case Access::NoAccess:
-                    default:
-                        break;
-                    }
-                }
-            }
-
-            m.init      = true;
-            return ret;
-        }
-#endif
+        static void      _load(const QuillFile&doc, StringSet& rSeen, PolicyMap rPolicy, PolicyMap tPolicy, bool fTemplate, unsigned depth, SetSpots&qs)
+        {   
+yError() << "Init::_load(" << doc.file() << ")";        
         
-    static QuillSpots      make_root(const QuillFile&doc, path_set& rSeen, path_set& tSeen, PolicyMap rPolicy, PolicyMap tPolicy, bool fTemplate, unsigned depth)
-    {   
-        #if 0
-        M& m = impl();
-        path    qdir    = doc.file().parent_path();
-        for(auto& rs : doc.templates){
-            if(!tSeen.add(rs.path))
-                continue;
-            PolicyMap   pm2 = moderate(tPolicy, rs.policy);
-            
-        }
-        #endif
-        return {};
-    }
-
-#if 0    
-
-        static bool       _load(const QuillFile&doc, PathSet&rSeen, PathSet&tSeen, PolicyMap rPolicy, PolicyMap tPolicy, SetSpots&spots, bool fTemplate, size_t depth)
-        {
             M& m = impl();
-            QDir        q(dirPathFor(doc.file()));
+            path    qdir    = doc.file().parent_path();
             for(auto& rs : doc.templates){
-                QString rsPath  = rs.path.qString();
-                if(!tSeen.add(rsPath))
+                if(!m.templates.add(rs.path))
                     continue;
                 PolicyMap   pm2 = moderate(tPolicy, rs.policy);
-                for(QString t : template_dir_paths(rsPath)){
+                for(const path& t : template_dirs(rs.path)){
                     Root*   rt          = nullptr;
                     bool    rcre        = false;
                     std::tie(rt,rcre)   = _root(t);
                     if(rcre)
-
-                        rt -> m_depth   = depth;
+                        rt -> depth   = depth;
                     for(DataRole dr : DataRole::all_values()){
                         if(pm2[dr] == Access::Default)
                             pm2[dr] = tPolicy[dr];
-                        rt -> m_roles[dr].access    = pm2[dr];
+                        rt -> access[dr]     = pm2[dr];
                     }
-                    rt->m_name          =  ":" + rsPath;
-                    rt->m_key           = rs.key.qString();
-                    if(rt->m_key.isEmpty())
-                        rt->m_key       = rt->m_name;
-                    rt->m_isTemplate    = true;
-                    rt->m_color         = rs.color.qString();
-                    rt->m_icon          = rs.icon.qString();
-                
-                    QString     qf  = quill_fragment_for_dir(t);
-                    if(!QFile::exists(qf)){
-                        yDebug() << "Quill fragment " << qf << " does not exist (not required to).";
+                    rt->name            =  ":" + rs.path;
+                    rt->key             = rs.key;
+                    if(rt->key.empty())
+                        rt->key         = rt->name;
+                    rt->is_template     = true;
+                    rt->color           = rs.color;
+                    rt->icon            = rs.icon;
+                    
+                    path    qf  = quill_fragment_for_dir(t);
+                    if(!std::filesystem::exists(qf)){
+                        wkspDebug << "Quill fragment " << qf << " does not exist (not required to).";
                         continue;
                     }
                     
                     QuillFile        sub;
-                    if(!sub.load(qf.toStdString())){
-                        yWarning() << "Unable to read Quill fragment: " << qf;
+                    if(!sub.load(qf)){
+                        wkspWarning << "Unable to read Quill fragment: " << qf;
                         continue;
                     }
                     
-                    _load(sub, rSeen, tSeen, rPolicy, pm2, spots, true, depth+1);
+                    _load(sub, rSeen, rPolicy, pm2, true, depth+1, qs);
                 }
             }
-            
+                
             if(!fTemplate){
                 for(auto& rs : doc.roots){
-                    QString     rsPath  = rs.path.qString().trimmed();
-                    QString     rpath   = q.absoluteFilePath(rsPath);
-                    if(rsPath == ".")
-                        rpath          = q.absolutePath();
-
-                    if(!rSeen.add(rpath))   // already seen
+                            // TODO ... need the equivalent to the QDIr magic....
+                    path    rpath   = rs.path.c_str(); // absolute_proximate( rs.path, qdir);
+                    if(rpath == ".")
+                        rpath       = qdir;
+                    if(!rSeen.add(rpath.string()))       // already seen
                         continue;
-                        
+
                     PolicyMap   pm2 = moderate(rPolicy, rs.policy);    
                     
                     Root*   rt      = nullptr;
                     bool    rcre    = false;
                     std::tie(rt,rcre)   = _root(rpath);
                     if(rcre)
-                        rt -> m_depth   = depth;
+                        rt -> depth   = depth;
                         
                     for(DataRole dr : DataRole::all_values()){
                         if(pm2[dr] == Access::Default)
                             pm2[dr] = rPolicy[dr];
-                        rt -> m_roles[dr].access    = pm2[dr];
+                        rt -> access[dr]    = pm2[dr];
                     }
-                    rt -> m_name        = rs.name.qString();
-                    rt -> m_key         = rs.key.qString();
-                    if(rt -> m_key.isEmpty())
-                        rt -> m_key     = rt -> m_name;
+                    rt -> name        = rs.name;
+                    rt -> key         = rs.key;
+                    if(rt -> key.empty())
+                        rt -> key     = rt -> name;
                     if(rs.vcs != Vcs())
-                        rt -> m_vcs    |= rs.vcs;
-                    rt -> m_isTemplate  = false;
-                    rt->m_color         = rs.color.qString();
-                    rt->m_icon          = rs.icon.qString();
+                        rt -> vcs    |= rs.vcs;
+                    rt -> is_template  = false;
+                    rt->color         = rs.color.qString();
+                    rt->icon          = rs.icon.qString();
                     
                     if(!rcre)       // should only trigger for the root, avoid a nasty recursion
                         continue;
-                    
-                    QString     qf  = quill_fragment_for_dir(rpath);
-                    if(!QFile::exists(qf)){
-                        yDebug() << "Quill fragment " << qf << " does not exist (not required to).";
+                        
+                    path     qf  = quill_fragment_for_dir(rpath);
+                    if(!std::filesystem::exists(qf)){
+                        wkspDebug << "Quill fragment " << qf << " does not exist (not required to).";
                         continue;
                     }
                     
                     QuillFile        sub;
-                    if(!sub.load(qf.toStdString())){
-                        yWarning() << "Unable to read Quill fragment: " << qf;
+                    if(!sub.load(qf)){
+                        wkspWarning << "Unable to read Quill fragment: " << qf;
                         continue;
                     }
                     
                     
-                    if((!sub.abbr.empty()) && (depth < spots.abbr)){
-                        m.abbreviation      = sub.abbr.qString();
-                        spots.abbr          = depth;
+                    if((!sub.abbr.empty()) && (depth < qs.abbr)){
+                        m.abbr             = sub.abbr;
+                        qs.abbr             = depth;
                     }
-                    if((!sub.author.empty()) && (depth < spots.author)){
-                        m.author            = sub.author.qString();
-                        spots.author        = depth;
+                    if((!sub.author.empty()) && (depth < qs.author)){
+                        m.author            = sub.author;
+                        qs.author           = depth;
                     }
                     
-                    if(sub.copyright.from && (depth < spots.copyfrom)){
+                    if(sub.copyright.from && (depth < qs.copyfrom)){
                         m.copyright.from    = sub.copyright.from;
-                        spots.copyfrom      = depth;
+                        qs.copyfrom         = depth;
                     }
-                    if((sub.copyright.stance != AssertDeny()) && (depth < spots.copystance)){
+                    if((sub.copyright.stance != AssertDeny()) && (depth < qs.copystance)){
                         m.copyright.stance  = sub.copyright.stance;
-                        spots.copystance    = depth;
+                        qs.copystance       = depth;
                     }
-                    if((!sub.copyright.text.empty()) && (depth < spots.copytext)){
+                    if((!sub.copyright.text.empty()) && (depth < qs.copytext)){
                         m.copyright.text    = sub.copyright.text;
-                        spots.copytext      = depth;
+                        qs.copytext         = depth;
                     }
-                    if(sub.copyright.to && (depth < spots.copyto)){
+                    if(sub.copyright.to && (depth < qs.copyto)){
                         m.copyright.to      = sub.copyright.to;
-                        spots.copyto        = depth;
+                        qs.copyto        =   depth;
                     }
-                    if((!sub.home.empty()) && (depth < spots.home)){
-                        m.home              = sub.home.qString();
-                        spots.home          = depth;
+                    if((!sub.home.empty()) && (depth < qs.home)){
+                        m.home              = sub.home;
+                        qs.home             = depth;
                     }
-                    if((!sub.name.empty()) && (depth < spots.name)){
-                        m.name              = sub.name.qString();
-                        spots.name          = depth;
+                    if((!sub.name.empty()) && (depth < qs.name)){
+                        m.name              = sub.name;
+                        qs.name             = depth;
                     }
                     
-                    _load(sub, rSeen, tSeen, pm2, tPolicy, spots, false, depth+1);
+                    _load(sub, rSeen, pm2, tPolicy, false, depth+1, qs);
                 }
             }
-            return true;
         }
-        #endif
-        #if 0
+
+
 
         /*! Gets/Creates a root
         */
-        static std::pair<Root*,bool>   _root(const QString& s)
+        static std::pair<Root*,bool>   _root(const path& s)
         {
             M&   m   = impl();
-            const Root*r    = m.root_by_path.get(s, nullptr);
+            const Root*r    = m.rpath.get(s, nullptr);
             if(r)
                 return std::pair<Root*,bool>(const_cast<Root*>(r), false);
                 
             Root*r2 = new Root(s);
-            r2 -> m_id  = m.roots.size();
+            r2 -> id  = m.roots.size();
             m.roots << r2;
-            m.root_by_path[s]    = r2;
+            m.rpath[s]    = r2;
             return std::pair<Root*,bool>(r2, true);
         }
-        #endif
     };
 
 
@@ -1161,7 +884,7 @@ namespace wksp {
         return impl().rfirst;
     }
     
-    const RootMap&      root_map()
+    const RootPathMap&  root_path_map()
     {
         return impl().rpath;
     }

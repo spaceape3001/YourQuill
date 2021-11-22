@@ -154,7 +154,7 @@ namespace wksp {
     uint64_t                        root_count();
     const Root*                     root_first(DataRole);
     const RoleMap&                  root_firsts();
-    const RootMap&                  root_map();
+    const RootPathMap&              root_path_map();
     const RoleVecMap&               root_reads();
     const RootVector&               root_reads(DataRole);
     const RoleVecMap&               root_writes();
