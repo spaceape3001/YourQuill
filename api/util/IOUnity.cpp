@@ -31,6 +31,7 @@
 #include <vector>
 #endif
 
+#include <coroutine>
 #include <fstream>
 
 #include <QByteArray>

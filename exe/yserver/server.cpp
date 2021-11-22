@@ -219,8 +219,8 @@ struct DBServer : public HttpRequestHandler {
     
     DBServer()
     {
-        QDir            logDir(wksp::log_dir_path());
-        m_accessLog         = logDir.absoluteFilePath(QString("access-%1").arg(wksp::start()) + "-%1.log");
+        QDir            logDir(QString::fromStdString(wksp::log_dir().string()));
+        m_accessLog         = logDir.absoluteFilePath(QString("access-%1").arg(wksp::start().qString()) + "-%1.log");
         //m_errorLog          = logDir.absoluteFilePath(QString("error-%1").arg(wksp::start()) + "-%1.log");
     }
 
@@ -289,7 +289,7 @@ int main(int argc, char* argv[])
         yWarning() << "Global Thread Pool is NULL!";
     meta_init();
     meta_freeze();
-    if(!wksp::initialize(argv[1], all_set<wksp::Option>())){
+    if(!wksp::initialize(argv[1], wksp::SEARCH|wksp::TEMPLATES_RO|wksp::INIT_LOG|wksp::BAIL_PID)){
         yError() << "Unable to initialize database!";
         return -1;
     }
@@ -298,7 +298,7 @@ int main(int argc, char* argv[])
     //  1. Guard on the dup PID (check, if readable, kill the other
     //  2. Move the database wipe/init here
     
-    std::filesystem::path   pidfragment = wksp::db_pid().toStdString();
+    std::filesystem::path   pidfragment = wksp::db_pid();
     if(file_exists(pidfragment.c_str())){
         auto    i   = String(file_load_all(pidfragment.c_str())).to_uinteger();
         if(i.good){
@@ -316,7 +316,7 @@ int main(int argc, char* argv[])
     }
     
     {
-        const QString&  df  = wksp::cache_db();
+        QString  df  = QString::fromStdString(wksp::cache_db().string());
         if(QFile::exists(df))
             QFile::remove(df);
     }
@@ -332,7 +332,7 @@ int main(int argc, char* argv[])
     }
     
 
-    QSettings       *ini = new QSettings( wksp::ini(), QSettings::IniFormat);
+    QSettings       *ini = new QSettings( QString::fromStdString(wksp::ini().string()), QSettings::IniFormat);
     ini->setValue("port", wksp::port());
     ini->setValue("minThreads", 10);
     ini->setValue("readTimeout", wksp::read_timeout());

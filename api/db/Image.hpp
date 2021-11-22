@@ -56,7 +56,7 @@ namespace cdb {
     Image                   image(Document);
     Image                   image(Fragment);
 
-    Image                   image(const QString&);
+    Image                   image(const String&);
 
         //! Returns an image from a document, if it already exists in the cache
     Image                   image(uint64_t);

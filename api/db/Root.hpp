@@ -14,97 +14,77 @@
 #include <util/EnumMap.hpp>
 #include <util/Flag.hpp>
 
-#include <QDir>
+#include <filesystem>
 
 namespace wksp { struct Init; }
 
 /*! \brief Represents a "root" directory for the workspace, all keys are relative to one of these.
 */
-class Root {
+struct Root {
     friend struct wksp::Init;
-public:
-
-
-    YQ_ENUM(G, , 
-        Complain,
-        Writable
-    )
+    using fspath = std::filesystem::path;
     
-    //  whether or not the provided string is a directory, or not
-    static bool         is_good_dir(const QString& s, Flag<G> f=Flag<G>());
+    EnumMap<DataRole, Access>   access;
+    String                      color;
+    uint64_t                    depth           = 0;    // used by the workspace during load to shuffle into order
+    String                      icon;               // file
+    uint64_t                    id              = 0;
+    bool                        is_template     = false;
+    String                      key;
+    String                      name;
+    const std::filesystem::path path;
+    Flag<Vcs>                   vcs;
     
-    static const Root*  by_key(const QString&);
 
-    //Vector<Directory>   all_directories() const;
-    //uint64_t            all_directory_count() const;
-    //uint64_t            all_fragment_count() const;
-    //Vector<Fragment>    all_fragments() const;
-
-    const QString&      color() const { return m_color; }
-
-    const QDir&         dir() const { return m_dir; }
-
-    QString             key() const { return m_key; }
-    
-    const QString&      path() const { return m_path; }         
+    static const Root*  by_key(const std::string_view&);
 
     bool                has_git() const;
     bool                has_subversion() const;
 
     //  version control
-    void                move(const QString&, const QString&);
-    void                remove(const QString&);
-    void                add(const QString&);
+    void                move(const std::filesystem::path&, const std::filesystem::path&);
+    void                remove(const std::filesystem::path&);
+    void                add(const std::filesystem::path&);
     bool                commit();
     bool                update();
 
 
     bool                exists(const char*) const;
-    bool                exists(const std::string&) const;
-    bool                exists(const QByteArray&) const;
     bool                exists(const QString&) const;
+    bool                exists(const QByteArray&) const;
+    bool                exists(const std::string&) const;
+    bool                exists(const std::string_view&) const;
+    bool                exists(const std::filesystem::path&) const;
     
     bool                make_path(const char*) const;
-    bool                make_path(const std::string&) const;
     bool                make_path(const QByteArray&) const;
     bool                make_path(const QString&) const;
+    bool                make_path(const std::string&) const;
+    bool                make_path(const std::string_view&) const;
+    bool                make_path(const std::filesystem::path&) const;
 
     //  From the quill-doc (relative)
-    const QString&      def_icon_file() const { return m_icon; }
+    //const String&       def_icon_file() const { return m_icon; }
     
     bool                is_readable(DataRole) const;
     bool                is_writable(DataRole) const;
     bool                is_write_first(DataRole) const;
-    bool                is_template() const { return m_isTemplate; }
 
-    unsigned short      read_order(DataRole) const;
-
-    QString             resolve(const char*) const;
-    QString             resolve(const QByteArray&) const;
-    QString             resolve(const QString&   ) const;
-    QString             resolve(const std::string&) const;
+    std::filesystem::path   resolve(const char*     ) const;
+    std::filesystem::path   resolve(const QByteArray& ) const;
+    std::filesystem::path   resolve(const QString& ) const;
+    std::filesystem::path   resolve(const std::string& ) const;
+    std::filesystem::path   resolve(const std::string_view& ) const;
+    std::filesystem::path   resolve(const std::filesystem::path&) const;
     
-    const QString&      name() const { return m_name; }
     
-
     Access              policy(DataRole) const;
-
-    unsigned short      write_order(DataRole) const;
-    
-    uint64_t            id() const { return m_id; }
-    uint64_t            depth() const { return m_depth; }
     
 private:
 
-    Root(const QString&);
-    Root(const QString&, PolicyMap);
+    Root(const std::filesystem::path&);
+    Root(const std::filesystem::path&, PolicyMap);
 
-    struct Role {
-        Access          access;
-        unsigned short  readOrder;  // cannot be overriden...
-        unsigned short  writeOrder;
-        Role() : readOrder(0), writeOrder(0) {}
-    };
 
     Root(const Root&) = delete;
     Root(Root&&) = delete;
@@ -114,23 +94,6 @@ private:
     Root&    operator=(const Root&) = delete;
     Root&    operator=(Root&&) = delete;
     
-    
-    //const Root*                dirFor(const QStringList&) const;
-    //Root*                      dirFor(const QStringList&, bool fCreate);
-    
-    //mutable tbb::spin_rw_mutex          m_mutex;
-    QString                             m_path;
-    QDir                                m_dir;
-    //Map<QString,Root*,IgCase>      m_dirMap;
-    EnumMap<DataRole, Role>             m_roles;
-    bool                                m_isTemplate;
-    QString                             m_key;
-    QString                             m_name;
-    QString                             m_color;
-    QString                             m_icon;     // file
-    Flag<Vcs>                           m_vcs;
-    uint64_t                            m_id;
-    uint64_t                            m_depth;   // used by the workspace during load to shuffle into order
 };
 
 

@@ -6,11 +6,12 @@
 add_subdirectory(util)
 add_subdirectory(meta)
 add_subdirectory(math)
-add_subdirectory(gui)
-add_subdirectory(gadget)
+#add_subdirectory(gui)
+#add_subdirectory(gadget)
 add_subdirectory(db)
-add_subdirectory(dbgui)
+#add_subdirectory(dbgui)
 add_subdirectory(srv)
 add_subdirectory(ipc)
+#add_subdirectory(plot)
 
 

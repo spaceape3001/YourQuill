@@ -53,7 +53,7 @@ bool            is_in(const std::initializer_list<String>& keys, const String& b
 bool            is_in(const std::initializer_list<const char*>& keys, const String& b);
 
 
-QString         join(const Set<uint16_t>& values, const QString& sep);
+String          join(const Set<uint16_t>& values, const String& sep);
 
 QString         join(const QStringSet&, QChar);
 QString         join(const QStringSet&, const QString&);
@@ -68,15 +68,14 @@ String          join(const Vector<String>&, char);
 String          join(const Vector<String>&, const String&);
 String          join(const StringSet&, const String&);
 
-String          join_string(const Set<uint16_t>& values, const String& sep);
-QString         join_qstring(const Set<uint16_t>& values, const QString& sep);
-
 QByteArray      make_png(const QImage&);
 
 QString         sanitize_path(const QString&);
+String          sanitize_path(const String&);
 QStringList     sanitize_path(const QStringList&);
 
 QString         strip_extension(const QString&);
+String          strip_extension(const String&);
 
 QString         utf8(const QByteArray&);
 QByteArray      utf8(const QString&);

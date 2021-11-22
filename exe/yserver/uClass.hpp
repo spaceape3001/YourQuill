@@ -12,10 +12,12 @@
 #include <db/Image.hpp>
 #include <db/Tag.hpp>
 
+#include <QString>
+
 using CPair         = std::pair<Class,Class>;
 
 struct UClass {
-    const QString       key;
+    const String        key;
     union {
         const uint64_t      id;
         const Class         cls;

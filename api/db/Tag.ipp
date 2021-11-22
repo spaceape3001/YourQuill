@@ -32,7 +32,7 @@ namespace cdb {
         return s.size();
     }
 
-    QString             brief(Tag t)
+    String             brief(Tag t)
     {
         static thread_local SQ    s("SELECT brief FROM Tags WHERE id=?");
         return s.str(t.id);
@@ -46,8 +46,8 @@ namespace cdb {
             yError() << "Rejecting tag " << key(doc) << " due to not being in the '.tags' folder";        
             return Tag{};
         }
-        QString k   = base_key(doc);
-        if(k.isEmpty())
+        String k   = base_key(doc);
+        if(k.empty())
             return Tag();
         
         static thread_local SQ    i("INSERT OR FAIL INTO Tags (k,id) VALUES (?,?)");
@@ -72,7 +72,7 @@ namespace cdb {
         return db_tag(document(f),wasCreated);
     }
 
-    Tag                 db_tag(const QString&k, bool* wasCreated)
+    Tag                 db_tag(const String&k, bool* wasCreated)
     {
         return db_tag(db_document(tags_folder(), k+".tag"), wasCreated);
     }
@@ -81,17 +81,10 @@ namespace cdb {
     {
         TagVec     ret;
         for(const String& s:all)
-            ret << db_tag(s.qString());
-        return ret;
-    }
-    
-    TagVec             db_tags(const QStringSet& all)
-    {
-        TagVec     ret;
-        for(const QString& s:all)
             ret << db_tag(s);
         return ret;
     }
+    
 
     Document            document(Tag t)
     {
@@ -129,23 +122,23 @@ namespace cdb {
             ret.doc         = Document(t.id);
             ret.key         = s.valueString(1);
             ret.name        = s.valueString(3);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
         }
         return ret;
     }
     
 
-    QString             key(Tag t)
+    String             key(Tag t)
     {
         static thread_local SQ    s("SELECT k FROM Tags WHERE id=?");
         return s.str(t.id);
     }
     
-    QString             label(Tag t)
+    String             label(Tag t)
     {
-        QString     n   = name(t);
-        return n.isEmpty() ? key(t) : n;
+        String     n   = name(t);
+        return n.empty() ? key(t) : n;
     }
     
     Leaf                leaf(Tag t)
@@ -154,7 +147,7 @@ namespace cdb {
         return s.as<Leaf>(t.id);
     }
 
-    Tag                     make_tag(const QString& k, const Root* rt)
+    Tag                     make_tag(const String& k, const Root* rt)
     {
         if(!rt)
             rt  = wksp::root_first(DataRole::Tags);
@@ -187,7 +180,7 @@ namespace cdb {
         return ret;
     }
     
-    QString             name(Tag t)
+    String             name(Tag t)
     {
         static thread_local SQ    s("SELECT name FROM Tags WHERE id=?");
         return s.str(t.id);
@@ -204,7 +197,7 @@ namespace cdb {
             ret.name    = s.valueString(0);
             ret.icon    = Image(s.valueU64(1)) ;
             ret.key     = s.valueString(2);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
             return ret;
         }
@@ -274,7 +267,7 @@ namespace cdb {
         return tf -> save();
     }
     
-    Tag                 tag(const QString& k)
+    Tag                 tag(const String& k)
     {
         static thread_local SQ    s("SELECT id FROM Tags WHERE k=?");
         return s.as<Tag>(k);
@@ -295,11 +288,12 @@ namespace cdb {
             return fAllowEmpty ? std::make_shared<TagFile>() : TagFile::Shared();
         
         TagFile::Shared  td = std::make_shared<TagFile>();
-        if(!td->load(ch, path(f).toStdString())){
-            yError() << "Unable to read " << path(f);
+        std::filesystem::path   fp  = path(f);
+        if(!td->load(ch, fp)){
+            yError() << "Unable to read " << fp;
             return TagFile::Shared();
         }
-        td -> set_file(path(f));
+        td -> set_file(fp);
         return td;
     }
 

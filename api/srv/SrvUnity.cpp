@@ -28,6 +28,11 @@
 #include <util/EnumMap.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
+
+#ifdef emit
+    #undef emit
+#endif
+
 #include <util/Guarded.hpp>
 #include <util/SqlQuery.hpp>
 #include <util/Utilities.hpp>
@@ -35,6 +40,11 @@
 
 #include <httpserver/httprequest.h>
 #include <sys/random.h>
+
+#ifdef emit
+    #undef emit
+#endif
+
 #include <tbb/spin_rw_mutex.h>
 
 #include <QByteArray>

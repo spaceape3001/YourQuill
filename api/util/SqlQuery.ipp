@@ -124,6 +124,11 @@ void    SqlQuery::bind(int n, const String&s)
     bindValue(n, s.qString());
 }
 
+void    SqlQuery::bind(int n, const std::filesystem::path&s)
+{
+    bindValue(n, QString::fromStdString(s.string()));
+}
+
 void    SqlQuery::bind(int n, uint64_t val)
 {
     bindValue(n, (quint64) val);
@@ -182,6 +187,11 @@ bool        SqlQuery::valueBool(int n) const
 QByteArray  SqlQuery::valueBytes(int n) const
 {
     return value(n).toByteArray();
+}
+
+std::filesystem::path   SqlQuery::valuePath(int n) const
+{
+    return value(n).toString().toStdString();
 }
 
 QString     SqlQuery::valueString(int n) const

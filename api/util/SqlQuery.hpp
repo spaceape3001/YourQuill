@@ -9,6 +9,7 @@
 #include <QSqlQuery>
 #include <QVariant>
 #include "Map.hpp"
+#include <filesystem>
 
 
 //  warning, do not allocate on the heap, pass it around as a QSqlQuery...it'll slice!
@@ -30,6 +31,7 @@ struct SqlQuery : public QSqlQuery {
     void        bind(int n, const QVariant& val);
     void        bind(int n, const String&);
     void        bind(int n, const QString&);
+    void        bind(int n, const std::filesystem::path&);
     void        bind(int n, uint64_t val);
     bool        exec(bool fNoisy=true);
     
@@ -76,6 +78,7 @@ struct SqlQuery : public QSqlQuery {
     
     QByteArray  valueBytes(int n) const;
     QString     valueString(int n) const;
+    std::filesystem::path   valuePath(int n) const;
 
     uint64_t    valueU64(int n) const;
 

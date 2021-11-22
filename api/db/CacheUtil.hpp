@@ -3,6 +3,7 @@
 #include <util/Set.hpp>
 #include <util/SqlQuery.hpp>
 #include <util/Vector.hpp>
+#include <filesystem>
 
 namespace cdb {
 
@@ -41,7 +42,25 @@ namespace cdb {
         }
 
         template <typename U>
+        U           as(uint64_t i, const String& j)
+        {
+            return U{u64(i, j)};
+        }
+
+        template <typename U>
         U           as(const QString& i)
+        {
+            return U{u64(i)};
+        }
+
+        template <typename U>
+        U           as(const String& i)
+        {
+            return U{u64(i)};
+        }
+
+        template <typename U>
+        U           as(const std::filesystem::path& i)
         {
             return U{u64(i)};
         }
@@ -50,12 +69,17 @@ namespace cdb {
         bool        boolean(uint64_t);
         bool        boolean(uint64_t, uint64_t);
         bool        boolean(uint64_t, const QString&);
+        bool        boolean(uint64_t, const String&);
+        
+        std::filesystem::path   path();
+        std::filesystem::path   path(uint64_t);
         
         //  Present verifies that exec() & next() works, so no need to do a value -> boolean conversion
         bool        present();
         bool        present(uint64_t);
         bool        present(uint64_t, uint64_t);
         bool        present(uint64_t, const QString&);
+        bool        present(uint64_t, const String&);
 
         template <typename U>
         Set<U>      set()
@@ -100,19 +124,24 @@ namespace cdb {
         size_t      size(uint64_t);
         size_t      size(uint64_t,uint64_t);
         size_t      size(uint64_t,const QString&);
+        size_t      size(uint64_t,const String&);
         size_t      size(const QString&);
+        size_t      size(const String&);
 
-        QString     str();
-        QString     str(uint64_t);
+        String      str();
+        String      str(uint64_t);
         
         uint64_t    u64();
         uint64_t    u64(uint64_t);
         uint64_t    u64(uint64_t,uint64_t);
         uint64_t    u64(uint64_t,const QString&);
+        uint64_t    u64(uint64_t,const String&);
         uint64_t    u64(const QString&);
+        uint64_t    u64(const String&);
+        uint64_t    u64(const std::filesystem::path&);
         
-        QStringSet  sset();
-        QStringSet  sset(uint64_t);
+        StringSet   sset();
+        StringSet   sset(uint64_t);
         
         template <typename U>
         Vector<U>   vec()
@@ -168,7 +197,34 @@ namespace cdb {
         }
 
         template <typename U>
+        Vector<U>   vec(uint64_t i, const String& j)
+        {
+            Vector<U>  ret;
+            auto _af  = af();
+            bind(0, i);
+            bind(1, j);
+            if(exec()){
+                while(next())
+                    ret << U{valueU64(0)};
+            }
+            return ret;
+        }
+
+        template <typename U>
         Vector<U>   vec(const QString& i)
+        {
+            Vector<U>  ret;
+            auto _af  = af();
+            bind(0, i);
+            if(exec()){
+                while(next())
+                    ret << U{valueU64(0)};
+            }
+            return ret;
+        }
+
+        template <typename U>
+        Vector<U>   vec(const String& i)
         {
             Vector<U>  ret;
             auto _af  = af();

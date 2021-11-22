@@ -46,7 +46,7 @@ struct Scanner::D {
     D() : root(nullptr), isRoot(false) {}
     D(const Root* d) : root(d), isRoot(true)
     {
-        dpath       = d->path();
+        dpath       = d->path;
         folder      = cdb::top_folder();
         directory   = cdb::db_directory(d);
     }

@@ -20,12 +20,12 @@ namespace cdb {
         return s.size();
     }
 
-    Graph               db_graph(const QString&dot_data, const QString& name)
+    Graph               db_graph(const String&dot_data, const String& name)
     {
-        static const QString&   dot_exe = wksp::dot();
+        static const std::filesystem::path&   dot_exe = wksp::dot();
         
-        QByteArray  html    = executeProcess(dot_exe, QStringList() << "-Tcmapx", dot_data.toUtf8(), 500);
-        QByteArray  svg     = executeProcess(dot_exe, QStringList() << "-Tsvg", dot_data.toUtf8(), 500);
+        QByteArray  html    = executeProcess(dot_exe.c_str(), QStringList() << "-Tcmapx", dot_data.c_str(), 500);
+        QByteArray  svg     = executeProcess(dot_exe.c_str(), QStringList() << "-Tsvg", dot_data.c_str(), 500);
      
         static thread_local SQ i("INSERT INTO Graphs (name, dot, html, svg) VALUES (?,?,?,?)");
         auto i_af = i.af();
@@ -41,7 +41,7 @@ namespace cdb {
         return Graph(i.lastInsertIdU64());
     }
 
-    QString             dot(Graph g)
+    String             dot(Graph g)
     {
         static thread_local SQ s("SELECT dot FROM Graphs WHERE id=?");
         return s.str(g.id);
@@ -64,13 +64,13 @@ namespace cdb {
         return exists_graph(i) ? Graph{i} : Graph{};
     }
 
-    QString             html(Graph g)
+    String             html(Graph g)
     {
         static thread_local SQ s("SELECT html FROM Graphs WHERE id=?");
         return s.str(g.id);
     }
 
-    QString             name(Graph g)
+    String             name(Graph g)
     {
         static thread_local SQ s("SELECT name FROM Graphs WHERE id=?");
         return s.str(g.id);

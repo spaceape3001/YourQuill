@@ -21,26 +21,26 @@
     HtmlWriter::HtmlWriter() = default;
     HtmlWriter::~HtmlWriter() = default;
 
-    HtmlWriter::FormAF      HtmlWriter::form(const QString& url, const QString& args, bool fInspectOverride)
+    HtmlWriter::FormAF      HtmlWriter::form(const String& url, const String& args, bool fInspectOverride)
     {
         write(html::Form{url, args, fInspectOverride});
         return FormAF(this);
     }
     
 
-    HtmlWriter::KVRow       HtmlWriter::key(const QString& k, const QString& url)
+    HtmlWriter::KVRow       HtmlWriter::key(const String& k, const String& url)
     {
         m_stream << "<tr><th align=\"left\">";
-        if(!url.isEmpty())
+        if(!url.empty())
             m_stream << "<a href=\"" << url << "\">";
-        m_stream << k.toHtmlEscaped();
-        if(!url.isEmpty())
+        m_stream << k.qString().toHtmlEscaped();
+        if(!url.empty())
             m_stream << "</a>";
         m_stream << "</th><td>";
         return KVRow(this);
     }
 
-    HtmlWriter::LinkAF      HtmlWriter::link(const QString&url)
+    HtmlWriter::LinkAF      HtmlWriter::link(const String&url)
     {
         m_stream << "<a href=\"" << url << "\">";
         return LinkAF(this);
@@ -79,14 +79,14 @@
 
     void    HtmlWriter::write(const Graph& g)
     {
-        QString n = cdb::name(g).toHtmlEscaped();
+        String n = cdb::name(g).qString().toHtmlEscaped();
         m_stream << "<img src=\"/graph?id=" << (quint64) g.id << "\" alt=\"" << n << "\" usemap=\"#" << n << "\">\n" 
             << cdb::html(g) << "\n";
     }
 
     void    HtmlWriter::write(const html::Bold&b)
     {
-        m_stream << "<B>" << b.txt.toHtmlEscaped() << "</B>\n";
+        m_stream << "<B>" << b.txt.qString().toHtmlEscaped() << "</B>\n";
     }
 
     void    HtmlWriter::write(const html::Config<Class>& c)
@@ -130,8 +130,8 @@
         for(const Root* r : wksp::roots()){
             *this << "<tr><td class=\"roots\">";
             if(r != x_root)
-                *this << "<a href=\"" << nonroot << r->key() << "\">";
-            *this << r -> name();
+                *this << "<a href=\"" << nonroot << r->key << "\">";
+            *this << r -> name;
             if(r != x_root)
                 *this << "</a>";
             *this  << "</td></tr>\n";
@@ -162,8 +162,8 @@
 
     void    HtmlWriter::write(const html::Dev<Folder>& fo)
     {
-        QString k   = cdb::key(fo.v);
-        if(k.isEmpty())
+        String k   = cdb::key(fo.v);
+        if(k.empty())
             k   = "/";
         m_stream << "<a href=\"/dev/folder?id=" << k << "\">" << k << "</a>";
     }
@@ -175,7 +175,7 @@
 
     void    HtmlWriter::write(const html::Dev<Leaf>&c)
     {
-        QString k = cdb::key(c.v);
+        String k = cdb::key(c.v);
         m_stream << "<a href=\"/dev/leaf?id=" << c.v.id << "\">" << k << "</a>";
     }
 
@@ -183,7 +183,7 @@
     {
         if(!r.v)
             return ;
-        m_stream << "<a href=\"/dev/root?id=" << r.v->id() << "\">" << r.v->path() << "</a>";
+        m_stream << "<a href=\"/dev/root?id=" << r.v->id << "\">" << r.v->path << "</a>";
     }
     
     void    HtmlWriter::write(const html::Dev<Tag>&c)
@@ -204,9 +204,9 @@
         f.url   = "/wksp/class/edit";
         if(r.root){
             if(r.value)
-                f.args   = QString("id=%1&root=%2").arg(x_class.id).arg(r.root->id());
+                f.args   = QString("id=%1&root=%2").arg(x_class.id).arg(r.root->id);
             else
-                f.args   = QString("root=%1").arg(r.root->id());
+                f.args   = QString("root=%1").arg(r.root->id);
         } else {
             if(r.value)
                 f.args   = QString("id=%1").arg(x_class.id);
@@ -218,7 +218,7 @@
 
     void    HtmlWriter::write(const html::Escape&e)
     {
-        m_stream << e.txt.toHtmlEscaped();
+        m_stream << e.txt.qString().toHtmlEscaped();
     }
 
     void    HtmlWriter::write(const html::Form&v)
@@ -249,43 +249,43 @@
 
     void    HtmlWriter::write(const html::H1&h)
     {
-        m_stream << "<H1>" << h.txt.toHtmlEscaped() << "</H1>\n";
+        m_stream << "<H1>" << h.txt.qString().toHtmlEscaped() << "</H1>\n";
     }
     
     void    HtmlWriter::write(const html::H2&h)
     {
-        m_stream << "<H2>" << h.txt.toHtmlEscaped() << "</H2>\n";
+        m_stream << "<H2>" << h.txt.qString().toHtmlEscaped() << "</H2>\n";
     }
     
     void    HtmlWriter::write(const html::H3&h)
     {
-        m_stream << "<H3>" << h.txt.toHtmlEscaped() << "</H3>\n";
+        m_stream << "<H3>" << h.txt.qString().toHtmlEscaped() << "</H3>\n";
     }
     
     void    HtmlWriter::write(const html::H4&h)
     {
-        m_stream << "<H4>" << h.txt.toHtmlEscaped() << "</H4>\n";
+        m_stream << "<H4>" << h.txt.qString().toHtmlEscaped() << "</H4>\n";
     }
     
     void    HtmlWriter::write(const html::H5&h)
     {
-        m_stream << "<H5>" << h.txt.toHtmlEscaped() << "</H5>\n";
+        m_stream << "<H5>" << h.txt.qString().toHtmlEscaped() << "</H5>\n";
     }
     
     void    HtmlWriter::write(const html::H6&h)
 
     {
-        m_stream << "<H6>" << h.txt.toHtmlEscaped() << "</H6>\n";
+        m_stream << "<H6>" << h.txt.qString().toHtmlEscaped() << "</H6>\n";
     }
     
     void    HtmlWriter::write(const html::Image&img)
     {
-        if(!img.src.isEmpty()){
-            m_stream << "<IMG SRC=\"" << img.src.toHtmlEscaped() << '"';
-            if(!img.alt.isEmpty())
-                m_stream << " ALT=\"" << img.alt.toHtmlEscaped() << '"';
-            if(!img.style.isEmpty())
-                m_stream << " STYLE=\"" << img.style.toHtmlEscaped() << '"';
+        if(!img.src.empty()){
+            m_stream << "<IMG SRC=\"" << img.src.qString().toHtmlEscaped() << '"';
+            if(!img.alt.empty())
+                m_stream << " ALT=\"" << img.alt.qString().toHtmlEscaped() << '"';
+            if(!img.style.empty())
+                m_stream << " STYLE=\"" << img.style.qString().toHtmlEscaped() << '"';
             m_stream << "/>";
         }
     }
@@ -330,12 +330,13 @@
     
     void        HtmlWriter::write(const html::ILabel&v)
     {
-        m_stream << "<label for=\"" << v.key << "\">" << v.label.toHtmlEscaped() << "</label>";
+        m_stream << "<label for=\"" << v.key << "\">" << v.label.qString().toHtmlEscaped() << "</label>";
     }
 
     void    HtmlWriter::write(const html::ILine& i)
     {
-        m_stream << "<input type=\"text\" name=\"" << i.key.toHtmlEscaped() << "\" id=\"" << i.key.toHtmlEscaped() << "\" value=\"" << i.value.toHtmlEscaped() << "\"";
+        QString     ke  = i.key.qString().toHtmlEscaped();
+        m_stream << "<input type=\"text\" name=\"" << ke << "\" id=\"" << ke << "\" value=\"" << i.value.qString().toHtmlEscaped() << "\"";
         if(i.size > 0)
             m_stream << " size=\"" << i.size << "\"";
         m_stream << ">";
@@ -346,11 +347,11 @@
         *this << "Change Root:<br>";
         const Root* re = def_root(v.dr);
         for(const Root* rt : wksp::roots()){
-            *this << "<input type=\"radio\" name=\"root\" id=\"" << rt->key() << "\" value=\"" << rt->id() 
-                << "\"><label for=\"" << rt->key() << "\">";
+            *this << "<input type=\"radio\" name=\"root\" id=\"" << rt->key << "\" value=\"" << rt->id 
+                << "\"><label for=\"" << rt->key << "\">";
             if(rt == re)
                 *this << "<b><u>";
-            *this << "[" << rt->key() << "] " << rt->name();
+            *this << "[" << rt->key << "] " << rt->name;
             if(rt == re)
                 *this << "</u></b>";
             *this  << "</label><br>\n";
@@ -379,18 +380,18 @@
     void    HtmlWriter::write(const html::IText& v)
     {
         m_stream << "<textarea id=\"" << v.key << "\" name=\"" << v.key << "\" rows=\"" << v.rows << "\" cols=\"" 
-            << v.cols << "\">" << v.value.toHtmlEscaped() << "</textarea>";
+            << v.cols << "\">" << v.value.qString().toHtmlEscaped() << "</textarea>";
     }
 
     void    HtmlWriter::write(const html::Icon<Document>&d)
     {
-        html::Icon<QString>   v;
+        html::Icon<String>   v;
         Image   i   = cdb::icon(d.src);
         if(i)
             v.src   = QString("/icon?id=%1").arg((quint64) i.id);
          else
             v.src   = "/icon/document.svg";
-        if(d.alt.isEmpty()){
+        if(d.alt.empty()){
             v.alt   = cdb::key(d.src);
         } else
             v.alt   = d.alt;
@@ -399,20 +400,20 @@
 
     void    HtmlWriter::write(const html::Icon<Folder>&f)
     {
-        html::Icon<QString>   v;
+        html::Icon<String>   v;
         auto    ni  = cdb::nki(f.src);
         if(ni.icon)
             v.src   = QString("/icon?id=%1").arg((quint64) ni.icon.id);
          else
             v.src   = "/icon/folder.svg";
-        if(f.alt.isEmpty()){
+        if(f.alt.empty()){
             v.alt   = ni.key;
         } else
             v.alt   = f.alt;
         write(v);
     }
     
-    void    HtmlWriter::write(const html::Icon<QString>&v)
+    void    HtmlWriter::write(const html::Icon<String>&v)
     {
         m_stream << "<img src=\"" << v.src << "\" class=\"";
         switch(icon_size()){
@@ -431,15 +432,15 @@
             break;
         }
         m_stream << "\"";
-        if(!v.alt.isEmpty())
-            m_stream << " alt=\"" << v.alt.toHtmlEscaped() << "\"";
+        if(!v.alt.empty())
+            m_stream << " alt=\"" << v.alt.qString().toHtmlEscaped() << "\"";
         m_stream << ">";
     }
     
 
     void    HtmlWriter::write(const html::Italic&i)
     {
-        m_stream << "<I>" << i.txt.toHtmlEscaped() << "</I>\n";
+        m_stream << "<I>" << i.txt.qString().toHtmlEscaped() << "</I>\n";
     }
 
     void    HtmlWriter::write(const html::Mark& m)
@@ -479,7 +480,7 @@
 
     void    HtmlWriter::write(const html::Underline&u)
     {
-        m_stream << "<U>" << u.txt.toHtmlEscaped() << "</U>\n";
+        m_stream << "<U>" << u.txt.qString().toHtmlEscaped() << "</U>\n";
     }
 
     void    HtmlWriter::write(const Leaf& l)
@@ -551,7 +552,7 @@
         }
     }
 
-    HtmlWriter::KVRow       HtmlWriter::Table::key(const QString&k, const QString& url)
+    HtmlWriter::KVRow       HtmlWriter::Table::key(const String&k, const String& url)
     {
         if(m_html){
             return m_html -> key(k, url);

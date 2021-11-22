@@ -25,13 +25,13 @@ namespace cdb {
     bool                    exists_property(uint64_t);
     
     
-    QString                 key(Property);
+    String                  key(Property);
     AttrKind                kind(Property);
     
     Property                property(uint64_t);
     
-    QString                 type(Property);
-    QString                 uid(Property);
-    QString                 value(Property);
+    String                  type(Property);
+    String                  uid(Property);
+    String                  value(Property);
     
 }

@@ -37,6 +37,10 @@
 #include <srv/Page.hpp>
 #include <srv/Scanner.hpp>
 
+#ifdef emit
+    #undef emit
+#endif
+
 #include <util/FileUtils.hpp>
 #include <util/Guarded.hpp>
 #include <util/Hash.hpp>
@@ -83,15 +87,15 @@ Image           calc_icon_for(const Root* rt)
     if(!rt)
         return Image{};
     
-    if(!rt->def_icon_file().isEmpty()){
-        Fragment    f   = cdb::fragment(rt->resolve(rt->def_icon_file()));
+    if(!rt->icon.empty()){
+        Fragment    f   = cdb::fragment(rt->resolve(rt->icon));
         if(f)
             return cdb::image(f);
     }
     
     for(const char* z : { ".icon", ".root" }){
         for(const char* y : Image::kSupportedExtensions){
-            QString     d   = QString(z) + "." + y;
+            String      d   = String(z) + "." + y;
             Document    doc = cdb::document(d);
             if(!doc)
                 continue;

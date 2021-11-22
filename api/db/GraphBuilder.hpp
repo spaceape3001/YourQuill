@@ -6,8 +6,8 @@
 
 #pragma once
 
+#include <util/String.hpp>
 #include <util/Vector.hpp>
-#include <QString>
 
 struct Graph;
 
@@ -17,38 +17,38 @@ public:
     struct Node;
     struct Edge;
 
-    GraphBuilder(const QString&);
+    GraphBuilder(const String&);
 
-    Node&               node(const QString&k, const QString& text=QString());
-    Edge&               edge(const QString&, const QString&);
+    Node&               node(const String&k, const String& text=String());
+    Edge&               edge(const String&, const String&);
 
-    void                rank(const QString&);
-    const QString&      rank() const { return m_rank; }
+    void                rank(const String&);
+    const String&       rank() const { return m_rank; }
     
-    const QString&      bgcolor() const { return m_bgcolor; }
-    void                bgcolor(const QString&); 
+    const String&       bgcolor() const { return m_bgcolor; }
+    void                bgcolor(const String&); 
     
     Graph               build() const;
     
 private:
-    const QString       m_name;
+    const String        m_name;
     Vector<Node>        m_nodes;
     Vector<Edge>        m_edges;
-    QString             m_bgcolor;
-    QString             m_rank;
+    String              m_bgcolor;
+    String              m_rank;
 };
 
 
 struct GraphBuilder::Node {
-    const QString   key;
-    QString         text;
-    QString         url;
-    QString         bgcolor;
-    QString         fgcolor;
+    const String    key;
+    String          text;
+    String          url;
+    String          bgcolor;
+    String          fgcolor;
 };
 
 struct GraphBuilder::Edge {
-    const QString   src, tgt;
-    QString         color;
+    const String    src, tgt;
+    String          color;
 };
 

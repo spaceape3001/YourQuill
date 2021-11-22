@@ -6,15 +6,21 @@
 
 #pragma once
 #include <QString>
+#include "String.hpp"
 
 class Comma {
 public:
-    Comma(const QString&sep=", ") : m_separator(sep), m_first(true) {}
+    Comma(const String&sep=", ") : m_separator(sep), m_first(true) {}
     
-    const QString&     text() const 
+    const String&     text() const 
     {
-        static QString s_blank;
+        static String s_blank;
         return m_first ? s_blank : m_separator;
+    }
+    
+    QString             qText() const
+    {
+        return text().qString();
     }
     
     Comma& operator++()
@@ -24,6 +30,6 @@ public:
     }
     
 private:
-    QString     m_separator;
+    String      m_separator;
     bool        m_first;
 };

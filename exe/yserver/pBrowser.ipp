@@ -37,7 +37,7 @@ namespace {
                 return ;
             QString     url;
             if(Leaf l = cdb::leaf(a)){
-                url = QString("/w/%1").arg(cdb::key(l));
+                url = QString("/w/%1").arg(cdb::key(l).qString());
             } else {
                 url = QString("/atom?id=%1").arg((quint64) a.id);
             }
@@ -53,7 +53,7 @@ namespace {
             if(!c)   
                 return ;
             auto ni = cdb::nki(c, true);
-            h << link(QString("/browse?cls=%1").arg(ni.key), ni.name);
+            h << link(QString("/browse?cls=%1").arg(ni.key.qString()), ni.name);
         });
     }
 

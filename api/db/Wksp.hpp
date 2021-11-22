@@ -11,46 +11,80 @@
 #include <util/Enum.hpp>
 #include <util/Flag.hpp>
 #include <util/QDirVectorFwd.hpp>
+#include <filesystem>
 
 class QSqlDatabase;
 class QDateTime;
 struct Copyright;
 
+#ifdef WIN32
+using RootPathMap   = Map<std::filesystem::path, const Root*, IgCase>;
+#else
+using RootPathMap   = Map<std::filesystem::path, const Root*>;
+#endif
+
+
 /*! Global workspace  
 */
 namespace wksp {
+    using fspath = std::filesystem::path;
+    using PathVector    = Vector<fspath>;
+
     static constexpr const char*    szQuillFile = ".yquill";
     static constexpr const char*    szConfigDir = ".config";
 
-    YQ_ENUM(Option, ,
-        SEARCH,         // Search upward for the quill fragment 
-        BAIL_PID,       // Checks for pid fragment
-        RO_TEMPLATE     // Templates are read_only
-    )
-    using Options = Flag<Option>;
+    enum {
+        SEARCH          = 0x1,  //  Search upward for quill fragment
+        TEMPLATES_RO    = 0x2,  //  Templates are read only
+        INIT_LOG        = 0x4,
+        BAIL_PID        = 0x8,
+        AUX_INIT        = 0x10  // Signals that we initialize from AUX, if active/possible (TODO)
+    };
+    
+    enum App : uint8_t {
+        ANY = 0,
+        BROKER,
+        UPDATER,
+        SERVER
+    };
+    
+
+    //YQ_ENUM(Option, ,
+        //SEARCH,         // Search upward for the quill fragment 
+        //BAIL_PID,       // Checks for pid fragment
+        //RO_TEMPLATE     // Templates are read_only
+    //)
+    //using Options = Flag<Option>;
     
     /*! \brief Abbreviation for this workspace 
     */
-    const QString&          abbreviation();
+    const String&                   abbreviation();
+    
+    
+    App                             app();
     
     /*! \brief Author for this workspace 
     */
-    const QString&          author();
+    const String&                   author();
     
     /*! \brief Set of "other" ports
     
         Given the chaining capability of the quill roots, this lists "other" ports to check to see if the
         server is active.
     */
-    const Set<uint16_t>&    aux_ports();
+    const Set<uint16_t>&            aux_ports();
     
     /*! \brief Searches for the "best" .quill fragment 
     */
-    QString                 best_guess(const QString& dirOrFragment);
+    std::filesystem::path           best_guess(const std::filesystem::path& dirOrFragment);
     
-    QSqlDatabase            cache();
+    //const std::filesystme::path&    broker_ipc();
     
-    const QString&          cache_db();
+    const std::filesystem::path&    build_path();
+
+    QSqlDatabase                    cache();
+    
+    const std::filesystem::path&    cache_db();
     
     
     
@@ -59,69 +93,99 @@ namespace wksp {
     //QString                 config_key(Document);
     //QString                 config_key(const QString&);
     
-    const Copyright&        copyright();
+    const Copyright&                copyright();
     
-    const QString&          db_pid();
+    const std::filesystem::path&    db_pid();
 
-    QString                 dot();
+    const std::filesystem::path&    dot();
 
-    QString                 git();
+    const std::filesystem::path&    git();
 
-    bool                    has_init();
+    bool                            has_init();
 
-    const QString&          home();
+    const String&                   home();
     
-    QString                 hostname();
+    const String&                   host();
 
-    const QString&          ini();
-    
-    bool                    initialize(const QString& dirOrFragment, Options opts={ Option::RO_TEMPLATE });
-    
-    const QString&          local_user();
-    
-    const QString&          log_dir_path();
-    
-    QString                 markdown();
-    
-    const QString&          name();
-    
-    QString                 perl();
-    
-    unsigned short          port();
-    
-    const QDir&             quill_dir();
-    
-    QString                 quill_fragment_for_dir(const QString& dirPath);
+    const std::filesystem::path&    ini();
 
-    const QString&          quill_key();
+        // an EMPTY path initializes us to NO workspace, all workspace-specific items will be blank
+    bool                            initialize(const std::filesystem::path&, unsigned int opts=TEMPLATES_RO, App app={});
     
-    const QString&          quill_path();
+    const String&                   local_user();
     
-    QString                 quill_resolve(const char*);
-    QString                 quill_resolve(const QByteArray&);
-    QString                 quill_resolve(const QString&);
-    QString                 quill_resolve(const std::string&);
+    const std::filesystem::path&    log_dir();
     
-    unsigned int            read_timeout();
+    const std::filesystem::path&    markdown();
     
-    const Root*             root(uint64_t rootId);
-    const Root*             root(const QString& rootPath);
-    uint64_t                root_count();
-    const Root*             root_first(DataRole);
-    const RoleMap&          root_firsts();
-    const RootMap&          root_map();
-    const RoleVecMap&       root_reads();
-    const RootVector&       root_reads(DataRole);
-    const RoleVecMap&       root_writes();
-    const RootVector&       root_writes(DataRole);
-    const RootVector&       roots();
+    const String&                   name();
     
-    QString                 smartypants();
-    const QString&          start();
+    const std::filesystem::path&    perl();
     
-    QDateTime               start_time();
+    unsigned short                  port();
     
-    QString                 subversion();
+        // argument that initialized the worspace
+    const std::filesystem::path&    quill_arg();
+    
+        //  Directory with the quill file
+    const std::filesystem::path&    quill_dir();
+
+        //  Quill file itself
+    const std::filesystem::path&    quill_file();
+    
+    std::filesystem::path           quill_fragment_for_dir(const std::filesystem::path&);
+
+    const String&                   quill_key();
+    
+    std::filesystem::path           quill_resolve(const char*);
+    std::filesystem::path           quill_resolve(const QByteArray&);
+    std::filesystem::path           quill_resolve(const QString&);
+    std::filesystem::path           quill_resolve(const std::string&);
+    std::filesystem::path           quill_resolve(const std::string_view&);
+    std::filesystem::path           quill_resolve(const std::filesystem::path&);
+    
+    unsigned int                    read_timeout();
+    
+    const Root*                     root(uint64_t rootId);
+    const Root*                     root(const std::string_view& key);
+    
+    //const Root*                     root_of(const std::filesystem::path&);
+    
+    uint64_t                        root_count();
+    const Root*                     root_first(DataRole);
+    const RoleMap&                  root_firsts();
+    const RootMap&                  root_map();
+    const RoleVecMap&               root_reads();
+    const RootVector&               root_reads(DataRole);
+    const RoleVecMap&               root_writes();
+    const RootVector&               root_writes(DataRole);
+    const RootVector&               roots();
+    
+    const std::filesystem::path&    server_ipc();
+    
+    std::filesystem::path           shared(const char*);
+    std::filesystem::path           shared(const QByteArray&);
+    std::filesystem::path           shared(const QString&);
+    std::filesystem::path           shared(const std::string&);
+    std::filesystem::path           shared(const std::string_view&);
+    std::filesystem::path           shared(const std::filesystem::path&);
+    
+    PathVector                      shared_all(const char*);
+    PathVector                      shared_all(const QByteArray&);
+    PathVector                      shared_all(const QString&);
+    PathVector                      shared_all(const std::string&);
+    PathVector                      shared_all(const std::string_view&);
+    PathVector                      shared_all(const std::filesystem::path&);
+
+    const PathVector&               shared_dirs();
+    
+    const std::filesystem::path&    smartypants();
+    
+    const String&                   start();
+    std::time_t                     start_time();
+    
+    
+    const std::filesystem::path&    subversion();
     
     //TagPtr                  tag(const QString&);
     //uint64_t                tag_count();
@@ -132,22 +196,26 @@ namespace wksp {
     //Vector<TagPtr>          tags();
     
     
-    Vector<QString>         template_dir_paths(const QString& templateName);
-    const QDirVector&       template_dirs();
-    QDirVector              template_dirs(const QString& templateName);
+    //Vector<QString>         template_dir_paths(const QString& templateName);
+    const PathVector&               template_dirs();
+    PathVector                      template_dirs(const std::string_view& templateName);
     //! Finds the quill associated with the template name
-    QString                 template_quill(const QString& templateName);
-    const QStringSet&       templates();
-    const QStringSet&       templates_available();
+    std::filesystem::path           template_quill(const std::string_view& templateName);
+    const StringSet&                templates();
+    const StringSet&                templates_available();
     
-    const QDir&             temp_dir();
+    const std::filesystem::path&    temp_dir();
     
-    const QString&          temp_dir_default();
+    //const QString&          temp_dir_default();
 
-    const QString&          temp_dir_path();
+    //const QString&          temp_dir_path();
     
-    QString                 temp_resolve(const char*);
-    QString                 temp_resolve(const QByteArray&);
-    QString                 temp_resolve(const QString&);
-    QString                 temp_resolve(const std::string&);
+    std::filesystem::path           temp_resolve(const char*);
+    std::filesystem::path           temp_resolve(const QByteArray&);
+    std::filesystem::path           temp_resolve(const QString&);
+    std::filesystem::path           temp_resolve(const std::string&);
+    std::filesystem::path           temp_resolve(const std::string_view&);
+    std::filesystem::path           temp_resolve(const std::filesystem::path&);
+    
+    const std::filesystem::path&    updater_ipc();
 }

@@ -47,30 +47,29 @@ struct Field {
 
 
 struct Class::Info {
-    QString     key;
+    String      key;
     Graph       deps;
     Document    doc;
     Image       icon;
-    QString     name;
-    QString     plural;
-    QString     brief;
-    bool        edge;
+    String      name;
+    String      plural;
+    String      brief;
+    bool        edge    = false;
 
-    Info() : edge{} {}
-    auto operator<=>(const Info&) const = default;
+    bool operator==(const Info&) const = default;
 };
 
 struct Field::Info {
     Class       class_;
-    QString     brief;
-    QString     key, pkey;
-    QString     name, plural;
-    auto operator<=>(const Info&) const = default;
+    String      brief;
+    String      key, pkey;
+    String      name, plural;
+    bool operator==(const Info&) const = default;
 };
 
 namespace cdb {
     
-    QStringSet              aliases(Field);
+    StringSet               aliases(Field);
 
     /*! \brief All classes in the cache database
     
@@ -87,29 +86,27 @@ namespace cdb {
     FieldVec                all_fields(Sorted sorted=Sorted());
     size_t                  all_fields_count();
 
-    QString                 brief(Class);
-    QString                 brief(Field);
+    String                  brief(Class);
+    String                  brief(Field);
 
     Class                   class_(Field);
     Class                   class_(uint64_t);
-    Class                   class_(const QString&);
+    Class                   class_(const String&);
 
     ClassFile::Shared       class_doc(Fragment, bool fAllowEmpty=false);
     
     ClassVec                classes(Field, Sorted sorted=Sorted());
     ClassVec                classes(const StringSet&);
-    ClassVec                classes(const QStringSet&);
     
     
-    QStringSet              data_types(Field);
+    StringSet               data_types(Field);
         
-    Class                   db_class(const QString&, bool *wasCreated=nullptr);
+    Class                   db_class(const String&, bool *wasCreated=nullptr);
     Class                   db_class(Document, bool *wasCreated=nullptr);
-    ClassVec                db_classes(const QStringSet&);
     ClassVec                db_classes(const StringSet&);
     
-    Field                   db_field(Class c, const QString&k, bool *wasCreated=nullptr);
-    //Field                   db_field(const QString&, bool *wasCreated=nullptr);
+    Field                   db_field(Class c, const String&k, bool *wasCreated=nullptr);
+    //Field                   db_field(const String&, bool *wasCreated=nullptr);
     //Field                   db_field(Document, bool *wasCreated=nullptr);
     
     ClassVec                def_derived(Class, Sorted sorted=Sorted());
@@ -140,7 +137,7 @@ namespace cdb {
     bool                    exists_field(uint64_t);
 
     Field                   field(uint64_t);
-    Field                   field(Class, const QString&);
+    Field                   field(Class, const String&);
     FieldVec                fields(Class, Sorted sorted=Sorted());
     size_t                  fields_count(Class);
 
@@ -157,19 +154,19 @@ namespace cdb {
     //bool                    is_all(Class, std::initializer_list<Class>);
     //bool                    is_any(Class, std::initializer_list<Class>);
 
-    QString                 key(Class);
-    QString                 key(Field);
+    String                  key(Class);
+    String                  key(Field);
 
-    QString                 label(Class);
-    QString                 label(Field);
+    String                  label(Class);
+    String                  label(Field);
     
     //Leaf                    leaf(Atom
 
     ClassData::Shared       merged(Class, unsigned int opts=0);
-    Class                   make_class(const QString&, const Root* rt=nullptr);
+    Class                   make_class(const String&, const Root* rt=nullptr);
 
-    QString                 name(Class);
-    QString                 name(Field);
+    String                  name(Class);
+    String                  name(Field);
     
     NKI                     nki(Class, bool autoKeyToName=false);
     NKI                     nki(Field, bool autoKeyToName=false);
@@ -179,10 +176,10 @@ namespace cdb {
     
 
     Class                   parent(Field);
-    QString                 pkey(Field);    //!< Key for plurals
+    String                  pkey(Field);    //!< Key for plurals
     
-    QString                 plural(Class);
-    QString                 plural(Field);
+    String                  plural(Class);
+    String                  plural(Field);
     
     QList<QVariant>         qvar_list(const Set<Class>&);
     QList<QVariant>         qvar_list(const Set<Field>&);

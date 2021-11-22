@@ -19,7 +19,7 @@ LeafTableModel::LeafTableModel(LeafProvider stp, QObject* parent) :
     });
     
     customRO("Ttile", [](Leaf t) -> QString {
-        return cdb::title(t);
+        return QString::fromStdString(cdb::title(t));
     //}, [](Leaf& t, const QString& k) -> bool {
         //return cdb::set_name(t, k.simplified());
     });

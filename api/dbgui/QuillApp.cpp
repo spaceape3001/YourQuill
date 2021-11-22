@@ -15,6 +15,12 @@
 
 #include <unistd.h>
 #include <curl/curl.h>
+
+    // hack because Qt #define emit for their MOC and tbb now uses it.
+#ifdef emit
+    #undef emit
+#endif
+
 #include <tbb/spin_rw_mutex.h>
 
 #include <QDir>
@@ -58,13 +64,11 @@ struct QuillApp::Impl {
     QString             appName;
     QDir                appDir;
     QString             appDirPath;
-    uint16_t            port;
+    uint16_t            port        = 0;
     QString             scheme, host, url;
-    QProcess*           db_proc;
-    QSettings*          settings;
+    QProcess*           db_proc     = nullptr;
+    QSettings*          settings    = nullptr;
     tbb::spin_rw_mutex  mutex;
-    
-    Impl() : port{}, db_proc{}, settings{} {}
 };
 
     #define LOCK                                                    \
@@ -259,7 +263,7 @@ unsigned int     QuillApp::undo_stack_limit()
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-QuillApp::QuillApp(int&argc, char**argv) : QApplication(argc, pre_init(argv)), m(impl())
+QuillApp::QuillApp(int&argc, char**argv) : QApplication(argc, pre_init(argv)), m_args(argc, argv), m(impl())
 {
     setOrganizationName("YourQuill");
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
@@ -284,8 +288,8 @@ bool      QuillApp::init_local_workspace(const QString& path)
     }
     
     //  resolve to a quill file
-    QString         qFile   = wksp::best_guess(path);
-    if(qFile.isEmpty()){
+    std::filesystem::path   qFile   = wksp::best_guess(path.toStdString());
+    if(qFile.empty()){
         yError() << "Unable to resolve " << path << " to a quill workspace.";
         return false;
     }
@@ -321,12 +325,12 @@ bool      QuillApp::init_local_workspace(const QString& path)
             yInfo() << "Database already running on port " << p << ", using it.";
             m.port      = p;
             running     = true;
-            qFile       = s;
+            qFile       = s.toStdString();
             m.url       = h;
         }
     }
     
-    if(!wksp::initialize(qFile, wksp::Options()))
+    if(!wksp::initialize(qFile, wksp::SEARCH, wksp::App::ANY))
         return false;
     
     //  Test ....
@@ -340,7 +344,7 @@ bool      QuillApp::init_local_workspace(const QString& path)
         //  FOR NOW, we're not detaching this.... eventually we'll smarten DB up.
         m.db_proc   = new QProcess(this);
         m.db_proc -> setProgram(yq_exe("yserver"));
-        m.db_proc -> setArguments(QStringList() << qFile);
+        m.db_proc -> setArguments(QStringList() << QString::fromStdString(qFile.string()));
         m.db_proc -> start();
         
         //  TODO make the DB scanner smarter to be detached and auto-kill when users are no-longer present

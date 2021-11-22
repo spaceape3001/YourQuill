@@ -28,6 +28,7 @@ public:
 	EnumMap(const V& val={});	// auto-creates the vector
 	~EnumMap();
 
+    V           get(E, V def={}) const;
 	V&			operator[](E);
 	const V&	operator[](E) const;
 private:
@@ -61,9 +62,17 @@ bool	EnumMap<E,V>::valid(E e)
 }
 
 template <typename E, typename V>
+V       EnumMap<E,V>::get(E e, V def) const
+{
+    if(!valid(e))
+        return def;
+    return m_values[e.value() - min_key()];
+}
+
+template <typename E, typename V>
 EnumMap<E,V>::EnumMap(const V& val)
 {
-	size_t	cnt	= size_t(max_key() - min_key() + 1);
+	static const size_t	cnt	= size_t(max_key() - min_key() + 1);
 	m_values.resize(cnt, val);
 }
 

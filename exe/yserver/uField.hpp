@@ -13,15 +13,15 @@
 #include <db/Tag.hpp>
 
 struct UField {
-    const QString   key;
+    const String   key;
     union {
         const uint64_t  id;
         const Field     field;
     };
     //Image           icon;
     Class           cls;
-    QString         db;     //!< Attributes/atom table
-    QString         dbv;    //!< Value tracking table
+    String          db;     //!< Attributes/atom table
+    String          dbv;    //!< Value tracking table
     StringSet       types;
     ADSet<Class>    atoms;
     TagSet          tags;

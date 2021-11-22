@@ -10,7 +10,7 @@
 #include <db/Tag.hpp>
 
 struct UTag {
-    const QString           key;
+    const String            key;
     union {
         const uint64_t      id;
         const Tag           tag;

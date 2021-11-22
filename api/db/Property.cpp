@@ -44,7 +44,7 @@ namespace cdb {
     }
     
     
-    QString                 key(Property p)
+    String                  key(Property p)
     {
         static thread_local SQ s("SELECT k FROM Properties WHERE id=?");
         return s.str(p.id);
@@ -65,19 +65,19 @@ namespace cdb {
         return exists_property(i) ? Property{i} : Property{};
     }
     
-    QString                 type(Property p)
+    String                  type(Property p)
     {
         static thread_local SQ s("SELECT type FROM Properties WHERE id=?");
         return s.str(p.id);
     }
     
-    QString                 uid(Property p)
+    String                  uid(Property p)
     {
         static thread_local SQ s("SELECT uid FROM Properties WHERE id=?");
         return s.str(p.id);
     }
     
-    QString                 value(Property p)
+    String                  value(Property p)
     {
         static thread_local SQ s("SELECT value FROM Properties WHERE id=?");
         return s.str(p.id);

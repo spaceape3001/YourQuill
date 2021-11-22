@@ -23,14 +23,14 @@ struct Atom {
 };
 
 struct Atom::Info {
-    QString     abbr;
-    QString     brief;
-    QString     key;
+    String      abbr;
+    String      brief;
+    String      key;
     //Document    doc;  // it's now "plrual"
     //Leaf        leaf; // causes circular dependencies.... 
-    QString     name;
+    String      name;
     Image       icon;
-    auto operator<=>(const Info&) const = default;
+    bool operator==(const Info&) const = default;
 };
 
 namespace cdb {
@@ -40,7 +40,7 @@ namespace cdb {
         \param[in]  a   Atom of interest
         \return The standard abbreviation
     */
-    QString                 abbreviation(Atom a);
+    String                 abbreviation(Atom a);
 
     /*! \brief Returns all atoms in the cache database
         \param[in] sorted   Yes/no for sorting by key. (default is no)
@@ -97,17 +97,17 @@ namespace cdb {
 
 
     Atom                    atom(uint64_t);
-    Atom                    atom(const QString&);
-    Atom                    atom(Document, const QString&);
+    Atom                    atom(const String&);
+    Atom                    atom(Document, const String&);
     Vector<Atom>            atoms(Atom, Sorted sorted=Sorted{});
     Vector<Atom>            atoms(Document, Sorted sorted=Sorted());
     
-    AtomVec                 atoms_by_name(const QString&, Sorted sorted=Sorted{});
+    AtomVec                 atoms_by_name(const String&, Sorted sorted=Sorted{});
     
     size_t                  atoms_count(Atom);
     size_t                  atoms_count(Document);
     
-    QString                 brief(Atom);
+    String                  brief(Atom);
     
     ClassVec                classes(Atom, Sorted sorted=Sorted{});
     ClassVec                classes(Atom, Document, Sorted sorted=Sorted{});
@@ -138,7 +138,7 @@ namespace cdb {
         \param[out]     wasCreated  true/false if the atom was created by this call
         \note This should only fail if the document is invalid (ie, no key), or the cache database is corrupted.
     */
-    Atom                    db_atom(Document doc, const QString&k, bool* wasCreated=nullptr);
+    Atom                    db_atom(Document doc, const String&k, bool* wasCreated=nullptr);
     
     
     //Document                document(Atom);
@@ -164,13 +164,13 @@ namespace cdb {
     
     bool                    is_leaf(Atom);
 
-    QString                 key(Atom);
+    String                  key(Atom);
 
-    QString                 label(Atom);
+    String                  label(Atom);
     
     //Leaf                    leaf(Atom
 
-    QString                 name(Atom);
+    String                  name(Atom);
     
     /*! \brief Name/Key/Icon for an Atom
     
@@ -185,7 +185,7 @@ namespace cdb {
 
     QList<QVariant>         qvar_list(const Set<Atom>&);
 
-    QString                 skey(Atom);
+    String                  skey(Atom);
 
     
     TagVec                  tags(Atom, Sorted sorted=Sorted{});
@@ -195,7 +195,7 @@ namespace cdb {
 
     bool                    tagged(Atom, Tag);
 
-    QString                 title(Atom);    // kept for comptibility
+    String                  title(Atom);    // kept for comptibility
 
 }
 

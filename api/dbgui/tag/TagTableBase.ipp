@@ -21,13 +21,13 @@ TagTableModel::TagTableModel(TagProvider stp, QObject* parent) :
     });
     
     customRW("Name", [](Tag t) -> QString {
-        return cdb::name(t);
+        return QString::fromStdString(cdb::name(t));
     }, [](Tag& t, const QString& k) -> bool {
         return cdb::set_name(t, k.simplified());
     });
     
     customRW("Brief", [](Tag t) -> QString {
-        return cdb::brief(t);
+        return QString::fromStdString(cdb::brief(t));
     }, [](Tag& t, const QString& k) -> bool {
         return cdb::set_brief(t, k.simplified());
     });

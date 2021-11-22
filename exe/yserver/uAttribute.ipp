@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    Attribute db_attribute(Document doc, Attribute par, uint64_t idx, const QString& k, const QString& uid, const QString& val)
+    Attribute db_attribute(Document doc, Attribute par, uint64_t idx, const String& k, const String& uid, const String& val)
     {
         static thread_local SqlQuery i(wksp::cache(), "INSERT INTO Attributes (doc,parent,idx,k,uid,value) VALUES (?,?,?,?,?,?)");
         auto s_af = i.af();

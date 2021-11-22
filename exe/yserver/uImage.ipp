@@ -54,7 +54,7 @@ void UImage::update(Image i)
     if(ct == ContentType::svg)
         return ;
 
-    QImageReader    reader(cdb::path(frag));
+    QImageReader    reader(QString::fromStdString(cdb::path(frag).string()));
     QByteArray      fmt     = reader.format();
     
     auto ct2        = mimeTypeForExt(utf8(fmt));

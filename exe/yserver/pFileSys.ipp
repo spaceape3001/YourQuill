@@ -12,9 +12,8 @@ namespace {
         static const char*  szDir   = "ico/ext";
         
         Map<QString,QString,IgCase> ret;
-        auto sh     = shared_dir(szDir);
-        if(sh.good){
-            QDir    d   = sh.value;
+        for(auto& p : shared_all("ico/ext")){
+            QDir    d(QString::fromStdString(p.string()));
             for(const QString& s : d.entryList(QStringList() << "*.svg")){
                 if(s.count('.') != 1)
                     continue;

@@ -43,7 +43,7 @@ message( "Build Type is " ${CMAKE_BUILD_TYPE})
 
 find_package(CURL)
 find_package(Log4cpp REQUIRED)
-find_package(TBB)
+find_package(TBB REQUIRED)
 find_package(Graphviz)
 find_package(SQLite3)
 # find_package(libzip REQUIRED)

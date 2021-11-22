@@ -787,8 +787,8 @@ namespace {
             
             for(Field ff : c.fields.def){
                 UField& f   = uget(ff);
-                f.db        = QString("A_%1_%2").arg(c.key).arg(f.key);
-                f.dbv       = QString("V_%1_%2").arg(c.key).arg(f.key);
+                f.db        = QString("A_%1_%2").arg(c.key.qString()).arg(f.key.qString());
+                f.dbv       = QString("V_%1_%2").arg(c.key.qString()).arg(f.key.qString());
                 if(!db_table_exists( f.db, wksp::cache())){
                     if(f.types.has("charname")){
                         SqlQuery(wksp::cache(), QString(
@@ -801,7 +801,7 @@ namespace {
                                 "last   VARCHAR(255), "
                                 "middle VARCHAR(255) "
                             ")"
-                        ).arg(f.db)).exec();
+                        ).arg(f.db.qString())).exec();
                     } else {
                         SqlQuery(wksp::cache(), QString(
                             "CREATE TABLE %1 ( "
@@ -810,7 +810,7 @@ namespace {
                                 "no    INTEGER, "                       // The "number" for the particular attribute
                                 "value VARCHAR(255)"
                             ")"
-                        ).arg(f.db)).exec();
+                        ).arg(f.db.qString())).exec();
                     }
                 }
 
@@ -819,12 +819,12 @@ namespace {
                         "CREATE TABLE %1 ( "
                             "value VARCHAR(255) COLLATE NOCASE UNIQUE, "
                             "brief VARCHAR(255)"
-                        ")").arg(f.dbv)).exec();
+                        ")").arg(f.dbv.qString())).exec();
                 }
             }
             
             if(c.edge){
-                c.db        = QString("E_%1").arg(c.key);
+                c.db        = QString("E_%1").arg(c.key.qString());
                 if(!db_table_exists(c.db, wksp::cache())){
                     SqlQuery(wksp::cache(), QString(
                         "CREATE TABLE %1 ( "
@@ -855,8 +855,8 @@ namespace {
         gb.rank("RL");
         
         for(Class c : classes){
-            QString k   = cdb::key(c);
-            QString t   = cdb::name(c);
+            QString k    = cdb::key(c).qString();
+            QString t    = cdb::name(c).qString();
             if(t.isEmpty())
                 t       = k;
             auto & n = gb.node("cl_" + k, t);
@@ -996,7 +996,7 @@ void        update_icon(Class c)
 
 void        update_class_icon(Fragment frag)
 {
-    QString     ckey    = cdb::skeyb(frag);
+    String     ckey    = cdb::skeyb(frag);
 
     Class   cls   = cdb::class_(ckey);
     if(!cls)

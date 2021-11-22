@@ -11,8 +11,8 @@ namespace {
     QString cls_title_root()
     {
         if(x_root)
-            return QString("Class '%1' {%2}").arg(cdb::label(x_class)).arg(x_root->name());
-        return QString("Class '%1'").arg(cdb::label(x_class));
+            return QString("Class '%1' {%2}").arg(cdb::label(x_class).qString()).arg(x_root->name.qString());
+        return QString("Class '%1'").arg(cdb::label(x_class).qString());
     }
 
     
@@ -156,7 +156,7 @@ namespace {
                 h << "[";
                 Comma m(",");
                 for(const Root* rt : j.second.roots){
-                    h << m.text() << rt->key();
+                    h << m.text() << rt->key;
                     ++m;
                 }
                 h << "]";
@@ -214,15 +214,15 @@ namespace {
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
-            auto f = h.form("/wksp/class/edit/reverses", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id()));
+            auto f = h.form("/wksp/class/edit/reverses", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id));
 
             h.table(col_array_cols(all, x_columns), [&](Class c){
                 if(!c) 
                     return ;
                     
-                QString     k   = cdb::key(c);
+                String     k   = cdb::key(c);
                     
-                QString     id  = "rev-" + k;
+                String     id  = "rev-" + k;
                 h << IHidden(id, "false") << "\n";
                 h << "<input type=\"checkbox\" id=\"" << id << "\" name=\"" << id << "\" value=\"true\"";
                 if(us->reverse.has(k))
@@ -255,8 +255,8 @@ namespace {
         for(auto c : all){
             if(c == x_class)
                 continue;
-            QString     k   = cdb::key(c);
-            QByteArray  id   = utf8("rev-" + k);
+            String      k   = cdb::key(c);
+            QByteArray  id   = ("rev-" + k).c_str();
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
                 x->reverse << k;
@@ -285,14 +285,14 @@ namespace {
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
             
-            auto f = h.form("/wksp/class/edit/sources", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id()));
+            auto f = h.form("/wksp/class/edit/sources", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id));
 
             h.table(col_array_cols(all, x_columns), [&](Class c){
                 if(!c)   
                     return ;
                     
-                QString     k   = cdb::key(c);
-                QString     id  = "src-" + k;
+                String     k   = cdb::key(c);
+                String     id  = "src-" + k;
                 h << IHidden(id, "false") << "\n";
                 h << "<input type=\"checkbox\" id=\"" << id << "\" name=\"" << id << "\" value=\"true\"";
                 if(us->sources.has(k))
@@ -326,8 +326,8 @@ namespace {
         for(auto c : all){
             if(c == x_class)
                 continue;
-            QString     k   = cdb::key(c);
-            QByteArray  id   = utf8("src-" + k);
+            String     k   = cdb::key(c);
+            QByteArray  id   = ("src-" + k).c_str();
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
                 x->sources << k;
@@ -355,14 +355,14 @@ namespace {
             
             Vector<Class>   all = cdb::all_classes(Sorted::YES);
             
-            auto f = h.form("/wksp/class/edit/targets", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id()));
+            auto f = h.form("/wksp/class/edit/targets", QString("id=%1&root=%2").arg((quint64) x_class.id).arg(x_root->id));
 
             h.table(col_array_cols(all, x_columns), [&](Class c){
                 if(!c)   
                     return ;
                     
-                QString     k   = cdb::key(c);
-                QString     id  = "tgt-" + k;
+                String     k   = cdb::key(c);
+                String     id  = "tgt-" + k;
                 h << IHidden(id, "false") << "\n";
                 h << "<input type=\"checkbox\" id=\"" << id << "\" name=\"" << id << "\" value=\"true\"";
                 if(us->targets.has(k))
@@ -394,8 +394,8 @@ namespace {
         for(auto c : all){
             if(c == x_class)
                 continue;
-            QString     k   = cdb::key(c);
-            QByteArray  id   = utf8("tgt-" + k);
+            String     k   = cdb::key(c);
+            QByteArray  id   = ("tgt-" + k).c_str();
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
                 x->targets << k;
@@ -425,7 +425,7 @@ namespace {
             
             auto f = h.form("/wksp/class/edit/use");
             h << IHidden("cls", cdb::key(x_class));
-            h << IHidden("root", x_root->id());
+            h << IHidden("root", x_root->id);
 
             h.table(col_array_cols(all, x_columns), [&](Class c){
                 if(!c)   
@@ -436,7 +436,7 @@ namespace {
                 if(c == x_class){
                     h << "[--] " << nki.name;
                 } else {
-                    QString     id  = "use-" + nki.key;
+                    String     id  = "use-" + nki.key;
                     h << IHidden(id, "false");
                     h << ICheck(id, nki.name, us->use.has(nki.key));
                     if(whole->use.has(nki.key) && !us->use.has(nki.key))
@@ -471,8 +471,8 @@ namespace {
         for(auto c : all){
             if(c == x_class)
                 continue;
-            QString     k   = cdb::key(c);
-            QByteArray  id   = utf8("use-" + k);
+            String     k   = cdb::key(c);
+            QByteArray  id   = ("use-" + k).c_str();
             auto r = to_boolean(x_request -> getParameter(id));
             if(r.good && r.value)
                 x->use << k;

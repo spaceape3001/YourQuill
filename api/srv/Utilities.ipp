@@ -20,7 +20,7 @@ QString     cur_user()
     if(!x_session)
         return "(no-session)";
     if(x_is_local)
-        return wksp::local_user();
+        return QString::fromStdString(wksp::local_user());
     return utf8(x_session -> user);
 }
 

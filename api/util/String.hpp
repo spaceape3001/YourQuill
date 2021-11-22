@@ -215,6 +215,9 @@ public:
     
     Vector<String>      hard_wrap(size_t) const;
     
+    int                 index_of(char) const;
+    int                 index_of(char, int) const;
+    
     /*! \brief Creates iterator for this string that'll work on char32_t
     
         \note   String must remain VALID/CONSTANT throughout this use!
@@ -226,10 +229,15 @@ public:
     String              join(const Set<String>&) const;
     String              join(const Set<String,IgCase>&) const;
     String              join(const List<String>&) const;
+
+    int                 last_index_of(char) const;
     
     String              lower() const;
     
     bool                matches_at(const String&, size_t pos=0) const;
+    
+    String              mid(int pos) const;
+    String              mid(int pos, int len) const;
 
     String              pad_left(size_t, char) const;
     String              pad_right(size_t, char) const;

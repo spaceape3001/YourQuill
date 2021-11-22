@@ -27,9 +27,9 @@ struct Leaf {
 struct Leaf::Info {
     //  Atom        atom;   circular dependencies
     Document    doc;
-    QString     key;
-    QString     title;
-    auto operator<=>(const Info&) const = default;
+    String      key;
+    String      title;
+    bool operator==(const Info&) const = default;
 };
 
 
@@ -60,17 +60,17 @@ namespace cdb {
     Leaf::Info              info(Leaf, bool autoKeyToName=false);
     bool                    is_leaf(Atom);
     
-    QString                 key(Leaf);
-    QString                 label(Leaf);
+    String                  key(Leaf);
+    String                  label(Leaf);
     
     Leaf                    leaf(uint64_t);
-    Leaf                    leaf(const QString&);
+    Leaf                    leaf(const String&);
 
     Leaf                    leaf(Atom);
     Leaf                    leaf(Document);
     Leaf                    leaf(Folder);
 
-    Leaf                    leaf_by_title(const QString&);
+    Leaf                    leaf_by_title(const String&);
 
     LeafFile::Shared        leaf_doc(Fragment, unsigned int options=0);
     
@@ -83,7 +83,7 @@ namespace cdb {
     Vector<Leaf::FragDoc>   reads(Leaf);
     Vector<Leaf::FragDoc>   reads(Leaf, class Root*);
 
-    QString                 title(Leaf);
+    String                  title(Leaf);
 
     //!  \brief   Returns a writable document
     //!

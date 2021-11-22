@@ -8,6 +8,11 @@
 
 #include <log4cpp/OstreamAppender.hh>
 #include <log4cpp/FileAppender.hh>
+
+    // hack because Qt #define emit for their MOC and tbb now uses it.
+#ifdef emit
+#undef emit
+#endif
 #include <tbb/spin_mutex.h>
 #include <tbb/spin_rw_mutex.h>
 

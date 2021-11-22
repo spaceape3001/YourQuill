@@ -61,14 +61,14 @@ namespace {
     struct UAtom {
         const Atom          atom;
         const Document      doc;
-        QString             sk;
+        String              sk;
         ClassSet            classes;
         
         UAtom(Atom a, Document d) : atom(a), doc(d), sk(cdb::skey(a)), classes(makeSet(cdb::classes(a)))
         {
         }
 
-        Property    add_property(const cdb::KVDiff& kv, AttrKind kind, const QString& type=QString(), uint64_t rid=0ULL)
+        Property    add_property(const cdb::KVDiff& kv, AttrKind kind, const String& type=String(), uint64_t rid=0ULL)
         {
             static thread_local cdb::SQ i("INSERT INTO Properties (atom, uid, k, value, kind, type, rid) VALUES (?, ?, ?, ?, ?, ?, ?)");
             auto i_af = i.af();
@@ -99,11 +99,11 @@ namespace {
         std::pair<Property,Atom>    add_atom(const cdb::KVDiff& kv)
         {
             //static const uint64_t   cnt = 0;
-            QString     k   = sk + '#' + kv.key + '.' + kv.value;
-            if(!kv.uid.isEmpty())
+            String     k   = sk + '#' + kv.key + '.' + kv.value;
+            if(!kv.uid.empty())
                 k += '.' + kv.uid;
             Atom        a   = cdb::db_atom(doc, k);
-            Property    p   = add_property(kv, AttrKind::Atom, QString(), a.id);
+            Property    p   = add_property(kv, AttrKind::Atom, String(), a.id);
             return {p,a};
         }
     };

@@ -8,20 +8,20 @@
 
 namespace cdb {
     namespace {
-        QString     full_key(Document d, const QString& ck)
+        String     full_key(Document d, const String& ck)
         {
-            QString     dk = strip_extension(key(d));
-            if(dk.isEmpty())    
-                return QString();
+            String     dk = strip_extension(key(d));
+            if(dk.empty())    
+                return String();
 
-            if(!ck.isEmpty())
+            if(!ck.empty())
                 dk      += "#" + ck;
             return dk;
         }
     }
 
 
-    QString             abbreviation(Atom a)
+    String             abbreviation(Atom a)
     {
         static thread_local SQ s("SELECT abbr FROM Atoms WHERE id=?");
         return s.str(a.id);
@@ -110,13 +110,13 @@ namespace cdb {
         return exists_atom(i) ? Atom{i} : Atom();
     }
     
-    Atom                atom(const QString& k)
+    Atom                atom(const String& k)
     {
         static thread_local SQ s("SELECT id FROM Atoms WHERE k=? LIMIT 1");
         return s.as<Atom>(k);
     }
 
-    Atom                atom(Document doc, const QString& ck)
+    Atom                atom(Document doc, const String& ck)
     {
         return atom(full_key(doc, ck));
     }
@@ -162,13 +162,13 @@ namespace cdb {
     }
     
     namespace {
-        AtomVec     atoms_by_name_sorted(const QString& n)
+        AtomVec     atoms_by_name_sorted(const String& n)
         {
             static thread_local SQ s("SELECT id FROM Atoms WHERE name=? ORDER BY k");
             return s.vec<Atom>(n);
         }
         
-        AtomVec     atoms_by_name_unsorted(const QString& n)
+        AtomVec     atoms_by_name_unsorted(const String& n)
         {
             static thread_local SQ s("SELECT id FROM Atoms WHERE name=?");
             return s.vec<Atom>(n);
@@ -176,7 +176,7 @@ namespace cdb {
     }
     
     
-    AtomVec             atoms_by_name(const QString& n, Sorted sorted)
+    AtomVec             atoms_by_name(const String& n, Sorted sorted)
     {
         return sorted ? atoms_by_name_sorted(n) : atoms_by_name_unsorted(n);
         AtomVec     ret;
@@ -188,7 +188,7 @@ namespace cdb {
         return s.size(doc);
     }
     
-    QString             brief(Atom a)
+    String             brief(Atom a)
     {
         static thread_local SQ s("SELECT brief FROM Atoms WHERE id=?");
         return s.str(a.id);
@@ -248,18 +248,17 @@ namespace cdb {
 
     Atom                db_atom(Document d, bool* wasCreated)
     {
-        return db_atom(d, QString(), wasCreated);
+        return db_atom(d, String(), wasCreated);
     }
     
-    Atom                db_atom(Document d, const QString&ck, bool* wasCreated)
+    Atom                db_atom(Document d, const String&ck, bool* wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
 
 
-
-        QString     dk = full_key(d, ck);
-        if(dk.isEmpty()){
+        String     dk = full_key(d, ck);
+        if(dk.empty()){
             yError() << "Cannot create to an empty key!";
             return Atom();
         }
@@ -384,16 +383,16 @@ namespace cdb {
     //}
     
  
-    QString             key(Atom a)
+    String             key(Atom a)
     {
         static thread_local SQ s("SELECT k FROM Atoms WHERE id=?");
         return s.str(a.id);
     }
     
-    QString             label(Atom a)
+    String             label(Atom a)
     {
-        QString n   = name(a);
-        if(n.isEmpty())
+        String n   = name(a);
+        if(n.empty())
             n       = key(a);
         return n;
     }
@@ -401,7 +400,7 @@ namespace cdb {
     
     //Leaf                    leaf(Atom
 
-    QString             name(Atom a)
+    String             name(Atom a)
     {
         static thread_local SQ s("SELECT name FROM Atoms WHERE id=?");
         return s.str(a.id);
@@ -418,7 +417,7 @@ namespace cdb {
             ret.name    = s.valueString(0);
             ret.icon    = Image{s.valueU64(1)};
             ret.key     = s.valueString(2);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
             return ret;
         }
@@ -443,7 +442,7 @@ namespace cdb {
         return ret;
     }
 
-    QString             skey(Atom a) 
+    String             skey(Atom a) 
     {
         static thread_local SQ s("SELECT sk FROM Atoms WHERE id=?");
         return s.str(a.id);
@@ -506,7 +505,7 @@ namespace cdb {
         return s.size(a.id, d.id);
     }
 
-    QString             title(Atom a)
+    String             title(Atom a)
     {
         return label(a);
     }

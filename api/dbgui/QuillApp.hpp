@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <memory>
 #include <util/Map.hpp>
+#include <util/CmdArgs.hpp>
 #include <QVariant>
 
 class QUrl;
@@ -96,5 +97,7 @@ private:
     struct Impl;
     static Impl&            impl();
     static QuillApp*        s_app;
+
+    CmdArgs                 m_args;
     Impl&                   m;
 };

@@ -14,7 +14,7 @@
 
 
 struct ULeaf {
-    const QString           key;
+    const String            key;
     union {
         const uint64_t      id;
         const Leaf          leaf;

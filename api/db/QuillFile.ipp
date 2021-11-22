@@ -121,7 +121,7 @@ bool    QuillFile::write(Vector<char>&chars)
     if(!author.empty())
         attrs << KeyValue("author", author);
     if(!aux_ports.empty())
-        attrs << KeyValue("aux", join_string(aux_ports, ", "));
+        attrs << KeyValue("aux", join(aux_ports, ", "));
     if(!cache.empty())
         attrs << KeyValue("cache", cache);
     if(!copyright.empty()){

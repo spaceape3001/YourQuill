@@ -115,10 +115,10 @@ namespace cdb {
         if(!rt)
             return Image();
         static thread_local SQ s("SELECT icon FROM RootIcons WHERE root=?");
-        return s.as<Image>(rt->id());
+        return s.as<Image>(rt->id);
     }
 
-    Image               image(const QString&k)
+    Image               image(const String&k)
     {
         return image(document(k));
     }
@@ -157,7 +157,7 @@ namespace cdb {
     {
         if(!img)
             return QIcon();
-        return QIcon(path(Fragment{img.id}));
+        return QIcon(path(Fragment{img.id}).c_str());
     }
 
     bool                raster(ContentType ct)
@@ -192,7 +192,7 @@ namespace cdb {
             
         static thread_local SQ r("REPLACE INTO RootIcons (root, icon) VALUES (?, ?)");
         auto r_af = r.af();
-        r.bind(0, rt->id());
+        r.bind(0, rt->id);
         r.bind(1, img.id);
         r.exec();
     }

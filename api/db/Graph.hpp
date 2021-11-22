@@ -16,12 +16,12 @@ struct Graph {
 namespace cdb {
     Vector<Graph>           all_graphs();
     size_t                  all_graphs_count();
-    Graph                   db_graph(const QString&dot_data, const QString& name);
-    QString                 dot(Graph);
+    Graph                   db_graph(const String&dot_data, const String& name);
+    String                  dot(Graph);
     bool                    exists(Graph);
     bool                    exists_graph(uint64_t);
     Graph                   graph(uint64_t);
-    QString                 html(Graph);
-    QString                 name(Graph);
+    String                  html(Graph);
+    String                  name(Graph);
     QByteArray              svg(Graph);
 }

@@ -33,7 +33,11 @@
 #include <QSqlError>
 #include <QTextStream>
 
+#include <QDir>
+#include <QFileInfo>
+
 #include <filesystem>
+#include <sstream>
 #include <string_view>
 
 

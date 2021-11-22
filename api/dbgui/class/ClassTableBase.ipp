@@ -117,10 +117,10 @@ ClassTableModel::ClassTableModel(ClassProvider cpp, QObject*parent) :
 {
     customRO("Key", [](Class c) -> auto { return cdb::key(c); });
     customRO("Name", [](Class c) -> QString {
-        return cdb::name(c);
+        return QString::fromStdString(cdb::name(c));
     });
     customRO("Description", [](Class c) -> QString {
-        return cdb::brief(c);
+        return QString::fromStdString(cdb::brief(c));
     });
 }
 

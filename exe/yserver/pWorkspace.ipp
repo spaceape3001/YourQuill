@@ -61,9 +61,9 @@ namespace {
     QJsonObject     api_workspace()
     {
         QJsonObject     ret;
-        ret["author"]       = wksp::author();
-        ret["abbreviation"] = wksp::abbreviation();
-        ret["name"]         = wksp::name();
+        ret["author"]       = wksp::author().qString();
+        ret["abbreviation"] = wksp::abbreviation().qString();
+        ret["name"]         = wksp::name().qString();
         ret["copyright"]    = wksp::copyright().text.qString();
         ret["c_stance"]     = wksp::copyright().stance.key().qString();
         ret["c_from"]       = QString::number(wksp::copyright().from);
@@ -71,8 +71,8 @@ namespace {
         ret["color"]        = cur_text_color();
         ret["bkcolor"]      = cur_back_color();
         if(x_is_local){
-            ret["quill"]    = wksp::quill_path();
-            ret["cache"]    = wksp::cache_db();
+            ret["quill"]    = QString::fromStdString(wksp::quill_file().string());
+            ret["cache"]    = QString::fromStdString(wksp::cache_db());
         }
         return ret;
     }
@@ -80,7 +80,7 @@ namespace {
     QJsonObject     api_wksp_quill()
     {
         QJsonObject     ret;
-        ret["quill"]        = wksp::quill_path();
+        ret["quill"]        = QString::fromStdString(wksp::quill_file().string());
         return ret;
     }
     
@@ -147,19 +147,19 @@ namespace {
                 
             auto ni     = cdb::nki(c, true);
 
-            h << link(QString("/wksp/class?cls=%1").arg(ni.key), ni.name) << " [";
+            h << link(QString("/wksp/class?cls=%1").arg(ni.key.qString()), ni.name) << " [";
             Comma m(",");
             Document    d   = cdb::document(c);
             for(const Root* rt : cdb::roots(d)){
                 if(!rt)
                     continue;
-                h << m.text() << rt -> key();
+                h << m.text() << rt -> key;
                 ++m;
             }
             h << "]";
             
-            QString b = cdb::brief(c);
-            if(!b.isEmpty())
+            String b = cdb::brief(c);
+            if(!b.empty())
                 h << "<br><i>" << b << "</i>";
         });
     }
@@ -182,7 +182,7 @@ namespace {
         h.key("Name") << wksp::name();
         h.key("Author") << wksp::author();
         h.key("Abbreviation") << wksp::abbreviation();
-        h.key("Copyright") << wksp::copyright().text.qString();
+        h.key("Copyright") << wksp::copyright().text;
     }
     
     void            wksp_tags(HtmlWriter& h)
@@ -220,12 +220,12 @@ namespace {
         
             //  Register Getters
         reg_getter("abbr", []() -> QByteArray {
-            static QByteArray ret = wksp::abbreviation().toUtf8();
+            static QByteArray ret = wksp::abbreviation().c_str();
             return ret;
         });
         
         reg_getter("author", []() -> QByteArray {
-            static QByteArray ret = wksp::author().toUtf8();
+            static QByteArray ret = wksp::author().c_str();
             return ret;
         });
         
@@ -242,12 +242,12 @@ namespace {
         });
         
         reg_getter("home", []() -> QByteArray{
-            static QByteArray   ret = wksp::home().toUtf8();
+            static QByteArray   ret = wksp::home().c_str();
             return ret;
         });
         
         reg_getter("host", []() -> QByteArray{
-            static QByteArray   ret = wksp::hostname().toUtf8();
+            static QByteArray   ret = wksp::host().c_str();
             return ret;
         });
         
@@ -260,7 +260,7 @@ namespace {
         });
         
         reg_getter("luser", []() -> QByteArray {
-            static QByteArray ret   = wksp::local_user().toUtf8();
+            static QByteArray ret   = wksp::local_user().c_str();
             if(x_is_local){
                 return ret;
             } else
@@ -268,7 +268,7 @@ namespace {
         });
         
         reg_getter("name", []() -> QByteArray {
-            static QByteArray   ret = wksp::name().toUtf8();
+            static QByteArray   ret = wksp::name().c_str();
             return ret;
         });
         

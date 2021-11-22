@@ -20,6 +20,7 @@
 
 #include <QByteArray>
 #include <QTextStream>
+#include <filesystem>
 
 class QDate;
 class QDateTime;
@@ -29,6 +30,11 @@ class QUrl;
 //class Page;
 //class Class;
 //class Graph;
+
+QTextStream&    operator<<(QTextStream&, const std::string_view&);
+QTextStream&    operator<<(QTextStream&, const std::string&);
+QTextStream&    operator<<(QTextStream&, const String&);
+QTextStream&    operator<<(QTextStream&, const std::filesystem::path&);
 
 class NetWriter {
 public:

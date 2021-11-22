@@ -10,8 +10,8 @@
 #include "Document.hpp"
 #include <db/bit/KeyValue.hpp>
 #include <db/enum/Change.hpp>
+#include <util/String.hpp>
 #include <util/Vector.hpp>
-#include <QString>
 
 /*! \brief Attribute of documents
 */
@@ -26,13 +26,13 @@ struct Attribute {
 namespace cdb {
 
     struct KVU {
-        QString     key, value, uid;
+        String     key, value, uid;
     };
 
     struct KVUA {
-        QString     key, value, uid;
+        String     key, value, uid;
         Attribute   attr;
-        uint64_t    idx;
+        uint64_t    idx     = 0;
     };
     
     /*! \brief Used for reporting the merged attributes between new and old
@@ -41,9 +41,9 @@ namespace cdb {
     */
     struct KVDiff {
         Vector<KVDiff>      sub;                //!< Sub values (assuming recursive)
-        QString             key;                //<! Key of the attribute (if modified, the new one)
-        QString             value;              //<! Value of the attribute (if modified, the new one)
-        QString             uid;                //<! User-ID of the attriubte (if modified, the new one
+        String              key;                //<! Key of the attribute (if modified, the new one)
+        String              value;              //<! Value of the attribute (if modified, the new one)
+        String              uid;                //<! User-ID of the attriubte (if modified, the new one
         Attribute           attr;               //<! Attribute of any existing 
         uint64_t            nidx    = 0;        //<! Index of the new Attribute, 
         uint64_t            oidx    = 0;        //<! Index of the old attribute
@@ -114,7 +114,7 @@ namespace cdb {
     uint64_t            index(Attribute);
     
 
-    QString             key(Attribute);
+    String              key(Attribute);
     KVU                 kvu(Attribute);
     Vector<KVUA>        kvua(Attribute);
     Vector<KVUA>        kvua(Document);
@@ -123,6 +123,6 @@ namespace cdb {
     DocOrAttr           parent(Attribute);
     
     //! User defined ID (from the file)
-    QString             uid(Attribute);
-    QString             value(Attribute);
+    String              uid(Attribute);
+    String              value(Attribute);
 }

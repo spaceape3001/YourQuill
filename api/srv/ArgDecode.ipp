@@ -592,7 +592,7 @@ R  decode_root(const Root*&out, const char* sz)
     if(f.isEmpty())
         return R::EMPTY;
 
-    out          = Root::by_key(utf8(f));
+    out          = Root::by_key(utf8(f).toStdString());
     if(out)
         return R::OKAY;
         

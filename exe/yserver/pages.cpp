@@ -11,6 +11,7 @@
 #include <db/Cache.hpp>
 #include <db/Class.hpp>
 #include <db/ClassFile.hpp>
+#include <db/CommonDirs.hpp>
 #include <db/FileSys.hpp>
 #include <db/Leaf.hpp>
 #include <db/Root.hpp>
@@ -38,6 +39,7 @@
 #include <util/Utilities.hpp>
 
 #include <QCoreApplication>
+#include <QDir>
 #include <QJsonObject>
 #include <QSqlDatabase>
 #include <QSqlIndex>

@@ -9,6 +9,7 @@
 #include "WkspLogging.hpp"
 #include "Workspace.hpp"
 
+#include <util/CmdArgs.hpp>
 #include <util/Compare.hpp>
 #include <util/Logging.hpp>
 #include <util/FileUtils.hpp>
@@ -32,4 +33,4 @@
 
 //#include "QuillFile.ipp"
 
-#include "Workspace.ipp"
+//#include "Workspace.ipp"

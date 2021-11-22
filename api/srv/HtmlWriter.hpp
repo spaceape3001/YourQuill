@@ -42,8 +42,8 @@ class Root;
 
 namespace html {
     struct Bold {
-        QString txt;
-        Bold(const QString& _txt) : txt(_txt) {}
+        String txt;
+        Bold(const String& _txt) : txt(_txt) {}
     };
     
     template <typename T>
@@ -56,82 +56,82 @@ namespace html {
     };
     
     struct Escape {
-        QString txt;
-        Escape(const QString& _txt) : txt(_txt) {}
+        String txt;
+        Escape(const String& _txt) : txt(_txt) {}
     };
     
     struct Form {
-        QString url, args;
+        String url, args;
         bool    inspect;    // this is an override
     };
     
     struct H1 {
-        QString txt;
-        H1(const QString& _txt) : txt(_txt) {}
+        String txt;
+        H1(const String& _txt) : txt(_txt) {}
     };
     
     struct H2 {
-        QString txt;
-        H2(const QString& _txt) : txt(_txt) {}
+        String txt;
+        H2(const String& _txt) : txt(_txt) {}
     };
 
     struct H3 {
-        QString txt;
-        H3(const QString& _txt) : txt(_txt) {}
+        String txt;
+        H3(const String& _txt) : txt(_txt) {}
     };
 
     struct H4 {
-        QString txt;
-        H4(const QString& _txt) : txt(_txt) {}
+        String txt;
+        H4(const String& _txt) : txt(_txt) {}
     };
 
     struct H5 {
-        QString txt;
-        H5(const QString& _txt) : txt(_txt) {}
+        String txt;
+        H5(const String& _txt) : txt(_txt) {}
     };
 
     struct H6 {
-        QString txt;
-        H6(const QString& _txt) : txt(_txt) {}
+        String txt;
+        H6(const String& _txt) : txt(_txt) {}
     };
 
     template <typename T>
     struct Icon {
         T       src;
-        QString alt;
+        String  alt;
         Icon(){}
-        Icon(const T& v, const QString& a=QString()) : src(v), alt(a) {}
+        Icon(const T& v, const String& a=String()) : src(v), alt(a) {}
     };
     
     template <typename T>
-    Icon<T> icon_for(const T& v, const QString& a=QString())
+    Icon<T> icon_for(const T& v, const String& a=String())
     {
         return Icon<T>(v, a);
     }
     
-    inline Icon<QString> icon_for(const char* z, const QString& a=QString())
+    inline Icon<String> icon_for(const char* z, const String& a=String())
     {
-        return Icon<QString>(z, a);
+        return Icon<String>(z, a);
     }
 
     struct Image {
-        QString     src;
-        QString     alt;
-        QString     style;
+        String      src;
+        String      alt;
+        String      style;
         
-        Image(const QString& _url, const QString& _alt=QString(), const QString& sty=QString()) :
+        Image(const String& _url, const String& _alt=String(), const String& sty=String()) :
             src(_url), alt(_alt), style(sty) {}
     };
     
     
     struct Italic {
-        QString txt;
-        Italic(const QString& _txt) : txt(_txt) {}
+        String txt;
+        Italic(const String& _txt) : txt(_txt) {}
     };
     
     struct Underline {
-        QString txt;
-        Underline(const QString& _txt) : txt(_txt) {}
+        String txt;
+        Underline(const String& _txt) : txt(_txt) {}
     };
     
     struct Mark {
@@ -162,8 +162,8 @@ namespace html {
     
     
     //struct Form {
-        //QString url, args;
-        //Form(const QString& u, const QString& a=QString()) : url(u), args(a) {}
+        //String url, args;
+        //Form(const String& u, const String& a=String()) : url(u), args(a) {}
     //};
     
     template <typename T>
@@ -192,43 +192,43 @@ namespace html {
     };
     
     struct ICheck {
-        QString     key, label;
+        String     key, label;
         bool        checked;
-        ICheck(const QString&k, const QString&l, bool c) : key(k), label(l), checked(c) {}
+        ICheck(const String&k, const String&l, bool c) : key(k), label(l), checked(c) {}
     };
     
     struct IHidden {
-        QString     key, value;
-        IHidden(const QString&k, const QString& v) : key(k), value(v) {}
-        IHidden(const QString&k, uint64_t v) : key(k), value(QString::number((quint64) v)){}
+        String     key, value;
+        IHidden(const String&k, const String& v) : key(k), value(v) {}
+        IHidden(const String&k, uint64_t v) : key(k), value(String::number(v)){}
     };
     
     struct ILabel {
-        QString     key, label;
-        ILabel(const QString& k, const QString&l) : key(k), label(l) {}
+        String     key, label;
+        ILabel(const String& k, const String&l) : key(k), label(l) {}
     };
     
     struct ILine {
-        QString key, value;
+        String key, value;
         int     size;
-        ILine(const QString& k, const QString& v=QString(), int z=-1) : key(k), value(v), size(z) {}
+        ILine(const String& k, const String& v=String(), int z=-1) : key(k), value(v), size(z) {}
     };
     
     struct IText {
-        QString key, value;
+        String key, value;
         int     rows, cols;
-        IText(const QString&k, const QString& v=QString(), int r=10, int c=80) : key(k), value(v), rows(r), cols(c) {}
+        IText(const String&k, const String& v=String(), int r=10, int c=80) : key(k), value(v), rows(r), cols(c) {}
     };
     
     template <typename T>
     struct Link {
-        QString url;
+        String url;
         T   value;
-        Link(const QString& u, const T& v) : url(u), value(v) {}
+        Link(const String& u, const T& v) : url(u), value(v) {}
     };
     
     template <typename T>
-    Link<T> link(const QString& u, const T& v)
+    Link<T> link(const String& u, const T& v)
     {
         return Link<T>(u, v);
     }
@@ -252,15 +252,15 @@ public:
     class LinkAF;
 
     Table       table();
-    KVRow       key(const QString&, const QString& url=QString());
+    KVRow       key(const String&, const String& url=String());
     
     template <typename T, typename P>
     void        table(const Array2<T>&, P);
 
     template <typename T>
     FormAF      form(const html::Edit<T>&);
-    FormAF      form(const QString& url, const QString& args=QString(), bool fInspectOverride=false);
-    LinkAF      link(const QString&);
+    FormAF      form(const String& url, const String& args=String(), bool fInspectOverride=false);
+    LinkAF      link(const String&);
 
     using NetWriter::write;
 
@@ -308,7 +308,7 @@ public:
     void        write(const html::IText&);
     void        write(const html::Icon<Document>&);
     void        write(const html::Icon<Folder>&);
-    void        write(const html::Icon<QString>&);
+    void        write(const html::Icon<String>&);
     void        write(const html::Image&);
     void        write(const html::Italic&);
     template <typename T>
@@ -322,7 +322,7 @@ public:
     void        write(SubmitLabel::enum_t);
     
     template <typename T>
-    void    write(const Vector<T>& values, const QString& sep = ", ")
+    void    write(const Vector<T>& values, const String& sep = ", ")
     {
         Comma   comma(sep);
         for(const T& v : values){
@@ -333,7 +333,7 @@ public:
     }
     
     template <typename T>
-    void    write(const html::Config<Vector<T>>& values, const QString& sep=", ")
+    void    write(const html::Config<Vector<T>>& values, const String& sep=", ")
     {
         Comma comma(sep);
         for(const T& t : values.v){
@@ -345,7 +345,7 @@ public:
     }
     
     template <typename T, typename C>
-    void    write(const html::Config<Set<T,C>>& values, const QString& sep=", ")
+    void    write(const html::Config<Set<T,C>>& values, const String& sep=", ")
     {
         Comma comma(sep);
         for(const T& t : values.v){
@@ -423,7 +423,7 @@ public:
         return *this;
     }
     
-    KVRow       key(const QString&, const QString& url=QString());
+    KVRow       key(const String&, const String& url=String());
     
     Table() : m_html(nullptr) {}
     

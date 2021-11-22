@@ -8,9 +8,9 @@
 
 MarkdownWriter::CT        MarkdownWriter::exec(const QByteArray&buf)
 {
-    static const QStringList    s_markdown      = QStringList() << wksp::markdown();
-    static const QStringList    s_smartypants   = QStringList() << wksp::smartypants();
-    static const QString        s_perl          = wksp::perl();
+    static const QStringList    s_markdown      = QStringList() << QString::fromStdString(wksp::markdown().string());
+    static const QStringList    s_smartypants   = QStringList() << QString::fromStdString(wksp::smartypants().string());
+    static const QString        s_perl          = QString::fromStdString(wksp::perl().string());
     
     CT              ret;
     QByteArray      clean;

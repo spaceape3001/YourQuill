@@ -101,8 +101,8 @@ namespace {
         for(const Root* r : roots){
             if(!r)
                 continue;
-            h << "<tr><td><a href=\"/dev/root?id=" << r->id() << "\">" << r->id() << "</a></td><td>" << r->key() 
-                << "</td><td>" << r->name() << "</td><td>" << r->path() << "</td></tr>\n";
+            h << "<tr><td><a href=\"/dev/root?id=" << r->id << "\">" << r->id << "</a></td><td>" << r->key 
+                << "</td><td>" << r->name << "</td><td>" << r->path << "</td></tr>\n";
         }
     }
     
@@ -216,7 +216,7 @@ namespace {
     {
         test(decode_directory_prime());
         auto i = cdb::info(x_directory);
-        h.title("Directory (" + i.path + ")");
+        h.title("Directory (" + i.path.string() + ")");
         auto t = h.table();
         h.key("ID") << x_directory.id;
         h.key("Directories") << cdb::directories_count(x_directory);
@@ -233,14 +233,14 @@ namespace {
     void    dev_directory_children(HtmlWriter& h)
     {
         test(decode_directory_prime());
-        h.title("Directory (" + cdb::path(x_directory) + "): Directories");
+        h.title("Directory (" + cdb::path(x_directory).string() + "): Directories");
         _directories(h, cdb::directories(x_directory, Sorted::YES));
     }
 
     void    dev_directory_fragments(HtmlWriter& h)
     {
         test(decode_directory_prime());
-        h.title("Directory (" + cdb::path(x_directory) + "): Fragments");
+        h.title("Directory (" + cdb::path(x_directory).string() + "): Fragments");
         _fragments(h, cdb::fragments(x_directory, Sorted::YES));
     }
     
@@ -365,7 +365,7 @@ namespace {
     {
         test(decode_fragment_prime());
         auto i = cdb::info(x_fragment);
-        h.title("Fragment (" + i.path + ")");
+        h.title("Fragment (" + i.path.string() + ")");
         h.key("ID") << x_fragment.id;
         h.key("Document") << dev(i.document);
         h.key("Directory") << dev(i.directory);
@@ -518,14 +518,14 @@ namespace {
     void    dev_root(HtmlWriter& h)
     {
         test(decode_root_prime());
-        h.title("Root (" + x_root -> path() + ")");
+        h.title("Root (" + x_root -> path.string() + ")");
         auto t   = h.table();
-        h.key("ID") << x_root->id();
-        h.key("Depth") << x_root -> depth();
-        h.key("Key") << x_root -> key();
-        h.key("Name") << x_root -> name();
-        h.key("Path") << x_root -> path();
-        h.key("Template") << x_root -> is_template();
+        h.key("ID") << x_root->id;
+        h.key("Depth") << x_root -> depth;
+        h.key("Key") << x_root -> key;
+        h.key("Name") << x_root -> name;
+        h.key("Path") << x_root -> path;
+        h.key("Template") << x_root -> is_template;
         h.key("Total Directories") << cdb::all_directories_count(x_root);
         h.key("Total Fragments") << cdb::all_fragments_count(x_root);
     }
@@ -533,14 +533,14 @@ namespace {
     void    dev_root_all_directories(HtmlWriter&h)
     {
         test(decode_root_prime());
-        h.title("Root (" + x_root -> path() + "): All Directories" );
+        h.title("Root (" + x_root -> path.string() + "): All Directories" );
         _directories(h, cdb::all_directories(x_root, Sorted::YES));
     }
 
     void    dev_root_all_fragments(HtmlWriter&h)
     {
         test(decode_root_prime());
-        h.title("Root (" + x_root -> path() + "): All Fragments" );
+        h.title("Root (" + x_root -> path.string() + "): All Fragments" );
         _fragments(h, cdb::all_fragments(x_root, Sorted::YES));
     }
     
@@ -563,35 +563,35 @@ namespace {
         h.key("Getters") << join(Page::static_getters().keys(), ", ");
         h.key("GIT") << wksp::git();
         h.key("Home") << wksp::home();
-        h.key("Host") << wksp::hostname();
+        h.key("Host") << wksp::host();
         h.key("Ini") << wksp::ini();
         h.key("Local User") << wksp::local_user();
-        h.key("Log Directory") << wksp::log_dir_path();
+        h.key("Log Directory") << wksp::log_dir();
         h.key("Markdown") << wksp::markdown();
         h.key("Name") << wksp::name();
         h.key("Perl") << wksp::perl();
         h.key("Port") << wksp::port();
         h.key("Quill Key") << wksp::quill_key();
-        h.key("Quill Path") << wksp::quill_path();
+        h.key("Quill Path") << wksp::quill_file();
         h.key("Read Timeout") << wksp::read_timeout();
         
         {
             auto r = h.key("Roots");
             r << "<OL>";
             for(const Root* rt : wksp::roots())
-                r << "<LI>[" << rt -> key() << "]: " << rt->path();
+                r << "<LI>[" << rt -> key << "]: " << rt->path;
             r << "</OL>";
         }
         
         h.key("Smartypants") << wksp::smartypants();
         h.key("Start") << wksp::start();
         
-        h.key("Temp Path") << wksp::temp_dir_path();
+        h.key("Temp Path") << wksp::temp_dir();
         
         {
             auto r = h.key("Templates");
             r << "<OL>";
-            for(const QString& t : wksp::templates())
+            for(const String& t : wksp::templates())
                 r << "<LI>" << t;
             r << "</OL>";
         }
@@ -655,7 +655,7 @@ namespace {
         h.key("Config") << dev(cdb::config_folder());
         h.key("Copyright") << wksp::copyright().text;
         h.key("Key") << wksp::quill_key();
-        h.key("Host") << wksp::hostname();
+        h.key("Host") << wksp::host();
         h.key("Port") << wksp::port();
         h.key("Read Timeout") << wksp::read_timeout();
         h.key("Start") << wksp::start();

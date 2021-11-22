@@ -6,7 +6,8 @@
 
 #include <iostream>
 
-#include <db/Workspace.hpp>
+#include <db/Root.hpp>
+#include <db/Wksp.hpp>
 #include <meta/Meta.hpp>
 #include <util/CmdArgs.hpp>
 #include <util/Logging.hpp>
@@ -24,29 +25,29 @@ int main(int argc, char* argv[])
     
     meta_init();
     meta_freeze();
-    Workspace::init(argv[1], Workspace::SEARCH);
+    wksp::initialize(argv[1], wksp::SEARCH);
     
     std::cout 
         << "Workspace Report:\n"
         << "-------------------\n"
-        << "File     : " << gWksp.qfile << "\n"
-        << "Key      : " << gWksp.qkey << "\n"
-        << "Name     : " << gWksp.name << "\n"
-        << "Author   : " << gWksp.author << "\n"
-        << "Port     : " << gWksp.port << "\n"
-        << "Templates: " << join(gWksp.templates, ", ") << "\n"
-        << "Available: " << join(gWksp.available, ", ") << "\n"
+        << "File     : " << wksp::quill_file() << "\n"
+        << "Key      : " << wksp::quill_key() << "\n"
+        << "Name     : " << wksp::name() << "\n"
+        << "Author   : " << wksp::author() << "\n"
+        << "Port     : " << wksp::port() << "\n"
+        << "Templates: " << join(wksp::templates(), ", ") << "\n"
+        << "Available: " << join(wksp::templates_available(), ", ") << "\n"
         << "\n"
-        << "Cache    : " << gWksp.cache << "\n"
-        << "Hostname : " << gWksp.host << "\n"
-        << "Logs     : " << gWksp.logs << "\n"
-        << "Temp Dir : " << gWksp.tmp << "\n"
+        << "Cache    : " << wksp::cache_db() << "\n"
+        << "Hostname : " << wksp::host() << "\n"
+        << "Logs     : " << wksp::log_dir() << "\n"
+        << "Temp Dir : " << wksp::temp_dir() << "\n"
         << "\n"
         << "Roots:\n"
         << "-------------------\n"
     ;
     
-    for(const Workspace::Root* rt : gWksp.roots)
+    for(const Root* rt : wksp::roots())
         std::cout << rt->id << " [" << rt->key << "] " << rt->path << "\n";
     
     return 0;

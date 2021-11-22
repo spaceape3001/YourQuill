@@ -387,6 +387,19 @@ Vector<String>  String::hard_wrap(size_t n) const
     return ret;
 }
 
+int                 String::index_of(char ch) const
+{
+    auto i  = find_first_of(ch);
+    return (i != npos) ? (int) i : -1;
+}
+
+int                 String::index_of(char ch, int j) const
+{
+    auto i  = find_first_of(ch, j);
+    return (i != npos) ? (int) i : -1;
+}
+
+
 String::Iter32          String::iterate() const
 {
     return Iter32(*this);
@@ -453,6 +466,12 @@ String          String::join(const List<String>&v) const
     return ret;
 }
 
+int             String::last_index_of(char ch) const
+{
+    auto i = find_last_of(ch);
+    return (i != npos) ? (int) i : -1;
+}
+
 
 String          String::lower() const
 {
@@ -485,6 +504,16 @@ bool    String::matches_at(const String& txt, size_t pos) const
         if(txt.at(i) != at(pos+i))
             return false;
     return true;
+}
+
+String  String::mid(int pos) const
+{
+    return substr(pos);
+}
+
+String  String::mid(int pos, int len) const
+{
+    return substr(pos, len);
 }
 
 

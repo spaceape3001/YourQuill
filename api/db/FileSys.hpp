@@ -11,7 +11,8 @@
 #include <db/enum/DataRole.hpp>
 #include <db/enum/Sorted.hpp>
 
-#include <QString>
+#include <filesystem>
+#include <util/String.hpp>
 
 /*! \brief Directory in the cache
 
@@ -65,63 +66,59 @@ struct Fragment {
 
 
 struct Directory::Info {
-    Folder      folder;
-    bool        hidden;
-    QString     name;
-    Directory   parent;
-    QString     path;
-    bool        removed;
-    const Root* root;
+    Folder                  folder;
+    bool                    hidden      = false;
+    String                  name;
+    Directory               parent;
+    std::filesystem::path   path;
+    bool                    removed     = false;
+    const Root*             root        = nullptr;
     
-    Info() : hidden{}, removed{}, root{} {}
-    auto operator<=>(const Info&) const = default;
+    bool operator==(const Info&) const = default;
 };
 
 struct Document::Info {
-    QString     base;
+    String      base;
     Folder      folder;
-    bool        hidden;
-    QString     key;
-    QString     name;
-    bool        removed;
-    QString     skey;
-    QString     suffix;
+    bool        hidden      = false;
+    String      key;
+    String      name;
+    bool        removed     = false;
+    String      skey;
+    String      suffix;
     Image       icon;
     
-    Info() : hidden{}, removed{} {}
-    auto operator<=>(const Info&) const = default;
+    bool operator==(const Info&) const = default;
 };
 
 
 struct Folder::Info {
-    QString     brief;
-    bool        hidden;
-    QString     key;
-    QString     name;
+    String      brief;
+    bool        hidden      = false;
+    String      key;
+    String      name;
     Folder      parent;
-    bool        removed;
-    QString     skey;
+    bool        removed     = false;
+    String      skey;
     Image       icon;
-    
-    Info() : hidden{}, removed{} {}
-    auto operator<=>(const Info&) const = default;
+
+    bool operator==(const Info&) const = default;
 };
 
 struct Fragment::Info {
-    Document    document;
-    Directory   directory;
-    Folder      folder;
-    bool        hidden;
-    uint64_t    modified;
-    QString     name;
-    QString     path;
-    bool        removed;
-    bool        rescan;
-    const Root* root;
-    size_t      size;
+    Document                document;
+    Directory               directory;
+    Folder                  folder;
+    bool                    hidden      = false;
+    uint64_t                modified    = 0ULL;
+    String                  name;
+    std::filesystem::path   path;
+    bool                    removed     = false;
+    bool                    rescan      = false;
+    const Root*             root        = nullptr;
+    size_t                  size        = 0;
     
-    Info() : hidden{}, modified{}, removed{}, rescan{}, root{}, size{} {}
-    auto operator<=>(const Info&) const = default;
+    bool operator==(const Info&) const = default;
 };
 
 
@@ -139,7 +136,7 @@ namespace cdb {
     
     Vector<Document>        all_documents(Sorted sorted=Sorted());
     size_t                  all_documents_count();
-    Vector<Document>        all_documents_suffix(const QString&, Sorted sorted=Sorted());
+    Vector<Document>        all_documents_suffix(const String&, Sorted sorted=Sorted());
 
     Vector<Folder>          all_folders(Sorted sorted=Sorted());
     size_t                  all_folders_count();
@@ -148,34 +145,34 @@ namespace cdb {
     Vector<Fragment>        all_fragments(const Root*,Sorted sorted=Sorted());
     size_t                  all_fragments_count();
     size_t                  all_fragments_count(const Root*);
-    Vector<Fragment>        all_fragments_suffix(const QString&, Sorted sorted=Sorted());
+    Vector<Fragment>        all_fragments_suffix(const String&, Sorted sorted=Sorted());
 
     
-    QString                 base_key(Document);         //!< key w/o final extensions
-    QString                 base_key(Fragment);
-    QString                 base_key(const QString&);
+    String                  base_key(Document);         //!< key w/o final extensions
+    String                  base_key(Fragment);
+    String                  base_key(const String&);
 
-    QString                 brief(Folder);
+    String                  brief(Folder);
 
     QByteArray              bytes(Fragment);                    // reads the specified fragment
-    QByteArray              bytes(const QString&);              // equiv to bytes(fragment(document(k)))
-    QByteArray              bytes(const QString&, DataRole);
+    QByteArray              bytes(const String&);              // equiv to bytes(fragment(document(k)))
+    QByteArray              bytes(const String&, DataRole);
 
     Vector<char>            chars(Fragment);
-    Vector<char>            chars(const QString&);
-    Vector<char>            chars(const QString&, DataRole);
+    Vector<char>            chars(const String&);
+    Vector<char>            chars(const String&, DataRole);
     
-    DirOrFrag               child(Directory, const QString&);
-    DocOrFold               child(Folder, const QString&);
+    DirOrFrag               child(Directory, const String&);
+    DocOrFold               child(Folder, const String&);
 
     size_t                  child_count(Directory);
     size_t                  child_count(Folder);
 
 #if 0
-    QString                 child_key(Directory);       //<! Key inside the directory (with extensions)
-    QString                 child_key(Document);
-    QString                 child_key(Folder);
-    QString                 child_key(Fragment);
+    String                 child_key(Directory);       //<! Key inside the directory (with extensions)
+    String                 child_key(Document);
+    String                 child_key(Folder);
+    String                 child_key(Fragment);
 #endif
 
     Vector<DirOrFrag>       children(Directory,Sorted sorted=Sorted());
@@ -190,19 +187,20 @@ namespace cdb {
 
     //Vector<uint8_t>         data(Fragment);   // TODO
 
-    Directory               db_directory(Directory, const QString&, bool *wasCreated=nullptr);
+    Directory               db_directory(Directory, const String&, bool *wasCreated=nullptr);
     Directory               db_directory(const Root*, bool *wasCreated=nullptr);
-    Document                db_document(Folder, const QString&, bool *wasCreated=nullptr);
+    Document                db_document(Folder, const String&, bool *wasCreated=nullptr);
 
-    Folder                  db_folder(Folder, const QString&, bool *wasCreated=nullptr);
-    Fragment                db_fragment(Directory, const QString&, bool *wasCreated=nullptr);
+    Folder                  db_folder(Folder, const String&, bool *wasCreated=nullptr);
+    Fragment                db_fragment(Directory, const String&, bool *wasCreated=nullptr);
     //Fragment                db_fragment(Document, const Root*);   // TODO
 
 
     Directory               directory(uint64_t);
-    Directory               directory(const QString&);
+    Directory               directory(const String&);
+    Directory               directory(const std::filesystem::path&);
     Directory               directory(Fragment);
-    Directory               directory(Directory, const QString&);
+    Directory               directory(Directory, const String&);
     Directory               directory(const Root*);
     
     Vector<Directory>       directories(Directory, Sorted sorted=Sorted());
@@ -215,18 +213,18 @@ namespace cdb {
     
     Vector<DirString>       directories_with_names(Directory, Sorted sorted=Sorted());
 
-    Document                document(Folder, const QString&);
+    Document                document(Folder, const String&);
     Document                document(Fragment);
 
-    Document                document(const QString&);
+    Document                document(const String&);
     Document                document(uint64_t);
 
         //Vector<Document>      documents(Directory);   // TODO
     Vector<Document>        documents(Folder, unsigned opts=0);
     Vector<Document>        documents(Folder, Sorted sorted);
     size_t                  documents_count(Folder, unsigned opts=0);
-    Vector<Document>        documents_by_suffix(Folder, const QString&, Sorted sorted=Sorted());
-    Vector<Document>        documents_by_suffix_excluding(Folder, const QString&, Sorted sorted=Sorted());
+    Vector<Document>        documents_by_suffix(Folder, const String&, Sorted sorted=Sorted());
+    Vector<Document>        documents_by_suffix_excluding(Folder, const String&, Sorted sorted=Sorted());
 
     bool                    exists(Directory);
     bool                    exists(Document);
@@ -236,8 +234,7 @@ namespace cdb {
 
     bool                    exists(const Root*, const char*);
     bool                    exists(const Root*, const QByteArray&);
-    bool                    exists(const Root*, const QString&);
-    bool                    exists(const Root*, const std::string&);
+    bool                    exists(const Root*, const String&);
 
     bool                    exists_directory(uint64_t);
     bool                    exists_document(uint64_t);
@@ -251,10 +248,10 @@ namespace cdb {
     Folder                  folder(Directory);
     Folder                  folder(Document);
     Folder                  folder(Fragment);
-    Folder                  folder(Folder, const QString&);
+    Folder                  folder(Folder, const String&);
 
     Folder                  folder(uint64_t);
-    Folder                  folder(const QString&);
+    Folder                  folder(const String&);
     
     Vector<Folder>          folder_path(Directory);
     Vector<Folder>          folder_path(Document);
@@ -265,13 +262,14 @@ namespace cdb {
     Vector<Folder>          folders(Folder, Sorted sorted);
     size_t                  folders_count(Folder, unsigned int opts=0);
 
-    Fragment                fragment(const QString&);
+    Fragment                fragment(const std::filesystem::path&);
+    Fragment                fragment(const String&);
     Fragment                fragment(uint64_t);
     Fragment                fragment(const Root*, const char*);
     Fragment                fragment(const Root*, const QByteArray&);
-    Fragment                fragment(const Root*, const QString&);
+    Fragment                fragment(const Root*, const String&);
     Fragment                fragment(const Root*, const std::string&);
-    Fragment                fragment(Directory, const QString&);
+    Fragment                fragment(Directory, const String&);
     
     /*! \brief Returns the first fragmment found for the given document
     */
@@ -287,8 +285,8 @@ namespace cdb {
     Vector<Fragment>        fragments(Directory, Sorted sorted=Sorted());
     Vector<Fragment>        fragments(Folder, Sorted sorted=Sorted());
     Vector<Fragment>        fragments(const Root*, Sorted sorted=Sorted());
-    Vector<Fragment>        fragments(const QString&, Sorted sorted=Sorted());
-    Vector<Fragment>        fragments(const QString&, DataRole, Sorted sorted=Sorted());
+    Vector<Fragment>        fragments(const String&, Sorted sorted=Sorted());
+    Vector<Fragment>        fragments(const String&, DataRole, Sorted sorted=Sorted());
 
     size_t                  fragments_count(Document);
     size_t                  fragments_count(Document, const Root*);
@@ -310,23 +308,23 @@ namespace cdb {
     Folder::Info            info(Folder);
     Fragment::Info          info(Fragment);
 
-    QString                 key(Directory);
-    QString                 key(Document);
-    QString                 key(Folder);
-    QString                 key(Fragment);
-    QString                 key(const Root*);
+    String                  key(Directory);
+    String                  key(Document);
+    String                  key(Folder);
+    String                  key(Fragment);
+    String                  key(const Root*);
 
-    //QString             label(Directory);
-    QString                 label(Document);
-    QString                 label(Folder);
-    QString                 label(Fragment);
+    //String             label(Directory);
+    String                  label(Document);
+    String                  label(Folder);
+    String                  label(Fragment);
 
     uint64_t                modified(Fragment);
 
-    QString                 name(Directory);
-    QString                 name(Document);
-    QString                 name(Folder);
-    QString                 name(Fragment);
+    String                  name(Directory);
+    String                  name(Document);
+    String                  name(Folder);
+    String                  name(Fragment);
 
     NKI                     nki(Document, bool autoKeyToName=false);
     NKI                     nki(Folder, bool autoKeyToName=false);
@@ -337,13 +335,13 @@ namespace cdb {
     Folder                  parent(Folder);
     Directory               parent(Fragment);
 
-    QString                 path(Directory);
-    QString                 path(Fragment);
-    QString                 path(const Root*, const char*, bool fMakePath=false);
-    QString                 path(const Root*, const QByteArray&, bool fMakePath=false);
-    QString                 path(const Root*, const QString&, bool fMakePath=false);
-    QString                 path(const Root*, const std::string&, bool fMakePath=false);
-    QString                 path(const Root*, Document, bool fMakePath=false);
+    std::filesystem::path   path(Directory);
+    std::filesystem::path   path(Fragment);
+    std::filesystem::path   path(const Root*, const char*, bool fMakePath=false);
+    std::filesystem::path   path(const Root*, const QByteArray&, bool fMakePath=false);
+    std::filesystem::path   path(const Root*, const String&, bool fMakePath=false);
+    std::filesystem::path   path(const Root*, const std::string&, bool fMakePath=false);
+    std::filesystem::path   path(const Root*, Document, bool fMakePath=false);
 
     bool                    removed(Directory);
     bool                    removed(Document);
@@ -365,18 +363,18 @@ namespace cdb {
     void                    show(Document);
     size_t                  size(Fragment);
 
-    QString                 skey(Directory);  //!< Key inside the directory
-    QString                 skey(Document);   //!< Key inside the directory
-    QString                 skey(Folder);     //!< Key inside the directory
-    QString                 skey(Fragment);   //!< Key inside the directory
+    String                  skey(Directory);  //!< Key inside the directory
+    String                  skey(Document);   //!< Key inside the directory
+    String                  skey(Folder);     //!< Key inside the directory
+    String                  skey(Fragment);   //!< Key inside the directory
 
-    QString                 skeyb(Directory); //!< Key inside the directory (w/o extensions)
-    QString                 skeyb(Document);  //!< Key inside the directory (w/o extensions)
-    QString                 skeyb(Folder);    //!< Key inside the directory (w/o extensions)
-    QString                 skeyb(Fragment);  //!< Key inside the directory (w/o extensions)
+    String                  skeyb(Directory); //!< Key inside the directory (w/o extensions)
+    String                  skeyb(Document);  //!< Key inside the directory (w/o extensions)
+    String                  skeyb(Folder);    //!< Key inside the directory (w/o extensions)
+    String                  skeyb(Fragment);  //!< Key inside the directory (w/o extensions)
 
-    QString                 suffix(Document);
-    QString                 suffix(Fragment);
+    String                  suffix(Document);
+    String                  suffix(Fragment);
 
     consteval Folder        tags_folder() { return Folder{Folder::TAGS}; }
     consteval Folder        top_folder() { return Folder{Folder::TOP}; }

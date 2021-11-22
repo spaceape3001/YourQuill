@@ -24,7 +24,7 @@ bool Class::less_name(Class a, Class b)
 
 namespace cdb {
 
-    QStringSet              aliases(Field f)
+    StringSet              aliases(Field f)
     {
         static thread_local SQ s("SELECT alias FROM FAlias WHERE field=?");
         return s.sset(f.id);
@@ -84,13 +84,13 @@ namespace cdb {
     
     
     
-    QString             brief(Class c)
+    String             brief(Class c)
     {
         static thread_local SQ    s("SELECT brief FROM Classes WHERE id=?");
         return s.str(c.id);
     }
     
-    QString             brief(Field f)
+    String             brief(Field f)
     {
         static thread_local SQ s("SELECT brief FROM Fields WHERE id=?");
         return s.str(f.id);
@@ -107,7 +107,7 @@ namespace cdb {
         return exists_class(i) ? Class{i} : Class();
     }
     
-    Class               class_(const QString& k)
+    Class               class_(const String& k)
     {
         static thread_local SQ s("SELECT id FROM Classes WHERE k=?");
         return s.as<Class>(k);
@@ -123,11 +123,12 @@ namespace cdb {
             return fAllowEmpty ? std::make_shared<ClassFile>() : ClassFile::Shared();
             
         ClassFile::Shared  td = std::make_shared<ClassFile>();
-        if(!td->load(ch, path(f).toStdString())){
-            yError() << "Unable to read " << path(f);
+        auto fp = path(f);
+        if(!td->load(ch, fp)){
+            yError() << "Unable to read " << fp;
             return ClassFile::Shared();
         }
-        td -> set_file(path(f));
+        td -> set_file(fp);
         return td;
     }
     
@@ -159,22 +160,13 @@ namespace cdb {
         return ret;
     }
     
-    ClassVec       classes(const QStringSet& sset)
-    {
-        Vector<Class>   ret;
-        for(QString s : sset)
-            ret << db_class(s);
-        return ret;
-    }
-    
-
-    QStringSet          data_types(Field f)
+    StringSet          data_types(Field f)
     {
         static thread_local SQ    s("SELECT type FROM FDataTypes WHERE field=?");
         return s.sset(f.id);
     }
 
-    Class               db_class(const QString&k, bool *wasCreated)
+    Class               db_class(const String&k, bool *wasCreated)
     {
         return db_class(db_document(classes_folder(), k+".cls"), wasCreated);
     }
@@ -185,8 +177,8 @@ namespace cdb {
             *wasCreated = false;
         if(folder(doc) != classes_folder())
             return Class{};
-        QString k   = base_key(doc);
-        if(k.isEmpty())
+        String k   = base_key(doc);
+        if(k.empty())
             return Class();
         
         static thread_local SQ    i("INSERT OR FAIL INTO Classes (k,id) VALUES (?,?)");
@@ -206,27 +198,20 @@ namespace cdb {
         }
     }
 
-    ClassVec            db_classes(const QStringSet& all)
+    ClassVec            db_classes(const StringSet& all)
     {
         ClassVec   ret;
-        for(const QString& s: all)
+        for(const String& s: all)
             ret << db_class(s);
         return ret;
     }
     
-    ClassVec            db_classes(const StringSet&all)
-    {
-        ClassVec   ret;
-        for(const String& s: all)
-            ret << db_class(s.qString());
-        return ret;
-    }
 
-    Field               db_field(Class c, const QString&k, bool *wasCreated)
+    Field               db_field(Class c, const String&k, bool *wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
-        if(k.isEmpty())
+        if(k.empty())
             return Field{};
             
         static thread_local SQ i("INSERT INTO Fields (class, k) VALUES (?,?)");
@@ -482,7 +467,7 @@ namespace cdb {
         return exists_field(i) ? Field{i} : Field{};
     }
     
-    Field               field(Class c, const QString&k)
+    Field               field(Class c, const String&k)
     {
         static thread_local SQ s("SELECT id FROM Fields WHERE class=? AND k=?");
         return s.as<Field>(c.id, k);
@@ -562,7 +547,7 @@ namespace cdb {
             ret.brief       = s.valueString(4);
             ret.icon        = Image(s.valueU64(5));
             ret.deps        = Graph(s.valueU64(6));
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
         }
         return ret;
@@ -583,7 +568,7 @@ namespace cdb {
             ret.pkey    = s.valueString(3);
             ret.plural  = s.valueString(4);
             ret.brief   = s.valueString(5);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
         }
         return ret;
@@ -613,34 +598,34 @@ namespace cdb {
 
 
     
-    QString             key(Class c)
+    String             key(Class c)
     {
         static thread_local SQ    s("SELECT k FROM Classes WHERE id=? LIMIT 1");
         return s.str(c.id);
     }
     
     
-    QString             key(Field f)
+    String             key(Field f)
     {
         static thread_local SQ s("SELECT k FROM Fields WHERE id=?");
         return s.str(f.id);
     }
     
     
-    QString             label(Class c)
+    String             label(Class c)
     {
-        QString     n   = name(c);
-        return n.isEmpty() ? key(c) : n;
+        String     n   = name(c);
+        return n.empty() ? key(c) : n;
     }
 
-    QString             label(Field f)
+    String             label(Field f)
     {
-        QString     n = name(f);
-        return n.isEmpty() ? key(f) : n;
+        String     n = name(f);
+        return n.empty() ? key(f) : n;
     }
     
 
-    Class                make_class(const QString&k, const Root* rt)
+    Class                make_class(const String&k, const Root* rt)
     {
         if(!rt)
             rt      = wksp::root_first(DataRole::Classes);
@@ -678,14 +663,14 @@ namespace cdb {
     
 
 
-    QString             name(Class c)
+    String             name(Class c)
     {
         static thread_local SQ    s("SELECT name FROM Classes WHERE id=?");
         return s.str(c.id);
     }
 
     
-    QString             name(Field f)
+    String             name(Field f)
     {
         static thread_local SQ    s("SELECT name FROM Fields WHERE id=?");
         return s.str(f.id);
@@ -701,7 +686,7 @@ namespace cdb {
             ret.name    = s.valueString(0);
             ret.icon    = Image{s.valueU64(1)};
             ret.key     = s.valueString(2);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
             return ret;
         }
@@ -719,7 +704,7 @@ namespace cdb {
             ret.name    = s.valueString(0);
             ret.icon    = Image(s.valueU64(1)) ;
             ret.key     = s.valueString(2);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
             return ret;
         }
@@ -752,19 +737,19 @@ namespace cdb {
     }
 
     
-    QString             pkey(Field f)
+    String             pkey(Field f)
     {
         static thread_local SQ s("SELECT pkey FROM Fields WHERE id=?");
         return s.str(f.id);
     }
     
-    QString             plural(Class c)
+    String             plural(Class c)
     {
         static thread_local SQ    s("SELECT plural FROM Classes WHERE id=?");
         return s.str(c.id);
     }
     
-    QString             plural(Field f)
+    String             plural(Field f)
     {
         static thread_local SQ s("SELECT plural FROM Fields WHERE id=?");
         return s.str(f.id);

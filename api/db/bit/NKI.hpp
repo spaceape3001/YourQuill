@@ -12,7 +12,7 @@
 
 namespace cdb {
     struct NKI {
-        QString     key, name;
+        String      key, name;
         Image       icon;
     };
 }

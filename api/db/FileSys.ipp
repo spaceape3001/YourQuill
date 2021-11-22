@@ -37,13 +37,13 @@ namespace cdb {
         Vector<Directory>   all_directories_sorted(const Root* rt)
         {
             static thread_local SQ    s("SELECT id FROM Directories WHERE root=? ORDER BY path");
-            return s.vec<Directory>(rt->id());
+            return s.vec<Directory>(rt->id);
         }
         
         Vector<Directory>   all_directories_unsorted(const Root*rt)
         {
             static thread_local SQ    s("SELECT id FROM Directories WHERE root=?");
-            return s.vec<Directory>(rt->id());
+            return s.vec<Directory>(rt->id);
         }
    }
     
@@ -67,7 +67,7 @@ namespace cdb {
             return 0;
 
         static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE root=?");
-        return s.size(rt->id());
+        return s.size(rt->id);
     }
     
     namespace {
@@ -97,20 +97,20 @@ namespace cdb {
     }
     
     namespace {
-        Vector<Document>    all_documents_suffix_sorted(const QString&sfx)
+        Vector<Document>    all_documents_suffix_sorted(const String&sfx)
         {
             static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
             return s.vec<Document>(sfx);
         }
 
-        Vector<Document>    all_documents_suffix_unsorted(const QString&sfx)
+        Vector<Document>    all_documents_suffix_unsorted(const String&sfx)
         {
             static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=?");
             return s.vec<Document>(sfx);
         }
     }
     
-    Vector<Document>    all_documents_suffix(const QString&sfx, Sorted sorted)
+    Vector<Document>    all_documents_suffix(const String&sfx, Sorted sorted)
     {
         return sorted ? all_documents_suffix_sorted(sfx) : all_documents_suffix_unsorted(sfx);
     }
@@ -165,13 +165,13 @@ namespace cdb {
         Vector<Fragment>    all_fragments_sorted(const Root* rt)
         {
             static thread_local SQ s("SELECT id FROM Fragments WHERE root=? ORDER BY path");
-            return s.vec<Fragment>(rt->id());
+            return s.vec<Fragment>(rt->id);
         }
 
         Vector<Fragment>    all_fragments_unsorted(const Root* rt)
         {
             static thread_local SQ s("SELECT id FROM Fragments WHERE root=?");
-            return s.vec<Fragment>(rt->id());
+            return s.vec<Fragment>(rt->id);
         }
     }
     
@@ -193,56 +193,56 @@ namespace cdb {
         if(!rt)
             return 0;
         static thread_local SQ s("SELECT COUNT(1) FROM Fragments WHERE root=?");
-        return s.size(rt->id());
+        return s.size(rt->id);
     }
     
     namespace {
-        Vector<Fragment>    all_fragments_suffix_sorted(const QString& sfx)
+        Vector<Fragment>    all_fragments_suffix_sorted(const String& sfx)
         {
             static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
             return s.vec<Fragment>(sfx);
         }
         
-        Vector<Fragment>    all_fragments_suffix_unsorted(const QString& sfx)
+        Vector<Fragment>    all_fragments_suffix_unsorted(const String& sfx)
         {
             static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=?");
             return s.vec<Fragment>(sfx);
         }
     }
 
-    Vector<Fragment>    all_fragments_suffix(const QString&sfx, Sorted sorted)
+    Vector<Fragment>    all_fragments_suffix(const String&sfx, Sorted sorted)
     {
         return sorted ? all_fragments_suffix_sorted(sfx) : all_fragments_suffix_unsorted(sfx);
     }
 
-    QString             base_key(const QString& key)
+    String             base_key(const String& key)
     {
-        int i   = key.lastIndexOf('/');
+        int i   = key.last_index_of('/');
         if(i<=0){
-            int j   = key.indexOf('.');
+            int j   = key.index_of('.');
             if(j<0)
                 return key;
             return key.mid(0,j);
         } else {
-            int j   = key.indexOf('.', i);
+            int j   = key.index_of('.', i);
             if(j<0)
                 return key.mid(i+1);
             return key.mid(i+1,j-i-1);
         }
     }
 
-    QString             base_key(Document doc)
+    String             base_key(Document doc)
     {
         static thread_local SQ    s("SELECT base FROM Documents WHERE id=?");
         return s.str(doc.id);
     }
     
-    QString             base_key(Fragment f)
+    String             base_key(Fragment f)
     {
         return base_key(document(f));
     }
 
-    QString             brief(Folder f)
+    String             brief(Folder f)
     {
         static thread_local SQ    s("SELECT brief FROM Folders WHERE id=?");
         return s.str(f.id);
@@ -253,12 +253,12 @@ namespace cdb {
         return file_bytes(path(f));
     }
     
-    QByteArray          bytes(const QString&k)
+    QByteArray          bytes(const String&k)
     {
         return bytes(fragment(document(k)));
     }
     
-    QByteArray          bytes(const QString&k, DataRole dr)
+    QByteArray          bytes(const String&k, DataRole dr)
     {
         return bytes(fragment(document(k),dr));
     }
@@ -269,17 +269,17 @@ namespace cdb {
         return file_load_char(path(f));
     }
     
-    Vector<char>        chars(const QString&k)
+    Vector<char>        chars(const String&k)
     {
         return chars(fragment(document(k)));
     }
     
-    Vector<char>        chars(const QString&k, DataRole dr)
+    Vector<char>        chars(const String&k, DataRole dr)
     {
         return chars(fragment(document(k),dr));
     }
     
-    DirOrFrag           child(Directory d, const QString& ck)
+    DirOrFrag           child(Directory d, const String& ck)
     {
         Fragment    f   = fragment(d, ck);
         if(f)
@@ -290,7 +290,7 @@ namespace cdb {
         return false;
     }
     
-    DocOrFold           child(Folder f, const QString& ck)
+    DocOrFold           child(Folder f, const String& ck)
     {
         Document    doc   = document(f, ck);
         if(doc)
@@ -314,10 +314,10 @@ namespace cdb {
 
 
 #if 0
-    QString                 child_key(Directory);       //<! Key inside the directory (with extensions)
-    QString                 child_key(Document);
-    QString                 child_key(Folder);
-    QString                 child_key(Fragment);
+    String                 child_key(Directory);       //<! Key inside the directory (with extensions)
+    String                 child_key(Document);
+    String                 child_key(Folder);
+    String                 child_key(Fragment);
 #endif
 
 
@@ -354,14 +354,14 @@ namespace cdb {
         static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
         auto s_lk   = s.af();
         auto i_lk   = i.af();
-        i.bind(0, rt->path());
-        i.bind(1, rt->id());
+        i.bind(0, rt->path);
+        i.bind(1, rt->id);
         if(i.exec(false)){
             if(wasCreated)
                 *wasCreated  = true;
             return Directory(i.lastInsertIdU64());
         } else {
-            s.bind(0, rt->path());
+            s.bind(0, rt->path);
             if(s.exec() && s.next())
                 return Directory(s.valueU64(0));
             yError() << "Sql Query error!" << s.lastError() << "  Unable to get directory ID";
@@ -369,14 +369,14 @@ namespace cdb {
         }
     }
     
-    Directory           db_directory(Directory dir, const QString& k, bool *wasCreated)
+    Directory           db_directory(Directory dir, const String& k, bool *wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
-        if(k.isEmpty() || !dir)
+        if(k.empty() || !dir)
             return Directory();
         Folder  f       = db_folder(folder(dir), k);
-        QString p       = path(dir) + "/" + k;
+        String p       = path(dir) + "/" + k;
         
         const Root* rt  = root(dir);
         if(!f || !rt)
@@ -388,7 +388,7 @@ namespace cdb {
         auto i_lk   = i.af();
 
         i.bind(0, p);
-        i.bind(1,rt->id());
+        i.bind(1,rt->id);
         i.bind(2,f.id);
         i.bind(3,dir.id);
         i.bind(4,k);
@@ -406,25 +406,25 @@ namespace cdb {
     }
     
 
-    Document            db_document(Folder f, const QString&ak, bool *wasCreated)
+    Document            db_document(Folder f, const String&ak, bool *wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
         if(!f)
             return Document();
-        if(ak.isEmpty())
+        if(ak.empty())
             return Document();
 
-        QString     k   = key(f);
-        if(k.isEmpty()){
+        String     k   = key(f);
+        if(k.empty()){
             k   = ak;
         } else 
             k   = k + '/' + ak;
                 
-        int         x       = ak.lastIndexOf('.');
-        int         y       = ak.indexOf('.',1);    // first period past any "hidden"
-        QString     sfx     = (x > 0) ? ak.mid(x+1) : QString();
-        QString     base    = (y > 0) ? ak.mid(0,y) : ak;
+        int         x       = ak.last_index_of('.');
+        int         y       = ak.index_of('.',1);    // first period past any "hidden"
+        String     sfx     = (x > 0) ? ak.mid(x+1) : String();
+        String     base    = (y > 0) ? ak.mid(0,y) : ak;
             
         static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base,hidden) VALUES (?,?,?,?,?,?,?)");
         static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
@@ -454,17 +454,17 @@ namespace cdb {
 
     }
     
-    Folder              db_folder(Folder f, const QString&ck, bool *wasCreated)
+    Folder              db_folder(Folder f, const String&ck, bool *wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
         if(!f)
             return Folder{};
-        if(ck.isEmpty())
+        if(ck.empty())
             return Folder{};
 
-        QString     k = key(f);
-        if(k.isEmpty()){
+        String     k = key(f);
+        if(k.empty()){
             k   = ck;
         } else 
             k   = k + '/' + ck;
@@ -493,17 +493,17 @@ namespace cdb {
     }
     
     
-    Fragment            db_fragment(Directory dir, const QString& k, bool *wasCreated)
+    Fragment            db_fragment(Directory dir, const String& k, bool *wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
-        if(k.isEmpty() || !dir)
+        if(k.empty() || !dir)
             return Fragment{};
         
         Folder          f   = folder(dir);
         Document        a   = db_document(f, k);
-        QString         p   = path(dir) + "/" + k;
-        QString         sfx = suffix(a);
+        std::filesystem::path         p   = path(dir) / k.c_str();
+        String         sfx = suffix(a);
         const Root*     rt  = root(dir);
         
         
@@ -515,7 +515,7 @@ namespace cdb {
         i.bind(0,p);
         i.bind(1,k);
         i.bind(2,dir.id);
-        i.bind(3,rt->id());
+        i.bind(3,rt->id);
         i.bind(4,a.id);
         i.bind(5,f.id);
         i.bind(6,sfx);
@@ -540,12 +540,20 @@ namespace cdb {
         return exists_directory(i) ? Directory{i} : Directory();
     }
     
-    Directory           directory(const QString&path)
+    Directory           directory(const String&path)
     {
-        if(path.isEmpty())
+        if(path.empty())
             return Directory();
         static thread_local SQ    s("SELECT id FROM Directories WHERE path=? LIMIT 1");
         return s.as<Directory>(path);
+    }
+
+    Directory           directory(const std::filesystem::path&p)
+    {
+        if(p.empty())
+            return Directory();
+        static thread_local SQ    s("SELECT id FROM Directories WHERE path=? LIMIT 1");
+        return s.as<Directory>(p);
     }
     
     Directory           directory(Fragment f)
@@ -554,7 +562,7 @@ namespace cdb {
         return s.as<Directory>(f.id);
     }
     
-    Directory           directory(Directory d, const QString&k)
+    Directory           directory(Directory d, const String&k)
     {
         static thread_local SQ s("SELECT id FROM Directories WHERE parent=? AND name=?");
         return s.as<Directory>(d.id, k);
@@ -564,7 +572,7 @@ namespace cdb {
     {
         if(!rt)
             return Directory();
-        return directory(rt->path());
+        return directory(rt->path);
     }
     
     
@@ -613,7 +621,7 @@ namespace cdb {
             return Vector<Directory>();
             
         static thread_local SQ    s("SELECT id FROM Directories WHERE parent=0 AND root=?");
-        return s.vec<Directory>(rt->id());
+        return s.vec<Directory>(rt->id);
     }
 
     size_t              directories_count(Directory d)
@@ -633,7 +641,7 @@ namespace cdb {
         if(!rt)
             return 0;
         static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE parent=0 AND root=?");
-        return s.size(rt->id());
+        return s.size(rt->id);
     }
 
     namespace {
@@ -670,7 +678,7 @@ namespace cdb {
     }
     
     
-    Document            document(Folder f, const QString& k)
+    Document            document(Folder f, const String& k)
     {
         static thread_local SQ s("SELECT id FROM Documents WHERE folder=? AND sk=?");
         return s.as<Document>(f.id, k);
@@ -682,7 +690,7 @@ namespace cdb {
         return s.as<Document>(f.id);
     }
 
-    Document            document(const QString& k)
+    Document            document(const String& k)
     {
         static thread_local SQ    s("SELECT id FROM Documents WHERE k=? LIMIT 1");
         return s.as<Document>(k);
@@ -734,40 +742,40 @@ namespace cdb {
     }
     
     namespace {
-        Vector<Document>    documents_by_suffix_sorted(Folder f, const QString&sfx)
+        Vector<Document>    documents_by_suffix_sorted(Folder f, const String&sfx)
         {
             static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
             return s.vec<Document>(f.id, sfx);
         }
 
-        Vector<Document>    documents_by_suffix_unsorted(Folder f, const QString&sfx)
+        Vector<Document>    documents_by_suffix_unsorted(Folder f, const String&sfx)
         {
             static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=?");
             return s.vec<Document>(f.id, sfx);
         }
     }
     
-    Vector<Document>    documents_by_suffix(Folder f, const QString& sfx, Sorted sorted)
+    Vector<Document>    documents_by_suffix(Folder f, const String& sfx, Sorted sorted)
     {
         return sorted ? documents_by_suffix_sorted(f, sfx) : documents_by_suffix_unsorted(f,sfx);
     }
     
     
     namespace {
-        Vector<Document>    documents_by_suffix_excluding_sorted(Folder f, const QString&sfx)
+        Vector<Document>    documents_by_suffix_excluding_sorted(Folder f, const String&sfx)
         {
             static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=? ORDER BY k");
             return s.vec<Document>(f.id, sfx);
         }
         
-        Vector<Document>    documents_by_suffix_excluding_unsorted(Folder f, const QString&sfx)
+        Vector<Document>    documents_by_suffix_excluding_unsorted(Folder f, const String&sfx)
         {
             static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=?");
             return s.vec<Document>(f.id, sfx);
         }
     }
     
-    Vector<Document>    documents_by_suffix_excluding(Folder f, const QString&sfx, Sorted sorted)
+    Vector<Document>    documents_by_suffix_excluding(Folder f, const String&sfx, Sorted sorted)
     {
         return sorted ? documents_by_suffix_excluding_sorted(f,sfx) : documents_by_suffix_excluding_unsorted(f,sfx);
     }
@@ -793,7 +801,7 @@ namespace cdb {
             return false;
             
         static thread_local SQ s("SELECT 1 FROM Directories WHERE folder=? AND root=? LIMIT 1");
-        return s.present(fo.id, rt->id());
+        return s.present(fo.id, rt->id);
     }
     
     bool                exists(Fragment f)
@@ -818,7 +826,7 @@ namespace cdb {
         return rt -> exists(z);
     }
     
-    bool                exists(const Root*rt, const QString&z)
+    bool                exists(const Root*rt, const String&z)
     {
         if(!rt)
             return false;
@@ -867,7 +875,7 @@ namespace cdb {
         if(!rt)
             return Fragment{};
         static thread_local SQ s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
-        return s.as<Fragment>(d.id, rt->id());
+        return s.as<Fragment>(d.id, rt->id);
     }
 
     Fragment            first(Document d, DataRole dr)
@@ -898,7 +906,7 @@ namespace cdb {
         return s.as<Folder>(f.id);
     }
     
-    Folder              folder(Folder f, const QString&ck)
+    Folder              folder(Folder f, const String&ck)
     {
         static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND ck=? LIMIT 1");
         return s.as<Folder>(f.id, ck);
@@ -910,7 +918,7 @@ namespace cdb {
         return exists_folder(i) ? Folder{i} : Folder{};
     }
     
-    Folder              folder(const QString&k)
+    Folder              folder(const String&k)
     {
         static thread_local SQ    s("SELECT id FROM Folders WHERE k=? LIMIT 1");
         return s.as<Folder>(k);
@@ -980,7 +988,13 @@ namespace cdb {
         }
     }
 
-    Fragment            fragment(const QString& k)
+    Fragment            fragment(const std::filesystem::path&k)
+    {
+        static thread_local SQ   s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
+        return s.as<Fragment>(k);
+    }
+
+    Fragment            fragment(const String& k)
     {
         static thread_local SQ    s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
         return s.as<Fragment>(k);
@@ -1005,7 +1019,7 @@ namespace cdb {
         return fragment(rt->resolve(z));
     }
     
-    Fragment            fragment(const Root*rt, const QString&z)
+    Fragment            fragment(const Root*rt, const String&z)
     {
         if(!rt)
             return Fragment{};
@@ -1019,7 +1033,7 @@ namespace cdb {
         return fragment(rt->resolve(z));
     }
     
-    Fragment            fragment(Directory d, const QString& k)
+    Fragment            fragment(Directory d, const String& k)
     {
         static thread_local SQ s("SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
         return s.as<Fragment>(d.id, k);
@@ -1036,7 +1050,7 @@ namespace cdb {
         if(!rt)
             return Fragment{};
         static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
-        return s.as<Fragment>(d.id, rt->id());
+        return s.as<Fragment>(d.id, rt->id);
     }
     
     Fragment            fragment(Document d, DataRole dr)
@@ -1078,13 +1092,13 @@ namespace cdb {
         Vector<Fragment>    fragments_sorted(Document d, const Root* rt)
         {
             static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
-            return s.vec<Fragment>(d.id, rt->id());
+            return s.vec<Fragment>(d.id, rt->id);
         }
 
         Vector<Fragment>    fragments_unsorted(Document d, const Root* rt)
         {
             static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=?");
-            return s.vec<Fragment>(d.id, rt->id());
+            return s.vec<Fragment>(d.id, rt->id);
         }
     }
     
@@ -1151,12 +1165,12 @@ namespace cdb {
         return fragments(directory(rt), sorted);
     }
     
-    Vector<Fragment>    fragments(const QString&k, Sorted sorted)
+    Vector<Fragment>    fragments(const String&k, Sorted sorted)
     {
         return fragments(document(k),sorted);
     }
     
-    Vector<Fragment>    fragments(const QString&k, DataRole dr, Sorted sorted)
+    Vector<Fragment>    fragments(const String&k, DataRole dr, Sorted sorted)
     {
         return fragments(document(k), dr, sorted);
     }
@@ -1173,7 +1187,7 @@ namespace cdb {
             return 0;
             
         static thread_local SQ    s("SELECT COUNT(1) FROM Fragments WHERE document=? AND root=?");
-        return s.size(d.id, rt->id());
+        return s.size(d.id, rt->id);
     }
     
     size_t              fragments_count(Directory d)
@@ -1242,7 +1256,7 @@ namespace cdb {
             ret.folder  = Folder(s.valueU64(0));
             ret.name    = s.valueString(1);
             ret.parent  = Directory(s.valueU64(2));
-            ret.path    = s.valueString(3);
+            ret.path    = s.valuePath(3);
             ret.removed = s.valueAs<bool>(4);
             ret.root    = wksp::root(s.valueU64(5));
             ret.hidden  = s.valueAs<bool>(6);
@@ -1302,7 +1316,7 @@ namespace cdb {
             ret.folder      = Folder(s.valueU64(2));
             ret.modified    = s.valueU64(3);
             ret.name        = s.valueString(4);
-            ret.path        = s.valueString(5);
+            ret.path        = s.valuePath(5);
             ret.removed     = s.valueAs<bool>(6);
             ret.rescan      = s.valueAs<bool>(7);
             ret.size        = s.valueU64(8);
@@ -1312,49 +1326,49 @@ namespace cdb {
         return ret;
     }
 
-    QString             key(Directory d)
+    String             key(Directory d)
     {
         return key(folder(d));
     }
     
-    QString             key(Document d)
+    String             key(Document d)
     {
         static thread_local SQ    s("SELECT k FROM Documents WHERE id=? LIMIT 1");
         return s.str(d.id);
     }
 
-    QString             key(Folder f) 
+    String             key(Folder f) 
     {
         static thread_local SQ    s("SELECT k FROM Folders WHERE id=?");
         return s.str(f.id);
     }
     
-    QString             key(Fragment f)
+    String             key(Fragment f)
     {
         return key(document(f));
     }
 
-    QString             key(const Root*rt)
+    String             key(const Root*rt)
     {
         if(!rt)
-            return QString();
-        return rt->key();
+            return String();
+        return rt->key.qString();
     }
 
-    //QString             label(Directory);
-    QString             label(Document d)
+    //String             label(Directory);
+    String             label(Document d)
     {
         return key(d);
     }
 
-    QString             label(Folder f)
+    String             label(Folder f)
     {
         return key(f);
     }
     
-    QString             label(Fragment f)
+    String             label(Fragment f)
     {
-        return path(f);
+        return path(f).string();
     }
     
 
@@ -1364,25 +1378,25 @@ namespace cdb {
         return s.u64(f.id);
     }
 
-    QString             name(Directory d)
+    String             name(Directory d)
     {
         static thread_local SQ    s("SELECT name FROM Directories WHERE id=?");
         return s.str(d.id);
     }
     
-    QString             name(Document d)
+    String             name(Document d)
     {
         static thread_local SQ    s("SELECT name FROM Documents WHERE id=? LIMIT 1");
         return s.str(d.id);
     }
 
-    QString             name(Folder f)
+    String             name(Folder f)
     {
         static thread_local SQ    s("SELECT name FROM Folders WHERE id=?");
         return s.str(f.id);
     }
     
-    QString             name(Fragment f)
+    String             name(Fragment f)
     {
         static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
         return s.str(f.id);
@@ -1398,7 +1412,7 @@ namespace cdb {
             ret.name    = s.valueString(0);
             ret.icon    = Image(s.valueU64(1)) ;
             ret.key     = s.valueString(2);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
             return ret;
         }
@@ -1415,7 +1429,7 @@ namespace cdb {
             ret.name    = s.valueString(0);
             ret.icon    = Image(s.valueU64(1)) ;
             ret.key     = s.valueString(2);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
             return ret;
         }
@@ -1444,59 +1458,51 @@ namespace cdb {
         return directory(f);
     }
 
-    QString             path(Directory d)
+    std::filesystem::path   path(Directory d)
     {
         static thread_local SQ    s("SELECT path FROM Directories WHERE id=?");
-        return s.str(d.id);
+        return s.path(d.id);
     }
     
-    QString             path(Fragment f)
+    std::filesystem::path   path(Fragment f)
     {
         static thread_local SQ    s("SELECT path FROM Fragments WHERE id=?");
-        return s.str(f.id);
+        return s.path(f.id);
     }
     
-    QString             path(const Root*rt, const char*z, bool fMakePath)
+    std::filesystem::path   path(const Root*rt, const char*z, bool fMakePath)
     {
-        QString p =  rt -> resolve(z);
-        if(fMakePath){
-            QFileInfo   fi(p);
-            QDir().mkpath(fi.absolutePath());
-        }
+        std::filesystem::path   p   =  rt -> resolve(z);
+        if(fMakePath && !p.empty())
+            make_parent_path(p);
         return p;
     }
     
-    QString             path(const Root*rt, const QByteArray&z, bool fMakePath)
+    std::filesystem::path   path(const Root*rt, const QByteArray&z, bool fMakePath)
     {
-        QString p =  rt -> resolve(z);
-        if(fMakePath){
-            QFileInfo   fi(p);
-            QDir().mkpath(fi.absolutePath());
-        }
+        std::filesystem::path    p =  rt -> resolve(z);
+        if(fMakePath && !p.empty())
+            make_parent_path(p);
         return p;
     }
     
-    QString             path(const Root*rt, const QString&z, bool fMakePath)
+    std::filesystem::path   path(const Root*rt, const String&z, bool fMakePath)
     {
-        QString p =  rt -> resolve(z);
-        if(fMakePath){
-            QFileInfo   fi(p);
-            QDir().mkpath(fi.absolutePath());
-        }
+        std::filesystem::path   p =  rt -> resolve(z);
+        if(fMakePath && !p.empty())
+            make_parent_path(p);
         return p;
     }
     
-    QString             path(const Root*rt, const std::string&z, bool fMakePath)
+    std::filesystem::path   path(const Root*rt, const std::string&z, bool fMakePath)
     {
-        QString p =  rt -> resolve(z);
-        if(fMakePath){
-            QFileInfo   fi(p);
-            QDir().mkpath(fi.absolutePath());
-        }
+        std::filesystem::path    p =  rt -> resolve(z);
+        if(fMakePath && !p.empty())
+            make_parent_path(p);
         return p;
     }
     
-    QString             path(const Root*rt, Document doc, bool fMakePath)
+    std::filesystem::path   path(const Root*rt, Document doc, bool fMakePath)
     {
         return path(rt, key(doc), fMakePath);
     }
@@ -1618,57 +1624,57 @@ namespace cdb {
         return s.size(f.id);
     }
 
-    QString             skey(Directory d)
+    String             skey(Directory d)
     {
         static thread_local SQ    s("SELECT name FROM Documents WHERE id=?");
         return s.str(d.id);
     }
     
-    QString             skey(Document d)
+    String             skey(Document d)
     {
         static thread_local SQ    s("SELECT sk FROM Documents WHERE id=?");
         return s.str(d.id);
     }
     
-    QString             skey(Folder f)
+    String             skey(Folder f)
     {
         static thread_local SQ    s("SELECT sk FROM Folders WHERE id=?");
         return s.str(f.id);
     }
     
-    QString             skey(Fragment f)
+    String             skey(Fragment f)
     {
         static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
         return s.str(f.id);
     }
 
-    QString             skeyb(Directory d)
+    String             skeyb(Directory d)
     {
         return base_key(skey(d));
     }
     
-    QString             skeyb(Document d)
+    String             skeyb(Document d)
     {
         return base_key(skey(d));
     }
     
-    QString             skeyb(Folder f)
+    String             skeyb(Folder f)
     {
         return base_key(skey(f));
     }
     
-    QString             skeyb(Fragment f)
+    String             skeyb(Fragment f)
     {
         return base_key(skey(f));
     }
     
-    QString             suffix(Document d)
+    String             suffix(Document d)
     {
         static thread_local SQ    s("SELECT suffix FROM Documents WHERE id=?");
         return s.str(d.id);
     }
 
-    QString             suffix(Fragment f)
+    String             suffix(Fragment f)
     {
         static thread_local SQ    s("SELECT suffix FROM Fragments WHERE id=?");
         return s.str(f.id);
@@ -1676,7 +1682,7 @@ namespace cdb {
 
     void                update(Fragment f)
     {
-        String  p           = path(f);
+        std::filesystem::path   p           = path(f);
         SizeTimestamp   sz  = file_size_and_timestamp(p.c_str());
     
         static thread_local SQ    u("UPDATE Fragments SET bytes=?,modified=?,removed=?,rescan=0 WHERE id=?");

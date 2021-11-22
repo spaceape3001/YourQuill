@@ -9,14 +9,15 @@
 #include "Root.hpp"
 #include "QuillFile.hpp"
 #include "Wksp.hpp"
-#include "Workspace.hpp"
 
 #include "WkspLogging.hpp"
 #include "ShareDir.hpp"
 #include <db/bit/Copyright.hpp>
 #include <meta/Global.hpp>
 #include <meta/GlobalImpl.hpp>
+#include <util/CmdArgs.hpp>
 #include <util/DelayInit.hpp>
+#include <util/FileUtils.hpp>
 #include <util/Strings.hpp>
 #include <util/ThreadId.hpp>
 #include <util/Utilities.hpp>
@@ -28,73 +29,206 @@
 #include <QSqlError>
 #include <QTextCodec>
 
+#include <pwd.h>
+#include <filesystem>
 #include <unistd.h>
+
+    // hack because Qt #define emit for their MOC and tbb now uses it.
+#ifdef emit
+    #undef emit
+#endif
+
 #include <tbb/spin_rw_mutex.h>
 
+using namespace wksp;
+
 namespace {
+    using namespace std::filesystem;
+    
+    static constexpr const char*    kShareDir   = YQ_SHARE_DIR;
+
     static constexpr const unsigned short       kDefaultPort        = 25505;
     static constexpr const unsigned int         kDefaultReadTimeout = 30000;
+    static constexpr const mode_t   kDirMode        = 0755;
+    
+
+    #ifdef WIN32
+    using path_set      = Set<String,IgCase>;
+    #else
+    using path_set      = Set<String>;
+    #endif
+    
+    const char* homeDir()
+    {
+        const char* s   = getenv("HOME");
+        if(s)
+            return s;
+        struct passwd*  pw = getpwuid(getuid());;
+        if(pw)
+            return pw -> pw_dir;
+        return nullptr;
+    }
+    
+    
+    path   absolute_proximate(const String& spec, const path& base)
+    {
+        std::error_code ec1, ec2;
+        return absolute(proximate(spec.c_str(), base, ec1), ec2);
+    }
+
+
+    template <typename T>
+    struct Spot {
+        T           data;
+        unsigned    count   = 0;
+    };
+    
+    
+    struct QuillSpots {
+        Spot<String>        abbr;
+        Spot<String>        author;
+        Spot<unsigned>      copyfrom;
+        Spot<unsigned>      copyto;
+        Spot<AssertDeny>    copystance;
+        Spot<String>        copytext;
+        Spot<String>        home;
+        Spot<String>        name;
+    };
+
+    enum DirType {
+        BadDir,
+        ReadDir,
+        WriteDir
+    };
+    
+    DirType  dir_type(const std::filesystem::path& fs)
+    {
+        if(fs.filename().c_str()[0] == '.')  // filter out hidden
+            return BadDir;
+    
+        std::error_code ec;
+        if(!std::filesystem::is_directory(fs, ec))
+            return BadDir;
+        if(access(fs.c_str(), R_OK | W_OK | X_OK))
+            return WriteDir;
+        if(access(fs.c_str(), R_OK | X_OK))
+            return ReadDir;
+        return BadDir;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    
 
     struct M {
-        QString             abbreviation;
-        QString             app_name;
-        QString             author;
-        Set<uint16_t>       aux_ports;
-        QString             db_pid;
-        QString             cache;
-        Copyright           copyright;
-        //QString             dot;
-        //QString             git;
-        QString             home;
-        QString             ini;
-        bool                init;
-        QString             local_user;
-        QDir                log_dir;
-        QString             log_fragment;
-        QString             logs;
-        //QString             markdown;
-        QString             name;
-        //QString             perl;
-        unsigned short      port;
-        QString             quill_arg;
-        QDir                quill_dir;
-        QString             quill_dir_path;
-        QString             quill_full_path;
-        QString             quill_key;
-        QString             quill_prime;
-        unsigned int        read_timeout;
-        RootVector          roots;
-        Vector<QString>     root_icons;
-        RootMap             root_by_path;
-        RoleMap             root_first;
-        RoleVecMap          root_read;
-        RoleVecMap          root_write;
-        //QString             smartypants;
-        QString             start;
-        QDateTime           start_time;
-        //QString             subversion;
+        String                  abbr;
+        App                     app;
+        String                  app_name;
+        String                  author;
+        Set<uint16_t>           aux;
         
-        QDirVector          template_dirs;
-        QStringSet          templates;
-        QStringSet          templates_avail;
+        path                    broker_ipc;
+        path                    build           = YQ_BUILD_ROOT;
+        path                    db_pid;
+        path                    cache;
+        Copyright               copyright;
+        path                    dot             = "/usr/bin/dot";
+        path                    git             = "/usr/bin/git";
+        String                  home;
+        String                  host;
+        path                    ini;
+        bool                    init                = false;
+        String                  luser;
+        String                  logfrag;
+        path                    logs;
+        path                    markdown;
+        String                  name;
+        unsigned int            options;
+        path                    perl            = "/usr/bin/perl";
+        unsigned short          port            = 0;
         
-        QString             temporary;
-        QDir                temporary_dir;
-        QString             temporary_dir_default;
+        path                    qarg;
+        path                    qdir;
+        path                    qfile;
+        String                  qkey;
+        
+        unsigned int            read_timeout        = 0;
+        RoleMap                 rfirst;
+        //Vector<String>          ricons;
+        RootMap                 rkey;
+        RootVector              roots;
+        RootMap                 rpath;
+        RoleVecMap              rread;
+        RoleVecMap              rwrite;
+        path                    smartypants;
+        path                    server_ipc;
+        String                  start;
+        std::time_t             start_time;
+        path                    subversion      = "/usr/bin/svn";
+        
+        PathVector              shared_dirs;
+        
+        PathVector              template_dirs;
+        StringSet               templates;
+        StringSet               templates_avail;
+        
+        path                    tmp;
+        path                    updater_ipc;
+        
         
         mutable tbb::spin_rw_mutex  mutex;
 
-        M() : init(false), port(0), read_timeout(0) 
+        M()
         {
-            const char* tmpdir  = getenv("TMPDIR");
-            if(!tmpdir)
-                tmpdir              = "/tmp";
-            temporary_dir_default   = QDir(tmpdir).absoluteFilePath("yquill");
+            std::time(&start_time);
+            {
+                std::tm     gt;
+                gmtime_r(&start_time, &gt);
+                char    buffer[256];
+                strftime(buffer, sizeof(buffer), "yyyyMMdd-HHmmss", &gt);
+                start   = buffer;
+            }
 
-            template_dirs = shared_dirs("template");
-            for(const QDir& d : template_dirs)
-                for(QString s : d.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-                    templates_avail << s;
+            const char*   tmpdir  = getenv("TMPDIR");
+            if(!tmpdir)
+                tmpdir          = "/tmp";
+            tmp                 = path(tmpdir) / "yquill";
+            
+            char        hname[HOST_NAME_MAX+1];
+            gethostname(hname, sizeof(hname));
+            hname[HOST_NAME_MAX]    = '\0';
+            host            = String(hname);
+
+            make_path(tmp / ".broker");
+            broker_ipc          = tmp / ".broker" / "ipc";
+        
+            path   lHomeDir;
+            const char* hdir   = homeDir();
+            if(hdir){
+                auto hd     = path(hdir) / ".yquill";
+                if(!::access(hdir, W_OK))
+                    make_path(lHomeDir);
+                if(!::access(lHomeDir.c_str(), R_OK|X_OK))
+                    shared_dirs << hd;
+            }
+
+                
+            for(const char* z : { "/usr/local/share/yquill", "/usr/share/yquill", kShareDir }){
+                if(!access(z, R_OK|X_OK))
+                    shared_dirs << z;
+            }
+
+            template_dirs   = yqdir::all_children(shared_dirs, "template");
+            templates_avail = yqdir::subdirectory_names_set(template_dirs);
+            
+            markdown        = yqdir::first_child(shared_dirs, "perl/Markdown.pl");
+            smartypants     = yqdir::first_child(shared_dirs, "perl/SmartyPants.pl");
+                
+                //  While we have Qt, this will remain.
+            QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
         }
     };
     
@@ -104,27 +238,6 @@ namespace {
         return s_ret;
     }
 
-    struct SetSpots {
-        unsigned int    abbr;
-        unsigned int    author;
-        unsigned int    copyfrom;
-        unsigned int    copystance;
-        unsigned int    copytext;
-        unsigned int    copyto;
-        unsigned int    home;
-        unsigned int    name;
-        
-        SetSpots() : abbr(~0), author(~0), copyfrom(~0), 
-                    copystance(~0), copytext(~0), copyto(~0), 
-                    home(~0), name(~0) {}
-    };
-
-    QString     dirPathFor(const std::filesystem::path& pth)
-    {
-        return QFileInfo( QString::fromStdString(pth.string())).absolutePath();
-    }
-    
-
     Vector<Root*>       _roots()
     {
         Vector<Root*>  ret;
@@ -133,10 +246,12 @@ namespace {
         return ret;
     }
     
+
+    //  This will remain until we divorce Qt
     QSqlDatabase        connectDB()
     {
         QSqlDatabase    db      = QSqlDatabase::addDatabase("QSQLITE", QString("CacheDB %1").arg(thread_id()));
-        db.setDatabaseName(impl().cache);
+        db.setDatabaseName(impl().cache.c_str());
         if(!db.open()){
             yError() << "Cannot open the database: " <<  db.lastError();
             return QSqlDatabase();
@@ -151,6 +266,43 @@ namespace {
     #define WLOCK                                                   \
         M& m = impl();                                              \
         tbb::spin_rw_mutex::scoped_lock _lock(m.mutex, true);
+
+
+
+
+    //struct SetSpots {
+        //unsigned int    abbr;
+        //unsigned int    author;
+        //unsigned int    copyfrom;
+        //unsigned int    copystance;
+        //unsigned int    copytext;
+        //unsigned int    copyto;
+        //unsigned int    home;
+        //unsigned int    name;
+        
+        //SetSpots() : abbr(~0), author(~0), copyfrom(~0), 
+                    //copystance(~0), copytext(~0), copyto(~0), 
+                    //home(~0), name(~0) {}
+    //};
+
+    //QString     dirPathFor(const path& pth)
+    //{
+        //return QFileInfo( QString::fromStdString(pth.string())).absolutePath();
+    //}
+    
+    path       best_guess_quill(const path& sv)
+    {
+        if(is_similar(sv.filename().c_str(), wksp::szQuillFile))
+            return sv;
+        path    rt  = sv.root_path();
+        for(path q = is_directory(sv) ? sv : q.parent_path(); q != rt; q = q.parent_path()){
+            path    f   = q / wksp::szQuillFile;
+            if(exists(f))
+                return f;
+        }
+        return path();  // failed to find.... abort
+    }
+
 }
 
 
@@ -161,31 +313,228 @@ namespace wksp {
             const M&  m = impl();
             yInfo () << pfx << m.roots.size() << " roots";
             for(const Root* rt : m.roots)
-                yInfo () << pfx << " " << rt->path();
+                yInfo () << pfx << " " << rt->path;
         }
     
     
-        static bool _init(const QString& location, Options opts)
+        static bool _init(const std::filesystem::path& arg, unsigned int opts, App app)
         {
+            if(thread_id() != 0){
+                wkspError << "Workspace *MUST* be initialized from the main thread!";
+                return false;
+            }
+
+            M&  m       = impl();
+
+            m.app       = app;
+            m.app_name  = CmdArgs::appName();
+            m.options   = opts;
+            m.qarg      = arg;
+            
+            path    q       = arg;
+            if(q.is_relative()){
+                char        cwd[PATH_MAX+1];
+                if(getcwd(cwd, PATH_MAX) != cwd)
+                    return false;
+                cwd[PATH_MAX]   = '\0';
+                q   = path(cwd) / arg.c_str();
+            }
+            q = q.lexically_normal();
+
+            if(opts & SEARCH){
+                m.qfile = best_guess(q);
+            } else {
+                if(is_similar(q.filename().c_str(), szQuillFile)){
+                    m.qfile   = q;
+                } else if(is_directory(q)){
+                    m.qfile   = q / szQuillFile;
+                }
+            }
+
+            if(m.qfile.empty()){
+                wkspError << "No " << szQuillFile << " fragment at specified location, REQUIRED!";
+                return false;
+            }
+            
+            m.qdir      = m.qfile.parent_path();
+            m.qkey      = m.qdir.filename().c_str();
+
+            if(dir_type(m.qdir) == BadDir){
+                wkspError << "Bad directory for workspace --> " << m.qdir;
+                return false;
+            }
+            
+            QuillFile       doc;
+            if(!doc.load(m.qfile)){
+                wkspError << "Unable to load the file: " << m.qfile;
+                return false;
+            }
+            
+            if(doc.temp_dir.empty()){
+                m.tmp   = m.tmp / m.qkey.c_str();
+            } else 
+                m.tmp   = absolute_proximate(doc.temp_dir, m.qdir);
+            
+            m.aux       = std::move(doc.aux_ports);
+            m.port      = doc.port;
+            if(!m.port)
+                m.port      = kDefaultPort;
+            m.read_timeout  = doc.read_timeout;
+            if(!m.read_timeout)
+                m.read_timeout  = kDefaultReadTimeout;
+                
+                
+            if(!doc.log_dir.empty())
+                m.logs        = absolute_proximate(doc.log_dir.c_str(), m.tmp);
+            else
+                m.logs        = m.tmp / "log";
+            make_path(m.logs);
+
+
+            if(opts & INIT_LOG){
+                String  lf  = String(m.app_name) + "-" + m.start + ".log";
+                path log         = m.logs / lf.c_str();
+                log_to_file(log.c_str(), LogPriority::All);
+            }
+            
+            if(!doc.cache.empty())
+                m.cache       = absolute_proximate(doc.cache.c_str(), m.tmp);
+            else
+                m.cache       = m.tmp / "cache";
+                
+
+            path_set        rSeen, tSeen;
+            Root*           rt  = new Root(m.qdir, PolicyMap(Access::ReadWrite));
+            m.roots << rt;
+            m.rpath["."]              = rt;
+            m.rpath[m.qdir.c_str()]   = rt;
+            m.rkey["."]             = rt;
+
+            QuillSpots  qs  = make_root(doc, rSeen, tSeen, PolicyMap(Access::ReadWrite), 
+                PolicyMap((opts&TEMPLATES_RO) ? Access::ReadOnly : Access::ReadWrite), false, 0);
+            
+            m.abbr              = qs.abbr.data;
+            m.author            = qs.author.data;
+            m.copyright.from    = qs.copyfrom.data;
+            m.copyright.to      = qs.copyto.data;
+            m.copyright.stance  = qs.copystance.data;
+            m.copyright.text    = qs.copytext.data;
+            m.home              = qs.home.data;
+            m.name              = qs.name.data;
+
+            for(auto& i : tSeen)
+                m.templates << i;
+            
+            m.roots.sort([](const Root* a, const Root* b){
+                if(a->is_template != b->is_template)
+                    return a->is_template < b->is_template;
+                if(a->depth != b->depth)
+                    return a->depth < b->depth;
+                return a->id < b->id;
+            });
+            
+            Vector<Root*>   eroots  = _roots();
+            
+            for(Root* r2 : eroots){
+                fspath  cd      = r2 -> path / szConfigDir;
+                mkdir(cd.c_str(), kDirMode);
+            }
+            
+            StringSet   keys;
+            uint64_t    i   = 0;
+            for(Root* r2 : eroots){  // give everything IDs and record the keys
+                r2 -> id = i++;
+                if(dir_type(r2 -> path) != WriteDir){
+                    for(DataRole dr : DataRole::all_values())
+                        r2 -> access[dr]    = moderate(r2 -> access[dr], Access::ReadOnly);
+                }
+                keys << r2 -> key;
+            }
+            
+            //  make sure everything has a key, default is the number
+            for(Root* r2 : eroots){
+                if(!r2->key.empty())
+                    continue;
+                String s   = String::number(r2->id);
+                if(!keys.has(s)){
+                    r2 -> key = s;
+                    keys << s;
+                }
+                s += '_';
+                for(i=0;; ++i){
+                    String  k   = s + String::number(i);
+                    if(!keys.has(k)){
+                        r2 -> key = k;
+                        keys << k;
+                        break;
+                    }
+                }
+            }
+            
+            //  Sort out the writers
+            for(DataRole dr : DataRole::all_values()){
+                bool    hasFirst    = false;
+                for(Root* r3 : eroots){
+                    if(r3->access[dr] == Access::WriteFirst){
+                        if(hasFirst)    
+                            r3->access[dr]   = Access::ReadWrite;
+                        else
+                            hasFirst    = true;
+                    }
+                }
+
+                if(!hasFirst){
+                    for(Root* r3 : eroots){
+                        if(r3->access[dr]     == Access::WriteFirst) {
+                            r3 -> access[dr]    = Access::WriteFirst;
+                            hasFirst    = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!hasFirst)
+                    m.rfirst[dr]   = nullptr;
+
+                for(Root* r3 : eroots){
+                    switch(r3->access[dr]){
+                    case Access::WriteFirst:
+                        m.rfirst[dr]     = r3;
+                        /* fall through */
+                    case Access::ReadWrite:
+                        m.rwrite[dr] << r3;
+                    case Access::ReadOnly:
+                        m.rread[dr] << r3;
+                    case Access::NoAccess:
+                    default:
+                        break;
+                    }
+                }
+            }
+
+            m.init        = true;
+            return true;
+        }
+
+#if 0
             bool    ret     = true;
             
-            if(!Workspace::init(location.toStdString())){
+            unsigned int            opts2 = 0;
+            if(opts.is_set(Option::SEARCH))
+                opts2 |= Workspace::SEARCH;
+            
+            
+            if(!Workspace::init(location.toStdString(), opts2)){
                 wkspError << "Other init failed...bye.";
                 return false;
             }
             
-            M&  m = impl();
-            tbb::spin_rw_mutex::scoped_lock    _lock(m.mutex, true);
             
             if(m.init){
                 wkspError << "Workspace is already initialized!";
                 return false;
             }
             
-            if(thread_id() != 0){
-                wkspError << "Workspace *MUST* be initialized from the main thread!";
-                return false;
-            }
 
             //yInfo() << "wksp::Init::_init('" << location << "')";
             
@@ -193,33 +542,34 @@ namespace wksp {
             m.start         = m.start_time.toString("yyyyMMdd-HHmmss");
             m.app_name      = QCoreApplication::applicationName();
             
-            if(!CommonDir::init()){
-                wkspError << "Unable to create temporary directories!";
-                return false;
-            }
+            //if(!CommonDir::init()){
+                //wkspError << "Unable to create temporary directories!";
+                //return false;
+            //}
             
             
             //  Right now, hardcode these
             
-            QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
+            //QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf8"));
             
             
             m.quill_arg         = location;
-            if(opts.is_set(Option::SEARCH)){
-                m.quill_prime   = best_guess(location);
-            } else {
-                QFileInfo   fi(location);
-                if(fi.fileName() == szQuillFile){
-                    m.quill_prime   = location;
-                } else if(fi.isDir()){
-                    m.quill_prime    = QDir(location).absoluteFilePath(szQuillFile);
-                }
-            }
+            m.quill_prime       = gWksp.qfile.c_str();
+            //if(opts.is_set(Option::SEARCH)){
+                //m.quill_prime   = best_guess(location);
+            //} else {
+                //QFileInfo   fi(location);
+                //if(fi.fileName() == szQuillFile){
+                    //m.quill_prime   = location;
+                //} else if(fi.isDir()){
+                    //m.quill_prime    = QDir(location).absoluteFilePath(szQuillFile);
+                //}
+            //}
             
-            if(m.quill_prime.isEmpty()){
-                wkspError << "No " << szQuillFile << " fragment at specified location, REQUIRED!";
-                return false;
-            }
+            //if(m.quill_prime.isEmpty()){
+                //wkspError << "No " << szQuillFile << " fragment at specified location, REQUIRED!";
+                //return false;
+            //}
             
             QuillFile        doc;
             if(!doc.load(m.quill_prime.toStdString())){
@@ -227,34 +577,38 @@ namespace wksp {
                 return false;
             }
             
-            m.quill_dir_path        = dirPathFor(doc.file());
+            m.quill_dir_path        = gWksp.qdir.c_str();
             m.quill_dir             = QDir(m.quill_dir_path);
-            m.quill_key             = QFileInfo(m.quill_dir_path).fileName();
+            m.quill_key             = gWksp.qkey.c_str()
+            m.temporary             = gWksp.tmp.c_str();
             
-            if(doc.temp_dir.empty()){
-                const char* tmpdir  = getenv("TMPDIR");
-                if(!tmpdir)
-                    tmpdir          = "/tmp";
-                QDir    yqtemp      = QDir(tmpdir).absoluteFilePath("yquill");
-                m.temporary         = yqtemp.absoluteFilePath(m.quill_key);
-            } else
-                m.temporary         = m.quill_dir.absoluteFilePath(doc.temp_dir.qString());
+            //if(doc.temp_dir.empty()){
+                //const char* tmpdir  = getenv("TMPDIR");
+                //if(!tmpdir)
+                    //tmpdir          = "/tmp";
+                //QDir    yqtemp      = QDir(tmpdir).absoluteFilePath("yquill");
+                //m.temporary         = yqtemp.absoluteFilePath(m.quill_key);
+            //} else
+                //m.temporary         = m.quill_dir.absoluteFilePath(doc.temp_dir.qString());
             m.quill_dir.mkpath(m.temporary);
             m.temporary_dir         = QDir(m.temporary);
             
-            if(doc.cache.empty()){
-                m.cache             = m.temporary_dir.absoluteFilePath("cache");
-            } else
-                m.cache             = m.quill_dir.absoluteFilePath(doc.cache.qString());
+            m.cache                 = gWksp.cache.c_str();
+            
+            //if(doc.cache.empty()){
+                //m.cache             = m.temporary_dir.absoluteFilePath("cache");
+            //} else
+                //m.cache             = m.quill_dir.absoluteFilePath(doc.cache.qString());
             m.db_pid                = m.temporary_dir.absoluteFilePath("pid");
             
             //if(opts.is_set(Option::WIPE_CACHE) && QFile::exists(m.cache) )
                 //QFile::remove(m.cache);
             
-            if(doc.log_dir.empty()){
-                m.logs              = m.temporary_dir.absoluteFilePath("logs");
-            } else
-                m.logs              = m.quill_dir.absoluteFilePath(doc.log_dir.qString());
+            //if(doc.log_dir.empty()){
+                //m.logs              = m.temporary_dir.absoluteFilePath("logs");
+            //} else
+                //m.logs              = m.quill_dir.absoluteFilePath(doc.log_dir.qString());
+            m.logs                  = gWksp.logs.c_str()
             m.quill_dir.mkpath(m.logs);
             m.log_dir               = QDir(m.logs);
             m.log_fragment          = m.log_dir.absoluteFilePath(QString("%1-%2.log").arg(m.app_name).arg(m.start));
@@ -418,8 +772,24 @@ namespace wksp {
             m.init      = true;
             return ret;
         }
+#endif
         
-    
+    static QuillSpots      make_root(const QuillFile&doc, path_set& rSeen, path_set& tSeen, PolicyMap rPolicy, PolicyMap tPolicy, bool fTemplate, unsigned depth)
+    {   
+        #if 0
+        M& m = impl();
+        path    qdir    = doc.file().parent_path();
+        for(auto& rs : doc.templates){
+            if(!tSeen.add(rs.path))
+                continue;
+            PolicyMap   pm2 = moderate(tPolicy, rs.policy);
+            
+        }
+        #endif
+        return {};
+    }
+
+#if 0    
 
         static bool       _load(const QuillFile&doc, PathSet&rSeen, PathSet&tSeen, PolicyMap rPolicy, PolicyMap tPolicy, SetSpots&spots, bool fTemplate, size_t depth)
         {
@@ -554,6 +924,8 @@ namespace wksp {
             }
             return true;
         }
+        #endif
+        #if 0
 
         /*! Gets/Creates a root
         */
@@ -570,37 +942,30 @@ namespace wksp {
             m.root_by_path[s]    = r2;
             return std::pair<Root*,bool>(r2, true);
         }
+        #endif
     };
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    const QString&      abbreviation()
+    const String&       abbreviation()
     {
-        return impl().abbreviation;
+        return impl().abbr;
     }
     
-    const QString&      author()
+    const String&       author()
     {
         return impl().author;
     }
     
     const Set<uint16_t>&    aux_ports()
     {
-        return impl().aux_ports;
+        return impl().aux;
     }
     
-    QString             best_guess(const QString&dirOrFragment)
+    std::filesystem::path           best_guess(const std::filesystem::path& dirOrFragment)
     {
-        QFileInfo fi(dirOrFragment);
-        if(fi.fileName().toLower() == szQuillFile)
-            return dirOrFragment;
-        QDir    d(fi.isDir() ? dirOrFragment : fi.absolutePath());
-        for(; !d.isRoot(); d.cdUp()){
-            if(d.exists(szQuillFile))
-                return d.absoluteFilePath(szQuillFile);
-        }
-        return QString();
+        return best_guess_quill(dirOrFragment);
     }
 
     QSqlDatabase        cache()
@@ -609,7 +974,7 @@ namespace wksp {
         return s_ret;
     }
     
-    const QString&      cache_db()
+    const std::filesystem::path&    cache_db()
     {
         return impl().cache;
     }
@@ -643,20 +1008,19 @@ namespace wksp {
         return impl().copyright;
     }
 
-    const QString&     db_pid()
+    const std::filesystem::path&    db_pid()
     {
         return impl().db_pid;
     }
     
-    QString             dot()
+    const std::filesystem::path&    dot()
     {
-        return QString::fromStdString(gWksp.dot.string());
+        return impl().dot;
     }
 
-    
-    QString             git()
+    const std::filesystem::path&    git()
     {
-        return QString::fromStdString(gWksp.git.string());
+        return impl().git;
     }
 
     bool                has_init()
@@ -664,50 +1028,51 @@ namespace wksp {
         return impl().init;
     }
 
-    const QString&      home()
+    const String&       home()
     {
         return impl().home;
     }
     
-    QString             hostname()
+    const String&   host()
     {
-        return QString::fromStdString(gWksp.host);
+        return impl().host;
     }
     
       
-    const QString&      ini()
+    const std::filesystem::path&    ini()
     {
         return impl().ini;
     }
 
-    bool                initialize(const QString& dirOrFragment, Options opts)
+    bool                initialize(const std::filesystem::path&dirOrFragment, unsigned int opts, App app)
     {
-        return Init::_init(dirOrFragment, opts);
+        static bool ret = Init::_init(dirOrFragment, opts, app);
+        return ret;
     }
 
-    const QString&      local_user()
+    const String&      local_user()
     {
-        return impl().local_user;
+        return impl().luser;
     }
     
-    const QString&      log_dir_path()
+    const std::filesystem::path&    log_dir()
     {
         return impl().logs;
     }
     
-    QString             markdown()
+    const std::filesystem::path&    markdown()
     {
-        return QString::fromStdString(gWksp.markdown.string());
+        return impl().markdown;
     }
     
-    const QString&      name()
+    const String&       name()
     {
         return impl().name;
     }
     
-    QString             perl()
+    const std::filesystem::path&    perl()
     {
-        return QString::fromStdString(gWksp.perl.string());
+        return impl().perl;
     }
 
     unsigned short      port()
@@ -715,45 +1080,56 @@ namespace wksp {
         return impl().port;
     }
     
-    const QDir&         quill_dir()
+    const std::filesystem::path&    quill_dir()
     {
-        return impl().quill_dir;
+        return impl().qdir;
     }
 
-    QString             quill_fragment_for_dir(const QString&dirPath)
+    const std::filesystem::path&    quill_file()
     {
-        return QDir(dirPath).absoluteFilePath(szQuillFile);
+        return impl().qfile;
     }
 
-    const QString&      quill_key()
+    std::filesystem::path           quill_fragment_for_dir(const std::filesystem::path& pth)
     {
-        return impl().quill_key;
+        return pth / szQuillFile;
+    }
+
+    const String&       quill_key()
+    {
+        return impl().qkey;
     }
     
-    const QString&      quill_path()
+    std::filesystem::path   quill_resolve(const char* z)
     {
-        return impl().quill_dir_path;
+        return quill_resolve(std::filesystem::path(z));
     }
     
-    QString             quill_resolve(const char*z)
+    std::filesystem::path   quill_resolve(const QByteArray&z)
     {
-        return impl().quill_dir.absoluteFilePath(z);
+        return quill_resolve(std::filesystem::path(z.constData()));
     }
     
-    QString             quill_resolve(const QByteArray&z)
+    std::filesystem::path   quill_resolve(const QString&z)
     {
-        return quill_resolve(utf8(z));
+        return quill_resolve(std::filesystem::path(z.toStdString()));
     }
     
-    QString             quill_resolve(const QString&z)
+    std::filesystem::path   quill_resolve(const std::string&z)
     {
-        return impl().quill_dir.absoluteFilePath(z);
+        return quill_resolve(std::filesystem::path(z));
     }
     
-    QString             quill_resolve(const std::string&z)
+    std::filesystem::path   quill_resolve(const std::string_view&z)
     {
-        return quill_resolve(z.c_str());
+        return quill_resolve(std::filesystem::path(z));
     }
+    
+    std::filesystem::path   quill_resolve(const std::filesystem::path&z)
+    {
+        return impl().qdir / z;
+    }
+
     
     unsigned int        read_timeout()
     {
@@ -765,9 +1141,9 @@ namespace wksp {
         return impl().roots.value(rootId, nullptr);
     }
     
-    const Root*         root(const QString& rootPath)
+    const Root*    root(const std::string_view& key)
     {
-        return impl().root_by_path.get(rootPath, nullptr);
+        return impl().rkey.get(key, nullptr);
     }
     
     uint64_t            root_count()
@@ -777,37 +1153,37 @@ namespace wksp {
     
     const Root*         root_first(DataRole dr)
     {
-        return impl().root_first[dr];
+        return impl().rfirst[dr];
     }
 
     const RoleMap&      root_firsts()
     {
-        return impl().root_first;
+        return impl().rfirst;
     }
     
     const RootMap&      root_map()
     {
-        return impl().root_by_path;
+        return impl().rpath;
     }
     
     const RoleVecMap&   root_reads()
     {
-        return impl().root_read;
+        return impl().rread;
     }
 
     const RootVector&   root_reads(DataRole dr)
     {
-        return impl().root_read[dr];
+        return impl().rread[dr];
     }
     
     const RoleVecMap&   root_writes()
     {
-        return impl().root_write;
+        return impl().rwrite;
     }
 
     const RootVector&       root_writes(DataRole dr)
     {
-        return impl().root_write[dr];
+        return impl().rwrite[dr];
     }
     
     const RootVector&   roots()
@@ -815,181 +1191,128 @@ namespace wksp {
         return impl().roots;
     }
     
-    QString             smartypants()
+    const std::filesystem::path&    smartypants()
     {
-        return QString::fromStdString(gWksp.smartypants.string());
+        return impl().smartypants;
     }
     
-    const QString&      start()
+    const String&      start()
     {
         return impl().start;
     }
     
-    QDateTime           start_time()
+    std::time_t        start_time()
     {
         return impl().start_time;
     }
     
-    QString             subversion()
+    const std::filesystem::path&    subversion()
     {
-        return QString::fromStdString(gWksp.subversion.string());
+        return impl().subversion;
     }
 
-    
-    Vector<QString>     template_dir_paths(const QString& s)
-    {
-        Vector<QString>     ret;
-        for(const QDir& d : impl().template_dirs){
-            for(QString i : d.entryList(QStringList() << s, QDir::Dirs | QDir::NoDotAndDotDot))
-                ret << d.absoluteFilePath(i);
-        }
-        return ret;
-    }
-    
-    const QDirVector&   template_dirs()
+    const PathVector&   template_dirs()
     {
         return impl().template_dirs;
     }
     
-    QDirVector          template_dirs(const QString& s)
+
+    PathVector          template_dirs(const std::string_view& templateName)
     {
-        Vector<QDir>        ret;
-        for(const QString& d : template_dir_paths(s))
-            ret << QDir(d);
+        PathVector  ret;
+        for(const path& p : impl().template_dirs){
+            path    p2  = p / templateName;
+            if(dir_type(p2) != BadDir)
+                ret << p2;
+        }
         return ret;
     }
     
     //! Finds the quill associated with the template name
-    QString             template_quill(const QString& s)
+    std::filesystem::path   template_quill(const std::string_view& templateName)
     {
-        for(QDir d : template_dirs(s)){
-            if(d.exists(szQuillFile))
-                return d.absoluteFilePath(szQuillFile);
+        PathVector  ret;
+        for(const path& p : impl().template_dirs){
+            path    p2  = p / templateName;
+            if(dir_type(p2) == BadDir)
+                continue;
+            p2  /= szQuillFile;
+            if(std::filesystem::exists(p2))
+                return p2;
         }
-        return QString();
+        return {};
     }
     
-    const QStringSet&   templates()
+    const StringSet&   templates()
     {
         return impl().templates;
     }
     
-    const QStringSet&   templates_available()
+    const StringSet&   templates_available()
     {
         return impl().templates_avail;
     }
 
-    const QDir&         temp_dir()
+    const std::filesystem::path&         temp_dir()
     {
-        return impl().temporary_dir;
-    }
-    
-    const QString&      temp_dir_default()
-    {
-        return impl().temporary_dir_default;
+        return impl().tmp;
     }
 
-    const QString&      temp_dir_path()
+    std::filesystem::path           temp_resolve(const char* z)
     {
-        return impl().temporary;
+        return temp_resolve(path(z));
     }
     
-    QString             temp_resolve(const char*z)
+    std::filesystem::path           temp_resolve(const QByteArray&z)
     {
-        return impl().temporary_dir.absoluteFilePath(z);
+        return temp_resolve(path(z.constData()));
     }
     
-    QString             temp_resolve(const QByteArray&z)
+    std::filesystem::path           temp_resolve(const QString&z)
     {
-        return impl().temporary_dir.absoluteFilePath(utf8(z));
+        return temp_resolve(path(z.toStdString()));
     }
     
-    QString             temp_resolve(const QString&z)
+    std::filesystem::path           temp_resolve(const std::string&z)
     {
-        return impl().temporary_dir.absoluteFilePath(z);
+        return temp_resolve(path(z));
     }
     
-    QString             temp_resolve(const std::string&z)
+    std::filesystem::path           temp_resolve(const std::string_view&z)
     {
-        return impl().temporary_dir.absoluteFilePath(z.c_str());
+        return temp_resolve(path(z));
+    }
+    
+    std::filesystem::path           temp_resolve(const std::filesystem::path& p)
+    {
+        return impl().tmp / p;
     }
 }
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-const Root*  Root::by_key(const QString&k)
+const Root*  Root::by_key(const std::string_view&k)
 {
     for(const Root* r : wksp::roots())  
-        if(is_similar(r->key(),k))
+        if(is_similar(r->key,k))
             return r;
     return nullptr;
 }
 
-//  whether or not the provided string is a directory, or not
-bool    Root::is_good_dir(const QString& s, Flag<G> f)
-{
-    QFileInfo       info(s);
-    if(!info.exists()){
-        if(f.is_set(G::Complain))
-            yError() << "Non-existing directory '" << s << "' unable to load.";
-        return false;
-    }
-    
-    if(!info.isDir()){
-        if(f.is_set(G::Complain))
-            yError() << "Not a directory!  '" << s << "'";
-        return false;
-    }
-    
-    if(!info.isReadable()){
-        if(f.is_set(G::Complain))
-            yError() << "Unreadable directory '" << s << "'";
-        return false;
-    }
 
-    if(f.is_set(G::Writable) && !info.isWritable()){
-        if(f.is_set(G::Complain))
-            yError() << "Unwritable directory '" << s << "'";
-        return false;
-    }
-    
-    if(!info.isExecutable()){
-        if(f.is_set(G::Complain))
-            yError() << "Non-executable directory '" << s << "'";
-        return false;
-    }
-    
-    if(info.isHidden()){
-        if(f.is_set(G::Complain))
-            yError() << "Hidden directory '" << s << "'";
-        return false;
-    }
-    
-    if(info.isRoot()){
-        if(f.is_set(G::Complain))
-            yError() << "Root directory! '" << s << "'";
-        return false;
-    }
-    
-    
-    return true;
+
+Root::Root(const std::filesystem::path&s) : path(s)
+{
+    if(yqdir::child_exists(s, ".svn"))
+        vcs |= Vcs::SVN;
+    if(yqdir::child_exists(s, ".git"))
+        vcs |= Vcs::GIT;
 }
 
-
-
-Root::Root(const QString&s) : m_path(s), m_dir(s), m_isTemplate(false), m_id(0)
+Root::Root(const std::filesystem::path&s, PolicyMap pm) : Root(s)
 {
-    if(m_dir.exists(".svn"))
-        m_vcs |= Vcs::SVN;
-    if(m_dir.exists(".git"))
-        m_vcs |= Vcs::GIT;
-}
-
-Root::Root(const QString&s, PolicyMap pm) : Root(s)
-{
-    for(DataRole dr : DataRole::all_values())
-        m_roles[dr].access  = pm[dr];
+    access  = pm;
 }
 
 
@@ -1074,29 +1397,38 @@ Root::~Root()
     //return 0ULL;
 //}
 
-
-
-bool        Root::exists(const char*z) const
+bool    Root::exists(const char*z) const
 {
     if(!z)
         return false;
-    return exists(QString(z));
+    return exists(std::filesystem::path(z));
 }
 
-bool        Root::exists(const std::string&z) const
+bool    Root::exists(const QString&z) const
 {
-    return exists(QString::fromStdString(z));
+    return exists(std::filesystem::path(z.toStdString()));
 }
 
-bool        Root::exists(const QByteArray&z) const
+bool    Root::exists(const QByteArray&z) const
 {
-    return exists(QString::fromUtf8(z));
+    return exists(std::filesystem::path(z.constData()));
 }
 
-bool        Root::exists(const QString&z) const
+bool    Root::exists(const std::string&z) const
 {
-    return m_dir.exists(sanitize_path(z));
+    return exists(std::filesystem::path(z));
 }
+
+bool    Root::exists(const std::string_view&z) const
+{
+    return exists(std::filesystem::path(z));
+}
+
+bool    Root::exists(const std::filesystem::path&z) const
+{
+    return std::filesystem::exists(resolve(z));
+}
+
 
 //Fragment        Root::fragment(const char*z) const
 //{
@@ -1124,12 +1456,12 @@ bool        Root::exists(const QString&z) const
 
 bool        Root::has_git() const
 {
-    return m_vcs.is_set(Vcs::GIT);
+    return vcs.is_set(Vcs::GIT);
 }
 
 bool        Root::has_subversion() const
 {
-    return m_vcs.is_set(Vcs::SVN);
+    return vcs.is_set(Vcs::SVN);
 }
 
 bool        Root::is_readable(DataRole dr) const
@@ -1167,65 +1499,83 @@ bool        Root::make_path(const char*z) const
 {
     if(!z)
         return false;
-    return make_path(QString(z));
-}
-
-bool        Root::make_path(const std::string&z) const
-{
-    return make_path(QString::fromStdString(z));
+    return make_path(std::filesystem::path(z));
 }
 
 bool        Root::make_path(const QByteArray&z) const
 {
-    return make_path(utf8(z));
+    return make_path(std::filesystem::path(z.constData()));
 }
 
 bool        Root::make_path(const QString&z) const
 {
-    return m_dir.mkpath(z);
+    return make_path(std::filesystem::path(z.toStdString()));
+}
+
+bool        Root::make_path(const std::string&z) const
+{
+    return make_path(std::filesystem::path(z));
+}
+
+bool        Root::make_path(const std::string_view&z) const
+{
+    return make_path(std::filesystem::path(z));
+}
+
+bool        Root::make_path(const std::filesystem::path&z) const
+{
+    return make_parent_path(resolve(z));
 }
 
 
 Access      Root::policy(DataRole dr) const
 {
-    Access  a = m_roles[dr].access;
-    //if((a == Access::Default) && (dr != DataRole::Global))
-        //a   = m_roles[DataRole::Global].access;
-    return a;
+    return access.get(dr);
 }
 
-unsigned short       Root::read_order(DataRole dr) const
-{
-    return m_roles[dr].readOrder;
-}
+//unsigned short       Root::read_order(DataRole dr) const
+//{
+    //return m_roles[dr].readOrder;
+//}
 
 
-QString     Root::resolve(const char*z) const
+std::filesystem::path   Root::resolve(const char*  z   ) const
 {
     if(!z)
-        return QString();
-    return resolve(QString(z));
+        return {};
+    return resolve(std::filesystem::path(z));
 }
 
-QString     Root::resolve(const QByteArray&z) const
+std::filesystem::path   Root::resolve(const QByteArray& z) const
 {
-    return resolve(QString::fromUtf8(z));
+    return resolve(std::filesystem::path(z.constData()));
 }
 
-QString     Root::resolve(const QString&   z) const
+std::filesystem::path   Root::resolve(const QString& z) const
 {
-    return m_dir.absoluteFilePath(sanitize_path(z));
+    return resolve(std::filesystem::path(z.toStdString()));
 }
 
-QString     Root::resolve(const std::string&z) const
+std::filesystem::path   Root::resolve(const std::string& z) const
 {
-    return resolve(QString::fromStdString(z));
+    return resolve(std::filesystem::path(z));
 }
 
-unsigned short  Root::write_order(DataRole dr) const
+std::filesystem::path   Root::resolve(const std::string_view& z) const
 {
-    return m_roles[dr].writeOrder;
+    return resolve(std::filesystem::path(z));
 }
+
+std::filesystem::path   Root::resolve(const std::filesystem::path& z) const
+{
+    return path / z;
+}
+
+
+//unsigned short  Root::write_order(DataRole dr) const
+//{
+    //return m_roles[dr].writeOrder;
+//}
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

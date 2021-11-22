@@ -61,12 +61,12 @@ namespace cdb {
     namespace {
         bool    is_same(const KVUA& a, const KeyValue& b) 
         {
-            return (a.key == b.key.qString()) && (a.value == b.data.qString()) && (a.uid == b.id.qString());
+            return (a.key == b.key) && (a.value == b.data) && (a.uid == b.id);
         }
         
         bool    is_similar_kv(const KVUA& a, const KeyValue& b) 
         {
-            return ::is_similar(a.key, b.key.qString()) && ::is_similar(a.value, b.data.qString()) && is_similar(a.uid, b.id.qString());
+            return ::is_similar(a.key, b.key) && ::is_similar(a.value, b.data) && is_similar(a.uid, b.id);
         }
         
         void                add_all(Vector<KVDiff>& items, const KVTree& kvs, ssize_t depth)
@@ -219,7 +219,7 @@ namespace cdb {
     }
     
 
-    QString             key(Attribute a)
+    String             key(Attribute a)
     {
         static thread_local SQ s("SELECT k FROM Attributes WHERE id=?");
         return s.str(a.id);
@@ -291,13 +291,13 @@ namespace cdb {
         return false;
     }
     
-    QString             uid(Attribute a)
+    String             uid(Attribute a)
     {
         static thread_local SQ s("SELECT uid FROM Attributes WHERE id=?");
         return s.str(a.id);
     }
     
-    QString             value(Attribute a)
+    String             value(Attribute a)
     {
         static thread_local SQ s("SELECT value FROM Attributes WHERE id=?");
         return s.str(a.id);

@@ -12,7 +12,7 @@ namespace {
     
     QString cls_title()
     {
-        return QString("Class '%1'").arg(cdb::name(x_class));
+        return QString("Class '%1'").arg(cdb::name(x_class).qString());
     }
     
     void    _context(HtmlWriter& h, const Leaf::Merge& m)
@@ -25,7 +25,7 @@ namespace {
                 if(i == m.context.end())
                     continue;
                 
-                h << H2(rt->name());
+                h << H2(rt->name);
                 switch(i->second.format){
                 case Format::Markdown:
                     h << Mark( i->second.data.qBytes());

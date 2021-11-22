@@ -6,6 +6,31 @@
 
 #pragma once
 
+
+QTextStream&    operator<<(QTextStream&str, const std::string_view&v)
+{
+    return str << QString::fromStdString(std::string(v));
+}
+
+QTextStream&    operator<<(QTextStream&str, const String&v)
+{
+    return str << QString::fromStdString(v);
+}
+
+
+
+QTextStream&    operator<<(QTextStream&str, const std::string&v)
+{
+    return str << QString::fromStdString(v);
+}
+
+QTextStream&    operator<<(QTextStream&str, const std::filesystem::path&v)
+{
+    return str << QString::fromStdString(v.string());
+}
+
+
+
 NetWriter::NetWriter() : m_stream(&m_bytes)
 {
     m_stream.setCodec("UTF-8");

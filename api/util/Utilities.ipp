@@ -150,14 +150,14 @@ bool    is_in(const std::initializer_list<const char*>& vec, const String& b)
 }
 
 
-QString  join(const Set<uint16_t>& values, const QString& sep)
+String  join(const Set<uint16_t>& values, const String& sep)
 {
     Comma       c(sep);
-    QString     ret;
+    String      ret;
     for(uint16_t i : values){
         ret += c.text();
         ++c;
-        ret += QString::number(i);
+        ret += String::number(i);
     }
     return ret;
 }
@@ -278,35 +278,35 @@ String          join(const StringSet&them, const String&sep)
     return ret;
 }
 
-QString         join_qstring(const Set<uint16_t>& values, const QString& sep)
-{
-    QString     ret;
-    bool        first = true;
-    for(uint16_t v  : values){
-        if(first)
-            first   = false;
-        else
-            ret += sep;
+//QString         join_qstring(const Set<uint16_t>& values, const QString& sep)
+//{
+    //QString     ret;
+    //bool        first = true;
+    //for(uint16_t v  : values){
+        //if(first)
+            //first   = false;
+        //else
+            //ret += sep;
             
-        ret += QString::number(v);
-    }
-    return ret;
-}
+        //ret += QString::number(v);
+    //}
+    //return ret;
+//}
 
-String          join_string(const Set<uint16_t>& values, const String& sep)
-{
-    String      ret;
-    bool        first = true;
-    for(uint16_t v  : values){
-        if(first)
-            first   = false;
-        else
-            ret += sep;
+//String          join_string(const Set<uint16_t>& values, const String& sep)
+//{
+    //String      ret;
+    //bool        first = true;
+    //for(uint16_t v  : values){
+        //if(first)
+            //first   = false;
+        //else
+            //ret += sep;
             
-        ret += String::number(v);
-    }
-    return ret;
-}
+        //ret += String::number(v);
+    //}
+    //return ret;
+//}
 
 
 
@@ -392,6 +392,11 @@ QString         sanitize_path(const QString& path)
     return sanitize_path(path.split('/')).join('/');
 }
 
+String          sanitize_path(const String& path)
+{
+    return sanitize_path(path.qString());
+}
+
 QStringList     sanitize_path(const QStringList& path)
 {
     QStringList ret;
@@ -416,6 +421,11 @@ QString         strip_extension(const QString& name)
     if(x > s)
         return name.mid(0,x);
     return name;
+}
+
+String          strip_extension(const String& name)
+{
+    return strip_extension(name.qString());
 }
 
 QIcon           theme_icon(const QString& icon)

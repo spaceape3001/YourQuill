@@ -77,8 +77,8 @@ namespace cdb {
             return Leaf();
         }
         
-        QString     k   = strip_extension(key(doc));
-        if(k.isEmpty()){
+        String     k   = strip_extension(key(doc));
+        if(k.empty()){
             yError() << "Cannot create to blank key!";
             return Leaf();
         }
@@ -102,7 +102,7 @@ namespace cdb {
     Folder              detail_folder(Leaf l)
     {
         Folder  f   = folder(Document{l.id});
-        QString sk  = skeyb(Document{l.id});
+        String sk  = skeyb(Document{l.id});
         return db_folder(f, sk+".d");
     }
     
@@ -145,8 +145,8 @@ namespace cdb {
         if(s.exec() && s.next()){
             ret.doc     = Document(l.id);
             ret.key     = s.valueString(0);
-            ret.title   = s.valueString(2);
-            if(autoKey && ret.title.isEmpty())
+            ret.title   = s.valueString(1);
+            if(autoKey && ret.title.empty())
                 ret.title   = ret.key;
         }
         return ret;
@@ -155,16 +155,16 @@ namespace cdb {
     //bool                    is_leaf(Atom);
     
     
-    QString             key(Leaf l)
+    String             key(Leaf l)
     {
         static thread_local SQ s("SELECT k FROM Leafs WHERE id=?");
         return s.str(l.id);
     }
 
-    QString             label(Leaf l)
+    String             label(Leaf l)
     {
-        QString     n = title(l);
-        return n.isEmpty() ? key(l) : n;
+        String     n = title(l);
+        return n.empty() ? key(l) : n;
     }
     
     
@@ -173,7 +173,7 @@ namespace cdb {
         return exists_leaf(i) ? Leaf{i} : Leaf();
     }
 
-    Leaf                leaf(const QString& k)
+    Leaf                leaf(const String& k)
     {
         static thread_local SQ s("SELECT id FROM Leafs WHERE k=?");
         return s.as<Leaf>(k);
@@ -196,7 +196,7 @@ namespace cdb {
         return leaf(key(f));
     }
 
-    Leaf                    leaf_by_title(const QString&k)
+    Leaf                    leaf_by_title(const String&k)
     {
         static thread_local SQ    s("SELECT id FROM Leafs WHERE title like ? LIMIT 1");
         return s.as<Leaf>(k);
@@ -212,11 +212,12 @@ namespace cdb {
             return (options & AllowEmpty) ? std::make_shared<LeafFile>() : LeafFile::Shared();
         
         LeafFile::Shared     td  = std::make_shared<LeafFile>();
-        if(!td->load(ch, path(f).toStdString())){
-            yError() << "Unable to read " << path(f);
+        std::filesystem::path   fp  = path(f);
+        if(!td->load(ch, fp)){
+            yError() << "Unable to read " << fp;
             return LeafFile::Shared();
         }
-        td -> set_file(path(f));
+        td -> set_file(fp);
         return td;
     }
 
@@ -254,7 +255,7 @@ namespace cdb {
             ret.name    = s.valueString(0);
             ret.icon    = Image(s.valueU64(1)) ;
             ret.key     = s.valueString(2);
-            if(autoKey && ret.name.isEmpty())
+            if(autoKey && ret.name.empty())
                 ret.name    = ret.key;
             return ret;
         }
@@ -288,7 +289,7 @@ namespace cdb {
         return ret;
     }
 
-    QString             title(Leaf l)
+    String             title(Leaf l)
     {
         static thread_local SQ s("SELECT title FROM Leafs WHERE id=?");
         return s.str(l.id);
