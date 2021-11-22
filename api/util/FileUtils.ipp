@@ -212,7 +212,7 @@ SizeTimestamp   file_size_and_timestamp(const QString&z)
 //  Make the path (including the specified filename)
 bool            make_path(const std::filesystem::path& p, mode_t dirMode)
 {
-    if(::access(p.c_str(), X_OK) != 0)  // it exists
+    if(::access(p.c_str(), X_OK) == 0)  // it exists
         return true;
     std::filesystem::path   pp  = p.parent_path();
     if((pp != p) && !make_path(pp, dirMode))
