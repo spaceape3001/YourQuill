@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
     std::cout 
         << "Workspace Report:\n"
         << "-------------------\n"
+        << "Directory: " << wksp::quill_dir() << "\n"
         << "File     : " << wksp::quill_file() << "\n"
         << "Key      : " << wksp::quill_key() << "\n"
         << "Name     : " << wksp::name() << "\n"

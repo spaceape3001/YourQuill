@@ -109,9 +109,9 @@ namespace {
         std::error_code ec;
         if(!std::filesystem::is_directory(fs, ec))
             return BadDir;
-        if(access(fs.c_str(), R_OK | W_OK | X_OK))
+        if(access(fs.c_str(), R_OK | W_OK | X_OK) == 0)
             return WriteDir;
-        if(access(fs.c_str(), R_OK | X_OK))
+        if(access(fs.c_str(), R_OK | X_OK) == 0)
             return ReadDir;
         return BadDir;
     }
