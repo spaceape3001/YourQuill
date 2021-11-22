@@ -117,8 +117,9 @@ namespace yqdir {
     template <typename P>
     auto    for_all_children(const std::filesystem::path& dir, unsigned options, P pred)
     {
+        std::error_code ec;
         using result_t  = decltype(pred({}));
-        for(auto const& de : std::filesystem::directory_iterator(dir)){
+        for(auto const& de : std::filesystem::directory_iterator(dir, ec)){
             auto p  = de.path();
             if((options & yqdir::NO_EXT) && !p.extension().empty())
                 continue;
