@@ -234,14 +234,20 @@ namespace yqdir {
     path_vec        all_children(const path& dir, const std::string_view& name)
     {
         path_vec    ret;
-        for_all_children(dir, 0, [&](const path& p) { ret << p; });
+        for_all_children(dir, 0, [&](const path& p) { 
+            if(is_similar(p.filename().c_str(), name))
+                ret << p; 
+        });
         return ret;
     }
 
     path_vec        all_children(const std::vector<path>& dirs, const std::string_view& name)
     {
         path_vec    ret;
-        for_all_children(dirs, 0, [&](const path& p) { ret << p; });
+        for_all_children(dirs, 0, [&](const path& p) { 
+            if(is_similar(p.filename().c_str(), name))
+                ret << p; 
+        });
         return ret;
     }
     

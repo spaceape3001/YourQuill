@@ -88,6 +88,10 @@ set(util_sources
 add_library(yqutil SHARED ${util_sources})
 target_compile_definitions(yqutil PRIVATE YQ__CORE__OVERRIDE )
 
+IF(GCC)
+    SET(GCC_FSLIB stdc++fs)
+ENDIF()
+
 target_link_libraries(yqutil 
     PUBLIC 
         ${LOG4CPP_LIBRARIES} 
@@ -96,6 +100,7 @@ target_link_libraries(yqutil
         Qt5::Core 
         Qt5::Gui 
         Qt5::Sql
+        ${GCC_FSLIB}
 )
 
 

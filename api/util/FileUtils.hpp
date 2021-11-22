@@ -90,8 +90,12 @@ namespace yqdir {
     using   path        = std::filesystem::path;
     using   path_vec    = Vector<path>;
     
+    //  supposed to find all children with specfieid name
     path_vec        all_children(const path& dir, const std::string_view& name);
+
+    //  supposed to find all children with specfieid name
     path_vec        all_children(const std::vector<path>& dir, const std::string_view& name);
+
     path            first_child(const path& dir, const std::string_view& name);
     path            first_child(const std::vector<path>&, const std::string_view& name);
     
