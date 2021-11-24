@@ -200,3 +200,4 @@ ushort_r    to_ushort(const std::string&);
 ushort_r    to_ushort(const std::string_view&);
 ushort_r    to_ushort(const QByteArray&);
 ushort_r    to_ushort(const QString&);
+
