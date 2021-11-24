@@ -30,7 +30,7 @@ namespace {
 
 bool        StdFile::write(Vector<char>& buffer) 
 {
-    Stream  out(buffer);
+    SimpleStream  out(buffer);
     KVTree::write(out);
     if(!body.empty())
         out << '\n' << body;

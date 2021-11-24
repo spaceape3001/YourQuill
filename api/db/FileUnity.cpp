@@ -21,7 +21,7 @@
 #include <util/Result.hpp>
 #include <util/Reverse.hpp>
 #include <util/Set.hpp>
-#include <util/Stream.hpp>
+#include <util/SimpleStream.hpp>
 #include <util/Utilities.hpp>
 #include <util/Vector.hpp>
 

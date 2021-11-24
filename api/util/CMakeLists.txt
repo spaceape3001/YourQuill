@@ -54,6 +54,7 @@ set(util_sources
     ./Ref.hpp
     ./Safety.hpp
     ./Set.hpp
+    ./SimpleStream.hpp
     ./Span.hpp
     ./SqlQuery.ipp
     ./SqlQuery.hpp
@@ -61,7 +62,6 @@ set(util_sources
     ./SqlUtils.ipp
     ./SqlUtils.hpp
     ./Stack.hpp
-    ./Stream.hpp
     ./String.ipp
     ./String.hpp
     ./StringUtil.ipp

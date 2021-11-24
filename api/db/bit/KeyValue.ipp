@@ -1078,7 +1078,7 @@ namespace {
         return a;
     }
 
-    void       write_subs(Stream& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
+    void       write_subs(SimpleStream& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
     {
         for(const KeyValue& v : datas){
             if(v.empty()){
@@ -1112,14 +1112,14 @@ namespace {
 
 
 
-void    KVTree::write(Stream& out) const
+void    KVTree::write(SimpleStream& out) const
 {
     write_subs(out, subs, max_pad(*this));
 }
 
 void    KVTree::write(Vector<char>&buffer) const
 {
-    Stream  out(buffer);
+    SimpleStream  out(buffer);
     write(out);
 }
 

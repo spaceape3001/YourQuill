@@ -11,35 +11,35 @@
 class String;
 template <typename T> class Vector;
 
-class Stream {
+class SimpleStream {
 public:
     
-    Stream(Vector<char>& buf) : m_buffer(buf), m_line(1), m_col(0) {}
+    SimpleStream(Vector<char>& buf) : m_buffer(buf), m_line(1), m_col(0) {}
     
     unsigned int    line() const { return m_line; }
     unsigned int    column() const { return m_col; }
     
-    Stream&     operator<<(char ch)
+    SimpleStream&     operator<<(char ch)
     {
         put(ch);
         return *this;
     }
     
-    Stream&     operator<<(const std::string& s)
+    SimpleStream&     operator<<(const std::string& s)
     {
         for(char ch : s)
             put(ch);
         return *this;
     }
     
-    Stream&     operator<<(const std::string_view& s)
+    SimpleStream&     operator<<(const std::string_view& s)
     {
         for(char ch : s)
             put(ch);
         return *this;
     }
     
-    Stream&     operator<<(const char* z)
+    SimpleStream&     operator<<(const char* z)
     {
         for(; z && *z; ++z)
             put(*z);
@@ -64,3 +64,4 @@ private:
     unsigned int            m_line, m_col;
     
 };
+

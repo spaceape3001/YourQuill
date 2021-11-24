@@ -15,6 +15,9 @@ sharex
 toolx
 testx
 
+# Doxygen output
+3rd/pstreams-1.0.3/doc
+
 # Prerequisites
 *.d
 
