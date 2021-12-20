@@ -13,7 +13,7 @@ struct BufferStream : public Stream {
     
     ~BufferStream(){}
     
-    void write(const char* buf, size_t cb)
+    void write(const char* buf, size_t cb) override
     {
         data.append(buf, cb);
     }
@@ -23,3 +23,4 @@ struct BufferStream : public Stream {
         return std::string_view(data.data(), data.size());
     }
 };
+

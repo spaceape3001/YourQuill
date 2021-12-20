@@ -3,11 +3,22 @@
 #
 #   Files should be listed alphabetically
 
+#   This is a testing file, excluded from GIT, used for quick test compilation 
+#   of code before sliding it into the appropriate spot of the build.
+#   (ie.  prototyping goes here, but do not commit/push test.cpp.)
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/test.cpp)
+    set(util_test_source ./test.cpp)
+endif()
+
 set(util_sources
+    ${util_test_source}
+    
     ./AbstractFile.ipp
     ./AbstractFile.hpp
     ./Array1.hpp
     ./Array2.hpp
+    ./BufferStream.hpp
+    ./ByteArray.hpp
     ./Char8.hpp
     ./Char8.ipp
     ./Char32.hpp
@@ -33,6 +44,7 @@ set(util_sources
     ./FileUtils.hpp
     ./FileUtils.ipp
     ./Flag.hpp
+    ./Format.hpp
     ./Guarded.hpp
     ./Hash.hpp
     ./Http.ipp
@@ -62,6 +74,9 @@ set(util_sources
     ./SqlUtils.ipp
     ./SqlUtils.hpp
     ./Stack.hpp
+    ./Stream.hpp
+    ./StreamOps.hpp
+    ./StreamOps.ipp
     ./String.ipp
     ./String.hpp
     ./StringUtil.ipp
@@ -69,6 +84,8 @@ set(util_sources
     ./StringView.ipp
     ./StringView.hpp
     ./TypeTraits.hpp
+    ./Url.ipp
+    ./Url.hpp
     ./Utilities.ipp
     ./Utilities.hpp
     ./Vector.hpp

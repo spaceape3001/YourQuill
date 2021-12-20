@@ -5,11 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Array2.hpp"
+#include "BufferStream.hpp"
 #include "Char8.hpp"
 #include "Char32.hpp"
 #include "Compare.hpp"
 #include "Deque.hpp"
 #include "DelayInit.hpp"
+#include "Format.hpp"
 #include "Hash.hpp"
 #include "List.hpp"
 #include "Map.hpp"
@@ -21,6 +23,7 @@
 #include "String.hpp"
 #include "StringUtil.hpp"
 #include "StringView.hpp"
+#include "Url.hpp"
 #include "Vector.hpp"
 
 
@@ -33,6 +36,7 @@
 
 #include <QByteArray>
 #include <QString>
+#include <QUrl>
 
 
 namespace {
@@ -104,6 +108,7 @@ namespace {
 #include "Char32.ipp"
 #include "DelayInit.ipp"
 #include "Enum.ipp"
+#include "Format.ipp"
 #include "IgCase.ipp"
 #include "Random.ipp"
 #include "Ref.ipp"
@@ -111,4 +116,5 @@ namespace {
 #include "String.ipp"
 #include "StringUtil.ipp"
 #include "StringView.ipp"
+#include "Url.ipp"
 #include "Utilities.ipp"

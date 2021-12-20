@@ -15,6 +15,7 @@ class String;
 class StringView;
 class QByteArray;
 class QString;
+struct Url;
 
 using boolean_r         = Result<bool>;
 using double_r          = Result<double>;
@@ -41,3 +42,4 @@ using unsigned_r        = Result<unsigned int>;
 using ushort_r          = Result<unsigned short>;
 using qbytearray_r      = Result<QByteArray>;
 using qstring_r         = Result<QString>;
+using url_r             = Result<Url>;
