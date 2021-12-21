@@ -247,6 +247,10 @@ String::String(const QByteArray&s) : String(s.constData(), s.size())
 {
 }
 
+String::String(const ByteArray& s) : String(s.data(), s.size())
+{
+}
+
 
 String::String(const Vector<uint8_t>&data) : String((const char*) data.data(), data.size())
 {

@@ -19,6 +19,7 @@ set(util_sources
     ./Array2.hpp
     ./BufferStream.hpp
     ./ByteArray.hpp
+    ./ByteArray.ipp
     ./Char8.hpp
     ./Char8.ipp
     ./Char32.hpp

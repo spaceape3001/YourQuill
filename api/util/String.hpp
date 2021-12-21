@@ -8,6 +8,8 @@
 
 #include "StringsFwd.hpp"
 
+struct ByteArray;
+
 
 /*! \brief UTF-8 String
 
@@ -91,6 +93,7 @@ public:
     
     String(const QString&);
     String(const QByteArray&);
+    String(const ByteArray&);
     
     ~String(){}
     

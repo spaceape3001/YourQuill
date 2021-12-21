@@ -32,15 +32,9 @@ bool            db_run_script(const String&data, QSqlDatabase db)
     return success;
 }
 
-bool            db_run_script_file(const char*file, QSqlDatabase db)
+bool            db_run_script_file(const std::filesystem::path& file, QSqlDatabase db)
 {
-    return db_run_script(String(file_load_all(file)), db);
-}
-
-bool            db_run_script_file(const QString&str, QSqlDatabase db)
-{
-    std::string     f   = str.toStdString();
-    return db_run_script(String(file_load_all(f.c_str())), db);
+    return db_run_script(file_string(file), db);
 }
 
 

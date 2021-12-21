@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "AbstractFile.hpp"
+#include "ByteArray.hpp"
 #include "Curl.hpp"
 #include "Execute.hpp"
 #include "FileName.hpp"

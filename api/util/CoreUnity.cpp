@@ -6,6 +6,7 @@
 
 #include "Array2.hpp"
 #include "BufferStream.hpp"
+#include "ByteArray.hpp"
 #include "Char8.hpp"
 #include "Char32.hpp"
 #include "Compare.hpp"
@@ -103,7 +104,7 @@ namespace {
     }
 }
 
-
+#include "ByteArray.ipp"
 #include "Char8.ipp"
 #include "Char32.ipp"
 #include "DelayInit.ipp"

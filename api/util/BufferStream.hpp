@@ -13,9 +13,10 @@ struct BufferStream : public Stream {
     
     ~BufferStream(){}
     
-    void write(const char* buf, size_t cb) override
+    bool write(const char* buf, size_t cb) override
     {
         data.append(buf, cb);
+        return true;
     }
     
     std::string_view view() const 

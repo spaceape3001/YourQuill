@@ -54,21 +54,59 @@ bool        file_backup(const char* iFile, const char* suffix)
     return !rename(iFile, check.c_str());
 }
 
-QByteArray      file_bytes(const char*z)
+ByteArray       file_bytes(const std::filesystem::path& iFile)
 {
-    Vector<uint8_t>     bytes   = file_load_all(z);
-    return QByteArray((const char*) bytes.data(), bytes.size());
+    struct stat buf;
+    memset(&buf, 0, sizeof(buf));
+    if(::stat(iFile.c_str(), &buf) == -1)
+        return ByteArray();
+    size_t      sz  = buf.st_size;
+    int fd  = open(iFile.c_str(), O_RDONLY);
+    if(fd == -1)
+        return ByteArray();
+    
+    ByteArray   ret;
+    try {
+        ret.resize(sz);
+    } catch(const std::bad_alloc&){
+        return ByteArray();
+    }
+    ssize_t sz2 = read(fd, ret.data(), sz);
+    close(fd);
+    if(sz2 < 0)
+        return ByteArray();
+    if(sz2 < (ssize_t) sz)
+        ret.resize(sz2);
+    return ret;
 }
 
-QByteArray      file_bytes(const std::string&z)
+String          file_string(const std::filesystem::path&iFile)
 {
-    return file_bytes(z.c_str());
+    struct stat buf;
+    memset(&buf, 0, sizeof(buf));
+    if(::stat(iFile.c_str(), &buf) == -1)
+        return String();
+    size_t      sz  = buf.st_size;
+    int fd  = open(iFile.c_str(), O_RDONLY);
+    if(fd == -1)
+        return String();
+    
+    String   ret;
+    try {
+        ret.resize(sz);
+    } catch(const std::bad_alloc&){
+        return String();
+    }
+    ssize_t sz2 = read(fd, ret.data(), sz);
+    close(fd);
+    if(sz2 < 0)
+        return String();
+    if(sz2 < (ssize_t) sz)
+        ret.resize(sz2);
+    return ret;
 }
 
-QByteArray      file_bytes(const QString&z)
-{   
-    return file_bytes(z.toStdString());
-}
+
 
 bool        file_exists(const char* iFile)
 {
@@ -76,76 +114,6 @@ bool        file_exists(const char* iFile)
 }
 
 
-
-Vector<uint8_t> file_load_all(const char*iFile)
-{
-    struct stat buf;
-    memset(&buf, 0, sizeof(buf));
-    if(::stat(iFile, &buf) == -1)
-        return Vector<uint8_t>();
-    size_t      sz  = buf.st_size;
-    int fd  = open(iFile, O_RDONLY);
-    if(fd == -1)
-        return Vector<uint8_t>();
-    Vector<uint8_t> ret;
-    try {
-        ret.resize(sz);
-    } catch(const std::bad_alloc&){
-        return Vector<uint8_t>();
-    }
-    ssize_t sz2 = read(fd, ret.data(), sz);
-    close(fd);
-    if(sz2 < 0)
-        return Vector<uint8_t>();
-    if(sz2 < (ssize_t) sz)
-        ret.resize(sz2);
-    return ret;
-}
-
-Vector<uint8_t> file_load_all(const std::string&s)
-{
-    return file_load_all(s.c_str());
-}
-
-Vector<uint8_t> file_load_all(const QString&s)
-{
-    return file_load_all(s.toStdString());
-}
-
-Vector<char> file_load_char(const char*iFile)
-{
-    struct stat buf;
-    memset(&buf, 0, sizeof(buf));
-    if(::stat(iFile, &buf) == -1)
-        return Vector<char>();
-    size_t      sz  = buf.st_size;
-    int fd  = open(iFile, O_RDONLY);
-    if(fd == -1)
-        return Vector<char>();
-    Vector<char> ret;
-    try {
-        ret.resize(sz);
-    } catch(const std::bad_alloc&){
-        return Vector<char>();
-    }
-    ssize_t sz2 = read(fd, ret.data(), sz);
-    close(fd);
-    if(sz2 < 0)
-        return Vector<char>();
-    if(sz2 < (ssize_t) sz)
-        ret.resize(sz2,'\0');
-    return ret;
-}
-
-Vector<char> file_load_char(const std::string&s)
-{
-    return file_load_char(s.c_str());
-}
-
-Vector<char> file_load_char(const QString&s)
-{
-    return file_load_char(s.toStdString());
-}
 
 String  file_modified(const char* iFile)
 {

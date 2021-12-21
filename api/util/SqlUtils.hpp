@@ -32,19 +32,8 @@ bool            db_run_script(const String&script, QSqlDatabase db);
     \return TRUE if the file exists and all statements executed successfully
 
 */
-bool            db_run_script_file(const char*zFile, QSqlDatabase db);
+bool            db_run_script_file(const std::filesystem::path& file, QSqlDatabase db);
 
-/*! \brief Runs the specified script from the given filename
-
-    See db_run_script for syntax.  This loads up the file, runs that.
-    
-    \param[in]  zFile   The file to load
-    \param[in]  db      The database
-    
-    \return TRUE if the file exists and all statements executed successfully
-
-*/
-bool            db_run_script_file(const QString&zFile, QSqlDatabase db);
 
 /*! \brief Checks to see if the specified table exists 
 

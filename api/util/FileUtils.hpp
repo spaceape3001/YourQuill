@@ -14,14 +14,17 @@
 #include <iosfwd>
 #include <filesystem>
 
+class ByteArray;
 class QByteArray;
 class QString;
 class String;
 
 bool            file_backup(const char*, const char* suffix="bck");
-QByteArray      file_bytes(const char*);
-QByteArray      file_bytes(const std::string&);
-QByteArray      file_bytes(const QString&);
+ByteArray       file_bytes(const std::filesystem::path&);
+String          file_string(const std::filesystem::path&);
+//QByteArray      file_bytes(const char*);
+//QByteArray      file_bytes(const std::string&);
+//QByteArray      file_bytes(const QString&);
 bool            file_exists(const char*);
 String          file_modified(const char*);
 bool            file_readable(const char*);
@@ -56,13 +59,13 @@ Vector<String>  dir_directories(const char*);
     \note This will return an empty vector if an error occurs or the file is zero size.
     \return File contents
 */
-Vector<uint8_t> file_load_all(const char*);
-Vector<uint8_t> file_load_all(const std::string&);
-Vector<uint8_t> file_load_all(const QString&);
+//Vector<uint8_t> file_load_all(const char*);
+//Vector<uint8_t> file_load_all(const std::string&);
+//Vector<uint8_t> file_load_all(const QString&);
 
-Vector<char> file_load_char(const char*);
-Vector<char> file_load_char(const std::string&);
-Vector<char> file_load_char(const QString&);
+//Vector<char> file_load_char(const char*);
+//Vector<char> file_load_char(const std::string&);
+//Vector<char> file_load_char(const QString&);
 
 //  Make the path (including the specified filename)
 bool            make_path(const std::filesystem::path&, mode_t dirMode=0755);
