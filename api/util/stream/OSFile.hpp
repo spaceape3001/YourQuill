@@ -32,7 +32,7 @@ namespace yq {
             virtual bool    write(const char*z, size_t cb) override;
             virtual void    flush() override;
 
-            void            close();
+            void            close() override;
             
 
         private:

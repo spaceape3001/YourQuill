@@ -18,6 +18,7 @@ namespace yq {
             unsigned int    line() const { return m_line; }
             unsigned int    column() const { return m_column; }
             
+            void    close() override;
             bool    write(const char* z, size_t cb) override;
             
             bool    is_open() const override;

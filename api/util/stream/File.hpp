@@ -16,7 +16,7 @@ namespace yq {
             ~File();
             
             bool        open(const std::filesystem::path&);
-            void        close();
+            void        close() override;
             bool        is_open() const override;
             
             virtual bool    write(const char*z, size_t cb) override;
