@@ -110,7 +110,7 @@ namespace {
     }
 }
 
-bool    QuillFile::write(Stream&chars) const
+bool    QuillFile::write(yq::Stream&chars) const
 {
     KVTree        attrs;
 

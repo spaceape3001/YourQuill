@@ -10,9 +10,9 @@
 #include <util/Vector.hpp>
 
 struct KeyValue;
-class LineColStream;
-class Stream;
+
 class ByteArray;
+namespace yq { class Stream; }
 
 /*! \brief Collection of key-value pairs
 
@@ -260,7 +260,7 @@ struct KVTree {
     
     bool                        parse(const ByteArray& buffer, String* body, bool recursive, const std::string& fname);
     //void                        write(Vector<char>&) const;
-    void                        write(Stream&) const;
+    void                        write(yq::Stream&) const;
 };
 
 //! \brief KeyValue (in a file)

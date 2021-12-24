@@ -114,8 +114,8 @@ bool            AbstractFile::save_to(const std::filesystem::path& oPath) const
     if(!write_enabled())
         return false;
     
-    ByteArray       data;
-    ByteStream      output(data);
+    ByteArray               data;
+    yq::stream::Bytes       output(data);
     if(!write(output))
         return false;
         
@@ -145,7 +145,7 @@ bool            AbstractFile::save_to(const std::filesystem::path& oPath) const
 }
 
 
-bool            AbstractFile::save_to(Stream&out) const
+bool            AbstractFile::save_to(yq::Stream&out) const
 {   
     if(!write_enabled())
         return false;

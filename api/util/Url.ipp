@@ -39,7 +39,7 @@ String   Url::string(unsigned int opts) const
     //return buf.view();
 }
 
-void    Url::write_to(Stream&str, unsigned int opts) const
+void    Url::write_to(yq::Stream&str, unsigned int opts) const
 {
     str << string(opts);
 }
@@ -64,7 +64,7 @@ QUrl    Url::qUrl(unsigned int opts) const
     return ret;
 }
 
-Stream& operator<<(Stream&str, const Url&v)
+yq::Stream& operator<<(yq::Stream&str, const Url&v)
 {
     v.write_to(str);
     return str;

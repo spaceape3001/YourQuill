@@ -21,7 +21,7 @@ protected:
     virtual bool    write(XmlDocument&) const = 0;
 
     virtual bool    read(ByteArray&&, const std::string& fname) override;
-    virtual bool    write(Stream&) const override;
+    virtual bool    write(yq::Stream&) const override;
 
     virtual bool    is_binary() const override { return false; }
 };

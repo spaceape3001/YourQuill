@@ -34,7 +34,7 @@ bool    XmlFile::read(ByteArray&&buffer, const std::string& fname )
     return read(doc,fname);
 }
 
-bool    XmlFile::write(Stream & str) const
+bool    XmlFile::write(yq::Stream & str) const
 {
     Vector<char>    s;
     XmlDocument     doc;

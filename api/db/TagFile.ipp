@@ -45,7 +45,7 @@ bool    TagFile::read(ByteArray&&buffer, const std::string& fname)
     return true;
 }
 
-bool    TagFile::write(Stream&chars) const
+bool    TagFile::write(yq::Stream&chars) const
 {
     KVTree        attrs;
     if(!name.empty())

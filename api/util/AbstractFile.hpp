@@ -14,7 +14,9 @@
 
 class ByteArray;
 class String;
-class Stream;
+namespace yq {
+    class Stream;
+}
 class QString;
 
 /*! \brief Root of SMALL files
@@ -52,7 +54,7 @@ public:
     //  Saves to the specified file WITHOUT changign the file
     bool            save_to(const std::filesystem::path&) const;
 
-    bool            save_to(Stream&) const;
+    bool            save_to(yq::Stream&) const;
     //bool            save_to(Vector<char>&);
     
     void            set_file(const std::filesystem::path&);
@@ -68,7 +70,7 @@ protected:
                     could easily have MULTIPLE null values.
     */
     virtual bool    read(ByteArray&&, const std::string& fname) = 0;
-    virtual bool    write(Stream&) const = 0;
+    virtual bool    write(yq::Stream&) const = 0;
     virtual bool    is_binary() const { return false; }
 
     virtual bool    read_enabled() const { return true; }

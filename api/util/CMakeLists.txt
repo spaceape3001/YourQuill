@@ -19,7 +19,6 @@ set(util_sources
     ./Array2.hpp
     ./ByteArray.hpp
     ./ByteArray.ipp
-    ./ByteStream.hpp
     ./Char8.hpp
     ./Char8.ipp
     ./Char32.hpp
@@ -42,8 +41,6 @@ set(util_sources
     ./Execute.hpp
     ./FileName.hpp
     ./FileName.ipp
-    ./FileStream.hpp
-    ./FileStream.ipp
     ./FileUtils.hpp
     ./FileUtils.ipp
     ./Flag.hpp
@@ -56,8 +53,6 @@ set(util_sources
     ./IgCase.ipp
     ./IntRange.hpp
     ./IOUnity.cpp
-    ./LinuxFileStream.hpp
-    ./LinuxFileStream.ipp
     ./List.hpp
     ./LogFile.hpp
     ./LogFile.ipp
@@ -71,7 +66,6 @@ set(util_sources
     ./Ref.hpp
     ./Safety.hpp
     ./Set.hpp
-    ./SimpleStream.hpp
     ./Span.hpp
     ./SqlQuery.ipp
     ./SqlQuery.hpp
@@ -80,8 +74,7 @@ set(util_sources
     ./SqlUtils.hpp
     ./Stack.hpp
     ./Stream.hpp
-    ./StreamOps.hpp
-    ./StreamOps.ipp
+    # ./StreamOps.ipp
     ./String.ipp
     ./String.hpp
     ./StringUtil.ipp
@@ -105,6 +98,12 @@ set(util_sources
     #./ZipReader.hpp
     #./ZipWriter.hpp
 
+    ./stream/Bytes.hpp
+    ./stream/File.hpp
+    ./stream/OSFile.hpp
+    ./stream/LineCol.hpp
+    ./stream/Ops.hpp
+    ./stream/Streams.cpp
 )
 
 add_library(yqutil SHARED ${util_sources})

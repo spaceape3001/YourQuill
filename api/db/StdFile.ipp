@@ -28,7 +28,7 @@ namespace {
 }
 
 
-bool        StdFile::write(Stream& buffer) const
+bool        StdFile::write(yq::Stream& buffer) const
 {
     KVTree::write(buffer);
     if(!body.empty())

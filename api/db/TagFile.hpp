@@ -17,5 +17,5 @@ public:
 protected:
     virtual void    reset() override;
     virtual bool    read(ByteArray&&buffer, const std::string& fname) override;
-    virtual bool    write(Stream&) const override;
+    virtual bool    write(yq::Stream&) const override;
 };

@@ -17,15 +17,16 @@
 #include <db/bit/KeyValue.hpp>
 
 #include <util/ByteArray.hpp>
-#include <util/ByteStream.hpp>
 #include <util/FileUtils.hpp>
 #include <util/Logging.hpp>
 #include <util/Result.hpp>
 #include <util/Reverse.hpp>
 #include <util/Set.hpp>
-#include <util/StreamOps.hpp>
 #include <util/Utilities.hpp>
 #include <util/Vector.hpp>
+
+#include <util/stream/Bytes.hpp>
+#include <util/stream/Ops.hpp>
 
 #include <QDir>
 #include <QFile>

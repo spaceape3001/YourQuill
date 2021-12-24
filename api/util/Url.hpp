@@ -6,7 +6,9 @@
 #include <string_view>
 
 class QUrl;
-class Stream;
+namespace yq {
+    class Stream;
+}
 
 struct Url {
     enum {
@@ -32,11 +34,11 @@ struct Url {
     static url_r    parse(const std::string_view&, unsigned int opts=~0U);
     static Url      file(const std::filesystem::path&);
     String          string(unsigned int opts=~0U) const;
-    void            write_to(Stream&, unsigned int opts=~0U) const;
+    void            write_to(yq::Stream&, unsigned int opts=~0U) const;
     
     static Url      fromQUrl(const QUrl&);
     QUrl            qUrl(unsigned int opts=~0U) const;
 };
 
 
-Stream& operator<<(Stream&, const Url&);
+yq::Stream& operator<<(yq::Stream&, const Url&);

@@ -6,13 +6,12 @@
 
 #include "AbstractFile.hpp"
 #include "ByteArray.hpp"
-#include "ByteStream.hpp"
 #include "Curl.hpp"
 #include "Execute.hpp"
 #include "FileName.hpp"
 #include "FileUtils.hpp"
 #include "Http.hpp"
-#include "LinuxFileStream.hpp"
+
 #include "LogFile.hpp"
 #include "Logging.hpp"
 #include "Strings.hpp"
@@ -24,6 +23,8 @@
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
 
+
+#include <util/stream/Bytes.hpp>
 
 #if 0
 //#include "meta/Variant.hpp"
@@ -43,8 +44,6 @@
 #include <QTimer>
 
 #include <dirent.h>
-#include <fcntl.h>
-#include <unistd.h>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -56,7 +55,7 @@
 #include "FileName.ipp"
 #include "FileUtils.ipp"
 #include "Http.ipp"
-#include "LinuxFileStream.ipp"
+
 #include "LogFile.ipp"
 #include "Logging.ipp"
 #include "XmlFile.ipp"

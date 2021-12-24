@@ -1078,7 +1078,7 @@ namespace {
         return a;
     }
 
-    void       write_subs(LineColStream& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
+    void       write_subs(yq::stream::LineCol& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
     {
         for(const KeyValue& v : datas){
             if(v.empty()){
@@ -1112,9 +1112,9 @@ namespace {
 
 
 
-void    KVTree::write(Stream& out) const
+void    KVTree::write(yq::Stream& out) const
 {
-    LineColStream       counter(out);
+    yq::stream::LineCol     counter(out);
     write_subs(counter, subs, max_pad(*this));
 }
 

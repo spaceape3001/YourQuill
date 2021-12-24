@@ -271,7 +271,7 @@ namespace {
     }
 }
 
-bool    ClassFile::write(Stream& chars)   const
+bool    ClassFile::write(yq::Stream& chars)   const
 {
     KVTree        attrs;
     
