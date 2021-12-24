@@ -13,7 +13,7 @@ bool        StdFile::empty() const
 
 
 
-bool        StdFile::read(Vector<char>&buffer, const std::string& fname) 
+bool        StdFile::read(ByteArray&&buffer, const std::string& fname) 
 {
     return KVTree::parse(buffer, (has_body()?&body:nullptr), recursive_attributes(), fname);
 }
@@ -28,12 +28,11 @@ namespace {
 }
 
 
-bool        StdFile::write(Vector<char>& buffer) 
+bool        StdFile::write(Stream& buffer) const
 {
-    SimpleStream  out(buffer);
-    KVTree::write(out);
+    KVTree::write(buffer);
     if(!body.empty())
-        out << '\n' << body;
+        buffer << '\n' << body;
     return true;
 }
 

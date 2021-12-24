@@ -18,10 +18,10 @@ protected:
     ~XmlFile();
 
     virtual bool    read(const XmlDocument&, const std::string& fname) = 0;
-    virtual bool    write(XmlDocument&) = 0;
+    virtual bool    write(XmlDocument&) const = 0;
 
-    virtual bool    read(Vector<char>&, const std::string& fname) override;
-    virtual bool    write(Vector<char>&) override;
+    virtual bool    read(ByteArray&&, const std::string& fname) override;
+    virtual bool    write(Stream&) const override;
 
     virtual bool    is_binary() const override { return false; }
 };

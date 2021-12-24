@@ -48,7 +48,7 @@ namespace {
     }
 }
 
-bool    QuillFile::read(Vector<char>&buffer, const std::string& fname) 
+bool    QuillFile::read(ByteArray&&buffer, const std::string& fname) 
 {
     KVTree        attrs;
     if(!attrs.parse(buffer, nullptr, true, fname))
@@ -110,7 +110,7 @@ namespace {
     }
 }
 
-bool    QuillFile::write(Vector<char>&chars) 
+bool    QuillFile::write(Stream&chars) const
 {
     KVTree        attrs;
 

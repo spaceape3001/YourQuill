@@ -17,9 +17,9 @@ set(util_sources
     ./AbstractFile.hpp
     ./Array1.hpp
     ./Array2.hpp
-    ./BufferStream.hpp
     ./ByteArray.hpp
     ./ByteArray.ipp
+    ./ByteStream.hpp
     ./Char8.hpp
     ./Char8.ipp
     ./Char32.hpp
@@ -42,6 +42,8 @@ set(util_sources
     ./Execute.hpp
     ./FileName.hpp
     ./FileName.ipp
+    ./FileStream.hpp
+    ./FileStream.ipp
     ./FileUtils.hpp
     ./FileUtils.ipp
     ./Flag.hpp
@@ -54,6 +56,8 @@ set(util_sources
     ./IgCase.ipp
     ./IntRange.hpp
     ./IOUnity.cpp
+    ./LinuxFileStream.hpp
+    ./LinuxFileStream.ipp
     ./List.hpp
     ./LogFile.hpp
     ./LogFile.ipp

@@ -14,6 +14,8 @@
 #include <filesystem>
 #include <util/String.hpp>
 
+class ByteArray;
+
 /*! \brief Directory in the cache
 
     This structure represents an directory on the drive, in cache.
@@ -154,14 +156,6 @@ namespace cdb {
 
     String                  brief(Folder);
 
-    QByteArray              bytes(Fragment);                    // reads the specified fragment
-    QByteArray              bytes(const String&);              // equiv to bytes(fragment(document(k)))
-    QByteArray              bytes(const String&, DataRole);
-
-    Vector<char>            chars(Fragment);
-    Vector<char>            chars(const String&);
-    Vector<char>            chars(const String&, DataRole);
-    
     DirOrFrag               child(Directory, const String&);
     DocOrFold               child(Folder, const String&);
 
@@ -169,10 +163,10 @@ namespace cdb {
     size_t                  child_count(Folder);
 
 #if 0
-    String                 child_key(Directory);       //<! Key inside the directory (with extensions)
-    String                 child_key(Document);
-    String                 child_key(Folder);
-    String                 child_key(Fragment);
+    String                  child_key(Directory);       //<! Key inside the directory (with extensions)
+    String                  child_key(Document);
+    String                  child_key(Folder);
+    String                  child_key(Fragment);
 #endif
 
     Vector<DirOrFrag>       children(Directory,Sorted sorted=Sorted());
@@ -261,6 +255,14 @@ namespace cdb {
     Vector<Folder>          folders(Folder, unsigned int opts=0);
     Vector<Folder>          folders(Folder, Sorted sorted);
     size_t                  folders_count(Folder, unsigned int opts=0);
+
+    ByteArray               frag_bytes(Fragment);                    // reads the specified fragment
+    ByteArray               frag_bytes(const String&);              // equiv to bytes(fragment(document(k)))
+    ByteArray               frag_bytes(const String&, DataRole);
+
+    //String                  frag_string(Fragment);
+    //String                  frag_string(const String&);
+    //String                  frag_string(const String&, DataRole);
 
     Fragment                fragment(const std::filesystem::path&);
     Fragment                fragment(const String&);

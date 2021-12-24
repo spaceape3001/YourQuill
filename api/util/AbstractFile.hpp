@@ -12,7 +12,9 @@
 #include "VectorFwd.hpp"
 //#include "TypeFwd.hpp"
 
+class ByteArray;
 class String;
+class Stream;
 class QString;
 
 /*! \brief Root of SMALL files
@@ -27,15 +29,14 @@ public:
 
     void            clear();
 
-    bool            load(const QString&);
     bool            load(const std::filesystem::path&);
     bool            load(std::istream&, const std::filesystem::path& fp=std::filesystem::path());
     //bool            load(u8_istream&, const std::filesystem::path& fp=std::filesystem::path());
     /*! \brief Loads the data
     
-        \note   This may be DESTRUCTIVE to the buffer, if important, make a copy.
+        \note   This may/will be DESTRUCTIVE to the buffer, if important, make a copy.
     */
-    bool            load(Vector<char>&buffer, const std::filesystem::path& fp=std::filesystem::path());
+    bool            load(ByteArray&& buffer, const std::filesystem::path& fp=std::filesystem::path());
     
     /*! \brief Reloads
     
@@ -44,16 +45,17 @@ public:
     bool            reload();
 
     bool            save();
+    
+    //  Saves to the specified file and changes the filename (if different)
     bool            save_as(const std::filesystem::path&);
-    bool            save_as(const QString&);
-    bool            save_to(const std::filesystem::path&);
-    bool            save_to(const QString&);
+    
+    //  Saves to the specified file WITHOUT changign the file
+    bool            save_to(const std::filesystem::path&) const;
 
-    bool            save_to(std::ostream&);
-    bool            save_to(Vector<char>&);
+    bool            save_to(Stream&) const;
+    //bool            save_to(Vector<char>&);
     
     void            set_file(const std::filesystem::path&);
-    void            set_file(const QString&);
     
     
 protected:
@@ -65,8 +67,8 @@ protected:
         \param[in]  buffer  The file data, this will be null-terminated (always).  However, if you're binary, this
                     could easily have MULTIPLE null values.
     */
-    virtual bool    read(Vector<char>&buffer, const std::string& fname) = 0;
-    virtual bool    write(Vector<char>&) = 0;
+    virtual bool    read(ByteArray&&, const std::string& fname) = 0;
+    virtual bool    write(Stream&) const = 0;
     virtual bool    is_binary() const { return false; }
 
     virtual bool    read_enabled() const { return true; }

@@ -165,7 +165,7 @@ namespace {
     }
 }
 
-bool    ClassFile::read(Vector<char>&buffer, const std::string& fname) 
+bool    ClassFile::read(ByteArray&&buffer, const std::string& fname) 
 {
     KVTree        attrs;
     if(!attrs.parse(buffer, nullptr, true, fname))
@@ -271,7 +271,7 @@ namespace {
     }
 }
 
-bool    ClassFile::write(Vector<char>& chars)  
+bool    ClassFile::write(Stream& chars)   const
 {
     KVTree        attrs;
     

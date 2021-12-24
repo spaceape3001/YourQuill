@@ -42,11 +42,6 @@ bool            AbstractFile::load(const std::filesystem::path& ipath)
     return load(fin, ipath);
 }
 
-bool            AbstractFile::load(const QString& s)
-{
-    return load(std::filesystem::path(s.toStdString()));
-}
-
 
 //bool            AbstractFile::load(u8_istream&fin, const std::filesystem::path& fp)
 bool            AbstractFile::load(std::istream&fin, const std::filesystem::path& fp)
@@ -54,8 +49,7 @@ bool            AbstractFile::load(std::istream&fin, const std::filesystem::path
     if(!read_enabled())
         return false;
 
-    Vector<char>     data;
-    
+    ByteArray       data;
     fin.seekg( 0, std::ios::end);
     bool    ok  = !fin.fail();
     size_t  sz  = fin.tellg();
@@ -75,15 +69,15 @@ bool            AbstractFile::load(std::istream&fin, const std::filesystem::path
         data << u8'\0';
     }
     
-    return load(data, fp);
+    return load(std::move(data), fp);
 }
 
-bool            AbstractFile::load(Vector<char>&data, const std::filesystem::path& fp)
+bool            AbstractFile::load(ByteArray&&data, const std::filesystem::path& fp)
 {
     if(!read_enabled())
         return false;
     reset();
-    bool ok = read(data, fp.string());
+    bool ok = read(std::move(data), fp.string());
     if(ok)
         m_file  = fp;
     return ok;
@@ -114,19 +108,15 @@ bool            AbstractFile::save_as(const std::filesystem::path& oPath)
         return false;
 }
 
-bool            AbstractFile::save_as(const QString& p)
-{
-    return save_as(std::filesystem::path(p.toStdString()));
-}
 
-
-bool            AbstractFile::save_to(const std::filesystem::path& oPath)
+bool            AbstractFile::save_to(const std::filesystem::path& oPath) const
 {
     if(!write_enabled())
         return false;
-        
-    Vector<char>    data;
-    if(!write(data))
+    
+    ByteArray       data;
+    ByteStream      output(data);
+    if(!write(output))
         return false;
         
     std::filesystem::path   tmp  = oPath.string() + ".tmp";
@@ -154,27 +144,14 @@ bool            AbstractFile::save_to(const std::filesystem::path& oPath)
     return f;
 }
 
-bool            AbstractFile::save_to(const QString&p)
-{
-    return save_to(std::filesystem::path(p.toStdString()));
-}
 
-bool            AbstractFile::save_to(std::ostream&out)
+bool            AbstractFile::save_to(Stream&out) const
 {   
     if(!write_enabled())
         return false;
-    Vector<char>    data;
-    if(!write(data))
+    if(!write(out))
         return false;
-    out.write(data.data(), data.size());
     return true;
-}
-
-bool            AbstractFile::save_to(Vector<char>&data)
-{
-    if(!write_enabled())
-        return false;
-    return write(data);
 }
 
 void            AbstractFile::set_file(const std::filesystem::path&p)
@@ -184,9 +161,5 @@ void            AbstractFile::set_file(const std::filesystem::path&p)
 }
 
 
-void            AbstractFile::set_file(const QString& s)
-{
-    set_file(std::filesystem::path(s.toStdString()));
-}
 
 

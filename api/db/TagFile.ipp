@@ -32,7 +32,7 @@ void    TagFile::reset()
     TagData::reset();
 }
 
-bool    TagFile::read(Vector<char>&buffer, const std::string& fname) 
+bool    TagFile::read(ByteArray&&buffer, const std::string& fname) 
 {
     KVTree          attrs;
     if(!attrs.parse(buffer, nullptr, true, fname))
@@ -45,7 +45,7 @@ bool    TagFile::read(Vector<char>&buffer, const std::string& fname)
     return true;
 }
 
-bool    TagFile::write(Vector<char>&chars) 
+bool    TagFile::write(Stream&chars) const
 {
     KVTree        attrs;
     if(!name.empty())

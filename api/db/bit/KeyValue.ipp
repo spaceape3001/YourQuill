@@ -821,7 +821,7 @@ namespace {
     
 }
 
-bool    KVTree::parse(const Vector<char>& buffer, String* body, bool recursive, const std::string& fname)
+bool    KVTree::parse(const ByteArray& buffer, String* body, bool recursive, const std::string& fname)
 {
     if(buffer.empty())
         return true;
@@ -1078,7 +1078,7 @@ namespace {
         return a;
     }
 
-    void       write_subs(SimpleStream& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
+    void       write_subs(LineColStream& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
     {
         for(const KeyValue& v : datas){
             if(v.empty()){
@@ -1112,16 +1112,12 @@ namespace {
 
 
 
-void    KVTree::write(SimpleStream& out) const
+void    KVTree::write(Stream& out) const
 {
-    write_subs(out, subs, max_pad(*this));
+    LineColStream       counter(out);
+    write_subs(counter, subs, max_pad(*this));
 }
 
-void    KVTree::write(Vector<char>&buffer) const
-{
-    SimpleStream  out(buffer);
-    write(out);
-}
 
 
 

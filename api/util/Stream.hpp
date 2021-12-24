@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+
 //! Abstract baseis for a stream, yes it'll use virtuals
 class Stream {
 public:

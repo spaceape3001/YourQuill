@@ -161,7 +161,8 @@ namespace wksp {
     const RootVector&               root_writes(DataRole);
     const RootVector&               roots();
     
-    const std::filesystem::path&    server_ipc();
+    //const std::filesystem::path&    server_ipc();
+    const std::filesystem::path&    server_pid();
     
     std::filesystem::path           shared(const char*);
     std::filesystem::path           shared(const QByteArray&);
@@ -218,4 +219,5 @@ namespace wksp {
     std::filesystem::path           temp_resolve(const std::filesystem::path&);
     
     const std::filesystem::path&    updater_ipc();
+    const std::filesystem::path&    updater_pid();
 }

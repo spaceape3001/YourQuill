@@ -283,13 +283,13 @@ namespace cdb {
         if(!f)
             return TagFile::Shared();
 
-        Vector<char>    ch   = chars(f);
+        auto ch   = frag_bytes(f);
         if(ch.empty())
             return fAllowEmpty ? std::make_shared<TagFile>() : TagFile::Shared();
         
         TagFile::Shared  td = std::make_shared<TagFile>();
         std::filesystem::path   fp  = path(f);
-        if(!td->load(ch, fp)){
+        if(!td->load(std::move(ch), fp)){
             yError() << "Unable to read " << fp;
             return TagFile::Shared();
         }

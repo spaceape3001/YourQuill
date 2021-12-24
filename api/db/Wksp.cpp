@@ -154,6 +154,7 @@ namespace {
         RoleVecMap              rwrite;
         path                    smartypants;
         path                    server_ipc;
+        path                    server_pid;
         String                  start;
         std::time_t             start_time;
         path                    subversion      = "/usr/bin/svn";
@@ -166,7 +167,7 @@ namespace {
         
         path                    tmp;
         path                    updater_ipc;
-        
+        path                    updater_pid;
         
         mutable tbb::spin_rw_mutex  mutex;
 
@@ -313,30 +314,30 @@ namespace wksp {
                 return false;
             }
 
-            M&  m       = impl();
+            M&  m               = impl();
 
-            m.app       = app;
-            m.app_name  = CmdArgs::appName();
-            m.options   = opts;
-            m.qarg      = arg;
+            m.app               = app;
+            m.app_name          = CmdArgs::appName();
+            m.options           = opts;
+            m.qarg              = arg;
             
-            path    q       = arg;
+            path    q           = arg;
             if(q.is_relative()){
                 char        cwd[PATH_MAX+1];
                 if(getcwd(cwd, PATH_MAX) != cwd)
                     return false;
                 cwd[PATH_MAX]   = '\0';
-                q   = path(cwd) / arg.c_str();
+                q               = path(cwd) / arg.c_str();
             }
             q = q.lexically_normal();
 
             if(opts & SEARCH){
-                m.qfile = best_guess(q);
+                m.qfile         = best_guess(q);
             } else {
                 if(is_similar(q.filename().c_str(), szQuillFile)){
-                    m.qfile   = q;
+                    m.qfile     = q;
                 } else if(is_directory(q)){
-                    m.qfile   = q / szQuillFile;
+                    m.qfile     = q / szQuillFile;
                 }
             }
 
@@ -345,8 +346,8 @@ namespace wksp {
                 return false;
             }
             
-            m.qdir      = m.qfile.parent_path();
-            m.qkey      = m.qdir.filename().c_str();
+            m.qdir              = m.qfile.parent_path();
+            m.qkey              = m.qdir.filename().c_str();
 
             if(dir_type(m.qdir) == BadDir){
                 wkspError << "Bad directory for workspace --> " << m.qdir;
@@ -360,43 +361,46 @@ namespace wksp {
             }
             
             if(doc.temp_dir.empty()){
-                m.tmp   = m.tmp / m.qkey.c_str();
+                m.tmp               = m.tmp / m.qkey.c_str();
             } else 
-                m.tmp   = absolute_proximate(doc.temp_dir, m.qdir);
+                m.tmp               = absolute_proximate(doc.temp_dir, m.qdir);
             
-            m.aux       = std::move(doc.aux_ports);
-            m.port      = doc.port;
+            m.aux                   = std::move(doc.aux_ports);
+            m.port                  = doc.port;
             if(!m.port)
-                m.port      = kDefaultPort;
-            m.read_timeout  = doc.read_timeout;
+                m.port              = kDefaultPort;
+            m.read_timeout          = doc.read_timeout;
             if(!m.read_timeout)
-                m.read_timeout  = kDefaultReadTimeout;
+                m.read_timeout      = kDefaultReadTimeout;
                 
                 
             if(!doc.log_dir.empty())
-                m.logs        = absolute_proximate(doc.log_dir, m.tmp);
+                m.logs              = absolute_proximate(doc.log_dir, m.tmp);
             else
-                m.logs        = m.tmp / "log";
+                m.logs              = m.tmp / "log";
             make_path(m.logs);
 
 
             if(opts & INIT_LOG){
-                String  lf  = String(m.app_name) + "-" + m.start + ".log";
-                path log         = m.logs / lf.c_str();
+                String  lf          = String(m.app_name) + "-" + m.start + ".log";
+                path log            = m.logs / lf.c_str();
                 log_to_file(log.c_str(), LogPriority::All);
             }
             
             if(!doc.cache.empty())
-                m.cache       = absolute_proximate(doc.cache, m.tmp);
+                m.cache             = absolute_proximate(doc.cache, m.tmp);
             else
-                m.cache       = m.tmp / "cache";
-                
+                m.cache             = m.tmp / "cache";
+            
+            m.server_pid            = m.tmp / "server.pid";
+            m.updater_ipc           = m.tmp / "updater";
+            m.updater_pid           = m.tmp / "updater.pid";
 
             StringSet        rSeen;
             Root*           rt  = new Root(m.qdir, PolicyMap(Access::ReadWrite));
             m.roots << rt;
-            m.rpath["."]              = rt;
-            m.rpath[m.qdir.c_str()]   = rt;
+            m.rpath["."]            = rt;
+            m.rpath[m.qdir.c_str()] = rt;
             m.rkey["."]             = rt;
 
             SetSpots        qs;
@@ -417,10 +421,10 @@ namespace wksp {
                 qs.copyto           = 0;
             m.home                  = doc.home;
             if(!m.home.empty())
-                qs.home            = 0;
+                qs.home             = 0;
             m.name                  = doc.name;
             if(!m.name.empty())
-                qs.name          = 0;
+                qs.name             = 0;
             
              _load(doc, rSeen, PolicyMap(Access::ReadWrite), PolicyMap((opts&TEMPLATES_RO) ? Access::ReadOnly : Access::ReadWrite), false, 0, qs);
             
@@ -519,8 +523,6 @@ namespace wksp {
             
         static void      _load(const QuillFile&doc, StringSet& rSeen, PolicyMap rPolicy, PolicyMap tPolicy, bool fTemplate, unsigned depth, SetSpots&qs)
         {   
-yError() << "Init::_load(" << doc.file() << ")";        
-        
             M& m = impl();
             path    qdir    = doc.file().parent_path();
             for(auto& rs : doc.templates){
@@ -914,6 +916,11 @@ yError() << "Init::_load(" << doc.file() << ")";
         return impl().roots;
     }
     
+    const std::filesystem::path&    server_pid()
+    {
+        return impl().server_pid;
+    }
+
     const std::filesystem::path&    smartypants()
     {
         return impl().smartypants;
@@ -1009,6 +1016,16 @@ yError() << "Init::_load(" << doc.file() << ")";
     std::filesystem::path           temp_resolve(const std::filesystem::path& p)
     {
         return impl().tmp / p;
+    }
+
+    const std::filesystem::path&    updater_ipc()
+    {
+        return impl().updater_ipc;
+    }
+
+    const std::filesystem::path&    updater_pid()
+    {
+        return impl().updater_pid;
     }
 }
 

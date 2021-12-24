@@ -207,13 +207,13 @@ namespace cdb {
         if(!f)
             return LeafFile::Shared();
 
-        Vector<char>    ch   = chars(f);
+        auto    ch   = frag_bytes(f);
         if(ch.empty())
             return (options & AllowEmpty) ? std::make_shared<LeafFile>() : LeafFile::Shared();
         
         LeafFile::Shared     td  = std::make_shared<LeafFile>();
         std::filesystem::path   fp  = path(f);
-        if(!td->load(ch, fp)){
+        if(!td->load(std::move(ch), fp)){
             yError() << "Unable to read " << fp;
             return LeafFile::Shared();
         }

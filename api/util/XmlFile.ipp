@@ -18,12 +18,13 @@ XmlFile::~XmlFile()
 {
 }
 
-bool    XmlFile::read(Vector<char>&buffer, const std::string& fname )
+bool    XmlFile::read(ByteArray&&buffer, const std::string& fname )
 {
-    buffer << '\0';
+    ByteArray   chars   = std::move(buffer);
+    chars << '\0';
     XmlDocument     doc;
     try {
-        doc.parse<0>(buffer.data());
+        doc.parse<0>(chars.data());
     } catch(const rapidxml::parse_error& pe){
         size_t  pt  = pe.where<char>() - buffer.data();
         yError() << "Xml parse error: " << pe.what() << " (at byte " << pt << ") : " << fname;
@@ -33,13 +34,15 @@ bool    XmlFile::read(Vector<char>&buffer, const std::string& fname )
     return read(doc,fname);
 }
 
-bool    XmlFile::write(Vector<char>& s)  
+bool    XmlFile::write(Stream & str) const
 {
+    Vector<char>    s;
     XmlDocument     doc;
     XmlNode*        x   = doc.allocate_node(rapidxml::node_pi, "xml", "version=\"1.0\" encoding=\"UTF-8\"");
     doc.append_node(x);
     write(doc);
     rapidxml::print(std::back_inserter(s), doc, 0);
+    str.write(s.data(), s.size());
     return true;
 }
 

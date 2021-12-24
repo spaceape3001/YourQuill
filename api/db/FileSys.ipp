@@ -248,36 +248,6 @@ namespace cdb {
         return s.str(f.id);
     }
     
-    QByteArray          bytes(Fragment f)
-    {
-        return file_bytes(path(f));
-    }
-    
-    QByteArray          bytes(const String&k)
-    {
-        return bytes(fragment(document(k)));
-    }
-    
-    QByteArray          bytes(const String&k, DataRole dr)
-    {
-        return bytes(fragment(document(k),dr));
-    }
-    
-    
-    Vector<char>        chars(Fragment f)
-    {
-        return file_load_char(path(f));
-    }
-    
-    Vector<char>        chars(const String&k)
-    {
-        return chars(fragment(document(k)));
-    }
-    
-    Vector<char>        chars(const String&k, DataRole dr)
-    {
-        return chars(fragment(document(k),dr));
-    }
     
     DirOrFrag           child(Directory d, const String& ck)
     {
@@ -988,6 +958,37 @@ namespace cdb {
         }
     }
 
+    ByteArray           frag_bytes(Fragment f)
+    {
+        return file_bytes(path(f));
+    }
+    
+    ByteArray           frag_bytes(const String&k)
+    {
+        return frag_bytes(fragment(document(k)));
+    }
+    
+    ByteArray           frag_bytes(const String&k, DataRole dr)
+    {
+        return frag_bytes(fragment(document(k),dr));
+    }
+    
+    
+    //String              frag_string(Fragment f)
+    //{
+        //return file_string(path(f));
+    //}
+    
+    //String              frag_string(const String&k)
+    //{
+        //return frag_string(fragment(document(k)));
+    //}
+    
+    //String              frag_string(const String&k, DataRole dr)
+    //{
+        //return frag_string(fragment(document(k),dr));
+    //}
+
     Fragment            fragment(const std::filesystem::path&k)
     {
         static thread_local SQ   s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
@@ -1668,6 +1669,7 @@ namespace cdb {
         return base_key(skey(f));
     }
     
+
     String             suffix(Document d)
     {
         static thread_local SQ    s("SELECT suffix FROM Documents WHERE id=?");

@@ -118,13 +118,13 @@ namespace cdb {
         if(!f)
             return ClassFile::Shared();
             
-        Vector<char>    ch   = chars(f);
+        auto          ch  = frag_bytes(f);
         if(ch.empty())
             return fAllowEmpty ? std::make_shared<ClassFile>() : ClassFile::Shared();
             
         ClassFile::Shared  td = std::make_shared<ClassFile>();
         auto fp = path(f);
-        if(!td->load(ch, fp)){
+        if(!td->load(std::move(ch), fp)){
             yError() << "Unable to read " << fp;
             return ClassFile::Shared();
         }

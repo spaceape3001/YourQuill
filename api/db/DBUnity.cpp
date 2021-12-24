@@ -21,6 +21,7 @@
 #include "CacheUtil.hpp"
 
 #include <db/bit/NKI.hpp>
+#include <util/ByteArray.hpp>
 #include <util/DiffEngine.hpp>
 #include <util/Execute.hpp>
 #include <util/FileUtils.hpp>

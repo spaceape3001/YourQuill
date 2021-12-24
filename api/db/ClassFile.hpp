@@ -20,7 +20,7 @@ public:
 
 protected:
     virtual void    reset() override;
-    virtual bool    read(Vector<char>&buffer, const std::string& fname) override;
-    virtual bool    write(Vector<char>&) override;
+    virtual bool    read(ByteArray&&buffer, const std::string& fname) override;
+    virtual bool    write(Stream&) const override;
 };
 

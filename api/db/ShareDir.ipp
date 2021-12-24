@@ -43,8 +43,10 @@ const Vector<QDir>&         share_dirs()
 
 QByteArray                  shared_bytes(const char*z)
 {
-    Vector<uint8_t> sp = file_load_all(shared_file(z));
-    return QByteArray((const char*) sp.data(), sp.size());
+    return file_bytes(shared_file(z).value.toStdString()).qBytes();
+    //ByteArray       b
+    //Vector<uint8_t> sp = file_load_all(shared_file(z));
+    //return QByteArray((const char*) sp.data(), sp.size());
 }
 
 

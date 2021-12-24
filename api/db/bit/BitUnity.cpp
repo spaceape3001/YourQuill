@@ -12,11 +12,14 @@
 
 #include <db/FileStrings.hpp>
 
+#include <util/ByteArray.hpp>
 #include <util/EnumMap.hpp>
+#include <util/LineColStream.hpp>
 #include <util/Logging.hpp>
 #include <util/Reverse.hpp>
 #include <util/Set.hpp>
-#include <util/SimpleStream.hpp>
+#include <util/Stream.hpp>
+#include <util/StreamOps.hpp>
 #include <util/Strings.hpp>
 #include <util/Utilities.hpp>
 #include <util/XmlUtils.hpp>

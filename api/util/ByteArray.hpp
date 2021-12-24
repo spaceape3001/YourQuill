@@ -31,6 +31,27 @@ public:
         return m_data[n]; 
     }
     
+    auto    begin() { return m_data.begin(); }
+    auto    begin() const { return m_data.begin(); }
+    auto    cbegin() const { return m_data.cbegin(); }
+    auto    end() { return m_data.end(); }
+    auto    end() const { return m_data.end(); }
+    auto    cend() { return m_data.cend(); }
+    
+    auto    rbegin() { return m_data.begin(); }
+    auto    rbegin() const { return m_data.begin(); }
+    auto    crbegin() const { return m_data.cbegin(); }
+    
+    auto    rend() { return m_data.end(); }
+    auto    rend() const { return m_data.end(); }
+    auto    crend() { return m_data.cend(); }
+
+    ByteArray&      append(const char* z, size_t cb)
+    {
+        m_data.append(z, cb);
+        return *this;
+    }
+    
     char*           data() 
     { 
         return m_data.data(); 
@@ -66,6 +87,11 @@ public:
         return m_data.size(); 
     }
     
+    ByteArray&  operator<<(char ch)
+    {
+        m_data += ch;
+        return *this;
+    }
     
     
 private:
