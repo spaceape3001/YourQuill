@@ -8,10 +8,7 @@
 
 #define YQUILL__API__CORE__TYPE__HASH__H__
 
-//#include "TypeFwd.hpp"
-#include "MapFwd.hpp"
-#include "VectorFwd.hpp"
-
+#include <util/preamble.hpp>
 #include <unordered_map>
 
 namespace yq {

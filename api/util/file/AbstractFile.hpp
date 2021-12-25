@@ -9,14 +9,10 @@
 #include <bits/fs_fwd.h>
 #include <bits/fs_path.h>
 #include <iosfwd>
-#include <util/collection/AllFwd.hpp>
+#include <util/preamble.hpp>
 
-//#include "TypeFwd.hpp"
 
 namespace yq {
-    class ByteArray;
-    class Stream;
-    class String;
 
     /*! \brief Root of SMALL files
 

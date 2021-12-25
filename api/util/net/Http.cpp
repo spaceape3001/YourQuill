@@ -311,7 +311,7 @@ namespace yq {
     }
 
 
-    INVOKE(
+    YQ_INVOKE(
         statusMessages();
         contentTypes();
         extToTypeMap();

@@ -7,8 +7,7 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__MULTI_MAP__H__
 
-#include "VectorFwd.hpp"
-#include <initializer_list>
+#include <util/preamble.hpp>
 #include <map>
 
 namespace yq {

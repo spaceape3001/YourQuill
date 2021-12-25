@@ -7,7 +7,6 @@
 #include "Enum.hpp"
 #include "Ref.hpp"
 #include <util/text/Char8.hpp>
-#include <util/text/StringPair.hpp>
 #include <util/collection/Vector.hpp>
 #include <cassert>
 

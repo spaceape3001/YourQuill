@@ -7,7 +7,7 @@
 #pragma once
 
 #include <vector>
-#include <stddef.h>
+#include <cstddef>
 #include <util/type/IntRange.hpp>
 
 namespace yq {

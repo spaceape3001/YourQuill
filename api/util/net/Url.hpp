@@ -6,9 +6,6 @@
 
 #pragma once
 #include <util/text/String.hpp>
-#include <util/type/ResultFwd.hpp>
-#include <filesystem>
-#include <string_view>
 
 class QUrl;
 namespace yq {

@@ -7,9 +7,8 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__SET__H__
 
-#include "AllFwd.hpp"
+#include <util/preamble.hpp>
 
-#include <cassert>
 #include <set>
 #include <list>
 #include <vector>

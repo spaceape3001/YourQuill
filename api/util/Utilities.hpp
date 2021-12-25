@@ -6,10 +6,8 @@
 
 #pragma once
 
-#include <stdint.h>
+#include <util/preamble.hpp>
 #include <iosfwd>
-
-#include <util/collection/AllFwd.hpp>
 
 class QByteArray;
 class QChar;

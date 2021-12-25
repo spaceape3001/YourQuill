@@ -11,12 +11,10 @@
 #include "Format.hpp"
 #include "IgCase.hpp"
 #include "String.hpp"
-#include "StringPair.hpp"
 #include "StringUtil.hpp"
 #include "StringView.hpp"
 
 #include <util/algo/Compare.hpp>
-#include <util/c++/NaN.hpp>
 #include <util/collection/List.hpp>
 #include <util/collection/Map.hpp>
 #include <util/collection/Set.hpp>

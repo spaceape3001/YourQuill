@@ -7,7 +7,7 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__MAP__H__
 
-#include <util/collection/AllFwd.hpp>
+#include <util/preamble.hpp>
 #include <util/type/Result.hpp>
 #include <map>
 

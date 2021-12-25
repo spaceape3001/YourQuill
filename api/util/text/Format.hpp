@@ -8,8 +8,6 @@
 
 #include <util/text/String.hpp>
 #include <util/collection/Vector.hpp>
-#include <string>
-#include <string_view>
 
 
 /*! Lightly formatting string

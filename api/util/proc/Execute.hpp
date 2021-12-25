@@ -10,7 +10,7 @@
 #pragma once
 
 #include <QStringList>
-#include <util/collection/AllFwd.hpp>
+#include <util/preamble.hpp>
 
 class QByteArray;
 

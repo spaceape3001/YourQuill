@@ -8,7 +8,7 @@
 
 /*! \brief Implementor of the safety function 
 */
-template <class P>
+template <typename P>
 class Safety {
 public:
 
@@ -36,7 +36,7 @@ private:
     Something that will trigger on a destruction, unless the flag is 
     cleared
 */
-template <class P>
+template <typename P>
 Safety<P> safety(P p) 
 { 
     return Safety<P>(p); 

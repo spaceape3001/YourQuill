@@ -9,8 +9,6 @@
 #include <util/collection/Array1.hpp>
 #include <util/collection/Vector.hpp>
 #include <util/type/IntRange.hpp>
-#include <util/type/IntRangeFwd.hpp>
-#include <algorithm>
 
 namespace yq {
 

@@ -7,10 +7,8 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__VECTOR__H__
 
-#include <cassert>
+#include <util/preamble.hpp>
 #include <vector>
-#include <algorithm>
-#include "AllFwd.hpp"
 
 namespace yq {
 
