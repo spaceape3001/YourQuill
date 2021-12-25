@@ -163,6 +163,18 @@ namespace yq {
     #elif defined(__linux__) || defined(__unix__)
         using QPathSet   = Set<QString>;
     #endif
+
+
+    namespace thread {
+        //! Gets the current thread's ID
+        unsigned int id();
+    }
+    
+    //!  The build directory
+    const char*     build_directory();
+
+    //!  The build's share directory
+    const char*     share_directory();
 }
 
 

@@ -12,15 +12,15 @@
 
 #include "WkspLogging.hpp"
 #include "ShareDir.hpp"
+
 #include <db/bit/Copyright.hpp>
 #include <meta/Global.hpp>
 #include <meta/GlobalImpl.hpp>
+#include <util/Utilities.hpp>
 #include <util/app/CmdArgs.hpp>
 #include <util/app/DelayInit.hpp>
 #include <util/file/FileUtils.hpp>
 #include <util/text/Strings.hpp>
-#include <util/thread/Id.hpp>
-#include <util/Utilities.hpp>
 
 #include <QCoreApplication>
 #include <QDateTime>

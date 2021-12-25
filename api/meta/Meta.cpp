@@ -17,11 +17,10 @@
 #include "Object.hpp"
 #include "Variant.hpp"
 
-#include "util/collection/Map.hpp"
-#include "util/text/String.hpp"
 #include "util/Utilities.hpp"
-#include "util/thread/Id.hpp"
+#include "util/collection/Map.hpp"
 #include "util/collection/Vector.hpp"
+#include "util/text/String.hpp"
 
 #include <tbb/spin_mutex.h>
 

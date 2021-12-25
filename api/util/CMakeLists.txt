@@ -19,6 +19,8 @@ set(util_sources
     #./ZipReader.hpp
     #./ZipWriter.hpp
     
+    ./library.cpp
+    ./preamble.hpp
     ./Utilities.cpp
     ./Utilities.hpp
 
@@ -95,10 +97,6 @@ set(util_sources
     ./text/Strings.hpp
     ./text/Text.cpp
     
-    ./thread/Guarded.hpp
-    ./thread/Id.hpp
-    ./thread/Thread.cpp
-    
     ./type/Enum.hpp
     ./type/Flag.hpp
     ./type/IntRange.hpp
@@ -110,7 +108,12 @@ set(util_sources
 )
 
 add_library(yqutil SHARED ${util_sources})
-target_compile_definitions(yqutil PRIVATE YQ__CORE__OVERRIDE )
+target_compile_definitions(yqutil PRIVATE 
+    YQ__CORE__OVERRIDE 
+    "-DYQ_BUILD_ROOT=\"${CMAKE_SOURCE_DIR}\"" 
+    "-DYQ_SHARE_DIR=\"${CMAKE_SOURCE_DIR}/share\"" 
+)
+
 
 IF(GCC)
     SET(GCC_FSLIB stdc++fs)

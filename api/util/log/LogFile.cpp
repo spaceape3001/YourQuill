@@ -7,7 +7,6 @@
 #include "LogFile.hpp"
 #include "Logging.hpp"
 
-#include <util/thread/Id.hpp>
 #include <QTimer>
 
 namespace yq {
