@@ -7,12 +7,15 @@
 #include "Object.hpp"
 #include "ObjectImpl.hpp"
 
-MO_ABSTRACT(Object)
+namespace yq {
 
-Object::Object()
-{
-}
+    MO_ABSTRACT(Object)
 
-Object::~Object()
-{
+    Object::Object()
+    {
+    }
+
+    Object::~Object()
+    {
+    }
 }

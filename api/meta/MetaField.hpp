@@ -2,36 +2,39 @@
 
 #include "Meta.hpp"
 
-class MetaValue;
+namespace yq {
 
-/*! \brief A read/writiable property to a value
+    class MetaValue;
 
-    \note It's assumed fields are INDEPENDENT!
-    \note For read-only, use Aspects
-*/
-class MetaField : public Meta {
-    friend class MetaValue;
-    friend class Variant;
-public:
+    /*! \brief A read/writiable property to a value
 
-    //! MetaValue that this is a sub-to
-    const MetaValue&        parent() const { return m_parent; }
-    
-    //! Type of the value
-    const MetaValue&        value() const { return m_value; }
-    
-    struct Writer;
-    virtual const char*     generic() const override { return "MetaField"; }
-    
-protected:
-    MetaField(const char*, MetaValue&, const MetaValue&);
-    ~MetaField() {}
+        \note It's assumed fields are INDEPENDENT!
+        \note For read-only, use Aspects
+    */
+    class MetaField : public Meta {
+        friend class MetaValue;
+        friend class Variant;
+    public:
 
-    virtual Variant         get(const void*) const = 0;
-    virtual bool            set(void*, const void*) const = 0;
+        //! MetaValue that this is a sub-to
+        const MetaValue&        parent() const { return m_parent; }
+        
+        //! Type of the value
+        const MetaValue&        value() const { return m_value; }
+        
+        struct Writer;
+        virtual const char*     generic() const override { return "MetaField"; }
+        
+    protected:
+        MetaField(const char*, MetaValue&, const MetaValue&);
+        ~MetaField() {}
 
-private:
+        virtual Variant         get(const void*) const = 0;
+        virtual bool            set(void*, const void*) const = 0;
 
-    MetaValue&              m_parent;
-    const MetaValue&        m_value;
-};
+    private:
+
+        MetaValue&              m_parent;
+        const MetaValue&        m_value;
+    };
+}

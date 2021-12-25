@@ -2,13 +2,16 @@
 
 #include "MetaInfo.hpp"
 
-class MetaArg : public MetaInfo {
-public:
+namespace yq {
 
-    const MetaValue& type() const { return m_type; }
+    class MetaArg : public MetaInfo {
+    public:
 
-private:
-    MetaArg(const MetaValue&, const MetaInfo*);
-    
-    const MetaValue& m_type;
-};
+        const MetaValue& type() const { return m_type; }
+
+    private:
+        MetaArg(const MetaValue&, const MetaInfo*);
+        
+        const MetaValue& m_type;
+    };
+}
