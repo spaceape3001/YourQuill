@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
 
 #include <filesystem>
 #include <string>

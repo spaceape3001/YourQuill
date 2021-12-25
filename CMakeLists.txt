@@ -50,6 +50,7 @@ find_package(TBB REQUIRED)
 find_package(Graphviz)
 find_package(SQLite3)
 # find_package(libzip REQUIRED)
+#   Qt's got issues, want to remove it....
 find_package(Qt5 REQUIRED Core Gui Network Sql Svg  Widgets WebEngine WebEngineWidgets)
 
 # find_package(nghttp2)

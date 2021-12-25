@@ -6,10 +6,11 @@
 
 #pragma once
 
-#include <util/Stream.hpp>
-class ByteArray;
+#include <util/stream/Stream.hpp>
 
 namespace yq {
+    class ByteArray;
+    
     namespace stream {
         class Bytes : public Stream {
         public:

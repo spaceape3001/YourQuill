@@ -13,90 +13,123 @@ endif()
 set(util_sources
     ${util_test_source}
     
-    ./AbstractFile.ipp
-    ./AbstractFile.hpp
-    ./Array1.hpp
-    ./Array2.hpp
-    ./ByteArray.hpp
-    ./ByteArray.ipp
-    ./Char8.hpp
-    ./Char8.ipp
-    ./Char32.hpp
-    ./Char32.ipp
-    ./CmdArgs.cpp
-    ./CmdArgs.hpp
-    ./Comma.hpp
-    ./Compare.hpp
-    ./CoreUnity.cpp
-    ./Curl.ipp
-    ./Curl.hpp
-    ./DelayInit.ipp
-    ./DelayInit.hpp
-    ./Deque.hpp
-    ./DiffEngine.hpp
-    ./Enum.ipp
-    ./Enum.hpp
-    ./EnumMap.hpp
-    ./Execute.ipp
-    ./Execute.hpp
-    ./FileName.hpp
-    ./FileName.ipp
-    ./FileUtils.hpp
-    ./FileUtils.ipp
-    ./Flag.hpp
-    ./Format.hpp
-    ./Guarded.hpp
-    ./Hash.hpp
-    ./Http.ipp
-    ./Http.hpp
-    ./IgCase.hpp
-    ./IgCase.ipp
-    ./IntRange.hpp
-    ./IOUnity.cpp
-    ./List.hpp
-    ./LogFile.hpp
-    ./LogFile.ipp
-    ./Logging.hpp
-    ./Logging.ipp
-    ./Map.hpp
-    ./MultiMap.hpp
-    ./Random.ipp
-    ./Random.hpp
-    ./Ref.ipp
-    ./Ref.hpp
-    ./Safety.hpp
-    ./Set.hpp
-    ./Span.hpp
-    ./SqlQuery.ipp
-    ./SqlQuery.hpp
-    ./SqlUnity.cpp
-    ./SqlUtils.ipp
-    ./SqlUtils.hpp
-    ./Stack.hpp
-    ./Stream.hpp
-    # ./StreamOps.ipp
-    ./String.ipp
-    ./String.hpp
-    ./StringUtil.ipp
-    ./StringUtil.hpp
-    ./StringView.ipp
-    ./StringView.hpp
-    ./TypeTraits.hpp
-    ./Url.ipp
-    ./Url.hpp
-    ./Utilities.ipp
-    ./Utilities.hpp
-    ./Vector.hpp
-    ./XmlFile.hpp
-    ./XmlFile.ipp
-    ./XmlFwd.hpp
-    ./XmlUtils.hpp
-    ./XmlUtils.ipp
+    #./AbstractFile.ipp
+    #./AbstractFile.hpp
+    #./Compare.hpp
+    #./CoreUnity.cpp
+    #./Curl.ipp
+    #./Curl.hpp
+    #./DiffEngine.hpp
+    #./Enum.ipp
+    #./Enum.hpp
+    #./Execute.ipp
+    #./Execute.hpp
+    #./FileName.hpp
+    #./FileName.ipp
+    #./FileUtils.hpp
+    #./FileUtils.ipp
+    #./Flag.hpp
+    #./Format.hpp
+    #./Guarded.hpp
+    #./Http.ipp
+    #./Http.hpp
+    #./IntRange.hpp
+    #./IOUnity.cpp
+    #./LogFile.hpp
+    #./LogFile.ipp
+    #./Logging.hpp
+    #./Logging.ipp
+    #./Random.ipp
+    #./Random.hpp
+    #./Ref.ipp
+    #./Ref.hpp
+    #./SqlQuery.ipp
+    #./SqlQuery.hpp
+    #./SqlUnity.cpp
+    #./SqlUtils.ipp
+    #./SqlUtils.hpp
+    #./Stream.hpp
+    ## ./StreamOps.ipp
+    #./String.ipp
+    #./String.hpp
+    #./StringUtil.ipp
+    #./StringUtil.hpp
+    #./StringView.ipp
+    #./StringView.hpp
+    #./Url.ipp
+    #./Url.hpp
+    #./XmlFile.hpp
+    #./XmlFile.ipp
+    #./XmlFwd.hpp
+    #./XmlUtils.hpp
+    #./XmlUtils.ipp
     
     #   Disabled until needed
     #./ZipFile.cpp
     #./ZipReader.hpp
     #./ZipWriter.hpp
+    
+    ./Utilities.cpp
+    ./Utilities.hpp
+
+    ./algo/AlgoUnity.cpp
+    ./algo/Compare.hpp
+    ./algo/DiffEngine.hpp
+    ./algo/Random.hpp
+    
+    ./app/AppUnity.cpp
+    ./app/CmdArgs.hpp
+    ./app/DelayInit.hpp
+
+    ./c++/C++.cpp
+    ./c++/Concat.hpp
+    ./c++/DebugRel.hpp
+    ./c++/NaN.hpp
+    ./c++/NoCopy.hpp
+    ./c++/NoMove.hpp
+    ./c++/Safety.hpp
+    ./c++/TypeTraits.hpp
+    ./c++/UInt128.hpp
+
+    ./collection/Array1.hpp
+    ./collection/Array2.hpp
+    ./collection/Collections.cpp
+    ./collection/Deque.hpp
+    ./collection/EnumMap.hpp
+    ./collection/Hash.hpp
+    ./collection/List.hpp
+    ./collection/Map.hpp
+    ./collection/MultiMap.hpp
+    ./collection/Set.hpp
+    ./collection/Stack.hpp
+    ./collection/Vector.hpp
+    
+    ./file/AbstractFile.hpp
+    ./file/FileUnity.cpp
+    ./file/FileUtils.hpp
+    ./file/XmlFile.hpp
+    ./file/XmlFwd.hpp
+    ./file/XmlUtils.hpp
+    
+    ./log/LogFile.cpp
+    ./log/LogFile.hpp
+    ./log/Logging.cpp
+    ./log/Logging.hpp
+    
+    ./net/Curl.cpp
+    ./net/Curl.hpp
+    ./net/Http.cpp
+    ./net/Http.hpp
+    ./net/Url.cpp
+    ./net/Url.hpp
+
+    ./proc/Execute.cpp
+    ./proc/Execute.hpp
+    
+    ./sql/SqlLogging.hpp
+    ./sql/SqlQuery.hpp
+    ./sql/SqlUnity.cpp
+    ./sql/SqlUtils.hpp
 
     ./stream/Bytes.hpp
     ./stream/File.hpp
@@ -104,6 +137,28 @@ set(util_sources
     ./stream/LineCol.hpp
     ./stream/Ops.hpp
     ./stream/Streams.cpp
+    
+    ./text/ByteArray.hpp
+    ./text/Char8.hpp
+    ./text/Char32.hpp
+    ./text/Comma.hpp
+    ./text/Format.hpp
+    ./text/IgCase.hpp
+    ./text/String.hpp
+    ./text/StringPair.hpp
+    ./text/StringUtil.hpp
+    ./text/StringView.hpp
+    ./text/Strings.hpp
+    ./text/TextUnity.cpp
+    
+    ./type/Enum.hpp
+    ./type/Flag.hpp
+    ./type/IntRange.hpp
+    ./type/Ref.hpp
+    ./type/Result.hpp
+    ./type/Span.hpp
+    ./type/Touched.hpp
+    ./type/TypeUnity.cpp
 )
 
 add_library(yqutil SHARED ${util_sources})
