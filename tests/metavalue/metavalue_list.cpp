@@ -10,8 +10,10 @@
 
 #include "meta/MetaValue.hpp"
 #include "meta/Variant.hpp"
-#include "util/Vector.hpp"
+#include "util/collection/Vector.hpp"
 //#include "math/MathFwd.hpp"
+
+using namespace yq;
 
 
 int main(int argc, char* argv[])
