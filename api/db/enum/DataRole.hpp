@@ -7,33 +7,36 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
 
-/*! \brief An area of policy
+namespace yq {
 
-*/
-YQ_ENUM(DataRole, , 
-    //!  For all non-specific stuff
-    Other,
-    
-    //! Web elements
-    DB,
+    /*! \brief An area of policy
 
-    //! CSS style
-    Style,  
-    
-    //! Calendar Configuration
-    CfgCal,
-    
-    Tags,
-    
-    Classes,
-    
-    //! Users
-    Users,
-    
-    //! Images
-    Image
-)
+    */
+    YQ_ENUM(DataRole, , 
+        //!  For all non-specific stuff
+        Other,
+        
+        //! Web elements
+        DB,
 
-MV_DECLARE(DataRole)
+        //! CSS style
+        Style,  
+        
+        //! Calendar Configuration
+        CfgCal,
+        
+        Tags,
+        
+        Classes,
+        
+        //! Users
+        Users,
+        
+        //! Images
+        Image
+    )
+
+    MV_DECLARE(DataRole)
+}

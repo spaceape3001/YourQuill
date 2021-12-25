@@ -5,47 +5,50 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <util/ResultFwd.hpp>
-#include <util/VectorFwd.hpp>
+#include <util/preamble.hpp>
 
 class QDir;
 class QFileInfo;
 class QString;
 
-using qdir_r        = Result<QDir>;
-using qfileinfo_r   = Result<QFileInfo>;
-
-//! Directory of the build
-const char*                 build_dir_path();
+namespace yq {
 
 
-//! Vector of the paths for share directories
-//!
-//! \note these are in the order of desired search (in case of conflicts)
-const Vector<QString>&      share_dir_paths();
+    using qdir_r        = Result<QDir>;
+    using qfileinfo_r   = Result<QFileInfo>;
 
-//! Vector of QDirs for the share directories
-const Vector<QDir>&         share_dirs();
+    //! Directory of the build
+    const char*                 build_dir_path();
 
-QByteArray                  shared_bytes(const char*);
 
-//! Resolves the name to a directory (returns nothing if not exists)
-qdir_r                      shared_dir(const QString&);
+    //! Vector of the paths for share directories
+    //!
+    //! \note these are in the order of desired search (in case of conflicts)
+    const Vector<QString>&      share_dir_paths();
 
-Vector<QDir>                shared_dirs(const QString&);
+    //! Vector of QDirs for the share directories
+    const Vector<QDir>&         share_dirs();
 
-//! Resolves the name to a file (returns nothing if not exists)
-qstring_r                   shared_file(const QString&);
+    QByteArray                  shared_bytes(const char*);
 
-//! Gets all matches
-Vector<QString>             shared_files(const QString&);
+    //! Resolves the name to a directory (returns nothing if not exists)
+    qdir_r                      shared_dir(const QString&);
 
-qfileinfo_r                 shared_info(const QString&);
+    Vector<QDir>                shared_dirs(const QString&);
 
-//! Gets infos for all
-Vector<QFileInfo>           sharedInfos(const QString&);
+    //! Resolves the name to a file (returns nothing if not exists)
+    qstring_r                   shared_file(const QString&);
 
-//! Resolved the name to a path (file/dir) and returns nothing if not exists
-qstring_r                   shared_path(const QString&);
+    //! Gets all matches
+    Vector<QString>             shared_files(const QString&);
 
-Vector<QString>             shared_paths(const QString&);
+    qfileinfo_r                 shared_info(const QString&);
+
+    //! Gets infos for all
+    Vector<QFileInfo>           sharedInfos(const QString&);
+
+    //! Resolved the name to a path (file/dir) and returns nothing if not exists
+    qstring_r                   shared_path(const QString&);
+
+    Vector<QString>             shared_paths(const QString&);
+}

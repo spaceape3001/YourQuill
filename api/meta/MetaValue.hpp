@@ -10,6 +10,8 @@
 #include <util/collection/Hash.hpp>
 #include <util/text/String.hpp>
 
+class QVariant;
+
 namespace yq {
 
     class Variant;
@@ -21,7 +23,6 @@ namespace yq {
 
     struct MetaField;
     struct MetaKey;
-    class QVariant;
 
     class MetaValue : public MetaType {
         friend class Variant;

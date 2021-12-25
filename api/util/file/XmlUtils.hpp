@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <util/collections/Set.hpp>
+#include <util/collection/Set.hpp>
 #include <util/type/Enum.hpp>
 #include "XmlFwd.hpp"
 

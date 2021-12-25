@@ -7,17 +7,20 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
 
-/*! 
-    \enum SizeDesc
-    \brief Generic size descriptor (for end users)
-*/
-YQ_ENUM(SizeDesc, ,
-    Original,
-    Large,
-    Medium,
-    Small
-)
+namespace yq {
 
-MV_DECLARE(SizeDesc)
+    /*! 
+        \enum SizeDesc
+        \brief Generic size descriptor (for end users)
+    */
+    YQ_ENUM(SizeDesc, ,
+        Original,
+        Large,
+        Medium,
+        Small
+    )
+
+    MV_DECLARE(SizeDesc)
+}

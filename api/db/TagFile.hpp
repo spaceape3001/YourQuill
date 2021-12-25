@@ -7,15 +7,18 @@
 #pragma once
 
 #include "TagData.hpp"
-#include <util/AbstractFile.hpp>
+#include <util/file/AbstractFile.hpp>
 
-class TagFile : public AbstractFile, public TagData {
-public:
+namespace yq {
 
-    using Shared        = std::shared_ptr<TagFile>;
+    class TagFile : public AbstractFile, public TagData {
+    public:
 
-protected:
-    virtual void    reset() override;
-    virtual bool    read(ByteArray&&buffer, const std::string& fname) override;
-    virtual bool    write(yq::Stream&) const override;
-};
+        using Shared        = std::shared_ptr<TagFile>;
+
+    protected:
+        virtual void    reset() override;
+        virtual bool    read(ByteArray&&buffer, const std::string& fname) override;
+        virtual bool    write(yq::Stream&) const override;
+    };
+}

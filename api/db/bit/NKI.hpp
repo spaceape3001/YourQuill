@@ -8,11 +8,14 @@
 
 #include <db/CacheFwd.hpp>
 #include <db/Image.hpp>
-#include <QString>
 
-namespace cdb {
-    struct NKI {
-        String      key, name;
-        Image       icon;
-    };
+
+namespace yq {
+
+    namespace cdb {
+        struct NKI {
+            String      key, name;
+            Image       icon;
+        };
+    }
 }

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <util/Logging.hpp>
+#include <util/log/Logging.hpp>
 
 #define wkspAlert           yAlert("wksp")
 #define wkspCritical        yCritical("wksp")

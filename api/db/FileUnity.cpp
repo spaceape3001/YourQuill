@@ -16,14 +16,14 @@
 
 #include <db/bit/KeyValue.hpp>
 
-#include <util/ByteArray.hpp>
-#include <util/FileUtils.hpp>
-#include <util/Logging.hpp>
-#include <util/Result.hpp>
-#include <util/Reverse.hpp>
-#include <util/Set.hpp>
+#include <util/text/ByteArray.hpp>
+#include <util/file/FileUtils.hpp>
+#include <util/log/Logging.hpp>
+#include <util/type/Result.hpp>
+#include <util/collection/Reverse.hpp>
+#include <util/collection/Set.hpp>
 #include <util/Utilities.hpp>
-#include <util/Vector.hpp>
+#include <util/collection/Vector.hpp>
 
 #include <util/stream/Bytes.hpp>
 #include <util/stream/Ops.hpp>

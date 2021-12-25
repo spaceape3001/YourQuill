@@ -12,14 +12,14 @@
 
 #include <db/FileStrings.hpp>
 
-#include <util/ByteArray.hpp>
-#include <util/EnumMap.hpp>
-#include <util/Logging.hpp>
-#include <util/Reverse.hpp>
-#include <util/Set.hpp>
-#include <util/Strings.hpp>
+#include <util/text/ByteArray.hpp>
+#include <util/collection/EnumMap.hpp>
+#include <util/log/Logging.hpp>
+#include <util/collection/Reverse.hpp>
+#include <util/collection/Set.hpp>
+#include <util/text/Strings.hpp>
 #include <util/Utilities.hpp>
-#include <util/XmlUtils.hpp>
+#include <util/file/XmlUtils.hpp>
 
 #include <util/stream/LineCol.hpp>
 #include <util/stream/Ops.hpp>

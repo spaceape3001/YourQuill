@@ -10,84 +10,86 @@
 #include <compare>
 #include <utility>
 #include <variant>
-#include <util/SetFwd.hpp>
-#include <util/VectorFwd.hpp>
+#include <util/preamble.hpp>
 
-template <typename> class Vector;
 
 class QByteArray;
 class QString;
+class QVariant;
 
-struct Atom;
-struct Attribute;
-struct Class;
-struct Directory;
-struct Document;
-struct Field;
-struct Folder;
-struct Fragment;
-struct Graph;
-struct Image;
-struct Leaf;
-struct Tag;
+namespace yq {
 
-class Root;
+    struct Atom;
+    struct Attribute;
+    struct Class;
+    struct Directory;
+    struct Document;
+    struct Field;
+    struct Folder;
+    struct Fragment;
+    struct Graph;
+    struct Image;
+    struct Leaf;
+    struct Tag;
 
-using AtomSet       = Set<Atom>;
-using ClassSet      = Set<Class>;
-using FieldSet      = Set<Field>;
-using TagSet        = Set<Tag>;
+    class Root;
 
-using AtomVec       = Vector<Atom>;
-using ClassVec      = Vector<Class>;
-using DocVec        = Vector<Document>;
-using FieldVec      = Vector<Field>;
-using TagVec        = Vector<Tag>;
+    using AtomSet       = Set<Atom>;
+    using ClassSet      = Set<Class>;
+    using FieldSet      = Set<Field>;
+    using TagSet        = Set<Tag>;
 
-namespace cdb {
+    using AtomVec       = Vector<Atom>;
+    using ClassVec      = Vector<Class>;
+    using DocVec        = Vector<Document>;
+    using FieldVec      = Vector<Field>;
+    using TagVec        = Vector<Tag>;
 
-    enum {
-    
-        // Update flags
+    namespace cdb {
+
+        enum {
         
-        //! Consider this an "update" so reset the fragment to "updated" 
-        //! \note Only the scanner should be using this, may cause issues for otherrs to set this
-        IsUpdate                = 0x1,
-        //! Ignore attributes
-        IgnoreAttributes        = 0x2,
-        //! Ignore context
-        IgnoreContext           = 0x4,
-        
-        Override                = 0x8,
-        
-        AllowEmpty              = 0x10,
-        
+            // Update flags
             
-        //  Search Flags
+            //! Consider this an "update" so reset the fragment to "updated" 
+            //! \note Only the scanner should be using this, may cause issues for otherrs to set this
+            IsUpdate                = 0x1,
+            //! Ignore attributes
+            IgnoreAttributes        = 0x2,
+            //! Ignore context
+            IgnoreContext           = 0x4,
+            
+            Override                = 0x8,
+            
+            AllowEmpty              = 0x10,
+            
+                
+            //  Search Flags
 
-        //! Include hidden things
-        Hidden                  = 0x01,
+            //! Include hidden things
+            Hidden                  = 0x01,
 
-        //! Best sort available (equiv to Sorted::YES)
-        BestSort                = 0x02
-        
-    };
+            //! Best sort available (equiv to Sorted::YES)
+            BestSort                = 0x02
+            
+        };
 
 
-    struct NKI;
+        struct NKI;
 
-    using DirOrFrag     = std::variant<bool,Directory,Fragment>;
-    using DocOrAttr     = std::variant<bool,Document,Attribute>;
-    using DocOrFold     = std::variant<bool,Document,Folder>;
-    using DirOrFragStr  = std::pair<DirOrFrag,QString>;
-    using DocOrFoldStr  = std::pair<DocOrFold,QString>;
+        using DirOrFrag     = std::variant<bool,Directory,Fragment>;
+        using DocOrAttr     = std::variant<bool,Document,Attribute>;
+        using DocOrFold     = std::variant<bool,Document,Folder>;
+        using DirOrFragStr  = std::pair<DirOrFrag,QString>;
+        using DocOrFoldStr  = std::pair<DocOrFold,QString>;
 
-    using DirString     = std::pair<Directory,QString>;
-    using DocString     = std::pair<Document,QString>;
-    using FoldString    = std::pair<Folder,QString>;
-    using FragString    = std::pair<Fragment,QString>;
+        using DirString     = std::pair<Directory,QString>;
+        using DocString     = std::pair<Document,QString>;
+        using FoldString    = std::pair<Folder,QString>;
+        using FragString    = std::pair<Fragment,QString>;
 
-    using ClassPair     = std::pair<Class,Class>;
+        using ClassPair     = std::pair<Class,Class>;
+    }
+
 }
-
 

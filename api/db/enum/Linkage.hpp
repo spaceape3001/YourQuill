@@ -7,14 +7,16 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
 
+namespace yq {
 
-YQ_ENUM(Linkage, ,
-    None,
-    Any,
-    Indirect,
-    Direct
-)
+    YQ_ENUM(Linkage, ,
+        None,
+        Any,
+        Indirect,
+        Direct
+    )
 
-MV_DECLARE(Linkage)
+    MV_DECLARE(Linkage)
+}

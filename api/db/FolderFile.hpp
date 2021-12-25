@@ -7,18 +7,21 @@
 #pragma once
 #include "StdFile.hpp"
 
-class FolderFile : public StdFile {
-public:
+namespace yq {
 
-    static constexpr Seq         zIcon      = { "icon" };
-    static constexpr Seq         zName      = { "%", "%name", "name" };
-    static constexpr const char *szFile     = ".folder";
+    class FolderFile : public StdFile {
+    public:
 
-    String      icon() const;
-    void        icon(const String&);
+        static constexpr Seq         zIcon      = { "icon" };
+        static constexpr Seq         zName      = { "%", "%name", "name" };
+        static constexpr const char *szFile     = ".folder";
 
-    String      name() const;
-    void        name(const String&);
+        String      icon() const;
+        void        icon(const String&);
 
-private:
-};
+        String      name() const;
+        void        name(const String&);
+
+    private:
+    };
+}

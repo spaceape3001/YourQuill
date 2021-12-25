@@ -6,84 +6,87 @@
 
 #pragma once
 
-String      LeafFile::abbr() const
-{
-    return value(zAbbr);
-}
+namespace yq {
 
-void        LeafFile::abbr(const String&s)
-{
-    set(zAbbr, s, true);
-}
+    String      LeafFile::abbr() const
+    {
+        return value(zAbbr);
+    }
 
-String      LeafFile::brief() const
-{
-    return value(zBrief);
-}
+    void        LeafFile::abbr(const String&s)
+    {
+        set(zAbbr, s, true);
+    }
 
-void        LeafFile::brief(const String&s)
-{
-    set(zBrief, s, true);
-}
+    String      LeafFile::brief() const
+    {
+        return value(zBrief);
+    }
 
-StringSet   LeafFile::classes() const
-{
-    return values_set(zClass);
-}
+    void        LeafFile::brief(const String&s)
+    {
+        set(zBrief, s, true);
+    }
 
-void        LeafFile::classes(const StringSet&s)
-{
-    set_set(zClass, s);
-}
+    StringSet   LeafFile::classes() const
+    {
+        return values_set(zClass);
+    }
 
-Context     LeafFile::context() const
-{
-    return Context(format(), body);
-}
+    void        LeafFile::classes(const StringSet&s)
+    {
+        set_set(zClass, s);
+    }
+
+    Context     LeafFile::context() const
+    {
+        return Context(format(), body);
+    }
 
 
-Format      LeafFile::format() const
-{
-    const KeyValue* a = first(zFormat);
-    if(!a)
+    Format      LeafFile::format() const
+    {
+        const KeyValue* a = first(zFormat);
+        if(!a)
+            return defFormat;
+        auto r = Format::value_for(a->data);
+        if(r.good)
+            return r.value;
         return defFormat;
-    auto r = Format::value_for(a->data);
-    if(r.good)
-        return r.value;
-    return defFormat;
-}
+    }
 
-void        LeafFile::format(Format f)
-{
-    set(zFormat, f.key(), true);
-}
+    void        LeafFile::format(Format f)
+    {
+        set(zFormat, f.key(), true);
+    }
 
-String      LeafFile::notes() const
-{
-    return value(zNote);
-}
+    String      LeafFile::notes() const
+    {
+        return value(zNote);
+    }
 
-void        LeafFile::notes(const String&s)
-{
-    set(zNote, s, true);
-}
+    void        LeafFile::notes(const String&s)
+    {
+        set(zNote, s, true);
+    }
 
-StringSet   LeafFile::tags() const
-{
-    return values_set(zTag);
-}
+    StringSet   LeafFile::tags() const
+    {
+        return values_set(zTag);
+    }
 
-void        LeafFile::tags(const StringSet&s)
-{
-    set_set(zTag, s);
-}
+    void        LeafFile::tags(const StringSet&s)
+    {
+        set_set(zTag, s);
+    }
 
-String      LeafFile::title() const
-{
-    return value(zTitle);
-}
+    String      LeafFile::title() const
+    {
+        return value(zTitle);
+    }
 
-void        LeafFile::title(const String&s)
-{
-    set(zTitle, s, true);
+    void        LeafFile::title(const String&s)
+    {
+        set(zTitle, s, true);
+    }
 }

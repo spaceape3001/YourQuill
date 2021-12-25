@@ -9,12 +9,12 @@
 #include "WkspLogging.hpp"
 #include "Workspace.hpp"
 
-#include <util/CmdArgs.hpp>
-#include <util/Compare.hpp>
-#include <util/Logging.hpp>
-#include <util/FileUtils.hpp>
-#include <util/String.hpp>
-#include <util/Strings.hpp>
+#include <util/app/CmdArgs.hpp>
+#include <util/algo/Compare.hpp>
+#include <util/log/Logging.hpp>
+#include <util/file/FileUtils.hpp>
+#include <util/text/String.hpp>
+#include <util/text/Strings.hpp>
 
 
 #include <pwd.h>

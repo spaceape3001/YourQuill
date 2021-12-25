@@ -8,24 +8,27 @@
 
 #include <db/enum/Access.hpp>
 #include <db/enum/DataRole.hpp>
-#include <util/EnumMapFwd.hpp>
+#include <util/preamble.hpp>
 
-using PolicyMap     = EnumMap<DataRole,Access>;
+namespace yq {
 
-Result<Access>      decode_access(const String&arg);
+    using PolicyMap     = EnumMap<DataRole,Access>;
 
-/*! \brief Merges access levels
+    Result<Access>      decode_access(const String&arg);
 
-    This merges access levels, assuming a is superior
-    
-    \param[in]  Superior access
-    \parma[in]  Subordinate access, modified
-    \return Modified subordinate access, taking the superior into account
-*/
-Access      moderate(Access a, Access b);
-Access      moderate(Access a, Access b, Access limit);
+    /*! \brief Merges access levels
 
-PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b);
-PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b, Access limit);
-PolicyMap   moderate(Access a, const PolicyMap& b);
+        This merges access levels, assuming a is superior
+        
+        \param[in]  Superior access
+        \parma[in]  Subordinate access, modified
+        \return Modified subordinate access, taking the superior into account
+    */
+    Access      moderate(Access a, Access b);
+    Access      moderate(Access a, Access b, Access limit);
 
+    PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b);
+    PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b, Access limit);
+    PolicyMap   moderate(Access a, const PolicyMap& b);
+
+}

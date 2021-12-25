@@ -21,14 +21,16 @@
 #include "CacheUtil.hpp"
 
 #include <db/bit/NKI.hpp>
-#include <util/ByteArray.hpp>
-#include <util/DiffEngine.hpp>
-#include <util/Execute.hpp>
-#include <util/FileUtils.hpp>
-#include <util/Logging.hpp>
-#include <util/Strings.hpp>
 #include <util/Utilities.hpp>
-#include <util/Vector.hpp>
+
+#include <util/algo/Compare.hpp>
+#include <util/algo/DiffEngine.hpp>
+#include <util/collection/Vector.hpp>
+#include <util/file/FileUtils.hpp>
+#include <util/log/Logging.hpp>
+#include <util/proc/Execute.hpp>
+#include <util/text/ByteArray.hpp>
+#include <util/text/Strings.hpp>
 
 #include <QIcon>
 #include <QSqlError>
@@ -36,6 +38,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QList>
 
 #include <filesystem>
 #include <sstream>

@@ -205,8 +205,8 @@ namespace yq {
         WLOCK
         _r.m_root.addAppender(f);
     }
-}
 
+}
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -246,3 +246,4 @@ log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QUrl&v)
 {
     return cs << v.toString();
 }
+

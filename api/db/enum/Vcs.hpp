@@ -7,8 +7,12 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
+
+namespace yq {
 
 YQ_ENUM(Vcs, , None, RCS, SVN, GIT)
 
 MV_DECLARE(Vcs)
+
+}

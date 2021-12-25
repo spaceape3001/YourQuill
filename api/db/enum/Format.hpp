@@ -6,15 +6,17 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
 
+namespace yq {
 
-YQ_ENUM(Format, , 
-    Markdown, 
-    ASCII, 
-    Plain, 
-    Html, 
-    Novel 
-)
+    YQ_ENUM(Format, , 
+        Markdown, 
+        ASCII, 
+        Plain, 
+        Html, 
+        Novel 
+    )
 
-MV_DECLARE(Format)
+    MV_DECLARE(Format)
+}

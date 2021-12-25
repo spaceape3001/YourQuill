@@ -7,23 +7,25 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
 
-/*! \brief Page matching
+namespace yq {
 
-*/
-YQ_ENUM(Match,,
-    //!  exact match
-    Exact,
-    //! match name
-    Name,
-    //! match extension
-    Ext,
-    //! any directory (w/o ".")
-    AnyDir,
-    //! any fragment (w/o ".")
-    NoExt
-);
-MV_DECLARE(Match)
+    /*! \brief Page matching
 
+    */
+    YQ_ENUM(Match,,
+        //!  exact match
+        Exact,
+        //! match name
+        Name,
+        //! match extension
+        Ext,
+        //! any directory (w/o ".")
+        AnyDir,
+        //! any fragment (w/o ".")
+        NoExt
+    );
+    MV_DECLARE(Match)
 
+}

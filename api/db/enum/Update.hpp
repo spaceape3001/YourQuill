@@ -7,14 +7,17 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
-#include <util/Flag.hpp>
+#include <util/type/Enum.hpp>
+#include <util/type/Flag.hpp>
 
-YQ_ENUM(Update, ,
-    Interior,   //<! Update any object-local data (no linkage)
-    Exterior    //<! Update the object-local data (with linkage)
-)
+namespace yq {
 
-using UpdateFlags = Flag<Update>;
+    YQ_ENUM(Update, ,
+        Interior,   //<! Update any object-local data (no linkage)
+        Exterior    //<! Update the object-local data (with linkage)
+    )
 
-MV_DECLARE(Update)
+    using UpdateFlags = Flag<Update>;
+
+    MV_DECLARE(Update)
+}

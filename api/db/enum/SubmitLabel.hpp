@@ -7,12 +7,15 @@
 #pragma once
 
 #include <meta/MetaValue.hpp>
-#include <util/Enum.hpp>
+#include <util/type/Enum.hpp>
 
-YQ_ENUM(SubmitLabel,,
-    Default,
-    Save,
-    Create
-)
+namespace yq {
 
-MV_DECLARE(SubmitLabel)
+    YQ_ENUM(SubmitLabel,,
+        Default,
+        Save,
+        Create
+    )
+
+    MV_DECLARE(SubmitLabel)
+}
