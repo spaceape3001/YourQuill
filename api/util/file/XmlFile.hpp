@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "AbstractFile.hpp"
-#include "Enum.hpp"
-#include "XmlFwd.hpp"
+#include <util/file/AbstractFile.hpp>
+#include <util/type/Enum.hpp>
+#include <util/file/XmlFwd.hpp>
 #include <initializer_list>
 
 namespace yq {

@@ -4,9 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/Strings.hpp"
-#include "util/Vector.hpp"
+#include "util/text/Strings.hpp"
+#include "util/collection/Vector.hpp"
 #include <iostream>
+
+using namespace yq;
 
 int main(int,char*[])
 {

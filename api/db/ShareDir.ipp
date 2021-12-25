@@ -7,11 +7,6 @@
 #pragma once
 
 namespace yq {
-    const char*                build_dir_path()
-    {
-        return YQ_BUILD_ROOT;
-    }
-
     namespace {
         Vector<QString>         _shareDirPaths()
         {

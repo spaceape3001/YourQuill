@@ -4,8 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/Char8.hpp"
+#include "util/text/Char8.hpp"
 #include <iostream>
+
+using namespace yq;
 
 int main(int argc, char* argv[])
 {

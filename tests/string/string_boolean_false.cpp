@@ -4,8 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/Strings.hpp"
+#include "util/text/Strings.hpp"
 #include <iostream>
+
+using namespace yq;
 
 int main(int argc, char* argv[])
 {

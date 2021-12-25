@@ -4,7 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/Strings.hpp"
+#include "util/text/Strings.hpp"
+
+using namespace yq;
 
 int main(int, char*[])
 {

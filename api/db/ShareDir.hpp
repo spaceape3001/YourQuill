@@ -18,7 +18,7 @@ namespace yq {
     using qfileinfo_r   = Result<QFileInfo>;
 
     //! Directory of the build
-    const char*                 build_dir_path();
+    //const char*                 build_dir_path();
 
 
     //! Vector of the paths for share directories

@@ -1,13 +1,13 @@
 
 coretest(string_blank)
 
-mt_core(string_boolean_bad)
+mt_util(string_boolean_bad)
 add_test(NAME string_boolean_bad_bad COMMAND test_string_boolean_bad bad)
 add_test(NAME string_boolean_bad_falsey COMMAND test_string_boolean_bad falsey)
 add_test(NAME string_boolean_bad_truy COMMAND test_string_boolean_bad truy)
 add_test(NAME string_boolean_bad_truey COMMAND test_string_boolean_bad truey)
 
-mt_core(string_boolean_false)
+mt_util(string_boolean_false)
 add_test(NAME string_boolean_false_0 COMMAND test_string_boolean_false 0)
 add_test(NAME string_boolean_false_False COMMAND test_string_boolean_false False)
 add_test(NAME string_boolean_false_fAlSe COMMAND test_string_boolean_false fAlSe)
@@ -16,7 +16,7 @@ add_test(NAME string_boolean_false_NO COMMAND test_string_boolean_false NO)
 add_test(NAME string_boolean_false_No COMMAND test_string_boolean_false No)
 add_test(NAME string_boolean_false_no COMMAND test_string_boolean_false no)
 
-mt_core(string_boolean_true)
+mt_util(string_boolean_true)
 add_test(NAME string_boolean_true_1 COMMAND test_string_boolean_true 1)
 add_test(NAME string_boolean_true_True COMMAND test_string_boolean_true True)
 add_test(NAME string_boolean_true_true COMMAND test_string_boolean_true true)
@@ -24,16 +24,16 @@ add_test(NAME string_boolean_true_truE COMMAND test_string_boolean_true truE)
 add_test(NAME string_boolean_true_YES COMMAND test_string_boolean_true YES)
 add_test(NAME string_boolean_true_yes COMMAND test_string_boolean_true yes)
 
-mt_core(string_equal_false)
+mt_util(string_equal_false)
 add_test(NAME string_equal_false_foobar COMMAND test_string_equal_false foobar fooBar)
 
-mt_core(string_equal_true)
+mt_util(string_equal_true)
 add_test(NAME string_equal_true_foobar COMMAND test_string_equal_true foobar foobar)
 
-mt_core(string_similar_false)
+mt_util(string_similar_false)
 add_test(NAME string_similar_false_foo_bar COMMAND test_string_similar_false foo bar)
 
-mt_core(string_similar_true)
+mt_util(string_similar_true)
 add_test(NAME string_similar_true_foobar COMMAND test_string_similar_true foobar fooBar)
 
 coretest(string_split)
