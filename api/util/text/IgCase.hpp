@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include <string_view>
 
 class QByteArray;
 class QString;
@@ -16,8 +17,7 @@ namespace yq {
     /*! \brief Useful parameter for case-insensitive string keys in sets and maps
     */
     struct IgCase {
-        bool    operator()(const String&, const String&) const;
-        bool    operator()(const StringView&, const StringView&) const;
+        bool    operator()(const std::string_view&, const std::string_view&) const;
         bool    operator()(const QString&, const QString&) const;
         bool    operator()(const QByteArray&, const QByteArray&) const;
     };
@@ -25,8 +25,7 @@ namespace yq {
     /*! \brief Useful parameter for case-insensitive string keys in sets and maps
     */
     struct RevIgCase {
-        bool    operator()(const String&, const String&) const;
-        bool    operator()(const StringView&, const StringView&) const;
+        bool    operator()(const std::string_view&, const std::string_view&) const;
         bool    operator()(const QString&, const QString&) const;
         bool    operator()(const QByteArray&, const QByteArray&) const;
     };

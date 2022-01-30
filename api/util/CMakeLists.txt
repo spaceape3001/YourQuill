@@ -63,6 +63,22 @@ set(util_sources
     ./log/Logging.cpp
     ./log/Logging.hpp
     
+    ./meta/ArgInfo.hpp
+    ./meta/Binder.hpp
+    ./meta/CollectionInfo.hpp
+    ./meta/CompoundInfo.hpp
+    ./meta/DataBlock.hpp
+    ./meta/Global.hpp
+    ./meta/Init.hpp
+    ./meta/Meta.cpp
+    ./meta/Meta.hpp
+    ./meta/MethodInfo.hpp
+    ./meta/ObjectInfo.hpp
+    ./meta/PropertyInfo.hpp
+    ./meta/StructInfo.hpp
+    ./meta/TypeInfo.hpp
+    ./meta/ValueInfo.hpp
+    
     ./net/Curl.cpp
     ./net/Curl.hpp
     ./net/Http.cpp

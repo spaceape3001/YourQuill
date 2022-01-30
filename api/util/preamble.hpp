@@ -43,10 +43,30 @@ namespace yq {
     class Char32;
     class CmdArgs;
     class DelayInit;
+    class Global;           //  a global property ... effectively
+    
+    namespace meta {
+        class ArgInfo;
+        class GlobalInfo;   // Meta for global
+        class Meta;         // base meta 
+        class MethodInfo;   // Function call
+        class ObjectInfo;   // Obtrusive data type
+        class PropertyInfo; // a object property
+        class CompoundInfo;     // CompoundInfo type (with properties & methods)   
+        class CollectionInfo;
+        
+        class StructInfo;   // Generic structure, can have an element of one for a simple data type
+        class TypeInfo;     // Unobtrusive data type
+        class ValueInfo;
+    }
+    
+    class Obj;              // object with meta
     class RefCount;
     class Stream;
     class String;
     class StringView;
+    class Variant;
+
     
         //  STRUCTS
     struct IgCase;
@@ -152,6 +172,7 @@ namespace yq {
     using StringMap             = Map<String,String,IgCase>;
     using StringMultiMap        = MultiMap<String,String,IgCase>;
     using StringSet             = Set<String,IgCase>;
+    using StringViewSet         = Set<std::string_view,IgCase>;
     using QStringSet            = Set<QString,IgCase>;
     using StringPair            = std::pair<String,String>;
     using StringIntPair         = std::pair<String,int>;
