@@ -11,27 +11,25 @@
 #endif
 
 namespace yq {
-    namespace meta {
-        //  Reserved IDs
-        enum {
-            MT_Invalid      = 0,
-            MT_Variant,
-            MC_Global,      // Global is a compound, not type
-            MT_String,
-            MT_Boolean,
-            MT_Float,
-            MT_Double,
-            MT_Int8,
-            MT_Int16,
-            MT_Int32,
-            MT_Int64,
-            MT_UInt8,
-            MT_UInt16,
-            MT_UInt32,
-            MT_UInt64,
-            
-            M_USER
-        };
-    }
+    //  Reserved IDs
+    enum {
+        MT_Invalid      = 0,
+        MT_Variant,
+        MC_Global,      // Global is a compound, not type
+        MT_String,
+        MT_Boolean,
+        MT_Float,
+        MT_Double,
+        MT_Int8,
+        MT_Int16,
+        MT_Int32,
+        MT_Int64,
+        MT_UInt8,
+        MT_UInt16,
+        MT_UInt32,
+        MT_UInt64,
+        
+        M_USER
+    };
 }
 

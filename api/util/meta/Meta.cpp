@@ -8,6 +8,7 @@
 #include "Binder.hpp"
 #include "Global.hpp"
 #include "Internal.hpp"
+#include "MetaObject.hpp"
 #include "ObjectInfo.hpp"
 #include "TypeInfo.hpp"
 #include "Init.hpp"
@@ -17,94 +18,94 @@
 #include <util/type/Variant.hpp>
 
 namespace yq {
-    namespace meta {
 
-        namespace {
-            static constexpr const unsigned int         kReserve        = 8192;     // adjust as necessary
+    namespace {
+        static constexpr const unsigned int         kReserve        = 8192;     // adjust as necessary
 
-            template <typename T>
-            void    set_and_reserve(Vector<T>& vec, size_t idx, size_t inc, const T& val, const T& def)
-            {
-                if(vec.size() <= idx){
-                    if(vec.capacity() <= idx)
-                        vec.reserve(idx + inc);
-                    vec.resize(idx+1, def);
-                }
-                vec[idx]    = val;
+        template <typename T>
+        void    set_and_reserve(Vector<T>& vec, size_t idx, size_t inc, const T& val, const T& def)
+        {
+            if(vec.size() <= idx){
+                if(vec.capacity() <= idx)
+                    vec.reserve(idx + inc);
+                vec.resize(idx+1, def);
             }
-
-            struct Repo {
-                bool                    openReg     = true;
-                Vector<const Meta*>     all;
-                Vector<const Meta*>     metas;
-                Meta::LUC<ObjectInfo>   objects;
-                Meta::LUC<TypeInfo>     types;
-                
-                Repo()
-                {
-                    all.reserve(8192);      // adjust as necessary, performance tradeoff, basically
-                    all.resize(M_USER, nullptr);
-                }
-            };
-            
-            Repo&   repo()
-            {
-                static Repo*    s_repo  = new Repo;
-                return *s_repo;
-            }
-            
-            #if 0
-            bool    is_open()
-            {
-                return repo().openReg;
-            }
-            #endif
-            
-            const char*    str_start(const char* z, const char* pat)
-            {
-                const char *y   = z;
-                for(; *y && *pat; ++y, ++pat)
-                    if(*y != *pat)
-                        return z;
-                return y;
-            }
+            vec[idx]    = val;
         }
-        
-        struct EmptyType : public TypeInfo {
-        
-            EmptyType(id_t i) : TypeInfo( i ? "Any" : "Void", __FILE__, i) 
+
+        struct Repo {
+            bool                    openReg     = true;
+            Vector<const Meta*>     all;
+            Vector<const Meta*>     metas;
+            Meta::LUC<ObjectInfo>   objects;
+            Meta::LUC<TypeInfo>     types;
+            
+            Repo()
             {
-                m_copyB     = [](impl::DataBlock&, const impl::DataBlock&) {};
-                m_ctorCopyR = [](impl::DataBlock&, const void*) {};
-                m_ctorCopyB = [](impl::DataBlock&, const impl::DataBlock&) {};
-                m_ctorMove  = [](impl::DataBlock&, impl::DataBlock&&) {};
-                m_dtor      = [](impl::DataBlock&) {};
-                m_equal     = [](const impl::DataBlock&, const impl::DataBlock&) -> bool { return true; };
-                m_moveB     = [](impl::DataBlock&, impl::DataBlock&&) {};
-                if(i)
-                    m_print = [](Stream& s, const void*) { s << "(wildcard)"; };
-                else
-                    m_print = [](Stream& s, const void*) { s << "(empty)"; };
+                all.reserve(8192);      // adjust as necessary, performance tradeoff, basically
+                all.resize(M_USER, nullptr);
             }
         };
-            
-        const TypeInfo&        invalid()
+        
+        Repo&   repo()
         {
-            static EmptyType*  s_ret = new EmptyType(MT_Invalid);
-            return *s_ret;
+            static Repo*    s_repo  = new Repo;
+            return *s_repo;
         }
         
-        const TypeInfo&        variant()
-        {
-            static EmptyType*  s_ret = new EmptyType(MT_Variant);
-            return *s_ret;
-        }
-
-
-        bool    unlocked()
+        #if 0
+        bool    is_open()
         {
             return repo().openReg;
         }
+        #endif
+        
+        const char*    str_start(const char* z, const char* pat)
+        {
+            const char *y   = z;
+            for(; *y && *pat; ++y, ++pat)
+                if(*y != *pat)
+                    return z;
+            return y;
+        }
+    }
+    
+    struct EmptyType : public TypeInfo {
+    
+        EmptyType(id_t i) : TypeInfo( i ? "Any" : "Void", __FILE__, i) 
+        {
+            m_copyB     = [](DataBlock&, const DataBlock&) {};
+            m_ctorCopyR = [](DataBlock&, const void*) {};
+            m_ctorCopyB = [](DataBlock&, const DataBlock&) {};
+            m_ctorMove  = [](DataBlock&, DataBlock&&) {};
+            m_dtor      = [](DataBlock&) {};
+            m_equal     = [](const DataBlock&, const DataBlock&) -> bool { return true; };
+            m_moveB     = [](DataBlock&, DataBlock&&) {};
+            if(i)
+                m_print = [](Stream& s, const void*) { s << "(wildcard)"; };
+            else
+                m_print = [](Stream& s, const void*) { s << "(empty)"; };
+        }
+        
+        ~EmptyType(){}
+    };
+        
+    const TypeInfo&        invalid()
+    {
+        static EmptyType*  s_ret = new EmptyType(MT_Invalid);
+        return *s_ret;
+    }
+    
+    const TypeInfo&        variant()
+    {
+        static EmptyType*  s_ret = new EmptyType(MT_Variant);
+        return *s_ret;
+    }
+
+
+    bool    meta_unlocked()
+    {
+        return repo().openReg;
     }
 
 
@@ -113,19 +114,16 @@ namespace yq {
     //  ARG
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    namespace meta {
 
         ArgInfo::ArgInfo(const char* zName, const TypeInfo&t, Meta*par) : Meta(zName, par), m_type(t) 
         {
             m_flags |= ARG;
         }
-    }
-    
+        
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  COMPOUND
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    namespace meta {
         CompoundInfo::CompoundInfo(const char zName[], const char zFile[], Meta* par, id_t i) : Meta(zName, par, i), m_file(zFile)
         {
             m_flags |= COMPOUND;
@@ -139,7 +137,7 @@ namespace yq {
         void        CompoundInfo::gather(LUC<MethodInfo>& res)
         {
             res     = {};
-            for(const Meta* m : m_children){
+            for(const Meta* m : children()){
                 if(m && (m->flags() & METHOD))
                     res << static_cast<const MethodInfo*>(m);
             }
@@ -148,48 +146,24 @@ namespace yq {
         void        CompoundInfo::gather(LUC<PropertyInfo>& res)
         {
             res     = {};
-            for(const Meta* m : m_children){
+            for(const Meta* m : children()){
                 if(m && (m->flags() & PROPERTY))
                     res << static_cast<const PropertyInfo*>(m);
             }
         }
         
-    }
-
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  GETTER
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    namespace meta {
-        Getter::Getter(PropertyInfo*m) : Meta("", m) 
-        {
-            if(m && unlocked()){
-                if(m->m_getter){
-                    std::string_view   pp  = m->parent() ?  m->parent()->name() : "(unnamed)";
-                    metaCritical  << "Duplicate getter attempted on property " << pp << "::" << m->name();
-                }
-                m->m_getter     = this;
-            }
-        }
-
-        const PropertyInfo* Getter::property() const
-        {
-            return static_cast<const PropertyInfo*>(parent());
-        }
-    }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  GLOBAL
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    namespace meta {
         GlobalInfo&     GlobalInfo::instance()
         {
             static GlobalInfo*  s_ret   = new GlobalInfo;
             return *s_ret;
         }
-    
+
         GlobalInfo::GlobalInfo() : CompoundInfo("Global", __FILE__, nullptr, MC_Global)
         {
         }
@@ -206,22 +180,19 @@ namespace yq {
         }
         
         
-        const GlobalInfo&        Binder<Global>::bind()
+        const GlobalInfo&        InfoBinder<Global>::bind()
         {
             return GlobalInfo::instance();
         }
         
-        GlobalInfo::Writer       Binder<Global>::edit()
+        GlobalInfo::Writer       InfoBinder<Global>::edit()
         {
             return GlobalInfo::Writer( &GlobalInfo::instance() );
         }
-    }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  META
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    namespace meta {
 
 
         const Vector<const Meta*>&   Meta::all()
@@ -271,51 +242,48 @@ namespace yq {
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         Meta::Writer&     Meta::Writer::alias(const char z[])
         {
-            if(z && m_meta && unlocked())
+            if(z && m_meta && meta_unlocked())
                 m_meta -> m_aliases << std::string_view(z);
             return *this;
         }
         
         Meta::Writer&     Meta::Writer::description(const char z[])
         {
-            if(z && m_meta && unlocked())
+            if(z && m_meta && meta_unlocked())
                 m_meta -> m_description = std::string_view(z);
             return *this;
         }
         
         Meta::Writer&     Meta::Writer::label(const char z[])
         {
-            if(z && m_meta && unlocked())
+            if(z && m_meta && meta_unlocked())
                 m_meta -> m_label = std::string_view(z);
             return *this;
         }
         
         Meta::Writer&     Meta::Writer::tag(const char z[], const Variant& v)
         {
-            if(z && m_meta && unlocked())
+            if(z && m_meta && meta_unlocked())
                 m_meta -> m_tags[z] = v;
             return *this;
         }
         
         Meta::Writer&   Meta::Writer::tls()
         {
-            if(m_meta && unlocked())
+            if(m_meta && meta_unlocked())
                 m_meta -> m_flags |= TLS;
             return *this;
         }
-    }
-
 
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  METHOD
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    namespace meta {
         MethodInfo::MethodInfo(const char* zName, Meta*par, options_t opts) : Meta(zName, par)
         {
             m_flags |= METHOD | opts;
-            if(zName && par && unlocked()){
+            if(zName && par && meta_unlocked()){
                 if(par -> m_flags & GLOBAL){
                     GlobalInfo* g   = static_cast<GlobalInfo*>(par);
                     if(g->m_methods.keys.has(zName))
@@ -343,13 +311,11 @@ namespace yq {
             }
         }
 
-    }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  OBJECT
+    //  OBJECT (INFO)
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    namespace meta {
         ObjectInfo::ObjectInfo(const char* zName, const char* zFile, ObjectInfo*b) : CompoundInfo(zName, zFile), m_base(b)
         {
             m_flags |= OBJECT;
@@ -382,19 +348,20 @@ namespace yq {
                 for(ObjectInfo* b = m_base; b; b = b -> m_base)
                     m_all.derived << this;
             }
-            
         }
-    }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  OBJECT (META)
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  PROPERTY
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    namespace meta {
         PropertyInfo::PropertyInfo(const char* zName, const TypeInfo&t, Meta*par, options_t opts) : Meta(zName, par), m_type(t)
         {
             m_flags |= PROPERTY | opts;
-            if(zName && par && unlocked()){
+            if(zName && par && meta_unlocked()){
                 if(par -> m_flags & GLOBAL){
                     GlobalInfo* g   = static_cast<GlobalInfo*>(par);
                     if(g->m_properties.keys.has(zName))
@@ -421,17 +388,35 @@ namespace yq {
                 }
             }
         }
-    }
 
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  SETTER
+    //  PROP GETTER
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    namespace meta {
-        Setter::Setter(PropertyInfo*m) : Meta("", m) 
+        PropGetter::PropGetter(PropertyInfo*m) : Meta("", m) 
         {
-            if(m && unlocked()){
+            if(m && meta_unlocked()){
+                if(m->m_getter){
+                    std::string_view   pp  = m->parent() ?  m->parent()->name() : "(unnamed)";
+                    metaCritical  << "Duplicate getter attempted on property " << pp << "::" << m->name();
+                }
+                m->m_getter     = this;
+            }
+        }
+
+        const PropertyInfo* PropGetter::property() const
+        {
+            return static_cast<const PropertyInfo*>(parent());
+        }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  PROP SETTER
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        PropSetter::PropSetter(PropertyInfo*m) : Meta("", m) 
+        {
+            if(m && meta_unlocked()){
                 if(m->m_setter){
                     std::string_view   pp  = m->parent() ?  m->parent()->name() : "(unnamed)";
                     metaCritical  << "Duplicate setter attempted on property " << pp << "::" << m->name();
@@ -440,17 +425,15 @@ namespace yq {
             }
         }
 
-        const PropertyInfo* Setter::property() const
+        const PropertyInfo* PropSetter::property() const
         {
             return static_cast<const PropertyInfo*>(parent());
         }
-    }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  TYPE
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    namespace meta {
         TypeInfo::TypeInfo(const char* zName, const char* zFile, id_t i) : CompoundInfo(zName, zFile, nullptr, i)
         {
             m_flags |= TYPE;
@@ -462,18 +445,18 @@ namespace yq {
             }
         }
 
+        TypeInfo::~TypeInfo()
+        {
+            //  should never be used....
+        }
+        
         void    TypeInfo::sweep_impl() 
         {
             CompoundInfo::sweep_impl();
             gather(m_methods);
             gather(m_properties);
         }
-
-    }
     
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  VALUE
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  VARIANT
@@ -490,7 +473,7 @@ namespace yq {
         Variant::Variant(Variant&&mv) : m_type(mv.m_type)
         {
             (m_type -> m_ctorMove)(m_data, std::move(mv.m_data));
-            mv.m_type   = &meta::invalid();
+            mv.m_type   = &invalid();
         }
         
         #if 0
@@ -512,12 +495,12 @@ namespace yq {
         
         
         //! Creates a defaulted Variant to the specified meta-type
-        Variant::Variant(const meta::TypeInfo&mt) : m_type(&mt)
+        Variant::Variant(const TypeInfo&mt) : m_type(&mt)
         {
             assert(m_type);
             assert(m_type -> m_ctorCopyB);
 
-            (m_type -> m_ctorCopyB)(m_data, m_type -> m_defCopy);
+            (m_type -> m_ctorCopyB)(m_data, m_type -> m_default);
         }
         
         //  Variant(const meta::Type*);
@@ -528,7 +511,7 @@ namespace yq {
             (m_type -> m_dtor)(m_data);
             
             #ifndef NDEBUG
-            m_type      = &meta::invalid();
+            m_type      = &invalid();
             #endif
         }
         
@@ -570,6 +553,7 @@ namespace yq {
                     m_type  = mv.m_type;
                     (m_type -> m_ctorMove)(m_data, std::move(mv.m_data));
                 }
+                mv.m_type   = &invalid();
             }
             return *this;
         }
@@ -587,8 +571,7 @@ namespace yq {
         }
         
 
-
-        bool            Variant::can_convert_to(const meta::TypeInfo&t) const
+        bool            Variant::can_convert_to(const TypeInfo&t) const
         {
             assert(m_type);
             if(m_type == &t)
@@ -596,13 +579,23 @@ namespace yq {
             return m_type->m_convert.has(&t);
         }
 
+        const void*      Variant::raw_ptr() const 
+        {
+            return m_type -> is_small() ? (const void*) m_data.Data : m_data.Pointer;
+        };
+        
+        void*            Variant::raw_ptr() 
+        {
+            return m_type -> is_small() ? (void*) m_data.Data : m_data.Pointer;
+        };
+
 }
 
 
 YQ_INVOKE(
-    yq::meta::invalid();
-    yq::meta::variant();
-    yq::meta::GlobalInfo::instance();
+    yq::invalid();
+    yq::variant();
+    yq::GlobalInfo::instance();
 );
 
 

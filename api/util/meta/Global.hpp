@@ -22,40 +22,35 @@ namespace yq {
         const StringSet&    variables();
     };
 
-    namespace meta {
-        class GlobalInfo : public CompoundInfo {
-        public:
+    class GlobalInfo : public CompoundInfo {
+    public:
 
-            const LUC<MethodInfo>&      methods() const { return m_methods; }
-            const LUC<PropertyInfo>&    properties() const { return m_properties; }
-            
-            class Writer;
-            
-            static GlobalInfo&          instance();
-    
-        protected:
-            GlobalInfo();
-            virtual void                sweep_impl() override;
-
-            friend class PropertyInfo;
-            friend class MethodInfo;
-
-        private:
-            LUC<MethodInfo>             m_methods;
-            LUC<PropertyInfo>           m_properties;
-        };
+        const LUC<MethodInfo>&      methods() const { return m_methods; }
+        const LUC<PropertyInfo>&    properties() const { return m_properties; }
         
-        template <>
-        struct Binder<Global> : public False {
-            static constexpr const bool     Defined     = true;
-            static constexpr const bool     IsCompound  = true;     
-            static const GlobalInfo&        bind();
-            static GlobalInfo::Writer       edit();
-        };
+        class Writer;
+        
+        static GlobalInfo&          instance();
+
+    protected:
+        GlobalInfo();
+        virtual void                sweep_impl() override;
+
+        friend class PropertyInfo;
+        friend class MethodInfo;
+
+    private:
+        LUC<MethodInfo>             m_methods;
+        LUC<PropertyInfo>           m_properties;
     };
     
-    
-    
+    template <>
+    struct InfoBinder<Global>  {
+        static constexpr const bool     Defined     = true;
+        static constexpr const bool     IsCompound  = true;     
+        static const GlobalInfo&        bind();
+        static GlobalInfo::Writer       edit();
+    };
     
 }
 

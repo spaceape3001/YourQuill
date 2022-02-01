@@ -42,8 +42,8 @@ namespace yq {
         
         
         //! Creates a defaulted Variant to the specified meta-type
-        Variant(const meta::TypeInfo&);
-        Variant(const meta::TypeInfo*);
+        Variant(const TypeInfo&);
+        Variant(const TypeInfo*);
         
         template <typename T>
         Variant(T&&);
@@ -60,11 +60,11 @@ namespace yq {
         //template <typename T>
         //bool        operator!=(const T&) const;
         
-        bool            can_convert_to(const meta::TypeInfo&) const;
+        bool            can_convert_to(const TypeInfo&) const;
         template <typename T>
         bool            can_convert_to() const;
 
-        Variant         convert_to(const meta::TypeInfo&) const;
+        Variant         convert_to(const TypeInfo&) const;
 
         template <typename T>
         Variant         convert_to() const;
@@ -73,7 +73,7 @@ namespace yq {
         //Variant         get_field(const String&) const;
         
         String          io_format() const;
-        static Variant  io_parse(const meta::TypeInfo&, const String&);
+        static Variant  io_parse(const TypeInfo&, const String&);
         
         bool            is_valid() const;
         
@@ -82,28 +82,43 @@ namespace yq {
         
             \note There's no corresponding "parse" (deliberate), see the I/O helpers
         */
-        String      print() const;
+        String          print() const;
         
+        /*! \brief Guarded pointer
+            Returns the pointer *IF* it's feasible, otherwise null
+        */
+        template <typename T>
+        T*              ptr();
+
+        /*! \brief Guarded pointer
+            Returns the pointer *IF* it's feasible, otherwise null
+        */
+        template <typename T>
+        const T*        ptr() const;
+
+        
+        //! Raw pointer to void
+        const void*         raw_ptr() const;
+        //! Raw pointer to void
+        void*               raw_ptr();
+
         //bool        set_field(const String&, const Variant&);
 
-        const meta::TypeInfo& type() const { return *m_type; }
+        const TypeInfo& type() const { return *m_type; }
 
         template <typename T>
-        Result<T>   value() const;
+        Result<T>           value() const;
         
-        Variant(const meta::TypeInfo&, const void*);
+        Variant(const TypeInfo&, const void*);
 
-        const void*         ptr() const;
-        
-        void*               ptr();
 
     private:
-        Variant(meta::TypeInfo&&) = delete;   // prohibt temporary metatypes
+        Variant(TypeInfo&&) = delete;   // prohibt temporary metatypes
 
-        const meta::TypeInfo*   m_type;
-        impl::DataBlock     m_data;
+        const TypeInfo*     m_type;
+        DataBlock           m_data;
         
-        Variant(const meta::TypeInfo&&) = delete;
+        Variant(const TypeInfo&&) = delete;
         
         
         template <typename T>
