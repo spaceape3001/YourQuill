@@ -24,6 +24,22 @@
 #include <cctype>
 #include <QString>
 
+
+    /*
+        GCC v10 did not support to/from chars on floating point types.  It's been enabled in v11.
+        Therefore, we'll macro this portion. :(
+    */
+#if defined(MSVC)
+    #define FP_CHARCONV 1
+#elif defined(__GNUC__)
+    #if __GNUC__ >= 11
+        #define FP_CHARCONV 1
+    #endif
+#endif
+#ifndef FP_CHARCONV
+    #define FP_CHARCONV 0
+#endif
+
 namespace yq {
 
     namespace {
@@ -39,6 +55,13 @@ namespace yq {
             while(s && n && isspace(s[n-1]))
                 --n;
         }
+        
+        //const char* nonspace(const char* s, size_t n)
+        //{
+            //while(s && *s && isspace(*s) && n)
+                //++s, --n;
+            //return s;
+        //}
 
         //! Checks for equality by assuming left may vary in case, the right will be lower case.
         bool    is_same(const char*a, size_t n, const char *b)
@@ -542,16 +565,26 @@ namespace yq {
         {
             //  std::to_chars would be GREAT, if GCC implemented it.....
             char    buf[kStdBuf+1];
+            #if FP_CHARCONV
             int n  = snprintf(buf, kStdBuf, "%lg", v);
             return String(buf, n);
+            #else
+            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+            return String(buf, (p-buf));
+            #endif
         }
 
         String   String::number(float v)
         {
             //  std::to_chars would be GREAT, if GCC implemented it.....
             char    buf[kStdBuf+1];
+            #if FP_CHARCONV
             int n  = snprintf(buf, kStdBuf, "%g", v);
             return String(buf, n);
+            #else
+            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+            return String(buf, (p-buf));
+            #endif
         }
 
 
@@ -1759,6 +1792,8 @@ namespace yq {
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  STRING UTILITIES
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
 
     boolean_r   to_boolean(const char*s)
     {
@@ -1769,7 +1804,6 @@ namespace yq {
 
     boolean_r   to_boolean(const char*s, size_t n)
     {
-
         if(!s)
             return bFAIL;
         
@@ -1818,6 +1852,7 @@ namespace yq {
         return bFAIL;
     }
 
+
     boolean_r   to_boolean(const std::string&s)
     {
         return to_boolean(s.data(), s.size());
@@ -1855,22 +1890,20 @@ namespace yq {
         if(!n)
             return 0.;
 
-            //  Eventually "std::from_chars" will be available for floating point numbers in GCC ....
-        char*   z       = nullptr;
-        double  res     = std::strtod(s, &z);
-        if((const char*) s != z)
-            return res;
-        return dFAIL;
-
-        #if 0
-        // std::from_chars ... nice according to the specification *BUT* gcc v10 does NOT support it for floating point types!!!! (Go figure)
-        auto [p,ec] = std::from_chars((const char*) data(), (const char*)(data()+size()), result, std::chars_format::general);
-        if(ok)
-            *ok = (ec == std::errc());
-        return result;
+        #if FP_CHARCONV
+            double  result = NaN;
+            auto [p,ec] = std::from_chars(s, s+n, result, std::chars_format::general);
+            return double_r(ec == std::errc(), result);
+        #else
+            char*   z       = nullptr;
+            double  res     = std::strtod(s, &z);
+            if((const char*) s != z)
+                return res;
+            return dFAIL;
         #endif
     }
 
+    
     double_r    to_double(const std::string&s)
     {
         return to_double(s.data(), s.size());
@@ -1893,6 +1926,7 @@ namespace yq {
 
         //  ------------------------------------
 
+
     float_r     to_float(const char*s)
     {
         if(!s)
@@ -1908,20 +1942,16 @@ namespace yq {
         if(!n)
             return 0.f;
         
-            //  Eventually "std::from_chars" will be available for floating point numbers in GCC ....
-        char*   z       = nullptr;
-        float  res     = std::strtof(s, &z);
-        if((const char*) s != z)
-            return res;
-        return fFAIL;
-
-        #if 0
-        // std::from_chars ... nice according to the specification *BUT* gcc v10 does NOT support it for floating point types!!!! (Go figure)
-        float   result = NaNf;
-        auto [p,ec] = std::from_chars(data(), data()+size(), result);
-        if(ok)
-            *ok = (ec == std::errc());
-        return result;
+        #if FP_CHARCONV
+            float  result = NaNf;
+            auto [p,ec] = std::from_chars(s, s+n, result, std::chars_format::general);
+            return float_r(ec == std::errc(), result);
+        #else
+            char*   z       = nullptr;
+            float  res     = std::strtof(s, &z);
+            if((const char*) s != z)
+                return res;
+            return fFAIL;
         #endif
     }
 

@@ -19,6 +19,7 @@
 #include <util/collection/Set.hpp>
 #include <util/collection/Vector.hpp>
 #include <util/log/Logging.hpp>
+#include <util/stream/Ops.hpp>
 
 
 #define metaAlert       yAlert("meta")
@@ -869,6 +870,7 @@ namespace yq {
         }
         
         Writer(ObjectInfo* obj) : CompoundInfo::Dynamic<C>(obj) {}
+        Writer(ObjectInfo& obj) : CompoundInfo::Dynamic<C>(&obj) {}
     };
 
 
@@ -884,24 +886,166 @@ namespace yq {
     
     template <typename T>
     using type_info_t  = TypeInfoFor<T>::Type;
-
+    
+    template <typename T>
+    unsigned    gather_types(Vector<const TypeInfo*>& ret)
+    {
+        if constexpr (is_type_v<T>){
+            ret << &meta<T>();
+        }
+        return 1;
+    }
+    
+    template <typename T, typename... Args>
+    unsigned gather_types(Vector<const TypeInfo*>& ret)
+    {
+        if constexpr (is_type_v<T>){
+            ret << &meta<T>();
+        }
+        return 1 + gather_types<Args...>(ret);
+    }
+    
+    template <typename> struct GatherTemplateArgs { 
+        unsigned operator()(Vector<const TypeInfo*>& ret)
+        {
+            return 0;
+        }
+    };
+    
+    template <template <typename...> class Tmpl, typename ...Args> 
+    struct GatherTemplateArgs<Tmpl<Args...>> {
+        unsigned    operator()(Vector<const TypeInfo*>& ret) 
+        {
+            return gather_types<Args...>(ret);
+        }
+    };
 
     template <typename T>
     class TypeInfo::Typed : public type_info_t<T> {
     protected:
         Typed(const char* zName, const char* zFile, id_t i=AUTO_ID) : type_info_t<T>(zName, zFile, i)
         {
+            options_t   opts    = 0;
+        
             TypeInfo::m_default.ctorCopy(T{});
+            TypeInfo::m_copyB         = [](DataBlock& dst, const DataBlock&src){
+                dst.reference<T>() = src.reference<T>();
+            };
+            TypeInfo::m_ctorCopyR     = [](DataBlock& dst, const void* src){ 
+                dst.ctorCopy(*(const T*) src); 
+            };
+            TypeInfo::m_ctorCopyB     = [](DataBlock& dst, const DataBlock& src){ 
+                dst.ctorCopy( src.reference<T>());
+            };
+            TypeInfo::m_ctorMove      = [](DataBlock& dst, DataBlock&& src){
+                if constexpr (sizeof(T) <= sizeof(DataBlock))
+                    dst.ctorMove( std::move(src.reference<T>()));
+                else
+                    dst.Pointer = src.Pointer;
+            };
+            TypeInfo::m_dtor          = [](DataBlock& tgt)
+            {
+                tgt.dtor<T>();
+            };
+            TypeInfo::m_equal         = [](const DataBlock& a, const DataBlock& b) -> bool 
+            {
+                return a.reference<T>() == b.reference<T>();
+            };
+            
+            if constexpr (has_less_v<T>){
+                TypeInfo::m_less      = [](const DataBlock& a, const DataBlock& b) -> bool 
+                {
+                    return a.reference<T>() < b.reference<T>();
+                };
+                opts |= LESS;
+            }
+            
+            TypeInfo::m_moveB         = [](DataBlock& a, DataBlock&&b) 
+            {
+                a.reference<T>() = std::move( b.reference<T>());
+            };
+            
+            TypeInfo::m_size          = sizeof(T);
+            
+            if constexpr ( is_template_v<T>) {
+                TypeInfo::m_template.params     = GatherTemplateArgs<T>(TypeInfo::m_template.args);
+                if(!TypeInfo::m_template.args.empty())  // only flag it as a template if any parameters trigger
+                    opts |= TEMPLATE;
+            }
+            
+            if constexpr ( has_stream_v<T>) {
+                TypeInfo::m_print   = TypeInfo::m_format = [](Stream& str, const void* p){
+                    str << *(const T*) p;
+                };
+            }
+            
+            if(is_small_v<T>)
+                opts |= SMALL;
+            if(opts)
+                Meta::set_options(opts);
         }
     };
     
     template <typename T>
     class TypeInfo::Special : public Typed<T> {
-    public:
-    
     protected:
         Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<T>(zName, zFile, i) {}
     };
+    
+    template <typename K, typename V>
+    class TypeInfo::Special<Hash<K,V>> : public Typed<Hash<K,V>> {
+    protected:
+        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Hash<K,V>>(zName, zFile, i)
+        {
+            Meta::set_option(COLLECTION);
+        }
+    };
+
+    template <typename T>
+    class TypeInfo::Special<List<T>> : public Typed<List<T>> {
+    protected:
+        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<List<T>>(zName, zFile, i) 
+        {
+            Meta::set_option(COLLECTION);
+        }
+    };
+    
+    template <typename K, typename V, typename C>
+    class TypeInfo::Special<Map<K,V,C>> : public Typed<Map<K,V,C>> {
+    protected:
+        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Map<K,V,C>>(zName, zFile, i)
+        {
+            Meta::set_option(COLLECTION);
+        }
+    };
+
+    template <typename K, typename V, typename C>
+    class TypeInfo::Special<MultiMap<K,V,C>> : public Typed<MultiMap<K,V,C>> {
+    protected:
+        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<MultiMap<K,V,C>>(zName, zFile, i)
+        {
+            Meta::set_option(COLLECTION);
+        }
+    };
+
+    template <typename T, typename C>
+    class TypeInfo::Special<Set<T,C>> : public Typed<Set<T,C>> {
+    protected:
+        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Set<T,C>>(zName, zFile, i) 
+        {
+            Meta::set_option(COLLECTION);
+        }
+    };
+
+    template <typename T>
+    class TypeInfo::Special<Vector<T>> : public Typed<Vector<T>> {
+    protected:
+        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Vector<T>>(zName, zFile, i) 
+        {
+            Meta::set_option(COLLECTION);
+        }
+    };
+    
 
     //! The FINAL storage class, the one that's generic
     template <typename T>
@@ -921,7 +1065,7 @@ namespace yq {
         requires std::is_nothrow_convertible_v<U,T>
         void casts()
         {
-            static_assert( InfoBinder<U>::IsType, "U must be meta-type declared!");
+            static_assert( is_type_v<U>, "U must be meta-type declared!");
             if(meta_unlocked()){
                 static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_convert[ &InfoBinder<U>::bind()] = [](void* dst, const void* src){
                     *(U*) dst = U( *(const T*) src);
@@ -929,7 +1073,114 @@ namespace yq {
             }
         }
         
+        template <typename U, U(*FN)(T)>
+        void converts()
+        {
+            static_assert(is_type_v<U>, "U must be meta-type decalred!");
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_convert[ &InfoBinder<U>::bind()] = [](void* dst, const void* src){
+                    *(U*) dst = FN( *(const T*) src);
+                };
+            }
+        }
+        
+        template <typename U, U(*FN)(const T&)>
+        void converts()
+        {
+            static_assert(is_type_v<U>, "U must be meta-type decalred!");
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_convert[ &InfoBinder<U>::bind()] = [](void* dst, const void* src){
+                    *(U*) dst = FN( *(const T*) src);
+                };
+            }
+        }
+
+        template <typename U, void (*FN)(U&, const T&)>
+        void converts()
+        {
+            static_assert(is_type_v<U>, "U must be meta-type decalred!");
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_convert[ &InfoBinder<U>::bind()] = [](void* dst, const void* src){
+                    FN(*(U*) dst,  *(const T*) src);
+                };
+            }
+        }
+        
+        template <String(*FN)(T)>
+        void    format()
+        {
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_format   = [](Stream& out, const void*a)  {
+                    out << FN(*(const T*) a);
+                };
+            }
+        }
+        
+        template <String(*FN)(const T&)>
+        void    format()
+        {
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_format   = [](Stream& out, const void*a)  {
+                    out << FN(*(const T*) a);
+                };
+            }
+        }
+        
+        
+        template <bool (*FN)(T&, const std::string_view&)>
+        void    parse()
+        {
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_parse     = [](void*p, const std::string_view&txt) -> bool {
+                    return FN(*(T*) p, txt);
+                };
+            }
+        }
+
+        template <bool (*FN)(const std::string_view&, T&)>
+        void    parse()
+        {
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_parse     = [](void*p, const std::string_view&txt) -> bool {
+                    return FN(txt, *(T*) p);
+                };
+            }
+        }
+
+        template <Result<T> (*FN)(const std::string_view&)>
+        void    parse()
+        {
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_parse     = [](void*p, const std::string_view&txt) -> bool {
+                    Result<T>   r   = FN(txt);
+                    *(T*) p = std::move(r.value);
+                    return r.good;
+                };
+            }
+        }
+
+        template <String(*FN)(T)>
+        void    print()
+        {
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_print   = [](Stream& out, const void*a)  {
+                    out << FN(*(const T*) a);
+                };
+            }
+        }
+        
+        template <String(*FN)(const T&)>
+        void    print()
+        {
+            if(meta_unlocked()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_print   = [](Stream& out, const void*a)  {
+                    out << FN(*(const T*) a);
+                };
+            }
+        }
+
         Writer(TypeInfo* ti) : CompoundInfo::Dynamic<T>(ti) {}
+        Writer(TypeInfo& ti) : CompoundInfo::Dynamic<T>(&ti) {}
     };
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////

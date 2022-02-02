@@ -55,8 +55,8 @@ namespace yq {
         
         bool            operator==(const Variant&) const;
         
-        //template <typename T>
-        //bool        operator==(const T&) const;
+        template <typename T>
+        bool        operator==(const T&) const;
         //template <typename T>
         //bool        operator!=(const T&) const;
         

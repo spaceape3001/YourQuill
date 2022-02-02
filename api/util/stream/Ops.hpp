@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
+#include <type_traits>
 
 namespace yq {
     class Stream;
@@ -44,4 +45,18 @@ namespace yq {
     {
         return str << val.key();
     }
+    
+    
+    //  STREAM detection
+    template <typename T, class = void>
+    struct has_stream : public std::false_type {};
+    
+    template <typename T>
+    using stream_op = decltype(std::declval<Stream>() << std::declval<T>());
+    
+    template <typename T>
+    struct has_stream<T,std::void_t<stream_op<T>>> : public std::true_type{};
+    
+    template <typename T>
+    inline constexpr bool has_stream_v = has_stream<T>::value;
 }

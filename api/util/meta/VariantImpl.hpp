@@ -9,7 +9,7 @@
     //  SKIPPING INCLUDES... done in order by others
 
 namespace yq {
-    inline Variant::Variant() : m_type(invalid()), m_data{}
+    inline Variant::Variant() : m_type(&invalid()), m_data{}
     {
     }
 
@@ -18,7 +18,7 @@ namespace yq {
     void Variant::set(T&& val)
     {
         using U     = std::decay<T>::type;
-        static_assert( is_type_v<U>(), "TypeInfo must be metatype defined!");
+        static_assert( is_type_v<U>, "TypeInfo must be metatype defined!");
         m_type      = &meta<U>();
         if constexpr (std::is_rvalue_reference_v<T>){
             m_data.ctorMove(std::move(val));
@@ -33,33 +33,21 @@ namespace yq {
         set(val);
     }
 
-    //template <typename T>
-    //bool        Variant::operator==(const T&b) const
-    //{
-        //static_assert( MetaInfoValueInfo::InfoBinder<T>::Defined, "TypeInfo T must be metatype defined!");
-        //if(&metaValueInfo<T>() != m_type)
-            //return false;
-        //return m_data.reference<T>() == b;
-    //}
-
-    //template <typename T>
-    //bool        Variant::operator!=(const T&b) const
-    //{
-        //return !b;
-    //}
+    template <typename T>
+    bool        Variant::operator==(const T&b) const
+    {
+        static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");
+        if(&meta<T>() != m_type)
+            return false;
+        return m_data.reference<T>() == b;
+    }
 
 
-    //template <typename T>
-    //bool        operator==(const T& a, const Variant& b)
-    //{
-        //return b.operator==(a);
-    //}
-
-    //template <typename T>
-    //bool        operator!=(const T& a, const Variant& b)
-    //{
-        //return !b.operator==(a);
-    //}
+    template <typename T>
+    bool        operator==(const T& a, const Variant& b)
+    {
+        return b.operator==(a);
+    }
 
 
 

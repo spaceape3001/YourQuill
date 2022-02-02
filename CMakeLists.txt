@@ -77,7 +77,7 @@ function(group_files)
         endforeach()
 endfunction(group_files)
 
-add_definitions(-Wfatal-errors -Wall -fno-strict-aliasing -D_GNU_SOURCE)
+add_definitions(-Wfatal-errors -Wno-error=unused-function -Wall -fno-strict-aliasing -D_GNU_SOURCE)
 
 add_definitions(-DENABLE_QT=1)
 set(CMAKE_AUTOMOC ON)

@@ -55,6 +55,7 @@ namespace yq {
     class TypeInfo;     // Unobtrusive data type
     
     class MetaObject;   // object with meta
+    struct Parsed;
     class RefCount;
     class Stream;
     class String;

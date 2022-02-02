@@ -51,12 +51,15 @@ namespace yq {
         ENUM        = 1U << 5,
         ARG         = 1U << 6,
         GLOBAL      = 1U << 7,
+        COLLECTION  = 1U << 8,
+        TEMPLATE    = 1U << 9,
         
         
         STATE       = 1U << 20, //!< "State" property
         STATIC      = 1U << 21, //!< Non-object specific (global variables, functions, etc)
         SMALL       = 1U << 22, //!< Small enough to fit in DataBlock
-        TLS         = 1U << 23  //!< Thread local storage
+        TLS         = 1U << 23, //!< Thread local storage
+        LESS        = 1U << 24  //!< Can compare
     };
     
     //bool    is_type(const Meta&);
@@ -152,6 +155,9 @@ namespace yq {
         virtual void                    sweep_impl() {}
         static void                     sweep_all();
         
+        
+        void    set_option(options_t v) { m_flags |= v; }
+        void    set_options(options_t v) { m_flags |= v; }
         
     private:
         using TagMap    = Map<std::string_view, Variant, IgCase>;

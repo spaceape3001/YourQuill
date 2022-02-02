@@ -7,10 +7,11 @@
 #pragma once
 
 #include <util/meta/VariantDef.hpp>
+#include <util/meta/Binder.hpp>
+#include <util/meta/TypeInfo.hpp>
+#include <util/meta/VariantImpl.hpp>
 
 namespace yq {
-
-
 
     boolean_r   to_boolean(const Variant&);
     double_r    to_double(const Variant&);

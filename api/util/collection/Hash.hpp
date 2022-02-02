@@ -138,7 +138,7 @@ namespace yq {
     template <typename K, typename V>
     bool       Hash<K,V>:: has(const K& key) const
     {
-        return base_hash::find(key) != base_hash::end();
+        return base_hash::contains(key);
     }
 
 

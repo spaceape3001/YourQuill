@@ -65,7 +65,6 @@ set(util_sources
     
     ./meta/ArgInfo.hpp
     ./meta/Binder.hpp
-    ./meta/CollectionInfo.hpp
     ./meta/CompoundInfo.hpp
     ./meta/DataBlock.hpp
     ./meta/Global.hpp
@@ -75,9 +74,8 @@ set(util_sources
     ./meta/MethodInfo.hpp
     ./meta/ObjectInfo.hpp
     ./meta/PropertyInfo.hpp
-    ./meta/StructInfo.hpp
+    ./meta/StdTypes.cpp
     ./meta/TypeInfo.hpp
-    ./meta/ValueInfo.hpp
     
     ./net/Curl.cpp
     ./net/Curl.hpp
@@ -121,6 +119,7 @@ set(util_sources
     ./type/Span.hpp
     ./type/Touched.hpp
     ./type/Type.cpp
+    ./type/Variant.cpp
 )
 
 add_library(yqutil SHARED ${util_sources})

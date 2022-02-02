@@ -47,9 +47,8 @@ namespace yq {
 
         typedef bool        (*FNCompare)(const DataBlock&, const DataBlock&);
         typedef void        (*FNMoveBlkBlk)(DataBlock&, DataBlock&&);
-        typedef void        (*FNPrint)(Stream&, const void*);
-        typedef String      (*FNFormat)(const void*);                       // TODO: REVIEW 
-        typedef bool        (*FNParse)(void*, const std::string_view&);     // TODO: REVIEW 
+        typedef void        (*FNFormat)(Stream&, const void*);
+        typedef bool        (*FNParse)(void*, const std::string_view&);
 
     
         using ConvertHash   = Hash<const TypeInfo*, FNConvert>;
@@ -60,7 +59,13 @@ namespace yq {
         LUC<PropertyInfo>           m_properties;
         LUC<MethodInfo>             m_methods;
         DataBlock                   m_default;
-        Vector<const TypeInfo*>     m_templateArgs;
+        
+        struct {
+            Vector<const TypeInfo*> args;
+            
+            //!  total number of parameters (typed or not)
+            unsigned                params          = 0;
+        }                           m_template;
 
         size_t                  m_size              = 0;
         ConvertHash             m_convert;
@@ -73,9 +78,11 @@ namespace yq {
         FNCompare               m_equal         = nullptr;
         FNCompare               m_less          = nullptr;
         FNMoveBlkBlk            m_moveB         = nullptr;
-        FNPrint                 m_print         = nullptr;
-        FNFormat                m_ioFormat      = nullptr;          // TODO: REVIEW
-        FNParse                 m_ioParse       = nullptr;          // TODO: REVIEW
+            // Print is for user eyes
+        FNFormat                m_print         = nullptr;
+            // Format is for data storage
+        FNFormat                m_format        = nullptr;
+        FNParse                 m_parse         = nullptr;
         
     };
     

@@ -2,7 +2,6 @@
 #include <util/preamble.hpp>
 
 namespace yq {
-    
     template <typename T>
     struct InfoBinder {
         static constexpr const bool Defined     = false;
@@ -10,7 +9,7 @@ namespace yq {
         static constexpr const bool IsType      = false;
         static constexpr const bool IsObject    = false;
     };
-    
+
     template <typename T>
     static constexpr const bool     is_defined_v     = InfoBinder<T>::Defined;
     
@@ -26,7 +25,7 @@ namespace yq {
     const TypeInfo&        invalid();
     const TypeInfo&        variant();
 
-    
+
     template <>
     struct InfoBinder<void> {
         static constexpr const bool Defined     = true;
@@ -40,10 +39,9 @@ namespace yq {
         static constexpr const bool IsType      = true;     
         static const TypeInfo&  bind() { return variant(); }
     };
-    
-     
+
     template <typename T>
-    const InfoBinder<T>&    meta()
+    const auto&    meta()
     {
         static_assert(is_defined_v<T>, "Must be meta-declared!");
         return InfoBinder<T>::bind();
@@ -51,10 +49,17 @@ namespace yq {
 
 
     template <typename T>
-    InfoBinder<T>&          meta_edit()
+    auto&          meta_edit()
     {
         static_assert(is_defined_v<T>, "Must be meta-declared!");
         return InfoBinder<T>::edit();
+    }
+
+    template <typename T>
+    auto           meta_write()
+    {
+        auto&    e   = meta_edit<T>();
+        return typename std::remove_cvref_t<decltype(e)>::template Writer<T>(e);
     }
 }
 
