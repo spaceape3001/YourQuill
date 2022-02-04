@@ -72,12 +72,6 @@ namespace yq {
     };
 
 
-    template <typename T,typename C>
-    bool            operator==(const Set<T,C>&, const Set<T,C>&);
-
-    template <typename T,typename C>
-    bool            operator!=(const Set<T,C>&, const Set<T,C>&);
-
     template <typename T>
     Set<T>          makeSet(const List<T>&);
     template <typename T>
@@ -326,28 +320,6 @@ namespace yq {
             if(has(k))
                 return true;
         return false;
-    }
-
-    template <typename T,typename C>
-    bool            operator==(const Set<T,C>&lhs, const Set<T,C>&rhs)
-    {
-        if(lhs.size() != rhs.size())
-            return false;
-        auto a	= lhs.begin();
-        auto b	= rhs.begin();
-        for(; a!=lhs.end(); ++a, ++b){
-            assert(b!=rhs.end());
-            if(*a != *b)
-                return false;
-        }
-        assert(b==rhs.end());
-        return true;
-    }
-
-    template <typename T,typename C>
-    bool            operator!=(const Set<T,C>&lhs, const Set<T,C>&rhs)
-    {
-        return !(lhs == rhs);
     }
 
 

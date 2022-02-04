@@ -53,13 +53,6 @@ namespace yq {
 
     };
 
-    template <typename K, typename V>
-    bool    operator==(const Hash<K,V>& lhs, const Hash<K,V>& rhs);
-
-    template <typename K, typename V>
-    bool    operator!=(const Hash<K,V>& a, const Hash<K,V>& b);
-
-
     //template <typename K, typename V>
     //Hash<K,V>       makeHash(const List<std::pair<K,V>>&);
 
@@ -158,31 +151,6 @@ namespace yq {
             return insert_map(rhs);
         else
             return emplace_map(rhs);
-    }
-
-    template <typename K, typename V>
-    bool    operator==(const Hash<K,V>& lhs, const Hash<K,V>& rhs)
-    {
-        if(lhs.size() != rhs.size())
-            return false;
-            
-        auto a	= lhs.begin();
-        auto b	= rhs.begin();
-        for(; a!=lhs.end(); ++a, ++b){
-            assert(b!=rhs.end());
-            if(a->first!=b->first)
-                return false;
-            if(a->second != b->second)
-                return false;
-        }
-        assert(b==rhs.end());
-        return true;
-    }
-
-    template <typename K, typename V>
-    bool    operator!=(const Hash<K,V>& lhs, const Hash<K,V>& rhs)
-    {
-        return !(lhs == rhs);
     }
 
     template <typename K, typename V>

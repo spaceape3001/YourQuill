@@ -80,12 +80,6 @@ namespace yq {
         Vector<V>   values() const;
     };
 
-    template <typename K, typename V, typename C>
-    bool    operator==(const Map<K,V,C>& lhs, const Map<K,V,C>& rhs);
-
-    template <typename K, typename V, typename C>
-    bool    operator!=(const Map<K,V,C>& a, const Map<K,V,C>& b);
-
     template <typename K, typename V>
     Map<K,V>       makeMap(const List<std::pair<K,V>>&);
 
@@ -262,7 +256,6 @@ namespace yq {
         }
     }
 
-
     template <typename K, typename V, typename C>
     V           Map<K,V,C>::take(const K& key, const V& def)
     {
@@ -274,34 +267,7 @@ namespace yq {
         }
         return def;
     }
-
-
-
-    template <typename K, typename V, typename C>
-    bool    operator==(const Map<K,V,C>& lhs, const Map<K,V,C>& rhs)
-    {
-        if(lhs.size() != rhs.size())
-            return false;
-            
-        auto a  = lhs.begin();
-        auto b  = rhs.begin();
-        for(; a!=lhs.end(); ++a, ++b){
-            assert(b!=rhs.end());
-            if(a->first!=b->first)
-                return false;
-            if(a->second != b->second)
-                return false;
-        }
-        assert(b==rhs.end());
-        return true;
-    }
-
-    template <typename K, typename V, typename C>
-    bool    operator!=(const Map<K,V,C>& lhs, const Map<K,V,C>& rhs)
-    {
-        return !(lhs == rhs);
-    }    
-
+    
     template <typename K, typename V, typename C>
     Map<K,V,C>&        Map<K,V,C>::operator|=(const base_map& rhs)
     {

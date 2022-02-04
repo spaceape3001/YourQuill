@@ -159,28 +159,6 @@ namespace yq {
 
 
     template <typename T>
-    bool    operator==(const List<T>& lhs, const List<T>& rhs)
-    {
-        if(lhs.size() != rhs.size())
-            return false;
-        auto a	= lhs.begin();
-        auto b	= rhs.begin();
-        for(; a!=lhs.end(); ++a, ++b){
-            assert(b!=rhs.end());
-            if(*a != *b)
-                return false;
-        }
-        assert(b==rhs.end());
-        return true;
-    }
-
-    template <typename T>
-    bool    operator!=(const List<T>& lhs, const List<T>& rhs)
-    {
-        return !(lhs == rhs);
-    }
-
-    template <typename T>
     List<const T*>  makeConst(const List<T*>&src)
     {
         return List<const T*>(src.begin(), src.end());

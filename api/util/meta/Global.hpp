@@ -52,5 +52,14 @@ namespace yq {
         static GlobalInfo::Writer       edit();
     };
     
+    inline GlobalInfo*  to_global(Meta*m)
+    {
+        return (m && (m->flags() & GLOBAL)) ? static_cast<GlobalInfo*>(m) : nullptr;
+    }
+    
+    inline const GlobalInfo*  to_global(const Meta*m)
+    {
+        return (m && (m->flags() & GLOBAL)) ? static_cast<const GlobalInfo*>(m) : nullptr;
+    }
 }
 

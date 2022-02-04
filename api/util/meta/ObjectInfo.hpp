@@ -44,5 +44,13 @@ namespace yq {
     
         \return ObjectInfo pointer, if valid, NULL otherwise
     */
-    const ObjectInfo* to_object(const Meta* m);
+    inline const ObjectInfo* to_object(const Meta* m)
+    {
+        return (m && (m->flags() & OBJECT)) ? static_cast<const ObjectInfo*>(m) : nullptr;
+    }
+    
+    inline ObjectInfo* to_object(Meta* m)
+    {
+        return (m && (m->flags() & OBJECT)) ? static_cast<ObjectInfo*>(m) : nullptr;
+    }
 }

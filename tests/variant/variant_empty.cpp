@@ -4,12 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "meta/Variant.hpp"
+#include <util/type/Variant.hpp>
 #include <iostream>
 
 bool    success()
 {
-    Variant     v;
+    yq::Variant     v;
     if(v.type().id() != 0)
         return false;
     if(v != v)

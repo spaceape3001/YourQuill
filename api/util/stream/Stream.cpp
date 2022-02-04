@@ -10,7 +10,7 @@
 #include "LineCol.hpp"
 #include "OSFile.hpp"
 #include "Ops.hpp"
-
+#include "Text.hpp"
 
 #include <util/file/FileUtils.hpp>
 #include <util/text/ByteArray.hpp>
@@ -35,7 +35,14 @@ namespace yq {
             m_bytes.append(buf, cb);
             return true;
         }
+
+        bool Text::write(const char* buf, size_t cb) 
+        {
+            m_bytes.append(buf, cb);
+            return true;
+        }
     }
+    
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  C++ FILE STREAM

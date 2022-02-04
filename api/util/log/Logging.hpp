@@ -39,7 +39,7 @@ namespace yq {
 
     // suggestions (not required)
     static constexpr const auto  kLogDef_Console = YQ_DBGREL(LogPriority::Debug, LogPriority::Warning);
-    static constexpr const auto  kLogDef_File    = YQ_DBGREL(LogPriority::Deubg, LogPriority::Info);
+    static constexpr const auto  kLogDef_File    = YQ_DBGREL(LogPriority::Debug, LogPriority::Info);
 
 
     template <typename E>

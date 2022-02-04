@@ -181,11 +181,6 @@ namespace yq {
         CommaOp     operator=(T&&);
     };
 
-    template <typename T>
-    bool            operator==(const Vector<T>&, const Vector<T>&);
-
-    template <typename T>
-    bool            operator!=(const Vector<T>&, const Vector<T>&);
 
     template <typename T>
     Vector<const T*> makeConst(const Vector<T*>&);
@@ -724,28 +719,6 @@ namespace yq {
         if(n<base_vec::size())
             return base_vec::operator[](n);
         return def;
-    }
-
-    template <typename T>
-    bool    operator==(const Vector<T>& lhs, const Vector<T>& rhs)
-    {
-        if(lhs.size() != rhs.size())
-            return false;
-        auto a	= lhs.begin();
-        auto b	= rhs.begin();
-        for(; a!=lhs.end(); ++a, ++b){
-            assert(b!=rhs.end());
-            if(*a != *b)
-                return false;
-        }
-        assert(b==rhs.end());
-        return true;
-    }
-
-    template <typename T>
-    bool    operator!=(const Vector<T>& a, const Vector<T>& b)
-    {
-        return !(a == b);
     }
 
     template <typename T>

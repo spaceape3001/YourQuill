@@ -6,6 +6,7 @@
 
 #pragma once
 #include <util/preamble.hpp>
+#include <util/collection/Hash.hpp>
 #include <util/collection/Map.hpp>
 #include <util/collection/MultiMap.hpp>
 #include <util/collection/Set.hpp>
@@ -72,15 +73,26 @@ namespace yq {
     //bool    is_pointer(const Meta&); 
     //bool    is_structure(const Meta&);   
 
-    //! TRUE if we've not been frozen (modifications are rejected after this)
-    bool    meta_unlocked();
- 
     /* !\brief Root "meta" for all meta, everything else will derive from this.
     
         \note We will ASSUME SINGLE THREADED until AFTER freeze is called, so that no mutex locking is required.
     */
     class Meta {
     public:
+    
+    
+            //  I mean, really, 255 ain't enough?? Even in full-on UTF-8, that's over 40 characters.
+            //  This applies to tags  too BTW
+        static constexpr const size_t   MAX_NAME            = 255;
+        
+        static constexpr const size_t   MAX_KEY             = 255;
+
+            //  Label's a bit longer to permit formatting
+        static constexpr const size_t   MAX_LABEL           = 1023;
+        
+            //! No manifestos disguised as descriptions please
+        static constexpr const size_t   MAX_DESCRIPTION     = 4095;
+        
     
         //! Meta ID type
         using id_t                      = unsigned int;
@@ -95,6 +107,14 @@ namespace yq {
         static void                         init();     // starts/triggers the initialization (can be repeated)
         //! Locks/freezes the meta system (init is called a final time)
         static void                         freeze();
+        
+        //! Rather than using mutexes, we assert/check the read is being done thread-safe & acceptable
+        static bool                         thread_safe_read();
+        //! Rather than using mutexes, we assert/check the write is being done thread-safe & acceptable
+        static bool                         thread_safe_write();
+        
+        //! TRUE if we've not been frozen (modifications are rejected after this)
+        static bool                         unlocked();
 
 
         /*! \brief Any relevant aliases
@@ -104,6 +124,7 @@ namespace yq {
         //! \brief Vector of child-meta (could include pointers)
         const Vector<const Meta*>&      children() const { return m_children; }
         
+        const std::string_view&         description() const { return m_description; }
         
         //! \brief Flags for this class
         uint64_t                        flags() const { return m_flags; }
@@ -117,8 +138,11 @@ namespace yq {
         //! \brief Our ID number
         id_t                            id() const { return m_id; }
         
+        bool                            is_object() const { return (m_flags & OBJECT) != 0; }
         bool                            is_type() const { return (m_flags & TYPE) != 0; }
         
+        const std::string_view&         label() const { return m_label; }
+
         const std::string_view&         name() const { return m_name; }
         
         //  MAY BE NULL
@@ -173,7 +197,7 @@ namespace yq {
         id_t                            m_id        = AUTO_ID;
         
         enum {
-            Swept                   = 1ULL << 31
+            SWEPT                   = 1ULL << 31
         };
     };
 

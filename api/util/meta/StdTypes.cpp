@@ -107,6 +107,17 @@ namespace yq {
     
         void    init_stdtypes()
         {
+            meta_write<bool>().parse<parse_boolean>();
+            meta_write<double>().parse<parse_double>();
+            meta_write<float>().parse<parse_float>();
+            meta_write<int8_t>().parse<parse_int8>();
+            meta_write<int16_t>().parse<parse_int16>();
+            meta_write<int32_t>().parse<parse_int32>();
+            meta_write<int64_t>().parse<parse_int64>();
+            meta_write<uint8_t>().parse<parse_uint8>();
+            meta_write<uint16_t>().parse<parse_uint16>();
+            meta_write<uint32_t>().parse<parse_uint32>();
+            meta_write<uint64_t>().parse<parse_uint64>();
             meta_write<String>().parse<parse_string>();
         }
     }

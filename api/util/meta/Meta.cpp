@@ -13,11 +13,24 @@
 #include "TypeInfo.hpp"
 #include "Init.hpp"
 
+
 #include <util/app/DelayInit.hpp>
 #include <util/stream/Ops.hpp>
+#include <string.h>
+
+namespace yq {
+void    foo()
+{
+    std::unordered_map<int, std::string>    data;
+    data.find(0) != data.end();
+}
+}
+
+
 #include <util/type/Variant.hpp>
 
 namespace yq {
+
 
     namespace {
         static constexpr const unsigned int         kReserve        = 8192;     // adjust as necessary
@@ -68,6 +81,14 @@ namespace yq {
                     return z;
             return y;
         }
+        
+        #ifdef WIN32
+            //  until MSVC decides to grow up and get with the times....
+        size_t  strnlen(const char*z, size_t cb)
+        {
+            return strnlen_s(z, cb);
+        }
+        #endif
     }
     
     struct EmptyType : public TypeInfo {
@@ -75,6 +96,7 @@ namespace yq {
         EmptyType(id_t i) : TypeInfo( i ? "Any" : "Void", __FILE__, i) 
         {
             m_copyB     = [](DataBlock&, const DataBlock&) {};
+            m_copyR     = [](DataBlock&, const void*) {};
             m_ctorCopyR = [](DataBlock&, const void*) {};
             m_ctorCopyB = [](DataBlock&, const DataBlock&) {};
             m_ctorMove  = [](DataBlock&, DataBlock&&) {};
@@ -103,11 +125,6 @@ namespace yq {
     }
 
 
-    bool    meta_unlocked()
-    {
-        return repo().openReg;
-    }
-
 
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +144,10 @@ namespace yq {
         CompoundInfo::CompoundInfo(const char zName[], const char zFile[], Meta* par, id_t i) : Meta(zName, par, i), m_file(zFile)
         {
             m_flags |= COMPOUND;
+        }
+        
+        CompoundInfo::~CompoundInfo()
+        {
         }
 
         void        CompoundInfo::sweep_impl() 
@@ -197,14 +218,51 @@ namespace yq {
 
         const Vector<const Meta*>&   Meta::all()
         {
+            assert(thread_safe_read());
             return repo().all;
+        }
+
+
+        void    Meta::freeze()
+        {
+            init();
+            repo().openReg  = false;
+        }
+
+        void    Meta::init()
+        {
+            if(thread_safe_write()){
+                DelayInit::init_all();
+                sweep_all();
+            }
         }
 
         void    Meta::sweep_all()
         {
-            Repo&   r   = repo();
-            if(!r.openReg)
-                return ;
+            if(thread_safe_write()){
+                Repo&   r = repo();
+                for(const Meta* m : r.all)
+                    if(m)   // gaps can show
+                        const_cast<Meta*>(m) -> m_flags &= ~SWEPT;
+                for(const Meta* m : r.all)
+                    if(m)
+                        const_cast<Meta*>(m) -> sweep();
+            }
+        }
+
+        bool    Meta::thread_safe_read()
+        {
+            return (!repo().openReg) || (!thread::id());
+        }
+
+        bool    Meta::thread_safe_write()
+        {
+            return repo().openReg && !thread::id();
+        }
+
+        bool    Meta::unlocked()
+        {
+            return repo().openReg;
         }
 
 
@@ -216,98 +274,135 @@ namespace yq {
         
         Meta::Meta(const char zName[], Meta* parent, id_t i) 
         {
+            assert(zName);
+            assert(strnlen(zName, MAX_NAME+1) <= MAX_NAME);
+            assert(thread_safe_write());
+            
             //  strip out the yq namespace
             m_name      = str_start(zName, "yq::");
+            m_label     = m_name;                       // default (can be overriden)
             m_parent    = parent;
 
             auto& _r     = repo();
-            if(_r.openReg){
-                if(i < M_USER){
-                    m_id    = i;
-                    _r.all[i]   = this;
-                } else {
-                    m_id    = _r.all.size();
-                    _r.all << this;
-                }
-                if(i >= MT_String)
-                    _r.metas << this;
+            if(i < M_USER){
+                m_id    = i;
+                _r.all[i]   = this;
+            } else {
+                m_id    = _r.all.size();
+                _r.all << this;
             }
+            if(i >= MT_String)
+                _r.metas << this;
         }
         
         Meta::~Meta()
         {
             assert(false && "Do NOT delete Meta!  It's not meant to be deleted.");
+
+        }
+
+        void              Meta::sweep()
+        {
+            assert(thread_safe_write());
+
+            if(!(m_flags & SWEPT)){
+                sweep_impl();
+                m_flags |= SWEPT;
+            }
         }
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        Meta::Writer&     Meta::Writer::alias(const char z[])
+        Meta::Writer&     Meta::Writer::alias(const char zAlias[])
         {
-            if(z && m_meta && meta_unlocked())
-                m_meta -> m_aliases << std::string_view(z);
+            assert(zAlias);
+            assert(strnlen(zAlias, MAX_NAME+1) <= MAX_NAME);
+            m_meta -> m_aliases << std::string_view(zAlias);
             return *this;
         }
         
-        Meta::Writer&     Meta::Writer::description(const char z[])
+        Meta::Writer&     Meta::Writer::description(const char zDescription[])
         {
-            if(z && m_meta && meta_unlocked())
-                m_meta -> m_description = std::string_view(z);
+            assert(zDescription);
+            assert(strnlen(zDescription, MAX_DESCRIPTION+1) <= MAX_DESCRIPTION);
+            m_meta -> m_description = std::string_view(zDescription);
             return *this;
         }
         
-        Meta::Writer&     Meta::Writer::label(const char z[])
+        Meta::Writer&     Meta::Writer::label(const char zLabel[])
         {
-            if(z && m_meta && meta_unlocked())
-                m_meta -> m_label = std::string_view(z);
+            assert(zLabel);
+            assert(strnlen(zLabel, MAX_LABEL+1) <= MAX_LABEL);
+
+            m_meta -> m_label = std::string_view(zLabel);
             return *this;
         }
         
-        Meta::Writer&     Meta::Writer::tag(const char z[], const Variant& v)
+        Meta::Writer&     Meta::Writer::tag(const char zKey[])
         {
-            if(z && m_meta && meta_unlocked())
-                m_meta -> m_tags[z] = v;
+            assert(zKey);
+            assert(strnlen(zKey, MAX_KEY+1) <= MAX_KEY);
+            assert("Tag already set!" && !m_meta->m_tags.has(zKey));
+            m_meta -> m_tags[zKey] = Variant(true);
+            return *this;
+        }
+        
+        Meta::Writer&     Meta::Writer::tag(const char zKey[], Variant&& value)
+        {
+            assert(zKey);
+            assert(strnlen(zKey, MAX_KEY+1) <= MAX_KEY);
+            assert("Tag already set!" && !m_meta->m_tags.has(zKey));
+            m_meta -> m_tags[zKey] = std::move(value);
+            return *this;
+        }
+        
+
+        Meta::Writer&     Meta::Writer::tag(const char zKey[], const Variant& value)
+        {
+            assert(zKey);
+            assert(strnlen(zKey, MAX_KEY+1) <= MAX_KEY);
+            assert("Tag already set!" && !m_meta->m_tags.has(zKey));
+            m_meta -> m_tags[zKey] = value;
             return *this;
         }
         
         Meta::Writer&   Meta::Writer::tls()
         {
-            if(m_meta && meta_unlocked())
-                m_meta -> m_flags |= TLS;
+            m_meta -> m_flags |= TLS;
             return *this;
         }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  META OBJECT
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  METHOD
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        MethodInfo::MethodInfo(const char* zName, Meta*par, options_t opts) : Meta(zName, par)
+        MethodInfo::MethodInfo(const char* zName, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta)
         {
+            assert(parentMeta);
+
             m_flags |= METHOD | opts;
-            if(zName && par && meta_unlocked()){
-                if(par -> m_flags & GLOBAL){
-                    GlobalInfo* g   = static_cast<GlobalInfo*>(par);
-                    if(g->m_methods.keys.has(zName))
-                        metaCritical << "Duplicate method on GLOBAL: " << zName;
-                    g->m_methods << this;
-                }
-                
-                if(par -> m_flags & OBJECT){
-                    ObjectInfo* obj = static_cast<ObjectInfo*>(par);
-                    if(obj->m_local.methods.keys.has(zName)){
-                        std::string_view   pp  = par->parent() ?  par->parent()->name() : "(unnamed)";
-                        metaCritical << "Duplicate method on object (" << pp << "): " << zName;
-                    }
-                    obj->m_local.methods << this;
-                }
-                
-                if(par -> m_flags & TYPE){
-                    TypeInfo*   type = static_cast<TypeInfo*>(par);
-                    if(type -> m_methods.keys.has(zName)){
-                        std::string_view   pp  = par->parent() ?  par->parent()->name() : "(unnamed)";
-                        metaCritical << "Duplicate method on type (" << pp << "): " << zName;
-                    }
-                    type->m_methods << this;
-                }
+
+            if(GlobalInfo* g = to_global(parentMeta)){
+                assert(g == &meta<Global>());
+                if(g->m_methods.keys.has(zName))
+                    metaCritical << "Duplicate method on GLOBAL: " << zName;
+                g->m_methods << this;
+            }
+            
+            if(ObjectInfo* obj = to_object(parentMeta)){
+                if(obj->m_local.methods.keys.has(zName))
+                    metaCritical << "Duplicate method on object (" << obj -> name() << "): " << zName;
+                obj->m_local.methods << this;
+            }
+            
+            if(TypeInfo* type = to_type(parentMeta)){
+                if(type -> m_methods.keys.has(zName))
+                    metaCritical << "Duplicate method on type (" << type -> name() << "): " << zName;
+                type->m_methods << this;
             }
         }
 
@@ -316,15 +411,16 @@ namespace yq {
     //  OBJECT (INFO)
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        ObjectInfo::ObjectInfo(const char* zName, const char* zFile, ObjectInfo*b) : CompoundInfo(zName, zFile), m_base(b)
+        ObjectInfo::ObjectInfo(const char* zName, const char* zFile, ObjectInfo* myBase) : CompoundInfo(zName, zFile), m_base(myBase)
         {
+            assert(zFile);
+            
             m_flags |= OBJECT;
+
             Repo& r    = repo();
-            if(r.openReg){
-                if(r.objects.lut.has(zName))
-                    metaCritical << "Duplicate object registration: " << zName;
-                r.objects << this;
-            }
+            if(r.objects.lut.has(zName))
+                metaCritical << "Duplicate object registration: " << zName;
+            r.objects << this;
         }
 
 
@@ -335,7 +431,6 @@ namespace yq {
             m_all           = {};
             m_local.bases   = {};
             m_local.derived = {};
-
 
             if(m_base){
                 m_local.bases << m_base;
@@ -351,41 +446,32 @@ namespace yq {
         }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  OBJECT (META)
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  PROPERTY
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        PropertyInfo::PropertyInfo(const char* zName, const TypeInfo&t, Meta*par, options_t opts) : Meta(zName, par), m_type(t)
+        PropertyInfo::PropertyInfo(const char* zName, const TypeInfo&theType, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta), m_type(theType)
         {
+            assert(parentMeta);
+
             m_flags |= PROPERTY | opts;
-            if(zName && par && meta_unlocked()){
-                if(par -> m_flags & GLOBAL){
-                    GlobalInfo* g   = static_cast<GlobalInfo*>(par);
-                    if(g->m_properties.keys.has(zName))
-                        metaCritical << "Duplicate property on GLOBAL: " << zName;
-                    g->m_properties << this;
-                }
-                
-                if(par -> m_flags & OBJECT){
-                    ObjectInfo* obj = static_cast<ObjectInfo*>(par);
-                    if(obj->m_local.properties.keys.has(zName)){
-                        std::string_view   pp  = par->parent() ?  par->parent()->name() : "(unnamed)";
-                        metaCritical << "Duplicate property on object (" << pp << "): " << zName;
-                    }
-                    obj->m_local.properties << this;
-                }
-                
-                if(par -> m_flags & TYPE){
-                    TypeInfo*   type = static_cast<TypeInfo*>(par);
-                    if(type -> m_properties.keys.has(zName)){
-                        std::string_view   pp  = par->parent() ?  par->parent()->name() : "(unnamed)";
-                        metaCritical << "Duplicate property on type (" << pp << "): " << zName;
-                    }
-                    type->m_properties << this;
-                }
+
+            if(GlobalInfo* g = to_global(parentMeta)){
+                assert(g == &meta<Global>());
+                if(g->m_properties.keys.has(zName))
+                    metaCritical << "Duplicate property on GLOBAL: " << zName;
+                g->m_properties << this;
+            }
+            
+            if(ObjectInfo* obj = to_object(parentMeta)){
+                if(obj->m_local.properties.keys.has(zName))
+                    metaCritical << "Duplicate property on object (" << obj->name() << "): " << zName;
+                obj->m_local.properties << this;
+            }
+            
+            if(TypeInfo* type = to_type(parentMeta)){
+                if(type -> m_properties.keys.has(zName))
+                    metaCritical << "Duplicate property on type (" << type->name() << "): " << zName;
+                type->m_properties << this;
             }
         }
 
@@ -394,15 +480,10 @@ namespace yq {
     //  PROP GETTER
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        PropGetter::PropGetter(PropertyInfo*m) : Meta("", m) 
+        PropGetter::PropGetter(PropertyInfo* propInfo) : Meta("get", propInfo) 
         {
-            if(m && meta_unlocked()){
-                if(m->m_getter){
-                    std::string_view   pp  = m->parent() ?  m->parent()->name() : "(unnamed)";
-                    metaCritical  << "Duplicate getter attempted on property " << pp << "::" << m->name();
-                }
-                m->m_getter     = this;
-            }
+            assert("no duplicate getters!" && !propInfo->m_getter);    //  duplicate property is an ERROR
+            propInfo->m_getter     = this;
         }
 
         const PropertyInfo* PropGetter::property() const
@@ -414,15 +495,10 @@ namespace yq {
     //  PROP SETTER
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        PropSetter::PropSetter(PropertyInfo*m) : Meta("", m) 
+        PropSetter::PropSetter(PropertyInfo* propInfo) : Meta("", propInfo) 
         {
-            if(m && meta_unlocked()){
-                if(m->m_setter){
-                    std::string_view   pp  = m->parent() ?  m->parent()->name() : "(unnamed)";
-                    metaCritical  << "Duplicate setter attempted on property " << pp << "::" << m->name();
-                }
-                m->m_setter     = this;
-            }
+            assert("no duplicate setters!" && !propInfo->m_setter);    //  duplicate property is an ERROR
+            propInfo->m_setter     = this;
         }
 
         const PropertyInfo* PropSetter::property() const
@@ -434,15 +510,36 @@ namespace yq {
     //  TYPE
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        const Vector<const TypeInfo*>&   TypeInfo::all()
+        {
+            assert(thread_safe_read());
+            return repo().types.all;
+        }
+        
+        const TypeInfo*                  TypeInfo::lookup(id_t i)
+        {
+            assert(thread_safe_read());
+            const Meta* m   = repo().all.value(i, nullptr);
+            return (m && m->is_type()) ? static_cast<const TypeInfo*>(m) : nullptr;
+        }
+        
+        const TypeInfo*                  TypeInfo::lookup(const std::string_view&sv)
+        {
+            assert(thread_safe_read());
+            return repo().types.lut.first(sv, nullptr);
+        }
+
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
         TypeInfo::TypeInfo(const char* zName, const char* zFile, id_t i) : CompoundInfo(zName, zFile, nullptr, i)
         {
             m_flags |= TYPE;
+            
             Repo&   r  = repo();
-            if(r.openReg){
-                if(r.types.keys.has(zName))
-                    metaCritical  << "Duplicate type regsitration: " << zName;
-                r.types << this;
-            }
+            assert("no duplicate typenames!" && !r.types.lut.has(zName)); 
+            
+            r.types << this;
         }
 
         TypeInfo::~TypeInfo()
@@ -456,8 +553,6 @@ namespace yq {
             gather(m_methods);
             gather(m_properties);
         }
-    
-
 }
 
 

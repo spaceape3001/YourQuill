@@ -122,6 +122,7 @@ namespace yq {
     using qstring_r         = Result<QString>;
     using url_r             = Result<Url>;
     using u32string_r       = Result<std::u32string>;
+    using variant_r         = Result<Variant>;
     using wstring_r         = Result<std::wstring>;
 
         // INT RANGES

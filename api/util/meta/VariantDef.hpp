@@ -11,6 +11,7 @@
 
 #include <util/preamble.hpp>
 #include <util/meta/DataBlock.hpp>
+#include <util/meta/Binder.hpp>
 
 namespace yq {
 
@@ -21,68 +22,97 @@ namespace yq {
     class Variant {
     public:
 
+        static Variant      parse_me(const TypeInfo&, const std::string_view&);
+
         Variant();
         Variant(const Variant&);
         Variant(Variant&&);
         
-        Variant(char);
-        Variant(char8_t);
-        Variant(char32_t);
-        Variant(const char*);
-        Variant(const char8_t*);
-        Variant(const char32_t*);
-        Variant(const std::string&);
-        Variant(const std::u8string&);
-        Variant(const std::u32string&);
-        Variant(const std::wstring&);
-        Variant(const String&);
-    #ifdef ENABLE_QT
-        Variant(const QString&);
-    #endif
-        
-        
         //! Creates a defaulted Variant to the specified meta-type
-        Variant(const TypeInfo&);
-        Variant(const TypeInfo*);
+        explicit Variant(const TypeInfo&);
+        explicit Variant(const TypeInfo*);
         
+        explicit Variant(char);
+        explicit Variant(char8_t);
+        explicit Variant(char32_t);
+        explicit Variant(const char*);
+        explicit Variant(const char8_t*);
+        explicit Variant(const char32_t*);
+        explicit Variant(const std::string&);
+        explicit Variant(const std::u8string&);
+        explicit Variant(const std::u32string&);
+        explicit Variant(const std::wstring&);
+    #ifdef ENABLE_QT
+        explicit Variant(const QString&);
+    #endif
+
+        /*! \brief Direct construction constructor
+        
+            This directly creates a variant with the argument.
+            
+            \note EXPLICIT is required to keep the compiler from getting greedy.
+        */
         template <typename T>
-        Variant(T&&);
+        explicit Variant(T&&);
 
         ~Variant();
 
         Variant&        operator=(const Variant&);
         Variant&        operator=(Variant&&);
         
+        template <typename T>
+        requires is_type_v<std::decay_t<T>>
+        Variant&        operator=(T&&);
+        
         bool            operator==(const Variant&) const;
         
         template <typename T>
+        requires is_type_v<T>
         bool        operator==(const T&) const;
         //template <typename T>
         //bool        operator!=(const T&) const;
         
-        bool            can_convert_to(const TypeInfo&) const;
+        bool            can_convert(const TypeInfo&) const;
         template <typename T>
-        bool            can_convert_to() const;
+        bool            can_convert() const;
 
-        Variant         convert_to(const TypeInfo&) const;
+        //! Returns a variant that's been converted
+        Variant         convert(const TypeInfo&) const;
 
         template <typename T>
-        Variant         convert_to() const;
+        Variant         convert() const;
 
+
+        bool            is_valid() const;
 
         //Variant         get_field(const String&) const;
         
-        String          io_format() const;
-        static Variant  io_parse(const TypeInfo&, const String&);
+        /*! \brief Parses into the variant, overwriting
+        */
+        bool             parse(const TypeInfo&, const std::string_view&);
         
-        bool            is_valid() const;
+        
+        /*! \brief Parses into the variant, overwriting
+        
+            Type info is assumed to be STRING if variant is invalid.
+        */
+        bool             parse(const std::string_view&);
+        
+        
+        
+        /*! \brief Debug writing to stream
+        
+            This is meant for printing casually to the screen for the user's benefit (debugging, alerts, etc),
+            therefore, we'll opt for being concise over precision (ie. missing lesser bits is alright).
+        */
+        bool            print(Stream&) const;
         
         
         /*! \brief "Printable" version for debugging/general-output
         
             \note There's no corresponding "parse" (deliberate), see the I/O helpers
         */
-        String          print() const;
+        String          printable() const;
         
         /*! \brief Guarded pointer
             Returns the pointer *IF* it's feasible, otherwise null
@@ -101,16 +131,37 @@ namespace yq {
         const void*         raw_ptr() const;
         //! Raw pointer to void
         void*               raw_ptr();
+        
+        template <typename T>
+        const T&            ref(const T& bad={}) const;
+        
 
         //bool        set_field(const String&, const Variant&);
+
+        
 
         const TypeInfo& type() const { return *m_type; }
 
         template <typename T>
         Result<T>           value() const;
         
-        Variant(const TypeInfo&, const void*);
+        /*! \brief IO Writing to stream
+        
+            This is meant to write the data out in a way that'll fully capture the input (ie better to have a thousand 
+            decimals over missing a bit).  If not present and it's a compound object, then the algorithm driving this
+            ought to delve deeper.
+            
+            \brief TRUE if properly delegated
+        */
+        bool            write(Stream&) const;
 
+
+        /*! \brief The "I-KNOW-WHAT-I'M-DOING" constructor
+        
+            This routine blindly assumes the caller knows what they're doing, so here's the type and here's a pointer
+            to the data.  A null pointer will force a default construction.
+        */
+        Variant(const TypeInfo&, const void*);
 
     private:
         Variant(TypeInfo&&) = delete;   // prohibt temporary metatypes
@@ -123,6 +174,13 @@ namespace yq {
         
         template <typename T>
         void    set(T&&val);
+        
+        void    set(const TypeInfo&, const void*);
+        void    clear();
+        
+        //! Checks to make sure the type info is populated to the minimum specification
+        static bool    good(const TypeInfo&);
+        
     };
 }
 
