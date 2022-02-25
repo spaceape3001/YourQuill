@@ -109,8 +109,7 @@ namespace yq {
     void                 write_x(XmlBase* xb, uint32_t);
     void                 write_x(XmlBase* xb, uint64_t);
 
-    void                 write_x(XmlBase* xb, const std::string&);
-    void                 write_x(XmlBase* xb, const String&);
+    void                 write_x(XmlBase* xb, const std::string_view&);
 
     template <typename E>
     void                 write_x(XmlBase* xb, EnumImpl<E> v)
@@ -154,7 +153,7 @@ namespace yq {
     }
 
     template <typename T>
-    XmlNode*             write_child(XmlNode* xb, const String& pszTag, const T& value)
+    XmlNode*             write_child(XmlNode* xb, const std::string& pszTag, const T& value)
     {
         return write_child(xb, pszTag.c_str(), value, true);
     }

@@ -6,28 +6,7 @@
 
 #pragma once
 
-//  MERGING of the library's (simple) forward declarations/common headers....
-#include <algorithm>
-#include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <cuchar>
-#include <cwchar>
-#include <filesystem>
-#include <functional>
-#include <initializer_list>
-#include <limits>
-#include <span>
-#include <string>
-#include <string_view>
-#include <type_traits>
-#include <utility>
-
-#include <sys/types.h>
-
-    //  Qt... .I know... soon to eliminate, but for now... it's here
-class QByteArray;
-class QString;
+#include <util/c++/stdlibs.hpp>
 
     //  Linux suppourts int128
 using uint128_t = unsigned __int128;
@@ -39,8 +18,6 @@ namespace log4cpp {
 
 namespace yq {
     class ByteArray;
-    class Char8;
-    class Char32;
     class CmdArgs;
     class DelayInit;
     class Global;       //  a global property ... effectively
@@ -58,13 +35,22 @@ namespace yq {
     struct Parsed;
     class RefCount;
     class Stream;
-    class String;
-    class StringView;
     class Variant;
 
+
+    /*! \brief Useful parameter for case-insensitive string keys in sets and maps
+    */
+    struct IgCase {
+        bool    operator()(const std::string_view&, const std::string_view&) const;
+    };
+
+    /*! \brief Useful parameter for case-insensitive string keys in sets and maps
+    */
+    struct RevIgCase {
+        bool    operator()(const std::string_view&, const std::string_view&) const;
+    };
     
         //  STRUCTS
-    struct IgCase;
     struct Url;
 
         // TEMPLATE CLASS (BY CLASS)
@@ -107,8 +93,8 @@ namespace yq {
     using int128_r          = Result<int128_t>;
     using short_r           = Result<short>;
     using size_r            = Result<size_t>;
-    using string_r          = Result<String>;
-    using string_view_r     = Result<StringView>;
+    using string_r          = Result<std::string>;
+    using string_view_r     = Result<std::string_view>;
     //using string_map_r      = Result<StringMap>;
     //using string_set_r      = Result<StringSet>;
     using uint8_r           = Result<uint8_t>;
@@ -118,8 +104,6 @@ namespace yq {
     using uint128_r         = Result<uint128_t>;
     using unsigned_r        = Result<unsigned int>;
     using ushort_r          = Result<unsigned short>;
-    using qbytearray_r      = Result<QByteArray>;
-    using qstring_r         = Result<QString>;
     using url_r             = Result<Url>;
     using u32string_r       = Result<std::u32string>;
     using variant_r         = Result<Variant>;
@@ -165,20 +149,18 @@ namespace yq {
 
 
         //  Common permutations (Qt will go away...eventually)
-    using StringMap             = Map<String,String,IgCase>;
-    using StringMultiMap        = MultiMap<String,String,IgCase>;
-    using StringSet             = Set<String,IgCase>;
+    using StringMap             = Map<std::string,std::string,IgCase>;
+    using StringMultiMap        = MultiMap<std::string,std::string,IgCase>;
+    using StringSet             = Set<std::string,IgCase>;
     using StringViewSet         = Set<std::string_view,IgCase>;
-    using QStringSet            = Set<QString,IgCase>;
-    using StringPair            = std::pair<String,String>;
-    using StringIntPair         = std::pair<String,int>;
-    using QStringIntPair        = std::pair<QString,int>;
+    using StringPair            = std::pair<std::string,std::string>;
+    using StringIntPair         = std::pair<std::string,int>;
 
-        // move these to use std::filesystem::path
+        // TODO move these to use std::filesystem::path
     #if defined(__APPLE__) || defined(WIN32)
-        using QPathSet   = QStringSet;
+        using PathSet   = StringSet;
     #elif defined(__linux__) || defined(__unix__)
-        using QPathSet   = Set<QString>;
+        using PathSet   = Set<std::string>;
     #endif
 
 
@@ -186,6 +168,8 @@ namespace yq {
         //! Gets the current thread's ID
         unsigned int id();
     }
+
+    bool            is_main_thread();
     
     //!  The build directory
     const char*     build_directory();

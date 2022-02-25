@@ -14,13 +14,13 @@ namespace yq {
     namespace stream {
         class Text : public Stream {
         public:
-            Text(String& bytes) : m_bytes(bytes) {}
+            Text(std::string& bytes) : m_bytes(bytes) {}
             ~Text(){}
 
             bool write(const char* buf, size_t cb) override;
 
         private:
-            String&  m_bytes;
+            std::string&  m_bytes;
         };
     }
 }

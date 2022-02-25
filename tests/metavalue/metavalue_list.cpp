@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <algorithm>
 
-#include <util/text/String.hpp>
+#include <util/text/Utils.hpp>
 #include <util/type/Variant.hpp>
 #include <util/collection/Vector.hpp>
 //#include "math/MathFwd.hpp"
@@ -29,11 +29,14 @@ int main(int argc, char* argv[])
     }
     for(const TypeInfo* mt : all){
         Variant var(mt);
-        String  fmt     = var.printable();
-        String  name    = mt->name();
-        String  label   = mt->label();
+        std::string  fmt     = var.printable();
+        std::string  name    = copy(mt->name());
+        std::string  label   = copy(mt->label());
         printf("%3u %-*s %-*s %3u bytes def=%s\n", mt->id(), (int) mx, (const char*) name.c_str(), 
             (int) lx, (const char*) label.c_str(), (unsigned) mt->size(), (const char*) fmt.c_str());
     }
+    
+    
+    
     return 0;
 }

@@ -21,12 +21,10 @@ set(util_sources
     
     ./library.cpp
     ./preamble.hpp
-    ./Utilities.cpp
-    ./Utilities.hpp
 
-    ./algo/Algo.cpp
     ./algo/Compare.hpp
     ./algo/DiffEngine.hpp
+    ./algo/Random.cpp
     ./algo/Random.hpp
     
     ./app/App.cpp
@@ -58,8 +56,8 @@ set(util_sources
     ./file/XmlFwd.hpp
     ./file/XmlUtils.hpp
     
-    ./log/LogFile.cpp
-    ./log/LogFile.hpp
+    #./log/LogFile.cpp
+    #./log/LogFile.hpp
     ./log/Logging.cpp
     ./log/Logging.hpp
     
@@ -77,20 +75,20 @@ set(util_sources
     ./meta/StdTypes.cpp
     ./meta/TypeInfo.hpp
     
-    ./net/Curl.cpp
-    ./net/Curl.hpp
+    #./net/Curl.cpp
+    #./net/Curl.hpp
     ./net/Http.cpp
     ./net/Http.hpp
-    ./net/Url.cpp
-    ./net/Url.hpp
+    #./net/Url.cpp
+    #./net/Url.hpp
 
-    ./proc/Execute.cpp
-    ./proc/Execute.hpp
+    #./proc/Execute.cpp
+    #./proc/Execute.hpp
     
-    ./sql/Sql.cpp
-    ./sql/SqlLogging.hpp
-    ./sql/SqlQuery.hpp
-    ./sql/SqlUtils.hpp
+    #./sql/Sql.cpp
+    #./sql/SqlLogging.hpp
+    #./sql/SqlQuery.hpp
+    #./sql/SqlUtils.hpp
 
     ./stream/Bytes.hpp
     ./stream/File.hpp
@@ -99,18 +97,12 @@ set(util_sources
     ./stream/Ops.hpp
     ./stream/Stream.cpp
     
-    ./text/ByteArray.hpp
-    ./text/Char8.hpp
-    ./text/Char32.hpp
     ./text/Comma.hpp
     ./text/Format.hpp
-    ./text/IgCase.hpp
-    ./text/String.hpp
-    ./text/StringUtil.hpp
-    ./text/StringView.hpp
-    ./text/Strings.hpp
-    ./text/Text.cpp
+    ./text/Utils.cpp
+    ./text/Utils.hpp
     
+    ./type/ByteArray.hpp
     ./type/Enum.hpp
     ./type/Flag.hpp
     ./type/IntRange.hpp
@@ -139,9 +131,6 @@ target_link_libraries(yqutil
         ${LOG4CPP_LIBRARIES} 
         ${TBB_LIBRARIES}
         ${CURL_LIBRARIES}
-        Qt5::Core 
-        Qt5::Gui 
-        Qt5::Sql
         ${GCC_FSLIB}
 )
 

@@ -16,12 +16,11 @@
 namespace yq {
     class Stream;
 
-    Stream&     operator<<(Stream&, const char*);
     Stream&     operator<<(Stream&, const std::string&);
     Stream&     operator<<(Stream&, const std::string_view&);
-    Stream&     operator<<(Stream&, const QString&);
-    Stream&     operator<<(Stream&, const QByteArray&);
+    Stream&     operator<<(Stream&, const char*);
     Stream&     operator<<(Stream&, char);
+    Stream&     operator<<(Stream&, char32_t);
 
     Stream&     operator<<(Stream&, float);
     Stream&     operator<<(Stream&, double);

@@ -68,10 +68,10 @@ namespace yq {
 
     \note   MUST BE USED AT GLOBAL SCOPE (NO NAMESPACES)
 */
-#define MO_DECLARE(name)                                        \
+#define MO_DECLARE(...)                                         \
     namespace yq {                                              \
         template <>                                             \
-        struct InfoBinder(name) {                               \
+        struct InfoBinder(__VA_ARGS__) {                        \
             static constexpr const bool Defined         = true; \
             static constexpr const bool IsObject        = true; \
             static constexpr const bool IsCompound      = true; \
@@ -85,10 +85,10 @@ namespace yq {
 
     \note   MUST BE USED AT GLOBAL SCOPE (NO NAMESPACES)
 */
-#define MT_DECLARE(name)                                        \
+#define MT_DECLARE(...)                                         \
     namespace yq {                                              \
         template <>                                             \
-        struct InfoBinder<name> {                               \
+        struct InfoBinder<__VA_ARGS__> {                        \
             static constexpr const bool Defined     = true;     \
             static constexpr const bool IsObject    = false;    \
             static constexpr const bool IsType      = true;     \
@@ -99,7 +99,7 @@ namespace yq {
     } 
 
 
-MT_DECLARE(String)
+MT_DECLARE(std::string)
 MT_DECLARE(bool)
 MT_DECLARE(double)
 MT_DECLARE(float)

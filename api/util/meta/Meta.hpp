@@ -11,7 +11,6 @@
 #include <util/collection/MultiMap.hpp>
 #include <util/collection/Set.hpp>
 #include <util/collection/Vector.hpp>
-#include <util/text/IgCase.hpp>
 #include "VariantDef.hpp"
 
 /*
@@ -150,7 +149,7 @@ namespace yq {
         
         
         //  TODO
-        const Variant&                  tag(const String&) const;
+        const Variant&                  tag(const std::string_view&) const;
         
 
             // used during the creation....

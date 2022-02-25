@@ -10,6 +10,8 @@
 namespace yq {
 
 
+    template <class...> inline constexpr bool always_false_v = false;
+
     // bool    has_less<T>()
     template <typename T, class = void>
     struct has_less : public std::false_type {};

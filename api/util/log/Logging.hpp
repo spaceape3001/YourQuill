@@ -12,11 +12,6 @@
 #include <log4cpp/Priority.hh>
 #include <optional>
 
-class QDate;
-class QDateTime;
-class QDir;
-class QSqlError;
-class QUrl;
 
 namespace yq {
 
@@ -87,10 +82,10 @@ log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream& str, const std::opt
     return str;
 }
 
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QByteArray&);
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QDate&);
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QDateTime&);
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QDir&);
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QSqlError&);
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QString&);
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QUrl&);
+//log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QByteArray&);
+//log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QDate&);
+//log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QDateTime&);
+//log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QDir&);
+//log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QSqlError&);
+//log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QString&);
+//log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const QUrl&);

@@ -13,15 +13,14 @@
 #include "Text.hpp"
 
 #include <util/file/FileUtils.hpp>
-#include <util/text/ByteArray.hpp>
+#include <util/text/Utils.hpp>
+#include <util/type/ByteArray.hpp>
 
 #include <cstring>
-#include <charconv>
 
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <QString>
 
 namespace yq {
 
@@ -301,10 +300,9 @@ namespace yq {
 
         static constexpr const size_t   kStdBuf = 63;
 
-        Stream&     operator<<(Stream&str, const char* v)
+        Stream&     operator<<(Stream&str, const std::string_view&v)
         {
-            if(v)
-                str.write(v, strlen(v));
+            str.write(v.data(), v.size());
             return str;
         }
 
@@ -314,21 +312,9 @@ namespace yq {
             return str;
         }
 
-        Stream&     operator<<(Stream&str, const std::string_view&v)
+        Stream&     operator<<(Stream&str, const char*z)
         {
-            str.write(v.data(), v.size());
-            return str;
-        }
-
-        Stream&     operator<<(Stream&str, const QString&v)
-        {
-            return str << v.toStdString();
-        }
-
-        Stream&     operator<<(Stream&str,  const QByteArray&v)
-        {
-            str.write(v.constData(), v.size());
-            return str;
+            return operator<<(str, std::string_view(z));
         }
 
         Stream&     operator<<(Stream& str, char v)
@@ -337,101 +323,73 @@ namespace yq {
             return str;
         }
 
+        Stream&     operator<<(Stream&str, char32_t v)
+        {
+            return str << to_string(v);
+        }
+
         Stream&     operator<<(Stream&str, float v)
         {
-            //  std::to_chars would be GREAT, if GCC implemented it.....
-            char    buf[kStdBuf+1];
-            int n  = snprintf(buf, kStdBuf, "%g", v);
-            str.write(buf, n);
-            return str;
+            return str << to_string(v);
         }
 
         Stream&     operator<<(Stream&str, double v)
         {
-            //  std::to_chars would be GREAT, if GCC implemented it.....
-            char    buf[kStdBuf+1];
-            int n  = snprintf(buf, kStdBuf, "%lg", v);
-            str.write(buf, n);
+            str << to_string(v);
             return str;
         }
 
         Stream&     operator<<(Stream&str, bool v)
         {
-            static constexpr const std::string_view     kFalse  = "false";
-            static constexpr const std::string_view     kTrue   = "true";
-            return str << (v?kTrue:kFalse);
+            return str << to_string(v);
         }
 
 
         Stream&     operator<<(Stream&str, int8_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
         Stream&     operator<<(Stream&str, int16_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
         Stream&     operator<<(Stream&str, int32_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
         Stream&     operator<<(Stream&str, int64_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
 
         Stream&     operator<<(Stream&str, uint8_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
         Stream&     operator<<(Stream&str, uint16_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
         Stream&     operator<<(Stream&str, uint32_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
         Stream&     operator<<(Stream&str, uint64_t v)
         {
-            char    buf[kStdBuf+1];
-            auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-            str.write(buf, (p-buf));
-            return str;
+            return str << to_string(v);
         }
 
 
         Stream&     operator<<(Stream&str, const std::filesystem::path&v)
         {
-            return str << v.native();
+            return str << v.c_str();
         }
 
 }

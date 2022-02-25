@@ -8,7 +8,6 @@
 #define YQUILL__API__CORE__TYPE__LIST__H__
 
 #include <list>
-//#include <QList>
 
 namespace yq {
 
@@ -61,8 +60,6 @@ namespace yq {
     //template <typename T>
     //List<T>         makeList(const std::vector<T>&);
 
-    //template <typename T>
-    //QList<T>            qt(const List<T>&);
 
     //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  //
     //  ====================================================================  //
@@ -169,32 +166,6 @@ namespace yq {
     {
         return List<T>(src.begin(), src.end());
     }
-
-
-    //template <typename T>
-    //QList<T>            qt(const List<T>&src)
-    //{
-        //return QList<T>(src.begin(), src.end()); 
-    //}
-
-
-    //template <typename T>
-    //QList<T>            qtList(const List<T>& src)
-    //{
-        //return QList<T>(src.begin(), src.end()); 
-    //}
-
-    //template <typename T>
-    //void    sort(QList<T>& list)
-    //{
-        //std::stable_sort(list.begin(), list.end());
-    //}
-
-    //template <typename T, typename P>
-    //void    sort(QList<T>& list, P p)
-    //{
-        //std::stable_sort(list.begin(), list.end(), p);
-    //}
 }
 
 #ifdef YQUILL__API__CORE__TYPE__HASH__H__

@@ -35,17 +35,17 @@
 
 #define MT_IMPLEMENT( ... )                                                                                 \
     namespace yq {                                                                                          \
-        TypeInfo&   InfoBinder<__VA_ARGS__>::edit() {                                                       \
+        TypeInfo&   InfoBinder<__VA_ARGS__>::edit() {                                           \
             static auto* s_ret   = new TypeInfo::Final<__VA_ARGS__>(#__VA_ARGS__, __FILE__);                \
             return *s_ret;                                                                                  \
         }                                                                                                   \
         template <> TypeInfo& TypeInfo::Final<__VA_ARGS__>::s_save  = InfoBinder<__VA_ARGS__>::edit();      \
     }
 
-#define MT_FIXED( i, ... )                                                                                  \
+#define MT_FIXED( ii, ... )                                                                                 \
     namespace yq {                                                                                          \
-        TypeInfo&   InfoBinder<__VA_ARGS__>::edit() {                                                       \
-            static auto* s_ret   = new TypeInfo::Final<__VA_ARGS__>(#__VA_ARGS__, __FILE__, i);             \
+        TypeInfo&   InfoBinder<__VA_ARGS__>::edit() {                                           \
+            static auto* s_ret   = new TypeInfo::Final<__VA_ARGS__>(#__VA_ARGS__, __FILE__, ii);            \
             return *s_ret;                                                                                  \
         }                                                                                                   \
         template <> TypeInfo& TypeInfo::Final<__VA_ARGS__>::s_save  = InfoBinder<__VA_ARGS__>::edit();      \
@@ -1045,6 +1045,7 @@ namespace yq {
     template <typename T>
     using type_info_t  = TypeInfoFor<T>::Type;
     
+    #if 0
     /*! \brief Gathers Types
         
         This gathers the template parameter type as a type info into the vector, IF meta type aware.
@@ -1078,13 +1079,15 @@ namespace yq {
         }
     };
     
+
     template <template <typename...> class Tmpl, typename ...Args> 
     struct GatherTemplateArgs<Tmpl<Args...>> {
-        unsigned    operator()(Vector<const TypeInfo*>& ret) 
+        static unsigned   gather(Vector<const TypeInfo*>& ret) 
         {
             return gather_types<Args...>(ret);
         }
     };
+    #endif
 
     template <typename T>
     class TypeInfo::Typed : public type_info_t<T> {
@@ -1137,9 +1140,11 @@ namespace yq {
             TypeInfo::m_size          = sizeof(T);
             
             if constexpr ( is_template_v<T>) {
-                TypeInfo::m_template.params     = GatherTemplateArgs<T>(TypeInfo::m_template.args);
+            #if 0
+                TypeInfo::m_template.params     = GatherTemplateArgs<T>()(TypeInfo::m_template.args);
                 if(!TypeInfo::m_template.args.empty())  // only flag it as a template if any parameters trigger
                     opts |= TEMPLATE;
+            #endif
             }
             
             if constexpr ( has_stream_v<T>) {
@@ -1348,6 +1353,26 @@ namespace yq {
             if(thread_safe_write()){
                 static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_print   = [](Stream& dst, const void* src)  {
                     dst << FN(*(const T*) src);
+                };
+            }
+        }
+
+        template <void(*FN)(Stream&, const T&)>
+        void    print()
+        {
+            if(thread_safe_write()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_print   = [](Stream& dst, const void* src)  {
+                    FN(dst, *(const T*) src);
+                };
+            }
+        }
+
+        template <void(*FN)(Stream&, T)>
+        void    print()
+        {
+            if(thread_safe_write()){
+                static_cast<TypeInfo*>(Meta::Writer::m_meta)->m_print   = [](Stream& dst, const void* src)  {
+                    FN(dst, *(const T*) src);
                 };
             }
         }

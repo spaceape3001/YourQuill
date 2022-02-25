@@ -35,10 +35,10 @@ namespace yq {
         explicit Variant(char);
         explicit Variant(char8_t);
         explicit Variant(char32_t);
+        explicit Variant(char*);
         explicit Variant(const char*);
         explicit Variant(const char8_t*);
         explicit Variant(const char32_t*);
-        explicit Variant(const std::string&);
         explicit Variant(const std::u8string&);
         explicit Variant(const std::u32string&);
         explicit Variant(const std::wstring&);
@@ -85,7 +85,7 @@ namespace yq {
 
         bool            is_valid() const;
 
-        //Variant         get_field(const String&) const;
+        //Variant         get_field(const std::string&) const;
         
         /*! \brief Parses into the variant, overwriting
         */
@@ -112,7 +112,7 @@ namespace yq {
         
             \note There's no corresponding "parse" (deliberate), see the I/O helpers
         */
-        String          printable() const;
+        std::string          printable() const;
         
         /*! \brief Guarded pointer
             Returns the pointer *IF* it's feasible, otherwise null
@@ -136,7 +136,7 @@ namespace yq {
         const T&            ref(const T& bad={}) const;
         
 
-        //bool        set_field(const String&, const Variant&);
+        //bool        set_field(const std::string&, const Variant&);
 
         
 
@@ -174,6 +174,9 @@ namespace yq {
         
         template <typename T>
         void    set(T&&val);
+        
+        void    set(std::string_view&&);
+        void    set(const std::string_view&);
         
         void    set(const TypeInfo&, const void*);
         void    clear();

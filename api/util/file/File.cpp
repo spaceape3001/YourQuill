@@ -13,8 +13,8 @@
 #include <util/collection/Set.hpp>
 #include <util/log/Logging.hpp>
 #include <util/stream/Bytes.hpp>
-#include <util/text/ByteArray.hpp>
-#include <util/text/Strings.hpp>
+#include <util/text/Utils.hpp>
+#include <util/type/ByteArray.hpp>
 
 #include <filesystem>
 #include <fstream>
@@ -196,24 +196,24 @@ namespace yq {
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        Vector<String>  dir_files(const char* iDir)
+        Vector<std::string>  dir_files(const char* iDir)
         {
-            Vector<String>  ret;
+            Vector<std::string>  ret;
             DIR*            d   = opendir(iDir);
             if(d){
                 while(struct dirent* r = readdir(d)){
                     if(r -> d_type != DT_REG)
                         continue;
-                    ret << String(r->d_name);
+                    ret << std::string(r->d_name);
                 }
                 closedir(d);
             }
             return ret;
         }
 
-        Vector<String>  dir_directories(const char* iDir)
+        Vector<std::string>  dir_directories(const char* iDir)
         {
-            Vector<String>  ret;
+            Vector<std::string>  ret;
             DIR*            d   = opendir(iDir);
             if(d){
                 while(struct dirent* r = readdir(d)){
@@ -223,7 +223,7 @@ namespace yq {
                         if(r->d_name[1] == '.' || r->d_name[1] == '\0')
                             continue;
                     }
-                    ret << String(r->d_name);
+                    ret << std::string(r->d_name);
                 }
                 closedir(d);
             }
@@ -269,27 +269,27 @@ namespace yq {
             return ret;
         }
 
-        String          file_string(const std::filesystem::path&iFile)
+        std::string          file_string(const std::filesystem::path&iFile)
         {
             struct stat buf;
             memset(&buf, 0, sizeof(buf));
             if(::stat(iFile.c_str(), &buf) == -1)
-                return String();
+                return std::string();
             size_t      sz  = buf.st_size;
             int fd  = open(iFile.c_str(), O_RDONLY);
             if(fd == -1)
-                return String();
+                return std::string();
             
-            String   ret;
+            std::string   ret;
             try {
                 ret.resize(sz);
             } catch(const std::bad_alloc&){
-                return String();
+                return std::string();
             }
             ssize_t sz2 = read(fd, ret.data(), sz);
             close(fd);
             if(sz2 < 0)
-                return String();
+                return std::string();
             if(sz2 < (ssize_t) sz)
                 ret.resize(sz2);
             return ret;
@@ -304,11 +304,11 @@ namespace yq {
 
 
 
-        String  file_modified(const char* iFile)
+        std::string  file_modified(const char* iFile)
         {
             struct stat buf;
             if(::stat(iFile, &buf) != 0)
-                return String();
+                return std::string();
                 
             struct tm  mt;
             localtime_r(&buf.st_mtim.tv_sec, &mt);
@@ -413,18 +413,18 @@ namespace yq {
             }
 
             
-            Vector<String>  subdirectory_names(const path&d, unsigned options) 
+            Vector<std::string>  subdirectory_names(const path&d, unsigned options) 
             {
-                Vector<String>  ret;
+                Vector<std::string>  ret;
                 for_all_children(d, options | NO_FILES, [&](const path&p){
                     ret << p.filename().string();
                 });
                 return ret;
             }
             
-            Vector<String>  subdirectory_names(const std::vector<path>&dirs, unsigned options) 
+            Vector<std::string>  subdirectory_names(const std::vector<path>&dirs, unsigned options) 
             {
-                Vector<String>  ret;
+                Vector<std::string>  ret;
                 for_all_children(dirs, options | NO_FILES, [&](const path&p){
                     ret << p.filename().string();
                 });
@@ -548,27 +548,27 @@ namespace yq {
 
         unsigned_r           x_hex(const XmlBase*xb)
         {
-            return to_hex(xb->value(), xb->value_size());
+            return as_hex(xb->value(), xb->value_size());
         }
 
         uint8_r              x_hex8(const XmlBase*xb)
         {
-            return to_hex8(xb->value(), xb->value_size());
+            return as_hex8(xb->value(), xb->value_size());
         }
 
         uint16_r             x_hex16(const XmlBase*xb)
         {
-            return to_hex16(xb->value(), xb->value_size());
+            return as_hex16(xb->value(), xb->value_size());
         }
 
         uint32_r             x_hex32(const XmlBase*xb)
         {
-            return to_hex32(xb->value(), xb->value_size());
+            return as_hex32(xb->value(), xb->value_size());
         }
 
         uint64_r             x_hex64(const XmlBase*xb)
         {
-            return to_hex64(xb->value(), xb->value_size());
+            return as_hex64(xb->value(), xb->value_size());
         }
 
         int_r                x_int(const XmlBase*xb)
@@ -665,22 +665,22 @@ namespace yq {
 
         void                 write_hex(XmlBase* xb, uint8_t v)
         {
-            write_x(xb, String::hex(v));
+            write_x(xb, fmt_hex(v));
         }
 
         void                 write_hex(XmlBase* xb, uint16_t v)
         {
-            write_x(xb, String::hex(v));
+            write_x(xb, fmt_hex(v));
         }
 
         void                 write_hex(XmlBase* xb, uint32_t v) 
         {
-            write_x(xb, String::hex(v));
+            write_x(xb, fmt_hex(v));
         }
 
         void                 write_hex(XmlBase* xb, uint64_t v)
         {
-            write_x(xb, String::hex(v));
+            write_x(xb, fmt_hex(v));
         }
 
 
@@ -691,65 +691,59 @@ namespace yq {
 
         void                 write_x(XmlBase* xb, double v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, float v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, int8_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, int16_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, int32_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, int64_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, uint8_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, uint16_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, uint32_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
         void                 write_x(XmlBase* xb, uint64_t v)
         {
-            write_x(xb, String::number(v));
+            write_x(xb, to_string(v));
         }
 
-        void                 write_x(XmlBase* xb, const std::string&v)
+        void                 write_x(XmlBase* xb, const std::string_view&v)
         {
             XmlDocument*doc = document_for(xb);
             if(doc && !v.empty())
-                xb -> value(doc -> allocate_string(v.c_str(), v.size()), v.size());
+                xb -> value(doc -> allocate_string(v.data(), v.size()), v.size());
         }
 
-        void                 write_x(XmlBase* xb, const String&v)
-        {
-            XmlDocument*doc = document_for(xb);
-            if(doc && !v.empty())
-                xb -> value(doc -> allocate_string(v.c_str(), v.size()), v.size());
-        }
 }

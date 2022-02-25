@@ -54,15 +54,8 @@ namespace yq {
         return Compare::EQUAL;
     }
 
-    //Compare compare(const QVariant& a, const QVariant& b);
-    Compare compare(const std::string& a, const std::string& b);
+    Compare compare(const std::string_view& a, const std::string_view& b);
     Compare compare_igCase(const std::string_view& a, const std::string_view& b);
-    Compare compare_igCase(const std::string& a, const std::string& b);
-
-    Compare compare(const QString& a, const QString& b);
-    Compare compare_igCase(const char* a, const char* b);
-    Compare compare_igCase(const QString& a, const QString& b);
-    Compare compare_igCase(const QByteArray& a, const QByteArray& b);
 
     template <typename T>
     Compare  compare(const T& a, const T& b)

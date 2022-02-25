@@ -8,10 +8,18 @@
 #define YQUILL__API__CORE__TYPE__VECTOR__H__
 
 #include <util/preamble.hpp>
-#include <vector>
 
 namespace yq {
 
+    //template <typename T>
+    //std::vector<T>&  operator<<(std::vector<T>& vec, T&& v)
+    //{
+        //if constexpr ( std::is_rvalue_reference_v<T> ){
+            //vec.push_back(std::move(v));
+        //} else
+            //vec.push_back(v);
+        //return vec;
+    //}
 
     /*! \brief Our vector container type
 

@@ -236,7 +236,7 @@ namespace yq {
             return ret;
         }
         
-        using ContentExtMap = Map<String,ContentType,IgCase>;
+        using ContentExtMap = Map<std::string_view,ContentType,IgCase>;
         
         ContentExtMap   makeExtensionMap()
         {
@@ -304,7 +304,7 @@ namespace yq {
         return contentTypes()[ct];
     }
 
-    ContentType mimeTypeForExt(const String& ext)
+    ContentType mimeTypeForExt(const std::string_view& ext)
     {
         const auto& r = extToTypeMap();
         return r.get(ext);

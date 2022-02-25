@@ -5,10 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include "Compare.hpp"          // Compilation check
-#include "DiffEngine.hpp"       // Compilation check
 #include "Random.hpp"
 #include <random>
+#include <sys/random.h>
 
 namespace yq {
 
@@ -41,6 +40,21 @@ namespace yq {
             
         };
     }
+
+    uint64_t        randU64()
+    {
+        static constexpr const  uint64_t    SZ      = 32;
+        static thread_local     uint64_t    buffer[SZ];
+        static thread_local     uint64_t    nxt     = SZ;
+        
+        if(nxt >= SZ){
+            (void) !getrandom(buffer, sizeof(buffer), 0);
+            nxt     = 0;
+        }
+        
+        return buffer[nxt++];
+    }
+
 
     double urand()
     {

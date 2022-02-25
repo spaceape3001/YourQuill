@@ -182,9 +182,6 @@ namespace yq {
 }
 
 
-//template <typename K, typename V>
-//QMultiMap<K,V>      qt(const MultiMap<K,V>&src);
-
 #ifdef YQUILL__API__CORE__TYPE__VECTOR__H__
     #include "MultiMapVectorImpl.hxx"
 #endif

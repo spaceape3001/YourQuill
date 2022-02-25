@@ -18,6 +18,11 @@
 
 namespace yq {
 
+    /*! \brief Simple string format
+    
+        This is a simple formatter, where the input string is parsed ONCE, stored for
+        Further use (or use std::format... which will become the preferred TBH)
+    */
     class Format {
     public:
 
@@ -30,11 +35,9 @@ namespace yq {
         
         
         //!  Assuming this is a compiled string or similarly stable source
-        Format(const char*);                // Will NOT copy
-        Format(const std::string_view&);    // will NOT copy
-        Format(const std::string&);         // will NOT copy
+        Format(const std::string_view&);    // will NOT store a copy
 
-        Format(std::string&&);              // WILL copy
+        Format(std::string&&);              // WILL store
 
             // COPYING is forbidden
         Format(const Format&) = delete;
@@ -78,8 +81,8 @@ namespace yq {
         Args&     arg(const std::string_view&);
         Args&     arg(bool, const char* szTrue="true", const char* szFalse="false");
 
-        String          string() const;
-        operator String() const { return string(); }
+        std::string          string() const;
+        operator std::string() const { return string(); }
 
 
     private:

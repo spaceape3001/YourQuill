@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <util/text/String.hpp>
+#include <string_view>
 
 namespace yq {
 
@@ -15,23 +15,28 @@ namespace yq {
     */
     class Comma {
     public:
-        Comma(const String&sep=", ");
+        Comma(const std::string_view& sep=", ") : m_separator(sep), m_first(true) {}
         
         
         /*! \brief Text
         
             On first call, this will be blank.  On subsequent calls, it'll have the separator 
         */
-        const String&       text() const;
-        
-        //! text() but for Qt....
-        QString             qText() const;
+        const std::string_view&       text() const
+        {
+            static const std::string_view s_blank   = "";
+            return m_first ? s_blank : m_separator;
+        }
         
         //! Advances the sequence
-        Comma&              operator++();
+        Comma&              operator++()
+        {
+            m_first = false;
+            return *this;
+        }
         
     private:
-        String      m_separator;
-        bool        m_first;
+        std::string_view    m_separator;
+        bool                m_first;
     };
 }

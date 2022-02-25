@@ -6,8 +6,8 @@
 
 #include "Enum.hpp"
 #include "Ref.hpp"
-#include <util/text/Char8.hpp>
 #include <util/collection/Vector.hpp>
+#include <util/text/Utils.hpp>
 #include <cassert>
 
 namespace yq {
@@ -17,7 +17,7 @@ namespace yq {
 
 
     namespace {
-        void    clean_it(String& text)
+        void    clean_it(std::string& text)
         {
             char*    begin   = &text[0];
             char*    c       = begin;
@@ -65,7 +65,7 @@ namespace yq {
                 default:
                     if(cmtc || cmtcxx)
                         break;
-                    if(Char8(*c).is_alnum())
+                    if(is_alnum(*c))
                         *s++ = *c;
                     break;
                 }
@@ -82,14 +82,14 @@ namespace yq {
 
 
 
-    Vector<StringPair>  EnumDef::parse_definition(const String& str)
+    Vector<StringPair>  EnumDef::parse_definition(const std::string& str)
     {
         Vector<StringPair>  ret;
-        String          arg = str;
+        std::string          arg = str;
         clean_it(arg);
-        for(const String& s : arg.split(',')){
-            Vector<String> bits = s.split('=');
-            String  key, def;
+        for(const std::string_view& s : split(arg, ',')){
+            auto bits = split(s, '=');
+            std::string  key, def;
             switch(bits.size()){
             case 0:
                 continue;
@@ -108,7 +108,7 @@ namespace yq {
         return ret;
     }
 
-    EnumDef::EnumDef(const String& name, const String& def) : 
+    EnumDef::EnumDef(const std::string& name, const std::string& def) : 
         m_name(name), m_defValue(-1)
     {
         Vector<StringPair>  pairs   = parse_definition(def);
@@ -119,7 +119,7 @@ namespace yq {
         {
             int     theValue = 0;
             if(!itr.second.empty()){
-                theValue    = m_name2value.get(itr.second, itr.second.to_integer());
+                theValue    = m_name2value.get(itr.second, to_integer(itr.second));
                 nextValue   = 1 + theValue;
             } else {
                 theValue        = nextValue++;
@@ -134,13 +134,13 @@ namespace yq {
                 first       = false;
             }
         }
-        m_keys.sort(std::less<String>());
+        m_keys.sort(std::less<std::string>());
     }
 
 
-    bool    EnumDef::has_key(const String&key) const
+    bool    EnumDef::has_key(const std::string_view&key) const
     {
-        return m_name2value.has(key.strip_spaces());
+        return m_name2value.has(std::string(key));
     }
 
     bool    EnumDef::has_value(int v) const
@@ -170,26 +170,29 @@ namespace yq {
     }
 
 
-    Vector<int>  EnumDef::parse_comma_list(const String&str)  const
+    Vector<int>  EnumDef::parse_comma_list(const std::string_view&str)  const
     {
         Vector<int>  ret;
-        for(String s : str.strip_spaces().split(',')){
-            auto itr = m_name2value.find(s);
+        for(std::string_view s : split(strip_spaces(str), ',')){
+            auto itr = m_name2value.find(std::string(s));
             if(itr != m_name2value.end())
                 ret << itr->second;
         }
         return ret;
     }
 
-    String     EnumDef::make_comma_list(const Vector<int>&vals) const
+    std::string     EnumDef::make_comma_list(const Vector<int>&vals) const
     {
-        String::Join  ret(',');
+        std::vector<std::string_view>   bits;
         for(int v : vals){
             auto itr = m_value2name.find(v);
             if(itr != m_value2name.end())
-                ret << itr->second;
+                bits.push_back(itr->second);
         }
-        return ret;
+        if(!bits.empty())
+            return join(bits, ",");
+        else
+            return std::string();
     }
 
     Vector<int>             EnumDef::all_values() const
@@ -203,9 +206,9 @@ namespace yq {
     }
 
 
-    int_r     EnumDef::value_of(const String& key) const
+    int_r     EnumDef::value_of(const std::string_view& key) const
     {
-        return m_name2value(key.strip_spaces());
+        return m_name2value(std::string(key));
     }
 
 
@@ -228,12 +231,12 @@ namespace yq {
         }
     }
 
-    String Enum::key() const
+    std::string Enum::key() const
     {
         if(m_def){
             return m_def->key_of(m_value);
         } else {
-            return String();
+            return std::string();
         }
     }
 

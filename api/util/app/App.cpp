@@ -1,9 +1,6 @@
 #include "CmdArgs.hpp"
 #include "DelayInit.hpp"
 
-
-#include <util/text/StringView.hpp>
-
 #include <atomic>
 #include <span>
 
@@ -16,7 +13,7 @@ namespace yq {
     struct CmdArgs::Repo {
         CmdArgs*                app = nullptr;
         std::span<const char*>  args;
-        StringView              exe;
+        std::string_view        exe;
     };
 
     CmdArgs::Repo& CmdArgs::repo()

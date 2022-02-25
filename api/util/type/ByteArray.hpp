@@ -7,8 +7,6 @@
 #pragma once
 #include <util/collection/Vector.hpp>
 
-class QByteArray;
-
 namespace yq {
     class ByteArray {
     public:
@@ -17,10 +15,9 @@ namespace yq {
         ByteArray(const ByteArray&) = default;
         ByteArray(ByteArray&&) = default;
         
-        ByteArray(const QByteArray&);
-        ByteArray(const char*, size_t);
-        ByteArray(const Vector<char>&);
-        ByteArray(Vector<char>&&);
+        ByteArray(const char*z, size_t cb) : m_data(z, cb) {}
+        ByteArray(const Vector<char>&dat) : m_data(dat) {}
+        ByteArray(Vector<char>&&dat) : m_data(std::move(dat)) {}
         
         ByteArray&  operator=(const ByteArray&) = default;
         ByteArray&  operator=(ByteArray&&) = default;
@@ -74,7 +71,6 @@ namespace yq {
             return m_data.empty(); 
         }
         
-        QByteArray      qBytes() const;
 
         void            reserve(size_t z) 
         { 
@@ -87,7 +83,10 @@ namespace yq {
             m_data.resize(z);
         }
         
-        void            setData(Vector<char>&&);
+        void            setData(Vector<char>&&dat)
+        {
+            m_data  = std::move(dat);
+        }
         
         size_t          size() const 
         { 
@@ -99,7 +98,6 @@ namespace yq {
             m_data += ch;
             return *this;
         }
-        
         
     private:
         // this is binary data BTW, no interpretation

@@ -81,14 +81,6 @@ namespace yq {
                     return z;
             return y;
         }
-        
-        #ifdef WIN32
-            //  until MSVC decides to grow up and get with the times....
-        size_t  strnlen(const char*z, size_t cb)
-        {
-            return strnlen_s(z, cb);
-        }
-        #endif
     }
     
     struct EmptyType : public TypeInfo {
@@ -301,7 +293,12 @@ namespace yq {
 
         }
 
-        void              Meta::sweep()
+        bool  Meta::has_tag(const std::string_view&k) const
+        {
+            return m_tags.contains(k);
+        }
+
+        void  Meta::sweep()
         {
             assert(thread_safe_write());
 
@@ -309,6 +306,15 @@ namespace yq {
                 sweep_impl();
                 m_flags |= SWEPT;
             }
+        }
+
+        const Variant&  Meta::tag(const std::string_view&k) const
+        {
+            static Variant bad;
+            auto i = m_tags.find(k);
+            if(i != m_tags.end())
+                return i->second;
+            return bad;
         }
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -187,5 +187,11 @@ namespace yq {
         return ret;
     }
 
-    bool        any_changes(const Vector<DEResult>&);
+    inline bool     any_changes(const Vector<DEResult>&results)
+    {
+        for(auto& de : results)
+            if(de.mode != DEResult::Same)
+                return true;
+        return false;
+    }
 }

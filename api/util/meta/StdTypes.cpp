@@ -3,9 +3,9 @@
 #include "Init.hpp"
 
 #include <util/app/DelayInit.hpp>
-#include <util/text/StringUtil.hpp>
+#include <util/text/Utils.hpp>
 
-MT_FIXED(MT_String, String)
+MT_FIXED(MT_String, std::string)
 MT_FIXED(MT_Boolean, bool)
 MT_FIXED(MT_Float, float)
 MT_FIXED(MT_Double, double)
@@ -21,7 +21,7 @@ MT_FIXED(MT_UInt64, uint64_t)
 namespace yq {
     namespace {
     
-        bool    parse_string(const std::string_view& txt, String& v)
+        bool    parse_string(const std::string_view& txt, std::string& v)
         {
             v   = txt;
             return true;
@@ -97,28 +97,141 @@ namespace yq {
             v   = r.value;
             return r.good;
         }
-        
+
+
         bool    parse_uint64(const std::string_view&txt, uint64_t&v)
         {
             auto r  = to_uint64(txt);
             v   = r.value;
             return r.good;
         }
+        
+        //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void    print_string(Stream& str, const std::string& v)
+        {
+            str << v;
+        }
+
+        void    print_boolean(Stream& str, bool v)
+        {
+            str << v;
+        }
+
+        void    print_double(Stream& str, double v)
+        {
+            str << v;
+        }
+
+        void    print_float(Stream& str, float v)
+        {
+            str << v;
+        }
+
+        void    print_int8(Stream& str, int8_t v)
+        {
+            str << v;
+        }
+
+        void    print_int16(Stream& str, int16_t v)
+        {
+            str << v;
+        }
+
+        void    print_int32(Stream& str, int32_t v)
+        {
+            str << v;
+        }
+
+        void    print_int64(Stream& str, int64_t v)
+        {
+            str << v;
+        }
+
+
+        void    print_uint8(Stream& str, uint8_t v)
+        {
+            str << v;
+        }
+
+        void    print_uint16(Stream& str, uint16_t v)
+        {
+            str << v;
+        }
+
+        void    print_uint32(Stream& str, uint32_t v)
+        {
+            str << v;
+        }
+
+        void    print_uint64(Stream& str, uint64_t v)
+        {
+            str << v;
+        }
     
+
         void    init_stdtypes()
         {
-            meta_write<bool>().parse<parse_boolean>();
-            meta_write<double>().parse<parse_double>();
-            meta_write<float>().parse<parse_float>();
-            meta_write<int8_t>().parse<parse_int8>();
-            meta_write<int16_t>().parse<parse_int16>();
-            meta_write<int32_t>().parse<parse_int32>();
-            meta_write<int64_t>().parse<parse_int64>();
-            meta_write<uint8_t>().parse<parse_uint8>();
-            meta_write<uint16_t>().parse<parse_uint16>();
-            meta_write<uint32_t>().parse<parse_uint32>();
-            meta_write<uint64_t>().parse<parse_uint64>();
-            meta_write<String>().parse<parse_string>();
+            {
+                auto w = meta_write<bool>();
+                w.parse<parse_boolean>();
+                w.print<print_boolean>();
+            }
+            {
+                auto w = meta_write<double>();
+                w.parse<parse_double>();
+                w.print<print_double>();
+            }
+            {
+                auto w = meta_write<float>();
+                w.parse<parse_float>();
+                w.print<print_float>();
+            }
+            {
+                auto w  = meta_write<int8_t>();
+                w.parse<parse_int8>();
+                w.print<print_int8>();
+            }
+            {
+                auto w  = meta_write<int16_t>();
+                w.parse<parse_int16>();
+                w.print<print_int16>();
+            }
+            {
+                auto w  = meta_write<int32_t>();
+                w.parse<parse_int32>();
+                w.print<print_int32>();
+            }
+            {
+                auto w  = meta_write<int64_t>();
+                w.parse<parse_int64>();
+                w.print<print_int64>();
+            }
+            {
+                auto w  = meta_write<uint8_t>();
+                w.parse<parse_uint8>();
+                w.print<print_uint8>();
+            }
+            {
+                auto w  = meta_write<uint16_t>();
+                w.parse<parse_uint16>();
+                w.print<print_uint16>();
+            }
+            {
+                auto w  = meta_write<uint32_t>();
+                w.parse<parse_uint32>();
+                w.print<print_uint32>();
+            }
+            {
+                auto w  = meta_write<uint64_t>();
+                w.parse<parse_uint64>();
+                w.print<print_uint64>();
+            }
+            {
+                auto w  = meta_write<std::string>();
+                w.parse<parse_string>();
+                w.print<print_string>();
+            }
         }
     }
 }

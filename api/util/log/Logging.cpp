@@ -16,12 +16,12 @@
 #include <tbb/spin_mutex.h>
 #include <tbb/spin_rw_mutex.h>
 
-#include <QByteArray>
-#include <QDate>
-#include <QDateTime>
-#include <QDir>
-#include <QSqlError>
-#include <QUrl>
+//#include <QByteArray>
+//#include <QDate>
+//#include <QDateTime>
+//#include <QDir>
+//#include <QSqlError>
+//#include <QUrl>
 
 #include <iostream>
 
@@ -57,12 +57,8 @@ namespace yq {
             }
         }
 
-        static void        log_qt(log4cpp::CategoryStream&& cs, const QMessageLogContext& context, const QString& msg);
-        static void        log4cpp_qtMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg);
-
         struct LogRepo {
             log4cpp::Category&                                  m_root;
-            log4cpp::Category&                                  m_qt;
             tbb::spin_rw_mutex                                  m_mutex;
             log4cpp::OstreamAppender*                           m_out;
             LogPriority                                         m_outPri;
@@ -70,12 +66,10 @@ namespace yq {
             LogPriority                                         m_errPri;
             
             LogRepo() :    m_root(log4cpp::Category::getRoot()), 
-                        m_qt(log4cpp::Category::getInstance("qt")), 
                         m_out(nullptr), 
                         m_err(nullptr)
             {
                 //root.removeAllAppenders();
-                qInstallMessageHandler(log4cpp_qtMessageHandler);
             }
             
             log4cpp::Category*  make(const char* z)
@@ -101,36 +95,6 @@ namespace yq {
             static LogRepo s_repo;
             return s_repo;
         }
-        
-        static void         log_qt(log4cpp::CategoryStream&& cs, const QMessageLogContext& context, const QString& msg)
-        {
-            QByteArray  utf8    = msg.toUtf8();
-            const char* file    = context.file ? context.file : "??";
-            const char* fn      = context.function ? context.function : "??";
-            cs << utf8.constData() << " (" << file << ":" << context.line << ", " << fn << ")";
-        }
-        
-        static void        log4cpp_qtMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
-        {
-            switch(type){
-            case QtDebugMsg:
-                log_qt(log_repo().m_qt.debugStream(), context, msg);
-                break;
-            case QtInfoMsg:
-                log_qt(log_repo().m_qt.infoStream(), context, msg);
-                break;
-            case QtWarningMsg:
-                log_qt(log_repo().m_qt.warnStream(), context, msg);
-                break;
-            case QtCriticalMsg:
-                log_qt(log_repo().m_qt.critStream(), context, msg);
-                break;
-            case QtFatalMsg:
-                log_qt(log_repo().m_qt.fatalStream(), context, msg);
-                break;
-            }
-        }
-        
     }
 
     bool                        is_log_std_error_enabled()
@@ -206,44 +170,5 @@ namespace yq {
         _r.m_root.addAppender(f);
     }
 
-}
-
-//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QByteArray&v)
-{
-    return cs << v.constData();
-}
-
-
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QDate&v)
-{
-    return cs << v.toString(Qt::ISODate);
-}
-
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QDateTime&v)
-{
-    return cs << v.toString(Qt::ISODate);
-}
-
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QDir& v)
-{
-    return cs << v.absolutePath();
-}
-
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QSqlError&v)
-{
-    return cs << v.text();
-}
-
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QString&v)
-{
-    return cs << v.toStdString();
-}
-
-
-log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&cs, const QUrl&v)
-{
-    return cs << v.toString();
 }
 

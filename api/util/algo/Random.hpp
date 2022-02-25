@@ -10,6 +10,10 @@
 
 namespace yq {
 
+    /*! \brief Random 64-bit number from the kernel
+    */
+    uint64_t        randU64();
+
     /*! \brief Basic Random number
 
         This produces a uniform random number between [0,1)

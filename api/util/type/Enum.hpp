@@ -8,9 +8,6 @@
 
 #include <util/collection/Map.hpp>
 #include <util/collection/Vector.hpp>
-#include <util/text/IgCase.hpp>
-#include <util/text/String.hpp>
-#include <util/text/StringView.hpp>
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -74,7 +71,7 @@ namespace yq {
         constexpr Enum() : m_def(nullptr), m_value(-1) {}
             
         int                 value() const { return m_value; }
-        String              key() const;
+        std::string              key() const;
         Enum&               operator=(int value);
 
         bool                operator==(const Enum&b) const;
@@ -96,40 +93,40 @@ namespace yq {
     class EnumDef {
     public:
 
-        EnumDef(const String& name, const String& def);
+        EnumDef(const std::string& name, const std::string& def);
 
-        const String&           name() const { return m_name; }
+        const std::string&           name() const { return m_name; }
 
         int                     default_value() const { return m_defValue; }
         int                     minimum_value() const;
         int                     maximum_value() const;
 
-        int_r                   value_of(const String& key) const;
+        int_r                   value_of(const std::string_view& key) const;
 
         string_r                key_of(int value) const;
         bool                    has_value(int value) const;
-        bool                    has_key(const String&) const;
+        bool                    has_key(const std::string_view&) const;
 
-        const Vector<String>&   all_keys() const { return m_keys; }
+        const Vector<std::string>&   all_keys() const { return m_keys; }
         Vector<int>             all_values() const;
 
-        Vector<int>             parse_comma_list(const String&)  const;
-        String                  make_comma_list(const Vector<int>&) const;
+        Vector<int>             parse_comma_list(const std::string_view&)  const;
+        std::string             make_comma_list(const Vector<int>&) const;
 
         Enum                    make_enum(int) const;
 
     protected:
 
     private:
-        static Vector<std::pair<String,String>>  parse_definition(const String& def);
+        static Vector<std::pair<std::string,std::string>>  parse_definition(const std::string& def);
         
-        using Name2Val          = Map<String,int,IgCase>;
-        using Val2Name          = Map<int,String>;
+        using Name2Val          = Map<std::string,int,IgCase>;
+        using Val2Name          = Map<int,std::string>;
 
-        String                 m_name;
+        std::string                 m_name;
         Name2Val               m_name2value;
         Val2Name               m_value2name;
-        Vector<String>         m_keys;
+        Vector<std::string>         m_keys;
         int                    m_defValue;
     };
 
@@ -138,30 +135,28 @@ namespace yq {
     public:
         static_assert(E::isEnum, "E MUST be YQ_ENUM declared!");
         
-        using StringDesc        = std::pair<String, typename E::enum_t>;
-        using QStringDesc       = std::pair<QString, typename E::enum_t>;
+        using StringDesc        = std::pair<std::string, typename E::enum_t>;
         using StringDescVec     = Vector<StringDesc>;
-        using QStringDescVec    = Vector<QStringDesc>;
         
-        static const Vector<String>&        all_keys();
+        static const Vector<std::string>&        all_keys();
         static Vector<EnumImpl>             all_values();
         static typename E::enum_t           default_value();
-        static bool                         has_key(const String& k);
+        static bool                         has_key(const std::string& k);
         static bool                         has_value(int);
-        static Vector<String>               ordered_keys();
-        static Result<typename E::enum_t>   value_for(const String& txt);
+        static Vector<std::string>               ordered_keys();
+        static Result<typename E::enum_t>   value_for(const std::string& txt);
         static int                          max_value();
         static int                          min_value();
         
         // To, make this Vector
-        static Vector<EnumImpl>         comma_string(const String& k);
-        static String                   comma_string(const Vector<EnumImpl>& k);
+        static Vector<EnumImpl>         comma_string(const std::string& k);
+        static std::string                   comma_string(const Vector<EnumImpl>& k);
 
         EnumImpl() : E(default_value()) {}
         EnumImpl(const E& base) : E(base) {}
         constexpr EnumImpl(typename E::enum_t value) : E(value) {}
         EnumImpl(int value) : E( has_value(value) ? (typename E::enum_t) value : default_value()) {}
-        EnumImpl(const String&key, bool *ok=nullptr) : E(value_for(key))
+        EnumImpl(const std::string&key, bool *ok=nullptr) : E(value_for(key))
         {
             auto e = value_for(key);
             E::m_value = e.good ? e.value : default_value();
@@ -175,7 +170,7 @@ namespace yq {
 
         typename E::enum_t  value() const { return E::m_value; }
         
-        String     key() const;
+        std::string     key() const;
 
         EnumImpl&   operator=(const EnumImpl&b)
         {
@@ -223,7 +218,7 @@ namespace yq {
         static Vector<int>              to_ints(const Vector<EnumImpl>& vals);
 
     private:
-        static Vector<String> calcOrderedKeys();
+        static Vector<std::string> calcOrderedKeys();
         static Vector<EnumImpl> calcAllValues();
     };
 
@@ -246,7 +241,7 @@ namespace yq {
             //  -------------------------------------------------------------------
 
     template <typename E>
-    const Vector<String>& EnumImpl<E>::all_keys()
+    const Vector<std::string>& EnumImpl<E>::all_keys()
     {
         return E::staticEnumInfo()->all_keys();
     }
@@ -265,11 +260,11 @@ namespace yq {
     }
 
     template <typename E>
-    Vector<String> EnumImpl<E>::calcOrderedKeys()
+    Vector<std::string> EnumImpl<E>::calcOrderedKeys()
     {
-        Vector<String> keys    = all_keys();
+        Vector<std::string> keys    = all_keys();
         keys.sort(
-            [](const String& a, const String& b) -> bool
+            [](const std::string& a, const std::string& b) -> bool
             {
                 return EnumImpl(a) < EnumImpl(b);
             }
@@ -278,13 +273,13 @@ namespace yq {
     }
 
     template <typename E>
-    Vector<EnumImpl<E>>     EnumImpl<E>::comma_string(const String& k)
+    Vector<EnumImpl<E>>     EnumImpl<E>::comma_string(const std::string& k)
     {
         return toValues(E::staticEnumInfo()->parse_comma_list(k));
     }
 
     template <typename E>
-    String          EnumImpl<E>::comma_string(const Vector<EnumImpl>& k)
+    std::string          EnumImpl<E>::comma_string(const Vector<EnumImpl>& k)
     {
         return E::staticEnumInfo()->make_comma_list( toInts(k));
     }
@@ -297,7 +292,7 @@ namespace yq {
     }
 
     template <typename E>
-    bool         EnumImpl<E>::has_key(const String& k)
+    bool         EnumImpl<E>::has_key(const std::string& k)
     {
         return E::staticEnumInfo()->has_key(k);
     }
@@ -309,9 +304,9 @@ namespace yq {
     }
 
     template <typename E>
-    Vector<String> EnumImpl<E>::ordered_keys()
+    Vector<std::string> EnumImpl<E>::ordered_keys()
     {
-        static Vector<String> result = calcOrderedKeys();
+        static Vector<std::string> result = calcOrderedKeys();
         return result;
     }
 
@@ -338,7 +333,7 @@ namespace yq {
     }
 
     template <typename E>
-    Result<typename E::enum_t>   EnumImpl<E>::value_for(const String& txt)
+    Result<typename E::enum_t>   EnumImpl<E>::value_for(const std::string& txt)
     {
         int_r   vi  =  E::staticEnumInfo()->value_of(txt);
         return vi.cast_to<typename E::enum_t>();
@@ -359,7 +354,7 @@ namespace yq {
         //  -------------------------------------------------------------------
 
     template <typename E>
-    String     EnumImpl<E>::key() const
+    std::string     EnumImpl<E>::key() const
     {
         return E::staticEnumInfo()->key_of(E::m_value);
     }

@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <util/text/String.hpp>
+#include <util/text/Utils.hpp>
 #include <util/type/Variant.hpp>
 #include <iostream>
 
@@ -18,12 +18,12 @@ int main(int argc, char* argv[])
     }
     
     Meta::freeze();
-    String      str((const char8_t*) argv[1]);
-    Variant     var((const char8_t*) argv[1]);
+    std::string str(argv[1]);
+    Variant     var(argv[1]);
     
     std::cout << "Variant is " << var.printable() << "\n";
     
-    if(str != var.value<String>().value)
+    if(str != var.value<std::string>().value)
         return -1;
     return 0;
 }

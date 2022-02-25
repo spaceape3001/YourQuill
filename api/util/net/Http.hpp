@@ -172,6 +172,6 @@ namespace yq {
     bool        isInformational(unsigned short);
 
     const char* mimeType(ContentType);
-    ContentType mimeTypeForExt(const String&);
+    ContentType mimeTypeForExt(const std::string_view&);
 
 }

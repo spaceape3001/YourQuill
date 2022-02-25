@@ -15,12 +15,12 @@ namespace yq {
 
     bool            file_backup(const char*, const char* suffix="bck");
     ByteArray       file_bytes(const std::filesystem::path&);
-    String          file_string(const std::filesystem::path&);
+    std::string     file_string(const std::filesystem::path&);
     //QByteArray      file_bytes(const char*);
     //QByteArray      file_bytes(const std::string&);
     //QByteArray      file_bytes(const QString&);
     bool            file_exists(const char*);
-    String          file_modified(const char*);
+    std::string     file_modified(const char*);
     bool            file_readable(const char*);
     size_t          file_size(const char*);
 
@@ -43,8 +43,8 @@ namespace yq {
     SizeTimestamp   file_size_and_timestamp(const std::filesystem::path&);
     uint128_t       file_timestamp(const char*);
 
-    Vector<String>  dir_files(const char*);
-    Vector<String>  dir_directories(const char*);
+    Vector<std::string>  dir_files(const char*);
+    Vector<std::string>  dir_directories(const char*);
 
     /*! \brief Convience function for reading a file into a simple buffer
 
@@ -95,8 +95,8 @@ namespace yq {
         path            first_child(const std::vector<path>&, const std::string_view& name);
         
         //  Finds all chlidren (not hidden)
-        Vector<String>  subdirectory_names(const path&, unsigned options=0) ;
-        Vector<String>  subdirectory_names(const std::vector<path>&, unsigned options=0) ;
+        Vector<std::string>  subdirectory_names(const path&, unsigned options=0) ;
+        Vector<std::string>  subdirectory_names(const std::vector<path>&, unsigned options=0) ;
 
         //  Finds all chlidren (not hidden)
         StringSet       subdirectory_names_set(const path&, unsigned options=0) ;
