@@ -8,13 +8,12 @@
 
 #include <db/enum/Access.hpp>
 #include <db/enum/DataRole.hpp>
-#include <util/preamble.hpp>
 
 namespace yq {
 
     using PolicyMap     = EnumMap<DataRole,Access>;
 
-    Result<Access>      decode_access(const String&arg);
+    Result<Access>      decode_access(const std::string_view& arg);
 
     /*! \brief Merges access levels
 

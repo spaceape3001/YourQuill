@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
+#include <util/type/Flag.hpp>
 
 namespace yq {
 
@@ -18,5 +19,9 @@ namespace yq {
         Modified,   // fragment's been modified
         Removed     // fragment's been removed
     )
-    MV_DECLARE(Change)
+    
+    using ChangeFlags   = Flag<Change>;
 }
+
+YQ_TYPE_DECLARE(yq::Change)
+YQ_TYPE_DECLARE(yq::ChangeFlags)

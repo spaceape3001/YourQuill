@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -18,5 +18,6 @@ namespace yq {
         Direct
     )
 
-    MV_DECLARE(Linkage)
 }
+
+YQ_TYPE_DECLARE(yq::Linkage)

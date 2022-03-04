@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -26,6 +26,6 @@ namespace yq {
         //! any fragment (w/o ".")
         NoExt
     );
-    MV_DECLARE(Match)
-
 }
+
+YQ_TYPE_DECLARE(yq::Match)

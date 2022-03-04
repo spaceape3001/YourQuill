@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -22,5 +22,6 @@ namespace yq {
         Small
     )
 
-    MV_DECLARE(SizeDesc)
 }
+
+YQ_TYPE_DECLARE(yq::SizeDesc)

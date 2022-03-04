@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -21,7 +21,6 @@ namespace yq {
         Atom,           //!< This attribute is creating an atom (sub-to the current attom)
         Edge            //!< This attributes represents an edge (also an atom) to something else
     )
-
-    MV_DECLARE(AttrKind)
-
 }
+
+YQ_TYPE_DECLARE(yq::AttrKind)

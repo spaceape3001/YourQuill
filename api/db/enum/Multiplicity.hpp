@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -45,5 +45,6 @@ namespace yq {
     */
     YQ_ENUM(Multiplicity, , Default, Once, Many, Serial, All )
 
-    MV_DECLARE(Multiplicity)
 }
+
+YQ_TYPE_DECLARE(yq::Multiplicity)

@@ -1,5 +1,6 @@
 #include "Variant.hpp"
 
+#include <util/meta/Internal.hpp>
 #include <util/stream/Text.hpp>
 #include <util/text/Utils.hpp>
 
@@ -292,15 +293,144 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    namespace {
-        std::string_view    as_string(const Variant& var)
-        {
-            const std::string*p = var.ptr<std::string>();
-            if(p)
-                return std::string_view(*p);
-            return std::string_view();
+    boolean_r   to_boolean(const Variant&v)
+    {
+        switch(v.type().id()){
+        case MT_String:
+            return to_boolean(v.data().reference<std::string>());
+        case MT_Boolean:
+            return boolean_r{ v.data().reference<bool>(), true };
+        case MT_Int8:
+            return boolean_r{ static_cast<bool>( v.data().reference<int8_t>()), true };
+        case MT_Int16:
+            return boolean_r{ static_cast<bool>( v.data().reference<int16_t>()), true };
+        case MT_Int32:
+            return boolean_r{ static_cast<bool>( v.data().reference<int32_t>()), true };
+        case MT_Int64:
+            return boolean_r{ static_cast<bool>( v.data().reference<int64_t>()), true };
+        case MT_UInt8:
+            return boolean_r{ static_cast<bool>( v.data().reference<uint8_t>()), true };
+        case MT_UInt16:
+            return boolean_r{ static_cast<bool>( v.data().reference<uint16_t>()), true };
+        case MT_UInt32:
+            return boolean_r{ static_cast<bool>( v.data().reference<uint32_t>()), true };
+        case MT_UInt64:
+            return boolean_r{ static_cast<bool>( v.data().reference<uint64_t>()), true };
+        default:
+            return {};
         }
     }
-
+    
+    double_r    to_double(const Variant&v)
+    {
+        switch(v.type().id()){
+        case MT_String:
+            return to_double(v.data().reference<std::string>());
+        case MT_Boolean:
+            return double_r{ (v.data().reference<bool>()?1.0:0.0), true };
+        case MT_Double:
+            return double_r{ v.data().reference<double>(), true };
+        case MT_Float:
+            return double_r{ v.data().reference<float>(), true };
+        case MT_Int8:
+            return double_r{ static_cast<double>( v.data().reference<int8_t>()), true };
+        case MT_Int16:
+            return double_r{ static_cast<double>( v.data().reference<int16_t>()), true };
+        case MT_Int32:
+            return double_r{ static_cast<double>( v.data().reference<int32_t>()), true };
+        case MT_Int64:
+            return double_r{ static_cast<double>( v.data().reference<int64_t>()), true };
+        case MT_UInt8:
+            return double_r{ static_cast<double>( v.data().reference<uint8_t>()), true };
+        case MT_UInt16:
+            return double_r{ static_cast<double>( v.data().reference<uint16_t>()), true };
+        case MT_UInt32:
+            return double_r{ static_cast<double>( v.data().reference<uint32_t>()), true };
+        case MT_UInt64:
+            return double_r{ static_cast<double>( v.data().reference<uint64_t>()), true };
+        default:
+            return {};
+        }
+    }
+    
+    float_r     to_float(const Variant&v)
+    {
+        switch(v.type().id()){
+        case MT_String:
+            return to_float(v.data().reference<std::string>());
+        case MT_Boolean:
+            return float_r{ v.data().reference<bool>()?1.0f:0.0f, true };
+        case MT_Double:
+            return float_r{ (float) v.data().reference<float>(), true };
+        case MT_Float:
+            return float_r{ v.data().reference<float>(), true };
+        case MT_Int8:
+            return float_r{ static_cast<float>( v.data().reference<int8_t>()), true };
+        case MT_Int16:
+            return float_r{ static_cast<float>( v.data().reference<int16_t>()), true };
+        case MT_Int32:
+            return float_r{ static_cast<float>( v.data().reference<int32_t>()), true };
+        case MT_Int64:
+            return float_r{ static_cast<float>( v.data().reference<int64_t>()), true };
+        case MT_UInt8:
+            return float_r{ static_cast<float>( v.data().reference<uint8_t>()), true };
+        case MT_UInt16:
+            return float_r{ static_cast<float>( v.data().reference<uint16_t>()), true };
+        case MT_UInt32:
+            return float_r{ static_cast<float>( v.data().reference<uint32_t>()), true };
+        case MT_UInt64:
+            return float_r{ static_cast<float>( v.data().reference<uint64_t>()), true };
+        default:
+            return {};
+        }
+    }
+    
+    int_r       to_int(const Variant&v)
+    {
+        switch(v.type().id()){
+        case MT_String:
+            return to_int(v.data().reference<std::string>());
+        case MT_Boolean:
+            return int_r{ static_cast<int>(v.data().reference<bool>()), true };
+        case MT_Float:
+            return int_r{ static_cast<int>(v.data().reference<float>()), true };
+        case MT_Double:
+            return int_r{ static_cast<int>(v.data().reference<double>()), true };
+        case MT_Int8:
+            return int_r{ static_cast<int>( v.data().reference<int8_t>()), true };
+        case MT_Int16:
+            return int_r{ static_cast<int>( v.data().reference<int16_t>()), true };
+        case MT_Int32:
+            return int_r{ static_cast<int>( v.data().reference<int32_t>()), true };
+        case MT_Int64:
+            return int_r{ static_cast<int>( v.data().reference<int64_t>()), true };
+        case MT_UInt8:
+            return int_r{ static_cast<int>( v.data().reference<uint8_t>()), true };
+        case MT_UInt16:
+            return int_r{ static_cast<int>( v.data().reference<uint16_t>()), true };
+        case MT_UInt32:
+            return int_r{ static_cast<int>( v.data().reference<uint32_t>()), true };
+        case MT_UInt64:
+            return int_r{ static_cast<int>( v.data().reference<uint64_t>()), true };
+        default:
+            return {};
+        }
+    }
+    
+    #if 0
+    int8_r      to_int8(const Variant&v);
+    int16_r     to_int16(const Variant&v);
+    int32_r     to_int32(const Variant&v);
+    int64_r     to_int64(const Variant&v);
+    integer_r   to_integer(const Variant&v);
+    short_r     to_short(const Variant&v);
+    //string_r    to_string(const Variant&v);
+    uint8_r     to_uint8(const Variant&v);
+    uint16_r    to_uint16(const Variant&v);
+    uint32_r    to_uint32(const Variant&v);
+    uint64_r    to_uint64(const Variant&v);
+    unsigned_r  to_uinteger(const Variant&v);
+    ushort_r    to_ushort(const Variant&v);
+    #endif
 
 }

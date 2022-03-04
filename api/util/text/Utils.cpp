@@ -68,9 +68,6 @@ namespace yq {
         }
         
         
-        static constexpr const auto bTRUE     = boolean_r( true, true );
-        static constexpr const auto bFALSE    = boolean_r( true, false );
-        static constexpr const auto dFAIL     = double_r(false, NaN);
         static constexpr const auto fFAIL     = float_r(false, NaNf);
         
 
@@ -79,7 +76,7 @@ namespace yq {
         {
             T    res = 0;
             auto [p,ec] = std::from_chars(s, s+n, res, base);
-            return Result<T>(ec == std::errc(), res);
+            return Result<T>{res, ec == std::errc()};
         }
         
         std::string     cvt_u32string(const char32_t *z, size_t n)
@@ -174,81 +171,6 @@ namespace yq {
         return str;
     }
 
-    unsigned_r  as_hex(const char*s, size_t n)
-    {
-        if(!s)
-            return {};
-        trim_ws(s,n);
-        if(!n)
-            return 0;
-        return int_from_chars<unsigned int>(s, n, 16);
-    }
-
-
-    unsigned_r  as_hex(const std::string_view&s)
-    {
-        return as_hex(s.data(), s.size());
-    }
-
-    uint8_r  as_hex8(const char*s, size_t n)
-    {
-        if(!s)  
-            return {};
-        trim_ws(s,n);
-        if(!n)
-            return 0;
-        return int_from_chars<uint8_t>(s, n, 16);
-    }
-
-    uint8_r  as_hex8(const std::string_view&s)
-    {
-        return as_hex8(s.data(), s.size());
-    }
-
-    uint16_r  as_hex16(const char*s, size_t n)
-    {
-        if(!s)  
-            return {};
-        trim_ws(s,n);
-        if(!n)
-            return 0;
-        return int_from_chars<uint16_t>(s, n, 16);
-    }
-
-    uint16_r  as_hex16(const std::string_view&s)
-    {
-        return as_hex16(s.data(), s.size());
-    }
-
-    uint32_r  as_hex32(const char*s, size_t n)
-    {
-        if(!s)
-            return {};
-        trim_ws(s,n);
-        if(!n)
-            return 0;
-        return int_from_chars<uint32_t>(s, n, 16);
-    }
-
-    uint32_r  as_hex32(const std::string_view&s)
-    {
-        return as_hex32(s.data(), s.size());
-    }
-
-    uint64_r  as_hex64(const char*s, size_t n)
-    {
-        if(!s)
-            return {};
-        trim_ws(s,n);
-        if(!n)
-            return 0ULL;
-        return int_from_chars<uint64_t>(s, n, 16);
-    }
-
-    uint64_r  as_hex64(const std::string_view&s)
-    {
-        return as_hex64(s.data(), s.size());
-    }
 
     void    blank_cpp_comments(std::string& s)
     {
@@ -596,6 +518,33 @@ namespace yq {
         return is_greater(compare_igCase(a,b));
     }
 
+    bool  is_in(const std::string_view& str, const std::string_view& pat)
+    {
+        return is_similar(str, pat);
+    }
+    
+
+    bool  is_in(const std::string_view& str, const std::initializer_list<std::string_view>& pat)
+    {
+        for(auto& s : pat)
+            if(is_similar(str, s))
+                return true;
+        return false;
+    }
+    
+    bool  is_in(const std::string_view& str, const string_view_set_t& pat)
+    {
+        return pat.has(str);
+    }
+
+    bool  is_in(const std::string_view& str, const std::vector<std::string_view>& pat)
+    {
+        for(auto& s : pat)
+            if(is_similar(str, s))
+                return true;
+        return false;
+    }
+
     bool  is_less_igCase(const std::string_view&a, const std::string_view&b)
     {
         return is_less( compare_igCase(a,b));
@@ -603,6 +552,8 @@ namespace yq {
 
     bool  is_similar(const std::string_view&a, const std::string_view&b)
     {
+        if(a.size() != b.size())
+            return false;
         return is_equal( compare_igCase(a, b));
     }
 
@@ -885,14 +836,9 @@ namespace yq {
     Vector<std::string_view>  split(const char*s, size_t n, char ch)
     {
         Vector<std::string_view>  ret;
-        if(s && n){
-            const char* end = s + n;
-            const char* i   = nullptr;
-            const char* j   = nullptr;
-            for(i = s; (j = strnchr(i, end-i, ch)); i = j+1)
-                ret << std::string_view(i, j-i);
-            ret << std::string_view(i, end-i);
-        }
+        vsplit(s, n, ch, [&](const std::string_view& token){
+            ret << token;
+        });
         return ret;
     }
 
@@ -971,14 +917,9 @@ namespace yq {
     Vector<std::string_view>  split(const char* s, size_t n, const char* p, size_t pn)
     {
         Vector<std::string_view>  ret;
-        if(s && n){
-            const char* end = s + n;
-            const char* i   = nullptr;
-            const char* j   = nullptr;
-            for(i = s; (j = strnstr(i, end-i, p, pn)); i = j)
-                ret << std::string_view(i, j-i);
-            ret << std::string_view(i, end-i);
-        }
+        vsplit(s, n, p, pn, [&](const std::string_view& token){
+            ret << token;
+        });
         return ret;
     }
     
@@ -990,14 +931,9 @@ namespace yq {
     Vector<std::string_view>  split_igCase(const char* s , size_t n, char ch)
     {
         Vector<std::string_view>  ret;
-        if(s && n){
-            const char* end = s + n;
-            const char* i   = nullptr;
-            const char* j   = nullptr;
-            for(i = s; (j = strnchr_igCase(i, end-i, ch)); i = j)
-                ret << std::string_view(i, j-i);
-            ret << std::string_view(i, end-i);
-        }
+        vsplit_igCase(s, n, ch, [&](const std::string_view& token){
+            ret << token;
+        });
         return ret;
     }
     
@@ -1031,14 +967,9 @@ namespace yq {
     Vector<std::string_view>  split_igCase(const char* s, size_t n, const char*p, size_t pn)
     {
         Vector<std::string_view>  ret;
-        if(s && n){
-            const char* end = s + n;
-            const char* i   = nullptr;
-            const char* j   = nullptr;
-            for(i = s; (j = strnstr_igCase(i, end-i, p, pn)); i = j)
-                ret << std::string_view(i, j-i);
-            ret << std::string_view(i, end-i);
-        }
+        vsplit_igCase(s, n, p, pn, [&](const std::string_view& token){
+            ret << token;
+        });
         return ret;
     }
     
@@ -1253,6 +1184,9 @@ namespace yq {
     
     boolean_r  to_boolean(const char*s, size_t n)
     {
+        static constexpr const auto bTRUE     = boolean_r( true, true );
+        static constexpr const auto bFALSE    = boolean_r( false, true );
+
         if(!s)
             return {};
         
@@ -1309,21 +1243,31 @@ namespace yq {
     double_r  to_double(const char*s, size_t n)
     {
         if(!s)
-            return dFAIL;
+            return double_r{NaN, false};
+
         trim_ws(s, n);
-        if(!n)
-            return 0.;
+        switch(n){
+        case 0:
+            return double_r{ 0., true };
+        case 3:
+            if(strncasecmp(s, "nan", 3) == 0)
+                return double_r{ NaN, true };
+            if(strncasecmp(s, "inf", 3) == 0)
+                return double_r{ INF, true };
+            break;
+        }
+        
 
         #if FP_CHARCONV
             double  result = NaN;
             auto [p,ec] = std::from_chars(s, s+n, result, std::chars_format::general);
-            return double_r(ec == std::errc(), result);
+            return double_r{ result, ec == std::errc()};
         #else
             char*   z       = nullptr;
             double  res     = std::strtod(s, &z);
             if((const char*) s != z)
-                return res;
-            return dFAIL;
+                return double_r{ res, true };
+            return {};
         #endif
     }
 
@@ -1335,21 +1279,31 @@ namespace yq {
     float_r  to_float(const char*s, size_t n)
     {
         if(!s)
-            return fFAIL;
+            return float_r{NaNf, false};
+
         trim_ws(s, n);
-        if(!n)
-            return 0.f;
+
+        switch(n){
+        case 0:
+            return float_r{ 0.f, true};
+        case 3:
+            if(strncasecmp(s, "nan", 3) == 0)
+                return float_r{ NaNf, true };
+            if(strncasecmp(s, "inf", 3) == 0)
+                return float_r{ INFf, true };
+            break;
+        }
         
         #if FP_CHARCONV
             float  result = NaNf;
             auto [p,ec] = std::from_chars(s, s+n, result, std::chars_format::general);
-            return float_r(ec == std::errc(), result);
+            return float_r{result, ec == std::errc()};
         #else
             char*   z       = nullptr;
             float  res     = std::strtof(s, &z);
             if((const char*) s != z)
-                return res;
-            return fFAIL;
+                return {res, true};
+            return {};
         #endif
     }
 
@@ -1358,13 +1312,90 @@ namespace yq {
         return to_float(s.data(), s.size());
     }
 
-    integer_r  to_int(const char*s, size_t n)
+
+    unsigned_r  to_hex(const char*s, size_t n)
     {
         if(!s)
+            return { 0, false };
+        trim_ws(s,n);
+        if(!n)
+            return { 0, true };
+        return int_from_chars<unsigned int>(s, n, 16);
+    }
+
+
+    unsigned_r  to_hex(const std::string_view&s)
+    {
+        return to_hex(s.data(), s.size());
+    }
+
+    uint8_r  to_hex8(const char*s, size_t n)
+    {
+        if(!s)  
+            return { 0, false};
+        trim_ws(s,n);
+        if(!n)
+            return { 0, true };
+        return int_from_chars<uint8_t>(s, n, 16);
+    }
+
+    uint8_r  to_hex8(const std::string_view&s)
+    {
+        return to_hex8(s.data(), s.size());
+    }
+
+    uint16_r  to_hex16(const char*s, size_t n)
+    {
+        if(!s)  
             return {};
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
+        return int_from_chars<uint16_t>(s, n, 16);
+    }
+
+    uint16_r  to_hex16(const std::string_view&s)
+    {
+        return to_hex16(s.data(), s.size());
+    }
+
+    uint32_r  to_hex32(const char*s, size_t n)
+    {
+        if(!s)
+            return { 0, false };
+        trim_ws(s,n);
+        if(!n)
+            return { 0, true };
+        return int_from_chars<uint32_t>(s, n, 16);
+    }
+
+    uint32_r  to_hex32(const std::string_view&s)
+    {
+        return to_hex32(s.data(), s.size());
+    }
+
+    uint64_r  to_hex64(const char*s, size_t n)
+    {
+        if(!s)
+            return { 0ULL, false };
+        trim_ws(s,n);
+        if(!n)
+            return { 0ULL, true };
+        return int_from_chars<uint64_t>(s, n, 16);
+    }
+
+    uint64_r  to_hex64(const std::string_view&s)
+    {
+        return to_hex64(s.data(), s.size());
+    }
+    
+    integer_r  to_int(const char*s, size_t n)
+    {
+        if(!s)
+            return { 0, false };
+        trim_ws(s,n);
+        if(!n)
+            return { 0, true };
         return int_from_chars<int>(s,n);
     }
 
@@ -1376,10 +1407,10 @@ namespace yq {
     int8_r  to_int8(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<int8_t>(s,n);
     }
 
@@ -1392,10 +1423,10 @@ namespace yq {
     int16_r  to_int16(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<int16_t>(s,n);
     }
 
@@ -1407,10 +1438,10 @@ namespace yq {
     int32_r  to_int32(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<int32_t>(s,n);
     }
 
@@ -1423,10 +1454,10 @@ namespace yq {
     int64_r  to_int64(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0LL, false };
         trim_ws(s,n);
         if(!n)
-            return 0LL;
+            return { 0LL, true };
         return int_from_chars<int64_t>(s,n);
     }
 
@@ -1438,10 +1469,10 @@ namespace yq {
     integer_r  to_integer(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0L;
+            return { 0, true };
         return int_from_chars<int>(s,n);
     }
 
@@ -1472,10 +1503,10 @@ namespace yq {
     short_r  to_short(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false};
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<short>(s,n);
     }
 
@@ -1599,10 +1630,10 @@ namespace yq {
     unsigned_r  to_uint(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<unsigned>(s,n);
     }
 
@@ -1614,10 +1645,10 @@ namespace yq {
     uint8_r     to_uint8(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<uint8_t>(s,n);
     }
 
@@ -1629,10 +1660,10 @@ namespace yq {
     uint16_r    to_uint16(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<uint16_t>(s,n);
     }
 
@@ -1644,10 +1675,10 @@ namespace yq {
     uint32_r    to_uint32(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<uint32_t>(s,n);
     }
 
@@ -1659,10 +1690,10 @@ namespace yq {
     uint64_r    to_uint64(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0ULL, false };
         trim_ws(s,n);
         if(!n)
-            return 0ULL;
+            return { 0ULL, true };
         return int_from_chars<uint64_t>(s,n);
     }
 
@@ -1674,10 +1705,10 @@ namespace yq {
     unsigned_r  to_uinteger(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<unsigned int>(s,n);
     }
 
@@ -1689,10 +1720,10 @@ namespace yq {
     unsigned_r  to_unsigned(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<unsigned int>(s,n);
     }
 
@@ -1704,10 +1735,10 @@ namespace yq {
     ushort_r    to_ushort(const char*s, size_t n)
     {
         if(!s)
-            return {};
+            return { 0, false };
         trim_ws(s,n);
         if(!n)
-            return 0;
+            return { 0, true };
         return int_from_chars<unsigned short>(s,n);
     }
 

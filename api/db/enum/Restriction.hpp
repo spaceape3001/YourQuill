@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -34,6 +34,6 @@ namespace yq {
     */
     YQ_ENUM(Restriction, , Default, Any, Suggest, Track, Enumerate)
 
-    MV_DECLARE(Restriction)
-
 }
+
+YQ_TYPE_DECLARE(yq::Restriction)

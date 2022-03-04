@@ -12,7 +12,7 @@ namespace yq {
 
     struct Context {
         Format      format;
-        String      data;
+        std::string data;
         
         auto        operator<=>(const Context&) const = default;
     };

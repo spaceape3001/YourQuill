@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -16,6 +16,6 @@ namespace yq {
         Save,
         Create
     )
-
-    MV_DECLARE(SubmitLabel)
 }
+
+YQ_TYPE_DECLARE(yq::SubmitLabel)

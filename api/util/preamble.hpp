@@ -120,6 +120,9 @@ namespace yq {
     static constexpr double   NaN     = std::numeric_limits<double>::quiet_NaN();
     static constexpr float    NaNf    = std::numeric_limits<float>::quiet_NaN();
 
+    static constexpr double   INF     = std::numeric_limits<double>::infinity();
+    static constexpr float    INFf    = std::numeric_limits<float>::infinity();
+
         // NO-COPY TRAIT
 
     class NoCopy {
@@ -155,6 +158,9 @@ namespace yq {
     using StringViewSet         = Set<std::string_view,IgCase>;
     using StringPair            = std::pair<std::string,std::string>;
     using StringIntPair         = std::pair<std::string,int>;
+    using string_view_pair_t    = std::pair<std::string_view,std::string_view>;
+    using string_view_set_t     = Set<std::string_view,IgCase>;
+    using string_view_vector_t  = Vector<std::string_view>;
 
         // TODO move these to use std::filesystem::path
     #if defined(__APPLE__) || defined(WIN32)

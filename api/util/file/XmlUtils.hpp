@@ -15,21 +15,71 @@
 
 namespace yq {
 
-    boolean_r           x_boolean(const XmlBase*);
-    double_r            x_double(const XmlBase*);
-    float_r             x_float(const XmlBase*);
-    unsigned_r          x_hex(const XmlBase*);
-    uint8_r             x_hex8(const XmlBase*);
-    uint16_r            x_hex16(const XmlBase*);
-    uint32_r            x_hex32(const XmlBase*);
-    uint64_r            x_hex64(const XmlBase*);
-    int_r               x_int(const XmlBase*);
-    int_r               x_integer(const XmlBase*);
-    int8_r              x_int8(const XmlBase*);
-    int16_r             x_int16(const XmlBase*);
-    int32_r             x_int32(const XmlBase*);
-    int64_r             x_int64(const XmlBase*);
-    short_r             x_short(const XmlBase*);
+    boolean_r  to_boolean(const XmlBase*);
+    double_r   to_double(const XmlBase*);
+    float_r    to_float(const XmlBase*);
+    unsigned_r to_hex(const XmlBase*);
+    uint8_r    to_hex8(const XmlBase*);
+    uint16_r   to_hex16(const XmlBase*);
+    uint32_r   to_hex32(const XmlBase*);
+    uint64_r   to_hex64(const XmlBase*);
+    int_r      to_int(const XmlBase*);
+    int_r      to_integer(const XmlBase*);
+    int8_r     to_int8(const XmlBase*);
+    int16_r    to_int16(const XmlBase*);
+    int32_r    to_int32(const XmlBase*);
+    int64_r    to_int64(const XmlBase*);
+    short_r    to_short(const XmlBase*);
+    
+    /*! \brief Converts to string view
+    
+        \note Return value is a REFERENCE to the given data, therefore, copy off if the XML is being altered/destroyed.
+    */
+    std::string_view    to_string(const XmlBase*);
+    unsigned_r          to_uint(const XmlBase*);
+    uint8_r             to_uint8(const XmlBase*);
+    uint16_r            to_uint16(const XmlBase*);
+    uint32_r            to_uint32(const XmlBase*);
+    uint64_r            to_uint64(const XmlBase*);
+    unsigned_r          to_uinteger(const XmlBase*);
+    unsigned_r          to_unsigned(const XmlBase*);
+    ushort_r            to_ushort(const XmlBase*);
+
+    template <typename E>
+    Result<E>           to_enum(const XmlBase*xb)
+    {
+        if(xb -> value_size() == 0)
+            return Result<E>(E::default_value());
+        auto   v    = E::value_for(to_string(xb));
+        if(v.good)
+            return Result<E>(v.value);
+        return Result<E>();
+    }
+
+    /*! \brief Parses to bool
+    
+        Parses the contents of the tag/attribute, interpreting it as boolean true/false.
+    */
+    boolean_r  x_boolean(const XmlBase*);
+    double_r   x_double(const XmlBase*);
+    float_r    x_float(const XmlBase*);
+    unsigned_r x_hex(const XmlBase*);
+    uint8_r    x_hex8(const XmlBase*);
+    uint16_r   x_hex16(const XmlBase*);
+    uint32_r   x_hex32(const XmlBase*);
+    uint64_r   x_hex64(const XmlBase*);
+    int_r      x_int(const XmlBase*);
+    int_r      x_integer(const XmlBase*);
+    int8_r     x_int8(const XmlBase*);
+    int16_r    x_int16(const XmlBase*);
+    int32_r    x_int32(const XmlBase*);
+    int64_r    x_int64(const XmlBase*);
+    short_r    x_short(const XmlBase*);
+    
+    /*! \brief Converts to string view
+    
+        \note Return value is a REFERENCE to the given data, therefore, copy off if the XML is being altered/destroyed.
+    */
     std::string_view    x_string(const XmlBase*);
     unsigned_r          x_uint(const XmlBase*);
     uint8_r             x_uint8(const XmlBase*);

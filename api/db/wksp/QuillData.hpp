@@ -10,6 +10,8 @@
 #include <db/bit/Policy.hpp>
 #include <db/enum/Vcs.hpp>
 #include <util/collection/EnumMap.hpp>
+#include <util/collection/Set.hpp>
+#include <util/collection/Vector.hpp>
 
 namespace yq {
 
@@ -19,47 +21,47 @@ namespace yq {
         struct Root;
 
         //! Abbreviation
-        String                  abbr;
+        std::string             abbr;
         
         //! Author
-        String                  author;
+        std::string             author;
         
         //! Other ports that can cover this workspace
         Set<uint16_t>           aux_ports;
         
         //! Cache DB location
-        String                  cache;
+        std::string             cache;
         
         //! Our copyright....
         Copyright               copyright;
 
         //! Copyright string
-        String                  home;
+        std::string             home;
         
         //! INI file path
-        String                  ini;
+        std::string             ini;
         
         
         //! Name of the local user
-        String                  local_user;
+        std::string             local_user;
 
         //! Log directory
-        String                  log_dir;
+        std::string             log_dir;
         
         //! Name for this project
-        String                  name;
+        std::string             name;
         
         //! Port number to use
-        uint16_t                port;
+        uint16_t                port            = 0;
         
         //! Read timeout
-        unsigned int            read_timeout;
+        unsigned int            read_timeout    = 0;
         
         //! Root data directories
         Vector<Root>            roots;
 
         //! Temporary directory is here
-        String                  temp_dir;
+        std::string             temp_dir;
         
         //! Root templates
         Vector<Root>            templates;
@@ -69,16 +71,16 @@ namespace yq {
     };
 
     struct QuillData::Root {
-        String          key;
-        String          name;
-        String          path;
+        std::string     key;
+        std::string     name;
+        std::string     path;
         PolicyMap       policy;
         Vcs             vcs;
-        String          color;
-        String          icon;
+        std::string     color;
+        std::string     icon;
         
-        Root(){}
-        explicit Root(const String& p) : path(p) {}
+        Root() = default;
+        explicit Root(const std::string_view& p) : path(p) {}
         ~Root(){}
     };
 }

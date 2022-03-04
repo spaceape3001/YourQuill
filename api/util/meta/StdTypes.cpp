@@ -5,18 +5,18 @@
 #include <util/app/DelayInit.hpp>
 #include <util/text/Utils.hpp>
 
-MT_FIXED(MT_String, std::string)
-MT_FIXED(MT_Boolean, bool)
-MT_FIXED(MT_Float, float)
-MT_FIXED(MT_Double, double)
-MT_FIXED(MT_Int8, int8_t)
-MT_FIXED(MT_Int16, int16_t)
-MT_FIXED(MT_Int32, int32_t)
-MT_FIXED(MT_Int64, int64_t)
-MT_FIXED(MT_UInt8, uint8_t)
-MT_FIXED(MT_UInt16, uint16_t)
-MT_FIXED(MT_UInt32, uint32_t)
-MT_FIXED(MT_UInt64, uint64_t)
+YQ_TYPE_FIXED(MT_String, std::string)
+YQ_TYPE_FIXED(MT_Boolean, bool)
+YQ_TYPE_FIXED(MT_Float, float)
+YQ_TYPE_FIXED(MT_Double, double)
+YQ_TYPE_FIXED(MT_Int8, int8_t)
+YQ_TYPE_FIXED(MT_Int16, int16_t)
+YQ_TYPE_FIXED(MT_Int32, int32_t)
+YQ_TYPE_FIXED(MT_Int64, int64_t)
+YQ_TYPE_FIXED(MT_UInt8, uint8_t)
+YQ_TYPE_FIXED(MT_UInt16, uint16_t)
+YQ_TYPE_FIXED(MT_UInt32, uint32_t)
+YQ_TYPE_FIXED(MT_UInt64, uint64_t)
 
 namespace yq {
     namespace {

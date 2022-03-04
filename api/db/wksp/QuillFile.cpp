@@ -4,27 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "QuillFile.hpp"
+#include <db/bit/KeyValue.hpp>
 
 namespace yq {
 
     void    QuillData::reset()
     {
-        abbr.clear();
-        author.clear();
-        aux_ports.clear();
-        cache.clear();
-        copyright.reset();
-        home.clear();
-        ini.clear();
-        local_user.clear();
-        log_dir.clear();
-        name.clear();
-        port    = 0;
-        read_timeout    = 0;
-        roots.clear();
-        temp_dir.clear();
-        templates.clear();
+        *this = {};
     }
 
 
@@ -35,22 +22,22 @@ namespace yq {
     }
 
     namespace {
-        QuillData::Root    parse_root(const KeyValue* a)
+        QuillData::Root    parse_root(const KeyValue& a)
         {
             QuillData::Root ret;
-            ret.path    = a->data;
-            ret.key     = a->value({ "key", "k" });
-            ret.color   = a->value("color");
-            ret.vcs     = Vcs(a->value("vcs"));
-            ret.name    = a->value("name");
-            ret.icon    = a->value("icon");
+            ret.path    = a.data;
+            ret.key     = a.value({ "key", "k" });
+            ret.color   = a.value("color");
+            ret.vcs     = Vcs(a.value("vcs"));
+            ret.name    = a.value("name");
+            ret.icon    = a.value("icon");
             for(DataRole dr : DataRole::all_values())
-                ret.policy[dr]  = Access(a->value(dr.key()));
+                ret.policy[dr]  = Access(a.value(dr.key()));
             return ret;
         }
     }
 
-    bool    QuillFile::read(ByteArray&&buffer, const std::string& fname) 
+    bool    QuillFile::read(ByteArray&&buffer, const std::string_view& fname) 
     {
         KVTree        attrs;
         if(!attrs.parse(buffer, nullptr, true, fname))
@@ -58,7 +45,7 @@ namespace yq {
         
         abbr            = attrs.value({ "abbr", "abbreviation" });
         author          = attrs.value("author");
-        aux_ports       = attrs.values_set_u16({"aux"});
+        aux_ports       = attrs.values_set_u16("aux");
         cache           = attrs.value("cache");
         
         const KeyValue   *a  = nullptr;;
@@ -71,8 +58,8 @@ namespace yq {
         }
         if(a){
             copyright.text    = a->data;
-            copyright.from    = a->value("from").to_ushort().value;
-            copyright.to      = a->value("to").to_ushort().value;
+            copyright.from    = to_ushort(a->value("from")).value;
+            copyright.to      = to_ushort(a->value("to")).value;
         }
         
         home            = attrs.value("home");
@@ -80,14 +67,16 @@ namespace yq {
         local_user      = attrs.value({"local", "user", "local_user"});
         log_dir         = attrs.value("logs");
         name            = attrs.value({"name", "%"});
-        port            = attrs.value("port").to_uint16().value;
-        read_timeout    = attrs.value("timeout").to_uinteger().value;
+        port            = to_uint16(attrs.value("port")).value;
+        read_timeout    = to_uinteger(attrs.value("timeout")).value;
         temp_dir        = attrs.value({"temp", "tmp", "tempdir", "temp_dir"});
         
-        for(const KeyValue* a : attrs.all({"root", "r"}))
+        attrs.all(kv::key({"root", "r"}), [&](const KeyValue& a){
             roots << parse_root(a);
-        for(const KeyValue* a : attrs.all({"template", "t"}))
+        });
+        attrs.all(kv::key({"template", "t"}), [&](const KeyValue& a){
             templates << parse_root(a);
+        });
         return true;
     }
 
@@ -144,9 +133,9 @@ namespace yq {
             if(!copyright.text.empty())
                 a.data = copyright.text;
             if(copyright.from)
-                a << KeyValue("from", String::number(copyright.from));
+                a << KeyValue("from", to_string(copyright.from));
             if(copyright.to)
-                a << KeyValue("to", String::number(copyright.to));
+                a << KeyValue("to", to_string(copyright.to));
             attrs << a;
         }
         if(!home.empty())
@@ -158,9 +147,9 @@ namespace yq {
         if(!log_dir.empty())
             attrs << KeyValue("logs", log_dir);
         if(port)
-            attrs << KeyValue("port", String::number(port));
+            attrs << KeyValue("port", to_string(port));
         if(read_timeout)
-            attrs << KeyValue("timeout", String::number(read_timeout));
+            attrs << KeyValue("timeout", to_string(read_timeout));
         if(!temp_dir.empty())
             attrs << KeyValue("temp", temp_dir);
         

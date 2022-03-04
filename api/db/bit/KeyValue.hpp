@@ -6,8 +6,13 @@
 
 #pragma once
 
-#include <util/text/String.hpp>
+#include <util/collection/Reverse.hpp>
+#include <util/collection/Set.hpp>
 #include <util/collection/Vector.hpp>
+#include <util/text/Utils.hpp>
+#include <util/type/Result.hpp>
+#include <string>
+#include <string_view>
 
 namespace yq {
     struct KeyValue;
@@ -30,114 +35,56 @@ namespace yq {
         //! \brief Sub-KeyValues
         //! These are the sub-key-values (honored for recursive key-values)
         Vector<KeyValue>        subs;
+        
+        //! Finds all matches, returns a vector
+        template <typename Match>
+        Vector<const KeyValue*>     all(Match) const;
 
-
-        //! \brief Finds ALL key-values of the specified key
-        //! \note This returns pointers for efficiency, however, these pointers can be INVALIDATED by a modification of the attribute vector!
-        Vector<const KeyValue*>    all(const String& key) const;
-        
-        Vector<const KeyValue*>    all(const char*) const;
-        
-        //! \brief Finds ALL key-values of the specified key
-        //! \note This returns pointers for efficiency, however, these pointers can be INVALIDATED by a modification of the attribute vector!
-        Vector<const KeyValue*>    all(const std::initializer_list<String>&) const;
-        
-        Vector<const KeyValue*>    all(const std::initializer_list<const char*>&) const;
-        
-        //! \brief Finds ALL key-values of the specified key
-        //! \note This returns pointers for efficiency, however, these pointers can be INVALIDATED by a modification of the attribute vector!
-        Vector<const KeyValue*>    all(const Vector<String>&) const;
+        //! Finds all matches in visitor pattern
+        template <typename Match, typename Pred>
+        void                        all(Match, Pred) const;
 
         //! \brief Is empty?  
         //! This checks the strings/subkey-values for emptyness and returns appropriately
-        bool                        empty() const;
+        bool                        empty() const { return subs.empty(); }
         
-        //! \brief Erases ALL key-values with the speicfied key
-        void                        erase_all(const String& key);
-        void                        erase_all(const char* key);
-        //! \brief Erases ALL key-values with the speicfied keys
-        void                        erase_all(const std::initializer_list<String>&);
-        void                        erase_all(const std::initializer_list<const char*>&);
-        //! \brief Erases ALL key-values with the speicfied keys
-        void                        erase_all(const Vector<String>&);
+        //! \brief Erases ALL key-values that match
+        template <typename Match>
+        void                        erase_all(Match);
         
-        //! \brief Erases ALL key-values after the first with the spedcified key
-        void                        erase_seconds(const String& key);
-        void                        erase_seconds(const char* key);
-
-        //! \brief Erases ALL key-values after the first with the spedcified keys
-        void                        erase_seconds(const std::initializer_list<String>&);
-        void                        erase_seconds(const std::initializer_list<const char*>&);
-
-        //! \brief Erases ALL key-values after the first with the spedcified keys
-        void                        erase_seconds(const Vector<String>&);
-
-        //! \brief Returns the FIRST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        KeyValue*                  first(const String& key);
-
-        KeyValue*                  first(const char* key);
-
-
-        //! \brief Returns the FIRST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        KeyValue*                  first(const std::initializer_list<String>&);
-
-        KeyValue*                  first(const std::initializer_list<const char*>&);
-
-        KeyValue*                  first(const std::initializer_list<const char*>&, const String&, bool fCreate=false);
-
-
-        //! \brief Returns the FIRST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        KeyValue*                  first(const Vector<String>& keys);
-
-        //! \brief Returns the FIRST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        const KeyValue*            first(const String& key) const;
-        const KeyValue*            first(const char* key) const;
-
-        //! \brief Returns the FIRST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        const KeyValue*            first(const std::initializer_list<String>&) const;
-        const KeyValue*            first(const std::initializer_list<const char*>&) const;
-        const KeyValue*            first(const std::initializer_list<const char*>&, const String&) const;
-
-        //! \brief Returns the FIRST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        const KeyValue*            first(const Vector<String>& keys) const;
+        //! \brief Erases ALL key-values that match
+        template <typename Match>
+        void                        erase_seconds(Match);
         
-        //! \brief First attribute w/o a command
-        const KeyValue*            first_noncmd(const String& key) const;
-        const KeyValue*            first_noncmd(const char* key) const;
-        const KeyValue*            first_noncmd(const std::initializer_list<String>&) const;
-        const KeyValue*            first_noncmd(const std::initializer_list<const char*>&) const;
-        const KeyValue*            first_noncmd(const Vector<String>& keys) const;
+        //! \brief Returns the FIRST attribute
+        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
+        template <typename Match>
+        KeyValue*                  first(Match);
         
+        //KeyValue*                   first(const char*);
+        //KeyValue*                   first(const std::string_view&);
+        //KeyValue*                   first(const std::string&);
+        KeyValue*                   first(std::initializer_list<const char*>);
+
+        //! \brief Returns the FIRST attribute
+        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
+        template <typename Match>
+        const KeyValue*             first(Match) const;
+
+       
+        const KeyValue*             first(std::initializer_list<const char*>) const;
         void                        fusion(const KVTree&);
         
-        
-        bool                        has(const String&) const;
-        bool                        has(const char*) const;
-        bool                        has(const std::initializer_list<String>&) const;
-        bool                        has(const std::initializer_list<const char*>&) const;
-        bool                        has(const Vector<String>&) const;
+        //! \brief Checks for a match
+        template <typename Match>
+        bool                        has(Match) const;
         
         //! \brief Returns the LAST attribute
         //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        const KeyValue*            last(const String& key) const;
-        const KeyValue*            last(const char* key) const;
+        template <typename Match>
+        const KeyValue*            last(Match) const;
 
-        //! \brief Returns the LAST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        const KeyValue*            last(const std::initializer_list<String>&) const;
-        const KeyValue*            last(const std::initializer_list<const char*>&) const;
-
-        //! \brief Returns the LAST attribute
-        //! \note This returns a pointer for efficiency, however, this pointer can be INVALIDATED by a modification of the attribute vector!
-        const KeyValue*            last(const Vector<String>& keys) const;
-        
-        size_t                      max_key_size(bool recursive=false) const;
+        size_t                     max_key_size(bool recursive=false) const;
         
         //! \brief Sets the specified attribute
         //!
@@ -146,108 +93,48 @@ namespace yq {
         //!
         //! \note WARNING, this will (possibly) modify the vector, consider existing pointers to be invalid
         //!
-        //! \param  key     Key to set and modify
-        //! \param  value   New value
+        //! \param  m       Match
+        //! \param  key     Key to add (if not found)
+        //! \param  data    New value
         //! \param  purge   If true, deletes all OTHER attirubtes with the same key
         //! \return Pointer to the attribute
-        KeyValue*                  set(const String&key, const String& value, bool purge=false);
+        template <typename Match>
+        KeyValue*                  set(Match, const std::string_view&key, const std::string_view& data, bool purge=true);
 
-        //! \brief Sets the specified attribute
-        //!
-        //!  This sets the first attribute encountered to the specified value,   If the attribute does not exist, then
-        //!  it will be created.
-        //!
-        //! \note WARNING, this will (possibly) modify the vector, consider existing pointers to be invalid
-        //!
-        //! \param  key     Key to set and modify
-        //! \param  value   New value
-        //! \param  purge   If true, deletes all OTHER attirubtes with the same key
-        //! \return Pointer to the attribute
-        KeyValue*                  set(const char* key, const String& value, bool purge=false);
-
-        //! \brief Sets the specified attribute
-        //!
-        //!  This sets the first attribute encountered to the specified value,   If the attribute does not exist, then
-        //!  it will be created using the FIRST key in the list.
-        //!
-        //! \note WARNING, this will (possibly) modify the vector, consider existing pointers to be invalid
-        //!
-        //! \param  key     Key to set and modify
-        //! \param  value   New value
-        //! \param  purge   If true, deletes all OTHER attirubtes with the same key
-        //! \return Pointer to the attribute
-        KeyValue*                  set(const std::initializer_list<String>&key, const String& value, bool purge=false);
-
-        //! \brief Sets the specified attribute
-        //!
-        //!  This sets the first attribute encountered to the specified value,   If the attribute does not exist, then
-        //!  it will be created using the FIRST key in the list.
-        //!
-        //! \note WARNING, this will (possibly) modify the vector, consider existing pointers to be invalid
-        //!
-        //! \param  key     Key to set and modify
-        //! \param  value   New value
-        //! \param  purge   If true, deletes all OTHER attirubtes with the same key
-        //! \return Pointer to the attribute
-        KeyValue*                  set(const std::initializer_list<const char*>&key, const String& value, bool purge=false);
-
-        //! \brief Sets the specified attribute
-        //!
-        //!  This sets the first attribute encountered to the specified value,   If the attribute does not exist, then
-        //!  it will be created using the FIRST key in the vector.
-        //!
-        //! \note WARNING, this will (possibly) modify the vector, consider existing pointers to be invalid
-        //!
-        //! \param  key     Key to set and modify
-        //! \param  value   New value
-        //! \param  purge   If true, deletes all OTHER attirubtes with the same key
-        //! \return Pointer to the attribute
-        KeyValue*                  set(const Vector<String>&key, const String& value, bool purge=false);
-
-        KeyValue*                  set_set(const char*, const StringSet&, const String& sep=", ");
-        KeyValue*                  set_set(const String&, const StringSet&, const String& sep=", ");
+        KeyValue*                  set(const std::string_view&key, const std::string_view& data, bool purge=true);
+        KeyValue*                  set(const string_view_vector_t& keys, const std::string_view& data, bool purge=true);
+        KeyValue*                  set(const std::initializer_list<const char*>& keys, const std::string_view& data, bool purge=true);
         
-        //! \brief Sets the specified attribute to a string set
-        //! 
-        //! \note WARNING, this will (possibly) modify the vector, consider existing pointers to be invalid
-        //! \note This will ASSUME purge=true!
-        KeyValue*                  set_set(const std::initializer_list<const char*>&, const StringSet&, const String& sep=", ");
 
-        KeyValue*                  set_set(const std::initializer_list<String>&, const StringSet&, const String& sep=", ");
-        KeyValue*                  set_set(const Vector<String>&, const StringSet&, const String& sep=", ");
+        template <typename Match, typename T>
+        KeyValue*                  set(Match, const std::string_view&key, const T& data, bool purge=true);
         
-        KeyValue*                  set_set(const std::initializer_list<const char*>&, const Set<uint16_t>&, const String& sep=", ");
-
+        //  being jettisoned  set_set() ... use "join" instead.
+        
         
         //! \brief First value for string, empty if not found (or empty w/in)
-        String                      value(const String& key, bool excludeCmds=false) const;
-        String                      value(const char* key, bool excludeCmds=false) const;
+        template <typename Match>
+        std::string_view            value(Match) const;
         
-        //! \brief First value for string, empty if not found (or empty w/in)
-        String                      value(const std::initializer_list<String>&, bool excludeCmds=false) const;
-        String                      value(const std::initializer_list<const char*>&, bool excludeCmds=false) const;
-
-        //! \brief First value for string, empty if not found (or empty w/in)
-        String                      value(const Vector<String>&, bool excludeCmds=false) const;
+        //std::string_view            value(const char*) const;
+        //std::string_view            value(const std::string&) const;
+        //std::string_view            value(const std::string_view&) const;
+        std::string_view            value(std::initializer_list<const char*>) const;
+        
         
         //! \brief All non-empty values for string
-        Vector<String>              values(const String& key) const;
-        Vector<String>              values(const char* key) const;
-
-        //! \brief All non-empty values for string
-        Vector<String>              values(const std::initializer_list<String>&) const;
-        Vector<String>              values(const std::initializer_list<const char*>&) const;
-
-        //! \brief All non-empty values for string
-        Vector<String>              values(const Vector<String>&) const;
+        template <typename Match>
+        string_view_vector_t        values(Match) const;
         
-        StringSet                   values_set(const char*, const String& sep=",") const;
-        StringSet                   values_set(const String&, const String& sep=",") const;
-        StringSet                   values_set(const std::initializer_list<const char*>&, const String& sep=",") const;
-        StringSet                   values_set(const std::initializer_list<String>&, const String& sep=",") const;
-        StringSet                   values_set(const Vector<String>&, const String& sep=",") const;
+        //! \brief All non-empty values for string
+        template <typename Match, typename Pred>
+        void                        values(Match, Pred) const;
+
+        template <typename Match>
+        string_view_set_t           values_set(Match, const std::string_view& sep=",") const;
         
-        Set<uint16_t>               values_set_u16(const std::initializer_list<const char*>&, const String& sep=",") const;
+        template <typename Match>
+        Set<uint16_t>               values_set_u16(Match, const std::string_view& sep=",") const;
         
         KVTree&                     operator+=(KVTree&&);
         KVTree&                     operator+=(const KVTree&);
@@ -257,7 +144,7 @@ namespace yq {
         KVTree&                     operator<<(KeyValue&&);
         KVTree&                     operator<<(const KeyValue&);
         
-        bool                        parse(const ByteArray& buffer, String* body, bool recursive, const std::string& fname);
+        bool                        parse(const ByteArray& buffer, std::string* body, bool recursive, const std::string_view& fname);
         //void                        write(Vector<char>&) const;
         void                        write(yq::Stream&) const;
     };
@@ -270,21 +157,21 @@ namespace yq {
         //! \brief Command
         //! This is the optional command for the attribute.  It's intended for add/remove/modify/comment/etc
         //! However, '%' is reserved for system defined attribute keys
-        String              cmd;
+        std::string              cmd;
         
         //! \brief KeyValue Identifier
         //! This is the identifier for the attribute, it'll be surrounded by [] in the file and is expected to be
         //! alpha-numeric in nature.  Limited punctuation acceptable, spaces ignored on read
-        String              id;
+        std::string              id;
         
         //! \brief KeyValue Key
         //! This is the key, and is expected to present in everything except a comment.  Keys are expected to be
         //! Alpha-numeric in nature.  Limited punctuation acceptable, spaces will trip the value
-        String              key;
+        std::string              key;
         
         //! \brief KeyValue Value/data
         //! This is the attribute's valueData.  If the command isa comment, then this is the contents of that comment.
-        String              data;
+        std::string              data;
 
         //! \brief Indent of the attribute
         //! Ignored on write, this is the original indentation value for the attribute from the file.
@@ -292,11 +179,455 @@ namespace yq {
 
 
         KeyValue() = default;
-        KeyValue(const String& k) : key(k) {}
-        KeyValue(const String& k, const String& v) : key(k), data(v) {}
+        KeyValue(const std::string_view& k) : key(k) {}
+        KeyValue(const std::string_view& k, const std::string_view& v) : key(k), data(v) {}
         
-
         bool                empty() const;
+        
     };
+    
 
+    namespace kv {
+    
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        //  MATCH ON KEYS
+    
+        struct SingleKeyMatch {
+            std::string_view        pat;
+            bool operator()(const KeyValue& a) const
+            {
+                return is_in(a.key, pat);
+            }
+        };
+        
+            //! \brief Match the key
+        inline SingleKeyMatch        key(const std::string_view& s) { return SingleKeyMatch{s}; }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        struct InitKeyMatch {
+            const std::initializer_list<std::string_view>*   pat = nullptr;
+            bool operator()(const KeyValue& a) const
+            {
+                return is_in(a.key, *pat);
+            }
+        };
+        
+        inline InitKeyMatch          key(const std::initializer_list<std::string_view>& s) { return InitKeyMatch(&s); }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        struct VectorKeyMatch {
+            const std::vector<std::string_view>*   pat = nullptr;
+            bool operator()(const KeyValue& a) const
+            {
+                return is_in(a.key, *pat);
+            }
+        };
+
+        inline VectorKeyMatch        key(const std::vector<std::string_view>& s) { return VectorKeyMatch(&s); }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        struct CopyVectorKeyMatch {
+            std::vector<std::string_view>   pat;
+            bool operator()(const KeyValue& a) const
+            {
+                return is_in(a.key, pat);
+            }
+        };
+        
+        inline CopyVectorKeyMatch        key(const std::initializer_list<const char*>& keys) { 
+            CopyVectorKeyMatch ret;
+            for(auto& k : keys)
+                ret.pat.push_back(k);
+            return ret;
+        }
+        
+            //  ------------------------------------------------------------------------------------------------
+
+        struct SetKeyMatch {
+            const string_view_set_t*    pat = nullptr;
+            bool operator()(const KeyValue& a) const
+            {
+                return is_in(a.key, *pat);
+            }
+        };
+        
+        inline SetKeyMatch      key(const string_view_set_t& s) { return SetKeyMatch(&s); }
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        //  MATCH ON KEYS W/O COMMAND
+    
+        struct SingleNonCmdKeyMatch {
+            std::string_view        pat;
+            bool operator()(const KeyValue& a) const
+            {
+                return a.cmd.empty() && is_in(a.key, pat);
+            }
+        };
+        
+        inline SingleNonCmdKeyMatch noncmd_key(const std::string_view& s) { return SingleNonCmdKeyMatch{s}; }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        struct InitNonCmdKeyMatch {
+            const std::initializer_list<std::string_view>*    pat = nullptr;
+            bool operator()(const KeyValue& a) const
+            {
+                return a.cmd.empty() && is_in(a.key, *pat);
+            }
+        };
+        
+        inline InitNonCmdKeyMatch   noncmd_key(const std::initializer_list<std::string_view>& s) { return InitNonCmdKeyMatch(&s); }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        struct VectorNonCmdKeyMatch {
+            const std::vector<std::string_view>*    pat = nullptr;
+            bool operator()(const KeyValue& a) const
+            {
+                return a.cmd.empty() && is_in(a.key, *pat);
+            }
+        };
+
+        inline VectorNonCmdKeyMatch noncmd_key(const std::vector<std::string_view>& s) { return VectorNonCmdKeyMatch(&s); }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        struct SetNonCmdKeyMatch {
+            const string_view_set_t*    pat = nullptr;
+            bool operator()(const KeyValue& a) const
+            {
+                return a.cmd.empty() && is_in(a.key, *pat);
+            }
+        };
+        
+        inline SetNonCmdKeyMatch      noncmd_key(const string_view_set_t& s) { return SetNonCmdKeyMatch(&s); }
+    }
+        
+    template <typename Match>
+    Vector<const KeyValue*>  KVTree::all(Match m) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return all( kv::key(m) );
+        } else {
+            Vector<const KeyValue*> ret;
+            for(const KeyValue& a : subs)
+                if(m(a))
+                    ret << &a;
+            return ret;
+        }
+    }
+    
+
+    template <typename Match, typename Pred>
+    void  KVTree::all(Match m, Pred pred) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            all( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            all( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            all( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            all( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            all( kv::key(m), pred );
+        } else {
+            for(const KeyValue& a : subs)
+                if(m(a))
+                    pred(a);
+        }
+    }
+    
+    template <typename Match>
+    void  KVTree::erase_all(Match m)
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            erase_all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            erase_all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            erase_all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            erase_all( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            erase_all( kv::key(m) );
+        } else {
+            subs.erase_if(m);
+        }
+    }
+
+    template <typename Match>
+    void  KVTree::erase_seconds(Match m)
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            erase_seconds( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            erase_seconds( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            erase_seconds( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            erase_seconds( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            erase_seconds( kv::key(m) );
+        } else {
+            //  WARNING!  This will break if std::remove_if is ever NOT forward-sequential
+            bool    f   = false;
+            subs.erase_if([&](const KeyValue& a) -> bool {
+                if(m(a)){
+                    if(f)
+                        return true;
+                    f   = true;
+                }
+                return false;
+            });
+        }
+    }
+
+    template <typename Match>
+    KeyValue*  KVTree::first(Match m)
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return first( kv::key(m) );
+        } else {
+            for(KeyValue& a : subs)
+                if(m(a))
+                    return &a;
+            return nullptr;
+        }
+    }
+
+    template <typename Match>
+    const KeyValue*  KVTree::first(Match m) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return first( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return first( kv::key(m) );
+        } else {
+            for(const KeyValue& a : subs)
+                if(m(a))
+                    return &a;
+            return nullptr;
+        }
+    }
+
+    template <typename Match>
+    bool  KVTree::has(Match m) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return has( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return has( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return has( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return has( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return has( kv::key(m) );
+        } else {
+            return first(m) != nullptr;
+        }
+    }
+
+    template <typename Match>
+    const KeyValue*  KVTree::last(Match m) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return last( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return last( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return last( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return last( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return last( kv::key(m) );
+        } else {
+            for(const KeyValue& a : reverse(subs))
+                if(m(a))
+                    return &a;
+            return nullptr;
+        }
+    }
+
+    template <typename Match>
+    KeyValue*       KVTree::set(Match m, const std::string_view&key, const std::string_view& data, bool purge)
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return set( kv::key(m), key, data, purge );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return set( kv::key(m), key, data, purge );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return set( kv::key(m), key, data, purge );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return set( kv::key(m), key, data, purge );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return set( kv::key(m), key, data, purge );
+        } else {
+            if(purge)
+                erase_seconds(m);
+                
+            KeyValue* a = first(m);
+            if(a){
+                a -> data   = data;
+                return a;
+            }
+            
+            KeyValue    n;
+            n.key       = key;
+            n.data      = data;
+            subs.push_back(n);
+            return &subs.back();
+        }
+    }
+    
+    template <typename Match, typename T>
+    KeyValue*  KVTree::set(Match m, const std::string_view&key, const T& data, bool purge)
+    {
+        auto    sd  = to_string(data);  // here to anchor the results until AFTER set
+        return set(m, key, std::string_view(sd), purge);
+    }
+    
+    template <typename Match>
+    std::string_view  KVTree::value(Match m) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return value( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return value( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return value( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return value( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return value( kv::key(m) );
+        } else {
+            const KeyValue* a = first(m);
+            return a ? a->data : std::string_view();
+        }
+    }
+    
+    
+    template <typename Match>
+    string_view_vector_t  KVTree::values(Match m) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return values( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return values( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return values( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return values( kv::key(m) );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return values( kv::key(m) );
+        } else {
+            string_view_vector_t  ret;
+            all(m, [&](const KeyValue& a){
+                if(!a.data.empty())
+                    ret << a.data;
+            });
+            return ret;
+        }
+    }
+    
+    template <typename Match, typename Pred>
+    void  KVTree::values(Match m, Pred pred) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            values( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            values( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            values( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            values( kv::key(m), pred );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            values( kv::key(m), pred );
+        } else {
+            all(m, [&](const KeyValue& a){
+                if(!a.data.empty())
+                    pred(a.data);
+            });
+        }
+    }
+
+    template <typename Match>
+    string_view_set_t KVTree::values_set(Match m, const std::string_view& sep) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return values_set( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return values( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return values( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return values( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return values( kv::key(m), sep );
+        } else {
+            string_view_set_t   ret;
+            all(m, [&](const KeyValue&a){
+                if(!a.data.empty()){
+                    vsplit(a.data, sep, [&](const std::string_view& v){
+                        if(!v.empty())
+                            ret << v;
+                    });
+                }
+            });
+            return ret;
+        }
+    }
+    
+    template <typename Match>
+    Set<uint16_t> KVTree::values_set_u16(Match m, const std::string_view& sep) const
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return values_set_u16( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return value( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return values_set_u16( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return values_set_u16( kv::key(m), sep );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return values_set_u16( kv::key(m), sep );
+        } else {
+            Set<uint16_t>   ret;
+            for(const std::string_view& v : values_set(m, sep)){
+                auto r = to_uint16(v);
+                if(r.good)
+                    ret << r.value;
+            }
+            return ret;
+        }
+    }
+
+
+    
 }

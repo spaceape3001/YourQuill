@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -22,7 +22,6 @@ namespace yq {
             //  information
         WriteFirst
     )
-
-    MV_DECLARE(Access)
-
 }
+
+YQ_TYPE_DECLARE(yq::Access)

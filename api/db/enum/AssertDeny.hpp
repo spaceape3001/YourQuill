@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -24,6 +24,6 @@ namespace yq {
         \brief Explicity assert the thing
     */
     YQ_ENUM(AssertDeny, , Neither, Deny, Assert)
-    MV_DECLARE(AssertDeny)
-
 }
+
+YQ_TYPE_DECLARE(yq::AssertDeny)

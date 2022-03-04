@@ -68,7 +68,7 @@ namespace yq {
 
     \note   MUST BE USED AT GLOBAL SCOPE (NO NAMESPACES)
 */
-#define MO_DECLARE(...)                                         \
+#define YQ_OBJECT_DECLARE(...)                                  \
     namespace yq {                                              \
         template <>                                             \
         struct InfoBinder(__VA_ARGS__) {                        \
@@ -85,7 +85,7 @@ namespace yq {
 
     \note   MUST BE USED AT GLOBAL SCOPE (NO NAMESPACES)
 */
-#define MT_DECLARE(...)                                         \
+#define YQ_TYPE_DECLARE(...)                                    \
     namespace yq {                                              \
         template <>                                             \
         struct InfoBinder<__VA_ARGS__> {                        \
@@ -99,15 +99,15 @@ namespace yq {
     } 
 
 
-MT_DECLARE(std::string)
-MT_DECLARE(bool)
-MT_DECLARE(double)
-MT_DECLARE(float)
-MT_DECLARE(int8_t)
-MT_DECLARE(int16_t)
-MT_DECLARE(int32_t)
-MT_DECLARE(int64_t)
-MT_DECLARE(uint8_t)
-MT_DECLARE(uint16_t)
-MT_DECLARE(uint32_t)
-MT_DECLARE(uint64_t)
+YQ_TYPE_DECLARE(std::string)
+YQ_TYPE_DECLARE(bool)
+YQ_TYPE_DECLARE(double)
+YQ_TYPE_DECLARE(float)
+YQ_TYPE_DECLARE(int8_t)
+YQ_TYPE_DECLARE(int16_t)
+YQ_TYPE_DECLARE(int32_t)
+YQ_TYPE_DECLARE(int64_t)
+YQ_TYPE_DECLARE(uint8_t)
+YQ_TYPE_DECLARE(uint16_t)
+YQ_TYPE_DECLARE(uint32_t)
+YQ_TYPE_DECLARE(uint64_t)

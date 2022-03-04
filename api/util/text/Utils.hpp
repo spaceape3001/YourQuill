@@ -35,100 +35,6 @@ namespace yq {
     //! Checks to see if ANY string in the left starts with the right
     bool    any_starts_igCase(const std::initializer_list<std::string_view>&haystack, const std::string_view&pattern);
 
-    /*! \brief Decodes the given hex string into an unsigned
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    pointer to char string
-        \param[in] n    number of characters
-        \return The result
-    */
-    unsigned_r as_hex(const char*s, size_t n);
-
-    /*! \brief Decodes the given hex string into an unsigned
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    String view (which is auto-gen from std::string if need be.
-        \return The result
-    */
-    unsigned_r as_hex(const std::string_view&s);
-
-    /*! \brief Decodes the given hex string into an unsigned 8-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    pointer to char string
-        \param[in] n    number of characters
-        \return The result
-    */
-    uint8_r  as_hex8(const char*s, size_t n);
-
-    /*! \brief Decodes the given hex string into an unsigned 8-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    String view (which is auto-gen from std::string if need be.
-        \return The result
-    */
-    uint8_r  as_hex8(const std::string_view&s);
-
-    /*! \brief Decodes the given hex string into an unsigned 16-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    pointer to char string
-        \param[in] n    number of characters
-        \return The result
-    */
-    uint16_r  as_hex16(const char*s, size_t n);
-
-    /*! \brief Decodes the given hex string into an unsigned 16-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    String view (which is auto-gen from std::string if need be.
-        \return The result
-    */
-    uint16_r  as_hex16(const std::string_view&s);
-
-    /*! \brief Decodes the given hex string into an unsigned 32-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    pointer to char string
-        \param[in] n    number of characters
-        \return The result
-    */
-    uint32_r  as_hex32(const char*s, size_t n);
-
-    /*! \brief Decodes the given hex string into an unsigned 32-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    String view (which is auto-gen from std::string if need be.
-        \return The result
-    */
-    uint32_r  as_hex32(const std::string_view&s);
-
-    /*! \brief Decodes the given hex string into an unsigned 64-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    pointer to char string
-        \param[in] n    number of characters
-        \return The result
-    */
-    uint64_r  as_hex64(const char*s, size_t n);
-
-    /*! \brief Decodes the given hex string into an unsigned 64-bit intetger
-    
-        This trims whitespace from both ends & decodes the non-whitespace text.
-
-        \param[in] s    String view (which is auto-gen from std::string if need be.
-        \return The result
-    */
-    uint64_r  as_hex64(const std::string_view&s);
     
     /*! \brief Blanks all C++ comments in the given string 
     
@@ -453,6 +359,15 @@ namespace yq {
     {
         return ::iswdigit(ch);
     }
+    
+    /*! \brief Tests for emptiness
+    
+        \return TRUE if BOTH first & second are empty
+    */
+    inline bool is_empty(const string_view_pair_t& p)
+    {
+        return p.first.empty() && p.second.empty();
+    }
 
     /*! \brief Tests for graphical character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -476,6 +391,25 @@ namespace yq {
     */
     bool  is_greater_igCase(const std::string_view&a, const std::string_view&b);
     
+    
+    /*! \brief Test to see if string matches the pattern
+    
+        (this one is here so it signature matches the other
+    */
+    bool  is_in(const std::string_view& str, const std::string_view& pat);
+
+    /*! \brief Test to see if string matches one of the patterns
+    */
+    bool  is_in(const std::string_view& str, const std::initializer_list<std::string_view>& pat);
+    
+    /*! \brief Test to see if string matches one of the patterns
+    */
+    bool  is_in(const std::string_view& str, const string_view_set_t& pat);
+
+    /*! \brief Test to see if string matches one of the patterns
+    */
+    bool  is_in(const std::string_view& str, const std::vector<std::string_view>& pat);
+
     /*! \brief Tests if b < a ignoring case
     
         This ignores case differences as it compares strings a & b.
@@ -537,6 +471,7 @@ namespace yq {
     /*! \brief Tests for equality while ignoring case
     */
     bool  is_similar(char32_t, char32_t);
+
 
     /*! \brief Tests for equality while ignoring case
     */
@@ -665,6 +600,8 @@ namespace yq {
     */
     std::string     join(const std::vector<std::string_view>& collection, const std::string_view& separator);
     
+
+
     /*! \brief Checks to see if the haystack matches the pattern at position
     
         \note Check will end at the length pattern, so "matches_at("foobar rocks", 3, "bar")" will be TRUE
@@ -1136,7 +1073,103 @@ namespace yq {
     */
     float_r   to_float(const std::string_view&);
 
-    /*! \brief Decodes the given string into an integer
+
+    /*! \brief Decodes the given hex string into an unsigned
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    pointer to char string
+        \param[in] n    number of characters
+        \return The result
+    */
+    unsigned_r to_hex(const char*s, size_t n);
+
+    /*! \brief Decodes the given hex string into an unsigned
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    String view (which is auto-gen from std::string if need be.
+        \return The result
+    */
+    unsigned_r to_hex(const std::string_view&s);
+
+    /*! \brief Decodes the given hex string into an unsigned 8-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    pointer to char string
+        \param[in] n    number of characters
+        \return The result
+    */
+    uint8_r  to_hex8(const char*s, size_t n);
+
+    /*! \brief Decodes the given hex string into an unsigned 8-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    String view (which is auto-gen from std::string if need be.
+        \return The result
+    */
+    uint8_r  to_hex8(const std::string_view&s);
+
+    /*! \brief Decodes the given hex string into an unsigned 16-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    pointer to char string
+        \param[in] n    number of characters
+        \return The result
+    */
+    uint16_r  to_hex16(const char*s, size_t n);
+
+    /*! \brief Decodes the given hex string into an unsigned 16-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    String view (which is auto-gen from std::string if need be.
+        \return The result
+    */
+    uint16_r  to_hex16(const std::string_view&s);
+
+    /*! \brief Decodes the given hex string into an unsigned 32-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    pointer to char string
+        \param[in] n    number of characters
+        \return The result
+    */
+    uint32_r  to_hex32(const char*s, size_t n);
+
+    /*! \brief Decodes the given hex string into an unsigned 32-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    String view (which is auto-gen from std::string if need be.
+        \return The result
+    */
+    uint32_r  to_hex32(const std::string_view&s);
+
+    /*! \brief Decodes the given hex string into an unsigned 64-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    pointer to char string
+        \param[in] n    number of characters
+        \return The result
+    */
+    uint64_r  to_hex64(const char*s, size_t n);
+
+    /*! \brief Decodes the given hex string into an unsigned 64-bit intetger
+    
+        This trims whitespace from both ends & decodes the non-whitespace text.
+
+        \param[in] s    String view (which is auto-gen from std::string if need be.
+        \return The result
+    */
+    uint64_r  to_hex64(const std::string_view&s);
+    
+        /*! \brief Decodes the given string into an integer
     
         This trims whitespace from both ends & decodes the non-whitespace text.
 
@@ -1637,6 +1670,7 @@ namespace yq {
     */
     ushort_r  to_ushort(const std::string_view&s);
 
+
     /*! \brief String not starting/ending with spaces
     */
     std::string_view    trimmed(const std::string_view&);
@@ -1648,5 +1682,161 @@ namespace yq {
     /*! \brief String not starting with whitespace
     */
     std::string_view    trimmed_start(const std::string_view&);
+
+    /*! \brief Split via visitor pattern
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    Pointer to the string
+        \param[in]      n    Length of the string (in bytes)
+        \param[in]      ch   Character to split on
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+    template <typename Pred>
+    void            vsplit(const char* s, size_t n, char ch, Pred pred)
+    {
+        if(s && n){
+            const char* end = s + n;
+            const char* i   = nullptr;
+            const char* j   = nullptr;
+            for(i = s; (j = strnchr(i, end-i, ch)); i = j+1)
+                pred(std::string_view(i, j-i));
+            pred(std::string_view(i, end-i));
+        }
+    }
+
+    /*! \brief Split via visitor pattern
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    String view to operate on
+        \param[in]      ch   Character to split on
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+    template <typename Pred>
+    void            vsplit(const std::string_view& s, char ch, Pred pred)
+    {
+        vsplit(s.data(), s.size(), pred);
+    }
+    
+    /*! \brief Split via visitor pattern
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    Pointer to the string
+        \param[in]      n    Length of the string (in bytes)
+        \param[in]      p    Pattern to split on
+        \param[in]      pn   Length of the pattern (in bytes)
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+    template <typename Pred>
+    void            vsplit(const char* s, size_t n, const char* p, size_t pn, Pred pred)
+    {
+        if(s && n && p && pn){
+            const char* end = s + n;
+            const char* i   = nullptr;
+            const char* j   = nullptr;
+            for(i = s; (j = strnstr(i, end-i, p, pn)); i = j)
+                pred(std::string_view(i, j-i));
+            pred(std::string_view(i, end-i));
+        }
+    }
+    
+    /*! \brief Split via visitor pattern
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    String view to operate on
+        \param[in]      p    String view to split on
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+    template <typename Pred>
+    void            vsplit(const std::string_view& s, const std::string_view& pattern, Pred pred)    
+    {
+        vsplit(s.data(), s.size(), pattern.data(), pattern.size(), pred);
+    }
+    
+    /*! \brief Split via visitor pattern (ignoring case)
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    Pointer to the string
+        \param[in]      n    Length of the string (in bytes)
+        \param[in]      ch   Character to split on
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+
+    template <typename Pred>
+    void            vsplit_igCase(const char* s, size_t n, char ch, Pred pred)
+    {
+        if(s && n){
+            const char* end = s + n;
+            const char* i   = nullptr;
+            const char* j   = nullptr;
+            for(i = s; (j = strnchr_igCase(i, end-i, ch)); i = j+1)
+                pred(std::string_view(i, j-i));
+            pred(std::string_view(i, end-i));
+        }
+    }
+
+    /*! \brief Split via visitor pattern (ignoring case)
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    String view to operate on
+        \param[in]      ch   Character to split on
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+    template <typename Pred>
+    void            vsplit_igCase(const std::string_view& s, char ch, Pred pred)
+    {
+        vsplit_igCase(s.data(), s.size(), pred);
+    }
+
+    /*! \brief Split via visitor pattern (ignoring case)
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    Pointer to the string
+        \param[in]      n    Length of the string (in bytes)
+        \param[in]      p    Pattern to split on
+        \param[in]      pn   Length of the pattern (in bytes)
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+    template <typename Pred>
+    void            vsplit_igCase(const char* s, size_t n, const char* p, size_t pn, Pred pred)
+    {
+        if(s && n && p && pn){
+            const char* end = s + n;
+            const char* i   = nullptr;
+            const char* j   = nullptr;
+            for(i = s; (j = strnstr_igCase(i, end-i, p, pn)); i = j)
+                pred(std::string_view(i, j-i));
+            pred(std::string_view(i, end-i));
+        }
+    }
+    
+    /*! \brief Split via visitor pattern (ignoring case)
+    
+        This "splits" the string, but uses a lambda visitor instead of return vector.  Note, matched
+        character will NOT be echoed.
+        
+        \param[in]      s    String view to operate on
+        \param[in]      p    String view to split on
+        \param[in,out]  pred Function-like object, taking a std::string_view.
+    */
+    template <typename Pred>
+    void            vsplit_igCase(const std::string_view& s, const std::string_view& pattern, Pred pred)    
+    {
+        vsplit_igCase(s.data(), s.size(), pattern.data(), pattern.size(), pred);
+    }
+    
 }
 

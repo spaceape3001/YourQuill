@@ -163,6 +163,8 @@ namespace yq {
         */
         Variant(const TypeInfo&, const void*);
 
+        const DataBlock&    data() const { return m_data; }
+
     private:
         Variant(TypeInfo&&) = delete;   // prohibt temporary metatypes
 

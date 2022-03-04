@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 
 namespace yq {
@@ -50,6 +50,7 @@ namespace yq {
     )
 
 
-    MV_DECLARE(CalSystem)
 
 }
+
+YQ_TYPE_DECLARE(yq::CalSystem)

@@ -14,127 +14,194 @@ namespace yq {
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  ENUMERATION
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    namespace {
-        void    clean_it(std::string& text)
-        {
-            char*    begin   = &text[0];
-            char*    c       = begin;
-            char*    s       = begin;
-            char*    end     = c + text.size();
-            
-            bool    cmtcxx  = false;
-            bool    cmtc    = false;
-            char    last    = ' ';
-            
-            //  scrub the input of comments, non-definition characters
-            for(;c<end;++c){
-                switch(*c){
-                case '/':
-                    if(cmtcxx)
-                        break;
-                    if(cmtc && (last == '*')){
-                        cmtc    = false;
-                        break;
-                    }
-                    if(cmtc)
-                        break;
-                    if(last == '/')
-                        cmtcxx  = true;
-                    break;
-                case '*':
-                    if(cmtc || cmtcxx)
-                        break;
-                    if(last == '/')
-                        cmtc    = true;
-                    break;
-                case '\n':
-                case '\r':
-                    if(cmtcxx)
-                        cmtcxx  = false;
-                    break;
-                case ',':
-                case '=':
-                case '_':
-                case '-':
-                    if(cmtc || cmtcxx)
-                        break;
-                    *s++ = *c;
-                    break;
-                default:
-                    if(cmtc || cmtcxx)
-                        break;
-                    if(is_alnum(*c))
-                        *s++ = *c;
-                    break;
-                }
-                
-                last = *c;
-            }
-            
-            if(s != end){
-                *s  = '\0';
-                text.resize(s - begin);
-            }
-        }
-    }
-
-
-
-    Vector<StringPair>  EnumDef::parse_definition(const std::string& str)
-    {
-        Vector<StringPair>  ret;
-        std::string          arg = str;
-        clean_it(arg);
-        for(const std::string_view& s : split(arg, ',')){
-            auto bits = split(s, '=');
-            std::string  key, def;
-            switch(bits.size()){
-            case 0:
-                continue;
-            case 1:
-                key = bits[0];
-                break;
-            case 2:
-            default:
-                key = bits[0];
-                def = bits[1];
-                break;
-            }
-            if(!key.empty())
-                ret << StringPair(key, def);
-        }
-        return ret;
-    }
-
-    EnumDef::EnumDef(const std::string& name, const std::string& def) : 
+    
+    EnumDef::EnumDef(const char* name, const char* def) : 
         m_name(name), m_defValue(-1)
     {
-        Vector<StringPair>  pairs   = parse_definition(def);
+        int             val         = 0;
+        bool            first       = true;
 
-        int         nextValue   = 0;
-        bool        first       = true;
-        for(auto &itr : pairs)
-        {
-            int     theValue = 0;
-            if(!itr.second.empty()){
-                theValue    = m_name2value.get(itr.second, to_integer(itr.second));
-                nextValue   = 1 + theValue;
-            } else {
-                theValue        = nextValue++;
+        const char*    begin   = def;
+        const char*    c       = begin;
+        const char*    s       = nullptr;
+        const char*    end     = c + strlen(def);
+        
+        bool    cmtcxx          = false;
+        bool    cmtc            = false;
+        char    last            = ' ';
+        bool    alpha           = false;
+        bool    skip            = false;    // skip to next significant thing
+        
+        std::string_view        k, v;
+        
+        enum mode_t { 
+            LINE,   //  new line (or start)
+            KEY,
+            VALUE
+        };
+        
+        mode_t                  mode    = LINE;
+        
+        
+        auto    mkey     = [&]() {
+            if(s){
+                k       = std::string_view(s, c-s);
+                s       = nullptr;
             }
-            m_name2value[itr.first]    = theValue;
-            m_keys << itr.first;
-            if(!m_value2name.has(theValue)){
-                m_value2name[theValue]      = itr.first;
+        };
+        
+        
+        auto    mval    = [&]() {
+            if(s){
+                v       = std::string_view(s, c-s);
+                s       = nullptr;
             }
+        };
+        
+        
+            // Subroutine to process the enum into the maps
+        auto    proc    = [&]() {
+            if(v.empty() && k.empty())
+                return ;
+        
+            if(!v.empty()){
+                if(alpha){
+                    auto    itr = m_name2value.find(k);
+                    assert(itr != m_name2value.end());  // shouldn't ever trigger, as it was compilable code
+                    if(itr != m_name2value.end())
+                        val = itr -> second;
+                } else {
+                    auto ir = to_integer(v);
+                    assert(ir.good);                    // shouldn't ever trigger, as it was compilable code
+                    val  = to_integer(v);
+                }
+            }
+
+            m_name2value[k]     = val;
+            m_value2name[val]   = k;
+            
             if(first){
-                m_defValue      = theValue;
+                m_defValue  = val;
                 first       = false;
             }
+            
+            ++val;
+            mode    = LINE;
+            k       = {};
+            v       = {};
+            alpha   = false;
+        };
+        
+
+        //  Iterate....
+        for(;c<end;++c){
+            switch(*c){
+            case '/':
+                if(cmtcxx)
+                    break;
+                if(cmtc && (last == '*')){
+                    cmtc    = false;
+                    break;
+                }
+                if(cmtc)
+                    break;
+                if(last == '/')
+                    cmtcxx  = true;
+                break;
+            case '*':
+                if(cmtc || cmtcxx)
+                    break;
+                if(last == '/')
+                    cmtc    = true;
+                break;
+            case '\n':
+            case '\r':
+                if(cmtcxx)
+                    cmtcxx  = false;
+                break;
+            case ',':
+                if(cmtc || cmtcxx)
+                    break;
+                
+                switch(mode){
+                case LINE:
+                    break;
+                case KEY:
+                    mkey();
+                    break;
+                case VALUE:
+                    mval();
+                    break;
+                }
+                skip    = false;
+                proc();
+                break;
+
+            case '=':
+                if(cmtc || cmtcxx)
+                    break;
+                
+                mkey();
+                mode    = VALUE;
+                skip    = false;
+                break;
+                
+            case '_':
+            case '-':
+            default:
+                if(cmtc || cmtcxx)
+                    break;
+                
+                if(isspace(*c)){
+                    if(s){
+                        switch(mode){
+                        case KEY:
+                            mkey();
+                            break;
+                        case VALUE:
+                            mval();
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                } else {
+                    if(s && (mode == VALUE)){
+                        if(is_alpha(*c))
+                            alpha   = true;
+                    }
+                    if(!s && !skip){
+                        s   = c;
+                        if(mode == LINE)
+                            mode    = KEY;
+                        skip    = true;
+                    }
+                }
+                break;
+            }
+            
+            last = *c;
         }
-        m_keys.sort(std::less<std::string>());
+        
+        switch(mode){
+        case KEY:
+            mkey();
+            break;
+        case VALUE:
+            mval();
+            break;
+        default:
+            break;
+        }
+        
+        proc();
+        
+        m_sorted    = m_keys;
+        m_sorted.sort(is_less_igCase);
+        m_ordered   = m_keys;
+        m_ordered.sort([&](const std::string_view& a, const std::string_view&b) -> bool {
+            return m_name2value.get(a) < m_name2value.get(b);
+        });
     }
 
 
@@ -149,7 +216,7 @@ namespace yq {
     }
 
 
-    string_r EnumDef::key_of(int v) const
+    string_view_r EnumDef::key_of(int v) const
     {
         return m_value2name(v);
     }
@@ -173,11 +240,12 @@ namespace yq {
     Vector<int>  EnumDef::parse_comma_list(const std::string_view&str)  const
     {
         Vector<int>  ret;
-        for(std::string_view s : split(strip_spaces(str), ',')){
-            auto itr = m_name2value.find(std::string(s));
+        ret.reserve(count_characters(str, ','));
+        vsplit(str, ',', [&](const std::string_view& s){
+            auto itr = m_name2value.find(trimmed(s));
             if(itr != m_name2value.end())
-                ret << itr->second;
-        }
+                ret.push_back(itr->second);
+        });
         return ret;
     }
 
@@ -208,7 +276,7 @@ namespace yq {
 
     int_r     EnumDef::value_of(const std::string_view& key) const
     {
-        return m_name2value(std::string(key));
+        return m_name2value(key);
     }
 
 
@@ -231,12 +299,12 @@ namespace yq {
         }
     }
 
-    std::string Enum::key() const
+    std::string_view Enum::key() const
     {
         if(m_def){
             return m_def->key_of(m_value);
         } else {
-            return std::string();
+            return std::string_view();
         }
     }
 

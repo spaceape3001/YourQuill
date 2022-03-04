@@ -14,7 +14,7 @@ namespace yq {
 
     namespace cdb {
         struct NKI {
-            String      key, name;
+            std::string key, name;
             Image       icon;
         };
     }

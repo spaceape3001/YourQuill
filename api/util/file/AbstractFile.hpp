@@ -64,7 +64,7 @@ namespace yq {
             \param[in]  buffer  The file data, this will be null-terminated (always).  However, if you're binary, this
                         could easily have MULTIPLE null values.
         */
-        virtual bool    read(ByteArray&&, const std::string& fname) = 0;
+        virtual bool    read(ByteArray&&, const std::string_view& fname) = 0;
         virtual bool    write(yq::Stream&) const = 0;
         virtual bool    is_binary() const { return false; }
 

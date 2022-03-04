@@ -7,7 +7,7 @@
 #pragma once
 
 #include "QuillData.hpp"
-#include "StdFile.hpp"
+#include <util/file/AbstractFile.hpp>
 
 namespace yq {
 
@@ -18,7 +18,7 @@ namespace yq {
 
     protected:
         virtual void    reset() override;
-        virtual bool    read(ByteArray&&buffer, const std::string& fname) override;
+        virtual bool    read(ByteArray&&buffer, const std::string_view& fname) override;
         virtual bool    write(yq::Stream&) const override;
     };
 

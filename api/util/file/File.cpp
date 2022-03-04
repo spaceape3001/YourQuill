@@ -107,7 +107,7 @@ namespace yq {
             if(!read_enabled())
                 return false;
             reset();
-            bool ok = read(std::move(data), fp.string());
+            bool ok = read(std::move(data), fp.native());
             if(ok)
                 m_file  = fp;
             return ok;
@@ -498,7 +498,7 @@ namespace yq {
         {
         }
 
-        bool    XmlFile::read(ByteArray&&buffer, const std::string& fname )
+        bool    XmlFile::read(ByteArray&&buffer, const std::string_view& fname )
         {
             ByteArray   chars   = std::move(buffer);
             chars << '\0';
@@ -531,6 +531,128 @@ namespace yq {
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        boolean_r            to_boolean(const XmlBase*xb)
+        {
+            return to_boolean(xb->value(), xb->value_size());
+        }
+
+        double_r             to_double(const XmlBase* xb)
+        {
+            return to_double(xb->value(), xb->value_size());
+        }
+
+        float_r              to_float(const XmlBase* xb)
+        {
+            return to_float(xb->value(), xb->value_size());
+        }
+
+        unsigned_r           to_hex(const XmlBase*xb)
+        {
+            return to_hex(xb->value(), xb->value_size());
+        }
+
+        uint8_r              to_hex8(const XmlBase*xb)
+        {
+            return to_hex8(xb->value(), xb->value_size());
+        }
+
+        uint16_r             to_hex16(const XmlBase*xb)
+        {
+            return to_hex16(xb->value(), xb->value_size());
+        }
+
+        uint32_r             to_hex32(const XmlBase*xb)
+        {
+            return to_hex32(xb->value(), xb->value_size());
+        }
+
+        uint64_r             to_hex64(const XmlBase*xb)
+        {
+            return to_hex64(xb->value(), xb->value_size());
+        }
+
+        int_r                to_int(const XmlBase*xb)
+        {
+            return to_int(xb->value(), xb->value_size());
+        }
+
+        int_r                to_integer(const XmlBase*xb)
+        {
+            return to_integer(xb->value(), xb->value_size());
+        }
+
+        int8_r               to_int8(const XmlBase*xb)
+        {
+            return to_int8(xb->value(), xb->value_size());
+        }
+
+        int16_r              to_int16(const XmlBase*xb)
+        {
+            return to_int16(xb->value(), xb->value_size());
+        }
+
+        int32_r              to_int32(const XmlBase*xb)
+        {
+            return to_int32(xb->value(), xb->value_size());
+        }
+
+        int64_r              to_int64(const XmlBase*xb)
+        {
+            return to_int64(xb->value(), xb->value_size());
+        }
+
+        short_r              to_short(const XmlBase*xb)
+        {
+            return to_short(xb->value(), xb->value_size());
+        }
+            
+        std::string_view    to_string(const XmlBase*xb)
+        {
+            return std::string_view(xb->value(), xb->value_size());
+        }
+
+        unsigned_r           to_uint(const XmlBase*xb)
+        {
+            return to_uint(xb->value(), xb->value_size());
+        }
+
+        uint8_r              to_uint8(const XmlBase*xb)
+        {
+            return to_uint8(xb->value(), xb->value_size());
+        }
+
+        uint16_r             to_uint16(const XmlBase*xb)
+        {
+            return to_uint16(xb->value(), xb->value_size());
+        }
+
+        uint32_r             to_uint32(const XmlBase*xb)
+        {
+            return to_uint32(xb->value(), xb->value_size());
+        }
+
+        uint64_r             to_uint64(const XmlBase*xb)
+        {
+            return to_uint64(xb->value(), xb->value_size());
+        }
+
+        unsigned_r           to_uinteger(const XmlBase*xb)
+        {
+            return to_uinteger(xb->value(), xb->value_size());
+        }
+
+        unsigned_r           to_unsigned(const XmlBase*xb)
+        {
+            return to_unsigned(xb->value(), xb->value_size());
+        }
+
+        ushort_r             to_ushort(const XmlBase*xb)
+        {
+            return to_ushort(xb->value(), xb->value_size());
+        }
+        
+        //  //////////////////
+
         boolean_r            x_boolean(const XmlBase*xb)
         {
             return to_boolean(xb->value(), xb->value_size());
@@ -548,27 +670,27 @@ namespace yq {
 
         unsigned_r           x_hex(const XmlBase*xb)
         {
-            return as_hex(xb->value(), xb->value_size());
+            return to_hex(xb->value(), xb->value_size());
         }
 
         uint8_r              x_hex8(const XmlBase*xb)
         {
-            return as_hex8(xb->value(), xb->value_size());
+            return to_hex8(xb->value(), xb->value_size());
         }
 
         uint16_r             x_hex16(const XmlBase*xb)
         {
-            return as_hex16(xb->value(), xb->value_size());
+            return to_hex16(xb->value(), xb->value_size());
         }
 
         uint32_r             x_hex32(const XmlBase*xb)
         {
-            return as_hex32(xb->value(), xb->value_size());
+            return to_hex32(xb->value(), xb->value_size());
         }
 
         uint64_r             x_hex64(const XmlBase*xb)
         {
-            return as_hex64(xb->value(), xb->value_size());
+            return to_hex64(xb->value(), xb->value_size());
         }
 
         int_r                x_int(const XmlBase*xb)

@@ -132,8 +132,8 @@ namespace yq {
     {
         auto itr=base_map::find(key);
         if(itr != base_map::end())
-            return itr->second;
-        return Result<V>();
+            return { itr->second, true };
+        return {{}, false };
     }
 
 
@@ -184,8 +184,8 @@ namespace yq {
     {
         auto itr=base_map::find(key);
         if(itr != base_map::end())
-            return itr->second;
-        return Result<V>();
+            return { itr->second, true };
+        return { {}, false };
     }
 
     template <typename K, typename V, typename C>

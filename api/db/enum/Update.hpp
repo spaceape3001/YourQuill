@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <meta/MetaValue.hpp>
+#include <util/meta/Binder.hpp>
 #include <util/type/Enum.hpp>
 #include <util/type/Flag.hpp>
 
@@ -19,5 +19,7 @@ namespace yq {
 
     using UpdateFlags = Flag<Update>;
 
-    MV_DECLARE(Update)
 }
+
+YQ_TYPE_DECLARE(yq::Update)
+YQ_TYPE_DECLARE(yq::UpdateFlags)

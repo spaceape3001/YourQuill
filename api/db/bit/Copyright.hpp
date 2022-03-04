@@ -14,13 +14,13 @@ namespace yq {
     struct Copyright {
 
         //! Text of the licence (or disclaimer)
-        String          text;
+        std::string     text;
         
         //! Year to start (0 for indefinite)
-        unsigned short  from;
+        unsigned short  from        = 0;
         
         //! Year to end (0 for today/indefinite)
-        unsigned short  to;
+        unsigned short  to          = 0;
         
         //! \brief Whether we assert copyright over, or disclaim copyright
         //!
@@ -29,7 +29,6 @@ namespace yq {
         //! then this should be deny.
         AssertDeny      stance;
         
-        Copyright() : from{}, to{}, stance{} {}
         auto    operator<=>(const Copyright&) const = default;
 
         bool    empty() const;
