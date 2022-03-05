@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/text/Strings.hpp"
+#include "util/text/Utils.hpp"
 #include <iostream>
 
 using namespace yq;
@@ -16,5 +16,5 @@ int main(int argc, char* argv[])
         return -1;
     }
     
-    return (String(argv[1]) == String(argv[2])) ? 0 : -1;
+    return is_equal(argv[1], argv[2]) ? 0 : -1;
 }

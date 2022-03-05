@@ -124,18 +124,18 @@ namespace yq {
     }
 
     template <typename T>
-    Result<T>   Variant::value() const
+    Result<const T&>   Variant::value() const
     {
+        static thread_local T   tmp;
         static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");
         if(m_type == &meta<T>())
-            return m_data.reference<T>();
+            return {m_data.reference<T>(), true};
             
         auto cvt = m_type -> m_convert.get(&meta<T>(), nullptr);
         if(cvt){
-            T       tmp;
             (*cvt)(&tmp, raw_ptr());
-            return tmp;
+            return { tmp, true };
         }
-        return Result<T>();
+        return { tmp, false };
     }
 }

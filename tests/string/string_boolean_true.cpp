@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/text/Strings.hpp"
+#include "util/text/Utils.hpp"
 #include <iostream>
 
 using namespace yq;
@@ -16,6 +16,6 @@ int main(int argc, char* argv[])
         return -1;
     }
     
-    auto res    = String(argv[1]).to_boolean();
+    auto res    = to_boolean(argv[1]);
     return (res.good && res.value) ? 0 : -1;
 }

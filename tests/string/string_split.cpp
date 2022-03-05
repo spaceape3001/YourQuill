@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "util/text/Strings.hpp"
+#include "util/text/Utils.hpp"
 #include "util/collection/Vector.hpp"
 #include <iostream>
 
@@ -12,8 +12,7 @@ using namespace yq;
 
 int main(int,char*[])
 {
-    String      input("1 2 3");
-    Vector<String>  output  = input.split(' ');
+    auto  output  = split("1 2 3", ' ');
     if(output.size() != 3){
         std::cerr << "Size is not 3!\n";
         return -1;

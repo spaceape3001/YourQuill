@@ -143,7 +143,7 @@ namespace yq {
         const TypeInfo& type() const { return *m_type; }
 
         template <typename T>
-        Result<T>           value() const;
+        Result<const T&>    value() const;
         
         /*! \brief IO Writing to stream
         

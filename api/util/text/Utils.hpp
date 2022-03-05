@@ -7,7 +7,7 @@
 #pragma once
 
 #include <util/preamble.hpp>
-
+#include <util/type/Result.hpp>
 
 namespace yq {
 
@@ -368,6 +368,8 @@ namespace yq {
     {
         return p.first.empty() && p.second.empty();
     }
+    
+    bool        is_equal(const std::string_view&, const std::string_view&);
 
     /*! \brief Tests for graphical character
         \note   This is here for reasons of better spelling and to harmonize with overloads.

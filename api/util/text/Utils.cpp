@@ -513,6 +513,11 @@ namespace yq {
         return is_blank(s.data(), s.size());
     }
 
+    bool  is_equal(const std::string_view&a, const std::string_view&b)
+    {
+        return is_equal(compare(a,b));
+    }
+
     bool  is_greater_igCase(const std::string_view&a, const std::string_view&b)
     {
         return is_greater(compare_igCase(a,b));

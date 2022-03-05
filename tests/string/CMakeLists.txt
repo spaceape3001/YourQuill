@@ -1,5 +1,4 @@
 
-coretest(string_blank)
 
 mt_util(string_boolean_bad)
 add_test(NAME string_boolean_bad_bad COMMAND test_string_boolean_bad bad)
