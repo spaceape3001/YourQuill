@@ -1589,6 +1589,7 @@ namespace yq {
         return std::string_view(buf, (p-buf));
     }
 
+
     std::string_view  to_string(const std::u8string_view&s)
     {
         return std::string_view((const char*) s.data(), s.size());
@@ -1630,6 +1631,16 @@ namespace yq {
         static thread_local char    buf[kStdBuf+1];
         auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
         return std::string_view(buf, (p-buf));
+    }
+
+    std::string     to_time_string(std::time_t ct, const char* fmt)
+    {
+        std::tm     gt;
+        gmtime_r(&ct, &gt);
+        std::string     ret;
+        char    buffer[256];
+        strftime(buffer, sizeof(buffer), fmt, &gt);
+        return std::string(buffer);
     }
 
     unsigned_r  to_uint(const char*s, size_t n)

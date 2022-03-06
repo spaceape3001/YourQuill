@@ -198,9 +198,9 @@ namespace yq {
             return GlobalInfo::instance();
         }
         
-        GlobalInfo::Writer       InfoBinder<Global>::edit()
+        GlobalInfo&       InfoBinder<Global>::edit()
         {
-            return GlobalInfo::Writer( &GlobalInfo::instance() );
+            return GlobalInfo::instance();
         }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -479,6 +479,28 @@ namespace yq {
                     metaCritical << "Duplicate property on type (" << type->name() << "): " << zName;
                 type->m_properties << this;
             }
+        }
+
+        Variant     PropertyInfo::get(const void* obj) const
+        {
+            if(m_getter){
+                Variant ret(m_type);
+                if(m_getter -> get(ret.raw_ptr(), obj))
+                    return ret;
+            }
+            return Variant();
+        }
+        
+        bool        PropertyInfo::set(void* obj, const Variant&var) const
+        {
+            if(!m_setter)
+                return false;
+            if(var.type().id() == m_type.id())
+                return m_setter -> set(obj, var.raw_ptr());
+            Variant v2  = var.convert(m_type);
+            if(v2.is_valid())
+                return m_setter -> set(obj, v2.raw_ptr());
+            return false;
         }
 
 

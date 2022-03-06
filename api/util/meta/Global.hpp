@@ -28,7 +28,7 @@ namespace yq {
         const LUC<MethodInfo>&      methods() const { return m_methods; }
         const LUC<PropertyInfo>&    properties() const { return m_properties; }
         
-        class Writer;
+        template <typename> class Writer;   // which will only ever by GlobalInfo...however, consistency
         
         static GlobalInfo&          instance();
 
@@ -49,7 +49,7 @@ namespace yq {
         static constexpr const bool     Defined     = true;
         static constexpr const bool     IsCompound  = true;     
         static const GlobalInfo&        bind();
-        static GlobalInfo::Writer       edit();
+        static GlobalInfo&              edit();
     };
     
     inline GlobalInfo*  to_global(Meta*m)

@@ -303,6 +303,11 @@ namespace yq {
         }
 
 
+        bool        file_exists(const std::filesystem::path& pth)
+        {
+            return ::access(pth.c_str(), F_OK) == 0;
+        }
+
 
         std::string  file_modified(const char* iFile)
         {
@@ -501,6 +506,8 @@ namespace yq {
         bool    XmlFile::read(ByteArray&&buffer, const std::string_view& fname )
         {
             ByteArray   chars   = std::move(buffer);
+    bool            file_exists(const std::filesystem::path&);
+
             chars << '\0';
             XmlDocument     doc;
             try {

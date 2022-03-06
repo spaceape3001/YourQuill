@@ -58,8 +58,8 @@ namespace yq {
     template <typename T>
     auto           meta_write()
     {
-        auto&    e   = meta_edit<T>();
-        return typename std::remove_cvref_t<decltype(e)>::template Writer<T>(e);
+        auto&   e   = meta_edit<T>();
+        return typename std::remove_cvref_t<decltype(e)>::template Writer<T>(&e);
     }
 }
 

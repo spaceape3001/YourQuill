@@ -670,6 +670,8 @@ namespace yq {
                 static_cast<PropertyInfo*>(m_meta) -> m_default.reference<T>() = val;
                 return *this;
             }
+            
+            Writer(PropertyInfo* pi) : Meta::Writer(pi) {}
         };
         
      //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -714,6 +716,8 @@ namespace yq {
                 new XFBR_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
                 return *this;
             }
+            
+            VarW(PropertyInfo* pi) : Writer<T>(pi) {}
         };
     
         template <typename C, typename T>
@@ -756,6 +760,7 @@ namespace yq {
                 return *this;
             }
         
+            PropW(PropertyInfo* pi) : Writer<T>(pi) {}
         };
     
 
@@ -889,9 +894,7 @@ namespace yq {
             template <typename T, typename ... Args>
             MethodInfo::Writer              function(const char szName[], T(*)(Args...));
 
-        protected: 
             Static( CompoundInfo* compound ) : Meta::Writer(compound) {}
-
         };
         
         template <typename C>
@@ -982,8 +985,6 @@ namespace yq {
             template <typename T, typename ... Args>
             MethodInfo::Writer          method(const char szName[], T (C::*function)(Args...) const);
             
-            
-        protected:
             Dynamic(CompoundInfo* c) : Static(c) {}
         };
 
@@ -992,6 +993,7 @@ namespace yq {
     //  GLOBAL
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
     
+    template <typename T>
     class GlobalInfo::Writer : public CompoundInfo::Static {
     public:
     
@@ -1398,4 +1400,13 @@ namespace yq {
     //  VALUE
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  MISC WRAPPER
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    template <std::string_view (*FN)()>
+    std::string    string_view_proxy()
+    {
+        return std::string(FN());
+    }
 }

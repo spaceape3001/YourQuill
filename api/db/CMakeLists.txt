@@ -1,73 +1,68 @@
 set(db_sources
-    ./Atom.hpp
-    ./Atom.ipp
-    ./Attribute.hpp
-    ./Attribute.ipp
-    ./Cache.hpp
-    ./CacheFwd.hpp
-    ./CacheUtil.hpp
-    ./CacheUtil.ipp
-    ./Class.hpp
-    ./Class.ipp
-    ./ClassFile.hpp
-    ./ClassFile.ipp
-    ./CommonDirs.hpp
-    ./CommonDirs.ipp
-    ./DBUnity.cpp
-    ./DBUnity2.cpp
-    ./Directory.hpp
-    ./Document.hpp
-    ./Enums.cpp
-    ./Enums.hpp
-    ./Field.hpp
-    ./FileStrings.hpp
-    ./FileSys.hpp
-    ./FileSys.ipp
-    ./FileUnity.cpp
-    ./Folder.hpp
-    ./FolderFile.hpp
-    ./FolderFile.ipp
-    ./Fragment.hpp
-    ./Graph.hpp
-    ./Graph.ipp
-    ./GraphBuilder.hpp
-    ./GraphBuilder.ipp
-    ./Image.hpp
-    ./Image.ipp
-    ./Leaf.hpp
-    ./Leaf.ipp
-    ./LeafFile.hpp
-    ./LeafFile.ipp
-    ./Property.cpp
-    ./Property.hpp
-    ./QuillData.hpp
-    ./QuillFile.hpp
-    ./QuillFile.ipp
-    ./Root.hpp
-    ./RootFwd.hpp
-    ./ShareDir.hpp
-    ./ShareDir.ipp
-    ./StdFile.hpp
-    ./StdFile.ipp
-    ./Tag.hpp
-    ./Tag.ipp
-    ./TagFile.hpp
-    ./TagFile.ipp
-    ./Wksp.cpp
-    ./Wksp.hpp
-    ./Workspace.hpp
-    ./Workspace.ipp
-     
-    ./bit/BitUnity.cpp
+    #./Atom.hpp
+    #./Atom.ipp
+    #./Attribute.hpp
+    #./Attribute.ipp
+    #./Cache.hpp
+    #./CacheFwd.hpp
+    #./CacheUtil.hpp
+    #./CacheUtil.ipp
+    #./Class.hpp
+    #./Class.ipp
+    #./ClassFile.hpp
+    #./ClassFile.ipp
+    #./CommonDirs.hpp
+    #./CommonDirs.ipp
+    #./DBUnity.cpp
+    #./DBUnity2.cpp
+    #./Directory.hpp
+    #./Document.hpp
+    #./Field.hpp
+    #./FileStrings.hpp
+    #./FileSys.hpp
+    #./FileSys.ipp
+    #./FileUnity.cpp
+    #./Folder.hpp
+    #./FolderFile.hpp
+    #./FolderFile.ipp
+    #./Fragment.hpp
+    #./Graph.hpp
+    #./Graph.ipp
+    #./GraphBuilder.hpp
+    #./GraphBuilder.ipp
+    #./Image.hpp
+    #./Image.ipp
+    #./Leaf.hpp
+    #./Leaf.ipp
+    #./LeafFile.hpp
+    #./LeafFile.ipp
+    #./Property.cpp
+    #./Property.hpp
+    #./QuillData.hpp
+    #./QuillFile.hpp
+    #./QuillFile.ipp
+    #./Root.hpp
+    #./RootFwd.hpp
+    #./ShareDir.hpp
+    #./ShareDir.ipp
+    #./StdFile.hpp
+    #./StdFile.ipp
+    #./Tag.hpp
+    #./Tag.ipp
+    #./TagFile.hpp
+    #./TagFile.ipp
+    #./Wksp.cpp
+    #./Wksp.hpp
+    #./Workspace.hpp
+    #./Workspace.ipp
+
+    ./bit/Bits.cpp
     ./bit/Context.hpp
-    ./bit/Context.ipp
     ./bit/Copyright.hpp
-    ./bit/Copyright.ipp
+    ./bit/KeyValue.cpp
     ./bit/KeyValue.hpp
-    ./bit/KeyValue.ipp
     ./bit/NKI.hpp
     ./bit/Policy.hpp
-    ./bit/Policy.ipp
 
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp
@@ -84,6 +79,16 @@ set(db_sources
     ./enum/Sorted.hpp
     ./enum/Update.hpp
     ./enum/Vcs.hpp
+
+    ./enum/Enums.cpp
+    
+    ./wksp/QuillData.hpp
+    ./wksp/QuillFile.cpp
+    ./wksp/QuillFile.hpp
+    ./wksp/RootFwd.hpp
+    ./wksp/Root.hpp
+    ./wksp/Workspace.cpp
+    ./wksp/Workspace.hpp
 )
 
 add_library(yqdb SHARED ${db_sources})
@@ -92,7 +97,6 @@ target_compile_definitions(yqdb PRIVATE "-DYQ_BUILD_ROOT=\"${CMAKE_SOURCE_DIR}\"
 
 target_link_libraries(yqdb 
     PUBLIC 
-        yqmeta
         yqutil
 )
 

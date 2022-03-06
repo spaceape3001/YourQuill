@@ -158,9 +158,14 @@ namespace yq {
     using StringViewSet         = Set<std::string_view,IgCase>;
     using StringPair            = std::pair<std::string,std::string>;
     using StringIntPair         = std::pair<std::string,int>;
+
+    using string_set_t          = Set<std::string,IgCase>;
+    using string_view_set_t     = Set<std::string_view,IgCase>;
+
     using string_view_pair_t    = std::pair<std::string_view,std::string_view>;
     using string_view_set_t     = Set<std::string_view,IgCase>;
     using string_view_vector_t  = Vector<std::string_view>;
+    using path_vector_t         = Vector<std::filesystem::path>;
 
         // TODO move these to use std::filesystem::path
     #if defined(__APPLE__) || defined(WIN32)

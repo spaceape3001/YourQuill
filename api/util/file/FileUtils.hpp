@@ -20,6 +20,7 @@ namespace yq {
     //QByteArray      file_bytes(const std::string&);
     //QByteArray      file_bytes(const QString&);
     bool            file_exists(const char*);
+    bool            file_exists(const std::filesystem::path&);
     std::string     file_modified(const char*);
     bool            file_readable(const char*);
     size_t          file_size(const char*);

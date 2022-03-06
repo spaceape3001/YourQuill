@@ -17,22 +17,21 @@
 
 namespace yq {
 
-    namespace wksp { struct Init; }
+    namespace wksp { struct Impl; }
 
     /*! \brief Represents a "root" directory for the workspace, all keys are relative to one of these.
     */
     struct Root {
-        friend struct wksp::Init;
-        using fspath = std::filesystem::path;
+        friend struct wksp::Impl;
         
         EnumMap<DataRole, Access>   access;
-        String                      color;
+        std::string                 color;
         uint64_t                    depth           = 0;    // used by the workspace during load to shuffle into order
-        String                      icon;               // file
+        std::string                 icon;               // file
         uint64_t                    id              = 0;
         bool                        is_template     = false;
-        String                      key;
-        String                      name;
+        std::string                 key;
+        std::string                 name;
         const std::filesystem::path path;
         Flag<Vcs>                   vcs;
         
@@ -50,20 +49,6 @@ namespace yq {
         bool                update();
 
 
-        bool                exists(const char*) const;
-        bool                exists(const QString&) const;
-        bool                exists(const QByteArray&) const;
-        bool                exists(const std::string&) const;
-        bool                exists(const std::string_view&) const;
-        bool                exists(const std::filesystem::path&) const;
-        
-        bool                make_path(const char*) const;
-        bool                make_path(const QByteArray&) const;
-        bool                make_path(const QString&) const;
-        bool                make_path(const std::string&) const;
-        bool                make_path(const std::string_view&) const;
-        bool                make_path(const std::filesystem::path&) const;
-
         //  From the quill-doc (relative)
         //const String&       def_icon_file() const { return m_icon; }
         
@@ -71,10 +56,6 @@ namespace yq {
         bool                is_writable(DataRole) const;
         bool                is_write_first(DataRole) const;
 
-        std::filesystem::path   resolve(const char*     ) const;
-        std::filesystem::path   resolve(const QByteArray& ) const;
-        std::filesystem::path   resolve(const QString& ) const;
-        std::filesystem::path   resolve(const std::string& ) const;
         std::filesystem::path   resolve(const std::string_view& ) const;
         std::filesystem::path   resolve(const std::filesystem::path&) const;
         

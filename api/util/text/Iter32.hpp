@@ -26,7 +26,7 @@ namespace yq {
         char32_t  next()
         {
             char32_t ret = 0;
-            if((m_data < m_end) && !m_error){
+            if(m_data && (m_data < m_end) && !m_error){
                 int len = std::mbrtoc32(&ret, m_data, m_end-m_data, &m_state);
                 if(len > 0){
                     m_data     += len;
@@ -56,7 +56,7 @@ namespace yq {
             m_state{},
             m_error(false)
         {
-            assert(z);
+            assert(z || !n);
         }
         
     private:

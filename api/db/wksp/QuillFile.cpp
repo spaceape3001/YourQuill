@@ -25,8 +25,8 @@ namespace yq {
         QuillData::Root    parse_root(const KeyValue& a)
         {
             QuillData::Root ret;
-            ret.path    = a.data;
-            ret.key     = a.value({ "key", "k" });
+            ret.path    = trimmed(a.data);
+            ret.key     = trimmed(a.value({ "key", "k" }));
             ret.color   = a.value("color");
             ret.vcs     = Vcs(a.value("vcs"));
             ret.name    = a.value("name");

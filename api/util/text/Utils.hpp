@@ -1414,6 +1414,8 @@ namespace yq {
         \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
     */
     std::string_view  to_string(int64_t);
+
+
     
     /*! Converts the string view to string string view
     
@@ -1473,6 +1475,8 @@ namespace yq {
             ret << to_string(i);
         return ret;
     }
+    
+    std::string     to_time_string(std::time_t, const char* fmt="yyyy-MM-dd HH:mm:ss");
 
     /*! \brief Decodes the given string into an unsigned integer
     
@@ -1705,6 +1709,14 @@ namespace yq {
             for(i = s; (j = strnchr(i, end-i, ch)); i = j+1)
                 pred(std::string_view(i, j-i));
             pred(std::string_view(i, end-i));
+        }
+    }
+
+    template <typename Pred>
+    void            vsplit(const char* s, char ch, Pred pred)
+    {
+        if(s){
+            vsplit(s, strlen(s), ch, pred);
         }
     }
 

@@ -41,12 +41,9 @@ namespace yq {
         
         bool                is_state() const;
         bool                is_static() const;
-        
-    protected:
+
+            // best know what you're doing....
         PropertyInfo(const char* zName, const TypeInfo&, Meta*, options_t opts=0);
-        
-        virtual Variant     get_impl(const void*) const = 0;
-        virtual bool        set_impl(void*, const void*) const { return false; }
         
     private:
         const PropSetter*   m_setter    = nullptr;
