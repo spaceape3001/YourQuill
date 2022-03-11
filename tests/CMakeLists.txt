@@ -25,11 +25,11 @@ macro(utiltest name)
 endmacro()
 
 #add_subdirectory(attr)
-add_subdirectory(char8)
 #add_subdirectory(db)
 #add_subdirectory(fraction)
-add_subdirectory(metavalue)
-add_subdirectory(string)
 add_subdirectory(variant)
-add_subdirectory(workspace)
-add_subdirectory(xml)
+
+
+utiltest(strings)
+
+

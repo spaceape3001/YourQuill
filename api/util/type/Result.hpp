@@ -24,6 +24,7 @@ namespace yq {
         //constexpr Result(bool f, T&&v) : value(std::move(v)), good(f) {}
         
         operator const T& () const { return value; }
+        bool operator==(const Result&) const noexcept = default;
         
         template <typename U>
         Result<U>       cast_to() const
@@ -32,5 +33,6 @@ namespace yq {
         }
         
         constexpr operator std::pair<T,bool>() const { return std::pair<T,bool>(value, good); }
+        
     };
 }

@@ -4,6 +4,10 @@
 //
 //  (c) Copyright 2020, licenced under GPL-v3.
 //
+//
+//  Simple utility for asking a target for its data, printing it out to standard
+//  output.
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <curl/curl.h>
@@ -23,8 +27,8 @@ size_t  curl_write(char* ptr, size_t size, size_t nmbem, void*)
 int main(int argc, char*argv[])
 {
     if(argc<2){
-        cerr << "Usage: ask (url)\n";
-        return -1;
+        cout << "Usage: ask (url)\n";
+        return 0;
     }
     
     CURL* c = curl_easy_init();

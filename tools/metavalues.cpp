@@ -2,6 +2,8 @@
 //
 //  YOUR QUILL
 //
+//  Utility for printing out the available metavalue types
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
@@ -11,7 +13,6 @@
 #include <util/text/Utils.hpp>
 #include <util/type/Variant.hpp>
 #include <util/collection/Vector.hpp>
-//#include "math/MathFwd.hpp"
 
 using namespace yq;
 

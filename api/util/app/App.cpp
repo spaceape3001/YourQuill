@@ -1,8 +1,12 @@
 #include "CmdArgs.hpp"
 #include "DelayInit.hpp"
+#include "PidFile.hpp"
+
+#include <util/file/FileUtils.hpp>
 
 #include <atomic>
 #include <span>
+#include <fstream>
 
 namespace yq {
 
@@ -97,5 +101,31 @@ namespace yq {
     {
         static std::atomic<DelayInit*>   ptr(nullptr);
         return ptr.exchange(n);
+    }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  PID FILE
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    PidFile::PidFile(const std::filesystem::path& f, bool autoMake)
+    {
+        m_file  = f;
+        m_first = !file_exists(m_file.c_str());
+        if(m_first && autoMake)
+            make();
+        
+    }
+
+    void     PidFile::make()
+    {
+        std::ofstream   p(m_file);
+        p << getpid();
+    }
+
+    PidFile::~PidFile()
+    {
+        if(m_first){
+            remove(m_file.c_str());
+        }
     }
 }

@@ -30,6 +30,7 @@ set(util_sources
     ./app/App.cpp
     ./app/CmdArgs.hpp
     ./app/DelayInit.hpp
+    ./app/PidFile.hpp
 
     ./c++/C++.cpp
     ./c++/NaN.hpp
@@ -79,6 +80,8 @@ set(util_sources
     #./net/Curl.hpp
     ./net/Http.cpp
     ./net/Http.hpp
+    #./net/Net.cpp
+    #./net/Socket.hpp
     #./net/Url.cpp
     #./net/Url.hpp
 

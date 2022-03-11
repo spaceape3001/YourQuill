@@ -2,6 +2,8 @@
 //
 //  YOUR QUILL
 //
+//  Simple utilitiy for seeing how the XML file is being intpretted by rapidxml
+//
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "rapidxml.hpp"
@@ -70,8 +72,8 @@ void    write(const XN*xn, int depth=0)
 int main(int argc, char*argv[])
 {
     if(argc < 2){
-        std::cerr << "Insufficient arguments!\n";
-        return -1;
+        std::cout << "Usage: xmlread (file)\n";
+        return 0;
     }
     
     XF          theFile(argv[1]);

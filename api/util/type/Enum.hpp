@@ -208,16 +208,16 @@ namespace yq {
         //bool        operator==(typename E::enum_t rhs) const { return E::m_value == rhs; }
         //bool        operator!=(typename E::enum_t rhs) const { return E::m_value != rhs; }
         
-        bool        operator==(const EnumImpl& rhs) const { return E::m_value == rhs.E::m_value; }
-        bool        operator!=(const EnumImpl& rhs) const { return E::m_value != rhs.E::m_value; }
-        bool        operator<(const EnumImpl& rhs) const { return E::m_value < rhs.E::m_value; }
+        constexpr bool        operator==(const EnumImpl& rhs) const noexcept { return E::m_value == rhs.E::m_value; }
+        constexpr bool        operator!=(const EnumImpl& rhs) const noexcept { return E::m_value != rhs.E::m_value; }
+        constexpr bool        operator<(const EnumImpl& rhs) const noexcept { return E::m_value < rhs.E::m_value; }
 
-        friend bool operator==(typename E::enum_t lhs, const EnumImpl& rhs)
+        constexpr friend bool operator==(typename E::enum_t lhs, const EnumImpl& rhs) noexcept 
         {
            return lhs == rhs.E::m_value;
         }
 
-        friend bool operator!=(typename E::enum_t lhs, const EnumImpl& rhs)
+        constexpr friend bool operator!=(typename E::enum_t lhs, const EnumImpl& rhs) noexcept 
         {
             return lhs != rhs.E::m_value;
         }
