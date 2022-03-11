@@ -27,9 +27,7 @@ endmacro()
 #add_subdirectory(attr)
 #add_subdirectory(db)
 #add_subdirectory(fraction)
-add_subdirectory(variant)
-
 
 utiltest(strings)
-
+utiltest(variants)
 

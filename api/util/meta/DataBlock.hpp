@@ -16,6 +16,7 @@ namespace yq {
         uint64_t    Unsigned;       //  size assurance
         int64_t     Integer;        //  size assurance
         void*       Pointer;        //  pointer if it's big
+        char*       String;         //  pointer to string (for debugging if it's a string)
 
         template <typename T>
         void        ctorDefault()

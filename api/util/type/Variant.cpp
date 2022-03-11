@@ -59,52 +59,52 @@ namespace yq {
     }
     
 
-    Variant::Variant(char ch)
+    Variant::Variant(char ch) : m_type(nullptr)
     {
         set<std::string>(to_string(ch));
     }
     
-    Variant::Variant(char8_t ch)
+    Variant::Variant(char8_t ch) : m_type(nullptr)
     {
         set<std::string>(to_string(ch));
     }
     
-    Variant::Variant(char32_t ch)
+    Variant::Variant(char32_t ch) : m_type(nullptr)
     {
         set<std::string>(copy(to_string(ch)));
     }
     
-    Variant::Variant(const char*z)
+    Variant::Variant(const char*z) : m_type(nullptr)
     {
         set<std::string>(z);
     }
     
-    Variant::Variant(char*z)
+    Variant::Variant(char*z) : m_type(nullptr)
     {
         set<std::string>(z);
     }
 
-    Variant::Variant(const char8_t*z)
+    Variant::Variant(const char8_t*z) : m_type(nullptr)
     {
         set<std::string>(copy(to_string(z)));
     }
     
-    Variant::Variant(const char32_t*z)
+    Variant::Variant(const char32_t*z) : m_type(nullptr)
     {
         set<std::string>(to_string(z));
     }
     
-    Variant::Variant(const std::u8string&z)
+    Variant::Variant(const std::u8string&z) : m_type(nullptr)
     {
         set<std::string>(copy(to_string(z)));
     }
     
-    Variant::Variant(const std::u32string&z)
+    Variant::Variant(const std::u32string&z) : m_type(nullptr)
     {
         set<std::string>(to_string(z));
     }
     
-    Variant::Variant(const std::wstring&z)
+    Variant::Variant(const std::wstring&z) : m_type(nullptr)
     {
         set<std::string>(to_string(z));
     }

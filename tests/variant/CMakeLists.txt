@@ -1,8 +1,0 @@
-coretest(variant_empty)
-mt_core(variant_string)
-add_test(NAME variant_string_foo COMMAND test_variant_string foo)
-add_test(NAME variant_string_foobar COMMAND test_variant_string foobar)
-mt_core(variant_io_parse_int64)
-add_test(NAME variant_io_parse_int64_zero COMMAND test_variant_io_parse_int64 0)
-add_test(NAME variant_io_parse_int64_42 COMMAND test_variant_io_parse_int64 42)
-
