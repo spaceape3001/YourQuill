@@ -4,3 +4,6 @@
 [submodule "3rd/ut"]
 	path = 3rd/ut
 	url = https://github.com/boost-ext/ut.git
+[submodule "3rd/jsoncpp"]
+	path = 3rd/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp.git
