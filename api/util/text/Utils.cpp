@@ -555,6 +555,11 @@ namespace yq {
         return is_less( compare_igCase(a,b));
     }
 
+    bool    is_newline(char ch)
+    {
+        return (ch == '\r') || (ch == '\n');
+    }
+
     bool  is_similar(const std::string_view&a, const std::string_view&b)
     {
         if(a.size() != b.size())
@@ -1060,6 +1065,11 @@ namespace yq {
         return iter32_find(s, n, [&](char32_t c) -> bool {
             return ch == c;
         });
+    }
+
+    const char*  strnchr(const std::string_view&s, char ch)
+    {
+        return strnchr(s.data(), s.size(), ch);
     }
 
     const char*  strnchr_igCase(const char*s, size_t n, char ch)

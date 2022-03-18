@@ -73,7 +73,7 @@ namespace yq {
                 } else {
                     auto ir = to_integer(v);
                     assert(ir.good);                    // shouldn't ever trigger, as it was compilable code
-                    val  = to_integer(v);
+                    val  = ir.value;
                 }
             }
 

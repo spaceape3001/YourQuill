@@ -24,10 +24,22 @@ macro(utiltest name)
     add_test(NAME ${name} COMMAND test_${name} ${ARGN})
 endmacro()
 
+macro(mt_io name)
+    add_executable(test_${name} ${name}.cpp)
+    target_link_libraries(test_${name} PRIVATE yqutil yqio ${TBB_LIBRARIES})
+endmacro()
+macro(iotest name)
+    mt_io(${name})
+    add_test(NAME ${name} COMMAND test_${name} ${ARGN})
+endmacro()
+
 #add_subdirectory(attr)
 #add_subdirectory(db)
 #add_subdirectory(fraction)
 
 utiltest(strings)
 utiltest(variants)
+
+iotest(http)
+
 

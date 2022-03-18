@@ -433,6 +433,10 @@ namespace yq {
     {
         return ::islower(ch);
     }
+    
+    /*! \brief Tests for new line character
+    */
+    bool         is_newline(char);
 
     /*! \brief Tests for printable character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -945,6 +949,8 @@ namespace yq {
         \return pointer to character if found, NULL if not.
     */
     const char*  strnchr(const char*s, size_t n, char ch);
+
+    const char*  strnchr(const std::string_view&, char ch);
 
     /*! \brief Finds the next character 
     
