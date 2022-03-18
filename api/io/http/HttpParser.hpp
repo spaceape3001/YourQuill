@@ -2,6 +2,8 @@
 #include "HttpRequest.hpp"
 #include "HttpData.hpp"
 
+#include <util/preamble.hpp>
+
 namespace yq {
 
     struct MethodUriVersion {
@@ -28,7 +30,7 @@ namespace yq {
     
     HttpHeaderView          parse_header_line(const std::string_view&);
     
-    UriView                 parse_uri(const std::string_view&);
+    Result<UriView>         parse_uri(const std::string_view&);
     
 
 #if 0    

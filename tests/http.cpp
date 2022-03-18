@@ -22,6 +22,23 @@ ut::suite tests = []{
     "headers"_test = [](){
         expect( HttpHeaderView{ "User-Agent", "Dummy" } == parse_header_line("  User-Agent :  Dummy "));
     };
+    
+    "uri_parse"_test = [](){
+    
+        expect( UriView{ "http", "", "", "www.google.com",  "/test.php", "", "", 0 } == parse_uri("http://www.google.com/test.php"));
+        expect( UriView{ "ftp", "nobody", "",  "www.google.com", "/test.php", "", "", 0 } == parse_uri("ftp://nobody@www.google.com/test.php"));
+        expect( UriView{ "ftp", "nobody", "secret",  "www.google.com", "/test.php", "foobar=true", "hello", 8080 } == parse_uri("ftp://nobody:secret@www.google.com:8080/test.php?foobar=true#hello"));
+        expect( UriView{ "https", "", "",  "www.google.com", "/test.php", "foobar=true", "hello", 8080 } == parse_uri("https://www.google.com:8080/test.php?foobar=true#hello"));
+        expect( UriView{ "file", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == parse_uri("file:///test.php?foobar=true#hello"));
+        expect( UriView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == parse_uri("///test.php?foobar=true#hello"));
+        expect( UriView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == parse_uri("/test.php?foobar=true#hello"));
+        expect( UriView{ "", "", "",  "", "./test.php", "foobar=true", "hello", 0 } == parse_uri("./test.php?foobar=true#hello"));
+    };
+    
+    "uri_bad"_test = [](){
+        expect( false == parse_uri("foobar.txt").good );
+        expect( false == parse_uri("http[]//hello/foobar.txt").good );
+    };
 };
 
 

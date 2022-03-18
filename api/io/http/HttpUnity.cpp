@@ -103,11 +103,239 @@ namespace yq {
         return ret;
     }
     
-    UriView                 parse_uri(const std::string_view& s)
+    Result<UriView>                 parse_uri(const std::string_view& s)
     {
+        //  URI = scheme ":" ["//" authority] path ["?" query] ["#" fragment]
+        //  authority = [userinfo "@"] host [":" port]
+        
+        if(s.empty())
+            return {};
+
+        enum Mode {
+            Start       = 0,
+            Scheme,
+            Colon,
+            Slash1,
+            Slash2,
+            UserOrHost,
+            PwdOrPort,
+            Host1,
+            Host2,
+            SqOpen,
+            IPv6,
+            SqClose,
+            Port,
+            PSlash,
+            Path,
+            Query,
+            Fragment,
+            Error
+        };
+        
         UriView     ret;
-            //  TODO
-        return ret;
+        
+        const char* z   = nullptr;
+        const char* str = nullptr;
+        Mode        mode    = Start;
+        std::string_view    userhost;
+        
+        auto sstring = [&](int n=0) -> std::string_view {
+            if(str && z){
+                std::string_view    ret(str, z-str+n);
+                str     = nullptr;
+                return ret;
+            } else
+                return std::string_view();
+        };
+        
+        for(z=s.begin();z!=s.end();++z){
+            switch(mode){
+            case Start:
+                if(*z == '.'){
+                    mode    = Path;
+                    str     = z;
+                } else if(*z == '/'){
+                    mode    = Slash1;
+                } else if(is_alpha(*z)){
+                    mode    = Scheme;
+                    str     = z;
+                } else 
+                    mode    = Error;
+                break;
+            case Scheme:
+                if(*z == ':'){
+                    ret.scheme  = sstring();
+                    mode    = Colon;
+                } else if(!(is_alnum(*z) || (*z == '+') || (*z == '.') || (*z == '-')))
+                    mode    = Error;
+                break;
+            case Colon:
+                if(*z == '/'){
+                    mode    = Slash1;
+                } else {
+                    str     = z;
+                    mode    = Path;
+                }
+                break;
+            case Slash1:
+                if(*z == '/'){
+                    mode    = Slash2;
+                } else {
+                    str     = z-1;
+                    mode    = Path;
+                }
+                break;
+            case Slash2:
+                if(*z == '/'){
+                    mode    = Path;
+                    str     = z;
+                } else if(*z == '['){
+                    mode    = SqOpen;
+                    str     = z;
+                } else if(*z == '@'){
+                    mode    = Error;
+                } else if(*z == ':'){
+                    mode    = Error;
+                } else {
+                    mode    = UserOrHost;
+                    str     = z;
+                }
+                break;
+            case UserOrHost:
+                if(*z == '@'){
+                    ret.user    = sstring();
+                    mode        = Host1;
+                } else if(*z == ':'){
+                    mode        = PwdOrPort;
+                    userhost    = sstring();
+                    str         = z+1;
+                } else if(*z == '/'){
+                    //  it's a host....
+                    ret.host    = sstring();
+                    mode        = Path;
+                    str         = z;
+                }
+                break;
+            case PwdOrPort:
+                if(*z == '@'){
+                    // it was a user...  (with password)
+                    ret.user    = userhost;
+                    ret.pwd     = sstring();
+                    mode        = Host1;
+                } else if(*z == '/'){
+                    // it was a host:port
+                    ret.host    = userhost;
+                    ret.port    = to_integer(sstring()).value;
+                    mode        = Path;
+                    str         = z;
+                }
+                break;
+            case Host1:
+                str         = z;
+                if(*z == '['){
+                    mode    = SqOpen;
+                } else if(*z == ':'){
+                    mode    = Error;
+                } else {
+                    mode    = Host2;
+                }
+                break;
+            case Host2:
+                if(*z == ':'){
+                    ret.host    = sstring();
+                    mode        = Port;
+                    str         = z + 1;
+                } else if(*z == '/'){
+                    ret.host    = sstring();
+                    mode        = Path;
+                    str         = z;
+                } 
+                break;
+            case SqOpen:
+                if( *z == ']'){
+                    mode        = Error;
+                } else 
+                    mode        = IPv6;
+                break;
+            case IPv6:
+                if(*z == ']')
+                    mode         = SqClose;
+                break;
+            case SqClose:
+                ret.host        = sstring(1);
+                if(*z == ':'){
+                    mode        = Port;
+                    str         = z+1;
+                } else if(*z == '/'){
+                    mode        = Path;
+                    str         = z;
+                } else
+                    mode        = Error;
+                break;
+            case Port:
+                if(*z == '/'){
+                    ret.port    = to_integer(sstring()).value;
+                    mode        = Path;
+                    str         = z;
+                } else if(!is_digit(*z)){
+                    mode        = Error;
+                }
+                break;
+            case Path:
+                if(*z == '?'){
+                    ret.path    = sstring();
+                    mode        = Query;
+                    str         = z+1;
+                } else if(*z == '#'){
+                    ret.path    = sstring();
+                    mode        = Fragment;
+                    str         = z+1;
+                }
+                break;
+            case Query:
+                if(*z == '#'){
+                    ret.query  = sstring();
+                    mode       = Fragment;
+                    str         = z+1;
+                }
+                break;
+            default:
+                break;
+            }
+            
+            if(mode == Error)
+                return { ret, false};
+        }
+        
+        switch(mode){
+        case Scheme:
+        case Colon:
+        case Slash1:
+        case Slash2:
+            mode        = Error;
+            break;
+        case UserOrHost:
+            ret.host    = sstring();
+            break;
+        case PwdOrPort:
+            ret.host    = userhost;
+            ret.port    = to_integer(sstring()).value;
+            break;
+        case Path:
+            ret.path    = sstring();
+            break;
+        case Query:
+            ret.query   = sstring();
+            break;
+        case Fragment:
+            ret.fragment    = sstring();
+            break;
+        default:
+            break;
+        }
+        
+        
+        return { ret, mode != Error };
     }
     
 

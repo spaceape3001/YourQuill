@@ -11,23 +11,22 @@ namespace yq {
         bool    operator==(const HttpHeaderView&) const = default;
     };
 
-    struct UriBits {
-        std::string_view            scheme, host, user, pass, path, query, port, fragment;
-    };
-
     template <typename T>
     struct BasicUri {
         T       scheme;
-        T       host;
-        T       path;
         T       user;
         T       pwd;
+        T       host;
+        T       path;
         T       query;
         T       fragment;
         int     port    = 0;
+        
+        bool    operator==(const BasicUri&) const = default;
     };
 
     using UriView   = BasicUri<std::string_view>;
+    using Uri       = BasicUri<std::string>;
 
     struct HttpRequest {
         std::string_view            method, protocol;
