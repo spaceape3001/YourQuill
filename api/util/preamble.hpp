@@ -51,7 +51,6 @@ namespace yq {
     };
     
         //  STRUCTS
-    struct Url;
 
         // TEMPLATE CLASS (BY CLASS)
     template <class> class EnumImpl;
@@ -104,7 +103,6 @@ namespace yq {
     using uint128_r         = Result<uint128_t>;
     using unsigned_r        = Result<unsigned int>;
     using ushort_r          = Result<unsigned short>;
-    using url_r             = Result<Url>;
     using u32string_r       = Result<std::u32string>;
     using variant_r         = Result<Variant>;
     using wstring_r         = Result<std::wstring>;
@@ -187,6 +185,13 @@ namespace yq {
 
     //!  The build's share directory
     const char*     share_directory();
+    
+    template <typename T> struct BasicUrl;
+    using UrlView       = BasicUrl<std::string_view>;
+    using Url           = BasicUrl<std::string>;
+    
+    using url_r         = Result<Url>;
+    using url_view_r    = Result<UrlView>;
 }
 
 

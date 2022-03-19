@@ -1,7 +1,7 @@
 #pragma once
 #include <util/net/Http.hpp>
+#include <util/net/VersionSpec.hpp>
 #include <util/stream/Stream.hpp>
-#include "VersionSpec.hpp"
 
 namespace yq {
 

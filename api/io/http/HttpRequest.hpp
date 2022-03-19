@@ -2,42 +2,27 @@
 #include <asio/ip/tcp.hpp>
 #include <span>
 #include <util/net/Http.hpp>
+#include <util/net/Url.hpp>
+#include <util/net/VersionSpec.hpp>
 
 #include "HttpData.hpp"
 #include "HttpHeader.hpp"
-#include "VersionSpec.hpp"
 
 namespace yq {
 
     class HttpConnection;
 
 
-    template <typename T>
-    struct BasicUri {
-        T       scheme;
-        T       user;
-        T       pwd;
-        T       host;
-        T       path;
-        T       query;
-        T       fragment;
-        int     port    = 0;
-        
-        bool    operator==(const BasicUri&) const = default;
-    };
-
-    using UriView   = BasicUri<std::string_view>;
-    using Uri       = BasicUri<std::string>;
-
     class HttpRequest : public RefCount {
         friend class HttpConnection;
     public:
     
         HttpOp                              method() const { return m_method; }
-        const UriView&                      uri();
+        const UrlView&                      url() const { return m_url; }
         VersionSpec                         version() const { return m_version; }
         const asio::ip::address&            remote() const { return m_remote; }
         const std::vector<std::span<char>>& body() const { return m_body; }
+        const std::vector<HttpHeaderView>&  headers() const { return m_headers; }
         
     private:
         size_t                          m_content_length    = 0;
@@ -45,7 +30,7 @@ namespace yq {
         HttpOp                          m_method;
         int                             m_port  = 0;
         VersionSpec                     m_version;
-        UriView                         m_uri;
+        UrlView                         m_url;
         std::vector<HttpHeaderView>     m_headers;
         std::vector<HttpDataPtr>        m_buffers;
         std::vector<std::span<char>>    m_body;

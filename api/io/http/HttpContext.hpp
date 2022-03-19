@@ -2,9 +2,9 @@
 
 #include <functional>
 #include <asio.hpp>
-#include "VersionSpec.hpp"
 #include <util/collection/EnumMap.hpp>
 #include <util/net/Http.hpp>
+#include <util/net/VersionSpec.hpp>
 
 namespace yq {
     struct HttpRequest;

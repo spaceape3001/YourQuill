@@ -24,21 +24,6 @@ namespace yq {
             return asio::buffer(dp->data(), dp->count());
         }
     }
-
-    Stream& operator<<(Stream&s, const VersionSpec&v)
-    {
-        return s << v.protocol << '/' << v.major << '.' << v.minor;
-    }
-    
-    log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&s, const VersionSpec&v)
-    {
-        return s << v.protocol << '/' << v.major << '.' << v.minor;
-    }
-
-    bool                    match(const VersionSpec& a, const VersionSpec& b)
-    {
-        return is_similar(a.protocol, b.protocol) && (a.major == b.major) && (a.minor == b.minor);
-    }
     
     HttpHeaderView          parse_header_line(const std::string_view&s)
     {
@@ -51,87 +36,7 @@ namespace yq {
         return ret;
     }
 
-    Result<UriView>         parse_hostport(const std::string_view&input)
-    {
-        if(input.empty())
-            return {};
 
-        enum Mode {
-            Host1       = 0,
-            Host2,
-            IPv6,
-            SqClose,
-            Port
-        };
-        
-        UriView     ret;
-        Mode        mode    = Host1;
-        const char* z       = nullptr;
-        const char* str     = nullptr;
-        
-        auto sstring = [&]() -> std::string_view {
-            if(str && z){
-                std::string_view    ret(str, z-str);
-                str     = nullptr;
-                return ret;
-            } else
-                return std::string_view();
-        };
-        
-        for(z = input.begin(); z<input.end(); ++z){
-            switch(mode){
-            case Host1:
-                str     = z;
-                if(*z == '[')
-                    mode    = IPv6;
-                else
-                    mode    = Host2;
-                break;
-            case Host2:
-                if(*z == ':'){
-                    ret.host    = sstring();
-                    mode    = Port;
-                }
-                break;
-            case IPv6:
-                if(*z == ']')
-                    mode     = SqClose;
-                break;
-            case SqClose:
-                if(*z == ':'){
-                    ret.host    = sstring();
-                    mode        = Port;
-                }
-                break;
-            case Port:
-                if(!str)
-                    str = z;
-                break;
-            }
-        }
-        
-        bool        good    = true;
-        
-        switch(mode){
-        case Host2:
-        case SqClose:
-            ret.host        = sstring();
-            break;
-        case Port:
-            {
-                auto    r   = to_integer(sstring());
-                ret.port    = r.value;
-                good        = good && r.good;
-            }
-            break;
-        default:
-            good    = false;
-            break;
-        }
-        
-        return { ret, good };
-        
-    }
 
     MethodUriVersion        parse_method_uri(const std::string_view& input)
     {
@@ -211,298 +116,6 @@ namespace yq {
         return ret;
     }
     
-    Result<UriView>                 parse_uri(const std::string_view& s)
-    {
-        //  URI = scheme ":" ["//" authority] path ["?" query] ["#" fragment]
-        //  authority = [userinfo "@"] host [":" port]
-        
-        if(s.empty())
-            return {};
-            
-        if(s == "/")
-            return { UriView{ "", "", "", "", "/", "", "", 0 }, true };
-
-        enum Mode {
-            Start       = 0,
-            Scheme,
-            Colon,
-            Slash1,
-            Slash2,
-            UserOrHost,
-            PwdOrPort,
-            Host1,
-            Host2,
-            SqOpen,
-            IPv6,
-            SqClose,
-            Port,
-            PSlash,
-            Path,
-            Query,
-            Fragment,
-            Error
-        };
-        
-        UriView     ret;
-        
-        const char* z   = nullptr;
-        const char* str = nullptr;
-        Mode        mode    = Start;
-        std::string_view    userhost;
-        
-        auto sstring = [&](int n=0) -> std::string_view {
-            if(str && z){
-                std::string_view    ret(str, z-str+n);
-                str     = nullptr;
-                return ret;
-            } else
-                return std::string_view();
-        };
-        
-        for(z=s.begin();z!=s.end();++z){
-            switch(mode){
-            case Start:
-                if(*z == '.'){
-                    mode    = Path;
-                    str     = z;
-                } else if(*z == '/'){
-                    mode    = Slash1;
-                } else if(is_alpha(*z)){
-                    mode    = Scheme;
-                    str     = z;
-                } else 
-                    mode    = Error;
-                break;
-            case Scheme:
-                if(*z == ':'){
-                    ret.scheme  = sstring();
-                    mode    = Colon;
-                } else if(!(is_alnum(*z) || (*z == '+') || (*z == '.') || (*z == '-')))
-                    mode    = Error;
-                break;
-            case Colon:
-                if(*z == '/'){
-                    mode    = Slash1;
-                } else {
-                    str     = z;
-                    mode    = Path;
-                }
-                break;
-            case Slash1:
-                if(*z == '/'){
-                    mode    = Slash2;
-                } else {
-                    str     = z-1;
-                    mode    = Path;
-                }
-                break;
-            case Slash2:
-                if(*z == '/'){
-                    mode    = Path;
-                    str     = z;
-                } else if(*z == '['){
-                    mode    = SqOpen;
-                    str     = z;
-                } else if(*z == '@'){
-                    mode    = Error;
-                } else if(*z == ':'){
-                    mode    = Error;
-                } else {
-                    mode    = UserOrHost;
-                    str     = z;
-                }
-                break;
-            case UserOrHost:
-                if(*z == '@'){
-                    ret.user    = sstring();
-                    mode        = Host1;
-                } else if(*z == ':'){
-                    mode        = PwdOrPort;
-                    userhost    = sstring();
-                    str         = z+1;
-                } else if(*z == '/'){
-                    //  it's a host....
-                    ret.host    = sstring();
-                    mode        = Path;
-                    str         = z;
-                }
-                break;
-            case PwdOrPort:
-                if(*z == '@'){
-                    // it was a user...  (with password)
-                    ret.user    = userhost;
-                    ret.pwd     = sstring();
-                    mode        = Host1;
-                } else if(*z == '/'){
-                    // it was a host:port
-                    ret.host    = userhost;
-                    ret.port    = to_integer(sstring()).value;
-                    mode        = Path;
-                    str         = z;
-                }
-                break;
-            case Host1:
-                str         = z;
-                if(*z == '['){
-                    mode    = SqOpen;
-                } else if(*z == ':'){
-                    mode    = Error;
-                } else {
-                    mode    = Host2;
-                }
-                break;
-            case Host2:
-                if(*z == ':'){
-                    ret.host    = sstring();
-                    mode        = Port;
-                    str         = z + 1;
-                } else if(*z == '/'){
-                    ret.host    = sstring();
-                    mode        = Path;
-                    str         = z;
-                } 
-                break;
-            case SqOpen:
-                if( *z == ']'){
-                    mode        = Error;
-                } else 
-                    mode        = IPv6;
-                break;
-            case IPv6:
-                if(*z == ']')
-                    mode         = SqClose;
-                break;
-            case SqClose:
-                ret.host        = sstring(1);
-                if(*z == ':'){
-                    mode        = Port;
-                    str         = z+1;
-                } else if(*z == '/'){
-                    mode        = Path;
-                    str         = z;
-                } else
-                    mode        = Error;
-                break;
-            case Port:
-                if(*z == '/'){
-                    ret.port    = to_integer(sstring()).value;
-                    mode        = Path;
-                    str         = z;
-                } else if(!is_digit(*z)){
-                    mode        = Error;
-                }
-                break;
-            case Path:
-                if(*z == '?'){
-                    ret.path    = sstring();
-                    mode        = Query;
-                    str         = z+1;
-                } else if(*z == '#'){
-                    ret.path    = sstring();
-                    mode        = Fragment;
-                    str         = z+1;
-                }
-                break;
-            case Query:
-                if(*z == '#'){
-                    ret.query  = sstring();
-                    mode       = Fragment;
-                    str         = z+1;
-                }
-                break;
-            default:
-                break;
-            }
-            
-            if(mode == Error)
-                return { ret, false};
-        }
-        
-        switch(mode){
-        case Scheme:
-        case Colon:
-        case Slash1:
-        case Slash2:
-            mode        = Error;
-            break;
-        case UserOrHost:
-            ret.host    = sstring();
-            break;
-        case PwdOrPort:
-            ret.host    = userhost;
-            ret.port    = to_integer(sstring()).value;
-            break;
-        case Path:
-            ret.path    = sstring();
-            break;
-        case Query:
-            ret.query   = sstring();
-            break;
-        case Fragment:
-            ret.fragment    = sstring();
-            break;
-        default:
-            break;
-        }
-        
-        
-        return { ret, mode != Error };
-    }
-    
-
-
-    VersionSpec  parse_version(const std::string_view& s)
-    {
-        VersionSpec ret;
-        
-        enum Mode {
-            Major = 0,
-            Dot,
-            Minor,
-            Done
-        };
-        
-        const char* y   = strnchr(s, '/');
-        if(!y){
-            ret.protocol    = s;
-        } else {
-            ret.protocol    = std::string_view(s.data(), y);
-            ++y;
-            Mode        mode    = Major;
-            for(const char* z = y; z<s.end(); ++z){
-                char ch = *z;
-                switch(mode){
-                case Major:
-                    if(is_digit(ch)){
-                        ret.major = ret.major + (uint16_t) (ch - '0');
-                    } else if(ch == '.'){
-                        mode    = Dot;
-                    } else
-                        mode    = Done;
-                    break;
-                case Dot:
-                    if(!is_digit(ch)){
-                        mode    = Done;
-                        break;
-                    } 
-                    mode    = Minor;
-                    ret.minor = (uint16_t) (ch - '0');
-                    break;
-                case Minor:
-                    if(!is_digit(ch)){
-                        mode    = Done;
-                    } else {
-                        ret.minor = ret.minor + (uint16_t) (ch - '0');
-                    }
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-        
-        return ret;
-    }
 
     
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -540,16 +153,16 @@ namespace yq {
             return;
         }
     
-        if(rq->m_uri.host.empty() && !rq->m_host.empty())
-            rq->m_uri.host    = rq->m_host;
-        if(!rq->m_uri.port && rq->m_port)
-            rq->m_uri.port    = rq->m_port;
+        if(rq->m_url.host.empty() && !rq->m_host.empty())
+            rq->m_url.host    = rq->m_host;
+        if(!rq->m_url.port && rq->m_port)
+            rq->m_url.port    = rq->m_port;
         
-        
+    
         if(rq->m_version == VersionSpec{})
             rq->m_version   = http09();
             
-        if(match(rq->m_version, http11()) && rq->m_uri.host.empty()){
+        if(is_similar(rq->m_version, http11()) && rq->m_url.host.empty()){
             dispatch(HttpStatus::BadRequest);
             return ;
         }
@@ -662,15 +275,11 @@ namespace yq {
 
     void        HttpConnection::rxBody()
     {
-    yInfo() << "rxBody";
-        
         dispatch(HttpStatus::LoopDetected);
     }
 
     void        HttpConnection::rxDispatch()
     {
-    yInfo() << "rxDispatch";
-
         if(!m_request){
             dispatch(HttpStatus::InternalError);
             m_rxMode    = RxError;
@@ -680,7 +289,7 @@ namespace yq {
         VersionSpec as = limit(m_request->m_version);
         dispatch(m_request);
         m_request   = nullptr;
-        if(match(as, http11())){    
+        if(is_similar(as, http11())){    
             auto old    = m_buffer;
             m_buffer    = HttpData::make();
             if(m_next < old->count())
@@ -714,11 +323,8 @@ namespace yq {
         
         m_request -> m_headers.push_back(hv);
 
-
-    yInfo() << "rxHeader ('" << hv.key << "', '" << hv.value << "')";
-
         if(is_similar(hv.key, "host")){
-            auto t  = parse_hostport(hv.value);
+            auto t  = as_host_port(hv.value);
             if(t.good){
                 m_request -> m_host = t.value.host;
                 m_request -> m_port = t.value.port;
@@ -756,21 +362,21 @@ namespace yq {
             return;
         }
     
-        Result<UriView>     uri = parse_uri(muri.uri);
+        url_view_r     uri = to_url(muri.uri);
         if(!uri.good){
             dispatch(HttpStatus::BadURI);
             m_rxMode    = RxError;
             return;
         }
         
-        m_request -> m_uri = uri.value;
+        m_request -> m_url = uri.value;
         if(muri.version.empty()){
             m_request -> m_version = http09();
             m_rxMode    = RxDispatch;
             return ;
         }
 
-        m_request->m_version = parse_version(muri.version);
+        m_request->m_version = to_version_spec(muri.version);
         if(!is_similar(m_request->m_version.protocol, "http")){
             dispatch(HttpStatus::BadHTTPVersion);
             m_rxMode    = RxError;
@@ -786,7 +392,6 @@ namespace yq {
 
     void    HttpConnection::send(Ref<HttpResponse> r)
     {
-yInfo() << "Sending...";
         std::string_view    message;
         if(isSuccessful(r -> m_status) && !r->m_content.empty()){
             size_t      count = 0;
@@ -814,8 +419,6 @@ yInfo() << "Sending...";
             buffers.push_back(asio::buffer(message));
             buffers.push_back(asio::buffer("\r\n"));
         }
-        
-        yInfo() << "Reply is:\n" << r->m_reply->as_view();
         
         auto self = shared_from_this();
         async_write(m_socket, buffers, [r, self](std::error_code, size_t){} /* executor is to make sure response & buffers stay alive */ );

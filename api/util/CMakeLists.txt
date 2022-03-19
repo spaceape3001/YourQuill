@@ -78,10 +78,10 @@ set(util_sources
     
     #./net/Curl.cpp
     #./net/Curl.hpp
-    ./net/Http.cpp
     ./net/Http.hpp
-    #./net/Net.cpp
-    #./net/Socket.hpp
+    ./net/NetUnity.cpp
+    ./net/Uri.hpp
+    ./net/VersionSpec.hpp
     #./net/Url.cpp
     #./net/Url.hpp
 

@@ -28,8 +28,6 @@ add_executable(yquill
     #./pWorkspace.ipp
     
     #./server.cpp
-    ./HttpConnection.hpp
-    ./HttpConnection.ipp
     
     ./yquill.cpp
 )

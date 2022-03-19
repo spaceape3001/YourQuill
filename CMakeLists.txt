@@ -51,7 +51,7 @@ find_package(SQLite3)
 # find_package(libzip REQUIRED)
 #   Qt's got issues, want to remove it....
 
-# find_package(nghttp2)
+# find_package(jsoncpp REQUIRED)
 
 if(Feature_Experimental AND EXISTS play)
     set(VULKAN TRUE)
@@ -75,7 +75,7 @@ function(group_files)
         endforeach()
 endfunction(group_files)
 
-add_definitions(-Wfatal-errors -Wno-error=unused-function -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events)
+add_definitions(-Wfatal-errors -Wno-error=unused-function -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch)
 
 if(Developer_Build)
     add_definitions(-DDEV_BUILD=1)
