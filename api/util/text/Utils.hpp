@@ -927,6 +927,8 @@ namespace yq {
     */
     bool  starts_igCase(const std::string_view&s, const std::string_view& pat);
 
+    const char*         strany(const std::string_view& haystack, const std::string_view& needle);
+
     /*! \brief Strips the LAST extension
     
         This returns the input MINUS the last extension, call repeatedly to remove more than one.

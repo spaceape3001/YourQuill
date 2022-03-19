@@ -1022,6 +1022,15 @@ namespace yq {
         return starts_igCase(s.data(), s.size(), pat.data(), pat.size());
     }
 
+    const char*         strany(const std::string_view& haystack, const std::string_view& needle)
+    {
+        for(const char* z = haystack.begin(); z != haystack.end(); ++z){
+            if(strnchr(needle, *z))
+                return z;
+        }
+        return nullptr;
+    }
+
     std::string_view    strip_extension(const std::string_view&name)
     {
         ssize_t  x   = (ssize_t) name.find_last_of('.');

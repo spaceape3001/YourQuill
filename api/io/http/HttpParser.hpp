@@ -1,6 +1,7 @@
 #pragma once
 #include "HttpRequest.hpp"
 #include "HttpData.hpp"
+#include "VersionSpec.hpp"
 
 #include <util/preamble.hpp>
 
@@ -13,24 +14,13 @@ namespace yq {
 
     MethodUriVersion        parse_method_uri(const std::string_view&);
 
-    struct VersionSpec {
-        std::string_view    protocol;
-        uint16_t            v_major = 0;
-        uint16_t            v_minor = 0;
-        bool    operator==(const VersionSpec&) const = default;
-    };
-    
-    inline consteval VersionSpec    http09() { return { "http", 0, 9 }; }
-    inline consteval VersionSpec    http10() { return { "http", 1, 0 }; }
-    inline consteval VersionSpec    http11() { return { "http", 1, 1 }; }
-    
-    bool                    match(const VersionSpec& a, const VersionSpec& b);
 
     VersionSpec             parse_version(const std::string_view&);
     
     HttpHeaderView          parse_header_line(const std::string_view&);
     
     Result<UriView>         parse_uri(const std::string_view&);
+    Result<UriView>         parse_hostport(const std::string_view&);
     
 
 #if 0    

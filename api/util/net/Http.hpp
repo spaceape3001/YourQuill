@@ -99,6 +99,10 @@ namespace yq {
         RetryWith                   = 449,
         ParentalControl             = 450,
         Censored                    = 451,
+        
+        BadHTTPVersion              = 496,
+        MissingURI                  = 497,
+        BadURI                      = 498,
         ClientClosedRequest         = 499,
 
         InternalError               = 500,
@@ -150,8 +154,8 @@ namespace yq {
         xml
     )
 
-    const char* statusMessage(HttpStatus);
-    const char* statusMessage(unsigned short);
+    std::string_view    statusMessage(HttpStatus);
+    std::string_view    statusMessage(unsigned short);
 
     bool        isRedirect(HttpStatus);
     bool        isRedirect(unsigned short);
@@ -171,7 +175,7 @@ namespace yq {
     bool        isInformational(HttpStatus);
     bool        isInformational(unsigned short);
 
-    const char* mimeType(ContentType);
-    ContentType mimeTypeForExt(const std::string_view&);
+    std::string_view    mimeType(ContentType);
+    ContentType         mimeTypeForExt(const std::string_view&);
 
 }

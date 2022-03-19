@@ -8,7 +8,7 @@
 
 using asio::ip::tcp;
 
-static constexpr const size_t       kBufferSize     = 256;
+static constexpr const size_t       kBufferSize     = 1024;
 
 class session : public std::enable_shared_from_this<session> {
 public:
@@ -21,7 +21,7 @@ public:
         auto self(shared_from_this());
         m_socket.async_read_some(asio::buffer(m_buffer, kBufferSize), [this, self](std::error_code ec, std::size_t length){
             if(!ec){
-                write(1, m_buffer, length);
+                std::ignore =  write(1, m_buffer, length);
                 start();
             }
         });

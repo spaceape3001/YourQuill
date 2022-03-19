@@ -14,6 +14,13 @@ ut::suite tests = []{
         expect( VersionSpec{ "sftp", 0, 9 } == parse_version("sftp/0.9") );
     };
     
+    "versions match"_test = [](){
+        expect( match(http11(), http10()) == false );
+        expect( match(http10(), http10()) == true );
+        expect( match(http09(), http09()) == true );
+        expect( match(parse_version("HtTP/1.0"), http10()) == true);
+    };
+    
     "method line"_test = [](){
         expect( MethodUriVersion{ "get", "http://www.google.com", "" } == parse_method_uri( "get http://www.google.com" ));
         expect( MethodUriVersion{ "delete", "http://www.google.com", "http/1.2" } == parse_method_uri( "delete http://www.google.com  http/1.2 " ));
@@ -33,11 +40,20 @@ ut::suite tests = []{
         expect( UriView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == parse_uri("///test.php?foobar=true#hello"));
         expect( UriView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == parse_uri("/test.php?foobar=true#hello"));
         expect( UriView{ "", "", "",  "", "./test.php", "foobar=true", "hello", 0 } == parse_uri("./test.php?foobar=true#hello"));
+        
+        auto p  = parse_uri("/");
+        
+        expect( UriView{ "", "", "",  "", "/", "", "", 0 } == p);
     };
     
     "uri_bad"_test = [](){
         expect( false == parse_uri("foobar.txt").good );
         expect( false == parse_uri("http[]//hello/foobar.txt").good );
+    };
+    
+    "hostport parse"_test = [](){
+        expect( UriView("", "", "", "localhost", "", "", "", 12345) == parse_hostport("localhost:12345"));
+        expect( UriView("", "", "", "localhost", "", "", "", 0) == parse_hostport("localhost"));
     };
 };
 

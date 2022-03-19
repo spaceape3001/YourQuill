@@ -83,13 +83,13 @@ namespace yq {
             //return std::string(buffer);
         //}
         
-        using HttpStatusMap	= EnumMap<HttpStatus,const char*>;
+        using HttpStatusMap	= EnumMap<HttpStatus,std::string_view>;
         
         HttpStatusMap 	makeStatusMessage()
         {
             static const struct {
                 HttpStatus::enum_t  code;
-                const char*         message;
+                std::string_view    message;
             } kCodes[] = {
                 { HttpStatus::None,                     	"Invalid"                           },
 
@@ -157,6 +157,9 @@ namespace yq {
                 { HttpStatus::RetryWith,                    "Retry With"                        },
                 { HttpStatus::ParentalControl,              "Parental Control"                  },
                 { HttpStatus::Censored,                     "Censored"                          },
+                { HttpStatus::BadHTTPVersion,               "Incompatible HTTP Version"         },
+                { HttpStatus::MissingURI,                   "Missing URI"                       },
+                { HttpStatus::BadURI,                       "Malformed URI"                     }, 
                 { HttpStatus::ClientClosedRequest,          "Client Closed Request"             },
 
                 { HttpStatus::InternalError,                "Internal Error"                    },
@@ -190,13 +193,13 @@ namespace yq {
             return ret;
         }
         
-        using ContentTypeMap	= EnumMap<ContentType, const char*>;
+        using ContentTypeMap	= EnumMap<ContentType, std::string_view>;
         
         ContentTypeMap makeContentType()
         {
             static const struct {
                 ContentType::enum_t     code;
-                const char*             mime;
+                std::string_view        mime;
             } kCodes[] = {
                 { ContentType::unknown,         "application/octet-stream"  },
                 { ContentType::binary,          "application/octet-stream"  },
@@ -241,7 +244,7 @@ namespace yq {
         ContentExtMap   makeExtensionMap()
         {
             static const struct {
-                const char*             ext;
+                std::string_view        ext;
                 ContentType::enum_t     code;
             } kExts[] = {
                 { "bmp",    ContentType::bmp        },
@@ -286,20 +289,20 @@ namespace yq {
         
     }
 
-    const char* statusMessage(unsigned short code)
+    std::string_view    statusMessage(unsigned short code)
     {
         const auto & r	= statusMessages();
         if(!r.valid((int) code))
-            return "Status Out Of Range";
+            return std::string_view();
         return r[code];
     }
 
-    const char* statusMessage(HttpStatus code)
+    std::string_view    statusMessage(HttpStatus code)
     {
         return statusMessages()[code];
     }
 
-    const char* mimeType(ContentType ct)
+    std::string_view    mimeType(ContentType ct)
     {
         return contentTypes()[ct];
     }
