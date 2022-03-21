@@ -14,12 +14,12 @@
 #include <srv/Session.hpp>
 #include <srv/TLSGlobals.hpp>
 
-#include <util/CmdArgs.hpp>
-#include <util/FileUtils.hpp>
-#include <util/LogFile.hpp>
-#include <util/Logging.hpp>
-#include <util/Safety.hpp>
-#include <util/SqlUtils.hpp>
+#include <yq/CmdArgs.hpp>
+#include <yq/FileUtils.hpp>
+#include <yq/LogFile.hpp>
+#include <yq/Logging.hpp>
+#include <yq/Safety.hpp>
+#include <yq/SqlUtils.hpp>
 
 #include <httpserver/httpcookie.h>
 #include <httpserver/httplistener.h>
@@ -119,6 +119,7 @@ Ref<Session>      sessionFor(HttpRequest& req, HttpResponse& resp)
 }
 
 
+
 Page::Reply    do_dispatch()
 {
     //static Repo& _repo = repo();
@@ -149,12 +150,11 @@ Page::Reply    do_dispatch()
                     throw HttpStatus::NotAcceptable;
             }
                 
-            QByteArray  k;
             x_page      = Page::find(x_op, x_path, false);
             if(!x_page && (x_op == hGet)){
                 int i   = x_path.indexOf('/', 1);
                 if(i>0){
-                    k           = x_path.mid(i+1);
+                    x_pathinfo  = x_path.mid(i+1);
                     x_page      = Page::find(x_op, x_path.mid(1,i-1), true);
                 }
             }
@@ -178,8 +178,10 @@ Page::Reply    do_dispatch()
                         throw HttpStatus::Unauthorized;
                     break;
                 }
+                
+                ByteArrayStream stream(ret.content);
 
-                ret.type    = x_page -> handle(ret.content, k);
+                ret.type    = x_page -> handle(stream);
                 ret.status  = HttpStatus::Success;
                 break;
             }
@@ -260,7 +262,7 @@ struct DBServer : public HttpRequestHandler {
             } else {
                 resp.setStatus(rep.status.value());
                 resp.setHeader("Content-Type", mimeType(rep.type));
-                resp.write(rep.content, true);
+                resp.write(std::move(rep.content), true);
             }
             
             accessLog -> line() << x_session->user << " -- " << x_client << " -- " << x_time << " -- " 

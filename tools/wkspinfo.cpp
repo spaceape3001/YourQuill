@@ -11,10 +11,10 @@
 #include <db/wksp/Root.hpp>
 #include <db/wksp/Workspace.hpp>
 
-#include <util/app/CmdArgs.hpp>
-#include <util/log/Logging.hpp>
-#include <util/meta/Meta.hpp>
-#include <util/text/Utils.hpp>
+#include <yq/app/CmdArgs.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/meta/Meta.hpp>
+#include <yq/text/Utils.hpp>
 
 int main(int argc, char* argv[])
 {

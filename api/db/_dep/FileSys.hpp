@@ -12,7 +12,7 @@
 #include <db/enum/Sorted.hpp>
 
 #include <filesystem>
-#include <util/text/String.hpp>
+#include <yq/text/String.hpp>
 
 namespace yq {
     class ByteArray;

@@ -10,9 +10,9 @@
 #include <stdio.h>
 #include <algorithm>
 
-#include <util/text/Utils.hpp>
-#include <util/type/Variant.hpp>
-#include <util/collection/Vector.hpp>
+#include <yq/text/Utils.hpp>
+#include <yq/type/Variant.hpp>
+#include <yq/collection/Vector.hpp>
 
 using namespace yq;
 

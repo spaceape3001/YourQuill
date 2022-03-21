@@ -11,10 +11,10 @@
 
 #include <db/CommonDirs.hpp>
 
-#include <util/FileUtils.hpp>
-#include <util/Logging.hpp>
-#include <util/String.hpp>
-#include <util/Vector.hpp>
+#include <yq/FileUtils.hpp>
+#include <yq/Logging.hpp>
+#include <yq/String.hpp>
+#include <yq/Vector.hpp>
 
 #include <errno.h>
 #include <string.h>

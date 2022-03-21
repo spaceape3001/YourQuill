@@ -16,17 +16,17 @@
 
 #include <db/bit/KeyValue.hpp>
 
-#include <util/text/ByteArray.hpp>
-#include <util/file/FileUtils.hpp>
-#include <util/log/Logging.hpp>
-#include <util/type/Result.hpp>
-#include <util/collection/Reverse.hpp>
-#include <util/collection/Set.hpp>
-#include <util/Utilities.hpp>
-#include <util/collection/Vector.hpp>
+#include <yq/text/ByteArray.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/type/Result.hpp>
+#include <yq/collection/Reverse.hpp>
+#include <yq/collection/Set.hpp>
+#include <yq/Utilities.hpp>
+#include <yq/collection/Vector.hpp>
 
-#include <util/stream/Bytes.hpp>
-#include <util/stream/Ops.hpp>
+#include <yq/stream/Bytes.hpp>
+#include <yq/stream/Ops.hpp>
 
 #include <QDir>
 #include <QFile>

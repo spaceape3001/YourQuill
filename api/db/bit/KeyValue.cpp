@@ -7,11 +7,11 @@
 //#pragma once
 
 #include "KeyValue.hpp"
-#include <util/log/Logging.hpp>
-#include <util/stream/LineCol.hpp>
-#include <util/stream/Ops.hpp>
-#include <util/text/Utils.hpp>
-#include <util/type/ByteArray.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/stream/LineCol.hpp>
+#include <yq/stream/Ops.hpp>
+#include <yq/text/Utils.hpp>
+#include <yq/type/ByteArray.hpp>
 
 namespace yq {
 

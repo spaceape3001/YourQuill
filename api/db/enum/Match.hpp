@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <util/meta/Binder.hpp>
-#include <util/type/Enum.hpp>
+#include <yq/meta/Binder.hpp>
+#include <yq/type/Enum.hpp>
 
 namespace yq {
 

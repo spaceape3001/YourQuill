@@ -9,8 +9,8 @@
 #include "ClassData.hpp"
 #include "StdFile.hpp"
 
-#include <util/file/AbstractFile.hpp>
-#include <util/collection/Set.hpp>
+#include <yq/file/AbstractFile.hpp>
+#include <yq/collection/Set.hpp>
 
 namespace yq {
 

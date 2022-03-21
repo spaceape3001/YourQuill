@@ -7,9 +7,9 @@
 #pragma once
 #include <string>
 #include <string_view>
-#include <util/Map.hpp>
-#include <util/NoCopy.hpp>
-#include <util/NoMove.hpp>
+#include <yq/Map.hpp>
+#include <yq/NoCopy.hpp>
+#include <yq/NoMove.hpp>
 #include <sys/inotify.h>
 
 class DirWatcher : NoCopy, NoMove {

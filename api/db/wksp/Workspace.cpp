@@ -2,13 +2,13 @@
 #include "Root.hpp"
 #include "QuillFile.hpp"
 
-#include <util/app/CmdArgs.hpp>
-#include <util/app/DelayInit.hpp>
-#include <util/file/FileUtils.hpp>
-#include <util/log/Logging.hpp>
-#include <util/meta/Global.hpp>
-#include <util/meta/Init.hpp>
-#include <util/text/Utils.hpp>
+#include <yq/app/CmdArgs.hpp>
+#include <yq/app/DelayInit.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/meta/Global.hpp>
+#include <yq/meta/Init.hpp>
+#include <yq/text/Utils.hpp>
 #include <pwd.h>
 #include <unistd.h>
 

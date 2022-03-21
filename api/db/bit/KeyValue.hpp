@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <util/collection/Reverse.hpp>
-#include <util/collection/Set.hpp>
-#include <util/collection/Vector.hpp>
-#include <util/text/Utils.hpp>
-#include <util/type/Result.hpp>
+#include <yq/collection/Reverse.hpp>
+#include <yq/collection/Set.hpp>
+#include <yq/collection/Vector.hpp>
+#include <yq/text/Utils.hpp>
+#include <yq/type/Result.hpp>
 #include <string>
 #include <string_view>
 

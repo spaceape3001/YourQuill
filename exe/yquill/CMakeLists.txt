@@ -32,7 +32,7 @@ add_executable(yquill
     ./yquill.cpp
 )
 #target_link_libraries(yquill yqdb yqmeta yqsrv yqutil Qt::Core  Qt::Gui Qt::Svg QtWebApp)
-target_link_libraries(yquill yqdb yqio yqutil)
+target_link_libraries(yquill yqdb yq)
 target_include_directories(yquill PRIVATE .)
 
 

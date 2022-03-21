@@ -4,17 +4,17 @@
 #include <asio/ts/internet.hpp>
 
 #include <db/wksp/Workspace.hpp>
-#include <util/app/CmdArgs.hpp>
-#include <util/app/Plugins.hpp>
-#include <util/log/Logging.hpp>
-#include <util/meta/Meta.hpp>
-#include <util/stream/Ops.hpp>
-#include <io/http/HttpContext.hpp>
-#include <io/http/HttpDataStream.hpp>
-#include <io/http/HttpRequest.hpp>
-#include <io/http/HttpResponse.hpp>
-#include <io/http/HttpServer.hpp>
-#include <io/web/WebPage.hpp>
+#include <yq/app/CmdArgs.hpp>
+#include <yq/app/Plugins.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/meta/Meta.hpp>
+#include <yq/stream/Ops.hpp>
+#include <yq/http/HttpContext.hpp>
+#include <yq/http/HttpDataStream.hpp>
+#include <yq/http/HttpRequest.hpp>
+#include <yq/http/HttpResponse.hpp>
+#include <yq/http/HttpServer.hpp>
+#include <yq/web/WebPage.hpp>
 
 #include <iostream>
 #include <fstream>

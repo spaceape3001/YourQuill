@@ -9,9 +9,9 @@
 #include <db/bit/Copyright.hpp>
 #include <db/bit/Policy.hpp>
 #include <db/enum/Vcs.hpp>
-#include <util/collection/EnumMap.hpp>
-#include <util/collection/Set.hpp>
-#include <util/collection/Vector.hpp>
+#include <yq/collection/EnumMap.hpp>
+#include <yq/collection/Set.hpp>
+#include <yq/collection/Vector.hpp>
 
 namespace yq {
 

@@ -3,8 +3,7 @@
 #
 #   Files should be listed alphabetically
 
-add_subdirectory(util)
-add_subdirectory(io)
+add_subdirectory(yq)
 #add_subdirectory(math)
 add_subdirectory(db)
 #add_subdirectory(srv)

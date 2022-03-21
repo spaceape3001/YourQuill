@@ -1,9 +1,9 @@
-#include <io/http/HttpResponse.hpp>
-#include <io/http/HttpDataStream.hpp>
-#include <io/web/WebPage.hpp>
+#include <yq/http/HttpResponse.hpp>
+#include <yq/http/HttpDataStream.hpp>
+#include <yq/web/WebPage.hpp>
 
-#include <util/app/DelayInit.hpp>
-#include <util/stream/Ops.hpp>
+#include <yq/app/DelayInit.hpp>
+#include <yq/stream/Ops.hpp>
 
 using namespace yq;
 

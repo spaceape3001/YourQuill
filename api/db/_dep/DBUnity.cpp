@@ -21,16 +21,16 @@
 #include "CacheUtil.hpp"
 
 #include <db/bit/NKI.hpp>
-#include <util/Utilities.hpp>
+#include <yq/Utilities.hpp>
 
-#include <util/algo/Compare.hpp>
-#include <util/algo/DiffEngine.hpp>
-#include <util/collection/Vector.hpp>
-#include <util/file/FileUtils.hpp>
-#include <util/log/Logging.hpp>
-#include <util/proc/Execute.hpp>
-#include <util/text/ByteArray.hpp>
-#include <util/text/Strings.hpp>
+#include <yq/algo/Compare.hpp>
+#include <yq/algo/DiffEngine.hpp>
+#include <yq/collection/Vector.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/proc/Execute.hpp>
+#include <yq/text/ByteArray.hpp>
+#include <yq/text/Strings.hpp>
 
 #include <QIcon>
 #include <QSqlError>

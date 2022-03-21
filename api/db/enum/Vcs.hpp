@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <util/meta/Binder.hpp>
-#include <util/type/Enum.hpp>
-#include <util/type/Flag.hpp>
+#include <yq/meta/Binder.hpp>
+#include <yq/type/Enum.hpp>
+#include <yq/type/Flag.hpp>
 
 namespace yq {
 

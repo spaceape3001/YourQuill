@@ -1,8 +1,8 @@
 #pragma once
 
-#include <util/collection/Set.hpp>
-#include <util/collection/Vector.hpp>
-#include <util/sql/SqlQuery.hpp>
+#include <yq/collection/Set.hpp>
+#include <yq/collection/Vector.hpp>
+#include <yq/sql/SqlQuery.hpp>
 
 namespace yq {
 

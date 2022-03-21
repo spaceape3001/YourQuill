@@ -97,7 +97,7 @@ target_compile_definitions(yqdb PRIVATE "-DYQ_BUILD_ROOT=\"${CMAKE_SOURCE_DIR}\"
 
 target_link_libraries(yqdb 
     PUBLIC 
-        yqutil
+        yq
 )
 
 

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <util/preamble.hpp>
+#include <yq/preamble.hpp>
 
 class QDir;
 class QFileInfo;

@@ -11,8 +11,8 @@
 #include <db/enum/Access.hpp>
 #include <db/enum/Vcs.hpp>
 
-#include <util/collection/EnumMap.hpp>
-#include <util/type/Flag.hpp>
+#include <yq/collection/EnumMap.hpp>
+#include <yq/type/Flag.hpp>
 
 
 namespace yq {

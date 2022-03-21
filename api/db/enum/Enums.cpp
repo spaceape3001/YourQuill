@@ -21,7 +21,7 @@
 #include "Update.hpp"
 #include "Vcs.hpp"
 
-#include <util/meta/Init.hpp>
+#include <yq/meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::Access)
 YQ_TYPE_IMPLEMENT(yq::AssertDeny)

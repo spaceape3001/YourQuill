@@ -1,6 +1,6 @@
 #include <boost/ut.hpp>
-#include <util/text/Utils.hpp>
-#include <util/type/Variant.hpp>
+#include <yq/text/Utils.hpp>
+#include <yq/type/Variant.hpp>
 
 namespace ut = boost::ut;
 using namespace ut;

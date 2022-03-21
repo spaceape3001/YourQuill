@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <db/StdStrings.hpp>
-#include <util/collection/EnumMap.hpp>
-#include <util/file/XmlUtils.hpp>
-//#include <util/log/Logging.hpp>
-#include <util/text/Utils.hpp>
+#include <yq/collection/EnumMap.hpp>
+#include <yq/file/XmlUtils.hpp>
+//#include <yq/log/Logging.hpp>
+#include <yq/text/Utils.hpp>
 
 #include "Context.hpp"
 #include "Copyright.hpp"
@@ -204,17 +204,17 @@ namespace yq {
 
 #include <db/FileStrings.hpp>
 
-#include <util/text/ByteArray.hpp>
-#include <util/collection/EnumMap.hpp>
-#include <util/log/Logging.hpp>
-#include <util/collection/Reverse.hpp>
-#include <util/collection/Set.hpp>
-#include <util/text/Strings.hpp>
-#include <util/Utilities.hpp>
-#include <util/file/XmlUtils.hpp>
+#include <yq/text/ByteArray.hpp>
+#include <yq/collection/EnumMap.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/collection/Reverse.hpp>
+#include <yq/collection/Set.hpp>
+#include <yq/text/Strings.hpp>
+#include <yq/Utilities.hpp>
+#include <yq/file/XmlUtils.hpp>
 
-#include <util/stream/LineCol.hpp>
-#include <util/stream/Ops.hpp>
+#include <yq/stream/LineCol.hpp>
+#include <yq/stream/Ops.hpp>
 
 #include <cctype>
 #include <iostream>

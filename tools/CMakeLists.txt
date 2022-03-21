@@ -2,12 +2,12 @@ add_executable(ask ask.cpp)
 target_link_libraries(ask ${CURL_LIBRARIES})
 
 add_executable(metavalues metavalues.cpp)
-target_link_libraries(metavalues yqutil)
+target_link_libraries(metavalues yq)
 
 add_executable(tcpsink tcpsink.cpp)
 
 add_executable(wkspinfo wkspinfo.cpp)
-target_link_libraries(wkspinfo yqdb yqutil)
+target_link_libraries(wkspinfo yqdb yq)
 
 add_executable(xmlread xmlread.cpp)
 

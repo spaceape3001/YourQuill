@@ -2,8 +2,8 @@
 
 #include "RootFwd.hpp"
 #include <db/enum/SizeDesc.hpp>
-#include <util/type/Enum.hpp>
-#include <util/type/Flag.hpp>
+#include <yq/type/Enum.hpp>
+#include <yq/type/Flag.hpp>
 
 
 namespace yq {

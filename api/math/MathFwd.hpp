@@ -9,7 +9,7 @@
 #include <cmath>
 #include <stdint.h>
 //#include <utility>
-#include <util/NaN.hpp>
+#include <yq/NaN.hpp>
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

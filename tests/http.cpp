@@ -1,6 +1,6 @@
 #include <boost/ut.hpp>
-#include <io/http/HttpParser.hpp>
-#include <util/text/Utils.hpp>
+#include <yq/http/HttpParser.hpp>
+#include <yq/text/Utils.hpp>
 
 namespace ut = boost::ut;
 using namespace ut;

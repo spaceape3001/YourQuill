@@ -10,7 +10,7 @@
 #include <compare>
 #include <utility>
 #include <variant>
-#include <util/preamble.hpp>
+#include <yq/preamble.hpp>
 
 
 class QByteArray;

@@ -4,17 +4,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "CommonDirs.hpp"
+//#include "CommonDirs.hpp"
 #include "QuillFile.hpp"
-#include "WkspLogging.hpp"
-#include "Workspace.hpp"
+//#include "WkspLogging.hpp"
+//#include "Workspace.hpp"
 
-#include <util/app/CmdArgs.hpp>
-#include <util/algo/Compare.hpp>
-#include <util/log/Logging.hpp>
-#include <util/file/FileUtils.hpp>
-#include <util/text/String.hpp>
-#include <util/text/Strings.hpp>
+#include <yq/app/CmdArgs.hpp>
+#include <yq/algo/Compare.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/text/String.hpp>
+#include <yq/text/Strings.hpp>
 
 
 #include <pwd.h>
@@ -28,9 +28,9 @@
 
 #include <QTextCodec>
 
-#include "CommonDirs.ipp"
+//#include "CommonDirs.ipp"
 
 
-//#include "QuillFile.ipp"
+#include "QuillFile.ipp"
 
 //#include "Workspace.ipp"

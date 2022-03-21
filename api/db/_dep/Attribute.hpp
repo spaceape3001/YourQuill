@@ -11,8 +11,8 @@
 #include <db/bit/KeyValue.hpp>
 #include <db/enum/Change.hpp>
 
-#include <util/text/String.hpp>
-#include <util/collection/Vector.hpp>
+#include <yq/text/String.hpp>
+#include <yq/collection/Vector.hpp>
 
 namespace yq {
 

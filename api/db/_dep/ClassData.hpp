@@ -8,9 +8,9 @@
 
 #include <db/enum/Multiplicity.hpp>
 #include <db/enum/Restriction.hpp>
-#include <util/collection/Map.hpp>
-#include <util/collection/Set.hpp>
-#include <util/text/String.hpp>
+#include <yq/collection/Map.hpp>
+#include <yq/collection/Set.hpp>
+#include <yq/text/String.hpp>
 #include <memory>
 
 namespace yq {

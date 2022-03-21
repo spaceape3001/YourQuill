@@ -8,7 +8,7 @@
 
 #include "CacheFwd.hpp"
 #include <db/enum/SizeDesc.hpp>
-#include <util/net/Http.hpp>
+#include <yq/net/Http.hpp>
 
 class QIcon;
 
