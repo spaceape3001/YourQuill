@@ -295,15 +295,15 @@ namespace {
         
         auto pm = x_request->getParameterMap();
         if(canSubmit){
-            QByteArray  url = x_request -> getParameter("url");
-            if(!url.isEmpty()){
+            String   url = x_request -> getParameter("url");
+            if(!url.empty()){
                 h << "<form action=\"" << url;
-                QByteArray  args = x_request -> getParameter("args");
-                if(!args.isEmpty())
+                String  args = x_request -> getParameter("args");
+                if(!args.empty())
                     h << "?" << args;
-                h << "\" method=\"" << x_request->getMethod() << "\">\n";
+                h << "\" method=\"" << String(x_request->getMethod()) << "\">\n";
                 for(auto i = pm.begin(); i!=pm.end(); ++i)
-                    h << "<input type=\"hidden\" name=\"" << i.key() << "\" id=\"" << i.key() << "\" value=\"" 
+                    h << "<input type=\"hidden\" name=\"" << i.key().constData() << "\" id=\"" << i.key().constData() << "\" value=\"" 
                         << utf8(i.value()).toHtmlEscaped() << "\" >\n";
                 h << "<input type=\"submit\" value=\"Forward\">\n"
                   << "</form>\n";

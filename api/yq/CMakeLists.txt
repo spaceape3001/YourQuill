@@ -27,20 +27,28 @@ set(yq_sources
     ./algo/Random.cpp
     ./algo/Random.hpp
     
-    ./app/App.cpp
+    ./app/app_unity.cpp
     ./app/CmdArgs.hpp
     ./app/DelayInit.hpp
     ./app/PidFile.hpp
     ./app/Plugins.hpp
 
-    ./c++/C++.cpp
+    ./bit/bit_unity.cpp
+    ./bit/Context.hpp
+    ./bit/Copyright.hpp
+    ./bit/KeyValue.cpp
+    ./bit/KeyValue.hpp
+    # ./bit/NKI.hpp
+    ./bit/Policy.hpp
+
+    ./c++/c++_unity.cpp
     ./c++/NaN.hpp
     ./c++/Safety.hpp
     ./c++/TypeTraits.hpp
 
     ./collection/Array1.hpp
     ./collection/Array2.hpp
-    ./collection/Collections.cpp
+    ./collection/collection_unity.cpp
     ./collection/Deque.hpp
     ./collection/EnumMap.hpp
     ./collection/Hash.hpp
@@ -51,30 +59,47 @@ set(yq_sources
     ./collection/Stack.hpp
     ./collection/Vector.hpp
     
+    ./enum/enum_unity.cpp
+    ./enum/Access.hpp
+    ./enum/AssertDeny.hpp
+    ./enum/AttrKind.hpp
+    ./enum/CalSystem.hpp
+    ./enum/Change.hpp
+    ./enum/DataRole.hpp
+    ./enum/Format.hpp
+    ./enum/Linkage.hpp
+    ./enum/Match.hpp
+    ./enum/Multiplicity.hpp
+    ./enum/Restriction.hpp
+    ./enum/SizeDesc.hpp
+    ./enum/Sorted.hpp
+    ./enum/Update.hpp
+    ./enum/Vcs.hpp
+
+    ./file/file_unity.cpp
     ./file/AbstractFile.hpp
-    ./file/File.cpp
     ./file/FileUtils.hpp
     ./file/XmlFile.hpp
     ./file/XmlFwd.hpp
     ./file/XmlUtils.hpp
     
+    ./http/http_unity.cpp
     ./http/HttpData.hpp
     ./http/HttpParser.hpp
     ./http/HttpRequest.hpp
-    ./http/HttpUnity.cpp
 
     #./log/LogFile.cpp
     #./log/LogFile.hpp
     ./log/Logging.cpp
     ./log/Logging.hpp
     
+    ./meta/meta_unity.cpp
     ./meta/ArgInfo.hpp
     ./meta/Binder.hpp
     ./meta/CompoundInfo.hpp
     ./meta/DataBlock.hpp
     ./meta/Global.hpp
     ./meta/Init.hpp
-    ./meta/Meta.cpp
     ./meta/Meta.hpp
     ./meta/MethodInfo.hpp
     ./meta/ObjectInfo.hpp
@@ -84,8 +109,8 @@ set(yq_sources
     
     #./net/Curl.cpp
     #./net/Curl.hpp
+    ./net/net_unity.cpp
     ./net/Http.hpp
-    ./net/NetUnity.cpp
     ./net/Url.hpp
     ./net/VersionSpec.hpp
 
@@ -97,18 +122,19 @@ set(yq_sources
     #./sql/SqlQuery.hpp
     #./sql/SqlUtils.hpp
 
+    ./stream/stream_unity.cpp
     ./stream/Bytes.hpp
     ./stream/File.hpp
     ./stream/LineCol.hpp
     ./stream/OSFile.hpp
     ./stream/Ops.hpp
-    ./stream/Stream.cpp
     
     ./text/Comma.hpp
     ./text/Format.hpp
     ./text/Utils.cpp
     ./text/Utils.hpp
     
+    ./type/type_unity.cpp
     ./type/ByteArray.hpp
     ./type/Enum.hpp
     ./type/Flag.hpp
@@ -117,11 +143,18 @@ set(yq_sources
     ./type/Result.hpp
     ./type/Span.hpp
     ./type/Touched.hpp
-    ./type/Type.cpp
     ./type/Variant.cpp
 
     ./web/WebPage.hpp
-    ./web/WebUnity.cpp
+    ./web/web_unity.cpp
+
+    ./wksp/QuillData.hpp
+    ./wksp/QuillFile.cpp
+    ./wksp/QuillFile.hpp
+    ./wksp/RootFwd.hpp
+    ./wksp/Root.hpp
+    ./wksp/Workspace.cpp
+    ./wksp/Workspace.hpp
 )
 
 add_library(yq SHARED ${yq_sources})

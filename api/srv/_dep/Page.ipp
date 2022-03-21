@@ -18,7 +18,7 @@ Redirect::Redirect(HttpStatus a, const QUrl& b ) : why(a), where(b.toString().to
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 namespace {
-    using PageMap =  Map<QByteArray,const Page*,IgCase>;
+    using PageMap =  Map<String,const Page*,IgCase>;
     
         /*
             We're keeping "dispatchers' separate from pages.....  seems safer
@@ -29,7 +29,7 @@ namespace {
 
         EnumMap<HttpOp,PageMap>         pages;
         GetMap                          getters;
-        Guarded<QByteArray>             t_page;             // not locked with the rest
+        Guarded<String>             t_page;             // not locked with the rest
         //Map<String,QDir,IgCase>         dirs;
         EnumMap<HttpOp,PageMap>         dispatchers;
         mutable tbb::spin_rw_mutex      mutex;
@@ -38,10 +38,10 @@ namespace {
         PageRepo() : t_page(shared_bytes("std/page")), openReg(true)
         {
             //  Only hook the dynamic ones here.....
-            getters[sz_body] = []()->QByteArray {
+            getters[sz_body] = []()->String {
                 return x_content;
             };
-            getters[sz_title] = []()->QByteArray {
+            getters[sz_title] = []()->String {
                 return x_title;
             };
         }
@@ -69,17 +69,17 @@ const Vector<const Page*>&   Page::all()
     return repo().all;
 }
 
-QByteArray      Page::default_page()
+String       Page::default_page()
 {
     return repo().t_page;
 }
 
-void            Page::default_page(const QByteArray&v)
+void            Page::default_page(const String&v)
 {
     repo().t_page   = v;
 }
 
-const Page*     Page::find(HttpOp op, const QByteArray& p, bool fDispatcher)
+const Page*     Page::find(HttpOp op, const std::string_view& p, bool fDispatcher)
 {
     LOCK
     return fDispatcher ? _r.dispatchers[op].get(p, nullptr) : _r.pages[op].get(p, nullptr);
@@ -95,7 +95,7 @@ bool            Page::frozen()
     return repo().openReg;
 }
 
-FNGet           Page::static_getter(const QByteArray&z)
+FNGet           Page::static_getter(const std::string_view&z)
 {
     LOCK
     return _r.getters.get(z, nullptr);
@@ -149,7 +149,7 @@ Page::Writer& Page::Writer::anonymous()
     return *this;
 }
 
-Page::Writer& Page::Writer::argument(const QByteArray&k, const QByteArray& d)
+Page::Writer& Page::Writer::argument(const String&k, const String& d)
 {
     if(m_page){
         Arg a;
@@ -160,28 +160,28 @@ Page::Writer& Page::Writer::argument(const QByteArray&k, const QByteArray& d)
     return *this;
 }
 
-Page::Writer& Page::Writer::description(const QByteArray&d)
+Page::Writer& Page::Writer::description(const String&d)
 {
     if(m_page)
         m_page -> m_description = d;
     return *this;
 }
 
-Page::Writer& Page::Writer::getter(const QByteArray&k, FNGet fn)
+Page::Writer& Page::Writer::getter(const String&k, FNGet fn)
 {
-    if(m_page && fn && !k.isEmpty())
+    if(m_page && fn && !k.empty())
         m_page -> m_getters[k]   = fn;
     return *this;
 }
 
-Page::Writer& Page::Writer::icon(const QByteArray&i)
+Page::Writer& Page::Writer::icon(const String&i)
 {
     if(m_page)
         m_page -> m_icon = i;
     return *this;
 }
 
-Page::Writer& Page::Writer::label(const QByteArray&v)
+Page::Writer& Page::Writer::label(const String&v)
 {
     if(m_page)
         m_page -> m_label   = v;

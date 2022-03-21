@@ -10,7 +10,7 @@ namespace {
     using namespace html;
     
     
-    QString cls_title()
+    String cls_title()
     {
         return QString("Class '%1'").arg(cdb::name(x_class).qString());
     }
@@ -125,7 +125,7 @@ namespace {
         
     }
     
-    ContentType     page_graph(QByteArray& bytes)
+    ContentType     page_graph(String& bytes)
     {
         test(decode_graph_prime());
         bytes       = cdb::svg(x_graph);

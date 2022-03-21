@@ -5,7 +5,6 @@
 
 add_subdirectory(yq)
 #add_subdirectory(math)
-add_subdirectory(db)
 #add_subdirectory(srv)
 #add_subdirectory(plot)
 

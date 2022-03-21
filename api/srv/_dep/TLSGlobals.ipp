@@ -17,8 +17,9 @@ namespace {
          QByteArray                      m_client;
          HttpOp                          m_op;
          QByteArray                      m_path;
+         QByteArray                      m_pathinfo;
          Session*                        m_session;
-         QByteArray                      m_title;
+         String                          m_title;
          QByteArray                      m_content;
          Vector<QByteArray>              m_scripts;
 
@@ -52,8 +53,9 @@ thread_local bool                            &x_can_edit        = g_tls.m_can_ed
 thread_local QByteArray                      &x_client          = g_tls.m_client;
 thread_local HttpOp                          &x_op              = g_tls.m_op;
 thread_local QByteArray                      &x_path            = g_tls.m_path;
+thread_local QByteArray                      &x_pathinfo        = g_tls.m_pathinfo;
 thread_local Session*                        &x_session         = g_tls.m_session;
-thread_local QByteArray                      &x_title           = g_tls.m_title;
+thread_local String                          &x_title           = g_tls.m_title;
 thread_local QByteArray                      &x_content         = g_tls.m_content;
 thread_local Vector<QByteArray>              &x_scripts         = g_tls.m_scripts;
 

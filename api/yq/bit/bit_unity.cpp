@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <db/StdStrings.hpp>
 #include <yq/collection/EnumMap.hpp>
+#include <yq/file/Strings.hpp>
 #include <yq/file/XmlUtils.hpp>
 //#include <yq/log/Logging.hpp>
 #include <yq/text/Utils.hpp>
@@ -202,7 +202,7 @@ namespace yq {
 #include "NKI.hpp"
 #include "Policy.hpp"
 
-#include <db/FileStrings.hpp>
+#include <yq/FileStrings.hpp>
 
 #include <yq/text/ByteArray.hpp>
 #include <yq/collection/EnumMap.hpp>

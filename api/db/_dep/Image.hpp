@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CacheFwd.hpp"
-#include <db/enum/SizeDesc.hpp>
+#include <yq/enum/SizeDesc.hpp>
 #include <yq/net/Http.hpp>
 
 class QIcon;

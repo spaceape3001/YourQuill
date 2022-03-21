@@ -8,8 +8,8 @@
 
 #include <iostream>
 
-#include <db/wksp/Root.hpp>
-#include <db/wksp/Workspace.hpp>
+#include <yq/wksp/Root.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 #include <yq/app/CmdArgs.hpp>
 #include <yq/log/Logging.hpp>

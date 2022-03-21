@@ -15,28 +15,28 @@
 #include "TypedBytes.hpp"
 #include "Utilities.hpp"
 
-#include <db/Atom.hpp>
-#include <db/Class.hpp>
-#include <db/FileSys.hpp>
-#include <db/Image.hpp>
-#include <db/Graph.hpp>
-#include <db/Leaf.hpp>
-#include <db/Tag.hpp>
-#include <db/Root.hpp>
-#include <db/ShareDir.hpp>
-#include <db/Wksp.hpp>
-#include <util/EnumMap.hpp>
-#include <util/FileUtils.hpp>
-#include <util/Logging.hpp>
+#include <yq/Atom.hpp>
+#include <yq/Class.hpp>
+#include <yq/FileSys.hpp>
+#include <yq/Image.hpp>
+#include <yq/Graph.hpp>
+#include <yq/Leaf.hpp>
+#include <yq/Tag.hpp>
+#include <yq/Root.hpp>
+#include <yq/ShareDir.hpp>
+#include <yq/Wksp.hpp>
+#include <yq/EnumMap.hpp>
+#include <yq/FileUtils.hpp>
+#include <yq/Logging.hpp>
 
 #ifdef emit
     #undef emit
 #endif
 
-#include <util/Guarded.hpp>
-#include <util/SqlQuery.hpp>
-#include <util/Utilities.hpp>
-#include <util/Vector.hpp>
+#include <yq/Guarded.hpp>
+#include <yq/SqlQuery.hpp>
+#include <yq/Utilities.hpp>
+#include <yq/Vector.hpp>
 
 #include <httpserver/httprequest.h>
 #include <sys/random.h>

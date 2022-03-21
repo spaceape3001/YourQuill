@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <db/Attribute.hpp>
-#include <db/bit/KeyValue.hpp>
-#include <db/enum/Change.hpp>
+#include <yq/Attribute.hpp>
+#include <yq/bit/KeyValue.hpp>
+#include <yq/enum/Change.hpp>
 #include <util/Vector.hpp>
 
 struct KVTree;

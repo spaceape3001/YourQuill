@@ -15,11 +15,11 @@ namespace {
         {
         }
 
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
+        ContentType    handle(String& dst, const String&) const override
         {
             QImage    img;
             m_fn(img);
-            dst         = make_png(img);
+            //dst         = make_png(img);
             return ContentType::png; 
         }
     };
@@ -42,10 +42,10 @@ namespace {
         {
         }
 
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
+        ContentType    handle(String& dst, const String&) const override
         {
             QImage    img;
-            dst         = make_png(m_fn());
+            //dst         = make_png(m_fn());
             return ContentType::png; 
         }
     };

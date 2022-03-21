@@ -6,18 +6,18 @@
 
 #pragma once
 
-#include <db/enum/DataRole.hpp>
-#include <util/Http.hpp>
-#include <QByteArray>
+#include <yq/enum/DataRole.hpp>
+#include <yq/Http.hpp>
+#include <yq/String.hpp>
 #include <initializer_list>
 
 struct TypedBytes {
-    QByteArray      content;
+    String          content;
     ContentType     type;
     
     TypedBytes(){}
-    TypedBytes(std::initializer_list<QString>,ContentType ct=ContentType());
-    TypedBytes(DataRole, std::initializer_list<QString>,ContentType ct=ContentType());
+    TypedBytes(std::initializer_list<String>,ContentType ct=ContentType());
+    TypedBytes(DataRole, std::initializer_list<String>,ContentType ct=ContentType());
     
-    bool    empty() const { return content.isEmpty(); }
+    bool    empty() const { return content.empty(); }
 };

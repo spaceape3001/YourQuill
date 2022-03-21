@@ -8,7 +8,7 @@
 
 
 namespace {
-    QString cls_title_root()
+    String cls_title_root()
     {
         if(x_root)
             return QString("Class '%1' {%2}").arg(cdb::label(x_class).qString()).arg(x_root->name.qString());

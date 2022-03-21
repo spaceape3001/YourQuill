@@ -7,7 +7,7 @@
 #pragma once
 
 #include "uFwd.hpp"
-#include <db/Tag.hpp>
+#include <yq/Tag.hpp>
 
 struct UTag {
     const String            key;

@@ -17,7 +17,7 @@ public:
     
     static CT exec(const QByteArray&);
 
-    MarkdownWriter();
+    MarkdownWriter(Stream&);
     ~MarkdownWriter();
 
     template <typename T>

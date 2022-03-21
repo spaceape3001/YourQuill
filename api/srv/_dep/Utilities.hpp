@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <db/enum/DataRole.hpp>
-#include <db/enum/SizeDesc.hpp>
+#include <yq/enum/DataRole.hpp>
+#include <yq/enum/SizeDesc.hpp>
 
 class QByteArray;
 

@@ -8,8 +8,8 @@
 
 #include "CacheFwd.hpp"
 #include "Image.hpp"
-#include <db/enum/DataRole.hpp>
-#include <db/enum/Sorted.hpp>
+#include <yq/enum/DataRole.hpp>
+#include <yq/enum/Sorted.hpp>
 
 #include <filesystem>
 #include <yq/text/String.hpp>

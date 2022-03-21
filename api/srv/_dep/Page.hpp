@@ -8,17 +8,18 @@
 #define YQ__SERVER__PAGE_HPP
 
 #include "util/Http.hpp"
-#include <QByteArray>
+#include "util/Strings.hpp"
 
 struct Session;
 struct Request;
-
-
+namespace yq { class Stream; }
 class Markdown;
 class Html;
 class Css;
 class Text;
 
+class QByteArray;
+class QColor;
 class QDateTime;
 class QDir;
 class QHostAddress;
@@ -32,18 +33,18 @@ class QUrl;
 
 struct Redirect {
     HttpStatus              why;
-    QByteArray              where;
+    String                  where;
     
-    Redirect(const QByteArray& b ) : why(HttpStatus::TemporaryRedirect), where(b) {}
+    Redirect(const String& b ) : why(HttpStatus::TemporaryRedirect), where(b) {}
     Redirect(const QUrl& b );
-    Redirect(HttpStatus a, const QByteArray& b ) : why(a), where(b) {}
+    Redirect(HttpStatus a, const String& b ) : why(a), where(b) {}
     Redirect(HttpStatus a, const QUrl&);
 };
 
 
 namespace html { class TabBar; }
 
-typedef QByteArray (*FNGet)();
+typedef void    (*FNGet)(yq::Stream&);
 using GetMap    = Map<String,FNGet,IgCase>;
 
 
@@ -59,16 +60,16 @@ public:
     //! Not thread safe until freeze's been called.
     static const Vector<const Page*>&   all();
 
-    static QByteArray                   default_page();
-    static void                         default_page(const QByteArray&);
+    static String                       default_page();
+    static void                         default_page(const String&);
 
-    static const Page*                  find(HttpOp, const QByteArray&, bool fDispatcher);
+    static const Page*                  find(HttpOp, const std::string_view&, bool fDispatcher);
 
     static void                         freeze();
     static bool                         frozen();
     
 
-    static FNGet                        static_getter(const QByteArray&);
+    static FNGet                        static_getter(const std::string_view&);
 
 
     //! Not thread safe until freeze's been called.
@@ -78,11 +79,11 @@ public:
 
     //static void                         def_directory(const char*, const QDir&);
     //static void                         def_getter(const char*, FNGet);
-    //static void                         def_page(const QByteArray&);
-    //static ContentType                  direct_file(QByteArray& dst, const QString&file, bool fExpand=true);
-    //static ContentType                  direct_content(QByteArray&, const QByteArray&, ContentType, const QByteArray&title=QByteArray());
+    //static void                         def_page(const String&);
+    //static ContentType                  direct_file(String& dst, const QString&file, bool fExpand=true);
+    //static ContentType                  direct_content(String&, const String&, ContentType, const String&title=String());
     //static Reply                        dispatch();
-    //static QByteArray                   expand(const QByteArray&, const GetMap& args=GetMap());
+    //static String                   expand(const String&, const GetMap& args=GetMap());
     //static const Page*                  find(HttpOp, const String&);
     //static const GetMap&                static_getters();
     
@@ -91,19 +92,19 @@ public:
     HttpOp                              httpOp() const { return m_op; }
     
     const Vector<Arg>&                  arguments() const { return m_args; }
-    const QByteArray&                   description() const { return m_description; }
-    const QByteArray&                   label() const { return m_label; }
+    const String&                       description() const { return m_description; }
+    const String&                       label() const { return m_label; }
     bool                                local_only() const { return m_localOnly; }
     bool                                login_required() const { return m_loginReq; }
     bool                                post_anon() const { return m_postAnon; }
-    const QByteArray&                   icon() const { return m_icon; }
+    const String&                       icon() const { return m_icon; }
     const html::TabBar*                 tabbar() const { return m_tabbar; }
     bool                                no_expand() const { return m_noExpand; }
     bool                                is_dispatcher() const { return m_dispatch; }
     
-    virtual ContentType                 handle(QByteArray&, const QByteArray&) const = 0;
+    virtual ContentType                 handle(yq::Stream&) const = 0;
 
-    //FNGet                               getter(const QByteArray&,bool incDef=true) const;
+    //FNGet                               getter(const String&,bool incDef=true) const;
     
     //  Warning duplicates can be had here!
     //Vector<String>                      getters(bool incDef=true) const;
@@ -132,11 +133,11 @@ protected:
     Vector<Arg>                 m_args;
     HttpOp                      m_op;
     String                      m_path;
-    QByteArray                  m_description;
+    String                      m_description;
     GetMap                      m_getters;
-    QByteArray                  m_icon;
+    String                      m_icon;
     html::TabBar*               m_tabbar;
-    QByteArray                  m_label;
+    String                      m_label;
     bool                        m_loginReq;
     bool                        m_localOnly;
     bool                        m_postAnon;
@@ -147,27 +148,27 @@ protected:
 
 
 struct Page::Arg {
-    QByteArray  name;
-    QByteArray  description;
+    String  name;
+    String  description;
 };
 
 struct Page::Reply {
-    ContentType type;
-    QByteArray  content;
-    HttpStatus  status;
+    ContentType     type;
+    QByteArray      content;
+    HttpStatus      status;
 };
 
 
 struct Page::Writer {
     Writer& login();
-    Writer& description(const QByteArray&);
-    Writer& argument(const QByteArray&, const QByteArray& d=QByteArray());
-    Writer& getter(const QByteArray&, FNGet);
+    Writer& description(const String&);
+    Writer& argument(const String&, const String& d=String());
+    Writer& getter(const String&, FNGet);
     Writer& local();
     Writer& anonymous();
-    Writer& icon(const QByteArray&);
+    Writer& icon(const String&);
     Writer& no_expand();
-    Writer& label(const QByteArray&);
+    Writer& label(const String&);
     
     Writer& id();
     Writer& key();
@@ -179,7 +180,7 @@ struct Page::Writer {
 //Page::Writer     reg_page(HttpOp, const char*, Redirect(*)());
 Page::Writer        reg_page(HttpOp, const String&, void (*)());
 Page::Writer        reg_page(HttpOp, const String&, HttpStatus (*)());
-Page::Writer        reg_page(HttpOp, const String&, ContentType (*)(QByteArray&));
+Page::Writer        reg_page(HttpOp, const String&, ContentType (*)(String&));
 
 Page::Writer        reg_dispatcher(const String&, const QDir&);
 Page::Writer        reg_dispatcher(HttpOp, const String&, const QDir&);
@@ -188,6 +189,6 @@ Page::Writer        reg_dispatcher(HttpOp, const String&, void(*)(const String&)
 //void            reg_directory(const char*z, const QDir& d);
 void                reg_getter(const char*z, FNGet fn);
 
-ContentType         do_direct_content(QByteArray&dst, const QByteArray&data, ContentType ret, const QByteArray&title=QByteArray());
-ContentType         do_direct_file(QByteArray& dst, const QString&file, bool fExpand=true);
+ContentType         do_direct_content(String&dst, const String&data, ContentType ret, const String&title=String());
+ContentType         do_direct_file(String& dst, const String& file, bool fExpand=true);
 QByteArray          do_expand(const QByteArray&content, const GetMap&vars = GetMap());

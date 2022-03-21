@@ -9,5 +9,9 @@
 #include "CssWriter.hpp"
 #include "Page.hpp"
 
-Page::Writer        reg_page(HttpOp, const String&, void (*)(CssWriter&));
+namespace yq {
+
+    Page::Writer        reg_page(HttpOp, const String&, void (*)(CssWriter&));
+}
+
 

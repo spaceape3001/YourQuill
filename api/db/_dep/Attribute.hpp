@@ -8,8 +8,8 @@
 
 #include "CacheFwd.hpp"
 #include "Document.hpp"
-#include <db/bit/KeyValue.hpp>
-#include <db/enum/Change.hpp>
+#include <yq/bit/KeyValue.hpp>
+#include <yq/enum/Change.hpp>
 
 #include <yq/text/String.hpp>
 #include <yq/collection/Vector.hpp>

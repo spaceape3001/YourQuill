@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <util/Http.hpp>
+#include <yq/Http.hpp>
 
 
 class QDateTime;
@@ -45,8 +45,9 @@ extern thread_local bool                            &x_can_edit;
 extern thread_local QByteArray                      &x_client;
 extern thread_local HttpOp                          &x_op;
 extern thread_local QByteArray                      &x_path;
+extern thread_local QByteArray                      &x_pathinfo;    // path minus the starting slash
 extern thread_local Session*                        &x_session;
-extern thread_local QByteArray                      &x_title;
+extern thread_local String                          &x_title;
 extern thread_local QByteArray                      &x_content;
 extern thread_local Vector<QByteArray>              &x_scripts;
 

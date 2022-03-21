@@ -3,7 +3,7 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include <db/wksp/Workspace.hpp>
+#include <yq/wksp/Workspace.hpp>
 #include <yq/app/CmdArgs.hpp>
 #include <yq/app/Plugins.hpp>
 #include <yq/log/Logging.hpp>

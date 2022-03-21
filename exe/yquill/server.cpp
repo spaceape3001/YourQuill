@@ -6,8 +6,8 @@
 
 #include <iostream>
 
-#include <db/ShareDir.hpp>
-#include <db/Wksp.hpp>
+#include <yq/ShareDir.hpp>
+#include <yq/Wksp.hpp>
 
 #include <srv/Page.hpp>
 #include <srv/Scanner.hpp>

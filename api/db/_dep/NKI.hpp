@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <db/CacheFwd.hpp>
-#include <db/Image.hpp>
+#include <yq/CacheFwd.hpp>
+#include <yq/Image.hpp>
 
 
 namespace yq {

@@ -17,36 +17,36 @@ namespace {
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  Standard content
         
-    ContentType     css_page(QByteArray& h)
+    ContentType     css_page(String& h)
     {
         h   = cur_css();
         return ContentType::css;
     }
     
-    ContentType    index_page(QByteArray& h)
+    ContentType    index_page(String& h)
     {
         TypedBytes         cur  = cur_index();
-        return do_direct_content(h, do_expand(cur.content), cur.type);
+        return do_direct_content(h, do_expand(cur.content.qBytes()), cur.type);
     }
     
-    ContentType     background_page(QByteArray&h)
+    ContentType     background_page(String&h)
     {
         TypedBytes      cur = cur_background();
         h   = cur.content;
         return cur.type;
     }
     
-    QByteArray      get_scripts()
+    String      get_scripts()
     {
-        QByteArray  ret;
+        String  ret;
         for(const QByteArray& x : x_scripts)
-            ret += "\t\t<script src=\"/js/" + x + "\">\n";
+            ret += String("\t\t<script src=\"/js/" + x + "\">\n");
         return ret;
     }
     
     //  API control pages
 
-    ContentType      api_alive(QByteArray&dst)
+    ContentType      api_alive(String&dst)
     {
         dst     = "Santa Claus";
         return ContentType::text;
@@ -219,47 +219,47 @@ namespace {
         reg_dispatcher("markdown", shared_dir("www/markdown"));
         
             //  Register Getters
-        reg_getter("abbr", []() -> QByteArray {
+        reg_getter("abbr", []() -> String {
             static QByteArray ret = wksp::abbreviation().c_str();
             return ret;
         });
         
-        reg_getter("author", []() -> QByteArray {
+        reg_getter("author", []() -> String {
             static QByteArray ret = wksp::author().c_str();
             return ret;
         });
         
-        reg_getter("can_edit",[]() -> QByteArray {
+        reg_getter("can_edit",[]() -> String {
             return x_can_edit ? "true" : "false";
         });
         
-        reg_getter("date", []() -> QByteArray {
+        reg_getter("date", []() -> String {
             return x_time.toUtf8();
         });
         
-        reg_getter("footer", []() -> QByteArray{
+        reg_getter("footer", []() -> String{
             return do_expand(cur_footer());
         });
         
-        reg_getter("home", []() -> QByteArray{
+        reg_getter("home", []() -> String{
             static QByteArray   ret = wksp::home().c_str();
             return ret;
         });
         
-        reg_getter("host", []() -> QByteArray{
+        reg_getter("host", []() -> String{
             static QByteArray   ret = wksp::host().c_str();
             return ret;
         });
         
-        reg_getter("local", []() -> QByteArray{
+        reg_getter("local", []() -> String{
             return x_is_local ? "true" : "false";
         });
         
-        reg_getter("logged_in", []() -> QByteArray {
+        reg_getter("logged_in", []() -> String {
             return (x_session && x_session -> loggedIn) ? "true" : "false";
         });
         
-        reg_getter("luser", []() -> QByteArray {
+        reg_getter("luser", []() -> String {
             static QByteArray ret   = wksp::local_user().c_str();
             if(x_is_local){
                 return ret;
@@ -267,23 +267,23 @@ namespace {
                 return QByteArray();
         });
         
-        reg_getter("name", []() -> QByteArray {
+        reg_getter("name", []() -> String {
             static QByteArray   ret = wksp::name().c_str();
             return ret;
         });
         
-        reg_getter("port", []() -> QByteArray{
+        reg_getter("port", []() -> String {
             static QByteArray   ret = QByteArray::number(wksp::port());
             return ret;
         });
         
         reg_getter("scripts", get_scripts);
         
-        reg_getter("summary", []() -> QByteArray{
+        reg_getter("summary", []() -> String {
             return cur_summary();
         });
         
-        reg_getter("year", []() -> QByteArray{
+        reg_getter("year", []() -> String {
             return QByteArray::number(x_at.date().year());
         });
         

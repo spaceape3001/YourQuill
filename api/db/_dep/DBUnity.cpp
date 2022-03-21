@@ -20,7 +20,7 @@
 
 #include "CacheUtil.hpp"
 
-#include <db/bit/NKI.hpp>
+#include <yq/bit/NKI.hpp>
 #include <yq/Utilities.hpp>
 
 #include <yq/algo/Compare.hpp>

@@ -7,10 +7,10 @@
 #pragma once
 
 #include "uFwd.hpp"
-#include <db/Atom.hpp>
-#include <db/Attribute.hpp>
-#include <db/Property.hpp>
-#include <db/Tag.hpp>
+#include <yq/Atom.hpp>
+#include <yq/Attribute.hpp>
+#include <yq/Property.hpp>
+#include <yq/Tag.hpp>
 
 namespace cdb {
     struct KVReport;

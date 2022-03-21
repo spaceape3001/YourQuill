@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <db/enum/Access.hpp>
-#include <db/enum/DataRole.hpp>
+#include <yq/enum/Access.hpp>
+#include <yq/enum/DataRole.hpp>
 
 namespace yq {
 

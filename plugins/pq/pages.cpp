@@ -6,19 +6,19 @@
 
 #include "yCommon.hpp"
 
-#include <db/Atom.hpp>
-#include <db/Attribute.hpp>
-#include <db/Cache.hpp>
-#include <db/Class.hpp>
-#include <db/ClassFile.hpp>
-#include <db/CommonDirs.hpp>
-#include <db/FileSys.hpp>
-#include <db/Leaf.hpp>
-#include <db/Root.hpp>
-#include <db/Tag.hpp>
-#include <db/Wksp.hpp>
-#include <db/ShareDir.hpp>
-#include <db/bit/Copyright.hpp>
+#include <yq/Atom.hpp>
+#include <yq/Attribute.hpp>
+#include <yq/Cache.hpp>
+#include <yq/Class.hpp>
+#include <yq/ClassFile.hpp>
+#include <yq/CommonDirs.hpp>
+#include <yq/FileSys.hpp>
+#include <yq/Leaf.hpp>
+#include <yq/Root.hpp>
+#include <yq/Tag.hpp>
+#include <yq/Wksp.hpp>
+#include <yq/ShareDir.hpp>
+#include <yq/bit/Copyright.hpp>
 
 #include <meta/Global.hpp>
 #include <meta/Variant.hpp>

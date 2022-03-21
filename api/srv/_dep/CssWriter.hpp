@@ -8,15 +8,18 @@
 
 #include "NetWriter.hpp"
 
-class CssWriter : public NetWriter {
-public:
-    CssWriter();
-    ~CssWriter();
-    
-    template <typename T>
-    CssWriter& operator<<(const T& v)
-    {
-        write(v);
-        return *this;
-    }
-};
+namespace yq {
+
+    class CssWriter : public NetWriter {
+    public:
+        CssWriter(Stream&);
+        ~CssWriter();
+        
+        template <typename T>
+        CssWriter& operator<<(const T& v)
+        {
+            write(v);
+            return *this;
+        }
+    };
+}

@@ -19,14 +19,14 @@ namespace {
         {
         }
         
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
+        ContentType    handle(String& dst, const String&) const override
         {
             TextWriter    txt;
             m_fn(txt);
             txt.flush();
             x_title.clear();
-            x_content   = "<PRE>" + txt.steal() + "</PRE>";
-            dst         = do_expand(default_page(), m_getters);
+            x_content   = String("<PRE>" + txt.bytes() + "</PRE>").qBytes();
+            dst         = do_expand(default_page().qBytes(), m_getters);
             return ContentType::html;
         }
     };

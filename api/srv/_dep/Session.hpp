@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <db/enum/SizeDesc.hpp>
-#include <util/Ref.hpp>
+#include <yq/enum/SizeDesc.hpp>
+#include <yq/Ref.hpp>
 #include <QByteArray>
 #include <atomic>
 
@@ -26,7 +26,7 @@ struct ID {
 //YQ_ENUM( IconSize, , Small, Medium, Large )
 
 struct Session : public ID, public RefCount {
-    QByteArray                  user;
+    String                       user;
     bool                        loggedIn;
     int64_t                     accessed;
     std::atomic<const Root*>    defRoot;

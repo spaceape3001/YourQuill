@@ -21,12 +21,12 @@ QByteArray                   do_expand(const QByteArray&content, const GetMap&va
             break;
         }
         
-        QByteArray k    = QByteArray(z+n, i-n);
+        String k    = String(z+n, i-n);
         FNGet   fn  = vars.get(k,nullptr);
         if(!fn)
             fn  = Page::static_getter(k);
         if(fn)
-            ret.append(fn());
+            ret.append(fn().qBytes());
         n   = i + 2;
     }
     
@@ -36,29 +36,29 @@ QByteArray                   do_expand(const QByteArray&content, const GetMap&va
 }
 
 
-ContentType                  do_direct_content(QByteArray&dst, const QByteArray&data, ContentType ret, const QByteArray&title)
+ContentType                  do_direct_content(String&dst, const String&data, ContentType ret, const String&title)
 {
     switch(ret){
     case ContentType::html:
-        x_title     = title;
-        x_content   = data;
-        dst         = do_expand(Page::default_page());
+        x_title     = title.qBytes();
+        x_content   = data.qBytes();
+        dst         = do_expand(Page::default_page().qBytes());
         return ContentType::html;
     case ContentType::markdown:
         {
-            auto ct     = MarkdownWriter::exec(data);
+            auto ct     = MarkdownWriter::exec(data.qBytes());
             x_title     = ct.title;
             if(x_title.isEmpty())
-                x_title = title;
+                x_title = title.qBytes();
             x_content   = ct.content;
-            dst         = do_expand(Page::default_page());
+            dst         = do_expand(Page::default_page().qBytes());
             return ContentType::html;
         }
         return ContentType::html;
     case ContentType::text:
-        x_title     = title;
-        x_content   = "<PRE>" + data + "</PRE>";
-        dst         = do_expand(Page::default_page());
+        x_title     = title.qBytes();
+            x_content   = String("<PRE>" + data + "</PRE>").qBytes();
+        dst         = do_expand(Page::default_page().qBytes());
         return ContentType::html;
     default:
         break;
@@ -68,43 +68,43 @@ ContentType                  do_direct_content(QByteArray&dst, const QByteArray&
 }
 
 
-ContentType                 do_direct_file(QByteArray& dst, const QString&file, bool fExpand)
+ContentType                 do_direct_file(String& dst, const String&file, bool fExpand)
 {
-    QByteArray  data    = file_bytes(file);
-    QFileInfo   fi(file);
+    String  data    = file_bytes(file);
+    QFileInfo   fi(file.qString());
     ContentType ret = mimeTypeForExt(fi.suffix());
     switch(ret){
     case ContentType::html:
         if(fExpand){
             x_title     = fi.fileName().toUtf8();
-            x_content   = std::move(data);
-            dst         = do_expand(Page::default_page());
+            x_content   = data.qBytes();
+            dst         = do_expand(Page::default_page().qBytes());
             return ContentType::html;
         }
         break;
     case ContentType::markdown:
         if(fExpand){
-            auto ct     = MarkdownWriter::exec(data);
+            auto ct     = MarkdownWriter::exec(data.qBytes());
             x_title     = ct.title;
             if(x_title.isEmpty())
                 x_title = fi.fileName().toUtf8();
             x_content   = ct.content;
-            dst         = do_expand(Page::default_page());
+            dst         = do_expand(Page::default_page().qBytes());
             return ContentType::html;
         }
         break;
     case ContentType::text:
         if(fExpand){
-            x_content   = "<PRE>" + data + "</PRE>";
+            x_content   = String("<PRE>" + data + "</PRE>").qBytes();
             x_title     = fi.fileName().toUtf8();
-            dst         = do_expand(Page::default_page());
+            dst         = do_expand(Page::default_page().qBytes());
             return ContentType::html;
         }
         break;
     default:
         break;
     }
-    dst     = std::move(data);
+    dst     = data.qBytes();
     return ret;
 }
 
@@ -114,7 +114,7 @@ namespace {
     struct NonePage : public Page {
         typedef void (*FN)();
         FN          m_fn;
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
+        ContentType    handle(String& dst) const override
         {
             m_fn();
             throw HttpStatus::Teapot;
@@ -136,7 +136,7 @@ namespace {
         typedef HttpStatus (*FN)();
         FN                  m_fn;
         
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
+        ContentType    handle(Stream& dst) const override
         {
             throw m_fn();
         }
@@ -152,19 +152,22 @@ Page::Writer     reg_page(HttpOp op, const String&path, HttpStatus (*fn)())
 
 namespace {
     struct GenericPage : public Page {
-        typedef ContentType (*FN)(QByteArray&);
+        typedef ContentType (*FN)(String&);
         FN                  m_fn;
         
-        ContentType    handle(QByteArray& dst, const QByteArray&) const override
+        ContentType    handle(Stream& dst) const override
         {
-            return m_fn(dst);
+            String  buf;
+            auto ct =  m_fn(dst);
+            dst << buf;
+            return ct;
         }
         
         GenericPage(HttpOp op, const String& path, FN fn) : Page(op, path, false), m_fn(fn) {}
     };
 }
 
-Page::Writer     reg_page(HttpOp op, const String& path, ContentType (*fn)(QByteArray&))
+Page::Writer     reg_page(HttpOp op, const String& path, ContentType (*fn)(String&))
 {
     return Page::Writer(new GenericPage(op, path, fn));
 }
@@ -180,9 +183,9 @@ namespace {
         {
         }
         
-        ContentType     handle(QByteArray& dst, const QByteArray& path) const override
+        ContentType     handle(Stream& dst) const override
         {
-            return do_direct_file(dst, m_dir.absoluteFilePath(utf8(path)));
+            return do_direct_file(dst, m_dir.absoluteFilePath(QString::fromUtf8(x_pathinfo)));
         }
     };
 }
@@ -201,7 +204,7 @@ namespace {
     struct NoneDispatcher : public Page {
         typedef void (*FN)(const String&);
         FN          m_fn;
-        ContentType    handle(QByteArray& dst, const QByteArray&path) const override
+        ContentType    handle(String& dst) const override
         {
             m_fn(path);
             throw HttpStatus::Teapot;

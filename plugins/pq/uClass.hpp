@@ -8,9 +8,9 @@
 
 #include "uFwd.hpp"
 
-#include <db/Class.hpp>
-#include <db/Image.hpp>
-#include <db/Tag.hpp>
+#include <yq/Class.hpp>
+#include <yq/Image.hpp>
+#include <yq/Tag.hpp>
 
 #include <QString>
 

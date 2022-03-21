@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <util/Deque.hpp>
+#include <yq/Deque.hpp>
 #include <QThread>
 
 class QTimer;

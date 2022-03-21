@@ -9,7 +9,7 @@
 #include "ipcSocket.hpp"
 #include "PidFile.hpp"
 
-#include <db/CommonDirs.hpp>
+#include <yq/CommonDirs.hpp>
 
 #include <yq/FileUtils.hpp>
 #include <yq/Logging.hpp>

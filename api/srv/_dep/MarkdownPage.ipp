@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include "QByteArrayStream.hpp"
 
 MarkdownWriter::CT        MarkdownWriter::exec(const QByteArray&buf)
 {
@@ -32,7 +33,10 @@ MarkdownWriter::CT        MarkdownWriter::exec(const QByteArray&buf)
 }
 
 
-MarkdownWriter::MarkdownWriter() = default;
+MarkdownWriter::MarkdownWriter(Stream& str) : m_stream(str)
+{
+}
+
 MarkdownWriter::~MarkdownWriter() = default;
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -45,23 +49,24 @@ namespace {
         {
         }
         
-        ContentType  handle(QByteArray& dst, const QByteArray&) const override
+        ContentType  handle(String& dst, const String&) const override
         {
-            MarkdownWriter    md;
+            QByteArray          buff;
+            QByteArrayStream    bas(buff);
+            MarkdownWriter      md(bas);
             m_fn(md);
-            md.flush();
-            auto ct = MarkdownWriter::exec(md.steal());
+            auto ct = MarkdownWriter::exec(buff);
             x_title = md.title();
-            if(x_title.isEmpty() && !ct.title.isEmpty())
+            if(x_title.empty() && !ct.title.isEmpty())
                 x_title     = ct.title;
             x_content   = std::move(ct.content);
-            dst         = do_expand(default_page(), m_getters);
+            dst         = do_expand(default_page().qBytes(), m_getters);
             return ContentType::html;
         }
     };
 }
 
-Page::Writer     reg_page(HttpOp hOp, const QByteArray& path, void(*fn)(MarkdownWriter&))
+Page::Writer     reg_page(HttpOp hOp, const String& path, void(*fn)(MarkdownWriter&))
 {
     return Page::Writer(new MarkdownPage(hOp, path, fn));
 }
@@ -75,17 +80,17 @@ namespace {
         {
         }
         
-        ContentType  handle(QByteArray& dst, const QByteArray&path) const override
+        ContentType  handle(String& dst, const String&path) const override
         {
             MarkdownWriter    md;
             m_fn(md, path);
             md.flush();
-            auto ct = MarkdownWriter::exec(md.steal());
-            x_title = md.title();
+            auto ct = MarkdownWriter::exec(String(md.bytes()).qBytes());
+            x_title = md.title().qBytes();
             if(x_title.isEmpty() && !ct.title.isEmpty())
                 x_title     = ct.title;
             x_content   = std::move(ct.content);
-            dst         = do_expand(default_page(), m_getters);
+            dst         = do_expand(default_page().qBytes(), m_getters);
             return ContentType::html;
         }
     };

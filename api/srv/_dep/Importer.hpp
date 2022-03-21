@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <db/enum/Change.hpp>
-#include <util/DelayInit.hpp>
-#include <util/EnumMapFwd.hpp>
-#include <util/Flag.hpp>
+#include <yq/enum/Change.hpp>
+#include <yq/DelayInit.hpp>
+#include <yq/EnumMapFwd.hpp>
+#include <yq/Flag.hpp>
 
 
 #include <QRegularExpression>

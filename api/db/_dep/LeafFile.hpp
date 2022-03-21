@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <db/bit/Context.hpp>
-#include <db/enum/Format.hpp>
+#include <yq/bit/Context.hpp>
+#include <yq/enum/Format.hpp>
 #include "StdFile.hpp"
 
 namespace yq {

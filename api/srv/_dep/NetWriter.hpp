@@ -11,47 +11,44 @@
 //#include "db/Cache.hpp"
 //#include "db/Enums.hpp"
 //#include "util/Array2.hpp"
-#include <util/Comma.hpp>
-#include <util/Enum.hpp>
-#include <util/List.hpp>
-#include <util/Set.hpp>
-#include <util/Vector.hpp>
+#include <yq/Comma.hpp>
+#include <yq/Enum.hpp>
+#include <yq/List.hpp>
+#include <yq/Set.hpp>
+#include <yq/Vector.hpp>
 
 
-#include <QByteArray>
-#include <QTextStream>
 #include <filesystem>
 
+class QColor;
 class QDate;
 class QDateTime;
 class QDir;
+class QRect;
 class QUrl;
 //class QVariant;
 //class Page;
 //class Class;
 //class Graph;
+namespace yq { class Stream; }
 
-QTextStream&    operator<<(QTextStream&, const std::string_view&);
-QTextStream&    operator<<(QTextStream&, const std::string&);
-QTextStream&    operator<<(QTextStream&, const String&);
-QTextStream&    operator<<(QTextStream&, const std::filesystem::path&);
+//QTextStream&    operator<<(QTextStream&, const std::string_view&);
+//QTextStream&    operator<<(QTextStream&, const std::string&);
+//QTextStream&    operator<<(QTextStream&, const String&);
+//QTextStream&    operator<<(QTextStream&, const std::filesystem::path&);
 
 class NetWriter {
 public:
 
-    const QByteArray&   title() const { return m_title; }
-    void                title(const char*);
-    void                title(const QByteArray&);
-    void                title(const QString&);
-    void                title(const String&);
-    void                flush();
-    const QByteArray&   bytes() const { return m_bytes; }
-    QByteArray          steal();
+    const String&       title() const { return m_title; }
+    void                title(const std::string_view&);
+    
+    //String              steal();
 
     template <typename T>
     void    write(const T& data)
     {
-        m_stream << data;
+        *m_stream << data;
     }
     
     template <typename E>
@@ -61,7 +58,7 @@ public:
     }
     
     template <typename T>
-    void    write(const List<T>& values, const QString& sep = ", ")
+    void    write(const List<T>& values, const String& sep = ", ")
     {
         Comma   comma(sep);
         for(const T& v : values){
@@ -72,7 +69,7 @@ public:
     }
     
     template <typename T>
-    void    write(const Vector<T>& values, const QString& sep = ", ")
+    void    write(const Vector<T>& values, const String& sep = ", ")
     {
         Comma   comma(sep);
         for(const T& v : values){
@@ -83,7 +80,7 @@ public:
     }
 
     template <typename T, typename C>
-    void    write(const Set<T,C>& values, const QString& sep = ", ")
+    void    write(const Set<T,C>& values, const String& sep = ", ")
     {
         Comma   comma(sep);
         for(const T& v : values){
@@ -99,7 +96,7 @@ public:
     //void    write(const QDateTime&);
     void    write(const QDir&);
     void    write(const QRect&);
-    void    write(const QStringList&, const QString& sep=", ");
+    void    write(const QStringList&, const String& sep=", ");
     void    write(const QUrl&);
     void    write(const String&);
     //void    write(const QVariant&);
@@ -111,16 +108,22 @@ public:
         
         \return TRUE if the document loaded successfull, FALSE otherwise
     */
-    bool    append_document(const QString&documentname, bool fSuppressMsg=false);
+    bool    append_document(const std::filesystem::path&documentname, bool fSuppressMsg=false);
     
-protected:
-    QByteArray  m_bytes;
-    QTextStream m_stream;
-    QByteArray  m_title;
+    //! forces the doucment to "finish" for write
+    virtual void    finish(){}
+    
+        //  Reference, must remain valid for duration of session
+    void        setStream(Stream&);
 
-    void        write_in(NetWriter&&);
+protected:
+    String      m_title;
+    Stream*     m_stream;
     
     NetWriter();
+    NetWriter(Stream&);
     ~NetWriter();
+
+    
 };
 

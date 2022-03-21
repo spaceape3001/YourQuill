@@ -18,11 +18,13 @@
 #include "TLSGlobals.hpp"
 #include "Utilities.hpp"
 
-#include <db/Cache.hpp>
-#include <db/Wksp.hpp>
-#include <util/Execute.hpp>
-#include <util/FileUtils.hpp>
-#include <util/Utilities.hpp>
+#include <yq/Cache.hpp>
+#include <yq/Wksp.hpp>
+#include <yq/Execute.hpp>
+#include <yq/FileUtils.hpp>
+#include <yq/NullStream.hpp>
+#include <yq/StreamOps.hpp>
+#include <yq/Utilities.hpp>
 
 #include <httpserver/httprequest.h>
 

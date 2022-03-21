@@ -8,11 +8,11 @@
 
 #include "uFwd.hpp"
 
-//#include <db/Atom.hpp>
-//#include <db/Class.hpp>
-//#include <db/Image.hpp>
-//#include <db/Leaf.hpp>
-//#include <db/Tag.hpp>
+//#include <yq/Atom.hpp>
+//#include <yq/Class.hpp>
+//#include <yq/Image.hpp>
+//#include <yq/Leaf.hpp>
+//#include <yq/Tag.hpp>
 
 
 //static constexpr const std::initializer_list<const char*>    kImages = { "svg", "png", "gif", "jpg", "bmp", "tif", "tiff" };

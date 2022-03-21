@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/CacheFwd.hpp>
+#include <yq/CacheFwd.hpp>
 #include <util/Set.hpp>
 
 

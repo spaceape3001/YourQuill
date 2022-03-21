@@ -8,14 +8,14 @@
 
 #include "NetWriter.hpp"
 
-#include <db/Cache.hpp>
-#include <db/enum/DataRole.hpp>
-#include <db/enum/SubmitLabel.hpp>
+#include <yq/Cache.hpp>
+#include <yq/enum/DataRole.hpp>
+#include <yq/enum/SubmitLabel.hpp>
 
-#include <util/Array2.hpp>
-#include <util/Comma.hpp>
-#include <util/Set.hpp>
-#include <util/Vector.hpp>
+#include <yq/Array2.hpp>
+#include <yq/Comma.hpp>
+#include <yq/Set.hpp>
+#include <yq/Vector.hpp>
 
 
 //#include "db/Cache.hpp"

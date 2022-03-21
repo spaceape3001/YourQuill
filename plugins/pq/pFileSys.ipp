@@ -75,7 +75,7 @@ namespace {
     }
     
     
-    ContentType    get_icon(QByteArray& b)
+    ContentType    get_icon(String& b)
     {
         test(decode_icon_prime());
         if(cdb::raster(x_icon)){

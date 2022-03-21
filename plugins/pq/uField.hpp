@@ -8,9 +8,9 @@
 
 #include "uFwd.hpp"
 
-#include <db/Field.hpp>
-#include <db/Image.hpp>
-#include <db/Tag.hpp>
+#include <yq/Field.hpp>
+#include <yq/Image.hpp>
+#include <yq/Tag.hpp>
 
 struct UField {
     const String   key;

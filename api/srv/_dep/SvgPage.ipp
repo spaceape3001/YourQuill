@@ -12,9 +12,10 @@ namespace {
         typedef void(*FN)(QSvgGenerator&);
         SvgPage(HttpOp hOp, const String& path, FN fn) : Page(hOp, path, false), m_fn(fn){}
 
-        ContentType    handle(QByteArray&dst, const QByteArray&) const override
+        ContentType    handle(String&dst, const String&) const override
         {
-            QBuffer buf(&dst);
+            QByteArray  bytes;
+            QBuffer buf(&bytes);
             buf.open(QIODevice::ReadWrite);
             {
                 QSvgGenerator   svg;
@@ -22,6 +23,7 @@ namespace {
                 m_fn(svg);
             }
             buf.close();
+            dst = bytes;
             return ContentType::svg;
         }
     private:

@@ -17,21 +17,21 @@
 #include "uLeaf.hpp"
 #include "uTag.hpp"
 
-#include <db/Atom.hpp>
-#include <db/Attribute.hpp>
-#include <db/CacheUtil.hpp>
-#include <db/FileSys.hpp>
-#include <db/Graph.hpp>
-#include <db/GraphBuilder.hpp>
-#include <db/Image.hpp>
-#include <db/Leaf.hpp>
-#include <db/Property.hpp>
-#include <db/Root.hpp>
-#include <db/ShareDir.hpp>
-#include <db/Tag.hpp>
-#include <db/Wksp.hpp>
+#include <yq/Atom.hpp>
+#include <yq/Attribute.hpp>
+#include <yq/CacheUtil.hpp>
+#include <yq/FileSys.hpp>
+#include <yq/Graph.hpp>
+#include <yq/GraphBuilder.hpp>
+#include <yq/Image.hpp>
+#include <yq/Leaf.hpp>
+#include <yq/Property.hpp>
+#include <yq/Root.hpp>
+#include <yq/ShareDir.hpp>
+#include <yq/Tag.hpp>
+#include <yq/Wksp.hpp>
 
-#include <db/enum/AttrKind.hpp>
+#include <yq/enum/AttrKind.hpp>
 
 #include <srv/Importer.hpp>
 #include <srv/Page.hpp>
@@ -129,8 +129,8 @@ namespace {
     {
         TypedBytes  n   = TypedBytes(DataRole::Image, {".background.jpg", ".backgorund.png", ".background.svg", ".background.gif"});
         gBackground = n;
-        if(gHasBackground != !n.content.isEmpty()){
-            gHasBackground  = !n.content.isEmpty();
+        if(gHasBackground != !n.content.empty()){
+            gHasBackground  = !n.content.empty();
             update_css();
         }
     }

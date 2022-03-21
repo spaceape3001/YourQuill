@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RootFwd.hpp"
-#include <db/enum/SizeDesc.hpp>
+#include <yq/enum/SizeDesc.hpp>
 #include <yq/type/Enum.hpp>
 #include <yq/type/Flag.hpp>
 

@@ -14,7 +14,7 @@ namespace {
         {
         }
 
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
+        ContentType handle(String& dst, const String&) const override
         {
             QJsonDocument   doc;
             QJsonArray      arr;
@@ -41,7 +41,7 @@ namespace {
         {
         }
 
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
+        ContentType handle(String& dst, const String&) const override
         {
             QJsonDocument   doc;
             doc.setArray(m_fn());
@@ -66,7 +66,7 @@ namespace {
         {
         }
         
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
+        ContentType handle(String& dst, const String&) const override
         {
             QJsonDocument   doc;
             m_fn(doc);
@@ -91,7 +91,7 @@ namespace {
         {
         }
         
-        ContentType handle(QByteArray& dst, const QByteArray&) const override
+        ContentType handle(String& dst, const String&) const override
         {
             dst   = (m_fn()).toJson(QJsonDocument::Compact);
             return ContentType::json;
@@ -114,7 +114,7 @@ namespace {
         {
         }
         
-        ContentType handle(QByteArray&dst, const QByteArray&) const override
+        ContentType handle(String&dst, const String&) const override
         {
             QJsonDocument   doc;
             QJsonObject     obj;
@@ -141,7 +141,7 @@ namespace {
         {
         }
         
-        ContentType handle(QByteArray&dst, const QByteArray&) const override
+        ContentType handle(String&dst, const String&) const override
         {
             QJsonDocument   doc;
             doc.setObject(m_fn());

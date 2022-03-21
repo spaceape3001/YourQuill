@@ -7,7 +7,7 @@ target_link_libraries(metavalues yq)
 add_executable(tcpsink tcpsink.cpp)
 
 add_executable(wkspinfo wkspinfo.cpp)
-target_link_libraries(wkspinfo yqdb yq)
+target_link_libraries(wkspinfo yq)
 
 add_executable(xmlread xmlread.cpp)
 

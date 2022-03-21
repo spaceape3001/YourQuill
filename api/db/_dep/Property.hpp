@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CacheFwd.hpp"
-#include <db/enum/AttrKind.hpp>
+#include <yq/enum/AttrKind.hpp>
 
 namespace yq {
 

@@ -18,4 +18,4 @@
 #include "Tag.hpp"
 #include "Root.hpp"
 #include "Wksp.hpp"
-#include <db/bit/NKI.hpp>
+#include <yq/bit/NKI.hpp>
