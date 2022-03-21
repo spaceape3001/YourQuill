@@ -147,7 +147,7 @@ namespace yq {
         #ifdef NDEBUG
         try {
         #endif
-            if(!dlopen(pth.c_str(), RTLD_NOW|RTLD_LOCAL))
+            if(!dlopen(pth.c_str(), YQ_DBGREL(RTLD_LAZY|RTLD_LOCAL, RTLD_NOW|RTLD_LOCAL)))
                 yError() << "Plugin (" << pth << ") failed to load.";
             return true;
             

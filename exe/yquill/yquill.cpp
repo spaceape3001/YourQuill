@@ -14,7 +14,8 @@
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
 #include <yq/http/HttpServer.hpp>
-#include <yq/web/WebPage.hpp>
+#include <yq/text/Utils.hpp>
+#include <yq/web/Web.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -51,34 +52,46 @@ static const char  szHelloWorld[] = "<html><body><h1>HELLO WORLD!</h1></body></h
 static constexpr const size_t       kBufferSize     = 8192;
 
 
-void    hello_world(const HttpRequest& rq, HttpResponse& rs)
-{
-    HttpDataStream  out(rs.content(ContentType::html));
-    out << "<html><head><title>HELLO WORLD!</title></head>" 
-        << "<body><h1>HELLO WORLD!</h1>\n<table>\n";
-        
-    out << "<tr><th align=\"left\">Method</th><td>" << rq.method() << "</td></tr>\n";
-    out << "<tr><th align=\"left\">URL</th><td>" << rq.url() << "</td></tr>\n";
-    out << "<tr><th align=\"left\">Client HTTP</th><td>" << rq.version() << "</td></tr>\n";
-    for(auto& hv : rq.headers())
-        out << "<tr><th align=\"left\">" << hv.key << "</th><td>" << hv.value << "</td><?tr>\n";
-    out << "</table></body></html>\n";
-}
 
+std::pair<const Web*, size_t>     find_search(HttpOp m, const std::string_view& req)
+{
+    size_t  n       = 0;
+    for(size_t nslash = req.find_last_of('/'); (nslash != std::string::npos) && nslash; ++n, nslash=req.find_last_of('/', nslash-1)){
+        std::string tmp;
+        
+        if(!n){
+            tmp     = concat(req.substr(0,nslash), "/*");
+            const Web*p   = Web::find(m, tmp);
+            if(p)
+                return { p, nslash+1 };
+        }
+        
+        tmp = concat(req.substr(0, nslash), "/**");
+        const Web*p   = Web::find(m, tmp);
+        if(p)
+            return { p, nslash+1 };
+    }
+    return {};
+}
 
 void    http_process(const HttpRequest& rq, HttpResponse& rs)
 {
 yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
 
-    const WebPage*      pg  = WebPage::find(rq.method(), rq.url().path);
+    const Web*      pg  = Web::find(rq.method(), rq.url().path);
     if(pg){
-        pg -> handle(rq, rs);
+        pg -> handle(rq, rs, "");
         return ;
     }
 
-    hello_world(rq, rs);
-
-//    rs.status(HttpStatus::NotImplemented);
+    //  alright, begin the more crazy searching...
+    auto f  = find_search(rq.method(), rq.url().path);
+    if(f.first){
+        f.first -> handle(rq, rs, rq.url().path.substr(f.second));
+        return ;
+    }
+    
+    throw HttpStatus::NotFound;
 }
 
 int execMain(int argc, char* argv[])

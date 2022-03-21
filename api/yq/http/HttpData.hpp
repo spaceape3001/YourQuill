@@ -32,7 +32,7 @@ namespace yq {
         char*                   data() const { return (char*)(1 + &m_count); }
         
         //! Pointer to available (unfilled) space
-        char*                   freespace() const { return data() + count(); }
+        char*                   freespace() const { return data() + m_count; }
         
         //! Gets the data buffer size (whether it's filled or not)
         static uint32_t         size();
@@ -45,6 +45,8 @@ namespace yq {
         
         //! Detects emptiness
         bool                    empty() const { return !m_count; }
+        
+        bool                    full() const { return m_count >= size(); }
         
         //! Note, return size may be smaller if there's insufficient room!
         std::string_view        copy(const std::string_view&);

@@ -245,6 +245,15 @@ namespace yq {
         }
     }
 
+    std::string concat(const std::string_view& a, const std::string_view& b)
+    {
+        std::string ret;
+        ret.reserve(a.size()+b.size()+1);
+        ret = a;
+        ret += b;
+        return ret;
+    }
+
     bool    contains(const char* haystack, size_t nHaystack, const char* needle, size_t nNeedle)
     {
         return strnstr(haystack, nHaystack, needle, nNeedle) ? true : false;
@@ -387,6 +396,13 @@ namespace yq {
                 return false;
         });
         return ret;
+    }
+
+    bool    ends(const std::string_view& hay, const std::string_view& pat)
+    {
+        if(pat.size() > hay.size())
+            return false;
+        return hay.substr(hay.size()-pat.size()) == pat;
     }
 
     char32_t  first_non_blank_char(const std::string_view&a)
@@ -1798,6 +1814,5 @@ namespace yq {
         return std::string_view(s,e);
     }
 }
-
 
  

@@ -17,6 +17,7 @@ namespace yq {
     //! Concatenates the given 32-bit UTF character on to the string as UTF-8
     std::string&  operator+=(std::string&, char32_t);
     
+    
     //! Checks to see if ANY string in the left starts with the right
     bool    any_starts(const std::vector<std::string>&haystack, const std::string_view&pattern);
     
@@ -60,6 +61,8 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
     */
     std::string  capitalize(const std::string_view&s);
+    
+    std::string concat(const std::string_view& a, const std::string_view& b);
 
     /*! \brief Checks if the haystack has the needle
     */
@@ -143,6 +146,8 @@ namespace yq {
     /*! \brief Counts the opening number of space characters
     */
     size_t  count_start_spaces(const std::string_view&);
+    
+    bool    ends(const std::string_view& hay, const std::string_view& pat);
 
     /*! \brief First non-blank character
         This returns the first non-blank character seen, or NULL if none found
@@ -1891,4 +1896,5 @@ namespace yq {
         return ret;
     }
 }
+
 
