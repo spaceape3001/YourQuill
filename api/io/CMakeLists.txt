@@ -12,6 +12,9 @@ set(io_sources
     ./http/HttpParser.hpp
     ./http/HttpRequest.hpp
     ./http/HttpUnity.cpp
+    
+    ./web/WebPage.hpp
+    ./web/WebUnity.cpp
 )
 
 

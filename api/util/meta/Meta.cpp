@@ -73,13 +73,13 @@ namespace yq {
         }
         #endif
         
-        const char*    str_start(const char* z, const char* pat)
+        std::string_view     str_start(std::string_view z, const char* pat)
         {
-            const char *y   = z;
-            for(; *y && *pat; ++y, ++pat)
-                if(*y != *pat)
+            size_t i;
+            for(i=0; (i<z.size()) && *pat; ++i, ++pat)
+                if(z[i] != *pat)
                     return z;
-            return y;
+            return z.substr(i);
         }
     }
     
@@ -124,7 +124,7 @@ namespace yq {
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 
-        ArgInfo::ArgInfo(const char* zName, const TypeInfo&t, Meta*par) : Meta(zName, par), m_type(t) 
+        ArgInfo::ArgInfo(std::string_view zName, const Meta&t, Meta*par) : Meta(zName, par), m_type(t) 
         {
             m_flags |= ARG;
         }
@@ -133,7 +133,7 @@ namespace yq {
     //  COMPOUND
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        CompoundInfo::CompoundInfo(const char zName[], const char zFile[], Meta* par, id_t i) : Meta(zName, par, i), m_file(zFile)
+        CompoundInfo::CompoundInfo(std::string_view zName, const char zFile[], Meta* par, id_t i) : Meta(zName, par, i), m_file(zFile)
         {
             m_flags |= COMPOUND;
         }
@@ -260,14 +260,12 @@ namespace yq {
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        Meta::Meta(const char zName[], id_t i) : Meta(zName, nullptr, i)
+        Meta::Meta(std::string_view zName, id_t i) : Meta(zName, nullptr, i)
         {
         }
         
-        Meta::Meta(const char zName[], Meta* parent, id_t i) 
+        Meta::Meta(std::string_view zName, Meta* parent, id_t i) 
         {
-            assert(zName);
-            assert(strnlen(zName, MAX_NAME+1) <= MAX_NAME);
             assert(thread_safe_write());
             
             //  strip out the yq namespace
@@ -318,54 +316,41 @@ namespace yq {
         }
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        Meta::Writer&     Meta::Writer::alias(const char zAlias[])
+        Meta::Writer&     Meta::Writer::alias(std::string_view zAlias)
         {
-            assert(zAlias);
-            assert(strnlen(zAlias, MAX_NAME+1) <= MAX_NAME);
             m_meta -> m_aliases << std::string_view(zAlias);
             return *this;
         }
         
-        Meta::Writer&     Meta::Writer::description(const char zDescription[])
+        Meta::Writer&     Meta::Writer::description(std::string_view zDescription)
         {
-            assert(zDescription);
-            assert(strnlen(zDescription, MAX_DESCRIPTION+1) <= MAX_DESCRIPTION);
             m_meta -> m_description = std::string_view(zDescription);
             return *this;
         }
         
-        Meta::Writer&     Meta::Writer::label(const char zLabel[])
+        Meta::Writer&     Meta::Writer::label(std::string_view zLabel)
         {
-            assert(zLabel);
-            assert(strnlen(zLabel, MAX_LABEL+1) <= MAX_LABEL);
-
             m_meta -> m_label = std::string_view(zLabel);
             return *this;
         }
         
-        Meta::Writer&     Meta::Writer::tag(const char zKey[])
+        Meta::Writer&     Meta::Writer::tag(std::string_view zKey)
         {
-            assert(zKey);
-            assert(strnlen(zKey, MAX_KEY+1) <= MAX_KEY);
             assert("Tag already set!" && !m_meta->m_tags.has(zKey));
             m_meta -> m_tags[zKey] = Variant(true);
             return *this;
         }
         
-        Meta::Writer&     Meta::Writer::tag(const char zKey[], Variant&& value)
+        Meta::Writer&     Meta::Writer::tag(std::string_view zKey, Variant&& value)
         {
-            assert(zKey);
-            assert(strnlen(zKey, MAX_KEY+1) <= MAX_KEY);
             assert("Tag already set!" && !m_meta->m_tags.has(zKey));
             m_meta -> m_tags[zKey] = std::move(value);
             return *this;
         }
         
 
-        Meta::Writer&     Meta::Writer::tag(const char zKey[], const Variant& value)
+        Meta::Writer&     Meta::Writer::tag(std::string_view zKey, const Variant& value)
         {
-            assert(zKey);
-            assert(strnlen(zKey, MAX_KEY+1) <= MAX_KEY);
             assert("Tag already set!" && !m_meta->m_tags.has(zKey));
             m_meta -> m_tags[zKey] = value;
             return *this;
@@ -386,7 +371,7 @@ namespace yq {
     //  METHOD
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        MethodInfo::MethodInfo(const char* zName, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta)
+        MethodInfo::MethodInfo(std::string_view zName, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta)
         {
             assert(parentMeta);
 
@@ -417,7 +402,7 @@ namespace yq {
     //  OBJECT (INFO)
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        ObjectInfo::ObjectInfo(const char* zName, const char* zFile, ObjectInfo* myBase) : CompoundInfo(zName, zFile), m_base(myBase)
+        ObjectInfo::ObjectInfo(std::string_view zName, const char* zFile, ObjectInfo* myBase) : CompoundInfo(zName, zFile), m_base(myBase)
         {
             assert(zFile);
             
@@ -455,7 +440,7 @@ namespace yq {
     //  PROPERTY
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        PropertyInfo::PropertyInfo(const char* zName, const TypeInfo&theType, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta), m_type(theType)
+        PropertyInfo::PropertyInfo(std::string_view zName, const TypeInfo&theType, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta), m_type(theType)
         {
             assert(parentMeta);
 
@@ -560,7 +545,7 @@ namespace yq {
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        TypeInfo::TypeInfo(const char* zName, const char* zFile, id_t i) : CompoundInfo(zName, zFile, nullptr, i)
+        TypeInfo::TypeInfo(std::string_view zName, const char* zFile, id_t i) : CompoundInfo(zName, zFile, nullptr, i)
         {
             m_flags |= TYPE;
             

@@ -5,6 +5,7 @@
 
 #include <db/wksp/Workspace.hpp>
 #include <util/app/CmdArgs.hpp>
+#include <util/app/Plugins.hpp>
 #include <util/log/Logging.hpp>
 #include <util/meta/Meta.hpp>
 #include <util/stream/Ops.hpp>
@@ -13,6 +14,7 @@
 #include <io/http/HttpRequest.hpp>
 #include <io/http/HttpResponse.hpp>
 #include <io/http/HttpServer.hpp>
+#include <io/web/WebPage.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -49,10 +51,8 @@ static const char  szHelloWorld[] = "<html><body><h1>HELLO WORLD!</h1></body></h
 static constexpr const size_t       kBufferSize     = 8192;
 
 
-void    http_process(const HttpRequest& rq, HttpResponse& rs)
+void    hello_world(const HttpRequest& rq, HttpResponse& rs)
 {
-yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
-
     HttpDataStream  out(rs.content(ContentType::html));
     out << "<html><head><title>HELLO WORLD!</title></head>" 
         << "<body><h1>HELLO WORLD!</h1>\n<table>\n";
@@ -62,9 +62,21 @@ yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
     out << "<tr><th align=\"left\">Client HTTP</th><td>" << rq.version() << "</td></tr>\n";
     for(auto& hv : rq.headers())
         out << "<tr><th align=\"left\">" << hv.key << "</th><td>" << hv.value << "</td><?tr>\n";
-        
-        
     out << "</table></body></html>\n";
+}
+
+
+void    http_process(const HttpRequest& rq, HttpResponse& rs)
+{
+yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
+
+    const WebPage*      pg  = WebPage::find(rq.method(), rq.url().path);
+    if(pg){
+        pg -> handle(rq, rs);
+        return ;
+    }
+
+    hello_world(rq, rs);
 
 //    rs.status(HttpStatus::NotImplemented);
 }
@@ -74,8 +86,12 @@ int execMain(int argc, char* argv[])
     //  EVENTUALLY.... better arguments, but for now.... 
     log_to_std_error();
     Meta::init();
+
+    size_t n = load_plugin_dir("plugin");
+    yInfo() << "Loaded " << n << " Plugins.";
     
-    //  TODO .... load plugins
+    //  we'll eventually have a structure to the plugins.  For now, everything is loaded....
+    //  (likely based off templates and/or keywords in the quill file)
     
     Meta::freeze();
     if(!wksp::initialize(argv[1])){

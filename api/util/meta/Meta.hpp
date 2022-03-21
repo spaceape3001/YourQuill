@@ -169,8 +169,8 @@ namespace yq {
     
         //! Used by the constructor's default to auto-assign an ID
         static constexpr const id_t AUTO_ID = ~(id_t) 0;
-        explicit Meta(const char[], id_t i=AUTO_ID);
-        explicit Meta(const char[], Meta* parent, id_t i=AUTO_ID);
+        explicit Meta(std::string_view, id_t i=AUTO_ID);
+        explicit Meta(std::string_view, Meta* parent, id_t i=AUTO_ID);
         virtual ~Meta();    // do NOT delete... C++ won't let it be deleted
         
             // called after each init... repopulate property maps/vectors/etc (do not append, rebuild)

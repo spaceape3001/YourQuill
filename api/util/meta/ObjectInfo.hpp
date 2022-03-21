@@ -23,7 +23,7 @@ namespace yq {
         friend class PropertyInfo;
         friend class MethodInfo;
         
-        ObjectInfo(const char* zName, const char* zFile, ObjectInfo* b=nullptr);
+        ObjectInfo(std::string_view zName, const char* zFile, ObjectInfo* b=nullptr);
         
         virtual void                    sweep_impl() override;
 

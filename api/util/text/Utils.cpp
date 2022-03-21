@@ -1785,6 +1785,9 @@ namespace yq {
 
     std::string_view    trimmed(const std::string_view&sv)
     {
+        if(sv.empty())
+            return std::string_view();
+
         const char* s   = nullptr;
         const char* e   = nullptr;
         iter32(sv, [&](const char* z, char32_t ch){
@@ -1801,8 +1804,25 @@ namespace yq {
             return std::string_view();
     }
     
+    std::string_view    trimmed(const std::string_view&sv, char c)
+    {
+        if(sv.empty())
+            return std::string_view();
+            
+        const char* s   = nullptr;
+        const char* e   = nullptr;
+        for(s=sv.data(), e=sv.data()+sv.size(); (s<e) && (*s == c); ++s)
+            ;
+        for(; (s<e) && (e[-1] == c); --e)
+            ;
+        return std::string_view(s,e);
+    }
+
     std::string_view    trimmed_end(const std::string_view&sv)
     {
+        if(sv.empty())
+            return std::string_view();
+
         const char* e   = nullptr;
         iter32(sv, [&](const char* z, char32_t ch){
             if(!is_space(ch)){
@@ -1816,8 +1836,23 @@ namespace yq {
             return std::string_view();
     }
     
+    std::string_view    trimmed_end(const std::string_view&sv, char c)
+    {
+        if(sv.empty())
+            return std::string_view();
+            
+        const char* s   = nullptr;
+        const char* e   = nullptr;
+        for(s=sv.data(), e=sv.data()+sv.size(); (s<e) && (e[-1] == c); --e)
+            ;
+        return std::string_view(s,e);
+    }
+
     std::string_view    trimmed_start(const std::string_view&sv)
     {
+        if(sv.empty())
+            return std::string_view();
+
         const char* s   = nullptr;
         iter32_abort(sv, [&](const char* z, char32_t ch) -> bool {
             if(!is_space(ch)){
@@ -1831,6 +1866,17 @@ namespace yq {
         return sv;
     }
     
+    std::string_view    trimmed_start(const std::string_view&sv, char c)
+    {
+        if(sv.empty())
+            return std::string_view();
+            
+        const char* s   = nullptr;
+        const char* e   = nullptr;
+        for(s=sv.data(), e=sv.data()+sv.size(); (s<e) && (*s == c); ++s)
+            ;
+        return std::string_view(s,e);
+    }
 }
 
 

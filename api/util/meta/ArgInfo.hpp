@@ -13,12 +13,12 @@ namespace yq {
     class ArgInfo : public Meta {
     public:
     
-        const TypeInfo&        type() const { return m_type; }
+        const Meta&        type() const { return m_type; }
     
     private:
-        ArgInfo(const char* zName, const TypeInfo&, Meta*);
+        ArgInfo(std::string_view zName, const Meta&, Meta*);
         
-        const TypeInfo&         m_type;
+        const Meta&             m_type;
         DataBlock               m_default;
     };
 }

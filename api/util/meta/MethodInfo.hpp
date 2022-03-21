@@ -18,6 +18,6 @@ namespace yq {
     
     protected:
         LUC<ArgInfo>            m_args;
-        MethodInfo(const char* zName, Meta*, options_t opts=0);
+        MethodInfo(std::string_view zName, Meta*, options_t opts=0);
     };
 }

@@ -32,7 +32,7 @@ namespace yq {
         template <typename T> class Final;      //  Final one for storing
         
     protected:
-        TypeInfo(const char* zName, const char* zFile, id_t i=AUTO_ID);
+        TypeInfo(std::string_view zName, const char* zFile, id_t i=AUTO_ID);
         virtual ~TypeInfo();
 
         virtual void    sweep_impl() override;

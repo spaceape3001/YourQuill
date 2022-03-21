@@ -1689,13 +1689,26 @@ namespace yq {
     */
     std::string_view    trimmed(const std::string_view&);
     
+    /*! \brief String not starting/ending with specified character
+    
+    */
+    std::string_view    trimmed(const std::string_view&, char);
+
     /*! \brief String not ending with whitespaces
     */
     std::string_view    trimmed_end(const std::string_view&);
     
+    /*! \brief String not ending with whitespaces specified character
+    */
+    std::string_view    trimmed_end(const std::string_view&, char);
+
     /*! \brief String not starting with whitespace
     */
     std::string_view    trimmed_start(const std::string_view&);
+    
+    /*! \brief String not starting with whitespace specified character
+    */
+    std::string_view    trimmed_start(const std::string_view&, char);
 
     /*! \brief Split via visitor pattern
     

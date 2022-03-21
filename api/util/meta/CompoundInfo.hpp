@@ -33,7 +33,7 @@ namespace yq {
         LUC<PropertyInfo>       m_properties;
         std::string_view        m_file;
         
-        CompoundInfo(const char zName[], const char zFile[], Meta* par=nullptr, id_t i=AUTO_ID);
+        CompoundInfo(std::string_view zName, const char zFile[], Meta* par=nullptr, id_t i=AUTO_ID);
         ~CompoundInfo();
 
         virtual void            sweep_impl() override;

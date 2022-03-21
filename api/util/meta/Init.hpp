@@ -10,6 +10,7 @@
 #include "Global.hpp"
 #include "ObjectInfo.hpp"
 #include "TypeInfo.hpp"
+#include "MetaWriter.hpp"
 
 #include <util/c++/TypeTraits.hpp>
 #include <util/collection/List.hpp>
@@ -56,36 +57,6 @@
     }
 
 namespace yq {
-
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  META WRITER
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        /*! \brief "Writes" to a meta
-        
-            This is the base for a writer to a meta.
-        */
-        class Meta::Writer {
-        public:
-        
-            Writer&     alias(const char zAlias[]);
-            Writer&     description(const char zDescription[]);
-            Writer&     label(const char zLabel[]);
-            Writer&     tag(const char zKey[]); // implies boolean TRUE
-            Writer&     tag(const char zKey[], Variant&& value);
-            Writer&     tag(const char zKey[], const Variant& value);
-            Writer&     tls();  //!< Marks the TLS flag ... only meaningful on static variables, still
-        
-        protected:
-                //  In proper usage, should never be null, however, guard!
-            Meta* const m_meta = nullptr;
-            
-            Writer(Meta* myMeta) : m_meta(myMeta) 
-            {
-                assert(myMeta);
-                assert(thread_safe_write());
-            }
-        };
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  GETTERS
@@ -663,7 +634,7 @@ namespace yq {
         template <typename T>
         class PropertyInfo::Writer : public Meta::Writer {
         public:
-            Writer&  defValueInfo(const T& val)
+            Writer&  def_value(const T& val)
             {
                 assert(Meta::Writer::m_meta);
                 assert(thread_safe_write());
@@ -789,7 +760,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::Writer<T>       variable(const char szName[], T* pointer)
+            PropertyInfo::Writer<T>       variable(std::string_view szName, T* pointer)
             {
                 assert(pointer);
                 PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
@@ -805,7 +776,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::Writer<T>       variable(const char szName[], const T* pointer)
+            PropertyInfo::Writer<T>       variable(std::string_view szName, const T* pointer)
             {
                 assert(pointer);
                 PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
@@ -820,7 +791,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(const char szName[], T (*function)())
+            PropertyInfo::VarW<T>           variable(std::string_view szName, T (*function)())
             {
                 assert(function);
                 PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
@@ -835,7 +806,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(const char szName[], const T& (*function)())
+            PropertyInfo::VarW<T>           variable(std::string_view szName, const T& (*function)())
             {
                 assert(function);
                 PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
@@ -850,7 +821,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(const char szName[], void (*function)(T&))
+            PropertyInfo::VarW<T>           variable(std::string_view szName, void (*function)(T&))
             {
                 assert(function);
                 PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
@@ -866,7 +837,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(const char szName[], bool (*function)(T&))
+            PropertyInfo::VarW<T>           variable(std::string_view szName, bool (*function)(T&))
             {
                 assert(function);
                 PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
@@ -883,7 +854,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename ... Args>
-            MethodInfo::Writer              function(const char szName[], void(*)(Args...));
+            MethodInfo::Writer              function(std::string_view szName, void(*)(Args...));
 
             /*! \brief Defines a global variable
             
@@ -892,7 +863,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T, typename ... Args>
-            MethodInfo::Writer              function(const char szName[], T(*)(Args...));
+            MethodInfo::Writer              function(std::string_view szName, T(*)(Args...));
 
             Static( CompoundInfo* compound ) : Meta::Writer(compound) {}
         };
@@ -909,7 +880,7 @@ namespace yq {
                 \param  pointer Pointer to class/type member
             */
             template <typename T>
-            PropertyInfo::Writer<T>     property(const char szName[], T (C::*pointer))
+            PropertyInfo::Writer<T>     property(std::string_view szName, T (C::*pointer))
             {
                 assert(pointer);
                 PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATE);
@@ -926,7 +897,7 @@ namespace yq {
                 \param  pointer Pointer to class/type member
             */
             template <typename T>
-            PropertyInfo::Writer<T>     property(const char szName[], const T (C::*pointer))
+            PropertyInfo::Writer<T>     property(std::string_view szName, const T (C::*pointer))
             {
                 assert(pointer);
                 PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATE);
@@ -942,7 +913,7 @@ namespace yq {
                 \param  p       Function pointer to getter (const & returns)
             */
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(const char szName[], T (C::*function)() const)
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, T (C::*function)() const)
             {
                 assert(function);
                 PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta);
@@ -958,7 +929,7 @@ namespace yq {
                 \param  p       Function pointer to getter (const & returns)
             */
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(const char szName[], const T& (C::*function)() const)
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, const T& (C::*function)() const)
             {
                 assert(function);
                 PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta);
@@ -968,22 +939,22 @@ namespace yq {
 
 
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(const char szName[], void (C::*function)(T&) const);
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, void (C::*function)(T&) const);
         
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(const char szName[], bool (C::*function)(T&) const);
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, bool (C::*function)(T&) const);
             
             template <typename ... Args>
-            MethodInfo::Writer          method(const char szName[], void (C::*function)(Args...));
+            MethodInfo::Writer          method(std::string_view szName, void (C::*function)(Args...));
             
             template <typename ... Args>
-            MethodInfo::Writer          method(const char szName[], void (C::*function)(Args...) const);
+            MethodInfo::Writer          method(std::string_view szName, void (C::*function)(Args...) const);
 
             template <typename T, typename ... Args>
-            MethodInfo::Writer          method(const char szName[], T (C::*function)(Args...));
+            MethodInfo::Writer          method(std::string_view szName, T (C::*function)(Args...));
             
             template <typename T, typename ... Args>
-            MethodInfo::Writer          method(const char szName[], T (C::*function)(Args...) const);
+            MethodInfo::Writer          method(std::string_view szName, T (C::*function)(Args...) const);
             
             Dynamic(CompoundInfo* c) : Static(c) {}
         };
@@ -1094,7 +1065,7 @@ namespace yq {
     template <typename T>
     class TypeInfo::Typed : public type_info_t<T> {
     protected:
-        Typed(const char* zName, const char* zFile, id_t i=AUTO_ID) : type_info_t<T>(zName, zFile, i)
+        Typed(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : type_info_t<T>(zName, zFile, i)
         {
             options_t   opts    = 0;
         
@@ -1165,13 +1136,13 @@ namespace yq {
     template <typename T>
     class TypeInfo::Special : public Typed<T> {
     protected:
-        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<T>(zName, zFile, i) {}
+        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<T>(zName, zFile, i) {}
     };
     
     template <typename K, typename V>
     class TypeInfo::Special<Hash<K,V>> : public Typed<Hash<K,V>> {
     protected:
-        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Hash<K,V>>(zName, zFile, i)
+        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Hash<K,V>>(zName, zFile, i)
         {
             Meta::set_option(COLLECTION);
         }
@@ -1180,7 +1151,7 @@ namespace yq {
     template <typename T>
     class TypeInfo::Special<List<T>> : public Typed<List<T>> {
     protected:
-        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<List<T>>(zName, zFile, i) 
+        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<List<T>>(zName, zFile, i) 
         {
             Meta::set_option(COLLECTION);
         }
@@ -1189,7 +1160,7 @@ namespace yq {
     template <typename K, typename V, typename C>
     class TypeInfo::Special<Map<K,V,C>> : public Typed<Map<K,V,C>> {
     protected:
-        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Map<K,V,C>>(zName, zFile, i)
+        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Map<K,V,C>>(zName, zFile, i)
         {
             Meta::set_option(COLLECTION);
         }
@@ -1198,7 +1169,7 @@ namespace yq {
     template <typename K, typename V, typename C>
     class TypeInfo::Special<MultiMap<K,V,C>> : public Typed<MultiMap<K,V,C>> {
     protected:
-        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<MultiMap<K,V,C>>(zName, zFile, i)
+        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<MultiMap<K,V,C>>(zName, zFile, i)
         {
             Meta::set_option(COLLECTION);
         }
@@ -1207,7 +1178,7 @@ namespace yq {
     template <typename T, typename C>
     class TypeInfo::Special<Set<T,C>> : public Typed<Set<T,C>> {
     protected:
-        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Set<T,C>>(zName, zFile, i) 
+        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Set<T,C>>(zName, zFile, i) 
         {
             Meta::set_option(COLLECTION);
         }
@@ -1216,7 +1187,7 @@ namespace yq {
     template <typename T>
     class TypeInfo::Special<Vector<T>> : public Typed<Vector<T>> {
     protected:
-        Special(const char* zName, const char* zFile, id_t i=AUTO_ID) : Typed<Vector<T>>(zName, zFile, i) 
+        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Vector<T>>(zName, zFile, i) 
         {
             Meta::set_option(COLLECTION);
         }
@@ -1228,7 +1199,7 @@ namespace yq {
     class TypeInfo::Final : public Special<T> {
     private:
         friend class InfoBinder<T>;
-        Final(const char* zName, const char* zFile, id_t i=AUTO_ID) : Special<T>(zName, zFile, i) {}
+        Final(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Special<T>(zName, zFile, i) {}
         static TypeInfo&       s_save;
     };
 

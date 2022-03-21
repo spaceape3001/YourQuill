@@ -2,6 +2,9 @@
 #include <util/net/Http.hpp>
 #include <util/net/VersionSpec.hpp>
 #include <util/stream/Stream.hpp>
+#include <util/type/Ref.hpp>
+
+#include "HttpData.hpp"
 
 namespace yq {
 

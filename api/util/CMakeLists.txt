@@ -31,6 +31,7 @@ set(util_sources
     ./app/CmdArgs.hpp
     ./app/DelayInit.hpp
     ./app/PidFile.hpp
+    ./app/Plugins.hpp
 
     ./c++/C++.cpp
     ./c++/NaN.hpp
@@ -80,10 +81,8 @@ set(util_sources
     #./net/Curl.hpp
     ./net/Http.hpp
     ./net/NetUnity.cpp
-    ./net/Uri.hpp
+    ./net/Url.hpp
     ./net/VersionSpec.hpp
-    #./net/Url.cpp
-    #./net/Url.hpp
 
     #./proc/Execute.cpp
     #./proc/Execute.hpp
