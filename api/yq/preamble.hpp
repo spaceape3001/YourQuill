@@ -157,6 +157,7 @@ namespace yq {
     using StringPair            = std::pair<std::string,std::string>;
     using StringIntPair         = std::pair<std::string,int>;
 
+    using string_map_t          = Map<std::string,std::string,IgCase>;
     using string_set_t          = Set<std::string,IgCase>;
     using string_view_set_t     = Set<std::string_view,IgCase>;
 
@@ -192,6 +193,9 @@ namespace yq {
     
     using url_r         = Result<Url>;
     using url_view_r    = Result<UrlView>;
+
+    using std::literals::string_literals::operator""s;
+    using std::literals::string_view_literals::operator""sv;
 }
 
 

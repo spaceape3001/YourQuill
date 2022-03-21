@@ -32,6 +32,10 @@ set(yq_sources
     ./app/DelayInit.hpp
     ./app/PidFile.hpp
     ./app/Plugins.hpp
+    
+    ./atom/atom_unity.cpp
+    ./atom/ClassData.hpp
+    ./atom/ClassFile.hpp
 
     ./bit/bit_unity.cpp
     ./bit/Context.hpp
@@ -79,6 +83,7 @@ set(yq_sources
     ./file/file_unity.cpp
     ./file/AbstractFile.hpp
     ./file/FileUtils.hpp
+    ./file/StdFile.hpp
     ./file/XmlFile.hpp
     ./file/XmlFwd.hpp
     ./file/XmlUtils.hpp
@@ -87,6 +92,9 @@ set(yq_sources
     ./http/HttpData.hpp
     ./http/HttpParser.hpp
     ./http/HttpRequest.hpp
+    
+    ./leaf/leaf_unity.cpp
+    ./leaf/LeafFile.hpp
 
     #./log/LogFile.cpp
     #./log/LogFile.hpp
@@ -128,6 +136,10 @@ set(yq_sources
     ./stream/LineCol.hpp
     ./stream/OSFile.hpp
     ./stream/Ops.hpp
+    
+    ./tag/tag_unity.cpp
+    ./tag/TagData.hpp
+    ./tag/TagFile.hpp
     
     ./text/Comma.hpp
     ./text/Format.hpp

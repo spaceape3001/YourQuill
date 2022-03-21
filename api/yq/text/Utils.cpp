@@ -265,6 +265,14 @@ namespace yq {
         return contains_igCase(haystack.data(), haystack.size(), needle.data(), needle.size());
     }
 
+    string_set_t        copy(const string_view_set_t&input)
+    {
+        string_set_t    ret;
+        for(auto& s : input)
+            ret.insert(copy(s));
+        return ret;
+    }
+
     std::vector<std::string>    copy(const std::vector<std::string>&input)
     {
         std::vector<std::string>    ret;
@@ -575,94 +583,6 @@ namespace yq {
             return ret;
         });
         return ret;
-    }
-    
-    namespace {
-        template <template <typename...> class Tmpl, typename... T>
-        std::string  _joinString(const Tmpl<T...>& collection, const std::string_view& separator)
-        {
-            size_t  n   = collection.size() * separator.size();
-            for(const auto& s : collection)
-                n += s.size();
-            std::string ret;
-            ret.reserve(n);
-            bool    f   = true;
-            for(const auto&s : collection){
-                if(f){
-                    f   = false;
-                } else {
-                    ret += separator;
-                }
-                ret += s;
-            }
-            return ret;
-        }
-
-        template <template <typename...> class Tmpl, typename... T>
-        std::string  _joinOther(const Tmpl<T...>& collection, const std::string_view& separator)
-        {
-            std::string ret;
-            bool    f   = true;
-            for(const auto&s : collection){
-                if(f){
-                    f   = false;
-                } else {
-                    ret += separator;
-                }
-                ret += to_string(s);
-            }
-            return ret;
-        }
-    }
-    
-    std::string  join(const std::list<std::string>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
-    }
-    
-    std::string  join(const std::list<std::string_view>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
-    }
-    
-    std::string  join(const std::set<std::string>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
-    }
-    
-    std::string  join(const std::set<std::string,IgCase>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
-    }
-    
-    std::string  join(const std::set<std::string_view>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
-    }
-    
-    std::string  join(const std::set<std::string_view,IgCase>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
-    }
-    
-    std::string  join(const std::set<uint16_t>& collection, const std::string_view& separator)
-    {
-        return _joinOther(collection, separator);
-    }
-    
-    std::string  join(const std::set<uint32_t>& collection, const std::string_view& separator)
-    {
-        return _joinOther(collection, separator);
-    }
-    
-    std::string  join(const std::vector<std::string>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
-    }
-    
-    std::string  join(const std::vector<std::string_view>& collection, const std::string_view& separator)
-    {
-        return _joinString(collection, separator);
     }
 
     bool        matches_at(const std::string_view& haystack, size_t pos, const std::string_view& pattern)

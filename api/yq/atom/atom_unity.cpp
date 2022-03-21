@@ -4,22 +4,26 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "ClassFile.hpp"
+
+#include <yq/bit/KeyValue.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/text/Utils.hpp>
 
 namespace yq {
 
     ClassData&      ClassData::merge(const ClassData&b, bool fOverride)
     {
-        name.set_if(b.name, fOverride);
-        plural.set_if(b.plural, fOverride);
-        brief.set_if(b.brief, fOverride);
-        notes.set_if(b.notes, fOverride);
-        folder.set_if(b.folder, fOverride);
+        set_if_empty(name, b.name, fOverride);
+        set_if_empty(plural, b.plural, fOverride);
+        set_if_empty(brief, b.brief, fOverride);
+        set_if_empty(notes, b.notes, fOverride);
+        set_if_empty(folder, b.folder, fOverride);
         use += b.use;
         reverse += b.reverse;
         sources += b.sources;
         targets += b.targets;
-        binding.set_if(b.binding, fOverride);
+        set_if_empty(binding, b.binding, fOverride);
         triggers += b.triggers;
         suffixes += b.suffixes;
         prefixes += b.prefixes;
@@ -62,19 +66,19 @@ namespace yq {
 
     ClassData::Field& ClassData::Field::merge(const Field& b, bool fOverride)
     {
-        pkey.set_if(b.pkey, fOverride);
-        name.set_if(b.name, fOverride);
-        plural.set_if(b.plural, fOverride);
-        brief.set_if(b.brief, fOverride);
-        notes.set_if(b.notes, fOverride);
-        category.set_if(b.category, fOverride);
+        set_if_empty(pkey, b.pkey, fOverride);
+        set_if_empty(name, b.name, fOverride);
+        set_if_empty(plural, b.plural, fOverride);
+        set_if_empty(brief, b.brief, fOverride);
+        set_if_empty(notes, b.notes, fOverride);
+        set_if_empty(category, b.category, fOverride);
         aliases += b.aliases;
         //type.set_if(b.type, fOverride);
         types += b.types;
         //atom.set_if(b.atom, fOverride);
         atoms += b.atoms;
         tags += b.tags;
-        expected.set_if(b.expected, fOverride);
+        set_if_empty(expected, b.expected, fOverride);
         if((fOverride?b.multiplicity:multiplicity) != Multiplicity())
             multiplicity    = b.multiplicity;
         if((fOverride?b.restriction:restriction) != Restriction())
@@ -97,8 +101,8 @@ namespace yq {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ClassData::ValueInfo&   ClassData::ValueInfo::merge(const ValueInfo&b, bool fOverride)
     {
-        brief.set_if(b.brief, fOverride);
-        notes.set_if(b.notes, fOverride);
+        set_if_empty(brief, b.brief, fOverride);
+        set_if_empty(notes, b.notes, fOverride);
         return *this;
     }
 
@@ -116,92 +120,92 @@ namespace yq {
 
 
     namespace {
-        void        read_trigger(const KeyValue* a, ClassData::Trigger& t)
+        void        read_trigger(const KeyValue& a, ClassData::Trigger& t)
         {
-            t.type      = a->data;
-            t.name      = a->value({"name"}, true);
-            t.brief     = a->value({"brief", "desc"}, true);
-            t.notes     = a->value({"note", "notes"}, true);
+            t.type      = a.data;
+            t.name      = a.value(kv::noncmd_key("name"));
+            t.brief     = a.value(kv::noncmd_key("brief", "desc"));
+            t.notes     = a.value(kv::noncmd_key("note", "notes"));
             
-            for(const KeyValue& b : a->subs){
+            for(const KeyValue& b : a.subs){
                 if(b.cmd == "?")
                     t.args[b.key]  = b.data;
             }
         }
         
-        void        read_value(const KeyValue* a, ClassData::ValueInfo& v)
+        void        read_value(const KeyValue& a, ClassData::ValueInfo& v)
         {
-            v.brief     = a->value({"desc", "brief"});
-            v.notes     = a->value({"notes", "note"});
+            v.brief     = a.value(kv::key("desc", "brief"));
+            v.notes     = a.value(kv::key("notes", "note"));
         }
         
-        void        read_field(const KeyValue* a, ClassData::Field&f)
+        void        read_field(const KeyValue& a, ClassData::Field&f)
         {
-            f.pkey          = a->value("pkey");
-            f.name          = a->value({"%", "name"});
-            f.plural        = a->value("plural");
-            f.brief         = a->value({"desc", "brief"});
-            f.notes         = a->value({"notes", "note"});
-            f.category      = a->value({"category", "cat"});
-            f.aliases       = a->values_set({"alias", "aka"});
-            f.types         = a->values_set({"type"});
-            f.expected      = a->value({"expected", "expect"});
-            f.atoms         = a->values_set({"atom"});
-            f.aliases       = a->values_set({"alias", "aka"});
-            f.tags          = a->values_set({"tag"});
-            f.multiplicity  = Multiplicity(a->value("multiplicity"));
-            f.restriction   = Restriction(a->value("restriction"));
-            f.max_count     = a->value({"max_count", "count"}).to_uint64().value;
-            for(const KeyValue* b : a->all({"value", "val"})){
-                if(b->data.empty()){
+            f.pkey          = a.value(kv::key("pkey"));
+            f.name          = a.value(kv::key("%", "name"));
+            f.plural        = a.value(kv::key("plural"));
+            f.brief         = a.value(kv::key("desc", "brief"));
+            f.notes         = a.value(kv::key("notes", "note"));
+            f.category      = a.value(kv::key("category", "cat"));
+            f.aliases       = copy(a.values_set(kv::key("alias", "aka")));
+            f.types         = copy(a.values_set(kv::key("type")));
+            f.expected      = a.value(kv::key("expected", "expect"));
+            f.atoms         = copy(a.values_set(kv::key("atom")));
+            f.aliases       = copy(a.values_set(kv::key("alias", "aka")));
+            f.tags          = copy(a.values_set(kv::key("tag")));
+            f.multiplicity  = Multiplicity(a.value(kv::key("multiplicity")));
+            f.restriction   = Restriction(a.value(kv::key("restriction")));
+            f.max_count     = to_uint64(a.value(kv::key("max_count", "count"))).value;
+            
+            a.all(kv::key({"value", "val"}), [&](const KeyValue& b){
+                if(b.data.empty()){
                     yNotice() << "Empty value in field, skipped.";
-                    continue;
+                    return;
                 }
-                read_value(b, f.values[a->data]);
-            }
-            for(const KeyValue* b : a->all({"trigger"})){
+                read_value(b, f.values[a.data]);
+            });
+            
+            a.all(kv::key("trigger"), [&](const KeyValue& b){
                 ClassData::Trigger t;
                 read_trigger(b, t);
                 f.triggers << t;
-            }
+            });
         }
     }
 
-    bool    ClassFile::read(ByteArray&&buffer, const std::string& fname) 
+    bool    ClassFile::read(ByteArray&&buffer, const std::string_view& fname) 
     {
         KVTree        attrs;
         if(!attrs.parse(buffer, nullptr, true, fname))
             return false;
 
-        name            = attrs.value({"%", "name"});
-        plural          = attrs.value({"plural"});
-        brief           = attrs.value({"desc", "brief"});
-        notes           = attrs.value({"notes", "note"});
-        folder          = attrs.value({"folder"});
-        use             = attrs.values_set({"use", "is"});
-        reverse         = attrs.values_set({"reverse", "rev"});
-        sources         = attrs.values_set({"sources", "source", "src"});
-        targets         = attrs.values_set({"targets", "target", "tgt"});
-        aliases         = attrs.values_set({"alias", "aliases", "aka"});
-        binding         = attrs.value({"binding"});
-        prefixes        = attrs.values_set({"prefix"});
-        suffixes        = attrs.values_set({"suffix"});
-        tags            = attrs.values_set({"tag"});
+        name            = attrs.value(kv::key("%", "name"));
+        plural          = attrs.value(kv::key("plural"));
+        brief           = attrs.value(kv::key("desc", "brief"));
+        notes           = attrs.value(kv::key("notes", "note"));
+        folder          = attrs.value(kv::key("folder"));
+        use             = copy(attrs.values_set(kv::key("use", "is")));
+        reverse         = copy(attrs.values_set(kv::key("reverse", "rev")));
+        sources         = copy(attrs.values_set(kv::key("sources", "source", "src")));
+        targets         = copy(attrs.values_set(kv::key("targets", "target", "tgt")));
+        aliases         = copy(attrs.values_set(kv::key("alias", "aliases", "aka")));
+        binding         = attrs.value(kv::key("binding"));
+        prefixes        = copy(attrs.values_set(kv::key("prefix")));
+        suffixes        = copy(attrs.values_set(kv::key("suffix")));
+        tags            = copy(attrs.values_set(kv::key("tag")));
         
-        for(const KeyValue* a : attrs.all({"field"})){
-            if(a->data.empty()){
+        attrs.all(kv::key("field"), [&](const KeyValue& a){
+            if(a.data.empty()){
                 yNotice() << "Empty field key skipped.";
-                continue;
+                return;
             }
-            read_field(a, fields[a->data]);
-        }
-
-        for(const KeyValue* a : attrs.all({"trigger"})){
+            read_field(a, fields[a.data]);
+        });
+        attrs.all(kv::key("trigger"), [&](const KeyValue& a){
             Trigger     t;
             read_trigger(a, t);
             triggers << t;
-        }
-
+        });
 
         return true;
     }
@@ -259,7 +263,7 @@ namespace yq {
             if(f.restriction != Restriction())
                 a << KeyValue("restriction", f.restriction.key());
             if(f.max_count)
-                a << KeyValue("count", String::number(f.max_count));
+                a << KeyValue("count", to_string(f.max_count));
             for(auto& i : f.values){
                 KeyValue   b("value", i.first);
                 write_value(b, i.second);

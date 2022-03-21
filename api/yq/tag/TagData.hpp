@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/text/String.hpp>
+#include <yq/preamble.hpp>
 #include <memory>
 
 namespace yq {
@@ -14,10 +14,10 @@ namespace yq {
 
         using Shared    = std::shared_ptr<TagData>;
 
-        String      leaf;
-        String      name;
-        String      brief;
-        String      notes;
+        std::string      leaf;
+        std::string      name;
+        std::string      brief;
+        std::string      notes;
 
         
         /*! \brief Merges two tag documents

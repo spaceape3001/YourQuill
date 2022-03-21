@@ -16,13 +16,13 @@ namespace yq {
     class StdFile : public AbstractFile, public KVTree {
     public:
 
-        String              body;
+        std::string         body;
         
         bool                empty() const;
 
     protected:
         virtual void        reset() override;
-        virtual bool        read(ByteArray&&buffer, const std::string& fname) override;
+        virtual bool        read(ByteArray&&buffer, const std::string_view& fname) override;
         virtual bool        write(yq::Stream&) const override;
         
     private:

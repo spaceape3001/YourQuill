@@ -125,16 +125,16 @@ namespace yq {
         return set(kv::key(keys), *(keys.begin()), data, purge);
     }
     
-    KeyValue*  KVTree::set(const std::initializer_list<const char*>& keys, const std::string_view& data, bool purge)
+    KeyValue*  KVTree::set(const std::initializer_list<std::string_view>& keys, const std::string_view& data, bool purge)
     {
         return set(kv::key(keys), *(keys.begin()), data, purge);
     }
     
 
-    std::string_view KVTree::value(std::initializer_list<const char*>z) const
-    {
-        return value(kv::key(z));
-    }
+    //std::string_view KVTree::value(std::initializer_list<const char*>z) const
+    //{
+        //return value(kv::key(z));
+    //}
     
 
 

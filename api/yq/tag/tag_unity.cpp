@@ -4,16 +4,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "TagFile.hpp"
+#include <yq/bit/KeyValue.hpp>
+#include <yq/text/Utils.hpp>
 
 namespace yq {
 
     TagData& TagData::merge(const TagData&b, bool fOverride)
     {
-        leaf.set_if(b.leaf, fOverride);
-        name.set_if(b.name, fOverride);
-        brief.set_if(b.brief, fOverride);
-        notes.set_if(b.notes, fOverride);
+        set_if_empty(leaf, b.leaf, fOverride);
+        set_if_empty(name, b.name, fOverride);
+        set_if_empty(brief, b.brief, fOverride);
+        set_if_empty(notes, b.notes, fOverride);
         return *this;
     }
 
@@ -25,8 +27,8 @@ namespace yq {
         notes.clear();
     }
 
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
     void    TagFile::reset() 
@@ -34,16 +36,16 @@ namespace yq {
         TagData::reset();
     }
 
-    bool    TagFile::read(ByteArray&&buffer, const std::string& fname) 
+    bool    TagFile::read(ByteArray&&buffer, const std::string_view& fname) 
     {
         KVTree          attrs;
         if(!attrs.parse(buffer, nullptr, true, fname))
             return false;
 
-        name        = attrs.value({"%", "%tag", "tag", "%name", "name" });
-        notes       = attrs.value({"%note", "note", "notes", "%notes" });
-        brief       = attrs.value({"%desc", "brief", "desc", "%brief" });
-        leaf        = attrs.value({"%leaf", "leaf"});
+        name        = attrs.value(kv::key("%", "%tag", "tag", "%name", "name" ));
+        notes       = attrs.value(kv::key("%note", "note", "notes", "%notes" ));
+        brief       = attrs.value(kv::key("%desc", "brief", "desc", "%brief" ));
+        leaf        = attrs.value(kv::key("%leaf", "leaf"));
         return true;
     }
 

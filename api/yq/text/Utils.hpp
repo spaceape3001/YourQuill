@@ -85,6 +85,8 @@ namespace yq {
     {
         return std::string(s);
     }
+    
+    string_set_t        copy(const string_view_set_t&);
 
     /*! \brief Copies the vector of string
     
@@ -536,77 +538,22 @@ namespace yq {
         return ::iswxdigit(ch);
     }
     
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::list<std::string>& collection, const std::string_view& separator);
 
     /*! \brief Joins the collection into a string
         \param[in] collection  The collection
         \param[in] separator   The separator between elements.
         \return The joined string
     */
-    std::string     join(const std::list<std::string_view>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::set<std::string>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::set<std::string,IgCase>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::set<std::string_view>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::set<std::string_view,IgCase>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection, each element will be converted into a string
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::set<uint16_t>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection, each element will be converted into a string
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::set<uint32_t>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::vector<std::string>& collection, const std::string_view& separator);
-
-    /*! \brief Joins the collection into a string
-        \param[in] collection  The collection
-        \param[in] separator   The separator between elements.
-        \return The joined string
-    */
-    std::string     join(const std::vector<std::string_view>& collection, const std::string_view& separator);
+    template <template <typename...> class Tmpl, typename... T>
+    std::string     join(const Tmpl<T...>& collection, const std::string_view& separator);
     
-
+    /*! \brief Joins the collection into a string
+        \param[in] collection  The collection
+        \param[in] separator   The separator between elements.
+        \return The joined string
+    */
+    template <template <typename...> class Tmpl, typename... T>
+    std::string     join(const Tmpl<T...>& collection, char separator);
 
     /*! \brief Checks to see if the haystack matches the pattern at position
     
@@ -1873,5 +1820,75 @@ namespace yq {
         vsplit_igCase(s.data(), s.size(), pattern.data(), pattern.size(), pred);
     }
     
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  IMPLEMENTATION
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    template <template <typename...> class Tmpl, typename... T>
+    std::string     join(const Tmpl<T...>& collection, const std::string_view& separator)
+    {
+        std::string    ret;
+
+        using value_t                       = typename Tmpl<T...>::value_type;
+        static constexpr bool   is_string   = std::is_same_v<value_t, std::string> || std::is_same_v<value_t, std::string_view>;
+        
+        if constexpr ( is_string ){
+            size_t  n   = collection.size() * separator.size();
+            for(const auto& s : collection)
+                n += s.size();
+            ret.reserve(n);
+        }
+        
+        bool    f   = true;
+        for(const auto&s : collection){
+            if(f){
+                f   = false;
+            } else {
+                ret += separator;
+            }
+            
+            if constexpr (is_string) {
+                ret += s;
+            } 
+            if constexpr (!is_string){
+                ret += to_string(s);
+            }
+        }
+        return ret;
+    }
+    
+    template <template <typename...> class Tmpl, typename... T>
+    std::string     join(const Tmpl<T...>& collection, char separator)
+    {
+        std::string    ret;
+
+        using value_t                       = typename Tmpl<T...>::value_type;
+        static constexpr bool   is_string   = std::is_same_v<value_t, std::string> || std::is_same_v<value_t, std::string_view>;
+        
+        if constexpr ( is_string ){
+            size_t  n   = collection.size();
+            for(const auto& s : collection)
+                n += s.size();
+            ret.reserve(n);
+        }
+        
+        bool    f   = true;
+        for(const auto&s : collection){
+            if(f){
+                f   = false;
+            } else {
+                ret += separator;
+            }
+            
+            if constexpr (is_string) {
+                ret += s;
+            } 
+            if constexpr (!is_string){
+                ret += to_string(s);
+            }
+        }
+        return ret;
+    }
 }
 

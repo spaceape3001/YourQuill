@@ -79,6 +79,8 @@ namespace yq {
         std::string     color;
         std::string     icon;
         
+        //  users directory.... (default will be ./.users)
+        
         Root() = default;
         explicit Root(const std::string_view& p) : path(p) {}
         ~Root(){}

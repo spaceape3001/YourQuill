@@ -26,11 +26,11 @@ namespace yq {
         {
             QuillData::Root ret;
             ret.path    = trimmed(a.data);
-            ret.key     = trimmed(a.value({ "key", "k" }));
-            ret.color   = a.value("color");
-            ret.vcs     = Vcs(a.value("vcs"));
-            ret.name    = a.value("name");
-            ret.icon    = a.value("icon");
+            ret.key     = trimmed(a.value(kv::key( "key", "k" )));
+            ret.color   = a.value(kv::key("color"));
+            ret.vcs     = Vcs(a.value(kv::key("vcs")));
+            ret.name    = a.value(kv::key("name"));
+            ret.icon    = a.value(kv::key("icon"));
             for(DataRole dr : DataRole::all_values())
                 ret.policy[dr]  = Access(a.value(dr.key()));
             return ret;
@@ -43,38 +43,38 @@ namespace yq {
         if(!attrs.parse(buffer, nullptr, true, fname))
             return false;
         
-        abbr            = attrs.value({ "abbr", "abbreviation" });
-        author          = attrs.value("author");
+        abbr            = attrs.value(kv::key( "abbr", "abbreviation" ));
+        author          = attrs.value(kv::key("author"));
         aux_ports       = attrs.values_set_u16("aux");
-        cache           = attrs.value("cache");
+        cache           = attrs.value(kv::key("cache"));
         
         const KeyValue   *a  = nullptr;;
-        if((a = attrs.first({"disclaimer", "disclaim"}))){
+        if((a = attrs.first(kv::key("disclaimer", "disclaim")))){
             copyright.stance  = AssertDeny::Deny;
-        } else if((a = attrs.first("notice"))){
+        } else if((a = attrs.first(kv::key("notice")))){
             copyright.stance  = AssertDeny::Neither;
-        } else if((a = attrs.first("copyright"))){
+        } else if((a = attrs.first(kv::key("copyright")))){
             copyright.stance  = AssertDeny::Assert;
         }
         if(a){
             copyright.text    = a->data;
-            copyright.from    = to_ushort(a->value("from")).value;
-            copyright.to      = to_ushort(a->value("to")).value;
+            copyright.from    = to_ushort(a->value(kv::key("from"))).value;
+            copyright.to      = to_ushort(a->value(kv::key("to"))).value;
         }
         
-        home            = attrs.value("home");
-        ini             = attrs.value("ini");
-        local_user      = attrs.value({"local", "user", "local_user"});
-        log_dir         = attrs.value("logs");
-        name            = attrs.value({"name", "%"});
-        port            = to_uint16(attrs.value("port")).value;
-        read_timeout    = to_uinteger(attrs.value("timeout")).value;
-        temp_dir        = attrs.value({"temp", "tmp", "tempdir", "temp_dir"});
+        home            = attrs.value(kv::key("home"));
+        ini             = attrs.value(kv::key("ini"));
+        local_user      = attrs.value(kv::key("local", "user", "local_user"));
+        log_dir         = attrs.value(kv::key("logs"));
+        name            = attrs.value(kv::key("name", "%"));
+        port            = to_uint16(attrs.value(kv::key("port"))).value;
+        read_timeout    = to_uinteger(attrs.value(kv::key("timeout"))).value;
+        temp_dir        = attrs.value(kv::key("temp", "tmp", "tempdir", "temp_dir"));
         
-        attrs.all(kv::key({"root", "r"}), [&](const KeyValue& a){
+        attrs.all(kv::key("root", "r"), [&](const KeyValue& a){
             roots << parse_root(a);
         });
-        attrs.all(kv::key({"template", "t"}), [&](const KeyValue& a){
+        attrs.all(kv::key("template", "t"), [&](const KeyValue& a){
             templates << parse_root(a);
         });
         return true;

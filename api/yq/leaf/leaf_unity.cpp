@@ -4,38 +4,44 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "LeafFile.hpp"
+#include <yq/text/Utils.hpp>
 
 namespace yq {
 
-    String      LeafFile::abbr() const
+    std::string_view      LeafFile::abbr() const
     {
-        return value(zAbbr);
+        return value(kv::key(zAbbr));
     }
 
-    void        LeafFile::abbr(const String&s)
+    void        LeafFile::abbr(const std::string_view&s)
     {
         set(zAbbr, s, true);
     }
 
-    String      LeafFile::brief() const
+    std::string_view      LeafFile::brief() const
     {
         return value(zBrief);
     }
 
-    void        LeafFile::brief(const String&s)
+    void        LeafFile::brief(const std::string_view&s)
     {
         set(zBrief, s, true);
     }
 
-    StringSet   LeafFile::classes() const
+    string_view_set_t LeafFile::classes() const
     {
         return values_set(zClass);
     }
 
-    void        LeafFile::classes(const StringSet&s)
+    void        LeafFile::classes(const string_view_set_t&s)
     {
-        set_set(zClass, s);
+        set(zClass, join(s, ','));
+    }
+
+    void        LeafFile::classes(const string_set_t&s)
+    {
+        set(zClass, join(s, ','));
     }
 
     Context     LeafFile::context() const
@@ -60,32 +66,37 @@ namespace yq {
         set(zFormat, f.key(), true);
     }
 
-    String      LeafFile::notes() const
+    std::string_view      LeafFile::notes() const
     {
         return value(zNote);
     }
 
-    void        LeafFile::notes(const String&s)
+    void        LeafFile::notes(const std::string_view&s)
     {
         set(zNote, s, true);
     }
 
-    StringSet   LeafFile::tags() const
+    string_view_set_t   LeafFile::tags() const
     {
         return values_set(zTag);
     }
 
-    void        LeafFile::tags(const StringSet&s)
+    void        LeafFile::tags(const string_set_t&s)
     {
-        set_set(zTag, s);
+        set(zTag, join(s, ','));
     }
 
-    String      LeafFile::title() const
+    void        LeafFile::tags(const string_view_set_t&s)
+    {
+        set(zTag, join(s, ','));
+    }
+
+    std::string_view      LeafFile::title() const
     {
         return value(zTitle);
     }
 
-    void        LeafFile::title(const String&s)
+    void        LeafFile::title(const std::string_view&s)
     {
         set(zTitle, s, true);
     }

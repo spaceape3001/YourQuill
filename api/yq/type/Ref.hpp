@@ -10,6 +10,52 @@
 
 namespace yq {
 
+    //  Want a way to detect for things that derive from Ref-Count & things that don't
+    //  & have a helper so not everything has to be ref-count derived....
+    
+    template <typename T> class Ref;
+
+    /*! \brief Basic Reference Counted class
+    */
+    class RefCount {
+    public:
+        bool	unique() const 
+        {
+            return m_count <= 1;
+        }
+
+        size_t	count() const 
+        {
+            return m_count;
+        }
+        
+        /*! \brief Cause a memory leak
+        
+            This VIOLATES the pairity, ensuring that proper functions will never
+            release the memory.  (Are you sure this is what you want to do?)
+        */
+        void    leak() { incRef(); }
+
+    protected:
+
+        RefCount();
+        RefCount(const RefCount& copy);
+        virtual ~RefCount(){}
+        
+        RefCount& operator=(const RefCount&) = delete;
+        
+        template <typename T>  friend class Ref;
+
+            //! TREAD LIGHTLY!  Increments the reference count (can lead to orphaned memory)
+        void	incRef() const;
+            //! TREAD LIGHTLY!  Decrements the reference count (can lead to dangling pointers)
+        void	decRef() const;
+
+    private:
+        mutable std::atomic<size_t>  m_count;
+    };
+    
+
     /*! \brief Reference Counted Pointer
      * 
      * 	\tparam	T	type of object (must derive from RefCount!)
@@ -71,50 +117,6 @@ namespace yq {
     private:
         T*			m_ptr;
     };
-
-        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        //      REF COUNT
-        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    /*! \brief Basic Reference Counted class
-    */
-    class RefCount {
-    public:
-        bool	unique() const 
-        {
-            return m_count <= 1;
-        }
-
-        size_t	count() const 
-        {
-            return m_count;
-        }
-        
-        /*! \brief Cause a memory leak
-        
-            This VIOLATES the pairity, ensuring that proper functions will never
-            release the memory.  (Are you sure this is what you want to do?)
-        */
-        void    leak() { incRef(); }
-
-    protected:
-
-        RefCount();
-        RefCount(const RefCount& copy);
-        virtual ~RefCount(){}
-        
-        RefCount& operator=(const RefCount&) = delete;
-        
-        template <typename T>  friend class Ref;
-
-            //! TREAD LIGHTLY!  Increments the reference count (can lead to orphaned memory)
-        void	incRef() const;
-            //! TREAD LIGHTLY!  Decrements the reference count (can lead to dangling pointers)
-        void	decRef() const;
-
-    private:
-        mutable std::atomic<size_t>  m_count;
-    };
-
 
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

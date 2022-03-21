@@ -6,6 +6,7 @@
 
 #include "AbstractFile.hpp"
 #include "FileUtils.hpp"
+#include "StdFile.hpp"
 #include "XmlFile.hpp"
 #include "XmlUtils.hpp"
 
@@ -13,6 +14,7 @@
 #include <yq/collection/Set.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Bytes.hpp>
+#include <yq/stream/Ops.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/type/ByteArray.hpp>
 
@@ -490,6 +492,35 @@ namespace yq {
                 });
             }
         }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  STD FILE
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    bool        StdFile::empty() const
+    {
+        return body.empty() && subs.empty();
+    }
+
+    bool        StdFile::read(ByteArray&&buffer, const std::string_view& fname) 
+    {
+        return KVTree::parse(buffer, (has_body()?&body:nullptr), recursive_attributes(), fname);
+    }
+
+    void        StdFile::reset() 
+    {
+        subs.clear();
+        body.clear();
+    }
+
+
+    bool        StdFile::write(yq::Stream& buffer) const
+    {
+        KVTree::write(buffer);
+        if(!body.empty())
+            buffer << '\n' << body;
+        return true;
+    }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  XML FILE

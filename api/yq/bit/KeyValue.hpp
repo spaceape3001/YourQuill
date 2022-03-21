@@ -30,7 +30,7 @@ namespace yq {
         };
 
         //! Initializer of const char*, used for faster declarations
-        using Seq               = const std::initializer_list<const char*>;
+        using Seq               = std::initializer_list<std::string_view>;
 
         //! \brief Sub-KeyValues
         //! These are the sub-key-values (honored for recursive key-values)
@@ -103,7 +103,7 @@ namespace yq {
 
         KeyValue*                  set(const std::string_view&key, const std::string_view& data, bool purge=true);
         KeyValue*                  set(const string_view_vector_t& keys, const std::string_view& data, bool purge=true);
-        KeyValue*                  set(const std::initializer_list<const char*>& keys, const std::string_view& data, bool purge=true);
+        KeyValue*                  set(const std::initializer_list<std::string_view>& keys, const std::string_view& data, bool purge=true);
         
 
         template <typename Match, typename T>
@@ -119,7 +119,7 @@ namespace yq {
         //std::string_view            value(const char*) const;
         //std::string_view            value(const std::string&) const;
         //std::string_view            value(const std::string_view&) const;
-        std::string_view            value(std::initializer_list<const char*>) const;
+        //std::string_view            value(std::initializer_list<const char*>) const;
         
         
         //! \brief All non-empty values for string
@@ -201,19 +201,23 @@ namespace yq {
         };
         
             //! \brief Match the key
-        inline SingleKeyMatch        key(const std::string_view& s) { return SingleKeyMatch{s}; }
+        inline SingleKeyMatch        key(std::string_view s) { return SingleKeyMatch{s}; }
 
             //  ------------------------------------------------------------------------------------------------
 
         struct InitKeyMatch {
-            const std::initializer_list<std::string_view>*   pat = nullptr;
+            std::initializer_list<std::string_view>   pat;
             bool operator()(const KeyValue& a) const
             {
-                return is_in(a.key, *pat);
+                return is_in(a.key, pat);
             }
         };
         
-        inline InitKeyMatch          key(const std::initializer_list<std::string_view>& s) { return InitKeyMatch(&s); }
+        inline InitKeyMatch          key(std::initializer_list<std::string_view> s) { return InitKeyMatch{s}; }
+        inline InitKeyMatch          key(std::string_view a, std::string_view b) { return InitKeyMatch{{a, b}}; }
+        inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c) { return InitKeyMatch{{a, b, c}}; }
+        inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d) { return InitKeyMatch{{a, b, c, d}}; }
+        inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d, std::string_view e) { return InitKeyMatch{{a, b, c, d, e}}; }
 
             //  ------------------------------------------------------------------------------------------------
 
@@ -237,7 +241,7 @@ namespace yq {
             }
         };
         
-        inline CopyVectorKeyMatch        key(const std::initializer_list<const char*>& keys) { 
+        inline CopyVectorKeyMatch        key(std::initializer_list<const char*> keys) { 
             CopyVectorKeyMatch ret;
             for(auto& k : keys)
                 ret.pat.push_back(k);
@@ -272,14 +276,18 @@ namespace yq {
             //  ------------------------------------------------------------------------------------------------
 
         struct InitNonCmdKeyMatch {
-            const std::initializer_list<std::string_view>*    pat = nullptr;
+            std::initializer_list<std::string_view>    pat;
             bool operator()(const KeyValue& a) const
             {
-                return a.cmd.empty() && is_in(a.key, *pat);
+                return a.cmd.empty() && is_in(a.key, pat);
             }
         };
         
-        inline InitNonCmdKeyMatch   noncmd_key(const std::initializer_list<std::string_view>& s) { return InitNonCmdKeyMatch(&s); }
+        inline InitNonCmdKeyMatch   noncmd_key(std::initializer_list<std::string_view> s) { return InitNonCmdKeyMatch{s}; }
+        inline InitNonCmdKeyMatch   noncmd_key(std::string_view a, std::string_view b) { return InitNonCmdKeyMatch{{a,b}}; }
+        inline InitNonCmdKeyMatch   noncmd_key(std::string_view a, std::string_view b, std::string_view c) { return InitNonCmdKeyMatch{{a,b,c}}; }
+        inline InitNonCmdKeyMatch   noncmd_key(std::string_view a, std::string_view b, std::string_view c, std::string_view d) { return InitNonCmdKeyMatch{{a,b,c,d}}; }
+        inline InitNonCmdKeyMatch   noncmd_key(std::string_view a, std::string_view b, std::string_view c, std::string_view d, std::string_view e) { return InitNonCmdKeyMatch{{a,b,c,d,e}}; }
 
             //  ------------------------------------------------------------------------------------------------
 
@@ -583,13 +591,13 @@ namespace yq {
         if constexpr ( std::is_same_v<Match, const char*>) {
             return values_set( kv::key(m), sep );
         } else if constexpr ( std::is_same_v<Match, std::string_view>) {
-            return values( kv::key(m), sep );
+            return values_set( kv::key(m), sep );
         } else if constexpr ( std::is_same_v<Match, std::string>) {
-            return values( kv::key(m), sep );
+            return values_set( kv::key(m), sep );
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
-            return values( kv::key(m), sep );
+            return values_set( kv::key(m), sep );
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
-            return values( kv::key(m), sep );
+            return values_set( kv::key(m), sep );
         } else {
             string_view_set_t   ret;
             all(m, [&](const KeyValue&a){
