@@ -43,23 +43,24 @@ namespace yq {
         Do NOT rely on the numeric values, those are subject to change.
     */
     enum {
-        TYPE        = 1U << 0,
-        OBJECT      = 1U << 1,
-        COMPOUND    = 1U << 2,
-        PROPERTY    = 1U << 3,
-        METHOD      = 1U << 4,
-        ENUM        = 1U << 5,
-        ARG         = 1U << 6,
-        GLOBAL      = 1U << 7,
-        COLLECTION  = 1U << 8,
-        TEMPLATE    = 1U << 9,
+        TYPE        = 1ULL << 0,
+        OBJECT      = 1ULL << 1,
+        COMPOUND    = 1ULL << 2,
+        PROPERTY    = 1ULL << 3,
+        METHOD      = 1ULL << 4,
+        ENUM        = 1ULL << 5,
+        ARG         = 1ULL << 6,
+        GLOBAL      = 1ULL << 7,
+        COLLECTION  = 1ULL << 8,
+        TEMPLATE    = 1ULL << 9,
+        WEB         = 1ULL << 10,
+        PAGE        = 1ULL << 11,
         
-        
-        STATE       = 1U << 20, //!< "State" property
-        STATIC      = 1U << 21, //!< Non-object specific (global variables, functions, etc)
-        SMALL       = 1U << 22, //!< Small enough to fit in DataBlock
-        TLS         = 1U << 23, //!< Thread local storage
-        LESS        = 1U << 24  //!< Can compare
+        STATE       = 1ULL << 16, //!< "State" property
+        STATIC      = 1ULL << 17, //!< Non-object specific (global variables, functions, etc)
+        SMALL       = 1ULL << 18, //!< Small enough to fit in DataBlock
+        TLS         = 1ULL << 19, //!< Thread local storage
+        LESS        = 1ULL << 20  //!< Can compare
     };
     
     //bool    is_type(const Meta&);
@@ -97,7 +98,7 @@ namespace yq {
         using id_t                      = unsigned int;
         
         //! Our flags
-        using options_t                 = uint32_t;
+        using options_t                 = uint64_t;
         
         static const Vector<const Meta*>&   all();
         static const Meta*                  lookup(id_t);

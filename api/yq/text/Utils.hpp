@@ -19,22 +19,22 @@ namespace yq {
     
     
     //! Checks to see if ANY string in the left starts with the right
-    bool    any_starts(const std::vector<std::string>&haystack, const std::string_view&pattern);
+    bool    any_starts(const std::vector<std::string>&haystack, std::string_view pattern);
     
     //! Checks to see if ANY string in the left starts with the right
-    bool    any_starts(const std::vector<std::string_view>&haystack, const std::string_view&pattern);
+    bool    any_starts(const std::vector<std::string_view>&haystack, std::string_view pattern);
     
     //! Checks to see if ANY string in the left starts with the right
-    bool    any_starts(const std::initializer_list<std::string_view>&haystack, const std::string_view&pattern);
+    bool    any_starts(const std::initializer_list<std::string_view>&haystack, std::string_view pattern);
 
     //! Checks to see if ANY string in the left starts with the right
-    bool    any_starts_igCase(const std::vector<std::string>&haystack, const std::string_view&pattern);
+    bool    any_starts_igCase(const std::vector<std::string>&haystack, std::string_view pattern);
     
     //! Checks to see if ANY string in the left starts with the right
-    bool    any_starts_igCase(const std::vector<std::string_view>&haystack, const std::string_view&pattern);
+    bool    any_starts_igCase(const std::vector<std::string_view>&haystack, std::string_view pattern);
     
     //! Checks to see if ANY string in the left starts with the right
-    bool    any_starts_igCase(const std::initializer_list<std::string_view>&haystack, const std::string_view&pattern);
+    bool    any_starts_igCase(const std::initializer_list<std::string_view>&haystack, std::string_view pattern);
 
     
     /*! \brief Blanks all C++ comments in the given string 
@@ -60,9 +60,9 @@ namespace yq {
 
         \param[in] s    String view (which is auto-gen from std::string if need be.
     */
-    std::string  capitalize(const std::string_view&s);
+    std::string  capitalize(std::string_view s);
     
-    std::string concat(const std::string_view& a, const std::string_view& b);
+    std::string concat(std::string_view a, std::string_view b);
 
     /*! \brief Checks if the haystack has the needle
     */
@@ -70,7 +70,7 @@ namespace yq {
 
     /*! \brief Checks if the haystack has the needle
     */
-    bool    contains(const std::string_view& haystack, const std::string_view& needle);
+    bool    contains(std::string_view haystack, std::string_view needle);
 
     /*! \brief Checks if the haystack has the needle (ignoring case)
     */
@@ -78,13 +78,13 @@ namespace yq {
 
     /*! \brief Checks if the haystack has the needle (ignoring case)
     */
-    bool    contains_igCase(const std::string_view& haystack, const std::string_view& needle);
+    bool    contains_igCase(std::string_view haystack, std::string_view needle);
 
     /*! \brief Copies the string
     
         This doesn't return a reference, but actually makes a copy.
     */
-    inline std::string  copy(const std::string_view&s)
+    inline std::string  copy(std::string_view s)
     {
         return std::string(s);
     }
@@ -109,7 +109,7 @@ namespace yq {
 
     /* !\brief Counts the number of charcters
     */
-    size_t  count_characters(const std::string_view&s);
+    size_t  count_characters(std::string_view s);
 
     /* !\brief Counts the number of charcters
     */
@@ -117,7 +117,7 @@ namespace yq {
 
     /* !\brief Counts the number of charcters
     */
-    size_t  count_characters(const std::string_view&s, char ch);
+    size_t  count_characters(std::string_view s, char ch);
 
     /* !\brief Counts the number of charcters
     */
@@ -125,7 +125,7 @@ namespace yq {
 
     /* !\brief Counts the number of charcters
     */
-    size_t  count_characters(const std::string_view&s, char32_t ch);
+    size_t  count_characters(std::string_view s, char32_t ch);
 
     /* !\brief Counts the number of charcters
     */
@@ -133,7 +133,7 @@ namespace yq {
 
     /* !\brief Counts the number of charcters
     */
-    size_t  count_characters_igCase(const std::string_view&s, char ch);
+    size_t  count_characters_igCase(std::string_view s, char ch);
 
     /* !\brief Counts the number of charcters
     */
@@ -141,36 +141,36 @@ namespace yq {
 
     /* !\brief Counts the number of charcters
     */
-    size_t  count_characters_igCase(const std::string_view&s, char32_t ch);
+    size_t  count_characters_igCase(std::string_view s, char32_t ch);
 
     /*! \brief Counts the opening number of space characters
     */
-    size_t  count_start_spaces(const std::string_view&);
+    size_t  count_start_spaces(std::string_view);
     
-    bool    ends(const std::string_view& hay, const std::string_view& pat);
+    bool    ends(std::string_view hay, std::string_view pat);
 
     /*! \brief First non-blank character
         This returns the first non-blank character seen, or NULL if none found
     */
-    char32_t  first_non_blank_char(const std::string_view&sv);
+    char32_t  first_non_blank_char(std::string_view sv);
 
     /*! \brief First argument that isn't empty
     
         This returns the first argument that isn't empty.  If all area empty, a reference to the last one is returned
     */
-    std::string_view  first_non_empty(const std::string_view&, const std::string_view&);
+    std::string_view  first_non_empty(std::string_view, std::string_view);
 
     /*! \brief First argument that isn't empty
     
         This returns the first argument that isn't empty.  If all area empty, a reference to the last one is returned
     */
-    std::string_view  first_non_empty(const std::string_view&, const std::string_view&, const std::string_view&);
+    std::string_view  first_non_empty(std::string_view, std::string_view, std::string_view);
 
     /*! \brief First argument that isn't empty
     
         This returns the first argument that isn't empty.  If all area empty, a reference to the last one is returned
     */
-    std::string_view  first_non_empty(const std::string_view&, const std::string_view&, const std::string_view&, const std::string_view&);
+    std::string_view  first_non_empty(std::string_view, std::string_view, std::string_view, std::string_view);
 
     /*! \brief First argument that isn't empty
     
@@ -259,7 +259,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \param[in] width    number of characters to wrap at.
     */
-    std::vector<std::string_view>  hard_wrap(const std::string_view&s, size_t width);
+    std::vector<std::string_view>  hard_wrap(std::string_view s, size_t width);
 
     /*! \brief Tests for an alphanumeric character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -306,7 +306,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return TRUE if the ENTIRE string is alpha characters
     */
-    bool is_alpha(const std::string_view&);
+    bool is_alpha(std::string_view);
 
     /*! \brief Tests for blank character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -333,7 +333,7 @@ namespace yq {
     /*! \brief Tests for blank string
         \param[in] s    String view (which is auto-gen from std::string if need be.
     */
-    bool  is_blank(const std::string_view&s);
+    bool  is_blank(std::string_view s);
     
     /*! \brief Tests for control character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -376,7 +376,7 @@ namespace yq {
         return p.first.empty() && p.second.empty();
     }
     
-    bool        is_equal(const std::string_view&, const std::string_view&);
+    bool        is_equal(std::string_view, std::string_view);
 
     /*! \brief Tests for graphical character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -398,32 +398,32 @@ namespace yq {
     
         This ignores case differences as it compares strings a & b.
     */
-    bool  is_greater_igCase(const std::string_view&a, const std::string_view&b);
+    bool  is_greater_igCase(std::string_view a, std::string_view b);
     
     
     /*! \brief Test to see if string matches the pattern
     
         (this one is here so it signature matches the other
     */
-    bool  is_in(const std::string_view& str, const std::string_view& pat);
+    bool  is_in(std::string_view str, std::string_view pat);
 
     /*! \brief Test to see if string matches one of the patterns
     */
-    bool  is_in(const std::string_view& str, const std::initializer_list<std::string_view>& pat);
+    bool  is_in(std::string_view str, const std::initializer_list<std::string_view>& pat);
     
     /*! \brief Test to see if string matches one of the patterns
     */
-    bool  is_in(const std::string_view& str, const string_view_set_t& pat);
+    bool  is_in(std::string_view str, const string_view_set_t& pat);
 
     /*! \brief Test to see if string matches one of the patterns
     */
-    bool  is_in(const std::string_view& str, const std::vector<std::string_view>& pat);
+    bool  is_in(std::string_view str, const std::vector<std::string_view>& pat);
 
     /*! \brief Tests if b < a ignoring case
     
         This ignores case differences as it compares strings a & b.
     */
-    bool  is_less_igCase(const std::string_view&a, const std::string_view&b);
+    bool  is_less_igCase(std::string_view a, std::string_view b);
 
     /*! \brief Tests for lower-case alphabetical character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -488,7 +488,7 @@ namespace yq {
 
     /*! \brief Tests for equality while ignoring case
     */
-    bool  is_similar(const std::string_view&, const std::string_view&);
+    bool  is_similar(std::string_view, std::string_view);
 
     /*! \brief Tests for white-space character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -509,7 +509,7 @@ namespace yq {
     /*! \brief Tests for white-space characters
         \return TRUE if ALL characters in the string view are white space
     */
-    bool  is_space(const std::string_view&);
+    bool  is_space(std::string_view);
     
     /*! \brief Tests for upper-case alphabetical character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
@@ -550,7 +550,7 @@ namespace yq {
         \return The joined string
     */
     template <template <typename...> class Tmpl, typename... T>
-    std::string     join(const Tmpl<T...>& collection, const std::string_view& separator);
+    std::string     join(const Tmpl<T...>& collection, std::string_view separator);
     
     /*! \brief Joins the collection into a string
         \param[in] collection  The collection
@@ -564,25 +564,25 @@ namespace yq {
     
         \note Check will end at the length pattern, so "matches_at("foobar rocks", 3, "bar")" will be TRUE
     */
-    bool        matches_at(const std::string_view& haystack, size_t pos, const std::string_view& pattern);
+    bool        matches_at(std::string_view haystack, size_t pos, std::string_view pattern);
 
     /*! \brief Checks to see if the haystack matches the pattern at position
     
         \note Check will end at the length pattern, so "matches_at("foobar rocks", 3, "bar")" will be TRUE
     */
-    bool        matches_at_igCase(const std::string_view& haystack, size_t pos, const std::string_view& pattern);
+    bool        matches_at_igCase(std::string_view haystack, size_t pos, std::string_view pattern);
     
     /*! \brief Left pads the result until the character count is met */
-    std::string     pad_left(const std::string_view& data, size_t minSize, char ch=' ');
+    std::string     pad_left(std::string_view data, size_t minSize, char ch=' ');
     
     /*! \brief Left pads the result until the character count is met */
-    std::string     pad_left(const std::string_view& data, size_t minSize, char32_t ch);
+    std::string     pad_left(std::string_view data, size_t minSize, char32_t ch);
 
     /*! \brief Right pads the result until the character count is met */
-    std::string     pad_right(const std::string_view& data, size_t minSize, char ch=' ');
+    std::string     pad_right(std::string_view data, size_t minSize, char ch=' ');
 
     /*! \brief Right pads the result until the character count is met */
-    std::string     pad_right(const std::string_view& data, size_t minSize, char32_t ch);
+    std::string     pad_right(std::string_view data, size_t minSize, char32_t ch);
     
     /*! \brief Replaces all instances of old character with new character */
     size_t          replace_all(std::string&, char what, char with);
@@ -594,7 +594,7 @@ namespace yq {
     
         \note if B is empty, this is a NOP
     */
-    std::string&    set_if_empty(std::string&, const std::string_view&, bool fOverride=false);
+    std::string&    set_if_empty(std::string&, std::string_view, bool fOverride=false);
     
     /*! \brief Simplifies the given string
     
@@ -604,7 +604,7 @@ namespace yq {
 
     /*! \brief Simplifies the given string
     */
-    std::string     simplify(const std::string_view&, char sp=' ');
+    std::string     simplify(std::string_view, char sp=' ');
 
     /*! \brief Splits the string up into the specified equal number of chunks
     
@@ -631,7 +631,7 @@ namespace yq {
         \param[in] s        String view
         \param[in] number   Number of entries
     */
-    Vector<std::string_view>  split(const std::string_view& s, size_t number); 
+    Vector<std::string_view>  split(std::string_view s, size_t number); 
 
     /*! \brief Splits the string
     
@@ -658,7 +658,7 @@ namespace yq {
         \param[in] s        String view
         \param[in] ch       Character being split on
     */
-    Vector<std::string_view>  split(const std::string_view&s, char ch); 
+    Vector<std::string_view>  split(std::string_view s, char ch); 
 
     /*! \brief Splits the string, up to number entries
     
@@ -687,7 +687,7 @@ namespace yq {
         \param[in] ch       Character being split on
         \param[in] number   MAXIMUM Number of entries, more are treated as part of the last entry
     */
-    Vector<std::string_view>  split(const std::string_view&s, char ch, size_t number); 
+    Vector<std::string_view>  split(std::string_view s, char ch, size_t number); 
 
     /*! \brief Splits the string
     
@@ -714,7 +714,7 @@ namespace yq {
         \param[in] s        String view
         \param[in] ch       Character being split on
     */
-    Vector<std::string_view>  split(const std::string_view&s, char32_t ch); 
+    Vector<std::string_view>  split(std::string_view s, char32_t ch); 
     
     /*! \brief Splits the string
     
@@ -743,7 +743,7 @@ namespace yq {
         \param[in] ch       Character being split on
         \param[in] number   MAXIMUM Number of entries, more are treated as part of the last entry
     */
-    Vector<std::string_view>  split(const std::string_view&s, char32_t ch, size_t number); 
+    Vector<std::string_view>  split(std::string_view s, char32_t ch, size_t number); 
 
     /*! \brief Splits the string
     
@@ -771,7 +771,7 @@ namespace yq {
         \param[in] s        String view
         \param[in] p        pattern string
     */
-    Vector<std::string_view>  split(const std::string_view&s, const std::string_view&p);
+    Vector<std::string_view>  split(std::string_view s, std::string_view p);
 
     /*! \brief Splits the string ignoring case
     
@@ -798,7 +798,7 @@ namespace yq {
         \param[in] s        string
         \param[in] ch       Character being split on
     */
-    Vector<std::string_view>  split_igCase(const std::string_view& s, char ch); 
+    Vector<std::string_view>  split_igCase(std::string_view s, char ch); 
 
     /*! \brief Splits the string ignoring case
     
@@ -825,7 +825,7 @@ namespace yq {
         \param[in] s        string
         \param[in] ch       Character being split on
     */
-    Vector<std::string_view>  split_igCase(const std::string_view&s, char32_t ch); 
+    Vector<std::string_view>  split_igCase(std::string_view s, char32_t ch); 
     
     /*! \brief Splits the string ignoring case
     
@@ -853,7 +853,7 @@ namespace yq {
         \param[in] s        String view
         \param[in] p        pattern string
     */
-    Vector<std::string_view>  split_igCase(const std::string_view&s, const std::string_view&p);
+    Vector<std::string_view>  split_igCase(std::string_view s, std::string_view p);
 
     /*! \brief Checks the start of string
     
@@ -865,7 +865,7 @@ namespace yq {
     
         This checks to see if the start of the given string matches the given pattern.
     */
-    bool  starts(const std::string_view&s, const std::string_view& pat);
+    bool  starts(std::string_view s, std::string_view pat);
 
     /*! \brief Checks the start of string
     
@@ -877,15 +877,15 @@ namespace yq {
     
         This checks to see if the start of the given string matches the given pattern, ignoring case.
     */
-    bool  starts_igCase(const std::string_view&s, const std::string_view& pat);
+    bool  starts_igCase(std::string_view s, std::string_view pat);
 
-    const char*         strany(const std::string_view& haystack, const std::string_view& needle);
+    const char*         strany(std::string_view haystack, std::string_view needle);
 
     /*! \brief Strips the LAST extension
     
         This returns the input MINUS the last extension, call repeatedly to remove more than one.
     */
-    std::string_view    strip_extension(const std::string_view&);
+    std::string_view    strip_extension(std::string_view);
 
     /*! \brief Strips ALL spaces from the input
     */
@@ -893,7 +893,7 @@ namespace yq {
 
     /*! \brief Strips ALL spaces from the input
     */
-    std::string  strip_spaces(const std::string_view&);
+    std::string  strip_spaces(std::string_view);
 
     /*! \brief Finds the next character 
     
@@ -904,7 +904,7 @@ namespace yq {
     */
     const char*  strnchr(const char*s, size_t n, char ch);
 
-    const char*  strnchr(const std::string_view&, char ch);
+    const char*  strnchr(std::string_view, char ch);
 
     /*! \brief Finds the next character 
     
@@ -994,7 +994,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return The result
     */
-    boolean_r  to_boolean(const std::string_view& s);
+    boolean_r  to_boolean(std::string_view s);
 
     /*! \brief Decodes the given string into a dobule
     
@@ -1013,7 +1013,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return The result
     */
-    double_r  to_double(const std::string_view&s);
+    double_r  to_double(std::string_view s);
 
     /*! \brief Decodes the given string into a float
     
@@ -1033,7 +1033,7 @@ namespace yq {
         
         \return The result
     */
-    float_r   to_float(const std::string_view&);
+    float_r   to_float(std::string_view);
 
 
     /*! \brief Decodes the given hex string into an unsigned
@@ -1053,7 +1053,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return The result
     */
-    unsigned_r to_hex(const std::string_view&s);
+    unsigned_r to_hex(std::string_view s);
 
     /*! \brief Decodes the given hex string into an unsigned 8-bit intetger
     
@@ -1072,7 +1072,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return The result
     */
-    uint8_r  to_hex8(const std::string_view&s);
+    uint8_r  to_hex8(std::string_view s);
 
     /*! \brief Decodes the given hex string into an unsigned 16-bit intetger
     
@@ -1091,7 +1091,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return The result
     */
-    uint16_r  to_hex16(const std::string_view&s);
+    uint16_r  to_hex16(std::string_view s);
 
     /*! \brief Decodes the given hex string into an unsigned 32-bit intetger
     
@@ -1110,7 +1110,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return The result
     */
-    uint32_r  to_hex32(const std::string_view&s);
+    uint32_r  to_hex32(std::string_view s);
 
     /*! \brief Decodes the given hex string into an unsigned 64-bit intetger
     
@@ -1129,7 +1129,7 @@ namespace yq {
         \param[in] s    String view (which is auto-gen from std::string if need be.
         \return The result
     */
-    uint64_r  to_hex64(const std::string_view&s);
+    uint64_r  to_hex64(std::string_view s);
     
         /*! \brief Decodes the given string into an integer
     
@@ -1150,7 +1150,7 @@ namespace yq {
         
         \return The result
     */
-    integer_r  to_int(const std::string_view&s);
+    integer_r  to_int(std::string_view s);
 
     /*! \brief Decodes the given string into an 8-bit integer
     
@@ -1171,7 +1171,7 @@ namespace yq {
         
         \return The result
     */
-    int8_r  to_int8(const std::string_view&s);
+    int8_r  to_int8(std::string_view s);
 
     /*! \brief Decodes the given string into a 16-bit integer
     
@@ -1192,7 +1192,7 @@ namespace yq {
         
         \return The result
     */
-    int16_r  to_int16(const std::string_view&s);
+    int16_r  to_int16(std::string_view s);
 
     /*! \brief Decodes the given string into a 32-bit integer
     
@@ -1213,7 +1213,7 @@ namespace yq {
         
         \return The result
     */
-    int32_r  to_int32(const std::string_view&s);
+    int32_r  to_int32(std::string_view s);
 
     /*! \brief Decodes the given string into a 64-bit integer
     
@@ -1234,7 +1234,7 @@ namespace yq {
         
         \return The result
     */
-    int64_r  to_int64(const std::string_view&s);
+    int64_r  to_int64(std::string_view s);
 
     /*! \brief Decodes the given string into an integer
     
@@ -1255,7 +1255,7 @@ namespace yq {
         
         \return The result
     */
-    integer_r  to_integer(const std::string_view&s);
+    integer_r  to_integer(std::string_view s);
 
     /*! \brief Converts to lower case
     
@@ -1281,7 +1281,7 @@ namespace yq {
     
         Converts the given string to lowercase (as unicode characters)
     */
-    std::string  to_lower(const std::string_view&s);
+    std::string  to_lower(std::string_view s);
 
     /*! \brief Converts to lower case
         Converts the given string to lowercase.
@@ -1307,11 +1307,11 @@ namespace yq {
         
         \return The result
     */
-    short_r  to_short(const std::string_view&s);
+    short_r  to_short(std::string_view s);
 
     /*! \brief Returns the boolean as a string (view)
     */
-    inline std::string_view     to_string(bool f, const std::string_view& kFalse = "false", const std::string_view& kTrue="true")
+    inline std::string_view     to_string(bool f, std::string_view kFalse = "false", std::string_view kTrue="true")
     {
         return f ? kTrue : kFalse;
     }
@@ -1381,7 +1381,7 @@ namespace yq {
     
         Yes, there's a constructor, however, this is for the template (below);  Copy 
     */
-    inline std::string_view  to_string(const std::string_view& s)
+    inline std::string_view  to_string(std::string_view s)
     {
         return s;
     }
@@ -1457,7 +1457,7 @@ namespace yq {
         
         \return The result
     */
-    unsigned_r  to_uint(const std::string_view&s);
+    unsigned_r  to_uint(std::string_view s);
 
     /*! \brief Decodes the given string into an 8-bit unsigned integer
     
@@ -1478,7 +1478,7 @@ namespace yq {
         
         \return The result
     */
-    uint8_r  to_uint8(const std::string_view&s);
+    uint8_r  to_uint8(std::string_view s);
 
     /*! \brief Decodes the given string into a 16-bit unsigned integer
     
@@ -1499,7 +1499,7 @@ namespace yq {
         
         \return The result
     */
-    uint16_r  to_uint16(const std::string_view&s); 
+    uint16_r  to_uint16(std::string_view s); 
 
     /*! \brief Decodes the given string into a 32-bit unsigned integer
     
@@ -1520,7 +1520,7 @@ namespace yq {
         
         \return The result
     */
-    uint32_r  to_uint32(const std::string_view&s);
+    uint32_r  to_uint32(std::string_view s);
 
     /*! \brief Decodes the given string into a 64-bit unsigned integer
     
@@ -1541,7 +1541,7 @@ namespace yq {
         
         \return The result
     */
-    uint64_r  to_uint64(const std::string_view&s);
+    uint64_r  to_uint64(std::string_view s);
 
     /*! \brief Decodes the given string into an unsigned integer
     
@@ -1562,7 +1562,7 @@ namespace yq {
         
         \return The result
     */
-    unsigned_r  to_uinteger(const std::string_view&s);
+    unsigned_r  to_uinteger(std::string_view s);
 
     /*! \brief Decodes the given string into an unsigned integer
     
@@ -1583,7 +1583,7 @@ namespace yq {
         
         \return The result
     */
-    unsigned_r  to_unsigned(const std::string_view&s);
+    unsigned_r  to_unsigned(std::string_view s);
 
     /*! \brief Converts to upper case
     
@@ -1607,7 +1607,7 @@ namespace yq {
     
         Converts the given string to upper case (as unicode characters)
     */
-    std::string  to_upper(const std::string_view&);
+    std::string  to_upper(std::string_view);
 
     /*! \brief Converts to upper case
     
@@ -1634,33 +1634,33 @@ namespace yq {
         
         \return The result
     */
-    ushort_r  to_ushort(const std::string_view&s);
+    ushort_r  to_ushort(std::string_view s);
 
 
     /*! \brief String not starting/ending with spaces
     */
-    std::string_view    trimmed(const std::string_view&);
+    std::string_view    trimmed(std::string_view);
     
     /*! \brief String not starting/ending with specified character
     
     */
-    std::string_view    trimmed(const std::string_view&, char);
+    std::string_view    trimmed(std::string_view, char);
 
     /*! \brief String not ending with whitespaces
     */
-    std::string_view    trimmed_end(const std::string_view&);
+    std::string_view    trimmed_end(std::string_view);
     
     /*! \brief String not ending with whitespaces specified character
     */
-    std::string_view    trimmed_end(const std::string_view&, char);
+    std::string_view    trimmed_end(std::string_view, char);
 
     /*! \brief String not starting with whitespace
     */
-    std::string_view    trimmed_start(const std::string_view&);
+    std::string_view    trimmed_start(std::string_view);
     
     /*! \brief String not starting with whitespace specified character
     */
-    std::string_view    trimmed_start(const std::string_view&, char);
+    std::string_view    trimmed_start(std::string_view, char);
 
     /*! \brief Split via visitor pattern
     
@@ -1703,7 +1703,7 @@ namespace yq {
         \param[in,out]  pred Function-like object, taking a std::string_view.
     */
     template <typename Pred>
-    void            vsplit(const std::string_view& s, char ch, Pred pred)
+    void            vsplit(std::string_view s, char ch, Pred pred)
     {
         vsplit(s.data(), s.size(), pred);
     }
@@ -1742,7 +1742,7 @@ namespace yq {
         \param[in,out]  pred Function-like object, taking a std::string_view.
     */
     template <typename Pred>
-    void            vsplit(const std::string_view& s, const std::string_view& pattern, Pred pred)    
+    void            vsplit(std::string_view s, std::string_view pattern, Pred pred)    
     {
         vsplit(s.data(), s.size(), pattern.data(), pattern.size(), pred);
     }
@@ -1781,7 +1781,7 @@ namespace yq {
         \param[in,out]  pred Function-like object, taking a std::string_view.
     */
     template <typename Pred>
-    void            vsplit_igCase(const std::string_view& s, char ch, Pred pred)
+    void            vsplit_igCase(std::string_view s, char ch, Pred pred)
     {
         vsplit_igCase(s.data(), s.size(), pred);
     }
@@ -1820,7 +1820,7 @@ namespace yq {
         \param[in,out]  pred Function-like object, taking a std::string_view.
     */
     template <typename Pred>
-    void            vsplit_igCase(const std::string_view& s, const std::string_view& pattern, Pred pred)    
+    void            vsplit_igCase(std::string_view s, std::string_view pattern, Pred pred)    
     {
         vsplit_igCase(s.data(), s.size(), pattern.data(), pattern.size(), pred);
     }
@@ -1831,7 +1831,7 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     template <template <typename...> class Tmpl, typename... T>
-    std::string     join(const Tmpl<T...>& collection, const std::string_view& separator)
+    std::string     join(const Tmpl<T...>& collection, std::string_view separator)
     {
         std::string    ret;
 

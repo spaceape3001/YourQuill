@@ -157,7 +157,7 @@ set(yq_sources
     ./type/Touched.hpp
     ./type/Variant.cpp
 
-    ./web/WebPage.hpp
+    ./web/Web.hpp
     ./web/web_unity.cpp
 
     ./wksp/QuillData.hpp

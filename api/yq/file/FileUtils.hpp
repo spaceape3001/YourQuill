@@ -169,4 +169,11 @@ namespace yq {
                 return;
         }
     }
+    
+    //! "Sanitizes" a user-supplied path
+    //!
+    //! This sanitizes a user supplied path by removing extra slashes, hiddens, etc
+    std::string         path_sanitize(const std::string_view&);
+    std::string_view    file_extension(const std::string_view&);
+    
 }

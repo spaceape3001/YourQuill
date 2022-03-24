@@ -53,24 +53,31 @@ static constexpr const size_t       kBufferSize     = 8192;
 
 
 
-std::pair<const Web*, size_t>     find_search(HttpOp m, const std::string_view& req)
+std::pair<const Web*, std::string_view>     find_page(HttpOp m, std::string_view path)
 {
-    size_t  n       = 0;
-    for(size_t nslash = req.find_last_of('/'); (nslash != std::string::npos) && nslash; ++n, nslash=req.find_last_of('/', nslash-1)){
-        std::string tmp;
-        
-        if(!n){
-            tmp     = concat(req.substr(0,nslash), "/*");
-            const Web*p   = Web::find(m, tmp);
-            if(p)
-                return { p, nslash+1 };
-        }
-        
-        tmp = concat(req.substr(0, nslash), "/**");
-        const Web*p   = Web::find(m, tmp);
+    const Web*  p   = Web::page(m, path);
+    if(p)
+        return { p, std::string_view() };
+
+    // yInfo() << path << " not found, trying directory";
+
+    size_t  n   = path.find_last_of('/');
+    if(n == std::string_view::npos)
+        return {};
+    if(!n)
+        return {};
+    p   = Web::directory(m, path.substr(0, n));
+    if(p)
+        return { p, path.substr(n+1) };
+
+    // yInfo() << path.substr(0,n) << " not found, trying glob";
+    
+    for(; (n != std::string_view::npos) && n; n = path.find_last_of('/', n-1)){
+        p       = Web::glob(m, path.substr(0, n));
         if(p)
-            return { p, nslash+1 };
+            return { p, path.substr(n+1) };
     }
+    
     return {};
 }
 
@@ -78,16 +85,9 @@ void    http_process(const HttpRequest& rq, HttpResponse& rs)
 {
 yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
 
-    const Web*      pg  = Web::find(rq.method(), rq.url().path);
-    if(pg){
-        pg -> handle(rq, rs, "");
-        return ;
-    }
-
-    //  alright, begin the more crazy searching...
-    auto f  = find_search(rq.method(), rq.url().path);
-    if(f.first){
-        f.first -> handle(rq, rs, rq.url().path.substr(f.second));
+    auto pg = find_page(rq.method(), rq.url().path);
+    if(pg.first){
+        pg.first -> handle(rq, rs, pg.second);
         return ;
     }
     
@@ -100,6 +100,11 @@ int execMain(int argc, char* argv[])
     log_to_std_error();
     Meta::init();
 
+    if(!wksp::initialize(argv[1])){
+        yError() << "Unable to initialize database!";
+        return -1;
+    }
+
     size_t n = load_plugin_dir("plugin");
     yInfo() << "Loaded " << n << " Plugins.";
     
@@ -107,10 +112,6 @@ int execMain(int argc, char* argv[])
     //  (likely based off templates and/or keywords in the quill file)
     
     Meta::freeze();
-    if(!wksp::initialize(argv[1])){
-        yError() << "Unable to initialize database!";
-        return -1;
-    }
     
     yInfo() << "Launching Quill Server for '" << wksp::name() << "' on Port " << wksp::port() << ".";
     

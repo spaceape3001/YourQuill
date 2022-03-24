@@ -113,7 +113,7 @@ namespace yq {
     }
 
     
-    bool    any_starts(const std::vector<std::string>&haystack, const std::string_view&pat)
+    bool    any_starts(const std::vector<std::string>&haystack, std::string_view pat)
     {
         for(auto& s : haystack)
             if(starts(s, pat))
@@ -121,7 +121,7 @@ namespace yq {
         return false;
     }
     
-    bool    any_starts(const std::vector<std::string_view>&haystack, const std::string_view&pat)
+    bool    any_starts(const std::vector<std::string_view>&haystack, std::string_view pat)
     {
         for(auto& s : haystack)
             if(starts(s, pat))
@@ -129,7 +129,7 @@ namespace yq {
         return false;
     }
     
-    bool    any_starts(const std::initializer_list<std::string_view>&haystack, const std::string_view&pat)
+    bool    any_starts(const std::initializer_list<std::string_view>&haystack, std::string_view pat)
     {
         for(auto& s : haystack)
             if(starts(s, pat))
@@ -137,7 +137,7 @@ namespace yq {
         return false;
     }
     
-    bool    any_starts_igCase(const std::vector<std::string>&haystack, const std::string_view&pat)
+    bool    any_starts_igCase(const std::vector<std::string>&haystack, std::string_view pat)
     {
         for(auto& s : haystack)
             if(starts_igCase(s, pat))
@@ -145,7 +145,7 @@ namespace yq {
         return false;
     }
     
-    bool    any_starts_igCase(const std::vector<std::string_view>&haystack, const std::string_view&pat)
+    bool    any_starts_igCase(const std::vector<std::string_view>&haystack, std::string_view pat)
     {
         for(auto& s : haystack)
             if(starts_igCase(s, pat))
@@ -153,7 +153,7 @@ namespace yq {
         return false;
     }
     
-    bool    any_starts_igCase(const std::initializer_list<std::string_view>&haystack, const std::string_view&pat)
+    bool    any_starts_igCase(const std::initializer_list<std::string_view>&haystack, std::string_view pat)
     {
         for(auto& s : haystack)
             if(starts_igCase(s, pat))
@@ -208,12 +208,12 @@ namespace yq {
         return ret;
     }
     
-    std::string  capitalize(const std::string_view&s)
+    std::string  capitalize(std::string_view s)
     {
         return capitalize(s.data(), s.size());
     }
 
-    Compare compare(const std::string_view& a, const std::string_view& b)
+    Compare compare(std::string_view a, std::string_view b)
     {
         size_t  c   = std::min(a.size(), b.size());
         for(size_t i=0;i<c;++i){
@@ -226,7 +226,7 @@ namespace yq {
         return compare(a.size(), b.size());
     }
 
-    Compare compare_igCase(const std::string_view& sa, const std::string_view& sb)
+    Compare compare_igCase(std::string_view sa, std::string_view sb)
     {
         Iter32  a(sa);
         Iter32  b(sb);
@@ -245,7 +245,7 @@ namespace yq {
         }
     }
 
-    std::string concat(const std::string_view& a, const std::string_view& b)
+    std::string concat(std::string_view a, std::string_view b)
     {
         std::string ret;
         ret.reserve(a.size()+b.size()+1);
@@ -259,7 +259,7 @@ namespace yq {
         return strnstr(haystack, nHaystack, needle, nNeedle) ? true : false;
     }
 
-    bool    contains(const std::string_view& haystack, const std::string_view& needle)
+    bool    contains(std::string_view haystack, std::string_view needle)
     {
         return contains(haystack.data(), haystack.size(), needle.data(), needle.size());
     }
@@ -269,7 +269,7 @@ namespace yq {
         return strnstr_igCase(haystack, nHaystack, needle, nNeedle) ? true : false;
     }
 
-    bool    contains_igCase(const std::string_view& haystack, const std::string_view& needle)
+    bool    contains_igCase(std::string_view haystack, std::string_view needle)
     {
         return contains_igCase(haystack.data(), haystack.size(), needle.data(), needle.size());
     }
@@ -295,7 +295,7 @@ namespace yq {
     {
         std::vector<std::string>    ret;
         ret.reserve(input.size());
-        for(const std::string_view& s : input)
+        for(std::string_view s : input)
             ret.push_back(std::string(s));
         return ret;
     }
@@ -309,7 +309,7 @@ namespace yq {
         return ret;
     }
     
-    size_t  count_characters(const std::string_view&s)
+    size_t  count_characters(std::string_view s)
     {
         return count_characters(s.data(), s.size());
     }
@@ -325,7 +325,7 @@ namespace yq {
         return ret;
     }
     
-    size_t  count_characters(const std::string_view&s, char ch)
+    size_t  count_characters(std::string_view s, char ch)
     {
         return count_characters(s.data(), s.size(), ch);
     }
@@ -342,7 +342,7 @@ namespace yq {
         return ret;
     }
     
-    size_t  count_characters(const std::string_view&s, char32_t ch)
+    size_t  count_characters(std::string_view s, char32_t ch)
     {
         return count_characters(s.data(), s.size(), ch);
     }
@@ -362,7 +362,7 @@ namespace yq {
     }
     
 
-    size_t  count_characters_igCase(const std::string_view&s, char ch)
+    size_t  count_characters_igCase(std::string_view s, char ch)
     {
         return count_characters_igCase(s.data(), s.size(), ch);
     }
@@ -380,12 +380,12 @@ namespace yq {
         return ret;
     }
     
-    size_t  count_characters_igCase(const std::string_view&s, char32_t ch)
+    size_t  count_characters_igCase(std::string_view s, char32_t ch)
     {
         return count_characters_igCase(s.data(), s.size(), ch);
     }
 
-    size_t  count_start_spaces(const std::string_view&a)
+    size_t  count_start_spaces(std::string_view a)
     {
         size_t  ret   = 0;
         iter32_abort(a, [&](char32_t ch) -> bool {
@@ -398,14 +398,14 @@ namespace yq {
         return ret;
     }
 
-    bool    ends(const std::string_view& hay, const std::string_view& pat)
+    bool    ends(std::string_view hay, std::string_view pat)
     {
         if(pat.size() > hay.size())
             return false;
         return hay.substr(hay.size()-pat.size()) == pat;
     }
 
-    char32_t  first_non_blank_char(const std::string_view&a)
+    char32_t  first_non_blank_char(std::string_view a)
     {
         char32_t  ret   = 0;
         iter32_abort(a, [&](char32_t ch) -> bool {
@@ -418,12 +418,12 @@ namespace yq {
         return ret;
     }
 
-    std::string_view  first_non_empty(const std::string_view&a, const std::string_view&b)
+    std::string_view  first_non_empty(std::string_view a, std::string_view b)
     {
         return a.empty() ? b : a;
     }
 
-    std::string_view  first_non_empty(const std::string_view&a, const std::string_view&b, const std::string_view&c)
+    std::string_view  first_non_empty(std::string_view a, std::string_view b, std::string_view c)
     {
         if(!a.empty())
             return a;
@@ -432,7 +432,7 @@ namespace yq {
         return c;
     }
 
-    std::string_view  first_non_empty(const std::string_view&a, const std::string_view&b, const std::string_view&c, const std::string_view&d)
+    std::string_view  first_non_empty(std::string_view a, std::string_view b, std::string_view c, std::string_view d)
     {
         if(!a.empty())
             return a;
@@ -445,7 +445,7 @@ namespace yq {
 
     std::string_view  first_non_empty(std::initializer_list<std::string_view> args)
     {
-        for(const std::string_view& s : args)
+        for(std::string_view s : args)
             if(!s.empty())
                 return s;
         return std::string_view();
@@ -502,7 +502,7 @@ namespace yq {
         return ret;
     }
     
-    std::vector<std::string_view>  hard_wrap(const std::string_view&s, size_t width)
+    std::vector<std::string_view>  hard_wrap(std::string_view s, size_t width)
     {
         return hard_wrap(s.data(), s.size(), width);
     }
@@ -517,7 +517,7 @@ namespace yq {
         return ret;
     }
     
-    bool  is_alpha(const std::string_view&s)
+    bool  is_alpha(std::string_view s)
     {
         return is_alpha(s.data(), s.size());
     }
@@ -532,28 +532,28 @@ namespace yq {
         return ret;
     }
 
-    bool  is_blank(const std::string_view&s)
+    bool  is_blank(std::string_view s)
     {
         return is_blank(s.data(), s.size());
     }
 
-    bool  is_equal(const std::string_view&a, const std::string_view&b)
+    bool  is_equal(std::string_view a, std::string_view b)
     {
         return is_equal(compare(a,b));
     }
 
-    bool  is_greater_igCase(const std::string_view&a, const std::string_view&b)
+    bool  is_greater_igCase(std::string_view a, std::string_view b)
     {
         return is_greater(compare_igCase(a,b));
     }
 
-    bool  is_in(const std::string_view& str, const std::string_view& pat)
+    bool  is_in(std::string_view str, std::string_view pat)
     {
         return is_similar(str, pat);
     }
     
 
-    bool  is_in(const std::string_view& str, const std::initializer_list<std::string_view>& pat)
+    bool  is_in(std::string_view str, const std::initializer_list<std::string_view>& pat)
     {
         for(auto& s : pat)
             if(is_similar(str, s))
@@ -561,12 +561,12 @@ namespace yq {
         return false;
     }
     
-    bool  is_in(const std::string_view& str, const string_view_set_t& pat)
+    bool  is_in(std::string_view str, const string_view_set_t& pat)
     {
         return pat.has(str);
     }
 
-    bool  is_in(const std::string_view& str, const std::vector<std::string_view>& pat)
+    bool  is_in(std::string_view str, const std::vector<std::string_view>& pat)
     {
         for(auto& s : pat)
             if(is_similar(str, s))
@@ -574,7 +574,7 @@ namespace yq {
         return false;
     }
 
-    bool  is_less_igCase(const std::string_view&a, const std::string_view&b)
+    bool  is_less_igCase(std::string_view a, std::string_view b)
     {
         return is_less( compare_igCase(a,b));
     }
@@ -584,14 +584,14 @@ namespace yq {
         return (ch == '\r') || (ch == '\n');
     }
 
-    bool  is_similar(const std::string_view&a, const std::string_view&b)
+    bool  is_similar(std::string_view a, std::string_view b)
     {
         if(a.size() != b.size())
             return false;
         return is_equal( compare_igCase(a, b));
     }
 
-    bool  is_space(const std::string_view&a)
+    bool  is_space(std::string_view a)
     {
         bool    ret = true;
         return iter32_abort(a, [&](char32_t ch) -> bool {
@@ -601,17 +601,17 @@ namespace yq {
         return ret;
     }
 
-    bool        matches_at(const std::string_view& haystack, size_t pos, const std::string_view& pattern)
+    bool        matches_at(std::string_view haystack, size_t pos, std::string_view pattern)
     {
         return starts(haystack.substr(pos), pattern);
     }
     
-    bool        matches_at_igCase(const std::string_view& haystack, size_t pos, const std::string_view& pattern)
+    bool        matches_at_igCase(std::string_view haystack, size_t pos, std::string_view pattern)
     {
         return starts_igCase(haystack.substr(pos), pattern);
     }
 
-    std::string     pad_left(const std::string_view& data, size_t minSize, char ch)
+    std::string     pad_left(std::string_view data, size_t minSize, char ch)
     {
         size_t  ccount  = count_characters(data);
         if(ccount >= minSize)
@@ -621,7 +621,7 @@ namespace yq {
         return ret;
     }
     
-    std::string     pad_left(const std::string_view& data, size_t minSize, char32_t ch)
+    std::string     pad_left(std::string_view data, size_t minSize, char32_t ch)
     {
         size_t  ccount  = count_characters(data);
         if(ccount >= minSize)
@@ -637,7 +637,7 @@ namespace yq {
         return ret;
     }
     
-    std::string  pad_right(const std::string_view& data, size_t minSize, char ch)
+    std::string  pad_right(std::string_view data, size_t minSize, char ch)
     {
         size_t  ccount  = count_characters(data);
         std::string ret = copy(data);
@@ -646,7 +646,7 @@ namespace yq {
         return ret;
     }
 
-    std::string  pad_right(const std::string_view& data, size_t minSize, char32_t ch)
+    std::string  pad_right(std::string_view data, size_t minSize, char32_t ch)
     {
         size_t  ccount  = count_characters(data);
         if(ccount >= minSize)
@@ -716,7 +716,7 @@ namespace yq {
         //return ret;
     //}
 
-    std::string&    set_if_empty(std::string&a, const std::string_view&b, bool fOverride)
+    std::string&    set_if_empty(std::string&a, std::string_view b, bool fOverride)
     {
         if((a.empty() || fOverride) && !b.empty())
             a  = b;
@@ -750,7 +750,7 @@ namespace yq {
     }
     
 
-    std::string     simplify(const std::string_view&sv, char sp)
+    std::string     simplify(std::string_view sv, char sp)
     {
         return simplify(sv.data(), sv.size(), sp);
     }
@@ -774,7 +774,7 @@ namespace yq {
         return ret;
     }
 
-    Vector<std::string_view>  split(const std::string_view& s, size_t number)
+    Vector<std::string_view>  split(std::string_view s, size_t number)
     {
         return split(s.data(), s.size(), number);
     }
@@ -782,13 +782,13 @@ namespace yq {
     Vector<std::string_view>  split(const char*s, size_t n, char ch)
     {
         Vector<std::string_view>  ret;
-        vsplit(s, n, ch, [&](const std::string_view& token){
+        vsplit(s, n, ch, [&](std::string_view token){
             ret << token;
         });
         return ret;
     }
 
-    Vector<std::string_view>  split(const std::string_view&s, char ch)
+    Vector<std::string_view>  split(std::string_view s, char ch)
     {
         return split(s.data(), s.size(), ch);
     }
@@ -809,7 +809,7 @@ namespace yq {
         return ret;
     }
 
-    Vector<std::string_view>  split(const std::string_view&s, char ch, size_t number)
+    Vector<std::string_view>  split(std::string_view s, char ch, size_t number)
     {
         return split(s.data(), s.size(), ch, number);
     }
@@ -830,7 +830,7 @@ namespace yq {
         return ret;
     }
 
-    Vector<std::string_view>  split(const std::string_view&s, char32_t ch)
+    Vector<std::string_view>  split(std::string_view s, char32_t ch)
     {
         return split(s.data(), s.size(), ch);
     }
@@ -855,7 +855,7 @@ namespace yq {
         return ret;
     }
     
-    Vector<std::string_view>  split(const std::string_view&s, char32_t ch, size_t number)
+    Vector<std::string_view>  split(std::string_view s, char32_t ch, size_t number)
     {
         return split(s.data(), s.size(), ch, number);
     }
@@ -863,13 +863,13 @@ namespace yq {
     Vector<std::string_view>  split(const char* s, size_t n, const char* p, size_t pn)
     {
         Vector<std::string_view>  ret;
-        vsplit(s, n, p, pn, [&](const std::string_view& token){
+        vsplit(s, n, p, pn, [&](std::string_view token){
             ret << token;
         });
         return ret;
     }
     
-    Vector<std::string_view>  split(const std::string_view&s, const std::string_view&p)
+    Vector<std::string_view>  split(std::string_view s, std::string_view p)
     {
         return split(s.data(), s.size(), p.data(), p.size());
     }
@@ -877,13 +877,13 @@ namespace yq {
     Vector<std::string_view>  split_igCase(const char* s , size_t n, char ch)
     {
         Vector<std::string_view>  ret;
-        vsplit_igCase(s, n, ch, [&](const std::string_view& token){
+        vsplit_igCase(s, n, ch, [&](std::string_view token){
             ret << token;
         });
         return ret;
     }
     
-    Vector<std::string_view>  split_igCase(const std::string_view&s, char ch)
+    Vector<std::string_view>  split_igCase(std::string_view s, char ch)
     {
         return split_igCase(s.data(), s.size(), ch);
     }
@@ -905,7 +905,7 @@ namespace yq {
         return ret;
     }
     
-    Vector<std::string_view>  split_igCase(const std::string_view&s, char32_t ch)
+    Vector<std::string_view>  split_igCase(std::string_view s, char32_t ch)
     {
         return split_igCase(s.data(), s.size(), ch);
     }
@@ -913,13 +913,13 @@ namespace yq {
     Vector<std::string_view>  split_igCase(const char* s, size_t n, const char*p, size_t pn)
     {
         Vector<std::string_view>  ret;
-        vsplit_igCase(s, n, p, pn, [&](const std::string_view& token){
+        vsplit_igCase(s, n, p, pn, [&](std::string_view token){
             ret << token;
         });
         return ret;
     }
     
-    Vector<std::string_view>  split_igCase(const std::string_view&s, const std::string_view&p)
+    Vector<std::string_view>  split_igCase(std::string_view s, std::string_view p)
     {
         return split_igCase(s.data(), s.size(), p.data(), p.size());
     }
@@ -936,7 +936,7 @@ namespace yq {
         return false;
     }
     
-    bool  starts(const std::string_view&s, const std::string_view& pat)
+    bool  starts(std::string_view s, std::string_view pat)
     {
         return starts(s.data(), s.size(), pat.data(), pat.size());
     }
@@ -953,12 +953,12 @@ namespace yq {
         return false;
     }
     
-    bool  starts_igCase(const std::string_view&s, const std::string_view& pat)
+    bool  starts_igCase(std::string_view s, std::string_view pat)
     {
         return starts_igCase(s.data(), s.size(), pat.data(), pat.size());
     }
 
-    const char*         strany(const std::string_view& haystack, const std::string_view& needle)
+    const char*         strany(std::string_view haystack, std::string_view needle)
     {
         for(const char* z = haystack.begin(); z != haystack.end(); ++z){
             if(strnchr(needle, *z))
@@ -967,11 +967,11 @@ namespace yq {
         return nullptr;
     }
 
-    std::string_view    strip_extension(const std::string_view&name)
+    std::string_view    strip_extension(std::string_view name)
     {
         ssize_t  x   = (ssize_t) name.find_last_of('.');
         ssize_t  s   = (ssize_t) name.find_last_of('/');
-        if(x > s)
+        if(x > s+1)
             return name.substr(0,x);
         return name;
     }
@@ -990,7 +990,7 @@ namespace yq {
         return ret;
     }
     
-    std::string  strip_spaces(const std::string_view&s)
+    std::string  strip_spaces(std::string_view s)
     {
         return strip_spaces(s.data(), s.size());
     }
@@ -1012,7 +1012,7 @@ namespace yq {
         });
     }
 
-    const char*  strnchr(const std::string_view&s, char ch)
+    const char*  strnchr(std::string_view s, char ch)
     {
         return strnchr(s.data(), s.size(), ch);
     }
@@ -1195,7 +1195,7 @@ namespace yq {
         return {};
     }
 
-    boolean_r to_boolean(const std::string_view&s)
+    boolean_r to_boolean(std::string_view s)
     {
         return to_boolean(s.data(), s.size());
     }
@@ -1231,7 +1231,7 @@ namespace yq {
         #endif
     }
 
-    double_r  to_double(const std::string_view&s)
+    double_r  to_double(std::string_view s)
     {
         return to_double(s.data(), s.size());
     }
@@ -1267,7 +1267,7 @@ namespace yq {
         #endif
     }
 
-    float_r  to_float(const std::string_view&s)
+    float_r  to_float(std::string_view s)
     {
         return to_float(s.data(), s.size());
     }
@@ -1284,7 +1284,7 @@ namespace yq {
     }
 
 
-    unsigned_r  to_hex(const std::string_view&s)
+    unsigned_r  to_hex(std::string_view s)
     {
         return to_hex(s.data(), s.size());
     }
@@ -1299,7 +1299,7 @@ namespace yq {
         return int_from_chars<uint8_t>(s, n, 16);
     }
 
-    uint8_r  to_hex8(const std::string_view&s)
+    uint8_r  to_hex8(std::string_view s)
     {
         return to_hex8(s.data(), s.size());
     }
@@ -1314,7 +1314,7 @@ namespace yq {
         return int_from_chars<uint16_t>(s, n, 16);
     }
 
-    uint16_r  to_hex16(const std::string_view&s)
+    uint16_r  to_hex16(std::string_view s)
     {
         return to_hex16(s.data(), s.size());
     }
@@ -1329,7 +1329,7 @@ namespace yq {
         return int_from_chars<uint32_t>(s, n, 16);
     }
 
-    uint32_r  to_hex32(const std::string_view&s)
+    uint32_r  to_hex32(std::string_view s)
     {
         return to_hex32(s.data(), s.size());
     }
@@ -1344,7 +1344,7 @@ namespace yq {
         return int_from_chars<uint64_t>(s, n, 16);
     }
 
-    uint64_r  to_hex64(const std::string_view&s)
+    uint64_r  to_hex64(std::string_view s)
     {
         return to_hex64(s.data(), s.size());
     }
@@ -1359,7 +1359,7 @@ namespace yq {
         return int_from_chars<int>(s,n);
     }
 
-    integer_r   to_int(const std::string_view&s)
+    integer_r   to_int(std::string_view s)
     {
         return to_int(s.data(), s.size());
     }
@@ -1374,7 +1374,7 @@ namespace yq {
         return int_from_chars<int8_t>(s,n);
     }
 
-    int8_r  to_int8(const std::string_view&s)
+    int8_r  to_int8(std::string_view s)
     {
         return to_int8(s.data(), s.size());
     }
@@ -1390,7 +1390,7 @@ namespace yq {
         return int_from_chars<int16_t>(s,n);
     }
 
-    int16_r  to_int16(const std::string_view&s)
+    int16_r  to_int16(std::string_view s)
     {
         return to_int16(s.data(), s.size());
     }
@@ -1405,7 +1405,7 @@ namespace yq {
         return int_from_chars<int32_t>(s,n);
     }
 
-    int32_r  to_int32(const std::string_view&s)
+    int32_r  to_int32(std::string_view s)
     {
         return to_int32(s.data(), s.size());
     }
@@ -1421,7 +1421,7 @@ namespace yq {
         return int_from_chars<int64_t>(s,n);
     }
 
-    int64_r  to_int64(const std::string_view&s)
+    int64_r  to_int64(std::string_view s)
     {
         return to_int64(s.data(), s.size());
     }
@@ -1436,12 +1436,12 @@ namespace yq {
         return int_from_chars<int>(s,n);
     }
 
-    integer_r  to_integer(const std::string_view&s)
+    integer_r  to_integer(std::string_view s)
     {
         return to_integer(s.data(), s.size());
     }
 
-    std::string  to_lower(const std::string_view&s)
+    std::string  to_lower(std::string_view s)
     {
         std::string ret;
         ret.reserve(s.size());
@@ -1470,7 +1470,7 @@ namespace yq {
         return int_from_chars<short>(s,n);
     }
 
-    short_r  to_short(const std::string_view&s)
+    short_r  to_short(std::string_view s)
     {
         return to_short(s.data(), s.size());
     }
@@ -1608,7 +1608,7 @@ namespace yq {
         return int_from_chars<unsigned>(s,n);
     }
 
-    unsigned_r  to_uint(const std::string_view&s)
+    unsigned_r  to_uint(std::string_view s)
     {
         return to_uint(s.data(), s.size());
     }
@@ -1623,7 +1623,7 @@ namespace yq {
         return int_from_chars<uint8_t>(s,n);
     }
 
-    uint8_r     to_uint8(const std::string_view&s)
+    uint8_r     to_uint8(std::string_view s)
     {
         return to_uint8(s.data(), s.size());
     }
@@ -1638,7 +1638,7 @@ namespace yq {
         return int_from_chars<uint16_t>(s,n);
     }
 
-    uint16_r    to_uint16(const std::string_view&s)
+    uint16_r    to_uint16(std::string_view s)
     {
         return to_uint16(s.data(), s.size());
     }
@@ -1653,7 +1653,7 @@ namespace yq {
         return int_from_chars<uint32_t>(s,n);
     }
 
-    uint32_r    to_uint32(const std::string_view&s)
+    uint32_r    to_uint32(std::string_view s)
     {
         return to_uint32(s.data(), s.size());
     }
@@ -1668,7 +1668,7 @@ namespace yq {
         return int_from_chars<uint64_t>(s,n);
     }
 
-    uint64_r    to_uint64(const std::string_view&s)
+    uint64_r    to_uint64(std::string_view s)
     {
         return to_uint64(s.data(), s.size());
     }
@@ -1683,7 +1683,7 @@ namespace yq {
         return int_from_chars<unsigned int>(s,n);
     }
 
-    unsigned_r  to_uinteger(const std::string_view&s)
+    unsigned_r  to_uinteger(std::string_view s)
     {
         return to_uinteger(s.data(), s.size());
     }
@@ -1698,7 +1698,7 @@ namespace yq {
         return int_from_chars<unsigned int>(s,n);
     }
 
-    unsigned_r  to_unsigned(const std::string_view&s)
+    unsigned_r  to_unsigned(std::string_view s)
     {
         return to_unsigned(s.data(), s.size());
     }
@@ -1714,12 +1714,12 @@ namespace yq {
     }
 
 
-    ushort_r    to_ushort(const std::string_view&s)
+    ushort_r    to_ushort(std::string_view s)
     {
         return to_ushort(s.data(), s.size());
     }
 
-    std::string_view    trimmed(const std::string_view&sv)
+    std::string_view    trimmed(std::string_view sv)
     {
         if(sv.empty())
             return std::string_view();
@@ -1740,7 +1740,7 @@ namespace yq {
             return std::string_view();
     }
     
-    std::string_view    trimmed(const std::string_view&sv, char c)
+    std::string_view    trimmed(std::string_view sv, char c)
     {
         if(sv.empty())
             return std::string_view();
@@ -1754,7 +1754,7 @@ namespace yq {
         return std::string_view(s,e);
     }
 
-    std::string_view    trimmed_end(const std::string_view&sv)
+    std::string_view    trimmed_end(std::string_view sv)
     {
         if(sv.empty())
             return std::string_view();
@@ -1772,7 +1772,7 @@ namespace yq {
             return std::string_view();
     }
     
-    std::string_view    trimmed_end(const std::string_view&sv, char c)
+    std::string_view    trimmed_end(std::string_view sv, char c)
     {
         if(sv.empty())
             return std::string_view();
@@ -1784,7 +1784,7 @@ namespace yq {
         return std::string_view(s,e);
     }
 
-    std::string_view    trimmed_start(const std::string_view&sv)
+    std::string_view    trimmed_start(std::string_view sv)
     {
         if(sv.empty())
             return std::string_view();
@@ -1802,7 +1802,7 @@ namespace yq {
         return sv;
     }
     
-    std::string_view    trimmed_start(const std::string_view&sv, char c)
+    std::string_view    trimmed_start(std::string_view sv, char c)
     {
         if(sv.empty())
             return std::string_view();

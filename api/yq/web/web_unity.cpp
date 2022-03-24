@@ -8,6 +8,7 @@
 
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Map.hpp>
+#include <yq/file/FileUtils.hpp>
 #include <yq/http/HttpDataStream.hpp>
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
@@ -39,6 +40,9 @@ namespace yq {
         using WebPageMap       = EnumMap<HttpOp, Map<std::string_view, const Web*, IgCase>>;
     
         std::vector<const Web*> all;
+        WebPageMap                  dirs;
+        WebPageMap                  exts;
+        WebPageMap                  globs;
         WebPageMap                  pages;
         mutable tbb::spin_rw_mutex  mutex;
         volatile bool               open_reg    = true;
@@ -54,6 +58,18 @@ namespace yq {
     {
         return repo().all;
     }
+    
+    const Web*  Web::directory(HttpOp m, std::string_view sv)
+    {
+        LOCK
+        return _r.dirs[m].get(sv, nullptr);
+    }
+    
+    const Web*  Web::extension(HttpOp m, std::string_view sv)
+    {
+        LOCK
+        return _r.exts[m].get(sv, nullptr);
+    }
         
     void Web::freeze()
     {
@@ -67,35 +83,51 @@ namespace yq {
         return _r.open_reg;
     }
     
-    const Web* Web::find(HttpOp m, const std::string_view& sv)
+    const Web* Web::glob(HttpOp m, std::string_view sv)
+    {
+        LOCK
+        return _r.globs[m].get(sv, nullptr);
+    }
+
+    const Web* Web::page(HttpOp m, std::string_view sv)
     {
         LOCK
         return _r.pages[m].get(sv, nullptr);
     }
 
+    const WebMap&    Web::directory_map()
+    {
+        return repo().dirs;
+    }
+    
+    const WebMap&    Web::extension_map()
+    {
+        return repo().exts;
+    }
+    
+    const WebMap&    Web::page_map()
+    {
+        return repo().pages;
+    }
+    
+    const WebMap&    Web::glob_map()
+    {
+        return repo().globs;
+    }
+
     //  ----------------------------------------------------------------------------------------------------------------
     
-    Web::Web(Flag<HttpOp> _methods, std::string_view p, const std::source_location& sl) : Meta(p)
+    Web::Web(HttpOps _methods, std::string_view p, const std::source_location& sl) : Meta(p)
     {
-        m_path      = p;
-        if(ends(p, "/*"))
-            m_flags |= DIRECTORY;
-        if(ends(p, "/**"))
-            m_flags |= DIRECTORY | RECURSIVE ;
+        set_option(WEB);
         
-        m_method    = _methods;
+        m_path      = p;
+        m_methods   = _methods;
         m_source    = sl;
-        if(p.empty() || p[0] != '/'){
-            yCritical() << "Web: Bad path '" << p << "' -- not registering (defined at " << sl.file_name() << ":" << sl.line() << ")"; 
-        } else {
-            WLOCK
-            if(_r.open_reg){
-                _r.all.push_back(this);
-                for(HttpOp m : HttpOp::all_values()){
-                    if(_methods.is_set(m))
-                        _r.pages[m][m_path]     = this;
-                }
-            }
+        
+        WLOCK
+        if(_r.open_reg){
+            _r.all.push_back(this);
         }
     }
     
@@ -105,49 +137,120 @@ namespace yq {
 
     bool  Web::anonymouse_posting() const
     {
-        return static_cast<bool>(m_flags & POST_ANON);
+        return static_cast<bool>(flags() & POST_ANON);
     }
 
     bool  Web::local_only() const
     {
-        return static_cast<bool>(m_flags & LOCAL_ONLY);
+        return static_cast<bool>(flags() & LOCAL_ONLY);
     }
     
     bool  Web::login_required() const
     {
-        return static_cast<bool>(m_flags & LOGIN_REQ);
+        return static_cast<bool>(flags() & LOGIN_REQ);
     }
     
     bool  Web::no_expansion() const
     {
-        return static_cast<bool>(m_flags & NO_EXPAND);
+        return static_cast<bool>(flags() & NO_EXPAND);
     }
 
-    bool    Web::is_directory() const
+    void    Web::seal()
     {
-        return static_cast<bool>(m_flags & DIRECTORY);
+        if(flags() & SEALED)
+            return ;
+            
+        if(!(flags() & DISABLE_REG)){
+            std::string_view    p   = m_path;
+            if((!p.empty()) && (m_role == Role())){
+                switch(p[0]){
+                case '/':
+                    if(ends(p, "/*")){
+                        p   = p.substr(0, p.size()-2);
+                        m_role  = Role::Directory;
+                    } else if(ends(p, "/**")){
+                        p   = p.substr(0, p.size()-3);
+                        m_role  = Role::Glob;
+                    } else {
+                        m_role  = Role::Page;
+                    }
+                    break;
+                case '*':
+                    if(starts(p, "*.")){
+                        p   = p.substr(2);
+                        m_role  = Role::Extension;
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
+            
+            WLOCK
+            switch(m_role){
+            case Role::Directory:
+                for(HttpOp m : HttpOp::all_values())
+                    if(m_methods.is_set(m))
+                        _r.dirs[m][p]     = this;
+                break;
+            case Role::Extension:
+                for(HttpOp m : HttpOp::all_values())
+                    if(m_methods.is_set(m))
+                        _r.exts[m][p]     = this;
+                break;
+            case Role::Glob:
+                for(HttpOp m : HttpOp::all_values())
+                    if(m_methods.is_set(m))
+                        _r.globs[m][p]     = this;
+                break;
+            case Role::Page:
+                for(HttpOp m : HttpOp::all_values())
+                    if(m_methods.is_set(m))
+                        _r.pages[m][p]     = this;
+                break;
+            default:
+                break;
+            }
+        }
+        
+        set_option(SEALED);
     }
-    
-    bool    Web::is_recursive() const
-    {
-        return static_cast<bool>(m_flags & RECURSIVE);
-    }
+
 
     //  ----------------------------------------------------------------------------------------------------------------
-    Web::Writer&  Web::Writer::login()
+    Web::Writer::Writer(Web*p) : Meta::Writer(p), m_page(p)
     {
-        if(m_page)
-            m_page -> m_flags |= LOGIN_REQ;
+    }
+
+    Web::Writer::Writer(Writer&& mv) : Meta::Writer(std::move(mv)), m_page(mv.m_page)
+    {
+        mv.m_page = nullptr;
+    }
+    
+    Web::Writer& Web::Writer::operator=(Writer&& mv)
+    {
+        if(this != &mv){
+            if(m_page)
+                m_page -> seal();
+            m_page  = mv.m_page;
+            mv.m_page   = nullptr;
+        }
         return *this;
     }
     
-    Web::Writer&  Web::Writer::description(std::string_view sv)
+    Web::Writer::~Writer()
     {
         if(m_page)
-            Meta::Writer::description(sv);
+            m_page -> seal();
+    }
+
+    Web::Writer&  Web::Writer::anon_post()
+    {
+        if(m_page)
+            m_page -> set_option(POST_ANON);
         return *this;
     }
-    
+
     Web::Writer&  Web::Writer::argument(std::string_view k, std::string_view d) 
     {
         if(m_page)
@@ -155,111 +258,280 @@ namespace yq {
         return *this;
     }
     
-    Web::Writer&  Web::Writer::local()
+    Web::Writer&  Web::Writer::content(ContentTypes ct)
+    {
+        if(m_page){
+            m_page -> m_content_types   |= ct;
+        }
+        return *this;
+    }
+
+    Web::Writer&  Web::Writer::description(std::string_view sv)
     {
         if(m_page)
-            m_page -> m_flags |= LOCAL_ONLY;
+            Meta::Writer::description(sv);
         return *this;
     }
     
-    Web::Writer&  Web::Writer::anon_post()
+    Web::Writer&  Web::Writer::disable_reg()
     {
         if(m_page)
-            m_page -> m_flags |= POST_ANON;
+            m_page -> set_option(DISABLE_REG);
         return *this;
     }
+    
+    
+    Web::Writer&  Web::Writer::local()
+    {
+        if(m_page)
+            m_page -> set_option(LOCAL_ONLY);
+        return *this;
+    }
+
+    Web::Writer&  Web::Writer::login()
+    {
+        if(m_page)
+            m_page -> set_option(LOGIN_REQ);
+        return *this;
+    }
+    
     
     Web::Writer&  Web::Writer::no_expand()
     {
         if(m_page)
-            m_page -> m_flags |= NO_EXPAND;
+            m_page -> set_option(NO_EXPAND);
+        return *this;
+    }
+
+    Web::Writer&  Web::Writer::primary(ContentType ct)
+    {
+        if(m_page){
+            m_page -> m_content_type    = ct;
+            m_page -> m_content_types   |= ct;
+        }
         return *this;
     }
     
-    Web::Writer::Writer(Web*p) : Meta::Writer(p), m_page(p)
+    
+    Web::Writer& Web::Writer::role(Role r)
     {
+        if(m_page){
+            m_page -> m_role = r;
+        }
+        return *this;
     }
+    
+    Web::Writer& Web::Writer::sub(std::string_view p, const Web*w)
+    {
+        if(w){
+            sub(w->methods(), p, w);
+        }
+        return *this;
+    }
+    
+
+    Web::Writer& Web::Writer::sub(HttpOps m, std::string_view p, const Web*w)
+    {
+        if(w && m_page){
+            for(HttpOp h : HttpOp::all_values()){
+                if(m.is_set(h)){
+                    m_page -> set_option(HAS_SUBS);
+                    m_page -> m_subs[h][p]  = w;
+                }
+            }
+        }
+        return *this;
+    }
+    
     
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  STANDARD PAGES... (internal classes)
 
-    class StdWebFull : public Web {
-    public:
-        using FN = std::function<void(const HttpRequest&, HttpResponse&, const std::string_view&)>;
-        FN m_fn;
-        StdWebFull(Flag<HttpOp> m, std::string_view p, const std::source_location& sl, FN fn) : Web(m, p, sl), m_fn(fn) {}
-        virtual void handle(const HttpRequest& rq, HttpResponse& rs, const std::string_view&sv) const override 
-        {
-            m_fn(rq,rs,sv);
-        }
-    };
+    namespace {
+        class StdWebFullHandler : public Web {
+        public:
+            using FN = std::function<void(const HttpRequest&, HttpResponse&, std::string_view)>;
+            FN m_fn;
+            StdWebFullHandler(HttpOps m, std::string_view p, const std::source_location& sl, FN fn) : Web(m, p, sl), m_fn(fn) {}
+            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view sv) const override 
+            {
+                m_fn(rq,rs,sv);
+            }
+        };
+    }
 
-    Web::Writer    reg_web(std::string_view p, std::function<void(const HttpRequest&, HttpResponse&, const std::string_view&)> fn, const std::source_location& sl)
+    Web::Writer    reg_web(std::string_view p, std::function<void(const HttpRequest&, HttpResponse&, std::string_view)> fn, const std::source_location& sl)
     {
-        return Web::Writer(new StdWebFull( HttpOp::Get, p, sl, fn));
+        return Web::Writer(new StdWebFullHandler( HttpOp::Get, p, sl, fn));
     }
     
-    Web::Writer    reg_web(Flag<HttpOp> m, std::string_view p, std::function<void(const HttpRequest&, HttpResponse&, const std::string_view&)> fn, const std::source_location& sl)
+    Web::Writer    reg_web(HttpOps m, std::string_view p, std::function<void(const HttpRequest&, HttpResponse&, std::string_view)> fn, const std::source_location& sl)
     {
-        return Web::Writer(new StdWebFull( m, p, sl, fn));
+        return Web::Writer(new StdWebFullHandler( m, p, sl, fn));
     }
     
     //  ------------------------------------------------
 
-    class StdWebSingle : public Web {
-    public:
-        using FN = std::function<void(const HttpRequest&, HttpResponse&)>;
-        FN m_fn;
-        StdWebSingle(Flag<HttpOp> m, std::string_view p, const std::source_location& sl, FN fn) : Web(m, p, sl), m_fn(fn) {}
-        virtual void handle(const HttpRequest& rq, HttpResponse& rs, const std::string_view&) const override 
-        {
-            m_fn(rq,rs);
-        }
-    };
-
-    Web::Writer    reg_web(std::string_view p, std::function<void(const HttpRequest&, HttpResponse&)> fn, const std::source_location& sl)
-    {
-        return Web::Writer(new StdWebSingle( HttpOp::Get, p, sl, fn));
+    namespace {
+        class StdWebSingleHandler : public Web {
+        public:
+            using FN = std::function<void(const HttpRequest&, HttpResponse&)>;
+            FN m_fn;
+            StdWebSingleHandler(HttpOps m, std::string_view p, const std::source_location& sl, FN fn) : Web(m, p, sl), m_fn(fn) {}
+            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view) const override 
+            {
+                m_fn(rq,rs);
+            }
+        };
     }
     
-    Web::Writer    reg_web(Flag<HttpOp> m, std::string_view p, std::function<void(const HttpRequest&, HttpResponse&)> fn, const std::source_location& sl)
+    Web::Writer    reg_web(std::string_view p, std::function<void(const HttpRequest&, HttpResponse&)> fn, const std::source_location& sl)
     {
-        return Web::Writer(new StdWebSingle( m, p, sl, fn));
+        return Web::Writer(new StdWebSingleHandler( HttpOp::Get, p, sl, fn));
+    }
+    
+    Web::Writer    reg_web(HttpOps m, std::string_view p, std::function<void(const HttpRequest&, HttpResponse&)> fn, const std::source_location& sl)
+    {
+        return Web::Writer(new StdWebSingleHandler( m, p, sl, fn));
     }
 
+    //  ------------------------------------------------
+#if 0
+    namespace {
+    
+        class WebDirHandler : public Web {
+        public:
+            WebDirHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path& dpath) : Web(m, p, sl), m_dir(dpath){}
+            
+            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view sl) const override 
+            {
+                std::filesystem::path       toload =  m_dir / path_sanitize(sl);
+                switch(rq.method()){
+                case HttpOp::Get:
+                    send_file(toload, rs);
+                    break;
+                case HttpOp::Head:
+                    send_file_info(toload, rs);
+                    break;
+                default:
+                    throw HttpStatus::MethodNotAllowed;
+                }
+            }
+            
+            std::filesystem::path   m_dir;
+        };
 
+        class WebFileHandler : public Web {
+        public:
+        
+            WebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : Web(m, p, sl), m_file(f) {}
+
+            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view) const override 
+            {
+                switch(rq.method()){
+                case HttpOp::Get:
+                    send_file(m_file, rs);
+                    break;
+                case HttpOp::Head:
+                    send_file_info(m_file, rs);
+                    break;
+                default:
+                    throw HttpStatus::MethodNotAllowed;
+                }
+            }
+        
+            std::filesystem::path       m_file;
+        };
+        
+        class WebPathVecHandler : public Web {
+        public:
+            WebPathVecHandler(HttpOps m, std::string_view p, const std::source_location& sl, const path_vector_t& paths) : Web(m, p, sl), m_paths(paths){}
+            
+            
+            std::filesystem::path       resolve(std::string_view sl) const
+            {
+                
+            }
+            
+            
+            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view sl) const override 
+            {
+                std::filesystem::
+                for(const std::filesystem
+            }
+            
+
+        };
+    }
+
+    Web::Writer     reg_web(std::string_view p, const std::filesystem::path& fs, const std::source_location& sl)
+    {
+        if(std::filesystem::is_directory(fs)){
+            return { new WebDirHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
+        } else {
+            return { new WebFileHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
+        }
+    }
+#endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    namespace {
+        bool start_file(const std::filesystem::path& file, HttpResponse& rs, ContentType ct, size_t * sz=nullptr)
+        {
+            if(ct == ContentType()){
+                ct = mimeTypeForExt(file.extension().string().substr(1));
+            }
+        
+            struct stat buf;
+            if(::stat(file.c_str(), &buf) != 0){
+                rs.status(HttpStatus::NotFound);
+                return false;
+            }
+                
+                //  we don't do zero sized files
+            if(!buf.st_size){
+                rs.status(HttpStatus::NotFound);
+                return false;
+            }
+            
+            if(sz)
+                *sz = buf.st_size;
+            
+            
+            char        timestamp[256];
+            {
+                struct tm   ftime;
+                gmtime_r(&buf.st_mtim.tv_sec, &ftime);
+                strftime(timestamp, sizeof(timestamp), "%a, %d %b %Y %H:%M:%s GMT", &ftime);
+            }
+            rs.header("Date", timestamp);
+            
+            if(!sz)
+                rs.header("Content-Length", to_string(buf.st_size));
+            
+            return true;
+        }
+    }
+
+    bool    send_file_info(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
+    {
+        return start_file(file, rs, ct);
+    }
 
     bool    send_file(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
     {
-        if(ct == ContentType()){
-            ct = mimeTypeForExt(file.extension().string().substr(1));
-        }
-    
-        struct stat buf;
-        if(::stat(file.c_str(), &buf) != 0)
+        size_t  fsize   = 0;
+        if(!start_file(file, rs, ct,  &fsize))
             return false;
-            
-            //  we don't do zero sized files
-        size_t  fsize   = buf.st_size;
-        if(!fsize)
-            return false;
-        
-        
-        char        timestamp[256];
-        {
-            struct tm   ftime;
-            gmtime_r(&buf.st_mtim.tv_sec, &ftime);
-            strftime(timestamp, sizeof(timestamp), "%a, %d %b %Y %H:%M:%s GMT", &ftime);
-        }
-        rs.header("Date", timestamp);
 
         int fd   = open(file.c_str(), O_RDONLY);
-        if(fd == -1)
+        if(fd == -1){
+            rs.status(HttpStatus::NotFound);
             return false;
+        }
 
         std::vector<HttpDataPtr>&   data    = rs.content(ct);
         

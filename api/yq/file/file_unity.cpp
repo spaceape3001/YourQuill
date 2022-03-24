@@ -15,6 +15,7 @@
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/text/Iter32.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/type/ByteArray.hpp>
 
@@ -381,6 +382,58 @@ namespace yq {
         }
 
 
+        std::string         path_sanitize(const std::string_view& input)
+        {
+            std::string     ret;
+            ret.reserve(input.size());
+            
+            enum Mode {
+                Start       = 0,
+                Token
+            };
+            
+            
+            Mode        mode    = Start;
+            iter32(input, [&](char32_t c){
+                switch(mode){
+                case Start:
+                    if(is_alnum(c)){
+                        ret  += c;
+                        mode    = Token;
+                    }
+                    break;
+                case Token:
+                    if(c == '/'){
+                        ret += '/';
+                        mode    = Start;
+                    } else if(is_graph(c))
+                        ret += c;
+                    break;
+                }
+            });
+            
+            return ret;
+        }
+
+        std::string_view    file_extension(const std::string_view&sv)
+        {
+            size_t      p   = sv.find_last_of('.');
+            if(p == std::string_view::npos)     
+                return std::string_view();  // no extension, return empty
+
+            size_t      sl  = sv.find_last_of('/');
+            if(sl == std::string_view::npos){
+                if(p){
+                    return sv.substr(p+1);          // it's got an extension
+                } else {
+                    return std::string_view();      // it's a hidden no-extension file, return empty;
+                }
+            }
+            
+            if(p <= sl+1)   // hidden file, no-extension, return empty
+                return std::string_view();
+            return sv.substr(p+1);
+        }
 
         namespace dir {
 
