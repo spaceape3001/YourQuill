@@ -135,12 +135,14 @@ namespace yq {
     {
         Ref<HttpResponse>   r   = new HttpResponse(m_context.version);
         r -> status(code);
+yInfo() << "Dispatch code " << code.value();
         send(r);
     }
 
     void    HttpConnection::dispatch(HttpStatus code, VersionSpec vs)
     {
         Ref<HttpResponse>   r   = new HttpResponse(limit(vs));
+yInfo() << "Dispatch code " << code.value() << " " << vs;
         r -> status(code);
         send(r);
     }
@@ -170,8 +172,10 @@ namespace yq {
         Ref<HttpResponse>   response = new HttpResponse(limit(rq->m_version));
         try {
             m_context.handler(*rq, *response);
-            if(response->m_status == HttpStatus())
+            if(response->m_status == HttpStatus()){
+                yWarning() << "Handler failed to set status code!";
                 code    = HttpStatus::InternalError;
+            }
         }
         catch(HttpStatus ex)
         {
@@ -183,6 +187,7 @@ namespace yq {
         }
         catch(int ex)
         {
+yInfo() << "Caught exceptioninteger " << code;;        
             if((ex >= 0) && (ex < 600)){
                 code    = (HttpStatus::enum_t) ex;
             } else 
@@ -191,14 +196,19 @@ namespace yq {
         #ifdef NDEBUG
         catch(...)
         {
+yInfo() << "Caught general exception";        
             code    = HttpStatus::InternalError;
         }
         #endif
         
+        
         if((code != HttpStatus()) && isError(code)){
+yInfo() << "Error detected, returning server error.";
             dispatch(code);
-        } else
+        } else {
+yInfo() << "Sending response (" <<  response->m_status.value() << ")";
             send(response);
+        }
     }
 
     void        HttpConnection::do_read()
@@ -397,18 +407,24 @@ namespace yq {
             size_t      count = 0;
             for(auto& p : r->m_content)
                 count += p->count();
-            HttpDataStream(r->m_reply) << "Content-Length: " << count << "\r\n";
+            HttpDataStream(r->m_header) << "Content-Length: " << count << "\r\n";
         } else if(isError(r->m_status)){
             message     = m_context.messages[r->m_status];
             if(!message.empty()){
-                HttpDataStream(r->m_reply) 
+                HttpDataStream(r->m_header)
                     << "Content-Type: text/html\r\n" 
                     << "Content-Length: " << message.size() << "\r\n";
             }
         }
+        
+        HttpDataStream(r->m_reply) << r->m_version << ' ' << r->m_status.value() <<  ' ' << statusMessage(r->m_status) << "\r\n";
+
+
+yInfo() << "Sending (" << r->m_status.value() << ") reply " << r->m_reply->as_view();        
 
         std::vector<asio::const_buffer>   buffers;
         buffers.push_back(buffer_for(r -> m_reply));
+        buffers.push_back(buffer_for(r -> m_header));
         buffers.push_back(asio::buffer("\r\n"));
         
         if(isSuccessful(r->m_status) && !r->m_content.empty()){
@@ -419,6 +435,7 @@ namespace yq {
             buffers.push_back(asio::buffer(message));
             buffers.push_back(asio::buffer("\r\n"));
         }
+        
         
         auto self = shared_from_this();
         async_write(m_socket, buffers, [r, self](std::error_code, size_t){} /* executor is to make sure response & buffers stay alive */ );
@@ -648,6 +665,7 @@ namespace yq {
     HttpResponse::HttpResponse(VersionSpec vs) : m_version(vs)
     {
         m_reply     = HttpData::make();
+        m_header    = HttpData::make();
     }
     
     HttpResponse::~HttpResponse()
@@ -657,13 +675,22 @@ namespace yq {
 
     HttpResponse::ContentVec&     HttpResponse::content(ContentType ct) 
     {
-        if(m_status == HttpStatus())
-            status(HttpStatus::Success);
-        if(ct != ContentType())
-            HttpDataStream(m_reply) << "Content-Type: " << mimeType(ct) << "\r\n";
+        content_type(ct);
+        //if(m_status == HttpStatus())
+            //status(HttpStatus::Success);
+        //if(ct != ContentType())
+            //HttpDataStream(m_reply) << "Content-Type: " << mimeType(ct) << "\r\n";
         return m_content;
     }
 
+    void            HttpResponse::content_type(ContentType ct)
+    {
+        if((ct != ContentType()) && (m_contentType == ContentType())){
+            m_contentType   = ct;
+            header("Content-Type", mimeType(ct));
+        }
+    }
+    
     void            HttpResponse::content(const std::string_view&sv)
     {
         HttpDataStream(content()) << sv;
@@ -673,12 +700,7 @@ namespace yq {
     //! Sets intended status & version
     void            HttpResponse::status(HttpStatus s)
     {
-        [[unlikely]] if(m_status != HttpStatus()){
-            m_status    = HttpStatus::InternalError;
-        } else {
-            m_status    = s;
-            HttpDataStream(m_reply) << m_version << ' ' << m_status.value() <<  ' ' << statusMessage(s) << "\r\n";
-        }
+        m_status    = s;
     }
 
 
@@ -686,17 +708,12 @@ namespace yq {
     //  Errors will override....
     void    HttpResponse::header(const std::string_view&k, const std::string_view&v)
     {
-        [[unlikely]] if(m_status != HttpStatus()){
-            m_status    = HttpStatus::InternalError;
-            return ;
-        } else {
-            HttpDataStream(m_reply)  << k << ": " << v << "\r\n";
-        }
+        HttpDataStream(m_header)  << k << ": " << v << "\r\n";
     }
     
     void    HttpResponse::redirect(const std::string_view&sv, bool permanent)
     {
-        [[unlikely]] if(m_status != HttpStatus()){
+        if(m_status != HttpStatus()){
             if(!isRedirect(m_status)){
                 m_status    = HttpStatus::InternalError;
                 return ;
@@ -705,7 +722,16 @@ namespace yq {
             status( permanent ? HttpStatus::MovedPermanently : HttpStatus::TemporaryRedirect );
         }
         
-        HttpDataStream(m_reply) << "Location: " << sv << "\r\n";
+        HttpDataStream(m_header) << "Location: " << sv << "\r\n";
+    }
+
+    void    HttpResponse::reset()
+    {
+        m_status    = HttpStatus();
+        m_header  -> count(0);
+        m_reply -> count(0);
+        m_content.clear();
+        m_contentType   = ContentType();
     }
 
 

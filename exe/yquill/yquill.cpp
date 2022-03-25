@@ -52,7 +52,6 @@ static const char  szHelloWorld[] = "<html><body><h1>HELLO WORLD!</h1></body></h
 static constexpr const size_t       kBufferSize     = 8192;
 
 
-
 std::pair<const Web*, std::string_view>     find_page(HttpOp m, std::string_view path)
 {
     const Web*  p   = Web::page(m, path);

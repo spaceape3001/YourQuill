@@ -20,6 +20,7 @@ namespace yq {
         
         ContentVec&     content(ContentType ct = ContentType());
         void            content(const std::string_view&);
+        void            content_type(ContentType);
 
         //  set INTENDED status & version first BEFORE a header
         //  Errors will override....
@@ -31,13 +32,16 @@ namespace yq {
         
         void            redirect(const std::string_view&, bool permanent=false);
         const VersionSpec&     version() const { return m_version; }
+        void                reset();
         
     private:    
         friend class HttpConnection;
-        HttpDataPtr         m_reply;
+        HttpDataPtr         m_reply;   // start of the reply....
+        HttpDataPtr         m_header;
         HttpStatus          m_status;
         VersionSpec         m_version;
         ContentVec          m_content;
+        ContentType         m_contentType;
     };
 
 }

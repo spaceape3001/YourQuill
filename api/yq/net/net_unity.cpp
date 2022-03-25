@@ -217,7 +217,7 @@ namespace yq {
                 { ContentType::jpeg,            "image/jpeg"                },
                 { ContentType::json,            "application/json"          },
                 { ContentType::latex,           "application/x-latex"       },
-                { ContentType::mp3,             "text/markdown"             },
+                { ContentType::markdown,        "text/markdown"             },
                 { ContentType::mp3,             "audio/mpeg3"               },
                 { ContentType::mp4,             "video/mp4"                 },
                 { ContentType::mpeg,            "video/mpeg"                },

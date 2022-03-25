@@ -397,6 +397,31 @@ namespace yq {
     }
 
     //  ------------------------------------------------
+
+
+        class WebFileHandler : public Web {
+        public:
+        
+            WebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : Web(m, p, sl), m_file(f) {}
+
+            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view) const override 
+            {
+                switch(rq.method()){
+                case HttpOp::Get:
+                    send_file(m_file, rs);
+                    break;
+                case HttpOp::Head:
+                    send_file_info(m_file, rs);
+                    break;
+                default:
+                    throw HttpStatus::MethodNotAllowed;
+                }
+            }
+        
+            std::filesystem::path       m_file;
+        };
+
+
 #if 0
     namespace {
     
@@ -421,28 +446,6 @@ namespace yq {
             
             std::filesystem::path   m_dir;
         };
-
-        class WebFileHandler : public Web {
-        public:
-        
-            WebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : Web(m, p, sl), m_file(f) {}
-
-            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view) const override 
-            {
-                switch(rq.method()){
-                case HttpOp::Get:
-                    send_file(m_file, rs);
-                    break;
-                case HttpOp::Head:
-                    send_file_info(m_file, rs);
-                    break;
-                default:
-                    throw HttpStatus::MethodNotAllowed;
-                }
-            }
-        
-            std::filesystem::path       m_file;
-        };
         
         class WebPathVecHandler : public Web {
         public:
@@ -465,52 +468,46 @@ namespace yq {
         };
     }
 
+#endif
+
     Web::Writer     reg_web(std::string_view p, const std::filesystem::path& fs, const std::source_location& sl)
     {
         if(std::filesystem::is_directory(fs)){
-            return { new WebDirHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
+            return { nullptr }; // { new WebDirHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
         } else {
             return { new WebFileHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
         }
     }
-#endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     namespace {
-        bool start_file(const std::filesystem::path& file, HttpResponse& rs, ContentType ct, size_t * sz=nullptr)
+        struct FReply {
+            ContentType     type;
+            size_t          size    = 0;
+            char            timestamp[256];
+            HttpStatus      code;
+            bool            success = false;
+        };
+    
+        bool get_fileinfo(const std::filesystem::path& file, FReply& reply)
         {
-            if(ct == ContentType()){
-                ct = mimeTypeForExt(file.extension().string().substr(1));
-            }
+            if(reply.type == ContentType())
+                reply.type = mimeTypeForExt(file.extension().string().substr(1));
         
             struct stat buf;
-            if(::stat(file.c_str(), &buf) != 0){
-                rs.status(HttpStatus::NotFound);
+            if(::stat(file.c_str(), &buf) != 0)
                 return false;
-            }
                 
                 //  we don't do zero sized files
-            if(!buf.st_size){
-                rs.status(HttpStatus::NotFound);
+            if(!buf.st_size)
                 return false;
-            }
+            reply.size = buf.st_size;
             
-            if(sz)
-                *sz = buf.st_size;
-            
-            
-            char        timestamp[256];
-            {
-                struct tm   ftime;
-                gmtime_r(&buf.st_mtim.tv_sec, &ftime);
-                strftime(timestamp, sizeof(timestamp), "%a, %d %b %Y %H:%M:%s GMT", &ftime);
-            }
-            rs.header("Date", timestamp);
-            
-            if(!sz)
-                rs.header("Content-Length", to_string(buf.st_size));
+            struct tm   ftime;
+            gmtime_r(&buf.st_mtim.tv_sec, &ftime);
+            strftime(reply.timestamp, sizeof(reply.timestamp), "%a, %d %b %Y %H:%M:%S GMT", &ftime);
             
             return true;
         }
@@ -518,14 +515,29 @@ namespace yq {
 
     bool    send_file_info(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
     {
-        return start_file(file, rs, ct);
+        FReply reply;
+        reply.type  = ct;
+        if(get_fileinfo(file, reply)){
+            rs.status(HttpStatus::Success);
+            rs.header("Date", reply.timestamp);
+            rs.content_type(reply.type);
+            rs.header("Content-Length", to_string(reply.size));
+            return true;
+        } else {
+            rs.status(HttpStatus::NotFound);
+            return false;
+        }
     }
 
     bool    send_file(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
     {
-        size_t  fsize   = 0;
-        if(!start_file(file, rs, ct,  &fsize))
+        FReply reply;
+        reply.type  = ct;
+        if(!get_fileinfo(file, reply)){
+            rs.status(HttpStatus::NotFound);
             return false;
+        }
+
 
         int fd   = open(file.c_str(), O_RDONLY);
         if(fd == -1){
@@ -533,7 +545,7 @@ namespace yq {
             return false;
         }
 
-        std::vector<HttpDataPtr>&   data    = rs.content(ct);
+        std::vector<HttpDataPtr>&   data    = rs.content();
         
         size_t          amt_read    = 0;
         HttpDataPtr     cur     = HttpData::make();
@@ -543,7 +555,7 @@ namespace yq {
             amt_read += n;
             if(cur->full()){
                 data.push_back(cur);
-                if(amt_read >= fsize){
+                if(amt_read >= reply.size){
                     cur = nullptr;
                     break;
                 }
@@ -551,12 +563,16 @@ namespace yq {
             }
         } 
         close(fd);
+        
         if(cur)
             data.push_back(cur);
-        if(amt_read < fsize)
+        if(amt_read < reply.size){
             rs.status(HttpStatus::InternalError);
-        else
+        } else {
             rs.status(HttpStatus::Success);
+            rs.header("Date", reply.timestamp);
+            rs.content_type(reply.type);
+        }
         return true;
     }
     

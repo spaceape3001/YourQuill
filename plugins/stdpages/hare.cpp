@@ -1,4 +1,5 @@
 #include <yq/app/DelayInit.hpp>
+#include <yq/file/FileUtils.hpp>
 #include <yq/http/HttpDataStream.hpp>
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
@@ -47,9 +48,8 @@ void    test_directory(const HttpRequest& rq, HttpResponse& rs, const std::strin
     out << "</table></body></html>\n";
 }
 
-
-
 YQ_INVOKE(
+    reg_web("/readme",  std::filesystem::path(build_directory())/"README.md" );
     reg_web("/hare", simpleTest);
     reg_web("/hello", hello_world);
     reg_web("/test/**", test_directory);

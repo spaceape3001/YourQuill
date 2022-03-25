@@ -176,4 +176,6 @@ namespace yq {
     std::string         path_sanitize(const std::string_view&);
     std::string_view    file_extension(const std::string_view&);
     
+    inline std::filesystem::path   operator "" _fp(const char* z) { return std::filesystem::path(z); }
+    
 }
