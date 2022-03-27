@@ -7,6 +7,7 @@
 #pragma once
 
 #include <yq/type/Enum.hpp>
+#include <yq/type/Flag.hpp>
 
 #include <filesystem>
 #include <string>
@@ -45,6 +46,24 @@ namespace yq {
         return str << val.key();
     }
     
+    template <typename E>
+    Stream&     operator<<(Stream& str, Flag<E> val)
+    {
+        str << '{';
+        bool f = true;
+        for(E e : E::all_values()){
+            if(val.is_set(e)){
+                if(f){
+                    f   = false;
+                } else 
+                    str << "|";
+                str << e.key();
+            }
+        }
+        str << '}';
+        return str;
+    }
+
     
     //  STREAM detection
     template <typename T, class = void>

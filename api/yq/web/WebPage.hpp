@@ -28,9 +28,10 @@ namespace yq {
     using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
     
     struct WebContext {
-        const HttpRequest&  request;
-        HttpResponse&       reply;
-        std::string_view    truncated_path;
+        const HttpRequest&      request;
+        HttpResponse&           reply;
+        std::string_view        truncated_path; //!< Leftover from the user-provided path
+        std::filesystem::path   resolved_file;  //!< Resolved filename (for extension handlers)
     };
     
     namespace web {
@@ -187,11 +188,11 @@ namespace yq {
         //! Adds in a sub-web, overriding the web's path & methods
         Writer&  sub(HttpOps, std::string_view, const WebPage*);
         
-        
         Writer(WebPage*p); // : m_page(p) {}
         Writer(Writer&&);
         Writer& operator=(Writer&&);
         ~Writer();
+        Writer() : Meta::Writer(nullptr) {}
         
         operator const WebPage* () const { return m_page; }
         

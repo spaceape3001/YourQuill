@@ -437,6 +437,7 @@ namespace yq {
 
         namespace dir {
 
+            // FIXME .... none of these deal with sub-directories!
 
             path_vec        all_children(const path& d, const std::string_view& name)
             {

@@ -26,6 +26,10 @@ YQ_INVOKE(
     if(!web::set_template(wksp::shared("std/page"sv)))
         yWarning() << "Failed to set web template!";
 
+    reg_web("/img/**", wksp::shared_all("www/img"sv));
+    reg_web("/help/*", wksp::shared_all("www/help"sv));
+    reg_web("/js/*", wksp::shared_all("www/js"sv));
+
     //reg_web("img/**", wksp::shared_dir("www/img"));
     //reg_web("help/*", wksp::shared_dir("www/help"));
     //reg_web("js/*", wksp::shared_dir("www/js"));

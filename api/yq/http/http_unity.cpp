@@ -422,20 +422,28 @@ namespace yq {
         std::vector<asio::const_buffer>   buffers;
         buffers.push_back(buffer_for(r -> m_reply));
         buffers.push_back(buffer_for(r -> m_header));
-        buffers.push_back(asio::buffer("\r\n"));
+        buffers.push_back(asio::buffer("\r\n"sv));
         
         if(isSuccessful(r->m_status) && !r->m_content.empty()){
             for(auto& p : r->m_content)
                 buffers.push_back(buffer_for(p));
-            buffers.push_back(asio::buffer("\r\n"));
+            buffers.push_back(asio::buffer("\r\n"sv));
         } else if(isError(r->m_status) && !message.empty()){
             buffers.push_back(asio::buffer(message));
-            buffers.push_back(asio::buffer("\r\n"));
+            buffers.push_back(asio::buffer("\r\n"sv));
         }
         
         
         auto self = shared_from_this();
-        async_write(m_socket, buffers, [r, self](std::error_code, size_t){} /* executor is to make sure response & buffers stay alive */ );
+        async_write(m_socket, buffers, [r, self](std::error_code ec, size_t){
+            if (!ec)
+            {
+              // Initiate graceful connection closure.
+              asio::error_code ignored_ec;
+              self->m_socket.shutdown(asio::ip::tcp::socket::shutdown_both,
+                ignored_ec);
+            }
+        } /* executor is to make sure response & buffers stay alive */ );
     }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

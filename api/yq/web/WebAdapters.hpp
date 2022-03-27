@@ -38,11 +38,25 @@ namespace yq {
     template <void (*FN)(Stream&, WebContext&)>
     class SimpleWebVariable : public WebVariable {
     public:
-        SimpleWebVariable(std::string_view _path) : WebVariable(_path)
+        SimpleWebVariable(std::string_view _path, const std::source_location& _sl) : WebVariable(_path, _sl)
         {
         }
         
-    
+        
+        virtual void handle(Stream&str, WebContext&ctx) const override
+        {
+            FN(str, ctx);
+        }
     };
+    
+    template <void (*FN)(Stream&, WebContext&)>
+    WebVariable::Writer     reg_webvar(std::string_view name, const std::source_location& sl = std::source_location::current())
+    {   
+        return WebVariable::Writer(new SimpleWebVariable<FN>(name, sl));
+    }
+    
+    //  it'll select file vs dir based on filesystem path
+    WebPage::Writer     reg_web(const std::string_view& path, const std::filesystem::path&, const std::source_location& sl = std::source_location::current());
+    WebPage::Writer     reg_web(const std::string_view& path, const path_vector_t&, const std::source_location& sl = std::source_location::current());
 }
 

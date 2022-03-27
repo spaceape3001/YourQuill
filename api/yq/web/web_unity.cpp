@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "WebAdapters.hpp"
 #include "WebHtml.hpp"
 #include "WebPage.hpp"
 #include "WebTemplate.hpp"
@@ -310,6 +311,7 @@ namespace yq {
                     }
                     break;
                 default:
+                    yWarning() << "Page '" << name() << "' does NOT start with '*' or '/', bad registeration.";
                     break;
                 }
             }
@@ -471,88 +473,6 @@ namespace yq {
         return *this;
     }
     
-
-    //  ------------------------------------------------
-
-#if 0
-
-        class WebFileHandler : public WebPage {
-        public:
-        
-            WebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : WebPage(m, p, sl), m_file(f) {}
-
-            virtual void handle(WebContext&ctx) const override 
-            {
-                switch(ctx.request.method()){
-                case HttpOp::Get:
-                    send_file(m_file, ctx.reply);
-                    break;
-                case HttpOp::Head:
-                    send_file_info(m_file, ctx.reply);
-                    break;
-                default:
-                    throw HttpStatus::MethodNotAllowed;
-                }
-            }
-        
-            std::filesystem::path       m_file;
-        };
-
-
-    namespace {
-    
-        class WebDirHandler : public WebPage {
-        public:
-            WebDirHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path& dpath) : WebPage(m, p, sl), m_dir(dpath){}
-            
-            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view sl) const override 
-            {
-                std::filesystem::path       toload =  m_dir / path_sanitize(sl);
-                switch(rq.method()){
-                case HttpOp::Get:
-                    send_file(toload, rs);
-                    break;
-                case HttpOp::Head:
-                    send_file_info(toload, rs);
-                    break;
-                default:
-                    throw HttpStatus::MethodNotAllowed;
-                }
-            }
-            
-            std::filesystem::path   m_dir;
-        };
-        
-        class WebPathVecHandler : public WebPage {
-        public:
-            WebPathVecHandler(HttpOps m, std::string_view p, const std::source_location& sl, const path_vector_t& paths) : WebPage(m, p, sl), m_paths(paths){}
-            
-            
-            std::filesystem::path       resolve(std::string_view sl) const
-            {
-                
-            }
-            
-            
-            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view sl) const override 
-            {
-                std::filesystem::
-                for(const std::filesystem
-            }
-            
-
-        };
-    }
-
-    WebPage::Writer     reg_web(std::string_view p, const std::filesystem::path& fs, const std::source_location& sl)
-    {
-        if(std::filesystem::is_directory(fs)){
-            return { nullptr }; // { new WebDirHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
-        } else {
-            return { new WebFileHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
-        }
-    }
-#endif
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -829,50 +749,6 @@ namespace yq {
         });
     }
     
-    #if 0
-    namespace {
-        template <typename Pred>
-        void        send_html(HttpResponse& rs, const WebPage*w, Pred pred)
-        {
-            //if(expand){
-            //} else {
-                HttpDataStream      stream(rs.content(ContentType::html));
-                HtmlWriter          hwrite(stream);
-                pred(hwrite);
-            //}
-        
-            //stream::Text    text;
-            //HtmlWriter      hwrite(text);
-            //pred(hwrite);
-            
-            //HttpDataStream  out(rs.content(ContentType::html));
-            //out << "<HTML>";
-            //std::string_view    title   = hwrite.title();
-            
-            //if(!title.empty()){
-                //out << "<HEAD><TITLE>";
-                //html_escape_write(out, title);
-                //out <<  "</TITLE></HEAD>\n";
-            //}
-            
-            //out << 
-            
-            
-            
-            
-        }
-        
-    }
-
-
-
-
-    WebPage::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
-    WebPage::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
-
-    WebPage::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
-    WebPage::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
-    #endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -974,4 +850,126 @@ namespace yq {
     //void    append(NetWriter&, const std::filesystem::path&)
     //{
     //}
+
+    namespace {
+       class SimpleWebFileHandler : public WebPage {
+        public:
+        
+            SimpleWebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : WebPage(m, p, sl), m_file(f) 
+            {
+                m_ext       = f.extension().string();
+                if(!m_ext.empty() && m_ext[0] == '.')
+                    m_ext   = m_ext.substr(1);
+            }
+
+            virtual void handle(WebContext&ctx) const override 
+            {
+                const WebPage*  x   = web::extension(hGet, m_ext);
+                if(x){
+                    x -> handle(ctx);
+                } else {
+                    send_file(m_file, ctx.reply);
+                }
+            }
+        
+            std::filesystem::path       m_file;
+            std::string                 m_ext;
+        };
+        
+        class SimpleWebDirectory : public WebPage {
+        public:
+            SimpleWebDirectory(HttpOps m, std::string_view p,  const std::source_location& sl, const std::filesystem::path&f) : WebPage(m, p, sl), m_dir(f) 
+            {
+            }
+            
+            virtual void handle(WebContext&ctx) const override 
+            {
+                std::string     p   = path_sanitize(ctx.truncated_path);
+                std::filesystem::path   fp  = m_dir / p;
+                if(!std::filesystem::exists(fp)){
+                    ctx.reply.status(HttpStatus::NotFound);
+                    return; 
+                } 
+                
+                auto ext    = file_extension(p);
+                if(ext.empty()){
+                    send_file(fp, ctx.reply);
+                    return ;
+                }
+            
+                const WebPage*  x   = web::extension(hGet, ext);
+                if(x){
+                    ctx.resolved_file  = fp;
+                    x -> handle(ctx);
+                } else {
+                    send_file(fp, ctx.reply);
+                }
+            }
+        
+            std::filesystem::path       m_dir;
+        };
+     
+        class ManyWebDirectory : public WebPage {
+        public:
+            ManyWebDirectory(HttpOps m, std::string_view p,  const std::source_location& sl, const path_vector_t&f) : WebPage(m, p, sl), m_dirs(f) 
+            {
+            }
+            
+            virtual void handle(WebContext&ctx) const override 
+            {
+                std::string              p = path_sanitize(ctx.truncated_path);
+                std::filesystem::path   fp = first(p);
+                if(fp.empty()){
+                    ctx.reply.status(HttpStatus::NotFound);
+                    return; 
+                }
+
+                auto ext    = file_extension(p);
+                if(ext.empty()){
+                    send_file(fp, ctx.reply);
+                    return ;
+                }
+            
+                const WebPage*  x   = web::extension(hGet, ext);
+                if(x){
+                    ctx.resolved_file  = fp;
+                    x -> handle(ctx);
+                } else {
+                    send_file(fp, ctx.reply);
+                }
+            }
+            
+            std::filesystem::path       first(std::string_view v) const
+            {
+                for(auto& d : m_dirs){
+                    std::filesystem::path   f   = d / v;
+                    if(std::filesystem::exists(f))
+                        return f;
+                }
+                
+                return std::filesystem::path();
+            }
+            
+            path_vector_t               m_dirs;
+        };
+    }
+
+    WebPage::Writer     reg_web(const std::string_view& path, const std::filesystem::path&fp, const std::source_location& sl)
+    {
+        if(std::filesystem::is_directory(fp)){
+            return WebPage::Writer( new SimpleWebDirectory(hGet, path, sl, fp));
+        } else {
+            return WebPage::Writer( new SimpleWebFileHandler(hGet, path, sl, fp));
+        }
+        
+    }
+    
+    WebPage::Writer     reg_web(const std::string_view& path, const path_vector_t&dirs, const std::source_location& sl)
+    {
+        if(dirs.empty())
+            return WebPage::Writer();
+        return WebPage::Writer( new ManyWebDirectory(hGet, path, sl, dirs));
+    }
+    
+
 }

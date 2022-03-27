@@ -55,8 +55,9 @@ void    test_directory(WebContext& ctx)
 }
 
 YQ_INVOKE(
-    //reg_web("/readme",  std::filesystem::path(build_directory())/"README.md" );
+    reg_web("/readme",  std::filesystem::path(build_directory())/"README.md" );
     reg_webpage<simpleTest>("/hare");
     reg_webpage<hello_world>("/hello");
     reg_webpage<test_directory>("/test/**");
+    reg_web("/yquill", std::filesystem::path(share_directory())/"www"/"img"/"yquill.svg");
 );

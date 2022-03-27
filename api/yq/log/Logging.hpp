@@ -7,6 +7,7 @@
 #pragma once
 
 #include <yq/type/Enum.hpp>
+#include <yq/type/Flag.hpp>
 #include <log4cpp/Category.hh>
 #include <log4cpp/CategoryStream.hh>
 #include <log4cpp/Priority.hh>
@@ -43,6 +44,23 @@ namespace yq {
         return str << v.key();
     }
 
+    template <typename E>
+    log4cpp::CategoryStream&     operator<<(log4cpp::CategoryStream& str, Flag<E> val)
+    {
+        str << '{';
+        bool f = true;
+        for(E e : E::all_values()){
+            if(val.is_set(e)){
+                if(f){
+                    f   = false;
+                } else 
+                    str << "|";
+                str << e.key();
+            }
+        }
+        str << '}';
+        return str;
+    }
 
     log4cpp::Category&          log_category(const char* z=nullptr);
 

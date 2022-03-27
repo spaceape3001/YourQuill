@@ -101,8 +101,5 @@ YQ_INVOKE(
     reg_webpage<globs_table>("/dev/webglobs");
     reg_webpage<pages_table>("/dev/webpages");
     reg_webpage<variables_table>("/dev/webvars");
-    //reg_web("img/**", wksp::shared_dir("www/img"));
-    //reg_web("help/*", wksp::shared_dir("www/help"));
-    //reg_web("js/*", wksp::shared_dir("www/js"));
     //reg_web("markdown/*", wksp::shared_dir("www/markdown"));
 )
