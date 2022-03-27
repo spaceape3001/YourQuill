@@ -175,6 +175,17 @@ namespace yq {
                 unsigned int    home        = ~0;
                 unsigned int    name        = ~0;
             };
+            
+            std::filesystem::path       find_exe(const std::string_view x)
+            {
+                static const auto search    = searchPath();
+                for(auto& fs : search){
+                    std::filesystem::path   p   = fs / x;
+                    if(std::filesystem::exists(p))
+                        return p;
+                }
+                return std::filesystem::path();
+            }
         }
 
         struct Impl {
@@ -304,12 +315,11 @@ namespace yq {
             markdown        = dir::first_child(shared_dirs, "perl/Markdown.pl");
             smartypants     = dir::first_child(shared_dirs, "perl/SmartyPants.pl");
             
-            auto spath      = searchPath();
             #ifdef __unix__
-                dot         = dir::first_child(spath, "dot");
-                git         = dir::first_child(spath, "git");
-                perl        = dir::first_child(spath, "perl");
-                subversion  = dir::first_child(spath, "svn");
+                dot         = find_exe("dot");
+                git         = find_exe("git");
+                perl        = find_exe("perl");
+                subversion  = find_exe("svn");
             #else
                 //  TODO WINDOWS -- obvious from above
             #endif
@@ -843,22 +853,46 @@ namespace yq {
 
         std::filesystem::path           shared(const std::string_view&sv)
         {
-            return dir::first_child(impl().shared_dirs, sv);
+            for(auto& sd : impl().shared_dirs){
+                auto p = sd / sv;
+                if(file_exists(p))
+                    return p;
+            }
+            
+            return std::filesystem::path();
         }
         
         std::filesystem::path           shared(const std::filesystem::path&sv)
         {
-            return dir::first_child(impl().shared_dirs, sv.c_str());
+            for(auto& sd : impl().shared_dirs){
+                auto p = sd / sv;
+                if(file_exists(p))
+                    return p;
+            }
+            
+            return std::filesystem::path();
         }
 
         path_vector_t                   shared_all(const std::string_view&sv)
         {
-            return dir::all_children(impl().shared_dirs, sv);
+            path_vector_t       ret;
+            for(auto& sd : impl().shared_dirs){
+                auto p = sd / sv;
+                if(file_exists(p))
+                    ret.push_back(p);
+            }
+            return ret;
         }
         
         path_vector_t                   shared_all(const std::filesystem::path&sv)
         {
-            return dir::all_children(impl().shared_dirs, sv.c_str());
+            path_vector_t       ret;
+            for(auto& sd : impl().shared_dirs){
+                auto p = sd / sv;
+                if(file_exists(p))
+                    ret.push_back(p);
+            }
+            return ret;
         }
 
         const path_vector_t&            shared_dirs()

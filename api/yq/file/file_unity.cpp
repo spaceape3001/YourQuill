@@ -460,14 +460,18 @@ namespace yq {
             
             path            first_child(const path& d, const std::string_view& name)
             {
+                // FIXME WARNING... paths....
                 return for_all_children( d, 0, [&](const path&p) -> auto {
+                    //yInfo() << "   Checking " << d << " '" << p << "' for " << name;
                     return is_similar(p.filename().c_str(), name) ? p : path();
                 });
             }
             
             path            first_child(const std::vector<path>& d, const std::string_view& name)
             {
+                // FIXME WARNING... paths.... 
                 return for_all_children( d, 0, [&](const path&p) -> auto {
+                    //yInfo() << "   Checking " << p << " for " << name;
                     return is_similar(p.filename().c_str(), name) ? p : path();
                 });
             }
