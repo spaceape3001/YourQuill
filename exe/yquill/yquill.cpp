@@ -15,7 +15,7 @@
 #include <yq/http/HttpResponse.hpp>
 #include <yq/http/HttpServer.hpp>
 #include <yq/text/Utils.hpp>
-#include <yq/web/Web.hpp>
+#include <yq/web/WebPage.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -52,9 +52,9 @@ static const char  szHelloWorld[] = "<html><body><h1>HELLO WORLD!</h1></body></h
 static constexpr const size_t       kBufferSize     = 8192;
 
 
-std::pair<const Web*, std::string_view>     find_page(HttpOp m, std::string_view path)
+std::pair<const WebPage*, std::string_view>     find_page(HttpOp m, std::string_view path)
 {
-    const Web*  p   = Web::page(m, path);
+    const WebPage*  p   = web::page(m, path);
     if(p)
         return { p, std::string_view() };
 
@@ -65,14 +65,14 @@ std::pair<const Web*, std::string_view>     find_page(HttpOp m, std::string_view
         return {};
     if(!n)
         return {};
-    p   = Web::directory(m, path.substr(0, n));
+    p   = web::directory(m, path.substr(0, n));
     if(p)
         return { p, path.substr(n+1) };
 
     // yInfo() << path.substr(0,n) << " not found, trying glob";
     
     for(; (n != std::string_view::npos) && n; n = path.find_last_of('/', n-1)){
-        p       = Web::glob(m, path.substr(0, n));
+        p       = web::glob(m, path.substr(0, n));
         if(p)
             return { p, path.substr(n+1) };
     }
@@ -88,10 +88,26 @@ yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
     if(!pg.first)
         throw HttpStatus::NotFound;
 
+    HttpStatus  status;
+
     WebContext  ctx{rq, rs, pg.second};
-    pg.first -> handle(ctx);
-    if(rs.status() == HttpStatus())
+    try {
+        pg.first -> handle(ctx);
+    }
+    catch(HttpStatus s)
+    {
+        status  = s;
+    }
+    catch(HttpStatus::enum_t s)
+    {
+        status = s;
+    }
+    
+    if(status != HttpStatus()){
+        rs.status(status);
+    } else
         rs.status(HttpStatus::Success);
+    
     return ;
 }
 

@@ -5,13 +5,17 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+
 #include <yq/preamble.hpp>
 #include <yq/collection/Hash.hpp>
 #include <yq/collection/Map.hpp>
 #include <yq/collection/MultiMap.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
+
 #include "VariantDef.hpp"
+
+#include <source_location>
 
 /*
     META is about runtime reflection & introspection
@@ -133,7 +137,7 @@ namespace yq {
         virtual const char*             generic() const { return "Meta"; }
 
         //  TODO
-        bool                            has_tag(const std::string_view&) const;
+        bool                            has_tag(std::string_view) const;
 
         //! \brief Our ID number
         id_t                            id() const { return m_id; }
@@ -147,10 +151,12 @@ namespace yq {
         
         //  MAY BE NULL
         const Meta*                     parent() const { return m_parent; }
-        
+
+        //! \brief Source location of this definition
+        const std::source_location& source() const { return m_source; }
         
         //  TODO
-        const Variant&                  tag(const std::string_view&) const;
+        const Variant&                  tag(std::string_view) const;
         
 
             // used during the creation....
@@ -170,8 +176,8 @@ namespace yq {
     
         //! Used by the constructor's default to auto-assign an ID
         static constexpr const id_t AUTO_ID = ~(id_t) 0;
-        explicit Meta(std::string_view, id_t i=AUTO_ID);
-        explicit Meta(std::string_view, Meta* parent, id_t i=AUTO_ID);
+        explicit Meta(std::string_view, const std::source_location&, id_t i=AUTO_ID);
+        explicit Meta(std::string_view, Meta* parent, const std::source_location&, id_t i=AUTO_ID);
         virtual ~Meta();    // do NOT delete... C++ won't let it be deleted
         
             // called after each init... repopulate property maps/vectors/etc (do not append, rebuild)
@@ -182,6 +188,7 @@ namespace yq {
         
         void    set_option(options_t v) { m_flags |= v; }
         void    set_options(options_t v) { m_flags |= v; }
+        void    set_name(std::string_view v) { m_name = v; }
         
     private:
         using TagMap    = Map<std::string_view, Variant, IgCase>;
@@ -193,6 +200,7 @@ namespace yq {
         std::string_view                m_name;
         Vector<const Meta*>             m_children;
         const Meta*                     m_parent    = nullptr;
+        std::source_location            m_source;
         options_t                       m_flags     = {};
         id_t                            m_id        = AUTO_ID;
         

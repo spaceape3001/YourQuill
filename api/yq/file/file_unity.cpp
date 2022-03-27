@@ -590,7 +590,6 @@ namespace yq {
         bool    XmlFile::read(ByteArray&&buffer, const std::string_view& fname )
         {
             ByteArray   chars   = std::move(buffer);
-    bool            file_exists(const std::filesystem::path&);
 
             chars << '\0';
             XmlDocument     doc;

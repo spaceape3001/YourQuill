@@ -24,8 +24,8 @@ namespace yq {
     using HttpOps       = Flag<HttpOp>;
     using ContentTypes  = Flag<ContentType>;
     
-    class Web;
-    using WebMap    = EnumMap<HttpOp, Map<std::string_view, const Web*, IgCase>>;
+    class WebPage;
+    using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
     
     struct WebContext {
         const HttpRequest&  request;
@@ -33,11 +33,41 @@ namespace yq {
         std::string_view    truncated_path;
     };
     
+    namespace web {
+        void freeze();
+        bool frozen();
+        
+        // Not thread-safe until freeze() has been called.
+        const std::vector<const WebPage*>&  all_pages();
+        
+        const WebPage*      page(HttpOp, std::string_view);
+        const WebPage*      extension(HttpOp, std::string_view);
+        const WebPage*      directory(HttpOp, std::string_view);
+        const WebPage*      glob(HttpOp, std::string_view);
+
+        // Not thread-safe until freeze() has been called.
+        const WebPageMap&   page_map();
+
+        // Not thread-safe until freeze() has been called.
+        const WebPageMap&   extension_map();
+
+        // Not thread-safe until freeze() has been called.
+        const WebPageMap&   directory_map();
+
+        // Not thread-safe until freeze() has been called.
+        const WebPageMap&   glob_map();
+        
+        // Sets the template (will reload as necessary)
+        bool                set_template(const std::filesystem::path&);
+        // Sets the template to content
+        bool                set_template(std::string_view);
+    };
+    
 
     using FNGet     = std::function<void(Stream&)>;
     using GetMap    = Map<std::string_view, FNGet, IgCase>;
 
-    /*! \brief Web (or series of pages)
+    /*! \brief WebPage (or series of pages)
     
         \property path   The path of the web page, as specified.  
             Wildcards can be used to control how it's registered.  
@@ -47,11 +77,11 @@ namespace yq {
             Startign with '*.' signifies it's a custom file handler for extension which 
             standard directory handlers will utilize.
     */
-    class Web : public Meta {
+    class WebPage : public Meta {
     public:
     
         YQ_ENUM(Role, ,
-            //! Web Role unknown/other
+            //! WebPage Role unknown/other
             Unknown = 0,
             //! It's a web-page     /path/to/resource
             Page,
@@ -65,22 +95,6 @@ namespace yq {
     
         class Writer;
         struct Arg;
-    
-        static const std::vector<const Web*>&  all();
-        
-        static void freeze();
-        static bool frozen();
-    
-        static const Web*       page(HttpOp, std::string_view);
-        static const Web*       extension(HttpOp, std::string_view);
-        static const Web*       directory(HttpOp, std::string_view);
-        static const Web*       glob(HttpOp, std::string_view);
-        
-        static const WebMap&    directory_map();
-        static const WebMap&    extension_map();
-        static const WebMap&    page_map();
-        static const WebMap&    glob_map();
-        
     
     
         /*! \brief Handles the request
@@ -97,19 +111,18 @@ namespace yq {
         bool                        local_only() const;
         bool                        login_required() const;
         bool                        no_expansion() const;
-        std::string_view            path() const { return m_path; }
+        std::string_view            path() const { return name(); }
         Role                        role() const { return m_role; }
         HttpOps                     methods() const { return m_methods; }
-        const std::source_location& source() const { return m_source; }
         
     protected:
-        Web(HttpOps, std::string_view, const std::source_location&);
-        ~Web();
+        WebPage(HttpOps, std::string_view, const std::source_location&);
+        ~WebPage();
+        
+        void                    set_path(std::string_view v) { set_name(v); }
         
         std::vector<Arg>        m_args;
-        std::string_view        m_path;
-        std::source_location    m_source;
-        WebMap                  m_subs;     // for derived use... (ie, overrides or whatever)
+        WebPageMap              m_subs;     // for derived use... (ie, overrides or whatever)
         HttpOps                 m_methods;
         ContentTypes            m_content_types;
         ContentType             m_content_type;
@@ -128,12 +141,12 @@ namespace yq {
         void                    seal();
     };
 
-    struct Web::Arg {
+    struct WebPage::Arg {
         std::string_view  name;
         std::string_view  description;
     };
     
-    class Web::Writer : public Meta::Writer {
+    class WebPage::Writer : public Meta::Writer {
     public:
         
         //! Allow POST to not require login.  (Needed for the login post)
@@ -169,32 +182,26 @@ namespace yq {
         Writer&  role(Role);
         
         //! Adds in a sub-web, overriding the web's path
-        Writer&  sub(std::string_view, const Web*);
+        Writer&  sub(std::string_view, const WebPage*);
 
         //! Adds in a sub-web, overriding the web's path & methods
-        Writer&  sub(HttpOps, std::string_view, const Web*);
+        Writer&  sub(HttpOps, std::string_view, const WebPage*);
         
         
-        Writer(Web*p); // : m_page(p) {}
+        Writer(WebPage*p); // : m_page(p) {}
         Writer(Writer&&);
         Writer& operator=(Writer&&);
         ~Writer();
         
-        operator const Web* () const { return m_page; }
+        operator const WebPage* () const { return m_page; }
         
         Writer(const Writer&) = delete;
         Writer& operator=(const Writer&&) = delete;
     private:
-        Web*   m_page = nullptr;
+        WebPage*   m_page = nullptr;
     };
     
-    bool            send_file(const std::filesystem::path&, HttpResponse&, ContentType ct=ContentType());
-    bool            send_file_info(const std::filesystem::path&, HttpResponse&, ContentType ct=ContentType());
     
-    //! Registers a file or a directory to the specified path ... does get & head ops
-    Web::Writer     reg_web(std::string_view, const std::filesystem::path&, const std::source_location& sl = std::source_location::current());
-    Web::Writer     reg_web(std::string_view, const path_vector_t&, const std::source_location& sl = std::source_location::current());
-
-    Web::Writer     reg_web(std::string_view, std::function<void(WebContext&)>, const std::source_location& sl = std::source_location::current());
-    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(WebContext&)>, const std::source_location& sl = std::source_location::current());
+    bool    send_file(const std::filesystem::path&, HttpResponse&, ContentType ct=ContentType());
+    bool    send_file_info(const std::filesystem::path&, HttpResponse&, ContentType ct=ContentType());
 }

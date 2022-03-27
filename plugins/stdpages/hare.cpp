@@ -1,19 +1,25 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #include <yq/app/DelayInit.hpp>
 #include <yq/file/FileUtils.hpp>
 #include <yq/http/HttpDataStream.hpp>
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/web/Web.hpp>
+#include <yq/web/WebPage.hpp>
+#include <yq/web/WebHtml.hpp>
+#include <yq/web/WebAdapters.hpp>
 
 using namespace yq;
 
 void    simpleTest(WebContext& ctx)
 {
-    HttpDataStream  out(ctx.reply.content(ContentType::html));
-    
-    out <<
-        "<HTML><HEAD><TITLE>SIMPLE TEST</TITLE></HEAD><BODY><H1>TURTLE vs HARE</H1><p>This is the contest between the turtle &amp; the hare.</p></BODY></HTML>";
+    WebHtml out(ctx, "TURTLE vs HARE");
+    html::p(out) << "This is the contest between the turtle &amp; the hare.";
 }
 
 
@@ -49,8 +55,8 @@ void    test_directory(WebContext& ctx)
 }
 
 YQ_INVOKE(
-    reg_web("/readme",  std::filesystem::path(build_directory())/"README.md" );
-    reg_web("/hare", simpleTest);
-    reg_web("/hello", hello_world);
-    reg_web("/test/**", test_directory);
+    //reg_web("/readme",  std::filesystem::path(build_directory())/"README.md" );
+    reg_webpage<simpleTest>("/hare");
+    reg_webpage<hello_world>("/hello");
+    reg_webpage<test_directory>("/test/**");
 );

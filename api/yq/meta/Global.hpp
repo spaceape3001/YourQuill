@@ -33,7 +33,7 @@ namespace yq {
         static GlobalInfo&          instance();
 
     protected:
-        GlobalInfo();
+        GlobalInfo(const std::source_location& sl = std::source_location::current());
         virtual void                sweep_impl() override;
 
         friend class PropertyInfo;

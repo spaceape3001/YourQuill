@@ -85,7 +85,7 @@ namespace yq {
     
     struct EmptyType : public TypeInfo {
     
-        EmptyType(id_t i) : TypeInfo( i ? "Any" : "Void", __FILE__, i) 
+        EmptyType(id_t i, const std::source_location& sl = std::source_location::current()) : TypeInfo( i ? "Any" : "Void", sl, i) 
         {
             m_copyB     = [](DataBlock&, const DataBlock&) {};
             m_copyR     = [](DataBlock&, const void*) {};
@@ -124,7 +124,7 @@ namespace yq {
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 
-        ArgInfo::ArgInfo(std::string_view zName, const Meta&t, Meta*par) : Meta(zName, par), m_type(t) 
+        ArgInfo::ArgInfo(std::string_view zName, const std::source_location& sl, const Meta&t, Meta*par) : Meta(zName, par, sl), m_type(t) 
         {
             m_flags |= ARG;
         }
@@ -133,7 +133,7 @@ namespace yq {
     //  COMPOUND
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        CompoundInfo::CompoundInfo(std::string_view zName, const char zFile[], Meta* par, id_t i) : Meta(zName, par, i), m_file(zFile)
+        CompoundInfo::CompoundInfo(std::string_view zName, const std::source_location& sl, Meta* par, id_t i) : Meta(zName, par, sl, i)
         {
             m_flags |= COMPOUND;
         }
@@ -177,7 +177,7 @@ namespace yq {
             return *s_ret;
         }
 
-        GlobalInfo::GlobalInfo() : CompoundInfo("Global", __FILE__, nullptr, MC_Global)
+        GlobalInfo::GlobalInfo(const std::source_location& sl) : CompoundInfo("Global", sl, nullptr, MC_Global)
         {
         }
 
@@ -260,11 +260,11 @@ namespace yq {
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        Meta::Meta(std::string_view zName, id_t i) : Meta(zName, nullptr, i)
+        Meta::Meta(std::string_view zName, const std::source_location& sl, id_t i) : Meta(zName, nullptr, sl, i)
         {
         }
         
-        Meta::Meta(std::string_view zName, Meta* parent, id_t i) 
+        Meta::Meta(std::string_view zName, Meta* parent, const std::source_location& sl, id_t i) 
         {
             assert(thread_safe_write());
             
@@ -272,6 +272,7 @@ namespace yq {
             m_name      = str_start(zName, "yq::");
             m_label     = m_name;                       // default (can be overriden)
             m_parent    = parent;
+            m_source    = sl;
 
             auto& _r     = repo();
             if(i < M_USER){
@@ -291,7 +292,7 @@ namespace yq {
 
         }
 
-        bool  Meta::has_tag(const std::string_view&k) const
+        bool  Meta::has_tag(std::string_view k) const
         {
             return m_tags.contains(k);
         }
@@ -306,7 +307,7 @@ namespace yq {
             }
         }
 
-        const Variant&  Meta::tag(const std::string_view&k) const
+        const Variant&  Meta::tag(std::string_view k) const
         {
             static Variant bad;
             auto i = m_tags.find(k);
@@ -371,7 +372,7 @@ namespace yq {
     //  METHOD
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        MethodInfo::MethodInfo(std::string_view zName, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta)
+        MethodInfo::MethodInfo(std::string_view zName, const std::source_location& sl, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta, sl)
         {
             assert(parentMeta);
 
@@ -402,10 +403,8 @@ namespace yq {
     //  OBJECT (INFO)
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        ObjectInfo::ObjectInfo(std::string_view zName, const char* zFile, ObjectInfo* myBase) : CompoundInfo(zName, zFile), m_base(myBase)
+        ObjectInfo::ObjectInfo(std::string_view zName, const std::source_location& sl, ObjectInfo* myBase) : CompoundInfo(zName, sl), m_base(myBase)
         {
-            assert(zFile);
-            
             m_flags |= OBJECT;
 
             Repo& r    = repo();
@@ -440,7 +439,7 @@ namespace yq {
     //  PROPERTY
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        PropertyInfo::PropertyInfo(std::string_view zName, const TypeInfo&theType, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta), m_type(theType)
+        PropertyInfo::PropertyInfo(std::string_view zName, const std::source_location& sl, const TypeInfo&theType, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta, sl), m_type(theType)
         {
             assert(parentMeta);
 
@@ -493,7 +492,7 @@ namespace yq {
     //  PROP GETTER
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        PropGetter::PropGetter(PropertyInfo* propInfo) : Meta("get", propInfo) 
+        PropGetter::PropGetter(PropertyInfo* propInfo, const std::source_location& sl) : Meta("get", propInfo, sl) 
         {
             assert("no duplicate getters!" && !propInfo->m_getter);    //  duplicate property is an ERROR
             propInfo->m_getter     = this;
@@ -508,7 +507,7 @@ namespace yq {
     //  PROP SETTER
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        PropSetter::PropSetter(PropertyInfo* propInfo) : Meta("", propInfo) 
+        PropSetter::PropSetter(PropertyInfo* propInfo, const std::source_location& sl) : Meta("set", propInfo, sl) 
         {
             assert("no duplicate setters!" && !propInfo->m_setter);    //  duplicate property is an ERROR
             propInfo->m_setter     = this;
@@ -545,7 +544,7 @@ namespace yq {
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        TypeInfo::TypeInfo(std::string_view zName, const char* zFile, id_t i) : CompoundInfo(zName, zFile, nullptr, i)
+        TypeInfo::TypeInfo(std::string_view zName, const std::source_location& sl, id_t i) : CompoundInfo(zName, sl, nullptr, i)
         {
             m_flags |= TYPE;
             

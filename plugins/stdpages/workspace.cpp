@@ -1,9 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #include <yq/app/DelayInit.hpp>
 #include <yq/http/HttpDataStream.hpp>
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/web/Web.hpp>
+#include <yq/web/WebPage.hpp>
+#include <yq/web/WebAdapters.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 using namespace yq;

@@ -43,7 +43,7 @@ namespace yq {
         bool                is_static() const;
 
             // best know what you're doing....
-        PropertyInfo(std::string_view zName, const TypeInfo&, Meta*, options_t opts=0);
+        PropertyInfo(std::string_view zName, const std::source_location& sl, const TypeInfo&, Meta*, options_t opts=0);
         
     private:
         const PropSetter*   m_setter    = nullptr;

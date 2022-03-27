@@ -141,14 +141,12 @@ namespace yq {
     {
         Ref<HttpResponse>   r   = new HttpResponse(m_context.version);
         r -> status(code);
-yInfo() << "Dispatch code " << code.value();
         send(r);
     }
 
     void    HttpConnection::dispatch(HttpStatus code, VersionSpec vs)
     {
         Ref<HttpResponse>   r   = new HttpResponse(limit(vs));
-yInfo() << "Dispatch code " << code.value() << " " << vs;
         r -> status(code);
         send(r);
     }
@@ -193,7 +191,6 @@ yInfo() << "Dispatch code " << code.value() << " " << vs;
         }
         catch(int ex)
         {
-yInfo() << "Caught exceptioninteger " << code;;        
             if((ex >= 0) && (ex < 600)){
                 code    = (HttpStatus::enum_t) ex;
             } else 
@@ -202,16 +199,14 @@ yInfo() << "Caught exceptioninteger " << code;;
         #ifdef NDEBUG
         catch(...)
         {
-yInfo() << "Caught general exception";        
             code    = HttpStatus::InternalError;
         }
         #endif
         
         if((code != HttpStatus()) && isError(code)){
-yInfo() << "Error detected, returning server error.";
+            yInfo() << "Error detected, returning server error " << code;
             dispatch(code);
         } else {
-yInfo() << "Sending response (" <<  response->m_status.value() << ")";
             send(response);
         }
     }
@@ -423,9 +418,6 @@ yInfo() << "Sending response (" <<  response->m_status.value() << ")";
         }
         
         HttpDataStream(r->m_reply) << r->m_version << ' ' << r->m_status.value() <<  ' ' << statusMessage(r->m_status) << "\r\n";
-
-
-yInfo() << "Sending (" << r->m_status.value() << ") reply " << r->m_reply->as_view();        
 
         std::vector<asio::const_buffer>   buffers;
         buffers.push_back(buffer_for(r -> m_reply));

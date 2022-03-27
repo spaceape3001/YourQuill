@@ -37,16 +37,16 @@
 #define YQ_TYPE_IMPLEMENT( ... )                                                                            \
     namespace yq {                                                                                          \
         TypeInfo&   InfoBinder<__VA_ARGS__>::edit() {                                                       \
-            static auto* s_ret   = new TypeInfo::Final<__VA_ARGS__>(#__VA_ARGS__, __FILE__);                \
+            static auto* s_ret   = new TypeInfo::Final<__VA_ARGS__>(#__VA_ARGS__);                          \
             return *s_ret;                                                                                  \
         }                                                                                                   \
         template <> TypeInfo& TypeInfo::Final<__VA_ARGS__>::s_save  = InfoBinder<__VA_ARGS__>::edit();      \
     }
 
-#define YQ_TYPE_FIXED( ii, ... )                                                                                 \
+#define YQ_TYPE_FIXED( ii, ... )                                                                            \
     namespace yq {                                                                                          \
         TypeInfo&   InfoBinder<__VA_ARGS__>::edit() {                                                       \
-            static auto* s_ret   = new TypeInfo::Final<__VA_ARGS__>(#__VA_ARGS__, __FILE__, ii);            \
+            static auto* s_ret   = new TypeInfo::Final<__VA_ARGS__>(#__VA_ARGS__, ii);                      \
             return *s_ret;                                                                                  \
         }                                                                                                   \
         template <> TypeInfo& TypeInfo::Final<__VA_ARGS__>::s_save  = InfoBinder<__VA_ARGS__>::edit();      \
@@ -91,7 +91,7 @@ namespace yq {
             const PropertyInfo* property() const;
 
         protected:
-            PropGetter(PropertyInfo*);
+            PropGetter(PropertyInfo*, const std::source_location& sl);
         };
         
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,7 +120,7 @@ namespace yq {
                 }
 
             protected:
-                StaticPropGetter(PropertyInfo* propInfo) : PropGetter(propInfo) 
+                StaticPropGetter(PropertyInfo* propInfo, const std::source_location& sl) : PropGetter(propInfo, sl) 
                 {
                 }
             };
@@ -130,7 +130,7 @@ namespace yq {
             public:
                 typedef const T* P;
                 
-                XPV_PropGetter(PropertyInfo*propInfo, P pointer) : StaticPropGetter<T>(propInfo), m_data(pointer) 
+                XPV_PropGetter(PropertyInfo*propInfo, const std::source_location& sl, P pointer) : StaticPropGetter<T>(propInfo, sl), m_data(pointer) 
                 {
                     assert(pointer);
                 }
@@ -150,7 +150,7 @@ namespace yq {
             class XFV_PropGetter : public StaticPropGetter<T> {
             public:
                 typedef T (*FN)();
-                XFV_PropGetter(PropertyInfo* propInfo, FN function) : StaticPropGetter<T>(propInfo), m_function(function) 
+                XFV_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropGetter<T>(propInfo, sl), m_function(function) 
                 {
                     assert(function);
                 }
@@ -170,7 +170,7 @@ namespace yq {
             class XFR_PropGetter : public StaticPropGetter<T> {
             public:
                 typedef T& (*FN)();
-                XFR_PropGetter(PropertyInfo* propInfo, FN function) : StaticPropGetter<T>(propInfo), m_function(function) 
+                XFR_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropGetter<T>(propInfo, sl), m_function(function) 
                 {
                     assert(function);
                 }
@@ -190,7 +190,7 @@ namespace yq {
             class XFCR_PropGetter : public StaticPropGetter<T> {
             public:
                 typedef const T& (*FN)();
-                XFCR_PropGetter(PropertyInfo* propInfo, FN function) : StaticPropGetter<T>(propInfo), m_function(function) 
+                XFCR_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropGetter<T>(propInfo, sl), m_function(function) 
                 {
                     assert(function);
                 }
@@ -210,7 +210,7 @@ namespace yq {
             class XFVR_PropGetter : public StaticPropGetter<T> {
             public:
                 typedef void (*FN)(const T&);
-                XFVR_PropGetter(PropertyInfo* propInfo, FN function) : StaticPropGetter<T>(propInfo), m_function(function)
+                XFVR_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropGetter<T>(propInfo, sl), m_function(function)
                 {
                     assert(function);
                 }
@@ -230,7 +230,7 @@ namespace yq {
             class XFBR_PropGetter : public StaticPropGetter<T> {
             public:
                 typedef bool (*FN)(const T&);
-                XFBR_PropGetter(PropertyInfo* propInfo, FN function) : StaticPropGetter<T>(propInfo), m_function(function)
+                XFBR_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropGetter<T>(propInfo, sl), m_function(function)
                 {
                     assert(function);
                 }
@@ -270,7 +270,7 @@ namespace yq {
                 }
 
             protected:
-                DynamicPropGetter(PropertyInfo* propInfo) : PropGetter(propInfo) 
+                DynamicPropGetter(PropertyInfo* propInfo, const std::source_location& sl) : PropGetter(propInfo, sl) 
                 {
                 }
             };
@@ -284,7 +284,7 @@ namespace yq {
             class IPM_PropGetter : public DynamicPropGetter<C,T> {
             public:
                 typedef const T (C::*P);
-                IPM_PropGetter(PropertyInfo* propInfo, P pointer) : DynamicPropGetter<C,T>(propInfo), m_data(pointer) 
+                IPM_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, P pointer) : DynamicPropGetter<C,T>(propInfo, sl), m_data(pointer) 
                 {
                     assert(pointer);
                 }
@@ -305,7 +305,7 @@ namespace yq {
             class IFV_PropGetter : public DynamicPropGetter<C,T> {
             public:
                 typedef T (C::*FN)() const;
-                IFV_PropGetter(PropertyInfo* propInfo, FN function) : DynamicPropGetter<C,T>(propInfo), m_function(function)
+                IFV_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : DynamicPropGetter<C,T>(propInfo, sl), m_function(function)
                 {
                     assert(function);
                 }
@@ -327,7 +327,7 @@ namespace yq {
             class IFR_PropGetter : public DynamicPropGetter<C,T> {
             public:
                 typedef const T& (C::*FN)() const;
-                IFR_PropGetter(PropertyInfo* propInfo, FN function) : DynamicPropGetter<C,T>(propInfo), m_function(function)
+                IFR_PropGetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : DynamicPropGetter<C,T>(propInfo, sl), m_function(function)
                 {
                     assert(function);
                 }
@@ -367,7 +367,7 @@ namespace yq {
             virtual const Meta&     object() const = 0;
             const PropertyInfo* property() const;
         protected:
-            PropSetter(PropertyInfo*);
+            PropSetter(PropertyInfo*, const std::source_location& sl);
         };
         
         template <typename T>
@@ -385,7 +385,7 @@ namespace yq {
             }
 
         protected:
-            StaticPropSetter(PropertyInfo*propInfo) : PropSetter(propInfo) 
+            StaticPropSetter(PropertyInfo*propInfo, const std::source_location& sl) : PropSetter(propInfo, sl) 
             {
             }
         };
@@ -394,7 +394,7 @@ namespace yq {
         class XPV_PropSetter : public StaticPropSetter<T> {
         public:
             typedef T* P;
-            XPV_PropSetter(PropertyInfo* propInfo, P pointer) : StaticPropSetter<T>(propInfo), m_data(pointer) 
+            XPV_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, P pointer) : StaticPropSetter<T>(propInfo, sl), m_data(pointer) 
             {
                 assert(pointer);
             }
@@ -415,7 +415,7 @@ namespace yq {
         class XFV_PropSetter : public StaticPropSetter<T> {
         public:
             typedef void (*FN)(T);
-            XFV_PropSetter(PropertyInfo* propInfo, FN function) : StaticPropSetter<T>(propInfo), m_function(function) 
+            XFV_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropSetter<T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -436,7 +436,7 @@ namespace yq {
         class XFBV_PropSetter : public StaticPropSetter<T> {
         public:
             typedef bool (*FN)(T);
-            XFBV_PropSetter(PropertyInfo* propInfo, FN function) : StaticPropSetter<T>(propInfo), m_function(function) 
+            XFBV_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropSetter<T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -456,7 +456,7 @@ namespace yq {
         class XFR_PropSetter : public StaticPropSetter<T> {
         public:
             typedef void (*FN)(const T&);
-            XFR_PropSetter(PropertyInfo* propInfo, FN function) : StaticPropSetter<T>(propInfo), m_function(function) 
+            XFR_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropSetter<T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -478,7 +478,7 @@ namespace yq {
         class XFBR_PropSetter : public StaticPropSetter<T> {
         public:
             typedef bool (*FN)(const T&);
-            XFBR_PropSetter(PropertyInfo* propInfo, FN function) : StaticPropSetter<T>(propInfo), m_function(function) 
+            XFBR_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : StaticPropSetter<T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -513,7 +513,7 @@ namespace yq {
             }
 
         protected:
-            DynamicPropSetter(PropertyInfo* propInfo) : PropSetter(propInfo) {}
+            DynamicPropSetter(PropertyInfo* propInfo, const std::source_location& sl) : PropSetter(propInfo, sl) {}
         };
 
         
@@ -521,7 +521,7 @@ namespace yq {
         class IPM_PropSetter : public DynamicPropSetter<C,T> {
         public:
             typedef T*(C::*P);
-            IPM_PropSetter(PropertyInfo* propInfo, P pointer) : DynamicPropSetter<C,T>(propInfo), m_data(pointer) 
+            IPM_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, P pointer) : DynamicPropSetter<C,T>(propInfo, sl), m_data(pointer) 
             {
                 assert(pointer);
             }
@@ -544,7 +544,7 @@ namespace yq {
         public:
             typedef void (C::*FN)(T);
             
-            IFV_PropSetter(PropertyInfo* propInfo, FN function) : DynamicPropSetter<C,T>(propInfo), m_function(function) 
+            IFV_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : DynamicPropSetter<C,T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -566,7 +566,7 @@ namespace yq {
         public:
             typedef bool (C::*FN)(T);
             
-            IFBV_PropSetter(PropertyInfo* propInfo, FN function) : DynamicPropSetter<C,T>(propInfo), m_function(function) 
+            IFBV_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : DynamicPropSetter<C,T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -587,7 +587,7 @@ namespace yq {
         public:
             typedef void (C::*FN)(const T&);
             
-            IFR_PropSetter(PropertyInfo* propInfo, FN function) : DynamicPropSetter<C,T>(propInfo), m_function(function) 
+            IFR_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : DynamicPropSetter<C,T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -610,7 +610,7 @@ namespace yq {
         public:
             typedef bool (C::*FN)(const T&);
             
-            IFBR_PropSetter(PropertyInfo* propInfo, FN function) : DynamicPropSetter<C,T>(propInfo), m_function(function) 
+            IFBR_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, FN function) : DynamicPropSetter<C,T>(propInfo, sl), m_function(function) 
             {
                 assert(function);
             }
@@ -760,12 +760,12 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::Writer<T>       variable(std::string_view szName, T* pointer)
+            PropertyInfo::Writer<T>       variable(std::string_view szName, T* pointer, const std::source_location& sl=std::source_location::current())
             {
                 assert(pointer);
-                PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
-                new XPV_PropGetter<T>(ret, pointer);
-                new XPV_PropSetter<T>(ret, pointer);
+                PropertyInfo*ret  = new PropertyInfo(szName, sl, meta<T>(), m_meta, STATIC);
+                new XPV_PropGetter<T>(ret, sl, pointer);
+                new XPV_PropSetter<T>(ret, sl, pointer);
                 return PropertyInfo::Writer<T>{ret};
             }
 
@@ -776,11 +776,11 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::Writer<T>       variable(std::string_view szName, const T* pointer)
+            PropertyInfo::Writer<T>       variable(std::string_view szName, const T* pointer, const std::source_location& sl=std::source_location::current())
             {
                 assert(pointer);
-                PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
-                new XPV_PropGetter<T>(ret, pointer);
+                PropertyInfo*ret  = new PropertyInfo(szName, sl, meta<T>(), m_meta, STATIC);
+                new XPV_PropGetter<T>(ret, sl, pointer);
                 return PropertyInfo::Writer<T>{ret};
             }
 
@@ -791,11 +791,11 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(std::string_view szName, T (*function)())
+            PropertyInfo::VarW<T>           variable(std::string_view szName, T (*function)(), const std::source_location& sl=std::source_location::current())
             {
                 assert(function);
-                PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
-                new XFV_PropGetter<T>(ret, function);
+                PropertyInfo*   ret = new PropertyInfo(szName, sl, meta<T>(), m_meta, STATIC);
+                new XFV_PropGetter<T>(ret, sl, function);
                 return PropertyInfo::VarW<T>(ret);
             }
 
@@ -806,11 +806,11 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(std::string_view szName, const T& (*function)())
+            PropertyInfo::VarW<T>           variable(std::string_view szName, const T& (*function)(), const std::source_location& sl=std::source_location::current())
             {
                 assert(function);
-                PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
-                new XFCR_PropGetter<T>(ret, function);
+                PropertyInfo*   ret = new PropertyInfo(szName, sl, meta<T>(), m_meta, STATIC);
+                new XFCR_PropGetter<T>(ret, sl, function);
                 return PropertyInfo::VarW<T>(ret);
             }
 
@@ -821,11 +821,11 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(std::string_view szName, void (*function)(T&))
+            PropertyInfo::VarW<T>           variable(std::string_view szName, void (*function)(T&), const std::source_location& sl=std::source_location::current())
             {
                 assert(function);
-                PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
-                new XFVR_PropGetter<T>(ret, function);
+                PropertyInfo*   ret = new PropertyInfo(szName, sl, meta<T>(), m_meta, STATIC);
+                new XFVR_PropGetter<T>(ret, sl, function);
                 return PropertyInfo::VarW<T>(ret);
             }
             
@@ -837,11 +837,11 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T>
-            PropertyInfo::VarW<T>           variable(std::string_view szName, bool (*function)(T&))
+            PropertyInfo::VarW<T>           variable(std::string_view szName, bool (*function)(T&), const std::source_location& sl=std::source_location::current())
             {
                 assert(function);
-                PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), m_meta, STATIC);
-                new XFBR_PropGetter<T>(ret, function);
+                PropertyInfo*   ret = new PropertyInfo(szName, meta<T>(), sl, m_meta, STATIC);
+                new XFBR_PropGetter<T>(ret, sl, function);
                 return PropertyInfo::VarW<T>(ret);
             }
 
@@ -854,7 +854,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename ... Args>
-            MethodInfo::Writer              function(std::string_view szName, void(*)(Args...));
+            MethodInfo::Writer              function(std::string_view szName, void(*)(Args...), const std::source_location& sl=std::source_location::current());
 
             /*! \brief Defines a global variable
             
@@ -863,7 +863,7 @@ namespace yq {
                 \tparam T   type
             */
             template <typename T, typename ... Args>
-            MethodInfo::Writer              function(std::string_view szName, T(*)(Args...));
+            MethodInfo::Writer              function(std::string_view szName, T(*)(Args...), const std::source_location& sl=std::source_location::current());
 
             Static( CompoundInfo* compound ) : Meta::Writer(compound) {}
         };
@@ -880,12 +880,12 @@ namespace yq {
                 \param  pointer Pointer to class/type member
             */
             template <typename T>
-            PropertyInfo::Writer<T>     property(std::string_view szName, T (C::*pointer))
+            PropertyInfo::Writer<T>     property(std::string_view szName, T (C::*pointer), const std::source_location& sl=std::source_location::current())
             {
                 assert(pointer);
-                PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATE);
-                new IPM_PropGetter<C,T>(ret, pointer);
-                new IPM_PropSetter<C,T>(ret, pointer);
+                PropertyInfo*ret  = new PropertyInfo(szName, sl, meta<T>(), m_meta, STATE);
+                new IPM_PropGetter<C,T>(ret, sl, pointer);
+                new IPM_PropSetter<C,T>(ret, sl, pointer);
                 return PropertyInfo::Writer<T>{ret};
             }
             
@@ -897,11 +897,11 @@ namespace yq {
                 \param  pointer Pointer to class/type member
             */
             template <typename T>
-            PropertyInfo::Writer<T>     property(std::string_view szName, const T (C::*pointer))
+            PropertyInfo::Writer<T>     property(std::string_view szName, const T (C::*pointer), const std::source_location& sl=std::source_location::current())
             {
                 assert(pointer);
-                PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta, STATE);
-                new IPM_PropGetter<C,T>(ret, pointer);
+                PropertyInfo*ret  = new PropertyInfo(szName, sl, meta<T>(), m_meta, STATE);
+                new IPM_PropGetter<C,T>(ret, sl, pointer);
                 return PropertyInfo::Writer<T>{ret};
             }
 
@@ -913,11 +913,11 @@ namespace yq {
                 \param  p       Function pointer to getter (const & returns)
             */
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(std::string_view szName, T (C::*function)() const)
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, T (C::*function)() const, const std::source_location& sl=std::source_location::current())
             {
                 assert(function);
-                PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta);
-                new IFV_PropGetter<C,T>(ret, function);
+                PropertyInfo*ret  = new PropertyInfo(szName, sl, meta<T>(), m_meta);
+                new IFV_PropGetter<C,T>(ret, sl, function);
                 return PropertyInfo::PropW<C,T>{ret};
             }
             
@@ -929,32 +929,32 @@ namespace yq {
                 \param  p       Function pointer to getter (const & returns)
             */
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(std::string_view szName, const T& (C::*function)() const)
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, const T& (C::*function)() const, const std::source_location& sl=std::source_location::current())
             {
                 assert(function);
-                PropertyInfo*ret  = new PropertyInfo(szName, meta<T>(), m_meta);
-                new IFR_PropGetter<C,T>(ret, function);
+                PropertyInfo*ret  = new PropertyInfo(szName, sl, meta<T>(), m_meta);
+                new IFR_PropGetter<C,T>(ret, sl, function);
                 return PropertyInfo::PropW<C,T>{ret};
             }
 
 
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(std::string_view szName, void (C::*function)(T&) const);
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, void (C::*function)(T&) const, const std::source_location& sl=std::source_location::current());
         
             template <typename T>
-            PropertyInfo::PropW<C,T>    property(std::string_view szName, bool (C::*function)(T&) const);
+            PropertyInfo::PropW<C,T>    property(std::string_view szName, bool (C::*function)(T&) const, const std::source_location& sl=std::source_location::current());
             
             template <typename ... Args>
-            MethodInfo::Writer          method(std::string_view szName, void (C::*function)(Args...));
+            MethodInfo::Writer          method(std::string_view szName, void (C::*function)(Args...), const std::source_location& sl=std::source_location::current());
             
             template <typename ... Args>
-            MethodInfo::Writer          method(std::string_view szName, void (C::*function)(Args...) const);
+            MethodInfo::Writer          method(std::string_view szName, void (C::*function)(Args...) const, const std::source_location& sl=std::source_location::current());
 
             template <typename T, typename ... Args>
-            MethodInfo::Writer          method(std::string_view szName, T (C::*function)(Args...));
+            MethodInfo::Writer          method(std::string_view szName, T (C::*function)(Args...), const std::source_location& sl=std::source_location::current());
             
             template <typename T, typename ... Args>
-            MethodInfo::Writer          method(std::string_view szName, T (C::*function)(Args...) const);
+            MethodInfo::Writer          method(std::string_view szName, T (C::*function)(Args...) const, const std::source_location& sl=std::source_location::current());
             
             Dynamic(CompoundInfo* c) : Static(c) {}
         };
@@ -1065,7 +1065,7 @@ namespace yq {
     template <typename T>
     class TypeInfo::Typed : public type_info_t<T> {
     protected:
-        Typed(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : type_info_t<T>(zName, zFile, i)
+        Typed(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : type_info_t<T>(zName, sl, i)
         {
             options_t   opts    = 0;
         
@@ -1136,13 +1136,13 @@ namespace yq {
     template <typename T>
     class TypeInfo::Special : public Typed<T> {
     protected:
-        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<T>(zName, zFile, i) {}
+        Special(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : Typed<T>(zName, sl, i) {}
     };
     
     template <typename K, typename V>
     class TypeInfo::Special<Hash<K,V>> : public Typed<Hash<K,V>> {
     protected:
-        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Hash<K,V>>(zName, zFile, i)
+        Special(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : Typed<Hash<K,V>>(zName, sl, i)
         {
             Meta::set_option(COLLECTION);
         }
@@ -1151,7 +1151,7 @@ namespace yq {
     template <typename T>
     class TypeInfo::Special<List<T>> : public Typed<List<T>> {
     protected:
-        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<List<T>>(zName, zFile, i) 
+        Special(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : Typed<List<T>>(zName, sl, i) 
         {
             Meta::set_option(COLLECTION);
         }
@@ -1160,7 +1160,7 @@ namespace yq {
     template <typename K, typename V, typename C>
     class TypeInfo::Special<Map<K,V,C>> : public Typed<Map<K,V,C>> {
     protected:
-        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Map<K,V,C>>(zName, zFile, i)
+        Special(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : Typed<Map<K,V,C>>(zName, sl, i)
         {
             Meta::set_option(COLLECTION);
         }
@@ -1169,7 +1169,7 @@ namespace yq {
     template <typename K, typename V, typename C>
     class TypeInfo::Special<MultiMap<K,V,C>> : public Typed<MultiMap<K,V,C>> {
     protected:
-        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<MultiMap<K,V,C>>(zName, zFile, i)
+        Special(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : Typed<MultiMap<K,V,C>>(zName, sl, i)
         {
             Meta::set_option(COLLECTION);
         }
@@ -1178,7 +1178,7 @@ namespace yq {
     template <typename T, typename C>
     class TypeInfo::Special<Set<T,C>> : public Typed<Set<T,C>> {
     protected:
-        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Set<T,C>>(zName, zFile, i) 
+        Special(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : Typed<Set<T,C>>(zName, sl, i) 
         {
             Meta::set_option(COLLECTION);
         }
@@ -1187,7 +1187,7 @@ namespace yq {
     template <typename T>
     class TypeInfo::Special<Vector<T>> : public Typed<Vector<T>> {
     protected:
-        Special(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Typed<Vector<T>>(zName, zFile, i) 
+        Special(std::string_view zName, const std::source_location&sl, id_t i=AUTO_ID) : Typed<Vector<T>>(zName, sl, i) 
         {
             Meta::set_option(COLLECTION);
         }
@@ -1199,7 +1199,7 @@ namespace yq {
     class TypeInfo::Final : public Special<T> {
     private:
         friend class InfoBinder<T>;
-        Final(std::string_view zName, const char* zFile, id_t i=AUTO_ID) : Special<T>(zName, zFile, i) {}
+        Final(std::string_view zName, id_t i=AUTO_ID, const std::source_location& sl=std::source_location::current()) : Special<T>(zName, sl, i) {}
         static TypeInfo&       s_save;
     };
 

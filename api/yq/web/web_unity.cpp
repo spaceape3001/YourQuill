@@ -4,8 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Web.hpp"
+#include "WebHtml.hpp"
+#include "WebPage.hpp"
 #include "WebTemplate.hpp"
+#include "WebVariable.hpp"
 //#include "NetWriter.hpp"
 
 #include <yq/collection/EnumMap.hpp>
@@ -23,14 +25,21 @@
 
 namespace yq {
 
-#define LOCK                                                \
-    const auto& _r = webRepo();                                \
-    tbb::spin_rw_mutex::scoped_lock     _lock;              \
-    if(_r.open_reg)                                         \
+    // Conditional read lock
+#define LOCK                                                        \
+    const auto& _r = webRepo();                                     \
+    tbb::spin_rw_mutex::scoped_lock     _lock;                      \
+    if(_r.openReg)                                                  \
         _lock.acquire(_r.mutex, false);
 
-#define WLOCK                                               \
-    auto& _r = webRepo();                                      \
+    // Unconditional read lock
+#define LLOCK                                                       \
+    const auto& _r = webRepo();                                     \
+    tbb::spin_rw_mutex::scoped_lock     _lock(_r.mutex, false);     \
+
+    // Unconditional write lock
+#define WLOCK                                                       \
+    auto& _r = webRepo();                                           \
     tbb::spin_rw_mutex::scoped_lock     _lock(_r.mutex, true);
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,18 +55,29 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     namespace {
+        using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
+        using WebVarMap     = Map<std::string_view, const WebVariable*, IgCase>;
 
-        struct WebRepo {
-            using WebPageMap       = EnumMap<HttpOp, Map<std::string_view, const Web*, IgCase>>;
+        static constexpr const char*    szDefaultTemplate = "<HTML><HEAD><TITLE>{{TITLE}}</TITLE></HEAD><BODY><H1>{{TITLE}}</H1>{{BODY}}</BODY></HTML>";
         
-            std::vector<const Web*> all;
-            WebPageMap                  dirs;
-            WebPageMap                  exts;
-            WebPageMap                  globs;
-            WebPageMap                  pages;
-            mutable tbb::spin_rw_mutex  mutex;
-            volatile bool               open_reg    = true;
+
+        
+        struct WebRepo {
+            std::vector<const WebPage*>     allPages;
+            std::vector<const WebVariable*> allVars;
+            WebPageMap                      dirs;
+            WebPageMap                      exts;
+            WebPageMap                      globs;
+            WebPageMap                      pages;
+            WebVarMap                       variables;
+            Ref<WebTemplate>                htmlTemplate;
+            mutable tbb::spin_rw_mutex      mutex;
+            volatile bool                   openReg    = true;
             
+            WebRepo()
+            {
+                htmlTemplate    = new WebTemplate;
+            }
         };
     
         WebRepo& webRepo() 
@@ -65,116 +85,211 @@ namespace yq {
             static WebRepo s_ret;
             return s_ret;
         }
-    }
-
-    const std::vector<const Web*>&  Web::all()
-    {
-        return webRepo().all;
-    }
-    
-    const Web*  Web::directory(HttpOp m, std::string_view sv)
-    {
-        LOCK
-        return _r.dirs[m].get(sv, nullptr);
-    }
-    
-    const Web*  Web::extension(HttpOp m, std::string_view sv)
-    {
-        LOCK
-        return _r.exts[m].get(sv, nullptr);
-    }
         
-    void Web::freeze()
-    {
-        WLOCK
-        _r.open_reg = false;
-    }
-    
-    bool Web::frozen()
-    {
-        LOCK
-        return _r.open_reg;
-    }
-    
-    const Web* Web::glob(HttpOp m, std::string_view sv)
-    {
-        LOCK
-        return _r.globs[m].get(sv, nullptr);
+        Ref<WebTemplate>    htmlTemplate()
+        {
+            LLOCK
+            return _r.htmlTemplate;
+        }
     }
 
-    const Web* Web::page(HttpOp m, std::string_view sv)
-    {
-        LOCK
-        return _r.pages[m].get(sv, nullptr);
+
+    namespace web {
+
+        const std::vector<const WebPage*>&  all_pages()
+        {
+            return webRepo().allPages;
+        }
+        
+        const std::vector<const WebVariable*>& all_variables()
+        {
+            return webRepo().allVars;
+        }
+
+        const WebPage*  directory(HttpOp m, std::string_view sv)
+        {
+            LOCK
+            return _r.dirs[m].get(sv, nullptr);
+        }
+        
+        const WebPageMap&    directory_map()
+        {
+            return webRepo().dirs;
+        }
+
+        const WebPage*  extension(HttpOp m, std::string_view sv)
+        {
+            LOCK
+            return _r.exts[m].get(sv, nullptr);
+        }
+
+        void freeze()
+        {
+            WLOCK
+            _r.openReg = false;
+        }
+        
+        bool frozen()
+        {
+            LOCK
+            return _r.openReg;
+        }
+
+        const WebPageMap&    glob_map()
+        {
+            return webRepo().globs;
+        }
+            
+        const WebPageMap&    extension_map()
+        {
+            return webRepo().exts;
+        }
+        
+        const WebPage* glob(HttpOp m, std::string_view sv)
+        {
+            LOCK
+            return _r.globs[m].get(sv, nullptr);
+        }
+
+        const WebPage* page(HttpOp m, std::string_view sv)
+        {
+            LOCK
+            return _r.pages[m].get(sv, nullptr);
+        }
+
+        const WebPageMap&    page_map()
+        {
+            return webRepo().pages;
+        }
+        
+        // Sets the template (will reload as necessary)
+        bool                set_template(const std::filesystem::path& p)
+        {
+            std::string     data    = file_string(p);
+            if(data.empty())    
+                return false;
+            Ref<WebTemplate>   ht  = new WebTemplate(std::move(data));
+            {
+                WLOCK
+                std::swap(_r.htmlTemplate, ht);
+            }
+            return true;
+        }
+        
+        // Sets the template to content
+        bool                set_template(std::string_view sv)
+        {
+            if(sv.empty())
+                return false;
+            Ref<WebTemplate>   ht  = new WebTemplate(sv);
+            {
+                WLOCK
+                std::swap(_r.htmlTemplate, ht);
+            }
+            return true;
+        }
+
+        const WebVariable*   variable(std::string_view k)
+        {
+            LOCK
+            return _r.variables.get(k, nullptr);
+        }
+    
+        const WebVarMap&    variable_map()
+        {
+            return webRepo().variables;
+        }
     }
 
-    const WebMap&    Web::directory_map()
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    WebHtml::WebHtml(WebContext&ctx, const std::string_view& _title) : m_context(ctx), m_title(_title)
     {
-        return webRepo().dirs;
+        m_body.reserve(65536);
     }
     
-    const WebMap&    Web::extension_map()
+    WebHtml::~WebHtml()
     {
-        return webRepo().exts;
-    }
-    
-    const WebMap&    Web::page_map()
-    {
-        return webRepo().pages;
-    }
-    
-    const WebMap&    Web::glob_map()
-    {
-        return webRepo().globs;
+        run_me();
     }
 
-    //  ----------------------------------------------------------------------------------------------------------------
+    void    WebHtml::run_me()
+    {
+        auto temp   = htmlTemplate();
+        HttpDataStream  out(m_context.reply.content(ContentType::html));
+        for(auto& t : temp->m_bits){
+            if(!t.variable){
+                out << t.token;
+                continue;
+            }
+            
+            if(is_similar(t.token, "body")){
+                out << m_body;
+            } else if(is_similar(t.token, "title")){
+                //out << m_title;
+                html_escape_write(out, m_title);
+            } else {
+                const WebVariable*  v = web::variable(t.token);
+                if(v){
+                    v -> handle(out, m_context);
+                }
+            }
+        }
+    }
+
+    bool WebHtml::write(const char* buf, size_t cb) 
+    {
+        m_body.append(buf, cb);
+        return true;
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
-    Web::Web(HttpOps _methods, std::string_view p, const std::source_location& sl) : Meta(p)
+    WebPage::WebPage(HttpOps _methods, std::string_view p, const std::source_location& sl) : Meta(p, sl)
     {
         set_option(WEB);
         
-        m_path      = p;
         m_methods   = _methods;
-        m_source    = sl;
         
         WLOCK
-        if(_r.open_reg){
-            _r.all.push_back(this);
+        if(_r.openReg){
+            _r.allPages.push_back(this);
         }
     }
     
-    Web::~Web()
+    WebPage::~WebPage()
     {
     }
 
-    bool  Web::anonymouse_posting() const
+    bool  WebPage::anonymouse_posting() const
     {
         return static_cast<bool>(flags() & POST_ANON);
     }
 
-    bool  Web::local_only() const
+    bool  WebPage::local_only() const
     {
         return static_cast<bool>(flags() & LOCAL_ONLY);
     }
     
-    bool  Web::login_required() const
+    bool  WebPage::login_required() const
     {
         return static_cast<bool>(flags() & LOGIN_REQ);
     }
     
-    bool  Web::no_expansion() const
+    bool  WebPage::no_expansion() const
     {
         return static_cast<bool>(flags() & NO_EXPAND);
     }
 
-    void    Web::seal()
+    void    WebPage::seal()
     {
         if(flags() & SEALED)
             return ;
             
         if(!(flags() & DISABLE_REG)){
-            std::string_view    p   = m_path;
+            std::string_view    p   = path();
             if((!p.empty()) && (m_role == Role())){
                 switch(p[0]){
                 case '/':
@@ -231,16 +346,16 @@ namespace yq {
 
 
     //  ----------------------------------------------------------------------------------------------------------------
-    Web::Writer::Writer(Web*p) : Meta::Writer(p), m_page(p)
+    WebPage::Writer::Writer(WebPage*p) : Meta::Writer(p), m_page(p)
     {
     }
 
-    Web::Writer::Writer(Writer&& mv) : Meta::Writer(std::move(mv)), m_page(mv.m_page)
+    WebPage::Writer::Writer(Writer&& mv) : Meta::Writer(std::move(mv)), m_page(mv.m_page)
     {
         mv.m_page = nullptr;
     }
     
-    Web::Writer& Web::Writer::operator=(Writer&& mv)
+    WebPage::Writer& WebPage::Writer::operator=(Writer&& mv)
     {
         if(this != &mv){
             if(m_page)
@@ -251,27 +366,27 @@ namespace yq {
         return *this;
     }
     
-    Web::Writer::~Writer()
+    WebPage::Writer::~Writer()
     {
         if(m_page)
             m_page -> seal();
     }
 
-    Web::Writer&  Web::Writer::anon_post()
+    WebPage::Writer&  WebPage::Writer::anon_post()
     {
         if(m_page)
             m_page -> set_option(POST_ANON);
         return *this;
     }
 
-    Web::Writer&  Web::Writer::argument(std::string_view k, std::string_view d) 
+    WebPage::Writer&  WebPage::Writer::argument(std::string_view k, std::string_view d) 
     {
         if(m_page)
             m_page -> m_args.push_back( Arg{k, d});
         return *this;
     }
     
-    Web::Writer&  Web::Writer::content(ContentTypes ct)
+    WebPage::Writer&  WebPage::Writer::content(ContentTypes ct)
     {
         if(m_page){
             m_page -> m_content_types   |= ct;
@@ -279,14 +394,14 @@ namespace yq {
         return *this;
     }
 
-    Web::Writer&  Web::Writer::description(std::string_view sv)
+    WebPage::Writer&  WebPage::Writer::description(std::string_view sv)
     {
         if(m_page)
             Meta::Writer::description(sv);
         return *this;
     }
     
-    Web::Writer&  Web::Writer::disable_reg()
+    WebPage::Writer&  WebPage::Writer::disable_reg()
     {
         if(m_page)
             m_page -> set_option(DISABLE_REG);
@@ -294,14 +409,14 @@ namespace yq {
     }
     
     
-    Web::Writer&  Web::Writer::local()
+    WebPage::Writer&  WebPage::Writer::local()
     {
         if(m_page)
             m_page -> set_option(LOCAL_ONLY);
         return *this;
     }
 
-    Web::Writer&  Web::Writer::login()
+    WebPage::Writer&  WebPage::Writer::login()
     {
         if(m_page)
             m_page -> set_option(LOGIN_REQ);
@@ -309,14 +424,14 @@ namespace yq {
     }
     
     
-    Web::Writer&  Web::Writer::no_expand()
+    WebPage::Writer&  WebPage::Writer::no_expand()
     {
         if(m_page)
             m_page -> set_option(NO_EXPAND);
         return *this;
     }
 
-    Web::Writer&  Web::Writer::primary(ContentType ct)
+    WebPage::Writer&  WebPage::Writer::primary(ContentType ct)
     {
         if(m_page){
             m_page -> m_content_type    = ct;
@@ -326,7 +441,7 @@ namespace yq {
     }
     
     
-    Web::Writer& Web::Writer::role(Role r)
+    WebPage::Writer& WebPage::Writer::role(Role r)
     {
         if(m_page){
             m_page -> m_role = r;
@@ -334,7 +449,7 @@ namespace yq {
         return *this;
     }
     
-    Web::Writer& Web::Writer::sub(std::string_view p, const Web*w)
+    WebPage::Writer& WebPage::Writer::sub(std::string_view p, const WebPage*w)
     {
         if(w){
             sub(w->methods(), p, w);
@@ -343,7 +458,7 @@ namespace yq {
     }
     
 
-    Web::Writer& Web::Writer::sub(HttpOps m, std::string_view p, const Web*w)
+    WebPage::Writer& WebPage::Writer::sub(HttpOps m, std::string_view p, const WebPage*w)
     {
         if(w && m_page){
             for(HttpOp h : HttpOp::all_values()){
@@ -356,42 +471,15 @@ namespace yq {
         return *this;
     }
     
-    
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  STANDARD PAGES... (internal classes)
-
-    namespace {
-        class StdWebFullHandler : public Web {
-        public:
-            using FN = std::function<void(WebContext&)>;
-            FN m_fn;
-            StdWebFullHandler(HttpOps m, std::string_view p, const std::source_location& sl, FN fn) : Web(m, p, sl), m_fn(fn) {}
-            virtual void handle(WebContext&ctx) const override 
-            {
-                m_fn(ctx);
-            }
-        };
-    }
-
-    Web::Writer    reg_web(std::string_view p, std::function<void(WebContext&)> fn, const std::source_location& sl)
-    {
-        return Web::Writer(new StdWebFullHandler( HttpOp::Get, p, sl, fn));
-    }
-    
-    Web::Writer    reg_web(HttpOps m, std::string_view p, std::function<void(WebContext&)> fn, const std::source_location& sl)
-    {
-        return Web::Writer(new StdWebFullHandler( m, p, sl, fn));
-    }
-    
 
     //  ------------------------------------------------
 
+#if 0
 
-        class WebFileHandler : public Web {
+        class WebFileHandler : public WebPage {
         public:
         
-            WebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : Web(m, p, sl), m_file(f) {}
+            WebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : WebPage(m, p, sl), m_file(f) {}
 
             virtual void handle(WebContext&ctx) const override 
             {
@@ -411,12 +499,11 @@ namespace yq {
         };
 
 
-#if 0
     namespace {
     
-        class WebDirHandler : public Web {
+        class WebDirHandler : public WebPage {
         public:
-            WebDirHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path& dpath) : Web(m, p, sl), m_dir(dpath){}
+            WebDirHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path& dpath) : WebPage(m, p, sl), m_dir(dpath){}
             
             virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view sl) const override 
             {
@@ -436,9 +523,9 @@ namespace yq {
             std::filesystem::path   m_dir;
         };
         
-        class WebPathVecHandler : public Web {
+        class WebPathVecHandler : public WebPage {
         public:
-            WebPathVecHandler(HttpOps m, std::string_view p, const std::source_location& sl, const path_vector_t& paths) : Web(m, p, sl), m_paths(paths){}
+            WebPathVecHandler(HttpOps m, std::string_view p, const std::source_location& sl, const path_vector_t& paths) : WebPage(m, p, sl), m_paths(paths){}
             
             
             std::filesystem::path       resolve(std::string_view sl) const
@@ -457,9 +544,7 @@ namespace yq {
         };
     }
 
-#endif
-
-    Web::Writer     reg_web(std::string_view p, const std::filesystem::path& fs, const std::source_location& sl)
+    WebPage::Writer     reg_web(std::string_view p, const std::filesystem::path& fs, const std::source_location& sl)
     {
         if(std::filesystem::is_directory(fs)){
             return { nullptr }; // { new WebDirHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
@@ -467,6 +552,159 @@ namespace yq {
             return { new WebFileHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
         }
     }
+#endif
+
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    WebTag::WebTag(WebHtml& wh, std::string_view t) : m_html(&wh), m_tag(t)
+    {
+        wh << '<' << t << '>';
+    }
+    
+    WebTag::WebTag(WebTag&&mv) : m_html(mv.m_html), m_tag(mv.m_tag)
+    {
+        mv.m_html   = nullptr;
+    }
+    
+    WebTag& WebTag::operator=(WebTag&&mv)
+    {
+        if(&mv != this){
+            close();
+            m_html          = mv.m_html;
+            mv.m_html       = nullptr;
+        }
+        return *this;
+    }
+    
+    WebTag::~WebTag()
+    {
+        close();
+    }
+    
+    void    WebTag::close()
+    {
+        if(m_html){
+            (*m_html) << "</" << m_tag << '>';
+            m_html  = nullptr;
+        }
+    }
+        
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        WebTemplate::WebTemplate()
+        {
+            parse(szDefaultTemplate);
+        }
+
+        WebTemplate::WebTemplate(std::string&& mv) : m_data(std::move(mv))
+        {
+            parse(m_data);
+        }
+        
+        WebTemplate::WebTemplate(std::string_view k) : m_data(k)
+        {
+            parse(m_data);
+        }
+
+        void    WebTemplate::parse(std::string_view data)
+        {
+            size_t n   = data.find_first_of("{{");
+            size_t m   = 0;
+            
+            if(n == std::string_view::npos){        // no variables... gotcha
+                m_bits << Token{ data, false };
+                return;
+            }
+            
+            while(n < data.size()){
+                if(n > m){
+                    //  There's some content before "{{", capture it
+                    m_bits << Token{ data.substr(m, n-m), false };
+                }
+
+                n += 2;
+                m   = data.find_first_of("}}", n);
+                if(m>=data.size()){ // badly truncated, dropping....
+                    n   = data.size();
+                    break;
+                }
+
+                std::string_view     k = data.substr(n, m-n);
+                m_bits << Token{ k, true };
+                m_vars << k;
+                
+                if(m>=data.size())
+                    break;
+                
+                m += 2;
+                n   = data.find_first_of("{{", m);
+            }
+            
+            if(m < data.size()){
+                    // no more, so push the remainder on
+                m_bits << Token{ data.substr(m), false };
+            }
+
+                // YES, possible to lose between "{{NAME" and end if there's no "}}", but that's ill-formed
+            
+        }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+        WebVariable::WebVariable(std::string_view n, const std::source_location& sl) : Meta(n, sl)
+        {
+            WLOCK
+            if(_r.openReg){
+                _r.allVars.push_back(this);
+                _r.variables[n] = this;
+            }
+        }
+        
+        WebVariable::~WebVariable()
+        {
+        }
+
+
+    //  ------------------------------------------------
+
+        WebVariable::Writer::Writer(WebVariable*p) : Meta::Writer(p), m_var(p)
+        {
+        }
+
+        WebVariable::Writer::Writer(Writer&& mv) : Meta::Writer(std::move(mv)), m_var(mv.m_var)
+        {
+            mv.m_var = nullptr;
+        }
+        
+        WebVariable::Writer& WebVariable::Writer::operator=(Writer&& mv)
+        {
+            if(this != &mv){
+                //if(m_var)
+                    //m_var -> seal();
+                m_var  = mv.m_var;
+                mv.m_var   = nullptr;
+            }
+            return *this;
+        }
+        
+        WebVariable::Writer::~Writer()
+        {
+            //if(m_var)
+                //m_var -> seal();
+        }
+
+
+        WebVariable::Writer&  WebVariable::Writer::description(std::string_view sv)
+        {
+            if(m_var)
+                Meta::Writer::description(sv);
+            return *this;
+        }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -564,6 +802,9 @@ namespace yq {
                             p('o');
                             p('s');
                             break;
+                        default:
+                            p(c);
+                            break;
                         }
                     }
                 }
@@ -591,7 +832,7 @@ namespace yq {
     #if 0
     namespace {
         template <typename Pred>
-        void        send_html(HttpResponse& rs, const Web*w, Pred pred)
+        void        send_html(HttpResponse& rs, const WebPage*w, Pred pred)
         {
             //if(expand){
             //} else {
@@ -626,11 +867,11 @@ namespace yq {
 
 
 
-    Web::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
-    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
+    WebPage::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
+    WebPage::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
 
-    Web::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
-    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
+    WebPage::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
+    WebPage::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
     #endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

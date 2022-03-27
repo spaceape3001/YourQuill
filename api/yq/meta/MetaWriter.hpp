@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Meta.hpp"
 
 namespace yq {
