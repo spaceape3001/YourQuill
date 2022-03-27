@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #include "HttpConnection.hpp"
 #include "HttpContext.hpp"
 #include "HttpData.hpp"
@@ -200,7 +206,6 @@ yInfo() << "Caught general exception";
             code    = HttpStatus::InternalError;
         }
         #endif
-        
         
         if((code != HttpStatus()) && isError(code)){
 yInfo() << "Error detected, returning server error.";

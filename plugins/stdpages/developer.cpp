@@ -37,33 +37,33 @@ namespace {
         out << "</TABLE>\n";
     } 
     
-    void    directories_table(const HttpRequest& rq, HttpResponse& rs)
+    void    directories_table(WebContext& ctx)
     {
-        HttpDataStream  out(rs.content(ContentType::html));
+        HttpDataStream  out(ctx.reply.content(ContentType::html));
         out << "<HTML><HEAD><TITLE>Registered Directories</TITLE></HEAD><BODY><H1>Available Web Directories</H1>\n";
         do_table(out, Web::directory_map());
         out << "</BODY></HTML>\n";
     }
     
-    void    extensions_table(const HttpRequest& rq, HttpResponse& rs)
+    void    extensions_table(WebContext& ctx)
     {
-        HttpDataStream  out(rs.content(ContentType::html));
+        HttpDataStream  out(ctx.reply.content(ContentType::html));
         out << "<HTML><HEAD><TITLE>Registered Extensions</TITLE></HEAD><BODY><H1>Available Web Extensions</H1>\n";
         do_table(out, Web::extension_map());
         out << "</BODY></HTML>\n";
     }
     
-    void    globs_table(const HttpRequest& rq, HttpResponse& rs)
+    void    globs_table(WebContext& ctx)
     {
-        HttpDataStream  out(rs.content(ContentType::html));
+        HttpDataStream  out(ctx.reply.content(ContentType::html));
         out << "<HTML><HEAD><TITLE>Registered Recursive Directories</TITLE></HEAD><BODY><H1>Available Web Recursive Directories</H1>\n";
         do_table(out, Web::glob_map());
         out << "</BODY></HTML>\n";
     }
     
-    void    pages_table(const HttpRequest& rq, HttpResponse& rs)
+    void    pages_table(WebContext& ctx)
     {
-        HttpDataStream  out(rs.content(ContentType::html));
+        HttpDataStream  out(ctx.reply.content(ContentType::html));
         out << "<HTML><HEAD><TITLE>Registered Pages</TITLE></HEAD><BODY><H1>Available Web Pages</H1>\n";
         do_table(out, Web::page_map(), true);
         out << "</BODY></HTML>\n";

@@ -85,12 +85,14 @@ void    http_process(const HttpRequest& rq, HttpResponse& rs)
 yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
 
     auto pg = find_page(rq.method(), rq.url().path);
-    if(pg.first){
-        pg.first -> handle(rq, rs, pg.second);
-        return ;
-    }
-    
-    throw HttpStatus::NotFound;
+    if(!pg.first)
+        throw HttpStatus::NotFound;
+
+    WebContext  ctx{rq, rs, pg.second};
+    pg.first -> handle(ctx);
+    if(rs.status() == HttpStatus())
+        rs.status(HttpStatus::Success);
+    return ;
 }
 
 int execMain(int argc, char* argv[])

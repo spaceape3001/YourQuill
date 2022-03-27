@@ -19,12 +19,23 @@ namespace yq {
     class HttpRequest;
     class HttpResponse;
     
+    struct WebSession;
+    
     using HttpOps       = Flag<HttpOp>;
     using ContentTypes  = Flag<ContentType>;
     
     class Web;
     using WebMap    = EnumMap<HttpOp, Map<std::string_view, const Web*, IgCase>>;
     
+    struct WebContext {
+        const HttpRequest&  request;
+        HttpResponse&       reply;
+        std::string_view    truncated_path;
+    };
+    
+
+    using FNGet     = std::function<void(Stream&)>;
+    using GetMap    = Map<std::string_view, FNGet, IgCase>;
 
     /*! \brief Web (or series of pages)
     
@@ -75,7 +86,7 @@ namespace yq {
         /*! \brief Handles the request
             \note truncated_path has NOT been sanitized!
         */
-        virtual void    handle(const HttpRequest&, HttpResponse&, std::string_view truncated_path) const = 0;
+        virtual void    handle(WebContext&) const = 0;
         
         bool                        anonymouse_posting() const;
         const std::vector<Arg>&     args() const { return m_args; }
@@ -115,9 +126,6 @@ namespace yq {
         };
         
         void                    seal();
-        
-        struct Repo;
-        static Repo&        repo();
     };
 
     struct Web::Arg {
@@ -187,10 +195,6 @@ namespace yq {
     Web::Writer     reg_web(std::string_view, const std::filesystem::path&, const std::source_location& sl = std::source_location::current());
     Web::Writer     reg_web(std::string_view, const path_vector_t&, const std::source_location& sl = std::source_location::current());
 
-    Web::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HttpResponse&)>, const std::source_location& sl = std::source_location::current());
-    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HttpResponse&)>, const std::source_location& sl = std::source_location::current());
-
-    Web::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HttpResponse&, std::string_view)>, const std::source_location& sl = std::source_location::current());
-    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HttpResponse&, std::string_view)>, const std::source_location& sl = std::source_location::current());
-
+    Web::Writer     reg_web(std::string_view, std::function<void(WebContext&)>, const std::source_location& sl = std::source_location::current());
+    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(WebContext&)>, const std::source_location& sl = std::source_location::current());
 }

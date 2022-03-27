@@ -8,42 +8,42 @@
 
 using namespace yq;
 
-void    simpleTest(const HttpRequest&, HttpResponse& rs)
+void    simpleTest(WebContext& ctx)
 {
-    HttpDataStream  out(rs.content(ContentType::html));
+    HttpDataStream  out(ctx.reply.content(ContentType::html));
     
     out <<
         "<HTML><HEAD><TITLE>SIMPLE TEST</TITLE></HEAD><BODY><H1>TURTLE vs HARE</H1><p>This is the contest between the turtle &amp; the hare.</p></BODY></HTML>";
 }
 
 
-void    hello_world(const HttpRequest& rq, HttpResponse& rs)
+void    hello_world(WebContext& ctx)
 {
-    HttpDataStream  out(rs.content(ContentType::html));
+    HttpDataStream  out(ctx.reply.content(ContentType::html));
     out << "<html><head><title>HELLO WORLD!</title></head>" 
         << "<body><h1>HELLO WORLD!</h1>\n<table>\n";
         
-    out << "<tr><th align=\"left\">Method</th><td>" << rq.method() << "</td></tr>\n";
-    out << "<tr><th align=\"left\">URL</th><td>" << rq.url() << "</td></tr>\n";
-    out << "<tr><th align=\"left\">Client HTTP</th><td>" << rq.version() << "</td></tr>\n";
-    for(auto& hv : rq.headers())
+    out << "<tr><th align=\"left\">Method</th><td>" << ctx.request.method() << "</td></tr>\n";
+    out << "<tr><th align=\"left\">URL</th><td>" << ctx.request.url() << "</td></tr>\n";
+    out << "<tr><th align=\"left\">Client HTTP</th><td>" << ctx.request.version() << "</td></tr>\n";
+    for(auto& hv : ctx.request.headers())
         out << "<tr><th align=\"left\">" << hv.key << "</th><td>" << hv.value << "</td><?tr>\n";
     out << "</table></body></html>\n";
 }
 
-void    test_directory(const HttpRequest& rq, HttpResponse& rs, const std::string_view& path)
+void    test_directory(WebContext& ctx)
 {
-    HttpDataStream  out(rs.content(ContentType::html));
+    HttpDataStream  out(ctx.reply.content(ContentType::html));
     
     out << "<html><head><title>TEST DIRECTORY!</title></head>" 
         << "<body><h1>TEST DIRECTORY!</h1>\n<table>\n";
         
-    out << "<tr><th align=\"left\">PATH</th><td>" << path << "</td></tr>\n";
+    out << "<tr><th align=\"left\">PATH</th><td>" << ctx.truncated_path << "</td></tr>\n";
         
-    out << "<tr><th align=\"left\">Method</th><td>" << rq.method() << "</td></tr>\n";
-    out << "<tr><th align=\"left\">URL</th><td>" << rq.url() << "</td></tr>\n";
-    out << "<tr><th align=\"left\">Client HTTP</th><td>" << rq.version() << "</td></tr>\n";
-    for(auto& hv : rq.headers())
+    out << "<tr><th align=\"left\">Method</th><td>" << ctx.request.method() << "</td></tr>\n";
+    out << "<tr><th align=\"left\">URL</th><td>" << ctx.request.url() << "</td></tr>\n";
+    out << "<tr><th align=\"left\">Client HTTP</th><td>" << ctx.request.version() << "</td></tr>\n";
+    for(auto& hv : ctx.request.headers())
         out << "<tr><th align=\"left\">" << hv.key << "</th><td>" << hv.value << "</td><?tr>\n";
     out << "</table></body></html>\n";
 }

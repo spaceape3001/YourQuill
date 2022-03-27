@@ -5,6 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Web.hpp"
+#include "WebTemplate.hpp"
+//#include "NetWriter.hpp"
 
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Map.hpp>
@@ -13,6 +15,8 @@
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
 #include <yq/log/Logging.hpp>
+#include <yq/stream/Ops.hpp>
+#include <yq/stream/Text.hpp>
 #include <yq/text/Utils.hpp>
 
 #include <tbb/spin_rw_mutex.h>
@@ -20,43 +24,52 @@
 namespace yq {
 
 #define LOCK                                                \
-    const auto& _r = repo();                                \
+    const auto& _r = webRepo();                                \
     tbb::spin_rw_mutex::scoped_lock     _lock;              \
     if(_r.open_reg)                                         \
         _lock.acquire(_r.mutex, false);
 
 #define WLOCK                                               \
-    auto& _r = repo();                                      \
+    auto& _r = webRepo();                                      \
     tbb::spin_rw_mutex::scoped_lock     _lock(_r.mutex, true);
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+#if 0
+    void NetWriter::title(std::string_view t)
+    {
+        m_title     = t;
+    }
+#endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    struct Web::Repo {
-        using WebPageMap       = EnumMap<HttpOp, Map<std::string_view, const Web*, IgCase>>;
+    namespace {
+
+        struct WebRepo {
+            using WebPageMap       = EnumMap<HttpOp, Map<std::string_view, const Web*, IgCase>>;
+        
+            std::vector<const Web*> all;
+            WebPageMap                  dirs;
+            WebPageMap                  exts;
+            WebPageMap                  globs;
+            WebPageMap                  pages;
+            mutable tbb::spin_rw_mutex  mutex;
+            volatile bool               open_reg    = true;
+            
+        };
     
-        std::vector<const Web*> all;
-        WebPageMap                  dirs;
-        WebPageMap                  exts;
-        WebPageMap                  globs;
-        WebPageMap                  pages;
-        mutable tbb::spin_rw_mutex  mutex;
-        volatile bool               open_reg    = true;
-    };
-    
-    Web::Repo& Web::repo() 
-    {
-        static Repo s_ret;
-        return s_ret;
+        WebRepo& webRepo() 
+        {
+            static WebRepo s_ret;
+            return s_ret;
+        }
     }
 
     const std::vector<const Web*>&  Web::all()
     {
-        return repo().all;
+        return webRepo().all;
     }
     
     const Web*  Web::directory(HttpOp m, std::string_view sv)
@@ -97,22 +110,22 @@ namespace yq {
 
     const WebMap&    Web::directory_map()
     {
-        return repo().dirs;
+        return webRepo().dirs;
     }
     
     const WebMap&    Web::extension_map()
     {
-        return repo().exts;
+        return webRepo().exts;
     }
     
     const WebMap&    Web::page_map()
     {
-        return repo().pages;
+        return webRepo().pages;
     }
     
     const WebMap&    Web::glob_map()
     {
-        return repo().globs;
+        return webRepo().globs;
     }
 
     //  ----------------------------------------------------------------------------------------------------------------
@@ -351,50 +364,26 @@ namespace yq {
     namespace {
         class StdWebFullHandler : public Web {
         public:
-            using FN = std::function<void(const HttpRequest&, HttpResponse&, std::string_view)>;
+            using FN = std::function<void(WebContext&)>;
             FN m_fn;
             StdWebFullHandler(HttpOps m, std::string_view p, const std::source_location& sl, FN fn) : Web(m, p, sl), m_fn(fn) {}
-            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view sv) const override 
+            virtual void handle(WebContext&ctx) const override 
             {
-                m_fn(rq,rs,sv);
+                m_fn(ctx);
             }
         };
     }
 
-    Web::Writer    reg_web(std::string_view p, std::function<void(const HttpRequest&, HttpResponse&, std::string_view)> fn, const std::source_location& sl)
+    Web::Writer    reg_web(std::string_view p, std::function<void(WebContext&)> fn, const std::source_location& sl)
     {
         return Web::Writer(new StdWebFullHandler( HttpOp::Get, p, sl, fn));
     }
     
-    Web::Writer    reg_web(HttpOps m, std::string_view p, std::function<void(const HttpRequest&, HttpResponse&, std::string_view)> fn, const std::source_location& sl)
+    Web::Writer    reg_web(HttpOps m, std::string_view p, std::function<void(WebContext&)> fn, const std::source_location& sl)
     {
         return Web::Writer(new StdWebFullHandler( m, p, sl, fn));
     }
     
-    //  ------------------------------------------------
-
-    namespace {
-        class StdWebSingleHandler : public Web {
-        public:
-            using FN = std::function<void(const HttpRequest&, HttpResponse&)>;
-            FN m_fn;
-            StdWebSingleHandler(HttpOps m, std::string_view p, const std::source_location& sl, FN fn) : Web(m, p, sl), m_fn(fn) {}
-            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view) const override 
-            {
-                m_fn(rq,rs);
-            }
-        };
-    }
-    
-    Web::Writer    reg_web(std::string_view p, std::function<void(const HttpRequest&, HttpResponse&)> fn, const std::source_location& sl)
-    {
-        return Web::Writer(new StdWebSingleHandler( HttpOp::Get, p, sl, fn));
-    }
-    
-    Web::Writer    reg_web(HttpOps m, std::string_view p, std::function<void(const HttpRequest&, HttpResponse&)> fn, const std::source_location& sl)
-    {
-        return Web::Writer(new StdWebSingleHandler( m, p, sl, fn));
-    }
 
     //  ------------------------------------------------
 
@@ -404,14 +393,14 @@ namespace yq {
         
             WebFileHandler(HttpOps m, std::string_view p, const std::source_location& sl, const std::filesystem::path&f) : Web(m, p, sl), m_file(f) {}
 
-            virtual void handle(const HttpRequest& rq, HttpResponse& rs, std::string_view) const override 
+            virtual void handle(WebContext&ctx) const override 
             {
-                switch(rq.method()){
+                switch(ctx.request.method()){
                 case HttpOp::Get:
-                    send_file(m_file, rs);
+                    send_file(m_file, ctx.reply);
                     break;
                 case HttpOp::Head:
-                    send_file_info(m_file, rs);
+                    send_file_info(m_file, ctx.reply);
                     break;
                 default:
                     throw HttpStatus::MethodNotAllowed;
@@ -478,6 +467,171 @@ namespace yq {
             return { new WebFileHandler( { HttpOp::Get, HttpOp::Head }, p,sl, fs) };
         }
     }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    namespace {
+        const Set<std::string_view, IgCase>&     httpEntities()
+        {
+            static const Set<std::string_view, IgCase>    ret({
+                "&amp;",
+                "&lt;",
+                "&gt;"
+            });
+            return ret;
+        }
+        
+        size_t  is_entity(std::string_view text)
+        {
+            if(text.empty())
+                return 0;
+            if(text[0] != '&')
+                return 0;
+            
+            const char* sc  = strnchr(text, ';');
+            if(!sc)
+                return 0;
+
+            const char* amp = strnchr(text.data()+1, text.size()-1, '&');
+            if(amp && (amp < sc))
+                return 0;
+
+                // size of this snippet
+            size_t  sz  = sc-text.data()+1;
+            if(text[1] == '#'){
+                for(const char* y=text.data()+2; (y<sc); ++y)
+                    if(!is_digit(*y))
+                        return 0;
+                return sz;
+            }
+            
+            static auto & entities = httpEntities();
+            if( entities.has(text.substr(0, sz)))
+                return sz;
+            return 0;
+        }
+        
+        
+        
+        template <typename Pred>
+        void        iter_http(std::string_view text, Pred p)
+        {
+            if(text.empty())
+                return ;
+            
+            const char*     next    = nullptr;
+            for(const char& c : text){
+                if(next && (&c<next)){
+                    p(c);
+                } else {
+                    size_t  sc  = is_entity(text.substr(&c-text.data()));
+                    if(sc){
+                        next    = &c + sc;
+                        p(c);
+                    } else {
+                        switch(c){
+                        case '&':
+                            p('&');
+                            p('a');
+                            p('m');
+                            p('p');
+                            p(';');
+                            break;
+                        case '<':
+                            p('&');
+                            p('l');
+                            p('t');
+                            p(';');
+                            break;
+                        case '>':
+                            p('&');
+                            p('g');
+                            p('t');
+                            p(';');
+                            break;
+                        case '"':
+                            p('&');
+                            p('q');
+                            p('u');
+                            p('o');
+                            p('t');
+                            break;
+                        case '\'':
+                            p('&');
+                            p('a');
+                            p('p');
+                            p('o');
+                            p('s');
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    std::string     html_escape(std::string_view sv)
+    {
+        std::string ret;
+        ret.reserve(sv.size());
+        iter_http(sv, [&](char c){
+            ret += c;
+        });
+        return ret;
+    }
+
+    void            html_escape_write(Stream& s, std::string_view sv)
+    {
+        iter_http(sv, [&](char ch){
+            s << ch;
+        });
+    }
+    
+    #if 0
+    namespace {
+        template <typename Pred>
+        void        send_html(HttpResponse& rs, const Web*w, Pred pred)
+        {
+            //if(expand){
+            //} else {
+                HttpDataStream      stream(rs.content(ContentType::html));
+                HtmlWriter          hwrite(stream);
+                pred(hwrite);
+            //}
+        
+            //stream::Text    text;
+            //HtmlWriter      hwrite(text);
+            //pred(hwrite);
+            
+            //HttpDataStream  out(rs.content(ContentType::html));
+            //out << "<HTML>";
+            //std::string_view    title   = hwrite.title();
+            
+            //if(!title.empty()){
+                //out << "<HEAD><TITLE>";
+                //html_escape_write(out, title);
+                //out <<  "</TITLE></HEAD>\n";
+            //}
+            
+            //out << 
+            
+            
+            
+            
+        }
+        
+    }
+
+
+
+
+    Web::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
+    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&)>, const std::source_location& sl);
+
+    Web::Writer     reg_web(std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
+    Web::Writer     reg_web(HttpOps, std::string_view, std::function<void(const HttpRequest&, HtmlWriter&, std::string_view)>, const std::source_location& sl);
+    #endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -576,4 +730,7 @@ namespace yq {
         return true;
     }
     
+    //void    append(NetWriter&, const std::filesystem::path&)
+    //{
+    //}
 }
