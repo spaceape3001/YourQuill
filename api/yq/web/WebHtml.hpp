@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include <yq/net/Url.hpp>
@@ -7,6 +13,7 @@
 
 namespace yq {
     struct WebContext;
+    class HttpRequest;
     class Stream;
     
 
@@ -23,6 +30,12 @@ namespace yq {
         
         bool write(const char* buf, size_t cb) override;
         bool is_open() const override { return true; }
+        
+        void        title(const std::string_view& _title);
+        
+        WebContext&     context() { return m_context; }
+        
+        const HttpRequest&  request() const;
 
     private:
     

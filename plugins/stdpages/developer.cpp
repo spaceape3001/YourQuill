@@ -54,45 +54,39 @@ namespace {
         out << "</TABLE>\n";
     }
 
-    void    directories_table(WebContext& ctx)
+    void    directories_table(WebHtml& out)
     {
-        WebHtml  out(ctx, "All Directories");
         do_table(out, web::directory_map());
-        out << "</BODY></HTML>\n";
     }
     
     void    extensions_table(WebContext& ctx)
     {
         WebHtml  out(ctx, "All File Extensions");
         do_table(out, web::extension_map());
-        out << "</BODY></HTML>\n";
     }
     
     void    globs_table(WebContext& ctx)
     {
         WebHtml  out(ctx, "All GLOBs");
         do_table(out, web::glob_map());
-        out << "</BODY></HTML>\n";
     }
     
     void    pages_table(WebContext& ctx)
     {
         WebHtml  out(ctx, "All Pages");
         do_table(out, web::page_map(), true);
-        out << "</BODY></HTML>\n";
     }
     
     void    variables_table(WebContext& ctx)
     {
         WebHtml  out(ctx, "All Variables");
         do_table(out, web::variable_map());
-        out << "</BODY></HTML>\n";
     }
     
 }
 
 YQ_INVOKE(
-    reg_webpage<directories_table>("/dev/webdirs");
+    reg_webpage<directories_table>("/dev/webdirs", "All Directories");
     reg_webpage<extensions_table>("/dev/webexts");
     reg_webpage<globs_table>("/dev/webglobs");
     reg_webpage<pages_table>("/dev/webpages");

@@ -254,6 +254,11 @@ namespace yq {
         run_me();
     }
 
+    const HttpRequest&  WebHtml::request() const
+    {   
+        return m_context.request;
+    }
+
     void    WebHtml::run_me()
     {
         auto temp   = web::html_template();
@@ -276,6 +281,11 @@ namespace yq {
                 }
             }
         }
+    }
+
+    void WebHtml::title(const std::string_view& _title)
+    {
+        m_title = _title;
     }
 
     bool WebHtml::write(const char* buf, size_t cb) 
@@ -1044,6 +1054,8 @@ namespace yq {
         return WebPage::Writer( new ManyWebDirectory(hGet, path, sl, dirs));
     }
     
+    //  ------------------------------------------------
+
     namespace {
         class FunctionWebAdapter : public WebPage {
         public:
@@ -1069,5 +1081,41 @@ namespace yq {
         return WebPage::Writer( new FunctionWebAdapter(methods, path, sl, fn));
     }
     
+    //  ------------------------------------------------
+    namespace {
+        class FunctionHtmlAdapter : public WebPage {
+        public:
+            FunctionHtmlAdapter(HttpOps _methods, std::string_view _path, std::string_view _title, const std::source_location& sl, std::function<void(WebHtml&)> fn) :
+                WebPage(_methods, _path, sl), m_fn(fn), m_title(_title) {}
+                
+            virtual void handle(WebContext& ctx) const override
+            {
+                WebHtml out(ctx, m_title);
+                m_fn(out);
+            }
+            
+            std::function<void(WebHtml&)>       m_fn;
+            std::string_view                    m_title;
+        };
+    }
 
+    WebPage::Writer     reg_webpage(std::string_view path, std::function<void(WebHtml&)> fn, const std::source_location& sl)
+    {
+        return WebPage::Writer( new FunctionHtmlAdapter(hGet, path, std::string_view(), sl, fn));
+    }
+    
+    WebPage::Writer     reg_webpage(HttpOps methods, std::string_view path, std::function<void(WebHtml&)>fn, const std::source_location& sl)
+    {
+        return WebPage::Writer( new FunctionHtmlAdapter(methods, path, std::string_view(), sl, fn));
+    }
+    
+    WebPage::Writer     reg_webpage(std::string_view path, std::string_view title, std::function<void(WebHtml&)>fn, const std::source_location& sl)
+    {
+        return WebPage::Writer( new FunctionHtmlAdapter(hGet, path, title, sl, fn));
+    }
+    
+    WebPage::Writer     reg_webpage(HttpOps methods, std::string_view path, std::string_view title, std::function<void(WebHtml&)>fn, const std::source_location& sl)
+    {
+        return WebPage::Writer( new FunctionHtmlAdapter(methods, path, title, sl, fn));
+    }
 }
