@@ -20,6 +20,7 @@ namespace yq {
     class HttpResponse;
     
     struct WebSession;
+    class WebTemplate;
     
     using HttpOps       = Flag<HttpOp>;
     using ContentTypes  = Flag<ContentType>;
@@ -57,6 +58,9 @@ namespace yq {
 
         // Not thread-safe until freeze() has been called.
         const WebPageMap&   glob_map();
+
+        // Gets the current html template
+        Ref<WebTemplate>    html_template();
         
         // Sets the template (will reload as necessary)
         bool                set_template(const std::filesystem::path&);

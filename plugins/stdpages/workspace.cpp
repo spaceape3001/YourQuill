@@ -11,11 +11,44 @@
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/Utils.hpp>
+#include <yq/type/Guarded.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 using namespace yq;
+
+namespace {
+    void    var_abbr(Stream&str, WebContext&)
+    {
+        str << wksp::abbreviation();
+    }
+
+    void    var_author(Stream&str, WebContext&)
+    {
+        str << wksp::author();
+    }
+
+    void    var_home(Stream&str, WebContext&)
+    {
+        str << wksp::home();
+    }
+
+    void    var_host(Stream& str, WebContext&)
+    {
+        str << wksp::host();
+    }
+
+    void    var_name(Stream& str, WebContext&)
+    {
+        str << wksp::name();
+    }
+
+    void    var_port(Stream& str, WebContext&)
+    {
+        str << wksp::port();
+    }
+}
 
 YQ_INVOKE(
 
@@ -26,9 +59,17 @@ YQ_INVOKE(
     if(!web::set_template(wksp::shared("std/page"sv)))
         yWarning() << "Failed to set web template!";
 
-    reg_web("/img/**", wksp::shared_all("www/img"sv));
-    reg_web("/help/*", wksp::shared_all("www/help"sv));
-    reg_web("/js/*", wksp::shared_all("www/js"sv));
+    reg_webpage("/img/**", wksp::shared_all("www/img"sv));
+    reg_webpage("/help/*", wksp::shared_all("www/help"sv));
+    reg_webpage("/js/*", wksp::shared_all("www/js"sv));
+
+    
+    reg_webvar<var_abbr>("abbr");
+    reg_webvar<var_author>("author");
+    reg_webvar<var_home>("home");
+    reg_webvar<var_host>("host");
+    reg_webvar<var_name>("name");
+    reg_webvar<var_port>("port");
 
     //reg_web("img/**", wksp::shared_dir("www/img"));
     //reg_web("help/*", wksp::shared_dir("www/help"));

@@ -174,6 +174,8 @@ namespace yq {
     //!
     //! This sanitizes a user supplied path by removing extra slashes, hiddens, etc
     std::string         path_sanitize(const std::string_view&);
+    
+    //! Returns the LAST file extension (no leading '.') or empty if none
     std::string_view    file_extension(const std::string_view&);
     
     inline std::filesystem::path   operator "" _fp(const char* z) { return std::filesystem::path(z); }

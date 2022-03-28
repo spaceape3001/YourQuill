@@ -1,5 +1,6 @@
 #pragma once
 
+#include <yq/net/Url.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Stream.hpp>
 #include <yq/type/Ref.hpp>
@@ -57,7 +58,7 @@ namespace yq {
                 *m_html << data;
             return *this;
         }
-    
+        
     private:
         WebTag(const WebTag&) = delete;
         WebTag& operator=(const WebTag&) = delete;
@@ -68,11 +69,74 @@ namespace yq {
         std::string_view    m_tag;
     };
     
-    namespace html {
-        inline WebTag   p(WebHtml& wh)
+    class WebAutoClose {
+    public:
+        WebAutoClose(WebHtml&, std::string_view);
+        WebAutoClose(WebAutoClose&&);
+        WebAutoClose& operator=(WebAutoClose&&);
+        ~WebAutoClose();
+    
+        template <typename T>
+        WebAutoClose&     operator<<(T data)
         {
-            return WebTag(wh, "p"sv);
+            if(m_html)
+                *m_html << data;
+            return *this;
         }
+
+        const std::string_view&     text() { return m_text; }
+
+    private:
+        WebAutoClose(const WebAutoClose&) = delete;
+        WebAutoClose& operator=(const WebAutoClose&) = delete;
+    
+        void    close();
+    
+        WebHtml*            m_html;
+        std::string_view    m_text;
+    };
+
+
+    namespace html {
+        //! Bold whatever comes next
+        WebTag   bold(WebHtml& wh);
+        
+        //! Header 1 for whatever comes next
+        WebTag   h1(WebHtml& wh);
+
+        //! Header 2 for whatever comes next
+        WebTag   h2(WebHtml& wh);
+
+        //! Header 3 for whatever comes next
+        WebTag   h3(WebHtml& wh);
+
+        //! Header 4 for whatever comes next
+        WebTag   h4(WebHtml& wh);
+
+        //! Header 5 for whatever comes next
+        WebTag   h5(WebHtml& wh);
+
+        //! Header 6 for whatever comes next
+        WebTag   h6(WebHtml& wh);
+        
+        //! Italic whatever comes next
+        WebTag   italic(WebHtml& wh);
+        
+        //! Used for two-column key/value tables
+        WebAutoClose  kvrow(WebHtml&, std::string_view key, const UrlView& url= UrlView());
+        WebAutoClose  link(WebHtml&, const UrlView& uri);
+        
+        //! Paragraph for whatever comes next
+        WebTag   paragraph(WebHtml& wh);
+        
+        //! Preformatted text for whatever comes next
+        WebTag   pre(WebHtml& wh);
+        
+        //! Table for whatever comes next
+        WebAutoClose    table(WebHtml& wh, std::string_view cls=std::string_view());
+        
+        //! Underline for whatever comes next
+        WebTag   underline(WebHtml& wh);
     }
     
 }

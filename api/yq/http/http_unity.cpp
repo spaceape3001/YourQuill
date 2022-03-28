@@ -11,7 +11,9 @@
 #include "HttpParser.hpp"
 #include "HttpResponse.hpp"
 #include "HttpServer.hpp"
+#include "TypedBytes.hpp"
 
+#include <yq/file/FileUtils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
@@ -760,4 +762,96 @@ namespace yq {
             start();
         });
     }
+    
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    Ref<TypedBytes> TypedBytes::info(const std::filesystem::path& fp)
+    {
+        Ref<TypedBytes>     ret = new TypedBytes(fp);
+        if(!ret -> do_info())
+            return {};
+        return ret;
+    }
+
+    Ref<TypedBytes> TypedBytes::load(const std::filesystem::path& fp)
+    {
+        Ref<TypedBytes>     ret = new TypedBytes(fp);
+        if(!ret -> do_info())
+            return {};
+        if(!ret -> do_read())
+            return {};
+        return ret;
+    }
+
+    //  ------------------------------------------------
+
+    bool    TypedBytes::do_info()
+    {
+        status  = HttpStatus(); // reset the status
+        auto ext    = file_extension(path.native());
+        if(!ext.empty())
+            type    = mimeTypeForExt(ext);
+        else
+            type    = ContentType();
+        
+        struct stat buf;
+        if(::stat(path.c_str(), &buf) != 0){
+            status  = HttpStatus::NotFound;
+            return false;
+        }
+
+        size        = buf.st_size;
+        struct tm   ftime;
+        gmtime_r(&buf.st_mtim.tv_sec, &ftime);
+        strftime(modified, sizeof(modified), "%a, %d %b %Y %H:%M:%S GMT", &ftime);
+        status = HttpStatus::Success;
+        return true;
+    }
+
+    
+    bool    TypedBytes::do_read()
+    {
+        if(path.empty() || !size){
+            status  = HttpStatus::NotFound;
+            return false;
+        }
+        
+            // reset for read
+        data.clear();
+        status  = HttpStatus(); 
+        
+        int fd   = open(path.c_str(), O_RDONLY);
+        if(fd == -1){
+            status  = HttpStatus::NotFound;
+            return false;
+        }
+        
+        size_t          amt_read    = 0;
+        HttpDataPtr     cur     = HttpData::make();
+        ssize_t         n = 0;
+        while((n = read(fd, cur->freespace(), cur->available())) > 0){
+            cur -> advance(n);
+            amt_read += n;
+            if(cur->full()){
+                data.push_back(cur);
+                if(amt_read >= size){
+                    cur = nullptr;
+                    break;
+                }
+                cur = HttpData::make();
+            }
+        } 
+        close(fd);
+
+        if(cur)
+            data.push_back(cur);
+        if(amt_read < size){
+            status = HttpStatus::InternalError;
+        } else {
+            status = HttpStatus::Success;
+        }
+        return true;
+    }
+    
+    
 }

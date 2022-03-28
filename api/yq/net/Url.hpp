@@ -32,6 +32,11 @@ namespace yq {
         }
 
         bool    operator==(const BasicUrl&) const = default;
+        bool    empty() const 
+        {
+            return scheme.empty() && user.empty() && pwd.empty() && host.empty() && path.empty() && query.empty() && fragment.empty() && !port;
+        }
+        
     };
 
     Url             copy(const UrlView&);

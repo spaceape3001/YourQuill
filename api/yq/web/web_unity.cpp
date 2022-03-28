@@ -17,6 +17,7 @@
 #include <yq/http/HttpDataStream.hpp>
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
+#include <yq/http/TypedBytes.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
@@ -87,11 +88,6 @@ namespace yq {
             return s_ret;
         }
         
-        Ref<WebTemplate>    htmlTemplate()
-        {
-            LLOCK
-            return _r.htmlTemplate;
-        }
     }
 
 
@@ -152,6 +148,12 @@ namespace yq {
             return _r.globs[m].get(sv, nullptr);
         }
 
+        Ref<WebTemplate>    html_template()
+        {
+            LLOCK
+            return _r.htmlTemplate;
+        }
+
         const WebPage* page(HttpOp m, std::string_view sv)
         {
             LOCK
@@ -190,6 +192,7 @@ namespace yq {
             return true;
         }
 
+
         const WebVariable*   variable(std::string_view k)
         {
             LOCK
@@ -199,6 +202,42 @@ namespace yq {
         const WebVarMap&    variable_map()
         {
             return webRepo().variables;
+        }
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    WebAutoClose::WebAutoClose(WebHtml& wh, std::string_view t) : m_html(&wh), m_text(t)
+    {
+    }
+    
+    WebAutoClose::WebAutoClose(WebAutoClose&&mv) : m_html(mv.m_html), m_text(mv.m_text)
+    {
+        mv.m_html   = nullptr;
+    }
+    
+    WebAutoClose& WebAutoClose::operator=(WebAutoClose&&mv)
+    {
+        if(&mv != this){
+            close();
+            m_text          = mv.m_text;
+            m_html          = mv.m_html;
+            mv.m_html       = nullptr;
+        }
+        return *this;
+    }
+    
+    WebAutoClose::~WebAutoClose()
+    {
+        close();
+    }
+    
+    void    WebAutoClose::close()
+    {
+        if(m_html){
+            (*m_html) << m_text;
+            m_html  = nullptr;
         }
     }
 
@@ -217,7 +256,7 @@ namespace yq {
 
     void    WebHtml::run_me()
     {
-        auto temp   = htmlTemplate();
+        auto temp   = web::html_template();
         HttpDataStream  out(m_context.reply.content(ContentType::html));
         for(auto& t : temp->m_bits){
             if(!t.variable){
@@ -244,7 +283,7 @@ namespace yq {
         m_body.append(buf, cb);
         return true;
     }
-
+    
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
@@ -510,6 +549,7 @@ namespace yq {
             m_html  = nullptr;
         }
     }
+
         
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -749,101 +789,134 @@ namespace yq {
         });
     }
     
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    namespace {
-        struct FReply {
-            ContentType     type;
-            size_t          size    = 0;
-            char            timestamp[256];
-            HttpStatus      code;
-            bool            success = false;
-        };
-    
-        bool get_fileinfo(const std::filesystem::path& file, FReply& reply)
+    namespace html {
+        WebTag   bold(WebHtml& wh)
         {
-            if(reply.type == ContentType())
-                reply.type = mimeTypeForExt(file.extension().string().substr(1));
+            return WebTag(wh, "b");
+        }
+    
+        WebTag   h1(WebHtml& wh)
+        {
+            return WebTag(wh, "h1"sv);
+        }
+
+        WebTag   h2(WebHtml& wh)
+        {
+            return WebTag(wh, "h2"sv);
+        }
         
-            struct stat buf;
-            if(::stat(file.c_str(), &buf) != 0)
-                return false;
-                
-                //  we don't do zero sized files
-            if(!buf.st_size)
-                return false;
-            reply.size = buf.st_size;
-            
-            struct tm   ftime;
-            gmtime_r(&buf.st_mtim.tv_sec, &ftime);
-            strftime(reply.timestamp, sizeof(reply.timestamp), "%a, %d %b %Y %H:%M:%S GMT", &ftime);
-            
-            return true;
+        WebTag   h3(WebHtml& wh)
+        {
+            return WebTag(wh, "h3"sv);
+        }
+
+        WebTag   h4(WebHtml& wh)
+        {
+            return WebTag(wh, "h4"sv);
+        }
+
+        WebTag   h5(WebHtml& wh)
+        {
+            return WebTag(wh, "h5"sv);
+        }
+
+        WebTag   h6(WebHtml& wh)
+        {
+            return WebTag(wh, "h6"sv);
+        }
+
+        WebTag   italic(WebHtml& wh)
+        {
+            return WebTag(wh, "i");
+        }
+
+        WebAutoClose   kvrow(WebHtml&wh, std::string_view key, const UrlView& url)
+        {
+            wh << "<tr><th align=\"left\">";
+            bool    a   = !url.empty();
+            if(a)
+                wh << "<a href=\"" << url << "\">";
+            html_escape_write(wh, key);
+            if(a)
+                wh << "</a>";
+            wh << "</th><td>";
+            return WebAutoClose(wh, "</td></tr>\n");
+        }
+
+        WebAutoClose  link(WebHtml&wh, const UrlView& url)
+        {
+            wh << "<a href=\"" << url << "\">";
+            return WebAutoClose(wh, "</a>");
+        }
+
+        WebTag   paragraph(WebHtml& wh)
+        {
+            return WebTag(wh, "p"sv);
+        }
+        
+        WebTag   pre(WebHtml& wh)
+        {
+            return WebTag(wh, "pre");
+        }
+        
+        WebAutoClose    table(WebHtml& wh, std::string_view cls)
+        {
+            if(cls.empty()){
+                wh << "<table>";
+            } else {
+                wh << "<table class=\"" << cls << "\">";
+            }
+            return WebAutoClose(wh, "</table>\n");
+        }
+
+        WebTag   underline(WebHtml& wh)
+        {
+            return WebTag(wh, "u");
         }
     }
 
+
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     bool    send_file_info(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
     {
-        FReply reply;
-        reply.type  = ct;
-        if(get_fileinfo(file, reply)){
-            rs.status(HttpStatus::Success);
-            rs.header("Date", reply.timestamp);
-            rs.content_type(reply.type);
-            rs.header("Content-Length", to_string(reply.size));
-            return true;
-        } else {
+        Ref<TypedBytes> tb  = new TypedBytes(file);
+        if(!tb -> do_info()){
             rs.status(HttpStatus::NotFound);
             return false;
         }
+        
+        if(ct == ContentType())
+            ct  = tb -> type;
+            
+        rs.status(HttpStatus::Success);
+        rs.header("Date", tb -> modified);
+        rs.content_type(ct);
+        rs.header("Content-Length", to_string(tb->size));
+        return true;
     }
 
     bool    send_file(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
     {
-        FReply reply;
-        reply.type  = ct;
-        if(!get_fileinfo(file, reply)){
+        Ref<TypedBytes> tb  = new TypedBytes(file);
+        if(!tb -> do_info()){
             rs.status(HttpStatus::NotFound);
             return false;
         }
-
-
-        int fd   = open(file.c_str(), O_RDONLY);
-        if(fd == -1){
-            rs.status(HttpStatus::NotFound);
+        
+        if(!tb -> do_read()){
+            rs.status(tb -> status);
             return false;
         }
 
-        std::vector<HttpDataPtr>&   data    = rs.content();
+        if(ct == ContentType())
+            ct  = tb -> type;
         
-        size_t          amt_read    = 0;
-        HttpDataPtr     cur     = HttpData::make();
-        ssize_t         n = 0;
-        while((n = read(fd, cur->freespace(), cur->available())) > 0){
-            cur -> advance(n);
-            amt_read += n;
-            if(cur->full()){
-                data.push_back(cur);
-                if(amt_read >= reply.size){
-                    cur = nullptr;
-                    break;
-                }
-                cur = HttpData::make();
-            }
-        } 
-        close(fd);
-        
-        if(cur)
-            data.push_back(cur);
-        if(amt_read < reply.size){
-            rs.status(HttpStatus::InternalError);
-        } else {
-            rs.status(HttpStatus::Success);
-            rs.header("Date", reply.timestamp);
-            rs.content_type(reply.type);
-        }
+        rs.content(ct) = std::move(tb->data);
+        rs.status(HttpStatus::Success);
+        rs.header("Date", tb -> modified);
         return true;
     }
     
@@ -954,7 +1027,7 @@ namespace yq {
         };
     }
 
-    WebPage::Writer     reg_web(const std::string_view& path, const std::filesystem::path&fp, const std::source_location& sl)
+    WebPage::Writer     reg_webpage(const std::string_view& path, const std::filesystem::path&fp, const std::source_location& sl)
     {
         if(std::filesystem::is_directory(fp)){
             return WebPage::Writer( new SimpleWebDirectory(hGet, path, sl, fp));
@@ -964,11 +1037,36 @@ namespace yq {
         
     }
     
-    WebPage::Writer     reg_web(const std::string_view& path, const path_vector_t&dirs, const std::source_location& sl)
+    WebPage::Writer     reg_webpage(const std::string_view& path, const path_vector_t&dirs, const std::source_location& sl)
     {
         if(dirs.empty())
             return WebPage::Writer();
         return WebPage::Writer( new ManyWebDirectory(hGet, path, sl, dirs));
+    }
+    
+    namespace {
+        class FunctionWebAdapter : public WebPage {
+        public:
+            FunctionWebAdapter(HttpOps _methods, std::string_view _path, const std::source_location& sl, std::function<void(WebContext&)> fn) :
+                WebPage(_methods, _path, sl), m_fn(fn) {}
+                
+            virtual void handle(WebContext& ctx) const override
+            {
+                m_fn(ctx);
+            }
+            
+            std::function<void(WebContext&)>    m_fn;
+        };
+    }
+
+    WebPage::Writer     reg_webpage(std::string_view path, std::function<void(WebContext&)>fn, const std::source_location& sl)
+    {
+        return WebPage::Writer( new FunctionWebAdapter(hGet, path, sl, fn));
+    }
+    
+    WebPage::Writer     reg_webpage(HttpOps methods, std::string_view path, std::function<void(WebContext&)>fn, const std::source_location& sl)
+    {
+        return WebPage::Writer( new FunctionWebAdapter(methods, path, sl, fn));
     }
     
 

@@ -34,6 +34,10 @@ namespace yq {
     {
         return WebPage::Writer( new SimpleWebAdapter<FN>(methods, path, sl) );
     }
+    
+    WebPage::Writer     reg_webpage(std::string_view path, std::function<void(WebContext&)>, const std::source_location& sl = std::source_location::current());
+    WebPage::Writer     reg_webpage(HttpOps methods, std::string_view path, std::function<void(WebContext&)>, const std::source_location& sl = std::source_location::current());
+    
 
     template <void (*FN)(Stream&, WebContext&)>
     class SimpleWebVariable : public WebVariable {
@@ -56,7 +60,7 @@ namespace yq {
     }
     
     //  it'll select file vs dir based on filesystem path
-    WebPage::Writer     reg_web(const std::string_view& path, const std::filesystem::path&, const std::source_location& sl = std::source_location::current());
-    WebPage::Writer     reg_web(const std::string_view& path, const path_vector_t&, const std::source_location& sl = std::source_location::current());
+    WebPage::Writer     reg_webpage(const std::string_view& path, const std::filesystem::path&, const std::source_location& sl = std::source_location::current());
+    WebPage::Writer     reg_webpage(const std::string_view& path, const path_vector_t&, const std::source_location& sl = std::source_location::current());
 }
 

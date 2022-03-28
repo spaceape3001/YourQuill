@@ -19,7 +19,7 @@ using namespace yq;
 void    simpleTest(WebContext& ctx)
 {
     WebHtml out(ctx, "TURTLE vs HARE");
-    html::p(out) << "This is the contest between the turtle &amp; the hare.";
+    html::paragraph(out) << "This is the contest between the turtle &amp; the hare.";
 }
 
 
@@ -55,9 +55,9 @@ void    test_directory(WebContext& ctx)
 }
 
 YQ_INVOKE(
-    reg_web("/readme",  std::filesystem::path(build_directory())/"README.md" );
+    reg_webpage("/readme",  std::filesystem::path(build_directory())/"README.md" );
     reg_webpage<simpleTest>("/hare");
     reg_webpage<hello_world>("/hello");
     reg_webpage<test_directory>("/test/**");
-    reg_web("/yquill", std::filesystem::path(share_directory())/"www"/"img"/"yquill.svg");
+    reg_webpage("/yquill", std::filesystem::path(share_directory())/"www"/"img"/"yquill.svg");
 );

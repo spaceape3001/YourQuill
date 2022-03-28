@@ -9,6 +9,7 @@
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/wksp/Workspace.hpp>
@@ -26,7 +27,7 @@ namespace {
         return ret;
     }
     
-    void    do_table(Stream& out, const WebPageMap& wm, bool links=false)
+    void    do_table(WebHtml& out, const WebPageMap& wm, bool links=false)
     {
         out << "<TABLE>\n";
         for(auto& i : analyze(wm)){
@@ -44,7 +45,7 @@ namespace {
         out << "</TABLE>\n";
     } 
     
-    void    do_table(Stream& out, const WebVarMap& wm)
+    void    do_table(WebHtml& out, const WebVarMap& wm)
     {
         out << "<TABLE>\n";
         for(auto& i : wm){
@@ -55,40 +56,35 @@ namespace {
 
     void    directories_table(WebContext& ctx)
     {
-        HttpDataStream  out(ctx.reply.content(ContentType::html));
-        out << "<HTML><HEAD><TITLE>Registered Directories</TITLE></HEAD><BODY><H1>Available Web Directories</H1>\n";
+        WebHtml  out(ctx, "All Directories");
         do_table(out, web::directory_map());
         out << "</BODY></HTML>\n";
     }
     
     void    extensions_table(WebContext& ctx)
     {
-        HttpDataStream  out(ctx.reply.content(ContentType::html));
-        out << "<HTML><HEAD><TITLE>Registered Extensions</TITLE></HEAD><BODY><H1>Available Web Extensions</H1>\n";
+        WebHtml  out(ctx, "All File Extensions");
         do_table(out, web::extension_map());
         out << "</BODY></HTML>\n";
     }
     
     void    globs_table(WebContext& ctx)
     {
-        HttpDataStream  out(ctx.reply.content(ContentType::html));
-        out << "<HTML><HEAD><TITLE>Registered Recursive Directories</TITLE></HEAD><BODY><H1>Available Web Recursive Directories</H1>\n";
+        WebHtml  out(ctx, "All GLOBs");
         do_table(out, web::glob_map());
         out << "</BODY></HTML>\n";
     }
     
     void    pages_table(WebContext& ctx)
     {
-        HttpDataStream  out(ctx.reply.content(ContentType::html));
-        out << "<HTML><HEAD><TITLE>Registered Pages</TITLE></HEAD><BODY><H1>Available Web Pages</H1>\n";
+        WebHtml  out(ctx, "All Pages");
         do_table(out, web::page_map(), true);
         out << "</BODY></HTML>\n";
     }
     
     void    variables_table(WebContext& ctx)
     {
-        HttpDataStream  out(ctx.reply.content(ContentType::html));
-        out << "<HTML><HEAD><TITLE>Registered Variables</TITLE></HEAD><BODY><H1>Available Web Variables</H1>\n";
+        WebHtml  out(ctx, "All Variables");
         do_table(out, web::variable_map());
         out << "</BODY></HTML>\n";
     }
