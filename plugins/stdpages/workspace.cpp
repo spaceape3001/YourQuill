@@ -48,6 +48,11 @@ namespace {
     {
         str << wksp::port();
     }
+    
+    void    var_time(Stream& str, WebContext& ctx)
+    {
+        str << ctx.time_text;
+    }
 }
 
 YQ_INVOKE(
@@ -70,6 +75,7 @@ YQ_INVOKE(
     reg_webvar<var_host>("host");
     reg_webvar<var_name>("name");
     reg_webvar<var_port>("port");
+    reg_webvar<var_time>("time");
 
     //reg_web("img/**", wksp::shared_dir("www/img"));
     //reg_web("help/*", wksp::shared_dir("www/help"));

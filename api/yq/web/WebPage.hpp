@@ -33,6 +33,8 @@ namespace yq {
         HttpResponse&           reply;
         std::string_view        truncated_path; //!< Leftover from the user-provided path
         std::filesystem::path   resolved_file;  //!< Resolved filename (for extension handlers)
+        time_t                  time = 0;
+        char                    time_text[256] = "";
     };
     
     namespace web {

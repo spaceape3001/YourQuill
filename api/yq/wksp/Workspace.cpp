@@ -8,6 +8,7 @@
 #include <yq/log/Logging.hpp>
 #include <yq/meta/Global.hpp>
 #include <yq/meta/Init.hpp>
+#include <yq/sql/SqlLite.hpp>
 #include <yq/text/Utils.hpp>
 #include <pwd.h>
 #include <unistd.h>
@@ -197,6 +198,7 @@ namespace yq {
             string_set_t            available;      // Available templates
             std::filesystem::path   cache;          // Cache location
             Copyright               copyright;      // Copyright info of the workspace
+            FNDbFlags               db_flags = nullptr;
             std::filesystem::path   dot;            // DOT excutable
             std::filesystem::path   git;            // GIT executable
             std::string             home;           // Start page??? of the workspace
@@ -233,7 +235,7 @@ namespace yq {
             std::filesystem::path   tmp;            // Temporary directory
             
             
-            bool    do_init(const std::filesystem::path&, unsigned int, App);
+            bool    do_init(const Config& cfg);
             void    load(const QuillFile&doc, StringSet& rSeen, PolicyMap rPolicy, PolicyMap tPolicy, bool fTemplate, unsigned depth, SetSpots&qs);
 
             std::pair<Root*, bool>  make_root(const std::filesystem::path&);
@@ -261,20 +263,35 @@ namespace yq {
             return search_up(absolute_me(sv).lexically_normal());
         }
 
-        bool    initialize(const std::filesystem::path&p, unsigned int opts, App app)
+        bool    initialize(const Config&cfg)
         {
-            static const bool ret = impl().do_init(p, opts, app);
+            static const bool ret = impl().do_init(cfg);
             return ret;
         }
         
 
+        SqlLite&                        db()
+        {
+            static thread_local SqlLite     ret;
+            if(!ret.is_open()){
+                auto& i = impl();
+                int f   = 0;
+                if(i.db_flags){
+                    f   = i.db_flags();
+                } else {
+                    f   = SqlLite::Create | SqlLite::ReadWrite;
+                }
+                ret.open(i.cache, f);
+            }
+            return ret;
+        }
 
         //  ================================================================
         //   INITIALIZATION/IMPLEMENTATION
         //  ================================================================
 
         
-        bool                Impl::do_init(const std::filesystem::path&arg_, unsigned int opts_, App app_)
+        bool                Impl::do_init(const Config& cfg)
         {
             if(thread::id() != 0){
                 wkspError << "Workspace *MUST* be initialized from the main thread!";
@@ -324,12 +341,13 @@ namespace yq {
                 //  TODO WINDOWS -- obvious from above
             #endif
             
-            app             = app_;
+            app             = cfg.app;
             app_name        = CmdArgs::appName();
-            qspec           = arg_;
-            qoptions        = opts_;
+            qspec           = cfg.spec;
+            qoptions        = cfg.options;
+            db_flags        = cfg.db_flags;
             
-            std::filesystem::path   q   = resolve(arg_, static_cast<bool>(opts_ & SEARCH));
+            std::filesystem::path   q   = resolve(cfg.spec, static_cast<bool>(qoptions & SEARCH));
             
             QuillFile       doc;
             if(!doc.load(q)){
@@ -681,6 +699,7 @@ namespace yq {
             }
             return ret;
         }
+
         
         //  ================================================================
         //     INFORMATION & QUERY -- valid AFTER successful initialize()

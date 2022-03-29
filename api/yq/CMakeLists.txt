@@ -125,8 +125,9 @@ set(yq_sources
     #./proc/Execute.cpp
     #./proc/Execute.hpp
     
-    #./sql/Sql.cpp
-    #./sql/SqlLogging.hpp
+    ./sql/sql_unity.cpp
+    ./sql/SqlLite.hpp
+    ./sql/SqlLogging.hpp
     #./sql/SqlQuery.hpp
     #./sql/SqlUtils.hpp
 
@@ -190,6 +191,7 @@ target_link_libraries(yq
         ${TBB_LIBRARIES}
         ${CURL_LIBRARIES}
         ${GCC_FSLIB}
+        ${SQLite3_LIBRARY}
 )
 
 

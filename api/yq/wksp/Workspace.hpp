@@ -4,9 +4,10 @@
 #include <yq/enum/SizeDesc.hpp>
 #include <yq/type/Enum.hpp>
 #include <yq/type/Flag.hpp>
-
+#include <functional>
 
 namespace yq {
+    class SqlLite;
     struct Copyright;
 
     #ifdef WIN32
@@ -20,6 +21,8 @@ namespace yq {
     
         static constexpr const char*    szQuillFile = ".yquill";
         static constexpr const char*    szConfigDir = ".config";
+    
+        typedef int (*FNDbFlags)();
     
         //! Options
         enum {
@@ -39,8 +42,15 @@ namespace yq {
             SERVER
         };
         
+        struct Config {
+            std::filesystem::path   spec;
+            FNDbFlags               db_flags    = nullptr;
+            unsigned int            options     = kStdOpts;
+            App                     app;
+        };
+        
             // an EMPTY path initializes us to NO workspace, all workspace-specific items will be blank
-        bool                    initialize(const std::filesystem::path&, unsigned int opts=kStdOpts, App app={});
+        bool                    initialize(const Config&);
 
         /*! \brief Searches for the "best" .quill fragment 
         
@@ -74,9 +84,12 @@ namespace yq {
 
         //! Location for the workspace's cache file
         const std::filesystem::path&    cache();
-
+        
         //! Copyright information
         const Copyright&                copyright();
+        
+        //! This connection is READ_ONLY!
+        SqlLite&                        db();
         
         //! Location for the DOT executable
         const std::filesystem::path&    dot();

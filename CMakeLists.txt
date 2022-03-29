@@ -75,7 +75,7 @@ function(group_files)
         endforeach()
 endfunction(group_files)
 
-add_definitions(-Wfatal-errors -Wno-error=unused-function -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch)
+add_definitions(-Wfatal-errors -Wno-error=unused-function -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch -DASIO_STANDALONE)
 
 if(Developer_Build)
     add_definitions(-DDEV_BUILD=1)

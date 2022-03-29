@@ -28,9 +28,15 @@ int main(int argc, char* argv[])
     CmdArgs args(argc, argv);
     log_to_std_error();
     
+    wksp::Config    cfg;
+    cfg.spec = argv[1];
+    cfg.options = wksp::SEARCH;
     Meta::init();
+    bool f = wksp::initialize(cfg);
     Meta::freeze();
-    bool f = wksp::initialize(argv[1], wksp::SEARCH);
+    
+    
+    
     
     if(!f){
         std::cerr << "INITIALZATION FAILED!\n";

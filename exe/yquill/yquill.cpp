@@ -1,4 +1,9 @@
-#define ASIO_STANDALONE
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #include <asio.hpp>
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
@@ -91,6 +96,11 @@ yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
     HttpStatus  status;
 
     WebContext  ctx{rq, rs, pg.second};
+    time(&ctx.time);
+    struct tm   ftime;
+    gmtime_r(&ctx.time, &ftime);
+    strftime(ctx.time_text, sizeof(ctx.time_text), "%F %T UTC", &ftime);
+    
     try {
         pg.first -> handle(ctx);
     }
@@ -107,6 +117,8 @@ yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
         rs.status(status);
     } else
         rs.status(HttpStatus::Success);
+
+    //  log the request result....
     
     return ;
 }
@@ -116,8 +128,11 @@ int execMain(int argc, char* argv[])
     //  EVENTUALLY.... better arguments, but for now.... 
     log_to_std_error();
     Meta::init();
+    
+    wksp::Config    wcfg;
+    wcfg.spec       = argv[1];
 
-    if(!wksp::initialize(argv[1])){
+    if(!wksp::initialize(wcfg)){
         yError() << "Unable to initialize database!";
         return -1;
     }
