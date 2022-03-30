@@ -137,8 +137,12 @@ namespace yq {
         std::filesystem::path           quill_resolve(const std::string_view&);
         std::filesystem::path           quill_resolve(const std::filesystem::path&);
 
+
         //! Any read timeout metric
         unsigned int                    read_timeout();
+        
+        //! Resolves across all the roots
+        path_vector_t                   resolve_all(const std::string_view&, bool templatesOnly=false);
         
         const Root*                     root(const std::filesystem::path&);
         uint64_t                        root_count();

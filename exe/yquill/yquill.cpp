@@ -9,8 +9,10 @@
 #include <asio/ts/internet.hpp>
 
 #include <yq/wksp/Workspace.hpp>
+
 #include <yq/app/CmdArgs.hpp>
 #include <yq/app/Plugins.hpp>
+#include <yq/file/FileUtils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/meta/Meta.hpp>
 #include <yq/stream/Ops.hpp>
@@ -19,12 +21,16 @@
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
 #include <yq/http/HttpServer.hpp>
+#include <yq/sql/SqlLite.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/web/WebPage.hpp>
 
-#include <iostream>
+#include <chrono>
+#include <condition_variable>
 #include <fstream>
+#include <iostream>
 #include <memory>
+#include <mutex>
 
 //#include "HttpConnection.hpp"
 //#include "HttpConnection.ipp"
@@ -123,33 +129,118 @@ yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
     return ;
 }
 
-int execMain(int argc, char* argv[])
+//void    db_thread()
+//{
+//}
+
+int     db_flags()
+{
+    switch(thread::id()){
+    case 0:
+        return SqlLite::ReadWrite|SqlLite::Create;
+    case 1:
+        return SqlLite::ReadWrite;
+    default:
+        return SqlLite::ReadOnly;
+    }
+}
+
+void    dir_monitor()
+{
+    using namespace std::chrono_literals;
+    uint64_t    cnt = 0;
+    //  TODO....
+    while(gQuit == Quit::No){
+        std::this_thread::sleep_for(5s);
+        yInfo() << "Dir monitor thread, tick " << ++cnt;
+    }
+}
+
+bool    initialize(const char* wfile)
 {
     //  EVENTUALLY.... better arguments, but for now.... 
     log_to_std_error();
     Meta::init();
     
     wksp::Config    wcfg;
-    wcfg.spec       = argv[1];
+    wcfg.spec       = wfile;
+    wcfg.db_flags   = db_flags;
 
     if(!wksp::initialize(wcfg)){
-        yError() << "Unable to initialize database!";
-        return -1;
+        yCritical() << "Unable to initialize database!";
+        return false;
     }
 
     size_t n = load_plugin_dir("plugin");
+    for(auto& fp : wksp::resolve_all(".plugin"sv))
+        n += load_plugin_dir(fp);
     yInfo() << "Loaded " << n << " Plugins.";
+    Meta::init();
     
-    //  we'll eventually have a structure to the plugins.  For now, everything is loaded....
-    //  (likely based off templates and/or keywords in the quill file)
+    const std::filesystem::path&   dbfile  = wksp::cache();
     
-    Meta::freeze();
+    if(std::filesystem::exists(dbfile)){
+        std::error_code ec;
+        if(!std::filesystem::remove(dbfile)){
+            yCritical() << "Unable to remove the old database at " << dbfile;
+            return false;
+        }
+    }
     
-    yInfo() << "Launching Quill Server for '" << wksp::name() << "' on Port " << wksp::port() << ".";
+    SqlLite& db = wksp::db();
+    if(!db.is_open()){
+        yCritical() << "Unable to create the database at " << dbfile;
+        return false;
+    }
     
+    path_vector_t   dbdirs  = wksp::shared_all("db"sv);
+    dbdirs += wksp::resolve_all(".db"sv);
+    
+    dir::for_all_children(dbdirs, dir::NO_DIRS, [&](const std::filesystem::path& fname){
+        if(!is_similar(fname.extension().c_str(), ".sql"))
+            return ;
+        
+        yInfo() << "Would execute " << fname;
+    });
+    
+
     HttpData::start_pool();
+
+    Meta::freeze();
+    return true;
+}
+
+
+
+int execMain(int argc, char* argv[])
+{
+    if(!initialize(argv[1]))
+        return -1;
     
-    //try {
+    
+    Vector<std::thread>     threads;
+    
+    std::condition_variable cv;
+    std::mutex              mutex;
+    bool                    ready = false;
+    
+    threads << std::thread([&](){
+        thread::id();
+        ready       = true;
+        cv.notify_one();
+        dir_monitor();
+    });
+    
+    {
+        std::unique_lock lk(mutex);
+        cv.wait(lk, [&]{ return ready; });
+    }
+    
+    threads << std::thread([&](){
+        thread::id();
+
+        yInfo() << "Launching Quill Server for '" << wksp::name() << "' on Port " << wksp::port() << ".";
+
         asio::error_code        ec;
         asio::io_context        context;
         HttpContext         env(context);
@@ -159,12 +250,16 @@ int execMain(int argc, char* argv[])
         HttpServer              server(env);
         server.start();
         context.run();
-    //}
-    //catch(std::exception& e)
-    //{
         
-    //}
+        yInfo() << "Exiting the server.";
+        
+        if(gQuit == Quit::No)
+            gQuit       = Quit::Stop;
+    });
 
+    //  eventually watch the IPC channel
+    for(auto& t : threads)
+        t.join();
     return 0;
 }
 

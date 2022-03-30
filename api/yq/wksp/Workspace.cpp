@@ -281,7 +281,9 @@ namespace yq {
                 } else {
                     f   = SqlLite::Create | SqlLite::ReadWrite;
                 }
-                ret.open(i.cache, f);
+                if(!ret.open(i.cache, f)){
+                    wkspError << "Unable to open the database " << i.cache;
+                }
             }
             return ret;
         }
@@ -822,6 +824,18 @@ namespace yq {
             return impl().rtimeout;
         }
         
+        path_vector_t                   resolve_all(const std::string_view& sv, bool templatesOnly)
+        {
+            path_vector_t       ret;
+            for(const Root* r : impl().roots){
+                if(templatesOnly && !r->is_template)
+                    continue;
+                std::filesystem::path   p   = r->resolve(sv);
+                if(std::filesystem::exists(p))
+                    ret.push_back(p);
+            }
+            return ret;
+        }
         
         const Root*                     root(const std::filesystem::path&p)
         {
