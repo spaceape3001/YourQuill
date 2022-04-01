@@ -40,6 +40,8 @@ namespace yq {
         std::string_view        time_text;
         time_t                  time = 0;
         uint64_t                flags = 0;
+        
+        StringMultiMap          decode_query();
     };
     
     namespace web {

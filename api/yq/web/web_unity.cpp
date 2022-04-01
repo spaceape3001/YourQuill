@@ -242,6 +242,13 @@ namespace yq {
     }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    StringMultiMap          WebContext::decode_query()
+    {
+        return decode_web_query(request.url().query);
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     WebHtml::WebHtml(WebContext&ctx, const std::string_view& _title) : m_context(ctx), m_title(_title)
@@ -1137,4 +1144,20 @@ namespace yq {
     {
         return WebPage::Writer( new FunctionHtmlAdapter(methods, path, title, sl, fn));
     }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    StringMultiMap      decode_web_query(std::string_view s)
+    {
+        StringMultiMap  ret;
+        vsplit(s, '&', [&](std::string_view b){
+            const char* eq  = strnchr(s, '=');
+            if(!eq)
+                return;
+            ret.insert(std::string(b.data(), eq), std::string(eq+1, b.end()));
+        });
+        return ret;
+    }
+    
 }

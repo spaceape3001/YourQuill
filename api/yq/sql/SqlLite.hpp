@@ -50,6 +50,8 @@ namespace yq {
         
         //! Queries and returns a set of table names.
         string_set_t    tables() const;
+        
+        bool            has_table(std::string_view) const;
     
     private:
     

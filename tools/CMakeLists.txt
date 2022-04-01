@@ -12,6 +12,8 @@ target_link_libraries(wkspinfo yq)
 add_executable(xmlread xmlread.cpp)
 
 
+add_executable(sqlquery sqlquery.cpp)
+target_link_libraries(sqlquery yq)
 
 # add_subdirectory(importer)
 # add_subdirectory(attrx)

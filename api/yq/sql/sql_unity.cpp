@@ -52,6 +52,16 @@ namespace yq {
         }
     }
 
+    bool        SqlLite::has_table(std::string_view s) const
+    {
+        SqlQuery    sql((SqlLite&) *this, "SELECT COUNT(1) FROM sqlite_master WHERE type='table' AND name=?");
+        sql.bind(1, s);
+        if(sql.step() == SqlQuery::Row){
+            return sql.v_bool(1);
+        } else
+            return false;
+    }
+
     bool        SqlLite::is_open() const
     {
         return m_database != nullptr;
@@ -70,9 +80,9 @@ namespace yq {
             
         int     r;
         if(flags){
-            r = sqlite3_open(file.c_str(), &m_database);
-        } else {
             r = sqlite3_open_v2(file.c_str(), &m_database, flags, nullptr);
+        } else {
+            r = sqlite3_open(file.c_str(), &m_database);
         }
         
         if(r != SQLITE_OK){
@@ -305,11 +315,22 @@ namespace yq {
         return true;
     }
     
+    int                 SqlQuery::column_count() const
+    {
+        if(!m_stmt)
+            return 0;
+        return sqlite3_column_count(m_stmt);
+    }
+    
+
     std::string_view    SqlQuery::column_name(int i) const
     {
         if(!m_stmt)
             return std::string_view();
-        return sqlite3_column_name(m_stmt, i);
+        const char* zname = sqlite3_column_name(m_stmt, i-1);
+        if(zname)
+            return std::string_view(zname);
+        return std::string_view();
     }
 
     void  SqlQuery::reset()
@@ -356,19 +377,15 @@ namespace yq {
     {
         if(!m_stmt)
             return false;
-        if(c<1)
-            return false;
-        return sqlite3_column_int(m_stmt, c) ? true : false;
+        return sqlite3_column_int(m_stmt, c-1) ? true : false;
     }
     
     std::span<const uint8_t>       SqlQuery::v_bytes(int c) const
     {
         if(!m_stmt)
             return {};
-        if(c<1)
-            return {};
-        unsigned char*  data = (uint8_t*) sqlite3_column_blob(m_stmt, c);
-        size_t          sz  = sqlite3_column_bytes(m_stmt, c);
+        unsigned char*  data = (uint8_t*) sqlite3_column_blob(m_stmt, c-1);
+        size_t          sz  = sqlite3_column_bytes(m_stmt, c-1);
         return std::span<const uint8_t>( data, sz );
     }
     
@@ -376,37 +393,31 @@ namespace yq {
     {
         if(!m_stmt)
             return 0.0;
-        if(c<1)
-            return 0.0;
-        return sqlite3_column_double(m_stmt, c);
+        return sqlite3_column_double(m_stmt, c-1);
     }
     
     int                 SqlQuery::v_int(int c) const
     {
         if(!m_stmt)
             return 0;
-        if(c<1)
-            return 0;
-        return sqlite3_column_int(m_stmt, c);
+        return sqlite3_column_int(m_stmt, c-1);
     }
     
     int64_t             SqlQuery::v_int64(int c) const
     {
         if(!m_stmt)
             return 0;
-        if(c<1)
-            return 0;
-        return sqlite3_column_int64(m_stmt, c);
+        return sqlite3_column_int64(m_stmt, c-1);
     }
     
-    std::string_view    SqlQuery::v_string(int c) const
+    std::string_view    SqlQuery::v_text(int c) const
     {
         if(!m_stmt)
             return std::string_view();
-        if(c<1)
+        const char* data    = (const char*) sqlite3_column_text(m_stmt, c-1);
+        if(!data)
             return std::string_view();
-        const char* data    = (const char*) sqlite3_column_text(m_stmt, c);
-        int  sz = sqlite3_column_bytes(m_stmt, c);
+        int  sz = sqlite3_column_bytes(m_stmt, c-1);
         if(data && (sz>0) && !data[sz-1]) // delete final NULL
             --sz;
         return std::string_view(data, sz);

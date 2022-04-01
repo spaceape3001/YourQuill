@@ -14,7 +14,7 @@
 #include <yq/collection/Map.hpp>
 #include <yq/collection/Set.hpp>
 
-
+#include <bitset>
 
     /*
         GCC v10 did not support to/from chars on floating point types.  It's been enabled in v11.
@@ -1813,6 +1813,54 @@ namespace yq {
             ;
         return std::string_view(s,e);
     }
+    
+    namespace {
+        std::bitset<256>    makeSet(const char* z)
+        {
+            std::bitset<256>    ret;
+            for(;*z;++z)
+                ret[*z] = true;
+            return ret;
+        }
+        
+    }
+
+    std::string     web_encode(std::string_view sv)
+    {
+        static const std::bitset<256>   good    = makeSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~");
+        std::string     ret;
+        ret.reserve(sv.size() * 3);
+        for(char c : sv){
+            if(good[c]){
+                ret += c;
+            } else {
+                ret += '%';
+                ret += fmt_hex((uint8_t) c, '0');
+            }
+        }
+        return ret;
+    }
+    
+    std::string     web_decode(std::string_view sv)
+    {
+        std::string     ret;
+        ret.reserve(sv.size());
+        const char* end = sv.end();
+        for(const char* c = sv.begin(); c<end; ++c){
+            if(*c != '%'){
+                ret += *c;
+                continue;
+            }
+
+                    // accept it
+            if((c+2<end) && is_digit(c[1]) && is_digit(c[2]))
+                ret += (char)( (c[1]-'0')*10+(c[2]-'0'));
+            // else assumed malformed, march  on
+            c += 2;
+        }
+        return ret;
+    }
+    
 }
 
  

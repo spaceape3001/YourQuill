@@ -13,6 +13,12 @@ struct sqlite3_stmt;
 namespace yq {
     class SqlLite;
     
+    /*! \brief SQL "Query" class
+
+        Helper to query the sqlite database.  Construction with SQL is mandatory.
+        
+        \note COLUMNS & PARAMETERS are 1-based, so they go 1...N
+    */
     class SqlQuery {
     public:
         enum Result {
@@ -40,34 +46,73 @@ namespace yq {
         Result               step();
         
         //! Binds NULL to column
-        bool                bind(int);
+        //! 
+        //! \param[in] c    Parameter/column index, starts at ONE
+        bool                bind(int col);
+
         //! Binds a BLOB
         //! \note this data MUST be available until unbind() is called (or reset_all)
-        bool                bind(int, std::span<uint8_t>);
-        //! \brief Boolean (maps to 0/1)
-        bool                bind(int, bool);
-        bool                bind(int, double);
-        bool                bind(int, int);
+        //! 
+        //! \param[in] col  Parameter/column index, starts at ONE
+        //! \param[in] v    BLOB to push in
+        bool                bind(int col, std::span<uint8_t> v);
         
-        bool                bind(int, int64_t);
+        //! \brief Binds a Boolean (maps to 0/1)
+        //! 
+        //! \param[in] col  Parameter/column index, starts at ONE
+        //! \param[in] v    Boolean parameter (will be mapped to 0/1)
+        bool                bind(int col, bool v);
+        //! \brief Binds a double
+        //! 
+        //! \param[in] col  Parameter/column index, starts at ONE
+        bool                bind(int col, double);
+        //! \brief Binds an integer
+        //! 
+        //! \param[in] col  Parameter/column index, starts at ONE
+        bool                bind(int col, int);
+        
+        //! \brief Binds a 64-bit integer
+        //! 
+        //! \param[in] col  Parameter/column index, starts at ONE
+        bool                bind(int col, int64_t);
         
         //! Binds a TEXT
         //! \note this data MUST be available until unbind() is called (or reset_all)
-        bool                bind(int, std::string_view);
+        //! \param[in] col  Parameter/column index, starts at ONE
+        bool                bind(int col, std::string_view);
         
-        std::string_view    column_name(int) const;
+        //! \brief Returns the column count
+        int                 column_count() const;
         
-        bool                v_bool(int) const;
-        //! \brief Result value as span
+        //! \brief Gets the name of the column
+        //! \param[in] c    Parameter/column index, starts at ONE
+        std::string_view    column_name(int c) const;
+        
+        //! \brief Result value as double
+        //! \param[in] col  Parameter/column index, starts at ONE
+        bool                v_bool(int col) const;
+
+        //! \brief Result value as blob
         //! \note COPY this off ASAP if desired to be kept or passed-along
-        std::span<const uint8_t>  v_bytes(int) const;
-        double              v_double(int) const;
-        int                 v_int(int) const;
-        int64_t             v_int64(int) const;
+        //! \param[in] col  Parameter/column index, starts at ONE
+        std::span<const uint8_t>  v_bytes(int col) const;
+
+        //! \brief Result value as double
+        //! \param[in] col  Parameter/column index, starts at ONE
+        double              v_double(int col) const;
+
+        //! \brief Result value as integer
+        //! \param[in] col  Parameter/column index, starts at ONE
+        int                 v_int(int col) const;
+
+        //! \brief Result value as 64-bit integer
+        //! \param[in] col  Parameter/column index, starts at ONE
+        int64_t             v_int64(int col) const;
         
         //! \brief Result value as string
         //! \note COPY this off ASAP if desired to be kept or passed-along
-        std::string_view    v_string(int) const;
+        //! \param[in] col  Parameter/column index, starts at ONE
+        std::string_view    v_text(int col) const;
 
         
         struct AutoFinish;

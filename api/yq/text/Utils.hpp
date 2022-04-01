@@ -1825,6 +1825,14 @@ namespace yq {
         vsplit_igCase(s.data(), s.size(), pattern.data(), pattern.size(), pred);
     }
     
+    /*! \brief Web encodes (with %) the string
+    */
+    std::string     web_encode(std::string_view);
+    /*! \brief Web decodes (with %) the string
+    */
+    std::string     web_decode(std::string_view);
+    
+    
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  IMPLEMENTATION
