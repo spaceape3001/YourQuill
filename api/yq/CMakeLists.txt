@@ -93,6 +93,12 @@ set(yq_sources
     ./http/HttpParser.hpp
     ./http/HttpRequest.hpp
     
+    ./ipc/ipc_unity.cpp
+    ./ipc/DirWatcher.hpp
+    ./ipc/ipcBuffer.hpp
+    ./ipc/ipcPackets.hpp
+    ./ipc/ipcSocket.hpp
+    
     ./leaf/leaf_unity.cpp
     ./leaf/LeafFile.hpp
 
