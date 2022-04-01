@@ -46,7 +46,7 @@ namespace yq {
     };
 
     template <typename T>
-    WebHtml& operator<<(WebHtml& wh, T data)
+    WebHtml& operator<<(WebHtml& wh, const T& data)
     {
         ((Stream&) wh) << data;
         return wh;

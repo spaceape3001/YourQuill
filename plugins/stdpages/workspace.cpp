@@ -14,6 +14,7 @@
 #include <yq/type/Guarded.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
+#include <yq/web/WebTemplate.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 using namespace yq;

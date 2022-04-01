@@ -327,15 +327,15 @@ namespace yq {
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    Stream& operator<<(Stream&s, const VersionSpec&v)
-    {
-        return s << v.protocol << '/' << v.major << '.' << v.minor;
-    }
+    //Stream& operator<<(Stream&s, const VersionSpec&v)
+    //{
+        //return s << v.protocol << '/' << v.major << '.' << v.minor;
+    //}
     
-    log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&s, const VersionSpec&v)
-    {
-        return s << v.protocol << '/' << v.major << '.' << v.minor;
-    }
+    //log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&s, const VersionSpec&v)
+    //{
+        //return s << v.protocol << '/' << v.major << '.' << v.minor;
+    //}
 
     bool       is_similar(const VersionSpec& a, const VersionSpec& b)
     {
@@ -766,69 +766,69 @@ namespace yq {
         return to_url(s.data(), s.size());
     }
 
-    template <typename S>
-    void            stream(S& s, const UrlView& v)
-    {
-        if(!v.scheme.empty())
-            s << v.scheme << ':';
+    //template <typename S>
+    //void            stream(S& s, const UrlView& v)
+    //{
+        //if(!v.scheme.empty())
+            //s << v.scheme << ':';
         
-        if(!v.host.empty()){
-            s << "//";
-            if(!v.user.empty()){
-                s << v.user;
-                if(!v.pwd.empty())
-                    s << ':' << v.pwd;
-                s << '@';
-            }
-            s << v.host;
-            if(v.port)
-                s << ':' << v.port;
+        //if(!v.host.empty()){
+            //s << "//";
+            //if(!v.user.empty()){
+                //s << v.user;
+                //if(!v.pwd.empty())
+                    //s << ':' << v.pwd;
+                //s << '@';
+            //}
+            //s << v.host;
+            //if(v.port)
+                //s << ':' << v.port;
             
-            if(v.path.empty()){
-                s << '/';
-            } else{
-                if(v.path[0] != '/')
-                    s << '/';
-                s << v.path;
-            }
-        } else {
-            if(v.scheme.empty()){
-                s << v.path;
-            } else {
-                if(v.path[0] == '/')
-                    s << "//";
-                s << v.path;
-            }
-        }
+            //if(v.path.empty()){
+                //s << '/';
+            //} else{
+                //if(v.path[0] != '/')
+                    //s << '/';
+                //s << v.path;
+            //}
+        //} else {
+            //if(v.scheme.empty()){
+                //s << v.path;
+            //} else {
+                //if(v.path[0] == '/')
+                    //s << "//";
+                //s << v.path;
+            //}
+        //}
         
-        if(!v.query.empty())
-            s << '?' << v.query;
-        if(!v.fragment.empty())
-            s << '#' << v.fragment;
-    }
+        //if(!v.query.empty())
+            //s << '?' << v.query;
+        //if(!v.fragment.empty())
+            //s << '#' << v.fragment;
+    //}
 
 
-    Stream&         operator<<(Stream&s, const UrlView&v)
-    {
-        stream(s, v);
-        return s;
-    }
+    //Stream&         operator<<(Stream&s, const UrlView&v)
+    //{
+        //stream(s, v);
+        //return s;
+    //}
     
-    Stream&         operator<<(Stream&s, const Url&v)
-    {
-        return s << (UrlView) v;
-    }
+    //Stream&         operator<<(Stream&s, const Url&v)
+    //{
+        //return s << (UrlView) v;
+    //}
 
-    std::ostream&   operator<<(std::ostream&s, const UrlView& v)
-    {
-        stream(s, v);
-        return s;
-    }
+    //std::ostream&   operator<<(std::ostream&s, const UrlView& v)
+    //{
+        //stream(s, v);
+        //return s;
+    //}
     
-    std::ostream&   operator<<(std::ostream&s, const Url& v)
-    {
-        return s << (UrlView) v;
-    }
+    //std::ostream&   operator<<(std::ostream&s, const Url& v)
+    //{
+        //return s << (UrlView) v;
+    //}
     
 
 }

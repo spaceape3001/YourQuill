@@ -48,7 +48,7 @@
 			<TR>
 				<TD ALIGN="right">
 					{{USER}}@{{HOST}}:{{PORT}}<BR>
-					<i>{{DATE}}</i>
+					<i>{{TIME}}</i>
 				</TD>
 			</TR>
 		</TABLE>

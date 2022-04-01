@@ -301,8 +301,15 @@ namespace yq {
             }
 
             std::time(&start);
-            start_gui       = to_time_string(start, "yyyy-MM-dd HH:mm:ss");
-            start_file      = to_time_string(start, "yyyyMMdd-HHmmss");
+            struct tm   gt;
+            gmtime_r(&start, &gt);
+            
+            char    timestamp[256];
+            strftime(timestamp, sizeof(timestamp),  "%Y-%m-%d %H:%M:%S", &gt);
+            start_gui       = timestamp;
+            strftime(timestamp, sizeof(timestamp),  "%Y%m%d-%H%M%S", &gt);
+            start_file      = timestamp;
+                        
             host            = get_host();
             tmp             = get_temp();
 
@@ -941,6 +948,11 @@ namespace yq {
         std::string_view                start()
         {
             return impl().start_gui;
+        }
+
+        std::string_view                start_file()
+        {
+            return impl().start_file;
         }
         
         std::time_t                     start_time()

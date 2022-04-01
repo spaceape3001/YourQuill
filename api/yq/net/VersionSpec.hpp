@@ -25,6 +25,15 @@ namespace yq {
     VersionSpec             to_version_spec(const char*, size_t);
     
     class Stream;
-    Stream& operator<<(Stream&, const VersionSpec&);
-    log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const VersionSpec&);
+    class WebHtml;
+
+    //Stream& operator<<(Stream&, const VersionSpec&);
+    //log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream&, const VersionSpec&);
+    template <typename S>
+    requires (!std::is_same_v<S, WebHtml>)
+    S&  operator<<(S& s, const VersionSpec&v)
+    {
+        s << v.protocol << '/' << v.major << '.' << v.minor;
+        return s;
+    }
 }

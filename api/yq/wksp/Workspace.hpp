@@ -170,6 +170,8 @@ namespace yq {
         
         //! Formatted text for start time (local convention)
         std::string_view                start();
+        //! "KIND" version for files
+        std::string_view                start_file();
         
         //! Start timestamp
         std::time_t                     start_time();

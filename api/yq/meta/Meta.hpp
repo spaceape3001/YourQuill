@@ -46,7 +46,7 @@ namespace yq {
         
         Do NOT rely on the numeric values, those are subject to change.
     */
-    enum {
+    enum : uint64_t {
         TYPE        = 1ULL << 0,
         OBJECT      = 1ULL << 1,
         COMPOUND    = 1ULL << 2,
@@ -201,11 +201,11 @@ namespace yq {
         Vector<const Meta*>             m_children;
         const Meta*                     m_parent    = nullptr;
         std::source_location            m_source;
-        options_t                       m_flags     = {};
+        options_t                       m_flags     = 0;
         id_t                            m_id        = AUTO_ID;
         
-        enum {
-            SWEPT                   = 1ULL << 31
+        enum : uint64_t {
+            SWEPT                   = 1ULL << 63
         };
     };
 

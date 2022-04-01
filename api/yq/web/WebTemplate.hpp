@@ -24,6 +24,8 @@ namespace yq {
         WebTemplate(std::string&& mv);
         WebTemplate(std::string_view k);
         
+        std::string_view    data() const { return m_data; }
+        
     private:
         void    parse(std::string_view);
         friend class WebHtml;

@@ -39,6 +39,7 @@ namespace yq {
         void            redirect(const std::string_view&, bool permanent=false);
         const VersionSpec&     version() const { return m_version; }
         void                reset();
+        size_t              content_size() const;
         
     private:    
         friend class HttpConnection;

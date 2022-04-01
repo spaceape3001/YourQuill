@@ -298,6 +298,10 @@ namespace yq {
             return;
         }
         
+        auto ep = m_socket.remote_endpoint();
+        m_request -> m_remote_addr    = ep.address();
+        m_request -> m_remote_port    = ep.port();
+        
         VersionSpec as = limit(m_request->m_version);
         dispatch(m_request);
         m_request   = nullptr;
@@ -688,6 +692,14 @@ namespace yq {
         //if(ct != ContentType())
             //HttpDataStream(m_reply) << "Content-Type: " << mimeType(ct) << "\r\n";
         return m_content;
+    }
+
+    size_t          HttpResponse::content_size() const
+    {
+        size_t  cnt = 0;
+        for(auto& i : m_content)
+            cnt += i->count();
+        return cnt;
     }
 
     void            HttpResponse::content_type(ContentType ct)

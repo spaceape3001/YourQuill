@@ -29,12 +29,17 @@ namespace yq {
     using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
     
     struct WebContext {
+        enum : uint64_t {
+            LOCAL           = 1ULL << 0
+        };
+    
         const HttpRequest&      request;
         HttpResponse&           reply;
         std::string_view        truncated_path; //!< Leftover from the user-provided path
         std::filesystem::path   resolved_file;  //!< Resolved filename (for extension handlers)
+        std::string_view        time_text;
         time_t                  time = 0;
-        char                    time_text[256] = "";
+        uint64_t                flags = 0;
     };
     
     namespace web {
@@ -135,14 +140,14 @@ namespace yq {
         ContentType             m_content_type;
         Role                    m_role;
         
-        enum {
-            LOCAL_ONLY      = 1ULL << 63,
-            LOGIN_REQ       = 1ULL << 62,
-            NO_EXPAND       = 1ULL << 61,
-            POST_ANON       = 1ULL << 60,
-            HAS_SUBS        = 1ULL << 59,
-            DISABLE_REG     = 1ULL << 58,
-            SEALED          = 1ULL << 57
+        enum : uint64_t {
+            LOCAL_ONLY      = 1ULL << 30,
+            LOGIN_REQ       = 1ULL << 31,
+            NO_EXPAND       = 1ULL << 32,
+            POST_ANON       = 1ULL << 33,
+            HAS_SUBS        = 1ULL << 34,
+            DISABLE_REG     = 1ULL << 35,
+            SEALED          = 1ULL << 36
         };
         
         void                    seal();

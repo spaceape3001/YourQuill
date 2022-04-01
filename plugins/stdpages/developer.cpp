@@ -9,6 +9,7 @@
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/text/Utils.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
@@ -19,39 +20,42 @@ using namespace yq;
 namespace {
     auto analyze(const WebPageMap& wm)
     {
-        Map<std::string_view, Flag<HttpOp>, IgCase> ret;
+        Map<std::string_view, EnumMap<HttpOp, const WebPage*>, IgCase> ret;
         for(HttpOp h : HttpOp::all_values()){
             for(auto& itr : wm[h])
-                ret[itr.first] |= h;
+                ret[itr.first][h] = itr.second;
         }
         return ret;
     }
     
     void    do_table(WebHtml& out, const WebPageMap& wm, bool links=false)
     {
-        out << "<TABLE>\n";
+        auto    t   = html::table(out);
         for(auto& i : analyze(wm)){
-            out << "<TR><TH align=\"left\">" << i.first << "</TH><TD>\n";
+            out << "<TR><TH align=\"left\">" << i.first << "</TH>";
             for(HttpOp h : HttpOp::all_values()){
-                if(i.second.is_set(h)){
+                out << "<TD>";
+                const WebPage*pg = i.second[h];
+                if(pg){
                     if(links && (h == hGet)){
-                        out << "<a href=\"" << i.first << "\">" << h << "</a> ";
+                        out << "<a href=\"" << i.first << "\">" << h << "</a>";
                     } else 
-                        out << h << " ";
+                        out << h;
+                    if(pg->local_only())
+                        out << "<br><i>local</i>";
                 }
+                out << "</TD>";
             }
-            out << "</TD></TR>\n";
+            out << "</TR>\n";
         }
-        out << "</TABLE>\n";
     } 
     
     void    do_table(WebHtml& out, const WebVarMap& wm)
     {
-        out << "<TABLE>\n";
+        auto    t   = html::table(out);
         for(auto& i : wm){
             out << "<TR><TH align=\"left\">" << i.first << "</TH><TD>" << i.second->description() << "</TD></TR>\n";
         }
-        out << "</TABLE>\n";
     }
 
     void    directories_table(WebHtml& out)

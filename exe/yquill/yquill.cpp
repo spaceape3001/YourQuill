@@ -32,6 +32,7 @@
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <syncstream>
 
 //#include "HttpConnection.hpp"
 //#include "HttpConnection.ipp"
@@ -92,41 +93,81 @@ std::pair<const WebPage*, std::string_view>     find_page(HttpOp m, std::string_
     return {};
 }
 
+std::filesystem::path     access_log_file()
+{
+    std::string     file    = "access-";
+    file += wksp::start_file();
+    file += '-';
+    file += to_string(thread::id());
+    file += ".log";
+    return wksp::log_dir() / file;
+}
+
 void    http_process(const HttpRequest& rq, HttpResponse& rs)
 {
-yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
+//yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
 
-    auto pg = find_page(rq.method(), rq.url().path);
-    if(!pg.first)
-        throw HttpStatus::NotFound;
+    static thread_local std::ofstream access_log(access_log_file(), std::ios_base::out | std::ios_base::app);
 
     HttpStatus  status;
-
-    WebContext  ctx{rq, rs, pg.second};
-    time(&ctx.time);
+    
+    time_t  atime;
+    time(&atime);
     struct tm   ftime;
-    gmtime_r(&ctx.time, &ftime);
-    strftime(ctx.time_text, sizeof(ctx.time_text), "%F %T UTC", &ftime);
+    char    timestamp[256];
+    gmtime_r(&atime, &ftime);
+    strftime(timestamp, sizeof(timestamp), "%F %T UTC", &ftime);
     
-    try {
-        pg.first -> handle(ctx);
-    }
-    catch(HttpStatus s)
-    {
-        status  = s;
-    }
-    catch(HttpStatus::enum_t s)
-    {
-        status = s;
-    }
-    
+    do {
+        auto pg = find_page(rq.method(), rq.url().path);
+        if(!pg.first){
+            status = HttpStatus::NotFound;
+            break;
+        }
+        
+        WebContext  ctx{rq, rs, pg.second};
+        ctx.time_text   = std::string_view(timestamp);
+        ctx.time        = atime;
+        
+        bool    isLocal = rq.remote_addr().is_loopback();
+        if(isLocal)
+            ctx.flags |= WebContext::LOCAL;
+
+        if(pg.first -> local_only() && !isLocal){
+            status = HttpStatus::Forbidden;
+            break;
+        }
+        
+        try {
+            pg.first -> handle(ctx);
+        }
+        catch(HttpStatus s)
+        {
+            status  = s;
+        }
+        catch(HttpStatus::enum_t s)
+        {
+            status = s;
+        }
+    } while(false);
+
     if(status != HttpStatus()){
         rs.status(status);
     } else
         rs.status(HttpStatus::Success);
-
-    //  log the request result....
     
+    // log it.
+    access_log << rq.remote_addr().to_string() 
+        << " - [" << timestamp  << "] \"" << rq.method().key() << " " << rq.url().path << " " << rq.version() 
+        << "\" " << rs.status().value() << " " << rs.content_size() << "\n";
+    access_log.flush();
+    
+    #ifndef NDEBUG
+    yInfo() << rq.remote_addr().to_string() 
+        << " - [" << timestamp  << "] \"" << rq.method() << " " << rq.url().path << " " << rq.version() 
+        << "\" " << rs.status().value() << " " << rs.content_size();
+    #endif
+
     return ;
 }
 
