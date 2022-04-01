@@ -924,10 +924,10 @@ namespace yq {
         return split_igCase(s.data(), s.size(), p.data(), p.size());
     }
     
-    bool  starts(const char* s, size_t n, const char* pat, size_t nPath)
+    bool  starts(const char* s, size_t n, const char* pat, size_t nPat)
     {
-        if(s && n && pat && (nPath>=n)){
-            for(size_t i=0;i<nPath;++i)
+        if(s && n && pat && (nPat<=n)){
+            for(size_t i=0;i<nPat;++i)
                 if(s[i] != pat[i])
                     return false;
             return true;

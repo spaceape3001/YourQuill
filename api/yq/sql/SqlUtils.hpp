@@ -6,11 +6,10 @@
 
 #pragma once
 
-class QString;
-class QSqlDatabase;
+#include <yq/preamble.hpp>
 
 namespace yq {
-    class String;
+    class SqlLite;
 
     /*! \brief Runs the specified script against the database
 
@@ -22,7 +21,7 @@ namespace yq {
         
         \return TRUE if all statements executed successfully
     */
-    bool            db_run_script(const String&script, QSqlDatabase db);
+    bool            db_run_script(std::string_view script, SqlLite& db);
 
     /*! \brief Runs the specified script from the given filename
 
@@ -34,16 +33,6 @@ namespace yq {
         \return TRUE if the file exists and all statements executed successfully
 
     */
-    bool            db_run_script_file(const std::filesystem::path& file, QSqlDatabase db);
-
-
-    /*! \brief Checks to see if the specified table exists 
-
-        \param[in]  zTable  The table to check for
-        \param[in]  db      The database
-        
-        \return TRUE if the table exists in the specified database
-    */
-    bool            db_table_exists(const String& zTable, QSqlDatabase db);
+    bool            db_run_script_file(const std::filesystem::path& file, SqlLite& db);
 
 }

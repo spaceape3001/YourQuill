@@ -22,6 +22,7 @@
 #include <yq/http/HttpResponse.hpp>
 #include <yq/http/HttpServer.hpp>
 #include <yq/sql/SqlLite.hpp>
+#include <yq/sql/SqlUtils.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/web/WebPage.hpp>
 
@@ -129,10 +130,6 @@ yInfo() << "Request: " << rq.method() << ' ' << rq.url() << ' ' << rq.version();
     return ;
 }
 
-//void    db_thread()
-//{
-//}
-
 int     db_flags()
 {
     switch(thread::id()){
@@ -148,11 +145,11 @@ int     db_flags()
 void    dir_monitor()
 {
     using namespace std::chrono_literals;
-    uint64_t    cnt = 0;
+    //uint64_t    cnt = 0;
     //  TODO....
     while(gQuit == Quit::No){
         std::this_thread::sleep_for(5s);
-        yInfo() << "Dir monitor thread, tick " << ++cnt;
+        //yInfo() << "Dir monitor thread, tick " << ++cnt;
     }
 }
 
@@ -199,9 +196,9 @@ bool    initialize(const char* wfile)
     dir::for_all_children(dbdirs, dir::NO_DIRS, [&](const std::filesystem::path& fname){
         if(!is_similar(fname.extension().c_str(), ".sql"))
             return ;
-        
-        yInfo() << "Would execute " << fname;
+        db_run_script_file(fname, db);
     });
+    
     
 
     HttpData::start_pool();

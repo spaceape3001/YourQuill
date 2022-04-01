@@ -114,6 +114,9 @@ namespace yq {
         //! Bold whatever comes next
         WebTag   bold(WebHtml& wh);
         
+        //! Unordeered list
+        WebTag  bullets(WebHtml&);
+
         //! Header 1 for whatever comes next
         WebTag   h1(WebHtml& wh);
 
@@ -135,9 +138,15 @@ namespace yq {
         //! Italic whatever comes next
         WebTag   italic(WebHtml& wh);
         
+        
         //! Used for two-column key/value tables
         WebAutoClose  kvrow(WebHtml&, std::string_view key, const UrlView& url= UrlView());
+        WebTag  li(WebHtml&);
         WebAutoClose  link(WebHtml&, const UrlView& uri);
+        
+        //! Numbered (ordered) list
+        WebTag  numbers(WebHtml&);
+        
         
         //! Paragraph for whatever comes next
         WebTag   paragraph(WebHtml& wh);

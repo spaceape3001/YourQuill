@@ -80,6 +80,202 @@ ut::suite tests = []{
         expect(split("1 2 3", ' ') == Vector<std::string_view>({ "1", "2", "3" }));
         expect(split("1,2,3", ',') == Vector<std::string_view>({ "1", "2", "3" }));
     };
+    
+    "split sql"_test  = [](){
+        const char* szText = 
+"CREATE TABLE Classes (\n\
+        -- ID is the document ID\n\
+    id          INTEGER PRIMARY KEY,\n\
+    k           VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE,\n\
+    edge        BOOLEAN NOT NULL DEFAULT 0,\n\
+	removed     BOOLEAN NOT NULL DEFAULT 0,\n\
+    name        VARCHAR(255),\n\
+    icon        INTEGER NOT NULL DEFAULT 0,\n\
+    \n\
+        -- dependency graph!\n\
+    deps        INTEGER,\n\
+    plural      VARCHAR(255),\n\
+    brief       VARCHAR(255)\n\
+);\n\
+\n\
+CREATE TABLE CDepends (\n\
+    class       INTEGER NOT NULL,\n\
+    base        INTEGER NOT NULL,\n\
+    UNIQUE(class,base) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CDependsDef (\n\
+    class       INTEGER NOT NULL,\n\
+    base        INTEGER NOT NULL,\n\
+    UNIQUE(class,base) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CEdges (\n\
+    class   INTEGER NOT NULL,\n\
+    source  INTEGER NOT NULL,\n\
+    target INTEGER NOT NULL,\n\
+    UNIQUE(class,source,target) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CFields (\n\
+    class       INTEGER NOT NULL,\n\
+    field       INTEGER NOT NULL,\n\
+    UNIQUE(class, field) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CFieldsDef (\n\
+    class       INTEGER NOT NULL,\n\
+    field       INTEGER NOT NULL,\n\
+    UNIQUE(class, field) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CReverses (\n\
+    class       INTEGER NOT NULL,\n\
+    reverse     INTEGER NOT NULL,\n\
+    UNIQUE(class,reverse) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CReversesDef (\n\
+    class       INTEGER NOT NULL,\n\
+    reverse     INTEGER NOT NULL,\n\
+    UNIQUE(class,reverse) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CSources (\n\
+    class       INTEGER NOT NULL,\n\
+    source      INTEGER NOT NULL,\n\
+    UNIQUE(class,source) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CSourcesDef (\n\
+    class       INTEGER NOT NULL,\n\
+    source      INTEGER NOT NULL,\n\
+    UNIQUE(class,source) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CTargets (\n\
+    class       INTEGER NOT NULL,\n\
+    target      INTEGER NOT NULL,\n\
+    UNIQUE(class,target) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CTargetsDef (\n\
+    class       INTEGER NOT NULL,\n\
+    target      INTEGER NOT NULL,\n\
+    UNIQUE(class,target) ON CONFLICT IGNORE\n\
+);\n\
+\n\
+CREATE TABLE CTags (\n\
+    class       INTEGER NOT NULL,\n\
+    tag         INTEGER NOT NULL,\n\
+    UNIQUE(class,tag) ON CONFLICT IGNORE\n\
+);\n\
+";
+
+        const char* szLines[] = {
+"CREATE TABLE Classes (",
+"        -- ID is the document ID",
+"    id          INTEGER PRIMARY KEY,",
+"    k           VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE,",
+"    edge        BOOLEAN NOT NULL DEFAULT 0,",
+"	removed     BOOLEAN NOT NULL DEFAULT 0,",
+"    name        VARCHAR(255),",
+"    icon        INTEGER NOT NULL DEFAULT 0,",
+"    ",
+"        -- dependency graph!",
+"    deps        INTEGER,",
+"    plural      VARCHAR(255),",
+"    brief       VARCHAR(255)",
+");",
+"",
+"CREATE TABLE CDepends (",
+"    class       INTEGER NOT NULL,",
+"    base        INTEGER NOT NULL,",
+"    UNIQUE(class,base) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CDependsDef (",
+"    class       INTEGER NOT NULL,",
+"    base        INTEGER NOT NULL,",
+"    UNIQUE(class,base) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CEdges (",
+"    class   INTEGER NOT NULL,",
+"    source  INTEGER NOT NULL,",
+"    target INTEGER NOT NULL,",
+"    UNIQUE(class,source,target) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CFields (",
+"    class       INTEGER NOT NULL,",
+"    field       INTEGER NOT NULL,",
+"    UNIQUE(class, field) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CFieldsDef (",
+"    class       INTEGER NOT NULL,",
+"    field       INTEGER NOT NULL,",
+"    UNIQUE(class, field) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CReverses (",
+"    class       INTEGER NOT NULL,",
+"    reverse     INTEGER NOT NULL,",
+"    UNIQUE(class,reverse) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CReversesDef (",
+"    class       INTEGER NOT NULL,",
+"    reverse     INTEGER NOT NULL,",
+"    UNIQUE(class,reverse) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CSources (",
+"    class       INTEGER NOT NULL,",
+"    source      INTEGER NOT NULL,",
+"    UNIQUE(class,source) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CSourcesDef (",
+"    class       INTEGER NOT NULL,",
+"    source      INTEGER NOT NULL,",
+"    UNIQUE(class,source) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CTargets (",
+"    class       INTEGER NOT NULL,",
+"    target      INTEGER NOT NULL,",
+"    UNIQUE(class,target) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CTargetsDef (",
+"    class       INTEGER NOT NULL,",
+"    target      INTEGER NOT NULL,",
+"    UNIQUE(class,target) ON CONFLICT IGNORE",
+");",
+"",
+"CREATE TABLE CTags (",
+"    class       INTEGER NOT NULL,",
+"    tag         INTEGER NOT NULL,",
+"    UNIQUE(class,tag) ON CONFLICT IGNORE",
+");",
+""
+        };
+        
+        size_t  i   = 0;
+        vsplit(szText, '\n', [&](std::string_view s){
+            expect( szLines[i++] == s );
+        });
+    };
+    
+    "starts_with"_test = [](){
+    
+        expect( true == starts("--", "--") );
+        expect( true == starts("-- frostbite", "--") );
+        expect( false == starts("-foobar", "--"));
+    
+    };
 };
 
 

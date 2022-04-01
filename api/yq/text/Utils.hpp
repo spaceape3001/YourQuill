@@ -1680,8 +1680,8 @@ namespace yq {
             const char* i   = nullptr;
             const char* j   = nullptr;
             for(i = s; (j = strnchr(i, end-i, ch)); i = j+1)
-                pred(std::string_view(i, j-i));
-            pred(std::string_view(i, end-i));
+                pred(std::string_view(i, j));
+            pred(std::string_view(i, end));
         }
     }
 
@@ -1705,7 +1705,7 @@ namespace yq {
     template <typename Pred>
     void            vsplit(std::string_view s, char ch, Pred pred)
     {
-        vsplit(s.data(), s.size(), pred);
+        vsplit(s.data(), s.size(), ch, pred);
     }
     
     /*! \brief Split via visitor pattern

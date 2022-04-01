@@ -2,6 +2,7 @@ set(stdpages_SOURCES
     ./hare.cpp
     
     ./developer.cpp
+    ./dev_sql.cpp
     ./workspace.cpp
 )
 

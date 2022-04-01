@@ -47,6 +47,9 @@ namespace yq {
         bool        is_open() const;
         void        close();
         const std::filesystem::path&    file() const { return m_file; }
+        
+        //! Queries and returns a set of table names.
+        string_set_t    tables() const;
     
     private:
     
@@ -55,7 +58,7 @@ namespace yq {
         SqlLite&    operator=(const SqlLite&);
     
         std::filesystem::path   m_file;
-        sqlite3*                m_database = nullptr;
+        mutable sqlite3*        m_database = nullptr;
     };
 
 }

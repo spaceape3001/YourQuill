@@ -128,7 +128,7 @@ set(yq_sources
     ./sql/sql_unity.cpp
     ./sql/SqlLite.hpp
     ./sql/SqlLogging.hpp
-    #./sql/SqlQuery.hpp
+    ./sql/SqlQuery.hpp
     #./sql/SqlUtils.hpp
 
     ./stream/stream_unity.cpp

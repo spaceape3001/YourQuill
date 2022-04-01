@@ -804,6 +804,11 @@ namespace yq {
         {
             return WebTag(wh, "b");
         }
+
+        WebTag  bullets(WebHtml&wh)
+        {
+            return WebTag(wh, "ul");
+        }
     
         WebTag   h1(WebHtml& wh)
         {
@@ -853,10 +858,20 @@ namespace yq {
             return WebAutoClose(wh, "</td></tr>\n");
         }
 
+        WebTag  li(WebHtml& wh)
+        {
+            return WebTag(wh, "li");
+        }
+
         WebAutoClose  link(WebHtml&wh, const UrlView& url)
         {
             wh << "<a href=\"" << url << "\">";
             return WebAutoClose(wh, "</a>");
+        }
+
+        WebTag  numbers(WebHtml&wh)
+        {
+            return WebTag(wh, "ol");
         }
 
         WebTag   paragraph(WebHtml& wh)

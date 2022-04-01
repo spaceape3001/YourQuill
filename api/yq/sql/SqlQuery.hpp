@@ -6,120 +6,78 @@
 
 #pragma once
 
-#include <QSqlQuery>
-#include <QVariant>
+#include <yq/preamble.hpp>
 
-#include <yq/collection/Map.hpp>
-#include <filesystem>
+struct sqlite3_stmt;
 
 namespace yq {
-
-
-    //  warning, do not allocate on the heap, pass it around as a QSqlQuery...it'll slice!
-    //  fortunately, there's little point, as qt does an internal pImpl pointer pattern
-    //  anyways.
-    struct SqlQuery : public QSqlQuery {
-
-        struct AutoFinish;
-
-        SqlQuery(QSqlDatabase, const QString& s=QString());
+    class SqlLite;
+    
+    class SqlQuery {
+    public:
+        enum Result {
+            Error   = -2,
+            Busy    = -1,
+            Done    = 0,
+            Row     = 1
+        };
+        
+        static bool exec(SqlLite&, const std::string&);
+    
+        SqlQuery(SqlLite&, std::string_view, bool isPersistent=true);
         SqlQuery(SqlQuery&&);
         ~SqlQuery();
         SqlQuery&   operator=(SqlQuery&&);
         
+        bool                valid() const { return m_stmt != nullptr; }
+        sqlite3_stmt*       stmt() const { return m_stmt; }
+        std::string_view    sql() const;
+        
+        //! Reset for a new bind/values
+        void                reset();
+        
+        //! Steps/executes the statement
+        Result               step();
+        
+        //! Binds NULL to column
+        bool                bind(int);
+        //! Binds a BLOB
+        //! \note this data MUST be available until unbind() is called (or reset_all)
+        bool                bind(int, std::span<uint8_t>);
+        //! \brief Boolean (maps to 0/1)
+        bool                bind(int, bool);
+        bool                bind(int, double);
+        bool                bind(int, int);
+        
+        bool                bind(int, int64_t);
+        
+        //! Binds a TEXT
+        //! \note this data MUST be available until unbind() is called (or reset_all)
+        bool                bind(int, std::string_view);
+        
+        std::string_view    column_name(int) const;
+        
+        bool                v_bool(int) const;
+        //! \brief Result value as span
+        //! \note COPY this off ASAP if desired to be kept or passed-along
+        std::span<const uint8_t>  v_bytes(int) const;
+        double              v_double(int) const;
+        int                 v_int(int) const;
+        int64_t             v_int64(int) const;
+        
+        //! \brief Result value as string
+        //! \note COPY this off ASAP if desired to be kept or passed-along
+        std::string_view    v_string(int) const;
+
+        
+        struct AutoFinish;
         AutoFinish  af();
-        
-        bool        batch(bool fNoisy=true);
-        void        bind(int n, const QByteArray& val);
-        void        bind(int n, const QVariant& val);
-        void        bind(int n, const String&);
-        void        bind(int n, const QString&);
-        void        bind(int n, const std::filesystem::path&);
-        void        bind(int n, uint64_t val);
-        bool        exec(bool fNoisy=true);
-        
-        
-        bool        prepare(const QString&);
-        
-        struct Attachment {
-            virtual void            value(const QVariant&) = 0;
-            virtual ~Attachment(){}
-        };
-        
-        // warning, this class takes ownership of the pointer, deletes it
-        void        attach(int, Attachment*);
-        void        attach(int, QStringList&);
-        void        attach(int, StringSet&);
-        void        attach(int, Vector<QString>&);
-       
-        template <typename P>
-        struct LambdaAttachment;
-        
-        template <typename P>
-        void        attach(int, P&&);
-       
-        uint64_t    lastInsertIdU64() const;
-
-        //  processes the results by pushing it into the "attachments"
-        void        process();
-       
-       
-        template <typename T>
-        T           valueAs(int n) const
-        {
-            return value(n).value<T>();
-        }
-
-        template <typename T>
-        T           valueAs(const QString&n) const
-        {
-            return value(n).value<T>();
-        }
-        
-        
-        bool        valueBool(int n) const;
-        
-        QByteArray  valueBytes(int n) const;
-        QString     valueString(int n) const;
-        std::filesystem::path   valuePath(int n) const;
-
-        uint64_t    valueU64(int n) const;
-
-        /*! \brief Shortcut for gettings a single-column result 
-        */
-        template <typename T>
-        void        getAll(int col, T& val)
-        {
-            attach(col, val);
-            process();
-        }
-
     private:
+    
         SqlQuery(const SqlQuery&) = delete;
         SqlQuery&   operator=(const SqlQuery&) = delete;
-        
-        void        setAttach(int, Attachment*);
-        Map<int, Attachment*>   m_attach;
+        mutable sqlite3_stmt    *m_stmt = nullptr;
     };
-
-    template <typename P>
-    struct SqlQuery::LambdaAttachment : public Attachment {
-        P       pred;
-        LambdaAttachment(P&& _pred) : pred(std::move(_pred)) 
-        {
-        }
-        
-        void    value(const QVariant& v) override 
-        {
-            pred(v);
-        }
-    };
-
-    template <typename P>
-    void SqlQuery::attach(int n, P&& pred)
-    {
-        setAttach(n, new LambdaAttachment<P>(std::move(pred)));
-    }
 
     struct SqlQuery::AutoFinish {
         AutoFinish(AutoFinish&&);
@@ -129,7 +87,7 @@ namespace yq {
         friend class SqlQuery;
         SqlQuery*       q;
         AutoFinish(SqlQuery* _q);
+        AutoFinish(const AutoFinish&) = delete;
+        AutoFinish& operator=(const AutoFinish&) = delete;
     };
-
-
 }
