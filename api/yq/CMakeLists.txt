@@ -80,13 +80,14 @@ set(yq_sources
     ./enum/Update.hpp
     ./enum/Vcs.hpp
 
-    ./file/file_unity.cpp
     ./file/file_cdb.cpp
+    ./file/file_unity.cpp
+    ./file/file_watch.cpp
     ./file/cdb.hpp
     ./file/AbstractFile.hpp
-    ./file/DirWatcher.cpp
     ./file/DirWatcher.hpp
     ./file/FileUtils.hpp
+    ./file/Importer.hpp
     ./file/StdFile.hpp
     ./file/XmlFile.hpp
     ./file/XmlFwd.hpp

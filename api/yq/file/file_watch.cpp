@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DirWatcher.hpp"
+#include "Importer.hpp"
 #include <yq/ipc/ipcBuffer.hpp>
 #include <yq/log/Logging.hpp>
+#include <vector>
 
 namespace yq {
 
@@ -87,4 +89,43 @@ namespace yq {
         return j;
     }
 
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    struct Importer::Repo {
+        std::vector<const Importer*>    all;
+    };
+    
+    Importer::Repo&  Importer::repo()
+    {
+        static Repo s_repo;
+        return s_repo;
+    }
+
+    const std::vector<const Importer*>&  Importer::all()
+    {
+        return repo().all;
+    }
+    
+    Importer::Importer(Trigger trigger, Flag<Change> changeMask, Folder folder, std::string_view ext, const std::filesystem::path& file, const std::source_location& sl)
+    {
+        m_extension = ext;
+        m_path      = file;
+        m_source    = sl;
+        m_folder    = folder;
+        m_trigger   = trigger;
+        m_change    = changeMask;
+        repo().all.push_back(this);
+    }
+    
+    Importer::~Importer()
+    {
+    }
+
+    Importer::Writer&     Importer::Writer::description(std::string_view d)
+    {
+        if(importer)
+            importer -> m_description = d;
+        return *this;
+    }
 }

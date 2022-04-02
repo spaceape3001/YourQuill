@@ -6,95 +6,96 @@
 
 #pragma once
 
+#include "Folder.hpp"
 #include <yq/enum/Change.hpp>
-#include <yq/DelayInit.hpp>
-#include <yq/EnumMapFwd.hpp>
-#include <yq/Flag.hpp>
+#include <yq/collection/EnumMap.hpp>
+#include <yq/type/Flag.hpp>
+#include <filesystem>
+#include <source_location>
+
+namespace yq {
+
+    struct Fragment;
 
 
-#include <regex>
+    /*! \brief Importer for files that have changed
 
-class Fragment;
-class Scanner;
-
-
-/*! \brief Importer for files that have changed
-
-*/
-class Importer : public DelayInit {
-public:
-
-    static Vector<const Importer*>  all();
-
-    virtual bool        change(Fragment,Change) const = 0;
-
-    struct Writer;
+    */
+    class Importer {
+    public:
     
-    const QString&      pattern() const { return m_pattern; }
-    const QString&      description() const { return m_description; }
+        enum Trigger {
+            NoTrigger,      //!< No trigger, it's a no-op
+            ByFile,         //!< Change is rigged to specific file, fragment/change invalid
+            ByFolderFile,   //!< Change to folder & file extension
+            ByExtension     //!< Change to file extension
+        };
     
-    bool                matches(const QString&dir, const QString&fragment) const;
-    Flag<Change>        change() const { return m_change; }
-    bool                is_added() const;
-    bool                is_modified() const;
-    bool                is_removed() const;
 
-protected:
-    Importer(Flag<Change>, const QString&);
-    virtual ~Importer();
-    virtual void        initialize() override;
+        static const std::vector<const Importer*>&  all();
 
-private:
-    QString             m_pattern;
-    QRegularExpression  m_dir, m_fragment;
-    QString             m_description;
-    Flag<Change>        m_change;
-    
-    friend class Scanner;
-    
-    struct Repo;
-    static Repo& repo();
+        // generic "change" handler
+        virtual bool                    change(Fragment,Change) const = 0;
 
-    static EnumMap<Change,Vector<const Importer*>>&     change_map();
-};
+        struct Writer;
+        
+        const std::filesystem::path&    path() const { return m_path; }
+        std::string_view                extension() const { return m_extension; }
+        Folder                          folder() const { return m_folder; }
+        std::string_view                description() const { return m_description; }
+        
+        Flag<Change>                    change() const { return m_change; }
+        Trigger                         trigger() const { return m_trigger; }
+        const std::source_location&     source() const { return m_source; }
+        
 
-struct Importer::Writer {
-    Writer(const Writer&) = delete;
-    Writer& operator=(const Writer&) = delete;
-    
-    Writer(Writer&&);
-    Writer& operator=(Writer&&);
-    ~Writer();
-    explicit Writer(Importer*);
-    
-    Writer& description(const QByteArray&);
-    Writer& depends(const QString&);            // <-- TODO
-    
-private:
-    Importer*                m_handler;
-};
+    protected:
+        Importer(Trigger, Flag<Change>, Folder, std::string_view, const std::filesystem::path&, const std::source_location&);
+        ~Importer();
 
+    private:
+        std::string             m_extension;
+        std::filesystem::path   m_path;
+        std::string             m_description;
+        std::source_location    m_source;
+        Folder                  m_folder;
+        Trigger                 m_trigger;
+        Flag<Change>            m_change;
+        
+        struct Repo;
+        static Repo&            repo();
+    };
 
-Importer::Writer    on_change( Flag<Change>, const QString&, void(*)());
-Importer::Writer    on_change( Flag<Change>, const QString&, void(*)(Fragment));
-Importer::Writer    on_change( Flag<Change>, const QString&, bool(*)(Fragment,Change));
-Importer::Writer    on_change( const QString&, void(*)());
-Importer::Writer    on_change( const QString&, void(*)(Fragment));
-Importer::Writer    on_change( const QString&, bool(*)(Fragment,Change));
+    struct Importer::Writer {
+        Writer&     description(std::string_view);
+        Importer*   importer  = nullptr;
+    };
+
+#if 0
 
 
-Importer::Writer    on_add( const QString&, void(*)(Fragment));
-Importer::Writer    on_add( const QString&, bool(*)(Fragment));
-Importer::Writer    on_add( const QString&, bool(*)(Fragment,Change));
+    Importer::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)());
+    Importer::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)(Fragment));
+    Importer::Writer    on_change( Flag<Change>, Folder, std::string_view ext, bool(*)(Fragment,Change));
+    Importer::Writer    on_change( const QString&, void(*)());
+    Importer::Writer    on_change( const QString&, void(*)(Fragment));
+    Importer::Writer    on_change( const QString&, bool(*)(Fragment,Change));
 
-Importer::Writer    on_modify( const QString&, void(*)(Fragment));
-Importer::Writer    on_modify( const QString&, bool(*)(Fragment));
-Importer::Writer    on_modify( const QString&, bool(*)(Fragment,Change));
 
-Importer::Writer    on_remove( const QString&, void(*)(Fragment));
-Importer::Writer    on_remove( const QString&, bool(*)(Fragment));
-Importer::Writer    on_remove( const QString&, bool(*)(Fragment,Change));
+    Importer::Writer    on_add( const QString&, void(*)(Fragment));
+    Importer::Writer    on_add( const QString&, bool(*)(Fragment));
+    Importer::Writer    on_add( const QString&, bool(*)(Fragment,Change));
 
-Importer::Writer    on_startup( const QString&, void(*)(Fragment));
-Importer::Writer    on_startup( const QString&, bool(*)(Fragment));
-Importer::Writer    on_startup( const QString&, bool(*)(Fragment,Change));
+    Importer::Writer    on_modify( const QString&, void(*)(Fragment));
+    Importer::Writer    on_modify( const QString&, bool(*)(Fragment));
+    Importer::Writer    on_modify( const QString&, bool(*)(Fragment,Change));
+
+    Importer::Writer    on_remove( const QString&, void(*)(Fragment));
+    Importer::Writer    on_remove( const QString&, bool(*)(Fragment));
+    Importer::Writer    on_remove( const QString&, bool(*)(Fragment,Change));
+
+    Importer::Writer    on_startup( const QString&, void(*)(Fragment));
+    Importer::Writer    on_startup( const QString&, bool(*)(Fragment));
+    Importer::Writer    on_startup( const QString&, bool(*)(Fragment,Change));
+#endif
+}

@@ -5,10 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <yq/app/DelayInit.hpp>
+#include <yq/file/cdb.hpp>
 #include <yq/file/FileUtils.hpp>
+#include <yq/file/ImportAdapters.hpp>
 #include <yq/http/HttpDataStream.hpp>
 #include <yq/http/HttpRequest.hpp>
 #include <yq/http/HttpResponse.hpp>
+#include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebHtml.hpp>
@@ -54,10 +57,23 @@ void    test_directory(WebContext& ctx)
     out << "</table></body></html>\n";
 }
 
+void    file_hare(Fragment f, Change c)
+{
+    yInfo() << "Hare today ... (" << c.key() << ") " << cdb::path(f);
+}
+
+void    file_turtle(Fragment f, Change c)
+{
+    yInfo() << "Turtle tomorrow  ... (" << c.key() << ") " << cdb::path(f);
+}
+
 YQ_INVOKE(
     reg_webpage("/readme",  std::filesystem::path(build_directory())/"README.md" );
     reg_webpage<simpleTest>("/hare");
     reg_webpage<hello_world>("/hello");
     reg_webpage<test_directory>("/test/**");
     reg_webpage("/yquill", std::filesystem::path(share_directory())/"www"/"img"/"yquill.svg");
+    
+    on_change<file_hare>("hare");
+    on_change<file_turtle>("turtle");
 );
