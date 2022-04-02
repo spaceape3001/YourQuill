@@ -87,7 +87,8 @@ set(yq_sources
     ./file/AbstractFile.hpp
     ./file/DirWatcher.hpp
     ./file/FileUtils.hpp
-    ./file/Importer.hpp
+    ./file/Notifier.hpp
+    ./file/NotifyAdapters.hpp
     ./file/StdFile.hpp
     ./file/XmlFile.hpp
     ./file/XmlFwd.hpp

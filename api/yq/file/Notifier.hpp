@@ -18,10 +18,10 @@ namespace yq {
     struct Fragment;
 
 
-    /*! \brief Importer for files that have changed
+    /*! \brief Notifier for files that have changed
 
     */
-    class Importer {
+    class Notifier {
     public:
     
         enum Trigger {
@@ -32,7 +32,7 @@ namespace yq {
         };
     
 
-        static const std::vector<const Importer*>&  all();
+        static const std::vector<const Notifier*>&  all();
 
         // generic "change" handler
         virtual bool                    change(Fragment,Change) const = 0;
@@ -50,8 +50,8 @@ namespace yq {
         
 
     protected:
-        Importer(Trigger, Flag<Change>, Folder, std::string_view, const std::filesystem::path&, const std::source_location&);
-        ~Importer();
+        Notifier(Trigger, Flag<Change>, Folder, std::string_view, const std::filesystem::path&, const std::source_location&);
+        ~Notifier();
 
     private:
         std::string             m_extension;
@@ -66,36 +66,36 @@ namespace yq {
         static Repo&            repo();
     };
 
-    struct Importer::Writer {
+    struct Notifier::Writer {
         Writer&     description(std::string_view);
-        Importer*   importer  = nullptr;
+        Notifier*   importer  = nullptr;
     };
 
 #if 0
 
 
-    Importer::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)());
-    Importer::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)(Fragment));
-    Importer::Writer    on_change( Flag<Change>, Folder, std::string_view ext, bool(*)(Fragment,Change));
-    Importer::Writer    on_change( const QString&, void(*)());
-    Importer::Writer    on_change( const QString&, void(*)(Fragment));
-    Importer::Writer    on_change( const QString&, bool(*)(Fragment,Change));
+    Notifier::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)());
+    Notifier::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)(Fragment));
+    Notifier::Writer    on_change( Flag<Change>, Folder, std::string_view ext, bool(*)(Fragment,Change));
+    Notifier::Writer    on_change( const QString&, void(*)());
+    Notifier::Writer    on_change( const QString&, void(*)(Fragment));
+    Notifier::Writer    on_change( const QString&, bool(*)(Fragment,Change));
 
 
-    Importer::Writer    on_add( const QString&, void(*)(Fragment));
-    Importer::Writer    on_add( const QString&, bool(*)(Fragment));
-    Importer::Writer    on_add( const QString&, bool(*)(Fragment,Change));
+    Notifier::Writer    on_add( const QString&, void(*)(Fragment));
+    Notifier::Writer    on_add( const QString&, bool(*)(Fragment));
+    Notifier::Writer    on_add( const QString&, bool(*)(Fragment,Change));
 
-    Importer::Writer    on_modify( const QString&, void(*)(Fragment));
-    Importer::Writer    on_modify( const QString&, bool(*)(Fragment));
-    Importer::Writer    on_modify( const QString&, bool(*)(Fragment,Change));
+    Notifier::Writer    on_modify( const QString&, void(*)(Fragment));
+    Notifier::Writer    on_modify( const QString&, bool(*)(Fragment));
+    Notifier::Writer    on_modify( const QString&, bool(*)(Fragment,Change));
 
-    Importer::Writer    on_remove( const QString&, void(*)(Fragment));
-    Importer::Writer    on_remove( const QString&, bool(*)(Fragment));
-    Importer::Writer    on_remove( const QString&, bool(*)(Fragment,Change));
+    Notifier::Writer    on_remove( const QString&, void(*)(Fragment));
+    Notifier::Writer    on_remove( const QString&, bool(*)(Fragment));
+    Notifier::Writer    on_remove( const QString&, bool(*)(Fragment,Change));
 
-    Importer::Writer    on_startup( const QString&, void(*)(Fragment));
-    Importer::Writer    on_startup( const QString&, bool(*)(Fragment));
-    Importer::Writer    on_startup( const QString&, bool(*)(Fragment,Change));
+    Notifier::Writer    on_startup( const QString&, void(*)(Fragment));
+    Notifier::Writer    on_startup( const QString&, bool(*)(Fragment));
+    Notifier::Writer    on_startup( const QString&, bool(*)(Fragment,Change));
 #endif
 }
