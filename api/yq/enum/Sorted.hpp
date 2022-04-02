@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace yq {
 
     /*! \brief Sorted for passing into functions

@@ -844,6 +844,14 @@ namespace yq {
             return ret;
         }
         
+        const Root*                     root(uint64_t j)
+        {
+            auto& i = impl();
+            if(j >= i.roots.size())
+                return nullptr;
+            return i.roots[j];
+        }
+        
         const Root*                     root(const std::filesystem::path&p)
         {
             return impl().rpath.get(p, nullptr);

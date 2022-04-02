@@ -81,7 +81,11 @@ set(yq_sources
     ./enum/Vcs.hpp
 
     ./file/file_unity.cpp
+    ./file/file_cdb.cpp
+    ./file/cdb.hpp
     ./file/AbstractFile.hpp
+    ./file/DirWatcher.cpp
+    ./file/DirWatcher.hpp
     ./file/FileUtils.hpp
     ./file/StdFile.hpp
     ./file/XmlFile.hpp
@@ -93,8 +97,9 @@ set(yq_sources
     ./http/HttpParser.hpp
     ./http/HttpRequest.hpp
     
+    ./image/Image.hpp
+    
     ./ipc/ipc_unity.cpp
-    ./ipc/DirWatcher.hpp
     ./ipc/ipcBuffer.hpp
     ./ipc/ipcPackets.hpp
     ./ipc/ipcSocket.hpp
@@ -170,6 +175,8 @@ set(yq_sources
     ./web/WebPage.hpp
     ./web/WebVariable.hpp
 
+    ./wksp/CacheSQ.cpp
+    ./wksp/CacheSQ.hpp
     ./wksp/QuillData.hpp
     ./wksp/QuillFile.cpp
     ./wksp/QuillFile.hpp

@@ -4,11 +4,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "cdb.hpp"
+#include <yq/bit/NKI.hpp>
+#include <yq/collection/vector_utils.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/sql/SqlLastId.hpp>
+#include <yq/sql/SqlQuery.hpp>
+#include <yq/text/Utils.hpp>
+#include <yq/type/ByteArray.hpp>
+#include <yq/wksp/CacheSQ.hpp>
+#include <yq/wksp/Root.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 namespace yq {
     namespace cdb {
-        Vector<Directory>   all_directories(unsigned opts)
+        std::vector<Directory>   all_directories(unsigned opts)
         {
             if(opts & BestSort){
                 if(opts & Hidden){
@@ -29,19 +39,19 @@ namespace yq {
             }
         }
         
-        Vector<Directory>   all_directories(Sorted sorted)
+        std::vector<Directory>   all_directories(Sorted sorted)
         {
             return all_directories(Hidden | (sorted ? BestSort : 0));
         }
 
         namespace {
-            Vector<Directory>   all_directories_sorted(const Root* rt)
+            std::vector<Directory>   all_directories_sorted(const Root* rt)
             {
                 static thread_local SQ    s("SELECT id FROM Directories WHERE root=? ORDER BY path");
                 return s.vec<Directory>(rt->id);
             }
             
-            Vector<Directory>   all_directories_unsorted(const Root*rt)
+            std::vector<Directory>   all_directories_unsorted(const Root*rt)
             {
                 static thread_local SQ    s("SELECT id FROM Directories WHERE root=?");
                 return s.vec<Directory>(rt->id);
@@ -49,10 +59,10 @@ namespace yq {
        }
         
         
-        Vector<Directory>   all_directories(const Root*rt, Sorted sorted)
+        std::vector<Directory>   all_directories(const Root*rt, Sorted sorted)
         {
             if(!rt)
-                return Vector<Directory>();
+                return std::vector<Directory>();
             return sorted ? all_directories_sorted(rt) : all_directories_unsorted(rt);
         }
         
@@ -72,13 +82,13 @@ namespace yq {
         }
         
         namespace {
-            Vector<Document>    all_documents_sorted()
+            std::vector<Document>    all_documents_sorted()
             {
                 static thread_local SQ    s("SELECT id FROM Documents ORDER BY k");
                 return s.vec<Document>();
             }
             
-            Vector<Document>    all_documents_unsorted()
+            std::vector<Document>    all_documents_unsorted()
             {
                 static thread_local SQ    s("SELECT id FROM Documents");
                 return s.vec<Document>();
@@ -86,7 +96,7 @@ namespace yq {
         }
         
         
-        Vector<Document>    all_documents(Sorted sorted)
+        std::vector<Document>    all_documents(Sorted sorted)
         {
             return sorted ? all_documents_sorted() : all_documents_unsorted();
         }
@@ -98,40 +108,40 @@ namespace yq {
         }
         
         namespace {
-            Vector<Document>    all_documents_suffix_sorted(const String&sfx)
+            std::vector<Document>    all_documents_suffix_sorted(std::string_view sfx)
             {
                 static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
                 return s.vec<Document>(sfx);
             }
 
-            Vector<Document>    all_documents_suffix_unsorted(const String&sfx)
+            std::vector<Document>    all_documents_suffix_unsorted(std::string_view sfx)
             {
                 static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=?");
                 return s.vec<Document>(sfx);
             }
         }
         
-        Vector<Document>    all_documents_suffix(const String&sfx, Sorted sorted)
+        std::vector<Document>    all_documents_suffix(std::string_view sfx, Sorted sorted)
         {
             return sorted ? all_documents_suffix_sorted(sfx) : all_documents_suffix_unsorted(sfx);
         }
         
         
        namespace {
-            Vector<Folder>  all_folders_sorted()
+            std::vector<Folder>  all_folders_sorted()
             {
                 static thread_local SQ    s("SELECT id FROM Folders ORDER BY k");
                 return s.vec<Folder>();
             }
 
-            Vector<Folder>  all_folders_unsorted()
+            std::vector<Folder>  all_folders_unsorted()
             {
                 static thread_local SQ    s("SELECT id FROM Folders");
                 return s.vec<Folder>();
             }
         }
 
-        Vector<Folder>      all_folders(Sorted sorted)
+        std::vector<Folder>      all_folders(Sorted sorted)
         {
             return sorted ? all_folders_sorted() : all_folders_unsorted();
         }
@@ -143,13 +153,13 @@ namespace yq {
         }
         
         namespace {
-            Vector<Fragment>    all_fragments_sorted()
+            std::vector<Fragment>    all_fragments_sorted()
             {
                 static thread_local SQ s("SELECT id FROM Fragments ORDER BY path");
                 return s.vec<Fragment>();
             }
             
-            Vector<Fragment>    all_fragments_unsorted()
+            std::vector<Fragment>    all_fragments_unsorted()
             {
                 static thread_local SQ s("SELECT id FROM Fragments");
                 return s.vec<Fragment>();
@@ -157,29 +167,29 @@ namespace yq {
         }
         
 
-        Vector<Fragment>    all_fragments(Sorted sorted)
+        std::vector<Fragment>    all_fragments(Sorted sorted)
         {
             return sorted ? all_fragments_sorted() : all_fragments_unsorted();
         }
         
         namespace {
-            Vector<Fragment>    all_fragments_sorted(const Root* rt)
+            std::vector<Fragment>    all_fragments_sorted(const Root* rt)
             {
                 static thread_local SQ s("SELECT id FROM Fragments WHERE root=? ORDER BY path");
                 return s.vec<Fragment>(rt->id);
             }
 
-            Vector<Fragment>    all_fragments_unsorted(const Root* rt)
+            std::vector<Fragment>    all_fragments_unsorted(const Root* rt)
             {
                 static thread_local SQ s("SELECT id FROM Fragments WHERE root=?");
                 return s.vec<Fragment>(rt->id);
             }
         }
         
-        Vector<Fragment>    all_fragments(const Root*rt, Sorted sorted)
+        std::vector<Fragment>    all_fragments(const Root*rt, Sorted sorted)
         {
             if(!rt)
-                return Vector<Fragment>();
+                return std::vector<Fragment>();
             return sorted ? all_fragments_sorted(rt) : all_fragments_unsorted(rt);
         }
         
@@ -198,59 +208,59 @@ namespace yq {
         }
         
         namespace {
-            Vector<Fragment>    all_fragments_suffix_sorted(const String& sfx)
+            std::vector<Fragment>    all_fragments_suffix_sorted(std::string_view sfx)
             {
                 static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
                 return s.vec<Fragment>(sfx);
             }
             
-            Vector<Fragment>    all_fragments_suffix_unsorted(const String& sfx)
+            std::vector<Fragment>    all_fragments_suffix_unsorted(std::string_view sfx)
             {
                 static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=?");
                 return s.vec<Fragment>(sfx);
             }
         }
 
-        Vector<Fragment>    all_fragments_suffix(const String&sfx, Sorted sorted)
+        std::vector<Fragment>    all_fragments_suffix(std::string_view sfx, Sorted sorted)
         {
             return sorted ? all_fragments_suffix_sorted(sfx) : all_fragments_suffix_unsorted(sfx);
         }
 
-        String             base_key(const String& key)
+        std::string_view         base_key(std::string_view key)
         {
-            int i   = key.last_index_of('/');
-            if(i<=0){
-                int j   = key.index_of('.');
-                if(j<0)
+            size_t i   = key.find_last_of('/');
+            if(i == std::string_view::npos){
+                size_t j   = key.find_first_of('.');
+                if(j == std::string_view::npos)
                     return key;
-                return key.mid(0,j);
+                return key.substr(0,j);
             } else {
-                int j   = key.index_of('.', i);
-                if(j<0)
-                    return key.mid(i+1);
-                return key.mid(i+1,j-i-1);
+                size_t j   = key.find_first_of('.', i);
+                if(j == std::string_view::npos)
+                    return key.substr(i+1);
+                return key.substr(i+1,j-i-1);
             }
         }
 
-        String             base_key(Document doc)
+        std::string             base_key(Document doc)
         {
             static thread_local SQ    s("SELECT base FROM Documents WHERE id=?");
             return s.str(doc.id);
         }
         
-        String             base_key(Fragment f)
+        std::string             base_key(Fragment f)
         {
             return base_key(document(f));
         }
 
-        String             brief(Folder f)
+        std::string             brief(Folder f)
         {
             static thread_local SQ    s("SELECT brief FROM Folders WHERE id=?");
             return s.str(f.id);
         }
         
         
-        DirOrFrag           child(Directory d, const String& ck)
+        DirOrFrag           child(Directory d, std::string_view ck)
         {
             Fragment    f   = fragment(d, ck);
             if(f)
@@ -261,7 +271,7 @@ namespace yq {
             return false;
         }
         
-        DocOrFold           child(Folder f, const String& ck)
+        DocOrFold           child(Folder f, std::string_view ck)
         {
             Document    doc   = document(f, ck);
             if(doc)
@@ -285,34 +295,34 @@ namespace yq {
 
 
     #if 0
-        String                 child_key(Directory);       //<! Key inside the directory (with extensions)
-        String                 child_key(Document);
-        String                 child_key(Folder);
-        String                 child_key(Fragment);
+        std::string                 child_key(Directory);       //<! Key inside the directory (with extensions)
+        std::string                 child_key(Document);
+        std::string                 child_key(Folder);
+        std::string                 child_key(Fragment);
     #endif
 
 
-        Vector<DirOrFrag>   children(Directory d, Sorted sorted)
+        std::vector<DirOrFrag>   children(Directory d, Sorted sorted)
         {
-            Vector<DirOrFrag>   ret;
+            std::vector<DirOrFrag>   ret;
             for(Directory d2 : directories(d, sorted))
-                ret << d2;
+                ret.push_back(d2);
             for(Fragment f : fragments(d, sorted))
-                ret << f;
+                ret.push_back(f);
             return ret;
         }
         
-        Vector<DocOrFold>   children(Folder, Sorted sorted);           // TODO
-        Vector<DirOrFrag>   children(const Root* rt, Sorted sorted)
+        std::vector<DocOrFold>   children(Folder, Sorted sorted);           // TODO
+        std::vector<DirOrFrag>   children(const Root* rt, Sorted sorted)
         {
             return children(directory(rt), sorted);
         }
 
-        Vector<DirOrFragStr>    children_and_names(Directory);  // TODO
-        Vector<DocOrFoldStr>    children_and_names(Folder);     // TODO
+        std::vector<DirOrFragStr>    children_and_names(Directory);  // TODO
+        std::vector<DocOrFoldStr>    children_and_names(Folder);     // TODO
         
         
-        Vector<uint8_t>         data(Fragment);     // TODO
+        std::vector<uint8_t>         data(Fragment);     // TODO
 
         Directory           db_directory(const Root*rt, bool *wasCreated)
         {
@@ -323,31 +333,35 @@ namespace yq {
                 
             static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
             static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
+            
             auto s_lk   = s.af();
             auto i_lk   = i.af();
-            i.bind(0, rt->path);
-            i.bind(1, rt->id);
-            if(i.exec(false)){
+            i.bind(1, rt->path);
+            i.bind(2, rt->id);
+            
+            if(is_good(i.step())){
                 if(wasCreated)
                     *wasCreated  = true;
-                return Directory(i.lastInsertIdU64());
+                return Directory(i.last_id());
             } else {
-                s.bind(0, rt->path);
-                if(s.exec() && s.next())
-                    return Directory(s.valueU64(0));
-                yError() << "Sql Query error!" << s.lastError() << "  Unable to get directory ID";
+                s.bind(1, rt->path);
+                if(s.step() == SqlQuery::Row)
+                    return Directory(s.v_uint64(1));
+                cdbError << "Unable to get directory ID";
                 return Directory();
             }
         }
         
-        Directory           db_directory(Directory dir, const String& k, bool *wasCreated)
+        Directory           db_directory(Directory dir, std::string_view k, bool *wasCreated)
         {
             if(wasCreated)
                 *wasCreated = false;
             if(k.empty() || !dir)
                 return Directory();
             Folder  f       = db_folder(folder(dir), k);
-            String p       = path(dir) + "/" + k;
+            std::string p       = path(dir);
+            p += '/';
+            p += k;
             
             const Root* rt  = root(dir);
             if(!f || !rt)
@@ -358,26 +372,27 @@ namespace yq {
             auto s_lk   = s.af();
             auto i_lk   = i.af();
 
-            i.bind(0, p);
-            i.bind(1,rt->id);
-            i.bind(2,f.id);
-            i.bind(3,dir.id);
-            i.bind(4,k);
-            if(i.exec(false)){
+            i.bind(1, p);
+            i.bind(2,rt->id);
+            i.bind(3,f.id);
+            i.bind(4,dir.id);
+            i.bind(5,k);
+            
+            if(is_good(i.step())){
                 if(wasCreated)
                     *wasCreated = true;
-                return Directory(i.lastInsertIdU64());
+                return Directory((uint64_t) i.last_id());
             } else {
-                s.bind(0, p);
-                if(s.exec() && s.next())
-                    return Directory(s.valueU64(0));
-                yError() << "Sql Query error!" << s.lastError() << "  Unable to get directory ID";
+                s.bind(1, p);
+                if(s.step() == SqlQuery::Row)
+                    return Directory(s.v_uint64(1));
+                cdbError << "Unable to get directory ID";
                 return Directory{};
             }
         }
         
 
-        Document            db_document(Folder f, const String&ak, bool *wasCreated)
+        Document            db_document(Folder f, std::string_view ak, bool *wasCreated)
         {
             if(wasCreated)
                 *wasCreated = false;
@@ -386,16 +401,18 @@ namespace yq {
             if(ak.empty())
                 return Document();
 
-            String     k   = key(f);
+            std::string     k   = key(f);
             if(k.empty()){
                 k   = ak;
-            } else 
-                k   = k + '/' + ak;
+            } else {
+                k   += '/';
+                k   += ak;
+            }
                     
-            int         x       = ak.last_index_of('.');
-            int         y       = ak.index_of('.',1);    // first period past any "hidden"
-            String     sfx     = (x > 0) ? ak.mid(x+1) : String();
-            String     base    = (y > 0) ? ak.mid(0,y) : ak;
+            size_t  x = ak.find_last_of('.');
+            size_t  y = ak.find_first_of('.',1);    // first period past any "hidden"
+            std::string_view     sfx     = (x != std::string_view::npos ) ? ak.substr(x+1) : std::string_view();
+            std::string_view     base    = (y != std::string_view::npos ) ? ak.substr(0,y) : ak;
                 
             static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base,hidden) VALUES (?,?,?,?,?,?,?)");
             static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
@@ -403,29 +420,29 @@ namespace yq {
             auto s_lk   = s.af();
             auto i_lk   = i.af();
 
-            i.bind(0,k);
-            i.bind(1,ak);
+            i.bind(1,k);
             i.bind(2,ak);
-            i.bind(3,f.id);
-            i.bind(4,sfx);
-            i.bind(5,base);
-            i.bind(6,ak.at(0) == '.');
+            i.bind(3,ak);
+            i.bind(4,f.id);
+            i.bind(5,sfx);
+            i.bind(6,base);
+            i.bind(7,ak[0] == '.');
             
-            if(i.exec(false)){
+            if(is_good(i.step())){
                 if(wasCreated)
                     *wasCreated = true;
-                return Document{i.lastInsertIdU64()};
+                return Document((uint64_t) i.last_id());
             } else {
                 s.bind(0,k);
-                if(s.exec() && s.next())
-                    return Document{s.valueU64(0)};
-                yError() << "Sql Query error!" << s.lastError() << "  Unable to get document ID";
+                if(s.step() == SqlQuery::Row)
+                    return Document{s.v_uint64(1)};
+                cdbError << "Unable to get documednt ID";
                 return Document();
             }
 
         }
         
-        Folder              db_folder(Folder f, const String&ck, bool *wasCreated)
+        Folder              db_folder(Folder f, std::string_view ck, bool *wasCreated)
         {
             if(wasCreated)
                 *wasCreated = false;
@@ -434,37 +451,44 @@ namespace yq {
             if(ck.empty())
                 return Folder{};
 
-            String     k = key(f);
+            std::string     k = key(f);
             if(k.empty()){
                 k   = ck;
-            } else 
-                k   = k + '/' + ck;
+            } else {
+                k += '/';
+                k += ck;
+            }
                 
             static thread_local SQ    i("INSERT OR FAIL INTO Folders (k,sk,name,parent,hidden) VALUES (?,?,?,?,?)");
             static thread_local SQ    s("SELECT id FROM Folders WHERE k=?");
 
             auto s_lk   = s.af();
             auto i_lk   = i.af();
-            i.bind(0,k);
-            i.bind(1,ck);
+            
+            
+            bool    hidden  = (ck[0] == '.') || (ck.find_first_of('.') != std::string_view::npos);
+            
+            i.bind(1,k);
             i.bind(2,ck);
-            i.bind(3,f.id);
-            i.bind(4,(ck.at(0) == '.') || ck.contains('.'));
-            if(i.exec(false)){
+            i.bind(3,ck);
+            i.bind(4,f.id);
+            i.bind(5,hidden);
+            
+            if(is_good(i.step())){
                 if(wasCreated)
                     *wasCreated = true;
-                return Folder{i.lastInsertIdU64()};
+                return Folder{(uint64_t) i.last_id()};
             } else {
                 s.bind(0,k);
-                if(s.exec() && s.next())
-                    return Folder{s.valueU64(0)};
-                yError() << "Sql Query error!" << s.lastError() << "  Unable to get folder ID";
+                if(s.step() == SqlQuery::Row)
+                    return Folder{s.v_uint64(1)};
+                cdbError << "Unable to get folder ID";
                 return Folder{};
             }    
         }
         
         
-        Fragment            db_fragment(Directory dir, const String& k, bool *wasCreated)
+        Fragment            db_fragment(Directory dir, std::string_view k, bool *wasCreated)
         {
             if(wasCreated)
                 *wasCreated = false;
@@ -473,8 +497,8 @@ namespace yq {
             
             Folder          f   = folder(dir);
             Document        a   = db_document(f, k);
-            std::filesystem::path         p   = path(dir) / k.c_str();
-            String         sfx = suffix(a);
+            std::filesystem::path         p   = path(dir) / k;
+            std::string         sfx = suffix(a);
             const Root*     rt  = root(dir);
             
             
@@ -483,23 +507,23 @@ namespace yq {
             auto s_lk   = s.af();
             auto i_lk   = i.af();
             
-            i.bind(0,p);
-            i.bind(1,k);
-            i.bind(2,dir.id);
-            i.bind(3,rt->id);
-            i.bind(4,a.id);
-            i.bind(5,f.id);
-            i.bind(6,sfx);
+            i.bind(1,p);
+            i.bind(2,k);
+            i.bind(3,dir.id);
+            i.bind(4,rt->id);
+            i.bind(5,a.id);
+            i.bind(6,f.id);
+            i.bind(7,sfx);
             
-            if(i.exec(false)){
+            if(is_good(i.step())){
                 if(wasCreated)
                     *wasCreated = true;
-                return Fragment(i.lastInsertIdU64());
+                return Fragment((uint64_t) i.last_id());
             } else {
                 s.bind(0,p);
-                if(s.exec() && s.next())
-                    return Fragment(s.valueU64(0));
-                yError() << "Sql Query error!" << s.lastError() << "  Unable to make/get fragment ID on " << k;
+                if(s.step() == SqlQuery::Row)
+                    return Fragment(s.v_uint64(1));
+                cdbError << "Unable to get fragment ID";
                 return Fragment{};
             }
         }
@@ -511,7 +535,7 @@ namespace yq {
             return exists_directory(i) ? Directory{i} : Directory();
         }
         
-        Directory           directory(const String&path)
+        Directory           directory(std::string_view path)
         {
             if(path.empty())
                 return Directory();
@@ -533,7 +557,7 @@ namespace yq {
             return s.as<Directory>(f.id);
         }
         
-        Directory           directory(Directory d, const String&k)
+        Directory           directory(Directory d, std::string_view k)
         {
             static thread_local SQ s("SELECT id FROM Directories WHERE parent=? AND name=?");
             return s.as<Directory>(d.id, k);
@@ -548,13 +572,13 @@ namespace yq {
         
         
         namespace {
-            Vector<Directory>   directories_sorted(Directory d)
+            std::vector<Directory>   directories_sorted(Directory d)
             {
                 static thread_local SQ    s("SELECT id FROM Directories WHERE parent=? ORDER BY name");
                 return s.vec<Directory>(d.id);
             }
 
-            Vector<Directory>   directories_unsorted(Directory d)
+            std::vector<Directory>   directories_unsorted(Directory d)
             {
                 static thread_local SQ    s("SELECT id FROM Directories WHERE parent=?");
                 return s.vec<Directory>(d.id);
@@ -562,34 +586,34 @@ namespace yq {
         }
         
         
-        Vector<Directory>   directories(Directory d, Sorted sorted)
+        std::vector<Directory>   directories(Directory d, Sorted sorted)
         {
             return sorted ? directories_sorted(d) : directories_unsorted(d);
         }
         
         namespace {
-            Vector<Directory>   directories_sorted(Folder f)
+            std::vector<Directory>   directories_sorted(Folder f)
             {
                 static thread_local SQ    s("SELECT id FROM Directories WHERE folder=? ORDER BY name");
                 return s.vec<Directory>(f.id);
             }
             
-            Vector<Directory>   directories_unsorted(Folder f)
+            std::vector<Directory>   directories_unsorted(Folder f)
             {
                 static thread_local SQ    s("SELECT id FROM Directories WHERE folder=?");
                 return s.vec<Directory>(f.id);
             }
         }
         
-        Vector<Directory>   directories(Folder f, Sorted sorted)
+        std::vector<Directory>   directories(Folder f, Sorted sorted)
         {
             return sorted ? directories_sorted(f) : directories_unsorted(f);
         }
         
-        Vector<Directory>   directories(const Root*rt)
+        std::vector<Directory>   directories(const Root*rt)
         {
             if(!rt)
-                return Vector<Directory>();
+                return std::vector<Directory>();
                 
             static thread_local SQ    s("SELECT id FROM Directories WHERE parent=0 AND root=?");
             return s.vec<Directory>(rt->id);
@@ -616,40 +640,38 @@ namespace yq {
         }
 
         namespace {
-            Vector<DirString>   directories_with_names_sorted(Directory dir)
+            std::vector<DirString>   directories_with_names_sorted(Directory dir)
             {
-                Vector<DirString>   ret;
+                std::vector<DirString>   ret;
                 static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=?");
                 auto s_lk   = s.af();
-                s.bind(0,dir.id);
-                if(s.exec()){
-                    while(s.next())
-                        ret << DirString(Directory(s.valueU64(0)), s.valueString(1));
+                s.bind(1,dir.id);
+                while(s.step() == SqlQuery::Row){
+                    ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
                 }
                 return ret;
             }
             
-            Vector<DirString>   directories_with_names_unsorted(Directory dir)
+            std::vector<DirString>   directories_with_names_unsorted(Directory dir)
             {
-                Vector<DirString>   ret;
+                std::vector<DirString>   ret;
                 static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
                 auto s_lk   = s.af();
-                s.bind(0,dir.id);
-                if(s.exec()){
-                    while(s.next())
-                        ret << DirString(Directory(s.valueU64(0)), s.valueString(1));
+                s.bind(1,dir.id);
+                while(s.step() == SqlQuery::Row){
+                    ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
                 }
                 return ret;
             }
         }
 
-        Vector<DirString>   directories_with_names(Directory dir, Sorted sorted)
+        std::vector<DirString>   directories_with_names(Directory dir, Sorted sorted)
         {
             return sorted ? directories_with_names_sorted(dir) : directories_with_names_unsorted(dir);
         }
         
         
-        Document            document(Folder f, const String& k)
+        Document            document(Folder f, std::string_view k)
         {
             static thread_local SQ s("SELECT id FROM Documents WHERE folder=? AND sk=?");
             return s.as<Document>(f.id, k);
@@ -661,7 +683,7 @@ namespace yq {
             return s.as<Document>(f.id);
         }
 
-        Document            document(const String& k)
+        Document            document(std::string_view k)
         {
             static thread_local SQ    s("SELECT id FROM Documents WHERE k=? LIMIT 1");
             return s.as<Document>(k);
@@ -673,9 +695,9 @@ namespace yq {
         }
 
 
-        //Vector<Document>    documents(Directory);
+        //std::vector<Document>    documents(Directory);
         
-        Vector<Document>    documents(Folder f, unsigned opts)
+        std::vector<Document>    documents(Folder f, unsigned opts)
         {
             if(opts & BestSort){
                 if(opts & Hidden){
@@ -696,7 +718,7 @@ namespace yq {
             }
         }
         
-        Vector<Document>    documents(Folder f, Sorted sorted)
+        std::vector<Document>    documents(Folder f, Sorted sorted)
         {
             return documents(f, Hidden | (sorted ? BestSort : 0));
         }
@@ -713,40 +735,40 @@ namespace yq {
         }
         
         namespace {
-            Vector<Document>    documents_by_suffix_sorted(Folder f, const String&sfx)
+            std::vector<Document>    documents_by_suffix_sorted(Folder f, std::string_view sfx)
             {
                 static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
                 return s.vec<Document>(f.id, sfx);
             }
 
-            Vector<Document>    documents_by_suffix_unsorted(Folder f, const String&sfx)
+            std::vector<Document>    documents_by_suffix_unsorted(Folder f, std::string_view sfx)
             {
                 static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=?");
                 return s.vec<Document>(f.id, sfx);
             }
         }
         
-        Vector<Document>    documents_by_suffix(Folder f, const String& sfx, Sorted sorted)
+        std::vector<Document>    documents_by_suffix(Folder f, std::string_view sfx, Sorted sorted)
         {
             return sorted ? documents_by_suffix_sorted(f, sfx) : documents_by_suffix_unsorted(f,sfx);
         }
         
         
         namespace {
-            Vector<Document>    documents_by_suffix_excluding_sorted(Folder f, const String&sfx)
+            std::vector<Document>    documents_by_suffix_excluding_sorted(Folder f, std::string_view sfx)
             {
                 static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=? ORDER BY k");
                 return s.vec<Document>(f.id, sfx);
             }
             
-            Vector<Document>    documents_by_suffix_excluding_unsorted(Folder f, const String&sfx)
+            std::vector<Document>    documents_by_suffix_excluding_unsorted(Folder f, std::string_view sfx)
             {
                 static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=?");
                 return s.vec<Document>(f.id, sfx);
             }
         }
         
-        Vector<Document>    documents_by_suffix_excluding(Folder f, const String&sfx, Sorted sorted)
+        std::vector<Document>    documents_by_suffix_excluding(Folder f, std::string_view sfx, Sorted sorted)
         {
             return sorted ? documents_by_suffix_excluding_sorted(f,sfx) : documents_by_suffix_excluding_unsorted(f,sfx);
         }
@@ -780,35 +802,11 @@ namespace yq {
             return exists_fragment(f.id);
         }
         
-        
-        bool                exists(const Root*rt, const char*z)
+        bool                exists(const Root*rt, std::string_view z)
         {
             if(!rt)
                 return false;
-            if(!z)
-                return false;
-            return rt -> exists(z);
-        }
-        
-        bool                exists(const Root*rt, const QByteArray&z)
-        {
-            if(!rt)
-                return false;
-            return rt -> exists(z);
-        }
-        
-        bool                exists(const Root*rt, const String&z)
-        {
-            if(!rt)
-                return false;
-            return rt -> exists(z);
-        }
-        
-        bool                exists(const Root*rt, const std::string&z)
-        {
-            if(!rt)
-                return false;
-            return rt -> exists(z);
+            return std::filesystem::exists(rt -> resolve(z));
         }
         
         bool                exists_directory(uint64_t i)
@@ -877,7 +875,7 @@ namespace yq {
             return s.as<Folder>(f.id);
         }
         
-        Folder              folder(Folder f, const String&ck)
+        Folder              folder(Folder f, std::string_view ck)
         {
             static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND ck=? LIMIT 1");
             return s.as<Folder>(f.id, ck);
@@ -889,39 +887,39 @@ namespace yq {
             return exists_folder(i) ? Folder{i} : Folder{};
         }
         
-        Folder              folder(const String&k)
+        Folder              folder(std::string_view k)
         {
             static thread_local SQ    s("SELECT id FROM Folders WHERE k=? LIMIT 1");
             return s.as<Folder>(k);
         }
 
-        Vector<Folder>      folder_path(Directory d)
+        std::vector<Folder>      folder_path(Directory d)
         {
             return folder_path(folder(d));
         }
 
-        Vector<Folder>      folder_path(Document doc)
+        std::vector<Folder>      folder_path(Document doc)
         {
-            Vector<Folder>  ret;
+            std::vector<Folder>  ret;
             for(Folder f = parent(doc); f; f = parent(f))
-                ret << f;
-            return Vector<Folder>(ret.rbegin(), ret.rend());
+                ret.push_back(f);
+            return std::vector<Folder>(ret.rbegin(), ret.rend());
         }
         
-        Vector<Folder>      folder_path(Folder folder)
+        std::vector<Folder>      folder_path(Folder folder)
         {
-            Vector<Folder>  ret;
+            std::vector<Folder>  ret;
             for(Folder f = parent(folder); f; f = parent(f))
-                ret << f;
-            return Vector<Folder>(ret.rbegin(), ret.rend());
+                ret.push_back(f);
+            return std::vector<Folder>(ret.rbegin(), ret.rend());
         }
 
-        Vector<Folder>      folder_path(Fragment f)
+        std::vector<Folder>      folder_path(Fragment f)
         {
             return folder_path(document(f));
         }
         
-        Vector<Folder>      folders(Folder f, unsigned opts)
+        std::vector<Folder>      folders(Folder f, unsigned opts)
         {
             if(opts & BestSort){
                 if(opts & Hidden){
@@ -942,7 +940,7 @@ namespace yq {
             }
         }
 
-        Vector<Folder>      folders(Folder f, Sorted sorted)
+        std::vector<Folder>      folders(Folder f, Sorted sorted)
         {
             return folders(f, Hidden | (sorted ? BestSort : 0));
         }
@@ -964,28 +962,28 @@ namespace yq {
             return file_bytes(path(f));
         }
         
-        ByteArray           frag_bytes(const String&k)
+        ByteArray           frag_bytes(std::string_view k)
         {
             return frag_bytes(fragment(document(k)));
         }
         
-        ByteArray           frag_bytes(const String&k, DataRole dr)
+        ByteArray           frag_bytes(std::string_view k, DataRole dr)
         {
             return frag_bytes(fragment(document(k),dr));
         }
         
         
-        //String              frag_string(Fragment f)
+        //std::string              frag_string(Fragment f)
         //{
             //return file_string(path(f));
         //}
         
-        //String              frag_string(const String&k)
+        //std::string              frag_string(std::string_view k)
         //{
             //return frag_string(fragment(document(k)));
         //}
         
-        //String              frag_string(const String&k, DataRole dr)
+        //std::string              frag_string(std::string_view k, DataRole dr)
         //{
             //return frag_string(fragment(document(k),dr));
         //}
@@ -996,7 +994,7 @@ namespace yq {
             return s.as<Fragment>(k);
         }
 
-        Fragment            fragment(const String& k)
+        Fragment            fragment(std::string_view k)
         {
             static thread_local SQ    s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
             return s.as<Fragment>(k);
@@ -1007,35 +1005,15 @@ namespace yq {
             return exists_fragment(i) ? Fragment{i} : Fragment{};
         }
         
-        Fragment            fragment(const Root*rt, const char* z)
+        Fragment            fragment(const Root*rt, std::string_view z)
         {
             if(!rt)
                 return Fragment{};
             return fragment(rt->resolve(z));
         }
         
-        Fragment            fragment(const Root*rt, const QByteArray&z)
-        {
-            if(!rt)
-                return Fragment{};
-            return fragment(rt->resolve(z));
-        }
         
-        Fragment            fragment(const Root*rt, const String&z)
-        {
-            if(!rt)
-                return Fragment{};
-            return fragment(rt->resolve(z));
-        }
-        
-        Fragment            fragment(const Root*rt, const std::string&z)
-        {
-            if(!rt)
-                return Fragment{};
-            return fragment(rt->resolve(z));
-        }
-        
-        Fragment            fragment(Directory d, const String& k)
+        Fragment            fragment(Directory d, std::string_view k)
         {
             static thread_local SQ s("SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
             return s.as<Fragment>(d.id, k);
@@ -1067,112 +1045,112 @@ namespace yq {
 
 
         namespace {
-            Vector<Fragment>    fragments_sorted(Document d)
+            std::vector<Fragment>    fragments_sorted(Document d)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? ORDER BY path");
                 return s.vec<Fragment>(d.id);
             }
 
-            Vector<Fragment>    fragments_unsorted(Document d)
+            std::vector<Fragment>    fragments_unsorted(Document d)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE document=?");
                 return s.vec<Fragment>(d.id);
             }
         }
 
-        Vector<Fragment>    fragments(Document d, Sorted sorted)
+        std::vector<Fragment>    fragments(Document d, Sorted sorted)
         {
             return sorted ? fragments_sorted(d) : fragments_unsorted(d);
         }
         
-        Vector<Fragment>        fragments(Document d, Sorted::Value sorted)
+        std::vector<Fragment>        fragments(Document d, Sorted::Value sorted)
         {
             return sorted ? fragments_sorted(d) : fragments_unsorted(d);
         }
         
         namespace {
-            Vector<Fragment>    fragments_sorted(Document d, const Root* rt)
+            std::vector<Fragment>    fragments_sorted(Document d, const Root* rt)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
                 return s.vec<Fragment>(d.id, rt->id);
             }
 
-            Vector<Fragment>    fragments_unsorted(Document d, const Root* rt)
+            std::vector<Fragment>    fragments_unsorted(Document d, const Root* rt)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=?");
                 return s.vec<Fragment>(d.id, rt->id);
             }
         }
         
-        Vector<Fragment>    fragments(Document d, const Root* rt, Sorted sorted)
+        std::vector<Fragment>    fragments(Document d, const Root* rt, Sorted sorted)
         {
             if(!rt)
-                return Vector<Fragment>();
+                return std::vector<Fragment>();
             return sorted ? fragments_sorted(d,rt) : fragments_unsorted(d,rt);
         }
         
-        Vector<Fragment>    fragments(Document d, const Root* rt, Sorted::Value sorted)
+        std::vector<Fragment>    fragments(Document d, const Root* rt, Sorted::Value sorted)
         {
             return fragments(d, rt, Sorted{sorted});
         }
 
-        Vector<Fragment>    fragments(Document d, DataRole dr, Sorted sorted)
+        std::vector<Fragment>    fragments(Document d, DataRole dr, Sorted sorted)
         {
-            Vector<Fragment>    ret;
+            std::vector<Fragment>    ret;
             for(const Root* rt : wksp::root_reads()[dr])
                 ret += fragments(d,rt,sorted);
             return ret;
         }
 
         namespace {
-            Vector<Fragment>    fragments_sorted(Directory d)
+            std::vector<Fragment>    fragments_sorted(Directory d)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
                 return s.vec<Fragment>(d.id);
             }
 
-            Vector<Fragment>    fragments_unsorted(Directory d)
+            std::vector<Fragment>    fragments_unsorted(Directory d)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
                 return s.vec<Fragment>(d.id);
             }
         }
         
-        Vector<Fragment>    fragments(Directory d, Sorted sorted)
+        std::vector<Fragment>    fragments(Directory d, Sorted sorted)
         {
             return sorted ? fragments_sorted(d) : fragments_unsorted(d);
         }
         
         namespace {
-            Vector<Fragment>    fragments_sorted(Folder f)
+            std::vector<Fragment>    fragments_sorted(Folder f)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE folder=? ORDER BY path");
                 return s.vec<Fragment>(f.id);
             }
 
-            Vector<Fragment>    fragments_unsorted(Folder f)
+            std::vector<Fragment>    fragments_unsorted(Folder f)
             {
                 static thread_local SQ    s("SELECT id FROM Fragments WHERE folder=?");
                 return s.vec<Fragment>(f.id);
             }
         }
         
-        Vector<Fragment>    fragments(Folder f, Sorted sorted)
+        std::vector<Fragment>    fragments(Folder f, Sorted sorted)
         {
             return sorted ? fragments_sorted(f) : fragments_unsorted(f);
         }
         
-        Vector<Fragment>    fragments(const Root*rt, Sorted sorted)
+        std::vector<Fragment>    fragments(const Root*rt, Sorted sorted)
         {
             return fragments(directory(rt), sorted);
         }
         
-        Vector<Fragment>    fragments(const String&k, Sorted sorted)
+        std::vector<Fragment>    fragments(std::string_view k, Sorted sorted)
         {
             return fragments(document(k),sorted);
         }
         
-        Vector<Fragment>    fragments(const String&k, DataRole dr, Sorted sorted)
+        std::vector<Fragment>    fragments(std::string_view k, DataRole dr, Sorted sorted)
         {
             return fragments(document(k), dr, sorted);
         }
@@ -1232,8 +1210,8 @@ namespace yq {
         {
             static thread_local SQ u("UPDATE Documents SET hidden=1 WHERE id=?");
             auto u_af   = u.af();
-            u.bind(0, d.id);
-            u.exec();
+            u.bind(1, d.id);
+            u.step();
         }
         
         Image               icon(Document d) 
@@ -1253,15 +1231,15 @@ namespace yq {
             Directory::Info        ret;
             static thread_local SQ    s("SELECT folder, name, parent, path, removed, root, hidden FROM Directories WHERE id=?");
             auto s_lk   = s.af();
-            s.bind(0, d.id);
-            if(s.exec() && s.next()){
-                ret.folder  = Folder(s.valueU64(0));
-                ret.name    = s.valueString(1);
-                ret.parent  = Directory(s.valueU64(2));
-                ret.path    = s.valuePath(3);
-                ret.removed = s.valueAs<bool>(4);
-                ret.root    = wksp::root(s.valueU64(5));
-                ret.hidden  = s.valueAs<bool>(6);
+            s.bind(1, d.id);
+            if(s.step() == SqlQuery::Row){
+                ret.folder  = Folder(s.v_uint64(1));
+                ret.name    = s.v_text(2);
+                ret.parent  = Directory(s.v_uint64(3));
+                ret.path    = s.v_text(4);
+                ret.removed = s.v_bool(5);
+                ret.root    = wksp::root(s.v_uint64(6));
+                ret.hidden  = s.v_bool(7);
             }
             return ret;
         }
@@ -1271,17 +1249,17 @@ namespace yq {
             Document::Info        ret;
             static thread_local SQ    s("SELECT k, sk, name, base, folder, suffix, removed, hidden, icon FROM Documents WHERE id=?");
             auto s_af       = s.af();
-            s.bind(0, d.id);
-            if(s.exec() && s.next()){
-                ret.key     = s.valueString(0);
-                ret.skey    = s.valueString(1);
-                ret.name    = s.valueString(2);
-                ret.base    = s.valueString(3);
-                ret.folder  = Folder(s.valueU64(4));
-                ret.suffix  = s.valueString(5);
-                ret.removed = s.valueAs<bool>(6);
-                ret.hidden  = s.valueAs<bool>(7);
-                ret.icon    = Image(s.valueU64(8));
+            s.bind(1, d.id);
+            if(s.step() == SqlQuery::Row){
+                ret.key     = s.v_text(1);
+                ret.skey    = s.v_text(2);
+                ret.name    = s.v_text(3);
+                ret.base    = s.v_text(4);
+                ret.folder  = Folder(s.v_uint64(5));
+                ret.suffix  = s.v_text(6);
+                ret.removed = s.v_bool(7);
+                ret.hidden  = s.v_bool(8);
+                ret.icon    = Image(s.v_uint64(9));
             }
             return ret;
         }
@@ -1291,16 +1269,16 @@ namespace yq {
             Folder::Info        ret;
             static thread_local SQ    s("SELECT k, sk, parent, name, brief, hidden, removed, icon FROM Folders WHERE id=?");
             auto s_af   = s.af();
-            s.bind(0,f.id);
-            if(s.exec() && s.next()){
-                ret.key         = s.valueString(0);
-                ret.skey        = s.valueString(1);
-                ret.parent      = Folder(s.valueU64(2));
-                ret.name        = s.valueString(3);
-                ret.brief       = s.valueString(4);
-                ret.hidden      = s.valueAs<bool>(5);
-                ret.removed     = s.valueAs<bool>(6);
-                ret.icon        = Image(s.valueU64(7));
+            s.bind(1,f.id);
+            if(s.step() == SqlQuery::Row){
+                ret.key         = s.v_text(1);
+                ret.skey        = s.v_text(2);
+                ret.parent      = Folder(s.v_uint64(3));
+                ret.name        = s.v_text(4);
+                ret.brief       = s.v_text(5);
+                ret.hidden      = s.v_bool(6);
+                ret.removed     = s.v_bool(7);
+                ret.icon        = Image(s.v_uint64(8));
             }
             return ret;
         }
@@ -1311,94 +1289,94 @@ namespace yq {
 
             static thread_local SQ    s("SELECT document, dir, folder, modified, name, path, removed, rescan, bytes, hidden, root FROM Fragments WHERE id=?");
             auto s_af   = s.af();
-            s.bind(0, f.id);
-            if(s.exec() && s.next()){
-                ret.document        = Document(s.valueU64(0));
-                ret.directory   = Directory(s.valueU64(1));
-                ret.folder      = Folder(s.valueU64(2));
-                ret.modified    = s.valueU64(3);
-                ret.name        = s.valueString(4);
-                ret.path        = s.valuePath(5);
-                ret.removed     = s.valueAs<bool>(6);
-                ret.rescan      = s.valueAs<bool>(7);
-                ret.size        = s.valueU64(8);
-                ret.hidden      = s.valueAs<bool>(9);
-                ret.root        = wksp::root(s.valueU64(10));
+            s.bind(1, f.id);
+            if(s.step() == SqlQuery::Row){
+                ret.document    = Document(s.v_uint64(1));
+                ret.directory   = Directory(s.v_uint64(2));
+                ret.folder      = Folder(s.v_uint64(3));
+                ret.modified    = s.v_uint64(4);
+                ret.name        = s.v_text(5);
+                ret.path        = s.v_text(6);
+                ret.removed     = s.v_bool(7);
+                ret.rescan      = s.v_bool(8);
+                ret.size        = s.v_uint64(9);
+                ret.hidden      = s.v_bool(10);
+                ret.root        = wksp::root(s.v_uint64(11));
             }
             return ret;
         }
 
-        String             key(Directory d)
+        std::string             key(Directory d)
         {
             return key(folder(d));
         }
         
-        String             key(Document d)
+        std::string             key(Document d)
         {
             static thread_local SQ    s("SELECT k FROM Documents WHERE id=? LIMIT 1");
             return s.str(d.id);
         }
 
-        String             key(Folder f) 
+        std::string             key(Folder f) 
         {
             static thread_local SQ    s("SELECT k FROM Folders WHERE id=?");
             return s.str(f.id);
         }
         
-        String             key(Fragment f)
+        std::string             key(Fragment f)
         {
             return key(document(f));
         }
 
-        String             key(const Root*rt)
+        std::string             key(const Root*rt)
         {
             if(!rt)
-                return String();
-            return rt->key.qString();
+                return std::string();
+            return rt->key;
         }
 
-        //String             label(Directory);
-        String             label(Document d)
+        //std::string             label(Directory);
+        std::string             label(Document d)
         {
             return key(d);
         }
 
-        String             label(Folder f)
+        std::string             label(Folder f)
         {
             return key(f);
         }
         
-        String             label(Fragment f)
+        std::string             label(Fragment f)
         {
             return path(f).string();
         }
         
 
-        uint64_t            modified(Fragment f)
+        uint64_t                modified(Fragment f)
         {
             static thread_local SQ    s("SELECT modified FROM Fragments WHERE id=?");
             return s.u64(f.id);
         }
 
-        String             name(Directory d)
+        std::string             name(Directory d)
         {
             static thread_local SQ    s("SELECT name FROM Directories WHERE id=?");
             return s.str(d.id);
         }
         
-        String             name(Document d)
+        std::string             name(Document d)
         {
             static thread_local SQ    s("SELECT name FROM Documents WHERE id=? LIMIT 1");
             return s.str(d.id);
         }
 
-        String             name(Folder f)
+        std::string             name(Folder f)
         {
             static thread_local SQ    s("SELECT name FROM Folders WHERE id=?");
             return s.str(f.id);
         }
         
-        String             name(Fragment f)
+        std::string             name(Fragment f)
         {
             static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
             return s.str(f.id);
@@ -1408,12 +1386,12 @@ namespace yq {
         {
             static thread_local SQ    s("SELECT name,icon,k FROM Documents WHERE id=?");
             auto s_af = s.af();
-            s.bind(0, d.id);
-            if(s.exec() && s.next()){
+            s.bind(1, d.id);
+            if(s.step() == SqlQuery::Row){
                 NKI  ret;
-                ret.name    = s.valueString(0);
-                ret.icon    = Image(s.valueU64(1)) ;
-                ret.key     = s.valueString(2);
+                ret.name    = s.v_text(1);
+                ret.icon    = Image(s.v_uint64(2)) ;
+                ret.key     = s.v_text(3);
                 if(autoKey && ret.name.empty())
                     ret.name    = ret.key;
                 return ret;
@@ -1425,12 +1403,12 @@ namespace yq {
         {
             static thread_local SQ    s("SELECT name,icon,k FROM Folders WHERE id=?");
             auto s_af = s.af();
-            s.bind(0, f.id);
-            if(s.exec() && s.next()){
+            s.bind(1, f.id);
+            if(s.step() == SqlQuery::Row){
                 NKI  ret;
-                ret.name    = s.valueString(0);
-                ret.icon    = Image(s.valueU64(1)) ;
-                ret.key     = s.valueString(2);
+                ret.name    = s.v_text(1);
+                ret.icon    = Image(s.v_uint64(2)) ;
+                ret.key     = s.v_text(3);
                 if(autoKey && ret.name.empty())
                     ret.name    = ret.key;
                 return ret;
@@ -1472,33 +1450,9 @@ namespace yq {
             return s.path(f.id);
         }
         
-        std::filesystem::path   path(const Root*rt, const char*z, bool fMakePath)
-        {
-            std::filesystem::path   p   =  rt -> resolve(z);
-            if(fMakePath && !p.empty())
-                make_parent_path(p);
-            return p;
-        }
-        
-        std::filesystem::path   path(const Root*rt, const QByteArray&z, bool fMakePath)
-        {
-            std::filesystem::path    p =  rt -> resolve(z);
-            if(fMakePath && !p.empty())
-                make_parent_path(p);
-            return p;
-        }
-        
-        std::filesystem::path   path(const Root*rt, const String&z, bool fMakePath)
+        std::filesystem::path   path(const Root*rt, std::string_view z, bool fMakePath)
         {
             std::filesystem::path   p =  rt -> resolve(z);
-            if(fMakePath && !p.empty())
-                make_parent_path(p);
-            return p;
-        }
-        
-        std::filesystem::path   path(const Root*rt, const std::string&z, bool fMakePath)
-        {
-            std::filesystem::path    p =  rt -> resolve(z);
             if(fMakePath && !p.empty())
                 make_parent_path(p);
             return p;
@@ -1537,8 +1491,8 @@ namespace yq {
         {
             static thread_local SQ    u("UPDATE Fragments SET rescan=1 WHERE id=?");
             auto u_af   = u.af();
-            u.bind(0, f.id);
-            u.exec();
+            u.bind(1, f.id);
+            u.step();
         }
         
         bool                rescanning(Fragment f)
@@ -1551,9 +1505,9 @@ namespace yq {
         {
             static thread_local SQ    s("SELECT root FROM Directories WHERE id=?");
             auto s_lk   = s.af();
-            s.bind(0, d.id);
-            if(s.exec() && s.next())
-                return wksp::root(s.valueU64(0));
+            s.bind(1, d.id);
+            if(s.step() == SqlQuery::Row)
+                return wksp::root(s.v_uint64(0));
             return nullptr;
         }
         
@@ -1561,40 +1515,36 @@ namespace yq {
         {
             static thread_local SQ    s("SELECT root FROM Fragments WHERE id=?");
             auto s_af   = s.af();
-            s.bind(0, f.id);
-            if(s.exec() && s.next())
-                return wksp::root( s.valueU64(0));
+            s.bind(1, f.id);
+            if(s.step() == SqlQuery::Row)
+                return wksp::root(s.v_uint64(0));
             return nullptr;
         }
 
-        Vector<const Root*> roots(Document d)
+        std::vector<const Root*> roots(Document d)
         {
-            Vector<const Root*> ret;
+            std::vector<const Root*> ret;
             static thread_local SQ    s("SELECT DISTINCT root FROM Fragments WHERE document=?");
             auto s_af       = s.af();
-            s.bind(0, d.id);
-            if(s.exec()){
-                while(s.next()){
-                    const Root*r    = wksp::root(s.valueU64(0));
-                    if(r)
-                        ret << r;
-                }
+            s.bind(1, d.id);
+            while(s.step() == SqlQuery::Row){
+                const Root*r    = wksp::root(s.v_uint64(1));
+                if(r)
+                    ret.push_back(r);
             }
             return ret;
         }
         
-        Vector<const Root*> roots(Folder f)
+        std::vector<const Root*> roots(Folder f)
         {
-            Vector<const Root*> ret;
+            std::vector<const Root*> ret;
             static thread_local SQ    s("SELECT DISTINCT root FROM Directories WHERE folder=?");
             auto s_af       = s.af();
-            s.bind(0, f.id);
-            if(s.exec()){
-                while(s.next()){
-                    const Root*r    = wksp::root(s.valueU64(0));
-                    if(r)
-                        ret << r;
-                }
+            s.bind(1, f.id);
+            while(s.step() == SqlQuery::Row){
+                const Root*r    = wksp::root(s.v_uint64(1));
+                if(r)
+                    ret.push_back(r);
             }
             return ret;
         }
@@ -1616,8 +1566,8 @@ namespace yq {
         {
             static thread_local SQ u("UPDATE Documents SET hidden=0 WHERE id=?");
             auto u_af   = u.af();
-            u.bind(0, d.id);
-            u.exec();
+            u.bind(1, d.id);
+            u.step();
         }
 
         size_t              size(Fragment f)
@@ -1626,58 +1576,62 @@ namespace yq {
             return s.size(f.id);
         }
 
-        String             skey(Directory d)
+        std::string             skey(Directory d)
         {
             static thread_local SQ    s("SELECT name FROM Documents WHERE id=?");
             return s.str(d.id);
         }
         
-        String             skey(Document d)
+        std::string             skey(Document d)
         {
             static thread_local SQ    s("SELECT sk FROM Documents WHERE id=?");
             return s.str(d.id);
         }
         
-        String             skey(Folder f)
+        std::string             skey(Folder f)
         {
             static thread_local SQ    s("SELECT sk FROM Folders WHERE id=?");
             return s.str(f.id);
         }
         
-        String             skey(Fragment f)
+        std::string             skey(Fragment f)
         {
             static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
             return s.str(f.id);
         }
 
-        String             skeyb(Directory d)
+        std::string             skeyb(Directory d)
         {
-            return base_key(skey(d));
+            std::string     bk  = skey(d);
+            return copy(base_key(bk));
         }
         
-        String             skeyb(Document d)
+        std::string             skeyb(Document d)
         {
-            return base_key(skey(d));
+            std::string     bk  = skey(d);
+            return copy(base_key(bk));
         }
         
-        String             skeyb(Folder f)
+        std::string             skeyb(Folder f)
         {
-            return base_key(skey(f));
+            std::string     bk  = skey(f);
+            return copy(base_key(bk));
         }
         
-        String             skeyb(Fragment f)
+        std::string             skeyb(Fragment f)
         {
-            return base_key(skey(f));
+            std::string     bk  = skey(f);
+            return copy(base_key(bk));
         }
         
 
-        String             suffix(Document d)
+        std::string             suffix(Document d)
         {
             static thread_local SQ    s("SELECT suffix FROM Documents WHERE id=?");
             return s.str(d.id);
         }
 
-        String             suffix(Fragment f)
+        std::string             suffix(Fragment f)
         {
             static thread_local SQ    s("SELECT suffix FROM Fragments WHERE id=?");
             return s.str(f.id);
@@ -1690,11 +1644,11 @@ namespace yq {
         
             static thread_local SQ    u("UPDATE Fragments SET bytes=?,modified=?,removed=?,rescan=0 WHERE id=?");
             auto u_af = u.af();
-            u.bind(0, sz.size);
-            u.bind(1, sz.nanoseconds());
-            u.bind(2, !sz.exists);
-            u.bind(3, f.id);
-            u.exec();  
+            u.bind(1, sz.size);
+            u.bind(2, sz.nanoseconds());
+            u.bind(3, !sz.exists);
+            u.bind(4, f.id);
+            u.step();  
         }
 
         bool                within(Folder p, Directory d, bool recursive)
@@ -1746,6 +1700,5 @@ namespace yq {
             }
             return Fragment{};
         }
-     }
-
+    }
 }

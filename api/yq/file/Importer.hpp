@@ -12,7 +12,7 @@
 #include <yq/Flag.hpp>
 
 
-#include <QRegularExpression>
+#include <regex>
 
 class Fragment;
 class Scanner;

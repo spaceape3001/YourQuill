@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "SqlLastId.hpp"
 #include "SqlLite.hpp"
 #include "SqlLogging.hpp"
 #include "SqlQuery.hpp"
@@ -34,6 +35,19 @@ namespace yq {
         str << why;
         return str;
     }
+    
+    
+    SqlLastId::SqlLastId(SqlLite& _db) : m_db(_db)
+    {
+        sqlite3_set_last_insert_rowid(m_db.db(), 0LL);
+    }
+    
+    uint64_t SqlLastId::get() 
+    {
+        return (uint64_t) sqlite3_last_insert_rowid(m_db.db());
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     SqlLite::SqlLite() : m_database(nullptr) 
     {
@@ -132,7 +146,7 @@ namespace yq {
     }
 
 
-    SqlQuery::SqlQuery(SqlLite&db, std::string_view sql, bool isPersistent) : m_stmt(nullptr)
+    SqlQuery::SqlQuery(SqlLite&db, std::string_view sql, bool isPersistent) : m_db(db), m_stmt(nullptr)
     {
         if(!db.db()){
             dbError  << "SqlQuery(" << sql << "): Database is CLOSED!";
@@ -152,10 +166,10 @@ namespace yq {
         }
     }
     
-    SqlQuery::SqlQuery(SqlQuery&&mv) : m_stmt(mv.m_stmt)
-    {
-        mv.m_stmt    = nullptr;
-    }
+    //SqlQuery::SqlQuery(SqlQuery&&mv) : m_stmt(mv.m_stmt)
+    //{
+        //mv.m_stmt    = nullptr;
+    //}
     
     SqlQuery::~SqlQuery()
     {
@@ -165,16 +179,16 @@ namespace yq {
         }
     }
     
-    SqlQuery&   SqlQuery::operator=(SqlQuery&&mv)
-    {
-        if(this != &mv){
-            if(m_stmt)
-                sqlite3_finalize(m_stmt);
-            m_stmt  = mv.m_stmt;
-            mv.m_stmt = nullptr;
-        }
-        return *this;
-    }
+    //SqlQuery&   SqlQuery::operator=(SqlQuery&&mv)
+    //{
+        //if(this != &mv){
+            //if(m_stmt)
+                //sqlite3_finalize(m_stmt);
+            //m_stmt  = mv.m_stmt;
+            //mv.m_stmt = nullptr;
+        //}
+        //return *this;
+    //}
     
     
     SqlQuery::AutoFinish  SqlQuery::af()
@@ -295,7 +309,37 @@ namespace yq {
         }
         return true;
     }
+
+    bool  SqlQuery::bind(int col, uint64_t v)
+    {
+        return bind(col, (int64_t) v);
+    }
+
+    bool  SqlQuery::bind(int c, const std::filesystem::path&v)
+    {
+        if(!m_stmt){
+            dbError << "SqlQuery::bind(" << c << "): Not properly prepared!";
+            return false;
+        }
+        if(c<1){
+            dbError << "SqlQuery::bind(" << c << "): Bad Column Number!";
+            return false;
+        }
+        
+        auto    d = v.native();
+        int r = sqlite3_bind_text(m_stmt, c, d.data(), d.size(), SQLITE_TRANSIENT);
+        if(r != SQLITE_OK){
+            dbError << "SqlQuery::bind(" << c << "): " << SqlError(r);
+            return false;
+        }
+        return true;
+    }
     
+    bool  SqlQuery::bind(int col, const std::string& s)
+    {
+        return bind(col, (std::string_view) s);
+    }
+
     bool  SqlQuery::bind(int c, std::string_view v)
     {
         if(!m_stmt){
@@ -331,6 +375,11 @@ namespace yq {
         if(zname)
             return std::string_view(zname);
         return std::string_view();
+    }
+
+    int64_t  SqlQuery::last_id() const
+    {
+        return sqlite3_last_insert_rowid(m_db.db());
     }
 
     void  SqlQuery::reset()
@@ -421,6 +470,11 @@ namespace yq {
         if(data && (sz>0) && !data[sz-1]) // delete final NULL
             --sz;
         return std::string_view(data, sz);
+    }
+
+    uint64_t            SqlQuery::v_uint64(int col) const
+    {
+        return (uint64_t) v_int64(col);
     }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -144,6 +144,8 @@ namespace yq {
         //! Resolves across all the roots
         path_vector_t                   resolve_all(const std::string_view&, bool templatesOnly=false);
         
+        //! Root by ID....
+        const Root*                     root(uint64_t);
         const Root*                     root(const std::filesystem::path&);
         uint64_t                        root_count();
         const Root*                     root_first(DataRole);
