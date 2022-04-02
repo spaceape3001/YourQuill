@@ -433,7 +433,7 @@ namespace yq {
                     *wasCreated = true;
                 return Document((uint64_t) i.last_id());
             } else {
-                s.bind(0,k);
+                s.bind(1,k);
                 if(s.step() == SqlQuery::Row)
                     return Document{s.v_uint64(1)};
                 cdbError << "Unable to get documednt ID";
@@ -479,7 +479,7 @@ namespace yq {
                     *wasCreated = true;
                 return Folder{(uint64_t) i.last_id()};
             } else {
-                s.bind(0,k);
+                s.bind(1,k);
                 if(s.step() == SqlQuery::Row)
                     return Folder{s.v_uint64(1)};
                 cdbError << "Unable to get folder ID";
@@ -520,7 +520,7 @@ namespace yq {
                     *wasCreated = true;
                 return Fragment((uint64_t) i.last_id());
             } else {
-                s.bind(0,p);
+                s.bind(1,p);
                 if(s.step() == SqlQuery::Row)
                     return Fragment(s.v_uint64(1));
                 cdbError << "Unable to get fragment ID";

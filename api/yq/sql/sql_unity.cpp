@@ -104,6 +104,8 @@ namespace yq {
             m_database = nullptr;
             return false;
         }
+        
+        sqlite3_extended_result_codes(m_database, 1);
         m_file  = file;
         return true;
     }
@@ -152,6 +154,10 @@ namespace yq {
             dbError  << "SqlQuery(" << sql << "): Database is CLOSED!";
             return;
         }
+
+    #ifndef NDEBUG
+        m_sql   = copy(sql);
+    #endif
     
         int flags = 0;
         if(isPersistent)
@@ -399,7 +405,7 @@ namespace yq {
             return std::string_view();
     }
 
-    SqlQuery::Result SqlQuery::step()
+    SqlQuery::Result SqlQuery::step(bool noisy)
     {
         if(!m_stmt){
             dbError <<"SqlQuery::step(): Calling on an uninitalized statement!";
@@ -414,10 +420,19 @@ namespace yq {
         case SQLITE_ROW:
             return Row;
         case SQLITE_BUSY:
-            dbError << "SqlQuery::step(): BUSY, try again later.";
+            if(noisy){
+                dbError << "SqlQuery::step(): BUSY, try again later.";
+            }
             return Busy;
         default:
-            dbError << "SqlQuery::step(): " << SqlError{r};
+            if(noisy){
+                r   = sqlite3_extended_errcode(m_db.db());
+                dbError << "SqlQuery::step("
+                #ifndef NDEBUG
+                    << m_sql <<
+                #endif
+                "): " << SqlError{r} << "\n" << sqlite3_errmsg(m_db.db());
+            }
             return Error;
         }
     }

@@ -27,8 +27,13 @@ namespace yq {
         enum Trigger {
             NoTrigger,      //!< No trigger, it's a no-op
             ByFile,         //!< Change is rigged to specific file, fragment/change invalid
-            ByFolderFile,   //!< Change to folder & file extension
-            ByExtension     //!< Change to file extension
+            ByDocument,     //!< Match name
+            ByExtension,    //!< Change to file extension
+            ByFolderExt,    //!< Change to folder & file extension
+            ByFolderDoc,    //!< Change to folder & doc
+            
+            SpecName,       //!< Signal to the constructor
+            SpecFolderName  //!< Signal to the constructor
         };
     
 
@@ -40,7 +45,7 @@ namespace yq {
         struct Writer;
         
         const std::filesystem::path&    path() const { return m_path; }
-        std::string_view                extension() const { return m_extension; }
+        std::string_view                specific() const { return m_specific; }
         Folder                          folder() const { return m_folder; }
         std::string_view                description() const { return m_description; }
         
@@ -48,13 +53,14 @@ namespace yq {
         Trigger                         trigger() const { return m_trigger; }
         const std::source_location&     source() const { return m_source; }
         
+        static const EnumMap<Change,Vector<const Notifier*>>&     change_map();
 
     protected:
         Notifier(Trigger, Flag<Change>, Folder, std::string_view, const std::filesystem::path&, const std::source_location&);
         ~Notifier();
 
     private:
-        std::string             m_extension;
+        std::string             m_specific;
         std::filesystem::path   m_path;
         std::string             m_description;
         std::source_location    m_source;
@@ -71,31 +77,4 @@ namespace yq {
         Notifier*   importer  = nullptr;
     };
 
-#if 0
-
-
-    Notifier::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)());
-    Notifier::Writer    on_change( Flag<Change>, Folder, std::string_view ext, void(*)(Fragment));
-    Notifier::Writer    on_change( Flag<Change>, Folder, std::string_view ext, bool(*)(Fragment,Change));
-    Notifier::Writer    on_change( const QString&, void(*)());
-    Notifier::Writer    on_change( const QString&, void(*)(Fragment));
-    Notifier::Writer    on_change( const QString&, bool(*)(Fragment,Change));
-
-
-    Notifier::Writer    on_add( const QString&, void(*)(Fragment));
-    Notifier::Writer    on_add( const QString&, bool(*)(Fragment));
-    Notifier::Writer    on_add( const QString&, bool(*)(Fragment,Change));
-
-    Notifier::Writer    on_modify( const QString&, void(*)(Fragment));
-    Notifier::Writer    on_modify( const QString&, bool(*)(Fragment));
-    Notifier::Writer    on_modify( const QString&, bool(*)(Fragment,Change));
-
-    Notifier::Writer    on_remove( const QString&, void(*)(Fragment));
-    Notifier::Writer    on_remove( const QString&, bool(*)(Fragment));
-    Notifier::Writer    on_remove( const QString&, bool(*)(Fragment,Change));
-
-    Notifier::Writer    on_startup( const QString&, void(*)(Fragment));
-    Notifier::Writer    on_startup( const QString&, bool(*)(Fragment));
-    Notifier::Writer    on_startup( const QString&, bool(*)(Fragment,Change));
-#endif
 }

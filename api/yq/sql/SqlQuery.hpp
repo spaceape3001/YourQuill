@@ -41,7 +41,7 @@ namespace yq {
         void                reset();
         
         //! Steps/executes the statement
-        Result               step();
+        Result              step(bool noisy=false);
         
         //! Binds NULL to column
         //! 
@@ -141,6 +141,9 @@ namespace yq {
         SqlQuery&   operator=(const SqlQuery&) = delete;
         SqlLite&                 m_db;
         mutable sqlite3_stmt    *m_stmt = nullptr;
+    #ifndef NDEBUG
+        std::string             m_sql;
+    #endif
     };
 
     struct SqlQuery::AutoFinish {
