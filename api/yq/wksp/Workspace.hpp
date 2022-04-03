@@ -61,6 +61,8 @@ namespace yq {
             //! TRUE if initialize was called successfully
         bool                            has_init();
 
+        void                            set_db_init();
+
         //  ================================================================
         //     INFORMATION & QUERY -- valid AFTER successful initialize()
         //  ================================================================
@@ -85,17 +87,21 @@ namespace yq {
         //! Location for the workspace's cache file
         const std::filesystem::path&    cache();
         
+        bool                            can_cdb();
+
         //! Copyright information
         const Copyright&                copyright();
         
         //! This connection is READ_ONLY!
         SqlLite&                        db();
         
+        
         //! Location for the DOT executable
         const std::filesystem::path&    dot();
 
         //! Location for the GIT executable
         const std::filesystem::path&    git();
+
 
         //! Location for the "home" of the project
         std::string_view                home();
@@ -156,7 +162,6 @@ namespace yq {
         const root_role_vec_map_t&      root_writes();
         const root_vector_t&            root_writes(DataRole);
         const root_vector_t&            roots();
-
 
         std::filesystem::path           shared(const std::string_view&);
         std::filesystem::path           shared(const std::filesystem::path&);

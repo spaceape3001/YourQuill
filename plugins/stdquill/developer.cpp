@@ -4,16 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq/app/DelayInit.hpp>
-#include <yq/http/HttpDataStream.hpp>
-#include <yq/http/HttpRequest.hpp>
-#include <yq/http/HttpResponse.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/text/Utils.hpp>
-#include <yq/web/WebHtml.hpp>
-#include <yq/web/WebPage.hpp>
-#include <yq/web/WebAdapters.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include "stdquill.hpp"
 
 using namespace yq;
 

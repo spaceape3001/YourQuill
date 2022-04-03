@@ -199,6 +199,7 @@ namespace yq {
             std::filesystem::path   cache;          // Cache location
             Copyright               copyright;      // Copyright info of the workspace
             FNDbFlags               db_flags = nullptr;
+            std::atomic<bool>       db_init;
             std::filesystem::path   dot;            // DOT excutable
             std::filesystem::path   git;            // GIT executable
             std::string             home;           // Start page??? of the workspace
@@ -233,6 +234,12 @@ namespace yq {
             path_vector_t           template_dirs;  // Directories of templates....
             string_set_t            templates;      // Templates in use
             std::filesystem::path   tmp;            // Temporary directory
+            
+            
+            Impl()
+            {
+                db_init = false;
+            }
             
             
             bool    do_init(const Config& cfg);
@@ -709,6 +716,11 @@ namespace yq {
             return ret;
         }
 
+        void                            set_db_init()
+        {
+            impl().db_init  = true;
+        }
+
         
         //  ================================================================
         //     INFORMATION & QUERY -- valid AFTER successful initialize()
@@ -740,6 +752,11 @@ namespace yq {
             return impl().cache;
         }
         
+        bool                            can_cdb()
+        {
+            return impl().db_init;
+        }
+
         const Copyright&                copyright()
         {
             return impl().copyright;

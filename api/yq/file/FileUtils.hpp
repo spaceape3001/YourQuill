@@ -16,9 +16,6 @@ namespace yq {
     bool            file_backup(const char*, const char* suffix="bck");
     ByteArray       file_bytes(const std::filesystem::path&);
     std::string     file_string(const std::filesystem::path&);
-    //QByteArray      file_bytes(const char*);
-    //QByteArray      file_bytes(const std::string&);
-    //QByteArray      file_bytes(const QString&);
     bool            file_exists(const char*);
     bool            file_exists(const std::filesystem::path&);
     std::string     file_modified(const char*);

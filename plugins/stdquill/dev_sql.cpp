@@ -4,15 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq/app/DelayInit.hpp>
-#include <yq/http/HttpRequest.hpp>
-#include <yq/http/HttpResponse.hpp>
+#include "stdquill.hpp"
+
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/web/WebHtml.hpp>
-#include <yq/web/WebAdapters.hpp>
-#include <yq/wksp/Workspace.hpp>
 
 using namespace yq;
 

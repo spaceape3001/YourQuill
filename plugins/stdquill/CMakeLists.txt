@@ -1,4 +1,4 @@
-set(stdpages_SOURCES 
+set(stdquill_SOURCES 
     ./hare.cpp
     
     ./developer.cpp
@@ -8,6 +8,6 @@ set(stdpages_SOURCES
     ./workspace.cpp
 )
 
-add_library( stdpages SHARED ${stdpages_SOURCES} )
-#target_link_libraries( developer yq)
+add_library( stdquill SHARED ${stdquill_SOURCES} )
+#target_link_libraries( stdquill yq )
 

@@ -973,20 +973,20 @@ namespace yq {
         }
         
         
-        //std::string              frag_string(Fragment f)
-        //{
-            //return file_string(path(f));
-        //}
+        std::string              frag_string(Fragment f)
+        {
+            return file_string(path(f));
+        }
         
-        //std::string              frag_string(std::string_view k)
-        //{
-            //return frag_string(fragment(document(k)));
-        //}
+        std::string              frag_string(std::string_view k)
+        {
+            return frag_string(fragment(document(k)));
+        }
         
-        //std::string              frag_string(std::string_view k, DataRole dr)
-        //{
-            //return frag_string(fragment(document(k),dr));
-        //}
+        std::string              frag_string(std::string_view k, DataRole dr)
+        {
+            return frag_string(fragment(document(k),dr));
+        }
 
         Fragment            fragment(const std::filesystem::path&k)
         {

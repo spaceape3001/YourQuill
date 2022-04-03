@@ -107,6 +107,7 @@ bool    initialize(const char* wfile)
     HttpData::start_pool();
 
     Meta::freeze();
+    wksp::set_db_init();
     return true;
 }
 

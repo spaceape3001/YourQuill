@@ -235,9 +235,9 @@ namespace yq {
         ByteArray                   frag_bytes(std::string_view );              // equiv to bytes(fragment(document(k)))
         ByteArray                   frag_bytes(std::string_view , DataRole);
 
-        //std::string             frag_string(Fragment);
-        //std::string             frag_string(std::string_view );
-        //std::string             frag_string(std::string_view , DataRole);
+        std::string                 frag_string(Fragment);
+        std::string                 frag_string(std::string_view );
+        std::string                 frag_string(std::string_view , DataRole);
 
         Fragment                    fragment(const std::filesystem::path&);
         Fragment                    fragment(std::string_view );

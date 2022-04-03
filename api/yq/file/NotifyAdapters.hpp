@@ -35,6 +35,12 @@ namespace yq {
         return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFile, all_set<Change>(), Folder(), std::string_view(), fp, sl)};
     }
     
+    template <void (*FN)()> 
+    Notifier::Writer    on_change(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
+    {
+        return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFolderExt, all_set<Change>(), f, ext, std::filesystem::path(), sl)};
+    }
+
         ////////////////////////////////////////////////////////////////////////////////
 
     template <void(*FN)(Fragment)>
