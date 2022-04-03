@@ -14,6 +14,8 @@
 #include <string>
 #include <string_view>
 
+#include <yq/log/Logging.hpp>
+
 namespace yq {
     struct KeyValue;
 
@@ -43,6 +45,8 @@ namespace yq {
         //! Finds all matches in visitor pattern
         template <typename Match, typename Pred>
         void                        all(Match, Pred) const;
+
+        size_t                      count_keys(std::string_view) const;
 
         //! \brief Is empty?  
         //! This checks the strings/subkey-values for emptyness and returns appropriately
@@ -194,71 +198,57 @@ namespace yq {
     
         struct SingleKeyMatch {
             std::string_view        pat;
-            bool operator()(const KeyValue& a) const
-            {
-                return is_in(a.key, pat);
-            }
+            bool operator()(const KeyValue& a) const;
         };
         
             //! \brief Match the key
-        inline SingleKeyMatch        key(std::string_view s) { return SingleKeyMatch{s}; }
+        SingleKeyMatch        key(std::string_view s);
 
             //  ------------------------------------------------------------------------------------------------
 
         struct InitKeyMatch {
             std::initializer_list<std::string_view>   pat;
-            bool operator()(const KeyValue& a) const
-            {
-                return is_in(a.key, pat);
-            }
+            bool operator()(const KeyValue& a) const;
         };
         
-        inline InitKeyMatch          key(std::initializer_list<std::string_view> s) { return InitKeyMatch{s}; }
-        inline InitKeyMatch          key(std::string_view a, std::string_view b) { return InitKeyMatch{{a, b}}; }
-        inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c) { return InitKeyMatch{{a, b, c}}; }
-        inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d) { return InitKeyMatch{{a, b, c, d}}; }
-        inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d, std::string_view e) { return InitKeyMatch{{a, b, c, d, e}}; }
+        //inline InitKeyMatch          key(std::initializer_list<std::string_view> s) { return InitKeyMatch{s}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b) { return InitKeyMatch{{a, b}}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c) { return InitKeyMatch{{a, b, c}}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d) { return InitKeyMatch{{a, b, c, d}}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d, std::string_view e) { return InitKeyMatch{{a, b, c, d, e}}; }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        struct PtrVectorKeyMatch {
+            const std::vector<std::string_view>*   pat = nullptr;
+            bool operator()(const KeyValue& a) const;
+        };
+
+        //inline VectorKeyMatch        key(const std::vector<std::string_view>& s) { return VectorKeyMatch(&s); }
 
             //  ------------------------------------------------------------------------------------------------
 
         struct VectorKeyMatch {
-            const std::vector<std::string_view>*   pat = nullptr;
-            bool operator()(const KeyValue& a) const
-            {
-                return is_in(a.key, *pat);
-            }
-        };
-
-        inline VectorKeyMatch        key(const std::vector<std::string_view>& s) { return VectorKeyMatch(&s); }
-
-            //  ------------------------------------------------------------------------------------------------
-
-        struct CopyVectorKeyMatch {
             std::vector<std::string_view>   pat;
-            bool operator()(const KeyValue& a) const
-            {
-                return is_in(a.key, pat);
-            }
+            bool operator()(const KeyValue& a) const;
         };
         
-        inline CopyVectorKeyMatch        key(std::initializer_list<const char*> keys) { 
-            CopyVectorKeyMatch ret;
-            for(auto& k : keys)
-                ret.pat.push_back(k);
-            return ret;
-        }
-        
+        VectorKeyMatch  key(const std::vector<std::string_view>& s);
+        VectorKeyMatch  key(std::initializer_list<const char*> keys);
+        VectorKeyMatch  key(std::initializer_list<std::string_view> s);
+        VectorKeyMatch  key(std::string_view a, std::string_view b);
+        VectorKeyMatch  key(std::string_view a, std::string_view b, std::string_view c);
+        VectorKeyMatch  key(std::string_view a, std::string_view b, std::string_view c, std::string_view d);
+        VectorKeyMatch  key(std::string_view a, std::string_view b, std::string_view c, std::string_view d, std::string_view e);
+
             //  ------------------------------------------------------------------------------------------------
 
         struct SetKeyMatch {
-            const string_view_set_t*    pat = nullptr;
-            bool operator()(const KeyValue& a) const
-            {
-                return is_in(a.key, *pat);
-            }
+            string_view_set_t    pat;
+            bool operator()(const KeyValue& a) const;
         };
         
-        inline SetKeyMatch      key(const string_view_set_t& s) { return SetKeyMatch(&s); }
+        inline SetKeyMatch      key(const string_view_set_t& s) { return SetKeyMatch(s); }
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  MATCH ON KEYS W/O COMMAND

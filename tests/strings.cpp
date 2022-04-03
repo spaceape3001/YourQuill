@@ -276,6 +276,12 @@ CREATE TABLE CTags (\n\
         expect( false == starts("-foobar", "--"));
     
     };
+    
+    "is_in"_test = [](){
+        expect( true == is_in("foo", std::initializer_list<std::string_view>{ "foo", "bar" }));
+        expect( false == is_in("foox", std::initializer_list<std::string_view>{ "foo", "bar" }));
+        expect( true == is_in("foo", std::initializer_list<std::string_view>{ "bar", "FOO" }));
+    };
 };
 
 

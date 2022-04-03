@@ -86,6 +86,15 @@ namespace yq {
             }
         }
         #endif
+    
+    size_t              KVTree::count_keys(std::string_view z) const
+    {
+        size_t  cnt = 0;
+        for(auto& a : subs)
+            if(is_similar(a.key, z))
+                ++cnt;
+        return cnt;
+    }
 
     KeyValue*           KVTree::first(std::initializer_list<const char*>z)
     {
@@ -262,7 +271,7 @@ namespace yq {
                     if(body){
                         mode    = Mode::BODY;
                     } else {
-                        //  No body means a new attriubte, clone the last indent
+                        //  No body means a new attribute, clone the last indent
                         KeyValue   a;
                         a.indent    = lident;
                         datas << a;
@@ -513,5 +522,118 @@ namespace yq {
         return cmd.empty() && id.empty() && key.empty() && data.empty() && subs.empty(); 
     }
     
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    namespace kv {
+        bool SingleKeyMatch::operator()(const KeyValue& a) const
+        {
+            return is_in(a.key, pat);
+        }
+
+        SingleKeyMatch        key(std::string_view s) 
+        { 
+            return SingleKeyMatch{s}; 
+        }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        bool InitKeyMatch::operator()(const KeyValue& a) const
+        {
+            return is_in(a.key, pat);
+        }
+
+        //inline InitKeyMatch          key(std::initializer_list<std::string_view> s) { return InitKeyMatch{s}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b) { return InitKeyMatch{{a, b}}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c) { return InitKeyMatch{{a, b, c}}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d) { return InitKeyMatch{{a, b, c, d}}; }
+        //inline InitKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d, std::string_view e) { return InitKeyMatch{{a, b, c, d, e}}; }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        bool PtrVectorKeyMatch::operator()(const KeyValue& a) const
+        {
+            return is_in(a.key, *pat);
+        }
+
+
+            //  ------------------------------------------------------------------------------------------------
+
+        bool VectorKeyMatch::operator()(const KeyValue& a) const
+        {
+            return is_in(a.key, pat);
+        }
+
+            //  ------------------------------------------------------------------------------------------------
+            
+        VectorKeyMatch        key(const std::vector<std::string_view>& s) 
+        { 
+            return VectorKeyMatch(s); 
+        }
+
+        VectorKeyMatch        key(std::initializer_list<const char*> keys) 
+        { 
+            VectorKeyMatch ret;
+            for(auto& k : keys)
+                ret.pat.push_back(k);
+            return ret;
+        }
+        
+        VectorKeyMatch          key(std::initializer_list<std::string_view> s) 
+        { 
+            VectorKeyMatch ret;
+            for(auto& k : s)
+                ret.pat.push_back(k);
+            return ret;
+        }
+
+        VectorKeyMatch          key(std::string_view a, std::string_view b) 
+        { 
+            VectorKeyMatch ret;
+            ret.pat.push_back(a);
+            ret.pat.push_back(b);
+            return ret;
+        }
+        
+        VectorKeyMatch          key(std::string_view a, std::string_view b, std::string_view c) 
+        { 
+            VectorKeyMatch ret;
+            ret.pat.push_back(a);
+            ret.pat.push_back(b);
+            ret.pat.push_back(c);
+            return ret;
+        }
+        
+        VectorKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d) 
+        { 
+            VectorKeyMatch ret;
+            ret.pat.push_back(a);
+            ret.pat.push_back(b);
+            ret.pat.push_back(c);
+            ret.pat.push_back(d);
+            return ret;
+        }
+        
+        VectorKeyMatch          key(std::string_view a, std::string_view b, std::string_view c, std::string_view d, std::string_view e) 
+        { 
+            VectorKeyMatch ret;
+            ret.pat.push_back(a);
+            ret.pat.push_back(b);
+            ret.pat.push_back(c);
+            ret.pat.push_back(d);
+            ret.pat.push_back(e);
+            return ret;
+        }
+
+            //  ------------------------------------------------------------------------------------------------
+
+        bool SetKeyMatch::operator()(const KeyValue& a) const
+        {
+            return is_in(a.key, pat);
+        }
+
+            //  ------------------------------------------------------------------------------------------------
+
+    }
 
 }

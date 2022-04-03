@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <yq/app/DelayInit.hpp>
+#include <yq/bit/Copyright.hpp>
 #include <yq/http/HttpRequest.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/Utils.hpp>
@@ -15,6 +16,7 @@
 #include <yq/wksp/Workspace.hpp>
 
 using namespace yq;
+using namespace std::literals::string_literals;
 
 namespace {
     void    dev_table(WebHtml& h, const root_vector_t& roots)
@@ -34,8 +36,30 @@ namespace {
         h.title("Workspace Roots");
         dev_table(h, wksp::roots());
     }
+
+   void  wksp_info(WebHtml& h)
+   {
+        h.title("Workspace '"s + copy(wksp::name()) + "'"s);
+        
+        auto t = html::table(h);
+        html::kvrow(h, "Name") << wksp::name();
+        html::kvrow(h, "Author") << wksp::author();
+        html::kvrow(h, "Abbreviation") << wksp::abbreviation();
+        html::kvrow(h, "Cache") << wksp::cache();
+        //html::kvrow(h, "Config") << dev(cdb::config_folder());
+        html::kvrow(h, "Copyright") << wksp::copyright().text;
+        html::kvrow(h, "Key") << wksp::quill_key();
+        html::kvrow(h, "Host") << wksp::host();
+        html::kvrow(h, "Port") << wksp::port();
+        html::kvrow(h, "Read Timeout") << wksp::read_timeout();
+        html::kvrow(h, "Start") << wksp::start();
+        html::kvrow(h, "Templates") << join(wksp::templates(), ", ");
+   }
+     
+
 }
 
 YQ_INVOKE(
+    reg_webpage<wksp_info>("/dev/wksp/info");
     reg_webpage<wksp_roots>("/dev/wksp/roots");
 )
