@@ -6,7 +6,6 @@
 
 #include "yquill.hpp"
 
-
 #include <yq/app/CmdArgs.hpp>
 #include <yq/app/Plugins.hpp>
 #include <yq/file/FileUtils.hpp>
@@ -60,7 +59,12 @@ int     db_flags()
 bool    initialize(const char* wfile)
 {
     //  EVENTUALLY.... better arguments, but for now.... 
-    log_to_std_error();
+    log_to_std_error(
+    #ifndef NDEBUG
+        LogPriority::Debug
+    #endif
+    );
+    
     Meta::init();
     
     wksp::Config    wcfg;
@@ -108,6 +112,15 @@ bool    initialize(const char* wfile)
 
     Meta::freeze();
     wksp::set_db_init();
+    
+    yInfo() << "Stage 1: File scan.";
+    stage1_scan();    
+    yInfo() << "Stage 2: Sweep.";
+    stage2_unimport();
+    yInfo() << "Stage 3: Digesting documents.";
+    stage3_documents();
+    yInfo() << "Stage 4: Finalization.";
+    stage4_finalize();
     return true;
 }
 

@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DirWatcher.hpp"
-#include "Notifier.hpp"
 #include <yq/ipc/ipcBuffer.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/text/Utils.hpp>
@@ -90,79 +89,5 @@ namespace yq {
         return j;
     }
 
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    
-    struct Notifier::Repo {
-        std::vector<const Notifier*>    all;
-        EnumMap<Change,Vector<const Notifier*>> byChange;
-    };
-    
-    Notifier::Repo&  Notifier::repo()
-    {
-        static Repo s_repo;
-        return s_repo;
-    }
 
-    const std::vector<const Notifier*>&  Notifier::all()
-    {
-        return repo().all;
-    }
-    
-    const EnumMap<Change,Vector<const Notifier*>>&     Notifier::change_map()
-    {
-        return repo().byChange;
-    }
-    
-
-    Notifier::Notifier(Trigger trigger, Flag<Change> changeMask, Folder folder, std::string_view ext, const std::filesystem::path& file, const std::source_location& sl)
-    {
-        m_path      = file;
-        m_source    = sl;
-        m_folder    = folder;
-        m_change    = changeMask;
-
-        bool        is_extension    = starts(ext, "*.");
-        if(is_extension)
-            ext     = ext.substr(2);
-        m_specific  = ext;
-        
-        switch(trigger){
-        case NoTrigger:
-        case ByFile:
-            break;
-        case ByDocument:
-        case ByExtension:
-        case ByFolderExt:
-        case ByFolderDoc:
-            m_trigger   = trigger;
-            break;
-        case SpecName:
-            m_trigger   = is_extension ? ByExtension : ByDocument;
-            break;
-        case SpecFolderName:
-            m_trigger   = is_extension ? ByFolderExt : ByFolderDoc;
-            break;
-        default:
-            m_trigger   = NoTrigger;
-            break;
-        }
-
-        Repo&   _r = repo();
-        _r.all.push_back(this);
-        for(Change c : Change::all_values())
-            if(changeMask.is_set(c))
-                _r.byChange[c] << this;
-    }
-    
-    Notifier::~Notifier()
-    {
-    }
-
-    Notifier::Writer&     Notifier::Writer::description(std::string_view d)
-    {
-        if(importer)
-            importer -> m_description = d;
-        return *this;
-    }
 }

@@ -5,14 +5,23 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "yquill.hpp"
-#include "yscanner.hpp"
+//#include "yscanner.hpp"
 
+#include <yq/algo/Compare.hpp>
+#include <yq/collection/Deque.hpp>
+#include <yq/collection/EnumMap.hpp>
+#include <yq/collection/Set.hpp>
+#include <yq/collection/Vector.hpp>
 #include <yq/enum/Change.hpp>
 #include <yq/file/cdb.hpp>
+#include <yq/file/DirWatcher.hpp>
 #include <yq/file/FileUtils.hpp>
-#include <yq/file/Notifier.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/sql/SqlQuery.hpp>
+#include <yq/srv/Notifier.hpp>
+#include <yq/srv/Stage2.hpp>
+#include <yq/srv/Stage3.hpp>
+#include <yq/srv/Stage4.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/wksp/Root.hpp>
 #include <yq/wksp/Workspace.hpp>
@@ -38,7 +47,211 @@ static constexpr const unsigned int kScanTickInterval   = 100;
 #define sNotice          yNotice("scanner")
 #define sWarning         yWarning("scanner")
 
+struct RootPath {
+    const yq::Root*             root    = nullptr;
+    std::filesystem::path       path;       //!< Relative path if root present, absolute otherwise
+};
 
+RootPath    rootPath(const std::filesystem::path&fp)
+{
+    static const std::vector<const Root*>& roots = wksp::roots();
+    
+    for(const Root* r : roots){
+        std::error_code         ec;
+        std::filesystem::path   p   = std::filesystem::relative(fp, r->path, ec);
+        if(ec != std::error_code())
+            continue;
+        if(starts(p.native(), "../"))
+            continue;
+        if(starts(p.native(), "/"))
+            continue;
+        return RootPath{ r, p };
+    }
+    
+    return RootPath{ nullptr, fp };
+}
+
+
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+struct DQ1 {
+    Folder                  folder;
+    Directory               directory;
+    std::filesystem::path   path;
+};
+
+std::string_view    suffix(std::string_view n)
+{
+    size_t  i   = n.find_first_of('.', 1);
+    if(i != std::string_view::npos)
+        return n.substr(i);
+    return std::string_view();
+}
+
+bool    ignore(Folder f, std::string_view n)
+{
+    if(n == ".")
+        return true;
+    if(n == "..")
+        return true;
+    if(n == ". ")
+        return true;
+        
+    if(f == cdb::top_folder()){
+        if(is_similar(n, ".cache"))
+            return true;
+        if(is_similar(n, ".git"))
+            return true;
+        if(is_similar(n, ".logs"))
+            return true;
+        if(is_similar(n, ".quill"))
+            return true;
+        if(is_similar(n, ".svn"))
+            return true;
+        if(is_similar(n, ".users"))
+            return true;
+        if(is_similar(n, ".yquill"))
+            return true;
+    }
+
+        // prune out temporaries....
+    if(ends(n, "~"))
+        return true;
+    if(ends(n, "-"))
+        return true;
+    if(ends(n, ".bck"))
+        return true;
+    if(ends(n, ".disable"))
+        return true;
+    if(ends(n, ".bad"))
+        return true;
+    if(ends(n, ".orig"))
+        return true;
+    if(starts(suffix(n), ".draft"))
+        return true;
+    if(n == ".")
+        return true;
+    if(n == "..")
+        return true;
+
+    return false;
+}
+
+
+        //  Stage 1 -- only scans, creates the directories/fragments in the database
+void    stage1_scan()
+{
+    Deque<DQ1>      queue;
+    
+    for(const Root* rt : wksp::roots())
+        queue << DQ1{cdb::top_folder(), cdb::db_root(rt), rt->path};
+    
+    while(!queue.empty()){
+        DQ1     dq;
+        queue >> dq;
+        
+        dir::for_all_children(dq.path, dir::HIDDEN, [&](const std::filesystem::path& p){
+            auto n  = p.filename().string();
+            if(ignore(dq.folder, n))
+                return;
+                
+            if(std::filesystem::is_directory(p)){
+                DQ1 dq2;
+                std::tie(dq2.directory, dq2.folder)    = cdb::db_directory(dq.directory, n);
+                if(dq2.directory){
+                    dq2.path   = p;
+                    queue << dq2;
+                }
+            } else {
+                cdb::db_fragment(dq.directory, n);
+            }
+        });
+    }
+}
+
+        //  Stage 2 -- call the on_startups with zero arguments
+void    stage2_unimport()
+{
+    Vector<const Stage2*>   handlers    = Stage2::all();
+    std::stable_sort(handlers.begin(), handlers.end(), [](const Stage2*a, const Stage2*b) -> bool {
+        return a->order() < b->order();
+    });
+    for(const Stage2* h : handlers)
+        h->invoke();
+}
+
+        //  Stage 3 -- call the on_startup for all the files with respective importing
+void    stage3_documents()
+{
+    Vector<const Stage3*>   handlers    = Stage3::all();
+    std::stable_sort(handlers.begin(), handlers.end(), [](const Stage3*a, const Stage3*b) -> bool {
+        return a->order() < b->order();
+    });
+    
+    SqlQuery                sn(wksp::db(), "SELECT id FROM Documents WHERE name=? ORDER BY k");
+    SqlQuery                sx(wksp::db(), "SELECT id FROM Documents WHERE suffix=? ORDER BY k");
+    SqlQuery                sfn(wksp::db(), "SELECT id FROM Documents WHERE folder=? AND name=? ORDER BY k");
+    SqlQuery                sfx(wksp::db(), "SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
+    
+    for(const Stage3* h : handlers){
+        SqlQuery::AutoFinish    af;
+        switch(h->method()){
+        case Stage3::ByName:
+            af  = sn.autoFinish();
+            sn.bind(1, h->specific());
+            while(sn.step() == SqlQuery::Row){
+                h -> invoke(Document{ sn.v_uint64(1)});
+            }
+            break;
+        case Stage3::ByExt:
+            af  = sn.autoFinish();
+            sx.bind(1, h->specific());
+            while(sx.step() == SqlQuery::Row){
+                h -> invoke(Document{ sx.v_uint64(1)});
+            }
+            break;
+        case Stage3::ByFolderName:
+            af  = sn.autoFinish();
+            sfn.bind(1, h->folder().id);
+            sfn.bind(2, h->specific());
+            while(sfn.step() == SqlQuery::Row){
+                h -> invoke(Document{ sfn.v_uint64(1)});
+            }
+            break;
+        case Stage3::ByFolderExt:
+            af  = sn.autoFinish();
+            sfn.bind(1, h->folder().id);
+            sfx.bind(2, h->specific());
+            while(sfx.step() == SqlQuery::Row){
+                h -> invoke(Document{ sfx.v_uint64(1)});
+            }
+            break;
+        }
+    }
+}
+
+        // Stage 4 -- pass after stage 3
+void    stage4_finalize()
+{
+    Vector<const Stage4*>   handlers    = Stage4::all();
+    std::stable_sort(handlers.begin(), handlers.end(), [](const Stage4*a, const Stage4*b) -> bool {
+        return a->order() < b->order();
+    });
+    for(const Stage4* h : handlers)
+        h->invoke();
+}
+
+        //  Stage 5 -- scan/sweep for changes
+void    stage5_sweep()
+{
+}
+
+
+
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+//  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#if 0
 struct YScanner::D {
     const Root*         root;
     std::string         dpath;
@@ -367,6 +580,7 @@ void     YScanner::scan()
     
     m_primed    = true;
 }
+#endif
 
 
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -374,7 +588,6 @@ void     YScanner::scan()
 
 void        run_scanner(Vector<std::thread>& threads)
 {
-    using namespace std::literals::chrono_literals;
     std::condition_variable cv;
     std::mutex              mutex;
     bool                    ready = false;
@@ -382,17 +595,12 @@ void        run_scanner(Vector<std::thread>& threads)
     threads << std::thread([&](){
         thread::id();
 
-        YScanner scan;
-        scan.prime();
-
         ready       = true;
         cv.notify_one();
 
         while(gQuit == Quit::No){
-            std::this_thread::sleep_for(1ms);
-            scan.do_work();
-            if(scan.is_bad())
-                break;
+            std::this_thread::sleep_for(10ms);
+            stage5_sweep();
         }
     });
     

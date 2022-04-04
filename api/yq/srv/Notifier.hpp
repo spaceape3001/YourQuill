@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Folder.hpp"
 #include <yq/enum/Change.hpp>
+#include <yq/file/Folder.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/type/Flag.hpp>
 #include <filesystem>
@@ -20,6 +20,7 @@ namespace yq {
 
     /*! \brief Notifier for files that have changed
 
+        Technically "stage 5", this is a notification that a particular file has changed
     */
     class Notifier {
     public:

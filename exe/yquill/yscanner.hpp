@@ -8,21 +8,45 @@
 
 namespace yq {
     class Notifier;
+    class Root;
 }
 
-class YScanner /* : public yq::DirWatcher  */ {  // dirwatcher is pending....
+using namespace yq;
+
+struct RootPath {
+    const yq::Root*             root    = nullptr;
+    std::filesystem::path       path;       //!< Relative path if root present, absolute otherwise
+};
+
+#if 0
+class YScanner : public yq::DirWatcher {
 public:
 
 
     YScanner();
     ~YScanner();
     
-    void    do_work();
+    
     void    prime();
+    void    do_work();
     
     bool    is_bad() const { return m_bad; }
 
 private:
+
+    enum State {
+        Init        = 0,
+        Startup,
+        Scanning
+    };
+    
+
+    State                   m_state = Init;
+
+    void                check(const std::filesystem::path&);
+    //const yq::Root*     root(const std::filesystem::path&) const;
+
+
     
     struct D;
     struct F;
@@ -30,7 +54,6 @@ private:
     struct T;
 
     using WatchList = yq::Vector<const yq::Notifier*> ;
-
 
     yq::Deque<D>            m_scan;
     yq::Vector<W>           m_watch;
@@ -45,8 +68,12 @@ private:
     //yq::EnumMap<Change, T>  m_notify;
     
     
+    
+    
+    
     //D                   next();
     void     scan();
     void     checkWatch();
 };
+#endif
 

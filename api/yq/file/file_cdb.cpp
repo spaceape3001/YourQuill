@@ -324,48 +324,24 @@ namespace yq {
         
         std::vector<uint8_t>         data(Fragment);     // TODO
 
-        Directory           db_directory(const Root*rt, bool *wasCreated)
+        std::pair<Directory, Folder>    db_directory(Directory dirParent, std::string_view k, bool *wasCreated)
         {
             if(wasCreated)
                 *wasCreated = false;
+            if(k.empty() || !dirParent)
+                return {};
+            const Root* rt  = root(dirParent);
             if(!rt)
-                return Directory();
+                return {};
+
+            Folder f           = db_folder(folder(dirParent), k);
+            if(!f)
+                return {};
                 
-            static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
-            static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
-            
-            auto s_lk   = s.af();
-            auto i_lk   = i.af();
-            i.bind(1, rt->path);
-            i.bind(2, rt->id);
-            
-            if(is_good(i.step())){
-                if(wasCreated)
-                    *wasCreated  = true;
-                return Directory(i.last_id());
-            } else {
-                s.bind(1, rt->path);
-                if(s.step() == SqlQuery::Row)
-                    return Directory(s.v_uint64(1));
-                cdbError << "Unable to get directory ID";
-                return Directory();
-            }
-        }
-        
-        Directory           db_directory(Directory dir, std::string_view k, bool *wasCreated)
-        {
-            if(wasCreated)
-                *wasCreated = false;
-            if(k.empty() || !dir)
-                return Directory();
-            Folder  f       = db_folder(folder(dir), k);
-            std::string p       = path(dir);
+            std::string p       = path(dirParent);
             p += '/';
             p += k;
             
-            const Root* rt  = root(dir);
-            if(!f || !rt)
-                return Directory();
                 
             static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent,name) VALUES (?,?,?,?,?)");
             static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
@@ -375,19 +351,19 @@ namespace yq {
             i.bind(1, p);
             i.bind(2,rt->id);
             i.bind(3,f.id);
-            i.bind(4,dir.id);
+            i.bind(4,dirParent.id);
             i.bind(5,k);
             
             if(is_good(i.step())){
                 if(wasCreated)
                     *wasCreated = true;
-                return Directory((uint64_t) i.last_id());
+                return { Directory((uint64_t) i.last_id()), f};
             } else {
                 s.bind(1, p);
                 if(s.step() == SqlQuery::Row)
-                    return Directory(s.v_uint64(1));
+                    return { Directory(s.v_uint64(1)), f };
                 cdbError << "Unable to get directory ID";
-                return Directory{};
+                return {};
             }
         }
         
@@ -488,18 +464,18 @@ namespace yq {
         }
         
         
-        Fragment            db_fragment(Directory dir, std::string_view k, bool *wasCreated)
+        std::pair<Fragment, Document>   db_fragment(Directory dirParent, std::string_view k, bool *wasCreated)
         {
             if(wasCreated)
                 *wasCreated = false;
-            if(k.empty() || !dir)
-                return Fragment{};
+            if(k.empty() || !dirParent)
+                return {};
             
-            Folder          f   = folder(dir);
+            Folder          f   = folder(dirParent);
             Document        a   = db_document(f, k);
-            std::filesystem::path         p   = path(dir) / k;
+            std::filesystem::path         p   = path(dirParent) / k;
             std::string         sfx = suffix(a);
-            const Root*     rt  = root(dir);
+            const Root*     rt  = root(dirParent);
             
             
             static thread_local SQ    i("INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder,suffix) VALUES (?,?,?,?,?,?,?)");
@@ -509,7 +485,7 @@ namespace yq {
             
             i.bind(1,p);
             i.bind(2,k);
-            i.bind(3,dir.id);
+            i.bind(3,dirParent.id);
             i.bind(4,rt->id);
             i.bind(5,a.id);
             i.bind(6,f.id);
@@ -518,13 +494,41 @@ namespace yq {
             if(is_good(i.step())){
                 if(wasCreated)
                     *wasCreated = true;
-                return Fragment((uint64_t) i.last_id());
+                return { Fragment((uint64_t) i.last_id()), a };
             } else {
                 s.bind(1,p);
                 if(s.step() == SqlQuery::Row)
-                    return Fragment(s.v_uint64(1));
+                    return { Fragment(s.v_uint64(1)), a };
                 cdbError << "Unable to get fragment ID";
-                return Fragment{};
+                return {};
+            }
+        }
+        
+        Directory           db_root(const Root*rt, bool *wasCreated)
+        {
+            if(wasCreated)
+                *wasCreated = false;
+            if(!rt)
+                return Directory();
+                
+            static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
+            static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
+            
+            auto s_lk   = s.af();
+            auto i_lk   = i.af();
+            i.bind(1, rt->path);
+            i.bind(2, rt->id);
+            
+            if(is_good(i.step())){
+                if(wasCreated)
+                    *wasCreated  = true;
+                return Directory(i.last_id());
+            } else {
+                s.bind(1, rt->path);
+                if(s.step() == SqlQuery::Row)
+                    return Directory(s.v_uint64(1));
+                cdbError << "Unable to get directory ID";
+                return Directory();
             }
         }
         

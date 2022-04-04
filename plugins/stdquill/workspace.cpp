@@ -6,7 +6,7 @@
 
 #include "stdquill.hpp"
 #include <yq/file/FileUtils.hpp>
-#include <yq/file/NotifyAdapters.hpp>
+#include <yq/srv/NotifyAdapters.hpp>
 #include <yq/http/TypedBytes.hpp>
 #include <yq/stream/Text.hpp>
 

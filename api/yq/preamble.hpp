@@ -8,6 +8,10 @@
 
 #include <yq/c++/stdlibs.hpp>
 
+using namespace std::literals::chrono_literals;
+using namespace std::literals::string_literals;
+using namespace std::literals::string_view_literals;
+
     //  Linux suppourts int128
 using uint128_t = unsigned __int128;
 using int128_t  = __int128;

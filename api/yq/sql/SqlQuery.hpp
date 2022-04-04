@@ -133,6 +133,7 @@ namespace yq {
         
         struct AutoFinish;
         AutoFinish  af();
+        AutoFinish  autoFinish();
     private:
     
         SqlQuery(SqlQuery&&) = delete;
@@ -147,12 +148,13 @@ namespace yq {
     };
 
     struct SqlQuery::AutoFinish {
+        AutoFinish(){}
         AutoFinish(AutoFinish&&);
         AutoFinish& operator=(AutoFinish&&);
         ~AutoFinish();
     private:
         friend class SqlQuery;
-        SqlQuery*       q;
+        SqlQuery*       q = nullptr;
         AutoFinish(SqlQuery* _q);
         AutoFinish(const AutoFinish&) = delete;
         AutoFinish& operator=(const AutoFinish&) = delete;

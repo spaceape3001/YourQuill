@@ -23,7 +23,6 @@
 #define wkspNotice          yNotice("wksp")
 #define wkspWarning         yWarning("wksp")
 
-
 namespace yq {
     namespace wksp {
         namespace {
@@ -430,9 +429,9 @@ namespace yq {
             string_set_t    rSeen;
             Root*           rt  = new Root(qdir, PolicyMap(Access::ReadWrite));
             roots << rt;
-            rpath["."]              = rt;
+            rpath["."sv]              = rt;
             rpath[qdir]             = rt;
-            rkey["."]               = rt;
+            rkey["."sv]               = rt;
 
             SetSpots        qs;
             abbr                    = doc.abbr;
