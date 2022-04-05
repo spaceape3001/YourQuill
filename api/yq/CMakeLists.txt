@@ -87,8 +87,6 @@ set(yq_sources
     ./file/AbstractFile.hpp
     ./file/DirWatcher.hpp
     ./file/FileUtils.hpp
-    ./file/Notifier.hpp
-    ./file/NotifyAdapters.hpp
     ./file/StdFile.hpp
     ./file/XmlFile.hpp
     ./file/XmlFwd.hpp
@@ -143,6 +141,13 @@ set(yq_sources
     ./sql/SqlLogging.hpp
     ./sql/SqlQuery.hpp
     #./sql/SqlUtils.hpp
+    
+    ./srv/srv_unity.cpp
+    ./srv/Notifier.hpp
+    ./srv/NotifyAdapters.hpp
+    ./srv/Stage2.hpp
+    ./srv/Stage3.hpp
+    ./srv/Stage4.hpp
 
     ./stream/stream_unity.cpp
     ./stream/Bytes.hpp

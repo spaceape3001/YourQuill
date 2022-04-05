@@ -14,7 +14,6 @@ namespace yq {
 
     YQ_ENUM(Change, ,
         None,
-        Startup,    // on startup pass
         Added,      // fragment's been added
         Modified,   // fragment's been modified
         Removed     // fragment's been removed

@@ -18,6 +18,8 @@
 
 namespace yq {
     namespace cdb {
+        static constexpr const uint64_t     kMaxFixedFolder = Folder::TAGS;
+    
         std::vector<Directory>   all_directories(unsigned opts)
         {
             if(opts & BestSort){
@@ -643,16 +645,23 @@ namespace yq {
             return s.size(rt->id);
         }
 
+        std::set<Directory>             directories_set(Directory d)
+        {
+            static thread_local SQ    s("SELECT id FROM Directories WHERE parent=?");
+            return s.set<Directory>(d.id);
+        }
+        
+
         namespace {
             std::vector<DirString>   directories_with_names_sorted(Directory dir)
             {
                 std::vector<DirString>   ret;
                 static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=?");
-                auto s_lk   = s.af();
                 s.bind(1,dir.id);
                 while(s.step() == SqlQuery::Row){
                     ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
                 }
+                s.reset();
                 return ret;
             }
             
@@ -660,11 +669,11 @@ namespace yq {
             {
                 std::vector<DirString>   ret;
                 static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
-                auto s_lk   = s.af();
                 s.bind(1,dir.id);
                 while(s.step() == SqlQuery::Row){
                     ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
                 }
+                s.reset();
                 return ret;
             }
         }
@@ -776,6 +785,60 @@ namespace yq {
         {
             return sorted ? documents_by_suffix_excluding_sorted(f,sfx) : documents_by_suffix_excluding_unsorted(f,sfx);
         }
+
+        void    erase(Directory d)
+        {
+            if(!d)
+                return ;
+            
+            Folder          f   = folder(d);
+            if(f.id && f.id <= kMaxFixedFolder)
+                return ;
+            
+            {
+                static thread_local SQ dq("DELETE FROM Directories WHERE id=?");
+                dq.bind(1, d.id);
+                dq.step();
+                dq.reset();
+            }
+            
+            if(!f)
+                return ;
+            
+            size_t dc = directories_count(f);
+            if(!dc){
+                static thread_local SQ dq("DELETE FROM Folders WHERE id=?");
+                dq.bind(1, f.id);
+                dq.step();
+                dq.reset();
+            }
+        }
+
+        void    erase(Fragment f)
+        {
+            if(!f)
+                return ;
+                
+            Document    doc = document(f);
+            {
+                static thread_local SQ d("DELETE FROM Fragments WHERE id=?");
+                d.bind(1, f.id);
+                d.step();
+                d.reset();
+            }
+            
+            if(!doc)
+                return ;
+            
+            size_t  fc  = fragments_count(doc);
+            if(!fc){
+                static thread_local SQ d("DELETE FROM Documents WHERE id=?");
+                d.bind(1, doc.id);
+                d.step();
+                d.reset();
+            }
+        }
+
 
         bool                exists(Directory d)
         {
@@ -1186,6 +1249,12 @@ namespace yq {
             return s.size(f.id);
         }
 
+        std::set<Fragment>    fragments_set(Directory d)
+        {
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
+            return s.set<Fragment>(d.id);
+        }
+
         bool                hidden(Directory d)
         {
             static thread_local SQ    s("SELECT hidden FROM Directories WHERE id=?");
@@ -1213,9 +1282,9 @@ namespace yq {
         void                hide(Document d)
         {
             static thread_local SQ u("UPDATE Documents SET hidden=1 WHERE id=?");
-            auto u_af   = u.af();
             u.bind(1, d.id);
             u.step();
+            u.reset();
         }
         
         Image               icon(Document d) 
@@ -1234,7 +1303,6 @@ namespace yq {
         {
             Directory::Info        ret;
             static thread_local SQ    s("SELECT folder, name, parent, path, removed, root, hidden FROM Directories WHERE id=?");
-            auto s_lk   = s.af();
             s.bind(1, d.id);
             if(s.step() == SqlQuery::Row){
                 ret.folder  = Folder(s.v_uint64(1));
@@ -1245,6 +1313,7 @@ namespace yq {
                 ret.root    = wksp::root(s.v_uint64(6));
                 ret.hidden  = s.v_bool(7);
             }
+            s.reset();
             return ret;
         }
         
@@ -1252,7 +1321,6 @@ namespace yq {
         {
             Document::Info        ret;
             static thread_local SQ    s("SELECT k, sk, name, base, folder, suffix, removed, hidden, icon FROM Documents WHERE id=?");
-            auto s_af       = s.af();
             s.bind(1, d.id);
             if(s.step() == SqlQuery::Row){
                 ret.key     = s.v_text(1);
@@ -1265,6 +1333,7 @@ namespace yq {
                 ret.hidden  = s.v_bool(8);
                 ret.icon    = Image(s.v_uint64(9));
             }
+            s.reset();
             return ret;
         }
         
@@ -1272,7 +1341,6 @@ namespace yq {
         {
             Folder::Info        ret;
             static thread_local SQ    s("SELECT k, sk, parent, name, brief, hidden, removed, icon FROM Folders WHERE id=?");
-            auto s_af   = s.af();
             s.bind(1,f.id);
             if(s.step() == SqlQuery::Row){
                 ret.key         = s.v_text(1);
@@ -1284,6 +1352,7 @@ namespace yq {
                 ret.removed     = s.v_bool(7);
                 ret.icon        = Image(s.v_uint64(8));
             }
+            s.reset();
             return ret;
         }
         
@@ -1292,7 +1361,6 @@ namespace yq {
             Fragment::Info        ret;
 
             static thread_local SQ    s("SELECT document, dir, folder, modified, name, path, removed, rescan, bytes, hidden, root FROM Fragments WHERE id=?");
-            auto s_af   = s.af();
             s.bind(1, f.id);
             if(s.step() == SqlQuery::Row){
                 ret.document    = Document(s.v_uint64(1));
@@ -1307,6 +1375,7 @@ namespace yq {
                 ret.hidden      = s.v_bool(10);
                 ret.root        = wksp::root(s.v_uint64(11));
             }
+            s.reset();
             return ret;
         }
 
@@ -1494,9 +1563,9 @@ namespace yq {
         void                rescan(Fragment f)
         {
             static thread_local SQ    u("UPDATE Fragments SET rescan=1 WHERE id=?");
-            auto u_af   = u.af();
             u.bind(1, f.id);
             u.step();
+            u.reset();
         }
         
         bool                rescanning(Fragment f)
@@ -1647,12 +1716,12 @@ namespace yq {
             SizeTimestamp   sz  = file_size_and_timestamp(p.c_str());
         
             static thread_local SQ    u("UPDATE Fragments SET bytes=?,modified=?,removed=?,rescan=0 WHERE id=?");
-            auto u_af = u.af();
             u.bind(1, sz.size);
             u.bind(2, sz.nanoseconds());
             u.bind(3, !sz.exists);
             u.bind(4, f.id);
-            u.step();  
+            u.step(true);
+            u.reset();
         }
 
         bool                within(Folder p, Directory d, bool recursive)

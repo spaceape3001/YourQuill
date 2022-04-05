@@ -49,7 +49,7 @@ namespace yq {
         std::string_view                specific() const { return m_specific; }
         Folder                          folder() const { return m_folder; }
         std::string_view                description() const { return m_description; }
-        
+       
         Flag<Change>                    change() const { return m_change; }
         Trigger                         trigger() const { return m_trigger; }
         const std::source_location&     source() const { return m_source; }

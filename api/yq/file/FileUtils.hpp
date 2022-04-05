@@ -23,10 +23,10 @@ namespace yq {
     size_t          file_size(const char*);
 
     struct SizeTimestamp {
-        size_t          size;
-        uint64_t        time;
-        uint64_t        nano;
-        bool            exists;
+        size_t          size   = 0;
+        uint64_t        time   = 0;
+        uint64_t        nano   = 0;
+        bool            exists = false;
         
         SizeTimestamp() : size{}, time{}, nano{}, exists(false) {}
         SizeTimestamp(size_t s, uint64_t t, uint64_t n) : size(s), time(t), nano(n), exists(true) {}

@@ -164,7 +164,9 @@ void    stage1_scan()
                     queue << dq2;
                 }
             } else {
-                cdb::db_fragment(dq.directory, n);
+                Fragment frag = cdb::db_fragment(dq.directory, n).first;
+                if(frag)
+                    cdb::update(frag);
             }
         });
     }
@@ -242,9 +244,152 @@ void    stage4_finalize()
         h->invoke();
 }
 
+std::string_view    filename(std::string_view fn)
+{
+    size_t  n = fn.find_last_of('/');
+    if(n==0)
+        return fn.substr(1);
+    if(n == std::string_view::npos)
+        return fn;
+    return fn.substr(n+1);
+}
+
+
+void    dispatch(Change change, Fragment frag, Folder fo, const std::filesystem::path& p)
+{
+    static const EnumMap<Change,Vector<const Notifier*>>& changeMap = Notifier::change_map();
+
+    std::string_view    name    = filename(p.native());
+    std::string_view    ext     = file_extension(name);
+
+    for(const Notifier* n : changeMap[change]){
+        switch(n->trigger()){
+        case Notifier::ByFile:
+            if(p != n->path())
+                continue;
+            break;
+        case Notifier::ByFolderDoc:
+            if(fo != n->folder())
+                continue;
+            // fallthrough is deliberate
+        case Notifier::ByDocument:
+            if(!is_similar(name, n->specific()))
+                continue;
+            break;
+        case Notifier::ByFolderExt:
+            if(fo != n->folder())
+                continue;
+            // fallthrough is deliberate
+        case Notifier::ByExtension:
+            if(!is_similar(ext, n->specific()))
+                continue;
+            break;
+        default:
+            continue;
+        }
+        
+        n -> change(frag, change);
+    }
+    
+    
+    sInfo << change.key() << " " << p;
+    cdb::update(frag);
+}
+
+
+void    notify(Change change, Fragment frag, Folder fo, const std::filesystem::path& p=std::filesystem::path())
+{
+    dispatch(change, frag?frag:cdb::fragment(p), fo?fo:cdb::folder(frag), p.empty()?cdb::path(frag):p);
+}
+
+
+void    check_file(Folder folder, Fragment frag, const std::filesystem::path& p)
+{
+    auto info           = cdb::info(frag);
+    SizeTimestamp       szt = file_size_and_timestamp(p);
+    
+    if((szt.nanoseconds() == info.modified) && (szt.size == info.size) && (szt.exists == !info.removed))
+        return ;
+        
+    if(szt.exists && info.removed){
+        notify(Change::Added, frag, folder, p);
+    } else if(!info.removed && !szt.exists){
+        notify(Change::Removed, frag, folder, p);
+        cdb::erase(frag);
+    } else {
+        notify(Change::Modified, frag, folder, p);
+    }
+}
+
+void    dir_removed(Directory d, Folder fo=Folder())
+{
+    if(!fo)
+        fo  = cdb::folder(d);
+    for(Fragment f : cdb::fragments(d)){
+        notify(Change::Removed, f, fo);
+        cdb::erase(f);
+    }
+    for(Directory d2 : cdb::directories(d))
+        dir_removed(d2);
+    cdb::erase(d);
+}
+
         //  Stage 5 -- scan/sweep for changes
 void    stage5_sweep()
 {
+    Deque<DQ1>      queue;
+    
+    for(const Root* rt : wksp::roots())
+        queue << DQ1{cdb::top_folder(), cdb::db_root(rt), rt->path};
+
+    while(!queue.empty()){
+        DQ1     dq;
+        queue >> dq;
+        
+        // so we can process removes
+        auto frags  = cdb::fragments_set(dq.directory);
+        auto dirs   = cdb::directories_set(dq.directory);
+        
+        dir::for_all_children(dq.path, dir::HIDDEN, [&](const std::filesystem::path& p){
+            auto n  = p.filename().string();
+            if(ignore(dq.folder, n))
+                return;
+            
+            //  TODO.... not copy & paste
+            if(std::filesystem::is_directory(p)){
+                DQ1 dq2;
+                std::tie(dq2.directory, dq2.folder)    = cdb::db_directory(dq.directory, n);
+                if(dq2.directory){
+                    dq2.path   = p;
+                    queue << dq2;
+                    dirs.erase(dq2.directory);
+                }
+            } else {
+                bool    fWasCreate  = false;
+                Fragment    frag;
+                Document    doc;
+                std::tie(frag, doc) = cdb::db_fragment(dq.directory, n, &fWasCreate);
+                
+                if(fWasCreate){
+                    notify(Change::Added, frag, dq.folder, p);
+                } else {
+                    check_file(dq.folder, frag, p);
+                }
+                frags.erase(frag);
+            }
+        });
+        
+        for(Directory d2 : dirs)
+            dir_removed(d2, dq.folder);
+        for(Fragment f2 : frags){
+            notify(Change::Removed, f2, dq.folder);
+            cdb::erase(f2);
+        }
+        
+
+        if(gQuit != Quit::No)
+            break;
+    }
 }
 
 

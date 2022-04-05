@@ -182,6 +182,8 @@ namespace yq {
         size_t                          directories_count(Folder);
         size_t                          directories_count(const Root*);
         
+        std::set<Directory>             directories_set(Directory);
+
         std::vector<DirString>          directories_with_names(Directory, Sorted sorted=Sorted());
 
         Document                        document(Folder, std::string_view );
@@ -196,6 +198,9 @@ namespace yq {
         size_t                          documents_count(Folder, unsigned opts=0);
         std::vector<Document>           documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
         std::vector<Document>           documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
+
+        void                            erase(Directory);
+        void                            erase(Fragment);
 
         bool                            exists(Directory);
         bool                            exists(Document);
@@ -266,6 +271,8 @@ namespace yq {
         size_t                          fragments_count(Document, const Root*);
         size_t                          fragments_count(Directory);
         size_t                          fragments_count(Folder);
+
+        std::set<Fragment>              fragments_set(Directory);
 
         bool                            hidden(Directory);
         bool                            hidden(Document);
