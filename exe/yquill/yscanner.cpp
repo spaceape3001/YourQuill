@@ -91,14 +91,16 @@ std::string_view    suffix(std::string_view n)
 
 bool    ignore(Folder f, std::string_view n)
 {
+    // weed out bad directories to follow
     if(n == ".")
         return true;
     if(n == "..")
         return true;
-    if(n == ". ")
+    if(n == ". ")   // Don't know how this got onto the drive in the first place...
         return true;
         
     if(f == cdb::top_folder()){
+        // weed out reserved files
         if(is_similar(n, ".cache"))
             return true;
         if(is_similar(n, ".git"))
@@ -116,6 +118,8 @@ bool    ignore(Folder f, std::string_view n)
     }
 
         // prune out temporaries....
+    if(starts(n, ".#"))
+        return true;
     if(ends(n, "~"))
         return true;
     if(ends(n, "-"))
@@ -129,10 +133,6 @@ bool    ignore(Folder f, std::string_view n)
     if(ends(n, ".orig"))
         return true;
     if(starts(suffix(n), ".draft"))
-        return true;
-    if(n == ".")
-        return true;
-    if(n == "..")
         return true;
 
     return false;
@@ -291,8 +291,6 @@ void    dispatch(Change change, Fragment frag, Folder fo, const std::filesystem:
         n -> change(frag, change);
     }
     
-    
-    sInfo << change.key() << " " << p;
     cdb::update(frag);
 }
 

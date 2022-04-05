@@ -74,6 +74,6 @@ YQ_INVOKE(
     reg_webpage<test_directory>("/test/**");
     reg_webpage("/yquill", std::filesystem::path(share_directory())/"www"/"img"/"yquill.svg");
     
-    on_change<file_hare>("hare");
-    on_change<file_turtle>("turtle");
+    on_change<file_hare>("*.hare");
+    on_change<file_turtle>("*.turtle");
 );
