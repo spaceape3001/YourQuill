@@ -376,7 +376,7 @@ namespace yq {
                 *wasCreated = false;
             if(!f)
                 return Document();
-            if(ak.empty())
+            if(ak.empty() || is_space(ak))
                 return Document();
 
             std::string     k   = key(f);
@@ -470,9 +470,9 @@ namespace yq {
         {
             if(wasCreated)
                 *wasCreated = false;
-            if(k.empty() || !dirParent)
+            if(k.empty() || is_space(k) || !dirParent)
                 return {};
-            
+
             Folder          f   = folder(dirParent);
             Document        a   = db_document(f, k);
             std::filesystem::path         p   = path(dirParent) / k;
