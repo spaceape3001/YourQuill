@@ -191,6 +191,10 @@ namespace yq {
 
         Document                        document(std::string_view );
         Document                        document(uint64_t);
+        
+        /*! \brief Returns the FIRST document encountered
+        */
+        Document                        document(std::initializer_list<std::string_view>);
 
             //std::vector<Document>      documents(Directory);   // TODO
         std::vector<Document>           documents(Folder, unsigned opts=0);

@@ -8,6 +8,7 @@
 #include <yq/file/FileUtils.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage3.hpp>
+#include <yq/srv/Stage4.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/web/TypedBytes.hpp>
 
@@ -59,7 +60,27 @@ namespace {
     
     void    update_css();
     
-    
+    void    update_background()
+    {
+        Document    doc = cdb::document({ ".background.jpg", ".background.gif", ".background.png", ".background.svg" });
+        bool    now = false;
+
+        do {
+            Fragment    frag = cdb::fragment(doc, DataRole::Image);
+            if(!frag)
+                break;
+            Ref<TypedBytes> tb  = TypedBytes::load(cdb::path(frag));
+            if(!tb)
+                break;
+            gBackground = tb;
+            now = true;
+            
+        } while(false);
+        
+        bool    was = gHasBackground.exchange(now);
+        if(now != was)
+            update_css();
+    }
     
     void    update_css()
     {
@@ -127,6 +148,20 @@ namespace {
         gCss        = newCssData;
     }
     
+    void    page_background(WebContext& ctx)
+    {
+        Ref<TypedBytes>     data = gBackground;
+        if(!data){
+            ctx.status  = HttpStatus::ServiceUnavailable;
+            return;
+        }
+        
+        ctx.tx_content_type = data -> type;
+        ctx.tx_content      = data -> data;
+        ctx.tx_header("Date", data->modified);
+        ctx.status          = HttpStatus::Success;
+    }
+    
     void    page_css(WebContext& ctx)
     {
         ctx.tx_content_type = ContentType::css;
@@ -147,6 +182,7 @@ YQ_INVOKE(
     reg_webpage("/help/*", wksp::shared_all("www/help"sv));
     reg_webpage("/js/*", wksp::shared_all("www/js"sv));
     reg_webpage<page_css>("/css");
+    reg_webpage<page_background>("/background");
 
     
     reg_webvar<var_abbr>("abbr");
@@ -166,5 +202,10 @@ YQ_INVOKE(
     on_stage3<update_css>(cdb::top_folder(), ".css"sv);
     on_change<update_css>(cdb::top_folder(), ".css"sv);
     on_change<update_css>(gSharedCssFile);
+    on_stage4<update_background>();
+    on_change<update_background>(cdb::top_folder(), ".background.jpg");
+    on_change<update_background>(cdb::top_folder(), ".background.gif");
+    on_change<update_background>(cdb::top_folder(), ".background.png");
+    on_change<update_background>(cdb::top_folder(), ".background.svg");
 )
 

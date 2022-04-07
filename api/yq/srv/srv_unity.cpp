@@ -153,6 +153,8 @@ namespace yq {
         } else {
             m_method    = is_ext ? ByExt : ByName;
         }
+        
+        repo().all << this;
     }
     
     Stage3::~Stage3()

@@ -701,6 +701,16 @@ namespace yq {
             static thread_local SQ    s("SELECT id FROM Documents WHERE k=? LIMIT 1");
             return s.as<Document>(k);
         }
+
+        Document            document(std::initializer_list<std::string_view> keys)
+        {
+            for(std::string_view k : keys){
+                Document    d = document(k);
+                if(d)
+                    return d;
+            }
+            return Document{};
+        }
         
         Document            document(uint64_t i)
         {
