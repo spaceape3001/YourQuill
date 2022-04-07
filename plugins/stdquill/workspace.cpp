@@ -7,8 +7,9 @@
 #include "stdquill.hpp"
 #include <yq/file/FileUtils.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
-#include <yq/http/TypedBytes.hpp>
+#include <yq/srv/Stage3.hpp>
 #include <yq/stream/Text.hpp>
+#include <yq/web/TypedBytes.hpp>
 
 using namespace yq;
 
@@ -53,7 +54,7 @@ namespace {
     
     void    var_time(Stream& str, WebContext& ctx)
     {
-        str << ctx.time_text;
+        str << ctx.timestamp;
     }
     
     void    update_css();
@@ -128,7 +129,8 @@ namespace {
     
     void    page_css(WebContext& ctx)
     {
-        ctx.reply.content(ContentType::css).push_back(gCss);
+        ctx.tx_content_type = ContentType::css;
+        ctx.tx_content.push_back(gCss);
     }
 }
 
@@ -161,7 +163,7 @@ YQ_INVOKE(
     //reg_web("markdown/*", wksp::shared_dir("www/markdown"));
     
     gSharedCssFile      = wksp::shared("std/css"sv);
-    update_css();
+    on_stage3<update_css>(cdb::top_folder(), ".css"sv);
     on_change<update_css>(cdb::top_folder(), ".css"sv);
     on_change<update_css>(gSharedCssFile);
 )

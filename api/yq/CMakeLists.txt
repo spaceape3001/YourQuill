@@ -92,10 +92,6 @@ set(yq_sources
     ./file/XmlFwd.hpp
     ./file/XmlUtils.hpp
     
-    ./http/http_unity.cpp
-    ./http/HttpData.hpp
-    ./http/HttpParser.hpp
-    ./http/HttpRequest.hpp
     
     ./image/Image.hpp
     
@@ -177,6 +173,8 @@ set(yq_sources
     ./type/Variant.cpp
 
     ./web/web_unity.cpp
+    ./web/HttpData.hpp
+    ./web/HttpParser.hpp
     ./web/WebAdapters.hpp
     ./web/WebHtml.hpp
     ./web/WebPage.hpp

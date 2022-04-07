@@ -56,6 +56,49 @@ namespace yq {
         std::source_location    m_source;
     };
     
+    
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    template <void (*FN)()>
+    class NullFNStage3Adapter : public Stage3 {
+    public:
+        NullFNStage3Adapter(Folder f, std::string_view sp, int _order, const std::source_location& sl) : Stage3(f, sp, _order, sl)
+        {
+        }
+        
+    
+        void    invoke(Document doc) const override
+        {
+            FN();
+        }
+    };
+
+    template <void (*FN)()>
+    void    on_stage3(std::string_view name, const std::source_location&sl = std::source_location::current())
+    {
+        new NullFNStage3Adapter<FN>(Folder(), name, 0, sl);
+    }
+
+    template <void (*FN)()>
+    void    on_stage3(Folder f, std::string_view name, const std::source_location&sl = std::source_location::current())
+    {
+        new NullFNStage3Adapter<FN>(f, name, 0, sl);
+    }
+
+    template <void (*FN)()>
+    void    on_stage3(int order, std::string_view name, const std::source_location&sl = std::source_location::current())
+    {
+        new NullFNStage3Adapter<FN>(Folder(), name, order, sl);
+    }
+
+    template <void (*FN)()>
+    void    on_stage3(int order, Folder f, std::string_view name, const std::source_location&sl = std::source_location::current())
+    {
+        new NullFNStage3Adapter<FN>(f, name, order, sl);
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
     template <void (*FN)(Document)>
     class SimpleStage3Adapter : public Stage3 {
     public:

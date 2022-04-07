@@ -9,6 +9,7 @@
 #include <yq/stream/Stream.hpp>
 
 #include "HttpData.hpp"
+#include <functional>
 
 namespace yq {
     class HttpDataStream : public Stream {

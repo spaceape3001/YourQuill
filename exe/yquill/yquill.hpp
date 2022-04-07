@@ -17,8 +17,8 @@ enum class Quit {
 
 extern volatile Quit   gQuit;
 
-void        run_scanner(yq::Vector<std::thread>&);
-void        run_server(yq::Vector<std::thread>&);
+void    run_scanner(yq::Vector<std::thread>&);
+void    run_server(yq::Vector<std::thread>&);
 
         //  Stage 1 -- only scans, creates the directories/fragments in the database
 void    stage1_scan();

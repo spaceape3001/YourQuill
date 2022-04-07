@@ -1673,24 +1673,33 @@ namespace yq {
         \param[in,out]  pred Function-like object, taking a std::string_view.
     */
     template <typename Pred>
-    void            vsplit(const char* s, size_t n, char ch, Pred pred)
+    auto            vsplit(const char* s, size_t n, char ch, Pred pred)
     {
+        using return_t  = decltype(pred(std::string_view()));
         if(s && n){
             const char* end = s + n;
             const char* i   = nullptr;
             const char* j   = nullptr;
-            for(i = s; (j = strnchr(i, end-i, ch)); i = j+1)
-                pred(std::string_view(i, j));
-            pred(std::string_view(i, end));
+            for(i = s; (j = strnchr(i, end-i, ch)); i = j+1){
+                if constexpr (!std::is_same_v<return_t, void>){
+                    return_t    t   = pred(std::string_view(i, j));
+                    if(t != return_t())
+                        return t;
+                } else
+                    pred(std::string_view(i,j));
+            }
+            return pred(std::string_view(i, end));
         }
+        return return_t();
     }
 
     template <typename Pred>
-    void            vsplit(const char* s, char ch, Pred pred)
+    auto            vsplit(const char* s, char ch, Pred pred)
     {
-        if(s){
-            vsplit(s, strlen(s), ch, pred);
-        }
+        using return_t = decltype(vsplit(s, strlen(s), ch, pred));
+        if(s)
+            return vsplit(s, strlen(s), ch, pred);
+        return return_t();
     }
 
     /*! \brief Split via visitor pattern
@@ -1703,9 +1712,9 @@ namespace yq {
         \param[in,out]  pred Function-like object, taking a std::string_view.
     */
     template <typename Pred>
-    void            vsplit(std::string_view s, char ch, Pred pred)
+    auto            vsplit(std::string_view s, char ch, Pred pred)
     {
-        vsplit(s.data(), s.size(), ch, pred);
+        return vsplit(s.data(), s.size(), ch, pred);
     }
     
     /*! \brief Split via visitor pattern

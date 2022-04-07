@@ -1,3 +1,5 @@
+#error "Don't INCLUDE"
+
 #pragma once
 
 #include <asio.hpp>

@@ -1,3 +1,5 @@
+#error "Don't INCLUDE"
+
 #pragma once
 
 #include <functional>
@@ -25,3 +27,4 @@ namespace yq {
     };
     
 }
+

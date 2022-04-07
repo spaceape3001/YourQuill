@@ -28,21 +28,7 @@ namespace yq {
     class WebPage;
     using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
     
-    struct WebContext {
-        enum : uint64_t {
-            LOCAL           = 1ULL << 0
-        };
-    
-        const HttpRequest&      request;
-        HttpResponse&           reply;
-        std::string_view        truncated_path; //!< Leftover from the user-provided path
-        std::filesystem::path   resolved_file;  //!< Resolved filename (for extension handlers)
-        std::string_view        time_text;
-        time_t                  time = 0;
-        uint64_t                flags = 0;
-        
-        StringMultiMap          decode_query();
-    };
+    struct WebContext;
     
     namespace web {
         void freeze();
@@ -216,6 +202,6 @@ namespace yq {
     };
     
     
-    bool    send_file(const std::filesystem::path&, HttpResponse&, ContentType ct=ContentType());
-    bool    send_file_info(const std::filesystem::path&, HttpResponse&, ContentType ct=ContentType());
+    bool    send_file(const std::filesystem::path&, WebContext&, ContentType ct=ContentType());
+    bool    send_file_info(const std::filesystem::path&, WebContext&, ContentType ct=ContentType());
 }

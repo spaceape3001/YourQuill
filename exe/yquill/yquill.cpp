@@ -10,12 +10,12 @@
 #include <yq/app/Plugins.hpp>
 #include <yq/file/FileUtils.hpp>
 #include <yq/log/Logging.hpp>
-#include <yq/http/HttpData.hpp>
 #include <yq/meta/Meta.hpp>
 //#include <yq/stream/Ops.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlUtils.hpp>
 #include <yq/text/Utils.hpp>
+#include <yq/web/HttpData.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 #include <iostream>

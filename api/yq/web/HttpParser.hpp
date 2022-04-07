@@ -1,6 +1,5 @@
 #pragma once
-#include "HttpRequest.hpp"
-#include "HttpData.hpp"
+#include "HttpHeader.hpp"
 
 #include <yq/preamble.hpp>
 

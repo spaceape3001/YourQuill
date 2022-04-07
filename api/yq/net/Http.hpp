@@ -12,6 +12,7 @@ namespace yq {
 
     YQ_ENUM(HttpOp, ,
         Unknown = 0,
+        Error,          // shoved in here for the pages... not a real method
         Get,
         Head,
         Post,

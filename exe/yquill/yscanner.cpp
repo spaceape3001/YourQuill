@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "yquill.hpp"
-//#include "yscanner.hpp"
 
 #include <yq/algo/Compare.hpp>
 #include <yq/collection/Deque.hpp>

@@ -13,7 +13,6 @@
 
 namespace yq {
     struct WebContext;
-    class HttpRequest;
     class Stream;
     
 
@@ -35,8 +34,6 @@ namespace yq {
         
         WebContext&     context() { return m_context; }
         
-        const HttpRequest&  request() const;
-
     private:
     
         void                run_me();

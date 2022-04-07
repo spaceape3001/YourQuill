@@ -4,13 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "HttpConnection.hpp"
-#include "HttpContext.hpp"
+//#include "HttpConnection.hpp"
+//#include "HttpContext.hpp"
 #include "HttpData.hpp"
 #include "HttpDataStream.hpp"
 #include "HttpParser.hpp"
-#include "HttpResponse.hpp"
-#include "HttpServer.hpp"
+//#include "HttpResponse.hpp"
+//#include "HttpServer.hpp"
 #include "TypedBytes.hpp"
 
 #include <yq/file/FileUtils.hpp>
@@ -26,12 +26,14 @@
 
 namespace yq {
 
+#if 0
     namespace {
         auto      buffer_for(const HttpDataPtr dp)
         {
             return asio::buffer(dp->data(), dp->count());
         }
     }
+#endif
     
     HttpHeaderView          parse_header_line(const std::string_view&s)
     {
@@ -127,6 +129,7 @@ namespace yq {
 
     
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#if 0
 
     HttpConnection::HttpConnection(HttpContext&ctx, asio::ip::tcp::socket s) : 
         m_context(ctx), m_socket(std::move(s))
@@ -451,9 +454,11 @@ namespace yq {
             }
         } /* executor is to make sure response & buffers stay alive */ );
     }
+    
+    #endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+#if 0
     HttpContext::HttpContext(asio::io_context& ctx) : io_ctx(ctx)
     {
         for(HttpStatus hs : HttpStatus::all_values()){
@@ -474,7 +479,7 @@ namespace yq {
                 << cat << " (" << hs.value() << "): " << statusMessage(hs) << "</h1></body></html>";
         }
     }
-    
+#endif    
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     struct HttpData::Pool {
@@ -672,7 +677,7 @@ namespace yq {
     
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    
+    #if 0
     HttpResponse::HttpResponse(VersionSpec vs) : m_version(vs)
     {
         m_reply     = HttpData::make();
@@ -753,8 +758,9 @@ namespace yq {
         m_contentType   = ContentType();
     }
 
-
+#endif
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    #if 0
     HttpServer::HttpServer(HttpContext&ctx) : 
         m_context(ctx),
         m_acceptor(ctx.io_ctx, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), ctx.port)),
@@ -774,6 +780,7 @@ namespace yq {
             start();
         });
     }
+    #endif
     
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     

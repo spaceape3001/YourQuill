@@ -4,7 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "HttpData.hpp"
+#include "HttpDataStream.hpp"
+#include "HttpParser.hpp"
+#include "TypedBytes.hpp"
 #include "WebAdapters.hpp"
+#include "WebContext.hpp"
 #include "WebHtml.hpp"
 #include "WebPage.hpp"
 #include "WebTemplate.hpp"
@@ -14,16 +19,14 @@
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Map.hpp>
 #include <yq/file/FileUtils.hpp>
-#include <yq/http/HttpDataStream.hpp>
-#include <yq/http/HttpRequest.hpp>
-#include <yq/http/HttpResponse.hpp>
-#include <yq/http/TypedBytes.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/text/Utils.hpp>
 
+#include <asio/write.hpp>
 #include <tbb/spin_rw_mutex.h>
+#include <unistd.h>
 
 namespace yq {
 
@@ -205,8 +208,391 @@ namespace yq {
         }
     }
 
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+    
+    HttpHeaderView          parse_header_line(const std::string_view&s)
+    {
+        HttpHeaderView  ret;
+        const char* c   = strnchr(s, ':');
+        if(c){
+            ret.key     = trimmed(std::string_view(s.data(), c));
+            ret.value   = trimmed(std::string_view(c+1, s.end()));
+        }
+        return ret;
+    }
+
+
+
+    MethodUriVersion        parse_method_uri(const std::string_view& input)
+    {
+        const char* z       = nullptr;
+        const char* str     = nullptr;
+        
+        enum Mode {
+            Start    = 0,
+            Method,
+            MSpace,
+            Uri,
+            USpace,
+            Version,
+            Done
+        };
+        
+        Mode                mode    = Start;
+        MethodUriVersion    ret;
+
+        for(z = input.begin(); z<input.end(); ++z){
+            switch(mode){
+            case Start:
+                if(!is_space(*z)){
+                    str     = z;
+                    mode    = Method;
+                }
+                break;
+            case Method:
+                if(is_space(*z)){
+                    ret.method  = std::string_view(str, z);
+                    mode    = MSpace;
+                }
+                break;
+            case MSpace:
+                if(is_space(*z))
+                    break;
+                str     = z;
+                mode    = Uri;
+                break;
+            case Uri:
+                if(is_space(*z)){
+                    ret.uri = std::string_view(str, z);
+                    mode    = USpace;
+                }
+                break;
+            case USpace:
+                if(is_space(*z))
+                    break;
+                str = z;
+                mode    = Version;
+                break;
+            case Version:
+                if(is_space(*z)){
+                    ret.version = std::string_view(str, z);
+                    mode        = Done;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        
+        switch(mode){
+        case Method:
+            ret.method  = std::string_view(str, z);
+            break;
+        case Uri:
+            ret.uri = std::string_view(str, z);
+            break;
+        case Version:
+            ret.version  = std::string_view(str, z);
+            break;
+        default:
+            break;
+        }
+        
+        return ret;
+    }
+    
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    struct HttpData::Pool {
+        size_t                          size    = 0ULL;
+        size_t                          total   = 0ULL;
+        std::vector<Ref<HttpData>>      available;
+        tbb::spin_rw_mutex              mutex;
+        
+        Pool(){}
+        ~Pool(){}
+        
+        bool    init(size_t n)
+        {
+            size_t  mask    = (1ULL << kClean) - 1;
+            bool    inc     = static_cast<bool>(n & mask);
+            n  = (n >> kClean) << kClean;
+            if(inc)
+                ++n;
+            total           = n;
+            size            = n - sizeof(HttpData);
+            return true;
+        }
+        
+        HttpData*       create() 
+        {
+            HttpData*   p    = (HttpData*) new char[total];
+            new(p) HttpData();
+            return  p;
+        }
+        
+    };
+    
+    HttpData::Pool&  HttpData::pool()
+    {
+        static Pool     s_ret;
+        return s_ret;
+    }
+    
+    
+    bool    HttpData::start_pool(uint32_t n)
+    {
+        static bool    f = pool().init(n);
+        return f;
+    }
+
+    uint32_t    HttpData::size()
+    {
+        return pool().size;
+    }
+
+    Ref<HttpData>    HttpData::make()
+    {
+        // temporary
+        return pool().create();
+    }
+
+    HttpData::HttpData() : m_ref{0}, m_count{0}
+    {
+    }
+    
+    HttpData::~HttpData()
+    {
+    }
+
+    void    HttpData::advance(size_t n) 
+    { 
+        m_count = std::min<uint32_t>(m_count+n, size());
+    }
+
+    size_t  HttpData::append(const char*z, size_t cb)
+    {
+        cb  = std::min(cb, available());
+        memcpy(data()+m_count, z, cb);
+        m_count += cb;
+        return cb;
+    }
+    
+    size_t  HttpData::append(const std::string_view&s)
+    {
+        return append(s.data(), s.size());
+    }
+
+    std::string_view        HttpData::as_view() const 
+    { 
+        return std::string_view( data(), m_count ); 
+    }
+    
+    std::string_view        HttpData::as_view(uint32_t n) const 
+    { 
+        n = std::min(n, m_count);
+        return std::string_view( data() + n, m_count - n ); 
+    }
+
+    size_t            HttpData::available() const
+    {
+        return size() - m_count;
+    }
+
+    std::string_view  HttpData::copy(const std::string_view& sv)
+    {
+        size_t  rem = available();
+        size_t  cnt = std::min(sv.size(), rem);
+        if(!cnt)
+            return std::string_view();
+        memcpy(data()+m_count, sv.data(), cnt);
+        std::string_view    ret(data()+m_count, cnt);
+        m_count += cnt;
+        return ret;
+    }
+    
+    void    HttpData::count(uint32_t i)
+    {
+        m_count = std::min(i, (uint32_t) pool().size);
+    }
+    
+    void    HttpData::decRef() const
+    {
+        if(!--m_ref){
+            //  temporary
+            delete this;
+            //  recycle
+        }
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    HttpDataStream::HttpDataStream(std::vector<HttpDataPtr>& destination) : 
+        HttpDataStream( 
+            [&destination](HttpDataPtr x){ 
+                destination.push_back(x); 
+            }
+        )
+    {
+    }
+    
+    HttpDataStream::HttpDataStream(DestinationX x) : m_destination(x)
+    {
+    }
+    
+    HttpDataStream::HttpDataStream(HttpDataPtr x) : m_buffer(x)
+    {
+    }
+
+    HttpDataStream::~HttpDataStream()
+    {
+        flush();
+    }
+
+    HttpDataPtr&    HttpDataStream::buffer()
+    {
+        if(!m_buffer)
+            m_buffer    = HttpData::make();
+        return m_buffer;
+    }
+
+    void HttpDataStream::close() 
+    {
+        //  Do nothing, it's always open
+    }
+    
+    void HttpDataStream::flush()
+    {
+        if(m_destination && m_buffer && m_buffer -> m_count){
+            m_destination(m_buffer);
+            m_buffer = nullptr;
+        }
+    }
+    
+    bool HttpDataStream::is_full() const
+    {
+        return (!m_destination) && m_buffer && !m_buffer->available();
+    }
+
+    bool HttpDataStream::is_open() const 
+    { 
+        return true; 
+    }
+    
+    bool HttpDataStream::write(const char* z, size_t cb) 
+    {
+        if(!z)  
+            return false;
+
+        size_t  n = 0;
+        while( cb && ((n = buffer()->append(z, cb)) != cb)){
+            z  += n;
+            cb -= n;
+            if(!m_destination)
+                break;
+            m_destination(m_buffer);
+            m_buffer    = HttpData::make();
+        }
+        
+        return true;
+    }
+    
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    Ref<TypedBytes> TypedBytes::info(const std::filesystem::path& fp)
+    {
+        Ref<TypedBytes>     ret = new TypedBytes(fp);
+        if(!ret -> do_info())
+            return {};
+        return ret;
+    }
+
+    Ref<TypedBytes> TypedBytes::load(const std::filesystem::path& fp)
+    {
+        Ref<TypedBytes>     ret = new TypedBytes(fp);
+        if(!ret -> do_info())
+            return {};
+        if(!ret -> do_read())
+            return {};
+        return ret;
+    }
+
+    //  ------------------------------------------------
+
+    bool    TypedBytes::do_info()
+    {
+        status  = HttpStatus(); // reset the status
+        auto ext    = file_extension(path.native());
+        if(!ext.empty())
+            type    = mimeTypeForExt(ext);
+        else
+            type    = ContentType();
+        
+        struct stat buf;
+        if(::stat(path.c_str(), &buf) != 0){
+            status  = HttpStatus::NotFound;
+            return false;
+        }
+
+        size        = buf.st_size;
+        struct tm   ftime;
+        gmtime_r(&buf.st_mtim.tv_sec, &ftime);
+        strftime(modified, sizeof(modified), "%a, %d %b %Y %H:%M:%S GMT", &ftime);
+        status = HttpStatus::Success;
+        return true;
+    }
+
+    
+    bool    TypedBytes::do_read()
+    {
+        if(path.empty() || !size){
+            status  = HttpStatus::NotFound;
+            return false;
+        }
+        
+            // reset for read
+        data.clear();
+        status  = HttpStatus(); 
+        
+        int fd   = open(path.c_str(), O_RDONLY);
+        if(fd == -1){
+            status  = HttpStatus::NotFound;
+            return false;
+        }
+        
+        size_t          amt_read    = 0;
+        HttpDataPtr     cur     = HttpData::make();
+        ssize_t         n = 0;
+        while((n = read(fd, cur->freespace(), cur->available())) > 0){
+            cur -> advance(n);
+            amt_read += n;
+            if(cur->full()){
+                data.push_back(cur);
+                if(amt_read >= size){
+                    cur = nullptr;
+                    break;
+                }
+                cur = HttpData::make();
+            }
+        } 
+        close(fd);
+
+        if(cur)
+            data.push_back(cur);
+        if(amt_read < size){
+            status = HttpStatus::InternalError;
+        } else {
+            status = HttpStatus::Success;
+        }
+        return true;
+    }
+    
+    
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -244,11 +630,82 @@ namespace yq {
     }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    StringMultiMap          WebContext::decode_query()
-    {
-        return decode_web_query(request.url().query);
-    }
+        WebContext::WebContext(asio::io_context& _io_ctx) :io_ctx(_io_ctx)
+        {
+        }
+        
+        WebContext::~WebContext()
+        {
+        }
+
+        StringMultiMap          WebContext::decode_query()
+        {
+            StringMultiMap  ret;
+            vsplit(url.query, '&', [&](std::string_view b){
+                const char* eq  = strnchr(b, '=');
+                if(!eq)
+                    return;
+                ret.insert(std::string(b.data(), eq), std::string(eq+1, b.end()));
+            });
+            return ret;
+        }
+
+        std::string         WebContext::find_query(std::string_view k)
+        {
+            return vsplit(url.query, '&', [&](std::string_view b) -> std::string {
+                const char* eq  = strnchr(b, '=');
+                if(!eq)
+                    return std::string();
+                if(!is_similar(k, std::string_view(b.data(), eq)))
+                    return std::string();
+                return web_decode(std::string_view(eq+1, b.end()));
+            });
+        }
+
+        void    WebContext::redirect(std::string_view sv, bool permanent)
+        {
+            if(status != HttpStatus()){
+                if(!isRedirect(status)){
+                    status    = HttpStatus::InternalError;
+                    return ;
+                }
+            } else {
+                status = permanent ? HttpStatus::MovedPermanently : HttpStatus::TemporaryRedirect;
+            }
+            
+            tx_header("Location", sv);
+        }
+
+        size_t                  WebContext::tx_content_size() const
+        {
+            size_t  cnt = 0;
+            for(auto& i : tx_content){
+                if(i)
+                    cnt += i->count();
+            }
+            return cnt;
+        }
+
+        void    WebContext::tx_header(std::string_view k, std::string_view v)
+        {
+            if(!tx_header_buffer)
+                tx_header_buffer    = HttpData::make();
+            HttpDataStream(tx_header_buffer)  << k << ": " << v << "\r\n";
+        }
+
+        void                    WebContext::tx_reset(bool resetStatus)
+        {
+            tx_content.clear();
+            tx_header_buffer    = nullptr;
+            tx_content_type     = ContentType();
+            if(resetStatus)
+                status       = HttpStatus();
+        }
+
+
+
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -263,15 +720,11 @@ namespace yq {
         run_me();
     }
 
-    const HttpRequest&  WebHtml::request() const
-    {   
-        return m_context.request;
-    }
-
     void    WebHtml::run_me()
     {
         auto temp   = web::html_template();
-        HttpDataStream  out(m_context.reply.content(ContentType::html));
+        m_context.tx_content_type   = ContentType::html;
+        HttpDataStream  out(m_context.tx_content);
         for(auto& t : temp->m_bits){
             if(!t.variable){
                 out << t.token;
@@ -918,43 +1371,44 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    bool    send_file_info(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
+    bool    send_file_info(const std::filesystem::path& file, WebContext& rs, ContentType ct)
     {
         Ref<TypedBytes> tb  = new TypedBytes(file);
         if(!tb -> do_info()){
-            rs.status(HttpStatus::NotFound);
+            rs.status = HttpStatus::NotFound;
             return false;
         }
         
         if(ct == ContentType())
             ct  = tb -> type;
             
-        rs.status(HttpStatus::Success);
-        rs.header("Date", tb -> modified);
-        rs.content_type(ct);
-        rs.header("Content-Length", to_string(tb->size));
+        rs.status = HttpStatus::Success;
+        rs.tx_header("Date", tb -> modified);
+        rs.tx_content_type = ct;
+        //rs.header("Content-Length", to_string(tb->size));
         return true;
     }
 
-    bool    send_file(const std::filesystem::path& file, HttpResponse& rs, ContentType ct)
+    bool    send_file(const std::filesystem::path& file, WebContext& rs, ContentType ct)
     {
         Ref<TypedBytes> tb  = new TypedBytes(file);
         if(!tb -> do_info()){
-            rs.status(HttpStatus::NotFound);
+            rs.status = HttpStatus::NotFound;
             return false;
         }
         
         if(!tb -> do_read()){
-            rs.status(tb -> status);
+            rs.status = tb -> status;
             return false;
         }
 
         if(ct == ContentType())
             ct  = tb -> type;
         
-        rs.content(ct) = std::move(tb->data);
-        rs.status(HttpStatus::Success);
-        rs.header("Date", tb -> modified);
+        rs.tx_content_type  = ct;
+        rs.tx_content       = std::move(tb->data);
+        rs.status = HttpStatus::Success;
+        rs.tx_header("Date", tb -> modified);
         return true;
     }
     
@@ -979,7 +1433,7 @@ namespace yq {
                 if(x){
                     x -> handle(ctx);
                 } else {
-                    send_file(m_file, ctx.reply);
+                    send_file(m_file, ctx);
                 }
             }
         
@@ -998,13 +1452,13 @@ namespace yq {
                 std::string     p   = path_sanitize(ctx.truncated_path);
                 std::filesystem::path   fp  = m_dir / p;
                 if(!std::filesystem::exists(fp)){
-                    ctx.reply.status(HttpStatus::NotFound);
+                    ctx.status = HttpStatus::NotFound;
                     return; 
                 } 
                 
                 auto ext    = file_extension(p);
                 if(ext.empty()){
-                    send_file(fp, ctx.reply);
+                    send_file(fp, ctx);
                     return ;
                 }
             
@@ -1013,7 +1467,7 @@ namespace yq {
                     ctx.resolved_file  = fp;
                     x -> handle(ctx);
                 } else {
-                    send_file(fp, ctx.reply);
+                    send_file(fp, ctx);
                 }
             }
         
@@ -1031,13 +1485,13 @@ namespace yq {
                 std::string              p = path_sanitize(ctx.truncated_path);
                 std::filesystem::path   fp = first(p);
                 if(fp.empty()){
-                    ctx.reply.status(HttpStatus::NotFound);
+                    ctx.status = HttpStatus::NotFound;
                     return; 
                 }
 
                 auto ext    = file_extension(p);
                 if(ext.empty()){
-                    send_file(fp, ctx.reply);
+                    send_file(fp, ctx);
                     return ;
                 }
             
@@ -1046,7 +1500,7 @@ namespace yq {
                     ctx.resolved_file  = fp;
                     x -> handle(ctx);
                 } else {
-                    send_file(fp, ctx.reply);
+                    send_file(fp, ctx);
                 }
             }
             
@@ -1150,16 +1604,5 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    StringMultiMap      decode_web_query(std::string_view s)
-    {
-        StringMultiMap  ret;
-        vsplit(s, '&', [&](std::string_view b){
-            const char* eq  = strnchr(s, '=');
-            if(!eq)
-                return;
-            ret.insert(std::string(b.data(), eq), std::string(eq+1, b.end()));
-        });
-        return ret;
-    }
     
 }
