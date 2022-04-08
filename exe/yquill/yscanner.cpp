@@ -206,27 +206,27 @@ void    stage3_documents()
             }
             break;
         case Stage3::ByExt:
-            af  = sn.autoFinish();
+            af  = sx.autoFinish();
             sx.bind(1, h->specific());
-            while(sx.step() == SqlQuery::Row){
+            while(sx.step() == SqlQuery::Row)
                 h -> invoke(Document{ sx.v_uint64(1)});
-            }
             break;
         case Stage3::ByFolderName:
-            af  = sn.autoFinish();
+            af  = sfn.autoFinish();
             sfn.bind(1, h->folder().id);
             sfn.bind(2, h->specific());
-            while(sfn.step() == SqlQuery::Row){
+            while(sfn.step() == SqlQuery::Row)
                 h -> invoke(Document{ sfn.v_uint64(1)});
-            }
             break;
         case Stage3::ByFolderExt:
-            af  = sn.autoFinish();
-            sfn.bind(1, h->folder().id);
+            af  = sfx.autoFinish();
+            sfx.bind(1, h->folder().id);
             sfx.bind(2, h->specific());
-            while(sfx.step() == SqlQuery::Row){
+            while(sfx.step() == SqlQuery::Row)
                 h -> invoke(Document{ sfx.v_uint64(1)});
-            }
+            break;
+        default:
+yInfo() << "Skipping " << h->folder().id << " " << h->specific() << " (" << h->order() << ")";
             break;
         }
     }

@@ -46,11 +46,29 @@ namespace yq {
         bool        SQ::boolean(uint64_t i, std::string_view j)
         {
             auto _af = af();
-            bind(0, (int64_t) i);
-            bind(1, j);
+            bind(1, (int64_t) i);
+            bind(2, j);
             if(step() == Row)
                 return v_bool(1);
             return false;
+        }
+
+        bool        SQ::exec()
+        {
+            auto _af = af();
+            switch(step()){
+            case Row:
+            case Done:
+                return true;
+            default:
+                return false;
+            }
+        }
+
+        bool        SQ::exec(uint64_t i)
+        {
+            bind(1, (int64_t) i);
+            return exec();
         }
 
         std::filesystem::path   SQ::path()

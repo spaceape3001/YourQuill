@@ -32,7 +32,8 @@ namespace yq {
         
         void        title(const std::string_view& _title);
         
-        WebContext&     context() { return m_context; }
+        WebContext&         context() { return m_context; }
+        const WebContext&   context() const { return m_context; }
         
     private:
     

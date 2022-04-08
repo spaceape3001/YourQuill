@@ -124,51 +124,51 @@ WebHtml&    operator<<(WebHtml& h, const DevID<const Root*>&v)
 }
 
 
-namespace {
-    void    dev_table(WebHtml& h, const std::vector<Directory>& dirs)
-    {
-        auto _tab = html::table(h);
-        h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
-        for(Directory d : dirs){
-            h << "<tr><td>" << dev_id(d) << "</td><td>" 
-                << cdb::fragments_count(d) << "</td><td>" << cdb::directories_count(d) << "</td><td>" << cdb::path(d) << "</td></tr>\n";
-        }
+void    dev_table(WebHtml& h, const std::vector<Directory>& dirs)
+{
+    auto _tab = html::table(h);
+    h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
+    for(Directory d : dirs){
+        h << "<tr><td>" << dev_id(d) << "</td><td>" 
+            << cdb::fragments_count(d) << "</td><td>" << cdb::directories_count(d) << "</td><td>" << cdb::path(d) << "</td></tr>\n";
     }
-    
-    void    dev_table(WebHtml& h, const std::vector<Document>& documents)
-    {
-        auto _tab = html::table(h);
-        h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
-        for(Document a : documents){
-            auto i = cdb::info(a);
-            h << "<tr><td>" << dev_id(a)  << "</td><td>" << cdb::fragments_count(a) 
-              << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" << i.suffix << "</td></tr>\n";
-        }
-    }
+}
 
-    void    dev_table(WebHtml& h, const std::vector<Fragment>& fragments)
-    {
-        auto _tab = html::table(h);
-        h << "<tr><th>ID</th><th>Name</th><th>Size</th><th>Path</th>\n";
-        for(Fragment f : fragments){
-            auto i = cdb::info(f);
-            h << "<tr><td>" << dev_id(f) << "</td><td>" << i.name 
-                << "</td><td>" << i.size << "</td><td>" << i.path << "</td></tr>\n";
-        }
+void    dev_table(WebHtml& h, const std::vector<Document>& documents)
+{
+    auto _tab = html::table(h);
+    h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
+    for(Document a : documents){
+        auto i = cdb::info(a);
+        h << "<tr><td>" << dev_id(a)  << "</td><td>" << cdb::fragments_count(a) 
+          << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" << i.suffix << "</td></tr>\n";
     }
-    
-    void    dev_table(WebHtml& h, const std::vector<Folder>&folders)
-    {
-        auto _tab = html::table(h);
-        h << "<tr><th><ID></th><th>key</th><th>Name</th><th>Documents</th><th>Children</th><th>Brief</th></tr>\n";
-        for(Folder f : folders){
-            auto i = cdb::info(f);
-            h << "<tr><td>" << dev_id(f) << "</td><td>" << i.key
-              << "</td><td>" << i.name << "</td><td>" << cdb::documents_count(f) << "</td><td>" << cdb::folders_count(f) 
-              << "</td><td>" << i.brief << "</td</tr>\n";
-        }
+}
+
+void    dev_table(WebHtml& h, const std::vector<Fragment>& fragments)
+{
+    auto _tab = html::table(h);
+    h << "<tr><th>ID</th><th>Name</th><th>Size</th><th>Path</th>\n";
+    for(Fragment f : fragments){
+        auto i = cdb::info(f);
+        h << "<tr><td>" << dev_id(f) << "</td><td>" << i.name 
+            << "</td><td>" << i.size << "</td><td>" << i.path << "</td></tr>\n";
     }
-    
+}
+
+void    dev_table(WebHtml& h, const std::vector<Folder>&folders)
+{
+    auto _tab = html::table(h);
+    h << "<tr><th><ID></th><th>key</th><th>Name</th><th>Documents</th><th>Children</th><th>Brief</th></tr>\n";
+    for(Folder f : folders){
+        auto i = cdb::info(f);
+        h << "<tr><td>" << dev_id(f) << "</td><td>" << i.key
+          << "</td><td>" << i.name << "</td><td>" << cdb::documents_count(f) << "</td><td>" << cdb::folders_count(f) 
+          << "</td><td>" << i.brief << "</td</tr>\n";
+    }
+}
+
+namespace {
     void    page_dev_dirs(WebHtml& h)
     {
         h.title("Listing of Directories");

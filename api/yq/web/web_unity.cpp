@@ -652,13 +652,26 @@ namespace yq {
             return ret;
         }
 
-        std::string         WebContext::find_query(std::string_view k)
+        std::string         WebContext::find_query(std::string_view k) const
         {
             return vsplit(url.query, '&', [&](std::string_view b) -> std::string {
                 const char* eq  = strnchr(b, '=');
                 if(!eq)
                     return std::string();
                 if(!is_similar(k, std::string_view(b.data(), eq)))
+                    return std::string();
+                return web_decode(std::string_view(eq+1, b.end()));
+            });
+        }
+
+
+        std::string         WebContext::find_query(std::initializer_list<std::string_view> keys) const
+        {
+            return vsplit(url.query, '&', [&](std::string_view b) -> std::string {
+                const char* eq  = strnchr(b, '=');
+                if(!eq)
+                    return std::string();
+                if(!is_in(std::string_view(b.data(), eq), keys))
                     return std::string();
                 return web_decode(std::string_view(eq+1, b.end()));
             });

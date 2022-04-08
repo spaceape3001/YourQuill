@@ -13,9 +13,6 @@
 #include <yq/preamble.hpp>
 
 
-class QByteArray;
-class QString;
-class QVariant;
 
 namespace yq {
 
@@ -32,18 +29,18 @@ namespace yq {
     struct Leaf;
     struct Tag;
 
-    class Root;
+    struct Root;
 
-    using AtomSet       = Set<Atom>;
-    using ClassSet      = Set<Class>;
-    using FieldSet      = Set<Field>;
-    using TagSet        = Set<Tag>;
+    using atom_set_t     = Set<Atom>;
+    using class_set_t   = Set<Class>;
+    using field_set_t   = Set<Field>;
+    using tag_set_t     = Set<Tag>;
 
-    using AtomVec       = Vector<Atom>;
-    using ClassVec      = Vector<Class>;
-    using DocVec        = Vector<Document>;
-    using FieldVec      = Vector<Field>;
-    using TagVec        = Vector<Tag>;
+    using atom_vec_t    = std::vector<Atom>;
+    using class_vec_t   = std::vector<Class>;
+    using doc_vec_t     = std::vector<Document>;
+    using field_vec_t   = std::vector<Field>;
+    using tag_vec_t     = std::vector<Tag>;
 
     namespace cdb {
 
@@ -61,16 +58,16 @@ namespace yq {
             
             Override                = 0x8,
             
-            AllowEmpty              = 0x10,
+            AllowEmpty              = 0x10
             
                 
-            //  Search Flags
+            ////  Search Flags
 
-            //! Include hidden things
-            Hidden                  = 0x01,
+            ////! Include hidden things
+            //Hidden                  = 0x01,
 
-            //! Best sort available (equiv to Sorted::YES)
-            BestSort                = 0x02
+            ////! Best sort available (equiv to Sorted::YES)
+            //BestSort                = 0x02
             
         };
 
@@ -80,13 +77,13 @@ namespace yq {
         using DirOrFrag     = std::variant<bool,Directory,Fragment>;
         using DocOrAttr     = std::variant<bool,Document,Attribute>;
         using DocOrFold     = std::variant<bool,Document,Folder>;
-        using DirOrFragStr  = std::pair<DirOrFrag,QString>;
-        using DocOrFoldStr  = std::pair<DocOrFold,QString>;
+        using DirOrFragStr  = std::pair<DirOrFrag,std::string>;
+        using DocOrFoldStr  = std::pair<DocOrFold,std::string>;
 
-        using DirString     = std::pair<Directory,QString>;
-        using DocString     = std::pair<Document,QString>;
-        using FoldString    = std::pair<Folder,QString>;
-        using FragString    = std::pair<Fragment,QString>;
+        using DirString     = std::pair<Directory,std::string>;
+        using DocString     = std::pair<Document,std::string>;
+        using FoldString    = std::pair<Folder,std::string>;
+        using FragString    = std::pair<Fragment,std::string>;
 
         using ClassPair     = std::pair<Class,Class>;
     }

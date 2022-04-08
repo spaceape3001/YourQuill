@@ -56,7 +56,6 @@ namespace yq {
         bool                is_writable(DataRole) const;
         bool                is_write_first(DataRole) const;
 
-        std::filesystem::path   resolve(const std::string_view& ) const;
         std::filesystem::path   resolve(const std::filesystem::path&) const;
         
         

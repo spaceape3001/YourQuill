@@ -153,6 +153,8 @@ set(yq_sources
     ./stream/Ops.hpp
     
     ./tag/tag_unity.cpp
+    ./tag/cdb.hpp
+    ./tag/Tag.hpp
     ./tag/TagData.hpp
     ./tag/TagFile.hpp
     

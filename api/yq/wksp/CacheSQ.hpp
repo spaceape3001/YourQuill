@@ -73,6 +73,11 @@ namespace yq {
             bool        boolean(uint64_t, uint64_t);
             bool        boolean(uint64_t, std::string_view );
             
+                // used to execute where id=? style statements
+            bool        exec(uint64_t);
+                // summarizes step & output check
+            bool        exec();
+            
             std::filesystem::path   path();
             std::filesystem::path   path(uint64_t);
             

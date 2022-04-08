@@ -878,7 +878,11 @@ namespace yq {
             return impl().roots.size();
         }
         
-        const Root*                     root_first(DataRole);
+        const Root*                     root_first(DataRole dr)
+        {
+            return impl().rfirst[dr];
+        }
+        
         const root_role_map_t&          root_firsts()
         {
             return impl().rfirst;
@@ -1108,11 +1112,6 @@ namespace yq {
     Access      Root::policy(DataRole dr) const
     {
         return access.get(dr);
-    }
-
-    std::filesystem::path   Root::resolve(const std::string_view& z) const
-    {
-        return path / z;
     }
 
     std::filesystem::path   Root::resolve(const std::filesystem::path& z) const

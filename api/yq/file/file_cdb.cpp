@@ -1434,6 +1434,15 @@ namespace yq {
             return path(f).string();
         }
         
+        void    make_directory(Folder fo, const Root* rt)
+        {
+            if(!rt)
+                return ;
+            if(fo == top_folder())
+                return ;
+                
+            make_path(rt->resolve(key(fo)));
+        }
 
         uint64_t                modified(Fragment f)
         {

@@ -25,6 +25,9 @@ namespace yq {
         static constexpr const std::initializer_list<const char*>   kSupportedExtensions = {
             "svg", "png", "gif", "jpg", "bmp", "tif", "tiff" 
         };
+        static constexpr const std::initializer_list<const char*>   kSupportedExtensionWildcards = {
+            "*.svg", "*.png", "*.gif", "*.jpg", "*.bmp", "*.tif", "*.tiff" 
+        };
 
         uint64_t  id = 0ULL;
         constexpr auto    operator<=>(const Image& rhs) const = default;

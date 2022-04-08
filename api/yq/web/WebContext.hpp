@@ -88,7 +88,8 @@ namespace yq {
         StringMultiMap                  decode_query();
         
         //! Decodes the first query parameter found by the given name (ignoring the rest)
-        std::string                     find_query(std::string_view);
+        std::string                     find_query(std::string_view) const;
+        std::string                     find_query(std::initializer_list<std::string_view>) const;
         
         void                            tx_header(std::string_view k, std::string_view v);
         size_t                          tx_content_size() const;

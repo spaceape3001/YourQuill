@@ -303,6 +303,8 @@ namespace yq {
         std::string                     label(Document);
         std::string                     label(Folder);
         std::string                     label(Fragment);
+        
+        void                            make_directory(Folder, const Root*);
 
         uint64_t                        modified(Fragment);
 
