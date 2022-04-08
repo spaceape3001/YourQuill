@@ -191,9 +191,8 @@ namespace {
             }
 
             time(&ctx->time);
-            struct tm   ftime;
-            gmtime_r(&ctx->time, &ftime);
-            strftime(ctx->timestamp, sizeof(ctx->timestamp), "%F %T UTC", &ftime);
+            gmtime_r(&ctx->time, &ctx->timeparts);
+            strftime(ctx->timestamp, sizeof(ctx->timestamp), "%F %T UTC", &ctx->timeparts);
 
             do {
                 auto pg = find_page(ctx->method, ctx->url.path);

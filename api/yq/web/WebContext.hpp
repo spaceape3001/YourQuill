@@ -12,6 +12,7 @@
 #include <yq/net/VersionSpec.hpp>
 #include <yq/web/HttpData.hpp>
 #include <yq/web/HttpHeader.hpp>
+#include <time.h>
 
 namespace asio {
     class io_context;
@@ -62,6 +63,8 @@ namespace yq {
 
         //! Time of dispatch
         time_t                          time;
+        
+        struct tm                       timeparts;
         
         //! Time text
         char                            timestamp[64];

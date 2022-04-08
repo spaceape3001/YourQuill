@@ -32,6 +32,13 @@ namespace {
     {
         str << wksp::author();
     }
+    
+    void    var_footer(Stream&str, WebContext&)
+    {
+        std::string     footer = gFooter;
+        
+        str << (std::string) gFooter;
+    }
 
     void    var_home(Stream&str, WebContext&)
     {
@@ -53,9 +60,19 @@ namespace {
         str << wksp::port();
     }
     
+    void    var_summary(Stream&str, WebContext&)
+    {
+        str << (std::string) gSummary;
+    }
+
     void    var_time(Stream& str, WebContext& ctx)
     {
         str << ctx.timestamp;
+    }
+    
+    void    var_year(Stream& str, WebContext& ctx)
+    {
+        str << (ctx.timeparts.tm_year+1900);
     }
     
     void    update_css();
@@ -84,7 +101,6 @@ namespace {
     
     void    update_css()
     {
-    yInfo() << "Updating CSS";
         std::string       css;
         if(wksp::can_cdb()){
             for(Fragment f : cdb::fragments("*.css", DataRole::Style))
@@ -144,9 +160,37 @@ namespace {
             
             ncss << file_string(gSharedCssFile);
         }
-        yInfo() << "Updating CSS to " << newCssData->count() << " size.";
         gCss        = newCssData;
     }
+    
+    void    update_footer()
+    {
+        std::string     r;
+        if(wksp::can_cdb()){
+            Fragment    f   = cdb::first(cdb::document(".footer"));
+            if(f){
+                r   = cdb::frag_string(f);
+            }
+        }
+        
+        if(r.empty())
+            r       = file_string(wksp::shared("std/footer"sv));
+        gFooter = r;
+    }
+    
+    void    update_page()
+    {
+        web::set_template(wksp::shared("std/page"sv));
+    }
+    
+    void    update_index()
+    {
+    }
+    
+    void    update_summary()
+    {
+    }
+    
     
     void    page_background(WebContext& ctx)
     {
@@ -175,8 +219,11 @@ YQ_INVOKE(
     for(auto& fs : wksp::shared_dirs())
         yInfo() << "share directory " << (++n) << ": "  << fs;
 
-    if(!web::set_template(wksp::shared("std/page"sv)))
+    std::filesystem::path       spage   = wksp::shared("std/page"sv);
+    if(!web::set_template(spage))
         yWarning() << "Failed to set web template!";
+        
+    on_change<update_page>(spage);
 
     reg_webpage("/img/**", wksp::shared_all("www/img"sv));
     reg_webpage("/help/*", wksp::shared_all("www/help"sv));
@@ -187,11 +234,14 @@ YQ_INVOKE(
     
     reg_webvar<var_abbr>("abbr");
     reg_webvar<var_author>("author");
+    reg_webvar<var_footer>("footer");
     reg_webvar<var_home>("home");
     reg_webvar<var_host>("host");
     reg_webvar<var_name>("name");
     reg_webvar<var_port>("port");
+    reg_webvar<var_summary>("summary");
     reg_webvar<var_time>("time");
+    reg_webvar<var_year>("year");
 
     //reg_web("img/**", wksp::shared_dir("www/img"));
     //reg_web("help/*", wksp::shared_dir("www/help"));
@@ -207,5 +257,14 @@ YQ_INVOKE(
     on_change<update_background>(cdb::top_folder(), ".background.gif");
     on_change<update_background>(cdb::top_folder(), ".background.png");
     on_change<update_background>(cdb::top_folder(), ".background.svg");
+    
+    
+    on_change<update_footer>(cdb::top_folder(), ".footer");
+    on_stage4<update_footer>();
+    //on_change<update_index>(cdb::top_folder(), ".index.html");
+    //on_change<update_index>(cdb::top_folder(), ".index.htm");
+    on_stage4<update_index>();
+    on_stage4<update_summary>();
+    on_change<update_summary>(cdb::top_folder(), ".summary");
 )
 
