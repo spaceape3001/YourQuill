@@ -970,11 +970,19 @@ namespace yq {
         return *this;
     }
     
+    WebPage::Writer& WebPage::Writer::script(std::string_view sv)
+    {
+        if(m_page)
+            m_page -> m_scripts.push_back(sv);
+        return *this;
+    }
+
     void    WebPage::Writer::set_group(const WebGroup*g) 
     {
         if(m_page)
             m_page -> m_group = g;
     }
+
 
     WebPage::Writer& WebPage::Writer::sub(std::string_view p, const WebPage*w)
     {

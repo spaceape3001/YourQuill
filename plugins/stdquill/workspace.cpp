@@ -98,6 +98,26 @@ namespace {
         str << wksp::port();
     }
     
+    void    add_script(Stream& str, std::string_view name)
+    {
+        switch(mimeTypeForExt(file_extension(name))){
+        case ContentType::javascript:
+            str << "\t\t<script srce=\"/js/" << name << "\">\n";
+            break;
+        default:
+            //  do nothing if unclear...
+            break;
+        }
+    }
+    
+    void    var_scripts(Stream& str, WebContext& ctx)
+    {
+        for(std::string_view s : ctx.page->scripts())
+            add_script(str, s);
+        for(const std::string& s : ctx.var_scripts)
+            add_script(str, s);
+    }
+    
     void    var_summary(Stream&str, WebContext&ctx)
     {
         Ref<WebTemplate>    summary  = gSummary;
@@ -337,6 +357,7 @@ YQ_INVOKE(
     reg_webvar<var_host>("host");
     reg_webvar<var_name>("name");
     reg_webvar<var_port>("port");
+    reg_webvar<var_scripts>("scripts");
     reg_webvar<var_summary>("summary");
     reg_webvar<var_tabbar>("tabbar");
     reg_webvar<var_time>("time");

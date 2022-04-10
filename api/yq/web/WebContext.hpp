@@ -93,6 +93,9 @@ namespace yq {
 
         //! Body variable
         std::string                     var_body;
+        
+        //! Extra (context-dependent) scripts
+        std::vector<std::string>        var_scripts;
 
         //! Title variable
         std::string                     var_title;

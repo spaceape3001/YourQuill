@@ -120,6 +120,7 @@ namespace yq {
         Role                        role() const { return m_role; }
         HttpOps                     methods() const { return m_methods; }
         const WebGroup*             group() const { return m_group; }
+        const std::vector<std::string_view>&    scripts() const { return m_scripts; }
         
     protected:
         WebPage(HttpOps, std::string_view, const std::source_location&);
@@ -128,6 +129,7 @@ namespace yq {
         void                    set_path(std::string_view v) { set_name(v); }
         
         std::vector<Arg>        m_args;
+        std::vector<std::string_view>   m_scripts;
         WebPageMap              m_subs;     // for derived use... (ie, overrides or whatever)
         std::string_view        m_label;
         const WebGroup*         m_group = nullptr;
@@ -191,6 +193,9 @@ namespace yq {
             \note This will disable the stripping of "/" or "*".
         */
         Writer&  role(Role);
+        
+        //! Adds a script
+        Writer& script(std::string_view);
         
         //! Adds in a sub-web, overriding the web's path
         Writer&  sub(std::string_view, const WebPage*);
