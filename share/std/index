@@ -3,20 +3,20 @@
 {{SUMMARY}}
 
 <table class="nh">
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/folder-documents.svg"/></td><td class="nh-link"><a href="/folder">Files &amp; Folders</a></td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/categories.svg"/></td><td class="nh-link"><a href="/categories">Categories</a></td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/folder-documents.svg"/></td><td class="nh-link"><a href="/folder">Files &amp; Folders</a></td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/categories.svg"/></td><td class="nh-link"><a href="/categories">Categories</a></td></tr>
     <tr class="nh"><td></td><td class="nh-link"><a href="/browse">Browse</a></td></tr>
     <tr><td colspan="2"><hr width="50%" /></td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/characters.svg"/></td><td class="nh-link">Characters</td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/essays.svg"/></td><td class="nh-link">Essays</td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/groups.svg"/></td><td class="nh-link">Groups &amp; Organizations</td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/places.svg"/></td><td class="nh-link">Places</td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/stories.svg"/></td><td class="nh-link">Stories</td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/tidbits.svg"/></td><td class="nh-link">Tidbits &amp; Misc</td></tr>
-    <tr class="nh"><td class="nh-icon"><img class="nh" src="icon/events.svg"/></td><td class="nh-link">Timeline (Events)</td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/characters.svg"/></td><td class="nh-link">Characters</td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/essays.svg"/></td><td class="nh-link">Essays</td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/groups.svg"/></td><td class="nh-link">Groups &amp; Organizations</td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/places.svg"/></td><td class="nh-link">Places</td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/stories.svg"/></td><td class="nh-link">Stories</td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/tidbits.svg"/></td><td class="nh-link">Tidbits &amp; Misc</td></tr>
+    <tr class="nh"><td class="nh-icon"><img class="nh" src="img/events.svg"/></td><td class="nh-link">Timeline (Events)</td></tr>
     <tr><td colspan="2"><hr width="50%" /></td></tr>
-    <tr class="nh"><td class="nh-icon"><a href="wksp"><img class="nh" src="icon/workspace.svg"/></a></td><td class="nh-link"><a href="wksp">Workspace</a></td></tr>
-    <tr class="nh"><td class="nh-icon"><a href="help/index.md"><img class="nh" src="icon/help.svg"/></a></td><td class="nh-link"><a href="dev/index.md">Help &amp; Documentation</a></td></tr>
-    <tr class="nh"><td class="nh-icon"><a href="dev/index.md"><img class="nh" src="icon/developers.svg"/></a></td><td class="nh-link"><a href="dev/index.md">Developers</a></td></tr>
+    <tr class="nh"><td class="nh-icon"><a href="wksp"><img class="nh" src="img/workspace.svg"/></a></td><td class="nh-link"><a href="wksp">Workspace</a></td></tr>
+    <tr class="nh"><td class="nh-icon"><a href="help/index.md"><img class="nh" src="img/help.svg"/></a></td><td class="nh-link"><a href="dev/index.md">Help &amp; Documentation</a></td></tr>
+    <tr class="nh"><td class="nh-icon"><a href="dev/index.md"><img class="nh" src="img/developers.svg"/></a></td><td class="nh-link"><a href="dev/index.md">Developers</a></td></tr>
 </table>
 

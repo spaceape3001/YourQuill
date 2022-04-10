@@ -32,6 +32,8 @@ namespace yq {
         
         ContentType         type() const { return m_type; }
         
+        void        writeBitsToInfo() const;
+        
     private:
         void    parse(std::string_view);
         friend class WebHtml;

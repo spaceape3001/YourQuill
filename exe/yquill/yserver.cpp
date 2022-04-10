@@ -211,6 +211,7 @@ namespace {
                 
                 try {
                     ctx->page   = pg.first;
+                    ctx->truncated_path = pg.second;
                     pg.first -> handle(*ctx);
                     if(ctx -> status == HttpStatus())
                         ctx -> status   = HttpStatus::Success;

@@ -346,8 +346,8 @@ YQ_INVOKE(
         yInfo() << "share directory " << (++n) << ": "  << fs;
 
     reg_webpage("/img/**", wksp::shared_all("www/img"sv));
-    reg_webpage("/help/*", wksp::shared_all("www/help"sv));
-    reg_webpage("/js/*", wksp::shared_all("www/js"sv));
+    reg_webpage("/help/**", wksp::shared_all("www/help"sv));
+    reg_webpage("/js/**", wksp::shared_all("www/js"sv));
     reg_webpage<page_css>("/css");
     reg_webpage<page_background>("/background");
     reg_webpage<page_index>("/");

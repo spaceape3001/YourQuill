@@ -1097,7 +1097,7 @@ namespace yq {
 
         void    WebTemplate::parse(std::string_view data)
         {
-            size_t n   = data.find_first_of("{{");
+            size_t n   = data.find("{{");
             size_t m   = 0;
             
             if(n == std::string_view::npos){        // no variables... gotcha
@@ -1112,7 +1112,7 @@ namespace yq {
                 }
 
                 n += 2;
-                m   = data.find_first_of("}}", n);
+                m   = data.find("}}", n);
                 if(m>=data.size()){ // badly truncated, dropping....
                     n   = data.size();
                     break;
@@ -1126,7 +1126,7 @@ namespace yq {
                     break;
                 
                 m += 2;
-                n   = data.find_first_of("{{", m);
+                n   = data.find("{{", m);
             }
             
             if(m < data.size()){
@@ -1136,6 +1136,26 @@ namespace yq {
 
                 // YES, possible to lose between "{{NAME" and end if there's no "}}", but that's ill-formed
             
+        }
+
+        void        WebTemplate::writeBitsToInfo() const
+        {
+            auto write  = [&](log4cpp::CategoryStream&& log)
+            {
+                log << "WebTemplate Report:\n"
+                    << "Variables Found: " << join(m_vars, ", ") << "\n";
+                    
+                size_t n=1;
+                for(auto& b : m_bits){
+                    if(b.variable){
+                        log << "[" << n << "] Variable: " << b.token << "\n";
+                    } else {
+                        log << "[" << n << "] Text : " << b.token << "\n";
+                    }
+                    ++n;
+                }
+            };
+            write(yInfo());
         }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
