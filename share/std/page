@@ -42,8 +42,14 @@
 				<TD><HR></TD>
 			</TR>
 			<TR>
-				<TD ROWSPAN="2"><A HREF="/"><IMG SRC="/img/yquill.svg" HEIGHT="128" BORDER="0" ALT="YQ"></A></TD>
+				<TD ROWSPAN="3"><A HREF="/"><IMG SRC="/img/yquill.svg" HEIGHT="128" BORDER="0" ALT="YQ"></A></TD>
 				<TD>{{FOOTER}}</TD>
+			</TR>
+			<TR>
+				<TD ALIGN="left">
+				    <!-- TEMPORARY UNTIL FULLY OPERATIONAL -->
+				    <A HREF="/dev/webpages">ALL Web Pages</A>
+				</TD>
 			</TR>
 			<TR>
 				<TD ALIGN="right">

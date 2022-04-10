@@ -97,6 +97,7 @@ void        dev_table(WebHtml&, const std::vector<Folder>&);
 void        dev_table(WebHtml&, const std::vector<Fragment>&);
 void        dev_table(WebHtml&, const std::vector<Leaf>&);
 void        dev_table(WebHtml&, const std::vector<Tag>&);
+void        dev_table(WebHtml&, const std::vector<const Root*>&);
 
 
 

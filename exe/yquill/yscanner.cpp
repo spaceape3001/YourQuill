@@ -226,7 +226,6 @@ void    stage3_documents()
                 h -> invoke(Document{ sfx.v_uint64(1)});
             break;
         default:
-yInfo() << "Skipping " << h->folder().id << " " << h->specific() << " (" << h->order() << ")";
             break;
         }
     }
@@ -322,11 +321,11 @@ void    dir_removed(Directory d, Folder fo=Folder())
 {
     if(!fo)
         fo  = cdb::folder(d);
-    for(Fragment f : cdb::fragments(d)){
+    for(Fragment f : cdb::child_fragments(d)){
         notify(Change::Removed, f, fo);
         cdb::erase(f);
     }
-    for(Directory d2 : cdb::directories(d))
+    for(Directory d2 : cdb::child_directories(d))
         dir_removed(d2);
     cdb::erase(d);
 }

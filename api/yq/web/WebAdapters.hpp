@@ -110,7 +110,7 @@ namespace yq {
     WebPage::Writer     reg_webpage(std::string_view path, std::string_view title, std::function<void(WebHtml&)>, const std::source_location& sl = std::source_location::current());
     WebPage::Writer     reg_webpage(HttpOps methods, std::string_view path, std::string_view title, std::function<void(WebHtml&)>, const std::source_location& sl = std::source_location::current());
 
-    void                reg_webgroup(std::initializer_list<WebPage::Writer>);
+    void                reg_webgroup(std::initializer_list<WebPage*>);
 
     //! Decodes (%) of the web query & parses it into a multimap
     StringMultiMap      decode_web_query(std::string_view);

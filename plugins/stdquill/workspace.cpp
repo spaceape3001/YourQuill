@@ -144,7 +144,7 @@ namespace {
             } else {
                 UrlView url = ctx.url;
                 url.path    = p->path();
-                str << "<td class=\"tabbar\"><a href=\"" << url << ">";
+                str << "<td class=\"tabbar\"><a href=\"" << url << "\">";
                 html_escape_write(str, p -> label());
                 str << "</a></td>";
             }
@@ -167,6 +167,9 @@ namespace {
         str << (ctx.timeparts.tm_year+1900);
     }
     
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     void    update_css();
     
     void    update_background()
@@ -299,6 +302,35 @@ namespace {
             r       = file_string(gSharedSummaryFile);
         gSummary = new WebTemplate(std::move(r));
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    void    dev_wksp_roots(WebHtml&h)
+    {
+        h.title("Workspace Roots");
+        dev_table(h, wksp::roots());
+    }
+
+    void  dev_wksp_info(WebHtml& h)
+    {
+        h.title("Workspace '"s + copy(wksp::name()) + "'"s);
+        
+        auto t = html::table(h);
+        html::kvrow(h, "Name") << wksp::name();
+        html::kvrow(h, "Author") << wksp::author();
+        html::kvrow(h, "Abbreviation") << wksp::abbreviation();
+        html::kvrow(h, "Cache") << wksp::cache();
+        //html::kvrow(h, "Config") << dev(cdb::config_folder());
+        html::kvrow(h, "Copyright") << wksp::copyright().text;
+        html::kvrow(h, "Key") << wksp::quill_key();
+        html::kvrow(h, "Host") << wksp::host();
+        html::kvrow(h, "Port") << wksp::port();
+        html::kvrow(h, "Read Timeout") << wksp::read_timeout();
+        html::kvrow(h, "Start") << wksp::start();
+        html::kvrow(h, "Templates") << join(wksp::templates(), ", ");
+    }
+     
     
     void    page_background(WebContext& ctx)
     {
@@ -337,74 +369,89 @@ namespace {
         if(index->page)
             index->page -> execute(out, out.context());
     }
+    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    void    reg_me()
+    {
+        unsigned int n = 0;
+        for(auto& fs : wksp::shared_dirs())
+            yInfo() << "share directory " << (++n) << ": "  << fs;
+
+        reg_webpage("/img/**", wksp::shared_all("www/img"sv));
+        reg_webpage("/help/**", wksp::shared_all("www/help"sv));
+        reg_webpage("/js/**", wksp::shared_all("www/js"sv));
+
+        reg_webgroup({
+            reg_webpage<dev_wksp_info>("/dev/wksp/info").label("Info"),
+            reg_webpage<dev_wksp_roots>("/dev/wksp/roots").label("Roots")
+        });
+
+        reg_webpage<page_css>("/css");
+        reg_webpage<page_background>("/background");
+        reg_webpage<page_index>("/");
+        
+        reg_webvar<var_abbr>("abbr");
+        reg_webvar<var_author>("author");
+        reg_webvar<var_body>("body");
+        reg_webvar<var_footer>("footer");
+        reg_webvar<var_home>("home");
+        reg_webvar<var_host>("host");
+        reg_webvar<var_name>("name");
+        reg_webvar<var_port>("port");
+        reg_webvar<var_scripts>("scripts");
+        reg_webvar<var_summary>("summary");
+        reg_webvar<var_tabbar>("tabbar");
+        reg_webvar<var_time>("time");
+        reg_webvar<var_title>("title");
+        reg_webvar<var_year>("year");
+
+        //reg_web("img/**", wksp::shared_dir("www/img"));
+        //reg_web("help/*", wksp::shared_dir("www/help"));
+        //reg_web("js/*", wksp::shared_dir("www/js"));
+        //reg_web("markdown/*", wksp::shared_dir("www/markdown"));
+
+            // PAGE TEMPLATE
+        gSharedPageFile     = wksp::shared(kStdPage);
+        on_stage4<update_page>();
+        on_change<update_page>(gSharedPageFile);
+        
+            // CSS
+        gSharedCssFile      = wksp::shared(kStdCSS);
+        on_stage4<update_css>();
+        on_change<update_css>(cdb::top_folder(), ".css"sv);
+        on_change<update_css>(gSharedCssFile);
+        
+            // BACKGROUND
+        on_stage4<update_background>();
+        for(std::string_view k : kBackgroundFiles)
+            on_change<update_background>(cdb::top_folder(), k);
+
+            // FOOTER
+        gSharedFooterFile   = wksp::shared(kStdFooter);
+        on_stage4<update_footer>();
+        on_change<update_footer>(cdb::top_folder(), ".footer");
+        on_change<update_footer>(gSharedFooterFile);
+
+            // MAIN INDEX
+        gSharedIndexFile    = wksp::shared(kStdIndex);
+        on_stage4<update_index>();
+        for(std::string_view k : kIndexFiles)
+            on_change<update_index>(cdb::top_folder(), k);
+        on_change<update_index>(gSharedIndexFile);
+        
+            // SUMMARY
+        gSharedSummaryFile  = wksp::shared(kStdSummary);
+        on_stage4<update_summary>();
+        on_change<update_summary>(cdb::top_folder(), ".summary");
+        on_change<update_summary>(gSharedSummaryFile);
+    }
+    
 }
 
-YQ_INVOKE(
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    unsigned int n = 0;
-    for(auto& fs : wksp::shared_dirs())
-        yInfo() << "share directory " << (++n) << ": "  << fs;
-
-    reg_webpage("/img/**", wksp::shared_all("www/img"sv));
-    reg_webpage("/help/**", wksp::shared_all("www/help"sv));
-    reg_webpage("/js/**", wksp::shared_all("www/js"sv));
-    reg_webpage<page_css>("/css");
-    reg_webpage<page_background>("/background");
-    reg_webpage<page_index>("/");
-    
-    reg_webvar<var_abbr>("abbr");
-    reg_webvar<var_author>("author");
-    reg_webvar<var_body>("body");
-    reg_webvar<var_footer>("footer");
-    reg_webvar<var_home>("home");
-    reg_webvar<var_host>("host");
-    reg_webvar<var_name>("name");
-    reg_webvar<var_port>("port");
-    reg_webvar<var_scripts>("scripts");
-    reg_webvar<var_summary>("summary");
-    reg_webvar<var_tabbar>("tabbar");
-    reg_webvar<var_time>("time");
-    reg_webvar<var_title>("title");
-    reg_webvar<var_year>("year");
-
-    //reg_web("img/**", wksp::shared_dir("www/img"));
-    //reg_web("help/*", wksp::shared_dir("www/help"));
-    //reg_web("js/*", wksp::shared_dir("www/js"));
-    //reg_web("markdown/*", wksp::shared_dir("www/markdown"));
-
-        // PAGE TEMPLATE
-    gSharedPageFile     = wksp::shared(kStdPage);
-    on_stage4<update_page>();
-    on_change<update_page>(gSharedPageFile);
-    
-        // CSS
-    gSharedCssFile      = wksp::shared(kStdCSS);
-    on_stage4<update_css>();
-    on_change<update_css>(cdb::top_folder(), ".css"sv);
-    on_change<update_css>(gSharedCssFile);
-    
-        // BACKGROUND
-    on_stage4<update_background>();
-    for(std::string_view k : kBackgroundFiles)
-        on_change<update_background>(cdb::top_folder(), k);
-
-        // FOOTER
-    gSharedFooterFile   = wksp::shared(kStdFooter);
-    on_stage4<update_footer>();
-    on_change<update_footer>(cdb::top_folder(), ".footer");
-    on_change<update_footer>(gSharedFooterFile);
-
-        // MAIN INDEX
-    gSharedIndexFile    = wksp::shared(kStdIndex);
-    on_stage4<update_index>();
-    for(std::string_view k : kIndexFiles)
-        on_change<update_index>(cdb::top_folder(), k);
-    on_change<update_index>(gSharedIndexFile);
-    
-        // SUMMARY
-    gSharedSummaryFile  = wksp::shared(kStdSummary);
-    on_stage4<update_summary>();
-    on_change<update_summary>(cdb::top_folder(), ".summary");
-    on_change<update_summary>(gSharedSummaryFile);
-)
+YQ_INVOKE( reg_me(); )
 

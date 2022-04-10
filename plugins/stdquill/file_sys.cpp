@@ -128,10 +128,10 @@ WebHtml&    operator<<(WebHtml& h, const DevID<const Root*>&v)
 void    dev_table(WebHtml& h, const std::vector<Directory>& dirs)
 {
     auto _tab = html::table(h);
-    h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
+        h << "<tr><th>ID</th><th>Fragments</th><th>Children</th><th>Path</th></tr>\n";
     for(Directory d : dirs){
         h << "<tr><td>" << dev_id(d) << "</td><td>" 
-            << cdb::fragments_count(d) << "</td><td>" << cdb::directories_count(d) << "</td><td>" << cdb::path(d) << "</td></tr>\n";
+            << cdb::child_fragments_count(d) << "</td><td>" << cdb::child_directories_count(d) << "</td><td>" << cdb::path(d) << "</td></tr>\n";
     }
 }
 
@@ -168,6 +168,18 @@ void    dev_table(WebHtml& h, const std::vector<Folder>&folders)
           << "</td><td>" << i.brief << "</td</tr>\n";
     }
 }
+
+void    dev_table(WebHtml&h, const std::vector<const Root*>& roots)
+{
+    auto _tab = html::table(h);
+    h << "<tr><th><ID></th><th>Key</th><th>Name</th><th>Path</th></tr>\n";
+    for(const Root* r : roots){
+        if(!r)
+            continue;
+        h << "<tr><td>" << dev_id(r) <<  "</td><td>" << r->key << "</td><td>" << r->name << "</td><td>" << r->path << "</td></tr>\n";
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -222,12 +234,104 @@ namespace {
         h.title("Listing of Folders");
         dev_table(h, cdb::all_folders(Sorted::YES));
     }
+    
+    void    page_dev_root(WebHtml& h)
+    {
+        const Root* rt   = arg::root(h);
+        if(!rt)
+            throw hNotFound;
+        
+        std::string t   = "Root (";
+        t += rt->name;
+        t += ')';
+        h.title(t);
+        
+        auto tab   = html::table(h);
+        html::kvrow(h, "ID") << rt->id;
+        html::kvrow(h, "Depth") << rt -> depth;
+        html::kvrow(h, "Key") << rt -> key;
+        html::kvrow(h, "Name") << rt -> name;
+        html::kvrow(h, "Path") << rt -> path;
+        html::kvrow(h, "Template") << rt -> is_template;
+        html::kvrow(h, "Total Directories") << cdb::all_directories_count(rt);
+        html::kvrow(h, "Total Fragments") << cdb::all_fragments_count(rt);
+    }
+    
+    
+    void    page_dev_root_all_directories(WebHtml& h)
+    {
+        const Root* rt   = arg::root(h);
+        if(!rt)
+            throw hNotFound;
+
+        std::string t   = "Root (";
+        t += rt->name;
+        t += "): All Directories";
+        h.title(t);
+        
+        dev_table(h, cdb::all_directories(rt, Sorted::YES));
+    }
+    
+    void    page_dev_root_all_fragments(WebHtml& h)
+    {
+        const Root* rt  = arg::root(h);
+        if(!rt)
+            throw hNotFound;
+            
+        std::string t   = "Root (";
+        t += rt->name;
+        t += "): All Fragments";
+        h.title(t);
+        
+        dev_table(h, cdb::all_fragments(rt, Sorted::YES));
+    }
+
+    void    page_dev_root_directories(WebHtml& h)
+    {
+        const Root* rt   = arg::root(h);
+        if(!rt)
+            throw hNotFound;
+
+        std::string t   = "Root (";
+        t += rt->name;
+        t += "): Directories";
+        h.title(t);
+        
+        dev_table(h, cdb::directories(rt, Sorted::YES));
+    }
+
+    void    page_dev_root_fragments(WebHtml& h)
+    {
+        const Root* rt   = arg::root(h);
+        if(!rt)
+            throw hNotFound;
+
+        std::string t   = "Root (";
+        t += rt->name;
+        t += "): Fragments";
+        h.title(t);
+        
+        dev_table(h, cdb::fragments(rt, Sorted::YES));
+    }
+ 
+    void    reg_me()
+    {
+        reg_webpage<page_dev_dirs>("/dev/directories");
+        reg_webpage<page_dev_docs>("/dev/documents");
+        reg_webpage<page_dev_folders>("/dev/folders");
+        reg_webpage<page_dev_frags>("/dev/fragments");
+        reg_webpage<page_dev_fragment>("/dev/fragment").description("Developer info for a fragment").argument("id", "Fragment ID");
+        
+        reg_webgroup({
+            reg_webpage<page_dev_root>("/dev/root").argument("id", "Root ID").label("Info"),
+            reg_webpage<page_dev_root_directories>("/dev/root/dirs").argument("id", "Root ID").label("Dirs"),
+            reg_webpage<page_dev_root_fragments>("/dev/root/frags").argument("id", "Root ID").label("Frags"),
+            reg_webpage<page_dev_root_all_directories>("/dev/root/all_dirs").argument("id", "Root ID").label("AllDirs"),
+            reg_webpage<page_dev_root_all_fragments>("/dev/root/all_frags").argument("id", "Root ID").label("AllFrags")
+        });
+    }
+    
+    
 }
 
-YQ_INVOKE(
-    reg_webpage<page_dev_dirs>("/dev/directories");
-    reg_webpage<page_dev_docs>("/dev/documents");
-    reg_webpage<page_dev_folders>("/dev/folders");
-    reg_webpage<page_dev_frags>("/dev/fragments");
-    reg_webpage<page_dev_fragment>("/dev/fragment").description("Developer info for a fragment").argument("id", "Fragment ID");
-)
+YQ_INVOKE( reg_me(); )

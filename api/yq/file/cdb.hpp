@@ -139,6 +139,16 @@ namespace yq {
         size_t                          child_count(Directory);
         size_t                          child_count(Folder);
 
+        std::vector<Directory>          child_directories(Directory, Sorted sorted=Sorted());
+        size_t                          child_directories_count(Directory);
+
+        Directory                       child_directory(Directory, std::string_view );
+        Fragment                        child_fragment(Directory, std::string_view );
+        std::vector<Fragment>           child_fragments(Directory, Sorted sorted=Sorted());
+        size_t                          child_fragments_count(Directory);
+
+
+
     #if 0
         std::string                     child_key(Directory);       //<! Key inside the directory (with extensions)
         std::string                     child_key(Document);
@@ -170,17 +180,16 @@ namespace yq {
         Directory                       directory(uint64_t);
         Directory                       directory(const std::filesystem::path&);
         Directory                       directory(Fragment);
-        Directory                       directory(Directory, std::string_view );
         Directory                       directory(const Root*);
         Directory                       directory(const Root*, std::string_view);
         
-        std::vector<Directory>          directories(Directory, Sorted sorted=Sorted());
         std::vector<Directory>          directories(Folder, Sorted sorted=Sorted());
         std::vector<Directory>          directories(const Root*, Sorted sorted=Sorted());
+        std::vector<Directory>          directories(Folder, const Root*, Sorted sorted=Sorted());
         
-        size_t                          directories_count(Directory);
         size_t                          directories_count(Folder);
         size_t                          directories_count(const Root*);
+        std::vector<Directory>          directories_count(Folder, const Root*);
         
         std::set<Directory>             directories_set(Directory);
 
@@ -260,7 +269,6 @@ namespace yq {
         Fragment                        fragment(std::string_view );
         Fragment                        fragment(uint64_t);
         Fragment                        fragment(const Root*, std::string_view );
-        Fragment                        fragment(Directory, std::string_view );
         
         /*! \brief Returns the first fragmment found for the given document
         */
@@ -273,7 +281,6 @@ namespace yq {
         std::vector<Fragment>           fragments(Document, const Root*, Sorted sorted=Sorted());
         std::vector<Fragment>           fragments(Document, const Root*, Sorted::Value sorted);
         std::vector<Fragment>           fragments(Document, DataRole, Sorted sorted=Sorted());
-        std::vector<Fragment>           fragments(Directory, Sorted sorted=Sorted());
         std::vector<Fragment>           fragments(Folder, Sorted sorted=Sorted());
         std::vector<Fragment>           fragments(const Root*, Sorted sorted=Sorted());
         std::vector<Fragment>           fragments(std::string_view , Sorted sorted=Sorted());
@@ -281,7 +288,6 @@ namespace yq {
 
         size_t                          fragments_count(Document);
         size_t                          fragments_count(Document, const Root*);
-        size_t                          fragments_count(Directory);
         size_t                          fragments_count(Folder);
 
         std::set<Fragment>              fragments_set(Directory);

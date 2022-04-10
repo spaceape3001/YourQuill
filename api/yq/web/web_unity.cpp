@@ -1005,18 +1005,21 @@ namespace yq {
         }
         return *this;
     }
+
+    void    WebGroup::add(WebPage*p)
+    {
+        if(p){
+            pages.push_back(p);
+            p->m_group = this;
+        }
+    }
     
-    void    reg_webgroup(std::initializer_list<WebPage::Writer> gdef)
+    void    reg_webgroup(std::initializer_list<WebPage*> gdef)
     {
         if(!std::empty(gdef)){
             WebGroup*   group   = new WebGroup;
-            for(const WebPage::Writer& w : gdef){
-                const WebPage*    p   = w.page();
-                if(!p)
-                    continue;
-                group -> pages.push_back(p);
-                ((WebPage::Writer&) w).set_group(group);
-            }
+            for(WebPage* p : gdef)
+                group -> add(p);
         }
     }
 

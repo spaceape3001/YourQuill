@@ -160,6 +160,8 @@ set(yq_sources
     
     ./text/Comma.hpp
     ./text/Format.hpp
+    ./text/Markdown.cpp
+    ./text/Markdown.hpp
     ./text/Utils.cpp
     ./text/Utils.hpp
     

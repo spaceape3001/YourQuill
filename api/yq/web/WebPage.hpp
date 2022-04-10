@@ -66,6 +66,7 @@ namespace yq {
     
     struct WebGroup {
         std::vector<const WebPage*> pages;
+        void    add(WebPage*);
     };
 
     /*! \brief WebPage (or series of pages)
@@ -79,6 +80,7 @@ namespace yq {
             standard directory handlers will utilize.
     */
     class WebPage : public Meta {
+        friend struct WebGroup;
     public:
     
         YQ_ENUM(Role, ,
@@ -211,10 +213,10 @@ namespace yq {
         ~Writer();
         Writer() : Meta::Writer(nullptr) {}
         
-        operator const WebPage* () const { return m_page; }
+        operator WebPage* () const { return m_page; }
         
-        Writer(const Writer&);
-        Writer& operator=(const Writer&&);
+        Writer(const Writer&) = delete;
+        Writer& operator=(const Writer&) = delete;
         
     private:
         WebPage*   m_page = nullptr;

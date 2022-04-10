@@ -1,11 +1,8 @@
 set(stdquill_SOURCES 
-    ./hare.cpp
-    
     ./developer.cpp
-    ./dev_sql.cpp
-    ./dev_wksp.cpp
     
     ./atom_sys.cpp
+    ./cache_db.cpp
     ./file_sys.cpp
     ./leaf_sys.cpp
     ./markdown.cpp

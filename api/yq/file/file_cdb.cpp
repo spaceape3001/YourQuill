@@ -869,10 +869,10 @@ namespace yq {
         
         DirOrFrag           child(Directory d, std::string_view ck)
         {
-            Fragment    f   = fragment(d, ck);
+            Fragment    f   = child_fragment(d, ck);
             if(f)
                 return f;
-            Directory   dir = directory(d, ck);
+            Directory   dir = child_directory(d, ck);
             if(dir)
                 return dir;
             return false;
@@ -892,7 +892,7 @@ namespace yq {
 
         size_t              child_count(Directory d)
         {
-            return directories_count(d) + fragments_count(d);
+            return child_directories_count(d) + child_fragments_count(d);
         }
         
         size_t              child_count(Folder f)
@@ -900,6 +900,17 @@ namespace yq {
             return documents_count(f) + folders_count(f);
         }
 
+        Directory           child_directory(Directory d, std::string_view k)
+        {
+            static thread_local SQ s("SELECT id FROM Directories WHERE parent=? AND name=?");
+            return s.as<Directory>(d.id, k);
+        }
+
+        Fragment            child_fragment(Directory d, std::string_view k)
+        {
+            static thread_local SQ s("SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
+            return s.as<Fragment>(d.id, k);
+        }
 
     #if 0
         std::string                 child_key(Directory);       //<! Key inside the directory (with extensions)
@@ -908,13 +919,64 @@ namespace yq {
         std::string                 child_key(Fragment);
     #endif
 
+        namespace {
+            std::vector<Directory>   child_directories_sorted(Directory d)
+            {
+                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=? ORDER BY name");
+                return s.vec<Directory>(d.id);
+            }
+
+            std::vector<Directory>   child_directories_unsorted(Directory d)
+            {
+                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=?");
+                return s.vec<Directory>(d.id);
+            }
+        }
+        
+        
+        std::vector<Directory>   child_directories(Directory d, Sorted sorted)
+        {
+            return sorted ? child_directories_sorted(d) : child_directories_unsorted(d);
+        }
+        
+        size_t              child_directories_count(Directory d)
+        {
+            static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE parent=?");
+            return s.size(d.id);
+        }
+        
+        namespace {
+            std::vector<Fragment>    child_fragments_sorted(Directory d)
+            {
+                static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
+                return s.vec<Fragment>(d.id);
+            }
+
+            std::vector<Fragment>    child_fragments_unsorted(Directory d)
+            {
+                static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
+                return s.vec<Fragment>(d.id);
+            }
+        }
+        
+        std::vector<Fragment>    child_fragments(Directory d, Sorted sorted)
+        {
+            return sorted ? child_fragments_sorted(d) : child_fragments_unsorted(d);
+        }
+
+        size_t              child_fragments_count(Directory d)
+        {
+            static thread_local SQ        s("SELECT COUNT(1) FROM Fragments WHERE dir=?");
+            return s.size(d.id);
+        }
+        
 
         std::vector<DirOrFrag>   children(Directory d, Sorted sorted)
         {
             std::vector<DirOrFrag>   ret;
-            for(Directory d2 : directories(d, sorted))
+            for(Directory d2 : child_directories(d, sorted))
                 ret.push_back(d2);
-            for(Fragment f : fragments(d, sorted))
+            for(Fragment f : child_fragments(d, sorted))
                 ret.push_back(f);
             return ret;
         }
@@ -1161,11 +1223,6 @@ namespace yq {
             return s.as<Directory>(f.id);
         }
         
-        Directory           directory(Directory d, std::string_view k)
-        {
-            static thread_local SQ s("SELECT id FROM Directories WHERE parent=? AND name=?");
-            return s.as<Directory>(d.id, k);
-        }
 
         Directory           directory(const Root*rt)
         {
@@ -1174,26 +1231,6 @@ namespace yq {
             return directory(rt->path);
         }
         
-        
-        namespace {
-            std::vector<Directory>   directories_sorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=? ORDER BY name");
-                return s.vec<Directory>(d.id);
-            }
-
-            std::vector<Directory>   directories_unsorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=?");
-                return s.vec<Directory>(d.id);
-            }
-        }
-        
-        
-        std::vector<Directory>   directories(Directory d, Sorted sorted)
-        {
-            return sorted ? directories_sorted(d) : directories_unsorted(d);
-        }
         
         namespace {
             std::vector<Directory>   directories_sorted(Folder f)
@@ -1214,21 +1251,34 @@ namespace yq {
             return sorted ? directories_sorted(f) : directories_unsorted(f);
         }
         
-        std::vector<Directory>   directories(const Root*rt)
-        {
-            if(!rt)
-                return std::vector<Directory>();
-                
-            static thread_local SQ    s("SELECT id FROM Directories WHERE parent=0 AND root=?");
-            return s.vec<Directory>(rt->id);
-        }
+        namespace {
+            std::vector<Directory>   directories_unsorted(const Root*rt)
+            {
+                if(!rt)
+                    return std::vector<Directory>();
+                    
+                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=0 AND root=?");
+                return s.vec<Directory>(rt->id);
+            }
 
-        size_t              directories_count(Directory d)
-        {
-            static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE parent=?");
-            return s.size(d.id);
+            std::vector<Directory>   directories_sorted(const Root*rt)
+            {
+                if(!rt)
+                    return std::vector<Directory>();
+                    
+                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=0 AND root=? ORDER BY NAME");
+                return s.vec<Directory>(rt->id);
+            }
         }
         
+        
+        std::vector<Directory>   directories(const Root*rt, Sorted sorted)
+        {
+            return sorted ? directories_sorted(rt) : directories_unsorted(rt);
+        }
+
+
+
         size_t              directories_count(Folder f)
         {
             static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE folder=?");
@@ -1725,11 +1775,6 @@ namespace yq {
         }
         
         
-        Fragment            fragment(Directory d, std::string_view k)
-        {
-            static thread_local SQ s("SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
-            return s.as<Fragment>(d.id, k);
-        }
         
         Fragment            fragment(Document d)
         {
@@ -1814,24 +1859,6 @@ namespace yq {
             return ret;
         }
 
-        namespace {
-            std::vector<Fragment>    fragments_sorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
-                return s.vec<Fragment>(d.id);
-            }
-
-            std::vector<Fragment>    fragments_unsorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
-                return s.vec<Fragment>(d.id);
-            }
-        }
-        
-        std::vector<Fragment>    fragments(Directory d, Sorted sorted)
-        {
-            return sorted ? fragments_sorted(d) : fragments_unsorted(d);
-        }
         
         namespace {
             std::vector<Fragment>    fragments_sorted(Folder f)
@@ -1854,7 +1881,7 @@ namespace yq {
         
         std::vector<Fragment>    fragments(const Root*rt, Sorted sorted)
         {
-            return fragments(directory(rt), sorted);
+            return child_fragments(directory(rt), sorted);
         }
         
         std::vector<Fragment>    fragments(std::string_view k, Sorted sorted)
@@ -1880,12 +1907,6 @@ namespace yq {
                 
             static thread_local SQ    s("SELECT COUNT(1) FROM Fragments WHERE document=? AND root=?");
             return s.size(d.id, rt->id);
-        }
-        
-        size_t              fragments_count(Directory d)
-        {
-            static thread_local SQ        s("SELECT COUNT(1) FROM Fragments WHERE dir=?");
-            return s.size(d.id);
         }
         
         size_t              fragments_count(Folder f)
