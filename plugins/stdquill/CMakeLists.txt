@@ -8,6 +8,7 @@ set(stdquill_SOURCES
     ./atom_sys.cpp
     ./file_sys.cpp
     ./leaf_sys.cpp
+    ./markdown.cpp
     ./tag_sys.cpp
     ./user.cpp
     ./workspace.cpp

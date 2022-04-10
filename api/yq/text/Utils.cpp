@@ -398,6 +398,15 @@ namespace yq {
         return ret;
     }
 
+    
+    size_t  count_starts(std::string_view s, char ch)
+    {
+        size_t  n = 0;
+        for(; (n<s.size()) && (s[n] == ch); ++n)
+            ;
+        return n;
+    }
+
     bool    ends(std::string_view hay, std::string_view pat)
     {
         if(pat.size() > hay.size())

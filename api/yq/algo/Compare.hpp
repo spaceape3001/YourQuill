@@ -91,6 +91,13 @@ namespace yq {
         }
     }
 
+    template <typename T>
+    bool    is_between(T val, T low, T high)
+    {
+        return (low <= val) && (val <= high);
+    }
+
+
     inline bool is_equal(Compare c)
     {
         return (c == Compare::EQUAL) ? true : false;

@@ -1320,17 +1320,24 @@ namespace yq {
     
     std::string     html_escape(std::string_view sv)
     {
+        static constexpr const std::string_view     kReplacementChar    = "\xEF\xBF\xBD"sv;
         std::string ret;
         ret.reserve(sv.size());
         iter_http(sv, [&](char c){
-            ret += c;
+            if(!c) [[unlikely]] {
+                ret += kReplacementChar;
+            } else
+                ret += c;
         });
         return ret;
     }
 
     void            html_escape_write(Stream& s, std::string_view sv)
     {
+        static constexpr const std::string_view     kReplacementChar    = "\xEF\xBF\xBD"sv;
         iter_http(sv, [&](char ch){
+            if(!ch) [[unlikely]]
+                s << kReplacementChar;
             s << ch;
         });
     }

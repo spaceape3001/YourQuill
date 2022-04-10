@@ -147,6 +147,10 @@ namespace yq {
     */
     size_t  count_start_spaces(std::string_view);
     
+    /*! \brief Counts the number of the specified character that start the string
+    */
+    size_t  count_starts(std::string_view, char);
+
     bool    ends(std::string_view hay, std::string_view pat);
 
     /*! \brief First non-blank character

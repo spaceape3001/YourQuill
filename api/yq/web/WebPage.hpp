@@ -63,9 +63,6 @@ namespace yq {
         bool                set_template(std::string_view);
     };
     
-
-    using FNGet     = std::function<void(Stream&)>;
-    using GetMap    = Map<std::string_view, FNGet, IgCase>;
     
     struct WebGroup {
         std::vector<const WebPage*> pages;
