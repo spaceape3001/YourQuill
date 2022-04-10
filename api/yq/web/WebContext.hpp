@@ -22,6 +22,10 @@ namespace yq {
     class WebPage;
     
     struct WebContext : public RefCount {
+        enum : uint64_t {
+            LOCAL           = 1ULL << 0
+        };
+        
         //! Informational Flags about this... 
         uint32_t                        flags       = 0;
 
@@ -120,10 +124,8 @@ namespace yq {
         void                            tx_reset(bool resetStatus=false);
         void                            simple_content(std::string_view);
         
+        bool                            is_local() const { return static_cast<bool>(flags & LOCAL); }
         
-        enum : uint64_t {
-            LOCAL           = 1ULL << 0
-        };
         
         WebContext(asio::io_context& _io_ctx);
         ~WebContext();

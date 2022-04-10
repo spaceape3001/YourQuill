@@ -9,6 +9,7 @@ set(stdquill_SOURCES
     ./file_sys.cpp
     ./leaf_sys.cpp
     ./tag_sys.cpp
+    ./user.cpp
     ./workspace.cpp
 )
 

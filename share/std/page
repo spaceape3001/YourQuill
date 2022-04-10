@@ -58,7 +58,7 @@
 	        var canEdit     = {{CAN_EDIT}};
 	        var loggedIn    = {{LOGGED_IN}};
 
-	        function updateUserInfo() {
+	        function updateUserInfo() {	        
 	            document.getElementById("pleaseLogin").style.display = (local || loggedIn) ? "none" : "block";
 	            document.getElementById("weAreLoggedIn").style.display = (local || !loggedIn) ? "none" : "block";
 	            document.getElementById("weAreLocalUser").style.display = local ? "block" : "none";

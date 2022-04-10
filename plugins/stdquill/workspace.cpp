@@ -71,12 +71,14 @@ namespace {
         str << ctx.var_body;
     }
     
+    
     void    var_footer(Stream&str, WebContext&ctx)
     {
         Ref<WebTemplate>    footer  = gFooter;
         if(footer)
             footer -> execute(str, ctx);
     }
+    
 
     void    var_home(Stream&str, WebContext&)
     {
@@ -87,6 +89,7 @@ namespace {
     {
         html_escape_write(str, wksp::host());
     }
+
 
     void    var_name(Stream& str, WebContext&)
     {
