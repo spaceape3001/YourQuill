@@ -10,6 +10,7 @@
 #include "CalSystem.hpp"
 #include "Change.hpp"
 #include "DataRole.hpp"
+#include "FileType.hpp"
 #include "Format.hpp"
 #include "Linkage.hpp"
 #include "Match.hpp"
@@ -29,6 +30,7 @@ YQ_TYPE_IMPLEMENT(yq::AttrKind)
 YQ_TYPE_IMPLEMENT(yq::CalSystem)
 YQ_TYPE_IMPLEMENT(yq::Change)
 YQ_TYPE_IMPLEMENT(yq::DataRole)
+YQ_TYPE_IMPLEMENT(yq::FileType)
 YQ_TYPE_IMPLEMENT(yq::Format)
 YQ_TYPE_IMPLEMENT(yq::Linkage)
 YQ_TYPE_IMPLEMENT(yq::Match)

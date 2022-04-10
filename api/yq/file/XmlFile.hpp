@@ -27,4 +27,5 @@ namespace yq {
 
         virtual bool    is_binary() const override { return false; }
     };
+    
 }

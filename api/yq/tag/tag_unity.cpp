@@ -4,12 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "arg.hpp"
 #include "cdb.hpp"
 #include <yq/bit/KeyValue.hpp>
 #include <yq/bit/NKI.hpp>
 #include <yq/file/cdb.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/type/ByteArray.hpp>
+#include <yq/web/WebContext.hpp>
+#include <yq/web/WebHtml.hpp>
 #include <yq/wksp/CacheFwd.hpp>
 #include <yq/wksp/CacheSQ.hpp>
 #include <yq/wksp/Root.hpp>
@@ -26,7 +29,7 @@ namespace yq {
         }
     }
 
-    TagData& TagData::merge(const TagData&b, bool fOverride)
+    Tag::Data& Tag::Data::merge(const Data&b, bool fOverride)
     {
         set_if_empty(leaf, b.leaf, fOverride);
         set_if_empty(name, b.name, fOverride);
@@ -35,7 +38,7 @@ namespace yq {
         return *this;
     }
 
-    void    TagData::reset() 
+    void    Tag::Data::reset() 
     {
         name.clear();
         leaf.clear();
@@ -47,12 +50,12 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-    void    TagFile::reset() 
+    void    Tag::File::reset() 
     {
-        TagData::reset();
+        Data::reset();
     }
 
-    bool    TagFile::read(ByteArray&&buffer, const std::string_view& fname) 
+    bool    Tag::File::read(ByteArray&&buffer, const std::string_view& fname) 
     {
         KVTree          attrs;
         if(!attrs.parse(buffer, nullptr, true, fname))
@@ -65,7 +68,7 @@ namespace yq {
         return true;
     }
 
-    bool    TagFile::write(yq::Stream&chars) const
+    bool    Tag::File::write(yq::Stream&chars) const
     {
         KVTree        attrs;
         if(!name.empty())
@@ -80,6 +83,125 @@ namespace yq {
         return true;
     }
 
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    namespace arg {
+        Tag tag(std::string_view  arg_string)
+        {
+            arg_string   = trimmed(arg_string);
+            if(arg_string.empty())
+                return Tag{};
+                
+            Tag t   = cdb::tag( arg_string);
+            if(t)
+                return t;
+            uint64_t    i = to_uint64( arg_string).value;
+            if(cdb::exists_tag(i))
+                return Tag{i};
+            return Tag{};
+        }
+        
+        Tag tag(const WebContext&ctx)
+        {
+            std::string    k    = ctx.find_query("id");
+            if(!k.empty())
+                return tag_id(k);
+            
+            k       = ctx.find_query("key");
+            if(!k.empty())
+                return tag_key(k);
+            
+            k       = ctx.find_query("tag");
+            if(!k.empty())
+                return tag(k);
+            return Tag{};
+        }
+        
+        Tag tag(const WebHtml&h)
+        {
+            return tag(h.context());
+        }
+        
+        Tag tag(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return tag(arg_string);
+        }
+        
+        Tag tag(const WebHtml&h, std::string_view arg_name)
+        {
+            return tag(h.context(), arg_name);
+        }
+        
+        Tag tag(const WebContext& ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return tag(arg_string);
+        }
+        
+        Tag tag(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return tag(h.context(), arg_names);
+        }
+
+        Tag tag_id(std::string_view arg_string)
+        {
+            uint64_t    i   = to_uint64(arg_string).value;
+            if(cdb::exists_tag(i))
+                return Tag{i};
+            return Tag{};
+        }
+
+        Tag tag_id(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return tag_id(arg_string);
+        }
+        
+        Tag tag_id(const WebHtml&h, std::string_view arg_name)
+        {
+            return tag_id(h.context(), arg_name);
+        }
+        
+        Tag tag_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return tag_id(arg_string);
+        }
+        
+        Tag tag_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return tag_id(h.context(), arg_names);
+        }
+        
+        Tag tag_key(std::string_view arg_string)
+        {
+            return cdb::tag(trimmed(arg_string));
+        }
+        
+        Tag tag_key(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return tag_key(arg_string);
+        }
+        
+        Tag tag_key(const WebHtml&h, std::string_view arg_name)
+        {
+            return tag_key(h.context(), arg_name);
+        }
+        
+        Tag tag_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return tag_key(arg_string);
+        }
+        
+        Tag tag_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return tag_key(h.context(), arg_names);
+        }
+    }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -258,15 +380,15 @@ namespace yq {
                 return t;
             if(fragments_count(doc))
                 return t;
-            TagFile::Shared td  = write(t, rt);
+            Tag::SharedFile td  = write(t, rt);
             td -> name  = k;
             td -> save();
             return t;
         }
 
-        SharedTagData   merged(Tag t, unsigned int opts)
+        Tag::SharedData   merged(Tag t, unsigned int opts)
         {
-            SharedTagData  ret = std::make_shared<TagData>();
+            Tag::SharedData  ret = std::make_shared<Tag::Data>();
             for(auto& i :reads(t)){
                 if(opts & IsUpdate)
                     cdb::update(i.first);
@@ -299,7 +421,7 @@ namespace yq {
             return NKI{};
         }
         
-        TagFile::Shared          read(Tag t, const Root* rt)
+        Tag::SharedFile          read(Tag t, const Root* rt)
         {
             return tag_doc(fragment(document(t), rt));
         }
@@ -309,7 +431,7 @@ namespace yq {
         {
             std::vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), DataRole::Tags)){
-                TagFile::Shared  p   = tag_doc(f);
+                Tag::SharedFile  p   = tag_doc(f);
                 if(p)
                     ret.push_back(TagFragDoc(f,p));
             }
@@ -320,7 +442,7 @@ namespace yq {
         {
             std::vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), rt)){
-                TagFile::Shared  p   = tag_doc(f);
+                Tag::SharedFile  p   = tag_doc(f);
                 if(p)
                     ret.push_back(TagFragDoc(f,p));
             }
@@ -365,33 +487,33 @@ namespace yq {
             return exists_tag(i) ? Tag{i} : Tag{};
         }
         
-        TagFile::Shared      tag_doc(Fragment f, bool fAllowEmpty)
+        Tag::SharedFile      tag_doc(Fragment f, bool fAllowEmpty)
         {
             if(!f)
-                return TagFile::Shared();
+                return Tag::SharedFile();
 
             auto ch   = frag_bytes(f);
             if(ch.empty())
-                return fAllowEmpty ? std::make_shared<TagFile>() : TagFile::Shared();
+                return fAllowEmpty ? std::make_shared<Tag::File>() : Tag::SharedFile();
             
-            TagFile::Shared  td = std::make_shared<TagFile>();
+            Tag::SharedFile  td = std::make_shared<Tag::File>();
             std::filesystem::path   fp  = path(f);
             if(!td->load(std::move(ch), fp)){
                 yError() << "Unable to read " << fp;
-                return TagFile::Shared();
+                return Tag::SharedFile();
             }
             td -> set_file(fp);
             return td;
         }
 
         
-        TagFile::Shared         write(Tag t, const Root* rt)
+        Tag::SharedFile         write(Tag t, const Root* rt)
         {
             Document    d   = document(t);
             if(!d)
-                return TagFile::Shared();
+                return Tag::SharedFile();
             if(rt && !rt->is_writable(DataRole::Tags))
-                return TagFile::Shared();
+                return Tag::SharedFile();
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Tags);
             if(f)
                 return tag_doc(f, true);
@@ -400,7 +522,7 @@ namespace yq {
             if((fo != cdb::top_folder()) && !exists(fo, rt))
                 make_directory(fo, rt);
 
-            TagFile::Shared ptr  = std::make_shared<TagFile>();
+            Tag::SharedFile ptr  = std::make_shared<Tag::File>();
             ptr -> set_file( rt -> resolve(key(d)));
             ptr -> reload();
             return ptr;

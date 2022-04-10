@@ -723,9 +723,10 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    WebHtml::WebHtml(WebContext&ctx, const std::string_view& _title) : m_context(ctx), m_title(_title)
+    WebHtml::WebHtml(WebContext&ctx, const std::string_view& _title) : m_context(ctx)
     {
-        m_body.reserve(65536);
+        ctx.var_body.reserve(65536);
+        ctx.var_title       = _title;
     }
     
     WebHtml::~WebHtml()
@@ -738,34 +739,17 @@ namespace yq {
         auto temp   = web::html_template();
         m_context.tx_content_type   = ContentType::html;
         HttpDataStream  out(m_context.tx_content);
-        for(auto& t : temp->m_bits){
-            if(!t.variable){
-                out << t.token;
-                continue;
-            }
-            
-            if(is_similar(t.token, "body")){
-                out << m_body;
-            } else if(is_similar(t.token, "title")){
-                //out << m_title;
-                html_escape_write(out, m_title);
-            } else {
-                const WebVariable*  v = web::variable(t.token);
-                if(v){
-                    v -> handle(out, m_context);
-                }
-            }
-        }
+        temp -> execute(out, m_context);
     }
 
     void WebHtml::title(const std::string_view& _title)
     {
-        m_title = _title;
+        m_context.var_title     = _title;
     }
 
     bool WebHtml::write(const char* buf, size_t cb) 
     {
-        m_body.append(buf, cb);
+        m_context.var_body.append(buf, cb);
         return true;
     }
     
@@ -935,6 +919,13 @@ namespace yq {
     }
     
     
+    WebPage::Writer&  WebPage::Writer::label(std::string_view sv)
+    {
+        if(m_page && !sv.empty())
+            m_page -> m_label = sv;
+        return *this;
+    }
+
     WebPage::Writer&  WebPage::Writer::local()
     {
         if(m_page){
@@ -979,6 +970,12 @@ namespace yq {
         return *this;
     }
     
+    void    WebPage::Writer::set_group(const WebGroup*g) 
+    {
+        if(m_page)
+            m_page -> m_group = g;
+    }
+
     WebPage::Writer& WebPage::Writer::sub(std::string_view p, const WebPage*w)
     {
         if(w){
@@ -1001,7 +998,19 @@ namespace yq {
         return *this;
     }
     
-
+    void    reg_webgroup(std::initializer_list<WebPage::Writer> gdef)
+    {
+        if(!std::empty(gdef)){
+            WebGroup*   group   = new WebGroup;
+            for(const WebPage::Writer& w : gdef){
+                const WebPage*    p   = w.page();
+                if(!p)
+                    continue;
+                group -> pages.push_back(p);
+                ((WebPage::Writer&) w).set_group(group);
+            }
+        }
+    }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1043,20 +1052,40 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        WebTemplate::WebTemplate()
+        WebTemplate::WebTemplate(ContentType ct) : m_type(ct)
         {
             parse(szDefaultTemplate);
         }
 
-        WebTemplate::WebTemplate(std::string&& mv) : m_data(std::move(mv))
+        WebTemplate::WebTemplate(std::string&& mv, ContentType ct) : m_data(std::move(mv)), m_type(ct)
         {
             parse(m_data);
         }
         
-        WebTemplate::WebTemplate(std::string_view k) : m_data(k)
+        WebTemplate::WebTemplate(std::string_view k, ContentType ct) : m_data(k), m_type(ct)
         {
             parse(m_data);
         }
+
+        void    WebTemplate::execute(Stream&str, WebContext&ctx) const
+        {
+            //  TODO .... content type == markdown
+        
+            for(auto& t : m_bits){
+                if(!t.variable){
+                    str << t.token;
+                    continue;
+                }
+                
+                const WebVariable*  v = web::variable(t.token);
+                if(v){
+                    v -> handle(str, ctx);
+                } else {
+                    str << "{{" << t.token << "}}"; // make it clear there's a substitution failure
+                }
+            }
+        }
+        
 
         void    WebTemplate::parse(std::string_view data)
         {
@@ -1429,6 +1458,20 @@ namespace yq {
     //{
     //}
 
+    std::string_view    web_title(std::string_view text)
+    {
+        if(!starts(text, "#!"))
+            return std::string_view();
+        size_t  n = text.find_first_of('\n');
+        if(n == std::string_view::npos)
+            return text;
+        return std::string_view(text.data()+2, text.data()+n+1);
+    }
+
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     namespace {
        class SimpleWebFileHandler : public WebPage {
         public:
@@ -1616,6 +1659,4 @@ namespace yq {
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    
 }

@@ -17,7 +17,7 @@ namespace yq {
     struct Image;
     struct Root;
     
-    using TagFragDoc    = std::pair<Fragment, TagFile::Shared>;
+    using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
     struct Tag::Info {
         std::string     brief;
         Document        doc;
@@ -30,7 +30,7 @@ namespace yq {
     namespace cdb {
         struct NKI;
         
-        using SharedTagData     = std::shared_ptr<TagData>;
+        using SharedTagData     = std::shared_ptr<Tag::Data>;
  
         std::vector<Tag>        all_tags(Sorted sorted=Sorted());
         size_t                  all_tags_count();
@@ -72,7 +72,7 @@ namespace yq {
         //! \brief Returns the FIRST trag fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        TagFile::Shared         read(Tag, const Root*);
+        Tag::SharedFile         read(Tag, const Root*);
         
         std::vector<TagFragDoc> reads(Tag);
         std::vector<TagFragDoc> reads(Tag, class Root*);
@@ -85,14 +85,14 @@ namespace yq {
         Tag                     tag(std::string_view);
         Tag                     tag(uint64_t);
         
-        TagFile::Shared         tag_doc(Fragment, bool fAllowEmpty=false);
+        Tag::SharedFile         tag_doc(Fragment, bool fAllowEmpty=false);
 
         //!  \brief   Returns a writable document
         //!
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        TagFile::Shared         write(Tag, const Root*);
+        Tag::SharedFile         write(Tag, const Root*);
     };
 
 }

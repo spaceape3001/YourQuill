@@ -873,6 +873,11 @@ namespace yq {
             return impl().rpath.get(p, nullptr);
         }
         
+        const Root*                     root(std::string_view k)
+        {
+            return impl().rkey.get(k, nullptr);
+        }
+
         uint64_t                        root_count()
         {
             return impl().roots.size();
@@ -1047,7 +1052,7 @@ namespace yq {
 
     const Root*  Root::by_key(const std::string_view&k)
     {
-        return wksp::impl().rkey.get(k, nullptr);
+        return wksp::root(k);
     }
 
     Root::Root(const std::filesystem::path&s) : path(s)

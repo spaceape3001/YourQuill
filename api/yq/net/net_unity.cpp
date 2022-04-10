@@ -312,7 +312,7 @@ namespace yq {
         return contentTypes()[ct];
     }
 
-    ContentType mimeTypeForExt(const std::string_view& ext)
+    ContentType mimeTypeForExt(std::string_view ext)
     {
         const auto& r = extToTypeMap();
         return r.get(ext);

@@ -11,10 +11,8 @@
 
 namespace yq {
 
-    class TagFile : public AbstractFile, public TagData {
+    class Tag::File : public AbstractFile, public Data {
     public:
-
-        using Shared        = std::shared_ptr<TagFile>;
 
     protected:
         virtual void    reset() override;

@@ -210,6 +210,7 @@ namespace {
                 }
                 
                 try {
+                    ctx->page   = pg.first;
                     pg.first -> handle(*ctx);
                     if(ctx -> status == HttpStatus())
                         ctx -> status   = HttpStatus::Success;

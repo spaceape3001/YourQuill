@@ -98,13 +98,7 @@ void        dev_table(WebHtml&, const std::vector<Fragment>&);
 void        dev_table(WebHtml&, const std::vector<Leaf>&);
 void        dev_table(WebHtml&, const std::vector<Tag>&);
 
-Tag         tag(std::string_view);
-Tag         tag(const WebContext&);
-Tag         tag(const WebHtml&);
-Tag         tag(const WebContext&, std::string_view);
-Tag         tag(const WebHtml&, std::string_view);
-Tag         tag(const WebContext&, std::initializer_list<std::string_view>);
-Tag         tag(const WebHtml&, std::initializer_list<std::string_view>);
+
 
 enum {
     s3_tag1         = -100,

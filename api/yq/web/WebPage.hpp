@@ -66,6 +66,10 @@ namespace yq {
 
     using FNGet     = std::function<void(Stream&)>;
     using GetMap    = Map<std::string_view, FNGet, IgCase>;
+    
+    struct WebGroup {
+        std::vector<const WebPage*> pages;
+    };
 
     /*! \brief WebPage (or series of pages)
     
@@ -108,12 +112,14 @@ namespace yq {
         ContentType                 content_type() const { return m_content_type; }
         //! All general content types
         ContentTypes                content_types() const { return m_content_types; }
+        std::string_view            label() const { return m_label; }
         bool                        local_only() const;
         bool                        login_required() const;
         bool                        no_expansion() const;
         std::string_view            path() const { return name(); }
         Role                        role() const { return m_role; }
         HttpOps                     methods() const { return m_methods; }
+        const WebGroup*             group() const { return m_group; }
         
     protected:
         WebPage(HttpOps, std::string_view, const std::source_location&);
@@ -123,6 +129,8 @@ namespace yq {
         
         std::vector<Arg>        m_args;
         WebPageMap              m_subs;     // for derived use... (ie, overrides or whatever)
+        std::string_view        m_label;
+        const WebGroup*         m_group = nullptr;
         HttpOps                 m_methods;
         ContentTypes            m_content_types;
         ContentType             m_content_type;
@@ -164,6 +172,9 @@ namespace yq {
         //! Disable registration
         Writer&  disable_reg();
         
+        //! Sets the label for the tab-bar
+        Writer&  label(std::string_view);
+        
         //! Local address only (ie, same machine)
         Writer&  local();
         
@@ -187,6 +198,11 @@ namespace yq {
         //! Adds in a sub-web, overriding the web's path & methods
         Writer&  sub(HttpOps, std::string_view, const WebPage*);
         
+        //! Sets the group of the page
+        void     set_group(const WebGroup*);
+        
+        const WebPage*  page() const { return m_page; }
+        
         Writer(WebPage*p); // : m_page(p) {}
         Writer(Writer&&);
         Writer& operator=(Writer&&);
@@ -195,8 +211,9 @@ namespace yq {
         
         operator const WebPage* () const { return m_page; }
         
-        Writer(const Writer&) = delete;
-        Writer& operator=(const Writer&&) = delete;
+        Writer(const Writer&);
+        Writer& operator=(const Writer&&);
+        
     private:
         WebPage*   m_page = nullptr;
     };

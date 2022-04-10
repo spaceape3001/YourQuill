@@ -35,7 +35,7 @@
 				<TH ALIGN="center" VALIGN="center"><H1>{{TITLE}}</H1></TH>
 			</TR>
 			<TR>
-				<TD COLSPAN="2" WIDTH="100%">{{BODY}}</TD>
+				<TD COLSPAN="2" WIDTH="100%">{{TABBAR}}{{BODY}}</TD>
 			</TR>
 			<TR>
 				<TD></TD>

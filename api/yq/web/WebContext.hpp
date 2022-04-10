@@ -19,6 +19,8 @@ namespace asio {
 }
 
 namespace yq {
+    class WebPage;
+    
     struct WebContext : public RefCount {
         //! Informational Flags about this... 
         uint32_t                        flags       = 0;
@@ -30,8 +32,13 @@ namespace yq {
         asio::io_context&               io_ctx;
         
 
+        //MarkdownContext                 markdown;
+
         //! Method of the request
         HttpOp                          method;
+        
+        //! Our webpage....
+        const WebPage*                  page        = nullptr;
         
         //! Should be our port, if any is specified
         uint16_t                        port        = 0;
@@ -84,8 +91,16 @@ namespace yq {
         //! Path beyond what resolved (ie, for glob patterns)
         std::string_view                truncated_path;
 
+        //! Body variable
+        std::string                     var_body;
+
+        //! Title variable
+        std::string                     var_title;
+
         //! Version of the request
         VersionSpec                     version;
+        
+        
         
         //! Decodes ALL queries
         StringMultiMap                  decode_query();

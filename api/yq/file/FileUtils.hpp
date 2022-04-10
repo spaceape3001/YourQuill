@@ -21,6 +21,11 @@ namespace yq {
     std::string     file_modified(const char*);
     bool            file_readable(const char*);
     size_t          file_size(const char*);
+    
+    bool            file_write(const std::filesystem::path&, const char*, size_t);
+    bool            file_write(const std::filesystem::path&, std::string_view);
+    bool            file_write(const std::filesystem::path&, const ByteArray&);
+    bool            file_write(const std::filesystem::path&, const std::vector<char>&);
 
     struct SizeTimestamp {
         size_t          size   = 0;

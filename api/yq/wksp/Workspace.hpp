@@ -152,6 +152,7 @@ namespace yq {
         
         //! Root by ID....
         const Root*                     root(uint64_t);
+        const Root*                     root(std::string_view);
         const Root*                     root(const std::filesystem::path&);
         uint64_t                        root_count();
         const Root*                     root_first(DataRole);

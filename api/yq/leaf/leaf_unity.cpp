@@ -46,7 +46,8 @@ namespace yq {
 
     Context     LeafFile::context() const
     {
-        return Context(format(), body);
+        return Context();
+//        return Context(format(), body);
     }
 
 

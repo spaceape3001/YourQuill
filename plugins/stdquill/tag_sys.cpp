@@ -8,6 +8,7 @@
 #include <yq/leaf/Leaf.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage3.hpp>
+#include <yq/tag/arg.hpp>
 #include <yq/tag/cdb.hpp>
 #include <yq/wksp/CacheFwd.hpp>
 #include <yq/wksp/CacheSQ.hpp>
@@ -37,63 +38,6 @@ WebHtml&    operator<<(WebHtml&h, const DevID<Tag>&v)
     return h;
 }
 
-Tag tag(std::string_view k)
-{
-    k   = trimmed(k);
-    if(k.empty())
-        return Tag();
-    Tag t   = cdb::tag(k);
-    if(t)
-        return t;
-    uint64_t    i = to_uint64(k).value;
-    if(cdb::exists_tag(i))
-        return Tag{i};
-    return Tag{};
-}
-
-Tag     tag(const WebContext&ctx)
-{
-    std::string    k    = ctx.find_query("id");
-    if(!k.empty())
-        return Tag{ to_uint64(k).value };
-    
-    k       = ctx.find_query("key");
-    if(!k.empty())
-        return cdb::tag(k);
-    
-    k       = ctx.find_query("tag");
-    if(!k.empty())
-        return tag(k);
-    return Tag{};
-}
-
-Tag     tag(const WebHtml&h)
-{
-    return tag(h.context());
-}
-
-Tag     tag(const WebContext& ctx, std::string_view k)
-{
-    std::string     v  = ctx.find_query(k);
-    return tag(v);
-}
-
-Tag     tag(const WebHtml& h, std::string_view k)
-{
-    return tag(h.context(), k);
-}
-
-Tag     tag(const WebContext&ctx, std::initializer_list<std::string_view> keys)
-{
-    std::string v   = ctx.find_query(keys);
-    return tag(v);
-}
-
-Tag     tag(const WebHtml&h, std::initializer_list<std::string_view> keys)
-{
-    return tag(h.context(), keys);
-}
-
 
 void    dev_table(WebHtml& h, const std::vector<Tag>&tags)
 {
@@ -112,7 +56,7 @@ namespace {
 
     void    page_dev_tag(WebHtml& out)
     {
-        Tag x   = tag(out);
+        Tag x   = arg::tag(out);
         if(!x)
             throw hNotFound;
         auto i = cdb::info(x);
@@ -134,7 +78,7 @@ namespace {
         dev_table(out, cdb::all_tags());
     }
     
-    void    update_info(Tag x, const TagData::Shared& data)
+    void    update_info(Tag x, const Tag::SharedData& data)
     {
         static thread_local cdb::SQ u("UPDATE Tags SET name=?,brief=? WHERE id=?");
         auto u_af = u.af();
@@ -144,12 +88,12 @@ namespace {
         u.exec();
     }
     
-    void    update_image(Tag tag, const TagData::Shared& data)
+    void    update_image(Tag tag, const Tag::SharedData& data)
     {
         // TODO
     }
     
-    void    update_leaf(Tag tag, const TagData::Shared& data)
+    void    update_leaf(Tag tag, const Tag::SharedData& data)
     {
         // TODO
     }
@@ -158,7 +102,7 @@ namespace {
     {
         //  Initial import
         Tag t = cdb::db_tag(doc);
-        TagData::Shared data    = cdb::merged(t, cdb::IsUpdate);
+        Tag::SharedData data    = cdb::merged(t, cdb::IsUpdate);
         update_info(t, data);
     }
 
@@ -166,7 +110,7 @@ namespace {
     {
         //  leaf & image cross
         Tag t = cdb::db_tag(doc);
-        TagData::Shared data    = cdb::merged(t, cdb::IsUpdate);
+        Tag::SharedData data    = cdb::merged(t, cdb::IsUpdate);
         update_leaf(t, data);
         update_image(t, data);
     }
@@ -184,7 +128,7 @@ namespace {
         }
         // TODO
         
-        TagData::Shared data    = cdb::merged(t, cdb::IsUpdate);
+        Tag::SharedData data    = cdb::merged(t, cdb::IsUpdate);
         update_info(t, data);
         update_leaf(t, data);
     }

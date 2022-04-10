@@ -6,9 +6,18 @@
 
 #pragma once
 
-#include "Leaf.hpp"
-#include "LeafFile.hpp"
+#include <yq/meta/Binder.hpp>
+#include <yq/type/Enum.hpp>
 
 namespace yq {
-    
+
+    /*! \brief File Type 
+    */
+    YQ_ENUM(FileType, ,
+        Default,
+        KeyValue,
+        Xml
+    )
 }
+
+YQ_TYPE_DECLARE(yq::FileType)

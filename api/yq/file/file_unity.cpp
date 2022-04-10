@@ -7,10 +7,12 @@
 #include "AbstractFile.hpp"
 #include "FileUtils.hpp"
 #include "StdFile.hpp"
+//#include "StdXml.hpp"
 #include "XmlFile.hpp"
 #include "XmlUtils.hpp"
 
 #include <yq/algo/Compare.hpp>
+#include <yq/c++/Safety.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Bytes.hpp>
@@ -352,6 +354,47 @@ namespace yq {
             return SizeTimestamp( buf.st_size, buf.st_mtim.tv_sec, buf.st_mtim.tv_nsec );
         }
 
+        bool    file_write(const std::filesystem::path&oFile, const char*data, size_t count)
+        {
+            if(count && !data)
+                return false;
+            
+            int fd  = open(oFile.c_str(), O_CREAT|O_LARGEFILE|O_TRUNC|O_WRONLY, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+            if(fd == -1)
+                return false;
+            
+            auto cls = safety([fd](){ close(fd); });    
+            if(!count)
+                return true;
+            
+            for(;;){
+                ssize_t i   = write(fd, data, count);
+                if(i <= 0)
+                    return false;
+                if(i >= (ssize_t) count)
+                    return true;
+                data += i;
+                count -= i;
+            }
+        }
+
+
+        bool    file_write(const std::filesystem::path&oFile, std::string_view sv)
+        {
+            return file_write(oFile, sv.data(), sv.size());
+        }
+        
+        bool    file_write(const std::filesystem::path&oFile, const ByteArray& sv)
+        {
+            return file_write(oFile, std::string_view( sv.data(), sv.size()));
+        }
+
+        bool    file_write(const std::filesystem::path&oFile, const std::vector<char>&sv)
+        {
+            return file_write(oFile, std::string_view( sv.data(), sv.size()));
+        }
+        
+
         //std::filesystem::path   find_first_file(const std::filesystem::path& dir, const std::string_view& name)
         //{
             //for(auto const& de : std::filesystem::directory_iterator(dname)){
@@ -555,30 +598,79 @@ namespace yq {
     //  STD FILE
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    bool        StdFile::empty() const
-    {
-        return body.empty() && subs.empty();
-    }
+        bool        StdFile::empty() const
+        {
+            return body.empty() && subs.empty();
+        }
 
-    bool        StdFile::read(ByteArray&&buffer, const std::string_view& fname) 
-    {
-        return KVTree::parse(buffer, (has_body()?&body:nullptr), recursive_attributes(), fname);
-    }
+        bool        StdFile::read(ByteArray&&buffer, const std::string_view& fname) 
+        {
+            return KVTree::parse(buffer, (has_body()?&body:nullptr), recursive_attributes(), fname);
+        }
 
-    void        StdFile::reset() 
-    {
-        subs.clear();
-        body.clear();
-    }
+        void        StdFile::reset() 
+        {
+            subs.clear();
+            body.clear();
+        }
 
 
-    bool        StdFile::write(yq::Stream& buffer) const
-    {
-        KVTree::write(buffer);
-        if(!body.empty())
-            buffer << '\n' << body;
-        return true;
-    }
+        bool        StdFile::write(yq::Stream& buffer) const
+        {
+            KVTree::write(buffer);
+            if(!body.empty())
+                buffer << '\n' << body;
+            return true;
+        }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  STD XML
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //StdXml::StdXml()
+        //{
+        //}
+        
+        //StdXml::~StdXml()
+        //{
+        //}
+
+        //XmlDocument&        StdXml::xmldoc()
+        //{
+            //if(!m_doc.first_node()){
+                //XmlNode*        x   = m_doc.allocate_node(rapidxml::node_pi, "xml", "version=\"1.0\" encoding=\"UTF-8\"");
+                //m_doc.append_node(x);
+            //}
+            //return m_doc;
+        //}
+
+        //bool    StdXml::read(ByteArray&&buffer, const std::string_view& fname) 
+        //{
+            //m_data  = std::move(buffer);
+            //m_data << '\0';
+            //try {
+                //m_doc.parse<0>(m_data.data());
+            //} catch(const rapidxml::parse_error& pe){
+                //size_t  pt  = pe.where<char>() - m_data.data();
+                //yError() << "Xml parse error: " << pe.what() << " (at byte " << pt << ") : " << fname;
+                //return false;
+            //}
+            //return true;
+        //}
+        
+        //void    StdXml::reset() 
+        //{
+            //m_data      = {};
+            //m_doc       = {};
+        //}
+
+        //bool    StdXml::write(yq::Stream&str) const 
+        //{
+            //std::vector<char>   s;
+            //rapidxml::print(std::back_inserter(s), m_doc, 0);
+            //str.write(s.data(), s.size());
+            //return true;
+        //}
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  XML FILE
@@ -625,6 +717,13 @@ namespace yq {
     //  XML UTILS
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        size_t  count_children(const XmlNode*xn, const char* pszTag)
+        {
+            size_t cnt=0;
+            for(const XmlNode* xb = xn->first_node(pszTag); xb; xb = xb -> next_sibling(pszTag))
+                ++cnt;
+            return cnt;
+        }
 
         boolean_r            to_boolean(const XmlBase*xb)
         {
@@ -956,11 +1055,15 @@ namespace yq {
             write_x(xb, to_string(v));
         }
 
-        void                 write_x(XmlBase* xb, const std::string_view&v)
+        void                 write_x(XmlBase* xb, std::string_view v)
         {
             XmlDocument*doc = document_for(xb);
             if(doc && !v.empty())
                 xb -> value(doc -> allocate_string(v.data(), v.size()), v.size());
         }
 
+        void    xml_start(XmlDocument&doc)
+        {
+            doc.append_node(doc.allocate_node(rapidxml::node_pi, "xml", "version=\"1.0\" encoding=\"UTF-8\""));
+        }
 }

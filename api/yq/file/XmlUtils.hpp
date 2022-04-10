@@ -125,13 +125,14 @@ namespace yq {
     auto                read_children(const XmlNode* xn, const char* pszTag, Pred pred)
     {
         using Res = std::invoke_result_t<Pred, const XmlNode*>;
-        Vector<Res> ret;
+        std::vector<Res> ret;
         for(const XmlNode* xb = xn->first_node(pszTag); xb; xb = xb -> next_sibling(pszTag))
-            ret << pred(xb);
+            ret.push_back(pred(xb));
         return ret;
     }
 
 
+    size_t              count_children(const XmlNode*, const char* pszTag);
 
 
     /*
@@ -159,7 +160,7 @@ namespace yq {
     void                 write_x(XmlBase* xb, uint32_t);
     void                 write_x(XmlBase* xb, uint64_t);
 
-    void                 write_x(XmlBase* xb, const std::string_view&);
+    void                 write_x(XmlBase* xb, std::string_view);
 
     template <typename E>
     void                 write_x(XmlBase* xb, EnumImpl<E> v)
@@ -230,4 +231,6 @@ namespace yq {
         }
     }
 
+    //! Adds the customary <?xml version=" ... line
+    void    xml_start(XmlDocument&);
 }

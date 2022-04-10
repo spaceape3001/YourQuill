@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "arg.hpp"
 #include "cdb.hpp"
 #include <yq/bit/NKI.hpp>
 #include <yq/collection/vector_utils.hpp>
@@ -12,11 +13,615 @@
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/type/ByteArray.hpp>
+#include <yq/web/WebContext.hpp>
+#include <yq/web/WebHtml.hpp>
 #include <yq/wksp/CacheSQ.hpp>
 #include <yq/wksp/Root.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 namespace yq {
+    namespace arg {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Directory directory(std::string_view  arg_string, const Root* rt)
+        {
+            arg_string   = trimmed(arg_string);
+            if(arg_string.empty())
+                return Directory{};
+                
+            Folder      folder = folder_key(arg_string);
+            if(folder)
+                return cdb::first_directory(folder, rt);
+
+            return directory_id(arg_string);
+        }
+        
+        Directory directory(const WebContext&ctx, const Root* rt)
+        {
+            std::string    k;
+            
+            
+            k    = ctx.find_query("id");
+            if(!k.empty())
+                return directory_id(k);
+            
+            k   = ctx.find_query("root");
+            if(!k.empty())
+                rt  = root(k);
+
+            k       = ctx.find_query("key");
+            if(!k.empty())
+                return directory_key(k, rt);
+            
+            k       = ctx.find_query("directory");
+            if(!k.empty())
+                return directory(k, rt);
+            return Directory{};
+        }
+        
+        Directory directory(const WebHtml&h, const Root* rt)
+        {
+            return directory(h.context(), rt);
+        }
+        
+        Directory directory(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return directory(arg_string, rt);
+        }
+        
+        Directory directory(const WebHtml&h, std::string_view arg_name, const Root* rt)
+        {
+            return directory(h.context(), arg_name, rt);
+        }
+        
+        Directory directory(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return directory(arg_string, rt);
+        }
+        
+        Directory directory(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            return directory(h.context(), arg_names, rt);
+        }
+
+        Directory directory_id(std::string_view arg_string)
+        {
+            uint64_t    i   = to_uint64(arg_string).value;
+            if(cdb::exists_directory(i))
+                return Directory{i};
+            return Directory{};
+        }
+
+        Directory directory_id(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return directory_id(arg_string);
+        }
+        
+        Directory directory_id(const WebHtml&h, std::string_view arg_name)
+        {
+            return directory_id(h.context(), arg_name);
+        }
+        
+        Directory directory_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return directory_id(arg_string);
+        }
+        
+        Directory directory_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return directory_id(h.context(), arg_names);
+        }
+        
+        Directory directory_key(std::string_view arg_string, const Root* rt)
+        {
+            Folder  folder  = folder_key(arg_string);
+            if(!folder)
+                return Directory();
+            return cdb::first_directory(folder, rt);
+        }
+        
+        Directory directory_key(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return directory_key(arg_string, rt);
+        }
+        
+        Directory directory_key(const WebHtml&h, std::string_view arg_name, const Root* rt)
+        {
+            return directory_key(h.context(), arg_name, rt);
+        }
+        
+        Directory directory_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return directory_key(arg_string, rt);
+        }
+        
+        Directory directory_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            return directory_key(h.context(), arg_names, rt);
+        }
+        
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Document document(std::string_view  arg_string)
+        {
+            arg_string   = trimmed(arg_string);
+            if(arg_string.empty())
+                return Document{};
+                
+            Document t   = cdb::document( arg_string);
+            if(t)
+                return t;
+            uint64_t    i = to_uint64( arg_string).value;
+            if(cdb::exists_document(i))
+                return Document{i};
+            return Document{};
+        }
+        
+        Document document(const WebContext&ctx)
+        {
+            std::string    k    = ctx.find_query("id");
+            if(!k.empty())
+                return document_id(k);
+            
+            k       = ctx.find_query("key");
+            if(!k.empty())
+                return document_key(k);
+            
+            k       = ctx.find_query("document");
+            if(!k.empty())
+                return document(k);
+            return Document{};
+        }
+        
+        Document document(const WebHtml&h)
+        {
+            return document(h.context());
+        }
+        
+        Document document(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return document(arg_string);
+        }
+        
+        Document document(const WebHtml&h, std::string_view arg_name)
+        {
+            return document(h.context(), arg_name);
+        }
+        
+        Document document(const WebContext& ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return document(arg_string);
+        }
+        
+        Document document(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return document(h.context(), arg_names);
+        }
+
+        Document document_id(std::string_view arg_string)
+        {
+            uint64_t    i   = to_uint64(arg_string).value;
+            if(cdb::exists_document(i))
+                return Document{i};
+            return Document{};
+        }
+
+        Document document_id(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return document_id(arg_string);
+        }
+        
+        Document document_id(const WebHtml&h, std::string_view arg_name)
+        {
+            return document_id(h.context(), arg_name);
+        }
+        
+        Document document_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return document_id(arg_string);
+        }
+        
+        Document document_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return document_id(h.context(), arg_names);
+        }
+        
+        Document document_key(std::string_view arg_string)
+        {
+            return cdb::document(trimmed(arg_string));
+        }
+        
+        Document document_key(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return document_key(arg_string);
+        }
+        
+        Document document_key(const WebHtml&h, std::string_view arg_name)
+        {
+            return document_key(h.context(), arg_name);
+        }
+        
+        Document document_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return document_key(arg_string);
+        }
+        
+        Document document_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return document_key(h.context(), arg_names);
+        }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Folder folder(std::string_view  arg_string)
+        {
+            arg_string   = trimmed(arg_string);
+            if(arg_string.empty())
+                return Folder{};
+                
+            Folder t   = cdb::folder( arg_string);
+            if(t)
+                return t;
+            uint64_t    i = to_uint64( arg_string).value;
+            if(cdb::exists_folder(i))
+                return Folder{i};
+            return Folder{};
+        }
+        
+        Folder folder(const WebContext&ctx)
+        {
+            std::string    k    = ctx.find_query("id");
+            if(!k.empty())
+                return folder_id(k);
+            
+            k       = ctx.find_query("key");
+            if(!k.empty())
+                return folder_key(k);
+            
+            k       = ctx.find_query("folder");
+            if(!k.empty())
+                return folder(k);
+            return Folder{};
+        }
+        
+        Folder folder(const WebHtml&h)
+        {
+            return folder(h.context());
+        }
+        
+        Folder folder(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return folder(arg_string);
+        }
+        
+        Folder folder(const WebHtml&h, std::string_view arg_name)
+        {
+            return folder(h.context(), arg_name);
+        }
+        
+        Folder folder(const WebContext& ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return folder(arg_string);
+        }
+        
+        Folder folder(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return folder(h.context(), arg_names);
+        }
+
+        Folder folder_id(std::string_view arg_string)
+        {
+            uint64_t    i   = to_uint64(arg_string).value;
+            if(cdb::exists_folder(i))
+                return Folder{i};
+            return Folder{};
+        }
+
+        Folder folder_id(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return folder_id(arg_string);
+        }
+        
+        Folder folder_id(const WebHtml&h, std::string_view arg_name)
+        {
+            return folder_id(h.context(), arg_name);
+        }
+        
+        Folder folder_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return folder_id(arg_string);
+        }
+        
+        Folder folder_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return folder_id(h.context(), arg_names);
+        }
+        
+        Folder folder_key(std::string_view arg_string)
+        {
+            return cdb::folder(trimmed(arg_string));
+        }
+        
+        Folder folder_key(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return folder_key(arg_string);
+        }
+        
+        Folder folder_key(const WebHtml&h, std::string_view arg_name)
+        {
+            return folder_key(h.context(), arg_name);
+        }
+        
+        Folder folder_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return folder_key(arg_string);
+        }
+        
+        Folder folder_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return folder_key(h.context(), arg_names);
+        }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Fragment fragment(std::string_view  arg_string, const Root* rt)
+        {
+            arg_string   = trimmed(arg_string);
+            if(arg_string.empty())
+                return Fragment{};
+                
+            Document      doc = document_key(arg_string);
+            if(doc)
+                return cdb::first_fragment(doc, rt);
+
+            return fragment_id(arg_string);
+        }
+        
+        Fragment fragment(const WebContext&ctx, const Root* rt)
+        {
+            std::string    k;
+            
+            
+            k    = ctx.find_query("id");
+            if(!k.empty())
+                return fragment_id(k);
+            
+            k   = ctx.find_query("root");
+            if(!k.empty())
+                rt  = root(k);
+
+            k       = ctx.find_query("key");
+            if(!k.empty())
+                return fragment_key(k, rt);
+            
+            k       = ctx.find_query("fragment");
+            if(!k.empty())
+                return fragment(k, rt);
+            return Fragment{};
+        }
+        
+        Fragment fragment(const WebHtml&h, const Root* rt)
+        {
+            return fragment(h.context(), rt);
+        }
+        
+        Fragment fragment(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return fragment(arg_string, rt);
+        }
+        
+        Fragment fragment(const WebHtml&h, std::string_view arg_name, const Root* rt)
+        {
+            return fragment(h.context(), arg_name, rt);
+        }
+        
+        Fragment fragment(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return fragment(arg_string, rt);
+        }
+        
+        Fragment fragment(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            return fragment(h.context(), arg_names, rt);
+        }
+
+        Fragment fragment_id(std::string_view arg_string)
+        {
+            uint64_t    i   = to_uint64(arg_string).value;
+            if(cdb::exists_fragment(i))
+                return Fragment{i};
+            return Fragment{};
+        }
+
+        Fragment fragment_id(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return fragment_id(arg_string);
+        }
+        
+        Fragment fragment_id(const WebHtml&h, std::string_view arg_name)
+        {
+            return fragment_id(h.context(), arg_name);
+        }
+        
+        Fragment fragment_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return fragment_id(arg_string);
+        }
+        
+        Fragment fragment_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return fragment_id(h.context(), arg_names);
+        }
+        
+        Fragment fragment_key(std::string_view arg_string, const Root* rt)
+        {
+            Document  doc  = document_key(arg_string);
+            if(!doc)
+                return Fragment();
+            return cdb::first_fragment(doc, rt);
+        }
+        
+        Fragment fragment_key(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return fragment_key(arg_string, rt);
+        }
+        
+        Fragment fragment_key(const WebHtml&h, std::string_view arg_name, const Root* rt)
+        {
+            return fragment_key(h.context(), arg_name, rt);
+        }
+        
+        Fragment fragment_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return fragment_key(arg_string, rt);
+        }
+        
+        Fragment fragment_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        {
+            return fragment_key(h.context(), arg_names, rt);
+        }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        const Root* root(std::string_view  arg_string)
+        {
+            arg_string   = trimmed(arg_string);
+            if(arg_string.empty())
+                return nullptr;
+                
+            const Root* t   = wksp::root( arg_string);
+            if(t)
+                return t;
+            return wksp::root(to_uint64( arg_string).value);
+        }
+        
+        const Root* root(const WebContext&ctx)
+        {
+            std::string    k    = ctx.find_query("id");
+            if(!k.empty())
+                return root_id(k);
+            
+            k       = ctx.find_query("key");
+            if(!k.empty())
+                return root_key(k);
+            
+            k       = ctx.find_query("root");
+            if(!k.empty())
+                return root(k);
+            return nullptr;
+        }
+        
+        const Root* root(const WebHtml&h)
+        {
+            return root(h.context());
+        }
+        
+        const Root* root(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return root(arg_string);
+        }
+        
+        const Root* root(const WebHtml&h, std::string_view arg_name)
+        {
+            return root(h.context(), arg_name);
+        }
+        
+        const Root* root(const WebContext& ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return root(arg_string);
+        }
+        
+        const Root* root(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return root(h.context(), arg_names);
+        }
+
+        const Root* root_id(std::string_view arg_string)
+        {
+            return wksp::root(to_uint64(arg_string).value);
+        }
+
+        const Root* root_id(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return root_id(arg_string);
+        }
+        
+        const Root* root_id(const WebHtml&h, std::string_view arg_name)
+        {
+            return root_id(h.context(), arg_name);
+        }
+        
+        const Root* root_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return root_id(arg_string);
+        }
+        
+        const Root* root_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return root_id(h.context(), arg_names);
+        }
+        
+        const Root* root_key(std::string_view arg_string)
+        {
+            return wksp::root(trimmed(arg_string));
+        }
+        
+        const Root* root_key(const WebContext&ctx, std::string_view arg_name)
+        {
+            std::string     arg_string = ctx.find_query(arg_name);
+            return root_key(arg_string);
+        }
+        
+        const Root* root_key(const WebHtml&h, std::string_view arg_name)
+        {
+            return root_key(h.context(), arg_name);
+        }
+        
+        const Root* root_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        {
+            std::string     arg_string = ctx.find_query(arg_names);
+            return root_key(arg_string);
+        }
+        
+        const Root* root_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
+        {
+            return root_key(h.context(), arg_names);
+        }
+    }
+
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
     namespace cdb {
         static constexpr const uint64_t     kMaxFixedFolder = Folder::TAGS;
     
@@ -541,13 +1146,6 @@ namespace yq {
             return exists_directory(i) ? Directory{i} : Directory();
         }
         
-        Directory           directory(std::string_view path)
-        {
-            if(path.empty())
-                return Directory();
-            static thread_local SQ    s("SELECT id FROM Directories WHERE path=? LIMIT 1");
-            return s.as<Directory>(path);
-        }
 
         Directory           directory(const std::filesystem::path&p)
         {
@@ -702,15 +1300,6 @@ namespace yq {
             return s.as<Document>(k);
         }
 
-        Document            document(std::initializer_list<std::string_view> keys)
-        {
-            for(std::string_view k : keys){
-                Document    d = document(k);
-                if(d)
-                    return d;
-            }
-            return Document{};
-        }
         
         Document            document(uint64_t i)
         {
@@ -910,24 +1499,70 @@ namespace yq {
             return s.present(i);
         }
 
-        Fragment            first(Document d)
+
+        Directory           first_directory(Folder fo)
+        {
+            if(!fo)
+                return Directory();
+            static thread_local SQ  s("SELECT id FROM Directories WHERE folder=? LIMIT 1");
+            return s.as<Directory>(fo.id);
+        }
+        
+        Directory           first_directory(Folder fo, const Root*r)
+        {
+            if(!r)
+                return first_directory(fo);
+            if(!fo)
+                return Directory();
+            
+            static thread_local SQ s("SELECT id FROM Directories WHERE folder=? AND root=? LIMIT 1");
+            auto af = s.af();
+            s.bind(1, fo.id);
+            s.bind(2, r->id);
+            if(s.step() == SqlQuery::Row)
+                return Directory{ s.v_uint64(1)};
+            return Directory{};
+        }
+
+        Document            first_document(std::initializer_list<std::string_view> keys)
+        {
+            for(std::string_view k : keys){
+                Document    d   = document(k);
+                if(d)
+                    return d;
+            }
+            return Document{};
+        }
+        
+        Document            first_document(Folder f, std::initializer_list<std::string_view> keys)
+        {
+            for(std::string_view k : keys){
+                Document    d   = document(f, k);
+                if(d)
+                    return d;
+            }
+            return Document{};
+        }
+
+        Fragment            first_fragment(Document d)
         {
             static thread_local SQ s("SELECT id FROM Fragments WHERE document=? ORDER BY root LIMIT 1");
             return s.as<Fragment>(d.id);
         }
         
-        Fragment            first(Document d, const Root*rt)
+        Fragment            first_fragment(Document d, const Root*rt)
         {
             if(!rt)
-                return Fragment{};
+                return first_fragment(d);
+                
             static thread_local SQ s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
             return s.as<Fragment>(d.id, rt->id);
         }
 
-        Fragment            first(Document d, DataRole dr)
+        Fragment            first_fragment(Document d, DataRole dr)
         {
             for(const Root* rt : wksp::root_reads()[dr]){
-                Fragment f = first(d,rt);
+                Fragment f = first_fragment(d,rt);
                 if(f)
                     return f;
             }
@@ -1786,7 +2421,7 @@ namespace yq {
         Fragment            writable(Document d, DataRole dr)
         {
             for(const Root* rt : wksp::root_writes()[dr]){
-                Fragment f = first(d, rt);
+                Fragment f = first_fragment(d, rt);
                 if(f)
                     return f;
             }

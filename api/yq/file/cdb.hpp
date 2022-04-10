@@ -168,11 +168,11 @@ namespace yq {
 
 
         Directory                       directory(uint64_t);
-        Directory                       directory(std::string_view );
         Directory                       directory(const std::filesystem::path&);
         Directory                       directory(Fragment);
         Directory                       directory(Directory, std::string_view );
         Directory                       directory(const Root*);
+        Directory                       directory(const Root*, std::string_view);
         
         std::vector<Directory>          directories(Directory, Sorted sorted=Sorted());
         std::vector<Directory>          directories(Folder, Sorted sorted=Sorted());
@@ -192,9 +192,6 @@ namespace yq {
         Document                        document(std::string_view );
         Document                        document(uint64_t);
         
-        /*! \brief Returns the FIRST document encountered
-        */
-        Document                        document(std::initializer_list<std::string_view>);
 
             //std::vector<Document>      documents(Directory);   // TODO
         std::vector<Document>           documents(Folder, unsigned opts=0);
@@ -219,9 +216,20 @@ namespace yq {
         bool                            exists_folder(uint64_t);
         bool                            exists_fragment(uint64_t);
 
-        Fragment                        first(Document);
-        Fragment                        first(Document, const Root*);
-        Fragment                        first(Document, DataRole);
+        Directory                       first_directory(Folder);
+        Directory                       first_directory(Folder, const Root*);
+
+        /*! \brief Returns the FIRST document encountered
+        */
+        Document                        first_document(std::initializer_list<std::string_view>);
+
+        /*! \brief Returns the FIRST document encountered
+        */
+        Document                        first_document(Folder, std::initializer_list<std::string_view>);
+
+        Fragment                        first_fragment(Document);
+        Fragment                        first_fragment(Document, const Root*);
+        Fragment                        first_fragment(Document, DataRole);
 
         Folder                          folder(Directory);
         Folder                          folder(Document);

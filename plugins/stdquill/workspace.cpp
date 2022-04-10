@@ -14,45 +14,83 @@
 
 using namespace yq;
 
+struct Index : public RefCount {
+    std::string             data;
+    Ref<WebTemplate>        page;
+    Ref<WebTemplate>        title;
+    
+    Index(std::string&& dat, ContentType ct) : data(std::move(dat))
+    {
+        std::string_view    t   = web_title(data);
+        std::string_view    p;
+        if(!t.empty()){
+            const char* z0  = t.data()+t.size();
+            const char* z1  = data.data() + data.size();
+            p       = std::string_view(z0, z1);
+            t       = trimmed(t);
+            title   = new WebTemplate(t);
+        } else {
+            p   = data;
+        }
+        
+        page            = new WebTemplate(p, ct);
+    }
+};
+
 Guarded<HttpDataPtr>            gCss;
 Guarded<std::string>            gTextColor, gBkColor;
 std::atomic<bool>               gHasBackground{false};
-Guarded<Ref<TypedBytes>>        gBackground, gIndex;
-Guarded<std::string>            gFooter;
-Guarded<std::string>            gSummary;
-std::filesystem::path           gSharedCssFile;
+Guarded<Ref<TypedBytes>>        gBackground;
+Guarded<Ref<WebTemplate>>       gFooter, gSummary;
+Guarded<Ref<Index>>             gIndex;
+std::filesystem::path           gSharedCssFile, gSharedFooterFile, gSharedIndexFile, gSharedPageFile, gSharedSummaryFile;
+
+namespace {
+    static const std::initializer_list<std::string_view>    kIndexFiles = { ".index", ".index.md", ".index.html", ".index.htm" };
+    static const std::initializer_list<std::string_view>    kBackgroundFiles = { ".background.jpg", ".background.gif", ".background.png", ".background.svg" };
+    static const std::string_view       kStdCSS         = "std/css";
+    static const std::string_view       kStdPage        = "std/page";
+    static const std::string_view       kStdIndex       = "std/index";
+    static const std::string_view       kStdFooter      = "std/footer";
+    static const std::string_view       kStdSummary     = "std/summary";
+}
 
 namespace {
     void    var_abbr(Stream&str, WebContext&)
     {
-        str << wksp::abbreviation();
+        html_escape_write(str, wksp::abbreviation());
     }
 
     void    var_author(Stream&str, WebContext&)
     {
-        str << wksp::author();
+        html_escape_write(str, wksp::author());
     }
     
-    void    var_footer(Stream&str, WebContext&)
+    void    var_body(Stream& str, WebContext&ctx)
     {
-        std::string     footer = gFooter;
-        
-        str << (std::string) gFooter;
+        str << ctx.var_body;
+    }
+    
+    void    var_footer(Stream&str, WebContext&ctx)
+    {
+        Ref<WebTemplate>    footer  = gFooter;
+        if(footer)
+            footer -> execute(str, ctx);
     }
 
     void    var_home(Stream&str, WebContext&)
     {
-        str << wksp::home();
+        html_escape_write(str, wksp::home());
     }
 
     void    var_host(Stream& str, WebContext&)
     {
-        str << wksp::host();
+        html_escape_write(str, wksp::host());
     }
 
     void    var_name(Stream& str, WebContext&)
     {
-        str << wksp::name();
+        html_escape_write(str, wksp::name());
     }
 
     void    var_port(Stream& str, WebContext&)
@@ -60,14 +98,45 @@ namespace {
         str << wksp::port();
     }
     
-    void    var_summary(Stream&str, WebContext&)
+    void    var_summary(Stream&str, WebContext&ctx)
     {
-        str << (std::string) gSummary;
+        Ref<WebTemplate>    summary  = gSummary;
+        if(summary)
+            summary -> execute(str, ctx);
+    }
+    
+    void    var_tabbar(Stream& str, WebContext& ctx)
+    {
+        const WebGroup* grp = ctx.page -> group();
+        if(!grp)
+            return ;
+    
+        str << "<table class=\"tabbar\"><tr>\n";
+        for(const WebPage* p : grp -> pages){
+            bool    us = p == ctx.page;
+            if(us) {
+                str << "<td class=\"tb-select\">";
+                html_escape_write(str, p -> label());
+                str << "</td>";
+            } else {
+                UrlView url = ctx.url;
+                url.path    = p->path();
+                str << "<td class=\"tabbar\"><a href=\"" << url << ">";
+                html_escape_write(str, p -> label());
+                str << "</a></td>";
+            }
+        }
+        str << "</td></table>\n";
     }
 
     void    var_time(Stream& str, WebContext& ctx)
     {
         str << ctx.timestamp;
+    }
+    
+    void    var_title(Stream& str, WebContext&ctx)
+    {
+        html_escape_write(str, ctx.var_title);
     }
     
     void    var_year(Stream& str, WebContext& ctx)
@@ -79,20 +148,22 @@ namespace {
     
     void    update_background()
     {
-        Document    doc = cdb::document({ ".background.jpg", ".background.gif", ".background.png", ".background.svg" });
+        Document    doc = cdb::first_document(kBackgroundFiles);
         bool    now = false;
 
-        do {
-            Fragment    frag = cdb::fragment(doc, DataRole::Image);
-            if(!frag)
-                break;
-            Ref<TypedBytes> tb  = TypedBytes::load(cdb::path(frag));
-            if(!tb)
-                break;
-            gBackground = tb;
-            now = true;
-            
-        } while(false);
+        if(doc){
+            do {
+                Fragment    frag = cdb::fragment(doc, DataRole::Image);
+                if(!frag)
+                    break;
+                Ref<TypedBytes> tb  = TypedBytes::load(cdb::path(frag));
+                if(!tb)
+                    break;
+                gBackground = tb;
+                now = true;
+                
+            } while(false);
+        }
         
         bool    was = gHasBackground.exchange(now);
         if(now != was)
@@ -102,10 +173,8 @@ namespace {
     void    update_css()
     {
         std::string       css;
-        if(wksp::can_cdb()){
-            for(Fragment f : cdb::fragments("*.css", DataRole::Style))
-                css += cdb::frag_string(f);
-        }
+        for(Fragment f : cdb::fragments("*.css", DataRole::Style))
+            css += cdb::frag_string(f);
         
         HttpDataPtr         newCssData = HttpData::make();
         {
@@ -166,31 +235,47 @@ namespace {
     void    update_footer()
     {
         std::string     r;
-        if(wksp::can_cdb()){
-            Fragment    f   = cdb::first(cdb::document(".footer"));
-            if(f){
-                r   = cdb::frag_string(f);
-            }
-        }
-        
+        Fragment    f   = cdb::first_fragment(cdb::document(".footer"));
+        if(f)
+            r   = cdb::frag_string(f);
         if(r.empty())
-            r       = file_string(wksp::shared("std/footer"sv));
-        gFooter = r;
+            r       = file_string(gSharedFooterFile);
+        gFooter = new WebTemplate(std::move(r));
     }
     
     void    update_page()
     {
-        web::set_template(wksp::shared("std/page"sv));
+        if(!web::set_template(gSharedPageFile))
+            yWarning() << "Failed to set web template!";
     }
     
     void    update_index()
     {
+        std::string     r;
+        Document    d   = cdb::first_document(kIndexFiles);
+        ContentType ct;
+        if(d){
+            std::string ext = cdb::suffix(d);
+            r       = cdb::frag_string(cdb::first_fragment(d));
+            ct      = mimeTypeForExt(ext);
+        }
+        if(ct == ContentType())
+            ct  = ContentType::markdown;
+        if(r.empty())
+            r       = file_string(gSharedIndexFile);
+        gIndex      = new Index(std::move(r), ct);
     }
     
     void    update_summary()
     {
+        std::string     r;
+        Fragment    f   = cdb::first_fragment(cdb::document(".summary"));
+        if(f)
+            r   = cdb::frag_string(f);
+        if(r.empty())
+            r       = file_string(gSharedSummaryFile);
+        gSummary = new WebTemplate(std::move(r));
     }
-    
     
     void    page_background(WebContext& ctx)
     {
@@ -211,6 +296,24 @@ namespace {
         ctx.tx_content_type = ContentType::css;
         ctx.tx_content.push_back(gCss);
     }
+    
+    
+    void    page_index(WebHtml& out)
+    {
+        Ref<Index>  index   = gIndex;
+        if(!index)
+            return ;
+        
+        if(index->title){
+            std::string&    title   = out.context().var_title;
+            title.reserve(256);
+            stream::Text    text(title);
+            index->title->execute(text, out.context());
+        }
+        
+        if(index->page)
+            index->page -> execute(out, out.context());
+    }
 }
 
 YQ_INVOKE(
@@ -219,52 +322,65 @@ YQ_INVOKE(
     for(auto& fs : wksp::shared_dirs())
         yInfo() << "share directory " << (++n) << ": "  << fs;
 
-    std::filesystem::path       spage   = wksp::shared("std/page"sv);
-    if(!web::set_template(spage))
-        yWarning() << "Failed to set web template!";
-        
-    on_change<update_page>(spage);
-
     reg_webpage("/img/**", wksp::shared_all("www/img"sv));
     reg_webpage("/help/*", wksp::shared_all("www/help"sv));
     reg_webpage("/js/*", wksp::shared_all("www/js"sv));
     reg_webpage<page_css>("/css");
     reg_webpage<page_background>("/background");
-
+    reg_webpage<page_index>("/");
     
     reg_webvar<var_abbr>("abbr");
     reg_webvar<var_author>("author");
+    reg_webvar<var_body>("body");
     reg_webvar<var_footer>("footer");
     reg_webvar<var_home>("home");
     reg_webvar<var_host>("host");
     reg_webvar<var_name>("name");
     reg_webvar<var_port>("port");
     reg_webvar<var_summary>("summary");
+    reg_webvar<var_tabbar>("tabbar");
     reg_webvar<var_time>("time");
+    reg_webvar<var_title>("title");
     reg_webvar<var_year>("year");
 
     //reg_web("img/**", wksp::shared_dir("www/img"));
     //reg_web("help/*", wksp::shared_dir("www/help"));
     //reg_web("js/*", wksp::shared_dir("www/js"));
     //reg_web("markdown/*", wksp::shared_dir("www/markdown"));
+
+        // PAGE TEMPLATE
+    gSharedPageFile     = wksp::shared(kStdPage);
+    on_stage4<update_page>();
+    on_change<update_page>(gSharedPageFile);
     
-    gSharedCssFile      = wksp::shared("std/css"sv);
-    on_stage3<update_css>(cdb::top_folder(), ".css"sv);
+        // CSS
+    gSharedCssFile      = wksp::shared(kStdCSS);
+    on_stage4<update_css>();
     on_change<update_css>(cdb::top_folder(), ".css"sv);
     on_change<update_css>(gSharedCssFile);
+    
+        // BACKGROUND
     on_stage4<update_background>();
-    on_change<update_background>(cdb::top_folder(), ".background.jpg");
-    on_change<update_background>(cdb::top_folder(), ".background.gif");
-    on_change<update_background>(cdb::top_folder(), ".background.png");
-    on_change<update_background>(cdb::top_folder(), ".background.svg");
-    
-    
-    on_change<update_footer>(cdb::top_folder(), ".footer");
+    for(std::string_view k : kBackgroundFiles)
+        on_change<update_background>(cdb::top_folder(), k);
+
+        // FOOTER
+    gSharedFooterFile   = wksp::shared(kStdFooter);
     on_stage4<update_footer>();
-    //on_change<update_index>(cdb::top_folder(), ".index.html");
-    //on_change<update_index>(cdb::top_folder(), ".index.htm");
+    on_change<update_footer>(cdb::top_folder(), ".footer");
+    on_change<update_footer>(gSharedFooterFile);
+
+        // MAIN INDEX
+    gSharedIndexFile    = wksp::shared(kStdIndex);
     on_stage4<update_index>();
+    for(std::string_view k : kIndexFiles)
+        on_change<update_index>(cdb::top_folder(), k);
+    on_change<update_index>(gSharedIndexFile);
+    
+        // SUMMARY
+    gSharedSummaryFile  = wksp::shared(kStdSummary);
     on_stage4<update_summary>();
     on_change<update_summary>(cdb::top_folder(), ".summary");
+    on_change<update_summary>(gSharedSummaryFile);
 )
 

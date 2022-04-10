@@ -16,12 +16,20 @@
 
 namespace yq {
 
+    bool        read_xn(Context&ret, const XmlNode*xn)
+    {
+        ret.title   = read_attribute(xn, szTitle, x_string);
+        ret.icon    = read_attribute(xn, szIcon, x_string);
+        ret.order   = read_attribute(xn, szOrder, x_integer).value;
+        ret.format  = read_attribute(xn, szFormat, x_enum<Format>).value;
+        ret.data    = to_string(xn);
+        return true;
+    }
+
     Context     x_context(const XmlNode* xn)
     {
-        auto    fmt = read_attribute(xn, szFormat, x_enum<Format>);
         Context ret;
-        ret.format  = fmt.value;
-        ret.data    = to_string(xn);
+        read_xn(ret, xn);
         return ret;
     }
 
@@ -29,6 +37,12 @@ namespace yq {
     {
         if(v.format != Format())
             write_attribute(xn, szFormat, v.format);
+        if(!v.title.empty())
+            write_attribute(xn, szTitle, v.title);
+        if(!v.icon.empty())
+            write_attribute(xn, szIcon, v.icon);
+        if(v.order)
+            write_attribute(xn, szOrder, v.order);
         if(!v.data.empty()){
             xn->append_node(
                 xn->document()->allocate_node(

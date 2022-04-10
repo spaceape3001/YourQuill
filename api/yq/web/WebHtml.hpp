@@ -15,6 +15,14 @@ namespace yq {
     struct WebContext;
     class Stream;
     
+    /*! \brief Web Title
+    
+        Detects a "web-title" syntax in the document, denoted by the start with a "#!" syntax.  
+        Returns empty if not found.
+        
+        \note This is NOT trimmed, it will typically have whitespace in the trailing newline.
+    */
+    std::string_view    web_title(std::string_view);
 
     class WebHtml : public Stream {
     public:
@@ -35,12 +43,9 @@ namespace yq {
         WebContext&         context() { return m_context; }
         const WebContext&   context() const { return m_context; }
         
-    private:
-    
         void                run_me();
+    private:
         WebContext&         m_context;
-        std::string         m_title;
-        std::string         m_body;
     };
 
     template <typename T>
