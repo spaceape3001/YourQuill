@@ -26,9 +26,10 @@ endmacro()
 #add_subdirectory(db)
 #add_subdirectory(fraction)
 
+yq_test(encode64)
+yq_test(http)
 yq_test(strings)
 yq_test(variants)
 
-yq_test(http)
 
 

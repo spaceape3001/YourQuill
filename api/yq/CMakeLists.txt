@@ -159,6 +159,8 @@ set(yq_sources
     ./tag/TagFile.hpp
     
     ./text/Comma.hpp
+    ./text/Encode64.cpp
+    ./text/Encode64.hpp
     ./text/Format.hpp
     ./text/Markdown.cpp
     ./text/Markdown.hpp

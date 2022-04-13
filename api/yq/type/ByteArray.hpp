@@ -19,6 +19,10 @@ namespace yq {
         ByteArray(const Vector<char>&dat) : m_data(dat) {}
         ByteArray(Vector<char>&&dat) : m_data(std::move(dat)) {}
         
+        ByteArray(std::initializer_list<uint8_t> d) : m_data((const char*) std::data(d), d.size())
+        {
+        }
+        
         ByteArray&  operator=(const ByteArray&) = default;
         ByteArray&  operator=(ByteArray&&) = default;
         
@@ -83,6 +87,12 @@ namespace yq {
             m_data.resize(z);
         }
         
+        
+        void            resize(size_t z, char ch)
+        {
+            m_data.resize(z, ch);
+        }
+
         void            setData(Vector<char>&&dat)
         {
             m_data  = std::move(dat);
@@ -98,6 +108,8 @@ namespace yq {
             m_data += ch;
             return *this;
         }
+        
+        bool    operator==(const ByteArray&) const = default;
         
     private:
         // this is binary data BTW, no interpretation
