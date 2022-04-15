@@ -5,12 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "HttpData.hpp"
 #include <yq/net/Http.hpp>
+#include <yq/type/ByteArray.hpp>
+#include <yq/type/Ref.hpp>
 
 namespace yq {
     struct TypedBytes : public RefCount {
-        std::vector<HttpDataPtr>    data;
+    
+        std::shared_ptr<ByteArray>  data;
         ContentType                 type;
         size_t                      size            = 0;
         std::filesystem::path       path;

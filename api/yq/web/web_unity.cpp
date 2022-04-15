@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "HttpData.hpp"
-#include "HttpDataStream.hpp"
 #include "HttpParser.hpp"
 #include "TypedBytes.hpp"
 #include "WebAdapters.hpp"
@@ -17,10 +15,12 @@
 //#include "NetWriter.hpp"
 
 #include <yq/algo/Random.hpp>
+#include <yq/c++/Safety.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Map.hpp>
 #include <yq/file/FileUtils.hpp>
 #include <yq/log/Logging.hpp>
+#include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/text/Encode64.hpp>
@@ -324,201 +324,6 @@ namespace yq {
     }
     
 
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    struct HttpData::Pool {
-        size_t                          size    = 0ULL;
-        size_t                          total   = 0ULL;
-        std::vector<Ref<HttpData>>      available;
-        tbb::spin_rw_mutex              mutex;
-        
-        Pool(){}
-        ~Pool(){}
-        
-        bool    init(size_t n)
-        {
-            size_t  mask    = (1ULL << kClean) - 1;
-            bool    inc     = static_cast<bool>(n & mask);
-            n  = (n >> kClean) << kClean;
-            if(inc)
-                ++n;
-            total           = n;
-            size            = n - sizeof(HttpData);
-            return true;
-        }
-        
-        HttpData*       create() 
-        {
-            HttpData*   p    = (HttpData*) new char[total];
-            new(p) HttpData();
-            return  p;
-        }
-        
-    };
-    
-    HttpData::Pool&  HttpData::pool()
-    {
-        static Pool     s_ret;
-        return s_ret;
-    }
-    
-    
-    bool    HttpData::start_pool(uint32_t n)
-    {
-        static bool    f = pool().init(n);
-        return f;
-    }
-
-    uint32_t    HttpData::size()
-    {
-        return pool().size;
-    }
-
-    Ref<HttpData>    HttpData::make()
-    {
-        // temporary
-        return pool().create();
-    }
-
-    HttpData::HttpData() : m_ref{0}, m_count{0}
-    {
-    }
-    
-    HttpData::~HttpData()
-    {
-    }
-
-    void    HttpData::advance(size_t n) 
-    { 
-        m_count = std::min<uint32_t>(m_count+n, size());
-    }
-
-    size_t  HttpData::append(const char*z, size_t cb)
-    {
-        cb  = std::min(cb, available());
-        memcpy(data()+m_count, z, cb);
-        m_count += cb;
-        return cb;
-    }
-    
-    size_t  HttpData::append(const std::string_view&s)
-    {
-        return append(s.data(), s.size());
-    }
-
-    std::string_view        HttpData::as_view() const 
-    { 
-        return std::string_view( data(), m_count ); 
-    }
-    
-    std::string_view        HttpData::as_view(uint32_t n) const 
-    { 
-        n = std::min(n, m_count);
-        return std::string_view( data() + n, m_count - n ); 
-    }
-
-    size_t            HttpData::available() const
-    {
-        return size() - m_count;
-    }
-
-    std::string_view  HttpData::copy(const std::string_view& sv)
-    {
-        size_t  rem = available();
-        size_t  cnt = std::min(sv.size(), rem);
-        if(!cnt)
-            return std::string_view();
-        memcpy(data()+m_count, sv.data(), cnt);
-        std::string_view    ret(data()+m_count, cnt);
-        m_count += cnt;
-        return ret;
-    }
-    
-    void    HttpData::count(uint32_t i)
-    {
-        m_count = std::min(i, (uint32_t) pool().size);
-    }
-    
-    void    HttpData::decRef() const
-    {
-        if(!--m_ref){
-            //  temporary
-            delete this;
-            //  recycle
-        }
-    }
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    HttpDataStream::HttpDataStream(std::vector<HttpDataPtr>& destination) : 
-        HttpDataStream( 
-            [&destination](HttpDataPtr x){ 
-                destination.push_back(x); 
-            }
-        )
-    {
-    }
-    
-    HttpDataStream::HttpDataStream(DestinationX x) : m_destination(x)
-    {
-    }
-    
-    HttpDataStream::HttpDataStream(HttpDataPtr x) : m_buffer(x)
-    {
-    }
-
-    HttpDataStream::~HttpDataStream()
-    {
-        flush();
-    }
-
-    HttpDataPtr&    HttpDataStream::buffer()
-    {
-        if(!m_buffer)
-            m_buffer    = HttpData::make();
-        return m_buffer;
-    }
-
-    void HttpDataStream::close() 
-    {
-        //  Do nothing, it's always open
-    }
-    
-    void HttpDataStream::flush()
-    {
-        if(m_destination && m_buffer && m_buffer -> m_count){
-            m_destination(m_buffer);
-            m_buffer = nullptr;
-        }
-    }
-    
-    bool HttpDataStream::is_full() const
-    {
-        return (!m_destination) && m_buffer && !m_buffer->available();
-    }
-
-    bool HttpDataStream::is_open() const 
-    { 
-        return true; 
-    }
-    
-    bool HttpDataStream::write(const char* z, size_t cb) 
-    {
-        if(!z)  
-            return false;
-
-        size_t  n = 0;
-        while( cb && ((n = buffer()->append(z, cb)) != cb)){
-            z  += n;
-            cb -= n;
-            if(!m_destination)
-                break;
-            m_destination(m_buffer);
-            m_buffer    = HttpData::make();
-        }
-        
-        return true;
-    }
     
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -575,7 +380,7 @@ namespace yq {
         }
         
             // reset for read
-        data.clear();
+        data    = std::make_shared<ByteArray>();
         status  = HttpStatus(); 
         
         int fd   = open(path.c_str(), O_RDONLY);
@@ -584,25 +389,21 @@ namespace yq {
             return false;
         }
         
+        auto sc = safety([fd]() { close(fd); }); // auto-close if necessary
+        
+        
+        ByteArray&ba    = *data;
+        ba.resize(size);
+        
         size_t          amt_read    = 0;
-        HttpDataPtr     cur     = HttpData::make();
-        ssize_t         n = 0;
-        while((n = read(fd, cur->freespace(), cur->available())) > 0){
-            cur -> advance(n);
+        
+        while(amt_read < size){
+            size_t      n   = read(fd, ba.data()+amt_read, size-amt_read);
+            if(n <= 0)
+                break;
             amt_read += n;
-            if(cur->full()){
-                data.push_back(cur);
-                if(amt_read >= size){
-                    cur = nullptr;
-                    break;
-                }
-                cur = HttpData::make();
-            }
-        } 
-        close(fd);
-
-        if(cur)
-            data.push_back(cur);
+        }
+        
         if(amt_read < size){
             status = HttpStatus::InternalError;
         } else {
@@ -710,37 +511,20 @@ namespace yq {
             tx_header("Location", sv);
         }
 
-        size_t                  WebContext::tx_content_size() const
-        {
-            size_t  cnt = 0;
-            for(auto& i : tx_content){
-                if(i)
-                    cnt += i->count();
-            }
-            return cnt;
-        }
-
-        void    WebContext::tx_header(std::string_view k, std::string_view v)
-        {
-            if(!tx_header_buffer)
-                tx_header_buffer    = HttpData::make();
-            HttpDataStream(tx_header_buffer)  << k << ": " << v << "\r\n";
-        }
-
-        void                    WebContext::tx_reset(bool resetStatus)
-        {
-            tx_content.clear();
-            tx_header_buffer    = nullptr;
-            tx_content_type     = ContentType();
-            if(resetStatus)
-                status       = HttpStatus();
-        }
-
 
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    namespace {
+        ByteArray&      byteArrayFor(WebContext& ctx)
+        {
+            if(!ctx.tx_content)
+                ctx.tx_content  = std::make_shared<ByteArray>();
+            return *(ctx.tx_content);
+        }
+    }
 
     WebHtml::WebHtml(WebContext&ctx, const std::string_view& _title) : m_context(ctx)
     {
@@ -755,9 +539,11 @@ namespace yq {
 
     void    WebHtml::run_me()
     {
+        auto& ba = byteArrayFor(m_context);
+        ba.reserve(8192+m_context.var_body.size());   // an estimate....
         auto temp   = web::html_template();
         m_context.tx_content_type   = ContentType::html;
-        HttpDataStream  out(m_context.tx_content);
+        stream::Bytes   out(ba);
         temp -> execute(out, m_context);
     }
 

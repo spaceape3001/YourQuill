@@ -14,7 +14,7 @@
 #include <yq/net/Url.hpp>
 #include <yq/net/VersionSpec.hpp>
 // #include <yq/text/KV.hpp>
-#include <yq/web/HttpData.hpp>
+#include <yq/type/ByteArray.hpp>
 #include <yq/web/HttpHeader.hpp>
 #include <time.h>
 
@@ -77,18 +77,16 @@ namespace yq {
         //! Resolved filename (for extension handlers)
         std::filesystem::path           resolved_file;
         
-        //! Spans of data for the received body
-        std::vector<std::span<char>>    rx_body;
+        //! The received content
+        std::vector<char>               rx_body;
 
-        //! Length of the RC body
-        size_t                          rx_content_length = 0;
         ContentType                     rx_content_type;
 
         //! Headers received
         StringViewMultiMap              rx_headers;
         
         //! Buffers of the received data (don't TOUCH)
-        std::vector<HttpDataPtr>        rx_buffers;
+        //std::vector<HttpDataPtr>        rx_buffers;
 
         //! Session Data
         //! \note this data will not persist across sessions unless the *set* method is called
@@ -107,13 +105,10 @@ namespace yq {
         char                            timestamp[64];
 
         //! Content to transmit
-        std::vector<HttpDataPtr>        tx_content;
+        std::shared_ptr<ByteArray>      tx_content;
 
         //! Type of the data being returned
         ContentType                     tx_content_type;
-        
-        //! Buffer for the headers going out
-        HttpDataPtr                     tx_header_buffer;
 
         //! URL requested
         UrlView                         url;
@@ -142,13 +137,12 @@ namespace yq {
         std::string                     find_query(std::string_view) const;
         std::string                     find_query(std::initializer_list<std::string_view>) const;
         
-        void                            tx_header(std::string_view k, std::string_view v);
-        size_t                          tx_content_size() const;
+        virtual void                    tx_header(std::string_view k, std::string_view v) = 0;
 
         void                            redirect(std::string_view where, bool permanent=false);
         
-        void                            tx_reset(bool resetStatus=false);
-        void                            simple_content(std::string_view);
+        //void                            tx_reset(bool resetStatus=false);
+        //void                            simple_content(std::string_view);
         
         bool                            is_local() const { return static_cast<bool>(flags & LOCAL); }
         

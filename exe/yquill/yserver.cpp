@@ -14,7 +14,8 @@
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/text/Utils.hpp>
-#include <yq/web/HttpDataStream.hpp>
+#include <yq/type/FixedBuffer.hpp>
+#include <yq/type/Ref.hpp>
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebPage.hpp>
@@ -27,9 +28,15 @@
 using namespace yq;
 
 namespace asio {
-    const_buffer    buffer(const HttpDataPtr& dp)
+    const_buffer    buffer(const std::shared_ptr<ByteArray>& dp)
     {
-        return buffer(dp->data(), dp->count());
+        return buffer(dp->data(), dp->size());
+    }
+    
+    template <uint64_t N>
+    const_buffer    buffer(const FixedBuffer<N>& dp)
+    {
+        return buffer(dp.data(), dp.count());
     }
 }
 
@@ -50,9 +57,18 @@ struct Session : public RefCount {
 };
 
 struct Context : public WebContext, public RefCount {
-    Ref<Session>     ss;
-    
+    Ref<Session>        ss;
     std::string_view    cookie_ssid, cookie_magic;
+    std::string         cookie;         // think I need to send this *EVERY* time
+
+    enum Quality {
+        Flunk   = 0,    // no qualification
+        Expired,        // Expired
+        Renew,          // had to renew the cookie
+        Pass            // passed
+    };
+    
+    FixedBuffer<8192>   rx, tx;
     
     Context(asio::io_context& _io_ctx);
     
@@ -63,18 +79,12 @@ struct Context : public WebContext, public RefCount {
     virtual void    set_logged_in(bool v) override;
     virtual void    set_inspect_submit(bool v) override;
     virtual void    set_icon_size(SizeDesc v) override;
-
-    enum Quality {
-        Flunk   = 0,    // no qualification
-        Expired,        // Expired
-        Renew,          // had to renew the cookie
-        Pass            // passed
-    };
-
+    virtual void    tx_header(std::string_view k, std::string_view v) override;
     
-    Quality         check_session();
-    Quality         config_session();
-    void            send_cookie();
+    Quality                 check_session();
+    Quality                 config_session();
+    void                    send_cookie();
+    size_t                  tx_content_size() const;
 };
 
 
@@ -108,6 +118,8 @@ namespace {
         unsigned int        sizeSSID        = 12;
         unsigned int        sizeMAGIC       = 32;
         
+            // max Rx body before complaining
+        size_t              maxRxBody       = 6 << 20ULL;
     }  config;
 
     struct {
@@ -241,7 +253,7 @@ namespace {
     {
         std::string     ret;
         stream::Text    text(ret);
-        text << config.cookieName << '=' << ssid << '+' << magic << "; SameSite=Strict; Max-Age=" << config.renewCookie << "; Version=1";
+        text << config.cookieName << '=' << ssid << '+' << magic << "; Max-Age=300; SameSite=Strict; HttpOnly";
         return ret;
     }
 }
@@ -260,14 +272,16 @@ namespace {
             if(is_similar(ss->magic, cookie_magic)){
                 session         = ss->master;
                 ss->accessed    = time;
-                if(time < ss->magicked + config.renewCookie)
+                if(time < ss->magicked + config.renewCookie){
                     return Pass;
+                }
                 
                 //  Good, but needs renewal
                 
             } else if(is_similar(ss->oldMagic, cookie_magic)){
                 if(time + config.oldMagic < ss->magicked){
                     session = ss->master;
+                    //cookie  = ss->cookie;
                     ss -> accessed  = time;
                     return Pass;
                 }
@@ -287,9 +301,11 @@ namespace {
                 std::swap(oldOld, ss->oldMagic);
                 std::swap(ss->oldMagic, ss->magic);
                 std::swap(ss->magic, newMagic);
+                std::swap(ss->cookie, newCookie);
                 ss->magicked = time;
             }
         }
+        
         
         return Renew;
     }
@@ -307,7 +323,6 @@ namespace {
                 switch(check_session()){
                 case Renew:
                     send_cookie();
-                    //  FALL THROUGH
                 case Pass:
                     return Pass;
                 case Expired:
@@ -409,6 +424,17 @@ namespace {
         }
     }
     
+    size_t  Context::tx_content_size() const
+    {
+        if(!tx_content)
+            return 0;
+        return tx_content -> size();
+    }
+
+    void    Context::tx_header(std::string_view k, std::string_view v)
+    {
+        tx << k << ": " << v << "\r\n";
+    }
 
 
 
@@ -455,35 +481,61 @@ public:
         RxError
     };
     
+    static constexpr size_t kMaxProcess = 512;
+    
     asio::io_context&       m_context;
     asio::ip::tcp::socket   m_socket;
     Ref<Context>            m_current;
-    HttpDataPtr             m_buffer;
     RxMode                  m_rxMode    = RxMethod;
-    size_t                  m_next  = 0;
-    size_t                  m_counter   = 0;
-    bool                    m_eod   = false;
+    size_t                  m_next      = 0;
+    size_t                  m_rxSoFar   = 0;
+    bool                    m_eod       = false;
+    
 
     HttpConnection(asio::io_context& ctx, asio::ip::tcp::socket&& s) : m_context(ctx), m_socket(std::move(s)) 
     {
-        m_buffer                = HttpData::make();
-        m_current               = new Context(ctx);
     }
     
     void    do_read()
     {
-        if(!m_buffer->available())
-            return ;
-            
+        if(!m_current)
+            m_current       = new Context(m_context);
+        if(m_rxMode == RxBody)
+            do_body();
+        else
+            do_header();
+    }
+    
+    void    do_header()
+    {
         Ref<HttpConnection>     me(this);
-        m_socket.async_read_some(asio::buffer(m_buffer->freespace(), m_buffer->available()), 
+        m_socket.async_read_some(asio::buffer(m_current->rx.freespace(), std::min(kMaxProcess, m_current->rx.available())),
             [this, me](std::error_code ec, std::size_t length){
-                if(!ec){
-                    m_buffer->advance(length);
+                if(ec)
+                    return;
+                m_current->rx.advance(length);
+                process();
+                if(m_rxMode != RxError)
+                    do_read();
+            }
+        );
+    }
+    
+    void    do_body()
+    {
+        Ref<HttpConnection>     me(this);
+        m_socket.async_read_some(asio::buffer(m_current->rx_body.data()+m_rxSoFar, m_current->rx_body.size()-m_rxSoFar),
+            [this, me](std::error_code ec, std::size_t length){
+                if(ec)
+                    return;
+                if(!length)
+                    return ;
+                    
+                m_rxSoFar += length;
+                if(m_rxSoFar >= m_current->rx_body.size())
                     process();
-                    if(m_rxMode != RxError)
-                        do_read();
-                }
+                if(m_rxMode != RxError)
+                    do_read();
             }
         );
     }
@@ -564,7 +616,7 @@ public:
         
         if(isError(ctx->status)){
             HttpStatus code = ctx->status;
-            ctx -> tx_reset();
+            ctx -> tx_content   = {};
             ctx -> status   = code;
         }
         send(ctx);
@@ -592,7 +644,7 @@ public:
     // Gets the next line out of the buffer
     std::string_view    next_line()
     {
-        std::string_view    line = m_buffer -> as_view(m_next);
+        std::string_view    line = m_current->rx.as_view(m_next);
         if(line.empty()){
             m_eod   = true;
             return std::string_view();
@@ -609,7 +661,7 @@ public:
             ++z;
         if(z && (*z == '\n'))
             ++z;
-        m_next  = z - m_buffer->data();
+        m_next  = z - m_current->rx.data();
         m_eod   = false;
         return std::string_view(line.data(), y-line.data());
     }
@@ -646,6 +698,14 @@ public:
             return;
         }
         
+        if(m_rxSoFar >= m_current -> rx_body.size()){
+            m_rxSoFar   = 0;
+            m_rxMode    = RxDispatch;
+        } else {
+            dispatch(HttpStatus::InternalError);
+            m_rxMode    = RxError;
+            return;
+        }
     }
 
     void                rxCookie(std::string_view cookie_data)
@@ -661,6 +721,8 @@ public:
             
             m_current -> cookie_ssid  = std::string_view( s.data()+i+1, s.data()+j);
             m_current -> cookie_magic = s.substr(j+1);
+            
+            yInfo() << "Got cookie " << m_current -> cookie_ssid;
         });
     }
     
@@ -682,10 +744,7 @@ public:
         m_current   = nullptr;
         
         if(is_similar(as, http11())){    
-            auto old    = m_buffer;
-            m_buffer    = HttpData::make();
-            if(m_next < old->count())
-                m_buffer -> append(old->as_view(m_next));
+            //  we *might* have to worry about stuff still in the rx queue ... addres later if that's an issue.
             m_next      = 0;
             m_rxMode    = RxMethod;
         } else
@@ -703,12 +762,15 @@ public:
         KVView  hv  = parse_header_line(next_line());
         if(hv.empty()){
             if(!m_eod){
-                //if(m_current -> rx_content_length){
-                    //m_rxMode    = RxBody;
-                    //m_counter   = 0;
-                //} else {
+                if(m_current -> rx_body.size()){
+                    m_rxMode        = RxBody;
+                    m_rxSoFar       = m_current->rx.count() - m_next;
+                    if(m_rxSoFar)
+                        memcpy(m_current->rx_body.data(), m_current->rx.data()+m_next, m_rxSoFar);
+                    m_next          = 0;
+                } else {
                     m_rxMode    = RxDispatch;
-                //}
+                }
             }
             return;
         }
@@ -722,9 +784,16 @@ public:
                 m_current -> port = t.value.port;
             }
         } else if(is_similar(hv.key, "Content-Length")){
-            auto t = to_integer(hv.value);
-            if(t.good)
-                m_current -> rx_content_length   = t.value;
+            auto t = to_uint64(hv.value);
+            if(t.good){
+                if(t.value > config.maxRxBody){
+                    m_current -> status     = HttpStatus::PayloadTooLarge;
+                    m_rxMode        = RxError;
+                    return;
+                }
+                
+                m_current -> rx_body.resize(t.value);
+            }
         } else if(is_similar(hv.key, "Content-Type")){
             m_current -> rx_content_type         = ContentType(hv.value);
         } else if(is_similar(hv.key, "Cookie")){
@@ -737,11 +806,6 @@ public:
         std::string_view    v   = next_line();
         if(v.empty())
             return;
-
-        if(!m_current){
-            m_current   = new Context(m_context);
-            m_current -> rx_buffers.push_back(m_buffer);
-        }
 
         MethodUriVersion  muri      = parse_method_uri(v);
         auto m = HttpOp::value_for(muri.method);
@@ -799,26 +863,25 @@ public:
             if(sz){
                 has_content = true;
                 ctx -> tx_header("Content-Length", to_string(sz));
+                
+                if(ctx -> tx_content_type != ContentType())
+                    ctx -> tx_header("Content-Type", mimeType(ctx->tx_content_type));
             }
         } else if(isError(ctx->status)){
             // reset the content buffer
-            if(ctx -> tx_header_buffer)
-                ctx -> tx_header_buffer -> count(0);
+            ctx -> tx.count(0);
             if(sq.html_data.size()){
                 ctx -> tx_header("Content-Type", "text/html");
                 ctx -> tx_header("Content-Length", to_string(sq.html_data.size()));
             }
         }
         
-        if(ctx -> tx_header_buffer)
-            buffers.push_back(asio::buffer(ctx -> tx_header_buffer));
+        if(!ctx -> tx.empty())
+            buffers.push_back(asio::buffer(ctx -> tx));
         buffers.push_back(asio::buffer("\r\n"sv));
         
         if(isSuccessful(ctx->status) && has_content){
-            for(auto& p : ctx->tx_content){
-                if(p)
-                    buffers.push_back(asio::buffer(p));
-            }
+            buffers.push_back(asio::buffer(ctx->tx_content));
             buffers.push_back(asio::buffer("\r\n"sv));
         } else if(isError(ctx->status) && sq.html_data.size()){
             buffers.push_back(sq.html_asio);

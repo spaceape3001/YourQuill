@@ -2255,7 +2255,7 @@ namespace yq {
             auto s_lk   = s.af();
             s.bind(1, d.id);
             if(s.step() == SqlQuery::Row)
-                return wksp::root(s.v_uint64(0));
+                return wksp::root(s.v_uint64(1));
             return nullptr;
         }
         
@@ -2265,7 +2265,7 @@ namespace yq {
             auto s_af   = s.af();
             s.bind(1, f.id);
             if(s.step() == SqlQuery::Row)
-                return wksp::root(s.v_uint64(0));
+                return wksp::root(s.v_uint64(1));
             return nullptr;
         }
 

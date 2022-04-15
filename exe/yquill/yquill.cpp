@@ -15,7 +15,6 @@
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlUtils.hpp>
 #include <yq/text/Utils.hpp>
-#include <yq/web/HttpData.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 #include <iostream>
@@ -107,8 +106,6 @@ bool    initialize(const char* wfile)
         db_run_script_file(fname, db);
     });
     
-
-    HttpData::start_pool();
 
     Meta::freeze();
     wksp::set_db_init();

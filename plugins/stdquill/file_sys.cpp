@@ -239,7 +239,7 @@ namespace {
     {
         const Root* rt   = arg::root(h);
         if(!rt)
-            throw hNotFound;
+            rt          = wksp::root(0);
         
         std::string t   = "Root (";
         t += rt->name;
@@ -262,7 +262,7 @@ namespace {
     {
         const Root* rt   = arg::root(h);
         if(!rt)
-            throw hNotFound;
+            rt          = wksp::root(0);
 
         std::string t   = "Root (";
         t += rt->name;
@@ -276,7 +276,7 @@ namespace {
     {
         const Root* rt  = arg::root(h);
         if(!rt)
-            throw hNotFound;
+            rt          = wksp::root(0);
             
         std::string t   = "Root (";
         t += rt->name;
@@ -290,7 +290,7 @@ namespace {
     {
         const Root* rt   = arg::root(h);
         if(!rt)
-            throw hNotFound;
+            rt          = wksp::root(0);
 
         std::string t   = "Root (";
         t += rt->name;
@@ -304,7 +304,7 @@ namespace {
     {
         const Root* rt   = arg::root(h);
         if(!rt)
-            throw hNotFound;
+            rt          = wksp::root(0);
 
         std::string t   = "Root (";
         t += rt->name;

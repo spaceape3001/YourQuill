@@ -9,6 +9,7 @@
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
+#include <yq/stream/Bytes.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/web/TypedBytes.hpp>
 
@@ -37,7 +38,7 @@ struct Index : public RefCount {
     }
 };
 
-Guarded<HttpDataPtr>            gCss;
+Guarded<std::shared_ptr<ByteArray>>     gCss;
 Guarded<std::string>            gTextColor, gBkColor;
 std::atomic<bool>               gHasBackground{false};
 Guarded<Ref<TypedBytes>>        gBackground;
@@ -202,9 +203,9 @@ namespace {
         for(Fragment f : cdb::fragments("*.css", DataRole::Style))
             css += cdb::frag_string(f);
         
-        HttpDataPtr         newCssData = HttpData::make();
+        ByteArray           newCssData;
         {
-            HttpDataStream      ncss(newCssData);
+            stream::Bytes       ncss(newCssData);
             
             std::string     newTxtColor = "black";
             std::string     newBkColor  = "white";
@@ -255,7 +256,7 @@ namespace {
             
             ncss << file_string(gSharedCssFile);
         }
-        gCss        = newCssData;
+        gCss        = std::make_shared<ByteArray>(std::move(newCssData));
     }
     
     void    update_footer()
@@ -349,7 +350,7 @@ namespace {
     void    page_css(WebContext& ctx)
     {
         ctx.tx_content_type = ContentType::css;
-        ctx.tx_content.push_back(gCss);
+        ctx.tx_content = gCss;
     }
     
     

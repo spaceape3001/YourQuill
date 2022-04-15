@@ -9,11 +9,13 @@
 #include <yq/net/Url.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Stream.hpp>
+#include <yq/type/ByteArray.hpp>
 #include <yq/type/Ref.hpp>
 
 namespace yq {
     struct WebContext;
     class Stream;
+    class ByteArray;
     
     /*! \brief Web Title
     
