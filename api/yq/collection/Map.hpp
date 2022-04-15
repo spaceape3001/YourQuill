@@ -48,7 +48,7 @@ namespace yq {
         bool        has(const K& key) const;
         
         using base_map::insert;
-        Map&        insert(const K&, const V&);
+        bool        insert(const K&, const V&);
         
         
         Map&        insert_map(const std::map<K,V,C>&);
@@ -195,10 +195,9 @@ namespace yq {
     }
 
     template <typename K, typename V, typename C>
-    Map<K,V,C>&       Map<K,V,C>::insert(const K&k, const V&v)
+    bool       Map<K,V,C>::insert(const K&k, const V&v)
     {
-        (*this)[k]  = v;
-        return *this;
+        return base_map::insert({ k, v }).second;
     }
 
 

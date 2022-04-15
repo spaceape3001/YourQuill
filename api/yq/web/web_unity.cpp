@@ -12,16 +12,19 @@
 #include "WebContext.hpp"
 #include "WebHtml.hpp"
 #include "WebPage.hpp"
+#include "WebSession.hpp"
 #include "WebTemplate.hpp"
 #include "WebVariable.hpp"
 //#include "NetWriter.hpp"
 
+#include <yq/algo/Random.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Map.hpp>
 #include <yq/file/FileUtils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
+#include <yq/text/Encode64.hpp>
 #include <yq/text/Utils.hpp>
 
 #include <asio/write.hpp>
@@ -78,6 +81,9 @@ namespace yq {
             Ref<WebTemplate>                htmlTemplate;
             mutable tbb::spin_rw_mutex      mutex;
             volatile bool                   openReg    = true;
+            
+                // This *IS* case sensitive!
+            //Map<std::string_view, Ref<WebSession>>  sessions;
             
             WebRepo()
             {
@@ -211,11 +217,25 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-    
-    HttpHeaderView          parse_header_line(const std::string_view&s)
+    StringViewMultiMap     parse_cookie(std::string_view cs)
     {
-        HttpHeaderView  ret;
+        StringViewMultiMap ret;
+        vsplit(cs, ';', [&](std::string_view s){
+            const char* eq  = strnchr(s, '=');
+            if(eq){
+                std::string_view k   = trimmed(std::string_view(s.data(), eq));
+                std::string_view v   = trimmed(std::string_view(eq+1, s.end()));
+                ret.insert(k, v);
+            } else {
+                ret.insert(trimmed(s), std::string_view());
+            }
+        });
+        return ret;
+    }
+    
+    KVView                  parse_header_line(std::string_view s)
+    {
+        KVView          ret;
         const char* c   = strnchr(s, ':');
         if(c){
             ret.key     = trimmed(std::string_view(s.data(), c));
@@ -226,7 +246,7 @@ namespace yq {
 
 
 
-    MethodUriVersion        parse_method_uri(const std::string_view& input)
+    MethodUriVersion        parse_method_uri(std::string_view input)
     {
         const char* z       = nullptr;
         const char* str     = nullptr;
@@ -1022,6 +1042,170 @@ namespace yq {
                 group -> add(p);
         }
     }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#if 0
+
+
+        Ref<WebSession>  WebSession::create()
+        {
+            Ref<WebSession>     ws  = new WebSession;
+
+            for(;;){
+                ws->m_ssid      = randomWebString(32);
+                WLOCK
+                auto itr = _r.sessions.insert({ ws->ssid(), ws });
+                if(itr.second)
+                    break;
+            }
+            
+            return ws;
+        }
+        
+
+        // Tries to find the specified session (or empty if not)(
+        Ref<WebSession>     WebSession::find(std::string_view ssid)
+        {
+            Ref<WebSession>    ret;
+            {
+                LLOCK
+                ret = _r.sessions.get(ssid);
+            }
+            return ret;
+        }
+
+
+        size_t             WebSession::purge(time_t all_before)
+        {
+            std::vector<Ref<WebSession>> to_erase;
+            size_t      old_size = 0;
+            size_t      new_size = 0;
+            
+            {
+                WLOCK
+                old_size    = _r.sessions.size();
+                to_erase.reserve(old_size);
+                for(auto i = _r.sessions.begin(), last = _r.sessions.end(); i != last; ){
+                    if(!i->second){
+                        i   = _r.sessions.erase(i);
+                    } else if(i->second->m_accessed < all_before){
+                        to_erase.push_back(std::move(i->second));
+                        i   = _r.sessions.erase(i);
+                    } else
+                        ++i;
+                }
+                new_size    = _r.sessions.size();
+            }
+            
+            return old_size - new_size;
+        }
+
+
+        
+
+    //  ----------------------------------------------------------------------------------------------------------------
+        #define WS_LOCK \
+            tbb::spin_rw_mutex::scoped_lock _lock(m_mutex, false);
+        #define WS_WLOCK \
+            tbb::spin_rw_mutex::scoped_lock _lock(m_mutex, true);
+        
+        
+        WebSession::WebSession()
+        {
+            time(&m_created);
+            _remagic();
+            m_magicked  = m_created;
+        }
+        
+        WebSession::~WebSession()
+        {
+        }
+
+        void            WebSession::_remagic()
+        {
+            m_oldMagic  = std::move(m_magic);
+            m_magic     = randomWebString(256);
+        }
+        
+        
+        //  -------------------
+        
+        bool            WebSession::auto_edit() const
+        {
+            WS_LOCK
+            return m_autoEdit;
+        }
+        
+        unsigned int    WebSession::columns() const
+        {
+            WS_LOCK
+            return m_columns;
+        }
+        
+        const Root*     WebSession::def_root() const
+        {
+            WS_LOCK
+            return m_defRoot;
+        }
+        
+        SizeDesc        WebSession::icon_size() const
+        {
+            WS_LOCK
+            return m_iconSize;
+        }
+
+        bool            WebSession::inspect_submit() const
+        {
+            WS_LOCK
+            return m_inspectSubmit;
+        }
+
+        time_t          WebSession::last_access() const
+        {
+            WS_LOCK
+            return m_accessed;
+        }
+        
+        bool            WebSession::logged_in() const
+        {
+            WS_LOCK
+            return m_loggedIn;
+        }
+
+        std::string     WebSession::magic() const
+        {
+            WS_LOCK
+            return m_magic;
+        }
+        
+        time_t          WebSession::magicked() const
+        {
+            WS_LOCK
+            return m_magicked;
+        }
+        
+        std::string_view  WebSession::old_magic() const
+        {
+            WS_LOCK
+            return m_oldMagic;
+        }
+        
+
+        uint64_t        WebSession::user_id() const
+        {
+            WS_LOCK
+            return m_userId;
+        }
+
+        std::string     WebSession::username() const
+        {
+            WS_LOCK
+            return m_username;
+        }
+        
+#endif
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <HTML>
 	<HEAD>
+		<META charset="utf-8" />
 		<TITLE>{{TITLE}}</TITLE>
 		<LINK rel="stylesheet" type="text/css" href="/css" />
 	</HEAD>
@@ -48,7 +49,8 @@
 			<TR>
 				<TD ALIGN="left">
 				    <!-- TEMPORARY UNTIL FULLY OPERATIONAL -->
-				    <A HREF="/dev/webpages">ALL Web Pages</A>
+				    <A HREF="/dev/webpages">ALL Web Pages</A><br />
+				    {{SSID}}
 				</TD>
 			</TR>
 			<TR>

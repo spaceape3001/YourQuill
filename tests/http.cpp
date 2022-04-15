@@ -29,7 +29,7 @@ ut::suite tests = []{
     };
     
     "headers"_test = [](){
-        expect( HttpHeaderView{ "User-Agent", "Dummy" } == parse_header_line("  User-Agent :  Dummy "));
+        expect( KVView{ "User-Agent", "Dummy" } == parse_header_line("  User-Agent :  Dummy "));
     };
     
     "uri_parse"_test = [](){

@@ -382,6 +382,11 @@ namespace {
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage("/js/**", wksp::shared_all("www/js"sv));
+        
+        reg_webpage("/favicon.ico", wksp::shared("www/img/yquill.svg"sv));
+        
+        //  for now....
+        reg_webpage("/.logo", wksp::shared("www/img/yquill.svg"sv));
 
         reg_webgroup({
             reg_webpage<dev_wksp_info>("/dev/wksp/info").label("Info"),

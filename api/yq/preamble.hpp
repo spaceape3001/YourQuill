@@ -165,6 +165,7 @@ namespace yq {
     using StringViewSet         = Set<std::string_view,IgCase>;
     using StringPair            = std::pair<std::string,std::string>;
     using StringIntPair         = std::pair<std::string,int>;
+    using StringViewMultiMap    = MultiMap<std::string_view,std::string_view,IgCase>;
 
     using string_map_t          = Map<std::string,std::string,IgCase>;
     using string_set_t          = Set<std::string,IgCase>;
