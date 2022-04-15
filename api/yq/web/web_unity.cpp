@@ -12,7 +12,6 @@
 #include "WebContext.hpp"
 #include "WebHtml.hpp"
 #include "WebPage.hpp"
-#include "WebSession.hpp"
 #include "WebTemplate.hpp"
 #include "WebVariable.hpp"
 //#include "NetWriter.hpp"

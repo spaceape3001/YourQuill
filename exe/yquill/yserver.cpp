@@ -17,7 +17,6 @@
 #include <yq/web/HttpDataStream.hpp>
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
-#include <yq/web/WebSession.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/wksp/Workspace.hpp>
 
@@ -242,7 +241,7 @@ namespace {
     {
         std::string     ret;
         stream::Text    text(ret);
-        text << config.cookieName << '=' << ssid << '+' << magic << "; SameSite=Lax; Max-Age=" << config.renewCookie << "; Version=1";
+        text << config.cookieName << '=' << ssid << '+' << magic << "; SameSite=Strict; Max-Age=" << config.renewCookie << "; Version=1";
         return ret;
     }
 }
