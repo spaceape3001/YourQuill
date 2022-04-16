@@ -81,6 +81,7 @@ namespace yq {
         \note Return value is a REFERENCE to the given data, therefore, copy off if the XML is being altered/destroyed.
     */
     std::string_view    x_string(const XmlBase*);
+    std::string         x_sstring(const XmlBase*);
     unsigned_r          x_uint(const XmlBase*);
     uint8_r             x_uint8(const XmlBase*);
     uint16_r            x_uint16(const XmlBase*);

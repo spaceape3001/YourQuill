@@ -67,6 +67,7 @@ set(yq_sources
     ./enum/Access.hpp
     ./enum/AssertDeny.hpp
     ./enum/AttrKind.hpp
+    ./enum/AuthenticationType.hpp
     ./enum/CalSystem.hpp
     ./enum/Change.hpp
     ./enum/DataRole.hpp
@@ -178,6 +179,16 @@ set(yq_sources
     ./type/Span.hpp
     ./type/Touched.hpp
     ./type/Variant.cpp
+
+    ./user/User.hpp
+    ./user/UserData.hpp
+    ./user/UserFile.hpp
+    ./user/UserGroup.hpp
+    ./user/UserGroupData.hpp
+    ./user/UserGroupFile.hpp
+    ./user/arg.hpp
+    ./user/cdb.hpp
+    ./user/user_unity.cpp
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp

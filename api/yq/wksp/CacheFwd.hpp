@@ -58,7 +58,10 @@ namespace yq {
             
             Override                = 0x8,
             
-            AllowEmpty              = 0x10
+            AllowEmpty              = 0x10,
+            
+            //! Skip biograph (in users/groups)
+            SkipBio                 = 0x20
             
                 
             ////  Search Flags

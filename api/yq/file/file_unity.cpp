@@ -927,6 +927,11 @@ namespace yq {
             return std::string_view(xb->value(), xb->value_size());
         }
 
+        std::string         x_sstring(const XmlBase*xb)
+        {
+            return std::string(xb->value(), xb->value_size());
+        }
+
         unsigned_r           x_uint(const XmlBase*xb)
         {
             return to_uint(xb->value(), xb->value_size());

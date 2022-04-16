@@ -25,6 +25,7 @@ namespace yq {
     static constexpr const char*    szAttribute         = "attr";
     static constexpr const char*    szAttribute_        = "_attr_";
     static constexpr const char*    szAttributes        = "attributes";
+    static constexpr const char*    szAuthentication    = "authentication";
     static constexpr const char*    szAuthor            = "author";
     static constexpr const char*    szAuto              = "auto";
     static constexpr const char*    szAutoInfer         = "auto_infer";
@@ -79,6 +80,7 @@ namespace yq {
     static constexpr const char*    szFont              = "font";
     static constexpr const char*    szFormat            = "format";
     static constexpr const char*    szFrom              = "from";
+    static constexpr const char*    szGroup             = "group";
     static constexpr const char*    szHandle            = "handle";
     static constexpr const char*    szHome              = "home";
     static constexpr const char*    szIcon              = "icon";
@@ -154,6 +156,7 @@ namespace yq {
     static constexpr const char*    szTo                = "to";
     static constexpr const char*    szType              = "type";
     static constexpr const char*    szUse               = "use";
+    static constexpr const char*    szUser              = "user";
     static constexpr const char*    szUntil             = "until";
     static constexpr const char*    szValue             = "value";
     static constexpr const char*    szVcs               = "vcs";
@@ -168,6 +171,8 @@ namespace yq {
     static constexpr const char*    szYQServer          = "yq_server";
     static constexpr const char*    szYQTag             = "yq_tag";
     static constexpr const char*    szYQType            = "yq_type";
+    static constexpr const char*    szYQUser            = "yq_user";
+    static constexpr const char*    szYQUserGroup       = "yq_usergroup";
     static constexpr const char*    szYQWiki            = "yq_wiki";
     static constexpr const char*    szYQWorkspace       = "yq_workspace";
     static constexpr const char*    szZero              = "zero";

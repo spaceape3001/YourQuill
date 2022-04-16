@@ -69,6 +69,7 @@ INSERT INTO Folders (id,k,parent,sk,name) VALUES (1, '',         0, '',         
 INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (2, '.config',  1, '.config',  'Config', 1);
 INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (3, '.classes', 1, '.classes', 'Classes', 1);
 INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (4, '.tags',    1, '.tags',    'Tags', 1);
+INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (5, '.users',    1, '.users',    'Users', 1);
 
 
 

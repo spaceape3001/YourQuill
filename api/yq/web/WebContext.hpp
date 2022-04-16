@@ -35,6 +35,7 @@ namespace yq {
         bool                auto_edit       = false;
         bool                logged_in       = false;
         bool                inspect_submit  = false;
+        bool                admin           = false;
     };
     
     
@@ -149,13 +150,14 @@ namespace yq {
         
         bool                            is_local() const { return static_cast<bool>(flags & LOCAL); }
         
-        virtual void                    set_username(std::string_view) = 0;
+        virtual void                    set_admin(bool) = 0;
         virtual void                    set_auto_edit(bool) = 0;
         virtual void                    set_columns(int) = 0;
         virtual void                    set_def_root(const Root*) = 0;
-        virtual void                    set_logged_in(bool) = 0;
         virtual void                    set_inspect_submit(bool) = 0;
         virtual void                    set_icon_size(SizeDesc) = 0;
+        virtual void                    set_logged_in(bool) = 0;
+        virtual void                    set_username(std::string_view) = 0;
         
         WebContext(asio::io_context& _io_ctx);
         ~WebContext();

@@ -9,6 +9,7 @@
 #include <yq/bit/KeyValue.hpp>
 #include <yq/bit/NKI.hpp>
 #include <yq/file/cdb.hpp>
+#include <yq/log/Logging.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/type/ByteArray.hpp>
 #include <yq/web/WebContext.hpp>
@@ -328,7 +329,7 @@ namespace yq {
         Tag::Info           info(Tag t, bool autoKey)
         {
             Tag::Info    ret;
-            static thread_local SQ    s("SELECT brief,k,name FROM Tags WHERE id=?");
+            static thread_local SQ    s("SELECT brief,k,name,icon FROM Tags WHERE id=?");
             auto s_af = s.af();
             s.bind(1, t.id);
             if(s.step() == SqlQuery::Row){
@@ -338,6 +339,7 @@ namespace yq {
                 ret.name        = s.v_text(3);
                 if(autoKey && ret.name.empty())
                     ret.name    = ret.key;
+                ret.icon        = Image{ s.v_uint64(4) };
             }
             return ret;
         }

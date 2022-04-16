@@ -623,7 +623,7 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     namespace cdb {
-        static constexpr const uint64_t     kMaxFixedFolder = Folder::TAGS;
+        static constexpr const uint64_t     kMaxFixedFolder = Folder::USERS;
     
         std::vector<Directory>   all_directories(unsigned opts)
         {

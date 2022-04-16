@@ -24,6 +24,7 @@ namespace yq {
         static constexpr const uint64_t CONFIG  = 2ULL;
         static constexpr const uint64_t CLASSES = 3ULL;
         static constexpr const uint64_t TAGS    = 4ULL;
+        static constexpr const uint64_t USERS   = 5ULL;
             // warning, adding a number here needs to adjust kMaxFixedFolder in file_cdb.cpp
         constexpr operator bool() const { return id != 0ULL; }
     };

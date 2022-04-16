@@ -73,6 +73,7 @@ struct Context : public WebContext, public RefCount {
     Context(asio::io_context& _io_ctx);
     
     virtual void    set_username(std::string_view sv) override;
+    virtual void    set_admin(bool) override;
     virtual void    set_auto_edit(bool f) override;
     virtual void    set_columns(int v) override;
     virtual void    set_def_root(const Root*rt) override;
@@ -350,6 +351,17 @@ namespace {
             tx_header("Set-Cookie", ss->cookie);
     }
     
+    void    Context::set_admin(bool f) 
+    {
+        if(ss){
+            {
+                tbb::spin_rw_mutex::scoped_lock     _lock(ss->mutex, true);
+                ss->master.admin    = f;
+            }
+            session.admin   = f;
+        }
+    }
+
     void    Context::set_auto_edit(bool f) 
     {
         if(ss){

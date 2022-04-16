@@ -529,7 +529,6 @@ YScanner::YScanner()
         << ".logs" 
         << ".quill" 
         << ".svn" 
-        << ".users"
     ;
     
     for(const Notifier* n : Notifier::all()){

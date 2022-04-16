@@ -11,10 +11,10 @@
 
 #include <yq/enum/Sorted.hpp>
 #include <yq/file/Document.hpp>
+#include <yq/image/Image.hpp>
 
 namespace yq {
     struct Fragment;
-    struct Image;
     struct Root;
     
     using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
@@ -22,6 +22,7 @@ namespace yq {
         std::string     brief;
         Document        doc;
         std::string     key;
+        Image           icon;
         //Leaf        leaf;
         std::string     name;
         bool operator==(const Info&) const = default;
@@ -29,8 +30,6 @@ namespace yq {
 
     namespace cdb {
         struct NKI;
-        
-        using SharedTagData     = std::shared_ptr<Tag::Data>;
  
         std::vector<Tag>        all_tags(Sorted sorted=Sorted());
         size_t                  all_tags_count();
@@ -62,14 +61,14 @@ namespace yq {
         //Leaf                    leaf(Tag t);
         
         Tag                     make_tag(std::string_view, const Root* rt=nullptr);
-        SharedTagData           merged(Tag, unsigned int opts=0);
+        Tag::SharedData         merged(Tag, unsigned int opts=0);
         
         std::string             name(Tag);
         
         
         NKI                     nki(Tag, bool autoKeyToName=false);
     
-        //! \brief Returns the FIRST trag fragment that qualifies
+        //! \brief Returns the FIRST tag fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
         Tag::SharedFile         read(Tag, const Root*);

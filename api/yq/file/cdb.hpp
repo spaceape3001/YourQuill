@@ -390,6 +390,8 @@ namespace yq {
         */
         bool                            within(Folder parentFolder, Directory theDirectory, bool recursive=true);
 
+        consteval Folder                users_folder() { return Folder{Folder::USERS}; }
+
         /*! \brief Tests to see if directory is within the specified folder
         
             This tests to see if the spacified directory is within the folder.
