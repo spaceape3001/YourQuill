@@ -120,6 +120,9 @@ namespace {
         
             // max Rx body before complaining
         size_t              maxRxBody       = 6 << 20ULL;
+        
+        size_t              numThreads      = 4;
+        
     }  config;
 
     struct {
@@ -253,7 +256,7 @@ namespace {
     {
         std::string     ret;
         stream::Text    text(ret);
-        text << config.cookieName << '=' << ssid << '+' << magic << "; Max-Age=300; SameSite=Strict; HttpOnly";
+        text << config.cookieName << '=' << ssid << '+' << magic << "; Path=/; Max-Age=300; SameSite=Strict; HttpOnly";
         return ret;
     }
 }
@@ -905,24 +908,35 @@ public:
 class HttpServer {
 public:
 
-    HttpServer(asio::io_context& ctx) : 
-        m_context(ctx), 
-        m_acceptor(ctx, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), wksp::port())), 
-        m_socket(ctx)
+    HttpServer() : 
+        m_acceptor(m_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), wksp::port())), 
+        m_socket(m_context)
     {
     }
     
     void    start()
     {
+        listen();
+    }
+    
+    void    listen()
+    {
         m_acceptor.async_accept(m_socket, [this](std::error_code ec){
             if(!ec){
                 ( new HttpConnection(m_context, std::move(m_socket))) -> do_read();
             }
-            start();
+            listen();
         });
     }
     
-    asio::io_context&           m_context;
+    void    run() { 
+        thread::id();
+        m_context.run(); 
+        if(gQuit == Quit::No)
+            gQuit       = Quit::Stop;
+    }
+    
+    asio::io_context            m_context;
     asio::ip::tcp::acceptor     m_acceptor;
     asio::ip::tcp::socket       m_socket;
 };
@@ -930,27 +944,18 @@ public:
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-void        do_server()
-{
-    thread::id();
-    yInfo() << "Launching Quill HttpServer for '" << wksp::name() << "' on Port " << wksp::port() << ".";
-
-    asio::error_code        ec;
-    asio::io_context        context;
-    HttpServer  server(context);
-    server.start();
-    context.run();
-    
-    yInfo() << "Exiting the server.";
-    
-    if(gQuit == Quit::No)
-        gQuit       = Quit::Stop;
-}
-
-
 void        run_server(yq::Vector<std::thread>&  threads)
 {
     genStatus();
-    threads << std::thread(do_server);
+    yInfo() << "Launching Quill HttpServer for '" << wksp::name() << "' on Port " << wksp::port() << ".";
+    
+    HttpServer* server      = new HttpServer;
+    server -> start();
+    
+    for(size_t i=0;i<config.numThreads;++i){
+        threads << std::thread([server](){
+            server -> run();
+        });
+    }
 }
 
