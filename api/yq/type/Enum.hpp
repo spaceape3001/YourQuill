@@ -127,13 +127,16 @@ namespace yq {
         */
         EnumDef(const char* name, const char* def);
 
+        using Name2Val          = Map<std::string_view,int,IgCase>;
+        using Val2Name          = Map<int,std::string_view>;
+        
+        const Val2Name&         val2name() const { return m_value2name; }
+
     protected:
 
     private:
         template <class> friend class EnumImpl;
 
-        using Name2Val          = Map<std::string_view,int,IgCase>;
-        using Val2Name          = Map<int,std::string_view>;
 
         std::string_view            m_name;
         Name2Val                    m_name2value;

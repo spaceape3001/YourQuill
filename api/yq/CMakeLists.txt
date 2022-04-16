@@ -192,7 +192,9 @@ set(yq_sources
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp
+    ./web/JsonAdapter.hpp
     ./web/WebAdapters.hpp
+    ./web/WebContext.hpp
     ./web/WebHtml.hpp
     ./web/WebPage.hpp
     ./web/WebVariable.hpp

@@ -7,7 +7,9 @@
 #pragma once
 
 #include <yq/collection/Set.hpp>
+#include <yq/text/Utils.hpp>
 #include <yq/type/Enum.hpp>
+#include <yq/type/Flag.hpp>
 #include "XmlFwd.hpp"
 
 #include "rapidxml.hpp"
@@ -101,6 +103,18 @@ namespace yq {
             return Result<E>(v.value);
         return Result<E>();
     }
+    
+    template <typename E>
+    Flag<E>             x_flag(const XmlBase* xb)
+    {
+        Flag<E> ret;
+        vsplit(x_string(xb), ',', [&](std::string_view k){
+            auto    v   = E::value_for(k);
+            if(v.good)
+                ret.set(v.value);
+        });
+        return ret;
+    }
 
     template <typename Pred>
     auto                read_attribute(const XmlNode* xn, const char* pszAttr, Pred pred)
@@ -167,6 +181,13 @@ namespace yq {
     void                 write_x(XmlBase* xb, EnumImpl<E> v)
     {
         write_x(xb, v.key());
+    }
+
+    template <typename E>
+    void                 write_x(XmlBase* xb, Flag<E> v)
+    {
+        std::string     build   = v.as_string(","sv);
+        write_x(xb, build);
     }
 
     template <typename T>

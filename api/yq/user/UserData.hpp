@@ -8,6 +8,7 @@
 #include <yq/bit/Context.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
+#include <yq/enum/Permission.hpp>
 
 #pragma once
 
@@ -17,7 +18,8 @@ namespace yq {
         std::string         name;
         Authentication      authentication;
         Vector<Context>     bio;
-        StringSet           groups;
+        Permissions         permissions;
+        std::string         brief;
 
         /*! \brief Merges two user  documents
         

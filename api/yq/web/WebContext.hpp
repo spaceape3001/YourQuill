@@ -16,6 +16,7 @@
 // #include <yq/text/KV.hpp>
 #include <yq/type/ByteArray.hpp>
 #include <yq/web/HttpHeader.hpp>
+#include <nlohmann/json_fwd.hpp>
 #include <time.h>
 
 namespace asio {
@@ -131,10 +132,13 @@ namespace yq {
         
 
         //! Decodes post parameters
-        StringViewMultiMap              decode_post();
+        StringViewMultiMap              decode_post() const;
         
         //! Decodes ALL queries
-        StringViewMultiMap              decode_query();
+        StringViewMultiMap              decode_query() const;
+        
+        //! Converts the "body" to json
+        nlohmann::json                  decode_json() const;
         
         
         //! Decodes the first query parameter found by the given name (ignoring the rest)

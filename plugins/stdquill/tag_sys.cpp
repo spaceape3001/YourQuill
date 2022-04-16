@@ -126,7 +126,6 @@ namespace {
                 return ;
             }
         }
-        // TODO
         
         Tag::SharedData data    = cdb::merged(t, cdb::IsUpdate);
         update_info(t, data);

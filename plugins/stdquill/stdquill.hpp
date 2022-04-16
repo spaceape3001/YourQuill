@@ -19,6 +19,7 @@
 #include <yq/tag/Tag.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/type/Guarded.hpp>
+#include <yq/user/User.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
@@ -67,6 +68,7 @@ WebHtml&    operator<<(WebHtml&, const Dev<Folder>&);
 WebHtml&    operator<<(WebHtml&, const Dev<Fragment>&);
 WebHtml&    operator<<(WebHtml&, const Dev<Leaf>&);
 WebHtml&    operator<<(WebHtml&, const Dev<Tag>&);
+WebHtml&    operator<<(WebHtml&, const Dev<User>&);
 WebHtml&    operator<<(WebHtml&, const Dev<const Root*>&);
 
 WebHtml&    operator<<(WebHtml&, const Atom&);
@@ -75,6 +77,7 @@ WebHtml&    operator<<(WebHtml&, const Document&);
 WebHtml&    operator<<(WebHtml&, const Folder&);
 WebHtml&    operator<<(WebHtml&, const Leaf&);
 WebHtml&    operator<<(WebHtml&, const Tag&);
+WebHtml&    operator<<(WebHtml&, const User&);
 
 WebHtml&    operator<<(WebHtml&, const DevID<Atom>&);
 WebHtml&    operator<<(WebHtml&, const DevID<Class>&);
@@ -85,6 +88,7 @@ WebHtml&    operator<<(WebHtml&, const DevID<Folder>&);
 WebHtml&    operator<<(WebHtml&, const DevID<Fragment>&);
 WebHtml&    operator<<(WebHtml&, const DevID<Leaf>&);
 WebHtml&    operator<<(WebHtml&, const DevID<Tag>&);
+WebHtml&    operator<<(WebHtml&, const DevID<User>&);
 WebHtml&    operator<<(WebHtml&, const DevID<const Root*>&);
 
 void        dev_table(WebHtml&, const std::vector<Atom>&);
@@ -96,14 +100,17 @@ void        dev_table(WebHtml&, const std::vector<Folder>&);
 void        dev_table(WebHtml&, const std::vector<Fragment>&);
 void        dev_table(WebHtml&, const std::vector<Leaf>&);
 void        dev_table(WebHtml&, const std::vector<Tag>&);
+void        dev_table(WebHtml&, const std::vector<User>&);
 void        dev_table(WebHtml&, const std::vector<const Root*>&);
 
 
 
 enum {
-    s3_tag1         = -100,
-    s3_leaf         =    0,
-    s3_tag2         =  100
+    s3_tag1     = 0,
+    s3_leaf,
+    s3_user1,
+    s3_user2,
+    s3_tag2
 };
 
 

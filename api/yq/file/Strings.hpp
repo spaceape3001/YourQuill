@@ -113,6 +113,7 @@ namespace yq {
     static constexpr const char*    szOutput            = "output";
     static constexpr const char*    szParent            = "parent";
     static constexpr const char*    szPath              = "path";
+    static constexpr const char*    szPermission        = "permission";
     static constexpr const char*    szPKey              = "pkey";
     static constexpr const char*    szPlural            = "plural";
     static constexpr const char*    szPolicy            = "policy";

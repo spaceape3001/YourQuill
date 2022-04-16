@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "UserFile.hpp"
-#include "UserGroupFile.hpp"
 #include "arg.hpp"
 #include "cdb.hpp"
 #include <yq/file/cdb.hpp>
@@ -26,14 +25,8 @@ namespace yq {
         std::string user_filename(std::string_view k)
         {
             std::string ret(k);
-            ret += ".user";
-            return ret;
-        }
-
-        std::string usergroup_filename(std::string_view k)
-        {
-            std::string ret(k);
-            ret += ".ugrp";
+            ret += ".";
+            ret += User::szExtension;
             return ret;
         }
     }
@@ -46,7 +39,8 @@ namespace yq {
     {
         set_if_empty(name, b.name, fOverride);
         bio += b.bio;
-        groups += groups;
+        permissions |= b.permissions;
+        set_if_empty(brief, b.brief, fOverride);
         return *this;
     }
     
@@ -79,11 +73,12 @@ namespace yq {
         }
         
         name            = read_child(xn, szName, x_string);
+        brief           = read_child(xn, szBrief, x_string);
         authentication  = read_child(xn, szAuthentication, x_authentication);
         if(!skip_bio)
             bio         = read_children(xn, szContext, x_context);
         std::vector<std::string>    theGroups = read_children(xn, szGroup, x_sstring);
-        groups          = StringSet(theGroups.begin(), theGroups.end());
+        permissions     = read_child(xn, szPermission, x_flag<Permission>);
         return true;
     }
     
@@ -96,66 +91,13 @@ namespace yq {
         XmlNode*    xuser   = doc.allocate_node(rapidxml::node_element, szUser);
         xroot -> append_node(xuser);
         
-        write_child(xuser, szUser, name);
+        write_child(xuser, szName, name);
+        if(!brief.empty())
+            write_child(xuser, szBrief, brief);
         write_child(xuser, szAuthentication, authentication);
         write_children(xuser, szContext, bio);
-        write_children(xuser, szGroup, groups);
-        return true;
-    }
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-    UserGroup::Data&  UserGroup::Data::merge(const Data&b, bool fOverride)
-    {
-        set_if_empty(name, b.name, fOverride);
-        bio += b.bio;
-        return *this;
-    }
-    
-    void  UserGroup::Data::reset()
-    {
-        *this   = Data();
-    }
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    void  UserGroup::File::reset() 
-    {
-        Data::reset();
-    }
-    
-    bool  UserGroup::File::read(const XmlDocument&doc, std::string_view fname) 
-    {
-        const XmlNode*  xn  = doc.first_node(szYQUserGroup);
-        if(!xn){
-            yError() << "No appropriate root element!  In: '" << fname << "'";
-            return false;
-        }
-        
-        xn      = xn -> first_node(szGroup);
-        if(!xn){
-            yError() << "No group! In: " << fname << "'";
-            return false;
-        }
-        
-        name            = read_child(xn, szName, x_string);
-        if(!skip_bio)
-            bio         = read_children(xn, szContext, x_context);
-        return true;
-    }
-    
-    bool  UserGroup::File::write(XmlDocument&doc) const 
-    {
-        xml_start(doc);
-        
-        XmlNode*  xroot  = doc.allocate_node(rapidxml::node_element, szYQUserGroup);
-        doc.append_node(xroot);
-        XmlNode*    xuser   = doc.allocate_node(rapidxml::node_element, szGroup);
-        xroot -> append_node(xuser);
-        write_children(xuser, szContext, bio);
+        if(permissions)
+            write_child(xuser, szPermission, permissions);
         return true;
     }
 
@@ -277,124 +219,6 @@ namespace yq {
         {
             return user_key(h.context(), arg_names);
         }
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-        UserGroup usergroup(std::string_view  arg_string)
-        {
-            arg_string   = trimmed(arg_string);
-            if(arg_string.empty())
-                return UserGroup{};
-                
-            UserGroup t   = cdb::usergroup( arg_string);
-            if(t)
-                return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_usergroup(i))
-                return UserGroup{i};
-            return UserGroup{};
-        }
-        
-        UserGroup usergroup(const WebContext&ctx)
-        {
-            std::string    k    = ctx.find_query("id");
-            if(!k.empty())
-                return usergroup_id(k);
-            
-            k       = ctx.find_query("key");
-            if(!k.empty())
-                return usergroup_key(k);
-            
-            k       = ctx.find_query("usergroup");
-            if(!k.empty())
-                return usergroup(k);
-            return UserGroup{};
-        }
-        
-        UserGroup usergroup(const WebHtml&h)
-        {
-            return usergroup(h.context());
-        }
-        
-        UserGroup usergroup(const WebContext&ctx, std::string_view arg_name)
-        {
-            std::string     arg_string = ctx.find_query(arg_name);
-            return usergroup(arg_string);
-        }
-        
-        UserGroup usergroup(const WebHtml&h, std::string_view arg_name)
-        {
-            return usergroup(h.context(), arg_name);
-        }
-        
-        UserGroup usergroup(const WebContext& ctx, std::initializer_list<std::string_view> arg_names)
-        {
-            std::string     arg_string = ctx.find_query(arg_names);
-            return usergroup(arg_string);
-        }
-        
-        UserGroup usergroup(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return usergroup(h.context(), arg_names);
-        }
-
-        UserGroup usergroup_id(std::string_view arg_string)
-        {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_usergroup(i))
-                return UserGroup{i};
-            return UserGroup{};
-        }
-
-        UserGroup usergroup_id(const WebContext&ctx, std::string_view arg_name)
-        {
-            std::string     arg_string = ctx.find_query(arg_name);
-            return usergroup_id(arg_string);
-        }
-        
-        UserGroup usergroup_id(const WebHtml&h, std::string_view arg_name)
-        {
-            return usergroup_id(h.context(), arg_name);
-        }
-        
-        UserGroup usergroup_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
-        {
-            std::string     arg_string = ctx.find_query(arg_names);
-            return usergroup_id(arg_string);
-        }
-        
-        UserGroup usergroup_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return usergroup_id(h.context(), arg_names);
-        }
-        
-        UserGroup usergroup_key(std::string_view arg_string)
-        {
-            return cdb::usergroup(trimmed(arg_string));
-        }
-        
-        UserGroup usergroup_key(const WebContext&ctx, std::string_view arg_name)
-        {
-            std::string     arg_string = ctx.find_query(arg_name);
-            return usergroup_key(arg_string);
-        }
-        
-        UserGroup usergroup_key(const WebHtml&h, std::string_view arg_name)
-        {
-            return usergroup_key(h.context(), arg_name);
-        }
-        
-        UserGroup usergroup_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
-        {
-            std::string     arg_string = ctx.find_query(arg_names);
-            return usergroup_key(arg_string);
-        }
-        
-        UserGroup usergroup_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return usergroup_key(h.context(), arg_names);
-        }
     }
 
 
@@ -403,31 +227,6 @@ namespace yq {
 
     namespace cdb {
     
-        namespace {
-            std::vector<UserGroup>  all_usergroups_sorted()
-            {
-                static thread_local SQ    s("SELECT id FROM UserGroups ORDER BY k");
-                return s.vec<UserGroup>();
-            }
-            
-            std::vector<UserGroup>  all_usergroups_unsorted()
-            {
-                static thread_local SQ    s("SELECT id FROM UserGroups");
-                return s.vec<UserGroup>();
-            }
-        }
-
-        std::vector<UserGroup>      all_usergroups(Sorted sorted)
-        {
-            return sorted ? all_usergroups_sorted() : all_usergroups_unsorted();
-        }
-        
-        size_t                  all_usergroups_count()
-        {
-            static thread_local SQ s("SELECT COUNT(1) FROM UserGroups");
-            return s.size();
-        }
-
 
         namespace {
             std::vector<User>     all_users_sorted()
@@ -453,6 +252,20 @@ namespace yq {
             static thread_local SQ s("SELECT COUNT(1) FROM Users");
             return s.size();
         }
+
+        bool                    any_users()
+        {
+            static thread_local SQ s("SELECT 1 FROM Users LIMIT 1");
+            auto af = s.af();
+            return s.step() == SqlQuery::Row;
+        }
+
+        std::string             brief(User u)
+        {
+            static thread_local SQ s("SELECT brief FROM Users WHERE id=?");
+            return s.str(u.id);
+        }
+        
 
         User                    db_user(Document doc, bool* wasCreated)
         {
@@ -494,52 +307,8 @@ namespace yq {
             return db_user(db_document(users_folder(), tfn), wasCreated);
         }
             
-        UserGroup                db_usergroup(Document doc, bool* wasCreated)
-        {
-            if(wasCreated)
-                *wasCreated = false;
-            if(folder(doc) != users_folder()){
-                yError() << "Rejecting usergroup " << key(doc) << " due to not being in the '.usergroups' folder";        
-                return UserGroup{};
-            }
-            std::string k   = base_key(doc);
-            if(k.empty())
-                return UserGroup();
-            
-            static thread_local SQ    i("INSERT OR FAIL INTO UserGroups (k,id) VALUES (?,?)");
-            auto i_lk   = i.af();
-            
-            i.bind(1, k);
-            i.bind(2, doc.id);
-            if(i.step(false) == SqlQuery::Done){
-                if(wasCreated)
-                    *wasCreated = true;
-                return UserGroup{doc.id};
-            } else if(exists_usergroup(doc.id)){
-                return UserGroup{doc.id};
-            } else {
-                yError() << "Unable to get the usergroup from the database: " << k;
-                return UserGroup{};
-            }
-        }
-        
-        UserGroup               db_usergroup(Fragment f, bool* wasCreated)
-        {
-            return db_usergroup(document(f),wasCreated);
-        }
-
-        UserGroup                db_usergroup(std::string_view k, bool* wasCreated)
-        {
-            std::string     tfn = usergroup_filename(k);
-            return db_usergroup(db_document(users_folder(), tfn), wasCreated);
-        }
 
         Document                document(User u)
-        {
-            return exists(u) ? Document{u.id} : Document{};
-        }
-    
-        Document                document(UserGroup u)
         {
             return exists(u) ? Document{u.id} : Document{};
         }
@@ -550,20 +319,9 @@ namespace yq {
             d.exec(u.id);
         }
         
-        void                    erase(UserGroup u)
-        {
-            static thread_local SQ d("DELETE FROM UserGroups WHERE id=?");
-            d.exec(u.id);
-        }
-
         bool                    exists(User u)
         {
             return exists_user(u.id);
-        }
-
-        bool                    exists(UserGroup u)
-        {
-            return exists_usergroup(u.id);
         }
 
         bool                    exists_user(uint64_t i)
@@ -572,28 +330,16 @@ namespace yq {
             return s.present(i);
         }
         
-        bool                    exists_usergroup(uint64_t i)
-        {
-            static thread_local SQ s("SELECT 1 FROM UserGroups WHERE id=? LIMIT 1");
-            return s.present(i);
-        }
-
         Image                   icon(User u)
         {
             static thread_local SQ    s("SELECT icon FROM Users WHERE id=? LIMIT 1");
             return s.as<Image>(u.id);
         }
         
-        Image                   icon(UserGroup u)
-        {
-            static thread_local SQ    s("SELECT icon FROM UserGroups WHERE id=? LIMIT 1");
-            return s.as<Image>(u.id);
-        }
-
         User::Info              info(User u, bool autoKeyToName)
         {
             User::Info  ret;
-            static thread_local SQ  s("SELECT k,name,icon FROM Users WHERE id=?");
+            static thread_local SQ  s("SELECT k,name,icon,brief,is_admin,is_owner,is_reader,is_writer FROM Users WHERE id=?");
             auto s_af = s.af();
             s.bind(1, u.id);
             if(s.step() == SqlQuery::Row){
@@ -601,30 +347,42 @@ namespace yq {
                 ret.name    = s.v_text(2);
                 ret.doc     = Document{u.id};
                 ret.icon    = Image(s.v_uint64(3));
+                ret.brief   = s.v_text(4);
                 if(autoKeyToName && ret.name.empty())
                     ret.name    = ret.key;
-                
+                ret.is_admin    = s.v_bool(5);
+                ret.is_owner    = s.v_bool(6);
+                ret.is_reader   = s.v_bool(7);
+                ret.is_writer   = s.v_bool(8);
             }
             return ret;
         }
         
-        UserGroup::Info              info(UserGroup u, bool autoKeyToName)
+
+        bool                    is_admin(User u)
         {
-            UserGroup::Info  ret;
-            static thread_local SQ  s("SELECT k,name,icon FROM UserGroups WHERE id=?");
-            auto s_af = s.af();
-            s.bind(1, u.id);
-            if(s.step() == SqlQuery::Row){
-                ret.key     = s.v_text(1);
-                ret.name    = s.v_text(2);
-                ret.doc     = Document{u.id};
-                ret.icon    = Image(s.v_uint64(3));
-                if(autoKeyToName && ret.name.empty())
-                    ret.name    = ret.key;
-                
-            }
-            return ret;
+            static thread_local SQ s("SELECT is_admin FROM Users WHERE id=?");
+            return s.boolean(u.id);
         }
+        
+        bool                    is_owner(User u)
+        {
+            static thread_local SQ s("SELECT is_owner FROM Users WHERE id=?");
+            return s.boolean(u.id);
+        }
+        
+        bool                    is_reader(User u)
+        {
+            static thread_local SQ s("SELECT is_reader FROM Users WHERE id=?");
+            return s.boolean(u.id);
+        }
+        
+        bool                    is_writer(User u)
+        {
+            static thread_local SQ s("SELECT is_writer FROM Users WHERE id=?");
+            return s.boolean(u.id);
+        }
+        
 
         std::string             key(User u)
         {
@@ -632,11 +390,6 @@ namespace yq {
             return s.str(u.id);
         }
         
-        std::string             key(UserGroup u)
-        {
-            static thread_local SQ    s("SELECT k FROM UserGroups WHERE id=?");
-            return s.str(u.id);
-        }
 
         User                    make_user(std::string_view k, const Root* rt)
         {
@@ -661,28 +414,6 @@ namespace yq {
             return t;
         }
         
-        UserGroup                    make_usergroup(std::string_view k, const Root* rt)
-        {
-            if(!rt)
-                rt  = wksp::root_first(DataRole::Users);
-            if(!rt){
-                yError() << "No root specified to create the user in!";
-                return UserGroup{};
-            }
-            
-            std::string     tfn = usergroup_filename(k);
-            Document    doc = db_document(users_folder(), tfn);
-            bool            was = false;
-            UserGroup         t   = db_usergroup(doc, &was);
-            if(!was)
-                return t;
-            if(fragments_count(doc))
-                return t;
-            UserGroup::SharedFile td  = write(t, rt);
-            td -> name  = k;
-            td -> save();
-            return t;
-        }
 
         User::SharedData         merged(User u, unsigned int opts)
         {
@@ -695,15 +426,10 @@ namespace yq {
             return ret;
         }
         
-        UserGroup::SharedData          merged(UserGroup u, unsigned int opts)
+        std::string             name(User u)
         {
-            UserGroup::SharedData  ret = std::make_shared<UserGroup::Data>();
-            for(auto& i : reads(u)){
-                if(opts & IsUpdate)
-                    cdb::update(i.first);
-                ret -> merge(*(i.second), static_cast<bool>(opts&Override));
-            }
-            return ret;
+            static thread_local SQ    s("SELECT name FROM Users WHERE id=?");
+            return s.str(u.id);
         }
 
         std::vector<UserFragDoc> reads(User u)
@@ -724,28 +450,6 @@ namespace yq {
                 User::SharedFile  p   = user_doc(f);
                 if(p)
                     ret.push_back(UserFragDoc(f,p));
-            }
-            return ret;
-        }
-
-        std::vector<UserGroupFragDoc> reads(UserGroup u)
-        {
-            std::vector<UserGroupFragDoc>  ret;
-            for(Fragment f : fragments(document(u), DataRole::Users)){
-                UserGroup::SharedFile  p   = usergroup_doc(f);
-                if(p)
-                    ret.push_back(UserGroupFragDoc(f,p));
-            }
-            return ret;
-        }
-        
-        std::vector<UserGroupFragDoc> reads(UserGroup u, class Root*rt)
-        {
-            std::vector<UserGroupFragDoc>  ret;
-            for(Fragment f : fragments(document(u), rt)){
-                UserGroup::SharedFile  p   = usergroup_doc(f);
-                if(p)
-                    ret.push_back(UserGroupFragDoc(f,p));
             }
             return ret;
         }
@@ -780,36 +484,6 @@ namespace yq {
             return td;
         }
         
-        UserGroup                    usergroup(std::string_view k)
-        {
-            static thread_local SQ    s("SELECT id FROM UserGroups WHERE k=?");
-            return s.as<UserGroup>(k);
-        }
-        
-        UserGroup                    usergroup(uint64_t i)
-        {
-            return exists_user(i) ? UserGroup{i} : UserGroup{};
-        }
-        
-        UserGroup::SharedFile        usergroup_doc(Fragment f, bool fAllowEmpty)
-        {
-            if(!f)
-                return UserGroup::SharedFile();
-
-            auto ch   = frag_bytes(f);
-            if(ch.empty())
-                return fAllowEmpty ? std::make_shared<UserGroup::File>() : UserGroup::SharedFile();
-            
-            UserGroup::SharedFile  td = std::make_shared<UserGroup::File>();
-            std::filesystem::path   fp  = path(f);
-            if(!td->load(std::move(ch), fp)){
-                yError() << "Unable to read " << fp;
-                return UserGroup::SharedFile();
-            }
-            td -> set_file(fp);
-            return td;
-        }
-        
 
         User::SharedFile          write(User u, const Root*rt)
         {
@@ -827,27 +501,6 @@ namespace yq {
                 make_directory(fo, rt);
 
             User::SharedFile ptr  = std::make_shared<User::File>();
-            ptr -> set_file( rt -> resolve(key(d)));
-            ptr -> reload();
-            return ptr;
-        }    
-
-        UserGroup::SharedFile          write(UserGroup u, const Root*rt)
-        {
-            Document    d   = document(u);
-            if(!d)
-                return UserGroup::SharedFile();
-            if(rt && !rt->is_writable(DataRole::Users))
-                return UserGroup::SharedFile();
-            Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Users);
-            if(f)
-                return usergroup_doc(f, true);
-
-            Folder      fo  = folder(d);
-            if((fo != cdb::users_folder()) && !exists(fo, rt))
-                make_directory(fo, rt);
-
-            UserGroup::SharedFile ptr  = std::make_shared<UserGroup::File>();
             ptr -> set_file( rt -> resolve(key(d)));
             ptr -> reload();
             return ptr;

@@ -141,7 +141,7 @@ namespace {
 
 YQ_INVOKE(
     reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
-    reg_webpage<page_dev_echo>("/dev/echo");
+    reg_webpage<page_dev_echo>({hGet, hPost}, "/dev/echo");
     reg_webpage<directories_table>("/dev/webdirs", "All Directories");
     reg_webpage<extensions_table>("/dev/webexts");
     reg_webpage<globs_table>("/dev/webglobs");

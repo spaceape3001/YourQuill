@@ -10,6 +10,9 @@
 
 namespace yq {
 
+    std::string     flag_string(const EnumDef* def, uint64_t values, std::string_view sep=",");
+
+
     /*! \brief A flag object for enums (up to 64-values)
     */
     template <typename E, typename T=uint64_t>
@@ -177,6 +180,26 @@ namespace yq {
             return is_set(e);
         }
         
+        operator bool() const
+        {
+            return static_cast<bool>(m_value);
+        }
+        
+        
+        void    set(enum_t e)
+        {
+            m_value |= mask(e);
+        }
+        
+        void    clear(enum_t e)
+        {
+            m_value &= ~mask(e);
+        }
+
+        std::string as_string(std::string_view sep=",") const
+        {
+            return flag_string(E::staticEnumInfo(), m_value, sep);
+        }
 
     private:
         T    m_value;

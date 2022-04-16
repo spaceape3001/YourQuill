@@ -6,6 +6,7 @@
 
 #include "HttpParser.hpp"
 #include "TypedBytes.hpp"
+#include "JsonAdapter.hpp"
 #include "WebAdapters.hpp"
 #include "WebContext.hpp"
 #include "WebHtml.hpp"
@@ -26,7 +27,9 @@
 #include <yq/text/Encode64.hpp>
 #include <yq/text/Utils.hpp>
 
+
 #include <asio/write.hpp>
+#include <nlohmann/json.hpp>
 #include <tbb/spin_rw_mutex.h>
 #include <unistd.h>
 
@@ -484,15 +487,23 @@ namespace yq {
         {
         }
         
+        nlohmann::json              WebContext::decode_json() const
+        {
+            if(rx_body.empty())
+                return nlohmann::json();
+            return nlohmann::json::parse(rx_body.begin(), rx_body.end());
+        }
+
+
         //! Decodes post parameters
-        StringViewMultiMap          WebContext::decode_post()
+        StringViewMultiMap          WebContext::decode_post() const
         {
             if((rx_content_type != ContentType()) && (rx_content_type != ContentType::form))
                 return StringViewMultiMap();
             return parse_parameters(rx_body);
         }
 
-        StringViewMultiMap          WebContext::decode_query()
+        StringViewMultiMap          WebContext::decode_query() const
         {
             return parse_parameters(url.query);
         }

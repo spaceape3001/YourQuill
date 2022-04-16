@@ -11,6 +11,7 @@
 #include <yq/srv/Stage4.hpp>
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Text.hpp>
+#include <yq/web/JsonAdapter.hpp>
 #include <yq/web/TypedBytes.hpp>
 
 using namespace yq;
@@ -307,6 +308,30 @@ namespace {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    json    api_workspace(WebContext&ctx)
+    {
+        json    ret{
+            { "author", wksp::author() },
+            { "abbreviation", wksp::abbreviation() },
+            { "bkcolor", gBkColor },
+            { "copyright", wksp::copyright().text },
+            { "c_stance", wksp::copyright().stance.key() },
+            { "c_from", wksp::copyright().from },
+            { "c_to", wksp::copyright().to },
+            { "color", gTextColor },
+            { "name", wksp::name() }
+        };
+        if(ctx.is_local()){
+            ret["quill"] = wksp::quill_file().string();
+            ret["cache"] = wksp::cache().string();
+        }
+        
+        return ret;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     void    dev_wksp_roots(WebHtml&h)
     {
         h.title("Workspace Roots");
@@ -380,6 +405,10 @@ namespace {
         for(auto& fs : wksp::shared_dirs())
             yInfo() << "share directory " << (++n) << ": "  << fs;
 
+
+
+        reg_webpage<api_workspace>("/api/workspace"sv);
+
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage("/js/**", wksp::shared_all("www/js"sv));
@@ -387,7 +416,7 @@ namespace {
         reg_webpage("/favicon.ico", wksp::shared("www/img/yquill.svg"sv));
         
         //  for now....
-        reg_webpage("/.logo", wksp::shared("www/img/yquill.svg"sv));
+        reg_webpage("/logo", wksp::shared("www/img/yquill.svg"sv));
 
         reg_webgroup({
             reg_webpage<dev_wksp_info>("/dev/wksp/info").label("Info"),
@@ -397,6 +426,8 @@ namespace {
         reg_webpage<page_css>("/css");
         reg_webpage<page_background>("/background");
         reg_webpage<page_index>("/");
+
+
         
         reg_webvar<var_abbr>("abbr");
         reg_webvar<var_author>("author");

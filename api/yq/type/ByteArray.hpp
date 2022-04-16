@@ -111,7 +111,7 @@ namespace yq {
         
         bool    operator==(const ByteArray&) const = default;
         
-    private:
+    //private:
         // this is binary data BTW, no interpretation
         Vector<char>        m_data;
     };
