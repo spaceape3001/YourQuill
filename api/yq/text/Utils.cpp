@@ -12,6 +12,7 @@
 #include <yq/algo/Compare.hpp>
 #include <yq/collection/List.hpp>
 #include <yq/collection/Map.hpp>
+#include <yq/collection/MultiMap.hpp>
 #include <yq/collection/Set.hpp>
 
 #include <bitset>
@@ -1834,22 +1835,6 @@ namespace yq {
         
     }
 
-    std::string     web_encode(std::string_view sv)
-    {
-        static const std::bitset<256>   good    = makeSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~");
-        std::string     ret;
-        ret.reserve(sv.size() * 3);
-        for(char c : sv){
-            if(good[c]){
-                ret += c;
-            } else {
-                ret += '%';
-                ret += fmt_hex((uint8_t) c, '0');
-            }
-        }
-        return ret;
-    }
-    
     std::string     web_decode(std::string_view sv)
     {
         std::string     ret;
@@ -1866,6 +1851,30 @@ namespace yq {
                 ret += (char)( (c[1]-'0')*10+(c[2]-'0'));
             // else assumed malformed, march  on
             c += 2;
+        }
+        return ret;
+    }
+
+    StringMultiMap  web_decode(StringViewMultiMap mm)
+    {
+        StringMultiMap  ret;
+        for(auto& i : mm)
+            ret.insert(web_decode(i.first), web_decode(i.second));
+        return ret;
+    }
+    
+    std::string     web_encode(std::string_view sv)
+    {
+        static const std::bitset<256>   good    = makeSet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~");
+        std::string     ret;
+        ret.reserve(sv.size() * 3);
+        for(char c : sv){
+            if(good[c]){
+                ret += c;
+            } else {
+                ret += '%';
+                ret += fmt_hex((uint8_t) c, '0');
+            }
         }
         return ret;
     }

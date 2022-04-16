@@ -324,6 +324,20 @@ namespace yq {
     }
     
 
+    StringViewMultiMap parse_parameters(std::string_view sv)
+    {
+        StringViewMultiMap  ret;
+        if(!sv.empty()){
+            vsplit(sv, '&', [&](std::string_view b){
+                const char* eq  = strnchr(b, '=');
+                if(!eq)
+                    return;
+                ret.insert(std::string_view(b.data(), eq), std::string_view(eq+1, b.end()));
+            });
+        }
+        return ret;
+    }
+
     
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -416,38 +430,48 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    WebAutoClose::WebAutoClose(WebHtml& wh, std::string_view t) : m_html(&wh), m_text(t)
-    {
-    }
-    
-    WebAutoClose::WebAutoClose(WebAutoClose&&mv) : m_html(mv.m_html), m_text(mv.m_text)
-    {
-        mv.m_html   = nullptr;
-    }
-    
-    WebAutoClose& WebAutoClose::operator=(WebAutoClose&&mv)
-    {
-        if(&mv != this){
+        WebAutoClose::WebAutoClose(WebHtml&wh, std::string_view sv) : 
+            m_html(&wh)
+        {
+            m_close = [sv](WebHtml&h) {
+                h << sv;
+            };
+        }
+        
+        WebAutoClose::WebAutoClose(WebHtml& wh, CloseHandler onClose) : m_html(&wh), m_close(onClose)
+        {
+        }
+        
+        WebAutoClose::WebAutoClose(WebAutoClose&&mv) : m_html(mv.m_html), m_close(std::move(mv.m_close))
+        {
+            mv.m_html   = nullptr;
+        }
+        
+        WebAutoClose& WebAutoClose::operator=(WebAutoClose&&mv)
+        {
+            if(&mv != this){
+                close();
+                std::swap(m_html, mv.m_html);
+                m_close         = std::move(mv.m_close);
+            }
+            return *this;
+        }
+        
+        WebAutoClose::~WebAutoClose()
+        {
             close();
-            m_text          = mv.m_text;
-            m_html          = mv.m_html;
-            mv.m_html       = nullptr;
         }
-        return *this;
-    }
-    
-    WebAutoClose::~WebAutoClose()
-    {
-        close();
-    }
-    
-    void    WebAutoClose::close()
-    {
-        if(m_html){
-            (*m_html) << m_text;
-            m_html  = nullptr;
+        
+        void    WebAutoClose::close()
+        {
+            if(m_html){
+                if(m_close)
+                    m_close(*m_html);
+                m_html  = nullptr;
+            }
         }
-    }
+
+
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -459,17 +483,18 @@ namespace yq {
         WebContext::~WebContext()
         {
         }
-
-        StringMultiMap          WebContext::decode_query()
+        
+        //! Decodes post parameters
+        StringViewMultiMap          WebContext::decode_post()
         {
-            StringMultiMap  ret;
-            vsplit(url.query, '&', [&](std::string_view b){
-                const char* eq  = strnchr(b, '=');
-                if(!eq)
-                    return;
-                ret.insert(std::string(b.data(), eq), std::string(eq+1, b.end()));
-            });
-            return ret;
+            if((rx_content_type != ContentType()) && (rx_content_type != ContentType::form))
+                return StringViewMultiMap();
+            return parse_parameters(rx_body);
+        }
+
+        StringViewMultiMap          WebContext::decode_query()
+        {
+            return parse_parameters(url.query);
         }
 
         std::string         WebContext::find_query(std::string_view k) const
@@ -517,47 +542,244 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    namespace {
-        ByteArray&      byteArrayFor(WebContext& ctx)
-        {
-            if(!ctx.tx_content)
-                ctx.tx_content  = std::make_shared<ByteArray>();
-            return *(ctx.tx_content);
+        namespace {
+            ByteArray&      byteArrayFor(WebContext& ctx)
+            {
+                if(!ctx.tx_content)
+                    ctx.tx_content  = std::make_shared<ByteArray>();
+                return *(ctx.tx_content);
+            }
         }
-    }
 
-    WebHtml::WebHtml(WebContext&ctx, const std::string_view& _title) : m_context(ctx)
-    {
-        ctx.var_body.reserve(65536);
-        ctx.var_title       = _title;
-    }
-    
-    WebHtml::~WebHtml()
-    {
-        run_me();
-    }
+        WebHtml::WebHtml(WebContext&ctx, const std::string_view& _title) : m_context(ctx)
+        {
+            ctx.var_body.reserve(65536);
+            if(_title.empty()){
+                ctx.var_title.reserve(512);
+            } else {
+                ctx.var_title       = _title;
+            }
+        }
+        
+        WebHtml::~WebHtml()
+        {
+            run_me();
+        }
 
-    void    WebHtml::run_me()
-    {
-        auto& ba = byteArrayFor(m_context);
-        ba.reserve(8192+m_context.var_body.size());   // an estimate....
-        auto temp   = web::html_template();
-        m_context.tx_content_type   = ContentType::html;
-        stream::Bytes   out(ba);
-        temp -> execute(out, m_context);
-    }
+        void    WebHtml::run_me()
+        {
+            auto& ba = byteArrayFor(m_context);
+            ba.reserve(8192+m_context.var_body.size());   // an estimate....
+            auto temp   = web::html_template();
+            m_context.tx_content_type   = ContentType::html;
+            stream::Bytes   out(ba);
+            temp -> execute(out, m_context);
+        }
 
-    void WebHtml::title(const std::string_view& _title)
-    {
-        m_context.var_title     = _title;
-    }
+        void WebHtml::title(const std::string_view& _title)
+        {
+            m_context.var_title     = _title;
+        }
 
-    bool WebHtml::write(const char* buf, size_t cb) 
-    {
-        m_context.var_body.append(buf, cb);
-        return true;
-    }
-    
+        bool WebHtml::write(const char* buf, size_t cb) 
+        {
+            switch(m_target){
+            case BODY:
+                m_context.var_body.append(buf, cb);
+                break;
+            case TITLE:
+                m_context.var_title.append(buf, cb);
+                break;
+            }
+            return true;
+        }
+        
+        
+        //  ------------------------------
+
+        WebAutoClose              WebHtml::b()
+        {
+            *this << "<b>"sv;
+            return WebAutoClose(*this, "</b>"sv);
+        }
+        
+        WebAutoClose              WebHtml::bold()
+        {
+            *this << "<b>"sv;
+            return WebAutoClose(*this, "</b>"sv);
+        }
+        
+        WebAutoClose              WebHtml::bullets()
+        {
+            *this << "<ul>"sv;
+            return WebAutoClose(*this, "</ul>"sv);
+        }
+        
+        WebAutoClose              WebHtml::h1()
+        {
+            *this << "<h1>"sv;
+            return WebAutoClose(*this, "</h1>"sv);
+        }
+        
+        void                WebHtml::h1(std::string_view s)
+        {
+            auto wt = h1();
+            html_escape_write(*this, s);
+        }
+        
+        WebAutoClose              WebHtml::h2()
+        {
+            *this << "<h2>"sv;
+            return WebAutoClose(*this, "</h2>"sv);
+        }
+        
+        void                WebHtml::h2(std::string_view s)
+        {
+            auto wt = h2();
+            html_escape_write(*this, s);
+        }
+        
+        WebAutoClose              WebHtml::h3()
+        {
+            *this << "<h3>"sv;
+            return WebAutoClose(*this, "</h3>"sv);
+        }
+
+        void                WebHtml::h3(std::string_view s)
+        {
+            auto wt = h3();
+            html_escape_write(*this, s);
+        }
+       
+        WebAutoClose              WebHtml::h4()
+        {
+            *this << "<h4>"sv;
+            return WebAutoClose(*this, "</h4>"sv);
+        }
+
+        void                WebHtml::h4(std::string_view s)
+        {
+            auto wt = h4();
+            html_escape_write(*this, s);
+        }
+        
+        WebAutoClose              WebHtml::h5()
+        {
+            *this << "<h5>"sv;
+            return WebAutoClose(*this, "</h5>"sv);
+        }
+        
+        void                WebHtml::h5(std::string_view s)
+        {
+            auto wt = h5();
+            html_escape_write(*this, s);
+        }
+        
+        WebAutoClose              WebHtml::h6()
+        {
+            *this << "<h6>"sv;
+            return WebAutoClose(*this, "</h6>"sv);
+        }
+        
+        void                WebHtml::h6(std::string_view s)
+        {
+            auto wt = h6();
+            html_escape_write(*this, s);
+        }
+        
+        WebAutoClose              WebHtml::i()
+        {
+            *this << "<i>"sv;
+            return WebAutoClose(*this, "</i>"sv);
+        }
+        
+        WebAutoClose              WebHtml::italic()
+        {
+            *this << "<i>"sv;
+            return WebAutoClose(*this, "</i>"sv);
+        }
+        
+        WebAutoClose        WebHtml::kvrow(std::string_view key, const UrlView& url)
+        {
+            *this << "<tr><th align=\"left\">";
+            bool    a   = !url.empty();
+            if(a)
+                *this << "<a href=\"" << url << "\">";
+            html_escape_write(*this, key);
+            if(a)
+                *this << "</a>";
+            *this << "</th><td>";
+            return WebAutoClose(*this, "</td></tr>\n"sv);
+        }
+        
+        WebAutoClose              WebHtml::li()
+        {
+            *this << "<li>"sv;
+            return WebAutoClose(*this, "</li>\n"sv);
+        }
+        
+        WebAutoClose        WebHtml::link(const UrlView& url)
+        {
+            *this << "<a href=\"" << url << "\">";
+            return WebAutoClose(*this, "</a>"sv);
+        }
+        
+        WebAutoClose              WebHtml::numbers()
+        {
+            *this << "<ol>"sv;
+            return WebAutoClose(*this, "</ol>"sv);
+        }
+        
+        WebAutoClose              WebHtml::p()
+        {
+            *this << "<p>"sv;
+            return WebAutoClose(*this, "</p>"sv);
+        }
+        
+        WebAutoClose              WebHtml::paragraph()
+        {
+            *this << "<p>"sv;
+            return WebAutoClose(*this, "</p>"sv);
+        }
+        
+        WebAutoClose              WebHtml::pre()
+        {
+            *this << "<pre>"sv;
+            return WebAutoClose(*this, "</pre>"sv);
+        }
+        
+        WebAutoClose        WebHtml::table(std::string_view cls)
+        {
+            if(cls.empty()){
+                *this << "<table>";
+            } else {
+                *this << "<table class=\"" << cls << "\">";
+            }
+            return WebAutoClose(*this, "</table>\n"sv);
+        }
+
+        WebAutoClose  WebHtml::title()
+        {
+            Target  oldTarget   = m_target;
+            m_target            = TITLE;
+            return WebAutoClose(*this, [oldTarget](WebHtml& h){
+                h.m_target  = oldTarget;
+            });
+        }
+        
+        WebAutoClose              WebHtml::u()
+        {
+            *this << "<u>"sv;
+            return WebAutoClose(*this, "</u>"sv);
+        }
+        
+        WebAutoClose              WebHtml::underline()
+        {
+            *this << "<u>"sv;
+            return WebAutoClose(*this, "</u>"sv);
+        }
+        
+
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
@@ -825,206 +1047,6 @@ namespace yq {
             WebGroup*   group   = new WebGroup;
             for(WebPage* p : gdef)
                 group -> add(p);
-        }
-    }
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-#if 0
-
-
-        Ref<WebSession>  WebSession::create()
-        {
-            Ref<WebSession>     ws  = new WebSession;
-
-            for(;;){
-                ws->m_ssid      = randomWebString(32);
-                WLOCK
-                auto itr = _r.sessions.insert({ ws->ssid(), ws });
-                if(itr.second)
-                    break;
-            }
-            
-            return ws;
-        }
-        
-
-        // Tries to find the specified session (or empty if not)(
-        Ref<WebSession>     WebSession::find(std::string_view ssid)
-        {
-            Ref<WebSession>    ret;
-            {
-                LLOCK
-                ret = _r.sessions.get(ssid);
-            }
-            return ret;
-        }
-
-
-        size_t             WebSession::purge(time_t all_before)
-        {
-            std::vector<Ref<WebSession>> to_erase;
-            size_t      old_size = 0;
-            size_t      new_size = 0;
-            
-            {
-                WLOCK
-                old_size    = _r.sessions.size();
-                to_erase.reserve(old_size);
-                for(auto i = _r.sessions.begin(), last = _r.sessions.end(); i != last; ){
-                    if(!i->second){
-                        i   = _r.sessions.erase(i);
-                    } else if(i->second->m_accessed < all_before){
-                        to_erase.push_back(std::move(i->second));
-                        i   = _r.sessions.erase(i);
-                    } else
-                        ++i;
-                }
-                new_size    = _r.sessions.size();
-            }
-            
-            return old_size - new_size;
-        }
-
-
-        
-
-    //  ----------------------------------------------------------------------------------------------------------------
-        #define WS_LOCK \
-            tbb::spin_rw_mutex::scoped_lock _lock(m_mutex, false);
-        #define WS_WLOCK \
-            tbb::spin_rw_mutex::scoped_lock _lock(m_mutex, true);
-        
-        
-        WebSession::WebSession()
-        {
-            time(&m_created);
-            _remagic();
-            m_magicked  = m_created;
-        }
-        
-        WebSession::~WebSession()
-        {
-        }
-
-        void            WebSession::_remagic()
-        {
-            m_oldMagic  = std::move(m_magic);
-            m_magic     = randomWebString(256);
-        }
-        
-        
-        //  -------------------
-        
-        bool            WebSession::auto_edit() const
-        {
-            WS_LOCK
-            return m_autoEdit;
-        }
-        
-        unsigned int    WebSession::columns() const
-        {
-            WS_LOCK
-            return m_columns;
-        }
-        
-        const Root*     WebSession::def_root() const
-        {
-            WS_LOCK
-            return m_defRoot;
-        }
-        
-        SizeDesc        WebSession::icon_size() const
-        {
-            WS_LOCK
-            return m_iconSize;
-        }
-
-        bool            WebSession::inspect_submit() const
-        {
-            WS_LOCK
-            return m_inspectSubmit;
-        }
-
-        time_t          WebSession::last_access() const
-        {
-            WS_LOCK
-            return m_accessed;
-        }
-        
-        bool            WebSession::logged_in() const
-        {
-            WS_LOCK
-            return m_loggedIn;
-        }
-
-        std::string     WebSession::magic() const
-        {
-            WS_LOCK
-            return m_magic;
-        }
-        
-        time_t          WebSession::magicked() const
-        {
-            WS_LOCK
-            return m_magicked;
-        }
-        
-        std::string_view  WebSession::old_magic() const
-        {
-            WS_LOCK
-            return m_oldMagic;
-        }
-        
-
-        uint64_t        WebSession::user_id() const
-        {
-            WS_LOCK
-            return m_userId;
-        }
-
-        std::string     WebSession::username() const
-        {
-            WS_LOCK
-            return m_username;
-        }
-        
-#endif
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    WebTag::WebTag(WebHtml& wh, std::string_view t) : m_html(&wh), m_tag(t)
-    {
-        wh << '<' << t << '>';
-    }
-    
-    WebTag::WebTag(WebTag&&mv) : m_html(mv.m_html), m_tag(mv.m_tag)
-    {
-        mv.m_html   = nullptr;
-    }
-    
-    WebTag& WebTag::operator=(WebTag&&mv)
-    {
-        if(&mv != this){
-            close();
-            m_html          = mv.m_html;
-            mv.m_html       = nullptr;
-        }
-        return *this;
-    }
-    
-    WebTag::~WebTag()
-    {
-        close();
-    }
-    
-    void    WebTag::close()
-    {
-        if(m_html){
-            (*m_html) << "</" << m_tag << '>';
-            m_html  = nullptr;
         }
     }
 
@@ -1314,108 +1336,6 @@ namespace yq {
         });
     }
     
-    namespace html {
-        WebTag   bold(WebHtml& wh)
-        {
-            return WebTag(wh, "b");
-        }
-
-        WebTag  bullets(WebHtml&wh)
-        {
-            return WebTag(wh, "ul");
-        }
-    
-        WebTag   h1(WebHtml& wh)
-        {
-            return WebTag(wh, "h1"sv);
-        }
-
-        WebTag   h2(WebHtml& wh)
-        {
-            return WebTag(wh, "h2"sv);
-        }
-        
-        WebTag   h3(WebHtml& wh)
-        {
-            return WebTag(wh, "h3"sv);
-        }
-
-        WebTag   h4(WebHtml& wh)
-        {
-            return WebTag(wh, "h4"sv);
-        }
-
-        WebTag   h5(WebHtml& wh)
-        {
-            return WebTag(wh, "h5"sv);
-        }
-
-        WebTag   h6(WebHtml& wh)
-        {
-            return WebTag(wh, "h6"sv);
-        }
-
-        WebTag   italic(WebHtml& wh)
-        {
-            return WebTag(wh, "i");
-        }
-
-        WebAutoClose   kvrow(WebHtml&wh, std::string_view key, const UrlView& url)
-        {
-            wh << "<tr><th align=\"left\">";
-            bool    a   = !url.empty();
-            if(a)
-                wh << "<a href=\"" << url << "\">";
-            html_escape_write(wh, key);
-            if(a)
-                wh << "</a>";
-            wh << "</th><td>";
-            return WebAutoClose(wh, "</td></tr>\n");
-        }
-
-        WebTag  li(WebHtml& wh)
-        {
-            return WebTag(wh, "li");
-        }
-
-        WebAutoClose  link(WebHtml&wh, const UrlView& url)
-        {
-            wh << "<a href=\"" << url << "\">";
-            return WebAutoClose(wh, "</a>");
-        }
-
-        WebTag  numbers(WebHtml&wh)
-        {
-            return WebTag(wh, "ol");
-        }
-
-        WebTag   paragraph(WebHtml& wh)
-        {
-            return WebTag(wh, "p"sv);
-        }
-        
-        WebTag   pre(WebHtml& wh)
-        {
-            return WebTag(wh, "pre");
-        }
-        
-        WebAutoClose    table(WebHtml& wh, std::string_view cls)
-        {
-            if(cls.empty()){
-                wh << "<table>";
-            } else {
-                wh << "<table class=\"" << cls << "\">";
-            }
-            return WebAutoClose(wh, "</table>\n");
-        }
-
-        WebTag   underline(WebHtml& wh)
-        {
-            return WebTag(wh, "u");
-        }
-    }
-
-
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

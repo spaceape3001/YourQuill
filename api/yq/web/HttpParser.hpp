@@ -10,6 +10,7 @@ namespace yq {
         bool    operator==(const MethodUriVersion&) const = default;
     };
 
+    StringViewMultiMap      parse_parameters(std::string_view);
     MethodUriVersion        parse_method_uri(std::string_view);
 
     KVView                  parse_header_line(std::string_view);

@@ -721,8 +721,6 @@ public:
             
             m_current -> cookie_ssid  = std::string_view( s.data()+i+1, s.data()+j);
             m_current -> cookie_magic = s.substr(j+1);
-            
-            yInfo() << "Got cookie " << m_current -> cookie_ssid;
         });
     }
     

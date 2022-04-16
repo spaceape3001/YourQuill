@@ -134,6 +134,7 @@ namespace yq {
         bmp,
         css,
         csv,
+        form,
         gif,
         html,
         javascript,

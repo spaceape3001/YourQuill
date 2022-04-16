@@ -14,16 +14,14 @@ using namespace yq;
 namespace {
     void page_tables(WebHtml& out)
     {
-        auto list = html::numbers(out);
-        for(auto& s : wksp::db().tables()){
-            out << "<li><a href=\"table?table=" << s << "\">" << s << "</a>\n";
-        }
+        auto list = out.numbers();
+        for(auto& s : wksp::db().tables())
+            out.li() << "<a href=\"table?table=" << web_encode(s) << "\">" << s << "</a>\n";
     }
 
     void page_table(WebHtml& out)
     {
-        StringMultiMap  args    = out.context().decode_query();
-        std::string table  = args.first("table");
+        std::string table = out.context().find_query("table");
         if(table.empty())
             throw HttpStatus::NotAcceptable;
         
@@ -36,12 +34,11 @@ namespace {
         if(!sql.valid())
             throw HttpStatus::InternalError;
 
-        std::string title   = "Sql Table: " + table;
-        out.title(table);
+        out.title() << "Sql Table: " << table;
         
 //        bool    first   = false;
         
-        auto _table = html::table(out);
+        auto _table = out.table();
     
     }
 }

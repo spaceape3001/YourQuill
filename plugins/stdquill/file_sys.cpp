@@ -127,7 +127,7 @@ WebHtml&    operator<<(WebHtml& h, const DevID<const Root*>&v)
 
 void    dev_table(WebHtml& h, const std::vector<Directory>& dirs)
 {
-    auto _tab = html::table(h);
+    auto _tab = h.table();
         h << "<tr><th>ID</th><th>Fragments</th><th>Children</th><th>Path</th></tr>\n";
     for(Directory d : dirs){
         h << "<tr><td>" << dev_id(d) << "</td><td>" 
@@ -137,7 +137,7 @@ void    dev_table(WebHtml& h, const std::vector<Directory>& dirs)
 
 void    dev_table(WebHtml& h, const std::vector<Document>& documents)
 {
-    auto _tab = html::table(h);
+    auto _tab = h.table();
     h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
     for(Document a : documents){
         auto i = cdb::info(a);
@@ -148,7 +148,7 @@ void    dev_table(WebHtml& h, const std::vector<Document>& documents)
 
 void    dev_table(WebHtml& h, const std::vector<Fragment>& fragments)
 {
-    auto _tab = html::table(h);
+    auto _tab = h.table();
     h << "<tr><th>ID</th><th>Name</th><th>Size</th><th>Path</th>\n";
     for(Fragment f : fragments){
         auto i = cdb::info(f);
@@ -159,7 +159,7 @@ void    dev_table(WebHtml& h, const std::vector<Fragment>& fragments)
 
 void    dev_table(WebHtml& h, const std::vector<Folder>&folders)
 {
-    auto _tab = html::table(h);
+    auto _tab = h.table();
     h << "<tr><th><ID></th><th>key</th><th>Name</th><th>Documents</th><th>Children</th><th>Brief</th></tr>\n";
     for(Folder f : folders){
         auto i = cdb::info(f);
@@ -171,7 +171,7 @@ void    dev_table(WebHtml& h, const std::vector<Folder>&folders)
 
 void    dev_table(WebHtml&h, const std::vector<const Root*>& roots)
 {
-    auto _tab = html::table(h);
+    auto _tab = h.table();
     h << "<tr><th><ID></th><th>Key</th><th>Name</th><th>Path</th></tr>\n";
     for(const Root* r : roots){
         if(!r)
@@ -200,27 +200,26 @@ namespace {
     
     void    page_dev_fragment(WebHtml&h)
     {
-        StringMultiMap  args    = h.context().decode_query();
-        Fragment x_fragment{to_uint64(args.first("id"))};
+        Fragment    x_fragment = arg::fragment(h);
         if(!x_fragment)
             throw HttpStatus::NotAcceptable;
 
         auto i = cdb::info(x_fragment);
-        h.title("Fragment (" + i.path.string() + ")");
+        h.title() << "Fragment (" << i.path.string() << ")";
 
-        auto _t = html::table(h);
-        html::kvrow(h, "ID") << x_fragment.id;
-        html::kvrow(h, "Document") << dev(i.document);
-        html::kvrow(h, "Directory") << dev(i.directory);
-        html::kvrow(h, "Folder") << dev(i.folder);
-        html::kvrow(h, "Hidden") << i.hidden;
-        html::kvrow(h, "Modified") << i.modified << " ns.";
-        html::kvrow(h, "Name") << i.name;
-        html::kvrow(h, "Path") << i.path;
-        html::kvrow(h, "Removed") << i.removed;
-        html::kvrow(h, "Rescan") << i.rescan;
-        html::kvrow(h, "Root") << dev(i.root);
-        html::kvrow(h, "Size") << i.size;
+        auto _t = h.table();
+        h.kvrow("ID") << x_fragment.id;
+        h.kvrow("Document") << dev(i.document);
+        h.kvrow("Directory") << dev(i.directory);
+        h.kvrow("Folder") << dev(i.folder);
+        h.kvrow("Hidden") << i.hidden;
+        h.kvrow("Modified") << i.modified << " ns.";
+        h.kvrow("Name") << i.name;
+        h.kvrow("Path") << i.path;
+        h.kvrow("Removed") << i.removed;
+        h.kvrow("Rescan") << i.rescan;
+        h.kvrow("Root") << dev(i.root);
+        h.kvrow("Size") << i.size;
     }
 
     void    page_dev_frags(WebHtml& h)
@@ -241,20 +240,17 @@ namespace {
         if(!rt)
             rt          = wksp::root(0);
         
-        std::string t   = "Root (";
-        t += rt->name;
-        t += ')';
-        h.title(t);
+        h.title() << "Root (" << rt->name << ")";
         
-        auto tab   = html::table(h);
-        html::kvrow(h, "ID") << rt->id;
-        html::kvrow(h, "Depth") << rt -> depth;
-        html::kvrow(h, "Key") << rt -> key;
-        html::kvrow(h, "Name") << rt -> name;
-        html::kvrow(h, "Path") << rt -> path;
-        html::kvrow(h, "Template") << rt -> is_template;
-        html::kvrow(h, "Total Directories") << cdb::all_directories_count(rt);
-        html::kvrow(h, "Total Fragments") << cdb::all_fragments_count(rt);
+        auto tab   = h.table();
+        h.kvrow("ID") << rt->id;
+        h.kvrow("Depth") << rt -> depth;
+        h.kvrow("Key") << rt -> key;
+        h.kvrow("Name") << rt -> name;
+        h.kvrow("Path") << rt -> path;
+        h.kvrow("Template") << rt -> is_template;
+        h.kvrow("Total Directories") << cdb::all_directories_count(rt);
+        h.kvrow("Total Fragments") << cdb::all_fragments_count(rt);
     }
     
     
@@ -264,11 +260,7 @@ namespace {
         if(!rt)
             rt          = wksp::root(0);
 
-        std::string t   = "Root (";
-        t += rt->name;
-        t += "): All Directories";
-        h.title(t);
-        
+        h.title() << "Root (" << rt->name << "): All Directories";
         dev_table(h, cdb::all_directories(rt, Sorted::YES));
     }
     
@@ -278,11 +270,7 @@ namespace {
         if(!rt)
             rt          = wksp::root(0);
             
-        std::string t   = "Root (";
-        t += rt->name;
-        t += "): All Fragments";
-        h.title(t);
-        
+        h.title() << "Root (" << rt->name << "): All Fragments";
         dev_table(h, cdb::all_fragments(rt, Sorted::YES));
     }
 
@@ -291,11 +279,8 @@ namespace {
         const Root* rt   = arg::root(h);
         if(!rt)
             rt          = wksp::root(0);
-
-        std::string t   = "Root (";
-        t += rt->name;
-        t += "): Directories";
-        h.title(t);
+            
+        h.title() << "Root (" << rt->name << "): Directories";
         
         dev_table(h, cdb::directories(rt, Sorted::YES));
     }
@@ -306,11 +291,8 @@ namespace {
         if(!rt)
             rt          = wksp::root(0);
 
-        std::string t   = "Root (";
-        t += rt->name;
-        t += "): Fragments";
-        h.title(t);
-        
+        h.title() << "Root (" << rt->name << "): Fragments";
+
         dev_table(h, cdb::fragments(rt, Sorted::YES));
     }
  

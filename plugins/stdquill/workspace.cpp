@@ -315,21 +315,21 @@ namespace {
 
     void  dev_wksp_info(WebHtml& h)
     {
-        h.title("Workspace '"s + copy(wksp::name()) + "'"s);
+        h.title() << "Workspace '" << wksp::name() << "'";
         
-        auto t = html::table(h);
-        html::kvrow(h, "Name") << wksp::name();
-        html::kvrow(h, "Author") << wksp::author();
-        html::kvrow(h, "Abbreviation") << wksp::abbreviation();
-        html::kvrow(h, "Cache") << wksp::cache();
-        //html::kvrow(h, "Config") << dev(cdb::config_folder());
-        html::kvrow(h, "Copyright") << wksp::copyright().text;
-        html::kvrow(h, "Key") << wksp::quill_key();
-        html::kvrow(h, "Host") << wksp::host();
-        html::kvrow(h, "Port") << wksp::port();
-        html::kvrow(h, "Read Timeout") << wksp::read_timeout();
-        html::kvrow(h, "Start") << wksp::start();
-        html::kvrow(h, "Templates") << join(wksp::templates(), ", ");
+        auto t = h.table();
+        h.kvrow("Name") << wksp::name();
+        h.kvrow("Author") << wksp::author();
+        h.kvrow("Abbreviation") << wksp::abbreviation();
+        h.kvrow("Cache") << wksp::cache();
+        //h.kvrow("Config") << dev(cdb::config_folder());
+        h.kvrow("Copyright") << wksp::copyright().text;
+        h.kvrow("Key") << wksp::quill_key();
+        h.kvrow("Host") << wksp::host();
+        h.kvrow("Port") << wksp::port();
+        h.kvrow("Read Timeout") << wksp::read_timeout();
+        h.kvrow("Start") << wksp::start();
+        h.kvrow("Templates") << join(wksp::templates(), ", ");
     }
      
     

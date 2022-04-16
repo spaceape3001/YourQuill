@@ -211,6 +211,7 @@ namespace yq {
                 { ContentType::bmp,             "image/bmp"                 },
                 { ContentType::css,             "text/css"                  },
                 { ContentType::csv,             "text/csv"                  },
+                { ContentType::form,            "application/x-www-form-urlencoded" },
                 { ContentType::gif,             "text/gif"                  },
                 { ContentType::html,            "text/HTML"                 },
                 { ContentType::javascript,      "application/javascript"    },

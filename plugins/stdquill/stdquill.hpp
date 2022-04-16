@@ -19,7 +19,6 @@
 #include <yq/tag/Tag.hpp>
 #include <yq/text/Utils.hpp>
 #include <yq/type/Guarded.hpp>
-#include <yq/web/HttpDataStream.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>

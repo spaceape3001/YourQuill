@@ -170,6 +170,7 @@ set(yq_sources
     ./type/type_unity.cpp
     ./type/ByteArray.hpp
     ./type/Enum.hpp
+    ./type/FixedBuffer.hpp
     ./type/Flag.hpp
     ./type/IntRange.hpp
     ./type/Ref.hpp
@@ -179,7 +180,6 @@ set(yq_sources
     ./type/Variant.cpp
 
     ./web/web_unity.cpp
-    ./web/HttpData.hpp
     ./web/HttpParser.hpp
     ./web/WebAdapters.hpp
     ./web/WebHtml.hpp

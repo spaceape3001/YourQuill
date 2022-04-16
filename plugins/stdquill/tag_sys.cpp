@@ -41,7 +41,7 @@ WebHtml&    operator<<(WebHtml&h, const DevID<Tag>&v)
 
 void    dev_table(WebHtml& h, const std::vector<Tag>&tags)
 {
-    auto ta = html::table(h);
+    auto ta = h.table();
     h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Doc</th><th>Leaf</th><th>Brief</th></tr>\n";
     for(Tag t : tags){
         auto i  = cdb::info(t);
@@ -61,15 +61,15 @@ namespace {
             throw hNotFound;
         auto i = cdb::info(x);
         
-        out.title("Tag \"" + i.name + "\" (" + i.key + ")");
-        auto ta = html::table(out);
-        html::kvrow(out, "ID") << x.id;
-        html::kvrow(out, "Name") << i.name;
-        html::kvrow(out, "Key") << i.key;
-        html::kvrow(out, "Brief") << i.brief;
-        html::kvrow(out, "Document") << dev(i.doc);
-        html::kvrow(out, "Leaf"); //  << dev(cdb::leaf(x_tag));
-        html::kvrow(out, "Image");
+        out.title() << "Tag \"" << i.name << "\" (" << i.key << ")";
+        auto ta = out.table();
+        out.kvrow("ID") << x.id;
+        out.kvrow("Name") << i.name;
+        out.kvrow("Key") << i.key;
+        out.kvrow("Brief") << i.brief;
+        out.kvrow("Document") << dev(i.doc);
+        out.kvrow("Leaf"); //  << dev(cdb::leaf(x_tag));
+        out.kvrow("Image");
     }
 
     void    page_dev_tags(WebHtml& out)

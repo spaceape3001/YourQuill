@@ -17,6 +17,8 @@ namespace yq {
     class Stream;
     class ByteArray;
     
+    class WebAutoClose;
+    
     /*! \brief Web Title
     
         Detects a "web-title" syntax in the document, denoted by the start with a "#!" syntax.  
@@ -28,7 +30,7 @@ namespace yq {
 
     class WebHtml : public Stream {
     public:
-    
+
         typedef void    (*FNGetter)(Stream&, WebContext&);
     
         static void     set_template(const std::filesystem::path&);
@@ -40,14 +42,52 @@ namespace yq {
         bool write(const char* buf, size_t cb) override;
         bool is_open() const override { return true; }
         
-        void        title(const std::string_view& _title);
+        void      title(const std::string_view& _title);
         
         WebContext&         context() { return m_context; }
         const WebContext&   context() const { return m_context; }
         
-        void                run_me();
+        void      run_me();
+        
+        //  HTML helpers (will replace the below...)
+        WebAutoClose  b();
+        WebAutoClose  bold();
+        WebAutoClose  bullets();
+        WebAutoClose  h1();
+        WebAutoClose  h2();
+        WebAutoClose  h3();
+        WebAutoClose  h4();
+        WebAutoClose  h5();
+        WebAutoClose  h6();
+ 
+        void      h1(std::string_view);
+        void      h2(std::string_view);
+        void      h3(std::string_view);
+        void      h4(std::string_view);
+        void      h5(std::string_view);
+        void      h6(std::string_view);
+ 
+        WebAutoClose  i();
+        WebAutoClose  italic();
+        WebAutoClose  kvrow(std::string_view key, const UrlView& url= UrlView());
+        WebAutoClose  li();
+        WebAutoClose  link(const UrlView& uri);
+        WebAutoClose  numbers();
+        WebAutoClose  p();
+        WebAutoClose  paragraph();
+        WebAutoClose  pre();
+        WebAutoClose  table(std::string_view cls=std::string_view());
+        WebAutoClose  title();
+        WebAutoClose  u();
+        WebAutoClose  underline();
+        
     private:
         WebContext&         m_context;
+        enum Target {
+            BODY,
+            TITLE
+        };
+        Target              m_target     = BODY;
     };
 
     template <typename T>
@@ -60,110 +100,36 @@ namespace yq {
     std::string     html_escape(std::string_view);
     void            html_escape_write(Stream& s, std::string_view);
     
-    class WebTag {
-    public:
-        WebTag(WebHtml&, std::string_view);
-        WebTag(WebTag&&);
-        WebTag& operator=(WebTag&&);
-        ~WebTag();
-        
-        const std::string_view&     tag() { return m_tag; }
-    
-        template <typename T>
-        WebTag&     operator<<(T data)
-        {
-            if(m_html)
-                *m_html << data;
-            return *this;
-        }
-        
-    private:
-        WebTag(const WebTag&) = delete;
-        WebTag& operator=(const WebTag&) = delete;
-    
-        void    close();
-    
-        WebHtml*            m_html;
-        std::string_view    m_tag;
-    };
     
     class WebAutoClose {
     public:
-        WebAutoClose(WebHtml&, std::string_view);
-        WebAutoClose(WebAutoClose&&);
-        WebAutoClose& operator=(WebAutoClose&&);
-        ~WebAutoClose();
     
+        using CloseHandler  = std::function<void(WebHtml&)>;
+
+        WebAutoClose(WebHtml&, std::string_view );
+
+        WebAutoClose(WebHtml&, CloseHandler);
+        WebAutoClose(WebAutoClose&&);
+        WebAutoClose&   operator=(WebAutoClose&&);
+        ~WebAutoClose();
+
         template <typename T>
-        WebAutoClose&     operator<<(T data)
+        WebAutoClose&     operator<<(const T& data)
         {
             if(m_html)
                 *m_html << data;
             return *this;
         }
-
-        const std::string_view&     text() { return m_text; }
+    
+    protected:
+        friend class WebHtml;
+        WebHtml*        m_html  = nullptr;
+        CloseHandler    m_close;
 
     private:
         WebAutoClose(const WebAutoClose&) = delete;
         WebAutoClose& operator=(const WebAutoClose&) = delete;
-    
-        void    close();
-    
-        WebHtml*            m_html;
-        std::string_view    m_text;
+        void                    close();
     };
-
-
-    namespace html {
-        //! Bold whatever comes next
-        WebTag   bold(WebHtml& wh);
-        
-        //! Unordeered list
-        WebTag  bullets(WebHtml&);
-
-        //! Header 1 for whatever comes next
-        WebTag   h1(WebHtml& wh);
-
-        //! Header 2 for whatever comes next
-        WebTag   h2(WebHtml& wh);
-
-        //! Header 3 for whatever comes next
-        WebTag   h3(WebHtml& wh);
-
-        //! Header 4 for whatever comes next
-        WebTag   h4(WebHtml& wh);
-
-        //! Header 5 for whatever comes next
-        WebTag   h5(WebHtml& wh);
-
-        //! Header 6 for whatever comes next
-        WebTag   h6(WebHtml& wh);
-        
-        //! Italic whatever comes next
-        WebTag   italic(WebHtml& wh);
-        
-        
-        //! Used for two-column key/value tables
-        WebAutoClose  kvrow(WebHtml&, std::string_view key, const UrlView& url= UrlView());
-        WebTag  li(WebHtml&);
-        WebAutoClose  link(WebHtml&, const UrlView& uri);
-        
-        //! Numbered (ordered) list
-        WebTag  numbers(WebHtml&);
-        
-        
-        //! Paragraph for whatever comes next
-        WebTag   paragraph(WebHtml& wh);
-        
-        //! Preformatted text for whatever comes next
-        WebTag   pre(WebHtml& wh);
-        
-        //! Table for whatever comes next
-        WebAutoClose    table(WebHtml& wh, std::string_view cls=std::string_view());
-        
-        //! Underline for whatever comes next
-        WebTag   underline(WebHtml& wh);
-    }
     
 }

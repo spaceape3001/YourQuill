@@ -128,10 +128,13 @@ namespace yq {
         //! Version of the request
         VersionSpec                     version;
         
-        
+
+        //! Decodes post parameters
+        StringViewMultiMap              decode_post();
         
         //! Decodes ALL queries
-        StringMultiMap                  decode_query();
+        StringViewMultiMap              decode_query();
+        
         
         //! Decodes the first query parameter found by the given name (ignoring the rest)
         std::string                     find_query(std::string_view) const;
