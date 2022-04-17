@@ -10,6 +10,7 @@
 #include "SqlLite.hpp"
 #include "SqlLogging.hpp"
 #include <yq/text/text_utils.hpp>
+#include <yq/type/ByteArray.hpp>
 #include <sqlite3.h>
 
 namespace yq {
@@ -327,15 +328,22 @@ namespace yq {
         return sqlite3_column_int(m_stmt, c-1) ? true : false;
     }
     
-    std::span<const uint8_t>       SqlQuery::v_bytes(int c) const
+    std::span<const uint8_t>       SqlQuery::v_blob(int c) const
     {
         if(!m_stmt)
             return {};
-        unsigned char*  data = (uint8_t*) sqlite3_column_blob(m_stmt, c-1);
+        const uint8_t*  data = (const uint8_t*) sqlite3_column_blob(m_stmt, c-1);
         size_t          sz  = sqlite3_column_bytes(m_stmt, c-1);
         return std::span<const uint8_t>( data, sz );
     }
     
+    ByteArray           SqlQuery::v_bytes(int c) const
+    {
+        const char*  data = (const char*) sqlite3_column_blob(m_stmt, c-1);
+        size_t          sz  = sqlite3_column_bytes(m_stmt, c-1);
+        return ByteArray( data, sz );
+    }
+
     double              SqlQuery::v_double(int c) const
     {
         if(!m_stmt)

@@ -10,7 +10,6 @@
 #include "fragment_arg.hpp"
 #include "root_arg.hpp"
 
-
 namespace yq {
     namespace arg {
 

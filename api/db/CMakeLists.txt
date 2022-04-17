@@ -1,6 +1,6 @@
 set(db_sources
-    ./_arg.cpp
-    ./_cdb.cpp
+    ./arg.cpp
+    ./cdb.cpp
     ./_file.cpp
     ./_html.cpp
 )

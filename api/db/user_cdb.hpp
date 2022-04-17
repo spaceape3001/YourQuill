@@ -6,10 +6,12 @@
 
 #pragma once
 
+#include "cdb_common.hpp"
 #include "user_file.hpp"
+#include "document.hpp"
+#include "image.hpp"
+
 #include <yq/enum/Sorted.hpp>
-#include <yq/file/Document.hpp>
-#include <yq/image/Image.hpp>
 
 namespace yq {
     struct Fragment;
@@ -29,17 +31,14 @@ namespace yq {
     };
 
 
-    using UserFragDoc       = std::pair<Fragment, User::SharedFile>;
 
     namespace cdb {
-        struct NKI;
-        
         enum {
             SKIP_BIO        = 0x100
         };
-        
+        using UserFragDoc  = std::pair<Fragment, User::SharedFile>;
 
-        std::vector<User>       all_users(Sorted sorted=Sorted());
+        Vector<User>            all_users(Sorted sorted=Sorted());
         size_t                  all_users_count();
         
         bool                    any_users();
@@ -70,8 +69,8 @@ namespace yq {
         
         std::string             name(User);
         
-        std::vector<UserFragDoc> reads(User);
-        std::vector<UserFragDoc> reads(User, class Root*);
+        Vector<UserFragDoc>     reads(User);
+        Vector<UserFragDoc>     reads(User, class Root*);
 
         User                    user(std::string_view);
         User                    user(uint64_t);

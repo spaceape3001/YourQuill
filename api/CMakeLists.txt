@@ -4,6 +4,7 @@
 #   Files should be listed alphabetically
 
 add_subdirectory(yq)
+add_subdirectory(db)
 #add_subdirectory(math)
 #add_subdirectory(srv)
 #add_subdirectory(plot)

@@ -4,36 +4,29 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "user_file.hpp"
-#include "user_cdb.hpp"
-#include <yq/file/file_cdb.hpp>
 
 namespace yq {
-    namespace {
-        inline std::string user_filename(std::string_view k)
-        {
-            return make_filename(k, User::szExtension);
-        }
-    }
-
     namespace cdb {
-    
-
         namespace {
-            std::vector<User>     all_users_sorted()
+            inline std::string user_filename(std::string_view k)
+            {
+                return make_filename(k, User::szExtension);
+            }
+
+            Vector<User>     all_users_sorted()
             {
                 static thread_local SQ    s("SELECT id FROM Users ORDER BY k");
                 return s.vec<User>();
             }
             
-            std::vector<User>     all_users_unsorted()
+            Vector<User>     all_users_unsorted()
             {
                 static thread_local SQ    s("SELECT id FROM Users");
                 return s.vec<User>();
             }
         }
 
-        std::vector<User>       all_users(Sorted sorted)
+        Vector<User>       all_users(Sorted sorted)
         {
             return sorted ? all_users_sorted() : all_users_unsorted();
         }
@@ -56,7 +49,6 @@ namespace yq {
             static thread_local SQ s("SELECT brief FROM Users WHERE id=?");
             return s.str(u.id);
         }
-        
 
         User                    db_user(Document doc, bool* wasCreated)
         {
@@ -223,9 +215,9 @@ namespace yq {
             return s.str(u.id);
         }
 
-        std::vector<UserFragDoc> reads(User u)
+        Vector<UserFragDoc> reads(User u)
         {
-            std::vector<UserFragDoc>  ret;
+            Vector<UserFragDoc>  ret;
             for(Fragment f : fragments(document(u), DataRole::Users)){
                 User::SharedFile  p   = user_doc(f);
                 if(p)
@@ -234,9 +226,9 @@ namespace yq {
             return ret;
         }
         
-        std::vector<UserFragDoc> reads(User u, class Root*rt)
+        Vector<UserFragDoc> reads(User u, class Root*rt)
         {
-            std::vector<UserFragDoc>  ret;
+            Vector<UserFragDoc>  ret;
             for(Fragment f : fragments(document(u), rt)){
                 User::SharedFile  p   = user_doc(f);
                 if(p)

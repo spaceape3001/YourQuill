@@ -4,37 +4,28 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "tag_cdb.hpp"
-#include "tag_file.hpp"
-#include <yq/bit/NKI.hpp>
-#include <yq/file/file_cdb.hpp>
-
 namespace yq {
-
-    namespace {
-        inline std::string tag_filename(std::string_view k)
-        {
-            return make_filename(k, Tag::szExtension);
-        }
-    }
-
-
     namespace cdb {
         namespace {
-            std::vector<Tag>     all_tags_sorted()
+            inline std::string tag_filename(std::string_view k)
+            {
+                return make_filename(k, Tag::szExtension);
+            }
+            
+            Vector<Tag>     all_tags_sorted()
             {
                 static thread_local SQ    s("SELECT id FROM Tags ORDER BY k");
                 return s.vec<Tag>();
             }
             
-            std::vector<Tag>     all_tags_unsorted()
+            Vector<Tag>     all_tags_unsorted()
             {
                 static thread_local SQ    s("SELECT id FROM Tags");
                 return s.vec<Tag>();
             }
         }
 
-        std::vector<Tag>         all_tags(Sorted sorted)
+        Vector<Tag>         all_tags(Sorted sorted)
         {
             return sorted ? all_tags_sorted() : all_tags_unsorted();
         }
@@ -91,17 +82,17 @@ namespace yq {
             return db_tag(db_document(tags_folder(), tfn), wasCreated);
         }
         
-        std::vector<Tag>    db_tags(const string_set_t&all)
+        Vector<Tag>    db_tags(const string_set_t&all)
         {
-            std::vector<Tag>     ret;
+            Vector<Tag>     ret;
             for(const std::string& s:all)
                 ret.push_back(db_tag(s));
             return ret;
         }
         
-        std::vector<Tag>    db_tags(const string_view_set_t&all)
+        Vector<Tag>    db_tags(const string_view_set_t&all)
         {
-            std::vector<Tag>     ret;
+            Vector<Tag>     ret;
             for(const std::string_view& s:all)
                 ret.push_back(db_tag(s));
             return ret;
@@ -240,9 +231,9 @@ namespace yq {
         }
 
         
-        std::vector<TagFragDoc>      reads(Tag t)
+        Vector<TagFragDoc>      reads(Tag t)
         {
-            std::vector<TagFragDoc>  ret;
+            Vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), DataRole::Tags)){
                 Tag::SharedFile  p   = tag_doc(f);
                 if(p)
@@ -251,9 +242,9 @@ namespace yq {
             return ret;
         }
 
-        std::vector<TagFragDoc>    reads(Tag t, class Root* rt)
+        Vector<TagFragDoc>    reads(Tag t, class Root* rt)
         {
-            std::vector<TagFragDoc>  ret;
+            Vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), rt)){
                 Tag::SharedFile  p   = tag_doc(f);
                 if(p)

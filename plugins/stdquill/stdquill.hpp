@@ -6,28 +6,36 @@
 
 #pragma once
 
+#include <db/filesys_cdb.hpp>
+#include <db/root.hpp>
+#include <db/tag.hpp>
+#include <db/user.hpp>
+#include <db/workspace.hpp>
+
+
 #include <yq/app/DelayInit.hpp>
-#include <yq/atom/Atom.hpp>
-#include <yq/atom/Class.hpp>
-#include <yq/atom/Field.hpp>
+//#include <yq/atom/Atom.hpp>
+//#include <yq/atom/Class.hpp>
+//#include <yq/atom/Field.hpp>
 #include <yq/bit/Copyright.hpp>
 #include <yq/enum/SubmitLabel.hpp>
-#include <yq/file/file_cdb.hpp>
-#include <yq/image/Image.hpp>
-#include <yq/leaf/Leaf.hpp>
+//#include <yq/leaf/Leaf.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
-#include <db/tag.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/type/Guarded.hpp>
-#include <db/user.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebTemplate.hpp>
-#include <yq/wksp/Root.hpp>
-#include <yq/wksp/Workspace.hpp>
+
+namespace yq {
+    struct Atom;
+    struct Class;
+    struct Field;
+    struct Leaf;
+}
 
 
 using namespace yq;

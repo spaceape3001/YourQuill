@@ -6,17 +6,15 @@
 
 #pragma once
 
+#include "cdb_common.hpp"
+#include "document.hpp"
+#include "image.hpp"
 #include "tag_file.hpp"
 
 #include <yq/enum/Sorted.hpp>
-#include <yq/file/Document.hpp>
-#include <yq/image/Image.hpp>
 
 namespace yq {
-    struct Fragment;
-    struct Root;
     
-    using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
     struct Tag::Info {
         std::string     brief;
         Document        doc;
@@ -28,9 +26,9 @@ namespace yq {
     };
 
     namespace cdb {
-        struct NKI;
+        using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
  
-        std::vector<Tag>        all_tags(Sorted sorted=Sorted());
+        Vector<Tag>             all_tags(Sorted sorted=Sorted());
         size_t                  all_tags_count();
         
         std::string             brief(Tag);
@@ -38,21 +36,17 @@ namespace yq {
         Tag                     db_tag(Document, bool* wasCreated=nullptr);
         Tag                     db_tag(Fragment, bool* wasCreated=nullptr);
         Tag                     db_tag(std::string_view,  bool* wasCreated=nullptr);
-        std::vector<Tag>        db_tags(string_view_set_t);
-        std::vector<Tag>        db_tags(string_set_t);
-
+        Vector<Tag>             db_tags(string_view_set_t);
+        Vector<Tag>             db_tags(string_set_t);
 
         Document                document(Tag);
 
         void                    erase(Tag);
         bool                    exists(Tag);
-
         bool                    exists_tag(uint64_t);
         Image                   icon(Tag);
         
-        
         Tag::Info               info(Tag, bool autoKeyToName=false);
-        
 
         std::string             key(Tag);
         
@@ -64,7 +58,6 @@ namespace yq {
         
         std::string             name(Tag);
         
-        
         NKI                     nki(Tag, bool autoKeyToName=false);
     
         //! \brief Returns the FIRST tag fragment that qualifies
@@ -72,13 +65,12 @@ namespace yq {
         //!     Will not create a fragment, though (so can return NULL)
         Tag::SharedFile         read(Tag, const Root*);
         
-        std::vector<TagFragDoc> reads(Tag);
-        std::vector<TagFragDoc> reads(Tag, class Root*);
+        Vector<TagFragDoc>      reads(Tag);
+        Vector<TagFragDoc>      reads(Tag, class Root*);
         
         bool                    set_brief(Tag, std::string_view, class Root* rt=nullptr);
         bool                    set_name(Tag, std::string_view, class Root* rt=nullptr);
         bool                    set_notes(Tag, std::string_view, class Root* rt=nullptr);
-        
         
         Tag                     tag(std::string_view);
         Tag                     tag(uint64_t);

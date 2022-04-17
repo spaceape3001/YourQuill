@@ -14,6 +14,7 @@ struct sqlite3_stmt;
 
 namespace yq {
     class SqlLite;
+    class ByteArray;
     
     /*! \brief SQL "Query" class
 
@@ -110,7 +111,9 @@ namespace yq {
         //! \brief Result value as blob
         //! \note COPY this off ASAP if desired to be kept or passed-along
         //! \param[in] col  Parameter/column index, starts at ONE
-        std::span<const uint8_t>  v_bytes(int col) const;
+        std::span<const uint8_t>  v_blob(int col) const;
+        
+        ByteArray           v_bytes(int col) const;
 
         //! \brief Result value as double
         //! \param[in] col  Parameter/column index, starts at ONE

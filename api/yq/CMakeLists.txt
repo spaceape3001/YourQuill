@@ -21,7 +21,6 @@ set(yq_sources
     
     ./preamble.hpp
     
-    ./sql_unity.cpp
 
     ./algo/Compare.hpp
     ./algo/DiffEngine.hpp
@@ -49,7 +48,6 @@ set(yq_sources
     ./bit/Copyright.hpp
     ./bit/KeyValue.cpp
     ./bit/KeyValue.hpp
-    ./bit/NKI.hpp
     ./bit/Policy.hpp
 
     ./c++/c++_unity.cpp
@@ -105,8 +103,6 @@ set(yq_sources
     ./enum/Update.hpp
     ./enum/Vcs.hpp
     
-    ./file/file_cdb.cpp
-    ./file/file_cdb.hpp
     ./file/file_utils.hpp
     ./file/file_unity.cpp
     ./file/file_watch.cpp
@@ -118,15 +114,10 @@ set(yq_sources
     ./file/XmlUtils.hpp
     
     
-    ./image/Image.hpp
-    
     ./ipc/ipc_unity.cpp
     ./ipc/ipcBuffer.hpp
     ./ipc/ipcPackets.hpp
     ./ipc/ipcSocket.hpp
-    
-    ./leaf/leaf_unity.cpp
-    ./leaf/LeafFile.hpp
 
     #./log/LogFile.cpp
     #./log/LogFile.hpp
@@ -173,6 +164,7 @@ set(yq_sources
     ./sql/SqlQuery.ipp
     ./sql/SqlUtils.hpp
     ./sql/SqlUtils.ipp
+    ./sql/sql_unity.cpp
     
     ./srv/srv_unity.cpp
     ./srv/Notifier.hpp
@@ -223,16 +215,6 @@ set(yq_sources
     ./web/WebHtml.hpp
     ./web/WebPage.hpp
     ./web/WebVariable.hpp
-
-    ./wksp/CacheSQ.cpp
-    ./wksp/CacheSQ.hpp
-    ./wksp/QuillData.hpp
-    ./wksp/QuillFile.cpp
-    ./wksp/QuillFile.hpp
-    ./wksp/RootFwd.hpp
-    ./wksp/Root.hpp
-    ./wksp/Workspace.cpp
-    ./wksp/Workspace.hpp
 )
 
 add_library(yq SHARED ${yq_sources})

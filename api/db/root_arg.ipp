@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "root_arg.hpp"
-#include <yq/wksp/Root.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include "root.hpp"
+#include "workspace.hpp"
 
 namespace yq {
     namespace arg {
