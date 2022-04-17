@@ -6,9 +6,11 @@
 
 #pragma once
 
-class NoCopy {
-    NoCopy(const NoCopy&) = delete;
-    NoCopy& operator=(const NoCopy&) = delete;
-protected:
-    NoCopy(){}
-};
+namespace yq {
+    namespace thread {
+        //! Gets the current thread's ID
+        unsigned int id();
+    }
+
+    bool            is_main_thread();
+}

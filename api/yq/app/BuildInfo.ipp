@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include "BuildInfo.hpp"
+
+namespace yq {
+    const char*     build_directory()
+    {
+        return YQ_BUILD_ROOT;
+    }
+
+    const char*     share_directory()
+    {
+        return YQ_SHARE_DIR;
+    }
+}

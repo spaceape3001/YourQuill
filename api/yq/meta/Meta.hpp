@@ -190,6 +190,10 @@ namespace yq {
         void    set_options(options_t v) { m_flags |= v; }
         void    set_name(std::string_view v) { m_name = v; }
         
+        
+        struct Repo;
+        static Repo&                    repo();
+        
     private:
         using TagMap    = Map<std::string_view, Variant, IgCase>;
     

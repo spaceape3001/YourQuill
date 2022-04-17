@@ -7,12 +7,14 @@
 #pragma once
 
 #include <yq/preamble.hpp>
+#include <yq/c++/trait/not_moveable.hpp>
+#include <yq/c++/trait/not_copyable.hpp>
 
 struct sqlite3;
 
 namespace yq {
     
-    class SqlLite {
+    class SqlLite : trait::not_moveable, trait::not_copyable {
     public:
     
         enum {
@@ -54,10 +56,10 @@ namespace yq {
         bool            has_table(std::string_view) const;
     
     private:
-    
-        SqlLite(const SqlLite&) = delete;
-        SqlLite(SqlLite&&) = delete;
-        SqlLite&    operator=(const SqlLite&);
+        
+        static bool         config_sqlite();
+        static int          tables_callback(void* ret, int, char**argv, char**);
+        
     
         std::filesystem::path   m_file;
         mutable sqlite3*        m_database = nullptr;

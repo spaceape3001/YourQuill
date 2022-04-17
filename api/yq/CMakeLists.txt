@@ -21,6 +21,8 @@ set(yq_sources
     
     ./library.cpp
     ./preamble.hpp
+    
+    ./sql_unity.cpp
 
     ./algo/Compare.hpp
     ./algo/DiffEngine.hpp
@@ -28,10 +30,16 @@ set(yq_sources
     ./algo/Random.hpp
     
     ./app/app_unity.cpp
+    ./app/BuildInfo.hpp
+    ./app/BuildInfo.ipp
     ./app/CmdArgs.hpp
+    ./app/CmdArgs.ipp
     ./app/DelayInit.hpp
     ./app/PidFile.hpp
     ./app/Plugins.hpp
+    ./app/Plugins.ipp
+    ./app/ThreadId.hpp
+    ./app/ThreadId.ipp
     
     ./atom/atom_unity.cpp
     ./atom/ClassData.hpp
@@ -42,13 +50,30 @@ set(yq_sources
     ./bit/Copyright.hpp
     ./bit/KeyValue.cpp
     ./bit/KeyValue.hpp
-    # ./bit/NKI.hpp
+    ./bit/NKI.hpp
     ./bit/Policy.hpp
 
     ./c++/c++_unity.cpp
+    ./c++/Concat.hpp
+    ./c++/DbgRel.hpp
     ./c++/NaN.hpp
     ./c++/Safety.hpp
-    ./c++/TypeTraits.hpp
+    
+    ./c++/trait/always_false.hpp
+    ./c++/trait/always_true.hpp
+    ./c++/trait/can_two_add.hpp
+    ./c++/trait/can_two_divide.hpp
+    ./c++/trait/can_two_multiply.hpp
+    ./c++/trait/can_two_subtract.hpp
+    ./c++/trait/has_addition.hpp
+    ./c++/trait/has_equality.hpp
+    ./c++/trait/has_inequality.hpp
+    ./c++/trait/has_less.hpp
+    ./c++/trait/has_subtraction.hpp
+    ./c++/trait/is_template.hpp
+    ./c++/trait/not_copyable.hpp
+    ./c++/trait/not_moveable.hpp
+    ./c++/trait/sink.hpp
 
     ./collection/Array1.hpp
     ./collection/Array2.hpp
@@ -81,13 +106,14 @@ set(yq_sources
     ./enum/Update.hpp
     ./enum/Vcs.hpp
 
+    ./file/file_arg.hpp
     ./file/file_cdb.cpp
+    ./file/file_cdb.hpp
+    ./file/file_utils.hpp
     ./file/file_unity.cpp
     ./file/file_watch.cpp
-    ./file/cdb.hpp
     ./file/AbstractFile.hpp
     ./file/DirWatcher.hpp
-    ./file/FileUtils.hpp
     ./file/StdFile.hpp
     ./file/XmlFile.hpp
     ./file/XmlFwd.hpp
@@ -117,9 +143,14 @@ set(yq_sources
     ./meta/Global.hpp
     ./meta/Init.hpp
     ./meta/Meta.hpp
+    ./meta/MetaRepo.hpp
+    ./meta/MetaRepo.ipp
+    ./meta/MetaWriter.hpp
+    ./meta/MetaWriter.ipp
     ./meta/MethodInfo.hpp
     ./meta/ObjectInfo.hpp
     ./meta/PropertyInfo.hpp
+    ./meta/ReservedIDs.hpp
     ./meta/StdTypes.cpp
     ./meta/TypeInfo.hpp
     
@@ -133,11 +164,17 @@ set(yq_sources
     #./proc/Execute.cpp
     #./proc/Execute.hpp
     
-    ./sql/sql_unity.cpp
+    ./sql/SqlError.hpp
+    ./sql/SqlError.ipp
+    ./sql/SqlLastId.hpp
+    ./sql/SqlLastId.ipp
     ./sql/SqlLite.hpp
+    ./sql/SqlLite.ipp
     ./sql/SqlLogging.hpp
     ./sql/SqlQuery.hpp
-    #./sql/SqlUtils.hpp
+    ./sql/SqlQuery.ipp
+    ./sql/SqlUtils.hpp
+    ./sql/SqlUtils.ipp
     
     ./srv/srv_unity.cpp
     ./srv/Notifier.hpp
@@ -183,9 +220,6 @@ set(yq_sources
     ./user/User.hpp
     ./user/UserData.hpp
     ./user/UserFile.hpp
-    ./user/UserGroup.hpp
-    ./user/UserGroupData.hpp
-    ./user/UserGroupFile.hpp
     ./user/arg.hpp
     ./user/cdb.hpp
     ./user/user_unity.cpp

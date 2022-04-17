@@ -4,10 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "ReservedIDs.hpp"
+
+#include "MetaRepo.ipp"
+#include "MetaWriter.ipp"
+
 #include "Meta.hpp"
 #include "Binder.hpp"
 #include "Global.hpp"
-#include "Internal.hpp"
 #include "MetaObject.hpp"
 #include "ObjectInfo.hpp"
 #include "TypeInfo.hpp"
@@ -46,32 +50,26 @@ namespace yq {
             vec[idx]    = val;
         }
 
-        struct Repo {
-            bool                    openReg     = true;
-            Vector<const Meta*>     all;
-            Vector<const Meta*>     metas;
-            Meta::LUC<ObjectInfo>   objects;
-            Meta::LUC<TypeInfo>     types;
+        //struct Repo {
+            //bool                    openReg     = true;
+            //Vector<const Meta*>     all;
+            //Vector<const Meta*>     metas;
+            //Meta::LUC<ObjectInfo>   objects;
+            //Meta::LUC<TypeInfo>     types;
             
-            Repo()
-            {
-                all.reserve(8192);      // adjust as necessary, performance tradeoff, basically
-                all.resize(M_USER, nullptr);
-            }
-        };
+            //Repo()
+            //{
+                //all.reserve(8192);      // adjust as necessary, performance tradeoff, basically
+                //all.resize(M_USER, nullptr);
+            //}
+        //};
         
-        Repo&   repo()
-        {
-            static Repo*    s_repo  = new Repo;
-            return *s_repo;
-        }
+        //Repo&   repo()
+        //{
+            //static Repo*    s_repo  = new Repo;
+            //return *s_repo;
+        //}
         
-        #if 0
-        bool    is_open()
-        {
-            return repo().openReg;
-        }
-        #endif
         
         std::string_view     str_start(std::string_view z, const char* pat)
         {
@@ -314,53 +312,6 @@ namespace yq {
             if(i != m_tags.end())
                 return i->second;
             return bad;
-        }
-
-        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        Meta::Writer&     Meta::Writer::alias(std::string_view zAlias)
-        {
-            m_meta -> m_aliases << std::string_view(zAlias);
-            return *this;
-        }
-        
-        Meta::Writer&     Meta::Writer::description(std::string_view zDescription)
-        {
-            m_meta -> m_description = std::string_view(zDescription);
-            return *this;
-        }
-        
-        Meta::Writer&     Meta::Writer::label(std::string_view zLabel)
-        {
-            m_meta -> m_label = std::string_view(zLabel);
-            return *this;
-        }
-        
-        Meta::Writer&     Meta::Writer::tag(std::string_view zKey)
-        {
-            assert("Tag already set!" && !m_meta->m_tags.has(zKey));
-            m_meta -> m_tags[zKey] = Variant(true);
-            return *this;
-        }
-        
-        Meta::Writer&     Meta::Writer::tag(std::string_view zKey, Variant&& value)
-        {
-            assert("Tag already set!" && !m_meta->m_tags.has(zKey));
-            m_meta -> m_tags[zKey] = std::move(value);
-            return *this;
-        }
-        
-
-        Meta::Writer&     Meta::Writer::tag(std::string_view zKey, const Variant& value)
-        {
-            assert("Tag already set!" && !m_meta->m_tags.has(zKey));
-            m_meta -> m_tags[zKey] = value;
-            return *this;
-        }
-        
-        Meta::Writer&   Meta::Writer::tls()
-        {
-            m_meta -> m_flags |= TLS;
-            return *this;
         }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////

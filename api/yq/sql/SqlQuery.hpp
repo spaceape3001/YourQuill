@@ -7,6 +7,8 @@
 #pragma once
 
 #include <yq/preamble.hpp>
+#include <yq/c++/trait/not_moveable.hpp>
+#include <yq/c++/trait/not_copyable.hpp>
 
 struct sqlite3_stmt;
 
@@ -19,7 +21,7 @@ namespace yq {
         
         \note COLUMNS & PARAMETERS are 1-based, so they go 1...N
     */
-    class SqlQuery {
+    class SqlQuery : trait::not_moveable, trait::not_copyable {
     public:
         enum Result {
             Error   = -2,
@@ -128,18 +130,11 @@ namespace yq {
         //! \note COPY this off ASAP if desired to be kept or passed-along
         //! \param[in] col  Parameter/column index, starts at ONE
         std::string_view    v_text(int col) const;
-
-
         
         struct AutoFinish;
         AutoFinish  af();
         AutoFinish  autoFinish();
     private:
-    
-        SqlQuery(SqlQuery&&) = delete;
-        SqlQuery&   operator=(SqlQuery&&) = delete;
-        SqlQuery(const SqlQuery&) = delete;
-        SqlQuery&   operator=(const SqlQuery&) = delete;
         SqlLite&                 m_db;
         mutable sqlite3_stmt    *m_stmt = nullptr;
     #ifndef NDEBUG
@@ -147,7 +142,7 @@ namespace yq {
     #endif
     };
 
-    struct SqlQuery::AutoFinish {
+    struct SqlQuery::AutoFinish : trait::not_copyable {
         AutoFinish(){}
         AutoFinish(AutoFinish&&);
         AutoFinish& operator=(AutoFinish&&);
@@ -156,8 +151,6 @@ namespace yq {
         friend class SqlQuery;
         SqlQuery*       q = nullptr;
         AutoFinish(SqlQuery* _q);
-        AutoFinish(const AutoFinish&) = delete;
-        AutoFinish& operator=(const AutoFinish&) = delete;
     };
     
     inline constexpr bool is_good(SqlQuery::Result r)

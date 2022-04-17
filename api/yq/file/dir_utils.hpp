@@ -7,61 +7,13 @@
 #pragma once
 
 #include <yq/preamble.hpp>
-
-#include <iosfwd>
-
+#include <filesystem>
+#include <string_view>
+#include <vector>
 
 namespace yq {
-
-    bool            file_backup(const char*, const char* suffix="bck");
-    ByteArray       file_bytes(const std::filesystem::path&);
-    std::string     file_string(const std::filesystem::path&);
-    bool            file_exists(const char*);
-    bool            file_exists(const std::filesystem::path&);
-    std::string     file_modified(const char*);
-    bool            file_readable(const char*);
-    size_t          file_size(const char*);
-    
-    bool            file_write(const std::filesystem::path&, const char*, size_t);
-    bool            file_write(const std::filesystem::path&, std::string_view);
-    bool            file_write(const std::filesystem::path&, const ByteArray&);
-    bool            file_write(const std::filesystem::path&, const std::vector<char>&);
-
-    struct SizeTimestamp {
-        size_t          size   = 0;
-        uint64_t        time   = 0;
-        uint64_t        nano   = 0;
-        bool            exists = false;
-        
-        SizeTimestamp() : size{}, time{}, nano{}, exists(false) {}
-        SizeTimestamp(size_t s, uint64_t t, uint64_t n) : size(s), time(t), nano(n), exists(true) {}
-        uint64_t        nanoseconds() const { return 1'000'000'000*time + nano; }
-        bool    operator==(const SizeTimestamp&) const = default;
-    };
-
-    /*! \brief Size and time for last modification
-
-        This queries and returns the file size and timestamp to the last update.  Nothing's guaranteed to uint128_t except
-        that it changes once a nanosecond.
-    */
-    SizeTimestamp   file_size_and_timestamp(const std::filesystem::path&);
-    uint128_t       file_timestamp(const char*);
-
     Vector<std::string>  dir_files(const char*);
     Vector<std::string>  dir_directories(const char*);
-
-    /*! \brief Convience function for reading a file into a simple buffer
-
-        \note This will return an empty vector if an error occurs or the file is zero size.
-        \return File contents
-    */
-    //Vector<uint8_t> file_load_all(const char*);
-    //Vector<uint8_t> file_load_all(const std::string&);
-    //Vector<uint8_t> file_load_all(const QString&);
-
-    //Vector<char> file_load_char(const char*);
-    //Vector<char> file_load_char(const std::string&);
-    //Vector<char> file_load_char(const QString&);
 
     //  Make the path (including the specified filename)
     bool            make_path(const std::filesystem::path&, mode_t dirMode=0755);
@@ -90,13 +42,13 @@ namespace yq {
         using   path_vec    = Vector<path>;
         
         //  supposed to find all children with specfieid name
-        path_vec        all_children(const path& dir, const std::string_view& name);
+        path_vec        all_children(const path& dir, std::string_view name);
 
         //  supposed to find all children with specfieid name
-        path_vec        all_children(const std::vector<path>& dir, const std::string_view& name);
+        path_vec        all_children(const std::vector<path>& dir, std::string_view name);
 
-        path            first_child(const path& dir, const std::string_view& name);
-        path            first_child(const std::vector<path>&, const std::string_view& name);
+        path            first_child(const path& dir, std::string_view name);
+        path            first_child(const std::vector<path>&, std::string_view name);
         
         //  Finds all chlidren (not hidden)
         Vector<std::string>  subdirectory_names(const path&, unsigned options=0) ;
@@ -110,8 +62,8 @@ namespace yq {
         path_vec        subdirectories(const path&, unsigned options=0);
         path_vec        subdirectories(const std::vector<path>&, unsigned options=0);
         
-        bool            child_exists(const path&, const std::string_view& name);
-        bool            child_exists(const std::vector<path>&, const std::string_view& name);
+        bool            child_exists(const path&, std::string_view name);
+        bool            child_exists(const std::vector<path>&, std::string_view name);
         
         template <typename P>
         auto    for_all_children(const std::filesystem::path& d, unsigned options, P pred)
@@ -172,15 +124,4 @@ namespace yq {
                 return;
         }
     }
-    
-    //! "Sanitizes" a user-supplied path
-    //!
-    //! This sanitizes a user supplied path by removing extra slashes, hiddens, etc
-    std::string         path_sanitize(const std::string_view&);
-    
-    //! Returns the LAST file extension (no leading '.') or empty if none
-    std::string_view    file_extension(const std::string_view&);
-    
-    inline std::filesystem::path   operator "" _fp(const char* z) { return std::filesystem::path(z); }
-    
-}
+    }

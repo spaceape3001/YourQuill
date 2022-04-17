@@ -6,7 +6,7 @@
 
 #pragma once
 #include <yq/preamble.hpp>
-#include <yq/c++/TypeTraits.hpp>
+#include <yq/c++/trait/always_false.hpp>
 
 #include <cwchar>
 #include <string_view>

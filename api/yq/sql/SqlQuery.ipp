@@ -4,138 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "SqlLastId.hpp"
+#include "SqlQuery.hpp"
+
+#include "SqlError.hpp"
 #include "SqlLite.hpp"
 #include "SqlLogging.hpp"
-#include "SqlQuery.hpp"
-#include <sqlite3.h>
-#include <yq/collection/Set.hpp>
-#include <yq/file/FileUtils.hpp>
 #include <yq/text/Utils.hpp>
+#include <sqlite3.h>
 
 namespace yq {
-
-    namespace {
-        bool    configUp()
-        {
-            sqlite3_config(SQLITE_CONFIG_MULTITHREAD );
-            return true;
-        }
-    }
-
-    struct SqlError {
-        int     result = SQLITE_OK;
-    };
-    
-    log4cpp::CategoryStream&    operator<<(log4cpp::CategoryStream& str, SqlError ec)
-    {
-        const char* why = sqlite3_errstr(ec.result);
-        if(!why)
-            why = "Unknown Reason";
-        str << why;
-        return str;
-    }
-    
-    
-    SqlLastId::SqlLastId(SqlLite& _db) : m_db(_db)
-    {
-        sqlite3_set_last_insert_rowid(m_db.db(), 0LL);
-    }
-    
-    uint64_t SqlLastId::get() 
-    {
-        return (uint64_t) sqlite3_last_insert_rowid(m_db.db());
-    }
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    SqlLite::SqlLite() : m_database(nullptr) 
-    {
-    }
-    
-    SqlLite::~SqlLite()
-    {
-        close();
-    }
-    
-    void        SqlLite::close()
-    {
-        if(m_database != nullptr){
-            sqlite3_close_v2(m_database);
-            m_database  = nullptr;
-        }
-    }
-
-    bool        SqlLite::has_table(std::string_view s) const
-    {
-        SqlQuery    sql((SqlLite&) *this, "SELECT COUNT(1) FROM sqlite_master WHERE type='table' AND name=?");
-        sql.bind(1, s);
-        if(sql.step() == SqlQuery::Row){
-            return sql.v_bool(1);
-        } else
-            return false;
-    }
-
-    bool        SqlLite::is_open() const
-    {
-        return m_database != nullptr;
-    }
-    
-    bool        SqlLite::open(const std::filesystem::path& file, int flags)
-    {
-        if(is_open())
-            return false;
-        if(file.empty())
-            return false;
-            
-        static bool fConfig = configUp();
-        if(!fConfig)
-            return false;
-            
-        int     r;
-        if(flags){
-            r = sqlite3_open_v2(file.c_str(), &m_database, flags, nullptr);
-        } else {
-            r = sqlite3_open(file.c_str(), &m_database);
-        }
-        
-        if(r != SQLITE_OK){
-            dbError << "Database (" << file << ") failed to open: " << SqlError(r);
-            m_database = nullptr;
-            return false;
-        }
-        
-        sqlite3_extended_result_codes(m_database, 1);
-        m_file  = file;
-        return true;
-    }
-    
-    namespace {
-        int     string_set_callback(void* ret, int, char**argv, char**)  
-        {
-            (*(string_set_t*) ret) << argv[0];
-            return 0;
-        }
-    }
-    
-    string_set_t    SqlLite::tables() const
-    {
-        string_set_t    ret;
-        if(m_database){
-            char* zErrMsg   = nullptr;
-            if(sqlite3_exec(m_database, "SELECT name FROM sqlite_master WHERE type='table'", 
-                string_set_callback, &ret, &zErrMsg) != SQLITE_OK
-            ){
-                dbError << "SqlLite::tables() : " << zErrMsg;
-                sqlite3_free(zErrMsg);
-            }
-        }
-        return ret;
-    }
-    
-    
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     bool SqlQuery::exec(SqlLite&db, const std::string& sql)
     {
@@ -527,52 +404,4 @@ namespace yq {
             q   = nullptr;
         }
     }
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    
-    bool    _runscript(std::string_view script, SqlLite& db)
-    {
-        std::string         buffer;
-        buffer.reserve(script.size());
-    
-        vsplit(script, '\n', [&](std::string_view l){
-            l = trimmed(l);
-            if(is_blank(l))
-                return;
-            if(starts(l, "--")){
-                return ;
-            }
-            buffer += l;
-            buffer += ' ';
-        });
-        
-        for(std::string_view sql : split(buffer, ';')){
-            std::string s = copy(trimmed(sql));
-            if(!SqlQuery::exec(db, s))
-                return false;
-        }
-        return true;
-    }
-    
-    bool    db_run_script(std::string_view script, SqlLite& db)
-    {
-        return _runscript(script, db);
-    }
-    
-    bool    db_run_script_file(const std::filesystem::path& file, SqlLite& db)
-    {
-        dbInfo << "db_script_file " << file;
-        if(!std::filesystem::exists(file)){
-            dbError << "db_run_script_file(" << file << "): does not exist!";
-            return false;
-        }
-        
-        std::string     text    = file_string(file);
-        if(text.empty())
-            return true;
-        return _runscript(text, db);
-    }
-    
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 }

@@ -8,16 +8,6 @@
 #include <yq/text/Utils.hpp>
 
 namespace yq {
-    namespace thread {
-        unsigned int id()
-        {
-            static std::atomic<unsigned int>    sNext{0};
-            static thread_local unsigned int    sRet    = sNext++;
-            return sRet;
-        }
-        
-        static unsigned int kMainThread     = id();
-    }
 
     const char*     build_directory()
     {
@@ -29,10 +19,6 @@ namespace yq {
         return YQ_SHARE_DIR;
     }
 
-    bool is_main_thread()
-    {
-        return thread::id() == 0;
-    }
 
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////

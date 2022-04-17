@@ -6,7 +6,9 @@
 
 #pragma once
 
+#include <yq/app/ThreadId.hpp>
 #include <yq/c++/stdlibs.hpp>
+#include <yq/log/LogFwd.hpp>
 
 using namespace std::literals::chrono_literals;
 using namespace std::literals::string_literals;
@@ -16,9 +18,6 @@ using namespace std::literals::string_view_literals;
 using uint128_t = unsigned __int128;
 using int128_t  = __int128;
 
-namespace log4cpp {
-    class CategoryStream;
-}
 
 namespace yq {
     class ByteArray;
@@ -130,24 +129,6 @@ namespace yq {
     static constexpr double   INF     = std::numeric_limits<double>::infinity();
     static constexpr float    INFf    = std::numeric_limits<float>::infinity();
 
-        // NO-COPY TRAIT
-
-    class NoCopy {
-        NoCopy(const NoCopy&) = delete;
-        NoCopy& operator=(const NoCopy&) = delete;
-    protected:
-        NoCopy(){}
-    };
-
-        // NO_MOVE TRAIT
-
-    class NoMove {
-        NoMove(NoMove&&) = delete;
-        NoMove& operator=(NoMove&&) = delete;
-    protected:
-        NoMove(){}
-    };
-
 
         //  UINT 128
     struct UInt128 { 
@@ -184,12 +165,6 @@ namespace yq {
     #endif
 
 
-    namespace thread {
-        //! Gets the current thread's ID
-        unsigned int id();
-    }
-
-    bool            is_main_thread();
     
     //!  The build directory
     const char*     build_directory();
@@ -209,21 +184,4 @@ namespace yq {
 }
 
 
-
-//  To use preprocessor right, for concatenation, the double-invoke is required (nuiance)
-#define YQ_CONCAT_IMPL(a, b) a##b
-#define YQ_CONCAT(a, b) YQ_CONCAT_IMPL(a,b)
-
-
-/*! \macro YQ_DBGREL
-    \brief Simple macro for debug vs release
-    \param[in]  Debug argument
-    \param[in]  Release argument
-*/
-
-#ifndef NDEBUG
-    #define YQ_DBGREL(a,b) a
-#else
-    #define YQ_DBGREL(a,b) b
-#endif
 

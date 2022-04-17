@@ -3,4 +3,3 @@
 
 #include "NaN.hpp"
 #include "Safety.hpp"
-#include "TypeTraits.hpp"

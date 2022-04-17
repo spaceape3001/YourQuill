@@ -1,0 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace yq {
+
+    //! The compiled build directory path
+    const char*     build_directory();
+
+    //! The share path to the one inside the build directory;
+    const char*     share_directory();
+}

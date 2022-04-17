@@ -6,13 +6,16 @@
 
 #pragma once
 
+#include <yq/meta/MetaWriter.hpp>
+#include <yq/meta/MetaLog.hpp>
+
 #include "Binder.hpp"
 #include "Global.hpp"
 #include "ObjectInfo.hpp"
 #include "TypeInfo.hpp"
-#include "MetaWriter.hpp"
 
-#include <yq/c++/TypeTraits.hpp>
+#include <yq/c++/trait/has_less.hpp>
+#include <yq/c++/trait/is_template.hpp>
 #include <yq/collection/List.hpp>
 #include <yq/collection/Hash.hpp>
 #include <yq/collection/Map.hpp>
@@ -23,15 +26,6 @@
 #include <yq/stream/Ops.hpp>
 
 
-#define metaAlert       yAlert("meta")
-#define metaCritical    yCritical("meta")
-#define metaDebug       yDebug("meta")
-#define metaError       yError("meta")
-#define metaEmergency   yEmergency("meta")
-#define metaFatal       yFatal("meta")
-#define metaInfo        yInfo("meta")
-#define metaNotice      yNotice("meta")
-#define metaWarning     yWarning("meta")
 
 
 #define YQ_TYPE_IMPLEMENT( ... )                                                                            \
@@ -1097,7 +1091,7 @@ namespace yq {
                 return a.reference<T>() == b.reference<T>();
             };
             
-            if constexpr (has_less_v<T>){
+            if constexpr (trait::has_less_v<T>){
                 TypeInfo::m_less      = [](const DataBlock& a, const DataBlock& b) -> bool 
                 {
                     return a.reference<T>() < b.reference<T>();
@@ -1112,7 +1106,7 @@ namespace yq {
             
             TypeInfo::m_size          = sizeof(T);
             
-            if constexpr ( is_template_v<T>) {
+            if constexpr ( trait::is_template_v<T>) {
             #if 0
                 TypeInfo::m_template.params     = GatherTemplateArgs<T>()(TypeInfo::m_template.args);
                 if(!TypeInfo::m_template.args.empty())  // only flag it as a template if any parameters trigger

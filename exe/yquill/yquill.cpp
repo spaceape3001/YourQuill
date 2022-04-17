@@ -8,7 +8,8 @@
 
 #include <yq/app/CmdArgs.hpp>
 #include <yq/app/Plugins.hpp>
-#include <yq/file/FileUtils.hpp>
+#include <yq/file/dir_utils.hpp>
+#include <yq/file/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/meta/Meta.hpp>
 //#include <yq/stream/Ops.hpp>

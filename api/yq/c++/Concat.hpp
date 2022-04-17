@@ -6,9 +6,6 @@
 
 #pragma once
 
-class NoMove {
-    NoMove(NoMove&&) = delete;
-    NoMove& operator=(NoMove&&) = delete;
-protected:
-    NoMove(){}
-};
+//  To use preprocessor right, for concatenation, the double-invoke is required (nuiance)
+#define YQ_CONCAT_IMPL(a, b) a##b
+#define YQ_CONCAT(a, b) YQ_CONCAT_IMPL(a,b)

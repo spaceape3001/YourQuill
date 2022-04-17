@@ -9,14 +9,14 @@
 #include <string>
 #include <string_view>
 #include <yq/collection/Map.hpp>
-#include <yq/c++/NoCopy.hpp>
-#include <yq/c++/NoMove.hpp>
+#include <yq/c++/trait/not_copyable.hpp>
+#include <yq/c++/trait/not_moveable.hpp>
 #include <sys/inotify.h>
 
 
 namespace yq {
 
-    class DirWatcher : NoCopy, NoMove {
+    class DirWatcher : trait::not_copyable, trait::not_moveable {
     public:
         DirWatcher();
         ~DirWatcher();

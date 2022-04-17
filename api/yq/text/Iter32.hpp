@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/preamble.hpp>
-#include <yq/c++/TypeTraits.hpp>
+#include <yq/c++/trait/always_false.hpp>
 #include <cuchar>
 #include <cwchar>
 #include <charconv>
@@ -103,7 +103,7 @@ namespace yq {
                     // Want the pointer & length
                 pred(p, len);
             } else {
-                static_assert(always_false_v<Pred>, "Argument deduction failed");
+                static_assert(trait::always_false_v<Pred>, "Argument deduction failed");
             }
             p += len;
         }
@@ -152,7 +152,7 @@ namespace yq {
                 if(!pred(p, len))
                     break;
             } else {
-                static_assert(always_false_v<Pred>, "Argument deduction failed");
+                static_assert(trait::always_false_v<Pred>, "Argument deduction failed");
             } 
             p += len;
         }
@@ -194,7 +194,7 @@ namespace yq {
                     if(pred(wc))
                         ret.append(p, len);
                 } else {
-                    static_assert(always_false_v<Pred>, "Argument deduction failed");
+                    static_assert(trait::always_false_v<Pred>, "Argument deduction failed");
                 } 
                 p += len;
             }
@@ -232,7 +232,7 @@ namespace yq {
                 if(pred(wc))
                     return p;
             } else {
-                static_assert(always_false_v<Pred>, "Argument deduction failed");
+                static_assert(trait::always_false_v<Pred>, "Argument deduction failed");
             }
             p += len;
         }
@@ -263,7 +263,7 @@ namespace yq {
                     if(!pred(wc))
                         ret.append(p, len);
                 } else {
-                    static_assert(always_false_v<Pred>, "Argument deduction failed");
+                    static_assert(trait::always_false_v<Pred>, "Argument deduction failed");
                 } 
                 p += len;
             }

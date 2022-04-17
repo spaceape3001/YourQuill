@@ -11,7 +11,8 @@
 #include <yq/atom/Class.hpp>
 #include <yq/atom/Field.hpp>
 #include <yq/bit/Copyright.hpp>
-#include <yq/file/cdb.hpp>
+#include <yq/enum/SubmitLabel.hpp>
+#include <yq/file/file_cdb.hpp>
 #include <yq/image/Image.hpp>
 #include <yq/leaf/Leaf.hpp>
 #include <yq/log/Logging.hpp>
@@ -58,6 +59,69 @@ DevID<T> dev_id(T d)
     return DevID<T>{ d }; 
 }
 
+template <typename T>
+struct Icon {
+    T                   src;
+    std::string_view    alt;
+    std::string_view    style;
+};
+
+template <typename T>
+Icon<T> icon(T v, std::string_view a=std::string_view(), std::string_view s=std::string_view())
+{
+    return Icon{v, a, s};
+}
+
+WebAutoClose    form(WebHtml&, std::string_view action, bool inspect=false);
+WebAutoClose    form(WebHtml&, std::string_view action, HttpOp, bool inspect=false);
+
+namespace input {
+
+    struct key {};
+    struct edit_req {};
+    struct root {
+        DataRole dr;
+    };
+
+    struct check {
+        std::string_view    key, label;
+        bool                checked = false;
+    };
+
+    struct hidden {
+        std::string_view    key, value;
+    };
+
+    struct label {
+        std::string_view    key, label;
+    };
+
+    struct line {
+        std::string_view    key, value;
+        int                 size = -1;
+    };
+    
+    struct text {
+        std::string_view    key, value;
+        int                 rows    = 10;
+        int                 cols    = 80;
+    };
+    
+    struct control_root {
+    };
+};
+
+
+WebHtml&    operator<<(WebHtml&, SubmitLabel);
+WebHtml&    operator<<(WebHtml&, input::key);
+WebHtml&    operator<<(WebHtml&, input::edit_req);
+WebHtml&    operator<<(WebHtml&, input::root);
+WebHtml&    operator<<(WebHtml&, const input::check&);
+WebHtml&    operator<<(WebHtml&, const input::hidden&);
+WebHtml&    operator<<(WebHtml&, const input::label&);
+WebHtml&    operator<<(WebHtml&, const input::line&);
+WebHtml&    operator<<(WebHtml&, const input::text&);
+WebHtml&    operator<<(WebHtml&, input::control_root);
 
 WebHtml&    operator<<(WebHtml&, const Dev<Atom>&);
 WebHtml&    operator<<(WebHtml&, const Dev<Class>&);

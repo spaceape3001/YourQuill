@@ -12,9 +12,10 @@
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
 #include <yq/enum/Change.hpp>
-#include <yq/file/cdb.hpp>
+#include <yq/file/dir_utils.hpp>
 #include <yq/file/DirWatcher.hpp>
-#include <yq/file/FileUtils.hpp>
+#include <yq/file/file_cdb.hpp>
+#include <yq/file/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/srv/Notifier.hpp>

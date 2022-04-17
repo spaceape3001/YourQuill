@@ -7,7 +7,7 @@
 #include "UserFile.hpp"
 #include "arg.hpp"
 #include "cdb.hpp"
-#include <yq/file/cdb.hpp>
+#include <yq/file/file_cdb.hpp>
 #include <yq/file/Strings.hpp>
 #include <yq/file/XmlUtils.hpp>
 #include <yq/log/Logging.hpp>
