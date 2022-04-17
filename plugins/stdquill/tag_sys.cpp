@@ -8,8 +8,8 @@
 #include <yq/leaf/Leaf.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage3.hpp>
-#include <yq/tag/arg.hpp>
-#include <yq/tag/cdb.hpp>
+#include <db/tag_arg.hpp>
+#include <db/tag_cdb.hpp>
 #include <yq/wksp/CacheFwd.hpp>
 #include <yq/wksp/CacheSQ.hpp>
 

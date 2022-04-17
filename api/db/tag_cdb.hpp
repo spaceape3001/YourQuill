@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include "Tag.hpp"
-#include "TagFile.hpp"
+#include "tag_file.hpp"
 
 #include <yq/enum/Sorted.hpp>
 #include <yq/file/Document.hpp>

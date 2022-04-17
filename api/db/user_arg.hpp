@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include "User.hpp"
 #include <initializer_list>
 #include <string_view>
 
 namespace yq {
     struct WebContext;
     class WebHtml;
+    struct User;
     
     namespace arg {
         //! Finds user, tries key first, then by ID

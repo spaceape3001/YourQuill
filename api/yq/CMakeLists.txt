@@ -104,8 +104,7 @@ set(yq_sources
     ./enum/Sorted.hpp
     ./enum/Update.hpp
     ./enum/Vcs.hpp
-
-    ./file/file_arg.hpp
+    
     ./file/file_cdb.cpp
     ./file/file_cdb.hpp
     ./file/file_utils.hpp
@@ -189,11 +188,6 @@ set(yq_sources
     ./stream/OSFile.hpp
     ./stream/Ops.hpp
     
-    ./tag/tag_unity.cpp
-    ./tag/cdb.hpp
-    ./tag/Tag.hpp
-    ./tag/TagData.hpp
-    ./tag/TagFile.hpp
     
     ./text/Comma.hpp
     ./text/Encode64.cpp
@@ -220,13 +214,6 @@ set(yq_sources
     ./type/Span.hpp
     ./type/Touched.hpp
     ./type/Variant.cpp
-
-    ./user/User.hpp
-    ./user/UserData.hpp
-    ./user/UserFile.hpp
-    ./user/arg.hpp
-    ./user/cdb.hpp
-    ./user/user_unity.cpp
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp

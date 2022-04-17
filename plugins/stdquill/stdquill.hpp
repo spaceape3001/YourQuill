@@ -17,10 +17,10 @@
 #include <yq/leaf/Leaf.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/tag/Tag.hpp>
+#include <db/tag.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/type/Guarded.hpp>
-#include <yq/user/User.hpp>
+#include <db/user.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>

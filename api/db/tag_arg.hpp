@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "Tag.hpp"
 #include <initializer_list>
 #include <string_view>
 
 namespace yq {
+    struct Tag;
     struct WebContext;
     class WebHtml;
     

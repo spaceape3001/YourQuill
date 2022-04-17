@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include "User.hpp"
-#include "UserFile.hpp"
+#include "user_file.hpp"
 #include <yq/enum/Sorted.hpp>
 #include <yq/file/Document.hpp>
 #include <yq/image/Image.hpp>

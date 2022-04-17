@@ -3,7 +3,7 @@
 
 #include <yq/preamble.hpp>
 #include <memory>
-#include "User.hpp"
+#include "user.hpp"
 #include <yq/bit/Authentication.hpp>
 #include <yq/bit/Context.hpp>
 #include <yq/collection/Set.hpp>

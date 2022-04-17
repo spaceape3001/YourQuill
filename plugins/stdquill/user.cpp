@@ -7,9 +7,9 @@
 #include "stdquill.hpp"
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage3.hpp>
-#include <yq/user/arg.hpp>
-#include <yq/user/cdb.hpp>
-#include <yq/user/UserData.hpp>
+#include <db/user_arg.hpp>
+#include <db/user_cdb.hpp>
+#include <db/user_data.hpp>
 #include <yq/wksp/CacheFwd.hpp>
 #include <yq/wksp/CacheSQ.hpp>
 

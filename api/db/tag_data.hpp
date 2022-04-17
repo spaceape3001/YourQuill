@@ -5,10 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/preamble.hpp>
-#include <memory>
-#include "Tag.hpp"
-#include <yq/bit/Context.hpp>
+#include "tag.hpp"
 
 namespace yq {
 
@@ -26,7 +23,5 @@ namespace yq {
         Data&       merge(const Data&, bool fOverride=false);
         void        reset();
     };
-    
-    
     
 }

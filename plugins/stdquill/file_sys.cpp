@@ -5,7 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "stdquill.hpp"
-#include <yq/file/file_arg.hpp>
+#include <db/directory_arg.hpp>
+#include <db/document_arg.hpp>
+#include <db/folder_arg.hpp>
+#include <db/fragment_arg.hpp>
+#include <db/root_arg.hpp>
 
 using namespace yq;
 

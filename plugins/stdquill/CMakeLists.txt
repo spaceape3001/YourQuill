@@ -12,5 +12,5 @@ set(stdquill_SOURCES
 )
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
-#target_link_libraries( stdquill yq )
+#target_link_libraries( stdquill yq yqdb )
 
