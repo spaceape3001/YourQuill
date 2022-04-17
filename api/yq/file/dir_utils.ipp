@@ -8,7 +8,7 @@
 
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 
 #include <sys/stat.h>
 #include <dirent.h>

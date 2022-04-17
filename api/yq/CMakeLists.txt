@@ -19,7 +19,6 @@ set(yq_sources
     #./ZipReader.hpp
     #./ZipWriter.hpp
     
-    ./library.cpp
     ./preamble.hpp
     
     ./sql_unity.cpp
@@ -200,10 +199,15 @@ set(yq_sources
     ./text/Encode64.cpp
     ./text/Encode64.hpp
     ./text/Format.hpp
+    ./text/IgCase.hpp
+    ./text/IgCase.ipp
     ./text/Markdown.cpp
     ./text/Markdown.hpp
-    ./text/Utils.cpp
-    ./text/Utils.hpp
+    ./text/RevIgCase.hpp
+    ./text/RevIgCase.ipp
+    ./text/text_utils.hpp
+    ./text/text_utils.ipp
+    ./text/text_unity.cpp
     
     ./type/type_unity.cpp
     ./type/ByteArray.hpp

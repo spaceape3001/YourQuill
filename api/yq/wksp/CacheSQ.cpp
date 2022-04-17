@@ -7,7 +7,7 @@
 #include "CacheSQ.hpp"
 #include "Workspace.hpp"
 #include <yq/collection/Set.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 
 namespace yq {
 

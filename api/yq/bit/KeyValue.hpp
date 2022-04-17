@@ -9,7 +9,7 @@
 #include <yq/collection/Reverse.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/type/Result.hpp>
 #include <string>
 #include <string_view>

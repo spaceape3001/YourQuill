@@ -8,7 +8,7 @@
 #include <yq/algo/Compare.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Stream.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 
 /*
     Crediting https://github.com/progsource/maddy for the guidance in how-to, however, the code

@@ -13,7 +13,7 @@
 #include "Text.hpp"
 
 #include <yq/file/file_utils.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
 
 #include <cstring>

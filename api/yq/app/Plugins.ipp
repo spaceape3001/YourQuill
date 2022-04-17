@@ -8,7 +8,7 @@
 
 #include <yq/file/dir_utils.hpp>
 #include <yq/log/Logging.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 
 #include <dlfcn.h>
 

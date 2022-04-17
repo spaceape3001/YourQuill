@@ -8,6 +8,7 @@
 #include "Root.hpp"
 #include "QuillFile.hpp"
 
+#include <yq/app/BuildInfo.hpp>
 #include <yq/app/CmdArgs.hpp>
 #include <yq/app/DelayInit.hpp>
 #include <yq/file/dir_utils.hpp>
@@ -16,7 +17,7 @@
 #include <yq/meta/Global.hpp>
 #include <yq/meta/Init.hpp>
 #include <yq/sql/SqlLite.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <pwd.h>
 #include <unistd.h>
 

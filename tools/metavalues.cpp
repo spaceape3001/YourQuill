@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <algorithm>
 
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/type/Variant.hpp>
 #include <yq/collection/Vector.hpp>
 

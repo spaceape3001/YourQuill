@@ -20,7 +20,7 @@
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/Iter32.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
 
 #include <filesystem>

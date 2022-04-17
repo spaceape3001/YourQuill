@@ -9,7 +9,7 @@
 #include "SqlError.hpp"
 #include "SqlLite.hpp"
 #include "SqlLogging.hpp"
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <sqlite3.h>
 
 namespace yq {

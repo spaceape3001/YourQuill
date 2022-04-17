@@ -4,9 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "BuildInfo.ipp"
-#include "CmdArgs.ipp"
-#include "DelayInit.ipp"
-#include "ThreadId.ipp"
-#include "PidFile.ipp"
-#include "Plugins.ipp"
+#include "text_utils.ipp"
+#include "IgCase.ipp"
+#include "RevIgCase.ipp"

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "LeafFile.hpp"
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 
 namespace yq {
 

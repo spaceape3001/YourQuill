@@ -4,7 +4,7 @@
 #include <yq/log/Logging.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 
 using namespace yq;
 

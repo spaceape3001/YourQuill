@@ -12,7 +12,7 @@
 #include <yq/collection/vector_utils.hpp>
 #include <yq/sql/SqlLastId.hpp>
 #include <yq/sql/SqlQuery.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

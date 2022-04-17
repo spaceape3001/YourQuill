@@ -10,7 +10,7 @@
 #include <yq/c++/Safety.hpp>
 #include <yq/collection/Vector.hpp>
 #include <yq/text/Iter32.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
 #include <yq/type/Result.hpp>
 

@@ -7,16 +7,16 @@
 #pragma once
 
 #include <yq/app/ThreadId.hpp>
+#include <yq/c++/128-bit.hpp>
 #include <yq/c++/stdlibs.hpp>
 #include <yq/log/LogFwd.hpp>
+#include <yq/text/IgCase.hpp>
+#include <yq/text/RevIgCase.hpp>
 
 using namespace std::literals::chrono_literals;
 using namespace std::literals::string_literals;
 using namespace std::literals::string_view_literals;
 
-    //  Linux suppourts int128
-using uint128_t = unsigned __int128;
-using int128_t  = __int128;
 
 
 namespace yq {
@@ -39,23 +39,6 @@ namespace yq {
     class RefCount;
     class Stream;
     class Variant;
-
-
-    /*! \brief Useful parameter for case-insensitive string keys in sets and maps
-    */
-    struct IgCase {
-        bool    operator()(const std::string_view&, const std::string_view&) const;
-        bool    operator()(char, char) const;
-        bool    operator()(char32_t, char32_t) const;
-    };
-
-    /*! \brief Useful parameter for case-insensitive string keys in sets and maps
-    */
-    struct RevIgCase {
-        bool    operator()(const std::string_view&, const std::string_view&) const;
-        bool    operator()(char, char) const;
-        bool    operator()(char32_t, char32_t) const;
-    };
     
         //  STRUCTS
 
@@ -130,14 +113,6 @@ namespace yq {
     static constexpr float    INFf    = std::numeric_limits<float>::infinity();
 
 
-        //  UINT 128
-    struct UInt128 { 
-        uint64_t low, high; 
-        UInt128() : low{}, high{} {}
-        UInt128(uint64_t l, uint64_t h) : low(l), high(h) {}
-        operator unsigned __int128 () const { return *(const unsigned __int128*) this; }
-    };
-
 
         //  Common permutations (Qt will go away...eventually)
     using StringMap             = Map<std::string,std::string,IgCase>;
@@ -163,14 +138,6 @@ namespace yq {
     #elif defined(__linux__) || defined(__unix__)
         using PathSet   = Set<std::string>;
     #endif
-
-
-    
-    //!  The build directory
-    const char*     build_directory();
-
-    //!  The build's share directory
-    const char*     share_directory();
     
     template <typename T> struct BasicUrl;
     using UrlView       = BasicUrl<std::string_view>;

@@ -7,7 +7,7 @@
 #include "Comma.hpp"
 #include "Iter32.hpp"
 #include "IterW.hpp"
-#include "Utils.hpp"
+#include "text_utils.hpp"
 
 #include <yq/algo/Compare.hpp>
 #include <yq/collection/List.hpp>

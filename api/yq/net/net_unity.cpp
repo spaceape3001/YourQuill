@@ -12,7 +12,7 @@
 #include <yq/collection/EnumMap.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <stdio.h>
 
 namespace yq {

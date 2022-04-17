@@ -109,7 +109,7 @@ include_directories(api)
 include_directories(${CMAKE_BINARY_DIR}/api)
 include_directories(3rd/rapidxml-1.13)
 include_directories(3rd/asio/asio/include)
-include_directories(${nghttp2_INCLUDE_DIRS})
+include_directories(3rd/nlohmann/include)
 
 if(Feature_PrecompiledHeaders)
     SET(PRECOMPILE_HEADERS util/c++/stdlibs.hpp)

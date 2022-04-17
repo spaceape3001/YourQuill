@@ -22,7 +22,7 @@
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <yq/text/Utils.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/wksp/Root.hpp>
 #include <yq/wksp/Workspace.hpp>
 
