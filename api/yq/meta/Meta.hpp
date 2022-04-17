@@ -64,7 +64,8 @@ namespace yq {
         STATIC      = 1ULL << 17, //!< Non-object specific (global variables, functions, etc)
         SMALL       = 1ULL << 18, //!< Small enough to fit in DataBlock
         TLS         = 1ULL << 19, //!< Thread local storage
-        LESS        = 1ULL << 20  //!< Can compare
+        LESS        = 1ULL << 20, //!< Can compare
+        TODO        = 1ULL << 30
     };
     
     //bool    is_type(const Meta&);
@@ -157,6 +158,9 @@ namespace yq {
         
         //  TODO
         const Variant&                  tag(std::string_view) const;
+        
+        //! \brief Marked as "TODO" on this object (reminder for future work)
+        bool                            todo() const { return (m_flags&TODO) != 0; }
         
 
             // used during the creation....

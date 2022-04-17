@@ -24,6 +24,7 @@ namespace yq {
         Writer&     tag(std::string_view zKey, Variant&& value);
         Writer&     tag(std::string_view zKey, const Variant& value);
         Writer&     tls();  //!< Marks the TLS flag ... only meaningful on static variables, still
+        Writer&     todo(); //!< Marks this as needing TODO work
     
     protected:
             //  In proper usage, should never be null, however, guard!

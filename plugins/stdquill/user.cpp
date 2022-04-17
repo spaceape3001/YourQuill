@@ -22,27 +22,9 @@ using namespace yq::cdb;
 using namespace yq::html;
 
 namespace {
-    void    var_can_edit(Stream& str, WebContext&)
-    {
-        //  TODO
-        str << true;
-    }
 
-    void    var_local(Stream& str, WebContext& ctx)
-    {
-        str << ctx.is_local();
-    }
 
-    void    var_logged_in(Stream&str, WebContext& ctx)
-    {
-        //  TODO
-        str << true;
-    }
 
-    void    var_ssid(Stream&str, WebContext& ctx)
-    {
-        str << ctx.session.ssid;
-    }
     
     
     //  -------------------------------------
@@ -139,10 +121,10 @@ namespace {
     //  -------------------------------------
     void    reg_me()
     {
-        reg_webvar<var_can_edit>("can_edit");
-        reg_webvar<var_logged_in>("logged_in");
-        reg_webvar<var_local>("local");
-        reg_webvar<var_ssid>("ssid");
+        
+        
+        
+        
 
         on_stage3<stage3_user1>(s3_user1, cdb::users_folder(), "*.user");
         on_stage3<stage3_user2>(s3_user2, cdb::users_folder(), "*.user");

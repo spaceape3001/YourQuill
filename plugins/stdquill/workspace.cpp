@@ -64,20 +64,8 @@ namespace {
 }
 
 namespace {
-    void    var_abbr(Stream&str, WebContext&)
-    {
-        html_escape_write(str, wksp::abbreviation());
-    }
 
-    void    var_author(Stream&str, WebContext&)
-    {
-        html_escape_write(str, wksp::author());
-    }
     
-    void    var_body(Stream& str, WebContext&ctx)
-    {
-        str << ctx.var_body;
-    }
     
     
     void    var_footer(Stream&str, WebContext&ctx)
@@ -88,46 +76,11 @@ namespace {
     }
     
 
-    void    var_home(Stream&str, WebContext&)
-    {
-        html_escape_write(str, wksp::home());
-    }
-
-    void    var_host(Stream& str, WebContext&)
-    {
-        html_escape_write(str, wksp::host());
-    }
 
 
-    void    var_name(Stream& str, WebContext&)
-    {
-        html_escape_write(str, wksp::name());
-    }
 
-    void    var_port(Stream& str, WebContext&)
-    {
-        str << wksp::port();
-    }
+
     
-    void    add_script(Stream& str, std::string_view name)
-    {
-        switch(mimeTypeForExt(file_extension(name))){
-        case ContentType::javascript:
-            str << "\t\t<script srce=\"/js/" << name << "\">\n";
-            break;
-        default:
-            //  do nothing if unclear...
-            break;
-        }
-    }
-    
-    void    var_scripts(Stream& str, WebContext& ctx)
-    {
-        for(std::string_view s : ctx.page->scripts())
-            add_script(str, s);
-        for(const std::string& s : ctx.var_scripts)
-            add_script(str, s);
-    }
     
     void    var_summary(Stream&str, WebContext&ctx)
     {
@@ -136,44 +89,8 @@ namespace {
             summary -> execute(str, ctx);
     }
     
-    void    var_tabbar(Stream& str, WebContext& ctx)
-    {
-        const WebGroup* grp = ctx.page -> group();
-        if(!grp)
-            return ;
-    
-        str << "<table class=\"tabbar\"><tr>\n";
-        for(const WebPage* p : grp -> pages){
-            bool    us = p == ctx.page;
-            if(us) {
-                str << "<td class=\"tb-select\">";
-                html_escape_write(str, p -> label());
-                str << "</td>";
-            } else {
-                UrlView url = ctx.url;
-                url.path    = p->path();
-                str << "<td class=\"tabbar\"><a href=\"" << url << "\">";
-                html_escape_write(str, p -> label());
-                str << "</a></td>";
-            }
-        }
-        str << "</td></table>\n";
-    }
 
-    void    var_time(Stream& str, WebContext& ctx)
-    {
-        str << ctx.timestamp;
-    }
     
-    void    var_title(Stream& str, WebContext&ctx)
-    {
-        html_escape_write(str, ctx.var_title);
-    }
-    
-    void    var_year(Stream& str, WebContext& ctx)
-    {
-        str << (ctx.timeparts.tm_year+1900);
-    }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -436,20 +353,18 @@ namespace {
 
 
         
-        reg_webvar<var_abbr>("abbr");
-        reg_webvar<var_author>("author");
-        reg_webvar<var_body>("body");
+        
         reg_webvar<var_footer>("footer");
-        reg_webvar<var_home>("home");
-        reg_webvar<var_host>("host");
-        reg_webvar<var_name>("name");
-        reg_webvar<var_port>("port");
-        reg_webvar<var_scripts>("scripts");
+        
+        
+        
+        
+        
         reg_webvar<var_summary>("summary");
-        reg_webvar<var_tabbar>("tabbar");
-        reg_webvar<var_time>("time");
-        reg_webvar<var_title>("title");
-        reg_webvar<var_year>("year");
+        
+        
+        
+        
 
         //reg_web("img/**", wksp::shared_dir("www/img"));
         //reg_web("help/*", wksp::shared_dir("www/help"));

@@ -62,4 +62,10 @@ namespace yq {
         m_meta -> m_flags |= TLS;
         return *this;
     }
+
+    Meta::Writer&   Meta::Writer::todo()
+    {
+        m_meta -> m_flags |= TODO;
+        return *this;
+    }
 }

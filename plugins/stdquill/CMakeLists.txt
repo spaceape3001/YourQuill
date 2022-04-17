@@ -1,4 +1,6 @@
 set(stdquill_SOURCES 
+    ./variables.cpp
+
     ./atom_sys.cpp
     ./cache_db.cpp
     ./common.cpp

@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace {
+
+    void    var_logged_in(Stream&str, WebContext& ctx)
+    {
+        //  TODO
+        str << true;
+    }
+
+    YQ_INVOKE( reg_webvar<var_logged_in>("logged_in").todo(); )
+}
+
