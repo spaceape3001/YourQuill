@@ -7,14 +7,14 @@
 #pragma once
 
 #include "html_common.hpp"
+#include "field.hpp"
 
 namespace yq {
-    struct Tag;
     namespace html {
-        //WebHtml&    operator<<(WebHtml&, Tag);
-        WebHtml&    operator<<(WebHtml&, Dev<Tag>);
-        WebHtml&    operator<<(WebHtml&, DevID<Tag>);
-        void        dev_table(WebHtml&, const std::vector<Tag>&);
+        //WebHtml&    operator<<(WebHtml&, Field);
+        //WebHtml&    operator<<(WebHtml&, Dev<Field>);
+        WebHtml&    operator<<(WebHtml&, DevID<Field>);
+        //void        dev_table(WebHtml&, const std::vector<Field>&);
     }
 }
 

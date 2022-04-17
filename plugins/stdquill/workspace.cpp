@@ -14,7 +14,13 @@
 #include <yq/web/JsonAdapter.hpp>
 #include <yq/web/TypedBytes.hpp>
 
+#include <db/filesys_html.hpp>
+#include <db/workspace.hpp>
+
 using namespace yq;
+//using namespace yq::arg;
+//using namespace yq::cdb;
+using namespace yq::html;
 
 struct Index : public RefCount {
     std::string             data;

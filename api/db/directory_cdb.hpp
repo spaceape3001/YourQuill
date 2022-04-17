@@ -76,11 +76,13 @@ namespace yq {
         */
         Set<Directory>  child_directories_set(Directory par);
 
+        Vector<DirString>          child_directories_with_names(Directory, Sorted sorted=Sorted());
+
         Directory                       child_directory(Directory, std::string_view );
         Fragment                        child_fragment(Directory, std::string_view );
         Vector<Fragment>           child_fragments(Directory, Sorted sorted=Sorted());
         size_t                          child_fragments_count(Directory);
-        Vector<DirString>          child_directories_with_names(Directory, Sorted sorted=Sorted());
+        Set<Fragment>              child_fragments_set(Directory);
 
 
 
@@ -113,7 +115,6 @@ namespace yq {
         
         Vector<Folder>             folder_path(Directory);
 
-        Set<Fragment>              fragments_set(Directory);
 
         bool                            hidden(Directory);
         Directory::Info                 info(Directory);

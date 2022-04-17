@@ -158,6 +158,12 @@ namespace yq {
             return s.size(d.id);
         }
 
+        Set<Fragment>    child_fragments_set(Directory d)
+        {
+            static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
+            return s.set<Fragment>(d.id);
+        }
+
         Vector<DirOrFrag>   children(Directory d, Sorted sorted)
         {
             Vector<DirOrFrag>   ret;
@@ -280,11 +286,6 @@ namespace yq {
             return folder_path(folder(d));
         }
 
-        Set<Fragment>    fragments_set(Directory d)
-        {
-            static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
-            return s.set<Fragment>(d.id);
-        }
 
         bool                hidden(Directory d)
         {

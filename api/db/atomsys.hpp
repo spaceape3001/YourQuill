@@ -4,5 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "stdquill.hpp"
-#include <db/atomsys.hpp>
+#pragma once
+
+#include "atom.hpp"
+#include "class.hpp"
+#include "field.hpp"

@@ -61,6 +61,7 @@ namespace yq {
     }
 }
 
+#include "cdb_sq.ipp"
 #include "directory_cdb.ipp"
 #include "document_cdb.ipp"
 #include "folder_cdb.ipp"
@@ -73,3 +74,4 @@ namespace yq {
 //#include "image_cdb.ipp"
 //#include "tag_cdb.ipp"
 //#include "user_cdb.ipp"
+

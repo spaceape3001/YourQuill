@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include <yq/enum/Change.hpp>
 #include <db/folder.hpp>
+
+#include <yq/enum/Change.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/type/Flag.hpp>
 #include <filesystem>

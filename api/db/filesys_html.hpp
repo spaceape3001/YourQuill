@@ -4,5 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "stdquill.hpp"
-#include <db/atomsys.hpp>
+#pragma once
+
+#include "directory_html.hpp"
+#include "document_html.hpp"
+#include "folder_html.hpp"
+#include "fragment_html.hpp"
+#include "root_html.hpp"

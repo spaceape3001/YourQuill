@@ -6,6 +6,10 @@
 
 #include "yquill.hpp"
 
+#include <db/filesys_cdb.hpp>
+#include <db/root.hpp>
+#include <db/workspace.hpp>
+
 #include <yq/algo/Compare.hpp>
 #include <yq/collection/Deque.hpp>
 #include <yq/collection/EnumMap.hpp>
@@ -14,7 +18,6 @@
 #include <yq/enum/Change.hpp>
 #include <yq/file/dir_utils.hpp>
 #include <yq/file/DirWatcher.hpp>
-#include <yq/file/file_cdb.hpp>
 #include <yq/file/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/sql/SqlQuery.hpp>
@@ -23,8 +26,6 @@
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
 #include <yq/text/text_utils.hpp>
-#include <yq/wksp/Root.hpp>
-#include <yq/wksp/Workspace.hpp>
 
 
 #include <chrono>
@@ -344,8 +345,8 @@ void    stage5_sweep()
         queue >> dq;
         
         // so we can process removes
-        auto frags  = cdb::fragments_set(dq.directory);
-        auto dirs   = cdb::directories_set(dq.directory);
+        auto frags  = cdb::child_fragments_set(dq.directory);
+        auto dirs   = cdb::child_directories_set(dq.directory);
         
         dir::for_all_children(dq.path, dir::HIDDEN, [&](const std::filesystem::path& p){
             auto n  = p.filename().string();

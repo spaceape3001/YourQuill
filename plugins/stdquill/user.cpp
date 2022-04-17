@@ -5,61 +5,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "stdquill.hpp"
-#include <yq/srv/NotifyAdapters.hpp>
-#include <yq/srv/Stage3.hpp>
+
+#include <db/cdb_sq.hpp>
 #include <db/user_arg.hpp>
 #include <db/user_cdb.hpp>
 #include <db/user_data.hpp>
-#include <yq/wksp/CacheFwd.hpp>
-#include <yq/wksp/CacheSQ.hpp>
+#include <db/user_html.hpp>
 
 
+#include <yq/srv/NotifyAdapters.hpp>
+#include <yq/srv/Stage3.hpp>
 
-WebHtml&    operator<<(WebHtml&h, const Dev<User>&v)
-{
-    std::string n       = cdb::name(v.data);
-    if(n.empty())
-        n   = "(no-name)";
-    if(v.data)
-        h << "<a href=\"/dev/user?id=" << v.data.id << "\">";
-    h << "[" << v.data.id << "] " << n;
-    if(v.data)
-        h << "</a>";
-    return h;
-}
-
-WebHtml&    operator<<(WebHtml&h, const DevID<User>&v)
-{
-    if(v.data)
-        h << "<a href=\"/dev/user?id=" << v.data.id << "\">";
-    h << v.data.id;
-    if(v.data)
-        h << "</a>";
-    return h;
-}
-
-WebHtml&    operator<<(WebHtml&h, const User&u)
-{
-    h << "(user: " << cdb::name(u) << ")";
-    return h;
-}
-
-
-void    dev_table(WebHtml& h, const std::vector<User>&users)
-{
-    auto ta = h.table();
-    h << "<tr><th>ID</th><th>Key</th><th>Owner</th><th>Admin</th><th>Writer</th><th>Reader</th><th>Name</th><th>Doc</th><th>Brief</th></tr>\n";
-    for(User t : users){
-        auto i  = cdb::info(t);
-        h << "<tr><td>" << dev_id(t) << "</td><td>" << i.key << "</td><td>" 
-            << i.is_owner << "</td><td>"
-            << i.is_admin << "</td><td>"
-            << i.is_writer << "</td><td>"
-            << i.is_reader << "</td><td>"
-            <<  i.name << "</td><td>" << dev(i.doc) << "</td><td>" << i.brief << "</td></tr>\n";
-    }
-}
-
+using namespace yq;
+using namespace yq::arg;
+using namespace yq::cdb;
+using namespace yq::html;
 
 namespace {
     void    var_can_edit(Stream& str, WebContext&)

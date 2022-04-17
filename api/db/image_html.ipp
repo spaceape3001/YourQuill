@@ -4,5 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "stdquill.hpp"
-#include <db/atomsys.hpp>
+#pragma once
+
+namespace yq {
+    namespace html {
+    
+    }
+}

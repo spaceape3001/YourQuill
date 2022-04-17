@@ -5,8 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "quill_file.hpp"
-#include <yq/bit/KeyValue.hpp>
-#include <yq/log/Logging.hpp>
 
 namespace yq {
 

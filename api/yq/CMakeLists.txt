@@ -39,10 +39,6 @@ set(yq_sources
     ./app/ThreadId.hpp
     ./app/ThreadId.ipp
     
-    ./atom/atom_unity.cpp
-    ./atom/ClassData.hpp
-    ./atom/ClassFile.hpp
-
     ./bit/bit_unity.cpp
     ./bit/Context.hpp
     ./bit/Copyright.hpp

@@ -1,8 +1,9 @@
 set(db_sources
     ./arg.cpp
     ./cdb.cpp
-    ./_file.cpp
-    ./_html.cpp
+    ./file.cpp
+    ./html.cpp
+    ./workspace.cpp
 )
 
 add_library(yqdb SHARED ${db_sources})

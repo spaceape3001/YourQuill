@@ -12,6 +12,8 @@
 #include <db/user.hpp>
 #include <db/workspace.hpp>
 
+#include <db/html_common.hpp>
+
 
 #include <yq/app/DelayInit.hpp>
 //#include <yq/atom/Atom.hpp>
@@ -39,33 +41,13 @@ namespace yq {
 
 
 using namespace yq;
+using namespace yq::html;
 
 
 
 extern Guarded<std::string>     gTextColor, gBkColor;
 
-template <typename T>
-struct Dev {
-    T       data;
-};
 
-template <typename T>
-Dev<T> dev(T d) 
-{ 
-    return Dev<T>{ d }; 
-}
-
-
-template <typename T>
-struct DevID {
-    T       data;
-};
-
-template <typename T>
-DevID<T> dev_id(T d) 
-{ 
-    return DevID<T>{ d }; 
-}
 
 template <typename T>
 struct Icon {
@@ -130,50 +112,6 @@ WebHtml&    operator<<(WebHtml&, const input::label&);
 WebHtml&    operator<<(WebHtml&, const input::line&);
 WebHtml&    operator<<(WebHtml&, const input::text&);
 WebHtml&    operator<<(WebHtml&, input::control_root);
-
-WebHtml&    operator<<(WebHtml&, const Dev<Atom>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Class>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Directory>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Document>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Field>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Folder>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Fragment>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Leaf>&);
-WebHtml&    operator<<(WebHtml&, const Dev<Tag>&);
-WebHtml&    operator<<(WebHtml&, const Dev<User>&);
-WebHtml&    operator<<(WebHtml&, const Dev<const Root*>&);
-
-WebHtml&    operator<<(WebHtml&, const Atom&);
-WebHtml&    operator<<(WebHtml&, const Class&);
-WebHtml&    operator<<(WebHtml&, const Document&);
-WebHtml&    operator<<(WebHtml&, const Folder&);
-WebHtml&    operator<<(WebHtml&, const Leaf&);
-WebHtml&    operator<<(WebHtml&, const Tag&);
-WebHtml&    operator<<(WebHtml&, const User&);
-
-WebHtml&    operator<<(WebHtml&, const DevID<Atom>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Class>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Directory>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Document>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Field>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Folder>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Fragment>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Leaf>&);
-WebHtml&    operator<<(WebHtml&, const DevID<Tag>&);
-WebHtml&    operator<<(WebHtml&, const DevID<User>&);
-WebHtml&    operator<<(WebHtml&, const DevID<const Root*>&);
-
-void        dev_table(WebHtml&, const std::vector<Atom>&);
-void        dev_table(WebHtml&, const std::vector<Class>&);
-void        dev_table(WebHtml&, const std::vector<Directory>&);
-void        dev_table(WebHtml&, const std::vector<Document>&);
-void        dev_table(WebHtml&, const std::vector<Field>&);
-void        dev_table(WebHtml&, const std::vector<Folder>&);
-void        dev_table(WebHtml&, const std::vector<Fragment>&);
-void        dev_table(WebHtml&, const std::vector<Leaf>&);
-void        dev_table(WebHtml&, const std::vector<Tag>&);
-void        dev_table(WebHtml&, const std::vector<User>&);
-void        dev_table(WebHtml&, const std::vector<const Root*>&);
 
 
 

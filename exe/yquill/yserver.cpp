@@ -9,6 +9,8 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
+#include <db/workspace.hpp>
+
 #include <yq/algo/Random.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
@@ -19,7 +21,6 @@
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebPage.hpp>
-#include <yq/wksp/Workspace.hpp>
 
 #include <fstream>
 #include <syncstream>

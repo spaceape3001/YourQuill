@@ -9,12 +9,12 @@
 #include "html_common.hpp"
 
 namespace yq {
-    struct Tag;
+    struct Class;
     namespace html {
-        //WebHtml&    operator<<(WebHtml&, Tag);
-        WebHtml&    operator<<(WebHtml&, Dev<Tag>);
-        WebHtml&    operator<<(WebHtml&, DevID<Tag>);
-        void        dev_table(WebHtml&, const std::vector<Tag>&);
+        //WebHtml&    operator<<(WebHtml&, Class);
+        //WebHtml&    operator<<(WebHtml&, Dev<Clss>);
+        WebHtml&    operator<<(WebHtml&, DevID<Class>);
+        //void        dev_table(WebHtml&, const std::vector<Class>&);
     }
 }
 
