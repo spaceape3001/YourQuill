@@ -81,6 +81,10 @@ namespace yq {
         WebAutoClose  u();
         WebAutoClose  underline();
         
+        
+        operator const WebContext& () const noexcept { return m_context; }
+        operator WebContext& () noexcept { return m_context; }
+        
     private:
         WebContext&         m_context;
         enum Target {

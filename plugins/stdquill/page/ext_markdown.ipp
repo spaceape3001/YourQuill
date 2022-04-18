@@ -4,11 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "stdquill.hpp"
-#include <yq/file/file_utils.hpp>
-#include <yq/stream/Text.hpp>
-#include <yq/text/Markdown.hpp>
-#include <yq/web/WebContext.hpp>
+#pragma once
 
 namespace {
     void    extension_markdown( WebHtml& out )
@@ -36,8 +32,7 @@ namespace {
         Markdown            parser(render, config);
         parser.process(d);
     }
+
+    YQ_INVOKE( reg_webpage<extension_markdown>("*.md"); )
 }
 
-YQ_INVOKE(
-    reg_webpage<extension_markdown>("*.md");
-)

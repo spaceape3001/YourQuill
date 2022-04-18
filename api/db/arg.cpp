@@ -20,6 +20,7 @@
 #include "document_cdb.hpp"
 #include "folder_cdb.hpp"
 #include "fragment_cdb.hpp"
+#include "image_cdb.hpp"
 #include "root_cdb.hpp"
 #include "tag_cdb.hpp"
 #include "user_cdb.hpp"

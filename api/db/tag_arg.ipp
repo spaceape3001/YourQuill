@@ -25,7 +25,7 @@ namespace yq {
             return Tag{};
         }
         
-        Tag tag(const WebContext&ctx)
+        Tag tag(const WebContext&ctx, bool *detected)
         {
             std::string    k    = ctx.find_query("id");
             if(!k.empty())
@@ -41,31 +41,21 @@ namespace yq {
             return Tag{};
         }
         
-        Tag tag(const WebHtml&h)
-        {
-            return tag(h.context());
-        }
         
-        Tag tag(const WebContext&ctx, std::string_view arg_name)
+        Tag tag(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return tag(arg_string);
         }
         
-        Tag tag(const WebHtml&h, std::string_view arg_name)
-        {
-            return tag(h.context(), arg_name);
-        }
-        
-        Tag tag(const WebContext& ctx, std::initializer_list<std::string_view> arg_names)
+        Tag tag(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return tag(arg_string);
-        }
-        
-        Tag tag(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return tag(h.context(), arg_names);
         }
 
         Tag tag_id(std::string_view arg_string)
@@ -76,26 +66,20 @@ namespace yq {
             return Tag{};
         }
 
-        Tag tag_id(const WebContext&ctx, std::string_view arg_name)
+        Tag tag_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return tag_id(arg_string);
         }
         
-        Tag tag_id(const WebHtml&h, std::string_view arg_name)
-        {
-            return tag_id(h.context(), arg_name);
-        }
-        
-        Tag tag_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        Tag tag_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return tag_id(arg_string);
-        }
-        
-        Tag tag_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return tag_id(h.context(), arg_names);
         }
         
         Tag tag_key(std::string_view arg_string)
@@ -103,26 +87,20 @@ namespace yq {
             return cdb::tag(trimmed(arg_string));
         }
         
-        Tag tag_key(const WebContext&ctx, std::string_view arg_name)
+        Tag tag_key(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return tag_key(arg_string);
         }
         
-        Tag tag_key(const WebHtml&h, std::string_view arg_name)
-        {
-            return tag_key(h.context(), arg_name);
-        }
-        
-        Tag tag_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        Tag tag_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return tag_key(arg_string);
-        }
-        
-        Tag tag_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return tag_key(h.context(), arg_names);
         }
     }
 }

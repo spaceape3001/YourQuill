@@ -162,6 +162,7 @@ namespace yq {
                 { HttpStatus::RetryWith,                    "Retry With"                        },
                 { HttpStatus::ParentalControl,              "Parental Control"                  },
                 { HttpStatus::Censored,                     "Censored"                          },
+                { HttpStatus::BadArgument,                  "Bad Argument Provided"             },
                 { HttpStatus::BadHTTPVersion,               "Incompatible HTTP Version"         },
                 { HttpStatus::MissingURI,                   "Missing URI"                       },
                 { HttpStatus::BadURI,                       "Malformed URI"                     }, 

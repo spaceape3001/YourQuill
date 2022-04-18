@@ -31,7 +31,7 @@ namespace yq {
             return h;
         }
 
-        void    dev_table(WebHtml&h, std::vector<const Root*> roots)
+        void    dev_table(WebHtml&h, const std::vector<const Root*>& roots)
         {
             auto _tab = h.table();
             h << "<tr><th><ID></th><th>Key</th><th>Name</th><th>Path</th></tr>\n";

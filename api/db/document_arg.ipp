@@ -22,49 +22,50 @@ namespace yq {
             return Document{};
         }
         
-        Document document(const WebContext&ctx)
+        Document document(const WebContext&ctx, bool *detected)
         {
+            if(detected)
+                *detected   = false;
+        
             std::string    k    = ctx.find_query("id");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return document_id(k);
+            }
             
             k       = ctx.find_query("key");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return document_key(k);
+            }
             
             k       = ctx.find_query("document");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return document(k);
+            }
             return Document{};
         }
         
-        Document document(const WebHtml&h)
-        {
-            return document(h.context());
-        }
-        
-        Document document(const WebContext&ctx, std::string_view arg_name)
+        Document document(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return document(arg_string);
         }
         
-        Document document(const WebHtml&h, std::string_view arg_name)
-        {
-            return document(h.context(), arg_name);
-        }
-        
-        Document document(const WebContext& ctx, std::initializer_list<std::string_view> arg_names)
+        Document document(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return document(arg_string);
         }
         
-        Document document(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return document(h.context(), arg_names);
-        }
-
         Document document_id(std::string_view arg_string)
         {
             uint64_t    i   = to_uint64(arg_string).value;
@@ -73,26 +74,20 @@ namespace yq {
             return Document{};
         }
 
-        Document document_id(const WebContext&ctx, std::string_view arg_name)
+        Document document_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return document_id(arg_string);
         }
         
-        Document document_id(const WebHtml&h, std::string_view arg_name)
-        {
-            return document_id(h.context(), arg_name);
-        }
-        
-        Document document_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        Document document_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return document_id(arg_string);
-        }
-        
-        Document document_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return document_id(h.context(), arg_names);
         }
         
         Document document_key(std::string_view arg_string)
@@ -100,27 +95,20 @@ namespace yq {
             return cdb::document(trimmed(arg_string));
         }
         
-        Document document_key(const WebContext&ctx, std::string_view arg_name)
+        Document document_key(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return document_key(arg_string);
         }
         
-        Document document_key(const WebHtml&h, std::string_view arg_name)
-        {
-            return document_key(h.context(), arg_name);
-        }
-        
-        Document document_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        Document document_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return document_key(arg_string);
         }
-        
-        Document document_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return document_key(h.context(), arg_names);
-        }
-
     }
 }

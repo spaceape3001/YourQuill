@@ -8,6 +8,7 @@
 
 #include "cdb_common.hpp"
 #include "image.hpp"
+#include <yq/enum/SizeDesc.hpp>
 #include <yq/net/Http.hpp>
 
 namespace yq {

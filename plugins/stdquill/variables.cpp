@@ -20,6 +20,7 @@ using namespace yq;
 #include "var/body.ipp"
 #include "var/can_edit.ipp"
 #include "var/footer.ipp"
+#include "var/home.ipp"
 #include "var/host.ipp"
 #include "var/local.ipp"
 #include "var/logged_in.ipp"

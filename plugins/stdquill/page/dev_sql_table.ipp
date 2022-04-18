@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 namespace {
@@ -7,7 +13,7 @@ namespace {
         int i, cc, count;
         std::string table = h.context().find_query("table");
         if(table.empty())
-            throw HttpStatus::NotAcceptable;
+            throw HttpStatus::BadArgument;
         
         auto& db    = wksp::db();
         if(!db.has_table(table))

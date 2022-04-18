@@ -22,29 +22,7 @@ using namespace yq::html;
 
 namespace {
 
-    void    page_dev_tag(WebHtml& out)
-    {
-        Tag x   = tag(out);
-        if(!x)
-            throw hNotFound;
-        auto i = info(x);
-        
-        out.title() << "Tag \"" << i.name << "\" (" << i.key << ")";
-        auto ta = out.table();
-        out.kvrow("ID") << x.id;
-        out.kvrow("Name") << i.name;
-        out.kvrow("Key") << i.key;
-        out.kvrow("Brief") << i.brief;
-        out.kvrow("Document") << dev(i.doc);
-        out.kvrow("Leaf"); //  << dev(leaf(x_tag));
-        out.kvrow("Image");
-    }
 
-    void    page_dev_tags(WebHtml& out)
-    {
-        out.title("All Tags");
-        dev_table(out, all_tags());
-    }
     
     void    update_info(Tag x, const Tag::SharedData& data)
     {
@@ -107,12 +85,7 @@ namespace {
 }
 
 YQ_INVOKE(
-    reg_webpage<page_dev_tag>("/dev/tag")
-        .argument("id", "Tag id (number)")
-        .argument("key", "Tag key (string)")
-        .argument("tag", "Tag key/identifier");
         
-    reg_webpage<page_dev_tags>("/dev/alltags");
     
     on_change<update_tag_data>(tags_folder(), "*.tag");
     for(const char* z : Image::kSupportedExtensionWildcards)

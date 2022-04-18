@@ -26,56 +26,54 @@ namespace yq {
             return fragment_id(arg_string);
         }
         
-        Fragment fragment(const WebContext&ctx, const Root* rt)
+        Fragment fragment(const WebContext&ctx, const Root* rt, bool *detected)
         {
-            std::string    k;
+            if(detected)
+                *detected   = false;
             
-            
-            k    = ctx.find_query("id");
-            if(!k.empty())
+            std::string k    = ctx.find_query("id");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return fragment_id(k);
+            }
             
             k   = ctx.find_query("root");
             if(!k.empty())
                 rt  = root(k);
 
             k       = ctx.find_query("key");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return fragment_key(k, rt);
+            }
             
             k       = ctx.find_query("fragment");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return fragment(k, rt);
+            }
             return Fragment{};
         }
         
-        Fragment fragment(const WebHtml&h, const Root* rt)
-        {
-            return fragment(h.context(), rt);
-        }
-        
-        Fragment fragment(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        Fragment fragment(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return fragment(arg_string, rt);
         }
         
-        Fragment fragment(const WebHtml&h, std::string_view arg_name, const Root* rt)
-        {
-            return fragment(h.context(), arg_name, rt);
-        }
-        
-        Fragment fragment(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        Fragment fragment(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return fragment(arg_string, rt);
         }
         
-        Fragment fragment(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
-        {
-            return fragment(h.context(), arg_names, rt);
-        }
-
         Fragment fragment_id(std::string_view arg_string)
         {
             uint64_t    i   = to_uint64(arg_string).value;
@@ -84,26 +82,20 @@ namespace yq {
             return Fragment{};
         }
 
-        Fragment fragment_id(const WebContext&ctx, std::string_view arg_name)
+        Fragment fragment_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return fragment_id(arg_string);
         }
         
-        Fragment fragment_id(const WebHtml&h, std::string_view arg_name)
-        {
-            return fragment_id(h.context(), arg_name);
-        }
-        
-        Fragment fragment_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        Fragment fragment_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return fragment_id(arg_string);
-        }
-        
-        Fragment fragment_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return fragment_id(h.context(), arg_names);
         }
         
         Fragment fragment_key(std::string_view arg_string, const Root* rt)
@@ -114,26 +106,20 @@ namespace yq {
             return cdb::first_fragment(doc, rt);
         }
         
-        Fragment fragment_key(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        Fragment fragment_key(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected   = !arg_string.empty();
             return fragment_key(arg_string, rt);
         }
         
-        Fragment fragment_key(const WebHtml&h, std::string_view arg_name, const Root* rt)
-        {
-            return fragment_key(h.context(), arg_name, rt);
-        }
-        
-        Fragment fragment_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        Fragment fragment_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected   = !arg_string.empty();
             return fragment_key(arg_string, rt);
-        }
-        
-        Fragment fragment_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
-        {
-            return fragment_key(h.context(), arg_names, rt);
         }
     }
 }

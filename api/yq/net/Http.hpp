@@ -101,6 +101,7 @@ namespace yq {
         ParentalControl             = 450,
         Censored                    = 451,
         
+        BadArgument                 = 495,
         BadHTTPVersion              = 496,
         MissingURI                  = 497,
         BadURI                      = 498,

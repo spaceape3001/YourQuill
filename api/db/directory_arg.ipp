@@ -23,56 +23,56 @@ namespace yq {
             return directory_id(arg_string);
         }
         
-        Directory directory(const WebContext&ctx, const Root* rt)
+        Directory directory(const WebContext&ctx, const Root* rt, bool *detected)
         {
             std::string    k;
             
+            if(detected)
+                *detected   = false;
             
             k    = ctx.find_query("id");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return directory_id(k);
+            }
             
             k   = ctx.find_query("root");
             if(!k.empty())
                 rt  = root(k);
 
             k       = ctx.find_query("key");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return directory_key(k, rt);
+            }
             
             k       = ctx.find_query("directory");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return directory(k, rt);
+            }
             return Directory{};
         }
         
-        Directory directory(const WebHtml&h, const Root* rt)
-        {
-            return directory(h.context(), rt);
-        }
-        
-        Directory directory(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        Directory directory(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected = !arg_string.empty();
             return directory(arg_string, rt);
         }
         
-        Directory directory(const WebHtml&h, std::string_view arg_name, const Root* rt)
-        {
-            return directory(h.context(), arg_name, rt);
-        }
-        
-        Directory directory(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        Directory directory(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected = !arg_string.empty();
             return directory(arg_string, rt);
         }
         
-        Directory directory(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
-        {
-            return directory(h.context(), arg_names, rt);
-        }
-
         Directory directory_id(std::string_view arg_string)
         {
             uint64_t    i   = to_uint64(arg_string).value;
@@ -81,27 +81,22 @@ namespace yq {
             return Directory{};
         }
 
-        Directory directory_id(const WebContext&ctx, std::string_view arg_name)
+        Directory directory_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected = !arg_string.empty();
             return directory_id(arg_string);
         }
         
-        Directory directory_id(const WebHtml&h, std::string_view arg_name)
-        {
-            return directory_id(h.context(), arg_name);
-        }
-        
-        Directory directory_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names)
+        Directory directory_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected = !arg_string.empty();
             return directory_id(arg_string);
         }
         
-        Directory directory_id(const WebHtml&h, std::initializer_list<std::string_view> arg_names)
-        {
-            return directory_id(h.context(), arg_names);
-        }
         
         Directory directory_key(std::string_view arg_string, const Root* rt)
         {
@@ -111,26 +106,20 @@ namespace yq {
             return cdb::first_directory(folder, rt);
         }
         
-        Directory directory_key(const WebContext&ctx, std::string_view arg_name, const Root* rt)
+        Directory directory_key(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
+            if(detected)
+                *detected = !arg_string.empty();
             return directory_key(arg_string, rt);
         }
         
-        Directory directory_key(const WebHtml&h, std::string_view arg_name, const Root* rt)
-        {
-            return directory_key(h.context(), arg_name, rt);
-        }
-        
-        Directory directory_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt)
+        Directory directory_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
+            if(detected)
+                *detected = !arg_string.empty();
             return directory_key(arg_string, rt);
-        }
-        
-        Directory directory_key(const WebHtml&h, std::initializer_list<std::string_view> arg_names, const Root* rt)
-        {
-            return directory_key(h.context(), arg_names, rt);
         }
     }
 }
