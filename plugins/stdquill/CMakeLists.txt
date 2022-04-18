@@ -1,8 +1,8 @@
 set(stdquill_SOURCES 
+    ./pages.cpp
     ./variables.cpp
 
     ./atom_sys.cpp
-    ./cache_db.cpp
     ./common.cpp
     ./developer.cpp
     ./file_sys.cpp
