@@ -61,8 +61,8 @@ namespace yq {
         
         Vector<Document>    child_documents(Folder f, unsigned opts)
         {
-            if(opts & BestSort){
-                if(opts & Hidden){
+            if(opts & BEST_SORT){
+                if(opts & HIDDEN){
                     static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? ORDER BY sk");
                     return s.vec<Document>(f.id);
                 } else {
@@ -70,7 +70,7 @@ namespace yq {
                     return s.vec<Document>(f.id);
                 }
             } else {
-                if(opts & Hidden){
+                if(opts & HIDDEN){
                     static thread_local SQ    s("SELECT id FROM Documents WHERE folder=?");
                     return s.vec<Document>(f.id);
                 } else {
@@ -82,12 +82,12 @@ namespace yq {
         
         Vector<Document>    child_documents(Folder f, Sorted sorted)
         {
-            return child_documents(f, Hidden | (sorted ? BestSort : 0));
+            return child_documents(f, HIDDEN | (sorted ? BEST_SORT : 0));
         }
 
         size_t              child_documents_count(Folder f, unsigned opts)
         {
-            if(opts & Hidden){
+            if(opts & HIDDEN){
                 static thread_local SQ    s("SELECT COUNT(1) FROM Documents WHERE folder=?");
                 return s.size(f.id);
             } else {
@@ -143,8 +143,8 @@ namespace yq {
 
         Vector<Folder>      child_folders(Folder f, unsigned opts)
         {
-            if(opts & BestSort){
-                if(opts & Hidden){
+            if(opts & BEST_SORT){
+                if(opts & HIDDEN){
                     static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? ORDER BY sk");
                     return s.vec<Folder>(f.id);
                 } else {
@@ -152,7 +152,7 @@ namespace yq {
                     return s.vec<Folder>(f.id);
                 }
             } else {
-                if(opts & Hidden){
+                if(opts & HIDDEN){
                     static thread_local SQ    s("SELECT id FROM Folders WHERE parent=?");
                     return s.vec<Folder>(f.id);
                 } else {
@@ -164,13 +164,13 @@ namespace yq {
 
         Vector<Folder>      child_folders(Folder f, Sorted sorted)
         {
-            return child_folders(f, Hidden | (sorted ? BestSort : 0));
+            return child_folders(f, HIDDEN | (sorted ? BEST_SORT : 0));
         }
         
         
         size_t              child_folders_count(Folder f, unsigned opts)
         {
-            if(opts & Hidden){
+            if(opts & HIDDEN){
                 static thread_local SQ    s("SELECT COUNT(1) FROM Folders WHERE parent=?");
                 return s.size(f.id);
             } else {

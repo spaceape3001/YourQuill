@@ -14,10 +14,13 @@
 #include <yq/type/ByteArray.hpp>
 
 #include "cdb_sq.hpp"
+#include "id_lock.hpp"
 #include "nki.hpp"
 #include "root.hpp"
 #include "workspace.hpp"
 
+#include "class.hpp"
+#include "leaf.hpp"
 
 #include "directory_cdb.hpp"
 #include "document_cdb.hpp"
@@ -27,6 +30,8 @@
 #include "root_cdb.hpp"
 #include "tag_cdb.hpp"
 #include "user_cdb.hpp"
+
+#include "id_lock.ipp"
 
 namespace yq {
     namespace cdb {
@@ -60,7 +65,15 @@ namespace yq {
             }
         }
     }
+    
+    // explicit instantiation
+    template class IDLock<Class>;
+    template class IDLock<Fragment>;
+    template class IDLock<Leaf>;
+    template class IDLock<Tag>;
+    template class IDLock<User>;
 }
+
 
 #include "cdb_sq.ipp"
 #include "directory_cdb.ipp"

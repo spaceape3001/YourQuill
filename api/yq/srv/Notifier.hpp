@@ -54,11 +54,12 @@ namespace yq {
         Flag<Change>                    change() const { return m_change; }
         Trigger                         trigger() const { return m_trigger; }
         const std::source_location&     source() const { return m_source; }
+        int                             order() const { return m_order; }
         
         static const EnumMap<Change,Vector<const Notifier*>>&     change_map();
 
     protected:
-        Notifier(Trigger, Flag<Change>, Folder, std::string_view, const std::filesystem::path&, const std::source_location&);
+        Notifier(Trigger, Flag<Change>, Folder, std::string_view, const std::filesystem::path&, int order, const std::source_location&);
         ~Notifier();
 
     private:
@@ -69,6 +70,7 @@ namespace yq {
         Folder                  m_folder;
         Trigger                 m_trigger;
         Flag<Change>            m_change;
+        int                     m_order;
         
         struct Repo;
         static Repo&            repo();

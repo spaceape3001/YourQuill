@@ -58,13 +58,13 @@ namespace yq {
         Folder                          folder(Fragment);
         Vector<Folder>                  folder_path(Fragment);
         
-        ByteArray                       frag_bytes(Fragment);                    // reads the specified fragment
-        ByteArray                       frag_bytes(std::string_view );              // equiv to bytes(fragment(document(k)))
-        ByteArray                       frag_bytes(std::string_view , DataRole);
+        ByteArray                       frag_bytes(Fragment, unsigned int opts=0);                    // reads the specified fragment
+        ByteArray                       frag_bytes(std::string_view, unsigned int opts=0 );              // equiv to bytes(fragment(document(k)))
+        ByteArray                       frag_bytes(std::string_view , DataRole, unsigned int opts=0);
 
-        std::string                     frag_string(Fragment);
-        std::string                     frag_string(std::string_view );
-        std::string                     frag_string(std::string_view , DataRole);
+        std::string                     frag_string(Fragment, unsigned int opts=0);
+        std::string                     frag_string(std::string_view, unsigned int opts=0 );
+        std::string                     frag_string(std::string_view , DataRole, unsigned int opts=0);
 
         Fragment                        fragment(const std::filesystem::path&);
         Fragment                        fragment(std::string_view );

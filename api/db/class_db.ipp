@@ -655,7 +655,7 @@ namespace yq {
         {
             ClassData::Shared        ret = std::make_shared<ClassData>();;
             for(auto& i : reads(c)){
-                if(opts & IsUpdate)
+                if(opts & IS_UPDATE)
                     update(i.first);
                 ret->merge(*(i.second), static_cast<bool>(opts&Override));
             }

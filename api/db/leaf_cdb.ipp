@@ -226,7 +226,7 @@ namespace yq {
         Leaf::Merge::Shared         merged(Leaf l, unsigned int opts)
         {
             Leaf::Merge::Shared     ret = std::make_shared<Leaf::Merge>();
-            bool    fFragUpdate     = static_cast<bool>(opts & IsUpdate);
+            bool    fFragUpdate     = static_cast<bool>(opts & IS_UPDATE);
             //bool    fAttributes     = !static_cast<bool>(opts & IgnoreAttributes);
             bool    fContext        = !static_cast<bool>(opts & IgnoreContext);
                 

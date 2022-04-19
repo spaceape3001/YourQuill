@@ -36,6 +36,14 @@ namespace yq {
             return s.size();
         }
 
+        Image   best_image(Tag x)
+        {
+            Document    d   = document(x);
+            if(d)
+                return best_image(d);
+            return Image{};
+        }
+
         std::string                 brief(Tag t)
         {
             static thread_local SQ    s("SELECT brief FROM Tags WHERE id=?");
@@ -167,7 +175,7 @@ namespace yq {
         }
         #endif
 
-        Tag                     make_tag(std::string_view k, const Root* rt)
+        Tag                     make_tag(std::string_view k, const Root* rt, unsigned int opts)
         {
             if(!rt)
                 rt  = wksp::root_first(DataRole::Tags);
@@ -184,7 +192,13 @@ namespace yq {
                 return t;
             if(fragments_count(doc))
                 return t;
-            Tag::SharedFile td  = write(t, rt);
+                
+            Tag::Lock   lk;
+            if(!(opts & DONT_LOCK))
+                lk  = Tag::Lock::write(t);
+            
+                // prelude, we're first....
+            Tag::SharedFile td  = write(t, rt, opts);
             td -> name  = k;
             td -> save();
             return t;
@@ -192,11 +206,23 @@ namespace yq {
 
         Tag::SharedData   merged(Tag t, unsigned int opts)
         {
+            if(!t)
+                return Tag::SharedData();
+            
+            Tag::Lock   lk;
+            if(!(opts & DONT_LOCK)){
+                lk   = Tag::Lock::read(t);
+                if(!lk){
+                    yWarning() << "Unable to acquire read lock on tag: " << key(t);
+                    return Tag::SharedData();
+                }
+            }
+
             Tag::SharedData  ret = std::make_shared<Tag::Data>();
-            for(auto& i :reads(t)){
-                if(opts & IsUpdate)
+            for(auto& i : reads(t, opts)){
+                if(opts & IS_UPDATE)
                     cdb::update(i.first);
-                ret -> merge(*(i.second), static_cast<bool>(opts&Override));
+                ret -> merge(*(i.second), static_cast<bool>(opts&OVERRIDE));
             }
             return ret;
         }
@@ -225,28 +251,28 @@ namespace yq {
             return NKI{};
         }
         
-        Tag::SharedFile          read(Tag t, const Root* rt)
+        Tag::SharedFile          read(Tag t, const Root* rt, unsigned int opts)
         {
-            return tag_doc(fragment(document(t), rt));
+            return tag_doc(fragment(document(t), rt), opts);
         }
 
         
-        Vector<TagFragDoc>      reads(Tag t)
+        Vector<TagFragDoc>      reads(Tag t, unsigned int opts)
         {
             Vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), DataRole::Tags)){
-                Tag::SharedFile  p   = tag_doc(f);
+                Tag::SharedFile  p   = tag_doc(f,opts);
                 if(p)
                     ret.push_back(TagFragDoc(f,p));
             }
             return ret;
         }
 
-        Vector<TagFragDoc>    reads(Tag t, class Root* rt)
+        Vector<TagFragDoc>    reads(Tag t, class Root* rt, unsigned int opts)
         {
             Vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), rt)){
-                Tag::SharedFile  p   = tag_doc(f);
+                Tag::SharedFile  p   = tag_doc(f, opts);
                 if(p)
                     ret.push_back(TagFragDoc(f,p));
             }
@@ -291,19 +317,33 @@ namespace yq {
             return exists_tag(i) ? Tag{i} : Tag{};
         }
         
-        Tag::SharedFile      tag_doc(Fragment f, bool fAllowEmpty)
+        Tag::SharedFile      tag_doc(Fragment f, unsigned int opts)
         {
             if(!f)
                 return Tag::SharedFile();
+                
+            std::filesystem::path       fp  = path(f);
+            
+            Fragment::Lock  lk;
+            if(!(opts & DONT_LOCK)){
+                lk  = Fragment::Lock::read(f);
+                if(!lk){
+                    yWarning() << "Unable to get read lock on fragment: " << fp;
+                    return Tag::SharedFile();
+                }
+            }
 
-            auto ch   = frag_bytes(f);
-            if(ch.empty())
-                return fAllowEmpty ? std::make_shared<Tag::File>() : Tag::SharedFile();
+            auto ch   = file_bytes(fp);
+            lk.free();
+            if(ch.empty()){
+                if(opts & ALLOW_EMPTY)
+                    return std::make_shared<Tag::File>();
+                return Tag::SharedFile();
+            }
             
             Tag::SharedFile  td = std::make_shared<Tag::File>();
-            std::filesystem::path   fp  = path(f);
             if(!td->load(std::move(ch), fp)){
-                yError() << "Unable to read " << fp;
+                yError() << "Unable to parse tag file: " << fp;
                 return Tag::SharedFile();
             }
             td -> set_file(fp);
@@ -311,7 +351,7 @@ namespace yq {
         }
 
         
-        Tag::SharedFile         write(Tag t, const Root* rt)
+        Tag::SharedFile         write(Tag t, const Root* rt, unsigned int opts)
         {
             Document    d   = document(t);
             if(!d)
@@ -320,7 +360,7 @@ namespace yq {
                 return Tag::SharedFile();
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Tags);
             if(f)
-                return tag_doc(f, true);
+                return tag_doc(f, opts | ALLOW_EMPTY);
 
             Folder      fo  = folder(d);
             if((fo != cdb::top_folder()) && !exists(fo, rt))

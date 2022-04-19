@@ -44,7 +44,7 @@ namespace {
     void    stage3_user1(Document doc)
     {
         User u  = cdb::db_user(doc);
-        User::SharedData data = cdb::merged(u, cdb::IsUpdate);
+        User::SharedData data = cdb::merged(u, cdb::IS_UPDATE);
         if(data)
             update_info(u, data);
     }
@@ -60,7 +60,7 @@ namespace {
     void    stage3_user2(Document doc)
     {
         User u  = cdb::db_user(doc);
-        User::SharedData data = cdb::merged(u, cdb::IsUpdate);
+        User::SharedData data = cdb::merged(u, cdb::IS_UPDATE);
         if(!data)
             return ;
         
@@ -81,7 +81,7 @@ namespace {
             }
         }
         
-        User::SharedData data = cdb::merged(t, cdb::IsUpdate);
+        User::SharedData data = cdb::merged(t, cdb::IS_UPDATE);
         update_info(t, data);
     }
     

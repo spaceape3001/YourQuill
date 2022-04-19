@@ -58,6 +58,31 @@ namespace yq {
             return s.str(doc.id);
         }
 
+        Image   best_image(Document x)
+        {
+            std::string k   = key(x);
+            if(k.empty())
+                return Image{};
+                
+            size_t  i   = k.find_last_of('.');
+            if((i != std::string::npos) && (i>0)){
+                // truncate
+                k.resize(i+1);
+            }
+            
+            Folder      fo  = folder(x);
+            for(const char* z : Image::kSupportedExtensions){
+                std::string     k2 = k + z;
+                Document        dimg    = child_document(fo, k2);
+                if(!dimg)
+                    continue;
+                Image img = image(dimg);
+                if(img)
+                    return img;
+            }
+            return Image{};
+        }
+
     #if 0
         std::string                 child_key(Document);
     #endif
@@ -98,7 +123,7 @@ namespace yq {
             i.bind(6,base);
             i.bind(7,ak[0] == '.');
             
-            if(is_good(i.step())){
+            if(is_good(i.step(false))){
                 if(wasCreated)
                     *wasCreated = true;
                 return Document((uint64_t) i.last_id());
@@ -106,7 +131,7 @@ namespace yq {
                 s.bind(1,k);
                 if(s.step() == SqlQuery::Row)
                     return Document{s.v_uint64(1)};
-                cdbError << "Unable to get documednt ID";
+                cdbError << "Unable to get document ID";
                 return Document();
             }
 
@@ -290,7 +315,7 @@ namespace yq {
         {
             static thread_local SQ u("UPDATE Documents SET hidden=1 WHERE id=?");
             u.bind(1, d.id);
-            u.step();
+            u.exec();
             u.reset();
         }
         
@@ -388,9 +413,9 @@ namespace yq {
         void                show(Document d)
         {
             static thread_local SQ u("UPDATE Documents SET hidden=0 WHERE id=?");
-            auto u_af   = u.af();
             u.bind(1, d.id);
-            u.step();
+            u.step(true);
+            u.reset();
         }
         
         std::string             skey(Document d)

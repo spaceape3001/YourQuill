@@ -174,7 +174,7 @@ namespace yq {
         }
         
 
-        User                    make_user(std::string_view k, const Root* rt)
+        User                    make_user(std::string_view k, const Root* rt, unsigned int opts)
         {
             if(!rt)
                 rt  = wksp::root_first(DataRole::Users);
@@ -191,7 +191,7 @@ namespace yq {
                 return t;
             if(fragments_count(doc))
                 return t;
-            User::SharedFile td  = write(t, rt);
+            User::SharedFile td  = write(t, rt, opts);
             td -> name  = k;
             td -> save();
             return t;
@@ -200,11 +200,23 @@ namespace yq {
 
         User::SharedData         merged(User u, unsigned int opts)
         {
+            if(!u)
+                return User::SharedData();
+            
+            User::Lock  lk;
+            if(!(opts & DONT_LOCK)){
+                lk      = User::Lock::read(u);
+                if(!lk){
+                    yWarning() << "Unable to get read lock on user: " << key(u);
+                    return User::SharedData();
+                }
+            }
+            
             User::SharedData  ret = std::make_shared<User::Data>();
-            for(auto& i : reads(u)){
-                if(opts & IsUpdate)
+            for(auto& i : reads(u, opts)){
+                if(opts & IS_UPDATE)
                     cdb::update(i.first);
-                ret -> merge(*(i.second), static_cast<bool>(opts&Override));
+                ret -> merge(*(i.second), static_cast<bool>(opts&OVERRIDE));
             }
             return ret;
         }
@@ -215,22 +227,22 @@ namespace yq {
             return s.str(u.id);
         }
 
-        Vector<UserFragDoc> reads(User u)
+        Vector<UserFragDoc> reads(User u, unsigned int opts)
         {
             Vector<UserFragDoc>  ret;
             for(Fragment f : fragments(document(u), DataRole::Users)){
-                User::SharedFile  p   = user_doc(f);
+                User::SharedFile  p   = user_doc(f, opts);
                 if(p)
                     ret.push_back(UserFragDoc(f,p));
             }
             return ret;
         }
         
-        Vector<UserFragDoc> reads(User u, class Root*rt)
+        Vector<UserFragDoc> reads(User u, class Root*rt, unsigned int opts)
         {
             Vector<UserFragDoc>  ret;
             for(Fragment f : fragments(document(u), rt)){
-                User::SharedFile  p   = user_doc(f);
+                User::SharedFile  p   = user_doc(f, opts);
                 if(p)
                     ret.push_back(UserFragDoc(f,p));
             }
@@ -248,19 +260,33 @@ namespace yq {
             return exists_user(i) ? User{i} : User{};
         }
         
-        User::SharedFile        user_doc(Fragment f, bool fAllowEmpty)
+        User::SharedFile        user_doc(Fragment f, unsigned int opts)
         {
             if(!f)
                 return User::SharedFile();
+                
+            std::filesystem::path   fp  = path(f);
 
-            auto ch   = frag_bytes(f);
-            if(ch.empty())
-                return fAllowEmpty ? std::make_shared<User::File>() : User::SharedFile();
+            Fragment::Lock  lk;
+            if(!(opts & DONT_LOCK)){
+                lk      = Fragment::Lock::read(f);
+                if(!lk){
+                    yWarning() << "Unable to obtain read lock on fragment: " << fp;
+                    return User::SharedFile();
+                }
+            }
+
+            auto ch   = frag_bytes(f, opts);
+            lk.free();
+            if(ch.empty()){
+                if(opts & ALLOW_EMPTY)
+                    return std::make_shared<User::File>();
+                return User::SharedFile();
+            }
             
             User::SharedFile  td = std::make_shared<User::File>();
-            std::filesystem::path   fp  = path(f);
             if(!td->load(std::move(ch), fp)){
-                yError() << "Unable to read " << fp;
+                yError() << "Unable to parse user file: " << fp;
                 return User::SharedFile();
             }
             td -> set_file(fp);
@@ -268,7 +294,7 @@ namespace yq {
         }
         
 
-        User::SharedFile          write(User u, const Root*rt)
+        User::SharedFile          write(User u, const Root*rt, unsigned int opts)
         {
             Document    d   = document(u);
             if(!d)
@@ -277,7 +303,7 @@ namespace yq {
                 return User::SharedFile();
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Users);
             if(f)
-                return user_doc(f, true);
+                return user_doc(f, opts);
 
             Folder      fo  = folder(d);
             if((fo != cdb::users_folder()) && !exists(fo, rt))

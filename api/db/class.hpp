@@ -11,6 +11,8 @@
 
 namespace yq {
 
+    template <typename> class IDLock;
+
     /*! \brief Atom class in the cache
 
         This structure represents an atom classification in the cache
@@ -18,6 +20,10 @@ namespace yq {
     struct Class {
         static constexpr const char*    szExtension = "cls";
         struct Info;
+        struct File;
+        struct Data;
+        using Lock = IDLock<Class>;
+        
 
         static bool less_key(Class a, Class b);
         static bool less_label(Class a, Class b);

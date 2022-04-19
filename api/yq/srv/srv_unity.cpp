@@ -12,6 +12,7 @@
 #include <yq/collection/Vector.hpp>
 #include <yq/text/text_utils.hpp>
 
+
 namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -38,12 +39,13 @@ namespace yq {
     }
     
 
-    Notifier::Notifier(Trigger trigger, Flag<Change> changeMask, Folder folder, std::string_view ext, const std::filesystem::path& file, const std::source_location& sl)
+    Notifier::Notifier(Trigger trigger, Flag<Change> changeMask, Folder folder, std::string_view ext, const std::filesystem::path& file, int _order, const std::source_location& sl)
     {
         m_path      = file;
         m_source    = sl;
         m_folder    = folder;
         m_change    = changeMask;
+        m_order     = _order;
 
         bool        is_extension    = starts(ext, "*.");
         if(is_extension)

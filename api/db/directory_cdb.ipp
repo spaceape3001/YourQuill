@@ -9,8 +9,8 @@ namespace yq {
     namespace cdb {
         Vector<Directory>   all_directories(unsigned opts)
         {
-            if(opts & BestSort){
-                if(opts & Hidden){
+            if(opts & BEST_SORT){
+                if(opts & HIDDEN){
                     static thread_local SQ    s("SELECT id FROM Directories ORDER BY path");
                     return s.vec<Directory>();
                 } else {
@@ -18,7 +18,7 @@ namespace yq {
                     return s.vec<Directory>();
                 }
             } else {
-                if(opts & Hidden){
+                if(opts & HIDDEN){
                     static thread_local SQ    s("SELECT id FROM Directories");
                     return s.vec<Directory>();
                 } else {
@@ -30,7 +30,7 @@ namespace yq {
         
         Vector<Directory>   all_directories(Sorted sorted)
         {
-            return all_directories(Hidden | (sorted ? BestSort : 0));
+            return all_directories(HIDDEN | (sorted ? BEST_SORT : 0));
         }
 
         size_t              all_directories_count()

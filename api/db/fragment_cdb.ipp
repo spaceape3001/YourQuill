@@ -162,35 +162,49 @@ namespace yq {
             return folder_path(document(f));
         }
         
-        ByteArray           frag_bytes(Fragment f)
+        ByteArray           frag_bytes(Fragment f, unsigned opts)
         {
-            return file_bytes(path(f));
+            std::filesystem::path   p = path(f);
+            Fragment::Lock  lk;
+            if(!(opts & DONT_LOCK))
+                lk = Fragment::Lock::read(f);
+            if(lk){
+                return file_bytes(p);
+            } else
+                return ByteArray{};
         }
         
-        ByteArray           frag_bytes(std::string_view k)
+        ByteArray           frag_bytes(std::string_view k, unsigned opts)
         {
-            return frag_bytes(fragment(document(k)));
+            return frag_bytes(fragment(document(k)), opts);
         }
         
-        ByteArray           frag_bytes(std::string_view k, DataRole dr)
+        ByteArray           frag_bytes(std::string_view k, DataRole dr, unsigned opts)
         {
-            return frag_bytes(fragment(document(k),dr));
+            return frag_bytes(fragment(document(k),dr), opts);
         }
         
         
-        std::string              frag_string(Fragment f)
+        std::string              frag_string(Fragment f, unsigned opts)
         {
-            return file_string(path(f));
+            std::filesystem::path   p = path(f);
+            Fragment::Lock  lk;
+            if(!(opts & DONT_LOCK))
+                lk = Fragment::Lock::read(f);
+            if(lk){
+                return file_string(p);
+            } else
+                return std::string{};
         }
         
-        std::string              frag_string(std::string_view k)
+        std::string              frag_string(std::string_view k, unsigned opts)
         {
-            return frag_string(fragment(document(k)));
+            return frag_string(fragment(document(k)), opts);
         }
         
-        std::string              frag_string(std::string_view k, DataRole dr)
+        std::string              frag_string(std::string_view k, DataRole dr, unsigned opts)
         {
-            return frag_string(fragment(document(k),dr));
+            return frag_string(fragment(document(k),dr), opts);
         }
 
         Fragment            fragment(const std::filesystem::path&k)

@@ -43,27 +43,29 @@ namespace yq {
 
         enum {
             //! Include hidden things
-            Hidden                  = 0x01,
+            HIDDEN                  = 0x01,
 
             //! Best sort available (equiv to Sorted::YES)
-            BestSort                = 0x02,
+            BEST_SORT                = 0x02,
             
             // Update flags
             
             //! Consider this an "update" so reset the fragment to "updated" 
             //! \note Only the scanner should be using this, may cause issues for otherrs to set this
-            IsUpdate                = 0x04,
+            IS_UPDATE               = 0x04,
             //! Ignore attributes
-            IgnoreAttributes        = 0x08,
+            IGNORE_ATTRIBUTES       = 0x08,
             //! Ignore context
-            IgnoreContext           = 0x10,
+            IGNORE_CONTEXT          = 0x10,
             
-            Override                = 0x20,
+            OVERRIDE                = 0x20,
             
-            AllowEmpty              = 0x40,
+            ALLOW_EMPTY             = 0x40,
             
             //! Skip biograph (in users/groups)
-            SkipBio                 = 0x80
+            SKIP_BIO                = 0x80,
+            
+            DONT_LOCK               = 0x100
             
         };
     

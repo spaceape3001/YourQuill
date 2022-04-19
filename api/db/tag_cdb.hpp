@@ -31,6 +31,8 @@ namespace yq {
         Vector<Tag>             all_tags(Sorted sorted=Sorted());
         size_t                  all_tags_count();
         
+        //! Searches for the best image for the tag
+        Image                   best_image(Tag);
         std::string             brief(Tag);
 
         Tag                     db_tag(Document, bool* wasCreated=nullptr);
@@ -53,7 +55,7 @@ namespace yq {
         std::string             label(Tag);
         //Leaf                    leaf(Tag t);
         
-        Tag                     make_tag(std::string_view, const Root* rt=nullptr);
+        Tag                     make_tag(std::string_view, const Root* rt=nullptr, unsigned int opts=0);
         Tag::SharedData         merged(Tag, unsigned int opts=0);
         
         std::string             name(Tag);
@@ -63,10 +65,10 @@ namespace yq {
         //! \brief Returns the FIRST tag fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        Tag::SharedFile         read(Tag, const Root*);
+        Tag::SharedFile         read(Tag, const Root*, unsigned int opts=0);
         
-        Vector<TagFragDoc>      reads(Tag);
-        Vector<TagFragDoc>      reads(Tag, class Root*);
+        Vector<TagFragDoc>      reads(Tag, unsigned int opts=0);
+        Vector<TagFragDoc>      reads(Tag, class Root*, unsigned int opts=0);
         
         bool                    set_brief(Tag, std::string_view, class Root* rt=nullptr);
         bool                    set_name(Tag, std::string_view, class Root* rt=nullptr);
@@ -75,14 +77,14 @@ namespace yq {
         Tag                     tag(std::string_view);
         Tag                     tag(uint64_t);
         
-        Tag::SharedFile         tag_doc(Fragment, bool fAllowEmpty=false);
+        Tag::SharedFile         tag_doc(Fragment, unsigned int opts=0);
 
         //!  \brief   Returns a writable document
         //!
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        Tag::SharedFile         write(Tag, const Root*);
+        Tag::SharedFile         write(Tag, const Root*, unsigned int opts=0);
     };
 
 }

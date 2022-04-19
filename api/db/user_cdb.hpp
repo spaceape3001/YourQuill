@@ -33,9 +33,6 @@ namespace yq {
 
 
     namespace cdb {
-        enum {
-            SKIP_BIO        = 0x100
-        };
         using UserFragDoc  = std::pair<Fragment, User::SharedFile>;
 
         Vector<User>            all_users(Sorted sorted=Sorted());
@@ -64,18 +61,18 @@ namespace yq {
         bool                    is_reader(User);
         
         std::string             key(User);
-        User                    make_user(std::string_view, const Root* rt=nullptr);
+        User                    make_user(std::string_view, const Root* rt=nullptr, unsigned int opts=0);
         User::SharedData        merged(User, unsigned int opts=0);
         
         std::string             name(User);
         
-        Vector<UserFragDoc>     reads(User);
-        Vector<UserFragDoc>     reads(User, class Root*);
+        Vector<UserFragDoc>     reads(User, unsigned int opts=0);
+        Vector<UserFragDoc>     reads(User, class Root*, unsigned int opts=0);
 
         User                    user(std::string_view);
         User                    user(uint64_t);
         
-        User::SharedFile        user_doc(Fragment, bool fAllowEmpty=false);
+        User::SharedFile        user_doc(Fragment, unsigned int opts=0);
 
 
         //!  \brief   Returns a writable document
@@ -83,6 +80,6 @@ namespace yq {
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        User::SharedFile        write(User, const Root*);
+        User::SharedFile        write(User, const Root*, unsigned int opts=0);
     }
 }

@@ -267,6 +267,11 @@ namespace yq {
         return std::string_view();
     }
 
+    //bool     SqlQuery::exec(bool noisy)
+    //{
+        //return is_good(step(noisy));
+    //}
+
     int64_t  SqlQuery::last_id() const
     {
         return sqlite3_last_insert_rowid(m_db.db());

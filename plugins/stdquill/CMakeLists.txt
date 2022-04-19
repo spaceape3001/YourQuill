@@ -1,10 +1,10 @@
 set(stdquill_SOURCES 
     ./pages.cpp
+    ./updater.cpp
     ./variables.cpp
 
     ./common.cpp
     ./developer.cpp
-    ./tag_sys.cpp
     ./user.cpp
     ./workspace.cpp
 )

@@ -254,10 +254,21 @@ std::string_view    filename(std::string_view fn)
     return fn.substr(n+1);
 }
 
+EnumMap<Change,Vector<const Notifier*>> change_map()
+{
+    EnumMap<Change,Vector<const Notifier*>> ret = Notifier::change_map();
+    for(Change c : Change::all_values()){
+        ret[c].stable_sort([](const Notifier*a, const Notifier*b) -> bool {
+            return a->order() < b->order();
+        });
+    }
+    return ret;
+}
+
 
 void    dispatch(Change change, Fragment frag, Folder fo, const std::filesystem::path& p)
 {
-    static const EnumMap<Change,Vector<const Notifier*>>& changeMap = Notifier::change_map();
+    static EnumMap<Change,Vector<const Notifier*>> changeMap = change_map();
 
     std::string_view    name    = filename(p.native());
     std::string_view    ext     = file_extension(name);

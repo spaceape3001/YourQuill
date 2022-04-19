@@ -40,6 +40,15 @@ namespace yq {
         
         std::string                     base_key(Document);         //!< key w/o final extensions
 
+        /*! \brief Finds image that best corresponds to the document
+        
+            This does so by replacing any final extension with the various image extensions & checking.
+            
+            \param[in] doc  Input document
+            \return Image if successful, null otherwise
+        */
+        Image                           best_image(Document doc);
+        
     #if 0
         std::string                     child_key(Document);
     #endif

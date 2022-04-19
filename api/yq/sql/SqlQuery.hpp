@@ -101,6 +101,9 @@ namespace yq {
         //! \param[in] c    Parameter/column index, starts at ONE
         std::string_view    column_name(int c) const;
         
+        //! \brief Conviences to is_good(step())
+        //bool                exec(bool noisy=true);
+        
         //! Returns the last ID (database-connection-wide)
         int64_t             last_id() const;
 

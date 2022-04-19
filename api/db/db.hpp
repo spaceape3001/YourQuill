@@ -9,6 +9,8 @@
 #include "atom.hpp"
 #include "atom_html.hpp"
 
+#include "cdb_sq.hpp"
+
 #include "class.hpp"
 #include "class_html.hpp"
 
@@ -34,6 +36,8 @@
 #include "fragment_arg.hpp"
 #include "fragment_cdb.hpp"
 #include "fragment_html.hpp"
+
+#include "id_lock.hpp"
 
 #include "image.hpp"
 #include "image_cdb.hpp"
