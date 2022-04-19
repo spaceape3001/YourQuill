@@ -8,9 +8,9 @@
 
 namespace {
 
-    void    var_year(Stream& str, WebContext& ctx)
+    void    var_year(WebHtml& h)
     {
-        str << (ctx.timeparts.tm_year+1900);
+        h << (h.context().timeparts.tm_year+1900);
     }
 
     YQ_INVOKE( reg_webvar<var_year>("year"); )

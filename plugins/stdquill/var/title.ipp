@@ -8,9 +8,9 @@
 
 namespace {
 
-    void    var_title(Stream& str, WebContext&ctx)
+    void    var_title(WebHtml&h)
     {
-        html_escape_write(str, ctx.var_title);
+        html_escape_write(h, h.context().var_title);
     }
 
     YQ_INVOKE( reg_webvar<var_title>("title"); )

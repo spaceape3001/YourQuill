@@ -32,7 +32,7 @@ namespace yq {
     public:
     
         
-        virtual void handle(Stream&, WebContext&) const = 0;
+        virtual void handle(WebHtml&) const = 0;
         
         class Writer;
     

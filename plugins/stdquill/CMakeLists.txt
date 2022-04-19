@@ -5,7 +5,6 @@ set(stdquill_SOURCES
 
     ./common.cpp
     ./developer.cpp
-    ./user.cpp
     ./workspace.cpp
 )
 

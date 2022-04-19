@@ -40,7 +40,7 @@ namespace yq {
     WebPage::Writer     reg_webpage(HttpOps methods, std::string_view path, std::function<void(WebContext&)>, const std::source_location& sl = std::source_location::current());
     
 
-    template <void (*FN)(Stream&, WebContext&)>
+    template <void (*FN)(WebHtml&)>
     class SimpleWebVariable : public WebVariable {
     public:
         SimpleWebVariable(std::string_view _path, const std::source_location& _sl) : WebVariable(_path, _sl)
@@ -48,13 +48,13 @@ namespace yq {
         }
         
         
-        virtual void handle(Stream&str, WebContext&ctx) const override
+        virtual void handle(WebHtml&ctx) const override
         {
-            FN(str, ctx);
+            FN(ctx);
         }
     };
     
-    template <void (*FN)(Stream&, WebContext&)>
+    template <void (*FN)(WebHtml&)>
     WebVariable::Writer     reg_webvar(std::string_view name, const std::source_location& sl = std::source_location::current())
     {   
         return WebVariable::Writer(new SimpleWebVariable<FN>(name, sl));

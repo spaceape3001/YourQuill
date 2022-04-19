@@ -8,28 +8,29 @@
 
 namespace {
 
-    void    var_tabbar(Stream& str, WebContext& ctx)
+    void    var_tabbar(WebHtml& h)
     {
+        WebContext& ctx = h.context();
         const WebGroup* grp = ctx.page -> group();
         if(!grp)
             return ;
     
-        str << "<table class=\"tabbar\"><tr>\n";
+        h << "<table class=\"tabbar\"><tr>\n";
         for(const WebPage* p : grp -> pages){
             bool    us = p == ctx.page;
             if(us) {
-                str << "<td class=\"tb-select\">";
-                html_escape_write(str, p -> label());
-                str << "</td>";
+                h << "<td class=\"tb-select\">";
+                html_escape_write(h, p -> label());
+                h << "</td>";
             } else {
                 UrlView url = ctx.url;
                 url.path    = p->path();
-                str << "<td class=\"tabbar\"><a href=\"" << url << "\">";
-                html_escape_write(str, p -> label());
-                str << "</a></td>";
+                h << "<td class=\"tabbar\"><a href=\"" << url << "\">";
+                html_escape_write(h, p -> label());
+                h << "</a></td>";
             }
         }
-        str << "</td></table>\n";
+        h << "</td></table>\n";
     }
 
     YQ_INVOKE( reg_webvar<var_tabbar>("tabbar"); )

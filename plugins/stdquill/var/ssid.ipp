@@ -8,9 +8,9 @@
 
 namespace {
 
-    void    var_ssid(Stream&str, WebContext& ctx)
+    void    var_ssid(WebHtml& h)
     {
-        str << ctx.session.ssid;
+        h << h.context().session.ssid;
     }
 
     YQ_INVOKE( reg_webvar<var_ssid>("ssid"); )

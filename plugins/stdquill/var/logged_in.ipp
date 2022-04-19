@@ -8,10 +8,10 @@
 
 namespace {
 
-    void    var_logged_in(Stream&str, WebContext& ctx)
+    void    var_logged_in(WebHtml& h)
     {
         //  TODO
-        str << true;
+        h << true;
     }
 
     YQ_INVOKE( reg_webvar<var_logged_in>("logged_in").todo(); )

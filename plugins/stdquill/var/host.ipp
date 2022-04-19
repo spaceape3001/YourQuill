@@ -7,9 +7,9 @@
 #pragma once
 
 namespace {
-    void    var_host(Stream& str, WebContext&)
+    void    var_host(WebHtml&h)
     {
-        html_escape_write(str, wksp::host());
+        html_escape_write(h, wksp::host());
     }
 
     YQ_INVOKE( reg_webvar<var_host>("host"); )

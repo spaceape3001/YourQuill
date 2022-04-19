@@ -87,9 +87,11 @@ namespace yq {
         
     private:
         WebContext&         m_context;
+        ByteArray*          m_dest = nullptr;
         enum Target {
             BODY,
-            TITLE
+            TITLE,
+            DEST
         };
         Target              m_target     = BODY;
     };

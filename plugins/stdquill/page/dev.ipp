@@ -7,11 +7,5 @@
 #pragma once
 
 namespace {
-    void    var_author(WebHtml&h)
-    {
-        html_escape_write(h, wksp::author());
-    }
-
-    YQ_INVOKE( reg_webvar<var_author>("author"); )
+    YQ_INVOKE( reg_webpage("/dev/**", wksp::shared_all("www/dev"sv)); )
 }
-

@@ -8,9 +8,9 @@
 
 namespace {
 
-    void    var_home(Stream&str, WebContext&)
+    void    var_home(WebHtml&h)
     {
-        html_escape_write(str, wksp::home());
+        html_escape_write(h, wksp::home());
     }
 
     YQ_INVOKE( reg_webvar<var_home>("home"); )

@@ -8,9 +8,9 @@
 
 namespace {
 
-    void    var_time(Stream& str, WebContext& ctx)
+    void    var_time(WebHtml& h)
     {
-        str << ctx.timestamp;
+        h  << h.context().timestamp;
     }
     
 

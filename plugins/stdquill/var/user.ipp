@@ -8,12 +8,13 @@
 
 namespace {
 
-    void    var_user(Stream&str, WebContext& ctx)
+    void    var_user(WebHtml& h)
     {
-        if(!ctx.session.logged_in)
-            str << "(anonymous)";
+        auto& ctx = h.context().session;
+        if(!ctx.logged_in)
+            h << "(anonymous)";
         else
-            str << ctx.session.username;
+            h << ctx.username;
     }
 
     YQ_INVOKE( reg_webvar<var_user>("user"); )

@@ -8,10 +8,10 @@
 
 namespace {
 
-    void    var_can_edit(Stream& str, WebContext&)
+    void    var_can_edit(WebHtml&h)
     {
         //  TODO
-        str << true;
+        h << true;
     }
 
     YQ_INVOKE( reg_webvar<var_can_edit>("can_edit").todo(); )

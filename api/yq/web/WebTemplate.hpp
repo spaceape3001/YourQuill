@@ -28,7 +28,7 @@ namespace yq {
         
         std::string_view    data() const { return m_data; }
         
-        void            execute(Stream&, WebContext&) const;
+        void            execute(WebHtml&) const;
         
         ContentType         type() const { return m_type; }
         

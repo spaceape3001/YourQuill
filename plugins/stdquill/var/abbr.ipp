@@ -7,9 +7,9 @@
 #pragma once
 
 namespace {
-    void    var_abbr(Stream&str, WebContext&)
+    void    var_abbr(WebHtml&h)
     {
-        html_escape_write(str, wksp::abbreviation());
+        html_escape_write(h, wksp::abbreviation());
     }
 
     YQ_INVOKE( reg_webvar<var_abbr>("abbr"); )

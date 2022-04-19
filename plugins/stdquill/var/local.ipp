@@ -8,9 +8,9 @@
 
 namespace {
 
-    void    var_local(Stream& str, WebContext& ctx)
+    void    var_local(WebHtml& h)
     {
-        str << ctx.is_local();
+        h << h.context().is_local();
     }
 
     YQ_INVOKE( reg_webvar<var_local>("local"); )

@@ -1,9 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 namespace {
-    void    var_body(Stream& str, WebContext&ctx)
+    void    var_body(WebHtml& h)
     {
-        str << ctx.var_body;
+        h << h.context().var_body;
     }
 
     YQ_INVOKE(reg_webvar<var_body>("body");)

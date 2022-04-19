@@ -6,12 +6,7 @@
 
 #pragma once
 
-namespace {
-    void    var_author(WebHtml&h)
-    {
-        html_escape_write(h, wksp::author());
-    }
+#include <yq/type/Guarded.hpp>
+#include <string>
 
-    YQ_INVOKE( reg_webvar<var_author>("author"); )
-}
-
+extern Guarded<std::string>     gTextColor, gBkColor;

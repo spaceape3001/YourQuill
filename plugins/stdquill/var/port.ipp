@@ -8,9 +8,9 @@
 
 namespace {
 
-    void    var_port(Stream& str, WebContext&)
+    void    var_port(WebHtml&h)
     {
-        str << wksp::port();
+        h << wksp::port();
     }
 
     YQ_INVOKE( reg_webvar<var_port>("port"); )

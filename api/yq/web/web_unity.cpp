@@ -583,8 +583,12 @@ namespace yq {
             ba.reserve(8192+m_context.var_body.size());   // an estimate....
             auto temp   = web::html_template();
             m_context.tx_content_type   = ContentType::html;
-            stream::Bytes   out(ba);
-            temp -> execute(out, m_context);
+            
+            m_dest      = &ba;
+            Target  oldT    = m_target;
+            m_target    = DEST;
+            temp -> execute(*this);
+            m_target    = oldT;
         }
 
         void WebHtml::title(const std::string_view& _title)
@@ -600,6 +604,10 @@ namespace yq {
                 break;
             case TITLE:
                 m_context.var_title.append(buf, cb);
+                break;
+            case DEST:
+                if(m_dest)
+                    m_dest -> append(buf, cb);
                 break;
             }
             return true;
@@ -1080,21 +1088,21 @@ namespace yq {
             parse(m_data);
         }
 
-        void    WebTemplate::execute(Stream&str, WebContext&ctx) const
+        void    WebTemplate::execute(WebHtml&h) const
         {
             //  TODO .... content type == markdown
         
             for(auto& t : m_bits){
                 if(!t.variable){
-                    str << t.token;
+                    h << t.token;
                     continue;
                 }
                 
                 const WebVariable*  v = web::variable(t.token);
                 if(v){
-                    v -> handle(str, ctx);
+                    v -> handle(h);
                 } else {
-                    str << "{{" << t.token << "}}"; // make it clear there's a substitution failure
+                    h << "{{" << t.token << "}}"; // make it clear there's a substitution failure
                 }
             }
         }
