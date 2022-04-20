@@ -58,6 +58,11 @@ using namespace yq::html;
 #include "page/dev_tag.ipp"
 #include "page/dev_tags.ipp"
 #include "page/dev_users.ipp"
+#include "page/dev_webdirs.ipp"
+#include "page/dev_webexts.ipp"
+#include "page/dev_webglobs.ipp"
+#include "page/dev_webpages.ipp"
+#include "page/dev_webvars.ipp"
 #include "page/dev_wksp.ipp"
 
 #include "page/ext_markdown.ipp"

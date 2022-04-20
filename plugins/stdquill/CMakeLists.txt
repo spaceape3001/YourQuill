@@ -4,7 +4,6 @@ set(stdquill_SOURCES
     ./variables.cpp
 
     ./common.cpp
-    ./developer.cpp
 )
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
