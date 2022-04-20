@@ -7,8 +7,14 @@
 #pragma once
 
 namespace {
+    void    var_footer(WebHtml&h)
+    {
+        Ref<WebTemplate>    footer  = gFooter;
+        if(footer)
+            footer -> execute(h);
+    }
 
 
-    YQ_INVOKE( )
+    YQ_INVOKE( reg_webvar<var_footer>("footer"); )
 }
 

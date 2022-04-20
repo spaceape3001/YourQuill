@@ -17,6 +17,8 @@ namespace {
         h.kvrow("Author") << wksp::author();
         h.kvrow("Abbreviation") << wksp::abbreviation();
         h.kvrow("Cache") << wksp::cache();
+        h.kvrow("Color (Background)") << gBkColor.get();
+        h.kvrow("Color (Text)") << gTextColor.get();
         //h.kvrow("Config") << dev(cdb::config_folder());
         h.kvrow("Copyright") << wksp::copyright().text;
         h.kvrow("Key") << wksp::quill_key();

@@ -45,6 +45,7 @@ CREATE TABLE Documents (
 	sk          VARCHAR(255) NOT NULL COLLATE NOCASE,
 	name        VARCHAR(255) COLLATE NOCASE,
 	base        VARCHAR(255) COLLATE NOCASE,
+	mime        INTEGER,
 	folder      INTEGER,
 	icon        INTEGER,
 	suffix      VARCHAR(255),

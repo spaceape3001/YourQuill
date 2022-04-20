@@ -30,9 +30,14 @@ using namespace yq::html;
 
 #include "common.hpp"
 
+#include "page/_index.ipp"
+
 #include "page/admin_users.ipp"
 
 #include "page/api_workspace.ipp"
+
+#include "page/background.ipp"
+#include "page/css.ipp"
 
 #include "page/dev.ipp"
 #include "page/dev_directories.ipp"
@@ -43,6 +48,7 @@ using namespace yq::html;
 #include "page/dev_folder.ipp"
 #include "page/dev_folders.ipp"
 #include "page/dev_fragment.ipp"
+#include "page/dev_fragment_image.ipp"
 #include "page/dev_fragments.ipp"
 #include "page/dev_hello.ipp"
 #include "page/dev_root.ipp"
@@ -55,8 +61,10 @@ using namespace yq::html;
 #include "page/dev_wksp.ipp"
 
 #include "page/ext_markdown.ipp"
+#include "page/favicon.ico.ipp"
 #include "page/help.ipp"
 #include "page/img.ipp"
 #include "page/js.ipp"
+#include "page/logo.ipp"
 
 #include "page/user.ipp"

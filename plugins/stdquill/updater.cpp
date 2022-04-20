@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "common.hpp"
 #include <db/db.hpp>
 
 #include <yq/app/DelayInit.hpp>
@@ -14,8 +15,10 @@
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
+#include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
+#include <yq/text/text_utils.hpp>
 
 using namespace yq;
 using namespace yq::cdb;
@@ -125,10 +128,24 @@ namespace {
     }
 }
 
+Guarded<std::string>            gTextColor, gBkColor;
+Guarded<Ref<PageTemplate>>      gIndex;
+Guarded<Ref<WebTemplate>>       gFooter, gSummary;
+Guarded<Ref<TypedBytes>>        gBackground;
+std::atomic<bool>               gHasBackground{false};
+Guarded<SharedByteArray>        gCss;
+std::vector<std::string>        gBackgroundFiles;
+std::filesystem::path           gSharedCssFile, gSharedFooterFile, gSharedIndexFile, gSharedPageFile, gSharedSummaryFile;
 
+#include "fcn/load_background.ipp"
+#include "fcn/update_css.ipp"
+#include "fcn/update_footer.ipp"
+#include "fcn/update_index.ipp"
+#include "fcn/update_page.ipp"
+#include "fcn/update_summary.ipp"
 
 //  ====================================================================================================================
-//      DO NOT RE-ORGANIZE as they are ORDER dependent.
+//      DO NOT RE-ORGANIZE the following as they are ORDER dependent.
 //  ====================================================================================================================
 
 
@@ -140,6 +157,22 @@ namespace {
 #include "update/s3_tag.ipp"
 //#include "update/s3_tag_leaf.ipp"
 
-#include "update/image.ipp"
-#include "update/tag.ipp"
-#include "update/user.ipp"
+#include "update/s4_background.ipp"
+#include "update/s4_css.ipp"
+#include "update/s4_footer.ipp"
+#include "update/s4_index.ipp"
+#include "update/s4_page.ipp"
+#include "update/s4_summary.ipp"
+
+#include "update/u_image.ipp"
+#include "update/u_tag.ipp"
+#include "update/u_user.ipp"
+
+#include "update/u_background.ipp"
+#include "update/u_css.ipp"
+#include "update/u_index.ipp"
+#include "update/u_footer.ipp"
+#include "update/u_page.ipp"
+#include "update/u_summary.ipp"
+
+

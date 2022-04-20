@@ -24,6 +24,12 @@ namespace yq {
             return *this;
         }
         
+        T   get() const
+        {
+            tbb::spin_rw_mutex::scoped_lock _lock(m_mutex, false);
+            return m_data;
+        }
+        
         operator T() const
         {
             tbb::spin_rw_mutex::scoped_lock _lock(m_mutex, false);

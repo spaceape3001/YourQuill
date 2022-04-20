@@ -15,6 +15,7 @@ namespace {
         if(!x){
             if(detected)
                 throw HttpStatus::BadArgument;
+            //  redirect...once we get a streaming API to it
             x       = top_folder();
         }
 

@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace {
+    void    page__index(WebHtml& out)
+    {
+        auto idx    = gIndex.get();
+        if(!idx)
+            return;
+        idx -> execute(out);
+    }
+
+    YQ_INVOKE( reg_webpage<page__index>("/"); )
+}

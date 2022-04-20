@@ -13,6 +13,7 @@
 
 #include <yq/enum/DataRole.hpp>
 #include <yq/enum/Sorted.hpp>
+#include <yq/net/Http.hpp>
 
 namespace yq {
     class Root;
@@ -64,6 +65,7 @@ namespace yq {
         /*! \brief Returns the FIRST document encountered
         */
         Document                        first_document(std::initializer_list<std::string_view>);
+        Document                        first_document(const std::vector<std::string>&);
 
         Fragment                        first_fragment(Document);
         Fragment                        first_fragment(Document, const Root*);
@@ -99,6 +101,8 @@ namespace yq {
         std::string                     key(Document);
 
         std::string                     label(Document);
+        
+        ContentType                     mime_type(Document);
         std::string                     name(Document);
 
         NKI                             nki(Document, bool autoKeyToName=false);
@@ -111,6 +115,8 @@ namespace yq {
         Vector<const Root*>             roots(Document);
 
         size_t                          roots_count(Folder);
+
+        void                            set_mime_type(Document, ContentType);
 
         void                            show(Document);
 

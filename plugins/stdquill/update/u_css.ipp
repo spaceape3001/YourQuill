@@ -1,0 +1,22 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace {
+
+    void    u_css()
+    {
+        update_css();
+    }
+    
+    YQ_INVOKE( 
+        fx_css();
+        u_change<u_css>(top_folder(), ".css");
+        u_change<u_css>(gSharedCssFile);
+    )
+    
+}

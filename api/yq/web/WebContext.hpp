@@ -15,7 +15,7 @@
 #include <yq/net/VersionSpec.hpp>
 // #include <yq/text/KV.hpp>
 #include <yq/type/ByteArray.hpp>
-#include <yq/web/HttpHeader.hpp>
+//#include <yq/web/HttpHeader.hpp>
 #include <nlohmann/json_fwd.hpp>
 #include <time.h>
 

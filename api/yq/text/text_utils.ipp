@@ -16,6 +16,7 @@
 #include <yq/collection/Map.hpp>
 #include <yq/collection/MultiMap.hpp>
 #include <yq/collection/Set.hpp>
+#include <yq/log/Logging.hpp>
 
 #include <bitset>
 
@@ -955,7 +956,7 @@ namespace yq {
     
     bool  starts_igCase(const char* s, size_t n, const char* pat, size_t nPath)
     {
-        if(s && n && pat && (nPath>=n)){
+        if(s && n && pat && (nPath<=n)){
             for(size_t i=0;i<nPath;++i)
                 if(to_lower(s[i]) != to_lower(pat[i]))
                     return false;

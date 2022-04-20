@@ -112,6 +112,10 @@ bool    initialize(const char* wfile)
     Meta::freeze();
     wksp::set_db_init();
     
+    n = 0;
+    for(auto& fs : wksp::shared_dirs())
+        yInfo() << "share directory " << (++n) << ": "  << fs;
+
     yInfo() << "Stage 1: File scan.";
     stage1_scan();    
     yInfo() << "Stage 2: Sweep.";

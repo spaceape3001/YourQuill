@@ -78,6 +78,65 @@ namespace yq {
         return isSuccessful((unsigned short) u);
     }
 
+    bool        isImage(ContentType ct)
+    {
+        switch(ct){
+        case ContentType::bmp:
+        case ContentType::gif:
+        case ContentType::jpeg:
+        case ContentType::png:
+        case ContentType::svg:
+        case ContentType::tiff:
+            return true;
+        default:
+            return false;
+        }
+    }
+
+    bool    isTextual(ContentType ct)
+    {
+        switch(ct){
+        case ContentType::css:
+        case ContentType::csv:
+        case ContentType::form:
+        case ContentType::html:
+        case ContentType::javascript:
+        case ContentType::json:
+        case ContentType::latex:
+        case ContentType::markdown:
+        case ContentType::rtf:
+        case ContentType::svg:
+        case ContentType::text:
+        case ContentType::xml:
+            return true;
+        default:
+            return false;
+        }
+    }
+    
+    bool            isAudio(ContentType ct)
+    {
+        switch(ct){
+        case ContentType::mp3:
+        case ContentType::ogg:
+        case ContentType::wave:
+            return true;
+        default:
+            return false;
+        }
+    }
+    
+    bool            isMovie(ContentType ct)
+    {
+        switch(ct){
+        case ContentType::mp4:
+        case ContentType::mpeg:
+            return true;
+        default:
+            return false;
+        }
+    }
+
 
     namespace {
     

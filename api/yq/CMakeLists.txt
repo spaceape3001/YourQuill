@@ -205,12 +205,22 @@ set(yq_sources
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp
+    ./web/HttpParser.ipp
     ./web/JsonAdapter.hpp
+    ./web/PageTemplate.hpp
+    ./web/PageTemplate.ipp
     ./web/WebAdapters.hpp
+    ./web/WebAdapters.ipp
     ./web/WebContext.hpp
+    ./web/WebContext.ipp
     ./web/WebHtml.hpp
+    ./web/WebHtml.ipp
     ./web/WebPage.hpp
+    ./web/WebPage.ipp
+    ./web/WebTemplate.hpp
+    ./web/WebTemplate.ipp
     ./web/WebVariable.hpp
+    ./web/WebVariable.ipp
 )
 
 add_library(yq SHARED ${yq_sources})

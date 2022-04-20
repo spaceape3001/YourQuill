@@ -79,7 +79,7 @@ TABLE.roots {
     border: 2px solid var(--background-color);
 }
 
-TD.tabbar {
+td.tabbar {
 }
 
 td.tabbar a {
@@ -90,19 +90,25 @@ td.roots a {
     color: var(--background-color);
 }
 
-TD.tb-select {
+td.tb-select {
 }
 
-DIV.COL2 {
+div.col2 {
     columns: 2 100em;
 }
 
-DIV.COL3 {
+div.col3 {
     columns: 3 100em;
 }
 
-DIV.COL4 {
+div.col4 {
     columns: 4 100em;
+}
+
+div.summary {
+    width: 80%;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 img.small {

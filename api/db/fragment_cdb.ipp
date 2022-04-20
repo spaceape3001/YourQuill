@@ -166,12 +166,15 @@ namespace yq {
         {
             std::filesystem::path   p = path(f);
             Fragment::Lock  lk;
-            if(!(opts & DONT_LOCK))
+            if(!(opts & DONT_LOCK)){
                 lk = Fragment::Lock::read(f);
-            if(lk){
-                return file_bytes(p);
-            } else
-                return ByteArray{};
+                if(!lk){
+                    yWarning() << "Unable to get read lock on fragment: " << p;
+                    return ByteArray();
+                }
+            }
+                
+            return file_bytes(p);
         }
         
         ByteArray           frag_bytes(std::string_view k, unsigned opts)
@@ -189,12 +192,15 @@ namespace yq {
         {
             std::filesystem::path   p = path(f);
             Fragment::Lock  lk;
-            if(!(opts & DONT_LOCK))
+            if(!(opts & DONT_LOCK)){
                 lk = Fragment::Lock::read(f);
-            if(lk){
-                return file_string(p);
-            } else
-                return std::string{};
+                if(!lk){
+                    yWarning() << "Unable to get read lock on fragment: " << p;
+                    return std::string();
+                }
+            }
+                
+            return file_string(p);
         }
         
         std::string              frag_string(std::string_view k, unsigned opts)

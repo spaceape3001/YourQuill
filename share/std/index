@@ -1,6 +1,8 @@
 #! Welcome to {{NAME}}
 
+<div class="summary">
 {{SUMMARY}}
+</div>
 
 <table class="nh">
     <tr class="nh"><td class="nh-icon"><img class="nh" src="img/folder-documents.svg"/></td><td class="nh-link"><a href="/folder">Files &amp; Folders</a></td></tr>

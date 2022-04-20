@@ -109,7 +109,7 @@ namespace yq {
             std::string_view     sfx     = (x != std::string_view::npos ) ? ak.substr(x+1) : std::string_view();
             std::string_view     base    = (y != std::string_view::npos ) ? ak.substr(0,y) : ak;
                 
-            static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base,hidden) VALUES (?,?,?,?,?,?,?)");
+            static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base,hidden,mime) VALUES (?,?,?,?,?,?,?,?)");
             static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
             
             auto s_lk   = s.af();
@@ -122,6 +122,7 @@ namespace yq {
             i.bind(5,sfx);
             i.bind(6,base);
             i.bind(7,ak[0] == '.');
+            i.bind(8,mimeTypeForExt(sfx).value());
             
             if(is_good(i.step(false))){
                 if(wasCreated)
@@ -160,6 +161,16 @@ namespace yq {
         }
 
         Document            first_document(std::initializer_list<std::string_view> keys)
+        {
+            for(std::string_view k : keys){
+                Document    d   = document(k);
+                if(d)
+                    return d;
+            }
+            return Document{};
+        }
+
+        Document            first_document(const std::vector<std::string>& keys)
         {
             for(std::string_view k : keys){
                 Document    d   = document(k);
@@ -355,6 +366,17 @@ namespace yq {
         {
             return key(d);
         }
+
+        ContentType             mime_type(Document d)
+        {
+            static thread_local SQ  s("SELECT mime FROM Documents WHERE id=? LIMIT 1");
+            auto af = s.af();
+            s.bind(1, d.id);
+            if(s.step() == SqlQuery::Row){
+                return (ContentType::enum_t) s.v_int(1);
+            } else 
+                return ContentType();
+        }
         
         std::string             name(Document d)
         {
@@ -408,6 +430,15 @@ namespace yq {
         {
             static thread_local SQ    s("SELECT COUNT(DISTINCT root) FROM Fragments WHERE document=?");
             return s.size(d.id);
+        }
+
+        void                set_mime_type(Document doc, ContentType ct)
+        {
+            static thread_local SQ  u("UPDATE Documents SET mime=? WHERE id=?");
+            u.bind(1, ct.value());
+            u.bind(2, doc.id);
+            u.step(true);
+            u.reset();
         }
         
         void                show(Document d)

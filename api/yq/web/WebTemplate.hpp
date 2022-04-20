@@ -34,6 +34,8 @@ namespace yq {
         
         void        writeBitsToInfo() const;
         
+        bool        empty() const { return m_data.empty(); }
+        
     private:
         void    parse(std::string_view);
         friend class WebHtml;
@@ -43,5 +45,9 @@ namespace yq {
         string_view_set_t           m_vars;
         ContentType                 m_type;
     };
+    
+    namespace web {
+        void    set_template(Ref<WebTemplate>);
+    }
     
 }
