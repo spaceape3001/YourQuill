@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <yq/meta/Binder.hpp>
+#include <yq/type/Enum.hpp>
+
+namespace yq {
+
+    YQ_ENUM(Submit,,
+        Default,
+        Save,
+        Create
+    )
+}
+
+YQ_TYPE_DECLARE(yq::Submit)

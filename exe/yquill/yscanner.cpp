@@ -15,7 +15,6 @@
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
-#include <yq/enum/Change.hpp>
 #include <yq/file/dir_utils.hpp>
 #include <yq/file/DirWatcher.hpp>
 #include <yq/file/file_utils.hpp>

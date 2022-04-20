@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/enum/DataRole.hpp>
+#include "enum_data_role.hpp"
 
 namespace yq {
 

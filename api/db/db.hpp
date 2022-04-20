@@ -32,6 +32,8 @@
 #include "folder_cdb.hpp"
 #include "folder_html.hpp"
 
+#include "form_html.hpp"
+
 #include "fragment.hpp"
 #include "fragment_arg.hpp"
 #include "fragment_cdb.hpp"

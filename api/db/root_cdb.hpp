@@ -7,7 +7,7 @@
 #pragma once
 
 #include "cdb_common.hpp"
-#include <yq/enum/Sorted.hpp>
+#include "enum_sorted.hpp"
 
 namespace yq {
     class Root;

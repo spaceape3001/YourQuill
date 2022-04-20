@@ -4,11 +4,11 @@
 #include <yq/preamble.hpp>
 #include <memory>
 #include "user.hpp"
-#include <yq/bit/Authentication.hpp>
-#include <yq/bit/Context.hpp>
+#include "bit_authentication.hpp"
+#include "bit_context.hpp"
+#include "enum_permission.hpp"
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
-#include <yq/enum/Permission.hpp>
 
 #pragma once
 

@@ -39,12 +39,8 @@ set(yq_sources
     ./app/ThreadId.hpp
     ./app/ThreadId.ipp
     
-    ./bit/bit_unity.cpp
-    ./bit/Context.hpp
-    ./bit/Copyright.hpp
     ./bit/KeyValue.cpp
     ./bit/KeyValue.hpp
-    ./bit/Policy.hpp
 
     ./c++/c++_unity.cpp
     ./c++/Concat.hpp
@@ -80,24 +76,6 @@ set(yq_sources
     ./collection/Set.hpp
     ./collection/Stack.hpp
     ./collection/Vector.hpp
-    
-    ./enum/enum_unity.cpp
-    ./enum/Access.hpp
-    ./enum/AssertDeny.hpp
-    ./enum/AttrKind.hpp
-    ./enum/AuthenticationType.hpp
-    ./enum/CalSystem.hpp
-    ./enum/Change.hpp
-    ./enum/DataRole.hpp
-    ./enum/Format.hpp
-    ./enum/Linkage.hpp
-    ./enum/Match.hpp
-    ./enum/Multiplicity.hpp
-    ./enum/Restriction.hpp
-    ./enum/SizeDesc.hpp
-    ./enum/Sorted.hpp
-    ./enum/Update.hpp
-    ./enum/Vcs.hpp
     
     ./file/file_utils.hpp
     ./file/file_unity.cpp

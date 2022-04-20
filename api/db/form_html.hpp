@@ -6,16 +6,15 @@
 
 #pragma once
 
-#include <yq/meta/Binder.hpp>
-#include <yq/type/Enum.hpp>
+#include "enum_submit.hpp"
+#include "enum_reset.hpp"
 
 namespace yq {
-
-    YQ_ENUM(SubmitLabel,,
-        Default,
-        Save,
-        Create
-    )
+    class WebHtml;
+    
+    namespace html {
+        WebHtml&    operator<<(WebHtml&, Reset);    
+        WebHtml&    operator<<(WebHtml&, Submit);    
+    }
 }
 
-YQ_TYPE_DECLARE(yq::SubmitLabel)

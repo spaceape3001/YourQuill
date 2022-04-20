@@ -8,10 +8,9 @@
 
 #include "cdb_common.hpp"
 #include "document.hpp"
+#include "enum_sorted.hpp"
 #include "image.hpp"
 #include "tag_file.hpp"
-
-#include <yq/enum/Sorted.hpp>
 
 namespace yq {
     

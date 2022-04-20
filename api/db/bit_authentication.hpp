@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/enum/AuthenticationType.hpp>
+#include "enum_authentication_type.hpp"
 #include <yq/file/XmlFwd.hpp>
 
 namespace yq {

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "tag_data.hpp"
-#include <yq/file/AbstractFile.hpp>
+#include <yq/file/XmlFile.hpp>
 
 namespace yq {
 

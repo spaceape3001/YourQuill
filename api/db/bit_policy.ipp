@@ -6,22 +6,25 @@
 
 #pragma once
 
+#include "bit_policy.hpp"
+#include <yq/collection/EnumMap.hpp>
+
 namespace yq {
 
-    Result<Access>      decode_access(const String&arg)
+    Result<Access>      decode_access(std::string_view arg)
     {
         auto    ac  = Access::value_for(arg);
         if(ac.good)
-            return Access(ac.value);
+            return { ac.value, true };
         if(is_similar(arg, "first"))
-            return Access(Access::WriteFirst);
+            return { Access(Access::WriteFirst), true };
         if(is_similar(arg, "write"))
-            return Access(Access::ReadWrite);
+            return { Access(Access::ReadWrite), true };
         if(is_similar(arg, "read"))
-            return Access(Access::ReadOnly);
+            return { Access(Access::ReadOnly), true };
         if(is_similar(arg, "deny"))
-            return Access(Access::NoAccess);
-        return Result<Access>();
+            return { Access(Access::NoAccess), true };
+        return {};
     }
 
 

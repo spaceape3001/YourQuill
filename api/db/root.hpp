@@ -7,9 +7,9 @@
 #pragma once
 
 #include "root_fwd.hpp"
-#include <yq/bit/Policy.hpp>
-#include <yq/enum/Access.hpp>
-#include <yq/enum/Vcs.hpp>
+#include "bit_policy.hpp"
+#include "enum_access.hpp"
+#include "enum_vcs.hpp"
 
 #include <yq/collection/EnumMap.hpp>
 #include <yq/type/Flag.hpp>

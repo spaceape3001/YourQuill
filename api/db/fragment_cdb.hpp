@@ -9,11 +9,11 @@
 #include "cdb_common.hpp"
 #include "directory.hpp"
 #include "document.hpp"
+#include "enum_data_role.hpp"
+#include "enum_sorted.hpp"
 #include "folder.hpp"
 #include "fragment.hpp"
 
-#include <yq/enum/DataRole.hpp>
-#include <yq/enum/Sorted.hpp>
 
 
 namespace yq {

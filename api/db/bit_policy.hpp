@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include <yq/enum/Access.hpp>
-#include <yq/enum/DataRole.hpp>
+#include "enum_access.hpp"
+#include "enum_data_role.hpp"
 
 namespace yq {
 
     using PolicyMap     = EnumMap<DataRole,Access>;
 
-    Result<Access>      decode_access(const std::string_view& arg);
+    Result<Access>      decode_access(std::string_view arg);
 
     /*! \brief Merges access levels
 

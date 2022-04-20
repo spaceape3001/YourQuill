@@ -8,11 +8,11 @@
 
 #include "cdb_common.hpp"
 #include "document.hpp"
+#include "enum_data_role.hpp"
+#include "enum_sorted.hpp"
 #include "folder.hpp"
 #include "image.hpp"
 
-#include <yq/enum/DataRole.hpp>
-#include <yq/enum/Sorted.hpp>
 #include <yq/net/Http.hpp>
 
 namespace yq {

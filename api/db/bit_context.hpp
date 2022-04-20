@@ -5,7 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/enum/Format.hpp>
+
+#include "enum_format.hpp"
 #include <yq/file/XmlFwd.hpp>
 
 namespace yq {

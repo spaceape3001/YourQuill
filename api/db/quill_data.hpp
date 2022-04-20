@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/bit/Copyright.hpp>
-#include <yq/bit/Policy.hpp>
-#include <yq/enum/Vcs.hpp>
+#include "bit_copyright.hpp"
+#include "bit_policy.hpp"
+#include "enum_vcs.hpp"
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
