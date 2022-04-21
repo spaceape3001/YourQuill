@@ -53,6 +53,7 @@ using namespace yq::html;
 #include "page/dev_hello.ipp"
 #include "page/dev_image.ipp"
 #include "page/dev_images.ipp"
+#include "page/dev_meta_types.ipp"
 #include "page/dev_mimetypes.ipp"
 #include "page/dev_root.ipp"
 #include "page/dev_roots.ipp"

@@ -51,6 +51,8 @@
 #include "leaf.hpp"
 #include "leaf_html.hpp"
 
+#include "meta_typeinfo_html.hpp"
+
 #include "page_html.hpp"
 
 #include "quill_file.hpp"
