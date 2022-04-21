@@ -47,7 +47,11 @@ find_package(CURL)
 find_package(Log4cpp REQUIRED)
 find_package(TBB REQUIRED)
 find_package(Graphviz)
-find_package(SQLite3)
+find_package(SQLite3 REQUIRED)
+find_package(ImageMagick COMPONENTS Magick++)
+
+message( "ImageMagick Headers is '${ImageMagick_INCLUDE_DIRS}'" )
+message( "ImageMagick Libraries is '${ImageMagick_LIBRARIES}'" )
 # find_package(libzip REQUIRED)
 #   Qt's got issues, want to remove it....
 
