@@ -9,6 +9,7 @@
 #include "cdb_common.hpp"
 #include "enum_size_desc.hpp"
 #include "image.hpp"
+#include "thumbnail.hpp"
 #include <yq/net/Http.hpp>
 
 namespace yq {
@@ -44,10 +45,11 @@ namespace yq {
             //! Returns an image from a document, if it already exists in the cache
         Image                   image(uint64_t);
 
-        bool                    raster(ContentType);
-        bool                    raster(Image);
+        bool                    is_raster(ContentType);
+        bool                    is_raster(Image);
 
-        ContentType             type(Image);
+        ContentType             mime_type(Image);
+        Thumbnail               thumbnail(Image, SizeDesc sz=SizeDesc::Small);
         void                    update_root(const Root*, Image);
     }
 }

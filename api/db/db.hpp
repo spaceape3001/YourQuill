@@ -24,6 +24,8 @@
 #include "document_cdb.hpp"
 #include "document_html.hpp"
 
+#include "enum_size_desc_arg.hpp"
+
 #include "field.hpp"
 #include "field_html.hpp"
 
@@ -42,6 +44,7 @@
 #include "id_lock.hpp"
 
 #include "image.hpp"
+#include "image_arg.hpp"
 #include "image_cdb.hpp"
 #include "image_html.hpp"
 
@@ -62,6 +65,9 @@
 #include "tag_cdb.hpp"
 #include "tag_file.hpp"
 #include "tag_html.hpp"
+
+#include "thumbnail.hpp"
+#include "thumbnail_html.hpp"
 
 #include "user.hpp"
 #include "user_arg.hpp"

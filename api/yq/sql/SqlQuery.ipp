@@ -123,6 +123,30 @@ namespace yq {
         }
         return true;
     }
+
+    bool  SqlQuery::bind(int c, const void* v, size_t cnt)
+    {
+        if(!m_stmt){
+            dbError << "SqlQuery::bind(" << c << "): Not properly prepared!";
+            return false;
+        }
+        if(c<1){
+            dbError << "SqlQuery::bind(" << c << "): Bad Column Number!";
+            return false;
+        }
+        
+        if(!v){
+            dbError << "SqlQuery::bind(" << c << "): Null Pointer!";
+            return false;
+        }
+        
+        int r = sqlite3_bind_blob(m_stmt, c, v, cnt, SQLITE_STATIC);
+        if(r != SQLITE_OK){
+            dbError << "SqlQuery::bind(" << c << "): " << SqlError(r);
+            return false;
+        }
+        return true;
+    }
     
     bool  SqlQuery::bind(int c, bool v)
     {

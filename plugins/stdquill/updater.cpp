@@ -20,6 +20,7 @@
 #include <yq/stream/Text.hpp>
 #include <yq/text/text_utils.hpp>
 
+
 using namespace yq;
 using namespace yq::cdb;
 
@@ -151,8 +152,10 @@ std::filesystem::path           gSharedCssFile, gSharedFooterFile, gSharedIndexF
 
 //  DO NOT ORGANIZE theseblow, they will be listed in the desired order of execution
 
+#include "update/s2_image.ipp"
 
-//#include "update/s3_image.ipp"
+
+#include "update/s3_image.ipp"
 #include "update/s3_user.ipp"
 #include "update/s3_tag.ipp"
 //#include "update/s3_tag_leaf.ipp"

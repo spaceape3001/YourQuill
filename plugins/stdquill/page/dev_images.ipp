@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace {
+    
+    void page_dev_images(WebHtml& h)
+    {
+        h.title("All Images");
+        dev_table(h, all_images());
+    }
+    
+    YQ_INVOKE( reg_webpage<page_dev_images>("/dev/images"); )
+    
+}

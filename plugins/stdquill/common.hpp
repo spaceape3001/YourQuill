@@ -6,12 +6,15 @@
 
 #pragma once
 
+#include "imaging.hpp"
+
 #include <yq/type/ByteArray.hpp>
 #include <yq/type/Guarded.hpp>
 #include <yq/web/PageTemplate.hpp>
 #include <yq/web/TypedBytes.hpp>
 #include <yq/web/WebTemplate.hpp>
 #include <string>
+
 
 using namespace yq;
 
@@ -48,4 +51,3 @@ void    update_footer(unsigned int opts=0);
 void    update_summary(unsigned int opts=0);
 void    update_page(unsigned int opts=0);
 void    update_index(unsigned int opts=0);
-

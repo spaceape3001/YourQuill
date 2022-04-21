@@ -58,6 +58,9 @@ namespace yq {
         //! \param[in] v    BLOB to push in
         bool                bind(int col, std::span<uint8_t> v);
         
+        bool                bind(int col, const void*, size_t);
+
+
         //! \brief Binds a Boolean (maps to 0/1)
         //! 
         //! \param[in] col  Parameter/column index, starts at ONE

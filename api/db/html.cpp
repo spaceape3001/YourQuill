@@ -22,6 +22,7 @@
 #include "page_html.hpp"
 #include "root_html.hpp"
 #include "tag_html.hpp"
+#include "thumbnail_html.hpp"
 #include "user_html.hpp"
 
 #include "atom.hpp"
@@ -55,8 +56,10 @@
 #include "folder_html.ipp"
 #include "form_html.ipp"
 #include "fragment_html.ipp"
+#include "image_html.ipp"
 #include "leaf_html.ipp"
 #include "page_html.ipp"
 #include "root_html.ipp"
 #include "tag_html.ipp"
+#include "thumbnail_html.ipp"
 #include "user_html.ipp"

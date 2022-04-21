@@ -26,12 +26,7 @@ namespace yq {
         
             ByteArray          bytes_image(Image img)
             {
-                static thread_local SQ s("SELECT image FROM Images WHERE id=?");
-                auto s_af   = s.af();
-                s.bind(1, img.id);
-                if(s.step() == SqlQuery::Row)
-                    return s.v_bytes(1);
-                return ByteArray();
+                return frag_bytes(Fragment{img.id}, DONT_LOCK);
             }
             
             ByteArray           bytes_large(Image img)
@@ -148,29 +143,23 @@ namespace yq {
 
         ByteArray          image_bytes(Image img, SizeDesc sz)
         {
-            switch(sz){
-            case SizeDesc::Large:
-                return bytes_large(img);
-            case SizeDesc::Medium:
-                return bytes_medium(img);
-            case SizeDesc::Small:
-                return bytes_small(img);
-            case SizeDesc::Original:
-            default:
+            if(is_raster(img)){
+                switch(sz){
+                case SizeDesc::Large:
+                    return bytes_large(img);
+                case SizeDesc::Medium:
+                    return bytes_medium(img);
+                case SizeDesc::Small:
+                    return bytes_small(img);
+                case SizeDesc::Original:
+                default:
+                    return bytes_image(img);
+                }
+            } else
                 return bytes_image(img);
-            }
         }
 
-#if 0
-        QIcon               qIcon(Image img)
-        {
-            if(!img)
-                return QIcon();
-            return QIcon(path(Fragment{img.id}).c_str());
-        }
-    #endif
-
-        bool                raster(ContentType ct)
+        bool                is_raster(ContentType ct)
         {
             switch(ct){
             case ContentType::gif:
@@ -183,17 +172,26 @@ namespace yq {
             }
         }
         
-        bool                raster(Image i)
+        bool                is_raster(Image i)
         {
-            return raster(type(i));
+            return is_raster(mime_type(i));
         }
         
-
-        ContentType         type(Image i)
+        ContentType         mime_type(Image i)
         {
             static thread_local SQ s("SELECT type FROM Images WHERE id=?");
-            return ContentType(s.str(i.id));
+            auto s_af   = s.af();
+            s.bind(1, i.id);
+            if(s.step() == SqlQuery::Row)
+                return ContentType( s.v_int(1));
+            return ContentType();
         }
+
+        Thumbnail               thumbnail(Image i, SizeDesc sz) 
+        { 
+            return { i, sz }; 
+        }
+
 
         void                    update_root(const Root*rt, Image img)
         {

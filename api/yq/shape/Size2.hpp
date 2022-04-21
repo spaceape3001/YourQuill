@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace yq {
+    template <typename T>
+    struct Size2 {
+        T   x = T{};
+        T   y = T{};
+        
+        bool    operator==(const Size2&) const noexcept = default;
+    };
+}

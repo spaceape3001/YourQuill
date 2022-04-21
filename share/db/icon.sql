@@ -3,9 +3,7 @@ CREATE TABLE Images (
     id          INTEGER PRIMARY KEY,
     type        VARCHAR(255),
 
-    image       BLOB,
-    
-        -- implicitly thumbnails
+        -- thumbnails if raster
     small       BLOB,
     medium      BLOB,
     large       BLOB
