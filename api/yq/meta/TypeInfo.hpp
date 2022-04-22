@@ -1,7 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 #include "CompoundInfo.hpp"
+#include <yq/file/XmlFwd.hpp>
 #include <unordered_map>
-
 
 namespace yq {
     /* \brief Declares a type that can be stored unobtrusively
@@ -56,6 +62,11 @@ namespace yq {
         typedef void        (*FNFormat)(Stream&, const void*);
         typedef bool        (*FNParse)(void*, const std::string_view&);
 
+        typedef void        (*FNXmlBaseWrite)(XmlBase*, const void*);
+        typedef bool        (*FNXmlBaseRead)(void*, const XmlBase*);
+        typedef void        (*FNXmlNodeWrite)(XmlNode*, const void*);
+        typedef bool        (*FNXmlNodeRead)(void*, const XmlNode*);
+
     
         using ConvertHash   = Hash<const TypeInfo*, FNConvert>;
         friend class PropertyInfo;
@@ -88,9 +99,13 @@ namespace yq {
             // Print is for user eyes
         FNFormat                m_print         = nullptr;
             // Format is for data storage
-        FNFormat                m_write        = nullptr;
+        FNFormat                m_write         = nullptr;
         FNParse                 m_parse         = nullptr;
         
+        FNXmlBaseWrite          m_xbwrite       = nullptr;
+        FNXmlBaseRead           m_xbread        = nullptr;
+        FNXmlNodeWrite          m_xnwrite       = nullptr;
+        FNXmlNodeRead           m_xnread        = nullptr;
     };
     
     /*! \brief Converts meta to type, if it's valid
