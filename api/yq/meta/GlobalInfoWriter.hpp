@@ -14,9 +14,8 @@ namespace yq {
     class GlobalInfo::Writer : public CompoundInfo::Static {
     public:
     
-        Writer(GlobalInfo* p) : CompoundInfo::Static(p) 
+        Writer(GlobalInfo& p) : CompoundInfo::Static(&p) 
         {
-            assert(p);
         }
     };
 }

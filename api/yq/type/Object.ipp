@@ -1,0 +1,22 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include "Object.hpp"
+
+namespace yq {
+    const ObjectInfo&    Object::metaInfo() const 
+    {
+        return staticMetaInfo();
+    }
+    
+    const ObjectInfo&    Object::staticMetaInfo()
+    {
+        static ObjectInfo   s_info("Object");
+        return s_info;
+    }
+}

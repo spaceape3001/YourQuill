@@ -1134,11 +1134,11 @@ namespace yq {
     
     namespace {
         YQ_INVOKE(
-            meta_write<Global>().variable("abbreviation", string_view_proxy<wksp::abbreviation>);
-            meta_write<Global>().variable("host", string_view_proxy<wksp::host>);
-            meta_write<Global>().variable("name", string_view_proxy<wksp::name>);
-            meta_write<Global>().variable("port", wksp::port);
-            meta_write<Global>().variable("start", string_view_proxy<wksp::start>);
+            writer<Global>().variable("abbreviation", string_view_proxy<wksp::abbreviation>);
+            writer<Global>().variable("host", string_view_proxy<wksp::host>);
+            writer<Global>().variable("name", string_view_proxy<wksp::name>);
+            writer<Global>().variable("port", wksp::port);
+            writer<Global>().variable("start", string_view_proxy<wksp::start>);
         );
     }
 

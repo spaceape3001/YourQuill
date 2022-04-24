@@ -10,28 +10,29 @@
 
 namespace yq {
 
-    inline Variant::Variant() : m_type(&invalid()), m_data{}
+    inline Any::Any() : m_type(&invalid()), m_data{}
     {
     }
 
 
     template <typename T>
-    Variant::Variant(T&& val) : m_type(nullptr)
+    requires (!std::is_same_v<T, Any>)
+    Any::Any(T&& val) : m_type(nullptr)
     {
         set(val);
     }
 
     template <typename T>
-    requires is_type_v<std::decay_t<T>>
-    Variant&    Variant::operator=(T&& cp)
+    requires (is_type_v<std::decay_t<T>> && !std::is_same_v<T,Any>)
+    Any&    Any::operator=(T&& cp)
     {
         set(cp);
         return *this;
     }
 
     template <typename T>
-    requires is_type_v<T>
-    bool        Variant::operator==(const T&b) const
+    requires (is_type_v<std::decay_t<T>> && !std::is_same_v<T,Any>)
+    bool        Any::operator==(const T&b) const
     {
         if(&meta<T>() != m_type)
             return false;
@@ -41,48 +42,48 @@ namespace yq {
 
     template <typename T>
     requires is_type_v<T>
-    bool        operator==(const T& a, const Variant& b)
+    bool        operator==(const T& a, const Any& b)
     {
         return b.operator==(a);
     }
 
     template <typename T>
-    bool        Variant::can_convert() const
+    bool        Any::can_convert() const
     {
         static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");
         return can_convert_to(&meta<T>());
     }
 
     template <typename T>
-    Variant     Variant::convert() const
+    Any     Any::convert() const
     {
         static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");
         return convert_to(meta<T>());
     }
 
     template <typename T>
-    T*          Variant::ptr()
+    T*          Any::ptr()
     {
         static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");
         return (m_type == &meta<T>()) ?  m_data.pointer<T>() : nullptr;
     }
 
     template <typename T>
-    const T*    Variant::ptr() const
+    const T*    Any::ptr() const
     {
         static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");
         return (m_type == &meta<T>()) ?  m_data.pointer<T>() : nullptr;
     }
 
     template <typename T>
-    const T&            Variant::ref(const T& bad) const
+    const T&            Any::ref(const T& bad) const
     {
         static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");
         return (m_type == &meta<T>()) ?  m_data.reference<T>() : bad;
     }
 
     template <typename T>
-    void Variant::set(T&& val)
+    void Any::set(T&& val)
     {
         using U     = std::decay<T>::type;
         static_assert( is_type_v<U>, "TypeInfo must be metatype defined!");
@@ -109,14 +110,14 @@ namespace yq {
         }
     }
 
-    inline void    Variant::set(const std::string_view&cp)
+    inline void    Any::set(const std::string_view&cp)
     {
         static const TypeInfo*  mtString    = &meta<std::string>();
         m_data.reference<std::string>() = std::string(cp);
         m_type  = mtString;
     }
 
-    inline void    Variant::set(std::string_view&&cp)
+    inline void    Any::set(std::string_view&&cp)
     {
         static const TypeInfo*  mtString    = &meta<std::string>();
         m_data.reference<std::string>() = std::string(cp);
@@ -124,7 +125,7 @@ namespace yq {
     }
 
     template <typename T>
-    Result<const T&>   Variant::value() const
+    Result<const T&>   Any::value() const
     {
         static thread_local T   tmp;
         static_assert( is_type_v<T>, "TypeInfo T must be metatype defined!");

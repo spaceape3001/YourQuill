@@ -11,39 +11,39 @@
 
 #include <yq/preamble.hpp>
 #include <yq/meta/DataBlock.hpp>
-#include <yq/meta/Binder.hpp>
+#include <yq/meta/InfoBinder.hpp>
 
 namespace yq {
 
     /*! \brief Generic Data
 
-        A Variant is generic data, it's meant to be unobtrusive.  
+        A Any is generic data, it's meant to be unobtrusive.  
     */
-    class Variant {
+    class Any {
     public:
 
-        static Variant      parse_me(const TypeInfo&, const std::string_view&);
+        static Any      parse_me(const TypeInfo&, const std::string_view&);
 
-        Variant();
-        Variant(const Variant&);
-        Variant(Variant&&);
+        Any();
+        Any(const Any&);
+        Any(Any&&);
         
-        //! Creates a defaulted Variant to the specified meta-type
-        explicit Variant(const TypeInfo&);
-        explicit Variant(const TypeInfo*);
+        //! Creates a defaulted Any to the specified meta-type
+        explicit Any(const TypeInfo&);
+        explicit Any(const TypeInfo*);
         
-        explicit Variant(char);
-        explicit Variant(char8_t);
-        explicit Variant(char32_t);
-        explicit Variant(char*);
-        explicit Variant(const char*);
-        explicit Variant(const char8_t*);
-        explicit Variant(const char32_t*);
-        explicit Variant(const std::u8string&);
-        explicit Variant(const std::u32string&);
-        explicit Variant(const std::wstring&);
+        explicit Any(char);
+        explicit Any(char8_t);
+        explicit Any(char32_t);
+        explicit Any(char*);
+        explicit Any(const char*);
+        explicit Any(const char8_t*);
+        explicit Any(const char32_t*);
+        explicit Any(const std::u8string&);
+        explicit Any(const std::u32string&);
+        explicit Any(const std::wstring&);
     #ifdef ENABLE_QT
-        explicit Variant(const QString&);
+        explicit Any(const QString&);
     #endif
 
         /*! \brief Direct construction constructor
@@ -53,21 +53,22 @@ namespace yq {
             \note EXPLICIT is required to keep the compiler from getting greedy.
         */
         template <typename T>
-        explicit Variant(T&&);
+        requires (!std::is_same_v<T,Any>)
+        explicit Any(T&&);
 
-        ~Variant();
+        ~Any();
 
-        Variant&        operator=(const Variant&);
-        Variant&        operator=(Variant&&);
+        Any&        operator=(const Any&);
+        Any&        operator=(Any&&);
         
         template <typename T>
-        requires is_type_v<std::decay_t<T>>
-        Variant&        operator=(T&&);
+        requires (is_type_v<std::decay_t<T>> && !std::is_same_v<T,Any>)
+        Any&        operator=(T&&);
         
-        bool            operator==(const Variant&) const;
+        bool            operator==(const Any&) const;
         
         template <typename T>
-        requires is_type_v<T>
+        requires (is_type_v<std::decay_t<T>> && !std::is_same_v<T,Any>)
         bool        operator==(const T&) const;
         //template <typename T>
         //bool        operator!=(const T&) const;
@@ -77,15 +78,15 @@ namespace yq {
         bool            can_convert() const;
 
         //! Returns a variant that's been converted
-        Variant         convert(const TypeInfo&) const;
+        Any         convert(const TypeInfo&) const;
 
         template <typename T>
-        Variant         convert() const;
+        Any         convert() const;
 
 
         bool            is_valid() const;
 
-        //Variant         get_field(const std::string&) const;
+        //Any         get_field(const std::string&) const;
         
         /*! \brief Parses into the variant, overwriting
         */
@@ -136,7 +137,7 @@ namespace yq {
         const T&            ref(const T& bad={}) const;
         
 
-        //bool        set_field(const std::string&, const Variant&);
+        //bool        set_field(const std::string&, const Any&);
 
         
 
@@ -161,17 +162,17 @@ namespace yq {
             This routine blindly assumes the caller knows what they're doing, so here's the type and here's a pointer
             to the data.  A null pointer will force a default construction.
         */
-        Variant(const TypeInfo&, const void*);
+        Any(const TypeInfo&, const void*);
 
         const DataBlock&    data() const { return m_data; }
 
     private:
-        Variant(TypeInfo&&) = delete;   // prohibt temporary metatypes
+        Any(TypeInfo&&) = delete;   // prohibt temporary metatypes
 
         const TypeInfo*     m_type;
         DataBlock           m_data;
         
-        Variant(const TypeInfo&&) = delete;
+        Any(const TypeInfo&&) = delete;
         
         
         template <typename T>

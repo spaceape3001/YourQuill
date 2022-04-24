@@ -11,7 +11,7 @@
 #include <algorithm>
 
 #include <yq/text/text_utils.hpp>
-#include <yq/type/Variant.hpp>
+#include <yq/type/Any.hpp>
 #include <yq/collection/Vector.hpp>
 
 using namespace yq;
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         lx  = std::max(lx, mt->label().size());
     }
     for(const TypeInfo* mt : all){
-        Variant var(mt);
+        Any var(mt);
         std::string  fmt     = var.printable();
         std::string  name    = copy(mt->name());
         std::string  label   = copy(mt->label());

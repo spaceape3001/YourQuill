@@ -7,6 +7,7 @@
 #pragma once
 
 #include "PropGetter.hpp"
+#include "TypeInfo.hpp"
 
 namespace yq {
 

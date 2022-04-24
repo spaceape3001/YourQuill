@@ -33,8 +33,8 @@ namespace yq {
     
         const TypeInfo&     type() const { return m_type; }
         
-        Variant             get(const void*) const;
-        bool                set(void*, const Variant&) const;
+        Any             get(const void*) const;
+        bool                set(void*, const Any&) const;
         
         const PropGetter*   getter() const { return m_getter; }
         const PropSetter*   setter() const { return m_setter; }

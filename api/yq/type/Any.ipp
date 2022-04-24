@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Variant.hpp"
+#include "Any.hpp"
 
 #include <yq/meta/ReservedIDs.hpp>
 #include <yq/stream/Text.hpp>
@@ -12,7 +12,7 @@
 
 
 namespace yq {
-    bool    Variant::good(const TypeInfo&ti)
+    bool    Any::good(const TypeInfo&ti)
     {
         //  these are the function pointers that won't be checked at runtime
         return ti.m_copyB && ti.m_copyR && ti.m_ctorCopyR && ti.m_ctorCopyB 
@@ -20,41 +20,41 @@ namespace yq {
     }
 
 
-    Variant      Variant::parse_me(const TypeInfo& ti, const std::string_view&txt)
+    Any      Any::parse_me(const TypeInfo& ti, const std::string_view&txt)
     {
-        Variant ret;
+        Any ret;
         bool    f   = ret.parse(ti, txt);
-        return f ? ret : Variant();
+        return f ? ret : Any();
     }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    Variant::Variant(const Variant& cp) : m_type(cp.m_type)
+    Any::Any(const Any& cp) : m_type(cp.m_type)
     {
         (m_type -> m_ctorCopyB)(m_data, cp.m_data);
     }
     
-    Variant::Variant(Variant&&mv) : m_type(mv.m_type)
+    Any::Any(Any&&mv) : m_type(mv.m_type)
     {
         (m_type -> m_ctorMove)(m_data, std::move(mv.m_data));
         mv.m_type   = &invalid();
     }
     
-    Variant::Variant(const TypeInfo* newTypePtr) 
+    Any::Any(const TypeInfo* newTypePtr) 
     {
         assert(newTypePtr && good(*newTypePtr));
         m_type  = newTypePtr;
         (m_type -> m_ctorCopyB)(m_data, m_type -> m_default);
     }
     
-    //! Creates a defaulted Variant to the specified meta-type
-    Variant::Variant(const TypeInfo&newType) : m_type(&newType)
+    //! Creates a defaulted Any to the specified meta-type
+    Any::Any(const TypeInfo&newType) : m_type(&newType)
     {
         assert(good(newType));
         (m_type -> m_ctorCopyB)(m_data, m_type -> m_default);
     }
     
-    Variant::Variant(const TypeInfo&newType, const void* dp) : m_type(&newType)
+    Any::Any(const TypeInfo&newType, const void* dp) : m_type(&newType)
     {
         assert(good(newType));
 
@@ -65,60 +65,60 @@ namespace yq {
     }
     
 
-    Variant::Variant(char ch) : m_type(nullptr)
+    Any::Any(char ch) : m_type(nullptr)
     {
         set<std::string>(to_string(ch));
     }
     
-    Variant::Variant(char8_t ch) : m_type(nullptr)
+    Any::Any(char8_t ch) : m_type(nullptr)
     {
         set<std::string>(to_string(ch));
     }
     
-    Variant::Variant(char32_t ch) : m_type(nullptr)
+    Any::Any(char32_t ch) : m_type(nullptr)
     {
         set<std::string>(copy(to_string(ch)));
     }
     
-    Variant::Variant(const char*z) : m_type(nullptr)
+    Any::Any(const char*z) : m_type(nullptr)
     {
         set<std::string>(z);
     }
     
-    Variant::Variant(char*z) : m_type(nullptr)
+    Any::Any(char*z) : m_type(nullptr)
     {
         set<std::string>(z);
     }
 
-    Variant::Variant(const char8_t*z) : m_type(nullptr)
+    Any::Any(const char8_t*z) : m_type(nullptr)
     {
         set<std::string>(copy(to_string(z)));
     }
     
-    Variant::Variant(const char32_t*z) : m_type(nullptr)
+    Any::Any(const char32_t*z) : m_type(nullptr)
     {
         set<std::string>(to_string(z));
     }
     
-    Variant::Variant(const std::u8string&z) : m_type(nullptr)
+    Any::Any(const std::u8string&z) : m_type(nullptr)
     {
         set<std::string>(copy(to_string(z)));
     }
     
-    Variant::Variant(const std::u32string&z) : m_type(nullptr)
+    Any::Any(const std::u32string&z) : m_type(nullptr)
     {
         set<std::string>(to_string(z));
     }
     
-    Variant::Variant(const std::wstring&z) : m_type(nullptr)
+    Any::Any(const std::wstring&z) : m_type(nullptr)
     {
         set<std::string>(to_string(z));
     }
     
 
-    //  Variant(const meta::Type*);
+    //  Any(const meta::Type*);
 
-    Variant::~Variant()
+    Any::~Any()
     {
         assert(m_type);
         (m_type -> m_dtor)(m_data);
@@ -129,7 +129,7 @@ namespace yq {
     }
     
 
-    Variant&        Variant::operator=(const Variant& cp)
+    Any&        Any::operator=(const Any& cp)
     {
         assert(m_type);
         if(&cp != this){
@@ -149,7 +149,7 @@ namespace yq {
         return *this;
     }
     
-    Variant&        Variant::operator=(Variant&&mv)
+    Any&        Any::operator=(Any&&mv)
     {
         assert(m_type);
         if(&mv != this){
@@ -165,7 +165,7 @@ namespace yq {
         return *this;
     }
     
-    bool            Variant::operator==(const Variant&b) const
+    bool            Any::operator==(const Any&b) const
     {
         if(this == &b)
             return true;
@@ -175,18 +175,18 @@ namespace yq {
     }
     
 
-    bool            Variant::can_convert(const TypeInfo&newType) const
+    bool            Any::can_convert(const TypeInfo&newType) const
     {
         if(m_type == &newType)
             return true;
         if(&newType == &invalid())
             return true;
-        if(&newType == &variant())
+        if(&newType == &any())
             return true;
         return m_type->m_convert.has(&newType);
     }
 
-    void            Variant::clear()
+    void            Any::clear()
     {
         if(m_type){
             m_type -> m_dtor(m_data);
@@ -195,35 +195,35 @@ namespace yq {
     }
     
 
-    Variant         Variant::convert(const TypeInfo& newType) const
+    Any         Any::convert(const TypeInfo& newType) const
     {
         assert(m_type);
 
         if(&newType == m_type)
             return *this;
         if(&newType == &invalid())
-            return Variant();
+            return Any();
         if(m_type == &invalid())
-            return Variant();
-        if(&newType == &variant())
+            return Any();
+        if(&newType == &any())
             return *this;
             
         auto fn = m_type -> m_convert.get(&newType, nullptr);
         if(!fn)
-            return Variant();
+            return Any();
         
-        Variant ret(newType);
+        Any ret(newType);
         fn(ret.raw_ptr(), raw_ptr());
         return ret;
     }
 
 
-    bool            Variant::is_valid() const
+    bool            Any::is_valid() const
     {
         return m_type && (m_type != &invalid());
     }
 
-    bool            Variant::parse(const TypeInfo&newType, const std::string_view&txt)
+    bool            Any::parse(const TypeInfo&newType, const std::string_view&txt)
     {   
         assert(m_type);
         if(&newType != m_type){
@@ -238,7 +238,7 @@ namespace yq {
     }
     
 
-    bool            Variant::print(Stream& str) const
+    bool            Any::print(Stream& str) const
     {
         assert(m_type);
         if(m_type->m_print){
@@ -248,7 +248,7 @@ namespace yq {
         return false;
     }
 
-    std::string          Variant::printable() const
+    std::string          Any::printable() const
     {
         std::string  result;
         stream::Text  buf(result);
@@ -257,17 +257,17 @@ namespace yq {
         return result;  
     }
 
-    const void*      Variant::raw_ptr() const 
+    const void*      Any::raw_ptr() const 
     {
         return m_type -> is_small() ? (const void*) m_data.Data : m_data.Pointer;
     };
     
-    void*            Variant::raw_ptr() 
+    void*            Any::raw_ptr() 
     {
         return m_type -> is_small() ? (void*) m_data.Data : m_data.Pointer;
     };
 
-    void    Variant::set(const TypeInfo&newType, const void*val)
+    void    Any::set(const TypeInfo&newType, const void*val)
     {
         if(m_type){
             if(&newType == m_type){
@@ -286,7 +286,7 @@ namespace yq {
             m_type -> m_ctorCopyB(m_data, m_type->m_default);
     }
 
-    bool        Variant::write(Stream&str) const
+    bool        Any::write(Stream&str) const
     {
         assert(m_type);
         if(m_type -> m_write){
@@ -299,7 +299,7 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    boolean_r   to_boolean(const Variant&v)
+    boolean_r   to_boolean(const Any&v)
     {
         switch(v.type().id()){
         case MT_String:
@@ -327,7 +327,7 @@ namespace yq {
         }
     }
     
-    double_r    to_double(const Variant&v)
+    double_r    to_double(const Any&v)
     {
         switch(v.type().id()){
         case MT_String:
@@ -359,7 +359,7 @@ namespace yq {
         }
     }
     
-    float_r     to_float(const Variant&v)
+    float_r     to_float(const Any&v)
     {
         switch(v.type().id()){
         case MT_String:
@@ -391,7 +391,7 @@ namespace yq {
         }
     }
     
-    int_r       to_int(const Variant&v)
+    int_r       to_int(const Any&v)
     {
         switch(v.type().id()){
         case MT_String:
@@ -424,19 +424,19 @@ namespace yq {
     }
     
     #if 0
-    int8_r      to_int8(const Variant&v);
-    int16_r     to_int16(const Variant&v);
-    int32_r     to_int32(const Variant&v);
-    int64_r     to_int64(const Variant&v);
-    integer_r   to_integer(const Variant&v);
-    short_r     to_short(const Variant&v);
-    //string_r    to_string(const Variant&v);
-    uint8_r     to_uint8(const Variant&v);
-    uint16_r    to_uint16(const Variant&v);
-    uint32_r    to_uint32(const Variant&v);
-    uint64_r    to_uint64(const Variant&v);
-    unsigned_r  to_uinteger(const Variant&v);
-    ushort_r    to_ushort(const Variant&v);
+    int8_r      to_int8(const Any&v);
+    int16_r     to_int16(const Any&v);
+    int32_r     to_int32(const Any&v);
+    int64_r     to_int64(const Any&v);
+    integer_r   to_integer(const Any&v);
+    short_r     to_short(const Any&v);
+    //string_r    to_string(const Any&v);
+    uint8_r     to_uint8(const Any&v);
+    uint16_r    to_uint16(const Any&v);
+    uint32_r    to_uint32(const Any&v);
+    uint64_r    to_uint64(const Any&v);
+    unsigned_r  to_uinteger(const Any&v);
+    ushort_r    to_ushort(const Any&v);
     #endif
 
 }

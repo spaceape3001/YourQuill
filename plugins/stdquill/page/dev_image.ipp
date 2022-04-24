@@ -17,6 +17,8 @@ namespace {
         Fragment    frag    = fragment(img);
         Document    doc     = document(img);
         const Root* rt      = root(frag);
+        if(!rt)
+            throw HttpStatus::BadArgument;
         
         h.title() << "Image [" << rt->key << "](" << label(doc) << ")";
         h << img;

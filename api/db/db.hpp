@@ -9,6 +9,8 @@
 #include "atom.hpp"
 #include "atom_html.hpp"
 
+#include "authentication.hpp"
+
 #include "cdb_sq.hpp"
 
 #include "class.hpp"
@@ -51,7 +53,10 @@
 #include "leaf.hpp"
 #include "leaf_html.hpp"
 
-#include "meta_typeinfo_html.hpp"
+#include "meta_object_arg.hpp"
+#include "meta_object_html.hpp"
+#include "meta_type_arg.hpp"
+#include "meta_type_html.hpp"
 
 #include "page_html.hpp"
 

@@ -18,6 +18,9 @@ namespace yq {
     */
     struct Field {
         struct Info;
+        struct Data;
+        using SharedData = std::shared_ptr<Data>;
+
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Field&rhs) const = default;
         constexpr operator bool() const { return id != 0ULL; }

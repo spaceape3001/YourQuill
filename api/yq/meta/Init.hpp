@@ -6,16 +6,17 @@
 
 #pragma once
 
-#include "Binder.hpp"
+#include "InfoBinder.hpp"
 #include "CompoundInfoDynamic.hpp"
 #include "CompoundInfoStatic.hpp"
 #include "Global.hpp"
 #include "GlobalInfoWriter.hpp"
 #include "MetaWriter.hpp"
-#include "MetaLog.hpp"
 #include "ObjectInfoWriter.hpp"
 #include "PropertyInfoWriter.hpp"
 #include "TypeInfoWriter.hpp"
+
+#include <yq/log/Logging.hpp>
 
 
 #define YQ_TYPE_IMPLEMENT( ... )                                                                            \

@@ -179,62 +179,62 @@ namespace yq {
         void    init_stdtypes()
         {
             {
-                auto w = meta_write<bool>();
+                auto w = writer<bool>();
                 w.parse<parse_boolean>();
                 w.print<print_boolean>();
             }
             {
-                auto w = meta_write<double>();
+                auto w = writer<double>();
                 w.parse<parse_double>();
                 w.print<print_double>();
             }
             {
-                auto w = meta_write<float>();
+                auto w = writer<float>();
                 w.parse<parse_float>();
                 w.print<print_float>();
             }
             {
-                auto w  = meta_write<int8_t>();
+                auto w  = writer<int8_t>();
                 w.parse<parse_int8>();
                 w.print<print_int8>();
             }
             {
-                auto w  = meta_write<int16_t>();
+                auto w  = writer<int16_t>();
                 w.parse<parse_int16>();
                 w.print<print_int16>();
             }
             {
-                auto w  = meta_write<int32_t>();
+                auto w  = writer<int32_t>();
                 w.parse<parse_int32>();
                 w.print<print_int32>();
             }
             {
-                auto w  = meta_write<int64_t>();
+                auto w  = writer<int64_t>();
                 w.parse<parse_int64>();
                 w.print<print_int64>();
             }
             {
-                auto w  = meta_write<uint8_t>();
+                auto w  = writer<uint8_t>();
                 w.parse<parse_uint8>();
                 w.print<print_uint8>();
             }
             {
-                auto w  = meta_write<uint16_t>();
+                auto w  = writer<uint16_t>();
                 w.parse<parse_uint16>();
                 w.print<print_uint16>();
             }
             {
-                auto w  = meta_write<uint32_t>();
+                auto w  = writer<uint32_t>();
                 w.parse<parse_uint32>();
                 w.print<print_uint32>();
             }
             {
-                auto w  = meta_write<uint64_t>();
+                auto w  = writer<uint64_t>();
                 w.parse<parse_uint64>();
                 w.print<print_uint64>();
             }
             {
-                auto w  = meta_write<std::string>();
+                auto w  = writer<std::string>();
                 w.parse<parse_string>();
                 w.print<print_string>();
             }

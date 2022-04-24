@@ -6,6 +6,7 @@
 
 #pragma once
 #include <yq/collection/Vector.hpp>
+#include <string_view>
 
 namespace yq {
     class ByteArray {
@@ -59,6 +60,11 @@ namespace yq {
             m_data.append(z, cb);
             return *this;
         }
+
+        std::string_view    as_view() const 
+        { 
+            return std::string_view(m_data.data(), m_data.size()); 
+        }
         
         char*           data() 
         { 
@@ -110,6 +116,7 @@ namespace yq {
         }
         
         bool    operator==(const ByteArray&) const = default;
+        
         
     //private:
         // this is binary data BTW, no interpretation

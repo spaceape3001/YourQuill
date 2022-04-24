@@ -4,7 +4,7 @@
 #include <yq/preamble.hpp>
 #include <memory>
 #include "user.hpp"
-#include "bit_authentication.hpp"
+#include "authentication.hpp"
 #include "bit_context.hpp"
 #include "enum_permission.hpp"
 #include <yq/collection/Set.hpp>
@@ -16,7 +16,7 @@ namespace yq {
 
     struct User::Data {
         std::string         name;
-        Authentication      authentication;
+        Ref<Authentication> authentication;
         Vector<Context>     bio;
         Permissions         permissions;
         std::string         brief;

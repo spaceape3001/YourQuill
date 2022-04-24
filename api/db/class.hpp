@@ -23,6 +23,8 @@ namespace yq {
         struct File;
         struct Data;
         using Lock = IDLock<Class>;
+        using SharedData = std::shared_ptr<Data>;
+        using SharedFile = std::shared_ptr<File>;
         
 
         static bool less_key(Class a, Class b);

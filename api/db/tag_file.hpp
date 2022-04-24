@@ -11,12 +11,13 @@
 
 namespace yq {
 
-    class Tag::File : public AbstractFile, public Data {
+    class Tag::File : public XmlFile, public Data {
     public:
 
     protected:
         virtual void    reset() override;
         virtual bool    read(ByteArray&&buffer, const std::string_view& fname) override;
-        virtual bool    write(yq::Stream&) const override;
+        virtual bool    read(const XmlDocument&, std::string_view fname) override;
+        virtual bool    write(XmlDocument&) const override;
     };
 }

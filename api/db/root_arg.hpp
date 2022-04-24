@@ -11,7 +11,6 @@
 
 namespace yq {
     struct WebContext;
-    class WebHtml;
     struct Root;
     
     namespace arg {

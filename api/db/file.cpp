@@ -9,6 +9,7 @@
 #include <yq/file/XmlUtils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/text/text_utils.hpp>
+#include <yq/type/ByteArray.hpp>
 
 #include "enum_access.hpp"
 #include "enum_assert_deny.hpp"
@@ -28,13 +29,18 @@
 #include "enum_submit.hpp"
 #include "enum_vcs.hpp"
 
-#include "bit_authentication.ipp"
+#include "authentication.ipp"
+#include "authentication_data.ipp"
+
 #include "bit_context.ipp"
 #include "bit_copyright.ipp"
 #include "bit_policy.ipp"
 
+//#include "class_data.ipp"
 #include "quill_file.ipp"
+#include "tag_data.ipp"
 #include "tag_file.ipp"
+#include "user_data.ipp"
 #include "user_file.ipp"
 
 #include <yq/meta/Init.hpp>

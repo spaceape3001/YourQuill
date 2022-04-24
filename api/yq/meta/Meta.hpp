@@ -7,13 +7,15 @@
 #pragma once
 
 #include <yq/preamble.hpp>
+#include <yq/c++/trait/not_copyable.hpp>
+#include <yq/c++/trait/not_moveable.hpp>
 #include <yq/collection/Hash.hpp>
 #include <yq/collection/Map.hpp>
 #include <yq/collection/MultiMap.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
 
-#include "VariantDef.hpp"
+#include "AnyDef.hpp"
 
 #include <source_location>
 
@@ -38,7 +40,7 @@
 
 
 namespace yq {
-    //class Variant;
+    //class Any;
     
     /*
         We want flags, however, they also need to expandable in the other libraries. 
@@ -65,7 +67,8 @@ namespace yq {
         SMALL       = 1ULL << 18, //!< Small enough to fit in DataBlock
         TLS         = 1ULL << 19, //!< Thread local storage
         LESS        = 1ULL << 20, //!< Can compare
-        TODO        = 1ULL << 30
+        TODO        = 1ULL << 30,
+        ABSTRACT    = 1ULL << 31
     };
     
     //bool    is_type(const Meta&);
@@ -82,7 +85,7 @@ namespace yq {
     
         \note We will ASSUME SINGLE THREADED until AFTER freeze is called, so that no mutex locking is required.
     */
-    class Meta {
+    class Meta : trait::not_copyable, trait::not_moveable {
     public:
     
     
@@ -157,7 +160,7 @@ namespace yq {
         const std::source_location& source() const { return m_source; }
         
         //  TODO
-        const Variant&                  tag(std::string_view) const;
+        const Any&                  tag(std::string_view) const;
         
         //! \brief Marked as "TODO" on this object (reminder for future work)
         bool                            todo() const { return (m_flags&TODO) != 0; }
@@ -195,11 +198,8 @@ namespace yq {
         void    set_name(std::string_view v) { m_name = v; }
         
         
-        struct Repo;
-        static Repo&                    repo();
-        
     private:
-        using TagMap    = Map<std::string_view, Variant, IgCase>;
+        using TagMap    = Map<std::string_view, Any, IgCase>;
     
         TagMap                          m_tags;
         Set<std::string_view>           m_aliases;
@@ -215,6 +215,10 @@ namespace yq {
         enum : uint64_t {
             SWEPT                   = 1ULL << 63
         };
+        
+        struct Repo;
+        static Repo&    repo();
+        
     };
 
     template <typename T>

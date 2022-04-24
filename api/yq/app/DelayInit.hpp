@@ -20,6 +20,7 @@ namespace yq {
     class  DelayInit {
     public:
         struct Ctor;
+        struct Invoke;
         static void         init_all(bool fRepeat=true);
 
     protected:

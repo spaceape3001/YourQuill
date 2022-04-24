@@ -15,7 +15,7 @@
 #include "MetaWriter.ipp"
 #include "MethodInfo.ipp"
 #include "ObjectInfo.ipp"
-#include "PropertyInfo.hpp"
+#include "PropertyInfo.ipp"
 #include "PropGetter.ipp"
 #include "PropSetter.ipp"
 #include "TypeInfo.ipp"
@@ -23,9 +23,11 @@
 
 YQ_INVOKE(
     yq::invalid();
-    yq::variant();
+    yq::any();
     yq::GlobalInfo::instance();
 );
+
+
 
 
 #if 0

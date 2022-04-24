@@ -21,8 +21,8 @@ namespace yq {
         Writer&     description(std::string_view zDescription);
         Writer&     label(std::string_view zLabel);
         Writer&     tag(std::string_view zKey); // implies boolean TRUE
-        Writer&     tag(std::string_view zKey, Variant&& value);
-        Writer&     tag(std::string_view zKey, const Variant& value);
+        Writer&     tag(std::string_view zKey, Any&& value);
+        Writer&     tag(std::string_view zKey, const Any& value);
         Writer&     tls();  //!< Marks the TLS flag ... only meaningful on static variables, still
         Writer&     todo(); //!< Marks this as needing TODO work
     

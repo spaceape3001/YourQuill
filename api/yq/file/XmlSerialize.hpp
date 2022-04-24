@@ -6,12 +6,14 @@
 
 #pragma once
 
-#include "ObjectInfo.hpp"
+#include <yq/file/XmlFwd.hpp>
 
 namespace yq {
-    class MetaObject {
-    public:
-    
+
+    // Base class for xml serialization
+    struct XmlSerialize {
+        virtual bool    load(const XmlNode*) { return true; }
+        virtual bool    save(XmlNode*) const { return true; }
     };
 }
 

@@ -4,29 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
 #include "user_file.hpp"
-#include <yq/type/ByteArray.hpp>
 
 namespace yq {
-
-
-    User::Data&  User::Data::merge(const Data&b, bool fOverride)
-    {
-        set_if_empty(name, b.name, fOverride);
-        bio += b.bio;
-        permissions |= b.permissions;
-        set_if_empty(brief, b.brief, fOverride);
-        return *this;
-    }
-    
-    void  User::Data::reset()
-    {
-        *this   = Data();
-    }
-    
-
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     void  User::File::reset() 
     {

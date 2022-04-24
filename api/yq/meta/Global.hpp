@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Meta.hpp"
-#include "Binder.hpp"
+#include "InfoBinder.hpp"
 #include "CompoundInfo.hpp"
 
 namespace yq {
@@ -46,8 +46,11 @@ namespace yq {
     
     template <>
     struct InfoBinder<Global>  {
+        using Info  = GlobalInfo;
         static constexpr const bool     Defined     = true;
         static constexpr const bool     IsCompound  = true;     
+        static constexpr const bool     IsType      = false;
+        static constexpr const bool     IsObject    = false;
         static const GlobalInfo&        bind();
         static GlobalInfo&              edit();
     };

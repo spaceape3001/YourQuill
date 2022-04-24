@@ -26,13 +26,26 @@ namespace yq {
             return *this; 
         }
         
+        Writer&     abstract()
+        {
+            if(Meta::Writer::m_meta)
+                Meta::Writer::m_meta -> set_option(ABSTRACT);
+            return *this;
+        }
+        
         Writer(ObjectInfo* obj) : CompoundInfo::Dynamic<C>(obj) 
         {
             assert(obj);
+            if constexpr ( std::is_abstract_v<C> ){
+                Meta::Writer::m_meta -> set_option(ABSTRACT);
+            }
+            
         }
         
-        Writer(ObjectInfo& obj) : CompoundInfo::Dynamic<C>(&obj) 
+        Writer(ObjectInfo& obj) : Writer(&obj)
         {
         }
     };
 }
+
+

@@ -13,13 +13,13 @@ namespace yq {
     /* \brief Declares a type that can be stored unobtrusively
     */
     class TypeInfo : public CompoundInfo {
-        friend class Variant;
+        friend class Any;
     public:
     
             // WARNING UNSAFE IN UNLOCKED MULTITHREADED MODE!
         static const Vector<const TypeInfo*>&   all();
-        static const TypeInfo*                  lookup(id_t);
-        static const TypeInfo*                  lookup(const std::string_view&);
+        static const TypeInfo*                  find(id_t);
+        static const TypeInfo*                  find(std::string_view);
     
         bool        can_parse() const { return m_parse ? true : false; }
         bool        can_write() const { return m_write ? true : false; }
@@ -36,6 +36,13 @@ namespace yq {
         template <typename T> class Typed;      //  base type
         template <typename T> class Special;    //  allows for specialization
         template <typename T> class Final;      //  Final one for storing
+
+
+        size_t                              method_count() const;
+        const Vector<const MethodInfo*>&    methods() const;
+
+        size_t                              property_count() const;
+        const Vector<const PropertyInfo*>&  properties() const;
         
     protected:
         TypeInfo(std::string_view zName, const std::source_location& sl, id_t i=AUTO_ID);

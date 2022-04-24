@@ -121,9 +121,9 @@ namespace yq {
         }
     }
 
-    const Variant&  Meta::tag(std::string_view k) const
+    const Any&  Meta::tag(std::string_view k) const
     {
-        static Variant bad;
+        static Any bad;
         auto i = m_tags.find(k);
         if(i != m_tags.end())
             return i->second;

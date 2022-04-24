@@ -15,38 +15,6 @@
 
 namespace yq {
 
-    /*! \brief Class in the cache
-
-        This structure represents an atom classification in the cache
-    */
-    struct Class {
-        static constexpr const char*    szExtension = "cls";
-        struct Info;
-        using FragDoc       = std::pair<Fragment, ClassFile::Shared>;
-
-        static bool less_key(Class a, Class b);
-        static bool less_label(Class a, Class b);
-        static bool less_name(Class a, Class b);
-
-        uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Class&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
-    };
-
-
-    /*! \brief Field of the class
-
-        A field is a pre-declared attribute for any atom using the specified class.  It's recommended to keep fields
-        unqiue.
-    */
-    struct Field {
-        struct Info;
-        uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Field&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
-    };
-
-
     struct Class::Info {
         String      key;
         Graph       deps;
@@ -60,15 +28,9 @@ namespace yq {
         bool operator==(const Info&) const = default;
     };
 
-    struct Field::Info {
-        Class       class_;
-        String      brief;
-        String      key, pkey;
-        String      name, plural;
-        bool operator==(const Info&) const = default;
-    };
 
     namespace cdb {
+        using ClassFragDoc      = std::pair<Fragment, ClassFile::Shared>;
         
         StringSet               aliases(Field);
 

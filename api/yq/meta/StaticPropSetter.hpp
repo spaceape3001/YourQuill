@@ -7,6 +7,7 @@
 #pragma once
 
 #include "PropSetter.hpp"
+#include "TypeInfo.hpp"
 
 namespace yq {
     template <typename T>

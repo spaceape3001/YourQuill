@@ -7,7 +7,7 @@
 #pragma once
 
 #include "TypeInfo.hpp"
-#include "Binder.hpp"
+#include "InfoBinder.hpp"
 #include "CompoundInfoDynamic.hpp"
 #include <yq/c++/trait/has_less.hpp>
 #include <yq/c++/trait/is_template.hpp>
@@ -269,7 +269,7 @@ namespace yq {
             }
         }
         
-        template <String(*FN)(T)>
+        template <std::string(*FN)(T)>
         void    format()
         {
             if(thread_safe_write()){
@@ -279,7 +279,7 @@ namespace yq {
             }
         }
         
-        template <String(*FN)(const T&)>
+        template <std::string(*FN)(const T&)>
         void    format()
         {
             if(thread_safe_write()){
@@ -322,7 +322,7 @@ namespace yq {
             }
         }
 
-        template <String(*FN)(T)>
+        template <std::string(*FN)(T)>
         void    print()
         {
             if(thread_safe_write()){
@@ -332,7 +332,7 @@ namespace yq {
             }
         }
         
-        template <String(*FN)(const T&)>
+        template <std::string(*FN)(const T&)>
         void    print()
         {
             if(thread_safe_write()){

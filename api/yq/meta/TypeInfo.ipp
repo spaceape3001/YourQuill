@@ -38,9 +38,9 @@ namespace yq {
         return *s_ret;
     }
     
-    const TypeInfo&        variant()
+    const TypeInfo&        any()
     {
-        static EmptyType*  s_ret = new EmptyType(MT_Variant);
+        static EmptyType*  s_ret = new EmptyType(MT_Any);
         return *s_ret;
     }
 
@@ -52,14 +52,14 @@ namespace yq {
         return repo().types.all;
     }
     
-    const TypeInfo*                  TypeInfo::lookup(id_t i)
+    const TypeInfo*                  TypeInfo::find(id_t i)
     {
         assert(thread_safe_read());
         const Meta* m   = repo().all.value(i, nullptr);
         return (m && m->is_type()) ? static_cast<const TypeInfo*>(m) : nullptr;
     }
     
-    const TypeInfo*                  TypeInfo::lookup(const std::string_view&sv)
+    const TypeInfo*                  TypeInfo::find(std::string_view sv)
     {
         assert(thread_safe_read());
         return repo().types.lut.first(sv, nullptr);
@@ -83,6 +83,26 @@ namespace yq {
         //  should never be used....
     }
     
+    size_t                              TypeInfo::method_count() const
+    {
+        return m_methods.all.size();
+    }
+
+    const Vector<const MethodInfo*>&    TypeInfo::methods() const
+    {
+        return m_methods.all;
+    }
+    
+    const Vector<const PropertyInfo*>&  TypeInfo::properties() const
+    {
+        return m_properties.all;
+    }
+
+    size_t                              TypeInfo::property_count() const
+    {
+        return m_properties.all.size();
+    }
+
     void    TypeInfo::sweep_impl() 
     {
         CompoundInfo::sweep_impl();

@@ -100,10 +100,10 @@ set(yq_sources
     
     ./meta/meta_unity.cpp
     ./meta/ArgInfo.hpp
-    ./meta/Binder.hpp
     ./meta/CompoundInfo.hpp
     ./meta/DataBlock.hpp
     ./meta/Global.hpp
+    ./meta/InfoBinder.hpp
     ./meta/Init.hpp
     ./meta/Meta.hpp
     ./meta/MetaRepo.hpp
@@ -170,6 +170,8 @@ set(yq_sources
     ./text/text_unity.cpp
     
     ./type/type_unity.cpp
+    
+    ./type/Any.hpp
     ./type/ByteArray.hpp
     ./type/Enum.hpp
     ./type/FixedBuffer.hpp
@@ -179,7 +181,6 @@ set(yq_sources
     ./type/Result.hpp
     ./type/Span.hpp
     ./type/Touched.hpp
-    ./type/Variant.cpp
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp

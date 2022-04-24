@@ -13,7 +13,7 @@ namespace {
         if(!img)
             return ;
 
-        static thread_local SQ u("DELETE FROM Image WHERE id=?");
+        static thread_local SQ u("DELETE FROM Images WHERE id=?");
         u.exec(img.id);
     }
 

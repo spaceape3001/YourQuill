@@ -20,6 +20,7 @@ using namespace std::literals::string_view_literals;
 
 
 namespace yq {
+    class Any;
     class ByteArray;
     class CmdArgs;
     class DelayInit;
@@ -38,7 +39,6 @@ namespace yq {
     struct Parsed;
     class RefCount;
     class Stream;
-    class Variant;
     
         //  STRUCTS
 
@@ -71,6 +71,7 @@ namespace yq {
     
         // RESULTS
     
+    using any_r             = Result<Any>;
     using boolean_r         = Result<bool>;
     using double_r          = Result<double>;
     using float_r           = Result<float>;
@@ -95,7 +96,6 @@ namespace yq {
     using unsigned_r        = Result<unsigned int>;
     using ushort_r          = Result<unsigned short>;
     using u32string_r       = Result<std::u32string>;
-    using variant_r         = Result<Variant>;
     using wstring_r         = Result<std::wstring>;
 
         // INT RANGES

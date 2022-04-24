@@ -38,11 +38,11 @@ namespace yq {
     Meta::Writer&     Meta::Writer::tag(std::string_view zKey)
     {
         assert("Tag already set!" && !m_meta->m_tags.has(zKey));
-        m_meta -> m_tags[zKey] = Variant(true);
+        m_meta -> m_tags[zKey] = Any(true);
         return *this;
     }
     
-    Meta::Writer&     Meta::Writer::tag(std::string_view zKey, Variant&& value)
+    Meta::Writer&     Meta::Writer::tag(std::string_view zKey, Any&& value)
     {
         assert("Tag already set!" && !m_meta->m_tags.has(zKey));
         m_meta -> m_tags[zKey] = std::move(value);
@@ -50,7 +50,7 @@ namespace yq {
     }
     
 
-    Meta::Writer&     Meta::Writer::tag(std::string_view zKey, const Variant& value)
+    Meta::Writer&     Meta::Writer::tag(std::string_view zKey, const Any& value)
     {
         assert("Tag already set!" && !m_meta->m_tags.has(zKey));
         m_meta -> m_tags[zKey] = value;

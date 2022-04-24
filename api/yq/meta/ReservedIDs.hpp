@@ -14,7 +14,7 @@ namespace yq {
     //  Reserved IDs
     enum {
         MT_Invalid      = 0,
-        MT_Variant,
+        MT_Any,
         MC_Global,      // Global is a compound, not type
         MT_String,
         MT_Boolean,
