@@ -45,6 +45,16 @@ namespace {
         dev_table(h, obj->deriveds(true));
     }
 
+    void page_dev_meta_object_all_properties(WebHtml&h)
+    {
+        const ObjectInfo*   obj = object_info(h);
+        if(!obj)
+            throw HttpStatus::BadArgument;
+            
+        h.title() << "Object Info (" << obj -> name() << "): All Properties";
+        dev_table(h, obj->properties(true));
+    }
+
     void page_dev_meta_object_derived(WebHtml&h)
     {
         const ObjectInfo*   obj = object_info(h);
@@ -55,12 +65,24 @@ namespace {
         dev_table(h, obj->deriveds(false));
     }
 
+    void page_dev_meta_object_properties(WebHtml&h)
+    {
+        const ObjectInfo*   obj = object_info(h);
+        if(!obj)
+            throw HttpStatus::BadArgument;
+            
+        h.title() << "Object Info (" << obj -> name() << "): Properties";
+        dev_table(h, obj->properties(false));
+    }
+
     YQ_INVOKE( 
         reg_webgroup({
             reg_webpage<page_dev_meta_object>("/dev/meta/object").label("Info"),
             reg_webpage<page_dev_meta_object_derived>("/dev/meta/object/derived").label("Derived"),
+            reg_webpage<page_dev_meta_object_properties>("/dev/meta/object/properties").label("Properties"),
             reg_webpage<page_dev_meta_object_all_base>("/dev/meta/object/all_base").label("All Base"),
-            reg_webpage<page_dev_meta_object_all_derived>("/dev/meta/object/all_derived").label("All Derived")
+            reg_webpage<page_dev_meta_object_all_derived>("/dev/meta/object/all_derived").label("All Derived"),
+            reg_webpage<page_dev_meta_object_all_properties>("/dev/meta/object/all_properties").label("All Properties")
         });
     )
 }

@@ -14,6 +14,6 @@ namespace {
         dev_table(h, web::glob_map());
     }
     
-    YQ_INVOKE( reg_webpage<page_dev_webglobs>("/dev/webglobs"); )
+    YQ_INVOKE( reg_webpage<page_dev_webglobs>("/dev/web/globs"); )
     
 }

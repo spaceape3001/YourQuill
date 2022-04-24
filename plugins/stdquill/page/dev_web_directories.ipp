@@ -7,13 +7,13 @@
 #pragma once
 
 namespace {
-    
-    void page_dev_webpages(WebHtml& h)
+
+    void    page_dev_webdirs(WebHtml&h)
     {
-        h.title("All WebPages");
-        dev_table(h, web::page_map(), true);
+        h.title("All WebDirs");
+        dev_table(h, web::directory_map());
     }
     
-    YQ_INVOKE( reg_webpage<page_dev_webpages>("/dev/webpages"); )
+    YQ_INVOKE( reg_webpage<page_dev_webdirs>("/dev/web/directories"); )
     
 }

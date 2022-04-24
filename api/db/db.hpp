@@ -55,6 +55,9 @@
 
 #include "meta_object_arg.hpp"
 #include "meta_object_html.hpp"
+
+#include "meta_property_html.hpp"
+
 #include "meta_type_arg.hpp"
 #include "meta_type_html.hpp"
 

@@ -53,6 +53,16 @@ namespace yq {
         }
         return Any();
     }
+
+    bool        PropertyInfo::is_state() const
+    {
+        return static_cast<bool>(flags() & STATE);
+    }
+    
+    bool        PropertyInfo::is_static() const
+    {
+        return static_cast<bool>(flags() & STATIC);
+    }
     
     bool        PropertyInfo::set(void* obj, const Any&var) const
     {

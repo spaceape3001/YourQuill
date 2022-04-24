@@ -49,7 +49,7 @@
 			<TR>
 				<TD ALIGN="left">
 				    <!-- TEMPORARY UNTIL FULLY OPERATIONAL -->
-				    <A HREF="/dev/webpages">ALL Web Pages</A><br />
+				    <A HREF="/dev/web/pages">ALL Web Pages</A><br />
 				    {{SSID}}
 				</TD>
 			</TR>

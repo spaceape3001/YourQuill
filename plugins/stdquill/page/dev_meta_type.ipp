@@ -34,10 +34,21 @@ namespace {
         h.kvrow("Methods") << type->method_count();
     }
     
-    YQ_INVOKE( 
-        reg_webpage<page_dev_meta_type>("/dev/meta/type");
+    void    page_dev_meta_type_properties(WebHtml& h)
+    {
+        const TypeInfo* type    = type_info(h);
+        if(!type)
+            throw HttpStatus::BadArgument;
         
-        //  going to web-group this with properties (later)
+        h.title() << "Type Info (" << type->name() << "): Properties";
+        dev_table(h, type->properties());
+    }
+    
+    YQ_INVOKE( 
+        reg_webgroup({
+            reg_webpage<page_dev_meta_type>("/dev/meta/type").label("Info"),
+            reg_webpage<page_dev_meta_type_properties>("/dev/meta/type/properties").label("Properties")
+        });
     )
     
 }

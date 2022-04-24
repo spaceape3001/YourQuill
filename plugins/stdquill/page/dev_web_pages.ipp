@@ -8,12 +8,12 @@
 
 namespace {
     
-    void page_dev_webvars(WebHtml& h)
+    void page_dev_webpages(WebHtml& h)
     {
-        h.title("All WebVariables");
-        dev_table(h, web::variable_map());
+        h.title("All WebPages");
+        dev_table(h, web::page_map(), true);
     }
     
-    YQ_INVOKE( reg_webpage<page_dev_webvars>("/dev/webvars"); )
+    YQ_INVOKE( reg_webpage<page_dev_webpages>("/dev/web/pages"); )
     
 }
