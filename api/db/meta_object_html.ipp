@@ -37,7 +37,7 @@ namespace yq {
             h << "<tr><th>ID</th><th>Name</th><th>Base</th><th>Size</th><th>Description</th></tr>\n";
             for(const ObjectInfo* ti : objects){
                 h << "<tr><td>"  << dev_id(ti) 
-                  << "</td><td>" << ti->name() 
+                  << "</td><td>" << dev(ti) 
                   << "</td><td>" << dev(ti->base()) 
                   << "</td><td>" << ti->size() 
                   << "</td><td>" << ti->description() 

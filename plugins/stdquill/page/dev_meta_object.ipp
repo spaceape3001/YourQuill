@@ -52,7 +52,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Object Info (" << obj -> name() << "): Derived";
-        dev_table(h, obj->deriveds(true));
+        dev_table(h, obj->deriveds(false));
     }
 
     YQ_INVOKE( 

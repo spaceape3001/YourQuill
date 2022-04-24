@@ -102,12 +102,14 @@ namespace yq {
             m_local.bases << m_base;
             m_base -> sweep();
             m_base -> m_local.derived << this;
+
+            for(ObjectInfo* b = m_base; b; b = b -> m_base){
+                b->m_all.derived << this;
+                m_all.bases << b;
+            }
             
-            m_all.bases += m_base -> m_all.bases;
             m_all.methods += m_base -> m_all.methods;
             m_all.properties += m_base -> m_all.properties;
-            for(ObjectInfo* b = m_base; b; b = b -> m_base)
-                m_all.derived << this;
         }
     }
 

@@ -39,7 +39,7 @@ namespace yq {
                 if(!ti)
                     continue;
                 h << "<tr><td>"  << dev_id(ti) 
-                  << "</td><td>" << ti->name() 
+                  << "</td><td>" << dev(ti) 
                   << "</td><td>" << ti->size() 
                   << "</td><td>" << ti->description() 
                   << "</td></tr>\n";
