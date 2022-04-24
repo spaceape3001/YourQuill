@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <db/authentication.hpp>
+#include <db/bit/authentication.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
 
 // First three are TESTING PURPOSES ONLY, to be removed for final release

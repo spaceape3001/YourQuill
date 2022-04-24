@@ -6,20 +6,8 @@
 
 #pragma once
 
-#include <cstdint>
-#include <compare>
+#include "directory/struct.hpp"
 
-namespace yq {
-
-    /*! \brief Directory 
-
-        This represents a directory on the drive, which is reflected in the 
-        cache database.
-    */
-    struct Directory {
-        struct Info;
-        uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Directory&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
-    };
-}
+#include "directory/arg.hpp"
+#include "directory/cdb.hpp"
+#include "directory/html.hpp"

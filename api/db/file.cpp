@@ -11,41 +11,21 @@
 #include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
 
-#include "enum_access.hpp"
-#include "enum_assert_deny.hpp"
-#include "enum_attr_kind.hpp"
-#include "enum_cal_system.hpp"
-#include "enum_change.hpp"
-#include "enum_data_role.hpp"
-#include "enum_file_type.hpp"
-#include "enum_format.hpp"
-#include "enum_linkage.hpp"
-#include "enum_multiplicity.hpp"
-#include "enum_permission.hpp"
-#include "enum_reset.hpp"
-#include "enum_restriction.hpp"
-#include "enum_size_desc.hpp"
-#include "enum_submit.hpp"
-#include "enum_vcs.hpp"
+#include "enum.hpp"
 
 
-#include "action.ipp"
-#include "authentication.ipp"
+#include "bit/authentication.ipp"
 
-#include "constraint.ipp"
-#include "context.ipp"
-#include "copyright.ipp"
-#include "policy.ipp"
-#include "rule.ipp"
+#include "bit/context.ipp"
+#include "bit/copyright.ipp"
+#include "bit/policy.ipp"
+#include "bit/rule.ipp"
 
-#include "trigger.ipp"
-
-//#include "class_data.ipp"
-#include "quill_file.ipp"
-#include "tag_data.ipp"
-#include "tag_file.ipp"
-#include "user_data.ipp"
-#include "user_file.ipp"
+#include "quill/file.ipp"
+#include "tag/data.ipp"
+#include "tag/file.ipp"
+#include "user/data.ipp"
+#include "user/file.ipp"
 
 #include <yq/meta/Init.hpp>
 

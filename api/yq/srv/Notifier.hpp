@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/enum_change.hpp>
+#include <db/enum/change.hpp>
 #include <db/folder.hpp>
 
 #include <yq/collection/EnumMap.hpp>

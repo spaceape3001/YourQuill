@@ -48,6 +48,7 @@ namespace yq {
     static constexpr const char*    szColumn            = "column";
     static constexpr const char*    szComment           = "comment";
     static constexpr const char*    szConsole           = "console";
+    static constexpr const char*    szConstraint        = "constraint";
     static constexpr const char*    szContext           = "context";
     static constexpr const char*    szContext_          = "_context_";
     static constexpr const char*    szCopyAssert        = "copyright_assert";
@@ -169,6 +170,7 @@ namespace yq {
     static constexpr const char*    szYQLeaf            = "yq_leaf";
     static constexpr const char*    szYQLeafDef         = "yq_define_leaf";
     static constexpr const char*    szYQQuill           = "yq_quill";
+    static constexpr const char*    szYQRule            = "yq_rule";
     static constexpr const char*    szYQServer          = "yq_server";
     static constexpr const char*    szYQTag             = "yq_tag";
     static constexpr const char*    szYQType            = "yq_type";

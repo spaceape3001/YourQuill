@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/enum_size_desc.hpp>
+#include <db/enum/size_desc.hpp>
 
 //#include "WebSession.hpp"
 #include <asio/ip/address.hpp>

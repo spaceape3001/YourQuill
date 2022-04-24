@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "directory_arg.hpp"
-#include "document_arg.hpp"
-#include "folder_arg.hpp"
-#include "fragment_arg.hpp"
-#include "root_arg.hpp"
+#include "directory/arg.hpp"
+#include "document/arg.hpp"
+#include "folder/arg.hpp"
+#include "fragment/arg.hpp"
+#include "root/arg.hpp"

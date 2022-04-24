@@ -1,0 +1,20 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <compare>
+#include <cstdint>
+
+#include <db/enum/size_desc.hpp>
+#include <db/image/struct.hpp>
+
+namespace yq {
+    struct Thumbnail {
+        Image       img;
+        SizeDesc    size;
+    };
+}

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "directory_cdb.hpp"
-#include "document_cdb.hpp"
-#include "folder_cdb.hpp"
-#include "fragment_cdb.hpp"
-#include "root_cdb.hpp"
+#include "directory/cdb.hpp"
+#include "document/cdb.hpp"
+#include "folder/cdb.hpp"
+#include "fragment/cdb.hpp"
+#include "root/cdb.hpp"

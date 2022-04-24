@@ -6,19 +6,8 @@
 
 #pragma once
 
-#include <cstdint>
-#include <compare>
+#include "document/struct.hpp"
 
-namespace yq {
-    /*! \brief Document in the cache
-
-        This represents a document in the cache, which is case insensitive and
-        fused across all matching fragments in the workspace
-    */
-    struct Document {
-        struct Info;
-        uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Document&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
-    };
-}
+#include "document/arg.hpp"
+#include "document/cdb.hpp"
+#include "document/html.hpp"

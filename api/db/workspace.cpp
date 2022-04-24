@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "workspace.hpp"
-#include "root.hpp"
-#include "quill_file.hpp"
+#include <db/root/struct.hpp>
+#include <db/quill/file.hpp>
 
 #include <yq/app/BuildInfo.hpp>
 #include <yq/app/CmdArgs.hpp>

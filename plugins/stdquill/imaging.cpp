@@ -9,13 +9,13 @@
 #include <yq/log/Logging.hpp>
 #include <yq/shape/Size2Ops.hpp>
 #include <db/cdb_sq.hpp>
-#include <db/document.hpp>
-#include <db/document_cdb.hpp>
-#include <db/fragment.hpp>
-#include <db/fragment_cdb.hpp>
+#include <db/document/struct.hpp>
+#include <db/document/cdb.hpp>
+#include <db/fragment/struct.hpp>
+#include <db/fragment/cdb.hpp>
 #include <db/id_lock.hpp>
-#include <db/image.hpp>
-#include <db/image_cdb.hpp>
+#include <db/image/struct.hpp>
+#include <db/image/cdb.hpp>
 
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning

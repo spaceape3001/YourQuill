@@ -8,5 +8,5 @@ set(stdquill_SOURCES
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
 target_include_directories( stdquill PRIVATE ${ImageMagick_INCLUDE_DIRS}) 
-target_link_libraries( stdquill PRIVATE yq yqdb ${ImageMagick_LIBRARIES})
+target_link_libraries( stdquill PRIVATE yq yqdb yqdtn ${ImageMagick_LIBRARIES})
 
