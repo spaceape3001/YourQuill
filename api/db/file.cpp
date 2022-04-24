@@ -14,7 +14,6 @@
 #include "enum_access.hpp"
 #include "enum_assert_deny.hpp"
 #include "enum_attr_kind.hpp"
-#include "enum_authentication_type.hpp"
 #include "enum_cal_system.hpp"
 #include "enum_change.hpp"
 #include "enum_data_role.hpp"
@@ -29,12 +28,17 @@
 #include "enum_submit.hpp"
 #include "enum_vcs.hpp"
 
-#include "authentication.ipp"
-#include "authentication_data.ipp"
 
-#include "bit_context.ipp"
-#include "bit_copyright.ipp"
-#include "bit_policy.ipp"
+#include "action.ipp"
+#include "authentication.ipp"
+
+#include "constraint.ipp"
+#include "context.ipp"
+#include "copyright.ipp"
+#include "policy.ipp"
+#include "rule.ipp"
+
+#include "trigger.ipp"
 
 //#include "class_data.ipp"
 #include "quill_file.ipp"
@@ -48,7 +52,6 @@
 YQ_TYPE_IMPLEMENT(yq::Access)
 YQ_TYPE_IMPLEMENT(yq::AssertDeny)
 YQ_TYPE_IMPLEMENT(yq::AttrKind)
-YQ_TYPE_IMPLEMENT(yq::AuthenticationType)
 YQ_TYPE_IMPLEMENT(yq::CalSystem)
 YQ_TYPE_IMPLEMENT(yq::Change)
 YQ_TYPE_IMPLEMENT(yq::DataRole)

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "bit_copyright.hpp"
-#include "bit_policy.hpp"
+#include "copyright.hpp"
+#include "policy.hpp"
 #include "enum_vcs.hpp"
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Set.hpp>

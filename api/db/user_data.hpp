@@ -5,7 +5,7 @@
 #include <memory>
 #include "user.hpp"
 #include "authentication.hpp"
-#include "bit_context.hpp"
+#include "context.hpp"
 #include "enum_permission.hpp"
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>

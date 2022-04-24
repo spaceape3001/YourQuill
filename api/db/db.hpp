@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "action.hpp"
+
 #include "atom.hpp"
 #include "atom_html.hpp"
 
@@ -15,6 +17,8 @@
 
 #include "class.hpp"
 #include "class_html.hpp"
+
+#include "constraint.hpp"
 
 #include "directory.hpp"
 #include "directory_arg.hpp"
@@ -78,6 +82,8 @@
 
 #include "thumbnail.hpp"
 #include "thumbnail_html.hpp"
+
+#include "trigger.hpp"
 
 #include "user.hpp"
 #include "user_arg.hpp"

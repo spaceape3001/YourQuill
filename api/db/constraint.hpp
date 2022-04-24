@@ -6,20 +6,20 @@
 
 #pragma once
 
+#include <yq/type/XmlObject.hpp>
 #include <yq/type/Ref.hpp>
 
 namespace yq {
-
-    //  This will become a meta object....?
-    //  
-    //  A constraint is a restriction applied to a class/field/etc
-    class Constraint : public RefCount { 
+    
+    class Constraint : public XmlObject, public RefCount {
+        YQ_OBJECT_DECLARE(Constraint, XmlObject)
     public:
     
-        struct Data;
-        using SharedData    = std::shared_ptr<Data>;
-        
-        virtual void    something() const = 0;
+        //  TBD....
+        virtual void    constraint() const = 0;
     };
+
+    Ref<Constraint>     x_constraint(const XmlNode* xn);
+    void    write_xn(XmlNode* xn, const Ref<Constraint>&);
 
 }
