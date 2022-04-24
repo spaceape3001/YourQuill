@@ -49,7 +49,7 @@ namespace yq {
             return body.empty() && subs.empty();
         }
 
-        bool        StdFile::read(ByteArray&&buffer, const std::string_view& fname) 
+        bool        StdFile::read(ByteArray&&buffer, std::string_view fname) 
         {
             return KVTree::parse(buffer, (has_body()?&body:nullptr), recursive_attributes(), fname);
         }
@@ -130,7 +130,7 @@ namespace yq {
         {
         }
 
-        bool    XmlFile::read(ByteArray&&buffer, const std::string_view& fname )
+        bool    XmlFile::read(ByteArray&&buffer, std::string_view fname )
         {
             ByteArray   chars   = std::move(buffer);
 
@@ -427,6 +427,14 @@ namespace yq {
             if(xn)
                 return xn -> document();
             return nullptr;
+        }
+
+        string_set_t         read_child_string_set(const XmlNode*xn, const char* pszTag)
+        {
+            string_set_t    ret;
+            for(const XmlNode* xb = xn->first_node(pszTag); xb; xb = xb -> next_sibling(pszTag))
+                ret << x_sstring(xb);
+            return ret;
         }
 
 

@@ -22,7 +22,7 @@ namespace yq {
         virtual bool    read(const XmlDocument&, std::string_view fname) = 0;
         virtual bool    write(XmlDocument&) const = 0;
 
-        virtual bool    read(ByteArray&&, const std::string_view& fname) override;
+        virtual bool    read(ByteArray&&, std::string_view fname) override;
         virtual bool    write(yq::Stream&) const override;
 
         virtual bool    is_binary() const override { return false; }

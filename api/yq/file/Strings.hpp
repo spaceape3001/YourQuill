@@ -69,6 +69,7 @@ namespace yq {
     static constexpr const char*    szEnumeration       = "enumeration";
     static constexpr const char*    szEnumeration_      = "_enumeration_";
     static constexpr const char*    szEdge              = "edge";
+    static constexpr const char*    szExpected          = "expected";
     static constexpr const char*    szExpression        = "expression";
     static constexpr const char*    szExtend            = "extend";
     static constexpr const char*    szExtra             = "extra";
@@ -167,6 +168,7 @@ namespace yq {
     static constexpr const char*    szYQAttr            = "yq_attr";
     static constexpr const char*    szYQAttrDef         = "yq_define_attribute";
     static constexpr const char*    szYQClass           = "yq_class";
+    static constexpr const char*    szYQField           = "yq_field";
     static constexpr const char*    szYQLeaf            = "yq_leaf";
     static constexpr const char*    szYQLeafDef         = "yq_define_leaf";
     static constexpr const char*    szYQQuill           = "yq_quill";
@@ -176,6 +178,7 @@ namespace yq {
     static constexpr const char*    szYQType            = "yq_type";
     static constexpr const char*    szYQUser            = "yq_user";
     static constexpr const char*    szYQUserGroup       = "yq_usergroup";
+    static constexpr const char*    szYQValues          = "yq_values";
     static constexpr const char*    szYQWiki            = "yq_wiki";
     static constexpr const char*    szYQWorkspace       = "yq_workspace";
     static constexpr const char*    szZero              = "zero";

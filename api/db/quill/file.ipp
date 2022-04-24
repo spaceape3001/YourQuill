@@ -36,7 +36,7 @@ namespace yq {
         }
     }
 
-    bool    QuillFile::read(ByteArray&&buffer, const std::string_view& fname) 
+    bool    QuillFile::read(ByteArray&&buffer, std::string_view fname) 
     {
         KVTree        attrs;
         if(!attrs.parse(buffer, nullptr, true, fname))

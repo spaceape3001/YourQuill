@@ -46,7 +46,7 @@ namespace yq {
         //  Saves to the specified file and changes the filename (if different)
         bool            save_as(const std::filesystem::path&);
         
-        //  Saves to the specified file WITHOUT changign the file
+        //  Saves to the specified file WITHOUT changing the file
         bool            save_to(const std::filesystem::path&) const;
 
         bool            save_to(yq::Stream&) const;
@@ -56,7 +56,7 @@ namespace yq {
         
         
     protected:
-        virtual void    reset() = 0;
+        virtual void    reset() {}
         virtual bool    can_change_to(const std::filesystem::path&) { return true; }
         
         /*! \brief  Sub-classes extend this for "reading" the data
@@ -64,7 +64,7 @@ namespace yq {
             \param[in]  buffer  The file data, this will be null-terminated (always).  However, if you're binary, this
                         could easily have MULTIPLE null values.
         */
-        virtual bool    read(ByteArray&&, const std::string_view& fname) = 0;
+        virtual bool    read(ByteArray&&, std::string_view fname) = 0;
         virtual bool    write(yq::Stream&) const = 0;
         virtual bool    is_binary() const { return false; }
 

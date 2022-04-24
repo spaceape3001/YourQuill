@@ -21,12 +21,17 @@
 #include "bit/policy.ipp"
 #include "bit/rule.ipp"
 
+#include "class/data.ipp"
+#include "class/file.ipp"
+#include "field/data.ipp"
+#include "field/file.ipp"
 #include "quill/file.ipp"
 #include "tag/data.ipp"
 #include "tag/file.ipp"
 #include "user/data.ipp"
 #include "user/file.ipp"
 #include "value/data.ipp"
+#include "value/file.ipp"
 
 #include <yq/meta/Init.hpp>
 

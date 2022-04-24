@@ -1,3 +1,0 @@
-% Meeting
-is event
-

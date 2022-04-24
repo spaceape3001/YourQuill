@@ -158,6 +158,9 @@ std::filesystem::path           gSharedCssFile, gSharedFooterFile, gSharedIndexF
 #include "update/s3_image.ipp"
 #include "update/s3_user.ipp"
 #include "update/s3_tag.ipp"
+#include "update/s3_class.ipp"
+
+
 //#include "update/s3_tag_leaf.ipp"
 
 #include "update/s4_background.ipp"

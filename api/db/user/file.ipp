@@ -41,8 +41,6 @@ namespace yq {
     
     bool  User::File::write(XmlDocument&doc) const 
     {
-        xml_start(doc);
-        
         XmlNode*  xroot  = doc.allocate_node(rapidxml::node_element, szYQUser);
         doc.append_node(xroot);
         XmlNode*    xuser   = doc.allocate_node(rapidxml::node_element, szUser);

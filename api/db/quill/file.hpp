@@ -18,7 +18,7 @@ namespace yq {
 
     protected:
         virtual void    reset() override;
-        virtual bool    read(ByteArray&&buffer, const std::string_view& fname) override;
+        virtual bool    read(ByteArray&&buffer, std::string_view fname) override;
         virtual bool    write(yq::Stream&) const override;
     };
 

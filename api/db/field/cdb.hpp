@@ -25,44 +25,33 @@ namespace yq {
 
     namespace cdb {
         
-        StringSet               aliases(Field);
-
-        /*! \brief All classes in the cache database
-        
-            \param[in]  sorted  Yes/No to sort by key (default is no)
-            \return vector of classes
-        */
-        ClassVec                all_classes(Sorted sorted=Sorted{});
-        
-        /*! \brief Count of all classes declared in the cache
-        */
-        size_t                  all_classes_count();
-
+        string_set_t            aliases(Field);
 
         FieldVec                all_fields(Sorted sorted=Sorted());
         size_t                  all_fields_count();
+        
+        bool                    any(Field);
 
-        String                  brief(Class);
         String                  brief(Field);
 
         Class                   class_(Field);
-        Class                   class_(uint64_t);
-        Class                   class_(const String&);
 
-        ClassFile::Shared       class_doc(Fragment, bool fAllowEmpty=false);
+        Class::SharedFile       class_doc(Fragment, bool fAllowEmpty=false);
         
         ClassVec                classes(Field, Sorted sorted=Sorted());
-        ClassVec                classes(const StringSet&);
+        ClassVec                classes(const string_set_t&);
         
         
-        StringSet               data_types(Field);
+        string_set_t            data_types(Field);
             
-        Class                   db_class(const String&, bool *wasCreated=nullptr);
+        Class                   db_class(std::string_view , bool *wasCreated=nullptr);
         Class                   db_class(Document, bool *wasCreated=nullptr);
-        ClassVec                db_classes(const StringSet&);
+        ClassVec                db_classes(const string_set_t&);
         
-        Field                   db_field(Class c, const String&k, bool *wasCreated=nullptr);
-        //Field                   db_field(const String&, bool *wasCreated=nullptr);
+        Field                   db_field(Class c, std::string_view k, bool *wasCreated=nullptr);
+        Field                   db_field(std::string_view k, bool *wasCreated=nullptr);
+        
+        //Field                   db_field(std::string_view , bool *wasCreated=nullptr);
         //Field                   db_field(Document, bool *wasCreated=nullptr);
         
         ClassVec                def_derived(Class, Sorted sorted=Sorted());
@@ -93,7 +82,7 @@ namespace yq {
         bool                    exists_field(uint64_t);
 
         Field                   field(uint64_t);
-        Field                   field(Class, const String&);
+        Field                   field(Class, std::string_view );
         FieldVec                fields(Class, Sorted sorted=Sorted());
         size_t                  fields_count(Class);
 
@@ -119,7 +108,7 @@ namespace yq {
         //Leaf                    leaf(Atom
 
         ClassData::Shared       merged(Class, unsigned int opts=0);
-        Class                   make_class(const String&, const Root* rt=nullptr);
+        Class                   make_class(std::string_view , const Root* rt=nullptr);
 
         String                  name(Class);
         String                  name(Field);

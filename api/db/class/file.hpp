@@ -6,23 +6,20 @@
 
 #pragma once
 
-#include "ClassData.hpp"
-
-#include <yq/file/AbstractFile.hpp>
-#include <yq/collection/Set.hpp>
+#include "data.hpp"
+#include <yq/file/XmlFile.hpp>
 
 namespace yq {
 
     //! Atom classes (including fields)
-    class ClassFile : public AbstractFile, public ClassData {
+    class Class::File : public Data, public XmlFile {
     public:
-
-        using Shared    = std::shared_ptr<ClassFile>;
 
     protected:
         virtual void    reset() override;
-        virtual bool    read(ByteArray&&buffer, const std::string_view& fname) override;
-        virtual bool    write(yq::Stream&) const override;
+
+        virtual bool    read(const XmlDocument&, std::string_view fname) override;
+        virtual bool    write(XmlDocument&) const override;
     };
 
 }

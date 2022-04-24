@@ -7,6 +7,7 @@
 #pragma once
 
 #include "struct.hpp"
+#include <yq/collection/Vector.hpp>
 
 namespace yq {
     struct Value::Data {
@@ -16,6 +17,13 @@ namespace yq {
     };
     
     Value::Data x_value(const XmlNode*);
-    bool    read(Value::Data&, const XmlNode*);
-    void    write(XmlNode*, const Value::Data&);
+    bool    read_xn(Value::Data&, const XmlNode*);
+    void    write_xn(XmlNode*, const Value::Data&);
+    
+    struct Value::ListData {
+        Vector<Data>   values;
+
+        ListData&   merge(const ListData&, bool fOverride);
+    };
+    
 }

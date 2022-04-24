@@ -4,7 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ClassFile.hpp"
+#include "file.hpp"
+
+#include <db/field/file.hpp>
 
 #include <yq/bit/KeyValue.hpp>
 #include <yq/log/Logging.hpp>
@@ -17,212 +19,78 @@ namespace yq {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    void    ClassFile::reset() 
+    void    Class::File::reset() 
     {
-        ClassData::reset();
+        *(Data*) this   = Data{};
     }
 
-
-    namespace {
-        void        read_trigger(const KeyValue& a, ClassData::Trigger& t)
-        {
-            t.type      = a.data;
-            t.name      = a.value(kv::noncmd_key("name"));
-            t.brief     = a.value(kv::noncmd_key("brief", "desc"));
-            t.notes     = a.value(kv::noncmd_key("note", "notes"));
-            
-            for(const KeyValue& b : a.subs){
-                if(b.cmd == "?")
-                    t.args[b.key]  = b.data;
-            }
-        }
-        
-        void        read_value(const KeyValue& a, ClassData::ValueInfo& v)
-        {
-            v.brief     = a.value(kv::key("desc", "brief"));
-            v.notes     = a.value(kv::key("notes", "note"));
-        }
-        
-        void        read_field(const KeyValue& a, ClassData::Field&f)
-        {
-            f.pkey          = a.value(kv::key("pkey"));
-            f.name          = a.value(kv::key("%", "name"));
-            f.plural        = a.value(kv::key("plural"));
-            f.brief         = a.value(kv::key("desc", "brief"));
-            f.notes         = a.value(kv::key("notes", "note"));
-            f.category      = a.value(kv::key("category", "cat"));
-            f.aliases       = copy(a.values_set(kv::key("alias", "aka")));
-            f.types         = copy(a.values_set(kv::key("type")));
-            f.expected      = a.value(kv::key("expected", "expect"));
-            f.atoms         = copy(a.values_set(kv::key("atom")));
-            f.aliases       = copy(a.values_set(kv::key("alias", "aka")));
-            f.tags          = copy(a.values_set(kv::key("tag")));
-            f.multiplicity  = Multiplicity(a.value(kv::key("multiplicity")));
-            f.restriction   = Restriction(a.value(kv::key("restriction")));
-            f.max_count     = to_uint64(a.value(kv::key("max_count", "count"))).value;
-            
-            a.all(kv::key({"value", "val"}), [&](const KeyValue& b){
-                if(b.data.empty()){
-                    yNotice() << "Empty value in field, skipped.";
-                    return;
-                }
-                read_value(b, f.values[a.data]);
-            });
-            
-            a.all(kv::key("trigger"), [&](const KeyValue& b){
-                ClassData::Trigger t;
-                read_trigger(b, t);
-                f.triggers << t;
-            });
-        }
-    }
-
-    bool    ClassFile::read(ByteArray&&buffer, const std::string_view& fname) 
+    
+    bool    Class::File::read(const XmlDocument&doc, std::string_view fname) 
     {
-        KVTree        attrs;
-        if(!attrs.parse(buffer, nullptr, true, fname))
+        const XmlNode*  xn  = doc.first_node(szYQClass);
+        if(!xn){
+            yError() << "No appropriate root element!  In: '" << fname << "'";
             return false;
-
-        name            = attrs.value(kv::key("%", "name"));
-        plural          = attrs.value(kv::key("plural"));
-        brief           = attrs.value(kv::key("desc", "brief"));
-        notes           = attrs.value(kv::key("notes", "note"));
-        folder          = attrs.value(kv::key("folder"));
-        use             = copy(attrs.values_set(kv::key("use", "is")));
-        reverse         = copy(attrs.values_set(kv::key("reverse", "rev")));
-        sources         = copy(attrs.values_set(kv::key("sources", "source", "src")));
-        targets         = copy(attrs.values_set(kv::key("targets", "target", "tgt")));
-        aliases         = copy(attrs.values_set(kv::key("alias", "aliases", "aka")));
-        binding         = attrs.value(kv::key("binding"));
-        prefixes        = copy(attrs.values_set(kv::key("prefix")));
-        suffixes        = copy(attrs.values_set(kv::key("suffix")));
-        tags            = copy(attrs.values_set(kv::key("tag")));
+        }
         
-        attrs.all(kv::key("field"), [&](const KeyValue& a){
-            if(a.data.empty()){
-                yNotice() << "Empty field key skipped.";
-                return;
-            }
-            read_field(a, fields[a.data]);
-        });
-        attrs.all(kv::key("trigger"), [&](const KeyValue& a){
-            Trigger     t;
-            read_trigger(a, t);
-            triggers << t;
-        });
-
+        xn      = xn -> first_node(szClass);
+        if(!xn){
+            yError() << "No class! In: " << fname << "'";
+            return false;
+        }
+        
+        name            = read_child(xn, szName, x_sstring);
+        plural          = read_child(xn, szPlural, x_sstring);
+        brief           = read_child(xn, szBrief, x_sstring);
+        notes           = read_child(xn, szNotes, x_sstring);
+        folder          = read_child(xn, szFolder, x_sstring);
+        use             = read_child_string_set(xn, szIs);
+        reverse         = read_child_string_set(xn, szReverse);
+        sources         = read_child_string_set(xn, szSource);
+        targets         = read_child_string_set(xn, szTarget);
+        aliases         = read_child_string_set(xn, szAlias);
+        binding         = read_child(xn, szBinding, x_sstring);
+        prefixes        = read_child_string_set(xn, szPrefix);
+        suffixes        = read_child_string_set(xn, szSuffix);
+        tags            = read_child_string_set(xn, szTag);
         return true;
-    }
-
-    namespace {
-        void    write_trigger(KeyValue& a, const ClassData::Trigger& t)
-        {
-            if(!t.name.empty())
-                a << KeyValue("name", t.name);
-            if(!t.brief.empty())
-                a << KeyValue("desc", t.brief);
-            if(!t.notes.empty())
-                a << KeyValue("notes", t.notes);
-            for(auto& i : t.args){
-                KeyValue b(i.first, i.second);
-                b.cmd = "?";
-                a << b;
-            }
-        }
         
-        void    write_value(KeyValue& a, const ClassData::ValueInfo& v)
-        {
-            if(!v.brief.empty())
-                a << KeyValue("desc", v.brief);
-            if(!v.notes.empty())
-                a << KeyValue("notes", v.notes);
-        }
-        
-        void    write_field(KeyValue& a, const ClassData::Field& f)
-        {
-            if(!f.pkey.empty())
-                a << KeyValue("pkey", f.pkey);
-            if(!f.name.empty())
-                a << KeyValue("name", f.name);
-            if(!f.plural.empty())   
-                a << KeyValue("plural", f.plural);
-            if(!f.brief.empty())
-                a << KeyValue("desc", f.brief);
-            if(!f.notes.empty())
-                a << KeyValue("notes", f.notes);
-            if(!f.category.empty())
-                a << KeyValue("category", f.category);
-            if(!f.aliases.empty())
-                a << KeyValue("alias", join(f.aliases, ", "));
-            if(!f.types.empty())
-                a << KeyValue("type", join(f.types, ", "));
-            if(!f.atoms.empty())
-                a << KeyValue("atom", join(f.atoms, ", "));
-            if(!f.tags.empty())
-                a << KeyValue("tag", join(f.tags, ", "));
-            if(!f.expected.empty())
-                a << KeyValue("expected", f.expected);
-            if(f.multiplicity != Multiplicity())
-                a << KeyValue("multiplicity", f.multiplicity.key());
-            if(f.restriction != Restriction())
-                a << KeyValue("restriction", f.restriction.key());
-            if(f.max_count)
-                a << KeyValue("count", to_string(f.max_count));
-            for(auto& i : f.values){
-                KeyValue   b("value", i.first);
-                write_value(b, i.second);
-                a << b;
-            }
-            for(auto& j : f.triggers){
-                KeyValue b("trigger", j.type);
-                write_trigger(b, j);
-                a << b;
-            }
-        }
     }
+    
 
-    bool    ClassFile::write(yq::Stream& chars)   const
+    bool    Class::File::write(XmlDocument&doc) const
     {
-        KVTree        attrs;
-        
+        XmlNode*  xroot  = doc.allocate_node(rapidxml::node_element, szYQClass);
+        doc.append_node(xroot);
+        XmlNode*    xn   = doc.allocate_node(rapidxml::node_element, szClass);
+        xroot -> append_node(xn);
+
         if(!name.empty())
-            attrs << KeyValue("name", name);
+            write_child(xn, szName, name);
         if(!plural.empty())
-            attrs << KeyValue("plural", plural);
+            write_child(xn, szPlural, name);
         if(!brief.empty())
-            attrs << KeyValue("desc", brief);
+            write_child(xn, szBrief, brief);
         if(!notes.empty())
-            attrs << KeyValue("notes", notes);
+            write_child(xn, szNotes, notes);
         if(!use.empty())
-            attrs << KeyValue("use", join(use, ", "));
+            write_children(xn, szIs, use);
         if(!reverse.empty())
-            attrs << KeyValue("reverse", join(reverse, ", "));
+            write_children(xn, szReverse, reverse);
         if(!targets.empty())
-            attrs << KeyValue("target", join(targets, ", "));
+            write_children(xn, szTarget, targets);
         if(!sources.empty())
-            attrs << KeyValue("source", join(sources, ", "));
+            write_children(xn, szSource, sources);
         if(!prefixes.empty())
-            attrs << KeyValue("prefix", join(prefixes, ", "));
+            write_children(xn, szPrefix, prefixes);
         if(!suffixes.empty())
-            attrs << KeyValue("suffix", join(suffixes, ", "));
+            write_children(xn, szSuffix, suffixes);
         if(!aliases.empty())
-            attrs << KeyValue("alias", join(aliases, ", "));
+            write_children(xn, szAlias, aliases);
         if(!binding.empty())
-            attrs << KeyValue("binding", binding);
+            write_child(xn, szBinding, binding);
         if(!tags.empty())
-            attrs << KeyValue("tag", join(tags, ", "));
-        for(auto& t : triggers){
-            KeyValue   a("trigger", t.type);
-            write_trigger(a, t);
-            attrs << a;
-        }
-        for(auto& i : fields){
-            KeyValue   a("field", i.first);
-            write_field(a, i.second);
-            attrs << a;
-        }
-            
-        attrs.write(chars);
+            write_children(xn, szTag, tags);
         return true;
     }
 

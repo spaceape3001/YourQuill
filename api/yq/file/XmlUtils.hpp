@@ -140,11 +140,13 @@ namespace yq {
     auto                read_children(const XmlNode* xn, const char* pszTag, Pred pred)
     {
         using Res = std::invoke_result_t<Pred, const XmlNode*>;
-        std::vector<Res> ret;
+        Vector<Res> ret;
         for(const XmlNode* xb = xn->first_node(pszTag); xb; xb = xb -> next_sibling(pszTag))
             ret.push_back(pred(xb));
         return ret;
     }
+    
+    string_set_t        read_child_string_set(const XmlNode*, const char* pszTag);
 
 
     size_t              count_children(const XmlNode*, const char* pszTag);

@@ -592,7 +592,7 @@ namespace yq {
             string_view_set_t   ret;
             all(m, [&](const KeyValue&a){
                 if(!a.data.empty()){
-                    vsplit(a.data, sep, [&](const std::string_view& v){
+                    vsplit(a.data, sep, [&](std::string_view v){
                         if(!v.empty())
                             ret << v;
                     });

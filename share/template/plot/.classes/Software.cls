@@ -1,3 +1,0 @@
-%  Software
-is publication
-

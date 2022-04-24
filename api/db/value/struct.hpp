@@ -17,6 +17,8 @@ namespace yq {
     struct Value {
         struct Data;
         struct Info;
+        struct ListData;
+        struct ListFile;
 
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Value&rhs) const = default;

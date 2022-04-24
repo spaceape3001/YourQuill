@@ -1739,7 +1739,7 @@ namespace yq {
             const char* end = s + n;
             const char* i   = nullptr;
             const char* j   = nullptr;
-            for(i = s; (j = strnstr(i, end-i, p, pn)); i = j)
+            for(i = s; (j = strnstr(i, end-i, p, pn)); i = j+1)
                 pred(std::string_view(i, j-i));
             pred(std::string_view(i, end-i));
         }
@@ -1817,7 +1817,7 @@ namespace yq {
             const char* end = s + n;
             const char* i   = nullptr;
             const char* j   = nullptr;
-            for(i = s; (j = strnstr_igCase(i, end-i, p, pn)); i = j)
+            for(i = s; (j = strnstr_igCase(i, end-i, p, pn)); i = j+1)
                 pred(std::string_view(i, j-i));
             pred(std::string_view(i, end-i));
         }
