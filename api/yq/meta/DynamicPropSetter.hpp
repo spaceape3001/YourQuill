@@ -31,7 +31,7 @@ namespace yq {
     template <typename C, typename T>
     class IPM_PropSetter : public DynamicPropSetter<C,T> {
     public:
-        typedef T*(C::*P);
+        typedef T (C::*P);
         IPM_PropSetter(PropertyInfo* propInfo, const std::source_location& sl, P pointer) : DynamicPropSetter<C,T>(propInfo, sl), m_data(pointer) 
         {
             assert(pointer);
@@ -41,7 +41,7 @@ namespace yq {
         {
             assert(obj);
             assert(value);
-            *(((C*) obj)->*m_data) =  *(const T*) value;
+            (((C*) obj)->*m_data) =  *(const T*) value;
             return true;
         }
     

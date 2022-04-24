@@ -9,6 +9,7 @@
 #include "CompoundInfoStatic.hpp"
 #include "DynamicPropGetter.hpp"
 #include "DynamicPropSetter.hpp"
+#include "PropertyInfoWriter.hpp"
 
 namespace yq {
     template <typename C>

@@ -32,4 +32,3 @@ yq_test(strings)
 yq_test(variants)
 
 
-

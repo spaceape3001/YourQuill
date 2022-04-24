@@ -55,7 +55,7 @@ namespace yq {
         {
             assert(dst);
             assert(obj);
-            *(T*) dst   = *(((C*) obj)->*m_data);
+            *(T*) dst   = (((C*) obj)->*m_data);
             return true;
         }
         

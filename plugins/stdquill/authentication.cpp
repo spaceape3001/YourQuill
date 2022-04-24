@@ -1,0 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include <db/authentication.hpp>
+#include <yq/meta/ObjectInfoWriter.hpp>
+
+// First three are TESTING PURPOSES ONLY, to be removed for final release
+#include "auth/accept.ipp"
+#include "auth/reject.ipp"
+#include "auth/simple.ipp"

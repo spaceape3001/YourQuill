@@ -11,6 +11,7 @@
 #include "MethodInfoWriter.hpp"
 #include "StaticPropGetter.hpp"
 #include "StaticPropSetter.hpp"
+#include "PropertyInfoWriter.hpp"
 
 namespace yq {
 
