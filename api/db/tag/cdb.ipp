@@ -56,7 +56,7 @@ namespace yq {
         {
             if(wasCreated)
                 *wasCreated = false;
-            if(folder(doc) != tags_folder()){
+            if(folder(doc) != config_folder()){
                 yError() << "Rejecting tag " << key(doc) << " due to not being in the '.tags' folder";        
                 return Tag{};
             }
@@ -89,7 +89,7 @@ namespace yq {
         Tag                 db_tag(std::string_view k, bool* wasCreated)
         {
             std::string     tfn = tag_filename(k);
-            return db_tag(db_document(tags_folder(), tfn), wasCreated);
+            return db_tag(db_document(config_folder(), tfn), wasCreated);
         }
         
         Vector<Tag>    db_tags(const string_set_t&all)
@@ -187,7 +187,7 @@ namespace yq {
             }
             
             std::string     tfn = tag_filename(k);
-            Document    doc = db_document(tags_folder(), tfn);
+            Document    doc = db_document(config_folder(), tfn);
             bool            was = false;
             Tag         t   = db_tag(doc, &was);
             if(!was)

@@ -393,6 +393,11 @@ namespace yq {
             return 0;
         return sqlite3_column_int64(m_stmt, c-1);
     }
+
+    std::string         SqlQuery::v_string(int col) const
+    {
+        return std::string(v_text(col));
+    }
     
     std::string_view    SqlQuery::v_text(int c) const
     {

@@ -24,7 +24,7 @@
 #include "tag.hpp"
 #include "thumbnail.hpp"
 #include "user.hpp"
-//#include "value.hpp"
+#include "value.hpp"
 #include "workspace.hpp"
 
 #include "web/html.hpp"

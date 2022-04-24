@@ -55,7 +55,7 @@
         if(bk.empty())
             return;
         bk += ".tag";
-        doc             = child_document(tags_folder(), bk);
+        doc             = child_document(config_folder(), bk);
         if(!doc)
             return ;
             
@@ -77,9 +77,9 @@
     //  TODO images & leaf....
  
     YQ_INVOKE( 
-        u_change<change_tag>(tags_folder(), "*.tag"); 
+        u_change<change_tag>(config_folder(), "*.tag"); 
         for(const char* z : Image::kSupportedExtensionWildcards)
-            u_change<change_tag_image>(tags_folder(), z);
+            u_change<change_tag_image>(config_folder(), z);
     )
  }
  

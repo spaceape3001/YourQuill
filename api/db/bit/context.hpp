@@ -16,7 +16,7 @@ namespace yq {
         Format          format;
         int             order=0;
         
-        auto        operator<=>(const Context&) const = default;
+        bool        operator==(const Context&) const = default;
     };
 
     Context         x_context(const XmlNode*);

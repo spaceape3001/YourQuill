@@ -30,6 +30,7 @@
 #include "root/cdb.hpp"
 #include "tag/cdb.hpp"
 #include "user/cdb.hpp"
+#include "value/cdb.hpp"
 
 #include "id_lock.ipp"
 
@@ -84,6 +85,7 @@ namespace yq {
 #include "root/cdb.ipp"
 #include "tag/cdb.ipp"
 #include "user/cdb.ipp"
+#include "value/cdb.ipp"
 
 //#include "image_cdb.ipp"
 //#include "tag_cdb.ipp"

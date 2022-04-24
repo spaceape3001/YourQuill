@@ -32,7 +32,15 @@ namespace yq {
 
     namespace cdb {
 
-        Vector<Folder>             all_folders(Sorted sorted=Sorted());
+        /*! \brief ALL the folders in the cache
+        
+            \param[in] sorted   Flag to sort the results by key
+            \return Vector of all folders (warning, can be huge)
+        */
+        Vector<Folder>                  all_folders(Sorted sorted=Sorted());
+        
+        /*! \brief Count of folders in the cache
+        */
         size_t                          all_folders_count();
 
 
@@ -46,11 +54,11 @@ namespace yq {
 
         Document                        child_document(Folder, std::string_view );
 
-        Vector<Document>           child_documents(Folder, unsigned opts=0);
-        Vector<Document>           child_documents(Folder, Sorted sorted);
-        size_t                     child_documents_count(Folder, unsigned opts=0);
-        Vector<Document>           child_documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
-        Vector<Document>           child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
+        Vector<Document>                child_documents(Folder, unsigned opts=0);
+        Vector<Document>                child_documents(Folder, Sorted sorted);
+        size_t                          child_documents_count(Folder, unsigned opts=0);
+        Vector<Document>                child_documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
+        Vector<Document>                child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
 
         Folder                          child_folder(Folder, std::string_view );
 
@@ -70,7 +78,7 @@ namespace yq {
 
         Vector<DocOrFoldStr>       children_and_names(Folder);
 
-        consteval Folder                classes_folder() { return Folder{Folder::CLASSES}; }
+        //consteval Folder                classes_folder() { return Folder{Folder::CLASSES}; }
         consteval Folder                config_folder() { return Folder{Folder::CONFIG}; }
 
         //Vector<uint8_t>         data(Fragment);   // TODO
@@ -134,7 +142,7 @@ namespace yq {
         bool                            removed(Folder);
         
         
-        Vector<const Root*>        roots(Folder);
+        Vector<const Root*>             roots(Folder);
 
         size_t                          roots_count(Folder);
 
@@ -144,7 +152,7 @@ namespace yq {
         std::string                     skeyb(Folder);    //!< Key inside the directory (w/o extensions)
 
 
-        consteval Folder                tags_folder() { return Folder{Folder::TAGS}; }
+        //consteval Folder                tags_folder() { return Folder{Folder::TAGS}; }
         consteval Folder                top_folder() { return Folder{Folder::TOP}; }
         consteval Folder                users_folder() { return Folder{Folder::USERS}; }
 

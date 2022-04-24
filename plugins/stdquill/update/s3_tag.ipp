@@ -28,5 +28,5 @@ namespace {
         u.exec();
     }
     
-    YQ_INVOKE( u_stage3<s3_tag>(tags_folder(), "*.tag"); )
+    YQ_INVOKE( u_stage3<s3_tag>(config_folder(), "*.tag"); )
 }

@@ -26,6 +26,7 @@
 #include "tag/file.ipp"
 #include "user/data.ipp"
 #include "user/file.ipp"
+#include "value/data.ipp"
 
 #include <yq/meta/Init.hpp>
 

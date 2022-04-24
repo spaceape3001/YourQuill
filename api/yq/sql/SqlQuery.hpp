@@ -134,6 +134,8 @@ namespace yq {
         int64_t             v_int64(int col) const;
         uint64_t            v_uint64(int col) const;
 
+        std::string         v_string(int col) const;
+
         
         //! \brief Result value as string
         //! \note COPY this off ASAP if desired to be kept or passed-along
