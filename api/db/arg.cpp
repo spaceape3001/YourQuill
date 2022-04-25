@@ -8,6 +8,7 @@
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 
+#include "category/arg.hpp"
 #include "directory/arg.hpp"
 #include "document/arg.hpp"
 #include "enum/size_desc_arg.hpp"
@@ -29,6 +30,7 @@
 #include "tag/cdb.hpp"
 #include "user/cdb.hpp"
 
+#include "category/arg.ipp"
 #include "directory/arg.ipp"
 #include "document/arg.ipp"
 #include "enum/size_desc_arg.ipp"

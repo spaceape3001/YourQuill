@@ -1,32 +1,67 @@
 
 --  Fields as presented/processed
 CREATE TABLE Fields (
-        -- ID is the document ID
+    -- ID is the document ID
     id          INTEGER PRIMARY KEY,
-    class       INTEGER NOT NULL,
-    k           VARCHAR(255) NOT NULL,
-    type        VARCHAR(255),
-        -- Atom class, not an atom itself
+
+    -- this is the full field key, whether it's name or character.name
+    k           VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE,
+    
+    -- class of principal definition, if it's singular, zero otherwise
+    class       INTEGER NOT NULL DEFAULT 0,
+
+    -- this is the key that's used within the class (ie "name" for "character.name")
+    ck          VARCHAR(255) COLLATE NOCASE,
+    
+    -- nominal type
+    expected    VARCHAR(255) COLLATE NOCASE,
+
+    -- icon
     icon        INTEGER NOT NULL DEFAULT 0,
-    pkey        VARCHAR(255),
-    name        VARCHAR(255),
-    plural      VARCHAR(255),
+
+    -- name of the field
+    name        VARCHAR(255) COLLATE NOCASE,
+    
+    -- plural of the field
+    plural      VARCHAR(255) COLLATE NOCASE,
+    
+    -- brief of the field
     brief       VARCHAR(255),
-    multi       VARCHAR(255),
-    restrict    VARCHAR(255),
-    category    VARCHAR(255),
-        -- SQL Table for atom/value associations
+    
+    -- multi capability of the field
+    multi       INTEGER NOT NULL DEFAULT 0,
+    
+    -- restriction of the field
+    restrict    INTEGER NOT NULL DEFAULT 0,
+    
+    -- Category TBD
+    category    INTEGER NOT NULL DEFAULT 0,
+    
+        -- SQL Table for atom/value associations (TBD)
     dbt         VARCHAR(255),
-        -- SQL Table for values
+
+        -- SQL Table for values (TBD)
     dbv         VARCHAR(255),
-    max         INTEGER NOT NULL DEFAULT 0,
+    
+        -- max count per atom (zero is unlimited)
+    maxcnt      INTEGER NOT NULL DEFAULT 0,
+    
+        -- true if this field's been removed
 	removed     BOOLEAN NOT NULL DEFAULT 0,
 	
-	UNIQUE(class,k) ON CONFLICT IGNORE
+	    -- true if this field's been marked any-class (thus on all)
+	anycls      BOOLEAN NOT NULL DEFAULT 0
 );
 
-INSERT INTO Fields (class, k, name) VALUES (0, '%', 'Title');
+INSERT INTO Fields (class, k, name, anycls) VALUES (0, '%', 'Title', 1);
 
+-- Defined classes this field applies to
+CREATE TABLE FDefClass (
+    field       INTEGER NOT NULL,
+    class       INTEGER NOT NULL,
+
+    UNIQUE(field,class)
+);
 
 CREATE TABLE FAlias (
     field       INTEGER NOT NULL,
@@ -36,19 +71,20 @@ CREATE TABLE FAlias (
 
 CREATE TABLE FDataTypes (
     field       INTEGER NOT NULL,
-    type        VARCHAR(255) NOT NULL COLLATE NOCASE,
-    UNIQUE(field,type) ON CONFLICT IGNORE
+        -- this comes out of the meta system
+    type        INTEGER NOT NULL,
+    UNIQUE(field,type)
 );
 
 CREATE TABLE FAtomTypes (
     field       INTEGER NOT NULL,
     class       INTEGER NOT NULL,
-    UNIQUE(field,class) ON CONFLICT IGNORE
+    UNIQUE(field,class)
 );
 
 CREATE TABLE FTags (
     field       INTEGER NOT NULL,
     tag         INTEGER NOT NULL,
-    UNIQUE(field, tag) ON CONFLICT IGNORE
+    UNIQUE(field, tag) 
 );
 

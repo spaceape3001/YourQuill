@@ -47,6 +47,9 @@ namespace yq {
 
 
         std::string                     brief(Folder);
+        
+        
+        consteval Folder                categories_folder() { return Folder{Folder::CATEGORIES}; }
 
         DocOrFold                       child(Folder, std::string_view );
 
@@ -78,7 +81,7 @@ namespace yq {
 
         Vector<DocOrFoldStr>       children_and_names(Folder);
 
-        //consteval Folder                classes_folder() { return Folder{Folder::CLASSES}; }
+        consteval Folder                classes_folder() { return Folder{Folder::CLASSES}; }
         consteval Folder                config_folder() { return Folder{Folder::CONFIG}; }
 
         //Vector<uint8_t>         data(Fragment);   // TODO
@@ -152,7 +155,7 @@ namespace yq {
         std::string                     skeyb(Folder);    //!< Key inside the directory (w/o extensions)
 
 
-        //consteval Folder                tags_folder() { return Folder{Folder::TAGS}; }
+        consteval Folder                tags_folder() { return Folder{Folder::TAGS}; }
         consteval Folder                top_folder() { return Folder{Folder::TOP}; }
         consteval Folder                users_folder() { return Folder{Folder::USERS}; }
 

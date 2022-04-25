@@ -29,6 +29,7 @@ namespace yq {
         string_set_t            suffixes;       //!< List of common suffixes
         string_set_t            aliases;        //!< List of aliases
         string_set_t            tags;           //!< List of tags applied to this class
+        std::string             category;       //!< Category for this class to be under
         std::string             binding;        //!< Primary Column that binds for edges.   Empty will imply the key as default.
 
         Data&                   merge(const Data&, bool fOverride);

@@ -5,15 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <db/class/file.hpp>
 
-namespace {
-
-    void    s3_class(Document doc)
-    {
-    }
-
-    
-    YQ_INVOKE( u_stage3<s3_class>(cdb::classes_folder(), "*.cls"); )
-    
-}
+#include "category/struct.hpp"
+#include "category/arg.hpp"
+#include "category/cdb.hpp"
+#include "category/data.hpp"
+#include "category/file.hpp"
+#include "category/html.hpp"

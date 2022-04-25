@@ -21,6 +21,8 @@
 #include "bit/policy.ipp"
 #include "bit/rule.ipp"
 
+#include "category/data.ipp"
+#include "category/file.ipp"
 #include "class/data.ipp"
 #include "class/file.ipp"
 #include "field/data.ipp"

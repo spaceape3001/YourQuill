@@ -10,6 +10,7 @@
 #include <yq/web/WebHtml.hpp>
 
 #include "atom/html.hpp"
+#include "category/html.hpp"
 #include "class/html.hpp"
 #include "directory/html.hpp"
 #include "document/html.hpp"
@@ -29,6 +30,7 @@
 #include "user/html.hpp"
 
 #include "atom/struct.hpp"
+#include "category/struct.hpp"
 #include "class/struct.hpp"
 #include "directory/struct.hpp"
 #include "document/struct.hpp"
@@ -41,6 +43,7 @@
 #include "tag/struct.hpp"
 #include "user/struct.hpp"
 
+#include "category/cdb.hpp"
 #include "directory/cdb.hpp"
 #include "document/cdb.hpp"
 #include "folder/cdb.hpp"
@@ -51,6 +54,7 @@
 #include "user/cdb.hpp"
 
 #include "atom/html.ipp"
+#include "category/html.ipp"
 #include "class/html.ipp"
 #include "field/html.ipp"
 #include "directory/html.ipp"

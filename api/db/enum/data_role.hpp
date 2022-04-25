@@ -18,7 +18,7 @@ namespace yq {
         //!  For all non-specific stuff
         Other,
         
-        //! Web elements
+        //! Wiki elements (the user files)
         DB,
 
         //! CSS style
@@ -27,9 +27,8 @@ namespace yq {
         //! Calendar Configuration
         CfgCal,
         
-        Tags,
-        
-        Classes,
+        //! DB Config stuff (classes, categories, tags, etc)
+        Config,
         
         //! Users
         Users,

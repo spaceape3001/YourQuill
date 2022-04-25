@@ -12,7 +12,6 @@
 namespace yq {
     struct Tag;
     struct WebContext;
-    class WebHtml;
     
     namespace arg {
         //! Finds tag, tries key first, then by ID

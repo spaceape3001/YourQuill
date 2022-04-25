@@ -17,6 +17,7 @@ namespace yq {
         set_if_empty(brief, b.brief, fOverride);
         set_if_empty(notes, b.notes, fOverride);
         set_if_empty(folder, b.folder, fOverride);
+        set_if_empty(category, b.category, fOverride);
         use += b.use;
         reverse += b.reverse;
         sources += b.sources;

@@ -8,6 +8,7 @@
 
 
 #include "atom.hpp"
+#include "category.hpp"
 #include "class.hpp"
 #include "directory.hpp"
 #include "document.hpp"

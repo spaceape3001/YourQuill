@@ -53,6 +53,7 @@ namespace yq {
         prefixes        = read_child_string_set(xn, szPrefix);
         suffixes        = read_child_string_set(xn, szSuffix);
         tags            = read_child_string_set(xn, szTag);
+        category        = read_child(xn, szCategory, x_sstring);
         return true;
         
     }
@@ -91,6 +92,8 @@ namespace yq {
             write_child(xn, szBinding, binding);
         if(!tags.empty())
             write_children(xn, szTag, tags);
+        if(!category.empty())
+            write_child(xn, szCategory, category);
         return true;
     }
 

@@ -167,6 +167,7 @@ namespace yq {
     static constexpr const char*    szYear              = "year";
     static constexpr const char*    szYQAttr            = "yq_attr";
     static constexpr const char*    szYQAttrDef         = "yq_define_attribute";
+    static constexpr const char*    szYQCategory        = "yq_category";
     static constexpr const char*    szYQClass           = "yq_class";
     static constexpr const char*    szYQField           = "yq_field";
     static constexpr const char*    szYQLeaf            = "yq_leaf";

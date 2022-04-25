@@ -6,17 +6,17 @@
 
 #pragma once
 
-#include "CacheFwd.hpp"
-#include "ClassFile.hpp"
-#include "FileSys.hpp"
-#include "Graph.hpp"
-#include "Image.hpp"
+#include <db/cdb_common.hpp>
+#include "file.hpp"
+#include <db/class/struct.hpp>
 
 
 namespace yq {
+    struct Field;
+    struct TypeInfo;
 
     struct Field::Info {
-        Class           class_;
+        Class            class_;
         std::string      brief;
         std::string      key, pkey;
         std::string      name, plural;
@@ -27,91 +27,56 @@ namespace yq {
         
         string_set_t            aliases(Field);
 
-        FieldVec                all_fields(Sorted sorted=Sorted());
+        Vector<Field>           all_fields(Sorted sorted=Sorted());
         size_t                  all_fields_count();
         
-        bool                    any(Field);
 
-        String                  brief(Field);
+        std::string             brief(Field);
 
         Class                   class_(Field);
 
-        Class::SharedFile       class_doc(Fragment, bool fAllowEmpty=false);
+
+        /*! \brief ALL classes this field can be in
+        */
+        Vector<Field>           classes(Field, Sorted sorted=Sorted());
         
-        ClassVec                classes(Field, Sorted sorted=Sorted());
-        ClassVec                classes(const string_set_t&);
+        /*! \brief All data types this field can use
+        */
+        StringSet               data_types(Field);
         
-        
-        string_set_t            data_types(Field);
-            
-        Class                   db_class(std::string_view , bool *wasCreated=nullptr);
-        Class                   db_class(Document, bool *wasCreated=nullptr);
-        ClassVec                db_classes(const string_set_t&);
-        
-        Field                   db_field(Class c, std::string_view k, bool *wasCreated=nullptr);
-        Field                   db_field(std::string_view k, bool *wasCreated=nullptr);
+        //Field                   db_field(Class c, std::string_view k, bool *wasCreated=nullptr);
+        Field                   db_field(Document, bool *wasCreated=nullptr);
         
         //Field                   db_field(std::string_view , bool *wasCreated=nullptr);
         //Field                   db_field(Document, bool *wasCreated=nullptr);
         
-        ClassVec                def_derived(Class, Sorted sorted=Sorted());
-        FieldVec                def_fields(Class, Sorted sorted=Sorted());
-        ClassVec                def_reverse(Class, Sorted sorted=Sorted());
-        ClassVec                def_source(Class, Sorted sorted=Sorted());
-        ClassVec                def_target(Class, Sorted sorted=Sorted());
-        ClassVec                def_use(Class, Sorted sorted=Sorted());
+        Vector<Class>           def_classes(Field, Sorted sorted=Sorted());
         
-        Graph                   dep_graph(Class);
-        Folder                  detail_folder(Class);
-
-        Vector<Class>           dependents(Class, Sorted sorted=Sorted());
-        
-        //Document                document(Atom);
-        Document                document(Class);
         Document                document(Field);
 
-        bool                    edge(Class);
-        
-        ClassVec                edges_in(Class, Sorted sorted=Sorted());
-        ClassVec                edges_out(Class, Sorted sorted=Sorted());
-      
-        bool                    exists(Class);
         bool                    exists(Field);
-
-        bool                    exists_class(uint64_t);
         bool                    exists_field(uint64_t);
 
         Field                   field(uint64_t);
-        Field                   field(Class, std::string_view );
-        FieldVec                fields(Class, Sorted sorted=Sorted());
-        size_t                  fields_count(Class);
+        Field::SharedFile       field_doc(Fragment, bool fAllowEmpty=false);
 
-        Image                   icon(Class);
         Image                   icon(Field);
-        
-        //Vector<Atom>            inbound(Atom);
-        ClassVec                inbound(Class, Sorted sorted=Sorted());
 
-        Class::Info             info(Class, bool autoKeyToName=false);
         Field::Info             info(Field, bool autoKeyToName=false);
 
-        bool                    is(Class derived, Class base);
-        //bool                    is_all(Class, std::initializer_list<Class>);
-        //bool                    is_any(Class, std::initializer_list<Class>);
+        bool                    is_any(Field);
 
-        String                  key(Class);
-        String                  key(Field);
+        std::string             key(Field);
 
-        String                  label(Class);
-        String                  label(Field);
+        std::string             label(Field);
         
         //Leaf                    leaf(Atom
 
-        ClassData::Shared       merged(Class, unsigned int opts=0);
+        Field::SharedData       merged(Field, unsigned int opts=0);
         Class                   make_class(std::string_view , const Root* rt=nullptr);
 
-        String                  name(Class);
-        String                  name(Field);
+        std::string                  name(Class);
+        std::string                  name(Field);
         
         NKI                     nki(Class, bool autoKeyToName=false);
         NKI                     nki(Field, bool autoKeyToName=false);
@@ -121,10 +86,10 @@ namespace yq {
         
 
         Class                   parent(Field);
-        String                  pkey(Field);    //!< Key for plurals
+        std::string                  pkey(Field);    //!< Key for plurals
         
-        String                  plural(Class);
-        String                  plural(Field);
+        std::string                  plural(Class);
+        std::string                  plural(Field);
         
         QList<QVariant>         qvar_list(const Set<Class>&);
         QList<QVariant>         qvar_list(const Set<Field>&);

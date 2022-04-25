@@ -38,11 +38,11 @@ CREATE TABLE CFields (
     UNIQUE(class, field) ON CONFLICT IGNORE
 );
 
-CREATE TABLE CFieldsDef (
-    class       INTEGER NOT NULL,
-    field       INTEGER NOT NULL,
-    UNIQUE(class, field) ON CONFLICT IGNORE
-);
+-- CREATE TABLE CFieldsDef (
+--    class       INTEGER NOT NULL,
+--    field       INTEGER NOT NULL,
+--    UNIQUE(class, field) ON CONFLICT IGNORE
+-- );
 
 CREATE TABLE CReverses (
     class       INTEGER NOT NULL,
