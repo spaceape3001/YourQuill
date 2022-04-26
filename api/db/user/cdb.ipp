@@ -174,6 +174,11 @@ namespace yq {
             return s.str(u.id);
         }
         
+        std::string             label(User u)
+        {
+            static thread_local SQ    s("SELECT ifnull(name,k) FROM Users WHERE id=?");
+            return s.str(u.id);
+        }
 
         User                    make_user(std::string_view k, const Root* rt, unsigned int opts)
         {

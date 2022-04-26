@@ -61,6 +61,7 @@ namespace yq {
         bool                    is_reader(User);
         
         std::string             key(User);
+        std::string             label(User);
         User                    make_user(std::string_view, const Root* rt=nullptr, unsigned int opts=0);
         User::SharedData        merged(User, unsigned int opts=0);
         

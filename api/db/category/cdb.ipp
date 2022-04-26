@@ -193,8 +193,8 @@ namespace yq {
         
         std::string label(Category t)
         {
-            std::string     n   = name(t);
-            return n.empty() ? key(t) : n;
+            static thread_local SQ    s("SELECT ifnull(name,k) FROM Categories WHERE id=?");
+            return s.str(t.id);
         }
         
         Category                     make_category(std::string_view k, const Root* rt, unsigned int opts)

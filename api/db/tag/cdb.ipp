@@ -165,8 +165,8 @@ namespace yq {
         
         std::string label(Tag t)
         {
-            std::string     n   = name(t);
-            return n.empty() ? key(t) : n;
+            static thread_local SQ    s("SELECT ifnull(name,k) FROM Tags WHERE id=?");
+            return s.str(t.id);
         }
         
         Leaf                leaf(Tag t)
@@ -323,7 +323,6 @@ namespace yq {
                 return Tag::SharedFile();
                 
             std::filesystem::path       fp  = path(f);
-            
             Fragment::Lock  lk;
             if(!(opts & DONT_LOCK)){
                 lk  = Fragment::Lock::read(f);

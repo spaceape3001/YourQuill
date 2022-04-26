@@ -49,6 +49,8 @@ namespace yq {
         
         Tag::Info               info(Tag, bool autoKeyToName=false);
 
+        //bool                    is_tagged(Field, Tag);
+
         std::string             key(Tag);
         
         std::string             label(Tag);

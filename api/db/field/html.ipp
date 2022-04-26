@@ -6,23 +6,37 @@
 
 #pragma once
 
+#include "cdb.hpp"
+#include "html.hpp"
+#include <db/image/cdb.hpp>
+#include <db/image/struct.hpp>
+#include <db/thumbnail/html.hpp>
+#include <db/thumbnail/struct.hpp>
+
 namespace yq {
     namespace html {
-        #if 0
         WebHtml&    operator<<(WebHtml&h, Field v)
         {
+            Thumbnail th = cdb::thumbnail(cdb::icon(v), h.context().session.icon_size);
+            
+            //  start the url (later)
+            if(th)
+                h << th << " ";
+            
+            h << cdb::label(v);
+            //  end the url (later)
+            return h;
         }
         
         WebHtml&    operator<<(WebHtml&h, Dev<Field> v)
         {
             if(v.data)
                 h << "<a href=\"/dev/field?id=" << v.data.id << "\">";
-            h << v.data.id;
+            h << cdb::name(v.data);
             if(v.data)
                 h << "</a>";
             return h;
         }
-        #endif
         
         WebHtml&    operator<<(WebHtml&h, DevID<Field> v)
         {
@@ -34,6 +48,16 @@ namespace yq {
             return h;
         }
         
-        //void        dev_table(WebHtml&h, const std::vector<Field>& table);
+        void        dev_table(WebHtml&h, const std::vector<Field>& fields)
+        {
+            auto t = h.table();
+            h << "<tr><th>ID</th><th>Class</th><th>Key</th><th>Name</th><th>Brief</th>\n";
+            for(Field f : fields){
+                auto i = cdb::info(f);
+                h << "<tr><td>" << dev_id(f) << "</td><td>" << dev(i.class_) << "</td><td>" 
+                    << i.key <<"</td><td>" << i.name << "</td><td>"
+                    << i.brief <<"</td></tr>\n";
+            }
+        }
     }
 }

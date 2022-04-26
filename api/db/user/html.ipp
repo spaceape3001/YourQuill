@@ -6,12 +6,27 @@
 
 #pragma once
 
+#include "cdb.hpp"
+#include "html.hpp"
+#include <db/document/cdb.hpp>
+#include <db/image/cdb.hpp>
+#include <db/image/struct.hpp>
+#include <db/thumbnail/html.hpp>
+#include <db/thumbnail/struct.hpp>
+
 namespace yq {
     namespace html {
 
-        WebHtml&    operator<<(WebHtml&h, User u)
+        WebHtml&    operator<<(WebHtml&h, User v)
         {
-            h << "(user: " << cdb::name(u) << ")";
+            Thumbnail th = cdb::thumbnail(cdb::icon(v), h.context().session.icon_size);
+            
+            //  start the url (later)
+            if(th)
+                h << th << " ";
+            
+            h << cdb::label(v);
+            //  end the url (later)
             return h;
         }
 

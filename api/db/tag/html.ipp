@@ -6,18 +6,34 @@
 
 #pragma once
 
+#include "cdb.hpp"
+#include "html.hpp"
+#include <db/document/cdb.hpp>
+#include <db/image/cdb.hpp>
+#include <db/image/struct.hpp>
+#include <db/thumbnail/html.hpp>
+#include <db/thumbnail/struct.hpp>
+
 namespace yq {
     namespace html {
-        //WebHtml&    operator<<(WebHtml&, Tag);
+        WebHtml&    operator<<(WebHtml&h, Tag t)
+        {
+            Thumbnail th = cdb::thumbnail(cdb::icon(t), h.context().session.icon_size);
+            
+            //  start the url (later)
+            if(th)
+                h << th << " ";
+            
+            h << cdb::label(t);
+            //  end the url (later)
+            return h;
+        }
     
         WebHtml&    operator<<(WebHtml&h, Dev<Tag> v)
         {
-            std::string n       = cdb::name(v.data);
-            if(n.empty())
-                n   = "(no-name)";
             if(v.data)
                 h << "<a href=\"/dev/tag?id=" << v.data.id << "\">";
-            h << "[" << v.data.id << "] " << n;
+            h << "[" << v.data.id << "] " << cdb::label(v.data);
             if(v.data)
                 h << "</a>";
             return h;

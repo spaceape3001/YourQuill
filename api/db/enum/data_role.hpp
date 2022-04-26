@@ -24,9 +24,6 @@ namespace yq {
         //! CSS style
         Style,  
         
-        //! Calendar Configuration
-        CfgCal,
-        
         //! DB Config stuff (classes, categories, tags, etc)
         Config,
         

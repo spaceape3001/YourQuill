@@ -26,6 +26,7 @@
 #include "class/cdb.hpp"
 #include "directory/cdb.hpp"
 #include "document/cdb.hpp"
+#include "field/cdb.hpp"
 #include "folder/cdb.hpp"
 #include "fragment/cdb.hpp"
 #include "image/cdb.hpp"
@@ -82,8 +83,10 @@ namespace yq {
 
 #include "cdb_sq.ipp"
 #include "category/cdb.ipp"
+#include "class/cdb.ipp"
 #include "directory/cdb.ipp"
 #include "document/cdb.ipp"
+#include "field/cdb.ipp"
 #include "folder/cdb.ipp"
 #include "fragment/cdb.ipp"
 #include "image/cdb.ipp"

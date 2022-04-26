@@ -7,6 +7,7 @@
 #include "html_common.hpp"
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 
 #include "atom/html.hpp"
@@ -43,7 +44,7 @@
 #include "tag/struct.hpp"
 #include "user/struct.hpp"
 
-#include "category/cdb.hpp"
+//#include "category/cdb.hpp"
 #include "directory/cdb.hpp"
 #include "document/cdb.hpp"
 #include "folder/cdb.hpp"

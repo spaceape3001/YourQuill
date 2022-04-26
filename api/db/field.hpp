@@ -7,7 +7,8 @@
 #pragma once
 
 #include "field/struct.hpp"
-//#include "field/arg.hpp"
-//#include "field/cdb.hpp"
-//#include "field/data.hpp"
-//#include "field/html.hpp"
+#include "field/arg.hpp"
+#include "field/cdb.hpp"
+#include "field/data.hpp"
+#include "field/file.hpp"
+#include "field/html.hpp"

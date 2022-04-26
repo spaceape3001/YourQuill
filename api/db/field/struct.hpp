@@ -21,6 +21,7 @@ namespace yq {
         it's file name and it's class id in the cdb will be 0.  
     */
     struct Field {
+        static constexpr const char*    szExtension = "fld";
         struct Info;
         struct Data;
         class File;

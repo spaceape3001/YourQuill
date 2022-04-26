@@ -13,6 +13,12 @@ CREATE TABLE Classes (
     brief       VARCHAR(255)
 );
 
+CREATE TABLE CAlias (
+    class       INTEGER NOT NULL,
+    alias       VARCHAR(255) NOT NULL,
+    UNIQUE(class, alias)
+);
+
 CREATE TABLE CDepends (
     class       INTEGER NOT NULL,
     base        INTEGER NOT NULL,

@@ -223,4 +223,9 @@ target_link_libraries(yq
         ${SQLite3_LIBRARY}
 )
 
+#   override for temp
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/garbage)
+add_executable( link_test_yqlib linktest.cpp )
+target_link_libraries( link_test_yqlib yq )
+
 
