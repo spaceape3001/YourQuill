@@ -154,12 +154,12 @@ std::filesystem::path           gSharedCssFile, gSharedFooterFile, gSharedIndexF
 
 #include "update/s2_image.ipp"
 
-
 #include "update/s3_image.ipp"
 #include "update/s3_user.ipp"
 #include "update/s3_tag.ipp"
 #include "update/s3_class.ipp"
-
+#include "update/s3_field.ipp"
+#include "update/s3_class_field.ipp"
 
 //#include "update/s3_tag_leaf.ipp"
 
@@ -173,6 +173,9 @@ std::filesystem::path           gSharedCssFile, gSharedFooterFile, gSharedIndexF
 #include "update/u_image.ipp"
 #include "update/u_tag.ipp"
 #include "update/u_user.ipp"
+
+#include "update/u_class.ipp"
+#include "update/u_field.ipp"
 
 #include "update/u_background.ipp"
 #include "update/u_css.ipp"

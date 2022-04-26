@@ -10,8 +10,12 @@
  
     void    remove_tag(Tag x)
     {
-        static thread_local SQ  x1( "DELETE FROM Tags WHERE id=?");
-        x1.exec(x.id);
+        static thread_local SQ  stmts[] = {
+            SQ( "DELETE FROM CTags WHERE tag=?" ),
+            SQ( "DELETE FROM Tags WHERE id=?" )
+        };
+        for(auto& sq : stmts)
+            sq.exec(x.id);
     }
     
     void    update_tag(Tag x)

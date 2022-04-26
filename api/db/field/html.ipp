@@ -32,7 +32,7 @@ namespace yq {
         {
             if(v.data)
                 h << "<a href=\"/dev/field?id=" << v.data.id << "\">";
-            h << cdb::name(v.data);
+            h << cdb::label(v.data);
             if(v.data)
                 h << "</a>";
             return h;

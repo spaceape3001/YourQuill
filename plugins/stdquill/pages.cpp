@@ -41,6 +41,7 @@ using namespace yq::html;
 
 #include "page/dev.ipp"
 #include "page/dev_categories.ipp"
+#include "page/dev_class.ipp"
 #include "page/dev_classes.ipp"
 #include "page/dev_directories.ipp"
 #include "page/dev_directory.ipp"

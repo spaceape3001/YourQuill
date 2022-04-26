@@ -50,6 +50,12 @@ CREATE TABLE CFields (
 --    UNIQUE(class, field) ON CONFLICT IGNORE
 -- );
 
+CREATE TABLE CPrefix (
+    class       INTEGER NOT NULL,
+    prefix      VARCHAR(255) NOT NULL,
+    UNIQUE(class, prefix)
+);
+
 CREATE TABLE CReverses (
     class       INTEGER NOT NULL,
     reverse     INTEGER NOT NULL,
@@ -74,6 +80,18 @@ CREATE TABLE CSourcesDef (
     UNIQUE(class,source) ON CONFLICT IGNORE
 );
 
+CREATE TABLE CSuffix (
+    class       INTEGER NOT NULL,
+    suffix      VARCHAR(255) NOT NULL,
+    UNIQUE(class, suffix)
+);
+
+CREATE TABLE CTags (
+    class       INTEGER NOT NULL,
+    tag         INTEGER NOT NULL,
+    UNIQUE(class,tag) ON CONFLICT IGNORE
+);
+
 CREATE TABLE CTargets (
     class       INTEGER NOT NULL,
     target      INTEGER NOT NULL,
@@ -86,9 +104,4 @@ CREATE TABLE CTargetsDef (
     UNIQUE(class,target) ON CONFLICT IGNORE
 );
 
-CREATE TABLE CTags (
-    class       INTEGER NOT NULL,
-    tag         INTEGER NOT NULL,
-    UNIQUE(class,tag) ON CONFLICT IGNORE
-);
 

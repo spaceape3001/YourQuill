@@ -56,13 +56,7 @@ namespace yq {
         bool        SQ::exec()
         {
             auto _af = af();
-            switch(step()){
-            case Row:
-            case Done:
-                return true;
-            default:
-                return false;
-            }
+            return is_good(step());
         }
 
         bool        SQ::exec(uint64_t i)
