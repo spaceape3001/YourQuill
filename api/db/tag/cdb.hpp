@@ -27,7 +27,7 @@ namespace yq {
     namespace cdb {
         using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
  
-        Vector<Tag>             all_tags(Sorted sorted=Sorted());
+        std::vector<Tag>        all_tags(Sorted sorted=Sorted());
         size_t                  all_tags_count();
         
         //! Searches for the best image for the tag
@@ -37,8 +37,8 @@ namespace yq {
         Tag                     db_tag(Document, bool* wasCreated=nullptr);
         Tag                     db_tag(Fragment, bool* wasCreated=nullptr);
         Tag                     db_tag(std::string_view,  bool* wasCreated=nullptr);
-        Vector<Tag>             db_tags(string_view_set_t);
-        Vector<Tag>             db_tags(string_set_t);
+        std::vector<Tag>        db_tags(string_view_set_t);
+        std::vector<Tag>        db_tags(string_set_t);
 
         Document                document(Tag);
 
@@ -68,8 +68,8 @@ namespace yq {
         //!     Will not create a fragment, though (so can return NULL)
         Tag::SharedFile         read(Tag, const Root*, unsigned int opts=0);
         
-        Vector<TagFragDoc>      reads(Tag, unsigned int opts=0);
-        Vector<TagFragDoc>      reads(Tag, class Root*, unsigned int opts=0);
+        std::vector<TagFragDoc> reads(Tag, unsigned int opts=0);
+        std::vector<TagFragDoc> reads(Tag, class Root*, unsigned int opts=0);
         
         bool                    set_brief(Tag, std::string_view, class Root* rt=nullptr);
         bool                    set_name(Tag, std::string_view, class Root* rt=nullptr);
@@ -79,6 +79,8 @@ namespace yq {
         Tag                     tag(uint64_t);
         
         Tag::SharedFile         tag_doc(Fragment, unsigned int opts=0);
+
+        std::vector<Tag>        tags(const string_set_t&, bool noisy=false);
 
         //!  \brief   Returns a writable document
         //!

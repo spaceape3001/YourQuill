@@ -8,6 +8,7 @@
 
 #include <db/cdb_common.hpp>
 #include "file.hpp"
+#include <db/category/struct.hpp>
 #include <db/document/struct.hpp>
 #include <db/enum/sorted.hpp>
 #include <db/image/struct.hpp>
@@ -22,6 +23,8 @@ namespace yq {
     
     struct Class::Info {
         std::string key;
+        Category    category;
+        std::string binding;
         //Graph       deps;
         Document    doc;
         Image       icon;
@@ -48,20 +51,26 @@ namespace yq {
         /*! \brief Count of all classes declared in the cache
         */
         size_t                      all_classes_count();
+        
+        std::string                 binding(Class);
 
         std::string                 brief(Class);
+        
+        Category                    category(Class);
 
         Class                       class_(uint64_t);
         Class                       class_(std::string_view );
 
         Class::SharedFile           class_doc(Fragment, unsigned int opts=0);
         
-        std::vector<Class>          classes(const string_set_t&);
+        std::vector<Class>          classes(const string_set_t&, bool noisy=false);
         
         Class                       db_class(Document, bool *wasCreated=nullptr);
         Class                       db_class(std::string_view, bool *wasCreated=nullptr);
         
+        
         std::vector<Class>          def_derived(Class, Sorted sorted=Sorted());
+        std::vector<Field>          def_fields(Class c, Sorted sorted=Sorted{});
         std::vector<Class>          def_reverse(Class, Sorted sorted=Sorted());
         std::vector<Class>          def_source(Class, Sorted sorted=Sorted());
         std::vector<Class>          def_target(Class, Sorted sorted=Sorted());

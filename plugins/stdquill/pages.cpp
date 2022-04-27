@@ -7,6 +7,7 @@
 #include <db/db.hpp>
 
 #include <yq/app/DelayInit.hpp>
+#include <yq/collection/vector_utils.hpp>
 #include <yq/file/dir_utils.hpp>
 #include <yq/file/file_utils.hpp>
 #include <yq/log/Logging.hpp>
@@ -41,6 +42,7 @@ using namespace yq::html;
 
 #include "page/dev.ipp"
 #include "page/dev_categories.ipp"
+#include "page/dev_category.ipp"
 #include "page/dev_class.ipp"
 #include "page/dev_classes.ipp"
 #include "page/dev_directories.ipp"
@@ -48,6 +50,7 @@ using namespace yq::html;
 #include "page/dev_document.ipp"
 #include "page/dev_documents.ipp"
 #include "page/dev_echo.ipp"
+#include "page/dev_field.ipp"
 #include "page/dev_fields.ipp"
 #include "page/dev_folder.ipp"
 #include "page/dev_folders.ipp"

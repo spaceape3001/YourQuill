@@ -6,6 +6,8 @@ CREATE TABLE Classes (
 	removed     BOOLEAN NOT NULL DEFAULT 0,
     name        VARCHAR(255),
     icon        INTEGER NOT NULL DEFAULT 0,
+    category    INTEGER NOT NULL DEFAULT 0,
+    binding     VARCHAR(255),
     
         -- dependency graph!
     deps        INTEGER,

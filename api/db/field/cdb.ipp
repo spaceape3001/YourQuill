@@ -11,6 +11,22 @@
 
 namespace yq {
 
+    bool Field::less_key(Field a, Field b)
+    {
+        return is_less_igCase(cdb::key(a), cdb::key(b));
+    }
+
+    bool Field::less_label(Field a, Field b)
+    {
+        return is_less_igCase(cdb::label(a), cdb::label(b));
+    }
+
+    bool Field::less_name(Field a, Field b)
+    {
+        return is_less_igCase(cdb::name(a), cdb::name(b));
+    }
+
+
     namespace cdb {
         
         namespace {
@@ -21,20 +37,20 @@ namespace yq {
         }
 
         namespace {
-            Vector<Field>    all_fields_sorted()
+            std::vector<Field>    all_fields_sorted()
             {
                 static thread_local SQ s("SELECT id FROM Fields ORDER BY k");
                 return s.vec<Field>();
             }
             
-            Vector<Field>    all_fields_unsorted()
+            std::vector<Field>    all_fields_unsorted()
             {
                 static thread_local SQ s("SELECT id FROM Fields");
                 return s.vec<Field>();
             }
         }
         
-        Vector<Field>           all_fields(Sorted sorted)
+        std::vector<Field>           all_fields(Sorted sorted)
         {
             return sorted ? all_fields_sorted() : all_fields_unsorted();
         }
@@ -51,6 +67,12 @@ namespace yq {
             static thread_local SQ s("SELECT brief FROM Fields WHERE id=?");
             return s.str(f.id);
         }
+
+        Category  category(Field f)
+        {
+            static thread_local SQ s("SELECT category FROM Fields WHERE id=?");
+            return s.as<Category>(f.id);
+        }
         
         Class               class_(Field f)
         {
@@ -60,20 +82,20 @@ namespace yq {
 
         
         namespace {
-            Vector<Class>       classes_sorted(Field f)
+            std::vector<Class>       classes_sorted(Field f)
             {
                 static thread_local SQ s("SELECT class FROM CFields INNER JOIN Classes ON CFields.class=Classes.id WHERE field=? ORDER BY Classes.k");
                 return s.vec<Class>(f.id);
             }
 
-            Vector<Class>       classes_unsorted(Field f)
+            std::vector<Class>       classes_unsorted(Field f)
             {
                 static thread_local SQ s("SELECT class FROM CFields WHERE field=?");
                 return s.vec<Class>(f.id);
             }
         }
         
-        Vector<Class>       classes(Field f, Sorted sorted)
+        std::vector<Class>       classes(Field f, Sorted sorted)
         {
             return sorted ? classes_sorted(f) : classes_unsorted(f);
         }
@@ -94,7 +116,7 @@ namespace yq {
             if(exists_field(doc.id))
                 return Field{doc.id};
             
-            std::string k   = base_key(doc);
+            std::string k   = skeyc(doc);
             if(k.empty())
                 return Field();
 
@@ -122,14 +144,27 @@ namespace yq {
                 yError() << "Unable to get the field from the database: " << k;
                 return Field{};
             }
-         }
+        }
+        
+        
+        namespace {
+            std::vector<Class>           def_classes_sorted(Field f)
+            {
+                static thread_local SQ s("SELECT class FROM FDefClass INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
+                return s.vec<Class>(f.id);
+            }
 
-#if 0
-         Vector<Class>           def_classes(Field f, Sorted sorted)
-         {
-            return Vector<Class>();
-         }
-#endif
+            std::vector<Class>           def_classes_unsorted(Field f)
+            {
+                static thread_local SQ s("SELECT class FROM FDefClass WHERE field=?");
+                return s.vec<Class>(f.id);
+            }
+        }
+        
+        std::vector<Class>           def_classes(Field f, Sorted sorted)
+        {
+            return sorted ? def_classes_sorted(f) : def_classes_unsorted(f);
+        }
 
         Document                document(Field f)
         {
@@ -203,7 +238,7 @@ namespace yq {
         Field::Info         info(Field f, bool autoKey)
         {
             Field::Info        ret;
-            static thread_local SQ s("SELECT k, class, name, pkey, plural, brief FROM Fields WHERE id=?");
+            static thread_local SQ s("SELECT k, class, name, pkey, plural, brief, category FROM Fields WHERE id=?");
             auto s_af = s.af();
             s.bind(1, f.id);
             if(s.step() == SqlQuery::Row){
@@ -215,6 +250,7 @@ namespace yq {
                 ret.brief   = s.v_string(6);
                 if(autoKey && ret.name.empty())
                     ret.name    = ret.key;
+                ret.category = Category{ s.v_uint64(7)};
             }
             return ret;
         }
@@ -292,43 +328,43 @@ namespace yq {
             return field_doc(fragment(document(f), rt), opts);
         }
 
-        Vector<FieldFragDoc>    reads(Field f, unsigned int opts)
+        std::vector<FieldFragDoc>    reads(Field f, unsigned int opts)
         {
-            Vector<FieldFragDoc>  ret;
+            std::vector<FieldFragDoc>  ret;
             for(Fragment ff : fragments(document(f), DataRole::Config)){
                 Field::SharedFile    p   = field_doc(ff, opts);
                 if(p)
-                    ret << FieldFragDoc(ff, p);
+                    ret.push_back(FieldFragDoc(ff, p));
             }
             return ret;
         }
 
-        Vector<FieldFragDoc>  reads(Field f, class Root*rt, unsigned int opts)
+        std::vector<FieldFragDoc>  reads(Field f, class Root*rt, unsigned int opts)
         {
-            Vector<FieldFragDoc>  ret;
+            std::vector<FieldFragDoc>  ret;
             for(Fragment ff : fragments(document(f), rt)){
                 Field::SharedFile    p   = field_doc(ff, opts);
                 if(p)
-                    ret << FieldFragDoc(ff, p);
+                    ret.push_back(FieldFragDoc(ff, p));
             }
             return ret;
         }
 
         namespace {
-            Vector<Tag>  tags_sorted(Field f)
+            std::vector<Tag>  tags_sorted(Field f)
             {
                 static thread_local SQ s("SELECT tag FROM FTags INNER JOIN Tags ON FTags.tag=Tags.id WHERE field=? ORDER BY Tags.K");
                 return s.vec<Tag>(f.id);
             }
             
-            Vector<Tag>  tags_unsorted(Field f)
+            std::vector<Tag>  tags_unsorted(Field f)
             {
                 static thread_local SQ s("SELECT tag FROM FTags WHERE field=?");
                 return s.vec<Tag>(f.id);
             }
         }
         
-        Vector<Tag>  tags(Field f, Sorted sorted)
+        std::vector<Tag>  tags(Field f, Sorted sorted)
         {
             return sorted ? tags_sorted(f) : tags_unsorted(f);
         }

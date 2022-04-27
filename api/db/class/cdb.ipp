@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include "cdb.hpp"
+#include <db/category/struct.hpp>
+
 namespace yq {
     bool Class::less_key(Class a, Class b)
     {
@@ -52,38 +55,48 @@ namespace yq {
             }
         }
 
-
-        std::vector<Class>       all_classes(Sorted sorted)
+        std::vector<Class>  all_classes(Sorted sorted)
         {
             return sorted ? all_classes_sorted() : all_classes_unsorted();
         }
 
-        
-        size_t              all_classes_count()
+        size_t  all_classes_count()
         {
             static thread_local SQ    s("SELECT COUNT(1) FROM Classes");
             return s.size();
         }
         
         
-        std::string             brief(Class c)
+        std::string  binding(Class c)
+        {
+            static thread_local SQ  s("SELECT binding FROM Classes WHERE id=?");
+            return s.str(c.id);
+        }
+
+        std::string  brief(Class c)
         {
             static thread_local SQ    s("SELECT brief FROM Classes WHERE id=?");
             return s.str(c.id);
         }
         
-        Class               class_(uint64_t i)
+        Category  category(Class c)
+        {
+            static thread_local SQ s("SELECT category FROM Classes WHERE id=?");
+            return s.as<Category>(c.id);
+        }
+
+        Class  class_(uint64_t i)
         {
             return exists_class(i) ? Class{i} : Class();
         }
         
-        Class               class_(std::string_view  k)
+        Class  class_(std::string_view  k)
         {
             static thread_local SQ s("SELECT id FROM Classes WHERE k=?");
             return s.as<Class>(k);
         }
 
-        Class::SharedFile        class_doc(Fragment f, unsigned int opts)
+        Class::SharedFile  class_doc(Fragment f, unsigned int opts)
         {
             if(!f)
                 return Class::SharedFile();
@@ -116,11 +129,22 @@ namespace yq {
         }
         
 
-        std::vector<Class>       classes(const string_set_t& sset)
+        std::vector<Class>       classes(const string_set_t& sset, bool noisy)
         {
             std::vector<Class>   ret;
-            for(const std::string& s : sset)
-                ret.push_back(class_(s));
+            for(const std::string& s : sset){
+                if(s.empty())
+                    continue;
+                    
+                Class cls = class_(s);
+                if(!cls){
+                    if(noisy)
+                        yWarning() << "Unable to find class: " << s;
+                    continue;
+                }
+                
+                ret.push_back(cls);
+            }
             return ret;
         }
         
@@ -183,6 +207,26 @@ namespace yq {
         {
             return sorted ? def_derived_sorted(c) : def_derived_unsorted(c);
         }
+
+        namespace {
+            std::vector<Field>           def_fields_sorted(Class c)
+            {
+                static thread_local SQ s("SELECT field FROM FDefClass INNER JOIN Fields ON FDefClass.field=Fields.id WHERE field=? ORDER BY Fields.cK");
+                return s.vec<Field>(c.id);
+            }
+
+            std::vector<Field>           def_fields_unsorted(Class c)
+            {
+                static thread_local SQ s("SELECT field FROM FDefClass WHERE class=?");
+                return s.vec<Field>(c.id);
+            }
+        }
+        
+        std::vector<Field>           def_fields(Class c, Sorted sorted)
+        {
+            return sorted ? def_fields_sorted(c) : def_fields_unsorted(c);
+        }
+
 
         namespace {
             std::vector<Class>        def_reverse_sorted(Class c)
@@ -418,7 +462,7 @@ namespace yq {
         Class::Info         info(Class c, bool autoKey)
         {
             Class::Info    ret;
-            static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps FROM Classes WHERE id=?");
+            static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps, category, binding FROM Classes WHERE id=?");
             auto s_af = s.af();
             s.bind(1, c.id);
             if(s.step() == SqlQuery::Row){
@@ -432,6 +476,8 @@ namespace yq {
                 //ret.deps        = Graph(s.v_uint64(7));
                 if(autoKey && ret.name.empty())
                     ret.name    = ret.key;
+                ret.category    = Category(s.v_uint64(8));
+                ret.binding     = s.v_string(9);
             }
             return ret;
         }

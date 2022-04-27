@@ -65,6 +65,24 @@ namespace yq {
         return repo().types.lut.first(sv, nullptr);
     }
 
+    Vector<const TypeInfo*>          TypeInfo::find_all(const string_set_t& types, bool noisy)
+    {
+        Vector<const TypeInfo*> ret;
+        auto&   r   = repo().types.lut;
+        for(const std::string& s : types){
+            if(s.empty())
+                continue;
+                
+            const TypeInfo* ti  = r.first(s);
+            if(!ti){
+                if(noisy)
+                    yWarning() << "Unable to find type info for: " << s;
+                continue;
+            }
+            ret << ti;
+        }
+        return ret;
+    }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

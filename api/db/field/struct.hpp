@@ -28,6 +28,10 @@ namespace yq {
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
 
+        static bool less_key(Field a, Field b);
+        static bool less_label(Field a, Field b);
+        static bool less_name(Field a, Field b);
+
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Field&rhs) const = default;
         constexpr operator bool() const { return id != 0ULL; }

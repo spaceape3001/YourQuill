@@ -54,21 +54,23 @@ namespace yq {
 
         std::string             base_key(Document doc)
         {
-            static thread_local SQ    s("SELECT base FROM Documents WHERE id=?");
+            static thread_local SQ    s("SELECT skb FROM Documents WHERE id=?");
             return s.str(doc.id);
         }
 
         Image   best_image(Document x)
         {
-            std::string k   = key(x);
+            std::string k   = skeyc(x);
             if(k.empty())
                 return Image{};
                 
-            size_t  i   = k.find_last_of('.');
-            if((i != std::string::npos) && (i>0)){
-                // truncate
-                k.resize(i+1);
-            }
+            k += '.';
+                
+            //size_t  i   = k.find_last_of('.');
+            //if((i != std::string::npos) && (i>0)){
+                //// truncate
+                //k.resize(i+1);
+            //}
             
             Folder      fo  = folder(x);
             for(const char* z : Image::kSupportedExtensions){
@@ -106,10 +108,12 @@ namespace yq {
                     
             size_t  x = ak.find_last_of('.');
             size_t  y = ak.find_first_of('.',1);    // first period past any "hidden"
+            
             std::string_view     sfx     = (x != std::string_view::npos ) ? ak.substr(x+1) : std::string_view();
             std::string_view     base    = (y != std::string_view::npos ) ? ak.substr(0,y) : ak;
+            std::string_view     skc     = (x != std::string_view::npos ) ? ak.substr(0,x) : ak;
                 
-            static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,base,hidden,mime) VALUES (?,?,?,?,?,?,?,?)");
+            static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,skb,hidden,mime,skc) VALUES (?,?,?,?,?,?,?,?,?)");
             static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
             
             auto s_lk   = s.af();
@@ -123,6 +127,7 @@ namespace yq {
             i.bind(6,base);
             i.bind(7,ak[0] == '.');
             i.bind(8,mimeTypeForExt(sfx).value());
+            i.bind(9,skc);
             
             if(is_good(i.step(false))){
                 if(wasCreated)
@@ -339,18 +344,19 @@ namespace yq {
         Document::Info      info(Document d)
         {
             Document::Info        ret;
-            static thread_local SQ    s("SELECT k, sk, name, base, folder, suffix, removed, hidden, icon FROM Documents WHERE id=?");
+            static thread_local SQ    s("SELECT k, sk, name, skb, folder, suffix, removed, hidden, icon, skeyc FROM Documents WHERE id=?");
             s.bind(1, d.id);
             if(s.step() == SqlQuery::Row){
                 ret.key     = s.v_text(1);
                 ret.skey    = s.v_text(2);
                 ret.name    = s.v_text(3);
-                ret.base    = s.v_text(4);
+                ret.skeyb   = s.v_text(4);
                 ret.folder  = Folder(s.v_uint64(5));
                 ret.suffix  = s.v_text(6);
                 ret.removed = s.v_bool(7);
                 ret.hidden  = s.v_bool(8);
                 ret.icon    = Image(s.v_uint64(9));
+                ret.skeyc   = s.v_text(10);
             }
             s.reset();
             return ret;
@@ -457,8 +463,14 @@ namespace yq {
         
         std::string             skeyb(Document d)
         {
-            std::string     bk  = skey(d);
-            return copy(base_key(bk));
+            static thread_local SQ    s("SELECT skb FROM Documents WHERE id=?");
+            return s.str(d.id);
+        }
+
+        std::string             skeyc(Document d)
+        {
+            static thread_local SQ    s("SELECT skc FROM Documents WHERE id=?");
+            return s.str(d.id);
         }
 
         std::string             suffix(Document d)

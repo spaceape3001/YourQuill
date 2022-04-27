@@ -28,12 +28,15 @@ namespace {
     void    update_class(Class cls)
     {
         Class::SharedData   data    = merged(cls, IS_UPDATE);
+        Category    cat = category(data->category);
         
-        static thread_local SQ  uc("UPDATE Classes SET name=?,plural=?,brief=? WHERE id=?");
+        static thread_local SQ  uc("UPDATE Classes SET name=?,plural=?,brief=?,category=?,binding=? WHERE id=?");
         uc.bind(1, data->name);
         uc.bind(2, data->plural);
         uc.bind(3, data->brief);
-        uc.bind(4, cls.id);
+        uc.bind(4, cat.id);
+        uc.bind(5, data->binding);
+        uc.bind(6, cls.id);
         uc.exec();
         
         

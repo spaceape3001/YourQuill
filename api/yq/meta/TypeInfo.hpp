@@ -20,6 +20,7 @@ namespace yq {
         static const Vector<const TypeInfo*>&   all();
         static const TypeInfo*                  find(id_t);
         static const TypeInfo*                  find(std::string_view);
+        static Vector<const TypeInfo*>          find_all(const string_set_t&, bool noisy=false);
     
         bool        can_parse() const { return m_parse ? true : false; }
         bool        can_write() const { return m_write ? true : false; }

@@ -32,13 +32,15 @@ namespace yq {
     namespace cdb {
         using CatFragDoc      = std::pair<Fragment, Category::SharedFile>;
         
-        Vector<Category>        all_categories(Sorted sorted=Sorted());
+        std::vector<Category>   all_categories(Sorted sorted=Sorted());
         size_t                  all_categories_count();
         
         Category                category(uint64_t);
         Category                category(std::string_view);
         
         Category::SharedFile    category_doc(Fragment, bool fAllowEmpty=false);
+        
+        std::vector<Class>      classes(Category);
         
         Category                db_category(Document, bool* was_created=nullptr);
         Category                db_category(Fragment f, bool* wasCreated);
@@ -48,6 +50,8 @@ namespace yq {
         
         bool                    exists(Category);
         bool                    exists_category(uint64_t);
+
+        std::vector<Field>      fields(Category);
         
         Image                   icon(Category);
         
@@ -68,8 +72,8 @@ namespace yq {
         //!     Will not create a fragment, though (so can return NULL)
         Category::SharedFile    read(Category, const Root*, unsigned int opts=0);
         
-        Vector<CatFragDoc>      reads(Category, unsigned int opts=0);
-        Vector<CatFragDoc>      reads(Category, class Root*, unsigned int opts=0);
+        std::vector<CatFragDoc> reads(Category, unsigned int opts=0);
+        std::vector<CatFragDoc> reads(Category, class Root*, unsigned int opts=0);
 
         bool                    set_brief(Category, std::string_view, class Root* rt=nullptr);
         bool                    set_name(Category, std::string_view, class Root* rt=nullptr);

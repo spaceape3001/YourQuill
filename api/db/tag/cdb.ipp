@@ -14,20 +14,20 @@ namespace yq {
                 return make_filename(k, Tag::szExtension);
             }
             
-            Vector<Tag>     all_tags_sorted()
+            std::vector<Tag>     all_tags_sorted()
             {
                 static thread_local SQ    s("SELECT id FROM Tags ORDER BY k");
                 return s.vec<Tag>();
             }
             
-            Vector<Tag>     all_tags_unsorted()
+            std::vector<Tag>     all_tags_unsorted()
             {
                 static thread_local SQ    s("SELECT id FROM Tags");
                 return s.vec<Tag>();
             }
         }
 
-        Vector<Tag>         all_tags(Sorted sorted)
+        std::vector<Tag>         all_tags(Sorted sorted)
         {
             return sorted ? all_tags_sorted() : all_tags_unsorted();
         }
@@ -92,17 +92,17 @@ namespace yq {
             return db_tag(db_document(tags_folder(), tfn), wasCreated);
         }
         
-        Vector<Tag>    db_tags(const string_set_t&all)
+        std::vector<Tag>    db_tags(const string_set_t&all)
         {
-            Vector<Tag>     ret;
+            std::vector<Tag>     ret;
             for(const std::string& s:all)
                 ret.push_back(db_tag(s));
             return ret;
         }
         
-        Vector<Tag>    db_tags(const string_view_set_t&all)
+        std::vector<Tag>    db_tags(const string_view_set_t&all)
         {
-            Vector<Tag>     ret;
+            std::vector<Tag>     ret;
             for(const std::string_view& s:all)
                 ret.push_back(db_tag(s));
             return ret;
@@ -257,9 +257,9 @@ namespace yq {
         }
 
         
-        Vector<TagFragDoc>      reads(Tag t, unsigned int opts)
+        std::vector<TagFragDoc>      reads(Tag t, unsigned int opts)
         {
-            Vector<TagFragDoc>  ret;
+            std::vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), DataRole::Config)){
                 Tag::SharedFile  p   = tag_doc(f,opts);
                 if(p)
@@ -268,9 +268,9 @@ namespace yq {
             return ret;
         }
 
-        Vector<TagFragDoc>    reads(Tag t, class Root* rt, unsigned int opts)
+        std::vector<TagFragDoc>    reads(Tag t, class Root* rt, unsigned int opts)
         {
-            Vector<TagFragDoc>  ret;
+            std::vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), rt)){
                 Tag::SharedFile  p   = tag_doc(f, opts);
                 if(p)
@@ -347,6 +347,24 @@ namespace yq {
             }
             td -> set_file(fp);
             return td;
+        }
+
+        std::vector<Tag>             tags(const string_set_t&keys, bool noisy)
+        {
+            std::vector<Tag> ret;
+            for(const std::string& s : keys){
+                if(s.empty())
+                    continue;
+                    
+                Tag t   = tag(s);
+                if(!t){
+                    if(noisy)
+                        yWarning() << "Unable to find tag: " << s;
+                    continue;
+                }
+                ret.push_back(t);
+            }
+            return ret;
         }
 
         

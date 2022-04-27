@@ -15,8 +15,9 @@ namespace {
 
         Class::SharedData       data    = merged(c, DONT_LOCK|IS_UPDATE);
         Image       ico = best_image(doc);
+        Category    cat = category(data->category);
 
-        static thread_local SQ uc("UPDATE Classes SET name=?, icon=?, plural=?, brief=? WHERE id=?");
+        static thread_local SQ uc("UPDATE Classes SET name=?, icon=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
         static thread_local SQ ia("INSERT INTO CAlias (class, alias) VALUES (?,?)");
         static thread_local SQ ip("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
         static thread_local SQ is("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
@@ -26,7 +27,9 @@ namespace {
         uc.bind(2, ico.id);
         uc.bind(3, data->plural);
         uc.bind(4, data->brief);
-        uc.bind(5, c.id);
+        uc.bind(5, cat.id);
+        uc.bind(6, data->binding);
+        uc.bind(7, c.id);
         uc.exec();
         
         for(const std::string& a : data->aliases){

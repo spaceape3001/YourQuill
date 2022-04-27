@@ -8,6 +8,7 @@
 
 #include <db/cdb_common.hpp>
 #include "file.hpp"
+#include <db/category/struct.hpp>
 #include <db/class/struct.hpp>
 #include <db/image/struct.hpp>
 
@@ -19,6 +20,7 @@ namespace yq {
     struct Field::Info {
         Class           class_;
         Image           icon;
+        Category        category;
         std::string     brief;
         std::string     key, pkey;
         std::string     name, plural;
@@ -30,18 +32,21 @@ namespace yq {
         
         string_set_t            aliases(Field);
 
-        Vector<Field>           all_fields(Sorted sorted=Sorted());
+        std::vector<Field>           all_fields(Sorted sorted=Sorted());
         size_t                  all_fields_count();
         
 
         std::string             brief(Field);
+        
+        Category                category(Field);
+        
 
         Class                   class_(Field);
 
 
         /*! \brief ALL classes this field can be in
         */
-        Vector<Class>           classes(Field, Sorted sorted=Sorted());
+        std::vector<Class>       classes(Field, Sorted sorted=Sorted());
         
         /*! \brief All data types this field can use
         */
@@ -53,7 +58,7 @@ namespace yq {
         //Field                   db_field(std::string_view , bool *wasCreated=nullptr);
         //Field                   db_field(Document, bool *wasCreated=nullptr);
         
-        Vector<Class>           def_classes(Field, Sorted sorted=Sorted());
+        std::vector<Class>           def_classes(Field, Sorted sorted=Sorted());
         
         Document                document(Field);
 
@@ -93,10 +98,10 @@ namespace yq {
         //!     Will not create a fragment, though (so can return NULL)
         Field::SharedFile       read(Field, const Root*, unsigned int opts=0);
 
-        Vector<FieldFragDoc>    reads(Field, unsigned int opts=0);
-        Vector<FieldFragDoc>    reads(Field, class Root*, unsigned int opts=0);
+        std::vector<FieldFragDoc>    reads(Field, unsigned int opts=0);
+        std::vector<FieldFragDoc>    reads(Field, class Root*, unsigned int opts=0);
 
-        Vector<Tag>             tags(Field, Sorted sorted=Sorted());
+        std::vector<Tag>             tags(Field, Sorted sorted=Sorted());
         size_t                  tags_count(Field);
 
         bool                    tagged(Field, Tag);

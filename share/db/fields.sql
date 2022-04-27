@@ -25,6 +25,9 @@ CREATE TABLE Fields (
     -- plural of the field
     plural      VARCHAR(255) COLLATE NOCASE,
     
+    -- plural (key) of the field
+    pkey        VARCHAR(255) COLLATE NOCASE,
+    
     -- brief of the field
     brief       VARCHAR(255),
     
@@ -53,13 +56,12 @@ CREATE TABLE Fields (
 	anycls      BOOLEAN NOT NULL DEFAULT 0
 );
 
-INSERT INTO Fields (class, k, name, anycls) VALUES (0, '%', 'Title', 1);
+-- INSERT INTO Fields (id, class, k, name, anycls) VALUES (1, 0, '%', 'Title', 1);
 
 -- Defined classes this field applies to
 CREATE TABLE FDefClass (
     field       INTEGER NOT NULL,
     class       INTEGER NOT NULL,
-
     UNIQUE(field,class)
 );
 

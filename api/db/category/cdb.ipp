@@ -14,20 +14,20 @@ namespace yq {
                 return make_filename(k, Category::szExtension);
             }
             
-            Vector<Category>     all_categories_sorted()
+            std::vector<Category>     all_categories_sorted()
             {
                 static thread_local SQ    s("SELECT id FROM Categories ORDER BY k");
                 return s.vec<Category>();
             }
             
-            Vector<Category>     all_categories_unsorted()
+            std::vector<Category>     all_categories_unsorted()
             {
                 static thread_local SQ    s("SELECT id FROM Categories");
                 return s.vec<Category>();
             }
         }
 
-        Vector<Category>         all_categories(Sorted sorted)
+        std::vector<Category>         all_categories(Sorted sorted)
         {
             return sorted ? all_categories_sorted() : all_categories_unsorted();
         }
@@ -96,6 +96,12 @@ namespace yq {
             return td;
         }
 
+        std::vector<Class>  classes(Category cat)
+        {
+            static thread_local SQ s("SELECT id FROM Classes WHERE category=?");
+            return s.vec<Class>(cat.id);
+        }
+
         Category                 db_category(Document doc, bool* wasCreated)
         {
             if(wasCreated)
@@ -157,6 +163,12 @@ namespace yq {
         {
             static thread_local SQ s("SELECT 1 FROM Categories WHERE id=? LIMIT 1");
             return s.present(i);
+        }
+
+        std::vector<Field>      fields(Category cat)
+        {
+            static thread_local SQ s("SELECT id FROM Fields WHERE category=?");
+            return s.vec<Field>(cat.id);
         }
 
         Image               icon(Category t)
@@ -279,9 +291,9 @@ namespace yq {
         }
 
         
-        Vector<CatFragDoc>      reads(Category t, unsigned int opts)
+        std::vector<CatFragDoc>      reads(Category t, unsigned int opts)
         {
-            Vector<CatFragDoc>  ret;
+            std::vector<CatFragDoc>  ret;
             for(Fragment f : fragments(document(t), DataRole::Config)){
                 Category::SharedFile  p   = category_doc(f,opts);
                 if(p)
@@ -290,9 +302,9 @@ namespace yq {
             return ret;
         }
 
-        Vector<CatFragDoc>    reads(Category t, class Root* rt, unsigned int opts)
+        std::vector<CatFragDoc>    reads(Category t, class Root* rt, unsigned int opts)
         {
-            Vector<CatFragDoc>  ret;
+            std::vector<CatFragDoc>  ret;
             for(Fragment f : fragments(document(t), rt)){
                 Category::SharedFile  p   = category_doc(f, opts);
                 if(p)

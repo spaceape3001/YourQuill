@@ -20,13 +20,14 @@ namespace yq {
     class ByteArray;
 
     struct Document::Info {
-        std::string     base;
         Folder          folder;
         bool            hidden      = false;
         std::string     key;
         std::string     name;
         bool            removed     = false;
         std::string     skey;
+        std::string     skeyb;
+        std::string     skeyc;
         std::string     suffix;
         Image           icon;
         
@@ -122,7 +123,9 @@ namespace yq {
 
         std::string                     skey(Document);   //!< Key inside the directory
 
-        std::string                     skeyb(Document);  //!< Key inside the directory (w/o extensions)
+        std::string                     skeyb(Document);  //!< Key inside the directory (w/o any extensions)
+
+        std::string                     skeyc(Document);  //!< Key inside the directory (w/o final extension)
 
         std::string                     suffix(Document);
 

@@ -105,6 +105,8 @@ namespace yq {
         bool                            exists(Folder, const Root*);
 
         bool                            exists_folder(uint64_t);
+        
+        consteval Folder                fields_folder() { return Folder{Folder::FIELDS}; }
 
         Directory                       first_directory(Folder);
         Directory                       first_directory(Folder, const Root*);
