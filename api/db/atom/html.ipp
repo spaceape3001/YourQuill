@@ -6,23 +6,26 @@
 
 #pragma once
 
+#include "cdb.hpp"
+
 namespace yq {
     namespace html {
-        #if 0
         WebHtml&    operator<<(WebHtml&h, Atom v)
         {
+            //  more TODO...
+            h << cdb::label(v);
+            return h;
         }
         
         WebHtml&    operator<<(WebHtml&h, Dev<Atom> v)
         {
             if(v.data)
                 h << "<a href=\"/dev/atom?id=" << v.data.id << "\">";
-            h << v.data.id;
+            h << cdb::label(v.data);
             if(v.data)
                 h << "</a>";
             return h;
         }
-        #endif
         
         WebHtml&    operator<<(WebHtml&h, DevID<Atom> v)
         {
@@ -34,6 +37,14 @@ namespace yq {
             return h;
         }
         
-        //void        dev_table(WebHtml&h, const std::vector<Atom>& table);
+        void        dev_table(WebHtml&h, const std::vector<Atom>& atoms)
+        {
+            auto t = h.table();
+            h << "<tr><th>ID</th><th>Key</th><th>Brief</th></tr>\n";
+            for(Atom a : atoms){
+                auto i = cdb::info(a);
+                h << "<tr><td>" << dev_id(a) << "</td><td>" << i.key << "</td><td>" << i.brief << "</td></tr>\n";
+            }
+        }
     }
 }

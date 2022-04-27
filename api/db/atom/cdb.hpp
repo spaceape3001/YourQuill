@@ -6,35 +6,25 @@
 
 #pragma once
 
-#include "CacheFwd.hpp"
-#include "ClassFile.hpp"
-#include "FileSys.hpp"
-#include "Graph.hpp"
-#include "Image.hpp"
-
-template <typename> class QList;
-class QVariant;
+#include <db/cdb_common.hpp>
+#include "struct.hpp"
+#include <db/enum/sorted.hpp>
+#include <db/image/struct.hpp>
+#include <db/leaf/struct.hpp>
+#include <vector>
 
 namespace yq {
-
-    /*! \brief Atom in the cache
-        This structure represents an atom in the cache
-    */
-    struct Atom {
-        struct Info;
-        uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Atom&rhs) const = default; 
-        constexpr operator bool() const { return id != 0ULL; }
-    };
+    struct Class;
+    struct Document;
+    struct Tag;
 
     struct Atom::Info {
-        String      abbr;
-        String      brief;
-        String      key;
-        //Document    doc;  // it's now "plrual"
-        //Leaf        leaf; // causes circular dependencies.... 
-        String      name;
-        Image       icon;
+        std::string     abbr;
+        std::string     brief;
+        std::string     key;
+        Leaf            leaf; 
+        std::string     name;
+        Image           icon;
         bool operator==(const Info&) const = default;
     };
 
@@ -45,13 +35,13 @@ namespace yq {
             \param[in]  a   Atom of interest
             \return The standard abbreviation
         */
-        String                 abbreviation(Atom a);
+        std::string            abbreviation(Atom a);
 
         /*! \brief Returns all atoms in the cache database
             \param[in] sorted   Yes/no for sorting by key. (default is no)
-            \return Vector of the found atoms
+            \return std::vector of the found atoms
         */
-        AtomVec                all_atoms(Sorted sorted=Sorted{});
+        std::vector<Atom>       all_atoms(Sorted sorted=Sorted{});
         
         /*! \brief Returns all atoms in the cache database for given class
         
@@ -60,9 +50,9 @@ namespace yq {
         
             \param[in] cls      Class to select for
             \param[in] sorted   Yes/no for sorting by key (default is no)
-            \return Vector of the found atoms
+            \return std::vector of the found atoms
         */
-        AtomVec                 all_atoms(Class cls,Sorted sorted=Sorted());
+        std::vector<Atom>       all_atoms(Class cls,Sorted sorted=Sorted());
         
         /*! \brief Returns all atoms in the cache database with the given tag
         
@@ -71,9 +61,9 @@ namespace yq {
         
             \param[in] tag      Tag to select for
             \param[in] sorted   Yes/no for sorting by key (default is no)
-            \return Vector of the found atoms
+            \return std::vector of the found atoms
         */
-        AtomVec                 all_atoms(Tag tag,Sorted sorted=Sorted());
+        std::vector<Atom>       all_atoms(Tag tag,Sorted sorted=Sorted());
         
         /*! \brief Counts the number of atoms in the database
             \return The count
@@ -102,20 +92,20 @@ namespace yq {
 
 
         Atom                    atom(uint64_t);
-        Atom                    atom(const String&);
-        Atom                    atom(Document, const String&);
-        Vector<Atom>            atoms(Atom, Sorted sorted=Sorted{});
-        Vector<Atom>            atoms(Document, Sorted sorted=Sorted());
+        Atom                    atom(std::string_view );
+        Atom                    atom(Document, std::string_view );
+        std::vector<Atom>       atoms(Atom, Sorted sorted=Sorted{});
+        std::vector<Atom>       atoms(Document, Sorted sorted=Sorted());
         
-        AtomVec                 atoms_by_name(const String&, Sorted sorted=Sorted{});
+        std::vector<Atom>       atoms_by_name(std::string_view , Sorted sorted=Sorted{});
         
         size_t                  atoms_count(Atom);
         size_t                  atoms_count(Document);
         
-        String                  brief(Atom);
+        std::string             brief(Atom);
         
-        ClassVec                classes(Atom, Sorted sorted=Sorted{});
-        ClassVec                classes(Atom, Document, Sorted sorted=Sorted{});
+        std::vector<Class>      classes(Atom, Sorted sorted=Sorted{});
+        std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
         size_t                  classes_count(Atom);
         size_t                  classes_count(Atom,Document);
         
@@ -143,12 +133,10 @@ namespace yq {
             \param[out]     wasCreated  true/false if the atom was created by this call
             \note This should only fail if the document is invalid (ie, no key), or the cache database is corrupted.
         */
-        Atom                    db_atom(Document doc, const String&k, bool* wasCreated=nullptr);
+        Atom                    db_atom(Document doc, std::string_view k, bool* wasCreated=nullptr);
         
         
-        //Document                document(Atom);
-        
-        DocVec                  documents(Atom, Sorted sorted=Sorted{});
+        std::vector<Document>   documents(Atom, Sorted sorted=Sorted{});
         size_t                  documents_count(Atom);
 
       
@@ -159,7 +147,7 @@ namespace yq {
 
         Image                   icon(Atom);
         
-        //Vector<Atom>            inbound(Atom);
+        std::vector<Atom>            inbound(Atom);
 
         Atom::Info              info(Atom);
 
@@ -169,13 +157,13 @@ namespace yq {
         
         bool                    is_leaf(Atom);
 
-        String                  key(Atom);
+        std::string             key(Atom);
 
-        String                  label(Atom);
+        std::string             label(Atom);
         
-        //Leaf                    leaf(Atom
+        Leaf                    leaf(Atom);
 
-        String                  name(Atom);
+        std::string             name(Atom);
         
         /*! \brief Name/Key/Icon for an Atom
         
@@ -184,23 +172,21 @@ namespace yq {
         */
         NKI                     nki(Atom a, bool autoKeyToName=false);
         
-        //Vector<Atom>            outbound(Atom);
+        std::vector<Atom>            outbound(Atom);
         
         Atom                    parent(Atom);
 
-        QList<QVariant>         qvar_list(const Set<Atom>&);
-
-        String                  skey(Atom);
+        std::string             skey(Atom);
 
         
-        TagVec                  tags(Atom, Sorted sorted=Sorted{});
-        TagVec                  tags(Atom, Document, Sorted sorted=Sorted{});
+        std::vector<Tag>        tags(Atom, Sorted sorted=Sorted{});
+        std::vector<Tag>        tags(Atom, Document, Sorted sorted=Sorted{});
         size_t                  tags_count(Atom);
         size_t                  tags_count(Atom, Document);
 
         bool                    tagged(Atom, Tag);
 
-        String                  title(Atom);    // kept for comptibility
+        std::string             title(Atom);    // kept for comptibility
 
     }
 

@@ -22,6 +22,7 @@
 #include "class/struct.hpp"
 #include "leaf/struct.hpp"
 
+#include "atom/cdb.hpp"
 #include "category/cdb.hpp"
 #include "class/cdb.hpp"
 #include "directory/cdb.hpp"
@@ -71,6 +72,7 @@ namespace yq {
     }
     
     // explicit instantiation
+    template class IDLock<Atom>;
     template class IDLock<Category>;
     template class IDLock<Class>;
     template class IDLock<Field>;
@@ -82,6 +84,7 @@ namespace yq {
 
 
 #include "cdb_sq.ipp"
+#include "atom/cdb.ipp"
 #include "category/cdb.ipp"
 #include "class/cdb.ipp"
 #include "directory/cdb.ipp"

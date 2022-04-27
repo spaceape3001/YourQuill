@@ -9,6 +9,7 @@
 #include <yq/web/WebHtml.hpp>
 
 //#include "category/arg.hpp"
+#include "atom/arg.hpp"
 #include "class/arg.hpp"
 #include "field/arg.hpp"
 #include "directory/arg.hpp"
@@ -23,6 +24,7 @@
 #include "tag/arg.hpp"
 #include "user/arg.hpp"
 
+#include "atom/cdb.hpp"
 #include "class/cdb.hpp"
 #include "directory/cdb.hpp"
 #include "document/cdb.hpp"
@@ -34,6 +36,7 @@
 #include "tag/cdb.hpp"
 #include "user/cdb.hpp"
 
+#include "atom/arg.ipp"
 #include "class/arg.ipp"
 #include "category/arg.ipp"
 #include "directory/arg.ipp"

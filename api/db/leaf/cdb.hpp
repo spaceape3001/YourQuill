@@ -27,7 +27,7 @@ namespace yq {
     };
 
     struct Leaf::Info {
-        //  Atom        atom;   circular dependencies
+        Atom        atom;       
         Document    doc;
         String      key;
         String      title;

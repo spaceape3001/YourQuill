@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace {
+
+    void page_dev_atoms(WebHtml&h)
+    {
+        h.title() << "All Atoms";
+        dev_table(h, all_atoms(Sorted::YES));
+    }
+    
+    YQ_INVOKE( reg_webpage<page_dev_atoms>("/dev/atoms"); )
+    
+}
