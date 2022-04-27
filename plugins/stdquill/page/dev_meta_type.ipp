@@ -19,6 +19,7 @@ namespace {
         auto ta = h.table();
         h.kvrow("ID") << type -> id();
         h.kvrow("Name") << type->name();
+        h.kvrow("Aliases") << join(type->aliases(), ", ");
         h.kvrow("Size") << type->size();
         
         

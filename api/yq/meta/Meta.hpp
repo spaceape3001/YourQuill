@@ -245,6 +245,12 @@ namespace yq {
             keys += b.keys;
             return *this;
         }
+        
+        void    add_mapping(std::string_view k, const T* d)
+        {
+            lut.insert(k,d);
+            keys += k;
+        }
     };
 }
 

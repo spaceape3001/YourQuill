@@ -44,13 +44,9 @@ namespace {
         Class   c   = class_(h);
         if(!c)
             throw HttpStatus::BadArgument;
-        
-        std::vector<Field>  flist   = def_fields(c);
-        flist += def_fields(Class());
-        std::sort(flist.begin(), flist.end(), Field::less_label);
-            
+
         h.title() << "Class (" << label(c) << "): Def Fields";
-        dev_table(h, flist);
+        dev_table(h, def_fields(c, Sorted::YES));
     }
 
     

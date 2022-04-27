@@ -22,6 +22,8 @@ namespace yq {
         static const TypeInfo*                  find(std::string_view);
         static Vector<const TypeInfo*>          find_all(const string_set_t&, bool noisy=false);
     
+        const Vector<std::string_view>&         aliases() const { return m_aliases; }
+    
         bool        can_parse() const { return m_parse ? true : false; }
         bool        can_write() const { return m_write ? true : false; }
         bool        can_print() const { return m_print ? true : false; }
@@ -48,6 +50,8 @@ namespace yq {
     protected:
         TypeInfo(std::string_view zName, const std::source_location& sl, id_t i=AUTO_ID);
         virtual ~TypeInfo();
+
+        void            add_alias(std::string_view);
 
         virtual void    sweep_impl() override;
 
@@ -84,6 +88,8 @@ namespace yq {
         LUC<PropertyInfo>           m_properties;
         LUC<MethodInfo>             m_methods;
         DataBlock                   m_default;
+        
+        Vector<std::string_view>        m_aliases;
         
         struct {
             Vector<const TypeInfo*> args;

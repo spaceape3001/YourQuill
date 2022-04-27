@@ -205,6 +205,7 @@ namespace yq {
             }
             {
                 auto w  = writer<int32_t>();
+                w.alias("Integer");
                 w.parse<parse_int32>();
                 w.print<print_int32>();
             }
@@ -235,6 +236,7 @@ namespace yq {
             }
             {
                 auto w  = writer<std::string>();
+                w.alias("String");
                 w.parse<parse_string>();
                 w.print<print_string>();
             }

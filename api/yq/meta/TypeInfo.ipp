@@ -100,6 +100,12 @@ namespace yq {
     {
         //  should never be used....
     }
+
+    void            TypeInfo::add_alias(std::string_view sz)
+    {
+        repo().types.add_mapping(sz, this);
+        m_aliases << sz;
+    }
     
     size_t                              TypeInfo::method_count() const
     {

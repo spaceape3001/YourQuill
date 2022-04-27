@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yq_field>
+    <field>
+        <name>End</name>
+        <plural>Ends</plural>
+        <type>Timestamp</type>
+    </field>
+</yq_field>
+

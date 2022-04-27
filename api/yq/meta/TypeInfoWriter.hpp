@@ -224,6 +224,12 @@ namespace yq {
     public:
         static_assert( InfoBinder<T>::IsType, "T must be meta-type declared!");
     
+    
+        void    alias(std::string_view a)
+        {
+            static_cast<TypeInfo*>(Meta::Writer::m_meta) -> add_alias(a);
+        }
+    
         template <typename U>
         requires std::is_nothrow_convertible_v<U,T>
         void casts()
