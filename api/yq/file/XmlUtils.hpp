@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include <yq/collection/Set.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/type/Enum.hpp>
 #include <yq/type/Flag.hpp>
@@ -14,6 +13,8 @@
 
 #include "rapidxml.hpp"
 #include <type_traits>
+#include <vector>
+#include <set>
 
 namespace yq {
 
@@ -203,8 +204,10 @@ namespace yq {
     template <typename T>
     void                write_attribute(XmlNode* xb, const char* pszAttr, const T& value, bool copyAttr=false)
     {
+        assert(xb);
         XmlDocument*    doc = xb -> document();
-        XmlAttribute*   xa  = xb -> document() -> allocate_attribute();
+        assert(doc);
+        XmlAttribute*   xa  = doc -> allocate_attribute();
         if(copyAttr){
             xa -> name( doc -> allocate_string(pszAttr));
         } else
@@ -216,8 +219,10 @@ namespace yq {
     template <typename T>
     XmlNode*             write_child(XmlNode* xb, const char* pszTag, const T& value, bool copyTag=false)
     {
+        assert(xb && pszTag);
         XmlDocument*    doc = xb -> document();
-        XmlNode*        xn  = xb -> document() -> allocate_node(rapidxml::node_element);
+        assert(doc);
+        XmlNode*        xn  = doc -> allocate_node(rapidxml::node_element);
         if(copyTag){
             xn -> name(doc->allocate_string(pszTag));
         } else 
@@ -234,9 +239,11 @@ namespace yq {
     }
 
     template <typename T,typename C>
-    void    write_children(XmlNode* xb, const char* pszTag, const Set<T,C>& values)
+    void    write_children(XmlNode* xb, const char* pszTag, const std::set<T,C>& values)
     {
+        assert(xb && pszTag);
         XmlDocument*    doc = xb -> document();
+        assert(doc);
         for(const T& v : values){
             XmlNode*    xn  = doc -> allocate_node(rapidxml::node_element, pszTag);
             xb -> append_node(xn);
@@ -245,9 +252,11 @@ namespace yq {
     }
 
     template <typename T>
-    void    write_children(XmlNode* xb, const char* pszTag, const Vector<T>& values)
+    void    write_children(XmlNode* xb, const char* pszTag, const std::vector<T>& values)
     {
+        assert(xb && pszTag);
         XmlDocument*    doc = xb -> document();
+        assert(doc);
         for(const T& v : values){
             XmlNode*    xn  = doc -> allocate_node(rapidxml::node_element, pszTag);
             xb -> append_node(xn);

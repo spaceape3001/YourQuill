@@ -75,5 +75,7 @@ namespace yq {
             between the final '/' and the first '.' after that.
         */
         std::string_view                base_key(std::string_view);
+        
+        std::string                     make_filename(std::string_view k, const char* ext);
     }
 }

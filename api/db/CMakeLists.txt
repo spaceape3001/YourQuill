@@ -1,9 +1,13 @@
 set(db_sources
-    ./arg.cpp
-    ./cdb.cpp
-    ./file.cpp
-    ./html.cpp
-    ./workspace.cpp
+    ./atomsys.cpp
+    ./db.cpp
+    ./docsys.cpp
+    ./filesys.cpp
+    ./imagesys.cpp
+    ./metasys.cpp
+    ./orgsys.cpp
+    ./wksp.cpp
+    ./wksp/workspace.cpp
 )
 
 add_library(yqdb SHARED ${db_sources})

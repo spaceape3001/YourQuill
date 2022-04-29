@@ -44,6 +44,7 @@ namespace yq {
     static constexpr const char*    szChain             = "chain";
     static constexpr const char*    szClass             = "class";
     static constexpr const char*    szClass_            = "_class_";
+    static constexpr const char*    szCmd               = "cmd";
     static constexpr const char*    szColor             = "color";
     static constexpr const char*    szColumn            = "column";
     static constexpr const char*    szComment           = "comment";

@@ -62,6 +62,7 @@ using namespace yq::html;
 #include "page/dev_hello.ipp"
 #include "page/dev_image.ipp"
 #include "page/dev_images.ipp"
+#include "page/dev_leafs.ipp"
 #include "page/dev_meta_object.ipp"
 #include "page/dev_meta_objects.ipp"
 #include "page/dev_meta_type.ipp"

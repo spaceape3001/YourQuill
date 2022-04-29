@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "cdb_sq.hpp"
-#include "workspace.hpp"
+#include <db/wksp/workspace.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/text/text_utils.hpp>
 

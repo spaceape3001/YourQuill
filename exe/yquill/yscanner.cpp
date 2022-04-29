@@ -6,9 +6,8 @@
 
 #include "yquill.hpp"
 
-#include <db/filesys_cdb.hpp>
-#include <db/root.hpp>
-#include <db/workspace.hpp>
+#include <db/filesys.hpp>
+#include <db/wksp/workspace.hpp>
 
 #include <yq/algo/Compare.hpp>
 #include <yq/collection/Deque.hpp>

@@ -9,7 +9,7 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include <db/workspace.hpp>
+#include <db/wksp/workspace.hpp>
 
 #include <yq/algo/Random.hpp>
 #include <yq/log/Logging.hpp>

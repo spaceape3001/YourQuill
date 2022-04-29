@@ -200,13 +200,13 @@ namespace yq {
         m_sorted    = m_keys;
         m_sorted.sort(is_less_igCase);
         m_ordered   = m_keys;
-        m_ordered.sort([&](const std::string_view& a, const std::string_view&b) -> bool {
+        m_ordered.sort([&](std::string_view  a, std::string_view b) -> bool {
             return m_name2value.get(a) < m_name2value.get(b);
         });
     }
 
 
-    bool    EnumDef::has_key(const std::string_view&key) const
+    bool    EnumDef::has_key(std::string_view key) const
     {
         return m_name2value.has(std::string(key));
     }
@@ -238,11 +238,11 @@ namespace yq {
     }
 
 
-    Vector<int>  EnumDef::parse_comma_list(const std::string_view&str)  const
+    Vector<int>  EnumDef::parse_comma_list(std::string_view str)  const
     {
         Vector<int>  ret;
         ret.reserve(count_characters(str, ','));
-        vsplit(str, ',', [&](const std::string_view& s){
+        vsplit(str, ',', [&](std::string_view  s){
             auto itr = m_name2value.find(trimmed(s));
             if(itr != m_name2value.end())
                 ret.push_back(itr->second);
@@ -275,7 +275,7 @@ namespace yq {
     }
 
 
-    int_r     EnumDef::value_of(const std::string_view& key) const
+    int_r     EnumDef::value_of(std::string_view  key) const
     {
         return m_name2value(key);
     }

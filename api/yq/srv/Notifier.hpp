@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/enum/change.hpp>
-#include <db/folder.hpp>
+#include <db/filesys/folder.hpp>
 
 #include <yq/collection/EnumMap.hpp>
 #include <yq/type/Flag.hpp>

@@ -8,6 +8,7 @@
 
 #include <unordered_map>
 #include <tbb/spin_mutex.h>
+#include <db/id_lock.hpp>
 #include <yq/c++/trait/not_moveable.hpp>
 
 namespace yq {
@@ -20,37 +21,10 @@ namespace yq {
         std::unordered_map<uint64_t, Data>  locks;
         tbb::spin_mutex                     mutex;
         
-        bool    inc_read(uint64_t i)
-        {
-            tbb::spin_mutex::scoped_lock    _lock(mutex);
-            auto& d = locks[i];
-            if(d.count == 0xFF)
-                return false;
-            ++d.count;
-            return true;
-        }
-        
-        bool    get_write(uint64_t i)
-        {
-            tbb::spin_mutex::scoped_lock    _lock(mutex);
-            return locks.insert({ i, { 0xFF } }).second;
-        }
-        
-        void    free_read(uint64_t i)
-        {
-            tbb::spin_mutex::scoped_lock    _lock(mutex);
-            auto d = locks.find(i);
-            if(d != locks.end()){
-                if(!--(d->second.count))
-                    locks.erase(i);
-            }
-        }
-        
-        void    free_write(uint64_t i)
-        {
-            tbb::spin_mutex::scoped_lock    _lock(mutex);
-            locks.erase(i);
-        }
+        bool    inc_read(uint64_t i);
+        bool    get_write(uint64_t i);
+        void    free_read(uint64_t i);
+        void    free_write(uint64_t i);
     };
 
     template <typename ID>

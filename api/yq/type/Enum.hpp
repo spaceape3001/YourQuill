@@ -94,22 +94,22 @@ namespace yq {
     public:
 
 
-        const std::string_view& name() const { return m_name; }
+        std::string_view  name() const { return m_name; }
 
         int                     default_value() const { return m_defValue; }
         int                     minimum_value() const;
         int                     maximum_value() const;
 
-        int_r                   value_of(const std::string_view& key) const;
+        int_r                   value_of(std::string_view  key) const;
 
         string_view_r           key_of(int value) const;
         bool                    has_value(int value) const;
-        bool                    has_key(const std::string_view&) const;
+        bool                    has_key(std::string_view ) const;
 
         const Vector<std::string_view>&   all_keys() const { return m_keys; }
         Vector<int>             all_values() const;
 
-        Vector<int>             parse_comma_list(const std::string_view&)  const;
+        Vector<int>             parse_comma_list(std::string_view )  const;
         std::string             make_comma_list(const Vector<int>&) const;
 
         Enum                    make_enum(int) const;
@@ -158,23 +158,23 @@ namespace yq {
         static const Vector<std::string_view>&        all_keys();
         static Vector<EnumImpl>             all_values();
         static typename E::enum_t           default_value();
-        static bool                         has_key(const std::string_view& k);
+        static bool                         has_key(std::string_view k);
         static bool                         has_value(int);
         static const Vector<std::string_view>&     ordered_keys();
         static const Vector<std::string_view>&    sorted_keys();
-        static Result<typename E::enum_t>   value_for(const std::string_view& txt);
+        static Result<typename E::enum_t>   value_for(std::string_view txt);
         static int                          max_value();
         static int                          min_value();
         
         // To, make this Vector
-        static Vector<EnumImpl>             comma_string(const std::string_view& k);
+        static Vector<EnumImpl>             comma_string(std::string_view k);
         static std::string                  comma_string(const Vector<EnumImpl>& k);
 
         EnumImpl() : E(default_value()) {}
         EnumImpl(const E& base) : E(base) {}
         constexpr EnumImpl(typename E::enum_t value) : E(value) {}
         EnumImpl(int value) : E( has_value(value) ? (typename E::enum_t) value : default_value()) {}
-        EnumImpl(const std::string_view&key, bool *ok=nullptr) : E(value_for(key))
+        EnumImpl(std::string_view key, bool *ok=nullptr) : E(value_for(key))
         {
             auto e = value_for(key);
             E::m_value = e.good ? e.value : default_value();
@@ -278,7 +278,7 @@ namespace yq {
 
 
     template <typename E>
-    Vector<EnumImpl<E>>     EnumImpl<E>::comma_string(const std::string_view& k)
+    Vector<EnumImpl<E>>     EnumImpl<E>::comma_string(std::string_view  k)
     {
         return toValues(E::staticEnumInfo()->parse_comma_list(k));
     }
@@ -297,7 +297,7 @@ namespace yq {
     }
 
     template <typename E>
-    bool         EnumImpl<E>::has_key(const std::string_view& k)
+    bool         EnumImpl<E>::has_key(std::string_view  k)
     {
         return E::staticEnumInfo()->has_key(k);
     }
@@ -343,7 +343,7 @@ namespace yq {
     }
 
     template <typename E>
-    Result<typename E::enum_t>   EnumImpl<E>::value_for(const std::string_view& txt)
+    Result<typename E::enum_t>   EnumImpl<E>::value_for(std::string_view  txt)
     {
         int_r   vi  =  E::staticEnumInfo()->value_of(txt);
         return vi.cast_to<typename E::enum_t>();

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "common.hpp"
-#include <db/workspace.hpp>
+#include <db/wksp/workspace.hpp>
 
 #include <yq/app/DelayInit.hpp>
 #include <yq/stream/Ops.hpp>

@@ -39,7 +39,7 @@ namespace yq {
         if(!v.data.empty()){
             xn->append_node(
                 xn->document()->allocate_node(
-                    rapidxml::node_data, nullptr, v.data.c_str(), 0ULL, v.data.size()
+                    rapidxml::node_cdata, nullptr, v.data.c_str(), 0ULL, v.data.size()
                 )
             );
         }

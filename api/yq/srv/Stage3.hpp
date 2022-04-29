@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/preamble.hpp>
-#include <db/document.hpp>
-#include <db/folder.hpp>
+#include <db/filesys/document.hpp>
+#include <db/filesys/folder.hpp>
 #include <source_location>
 #include <filesystem>
 

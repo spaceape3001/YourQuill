@@ -17,7 +17,7 @@
 #include <yq/sql/SqlUtils.hpp>
 #include <yq/text/text_utils.hpp>
 
-#include <db/workspace.hpp>
+#include <db/wksp/workspace.hpp>
 
 #include <iostream>
 

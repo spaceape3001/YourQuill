@@ -10,9 +10,11 @@
 #include <yq/file/XmlFwd.hpp>
 
 namespace yq {
+    struct Root;
 
     struct Context {
         std::string     icon, title, data;
+        const Root*     root = nullptr;
         Format          format;
         int             order=0;
         

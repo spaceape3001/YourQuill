@@ -1,5 +1,6 @@
 
-    -- This stores the attributes in a file
+    -- This stores the attributes in a file.
+    -- We need to know what's changed, therefore retain this info
 CREATE TABLE Attributes (
         -- ID number
     id          INTEGER PRIMARY KEY,
@@ -12,7 +13,11 @@ CREATE TABLE Attributes (
         -- key
     k           VARCHAR(255) NOT NULL COLLATE NOCASE,
         -- user defined ID (file)
-    uid         VARCHAR(255)          COLLATE NOCASE,
-    value       VARCHAR(255)          COLLATE NOCASE
+    uid         VARCHAR(255) COLLATE NOCASE,
+    type        VARCHAR(255) COLLATE NOCASE,
+        -- value of the attribute (generic text)
+    value       VARCHAR(255) COLLATE NOCASE,
+    at          VARCHAR(255) COLLATE NOCASE,
+    until       VARCHAR(255) COLLATE NOCASE
 );
 
