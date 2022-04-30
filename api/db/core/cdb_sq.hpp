@@ -84,6 +84,9 @@ namespace yq {
                 // summarizes step & output check
             bool        exec();
             
+                //! Executes two argument statements
+            bool        exec(uint64_t arg1, uint64_t arg2);
+            
             std::filesystem::path   path();
             std::filesystem::path   path(uint64_t);
             

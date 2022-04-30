@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/collection/Vector.hpp>
-
+#include <vector>
+\
 namespace yq {
 
     template <typename T>
@@ -63,7 +63,7 @@ namespace yq {
 
     private:
         ssize_t         m_zero;
-        Vector<T>       m_data;
+        std::vector<T>  m_data;
     };
 
 

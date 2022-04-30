@@ -65,6 +65,13 @@ namespace yq {
             return exec();
         }
 
+        bool        SQ::exec(uint64_t i, uint64_t j)
+        {
+            bind(1, (int64_t) i);
+            bind(2, (int64_t) j);
+            return exec();
+        }
+
         std::filesystem::path   SQ::path()
         {
             auto _af = af();

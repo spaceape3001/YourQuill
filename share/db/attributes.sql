@@ -14,10 +14,7 @@ CREATE TABLE Attributes (
     k           VARCHAR(255) NOT NULL COLLATE NOCASE,
         -- user defined ID (file)
     uid         VARCHAR(255) COLLATE NOCASE,
-    type        VARCHAR(255) COLLATE NOCASE,
         -- value of the attribute (generic text)
-    value       VARCHAR(255) COLLATE NOCASE,
-    at          VARCHAR(255) COLLATE NOCASE,
-    until       VARCHAR(255) COLLATE NOCASE
+    value       VARCHAR(255) COLLATE NOCASE
 );
 

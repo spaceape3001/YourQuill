@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/collection/Array1.hpp>
-#include <yq/collection/Vector.hpp>
 #include <yq/type/IntRange.hpp>
+#include <vector>
 
 namespace yq {
 
@@ -27,8 +27,8 @@ namespace yq {
     */
     template <typename VA, typename VB, typename Equivalent, typename Added, typename Removed, typename Untouched> 
     struct DiffEngine {
-        const Vector<VA>&   A;
-        const Vector<VB>&   B;
+        const std::vector<VA>&   A;
+        const std::vector<VB>&   B;
         Array1<ssize_t>     Vf, Vb;
         Equivalent          equiv;
         Added               added;
@@ -41,7 +41,7 @@ namespace yq {
             bool        good;
         };
         
-        DiffEngine(const Vector<VA>& a, const Vector<VB>& b, Equivalent eq, Added ad, Removed rm, Untouched ut) : 
+        DiffEngine(const std::vector<VA>& a, const std::vector<VB>& b, Equivalent eq, Added ad, Removed rm, Untouched ut) : 
             A(a), B(b), equiv(eq), added(ad), removed(rm), untouched(ut)
         {
             ssize_t mx  = a.size() + b.size() + 1;
@@ -157,7 +157,7 @@ namespace yq {
     };
 
     template <typename VA, typename VB, typename Equivalent, typename Added, typename Removed, typename Untouched> 
-    bool    diff_it(const Vector<VA>& va, const Vector<VB>& vb, Equivalent equiv, Added add, Removed rem, Untouched ut)
+    bool    diff_it(const std::vector<VA>& va, const std::vector<VB>& vb, Equivalent equiv, Added add, Removed rem, Untouched ut)
     {
         return DiffEngine<VA,VB,Equivalent,Added,Removed,Untouched>(va, vb, equiv, add, rem, ut).compare();
     }
@@ -174,20 +174,20 @@ namespace yq {
     };
 
     template <typename T, typename CEQ = std::equal_to<T>>
-    Vector<DEResult>    diff_it(const Vector<T>& Old, const Vector<T>& New, CEQ cmp = CEQ())
+    std::vector<DEResult>    diff_it(const std::vector<T>& Old, const std::vector<T>& New, CEQ cmp = CEQ())
     {
-        Vector<DEResult>   ret;
+        std::vector<DEResult>   ret;
         diff_it( Old, New, cmp, [&](SSizeRange Y){
-            ret << DEResult{ {}, Y, DEResult::Add };
+            ret.push_back(DEResult{ {}, Y, DEResult::Add });
         }, [&](SSizeRange X){
-            ret << DEResult{ X, {}, DEResult::Remove };
+            ret.push_back(DEResult{ X, {}, DEResult::Remove });
         }, [&](SSizeRange X, SSizeRange Y){
-            ret << DEResult{ X, Y, DEResult::Same };
+            ret.push_back(DEResult{ X, Y, DEResult::Same });
         });
         return ret;
     }
 
-    inline bool     any_changes(const Vector<DEResult>&results)
+    inline bool     any_changes(const std::vector<DEResult>&results)
     {
         for(auto& de : results)
             if(de.mode != DEResult::Same)

@@ -21,6 +21,9 @@
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 
+#include <db/docsys/attribute-arg.ipp>
+#include <db/docsys/attribute-cdb.ipp>
+#include <db/docsys/attribute-diff.ipp>
 
 #include <db/docsys/leaf-arg.ipp>
 #include <db/docsys/leaf-cdb.ipp>

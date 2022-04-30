@@ -6,6 +6,11 @@
 
 #pragma once
 
+#include <db/docsys/attribute.hpp>
+#include <db/docsys/attribute-arg.hpp>
+#include <db/docsys/attribute-cdb.hpp>
+#include <db/docsys/attribute-diff.hpp>
+
 #include <db/docsys/leaf.hpp>
 #include <db/docsys/leaf-arg.hpp>
 #include <db/docsys/leaf-cdb.hpp>
