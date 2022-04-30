@@ -66,6 +66,7 @@ namespace yq {
     static constexpr const char*    szDeny              = "deny";
     static constexpr const char*    szDescription       = "description";
     static constexpr const char*    szDirectory         = "directory";
+    static constexpr const char*    szDisclaim          = "disclaim";
     static constexpr const char*    szEnable            = "enable";
     static constexpr const char*    szEnumeration       = "enumeration";
     static constexpr const char*    szEnumeration_      = "_enumeration_";
@@ -110,6 +111,7 @@ namespace yq {
     static constexpr const char*    szNode              = "node";
     static constexpr const char*    szNotes             = "notes";
     static constexpr const char*    szNotes_            = "_notes_";
+    static constexpr const char*    szNotice            = "notice";
     static constexpr const char*    szOccurs            = "occurs";
     static constexpr const char*    szOrder             = "order";
     static constexpr const char*    szOur               = "our";

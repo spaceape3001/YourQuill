@@ -32,7 +32,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Object Info (" << obj -> name() << "): All Bases";
-        dev_table(h, obj->bases(true));
+        dev_table(h, obj->bases(true).all);
     }
 
     void page_dev_meta_object_all_derived(WebHtml&h)
@@ -42,7 +42,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Object Info (" << obj -> name() << "): All Derived";
-        dev_table(h, obj->deriveds(true));
+        dev_table(h, obj->deriveds(true).all);
     }
 
     void page_dev_meta_object_all_properties(WebHtml&h)
@@ -52,7 +52,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Object Info (" << obj -> name() << "): All Properties";
-        dev_table(h, obj->properties(true));
+        dev_table(h, obj->properties(true).all);
     }
 
     void page_dev_meta_object_derived(WebHtml&h)
@@ -62,7 +62,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Object Info (" << obj -> name() << "): Derived";
-        dev_table(h, obj->deriveds(false));
+        dev_table(h, obj->deriveds(false).all);
     }
 
     void page_dev_meta_object_properties(WebHtml&h)
@@ -72,7 +72,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Object Info (" << obj -> name() << "): Properties";
-        dev_table(h, obj->properties(false));
+        dev_table(h, obj->properties(false).all);
     }
 
     YQ_INVOKE( 

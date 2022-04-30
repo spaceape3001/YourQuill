@@ -36,19 +36,15 @@ namespace yq {
         }
     }
 
-    bool    QuillFile::read(ByteArray&&buffer, std::string_view fname) 
+    bool    QuillFile::read(KVTree&&attrs, std::string_view) 
     {
-        KVTree        attrs;
-        if(!attrs.parse(buffer, nullptr, true, fname))
-            return false;
-        
         abbr            = attrs.value(kv::key( "abbr", "abbreviation" ));
         author          = attrs.value(kv::key("author"));
         aux_ports       = attrs.values_set_u16("aux");
         cache           = attrs.value(kv::key("cache"));
         
         const KeyValue   *a  = nullptr;;
-        if((a = attrs.first(kv::key("disclaimer", "disclaim")))){
+        if((a = attrs.first(kv::key("disclaimer", "disclaim", "deny")))){
             copyright.stance  = AssertDeny::Deny;
         } else if((a = attrs.first(kv::key("notice")))){
             copyright.stance  = AssertDeny::Neither;
@@ -84,15 +80,15 @@ namespace yq {
         {
             a.data = r.path;
             if(!r.key.empty())
-                a << KeyValue("key", r.key);
+                a << KeyValue(szKey, r.key);
             if(!r.name.empty())
-                a << KeyValue("name", r.name);
+                a << KeyValue(szName, r.name);
             if(!r.color.empty())
-                a << KeyValue("color", r.color);
+                a << KeyValue(szColor, r.color);
             if(!r.icon.empty())
-                a << KeyValue("icon", r.icon);
+                a << KeyValue(szIcon, r.icon);
             if(r.vcs != Vcs())
-                a << KeyValue("vcs", r.vcs.key());
+                a << KeyValue(szVcs, r.vcs.key());
             for(DataRole dr : DataRole::all_values()){
                 if(r.policy[dr] != Access())
                     a << KeyValue(dr.key(), r.policy[dr].key());
@@ -100,25 +96,23 @@ namespace yq {
         }
     }
 
-    bool    QuillFile::write(yq::Stream&chars) const
+    bool    QuillFile::write(KVTree& attrs) const
     {
-        KVTree        attrs;
-
         if(!name.empty())
-            attrs << KeyValue("name", name);
+            attrs << KeyValue(szName, name);
         if(!abbr.empty())
             attrs << KeyValue("abbr", abbr);
         if(!author.empty())
-            attrs << KeyValue("author", author);
+            attrs << KeyValue(szAuthor, author);
         if(!aux_ports.empty())
             attrs << KeyValue("aux", join(aux_ports, ", "));
         if(!cache.empty())
-            attrs << KeyValue("cache", cache);
+            attrs << KeyValue(szCache, cache);
         if(!copyright.empty()){
             KeyValue  a;
             switch(copyright.stance){
             case AssertDeny::Neither:
-                a.key   = "notice";
+                a.key   = szNotice;
                 break;
             case AssertDeny::Deny:
                 a.key   = "disclaim";
@@ -164,8 +158,6 @@ namespace yq {
             write_onto(a, r);
             attrs << a;
         }
-        
-        attrs.write(chars);
         return true;
     }
 

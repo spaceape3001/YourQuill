@@ -6,20 +6,20 @@
 
 #pragma once
 
+#include <db/core/std_file.hpp>
 #include <db/wksp/quill-data.hpp>
-#include <yq/file/AbstractFile.hpp>
 
 namespace yq {
 
-    class QuillFile : public AbstractFile, public QuillData {
+    class QuillFile : public StdFile, public QuillData {
     public:
 
         //struct RootInfo;
 
     protected:
         virtual void    reset() override;
-        virtual bool    read(ByteArray&&buffer, std::string_view fname) override;
-        virtual bool    write(yq::Stream&) const override;
+        virtual bool        read(KVTree&&, std::string_view fname) override;
+        virtual bool        write(KVTree&) const override;
     };
 
 }

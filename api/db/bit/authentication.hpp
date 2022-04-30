@@ -5,18 +5,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-//#include "enum_authentication_type.hpp"
-#include <yq/file/XmlFwd.hpp>
-#include <yq/type/XmlObject.hpp>
-#include <yq/type/Ref.hpp>
+#include <db/core/std_object.hpp>
+
 
 namespace yq {
-    class Authentication : public XmlObject, public RefCount {
-        YQ_OBJECT_DECLARE(Authentication, XmlObject);
+    class Authentication : public StdObject {
+        YQ_STD_OBJECT_ABSTRACT(Authentication, StdObject);
     public:
         virtual bool  accept(std::string_view) const = 0;
     };
 
-    Ref<Authentication>     x_authentication(const XmlNode* xn);
-    void    write_xn(XmlNode* xn, const Ref<Authentication>&);
+    //Ref<Authentication>     x_authentication(const XmlNode* xn);
+    //void    write_xn(XmlNode* xn, const Ref<Authentication>&);
 }

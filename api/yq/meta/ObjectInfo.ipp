@@ -46,43 +46,43 @@ namespace yq {
         r.objects << this;
     }
 
-    const Vector<const ObjectInfo*>&    ObjectInfo::bases(bool all) const
+    const Meta::LUC<ObjectInfo>&    ObjectInfo::bases(bool all) const
     {
-        return def(all).bases.all;
+        return def(all).bases;
     }
 
-    const Vector<const ObjectInfo*>&    ObjectInfo::deriveds(bool all) const
+    const Meta::LUC<ObjectInfo>&    ObjectInfo::deriveds(bool all) const
     {
-        return def(all).derived.all;
+        return def(all).derived;
     }
     
 
-    bool    ObjectInfo::is_base(const ObjectInfo*oi) const
+    bool    ObjectInfo::is_base(const ObjectInfo&oi) const
     {
         for(const ObjectInfo* b = m_base; b; b = b -> m_base){
-            if(oi == b)
+            if(&oi == b)
                 return true;
         }
         return false;
     }
     
-    bool    ObjectInfo::is_derived(const ObjectInfo*oi) const
+    bool    ObjectInfo::is_derived(const ObjectInfo& oi) const
     {
-        for(const ObjectInfo* b = oi->m_base; b; b = b -> m_base){
+        for(const ObjectInfo* b = oi.m_base; b; b = b -> m_base){
             if(b == this)
                 return true;
         }
         return false;
     }
     
-    const Vector<const MethodInfo*>&    ObjectInfo::methods(bool all) const
+    const Meta::LUC<MethodInfo>&    ObjectInfo::methods(bool all) const
     {
-        return def(all).methods.all;
+        return def(all).methods;
     }
     
-    const Vector<const PropertyInfo*>&  ObjectInfo::properties(bool all) const
+    const Meta::LUC<PropertyInfo>&  ObjectInfo::properties(bool all) const
     {
-        return def(all).properties.all;
+        return def(all).properties;
     }
     
     size_t  ObjectInfo::size() const

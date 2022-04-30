@@ -7,10 +7,10 @@
 #pragma once
 
 #include <db/wksp/user-data.hpp>
-#include <yq/file/XmlFile.hpp>
+#include <db/core/std_file.hpp>
 
 namespace yq {
-    class User::File : public XmlFile, public User::Data {
+    class User::File : public StdFile, public User::Data {
     public:
     
         //  Set this before load
@@ -18,7 +18,11 @@ namespace yq {
     
     protected:
         virtual void    reset() override;
-        virtual bool    read(const XmlDocument&, std::string_view fname) override;
-        virtual bool    write(XmlDocument&) const override;
+
+        //! Override to read with body
+        virtual bool        read(KVTree&&, std::string_view body, std::string_view fname) override;
+        
+        //! Override to write with body
+        virtual bool        write(KVTree&, Stream&) const override;
     };
 }

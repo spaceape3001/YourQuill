@@ -16,7 +16,7 @@
 #include <db/core/id_lock.hpp>
 #include <db/core/strings.hpp>
 
-#include <yq/collection/vector_utils.hpp>
+#include <yq/collection/c_utils.hpp>
 #include <yq/file/XmlUtils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>

@@ -45,6 +45,11 @@ namespace yq {
             return true;
         }
     
+        virtual bool            set(void*obj, std::string_view value) const override
+        {
+            assert(obj);
+            return TypeInfo::parse(((C*) obj)->*m_data, value);
+        }
         
     private:
         P      m_data;
@@ -68,6 +73,16 @@ namespace yq {
             return true;
         }
         
+        virtual bool            set(void*obj, std::string_view value) const override
+        {
+            assert(obj);
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            (((C*) obj)->*m_function)(tmp);
+            return true;
+        }
+
     private:
         FN      m_function;
     };
@@ -89,6 +104,15 @@ namespace yq {
             return (((C*) obj)->*m_function)(*(const T*) value);
         }
         
+        virtual bool            set(void*obj, std::string_view value) const override
+        {
+            assert(obj);
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            return (((C*) obj)->*m_function)(tmp);
+        }
+
     private:
         FN      m_function;
     };
@@ -112,6 +136,16 @@ namespace yq {
             return true;
         }
         
+        virtual bool            set(void*obj, std::string_view value) const override
+        {
+            assert(obj);
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            (((C*) obj)->*m_function)(tmp);
+            return true;
+        }
+
     private:
         FN      m_function;
     };
@@ -133,6 +167,15 @@ namespace yq {
             return (((C*) obj)->*m_function)(*(const T*) value);
         }
         
+        virtual bool            set(void*obj, std::string_view value) const override
+        {
+            assert(obj);
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            return (((C*) obj)->*m_function)(tmp);
+        }
+
     private:
         FN      m_function;
     };

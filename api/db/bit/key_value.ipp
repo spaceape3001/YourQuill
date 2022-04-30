@@ -17,7 +17,7 @@ namespace yq {
 
 #if 0
     namespace {
-        string_view_set_t   make_set(const Vector<const KeyValue*>&subs, const std::string_view& sep)
+        string_view_set_t   make_set(const std::vector<const KeyValue*>&subs, const std::string_view& sep)
         {
             string_view_set_t       ret;
             for(const KeyValue* a : subs){
@@ -39,7 +39,7 @@ namespace yq {
 
         #if 0
         namespace {
-            Vector<AttrData>::iterator      find(Vector<AttrData>& dst, const AttrData& ref)
+            std::vector<AttrData>::iterator      find(std::vector<AttrData>& dst, const AttrData& ref)
             {
                 for(auto i = dst.begin(); i != dst.end(); ++i){
                     if(!is_similar(i->key, ref.key))
@@ -52,7 +52,7 @@ namespace yq {
                 return dst.end();
             }
 
-            void    fuse(Vector<AttrData>& dst, const Vector<AttrData>& src, const Root* rt)
+            void    fuse(std::vector<AttrData>& dst, const std::vector<AttrData>& src, const Root* rt)
             {
                 for(const AttrData& a : src){
                     switch(a.action){
@@ -216,10 +216,10 @@ namespace yq {
         
     }
 
-    bool    KVTree::parse(const ByteArray& buffer, std::string* body, bool recursive, const std::string_view& fname)
+    KVTree::Parsed   KVTree::parse(std::string_view buffer, std::string_view fname, unsigned int opts)
     {
         if(buffer.empty())
-            return true;
+            return { std::string_view(), true };
             
         enum class Mode {
             SPACE,          //!< Space at start of line
@@ -233,10 +233,12 @@ namespace yq {
             BODY            //!< Body of the document
         };
 
-        Mode            mode    = Mode::SPACE;
-        if(body)
-            body->reserve(buffer.size());
-        KeyValue           val;
+        Mode            mode        = Mode::SPACE;
+        bool            doBody      = static_cast<bool>(opts & BODY);
+        
+        const char*     bstart      = nullptr;
+
+        KeyValue        val;
         unsigned int    line    = 1;
         unsigned int    lident  = 0;
         Vector<KeyValue>   datas;
@@ -253,13 +255,13 @@ namespace yq {
             mode    = Mode::SPACE;
         };
         
-        for(char ch : buffer){
+        for(const char& ch : buffer){
             if(!ch)
                 continue;
             switch(mode){
             case Mode::BODY:
-                if(ch)
-                    *body += ch;
+                //if(ch)
+                    //*body += ch;
                 break;
             case Mode::SPACE:
                 switch(ch){
@@ -268,7 +270,8 @@ namespace yq {
                     mode    = Mode::VALUE;
                     break;
                 case '\n':
-                    if(body){
+                    if(doBody){
+                        bstart  = &ch;
                         mode    = Mode::BODY;
                     } else {
                         //  No body means a new attribute, clone the last indent
@@ -430,12 +433,20 @@ namespace yq {
                 }
                 break;
             }
+            
+            if(bstart)
+                break;
         }
         
+
+        Parsed  ret{ std::string_view(), true };
         if(datas.empty())
-            return true;
+            return ret;
+
+        if(bstart)
+            ret.body    = std::string_view(bstart, buffer.end());
             
-        if(recursive){
+        if(static_cast<bool>(opts & RECURSIVE)){
             unsigned int        z   = datas[0].indent;
             for(size_t i=0; i<datas.size(); ++i){
                 if(datas[i].indent <= z){
@@ -450,7 +461,7 @@ namespace yq {
             subs       = std::move(datas);
         }
         
-        return true;
+        return ret;
     }
 
     namespace {
@@ -473,7 +484,7 @@ namespace yq {
             return a;
         }
 
-        void       write_subs(yq::stream::LineCol& out, const Vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
+        void       write_subs(yq::stream::LineCol& out, const std::vector<KeyValue>&datas, unsigned int mxval, unsigned int depth=0) 
         {
             for(const KeyValue& v : datas){
                 if(v.empty()){

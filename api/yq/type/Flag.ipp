@@ -32,4 +32,21 @@ namespace yq {
         }
         return ret;
     }
+
+    template <>
+    uint64_t        flag_decode<uint64_t>(const EnumDef* def, std::string_view keys, std::string_view sep)
+    {
+        if(keys.empty() || sep.empty() || !def)
+            return 0ULL;
+
+        uint64_t    ret   = 0ULL;
+        vsplit(keys, sep, [&](std::string_view k){
+            k   = trimmed(k);
+            auto r = def->value_of(k);
+            if(!r.good)
+                return ;
+            ret |= (1ULL << r.value);
+        });
+        return ret;
+    }
 }

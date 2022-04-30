@@ -64,6 +64,13 @@ namespace yq {
         return static_cast<bool>(flags() & STATIC);
     }
     
+    bool        PropertyInfo::print(const void*obj, Stream&str) const
+    {
+        if(m_getter)
+            return m_getter -> print(str, obj);
+        return false;
+    }
+
     bool        PropertyInfo::set(void* obj, const Any&var) const
     {
         if(!m_setter)
@@ -75,5 +82,20 @@ namespace yq {
             return m_setter -> set(obj, v2.raw_ptr());
         return false;
     }
+
+    bool    PropertyInfo::set(void* obj, std::string_view var) const
+    {
+        if(m_setter)
+            return m_setter -> set(obj, var);
+        return false;
+    }
+
+    bool        PropertyInfo::write(const void*obj, Stream&str) const
+    {
+        if(m_getter)
+            return m_getter -> write(str, obj);
+        return false;
+    }
+        
 
 }

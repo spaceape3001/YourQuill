@@ -39,9 +39,6 @@ set(yq_sources
     ./app/ThreadId.hpp
     ./app/ThreadId.ipp
     
-    ./bit/KeyValue.cpp
-    ./bit/KeyValue.hpp
-
     ./c++/c++_unity.cpp
     ./c++/Concat.hpp
     ./c++/DbgRel.hpp
@@ -82,7 +79,6 @@ set(yq_sources
     ./file/file_watch.cpp
     ./file/AbstractFile.hpp
     ./file/DirWatcher.hpp
-    ./file/StdFile.hpp
     ./file/XmlFile.hpp
     ./file/XmlFwd.hpp
     ./file/XmlUtils.hpp

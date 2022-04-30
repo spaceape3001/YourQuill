@@ -16,7 +16,7 @@ namespace yq {
     public:
 
         virtual void    reset() override;
-        virtual bool    read(KVTree&&, std::string&&) override;
+        virtual bool    read(KVTree&&, std::string_view) override;
         virtual bool    write(Stream&) const override;
         virtual bool    recursive_attributes() const { return true; }
         virtual bool    has_body() const { return true; }

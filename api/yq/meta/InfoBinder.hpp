@@ -61,14 +61,14 @@ namespace yq {
     template <typename T>
     const auto&    meta()
     {
-        static_assert(is_defined_v<T>, "Must be meta-declared!");
+        static_assert(InfoBinder<T>::Defined, "Must be meta-declared!");
         return InfoBinder<T>::bind();
     }
 
     template <typename T>
     auto           writer()
     {
-        static_assert(is_defined_v<T>, "Must be meta-declared!");
+        static_assert(InfoBinder<T>::Defined, "Must be meta-declared!");
         return typename info_t<T>::Writer<T>( InfoBinder<T>::edit() );
     }
 }

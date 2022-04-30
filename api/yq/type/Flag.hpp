@@ -11,6 +11,8 @@
 namespace yq {
 
     std::string     flag_string(const EnumDef* def, uint64_t values, std::string_view sep=",");
+    template <typename T>
+    T               flag_decode(const EnumDef* def, std::string_view keys, std::string_view sep=",");
 
 
     /*! \brief A flag object for enums (up to 64-values)
@@ -49,6 +51,11 @@ namespace yq {
         Flag(enum_t e) : m_value(mask(e)) {}
 
         Flag(T v) : m_value(v) {}
+        
+        Flag(std::string_view k, std::string_view sep=",") : 
+            m_value(flag_decode<T>(E::staticEnumInfo(), k, sep))
+        {
+        }
         
         T       value() const { return m_value; }
         

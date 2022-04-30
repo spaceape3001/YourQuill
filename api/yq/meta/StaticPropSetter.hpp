@@ -46,6 +46,10 @@ namespace yq {
             return true;
         }
         
+        virtual bool            set(void*, std::string_view value) const override
+        {
+            return TypeInfo::parse(*m_data, value);
+        }
 
     private:
         P      m_data;
@@ -67,6 +71,14 @@ namespace yq {
             return true;
         }
         
+        virtual bool            set(void*, std::string_view value) const override
+        {
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            (*m_function)(tmp);
+            return true;
+        }
 
     private:
         FN      m_function;
@@ -87,6 +99,13 @@ namespace yq {
             return (*m_function)(*(const T*) value);
         }
         
+        virtual bool            set(void*, std::string_view value) const override
+        {
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            return (*m_function)(tmp);
+        }
 
     private:
         FN      m_function;
@@ -108,6 +127,14 @@ namespace yq {
             return true;
         }
         
+        virtual bool            set(void*, std::string_view value) const override
+        {
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            (*m_function)(tmp);
+            return true;
+        }
 
     private:
         FN      m_function;
@@ -129,6 +156,13 @@ namespace yq {
             return (*m_function)(*(const T*) value);
         }
         
+        virtual bool            set(void*, std::string_view value) const override
+        {
+            T   tmp;
+            if(!TypeInfo::parse(tmp, value))
+                return false;
+            return (*m_function)(tmp);
+        }
 
     private:
         FN      m_function;

@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq/bit/KeyValue.hpp>
+#include <db/bit/key_value.hpp>
 #include <yq/file/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/text/text_utils.hpp>
@@ -44,10 +44,15 @@ int main(int argc, char* argv[])
     
     log_to_std_error();
     KVTree          tree;
-    std::string     body;
-    ByteArray       bytes   = file_bytes(zfile);
-    if(!tree.parse(bytes, (do_body?&body:nullptr), true, zfile))
+    std::string    bytes   = file_string(zfile);
+    unsigned int opts   = KVTree::RECURSIVE;
+    if(do_body)
+        opts |= KVTree::BODY;
+    auto ret =tree.parse(bytes, zfile, opts);
+    if(!ret.good)
         return -1;
     print(tree);
+    if(!ret.body.empty())
+        std::cout << '\n' << ret.body << '\n';
     return 0;
 }

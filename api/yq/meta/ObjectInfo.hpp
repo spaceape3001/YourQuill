@@ -32,15 +32,15 @@ namespace yq {
         static const ObjectInfo*        find(std::string_view);
         static const ObjectInfo*        find(id_t);
         
-        bool    is_base(const ObjectInfo*) const;
-        bool    is_derived(const ObjectInfo*) const;
+        bool    is_base(const ObjectInfo&) const;
+        bool    is_derived(const ObjectInfo&) const;
         
         virtual size_t          size() const;
         
-        const Vector<const ObjectInfo*>&    deriveds(bool all=false) const;
-        const Vector<const ObjectInfo*>&    bases(bool all=false) const;
-        const Vector<const PropertyInfo*>&  properties(bool all=false) const;
-        const Vector<const MethodInfo*>&    methods(bool all=false) const;
+        const LUC<ObjectInfo>&    deriveds(bool all=false) const;
+        const LUC<ObjectInfo>&    bases(bool all=false) const;
+        const LUC<PropertyInfo>&  properties(bool all=false) const;
+        const LUC<MethodInfo>&    methods(bool all=false) const;
         
     
     protected:

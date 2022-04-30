@@ -2,7 +2,7 @@ add_executable(ask ask.cpp)
 target_link_libraries(ask ${CURL_LIBRARIES})
 
 add_executable(kvtree kvtree.cpp)
-target_link_libraries(kvtree yq)
+target_link_libraries(kvtree yq yqdb)
 
 add_executable(metavalues metavalues.cpp)
 target_link_libraries(metavalues yq)

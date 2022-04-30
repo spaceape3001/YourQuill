@@ -13,6 +13,7 @@
 #include <yq/type/Result.hpp>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include <yq/log/Logging.hpp>
 
@@ -36,11 +37,11 @@ namespace yq {
 
         //! \brief Sub-KeyValues
         //! These are the sub-key-values (honored for recursive key-values)
-        Vector<KeyValue>        subs;
+        Vector<KeyValue>            subs;
         
         //! Finds all matches, returns a vector
         template <typename Match>
-        Vector<const KeyValue*>     all(Match) const;
+        std::vector<const KeyValue*> all(Match) const;
 
         //! Finds all matches in visitor pattern
         template <typename Match, typename Pred>
@@ -148,8 +149,13 @@ namespace yq {
         KVTree&                     operator<<(KeyValue&&);
         KVTree&                     operator<<(const KeyValue&);
         
-        bool                        parse(const ByteArray& buffer, std::string* body, bool recursive, const std::string_view& fname);
-        //void                        write(Vector<char>&) const;
+        struct Parsed {
+            std::string_view    body;
+            bool                good = false;
+        };
+        
+        Parsed                      parse(std::string_view buffer, std::string_view fname, unsigned int opts=RECURSIVE);
+        //void                        write(std::vector<char>&) const;
         void                        write(yq::Stream&) const;
     };
 
@@ -305,7 +311,7 @@ namespace yq {
     }
         
     template <typename Match>
-    Vector<const KeyValue*>  KVTree::all(Match m) const
+    std::vector<const KeyValue*>  KVTree::all(Match m) const
     {
         if constexpr ( std::is_same_v<Match, const char*>) {
             return all( kv::key(m) );
@@ -318,10 +324,11 @@ namespace yq {
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
             return all( kv::key(m) );
         } else {
-            Vector<const KeyValue*> ret;
-            for(const KeyValue& a : subs)
+            std::vector<const KeyValue*> ret;
+            for(const KeyValue& a : subs){
                 if(m(a))
-                    ret << &a;
+                    ret.push_back(&a);
+            }
             return ret;
         }
     }
@@ -341,9 +348,10 @@ namespace yq {
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
             all( kv::key(m), pred );
         } else {
-            for(const KeyValue& a : subs)
+            for(const KeyValue& a : subs){
                 if(m(a))
                     pred(a);
+            }
         }
     }
     
@@ -406,9 +414,10 @@ namespace yq {
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
             return first( kv::key(m) );
         } else {
-            for(KeyValue& a : subs)
+            for(KeyValue& a : subs){
                 if(m(a))
                     return &a;
+            }
             return nullptr;
         }
     }
@@ -427,9 +436,10 @@ namespace yq {
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
             return first( kv::key(m) );
         } else {
-            for(const KeyValue& a : subs)
+            for(const KeyValue& a : subs){
                 if(m(a))
                     return &a;
+            }
             return nullptr;
         }
     }
@@ -466,9 +476,10 @@ namespace yq {
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
             return last( kv::key(m) );
         } else {
-            for(const KeyValue& a : reverse(subs))
+            for(const KeyValue& a : reverse(subs)){
                 if(m(a))
                     return &a;
+            }
             return nullptr;
         }
     }

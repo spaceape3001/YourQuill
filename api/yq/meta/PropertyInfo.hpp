@@ -11,6 +11,7 @@ namespace yq {
 
     class PropGetter;
     class PropSetter;
+    class Stream;
 
     /*! \brief Attribute of a object/value
     
@@ -33,8 +34,16 @@ namespace yq {
     
         const TypeInfo&     type() const { return m_type; }
         
-        Any             get(const void*) const;
+        Any                 get(const void*) const;
+        
+        // write for saving
+        bool                write(const void*, Stream&) const;
+        
+        // write for printing
+        bool                print(const void*, Stream&) const;
+        
         bool                set(void*, const Any&) const;
+        bool                set(void*, std::string_view) const;
         
         const PropGetter*   getter() const { return m_getter; }
         const PropSetter*   setter() const { return m_setter; }

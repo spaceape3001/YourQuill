@@ -25,7 +25,7 @@ public:                                                 \
     using MyBase   = base;                              \
     using MyObject = cls;                               \
     virtual const MyInfo& metaInfo() const override;    \
-    static const MyInfo&  staticMetaInfo(); 
+    static const MyInfo&  staticMetaInfo();
 
 
     //! Root Meta Capable Object 

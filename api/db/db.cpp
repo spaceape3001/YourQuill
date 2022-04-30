@@ -86,8 +86,8 @@ namespace yq {
 #include <db/bit/policy.ipp>
 #include <db/bit/rule.ipp>
 #include <db/core/cdb_sq.ipp>
-
 #include <db/core/std_file.ipp>
+#include <db/core/std_object.ipp>
 
 #include <db/enum/size_desc_arg.ipp>
 #include <yq/meta/Init.hpp>

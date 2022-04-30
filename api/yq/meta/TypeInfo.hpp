@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include "InfoBinder.hpp"
 #include "CompoundInfo.hpp"
 #include <yq/file/XmlFwd.hpp>
 #include <unordered_map>
@@ -46,6 +47,13 @@ namespace yq {
 
         size_t                              property_count() const;
         const Vector<const PropertyInfo*>&  properties() const;
+
+        template <typename T>
+        static bool parse(T&, std::string_view);
+        template <typename T>
+        static bool write(const T&, Stream&);
+        template <typename T>
+        static bool print(const T&, Stream&);
         
     protected:
         TypeInfo(std::string_view zName, const std::source_location& sl, id_t i=AUTO_ID);
@@ -139,4 +147,38 @@ namespace yq {
     {
         return (m && (m->flags() & TYPE)) ? static_cast<TypeInfo*>(m) : nullptr;
     }
+
+    template <typename T>
+    bool TypeInfo::parse(T&value, std::string_view sv)
+    {
+        static_assert( is_defined_v<T>, "T must be meta-type capable!");
+        const TypeInfo& ti  = meta<T>();
+        if(ti.m_parse)
+            return ti.m_parse(&value, sv);
+        return false;
+    }
+
+    template <typename T>
+    bool TypeInfo::print(const T&value, Stream&str)
+    {
+        static_assert( is_defined_v<T>, "T must be meta-type capable!");
+        const TypeInfo& ti  = meta<T>();
+        if(!ti.m_print)
+            return false;
+        ti.m_print(str, &value);
+        return true;
+    }
+
+    template <typename T>
+    bool TypeInfo::write(const T&value, Stream&str)
+    {
+        static_assert( is_defined_v<T>, "T must be meta-type capable!");
+        const TypeInfo& ti  = meta<T>();
+        if(!ti.m_write)
+            return false;
+        ti.m_write(str, &value);
+        return true;
+    }
+    
+    
 }

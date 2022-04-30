@@ -20,6 +20,9 @@ namespace yq {
     template <typename C, typename T>
     class DynamicPropGetter : public PropGetter {
     public:
+    
+        static_assert(InfoBinder<T>::Defined, "Type must be meta defined!");
+        static_assert(is_defined_v<T>, "Type must be meta defined!");
 
         virtual const Meta&     data() const override
         {
@@ -55,7 +58,21 @@ namespace yq {
         {
             assert(dst);
             assert(obj);
-            *(T*) dst   = (((C*) obj)->*m_data);
+            *(T*) dst   = (((const C*) obj)->*m_data);
+            return true;
+        }
+
+        virtual bool            print(Stream&str, const void*obj) const override
+        {
+            assert(obj);
+            TypeInfo::print(((const C*) obj)->*m_data, str);
+            return true;
+        }
+        
+        virtual bool            write(Stream&str, const void*obj) const override
+        {
+            assert(obj);
+            TypeInfo::write(((const C*) obj)->*m_data, str);
             return true;
         }
         
@@ -77,6 +94,20 @@ namespace yq {
             assert(dst);
             assert(obj);
             *(T*) dst   = (((const C*) obj)->*m_function)();
+            return true;
+        }
+
+        virtual bool            print(Stream&str, const void*obj) const override
+        {
+            assert(obj);
+            TypeInfo::print((((const C*) obj)->*m_function)(), str);
+            return true;
+        }
+        
+        virtual bool            write(Stream&str, const void*obj) const override
+        {
+            assert(obj);
+            TypeInfo::write((((const C*) obj)->*m_function)(), str);
             return true;
         }
         
@@ -102,6 +133,20 @@ namespace yq {
             return true;
         }
         
+        virtual bool            print(Stream&str, const void*obj) const override
+        {
+            assert(obj);
+            TypeInfo::print((((const C*) obj)->*m_function)(), str);
+            return true;
+        }
+        
+        virtual bool            write(Stream&str, const void*obj) const override
+        {
+            assert(obj);
+            TypeInfo::write((((const C*) obj)->*m_function)(), str);
+            return true;
+        }
+
     private:
         FN      m_function;
     };

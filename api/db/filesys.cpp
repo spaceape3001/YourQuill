@@ -13,7 +13,7 @@
 #include <db/wksp/workspace.hpp>
 
 #include <yq/collection/Set.hpp>
-#include <yq/collection/vector_utils.hpp>
+#include <yq/collection/c_utils.hpp>
 #include <yq/file/dir_utils.hpp>
 #include <yq/file/file_utils.hpp>
 #include <yq/stream/Ops.hpp>

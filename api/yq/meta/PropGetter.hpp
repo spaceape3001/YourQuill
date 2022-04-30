@@ -26,6 +26,20 @@ namespace yq {
         */
         virtual bool            get(void*dst, const void*obj) const = 0;
         
+        /*! \brief "Streams" the value for the meta (writing)
+        
+            \param[out] dst     Stream destination, assumed to be correct buffer.
+            \param[in] obj      Pointer to the object, if used.  (Ignored on static properties.)
+        */
+        virtual bool            write(Stream&, const void*) const = 0;
+
+        /*! \brief "Streams" the value for the meta (printing)
+        
+            \param[out] dst     Stream destination, assumed to be correct buffer.
+            \param[in] obj      Pointer to the object, if used.  (Ignored on static properties.)
+        */
+        virtual bool            print(Stream&, const void*) const = 0;
+
         /*! \brief Object/Type meta type expected for src
         
             \note This will be invalid() for static properties.
