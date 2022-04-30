@@ -27,10 +27,11 @@ namespace {
 
     void    update_field(Document doc)
     {
-        Field               x;
-        Field::SharedData   data;
-        std::tie(x,data) = update_field_info(doc);
-        if(!x)
+        Field               x = cdb::db_field(doc);
+        
+        
+        Field::SharedData   data = cdb::update_info(x);
+        if(!data)
             return ;
 
         //  Now it's time for tags/etc

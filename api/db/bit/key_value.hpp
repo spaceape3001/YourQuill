@@ -48,6 +48,8 @@ namespace yq {
         void                        all(Match, Pred) const;
 
         size_t                      count_keys(std::string_view) const;
+        
+        size_t                      count_all() const;
 
         //! \brief Is empty?  
         //! This checks the strings/subkey-values for emptyness and returns appropriately

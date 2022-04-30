@@ -126,10 +126,19 @@ namespace yq {
             }
         }
 
+        Attribute::Report  additions(Document doc, const KVTree& kv, ssize_t depth)
+        {
+            Attribute::Report    ret;
+            ret.changed     = !kv.empty();
+            add_all(ret.items, kv, depth);
+            ret.document    = doc;
+            return ret;
+        }
+
         Attribute::Report changes(Document doc, const KVTree& kv, ssize_t depth)
         {
             Attribute::Report    ret;
-            ret.changed  = difference(ret.items, cdb::kvua(doc), kv, depth);
+            ret.changed     = difference(ret.items, cdb::kvua(doc), kv, depth);
             ret.document    = doc;
             return ret;
         }
@@ -149,6 +158,7 @@ namespace yq {
             ret.changed =  difference(ret.items, old, kv, depth);
             return ret;
         }
+
     }
     
     namespace cdb {
@@ -182,6 +192,22 @@ namespace yq {
                     u_delete(d.sub);
             }
         }        
+    }
+
+    size_t  Attribute::Diff::total_items() const
+    {
+        size_t  c   = sub.size();
+        for(const Diff &d : sub)
+            c += d.total_items();
+        return c;
+    }
+
+    size_t  Attribute::Report::total_items() const
+    {
+        size_t   c = items.size();
+        for(const Diff& d : items)
+            c += d.total_items();
+        return c;
     }
 
     void    Attribute::Report::exec_inserts()

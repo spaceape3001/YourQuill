@@ -75,6 +75,8 @@ namespace yq {
 
         std::string                 title(Leaf);
 
+        Leaf::SharedData            update_info(Leaf, unsigned int opts=0);
+
         //!  \brief   Returns a writable document
         //!
         //!     \note the path will be CREATED by this method.

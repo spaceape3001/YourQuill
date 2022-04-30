@@ -223,7 +223,6 @@ namespace yq {
                     return Leaf::SharedFile();
                 }
             }
-            
 
             auto    ch   = file_bytes(fp);
             lk.free();
@@ -258,7 +257,6 @@ namespace yq {
                     return Leaf::SharedData();
                 }
             }
-
 
             Leaf::SharedData     ret = std::make_shared<Leaf::Data>();
             for(auto& i : reads(l, opts)){
@@ -318,6 +316,31 @@ namespace yq {
         {
             static thread_local SQ s("SELECT title FROM Leafs WHERE id=?");
             return s.str(l.id);
+        }
+
+        Leaf::SharedData         update_info(Leaf x, unsigned int opts)
+        {
+            auto data  = merged(x, opts|IS_UPDATE);
+            if(!data)
+                return Leaf::SharedData();
+
+            std::string_view title   = data->title();
+            std::string_view abbr    = data->abbr();
+            std::string_view brief   = data->brief();
+            
+            static thread_local SQ u("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
+
+            if(title.empty()){
+                u.bind(1, key(x));  // fall back (for now) 
+                                    // TODO ... make this smarter (later)
+            } else 
+                u.bind(1, title);
+            u.bind(2, abbr);
+            u.bind(3, brief);
+            u.bind(4, x.id);
+            u.exec();
+            
+            return data;
         }
 
         Leaf::SharedFile         write(Leaf l, const Root* rt, unsigned int opts)

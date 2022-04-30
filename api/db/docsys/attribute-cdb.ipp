@@ -79,6 +79,12 @@ namespace yq {
             return s.as<Document>(a.id);
         }
         
+        void                erase_all_attributes(Document doc)
+        {
+            static thread_local SQ x("DELETE FROM Attributes WHERE doc=?");
+            x.exec(doc.id);
+        }
+
         bool                exists(Attribute a)
         {
             return exists_attribute(a.id);

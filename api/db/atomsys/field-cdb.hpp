@@ -106,6 +106,8 @@ namespace yq {
 
         bool                    tagged(Field, Tag);
 
+        Field::SharedData       update_info(Field, unsigned int opts=0);
+
 
         //!  \brief   Returns a writable document
         //!

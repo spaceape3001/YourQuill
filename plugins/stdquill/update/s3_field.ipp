@@ -10,41 +10,13 @@
 
 namespace {
 
-    std::pair<Field, Field::SharedData>   update_field_info(Document doc)
-    {
-        Field  x       = db_field(doc);
-        Field::SharedData data = merged(x, IS_UPDATE | DONT_LOCK);
-        if(!data){
-            yWarning() << "Unable to update field '" << key(x) << "' due to lack of data";
-            return {};
-        }
-        
-        Category cat = category(data->category);
-
-        static thread_local SQ u1("UPDATE Fields SET name=?,brief=?,multi=?,restrict=?,category=?,pkey=?,expected=?,maxcnt=?,plural=? WHERE id=?");
-        u1.bind(1, data->name);
-        u1.bind(2, data->brief);
-        u1.bind(3, data->multiplicity.value());
-        u1.bind(4, data->restriction.value());
-        u1.bind(5, cat.id);
-        u1.bind(6, data->pkey);
-        u1.bind(7, data->expected);
-        u1.bind(8, data->max_count);
-        u1.bind(9, data->plural);
-        u1.bind(10, x.id);
-        u1.exec();
-        
-        return { x, data };
-    }
-    
 
     void    s3_field(Document doc)
     {
         Image               img     = best_image(doc);
-        Field               x;
-        Field::SharedData   data;
-        std::tie(x,data) = update_field_info(doc);
-        if(!x)
+        Field               x   = db_field(doc);
+        Field::SharedData   data = cdb::update_info(x, DONT_LOCK);
+        if(!data)
             return ;
 
         static thread_local SQ u1("UPDATE Fields SET icon=? WHERE id=?");
@@ -54,8 +26,7 @@ namespace {
         static thread_local SQ i4("INSERT INTO FTags (field, tag) VALUES (?, ?)");
         static thread_local SQ i5("INSERT INTO FDefClass (field, class) VALUES (?, ?)");
         
-        u1.bind(1, img.id);
-        u1.bind(2, x.id);
+        u1.exec(img.id, x.id);
         u1.exec();
         
         for(const std::string& s : data -> aliases){

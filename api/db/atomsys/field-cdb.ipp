@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <db/orgsys/category-cdb.hpp>
+
 namespace yq {
 
     bool Field::less_key(Field a, Field b)
@@ -378,6 +380,32 @@ namespace yq {
             return s.size(f.id);
         }
 
+
+        Field::SharedData       update_info(Field x, unsigned int opts)
+        {
+            Field::SharedData data = merged(x, IS_UPDATE | opts);
+            if(!data){
+                yWarning() << "Unable to update field '" << key(x) << "' due to lack of data";
+                return {};
+            }
+            
+            Category cat = category(data->category);
+
+            static thread_local SQ u1("UPDATE Fields SET name=?,brief=?,multi=?,restrict=?,category=?,pkey=?,expected=?,maxcnt=?,plural=? WHERE id=?");
+            u1.bind(1, data->name);
+            u1.bind(2, data->brief);
+            u1.bind(3, data->multiplicity.value());
+            u1.bind(4, data->restriction.value());
+            u1.bind(5, cat.id);
+            u1.bind(6, data->pkey);
+            u1.bind(7, data->expected);
+            u1.bind(8, data->max_count);
+            u1.bind(9, data->plural);
+            u1.bind(10, x.id);
+            u1.exec();
+            
+            return data;
+        }
         
         Field::SharedFile        writable(Field f, const Root* rt, unsigned int opts)
         {

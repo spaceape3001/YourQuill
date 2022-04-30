@@ -96,6 +96,14 @@ namespace yq {
         return cnt;
     }
 
+    size_t              KVTree::count_all() const
+    {
+        size_t  cnt = subs.size();
+        for(auto& a : subs)
+            cnt += a.count_all();
+        return cnt;
+    }
+
     KeyValue*           KVTree::first(std::initializer_list<const char*>z)
     {
         return first(kv::key(z));

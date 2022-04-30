@@ -43,6 +43,8 @@ namespace yq {
         bool            unchanged() const { return (chg & XMASK) == 0; }
         bool            indexed() const { return (chg & INDEX) != 0; }
         bool            subchanged() const { return (chg & SUB) != 0; }
+        
+        size_t              total_items() const;
     };
 
     struct Attribute::Report {
@@ -54,6 +56,7 @@ namespace yq {
         void                exec_inserts();
         void                exec_reindex();
         void                exec_removals();
+        size_t              total_items() const;
     };
 
     namespace diff {
@@ -72,7 +75,13 @@ namespace yq {
             \param[in]  depth       Number of sub-levels to descend
             \return Vector, a union of old/new that reports how things have changed
         */
-        Attribute::Report    changes(const Vector<Attribute::KVUA>& old, const KVTree& newAttrs, ssize_t depth=-1);
+        Attribute::Report    changes(const std::vector<Attribute::KVUA>& old, const KVTree& newAttrs, ssize_t depth=-1);
+
+        /*! \brief Reports on the addition of new
+        
+            \note This is equivalent to changes on new documents
+        */
+        Attribute::Report    additions(Document doc, const KVTree& newAttrs, ssize_t depth=-1);
     }
 }
 

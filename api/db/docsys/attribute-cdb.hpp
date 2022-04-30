@@ -49,6 +49,9 @@ namespace yq {
         
         Document                document(Attribute);
 
+        //! Erases *ALL* attributes for specified document
+        void                    erase_all_attributes(Document);
+
         bool                    exists(Attribute);
         bool                    exists_attribute(uint64_t);
 
