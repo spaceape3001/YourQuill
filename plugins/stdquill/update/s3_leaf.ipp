@@ -14,12 +14,7 @@ namespace {
         Leaf::SharedData data   = update_info(l, DONT_LOCK);
         if(!data)
             return ;
-        
-        Image   img = best_image(doc);
-        
-        static thread_local SQ u("UPDATE Leafs SET icon=? WHERE id=?");
-        u.exec(img.id, l.id);
-
+        update_icon(l);
         auto rep        = diff::additions(doc, data->attrs);
         
         

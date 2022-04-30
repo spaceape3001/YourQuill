@@ -38,7 +38,7 @@ namespace yq {
         size_t                  all_categories_count();
         
         Category                category(uint64_t);
-        Category                category(Document);
+        Category                category(Document, bool calc=false);
         Category                category(std::string_view);
         
         Category::SharedFile    category_doc(Fragment, bool fAllowEmpty=false);
@@ -50,6 +50,9 @@ namespace yq {
         Category                db_category(std::string_view k, bool* wasCreated);
         
         Document                document(Category);
+        
+        //! Erases the category from the cache
+        void                    erase(Category);
         
         bool                    exists(Category);
         bool                    exists_category(uint64_t);
@@ -80,6 +83,9 @@ namespace yq {
 
         bool                    set_brief(Category, std::string_view, class Root* rt=nullptr);
         bool                    set_name(Category, std::string_view, class Root* rt=nullptr);
+
+        void                    update_icon(Category);
+        Category::SharedData    update_info(Category, unsigned int opts=0);
 
         //!  \brief   Returns a writable document
         //!

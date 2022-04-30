@@ -255,6 +255,36 @@ namespace yq {
             return ret;
         }
 
+        void                update_icon(User x)
+        {
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            static thread_local SQ u1("UPDATE Users SET icon=? WHERE id=?");
+            u1.exec(img.id, x.id);
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            u2.exec(doc.id, x.id);
+        }
+
+        User::SharedData         update_info(User x, unsigned int opts)
+        {
+            auto data  = merged(x, opts|IS_UPDATE);
+            if(!data)
+                return User::SharedData();
+
+            static thread_local SQ u("UPDATE Users SET name=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=? WHERE id=?");
+            auto u_af = u.af();
+            u.bind(1, data->name);
+            u.bind(2, data->brief);
+            u.bind(3, data->permissions.is_set( Permission::Owner ));
+            u.bind(4, data->permissions.is_set( Permission::Admin ));
+            u.bind(5, data->permissions.is_set( Permission::Writer ));
+            u.bind(6, data->permissions.is_set( Permission::Reader ));
+            u.bind(7, x.id);
+            u.exec();
+
+            return data;
+        }
+
         User                    user(std::string_view k)
         {
             static thread_local SQ    s("SELECT id FROM Users WHERE k=?");
@@ -264,6 +294,19 @@ namespace yq {
         User                    user(uint64_t i)
         {
             return exists_user(i) ? User{i} : User{};
+        }
+
+        User                    user(Document doc, bool calc)
+        {
+            if(!doc)
+                return User();
+            if(exists_user(doc.id))
+                return User{doc.id};
+            if(calc && (folder(doc) == users_folder())){
+                std::string k   = skeyb(doc);
+                return user(k);
+            }
+            return User();
         }
         
         User::SharedFile        user_doc(Fragment f, unsigned int opts)

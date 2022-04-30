@@ -63,9 +63,17 @@ namespace yq {
             return exists_category(i) ? Category{i} : Category{};
         }
 
-        Category                 category(Document doc)
+        Category                 category(Document doc, bool calc)
         {
-            return category(doc.id);
+            if(!doc)
+                return Category();
+            if(exists_category(doc.id))
+                return Category(doc.id);
+            if(calc && (folder(doc) == categories_folder())){
+                std::string     bk  = base_key(doc);
+                return category(bk);
+            }
+            return Category();
         }
         
         Category::SharedFile      category_doc(Fragment f, unsigned int opts)
@@ -152,10 +160,18 @@ namespace yq {
             return exists(t) ? Document{t.id} : Document{};
         }    
 
-        void                erase(Category t)
+        void                erase(Category x)
         {
-            static thread_local SQ d("DELETE FROM Categories WHERE id=?");
-            d.exec(t.id);
+            static thread_local SQ  stmts[] = {
+                SQ( "UPDATE Classes SET category=0 WHERE category=?" ),
+                SQ( "DELETE FROM Categories WHERE id=?" )
+            };
+            
+            if(!x)
+                return ;
+            
+            for(auto& sq : stmts)
+                sq.exec(x.id);
         }
 
         bool                exists(Category t)
@@ -336,6 +352,35 @@ namespace yq {
             return tf -> save();
         }
         
+        void                update_icon(Category x)
+        {
+            static thread_local SQ u1("UPDATE Categories SET icon=? WHERE id=?");
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            
+            if(img != icon(x)){
+                u1.exec(img.id, x.id);
+                u2.exec(doc.id, x.id);
+            }
+        }
+        
+        Category::SharedData           update_info(Category x, unsigned int opts)
+        {
+            Category::SharedData data = merged(x, IS_UPDATE | opts);
+            if(!data){
+                yWarning() << "Unable to update category '" << key(x) << "' due to lack of data";
+                return {};
+            }
+                
+            static thread_local SQ u("UPDATE Categories SET name=?,brief=?WHERE id=?");
+            u.bind(1, data->name);
+            u.bind(2, data->brief);
+            u.bind(3, x.id);
+            u.exec();
+            return data;
+        }
 
         
         Category::SharedFile         write(Category t, const Root* rt, unsigned int opts)

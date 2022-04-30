@@ -186,9 +186,17 @@ namespace yq {
             return s.as<Leaf>(k);
         }
 
-        Leaf                leaf(Document d)
+        Leaf                leaf(Document d, bool calc)
         {
-            return exists_leaf(d.id) ? Leaf{d.id} : Leaf{};
+            if(!d)
+                return Leaf();
+            if(exists_leaf(d.id))
+                return Leaf(d.id);
+            if(calc){
+                std::string k   = key(folder(d)) + "/" + skeyb(d);
+                return leaf(k);
+            }
+            return Leaf();
         }
         
         #if 0
@@ -318,6 +326,17 @@ namespace yq {
             return s.str(l.id);
         }
 
+        void                update_icon(Leaf x)
+        {
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            static thread_local SQ u1("UPDATE Leafs SET icon=? WHERE id=?");
+            u1.exec(img.id, x.id);
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            u2.exec(doc.id, x.id);
+        }
+
+
         Leaf::SharedData         update_info(Leaf x, unsigned int opts)
         {
             auto data  = merged(x, opts|IS_UPDATE);
@@ -327,9 +346,10 @@ namespace yq {
             std::string_view title   = data->title();
             std::string_view abbr    = data->abbr();
             std::string_view brief   = data->brief();
+            if(title.empty())
+                title       = data->attrs.value(kv::key({"nick", "name"}));
             
             static thread_local SQ u("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
-
             if(title.empty()){
                 u.bind(1, key(x));  // fall back (for now) 
                                     // TODO ... make this smarter (later)

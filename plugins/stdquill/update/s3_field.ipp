@@ -13,21 +13,17 @@ namespace {
 
     void    s3_field(Document doc)
     {
-        Image               img     = best_image(doc);
-        Field               x   = db_field(doc);
+        Field               x    = db_field(doc);
         Field::SharedData   data = cdb::update_info(x, DONT_LOCK);
         if(!data)
             return ;
+        update_icon(x);
 
-        static thread_local SQ u1("UPDATE Fields SET icon=? WHERE id=?");
         static thread_local SQ i1("INSERT INTO FAlias (field, alias) VALUES (?, ?)");
         static thread_local SQ i2("INSERT INTO FDataTypes (field, type) VALUES (?, ?)");
         static thread_local SQ i3("INSERT INTO FAtomTypes (field, class) VALUES (?, ?)");
         static thread_local SQ i4("INSERT INTO FTags (field, tag) VALUES (?, ?)");
         static thread_local SQ i5("INSERT INTO FDefClass (field, class) VALUES (?, ?)");
-        
-        u1.exec(img.id, x.id);
-        u1.exec();
         
         for(const std::string& s : data -> aliases){
             i1.bind(1, x.id);
@@ -67,5 +63,5 @@ namespace {
         }
     }
     
-    YQ_INVOKE( u_stage3<s3_field>(fields_folder(), "*.fld"); )
+    YQ_INVOKE( u_stage3<s3_field>(fields_folder(), "*.field"); )
 }

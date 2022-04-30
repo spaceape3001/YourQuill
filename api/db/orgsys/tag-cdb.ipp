@@ -113,10 +113,15 @@ namespace yq {
             return exists(t) ? Document{t.id} : Document{};
         }    
 
-        void                erase(Tag t)
+        void                erase(Tag x)
         {
-            static thread_local SQ d("DELETE FROM Tags WHERE id=?");
-            d.exec(t.id);
+            static thread_local SQ  stmts[] = {
+                SQ( "DELETE FROM CTags WHERE tag=?" ),
+                SQ( "DELETE FROM FTags WHERE tag=?" ),
+                SQ( "DELETE FROM Tags WHERE id=?" )
+            };
+            for(auto& sq : stmts)
+                sq.exec(x.id);
         }
 
         bool                exists(Tag t)
@@ -318,9 +323,17 @@ namespace yq {
             return exists_tag(i) ? Tag{i} : Tag{};
         }
         
-        Tag                  tag(Document doc)
+        Tag                  tag(Document doc, bool calc)
         {
-            return tag(doc.id);
+            if(!doc)
+                return Tag{};
+            if(exists_tag(doc.id))
+                return Tag{doc.id};
+            if(calc && (folder(doc) == tags_folder())){
+                std::string k   = base_key(doc);
+                return tag(k);
+            }
+            return Tag{};
         }
 
         Tag::SharedFile      tag_doc(Fragment f, unsigned int opts)
@@ -371,6 +384,37 @@ namespace yq {
                 ret.push_back(t);
             }
             return ret;
+        }
+
+        void                    update(Tag t, Leaf l)
+        {
+            static thread_local SQ u("UPDATE Tags SET leaf=? WHERE id=?");
+            u.exec(l.id, t.id);
+        }
+
+        void                    update_icon(Tag x)
+        {
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            static thread_local SQ u1("UPDATE Tags SET icon=? WHERE id=?");
+            u1.exec(img.id, x.id);
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            u2.exec(doc.id, x.id);
+        }
+
+        Tag::SharedData         update_info(Tag x, unsigned int opts)
+        {
+            auto data  = merged(x, opts|IS_UPDATE);
+            if(!data)
+                return Tag::SharedData();
+                
+            static thread_local SQ u("UPDATE Tags SET name=?,brief=? WHERE id=?");
+            auto u_af = u.af();
+            u.bind(1, data->name);
+            u.bind(2, data->brief);
+            u.bind(3, x.id);
+            u.exec();
+            return data;
         }
 
         

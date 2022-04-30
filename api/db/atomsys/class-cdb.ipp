@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <db/orgsys/category-cdb.hpp>
+#include <db/orgsys/tag-cdb.hpp>
+
 namespace yq {
     bool Class::less_key(Class a, Class b)
     {
@@ -87,9 +90,18 @@ namespace yq {
             return exists_class(i) ? Class{i} : Class();
         }
 
-        Class  class_(Document doc)
+        Class  class_(Document doc, bool calc)
         {
-            return class_(doc.id);
+            if(!doc)
+                return Class();
+            if(exists_class(doc.id))
+                return Class{doc.id};
+            if(calc && (folder(doc) == classes_folder())){
+                std::string k   = base_key(doc);
+                return class_(k);
+            }
+            
+            return Class();
         }
 
         
@@ -389,6 +401,23 @@ namespace yq {
         std::vector<Class>      edges_out(Class c, Sorted sorted)
         {
             return sorted ? edges_out_sorted(c) : edges_out_unsorted(c);
+        }
+
+        void                erase(Class x)
+        {
+            static thread_local SQ stmts[] = {
+                SQ("DELETE FROM CAlias WHERE class=?"),
+                SQ("DELETE FROM CPrefix WHERE class=?"),
+                SQ("DELETE FROM CSuffix WHERE class=?"),
+                SQ("DELETE FROM CTags WHERE class=?"),
+                SQ("DELETE FROM Classes WHERE id=?")
+            };
+            
+            if(!x)
+                return ;
+                
+            for(auto& sq : stmts)
+                sq.exec(x.id);
         }
 
         bool                exists(Class c)
@@ -762,6 +791,38 @@ namespace yq {
             static thread_local SQ    s("SELECT COUNT(1) FROM CTargets WHERE class=?");
             return s.size(c.id);
         }
+        
+        void                update_icon(Class x)
+        {
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            static thread_local SQ u1("UPDATE Classes SET icon=? WHERE id=?");
+            u1.exec(img.id, x.id);
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            u2.exec(doc.id, x.id);
+        }
+
+
+        Class::SharedData           update_info(Class x, unsigned int opts)
+        {
+            Class::SharedData data = merged(x, IS_UPDATE | opts);
+            if(!data){
+                yWarning() << "Unable to update class '" << key(x) << "' due to lack of data";
+                return {};
+            }
+            
+            Category cat = category(data->category);
+            static thread_local SQ uc("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
+            uc.bind(1, data->name);
+            uc.bind(2, data->plural);
+            uc.bind(3, data->brief);
+            uc.bind(4, cat.id);
+            uc.bind(5, data->binding);
+            uc.bind(6, x.id);
+            uc.exec();
+            return data;
+        }
+        
         
         namespace {
             std::vector<Class>    uses_sorted(Class c)

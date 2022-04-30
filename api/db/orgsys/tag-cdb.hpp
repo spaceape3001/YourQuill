@@ -79,11 +79,15 @@ namespace yq {
         
         Tag                     tag(std::string_view);
         Tag                     tag(uint64_t);
-        Tag                     tag(Document);
+        Tag                     tag(Document, bool calc=false);
         
         Tag::SharedFile         tag_doc(Fragment, unsigned int opts=0);
 
         std::vector<Tag>        tags(const string_set_t&, bool noisy=false);
+
+        void                    update(Tag, Leaf);
+        void                    update_icon(Tag);
+        Tag::SharedData         update_info(Tag, unsigned int opts=0);
 
         //!  \brief   Returns a writable document
         //!

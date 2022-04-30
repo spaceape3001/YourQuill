@@ -57,7 +57,7 @@ namespace yq {
         Leaf                        leaf(std::string_view);
 
         Leaf                        leaf(Atom);
-        Leaf                        leaf(Document);
+        Leaf                        leaf(Document, bool calc=false);
         //Leaf                        leaf(Folder);
 
         Leaf                        leaf_by_title(std::string_view);
@@ -75,6 +75,7 @@ namespace yq {
 
         std::string                 title(Leaf);
 
+        void                        update_icon(Leaf);
         Leaf::SharedData            update_info(Leaf, unsigned int opts=0);
 
         //!  \brief   Returns a writable document

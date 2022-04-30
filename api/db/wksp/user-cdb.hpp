@@ -47,6 +47,7 @@ namespace yq {
         
         Document                document(User);
     
+        //! Removes the user from the cache
         void                    erase(User);
         bool                    exists(User);
 
@@ -69,7 +70,11 @@ namespace yq {
         Vector<UserFragDoc>     reads(User, unsigned int opts=0);
         Vector<UserFragDoc>     reads(User, class Root*, unsigned int opts=0);
 
+        void                    update_icon(User);
+        User::SharedData        update_info(User, unsigned int opts=0);
+
         User                    user(std::string_view);
+        User                    user(Document, bool calc=false);
         User                    user(uint64_t);
         
         User::SharedFile        user_doc(Fragment, unsigned int opts=0);

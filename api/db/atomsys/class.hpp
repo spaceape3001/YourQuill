@@ -19,7 +19,7 @@ namespace yq {
         This structure represents an atom classification in the cache
     */
     struct Class {
-        static constexpr const char*    szExtension = "cls";
+        static constexpr const char*    szExtension = "class";
         struct Info;
         struct File;
         struct Data;

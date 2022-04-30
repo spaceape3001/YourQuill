@@ -40,6 +40,7 @@ namespace yq {
         string_view_set_t   classes() const;
         void                classes(const string_set_t&);
         void                classes(const string_view_set_t&);
+        
         std::string_view    notes() const;
         void                notes(const std::string_view&);
         string_view_set_t   tags() const;

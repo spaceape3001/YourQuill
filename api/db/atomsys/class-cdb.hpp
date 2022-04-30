@@ -59,7 +59,7 @@ namespace yq {
         Category                    category(Class);
 
         Class                       class_(uint64_t);
-        Class                       class_(Document);
+        Class                       class_(Document, bool calc=false);
         Class                       class_(std::string_view );
 
         Class::SharedFile           class_doc(Fragment, unsigned int opts=0);
@@ -87,6 +87,10 @@ namespace yq {
         
         std::vector<Class>          edges_in(Class, Sorted sorted=Sorted());
         std::vector<Class>          edges_out(Class, Sorted sorted=Sorted());
+      
+      
+        //! Removes the class from the cache
+        void                        erase(Class);
       
         bool                        exists(Class);
 
@@ -151,6 +155,9 @@ namespace yq {
 
         std::vector<Class>          uses(Class, Sorted sorted=Sorted());
         size_t                      uses_count(Class);
+
+        void                        update_icon(Class);
+        Class::SharedData           update_info(Class, unsigned int opts=0);
 
 
         //!  \brief   Returns a writable document

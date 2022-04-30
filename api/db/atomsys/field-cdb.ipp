@@ -169,6 +169,21 @@ namespace yq {
         {
             return Document(f.id);
         }
+        
+        void                erase(Field x)
+        {
+            static thread_local SQ stmts[] = {
+                SQ("DELETE FROM FDefClass WHERE field=?"),
+                SQ("DELETE FROM FTags WHERE field=?"),
+                SQ("DELETE FROM Fieldes WHERE id=?")
+            };
+
+            if(!x)
+                return ;
+            
+            for(auto& sq : stmts)
+                sq.exec(x.id);
+        }
 
         
         bool                exists(Field f)
@@ -188,9 +203,17 @@ namespace yq {
             return exists_field(i) ? Field{i} : Field{};
         }
         
-        Field                   field(Document doc)
+        Field                   field(Document doc, bool calc)
         {
-            return field(doc.id);
+            if(!doc)
+                return Field();
+            if(exists_field(doc.id))
+                return Field{doc.id};
+            if(calc && (folder(doc) == fields_folder())){
+                std::string k   = skeyc(doc);
+                return field(k);
+            }
+            return Field();
         }
 
         Field                   field(std::string_view k)
@@ -378,6 +401,17 @@ namespace yq {
         {
             static thread_local SQ s("SELECT COUNT(1) FROM FTags WHERE field=?");
             return s.size(f.id);
+        }
+
+
+        void                update_icon(Field x)
+        {
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            static thread_local SQ u1("UPDATE Fields SET icon=? WHERE id=?");
+            u1.exec(img.id, x.id);
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            u2.exec(doc.id, x.id);
         }
 
 

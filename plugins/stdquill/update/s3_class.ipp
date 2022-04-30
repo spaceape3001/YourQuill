@@ -12,24 +12,13 @@ namespace {
     {
         Class c = db_class(doc);
 
-        Class::SharedData       data    = merged(c, DONT_LOCK|IS_UPDATE);
-        Image       ico = best_image(doc);
-        Category    cat = category(data->category);
-
-        static thread_local SQ uc("UPDATE Classes SET name=?, icon=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
+        Class::SharedData       data    = update_info(c, DONT_LOCK|IS_UPDATE);
+        update_icon(c);
+        
         static thread_local SQ ia("INSERT INTO CAlias (class, alias) VALUES (?,?)");
         static thread_local SQ ip("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
         static thread_local SQ is("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
         static thread_local SQ it("INSERT INTO CTags (class, tag) VALUES (?,?)");
-        
-        uc.bind(1, data->name);
-        uc.bind(2, ico.id);
-        uc.bind(3, data->plural);
-        uc.bind(4, data->brief);
-        uc.bind(5, cat.id);
-        uc.bind(6, data->binding);
-        uc.bind(7, c.id);
-        uc.exec();
         
         for(const std::string& a : data->aliases){
             ia.bind(1, c.id);
@@ -70,8 +59,8 @@ namespace {
 
     
     YQ_INVOKE( 
-        u_stage3<s3_class>(cdb::classes_folder(), "*.cls"); 
-        u_stage3<s3_class_bind>(cdb::classes_folder(), "*.cls"); 
+        u_stage3<s3_class>(cdb::classes_folder(), "*.class"); 
+        u_stage3<s3_class_bind>(cdb::classes_folder(), "*.class"); 
     )
     
 }

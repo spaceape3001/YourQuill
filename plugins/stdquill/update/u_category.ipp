@@ -8,73 +8,35 @@
  
  namespace {
  
-    void    remove_category(Category x)
+    void    update_category(Document doc)
     {
-        static thread_local SQ  stmts[] = {
-            SQ( "UPDATE Classes SET category=0 WHERE category=?" ),
-            SQ( "DELETE FROM Categories WHERE id=?" )
-        };
-        for(auto& sq : stmts)
-            sq.exec(x.id);
-    }
-    
-    void    update_category(Category x)
-    {
-        Category::SharedData data = merged(x, IS_UPDATE);
-        if(!data)
+        Category         x   = db_category(doc);
+        if(!x)
             return ;
-            
-        Leaf    l;  // ignore for now
-        
-        static thread_local SQ u1("UPDATE Categories SET name=?,brief=? WHERE Categorys=?");
-        auto af = u1.af();
-        u1.bind(1, data->name);
-        u1.bind(2, data->brief);
-        u1.bind(3, x.id);
-        u1.exec();
+
+        Category::SharedData data = update_info(x);
+        if(!data){
+            yWarning() << "Unable to update category '" << key(x) << "' due to lack of data";
+            return ;
+        }
     }
  
     void    change_category(Fragment frag, Change chg)
     {
         Document    doc = document(frag);
-        Category         t   = db_category(doc);
-        if(!t)
-            return ;
-
         if(chg == Change::Removed){
             if(fragments_count(doc) <= 1){
-                remove_category(t);
+                erase(category(doc));
                 return ;
             }
         }
         
-        update_category(t);
+        update_category(doc);
     }
  
     void    change_category_image(Fragment frag, Change)
     {
-        Document    doc = document(frag);
-        std::string bk  = base_key(doc);
-        if(bk.empty())
-            return;
-        bk += ".cat";
-        doc             = child_document(categories_folder(), bk);
-        if(!doc)
-            return ;
-            
-        Category     x   = category(doc);
-        if(x){
-            Image   img0    = icon(x);
-            Image   img1    = best_image(doc);
-            if(img0 == img1)
-                return ;
-            
-            static thread_local SQ u1("UPDATE Categories SET icon=? WHERE id=?");
-            auto af = u1.af();
-            u1.bind(1, img1.id);
-            u1.bind(2, x.id);
-            u1.exec();
-        }
+        update_icon(category(document(frag), true));
     }
  
     //  TODO images & leaf....

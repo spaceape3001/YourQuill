@@ -61,11 +61,21 @@ namespace yq {
         
         Document                document(Field);
 
+        //! Erases the field from the cache
+        void                    erase(Field);
+
         bool                    exists(Field);
         bool                    exists_field(uint64_t);
 
         Field                   field(uint64_t);
-        Field                   field(Document);
+        
+        /*! \brief Field for document
+        
+            Returns the field for the specified document
+            
+            \param[in] calc Set to TRUE to use the document skeyc
+        */
+        Field                   field(Document, bool calc=false);
         Field                   field(std::string_view);
         Field::SharedFile       field_doc(Fragment, unsigned int opts=0);
 
@@ -106,6 +116,7 @@ namespace yq {
 
         bool                    tagged(Field, Tag);
 
+        void                    update_icon(Field);
         Field::SharedData       update_info(Field, unsigned int opts=0);
 
 

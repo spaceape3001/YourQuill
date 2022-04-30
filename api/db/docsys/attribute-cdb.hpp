@@ -68,6 +68,7 @@ namespace yq {
         std::vector<Attribute::KVUA>    kvua(Document);
         
         Attribute               parent(Attribute);
+        
         std::string             uid(Attribute);
         std::string             value(Attribute);
     }

@@ -24,16 +24,11 @@ namespace {
         h.kvrow("Fragments") << cdb::fragments_count(doc);
         h.kvrow("Hidden") << i.hidden;
         
-        if(is_similar(i.suffix, "cls")){
-            //Class c = cdb::class_(doc);
-            //if(!c)
-                //yInfo() << "Undefined class! " << i.key << " " << doc.id;
-            //if(!cdb::exists_class(doc.id))
-                //yInfo() << "Exists class is FALSE!";
+        if(is_similar(i.suffix, "class")){
             h.kvrow("Is class") << dev(cdb::class_(doc));
-        } else if(is_similar(i.suffix, "fld")){
+        } else if(is_similar(i.suffix, "field")){
             h.kvrow("Is field") << dev(cdb::field(doc));
-        } else if(is_similar(i.suffix, "usr")){
+        } else if(is_similar(i.suffix, "user")){
             h.kvrow("Is user") << dev(cdb::user(doc));
         } else if(is_similar(i.suffix, "tag")){
             h.kvrow("Is tag") << dev(cdb::tag(doc));
