@@ -1,8 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<yq_field>
-	<field>
-		<name>Name</name>
-		<type>charname</type>
-	</field>
-</yq_field>
-
+%        Name
+category 
+type     charname

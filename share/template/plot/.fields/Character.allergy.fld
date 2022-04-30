@@ -1,9 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<yq_field>
-	<field>
-		<name/>
-		<plural>Allergies</plural>
-		<type>string</type>
-	</field>
-</yq_field>
-
+plural   Allergies
+category 
+type     string

@@ -7,6 +7,8 @@
 #pragma once
 #include <list>
 #include <set>
+#include <string>
+#include <string_view>
 #include <vector>
 
 namespace yq {
@@ -21,6 +23,14 @@ namespace yq {
         a.insert(b.begin(), b.end());
         return a;
     }
+
+    template <typename C, typename C2, typename A, typename A2>
+    std::set<std::string, C, A>&    operator+=(std::set<std::string, C, A>& a, const std::set<std::string_view, C2, A2>& b)
+    {
+        a.insert(b.begin(), b.end());
+        return a;
+    }
+
 
     template <typename T, typename C, typename A, typename A2>
     std::set<T, C, A>&    operator+=(std::set<T, C, A>& a, const std::vector<T, A2>& b)
@@ -67,6 +77,13 @@ namespace yq {
         return a;
     }
     
+    template <typename A>
+    std::vector<std::string, A>&    operator+=(std::vector<std::string, A>& a, const std::vector<std::string_view, A>& b)
+    {
+        a.insert(a.end(), b.begin(), b.end());
+        return a;
+    }
+
     template <typename T, typename A>
     std::vector<T,A>&    operator<<(std::vector<T, A>& a, const T& b)
     {

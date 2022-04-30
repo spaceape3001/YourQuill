@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <db/bit/key_value.hpp>
+#include <yq/collection/c_utils.hpp>
+
 namespace yq {
 
     void Field::File::reset() 
@@ -13,6 +16,7 @@ namespace yq {
         (*(Data*) this) = Data{};
     }
 
+    #if FIELD_XML_RESAVE
     bool    Field::File::read(const XmlDocument& doc, std::string_view fname) 
     {
         const XmlNode*  xn  = doc.first_node(szYQField);
@@ -44,38 +48,59 @@ namespace yq {
         max_count       = read_child(xn, szMaxCount, x_uint64).value;
         return true;
     }
-    
-    bool    Field::File::write(XmlDocument& doc) const 
+    #endif
+
+    bool    Field::File::read(KVTree&&attrs, std::string_view fname) 
     {
-        XmlNode*  xroot  = doc.allocate_node(rapidxml::node_element, szYQField);
-        doc.append_node(xroot);
-        XmlNode*    xn   = doc.allocate_node(rapidxml::node_element, szField);
-        xroot -> append_node(xn);
-        
-        write_child(xn, szName, name);
-        write_children(xn, szTag, tags);
-        if(!plural.empty())
-            write_child(xn, szPlural, plural);
+        name            = attrs.value(kv::key({ "%", "name" }));
+        pkey            = attrs.value("pkey");
+        plural          = attrs.value("plural");
+        brief           = attrs.value("brief");
+        notes           = attrs.value("notes");
+        category        = attrs.value("category");
+        aliases        += attrs.values_set("alias");
+        tags           += attrs.values_set("tag");
+        classes        += attrs.values_set("class");
+        types          += attrs.values_set("type");
+        atoms          += attrs.values_set("atom");
+        expected        = attrs.value("expected");
+        multiplicity    = Multiplicity(attrs.value("multiple"));
+        restriction     = Restriction(attrs.value("restrict"));
+        max_count       = to_uint(attrs.value("max")).value;
+        return true;
+    }
+    
+    bool    Field::File::write(KVTree&attrs) const 
+    {
+        if(!name.empty())
+            attrs.set("%", name);
         if(!pkey.empty())
-            write_child(xn, szPKey, pkey);
+            attrs.set("pkey", pkey);
+        if(!plural.empty())
+            attrs.set("plural", plural);
         if(!brief.empty())
-            write_child(xn, szBrief, brief);
+            attrs.set("brief", brief);
         if(!notes.empty())
-            write_child(xn, szNotes, notes);
-        if(!category.empty())
-            write_child(xn, szCategory, category);
-        write_children(xn, szAlias, aliases);
-        write_children(xn, szClass, classes);
-        write_children(xn, szType, types);
-        write_children(xn, szAtom, atoms);
-        if(!expected.empty())
-            write_child(xn, szExpected, expected);
+            attrs.set("notes", notes);
+        if(category.empty())
+            attrs.set("category", category);
+        if(!classes.empty())
+            attrs.set("class", join(classes, ","));
+        if(!aliases.empty())
+            attrs.set("alias", join(aliases, ","));
+        if(!tags.empty())
+            attrs.set("tag", join(tags, ","));
+        if(!types.empty())
+            attrs.set("type", join(types, ","));
+        if(!atoms.empty())
+            attrs.set("atom", join(atoms, ","));
+        
         if(multiplicity != Multiplicity())
-            write_child(xn, szMultiple, multiplicity);
+            attrs.set("multiple", multiplicity.key());
         if(restriction != Restriction())
-            write_child(xn, szRestrict, restriction);
+            attrs.set("restrict", restriction.key());
         if(max_count)
-            write_child(xn, szMaxCount, max_count);
+            attrs.set("max", to_string(max_count));
         return true;
     }
 }
