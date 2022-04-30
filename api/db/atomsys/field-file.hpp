@@ -8,7 +8,6 @@
 
 #include <db/atomsys/field-data.hpp>
 #include <db/core/std_file.hpp>
-//#include <yq/file/XmlFile.hpp>
 
 #define FIELD_XML_RESAVE 0
 

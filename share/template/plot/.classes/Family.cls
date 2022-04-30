@@ -1,9 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<yq_class>
-	<class>
-		<name>Family</name>
-		<plural>Family</plural>
-		<is>Group</is>
-	</class>
-</yq_class>
-
+%      Family
+plural Family
+is     Group

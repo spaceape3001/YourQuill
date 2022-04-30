@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <db/bit/key_value.hpp>
+#include <yq/collection/c_utils.hpp>
+
 namespace yq {
     void    Class::File::reset() 
     {
@@ -13,6 +16,7 @@ namespace yq {
     }
 
     
+    #if CLASS_XML_RESAVE
     bool    Class::File::read(const XmlDocument&doc, std::string_view fname) 
     {
         const XmlNode*  xn  = doc.first_node(szYQClass);
@@ -43,45 +47,59 @@ namespace yq {
         tags            = read_child_string_set(xn, szTag);
         category        = read_child(xn, szCategory, x_sstring);
         return true;
-        
+    }
+    #endif
+    
+    bool    Class::File::read(KVTree&&attrs, std::string_view fname) 
+    {
+        name            = attrs.value(kv::key({"%", "name"}));
+        plural          = attrs.value("plural");
+        brief           = attrs.value("brief");
+        notes           = attrs.value("notes");
+        folder          = attrs.value("folder");
+        use            += attrs.values_set("is");
+        reverse        += attrs.values_set("reverse");
+        sources        += attrs.values_set("source");
+        targets        += attrs.values_set("target");
+        aliases        += attrs.values_set("alias");
+        binding         = attrs.value("binding");
+        prefixes       += attrs.values_set("prefix");
+        suffixes       += attrs.values_set("suffix");
+        tags           += attrs.values_set("tag");
+        category        = attrs.value("category");
+        return true;
     }
     
-
-    bool    Class::File::write(XmlDocument&doc) const
+    bool    Class::File::write(KVTree&attrs) const 
     {
-        XmlNode*  xroot  = doc.allocate_node(rapidxml::node_element, szYQClass);
-        doc.append_node(xroot);
-        XmlNode*    xn   = doc.allocate_node(rapidxml::node_element, szClass);
-        xroot -> append_node(xn);
-
         if(!name.empty())
-            write_child(xn, szName, name);
+            attrs.set("%", name);
         if(!plural.empty())
-            write_child(xn, szPlural, name);
+            attrs.set("plural", plural);
         if(!brief.empty())
-            write_child(xn, szBrief, brief);
+            attrs.set("brief", brief);
         if(!notes.empty())
-            write_child(xn, szNotes, notes);
+            attrs.set("notes", notes);
         if(!use.empty())
-            write_children(xn, szIs, use);
+            attrs.set("is", join(use, ","));
         if(!reverse.empty())
-            write_children(xn, szReverse, reverse);
+            attrs.set("reverse", join(reverse, ","));
         if(!targets.empty())
-            write_children(xn, szTarget, targets);
+            attrs.set("target", join(targets, ","));
         if(!sources.empty())
-            write_children(xn, szSource, sources);
+            attrs.set("source", join(sources, ","));
         if(!prefixes.empty())
-            write_children(xn, szPrefix, prefixes);
+            attrs.set("prefix", join(prefixes, ","));
         if(!suffixes.empty())
-            write_children(xn, szSuffix, suffixes);
+            attrs.set("suffix", join(suffixes, ","));
         if(!aliases.empty())
-            write_children(xn, szAlias, aliases);
+            attrs.set("alias", join(aliases, ",") );
         if(!binding.empty())
-            write_child(xn, szBinding, binding);
+            attrs.set("binding", binding);
         if(!tags.empty())
-            write_children(xn, szTag, tags);
+            attrs.set("tag", join(tags, ","));
         if(!category.empty())
-            write_child(xn, szCategory, category);
+            attrs.set("category", category);
         return true;
     }
 
