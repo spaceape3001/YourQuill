@@ -8,12 +8,13 @@
 #include <yq/app/CmdArgs.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/shape/Size2Ops.hpp>
-#include <db/cdb_sq.hpp>
+
+#include <db/core/cdb_sq.hpp>
+#include <db/core/id_lock.hpp>
 #include <db/filesys/document.hpp>
 #include <db/filesys/document-cdb.hpp>
 #include <db/filesys/fragment.hpp>
 #include <db/filesys/fragment-cdb.hpp>
-#include <db/id_lock.hpp>
 #include <db/imagesys/image.hpp>
 #include <db/imagesys/image-cdb.hpp>
 

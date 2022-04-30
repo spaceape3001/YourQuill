@@ -7,8 +7,8 @@
 #pragma once
 
 #include "action.hpp"
+#include <db/core/strings.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
-#include <yq/file/Strings.hpp>
 #include <yq/file/XmlUtils.hpp>
 
 namespace yq {

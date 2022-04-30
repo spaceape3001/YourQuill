@@ -17,15 +17,19 @@ namespace {
         
         Image   img = best_image(doc);
         
+        std::string_view title   = data->title();
+        std::string_view abbr    = data->abbr();
+        std::string_view brief   = data->brief();
+        
         static thread_local SQ u("UPDATE Leafs SET icon=?, title=?, abbr=?, brief=? WHERE id=?");
         u.bind(1, img.id);
-        if(data->title.empty()){
+        if(title.empty()){
             u.bind(2, key(l));  // fall back (for now) 
                                 // TODO ... make this smarter (later)
         } else 
-            u.bind(2, data->title);
-        u.bind(3, data->abbr);
-        u.bind(4, data->brief);
+            u.bind(2, title);
+        u.bind(3, abbr);
+        u.bind(4, brief);
         u.bind(5, l.id);
         u.exec();
 

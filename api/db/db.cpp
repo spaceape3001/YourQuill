@@ -5,12 +5,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <yq/file/Strings.hpp>
 #include <yq/file/XmlUtils.hpp>
 
-#include <db/cdb_common.hpp>
 #include <db/enum.hpp>
-#include <db/id_lock.ipp>
+#include <db/core/cdb_common.hpp>
+#include <db/core/id_lock.ipp>
+#include <db/core/strings.hpp>
 
 #include <yq/text/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
@@ -78,15 +78,18 @@ namespace yq {
     }
 }
 
-#include <db/cdb_sq.ipp>
+
 #include <db/bit/authentication.ipp>
 #include <db/bit/context.ipp>
 #include <db/bit/copyright.ipp>
+#include <db/bit/key_value.ipp>
 #include <db/bit/policy.ipp>
 #include <db/bit/rule.ipp>
+#include <db/core/cdb_sq.ipp>
+
+#include <db/core/std_file.ipp>
 
 #include <db/enum/size_desc_arg.ipp>
-
 #include <yq/meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::Access)

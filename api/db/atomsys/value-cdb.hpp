@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/cdb_common.hpp>
+#include <db/core/cdb_common.hpp>
 #include <db/atomsys/field.hpp>
 #include <db/atomsys/value.hpp>
 #include <db/enum/sorted.hpp>

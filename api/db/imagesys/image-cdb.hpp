@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/imagesys/image.hpp>
-#include <db/cdb_common.hpp>
+#include <db/core/cdb_common.hpp>
 #include <db/enum/size_desc.hpp>
 #include <yq/net/Http.hpp>
 

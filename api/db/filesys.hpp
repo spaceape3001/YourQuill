@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <db/cdb_common.hpp>
-#include <db/html_common.hpp>
+#include <db/core/cdb_common.hpp>
+#include <db/core/html_common.hpp>
 
 #include <db/enum/data_role.hpp>
 #include <db/enum/sorted.hpp>

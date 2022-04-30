@@ -16,9 +16,10 @@
 
 #include "bit.hpp"
 #include "enum.hpp"
-#include "cdb_sq.hpp"
 #include "form_html.hpp"
-#include "id_lock.hpp"
+
+#include <db/core/cdb_sq.hpp>
+#include <db/core/id_lock.hpp>
 
 
 

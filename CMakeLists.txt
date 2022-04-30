@@ -1,14 +1,7 @@
 cmake_minimum_required(VERSION 3.20.0)      # Modern CMake please
-project(YourQuill VERSION 0.0.0.1)
+project(YourQuill VERSION 0.0.0.2)
 
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    if(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "11.0.0")
-        message(FATAL_ERROR "GCC version is obsolete, upgrade.")
-    endif()
-    SET(GCC ON)
-else()
-    SET(GCC OFF)
-endif()
+include(cmake/CheckCxxVersions.cmake)
 
 if( "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
         # Mixing source and binary output is asking for trouble, best to avoid it
@@ -71,13 +64,7 @@ if(VULKAN)
     find_package(GLFW3)
 endif()
 
-function(group_files)
-        foreach(_source ${ARGN})
-                get_filename_component(_source_path "${_source}" PATH)
-                string(REPLACE "/" "\\" _source_path_msvc "${_source_path}")
-                source_group("${_source_path_msvc}" FILES "${_source}")
-        endforeach()
-endfunction(group_files)
+include(cmake/GroupFiles.cmake)
 
 add_definitions(-Wfatal-errors -Wno-error=unused-function -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch -DASIO_STANDALONE)
 

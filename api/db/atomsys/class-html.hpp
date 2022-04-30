@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/html_common.hpp>
+#include <db/core/html_common.hpp>
 
 namespace yq {
     struct Class;

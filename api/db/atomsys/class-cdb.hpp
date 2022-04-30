@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/cdb_common.hpp>
+#include <db/core/cdb_common.hpp>
 #include <db/atomsys/class-file.hpp>
 #include <db/enum/sorted.hpp>
 #include <db/filesys/document.hpp>

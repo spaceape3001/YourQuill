@@ -7,15 +7,16 @@
 
 #include <db/atomsys.hpp>
 
-#include <db/cdb_sq.hpp>
 #include <db/filesys.hpp>
-#include <db/id_lock.hpp>
 #include <db/imagesys.hpp>
 #include <db/bit/nki.hpp>
+#include <db/core/cdb_sq.hpp>
+#include <db/core/id_lock.hpp>
+#include <db/core/strings.hpp>
 #include <db/orgsys/tag.hpp>
 #include <db/wksp/workspace.hpp>
+
 #include <yq/file/file_utils.hpp>
-#include <yq/file/Strings.hpp>
 #include <yq/file/XmlUtils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/text/text_utils.hpp>
@@ -44,7 +45,7 @@
 #include <db/atomsys/value-file.ipp>
 #include <db/atomsys/value-html.ipp>
 
-#include <db/id_lock.ipp>
+#include <db/core/id_lock.ipp>
 
 namespace yq {
     template class IDLock<Atom>;

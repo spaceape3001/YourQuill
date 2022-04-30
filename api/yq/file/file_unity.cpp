@@ -8,8 +8,6 @@
 #include "dir_utils.ipp"
 #include "file_utils.ipp"
 
-#include "StdFile.hpp"
-//#include "StdXml.hpp"
 #include "XmlFile.hpp"
 #include "XmlUtils.hpp"
 
@@ -39,84 +37,6 @@
 
 namespace yq {
 
-
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  STD FILE
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        bool        StdFile::empty() const
-        {
-            return body.empty() && subs.empty();
-        }
-
-        bool        StdFile::read(ByteArray&&buffer, std::string_view fname) 
-        {
-            return KVTree::parse(buffer, (has_body()?&body:nullptr), recursive_attributes(), fname);
-        }
-
-        void        StdFile::reset() 
-        {
-            subs.clear();
-            body.clear();
-        }
-
-
-        bool        StdFile::write(yq::Stream& buffer) const
-        {
-            KVTree::write(buffer);
-            if(!body.empty())
-                buffer << '\n' << body;
-            return true;
-        }
-
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  STD XML
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //StdXml::StdXml()
-        //{
-        //}
-        
-        //StdXml::~StdXml()
-        //{
-        //}
-
-        //XmlDocument&        StdXml::xmldoc()
-        //{
-            //if(!m_doc.first_node()){
-                //XmlNode*        x   = m_doc.allocate_node(rapidxml::node_pi, "xml", "version=\"1.0\" encoding=\"UTF-8\"");
-                //m_doc.append_node(x);
-            //}
-            //return m_doc;
-        //}
-
-        //bool    StdXml::read(ByteArray&&buffer, const std::string_view& fname) 
-        //{
-            //m_data  = std::move(buffer);
-            //m_data << '\0';
-            //try {
-                //m_doc.parse<0>(m_data.data());
-            //} catch(const rapidxml::parse_error& pe){
-                //size_t  pt  = pe.where<char>() - m_data.data();
-                //yError() << "Xml parse error: " << pe.what() << " (at byte " << pt << ") : " << fname;
-                //return false;
-            //}
-            //return true;
-        //}
-        
-        //void    StdXml::reset() 
-        //{
-            //m_data      = {};
-            //m_doc       = {};
-        //}
-
-        //bool    StdXml::write(yq::Stream&str) const 
-        //{
-            //std::vector<char>   s;
-            //rapidxml::print(std::back_inserter(s), m_doc, 0);
-            //str.write(s.data(), s.size());
-            //return true;
-        //}
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  XML FILE

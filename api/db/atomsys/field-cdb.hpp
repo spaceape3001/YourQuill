@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/cdb_common.hpp>
+#include <db/core/cdb_common.hpp>
 #include <db/atomsys/class.hpp>
 #include <db/atomsys/field-file.hpp>
 #include <db/imagesys/image.hpp>
