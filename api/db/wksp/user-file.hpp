@@ -16,6 +16,9 @@ namespace yq {
         //  Set this before load
         bool            skip_bio    = false;
     
+        virtual bool    recursive_attributes() const override { return true; }
+        virtual bool    has_body() const override { return true; }
+
     protected:
         virtual void    reset() override;
 

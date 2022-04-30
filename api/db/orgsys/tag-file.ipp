@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <db/bit/key_value.hpp>
+
 namespace yq {
 
     void    Tag::File::reset() 
@@ -13,6 +15,7 @@ namespace yq {
         Data::reset();
     }
 
+    #if TAG_XML_RESAVE
     bool    Tag::File::read(const XmlDocument&doc, std::string_view fname) 
     {
         const XmlNode*  xn  = doc.first_node(szYQTag);
@@ -33,21 +36,27 @@ namespace yq {
         leaf        = read_child(xn, szLeaf, x_string);
         return true;
     }
+    #endif
 
-
-    bool    Tag::File::write(XmlDocument& doc) const 
+    bool    Tag::File::read(KVTree&&attrs, std::string_view fname) 
     {
-        XmlNode*  xroot  = doc.allocate_node(rapidxml::node_element, szYQTag);
-        doc.append_node(xroot);
-        XmlNode*    xtag   = doc.allocate_node(rapidxml::node_element, szTag);
-        xroot -> append_node(xtag);
-        write_child(xtag, szName, name);
+        name    = attrs.value(kv::key({"%", "name"}));
+        brief   = attrs.value("brief");
+        notes   = attrs.value("notes");
+        leaf    = attrs.value("leaf");
+        return true;
+    }
+    
+    bool    Tag::File::write(KVTree&attrs) const 
+    {
+        if(!name.empty())
+            attrs.set("%", name);
         if(!brief.empty())
-            write_child(xtag, szBrief, brief);
-        if(notes.empty())
-            write_child(xtag, szNotes, notes);
+            attrs.set("brief", brief);
+        if(!notes.empty())
+            attrs.set("notes", notes);
         if(!leaf.empty())
-            write_child(xtag, szLeaf, leaf);
+            attrs.set("leaf", leaf);
         return true;
     }
 

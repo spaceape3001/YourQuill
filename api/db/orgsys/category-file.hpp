@@ -7,16 +7,20 @@
 #pragma once
 
 #include <db/orgsys/category-data.hpp>
-#include <yq/file/XmlFile.hpp>
+#include <db/core/std_file.hpp>
 
 namespace yq {
 
-    class Category::File : public XmlFile, public Data {
+    class Category::File : public StdFile, public Data {
     public:
+
+        virtual bool    recursive_attributes() const override { return false; }
+        virtual bool    has_body() const override { return false; }
 
     protected:
         virtual void    reset() override;
-        virtual bool    read(const XmlDocument&, std::string_view fname) override;
-        virtual bool    write(XmlDocument&) const override;
+
+        virtual bool    read(KVTree&&, std::string_view fname) override;
+        virtual bool    write(KVTree&) const override;
     };
 }
