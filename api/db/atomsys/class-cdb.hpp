@@ -59,6 +59,7 @@ namespace yq {
         Category                    category(Class);
 
         Class                       class_(uint64_t);
+        Class                       class_(Document);
         Class                       class_(std::string_view );
 
         Class::SharedFile           class_doc(Fragment, unsigned int opts=0);

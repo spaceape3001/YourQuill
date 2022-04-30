@@ -86,6 +86,12 @@ namespace yq {
         {
             return exists_class(i) ? Class{i} : Class();
         }
+
+        Class  class_(Document doc)
+        {
+            return class_(doc.id);
+        }
+
         
         Class  class_(std::string_view  k)
         {

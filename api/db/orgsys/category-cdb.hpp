@@ -38,6 +38,7 @@ namespace yq {
         size_t                  all_categories_count();
         
         Category                category(uint64_t);
+        Category                category(Document);
         Category                category(std::string_view);
         
         Category::SharedFile    category_doc(Fragment, bool fAllowEmpty=false);

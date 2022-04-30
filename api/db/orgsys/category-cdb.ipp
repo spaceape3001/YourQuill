@@ -62,6 +62,11 @@ namespace yq {
         {
             return exists_category(i) ? Category{i} : Category{};
         }
+
+        Category                 category(Document doc)
+        {
+            return category(doc.id);
+        }
         
         Category::SharedFile      category_doc(Fragment f, unsigned int opts)
         {

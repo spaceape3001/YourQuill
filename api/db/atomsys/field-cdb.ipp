@@ -186,6 +186,11 @@ namespace yq {
             return exists_field(i) ? Field{i} : Field{};
         }
         
+        Field                   field(Document doc)
+        {
+            return field(doc.id);
+        }
+
         Field                   field(std::string_view k)
         {
             static thread_local SQ s("SELECT 1 FROM Fields WHERE k=?");

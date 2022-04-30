@@ -65,6 +65,7 @@ namespace yq {
         bool                    exists_field(uint64_t);
 
         Field                   field(uint64_t);
+        Field                   field(Document);
         Field                   field(std::string_view);
         Field::SharedFile       field_doc(Fragment, unsigned int opts=0);
 

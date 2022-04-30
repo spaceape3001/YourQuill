@@ -43,10 +43,12 @@ namespace {
         if(isImage(ct)){
             h << "<img src=\"/dev/fragment/image?" << h.context().url.query << "\" alt=\"Raw Image\">";
         } else if(isTextual(ct) || !ct){
-            h << "<pre>";
-            std::string s = frag_string(x);
-            html_escape_write(h, s);
-            h << "</pre>";
+            if(!is_similar(suffix(document(x)), "usr")){ // blank out user files (avoid passwords)
+                h << "<pre>";
+                std::string s = frag_string(x);
+                html_escape_write(h, s);
+                h << "</pre>";
+            }
         } else if(isAudio(ct)){
             h.p() << "Audio File... TODO";
         } else if(isMovie(ct)){

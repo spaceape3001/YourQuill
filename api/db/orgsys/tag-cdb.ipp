@@ -318,6 +318,11 @@ namespace yq {
             return exists_tag(i) ? Tag{i} : Tag{};
         }
         
+        Tag                  tag(Document doc)
+        {
+            return tag(doc.id);
+        }
+
         Tag::SharedFile      tag_doc(Fragment f, unsigned int opts)
         {
             if(!f)

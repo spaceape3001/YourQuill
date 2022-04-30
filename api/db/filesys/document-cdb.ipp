@@ -344,7 +344,7 @@ namespace yq {
         Document::Info      info(Document d)
         {
             Document::Info        ret;
-            static thread_local SQ    s("SELECT k, sk, name, skb, folder, suffix, removed, hidden, icon, skeyc FROM Documents WHERE id=?");
+            static thread_local SQ    s("SELECT k, sk, name, skb, folder, suffix, removed, hidden, icon, skc FROM Documents WHERE id=?");
             s.bind(1, d.id);
             if(s.step() == SqlQuery::Row){
                 ret.key     = s.v_text(1);

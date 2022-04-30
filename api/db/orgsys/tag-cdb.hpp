@@ -79,6 +79,7 @@ namespace yq {
         
         Tag                     tag(std::string_view);
         Tag                     tag(uint64_t);
+        Tag                     tag(Document);
         
         Tag::SharedFile         tag_doc(Fragment, unsigned int opts=0);
 
