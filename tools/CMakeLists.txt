@@ -17,8 +17,3 @@ target_link_libraries(wkspinfo yq yqdb)
 
 add_executable(xmlread xmlread.cpp)
 
-# add_subdirectory(importer)
-# add_subdirectory(attrx)
-# add_subdirectory(convert)
-# add_subdirectory(reformat)
-
