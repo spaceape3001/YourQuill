@@ -180,7 +180,7 @@ namespace yq {
             return s.str(u.id);
         }
 
-        User                    make_user(std::string_view k, const Root* rt, unsigned int opts)
+        User                    make_user(std::string_view k, const Root* rt, cdb_options_t opts)
         {
             if(!rt)
                 rt  = wksp::root_first(DataRole::Users);
@@ -204,7 +204,7 @@ namespace yq {
         }
         
 
-        User::SharedData         merged(User u, unsigned int opts)
+        User::SharedData         merged(User u, cdb_options_t opts)
         {
             if(!u)
                 return User::SharedData();
@@ -233,7 +233,7 @@ namespace yq {
             return s.str(u.id);
         }
 
-        Vector<UserFragDoc> reads(User u, unsigned int opts)
+        Vector<UserFragDoc> reads(User u, cdb_options_t opts)
         {
             Vector<UserFragDoc>  ret;
             for(Fragment f : fragments(document(u), DataRole::Users)){
@@ -244,7 +244,7 @@ namespace yq {
             return ret;
         }
         
-        Vector<UserFragDoc> reads(User u, class Root*rt, unsigned int opts)
+        Vector<UserFragDoc> reads(User u, class Root*rt, cdb_options_t opts)
         {
             Vector<UserFragDoc>  ret;
             for(Fragment f : fragments(document(u), rt)){
@@ -257,30 +257,43 @@ namespace yq {
 
         void                update_icon(User x)
         {
+            if(!x)
+                return ;
+                
             Document    doc     = document(x);
             Image       img     = best_image(doc);
             static thread_local SQ u1("UPDATE Users SET icon=? WHERE id=?");
-            u1.exec(img.id, x.id);
             static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-            u2.exec(doc.id, x.id);
+            
+            if(icon(x) != img){
+                u1.exec(img.id, x.id);
+                u2.exec(doc.id, x.id);
+            }
         }
 
-        User::SharedData         update_info(User x, unsigned int opts)
+        User::SharedData         update(User x, cdb_options_t opts)
         {
+            if(!x)
+                return User::SharedData();
+
+            if(opts & U_ICON)
+                update_icon(x);
+        
             auto data  = merged(x, opts|IS_UPDATE);
             if(!data)
                 return User::SharedData();
 
-            static thread_local SQ u("UPDATE Users SET name=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=? WHERE id=?");
-            auto u_af = u.af();
-            u.bind(1, data->name);
-            u.bind(2, data->brief);
-            u.bind(3, data->permissions.is_set( Permission::Owner ));
-            u.bind(4, data->permissions.is_set( Permission::Admin ));
-            u.bind(5, data->permissions.is_set( Permission::Writer ));
-            u.bind(6, data->permissions.is_set( Permission::Reader ));
-            u.bind(7, x.id);
-            u.exec();
+            static thread_local SQ uInfo("UPDATE Users SET name=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=? WHERE id=?");
+            if(opts & U_INFO){
+                uInfo.bind(1, data->name);
+                uInfo.bind(2, data->brief);
+                uInfo.bind(3, data->permissions.is_set( Permission::Owner ));
+                uInfo.bind(4, data->permissions.is_set( Permission::Admin ));
+                uInfo.bind(5, data->permissions.is_set( Permission::Writer ));
+                uInfo.bind(6, data->permissions.is_set( Permission::Reader ));
+                uInfo.bind(7, x.id);
+                uInfo.exec();
+            }
 
             return data;
         }
@@ -309,7 +322,7 @@ namespace yq {
             return User();
         }
         
-        User::SharedFile        user_doc(Fragment f, unsigned int opts)
+        User::SharedFile        user_doc(Fragment f, cdb_options_t opts)
         {
             if(!f)
                 return User::SharedFile();
@@ -343,7 +356,7 @@ namespace yq {
         }
         
 
-        User::SharedFile          write(User u, const Root*rt, unsigned int opts)
+        User::SharedFile          write(User u, const Root*rt, cdb_options_t opts)
         {
             Document    d   = document(u);
             if(!d)

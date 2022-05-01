@@ -67,7 +67,7 @@ namespace yq {
         
         std::string             label(Category);
         
-        Category::SharedData    merged(Category, unsigned int opts=0);
+        Category::SharedData    merged(Category, cdb_options_t opts=0);
         
         std::string             name(Category);
         
@@ -76,22 +76,22 @@ namespace yq {
         //! \brief Returns the FIRST category fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        Category::SharedFile    read(Category, const Root*, unsigned int opts=0);
+        Category::SharedFile    read(Category, const Root*, cdb_options_t opts=0);
         
-        std::vector<CatFragDoc> reads(Category, unsigned int opts=0);
-        std::vector<CatFragDoc> reads(Category, class Root*, unsigned int opts=0);
+        std::vector<CatFragDoc> reads(Category, cdb_options_t opts=0);
+        std::vector<CatFragDoc> reads(Category, class Root*, cdb_options_t opts=0);
 
         bool                    set_brief(Category, std::string_view, class Root* rt=nullptr);
         bool                    set_name(Category, std::string_view, class Root* rt=nullptr);
 
+        Category::SharedData    update(Category, cdb_options_t opts=0);
         void                    update_icon(Category);
-        Category::SharedData    update_info(Category, unsigned int opts=0);
 
         //!  \brief   Returns a writable document
         //!
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        Category::SharedFile    write(Category, const Root*, unsigned int opts=0);
+        Category::SharedFile    write(Category, const Root*, cdb_options_t opts=0);
     }
 }

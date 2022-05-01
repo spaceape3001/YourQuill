@@ -24,12 +24,8 @@ CREATE TABLE CAlias (
 CREATE TABLE CDepends (
     class       INTEGER NOT NULL,
     base        INTEGER NOT NULL,
-    UNIQUE(class,base) ON CONFLICT IGNORE
-);
-
-CREATE TABLE CDependsDef (
-    class       INTEGER NOT NULL,
-    base        INTEGER NOT NULL,
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,base) ON CONFLICT IGNORE
 );
 
@@ -37,20 +33,26 @@ CREATE TABLE CEdges (
     class   INTEGER NOT NULL,
     source  INTEGER NOT NULL,
     target INTEGER NOT NULL,
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,source,target) ON CONFLICT IGNORE
 );
 
 CREATE TABLE CFields (
     class       INTEGER NOT NULL,
     field       INTEGER NOT NULL,
-    UNIQUE(class, field) ON CONFLICT IGNORE
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(class, field)
 );
 
--- CREATE TABLE CFieldsDef (
---    class       INTEGER NOT NULL,
---    field       INTEGER NOT NULL,
---    UNIQUE(class, field) ON CONFLICT IGNORE
--- );
+-- alternative keys
+CREATE TABLE CLookup (
+    class       INTEGER NOT NULL,
+    k           VARCHAR(255) NOT NULL COLLATE NOCASE,
+    priority    INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(class,k)
+);
 
 CREATE TABLE CPrefix (
     class       INTEGER NOT NULL,
@@ -61,24 +63,16 @@ CREATE TABLE CPrefix (
 CREATE TABLE CReverses (
     class       INTEGER NOT NULL,
     reverse     INTEGER NOT NULL,
-    UNIQUE(class,reverse) ON CONFLICT IGNORE
-);
-
-CREATE TABLE CReversesDef (
-    class       INTEGER NOT NULL,
-    reverse     INTEGER NOT NULL,
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,reverse) ON CONFLICT IGNORE
 );
 
 CREATE TABLE CSources (
     class       INTEGER NOT NULL,
     source      INTEGER NOT NULL,
-    UNIQUE(class,source) ON CONFLICT IGNORE
-);
-
-CREATE TABLE CSourcesDef (
-    class       INTEGER NOT NULL,
-    source      INTEGER NOT NULL,
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,source) ON CONFLICT IGNORE
 );
 
@@ -97,12 +91,8 @@ CREATE TABLE CTags (
 CREATE TABLE CTargets (
     class       INTEGER NOT NULL,
     target      INTEGER NOT NULL,
-    UNIQUE(class,target) ON CONFLICT IGNORE
-);
-
-CREATE TABLE CTargetsDef (
-    class       INTEGER NOT NULL,
-    target      INTEGER NOT NULL,
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,target) ON CONFLICT IGNORE
 );
 

@@ -149,13 +149,13 @@ namespace yq {
         namespace {
             std::vector<Class>           def_classes_sorted(Field f)
             {
-                static thread_local SQ s("SELECT class FROM FDefClass INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
+                static thread_local SQ s("SELECT class FROM CFields INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
                 return s.vec<Class>(f.id);
             }
 
             std::vector<Class>           def_classes_unsorted(Field f)
             {
-                static thread_local SQ s("SELECT class FROM FDefClass WHERE field=?");
+                static thread_local SQ s("SELECT class FROM CFields WHERE field=?");
                 return s.vec<Class>(f.id);
             }
         }
@@ -173,9 +173,9 @@ namespace yq {
         void                erase(Field x)
         {
             static thread_local SQ stmts[] = {
-                SQ("DELETE FROM FDefClass WHERE field=?"),
+                SQ("DELETE FROM CFields WHERE field=?"),
                 SQ("DELETE FROM FTags WHERE field=?"),
-                SQ("DELETE FROM Fieldes WHERE id=?")
+                SQ("DELETE FROM Fields WHERE id=?")
             };
 
             if(!x)
@@ -222,7 +222,7 @@ namespace yq {
             return s.as<Field>(k);
         }
 
-        Field::SharedFile        field_doc(Fragment f, unsigned int opts)
+        Field::SharedFile        field_doc(Fragment f, cdb_options_t opts)
         {
             if(!f)
                 return Field::SharedFile();
@@ -294,7 +294,7 @@ namespace yq {
             return s.str(f.id);
         }
 
-        Field::SharedData            merged(Field f, unsigned int opts)
+        Field::SharedData            merged(Field f, cdb_options_t opts)
         {
             Field::SharedData        ret = std::make_shared<Field::Data>();;
             for(auto& i : reads(f, opts)){
@@ -350,12 +350,12 @@ namespace yq {
         }
         
 
-        Field::SharedFile        read(Field f, const Root*rt, unsigned int opts)
+        Field::SharedFile        read(Field f, const Root*rt, cdb_options_t opts)
         {
             return field_doc(fragment(document(f), rt), opts);
         }
 
-        std::vector<FieldFragDoc>    reads(Field f, unsigned int opts)
+        std::vector<FieldFragDoc>    reads(Field f, cdb_options_t opts)
         {
             std::vector<FieldFragDoc>  ret;
             for(Fragment ff : fragments(document(f), DataRole::Config)){
@@ -366,7 +366,7 @@ namespace yq {
             return ret;
         }
 
-        std::vector<FieldFragDoc>  reads(Field f, class Root*rt, unsigned int opts)
+        std::vector<FieldFragDoc>  reads(Field f, class Root*rt, cdb_options_t opts)
         {
             std::vector<FieldFragDoc>  ret;
             for(Fragment ff : fragments(document(f), rt)){
@@ -403,45 +403,58 @@ namespace yq {
             return s.size(f.id);
         }
 
-
-        void                update_icon(Field x)
+        Field::SharedData       update(Field x, cdb_options_t opts)
         {
-            Document    doc     = document(x);
-            Image       img     = best_image(doc);
-            static thread_local SQ u1("UPDATE Fields SET icon=? WHERE id=?");
-            u1.exec(img.id, x.id);
-            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-            u2.exec(doc.id, x.id);
-        }
+            if(!x)
+                return Field::SharedData();
+                
+            if(opts & U_ICON)
+                update_icon(x);
 
-
-        Field::SharedData       update_info(Field x, unsigned int opts)
-        {
             Field::SharedData data = merged(x, IS_UPDATE | opts);
-            if(!data){
-                yWarning() << "Unable to update field '" << key(x) << "' due to lack of data";
-                return {};
-            }
+            if(!data)
+                return Field::SharedData();
             
-            Category cat = category(data->category);
+            static thread_local SQ uInfo("UPDATE Fields SET name=?,brief=?,multi=?,restrict=?,category=?,pkey=?,expected=?,maxcnt=?,plural=? WHERE id=?");
+            
+            if(opts & U_INFO){
+                Category cat = category(data->category);
 
-            static thread_local SQ u1("UPDATE Fields SET name=?,brief=?,multi=?,restrict=?,category=?,pkey=?,expected=?,maxcnt=?,plural=? WHERE id=?");
-            u1.bind(1, data->name);
-            u1.bind(2, data->brief);
-            u1.bind(3, data->multiplicity.value());
-            u1.bind(4, data->restriction.value());
-            u1.bind(5, cat.id);
-            u1.bind(6, data->pkey);
-            u1.bind(7, data->expected);
-            u1.bind(8, data->max_count);
-            u1.bind(9, data->plural);
-            u1.bind(10, x.id);
-            u1.exec();
+                uInfo.bind(1, data->name);
+                uInfo.bind(2, data->brief);
+                uInfo.bind(3, data->multiplicity.value());
+                uInfo.bind(4, data->restriction.value());
+                uInfo.bind(5, cat.id);
+                uInfo.bind(6, data->pkey);
+                uInfo.bind(7, data->expected);
+                uInfo.bind(8, data->max_count);
+                uInfo.bind(9, data->plural);
+                uInfo.bind(10, x.id);
+                uInfo.exec();
+            }
             
             return data;
         }
         
-        Field::SharedFile        writable(Field f, const Root* rt, unsigned int opts)
+        void                update_icon(Field x)
+        {
+            if(!x)
+                return ;
+                
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            
+            static thread_local SQ u1("UPDATE Fields SET icon=? WHERE id=?");
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+
+            if(icon(doc) != img){
+                u1.exec(img.id, x.id);
+                u2.exec(doc.id, x.id);
+            }
+        }
+
+        
+        Field::SharedFile        writable(Field f, const Root* rt, cdb_options_t opts)
         {
             Document    d   = document(f);
             if(!d)

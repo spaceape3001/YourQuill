@@ -26,6 +26,12 @@ namespace yq {
         bool operator==(const Info&) const = default;
     };
 
+    struct Field::Rank {
+        Field           field;
+        uint64_t        rank = 0;
+        constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
+   };
+
     namespace cdb {
         using FieldFragDoc      = std::pair<Fragment, Field::SharedFile>;
         
@@ -77,7 +83,7 @@ namespace yq {
         */
         Field                   field(Document, bool calc=false);
         Field                   field(std::string_view);
-        Field::SharedFile       field_doc(Fragment, unsigned int opts=0);
+        Field::SharedFile       field_doc(Fragment, cdb_options_t opts=0);
 
         Image                   icon(Field);
 
@@ -91,7 +97,7 @@ namespace yq {
         
         //Leaf                    leaf(Atom
 
-        Field::SharedData       merged(Field, unsigned int opts=0);
+        Field::SharedData       merged(Field, cdb_options_t opts=0);
         //Class                   make_class(std::string_view , const Root* rt=nullptr);
 
         std::string             name(Field);
@@ -106,18 +112,18 @@ namespace yq {
         //! \brief Returns the FIRST class fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        Field::SharedFile       read(Field, const Root*, unsigned int opts=0);
+        Field::SharedFile       read(Field, const Root*, cdb_options_t opts=0);
 
-        std::vector<FieldFragDoc>    reads(Field, unsigned int opts=0);
-        std::vector<FieldFragDoc>    reads(Field, class Root*, unsigned int opts=0);
+        std::vector<FieldFragDoc>    reads(Field, cdb_options_t opts=0);
+        std::vector<FieldFragDoc>    reads(Field, class Root*, cdb_options_t opts=0);
 
         std::vector<Tag>             tags(Field, Sorted sorted=Sorted());
         size_t                  tags_count(Field);
 
         bool                    tagged(Field, Tag);
 
+        Field::SharedData       update(Field, cdb_options_t opts=0);
         void                    update_icon(Field);
-        Field::SharedData       update_info(Field, unsigned int opts=0);
 
 
         //!  \brief   Returns a writable document
@@ -125,6 +131,6 @@ namespace yq {
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        Field::SharedFile       writable(Field, const Root*, unsigned int opts=0);
+        Field::SharedFile       writable(Field, const Root*, cdb_options_t opts=0);
     }
 }

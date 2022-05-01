@@ -37,7 +37,7 @@ void    init_magicka()
     Magick::InitializeMagick( CmdArgs::appName().data());
 }
 
-void    update_image(Image img, unsigned int opts)
+void    update_image(Image img, cdb_options_t opts)
 {
     if(!img)
         return;

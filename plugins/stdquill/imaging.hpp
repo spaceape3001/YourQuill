@@ -6,9 +6,11 @@
 
 #pragma once
 
+#include <db/core/cdb_common.hpp>
+
 namespace yq {
     struct Image;
 }
 
 void    init_magicka();
-void    update_image(yq::Image img, unsigned int opts=0);
+void    update_image(yq::Image img, yq::cdb::cdb_options_t opts=0);

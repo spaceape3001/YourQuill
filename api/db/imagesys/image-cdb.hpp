@@ -30,6 +30,9 @@ namespace yq {
 
         Document                document(Image);
 
+            //! Removes this image from the cache
+        void                    erase(Image);
+
         bool                    exists(Image);
         bool                    exists_image(uint64_t);
         

@@ -9,20 +9,20 @@
 namespace yq {
     namespace cdb {
         namespace {
-            Vector<Fragment>    all_fragments_sorted()
+            std::vector<Fragment>    all_fragments_sorted()
             {
                 static thread_local SQ s("SELECT id FROM Fragments ORDER BY path");
                 return s.vec<Fragment>();
             }
             
-            Vector<Fragment>    all_fragments_unsorted()
+            std::vector<Fragment>    all_fragments_unsorted()
             {
                 static thread_local SQ s("SELECT id FROM Fragments");
                 return s.vec<Fragment>();
             }
         }
         
-        Vector<Fragment>    all_fragments(Sorted sorted)
+        std::vector<Fragment>    all_fragments(Sorted sorted)
         {
             return sorted ? all_fragments_sorted() : all_fragments_unsorted();
         }
@@ -34,20 +34,20 @@ namespace yq {
         }
         
         namespace {
-            Vector<Fragment>    all_fragments_suffix_sorted(std::string_view sfx)
+            std::vector<Fragment>    all_fragments_suffix_sorted(std::string_view sfx)
             {
                 static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
                 return s.vec<Fragment>(sfx);
             }
             
-            Vector<Fragment>    all_fragments_suffix_unsorted(std::string_view sfx)
+            std::vector<Fragment>    all_fragments_suffix_unsorted(std::string_view sfx)
             {
                 static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=?");
                 return s.vec<Fragment>(sfx);
             }
         }
 
-        Vector<Fragment>    all_fragments_suffix(std::string_view sfx, Sorted sorted)
+        std::vector<Fragment>    all_fragments_suffix(std::string_view sfx, Sorted sorted)
         {
             return sorted ? all_fragments_suffix_sorted(sfx) : all_fragments_suffix_unsorted(sfx);
         }
@@ -63,7 +63,7 @@ namespace yq {
     #endif
         
         
-        Vector<uint8_t>         data(Fragment);     // TODO
+        std::vector<uint8_t>         data(Fragment);     // TODO
 
         std::pair<Fragment, Document>   db_fragment(Directory dirParent, std::string_view k, bool *wasCreated)
         {
@@ -159,12 +159,12 @@ namespace yq {
             return s.as<Folder>(f.id);
         }
 
-        Vector<Folder>      folder_path(Fragment f)
+        std::vector<Folder>      folder_path(Fragment f)
         {
             return folder_path(document(f));
         }
         
-        ByteArray           frag_bytes(Fragment f, unsigned opts)
+        ByteArray           frag_bytes(Fragment f, cdb_options_t opts)
         {
             std::filesystem::path   p = path(f);
             Fragment::Lock  lk;
@@ -179,18 +179,18 @@ namespace yq {
             return file_bytes(p);
         }
         
-        ByteArray           frag_bytes(std::string_view k, unsigned opts)
+        ByteArray           frag_bytes(std::string_view k, cdb_options_t opts)
         {
             return frag_bytes(fragment(document(k)), opts);
         }
         
-        ByteArray           frag_bytes(std::string_view k, DataRole dr, unsigned opts)
+        ByteArray           frag_bytes(std::string_view k, DataRole dr, cdb_options_t opts)
         {
             return frag_bytes(fragment(document(k),dr), opts);
         }
         
         
-        std::string              frag_string(Fragment f, unsigned opts)
+        std::string              frag_string(Fragment f, cdb_options_t opts)
         {
             std::filesystem::path   p = path(f);
             Fragment::Lock  lk;
@@ -205,12 +205,12 @@ namespace yq {
             return file_string(p);
         }
         
-        std::string              frag_string(std::string_view k, unsigned opts)
+        std::string              frag_string(std::string_view k, cdb_options_t opts)
         {
             return frag_string(fragment(document(k)), opts);
         }
         
-        std::string              frag_string(std::string_view k, DataRole dr, unsigned opts)
+        std::string              frag_string(std::string_view k, DataRole dr, cdb_options_t opts)
         {
             return frag_string(fragment(document(k),dr), opts);
         }
@@ -233,12 +233,12 @@ namespace yq {
         }
         
         
-        Vector<Fragment>    fragments(std::string_view k, Sorted sorted)
+        std::vector<Fragment>    fragments(std::string_view k, Sorted sorted)
         {
             return fragments(document(k),sorted);
         }
         
-        Vector<Fragment>    fragments(std::string_view k, DataRole dr, Sorted sorted)
+        std::vector<Fragment>    fragments(std::string_view k, DataRole dr, Sorted sorted)
         {
             return fragments(document(k), dr, sorted);
         }

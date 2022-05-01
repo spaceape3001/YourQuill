@@ -58,8 +58,8 @@ namespace yq {
         std::string             label(Tag);
         Leaf                    leaf(Tag t);
         
-        Tag                     make_tag(std::string_view, const Root* rt=nullptr, unsigned int opts=0);
-        Tag::SharedData         merged(Tag, unsigned int opts=0);
+        Tag                     make_tag(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0);
+        Tag::SharedData         merged(Tag, cdb_options_t opts=0);
         
         std::string             name(Tag);
         
@@ -68,10 +68,10 @@ namespace yq {
         //! \brief Returns the FIRST tag fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        Tag::SharedFile         read(Tag, const Root*, unsigned int opts=0);
+        Tag::SharedFile         read(Tag, const Root*, cdb_options_t opts=0);
         
-        std::vector<TagFragDoc> reads(Tag, unsigned int opts=0);
-        std::vector<TagFragDoc> reads(Tag, class Root*, unsigned int opts=0);
+        std::vector<TagFragDoc> reads(Tag, cdb_options_t opts=0);
+        std::vector<TagFragDoc> reads(Tag, class Root*, cdb_options_t opts=0);
         
         bool                    set_brief(Tag, std::string_view, class Root* rt=nullptr);
         bool                    set_name(Tag, std::string_view, class Root* rt=nullptr);
@@ -81,20 +81,21 @@ namespace yq {
         Tag                     tag(uint64_t);
         Tag                     tag(Document, bool calc=false);
         
-        Tag::SharedFile         tag_doc(Fragment, unsigned int opts=0);
+        Tag::SharedFile         tag_doc(Fragment, cdb_options_t opts=0);
 
         std::vector<Tag>        tags(const string_set_t&, bool noisy=false);
+        std::set<Tag>           tags_set(const string_set_t&, bool noisy=false);
+        std::set<Tag>           tags_set(const string_view_set_t&, bool noisy=false);
 
-        void                    update(Tag, Leaf);
         void                    update_icon(Tag);
-        Tag::SharedData         update_info(Tag, unsigned int opts=0);
+        Tag::SharedData         update(Tag, cdb_options_t opts=0);
 
         //!  \brief   Returns a writable document
         //!
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        Tag::SharedFile         write(Tag, const Root*, unsigned int opts=0);
+        Tag::SharedFile         write(Tag, const Root*, cdb_options_t opts=0);
     };
 
 }

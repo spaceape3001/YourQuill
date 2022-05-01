@@ -10,3 +10,10 @@ CREATE TABLE Leafs (
 	brief       VARCHAR(255)
 );
 
+CREATE TABLE LTags (
+    leaf        INTEGER NOT NULL,
+    tag         INTEGER NOT NULL,
+    UNIQUE(leaf, tag)
+);
+
+

@@ -16,6 +16,50 @@ namespace yq {
         {
         }
 
+        bool        SQ::batch(uint64_t i, const string_set_t& arg2)
+        {
+            bool ret    = true;
+            for(const std::string& j : arg2){
+                bind(1, i);
+                bind(2, j);
+                ret = exec() && ret;
+            }
+            return ret;
+        }
+        
+        bool        SQ::batch(const string_set_t& arg1, uint64_t j)
+        {
+            bool    ret = true;
+            for(const std::string&i : arg1){
+                bind(1, i);
+                bind(2, j);
+                ret = exec() && ret;
+            }
+            return ret;
+        }
+
+        bool        SQ::batch(uint64_t i, const std::set<uint64_t>& arg2)
+        {
+            bool ret    = true;
+            for(uint64_t j : arg2){
+                bind(1, i);
+                bind(2, j);
+                ret = exec() && ret;
+            }
+            return ret;
+        }
+        
+        bool        SQ::batch(const std::set<uint64_t>& arg1, uint64_t j)
+        {
+            bool    ret = true;
+            for(uint64_t i : arg1){
+                bind(1, i);
+                bind(2, j);
+                ret = exec() && ret;
+            }
+            return ret;
+        }
+
         bool        SQ::boolean()
         {
             auto _af = af();
@@ -67,10 +111,18 @@ namespace yq {
 
         bool        SQ::exec(uint64_t i, uint64_t j)
         {
-            bind(1, (int64_t) i);
-            bind(2, (int64_t) j);
+            bind(1, i);
+            bind(2, j);
             return exec();
         }
+
+        bool        SQ::exec(uint64_t i, std::string_view j)
+        {
+            bind(1, i);
+            bind(2, j);
+            return exec();
+        }
+            
 
         std::filesystem::path   SQ::path()
         {

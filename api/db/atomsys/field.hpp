@@ -24,6 +24,7 @@ namespace yq {
         static constexpr const char*    szExtension = "field";
         struct Info;
         struct Data;
+        struct Rank;
         class File;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
@@ -33,7 +34,7 @@ namespace yq {
         static bool less_name(Field a, Field b);
 
         uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Field&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Field&rhs) const noexcept = default;
+        constexpr operator bool() const noexcept { return id != 0ULL; }
     };
 }

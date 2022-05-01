@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include <iterator>
 #include <list>
 #include <set>
 #include <string>
@@ -43,10 +44,10 @@ namespace yq {
                               OutputIt d_right, Compare comp
     ){
         while (first1 != last1 && first2 != last2) {
-            if (comp(*first1 < *first2)) {
+            if (comp(*first1, *first2)) {
                 *d_left++  = *first1++;
             } else  {
-                if (!comp(*first2 < *first1)) { 
+                if (!comp(*first2,  *first1)) { 
                     *d_middle++ = *first1++;
                 } else {
                     *d_right++ = *first2; 
@@ -56,6 +57,25 @@ namespace yq {
         }
     }
                               
+    template<class InputIt1, class InputIt2, class OutputIt, class Compare>
+    void    set_left_right(InputIt1 first1, InputIt1 last1,
+                              InputIt2 first2, InputIt2 last2,
+                              OutputIt d_left, 
+                              OutputIt d_right, Compare comp
+    ){
+        while (first1 != last1 && first2 != last2) {
+            if (comp(*first1, *first2)) {
+                *d_left++  = *first1++;
+            } else  {
+                if (!comp(*first2, *first1)) { 
+                    ++first1;
+                } else {
+                    *d_right++ = *first2; 
+                }
+                ++first2;
+            }
+        }
+    }
 
     template <typename T, typename C, typename A>
     std::set<T, C, A>    operator+(const std::set<T, C, A>& a, const std::set<T, C, A>& b)
@@ -141,10 +161,24 @@ namespace yq {
     };
 
     template <typename T, typename C, typename A>
-    changes_t<T,C,A>    changes(const std::set<T,C,A>& from, const std::set<T,C,A>& to)
+    changes_t<T,C,A>    changes(const std::set<T,C,A>& from, const std::set<T,C,A>& to, C c=C())
     {
         changes_t<T,C,A>    ret;
-        set_changes(from.begin(), from.end(), to.begin(), to.end(), ret.removed.begin(), ret.same.begin(), ret.added.begin(), from.key_compare());
+        set_changes(from.begin(), from.end(), to.begin(), to.end(), 
+            std::inserter(ret.removed, ret.removed.end()), 
+            std::inserter(ret.same, ret.same.end()), 
+            std::inserter(ret.added, ret.added.end()), c
+        );
+        return ret;
+    }
+
+    template <typename T, typename C, typename A>
+    changes_t<T,C,A>    add_remove(const std::set<T,C,A>& from, const std::set<T,C,A>& to, C c=C())
+    {
+        changes_t<T,C,A>    ret;
+        set_left_right(from.begin(), from.end(), to.begin(), to.end(), 
+            std::inserter(ret.removed, ret.removed.end()), 
+            std::inserter(ret.added, ret.added.end()), c);
         return ret;
     }
 

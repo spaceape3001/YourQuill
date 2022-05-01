@@ -74,6 +74,11 @@ namespace yq {
                 return U{u64(i)};
             }
 
+            bool        batch(uint64_t argi, const string_set_t& arg2);
+            bool        batch(const string_set_t& arg1, uint64_t arg2);
+            bool        batch(uint64_t argi, const std::set<uint64_t>& arg2);
+            bool        batch(const std::set<uint64_t>& arg1, uint64_t arg2);
+
             bool        boolean();
             bool        boolean(uint64_t);
             bool        boolean(uint64_t, uint64_t);
@@ -86,6 +91,7 @@ namespace yq {
             
                 //! Executes two argument statements
             bool        exec(uint64_t arg1, uint64_t arg2);
+            bool        exec(uint64_t arg1, std::string_view arg2);
             
             std::filesystem::path   path();
             std::filesystem::path   path(uint64_t);

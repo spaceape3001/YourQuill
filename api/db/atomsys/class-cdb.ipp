@@ -8,6 +8,7 @@
 
 #include <db/orgsys/category-cdb.hpp>
 #include <db/orgsys/tag-cdb.hpp>
+#include <yq/collection/c_utils.hpp>
 
 namespace yq {
     bool Class::less_key(Class a, Class b)
@@ -35,12 +36,6 @@ namespace yq {
             }
         }
 
-        string_set_t         aliases(Class c)
-        {
-            static thread_local SQ s("SELECT alias FROM CAlias WHERE class=?");
-            return s.sset(c.id);
-        }
-
         namespace {
             std::vector<Class>    all_classes_sorted()
             {
@@ -65,7 +60,12 @@ namespace yq {
             static thread_local SQ    s("SELECT COUNT(1) FROM Classes");
             return s.size();
         }
-        
+
+        string_set_t        alternative_keys(Class c)
+        {
+            static thread_local SQ   s("SELECT k FROM CLookup WHERE class=? AND priority=0");
+            return s.sset(c.id);
+        }
         
         std::string  binding(Class c)
         {
@@ -103,15 +103,14 @@ namespace yq {
             
             return Class();
         }
-
         
         Class  class_(std::string_view  k)
         {
-            static thread_local SQ s("SELECT id FROM Classes WHERE k=?");
+            static thread_local SQ s("SELECT class, priority FROM CLookup WHERE k=? ORDER BY priority DESC LIMIT 1");
             return s.as<Class>(k);
         }
 
-        Class::SharedFile  class_doc(Fragment f, unsigned int opts)
+        Class::SharedFile  class_doc(Fragment f, cdb_options_t opts)
         {
             if(!f)
                 return Class::SharedFile();
@@ -180,6 +179,7 @@ namespace yq {
                 return Class();
         
             static thread_local SQ    i("INSERT OR FAIL INTO Classes (id,k) VALUES (?,?)");
+            static thread_local SQ    i2("INSERT OR REPLACE INTO CLookup (id,k,priority) VALUES (?,?,1)");
             auto i_lk   = i.af();
 
             i.bind(1, doc.id);
@@ -187,6 +187,9 @@ namespace yq {
             if(i.exec()){
                 if(wasCreated)
                     *wasCreated = true;
+                i2.bind(1, doc.id);
+                i2.bind(2, k);
+                i2.exec();
                 return Class{doc.id};
             } else if(exists_class(doc.id)){
                 return Class{doc.id};
@@ -203,17 +206,23 @@ namespace yq {
                 ret.push_back(db_class(s));
             return ret;
         }
+
+        string_set_t         def_aliases(Class c)
+        {
+            static thread_local SQ s("SELECT alias FROM CAlias WHERE class=?");
+            return s.sset(c.id);
+        }
         
         namespace {
             std::vector<Class>           def_derived_sorted(Class c)
             {   
-                static thread_local SQ s("SELECT class FROM CDependsDef INNER JOIN Classes ON CDependsDef.class=Classes.id WHERE base=? ORDER BY Classes.k");
+                static thread_local SQ s("SELECT class FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? AND hops=0 ORDER BY Classes.k");
                 return s.vec<Class>();
             }
 
             std::vector<Class>           def_derived_unsorted(Class c)
             {   
-                static thread_local SQ s("SELECT class FROM CDependsDef WHERE base=?");
+                static thread_local SQ s("SELECT class FROM CDepends WHERE base=? AND hops=0 ");
                 return s.vec<Class>();
             }
         }
@@ -226,13 +235,13 @@ namespace yq {
         namespace {
             std::vector<Field>           def_fields_sorted(Class c)
             {
-                static thread_local SQ s("SELECT field FROM FDefClass INNER JOIN Fields ON FDefClass.field=Fields.id WHERE field=? ORDER BY Fields.cK");
+                static thread_local SQ s("SELECT field FROM CFields INNER JOIN Fields ON FDefClass.field=Fields.id WHERE field=? AND hops=0 ORDER BY Fields.cK");
                 return s.vec<Field>(c.id);
             }
 
             std::vector<Field>           def_fields_unsorted(Class c)
             {
-                static thread_local SQ s("SELECT field FROM FDefClass WHERE class=?");
+                static thread_local SQ s("SELECT field FROM CFields WHERE class=? AND hops=0");
                 return s.vec<Field>(c.id);
             }
         }
@@ -242,17 +251,22 @@ namespace yq {
             return sorted ? def_fields_sorted(c) : def_fields_unsorted(c);
         }
 
+        string_set_t            def_prefixes(Class c)
+        {
+            static thread_local SQ  s("SELECT prefix FROM CPrefix WHERE class=?");
+            return s.sset(c.id);
+        }
 
         namespace {
             std::vector<Class>        def_reverse_sorted(Class c)
             {
-                static thread_local SQ s("SELECT reverse FROM CReverseDef INNER JOIN Classes ON CReverseDef.reverse=Classes.id WHERE class=? ORDER BY Classes.k");
+                static thread_local SQ s("SELECT reverse FROM CReverses INNER JOIN Classes ON CReverseDef.reverse=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
                 return s.vec<Class>(c.id);
             }
 
             std::vector<Class>        def_reverse_unsorted(Class c)
             {
-                static thread_local SQ s("SELECT reverse FROM CReverseDef WHERE class=?");
+                static thread_local SQ s("SELECT reverse FROM CReverses WHERE class=? AND hops=0");
                 return s.vec<Class>(c.id);
             }
         }
@@ -265,13 +279,13 @@ namespace yq {
         namespace {
             std::vector<Class>        def_source_sorted(Class c)
             {
-                static thread_local SQ s("SELECT source FROM CSourceDef INNER JOIN Classes ON CSourceDef.source=Classes.id WHERE class=? ORDER BY Classes.k");
+                static thread_local SQ s("SELECT source FROM CSources INNER JOIN Classes ON CSourceDef.source=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
                 return s.vec<Class>(c.id);
             }
 
             std::vector<Class>        def_source_unsorted(Class c)
             {
-                static thread_local SQ s("SELECT source FROM CSourceDef WHERE class=?");
+                static thread_local SQ s("SELECT source FROM CSources WHERE class=? AND hops=0");
                 return s.vec<Class>(c.id);
             }
         }
@@ -281,16 +295,22 @@ namespace yq {
             return sorted ? def_source_sorted(c) : def_source_unsorted(c);
         }
         
+        string_set_t                def_suffixes(Class c)
+        {
+            static thread_local SQ  s("SELECT suffix FROM CSuffix WHERE class=?");
+            return s.sset(c.id);
+        }
+
         namespace {
             std::vector<Class>        def_target_sorted(Class c)
             {
-                static thread_local SQ s("SELECT target FROM CTargetDef INNER JOIN Classes ON CTargetDef.target=Classes.id WHERE class=? ORDER BY Classes.k");
+                static thread_local SQ s("SELECT target FROM CTargets INNER JOIN Classes ON CTargetDef.target=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
                 return s.vec<Class>(c.id);
             }
 
             std::vector<Class>        def_target_unsorted(Class c)
             {
-                static thread_local SQ s("SELECT target FROM CTargetDef WHERE class=?");
+                static thread_local SQ s("SELECT target FROM CTargets WHERE class=? AND hops=0");
                 return s.vec<Class>(c.id);
             }
         }
@@ -304,13 +324,13 @@ namespace yq {
         namespace {
             std::vector<Class>        def_use_sorted(Class c)
             {
-                static thread_local SQ s("SELECT base FROM CDependsDef INNER JOIN Classes ON CDependsDef.base=Classes.id WHERE class=? ORDER BY Classes.k");
+                static thread_local SQ s("SELECT base FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
                 return s.vec<Class>(c.id);
             }
 
             std::vector<Class>        def_use_unsorted(Class c)
             {
-                static thread_local SQ s("SELECT base FROM CDependsDef WHERE class=?");
+                static thread_local SQ s("SELECT base FROM CDepends WHERE class=? AND hops=0");
                 return s.vec<Class>(c.id);
             }
         }
@@ -345,6 +365,29 @@ namespace yq {
         std::vector<Class>       dependents(Class c, Sorted sorted)
         {
             return sorted ? dependents_sorted(c) : dependents_unsorted(c);
+        }
+        
+        std::vector<Class::Rank>    dependents_ranked(Class c)
+        {
+            static thread_local SQ  s("SELECT class, hops FROM CDepends WHERE base=?");
+            auto s_af = s.af();
+            s.bind(1, c.id);
+            std::vector<Class::Rank>    ret;
+            while(s.step() == SqlQuery::Row)
+                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
+            return ret;
+        }
+
+        std::vector<Class::Rank>    dependents_ranked(Class c, int64_t depth)
+        {
+            static thread_local SQ  s("SELECT class, hops FROM CDepends WHERE base=? AND hops<=depth");
+            auto s_af = s.af();
+            s.bind(1, c.id);
+            s.bind(2, depth);
+            std::vector<Class::Rank>    ret;
+            while(s.step() == SqlQuery::Row)
+                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
+            return ret;
         }
 
         Folder              detail_folder(Class c)
@@ -410,6 +453,7 @@ namespace yq {
                 SQ("DELETE FROM CPrefix WHERE class=?"),
                 SQ("DELETE FROM CSuffix WHERE class=?"),
                 SQ("DELETE FROM CTags WHERE class=?"),
+                SQ("DELETE FROM CLookup WHERE class=? AND priority=1"),
                 SQ("DELETE FROM Classes WHERE id=?")
             };
             
@@ -580,7 +624,7 @@ namespace yq {
         }
         
 
-        Class::SharedData            merged(Class c, unsigned int opts)
+        Class::SharedData            merged(Class c, cdb_options_t opts)
         {
             Class::SharedData        ret = std::make_shared<Class::Data>();;
             for(auto& i : reads(c, opts)){
@@ -644,18 +688,13 @@ namespace yq {
             return s.str(c.id);
         }
 
-        string_set_t            prefixes(Class c)
-        {
-            static thread_local SQ  s("SELECT prefix FROM CPrefix WHERE class=?");
-            return s.sset(c.id);
-        }
 
-        Class::SharedFile        read(Class c, const Root*rt, unsigned int opts)
+        Class::SharedFile        read(Class c, const Root*rt, cdb_options_t opts)
         {
             return class_doc(fragment(document(c), rt), opts);
         }
 
-        std::vector<ClassFragDoc>    reads(Class c, unsigned int opts)
+        std::vector<ClassFragDoc>    reads(Class c, cdb_options_t opts)
         {
             std::vector<ClassFragDoc>  ret;
             for(Fragment f : fragments(document(c), DataRole::Config)){
@@ -666,7 +705,7 @@ namespace yq {
             return ret;
         }
 
-        std::vector<ClassFragDoc>  reads(Class c, class Root*rt, unsigned int opts)
+        std::vector<ClassFragDoc>  reads(Class c, class Root*rt, cdb_options_t opts)
         {
             std::vector<ClassFragDoc>  ret;
             for(Fragment f : fragments(document(c), rt)){
@@ -722,11 +761,6 @@ namespace yq {
             return s.size(c.id);
         }
 
-        string_set_t            suffixes(Class c)
-        {
-            static thread_local SQ  s("SELECT suffix FROM CSuffix WHERE class=?");
-            return s.sset(c.id);
-        }
 
         std::set<Tag>               tag_set(Class c)
         {
@@ -792,37 +826,116 @@ namespace yq {
             return s.size(c.id);
         }
         
-        void                update_icon(Class x)
+        Class::SharedData   update(Class x, cdb_options_t opts)
         {
-            Document    doc     = document(x);
-            Image       img     = best_image(doc);
-            static thread_local SQ u1("UPDATE Classes SET icon=? WHERE id=?");
-            u1.exec(img.id, x.id);
-            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-            u2.exec(doc.id, x.id);
-        }
+            if(!x)
+                return Class::SharedData{};
 
+            if(opts & U_ICON)
+                update_icon(x);
+            
+            Class::SharedData data = merged(x, opts);
+            if(!data)
+                return Class::SharedData();
+            
+            std::string     k   = key(x);
 
-        Class::SharedData           update_info(Class x, unsigned int opts)
-        {
-            Class::SharedData data = merged(x, IS_UPDATE | opts);
-            if(!data){
-                yWarning() << "Unable to update class '" << key(x) << "' due to lack of data";
-                return {};
+            static thread_local SQ iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
+            static thread_local SQ iPrefix("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
+            static thread_local SQ iSuffix("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
+            static thread_local SQ iLookup("INSERT INTO CLookup (class, k, priority) VALUES (?,?,0)");
+            static thread_local SQ iTag("INSERT INTO CTags (class, tag) VALUES (?,?)");
+            
+            static thread_local SQ dAlias("DELETE FROM CAlias WHERE class=? AND alias=?");
+            static thread_local SQ dPrefix("DELETE FROM CPrefix WHERE class=? AND prefix=?");
+            static thread_local SQ dSuffix("DELETE FROM CSuffix WHERE class=? AND suffix=?");
+            static thread_local SQ dLookup("DELETE FROM CLookup WHERE class=? AND k=?");
+            static thread_local SQ dTag("DELETE FROM CTags WHERE class=? AND tag=?");
+
+            static thread_local SQ uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
+
+            if(opts & U_INFO){
+                Category cat = category(data->category);
+                uInfo.bind(1, data->name);
+                uInfo.bind(2, data->plural);
+                uInfo.bind(3, data->brief);
+                uInfo.bind(4, cat.id);
+                uInfo.bind(5, data->binding);
+                uInfo.bind(6, x.id);
+                uInfo.exec();
+                
+                string_set_t    old_aliases         = def_aliases(x);
+                string_set_t    old_prefixes        = def_prefixes(x);
+                string_set_t    old_suffixes        = def_suffixes(x);
+                string_set_t    old_alternatives    = alternative_keys(x);
+                
+                string_set_t    alts;
+                for(auto& p : data->prefixes){
+                    alts << p + k;
+                    for(auto& a : data->aliases){
+                        alts << p + a;
+                        for(auto & s : data->suffixes)
+                            alts << p + a + s;
+                   }
+                }
+                
+                for(auto& a : data->aliases){
+                    alts << a;
+                    for(auto& s : data->suffixes)
+                        alts << a + s;
+                }
+                
+                for(auto& s : data->suffixes)
+                    alts << k + s;
+                
+                auto    ch_alias        = add_remove(old_aliases, data->aliases);
+                auto    ch_prefix       = add_remove(old_prefixes, data->prefixes);
+                auto    ch_suffix       = add_remove(old_suffixes, data->suffixes);
+                auto    ch_alternative  = add_remove(old_alternatives, alts);
+                
+                iAlias.batch(x.id, ch_alias.added);
+                dAlias.batch(x.id, ch_alias.removed);
+                
+                iPrefix.batch(x.id, ch_prefix.added);
+                dPrefix.batch(x.id, ch_prefix.removed);
+
+                iSuffix.batch(x.id, ch_suffix.added);
+                dSuffix.batch(x.id, ch_suffix.removed);
+
+                iLookup.batch(x.id, ch_alternative.added);
+                dLookup.batch(x.id, ch_alternative.removed);
             }
             
-            Category cat = category(data->category);
-            static thread_local SQ uc("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
-            uc.bind(1, data->name);
-            uc.bind(2, data->plural);
-            uc.bind(3, data->brief);
-            uc.bind(4, cat.id);
-            uc.bind(5, data->binding);
-            uc.bind(6, x.id);
-            uc.exec();
+            if(opts & U_TAGS){
+                std::set<Tag>   old_tags = make_set(tags(x));
+                std::set<Tag>   new_tags = tags_set(data->tags, true);
+                
+                auto ch_tag = add_remove(old_tags, new_tags);
+                iTag.batch(x.id, ids_for(ch_tag.added));
+                dTag.batch(x.id, ids_for(ch_tag.removed));
+            }
+            
             return data;
         }
         
+        
+        void                update_icon(Class x)
+        {
+            if(!x)
+                return ;
+                
+            static thread_local SQ u1("UPDATE Classes SET icon=? WHERE id=?");
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            if(img != icon(x)){
+                u1.exec(img.id, x.id);
+                u2.exec(doc.id, x.id);
+            }
+        }
+
+
         
         namespace {
             std::vector<Class>    uses_sorted(Class c)
@@ -849,8 +962,32 @@ namespace yq {
             static thread_local SQ s("SELECT COUNT(1) FROM CDepends WHERE class=?");
             return s.size(c.id);
         }
+
+        std::vector<Class::Rank>    uses_ranked(Class c)
+        {
+            static thread_local SQ  s("SELECT base, hops FROM CDepends WHERE class=?");
+            auto s_af = s.af();
+            s.bind(1, c.id);
+            std::vector<Class::Rank>    ret;
+            while(s.step() == SqlQuery::Row)
+                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
+            return ret;
+        }
+
+        std::vector<Class::Rank>    uses_ranked(Class c, int64_t depth)
+        {
+            static thread_local SQ  s("SELECT base, hops FROM CDepends WHERE class=? AND hops<=depth");
+            auto s_af = s.af();
+            s.bind(1, c.id);
+            s.bind(2, depth);
+            std::vector<Class::Rank>    ret;
+            while(s.step() == SqlQuery::Row)
+                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
+            return ret;
+        }
         
-        Class::SharedFile        writable(Class c, const Root* rt, unsigned int opts)
+
+        Class::SharedFile        writable(Class c, const Root* rt, cdb_options_t opts)
         {
             Document    d   = document(c);
             if(!d)

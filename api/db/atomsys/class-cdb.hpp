@@ -35,11 +35,16 @@ namespace yq {
 
         bool operator==(const Info&) const = default;
     };
+    
+    struct Class::Rank {
+        Class       cls;
+        int64_t     rank    = 0;
+        constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
+    };
 
     namespace cdb {
         using ClassFragDoc      = std::pair<Fragment, Class::SharedFile>;
         
-        string_set_t                aliases(Class);
 
         /*! \brief All classes in the cache database
         
@@ -52,6 +57,9 @@ namespace yq {
         */
         size_t                      all_classes_count();
         
+        string_set_t                alternative_keys(Class);
+        
+        
         std::string                 binding(Class);
 
         std::string                 brief(Class);
@@ -62,24 +70,30 @@ namespace yq {
         Class                       class_(Document, bool calc=false);
         Class                       class_(std::string_view );
 
-        Class::SharedFile           class_doc(Fragment, unsigned int opts=0);
+        Class::SharedFile           class_doc(Fragment, cdb_options_t opts=0);
         
         std::vector<Class>          classes(const string_set_t&, bool noisy=false);
         
         Class                       db_class(Document, bool *wasCreated=nullptr);
         Class                       db_class(std::string_view, bool *wasCreated=nullptr);
         
-        
+        string_set_t                def_aliases(Class);
         std::vector<Class>          def_derived(Class, Sorted sorted=Sorted());
         std::vector<Field>          def_fields(Class c, Sorted sorted=Sorted{});
         std::vector<Class>          def_reverse(Class, Sorted sorted=Sorted());
+        string_set_t                def_prefixes(Class);
         std::vector<Class>          def_source(Class, Sorted sorted=Sorted());
+        string_set_t                def_suffixes(Class);
         std::vector<Class>          def_target(Class, Sorted sorted=Sorted());
         std::vector<Class>          def_use(Class, Sorted sorted=Sorted());
         
         //Graph                   dep_graph(Class);
 
         std::vector<Class>          dependents(Class, Sorted sorted=Sorted());
+
+                //  Rank here is number of hops
+        std::vector<Class::Rank>    dependents_ranked(Class);
+        std::vector<Class::Rank>    dependents_ranked(Class, int64_t maxDepth);
         
         //Document                document(Atom);
         Document                    document(Class);
@@ -116,7 +130,7 @@ namespace yq {
         std::string                 key(Class);
         std::string                 label(Class);
 
-        Class::SharedData           merged(Class, unsigned int opts=0);
+        Class::SharedData           merged(Class, cdb_options_t opts=0);
         Class                       make_class(std::string_view , const Root* rt=nullptr);
 
         std::string                 name(Class);
@@ -127,23 +141,21 @@ namespace yq {
         std::vector<Class>          outbound(Class, Sorted sorted=Sorted());
         
         std::string                 plural(Class);
-        string_set_t                prefixes(Class);
         
 
         //! \brief Returns the FIRST class fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        Class::SharedFile           read(Class, const Root*, unsigned int opts=0);
+        Class::SharedFile           read(Class, const Root*, cdb_options_t opts=0);
 
-        std::vector<ClassFragDoc>   reads(Class, unsigned int opts=0);
-        std::vector<ClassFragDoc>   reads(Class, class Root*, unsigned int opts=0);
+        std::vector<ClassFragDoc>   reads(Class, cdb_options_t opts=0);
+        std::vector<ClassFragDoc>   reads(Class, class Root*, cdb_options_t opts=0);
 
         std::vector<Class>          reverses(Class, Sorted sorted=Sorted());
         
         std::vector<Class>          sources(Class, Sorted sorted=Sorted());
         size_t                      sources_count(Class);
         
-        string_set_t                suffixes(Class);
         
         std::set<Tag>               tag_set(Class);
         std::vector<Tag>            tags(Class, Sorted sorted=Sorted());
@@ -155,9 +167,11 @@ namespace yq {
 
         std::vector<Class>          uses(Class, Sorted sorted=Sorted());
         size_t                      uses_count(Class);
+        std::vector<Class::Rank>    uses_ranked(Class);
+        std::vector<Class::Rank>    uses_ranked(Class, int64_t depth);
 
+        Class::SharedData           update(Class, cdb_options_t opts=0);
         void                        update_icon(Class);
-        Class::SharedData           update_info(Class, unsigned int opts=0);
 
 
         //!  \brief   Returns a writable document
@@ -165,6 +179,6 @@ namespace yq {
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        Class::SharedFile           writable(Class, const Root*, unsigned int opts=0);
+        Class::SharedFile           writable(Class, const Root*, cdb_options_t opts=0);
     }
 }

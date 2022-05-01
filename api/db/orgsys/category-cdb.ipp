@@ -76,7 +76,7 @@ namespace yq {
             return Category();
         }
         
-        Category::SharedFile      category_doc(Fragment f, unsigned int opts)
+        Category::SharedFile      category_doc(Fragment f, cdb_options_t opts)
         {
             if(!f)
                 return Category::SharedFile();
@@ -230,7 +230,7 @@ namespace yq {
             return s.str(t.id);
         }
         
-        Category                     make_category(std::string_view k, const Root* rt, unsigned int opts)
+        Category                     make_category(std::string_view k, const Root* rt, cdb_options_t opts)
         {
             if(!rt)
                 rt  = wksp::root_first(DataRole::Config);
@@ -259,7 +259,7 @@ namespace yq {
             return t;
         }
 
-        Category::SharedData   merged(Category t, unsigned int opts)
+        Category::SharedData   merged(Category t, cdb_options_t opts)
         {
             if(!t)
                 return Category::SharedData();
@@ -306,13 +306,13 @@ namespace yq {
             return NKI{};
         }
         
-        Category::SharedFile          read(Category t, const Root* rt, unsigned int opts)
+        Category::SharedFile          read(Category t, const Root* rt, cdb_options_t opts)
         {
             return category_doc(fragment(document(t), rt), opts);
         }
 
         
-        std::vector<CatFragDoc>      reads(Category t, unsigned int opts)
+        std::vector<CatFragDoc>      reads(Category t, cdb_options_t opts)
         {
             std::vector<CatFragDoc>  ret;
             for(Fragment f : fragments(document(t), DataRole::Config)){
@@ -323,7 +323,7 @@ namespace yq {
             return ret;
         }
 
-        std::vector<CatFragDoc>    reads(Category t, class Root* rt, unsigned int opts)
+        std::vector<CatFragDoc>    reads(Category t, class Root* rt, cdb_options_t opts)
         {
             std::vector<CatFragDoc>  ret;
             for(Fragment f : fragments(document(t), rt)){
@@ -354,6 +354,9 @@ namespace yq {
         
         void                update_icon(Category x)
         {
+            if(!x)
+                return ;
+
             static thread_local SQ u1("UPDATE Categories SET icon=? WHERE id=?");
             static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
 
@@ -366,24 +369,31 @@ namespace yq {
             }
         }
         
-        Category::SharedData           update_info(Category x, unsigned int opts)
+        Category::SharedData           update(Category x, cdb_options_t opts)
         {
-            Category::SharedData data = merged(x, IS_UPDATE | opts);
-            if(!data){
-                yWarning() << "Unable to update category '" << key(x) << "' due to lack of data";
-                return {};
-            }
+            if(!x)
+                return Category::SharedData();
+
+            if(opts & U_ICON)
+                update_icon(x);
+            
+            Category::SharedData data = merged(x, opts);
+            if(!data)
+                return Category::SharedData();
                 
-            static thread_local SQ u("UPDATE Categories SET name=?,brief=?WHERE id=?");
-            u.bind(1, data->name);
-            u.bind(2, data->brief);
-            u.bind(3, x.id);
-            u.exec();
+            static thread_local SQ uInfo("UPDATE Categories SET name=?,brief=? WHERE id=?");
+            
+            if(opts & U_INFO){
+                uInfo.bind(1, data->name);
+                uInfo.bind(2, data->brief);
+                uInfo.bind(3, x.id);
+                uInfo.exec();
+            }
             return data;
         }
 
         
-        Category::SharedFile         write(Category t, const Root* rt, unsigned int opts)
+        Category::SharedFile         write(Category t, const Root* rt, cdb_options_t opts)
         {
             Document    d   = document(t);
             if(!d)

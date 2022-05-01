@@ -6,10 +6,12 @@
 
 #pragma once
 
+#include <set>
 #include <string>
 #include <string_view>
 #include <utility>
 #include <variant>
+#include <vector>
 
 namespace yq {
     struct Atom;
@@ -43,31 +45,42 @@ namespace yq {
 
         enum {
             //! Include hidden things
-            HIDDEN                  = 0x01,
+            HIDDEN                  = 1 << 0,
 
             //! Best sort available (equiv to Sorted::YES)
-            BEST_SORT                = 0x02,
+            BEST_SORT               = 1 << 1,
             
             // Update flags
             
             //! Consider this an "update" so reset the fragment to "updated" 
             //! \note Only the scanner should be using this, may cause issues for otherrs to set this
-            IS_UPDATE               = 0x04,
+            IS_UPDATE               = 1 << 2,
             //! Ignore attributes
-            IGNORE_ATTRIBUTES       = 0x08,
+            IGNORE_ATTRIBUTES       = 1 << 3,
             //! Ignore context
-            IGNORE_CONTEXT          = 0x10,
+            IGNORE_CONTEXT          = 1 << 4,
             
-            OVERRIDE                = 0x20,
+            OVERRIDE                = 1 << 5,
             
-            ALLOW_EMPTY             = 0x40,
+            ALLOW_EMPTY             = 1 << 6,
             
             //! Skip biograph (in users/groups)
-            SKIP_BIO                = 0x80,
+            SKIP_BIO                = 1 << 7,
             
-            DONT_LOCK               = 0x100
+            DONT_LOCK               = 1 << 8,
+
+            U_ICON                  = 1 << 9,
+            
+            // DO INFO
+            U_INFO                  = 1 << 10,
+            
+            U_TAGS                  = 1 << 11,
+            
+            U_LEAF                  = 1 << 12
             
         };
+        
+        using cdb_options_t         = unsigned int;
     
         /*! Base key of the argument
         
@@ -77,5 +90,23 @@ namespace yq {
         std::string_view                base_key(std::string_view);
         
         std::string                     make_filename(std::string_view k, const char* ext);
+        
+        template <typename C>
+        std::set<uint64_t>              ids_for(const std::set<C>& cs)
+        {
+            std::set<uint64_t> ret;
+            for(auto& c : cs)
+                ret.insert(c.id);
+            return ret;
+        }
+
+        template <typename C>
+        std::vector<uint64_t>           ids_for(const std::vector<C>& cs)
+        {
+            std::vector<uint64_t> ret;
+            for(auto& c : cs)
+                ret.insert(c.id);
+            return ret;
+        }
     }
 }

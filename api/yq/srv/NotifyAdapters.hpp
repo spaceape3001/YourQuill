@@ -58,8 +58,8 @@ namespace yq {
     template <void(*FN)(Fragment)>
     class FragmentFileNotifier : public Notifier {
     public:
-        FragmentFileNotifier(Trigger t, Flag<Change> ch, Folder folder, std::string_view ext, const std::filesystem::path& fname, const std::source_location&sl) :
-            Notifier(t, ch, folder, ext, fname, sl)
+        FragmentFileNotifier(Trigger t, Flag<Change> ch, Folder folder, std::string_view ext, const std::filesystem::path& fname, int _order, const std::source_location&sl) :
+            Notifier(t, ch, folder, ext, fname, _order, sl)
         {
         }
 

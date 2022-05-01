@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <vector>
+
 namespace yq {
     class Root;
     class ByteArray;
@@ -29,15 +31,13 @@ namespace yq {
         /*! \brief ALL the folders in the cache
         
             \param[in] sorted   Flag to sort the results by key
-            \return Vector of all folders (warning, can be huge)
+            \return std::vector of all folders (warning, can be huge)
         */
-        Vector<Folder>                  all_folders(Sorted sorted=Sorted());
+        std::vector<Folder>             all_folders(Sorted sorted=Sorted());
         
         /*! \brief Count of folders in the cache
         */
         size_t                          all_folders_count();
-
-
 
 
         std::string                     brief(Folder);
@@ -51,43 +51,43 @@ namespace yq {
 
         Document                        child_document(Folder, std::string_view );
 
-        Vector<Document>                child_documents(Folder, unsigned opts=0);
-        Vector<Document>                child_documents(Folder, Sorted sorted);
+        std::vector<Document>           child_documents(Folder, unsigned opts=0);
+        std::vector<Document>           child_documents(Folder, Sorted sorted);
         size_t                          child_documents_count(Folder, unsigned opts=0);
-        Vector<Document>                child_documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
-        Vector<Document>                child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
+        std::vector<Document>           child_documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
+        std::vector<Document>           child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
 
         Folder                          child_folder(Folder, std::string_view );
 
-        Vector<Folder>                  child_folders(Folder, unsigned int opts=0);
-        Vector<Folder>                  child_folders(Folder, Sorted sorted);
+        std::vector<Folder>             child_folders(Folder, unsigned int opts=0);
+        std::vector<Folder>             child_folders(Folder, Sorted sorted);
         size_t                          child_folders_count(Folder, unsigned int opts=0);
 
 
-        Vector<Fragment>                child_fragments(Folder, Sorted sorted=Sorted());
+        std::vector<Fragment>           child_fragments(Folder, Sorted sorted=Sorted());
         size_t                          child_fragments_count(Folder);
 
     #if 0
         std::string                     child_key(Folder);
     #endif
 
-        Vector<DocOrFold>          children(Folder,Sorted sorted=Sorted());
+        std::vector<DocOrFold>          children(Folder,Sorted sorted=Sorted());
 
-        Vector<DocOrFoldStr>       children_and_names(Folder);
+        std::vector<DocOrFoldStr>       children_and_names(Folder);
 
         consteval Folder                classes_folder() { return Folder{Folder::CLASSES}; }
         consteval Folder                config_folder() { return Folder{Folder::CONFIG}; }
 
-        //Vector<uint8_t>         data(Fragment);   // TODO
+        //std::vector<uint8_t>         data(Fragment);   // TODO
 
 
         Folder                          db_folder(Folder, std::string_view , bool *wasCreated=nullptr);
         
-        Vector<Directory>          directories(Folder, Sorted sorted=Sorted());
-        Vector<Directory>          directories(Folder, const Root*, Sorted sorted=Sorted());
+        std::vector<Directory>          directories(Folder, Sorted sorted=Sorted());
+        std::vector<Directory>          directories(Folder, const Root*, Sorted sorted=Sorted());
         
         size_t                          directories_count(Folder);
-        Vector<Directory>          directories_count(Folder, const Root*);
+        std::vector<Directory>          directories_count(Folder, const Root*);
         
 
         Document                        document(std::string_view );
@@ -115,7 +115,7 @@ namespace yq {
         Folder                          folder(uint64_t);
         Folder                          folder(std::string_view );
         
-        Vector<Folder>                  folder_path(Folder);
+        std::vector<Folder>             folder_path(Folder);
         
 
 
@@ -141,7 +141,7 @@ namespace yq {
         bool                            removed(Folder);
         
         
-        Vector<const Root*>             roots(Folder);
+        std::vector<const Root*>        roots(Folder);
 
         size_t                          roots_count(Folder);
 

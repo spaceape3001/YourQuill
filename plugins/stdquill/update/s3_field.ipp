@@ -23,7 +23,7 @@ namespace {
         static thread_local SQ i2("INSERT INTO FDataTypes (field, type) VALUES (?, ?)");
         static thread_local SQ i3("INSERT INTO FAtomTypes (field, class) VALUES (?, ?)");
         static thread_local SQ i4("INSERT INTO FTags (field, tag) VALUES (?, ?)");
-        static thread_local SQ i5("INSERT INTO FDefClass (field, class) VALUES (?, ?)");
+        static thread_local SQ i5("INSERT INTO CFields (field, class, hops) VALUES (?, ?, 0)");
         
         for(const std::string& s : data -> aliases){
             i1.bind(1, x.id);

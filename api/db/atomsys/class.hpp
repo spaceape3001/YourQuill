@@ -23,6 +23,7 @@ namespace yq {
         struct Info;
         struct File;
         struct Data;
+        struct Rank;
         using Lock = IDLock<Class>;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
@@ -33,7 +34,7 @@ namespace yq {
         static bool less_name(Class a, Class b);
 
         uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Class&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Class&rhs) const noexcept = default;
+        constexpr operator bool() const noexcept { return id != 0ULL; }
     };
 }

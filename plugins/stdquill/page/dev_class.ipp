@@ -22,9 +22,9 @@ namespace {
         h.kvrow("Plural") << i.plural;
         h.kvrow("Category") << dev(i.category);
         h.kvrow("Brief") << i.brief;
-        h.kvrow("Aliases") << join(aliases(c), ", ");
-        h.kvrow("Prefixes") << join(prefixes(c), ", ");
-        h.kvrow("Suffixes") << join(suffixes(c), ", ");
+        h.kvrow("Aliases") << join(def_aliases(c), ", ");
+        h.kvrow("Prefixes") << join(def_prefixes(c), ", ");
+        h.kvrow("Suffixes") << join(def_suffixes(c), ", ");
         h.kvrow("Binding") << i.binding;
     }
     

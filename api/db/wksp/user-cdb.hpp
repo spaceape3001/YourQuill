@@ -62,22 +62,22 @@ namespace yq {
         
         std::string             key(User);
         std::string             label(User);
-        User                    make_user(std::string_view, const Root* rt=nullptr, unsigned int opts=0);
-        User::SharedData        merged(User, unsigned int opts=0);
+        User                    make_user(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0);
+        User::SharedData        merged(User, cdb_options_t opts=0);
         
         std::string             name(User);
         
-        Vector<UserFragDoc>     reads(User, unsigned int opts=0);
-        Vector<UserFragDoc>     reads(User, class Root*, unsigned int opts=0);
+        Vector<UserFragDoc>     reads(User, cdb_options_t opts=0);
+        Vector<UserFragDoc>     reads(User, class Root*, cdb_options_t opts=0);
 
+        User::SharedData        update(User, cdb_options_t opts=0);
         void                    update_icon(User);
-        User::SharedData        update_info(User, unsigned int opts=0);
 
         User                    user(std::string_view);
         User                    user(Document, bool calc=false);
         User                    user(uint64_t);
         
-        User::SharedFile        user_doc(Fragment, unsigned int opts=0);
+        User::SharedFile        user_doc(Fragment, cdb_options_t opts=0);
 
 
         //!  \brief   Returns a writable document
@@ -85,6 +85,6 @@ namespace yq {
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        User::SharedFile        write(User, const Root*, unsigned int opts=0);
+        User::SharedFile        write(User, const Root*, cdb_options_t opts=0);
     }
 }

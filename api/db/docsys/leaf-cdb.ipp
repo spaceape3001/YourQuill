@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <db/orgsys/tag.hpp>
+#include <db/orgsys/tag-cdb.hpp>
+
 namespace yq {
     namespace cdb {
         namespace {
@@ -123,6 +126,16 @@ namespace yq {
             return exists(l) ?  Document{l.id} : Document{};
         }
         
+        void                erase(Leaf x)
+        {
+            static thread_local SQ  stmts[] = {
+                SQ( "DELETE FROM LTags WHERE leaf=?" ),
+                SQ( "DELETE FROM Leafs WHERE id=?" )
+            };
+            for(auto& sq : stmts)
+                sq.exec(x.id);
+        }
+
         bool                exists(Leaf l)
         {
             return exists_leaf(l.id);
@@ -212,7 +225,7 @@ namespace yq {
             return s.as<Leaf>(k);
         }
         
-        Leaf::SharedFile         leaf_doc(Fragment f, unsigned int opts)
+        Leaf::SharedFile         leaf_doc(Fragment f, cdb_options_t opts)
         {
             if(!f)
                 return Leaf::SharedFile();
@@ -252,7 +265,7 @@ namespace yq {
         }
 
         
-        Leaf::SharedData         merged(Leaf l, unsigned int opts)
+        Leaf::SharedData         merged(Leaf l, cdb_options_t opts)
         {
             if(!l)
                 return Leaf::SharedData();
@@ -293,12 +306,12 @@ namespace yq {
             return NKI{};
         }
 
-        Leaf::SharedFile         read(Leaf l, const Root* rt, unsigned int opts)
+        Leaf::SharedFile         read(Leaf l, const Root* rt, cdb_options_t opts)
         {
             return leaf_doc(fragment(document(l), rt), opts);
         }
 
-        std::vector<LeafFragDoc>     reads(Leaf l, unsigned int opts)
+        std::vector<LeafFragDoc>     reads(Leaf l, cdb_options_t opts)
         {
             std::vector<LeafFragDoc>  ret;
             for(Fragment f : fragments(document(l), DataRole::DB)){
@@ -309,7 +322,7 @@ namespace yq {
             return ret;
         }
 
-        std::vector<LeafFragDoc>   reads(Leaf l, class Root*rt, unsigned int opts)
+        std::vector<LeafFragDoc>   reads(Leaf l, class Root*rt, cdb_options_t opts)
         {
             std::vector<LeafFragDoc>  ret;
             for(Fragment f : fragments(document(l), rt)){
@@ -320,50 +333,95 @@ namespace yq {
             return ret;
         }
 
+        bool                        tagged(Leaf l, Tag t)
+        {
+            static thread_local SQ s("SELECT 1 FROM LTags WHERE leaf=? AND tag=? LIMIT 1");
+            return s.present(l.id, t.id);
+        }
+        
+        std::vector<Tag>            tags(Leaf l)
+        {
+            static thread_local SQ s("SELECT tag FROM LTags WHERE leaf=?");
+            return s.vec<Tag>(l.id);
+        }
+        
+        std::set<Tag>               tags_set(Leaf l)
+        {
+            static thread_local SQ s("SELECT tag FROM LTags WHERE leaf=?");
+            return s.set<Tag>(l.id);
+        }
+
         std::string             title(Leaf l)
         {
             static thread_local SQ s("SELECT title FROM Leafs WHERE id=?");
             return s.str(l.id);
         }
 
-        void                update_icon(Leaf x)
+        Leaf::SharedData         update(Leaf x, cdb_options_t opts)
         {
-            Document    doc     = document(x);
-            Image       img     = best_image(doc);
-            static thread_local SQ u1("UPDATE Leafs SET icon=? WHERE id=?");
-            u1.exec(img.id, x.id);
-            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-            u2.exec(doc.id, x.id);
-        }
-
-
-        Leaf::SharedData         update_info(Leaf x, unsigned int opts)
-        {
+            if(!x)
+                return Leaf::SharedData();
+            
+            if(opts & U_ICON)
+                update_icon(x);
+            
             auto data  = merged(x, opts|IS_UPDATE);
             if(!data)
                 return Leaf::SharedData();
 
-            std::string_view title   = data->title();
-            std::string_view abbr    = data->abbr();
-            std::string_view brief   = data->brief();
-            if(title.empty())
-                title       = data->attrs.value(kv::key({"nick", "name"}));
+            static thread_local SQ dTag("DELETE FROM LTags WHERE leaf=? AND tag=?");
+            static thread_local SQ iTag("INSERT INTO LTags (leaf, tag) VALUES (?,?)");
+            static thread_local SQ uInfo("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
+
+            if(opts & U_INFO){
+                std::string_view title   = data->title();
+                std::string_view abbr    = data->abbr();
+                std::string_view brief   = data->brief();
+                if(title.empty())
+                    title       = data->attrs.value(kv::key({"nick", "name"}));
+                
+                if(title.empty()){
+                    uInfo.bind(1, key(x));  // fall back (for now) 
+                                        // TODO ... make this smarter (later)
+                } else 
+                    uInfo.bind(1, title);
+                uInfo.bind(2, abbr);
+                uInfo.bind(3, brief);
+                uInfo.bind(4, x.id);
+                uInfo.exec();
+            }
             
-            static thread_local SQ u("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
-            if(title.empty()){
-                u.bind(1, key(x));  // fall back (for now) 
-                                    // TODO ... make this smarter (later)
-            } else 
-                u.bind(1, title);
-            u.bind(2, abbr);
-            u.bind(3, brief);
-            u.bind(4, x.id);
-            u.exec();
+            if(opts & U_TAGS){
+                std::set<Tag>   old_tags = tags_set(x);
+                std::set<Tag>   new_tags = tags_set(data->tags(), true);
+
+                auto ch_tag = add_remove(old_tags, new_tags);
+                iTag.batch(x.id, ids_for(ch_tag.added));
+                dTag.batch(x.id, ids_for(ch_tag.removed));
+                
+            }
             
             return data;
         }
 
-        Leaf::SharedFile         write(Leaf l, const Root* rt, unsigned int opts)
+        void                update_icon(Leaf x)
+        {
+            if(!x)
+                return ;
+                
+            Document    doc     = document(x);
+            Image       img     = best_image(doc);
+            static thread_local SQ u1("UPDATE Leafs SET icon=? WHERE id=?");
+            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+
+            if(icon(x) != img){
+                u1.exec(img.id, x.id);
+                u2.exec(doc.id, x.id);
+            }
+        }
+
+
+        Leaf::SharedFile         write(Leaf l, const Root* rt, cdb_options_t opts)
         {
             Document    d   = document(l);
             if(!d)

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <db/docsys/leaf-cdb.hpp>
+
 namespace yq {
     namespace cdb {
         namespace {
@@ -118,6 +120,7 @@ namespace yq {
             static thread_local SQ  stmts[] = {
                 SQ( "DELETE FROM CTags WHERE tag=?" ),
                 SQ( "DELETE FROM FTags WHERE tag=?" ),
+                SQ( "DELETE FROM LTags WHERE tag=?" ),
                 SQ( "DELETE FROM Tags WHERE id=?" )
             };
             for(auto& sq : stmts)
@@ -181,7 +184,7 @@ namespace yq {
             return s.as<Leaf>(t.id);
         }
 
-        Tag                     make_tag(std::string_view k, const Root* rt, unsigned int opts)
+        Tag                     make_tag(std::string_view k, const Root* rt, cdb_options_t opts)
         {
             if(!rt)
                 rt  = wksp::root_first(DataRole::Config);
@@ -210,7 +213,7 @@ namespace yq {
             return t;
         }
 
-        Tag::SharedData   merged(Tag t, unsigned int opts)
+        Tag::SharedData   merged(Tag t, cdb_options_t opts)
         {
             if(!t)
                 return Tag::SharedData();
@@ -257,13 +260,13 @@ namespace yq {
             return NKI{};
         }
         
-        Tag::SharedFile          read(Tag t, const Root* rt, unsigned int opts)
+        Tag::SharedFile          read(Tag t, const Root* rt, cdb_options_t opts)
         {
             return tag_doc(fragment(document(t), rt), opts);
         }
 
         
-        std::vector<TagFragDoc>      reads(Tag t, unsigned int opts)
+        std::vector<TagFragDoc>      reads(Tag t, cdb_options_t opts)
         {
             std::vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), DataRole::Config)){
@@ -274,7 +277,7 @@ namespace yq {
             return ret;
         }
 
-        std::vector<TagFragDoc>    reads(Tag t, class Root* rt, unsigned int opts)
+        std::vector<TagFragDoc>    reads(Tag t, class Root* rt, cdb_options_t opts)
         {
             std::vector<TagFragDoc>  ret;
             for(Fragment f : fragments(document(t), rt)){
@@ -336,7 +339,7 @@ namespace yq {
             return Tag{};
         }
 
-        Tag::SharedFile      tag_doc(Fragment f, unsigned int opts)
+        Tag::SharedFile      tag_doc(Fragment f, cdb_options_t opts)
         {
             if(!f)
                 return Tag::SharedFile();
@@ -386,6 +389,42 @@ namespace yq {
             return ret;
         }
 
+        std::set<Tag>           tags_set(const string_set_t& keys, bool noisy)
+        {
+            std::set<Tag> ret;
+            for(const std::string& s : keys){
+                if(s.empty())
+                    continue;
+                    
+                Tag t   = tag(s);
+                if(!t){
+                    if(noisy)
+                        yWarning() << "Unable to find tag: " << s;
+                    continue;
+                }
+                ret.insert(t);
+            }
+            return ret;
+        }
+
+        std::set<Tag>           tags_set(const string_view_set_t& keys, bool noisy)
+        {
+            std::set<Tag> ret;
+            for(std::string_view s : keys){
+                if(s.empty())
+                    continue;
+                    
+                Tag t   = tag(s);
+                if(!t){
+                    if(noisy)
+                        yWarning() << "Unable to find tag: " << s;
+                    continue;
+                }
+                ret.insert(t);
+            }
+            return ret;
+        }
+
         void                    update(Tag t, Leaf l)
         {
             static thread_local SQ u("UPDATE Tags SET leaf=? WHERE id=?");
@@ -394,31 +433,52 @@ namespace yq {
 
         void                    update_icon(Tag x)
         {
+            if(!x)
+                return ;
+
             Document    doc     = document(x);
             Image       img     = best_image(doc);
+
             static thread_local SQ u1("UPDATE Tags SET icon=? WHERE id=?");
-            u1.exec(img.id, x.id);
             static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-            u2.exec(doc.id, x.id);
+            
+            if(icon(x) != img){
+                u1.exec(img.id, x.id);
+                u2.exec(doc.id, x.id);
+            }
         }
 
-        Tag::SharedData         update_info(Tag x, unsigned int opts)
+        Tag::SharedData         update(Tag x, cdb_options_t opts)
         {
-            auto data  = merged(x, opts|IS_UPDATE);
+            if(!x)
+                return Tag::SharedData();
+
+            if(opts & U_ICON)
+                update_icon(x);
+
+            auto data  = merged(x, opts);
             if(!data)
                 return Tag::SharedData();
-                
-            static thread_local SQ u("UPDATE Tags SET name=?,brief=? WHERE id=?");
-            auto u_af = u.af();
-            u.bind(1, data->name);
-            u.bind(2, data->brief);
-            u.bind(3, x.id);
-            u.exec();
+             
+            static thread_local SQ uInfo("UPDATE Tags SET name=?,brief=? WHERE id=?");
+            static thread_local SQ uLeaf("UPDATE Tags SET leaf=? WHERE id=?");
+            
+            if(opts&U_INFO){
+                uInfo.bind(1, data->name);
+                uInfo.bind(2, data->brief);
+                uInfo.bind(3, x.id);
+                uInfo.exec();
+            }
+            if(opts&U_LEAF){
+                Leaf    l   = leaf(data->leaf);
+                uLeaf.exec(l.id, x.id);
+            }
+            
             return data;
         }
 
         
-        Tag::SharedFile         write(Tag t, const Root* rt, unsigned int opts)
+        Tag::SharedFile         write(Tag t, const Root* rt, cdb_options_t opts)
         {
             Document    d   = document(t);
             if(!d)
