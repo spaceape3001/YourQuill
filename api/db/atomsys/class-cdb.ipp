@@ -162,6 +162,45 @@ namespace yq {
             return ret;
         }
         
+        std::set<Class>     classes_set(const string_set_t&sset, bool noisy)
+        {
+            std::set<Class>   ret;
+            for(const std::string& s : sset){
+                if(s.empty())
+                    continue;
+                    
+                Class cls = class_(s);
+                if(!cls){
+                    if(noisy)
+                        yWarning() << "Unable to find class: " << s;
+                    continue;
+                }
+                
+                ret.insert(cls);
+            }
+            return ret;
+        }
+        
+        std::set<Class>     classes_set(const string_view_set_t&sset, bool noisy)
+        {
+            std::set<Class>   ret;
+            for(std::string_view s : sset){
+                if(s.empty())
+                    continue;
+                    
+                Class cls = class_(s);
+                if(!cls){
+                    if(noisy)
+                        yWarning() << "Unable to find class: " << s;
+                    continue;
+                }
+                
+                ret.insert(cls);
+            }
+            return ret;
+        }
+        
+
         Class               db_class(std::string_view k, bool *wasCreated)
         {
             std::string     tfn = class_filename(k);
@@ -179,7 +218,7 @@ namespace yq {
                 return Class();
         
             static thread_local SQ    i("INSERT OR FAIL INTO Classes (id,k) VALUES (?,?)");
-            static thread_local SQ    i2("INSERT OR REPLACE INTO CLookup (id,k,priority) VALUES (?,?,1)");
+            static thread_local SQ    i2("INSERT OR REPLACE INTO CLookup (class,k,priority) VALUES (?,?,1)");
             auto i_lk   = i.af();
 
             i.bind(1, doc.id);
@@ -235,7 +274,7 @@ namespace yq {
         namespace {
             std::vector<Field>           def_fields_sorted(Class c)
             {
-                static thread_local SQ s("SELECT field FROM CFields INNER JOIN Fields ON FDefClass.field=Fields.id WHERE field=? AND hops=0 ORDER BY Fields.cK");
+                static thread_local SQ s("SELECT field FROM CFields INNER JOIN Fields ON CFields.field=Fields.id WHERE CFields.class=? AND hops=0 ORDER BY Fields.cK");
                 return s.vec<Field>(c.id);
             }
 

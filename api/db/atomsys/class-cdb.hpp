@@ -73,6 +73,8 @@ namespace yq {
         Class::SharedFile           class_doc(Fragment, cdb_options_t opts=0);
         
         std::vector<Class>          classes(const string_set_t&, bool noisy=false);
+        std::set<Class>             classes_set(const string_set_t&, bool noisy=false);
+        std::set<Class>             classes_set(const string_view_set_t&, bool noisy=false);
         
         Class                       db_class(Document, bool *wasCreated=nullptr);
         Class                       db_class(std::string_view, bool *wasCreated=nullptr);

@@ -55,7 +55,7 @@ namespace yq {
         
         /*! \brief All data types this field can use
         */
-        string_set_t            data_types(Field);
+        std::set<uint64_t>      data_types(Field);
         
         //Field                   db_field(Class c, std::string_view k, bool *wasCreated=nullptr);
         Field                   db_field(Document, bool *wasCreated=nullptr);
@@ -114,11 +114,12 @@ namespace yq {
         //!     Will not create a fragment, though (so can return NULL)
         Field::SharedFile       read(Field, const Root*, cdb_options_t opts=0);
 
-        std::vector<FieldFragDoc>    reads(Field, cdb_options_t opts=0);
-        std::vector<FieldFragDoc>    reads(Field, class Root*, cdb_options_t opts=0);
+        std::vector<FieldFragDoc>   reads(Field, cdb_options_t opts=0);
+        std::vector<FieldFragDoc>   reads(Field, class Root*, cdb_options_t opts=0);
 
-        std::vector<Tag>             tags(Field, Sorted sorted=Sorted());
-        size_t                  tags_count(Field);
+        std::vector<Tag>            tags(Field, Sorted sorted=Sorted());
+        size_t                      tags_count(Field);
+        std::set<Tag>               tags_set(Field);
 
         bool                    tagged(Field, Tag);
 

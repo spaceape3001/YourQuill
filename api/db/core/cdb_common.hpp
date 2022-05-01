@@ -27,6 +27,7 @@ namespace yq {
     struct Root;
     struct Tag;
     struct User;
+    class TypeInfo;
     class ByteArray;
 
     namespace cdb {
@@ -108,5 +109,7 @@ namespace yq {
                 ret.insert(c.id);
             return ret;
         }
+        
+        std::set<uint64_t>              ids_for(const std::vector<const TypeInfo*>&);
     }
 }

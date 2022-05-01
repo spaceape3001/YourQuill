@@ -12,6 +12,7 @@
 #include <db/core/id_lock.ipp>
 #include <db/core/strings.hpp>
 
+#include <yq/meta/TypeInfo.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
 
@@ -75,6 +76,18 @@ namespace yq {
                 return key.substr(i+1,j-i-1);
             }
         }
+        
+        std::set<uint64_t>      ids_for(const std::vector<const TypeInfo*>&types)
+        {
+            std::set<uint64_t>  ret;
+            for(const TypeInfo* ti : types){
+                if(!ti)
+                    continue;
+                ret.insert(ti->id());
+            }
+            return ret;
+        }
+        
     }
 }
 
