@@ -35,6 +35,7 @@ namespace yq {
         unsigned int        columns         = 0;
         SizeDesc            icon_size;
         bool                auto_edit       = false;
+        bool                can_edit        = false;
         bool                logged_in       = false;
         bool                inspect_submit  = false;
         bool                admin           = false;

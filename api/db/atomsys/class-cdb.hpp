@@ -20,6 +20,7 @@ namespace yq {
 
     struct Fragment;
     struct Field;
+    struct Tag;
     
     struct Class::Info {
         std::string key;
@@ -73,6 +74,7 @@ namespace yq {
         Class::SharedFile           class_doc(Fragment, cdb_options_t opts=0);
         
         std::vector<Class>          classes(const string_set_t&, bool noisy=false);
+        std::vector<Class>          classes(Tag, Sorted sorted=Sorted{});
         std::set<Class>             classes_set(const string_set_t&, bool noisy=false);
         std::set<Class>             classes_set(const string_view_set_t&, bool noisy=false);
         

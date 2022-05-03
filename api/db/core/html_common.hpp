@@ -32,5 +32,16 @@ namespace yq {
         { 
             return DevID<T>{ d }; 
         }
+        
+        template <typename T>
+        struct Plural {
+            T       data;
+        };
+        
+        template <typename T>
+        Plural<T> plural(T d)
+        {
+            return Plural<T>{ d };
+        }
     }
 }

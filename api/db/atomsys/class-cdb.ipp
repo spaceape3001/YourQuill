@@ -162,6 +162,25 @@ namespace yq {
             return ret;
         }
         
+        namespace {
+            std::vector<Class>          classes_unsorted(Tag x)
+            {
+                static thread_local SQ s("SELECT class FROM CTags WHERE tag=?");
+                return s.vec<Class>(x.id);
+            }
+
+            std::vector<Class>          classes_sorted(Tag x)
+            {
+                static thread_local SQ s("SELECT class FROM CTags INNER JOIN Classes ON CTags.class=Classes.id WHERE tag=? ORDER BY Classes.k");
+                return s.vec<Class>(x.id);
+            }
+        }
+        
+        std::vector<Class>          classes(Tag x, Sorted sorted)
+        {
+            return sorted ? classes_sorted(x) : classes_unsorted(x);
+        }
+
         std::set<Class>     classes_set(const string_set_t&sset, bool noisy)
         {
             std::set<Class>   ret;

@@ -11,13 +11,14 @@ namespace yq {
         WebHtml&    operator<<(WebHtml&h, Class v)
         {
             Thumbnail th = cdb::thumbnail(cdb::icon(v), h.context().session.icon_size);
-            
+            if(v)
+                h << "<a href=\"/class?key=" << cdb::key(v) << "\">";
             //  start the url (later)
             if(th)
                 h << th << " ";
-            
             h << cdb::label(v);
-            //  end the url (later)
+            if(v)
+                h << "</a>";
             return h;
         }
         
@@ -41,6 +42,20 @@ namespace yq {
             return h;
         }
         
+        WebHtml&    operator<<(WebHtml&h, Plural<Class>v)
+        {
+            Thumbnail th = cdb::thumbnail(cdb::icon(v.data), h.context().session.icon_size);
+            if(v.data)
+                h << "<a href=\"/atoms?class=" << cdb::key(v.data) << "\">";
+            //  start the url (later)
+            if(th)
+                h << th << " ";
+            h << cdb::label(v.data);
+            if(v.data)
+                h << "</a>";
+            return h;
+        }
+
         void        dev_table(WebHtml&h, const std::vector<Class>& classes)
         {
             auto ta = h.table();

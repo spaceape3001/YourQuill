@@ -14,6 +14,7 @@ namespace yq {
         WebHtml&    operator<<(WebHtml&, Class);
         WebHtml&    operator<<(WebHtml&, Dev<Class>);
         WebHtml&    operator<<(WebHtml&, DevID<Class>);
+        WebHtml&    operator<<(WebHtml&, Plural<Class>);
         void        dev_table(WebHtml&, const std::vector<Class>&);
     }
 }
