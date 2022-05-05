@@ -18,12 +18,12 @@ namespace yq {
             const char* z1  = m_data.data() + m_data.size();
             p       = std::string_view(z0, z1);
             t       = trimmed(t);
-            m_title   = new WebTemplate(t);
+            m_title   = new Template(t);
         } else {
             p   = m_data;
         }
         
-        m_page          = new WebTemplate(p);
+        m_body          = new Template(p);
     }
     
     //PageTemplate::PageTemplate(const std::filesystem::path& pth) : PageTemplate( file_string(pth))
@@ -40,8 +40,8 @@ namespace yq {
             auto ti = h.title();
             m_title->execute(h);
         }
-        if(m_page)
-            m_page -> execute(h);
+        if(m_body)
+            m_body -> execute(h);
     }
     
 }

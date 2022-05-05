@@ -9,7 +9,7 @@
 #include <initializer_list>
 #include <string_view>
 
-#include <db/enum/size_desc.hpp>
+#include <yq/enum/size_desc.hpp>
 
 namespace yq {
     struct Attribute;

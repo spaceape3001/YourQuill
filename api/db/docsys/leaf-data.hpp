@@ -9,7 +9,7 @@
 #include <db/docsys/leaf.hpp>
 #include <db/bit/context.hpp>
 #include <db/bit/key_value.hpp>
-#include <db/enum/format.hpp>
+#include <yq/enum/format.hpp>
 
 namespace yq {
 

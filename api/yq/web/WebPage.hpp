@@ -6,6 +6,8 @@
 
 #pragma once
 
+//#include <yq/enum/change.hpp>
+#include <yq/c++/trait/not_copyable.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/meta/Meta.hpp>
 #include <yq/meta/MetaWriter.hpp>
@@ -16,11 +18,12 @@
 #include <source_location>
 
 namespace yq {
+    struct Folder;
     class HttpRequest;
     class HttpResponse;
     
     struct WebSession;
-    class WebTemplate;
+    class Template;
     
     using HttpOps       = Flag<HttpOp>;
     using ContentTypes  = Flag<ContentType>;
@@ -55,7 +58,7 @@ namespace yq {
         const WebPageMap&   glob_map();
 
         // Gets the current html template
-        Ref<WebTemplate>    html_template();
+        Ref<Template>    html_template();
         
         // Sets the template (will reload as necessary)
         bool                set_template(const std::filesystem::path&);
@@ -121,6 +124,7 @@ namespace yq {
         const WebGroup*             group() const { return m_group; }
         const std::vector<std::string_view>&    scripts() const { return m_scripts; }
         
+        
     protected:
         WebPage(HttpOps, std::string_view, const std::source_location&);
         ~WebPage();
@@ -155,7 +159,7 @@ namespace yq {
         std::string_view  description;
     };
     
-    class WebPage::Writer : public Meta::Writer {
+    class WebPage::Writer : public Meta::Writer, trait::not_copyable {
     public:
         
         //! Allow POST to not require login.  (Needed for the login post)
@@ -205,6 +209,11 @@ namespace yq {
         //! Sets the group of the page
         void     set_group(const WebGroup*);
         
+        //Writer&  on_change(const std::filesystem::path&, const std::source_location& sl = std::source_location::current());
+        //Writer&  on_change(std::string_view ext, const std::source_location& sl = std::source_location::current());
+        //Writer&  on_change(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current());
+        //Writer&  on_stage4(int order=0, const std::source_location& sl = std::source_location::current());
+        
         const WebPage*  page() const { return m_page; }
         
         Writer(WebPage*p); // : m_page(p) {}
@@ -214,9 +223,6 @@ namespace yq {
         Writer() : Meta::Writer(nullptr) {}
         
         operator WebPage* () const { return m_page; }
-        
-        Writer(const Writer&) = delete;
-        Writer& operator=(const Writer&) = delete;
         
     private:
         WebPage*   m_page = nullptr;

@@ -112,6 +112,7 @@ namespace yq {
 
     void                reg_webgroup(std::initializer_list<WebPage*>);
 
+
     //! Decodes (%) of the web query & parses it into a multimap
     StringMultiMap      decode_web_query(std::string_view);
 }

@@ -74,6 +74,8 @@ set(yq_sources
     ./collection/Stack.hpp
     ./collection/Vector.hpp
     
+    ./enum/enum_unity.cpp
+
     ./file/file_utils.hpp
     ./file/file_unity.cpp
     ./file/file_watch.cpp
@@ -192,8 +194,6 @@ set(yq_sources
     ./web/WebHtml.ipp
     ./web/WebPage.hpp
     ./web/WebPage.ipp
-    ./web/WebTemplate.hpp
-    ./web/WebTemplate.ipp
     ./web/WebVariable.hpp
     ./web/WebVariable.ipp
 )

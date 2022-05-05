@@ -10,7 +10,7 @@ namespace {
 
     void    var_summary(WebHtml&h)
     {
-        Ref<WebTemplate>    summary  = gSummary;
+        Ref<Template>    summary  = gSummary;
         if(summary)
             summary -> execute(h);
     }

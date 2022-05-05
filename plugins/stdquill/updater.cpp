@@ -27,7 +27,7 @@ using namespace yq::cdb;
 
 Guarded<std::string>            gTextColor, gBkColor;
 Guarded<Ref<PageTemplate>>      gIndex;
-Guarded<Ref<WebTemplate>>       gFooter, gSummary;
+Guarded<Ref<Template>>          gFooter, gSummary;
 Guarded<Ref<TypedBytes>>        gBackground;
 std::atomic<bool>               gHasBackground{false};
 Guarded<SharedByteArray>        gCss;
@@ -345,7 +345,7 @@ namespace {
                 r   = cdb::frag_string(f, DONT_LOCK);
             if(r.empty())
                 r       = file_string(gSharedFooterFile);
-            gFooter = new WebTemplate(std::move(r));
+            gFooter = new Template(std::move(r));
         }
         
         void    footer_stage4()
@@ -486,7 +486,7 @@ namespace {
 
         void    page__(cdb_options_t opts=0)
         {
-            Ref<WebTemplate>        wTemplate;
+            Ref<Template>        wTemplate;
             std::string     r;
             
             for(Fragment f : fragments(document(kPage))){
@@ -498,7 +498,7 @@ namespace {
             if(r.empty())
                 r   = file_string(gSharedPageFile);
             
-            wTemplate   = new WebTemplate(std::move(r));
+            wTemplate   = new Template(std::move(r));
             web::set_template(wTemplate);
         }       
 
@@ -525,7 +525,7 @@ namespace {
                 r   = cdb::frag_string(f);
             if(r.empty())
                 r       = file_string(gSharedSummaryFile);
-            gSummary = new WebTemplate(std::move(r));
+            gSummary = new Template(std::move(r));
         }
         
         void    summary_stage4()

@@ -7,8 +7,8 @@
 #pragma once
 
 #include <db/core/cdb_common.hpp>
-#include <db/enum/data_role.hpp>
-#include <db/enum/sorted.hpp>
+#include <yq/enum/data_role.hpp>
+#include <yq/enum/sorted.hpp>
 #include <db/filesys/document.hpp>
 #include <db/filesys/folder.hpp>
 #include <db/imagesys/image.hpp>

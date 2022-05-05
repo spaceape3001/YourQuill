@@ -9,7 +9,7 @@
 #include <compare>
 #include <cstdint>
 
-#include <db/enum/size_desc.hpp>
+#include <yq/enum/size_desc.hpp>
 #include <db/imagesys/image.hpp>
 
 namespace yq {

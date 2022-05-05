@@ -41,7 +41,7 @@ namespace yq {
         WebPageMap                      globs;
         WebPageMap                      pages;
         WebVarMap                       variables;
-        Ref<WebTemplate>                htmlTemplate;
+        Ref<Template>                htmlTemplate;
         mutable tbb::spin_rw_mutex      mutex;
         volatile bool                   openReg    = true;
         
@@ -50,7 +50,7 @@ namespace yq {
         
         WebRepo()
         {
-            htmlTemplate    = new WebTemplate;
+            htmlTemplate    = new Template;
         }
     };
 
@@ -119,7 +119,7 @@ namespace yq {
             return _r.globs[m].get(sv, nullptr);
         }
 
-        Ref<WebTemplate>    html_template()
+        Ref<Template>    html_template()
         {
             LLOCK
             return _r.htmlTemplate;
@@ -142,7 +142,7 @@ namespace yq {
             std::string     data    = file_string(p);
             if(data.empty())    
                 return false;
-            Ref<WebTemplate>   ht  = new WebTemplate(std::move(data));
+            Ref<Template>   ht  = new Template(std::move(data));
             {
                 WLOCK
                 std::swap(_r.htmlTemplate, ht);
@@ -155,7 +155,7 @@ namespace yq {
         {
             if(sv.empty())
                 return false;
-            Ref<WebTemplate>   ht  = new WebTemplate(sv);
+            Ref<Template>   ht  = new Template(sv);
             {
                 WLOCK
                 std::swap(_r.htmlTemplate, ht);
@@ -163,7 +163,7 @@ namespace yq {
             return true;
         }
 
-        void    set_template(Ref<WebTemplate> r)
+        void    set_template(Ref<Template> r)
         {
             WLOCK
             std::swap(_r.htmlTemplate, r);

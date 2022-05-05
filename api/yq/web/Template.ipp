@@ -7,22 +7,22 @@
 #pragma once
 
 namespace yq {
-    WebTemplate::WebTemplate(ContentType ct) : m_type(ct)
+    Template::Template(ContentType ct) : m_type(ct)
     {
         parse(szDefaultTemplate);
     }
 
-    WebTemplate::WebTemplate(std::string&& mv, ContentType ct) : m_data(std::move(mv)), m_type(ct)
+    Template::Template(std::string&& mv, ContentType ct) : m_data(std::move(mv)), m_type(ct)
     {
         parse(m_data);
     }
     
-    WebTemplate::WebTemplate(std::string_view k, ContentType ct) : m_data(k), m_type(ct)
+    Template::Template(std::string_view k, ContentType ct) : m_data(k), m_type(ct)
     {
         parse(m_data);
     }
 
-    void    WebTemplate::execute(WebHtml&h) const
+    void    Template::execute(WebHtml&h) const
     {
         //  TODO .... content type == markdown
     
@@ -42,7 +42,7 @@ namespace yq {
     }
     
 
-    void    WebTemplate::parse(std::string_view data)
+    void    Template::parse(std::string_view data)
     {
         size_t n   = data.find("{{");
         size_t m   = 0;
@@ -85,11 +85,11 @@ namespace yq {
         
     }
 
-    void        WebTemplate::writeBitsToInfo() const
+    void        Template::writeBitsToInfo() const
     {
         auto write  = [&](log4cpp::CategoryStream&& log)
         {
-            log << "WebTemplate Report:\n"
+            log << "Template Report:\n"
                 << "Variables Found: " << join(m_vars, ", ") << "\n";
                 
             size_t n=1;

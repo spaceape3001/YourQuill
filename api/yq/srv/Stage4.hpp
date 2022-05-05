@@ -8,6 +8,7 @@
 
 #include <yq/preamble.hpp>
 #include <source_location>
+#include <functional>
 
 namespace yq {
 
@@ -60,4 +61,7 @@ namespace yq {
     {
         new SimpleStage4Adapter<FN>(order, sl);
     }
+
+    void    on_stage4(int order, std::function<void()>, const std::source_location&sl = std::source_location::current());
+    void    on_stage4(std::function<void()>, const std::source_location&sl = std::source_location::current());
 }

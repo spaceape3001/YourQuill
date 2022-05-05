@@ -10,7 +10,7 @@
 #include <yq/type/Guarded.hpp>
 #include <yq/web/PageTemplate.hpp>
 #include <yq/web/TypedBytes.hpp>
-#include <yq/web/WebTemplate.hpp>
+#include <yq/web/Template.hpp>
 #include <string>
 
 using namespace yq;
@@ -19,7 +19,7 @@ using SharedByteArray   = std::shared_ptr<ByteArray>;
 
 extern Guarded<std::string>         gTextColor, gBkColor;
 extern Guarded<Ref<PageTemplate>>   gIndex;
-extern Guarded<Ref<WebTemplate>>    gFooter, gSummary;
+extern Guarded<Ref<Template>>       gFooter, gSummary;
 extern Guarded<Ref<TypedBytes>>     gBackground;
 extern std::atomic<bool>            gHasBackground;
 extern Guarded<SharedByteArray>     gCss;

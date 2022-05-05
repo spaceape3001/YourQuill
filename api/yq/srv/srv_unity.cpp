@@ -9,6 +9,7 @@
 #include "Stage3.hpp"
 #include "Stage4.hpp"
 
+#include <db/filesys/fragment.hpp>
 #include <yq/collection/Vector.hpp>
 #include <yq/text/text_utils.hpp>
 
@@ -189,5 +190,67 @@ namespace yq {
     
     Stage4::~Stage4()
     {
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    class FunctionalNotifier : public Notifier {
+    public:
+        std::function<void()>   m_function;
+        FunctionalNotifier(Trigger t, Flag<Change> ch, Folder folder, std::string_view ext, const std::filesystem::path& fname, int _order, std::function<void()> handler, const std::source_location&sl) :
+            Notifier(t, ch, folder, ext, fname, _order, sl), m_function(handler)
+        {
+            
+        }
+    
+        bool change(Fragment, Change) const override
+        {
+            m_function();
+            return true;
+        }
+        
+    };
+
+    Notifier::Writer    on_change(const std::filesystem::path&fp, std::function<void()>fn, const std::source_location& sl)
+    {
+        return Notifier::Writer{new FunctionalNotifier(Notifier::ByFile, all_set<Change>(), Folder(), std::string_view(), fp, 0, fn, sl)};
+    }
+    
+    Notifier::Writer    on_change(Folder f, std::string_view ext, std::function<void()>fn, const std::source_location& sl)
+    {
+        return Notifier::Writer{new FunctionalNotifier(Notifier::SpecFolderName, all_set<Change>(), f, ext, std::filesystem::path(), 0, fn, sl)};
+    }
+    
+    Notifier::Writer    on_change(std::string_view ext, std::function<void()>fn, const std::source_location& sl)
+    {
+        return Notifier::Writer{new FunctionalNotifier(Notifier::SpecName, all_set<Change>(), Folder(), ext, std::filesystem::path(), 0, fn, sl)};
+    }
+
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    class FunctionalStage4 : public Stage4 {
+    public:
+        std::function<void()>   m_function;
+        FunctionalStage4(int _order, std::function<void()> fn, const std::source_location& sl) : Stage4(_order, sl)
+        {
+        }
+    
+        void    invoke() const override
+        {
+            m_function();
+        }
+    };
+
+    void    on_stage4(int order, std::function<void()> fn, const std::source_location&sl)
+    {
+        new FunctionalStage4(order, fn, sl);
+    }
+    
+    void    on_stage4(std::function<void()>fn, const std::source_location&sl)
+    {
+        new FunctionalStage4(0, fn, sl);
     }
 }

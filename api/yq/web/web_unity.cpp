@@ -5,13 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "HttpParser.hpp"
-#include "TypedBytes.hpp"
 #include "JsonAdapter.hpp"
+#include "TypedBytes.hpp"
+#include "PageTemplate.hpp"
 #include "WebAdapters.hpp"
 #include "WebContext.hpp"
 #include "WebHtml.hpp"
 #include "WebPage.hpp"
-#include "WebTemplate.hpp"
 #include "WebVariable.hpp"
 //#include "NetWriter.hpp"
 
@@ -24,6 +24,8 @@
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
+#include <yq/srv/NotifyAdapters.hpp>
+#include <yq/srv/Stage4.hpp>
 #include <yq/text/Encode64.hpp>
 #include <yq/text/text_utils.hpp>
 
@@ -229,11 +231,11 @@ namespace yq {
 
 #include "HttpParser.ipp"
 #include "PageTemplate.ipp"
+#include "Template.ipp"
 #include "TypedBytes.ipp"
 #include "WebAdapters.ipp"
 #include "WebAutoClose.ipp"
 #include "WebContext.ipp"
 #include "WebHtml.ipp"
 #include "WebPage.ipp"
-#include "WebTemplate.ipp"
 #include "WebVariable.ipp"

@@ -9,7 +9,7 @@
 #include <db/core/cdb_common.hpp>
 #include <db/atomsys/atom.hpp>
 #include <db/docsys/leaf.hpp>
-#include <db/enum/sorted.hpp>
+#include <yq/enum/sorted.hpp>
 #include <db/filesys/document.hpp>
 #include <db/imagesys/image.hpp>
 #include <vector>

@@ -24,7 +24,7 @@
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
-#include <yq/web/WebTemplate.hpp>
+#include <yq/web/Template.hpp>
 
 using namespace yq;
 using namespace yq::arg;

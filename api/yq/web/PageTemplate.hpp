@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "WebTemplate.hpp"
+#include "Template.hpp"
 
 #include <yq/c++/trait/not_copyable.hpp>
 #include <yq/c++/trait/not_moveable.hpp>
@@ -25,8 +25,8 @@ namespace yq {
         void    execute(WebHtml&) const;
     
     private:
-        std::string             m_data;
-        Ref<WebTemplate>        m_page;
-        Ref<WebTemplate>        m_title;
+        std::string     m_data;
+        Ref<Template>   m_body;
+        Ref<Template>   m_title;
     };
 }

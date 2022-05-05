@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <db/enum/size_desc.hpp>
 
 //#include "WebSession.hpp"
 #include <asio/ip/address.hpp>
 #include <yq/collection/MultiMap.hpp>
+#include <yq/enum/size_desc.hpp>
 #include <yq/net/Http.hpp>
 #include <yq/net/Url.hpp>
 #include <yq/net/VersionSpec.hpp>

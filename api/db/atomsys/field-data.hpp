@@ -7,8 +7,8 @@
 #pragma once
 
 #include <db/atomsys/field-file.hpp>
-#include <db/enum/multiplicity.hpp>
-#include <db/enum/restriction.hpp>
+#include <yq/enum/multiplicity.hpp>
+#include <yq/enum/restriction.hpp>
 #include <yq/collection/Map.hpp>
 #include <yq/collection/Set.hpp>
 #include <memory>

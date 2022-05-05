@@ -8,7 +8,7 @@
 
 #include <db/bit/authentication.hpp>
 #include <db/bit/context.hpp>
-#include <db/enum/permission.hpp>
+#include <yq/enum/permission.hpp>
 #include <db/wksp/user.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/type/Ref.hpp>

@@ -9,7 +9,7 @@
 namespace {
     void    var_footer(WebHtml&h)
     {
-        Ref<WebTemplate>    footer  = gFooter;
+        Ref<Template>    footer  = gFooter;
         if(footer)
             footer -> execute(h);
     }

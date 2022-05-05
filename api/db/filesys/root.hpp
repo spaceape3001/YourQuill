@@ -8,8 +8,8 @@
 
 #include "root-fwd.hpp"
 #include <db/bit/policy.hpp>
-#include <db/enum/access.hpp>
-#include <db/enum/vcs.hpp>
+#include <yq/enum/access.hpp>
+#include <yq/enum/vcs.hpp>
 
 #include <yq/collection/EnumMap.hpp>
 #include <yq/type/Flag.hpp>

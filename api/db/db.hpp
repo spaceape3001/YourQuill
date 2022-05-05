@@ -15,7 +15,7 @@
 #include <db/wksp.hpp>
 
 #include "bit.hpp"
-#include "enum.hpp"
+#include <yq/enum.hpp>
 #include "form_html.hpp"
 
 #include <db/core/cdb_sq.hpp>

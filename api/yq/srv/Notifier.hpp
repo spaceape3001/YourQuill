@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <db/enum/change.hpp>
 #include <db/filesys/folder.hpp>
 
 #include <yq/collection/EnumMap.hpp>
+#include <yq/enum/change.hpp>
 #include <yq/type/Flag.hpp>
 #include <filesystem>
 #include <source_location>

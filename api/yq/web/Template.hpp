@@ -6,25 +6,28 @@
 
 #pragma once
 
+#include <yq/c++/trait/not_copyable.hpp>
+#include <yq/c++/trait/not_moveable.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
 #include <yq/net/Http.hpp>
 #include <yq/type/Ref.hpp>
 
+
 namespace yq {
     class WebHtml;
     struct WebContext;
 
-    class WebTemplate : public RefCount {
+    class Template : public RefCount {
     public:
         struct Token {
             std::string_view        token;
             bool                    variable;
         };
 
-        WebTemplate(ContentType ct=ContentType());
-        WebTemplate(std::string&& mv, ContentType ct=ContentType());
-        WebTemplate(std::string_view k, ContentType ct=ContentType());
+        Template(ContentType ct=ContentType());
+        Template(std::string&& mv, ContentType ct=ContentType());
+        Template(std::string_view k, ContentType ct=ContentType());
         
         std::string_view    data() const { return m_data; }
         
@@ -47,7 +50,8 @@ namespace yq {
     };
     
     namespace web {
-        void    set_template(Ref<WebTemplate>);
+        void    set_template(Ref<Template>);
     }
-    
+
+
 }

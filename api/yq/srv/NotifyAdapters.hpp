@@ -8,6 +8,7 @@
 
 #include "Notifier.hpp"
 #include <db/filesys/fragment.hpp>
+#include <functional>
 
 namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
@@ -52,6 +53,11 @@ namespace yq {
     {
         return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFolderExt, all_set<Change>(), f, ext, std::filesystem::path(), order, sl)};
     }
+
+
+    Notifier::Writer    on_change(const std::filesystem::path&fp, std::function<void()>, const std::source_location& sl = std::source_location::current());;
+    Notifier::Writer    on_change(std::string_view ext, std::function<void()>, const std::source_location& sl = std::source_location::current());
+    Notifier::Writer    on_change(Folder f, std::string_view ext, std::function<void()>, const std::source_location& sl = std::source_location::current());
 
         ////////////////////////////////////////////////////////////////////////////////
 

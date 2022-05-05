@@ -10,8 +10,8 @@
 #include <db/filesys/document.hpp>
 #include <db/filesys/folder.hpp>
 #include <db/filesys/fragment.hpp>
-#include <db/enum/data_role.hpp>
-#include <db/enum/sorted.hpp>
+#include <yq/enum/data_role.hpp>
+#include <yq/enum/sorted.hpp>
 
 namespace yq {
     class Root;
