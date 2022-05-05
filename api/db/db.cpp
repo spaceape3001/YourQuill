@@ -9,7 +9,6 @@
 
 #include <yq/enum.hpp>
 #include <db/core/cdb_common.hpp>
-#include <db/core/id_lock.ipp>
 
 
 #include <yq/file/Strings.hpp>
@@ -18,39 +17,6 @@
 #include <yq/web/WebContext.hpp>
 
 namespace yq {
-    
-    bool    IDLockRepo::inc_read(uint64_t i)
-    {
-        tbb::spin_mutex::scoped_lock    _lock(mutex);
-        auto& d = locks[i];
-        if(d.count == 0xFF)
-            return false;
-        ++d.count;
-        return true;
-    }
-    
-    bool    IDLockRepo::get_write(uint64_t i)
-    {
-        tbb::spin_mutex::scoped_lock    _lock(mutex);
-        return locks.insert({ i, { 0xFF } }).second;
-    }
-    
-    void    IDLockRepo::free_read(uint64_t i)
-    {
-        tbb::spin_mutex::scoped_lock    _lock(mutex);
-        auto d = locks.find(i);
-        if(d != locks.end()){
-            if(!--(d->second.count))
-                locks.erase(i);
-        }
-    }
-    
-    void    IDLockRepo::free_write(uint64_t i)
-    {
-        tbb::spin_mutex::scoped_lock    _lock(mutex);
-        locks.erase(i);
-    }
-
     namespace cdb {
         std::string make_filename(std::string_view k, const char* ext)
         {
@@ -96,5 +62,3 @@ namespace yq {
 #include <db/bit/authentication.ipp>
 #include <db/bit/rule.ipp>
 #include <db/core/cdb_sq.ipp>
-#include <db/core/std_file.ipp>
-#include <db/core/std_object.ipp>

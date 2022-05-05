@@ -8,8 +8,8 @@
 
 #include <unordered_map>
 #include <tbb/spin_mutex.h>
-#include <db/core/id_lock.hpp>
 #include <yq/c++/trait/not_moveable.hpp>
+#include <yq/db/IDLock.hpp>
 
 namespace yq {
 

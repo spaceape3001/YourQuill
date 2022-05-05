@@ -9,6 +9,7 @@
 #include <db/orgsys/category-cdb.hpp>
 #include <db/orgsys/tag-cdb.hpp>
 #include <yq/collection/c_utils.hpp>
+#include <yq/db/IDLock.hpp>
 
 namespace yq {
     bool Class::less_key(Class a, Class b)

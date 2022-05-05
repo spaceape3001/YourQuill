@@ -10,7 +10,6 @@
 #include <yq/shape/Size2Ops.hpp>
 
 #include <db/core/cdb_sq.hpp>
-#include <db/core/id_lock.hpp>
 #include <db/filesys/document.hpp>
 #include <db/filesys/document-cdb.hpp>
 #include <db/filesys/fragment.hpp>
@@ -18,6 +17,7 @@
 #include <db/imagesys/image.hpp>
 #include <db/imagesys/image-cdb.hpp>
 
+#include <yq/db/IDLock.hpp>
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning
 #define MAGICKCORE_QUANTUM_DEPTH MAGICKCORE_QUANTUM_DEPTH_OBSOLETE_IN_H

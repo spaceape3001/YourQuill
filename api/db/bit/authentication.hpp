@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <db/core/std_object.hpp>
+#include <yq/db/StdObject.hpp>
 
 
 namespace yq {

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <yq/db/IDLock.hpp>
+
 namespace yq {
     namespace cdb {
         namespace {

@@ -6,8 +6,10 @@
 
 #pragma once
 
-#include "std_object.hpp"
+#include "StdObject.hpp"
+#include <yq/bit/KeyValue.hpp>
 #include <yq/meta/Init.hpp>
+#include <yq/stream/Text.hpp>
 
 namespace yq {
     Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)

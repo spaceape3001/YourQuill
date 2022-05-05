@@ -10,7 +10,6 @@
 #include <db/imagesys.hpp>
 
 #include <db/core/cdb_sq.hpp>
-#include <db/core/id_lock.hpp>
 
 #include <yq/bit/KeyValue.hpp>
 #include <yq/collection/c_utils.hpp>
@@ -30,7 +29,7 @@
 #include <db/wksp/user-file.ipp>
 #include <db/wksp/user-html.ipp>
 
-#include <db/core/id_lock.ipp>
+#include <yq/db/IDLock.ipp>
 
 namespace yq {
     template class IDLock<User>;

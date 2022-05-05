@@ -10,7 +10,6 @@
 #include <db/filesys.hpp>
 #include <db/imagesys.hpp>
 #include <db/core/cdb_sq.hpp>
-#include <db/core/id_lock.hpp>
 #include <db/orgsys/tag.hpp>
 #include <db/wksp/workspace.hpp>
 
@@ -45,7 +44,7 @@
 #include <db/atomsys/value-file.ipp>
 #include <db/atomsys/value-html.ipp>
 
-#include <db/core/id_lock.ipp>
+#include <yq/db/IDLock.ipp>
 
 namespace yq {
     template class IDLock<Atom>;

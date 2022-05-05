@@ -8,6 +8,7 @@
 
 #include <db/orgsys/tag.hpp>
 #include <db/orgsys/tag-cdb.hpp>
+#include <yq/db/IDLock.hpp>
 
 namespace yq {
     namespace cdb {
