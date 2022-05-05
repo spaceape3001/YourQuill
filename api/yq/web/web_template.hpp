@@ -18,13 +18,15 @@ namespace yq {
     public:
     
         class Writer;
+        
+        void        update();
+        
     
     private:
         std::filesystem::path       m_master;
-        
         std::vector<std::string>    m_fragments; // for overrides
-        
         Guarded<Ref<PageTemplate>>  m_body;
+        
     };
     
     

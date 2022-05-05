@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "copyright.hpp"
+#include "Copyright.hpp"
 
 namespace yq {
 

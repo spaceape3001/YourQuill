@@ -9,7 +9,7 @@
 #include <db/filesys/folder.hpp>
 
 #include <yq/collection/EnumMap.hpp>
-#include <yq/enum/change.hpp>
+#include <yq/enum/Change.hpp>
 #include <yq/type/Flag.hpp>
 #include <filesystem>
 #include <source_location>

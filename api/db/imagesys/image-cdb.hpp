@@ -8,7 +8,7 @@
 
 #include <db/imagesys/image.hpp>
 #include <db/core/cdb_common.hpp>
-#include <yq/enum/size_desc.hpp>
+#include <yq/enum/SizeDesc.hpp>
 #include <yq/net/Http.hpp>
 
 

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/core/cdb_common.hpp>
-#include <yq/enum/sorted.hpp>
+#include <yq/enum/Sorted.hpp>
 #include <db/filesys/document.hpp>
 #include <db/imagesys/image.hpp>
 #include <db/orgsys/category.hpp>

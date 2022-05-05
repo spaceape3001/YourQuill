@@ -7,10 +7,11 @@
 #pragma once
 
 #include <db/bit/authentication.hpp>
-#include <db/bit/context.hpp>
-#include <yq/enum/permission.hpp>
 #include <db/wksp/user.hpp>
+
+#include <yq/bit/Context.hpp>
 #include <yq/collection/Set.hpp>
+#include <yq/enum/Permission.hpp>
 #include <yq/type/Ref.hpp>
 
 #include <memory>

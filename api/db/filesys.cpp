@@ -7,13 +7,13 @@
 #include <db/filesys.hpp>
 
 #include <db/imagesys.hpp>
-#include <db/bit/nki.hpp>
 #include <db/core/cdb_sq.hpp>
 #include <db/core/id_lock.hpp>
 #include <db/wksp/workspace.hpp>
 
 #include <yq/collection/Set.hpp>
 #include <yq/collection/c_utils.hpp>
+#include <yq/db/NKI.hpp>
 #include <yq/file/dir_utils.hpp>
 #include <yq/file/file_utils.hpp>
 #include <yq/stream/Ops.hpp>

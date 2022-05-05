@@ -39,6 +39,8 @@ set(yq_sources
     ./app/ThreadId.hpp
     ./app/ThreadId.ipp
     
+    ./bit/bit_unity.cpp
+    
     ./c++/c++_unity.cpp
     ./c++/Concat.hpp
     ./c++/DbgRel.hpp

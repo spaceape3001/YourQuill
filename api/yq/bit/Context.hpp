@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/enum/format.hpp>
+#include <yq/enum/Format.hpp>
 #include <yq/file/XmlFwd.hpp>
 #include <vector>
 

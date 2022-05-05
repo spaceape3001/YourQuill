@@ -6,7 +6,9 @@
 
 #pragma once
 
-#include "context.hpp"
+#include "Context.hpp"
+#include <yq/file/Strings.hpp>
+#include <yq/file/XmlUtils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
 

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "policy.hpp"
+#include "Policy.hpp"
 #include <yq/collection/EnumMap.hpp>
 
 namespace yq {

@@ -7,8 +7,8 @@
 #pragma once
 
 #include <db/bit/authentication.hpp>
-#include <db/bit/context.hpp>
-#include <db/bit/copyright.hpp>
-#include <db/bit/nki.hpp>
-#include <db/bit/policy.hpp>
+#include <yq/bit/Context.hpp>
+#include <yq/bit/Copyright.hpp>
+#include <yq/db/NKI.hpp>
+#include <yq/bit/Policy.hpp>
 #include <db/bit/rule.hpp>

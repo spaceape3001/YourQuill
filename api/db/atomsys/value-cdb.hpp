@@ -9,7 +9,7 @@
 #include <db/core/cdb_common.hpp>
 #include <db/atomsys/field.hpp>
 #include <db/atomsys/value.hpp>
-#include <yq/enum/sorted.hpp>
+#include <yq/enum/Sorted.hpp>
 
 namespace yq {
 

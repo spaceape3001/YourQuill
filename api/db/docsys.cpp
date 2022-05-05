@@ -8,13 +8,13 @@
 
 #include <db/filesys.hpp>
 #include <db/imagesys.hpp>
-#include <db/bit/nki.hpp>
 #include <db/core/cdb_sq.hpp>
 #include <db/core/id_lock.hpp>
-#include <db/core/strings.hpp>
 
 #include <yq/collection/c_utils.hpp>
+#include <yq/db/NKI.hpp>
 #include <yq/file/file_utils.hpp>
+#include <yq/file/Strings.hpp>
 #include <yq/file/XmlUtils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>

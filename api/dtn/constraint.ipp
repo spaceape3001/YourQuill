@@ -7,7 +7,7 @@
 #pragma once
 
 #include "constraint.hpp"
-#include <db/core/strings.hpp>
+#include <yq/file/Strings.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
 #include <yq/file/XmlUtils.hpp>
 

@@ -7,11 +7,10 @@
 #pragma once
 
 #include "root-fwd.hpp"
-#include <db/bit/policy.hpp>
-#include <yq/enum/access.hpp>
-#include <yq/enum/vcs.hpp>
-
+#include <yq/bit/Policy.hpp>
 #include <yq/collection/EnumMap.hpp>
+#include <yq/enum/Access.hpp>
+#include <yq/enum/Vcs.hpp>
 #include <yq/type/Flag.hpp>
 
 

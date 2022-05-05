@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <db/bit/key_value.hpp>
 #include <db/docsys/attribute-cdb.hpp>
 #include <yq/algo/DiffEngine.hpp>
+#include <yq/bit/KeyValue.hpp>
 #include <yq/preamble.hpp>
 #include <yq/type/IntRange.hpp>
 

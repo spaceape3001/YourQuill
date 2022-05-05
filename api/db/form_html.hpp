@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/enum/submit.hpp>
-#include <yq/enum/reset.hpp>
+#include <yq/enum/Submit.hpp>
+#include <yq/enum/Reset.hpp>
 
 namespace yq {
     class WebHtml;
