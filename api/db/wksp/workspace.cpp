@@ -6,18 +6,18 @@
 
 #include "workspace.hpp"
 #include <db/filesys/root.hpp>
-#include <db/wksp/quill-file.hpp>
 
 #include <yq/app/BuildInfo.hpp>
 #include <yq/app/CmdArgs.hpp>
 #include <yq/app/DelayInit.hpp>
-#include <yq/file/dir_utils.hpp>
-#include <yq/file/file_utils.hpp>
+#include <yq/io/dir_utils.hpp>
+#include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/meta/Global.hpp>
 #include <yq/meta/Init.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/text/text_utils.hpp>
+#include <yq/wksp/QuillFile.hpp>
 #include <pwd.h>
 #include <unistd.h>
 

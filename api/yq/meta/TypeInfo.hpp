@@ -7,7 +7,7 @@
 #pragma once
 #include "InfoBinder.hpp"
 #include "CompoundInfo.hpp"
-#include <yq/file/XmlFwd.hpp>
+#include <yq/io/XmlFwd.hpp>
 #include <unordered_map>
 
 namespace yq {

@@ -6,27 +6,30 @@
 
 #pragma once
 
-#include <db/atomsys/atom.hpp>
+#include <yq/atom/Atom.hpp>
 #include <db/atomsys/atom-arg.hpp>
 #include <db/atomsys/atom-cdb.hpp>
 #include <db/atomsys/atom-html.hpp>
 
-#include <db/atomsys/class.hpp>
+#include <yq/atom/Class.hpp>
 #include <db/atomsys/class-arg.hpp>
 #include <db/atomsys/class-cdb.hpp>
-#include <db/atomsys/class-data.hpp>
-#include <db/atomsys/class-file.hpp>
+#include <yq/atom/ClassData.hpp>
+#include <yq/atom/ClassFile.hpp>
 #include <db/atomsys/class-html.hpp>
 
-#include <db/atomsys/field.hpp>
+#include <yq/atom/Field.hpp>
 #include <db/atomsys/field-arg.hpp>
 #include <db/atomsys/field-cdb.hpp>
-#include <db/atomsys/field-file.hpp>
+#include <yq/atom/FieldData.hpp>
+#include <yq/atom/FieldFile.hpp>
 #include <db/atomsys/field-html.hpp>
 
 
-#include <db/atomsys/value.hpp>
+#include <yq/atom/Value.hpp>
 #include <db/atomsys/value-arg.hpp>
 #include <db/atomsys/value-cdb.hpp>
-#include <db/atomsys/value-file.hpp>
+#include <yq/atom/ValueData.hpp>
+#include <yq/atom/ValueFile.hpp>
 #include <db/atomsys/value-html.hpp>
+

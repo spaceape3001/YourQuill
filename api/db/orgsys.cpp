@@ -6,18 +6,18 @@
 
 #include "orgsys.hpp"
 
-#include <db/atomsys/class.hpp>
-#include <db/atomsys/field.hpp>
 #include <db/filesys.hpp>
 #include <db/imagesys.hpp>
 #include <db/core/cdb_sq.hpp>
 #include <db/wksp/workspace.hpp>
 
+#include <yq/atom/Class.hpp>
+#include <yq/atom/Field.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/db/NKI.hpp>
-#include <yq/file/file_utils.hpp>
-#include <yq/file/Strings.hpp>
-#include <yq/file/XmlUtils.hpp>
+#include <yq/io/file_utils.hpp>
+#include <yq/io/Strings.hpp>
+#include <yq/io/XmlUtils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
@@ -25,19 +25,10 @@
 
 #include <db/orgsys/category-arg.ipp>
 #include <db/orgsys/category-cdb.ipp>
-#include <db/orgsys/category-data.ipp>
-#include <db/orgsys/category-file.ipp>
 #include <db/orgsys/category-html.ipp>
 
 #include <db/orgsys/tag-arg.ipp>
 #include <db/orgsys/tag-cdb.ipp>
-#include <db/orgsys/tag-data.ipp>
-#include <db/orgsys/tag-file.ipp>
 #include <db/orgsys/tag-html.ipp>
 
 #include <yq/db/IDLock.ipp>
-
-namespace yq {
-    template class IDLock<Category>;
-    template class IDLock<Tag>;
-}

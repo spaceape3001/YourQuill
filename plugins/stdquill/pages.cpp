@@ -8,8 +8,8 @@
 #include <db/filesys/directory-arg.hpp>
 #include <yq/app/DelayInit.hpp>
 #include <yq/collection/c_utils.hpp>
-#include <yq/file/dir_utils.hpp>
-#include <yq/file/file_utils.hpp>
+#include <yq/io/dir_utils.hpp>
+#include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/meta/ObjectInfo.hpp>
 #include <yq/meta/TypeInfo.hpp>

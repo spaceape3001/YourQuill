@@ -9,8 +9,8 @@
 #include "Stage3.hpp"
 #include "Stage4.hpp"
 
-#include <db/filesys/fragment.hpp>
 #include <yq/collection/Vector.hpp>
+#include <yq/file/Fragment.hpp>
 #include <yq/text/text_utils.hpp>
 
 

@@ -8,11 +8,11 @@
 
 #include <db/core/cdb_common.hpp>
 #include <yq/enum/Sorted.hpp>
-#include <db/filesys/document.hpp>
-#include <db/imagesys/image.hpp>
-#include <db/orgsys/category.hpp>
-#include <db/orgsys/category-data.hpp>
-#include <db/orgsys/category-file.hpp>
+#include <yq/file/Document.hpp>
+#include <yq/image/Image.hpp>
+#include <yq/org/Category.hpp>
+#include <yq/org/CategoryData.hpp>
+#include <yq/org/CategoryFile.hpp>
 
 namespace yq {
 

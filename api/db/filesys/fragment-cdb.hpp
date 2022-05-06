@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <db/filesys/directory.hpp>
-#include <db/filesys/document.hpp>
-#include <db/filesys/folder.hpp>
-#include <db/filesys/fragment.hpp>
+#include <yq/file/Directory.hpp>
+#include <yq/file/Document.hpp>
+#include <yq/file/Folder.hpp>
+#include <yq/file/Fragment.hpp>
 #include <yq/enum/DataRole.hpp>
 #include <yq/enum/Sorted.hpp>
 

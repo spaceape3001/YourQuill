@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/enum/Format.hpp>
-#include <yq/file/XmlFwd.hpp>
+#include <yq/io/XmlFwd.hpp>
 #include <vector>
 
 namespace yq {

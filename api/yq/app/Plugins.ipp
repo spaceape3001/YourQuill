@@ -6,7 +6,7 @@
 
 #include "Plugins.hpp"
 
-#include <yq/file/dir_utils.hpp>
+#include <yq/io/dir_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/text/text_utils.hpp>
 

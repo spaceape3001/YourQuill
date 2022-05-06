@@ -12,7 +12,7 @@
 #include "Ops.hpp"
 #include "Text.hpp"
 
-#include <yq/file/file_utils.hpp>
+#include <yq/io/file_utils.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
 

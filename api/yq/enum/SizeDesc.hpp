@@ -9,9 +9,6 @@
 #include <yq/meta/InfoBinder.hpp>
 #include <yq/type/Enum.hpp>
 
-#include <initializer_list>
-#include <string_view>
-
 namespace yq {
 
     /*! 
@@ -24,14 +21,6 @@ namespace yq {
         Medium,
         Small
     )
-    
-    struct WebContext;
-    
-    namespace arg {
-        SizeDesc    size_desc(std::string_view);
-        SizeDesc    size_desc(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        SizeDesc    size_desc(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
 
 }
 

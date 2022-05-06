@@ -6,10 +6,9 @@
 
 #pragma once
 
-#include <db/filesys/folder.hpp>
-
 #include <yq/collection/EnumMap.hpp>
 #include <yq/enum/Change.hpp>
+#include <yq/file/Folder.hpp>
 #include <yq/type/Flag.hpp>
 #include <filesystem>
 #include <source_location>

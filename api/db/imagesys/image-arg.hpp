@@ -21,5 +21,9 @@ namespace yq {
         Image image(const WebContext&, bool *detected=nullptr);
         Image image(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Image image(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+    
+        SizeDesc    size_desc(std::string_view);
+        SizeDesc    size_desc(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        SizeDesc    size_desc(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
 }

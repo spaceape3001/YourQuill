@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <yq/db/Html.hpp>
+
 namespace yq {
     struct Document;
     namespace html {

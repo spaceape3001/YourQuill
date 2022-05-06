@@ -12,9 +12,9 @@
 
 #include <yq/collection/c_utils.hpp>
 #include <yq/db/NKI.hpp>
-#include <yq/file/file_utils.hpp>
-#include <yq/file/Strings.hpp>
-#include <yq/file/XmlUtils.hpp>
+#include <yq/io/file_utils.hpp>
+#include <yq/io/Strings.hpp>
+#include <yq/io/XmlUtils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
@@ -27,12 +27,5 @@
 
 #include <db/docsys/leaf-arg.ipp>
 #include <db/docsys/leaf-cdb.ipp>
-#include <db/docsys/leaf-data.ipp>
-#include <db/docsys/leaf-file.ipp>
 #include <db/docsys/leaf-html.ipp>
 
-#include <yq/db/IDLock.ipp>
-
-namespace yq {
-    template class IDLock<Leaf>;
-}

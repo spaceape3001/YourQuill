@@ -7,10 +7,10 @@
 #pragma once
 
 #include <db/core/cdb_common.hpp>
-#include <db/atomsys/atom.hpp>
+#include <yq/atom/Atom.hpp>
 #include <yq/enum/Sorted.hpp>
-#include <db/imagesys/image.hpp>
-#include <db/docsys/leaf.hpp>
+#include <yq/image/Image.hpp>
+#include <yq/leaf/Leaf.hpp>
 #include <vector>
 
 namespace yq {

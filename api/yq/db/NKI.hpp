@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/imagesys/image.hpp>
+#include <yq/image/Image.hpp>
 
 namespace yq {
     namespace cdb {

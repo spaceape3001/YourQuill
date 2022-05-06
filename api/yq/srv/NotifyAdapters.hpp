@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Notifier.hpp"
-#include <db/filesys/fragment.hpp>
+#include <yq/file/Fragment.hpp>
 #include <functional>
 
 namespace yq {

@@ -14,9 +14,9 @@
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
-#include <yq/file/dir_utils.hpp>
-#include <yq/file/DirWatcher.hpp>
-#include <yq/file/file_utils.hpp>
+#include <yq/io/dir_utils.hpp>
+#include <yq/io/DirWatcher.hpp>
+#include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/srv/Notifier.hpp>

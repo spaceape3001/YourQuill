@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/imagesys/image.hpp>
+#include <yq/image/Image.hpp>
 #include <db/core/cdb_common.hpp>
 #include <yq/enum/SizeDesc.hpp>
 #include <yq/net/Http.hpp>

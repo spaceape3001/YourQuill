@@ -7,12 +7,12 @@
 #pragma once
 
 #include <db/core/cdb_common.hpp>
-#include <db/filesys/document.hpp>
-#include <db/docsys/leaf.hpp>
+#include <yq/file/Document.hpp>
+#include <yq/leaf/Leaf.hpp>
 #include <yq/enum/Sorted.hpp>
-#include <db/imagesys/image.hpp>
-#include <db/orgsys/tag.hpp>
-#include <db/orgsys/tag-file.hpp>
+#include <yq/image/Image.hpp>
+#include <yq/org/Tag.hpp>
+#include <yq/org/TagFile.hpp>
 
 namespace yq {
     

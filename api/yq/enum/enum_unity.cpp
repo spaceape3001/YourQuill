@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <yq/enum.hpp>
-#include <yq/enum/SizeDesc.ipp>
 #include <yq/meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::Access)

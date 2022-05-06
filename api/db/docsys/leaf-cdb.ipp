@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/orgsys/tag.hpp>
+#include <yq/org/Tag.hpp>
 #include <db/orgsys/tag-cdb.hpp>
 #include <yq/db/IDLock.hpp>
 

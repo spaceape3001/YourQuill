@@ -10,7 +10,7 @@
 #include "SqlLite.hpp"
 #include "SqlLogging.hpp"
 #include "SqlQuery.hpp"
-#include <yq/file/file_utils.hpp>
+#include <yq/io/file_utils.hpp>
 #include <yq/text/text_utils.hpp>
 
 namespace yq {

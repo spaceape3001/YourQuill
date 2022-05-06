@@ -13,8 +13,8 @@
 #include <yq/collection/Set.hpp>
 #include <yq/collection/c_utils.hpp>
 #include <yq/db/NKI.hpp>
-#include <yq/file/dir_utils.hpp>
-#include <yq/file/file_utils.hpp>
+#include <yq/io/dir_utils.hpp>
+#include <yq/io/file_utils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
@@ -38,8 +38,4 @@
 #include <db/filesys/fragment-html.ipp>
 #include <db/filesys/root-html.ipp>
 
-#include <yq/db/IDLock.ipp>
 
-namespace yq {
-    template class IDLock<Fragment>;
-}

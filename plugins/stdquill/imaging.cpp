@@ -10,12 +10,12 @@
 #include <yq/shape/Size2Ops.hpp>
 
 #include <db/core/cdb_sq.hpp>
-#include <db/filesys/document.hpp>
 #include <db/filesys/document-cdb.hpp>
-#include <db/filesys/fragment.hpp>
 #include <db/filesys/fragment-cdb.hpp>
-#include <db/imagesys/image.hpp>
 #include <db/imagesys/image-cdb.hpp>
+#include <yq/file/Document.hpp>
+#include <yq/file/Fragment.hpp>
+#include <yq/image/Image.hpp>
 
 #include <yq/db/IDLock.hpp>
 #include <MagickCore/magick-baseconfig.h>

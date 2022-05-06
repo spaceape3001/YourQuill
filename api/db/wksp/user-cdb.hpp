@@ -7,10 +7,10 @@
 #pragma once
 
 #include <db/core/cdb_common.hpp>
-#include <db/filesys/document.hpp>
-#include <db/imagesys/image.hpp>
-#include <db/wksp/user-file.hpp>
 #include <yq/enum/Sorted.hpp>
+#include <yq/file/Document.hpp>
+#include <yq/image/Image.hpp>
+#include <yq/wksp/UserFile.hpp>
 
 namespace yq {
     struct Fragment;

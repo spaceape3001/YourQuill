@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <db/bit/authentication.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
+#include <yq/wksp/Authentication.hpp>
 
 // First three are TESTING PURPOSES ONLY, to be removed for final release
 #include "auth/accept.ipp"

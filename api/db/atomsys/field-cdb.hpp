@@ -7,10 +7,10 @@
 #pragma once
 
 #include <db/core/cdb_common.hpp>
-#include <db/atomsys/class.hpp>
-#include <db/atomsys/field-file.hpp>
-#include <db/imagesys/image.hpp>
-#include <db/orgsys/category.hpp>
+#include <yq/atom/Class.hpp>
+#include <yq/atom/FieldFile.hpp>
+#include <yq/image/Image.hpp>
+#include <yq/org/Category.hpp>
 
 namespace yq {
     struct Field;

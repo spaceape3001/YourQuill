@@ -9,8 +9,6 @@
 #include <initializer_list>
 #include <string_view>
 
-#include <yq/enum/SizeDesc.hpp>
-
 namespace yq {
     struct Attribute;
     struct WebContext;

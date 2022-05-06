@@ -39,6 +39,10 @@ set(yq_sources
     ./app/ThreadId.hpp
     ./app/ThreadId.ipp
     
+    ./atom/atom.cpp
+    
+    ./attr/attr.cpp
+    
     ./bit/bit_unity.cpp
     
     ./c++/c++_unity.cpp
@@ -76,24 +80,28 @@ set(yq_sources
     ./collection/Stack.hpp
     ./collection/Vector.hpp
     
-    ./db/db_unity.cpp
+    ./db/db.cpp
     
     ./enum/enum_unity.cpp
 
-    ./file/file_utils.hpp
-    ./file/file_unity.cpp
-    ./file/file_watch.cpp
-    ./file/AbstractFile.hpp
-    ./file/DirWatcher.hpp
-    ./file/XmlFile.hpp
-    ./file/XmlFwd.hpp
-    ./file/XmlUtils.hpp
+    ./file/file.cpp
+    
+    ./io/file_utils.hpp
+    ./io/file_unity.cpp
+    ./io/file_watch.cpp
+    ./io/AbstractFile.hpp
+    ./io/DirWatcher.hpp
+    ./io/XmlFile.hpp
+    ./io/XmlFwd.hpp
+    ./io/XmlUtils.hpp
     
     
     ./ipc/ipc_unity.cpp
     ./ipc/ipcBuffer.hpp
     ./ipc/ipcPackets.hpp
     ./ipc/ipcSocket.hpp
+
+    ./leaf/leaf.cpp
 
     #./log/LogFile.cpp
     #./log/LogFile.hpp
@@ -125,6 +133,8 @@ set(yq_sources
     ./net/Http.hpp
     ./net/Url.hpp
     ./net/VersionSpec.hpp
+
+    ./org/orgsys.cpp
 
     #./proc/Execute.cpp
     #./proc/Execute.hpp
@@ -200,6 +210,8 @@ set(yq_sources
     ./web/WebPage.ipp
     ./web/WebVariable.hpp
     ./web/WebVariable.ipp
+    
+    ./wksp/wksp.cpp
 )
 
 add_library(yq SHARED ${yq_sources})

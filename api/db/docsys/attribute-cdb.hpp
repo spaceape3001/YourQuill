@@ -7,7 +7,7 @@
 #pragma once
 
 #include <db/core/cdb_common.hpp>
-#include <db/filesys/document.hpp>
+#include <yq/file/Document.hpp>
 #include <vector>
 
 namespace yq {

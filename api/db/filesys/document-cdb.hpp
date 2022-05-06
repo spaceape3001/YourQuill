@@ -9,9 +9,9 @@
 #include <db/core/cdb_common.hpp>
 #include <yq/enum/DataRole.hpp>
 #include <yq/enum/Sorted.hpp>
-#include <db/filesys/document.hpp>
-#include <db/filesys/folder.hpp>
-#include <db/imagesys/image.hpp>
+#include <yq/file/Document.hpp>
+#include <yq/file/Folder.hpp>
+#include <yq/image/Image.hpp>
 #include <yq/net/Http.hpp>
 
 namespace yq {

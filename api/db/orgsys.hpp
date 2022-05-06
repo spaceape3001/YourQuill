@@ -6,16 +6,16 @@
 
 #pragma once
 
-#include <db/orgsys/category.hpp>
+#include <yq/org/Category.hpp>
 #include <db/orgsys/category-arg.hpp>
 #include <db/orgsys/category-cdb.hpp>
-#include <db/orgsys/category-data.hpp>
-#include <db/orgsys/category-file.hpp>
+#include <yq/org/CategoryData.hpp>
+#include <yq/org/CategoryFile.hpp>
 #include <db/orgsys/category-html.hpp>
 
-#include <db/orgsys/tag.hpp>
+#include <yq/org/Tag.hpp>
 #include <db/orgsys/tag-arg.hpp>
 #include <db/orgsys/tag-cdb.hpp>
-#include <db/orgsys/tag-data.hpp>
-#include <db/orgsys/tag-file.hpp>
+#include <yq/org/TagData.hpp>
+#include <yq/org/TagFile.hpp>
 #include <db/orgsys/tag-html.hpp>
