@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <db/core/cdb_common.hpp>
 #include <yq/atom/Field.hpp>
 #include <yq/atom/Value.hpp>
+#include <yq/db/CacheFwd.hpp>
 #include <yq/enum/Sorted.hpp>
 
 namespace yq {

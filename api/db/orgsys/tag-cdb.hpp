@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/core/cdb_common.hpp>
+#include <yq/db/CacheFwd.hpp>
 #include <yq/file/Document.hpp>
 #include <yq/leaf/Leaf.hpp>
 #include <yq/enum/Sorted.hpp>

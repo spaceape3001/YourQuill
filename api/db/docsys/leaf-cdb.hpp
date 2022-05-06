@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <db/core/cdb_common.hpp>
 #include <yq/atom/Atom.hpp>
-#include <yq/leaf/Leaf.hpp>
+#include <yq/db/CacheFwd.hpp>
 #include <yq/enum/Sorted.hpp>
 #include <yq/file/Document.hpp>
 #include <yq/image/Image.hpp>
+#include <yq/leaf/Leaf.hpp>
 #include <vector>
 
 namespace yq {

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <yq/db/CacheFwd.hpp>
 #include <vector>
 
 namespace yq {

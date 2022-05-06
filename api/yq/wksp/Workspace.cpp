@@ -4,12 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "workspace.hpp"
-#include <db/filesys/root.hpp>
+#include "Workspace.hpp"
 
 #include <yq/app/BuildInfo.hpp>
 #include <yq/app/CmdArgs.hpp>
 #include <yq/app/DelayInit.hpp>
+#include <yq/file/Root.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>

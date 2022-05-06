@@ -7,7 +7,6 @@
 #include "yquill.hpp"
 
 #include <db/filesys.hpp>
-#include <db/wksp/workspace.hpp>
 
 #include <yq/algo/Compare.hpp>
 #include <yq/collection/Deque.hpp>
@@ -24,6 +23,7 @@
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
 #include <yq/text/text_utils.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 
 #include <chrono>

@@ -8,13 +8,12 @@
 
 #include <iostream>
 
-#include <db/filesys/root.hpp>
-#include <db/wksp/workspace.hpp>
-
 #include <yq/app/CmdArgs.hpp>
+#include <yq/file/Root.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/meta/Meta.hpp>
 #include <yq/text/text_utils.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 int main(int argc, char* argv[])
 {

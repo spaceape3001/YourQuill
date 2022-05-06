@@ -6,7 +6,7 @@
 
 #pragma once
 
-
+#include <yq/db/CacheFwd.hpp>
 #include <yq/file/Directory.hpp>
 #include <yq/file/Folder.hpp>
 

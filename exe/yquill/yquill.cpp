@@ -16,8 +16,7 @@
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlUtils.hpp>
 #include <yq/text/text_utils.hpp>
-
-#include <db/wksp/workspace.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 #include <iostream>
 

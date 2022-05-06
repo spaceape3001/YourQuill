@@ -8,7 +8,7 @@
 #include <yq/io/XmlUtils.hpp>
 
 
-#include <db/core/cdb_common.hpp>
+#include <yq/db/CacheFwd.hpp>
 
 
 #include <yq/io/Strings.hpp>
@@ -60,4 +60,3 @@ namespace yq {
 
 
 #include <db/bit/rule.ipp>
-#include <db/core/cdb_sq.ipp>

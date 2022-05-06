@@ -8,10 +8,10 @@
 
 #include <db/filesys.hpp>
 #include <db/imagesys.hpp>
-#include <db/core/cdb_sq.hpp>
 
 #include <yq/collection/c_utils.hpp>
 #include <yq/db/NKI.hpp>
+#include <yq/db/Sq.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/io/Strings.hpp>
 #include <yq/io/XmlUtils.hpp>

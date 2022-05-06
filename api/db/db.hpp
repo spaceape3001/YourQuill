@@ -17,9 +17,8 @@
 #include "bit.hpp"
 #include <yq/enum.hpp>
 #include <yq/db/Html.hpp>
-
-#include <db/core/cdb_sq.hpp>
 #include <yq/db/IDLock.hpp>
+#include <yq/db/Sq.hpp>
 
 
 

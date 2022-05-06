@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/filesys/root-fwd.hpp>
+#include <yq/file/RootFwd.hpp>
 #include <yq/type/Enum.hpp>
 #include <yq/type/Flag.hpp>
 #include <functional>

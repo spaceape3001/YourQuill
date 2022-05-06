@@ -9,10 +9,9 @@
 
 #include <db/filesys.hpp>
 #include <db/imagesys.hpp>
-#include <db/core/cdb_sq.hpp>
-#include <db/wksp/workspace.hpp>
 
 #include <yq/db/NKI.hpp>
+#include <yq/db/Sq.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/io/Strings.hpp>
 #include <yq/io/XmlUtils.hpp>
@@ -21,6 +20,7 @@
 #include <yq/text/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 #include <db/atomsys/atom-arg.ipp>
 #include <db/atomsys/atom-cdb.ipp>

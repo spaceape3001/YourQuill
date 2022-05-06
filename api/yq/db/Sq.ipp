@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "cdb_sq.hpp"
-#include <db/wksp/workspace.hpp>
+#include "Sq.hpp"
 #include <yq/collection/Set.hpp>
 #include <yq/text/text_utils.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 namespace yq {
 

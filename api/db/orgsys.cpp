@@ -8,8 +8,8 @@
 
 #include <db/filesys.hpp>
 #include <db/imagesys.hpp>
-#include <db/core/cdb_sq.hpp>
-#include <db/wksp/workspace.hpp>
+#include <yq/db/Sq.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 #include <yq/atom/Class.hpp>
 #include <yq/atom/Field.hpp>

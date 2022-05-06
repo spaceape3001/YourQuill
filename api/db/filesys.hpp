@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <db/core/cdb_common.hpp>
+#include <yq/db/CacheFwd.hpp>
 #include <yq/db/Html.hpp>
 
 #include <yq/enum/DataRole.hpp>
@@ -32,7 +32,7 @@
 #include <db/filesys/fragment-cdb.hpp>
 #include <db/filesys/fragment-html.hpp>
 
-#include <db/filesys/root.hpp>
+#include <yq/file/Root.hpp>
 #include <db/filesys/root-arg.hpp>
 #include <db/filesys/root-cdb.hpp>
 #include <db/filesys/root-html.hpp>

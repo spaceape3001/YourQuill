@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <yq/db/CacheFwd.hpp>
+
 namespace yq {
     class Root;
     class ByteArray;

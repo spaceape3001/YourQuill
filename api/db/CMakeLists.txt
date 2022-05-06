@@ -7,7 +7,6 @@ set(db_sources
     ./metasys.cpp
     ./orgsys.cpp
     ./wksp.cpp
-    ./wksp/workspace.cpp
 )
 
 add_library(yqdb SHARED ${db_sources})

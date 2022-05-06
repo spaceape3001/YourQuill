@@ -5,19 +5,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "imaging.hpp"
-#include <yq/app/CmdArgs.hpp>
-#include <yq/log/Logging.hpp>
-#include <yq/shape/Size2Ops.hpp>
 
-#include <db/core/cdb_sq.hpp>
 #include <db/filesys/document-cdb.hpp>
 #include <db/filesys/fragment-cdb.hpp>
 #include <db/imagesys/image-cdb.hpp>
+
+#include <yq/app/CmdArgs.hpp>
+#include <yq/db/IDLock.hpp>
+#include <yq/db/Sq.hpp>
 #include <yq/file/Document.hpp>
 #include <yq/file/Fragment.hpp>
 #include <yq/image/Image.hpp>
+#include <yq/log/Logging.hpp>
+#include <yq/shape/Size2Ops.hpp>
 
-#include <yq/db/IDLock.hpp>
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning
 #define MAGICKCORE_QUANTUM_DEPTH MAGICKCORE_QUANTUM_DEPTH_OBSOLETE_IN_H

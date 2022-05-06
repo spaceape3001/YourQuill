@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "root-fwd.hpp"
+#include "RootFwd.hpp"
 #include <yq/bit/Policy.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/enum/Access.hpp>

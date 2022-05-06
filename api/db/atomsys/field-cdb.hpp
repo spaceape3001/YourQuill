@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <db/core/cdb_common.hpp>
 #include <yq/atom/Class.hpp>
 #include <yq/atom/FieldFile.hpp>
+#include <yq/db/CacheFwd.hpp>
 #include <yq/image/Image.hpp>
 #include <yq/org/Category.hpp>
 

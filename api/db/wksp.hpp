@@ -14,6 +14,6 @@
 #include <yq/wksp/UserFile.hpp>
 #include <db/wksp/user-html.hpp>
 
-#include <db/wksp/workspace.hpp>
+#include <yq/wksp/Workspace.hpp>
 #include <yq/wksp/QuillData.hpp>
 #include <yq/wksp/QuillFile.hpp>
