@@ -55,6 +55,8 @@ namespace yq {
         
         bool            has_table(std::string_view) const;
     
+        void            checkpoint();
+    
     private:
         
         static bool         config_sqlite();

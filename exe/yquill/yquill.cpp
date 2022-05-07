@@ -87,10 +87,18 @@ bool    initialize(const char* wfile)
     
     if(std::filesystem::exists(dbfile)){
         std::error_code ec;
-        if(!std::filesystem::remove(dbfile)){
+        if(!std::filesystem::remove(dbfile, ec)){
             yCritical() << "Unable to remove the old database at " << dbfile;
             return false;
         }
+        
+        auto shm    = dbfile;
+        shm += "-shm";
+        std::filesystem::remove(shm, ec);
+        
+        auto wal    = dbfile;
+        wal += "-wal";
+        std::filesystem::remove(wal, ec);
     }
     
     SqlLite& db = wksp::db();
@@ -126,6 +134,8 @@ bool    initialize(const char* wfile)
     stage3_documents();
     yInfo() << "Stage 4: Finalization.";
     stage4_finalize();
+    yInfo() << "Stage 5: Flushing write-ahead-log.";
+    db.checkpoint();
     return true;
 }
 

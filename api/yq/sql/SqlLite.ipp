@@ -37,6 +37,11 @@ namespace yq {
         close();
     }
     
+    void        SqlLite::checkpoint()
+    {
+        sqlite3_wal_checkpoint_v2(m_database, nullptr, SQLITE_CHECKPOINT_FULL, nullptr, nullptr);
+    }
+
     void        SqlLite::close()
     {
         if(m_database != nullptr){

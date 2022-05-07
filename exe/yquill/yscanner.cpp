@@ -21,6 +21,7 @@
 #include <yq/io/DirWatcher.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
+#include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/srv/Notifier.hpp>
 #include <yq/srv/Stage2.hpp>
@@ -345,8 +346,8 @@ void    dir_removed(Directory d, Folder fo=Folder())
     cdb::erase(d);
 }
 
-        //  Stage 5 -- scan/sweep for changes
-void    stage5_sweep()
+        //  Stage 6 -- scan/sweep for changes
+void    stage6_sweep()
 {
     Deque<DQ1>      queue;
     
@@ -752,10 +753,13 @@ void        run_scanner(Vector<std::thread>& threads)
 
         ready       = true;
         cv.notify_one();
+        
+        auto& db    = wksp::db();
 
         while(gQuit == Quit::No){
             std::this_thread::sleep_for(10ms);
-            stage5_sweep();
+            stage6_sweep();
+            db.checkpoint();
         }
     });
     
