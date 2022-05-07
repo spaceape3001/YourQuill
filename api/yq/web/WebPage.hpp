@@ -140,6 +140,7 @@ namespace yq {
         ContentTypes            m_content_types;
         ContentType             m_content_type;
         Role                    m_role;
+        std::vector<std::string_view>   m_alts;
         
         enum : uint64_t {
             LOCAL_ONLY      = 1ULL << 30,
@@ -162,6 +163,9 @@ namespace yq {
     class WebPage::Writer : public Meta::Writer, trait::not_copyable {
     public:
         
+        //! Allows for an alternate path (if we're pure-page no extensions)
+        Writer&  alt_path(std::string_view);
+
         //! Allow POST to not require login.  (Needed for the login post)
         Writer&  anon_post();
 
@@ -215,6 +219,7 @@ namespace yq {
         //Writer&  on_stage4(int order=0, const std::source_location& sl = std::source_location::current());
         
         const WebPage*  page() const { return m_page; }
+        
         
         Writer(WebPage*p); // : m_page(p) {}
         Writer(Writer&&);

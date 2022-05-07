@@ -51,7 +51,7 @@
 
 <tr>
     <td class="icon"><img class="medium" src="/img/im-user.svg" alt="Users"/></td>
-    <th>USERS</th>
+    <th><a href="/admin/tags">USERS</a></th>
     <td>{{USER_COUNT}}</td>
     <td class="explain">Accounts &amp; Permissions to access this project.</td>
 </tr>

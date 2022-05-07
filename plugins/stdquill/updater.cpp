@@ -43,60 +43,19 @@
 using namespace yq;
 using namespace yq::cdb;
 
-Guarded<std::string>            gTextColor, gBkColor;
-Guarded<Ref<TypedBytes>>        gBackground;
-std::atomic<bool>               gHasBackground{false};
-Guarded<SharedByteArray>        gCss;
-std::vector<std::string>        gBackgroundFiles;
-std::filesystem::path           gSharedCssFile, gSharedPageFile;
+alignas(64) Guarded<std::string>        gTextColor;
+alignas(64) Guarded<std::string>        gBkColor;
+alignas(64) std::atomic<bool>           gHasBackground{false};
+alignas(64) Guarded<SharedByteArray>    gCss;
+alignas(64) std::filesystem::path       gSharedCssFile;
+alignas(64) std::filesystem::path       gSharedPageFile;
 
 namespace {
     static constexpr const char*    kPage       = ".page";
-    static constexpr const char*    kBackground = ".background";
 
     static const std::string_view       kStdCSS         = "std/css";
     static const std::string_view       kStdPage        = "std/page";
 
-    void        css__(cdb_options_t opts=0);
-
-    //  ================================================================================================================
-    //      BACKGROUND
-    //  ================================================================================================================
-
-        bool        background__(cdb_options_t opts=0)
-        {
-            Document    doc = cdb::first_document(gBackgroundFiles);
-            bool    now = false;
-
-            if(doc){
-                do {
-                    Fragment    frag = cdb::fragment(doc, DataRole::Image);
-                    if(!frag)
-                        break;
-                    Fragment::Lock  lk;
-                    if(!(opts & DONT_LOCK))
-                        lk      = Fragment::Lock::read(frag);
-                    Ref<TypedBytes> tb  = TypedBytes::load(cdb::path(frag));
-                    if(!tb)
-                        break;
-                    gBackground = tb;
-                    now = true;
-                } while(false);
-            }
-
-            return gHasBackground.exchange(now) != now;
-        }
-        
-        void        background_stage4()
-        {
-            background__(DONT_LOCK);
-        }
-
-        void        background_update()
-        {
-            if(background__())
-                css__();
-        }
 
     //  ================================================================================================================
     //      CATEGORY
@@ -198,7 +157,7 @@ namespace {
     //      CSS
     //  ================================================================================================================
 
-        void    css__(cdb_options_t opts)
+        void    css__(cdb_options_t opts=0)
         {
             std::string       css;
             for(Fragment f : cdb::fragments(".css", DataRole::Style)){
@@ -274,11 +233,17 @@ namespace {
         {
             css__();
         }
+}
+
+void update_css()
+{
+    css__();
+}
 
     //  ================================================================================================================
     //      FIELDS (ATOMS)
     //  ================================================================================================================
-
+namespace {
             // called POST class-expansion
         void    field_s3_classes(Document doc)
         {
@@ -429,6 +394,7 @@ namespace {
             }
             
             if(created){
+                //  MORE
             } else {
                 //  MORE TODO 
                 auto rep     = diff::changes(doc, data->attrs);
@@ -438,8 +404,7 @@ namespace {
             }
             
         }
-
-
+        
     //  ================================================================================================================
     //      PAGE
     //  ================================================================================================================
@@ -597,8 +562,6 @@ namespace {
         
                 // FIX any necessary paths
                 
-            for(const char* z : Image::kSupportedExtensions)
-                gBackgroundFiles.push_back(".background."s + z);
             gSharedCssFile      = wksp::shared(kStdCSS);;
             gSharedPageFile     = wksp::shared(kStdPage);
 
@@ -628,7 +591,6 @@ namespace {
         
                 //  STAGE 4 global related
 
-            on_stage4<background_stage4>();
             on_stage4<css_stage4>();        // <---  Must come AFTER background stage4
             on_stage4<page_stage4>();
             
@@ -661,9 +623,6 @@ namespace {
                 on_change<user_icons>(users_folder(), z);
                 on_change<tag_icons>(classes_folder(), z);
             }
-
-            for(std::string_view f : gBackgroundFiles)
-                on_change<background_update>(top_folder(), f);
         }
 
     //  now outside the above function, we register....

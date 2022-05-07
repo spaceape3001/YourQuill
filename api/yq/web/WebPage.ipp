@@ -95,8 +95,11 @@ namespace yq {
                 break;
             case Role::Page:
                 for(HttpOp m : HttpOp::all_values())
-                    if(m_methods.is_set(m))
+                    if(m_methods.is_set(m)){
                         _r.pages[m][p]     = this;
+                        for(std::string_view a : m_alts)
+                            _r.pages[m][a]  = this;
+                    }
                 break;
             default:
                 break;
@@ -132,6 +135,13 @@ namespace yq {
     {
         if(m_page)
             m_page -> seal();
+    }
+
+    WebPage::Writer&  WebPage::Writer::alt_path(std::string_view k)
+    {
+        if(m_page)
+            m_page -> m_alts.push_back(k);
+        return *this;
     }
 
     WebPage::Writer&  WebPage::Writer::anon_post()

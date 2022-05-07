@@ -18,10 +18,10 @@ using namespace yq;
 using SharedByteArray   = std::shared_ptr<ByteArray>;
 
 extern Guarded<std::string>         gTextColor, gBkColor;
-extern Guarded<Ref<TypedBytes>>     gBackground;
 extern std::atomic<bool>            gHasBackground;
 extern Guarded<SharedByteArray>     gCss;
-extern std::vector<std::string>     gBackgroundFiles;
 extern std::filesystem::path        gSharedCssFile, gSharedPageFile;
 
+
+void    update_css();
 

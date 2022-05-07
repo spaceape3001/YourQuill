@@ -1661,6 +1661,16 @@ namespace yq {
             return Document{};
         }
 
+        Document            first_document(Folder f, const std::vector<std::string>&keys)
+        {
+            for(const std::string& k : keys){
+                Document    d   = child_document(f, k);
+                if(d)
+                    return d;
+            }
+            return Document{};
+        }
+
         Folder              folder(uint64_t i)
         {
             return exists_folder(i) ? Folder{i} : Folder{};
@@ -2728,7 +2738,7 @@ namespace yq {
         void    dev_table(WebHtml&h, const std::vector<const Root*>& roots)
         {
             auto _tab = h.table();
-            h << "<tr><th><ID></th><th>Key</th><th>Name</th><th>Path</th></tr>\n";
+            h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Path</th></tr>\n";
             for(const Root* r : roots){
                 if(!r)
                     continue;

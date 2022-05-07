@@ -39,6 +39,7 @@
 #include <yq/web/JsonAdapter.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
+#include <yq/web/WebImage.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebTemplate.hpp>
@@ -51,6 +52,7 @@ using namespace yq::cdb;
 using namespace yq::html;
 
 #include "common.hpp"
+
 
 namespace {
 
@@ -79,28 +81,45 @@ namespace {
 
     void    page_admin_categories(WebHtml& h)
     {
+        h.title() << "Categories for [" << html_escape(wksp::name()) << "]";
+        h << "<p><div class=\"explain\">"
+          << "Categories are used to group classes and fields into order for display purposes."
+          << "</div>\n";
         h << "TODO (CATEGORIES)";
     }
 
     void    page_admin_classes(WebHtml& h)
     {
+        h.title() << "Classes for [" << html_escape(wksp::name()) << "]";
+        h << "<p><div class=\"explain\">"
+          << "Classes declare the atom classifications that are to be tracked in the cache database."
+          << "</div>\n";
         h << "TODO (CLASSES)";
     }
 
     void    page_admin_fields(WebHtml& h)
     {
+        h.title() << "Fields for [" << html_escape(wksp::name()) << "]";
+        h << "<p><div class=\"explain\">"
+          << "Fields declare the atom properties that are to be tracked in the cache database."
+          << "</div>\n";
         h << "TODO (FIELDS)";
     }
 
     void    page_admin_tags(WebHtml& h)
     {
+        h.title() << "Tags for [" << html_escape(wksp::name()) << "]";
+        h << "<p><div class=\"explain\">"
+          << "Tags can annotate leafs, classes, fields, atoms, and more with a specific trait."
+          << "</div>\n";
         h << "TODO (TAGS)";
     }
 
     void    page_admin_users(WebHtml&h)
     {
+        h.title() << "Users for [" << html_escape(wksp::name()) << "]";
         // might have some characteristics?
-        h.title() << "TODO (USERS)";
+        h << "TODO (USERS)";
         dev_table(h, cdb::all_users(Sorted::YES));  // STUB
     }
 
@@ -136,19 +155,6 @@ namespace {
         h << "TODO";
     }
     
-    void    page_background(WebContext& ctx)
-    {
-        Ref<TypedBytes>     data = gBackground;
-        if(!data){
-            ctx.status  = HttpStatus::ServiceUnavailable;
-            return;
-        }
-        
-        ctx.tx_content_type = data -> type;
-        ctx.tx_content      = data -> data;
-        ctx.tx_header("Date", data->modified);
-        ctx.status          = HttpStatus::Success;
-    }
 
     void page_class(WebHtml& h)
     {
@@ -1198,7 +1204,11 @@ namespace {
         reg_webpage<page_api_workspace>("/api/workspace"sv); 
         reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");
         reg_webpage<page_atoms>("/atoms");
-        reg_webpage<page_background>("/background");
+        reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){
+            bool    now = wi.hasImage();
+            if(gHasBackground.exchange(now) != now)
+                update_css();
+        });
         reg_webgroup({
             reg_webpage<page_class>("/class").argument("ID", "Class ID").label("Overview"),
             reg_webpage<page_class_atoms>("/class/atoms").argument("ID", "Class ID").label("Atoms")
@@ -1309,12 +1319,11 @@ namespace {
             reg_webpage<page_dev_wksp_roots>("/dev/wksp/roots").label("Roots")
         });
         reg_webpage<page_extension_markdown>("*.md");
-        reg_webpage("/favicon.ico", wksp::shared("www/img/yquill.svg"sv)).todo();
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage<page_image>("/image").argument("id", "ID for the image");
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));
         reg_webpage("/js/**", wksp::shared_all("www/js"sv));
-        reg_webpage("/logo", wksp::shared("www/img/yquill.svg"sv)).todo();
+        reg_webimage("/logo", wksp::shared("www/img/yquill.svg"sv), Folder(), ".logo").alt_path("/favicon.ico");
         reg_webpage<page_thumbnail>("/thumbnail").argument("id", "ID for the image");
         reg_webpage<page_user>("/user");
     }

@@ -113,6 +113,7 @@ namespace yq {
         /*! \brief Returns the FIRST document encountered
         */
         Document                        first_document(Folder, std::initializer_list<std::string_view>);
+        Document                        first_document(Folder, const std::vector<std::string>&);
 
         Folder                          folder(Fragment);
 
