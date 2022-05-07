@@ -10,6 +10,7 @@
 #include <asio/ts/internet.hpp>
 
 #include <yq/algo/Random.hpp>
+#include <yq/app/DelayInit.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
@@ -17,7 +18,9 @@
 #include <yq/type/FixedBuffer.hpp>
 #include <yq/type/Ref.hpp>
 #include <yq/web/HttpParser.hpp>
+#include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>
+#include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/wksp/Workspace.hpp>
 
@@ -40,6 +43,7 @@ namespace asio {
     }
 }
 
+std::atomic<uint64_t>   gServerThreads{0};
 
 
 struct Session : public RefCount {
@@ -956,6 +960,15 @@ public:
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+void    var_sthreads(WebHtml&h)
+{
+    h << gServerThreads;
+}
+
+YQ_INVOKE(
+    reg_webvar<var_sthreads>("SERVER_THREADS");
+);
+
 void        run_server(yq::Vector<std::thread>&  threads)
 {
     genStatus();
@@ -966,8 +979,12 @@ void        run_server(yq::Vector<std::thread>&  threads)
     
     for(size_t i=0;i<config.numThreads;++i){
         threads << std::thread([server](){
+            ++gServerThreads;
             server -> run();
+            --gServerThreads;
         });
     }
 }
+
+
 

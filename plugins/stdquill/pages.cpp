@@ -1307,7 +1307,7 @@ namespace {
         reg_webpage<page_thumbnail>("/thumbnail").argument("id", "ID for the image");
         reg_webpage<page_user>("/user");
         reg_webgroup({
-            reg_webpage<page_wksp>("/wksp").label("Info")
+            reg_webtemplate("/wksp", wksp::shared("std/wksp"sv)).source(".wksp").label("Info")
         });
     }
     

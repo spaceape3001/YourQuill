@@ -111,6 +111,27 @@ div.summary {
     margin-right:auto;
 }
 
+TABLE.info {
+    font-size: large;
+    text-align: left;
+    width:75%;
+    margin-left:auto;
+    margin-right:auto;
+    outline-width:0.2em;
+    outline-style:groove;
+    border-top-style:groove;
+    border-bottom-style:groove;
+}
+
+TD.icon {
+    font-size: 400%;
+    text-align: center;
+}
+
+TD.icon img {
+    object-fit: contain;
+}
+
 img.small {
     max-width: 32px;
     max-height: 24px;

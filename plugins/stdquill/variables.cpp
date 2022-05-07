@@ -7,14 +7,19 @@
 #include "common.hpp"
 
 #include <yq/app/DelayInit.hpp>
+#include <yq/atom/ClassCDB.hpp>
+#include <yq/atom/FieldCDB.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/net/Http.hpp>
+#include <yq/org/CategoryCDB.hpp>
+#include <yq/org/TagCDB.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/web/VarTemplate.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebVariable.hpp>
+#include <yq/wksp/UserCDB.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 using namespace yq;
@@ -39,6 +44,21 @@ namespace {
     {
         //  TODO
         h << true;
+    }
+    
+    void    var_category_count(WebHtml&h)
+    {
+        h << cdb::all_categories_count();
+    }
+
+    void     var_class_count(WebHtml&h)
+    {
+        h << cdb::all_classes_count();
+    }
+    
+    void    var_field_count(WebHtml&h)
+    {
+        h << cdb::all_fields_count();
     }
 
     void    var_home(WebHtml&h)
@@ -126,6 +146,11 @@ namespace {
         }
         h << "</td></table>\n";
     }
+    
+    void    var_tag_count(WebHtml& h)
+    {
+        h << cdb::all_tags_count();
+    }
 
     void    var_time(WebHtml& h)
     {
@@ -146,6 +171,11 @@ namespace {
         else
             h << ctx.username;
     }
+    
+    void    var_user_count(WebHtml&h)
+    {
+        h << cdb::all_users_count();
+    }
 
     void    var_year(WebHtml& h)
     {
@@ -157,6 +187,9 @@ namespace {
         reg_webvar<var_author>("author"); 
         reg_webvar<var_body>("body");
         reg_webvar<var_can_edit>("can_edit").todo();        
+        reg_webvar<var_category_count>("category_count");
+        reg_webvar<var_class_count>("class_count");
+        reg_webvar<var_field_count>("field_count");
         reg_webvar("footer", wksp::shared("std/footer"sv)).source(".footer");
         //reg_webvar<var_footer>("footer");
         reg_webvar<var_home>("home");        
@@ -170,9 +203,11 @@ namespace {
         reg_webvar("summary", wksp::shared("std/footer"sv)).source(".summary");
         //reg_webvar<var_summary>("summary"); 
         reg_webvar<var_tabbar>("tabbar");
+        reg_webvar<var_tag_count>("tag_count");
         reg_webvar<var_time>("time");
         reg_webvar<var_title>("title");
         reg_webvar<var_user>("user");
+        reg_webvar<var_user_count>("user_count");
         reg_webvar<var_year>("year"); 
     )
 }
