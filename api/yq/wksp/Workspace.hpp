@@ -209,6 +209,6 @@ namespace yq {
         //! \param[in] all  Flag to get all available templates, otherwise, only the USED templates
         const string_set_t&             templates(bool all=false);
         
-        
+        unsigned int                    threads();
     }
 }

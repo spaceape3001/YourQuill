@@ -126,8 +126,6 @@ namespace {
             // max Rx body before complaining
         size_t              maxRxBody       = 6 << 20ULL;
         
-        size_t              numThreads      = 4;
-        
     }  config;
 
     struct {
@@ -974,10 +972,25 @@ void        run_server(yq::Vector<std::thread>&  threads)
     genStatus();
     yInfo() << "Launching Quill HttpServer for '" << wksp::name() << "' on Port " << wksp::port() << ".";
     
+    unsigned int        num_threads = wksp::threads();
+    unsigned int        num_proc    = yq::thread::num_processors();
+    
+    if(!num_proc)
+        num_proc        = 4;
+    if(!num_threads)
+        num_threads     = num_proc;
+    num_threads         = std::min(num_proc, num_threads);
+    
+    #ifndef NDEBUG
+    // restrict it under debug
+    num_threads         = std::min(2U, num_threads);
+    #endif
+        
+    
     HttpServer* server      = new HttpServer;
     server -> start();
     
-    for(size_t i=0;i<config.numThreads;++i){
+    for(unsigned i=0;i<num_threads;++i){
         threads << std::thread([server](){
             ++gServerThreads;
             server -> run();

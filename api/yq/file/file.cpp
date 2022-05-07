@@ -834,6 +834,14 @@ namespace yq {
             return exists_document(d.id);
         }
 
+        bool                exists(Document doc, const Root* rt)
+        {
+            if(!rt)
+                return false;
+            static thread_local SQ s("SELECT 1 FROM Fragments WHERE document=? AND root=? LIMIT 1");
+            return s.present(doc.id, rt->id);
+        }
+
         bool                exists_document(uint64_t i)
         {
             static thread_local SQ s("SELECT 1 FROM Documents WHERE id=? LIMIT 1");

@@ -3,10 +3,11 @@
 <p>
 
 <table class="info">
-<tr><td class="icon" rowspan="3"><img class="medium" src="/img/system-run-3.svg"/></td>
+<tr><td class="icon" rowspan="4"><img class="medium" src="/img/system-run-3.svg"/></td>
 
     <th align="left">Author</th><td>{{AUTHOR}}</td></tr>
 <tr><th align="left">Threads</th><td>{{SERVER_THREADS}} (server)</td></tr>
+<tr><th align="left">Templates</th><td>{{TEMPLATES}}</td></tr>
 <tr><td colspan="2"><i><small>These and other server settings can only be changed by editing the appropriate <tt>.yquill</tt> file and restarting the server.</small></i></td></tr>
 
 <tr><td class="icon" rowspan="2"><img class="medium" src="/img/categories.svg"/></td><th colspan="2">CATEGORIES</th></tr>

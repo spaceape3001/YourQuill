@@ -17,7 +17,7 @@
     <tr class="nh"><td class="nh-icon"><img class="nh" src="img/tidbits.svg"/></td><td class="nh-link">Tidbits &amp; Misc</td></tr>
     <tr class="nh"><td class="nh-icon"><img class="nh" src="img/events.svg"/></td><td class="nh-link">Timeline (Events)</td></tr>
     <tr><td colspan="2"><hr width="50%" /></td></tr>
-    <tr class="nh"><td class="nh-icon"><a href="wksp"><img class="nh" src="img/workspace.svg"/></a></td><td class="nh-link"><a href="wksp">Workspace</a></td></tr>
+    <tr class="nh"><td class="nh-icon"><a href="/admin"><img class="nh" src="img/workspace.svg"/></a></td><td class="nh-link"><a href="/admin">Administration</a></td></tr>
     <tr class="nh"><td class="nh-icon"><a href="help/index.md"><img class="nh" src="img/help.svg"/></a></td><td class="nh-link"><a href="dev/index.md">Help &amp; Documentation</a></td></tr>
     <tr class="nh"><td class="nh-icon"><a href="dev/index.md"><img class="nh" src="img/developers.svg"/></a></td><td class="nh-link"><a href="dev/index.md">Developers</a></td></tr>
 </table>

@@ -124,6 +124,7 @@ namespace yq {
         name            = attrs.value(kv::key("name", "%"));
         port            = to_uint16(attrs.value(kv::key("port"))).value;
         read_timeout    = to_uinteger(attrs.value(kv::key("timeout"))).value;
+        threads         = to_uinteger(attrs.value(kv::key("threads"))).value;
         temp_dir        = attrs.value(kv::key("temp", "tmp", "tempdir", "temp_dir"));
         
         attrs.all(kv::key("root", "r"), [&](const KeyValue& a){
@@ -205,6 +206,8 @@ namespace yq {
             attrs << KeyValue("timeout", to_string(read_timeout));
         if(!temp_dir.empty())
             attrs << KeyValue("temp", temp_dir);
+        if(threads)
+            attrs << KeyValue("threads", to_string(threads));
         
         for(const auto & r : roots){
             KeyValue   a;

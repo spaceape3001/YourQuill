@@ -240,6 +240,7 @@ namespace yq {
             std::filesystem::path   subversion;     // Subversion executable location
             path_vector_t           template_dirs;  // Directories of templates....
             string_set_t            templates;      // Templates in use
+            unsigned int            threads = 0;    // Desired thread count
             std::filesystem::path   tmp;            // Temporary directory
             
             
@@ -410,6 +411,7 @@ namespace yq {
             rtimeout        = doc.read_timeout;
             if(!rtimeout)
                 rtimeout    = kDefaultReadTimeout;
+            threads         = doc.threads;
 
             if(doc.temp_dir.empty()){
                 tmp         = tmp / qkey.c_str();
@@ -1052,6 +1054,11 @@ namespace yq {
         {
             return all ? impl().available : impl().templates;
         }
+        
+        unsigned int                    threads()
+        {
+            return impl().threads;
+        }
     }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1139,6 +1146,7 @@ namespace yq {
             writer<Global>().variable("name", string_view_proxy<wksp::name>);
             writer<Global>().variable("port", wksp::port);
             writer<Global>().variable("start", string_view_proxy<wksp::start>);
+            writer<Global>().variable("threads", wksp::threads);
         );
     }
 

@@ -77,11 +77,30 @@ namespace {
             h << ": " << extra;
     }
 
+    void    page_admin_categories(WebHtml& h)
+    {
+        h << "TODO (CATEGORIES)";
+    }
+
+    void    page_admin_classes(WebHtml& h)
+    {
+        h << "TODO (CLASSES)";
+    }
+
+    void    page_admin_fields(WebHtml& h)
+    {
+        h << "TODO (FIELDS)";
+    }
+
+    void    page_admin_tags(WebHtml& h)
+    {
+        h << "TODO (TAGS)";
+    }
 
     void    page_admin_users(WebHtml&h)
     {
         // might have some characteristics?
-        h.title() << "Users";
+        h.title() << "TODO (USERS)";
         dev_table(h, cdb::all_users(Sorted::YES));  // STUB
     }
 
@@ -1159,31 +1178,18 @@ namespace {
         h.title() << "User: " << cdb::name(u);
         h.p() << "Fill in the blank... TODO!";
     }
-
-    void page_wksp(WebHtml& h)
-    {
-        //  NOTE ... REPLACE THIS WITH A STATIC-PAGE TEMPLATE
-        
-        h.title(wksp::name());
-        if(h.context().session.can_edit)
-            h << "<font color=\"red\">Warning: Changes here (may) require a restart of the server.</font>\n";
-        
-        auto t = h.table();
-        h.kvrow("Name") << wksp::name();
-        h.kvrow("Author") << wksp::author();
-        h.kvrow("Abbreviation") << wksp::abbreviation();
-        h.kvrow("Copyright") << wksp::copyright().text;
-    }
     
-    void    page_wksp_classes(WebHtml& h)
-    {
-        h << "TODO";
-    }
-
     void    reg_me()
     {
         reg_webtemplate("/", wksp::shared("std/index"sv)).source(".index");
-        reg_webpage<page_admin_users>("/admin/users"); 
+        reg_webgroup({
+            reg_webtemplate("/admin", wksp::shared("std/admin"sv)).source(".admin").label("Info"),
+            reg_webpage<page_admin_categories>("/admin/categories").label("Categories"),
+            reg_webpage<page_admin_classes>("/admin/classes").label("Classes"),
+            reg_webpage<page_admin_fields>("/admin/fields").label("Fields"),
+            reg_webpage<page_admin_tags>("/admin/tags").label("Tags"),
+            reg_webpage<page_admin_users>("/admin/users").label("Users")
+        });
         reg_webpage<page_api_workspace>("/api/workspace"sv); 
         reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");
         reg_webpage<page_atoms>("/atoms");
@@ -1306,9 +1312,6 @@ namespace {
         reg_webpage("/logo", wksp::shared("www/img/yquill.svg"sv)).todo();
         reg_webpage<page_thumbnail>("/thumbnail").argument("id", "ID for the image");
         reg_webpage<page_user>("/user");
-        reg_webgroup({
-            reg_webtemplate("/wksp", wksp::shared("std/wksp"sv)).source(".wksp").label("Info")
-        });
     }
     
     

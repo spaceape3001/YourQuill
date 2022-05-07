@@ -14,6 +14,7 @@
 #include <yq/org/CategoryCDB.hpp>
 #include <yq/org/TagCDB.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/text/text_utils.hpp>
 #include <yq/web/VarTemplate.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebHtml.hpp>
@@ -152,6 +153,11 @@ namespace {
         h << cdb::all_tags_count();
     }
 
+    void    var_templates(WebHtml&h)
+    {
+        h << join(wksp::templates(), ", ");
+    }
+
     void    var_time(WebHtml& h)
     {
         h  << h.context().timestamp;
@@ -204,6 +210,7 @@ namespace {
         //reg_webvar<var_summary>("summary"); 
         reg_webvar<var_tabbar>("tabbar");
         reg_webvar<var_tag_count>("tag_count");
+        reg_webvar<var_templates>("templates");
         reg_webvar<var_time>("time");
         reg_webvar<var_title>("title");
         reg_webvar<var_user>("user");

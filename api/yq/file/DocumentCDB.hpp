@@ -62,6 +62,12 @@ namespace yq {
         Document                        document(uint64_t);
         
         bool                            exists(Document);
+        /*! \brief Document existence with Root
+        
+            Checks to see if the document has a fragment with the specified root.  
+            Will return FALSE if root is null.
+        */
+        bool                            exists(Document, const Root*);
         bool                            exists_document(uint64_t);
 
         /*! \brief Returns the FIRST document encountered
@@ -114,9 +120,13 @@ namespace yq {
 
         bool                            removed(Document);
 
-        std::vector<const Root*>         roots(Document);
+        /*! \brief Roots for document
+        
+            All the roots that has at least one fragment for the given document.
+        */
+        std::vector<const Root*>        roots(Document);
 
-        size_t                          roots_count(Folder);
+        size_t                          roots_count(Document);
 
         void                            set_mime_type(Document, ContentType);
 

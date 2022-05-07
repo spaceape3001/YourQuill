@@ -66,6 +66,9 @@ namespace yq {
         //! Root templates
         Vector<Root>            templates;
         
+        //! Number of threads to spawn...
+        unsigned int            threads         = 0;
+        
         void                    reset();
         
     };
