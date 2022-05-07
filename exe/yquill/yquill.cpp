@@ -14,6 +14,7 @@
 #include <yq/meta/Meta.hpp>
 //#include <yq/stream/Ops.hpp>
 #include <yq/sql/SqlLite.hpp>
+#include <yq/sql/SqlQuery.hpp>
 #include <yq/sql/SqlUtils.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/wksp/Workspace.hpp>
@@ -97,6 +98,8 @@ bool    initialize(const char* wfile)
         yCritical() << "Unable to create the database at " << dbfile;
         return false;
     }
+
+    SqlQuery::exec(db, "PRAGMA journal_mode=WAL");
     
     path_vector_t   dbdirs  = wksp::shared_all("db"sv);
     dbdirs += wksp::resolve_all(".db"sv);
