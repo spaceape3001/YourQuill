@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "FragmentDB.hpp"
 #include <yq/db/IDLock.hpp>
 
 namespace yq {

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "ImageHtml.hpp"
+
 namespace yq {
     namespace html {
         WebHtml&    operator<<(WebHtml& h, Image i)
@@ -29,6 +31,18 @@ namespace yq {
             return h;
         }
         
+        WebHtml&    operator<<(WebHtml& h, Thumbnail t)
+        {
+            std::string n   = cdb::label(cdb::document(t.img));
+            h << "<img src=\"/thumbnail?id=" << t.img.id;
+            if(t.size != SizeDesc())
+                h << "&size=" << t.size.key();
+            h << "\" alt=\"Thumbnail for '";
+            html_escape_write(h, n);
+            h << "'\" />";
+            return h;
+        }
+
         void        dev_table(WebHtml& h, const std::vector<Image>& images)
         {
             auto t = h.table();
@@ -39,3 +53,5 @@ namespace yq {
         }
     }
 }
+
+

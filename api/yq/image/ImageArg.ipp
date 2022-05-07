@@ -6,6 +6,12 @@
 
 #pragma once
 
+#include "Image.hpp"
+#include "ImageDB.hpp"
+#include <yq/text/text_utils.hpp>
+#include <yq/type/ByteArray.hpp>
+#include <yq/web/WebContext.hpp>
+
 namespace yq {
 
     namespace arg {

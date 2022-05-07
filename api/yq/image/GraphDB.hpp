@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <db/core/cdb_common.hpp>
+#include <yq/db/CacheFwd.hpp>
 #include <vector>
 
 namespace yq {
+    class ByteArray;
     namespace cdb {
-        class ByteArray;
         struct Graph;
 
         std::vector<Graph>      all_graphs();

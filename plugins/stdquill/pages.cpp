@@ -5,7 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <db/db.hpp>
-#include <db/filesys/directory-arg.hpp>
+
+#include <yq/directory.hpp>
+#include <yq/document.hpp>
+#include <yq/folder.hpp>
+#include <yq/fragment.hpp>
+#include <yq/image.hpp>
+#include <yq/root.hpp>
+
 #include <yq/app/DelayInit.hpp>
 #include <yq/collection/c_utils.hpp>
 #include <yq/io/dir_utils.hpp>

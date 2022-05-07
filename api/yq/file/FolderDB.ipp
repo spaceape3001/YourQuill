@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "FolderDB.hpp"
+
 namespace yq {
     namespace cdb {
        namespace {

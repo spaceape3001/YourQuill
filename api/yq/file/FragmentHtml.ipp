@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "FragmentHtml.hpp"
+
 namespace yq {
     namespace html {
         //WebHtml&    operator<<(WebHtml&, Fragment);

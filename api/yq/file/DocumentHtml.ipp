@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "DocumentHtml.hpp"
+
 namespace yq {
     namespace html {
         //WebHtml&    operator<<(WebHtml&, Document);

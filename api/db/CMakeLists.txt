@@ -2,8 +2,6 @@ set(db_sources
     ./atomsys.cpp
     ./db.cpp
     ./docsys.cpp
-    ./filesys.cpp
-    ./imagesys.cpp
     ./metasys.cpp
     ./orgsys.cpp
     ./wksp.cpp

@@ -6,105 +6,113 @@
 
 #pragma once
 
+#include "DocumentArg.hpp"
+
 namespace yq {
     namespace arg {
 
-        const Root* root(std::string_view  arg_string)
+        Document document(std::string_view  arg_string)
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return nullptr;
+                return Document{};
                 
-            const Root* t   = wksp::root( arg_string);
+            Document t   = cdb::document( arg_string);
             if(t)
                 return t;
-            return wksp::root(to_uint64( arg_string).value);
+            uint64_t    i = to_uint64( arg_string).value;
+            if(cdb::exists_document(i))
+                return Document{i};
+            return Document{};
         }
         
-        const Root* root(const WebContext&ctx, bool *detected)
+        Document document(const WebContext&ctx, bool *detected)
         {
             if(detected)
                 *detected   = false;
-                
+        
             std::string    k    = ctx.find_query("id");
             if(!k.empty()){
                 if(detected)
                     *detected   = true;
-                return root_id(k);
+                return document_id(k);
             }
             
             k       = ctx.find_query("key");
             if(!k.empty()){
                 if(detected)
                     *detected   = true;
-                return root_key(k);
+                return document_key(k);
             }
             
-            k       = ctx.find_query("root");
+            k       = ctx.find_query("document");
             if(!k.empty()){
                 if(detected)
                     *detected   = true;
-                return root(k);
+                return document(k);
             }
-            return nullptr;
+            return Document{};
         }
         
-        const Root* root(const WebContext&ctx, std::string_view arg_name, bool *detected)
+        Document document(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
             if(detected)
                 *detected   = !arg_string.empty();
-            return root(arg_string);
+            return document(arg_string);
         }
         
-        const Root* root(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        Document document(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
             if(detected)
                 *detected   = !arg_string.empty();
-            return root(arg_string);
+            return document(arg_string);
+        }
+        
+        Document document_id(std::string_view arg_string)
+        {
+            uint64_t    i   = to_uint64(arg_string).value;
+            if(cdb::exists_document(i))
+                return Document{i};
+            return Document{};
         }
 
-        const Root* root_id(std::string_view arg_string)
-        {
-            return wksp::root(to_uint64(arg_string).value);
-        }
-
-        const Root* root_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
+        Document document_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
             if(detected)
                 *detected   = !arg_string.empty();
-            return root_id(arg_string);
+            return document_id(arg_string);
         }
         
-        const Root* root_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        Document document_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
             if(detected)
                 *detected   = !arg_string.empty();
-            return root_id(arg_string);
+            return document_id(arg_string);
         }
         
-        const Root* root_key(std::string_view arg_string)
+        Document document_key(std::string_view arg_string)
         {
-            return wksp::root(trimmed(arg_string));
+            return cdb::document(trimmed(arg_string));
         }
         
-        const Root* root_key(const WebContext&ctx, std::string_view arg_name, bool *detected)
+        Document document_key(const WebContext&ctx, std::string_view arg_name, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_name);
             if(detected)
                 *detected   = !arg_string.empty();
-            return root_key(arg_string);
+            return document_key(arg_string);
         }
         
-        const Root* root_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        Document document_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
         {
             std::string     arg_string = ctx.find_query(arg_names);
             if(detected)
                 *detected   = !arg_string.empty();
-            return root_key(arg_string);
+            return document_key(arg_string);
         }
     }
 }

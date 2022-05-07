@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "RootHtml.hpp"
+
 namespace yq {
     namespace html {
 

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "FolderArg.hpp"
+
 namespace yq {
     namespace arg {
 

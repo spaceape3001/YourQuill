@@ -13,6 +13,7 @@
 #include <yq/file/Fragment.hpp>
 #include <yq/enum/DataRole.hpp>
 #include <yq/enum/Sorted.hpp>
+#include <filesystem>
 
 namespace yq {
     class Root;

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <yq/db/Sq.hpp>
+
 namespace yq {
     namespace cdb {
         Vector<Image>           all_images()

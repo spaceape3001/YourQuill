@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "RootDB.hpp"
+
 namespace yq {
 
     namespace cdb {

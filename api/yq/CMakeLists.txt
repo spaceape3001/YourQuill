@@ -86,6 +86,8 @@ set(yq_sources
 
     ./file/file.cpp
     
+    ./image/image.cpp
+    
     ./io/file_utils.hpp
     ./io/file_unity.cpp
     ./io/file_watch.cpp

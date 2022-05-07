@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "DirectoryDB.hpp"
+
 namespace yq {
     namespace cdb {
         std::vector<Directory>   all_directories(unsigned opts)

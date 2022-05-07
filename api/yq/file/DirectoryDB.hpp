@@ -6,10 +6,13 @@
 
 #pragma once
 
+#include <yq/collection/Set.hpp>
 #include <yq/db/CacheFwd.hpp>
+#include <yq/enum/Sorted.hpp>
 #include <yq/file/Directory.hpp>
 #include <yq/file/Folder.hpp>
 
+#include <filesystem>
 #include <vector>
 
 namespace yq {

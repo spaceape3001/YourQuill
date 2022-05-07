@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "DirectoryHtml.hpp"
+
 namespace yq {
     namespace html {
         //WebHtml&    operator<<(WebHtml&, Directory);

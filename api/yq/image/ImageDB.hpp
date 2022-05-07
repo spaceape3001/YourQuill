@@ -14,6 +14,7 @@
 
 namespace yq {
     struct Thumbnail;
+    class ByteArray;
     
     namespace cdb {
             //! Returns a vector of all images in the cache

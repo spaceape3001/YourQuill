@@ -6,11 +6,7 @@
 
 #pragma once
 
-#include "Directory.hpp"
-
-#include "Document.hpp"
-
-#include "Folder.hpp"
-
-#include "Fragment.hpp"
-
+#include <yq/image/Image.hpp>
+#include <yq/image/ImageArg.hpp>
+#include <yq/image/ImageDB.hpp>
+#include <yq/image/ImageHtml.hpp>

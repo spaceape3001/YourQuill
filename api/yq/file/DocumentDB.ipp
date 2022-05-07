@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "DocumentDB.hpp"
+
 namespace yq {
     namespace cdb {
         namespace {
