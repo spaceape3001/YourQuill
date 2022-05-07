@@ -67,6 +67,7 @@ set(yq_sources
     ./c++/trait/not_moveable.hpp
     ./c++/trait/sink.hpp
 
+
     ./collection/Array1.hpp
     ./collection/Array2.hpp
     ./collection/collection_unity.cpp
@@ -111,23 +112,8 @@ set(yq_sources
     ./log/Logging.hpp
     
     ./meta/meta_unity.cpp
-    ./meta/ArgInfo.hpp
-    ./meta/CompoundInfo.hpp
-    ./meta/DataBlock.hpp
-    ./meta/Global.hpp
-    ./meta/InfoBinder.hpp
-    ./meta/Init.hpp
-    ./meta/Meta.hpp
-    ./meta/MetaRepo.hpp
-    ./meta/MetaRepo.ipp
-    ./meta/MetaWriter.hpp
-    ./meta/MetaWriter.ipp
-    ./meta/MethodInfo.hpp
-    ./meta/ObjectInfo.hpp
-    ./meta/PropertyInfo.hpp
-    ./meta/ReservedIDs.hpp
+    ./meta/MetaHtml.cpp
     ./meta/StdTypes.cpp
-    ./meta/TypeInfo.hpp
     
     #./net/Curl.cpp
     #./net/Curl.hpp
@@ -140,6 +126,8 @@ set(yq_sources
 
     #./proc/Execute.cpp
     #./proc/Execute.hpp
+    
+    ./rule/rule.cpp
     
     ./sql/SqlError.hpp
     ./sql/SqlError.ipp

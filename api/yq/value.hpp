@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <yq/atom/Class.hpp>
-#include <yq/atom/ClassArg.hpp>
-#include <yq/atom/ClassCDB.hpp>
-#include <yq/atom/ClassData.hpp>
-#include <yq/atom/ClassFile.hpp>
-#include <yq/atom/ClassHtml.hpp>
+#include <yq/atom/Value.hpp>
+#include <yq/atom/ValueArg.hpp>
+#include <yq/atom/ValueCDB.hpp>
+#include <yq/atom/ValueData.hpp>
+#include <yq/atom/ValueFile.hpp>
+#include <yq/atom/ValueHtml.hpp>
 #include <yq/db/IDLock.hpp>

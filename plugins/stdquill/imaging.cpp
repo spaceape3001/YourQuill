@@ -8,13 +8,13 @@
 
 #include <yq/app/CmdArgs.hpp>
 #include <yq/db/IDLock.hpp>
-#include <yq/db/Sq.hpp>
+#include <yq/db/SQ.hpp>
 #include <yq/file/Document.hpp>
-#include <yq/file/DocumentDB.hpp>
+#include <yq/file/DocumentCDB.hpp>
 #include <yq/file/Fragment.hpp>
-#include <yq/file/FragmentDB.hpp>
+#include <yq/file/FragmentCDB.hpp>
 #include <yq/image/Image.hpp>
-#include <yq/image/ImageDB.hpp>
+#include <yq/image/ImageCDB.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/shape/Size2Ops.hpp>
 

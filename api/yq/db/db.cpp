@@ -6,7 +6,7 @@
 
 #include "CacheFwd.hpp"
 #include "Html.ipp"
-#include "Sq.ipp"
+#include "SQ.ipp"
 #include "StdObject.ipp"
 #include "StdFile.ipp"
 

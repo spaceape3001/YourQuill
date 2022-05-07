@@ -8,5 +8,5 @@
 
 #include <yq/image/Image.hpp>
 #include <yq/image/ImageArg.hpp>
-#include <yq/image/ImageDB.hpp>
+#include <yq/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>

@@ -4,9 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
-#include <yq/file/Directory.hpp>
-#include <yq/file/DirectoryArg.hpp>
-#include <yq/file/DirectoryCDB.hpp>
-#include <yq/file/DirectoryHtml.hpp>
+#include "Action.ipp"
+#include "Constraint.ipp"
+#include "Rule.ipp"
+#include "Trigger.ipp"

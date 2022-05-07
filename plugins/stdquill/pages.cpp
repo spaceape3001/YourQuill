@@ -4,17 +4,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <db/db.hpp>
-
+#include <yq/atom.hpp>
+#include <yq/attribute.hpp>
+#include <yq/category.hpp>
+#include <yq/class.hpp>
 #include <yq/directory.hpp>
 #include <yq/document.hpp>
 #include <yq/folder.hpp>
+#include <yq/field.hpp>
 #include <yq/fragment.hpp>
 #include <yq/image.hpp>
+#include <yq/leaf.hpp>
+#include <yq/meta.hpp>
+#include <yq/property.hpp>
 #include <yq/root.hpp>
+#include <yq/tag.hpp>
+#include <yq/user.hpp>
 
 #include <yq/app/DelayInit.hpp>
+#include <yq/bit/Copyright.hpp>
 #include <yq/collection/c_utils.hpp>
+#include <yq/db/NKI.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
@@ -32,6 +42,7 @@
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/Template.hpp>
+#include <yq/wksp/Workspace.hpp>
 
 using namespace yq;
 using namespace yq::arg;

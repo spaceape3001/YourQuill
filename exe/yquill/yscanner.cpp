@@ -6,13 +6,17 @@
 
 #include "yquill.hpp"
 
-#include <db/filesys.hpp>
-
 #include <yq/algo/Compare.hpp>
 #include <yq/collection/Deque.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
+#include <yq/file/DirectoryCDB.hpp>
+#include <yq/file/DocumentCDB.hpp>
+#include <yq/file/FolderCDB.hpp>
+#include <yq/file/FragmentCDB.hpp>
+#include <yq/file/Root.hpp>
+#include <yq/file/RootCDB.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/DirWatcher.hpp>
 #include <yq/io/file_utils.hpp>

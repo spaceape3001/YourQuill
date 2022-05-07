@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include <yq/file/Directory.hpp>
-#include <yq/file/DirectoryArg.hpp>
-#include <yq/file/DirectoryCDB.hpp>
-#include <yq/file/DirectoryHtml.hpp>
+#include <yq/meta/MetaHtml.hpp>
+#include <yq/meta/ObjectInfo.hpp>
+#include <yq/meta/PropertyInfo.hpp>
+#include <yq/meta/TypeInfo.hpp>
+

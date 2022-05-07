@@ -4,6 +4,6 @@ add_executable(yquill
     yscanner.cpp
     yserver.cpp
 )
-target_link_libraries(yquill yq yqdb)
+target_link_libraries(yquill yq )
 target_include_directories(yquill PRIVATE .)
 

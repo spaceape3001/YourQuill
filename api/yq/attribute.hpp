@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include <yq/file/Directory.hpp>
-#include <yq/file/DirectoryArg.hpp>
-#include <yq/file/DirectoryCDB.hpp>
-#include <yq/file/DirectoryHtml.hpp>
+#include <yq/attr/Attribute.hpp>
+#include <yq/attr/AttributeArg.hpp>
+#include <yq/attr/AttributeCDB.hpp>
+#include <yq/attr/AttributeDiff.hpp>
+#include <yq/attr/AttributeHtml.hpp>
