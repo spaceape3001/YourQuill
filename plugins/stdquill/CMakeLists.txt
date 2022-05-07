@@ -1,5 +1,4 @@
 set(stdquill_SOURCES 
-    ./authentication.cpp
     ./imaging.cpp
     ./pages.cpp
     ./updater.cpp

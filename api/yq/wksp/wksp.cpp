@@ -8,6 +8,10 @@
 #include "QuillData.hpp"
 #include "QuillFile.hpp"
 
+#include "AuthAccept.hpp"
+#include "AuthReject.hpp"
+#include "AuthSimple.hpp"
+
 #include "User.hpp"
 #include "UserArg.hpp"
 #include "UserCDB.hpp"
@@ -35,6 +39,10 @@
 #include <yq/db/IDLock.ipp>
 
 YQ_OBJECT_IMPLEMENT(yq::Authentication)
+YQ_OBJECT_IMPLEMENT(yq::auth::AutoAccept)
+YQ_OBJECT_IMPLEMENT(yq::auth::AutoReject)
+YQ_OBJECT_IMPLEMENT(yq::auth::Simple)
+
 
 namespace yq {
 
@@ -43,38 +51,16 @@ namespace yq {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+    YQ_INVOKE( 
+        auto w = writer<auth::Simple>();
+        w.label("Simple");
+        w.description("For Testing Purposes, UNECRYPTED password authentication");
+        w.property("password", &auth::Simple::m_password);
 
+        writer<auth::AutoAccept>().label("Accept").description("For Testing Purposes, auto-accepting authentication");
+        writer<auth::AutoReject>().label("Reject").description("For Testing Purposes, auto-rejecting authentication");
+    )
 
-
-    //bool    read_xn(Authentication&ret, const XmlNode*xn)
-    //{
-        //ret.type    = read_attribute(xn, szType, x_enum<AuthenticationType>).value;
-        //ret.data    = read_child(xn, szData, x_string);
-        //return true;
-    //}
-
-    //Ref<Authentication>     x_authentication(const XmlNode* xn)
-    //{
-        //std::string     s   = read_attribute(xn, szType, x_sstring);
-        //const ObjectInfo*   oi  = ObjectInfo::find(s);
-        //if(!oi)
-            //return Ref<Authentication>();
-        //Object* obj         = oi->create();
-        //Ref<Authentication>     auth    = dynamic_cast<Authentication*>(obj);
-        //if(auth && auth->load(xn))
-            //return auth;
-        //if(obj)
-            //delete obj;
-        //return Ref<Authentication>();
-    //}
-    
-    //void    write_xn(XmlNode* xn, const Ref<Authentication>&v)
-    //{
-        //if(v.valid()){
-            //write_attribute(xn, szType, v->metaInfo().name());
-            //v->save(xn);
-        //}
-    //}
 
 
 ////////////////////////////////////////////////////////////////////////////////
