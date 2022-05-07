@@ -10,6 +10,7 @@
 #include <yq/io/file_utils.hpp>
 #include <yq/net/Http.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/web/VarTemplate.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebContext.hpp>
@@ -38,13 +39,6 @@ namespace {
     {
         //  TODO
         h << true;
-    }
-
-    void    var_footer(WebHtml&h)
-    {
-        Ref<Template>    footer  = gFooter;
-        if(footer)
-            footer -> execute(h);
     }
 
     void    var_home(WebHtml&h)
@@ -102,22 +96,11 @@ namespace {
             add_script(h, s);
     }
 
-    YQ_INVOKE( reg_webvar<var_scripts>("scripts"); )
-
     void    var_ssid(WebHtml& h)
     {
         h << h.context().session.ssid;
     }
 
-    YQ_INVOKE( reg_webvar<var_ssid>("ssid"); )
-
-
-    void    var_summary(WebHtml&h)
-    {
-        Ref<Template>    summary  = gSummary;
-        if(summary)
-            summary -> execute(h);
-    }
 
     void    var_tabbar(WebHtml& h)
     {
@@ -174,14 +157,18 @@ namespace {
         reg_webvar<var_author>("author"); 
         reg_webvar<var_body>("body");
         reg_webvar<var_can_edit>("can_edit").todo();        
-        reg_webvar<var_footer>("footer");
+        reg_webvar("footer", wksp::shared("std/footer"sv)).source(".footer");
+        //reg_webvar<var_footer>("footer");
         reg_webvar<var_home>("home");        
         reg_webvar<var_host>("host");
         reg_webvar<var_local>("local");
         reg_webvar<var_logged_in>("logged_in").todo(); 
         reg_webvar<var_name>("name");
         reg_webvar<var_port>("port");
-        reg_webvar<var_summary>("summary"); 
+        reg_webvar<var_scripts>("scripts");
+        reg_webvar<var_ssid>("ssid");
+        reg_webvar("summary", wksp::shared("std/footer"sv)).source(".summary");
+        //reg_webvar<var_summary>("summary"); 
         reg_webvar<var_tabbar>("tabbar");
         reg_webvar<var_time>("time");
         reg_webvar<var_title>("title");

@@ -44,13 +44,11 @@ using namespace yq;
 using namespace yq::cdb;
 
 Guarded<std::string>            gTextColor, gBkColor;
-Guarded<Ref<PageTemplate>>      gIndex;
-Guarded<Ref<Template>>          gFooter, gSummary;
 Guarded<Ref<TypedBytes>>        gBackground;
 std::atomic<bool>               gHasBackground{false};
 Guarded<SharedByteArray>        gCss;
 std::vector<std::string>        gBackgroundFiles;
-std::filesystem::path           gSharedCssFile, gSharedFooterFile, gSharedIndexFile, gSharedPageFile, gSharedSummaryFile;
+std::filesystem::path           gSharedCssFile, gSharedPageFile;
 
 namespace {
     static constexpr const char*    kPage       = ".page";
@@ -58,11 +56,6 @@ namespace {
 
     static const std::string_view       kStdCSS         = "std/css";
     static const std::string_view       kStdPage        = "std/page";
-    static const std::string_view       kStdIndex       = "std/index";
-    static const std::string_view       kStdFooter      = "std/footer";
-    static const std::string_view       kStdSummary     = "std/summary";
-
-    static const std::initializer_list<std::string_view>    kIndexFiles = { ".index", ".index.html", ".index.htm" };
 
     void        css__(cdb_options_t opts=0);
 
@@ -352,31 +345,6 @@ namespace {
         
 
     //  ================================================================================================================
-    //      FOOTER (PAGE)
-    //  ================================================================================================================
-
-        void    footer__(cdb_options_t opts=0)
-        {
-            std::string     r;
-            Fragment    f   = cdb::first_fragment(cdb::document(".footer"));
-            if(f)
-                r   = cdb::frag_string(f, DONT_LOCK);
-            if(r.empty())
-                r       = file_string(gSharedFooterFile);
-            gFooter = new Template(std::move(r));
-        }
-        
-        void    footer_stage4()
-        {
-            footer__(DONT_LOCK);
-        }
-        
-        void    footer_update()
-        {
-            footer__();
-        }
-
-    //  ================================================================================================================
     //      IMAGES
     //  ================================================================================================================
 
@@ -401,31 +369,6 @@ namespace {
             }
         }
     
-    //  ================================================================================================================
-    //      INDEX (PAGE)
-    //  ================================================================================================================
-        
-        void    index__(cdb_options_t opts=0)
-        {
-            std::string r;
-            Document    d   = cdb::first_document(kIndexFiles);
-            if(d)
-                r   = cdb::frag_string(cdb::first_fragment(d), opts);
-            if(r.empty())
-                r       = file_string(gSharedIndexFile);
-            gIndex  = new PageTemplate(std::move(r));
-        }
-
-        void    index_stage4()
-        {
-            index__(DONT_LOCK);
-        }
-        
-        void    index_update()
-        {
-            index__();
-        }
-
     //  ================================================================================================================
     //      LEAFS
     //  ================================================================================================================
@@ -530,31 +473,6 @@ namespace {
             page__();
         }
 
-
-    //  ================================================================================================================
-    //      SUMMARY
-    //  ================================================================================================================
-
-        void    summary__(cdb_options_t opts=0)
-        {
-            std::string     r;
-            Fragment    f   = cdb::first_fragment(cdb::document(".summary"));
-            if(f)
-                r   = cdb::frag_string(f);
-            if(r.empty())
-                r       = file_string(gSharedSummaryFile);
-            gSummary = new Template(std::move(r));
-        }
-        
-        void    summary_stage4()
-        {
-            summary__(DONT_LOCK);
-        }
-        
-        void    summary_update()
-        {
-            summary__();
-        }
 
     //  ================================================================================================================
     //      TAGS
@@ -682,10 +600,7 @@ namespace {
             for(const char* z : Image::kSupportedExtensions)
                 gBackgroundFiles.push_back(".background."s + z);
             gSharedCssFile      = wksp::shared(kStdCSS);;
-            gSharedFooterFile   = wksp::shared(kStdFooter);
-            gSharedIndexFile    = wksp::shared(kStdIndex);
             gSharedPageFile     = wksp::shared(kStdPage);
-            gSharedSummaryFile  = wksp::shared(kStdSummary);;
 
                 //  I wanna get this separate, but for now....
             on_stage2<init_magicka>();
@@ -715,10 +630,7 @@ namespace {
 
             on_stage4<background_stage4>();
             on_stage4<css_stage4>();        // <---  Must come AFTER background stage4
-            on_stage4<footer_stage4>();
-            on_stage4<index_stage4>();
             on_stage4<page_stage4>();
-            on_stage4<summary_stage4>();
             
             
                 // Images change first (for icon changes)
@@ -731,19 +643,9 @@ namespace {
             on_change<css_update>(gSharedCssFile);
             on_change<css_update>(top_folder(), ".css");
 
-            on_change<footer_update>(gSharedFooterFile);
-            on_change<footer_update>(top_folder(), ".footer");
-
-            on_change<index_update>(gSharedIndexFile);
-            for(std::string_view k : kIndexFiles)
-                on_change<index_update>(top_folder(), k);
-                
             on_change<page_update>(gSharedPageFile);
             on_change<page_update>(top_folder(), ".page");
                 
-            on_change<summary_update>(gSharedSummaryFile);
-            on_change<summary_update>(top_folder(), ".summary");
-
             on_change<category_update>(categories_folder(), "*.cat");
             on_change<class_update>(classes_folder(), "*.class");
             on_change<field_update>(fields_folder(), "*.field");

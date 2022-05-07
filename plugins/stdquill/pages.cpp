@@ -41,6 +41,7 @@
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebAdapters.hpp>
+#include <yq/web/WebTemplate.hpp>
 #include <yq/web/Template.hpp>
 #include <yq/wksp/Workspace.hpp>
 
@@ -76,15 +77,6 @@ namespace {
             h << ": " << extra;
     }
 
-
-
-    void    page__index(WebHtml& out)
-    {
-        auto idx    = gIndex.get();
-        if(!idx)
-            return;
-        idx -> execute(out);
-    }
 
     void    page_admin_users(WebHtml&h)
     {
@@ -1190,7 +1182,7 @@ namespace {
 
     void    reg_me()
     {
-        reg_webpage<page__index>("/");
+        reg_webtemplate("/", wksp::shared("std/index"sv)).source(".index");
         reg_webpage<page_admin_users>("/admin/users"); 
         reg_webpage<page_api_workspace>("/api/workspace"sv); 
         reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");

@@ -234,7 +234,7 @@ namespace yq {
     class FunctionalStage4 : public Stage4 {
     public:
         std::function<void()>   m_function;
-        FunctionalStage4(int _order, std::function<void()> fn, const std::source_location& sl) : Stage4(_order, sl)
+        FunctionalStage4(int _order, std::function<void()> fn, const std::source_location& sl) : Stage4(_order, sl), m_function(fn)
         {
         }
     

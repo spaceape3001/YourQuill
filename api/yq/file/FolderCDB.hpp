@@ -6,9 +6,11 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
-#include <vector>
 #include "Folder.hpp"
+#include <yq/db/CacheFwd.hpp>
+#include <yq/enum/Sorted.hpp>
+#include <yq/image/Image.hpp>
+#include <vector>
 
 namespace yq {
     class Root;
