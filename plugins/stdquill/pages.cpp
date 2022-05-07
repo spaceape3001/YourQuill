@@ -1075,6 +1075,11 @@ namespace {
     void page_dev_webpages(WebHtml& h)
     {
         h.title("All WebPages");
+        
+        h << "<div class=\"explain\">"
+          << "List of all registered (specific) web-pages.  Directories & GLOBs not included."
+          << "</div>\n";
+        
         dev_table(h, web::page_map(), true);
     }
 

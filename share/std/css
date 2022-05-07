@@ -116,16 +116,28 @@ div.summary {
     margin-right:auto;
 }
 
+div.explain {
+    width: 80%;
+    margin-left:auto;
+    margin-right:auto;
+    font-size: 75%;
+    font-style:italic;
+    outline-width:0.10em;
+    outline-style:ridge;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
 TABLE.info {
     font-size: large;
     text-align: left;
     width:75%;
     margin-left:auto;
     margin-right:auto;
-    outline-width:0.2em;
-    outline-style:groove;
-    border-top-style:groove;
-    border-bottom-style:groove;
+    outline-width:0.20em;
+    outline-style:ridge;
 }
 
 TD.icon {
