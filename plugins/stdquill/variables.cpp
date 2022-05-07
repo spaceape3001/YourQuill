@@ -7,9 +7,18 @@
 #include "common.hpp"
 
 #include <yq/app/DelayInit.hpp>
+#include <yq/atom/AtomCDB.hpp>
 #include <yq/atom/ClassCDB.hpp>
 #include <yq/atom/FieldCDB.hpp>
+#include <yq/attr/AttributeCDB.hpp>
+#include <yq/file/DirectoryCDB.hpp>
+#include <yq/file/DocumentCDB.hpp>
+#include <yq/file/FolderCDB.hpp>
+#include <yq/file/FragmentCDB.hpp>
+#include <yq/file/RootCDB.hpp>
+#include <yq/image/ImageCDB.hpp>
 #include <yq/io/file_utils.hpp>
+#include <yq/leaf/LeafCDB.hpp>
 #include <yq/net/Http.hpp>
 #include <yq/org/CategoryCDB.hpp>
 #include <yq/org/TagCDB.hpp>
@@ -29,6 +38,16 @@ namespace {
     void    var_abbr(WebHtml&h)
     {
         html_escape_write(h, wksp::abbreviation());
+    }
+    
+    void    var_atom_count(WebHtml&h)
+    {
+        h << cdb::all_atoms_count();
+    }
+    
+    void    var_attribute_count(WebHtml&h)
+    {
+        h << cdb::all_attributes_count();
     }
 
     void    var_author(WebHtml&h)
@@ -57,9 +76,29 @@ namespace {
         h << cdb::all_classes_count();
     }
     
+    void    var_directory_count(WebHtml&h)
+    {
+        h << cdb::all_directories_count();
+    }
+    
+    void    var_document_count(WebHtml&h)
+    {
+        h << cdb::all_documents_count();
+    }
+    
     void    var_field_count(WebHtml&h)
     {
         h << cdb::all_fields_count();
+    }
+    
+    void    var_folder_count(WebHtml&h)
+    {
+        h << cdb::all_folders_count();
+    }
+    
+    void    var_fragment_count(WebHtml&h)
+    {
+        h << cdb::all_fragments_count();
     }
 
     void    var_home(WebHtml&h)
@@ -67,10 +106,19 @@ namespace {
         html_escape_write(h, wksp::home());
     }
 
-
     void    var_host(WebHtml&h)
     {
         html_escape_write(h, wksp::host());
+    }
+    
+    void    var_image_count(WebHtml&h)
+    {
+        h << cdb::all_images_count();
+    }
+    
+    void    var_leaf_count(WebHtml&h)
+    {
+        h << cdb::all_leafs_count();
     }
 
     void    var_local(WebHtml& h)
@@ -93,6 +141,11 @@ namespace {
     void    var_port(WebHtml&h)
     {
         h << wksp::port();
+    }
+    
+    void    var_root_count(WebHtml&h)
+    {
+        h << wksp::roots().size();
     }
 
 
@@ -189,33 +242,110 @@ namespace {
     }
 
     YQ_INVOKE( 
-        reg_webvar<var_abbr>("abbr");
-        reg_webvar<var_author>("author"); 
-        reg_webvar<var_body>("body");
-        reg_webvar<var_can_edit>("can_edit").todo();        
-        reg_webvar<var_category_count>("category_count");
-        reg_webvar<var_class_count>("class_count");
-        reg_webvar<var_field_count>("field_count");
-        reg_webvar("footer", wksp::shared("std/footer"sv)).source(".footer");
-        //reg_webvar<var_footer>("footer");
-        reg_webvar<var_home>("home");        
-        reg_webvar<var_host>("host");
-        reg_webvar<var_local>("local");
-        reg_webvar<var_logged_in>("logged_in").todo(); 
-        reg_webvar<var_name>("name");
-        reg_webvar<var_port>("port");
-        reg_webvar<var_scripts>("scripts");
-        reg_webvar<var_ssid>("ssid");
-        reg_webvar("summary", wksp::shared("std/footer"sv)).source(".summary");
-        //reg_webvar<var_summary>("summary"); 
-        reg_webvar<var_tabbar>("tabbar");
-        reg_webvar<var_tag_count>("tag_count");
-        reg_webvar<var_templates>("templates");
-        reg_webvar<var_time>("time");
-        reg_webvar<var_title>("title");
-        reg_webvar<var_user>("user");
-        reg_webvar<var_user_count>("user_count");
-        reg_webvar<var_year>("year"); 
+        reg_webvar<var_abbr>("abbreviation")
+            .description("The really SHORT form of your project's name");
+            
+        reg_webvar<var_atom_count>("atom_count")
+            .description("Total number of atoms in the cache database");
+            
+        reg_webvar<var_attribute_count>("attribute_count")
+            .description("Total number of attributes in the cache database");
+            
+        reg_webvar<var_author>("author")
+            .description("It's your project, right?"); 
+            
+        reg_webvar<var_body>("body")
+            .description("Body of the HTML page, used by the standard page template");
+            
+        reg_webvar<var_can_edit>("can_edit")
+            .todo();        
+        
+        reg_webvar<var_category_count>("category_count")
+            .description("Total number of categories in the cache database.");
+            
+        reg_webvar<var_class_count>("class_count")
+            .description("Total number of classes in the cache database.");
+            
+        reg_webvar<var_directory_count>("directory_count")
+            .description("Total number of directories in the cache database.");
+            
+        reg_webvar<var_document_count>("document_count")
+            .description("Total number of documents in the cache database.");
+            
+        reg_webvar<var_field_count>("field_count")
+            .description("Total number of fields in the cache database.");
+            
+        reg_webvar<var_folder_count>("folder_count")
+            .description("Total number of folders in the cache database.");
+            
+        reg_webvar("footer", wksp::shared("std/footer"sv))
+            .source(".footer")
+            .description("Footer used by the standarad page template.  Read from the /.footer file, treated as a template.");
+            
+        reg_webvar<var_fragment_count>("fragment_count")
+            .description("Total number of fragments in the cache database.");
+            
+        reg_webvar<var_home>("home")
+            .description("Home URL...TODO");        
+        
+        reg_webvar<var_host>("host")
+            .description("Host name of the computer this program is running on.");
+            
+        reg_webvar<var_image_count>("image_count")
+            .description("Total number of images in the cache database.");
+            
+        reg_webvar<var_leaf_count>("leaf_count")
+            .description("Total number of leafs in the cache database.");
+            
+        reg_webvar<var_local>("local")
+            .description("Boolean to indicate it's a localhost connection.");;
+            
+        reg_webvar<var_logged_in>("logged_in")
+            .todo()
+            .description("Boolean to indicate that a user is currently logged in on the session."); 
+            
+        reg_webvar<var_name>("name")
+            .description("Name of the project/universe.");
+            
+        reg_webvar<var_port>("port")
+            .description("Port number to use on the server.");
+            
+        reg_webvar<var_root_count>("root_count")
+            .description("Total number of roots (template & non-template) in the project/workspace.");
+            
+        reg_webvar<var_scripts>("scripts")
+            .description("Javascript(s) to use with the standard page template.");
+            
+        reg_webvar<var_ssid>("ssid")
+            .description("Current session ID");
+            
+        reg_webvar("summary", wksp::shared("std/summary"sv))
+            .source(".summary")
+            .description("Summary of the project used by the default home page.  Read from the /.summary file, treated as a template.");;
+
+        reg_webvar<var_tabbar>("tabbar")
+            .description("Injects a navigation tab-bar in for registered web-groups.");
+        
+        reg_webvar<var_tag_count>("tag_count")
+            .description("Total number of tags in the cache database.");
+            
+        reg_webvar<var_templates>("templates")
+            .description("Comma separated list of templates being used by this project/universe.");
+            
+        reg_webvar<var_time>("time")
+            .description("Current time of access by your request to the server.");
+        
+        reg_webvar<var_title>("title")
+            .description("Title of the page, used by the standard page template.");
+            
+        reg_webvar<var_user>("user")
+            .description("User (if known) of the current session.");
+            
+        reg_webvar<var_user_count>("user_count")
+            .description("Total number of users in the cache database.");
+            
+        reg_webvar<var_year>("year")
+            .description("Current calendar year, might be a little wonky around New Year's.");
     )
 }
 

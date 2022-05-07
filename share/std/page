@@ -8,7 +8,7 @@
 	<BODY>
 		<TABLE WIDTH="100%">
 			<TR>
-				<TH ROWSPAN="2"><A HREF="/{{HOME}}"><IMG SRC=".logo" BORDER="0" ALT="{{ABBR}}"></A></TH>
+				<TH ROWSPAN="2"><A HREF="/{{HOME}}"><IMG SRC=".logo" BORDER="0" ALT="{{ABBREVIATION}}"></A></TH>
 				<TH ALIGN="right" VALIGN="top">
 				<DIV id="pleaseLogin">
 				    <TABLE>

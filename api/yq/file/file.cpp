@@ -2576,6 +2576,11 @@ namespace yq {
             static thread_local SQ s("SELECT COUNT(1) FROM Fragments WHERE root=?");
             return s.size(rt->id);
         }
+
+        size_t                      all_roots_count()
+        {
+            return wksp::roots().size();
+        }
         
         std::vector<DirOrFrag>   children(const Root* rt, Sorted sorted)
         {

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "Attribute.hpp"
+
 #include <yq/db/CacheFwd.hpp>
 #include <yq/file/Document.hpp>
 #include <vector>

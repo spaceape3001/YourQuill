@@ -964,7 +964,8 @@ void    var_sthreads(WebHtml&h)
 }
 
 YQ_INVOKE(
-    reg_webvar<var_sthreads>("SERVER_THREADS");
+    reg_webvar<var_sthreads>("server_threads")
+        .description("Number of running server threads (ignores main & scanner threads).");
 );
 
 void        run_server(yq::Vector<std::thread>&  threads)

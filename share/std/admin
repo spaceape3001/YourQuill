@@ -3,26 +3,62 @@
 <p>
 
 <table class="info">
-<tr><td class="icon" rowspan="4"><img class="medium" src="/img/system-run-3.svg"/></td>
+<tr>
+    <td class="icon" rowspan="3"><img class="medium" src="/img/system-run-3.svg"/></td>
+    <th align="left">Author<sup>&Dagger;</sup></th>
+    <td>{{AUTHOR}}</td>
+    <td class="explain">Pen name for this project.</td>
+</tr>
+<tr>
+    <th align="left">Threads<sup>&Dagger;</sup></th>
+    <td>{{SERVER_THREADS}}</td>
+    <td class="explain">Number of threads used for the HTTP(S) server.  (Scanner &amp; Main/IPC threads separate.)</td>
+</tr>
+<tr>
+    <th align="left">Templates<sup>&Dagger;</sup></th>
+    <td>{{TEMPLATES}}</td>
+    <td class="explain">Pre-structured content that is leveraged by this project.</td>
+</tr>
 
-    <th align="left">Author</th><td>{{AUTHOR}}</td></tr>
-<tr><th align="left">Threads</th><td>{{SERVER_THREADS}} (server)</td></tr>
-<tr><th align="left">Templates</th><td>{{TEMPLATES}}</td></tr>
-<tr><td colspan="2"><i><small>These and other server settings can only be changed by editing the appropriate <tt>.yquill</tt> file and restarting the server.</small></i></td></tr>
 
-<tr><td class="icon" rowspan="2"><img class="medium" src="/img/categories.svg"/></td><th colspan="2">CATEGORIES</th></tr>
-<tr><th>Count</th><td>{{CATEGORY_COUNT}}</td></tr>
+<tr>
+    <td class="icon"><img class="medium" src="/img/categories.svg" alt="Categories" /></td>
+    <th><a href="/admin/categories">CATEGORIES</a></th>
+    <td>{{CATEGORY_COUNT}}</td>
+    <td class="explain">Used to organize atom classes &amp; fields.</td>
+</tr>
 
-<tr><td class="icon" rowspan="2">&Subset;</td><th colspan="2">CLASSES</th></tr>
-<tr><th>Count</th><td>{{CLASS_COUNT}}</td></tr>
+<tr>
+    <td class="icon">&Subset;</td>
+    <th><a href="/admin/classes">CLASSES</a></th>
+    <td>{{CLASS_COUNT}}</td>
+    <td class="explain">Known classifications of atoms being lifted from the documents.</td>
+</tr>
 
-<tr><td class="icon" rowspan="2">&angsph;</td><th colspan="2">FIELDS</th></tr>
-<tr><th>Count</th><td>{{FIELD_COUNT}}</td></tr>
+<tr>
+    <td class="icon">&angsph;</td>
+    <th><a href="/admin/fields">FIELDS</a></th>
+    <td>{{FIELD_COUNT}}</td>
+    <td class="explain">Known properties of atoms being lifted from the documents.</td>
+</tr>
 
-<tr><td class="icon" rowspan="2">&starf;</td><th colspan="2">TAGS</th></tr>
-<tr><th>Count</th><td>{{TAG_COUNT}}</td></tr>
+<tr>
+    <td class="icon">&starf;</td>
+    <th><a href="/admin/tags">TAGS</a></th>
+    <td>{{TAG_COUNT}}</td>
+    <td class="explain">Used to organize atoms, leafs, etc, by associating them with a tag.</td>
+</tr>
 
-<tr><td class="icon" rowspan="2"><img class="medium" src="/img/im-user.svg"/></td><th colspan="2">USERS</th></tr>
-<tr><th>Count</th><td>{{USER_COUNT}}</td></tr>
+<tr>
+    <td class="icon"><img class="medium" src="/img/im-user.svg" alt="Users"/></td>
+    <th>USERS</th>
+    <td>{{USER_COUNT}}</td>
+    <td class="explain">Accounts &amp; Permissions to access this project.</td>
+</tr>
+
+
 </table>
+
+<p><b><sup>&Dagger;</sup></b> All changes to server &amp; project settings require a restart of the server executable (after editing the appropriate configuration file).</p>
+
 

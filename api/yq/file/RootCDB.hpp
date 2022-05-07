@@ -21,6 +21,8 @@ namespace yq {
 
         std::vector<Fragment>      all_fragments(const Root*,Sorted sorted=Sorted());
         size_t                     all_fragments_count(const Root*);
+        
+        size_t                      all_roots_count();
 
         std::vector<DirOrFrag>     children(const Root*,Sorted sorted=Sorted());
 

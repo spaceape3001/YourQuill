@@ -93,6 +93,11 @@ td.roots a {
 td.tb-select {
 }
 
+td.explain {
+    font-size: 75%;
+    font-style:italic;
+}
+
 div.col2 {
     columns: 2 100em;
 }
