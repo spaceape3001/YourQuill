@@ -18,10 +18,19 @@ namespace yq {
     
     namespace cdb {
             //! Returns a vector of all images in the cache
-        Vector<Image>           all_images();
+        std::vector<Image>      all_images();
         
             //! Returns a count of the available images
         size_t                  all_images_count();
+
+        /*! \brief Finds image that best corresponds to the document
+        
+            This does so by replacing any final extension with the various image extensions & checking.
+            
+            \param[in] doc  Input document
+            \return Image if successful, null otherwise
+        */
+        Image                   best_image(Document doc);
 
             //! Returns the image bytes (either from file or database)
         ByteArray               bytes(Image, SizeDesc sz=SizeDesc::Original);
@@ -55,6 +64,9 @@ namespace yq {
         bool                    is_raster(Image);
 
         ContentType             mime_type(Image);
+        
+        //std::vector<Image>
+        
         Thumbnail               thumbnail(Image, SizeDesc sz=SizeDesc::Small);
         void                    update_root(const Root*, Image);
     }

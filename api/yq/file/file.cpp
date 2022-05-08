@@ -733,32 +733,6 @@ namespace yq {
             return s.str(doc.id);
         }
 
-        Image   best_image(Document x)
-        {
-            std::string k   = skeyc(x);
-            if(k.empty())
-                return Image{};
-                
-            k += '.';
-                
-            //size_t  i   = k.find_last_of('.');
-            //if((i != std::string::npos) && (i>0)){
-                //// truncate
-                //k.resize(i+1);
-            //}
-            
-            Folder      fo  = folder(x);
-            for(const char* z : Image::kSupportedExtensions){
-                std::string     k2 = k + z;
-                Document        dimg    = child_document(fo, k2);
-                if(!dimg)
-                    continue;
-                Image img = image(dimg);
-                if(img)
-                    return img;
-            }
-            return Image{};
-        }
 
     #if 0
         std::string                 child_key(Document);
@@ -1156,10 +1130,10 @@ namespace yq {
             return s.str(d.id);
         }
 
-        std::string             suffix(Document d)
+        Extension               suffix(Document d)
         {
             static thread_local SQ    s("SELECT suffix FROM Documents WHERE id=?");
-            return s.str(d.id);
+            return { s.str(d.id) };
         }
 
         Fragment            writable(Document d, DataRole dr)
@@ -2078,7 +2052,7 @@ namespace yq {
             Folder          f   = folder(dirParent);
             Document        a   = db_document(f, k);
             std::filesystem::path         p   = path(dirParent) / k;
-            std::string         sfx = suffix(a);
+            std::string         sfx = suffix(a).ext;
             const Root*     rt  = root(dirParent);
             
             
@@ -2356,10 +2330,10 @@ namespace yq {
             return copy(base_key(bk));
         }
 
-        std::string             suffix(Fragment f)
+        Extension              suffix(Fragment f)
         {
             static thread_local SQ    s("SELECT suffix FROM Fragments WHERE id=?");
-            return s.str(f.id);
+            return { s.str(f.id) };
         }
 
         void                update(Fragment f)

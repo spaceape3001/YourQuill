@@ -13,6 +13,7 @@
 
 #include <yq/db/SQ.hpp>
 #include <yq/file/DocumentCDB.hpp>
+#include <yq/file/FolderCDB.hpp>
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/FragmentHtml.hpp>
 #include <yq/file/Root.hpp>
@@ -107,7 +108,7 @@ namespace yq {
 ////////////////////////////////////////////////////////////////////////////////
 
     namespace cdb {
-        Vector<Image>           all_images()
+        std::vector<Image>      all_images()
         {
             static thread_local SQ s("SELECT id FROM Images");
             return s.vec<Image>();
@@ -117,6 +118,33 @@ namespace yq {
         {
             static thread_local SQ s("SELECT COUNT(1) FROM Images");
             return s.size();
+        }
+
+        Image   best_image(Document x)
+        {
+            std::string k   = skeyc(x);
+            if(k.empty())
+                return Image{};
+                
+            k += '.';
+                
+            //size_t  i   = k.find_last_of('.');
+            //if((i != std::string::npos) && (i>0)){
+                //// truncate
+                //k.resize(i+1);
+            //}
+            
+            Folder      fo  = folder(x);
+            for(const char* z : Image::kSupportedExtensions){
+                std::string     k2 = k + z;
+                Document        dimg    = child_document(fo, k2);
+                if(!dimg)
+                    continue;
+                Image img = image(dimg);
+                if(img)
+                    return img;
+            }
+            return Image{};
         }
 
         namespace {
@@ -175,9 +203,11 @@ namespace yq {
         Image               db_image(Fragment frag, bool *wasCreated)
         {
             static thread_local SQ i("INSERT OR FAIL INTO Images (id,type) VALUES (?,?)");
+            
+            auto ext    = suffix(frag).ext;
             auto i_af   = i.af();
             i.bind(1, frag.id);
-            i.bind(2, mimeTypeForExt(suffix(frag)));
+            i.bind(2, mimeTypeForExt(ext));
             
             if(is_good(i.step())){
                 if(wasCreated)

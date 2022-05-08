@@ -191,7 +191,6 @@ namespace yq {
     WebPage::Writer&  WebPage::Writer::local()
     {
         if(m_page){
-        yInfo() << "Page " << m_page->path() << " setting local only";
             m_page -> set_option(LOCAL_ONLY);
             if(!m_page->local_only())
                 yWarning() << "Page " << m_page->path() << " failed to set local-only flag";

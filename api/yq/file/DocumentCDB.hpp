@@ -38,19 +38,15 @@ namespace yq {
         struct NKI;
 
         std::vector<Document>           all_documents(Sorted sorted=Sorted());
-        size_t                     all_documents_count();
+        size_t                          all_documents_count();
         std::vector<Document>           all_documents_suffix(std::string_view , Sorted sorted=Sorted());
         
+        std::vector<Document>           all_similar(Document, Sorted=Sorted{});
+        std::vector<Document>           all_similar(Document, const std::vector<Extension>&, Sorted=Sorted{});
+        std::vector<Document>           all_similar(Document, const std::vector<ExtensionView>&, Sorted=Sorted{});
+
         std::string                     base_key(Document);         //!< key w/o final extensions
 
-        /*! \brief Finds image that best corresponds to the document
-        
-            This does so by replacing any final extension with the various image extensions & checking.
-            
-            \param[in] doc  Input document
-            \return Image if successful, null otherwise
-        */
-        Image                           best_image(Document doc);
         
     #if 0
         std::string                     child_key(Document);
@@ -129,7 +125,10 @@ namespace yq {
         size_t                          roots_count(Document);
 
         void                            set_mime_type(Document, ContentType);
-
+        
+        Document                        similar(Document, const ExtensionView&);
+        Document                        similar(Document, std::string_view newMiddle, const ExtensionView&);
+        
         void                            show(Document);
 
         std::string                     skey(Document);   //!< Key inside the directory
@@ -138,7 +137,7 @@ namespace yq {
 
         std::string                     skeyc(Document);  //!< Key inside the directory (w/o final extension)
 
-        std::string                     suffix(Document);
+        Extension                       suffix(Document);
 
         Fragment                        writable(Document, DataRole);
     }

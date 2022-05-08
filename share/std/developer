@@ -1,2 +1,12 @@
-DEVELOPER STUFF!
+#! Developer "Clippy"
+
+<p>
+
+<table class="info">
+<tr>
+    <td class="icon"><img src="/img/text-html.svg"></td>
+    <th align="left"><a href="/dev/web/pages">ALL Web Pages</a></th>
+    <td class="explain">All dynamic web pages registered with this system.</td>
+</tr>
+</table>
 

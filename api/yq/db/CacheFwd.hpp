@@ -40,6 +40,18 @@ namespace yq {
     using FolderStr     = std::pair<Folder,std::string>;
     using FragmentStr   = std::pair<Fragment,std::string>;
 
+    // used for extension specifications
+    struct ExtensionView {
+        std::string_view        ext;
+    };
+
+    struct Extension {
+        std::string             ext;
+        operator ExtensionView() const noexcept { return { ext }; }
+    };
+    
+    inline ExtensionView extension(std::string_view x) { return { x }; }
+
     namespace cdb {
 
         struct NKI;

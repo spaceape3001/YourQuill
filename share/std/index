@@ -3,19 +3,20 @@
 <div class="summary">
 {{SUMMARY}}
 </div>
+<p>
 
 <table class="nh">
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/folder-documents.svg"/></td>
-        <td class="nh-link"><a href="/folder">Files &amp; Folders</a></td>
+        <td class="nh-link">Files &amp; Folders</td>
     </tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/categories.svg"/></td>
-        <td class="nh-link"><a href="/categories">Categories</a></td>
+        <td class="nh-link">Categories</td>
     </tr>
     <tr class="nh">
         <td></td>
-        <td class="nh-link"><a href="/browse">Browse</a></td>
+        <td class="nh-link">Browse</td>
     </tr>
     <tr><td colspan="2"><hr width="50%" /></td></tr>
     <tr class="nh">

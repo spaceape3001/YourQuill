@@ -10,12 +10,13 @@
 		<TABLE WIDTH="100%">
 			<TR>
 				<TH ROWSPAN="2"><A HREF="/{{HOME}}"><IMG CLASS="large" SRC="/logo" BORDER="0" ALT="{{ABBREVIATION}}"></A></TH>
+				<TH />
 				<TH ALIGN="right" VALIGN="top">
 				<DIV id="pleaseLogin">
 				    <TABLE>
 				        <TR>
 				            <TD><input type="text" id="user" /></TD>
-				            <td><input type="text" id="pass" /></td>
+				            <td><input type="password" id="pass" /></td>
 				            <td><button type="button">Login</button></td>
 				        </tr>
 				    </TABLE>
@@ -34,30 +35,30 @@
 		        <DIV id="NoJavascript"><B>No Javascript: Read Only Mode</B></DIV>
 			</TR>
 			<TR>
-				<TH ALIGN="center" VALIGN="center"><H1>{{TITLE}}</H1></TH>
+				<TH COLSPAN="2" ALIGN="center" VALIGN="center"><H1>{{TITLE}}</H1></TH>
 			</TR>
 			<TR>
-				<TD COLSPAN="2" WIDTH="100%">{{TABBAR}}{{BODY}}</TD>
+				<TD COLSPAN="3"><HR></TD>
+			</TR>
+			<TR id="tabbar-row">
+				<TD COLSPAN="3" WIDTH="100%">{{TABBAR}}</TD>
+			</TR>
+			<TR id="tabbar-hr">
+				<TD COLSPAN="3"><HR></TD>
 			</TR>
 			<TR>
-				<TD></TD>
-				<TD><HR></TD>
+				<TD COLSPAN="3">{{BODY}}</TD>
 			</TR>
 			<TR>
-				<TD ROWSPAN="3"><A HREF="/"><IMG SRC="/img/yquill.svg" HEIGHT="128" BORDER="0" ALT="YQ"></A></TD>
+				<TD COLSPAN="3"><HR></TD>
+			</TR>
+			<TR>
+				<TD><A HREF="/"><IMG SRC="/img/yquill.svg" HEIGHT="128" BORDER="0" ALT="YQ"></A></TD>
 				<TD>{{FOOTER}}</TD>
-			</TR>
-			<TR>
-				<TD ALIGN="left">
-				    <!-- TEMPORARY UNTIL FULLY OPERATIONAL -->
-				    <A HREF="/dev/web/pages">ALL Web Pages</A><br />
-				    {{SSID}}
-				</TD>
-			</TR>
-			<TR>
 				<TD ALIGN="right">
 					{{USER}}@{{HOST}}:{{PORT}}<BR>
-					<i>{{TIME}}</i>
+					<i>{{TIME}}</i><br>
+					{{SSID}}
 				</TD>
 			</TR>
 		</TABLE>
@@ -66,16 +67,21 @@
 	        var isLocal       = {{LOCAL}};
 	        var canEdit       = {{CAN_EDIT}};
 	        var isLoggedIn    = {{LOGGED_IN}};
+	        var hasTabbar     = {{HAS_TABBAR}};
 
-	        function updateUserInfo() {	        
-	            document.getElementById("pleaseLogin").style.display = (isLocal || isLoggedIn) ? "none" : "block";
-	            document.getElementById("weAreLoggedIn").style.display = (isLocal || !isLoggedIn) ? "none" : "block";
-	            document.getElementById("weAreLocalUser").style.display = isLocal ? "block" : "none";
-            }
-            
-            document.getElementById("NoJavascript").style.display   = "none";
-            updateUserInfo();
-
+            $(document).ready(function(){
+                $("#NoJavascript").hide();
+                $("#weAreLocalUser").hide();
+                if(isLoggedIn){
+                    $("#pleaseLogin").hide();
+                } else {
+                    $("#weAreLoggedIn").hide();                
+                }
+                if(!hasTabbar){
+                    $("#tabbar-hr").hide();
+                    $("#tabbar-row").hide();
+                }
+            });
             {{script}}
 	    </script>
         {{SCRIPTS}}

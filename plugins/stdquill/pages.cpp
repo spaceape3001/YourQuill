@@ -633,13 +633,15 @@ namespace {
         Fragment    x = fragment(h, nullptr);
         if(!x)
             throw HttpStatus::BadArgument;
+            
+        std::string     sfx = suffix(x).ext;
 
         h.title() << "Fragment (" << path(x) << "): Content";
-        ContentType     ct = mimeTypeForExt( suffix(x));
+        ContentType     ct = mimeTypeForExt( sfx);
         if(isImage(ct)){
             h << "<img src=\"/dev/fragment/image?" << h.context().url.query << "\" alt=\"Raw Image\">";
         } else if(isTextual(ct) || !ct){
-            if(!is_similar(suffix(document(x)), "usr")){ // blank out user files (avoid passwords)
+            if(!is_similar(sfx, "usr")){ // blank out user files (avoid passwords)
                 h << "<pre>";
                 std::string s = frag_string(x);
                 html_escape_write(h, s);
@@ -660,7 +662,8 @@ namespace {
         if(!x)  
             throw HttpStatus::BadArgument;
     
-        ctx.tx_content_type = mimeTypeForExt( suffix(x));
+        auto ext = suffix(x).ext;
+        ctx.tx_content_type = mimeTypeForExt( ext );
         ctx.tx_content      = std::make_shared<ByteArray>(frag_bytes(x));
     }
 
@@ -1217,6 +1220,7 @@ namespace {
         });
         reg_webpage<page_css>("/css");
         reg_webtemplate("/dev", wksp::shared("std/developer"sv)).source(".developer");
+        reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
         reg_webgroup({
             reg_webpage<page_dev_atom>("/dev/atom").argument("id", "Atom ID").label("Info"),
             reg_webpage<page_dev_atom_classes>("/dev/atom/classes").argument("id", "Atom ID").label("Classes"),
@@ -1326,7 +1330,9 @@ namespace {
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage<page_image>("/image").argument("id", "ID for the image");
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));
-        reg_webpage("/js/**", wksp::shared_all("www/js"sv));
+        reg_webpage("/img/yquill.svg", wksp::shared("www/img/yquill.svg"sv));   // precaching
+        reg_webpage("/js/**", wksp::shared("www/js/jquery.js"sv));
+        reg_webpage("/js/jquery.js", wksp::shared("www/js/jquery.js"sv));      // precaching
         reg_webimage("/logo", wksp::shared("www/img/yquill.svg"sv), Folder(), ".logo").alt_path("/favicon.ico");
         reg_webpage<page_thumbnail>("/thumbnail").argument("id", "ID for the image");
         reg_webpage<page_user>("/user");

@@ -85,7 +85,7 @@ namespace yq {
         size_t                          size(Fragment);
         std::string                     skey(Fragment);   //!< Key inside the directory
         std::string                     skeyb(Fragment);  //!< Key inside the directory (w/o extensions)
-        std::string                     suffix(Fragment);
+        Extension                       suffix(Fragment);
         void                            update(Fragment);
     }
 }

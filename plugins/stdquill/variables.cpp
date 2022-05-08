@@ -100,6 +100,12 @@ namespace {
     {
         h << cdb::all_fragments_count();
     }
+    
+    void    var_has_tabbar(WebHtml&h)
+    {
+        WebContext& ctx = h.context();
+        h << (ctx.page->group() != nullptr);
+    }
 
     void    var_home(WebHtml&h)
     {
@@ -126,11 +132,9 @@ namespace {
         h << h.context().is_local();
     }
 
-
     void    var_logged_in(WebHtml& h)
     {
-        //  TODO
-        h << true;
+        h << h.context().session.logged_in;
     }
 
     void    var_name(WebHtml& h)
@@ -290,6 +294,8 @@ namespace {
         reg_webvar<var_fragment_count>("fragment_count")
             .description("Total number of fragments in the cache database.");
             
+        reg_webvar<var_has_tabbar>("has_tabbar");
+        
         reg_webvar<var_home>("home")
             .description("Home URL...TODO");        
         
