@@ -4,6 +4,7 @@
 		<META charset="utf-8" />
 		<TITLE>{{TITLE}}</TITLE>
 		<LINK rel="stylesheet" type="text/css" href="/css" />
+    	<SCRIPT src="/js/jquery.js" ></SCRIPT>
 	</HEAD>
 	<BODY>
 		<TABLE WIDTH="100%">
@@ -61,19 +62,21 @@
 			</TR>
 		</TABLE>
 	    <script>
-	        var user        = "{{USER}}";
-	        var local       = {{LOCAL}};
-	        var canEdit     = {{CAN_EDIT}};
-	        var loggedIn    = {{LOGGED_IN}};
+	        var user          = "{{USER}}";
+	        var isLocal       = {{LOCAL}};
+	        var canEdit       = {{CAN_EDIT}};
+	        var isLoggedIn    = {{LOGGED_IN}};
 
 	        function updateUserInfo() {	        
-	            document.getElementById("pleaseLogin").style.display = (local || loggedIn) ? "none" : "block";
-	            document.getElementById("weAreLoggedIn").style.display = (local || !loggedIn) ? "none" : "block";
-	            document.getElementById("weAreLocalUser").style.display = local ? "block" : "none";
+	            document.getElementById("pleaseLogin").style.display = (isLocal || isLoggedIn) ? "none" : "block";
+	            document.getElementById("weAreLoggedIn").style.display = (isLocal || !isLoggedIn) ? "none" : "block";
+	            document.getElementById("weAreLocalUser").style.display = isLocal ? "block" : "none";
             }
             
             document.getElementById("NoJavascript").style.display   = "none";
             updateUserInfo();
+
+            {{script}}
 	    </script>
         {{SCRIPTS}}
 	</BODY>

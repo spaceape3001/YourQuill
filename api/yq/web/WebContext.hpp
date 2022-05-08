@@ -125,6 +125,9 @@ namespace yq {
         
         //! Extra (context-dependent) scripts
         std::vector<std::string>        var_scripts;
+        
+        //! Extra javascript
+        std::string                     var_script;
 
         //! Title variable
         std::string                     var_title;

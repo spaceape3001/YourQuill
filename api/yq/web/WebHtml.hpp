@@ -81,6 +81,8 @@ namespace yq {
         WebAutoClose  u();
         WebAutoClose  underline();
         
+        //  called to script (will be pushed to the end of the document)
+        WebAutoClose  script();
         
         operator const WebContext& () const noexcept { return m_context; }
         operator WebContext& () noexcept { return m_context; }
@@ -91,6 +93,7 @@ namespace yq {
         enum Target {
             BODY,
             TITLE,
+            SCRIPT,
             DEST
         };
         Target              m_target     = BODY;

@@ -1216,6 +1216,7 @@ namespace {
             reg_webpage<page_class_atoms>("/class/atoms").argument("ID", "Class ID").label("Atoms")
         });
         reg_webpage<page_css>("/css");
+        reg_webtemplate("/dev", wksp::shared("std/developer"sv)).source(".developer");
         reg_webgroup({
             reg_webpage<page_dev_atom>("/dev/atom").argument("id", "Atom ID").label("Info"),
             reg_webpage<page_dev_atom_classes>("/dev/atom/classes").argument("id", "Atom ID").label("Classes"),
@@ -1321,6 +1322,7 @@ namespace {
         });
         reg_webpage<page_extension_markdown>("*.md");
         
+        reg_webtemplate("/help", wksp::shared("std/help"sv));
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage<page_image>("/image").argument("id", "ID for the image");
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));

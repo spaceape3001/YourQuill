@@ -60,6 +60,9 @@ namespace yq {
         case TITLE:
             m_context.var_title.append(buf, cb);
             break;
+        case SCRIPT:
+            m_context.var_script.append(buf, cb);
+            break;
         case DEST:
             if(m_dest)
                 m_dest -> append(buf, cb);
@@ -221,6 +224,16 @@ namespace yq {
         *this << "<pre>"sv;
         return WebAutoClose(*this, "</pre>"sv);
     }
+
+    WebAutoClose  WebHtml::script()
+    {
+        Target  oldTarget   = m_target;
+        m_target            = SCRIPT;
+        return WebAutoClose(*this, [oldTarget](WebHtml& h){
+            h.m_target  = oldTarget;
+        });
+    }
+    
     
     WebAutoClose        WebHtml::table(std::string_view cls)
     {
@@ -240,7 +253,7 @@ namespace yq {
             h.m_target  = oldTarget;
         });
     }
-    
+
     WebAutoClose              WebHtml::u()
     {
         *this << "<u>"sv;

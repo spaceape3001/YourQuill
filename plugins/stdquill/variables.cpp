@@ -147,6 +147,11 @@ namespace {
     {
         h << wksp::roots().size();
     }
+    
+    void    var_script(WebHtml&h)
+    {
+        h << h.context().var_script;
+    }
 
 
     void    add_script(WebHtml& str, std::string_view name)
@@ -313,8 +318,11 @@ namespace {
         reg_webvar<var_root_count>("root_count")
             .description("Total number of roots (template & non-template) in the project/workspace.");
             
+        reg_webvar<var_script>("script")
+            .description("Javascript used with the standard page template.");
+            
         reg_webvar<var_scripts>("scripts")
-            .description("Javascript(s) to use with the standard page template.");
+            .description("Javascript file(s), used by the standard page template");
             
         reg_webvar<var_ssid>("ssid")
             .description("Current session ID");
