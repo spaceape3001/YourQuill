@@ -366,6 +366,9 @@ namespace yq {
                             out << h;
                         if(pg->local_only())
                             out << "<br><i>local</i>";
+                            
+                        //  Only needed when troubleshooting
+                        //out << "<br>" << pg->source().file_name() << ":" << pg->source().line();
                     }
                     out << "</TD>";
                 }

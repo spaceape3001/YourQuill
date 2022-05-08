@@ -46,6 +46,17 @@ namespace yq {
         {
             return Plural<T>{ d };
         }
+        
+        struct MarkdownText {
+            std::string_view    data;
+        };
+        
+        inline MarkdownText    markdown(std::string_view k) 
+        { 
+            return MarkdownText{k}; 
+        }
+
+        WebHtml&    operator<<(WebHtml&, const MarkdownText&);
 
         WebHtml&    operator<<(WebHtml&, Reset);    
         WebHtml&    operator<<(WebHtml&, Submit);    

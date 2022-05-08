@@ -353,8 +353,10 @@ namespace yq {
 
             template_dirs   = dir::all_children(shared_dirs, "template");
             available       = dir::subdirectory_names_set(template_dirs);
-            markdown        = dir::first_child(shared_dirs, "perl/Markdown.pl");
-            smartypants     = dir::first_child(shared_dirs, "perl/SmartyPants.pl");
+            auto perl_dirs  = dir::all_children(shared_dirs, "perl");
+            
+            markdown        = dir::first_child(perl_dirs, "Markdown.pl");
+            smartypants     = dir::first_child(perl_dirs, "SmartyPants.pl");
             
             #ifdef __unix__
                 dot         = find_exe("dot");

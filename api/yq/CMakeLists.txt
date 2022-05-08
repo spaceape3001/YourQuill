@@ -94,6 +94,7 @@ set(yq_sources
     ./io/file_watch.cpp
     ./io/AbstractFile.hpp
     ./io/DirWatcher.hpp
+    ./io/Execute.cpp
     ./io/XmlFile.hpp
     ./io/XmlFwd.hpp
     ./io/XmlUtils.hpp

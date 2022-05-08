@@ -1141,11 +1141,13 @@ namespace {
             d               = bytes;
             ctx.var_title   = ctx.resolved_file.filename().string();
         }
+        
+        out << markdown(d);
 
-        stream::Text    render(ctx.var_body);
-        Markdown::Config    config;
-        Markdown            parser(render, config);
-        parser.process(d);
+        //stream::Text    render(ctx.var_body);
+        //Markdown::Config    config;
+        //Markdown            parser(render, config);
+        //parser.process(d);
     }
 
     void    page_image(WebContext& ctx)
@@ -1319,6 +1321,7 @@ namespace {
             reg_webpage<page_dev_wksp_roots>("/dev/wksp/roots").label("Roots")
         });
         reg_webpage<page_extension_markdown>("*.md");
+        
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage<page_image>("/image").argument("id", "ID for the image");
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));
