@@ -1216,7 +1216,6 @@ namespace {
             reg_webpage<page_class_atoms>("/class/atoms").argument("ID", "Class ID").label("Atoms")
         });
         reg_webpage<page_css>("/css");
-        reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
         reg_webgroup({
             reg_webpage<page_dev_atom>("/dev/atom").argument("id", "Atom ID").label("Info"),
             reg_webpage<page_dev_atom_classes>("/dev/atom/classes").argument("id", "Atom ID").label("Classes"),
