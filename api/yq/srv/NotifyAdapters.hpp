@@ -30,11 +30,13 @@ namespace yq {
         }
     };
     
+    #if 0
     template <void (*FN)()> 
     Notifier::Writer    on_change(const std::filesystem::path&fp, const std::source_location& sl = std::source_location::current())
     {
         return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFile, all_set<Change>(), Folder(), std::string_view(), fp, 0, sl)};
     }
+    #endif
     
     template <void (*FN)()> 
     Notifier::Writer    on_change(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
@@ -55,7 +57,7 @@ namespace yq {
     }
 
 
-    Notifier::Writer    on_change(const std::filesystem::path&fp, std::function<void()>, const std::source_location& sl = std::source_location::current());;
+    //Notifier::Writer    on_change(const std::filesystem::path&fp, std::function<void()>, const std::source_location& sl = std::source_location::current());;
     Notifier::Writer    on_change(std::string_view ext, std::function<void()>, const std::source_location& sl = std::source_location::current());
     Notifier::Writer    on_change(Folder f, std::string_view ext, std::function<void()>, const std::source_location& sl = std::source_location::current());
 

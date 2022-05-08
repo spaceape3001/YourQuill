@@ -12,6 +12,7 @@
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/Fragment.hpp>
 #include <yq/image/Image.hpp>
+#include <yq/srv/FileWatch.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage4.hpp>
 #include <yq/stream/Ops.hpp>

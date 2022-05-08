@@ -29,6 +29,7 @@
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
+#include <yq/srv/FileWatch.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
