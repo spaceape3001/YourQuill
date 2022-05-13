@@ -40,7 +40,7 @@ namespace yq {
         bool                inspect_submit  = false;
         bool                admin           = false;
     };
-    
+
     
     struct WebContext  {
         enum : uint64_t {

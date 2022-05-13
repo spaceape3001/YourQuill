@@ -33,6 +33,7 @@ namespace yq {
     
     struct WebContext;
     
+    
     namespace web {
         void freeze();
         bool frozen();
@@ -64,8 +65,8 @@ namespace yq {
         bool                set_template(const std::filesystem::path&);
         // Sets the template to content
         bool                set_template(std::string_view);
+
     };
-    
     
     struct WebGroup {
         std::vector<const WebPage*> pages;

@@ -23,6 +23,7 @@
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
+#include <yq/web/WebRedirect.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 #include <fstream>
@@ -623,6 +624,11 @@ public:
             {
                 ctx->status = s;
             }
+            catch(WebRedirect wr)
+            {
+                ctx -> tx_redirect  = wr.where;
+                ctx -> status       = wr.why;
+            }
             catch(Url u)
             {
                 ctx -> tx_redirect  = u;
@@ -849,7 +855,7 @@ public:
             return;
         }
     
-        url_view_r     uri = to_url(muri.uri);
+        url_view_r     uri = to_url_view(muri.uri);
         if(!uri.good){
             dispatch(HttpStatus::BadURI);
             m_rxMode    = RxError;

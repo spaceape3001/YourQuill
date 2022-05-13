@@ -34,20 +34,20 @@ ut::suite tests = []{
     
     "uri_parse"_test = [](){
     
-        expect( UrlView{ "http", "", "", "www.google.com",  "/test.php", "", "", 0 } == to_url("http://www.google.com/test.php"));
-        expect( UrlView{ "ftp", "nobody", "",  "www.google.com", "/test.php", "", "", 0 } == to_url("ftp://nobody@www.google.com/test.php"));
-        expect( UrlView{ "ftp", "nobody", "secret",  "www.google.com", "/test.php", "foobar=true", "hello", 8080 } == to_url("ftp://nobody:secret@www.google.com:8080/test.php?foobar=true#hello"));
-        expect( UrlView{ "https", "", "",  "www.google.com", "/test.php", "foobar=true", "hello", 8080 } == to_url("https://www.google.com:8080/test.php?foobar=true#hello"));
-        expect( UrlView{ "file", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == to_url("file:///test.php?foobar=true#hello"));
-        expect( UrlView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == to_url("///test.php?foobar=true#hello"));
-        expect( UrlView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == to_url("/test.php?foobar=true#hello"));
-        expect( UrlView{ "", "", "",  "", "./test.php", "foobar=true", "hello", 0 } == to_url("./test.php?foobar=true#hello"));
-        expect( UrlView{ "", "", "",  "", "/", "", "", 0 } == to_url("/"));
+        expect( UrlView{ "http", "", "", "www.google.com",  "/test.php", "", "", 0 } == to_url_view("http://www.google.com/test.php"));
+        expect( UrlView{ "ftp", "nobody", "",  "www.google.com", "/test.php", "", "", 0 } == to_url_view("ftp://nobody@www.google.com/test.php"));
+        expect( UrlView{ "ftp", "nobody", "secret",  "www.google.com", "/test.php", "foobar=true", "hello", 8080 } == to_url_view("ftp://nobody:secret@www.google.com:8080/test.php?foobar=true#hello"));
+        expect( UrlView{ "https", "", "",  "www.google.com", "/test.php", "foobar=true", "hello", 8080 } == to_url_view("https://www.google.com:8080/test.php?foobar=true#hello"));
+        expect( UrlView{ "file", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == to_url_view("file:///test.php?foobar=true#hello"));
+        expect( UrlView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == to_url_view("///test.php?foobar=true#hello"));
+        expect( UrlView{ "", "", "",  "", "/test.php", "foobar=true", "hello", 0 } == to_url_view("/test.php?foobar=true#hello"));
+        expect( UrlView{ "", "", "",  "", "./test.php", "foobar=true", "hello", 0 } == to_url_view("./test.php?foobar=true#hello"));
+        expect( UrlView{ "", "", "",  "", "/", "", "", 0 } == to_url_view("/"));
     };
     
     "uri_bad"_test = [](){
-        expect( false == to_url("foobar.txt").good );
-        expect( false == to_url("http[]//hello/foobar.txt").good );
+        expect( false == to_url_view("foobar.txt").good );
+        expect( false == to_url_view("http[]//hello/foobar.txt").good );
     };
     
     "hostport parse"_test = [](){

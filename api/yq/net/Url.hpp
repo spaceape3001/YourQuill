@@ -40,14 +40,14 @@ namespace yq {
     };
 
     Url             copy(const UrlView&);
-    url_view_r      to_url(const char*, size_t);
-    url_view_r      to_url(const char*);
-    url_view_r      to_url(const std::string_view&);
+    url_view_r      to_url_view(const char*, size_t);
+    url_view_r      to_url_view(const char*);
+    url_view_r      to_url_view(std::string_view);
     Url             to_url(const std::filesystem::path&);
     
     
     url_view_r      as_host_port(const char*, size_t);
-    url_view_r      as_host_port(const std::string_view&);
+    url_view_r      as_host_port(std::string_view);
 
     std::string     to_string(const Url&);
     std::string     to_string(const UrlView&);

@@ -65,6 +65,8 @@ namespace yq {
         TemporaryRedirect           = 307,
         PermanentRedirect           = 308,
         
+        PostedRedirect              = 399,
+        
         BadRequest                  = 400,
         Unauthorized                = 401,
         PaymentRequired             = 402,

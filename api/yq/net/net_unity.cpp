@@ -186,6 +186,7 @@ namespace yq {
                 { HttpStatus::UseProxy,                     "Use Proxy"                         },
                 { HttpStatus::TemporaryRedirect,            "Temporary Redirect"                },
                 { HttpStatus::PermanentRedirect,            "Permanent Redirect"                },
+                { HttpStatus::PostedRedirect,               "Redirecting After Post"            },
             
                 { HttpStatus::BadRequest,                   "Bad Request"                       },
                 { HttpStatus::Unauthorized,                 "Unauthorized"                      },
@@ -548,7 +549,7 @@ namespace yq {
         
     }    
 
-    url_view_r      as_host_port(const std::string_view&s)
+    url_view_r      as_host_port(std::string_view s)
     {
         return as_host_port(s.data(), s.size());
     }
@@ -580,7 +581,7 @@ namespace yq {
         return Url{ "file", std::string(), std::string(), std::string(), pth.string(), std::string(), std::string(), 0 };
     }
     
-    url_view_r      to_url(const char* sz, size_t cb)
+    url_view_r      to_url_view(const char* sz, size_t cb)
     {
         //  URI = scheme ":" ["//" authority] path ["?" query] ["#" fragment]
         //  authority = [userinfo "@"] host [":" port]
@@ -818,14 +819,14 @@ namespace yq {
         return { ret, mode != Error };
     }
     
-    url_view_r      to_url(const char*z)
+    url_view_r      to_url_view(const char*z)
     {   
-        return to_url(z, strlen(z));
+        return to_url_view(z, strlen(z));
     }
 
-    url_view_r      to_url(const std::string_view&s)
+    url_view_r      to_url_view(std::string_view s)
     {
-        return to_url(s.data(), s.size());
+        return to_url_view(s.data(), s.size());
     }
 
     //template <typename S>
