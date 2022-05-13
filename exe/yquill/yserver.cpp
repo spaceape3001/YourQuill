@@ -616,6 +616,11 @@ public:
             {
                 ctx->status = s;
             }
+            catch(Url u)
+            {
+                ctx -> tx_redirect  = u;
+                ctx -> status       = HttpStatus::SeeOther;
+            }
             catch(int ex)
             {
                 if((ex >= 0) && (ex < 600)){
@@ -889,6 +894,9 @@ public:
                 ctx -> tx_header("Content-Type", "text/html");
                 ctx -> tx_header("Content-Length", to_string(sq.html_data.size()));
             }
+        } else if(isRedirect(ctx->status)){
+            ctx -> tx.count(0);
+            ctx -> tx_header("Location", to_string(ctx -> tx_redirect));
         }
         
         if(!ctx -> tx.empty())

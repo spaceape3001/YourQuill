@@ -114,6 +114,9 @@ namespace yq {
         //! Type of the data being returned
         ContentType                     tx_content_type;
 
+        //! Used for redirects....
+        Url                             tx_redirect;
+
         //! URL requested
         UrlView                         url;
         
