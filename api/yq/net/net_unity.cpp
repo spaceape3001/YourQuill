@@ -12,6 +12,7 @@
 #include <yq/collection/EnumMap.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/stream/Text.hpp>
 #include <yq/text/text_utils.hpp>
 #include <stdio.h>
 
@@ -891,5 +892,19 @@ namespace yq {
         //return s << (UrlView) v;
     //}
     
-
+    std::string     to_string(const Url&  u)
+    {
+        std::string     ret;
+        stream::Text    txt(ret);
+        txt << u;
+        return ret;
+    }
+    
+    std::string     to_string(const UrlView&u)
+    {
+        std::string     ret;
+        stream::Text    txt(ret);
+        txt << u;
+        return ret;
+    }
 }
