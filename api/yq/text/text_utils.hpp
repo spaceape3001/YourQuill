@@ -222,6 +222,18 @@ namespace yq {
     */
     std::string_view  fmt_hex(uint64_t n, char f='0');
     
+    std::string_view  fmt_octal(uint8_t n);
+    std::string_view  fmt_octal(uint16_t n);
+    std::string_view  fmt_octal(uint32_t n);
+    std::string_view  fmt_octal(uint64_t n);
+
+    std::string_view  fmt_octal(uint8_t n, char f);
+    std::string_view  fmt_octal(uint16_t n, char f);
+    std::string_view  fmt_octal(uint32_t n, char f);
+    std::string_view  fmt_octal(uint64_t n, char f);
+
+
+    
     /*! \brief Formats the given number in scientifica notation
         
         \param[in] v        Value to format

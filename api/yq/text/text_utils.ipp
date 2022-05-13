@@ -496,6 +496,83 @@ namespace yq {
         auto [p,ec] = std::to_chars(buf+16, buf+kStdBuf, n, 16);
         return std::string_view(p-16,16);
     }
+    
+    template <typename T>
+    std::string_view  as_octal(T n)
+    {
+        static constexpr const size_t   K = (sizeof(T)*8 / 3) + 1;
+        static thread_local char buf[K+1];
+
+        buf[K]      = '\0';
+        size_t k    = K-1;
+        if(n){
+            for(;n;n>>=3, --k)
+                buf[k]  = '0' + (n&7);
+        } else
+            buf[k]  = '0';
+        return std::string_view(buf+k, K-k);
+    }
+    
+
+    std::string_view  fmt_octal(uint8_t n)
+    {
+        return as_octal(n);
+    }
+    
+    std::string_view  fmt_octal(uint16_t n)
+    {
+        return as_octal(n);
+    }
+    
+    std::string_view  fmt_octal(uint32_t n)
+    {
+        return as_octal(n);
+    }
+    
+    std::string_view  fmt_octal(uint64_t n)
+    {
+        return as_octal(n);
+    }
+
+    template <typename T>
+    std::string_view  as_octal(T n, char ch)
+    {
+        static constexpr const size_t   K = (sizeof(T)*8 / 3) + 1;
+        static thread_local char buf[K+1];
+
+        buf[K]      = '\0';
+        size_t k    = K-1;
+        if(n){
+            for(;n;n>>=3, --k)
+                buf[k]  = '0' + (n&7);
+        } else
+            buf[k]  = 0;
+        while(k>0)
+            buf[--k]    = ch;
+        return std::string_view(buf,K);
+    }
+    
+
+    std::string_view  fmt_octal(uint8_t n, char f)
+    {
+        return as_octal(n,f);
+    }
+    
+    std::string_view  fmt_octal(uint16_t n, char f)
+    {
+        return as_octal(n,f);
+    }
+    
+    std::string_view  fmt_octal(uint32_t n, char f)
+    {
+        return as_octal(n,f);
+    }
+    
+    std::string_view  fmt_octal(uint64_t n, char f)
+    {
+        return as_octal(n,f);
+    }
+    
 
     std::vector<std::string_view>  hard_wrap(const char*s, size_t n, size_t width)
     {
