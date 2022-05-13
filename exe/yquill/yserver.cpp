@@ -11,6 +11,7 @@
 
 #include <yq/algo/Random.hpp>
 #include <yq/app/DelayInit.hpp>
+#include <yq/collection/c_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
@@ -601,6 +602,12 @@ public:
                 break;
             }
             
+            //  temporary block to non-local posts (and others)
+            if(!is_in(ctx->method, {hGet, hHead}) && !isLocal){
+                ctx->status = HttpStatus::Forbidden;
+                break;
+            }
+
             try {
                 ctx->page   = pg.first;
                 ctx->truncated_path = pg.second;

@@ -643,7 +643,7 @@ namespace yq {
     }
     
 
-    bool  is_in(std::string_view str, const std::initializer_list<std::string_view>& pat)
+    bool  is_in(std::string_view str, std::initializer_list<std::string_view> pat)
     {
         for(auto& s : pat)
             if(is_similar(str, s))

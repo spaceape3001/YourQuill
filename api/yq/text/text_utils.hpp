@@ -425,7 +425,7 @@ namespace yq {
 
     /*! \brief Test to see if string matches one of the patterns
     */
-    bool  is_in(std::string_view str, const std::initializer_list<std::string_view>& pat);
+    bool  is_in(std::string_view str, std::initializer_list<std::string_view> pat);
     
     /*! \brief Test to see if string matches one of the patterns
     */

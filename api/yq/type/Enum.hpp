@@ -376,6 +376,15 @@ namespace yq {
         return *this;
     }
 
+    template <typename E>
+    bool    is_in(EnumImpl<E> val, std::initializer_list<typename E::enum_t> vals)
+    {
+        for(auto& t : vals)
+            if(val == t)
+                return true;
+        return false;
+    }
+
 
     //template <typename E>
     //bool    EnumImpl<E>::operator==(typename E::enum_t rhs) const
