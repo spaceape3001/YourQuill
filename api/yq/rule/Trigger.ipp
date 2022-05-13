@@ -15,8 +15,7 @@ namespace yq {
 
     Ref<Trigger>     x_trigger(const XmlNode* xn)
     {
-        std::string     s   = read_attribute(xn, szType, x_sstring);
-        const ObjectInfo*   oi  = ObjectInfo::find(s);
+        const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
         if(!oi)
             return Ref<Trigger>();
         Object* obj         = oi->create();

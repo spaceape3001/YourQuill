@@ -38,7 +38,7 @@ namespace yq {
     
         \note Return value is a REFERENCE to the given data, therefore, copy off if the XML is being altered/destroyed.
     */
-    std::string_view    to_string(const XmlBase*);
+    std::string_view    to_string_view(const XmlBase*);
     unsigned_r          to_uint(const XmlBase*);
     uint8_r             to_uint8(const XmlBase*);
     uint16_r            to_uint16(const XmlBase*);
@@ -53,7 +53,7 @@ namespace yq {
     {
         if(xb -> value_size() == 0)
             return Result<E>(E::default_value());
-        auto   v    = E::value_for(to_string(xb));
+        auto   v    = E::value_for(to_string_view(xb));
         if(v.good)
             return Result<E>(v.value);
         return Result<E>();
@@ -79,12 +79,12 @@ namespace yq {
     int64_r    x_int64(const XmlBase*);
     short_r    x_short(const XmlBase*);
     
+    std::string         x_string(const XmlBase*);
     /*! \brief Converts to string view
     
         \note Return value is a REFERENCE to the given data, therefore, copy off if the XML is being altered/destroyed.
     */
-    std::string_view    x_string(const XmlBase*);
-    std::string         x_sstring(const XmlBase*);
+    std::string_view    x_string_view(const XmlBase*);
     unsigned_r          x_uint(const XmlBase*);
     uint8_r             x_uint8(const XmlBase*);
     uint16_r            x_uint16(const XmlBase*);
@@ -99,7 +99,7 @@ namespace yq {
     {
         if(xb -> value_size() == 0)
             return Result<E>(E::default_value());
-        auto   v    = E::value_for(x_string(xb));
+        auto   v    = E::value_for(x_string_view(xb));
         if(v.good)
             return Result<E>(v.value);
         return Result<E>();

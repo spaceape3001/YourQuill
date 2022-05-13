@@ -166,7 +166,7 @@ namespace yq {
             return to_short(xb->value(), xb->value_size());
         }
             
-        std::string_view    to_string(const XmlBase*xb)
+        std::string_view    to_string_view(const XmlBase*xb)
         {
             return std::string_view(xb->value(), xb->value_size());
         }
@@ -288,12 +288,12 @@ namespace yq {
             return to_short(xb->value(), xb->value_size());
         }
             
-        std::string_view    x_string(const XmlBase*xb)
+        std::string_view    x_string_view(const XmlBase*xb)
         {
             return std::string_view(xb->value(), xb->value_size());
         }
 
-        std::string         x_sstring(const XmlBase*xb)
+        std::string         x_string(const XmlBase*xb)
         {
             return std::string(xb->value(), xb->value_size());
         }
@@ -353,7 +353,7 @@ namespace yq {
         {
             string_set_t    ret;
             for(const XmlNode* xb = xn->first_node(pszTag); xb; xb = xb -> next_sibling(pszTag))
-                ret << x_sstring(xb);
+                ret << x_string(xb);
             return ret;
         }
 
@@ -386,52 +386,52 @@ namespace yq {
 
         void                 write_x(XmlBase* xb, double v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, float v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, int8_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, int16_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, int32_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, int64_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, uint8_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, uint16_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, uint32_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, uint64_t v)
         {
-            write_x(xb, to_string(v));
+            write_x(xb, to_string_view(v));
         }
 
         void                 write_x(XmlBase* xb, std::string_view v)

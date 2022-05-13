@@ -311,7 +311,7 @@ namespace yq {
         //authentication  = read_child(xn, szAuthentication, x_authentication);
         //if(!skip_bio)
             //bio         = read_children(xn, szContext, x_context);
-        //std::vector<std::string>    theGroups = read_children(xn, szGroup, x_sstring);
+        //std::vector<std::string>    theGroups = read_children(xn, szGroup, x_string);
         //permissions     = read_child(xn, szPermission, x_flag<Permission>);
         //return true;
     //}

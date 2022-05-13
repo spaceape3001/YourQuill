@@ -300,7 +300,7 @@ namespace yq {
 
         static constexpr const size_t   kStdBuf = 63;
 
-        Stream&     operator<<(Stream&str, const std::string_view&v)
+        Stream&     operator<<(Stream&str, std::string_view v)
         {
             str.write(v.data(), v.size());
             return str;
@@ -325,65 +325,65 @@ namespace yq {
 
         Stream&     operator<<(Stream&str, char32_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, float v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, double v)
         {
-            str << to_string(v);
+            str << to_string_view(v);
             return str;
         }
 
         Stream&     operator<<(Stream&str, bool v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
 
         Stream&     operator<<(Stream&str, int8_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, int16_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, int32_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, int64_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
 
         Stream&     operator<<(Stream&str, uint8_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, uint16_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, uint32_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
         Stream&     operator<<(Stream&str, uint64_t v)
         {
-            return str << to_string(v);
+            return str << to_string_view(v);
         }
 
 

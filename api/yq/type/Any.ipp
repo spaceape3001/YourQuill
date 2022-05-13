@@ -92,7 +92,7 @@ namespace yq {
 
     Any::Any(const char8_t*z) : m_type(nullptr)
     {
-        set<std::string>(copy(to_string(z)));
+        set<std::string>(to_string(z));
     }
     
     Any::Any(const char32_t*z) : m_type(nullptr)
@@ -102,7 +102,7 @@ namespace yq {
     
     Any::Any(const std::u8string&z) : m_type(nullptr)
     {
-        set<std::string>(copy(to_string(z)));
+        set<std::string>(to_string(z));
     }
     
     Any::Any(const std::u32string&z) : m_type(nullptr)

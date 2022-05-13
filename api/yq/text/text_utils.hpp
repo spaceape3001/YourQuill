@@ -7,6 +7,7 @@
 #pragma once
 
 #include <yq/preamble.hpp>
+#include <yq/c++/trait/always_false.hpp>
 #include <yq/type/Result.hpp>
 
 namespace yq {
@@ -1325,72 +1326,13 @@ namespace yq {
     */
     short_r  to_short(std::string_view s);
 
-    /*! \brief Returns the boolean as a string (view)
-    */
-    inline std::string_view     to_string(bool f, std::string_view kFalse = "false", std::string_view kTrue="true")
-    {
-        return f ? kTrue : kFalse;
-    }
-    
-    /*! \brief Returns the character as a string.
-    */
-    inline std::string  to_string(char ch)
-    {
-        return std::string(1,ch);
-    }
-    
-    inline std::string  to_string(char8_t ch)
-    {
-        return std::string(1,(char) ch);
-    }
 
-    /*! \brief Returns the character as a string.
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view  to_string(char32_t);
-
-    /*! \brief Returns the character-array as a string.
-    */
-    inline std::string_view  to_string(const char*z)
-    {
-        return std::string_view(z);
-    }
     
     /*! \brief Returns the character-array as a string.
     */
     std::string   to_string(const char32_t*);
+
     
-
-    /*! \brief Formats the double into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view   to_string(double);
-
-    /*! \brief Formats the float into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view   to_string(float);
-
-    /*! \brief Formats the integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view   to_string(int8_t);
-
-    /*! \brief Formats the integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view   to_string(int16_t);
-
-    /*! \brief Formats the integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view   to_string(int32_t);
-
-    /*! \brief Formats the integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view  to_string(int64_t);
-
 
     
     /*! Converts the string view to string string view
@@ -1410,36 +1352,17 @@ namespace yq {
     {
         return s;
     }
+
+    std::string         to_string(const std::u32string&s);
     
     /*! \brief Converts to std::string
     */
-    std::string_view  to_string(const std::u8string_view&s);
+    std::string         to_string(const std::u32string_view&s);
 
-    /*! \brief Converts to std::string
-    */
-    std::string  to_string(const std::u32string_view&s);
+    std::string         to_string(const std::wstring&);
 
-    std::string to_string(const std::wstring_view&);
+    std::string         to_string(const std::wstring_view&);
 
-    /*! \brief Formats the unsigned integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view  to_string(uint8_t);
-
-    /*! \brief Formats the unsigned integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view  to_string(uint16_t);
-
-    /*! \brief Formats the unsigned integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view  to_string(uint32_t);
-
-    /*! \brief Formats the unsigned integer into a string
-        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
-    */
-    std::string_view  to_string(uint64_t);
 
     template <typename T>
     auto  to_string(const std::vector<T>& input)
@@ -1451,8 +1374,104 @@ namespace yq {
             ret << to_string(i);
         return ret;
     }
+
+    /*! \brief Returns the boolean as a string (view)
+    */
+    inline std::string_view     to_string_view(bool f, std::string_view kFalse = "false", std::string_view kTrue="true")
+    {
+        return f ? kTrue : kFalse;
+    }
+
+    /*! \brief Returns the character as a string.
     
-    std::string     to_time_string(std::time_t, const char* fmt="yyyy-MM-dd HH:mm:ss");
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view  to_string_view(char ch);
+
+    /*! \brief Returns the character as a string.
+    
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view  to_string_view(char8_t ch);
+    
+    /*! \brief Returns the character as a string.
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view  to_string_view(char32_t);
+
+    /*! \brief Returns the character-array as a string.
+    */
+    inline std::string_view  to_string_view(const char*z)
+    {
+        return std::string_view(z);
+    }
+
+    
+    /*! \brief Formats the double into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view   to_string_view(double);
+
+    /*! \brief Formats the float into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view   to_string_view(float);
+
+    /*! \brief Formats the integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view   to_string_view(int8_t);
+
+    /*! \brief Formats the integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view   to_string_view(int16_t);
+
+    /*! \brief Formats the integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view   to_string_view(int32_t);
+
+    /*! \brief Formats the integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view  to_string_view(int64_t);
+
+    inline std::string_view to_string_view( const std::string& sv)
+    {
+        return sv;
+    }
+
+    inline std::string_view to_string_view( std::string_view sv)
+    {
+        return sv;
+    }
+    
+    /*! \brief Converts to std::string_view
+    */
+    std::string_view    to_string_view(const std::u8string_view&s);
+
+    /*! \brief Formats the unsigned integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view    to_string_view(uint8_t);
+
+    /*! \brief Formats the unsigned integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view    to_string_view(uint16_t);
+
+    /*! \brief Formats the unsigned integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view    to_string_view(uint32_t);
+
+    /*! \brief Formats the unsigned integer into a string
+        \note Returns a REFERENCE to a thread-local buffer, copy off before next call, if retention is important.
+    */
+    std::string_view    to_string_view(uint64_t);
+    
+    std::string         to_time_string(std::time_t, const char* fmt="yyyy-MM-dd HH:mm:ss");
 
     /*! \brief Decodes the given string into an unsigned integer
     
@@ -1863,6 +1882,16 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  IMPLEMENTATION
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    namespace trait {
+        
+        template <typename T>
+        static constexpr const bool     has_to_string_view_v    = std::is_same_v<std::string_view, decltype(to_string_view(T()))>;
+
+        template <typename T>
+        static constexpr const bool     has_to_string_v    = std::is_same_v<std::string, decltype(to_string(T()))>;
+    }
+    
 
     template <template <typename...> class Tmpl, typename... T>
     std::string     join(const Tmpl<T...>& collection, std::string_view separator)
@@ -1891,7 +1920,13 @@ namespace yq {
                 ret += s;
             } 
             if constexpr (!is_string){
-                ret += to_string(s);
+                if constexpr ( trait::has_to_string_view_v<value_t> ){
+                    ret += to_string_view(s);
+                } else if constexpr ( trait::has_to_string_v<value_t> ){ 
+                    ret += to_string(s);
+                } else {
+                    static_assert(trait::always_false_v<value_t>, "Argument deduction failed");
+                }
             }
         }
         return ret;
@@ -1924,10 +1959,25 @@ namespace yq {
                 ret += s;
             } 
             if constexpr (!is_string){
-                ret += to_string(s);
+                if constexpr ( trait::has_to_string_view_v<value_t> ){
+                    ret += to_string_view(s);
+                } else if constexpr ( trait::has_to_string_v<value_t> ){ 
+                    ret += to_string(s);
+                } else {
+                    static_assert(trait::always_false_v<value_t>, "Argument deduction failed");
+                }
             }
         }
         return ret;
+    }
+
+    /*! \brief To string when we have a to-string-view function
+    */
+    template <typename T>
+    //requires (std::is_same_v<std::string_view, to_string_view(T())>)
+    std::string    to_string(const T& v)
+    {
+        return std::string(to_string_view(v));
     }
 }
 

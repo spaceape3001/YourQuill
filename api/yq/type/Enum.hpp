@@ -398,4 +398,15 @@ namespace yq {
         //return E::m_value != rhs;
     //}
 
+    template <typename E>
+    std::string_view    to_string_view(EnumImpl<E> e)
+    {
+        return e.key();
+    }
+
+    template <typename E>
+    std::string_view    to_string_view(typename E::enum_t e)
+    {
+        return EnumImpl<E>(e).key();
+    }
 }

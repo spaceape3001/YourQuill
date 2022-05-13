@@ -18,7 +18,7 @@ namespace yq {
     class Stream;
 
     Stream&     operator<<(Stream&, const std::string&);
-    Stream&     operator<<(Stream&, const std::string_view&);
+    Stream&     operator<<(Stream&, std::string_view);
     Stream&     operator<<(Stream&, const char*);
     Stream&     operator<<(Stream&, char);
     Stream&     operator<<(Stream&, char32_t);

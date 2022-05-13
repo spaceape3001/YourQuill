@@ -29,7 +29,7 @@ namespace yq {
     
     bool        read_xn(Rule&ret, const XmlNode*xn)
     {
-        ret.name        = read_child(xn, szName, x_sstring);
+        ret.name        = read_child(xn, szName, x_string);
         ret.actions     = read_children(xn, szAction, x_action);
         ret.constraint  = read_children(xn, szConstraint, x_constraint);
         ret.triggers    = read_children(xn, szTrigger, x_trigger);
@@ -46,8 +46,7 @@ namespace yq {
 */
     Ref<Rule>     x_rule(const XmlNode* xn)
     {
-        std::string     s   = read_attribute(xn, szType, x_sstring);
-        const ObjectInfo*   oi  = ObjectInfo::find(s);
+        const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
         if(!oi)
             return Ref<Rule>();
         Object* obj         = oi->create();

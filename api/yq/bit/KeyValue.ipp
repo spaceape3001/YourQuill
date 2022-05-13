@@ -132,19 +132,34 @@ namespace yq {
         return mx;
     }
 
-    KeyValue*  KVTree::set(const std::string_view&key, const std::string_view& data, bool purge)
+    KeyValue*  KVTree::set(std::string_view key, std::string_view data, bool purge)
     {
         return set(kv::key(key), key, data, purge);
     }
     
-    KeyValue*  KVTree::set(const string_view_vector_t& keys, const std::string_view& data, bool purge)
+    KeyValue*  KVTree::set(std::string_view key, std::string&& data, bool purge)
+    {
+        return set(kv::key(key), key, std::move(data), purge);
+    }
+    
+    KeyValue*  KVTree::set(const string_view_vector_t& keys, std::string_view  data, bool purge)
     {
         return set(kv::key(keys), *(keys.begin()), data, purge);
     }
+
+    KeyValue*  KVTree::set(const string_view_vector_t& keys, std::string&&  data, bool purge)
+    {
+        return set(kv::key(keys), *(keys.begin()), std::move(data), purge);
+    }
     
-    KeyValue*  KVTree::set(const std::initializer_list<std::string_view>& keys, const std::string_view& data, bool purge)
+    KeyValue*  KVTree::set(const std::initializer_list<std::string_view>& keys, std::string_view data, bool purge)
     {
         return set(kv::key(keys), *(keys.begin()), data, purge);
+    }
+
+    KeyValue*  KVTree::set(const std::initializer_list<std::string_view>& keys, std::string&& data, bool purge)
+    {
+        return set(kv::key(keys), *(keys.begin()), std::move(data), purge);
     }
     
 

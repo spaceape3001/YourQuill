@@ -106,15 +106,20 @@ namespace yq {
         //! \param  purge   If true, deletes all OTHER attirubtes with the same key
         //! \return Pointer to the attribute
         template <typename Match>
-        KeyValue*                  set(Match, const std::string_view&key, const std::string_view& data, bool purge=true);
+        KeyValue*                  set(Match, std::string_view key, std::string_view data, bool purge=true);
+        template <typename Match>
+        KeyValue*                  set(Match, std::string_view key, std::string&& data, bool purge=true);
 
-        KeyValue*                  set(const std::string_view&key, const std::string_view& data, bool purge=true);
-        KeyValue*                  set(const string_view_vector_t& keys, const std::string_view& data, bool purge=true);
-        KeyValue*                  set(const std::initializer_list<std::string_view>& keys, const std::string_view& data, bool purge=true);
+        KeyValue*                  set(std::string_view key, std::string_view data, bool purge=true);
+        KeyValue*                  set(std::string_view key, std::string&& data, bool purge=true);
+        KeyValue*                  set(const string_view_vector_t& keys, std::string_view data, bool purge=true);
+        KeyValue*                  set(const string_view_vector_t& keys, std::string && data, bool purge=true);
+        KeyValue*                  set(const std::initializer_list<std::string_view>& keys, std::string_view data, bool purge=true);
+        KeyValue*                  set(const std::initializer_list<std::string_view>& keys, std::string&& data, bool purge=true);
         
 
         template <typename Match, typename T>
-        KeyValue*                  set(Match, const std::string_view&key, const T& data, bool purge=true);
+        KeyValue*                  set(Match, std::string_view key, const T& data, bool purge=true);
         
         //  being jettisoned  set_set() ... use "join" instead.
         
@@ -191,8 +196,13 @@ namespace yq {
 
 
         KeyValue() = default;
-        KeyValue(const std::string_view& k) : key(k) {}
-        KeyValue(const std::string_view& k, const std::string_view& v) : key(k), data(v) {}
+        KeyValue(std::string_view k) : key(k) {}
+        KeyValue(std::string_view k, std::string_view v) : key(k), data(v) {}
+        KeyValue(const char* k, std::string_view v) : key(k), data(v) {}
+        KeyValue(std::string_view k, std::string&& v) : key(k), data(std::move(v)) {}
+        KeyValue(const char* k, std::string&& v) : key(k), data(std::move(v)) {}
+        KeyValue(std::string&& k, std::string_view v) : key(std::move(k)), data(v) {}
+        KeyValue(std::string&& k, std::string&& v) : key(std::move(k)), data(std::move(v)) {}
         
         bool                empty() const;
         
@@ -486,8 +496,9 @@ namespace yq {
         }
     }
 
+
     template <typename Match>
-    KeyValue*       KVTree::set(Match m, const std::string_view&key, const std::string_view& data, bool purge)
+    KeyValue*       KVTree::set(Match m, std::string_view key, std::string_view data, bool purge)
     {
         if constexpr ( std::is_same_v<Match, const char*>) {
             return set( kv::key(m), key, data, purge );
@@ -512,16 +523,46 @@ namespace yq {
             KeyValue    n;
             n.key       = key;
             n.data      = data;
-            subs.push_back(n);
+            subs.push_back(std::move(n));
+            return &subs.back();
+        }
+    }
+
+    template <typename Match>
+    KeyValue*       KVTree::set(Match m, std::string_view key, std::string&& data, bool purge)
+    {
+        if constexpr ( std::is_same_v<Match, const char*>) {
+            return set( kv::key(m), key, std::move(data), purge );
+        } else if constexpr ( std::is_same_v<Match, std::string_view>) {
+            return set( kv::key(m), key, std::move(data), purge );
+        } else if constexpr ( std::is_same_v<Match, std::string>) {
+            return set( kv::key(m), key, std::move(data), purge );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<std::string_view>>) {
+            return set( kv::key(m), key, std::move(data), purge );
+        } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
+            return set( kv::key(m), key, std::move(data), purge );
+        } else {
+            if(purge)
+                erase_seconds(m);
+                
+            KeyValue* a = first(m);
+            if(a){
+                a -> data   = std::move(data);
+                return a;
+            }
+            
+            KeyValue    n;
+            n.key       = key;
+            n.data      = std::move(data);
+            subs.push_back(std::move(n));
             return &subs.back();
         }
     }
     
     template <typename Match, typename T>
-    KeyValue*  KVTree::set(Match m, const std::string_view&key, const T& data, bool purge)
+    KeyValue*  KVTree::set(Match m, std::string_view key, const T& data, bool purge)
     {
-        auto    sd  = to_string(data);  // here to anchor the results until AFTER set
-        return set(m, key, std::string_view(sd), purge);
+        return set(m, key, to_string(data), purge);
     }
     
     template <typename Match>

@@ -501,7 +501,7 @@ namespace yq {
             for(Root* r2 : eroots){
                 if(!r2->key.empty())
                     continue;
-                std::string s   = std::string(to_string(r2->id));
+                std::string s   = to_string(r2->id);
                 if(!keys.has(s)){
                     r2 -> key = s;
                     keys << s;
@@ -510,7 +510,7 @@ namespace yq {
                 }
                 s += '_';
                 for(i=0;; ++i){
-                    std::string  k   = s + std::string(to_string(i));
+                    std::string  k   = s + to_string(i);
                     if(!keys.has(k)){
                         r2 -> key = k;
                         keys << k;

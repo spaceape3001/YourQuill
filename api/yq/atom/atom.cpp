@@ -762,21 +762,21 @@ namespace yq {
             return false;
         }
         
-        name            = read_child(xn, szName, x_sstring);
-        plural          = read_child(xn, szPlural, x_sstring);
-        brief           = read_child(xn, szBrief, x_sstring);
-        notes           = read_child(xn, szNotes, x_sstring);
-        folder          = read_child(xn, szFolder, x_sstring);
+        name            = read_child(xn, szName, x_string);
+        plural          = read_child(xn, szPlural, x_string);
+        brief           = read_child(xn, szBrief, x_string);
+        notes           = read_child(xn, szNotes, x_string);
+        folder          = read_child(xn, szFolder, x_string);
         use             = read_child_string_set(xn, szIs);
         reverse         = read_child_string_set(xn, szReverse);
         sources         = read_child_string_set(xn, szSource);
         targets         = read_child_string_set(xn, szTarget);
         aliases         = read_child_string_set(xn, szAlias);
-        binding         = read_child(xn, szBinding, x_sstring);
+        binding         = read_child(xn, szBinding, x_string);
         prefixes        = read_child_string_set(xn, szPrefix);
         suffixes        = read_child_string_set(xn, szSuffix);
         tags            = read_child_string_set(xn, szTag);
-        category        = read_child(xn, szCategory, x_sstring);
+        category        = read_child(xn, szCategory, x_string);
         return true;
     }
     #endif
@@ -2112,17 +2112,17 @@ namespace yq {
             return false;
         }
 
-        pkey            = read_child(xn, szPKey, x_sstring);
-        name            = read_child(xn, szName, x_sstring);
-        plural          = read_child(xn, szPlural, x_sstring);
-        brief           = read_child(xn, szBrief, x_sstring);
-        notes           = read_child(xn, szNotes, x_sstring);
-        category        = read_child(xn, szCategory, x_sstring);
+        pkey            = read_child(xn, szPKey, x_string);
+        name            = read_child(xn, szName, x_string);
+        plural          = read_child(xn, szPlural, x_string);
+        brief           = read_child(xn, szBrief, x_string);
+        notes           = read_child(xn, szNotes, x_string);
+        category        = read_child(xn, szCategory, x_string);
         aliases         = read_child_string_set(xn, szAlias);
         classes         = read_child_string_set(xn, szClass);
         types           = read_child_string_set(xn, szType);
         atoms           = read_child_string_set(xn, szAtom);
-        expected        = read_child(xn, szExpected, x_sstring);
+        expected        = read_child(xn, szExpected, x_string);
         tags            = read_child_string_set(xn, szTag);
         multiplicity    = read_child(xn, szMultiple, x_enum<Multiplicity>);
         restriction     = read_child(xn, szRestrict, x_enum<Restriction>);
@@ -2872,9 +2872,9 @@ namespace yq {
     
     bool    read_xn(Value::Data&ret, const XmlNode*xn)
     {
-        ret.notes   = read_child(xn, szNotes, x_sstring);
-        ret.brief   = read_child(xn, szBrief, x_sstring);
-        ret.data    = read_child(xn, szData, x_sstring);
+        ret.notes   = read_child(xn, szNotes, x_string);
+        ret.brief   = read_child(xn, szBrief, x_string);
+        ret.data    = read_child(xn, szData, x_string);
         return true;
     }
     

@@ -218,7 +218,7 @@ namespace {
         std::string     file    = "access-";
         file += wksp::start_file();
         file += '-';
-        file += to_string(thread::id());
+        file += to_string_view(thread::id());
         file += ".log";
         return wksp::log_dir() / file;
     }
@@ -889,7 +889,7 @@ public:
             size_t  sz  = ctx->tx_content_size();
             if(sz){
                 has_content = true;
-                ctx -> tx_header("Content-Length", to_string(sz));
+                ctx -> tx_header("Content-Length", to_string_view(sz));
                 
                 if(ctx -> tx_content_type != ContentType())
                     ctx -> tx_header("Content-Type", mimeType(ctx->tx_content_type));
@@ -899,7 +899,7 @@ public:
             ctx -> tx.count(0);
             if(sq.html_data.size()){
                 ctx -> tx_header("Content-Type", "text/html");
-                ctx -> tx_header("Content-Length", to_string(sq.html_data.size()));
+                ctx -> tx_header("Content-Length", to_string_view(sq.html_data.size()));
             }
         } else if(isRedirect(ctx->status)){
             ctx -> tx.count(0);

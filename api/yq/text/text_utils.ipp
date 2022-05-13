@@ -718,7 +718,7 @@ namespace yq {
             return std::string(data);
             
         size_t  deficit = minSize - ccount;
-        std::string bit = copy(to_string(ch));
+        std::string bit = to_string(ch);
         std::string ret;
         ret.reserve(deficit * bit.size() + data.size());
         for(size_t i = 0; i<deficit; ++i)
@@ -743,7 +743,7 @@ namespace yq {
             return std::string(data);
             
         size_t  deficit = minSize - ccount;
-        std::string_view bit = to_string(ch);
+        std::string_view bit = to_string_view(ch);
         std::string ret;
         ret.reserve(deficit * bit.size() + data.size());
         ret += data;
@@ -1565,14 +1565,6 @@ namespace yq {
         return to_short(s.data(), s.size());
     }
 
-    std::string_view   to_string(char32_t ch)
-    {
-        static thread_local char    buf[kStdBuf+1];
-        std::mbstate_t  state{};
-        int len = (int) c32rtomb(buf, ch, &state);
-        return std::string_view(buf, len);
-    }
-    
     std::string   to_string(const char32_t*z)
     {
         if(!z)
@@ -1580,98 +1572,132 @@ namespace yq {
         return cvt_u32string(z, strnlen(z, MAX_NULL_TERM));
     }
 
-    std::string_view   to_string(double v)
-    {
-        //  std::to_chars would be GREAT, if GCC implemented it.....
-        static thread_local char    buf[kStdBuf+1];
-        #if FP_CHARCONV
-        int n  = snprintf(buf, kStdBuf, "%lg", v);
-        return std::string_view(buf, n);
-        #else
-        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-        return std::string_view(buf, (p-buf));
-        #endif
-    }
-    
-    std::string_view   to_string(float v)
-    {
-        //  std::to_chars would be GREAT, if GCC implemented it.....
-        static thread_local char    buf[kStdBuf+1];
-        #if FP_CHARCONV
-        int n  = snprintf(buf, kStdBuf, "%lg", v);
-        return std::string_view(buf, n);
-        #else
-        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-        return std::string_view(buf, (p-buf));
-        #endif
-    }
-
-    std::string_view   to_string(int8_t v)
-    {
-        static thread_local char    buf[kStdBuf+1];
-        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, (int) v);
-        return std::string_view(buf, (p-buf));
-    }
-    
-    std::string_view   to_string(int16_t v)
-    {
-        static thread_local char    buf[kStdBuf+1];
-        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-        return std::string_view(buf, (p-buf));
-    }
-    
-    std::string_view   to_string(int32_t v)
-    {
-        static thread_local char    buf[kStdBuf+1];
-        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-        return std::string_view(buf, (p-buf));
-    }
-
-    std::string_view   to_string(int64_t v)
-    {
-        static thread_local char    buf[kStdBuf+1];
-        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-        return std::string_view(buf, (p-buf));
-    }
-
-
-    std::string_view  to_string(const std::u8string_view&s)
-    {
-        return std::string_view((const char*) s.data(), s.size());
-    }
-
-    std::string  to_string(const std::u32string_view&s)
+    std::string to_string(const std::u32string&s)
     {
         return cvt_u32string(s.data(), s.size());
     }
+    
+
+    std::string to_string(const std::u32string_view&s)
+    {
+        return cvt_u32string(s.data(), s.size());
+    }
+
+    std::string to_string(const std::wstring&s)
+    {
+        return cvt_wstring(s.data(), s.size());
+    }
+
 
     std::string to_string(const std::wstring_view&s)
     {
         return cvt_wstring(s.data(), s.size());
     }
 
-    std::string_view   to_string(uint8_t v)
+    std::string_view  to_string_view(char ch)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        buf[0] = ch;
+        return std::string_view(buf, 1);
+    }
+    
+    std::string_view  to_string_view(char8_t ch)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        buf[0] = (char) ch;
+        return std::string_view(buf, 1);
+    }
+
+    std::string_view   to_string_view(char32_t ch)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        std::mbstate_t  state{};
+        int len = (int) c32rtomb(buf, ch, &state);
+        return std::string_view(buf, len);
+    }
+    
+    std::string_view   to_string_view(double v)
+    {
+        //  std::to_chars would be GREAT, if GCC implemented it.....
+        static thread_local char    buf[kStdBuf+1];
+        #if FP_CHARCONV
+        int n  = snprintf(buf, kStdBuf, "%lg", v);
+        return std::string_view(buf, n);
+        #else
+        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+        return std::string_view(buf, (p-buf));
+        #endif
+    }
+    
+    std::string_view   to_string_view(float v)
+    {
+        //  std::to_chars would be GREAT, if GCC implemented it.....
+        static thread_local char    buf[kStdBuf+1];
+        #if FP_CHARCONV
+        int n  = snprintf(buf, kStdBuf, "%lg", v);
+        return std::string_view(buf, n);
+        #else
+        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+        return std::string_view(buf, (p-buf));
+        #endif
+    }
+
+    std::string_view   to_string_view(int8_t v)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, (int) v);
+        return std::string_view(buf, (p-buf));
+    }
+    
+    std::string_view   to_string_view(int16_t v)
     {
         static thread_local char    buf[kStdBuf+1];
         auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
         return std::string_view(buf, (p-buf));
     }
     
-    std::string_view   to_string(uint16_t v)
-    {
-        static thread_local char    buf[kStdBuf+1];
-        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
-        return std::string_view(buf, (p-buf));
-    }
-    
-    std::string_view   to_string(uint32_t v)
+    std::string_view   to_string_view(int32_t v)
     {
         static thread_local char    buf[kStdBuf+1];
         auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
         return std::string_view(buf, (p-buf));
     }
 
-    std::string_view   to_string(uint64_t v)
+    std::string_view   to_string_view(int64_t v)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+        return std::string_view(buf, (p-buf));
+    }
+
+
+    std::string_view  to_string_view(const std::u8string_view&s)
+    {
+        return std::string_view((const char*) s.data(), s.size());
+    }
+
+    std::string_view   to_string_view(uint8_t v)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+        return std::string_view(buf, (p-buf));
+    }
+    
+    std::string_view   to_string_view(uint16_t v)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+        return std::string_view(buf, (p-buf));
+    }
+    
+    std::string_view   to_string_view(uint32_t v)
+    {
+        static thread_local char    buf[kStdBuf+1];
+        auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
+        return std::string_view(buf, (p-buf));
+    }
+
+    std::string_view   to_string_view(uint64_t v)
     {
         static thread_local char    buf[kStdBuf+1];
         auto [p,ec] = std::to_chars(buf, buf+kStdBuf, v);
