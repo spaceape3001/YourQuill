@@ -9,6 +9,7 @@
 #include <yq/enum/SizeDesc.hpp>
 #include <yq/enum/Submit.hpp>
 #include <yq/enum/Reset.hpp>
+#include <yq/web/WebHtml.hpp>
 #include <optional>
 
 namespace yq {
@@ -68,7 +69,18 @@ namespace yq {
         {
             return Edit<T>{v, rt, force};
         }
-        
+
+    }
+
+        template <typename T>
+        WebAutoClose        WebHtml::edit(T v, const Root* r, bool forceInspect)
+        {
+            (*this) << html::edit(v, r, forceInspect);
+            return WebAutoClose(*this, "</form>\n");
+        }
+
+     namespace html {
+
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
         struct Escape {
@@ -79,6 +91,28 @@ namespace yq {
         {
             return Escape{std::string(v)};
         }
+        
+        WebHtml&    operator<<(WebHtml&, const Escape&);
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        
+        struct FormStart {
+            Url         url;
+            bool        force_inspect = false;
+        };
+        
+        inline FormStart   form_start(const Url& url, bool force_inspect=false)
+        {
+            return FormStart(url, force_inspect);
+        }
+        
+        inline FormStart   form_start(const UrlView& url, bool force_inspect=false)
+        {
+            return FormStart(copy(url), force_inspect);
+        }
+        
+        WebHtml&    operator<<(WebHtml&, const FormStart&);
+
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         

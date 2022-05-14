@@ -338,6 +338,11 @@ namespace yq {
         { 
             return { i, sz }; 
         }
+        
+        Thumbnail               thumbnail(Image i, std::string_view alt, SizeDesc sz)
+        {
+            return { i, sz, std::string(alt) }; 
+        }
 
 
         void                    update_root(const Root*rt, Image img)
@@ -378,13 +383,16 @@ namespace yq {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml& h, Thumbnail t)
+        WebHtml&    operator<<(WebHtml& h, const Thumbnail& t)
         {
-            std::string n   = cdb::label(cdb::document(t.img));
+            std::string n   = t.alt;
+            if(n.empty())
+                n           = "Thumbnail for '" + cdb::label(cdb::document(t.img)) + "'";
+            cdb::label(cdb::document(t.img));
             h << "<img src=\"/thumbnail?id=" << t.img.id;
             if(t.size != SizeDesc())
                 h << "&size=" << t.size.key();
-            h << "\" alt=\"Thumbnail for '";
+            h << "\" alt=\"";
             html_escape_write(h, n);
             h << "'\" />";
             return h;

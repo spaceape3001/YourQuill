@@ -36,6 +36,7 @@ namespace yq {
     struct Thumbnail {
         Image       img;
         SizeDesc    size;
+        std::string alt;
         
         bool operator==(const Thumbnail&) const = default;
         operator bool() const { return img; }

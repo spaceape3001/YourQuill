@@ -68,6 +68,7 @@ namespace yq {
         //std::vector<Image>
         
         Thumbnail               thumbnail(Image, SizeDesc sz=SizeDesc::Small);
+        Thumbnail               thumbnail(Image, std::string_view alt, SizeDesc sz=SizeDesc::Small);
         void                    update_root(const Root*, Image);
     }
 }

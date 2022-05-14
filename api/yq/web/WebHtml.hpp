@@ -16,8 +16,10 @@ namespace yq {
     struct WebContext;
     class Stream;
     class ByteArray;
+    struct Root;
     
     class WebAutoClose;
+    
     
     /*! \brief Web Title
     
@@ -46,6 +48,9 @@ namespace yq {
         
         WebContext&         context() { return m_context; }
         const WebContext&   context() const { return m_context; }
+        
+        template <typename T>
+        WebAutoClose        edit(T, const Root* r=nullptr, bool forceInspect=false);
         
         void      run_me();
         

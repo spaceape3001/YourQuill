@@ -1176,6 +1176,25 @@ namespace yq {
             return h;
         }
 
+        WebHtml&    operator<<(WebHtml&h, const Icon<Document>& v)
+        {
+            std::string a   = v.alt;
+            if(a.empty())
+                a   = cdb::key(v.src);
+            
+            Image   i   = cdb::icon(v.src);
+            if(i){
+                h << cdb::thumbnail(i, a);
+            } else {
+                Icon<std::string>   fwd;
+                fwd.src = "/img/document.svg";
+                fwd.style = v.style;
+                fwd.alt = std::move(a);
+                h << fwd;
+            }
+            return h;
+        }
+
         void    dev_table(WebHtml& h, const std::vector<Document>& documents)
         {
             auto _tab = h.table();
@@ -1851,6 +1870,25 @@ namespace yq {
             h << v.data.id;
             if(v.data)
                 h << "</a>";
+            return h;
+        }
+
+        WebHtml&    operator<<(WebHtml&h, const Icon<Folder>&v)
+        {
+            std::string a   = v.alt;
+            if(a.empty())
+                a   = cdb::key(v.src);
+            
+            Image   i   = cdb::icon(v.src);
+            if(i){
+                h << cdb::thumbnail(i, a);
+            } else {
+                Icon<std::string>   fwd;
+                fwd.src = "/img/folder.svg";
+                fwd.style = v.style;
+                fwd.alt = std::move(a);
+                h << fwd;
+            }
             return h;
         }
 

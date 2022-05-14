@@ -4,7 +4,7 @@
 
 <table class="info">
 <tr>
-    <td class="icon" rowspan="3"><img class="medium" src="/img/system-run-3.svg"/></td>
+    <td class="icon" rowspan="3"><img class="medium" src="/img/workspace.svg"/></td>
     <th align="left">Author<sup>&Dagger;</sup></th>
     <td>{{AUTHOR}}</td>
     <td class="explain">Pen name for this project.</td>
@@ -50,7 +50,7 @@
 </tr>
 
 <tr>
-    <td class="icon"><img class="medium" src="/img/im-user.svg" alt="Users"/></td>
+    <td class="icon"><img class="medium" src="/img/users.svg" alt="Users"/></td>
     <th><a href="/admin/tags">USERS</a></th>
     <td>{{USER_COUNT}}</td>
     <td class="explain">Accounts &amp; Permissions to access this project.</td>

@@ -47,6 +47,7 @@
 #include <yq/org/CategoryCDB.hpp>
 #include <yq/org/TagCDB.hpp>
 #include <yq/stream/Ops.hpp>
+#include <yq/stream/Text.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
@@ -2026,8 +2027,35 @@ namespace yq {
                 h << "</a>";
             return h;
         }
+
+        WebHtml&    operator<<(WebHtml&h, const Edit<Class>& v)
+        {
+            Url             url;
+            url.path        = "/admin/class/edit";
+            const Root* rt  = v.root;
+            if(!rt)
+                rt          = h.context().def_root(DataRole::Config);
+
+            Class   c   = v.value;
+            if(!c)
+                c       = arg::class_(h);
+            
+            {
+                stream::Text    args(url.query);
+                if(c)
+                    args << "id=" << c.id;
+                if(rt){
+                    if(c)
+                        args << '&';
+                    args << "root=" << rt->id;
+                }
+            }
+            
+            h << form_start(url, v.force_inspect);
+            return h;
+        }
         
-        WebHtml&    operator<<(WebHtml&h, Plural<Class>v)
+        WebHtml&    operator<<(WebHtml&h, const Plural<Class>& v)
         {
             Thumbnail th = cdb::thumbnail(cdb::icon(v.data), h.context().session.icon_size);
             if(v.data)

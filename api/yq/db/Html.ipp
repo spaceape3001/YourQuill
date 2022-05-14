@@ -17,6 +17,29 @@
 
 namespace yq {
     namespace html {
+        WebHtml&    operator<<(WebHtml&h, const Escape&v)
+        {
+            html_escape_write(h, v.text);
+            return h;
+        }
+
+        WebHtml&    operator<<(WebHtml&h, const FormStart&v)
+        {
+            bool    inspect = v.force_inspect || h.context().session.inspect_submit;
+            h << "<form action=\"";
+            if(inspect){
+                Url u2  = v.url;
+                u2.path = "/dev/echo";
+                h << u2;
+            } else {
+                h << v.url;
+            }
+            h << "\" method=\"post\">\n";
+            if(inspect)
+                h << "<input type=\"hidden\" name=\"url\" id=\"url\" value=\"" << v.url << "\">\n";
+            return h;
+        }
+
         WebHtml&    operator<<(WebHtml&h, const ICheck&v)
         {
             h << "<input type=\"checkbox\" id=\"" << v.key << "\" name=\"" << v.key << "\" value=\"true\"";
