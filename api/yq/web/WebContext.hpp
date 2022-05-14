@@ -34,7 +34,7 @@ namespace yq {
         std::string         username;
         const Root*         def_root        = nullptr;
         unsigned int        columns         = 0;
-        SizeDesc            icon_size;
+        SizeDesc            icon_size       = SizeDesc::Small;
         bool                auto_edit       = false;
         bool                can_edit        = false;
         bool                logged_in       = false;
@@ -141,6 +141,10 @@ namespace yq {
         //! Version of the request
         VersionSpec                     version;
         
+        bool                            can_edit() const;
+        
+        
+        unsigned int                    columns() const;
 
         //! Decodes post parameters
         StringViewMultiMap              decode_post() const;
@@ -169,9 +173,11 @@ namespace yq {
         
         bool                            is_local() const { return static_cast<bool>(flags & LOCAL); }
         
+        bool                            is_mobile() const;
+        
         virtual void                    set_admin(bool) = 0;
         virtual void                    set_auto_edit(bool) = 0;
-        virtual void                    set_columns(int) = 0;
+        virtual void                    set_columns(unsigned int) = 0;
         virtual void                    set_def_root(const Root*) = 0;
         virtual void                    set_inspect_submit(bool) = 0;
         virtual void                    set_icon_size(SizeDesc) = 0;

@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Html.hpp"
+#include "HtmlLayout.hpp"
 #include <yq/io/Execute.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/web/WebContext.hpp>

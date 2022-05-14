@@ -16,6 +16,23 @@ namespace yq {
     WebContext::~WebContext()
     {
     }
+
+    bool                        WebContext::can_edit() const
+    {
+        //  TODO
+        return is_local();
+    }
+
+    unsigned int                WebContext::columns() const
+    {
+        unsigned int c  = to_uinteger(find_query({"cols", "columns"})).value;
+        if(c)
+            return c;
+        if(session.columns)
+            return session.columns;
+        return is_mobile() ? 1 : 6;
+    }
+    
     
     nlohmann::json              WebContext::decode_json() const
     {
@@ -69,6 +86,12 @@ namespace yq {
                 return std::string();
             return web_decode(std::string_view(eq+1, b.end()));
         });
+    }
+
+    bool    WebContext::is_mobile() const 
+    { 
+        // TODO
+        return false; 
     }
 
     void    WebContext::redirect(std::string_view sv, bool permanent)

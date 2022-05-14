@@ -382,6 +382,27 @@ namespace yq {
             h << "<a href=\"/dev/image?id=" << v.data.id << "\">" << v.data.id << "</a>";
             return h;
         }
+
+        WebHtml&    operator<<(WebHtml&h, SizeDesc sz)
+        {
+            switch(sz){
+            case SizeDesc::Original:
+                h << "original";
+                break;
+            case SizeDesc::Large:
+                h << "large";
+                break;
+            case SizeDesc::Medium:
+                h << "medium";
+                break;
+            case SizeDesc::Small:
+            default:
+                h << "small";
+                break;
+            }
+            return h;
+        }
+
         
         WebHtml&    operator<<(WebHtml& h, const Thumbnail& t)
         {
@@ -394,7 +415,7 @@ namespace yq {
                 h << "&size=" << t.size.key();
             h << "\" alt=\"";
             html_escape_write(h, n);
-            h << "'\" />";
+            h << "'\" class=\"" << t.size << "\"/>";
             return h;
         }
 

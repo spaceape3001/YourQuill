@@ -24,6 +24,7 @@
 #include <yq/app/DelayInit.hpp>
 #include <yq/bit/Copyright.hpp>
 #include <yq/collection/c_utils.hpp>
+#include <yq/db/HtmlLayout.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
@@ -82,45 +83,160 @@ namespace {
     void    page_admin_categories(WebHtml& h)
     {
         h.title() << "Categories for [" << html_escape(wksp::name()) << "]";
+
         h << "<p><div class=\"explain\">"
           << "Categories are used to group classes and fields into order for display purposes."
           << "</div>\n";
-        h << "TODO (CATEGORIES)";
+
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, cdb::all_categories(Sorted::YES), 
+                [&](Category c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Category c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/category?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
+        }
     }
 
     void    page_admin_classes(WebHtml& h)
     {
         h.title() << "Classes for [" << html_escape(wksp::name()) << "]";
+
         h << "<p><div class=\"explain\">"
           << "Classes declare the atom classifications that are to be tracked in the cache database."
           << "</div>\n";
-        h << "TODO (CLASSES)";
+
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, cdb::all_classes(Sorted::YES), 
+                [&](Class c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Class c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
+        }
+
     }
 
     void    page_admin_fields(WebHtml& h)
     {
         h.title() << "Fields for [" << html_escape(wksp::name()) << "]";
+
         h << "<p><div class=\"explain\">"
           << "Fields declare the atom properties that are to be tracked in the cache database."
           << "</div>\n";
-        h << "TODO (FIELDS)";
+
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, cdb::all_fields(Sorted::YES), 
+                [&](Field c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Field c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
+        }
     }
 
     void    page_admin_tags(WebHtml& h)
     {
         h.title() << "Tags for [" << html_escape(wksp::name()) << "]";
+
         h << "<p><div class=\"explain\">"
           << "Tags can annotate leafs, classes, fields, atoms, and more with a specific trait."
           << "</div>\n";
-        h << "TODO (TAGS)";
+
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, cdb::all_tags(Sorted::YES), 
+                [&](Tag c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Tag c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/tag?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
+        }
+
     }
 
     void    page_admin_users(WebHtml&h)
     {
         h.title() << "Users for [" << html_escape(wksp::name()) << "]";
-        // might have some characteristics?
-        h << "TODO (USERS)";
-        dev_table(h, cdb::all_users(Sorted::YES));  // STUB
+        
+        
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, cdb::all_users(Sorted::YES), 
+                [&](User c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](User c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/user?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
+        }
     }
 
     json    page_api_workspace(WebContext&ctx)

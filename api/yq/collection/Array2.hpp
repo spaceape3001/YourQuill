@@ -66,9 +66,9 @@ namespace yq {
         
         void        append_rows(int cnt) ;
         
-        const     T*  data() const { return m_data.data(); }
+        const T*    data() const { return m_data.data(); }
         T*          data()  { return m_data.data(); }
-        size_t          bytes() const { return m_data.size() * sizeof(T); }
+        size_t      bytes() const { return m_data.size() * sizeof(T); }
 
         
     protected:
@@ -199,28 +199,4 @@ namespace yq {
     {
         return r * m_cols + c;
     }
-
-    /*! \brief Makes an array with data wrapping on new columns
-    */
-    template <typename T>
-    Array2<T>   col_array_cols(const std::vector<T>& data, int cols)
-    {
-        Array2<T>   ret;
-        if(cols < 1)
-            cols    = 1;
-        int         rows    = (data.size() + cols - 1) / cols;
-        if(rows < 1)
-            rows    = 1;
-        ret.resize(rows, cols);
-        for(int i=0;i<cols;++i)
-            for(int j=0;j<rows;++j)
-        {
-            size_t  n   = (size_t) i * (size_t) rows + (size_t) j;
-            if(n >= data.size())
-                continue;
-            ret(j,i)   = data[n];
-        }
-        return ret;
-    }
-
 }

@@ -7,6 +7,7 @@
 #pragma once
 
 #include <yq/db/Html.hpp>
+#include <yq/enum/SizeDesc.hpp>
 
 namespace yq {
     struct Image;
@@ -18,6 +19,7 @@ namespace yq {
         WebHtml&    operator<<(WebHtml&, Dev<Image>);
         WebHtml&    operator<<(WebHtml&, DevID<Image>);
         WebHtml&    operator<<(WebHtml&, const Thumbnail&);
+        WebHtml&    operator<<(WebHtml&, SizeDesc);
         void        dev_table(WebHtml&, const std::vector<Image>&);
     }
 }

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <yq/collection/Array2.hpp>
 #include <yq/enum/SizeDesc.hpp>
 #include <yq/enum/Submit.hpp>
 #include <yq/enum/Reset.hpp>
@@ -247,8 +248,48 @@ namespace yq {
         
         WebHtml&    operator<<(WebHtml&, const Icon<std::string>&);
        
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-       //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        template <typename T>
+        struct LinkKey {
+            T       data;
+        };
+        
+        template <typename T>
+        LinkKey<T>    lkey(T d)
+        {
+            return LinkKey<T>{d};
+        }
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        template <typename T>
+        struct LinkLabel {
+            T       data;
+        };
+        
+        template <typename T>
+        LinkLabel<T>    llabel(T d)
+        {
+            return LinkLabel<T>{d};
+        }
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        template <typename T>
+        struct LinkThumb {
+            T       data;
+        };
+        
+        template <typename T>
+        LinkThumb<T>    lthumb(T d)
+        {
+            return LinkThumb<T>{d};
+        }
+        
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         
         struct MarkdownText {
             std::string_view    data;
@@ -263,6 +304,9 @@ namespace yq {
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         
+        
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
         template <typename T>
         struct Plural {
             T       data;
@@ -274,6 +318,19 @@ namespace yq {
             return Plural<T>{ d };
         }
         
+
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        template <typename T>
+        struct Thumb {
+            T       data;
+        };
+        
+        template <typename T>
+        Thumb<T>    thumb(T d)
+        {
+            return Thumb<T>{d};
+        }
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -556,8 +556,14 @@ namespace yq {
         
         std::string             label(Atom a)
         {
-            static thread_local SQ    s("SELECT ifnull(name,k) FROM Atoms WHERE id=?");
-            return s.str(a.id);
+            std::string s   = name(a);
+            if(s.empty())
+                s   = key(a);
+            return s;
+        
+            //  temporary, fix once able to research
+            //static thread_local SQ    s("SELECT ifnull(name,k) FROM Atoms WHERE id=?");
+            //return s.str(a.id);
         }
         
         
@@ -1575,8 +1581,13 @@ namespace yq {
         
         std::string             label(Class c)
         {
-            static thread_local SQ    s("SELECT ifnull(name,k) FROM Classes WHERE id=?");
-            return s.str(c.id);
+            std::string s   = name(c);
+            if(s.empty())
+                s   = key(c);
+            return s;
+
+            //static thread_local SQ    s("SELECT ifnull(name,k) FROM Classes WHERE id=?");
+            //return s.str(c.id);
         }
 
 
@@ -2054,7 +2065,7 @@ namespace yq {
             h << form_start(url, v.force_inspect);
             return h;
         }
-        
+
         WebHtml&    operator<<(WebHtml&h, const Plural<Class>& v)
         {
             Thumbnail th = cdb::thumbnail(cdb::icon(v.data), h.context().session.icon_size);
@@ -2603,8 +2614,13 @@ namespace yq {
         
         std::string             label(Field f)
         {
-            static thread_local SQ    s("SELECT coalesce(name,ck,k) FROM Fields WHERE id=?");
-            return s.str(f.id);
+            std::string s = name(f);
+            if(s.empty())
+                s       = key(f);
+            return s;
+
+            //static thread_local SQ    s("SELECT coalesce(name,ck,k) FROM Fields WHERE id=?");
+            //return s.str(f.id);
         }
 
         Field::SharedData            merged(Field f, cdb_options_t opts)
