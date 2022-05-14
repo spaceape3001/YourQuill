@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <yq/text/text_utils.hpp>
+
 namespace yq {
     StringViewMultiMap     parse_cookie(std::string_view cs)
     {
@@ -128,5 +130,25 @@ namespace yq {
         }
         return ret;
     }
+
+    QueryStripped           stripped_query(std::string_view key, std::string_view query, bool first)
+    {
+        QueryStripped   ret;
+        ret.rest.reserve(query.size());
+        
+        vsplit(query, '&', [&](std::string_view b){
+            const char* eq  = strnchr(b, '=');
+            if(eq && is_similar(std::string_view(b.data(), eq), key)){
+                if(ret.value.empty() || !first)
+                    ret.value   = web_decode(std::string_view(eq+1, b.end()));
+            } else {
+                if(!ret.rest.empty())
+                    ret.rest += '&';
+                ret.rest += b;
+            }
+        });
+        return ret;
     }
+    
+}
 

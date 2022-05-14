@@ -10,6 +10,7 @@
 //#include "WebSession.hpp"
 #include <asio/ip/address.hpp>
 #include <yq/collection/MultiMap.hpp>
+#include <yq/enum/DataRole.hpp>
 #include <yq/enum/SizeDesc.hpp>
 #include <yq/net/Http.hpp>
 #include <yq/net/Url.hpp>
@@ -40,7 +41,9 @@ namespace yq {
         bool                inspect_submit  = false;
         bool                admin           = false;
     };
-
+    
+    struct QueryStripped;
+    
     
     struct WebContext  {
         enum : uint64_t {
@@ -148,10 +151,14 @@ namespace yq {
         //! Converts the "body" to json
         nlohmann::json                  decode_json() const;
         
+        const Root*                     def_root(DataRole) const;
+        
         
         //! Decodes the first query parameter found by the given name (ignoring the rest)
         std::string                     find_query(std::string_view) const;
         std::string                     find_query(std::initializer_list<std::string_view>) const;
+        
+        QueryStripped                   strip_query(std::string_view k, bool first=false) const;
         
         virtual void                    tx_header(std::string_view k, std::string_view v) = 0;
 
@@ -174,4 +181,5 @@ namespace yq {
         WebContext(asio::io_context& _io_ctx);
         ~WebContext();
     };
+
 }

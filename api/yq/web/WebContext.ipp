@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <yq/wksp/Workspace.hpp>
+
 namespace yq {
     WebContext::WebContext(asio::io_context& _io_ctx) :io_ctx(_io_ctx)
     {
@@ -35,6 +37,14 @@ namespace yq {
     {
         return parse_parameters(url.query);
     }
+
+    const Root*         WebContext::def_root(DataRole dr) const
+    {
+        if(session.def_root)
+            return session.def_root;
+        return wksp::root_reads(dr).value(0, nullptr);
+    }
+    
 
     std::string         WebContext::find_query(std::string_view k) const
     {
@@ -73,5 +83,10 @@ namespace yq {
         }
         
         tx_header("Location", sv);
+    }
+
+    QueryStripped       WebContext::strip_query(std::string_view k, bool first) const
+    {
+        return stripped_query(k, url.query, first);
     }
 }

@@ -39,6 +39,7 @@
 #include <yq/io/file_utils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>
+#include <yq/web/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/wksp/Workspace.hpp>
@@ -2706,6 +2707,68 @@ namespace yq {
             }
             
             h << "<a href=\"/dev/root?id=" << v.data->id << "\">" << v.data->id << "</a>";
+            return h;
+        }
+        
+
+        WebHtml&    operator<<(WebHtml&h, const ControlRoot&v)
+        {
+            auto& ctx   = h.context();
+            
+            auto qr = ctx.strip_query("root");
+            const Root* rt  = yq::arg::root(qr.value);
+            
+            Url newurl      = copy(ctx.url);
+            newurl.query    = qr.rest;
+            
+            h << "<table align=\"right\" class=\"roots\">\n";
+            h << "<tr><td class=\"roots\">";
+            if(rt)
+                h << "<a href=\"" << newurl << "\">";
+            h << "(Fused)";
+            if(rt)
+                h << "</a>";
+            h << "</td></tr><tr><td class=\"roots\"><hr width=\"10%\"></td></tr>\n";
+            
+            for(const Root* r : wksp::roots()){
+                newurl.query    = qr.rest;
+                if(newurl.query.empty())
+                    newurl.query   = "?root=";
+                else
+                    newurl.query  += "&root=";
+                newurl.query += r->key;
+                h << "<tr><td class=\"roots\">";
+                if(r != rt)
+                    h << "<a href=\"" << newurl << "\">";
+                h << r -> name;
+                if(r != rt)
+                    h << "</a>";
+                h  << "</td></tr>\n";
+            }
+            h << "</table>\n";
+            return h;
+        }
+        
+        WebHtml&    operator<<(WebHtml&h, const IRoot&v)
+        {
+            const Root* re = v.root;
+            if(!re)
+                re  = h.context().def_root(v.role);
+            if(!v.msg.empty()){
+                html_escape_write(h, v.msg);
+                h << "<br>";
+            }
+                
+            for(const Root* rt : wksp::roots()){
+                h << "<input type=\"radio\" name=\"root\" id=\"" << rt->key << "\" value=\"" << rt->id 
+                    << "\"><label for=\"" << rt->key << "\">";
+                if(rt == re)
+                    h << "<b><u>";
+                h << "[" << rt->key << "] " << rt->name;
+                if(rt == re)
+                    h << "</u></b>";
+                h  << "</label><br>\n";
+            }
             return h;
         }
 
