@@ -18,7 +18,7 @@
 // #include <yq/text/KV.hpp>
 #include <yq/type/ByteArray.hpp>
 //#include <yq/web/HttpHeader.hpp>
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 #include <time.h>
 
 namespace asio {
@@ -49,6 +49,9 @@ namespace yq {
         enum : uint64_t {
             LOCAL           = 1ULL << 0
         };
+        
+        //std::optional<bool>             auto_edit;
+        
         
         //std::string_view                cookie_magic;
         
@@ -92,6 +95,21 @@ namespace yq {
         //! Headers received
         StringViewMultiMap              rx_headers;
         
+        //! Json on post (after decoding)
+        nlohmann::json                  rx_json;
+        
+        //! Post Parameter map (after decoding...)
+        StringMultiMap                  rx_post;
+        
+        //! Post Parameter map (no-decoding...)
+        StringViewMultiMap              rx_post_raw;
+        
+        //! Query Parameter map (after decoding...)
+        StringMultiMap                  rx_query;
+
+        //! Query Parameter map (no decoding...)
+        StringViewMultiMap              rx_query_raw;
+
         //! Buffers of the received data (don't TOUCH)
         //std::vector<HttpDataPtr>        rx_buffers;
 
@@ -146,27 +164,24 @@ namespace yq {
         
         unsigned int                    columns() const;
 
-        //! Decodes post parameters
-        StringViewMultiMap              decode_post() const;
+        //! Decodes body to post parameters
+        void                            decode_post();
         
-        //! Decodes ALL queries
-        StringViewMultiMap              decode_query() const;
+        //! Decodes the query
+        void                            decode_query();
         
-        //! Converts the "body" to json
-        nlohmann::json                  decode_json() const;
+        //! Decodes body to json
+        void                            decode_json();
         
         const Root*                     def_root(DataRole) const;
         
+        bool                            edit_now();
         
         //! Decodes the first query parameter found by the given name (ignoring the rest)
         std::string                     find_query(std::string_view) const;
         std::string                     find_query(std::initializer_list<std::string_view>) const;
         
-        QueryStripped                   strip_query(std::string_view k, bool first=false) const;
-        
-        virtual void                    tx_header(std::string_view k, std::string_view v) = 0;
 
-        void                            redirect(std::string_view where, bool permanent=false);
         
         //void                            tx_reset(bool resetStatus=false);
         //void                            simple_content(std::string_view);
@@ -175,6 +190,19 @@ namespace yq {
         
         bool                            is_mobile() const;
         
+        void                            redirect(std::string_view where, bool permanent=false);
+
+        void                            return_to_sender(HttpStatus hWhy=HttpStatus::SeeOther);
+        
+        std::string_view                rx_header(std::string_view) const;
+
+        QueryStripped                   strip_query(std::string_view k, bool first=false) const;
+        
+
+    //  virtuals.....
+
+        virtual void                    tx_header(std::string_view k, std::string_view v) = 0;
+
         virtual void                    set_admin(bool) = 0;
         virtual void                    set_auto_edit(bool) = 0;
         virtual void                    set_columns(unsigned int) = 0;

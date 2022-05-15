@@ -116,6 +116,7 @@ namespace yq {
 
         //  Common permutations (Qt will go away...eventually)
     using StringMap             = Map<std::string,std::string,IgCase>;
+    using StringViewMap         = Map<std::string_view,std::string_view,IgCase>;
     using StringMultiMap        = MultiMap<std::string,std::string,IgCase>;
     using StringSet             = Set<std::string,IgCase>;
     using StringViewSet         = Set<std::string_view,IgCase>;

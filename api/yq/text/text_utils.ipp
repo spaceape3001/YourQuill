@@ -304,6 +304,15 @@ namespace yq {
         return ret;
     }
 
+    std::vector<std::string>  copy(std::initializer_list<std::string_view> input)
+    {
+        std::vector<std::string>    ret;
+        ret.reserve(input.size());
+        for(std::string_view s : input)
+            ret.push_back(std::string(s));
+        return ret;
+    }
+
     size_t  count_characters(const char* s, size_t n)
     {
         size_t  ret = 0;
@@ -1953,8 +1962,9 @@ namespace yq {
             }
 
                     // accept it
-            if((c+2<end) && is_digit(c[1]) && is_digit(c[2]))
-                ret += (char)( (c[1]-'0')*10+(c[2]-'0'));
+            if((c+2<end) && is_xdigit(c[1]) && is_xdigit(c[2]))
+                ret += (char) to_hex(c+1,2).value;
+
             // else assumed malformed, march  on
             c += 2;
         }

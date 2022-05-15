@@ -335,7 +335,14 @@ namespace yq {
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
         WebHtml&    operator<<(WebHtml&, Reset);    
-        WebHtml&    operator<<(WebHtml&, Submit);    
+        WebHtml&    operator<<(WebHtml&, Submit);   
+        
+        
+        WebHtml&    operator<<(WebHtml&, const StringMap&);
+        WebHtml&    operator<<(WebHtml&, const StringViewMap&);
+        WebHtml&    operator<<(WebHtml&, const StringMultiMap&);
+        WebHtml&    operator<<(WebHtml&, const StringViewMultiMap&);
+         
     }
 }
 

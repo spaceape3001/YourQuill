@@ -19,8 +19,9 @@ namespace yq {
 
     bool                        WebContext::can_edit() const
     {
+        return true;
         //  TODO
-        return is_local();
+        //return is_local();
     }
 
     unsigned int                WebContext::columns() const
@@ -34,25 +35,33 @@ namespace yq {
     }
     
     
-    nlohmann::json              WebContext::decode_json() const
+    void                      WebContext::decode_json() 
     {
-        if(rx_body.empty())
-            return nlohmann::json();
-        return nlohmann::json::parse(rx_body.begin(), rx_body.end());
+        if((rx_content_type != ContentType()) && (rx_content_type != ContentType::json))
+            return ;
+        if(!rx_json && !rx_body.empty())
+            rx_json = nlohmann::json::parse(rx_body.begin(), rx_body.end());
     }
 
 
     //! Decodes post parameters
-    StringViewMultiMap          WebContext::decode_post() const
+    void                        WebContext::decode_post() 
     {
         if((rx_content_type != ContentType()) && (rx_content_type != ContentType::form))
-            return StringViewMultiMap();
-        return parse_parameters(rx_body);
+            return ;
+
+        if(rx_post.empty() && !rx_body.empty()){
+            rx_post_raw = parse_parameters(rx_body);
+            rx_post     = web_decode(rx_post_raw);
+        }
     }
 
-    StringViewMultiMap          WebContext::decode_query() const
+    void                WebContext::decode_query() 
     {
-        return parse_parameters(url.query);
+        if(rx_query.empty() && !url.query.empty()){
+            rx_query_raw    = parse_parameters(url.query);
+            rx_query        = web_decode(rx_query_raw);
+        }
     }
 
     const Root*         WebContext::def_root(DataRole dr) const
@@ -62,9 +71,33 @@ namespace yq {
         return wksp::root_reads(dr).value(0, nullptr);
     }
     
+    bool                WebContext::edit_now()
+    {
+        decode_post();
+
+        std::string     estr    = rx_post.first("edit");
+        if(estr.empty())
+            return session.auto_edit;
+        
+        if(is_similar(estr, "later")){
+            set_auto_edit(false);
+            return false;
+        }
+        
+        if(is_similar(estr, "now")){
+            set_auto_edit(true);
+            return true;
+        }
+        
+        return session.auto_edit;
+    }
 
     std::string         WebContext::find_query(std::string_view k) const
     {
+        // bypass if queried already
+        if(!rx_query.empty())
+            return rx_query.first(copy(k));
+    
         return vsplit(url.query, '&', [&](std::string_view b) -> std::string {
             const char* eq  = strnchr(b, '=');
             if(!eq)
@@ -78,6 +111,10 @@ namespace yq {
 
     std::string         WebContext::find_query(std::initializer_list<std::string_view> keys) const
     {
+        // bypass if queried already
+        if(!rx_query.empty())
+            return rx_query.first(copy(keys));
+
         return vsplit(url.query, '&', [&](std::string_view b) -> std::string {
             const char* eq  = strnchr(b, '=');
             if(!eq)
@@ -106,6 +143,17 @@ namespace yq {
         }
         
         tx_header("Location", sv);
+    }
+
+    void                WebContext::return_to_sender(HttpStatus hWhy)
+    {
+        status  = hWhy;
+        tx_header("Location", rx_header("referer"));
+    }
+    
+    std::string_view    WebContext::rx_header(std::string_view k) const
+    {
+        return rx_headers.first(k);
     }
 
     QueryStripped       WebContext::strip_query(std::string_view k, bool first) const

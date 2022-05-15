@@ -54,6 +54,12 @@ ut::suite tests = []{
         expect( UrlView("", "", "", "localhost", "", "", "", 12345) == as_host_port("localhost:12345"));
         expect( UrlView("", "", "", "localhost", "", "", "", 0) == as_host_port("localhost"));
     };
+    
+    "decode"_test = [](){
+    
+        std::string     s   = web_decode("%2Fadmin%2Ftag%2Fcreate");
+        expect( "/admin/tag/create"s == s );
+    };
 };
 
 

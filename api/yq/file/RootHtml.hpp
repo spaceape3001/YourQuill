@@ -27,6 +27,20 @@ namespace yq {
             DataRole            role;
         };
         
+        inline IRoot iroot(DataRole r) 
+        {
+            IRoot ret;
+            ret.role = r;
+            return ret;
+        }
+
+        inline IRoot iroot(const Root* rt) 
+        {
+            IRoot ret;
+            ret.root = rt;
+            return ret;
+        }
+        
         WebHtml&    operator<<(WebHtml&, const ControlRoot&);
         WebHtml&    operator<<(WebHtml&, const IRoot&);
         

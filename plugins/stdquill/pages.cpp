@@ -86,7 +86,23 @@ namespace {
 
         h << "<p><div class=\"explain\">"
           << "Categories are used to group classes and fields into order for display purposes."
-          << "</div>\n";
+          << "</div><p>\n";
+
+        if(h.context().can_edit()){
+            h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
+            Url url;
+            url.path="/admin/category/create";
+            h << html::form_start(url, true);
+            h << "Add Category:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form></table>\n";
+        }
 
         {
             auto tac = h.table();
@@ -118,7 +134,23 @@ namespace {
 
         h << "<p><div class=\"explain\">"
           << "Classes declare the atom classifications that are to be tracked in the cache database."
-          << "</div>\n";
+          << "</div><p>\n";
+
+        if(h.context().can_edit()){
+            h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
+            Url url;
+            url.path="/admin/class/create";
+            h << html::form_start(url, true);
+            h << "Add Class:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form></table>\n";
+        }
 
         {
             auto tac = h.table();
@@ -151,7 +183,23 @@ namespace {
 
         h << "<p><div class=\"explain\">"
           << "Fields declare the atom properties that are to be tracked in the cache database."
-          << "</div>\n";
+          << "</div><p>\n";
+
+        if(h.context().can_edit()){
+            h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
+            Url url;
+            url.path="/admin/field/create";
+            h << html::form_start(url, true);
+            h << "Add Field:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form></table>\n";
+        }
 
         {
             auto tac = h.table();
@@ -177,13 +225,37 @@ namespace {
         }
     }
 
+    void    page_admin_tag_create(WebContext& ctx)
+    {
+        if(!ctx.can_edit())
+            throw HttpStatus::Unauthorized;
+        
+        
+    }
+
     void    page_admin_tags(WebHtml& h)
     {
         h.title() << "Tags for [" << html_escape(wksp::name()) << "]";
 
         h << "<p><div class=\"explain\">"
           << "Tags can annotate leafs, classes, fields, atoms, and more with a specific trait."
-          << "</div>\n";
+          << "</div><p>\n";
+
+        if(h.context().can_edit()){
+            h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
+            Url url;
+            url.path="/admin/tag/create";
+            h << html::form_start(url, true);
+            h << "Add Tag:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form></table>\n";
+        }
 
         {
             auto tac = h.table();
@@ -215,6 +287,22 @@ namespace {
         h.title() << "Users for [" << html_escape(wksp::name()) << "]";
         
         
+        if(h.context().can_edit()){
+            h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
+            Url url;
+            url.path="/admin/user/create";
+            h << html::form_start(url, true);
+            h << "Add User:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Users );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form></table>\n";
+        }
+
         {
             auto tac = h.table();
             auto iz = h.context().session.icon_size;
@@ -580,38 +668,32 @@ namespace {
         h.h2("URL Query");
         {
             auto ta = h.table();
-            for(auto& i : web_decode(ctx.decode_query()))
-                h.kvrow(i.first) << i.second;
+            h << ctx.rx_query;
         }
 
         if(isPost){
             h.h2("Post Parameters");
 
-            StringViewMultiMap   postParams = ctx.decode_post();
-            std::string_view     url = postParams.first("url");
+            std::string     url = ctx.rx_post.first("url");
             if(!url.empty()){
                 h << "<form action=\"" << url << "\" method=\"post\">\n";
-                for(auto& i : postParams)
+                for(auto& i : ctx.rx_post_raw)
                     h << "<input type=\"hidden\" name=\"" << i.first << "\" id=\"" << i.first << "\" value=\"" << i.second << "\">\n";
                 h << "<input type=\"submit\" value=\"Forward\">\n"
-                  << "</form\n";
+                  << "</form>\n";
             }
             
-            auto ta = h.table();
-            for(auto& i : web_decode(postParams))
-                h.kvrow(i.first) << i.second;
+            h << ctx.rx_post;
         }
         
         h.h2("Headers");
-        {
-            auto ta = h.table();
-            for(auto& i : ctx.rx_headers)
-                h.kvrow(i.first) << i.second;
-        }
+        h << ctx.rx_headers;
         
         if(!ctx.rx_body.empty()){
             h.h2("Body");
+            h << "<pre>\n";
             h << ctx.rx_body;
+            h << "</pre>\n";
         }
     }
 

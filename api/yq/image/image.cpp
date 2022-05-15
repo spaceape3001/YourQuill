@@ -187,17 +187,20 @@ namespace yq {
         
         ByteArray           bytes(Image img, SizeDesc sz)
         {
-            switch(sz){
-            case SizeDesc::Large:
-                return bytes_large(img);
-            case SizeDesc::Medium:
-                return bytes_medium(img);
-            case SizeDesc::Small:
-                return bytes_small(img);
-            case SizeDesc::Original:
-            default:
+            if(is_raster(img)){
+                switch(sz){
+                case SizeDesc::Large:
+                    return bytes_large(img);
+                case SizeDesc::Medium:
+                    return bytes_medium(img);
+                case SizeDesc::Small:
+                    return bytes_small(img);
+                case SizeDesc::Original:
+                default:
+                    return bytes_image(img);
+                }
+            } else
                 return bytes_image(img);
-            }
         }
 
         Image               db_image(Fragment frag, bool *wasCreated)
@@ -290,20 +293,7 @@ namespace yq {
 
         ByteArray          image_bytes(Image img, SizeDesc sz)
         {
-            if(is_raster(img)){
-                switch(sz){
-                case SizeDesc::Large:
-                    return bytes_large(img);
-                case SizeDesc::Medium:
-                    return bytes_medium(img);
-                case SizeDesc::Small:
-                    return bytes_small(img);
-                case SizeDesc::Original:
-                default:
-                    return bytes_image(img);
-                }
-            } else
-                return bytes_image(img);
+            return bytes(img, sz);
         }
 
         bool                is_raster(ContentType ct)
@@ -411,8 +401,8 @@ namespace yq {
                 n           = "Thumbnail for '" + cdb::label(cdb::document(t.img)) + "'";
             cdb::label(cdb::document(t.img));
             h << "<img src=\"/thumbnail?id=" << t.img.id;
-            if(t.size != SizeDesc())
-                h << "&size=" << t.size.key();
+            //if(t.size != SizeDesc())
+                //h << "&size=" << t.size.key();
             h << "\" alt=\"";
             html_escape_write(h, n);
             h << "'\" class=\"" << t.size << "\"/>";

@@ -198,5 +198,47 @@ namespace yq {
             h << ">";
             return h;
         }
+
+        WebHtml&    operator<<(WebHtml&h, const StringMap&v)
+        {
+            auto ta = h.table();
+            for(auto& i : v){
+                auto kv = h.kvrow(i.first);
+                html_escape_write(h, i.second);
+            }
+            return h;
+        }
+        
+        WebHtml&    operator<<(WebHtml&h, const StringViewMap&v)
+        {
+            auto ta = h.table();
+            for(auto& i : v){
+                auto kv = h.kvrow(i.first);
+                html_escape_write(h, i.second);
+            }
+            return h;
+        }
+
+        WebHtml&    operator<<(WebHtml&h, const StringMultiMap&v)
+        {
+            auto ta = h.table();
+            for(auto& i : v){
+                auto kv = h.kvrow(i.first);
+                html_escape_write(h, i.second);
+            }
+            return h;
+        }
+        
+        WebHtml&    operator<<(WebHtml&h, const StringViewMultiMap&v)
+        {
+            auto ta = h.table();
+            for(auto& i : v){
+                auto kv = h.kvrow(i.first);
+                html_escape_write(h, i.second);
+            }
+            return h;
+        }
+        
+
     }
 }

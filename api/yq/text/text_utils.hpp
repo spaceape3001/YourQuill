@@ -104,6 +104,8 @@ namespace yq {
     */
     std::vector<std::string>  copy(const std::vector<std::string_view>&);
     
+    std::vector<std::string>  copy(std::initializer_list<std::string_view>);
+
     /* !\brief Counts the number of charcters
     */
     size_t  count_characters(const char* s, size_t n);
