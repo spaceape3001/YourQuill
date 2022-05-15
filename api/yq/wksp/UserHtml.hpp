@@ -16,6 +16,7 @@ namespace yq {
         WebHtml&    operator<<(WebHtml&, DevID<User>);
         void        admin_table(WebHtml&, const std::vector<User>&);
         void        dev_table(WebHtml&, const std::vector<User>&);
+        void        new_user_control(WebHtml&, std::string_view npath);
     }
 }
 

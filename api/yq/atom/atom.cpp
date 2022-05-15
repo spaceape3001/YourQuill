@@ -40,6 +40,7 @@
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/Root.hpp>
+#include <yq/file/RootHtml.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>
 #include <yq/io/file_utils.hpp>
@@ -2118,6 +2119,22 @@ namespace yq {
                     << dev(i.doc) << "</td><td>" << i.brief << "</td></tr>\n";
             }
         }
+
+        void        new_class_control(WebHtml&h, std::string_view npath)
+        {
+            Url url;
+            url.path=copy(npath);
+            h << html::form_start(url, true);
+            h << "Add Class:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form>\n";
+        }
         
     }
 
@@ -2938,6 +2955,26 @@ namespace yq {
                     << i.key <<"</td><td>" << i.name << "</td><td>"
                     << i.brief <<"</td></tr>\n";
             }
+        }
+
+        void        new_field_control(WebHtml&h, std::string_view npath, Class c)
+        {
+            Url url;
+            url.path=copy(npath);
+            h << html::form_start(url, true);
+            h << "Add Field:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            if(c){
+                h << ihidden("class", to_string(c.id));
+            }
+            
+            h << "</form>\n";
         }
     }
 

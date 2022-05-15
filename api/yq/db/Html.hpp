@@ -163,6 +163,11 @@ namespace yq {
         struct IHidden {
             std::string key, value;
         };
+        
+        inline IHidden ihidden(std::string_view k, std::string_view v)
+        {
+            return IHidden(std::string(k), std::string(v));
+        }
 
         WebHtml&    operator<<(WebHtml&, const IHidden&);
 

@@ -28,6 +28,7 @@
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/Root.hpp>
+#include <yq/file/RootHtml.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/io/Strings.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
@@ -894,6 +895,23 @@ namespace yq {
                     <<  i.name << "</td><td>" << dev(i.doc) << "</td><td>" << i.brief << "</td></tr>\n";
             }
         }    
+
+        void        new_user_control(WebHtml&h, std::string_view npath)
+        {
+            Url url;
+            url.path=copy(npath);
+            h << html::form_start(url, true);
+            h << "Add User:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Users );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form>\n";
+        }
+
     }
 
 ////////////////////////////////////////////////////////////////////////////////

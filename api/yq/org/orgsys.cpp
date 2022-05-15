@@ -27,6 +27,7 @@
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/Root.hpp>
+#include <yq/file/RootHtml.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>
 #include <yq/io/file_utils.hpp>
@@ -663,6 +664,21 @@ namespace yq {
             }
         }
 
+        void        new_category_control(WebHtml&h, std::string_view npath)
+        {
+            Url url;
+            url.path=copy(npath);
+            h << html::form_start(url, true);
+            h << "Add Category:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form>\n";
+        }
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1403,6 +1419,23 @@ namespace yq {
                     << "</td><td>" << dev(i.doc) << "</td><td>" << /* dev(cdb::leaf(t)) << */ "</td><td>" << i.brief << "</td></tr>\n";
             }
         }
+
+        void        new_tag_control(WebHtml&h, std::string_view npath)
+        {
+            Url url;
+            url.path=copy(npath);
+            h << html::form_start(url, false);
+            h << "Add Tag:<br>";
+            h << ikey();
+            h << "<br><hr width=\"10%\">\n";
+            h << iroot( DataRole::Config );
+            h << "<hr width=\"10%\">\n";
+            h << iedit();
+            h << "<hr width=\"10%\">\n";
+            h << Submit(Submit::Create);
+            h << "</form>\n";
+        }
+        
 
     }
 

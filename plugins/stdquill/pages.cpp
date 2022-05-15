@@ -91,21 +91,35 @@ namespace {
 
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            Url url;
-            url.path="/admin/category/create";
-            h << html::form_start(url, true);
-            h << "Add Category:<br>";
-            h << ikey();
-            h << "<br><hr width=\"10%\">\n";
-            h << iroot( DataRole::Config );
-            h << "<hr width=\"10%\">\n";
-            h << iedit();
-            h << "<hr width=\"10%\">\n";
-            h << Submit(Submit::Create);
-            h << "</form></table>\n";
+            new_category_control(h, "/admin/categories/create");
+            h << "</table>\n";
         }
 
         admin_table(h, cdb::all_categories(Sorted::YES));
+    }
+    
+    void    page_admin_categories_create(WebContext& ctx)
+    {
+    }
+    
+    void    page_admin_category(WebHtml& h)
+    {
+        Category    c = category(h);
+        if(!c)
+            throw HttpStatus::BadArgument;
+        
+        h.title() << "Category " << key(c);
+        h << "TODO Category " << label(c);
+    }
+    
+    void    page_admin_class(WebHtml& h)
+    {
+        Class c = class_(h);
+        if(!c)
+            throw HttpStatus::BadArgument;
+        
+        h.title() << "Class " << key(c);
+        h << "TODO Class " << label(c);
     }
 
     void    page_admin_classes(WebHtml& h)
@@ -118,21 +132,25 @@ namespace {
 
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            Url url;
-            url.path="/admin/class/create";
-            h << html::form_start(url, true);
-            h << "Add Class:<br>";
-            h << ikey();
-            h << "<br><hr width=\"10%\">\n";
-            h << iroot( DataRole::Config );
-            h << "<hr width=\"10%\">\n";
-            h << iedit();
-            h << "<hr width=\"10%\">\n";
-            h << Submit(Submit::Create);
-            h << "</form></table>\n";
+            new_class_control(h, "/admin/class/create");
+            h << "</table>\n";
         }
         
         admin_table(h, cdb::all_classes(Sorted::YES));
+    }
+    
+    void    page_admin_classes_create(WebContext& ctx)
+    {
+    }
+    
+    void    page_admin_field(WebHtml&h)
+    {
+        Field f = field(h);
+        if(!f)
+            throw HttpStatus::BadArgument;
+        
+        h.title() << "Field " << key(f);
+        h << "TODO Field " << label(f);
     }
 
     void    page_admin_fields(WebHtml& h)
@@ -145,21 +163,15 @@ namespace {
 
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            Url url;
-            url.path="/admin/field/create";
-            h << html::form_start(url, true);
-            h << "Add Field:<br>";
-            h << ikey();
-            h << "<br><hr width=\"10%\">\n";
-            h << iroot( DataRole::Config );
-            h << "<hr width=\"10%\">\n";
-            h << iedit();
-            h << "<hr width=\"10%\">\n";
-            h << Submit(Submit::Create);
-            h << "</form></table>\n";
+            new_field_control(h, "/admin/field/create");
+            h << "</table>\n";
         }
 
         admin_table(h,  cdb::all_fields(Sorted::YES));
+    }
+
+    void    page_admin_fields_create(WebContext& ctx)
+    {
     }
 
     void    page_admin_tags(WebHtml& h)
@@ -172,18 +184,8 @@ namespace {
 
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            Url url;
-            url.path="/admin/tags/create";
-            h << html::form_start(url, false);
-            h << "Add Tag:<br>";
-            h << ikey();
-            h << "<br><hr width=\"10%\">\n";
-            h << iroot( DataRole::Config );
-            h << "<hr width=\"10%\">\n";
-            h << iedit();
-            h << "<hr width=\"10%\">\n";
-            h << Submit(Submit::Create);
-            h << "</form></table>\n";
+            new_tag_control(h, "/admin/tags/create");
+            h << "</table>\n";
         }
 
         admin_table(h, cdb::all_tags(Sorted::YES));
@@ -233,6 +235,16 @@ namespace {
         }
     }
 
+    void    page_admin_user(WebHtml&h)
+    {
+        User    u   = user(h);
+        if(!u)
+            throw HttpStatus::BadArgument;
+        
+        h.title() << "User: " << key(u);
+        h << "TODO (User " << name(u) << ")";
+    }
+
     void    page_admin_users(WebHtml&h)
     {
         h.title() << "Users for [" << html_escape(wksp::name()) << "]";
@@ -240,21 +252,16 @@ namespace {
         
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            Url url;
-            url.path="/admin/user/create";
-            h << html::form_start(url, true);
-            h << "Add User:<br>";
-            h << ikey();
-            h << "<br><hr width=\"10%\">\n";
-            h << iroot( DataRole::Users );
-            h << "<hr width=\"10%\">\n";
-            h << iedit();
-            h << "<hr width=\"10%\">\n";
-            h << Submit(Submit::Create);
-            h << "</form></table>\n";
+            new_user_control(h, "/admin/user/create");
+            h << "</table>\n";
         }
         
         admin_table(h, cdb::all_users(Sorted::YES));
+    }
+    
+    void    page_admin_users_create(WebContext& ctx)
+    {
+    
     }
 
     json    page_api_workspace(WebContext&ctx)
@@ -1330,8 +1337,16 @@ namespace {
             reg_webpage<page_admin_tags>("/admin/tags").label("Tags"),
             reg_webpage<page_admin_users>("/admin/users").label("Users")
         });
-        reg_webpage<page_admin_tag>("/admin/tag");
+        reg_webpage<page_admin_categories_create>(hPost, "/admin/categories/create");
+        reg_webpage<page_admin_category>("/admin/category").argument("id", "Category ID");
+        reg_webpage<page_admin_class>("/admin/class").argument("id", "Class ID");
+        reg_webpage<page_admin_classes_create>(hPost, "/admin/classes/create");
+        reg_webpage<page_admin_field>("/admin/field").argument("id", "Field ID");
+        reg_webpage<page_admin_fields_create>(hPost, "/admin/fields/create");
+        reg_webpage<page_admin_tag>("/admin/tag").argument("id", "Tag ID");;
         reg_webpage<page_admin_tags_create>(hPost, "/admin/tags/create");
+        reg_webpage<page_admin_user>("/admin/user").argument("id", "User ID");
+        reg_webpage<page_admin_users_create>(hPost, "/admin/users/create");
         reg_webpage<page_api_workspace>("/api/workspace"sv); 
         reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");
         reg_webpage<page_atoms>("/atoms");
@@ -1459,6 +1474,7 @@ namespace {
         reg_webpage("/img/yquill.svg", wksp::shared("www/img/yquill.svg"sv));   // precaching
         reg_webpage("/js/**", wksp::shared("www/js/jquery.js"sv));
         reg_webpage("/js/jquery.js", wksp::shared("www/js/jquery.js"sv));      // precaching
+        reg_webpage<page_leaf>("/leaf").argument("id", "Leaf ID");
         reg_webimage("/logo", wksp::shared("www/img/yquill.svg"sv), Folder(), ".logo").alt_path("/favicon.ico");
         reg_webpage<page_thumbnail>("/thumbnail").argument("id", "ID for the image");
         reg_webpage<page_user>("/user");

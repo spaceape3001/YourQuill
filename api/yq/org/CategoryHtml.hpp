@@ -17,6 +17,7 @@ namespace yq {
         WebHtml&    operator<<(WebHtml&, DevID<Category>);
         void        admin_table(WebHtml&, const std::vector<Category>&);
         void        dev_table(WebHtml&, const std::vector<Category>&);
+        void        new_category_control(WebHtml&, std::string_view npath);
     }
 }
 
