@@ -8,6 +8,7 @@
 #include "AtomArg.hpp"
 #include "AtomCDB.hpp"
 #include "AtomHtml.hpp"
+#include "AtomPost.hpp"
 
 #include "Class.hpp"
 #include "ClassArg.hpp"
@@ -15,6 +16,7 @@
 #include "ClassData.hpp"
 #include "ClassFile.hpp"
 #include "ClassHtml.hpp"
+#include "ClassPost.hpp"
 
 #include "Field.hpp"
 #include "FieldArg.hpp"
@@ -22,6 +24,7 @@
 #include "FieldData.hpp"
 #include "FieldFile.hpp"
 #include "FieldHtml.hpp"
+#include "FieldPost.hpp"
 
 #include "Value.hpp"
 #include "ValueCDB.hpp"
@@ -722,6 +725,43 @@ namespace yq {
                 auto i = cdb::info(a);
                 h << "<tr><td>" << dev_id(a) << "</td><td>" << i.key << "</td><td>" << i.brief << "</td></tr>\n";
             }
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Atom atom(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("atom");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::atom_id(k);
+            }
+            return Atom();
+        }
+        
+        Atom atom(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::atom_id(arg_string);
+        }
+        
+        Atom atom(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::atom_id(arg_string);
         }
     }
 
@@ -2147,6 +2187,43 @@ namespace yq {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Class class_(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("class");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::class_id(k);
+            }
+            return Class();
+        }
+        
+        Class class_(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::class_id(arg_string);
+        }
+        
+        Class class_(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::class_id(arg_string);
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
 //  (ATOM) FIELD DEFINITIONS
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -2983,6 +3060,43 @@ namespace yq {
             }
             
             h << "</form>\n";
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Field field(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("field");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::field_id(k);
+            }
+            return Field();
+        }
+        
+        Field field(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::field_id(arg_string);
+        }
+        
+        Field field(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::field_id(arg_string);
         }
     }
 

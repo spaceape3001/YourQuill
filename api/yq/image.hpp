@@ -10,3 +10,4 @@
 #include <yq/image/ImageArg.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>
+#include <yq/image/ImagePost.hpp>

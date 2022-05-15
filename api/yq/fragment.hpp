@@ -11,3 +11,4 @@
 #include <yq/file/FragmentArg.hpp>
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/FragmentHtml.hpp>
+#include <yq/file/FragmentPost.hpp>

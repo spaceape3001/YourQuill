@@ -12,3 +12,4 @@
 #include <yq/org/TagData.hpp>
 #include <yq/org/TagFile.hpp>
 #include <yq/org/TagHtml.hpp>
+#include <yq/org/TagPost.hpp>

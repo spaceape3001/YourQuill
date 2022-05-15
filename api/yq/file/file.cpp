@@ -8,21 +8,25 @@
 #include "DirectoryArg.hpp"
 #include "DirectoryCDB.hpp"
 #include "DirectoryHtml.hpp"
+#include "DirectoryPost.hpp"
 
 #include "Document.hpp"
 #include "DocumentArg.hpp"
 #include "DocumentCDB.hpp"
 #include "DocumentHtml.hpp"
+#include "DocumentPost.hpp"
 
 #include "Folder.hpp"
 #include "FolderArg.hpp"
 #include "FolderCDB.hpp"
 #include "FolderHtml.hpp"
+#include "FolderPost.hpp"
 
 #include "Fragment.hpp"
 #include "FragmentArg.hpp"
 #include "FragmentCDB.hpp"
 #include "FragmentHtml.hpp"
+#include "FragmentPost.hpp"
 
 #include "Root.hpp"
 #include "RootArg.hpp"
@@ -569,6 +573,43 @@ namespace yq {
             }
         }
 
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Directory directory(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("directory");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::directory_id(k);
+            }
+            return Directory();
+        }
+        
+        Directory directory(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::directory_id(arg_string);
+        }
+        
+        Directory directory(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::directory_id(arg_string);
+        }
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1205,6 +1246,43 @@ namespace yq {
                 h << "<tr><td>" << dev_id(a)  << "</td><td>" << cdb::fragments_count(a) 
                   << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" << i.suffix << "</td></tr>\n";
             }
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Document document(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("document");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::document_id(k);
+            }
+            return Document();
+        }
+        
+        Document document(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::document_id(arg_string);
+        }
+        
+        Document document(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::document_id(arg_string);
         }
     }
 
@@ -1906,6 +1984,44 @@ namespace yq {
         }
     }
 
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Folder folder(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("folder");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::folder_id(k);
+            }
+            return Folder();
+        }
+        
+        Folder folder(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::folder_id(arg_string);
+        }
+        
+        Folder folder(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::folder_id(arg_string);
+        }
+    }
+    
 ////////////////////////////////////////////////////////////////////////////////
 //  FRAGMENT
 ////////////////////////////////////////////////////////////////////////////////
@@ -2430,6 +2546,43 @@ namespace yq {
             }
         }
 
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Fragment fragment(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("fragment");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::fragment_id(k);
+            }
+            return Fragment();
+        }
+        
+        Fragment fragment(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::fragment_id(arg_string);
+        }
+        
+        Fragment fragment(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::fragment_id(arg_string);
+        }
     }
 
 ////////////////////////////////////////////////////////////////////////////////

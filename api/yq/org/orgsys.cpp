@@ -4,16 +4,21 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "Category.hpp"
 #include "CategoryArg.hpp"
 #include "CategoryCDB.hpp"
 #include "CategoryData.hpp"
 #include "CategoryFile.hpp"
 #include "CategoryHtml.hpp"
+#include "CategoryPost.hpp"
+
+#include "Tag.hpp"
 #include "TagArg.hpp"
 #include "TagCDB.hpp"
 #include "TagData.hpp"
 #include "TagFile.hpp"
 #include "TagHtml.hpp"
+#include "TagPost.hpp"
 
 #include <yq/atom/Class.hpp>
 #include <yq/atom/Field.hpp>
@@ -433,6 +438,12 @@ namespace yq {
             
                 // prelude, we're first....
             Category::SharedFile td  = write(t, rt, opts);
+            if(!td){
+                yWarning() << "Unable to create category file!";
+                return t;
+            }
+                
+            
             td -> name  = k;
             td -> save();
             return t;
@@ -579,6 +590,7 @@ namespace yq {
                 return Category::SharedFile();
             if(rt && !rt->is_writable(DataRole::Config))
                 return Category::SharedFile();
+                
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Config);
             if(f)
                 return category_doc(f, opts | ALLOW_EMPTY);
@@ -682,6 +694,43 @@ namespace yq {
             h << "<hr width=\"10%\">\n";
             h << Submit(Submit::Create);
             h << "</form>\n";
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Category category(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("category");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::category_id(k);
+            }
+            return Category();
+        }
+        
+        Category category(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::category_id(arg_string);
+        }
+        
+        Category category(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::category_id(arg_string);
         }
     }
 
@@ -1441,6 +1490,43 @@ namespace yq {
         }
         
 
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace post {
+
+        Tag tag(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("tag");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::tag_id(k);
+            }
+            return Tag();
+        }
+        
+        Tag tag(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::tag_id(arg_string);
+        }
+        
+        Tag tag(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::tag_id(arg_string);
+        }
     }
 
 ////////////////////////////////////////////////////////////////////////////////

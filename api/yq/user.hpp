@@ -13,3 +13,4 @@
 #include <yq/wksp/UserData.hpp>
 #include <yq/wksp/UserFile.hpp>
 #include <yq/wksp/UserHtml.hpp>
+#include <yq/wksp/UserPost.hpp>

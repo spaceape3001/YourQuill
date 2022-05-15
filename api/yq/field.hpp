@@ -12,4 +12,5 @@
 #include <yq/atom/FieldData.hpp>
 #include <yq/atom/FieldFile.hpp>
 #include <yq/atom/FieldHtml.hpp>
+#include <yq/atom/FieldPost.hpp>
 #include <yq/db/IDLock.hpp>

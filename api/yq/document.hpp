@@ -10,3 +10,4 @@
 #include <yq/file/DocumentArg.hpp>
 #include <yq/file/DocumentCDB.hpp>
 #include <yq/file/DocumentHtml.hpp>
+#include <yq/file/DocumentPost.hpp>

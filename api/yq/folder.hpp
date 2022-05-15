@@ -10,3 +10,4 @@
 #include <yq/file/FolderArg.hpp>
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/FolderHtml.hpp>
+#include <yq/file/FolderPost.hpp>

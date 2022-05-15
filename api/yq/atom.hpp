@@ -10,4 +10,5 @@
 #include <yq/atom/AtomArg.hpp>
 #include <yq/atom/AtomCDB.hpp>
 #include <yq/atom/AtomHtml.hpp>
+#include <yq/atom/AtomPost.hpp>
 #include <yq/db/IDLock.hpp>
