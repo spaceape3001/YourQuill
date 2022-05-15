@@ -238,7 +238,7 @@ namespace {
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
             Url url;
             url.path="/admin/tags/create";
-            h << html::form_start(url, true);
+            h << html::form_start(url, false);
             h << "Add Tag:<br>";
             h << ikey();
             h << "<br><hr width=\"10%\">\n";
@@ -275,6 +275,16 @@ namespace {
 
     }
 
+    void    page_admin_tag(WebHtml& h)
+    {
+        Tag     t   = arg::tag(h);
+        if(!t)
+            throw HttpStatus::BadArgument;
+            
+        h.title() << "Tag (" << key(t) << ")";
+        h << "TODO... tag " << label(t);
+    }
+
     void    page_admin_tags_create(WebContext& ctx)
     {
         if(!ctx.can_edit())
@@ -291,12 +301,9 @@ namespace {
         if(k.empty())
             throw HttpStatus::BadArgument;
         
-    yInfo() << "Trying to make tag: " << k;
         
         bool    created = false;
         Tag     t = cdb::make_tag(k, rt, 0, &created);
-
-    yInfo() << "Tag [" << k << "] id " << t.id;
         if(!t)
             throw HttpStatus::UnableToPerform;
         
@@ -1429,6 +1436,7 @@ namespace {
             reg_webpage<page_admin_tags>("/admin/tags").label("Tags"),
             reg_webpage<page_admin_users>("/admin/users").label("Users")
         });
+        reg_webpage<page_admin_tag>("/admin/tag");
         reg_webpage<page_admin_tags_create>(hPost, "/admin/tags/create");
         reg_webpage<page_api_workspace>("/api/workspace"sv); 
         reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");

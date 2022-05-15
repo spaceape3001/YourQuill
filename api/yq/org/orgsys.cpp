@@ -1002,13 +1002,9 @@ namespace yq {
             }
             
             std::string     tfn = tag_filename(k);
-yInfo() << "make_tag(" << k << ", " << rt->key << ")";            
-yInfo() << "   filename  ... " << tfn;
             Document    doc = db_document(tags_folder(), tfn);
-yInfo() << "   document ... " << doc.id << " '" << key(doc) << "'";
             bool            was = false;
             Tag         t   = db_tag(doc, &was);
-yInfo() << "   tag ... " << t.id;
             if(wasCreated)
                 *wasCreated = was;
             if(!was)

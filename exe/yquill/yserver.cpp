@@ -563,7 +563,7 @@ public:
     {
         static thread_local std::ofstream access_log(access_log_file(), std::ios_base::out | std::ios_base::app);
 
-        HttpStatus  code;
+        //HttpStatus  code;
         if(ctx->url.host.empty() && !ctx->host.empty())
             ctx->url.host    = ctx->host;
         ctx -> host = ctx -> url.host;
@@ -644,15 +644,15 @@ public:
             #ifdef NDEBUG
             catch(...)
             {
-                code    = HttpStatus::InternalError;
+                ctx->status    = HttpStatus::InternalError;
             }
             #endif
         } while(false);
         
         if(isError(ctx->status)){
-            HttpStatus code = ctx->status;
+            //HttpStatus code = ctx->status;
             ctx -> tx_content   = {};
-            ctx -> status   = code;
+            //ctx -> status   = code;
         }
         send(ctx);
         
