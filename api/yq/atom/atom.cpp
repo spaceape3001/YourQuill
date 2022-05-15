@@ -1595,8 +1595,10 @@ namespace yq {
         }
 
 
-        Class                make_class(std::string_view k, const Root* rt)
+        Class                make_class(std::string_view k, const Root* rt, cdb_options_t opts, bool *wasCreated)
         {
+            if(wasCreated)
+                *wasCreated = false;
             if(!rt)
                 rt      = wksp::root_first(DataRole::Config);
             if(!rt){
@@ -1608,11 +1610,17 @@ namespace yq {
             Document        doc = db_document(classes_folder(), cfn);
             bool            was = false;
             Class           c   = db_class(doc, &was);
+            if(wasCreated)
+                *wasCreated = was;
             if(!was)
                 return c;
                 
             if(fragments_count(doc))
                 return c;
+            Class::Lock   lk;
+            if(!(opts & DONT_LOCK))
+                lk  = Class::Lock::write(c);
+
             Class::SharedFile    td  = writable(c, rt, DONT_LOCK);
             td -> name      = k;
             td -> plural    = td->name + 's';
@@ -2124,7 +2132,7 @@ namespace yq {
         {
             Url url;
             url.path=copy(npath);
-            h << html::form_start(url, true);
+            h << html::form_start(url, false);
             h << "Add Class:<br>";
             h << ikey();
             h << "<br><hr width=\"10%\">\n";
@@ -2961,7 +2969,7 @@ namespace yq {
         {
             Url url;
             url.path=copy(npath);
-            h << html::form_start(url, true);
+            h << html::form_start(url, false);
             h << "Add Field:<br>";
             h << ikey();
             h << "<br><hr width=\"10%\">\n";

@@ -62,7 +62,7 @@ namespace yq {
         
         std::string             key(User);
         std::string             label(User);
-        User                    make_user(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0);
+        User                    make_user(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
         User::SharedData        merged(User, cdb_options_t opts=0);
         
         std::string             name(User);

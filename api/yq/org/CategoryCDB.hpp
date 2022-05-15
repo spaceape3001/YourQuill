@@ -67,6 +67,8 @@ namespace yq {
         
         std::string             label(Category);
         
+        Category                make_category(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
+        
         Category::SharedData    merged(Category, cdb_options_t opts=0);
         
         std::string             name(Category);

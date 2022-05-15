@@ -619,8 +619,10 @@ namespace yq {
             return s.str(u.id);
         }
 
-        User                    make_user(std::string_view k, const Root* rt, cdb_options_t opts)
+        User                    make_user(std::string_view k, const Root* rt, cdb_options_t opts, bool* wasCreated)
         {
+            if(wasCreated)
+                *wasCreated = false;
             if(!rt)
                 rt  = wksp::root_first(DataRole::Users);
             if(!rt){
@@ -632,6 +634,8 @@ namespace yq {
             Document    doc = db_document(users_folder(), tfn);
             bool            was = false;
             User         t   = db_user(doc, &was);
+            if(wasCreated)
+                *wasCreated = was;
             if(!was)
                 return t;
             if(fragments_count(doc))
@@ -900,7 +904,7 @@ namespace yq {
         {
             Url url;
             url.path=copy(npath);
-            h << html::form_start(url, true);
+            h << html::form_start(url, false);
             h << "Add User:<br>";
             h << ikey();
             h << "<br><hr width=\"10%\">\n";

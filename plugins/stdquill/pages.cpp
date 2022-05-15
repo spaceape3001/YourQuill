@@ -100,6 +100,36 @@ namespace {
     
     void    page_admin_categories_create(WebContext& ctx)
     {
+        if(!ctx.can_edit())
+            throw HttpStatus::Unauthorized;
+        
+        ctx.decode_post();
+        
+        bool  edit_now      = ctx.edit_now();
+        const Root* rt      = post::root(ctx);
+        if(!rt)
+            throw HttpStatus::BadArgument;
+            
+        std::string     k   = post::key(ctx);
+        if(k.empty())
+            throw HttpStatus::BadArgument;
+
+        bool    created = false;
+        Category     t = cdb::make_category(k, rt, 0, &created);
+        if(!t)
+            throw HttpStatus::UnableToPerform;
+    
+        if(edit_now){
+            Url url;
+            url.path    = "/admin/category";
+            stream::Text    qu(url.query);
+            qu << "id=" << t.id;
+            if(rt)
+                qu << "&root=" << rt->id;
+            throw redirect::see_other(url);
+        } else {
+            ctx.return_to_sender();
+        }
     }
     
     void    page_admin_category(WebHtml& h)
@@ -132,7 +162,7 @@ namespace {
 
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            new_class_control(h, "/admin/class/create");
+            new_class_control(h, "/admin/classes/create");
             h << "</table>\n";
         }
         
@@ -141,6 +171,36 @@ namespace {
     
     void    page_admin_classes_create(WebContext& ctx)
     {
+        if(!ctx.can_edit())
+            throw HttpStatus::Unauthorized;
+        
+        ctx.decode_post();
+        
+        bool  edit_now      = ctx.edit_now();
+        const Root* rt      = post::root(ctx);
+        if(!rt)
+            throw HttpStatus::BadArgument;
+            
+        std::string     k   = post::key(ctx);
+        if(k.empty())
+            throw HttpStatus::BadArgument;
+
+        bool    created = false;
+        Class     t = cdb::make_class(k, rt, 0, &created);
+        if(!t)
+            throw HttpStatus::UnableToPerform;
+    
+        if(edit_now){
+            Url url;
+            url.path    = "/admin/class";
+            stream::Text    qu(url.query);
+            qu << "id=" << t.id;
+            if(rt)
+                qu << "&root=" << rt->id;
+            throw redirect::see_other(url);
+        } else {
+            ctx.return_to_sender();
+        }
     }
     
     void    page_admin_field(WebHtml&h)
@@ -163,7 +223,7 @@ namespace {
 
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            new_field_control(h, "/admin/field/create");
+            new_field_control(h, "/admin/fields/create");
             h << "</table>\n";
         }
 
@@ -211,8 +271,6 @@ namespace {
         
         bool  edit_now      = ctx.edit_now();
         const Root* rt      = post::root(ctx);
-        if(!rt)
-            throw HttpStatus::BadArgument;
             
         std::string     k   = post::key(ctx);
         if(k.empty())
@@ -228,7 +286,9 @@ namespace {
             Url url;
             url.path    = "/admin/tag";
             stream::Text    qu(url.query);
-            qu << "id=" << t.id << "&root=" << rt->id;
+            qu << "id=" << t.id;
+            if(rt)
+                qu << "&root=" << rt->id;
             throw redirect::see_other(url);
         } else {
             ctx.return_to_sender();
@@ -252,7 +312,7 @@ namespace {
         
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
-            new_user_control(h, "/admin/user/create");
+            new_user_control(h, "/admin/users/create");
             h << "</table>\n";
         }
         
@@ -261,7 +321,36 @@ namespace {
     
     void    page_admin_users_create(WebContext& ctx)
     {
+        if(!ctx.can_edit())
+            throw HttpStatus::Unauthorized;
+        
+        ctx.decode_post();
+        
+        bool  edit_now      = ctx.edit_now();
+        const Root* rt      = post::root(ctx);
+        if(!rt)
+            throw HttpStatus::BadArgument;
+            
+        std::string     k   = post::key(ctx);
+        if(k.empty())
+            throw HttpStatus::BadArgument;
+
+        bool    created = false;
+        User     t = cdb::make_user(k, rt, 0, &created);
+        if(!t)
+            throw HttpStatus::UnableToPerform;
     
+        if(edit_now){
+            Url url;
+            url.path    = "/admin/user";
+            stream::Text    qu(url.query);
+            qu << "id=" << t.id;
+            if(rt)
+                qu << "&root=" << rt->id;
+            throw redirect::see_other(url);
+        } else {
+            ctx.return_to_sender();
+        }
     }
 
     json    page_api_workspace(WebContext&ctx)

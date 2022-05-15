@@ -135,7 +135,7 @@ namespace yq {
         std::string                 label(Class);
 
         Class::SharedData           merged(Class, cdb_options_t opts=0);
-        Class                       make_class(std::string_view , const Root* rt=nullptr);
+        Class                       make_class(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
 
         std::string                 name(Class);
         
