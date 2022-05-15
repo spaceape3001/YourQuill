@@ -36,6 +36,7 @@ namespace yq {
         
         V           first(const K&, const V&def={}) const;
         V           first(std::initializer_list<K>, const V&def={}) const;
+        V           first(const std::vector<K>&, const V&def={}) const;
         
         void        rekey(const K&from, const K&to);
         

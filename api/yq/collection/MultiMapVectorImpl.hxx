@@ -13,6 +13,17 @@
 namespace yq {
 
     template <typename K, typename V, typename C>
+    V           MultiMap<K,V,C>::first(const std::vector<K>&ks, const V&def) const
+    {
+        for(K k : ks){
+            auto itr = base_map::find(k);
+            if(itr != base_map::end())
+                return itr->second;
+        }
+        return def;
+    }
+
+    template <typename K, typename V, typename C>
     Vector<V>   MultiMap<K,V,C>::get(const K&k) const
     {
         Vector<V> ret;
