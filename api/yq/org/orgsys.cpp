@@ -19,6 +19,7 @@
 #include <yq/atom/Field.hpp>
 #include <yq/bit/KeyValue.hpp>
 #include <yq/io/Strings.hpp>
+#include <yq/db/HtmlLayout.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/file/DocumentCDB.hpp>
@@ -625,6 +626,30 @@ namespace yq {
             if(v.data)
                 h << "</a>";
             return h;
+        }
+
+        void        admin_table(WebHtml&h, const std::vector<Category>& categories)
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, categories, 
+                [&](Category c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Category c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/category?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
         }
 
         void    dev_table(WebHtml& h, const std::vector<Category>&categorys)
@@ -1342,6 +1367,30 @@ namespace yq {
             if(v.data)
                 h << "</a>";
             return h;
+        }
+
+        void    admin_table(WebHtml&h, const std::vector<Tag>&tags)
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, tags, 
+                [&](Tag c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Tag c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/tag?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
         }
 
         void    dev_table(WebHtml& h, const std::vector<Tag>&tags)

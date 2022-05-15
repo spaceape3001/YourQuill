@@ -19,6 +19,7 @@ namespace yq {
         //WebHtml&    operator<<(WebHtml&, const LinkLabel<Class>& );
         //WebHtml&    operator<<(WebHtml&, const LinkThumb<Class>& );
         WebHtml&    operator<<(WebHtml&, const Plural<Class>&);
+        void        admin_table(WebHtml&, const std::vector<Class>&);
         void        dev_table(WebHtml&, const std::vector<Class>&);
     }
 }

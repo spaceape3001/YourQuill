@@ -105,28 +105,7 @@ namespace {
             h << "</form></table>\n";
         }
 
-        {
-            auto tac = h.table();
-            auto iz = h.context().session.icon_size;
-            html::columns(h, cdb::all_categories(Sorted::YES), 
-                [&](Category c)
-                {
-                    if(c){
-                        Image   i   = cdb::icon(c);
-                        if(i){
-                            h << cdb::thumbnail(i, iz);
-                        } else
-                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
-                    }
-                },
-                [&](Category c)
-                {
-                    if(c){
-                        h << "<a href=\"/admin/category?id=" << c.id << "\">" << cdb::label(c) << "</a>";
-                    }
-                }
-            );
-        }
+        admin_table(h, cdb::all_categories(Sorted::YES));
     }
 
     void    page_admin_classes(WebHtml& h)
@@ -152,30 +131,8 @@ namespace {
             h << Submit(Submit::Create);
             h << "</form></table>\n";
         }
-
-        {
-            auto tac = h.table();
-            auto iz = h.context().session.icon_size;
-            html::columns(h, cdb::all_classes(Sorted::YES), 
-                [&](Class c)
-                {
-                    if(c){
-                        Image   i   = cdb::icon(c);
-                        if(i){
-                            h << cdb::thumbnail(i, iz);
-                        } else
-                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
-                    }
-                },
-                [&](Class c)
-                {
-                    if(c){
-                        h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
-                    }
-                }
-            );
-        }
-
+        
+        admin_table(h, cdb::all_classes(Sorted::YES));
     }
 
     void    page_admin_fields(WebHtml& h)
@@ -202,28 +159,7 @@ namespace {
             h << "</form></table>\n";
         }
 
-        {
-            auto tac = h.table();
-            auto iz = h.context().session.icon_size;
-            html::columns(h, cdb::all_fields(Sorted::YES), 
-                [&](Field c)
-                {
-                    if(c){
-                        Image   i   = cdb::icon(c);
-                        if(i){
-                            h << cdb::thumbnail(i, iz);
-                        } else
-                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
-                    }
-                },
-                [&](Field c)
-                {
-                    if(c){
-                        h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
-                    }
-                }
-            );
-        }
+        admin_table(h,  cdb::all_fields(Sorted::YES));
     }
 
     void    page_admin_tags(WebHtml& h)
@@ -250,28 +186,7 @@ namespace {
             h << "</form></table>\n";
         }
 
-        {
-            auto tac = h.table();
-            auto iz = h.context().session.icon_size;
-            html::columns(h, cdb::all_tags(Sorted::YES), 
-                [&](Tag c)
-                {
-                    if(c){
-                        Image   i   = cdb::icon(c);
-                        if(i){
-                            h << cdb::thumbnail(i, iz);
-                        } else
-                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
-                    }
-                },
-                [&](Tag c)
-                {
-                    if(c){
-                        h << "<a href=\"/admin/tag?id=" << c.id << "\">" << cdb::label(c) << "</a>";
-                    }
-                }
-            );
-        }
+        admin_table(h, cdb::all_tags(Sorted::YES));
 
     }
 
@@ -338,29 +253,8 @@ namespace {
             h << Submit(Submit::Create);
             h << "</form></table>\n";
         }
-
-        {
-            auto tac = h.table();
-            auto iz = h.context().session.icon_size;
-            html::columns(h, cdb::all_users(Sorted::YES), 
-                [&](User c)
-                {
-                    if(c){
-                        Image   i   = cdb::icon(c);
-                        if(i){
-                            h << cdb::thumbnail(i, iz);
-                        } else
-                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
-                    }
-                },
-                [&](User c)
-                {
-                    if(c){
-                        h << "<a href=\"/admin/user?id=" << c.id << "\">" << cdb::label(c) << "</a>";
-                    }
-                }
-            );
-        }
+        
+        admin_table(h, cdb::all_users(Sorted::YES));
     }
 
     json    page_api_workspace(WebContext&ctx)

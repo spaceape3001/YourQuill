@@ -32,6 +32,7 @@
 #include <yq/bit/KeyValue.hpp>
 #include <yq/collection/c_utils.hpp>
 #include <yq/db/CacheFwd.hpp>
+#include <yq/db/HtmlLayout.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/file/DocumentCDB.hpp>
@@ -40,11 +41,13 @@
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/Root.hpp>
 #include <yq/image/ImageCDB.hpp>
+#include <yq/image/ImageHtml.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/io/Strings.hpp>
 #include <yq/io/XmlUtils.hpp>
 #include <yq/meta/TypeInfo.hpp>
 #include <yq/org/CategoryCDB.hpp>
+#include <yq/org/TagHtml.hpp>
 #include <yq/org/TagCDB.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
@@ -2080,6 +2083,31 @@ namespace yq {
             return h;
         }
 
+        void        admin_table(WebHtml&h, const std::vector<Class>&classes)
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, classes, 
+                [&](Class c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Class c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
+        }
+        
+
         void        dev_table(WebHtml&h, const std::vector<Class>& classes)
         {
             auto ta = h.table();
@@ -2874,6 +2902,30 @@ namespace yq {
             if(v.data)
                 h << "</a>";
             return h;
+        }
+
+        void        admin_table(WebHtml&h, const std::vector<Field>&fields)
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, fields, 
+                [&](Field c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](Field c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
         }
         
         void        dev_table(WebHtml&h, const std::vector<Field>& fields)

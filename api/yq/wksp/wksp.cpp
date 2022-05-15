@@ -21,6 +21,7 @@
 
 #include <yq/bit/KeyValue.hpp>
 #include <yq/collection/c_utils.hpp>
+#include <yq/db/HtmlLayout.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/file/DocumentCDB.hpp>
 #include <yq/file/DocumentHtml.hpp>
@@ -853,6 +854,30 @@ namespace yq {
             if(v.data)
                 h << "</a>";
             return h;
+        }
+
+        void    admin_table(WebHtml&h, const std::vector<User>&users)
+        {
+            auto tac = h.table();
+            auto iz = h.context().session.icon_size;
+            html::columns(h, users, 
+                [&](User c)
+                {
+                    if(c){
+                        Image   i   = cdb::icon(c);
+                        if(i){
+                            h << cdb::thumbnail(i, iz);
+                        } else
+                            h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                    }
+                },
+                [&](User c)
+                {
+                    if(c){
+                        h << "<a href=\"/admin/user?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                    }
+                }
+            );
         }
 
         void    dev_table(WebHtml& h, const std::vector<User>&users)
