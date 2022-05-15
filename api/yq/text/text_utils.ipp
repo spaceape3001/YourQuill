@@ -700,6 +700,28 @@ namespace yq {
         return ret;
     }
 
+    bool        is_valid_key(std::string_view k)
+    {
+        if(k.empty())
+            return false;
+        
+        if(!is_alnum(k[0]))
+            return false;
+        for(size_t i=1;i<k.size();++i){
+            if(is_alnum(k[i]))
+                continue;
+            switch(k[i]){
+            case '-':
+            case '_':
+            case '+':
+                continue;
+            default:
+                return false;
+            }
+        }
+        return true;
+    }
+
     bool        matches_at(std::string_view haystack, size_t pos, std::string_view pattern)
     {
         return starts(haystack.substr(pos), pattern);

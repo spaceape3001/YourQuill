@@ -6,8 +6,10 @@
 
 #pragma once
 
-#include <yq/file/Root.hpp>
-#include <yq/file/RootArg.hpp>
-#include <yq/file/RootCDB.hpp>
-#include <yq/file/RootHtml.hpp>
-#include <yq/file/RootPost.hpp>
+namespace yq {
+    struct WebContext;
+    
+    namespace post {
+        std::string     key(WebContext&);
+    }
+}

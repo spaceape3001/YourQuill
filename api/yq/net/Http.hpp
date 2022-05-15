@@ -123,6 +123,7 @@ namespace yq {
         NetworkAuthenticationReq    = 511,
         InvalidSSLCertificate       = 526,
         
+        UnableToPerform             = 596,
         CurlError                   = 597,
         NetworkReadTimeout          = 598,
         NetworkConnectTimeout       = 599

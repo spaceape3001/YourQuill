@@ -38,11 +38,12 @@
 #include <yq/text/Markdown.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/web/JsonAdapter.hpp>
+#include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebImage.hpp>
 #include <yq/web/WebPage.hpp>
-#include <yq/web/WebAdapters.hpp>
+#include <yq/web/WebRedirect.hpp>
 #include <yq/web/WebTemplate.hpp>
 #include <yq/web/Template.hpp>
 #include <yq/wksp/Workspace.hpp>
@@ -225,14 +226,6 @@ namespace {
         }
     }
 
-    void    page_admin_tag_create(WebContext& ctx)
-    {
-        if(!ctx.can_edit())
-            throw HttpStatus::Unauthorized;
-        
-        
-    }
-
     void    page_admin_tags(WebHtml& h)
     {
         h.title() << "Tags for [" << html_escape(wksp::name()) << "]";
@@ -244,7 +237,7 @@ namespace {
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";
             Url url;
-            url.path="/admin/tag/create";
+            url.path="/admin/tags/create";
             h << html::form_start(url, true);
             h << "Add Tag:<br>";
             h << ikey();
@@ -280,6 +273,42 @@ namespace {
             );
         }
 
+    }
+
+    void    page_admin_tags_create(WebContext& ctx)
+    {
+        if(!ctx.can_edit())
+            throw HttpStatus::Unauthorized;
+        
+        ctx.decode_post();
+        
+        bool  edit_now      = ctx.edit_now();
+        const Root* rt      = post::root(ctx);
+        if(!rt)
+            throw HttpStatus::BadArgument;
+            
+        std::string     k   = post::key(ctx);
+        if(k.empty())
+            throw HttpStatus::BadArgument;
+        
+    yInfo() << "Trying to make tag: " << k;
+        
+        bool    created = false;
+        Tag     t = cdb::make_tag(k, rt, 0, &created);
+
+    yInfo() << "Tag [" << k << "] id " << t.id;
+        if(!t)
+            throw HttpStatus::UnableToPerform;
+        
+        if(edit_now){
+            Url url;
+            url.path    = "/admin/tag";
+            stream::Text    qu(url.query);
+            qu << "id=" << t.id << "&root=" << rt->id;
+            throw redirect::see_other(url);
+        } else {
+            ctx.return_to_sender();
+        }
     }
 
     void    page_admin_users(WebHtml&h)
@@ -647,11 +676,12 @@ namespace {
     void    page_dev_echo(WebHtml& h)
     {
         auto& ctx   = h.context();
+        ctx.decode_query();
+        ctx.decode_post();
 
         h.title("Developer's Echo");
         
         bool    isPost  = ctx.method == hPost;
-        
         
         h.h2("Environment");
         {
@@ -664,16 +694,11 @@ namespace {
             h.kvrow( "From") << ctx.remote_addr.to_string() << ":" << ctx.remote_port;
         }
         
-        
         h.h2("URL Query");
-        {
-            auto ta = h.table();
-            h << ctx.rx_query;
-        }
+        h << ctx.rx_query;
 
         if(isPost){
             h.h2("Post Parameters");
-
             std::string     url = ctx.rx_post.first("url");
             if(!url.empty()){
                 h << "<form action=\"" << url << "\" method=\"post\">\n";
@@ -692,7 +717,7 @@ namespace {
         if(!ctx.rx_body.empty()){
             h.h2("Body");
             h << "<pre>\n";
-            h << ctx.rx_body;
+            html_escape_write(h, ctx.rx_body);
             h << "</pre>\n";
         }
     }
@@ -1404,6 +1429,7 @@ namespace {
             reg_webpage<page_admin_tags>("/admin/tags").label("Tags"),
             reg_webpage<page_admin_users>("/admin/users").label("Users")
         });
+        reg_webpage<page_admin_tags_create>(hPost, "/admin/tags/create");
         reg_webpage<page_api_workspace>("/api/workspace"sv); 
         reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");
         reg_webpage<page_atoms>("/atoms");

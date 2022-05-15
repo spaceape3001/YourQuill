@@ -242,6 +242,7 @@ namespace yq {
                 { HttpStatus::NotExtended,                  "Not Extended"                      },
                 { HttpStatus::NetworkAuthenticationReq,     "Network Authentication Required"   },
                 { HttpStatus::InvalidSSLCertificate,        "Invalid SSL Certificate"           },
+                { HttpStatus::UnableToPerform,              "Unable to Perform Requested Function" },
                 { HttpStatus::CurlError,                    "Error in CURL library"             },
                 { HttpStatus::NetworkReadTimeout,           "Network Read Timeout"              },
                 { HttpStatus::NetworkConnectTimeout,        "Network Connect Timeout"           }

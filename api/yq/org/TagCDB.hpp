@@ -58,7 +58,7 @@ namespace yq {
         std::string             label(Tag);
         Leaf                    leaf(Tag t);
         
-        Tag                     make_tag(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0);
+        Tag                     make_tag(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
         Tag::SharedData         merged(Tag, cdb_options_t opts=0);
         
         std::string             name(Tag);

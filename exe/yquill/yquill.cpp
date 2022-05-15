@@ -50,9 +50,9 @@ int     db_flags()
     case 0:
         return SqlLite::ReadWrite|SqlLite::Create;
     case 1:
-        return SqlLite::ReadWrite;
     default:
-        return SqlLite::ReadOnly;
+        return SqlLite::ReadWrite;
+//        return SqlLite::ReadOnly;
     }
 }
 

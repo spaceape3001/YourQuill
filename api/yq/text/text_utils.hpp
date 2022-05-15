@@ -546,6 +546,15 @@ namespace yq {
         return ::iswupper(ch);
     }
     
+    /*! \brief Tests for a valid key
+    
+        Test for a valid key, one that can be a component of a full key.  Directory paths, 
+        extensions, are not tolerated by this routine.  A valid key is one that starts with
+        a letter or a number, and is followed by an unlimited number of letters, 
+        numbers, "_", "+", or "-".
+    */
+    bool        is_valid_key(std::string_view);
+    
     /*! \brief Tests for hexadecimal digit character
         \note   This is here for reasons of better spelling and to harmonize with overloads.
     */

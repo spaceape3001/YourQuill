@@ -989,8 +989,11 @@ namespace yq {
             return s.as<Leaf>(t.id);
         }
 
-        Tag                     make_tag(std::string_view k, const Root* rt, cdb_options_t opts)
+        Tag                     make_tag(std::string_view k, const Root* rt, cdb_options_t opts, bool* wasCreated)
         {
+            if(wasCreated)
+                *wasCreated = false;
+        
             if(!rt)
                 rt  = wksp::root_first(DataRole::Config);
             if(!rt){
@@ -999,9 +1002,15 @@ namespace yq {
             }
             
             std::string     tfn = tag_filename(k);
+yInfo() << "make_tag(" << k << ", " << rt->key << ")";            
+yInfo() << "   filename  ... " << tfn;
             Document    doc = db_document(tags_folder(), tfn);
+yInfo() << "   document ... " << doc.id << " '" << key(doc) << "'";
             bool            was = false;
             Tag         t   = db_tag(doc, &was);
+yInfo() << "   tag ... " << t.id;
+            if(wasCreated)
+                *wasCreated = was;
             if(!was)
                 return t;
             if(fragments_count(doc))
