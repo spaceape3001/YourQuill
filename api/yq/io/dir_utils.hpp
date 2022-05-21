@@ -16,10 +16,10 @@ namespace yq {
     Vector<std::string>  dir_directories(const char*);
 
     //  Make the path (including the specified filename)
-    bool            make_path(const std::filesystem::path&, mode_t dirMode=0755);
+    bool            make_path(const std::filesystem::path&);
 
     //  Make the path (not including the specified filename)
-    bool            make_parent_path(const std::filesystem::path&, mode_t dirMode=0755);
+    bool            make_parent_path(const std::filesystem::path&);
 
 
     namespace dir {

@@ -49,23 +49,20 @@ namespace yq {
         return ret;
     }
 
-
-
-    //  Make the path (including the specified filename)
-    bool            make_path(const std::filesystem::path& p, mode_t dirMode)
+    bool            make_path(const std::filesystem::path&p)
     {
-        if(::access(p.c_str(), X_OK) == 0)  // it exists
-            return true;
-        std::filesystem::path   pp  = p.parent_path();
-        if((pp != p) && !make_path(pp, dirMode))
-            return false;
-        return !mkdir(p.c_str(), dirMode);
+        std::error_code ec;
+        std::filesystem::create_directories(p, ec);
+        return ec == std::error_code();
     }
 
+
     //  Make the path (not including the specified filename)
-    bool            make_parent_path(const std::filesystem::path&p, mode_t dirMode)
+    bool            make_parent_path(const std::filesystem::path&p)
     {
-        return make_path(p.parent_path());
+        std::error_code ec;
+        std::filesystem::create_directories(p.parent_path(), ec);
+        return ec == std::error_code();
     }
 
 

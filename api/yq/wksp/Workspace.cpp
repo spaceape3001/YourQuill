@@ -332,8 +332,9 @@ namespace yq {
             const char* hdir   = homeDir();
             if(hdir){
                 auto hd     = std::filesystem::path(hdir) / ".yquill";
-                if(!::access(hdir, W_OK))
-                    make_path(hd, kDirMode);
+                if(!::access(hdir, W_OK)){
+                    make_path(hd);
+                }
                 if(!::access(hd.c_str(), R_OK|X_OK))
                     shared_dirs.push_back(hd);
             }
@@ -424,7 +425,7 @@ namespace yq {
                 logs        = tmp / "log";
             } else
                 logs        = absolute_proximate(doc.log_dir, tmp);
-            make_path(logs, kDirMode);
+            make_path(logs);
             
             if(qoptions & INIT_LOG){
                 std::string lf = app_name + '-' + start_file + ".log";
