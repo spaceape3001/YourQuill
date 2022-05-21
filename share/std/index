@@ -1,4 +1,4 @@
-#! Welcome to {{NAME}}
+#! Welcome to {{PROJECT}}
 
 <div class="summary">
 {{SUMMARY}}

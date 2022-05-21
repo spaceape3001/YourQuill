@@ -315,11 +315,11 @@ namespace {
             .todo()
             .description("Boolean to indicate that a user is currently logged in on the session."); 
             
-        reg_webvar<var_name>("name")
-            .description("Name of the project/universe.");
-            
         reg_webvar<var_port>("port")
             .description("Port number to use on the server.");
+            
+        reg_webvar<var_name>("project")
+            .description("Name of the project/universe.");
             
         reg_webvar<var_root_count>("root_count")
             .description("Total number of roots (template & non-template) in the project/workspace.");
