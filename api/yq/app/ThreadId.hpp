@@ -15,5 +15,6 @@ namespace yq {
         unsigned int num_processors();
     }
 
+    //! Checks for id being zero
     bool            is_main_thread();
 }

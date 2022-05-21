@@ -420,11 +420,15 @@ namespace yq {
                 yError() << "No root specified to create the category in!";
                 return Category{};
             }
-            
             std::string     tfn = category_filename(k);
             Document    doc = db_document(categories_folder(), tfn);
             bool            was = false;
             Category         t   = db_category(doc, &was);
+            if(!t){
+                yWarning() << "Unable to create/find category: " << k;
+                return t;
+            }
+            
             if(wasCreated)
                 *wasCreated = was;
             if(!was)
@@ -586,10 +590,14 @@ namespace yq {
         Category::SharedFile         write(Category t, const Root* rt, cdb_options_t opts)
         {
             Document    d   = document(t);
-            if(!d)
+            if(!d){
+                yWarning() << "write(Category '" << key(t) << "'): Has no document!";
                 return Category::SharedFile();
-            if(rt && !rt->is_writable(DataRole::Config))
+            }
+            if(rt && !rt->is_writable(DataRole::Config)){
+                yWarning() << "write(Category '" << key(t) << "'): Root " << rt->key << " cannot be written to!";
                 return Category::SharedFile();
+            }
                 
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Config);
             if(f)

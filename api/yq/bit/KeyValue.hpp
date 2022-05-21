@@ -203,17 +203,21 @@ namespace yq {
         KeyValue(const char* k, std::string&& v) : key(k), data(std::move(v)) {}
         KeyValue(std::string&& k, std::string_view v) : key(std::move(k)), data(v) {}
         KeyValue(std::string&& k, std::string&& v) : key(std::move(k)), data(std::move(v)) {}
-        
+
+        //! TRUE if the data AND subs is empty
         bool                empty() const;
         
     };
     
-
+    /*! \brief Namespace for classes (& creator functions for them) that can match key-value as predicates
+    */
     namespace kv {
     
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  MATCH ON KEYS
     
+        /*! \brief Matches the key against the pattern (case insensitive)
+        */
         struct SingleKeyMatch {
             std::string_view        pat;
             bool operator()(const KeyValue& a) const;
@@ -224,6 +228,8 @@ namespace yq {
 
             //  ------------------------------------------------------------------------------------------------
 
+        /*! \brief Checks key against initializer list of patterns
+        */
         struct InitKeyMatch {
             std::initializer_list<std::string_view>   pat;
             bool operator()(const KeyValue& a) const;
@@ -237,6 +243,8 @@ namespace yq {
 
             //  ------------------------------------------------------------------------------------------------
 
+        /*! \brief Checks key against vector of patterns
+        */
         struct PtrVectorKeyMatch {
             const std::vector<std::string_view>*   pat = nullptr;
             bool operator()(const KeyValue& a) const;
@@ -246,6 +254,8 @@ namespace yq {
 
             //  ------------------------------------------------------------------------------------------------
 
+        /*! \brief Checks key against vector of patterns
+        */
         struct VectorKeyMatch {
             std::vector<std::string_view>   pat;
             bool operator()(const KeyValue& a) const;
@@ -261,6 +271,8 @@ namespace yq {
 
             //  ------------------------------------------------------------------------------------------------
 
+        /*! \brief Checks key against set of patterns
+        */
         struct SetKeyMatch {
             string_view_set_t    pat;
             bool operator()(const KeyValue& a) const;
@@ -271,6 +283,7 @@ namespace yq {
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  MATCH ON KEYS W/O COMMAND
     
+        /*! \brief Checks the key against pattern, AND command must be empty */
         struct SingleNonCmdKeyMatch {
             std::string_view        pat;
             bool operator()(const KeyValue& a) const
@@ -283,6 +296,7 @@ namespace yq {
 
             //  ------------------------------------------------------------------------------------------------
 
+        /*! \brief Checks the key against patterns, AND command must be empty */
         struct InitNonCmdKeyMatch {
             std::initializer_list<std::string_view>    pat;
             bool operator()(const KeyValue& a) const
@@ -299,6 +313,7 @@ namespace yq {
 
             //  ------------------------------------------------------------------------------------------------
 
+        /*! \brief Checks the key against patterns, AND command must be empty */
         struct VectorNonCmdKeyMatch {
             const std::vector<std::string_view>*    pat = nullptr;
             bool operator()(const KeyValue& a) const
@@ -311,6 +326,7 @@ namespace yq {
 
             //  ------------------------------------------------------------------------------------------------
 
+        /*! \brief Checks the key against patterns, AND command must be empty */
         struct SetNonCmdKeyMatch {
             const string_view_set_t*    pat = nullptr;
             bool operator()(const KeyValue& a) const

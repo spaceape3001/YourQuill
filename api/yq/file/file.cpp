@@ -804,7 +804,7 @@ namespace yq {
             std::string_view     sfx     = (x != std::string_view::npos ) ? ak.substr(x+1) : std::string_view();
             std::string_view     base    = (y != std::string_view::npos ) ? ak.substr(0,y) : ak;
             std::string_view     skc     = (x != std::string_view::npos ) ? ak.substr(0,x) : ak;
-                
+            
             static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,skb,hidden,mime,skc) VALUES (?,?,?,?,?,?,?,?,?)");
             static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
             
@@ -824,11 +824,16 @@ namespace yq {
             if(is_good(i.step(false))){
                 if(wasCreated)
                     *wasCreated = true;
-                return Document((uint64_t) i.last_id());
+                Document    ret{(uint64_t) i.last_id()};
+                // separate because I occasionally need to print during debugging
+                return ret;
             } else {
                 s.bind(1,k);
-                if(s.step() == SqlQuery::Row)
-                    return Document{s.v_uint64(1)};
+                if(s.step() == SqlQuery::Row){
+                    Document    ret{s.v_uint64(1)};
+                    // separate because I occasionally need to print during debugging
+                    return ret;
+                }
                 cdbError << "Unable to get document ID";
                 return Document();
             }
@@ -1811,7 +1816,6 @@ namespace yq {
                 return ;
             if(fo == top_folder())
                 return ;
-                
             make_path(rt->resolve(key(fo)));
         }
 

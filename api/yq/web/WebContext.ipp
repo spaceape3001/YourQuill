@@ -148,7 +148,7 @@ namespace yq {
     void                WebContext::return_to_sender(HttpStatus hWhy)
     {
         status  = hWhy;
-        tx_header("Location", rx_header("referer"));
+        tx_redirect         = copy(to_url_view(rx_header("referer")).value);
     }
     
     std::string_view    WebContext::rx_header(std::string_view k) const
