@@ -414,6 +414,10 @@ namespace yq {
         {
             if(wasCreated)
                 *wasCreated = false;
+            if(k.empty()){
+                yError() << "Cannot create a BLANK category.";
+                return Category();
+            }
             if(!rt)
                 rt  = wksp::root_first(DataRole::Config);
             if(!rt){
@@ -589,6 +593,9 @@ namespace yq {
         
         Category::SharedFile         write(Category t, const Root* rt, cdb_options_t opts)
         {
+            if(!t)
+                return Category::SharedFile();
+                
             Document    d   = document(t);
             if(!d){
                 yWarning() << "write(Category '" << key(t) << "'): Has no document!";
@@ -1095,6 +1102,10 @@ namespace yq {
         {
             if(wasCreated)
                 *wasCreated = false;
+            if(k.empty()){
+                yError() << "Cannot create a BLANK tag.";
+                return Tag();
+            }
         
             if(!rt)
                 rt  = wksp::root_first(DataRole::Config);
@@ -1107,6 +1118,10 @@ namespace yq {
             Document    doc = db_document(tags_folder(), tfn);
             bool            was = false;
             Tag         t   = db_tag(doc, &was);
+            if(!t){
+                yWarning() << "Unable to create/find tag: " << k;
+                return t;
+            }
             if(wasCreated)
                 *wasCreated = was;
             if(!was)
@@ -1392,11 +1407,18 @@ namespace yq {
         
         Tag::SharedFile         write(Tag t, const Root* rt, cdb_options_t opts)
         {
+            if(!t)
+                return Tag::SharedFile();
+        
             Document    d   = document(t);
-            if(!d)
+            if(!d){
+                yWarning() << "write(Tag '" << key(t) << "'): Has no document!";
                 return Tag::SharedFile();
-            if(rt && !rt->is_writable(DataRole::Config))
+            }
+            if(rt && !rt->is_writable(DataRole::Config)){
+                yWarning() << "write(Tag '" << key(t) << "'): Root " << rt->key << " cannot be written to!";
                 return Tag::SharedFile();
+            }
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Config);
             if(f)
                 return tag_doc(f, opts | ALLOW_EMPTY);

@@ -232,6 +232,38 @@ namespace {
 
     void    page_admin_fields_create(WebContext& ctx)
     {
+        if(!ctx.can_edit())
+            throw HttpStatus::Unauthorized;
+        
+        ctx.decode_post();
+        
+        bool  edit_now      = ctx.edit_now();
+        const Root* rt      = post::root(ctx);
+        if(!rt)
+            throw HttpStatus::BadArgument;
+            
+        std::string     k   = post::key(ctx);
+        if(k.empty())
+            throw HttpStatus::BadArgument;
+            
+        Class           c   = post::class_(ctx);
+
+        bool    created = false;
+        Field     t = cdb::make_field(k, c, rt, 0, &created);
+        if(!t)
+            throw HttpStatus::UnableToPerform;
+    
+        if(edit_now){
+            Url url;
+            url.path    = "/admin/field";
+            stream::Text    qu(url.query);
+            qu << "id=" << t.id;
+            if(rt)
+                qu << "&root=" << rt->id;
+            throw redirect::see_other(url);
+        } else {
+            ctx.return_to_sender();
+        }
     }
 
     void    page_admin_tags(WebHtml& h)

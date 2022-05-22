@@ -624,6 +624,10 @@ namespace yq {
         {
             if(wasCreated)
                 *wasCreated = false;
+            if(k.empty()){
+                yError() << "Cannot create a BLANK user.";
+                return User();
+            }
             if(!rt)
                 rt  = wksp::root_first(DataRole::Users);
             if(!rt){
@@ -802,11 +806,18 @@ namespace yq {
 
         User::SharedFile          write(User u, const Root*rt, cdb_options_t opts)
         {
+            if(!u)
+                return User::SharedFile();
+                
             Document    d   = document(u);
-            if(!d)
+            if(!d){
+                yWarning() << "write(User '" << key(u) << "'): Has no document!";
                 return User::SharedFile();
-            if(rt && !rt->is_writable(DataRole::Users))
+            }
+            if(rt && !rt->is_writable(DataRole::Users)){
+                yWarning() << "write(User '" << key(u) << "'): Root " << rt->key << " cannot be written to!";
                 return User::SharedFile();
+            }
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Users);
             if(f)
                 return user_doc(f, opts);

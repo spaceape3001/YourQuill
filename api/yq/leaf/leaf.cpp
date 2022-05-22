@@ -686,11 +686,17 @@ namespace yq {
 
         Leaf::SharedFile         write(Leaf l, const Root* rt, cdb_options_t opts)
         {
+            if(!l)
+                return Leaf::SharedFile();
             Document    d   = document(l);
-            if(!d)
+            if(!d){
+                yWarning() << "write(Leaf '" << key(l) << "'): Has no document!";
                 return Leaf::SharedFile();
-            if(rt && !rt->is_writable(DataRole::DB))
+            }
+            if(rt && !rt->is_writable(DataRole::DB)){
+                yWarning() << "write(Leaf '" << key(l) << "'): Root " << rt->key << " cannot be written to!";
                 return Leaf::SharedFile();
+            }
 
             Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::DB);
             if(f)

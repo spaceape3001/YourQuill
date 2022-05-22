@@ -18,7 +18,7 @@ namespace yq {
             std::string k  =  ctx.rx_post.first("key");
             if(!is_valid_key(k))
                 return std::string();
-            return to_lower(k);
+            return k;
         }
     }
 }

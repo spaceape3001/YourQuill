@@ -1637,6 +1637,10 @@ namespace yq {
 
         Class                make_class(std::string_view k, const Root* rt, cdb_options_t opts, bool *wasCreated)
         {
+            if(k.empty()){
+                yError() << "Cannot create a BLANK class.";
+                return Class();
+            }
             if(wasCreated)
                 *wasCreated = false;
             if(!rt)
@@ -1650,6 +1654,10 @@ namespace yq {
             Document        doc = db_document(classes_folder(), cfn);
             bool            was = false;
             Class           c   = db_class(doc, &was);
+            if(!c){
+                yWarning() << "Unable to create/find class: " << k;
+                return c;
+            }
             if(wasCreated)
                 *wasCreated = was;
             if(!was)
@@ -2034,11 +2042,17 @@ namespace yq {
 
         Class::SharedFile        writable(Class c, const Root* rt, cdb_options_t opts)
         {
+            if(!c)
+                return Class::SharedFile();
             Document    d   = document(c);
-            if(!d)
+            if(!d){
+                yWarning() << "write(Class '" << key(c) << "'): Has no document!";
                 return Class::SharedFile();
-            if(rt && !rt->is_writable(DataRole::Config))
+            }
+            if(rt && !rt->is_writable(DataRole::Config)){
+                yWarning() << "write(Class '" << key(c) << "'): Root " << rt->key << " cannot be written to!";
                 return Class::SharedFile();
+            }
 
             Fragment    f   = fragment(d);
             if(f)
@@ -2753,6 +2767,55 @@ namespace yq {
             //return s.str(f.id);
         }
 
+        Field                       make_field(std::string_view kf, Class c, const Root* rt, cdb_options_t opts, bool *wasCreated)
+        {
+        
+            if(wasCreated)
+                *wasCreated = false;
+            if(kf.empty()){
+                yError() << "Cannot create a BLANK field!";
+                return Field();
+            }
+            if(!rt)
+                rt      = wksp::root_first(DataRole::Config);
+            if(!rt){
+                yError() << "No root specified to create the class in!";
+                return Field{};
+            }
+            
+            std::string         k;
+            if(c){
+                k   = key(c) + "." + std::string(kf);
+            } else {
+                k   = kf;
+            }
+            
+            std::string cfn = field_filename(k);
+            Document        doc = db_document(fields_folder(), cfn);
+            bool            was = false;
+            Field           f   = db_field(doc, &was);
+            if(!f){
+                yWarning() << "Unable to create/find class: " << k;
+                return f;
+            }
+            if(wasCreated)
+                *wasCreated = was;
+            if(!was)
+                return f;
+                
+            if(fragments_count(doc))
+                return f;
+            Field::Lock   lk;
+            if(!(opts & DONT_LOCK))
+                lk  = Field::Lock::write(f);
+
+            Field::SharedFile    td  = writable(f, rt, DONT_LOCK);
+            td -> name      = kf;
+            td -> plural    = td->name + 's';
+            td -> save();
+            return f;
+        }
+
         Field::SharedData            merged(Field f, cdb_options_t opts)
         {
             Field::SharedData        ret = std::make_shared<Field::Data>();;
@@ -2951,11 +3014,18 @@ namespace yq {
         
         Field::SharedFile        writable(Field f, const Root* rt, cdb_options_t opts)
         {
+            if(!f)
+                return Field::SharedFile();
+        
             Document    d   = document(f);
-            if(!d)
+            if(!d){
+                yWarning() << "write(Field '" << key(f) << "'): Has no document!";
                 return Field::SharedFile();
-            if(rt && !rt->is_writable(DataRole::Config))
+            }
+            if(rt && !rt->is_writable(DataRole::Config)){
+                yWarning() << "write(Field '" << key(f) << "'): Root " << rt->key << " cannot be written to!";
                 return Field::SharedFile();
+            }
 
             Fragment    ff   = fragment(d);
             if(ff)

@@ -96,6 +96,9 @@ namespace yq {
         std::string             label(Field);
         
         //Leaf                    leaf(Atom
+        
+        Field                   make_field(std::string_view, Class, const Root* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
+        
 
         Field::SharedData       merged(Field, cdb_options_t opts=0);
         //Class                   make_class(std::string_view , const Root* rt=nullptr);

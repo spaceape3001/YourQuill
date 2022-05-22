@@ -28,6 +28,7 @@ namespace yq {
         struct Data;
         struct Rank;
         class File;
+        using Lock = IDLock<Field>;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
 
