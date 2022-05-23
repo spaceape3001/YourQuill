@@ -2956,8 +2956,10 @@ namespace yq {
             }
                 
             for(const Root* rt : wksp::roots()){
-                h << "<input type=\"radio\" name=\"root\" id=\"" << rt->key << "\" value=\"" << rt->id 
-                    << "\"><label for=\"" << rt->key << "\">";
+                h << "<input type=\"radio\" name=\"root\" id=\"" << rt->key << "\" value=\"" << rt->id << "\"";
+                if(!rt->is_good(v.role, v.access))
+                    h << " disabled=\"true\"";
+                h   << "><label for=\"" << rt->key << "\">";
                 if(rt == re)
                     h << "<b><u>";
                 h << "[" << rt->key << "] " << rt->name;

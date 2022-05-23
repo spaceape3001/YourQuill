@@ -51,6 +51,7 @@ namespace yq {
         //  From the quill-doc (relative)
         //const String&       def_icon_file() const { return m_icon; }
         
+        bool                is_good(DataRole, Access) const;
         bool                is_readable(DataRole) const;
         bool                is_writable(DataRole) const;
         bool                is_write_first(DataRole) const;

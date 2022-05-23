@@ -385,7 +385,7 @@ namespace {
         }
     }
 
-    json    page_api_workspace(WebContext&ctx)
+    json    page_api_wksp(WebContext&ctx)
     {
         json    ret{
             { "author", wksp::author() },
@@ -401,6 +401,15 @@ namespace {
         if(ctx.is_local()){
             ret["quill"] = wksp::quill_file().string();
             ret["cache"] = wksp::cache().string();
+        }
+        return ret;
+    }
+
+    json    page_api_wksp_quill(WebContext&ctx)
+    {
+        json    ret;
+        if(ctx.is_local()){
+            ret["quill"] = wksp::quill_file().string();
         }
         return ret;
     }
@@ -1128,6 +1137,14 @@ namespace {
         h.kvrow("Template") << rt -> is_template;
         h.kvrow("Total Directories") << all_directories_count(rt);
         h.kvrow("Total Fragments") << all_fragments_count(rt);
+        h <<"<tr><td colspan=\"2\"><hr></td></tr>\n";
+        
+        for(DataRole dr : DataRole::all_values()){
+            std::string n   = "Policy ";
+            n += dr.key();
+            h.kvrow(n) << rt->policy(dr).key();
+        }
+        
     }
     
     void    page_dev_root_all_directories(WebHtml& h)
@@ -1468,7 +1485,10 @@ namespace {
         reg_webpage<page_admin_tags_create>(hPost, "/admin/tags/create");
         reg_webpage<page_admin_user>("/admin/user").argument("id", "User ID");
         reg_webpage<page_admin_users_create>(hPost, "/admin/users/create");
-        reg_webpage<page_api_workspace>("/api/workspace"sv); 
+        
+        reg_webpage<page_api_wksp>("/api/wksp"sv); 
+        reg_webpage<page_api_wksp_quill>("/api/wksp/quill"sv); 
+        
         reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");
         reg_webpage<page_atoms>("/atoms");
         reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){

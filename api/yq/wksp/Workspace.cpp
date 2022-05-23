@@ -1101,6 +1101,21 @@ namespace yq {
         return vcs.is_set(Vcs::SVN);
     }
 
+    bool        Root::is_good(DataRole dr, Access ac) const
+    {
+        switch(ac){
+        case Access::ReadOnly:
+            return is_readable(dr);
+        case Access::ReadWrite:
+        case Access::WriteFirst:
+            return is_writable(dr);
+        case Access::NoAccess:
+        case Access::Default:
+        default:
+            return true;
+        }
+    }
+
     bool        Root::is_readable(DataRole dr) const
     {
         switch(policy(dr)){

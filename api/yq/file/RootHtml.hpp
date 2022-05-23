@@ -25,19 +25,22 @@ namespace yq {
             std::string_view    msg = "Change Root:";
             const Root*         root = nullptr;
             DataRole            role;
+            Access              access;
         };
         
-        inline IRoot iroot(DataRole r) 
+        inline IRoot iroot(DataRole r, Access ac=Access()) 
         {
             IRoot ret;
-            ret.role = r;
+            ret.role    = r;
+            ret.access  = ac;
             return ret;
         }
 
-        inline IRoot iroot(const Root* rt) 
+        inline IRoot iroot(const Root* rt, Access ac=Access()) 
         {
             IRoot ret;
-            ret.root = rt;
+            ret.root    = rt;
+            ret.access  = ac;
             return ret;
         }
         
