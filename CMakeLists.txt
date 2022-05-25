@@ -65,8 +65,9 @@ if(VULKAN)
 endif()
 
 include(cmake/GroupFiles.cmake)
+include(cmake/LinkTest.cmake)
 
-add_definitions(-Wfatal-errors -Wno-error=unused-function -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch -DASIO_STANDALONE)
+add_definitions(-Wfatal-errors -Wno-error=unused-function -Wno-error=unused-variable -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch -DASIO_STANDALONE)
 
 if(Developer_Build)
     add_definitions(-DDEV_BUILD=1)
