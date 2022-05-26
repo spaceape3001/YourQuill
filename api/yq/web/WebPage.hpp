@@ -8,11 +8,11 @@
 
 //#include <yq/enum/change.hpp>
 #include <basic/trait/not_copyable.hpp>
-#include <yq/collection/EnumMap.hpp>
+#include <basic/EnumMap.hpp>
 #include <yq/meta/Meta.hpp>
 #include <yq/meta/MetaWriter.hpp>
 #include <yq/net/Http.hpp>
-#include <yq/type/Flag.hpp>
+#include <basic/Flag.hpp>
 
 #include <functional>
 #include <source_location>

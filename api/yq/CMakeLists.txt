@@ -19,11 +19,6 @@ set(yq_sources
     #./ZipReader.hpp
     #./ZipWriter.hpp
     
-    ./preamble.hpp
-    
-
-    ./algo/Compare.hpp
-    
     ./app/app_unity.cpp
     ./app/BuildInfo.hpp
     ./app/BuildInfo.ipp
@@ -39,8 +34,6 @@ set(yq_sources
     
     ./c++/NaN.hpp
     
-
-    ./collection/EnumMap.hpp
     
     ./db/db.cpp
     
@@ -59,7 +52,6 @@ set(yq_sources
     ./io/XmlFwd.hpp
     ./io/XmlUtils.hpp
     
-    
     ./ipc/ipc_unity.cpp
     ./ipc/ipcBuffer.hpp
     ./ipc/ipcPackets.hpp
@@ -69,8 +61,6 @@ set(yq_sources
 
     #./log/LogFile.cpp
     #./log/LogFile.hpp
-    ./log/Logging.cpp
-    ./log/Logging.hpp
     
     ./meta/meta_unity.cpp
     ./meta/MetaHtml.cpp
@@ -117,23 +107,12 @@ set(yq_sources
     
     ./text/Encode64.cpp
     ./text/Encode64.hpp
-    ./text/Format.hpp
-    ./text/IgCase.hpp
-    ./text/IgCase.ipp
     ./text/Markdown.cpp
     ./text/Markdown.hpp
-    ./text/RevIgCase.hpp
-    ./text/RevIgCase.ipp
-    ./text/text_utils.hpp
-    ./text/text_utils.ipp
-    ./text/text_unity.cpp
     
     ./type/type_unity.cpp
     
     ./type/Any.hpp
-    ./type/Enum.hpp
-    ./type/FixedBuffer.hpp
-    ./type/Flag.hpp
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp

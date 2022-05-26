@@ -12,12 +12,13 @@
 #include <basic/Random.hpp>
 #include <basic/DelayInit.hpp>
 #include <basic/c_utils.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
-#include <yq/text/text_utils.hpp>
-#include <yq/type/FixedBuffer.hpp>
+#include <basic/text_utils.hpp>
+#include <basic/FixedBuffer.hpp>
 #include <basic/Ref.hpp>
+#include <basic/ThreadId.hpp>
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>

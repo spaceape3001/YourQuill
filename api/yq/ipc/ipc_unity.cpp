@@ -7,7 +7,7 @@
 #include "ipcBuffer.hpp"
 #include "ipcPackets.hpp"
 #include "ipcSocket.hpp"
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 
 namespace yq {
 

@@ -7,7 +7,11 @@
 #pragma once
 #define YQUILL__API__CORE__TYPE__VECTOR__H__
 
-#include <yq/preamble.hpp>
+#include <basic/preamble.hpp>
+#include <algorithm>
+#include <vector>
+#include <cstring>
+
 
 namespace yq {
 

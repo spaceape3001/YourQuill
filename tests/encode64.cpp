@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <boost/ut.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/text/Encode64.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <basic/ByteArray.hpp>
 #include <cstring>
 

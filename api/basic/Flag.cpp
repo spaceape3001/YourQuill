@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
 
 #include "Flag.hpp"
+#include <basic/text_utils.hpp>
 
 namespace yq {
     std::string     flag_string(const EnumDef* def, uint64_t values, std::string_view sep)

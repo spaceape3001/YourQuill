@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/type/Enum.hpp>
-#include <yq/type/Flag.hpp>
+#include <basic/Enum.hpp>
+#include <basic/Flag.hpp>
 
 #include <filesystem>
 #include <string>

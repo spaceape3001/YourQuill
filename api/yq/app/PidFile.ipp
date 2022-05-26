@@ -9,6 +9,7 @@
 #include "PidFile.hpp"
 #include <yq/io/file_utils.hpp>
 #include <fstream>
+#include <unistd.h>
 
 namespace yq {
     PidFile::PidFile(const std::filesystem::path& f, bool autoMake)

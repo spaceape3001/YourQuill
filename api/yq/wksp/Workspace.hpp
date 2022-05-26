@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/file/RootFwd.hpp>
-#include <yq/type/Enum.hpp>
-#include <yq/type/Flag.hpp>
+#include <basic/Enum.hpp>
+#include <basic/Flag.hpp>
 #include <functional>
 
 namespace yq {

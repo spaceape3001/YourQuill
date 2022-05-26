@@ -6,7 +6,7 @@
 
 
 #pragma once
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 
 #define dbAlert             yAlert("db")
 #define dbCritical          yCritical("db")

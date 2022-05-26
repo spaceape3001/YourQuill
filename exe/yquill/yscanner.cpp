@@ -6,9 +6,9 @@
 
 #include "yquill.hpp"
 
-#include <yq/algo/Compare.hpp>
+#include <basic/Compare.hpp>
 #include <basic/Deque.hpp>
-#include <yq/collection/EnumMap.hpp>
+#include <basic/EnumMap.hpp>
 #include <basic/Set.hpp>
 #include <basic/Vector.hpp>
 #include <yq/file/DirectoryCDB.hpp>
@@ -20,7 +20,7 @@
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/DirWatcher.hpp>
 #include <yq/io/file_utils.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/srv/FileWatch.hpp>
@@ -28,7 +28,8 @@
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
+#include <basic/ThreadId.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 

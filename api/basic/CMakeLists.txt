@@ -8,28 +8,38 @@ endif()
 set(basic_sources
     ${basic_test_source}
     
-    ./basic.cpp
-
     ./Array1.hpp
     ./Array2.hpp
     ./ByteArray.hpp
     ./CmdArgs.cpp
     ./CmdArgs.hpp
     ./Comma.hpp
+    ./Compare.hpp
     ./Concat.hpp
     ./DbgRel.hpp
     ./Deque.hpp
     ./DelayInit.cpp
     ./DelayInit.hpp
     ./DiffEngine.hpp
+    ./Enum.cpp
+    ./Enum.hpp
+    ./EnumMap.hpp
     ./Execute.cpp
     ./Execute.hpp
     ./Guarded.hpp
+    ./FixedBuffer.hpp
+    ./Flag.cpp
+    ./Flag.hpp
     ./Hash.hpp
+    ./IgCase.hpp
+    ./IgCase.cpp
     ./IntRange.hpp
     ./Iter32.hpp
     ./IterW.hpp
     ./List.hpp
+    ./LogFwd.hpp
+    ./Logging.cpp
+    ./Logging.hpp
     ./Map.hpp
     ./MultiMap.hpp
     ./Random.cpp
@@ -37,6 +47,8 @@ set(basic_sources
     ./Ref.cpp
     ./Ref.hpp
     ./Result.hpp
+    ./RevIgCase.hpp
+    ./RevIgCase.cpp
     ./Safety.hpp
     ./Set.hpp
     ./Span.hpp
@@ -50,6 +62,8 @@ set(basic_sources
     ./Version.hpp
     
     ./c_utils.hpp
+    ./text_utils.cpp
+    ./text_utils.hpp
 
     ./trait/always_false.hpp
     ./trait/always_true.hpp

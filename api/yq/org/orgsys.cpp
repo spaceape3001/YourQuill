@@ -37,7 +37,7 @@
 #include <yq/image/ImageHtml.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/leaf/LeafCDB.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/wksp/Workspace.hpp>

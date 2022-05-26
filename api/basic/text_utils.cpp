@@ -4,19 +4,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
+#include "text_utils.hpp"
 #include <basic/Iter32.hpp>
 #include <basic/IterW.hpp>
-#include "text_utils.hpp"
 
-#include <yq/algo/Compare.hpp>
+#include <basic/Compare.hpp>
 #include <basic/Comma.hpp>
 #include <basic/List.hpp>
 #include <basic/Map.hpp>
 #include <basic/MultiMap.hpp>
 #include <basic/Set.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 
 #include <bitset>
 

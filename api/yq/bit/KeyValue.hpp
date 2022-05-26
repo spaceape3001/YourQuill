@@ -9,13 +9,10 @@
 #include <basic/c_utils.hpp>
 #include <basic/Set.hpp>
 #include <basic/Vector.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <basic/Result.hpp>
-#include <string>
-#include <string_view>
-#include <vector>
 
-#include <yq/log/Logging.hpp>
+//#include <basic/Logging.hpp>
 
 namespace yq {
     struct KeyValue;

@@ -6,18 +6,21 @@
 
 #pragma once
 
-#include <basic/ThreadId.hpp>
+#include <chrono>
+#include <filesystem>
+#include <string>
+#include <string_view>
+#include <vector>
+
 #include <basic/128-bit.hpp>
-#include <yq/c++/stdlibs.hpp>
-#include <yq/log/LogFwd.hpp>
-#include <yq/text/IgCase.hpp>
-#include <yq/text/RevIgCase.hpp>
+#include <basic/IgCase.hpp>
+#include <basic/LogFwd.hpp>
+#include <basic/RevIgCase.hpp>
+
 
 using namespace std::literals::chrono_literals;
 using namespace std::literals::string_literals;
 using namespace std::literals::string_view_literals;
-
-
 
 namespace yq {
     class Any;
@@ -39,8 +42,7 @@ namespace yq {
     struct Parsed;
     class RefCount;
     class Stream;
-    
-        //  STRUCTS
+
 
         // TEMPLATE CLASS (BY CLASS)
     template <class> class EnumImpl;
@@ -149,7 +151,7 @@ namespace yq {
 
     using std::literals::string_literals::operator""s;
     using std::literals::string_view_literals::operator""sv;
+    
 }
-
 
 

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/meta/InfoBinder.hpp>
-#include <yq/type/Enum.hpp>
+#include <basic/Enum.hpp>
 
 namespace yq {
 

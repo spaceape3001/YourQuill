@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/text/text_utils.hpp>
-#include <yq/type/Enum.hpp>
-#include <yq/type/Flag.hpp>
+#include <basic/text_utils.hpp>
+#include <basic/Enum.hpp>
+#include <basic/Flag.hpp>
 #include "XmlFwd.hpp"
 
 #include "rapidxml.hpp"

@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Markdown.hpp"
-#include <yq/algo/Compare.hpp>
+#include <basic/Compare.hpp>
 #include <yq/stream/Ops.hpp>
 #include <basic/Stream.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 
 /*
     Crediting https://github.com/progsource/maddy for the guidance in how-to, however, the code

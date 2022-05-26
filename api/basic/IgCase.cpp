@@ -4,10 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "IgCase.hpp"
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 
 namespace yq {
 

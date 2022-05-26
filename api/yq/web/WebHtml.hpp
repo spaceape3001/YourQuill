@@ -11,6 +11,7 @@
 #include <basic/Stream.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>
+#include <functional>
 
 namespace yq {
     struct WebContext;

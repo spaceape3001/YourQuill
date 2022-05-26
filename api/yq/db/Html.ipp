@@ -14,7 +14,7 @@
 #include <yq/web/WebHtml.hpp>
 #include <yq/wksp/Workspace.hpp>
 
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 
 namespace yq {
     namespace html {

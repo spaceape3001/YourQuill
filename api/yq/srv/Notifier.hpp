@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <yq/collection/EnumMap.hpp>
+#include <basic/EnumMap.hpp>
 #include <yq/enum/Change.hpp>
 #include <yq/file/Folder.hpp>
-#include <yq/type/Flag.hpp>
+#include <basic/Flag.hpp>
 #include <filesystem>
 #include <source_location>
 

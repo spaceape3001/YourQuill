@@ -12,14 +12,18 @@
 #include <yq/file/Root.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/meta/Global.hpp>
 #include <yq/meta/Init.hpp>
 #include <yq/sql/SqlLite.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
+#include <basic/ThreadId.hpp>
 #include <yq/wksp/QuillFile.hpp>
+
+#include <atomic>
 #include <pwd.h>
 #include <unistd.h>
+#include <limits.h>
 
 #define wkspAlert           yAlert("wksp")
 #define wkspCritical        yCritical("wksp")

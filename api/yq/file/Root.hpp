@@ -8,10 +8,10 @@
 
 #include "RootFwd.hpp"
 #include <yq/bit/Policy.hpp>
-#include <yq/collection/EnumMap.hpp>
+#include <basic/EnumMap.hpp>
 #include <yq/enum/Access.hpp>
 #include <yq/enum/Vcs.hpp>
-#include <yq/type/Flag.hpp>
+#include <basic/Flag.hpp>
 
 
 namespace yq {

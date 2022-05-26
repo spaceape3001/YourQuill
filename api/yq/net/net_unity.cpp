@@ -9,11 +9,11 @@
 #include "VersionSpec.hpp"
 
 #include <basic/DelayInit.hpp>
-#include <yq/collection/EnumMap.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/EnumMap.hpp>
+#include <basic/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <stdio.h>
 
 namespace yq {

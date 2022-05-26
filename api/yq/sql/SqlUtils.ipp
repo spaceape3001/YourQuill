@@ -11,7 +11,7 @@
 #include "SqlLogging.hpp"
 #include "SqlQuery.hpp"
 #include <yq/io/file_utils.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 
 namespace yq {
     bool    db_run_script(std::string_view script, SqlLite& db)

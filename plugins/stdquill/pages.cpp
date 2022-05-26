@@ -28,7 +28,7 @@
 #include <yq/db/NKI.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/meta/ObjectInfo.hpp>
 #include <yq/meta/TypeInfo.hpp>
 #include <yq/sql/SqlLite.hpp>
@@ -36,7 +36,7 @@
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/text/Markdown.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <yq/web/JsonAdapter.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>

@@ -8,6 +8,8 @@
 
 #include "Meta.hpp"
 #include <basic/DelayInit.hpp>
+#include <basic/ThreadId.hpp>
+#include <cassert>
 
 namespace yq {
 

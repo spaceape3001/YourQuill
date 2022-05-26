@@ -13,7 +13,7 @@
 #include "PropGetter.hpp"
 #include "PropSetter.hpp"
 
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/type/Any.hpp>
 
 namespace yq {

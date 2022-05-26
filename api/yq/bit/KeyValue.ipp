@@ -7,10 +7,10 @@
 #pragma once
 
 #include "KeyValue.hpp"
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/stream/LineCol.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <basic/ByteArray.hpp>
 
 namespace yq {

@@ -10,13 +10,14 @@
 #include <yq/app/Plugins.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/meta/Meta.hpp>
 //#include <yq/stream/Ops.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/sql/SqlUtils.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
+#include <basic/ThreadId.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 #include <iostream>

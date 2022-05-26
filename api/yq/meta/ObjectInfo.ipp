@@ -7,7 +7,7 @@
 #pragma once
 
 #include "ObjectInfo.hpp"
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/type/Object.hpp>
 
 namespace yq {

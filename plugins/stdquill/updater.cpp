@@ -28,7 +28,7 @@
 #include <yq/db/SQ.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/srv/FileWatch.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage2.hpp>
@@ -37,7 +37,7 @@
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 

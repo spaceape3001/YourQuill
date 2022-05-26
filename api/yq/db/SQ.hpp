@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/sql/SqlQuery.hpp>
 
 #include <set>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 
 namespace yq {
     StringViewMultiMap     parse_cookie(std::string_view cs)

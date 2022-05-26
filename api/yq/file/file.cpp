@@ -43,7 +43,7 @@
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

@@ -1,10 +1,10 @@
 #include <iostream>
 #include <basic/Array2.hpp>
 #include <basic/Vector.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 
 using namespace yq;
 

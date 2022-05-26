@@ -6,9 +6,10 @@
 
 #pragma once
 
-#include <yq/preamble.hpp>
+#include <basic/preamble.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <basic/trait/not_copyable.hpp>
+#include <span>
 
 struct sqlite3_stmt;
 

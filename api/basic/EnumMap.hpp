@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/type/Enum.hpp>
+#include <basic/Enum.hpp>
 #include <basic/Vector.hpp>
 
 namespace yq {

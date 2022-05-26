@@ -6,7 +6,7 @@
 
 #include "SQ.hpp"
 #include <basic/Set.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 namespace yq {

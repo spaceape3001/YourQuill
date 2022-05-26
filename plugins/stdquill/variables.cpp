@@ -23,7 +23,7 @@
 #include <yq/org/CategoryCDB.hpp>
 #include <yq/org/TagCDB.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <yq/web/VarTemplate.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebHtml.hpp>

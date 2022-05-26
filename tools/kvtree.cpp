@@ -6,8 +6,8 @@
 
 #include <yq/bit/KeyValue.hpp>
 #include <yq/io/file_utils.hpp>
-#include <yq/log/Logging.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/Logging.hpp>
+#include <basic/text_utils.hpp>
 #include <basic/ByteArray.hpp>
 
 using namespace yq;

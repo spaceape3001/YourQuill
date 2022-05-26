@@ -15,7 +15,7 @@
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/image/Image.hpp>
 #include <yq/image/ImageCDB.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/shape/Size2Ops.hpp>
 
 #include <MagickCore/magick-baseconfig.h>

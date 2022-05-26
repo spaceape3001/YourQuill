@@ -8,7 +8,8 @@
 
 #define YQUILL__API__CORE__TYPE__HASH__H__
 
-#include <yq/preamble.hpp>
+#include <basic/preamble.hpp>
+#include <unordered_map>
 
 namespace yq {
 

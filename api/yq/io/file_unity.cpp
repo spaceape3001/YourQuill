@@ -11,14 +11,14 @@
 #include "XmlFile.hpp"
 #include "XmlUtils.hpp"
 
-#include <yq/algo/Compare.hpp>
+#include <basic/Compare.hpp>
 #include <basic/Safety.hpp>
 #include <basic/Set.hpp>
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <basic/Iter32.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <basic/ByteArray.hpp>
 
 #include <filesystem>

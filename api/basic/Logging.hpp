@@ -7,8 +7,8 @@
 #pragma once
 
 #include <basic/DbgRel.hpp>
-#include <yq/type/Enum.hpp>
-#include <yq/type/Flag.hpp>
+#include <basic/Enum.hpp>
+#include <basic/Flag.hpp>
 #include <log4cpp/Category.hh>
 #include <log4cpp/CategoryStream.hh>
 #include <log4cpp/Priority.hh>

@@ -12,12 +12,12 @@
 
 #include <basic/IntRange.hpp>
 
-#include <yq/preamble.hpp>
+#include <basic/preamble.hpp>
 #include <basic/DiffEngine.hpp>
 #include <yq/bit/KeyValue.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 

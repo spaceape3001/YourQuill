@@ -8,7 +8,7 @@
 
 #include <yq/meta/ReservedIDs.hpp>
 #include <yq/stream/Text.hpp>
-#include <yq/text/text_utils.hpp>
+#include <basic/text_utils.hpp>
 
 
 namespace yq {

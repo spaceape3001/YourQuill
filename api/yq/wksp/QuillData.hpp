@@ -9,7 +9,7 @@
 #include <yq/bit/Copyright.hpp>
 #include <yq/bit/Policy.hpp>
 #include <yq/enum/Vcs.hpp>
-#include <yq/collection/EnumMap.hpp>
+#include <basic/EnumMap.hpp>
 #include <basic/Set.hpp>
 #include <basic/Vector.hpp>
 

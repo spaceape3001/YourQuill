@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Enum.ipp"
-#include "Flag.ipp"
 #include "Object.ipp"
 #include "Any.ipp"
 #include "XmlObject.ipp"

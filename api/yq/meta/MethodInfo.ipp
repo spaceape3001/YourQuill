@@ -11,7 +11,7 @@
 #include "ObjectInfo.hpp"
 #include "TypeInfo.hpp"
 
-#include <yq/log/Logging.hpp>
+#include <basic/Logging.hpp>
 
 namespace yq {
     MethodInfo::MethodInfo(std::string_view zName, const std::source_location& sl, Meta* parentMeta, options_t opts) : Meta(zName, parentMeta, sl)
