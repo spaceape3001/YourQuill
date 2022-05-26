@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/atom/Value.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Vector.hpp>
 
 namespace yq {
     struct Value::Data {

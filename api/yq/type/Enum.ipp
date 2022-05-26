@@ -7,7 +7,6 @@
 #pragma once
 
 #include "Enum.hpp"
-#include <yq/collection/Vector.hpp>
 #include <yq/text/text_utils.hpp>
 #include <cassert>
 

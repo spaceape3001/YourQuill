@@ -22,7 +22,7 @@
 #include <yq/algo/Random.hpp>
 #include <yq/c++/Safety.hpp>
 #include <yq/collection/EnumMap.hpp>
-#include <yq/collection/Map.hpp>
+#include <basic/Map.hpp>
 #include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Bytes.hpp>

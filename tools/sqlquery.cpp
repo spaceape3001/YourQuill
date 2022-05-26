@@ -1,6 +1,6 @@
 #include <iostream>
-#include <yq/collection/Array2.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Array2.hpp>
+#include <basic/Vector.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>

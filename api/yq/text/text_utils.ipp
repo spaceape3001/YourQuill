@@ -6,16 +6,16 @@
 
 #pragma once
 
-#include "Comma.hpp"
 #include "Iter32.hpp"
 #include "IterW.hpp"
 #include "text_utils.hpp"
 
 #include <yq/algo/Compare.hpp>
-#include <yq/collection/List.hpp>
-#include <yq/collection/Map.hpp>
-#include <yq/collection/MultiMap.hpp>
-#include <yq/collection/Set.hpp>
+#include <basic/Comma.hpp>
+#include <basic/List.hpp>
+#include <basic/Map.hpp>
+#include <basic/MultiMap.hpp>
+#include <basic/Set.hpp>
 #include <yq/log/Logging.hpp>
 
 #include <bitset>

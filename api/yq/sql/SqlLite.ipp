@@ -10,7 +10,7 @@
 #include "SqlLogging.hpp"
 #include "SqlQuery.hpp"
 #include <sqlite3.h>
-#include <yq/collection/Set.hpp>
+#include <basic/Set.hpp>
 
 namespace yq {
 

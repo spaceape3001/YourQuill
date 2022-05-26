@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/atom/Class.hpp>
-#include <yq/collection/Map.hpp>
-#include <yq/collection/Set.hpp>
+#include <basic/Map.hpp>
+#include <basic/Set.hpp>
 #include <memory>
 
 namespace yq {

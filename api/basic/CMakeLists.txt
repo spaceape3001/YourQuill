@@ -10,12 +10,25 @@ set(basic_sources
     
     ./basic.cpp
 
+    ./Array1.hpp
+    ./Array2.hpp
+    ./Comma.hpp
+    ./Deque.hpp
     ./Guarded.hpp
+    ./Hash.hpp
     ./IntRange.hpp
+    ./List.hpp
+    ./Map.hpp
+    ./MultiMap.hpp
     ./Ref.cpp
     ./Ref.hpp
     ./Result.hpp
+    ./Set.hpp
+    ./Stack.hpp
+    ./Vector.hpp
     ./Version.hpp
+    
+    ./c_utils.hpp
 
     ./trait/always_false.hpp
     ./trait/always_true.hpp

@@ -7,10 +7,10 @@
 #include "yquill.hpp"
 
 #include <yq/algo/Compare.hpp>
-#include <yq/collection/Deque.hpp>
+#include <basic/Deque.hpp>
 #include <yq/collection/EnumMap.hpp>
-#include <yq/collection/Set.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Set.hpp>
+#include <basic/Vector.hpp>
 #include <yq/file/DirectoryCDB.hpp>
 #include <yq/file/DocumentCDB.hpp>
 #include <yq/file/FolderCDB.hpp>

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <initializer_list>
 #include <iterator>
 #include <list>
@@ -169,16 +170,16 @@ namespace yq {
     }
 
     template <typename T, typename C, typename A>
-    struct changes_t {
+    struct Changes {
         std::set<T,C,A>     added;
         std::set<T,C,A>     same;
         std::set<T,C,A>     removed;
     };
 
     template <typename T, typename C, typename A>
-    changes_t<T,C,A>    changes(const std::set<T,C,A>& from, const std::set<T,C,A>& to, C c=C())
+    Changes<T,C,A>    changes(const std::set<T,C,A>& from, const std::set<T,C,A>& to, C c=C())
     {
-        changes_t<T,C,A>    ret;
+        Changes<T,C,A>    ret;
         set_changes(from.begin(), from.end(), to.begin(), to.end(), 
             std::inserter(ret.removed, ret.removed.end()), 
             std::inserter(ret.same, ret.same.end()), 
@@ -188,9 +189,9 @@ namespace yq {
     }
 
     template <typename T, typename C, typename A>
-    changes_t<T,C,A>    add_remove(const std::set<T,C,A>& from, const std::set<T,C,A>& to, C c=C())
+    Changes<T,C,A>    add_remove(const std::set<T,C,A>& from, const std::set<T,C,A>& to, C c=C())
     {
-        changes_t<T,C,A>    ret;
+        Changes<T,C,A>    ret;
         set_left_right(from.begin(), from.end(), to.begin(), to.end(), 
             std::inserter(ret.removed, ret.removed.end()), 
             std::inserter(ret.added, ret.added.end()), c);
@@ -242,4 +243,43 @@ namespace yq {
         return a;
     }
     
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  REVERSING!
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    template <typename T>
+    struct ReverseIter {
+        ReverseIter(const T& _c) : c(_c) {}
+        typename T::const_reverse_iterator begin() const { return c.rbegin(); }
+        typename T::const_reverse_iterator end() const { return c.rend(); }
+        const T& arg() const { return c; }
+    private:
+        const T& c;
+    };
+
+    template <typename T>
+    ReverseIter<T> reverse(const T& c) 
+    { 
+        return ReverseIter<T>(c); 
+    }
+
+    template <typename T>
+    bool  operator==(const T&a, const ReverseIter<T>& b)
+    {
+        if(a.size() != b.arg().size())
+            return false;
+        auto itr = a.begin();
+        auto jtr = b.begin();
+        for(; itr != a.end(); ++itr, ++jtr){
+            if(*itr != *jtr)
+                return false;
+        }
+        return true;
+    }
+
+    template <typename T>
+    bool  operator!=(const T&a, const ReverseIter<T>& b)
+    {
+        return !(a==b);
+    }
 }

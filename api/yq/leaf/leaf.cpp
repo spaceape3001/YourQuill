@@ -13,7 +13,7 @@
 #include "LeafLog.hpp"
 #include "LeafPost.hpp"
 
-#include <yq/collection/c_utils.hpp>
+#include <basic/c_utils.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/file/DocumentCDB.hpp>

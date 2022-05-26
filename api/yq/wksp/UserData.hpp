@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/bit/Context.hpp>
-#include <yq/collection/Set.hpp>
+#include <basic/Set.hpp>
 #include <yq/enum/Permission.hpp>
 #include <basic/Ref.hpp>
 #include <yq/wksp/Authentication.hpp>

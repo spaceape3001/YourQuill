@@ -13,7 +13,7 @@
 
 #include <yq/algo/Compare.hpp>
 #include <yq/c++/Safety.hpp>
-#include <yq/collection/Set.hpp>
+#include <basic/Set.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>

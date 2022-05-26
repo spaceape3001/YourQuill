@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/collection/Array2.hpp>
+#include <basic/Array2.hpp>
 #include <yq/enum/SizeDesc.hpp>
 #include <yq/enum/Submit.hpp>
 #include <yq/enum/Reset.hpp>

@@ -11,7 +11,7 @@
 
 #include <yq/algo/Random.hpp>
 #include <yq/app/DelayInit.hpp>
-#include <yq/collection/c_utils.hpp>
+#include <basic/c_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>

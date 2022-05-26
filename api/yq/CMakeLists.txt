@@ -52,18 +52,7 @@ set(yq_sources
     ./c++/Safety.hpp
     
 
-    ./collection/Array1.hpp
-    ./collection/Array2.hpp
-    ./collection/collection_unity.cpp
-    ./collection/Deque.hpp
     ./collection/EnumMap.hpp
-    ./collection/Hash.hpp
-    ./collection/List.hpp
-    ./collection/Map.hpp
-    ./collection/MultiMap.hpp
-    ./collection/Set.hpp
-    ./collection/Stack.hpp
-    ./collection/Vector.hpp
     
     ./db/db.cpp
     
@@ -142,7 +131,6 @@ set(yq_sources
     ./stream/Ops.hpp
     
     
-    ./text/Comma.hpp
     ./text/Encode64.cpp
     ./text/Encode64.hpp
     ./text/Format.hpp

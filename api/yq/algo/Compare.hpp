@@ -6,8 +6,7 @@
 
 #pragma once
 #include <yq/type/Enum.hpp>
-#include <yq/collection/Vector.hpp>
-
+#include <vector>
 
 namespace yq {
 
@@ -37,7 +36,7 @@ namespace yq {
         return chain_compare(lhs, rhs, b...);
     }
 
-    inline Compare merge(const Vector<Compare>& cs)
+    inline Compare merge(const std::vector<Compare>& cs)
     {
         for(Compare c : cs){
             switch(c){

@@ -9,8 +9,8 @@
 #include <yq/atom/Field.hpp>
 #include <yq/enum/Multiplicity.hpp>
 #include <yq/enum/Restriction.hpp>
-#include <yq/collection/Map.hpp>
-#include <yq/collection/Set.hpp>
+#include <basic/Map.hpp>
+#include <basic/Set.hpp>
 #include <memory>
 
 

@@ -9,11 +9,11 @@
 #include <yq/preamble.hpp>
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
-#include <yq/collection/Hash.hpp>
-#include <yq/collection/Map.hpp>
-#include <yq/collection/MultiMap.hpp>
-#include <yq/collection/Set.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Hash.hpp>
+#include <basic/Map.hpp>
+#include <basic/MultiMap.hpp>
+#include <basic/Set.hpp>
+#include <basic/Vector.hpp>
 
 #include "AnyDef.hpp"
 

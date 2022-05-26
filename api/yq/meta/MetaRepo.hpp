@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/meta/Meta.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Vector.hpp>
 
 namespace yq {
     struct Meta::Repo {

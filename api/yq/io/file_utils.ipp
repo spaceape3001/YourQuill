@@ -8,7 +8,7 @@
 
 #include "file_utils.hpp"
 #include <yq/c++/Safety.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Vector.hpp>
 #include <yq/text/Iter32.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
@@ -25,7 +25,7 @@
 //#include "XmlUtils.hpp"
 
 //#include <yq/algo/Compare.hpp>
-//#include <yq/collection/Set.hpp>
+//#include <basic/Set.hpp>
 //#include <yq/log/Logging.hpp>
 //#include <yq/stream/Bytes.hpp>
 //#include <yq/stream/Ops.hpp>

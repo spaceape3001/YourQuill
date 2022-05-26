@@ -6,8 +6,8 @@
 
 #include "dir_utils.hpp"
 
-#include <yq/collection/Set.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Set.hpp>
+#include <basic/Vector.hpp>
 #include <yq/text/text_utils.hpp>
 
 #include <sys/stat.h>

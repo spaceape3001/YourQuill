@@ -7,7 +7,7 @@
 #pragma once
 
 #include <string_view>
-#include <yq/collection/Stack.hpp>
+#include <basic/Stack.hpp>
 
 
 namespace yq {

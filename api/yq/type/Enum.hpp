@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/collection/Map.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Map.hpp>
+#include <basic/Vector.hpp>
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

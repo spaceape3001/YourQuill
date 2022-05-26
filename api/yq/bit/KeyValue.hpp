@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/collection/Reverse.hpp>
-#include <yq/collection/Set.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/c_utils.hpp>
+#include <basic/Set.hpp>
+#include <basic/Vector.hpp>
 #include <yq/text/text_utils.hpp>
 #include <basic/Result.hpp>
 #include <string>

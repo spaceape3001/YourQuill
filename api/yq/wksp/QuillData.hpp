@@ -10,8 +10,8 @@
 #include <yq/bit/Policy.hpp>
 #include <yq/enum/Vcs.hpp>
 #include <yq/collection/EnumMap.hpp>
-#include <yq/collection/Set.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Set.hpp>
+#include <basic/Vector.hpp>
 
 namespace yq {
 

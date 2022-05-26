@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/collection/Array1.hpp>
+#include <basic/Array1.hpp>
 #include <basic/IntRange.hpp>
 #include <vector>
 

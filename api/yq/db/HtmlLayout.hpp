@@ -7,7 +7,7 @@
 #pragma once
 
 #include <basic/trait/always_false.hpp>
-#include <yq/collection/Array2.hpp>
+#include <basic/Array2.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 

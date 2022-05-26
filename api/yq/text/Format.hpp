@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/text/String.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Vector.hpp>
 
 
 /*! Lightly formatting string

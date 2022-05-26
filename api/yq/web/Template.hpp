@@ -8,8 +8,8 @@
 
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
-#include <yq/collection/Set.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Set.hpp>
+#include <basic/Vector.hpp>
 #include <yq/net/Http.hpp>
 #include <basic/Ref.hpp>
 

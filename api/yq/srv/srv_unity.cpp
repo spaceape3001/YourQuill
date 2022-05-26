@@ -11,7 +11,7 @@
 #include "Stage3.hpp"
 #include "Stage4.hpp"
 
-#include <yq/collection/Vector.hpp>
+#include <basic/Vector.hpp>
 #include <yq/file/Fragment.hpp>
 #include <yq/text/text_utils.hpp>
 

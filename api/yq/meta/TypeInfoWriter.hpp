@@ -11,12 +11,12 @@
 #include "CompoundInfoDynamic.hpp"
 #include <basic/trait/has_less.hpp>
 #include <basic/trait/is_template.hpp>
-#include <yq/collection/List.hpp>
-#include <yq/collection/Hash.hpp>
-#include <yq/collection/Map.hpp>
-#include <yq/collection/MultiMap.hpp>
-#include <yq/collection/Set.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/List.hpp>
+#include <basic/Hash.hpp>
+#include <basic/Map.hpp>
+#include <basic/MultiMap.hpp>
+#include <basic/Set.hpp>
+#include <basic/Vector.hpp>
 #include <yq/stream/Ops.hpp>
 
 namespace yq {

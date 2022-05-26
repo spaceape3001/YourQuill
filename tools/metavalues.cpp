@@ -12,7 +12,7 @@
 
 #include <yq/text/text_utils.hpp>
 #include <yq/type/Any.hpp>
-#include <yq/collection/Vector.hpp>
+#include <basic/Vector.hpp>
 
 using namespace yq;
 

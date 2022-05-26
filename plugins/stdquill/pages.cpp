@@ -23,7 +23,7 @@
 
 #include <yq/app/DelayInit.hpp>
 #include <yq/bit/Copyright.hpp>
-#include <yq/collection/c_utils.hpp>
+#include <basic/c_utils.hpp>
 #include <yq/db/HtmlLayout.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/io/dir_utils.hpp>

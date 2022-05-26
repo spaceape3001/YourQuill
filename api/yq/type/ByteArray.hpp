@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/collection/Vector.hpp>
+#include <basic/Vector.hpp>
 #include <string_view>
 
 namespace yq {

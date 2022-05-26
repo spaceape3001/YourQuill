@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "SQ.hpp"
-#include <yq/collection/Set.hpp>
+#include <basic/Set.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/wksp/Workspace.hpp>
 
