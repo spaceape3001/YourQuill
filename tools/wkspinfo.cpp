@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include <yq/app/CmdArgs.hpp>
+#include <basic/CmdArgs.hpp>
 #include <yq/file/Root.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/meta/Meta.hpp>

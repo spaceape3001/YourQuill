@@ -6,7 +6,7 @@
 
 #include "common.hpp"
 
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 #include <yq/atom/AtomCDB.hpp>
 #include <yq/atom/ClassCDB.hpp>
 #include <yq/atom/FieldCDB.hpp>

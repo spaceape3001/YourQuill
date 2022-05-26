@@ -6,7 +6,7 @@
 
 #pragma once
 #include <yq/meta/ObjectInfo.hpp>
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 
 namespace yq {
 

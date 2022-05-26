@@ -6,7 +6,7 @@
 
 #include "imaging.hpp"
 
-#include <yq/app/CmdArgs.hpp>
+#include <basic/CmdArgs.hpp>
 #include <yq/db/IDLock.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/file/Document.hpp>

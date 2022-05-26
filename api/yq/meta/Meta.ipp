@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Meta.hpp"
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 
 namespace yq {
 

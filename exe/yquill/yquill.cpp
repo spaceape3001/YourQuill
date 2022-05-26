@@ -6,7 +6,7 @@
 
 #include "yquill.hpp"
 
-#include <yq/app/CmdArgs.hpp>
+#include <basic/CmdArgs.hpp>
 #include <yq/app/Plugins.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>

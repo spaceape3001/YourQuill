@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Encode64.hpp"
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 
 namespace yq {
     Encode64::E64   Encode64::encode64(R64 i)

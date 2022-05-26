@@ -21,7 +21,7 @@
 #include <yq/tag.hpp>
 #include <yq/user.hpp>
 
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 #include <yq/bit/Copyright.hpp>
 #include <basic/c_utils.hpp>
 #include <yq/db/HtmlLayout.hpp>

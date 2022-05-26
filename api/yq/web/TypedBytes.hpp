@@ -6,7 +6,7 @@
 
 #pragma once
 #include <yq/net/Http.hpp>
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>
 
 namespace yq {

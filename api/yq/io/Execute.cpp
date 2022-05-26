@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Execute.hpp"
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-enum-enum-conversion"
 #include <pstream.h>

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/app/ThreadId.hpp>
-#include <yq/c++/128-bit.hpp>
+#include <basic/ThreadId.hpp>
+#include <basic/128-bit.hpp>
 #include <yq/c++/stdlibs.hpp>
 #include <yq/log/LogFwd.hpp>
 #include <yq/text/IgCase.hpp>

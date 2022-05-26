@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 #include <basic/Guarded.hpp>
 #include <yq/web/PageTemplate.hpp>
 #include <yq/web/TypedBytes.hpp>

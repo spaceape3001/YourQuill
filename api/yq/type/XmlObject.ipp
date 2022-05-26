@@ -7,7 +7,7 @@
 #pragma once
 
 #include "XmlObject.hpp"
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
 
 namespace yq {

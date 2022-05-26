@@ -7,8 +7,8 @@
 #include "Workspace.hpp"
 
 #include <yq/app/BuildInfo.hpp>
-#include <yq/app/CmdArgs.hpp>
-#include <yq/app/DelayInit.hpp>
+#include <basic/CmdArgs.hpp>
+#include <basic/DelayInit.hpp>
 #include <yq/file/Root.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>

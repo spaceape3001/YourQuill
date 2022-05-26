@@ -11,7 +11,7 @@
 #include <yq/stream/LineCol.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 
 namespace yq {
 

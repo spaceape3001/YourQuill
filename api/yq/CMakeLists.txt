@@ -23,21 +23,13 @@ set(yq_sources
     
 
     ./algo/Compare.hpp
-    ./algo/DiffEngine.hpp
-    ./algo/Random.cpp
-    ./algo/Random.hpp
     
     ./app/app_unity.cpp
     ./app/BuildInfo.hpp
     ./app/BuildInfo.ipp
-    ./app/CmdArgs.hpp
-    ./app/CmdArgs.ipp
-    ./app/DelayInit.hpp
     ./app/PidFile.hpp
     ./app/Plugins.hpp
     ./app/Plugins.ipp
-    ./app/ThreadId.hpp
-    ./app/ThreadId.ipp
     
     ./atom/atom.cpp
     
@@ -45,11 +37,7 @@ set(yq_sources
     
     ./bit/bit_unity.cpp
     
-    ./c++/c++_unity.cpp
-    ./c++/Concat.hpp
-    ./c++/DbgRel.hpp
     ./c++/NaN.hpp
-    ./c++/Safety.hpp
     
 
     ./collection/EnumMap.hpp
@@ -147,12 +135,9 @@ set(yq_sources
     ./type/type_unity.cpp
     
     ./type/Any.hpp
-    ./type/ByteArray.hpp
     ./type/Enum.hpp
     ./type/FixedBuffer.hpp
     ./type/Flag.hpp
-    ./type/Span.hpp
-    ./type/Touched.hpp
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp

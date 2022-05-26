@@ -16,7 +16,7 @@
 #include <yq/net/Url.hpp>
 #include <yq/net/VersionSpec.hpp>
 // #include <yq/text/KV.hpp>
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 //#include <yq/web/HttpHeader.hpp>
 #include <nlohmann/json.hpp>
 #include <time.h>

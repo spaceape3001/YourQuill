@@ -9,8 +9,8 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include <yq/algo/Random.hpp>
-#include <yq/app/DelayInit.hpp>
+#include <basic/Random.hpp>
+#include <basic/DelayInit.hpp>
 #include <basic/c_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>

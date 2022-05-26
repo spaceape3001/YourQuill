@@ -24,7 +24,7 @@
 #include <yq/user.hpp>
 #include <yq/value.hpp>
 
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/io/dir_utils.hpp>
 #include <yq/io/file_utils.hpp>

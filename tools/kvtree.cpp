@@ -8,7 +8,7 @@
 #include <yq/io/file_utils.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/text/text_utils.hpp>
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 
 using namespace yq;
 

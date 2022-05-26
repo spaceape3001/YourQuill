@@ -12,19 +12,34 @@ set(basic_sources
 
     ./Array1.hpp
     ./Array2.hpp
+    ./ByteArray.hpp
+    ./CmdArgs.cpp
+    ./CmdArgs.hpp
     ./Comma.hpp
+    ./Concat.hpp
+    ./DbgRel.hpp
     ./Deque.hpp
+    ./DelayInit.cpp
+    ./DelayInit.hpp
+    ./DiffEngine.hpp
     ./Guarded.hpp
     ./Hash.hpp
     ./IntRange.hpp
     ./List.hpp
     ./Map.hpp
     ./MultiMap.hpp
+    ./Random.cpp
+    ./Random.hpp
     ./Ref.cpp
     ./Ref.hpp
     ./Result.hpp
+    ./Safety.hpp
     ./Set.hpp
+    ./Span.hpp
     ./Stack.hpp
+    ./ThreadId.cpp
+    ./ThreadId.hpp
+    ./Touched.hpp
     ./Vector.hpp
     ./Version.hpp
     

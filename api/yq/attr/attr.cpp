@@ -13,7 +13,7 @@
 #include <basic/IntRange.hpp>
 
 #include <yq/preamble.hpp>
-#include <yq/algo/DiffEngine.hpp>
+#include <basic/DiffEngine.hpp>
 #include <yq/bit/KeyValue.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/stream/Ops.hpp>

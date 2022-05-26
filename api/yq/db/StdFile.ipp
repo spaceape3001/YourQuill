@@ -8,7 +8,7 @@
 
 #include <yq/bit/KeyValue.hpp>
 #include <yq/stream/Text.hpp>
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 
 #include <rapidxml.hpp>
 

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/c++/DbgRel.hpp>
+#include <basic/DbgRel.hpp>
 #include <yq/type/Enum.hpp>
 #include <yq/type/Flag.hpp>
 #include <log4cpp/Category.hh>

@@ -8,7 +8,7 @@
 #include "Url.hpp"
 #include "VersionSpec.hpp"
 
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Ops.hpp>

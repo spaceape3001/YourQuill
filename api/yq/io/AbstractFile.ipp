@@ -7,7 +7,7 @@
 #include "AbstractFile.hpp"
 #include "file_utils.hpp"
 #include <yq/stream/Bytes.hpp>
-#include <yq/type/ByteArray.hpp>
+#include <basic/ByteArray.hpp>
 #include <fstream>
 
 namespace yq {
