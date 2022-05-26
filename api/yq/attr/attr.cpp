@@ -10,13 +10,14 @@
 #include "AttributeDiff.hpp"
 #include "AttributeHtml.hpp"
 
+#include <basic/IntRange.hpp>
+
 #include <yq/preamble.hpp>
 #include <yq/algo/DiffEngine.hpp>
 #include <yq/bit/KeyValue.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/text/text_utils.hpp>
-#include <yq/type/IntRange.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 

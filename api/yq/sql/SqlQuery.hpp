@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/preamble.hpp>
-#include <yq/c++/trait/not_moveable.hpp>
-#include <yq/c++/trait/not_copyable.hpp>
+#include <basic/trait/not_moveable.hpp>
+#include <basic/trait/not_copyable.hpp>
 
 struct sqlite3_stmt;
 

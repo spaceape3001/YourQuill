@@ -10,7 +10,7 @@
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Stream.hpp>
 #include <yq/type/ByteArray.hpp>
-#include <yq/type/Ref.hpp>
+#include <basic/Ref.hpp>
 
 namespace yq {
     struct WebContext;

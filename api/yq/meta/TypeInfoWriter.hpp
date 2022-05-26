@@ -9,8 +9,8 @@
 #include "TypeInfo.hpp"
 #include "InfoBinder.hpp"
 #include "CompoundInfoDynamic.hpp"
-#include <yq/c++/trait/has_less.hpp>
-#include <yq/c++/trait/is_template.hpp>
+#include <basic/trait/has_less.hpp>
+#include <basic/trait/is_template.hpp>
 #include <yq/collection/List.hpp>
 #include <yq/collection/Hash.hpp>
 #include <yq/collection/Map.hpp>

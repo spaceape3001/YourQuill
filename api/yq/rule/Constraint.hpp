@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/type/XmlObject.hpp>
-#include <yq/type/Ref.hpp>
+#include <basic/Ref.hpp>
 
 namespace yq {
     

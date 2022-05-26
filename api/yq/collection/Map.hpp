@@ -8,7 +8,7 @@
 #define YQUILL__API__CORE__TYPE__MAP__H__
 
 #include <yq/preamble.hpp>
-#include <yq/type/Result.hpp>
+#include <basic/Result.hpp>
 #include <map>
 
 namespace yq {

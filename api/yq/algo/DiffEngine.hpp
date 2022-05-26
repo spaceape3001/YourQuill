@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/collection/Array1.hpp>
-#include <yq/type/IntRange.hpp>
+#include <basic/IntRange.hpp>
 #include <vector>
 
 namespace yq {

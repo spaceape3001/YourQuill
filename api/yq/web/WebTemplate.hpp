@@ -11,7 +11,7 @@
 
 #include <yq/db/CacheFwd.hpp>
 #include <yq/file/Folder.hpp>
-#include <yq/type/Guarded.hpp>
+#include <basic/Guarded.hpp>
 
 namespace yq {
     class WebHtml;

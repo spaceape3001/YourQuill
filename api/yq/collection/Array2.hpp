@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <cstddef>
-#include <yq/type/IntRange.hpp>
+#include <basic/IntRange.hpp>
 
 namespace yq {
 

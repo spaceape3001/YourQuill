@@ -9,8 +9,8 @@
 #include <string>
 #include <string_view>
 #include <yq/collection/Map.hpp>
-#include <yq/c++/trait/not_copyable.hpp>
-#include <yq/c++/trait/not_moveable.hpp>
+#include <basic/trait/not_copyable.hpp>
+#include <basic/trait/not_moveable.hpp>
 #include <sys/inotify.h>
 
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <yq/type/Version.hpp>
+#include <basic/Version.hpp>
 #include <string_view>
 
 namespace log4cpp { class CategoryStream; }

@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <yq/c++/trait/not_copyable.hpp>
-#include <yq/c++/trait/not_moveable.hpp>
+#include <basic/trait/not_copyable.hpp>
+#include <basic/trait/not_moveable.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
 #include <yq/net/Http.hpp>
-#include <yq/type/Ref.hpp>
+#include <basic/Ref.hpp>
 
 
 namespace yq {

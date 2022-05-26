@@ -7,7 +7,7 @@
 #pragma once
 
 //#include <yq/enum/change.hpp>
-#include <yq/c++/trait/not_copyable.hpp>
+#include <basic/trait/not_copyable.hpp>
 #include <yq/collection/EnumMap.hpp>
 #include <yq/meta/Meta.hpp>
 #include <yq/meta/MetaWriter.hpp>

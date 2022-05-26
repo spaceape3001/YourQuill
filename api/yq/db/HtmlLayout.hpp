@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/c++/trait/always_false.hpp>
+#include <basic/trait/always_false.hpp>
 #include <yq/collection/Array2.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

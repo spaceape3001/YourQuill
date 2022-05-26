@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/preamble.hpp>
-#include <yq/c++/trait/always_false.hpp>
-#include <yq/type/Result.hpp>
+#include <basic/trait/always_false.hpp>
+#include <basic/Result.hpp>
 
 namespace yq {
 

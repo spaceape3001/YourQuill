@@ -12,7 +12,7 @@
 #include <yq/text/Iter32.hpp>
 #include <yq/text/text_utils.hpp>
 #include <yq/type/ByteArray.hpp>
-#include <yq/type/Result.hpp>
+#include <basic/Result.hpp>
 
 
 #include <fcntl.h>

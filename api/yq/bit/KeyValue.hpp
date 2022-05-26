@@ -10,7 +10,7 @@
 #include <yq/collection/Set.hpp>
 #include <yq/collection/Vector.hpp>
 #include <yq/text/text_utils.hpp>
-#include <yq/type/Result.hpp>
+#include <basic/Result.hpp>
 #include <string>
 #include <string_view>
 #include <vector>

@@ -9,7 +9,7 @@
 #include <yq/bit/Context.hpp>
 #include <yq/collection/Set.hpp>
 #include <yq/enum/Permission.hpp>
-#include <yq/type/Ref.hpp>
+#include <basic/Ref.hpp>
 #include <yq/wksp/Authentication.hpp>
 #include <yq/wksp/User.hpp>
 

@@ -51,22 +51,6 @@ set(yq_sources
     ./c++/NaN.hpp
     ./c++/Safety.hpp
     
-    ./c++/trait/always_false.hpp
-    ./c++/trait/always_true.hpp
-    ./c++/trait/can_two_add.hpp
-    ./c++/trait/can_two_divide.hpp
-    ./c++/trait/can_two_multiply.hpp
-    ./c++/trait/can_two_subtract.hpp
-    ./c++/trait/has_addition.hpp
-    ./c++/trait/has_equality.hpp
-    ./c++/trait/has_inequality.hpp
-    ./c++/trait/has_less.hpp
-    ./c++/trait/has_subtraction.hpp
-    ./c++/trait/is_template.hpp
-    ./c++/trait/not_copyable.hpp
-    ./c++/trait/not_moveable.hpp
-    ./c++/trait/sink.hpp
-
 
     ./collection/Array1.hpp
     ./collection/Array2.hpp
@@ -179,9 +163,6 @@ set(yq_sources
     ./type/Enum.hpp
     ./type/FixedBuffer.hpp
     ./type/Flag.hpp
-    ./type/IntRange.hpp
-    ./type/Ref.hpp
-    ./type/Result.hpp
     ./type/Span.hpp
     ./type/Touched.hpp
 
@@ -220,6 +201,7 @@ ENDIF()
 
 target_link_libraries(yq 
     PUBLIC 
+        yqbasic
         ${LOG4CPP_LIBRARIES} 
         ${TBB_LIBRARIES}
         ${CURL_LIBRARIES}
@@ -227,9 +209,5 @@ target_link_libraries(yq
         ${SQLite3_LIBRARY}
 )
 
-#   override for temp
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/garbage)
-add_executable( link_test_yqlib linktest.cpp )
-target_link_libraries( link_test_yqlib yq )
-
+LinkTest(yq)
 
