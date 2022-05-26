@@ -17,7 +17,7 @@
 #include <yq/log/Logging.hpp>
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/text/Iter32.hpp>
+#include <basic/Iter32.hpp>
 #include <yq/text/text_utils.hpp>
 #include <basic/ByteArray.hpp>
 

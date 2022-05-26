@@ -7,7 +7,7 @@
 #pragma once
 
 #include <QByteArray>
-#include <yq/stream/Stream.hpp>
+#include <basic/Stream.hpp>
 
 namespace yq {
     namespace stream {

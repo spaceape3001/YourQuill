@@ -55,7 +55,6 @@ set(yq_sources
     ./io/file_watch.cpp
     ./io/AbstractFile.hpp
     ./io/DirWatcher.hpp
-    ./io/Execute.cpp
     ./io/XmlFile.hpp
     ./io/XmlFwd.hpp
     ./io/XmlUtils.hpp
@@ -86,9 +85,6 @@ set(yq_sources
 
     ./org/orgsys.cpp
 
-    #./proc/Execute.cpp
-    #./proc/Execute.hpp
-    
     ./rule/rule.cpp
     
     ./sql/SqlError.hpp

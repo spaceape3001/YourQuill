@@ -7,7 +7,7 @@
 #include "Markdown.hpp"
 #include <yq/algo/Compare.hpp>
 #include <yq/stream/Ops.hpp>
-#include <yq/stream/Stream.hpp>
+#include <basic/Stream.hpp>
 #include <yq/text/text_utils.hpp>
 
 /*

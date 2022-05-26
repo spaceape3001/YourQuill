@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Iter32.hpp"
-#include "IterW.hpp"
+#include <basic/Iter32.hpp>
+#include <basic/IterW.hpp>
 #include "text_utils.hpp"
 
 #include <yq/algo/Compare.hpp>

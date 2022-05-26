@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/stream/Stream.hpp>
+#include <basic/Stream.hpp>
 #include <filesystem>
 #include <fstream>
 

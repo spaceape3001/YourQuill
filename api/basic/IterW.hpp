@@ -5,8 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/preamble.hpp>
+//#include <yq/preamble.hpp>
 #include <basic/trait/always_false.hpp>
+#include <cassert>
 
 #include <cwchar>
 #include <string_view>
@@ -48,7 +49,7 @@ namespace yq {
     private:
         IterW(std::string&&) = delete;
         IterW(std::string_view&&) = delete;
-        IterW(const Iter32&) = delete;
+        IterW(const IterW&) = delete;
         
         const char*     m_begin;
         const char*     m_data;

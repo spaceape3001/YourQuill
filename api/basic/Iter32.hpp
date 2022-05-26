@@ -6,11 +6,14 @@
 
 #pragma once
 
-#include <yq/preamble.hpp>
+//#include <yq/preamble.hpp>
 #include <basic/trait/always_false.hpp>
+#include <cassert>
 #include <cuchar>
 #include <cwchar>
 #include <charconv>
+#include <string>
+#include <string_view>
 
 namespace yq {
 
@@ -19,7 +22,7 @@ namespace yq {
     */
     class Iter32 {
     public:
-        Iter32(const std::string_view& s) : Iter32(s.data(), s.size()) {}
+        Iter32(std::string_view s) : Iter32(s.data(), s.size()) {}
         Iter32(Iter32&&) = default;
         Iter32&  operator=(Iter32&&) = default;
         

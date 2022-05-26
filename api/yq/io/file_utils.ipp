@@ -9,7 +9,7 @@
 #include "file_utils.hpp"
 #include <basic/Safety.hpp>
 #include <basic/Vector.hpp>
-#include <yq/text/Iter32.hpp>
+#include <basic/Iter32.hpp>
 #include <yq/text/text_utils.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Result.hpp>

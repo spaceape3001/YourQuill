@@ -22,9 +22,13 @@ set(basic_sources
     ./DelayInit.cpp
     ./DelayInit.hpp
     ./DiffEngine.hpp
+    ./Execute.cpp
+    ./Execute.hpp
     ./Guarded.hpp
     ./Hash.hpp
     ./IntRange.hpp
+    ./Iter32.hpp
+    ./IterW.hpp
     ./List.hpp
     ./Map.hpp
     ./MultiMap.hpp
@@ -37,6 +41,8 @@ set(basic_sources
     ./Set.hpp
     ./Span.hpp
     ./Stack.hpp
+    ./Stream.cpp
+    ./Stream.hpp
     ./ThreadId.cpp
     ./ThreadId.hpp
     ./Touched.hpp
