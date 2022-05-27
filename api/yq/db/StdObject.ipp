@@ -8,8 +8,8 @@
 
 #include "StdObject.hpp"
 #include <yq/bit/KeyValue.hpp>
-#include <yq/meta/Init.hpp>
-#include <yq/stream/Text.hpp>
+#include <basic/meta/Init.hpp>
+#include <basic/stream/Text.hpp>
 
 namespace yq {
     Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)

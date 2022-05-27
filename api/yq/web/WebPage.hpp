@@ -9,8 +9,8 @@
 //#include <yq/enum/change.hpp>
 #include <basic/trait/not_copyable.hpp>
 #include <basic/EnumMap.hpp>
-#include <yq/meta/Meta.hpp>
-#include <yq/meta/MetaWriter.hpp>
+#include <basic/meta/Meta.hpp>
+#include <basic/meta/MetaWriter.hpp>
 #include <yq/net/Http.hpp>
 #include <basic/Flag.hpp>
 

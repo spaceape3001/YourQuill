@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/meta/MetaHtml.hpp>
-#include <yq/meta/ObjectInfo.hpp>
-#include <yq/meta/PropertyInfo.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <basic/meta/ObjectInfo.hpp>
+#include <basic/meta/PropertyInfo.hpp>
+#include <basic/meta/TypeInfo.hpp>
 

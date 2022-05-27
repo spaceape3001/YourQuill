@@ -59,9 +59,8 @@ set(yq_sources
     #./log/LogFile.cpp
     #./log/LogFile.hpp
     
-    ./meta/meta_unity.cpp
     ./meta/MetaHtml.cpp
-    ./meta/StdTypes.cpp
+    ./meta/MetaHtml.hpp
     
     #./net/Curl.cpp
     #./net/Curl.hpp
@@ -81,14 +80,6 @@ set(yq_sources
     ./srv/Stage2.hpp
     ./srv/Stage3.hpp
     ./srv/Stage4.hpp
-
-    ./stream/stream_unity.cpp
-    ./stream/Bytes.hpp
-    ./stream/File.hpp
-    ./stream/LineCol.hpp
-    ./stream/OSFile.hpp
-    ./stream/Ops.hpp
-    
     
     ./text/Encode64.cpp
     ./text/Encode64.hpp
@@ -97,7 +88,6 @@ set(yq_sources
     
     ./type/type_unity.cpp
     
-    ./type/Any.hpp
 
     ./web/web_unity.cpp
     ./web/HttpParser.hpp

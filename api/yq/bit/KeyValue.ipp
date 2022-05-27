@@ -8,8 +8,8 @@
 
 #include "KeyValue.hpp"
 #include <basic/Logging.hpp>
-#include <yq/stream/LineCol.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/stream/LineCol.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 

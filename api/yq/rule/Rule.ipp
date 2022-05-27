@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Rule.hpp"
-#include <yq/meta/ObjectInfoWriter.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
 
 namespace yq {
 /*

@@ -8,7 +8,7 @@
 
 #include "Trigger.hpp"
 #include <yq/io/Strings.hpp>
-#include <yq/meta/ObjectInfoWriter.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
 #include <basic/XmlUtils.hpp>
 
 namespace yq {

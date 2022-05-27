@@ -9,7 +9,7 @@
 #include "Html.hpp"
 #include "HtmlLayout.hpp"
 #include <basic/Execute.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/StreamOps.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/wksp/Workspace.hpp>

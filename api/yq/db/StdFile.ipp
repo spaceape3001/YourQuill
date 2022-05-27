@@ -7,7 +7,7 @@
 #include "StdFile.hpp"
 
 #include <yq/bit/KeyValue.hpp>
-#include <yq/stream/Text.hpp>
+#include <basic/stream/Text.hpp>
 #include <basic/ByteArray.hpp>
 
 #include <rapidxml.hpp>

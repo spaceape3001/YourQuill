@@ -9,10 +9,11 @@
 #include <iostream>
 
 #include <basic/CmdArgs.hpp>
-#include <yq/file/Root.hpp>
 #include <basic/Logging.hpp>
-#include <yq/meta/Meta.hpp>
+#include <basic/meta/Meta.hpp>
 #include <basic/TextUtils.hpp>
+
+#include <yq/file/Root.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 int main(int argc, char* argv[])

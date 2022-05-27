@@ -8,28 +8,29 @@
 
 #include <basic/Compare.hpp>
 #include <basic/Deque.hpp>
+#include <basic/DirUtils.hpp>
 #include <basic/EnumMap.hpp>
+#include <basic/FileUtils.hpp>
+#include <basic/Logging.hpp>
 #include <basic/Set.hpp>
+#include <basic/SqlLite.hpp>
+#include <basic/SqlQuery.hpp>
+#include <basic/TextUtils.hpp>
+#include <basic/ThreadId.hpp>
 #include <basic/Vector.hpp>
+
 #include <yq/file/DirectoryCDB.hpp>
 #include <yq/file/DocumentCDB.hpp>
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/Root.hpp>
 #include <yq/file/RootCDB.hpp>
-#include <basic/DirUtils.hpp>
 #include <yq/io/DirWatcher.hpp>
-#include <basic/FileUtils.hpp>
-#include <basic/Logging.hpp>
-#include <basic/SqlLite.hpp>
-#include <basic/SqlQuery.hpp>
 #include <yq/srv/FileWatch.hpp>
 #include <yq/srv/Notifier.hpp>
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <basic/TextUtils.hpp>
-#include <basic/ThreadId.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 

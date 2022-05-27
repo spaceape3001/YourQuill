@@ -18,7 +18,7 @@
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/FragmentHtml.hpp>
 #include <yq/file/Root.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 #include <yq/web/WebContext.hpp>

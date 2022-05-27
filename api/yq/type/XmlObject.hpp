@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "Object.hpp"
+#include <basic/Object.hpp>
 #include <yq/io/XmlSerialize.hpp>
 
 namespace yq {

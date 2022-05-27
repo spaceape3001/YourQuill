@@ -15,8 +15,8 @@
 #include <basic/Safety.hpp>
 #include <basic/Set.hpp>
 #include <basic/Logging.hpp>
-#include <yq/stream/Bytes.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/stream/Bytes.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/Iter32.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>

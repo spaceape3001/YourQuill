@@ -15,17 +15,17 @@
 #include <db/html_common.hpp>
 
 
-#include <yq/app/DelayInit.hpp>
+#include <basic/DelayInit.hpp>
 //#include <yq/atom/Atom.hpp>
 //#include <yq/atom/Class.hpp>
 //#include <yq/atom/Field.hpp>
 #include <yq/bit/Copyright.hpp>
 #include <yq/enum/SubmitLabel.hpp>
 //#include <yq/leaf/Leaf.hpp>
-#include <yq/log/Logging.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/text/TextUtils.hpp>
-#include <yq/type/Guarded.hpp>
+#include <basic/Logging.hpp>
+#include <basic/StreamOps.hpp>
+#include <basic/TextUtils.hpp>
+#include <basic/Guarded.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>

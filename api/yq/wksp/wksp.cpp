@@ -32,8 +32,8 @@
 #include <yq/file/RootHtml.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/io/Strings.hpp>
-#include <yq/meta/ObjectInfoWriter.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

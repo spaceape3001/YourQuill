@@ -8,6 +8,8 @@ endif()
 set(basic_sources
     ${basic_test_source}
     
+    ./Any.cpp
+    ./Any.hpp
     ./Array1.hpp
     ./Array2.hpp
     ./ByteArray.hpp
@@ -47,6 +49,8 @@ set(basic_sources
     ./Logging.hpp
     ./Map.hpp
     ./MultiMap.hpp
+    ./Object.cpp
+    ./Object.hpp
     ./Random.cpp
     ./Random.hpp
     ./Ref.cpp
@@ -69,6 +73,8 @@ set(basic_sources
     ./Stack.hpp
     ./Stream.cpp
     ./Stream.hpp
+    ./StreamOps.cpp
+    ./StreamOps.hpp
     ./TextUtils.cpp
     ./TextUtils.hpp
     ./ThreadId.cpp
@@ -79,6 +85,61 @@ set(basic_sources
     ./XmlUtils.cpp
     ./XmlUtils.hpp
     
+    ./meta/AnyDef.hpp
+    ./meta/AnyImpl.hpp
+    ./meta/ArgInfo.cpp
+    ./meta/ArgInfo.hpp
+    ./meta/CompoundInfo.cpp
+    ./meta/CompoundInfo.hpp
+    ./meta/CompoundInfoDynamic.hpp
+    ./meta/CompoundInfoStatic.hpp
+    ./meta/DataBlock.hpp
+    ./meta/DynamicPropGetter.hpp
+    ./meta/DynamicPropSetter.hpp
+    ./meta/Global.cpp
+    ./meta/Global.hpp
+    ./meta/GlobalInfoWriter.hpp
+    ./meta/InfoBinder.hpp
+    ./meta/Init.hpp
+    ./meta/Meta.cpp
+    ./meta/Meta.hpp
+    ./meta/MetaRepo.cpp
+    ./meta/MetaRepo.hpp
+    ./meta/MetaWriter.cpp
+    ./meta/MetaWriter.hpp
+    ./meta/MethodInfo.cpp
+    ./meta/MethodInfo.hpp
+    ./meta/MethodInfoWriter.hpp
+    ./meta/ObjectInfo.cpp
+    ./meta/ObjectInfo.hpp
+    ./meta/ObjectInfoWriter.hpp
+    ./meta/PropGetter.cpp
+    ./meta/PropGetter.hpp
+    ./meta/PropSetter.cpp
+    ./meta/PropSetter.hpp
+    ./meta/PropertyInfo.cpp
+    ./meta/PropertyInfo.hpp
+    ./meta/PropertyInfoWriter.hpp
+    ./meta/ReservedIDs.hpp
+    ./meta/StaticPropGetter.hpp
+    ./meta/StaticPropSetter.hpp
+    ./meta/StdTypes.cpp
+    ./meta/TypeInfo.cpp
+    ./meta/TypeInfo.hpp
+    ./meta/TypeInfoWriter.hpp
+
+    ./stream/Bytes.cpp
+    ./stream/Bytes.hpp
+    ./stream/First.cpp
+    ./stream/First.hpp
+    ./stream/File.cpp
+    ./stream/File.hpp
+    ./stream/LineCol.cpp
+    ./stream/LineCol.hpp
+    ./stream/OSFile.cpp
+    ./stream/OSFile.hpp
+    ./stream/Text.hpp
+    ./stream/Text.cpp
 
     ./trait/always_false.hpp
     ./trait/always_true.hpp
@@ -100,6 +161,10 @@ set(basic_sources
 )
 
 add_library(yqbasic SHARED ${basic_sources})
+
+target_compile_definitions(yqbasic PRIVATE 
+    YQ__CORE__OVERRIDE 
+)
 
 IF(GCC)
     SET(GCC_FSLIB stdc++fs)

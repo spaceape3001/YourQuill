@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/meta/InfoBinder.hpp>
+#include <basic/meta/InfoBinder.hpp>
 #include <basic/Enum.hpp>
 #include <basic/Flag.hpp>
 

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <yq/enum.hpp>
-#include <yq/meta/Init.hpp>
+#include <basic/meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::Access)
 YQ_TYPE_IMPLEMENT(yq::AssertDeny)

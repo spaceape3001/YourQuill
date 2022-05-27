@@ -13,8 +13,8 @@
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <yq/meta/Global.hpp>
-#include <yq/meta/Init.hpp>
+#include <basic/meta/Global.hpp>
+#include <basic/meta/Init.hpp>
 #include <basic/SqlLite.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>

@@ -9,16 +9,18 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include <basic/Random.hpp>
 #include <basic/DelayInit.hpp>
 #include <basic/CollectionUtils.hpp>
-#include <basic/Logging.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/stream/Text.hpp>
-#include <basic/TextUtils.hpp>
 #include <basic/FixedBuffer.hpp>
+#include <basic/Logging.hpp>
+#include <basic/Random.hpp>
 #include <basic/Ref.hpp>
+#include <basic/StreamOps.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
+
+#include <basic/stream/Text.hpp>
+
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>

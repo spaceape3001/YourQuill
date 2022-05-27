@@ -6,7 +6,7 @@
 
 #include "AbstractFile.hpp"
 #include <basic/FileUtils.hpp>
-#include <yq/stream/Bytes.hpp>
+#include <basic/stream/Bytes.hpp>
 #include <basic/ByteArray.hpp>
 #include <fstream>
 

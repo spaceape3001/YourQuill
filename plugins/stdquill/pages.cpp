@@ -21,22 +21,25 @@
 #include <yq/tag.hpp>
 #include <yq/user.hpp>
 
-#include <basic/DelayInit.hpp>
-#include <yq/bit/Copyright.hpp>
 #include <basic/CollectionUtils.hpp>
-#include <yq/db/HtmlLayout.hpp>
-#include <yq/db/NKI.hpp>
+#include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <yq/meta/ObjectInfo.hpp>
-#include <yq/meta/TypeInfo.hpp>
 #include <basic/SqlLite.hpp>
 #include <basic/SqlQuery.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/stream/Text.hpp>
-#include <yq/text/Markdown.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
+
+#include <basic/meta/ObjectInfo.hpp>
+#include <basic/meta/TypeInfo.hpp>
+
+#include <basic/stream/Text.hpp>
+
+#include <yq/bit/Copyright.hpp>
+#include <yq/db/HtmlLayout.hpp>
+#include <yq/db/NKI.hpp>
+#include <yq/text/Markdown.hpp>
 #include <yq/web/JsonAdapter.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>

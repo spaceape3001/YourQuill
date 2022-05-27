@@ -25,19 +25,21 @@
 #include <yq/value.hpp>
 
 #include <basic/DelayInit.hpp>
-#include <yq/db/SQ.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
+#include <basic/StreamOps.hpp>
+#include <basic/TextUtils.hpp>
+
+#include <basic/stream/Bytes.hpp>
+#include <basic/stream/Text.hpp>
+
+#include <yq/db/SQ.hpp>
 #include <yq/srv/FileWatch.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <yq/stream/Bytes.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/stream/Text.hpp>
-#include <basic/TextUtils.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 

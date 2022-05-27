@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/net/Url.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/Stream.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>

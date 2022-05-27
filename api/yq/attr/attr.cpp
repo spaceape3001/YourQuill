@@ -16,7 +16,7 @@
 #include <basic/DiffEngine.hpp>
 #include <yq/bit/KeyValue.hpp>
 #include <yq/db/SQ.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

@@ -8,26 +8,6 @@
 #include <basic/TextUtils.hpp>
 #include <basic/XmlUtils.hpp>
 
-//#include <basic/Compare.hpp>
-//#include <basic/Safety.hpp>
-//#include <basic/Logging.hpp>
-//#include <yq/stream/Bytes.hpp>
-//#include <yq/stream/Ops.hpp>
-//#include <basic/Iter32.hpp>
-//#include <basic/ByteArray.hpp>
-
-//#include <cstring>
-
-//#include <dirent.h>
-//#include <sys/stat.h>
-//#include <sys/types.h>
-//#include <unistd.h>
-//#include <fcntl.h>
-
-//#include "rapidxml.hpp"
-//#include "rapidxml_print.hpp"
-
-
 namespace yq {
 
 

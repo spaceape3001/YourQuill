@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "MetaHtml.hpp"
-#include "ObjectInfo.hpp"
-#include "PropertyInfo.hpp"
-#include "TypeInfo.hpp"
+#include <yq/meta/MetaHtml.hpp>
+#include <basic/meta/ObjectInfo.hpp>
+#include <basic/meta/PropertyInfo.hpp>
+#include <basic/meta/TypeInfo.hpp>
 #include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

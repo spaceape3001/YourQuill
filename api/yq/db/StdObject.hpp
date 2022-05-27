@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/type/Object.hpp>
+#include <basic/Object.hpp>
 #include <basic/Ref.hpp>
 
 namespace yq {

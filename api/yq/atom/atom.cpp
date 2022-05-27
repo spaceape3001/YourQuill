@@ -49,12 +49,12 @@
 #include <basic/FileUtils.hpp>
 #include <yq/io/Strings.hpp>
 #include <basic/XmlUtils.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <basic/meta/TypeInfo.hpp>
 #include <yq/org/CategoryCDB.hpp>
 #include <yq/org/TagHtml.hpp>
 #include <yq/org/TagCDB.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/stream/Text.hpp>
+#include <basic/StreamOps.hpp>
+#include <basic/stream/Text.hpp>
 #include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

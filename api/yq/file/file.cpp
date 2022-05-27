@@ -42,7 +42,7 @@
 #include <yq/image/ImageCDB.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
-#include <yq/stream/Ops.hpp>
+#include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>

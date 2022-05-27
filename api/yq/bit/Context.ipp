@@ -9,8 +9,8 @@
 #include "Context.hpp"
 #include <yq/io/Strings.hpp>
 #include <basic/XmlUtils.hpp>
-#include <yq/stream/Ops.hpp>
-#include <yq/stream/Text.hpp>
+#include <basic/StreamOps.hpp>
+#include <basic/stream/Text.hpp>
 
 namespace yq {
     bool        read_xn(Context&ret, const XmlNode*xn)
