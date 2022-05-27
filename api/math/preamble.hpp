@@ -8,6 +8,13 @@
 
 #include <basic/preamble.hpp>
 #include <basic/trait/always_false.hpp>
+
+#include <math/trait/has_abs.hpp>
+#include <math/trait/has_is_finite.hpp>
+#include <math/trait/has_nan.hpp>
+#include <math/trait/has_one.hpp>
+#include <math/trait/has_sqrt.hpp>
+#include <math/trait/has_zero.hpp>
 #include <cmath>
 #include <cstdint>
 #include <limits>
@@ -125,15 +132,6 @@ namespace yq {
             return a.second;
     }
 
-    inline constexpr bool  is_nan(double v)
-    {
-        return std::isnan(v);
-    }
-
-    inline constexpr bool  is_nan(float v)
-    {
-        return std::isnan(v);
-    }
 
     inline constexpr int   iround(double v)
     {
@@ -154,6 +152,7 @@ namespace yq {
     {
         return (int)(floor(r)+copysign(0.1,r));
     }
+
 
     template <typename T> struct Coord2;
     using Coord2D = Coord2<double>;
@@ -181,46 +180,34 @@ namespace yq {
     using Size2U32  = Size2<int32_t>;
     using Size2U64  = Size2<int64_t>;
     
+    template <typename T> struct Vec1;
+    using Vec1D     = Vec1<double>;
+    using Vec1F     = Vec1<float>;
+    using Vec1I     = Vec1<int>;
+    using Vec1U     = Vec1<unsigned>;
+
+    template <typename T> struct Vec2;
+    using Vec2D     = Vec2<double>;
+    using Vec2F     = Vec2<float>;
+    using Vec2I     = Vec2<int>;
+    using Vec2U     = Vec2<unsigned>;
+
+    template <typename T> struct Vec3;
+    using Vec3D     = Vec3<double>;
+    using Vec3F     = Vec3<float>;
+    using Vec3I     = Vec3<int>;
+    using Vec3U     = Vec3<unsigned>;
+
+    template <typename T> struct Vec4;
+    using Vec4D     = Vec4<double>;
+    using Vec4F     = Vec4<float>;
+    using Vec4I     = Vec4<int>;
+    using Vec4U     = Vec4<unsigned>;
+    
     //! Call this if math isn't getting startup-initialized 
     void        initialize_math();
-    
-    //  DEFINE NaN (overrides)....
-    
-    //template <typename T>
-    //struct NaNBinder {
-        //static constexpr const bool Defined     = false;
-    //};
-    
-    //#define YQ_NAN(type, ...) 
-        //template <> 
-        //struct NaNBinder<type> {
-            //static constexpr const bool Defined     = true;
-        //};
-    
-    //#define YQ_NAN_T(type, ...) 
-        //template <typename T> 
-        //struct NaNBinder<type<T>> {
-            //static constexpr const bool Defined     = T::Defined;
-        //};
 
-    //template <typename T> static constexpr const bool has_nan_v = NanBinder<T>::Defined;
-    
-    
-    template <typename T> consteval T nan() 
-    { 
-        static_assert( trait::always_false_v<T>, "This type does not have a NaN defined!");
-        return T{};
-    }
-    template <typename T> static constexpr const T  nan_v   = nan<T>();
-
-    #define YQ_NAN(type, ... ) template <> consteval type nan<type>() { return __VA_ARGS__; }
-    YQ_NAN(double, NaN )
-    YQ_NAN(float, NaNf )
-    
-    template <typename T> consteval const T zero()
-    {
-        return T{};
-    }
-
-    template <typename T> static constexpr const T  zero_v  = zero<T>();
 }
+
+
+

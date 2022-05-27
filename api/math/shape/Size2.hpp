@@ -25,6 +25,11 @@ namespace yq {
         constexpr T   width() const { return x; }
         constexpr T   height() const { return y; }
     };
+
+    YQ_NAN_1(Size2, Size2<T>{ nan_v<T>, nan_v<T> })
+    YQ_IS_NAN_1(Size2, is_nan(v.x) || is_nan(v.y) )
+    YQ_IS_FINITE_1(Size2, is_finite(v.x) && is_finite(v.y) )
+    YQ_ZERO_1(Size2, Size2<T>{ zero_v<T>, zero_v<T> })
     
     
     template <typename T>

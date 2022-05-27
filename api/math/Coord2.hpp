@@ -18,7 +18,8 @@ namespace yq {
     
         static_assert(std::is_arithmetic_v<T>, "Template parameter T must be arithmetic type.");
 
-        T      i, j;
+        T      i = zero_v<T>;
+        T      j = zero_v<T>;
 
         constexpr Coord2() {}
         explicit constexpr Coord2(T d) : i(d), j(d) {}
@@ -28,6 +29,12 @@ namespace yq {
             // Coord2(const Vec2I&);
         constexpr bool operator==(const Coord2&) const noexcept = default;
     };
+    
+    YQ_NAN_1(Coord2, Coord2<T>{ nan_v<T>, nan_v<T> })
+    YQ_IS_NAN_1(Coord2, is_nan(v.i) || is_nan(v.j) )
+    YQ_IS_FINITE_1(Coord2, is_finite(v.i) && is_finite(v.j) )
+    YQ_ZERO_1(Coord2, Coord2<T>{ zero_v<T>, zero_v<T> })
+    
     
     template <typename T>
     constexpr Coord2<T> operator+(const Coord2<T>&a)
