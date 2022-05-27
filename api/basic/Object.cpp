@@ -14,7 +14,7 @@ namespace yq {
     
     const ObjectInfo&    Object::staticMetaInfo()
     {
-        static ObjectInfo   s_info("Object");
-        return s_info;
+        static ObjectInfo   *s_info = new ObjectInfo("Object");
+        return *s_info;
     }
 }

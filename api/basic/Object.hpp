@@ -105,15 +105,15 @@ public:                                                 \
 }
 
 
-#define YQ_OBJECT_IMPLEMENT(name)                                                                   \
-    const name::MyInfo&     name::staticMetaInfo()                                                  \
-    {                                                                                               \
-        static ObjectFixer<name>   s_info(#name, InfoBinder<MyBase>::edit());                       \
-        return s_info;                                                                              \
-    }                                                                                               \
-    const name::MyInfo&     name::metaInfo() const                                                  \
-    {                                                                                               \
-        return staticMetaInfo();                                                                    \
-    }                                                                                               \
+#define YQ_OBJECT_IMPLEMENT(name)                                                                       \
+    const name::MyInfo&     name::staticMetaInfo()                                                      \
+    {                                                                                                   \
+        static ObjectFixer<name>*  s_info = new ObjectFixer<name>(#name, InfoBinder<MyBase>::edit());   \
+        return *s_info;                                                                                 \
+    }                                                                                                   \
+    const name::MyInfo&     name::metaInfo() const                                                      \
+    {                                                                                                   \
+        return staticMetaInfo();                                                                        \
+    }                                                                                                   \
     template <> yq::DelayInit::Ctor yq::ObjectFixer<name>::s_reg([](){ name::staticMetaInfo(); });
 
