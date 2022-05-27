@@ -7,9 +7,6 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <basic/meta/InfoBinder.hpp>
-#include <basic/StreamOps.hpp>
-#include <log4cpp/CategoryStream.hh>
 
 namespace yq {
 
@@ -113,11 +110,4 @@ namespace yq {
         return as_stream(s, v);
     }
 }
-
-YQ_TYPE_DECLARE(yq::Size2D)
-YQ_TYPE_DECLARE(yq::Size2F)
-YQ_TYPE_DECLARE(yq::Size2I)
-YQ_TYPE_DECLARE(yq::Size2U)
-
-
 

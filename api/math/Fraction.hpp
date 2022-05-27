@@ -8,10 +8,6 @@
 
 #include <math/preamble.hpp>
 #include <math/gcd.hpp>
-#include <basic/meta/InfoBinder.hpp>
-#include <basic/StreamOps.hpp>
-#include <log4cpp/CategoryStream.hh>
-#include <type_traits>
 
 namespace yq {
 
@@ -181,8 +177,4 @@ namespace yq {
     }
 }
 
-YQ_TYPE_DECLARE(yq::Frac8)
-YQ_TYPE_DECLARE(yq::Frac16)
-YQ_TYPE_DECLARE(yq::Frac32)
-YQ_TYPE_DECLARE(yq::Frac64)
 

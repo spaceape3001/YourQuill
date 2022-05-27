@@ -15,7 +15,7 @@ namespace yq {
     };
 
     namespace trait {
-        template <typename T> static bool has_is_finite_v = is_finite_eval<T>::value;
+        template <typename T> static constexpr const bool has_is_finite_v = is_finite_eval<T>::value;
     }
     
     template <typename T>

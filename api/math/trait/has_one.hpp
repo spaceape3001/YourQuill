@@ -12,7 +12,7 @@ namespace yq {
     };
 
     namespace trait {
-        template <typename T> static bool has_one_v = one_eval<T>::value;
+        template <typename T> static constexpr const bool has_one_v = one_eval<T>::value;
     }
     
     template <typename T>

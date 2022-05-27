@@ -16,7 +16,7 @@ namespace yq {
     };
 
     namespace trait {
-        template <typename T> static bool has_abs_v = abs_eval<T>::value;
+        template <typename T> static constexpr const bool has_abs_v = abs_eval<T>::value;
     }
 
     template <typename T>

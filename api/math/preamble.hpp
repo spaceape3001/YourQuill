@@ -7,20 +7,26 @@
 #pragma once
 
 #include <basic/preamble.hpp>
+
+#include <basic/StreamOps.hpp>
+#include <basic/meta/InfoBinder.hpp>
 #include <basic/trait/always_false.hpp>
 
 #include <math/trait/has_abs.hpp>
+#include <math/trait/has_copysign.hpp>
 #include <math/trait/has_is_finite.hpp>
 #include <math/trait/has_nan.hpp>
 #include <math/trait/has_one.hpp>
 #include <math/trait/has_sqrt.hpp>
 #include <math/trait/has_zero.hpp>
+
 #include <cmath>
 #include <cstdint>
 #include <limits>
 #include <numbers>
 #include <utility>
 
+#include <log4cpp/CategoryStream.hh>
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //      MACROS
@@ -133,24 +139,24 @@ namespace yq {
     }
 
 
-    inline constexpr int   iround(double v)
+    inline int   iround(double v)
     {
         return (int)(std::round(v)+std::copysign(0.1,v));
     }
 
-    inline constexpr int   iceil(double r)
+    inline int   iceil(double r)
     {
-        return (int)(ceil(r)+copysign(0.1,r));
+        return (int)(ceil(r)+std::copysign(0.1,r));
     }
 
-    inline constexpr int   itrunc(double r)
+    inline int   itrunc(double r)
     {
-        return (int)(trunc(r)+copysign(0.1,r));
+        return (int)(trunc(r)+std::copysign(0.1,r));
     }
 
-    inline constexpr int   ifloor(double r)
+    inline int   ifloor(double r)
     {
-        return (int)(floor(r)+copysign(0.1,r));
+        return (int)(floor(r)+std::copysign(0.1,r));
     }
 
 
@@ -209,5 +215,39 @@ namespace yq {
 
 }
 
+YQ_TYPE_DECLARE(yq::Coord2D)
+YQ_TYPE_DECLARE(yq::Coord2F)
+YQ_TYPE_DECLARE(yq::Coord2I)
+YQ_TYPE_DECLARE(yq::Coord2U)
 
+
+YQ_TYPE_DECLARE(yq::Frac8)
+YQ_TYPE_DECLARE(yq::Frac16)
+YQ_TYPE_DECLARE(yq::Frac32)
+YQ_TYPE_DECLARE(yq::Frac64)
+
+YQ_TYPE_DECLARE(yq::Size2D)
+YQ_TYPE_DECLARE(yq::Size2F)
+YQ_TYPE_DECLARE(yq::Size2I)
+YQ_TYPE_DECLARE(yq::Size2U)
+
+YQ_TYPE_DECLARE(yq::Vec1D)
+YQ_TYPE_DECLARE(yq::Vec1F)
+YQ_TYPE_DECLARE(yq::Vec1I)
+YQ_TYPE_DECLARE(yq::Vec1U)
+
+YQ_TYPE_DECLARE(yq::Vec2D)
+YQ_TYPE_DECLARE(yq::Vec2F)
+YQ_TYPE_DECLARE(yq::Vec2I)
+YQ_TYPE_DECLARE(yq::Vec2U)
+
+YQ_TYPE_DECLARE(yq::Vec3D)
+YQ_TYPE_DECLARE(yq::Vec3F)
+YQ_TYPE_DECLARE(yq::Vec3I)
+YQ_TYPE_DECLARE(yq::Vec3U)
+
+YQ_TYPE_DECLARE(yq::Vec4D)
+YQ_TYPE_DECLARE(yq::Vec4F)
+YQ_TYPE_DECLARE(yq::Vec4I)
+YQ_TYPE_DECLARE(yq::Vec4U)
 

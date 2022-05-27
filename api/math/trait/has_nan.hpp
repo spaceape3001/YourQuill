@@ -18,7 +18,7 @@ namespace yq {
     };
 
     namespace trait {
-        template <typename T> static bool has_nan_v = nan_eval<T>::value;
+        template <typename T> static constexpr const bool has_nan_v = nan_eval<T>::value;
     }
     
     template <typename T>

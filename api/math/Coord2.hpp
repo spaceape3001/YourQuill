@@ -7,10 +7,6 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <basic/meta/InfoBinder.hpp>
-#include <basic/StreamOps.hpp>
-#include <log4cpp/CategoryStream.hh>
-#include <type_traits>
 
 namespace yq {
     template <typename T>
@@ -164,9 +160,4 @@ namespace yq {
         return as_stream(s, v);
     }
 }
-
-YQ_TYPE_DECLARE(yq::Coord2D)
-YQ_TYPE_DECLARE(yq::Coord2F)
-YQ_TYPE_DECLARE(yq::Coord2I)
-YQ_TYPE_DECLARE(yq::Coord2U)
 
