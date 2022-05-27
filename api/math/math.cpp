@@ -4,8 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "preamble.hpp"
-#include "Fraction.hpp"
+#include <math/preamble.hpp>
+#include <math/Fraction.hpp>
+#include <math/shape/Size2.hpp>
 
 #include <basic/DelayInit.hpp>
 #include <basic/meta/Init.hpp>
@@ -16,6 +17,11 @@ YQ_TYPE_IMPLEMENT(yq::Frac8)
 YQ_TYPE_IMPLEMENT(yq::Frac16)
 YQ_TYPE_IMPLEMENT(yq::Frac32)
 YQ_TYPE_IMPLEMENT(yq::Frac64)
+
+YQ_TYPE_IMPLEMENT(yq::Size2D)
+YQ_TYPE_IMPLEMENT(yq::Size2F)
+YQ_TYPE_IMPLEMENT(yq::Size2I)
+YQ_TYPE_IMPLEMENT(yq::Size2U)
 
 YQ_INVOKE(
     auto frac8  = writer<Frac8>();
@@ -33,6 +39,22 @@ YQ_INVOKE(
     auto frac64 = writer<Frac64>();
     frac64.property("num", &Frac64::num);
     frac64.property("den", &Frac64::den);
+    
+    auto size2d = writer<Size2D>();
+    size2d.property("x", &Size2D::x);
+    size2d.property("y", &Size2D::y);
+
+    auto size2f = writer<Size2F>();
+    size2f.property("x", &Size2F::x);
+    size2f.property("y", &Size2F::y);
+
+    auto size2i = writer<Size2I>();
+    size2i.property("x", &Size2I::x);
+    size2i.property("y", &Size2I::y);
+
+    auto size2u = writer<Size2U>();
+    size2u.property("x", &Size2U::x);
+    size2u.property("y", &Size2U::y);
 );
 
 namespace yq {

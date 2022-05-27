@@ -103,11 +103,6 @@ ENDIF()
 target_link_libraries(yq 
     PUBLIC 
         yqbasic
-        ${LOG4CPP_LIBRARIES} 
-        ${TBB_LIBRARIES}
-        ${CURL_LIBRARIES}
-        ${GCC_FSLIB}
-        ${SQLite3_LIBRARY}
 )
 
 LinkTest(yq)

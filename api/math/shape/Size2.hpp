@@ -6,9 +6,24 @@
 
 #pragma once
 
-#include "Size2.hpp"
+#include <math/preamble.hpp>
+#include <basic/meta/InfoBinder.hpp>
+#include <basic/StreamOps.hpp>
+#include <log4cpp/CategoryStream.hh>
 
 namespace yq {
+    template <typename T>
+    struct Size2 {
+        T   x = zero_v<T>;
+        T   y = zero_v<T>;
+        
+        bool    operator==(const Size2&) const noexcept = default;
+        
+        T   width() const { return x; }
+        T   height() const { return y; }
+    };
+    
+    
     template <typename T>
     bool    within(const Size2<T>& big, const Size2<T>& small);
     
@@ -32,9 +47,9 @@ namespace yq {
     
         if(within(frame, dims))
             return dims;
-        if(area(frame) == sq_t{})  // frame is bogus
+        if(area(frame) == zero_v<sq_t>)  // frame is bogus
             return dims;
-        if(area(dims) == sq_t{})    // dims is bogus
+        if(area(dims) == zero_v<sq_t>)    // dims is bogus
             return dims;
 
         /*
@@ -72,4 +87,29 @@ namespace yq {
         return (big.x >= small.x) && (big.y >= small.y);
     }
 
+    template <typename S, typename T>
+    S&  as_stream(S& s, const Size2<T>& v)
+    {
+        return s << "[" << v.x << "x" << v.y << "]";
+    }
+    
+    template <typename T>
+    Stream& operator<<(Stream&s, const Size2<T>& v)
+    {
+        return as_stream(s, v);
+    }
+
+    template <typename T>
+    log4cpp::CategoryStream& operator<<(log4cpp::CategoryStream& s, const Size2<T>& v)
+    {
+        return as_stream(s, v);
+    }
 }
+
+YQ_TYPE_DECLARE(yq::Size2D)
+YQ_TYPE_DECLARE(yq::Size2F)
+YQ_TYPE_DECLARE(yq::Size2I)
+YQ_TYPE_DECLARE(yq::Size2U)
+
+
+

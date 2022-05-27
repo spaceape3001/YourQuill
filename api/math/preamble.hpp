@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <basic/preamble.hpp>
+#include <basic/trait/always_false.hpp>
 #include <cmath>
 #include <cstdint>
 #include <limits>
@@ -94,11 +96,11 @@
 #define CROSS_EQ   %=
 
 namespace yq {
-    static constexpr double   pi      = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862;
-    static constexpr double   sqrt2   = 1.4142135623730950488016887242096980785696718753769480731766797379907324784621;
-    static constexpr double   sqrt3   = 1.7320508075688772935274463415058723669428052538103806280558069794519330169088;
-    static constexpr int64_t  max64   = std::numeric_limits<int64_t>::max();
-    static constexpr uint64_t maxu64  = std::numeric_limits<uint64_t>::max();
+    static constexpr const double   pi      = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862;
+    static constexpr const double   sqrt2   = 1.4142135623730950488016887242096980785696718753769480731766797379907324784621;
+    static constexpr const double   sqrt3   = 1.7320508075688772935274463415058723669428052538103806280558069794519330169088;
+    static constexpr const int64_t  max64   = std::numeric_limits<int64_t>::max();
+    static constexpr const uint64_t maxu64  = std::numeric_limits<uint64_t>::max();
 
     static constexpr double   deg2rad = pi / 180.0;
     static constexpr double   rad2deg = 180.0 / pi;
@@ -154,12 +156,65 @@ namespace yq {
     }
 
     template <typename T> struct Fraction;
-    using Frac64 = Fraction<int64_t>;
-    using Frac32 = Fraction<int32_t>;
+    using Frac8  = Fraction<int8_t>;
     using Frac16 = Fraction<int16_t>;
-    using Frac8 = Fraction<int8_t>;
+    using Frac32 = Fraction<int32_t>;
+    using Frac64 = Fraction<int64_t>;
+    
+    template <typename T> struct Size2;
+    using Size2D    = Size2<double>;
+    using Size2F    = Size2<float>;
+    using Size2I    = Size2<int>;
+    using Size2I8   = Size2<int8_t>;
+    using Size2I16  = Size2<int16_t>;
+    using Size2I32  = Size2<int32_t>;
+    using Size2I64  = Size2<int64_t>;
+    using Size2U    = Size2<unsigned>;
+    using Size2U8   = Size2<int8_t>;
+    using Size2U16  = Size2<int16_t>;
+    using Size2U32  = Size2<int32_t>;
+    using Size2U64  = Size2<int64_t>;
     
     //! Call this if math isn't getting startup-initialized 
     void        initialize_math();
+    
+    //  DEFINE NaN (overrides)....
+    
+    //template <typename T>
+    //struct NaNBinder {
+        //static constexpr const bool Defined     = false;
+    //};
+    
+    //#define YQ_NAN(type, ...) 
+        //template <> 
+        //struct NaNBinder<type> {
+            //static constexpr const bool Defined     = true;
+        //};
+    
+    //#define YQ_NAN_T(type, ...) 
+        //template <typename T> 
+        //struct NaNBinder<type<T>> {
+            //static constexpr const bool Defined     = T::Defined;
+        //};
 
+    //template <typename T> static constexpr const bool has_nan_v = NanBinder<T>::Defined;
+    
+    
+    template <typename T> consteval T nan() 
+    { 
+        static_assert( trait::always_false_v<T>, "This type does not have a NaN defined!");
+        return T{};
+    }
+    template <typename T> static constexpr const T  nan_v   = nan<T>();
+
+    #define YQ_NAN(type, ... ) template <> consteval type nan<type>() { return __VA_ARGS__; }
+    YQ_NAN(double, NaN )
+    YQ_NAN(float, NaNf )
+    
+    template <typename T> consteval const T zero()
+    {
+        return T{};
+    }
+
+    template <typename T> static constexpr const T  zero_v  = zero<T>();
 }

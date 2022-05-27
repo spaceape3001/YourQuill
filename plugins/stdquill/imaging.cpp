@@ -17,7 +17,6 @@
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/image/Image.hpp>
 #include <yq/image/ImageCDB.hpp>
-#include <yq/shape/Size2Ops.hpp>
 
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning
@@ -28,7 +27,7 @@
 using namespace yq;
 using namespace yq::cdb;
 
-Size2<unsigned>    size_for(const Magick::Geometry& sz)
+Size2U    size_for(const Magick::Geometry& sz)
 {
     return { (unsigned) sz.width(), (unsigned) sz.height() };
 }
@@ -65,10 +64,10 @@ void    update_image(Image img, cdb_options_t opts)
             
             std::string magickString    = theImage.magick();    // needed for saving
  
-            Size2<unsigned> isize   = size_for(theImage.size());
-            Size2<unsigned> ssize   = shrink_to_fit_within(isize, Image::kSmall);
-            Size2<unsigned> msize   = shrink_to_fit_within(isize, Image::kMedium);
-            Size2<unsigned> lsize   = shrink_to_fit_within(isize, Image::kLarge);
+            Size2U isize   = size_for(theImage.size());
+            Size2U ssize   = shrink_to_fit_within(isize, Image::kSmall);
+            Size2U msize   = shrink_to_fit_within(isize, Image::kMedium);
+            Size2U lsize   = shrink_to_fit_within(isize, Image::kLarge);
             
             if(ssize != isize){
                 Magick::Image   imgSmall    = theImage;
