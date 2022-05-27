@@ -9,7 +9,7 @@
 #include "Constraint.hpp"
 #include <yq/io/Strings.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
-#include <yq/io/XmlUtils.hpp>
+#include <basic/XmlUtils.hpp>
 
 namespace yq {
 

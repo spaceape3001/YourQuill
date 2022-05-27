@@ -76,6 +76,8 @@ set(basic_sources
     ./Touched.hpp
     ./Vector.hpp
     ./Version.hpp
+    ./XmlUtils.cpp
+    ./XmlUtils.hpp
     
 
     ./trait/always_false.hpp

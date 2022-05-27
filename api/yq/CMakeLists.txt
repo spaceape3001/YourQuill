@@ -48,8 +48,6 @@ set(yq_sources
     ./io/AbstractFile.hpp
     ./io/DirWatcher.hpp
     ./io/XmlFile.hpp
-    ./io/XmlFwd.hpp
-    ./io/XmlUtils.hpp
     
     ./ipc/ipc_unity.cpp
     ./ipc/ipcBuffer.hpp

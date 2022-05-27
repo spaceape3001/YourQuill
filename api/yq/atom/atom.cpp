@@ -48,7 +48,7 @@
 #include <yq/image/ImageHtml.hpp>
 #include <basic/FileUtils.hpp>
 #include <yq/io/Strings.hpp>
-#include <yq/io/XmlUtils.hpp>
+#include <basic/XmlUtils.hpp>
 #include <yq/meta/TypeInfo.hpp>
 #include <yq/org/CategoryCDB.hpp>
 #include <yq/org/TagHtml.hpp>

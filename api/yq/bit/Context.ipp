@@ -8,7 +8,7 @@
 
 #include "Context.hpp"
 #include <yq/io/Strings.hpp>
-#include <yq/io/XmlUtils.hpp>
+#include <basic/XmlUtils.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
 

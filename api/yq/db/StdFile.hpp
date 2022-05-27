@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/io/AbstractFile.hpp>
-#include <yq/io/XmlFwd.hpp>
+#include <basic/preamble.hpp>
 
 namespace yq {
     class Stream;

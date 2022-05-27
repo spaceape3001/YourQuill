@@ -9,7 +9,6 @@
 #include <basic/TextUtils.hpp>
 #include <basic/Enum.hpp>
 #include <basic/Flag.hpp>
-#include "XmlFwd.hpp"
 
 #include "rapidxml.hpp"
 #include <type_traits>
