@@ -6,6 +6,7 @@
 
 #include <basic/meta/Global.hpp>
 #include <basic/DelayInit.hpp>
+#include <basic/meta/ReservedIDs.hpp>
 
 namespace yq {
     GlobalInfo&     GlobalInfo::instance()

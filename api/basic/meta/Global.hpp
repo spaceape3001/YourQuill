@@ -9,7 +9,6 @@
 #include <basic/meta/Meta.hpp>
 #include <basic/meta/InfoBinder.hpp>
 #include <basic/meta/CompoundInfo.hpp>
-#include <basic/meta/ReservedIDs.hpp>
 
 namespace yq {
 
