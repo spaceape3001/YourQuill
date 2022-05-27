@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/db/Html.hpp>
-#include <yq/net/Http.hpp>
+#include <basic/Http.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebVariable.hpp>
 

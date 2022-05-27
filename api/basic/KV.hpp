@@ -8,6 +8,9 @@
 #include <basic/preamble.hpp>
 
 namespace yq {
+
+    /*! \brief Light weight Key-Value structure
+    */
     template <typename T>
     struct BasicKV {
         T       key, value;

@@ -21,6 +21,8 @@ set(basic_sources
     ./Comma.hpp
     ./Compare.hpp
     ./Concat.hpp
+    ./ContentType.cpp
+    ./ContentType.hpp
     ./DbgRel.hpp
     ./Deque.hpp
     ./DelayInit.cpp
@@ -28,6 +30,8 @@ set(basic_sources
     ./DiffEngine.hpp
     ./DirUtils.cpp
     ./DirUtils.hpp
+    ./Encode64.cpp
+    ./Encode64.hpp
     ./Enum.cpp
     ./Enum.hpp
     ./EnumMap.hpp
@@ -40,11 +44,18 @@ set(basic_sources
     ./Flag.cpp
     ./Flag.hpp
     ./Hash.hpp
+    ./Http.hpp
+    ./HttpOp.hpp
+    ./HttpParser.cpp
+    ./HttpParser.hpp
+    ./HttpStatus.cpp
+    ./HttpStatus.hpp
     ./IgCase.hpp
     ./IgCase.cpp
     ./IntRange.hpp
     ./Iter32.hpp
     ./IterW.hpp
+    ./KV.hpp
     ./List.hpp
     ./LogFwd.hpp
     ./Logging.cpp
@@ -53,6 +64,10 @@ set(basic_sources
     ./MultiMap.hpp
     ./Object.cpp
     ./Object.hpp
+    ./PidFile.cpp
+    ./PidFile.hpp
+    ./PluginLoader.cpp
+    ./PluginLoader.hpp
     ./Random.cpp
     ./Random.hpp
     ./Ref.cpp
@@ -82,8 +97,12 @@ set(basic_sources
     ./ThreadId.cpp
     ./ThreadId.hpp
     ./Touched.hpp
+    ./Url.cpp
+    ./Url.hpp
     ./Vector.hpp
     ./Version.hpp
+    ./VersionSpec.hpp
+    ./VersionSpec.cpp
     ./XmlFile.cpp
     ./XmlFile.hpp
     ./XmlObject.cpp

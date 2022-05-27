@@ -12,6 +12,7 @@
 #include <basic/DelayInit.hpp>
 #include <basic/CollectionUtils.hpp>
 #include <basic/FixedBuffer.hpp>
+#include <basic/HttpParser.hpp>
 #include <basic/Logging.hpp>
 #include <basic/Random.hpp>
 #include <basic/Ref.hpp>
@@ -21,7 +22,6 @@
 
 #include <basic/stream/Text.hpp>
 
-#include <yq/web/HttpParser.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

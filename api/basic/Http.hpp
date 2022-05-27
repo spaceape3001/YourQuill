@@ -4,6 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "text_utils.ipp"
-#include "IgCase.ipp"
-#include "RevIgCase.ipp"
+#pragma once
+
+#include "ContentType.hpp"
+#include "HttpOp.hpp"
+#include "HttpStatus.hpp"

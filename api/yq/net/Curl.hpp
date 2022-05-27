@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/net/Http.hpp>
+#include <basic/Http.hpp>
 
 
 class QUrl;

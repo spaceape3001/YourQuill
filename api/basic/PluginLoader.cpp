@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Plugins.hpp"
+#include "PluginLoader.hpp"
 
 #include <basic/DirUtils.hpp>
 #include <basic/Logging.hpp>

@@ -8,6 +8,7 @@
 
 #include <basic/DelayInit.hpp>
 #include <basic/FileUtils.hpp>
+#include <basic/Http.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
@@ -22,7 +23,6 @@
 #include <yq/file/RootCDB.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/leaf/LeafCDB.hpp>
-#include <yq/net/Http.hpp>
 #include <yq/org/CategoryCDB.hpp>
 #include <yq/org/TagCDB.hpp>
 #include <yq/web/VarTemplate.hpp>

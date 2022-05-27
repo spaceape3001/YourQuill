@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "HttpParser.hpp"
+#include <basic/HttpParser.hpp>
 #include "JsonAdapter.hpp"
 #include "TypedBytes.hpp"
 #include "PageTemplate.hpp"
@@ -30,7 +30,7 @@
 #include <basic/stream/Text.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <yq/text/Encode64.hpp>
+#include <basic/Encode64.hpp>
 #include <basic/TextUtils.hpp>
 
 
@@ -233,7 +233,6 @@ namespace yq {
 
 }
 
-#include "HttpParser.ipp"
 #include "PageTemplate.ipp"
 #include "Template.ipp"
 #include "TypedBytes.ipp"

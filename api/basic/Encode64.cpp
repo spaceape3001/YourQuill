@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Encode64.hpp"
+#include <basic/Encode64.hpp>
 #include <basic/ByteArray.hpp>
 #include <cassert>
 

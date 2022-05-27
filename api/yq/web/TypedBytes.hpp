@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/net/Http.hpp>
+#include <basic/Http.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>
 

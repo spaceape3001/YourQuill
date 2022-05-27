@@ -10,31 +10,6 @@
 
 namespace yq {
 
-    YQ_ENUM(HttpOp, ,
-        Unknown = 0,
-        Error,          // shoved in here for the pages... not a real method
-        Get,
-        Head,
-        Post,
-        Put,
-        Delete,
-        Trace,
-        Options,
-        Connect,
-        Patch
-    )
-
-
-    static constexpr const HttpOp::enum_t hConnect                  = HttpOp::Connect;
-    static constexpr const HttpOp::enum_t hDelete                   = HttpOp::Delete;
-    static constexpr const HttpOp::enum_t hGet                      = HttpOp::Get;
-    static constexpr const HttpOp::enum_t hHead                     = HttpOp::Head;
-    static constexpr const HttpOp::enum_t hOptions                  = HttpOp::Options;
-    static constexpr const HttpOp::enum_t hPatch                    = HttpOp::Patch;
-    static constexpr const HttpOp::enum_t hPost                     = HttpOp::Post;
-    static constexpr const HttpOp::enum_t hPut                      = HttpOp::Put;
-    static constexpr const HttpOp::enum_t hTrace                    = HttpOp::Trace;
-
     YQ_ENUM(HttpStatus, ,
         None                        = 0,
         
@@ -132,34 +107,6 @@ namespace yq {
     static constexpr const HttpStatus::enum_t   hNotFound           = HttpStatus::NotFound;
     static constexpr const HttpStatus::enum_t   hBadRequest         = HttpStatus::BadRequest;
 
-    YQ_ENUM(ContentType, ,
-        unknown                     = 0,
-        binary,
-        bmp,
-        css,
-        csv,
-        form,
-        gif,
-        html,
-        javascript,
-        jpeg,
-        json,
-        latex,
-        markdown,
-        mp3,
-        mp4,
-        mpeg,
-        ogg,
-        pdf,
-        png,
-        rtf,
-        svg,
-        text,
-        tiff,
-        wave,
-        xml
-    )
-
     std::string_view    statusMessage(HttpStatus);
     std::string_view    statusMessage(unsigned short);
 
@@ -180,18 +127,5 @@ namespace yq {
 
     bool        isInformational(HttpStatus);
     bool        isInformational(unsigned short);
-
-    std::string_view    mimeType(ContentType);
-    ContentType         mimeTypeForExt(std::string_view);
-    
-    //! TRUE for types that can render as images
-    bool                isImage(ContentType);
-    
-    //! TRUE for types that can reasonably render as text
-    //! \note this will overlap with isImage for some formats.
-    bool                isTextual(ContentType);
-    
-    bool            isAudio(ContentType);
-    bool            isMovie(ContentType);
 
 }

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/net/Http.hpp>
-#include <yq/net/Url.hpp>
+#include <basic/Http.hpp>
+#include <basic/Url.hpp>
     
 namespace yq {
 

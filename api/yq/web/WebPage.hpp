@@ -11,7 +11,7 @@
 #include <basic/EnumMap.hpp>
 #include <basic/meta/Meta.hpp>
 #include <basic/meta/MetaWriter.hpp>
-#include <yq/net/Http.hpp>
+#include <basic/Http.hpp>
 #include <basic/Flag.hpp>
 
 #include <functional>

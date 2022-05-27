@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include <basic/Version.hpp>
@@ -21,7 +27,7 @@ namespace yq {
     inline consteval VersionSpec    http11() { return { "HTTP", 1, 1 }; }
     
     bool                    is_similar(const VersionSpec& a, const VersionSpec& b);
-    VersionSpec             to_version_spec(const std::string_view&);
+    VersionSpec             to_version_spec(std::string_view);
     VersionSpec             to_version_spec(const char*, size_t);
     
     class Stream;

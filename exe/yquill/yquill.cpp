@@ -7,7 +7,7 @@
 #include "yquill.hpp"
 
 #include <basic/CmdArgs.hpp>
-#include <yq/app/Plugins.hpp>
+#include <basic/PluginLoader.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>

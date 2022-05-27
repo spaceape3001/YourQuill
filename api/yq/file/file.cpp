@@ -44,7 +44,7 @@
 #include <basic/FileUtils.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
-#include <yq/web/HttpParser.hpp>
+#include <basic/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/wksp/Workspace.hpp>

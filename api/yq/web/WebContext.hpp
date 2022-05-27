@@ -12,9 +12,9 @@
 #include <basic/MultiMap.hpp>
 #include <yq/enum/DataRole.hpp>
 #include <yq/enum/SizeDesc.hpp>
-#include <yq/net/Http.hpp>
-#include <yq/net/Url.hpp>
-#include <yq/net/VersionSpec.hpp>
+#include <basic/Http.hpp>
+#include <basic/Url.hpp>
+#include <basic/VersionSpec.hpp>
 // #include <yq/text/KV.hpp>
 #include <basic/ByteArray.hpp>
 //#include <yq/web/HttpHeader.hpp>

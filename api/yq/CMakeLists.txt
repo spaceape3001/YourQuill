@@ -19,12 +19,8 @@ set(yq_sources
     #./ZipReader.hpp
     #./ZipWriter.hpp
     
-    ./app/app_unity.cpp
     ./app/BuildInfo.hpp
-    ./app/BuildInfo.ipp
-    ./app/PidFile.hpp
-    ./app/Plugins.hpp
-    ./app/Plugins.ipp
+    ./app/BuildInfo.cpp
     
     ./atom/atom.cpp
     
@@ -43,13 +39,10 @@ set(yq_sources
     
     ./image/image.cpp
     
-    ./io/file_watch.cpp
+    ./io/DirWatcher.cpp
     ./io/DirWatcher.hpp
     
     ./ipc/ipc_unity.cpp
-    ./ipc/ipcBuffer.hpp
-    ./ipc/ipcPackets.hpp
-    ./ipc/ipcSocket.hpp
 
     ./leaf/leaf.cpp
 
@@ -61,10 +54,6 @@ set(yq_sources
     
     #./net/Curl.cpp
     #./net/Curl.hpp
-    ./net/net_unity.cpp
-    ./net/Http.hpp
-    ./net/Url.hpp
-    ./net/VersionSpec.hpp
 
     ./org/orgsys.cpp
 
@@ -78,15 +67,11 @@ set(yq_sources
     ./srv/Stage3.hpp
     ./srv/Stage4.hpp
     
-    ./text/Encode64.cpp
-    ./text/Encode64.hpp
     ./text/Markdown.cpp
     ./text/Markdown.hpp
     
 
     ./web/web_unity.cpp
-    ./web/HttpParser.hpp
-    ./web/HttpParser.ipp
     ./web/JsonAdapter.hpp
     ./web/PageTemplate.hpp
     ./web/PageTemplate.ipp

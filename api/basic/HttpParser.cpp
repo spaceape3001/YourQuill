@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
+#include <basic/HttpParser.hpp>
+#include <basic/MultiMap.hpp>
 #include <basic/TextUtils.hpp>
 
 namespace yq {

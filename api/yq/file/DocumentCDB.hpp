@@ -12,7 +12,7 @@
 #include <yq/file/Document.hpp>
 #include <yq/file/Folder.hpp>
 #include <yq/image/Image.hpp>
-#include <yq/net/Http.hpp>
+#include <basic/Http.hpp>
 
 namespace yq {
     struct Fragment;

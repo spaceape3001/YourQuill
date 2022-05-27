@@ -9,7 +9,7 @@
 #include <yq/db/CacheFwd.hpp>
 #include <yq/enum/SizeDesc.hpp>
 #include <yq/image/Image.hpp>
-#include <yq/net/Http.hpp>
+#include <basic/ContentType.hpp>
 
 
 namespace yq {
