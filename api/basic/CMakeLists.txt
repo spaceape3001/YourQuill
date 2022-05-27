@@ -23,6 +23,8 @@ set(basic_sources
     ./Concat.hpp
     ./ContentType.cpp
     ./ContentType.hpp
+    ./Curl.cpp
+    ./Curl.hpp
     ./DbgRel.hpp
     ./Deque.hpp
     ./DelayInit.cpp
@@ -43,6 +45,8 @@ set(basic_sources
     ./FixedBuffer.hpp
     ./Flag.cpp
     ./Flag.hpp
+    ./Format.cpp
+    ./Format.hpp
     ./Hash.hpp
     ./Http.hpp
     ./HttpOp.hpp
@@ -200,6 +204,7 @@ target_link_libraries(yqbasic
     PUBLIC
         ${LOG4CPP_LIBRARIES} 
         ${TBB_LIBRARIES}
+        ${CURL_LIBRARIES}
         ${GCC_FSLIB}
         ${SQLite3_LIBRARY}
 )

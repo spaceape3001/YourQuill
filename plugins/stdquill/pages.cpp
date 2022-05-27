@@ -39,7 +39,7 @@
 #include <yq/bit/Copyright.hpp>
 #include <yq/db/HtmlLayout.hpp>
 #include <yq/db/NKI.hpp>
-#include <yq/text/Markdown.hpp>
+#include <yq/util/Markdown.hpp>
 #include <yq/web/JsonAdapter.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>

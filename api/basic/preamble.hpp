@@ -17,6 +17,7 @@
 #include <basic/LogFwd.hpp>
 #include <basic/RevIgCase.hpp>
 
+#include <nlohmann/json_fwd.hpp>
 
 using namespace std::literals::chrono_literals;
 using namespace std::literals::string_literals;
@@ -165,6 +166,8 @@ namespace yq {
     using XmlNode       = rapidxml::xml_node<char>;
     using XmlAttribute  = rapidxml::xml_attribute<char>;
     using XmlDocument   = rapidxml::xml_document<char>;
+
+    using json = nlohmann::json;
 }
 
 

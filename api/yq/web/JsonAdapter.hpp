@@ -11,7 +11,6 @@
 #include <nlohmann/json.hpp>
 
 namespace yq {
-    using json = nlohmann::json;
 
     template <nlohmann::json (*FN)(WebContext&)>
     class JSONWebAdapter : public WebPage {

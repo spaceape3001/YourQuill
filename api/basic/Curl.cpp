@@ -1,6 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #include "Curl.hpp"
+#include <basic/ByteArray.hpp>
+#include <basic/Url.hpp>
 #include <curl/curl.h>
-#include <QJsonDocument>
+#include <nlohmann/json.hpp>
 
 namespace yq {
 
@@ -35,33 +43,41 @@ namespace yq {
     }
 
 
-    String              Curl::get_effective_url() const
+    std::string              Curl::get_effective_url() const
     {
         char*   c;
         if(curl_easy_getinfo(m_curl, CURLINFO_EFFECTIVE_URL, &c) == CURLE_OK)
-            return String(c);
-        return String();
+            return std::string(c);
+        return std::string();
     }
 
 
-    QByteArray          Curl::rx_bytes() const
+    ByteArray           Curl::rx_bytes() const
     {
-        return QByteArray((const char*) m_rx.data(), m_rx.size());
+        return ByteArray((const char*) m_rx.data(), m_rx.size());
     }
 
-    QJsonDocument       Curl::rx_json() const
+    json                Curl::rx_json() const
     {
-        return QJsonDocument::fromJson(rx_bytes());
+        if(m_rx.empty())
+            return json();
+            
+        return nlohmann::json::parse((const char*) m_rx.data(), (const char*) (m_rx.data()+m_rx.size()));
+    }
+
+    void                Curl::set_url(const Url&url)
+    {
+        set_url(to_string(url));
+    }
+    
+    void                Curl::set_url(const UrlView&url)
+    {
+        set_url(to_string(url));
     }
 
     void                Curl::set_url(const char*z)
     {
         curl_easy_setopt(m_curl, CURLOPT_URL, z);
-    }
-
-    void                Curl::set_url(const QUrl&u)
-    {
-        set_url(u.toString().toStdString());
     }
 
     void                Curl::set_url(const std::string&z)

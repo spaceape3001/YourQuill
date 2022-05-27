@@ -52,8 +52,6 @@ set(yq_sources
     ./meta/MetaHtml.cpp
     ./meta/MetaHtml.hpp
     
-    #./net/Curl.cpp
-    #./net/Curl.hpp
 
     ./org/orgsys.cpp
 
@@ -67,8 +65,8 @@ set(yq_sources
     ./srv/Stage3.hpp
     ./srv/Stage4.hpp
     
-    ./text/Markdown.cpp
-    ./text/Markdown.hpp
+    ./util/Markdown.cpp
+    ./util/Markdown.hpp
     
 
     ./web/web_unity.cpp

@@ -6,11 +6,7 @@
 
 #pragma once
 
-#include <basic/Http.hpp>
-
-
-class QUrl;
-class QJsonDocument;
+#include <basic/HttpStatus.hpp>
 
 namespace yq {
 
@@ -22,19 +18,20 @@ namespace yq {
         
         std::string         get_effective_url() const;
         
-        //void                set_url(const QUrl&);
+        void                set_url(const Url&);
+        void                set_url(const UrlView&);
         void                set_url(const std::string&);
         void                set_url(const char*);
         
-        using JsonResult    = std::pair<QJsonDocument,HttpStatus>;
-        using UInt8Result   = std::pair<Vector<uint8_t>,HttpStatus>;
-        using BytesResult   = std::pair<QByteArray,HttpStatus>;
+        //using JsonResult    = std::pair<json,HttpStatus>;
+        //using UInt8Result   = std::pair<Vector<uint8_t>,HttpStatus>;
+        //using BytesResult   = std::pair<ByteArray,HttpStatus>;
         
         HttpStatus          exec();
         
         const Vector<uint8_t>&      rx() const { return m_rx; }
-        QByteArray                  rx_bytes() const;
-        QJsonDocument               rx_json() const;
+        ByteArray                   rx_bytes() const;
+        json                        rx_json() const;
         
     private:
         Curl(const Curl&) = delete;
