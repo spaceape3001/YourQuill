@@ -12,8 +12,8 @@
 #include "Ops.hpp"
 #include "Text.hpp"
 
-#include <yq/io/file_utils.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/FileUtils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 
 #include <cstring>

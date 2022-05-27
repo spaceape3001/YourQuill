@@ -9,7 +9,7 @@
 #include "Init.hpp"
 
 #include <basic/DelayInit.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 YQ_TYPE_FIXED(MT_String, std::string)
 YQ_TYPE_FIXED(MT_Boolean, bool)

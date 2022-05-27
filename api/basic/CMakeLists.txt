@@ -13,6 +13,7 @@ set(basic_sources
     ./ByteArray.hpp
     ./CmdArgs.cpp
     ./CmdArgs.hpp
+    ./CollectionUtils.hpp
     ./Comma.hpp
     ./Compare.hpp
     ./Concat.hpp
@@ -21,12 +22,16 @@ set(basic_sources
     ./DelayInit.cpp
     ./DelayInit.hpp
     ./DiffEngine.hpp
+    ./DirUtils.cpp
+    ./DirUtils.hpp
     ./Enum.cpp
     ./Enum.hpp
     ./EnumMap.hpp
     ./Execute.cpp
     ./Execute.hpp
     ./Guarded.hpp
+    ./FileUtils.cpp
+    ./FileUtils.hpp
     ./FixedBuffer.hpp
     ./Flag.cpp
     ./Flag.hpp
@@ -52,18 +57,26 @@ set(basic_sources
     ./Safety.hpp
     ./Set.hpp
     ./Span.hpp
+    ./SqlError.cpp
+    ./SqlError.hpp
+    ./SqlLite.cpp
+    ./SqlLite.hpp
+    ./SqlLogging.hpp
+    ./SqlQuery.cpp
+    ./SqlQuery.hpp
+    ./SqlUtils.cpp
+    ./SqlUtils.hpp
     ./Stack.hpp
     ./Stream.cpp
     ./Stream.hpp
+    ./TextUtils.cpp
+    ./TextUtils.hpp
     ./ThreadId.cpp
     ./ThreadId.hpp
     ./Touched.hpp
     ./Vector.hpp
     ./Version.hpp
     
-    ./c_utils.hpp
-    ./text_utils.cpp
-    ./text_utils.hpp
 
     ./trait/always_false.hpp
     ./trait/always_true.hpp
@@ -95,6 +108,7 @@ target_link_libraries(yqbasic
         ${LOG4CPP_LIBRARIES} 
         ${TBB_LIBRARIES}
         ${GCC_FSLIB}
+        ${SQLite3_LIBRARY}
 )
 
 LinkTest(yqbasic)

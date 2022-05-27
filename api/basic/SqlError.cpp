@@ -4,8 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-#include "SqlError.hpp"
+#include <basic/SqlError.hpp>
 #include <log4cpp/CategoryStream.hh>
 
 namespace yq {

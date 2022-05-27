@@ -19,7 +19,7 @@
 #include <yq/file/FragmentHtml.hpp>
 #include <yq/file/Root.hpp>
 #include <yq/stream/Ops.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

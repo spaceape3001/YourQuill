@@ -23,20 +23,20 @@
 
 #include <basic/DelayInit.hpp>
 #include <yq/bit/Copyright.hpp>
-#include <basic/c_utils.hpp>
+#include <basic/CollectionUtils.hpp>
 #include <yq/db/HtmlLayout.hpp>
 #include <yq/db/NKI.hpp>
-#include <yq/io/dir_utils.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/DirUtils.hpp>
+#include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <yq/meta/ObjectInfo.hpp>
 #include <yq/meta/TypeInfo.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/sql/SqlQuery.hpp>
+#include <basic/SqlLite.hpp>
+#include <basic/SqlQuery.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/text/Markdown.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/web/JsonAdapter.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebContext.hpp>

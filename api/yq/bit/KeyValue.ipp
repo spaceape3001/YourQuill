@@ -10,7 +10,7 @@
 #include <basic/Logging.hpp>
 #include <yq/stream/LineCol.hpp>
 #include <yq/stream/Ops.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 
 namespace yq {

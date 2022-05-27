@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <yq/bit/KeyValue.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 
 using namespace yq;

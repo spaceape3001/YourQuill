@@ -23,7 +23,7 @@
 #include <basic/Safety.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/Map.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
@@ -31,7 +31,7 @@
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage4.hpp>
 #include <yq/text/Encode64.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 
 #include <asio/write.hpp>

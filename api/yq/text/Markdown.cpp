@@ -8,7 +8,7 @@
 #include <basic/Compare.hpp>
 #include <yq/stream/Ops.hpp>
 #include <basic/Stream.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 /*
     Crediting https://github.com/progsource/maddy for the guidance in how-to, however, the code

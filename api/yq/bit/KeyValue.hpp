@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <basic/c_utils.hpp>
+#include <basic/CollectionUtils.hpp>
 #include <basic/Set.hpp>
 #include <basic/Vector.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/Result.hpp>
 
 //#include <basic/Logging.hpp>

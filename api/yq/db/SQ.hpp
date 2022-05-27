@@ -7,7 +7,7 @@
 #pragma once
 
 #include <basic/Logging.hpp>
-#include <yq/sql/SqlQuery.hpp>
+#include <basic/SqlQuery.hpp>
 
 #include <set>
 #include <vector>

@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "AbstractFile.ipp"
-#include "dir_utils.ipp"
-#include "file_utils.ipp"
+#include <basic/DirUtils.hpp>
+#include <basic/FileUtils.hpp>
 
 #include "XmlFile.hpp"
 #include "XmlUtils.hpp"
@@ -18,7 +18,7 @@
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <basic/Iter32.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 
 #include <filesystem>

@@ -4,13 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-#include "SqlError.hpp"
-#include "SqlLite.hpp"
-#include "SqlLogging.hpp"
-#include "SqlQuery.hpp"
-#include <sqlite3.h>
 #include <basic/Set.hpp>
+#include <basic/SqlError.hpp>
+#include <basic/SqlLite.hpp>
+#include <basic/SqlLogging.hpp>
+#include <basic/SqlQuery.hpp>
+#include <sqlite3.h>
 
 namespace yq {
 

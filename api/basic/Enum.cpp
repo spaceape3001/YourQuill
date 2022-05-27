@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Enum.hpp"
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <cassert>
 
 namespace yq {

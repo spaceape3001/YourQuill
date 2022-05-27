@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "text_utils.hpp"
+#include "TextUtils.hpp"
 #include <basic/Iter32.hpp>
 #include <basic/IterW.hpp>
 

@@ -34,16 +34,16 @@
 #include "RootHtml.hpp"
 #include "RootPost.hpp"
 
-#include <basic/c_utils.hpp>
+#include <basic/CollectionUtils.hpp>
 #include <yq/db/IDLock.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/image/Image.hpp>
 #include <yq/image/ImageCDB.hpp>
-#include <yq/io/dir_utils.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/DirUtils.hpp>
+#include <basic/FileUtils.hpp>
 #include <yq/stream/Ops.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/web/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>

@@ -7,7 +7,7 @@
 #include "DirWatcher.hpp"
 #include <yq/ipc/ipcBuffer.hpp>
 #include <basic/Logging.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <vector>
 
 namespace yq {

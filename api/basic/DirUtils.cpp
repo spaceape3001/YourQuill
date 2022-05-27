@@ -4,11 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "dir_utils.hpp"
-
+#include <basic/DirUtils.hpp>
 #include <basic/Set.hpp>
 #include <basic/Vector.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 #include <sys/stat.h>
 #include <dirent.h>

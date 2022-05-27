@@ -6,7 +6,7 @@
 
 #include <boost/ut.hpp>
 #include <basic/Vector.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 namespace ut = boost::ut;
 using namespace ut;

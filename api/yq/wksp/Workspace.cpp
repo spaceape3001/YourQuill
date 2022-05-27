@@ -10,13 +10,13 @@
 #include <basic/CmdArgs.hpp>
 #include <basic/DelayInit.hpp>
 #include <yq/file/Root.hpp>
-#include <yq/io/dir_utils.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/DirUtils.hpp>
+#include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <yq/meta/Global.hpp>
 #include <yq/meta/Init.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/SqlLite.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 #include <yq/wksp/QuillFile.hpp>
 

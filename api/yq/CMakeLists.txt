@@ -43,7 +43,6 @@ set(yq_sources
     
     ./image/image.cpp
     
-    ./io/file_utils.hpp
     ./io/file_unity.cpp
     ./io/file_watch.cpp
     ./io/AbstractFile.hpp
@@ -76,19 +75,7 @@ set(yq_sources
     ./org/orgsys.cpp
 
     ./rule/rule.cpp
-    
-    ./sql/SqlError.hpp
-    ./sql/SqlError.ipp
-    ./sql/SqlLastId.hpp
-    ./sql/SqlLastId.ipp
-    ./sql/SqlLite.hpp
-    ./sql/SqlLite.ipp
-    ./sql/SqlLogging.hpp
-    ./sql/SqlQuery.hpp
-    ./sql/SqlQuery.ipp
-    ./sql/SqlUtils.hpp
-    ./sql/SqlUtils.ipp
-    ./sql/sql_unity.cpp
+
     
     ./srv/srv_unity.cpp
     ./srv/Notifier.hpp

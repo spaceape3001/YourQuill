@@ -8,15 +8,15 @@
 
 #include <basic/CmdArgs.hpp>
 #include <yq/app/Plugins.hpp>
-#include <yq/io/dir_utils.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/DirUtils.hpp>
+#include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <yq/meta/Meta.hpp>
 //#include <yq/stream/Ops.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/sql/SqlQuery.hpp>
-#include <yq/sql/SqlUtils.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/SqlLite.hpp>
+#include <basic/SqlQuery.hpp>
+#include <basic/SqlUtils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 #include <yq/wksp/Workspace.hpp>
 

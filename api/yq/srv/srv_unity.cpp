@@ -13,7 +13,7 @@
 
 #include <basic/Vector.hpp>
 #include <yq/file/Fragment.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 
 namespace yq {

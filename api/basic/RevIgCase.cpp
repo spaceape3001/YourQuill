@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "RevIgCase.hpp"
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 namespace yq {
 

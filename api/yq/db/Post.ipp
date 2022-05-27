@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Post.hpp"
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 
 namespace yq {

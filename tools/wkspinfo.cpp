@@ -12,7 +12,7 @@
 #include <yq/file/Root.hpp>
 #include <basic/Logging.hpp>
 #include <yq/meta/Meta.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 int main(int argc, char* argv[])

@@ -2,9 +2,9 @@
 #include <basic/Array2.hpp>
 #include <basic/Vector.hpp>
 #include <basic/Logging.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/sql/SqlQuery.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/SqlLite.hpp>
+#include <basic/SqlQuery.hpp>
+#include <basic/TextUtils.hpp>
 
 using namespace yq;
 

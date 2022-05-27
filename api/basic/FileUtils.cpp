@@ -6,11 +6,11 @@
 
 //#include "AbstractFile.ipp"
 
-#include "file_utils.hpp"
+#include <basic/FileUtils.hpp>
 #include <basic/Safety.hpp>
 #include <basic/Vector.hpp>
 #include <basic/Iter32.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Result.hpp>
 
@@ -18,28 +18,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
-
-//#include "StdFile.hpp"
-////#include "StdXml.hpp"
-//#include "XmlFile.hpp"
-//#include "XmlUtils.hpp"
-
-//#include <basic/Compare.hpp>
-//#include <basic/Set.hpp>
-//#include <basic/Logging.hpp>
-//#include <yq/stream/Bytes.hpp>
-//#include <yq/stream/Ops.hpp>
-
-//#include <filesystem>
-//#include <fstream>
-//#include <cstring>
-
-//#include <dirent.h>
-//#include <sys/types.h>
-
-//#include "rapidxml.hpp"
-//#include "rapidxml_print.hpp"
-
 
 namespace yq {
 

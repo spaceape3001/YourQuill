@@ -11,11 +11,11 @@
 
 #include <basic/Random.hpp>
 #include <basic/DelayInit.hpp>
-#include <basic/c_utils.hpp>
+#include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/FixedBuffer.hpp>
 #include <basic/Ref.hpp>
 #include <basic/ThreadId.hpp>

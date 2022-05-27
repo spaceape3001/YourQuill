@@ -13,7 +13,7 @@
 #include "LeafLog.hpp"
 #include "LeafPost.hpp"
 
-#include <basic/c_utils.hpp>
+#include <basic/CollectionUtils.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/file/DocumentCDB.hpp>
@@ -21,7 +21,7 @@
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/Root.hpp>
 #include <yq/image/ImageCDB.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/FileUtils.hpp>
 #include <yq/org/TagCDB.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>

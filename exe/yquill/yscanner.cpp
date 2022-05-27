@@ -17,18 +17,18 @@
 #include <yq/file/FragmentCDB.hpp>
 #include <yq/file/Root.hpp>
 #include <yq/file/RootCDB.hpp>
-#include <yq/io/dir_utils.hpp>
+#include <basic/DirUtils.hpp>
 #include <yq/io/DirWatcher.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/sql/SqlQuery.hpp>
+#include <basic/SqlLite.hpp>
+#include <basic/SqlQuery.hpp>
 #include <yq/srv/FileWatch.hpp>
 #include <yq/srv/Notifier.hpp>
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 #include <yq/wksp/Workspace.hpp>
 

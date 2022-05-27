@@ -33,7 +33,7 @@
 #include "ValueHtml.hpp"
 
 #include <yq/bit/KeyValue.hpp>
-#include <basic/c_utils.hpp>
+#include <basic/CollectionUtils.hpp>
 #include <yq/db/CacheFwd.hpp>
 #include <yq/db/HtmlLayout.hpp>
 #include <yq/db/SQ.hpp>
@@ -46,7 +46,7 @@
 #include <yq/file/RootHtml.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/FileUtils.hpp>
 #include <yq/io/Strings.hpp>
 #include <yq/io/XmlUtils.hpp>
 #include <yq/meta/TypeInfo.hpp>
@@ -55,7 +55,7 @@
 #include <yq/org/TagCDB.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/wksp/Workspace.hpp>

@@ -17,7 +17,7 @@
 #include <yq/bit/KeyValue.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/stream/Ops.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 

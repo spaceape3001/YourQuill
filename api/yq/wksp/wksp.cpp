@@ -21,7 +21,7 @@
 #include "UserPost.hpp"
 
 #include <yq/bit/KeyValue.hpp>
-#include <basic/c_utils.hpp>
+#include <basic/CollectionUtils.hpp>
 #include <yq/db/HtmlLayout.hpp>
 #include <yq/db/SQ.hpp>
 #include <yq/file/DocumentCDB.hpp>
@@ -34,7 +34,7 @@
 #include <yq/io/Strings.hpp>
 #include <yq/meta/ObjectInfoWriter.hpp>
 #include <yq/stream/Ops.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/wksp/Workspace.hpp>

@@ -13,7 +13,7 @@
 #include <basic/Logging.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <stdio.h>
 
 namespace yq {

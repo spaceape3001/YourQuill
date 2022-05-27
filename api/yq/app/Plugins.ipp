@@ -6,10 +6,10 @@
 
 #include "Plugins.hpp"
 
-#include <yq/io/dir_utils.hpp>
+#include <basic/DirUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/ThreadId.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 
 #include <dlfcn.h>
 

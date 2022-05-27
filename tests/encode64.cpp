@@ -7,7 +7,7 @@
 #include <boost/ut.hpp>
 #include <basic/Logging.hpp>
 #include <yq/text/Encode64.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 #include <cstring>
 

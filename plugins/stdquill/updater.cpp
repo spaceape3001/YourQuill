@@ -26,8 +26,8 @@
 
 #include <basic/DelayInit.hpp>
 #include <yq/db/SQ.hpp>
-#include <yq/io/dir_utils.hpp>
-#include <yq/io/file_utils.hpp>
+#include <basic/DirUtils.hpp>
+#include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <yq/srv/FileWatch.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
@@ -37,7 +37,7 @@
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Ops.hpp>
 #include <yq/stream/Text.hpp>
-#include <basic/text_utils.hpp>
+#include <basic/TextUtils.hpp>
 #include <yq/wksp/Workspace.hpp>
 
 
