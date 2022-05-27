@@ -8,6 +8,8 @@ endif()
 set(basic_sources
     ${basic_test_source}
     
+    ./AbstractFile.cpp
+    ./AbstractFile.hpp
     ./Any.cpp
     ./Any.hpp
     ./Array1.hpp
@@ -82,6 +84,11 @@ set(basic_sources
     ./Touched.hpp
     ./Vector.hpp
     ./Version.hpp
+    ./XmlFile.cpp
+    ./XmlFile.hpp
+    ./XmlObject.cpp
+    ./XmlObject.hpp
+    ./XmlSerialize.hpp
     ./XmlUtils.cpp
     ./XmlUtils.hpp
     

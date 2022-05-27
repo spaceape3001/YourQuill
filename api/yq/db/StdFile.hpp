@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/io/AbstractFile.hpp>
+#include <basic/AbstractFile.hpp>
 #include <basic/preamble.hpp>
 
 namespace yq {

@@ -43,11 +43,8 @@ set(yq_sources
     
     ./image/image.cpp
     
-    ./io/file_unity.cpp
     ./io/file_watch.cpp
-    ./io/AbstractFile.hpp
     ./io/DirWatcher.hpp
-    ./io/XmlFile.hpp
     
     ./ipc/ipc_unity.cpp
     ./ipc/ipcBuffer.hpp
@@ -85,8 +82,6 @@ set(yq_sources
     ./text/Encode64.hpp
     ./text/Markdown.cpp
     ./text/Markdown.hpp
-    
-    ./type/type_unity.cpp
     
 
     ./web/web_unity.cpp

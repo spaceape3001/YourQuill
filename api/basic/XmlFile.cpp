@@ -4,32 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "AbstractFile.ipp"
-#include <basic/DirUtils.hpp>
-#include <basic/FileUtils.hpp>
-
-#include "XmlFile.hpp"
-#include <basic/XmlUtils.hpp>
-
-#include <basic/Compare.hpp>
-#include <basic/Safety.hpp>
-#include <basic/Set.hpp>
-#include <basic/Logging.hpp>
-#include <basic/stream/Bytes.hpp>
-#include <basic/StreamOps.hpp>
-#include <basic/Iter32.hpp>
-#include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
-
-#include <filesystem>
-#include <fstream>
-#include <cstring>
-
-#include <dirent.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include <basic/Logging.hpp>
+#include <basic/Stream.hpp>
+#include <basic/XmlFile.hpp>
 
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
