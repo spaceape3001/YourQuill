@@ -12,23 +12,26 @@
 #include <log4cpp/CategoryStream.hh>
 
 namespace yq {
+
+    /*! Size object
+    */
     template <typename T>
     struct Size2 {
-        T   x = zero_v<T>;
-        T   y = zero_v<T>;
+        T   x;
+        T   y;
         
         bool    operator==(const Size2&) const noexcept = default;
         
-        T   width() const { return x; }
-        T   height() const { return y; }
+        constexpr T   width() const { return x; }
+        constexpr T   height() const { return y; }
     };
     
     
     template <typename T>
-    bool    within(const Size2<T>& big, const Size2<T>& small);
+    constexpr bool    within(const Size2<T>& big, const Size2<T>& small);
     
     template <typename T>
-    auto    area(const Size2<T>& sz)
+    constexpr auto    area(const Size2<T>& sz)
     {
         return sz.x*sz.y;
     }
@@ -82,7 +85,7 @@ namespace yq {
     }
 
     template <typename T>
-    bool   within(const Size2<T>& big, const Size2<T>& small)
+    constexpr bool   within(const Size2<T>& big, const Size2<T>& small)
     {
         return (big.x >= small.x) && (big.y >= small.y);
     }

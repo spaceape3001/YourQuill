@@ -125,35 +125,41 @@ namespace yq {
             return a.second;
     }
 
-    constexpr bool  is_nan(double v)
+    inline constexpr bool  is_nan(double v)
     {
         return std::isnan(v);
     }
 
-    constexpr bool  is_nan(float v)
+    inline constexpr bool  is_nan(float v)
     {
         return std::isnan(v);
     }
 
-    constexpr int   iround(double v)
+    inline constexpr int   iround(double v)
     {
         return (int)(std::round(v)+std::copysign(0.1,v));
     }
 
-    constexpr int   iceil(double r)
+    inline constexpr int   iceil(double r)
     {
         return (int)(ceil(r)+copysign(0.1,r));
     }
 
-    constexpr int   itrunc(double r)
+    inline constexpr int   itrunc(double r)
     {
         return (int)(trunc(r)+copysign(0.1,r));
     }
 
-    constexpr int   ifloor(double r)
+    inline constexpr int   ifloor(double r)
     {
         return (int)(floor(r)+copysign(0.1,r));
     }
+
+    template <typename T> struct Coord2;
+    using Coord2D = Coord2<double>;
+    using Coord2F = Coord2<float>;
+    using Coord2I = Coord2<int>;
+    using Coord2U = Coord2<unsigned>;
 
     template <typename T> struct Fraction;
     using Frac8  = Fraction<int8_t>;

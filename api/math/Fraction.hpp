@@ -11,12 +11,14 @@
 #include <basic/meta/InfoBinder.hpp>
 #include <basic/StreamOps.hpp>
 #include <log4cpp/CategoryStream.hh>
+#include <type_traits>
 
 namespace yq {
 
-
     template <typename I>
     struct Fraction {
+        static_assert(std::is_integral_v<I>, "Template parameter I must be an integer!");
+    
         I   num = I{0};
         I   den = I{1};
 
@@ -115,7 +117,7 @@ namespace yq {
     }
 
     template <typename I>
-    Fraction<I> operator^(Fraction<I>a, I b)
+    constexpr Fraction<I> operator^(Fraction<I>a, I b)
     {
         I     n   = 1;
         I     d   = 1;
@@ -138,7 +140,7 @@ namespace yq {
     }
 
     template <typename I>
-    std::strong_ordering   operator<=>(Fraction<I>&a, Fraction<I>b)
+    constexpr std::strong_ordering   operator<=>(Fraction<I>&a, Fraction<I>b)
     {
         auto    lt  = a.num*b.den;
         auto    rt  = a.den*b.den;
