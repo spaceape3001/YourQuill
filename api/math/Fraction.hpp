@@ -177,4 +177,7 @@ namespace yq {
     }
 }
 
-
+YQ_TYPE_DECLARE(yq::Frac8)
+YQ_TYPE_DECLARE(yq::Frac16)
+YQ_TYPE_DECLARE(yq::Frac32)
+YQ_TYPE_DECLARE(yq::Frac64)

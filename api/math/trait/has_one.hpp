@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <type_traits>
+
 namespace yq {
     template <typename T>
     struct one_eval : public std::false_type {

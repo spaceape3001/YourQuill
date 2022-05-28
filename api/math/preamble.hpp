@@ -14,11 +14,14 @@
 
 #include <math/trait/has_abs.hpp>
 #include <math/trait/has_copysign.hpp>
+#include <math/trait/has_identity.hpp>
 #include <math/trait/has_is_finite.hpp>
 #include <math/trait/has_nan.hpp>
 #include <math/trait/has_one.hpp>
 #include <math/trait/has_sqrt.hpp>
 #include <math/trait/has_zero.hpp>
+
+#include <math/forward.hpp>
 
 #include <cmath>
 #include <cstdint>
@@ -108,7 +111,18 @@
 #define CROSS       %
 #define CROSS_EQ   %=
 
+namespace std {
+    template <typename> class complex;
+}
+
+
 namespace yq {
+    using ComplexD  = std::complex<double>;
+    using ComplexF  = std::complex<float>;
+    using ComplexI  = std::complex<int>;
+    using ComplexU  = std::complex<unsigned>;
+    
+
     static constexpr const double   pi      = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862;
     static constexpr const double   sqrt2   = 1.4142135623730950488016887242096980785696718753769480731766797379907324784621;
     static constexpr const double   sqrt3   = 1.7320508075688772935274463415058723669428052538103806280558069794519330169088;
@@ -186,68 +200,19 @@ namespace yq {
     using Size2U32  = Size2<int32_t>;
     using Size2U64  = Size2<int64_t>;
     
-    template <typename T> struct Vec1;
-    using Vec1D     = Vec1<double>;
-    using Vec1F     = Vec1<float>;
-    using Vec1I     = Vec1<int>;
-    using Vec1U     = Vec1<unsigned>;
-
-    template <typename T> struct Vec2;
-    using Vec2D     = Vec2<double>;
-    using Vec2F     = Vec2<float>;
-    using Vec2I     = Vec2<int>;
-    using Vec2U     = Vec2<unsigned>;
-
-    template <typename T> struct Vec3;
-    using Vec3D     = Vec3<double>;
-    using Vec3F     = Vec3<float>;
-    using Vec3I     = Vec3<int>;
-    using Vec3U     = Vec3<unsigned>;
-
-    template <typename T> struct Vec4;
-    using Vec4D     = Vec4<double>;
-    using Vec4F     = Vec4<float>;
-    using Vec4I     = Vec4<int>;
-    using Vec4U     = Vec4<unsigned>;
     
     //! Call this if math isn't getting startup-initialized 
     void        initialize_math();
 
+    template <typename T> using square_t = decltype(T()*T());
+    template <typename T> using cube_t   = decltype(T()*T()*T());
+    template <typename T, typename U>  using product_t     = decltype(T()*U());
+    template <typename T, typename U>  using quotient_t    = decltype(T()/U());
+    template <typename T> using inverse_t = decltype(T()/square_t<T>());
+    
+    namespace trait {
+        template <typename T, typename U>  static constexpr const bool self_mul_v = std::is_same_v<T,product_t<T,U>>;
+        template <typename T, typename U>  static constexpr const bool self_div_v = std::is_same_v<T,quotient_t<T,U>>;
+    }
 }
-
-YQ_TYPE_DECLARE(yq::Coord2D)
-YQ_TYPE_DECLARE(yq::Coord2F)
-YQ_TYPE_DECLARE(yq::Coord2I)
-YQ_TYPE_DECLARE(yq::Coord2U)
-
-
-YQ_TYPE_DECLARE(yq::Frac8)
-YQ_TYPE_DECLARE(yq::Frac16)
-YQ_TYPE_DECLARE(yq::Frac32)
-YQ_TYPE_DECLARE(yq::Frac64)
-
-YQ_TYPE_DECLARE(yq::Size2D)
-YQ_TYPE_DECLARE(yq::Size2F)
-YQ_TYPE_DECLARE(yq::Size2I)
-YQ_TYPE_DECLARE(yq::Size2U)
-
-YQ_TYPE_DECLARE(yq::Vec1D)
-YQ_TYPE_DECLARE(yq::Vec1F)
-YQ_TYPE_DECLARE(yq::Vec1I)
-YQ_TYPE_DECLARE(yq::Vec1U)
-
-YQ_TYPE_DECLARE(yq::Vec2D)
-YQ_TYPE_DECLARE(yq::Vec2F)
-YQ_TYPE_DECLARE(yq::Vec2I)
-YQ_TYPE_DECLARE(yq::Vec2U)
-
-YQ_TYPE_DECLARE(yq::Vec3D)
-YQ_TYPE_DECLARE(yq::Vec3F)
-YQ_TYPE_DECLARE(yq::Vec3I)
-YQ_TYPE_DECLARE(yq::Vec3U)
-
-YQ_TYPE_DECLARE(yq::Vec4D)
-YQ_TYPE_DECLARE(yq::Vec4F)
-YQ_TYPE_DECLARE(yq::Vec4I)
-YQ_TYPE_DECLARE(yq::Vec4U)
 

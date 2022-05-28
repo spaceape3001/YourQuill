@@ -63,6 +63,5 @@ namespace yq {
     {
         return std::isnan(v);
     }
-
 }
 

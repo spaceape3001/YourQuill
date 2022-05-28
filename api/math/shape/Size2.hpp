@@ -111,3 +111,7 @@ namespace yq {
     }
 }
 
+YQ_TYPE_DECLARE(yq::Size2D)
+YQ_TYPE_DECLARE(yq::Size2F)
+YQ_TYPE_DECLARE(yq::Size2I)
+YQ_TYPE_DECLARE(yq::Size2U)

@@ -161,3 +161,8 @@ namespace yq {
     }
 }
 
+YQ_TYPE_DECLARE(yq::Coord2D)
+YQ_TYPE_DECLARE(yq::Coord2F)
+YQ_TYPE_DECLARE(yq::Coord2I)
+YQ_TYPE_DECLARE(yq::Coord2U)
+

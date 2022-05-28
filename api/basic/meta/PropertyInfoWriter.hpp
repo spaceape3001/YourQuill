@@ -34,39 +34,39 @@ namespace yq {
     class PropertyInfo::VarW : public Writer<T> {
     public:
     
-        Writer<T>&     setter(void(*function)(T))
+        Writer<T>&     setter(void(*function)(T), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
 
-            new XFV_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new XFV_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
         
-        Writer<T>&     setter(void(*function)(const T&))
+        Writer<T>&     setter(void(*function)(const T&), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
             assert(thread_safe_write());
-            new XFR_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new XFR_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
         
-        Writer<T>&     setter(bool(*function)(T))
+        Writer<T>&     setter(bool(*function)(T), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
             assert(thread_safe_write());
-            new XFBV_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new XFBV_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
         
-        Writer<T>&     setter(bool(*function)(const T&))
+        Writer<T>&     setter(bool(*function)(const T&), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
             assert(thread_safe_write());
-            new XFBR_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new XFBR_PropSetter<T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
         
@@ -77,39 +77,39 @@ namespace yq {
     class PropertyInfo::PropW : public Writer<T> {
     public:
     
-        Writer<T>&     setter(void (C::*function)(T))
+        Writer<T>&     setter(void (C::*function)(T), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
             assert(thread_safe_write());
-            new IFV_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new IFV_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
         
-        Writer<T>&     setter(void (C::*function)(const T&))
+        Writer<T>&     setter(void (C::*function)(const T&), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
             assert(thread_safe_write());
-            new IFR_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new IFR_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
         
-        Writer<T>&     setter(bool (C::*function)(T))
+        Writer<T>&     setter(bool (C::*function)(T), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
             assert(thread_safe_write());
-            new IFBV_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new IFBV_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
         
-        Writer<T>&     setter(bool (C::*function)(const T&))
+        Writer<T>&     setter(bool (C::*function)(const T&), const std::source_location& sl = std::source_location::current())
         {
             assert(function);
             assert(Meta::Writer::m_meta);
             assert(thread_safe_write());
-            new IFBR_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), function);
+            new IFBR_PropSetter<C,T>(static_cast<PropertyInfo*>(Meta::Writer::m_meta), sl, function);
             return *this;
         }
     

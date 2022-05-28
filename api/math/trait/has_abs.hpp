@@ -50,4 +50,5 @@ namespace yq {
             return std::abs(v);
         }                                                   
     };
+    
 }

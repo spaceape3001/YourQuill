@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <type_traits>
+
 namespace yq {
     template <typename T>
     struct zero_eval : public std::false_type {
@@ -42,5 +44,4 @@ namespace yq {
             return T{0}; 
         }                                                   
     };
-
 }
