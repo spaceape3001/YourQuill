@@ -42,26 +42,18 @@ find_package(Graphviz)
 find_package(SQLite3 REQUIRED)
 find_package(ImageMagick COMPONENTS Magick++)
 
-message( "ImageMagick Headers is '${ImageMagick_INCLUDE_DIRS}'" )
-message( "ImageMagick Libraries is '${ImageMagick_LIBRARIES}'" )
 # find_package(libzip REQUIRED)
 #   Qt's got issues, want to remove it....
 
-# find_package(jsoncpp REQUIRED)
+set(VULKAN TRUE)
 
-if(Feature_Experimental AND EXISTS play)
-    set(VULKAN TRUE)
-endif()
+set(VULKAN_DIR $ENV{VULKAN_SDK})
 
-if(VULKAN)
-    set(VULKAN_DIR $ENV{VULKAN_SDK})
+    # for the "play"
+find_package(Vulkan REQUIRED)
+message("Vulkan should be in " $ENV{VULKAN_SDK})
 
-        # for the "play"
-    find_package(Vulkan REQUIRED)
-    message("Vulkan should be in " $ENV{VULKAN_SDK})
-
-    find_package(GLFW3)
-endif()
+find_package(GLFW3)
 
 include(cmake/GroupFiles.cmake)
 include(cmake/LinkTest.cmake)
