@@ -5,10 +5,13 @@ endif()
 set(yq_engine_sources
     ${engine_test_source}
     
+    ./engine.cpp
     ./preamble.hpp
+    ./Visualizer.cpp
+    ./Visualizer.hpp
 )
 
-add_library(yqengine SHARED ${engine_sources})
+add_library(yqengine SHARED ${yq_engine_sources})
 target_link_libraries(yqengine PUBLIC yqbasic)
 LinkTest(yqengine)
 

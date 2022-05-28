@@ -4,7 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "Visualizer.hpp"
+#include <basic/DelayInit.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
 
-namespace yq {
-}
+
+YQ_OBJECT_IMPLEMENT(yq::Visualizer)
+
+

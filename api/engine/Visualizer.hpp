@@ -6,5 +6,12 @@
 
 #pragma once
 
+#include <basic/Object.hpp>
+
 namespace yq {
+    class Visualizer : public Object {
+        YQ_OBJECT_DECLARE(Visualizer, Object)
+    public:
+    
+    };
 }

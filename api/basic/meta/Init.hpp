@@ -37,10 +37,6 @@
         template <> TypeInfo& TypeInfo::Final<__VA_ARGS__>::s_save  = InfoBinder<__VA_ARGS__>::edit();      \
     }
     
-#define MO_IMPLEMENT( ... )                                                                                 \
-    namespace yq {                                                                                          \
-    }
-
 namespace yq {
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////
