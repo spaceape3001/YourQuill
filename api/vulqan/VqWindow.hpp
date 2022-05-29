@@ -32,6 +32,8 @@ namespace yq {
         static void poll_events();
 
         struct Info {
+            VkPhysicalDevice    device   = nullptr;
+        
             const char*         title    = "(untitled)";
             Size2I              size     = { 1920, 1080 };
                 //!  Set to get full screen, windowed otherwise
@@ -50,22 +52,21 @@ namespace yq {
         };
 
             // Creates a window bound to the specified vulkan instance
-        VqWindow(Ref<VqInstance>);
-        VqWindow(Ref<VqInstance>, const Info&);
+        VqWindow(const Info& i = Info());
         
         ~VqWindow();
 
             //! Calls user's attention to window
         void        attention();
 
-            //! Closes & destroys this window....
+            //! Closes (politely) this window....
         void        close();
         
             //! Brings window to front & input focus
         void        focus();
 
             //! Good & initialized window
-        bool        good() const { return m_init; }
+        bool        good() const { return m_window != nullptr; }
 
             //! Height of the window
         int         height() const;
@@ -76,8 +77,6 @@ namespace yq {
             //! Iconifies (minimizes) window
         void        iconify();
 
-            //! Creates & initializes this window
-        bool        initialize(const Info& i=Info());
         
             //! TRUE if the window has standard decorations (close/buttons/frame)
         bool        is_decorated() const;
@@ -98,11 +97,15 @@ namespace yq {
             //! TRUE if the window is visible
         bool        is_visible() const;
         
+        VkDevice    logical() const { return m_logical; }
+        
             //! Maximizes widnow
         void        maximize();
 
             //! Monitor (if fullscreen)
         VqMonitor   monitor() const;
+
+        VkPhysicalDevice    physical() const { return m_physical; }
 
             //! Current window position
         Vec2I       position() const;
@@ -137,6 +140,9 @@ namespace yq {
             //! Window size
         Size2I      size() const;
         
+            //! The Vulkan surface
+        VkSurfaceKHR    surface() const { return m_surface; }
+        
             //! Width of the window
         int         width() const;
 
@@ -148,13 +154,16 @@ namespace yq {
     private:
         void    _deinit();
     
-        Ref<VqInstance> m_vulkan;
-        GLFWwindow*     m_window        = nullptr;
-        VkSurfaceKHR    m_surface       = nullptr;
-        VkQueue         m_graphicsQueue = nullptr;
-        VkQueue         m_presentQueue  = nullptr;
-        VkDevice        m_logicalDevice = nullptr;
-        bool            m_init          = false;
+            //! Creates & initializes this window
+        bool       _init(const Info& i);
+
+        VkPhysicalDevice            m_physical      = nullptr;
+        GLFWwindow*                 m_window        = nullptr;
+        VkSurfaceKHR                m_surface       = nullptr;
+        VkQueue                     m_graphicsQueue = nullptr;
+        VkQueue                     m_presentQueue  = nullptr;
+        VkDevice                    m_logical       = nullptr;
+        VkSurfaceCapabilitiesKHR    m_capabilities;
     };
 
 }

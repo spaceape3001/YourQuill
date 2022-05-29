@@ -13,52 +13,58 @@
 #include <basic/Logging.hpp>
 
 namespace yq {
-    VqInstance::VqInstance()
+    VqInstance*     VqInstance::s_singleton = nullptr;
+    VkInstance      VqInstance::s_vulkan = nullptr;
+
+    const VqInstance*    VqInstance::singleton()
     {
+        return s_singleton;
     }
     
-    VqInstance::VqInstance(const Info& i) : VqInstance()
+    bool                 VqInstance::initialized()
     {
-        initialize(i);
+        return s_singleton != nullptr;
+    }
+
+    VkInstance           VqInstance::vulkan()
+    {
+        return s_vulkan;
+    }
+    
+
+    
+    VqInstance::VqInstance(const Info& i)
+    {
+        if((!s_singleton) && init(i)){
+            s_vulkan  = m_instance;
+            s_singleton = this;
+        }
     }
 
     VqInstance::~VqInstance()
     {
-        shutdown();
+        if(this == s_singleton){
+            s_vulkan  = nullptr;
+            vkDestroyInstance(m_instance, nullptr);
+            m_instance  = nullptr;
+            s_singleton = nullptr;
+        }
     }
     
-    void  VqInstance::_deinit()
+    bool  VqInstance::init(const Info& i)
     {
-        m_physDevice    = nullptr;
-        if(m_instance){
-            vkDestroyInstance(m_instance, nullptr);
-            m_instance    = nullptr;
-        }
-        m_layers.clear();
-        if(m_glfw){
-            glfwTerminate();
-            m_glfw      = false;
-        }
-    }
-
-    bool  VqInstance::initialize(const Info& i)
-    {
-        if(m_init)
-            return true;
-            
-        m_glfw  = i.glfw_enable && i.glfw_init;
-        if(m_glfw){
-            glfwSetErrorCallback([](int ec, const char* why){
-                if(!why)
-                    why = "Unknown error";
-                yWarning() << "GLFW error (" << ec << "): " << why;
-            });
-            glfwInit();
-        }
         
+        bool glfw = VqGLFW::initialized();
+            
         static const std::vector<const char*>   kValidationLayers = {
             "VK_LAYER_KHRONOS_validation"
         };
+        
+        m_allLayerProps     = vqEnumerateInstanceLayerProperties();
+        m_allLayerNames     = vqNameSet(m_allLayerProps);
+        
+        m_allExtensionProps = vqEnumerateInstanceExtensionProperties();
+        m_allExtensionNames = vqNameSet(m_allExtensionProps);
 
         bool    want_debug  = false;
 
@@ -66,29 +72,25 @@ namespace yq {
             Start by scanning the extensions for validation
         */
         if(i.validation != Required::NO){
-            std::set<std::string>     available   = vqNameSet(vqEnumerateInstanceLayerProperties());
             for(const char* z : kValidationLayers){
-                if(available.contains(z))
+                if(m_allLayerNames.contains(z))
                     m_layers.push_back(z);
             }
             
             if(m_layers.size() != kValidationLayers.size()){
                 auto stream    = (i.validation == Required::YES) ? yCritical() : yError();
                 stream << "Unable to find validation layers!";
-                if(i.validation == Required::YES){
-                    _deinit();
+                if(i.validation == Required::YES)
                     return false;
-                }
             } else
                 want_debug  = true;
         }
 
-        std::vector<const char*>     extensions;
-        if(i.glfw_enable){
-            extensions = vqGlfwRequiredExtensions();
+        if(glfw){
+            m_extensions = vqGlfwRequiredExtensions();
         }
         if(want_debug)
-            extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+            m_extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
             
             /*
                 Create our device
@@ -107,20 +109,19 @@ namespace yq {
         if(createInfo.enabledLayerCount)
             createInfo.ppEnabledLayerNames      = m_layers.data();
             
-        createInfo.enabledExtensionCount        = (uint32_t) extensions.size();
-        if(!extensions.empty())
-            createInfo.ppEnabledExtensionNames  = extensions.data();
+        createInfo.enabledExtensionCount        = (uint32_t) m_extensions.size();
+        if(createInfo.enabledExtensionCount)
+            createInfo.ppEnabledExtensionNames  = m_extensions.data();
             
         yInfo() << "Enabled Layer Count -> " << createInfo.enabledLayerCount;
         
         if(vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS){
             yCritical() << "Unable to create vulkan instance!";
             m_instance   = nullptr;
-            _deinit();
             return false;
         }
         
-        
+        #if 0
             /*
                 Get the physical device
                 We'll make it smarter (later)
@@ -140,16 +141,9 @@ namespace yq {
             _deinit();
             return false;
         }
+        #endif
      
-        m_init  = true;
         return true;
     }
     
-    void  VqInstance::shutdown()
-    {
-        if(!m_init)
-            return ;
-        _deinit();
-        m_init  = false;
-    }
 }

@@ -7,9 +7,11 @@
 #pragma once
 
 #include <basic/Ref.hpp>
+#include <basic/DbgRel.hpp>
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <vulkan/vulkan_core.h>
+#include <set>
 #include <vector>
 
 namespace yq {
@@ -24,8 +26,12 @@ namespace yq {
 
     /*! Instance for vulkan, should only have ONE
     */
-    class VqInstance : public RefCount, trait::not_copyable, trait::not_moveable {
+    class VqInstance : trait::not_copyable, trait::not_moveable {
     public:
+    
+        static const VqInstance*    singleton();
+        static VkInstance           vulkan();
+        static bool                 initialized();
     
     
         //! Info for initialization
@@ -47,40 +53,39 @@ namespace yq {
             uint32_t        vulkan_api      = VK_API_VERSION_1_2;
             
             //! Add KHRONOS validation layer
-            Required        validation      = Required::NO;
+            Required        validation      = YQ_DBGREL( Required::YES, Required::NO);
             
-            //! TRUE to enable glfw extensions
-            bool            glfw_enable     = true;
-            
-            //! TRUE to initialize glfw
-            bool            glfw_init       = true;
             
             Info(){}
         };
     
-        VqInstance();
-        VqInstance(const Info&);
+        VqInstance(const Info& i = Info());
         ~VqInstance();
         
-        bool                initialize(const Info& i=Info());
-        void                shutdown();
+        const std::vector<VkExtensionProperties>& available_extensions() const { return m_allExtensionProps; }
+        const std::vector<VkLayerProperties>&     available_layers() const { return m_allLayerProps; }
         
-        VkPhysicalDevice    physical_device() const { return m_physDevice; }
-        VkInstance          instance() const { return m_instance; }
-        bool                good() const { return m_init; }
+        bool    good() const { return m_instance != nullptr; }
+        
+        VkInstance  instance() const { return m_instance; }
+        
 
     public:
     
         friend class VqWindow;
-    
-        //!  Unabashed deinitializes... 
-        void            _deinit();
-    
-        std::vector<const char*>    m_layers;
-        VkInstance                  m_instance      = nullptr;
-        VkPhysicalDevice            m_physDevice    = nullptr;
-        bool                        m_glfw          = false;
-        bool                        m_init          = false;        
+        
+        static VqInstance*          s_singleton;
+        static VkInstance           s_vulkan;
+        
+        bool                        init(const Info&);
+        
+        VkInstance                          m_instance      = nullptr;
+        std::vector<VkLayerProperties>      m_allLayerProps;
+        std::vector<VkExtensionProperties>  m_allExtensionProps;
+        std::set<std::string>               m_allLayerNames;
+        std::set<std::string>               m_allExtensionNames;
+        std::vector<const char*>            m_extensions;
+        std::vector<const char*>            m_layers;
     };
 }
 

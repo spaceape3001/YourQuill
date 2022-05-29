@@ -23,30 +23,25 @@ namespace yq {
     
     ////////////////////////////////////////////////////////////////////////////////
 
-    VqWindow::VqWindow(Ref<VqInstance> vi) : m_vulkan(vi)
+    VqWindow::VqWindow(const Info&i)
     {
-        assert(vi.valid() && "Needs a valid vulkan instance!");
-    }
-    
-    VqWindow::VqWindow(Ref<VqInstance> vi, const Info&i) : VqWindow(vi)
-    {
-        initialize(i);
+        _init(i);
     }
     
     VqWindow::~VqWindow()
     {
-        close();
+        _deinit();
     }
 
     void VqWindow::_deinit()
     {
-        if(m_logicalDevice){
-            vkDestroyDevice(m_logicalDevice, nullptr);
-            m_logicalDevice   = nullptr;
+        if(m_logical){
+            vkDestroyDevice(m_logical, nullptr);
+            m_logical   = nullptr;
         }
 
         if(m_surface){
-            vkDestroySurfaceKHR(m_vulkan->m_instance, m_surface, nullptr);
+            vkDestroySurfaceKHR(VqInstance::vulkan(), m_surface, nullptr);
             m_surface  = nullptr;
         }
 
@@ -54,57 +49,23 @@ namespace yq {
             glfwDestroyWindow(m_window);
             m_window    = nullptr;
         }
-    }
-
-    void VqWindow::attention()
-    {
-        if(m_window)
-            glfwRequestWindowAttention(m_window);
-    }
-
-    void VqWindow::close()
-    {
-        if(m_init){
-            _deinit();
-            m_init  = false;
-        }
-    }
-
-    void VqWindow::focus()
-    {
-        if(m_window)
-            glfwFocusWindow(m_window);
-    }
-
-    int  VqWindow::height() const
-    {
-        if(!m_window)
-            return 0;
-    
-        int ret;
-        glfwGetWindowSize(m_window, nullptr, &ret);
-        return ret;
-    }
-
-    void VqWindow::hide()
-    {
-        if(m_window)
-            glfwHideWindow(m_window);
-    }
-
-    void VqWindow::iconify()
-    {
-        if(m_window)
-            glfwIconifyWindow(m_window);
-    }
-
-    bool VqWindow::initialize(const Info& i)
-    {
-        if(m_init)
-            return true;
         
-        if(!m_vulkan->good()){
-            yError() << "Cannot create window with uninitialized vulkan!";
+        m_physical = nullptr;
+    }
+    
+    bool VqWindow::_init(const Info& i)
+    {
+        const VqInstance*   inst    = VqInstance::singleton();
+        if(!inst){
+            yCritical() << "Vulkan has not been initialized!";
+            return false;
+        }
+    
+        m_physical    = i.device;
+        if(!m_physical)
+            m_physical  = vqFirstDevice();
+        if(!m_physical){
+            yCritical() << "Cannot create window without any devices!";
             return false;
         }
 
@@ -125,7 +86,7 @@ namespace yq {
                 Create our surface
             */
         
-        if(glfwCreateWindowSurface(m_vulkan->m_instance, m_window, nullptr, &m_surface) != VK_SUCCESS){
+        if(glfwCreateWindowSurface(inst->m_instance, m_window, nullptr, &m_surface) != VK_SUCCESS){
             yCritical() << "Unable to create window surface!";
             return false;
         }
@@ -133,8 +94,12 @@ namespace yq {
         /*
             Create our logical device
         */
+        
+        std::vector<const char*> deviceExtensions = {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+        };
     
-        auto queueInfos         = vqGetPhysicalDeviceQueueFamilyProperties(m_vulkan->m_physDevice);
+        auto queueInfos         = vqGetPhysicalDeviceQueueFamilyProperties(m_physical);
         Result<uint32_t> gqu    = vqFindFirstGraphicsQueue(queueInfos);
         if(!gqu.good){
             yCritical() << "Unable to get a queue with graphic capability!";
@@ -145,7 +110,7 @@ namespace yq {
         Result<uint32_t>    pqu;
         for(uint32_t i=0;i<(uint32_t) queueInfos.size();++i){
             VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(m_vulkan->m_physDevice, i, m_surface, &presentSupport);
+            vkGetPhysicalDeviceSurfaceSupportKHR(m_physical, i, m_surface, &presentSupport);
             if(presentSupport){
                 pqu = { i, true };
                 break;
@@ -175,13 +140,15 @@ namespace yq {
         dci.queueCreateInfoCount     = (uint32_t) qci.size();
         dci.pEnabledFeatures         = &df;
         
-        dci.enabledLayerCount        = (uint32_t) m_vulkan->m_layers.size();
+        dci.enabledLayerCount        = (uint32_t) inst->m_layers.size();
         if(dci.enabledLayerCount)
-            dci.ppEnabledLayerNames  = m_vulkan->m_layers.data();
+            dci.ppEnabledLayerNames  = inst->m_layers.data();
     
-        dci.enabledExtensionCount    = 0;
+        dci.enabledExtensionCount    = (uint32_t) deviceExtensions.size();
+        if(!deviceExtensions.empty())
+            dci.ppEnabledExtensionNames = deviceExtensions.data();
         
-        if(vkCreateDevice(m_vulkan->m_physDevice, &dci, nullptr, &m_logicalDevice) != VK_SUCCESS){
+        if(vkCreateDevice(m_physical, &dci, nullptr, &m_logical) != VK_SUCCESS){
             yCritical() << "Unable to create logical device!";
             _deinit();
             return false;
@@ -190,11 +157,55 @@ namespace yq {
             /*
                 Graphics queue
             */
-        vkGetDeviceQueue(m_logicalDevice, gqu.value, 0, &m_graphicsQueue);
-        vkGetDeviceQueue(m_logicalDevice, pqu.value, 0, &m_presentQueue);
+        vkGetDeviceQueue(m_logical, gqu.value, 0, &m_graphicsQueue);
+        vkGetDeviceQueue(m_logical, pqu.value, 0, &m_presentQueue);
+        
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &m_capabilities);
     
-        m_init  = true;
         return true;
+    }
+
+    
+    ////////////////////////////////////////////////////////////////////////////////
+
+    void VqWindow::attention()
+    {
+        if(m_window)
+            glfwRequestWindowAttention(m_window);
+    }
+
+    void VqWindow::close()
+    {
+        if(m_window)
+            glfwSetWindowShouldClose(m_window, GLFW_TRUE);
+    }
+
+    void VqWindow::focus()
+    {
+        if(m_window)
+            glfwFocusWindow(m_window);
+    }
+
+    int  VqWindow::height() const
+    {
+        if(!m_window)
+            return 0;
+    
+        int ret;
+        glfwGetWindowSize(m_window, nullptr, &ret);
+        return ret;
+    }
+
+    void VqWindow::hide()
+    {
+        if(m_window)
+            glfwHideWindow(m_window);
+    }
+
+    void VqWindow::iconify()
+    {
+        if(m_window)
+            glfwIconifyWindow(m_window);
     }
 
     bool        VqWindow::is_decorated() const

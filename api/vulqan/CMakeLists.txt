@@ -1,6 +1,9 @@
 add_library(yqvulqan SHARED 
     ./VqCore.cpp
     ./VqCore.hpp
+    ./VqEnums.cpp
+    ./VqGLFW.cpp
+    ./VqGLFW.hpp
     ./VqInstance.cpp
     ./VqInstance.hpp
     ./VqMonitor.cpp

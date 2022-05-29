@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqGLFW.hpp"
+#include "VqInstance.hpp"
 #include "VqCore.hpp"
 #include <basic/CollectionUtils.hpp>
 
@@ -51,6 +52,8 @@ namespace yq {
 
     std::vector<VkPhysicalDeviceGroupProperties>    vqEnumeratePhysicalDeviceGroups(VkInstance inst)
     {
+        if(!inst)
+            inst    = VqInstance::vulkan();
         uint32_t    count   = 0;
         vkEnumeratePhysicalDeviceGroups(inst, &count, nullptr);
         std::vector<VkPhysicalDeviceGroupProperties>    ret(count);
@@ -62,7 +65,9 @@ namespace yq {
 #if 0
     // not in the SDK?
     std::vector<VkPhysicalDeviceGroupProperties>    vqEnumeratePhysicalDeviceGroupsKHR(VkInstance inst)
-    {
+    {  
+        if(!inst)
+            inst    = VqInstance::vulkan();
         uint32_t    count   = 0;
         vkEnumeratePhysicalDeviceGroupsKHR(inst, &count, nullptr);
         std::vector<VkPhysicalDeviceGroupProperties>    ret(count);
@@ -74,6 +79,8 @@ namespace yq {
 
     std::vector<VkPhysicalDevice>        vqEnumeratePhysicalDevices(VkInstance inst)
     {
+        if(!inst)
+            inst    = VqInstance::vulkan();
         uint32_t    count   = 0;
         vkEnumeratePhysicalDevices(inst, &count, nullptr);
         std::vector<VkPhysicalDevice>    ret(count);
@@ -104,13 +111,34 @@ namespace yq {
         return {};
     }
 
+    VkPhysicalDevice                     vqFirstDevice(VkInstance inst)
+    {
+        if(!inst)
+            inst    = VqInstance::vulkan();
+        for(VkPhysicalDevice v : vqEnumeratePhysicalDevices(inst)){
+            if(v)
+                return v;
+        }
+        return nullptr;
+    }
 
     std::vector<VkQueueFamilyProperties> vqGetPhysicalDeviceQueueFamilyProperties(VkPhysicalDevice dev)
     {
         uint32_t        count = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(dev,&count,nullptr);
         std::vector<VkQueueFamilyProperties> ret(count);
-        vkGetPhysicalDeviceQueueFamilyProperties(dev,&count,ret.data());
+        if(count)
+            vkGetPhysicalDeviceQueueFamilyProperties(dev,&count,ret.data());
+        return ret;
+    }
+
+    std::vector<VkSurfaceFormatKHR>      vqGetPhysicalDeviceSurfaceFormatsKHR(VkPhysicalDevice dev, VkSurfaceKHR surf)
+    {
+        uint32_t        count = 0;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(dev,surf, &count,nullptr);
+        std::vector<VkSurfaceFormatKHR> ret(count);
+        if(count)
+            vkGetPhysicalDeviceSurfaceFormatsKHR(dev,surf, &count,ret.data());
         return ret;
     }
 
@@ -121,6 +149,14 @@ namespace yq {
         return std::vector<const char*>(them, them+cnt);
     }
 
+    std::string                             vqName(VkPhysicalDevice dev)
+    {
+        if(!dev) [[unlikely]]
+            return std::string();
+        VkPhysicalDeviceProperties  props;
+        vkGetPhysicalDeviceProperties(dev, &props);
+        return std::string(props.deviceName);
+    }
 
     std::set<std::string>                     vqNameSet(const std::vector<VkExtensionProperties>& props)
     {
@@ -146,5 +182,6 @@ namespace yq {
             ret |= q.queueFlags;
         return ret;
     }
+
 }
 
