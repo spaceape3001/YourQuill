@@ -62,10 +62,11 @@ namespace yq {
         VqInstance(const Info&);
         ~VqInstance();
         
-        bool            initialize(const Info& i=Info());
-        void            shutdown();
+        bool                initialize(const Info& i=Info());
+        void                shutdown();
         
-        //VkInstance          instance() const { return m_instance; }
+        VkPhysicalDevice    physical_device() const { return m_physDevice; }
+        VkInstance          instance() const { return m_instance; }
         bool                good() const { return m_init; }
 
     public:

@@ -12,6 +12,9 @@ target_link_libraries(sqlquery yq)
 
 add_executable(tcpsink tcpsink.cpp)
 
+add_executable(vk_devices vk_devices.cpp)
+target_link_libraries(vk_devices yqvulqan)
+
 add_executable(vk_extensions vk_extensions.cpp)
 target_link_libraries(vk_extensions yqvulqan)
 

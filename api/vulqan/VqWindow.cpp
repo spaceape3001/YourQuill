@@ -10,6 +10,8 @@
 #include "VqGLFW.hpp"
 
 #include <basic/Logging.hpp>
+#include <math/shape/Size2.hpp>
+#include <math/vec/Vec2.hpp>
 
 #include <cassert>
 
@@ -54,12 +56,46 @@ namespace yq {
         }
     }
 
+    void VqWindow::attention()
+    {
+        if(m_window)
+            glfwRequestWindowAttention(m_window);
+    }
+
     void VqWindow::close()
     {
         if(m_init){
             _deinit();
             m_init  = false;
         }
+    }
+
+    void VqWindow::focus()
+    {
+        if(m_window)
+            glfwFocusWindow(m_window);
+    }
+
+    int  VqWindow::height() const
+    {
+        if(!m_window)
+            return 0;
+    
+        int ret;
+        glfwGetWindowSize(m_window, nullptr, &ret);
+        return ret;
+    }
+
+    void VqWindow::hide()
+    {
+        if(m_window)
+            glfwHideWindow(m_window);
+    }
+
+    void VqWindow::iconify()
+    {
+        if(m_window)
+            glfwIconifyWindow(m_window);
     }
 
     bool VqWindow::initialize(const Info& i)
@@ -73,7 +109,9 @@ namespace yq {
         }
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_FLOATING, i.floating ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_DECORATED, i.decorated ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, i.resizable ? GLFW_TRUE : GLFW_FALSE);
 
         m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
         if(!m_window){
@@ -159,9 +197,163 @@ namespace yq {
         return true;
     }
 
+    bool        VqWindow::is_decorated() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_DECORATED) != 0;
+    }
+    
+    bool        VqWindow::is_focused() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_FOCUSED ) != 0;
+    }
+    
+    bool        VqWindow::is_floating() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_FLOATING) != 0;
+    }
+    
+    bool        VqWindow::is_fullscreen() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowMonitor(m_window) != nullptr;
+    }
+    
+    bool        VqWindow::is_hovered() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_HOVERED) != 0;
+    }
+    
+    bool        VqWindow::is_iconified() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0;
+    }
+
+    bool        VqWindow::is_maximized() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_MAXIMIZED) != 0;
+    }
+    
+    bool        VqWindow::is_resizable() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_RESIZABLE) != 0;
+    }
+    
+    bool        VqWindow::is_visible() const
+    {
+        if(!m_window)
+            return false;
+        return glfwGetWindowAttrib(m_window, GLFW_VISIBLE) != 0;
+    }
+    
+
+    void        VqWindow::maximize()
+    {
+        if(m_window)
+            glfwMaximizeWindow(m_window);
+    }
+
+    VqMonitor   VqWindow::monitor() const
+    {
+        if(m_window)
+            return VqMonitor(glfwGetWindowMonitor(m_window));
+        return VqMonitor();
+    }
+
+    Vec2I       VqWindow::position() const
+    {
+        if(!m_window)
+            return {};
+        Vec2I   ret;
+        glfwGetWindowPos(m_window, &ret.x, &ret.y);
+        return ret;
+    }
+
+    void        VqWindow::restore()
+    {
+        if(m_window)
+            glfwRestoreWindow(m_window);
+    }
+
+    void        VqWindow::set_position(const Vec2I& pos)
+    {
+        set_position(pos.x, pos.y);
+    }
+    
+    void        VqWindow::set_position(int x, int y)
+    {
+        if(m_window){
+            glfwSetWindowPos(m_window, x, y);
+        }
+    }
+
+    void        VqWindow::set_size(const Size2I& sz)
+    {
+        set_size(sz.x, sz.y);
+    }
+
+    void        VqWindow::set_size(int w, int h)
+    {
+        if(m_window){
+            glfwSetWindowSize(m_window, std::max(1, w), std::max(1, h));
+        }
+    }
+
+    void        VqWindow::set_title(const char*z)
+    {
+        if(m_window && z){
+            glfwSetWindowTitle(m_window, z);
+        }
+    }
+
+    void        VqWindow::set_title(const std::string&z)
+    {
+        set_title(z.c_str());
+    }
+
     bool        VqWindow::should_close() const
     {
+        if(!m_window) 
+            return true;
         return glfwWindowShouldClose(m_window);
     }
 
+    void        VqWindow::show()
+    {
+        if(m_window)
+            glfwShowWindow(m_window);
+    }
+
+    Size2I      VqWindow::size() const
+    {
+        if(!m_window)
+            return {};
+        Size2I  ret;
+        glfwGetWindowSize(m_window, &ret.x, &ret.y);
+        return ret;
+    }
+
+    int  VqWindow::width() const
+    {
+        if(!m_window)
+            return 0;
+    
+        int ret;
+        glfwGetWindowSize(m_window, &ret, nullptr);
+        return ret;
+    }
 }

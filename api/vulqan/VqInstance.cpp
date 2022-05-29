@@ -133,6 +133,7 @@ namespace yq {
             VkPhysicalDeviceProperties  props;
             vkGetPhysicalDeviceProperties(dev, &props);
             yInfo() << "Device: " << props.deviceName;
+            break;
         }
         if(!m_physDevice){
             yCritical() << "Unable to find a physical device!";
