@@ -199,6 +199,7 @@ namespace yq {
     using Size2U16  = Size2<int16_t>;
     using Size2U32  = Size2<int32_t>;
     using Size2U64  = Size2<int64_t>;
+    using Size2Z    = Size2<size_t>;
     
     
     //! Call this if math isn't getting startup-initialized 

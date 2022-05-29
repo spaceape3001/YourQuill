@@ -10,6 +10,7 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <vulkan/vulkan_core.h>
+#include <vector>
 
 namespace yq {
 
@@ -18,6 +19,8 @@ namespace yq {
         OPTIONAL,
         YES
     };
+
+    class VqWindow;
 
     /*! Instance for vulkan, should only have ONE
     */
@@ -62,19 +65,21 @@ namespace yq {
         bool            initialize(const Info& i=Info());
         void            shutdown();
         
-        VkInstance      instance() const { return m_vulkan; }
-        bool            good() const { return m_init; }
-    
+        //VkInstance          instance() const { return m_instance; }
+        bool                good() const { return m_init; }
 
     public:
+    
+        friend class VqWindow;
     
         //!  Unabashed deinitializes... 
         void            _deinit();
     
-        VkInstance          m_vulkan        = nullptr;
-        VkPhysicalDevice    m_physDevice    = nullptr;
-        bool                m_glfw          = false;
-        bool                m_init          = false;        
+        std::vector<const char*>    m_layers;
+        VkInstance                  m_instance      = nullptr;
+        VkPhysicalDevice            m_physDevice    = nullptr;
+        bool                        m_glfw          = false;
+        bool                        m_init          = false;        
     };
 }
 

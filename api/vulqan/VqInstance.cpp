@@ -32,10 +32,11 @@ namespace yq {
     void  VqInstance::_deinit()
     {
         m_physDevice    = nullptr;
-        if(m_vulkan){
-            vkDestroyInstance(m_vulkan, nullptr);
-            m_vulkan    = nullptr;
+        if(m_instance){
+            vkDestroyInstance(m_instance, nullptr);
+            m_instance    = nullptr;
         }
+        m_layers.clear();
         if(m_glfw){
             glfwTerminate();
             m_glfw      = false;
@@ -48,39 +49,47 @@ namespace yq {
             return true;
             
         m_glfw  = i.glfw_enable && i.glfw_init;
-        if(m_glfw)
+        if(m_glfw){
+            glfwSetErrorCallback([](int ec, const char* why){
+                if(!why)
+                    why = "Unknown error";
+                yWarning() << "GLFW error (" << ec << "): " << why;
+            });
             glfwInit();
+        }
         
         static const std::vector<const char*>   kValidationLayers = {
             "VK_LAYER_KHRONOS_validation"
         };
 
+        bool    want_debug  = false;
+
         /*
             Start by scanning the extensions for validation
         */
-        std::vector<const char*>    filtered;
         if(i.validation != Required::NO){
             std::set<std::string>     available   = vqNameSet(vqEnumerateInstanceLayerProperties());
             for(const char* z : kValidationLayers){
                 if(available.contains(z))
-                    filtered.push_back(z);
+                    m_layers.push_back(z);
             }
             
-            if(filtered.size() != kValidationLayers.size()){
+            if(m_layers.size() != kValidationLayers.size()){
                 auto stream    = (i.validation == Required::YES) ? yCritical() : yError();
                 stream << "Unable to find validation layers!";
                 if(i.validation == Required::YES){
                     _deinit();
                     return false;
                 }
-            }
+            } else
+                want_debug  = true;
         }
 
         std::vector<const char*>     extensions;
         if(i.glfw_enable){
             extensions = vqGlfwRequiredExtensions();
         }
-        if(!filtered.empty())
+        if(want_debug)
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
             
             /*
@@ -96,9 +105,9 @@ namespace yq {
         
         VqInstanceCreateInfo    createInfo;
         createInfo.pApplicationInfo             = &appInfo;
-        createInfo.enabledLayerCount            = (uint32_t) filtered.size();
+        createInfo.enabledLayerCount            = (uint32_t) m_layers.size();
         if(createInfo.enabledLayerCount)
-            createInfo.ppEnabledLayerNames      = filtered.data();
+            createInfo.ppEnabledLayerNames      = m_layers.data();
             
         createInfo.enabledExtensionCount        = (uint32_t) extensions.size();
         if(!extensions.empty())
@@ -106,9 +115,9 @@ namespace yq {
             
         yInfo() << "Enabled Layer Count -> " << createInfo.enabledLayerCount;
         
-        if(vkCreateInstance(&createInfo, nullptr, &m_vulkan) != VK_SUCCESS){
+        if(vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS){
             yCritical() << "Unable to create vulkan instance!";
-            m_vulkan   = nullptr;
+            m_instance   = nullptr;
             _deinit();
             return false;
         }
@@ -118,7 +127,7 @@ namespace yq {
                 Get the physical device
                 We'll make it smarter (later)
             */
-        auto devices = vqEnumeratePhysicalDevices(m_vulkan);
+        auto devices = vqEnumeratePhysicalDevices(m_instance);
         yInfo() << "Found " << devices.size() << " devices";
         for(VkPhysicalDevice dev : devices){
             if(!m_physDevice)
@@ -132,9 +141,6 @@ namespace yq {
             _deinit();
             return false;
         }
-        
-     
-        //  MORE TO DO....
      
         m_init  = true;
         return true;
