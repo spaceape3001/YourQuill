@@ -346,7 +346,7 @@ namespace yq {
             }
 
             #ifdef DEV_BUILD
-                const char* sd  = share_directory();
+                const char* sd  = build::share_directory();
                 if(!access(sd, R_OK|X_OK))
                     shared_dirs.push_back(std::filesystem::path(sd));
             #endif

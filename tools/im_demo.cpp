@@ -12,10 +12,10 @@
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
-#include <vulqan/VqCore.hpp>
-#include <vulqan/VqGLFW.hpp>
-#include <vulqan/VqInstance.hpp>
-#include <vulqan/VqWindow.hpp>
+#include <engine/VqCore.hpp>
+#include <engine/VqGLFW.hpp>
+#include <engine/VqInstance.hpp>
+#include <engine/VqWindow.hpp>
 #include <iostream>
 
 using namespace yq;
