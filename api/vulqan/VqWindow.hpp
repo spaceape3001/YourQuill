@@ -19,6 +19,11 @@ namespace yq {
     
     class VqInstance;
     
+    /*! \brief A basic window
+    
+        This encapsulates the GLFW & Vulkan into a single window, requires
+        a Vulkan instance.
+    */
     class VqWindow : public RefCount, trait::not_copyable, trait::not_moveable {
     public:
     
@@ -40,6 +45,10 @@ namespace yq {
         bool        good() const { return m_init; }
         GLFWwindow* window() const { return m_window; }
         void        close();
+        
+        bool        should_close() const;
+        
+        static void poll_events();
         
     private:
         void    _deinit();

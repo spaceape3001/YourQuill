@@ -12,6 +12,12 @@
 #include <set>
 #include <string>
 
+/*
+    The VqCore is about providing simple wrappers for boiler plate code, using the prefix "Vq" in lieu of "Vk".  
+    For structures, it's adding in the proper stype assignment. 
+*/
+
+
 namespace yq {
     struct VqApplicationInfo : public VkApplicationInfo {
         VqApplicationInfo() : VkApplicationInfo{}
@@ -40,11 +46,26 @@ namespace yq {
             sType   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         }
     };
+    
+    #ifdef WIN32
+    struct VqWin32SurfaceCreateInfoKHR : public VkWin32SurfaceCreateInfoKHR {
+        VqWin32SurfaceCreateInfoKHR() : VkWin32SurfaceCreateInfoKHR{}
+        {
+            sType   = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+        }
+    };
+    #endif
 
 
 
-    std::vector<VkExtensionProperties>      vqExtensionInstanceExtensionProperties(const char* z=nullptr);
-    std::vector<VkLayerProperties>          vqEnumerateInstanceLayerProperties();
+    std::vector<VkExtensionProperties>              vqEnumerateDeviceExtensionProperties(VkPhysicalDevice, const char* layerName=nullptr);
+    std::vector<VkLayerProperties>                  vqEnumerateDeviceLayerProperties(VkPhysicalDevice);
+    std::vector<VkExtensionProperties>              vqEnumerateInstanceExtensionProperties(const char* layerName=nullptr);
+    std::vector<VkLayerProperties>                  vqEnumerateInstanceLayerProperties();
+    std::vector<VkPhysicalDeviceGroupProperties>    vqEnumeratePhysicalDeviceGroups(VkInstance);
+    
+    // not in the SDK
+    //std::vector<VkPhysicalDeviceGroupProperties>    vqEnumeratePhysicalDeviceGroupsKHR(VkInstance);
 
     std::vector<VkQueueFamilyProperties>    vqGetPhysicalDeviceQueueFamilyProperties(VkPhysicalDevice);
     std::vector<const char*>                vqGlfwRequiredExtensions();

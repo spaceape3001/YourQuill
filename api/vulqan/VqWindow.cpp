@@ -15,6 +15,13 @@
 #include <cassert>
 
 namespace yq {
+    void VqWindow::poll_events()
+    {
+        glfwPollEvents();
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+
     VqWindow::VqWindow(Ref<VqInstance> vi) : m_vulkan(vi)
     {
         assert(vi.valid() && "Needs a valid vulkan instance!");
@@ -155,6 +162,11 @@ namespace yq {
     
         m_init  = true;
         return true;
+    }
+
+    bool        VqWindow::should_close() const
+    {
+        return glfwWindowShouldClose(m_window);
     }
 
 }
