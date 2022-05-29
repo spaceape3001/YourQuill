@@ -26,3 +26,5 @@ target_link_libraries(wkspinfo yq)
 
 add_executable(xmlread xmlread.cpp)
 
+add_executable(im_demo im_demo.cpp)
+target_link_libraries(im_demo yqbasic yqmath yqengine yqvulqan)

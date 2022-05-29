@@ -111,6 +111,26 @@ namespace yq {
         return {};
     }
 
+    VqQueueFamilyIndices                 vqFindQueueFamilies(VkPhysicalDevice dev, VkSurfaceKHR srf)
+    {
+        VqQueueFamilyIndices    ret;
+        uint32_t        count = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(dev,&count,nullptr);
+        std::vector<VkQueueFamilyProperties> qfp(count);
+        if(count){
+            vkGetPhysicalDeviceQueueFamilyProperties(dev,&count,qfp.data());
+            for(uint32_t i=0;i<count;++i){
+                if((qfp[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && !ret.graphicsFamily.has_value())
+                    ret.graphicsFamily = i;
+                VkBool32 presentSupport = false;
+                vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, srf, &presentSupport);
+                if(presentSupport && !ret.presentFamily.has_value())
+                    ret.presentFamily = i;
+            }
+        }
+        return ret;
+    }
+
     VkPhysicalDevice                     vqFirstDevice(VkInstance inst)
     {
         if(!inst)
@@ -139,6 +159,16 @@ namespace yq {
         std::vector<VkSurfaceFormatKHR> ret(count);
         if(count)
             vkGetPhysicalDeviceSurfaceFormatsKHR(dev,surf, &count,ret.data());
+        return ret;
+    }
+
+    std::vector<VkPresentModeKHR>           vqGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice dev, VkSurfaceKHR surf)
+    {
+        uint32_t        count = 0;
+        vkGetPhysicalDeviceSurfacePresentModesKHR(dev,surf, &count,nullptr);
+        std::vector<VkPresentModeKHR> ret(count);
+        if(count)
+            vkGetPhysicalDeviceSurfacePresentModesKHR(dev,surf, &count,ret.data());
         return ret;
     }
 

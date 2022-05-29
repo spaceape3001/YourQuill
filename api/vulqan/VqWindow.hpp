@@ -38,6 +38,7 @@ namespace yq {
             Size2I              size     = { 1920, 1080 };
                 //!  Set to get full screen, windowed otherwise
             VqMonitor           monitor;
+            VkPresentModeKHR    pmode   = VK_PRESENT_MODE_FIFO_KHR;
             
                 //!  Set to make always-on-top
             bool                floating    = false;
@@ -46,7 +47,7 @@ namespace yq {
             bool                decorated   = true;
             
                 //!  Set to make user-resizable
-            bool                resizable   = true;
+            bool                resizable   = false;
             
             Info(){}
         };
@@ -153,9 +154,17 @@ namespace yq {
         
     private:
         void    _deinit();
+        
+        void    _destroy_swapviews();
     
             //! Creates & initializes this window
-        bool       _init(const Info& i);
+        bool    _init(const Info& i);
+        
+        bool    _init_physical(VkPhysicalDevice);
+        bool    _init_surface();
+        bool    _init_swap();
+        bool    _init_swapviews();
+        bool    _init_window(const Info&);
 
         VkPhysicalDevice            m_physical      = nullptr;
         GLFWwindow*                 m_window        = nullptr;
@@ -163,7 +172,12 @@ namespace yq {
         VkQueue                     m_graphicsQueue = nullptr;
         VkQueue                     m_presentQueue  = nullptr;
         VkDevice                    m_logical       = nullptr;
-        VkSurfaceCapabilitiesKHR    m_capabilities;
+        VkPresentModeKHR            m_presentMode;
+        VkSurfaceFormatKHR          m_surfaceFormat;
+        VkSwapchainKHR              m_swapChain     = nullptr;
+        VkExtent2D                  m_swapExtent;
+        std::vector<VkImage>        m_swapImages;
+        std::vector<VkImageView>    m_swapImageViews;
     };
 
 }

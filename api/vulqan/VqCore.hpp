@@ -8,9 +8,11 @@
 
 #include <basic/Result.hpp>
 #include <vulkan/vulkan_core.h>
-#include <vector>
+
+#include <optional>
 #include <set>
 #include <string>
+#include <vector>
 
 /*
     The VqCore is about providing simple wrappers for boiler plate code, using the prefix "Vq" in lieu of "Vk".  
@@ -39,11 +41,25 @@ namespace yq {
             sType   = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
         }
     };
+    
+    struct VqImageViewCreateInfo : public VkImageViewCreateInfo {
+        VqImageViewCreateInfo() : VkImageViewCreateInfo{}
+        {
+            sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        }
+    };
 
     struct VqInstanceCreateInfo : public VkInstanceCreateInfo {
         VqInstanceCreateInfo() : VkInstanceCreateInfo{}
         {
             sType   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        }
+    };
+    
+    struct VqSwapchainCreateInfoKHR  : public VkSwapchainCreateInfoKHR {
+        VqSwapchainCreateInfoKHR() : VkSwapchainCreateInfoKHR{}
+        {
+            sType   = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
         }
     };
     
@@ -55,8 +71,6 @@ namespace yq {
         }
     };
     #endif
-
-
 
     std::vector<VkExtensionProperties>              vqEnumerateDeviceExtensionProperties(VkPhysicalDevice, const char* layerName=nullptr);
     std::vector<VkLayerProperties>                  vqEnumerateDeviceLayerProperties(VkPhysicalDevice);
@@ -73,6 +87,7 @@ namespace yq {
 
     std::vector<VkQueueFamilyProperties>    vqGetPhysicalDeviceQueueFamilyProperties(VkPhysicalDevice);
     std::vector<VkSurfaceFormatKHR>         vqGetPhysicalDeviceSurfaceFormatsKHR(VkPhysicalDevice, VkSurfaceKHR);
+    std::vector<VkPresentModeKHR>           vqGetPhysicalDeviceSurfacePresentModesKHR(VkPhysicalDevice, VkSurfaceKHR);
     std::vector<const char*>                vqGlfwRequiredExtensions();
 
     std::string                             vqName(VkPhysicalDevice);
@@ -84,6 +99,16 @@ namespace yq {
     Result<uint32_t>                        vqFindFirstGraphicsQueue(const std::vector<VkQueueFamilyProperties>&);
     Result<uint32_t>                        vqFindFirstPresentQueue(VkPhysicalDevice, VkSurfaceKHR);
     
+    
+
+    struct VqQueueFamilyIndices {
+        std::optional<uint32_t> graphicsFamily;
+        std::optional<uint32_t> presentFamily;
+    };
+
+    VqQueueFamilyIndices                    vqFindQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR);
+
+
     std::string_view                        to_string(VkColorSpaceKHR);
     std::string_view                        to_string(VkFormat);
 }

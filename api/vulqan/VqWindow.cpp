@@ -9,10 +9,12 @@
 #include "VqInstance.hpp"
 #include "VqGLFW.hpp"
 
+#include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vec2.hpp>
 
+#include <algorithm>
 #include <cassert>
 
 namespace yq {
@@ -35,6 +37,12 @@ namespace yq {
 
     void VqWindow::_deinit()
     {
+        _destroy_swapviews();
+        if(m_swapChain){
+            vkDestroySwapchainKHR(m_logical, m_swapChain, nullptr);
+            m_swapChain = nullptr;
+        }
+        
         if(m_logical){
             vkDestroyDevice(m_logical, nullptr);
             m_logical   = nullptr;
@@ -52,44 +60,30 @@ namespace yq {
         
         m_physical = nullptr;
     }
+
+    void VqWindow::_destroy_swapviews()
+    {
+        for(auto iv : m_swapImageViews){
+            vkDestroyImageView(m_logical, iv, nullptr);
+        }
+        m_swapImageViews.clear();
+    }
     
     bool VqWindow::_init(const Info& i)
     {
         const VqInstance*   inst    = VqInstance::singleton();
-        if(!inst){
+        if(!VqInstance::initialized()){
             yCritical() << "Vulkan has not been initialized!";
             return false;
         }
-    
-        m_physical    = i.device;
-        if(!m_physical)
-            m_physical  = vqFirstDevice();
-        if(!m_physical){
-            yCritical() << "Cannot create window without any devices!";
-            return false;
-        }
-
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_FLOATING, i.floating ? GLFW_TRUE : GLFW_FALSE);
-        glfwWindowHint(GLFW_DECORATED, i.decorated ? GLFW_TRUE : GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, i.resizable ? GLFW_TRUE : GLFW_FALSE);
-
-        m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
-        if(!m_window){
-            yError() << "Unable to create window.";
-            return false;
-        }
         
-        glfwSetWindowUserPointer(m_window, this);
-        
-            /*
-                Create our surface
-            */
-        
-        if(glfwCreateWindowSurface(inst->m_instance, m_window, nullptr, &m_surface) != VK_SUCCESS){
-            yCritical() << "Unable to create window surface!";
+        if(!_init_physical(i.device))
             return false;
-        }
+        if(!_init_window(i))
+            return false;
+        if(!_init_surface())
+            return false;
+        
 
         /*
             Create our logical device
@@ -99,25 +93,13 @@ namespace yq {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
         };
     
-        auto queueInfos         = vqGetPhysicalDeviceQueueFamilyProperties(m_physical);
-        Result<uint32_t> gqu    = vqFindFirstGraphicsQueue(queueInfos);
-        if(!gqu.good){
+        auto queueInfos         = vqFindQueueFamilies(m_physical, m_surface);
+        if(!queueInfos.graphicsFamily.has_value()){
             yCritical() << "Unable to get a queue with graphic capability!";
             _deinit();
             return false;
         }
-    
-        Result<uint32_t>    pqu;
-        for(uint32_t i=0;i<(uint32_t) queueInfos.size();++i){
-            VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(m_physical, i, m_surface, &presentSupport);
-            if(presentSupport){
-                pqu = { i, true };
-                break;
-            }
-        }
-    
-        if(!pqu.good){
+        if(!queueInfos.presentFamily.has_value()){
             yCritical() << "Unable to find a present queue!";
             _deinit();
             return false;
@@ -126,7 +108,7 @@ namespace yq {
         std::vector<VkDeviceQueueCreateInfo> qci;
         float quePri    = 1.0f;
         
-        for(uint32_t i : std::set<uint32_t>({ gqu.value, pqu.value})){
+        for(uint32_t i : std::set<uint32_t>({ queueInfos.graphicsFamily.value(), queueInfos.presentFamily.value()})){
             VqDeviceQueueCreateInfo info;
             info.queueFamilyIndex = i;
             info.queueCount = 1;
@@ -155,16 +137,159 @@ namespace yq {
         }
         
             /*
-                Graphics queue
+                Graphics queues
             */
-        vkGetDeviceQueue(m_logical, gqu.value, 0, &m_graphicsQueue);
-        vkGetDeviceQueue(m_logical, pqu.value, 0, &m_presentQueue);
+        vkGetDeviceQueue(m_logical, queueInfos.graphicsFamily.value(), 0, &m_graphicsQueue);
+        vkGetDeviceQueue(m_logical, queueInfos.presentFamily.value(), 0, &m_presentQueue);
         
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &m_capabilities);
     
+        auto    pmodes              = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
+        
+        //for(auto& sf : vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface)){
+            //yInfo() << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
+        //}
+
+    
+            /*
+                SWAP CHAIN
+            */
+    
+        m_presentMode               = pmodes.contains(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
+            // I know this is available on my card, get smarter later.
+        m_surfaceFormat.format      = VK_FORMAT_B8G8R8A8_SRGB;
+        m_surfaceFormat.colorSpace  = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    
+        if(!_init_swap())
+            return false;
+        if(!_init_swapviews())
+            return false;
         return true;
     }
 
+    bool VqWindow::_init_physical(VkPhysicalDevice dev)
+    {
+        if(!dev)
+            dev  = vqFirstDevice();
+        if(!dev){
+            yCritical() << "Cannot create window without any devices!";
+            return false;
+        }
+        m_physical  = dev;
+        return true;
+    }
+
+    bool VqWindow::_init_surface()
+    {
+        if(glfwCreateWindowSurface(VqInstance::vulkan(), m_window, nullptr, &m_surface) != VK_SUCCESS){
+            yCritical() << "Unable to create window surface!";
+            return false;
+        }
+        return true;
+    }
+
+    bool VqWindow::_init_swap()
+    {
+        VkSurfaceCapabilitiesKHR    capabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &capabilities);
+        VkExtent2D                  extents;
+        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+            extents = capabilities.currentExtent;
+        } else {
+            int w, h;
+            glfwGetFramebufferSize(m_window, &w, &h);
+            extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+            extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+        }
+        
+        uint32_t    imageCount    = capabilities.minImageCount + 1;
+        if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
+            imageCount = capabilities.maxImageCount;
+        }
+
+        VqSwapchainCreateInfoKHR    createInfo;
+        createInfo.surface          = m_surface;
+        createInfo.minImageCount    = imageCount;
+        createInfo.imageFormat      = m_surfaceFormat.format;
+        createInfo.imageColorSpace  = m_surfaceFormat.colorSpace;
+        createInfo.imageExtent      = extents;
+        createInfo.imageArrayLayers = 1;    // we're not steroscopic
+        createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        
+        auto indices                = vqFindQueueFamilies(m_physical, m_surface);
+        uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
+
+        if (indices.graphicsFamily != indices.presentFamily) {
+            createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+            createInfo.queueFamilyIndexCount = 2;
+            createInfo.pQueueFamilyIndices = queueFamilyIndices;
+        } else {
+            createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            createInfo.queueFamilyIndexCount = 0; // Optional
+            createInfo.pQueueFamilyIndices = nullptr; // Optional
+        }        
+        createInfo.preTransform     = capabilities.currentTransform;
+        createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        createInfo.presentMode      = m_presentMode;
+        createInfo.clipped          = VK_TRUE;
+        
+            // TEMPORARY UNTIL WE GET THE NEW ONE
+        createInfo.oldSwapchain = VK_NULL_HANDLE;
+        
+        if (vkCreateSwapchainKHR(m_logical, &createInfo, nullptr, &m_swapChain) != VK_SUCCESS){
+            yCritical() << "Failed to create the SWAP chain!";
+            return false;
+        }
+
+        vkGetSwapchainImagesKHR(m_logical, m_swapChain, &imageCount, nullptr);
+        m_swapImages.resize(imageCount);
+        vkGetSwapchainImagesKHR(m_logical, m_swapChain, &imageCount, m_swapImages.data());    
+        m_swapExtent    = extents;
+
+        return true;
+    }
+
+    bool    VqWindow::_init_swapviews()
+    {
+        bool    success = true;
+        m_swapImageViews.resize(m_swapImages.size());
+        for(size_t i=0;i<m_swapImages.size(); ++i){
+            VqImageViewCreateInfo   createInfo;
+            createInfo.image        = m_swapImages[i];
+            createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
+            createInfo.format       = m_surfaceFormat.format;
+            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            createInfo.subresourceRange.baseMipLevel = 0;
+            createInfo.subresourceRange.levelCount = 1;
+            createInfo.subresourceRange.baseArrayLayer = 0;
+            createInfo.subresourceRange.layerCount = 1;
+            if(vkCreateImageView(m_logical, &createInfo, nullptr, &m_swapImageViews[i]) != VK_SUCCESS) {
+                success = false;
+                yCritical() << "Failed to create one of the Swap Image Viewers!";
+            }
+        }
+        return success;
+    }
+
+    bool    VqWindow::_init_window(const Info&i)
+    {
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_FLOATING, i.floating ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_DECORATED, i.decorated ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, i.resizable ? GLFW_TRUE : GLFW_FALSE);
+
+        m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
+        if(!m_window){
+            yError() << "Unable to create window.";
+            return false;
+        }
+        
+        glfwSetWindowUserPointer(m_window, this);
+        return true;
+    }
     
     ////////////////////////////////////////////////////////////////////////////////
 
