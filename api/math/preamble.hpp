@@ -173,6 +173,19 @@ namespace yq {
         return (int)(floor(r)+std::copysign(0.1,r));
     }
 
+    template <typename T> struct ColorRgb;
+    using ColorRgbD     = ColorRgb<double>;
+    using ColorRgbF     = ColorRgb<double>;
+    using ColorRgbI     = ColorRgb<int>;
+    using ColorRgbU8    = ColorRgb<uint8_t>;
+    using ColorRgbU16   = ColorRgb<uint16_t>;
+
+    template <typename T> struct ColorRgba;
+    using ColorRgbaD    = ColorRgba<double>;
+    using ColorRgbaF    = ColorRgba<double>;
+    using ColorRgbaU8   = ColorRgba<uint8_t>;
+    using ColorRgbaU16  = ColorRgba<uint16_t>;
+    
 
     template <typename T> struct Coord2;
     using Coord2D = Coord2<double>;
@@ -185,6 +198,12 @@ namespace yq {
     using Frac16 = Fraction<int16_t>;
     using Frac32 = Fraction<int32_t>;
     using Frac64 = Fraction<int64_t>;
+    
+    template <typename T> struct Rect2;
+    using Rect2D    = Rect2<double>;
+    using Rect2F    = Rect2<float>;
+    using Rect2I    = Rect2<int>;
+    using Rect2U    = Rect2<unsigned>;
     
     template <typename T> struct Size2;
     using Size2D    = Size2<double>;

@@ -6,6 +6,8 @@
 
 #include <math/preamble.hpp>
 #include <math/Complex.hpp>
+#include <math/ColorRgb.hpp>
+#include <math/ColorRgba.hpp>
 #include <math/Coord2.hpp>
 #include <math/Fraction.hpp>
 #include <math/shape/Size2.hpp>

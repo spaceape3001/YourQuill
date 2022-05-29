@@ -7,8 +7,7 @@
 #include "VqWindow.hpp"
 #include "VqCore.hpp"
 #include "VqInstance.hpp"
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include "VqGLFW.hpp"
 
 #include <basic/Logging.hpp>
 
@@ -75,12 +74,8 @@ namespace yq {
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-        
-        GLFWmonitor*    mon = nullptr;
-        if(i.is_full)
-            mon     = glfwGetPrimaryMonitor();
 
-        m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, mon, nullptr);
+        m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
         if(!m_window){
             yError() << "Unable to create window.";
             return false;

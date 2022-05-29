@@ -12,6 +12,7 @@
 #include <math/preamble.hpp>
 #include <math/shape/Size2.hpp>
 #include <vulkan/vulkan_core.h>
+#include <vulqan/VqMonitor.hpp>
 
 struct GLFWwindow;
 
@@ -30,7 +31,8 @@ namespace yq {
         struct Info {
             const char*         title    = "(untitled)";
             Size2I              size     = { 1920, 1080 };
-            bool                is_full  = false;
+                //  set to get full screen, windowed otherwise
+            VqMonitor           monitor;
             
             Info(){}
         };

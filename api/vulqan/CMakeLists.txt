@@ -3,6 +3,8 @@ add_library(yqvulqan SHARED
     ./VqCore.hpp
     ./VqInstance.cpp
     ./VqInstance.hpp
+    ./VqMonitor.cpp
+    ./VqMonitor.hpp
     ./VqWindow.cpp
     ./VqWindow.hpp
 )
