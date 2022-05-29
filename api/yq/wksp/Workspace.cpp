@@ -6,10 +6,8 @@
 
 #include "Workspace.hpp"
 
-#include <yq/app/BuildInfo.hpp>
 #include <basic/CmdArgs.hpp>
 #include <basic/DelayInit.hpp>
-#include <yq/file/Root.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
@@ -18,6 +16,10 @@
 #include <basic/SqlLite.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
+
+#include <config/DirConfig.hpp>
+
+#include <yq/file/Root.hpp>
 #include <yq/wksp/QuillFile.hpp>
 
 #include <atomic>

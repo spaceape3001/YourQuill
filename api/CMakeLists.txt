@@ -3,6 +3,7 @@
 #
 #   Files should be listed alphabetically
 
+add_subdirectory(config)
 add_subdirectory(basic)
 add_subdirectory(math)
 add_subdirectory(yq)

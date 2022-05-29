@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "BuildInfo.hpp"
+#include "DirConfig.hpp"
 
 namespace yq {
     const char*     build_directory()

@@ -19,9 +19,6 @@ set(yq_sources
     #./ZipReader.hpp
     #./ZipWriter.hpp
     
-    ./app/BuildInfo.hpp
-    ./app/BuildInfo.cpp
-    
     ./atom/atom.cpp
     
     ./attr/attr.cpp
@@ -91,8 +88,6 @@ set(yq_sources
 add_library(yq SHARED ${yq_sources})
 target_compile_definitions(yq PRIVATE 
     YQ__CORE__OVERRIDE 
-    "-DYQ_BUILD_ROOT=\"${CMAKE_SOURCE_DIR}\"" 
-    "-DYQ_SHARE_DIR=\"${CMAKE_SOURCE_DIR}/share\"" 
 )
 
 
@@ -103,6 +98,7 @@ ENDIF()
 target_link_libraries(yq 
     PUBLIC 
         yqbasic
+        yqconfig
 )
 
 LinkTest(yq)
