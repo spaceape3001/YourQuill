@@ -161,7 +161,7 @@ namespace yq {
         return dirs;
     }
 
-    Ref<const Shader>    Shader::do_load(const std::filesystem::path&file, ShaderType st, unsigned int options)
+    ShaderPtr    Shader::do_load(const std::filesystem::path&file, ShaderType st, unsigned int options)
     {
         if(st == ShaderType()){
             std::string             sspec   = file.string();
@@ -169,7 +169,7 @@ namespace yq {
             st  = ShaderType(file_extension(sspec), &ok);
             if(!ok){
                 yError() << "Unable to deduce shader type from: " << file;
-                return Ref<const Shader>();
+                return ShaderPtr();
             }
         }
         
@@ -178,7 +178,7 @@ namespace yq {
             ResultCC    cc  = compile_shader(ByteArray(), file, std::filesystem::path(), static_cast<bool>(options & LOG_COMMAND));
             if(!cc.good){
                 yError() << "Unable to compile the shader: " << file << "\n" << cc.errors.as_view();
-                return Ref<const Shader>();
+                return ShaderPtr();
             }
             
             data    = std::move(cc.payload);
@@ -186,7 +186,7 @@ namespace yq {
             data    = file_bytes(file);
             if(data.empty()){
                 yError() << "Unable to load the shader: " << file;
-                return Ref<const Shader>();
+                return ShaderPtr();
             }
         }
         
@@ -199,38 +199,38 @@ namespace yq {
     }
 
 
-    Ref<const Shader>     Shader::get(const std::filesystem::path&fp)
+    ShaderPtr     Shader::get(const std::filesystem::path&fp)
     {
         return ShaderCache::singleton().get(fp);
     }
     
-    Ref<const Shader>     Shader::get(uint64_t i)
+    ShaderPtr     Shader::get(uint64_t i)
     {
         return ShaderCache::singleton().get(i);
     }
 
-    Ref<const Shader>      Shader::load(const std::filesystem::path& file)
+    ShaderPtr      Shader::load(const std::filesystem::path& file)
     {
         std::filesystem::path   fspec    = search(file);
         if(fspec.empty()){
             yError() << "Unable to resolve the file: " << file;
-            return Ref<const Shader>();
+            return ShaderPtr();
         }
         
         return do_load(fspec, ShaderType(), true);
     }
 
-    Ref<const Shader>      Shader::load(const ByteArray& glsl, ShaderType st)
+    ShaderPtr      Shader::load(const ByteArray& glsl, ShaderType st)
     {
         if(st == ShaderType()){
             yError() << "Cannot load shader as the type is unknown.";
-            return Ref<const Shader>();
+            return ShaderPtr();
         }
         
         ResultCC    cc  = compile_shader(glsl, std::filesystem::path(), std::filesystem::path());
         if(!cc.good){
             yError() << "Unable to compile the shader:\n" << cc.errors.as_view();
-            return Ref<const Shader>();
+            return ShaderPtr();
         }
         
         return new Shader(std::move(cc.payload), st);
@@ -301,16 +301,19 @@ namespace yq {
     {
     }
 
-    Ref<const Shader>   ShaderCache::get(const std::filesystem::path& fp)
+    ShaderPtr   ShaderCache::get(const std::filesystem::path& fp)
     {
-        Ref<const Asset>  ret = AssetCache::get(fp);
-        return Ref<const Shader>(static_cast<const Shader*>(ret.ptr()));
+        //  right now, hard-code to the manual method so we can bait & switch on the caching
+        return Shader::load(fp);
+    
+        //Ref<const Asset>  ret = AssetCache::get(fp);
+        //return ShaderPtr(static_cast<const Shader*>(ret.ptr()));
     }
     
-    Ref<const Shader>   ShaderCache::get(uint64_t i)
+    ShaderPtr   ShaderCache::get(uint64_t i)
     {
         Ref<const Asset>  ret = AssetCache::get(i);
-        return Ref<const Shader>(static_cast<const Shader*>(ret.ptr()));
+        return ShaderPtr(static_cast<const Shader*>(ret.ptr()));
     }
 
     Ref<const Asset>    ShaderCache::load_binary(const std::filesystem::path& fp) const

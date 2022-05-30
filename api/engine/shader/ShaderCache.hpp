@@ -7,6 +7,7 @@
 #pragma once
 
 #include <engine/asset/AssetCache.hpp>
+#include <engine/shader/ShaderPointer.hpp>
 #include <basic/Ref.hpp>
 
 namespace yq {
@@ -19,8 +20,8 @@ namespace yq {
     
         static ShaderCache&     singleton();
         
-        Ref<const Shader>     get(const std::filesystem::path&);
-        Ref<const Shader>     get(uint64_t);
+        ShaderPtr     get(const std::filesystem::path&);
+        ShaderPtr     get(uint64_t);
     
     protected:
         Ref<const Asset>      load_binary(const std::filesystem::path&) const override;

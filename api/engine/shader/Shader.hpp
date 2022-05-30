@@ -7,6 +7,7 @@
 #pragma once
 
 #include <engine/asset/Asset.hpp>
+#include <engine/shader/ShaderPointer.hpp>
 #include <engine/shader/ShaderType.hpp>
 #include <basic/ByteArray.hpp>
 
@@ -56,22 +57,22 @@ namespace yq {
         static const path_vector_t&   directories();
 
         //!  Gets or loads specified shader
-        static Ref<const Shader>      get(const std::filesystem::path&);
+        static ShaderPtr      get(const std::filesystem::path&);
 
         //!  Gets specified shader
-        static Ref<const Shader>      get(uint64_t);
+        static ShaderPtr      get(uint64_t);
         
         /*! \brief Compiles & Loads shader
         
             This compiles and loads the shaders (bypassing the cache).
         */
-        static Ref<const Shader>      load(const std::filesystem::path&);
+        static ShaderPtr      load(const std::filesystem::path&);
 
         /*! \brief Compiles & Loads shader
         
             This compiles and loads the shaders (bypassing the cache).
         */
-        static Ref<const Shader>      load(const ByteArray& glsl, ShaderType);
+        static ShaderPtr      load(const ByteArray& glsl, ShaderType);
         
         /*! \brief Searches for a shader
         
@@ -128,7 +129,7 @@ namespace yq {
         Shader();
         
         //! Raw load (from absolute file)
-        static Ref<const Shader>      do_load(const std::filesystem::path&, ShaderType st, unsigned int options);
+        static ShaderPtr      do_load(const std::filesystem::path&, ShaderType st, unsigned int options);
 
         enum {
             //! Compiles the shader

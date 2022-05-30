@@ -28,14 +28,23 @@ set(yq_engine_sources
     ./vulqan/VqCore.cpp
     ./vulqan/VqCore.hpp
     ./vulqan/VqEnums.cpp
+    ./vulqan/VqFence.cpp
+    ./vulqan/VqFence.hpp
+    ./vulqan/VqFencePool.cpp
+    ./vulqan/VqFencePool.hpp
     ./vulqan/VqGLFW.cpp
     ./vulqan/VqGLFW.hpp
     ./vulqan/VqInstance.cpp
     ./vulqan/VqInstance.hpp
     ./vulqan/VqMonitor.cpp
     ./vulqan/VqMonitor.hpp
-    ./vulqan/VqPipeline.cpp
-    ./vulqan/VqPipeline.hpp
+    ./vulqan/VqShaderStages.cpp
+    ./vulqan/VqShaderStages.hpp
+#    ./vulqan/VqPipelineLayout.cpp
+#    ./vulqan/VqPipelineLayout.hpp
+    
+#   ./vulqan/VqPipeline.cpp
+#    ./vulqan/VqPipeline.hpp
     ./vulqan/VqWindow.cpp
     ./vulqan/VqWindow.hpp
 )
