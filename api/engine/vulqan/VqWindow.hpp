@@ -12,7 +12,7 @@
 #include <math/preamble.hpp>
 #include <math/shape/Size2.hpp>
 #include <vulkan/vulkan_core.h>
-#include <engine/VqMonitor.hpp>
+#include <engine/vulqan/VqMonitor.hpp>
 
 struct GLFWwindow;
 

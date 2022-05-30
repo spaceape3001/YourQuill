@@ -49,7 +49,6 @@ namespace yq {
         
         ObjectInfo(std::string_view zName, const std::source_location& sl=std::source_location::current());
         
-
         virtual void                    sweep_impl() override;
 
         ObjectInfo*     m_base; // defined/declared base
@@ -64,7 +63,7 @@ namespace yq {
         D               m_local, m_all;
         
         const D& def(bool all) const { return all ? m_all : m_local; }
-        
+    
     private:
         ObjectInfo(std::string_view zName, ObjectInfo* base, const std::source_location& sl);
     };

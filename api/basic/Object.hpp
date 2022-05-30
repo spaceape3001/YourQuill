@@ -79,7 +79,7 @@ public:                                                 \
     
     template <typename Obj>
     struct ObjectFixer  : public Obj::MyInfo {
-        ObjectFixer(std::string_view szName, ObjectInfo& myBase, std::source_location sl=std::source_location::current()) :
+        ObjectFixer(std::string_view szName, typename Obj::MyBase::MyInfo& myBase, std::source_location sl=std::source_location::current()) :
             Obj::MyInfo(szName, myBase, sl)
         {
         }

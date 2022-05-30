@@ -49,26 +49,41 @@ namespace yq {
         Do NOT rely on the numeric values, those are subject to change.
     */
     enum : uint64_t {
-        TYPE        = 1ULL << 0,
-        OBJECT      = 1ULL << 1,
-        COMPOUND    = 1ULL << 2,
-        PROPERTY    = 1ULL << 3,
-        METHOD      = 1ULL << 4,
-        ENUM        = 1ULL << 5,
-        ARG         = 1ULL << 6,
-        GLOBAL      = 1ULL << 7,
-        COLLECTION  = 1ULL << 8,
-        TEMPLATE    = 1ULL << 9,
-        WEB         = 1ULL << 10,
-        PAGE        = 1ULL << 11,
+        TYPE            = 1ULL << 0,
+        OBJECT          = 1ULL << 1,
+        COMPOUND        = 1ULL << 2,
+        PROPERTY        = 1ULL << 3,
+        METHOD          = 1ULL << 4,
+        ENUM            = 1ULL << 5,
+        ARG             = 1ULL << 6,
+        GLOBAL          = 1ULL << 7,
+        COLLECTION      = 1ULL << 8,
+        TEMPLATE        = 1ULL << 9,
+        WEB             = 1ULL << 10,
+        PAGE            = 1ULL << 11,
+        ASSET           = 1ULL << 12,
+        SHADER          = 1ULL << 13,
+        TEXTURE         = 1ULL << 14,
+        LOADER          = 1ULL << 15,
+        CACHE           = 1ULL << 16,
+        COMPILER        = 1ULL << 17,
         
-        STATE       = 1ULL << 16, //!< "State" property
-        STATIC      = 1ULL << 17, //!< Non-object specific (global variables, functions, etc)
-        SMALL       = 1ULL << 18, //!< Small enough to fit in DataBlock
-        TLS         = 1ULL << 19, //!< Thread local storage
-        LESS        = 1ULL << 20, //!< Can compare
-        TODO        = 1ULL << 30,
-        ABSTRACT    = 1ULL << 31
+        STATE           = 1ULL << 26, //!< "State" property
+        STATIC          = 1ULL << 27, //!< Non-object specific (global variables, functions, etc)
+        SMALL           = 1ULL << 28, //!< Small enough to fit in DataBlock
+        TLS             = 1ULL << 29, //!< Thread local storage
+        LESS            = 1ULL << 30, //!< Can compare
+        TODO            = 1ULL << 40,
+        ABSTRACT        = 1ULL << 41,
+
+        LOCAL_ONLY      = 1ULL << 56,
+        LOGIN_REQ       = 1ULL << 57,
+        NO_EXPAND       = 1ULL << 58,
+        POST_ANON       = 1ULL << 59,
+        HAS_SUBS        = 1ULL << 60,
+        DISABLE_REG     = 1ULL << 61,
+        SEALED          = 1ULL << 62,
+        SWEPT           = 1ULL << 63
     };
     
     //bool    is_type(const Meta&);
@@ -211,10 +226,6 @@ namespace yq {
         std::source_location            m_source;
         options_t                       m_flags     = 0;
         id_t                            m_id        = AUTO_ID;
-        
-        enum : uint64_t {
-            SWEPT                   = 1ULL << 63
-        };
         
         struct Repo;
         static Repo&    repo();

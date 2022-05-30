@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/VqCore.hpp>
-#include <engine/VqInstance.hpp>
+#include <engine/vulqan/VqCore.hpp>
+#include <engine/vulqan/VqInstance.hpp>
 #include <iostream>
 
 using namespace yq;

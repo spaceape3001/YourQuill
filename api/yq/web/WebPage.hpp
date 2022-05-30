@@ -143,15 +143,6 @@ namespace yq {
         Role                    m_role;
         std::vector<std::string_view>   m_alts;
         
-        enum : uint64_t {
-            LOCAL_ONLY      = 1ULL << 30,
-            LOGIN_REQ       = 1ULL << 31,
-            NO_EXPAND       = 1ULL << 32,
-            POST_ANON       = 1ULL << 33,
-            HAS_SUBS        = 1ULL << 34,
-            DISABLE_REG     = 1ULL << 35,
-            SEALED          = 1ULL << 36
-        };
         
         void                    seal();
     };
