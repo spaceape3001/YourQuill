@@ -5,10 +5,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ShaderInfoWriter.hpp"
+
 #include <basic/DelayInit.hpp>
-#include <basic/FileUtils.hpp>
-#include <config/DirConfig.hpp>
 #include <basic/Execute.hpp>
+#include <basic/FileUtils.hpp>
+#include <basic/Logging.hpp>
+#include <basic/TextUtils.hpp>
+#include <basic/meta/Init.hpp>
+
+#include <config/DirConfig.hpp>
+
 #include <engine/asset/ResultCC.hpp>
 
 YQ_OBJECT_IMPLEMENT(yq::Shader)
@@ -47,16 +53,20 @@ namespace yq {
         
         ResultCC    compile_shader(const ByteArray& input, const std::filesystem::path& source, const std::filesystem::path& target)
         {
-            static const path_vector_t          dirs    = shader_dirs();
             static const std::filesystem::path  glslc   = glsl_compiler_executable();
             int                                 ecode   = -1;
             
             ProcessDescriptor   pd;
             pd.args.push_back(glslc.string());
+            
+            #if 0
+            static const path_vector_t          dirs    = shader_dirs();
+                // #include is a google extension...apparently (TODO, implement it)
             for(auto& d : dirs){
                 pd.args.push_back("-I");
                 pd.args.push_back(d.string());
             }
+            #endif
             
             pd.args.push_back("--target-env=vulkan1.2");
             
@@ -80,12 +90,14 @@ namespace yq {
             ResultCC    ret;
             ret.payload  = pd.execute(input, &ret.errors, &ecode);
             ret.good    = ecode == 0;
+            
+        yInfo() << "Shader " << source << " -> " << ecode << " command '" << join(pd.args, " ") << "'";
+            
             return ret;
         }
         
-        ResultCC    validate_shader(const ByteArray&input, const std::filesystem::path& source)
+        ResultCC    validate_shader(const ByteArray&input, const std::filesystem::path& source, ShaderType type)
         {
-            static const path_vector_t          dirs    = shader_dirs();
             static const std::filesystem::path  glslv   = glsl_validator_executable();
             int                                 ecode   = -1;
 
@@ -93,12 +105,20 @@ namespace yq {
             pd.args.push_back(glslv.string());
             pd.args.push_back("--target-env");
             pd.args.push_back("vulkan1.2");
+            
+            #if 0
+                // #include is a google extension...apparently (TODO, implement it)
+            static const path_vector_t          dirs    = shader_dirs();
             for(auto& d : dirs){
                 pd.args.push_back("-I" + d.string());
             }
+            #endif
             
             if(source.empty()){
-                pd.args.push_back("-");
+                pd.args.push_back("--stdin");
+                pd.args.push_back("-S");
+                pd.args.push_back(to_lower(type.key()));
+                
             } else {
                 pd.args.push_back(source.string());
             }
@@ -120,6 +140,7 @@ namespace yq {
         set_option(SHADER);
     }
 
+
     ResultCC    Shader::compile(const std::filesystem::path& source, const std::filesystem::path& target)
     {
         return compile_shader(ByteArray(), source, target);
@@ -131,6 +152,47 @@ namespace yq {
     }
     
 
+    const path_vector_t&       Shader::directories()
+    {
+        static const path_vector_t          dirs    = shader_dirs();
+        return dirs;
+    }
+
+    Ref<Shader>    Shader::do_load(const std::filesystem::path&file, ShaderType st, bool do_compile)
+    {
+        if(st == ShaderType()){
+            std::string             sspec   = file.string();
+            bool                    ok  = false;
+            st  = ShaderType(file_extension(sspec), &ok);
+            if(!ok){
+                yError() << "Unable to deduce shader type from: " << file;
+                return Ref<Shader>();
+            }
+        }
+        
+        ByteArray   data;
+        if(do_compile){
+            ResultCC    cc  = compile_shader(ByteArray(), file, std::filesystem::path());
+            if(!cc.good){
+                yError() << "Unable to compile the shader: " << file << "\n" << cc.errors.as_view();
+                return Ref<Shader>();
+            }
+            data    = std::move(cc.payload);
+        } else {
+            data    = file_bytes(file);
+            if(data.empty()){
+                yError() << "Unable to load the shader: " << file;
+                return Ref<Shader>();
+            }
+        }
+        
+        Ref<Shader>     ret = new Shader;
+        ret->m_type = st;
+        ret->m_payload  = std::move(data);
+        return ret;
+    }
+
+
     Ref<Shader>     Shader::get(const std::filesystem::path&fp)
     {
         return ShaderCache::singleton().get(fp);
@@ -141,17 +203,67 @@ namespace yq {
         return ShaderCache::singleton().get(i);
     }
 
-    ResultCC    Shader::validate(const std::filesystem::path& source)
+    Ref<Shader>      Shader::load(const std::filesystem::path& file)
     {
-        return validate_shader(ByteArray(), source);
+        std::filesystem::path   fspec    = search(file);
+        if(fspec.empty()){
+            yError() << "Unable to resolve the file: " << file;
+            return Ref<Shader>();
+        }
+        
+        return do_load(fspec, ShaderType(), true);
     }
 
-    ResultCC    Shader::validate(const ByteArray& data)
+    Ref<Shader>      Shader::load(const ByteArray& glsl, ShaderType st)
     {
-        return validate_shader(data, std::filesystem::path());
+        if(st == ShaderType()){
+            yError() << "Cannot load shader as the type is unknown.";
+            return Ref<Shader>();
+        }
+        
+        ResultCC    cc  = compile_shader(glsl, std::filesystem::path(), std::filesystem::path());
+        if(!cc.good){
+            yError() << "Unable to compile the shader:\n" << cc.errors.as_view();
+            return Ref<Shader>();
+        }
+        
+        return new Shader(std::move(cc.payload), st);
+    }
+
+    std::filesystem::path    Shader::search(const std::filesystem::path& fp)
+    {
+        return Asset::search(directories(), fp);
+    }
+
+    ResultCC    Shader::validate(const std::filesystem::path& source)
+    {
+        return validate_shader(ByteArray(), source, ShaderType());
+    }
+
+    ResultCC    Shader::validate(const ByteArray& data, ShaderType st)
+    {
+        return validate_shader(data, std::filesystem::path(), st);
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+
+    Shader::Shader()
+    {
+    }
+    
+    Shader::Shader(const ByteArray&raw, ShaderType st) : m_payload(raw), m_type(st)
+    {
+        assert(m_type != ShaderType());
+    }
+    
+    Shader::Shader(ByteArray&&raw, ShaderType st) : m_payload(std::move(raw)), m_type(st)
+    {
+        assert(m_type != ShaderType());
+    }
+    
+    Shader::~Shader()
+    {
+    }
 
     size_t  Shader::data_size() const 
     {
@@ -197,13 +309,7 @@ namespace yq {
 
     Ref<Asset>      ShaderCache::load_binary(const std::filesystem::path& fp) const
     {
-        ByteArray   bytes   = file_bytes(fp);
-        if(bytes.empty())
-            return Ref<Asset>();
-        
-        Shader* sc  = new Shader;
-        sc -> m_payload = std::move(bytes);
-        return Ref<Asset>(sc);
+        return Shader::do_load(fp, ShaderType(), false);
     }
     
 
@@ -275,6 +381,8 @@ namespace yq {
 }
 
 YQ_OBJECT_IMPLEMENT(yq::GLSLCompiler)
+YQ_TYPE_IMPLEMENT(yq::ShaderType)
+YQ_TYPE_IMPLEMENT(yq::ShaderTypeFlags)
 
 
 

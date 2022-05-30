@@ -46,8 +46,26 @@ namespace yq {
         //! Saves data to native binary format (whatever that is)
         virtual bool        save_binary(const std::filesystem::path&) const = 0;
         
-        //! ID is unique....
+        /*! \brief Asset ID
+        
+            This is the asset ID, as it resides in the asset cache.  
+            If the ID is zero, then it's not from the asset cache.    
+            A non-zero ID is guaranteed to be unique in the particular asset cache.
+        */
         uint64_t            id() const { return m_id; }
+        
+        /*! Searches the given vector for the specified file
+        
+            \note An ABSOLUTE file will auto-return itself.
+            
+            This first checks the relative against the current working directory, returns if that file exists.
+            Otherwise, it'll march through the paths, doing the same check.
+        
+            \param[in]  paths   Directories to search
+            \param[in]  file    Given filepath
+            \return filepath if absolute or detected, empty otherwise
+        */
+        static std::filesystem::path    search(const path_vector_t& paths, const std::filesystem::path& file);
         
     private:
         friend class AssetCache;

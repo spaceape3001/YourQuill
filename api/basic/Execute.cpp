@@ -24,9 +24,9 @@ namespace yq {
                 mode |= redi::pstreams::pstderr;
             const std::string&  cmd = args[0];
             redi::pstream   proc(cmd, args, mode);
+            auto p = proc.rdbuf();
             if(!stdInput.empty()){
                 proc.write(stdInput.data(), stdInput.size());
-                auto p = proc.rdbuf();
                 if(p)
                     p->peof();
             }
@@ -53,8 +53,11 @@ namespace yq {
                 }
             }
             
-            if(exit_code)
-                *exit_code   = proc.rdbuf()->status();
+            if(exit_code && p){
+                while(!p->exited()) // spin (TODO add in chrono)
+                    ;
+                *exit_code   = p->status();
+            }
         }
         return ret;
     }

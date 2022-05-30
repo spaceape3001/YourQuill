@@ -114,6 +114,13 @@ namespace yq {
             return lhs != rhs.m_ptr;
         }
         
+        template <typename U>
+        requires std::is_base_of_v<U,T>
+        operator Ref<U>() const noexcept
+        {
+            return Ref<U>(static_cast<U*>(m_ptr));
+        }
+        
     private:
         T*			m_ptr;
     };

@@ -8,6 +8,7 @@
 
 #include <string>
 #include <vector>
+#include <chrono>
 
 namespace yq {
 
@@ -24,7 +25,7 @@ namespace yq {
         */
         std::vector<std::string> args;
         
-        /*! \brief Maximum wait time
+        /*! \brief Maximum wait time for exit
         
             Rather than hanging the caller, this specifies the maximum wait
             time before considering the process "hung".  Note, specifying "0"

@@ -7,6 +7,7 @@
 #pragma once
 
 #include <engine/asset/Asset.hpp>
+#include <engine/shader/ShaderType.hpp>
 #include <basic/ByteArray.hpp>
 
 namespace yq {
@@ -31,6 +32,7 @@ namespace yq {
         YQ_OBJECT_INFO(ShaderInfo)
         YQ_OBJECT_DECLARE(Shader, Asset)
     public:
+    
 
         /*! \brief Compiles a shader
         
@@ -49,12 +51,37 @@ namespace yq {
         */
         static ResultCC compile(const ByteArray& glslData);
 
+
+        //!  All shader directories...
+        static const path_vector_t&   directories();
+
+        //!  Gets or loads specified shader
+        static Ref<Shader>      get(const std::filesystem::path&);
+
+        //!  Gets specified shader
+        static Ref<Shader>      get(uint64_t);
+        
+        /*! \brief Compiles & Loads shader
+        
+            This compiles and loads the shaders (bypassing the cache).
+        */
+        static Ref<Shader>      load(const std::filesystem::path&);
+
+        /*! \brief Compiles & Loads shader
+        
+            This compiles and loads the shaders (bypassing the cache).
+        */
+        static Ref<Shader>      load(const ByteArray& glsl, ShaderType);
+        
+        
+        static std::filesystem::path    search(const std::filesystem::path&);
+
         /*! \brief Validates a shader
         
             This validates a shader (from file).
             \param[in]  source File path to the source
         */
-        static ResultCC validate(const std::filesystem::path& source);
+        static ResultCC         validate(const std::filesystem::path& source);
 
         /*! \brief Validates a shader
         
@@ -62,18 +89,29 @@ namespace yq {
 
             \param[in] glslData     This is the GLSL shader data.
         */
-        static ResultCC validate(const ByteArray& glslData);
+        static ResultCC         validate(const ByteArray& glslData, ShaderType);
 
-        static Ref<Shader>     get(const std::filesystem::path&);
-        static Ref<Shader>     get(uint64_t);
 
         const ByteArray&    payload() const { return m_payload; }
         virtual size_t      data_size() const override;
         virtual bool        save_binary(const std::filesystem::path&) const override;
     
+        ShaderType          shader_type() const { return m_type; }
+    
+        Shader(const ByteArray&, ShaderType);
+        Shader(ByteArray&&, ShaderType);
+        virtual ~Shader();
+    
     private:
         friend class ShaderCache;
+
+        Shader();
+        
+        //! Raw load (from absolute file)
+        static Ref<Shader>      do_load(const std::filesystem::path&, ShaderType st, bool do_compile);
+
         ByteArray       m_payload;
+        ShaderType      m_type;
     };
     
 

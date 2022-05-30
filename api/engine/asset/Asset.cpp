@@ -65,6 +65,21 @@ namespace yq {
         set_option(ASSET);
     }
 
+    std::filesystem::path    Asset::search(const path_vector_t& paths, const std::filesystem::path& fp)
+    {
+        if(fp.is_absolute())
+            return fp;
+        std::filesystem::path   p2  = std::filesystem::absolute(fp);
+        if(std::filesystem::exists(p2))
+            return p2;
+        for(auto& d : paths){
+            p2  = d / fp;
+            if(std::filesystem::exists(p2))
+                return p2;
+        }
+        return std::filesystem::path();
+    }
+
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
