@@ -60,7 +60,7 @@ namespace yq {
 
         AssetCache(const AssetCacheInfo&);      // can't rely on the virtual working.....
 
-        virtual Ref<Asset>  load_binary(const std::filesystem::path&) const = 0;
+        virtual Ref<const Asset>  load_binary(const std::filesystem::path&) const = 0;
         
     private:
         std::vector<const AssetInfo*>       m_assetInfos;

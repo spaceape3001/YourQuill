@@ -51,7 +51,7 @@ namespace yq {
             return ret;
         }
         
-        ResultCC    compile_shader(const ByteArray& input, const std::filesystem::path& source, const std::filesystem::path& target)
+        ResultCC    compile_shader(const ByteArray& input, const std::filesystem::path& source, const std::filesystem::path& target, bool write_arg=false)
         {
             static const std::filesystem::path  glslc   = glsl_compiler_executable();
             int                                 ecode   = -1;
@@ -87,11 +87,14 @@ namespace yq {
                 pd.args.push_back(source.string());
             }
             
-            ResultCC    ret;
-            ret.payload  = pd.execute(input, &ret.errors, &ecode);
-            ret.good    = ecode == 0;
+            if(write_arg)
+                yInfo() << "Compiling shader, command is: " << join(pd.args, " ");
             
-        yInfo() << "Shader " << source << " -> " << ecode << " command '" << join(pd.args, " ") << "'";
+            ResultCC    ret;
+            ret.payload  = pd.execute(input, nullptr, &ecode);
+            ret.good    = ecode == 0;
+            if(!ret.good)
+                std::swap(ret.payload, ret.errors);
             
             return ret;
         }
@@ -141,14 +144,14 @@ namespace yq {
     }
 
 
-    ResultCC    Shader::compile(const std::filesystem::path& source, const std::filesystem::path& target)
+    ResultCC    Shader::compile(const std::filesystem::path& source, const std::filesystem::path& target, bool log_command)
     {
-        return compile_shader(ByteArray(), source, target);
+        return compile_shader(ByteArray(), source, target, log_command);
     }
 
-    ResultCC    Shader::compile(const ByteArray& data)
+    ResultCC    Shader::compile(const ByteArray& data, bool log_command)
     {
-        return compile_shader(data, std::filesystem::path(), std::filesystem::path());
+        return compile_shader(data, std::filesystem::path(), std::filesystem::path(), log_command);
     }
     
 
@@ -158,7 +161,7 @@ namespace yq {
         return dirs;
     }
 
-    Ref<Shader>    Shader::do_load(const std::filesystem::path&file, ShaderType st, bool do_compile)
+    Ref<const Shader>    Shader::do_load(const std::filesystem::path&file, ShaderType st, unsigned int options)
     {
         if(st == ShaderType()){
             std::string             sspec   = file.string();
@@ -166,65 +169,68 @@ namespace yq {
             st  = ShaderType(file_extension(sspec), &ok);
             if(!ok){
                 yError() << "Unable to deduce shader type from: " << file;
-                return Ref<Shader>();
+                return Ref<const Shader>();
             }
         }
         
         ByteArray   data;
-        if(do_compile){
-            ResultCC    cc  = compile_shader(ByteArray(), file, std::filesystem::path());
+        if(options & CC_SHADER){
+            ResultCC    cc  = compile_shader(ByteArray(), file, std::filesystem::path(), static_cast<bool>(options & LOG_COMMAND));
             if(!cc.good){
                 yError() << "Unable to compile the shader: " << file << "\n" << cc.errors.as_view();
-                return Ref<Shader>();
+                return Ref<const Shader>();
             }
+            
             data    = std::move(cc.payload);
         } else {
             data    = file_bytes(file);
             if(data.empty()){
                 yError() << "Unable to load the shader: " << file;
-                return Ref<Shader>();
+                return Ref<const Shader>();
             }
         }
         
         Ref<Shader>     ret = new Shader;
         ret->m_type = st;
         ret->m_payload  = std::move(data);
+        ret->m_file     = file;
+        ret->m_szt      = file_size_and_timestamp(file);
         return ret;
     }
 
 
-    Ref<Shader>     Shader::get(const std::filesystem::path&fp)
+    Ref<const Shader>     Shader::get(const std::filesystem::path&fp)
     {
         return ShaderCache::singleton().get(fp);
     }
     
-    Ref<Shader>     Shader::get(uint64_t i)
+    Ref<const Shader>     Shader::get(uint64_t i)
     {
         return ShaderCache::singleton().get(i);
     }
 
-    Ref<Shader>      Shader::load(const std::filesystem::path& file)
+    Ref<const Shader>      Shader::load(const std::filesystem::path& file)
     {
         std::filesystem::path   fspec    = search(file);
         if(fspec.empty()){
             yError() << "Unable to resolve the file: " << file;
-            return Ref<Shader>();
+            return Ref<const Shader>();
         }
         
         return do_load(fspec, ShaderType(), true);
     }
 
-    Ref<Shader>      Shader::load(const ByteArray& glsl, ShaderType st)
+    Ref<const Shader>      Shader::load(const ByteArray& glsl, ShaderType st)
     {
         if(st == ShaderType()){
             yError() << "Cannot load shader as the type is unknown.";
-            return Ref<Shader>();
+            return Ref<const Shader>();
         }
         
         ResultCC    cc  = compile_shader(glsl, std::filesystem::path(), std::filesystem::path());
         if(!cc.good){
             yError() << "Unable to compile the shader:\n" << cc.errors.as_view();
-            return Ref<Shader>();
+            return Ref<const Shader>();
         }
         
         return new Shader(std::move(cc.payload), st);
@@ -295,19 +301,19 @@ namespace yq {
     {
     }
 
-    Ref<Shader>   ShaderCache::get(const std::filesystem::path& fp)
+    Ref<const Shader>   ShaderCache::get(const std::filesystem::path& fp)
     {
-        Ref<Asset>  ret = AssetCache::get(fp);
-        return Ref<Shader>(static_cast<Shader*>(ret.ptr()));
+        Ref<const Asset>  ret = AssetCache::get(fp);
+        return Ref<const Shader>(static_cast<const Shader*>(ret.ptr()));
     }
     
-    Ref<Shader>   ShaderCache::get(uint64_t i)
+    Ref<const Shader>   ShaderCache::get(uint64_t i)
     {
-        Ref<Asset>  ret = AssetCache::get(i);
-        return Ref<Shader>(static_cast<Shader*>(ret.ptr()));
+        Ref<const Asset>  ret = AssetCache::get(i);
+        return Ref<const Shader>(static_cast<const Shader*>(ret.ptr()));
     }
 
-    Ref<Asset>      ShaderCache::load_binary(const std::filesystem::path& fp) const
+    Ref<const Asset>    ShaderCache::load_binary(const std::filesystem::path& fp) const
     {
         return Shader::do_load(fp, ShaderType(), false);
     }

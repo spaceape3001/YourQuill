@@ -121,6 +121,13 @@ namespace yq {
             return Ref<U>(static_cast<U*>(m_ptr));
         }
         
+        template <typename=void>
+        requires std::is_const_v<T>
+        operator Ref<const T>() const noexcept
+        {
+            return Ref<const T>(m_ptr);
+        }
+        
     private:
         T*			m_ptr;
     };

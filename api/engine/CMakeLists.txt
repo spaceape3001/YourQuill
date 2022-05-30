@@ -34,6 +34,8 @@ set(yq_engine_sources
     ./vulqan/VqInstance.hpp
     ./vulqan/VqMonitor.cpp
     ./vulqan/VqMonitor.hpp
+    ./vulqan/VqPipeline.cpp
+    ./vulqan/VqPipeline.hpp
     ./vulqan/VqWindow.cpp
     ./vulqan/VqWindow.hpp
 )

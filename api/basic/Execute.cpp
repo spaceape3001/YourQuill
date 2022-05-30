@@ -6,6 +6,8 @@
 
 #include "Execute.hpp"
 #include <basic/ByteArray.hpp>
+#include <basic/Logging.hpp>
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-enum-enum-conversion"
 #include <pstream.h>
@@ -27,37 +29,29 @@ namespace yq {
             auto p = proc.rdbuf();
             if(!stdInput.empty()){
                 proc.write(stdInput.data(), stdInput.size());
-                if(p)
-                    p->peof();
+                p->peof();
             }
          
-            bool moreOut    = true;
-            bool moreErr    = stdErrors != nullptr;
+            //bool moreOut    = true;
+            //bool moreErr    = stdErrors != nullptr;
             char buf[1024];
             std::streamsize n   = 0;
             auto& out   = proc.out();
             auto& err   = proc.err();
             
-            while(moreOut || moreErr){
-                if(moreOut){
-                    while((n = out.readsome(buf, sizeof(buf))) > 0)
-                        ret.append(buf, n);
-                    if(out.eof())
-                        moreOut = false;
+            do {
+                while((n = out.readsome(buf, sizeof(buf))) > 0){
+                    ret.append(buf, n);
                 }
-                if(moreErr && stdErrors){
-                    while((n = err.readsome(buf, sizeof(buf))) > 0)
+                if(stdErrors){
+                    while((n = err.readsome(buf, sizeof(buf))) > 0){
                         stdErrors -> append(buf, n);
-                    if(err.eof())
-                        moreErr = false;
+                    }
                 }
-            }
+            } while((!p->exited()) || !out.eof());
             
-            if(exit_code && p){
-                while(!p->exited()) // spin (TODO add in chrono)
-                    ;
+            if(exit_code)
                 *exit_code   = p->status();
-            }
         }
         return ret;
     }

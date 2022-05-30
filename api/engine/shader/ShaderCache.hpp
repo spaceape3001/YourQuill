@@ -19,11 +19,11 @@ namespace yq {
     
         static ShaderCache&     singleton();
         
-        Ref<Shader>     get(const std::filesystem::path&);
-        Ref<Shader>     get(uint64_t);
+        Ref<const Shader>     get(const std::filesystem::path&);
+        Ref<const Shader>     get(uint64_t);
     
     protected:
-        Ref<Asset>      load_binary(const std::filesystem::path&) const override;
+        Ref<const Asset>      load_binary(const std::filesystem::path&) const override;
     
     private:
         ShaderCache();

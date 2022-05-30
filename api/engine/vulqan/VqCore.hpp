@@ -56,6 +56,20 @@ namespace yq {
         }
     };
     
+    struct VqPipelineShaderStageCreateInfo : public VkPipelineShaderStageCreateInfo {
+        VqPipelineShaderStageCreateInfo() : VkPipelineShaderStageCreateInfo{}
+        {
+            sType   = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+        }
+    };
+    
+    struct VqShaderModuleCreateInfo : public VkShaderModuleCreateInfo {
+        VqShaderModuleCreateInfo() : VkShaderModuleCreateInfo{}
+        {
+            sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+        }
+    };
+    
     struct VqSwapchainCreateInfoKHR  : public VkSwapchainCreateInfoKHR {
         VqSwapchainCreateInfoKHR() : VkSwapchainCreateInfoKHR{}
         {

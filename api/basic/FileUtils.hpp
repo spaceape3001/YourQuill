@@ -57,7 +57,7 @@ namespace yq {
         that it changes once a nanosecond.
     */
     SizeTimestamp   file_size_and_timestamp(const std::filesystem::path&);
-    uint128_t       file_timestamp(const char*);
+    //uint128_t       file_timestamp(const std::filesystem::path&);
 
     /*! \brief Convience function for reading a file into a simple buffer
 
