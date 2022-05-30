@@ -17,6 +17,7 @@ namespace yq {
     class AssetInfo;
     class AssetLoader;
     class AssetCache;
+    struct ResultCC;
     
 
     class AssetCompilerInfo : public ObjectInfo {
@@ -43,8 +44,12 @@ namespace yq {
         YQ_OBJECT_DECLARE(AssetCompiler, Object)
     public:
     
-        // temporary TODO
-        virtual bool    compile(const std::filesystem::path& source, const std::filesystem::path& target) const = 0;
+        /*! \brief "Compiles" the asset
+        
+            This compiles the asset into a file of the native format.  "first" is success/failure, 
+            while "second" is any relevant error output from an external program compiler.
+        */
+        virtual ResultCC    compile(const std::filesystem::path& source, const std::filesystem::path& target) const = 0;
     };
 
 }

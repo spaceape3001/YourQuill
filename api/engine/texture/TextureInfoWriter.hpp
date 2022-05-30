@@ -25,18 +25,6 @@ namespace yq {
     };
 
     template <typename C>
-    class TextureCacheInfo::Writer : public AssetCacheInfo::Writer<C> {
-    public:
-        Writer(TextureCacheInfo* textureCacheInfo) : AssetCacheInfo::Writer<C>(textureCacheInfo)
-        {
-        }
-        
-        Writer(TextureCacheInfo& textureCacheInfo) : Writer(&textureCacheInfo)
-        {
-        }
-    };
-
-    template <typename C>
     class TextureLoaderInfo::Writer : public AssetLoaderInfo::Writer<C> {
     public:
         Writer(TextureLoaderInfo* textureLoaderInfo) : AssetLoaderInfo::Writer<C>(textureLoaderInfo)

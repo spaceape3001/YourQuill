@@ -7,6 +7,9 @@
 #include "ShaderInfoWriter.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/FileUtils.hpp>
+#include <config/DirConfig.hpp>
+#include <basic/Execute.hpp>
+#include <engine/asset/ResultCC.hpp>
 
 YQ_OBJECT_IMPLEMENT(yq::Shader)
 YQ_OBJECT_IMPLEMENT(yq::ShaderCache)
@@ -14,6 +17,98 @@ YQ_OBJECT_IMPLEMENT(yq::ShaderCompiler)
 YQ_OBJECT_IMPLEMENT(yq::ShaderLoader)
 
 namespace yq {
+
+    namespace {
+        //  configuration to change/move
+        std::filesystem::path   glsl_compiler_executable()
+        {
+            const char* z   = getenv("VULKAN_SDK_PATH");
+            if(!z)
+                z   = "/usr";
+        
+            return std::filesystem::path(z) / "bin" / "glslc";
+        }
+
+        std::filesystem::path   glsl_validator_executable()
+        {
+            const char* z   = getenv("VULKAN_SDK_PATH");
+            if(!z)
+                z   = "/usr";
+        
+            return std::filesystem::path(z) / "bin" / "glslangValidator";
+        }
+        
+        path_vector_t       shader_dirs()
+        {
+            path_vector_t   ret;
+            ret.push_back( std::filesystem::path(build::data_directory()) / "shaders" );
+            return ret;
+        }
+        
+        ResultCC    compile_shader(const ByteArray& input, const std::filesystem::path& source, const std::filesystem::path& target)
+        {
+            static const path_vector_t          dirs    = shader_dirs();
+            static const std::filesystem::path  glslc   = glsl_compiler_executable();
+            int                                 ecode   = -1;
+            
+            ProcessDescriptor   pd;
+            pd.args.push_back(glslc.string());
+            for(auto& d : dirs){
+                pd.args.push_back("-I");
+                pd.args.push_back(d.string());
+            }
+            
+            pd.args.push_back("--target-env=vulkan1.2");
+            
+            pd.args.push_back("-x");        // GLSL is the language of choice
+            pd.args.push_back("glsl");
+            
+            pd.args.push_back("-O");        // optimize for performance!
+            pd.args.push_back("-o");
+            if(target.empty()){
+                pd.args.push_back("-");
+            } else {
+                pd.args.push_back(target.string());
+            }
+            
+            if(source.empty()){
+                pd.args.push_back("-");
+            } else {
+                pd.args.push_back(source.string());
+            }
+            
+            ResultCC    ret;
+            ret.payload  = pd.execute(input, &ret.errors, &ecode);
+            ret.good    = ecode == 0;
+            return ret;
+        }
+        
+        ResultCC    validate_shader(const ByteArray&input, const std::filesystem::path& source)
+        {
+            static const path_vector_t          dirs    = shader_dirs();
+            static const std::filesystem::path  glslv   = glsl_validator_executable();
+            int                                 ecode   = -1;
+
+            ProcessDescriptor   pd;
+            pd.args.push_back(glslv.string());
+            pd.args.push_back("--target-env");
+            pd.args.push_back("vulkan1.2");
+            for(auto& d : dirs){
+                pd.args.push_back("-I" + d.string());
+            }
+            
+            if(source.empty()){
+                pd.args.push_back("-");
+            } else {
+                pd.args.push_back(source.string());
+            }
+
+            ResultCC    ret;
+            ret.payload = pd.execute(input, &ret.errors, &ecode);
+            ret.good    = ecode == 0;
+            return ret;
+        }
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -25,11 +120,16 @@ namespace yq {
         set_option(SHADER);
     }
 
-    Result<ByteArray>  Shader::compile(const std::filesystem::path& source, const std::filesystem::path& target)
+    ResultCC    Shader::compile(const std::filesystem::path& source, const std::filesystem::path& target)
     {
-        //  TODO
-        return {};
+        return compile_shader(ByteArray(), source, target);
     }
+
+    ResultCC    Shader::compile(const ByteArray& data)
+    {
+        return compile_shader(data, std::filesystem::path(), std::filesystem::path());
+    }
+    
 
     Ref<Shader>     Shader::get(const std::filesystem::path&fp)
     {
@@ -41,11 +141,14 @@ namespace yq {
         return ShaderCache::singleton().get(i);
     }
 
-        //! Used to "validate" a shader
-    Result<ByteArray>   Shader::validate(const std::filesystem::path& source)
+    ResultCC    Shader::validate(const std::filesystem::path& source)
     {
-        //  TODO
-        return {};
+        return validate_shader(ByteArray(), source);
+    }
+
+    ResultCC    Shader::validate(const ByteArray& data)
+    {
+        return validate_shader(data, std::filesystem::path());
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +166,6 @@ namespace yq {
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    ShaderCacheInfo::ShaderCacheInfo(std::string_view zName, const AssetCacheInfo& base, const std::source_location& sl) :
-        AssetCacheInfo(zName, base, sl)
-    {
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
 
     ShaderCache&     ShaderCache::singleton()
     {
@@ -78,7 +175,7 @@ namespace yq {
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    ShaderCache::ShaderCache()
+    ShaderCache::ShaderCache() : AssetCache(meta<ShaderCache>())
     {
     }
     
@@ -132,9 +229,9 @@ namespace yq {
     class GLSLCompiler : public ShaderCompiler {
         YQ_OBJECT_DECLARE(GLSLCompiler, ShaderCompiler)
     public:
-        bool    compile(const std::filesystem::path& source, const std::filesystem::path& target) const 
+        ResultCC   compile(const std::filesystem::path& source, const std::filesystem::path& target) const 
         {
-            return Shader::compile(source, target).good;
+            return compile_shader(ByteArray(), source, target);
         }
     };
     
@@ -148,6 +245,9 @@ namespace yq {
         
         auto sca = writer<ShaderCache>();
         sca.abstract();
+        sca.asset<Shader>();
+        sca.compiler<ShaderCompiler>();
+        sca.loader<ShaderLoader>();
 
         auto scc = writer<ShaderCompiler>();
         scc.abstract();
@@ -157,6 +257,20 @@ namespace yq {
         
         auto glsl = writer<GLSLCompiler>();
         glsl.description("Shader compiler for GLSL language");
+        glsl.extension("vert");
+        glsl.extension("tesc");
+        glsl.extension("tese");
+        glsl.extension("frag");
+        glsl.extension("geom");
+        glsl.extension("comp");
+        glsl.extension("mesh");
+        glsl.extension("task");
+        glsl.extension("rgen");
+        glsl.extension("rint");
+        glsl.extension("rahit");
+        glsl.extension("rchit");
+        glsl.extension("rmiss");
+        glsl.extension("rcall");
     )
 }
 

@@ -13,8 +13,12 @@
 
 namespace yq {
     class Asset;
+    class AssetCompiler;
+    class AssetCompilerInfo;
     class AssetInfo;
     class AssetLoader;
+    class AssetLoaderInfo;
+    
     class AssetCache;
     
     
@@ -25,6 +29,15 @@ namespace yq {
         AssetCacheInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
 
     protected:
+    
+        const AssetInfo*            base_asset() const { return m_asset; }
+        const AssetCompilerInfo*    base_compiler() const { return m_compiler; }
+        const AssetLoaderInfo*      base_loader() const { return m_loader; }
+    
+    private:
+        const AssetInfo*            m_asset     = nullptr;
+        const AssetCompilerInfo*    m_compiler  = nullptr;
+        const AssetLoaderInfo*      m_loader    = nullptr;
     };
     
     /*! \brief An asset cache retains the data
@@ -37,6 +50,7 @@ namespace yq {
     public:
     
     
+    
         //  TODO.....
 
     protected:
@@ -44,7 +58,15 @@ namespace yq {
         Ref<Asset>          get(uint64_t);
 
 
+        AssetCache(const AssetCacheInfo&);      // can't rely on the virtual working.....
+
         virtual Ref<Asset>  load_binary(const std::filesystem::path&) const = 0;
+        
+    private:
+        std::vector<const AssetInfo*>       m_assetInfos;
+        std::vector<const AssetLoader*>     m_assetLoaders;
+        std::vector<const AssetCompiler*>   m_assetCompilers;
+        
     };
 
 }

@@ -35,6 +35,52 @@ namespace yq {
         Writer(AssetCacheInfo& assetCacheInfo) : Writer(&assetCacheInfo)
         {
         }
+        
+        Writer&     asset(const AssetInfo& ai)
+        {
+            AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+            if(aci)
+                aci -> m_asset  = &ai;
+            return *this;
+        }
+        
+        template <typename A>
+        Writer&     asset()
+        {
+            asset(meta<A>());
+            return *this;
+        }
+        
+        Writer&     compiler(const AssetCompilerInfo&ai)
+        {
+            AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+            if(aci)
+                aci -> m_compiler = &ai;
+            return *this;
+        }
+        
+        
+        template <typename A>
+        Writer&     compiler()
+        {
+            compiler(meta<A>());
+            return *this;
+        }
+        
+        Writer& loader(const AssetLoaderInfo& ali)
+        {
+            AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+            if(aci)
+                aci -> m_loader = &ali;
+            return *this;
+        }
+        
+        template <typename A>
+        Writer&     loader()
+        {
+            loader(meta<A>());
+            return *this;
+        }
     };
 
     template <typename C>

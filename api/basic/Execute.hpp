@@ -32,7 +32,7 @@ namespace yq {
         */
         int         wait = 500;
         
-        ByteArray       execute(const ByteArray& stdInput, ByteArray* stdErrors=nullptr) const;
+        ByteArray       execute(const ByteArray& stdInput, ByteArray* stdErrors=nullptr, int *exit_code=nullptr) const;
     };
 
 

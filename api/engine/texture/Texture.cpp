@@ -24,12 +24,7 @@ namespace yq {
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    TextureCacheInfo::TextureCacheInfo(std::string_view zName, const AssetCacheInfo& base, const std::source_location& sl) :
-        AssetCacheInfo(zName, base, sl)
-    {
-    }
-
-    TextureCache::TextureCache()
+    TextureCache::TextureCache() : AssetCache(meta<TextureCache>())
     {
     }
     
@@ -47,6 +42,19 @@ namespace yq {
 
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
+    
+    YQ_INVOKE(
+        auto ti = writer<Texture>();
+        ti.description("Texture Asset");
+        
+        auto tc = writer<TextureCache>();
+        tc.asset<Texture>();
+        tc.loader<TextureLoader>();
+        tc.description("Texture Cache object");
+        
+        auto tl = writer<TextureLoader>();
+        tl.description("Texture Loader");
+    )
 }
 
 

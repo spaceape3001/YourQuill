@@ -26,17 +26,6 @@ namespace yq {
         }
     };
 
-    template <typename C>
-    class ShaderCacheInfo::Writer : public AssetCacheInfo::Writer<C> {
-    public:
-        Writer(ShaderCacheInfo* shaderCacheInfo) : AssetCacheInfo::Writer<C>(shaderCacheInfo)
-        {
-        }
-        
-        Writer(ShaderCacheInfo& shaderCacheInfo) : Writer(&shaderCacheInfo)
-        {
-        }
-    };
 
     template <typename C>
     class ShaderCompilerInfo::Writer : public AssetCompilerInfo::Writer<C> {

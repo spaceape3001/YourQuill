@@ -12,7 +12,7 @@
 #pragma GCC diagnostic pop
 
 namespace yq {
-    ByteArray       ProcessDescriptor::execute(const ByteArray& stdInput, ByteArray* stdErrors) const
+    ByteArray       ProcessDescriptor::execute(const ByteArray& stdInput, ByteArray* stdErrors, int *exit_code) const
     {
         ByteArray ret;
         if(!args.empty()){
@@ -52,6 +52,9 @@ namespace yq {
                         moreErr = false;
                 }
             }
+            
+            if(exit_code)
+                *exit_code   = proc.rdbuf()->status();
         }
         return ret;
     }
