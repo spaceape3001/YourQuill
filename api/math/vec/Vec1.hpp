@@ -225,6 +225,37 @@ namespace yq {
     {
         return a.x*b.x;
     }
+
+    //  --------------------------------------------------------
+    //  ADVANCED FUNCTIONS
+
+    //! TRUE if every component of a is less than b
+    template <typename T>
+    bool        all_less(const Vec1<T>& a, const Vec1<T>&b)
+    {
+        return (a.x<b.x);
+    }
+
+    //! TRUE if every component of a is less than (or equal to) b
+    template <typename T>
+    bool        all_less_equal(const Vec1<T>& a, const Vec1<T>&b)
+    {
+        return (a.x<=b.x);
+    }
+
+    //! TRUE if every component of a is greater than b
+    template <typename T>
+    bool        all_greater(const Vec1<T>& a, const Vec1<T>&b)
+    {
+        return (a.x>b.x);
+    }
+
+    //! TRUE if every component of a is greater or equal to b
+    template <typename T>
+    bool        all_greater_equal(const Vec1<T>& a, const Vec1<T>&b)
+    {
+        return (a.x>=b.x);
+    }
 }
 
 YQ_TYPE_DECLARE(yq::Vec1D)

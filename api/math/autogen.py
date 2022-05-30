@@ -37,6 +37,7 @@ DATA    = [
 class DType:
     def __init__(self, par, dinfo):
         self.parent = par
+        self.key    = dinfo['key']
         self.args   = par.args | dinfo
         self.name   = '%s%s' % (par.name, dinfo['key'])
         self.args['name']   = self.name
@@ -64,15 +65,33 @@ class Bit:
 
 class VType:
     def __init__(self, n):
-        self.n      = n
-        self.name   = '%s%d' % (VNAME, n)
-        self.header = '%s.hpp' % self.name
         self.args   = dict()
-        self.args['name']   = self.name
-        self.args['vector'] = self.name
-        self.args['header'] = self.header
-        self.args['N']      = n
 
+        self.n                  = n
+        self.args['N']      = n
+        self.name               = '%s%d' % (VNAME, n)
+        self.args['name']       = self.name
+        self.args['vector']     = self.name
+        self.header             = '%s.hpp' % self.name
+        self.args['header'] = self.header
+
+        self.axbox              = 'AxBox%d' % n
+        self.args['axbox']      = self.axbox
+        self.seg                = 'Seg%d' % n
+        self.args['seg']        = self.seg
+        self.mvec               = 'MVec%d' % n
+        self.args['mvec']       = self.mvec
+        if n > 1:
+            self.tri            = 'Tri%d' % n
+            self.args['tri']    = self.tri
+            self.bvec           = 'BVec%d' % n
+            self.args['bvec']   = self.bvec
+        if n > 2:
+            self.tvec           = 'TVec%d' % n
+            self.args['tvec']   = self.tvec
+        if n > 3:
+            self.qvec           = 'QVec%d' % n
+            self.args['qvec']   = self.qvec
         self.bits   = []
         for i in range(0,n):
             self.bits.append(Bit(i, self.args))
@@ -80,7 +99,11 @@ class VType:
 
         self.data   = []
         for d in DATA:
-            self.data.append(DType(self, d))
+            ad = DType(self,d);
+            abx = self.axbox + ad.key
+            ad.args['abxk'] = abx
+            ad.args['abxl']  = abx.lower()
+            self.data.append(ad)
         
         
 class TType:
@@ -557,6 +580,57 @@ namespace yq {
             if not b.first:
                 f.write(" + ")
             f.write("a.%(bit)s*b.%(bit)s" % b.args);
+        f.write(""";
+    }
+
+    //  --------------------------------------------------------
+    //  ADVANCED FUNCTIONS
+
+    //! TRUE if every component of a is less than b
+    template <typename T>
+    bool        all_less(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    {
+        return """ % v.args);
+        for b in v.bits:
+            if not b.first:
+                f.write(" && ");
+            f.write("(a.%(bit)s<b.%(bit)s)" % b.args);
+        f.write(""";
+    }
+
+    //! TRUE if every component of a is less than (or equal to) b
+    template <typename T>
+    bool        all_less_equal(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    {
+        return """ % v.args);
+        for b in v.bits:
+            if not b.first:
+                f.write(" && ");
+            f.write("(a.%(bit)s<=b.%(bit)s)" % b.args);
+        f.write(""";
+    }
+
+    //! TRUE if every component of a is greater than b
+    template <typename T>
+    bool        all_greater(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    {
+        return """ % v.args);
+        for b in v.bits:
+            if not b.first:
+                f.write(" && ");
+            f.write("(a.%(bit)s>b.%(bit)s)" % b.args);
+        f.write(""";
+    }
+
+    //! TRUE if every component of a is greater or equal to b
+    template <typename T>
+    bool        all_greater_equal(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    {
+        return """ % v.args);
+        for b in v.bits:
+            if not b.first:
+                f.write(" && ");
+            f.write("(a.%(bit)s>=b.%(bit)s)" % b.args);
         f.write(""";
     }
 }
@@ -1288,6 +1362,38 @@ namespace yq {
             f.write("YQ_TYPE_DECLARE(yq::%(name)s)\n" % d.args)
         f.write('\n')
         
+    ############################################
+    ##  AXBOX INSTANTIATIONS
+for v in VECTORS:
+    with open('shape/%(axbox)s.hpp' % v.args, 'w') as f:
+        f.write(YQUILL)
+        f.write(WARNING)
+        f.write("""
+#include <math/preamble.hpp>
+#include <math/vec/%(header)s>
+
+
+namespace yq {
+
+    template <typename T>
+    struct %(axbox)s {
+        using component_t   = T;
+        
+        %(vector)s<T>  lo, hi;
+        
+        constexpr bool operator==(const %(axbox)s&) const noexcept = default;
+    };
+}
+
+""" % v.args)
+        
+        for d in v.data:
+            f.write("YQ_TYPE_DECLARE(yq::%(axbox)s%(key)s)\n" % d.args)
+        f.write('\n')
+
+
+        
+
 
     ############################################
     ##  TYPE INSTANTIATIONS
@@ -1304,6 +1410,9 @@ with open('types_python.cpp', 'w') as f:
     f.write('\n')
     for v in VECTORS:
         f.write("#include <math/vec/%(header)s>\n" % v.args)
+    f.write('\n')
+    for v in VECTORS:
+        f.write("#include <math/shape/%(axbox)s.hpp>\n" % v.args)
 
     f.write("""
 
@@ -1313,6 +1422,11 @@ with open('types_python.cpp', 'w') as f:
 using namespace yq;
     
 """)
+
+    for v in VECTORS:
+        for d in v.data:
+            f.write("YQ_TYPE_IMPLEMENT(yq::%(abxk)s)\n" % d.args)
+        f.write('\n')
     
     for t in TENSORS:
         for d in t.data:
@@ -1323,6 +1437,7 @@ using namespace yq;
         for d in v.data:
             f.write("YQ_TYPE_IMPLEMENT(yq::%(name)s)\n" % d.args)
         f.write('\n')
+
     
     f.write("""
 
@@ -1344,6 +1459,15 @@ YQ_INVOKE(
             for b in v.bits:
                 f.write("""    %(lower)s.property("%(bit)s", &%(name)s::%(bit)s);\n""" % (b.args|d.args))
             f.write('\n')
+        f.write('\n')
+
+    for v in VECTORS:
+        for d in v.data:
+            f.write("""
+    auto %(abxl)s = writer<%(abxk)s>();
+    %(abxl)s.property("lo", &%(abxk)s::lo);
+    %(abxl)s.property("hi", &%(abxk)s::hi);
+""" % d.args)
         f.write('\n')
 
     f.write("""

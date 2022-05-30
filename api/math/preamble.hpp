@@ -173,6 +173,30 @@ namespace yq {
         return (int)(floor(r)+std::copysign(0.1,r));
     }
 
+    template <typename T> struct AxBox1;
+    using AxBox1D   = AxBox1<double>;
+    using AxBox1F   = AxBox1<float>;
+    using AxBox1I   = AxBox1<int>;
+    using AxBox1U   = AxBox1<unsigned>;
+
+    template <typename T> struct AxBox2;
+    using AxBox2D   = AxBox2<double>;
+    using AxBox2F   = AxBox2<float>;
+    using AxBox2I   = AxBox2<int>;
+    using AxBox2U   = AxBox2<unsigned>;
+
+    template <typename T> struct AxBox3;
+    using AxBox3D   = AxBox3<double>;
+    using AxBox3F   = AxBox3<float>;
+    using AxBox3I   = AxBox3<int>;
+    using AxBox3U   = AxBox3<unsigned>;
+
+    template <typename T> struct AxBox4;
+    using AxBox4D   = AxBox4<double>;
+    using AxBox4F   = AxBox4<float>;
+    using AxBox4I   = AxBox4<int>;
+    using AxBox4U   = AxBox4<unsigned>;
+
     template <typename T> struct ColorRgb;
     using ColorRgbD     = ColorRgb<double>;
     using ColorRgbF     = ColorRgb<double>;
@@ -204,6 +228,30 @@ namespace yq {
     using Rect2F    = Rect2<float>;
     using Rect2I    = Rect2<int>;
     using Rect2U    = Rect2<unsigned>;
+
+    template <typename T> struct Seg1;
+    using Seg1D   = Seg1<double>;
+    using Seg1F   = Seg1<float>;
+    using Seg1I   = Seg1<int>;
+    using Seg1U   = Seg1<unsigned>;
+
+    template <typename T> struct Seg2;
+    using Seg2D   = Seg2<double>;
+    using Seg2F   = Seg2<float>;
+    using Seg2I   = Seg2<int>;
+    using Seg2U   = Seg2<unsigned>;
+
+    template <typename T> struct Seg3;
+    using Seg3D   = Seg3<double>;
+    using Seg3F   = Seg3<float>;
+    using Seg3I   = Seg3<int>;
+    using Seg3U   = Seg3<unsigned>;
+
+    template <typename T> struct Seg4;
+    using Seg4D   = Seg4<double>;
+    using Seg4F   = Seg4<float>;
+    using Seg4I   = Seg4<int>;
+    using Seg4U   = Seg4<unsigned>;
     
     template <typename T> struct Size2;
     using Size2D    = Size2<double>;

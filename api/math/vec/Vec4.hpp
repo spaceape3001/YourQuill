@@ -256,6 +256,37 @@ namespace yq {
     {
         return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
     }
+
+    //  --------------------------------------------------------
+    //  ADVANCED FUNCTIONS
+
+    //! TRUE if every component of a is less than b
+    template <typename T>
+    bool        all_less(const Vec4<T>& a, const Vec4<T>&b)
+    {
+        return (a.x<b.x) && (a.y<b.y) && (a.z<b.z) && (a.w<b.w);
+    }
+
+    //! TRUE if every component of a is less than (or equal to) b
+    template <typename T>
+    bool        all_less_equal(const Vec4<T>& a, const Vec4<T>&b)
+    {
+        return (a.x<=b.x) && (a.y<=b.y) && (a.z<=b.z) && (a.w<=b.w);
+    }
+
+    //! TRUE if every component of a is greater than b
+    template <typename T>
+    bool        all_greater(const Vec4<T>& a, const Vec4<T>&b)
+    {
+        return (a.x>b.x) && (a.y>b.y) && (a.z>b.z) && (a.w>b.w);
+    }
+
+    //! TRUE if every component of a is greater or equal to b
+    template <typename T>
+    bool        all_greater_equal(const Vec4<T>& a, const Vec4<T>&b)
+    {
+        return (a.x>=b.x) && (a.y>=b.y) && (a.z>=b.z) && (a.w>=b.w);
+    }
 }
 
 YQ_TYPE_DECLARE(yq::Vec4D)

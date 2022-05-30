@@ -242,6 +242,37 @@ namespace yq {
     {
         return a.x*b.x + a.y*b.y + a.z*b.z;
     }
+
+    //  --------------------------------------------------------
+    //  ADVANCED FUNCTIONS
+
+    //! TRUE if every component of a is less than b
+    template <typename T>
+    bool        all_less(const Vec3<T>& a, const Vec3<T>&b)
+    {
+        return (a.x<b.x) && (a.y<b.y) && (a.z<b.z);
+    }
+
+    //! TRUE if every component of a is less than (or equal to) b
+    template <typename T>
+    bool        all_less_equal(const Vec3<T>& a, const Vec3<T>&b)
+    {
+        return (a.x<=b.x) && (a.y<=b.y) && (a.z<=b.z);
+    }
+
+    //! TRUE if every component of a is greater than b
+    template <typename T>
+    bool        all_greater(const Vec3<T>& a, const Vec3<T>&b)
+    {
+        return (a.x>b.x) && (a.y>b.y) && (a.z>b.z);
+    }
+
+    //! TRUE if every component of a is greater or equal to b
+    template <typename T>
+    bool        all_greater_equal(const Vec3<T>& a, const Vec3<T>&b)
+    {
+        return (a.x>=b.x) && (a.y>=b.y) && (a.z>=b.z);
+    }
 }
 
 YQ_TYPE_DECLARE(yq::Vec3D)
