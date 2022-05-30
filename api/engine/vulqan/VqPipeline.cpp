@@ -13,76 +13,55 @@
 #include <engine/shader/Shader.hpp>
 
 namespace yq {
-    VqPipeline::VqPipeline(VkDevice dev, const std::vector<Ref<const Shader>>& shaders)
+    VqPipeline::VqPipeline(VqWindow& win, const PipelineConfig& config)
     {
-        std::vector<VkPipelineShaderStageCreateInfo>    stages;
-        auto s = safety([&](){
-            for(auto& i : stages)
-                vkDestroyShaderModule(dev, i.module, nullptr);
-        });
+        VqShaderStages      stages(win, config.shaders);
         
-        stages.reserve(shaders.size());
         
-        uint32_t    stage_mask  = 0;
+        VqPipelineVertexInputStateCreateInfo    vertexInfo;
+        vertexInfo.vertexBindingDescriptionCount    = 0;
+        vertexInfo.pVertexBindingDescriptions       = nullptr;
+        vertexInfo.vertexAttributeDescriptionCount  = 0;
+        vertexInfo.pVertexAttributeDescriptions     = nullptr;
         
-        for(auto& s : shaders){
-            if(!s){
-                yCritical() << "NULL SHADER detected, skipping";
-                continue;
-            }
+        VqPipelineInputAssemblyStateCreateInfo  inputAssembly;
+        inputAssembly.topology                  = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        inputAssembly.primitiveRestartEnable    = VK_FALSE;
         
-            VqPipelineShaderStageCreateInfo stage;
-            
-            switch(s->shader_type()){
-            case ShaderType::VERT:
-                stage.stage = VK_SHADER_STAGE_VERTEX_BIT;
-                break;
-            case ShaderType::TESC:
-                stage.stage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-                break;
-            case ShaderType::TESE:
-                stage.stage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-                break;
-            case ShaderType::FRAG:
-                stage.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-                break;
-            case ShaderType::GEOM:
-                stage.stage = VK_SHADER_STAGE_GEOMETRY_BIT;
-                break;
-            case ShaderType::COMP:
-                stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
-                break;
-            case ShaderType::UNKNOWN:
-            default:
-                yError() << "Unknown shader type...skipping.";
-                continue;
-            }
-            
-            stage_mask |= stage.stage;
-            stage.pName = "main";
+        VkViewport viewport{};
+        viewport.x = 0.0f;
+        viewport.y = 0.0f;
+        viewport.width = (float) win.m_swapExtent.width;
+        viewport.height = (float) win.m_swapExtent.height;
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+
+        VkRect2D scissor{};
+        scissor.offset = {0, 0};
+        scissor.extent = win.m_swapExtent;        
         
-            const ByteArray&    code    = s->payload();
-            VqShaderModuleCreateInfo createInfo;
-            createInfo.codeSize = code.size();
-            createInfo.pCode    = reinterpret_cast<const uint32_t*>(code.data());
-            if (vkCreateShaderModule(dev, &createInfo, nullptr, &stage.module) != VK_SUCCESS) {
-                yError() << "Unable to create shader module.";
-                continue;
-            }
-            
-            stages.push_back(stage);
-        }
+        VqPipelineViewportStateCreateInfo   viewportState{};
+        viewportState.viewportCount = 1;
+        viewportState.pViewports = &viewport;
+        viewportState.scissorCount = 1;
+        viewportState.pScissors = &scissor;
         
-    
+        VqPipelineRasterizationStateCreateInfo  rasterizer;
+        
+        rasterizer.depthClampEnable = VK_FALSE;
+        rasterizer.rasterizerDiscardEnable = VK_FALSE;
+        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+        rasterizer.lineWidth = 1.0f;
+        rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+        rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterizer.depthBiasEnable = VK_FALSE;
+        rasterizer.depthBiasConstantFactor = 0.0f; // Optional
+        rasterizer.depthBiasClamp = 0.0f; // Optional
+        rasterizer.depthBiasSlopeFactor = 0.0f; // Optional
+
     }
-    
-    VqPipeline::VqPipeline(VqWindow& win, const std::vector<Ref<const Shader>>& shaders) : VqPipeline(win.logical(), shaders)
-    {
-    }
-    
 
     VqPipeline::~VqPipeline()
     {
     }
-    
 }

@@ -14,10 +14,12 @@
 #include <vulkan/vulkan_core.h>
 #include <engine/vulqan/VqMonitor.hpp>
 
+struct HelloApp;
 struct GLFWwindow;
 
 namespace yq {
     
+    class VqPipeline;
     class VqInstance;
     
     /*! \brief A basic window
@@ -26,6 +28,7 @@ namespace yq {
         a Vulkan instance.
     */
     class VqWindow : public RefCount, trait::not_copyable, trait::not_moveable {
+friend struct HelloApp;
     public:
         
             //! Polls for events (does not loiter)
@@ -141,6 +144,8 @@ namespace yq {
             //! Window size
         Size2I      size() const;
         
+        const VkExtent2D&   swap_extent() const { return m_swapExtent; }
+        
             //! The Vulkan surface
         VkSurfaceKHR    surface() const { return m_surface; }
         
@@ -152,15 +157,20 @@ namespace yq {
 
         
         
-    private:
+    //private:
+        friend class VqPipeline;
+        friend struct HelloApp;
         void    _deinit();
-        
+
+        void    _destroy_renderpass();
+
         void    _destroy_swapviews();
     
             //! Creates & initializes this window
         bool    _init(const Info& i);
         
         bool    _init_physical(VkPhysicalDevice);
+        bool    _init_renderpass();
         bool    _init_surface();
         bool    _init_swap();
         bool    _init_swapviews();
@@ -175,9 +185,10 @@ namespace yq {
         VkPresentModeKHR            m_presentMode;
         VkSurfaceFormatKHR          m_surfaceFormat;
         VkSwapchainKHR              m_swapChain     = nullptr;
-        VkExtent2D                  m_swapExtent;
+        VkExtent2D                  m_swapExtent    = { 0, 0 };
         std::vector<VkImage>        m_swapImages;
         std::vector<VkImageView>    m_swapImageViews;
+        VkRenderPass                m_renderPass    = nullptr;
     };
 
 }

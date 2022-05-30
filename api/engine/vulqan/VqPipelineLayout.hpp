@@ -7,21 +7,24 @@
 #pragma once
 
 #include <basic/Ref.hpp>
+#include <vulkan/vulkan_core.h>
 
 namespace yq {
     class VqWindow;
     struct PipelineConfig;
     
-    class VqPipeline : public RefCount {
+    class VqPipelineLayout : public RefCount {
     public:
         
             //   TODO...add specialization info...
             
-        VqPipeline(VqWindow&, const PipelineConfig&);
-        ~VqPipeline();
+        VqPipelineLayout(VqWindow&, const PipelineConfig&);
+        ~VqPipelineLayout();
+        
+        VkPipelineLayout    vulkan() const { return m_pipelineLayout; }
         
     private:
-        VkPipelineLayout        m_pipeline  = nullptr;
+        VkPipelineLayout        m_pipelineLayout  = nullptr;
     };
 
 }

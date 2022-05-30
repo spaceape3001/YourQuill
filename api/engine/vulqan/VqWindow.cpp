@@ -4,6 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+/*
+    YES, we're leveraging the "hello triangle" tutorial
+    
+    https://vulkan-tutorial.com/
+*/
+
 #include "VqWindow.hpp"
 #include "VqCore.hpp"
 #include "VqInstance.hpp"
@@ -37,6 +43,16 @@ namespace yq {
 
     void VqWindow::_deinit()
     {
+        if(m_logical){
+            vkDeviceWaitIdle(m_logical);
+        }
+    
+        if(m_renderPass){
+            vkDestroyRenderPass(m_logical, m_renderPass, nullptr);
+            m_renderPass    = nullptr;
+        }
+    
+        _destroy_renderpass();
         _destroy_swapviews();
         if(m_swapChain){
             vkDestroySwapchainKHR(m_logical, m_swapChain, nullptr);
@@ -59,6 +75,14 @@ namespace yq {
         }
         
         m_physical = nullptr;
+    }
+
+    void VqWindow::_destroy_renderpass()
+    {
+        if(m_renderPass){
+            vkDestroyRenderPass(m_logical, m_renderPass, nullptr);
+            m_renderPass    = nullptr;
+        }
     }
 
     void VqWindow::_destroy_swapviews()
@@ -163,6 +187,10 @@ namespace yq {
             return false;
         if(!_init_swapviews())
             return false;
+            
+        if(!_init_renderpass())
+            return false;
+            
         return true;
     }
 
@@ -177,6 +205,44 @@ namespace yq {
         m_physical  = dev;
         return true;
     }
+
+    bool    VqWindow::_init_renderpass()
+    {
+            //  Render pass
+        VkAttachmentDescription colorAttachment{};
+        colorAttachment.format = m_surfaceFormat.format;
+        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;        
+        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+        
+        VkAttachmentReference colorAttachmentRef{};
+        colorAttachmentRef.attachment = 0;
+        colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+        VkSubpassDescription subpass{};
+        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;        
+
+        subpass.colorAttachmentCount = 1;
+        subpass.pColorAttachments = &colorAttachmentRef;
+        
+        VkRenderPassCreateInfo renderPassInfo{};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+        renderPassInfo.attachmentCount = 1;
+        renderPassInfo.pAttachments = &colorAttachment;
+        renderPassInfo.subpassCount = 1;
+        renderPassInfo.pSubpasses = &subpass;
+
+        if (vkCreateRenderPass(m_logical, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) {
+            yCritical() << "Unable to create the render pass!";
+            return false;
+        } else
+            return true;
+    }
+
 
     bool VqWindow::_init_surface()
     {
