@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "VqCore.hpp"
+#include "VqUtils.hpp"
 #include "VqShaderStages.hpp"
 #include "VqWindow.hpp"
 #include <basic/Logging.hpp>

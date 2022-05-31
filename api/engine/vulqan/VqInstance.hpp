@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "Required.hpp"
 #include <basic/Ref.hpp>
 #include <basic/DbgRel.hpp>
 #include <basic/trait/not_copyable.hpp>
@@ -16,11 +17,6 @@
 
 namespace yq {
 
-    enum class Required {
-        NO,
-        OPTIONAL,
-        YES
-    };
 
     class VqWindow;
 

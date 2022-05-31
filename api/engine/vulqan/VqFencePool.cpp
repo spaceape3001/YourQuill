@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "VqCore.hpp"
+#include "VqStructs.hpp"
 #include "VqFencePool.hpp"
 #include "VqWindow.hpp"
 

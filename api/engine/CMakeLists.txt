@@ -25,8 +25,8 @@ set(yq_engine_sources
     ./texture/TextureLoader.hpp
     ./texture/TextureInfoWriter.hpp
     
-    ./vulqan/VqCore.cpp
-    ./vulqan/VqCore.hpp
+    ./vulqan/VqApp.cpp
+    ./vulqan/VqApp.cpp
     ./vulqan/VqEnums.cpp
     ./vulqan/VqFence.cpp
     ./vulqan/VqFence.hpp
@@ -45,6 +45,9 @@ set(yq_engine_sources
     
 #   ./vulqan/VqPipeline.cpp
 #    ./vulqan/VqPipeline.hpp
+    ./vulqan/VqStructs.hpp
+    ./vulqan/VqUtils.cpp
+    ./vulqan/VqUtils.hpp
     ./vulqan/VqWindow.cpp
     ./vulqan/VqWindow.hpp
 )

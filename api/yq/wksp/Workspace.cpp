@@ -6,7 +6,7 @@
 
 #include "Workspace.hpp"
 
-#include <basic/CmdArgs.hpp>
+#include <basic/BasicApp.hpp>
 #include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
@@ -44,55 +44,7 @@ namespace yq {
             static constexpr const unsigned int         kDefaultReadTimeout = 30000;
             static constexpr const mode_t               kDirMode            = 0755;
 
-            std::string             get_host()
-            {
-                char        hname[HOST_NAME_MAX+1];
-                gethostname(hname, sizeof(hname));
-                hname[HOST_NAME_MAX]    = '\0';
-                return std::string(hname);
-            }
-            
-            std::filesystem::path   get_temp()
-            {
-                const char*   tmpdir  = getenv("TMPDIR");
-                if(!tmpdir)
-                    tmpdir          = "/tmp";
-                return std::filesystem::path(tmpdir) / "yquill";
-            }
 
-            const char* homeDir()
-            {
-                const char* s   = getenv("HOME");
-                if(s)
-                    return s;
-                struct passwd*  pw = getpwuid(getuid());;
-                if(pw)
-                    return pw -> pw_dir;
-                return nullptr;
-            }
-            
-            path_vector_t   searchPath()
-            {
-                path_vector_t   ret;
-                const char* s   = getenv("PATH");
-                if(!s){
-                    //  TODO ... WINDOWS!
-                    #ifdef __unix__
-                        //  If there is no path, construct a minimal common one
-                        s   = "/usr/local/bin:/usr/bin:/bin";
-                    #endif
-                }
-                
-                if(s){
-                    vsplit(s, ':', [&](const std::string_view& s){
-                        std::filesystem::path       sd(s);
-                        if(!access(sd.c_str(), R_OK|X_OK))
-                            ret.push_back(sd);
-                    });
-                }
-                
-                return ret;
-            }
 
             std::filesystem::path   absolute_me(const std::filesystem::path& sv)
             {
@@ -189,17 +141,6 @@ namespace yq {
                 unsigned int    home        = ~0;
                 unsigned int    name        = ~0;
             };
-            
-            std::filesystem::path       find_exe(const std::string_view x)
-            {
-                static const auto search    = searchPath();
-                for(auto& fs : search){
-                    std::filesystem::path   p   = fs / x;
-                    if(std::filesystem::exists(p))
-                        return p;
-                }
-                return std::filesystem::path();
-            }
         }
 
         struct Impl {
@@ -331,14 +272,14 @@ namespace yq {
             strftime(timestamp, sizeof(timestamp),  "%Y%m%d-%H%M%S", &gt);
             start_file      = timestamp;
                         
-            host            = get_host();
-            tmp             = get_temp();
+            host            = BasicApp::hostname();
+            tmp             = BasicApp::temp_dir();
 
             //  build out share directories
-            const char* hdir   = homeDir();
-            if(hdir){
-                auto hd     = std::filesystem::path(hdir) / ".yquill";
-                if(!::access(hdir, W_OK)){
+            const std::filesystem::path& hdir   = BasicApp::user_home();
+            if(!hdir.empty()){
+                auto hd     = hdir / ".yquill";
+                if(!::access(hdir.c_str(), W_OK)){
                     make_path(hd);
                 }
                 if(!::access(hd.c_str(), R_OK|X_OK))
@@ -366,16 +307,16 @@ namespace yq {
             smartypants     = dir::first_child(perl_dirs, "SmartyPants.pl");
             
             #ifdef __unix__
-                dot         = find_exe("dot");
-                git         = find_exe("git");
-                perl        = find_exe("perl");
-                subversion  = find_exe("svn");
+                dot         = BasicApp::find_exe("dot");
+                git         = BasicApp::find_exe("git");
+                perl        = BasicApp::find_exe("perl");
+                subversion  = BasicApp::find_exe("svn");
             #else
                 //  TODO WINDOWS -- obvious from above
             #endif
             
             app             = cfg.app;
-            app_name        = CmdArgs::appName();
+            app_name        = BasicApp::app_name();
             qspec           = cfg.spec;
             qoptions        = cfg.options;
             db_flags        = cfg.db_flags;

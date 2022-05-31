@@ -14,9 +14,9 @@ set(basic_sources
     ./Any.hpp
     ./Array1.hpp
     ./Array2.hpp
+    ./BasicApp.cpp
+    ./BasicApp.hpp
     ./ByteArray.hpp
-    ./CmdArgs.cpp
-    ./CmdArgs.hpp
     ./CollectionUtils.hpp
     ./Comma.hpp
     ./Compare.hpp

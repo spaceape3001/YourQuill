@@ -1,9 +1,6 @@
 add_executable(ask ask.cpp)
 target_link_libraries(ask ${CURL_LIBRARIES})
 
-add_executable(im_demo im_demo.cpp)
-target_link_libraries(im_demo yqbasic yqmath yqengine)
-
 add_executable(kvtree kvtree.cpp)
 target_link_libraries(kvtree yq)
 

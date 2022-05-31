@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include <basic/CmdArgs.hpp>
+#include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
 #include <basic/meta/Meta.hpp>
 #include <basic/TextUtils.hpp>
@@ -25,8 +25,7 @@ int main(int argc, char* argv[])
     
     using namespace yq;
     
-    CmdArgs args(argc, argv);
-    log_to_std_error();
+    BasicApp args(argc, argv);
     
     wksp::Config    cfg;
     cfg.spec = argv[1];

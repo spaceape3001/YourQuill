@@ -35,7 +35,7 @@ namespace rapidxml {
 namespace yq {
     class Any;
     class ByteArray;
-    class CmdArgs;
+    class BasicApp;
     class DelayInit;
     class Global;       //  a global property ... effectively
     

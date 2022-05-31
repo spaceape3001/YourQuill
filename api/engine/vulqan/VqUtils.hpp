@@ -8,7 +8,7 @@
 
 #include <basic/Result.hpp>
 #include <vulkan/vulkan_core.h>
-#include "vq_struct_python.hpp"
+#include <engine/vulqan/VqStructs.hpp>
 
 #include <optional>
 #include <set>

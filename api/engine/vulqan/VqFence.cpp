@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "VqCore.hpp"
 #include "VqFence.hpp"
+#include "VqStructs.hpp"
 #include "VqWindow.hpp"
 #include <basic/Logging.hpp>
 

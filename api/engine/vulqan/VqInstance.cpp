@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqInstance.hpp"
-#include "VqCore.hpp"
+#include "VqStructs.hpp"
+#include "VqUtils.hpp"
 #include "VqGLFW.hpp"
 
-#include <basic/CmdArgs.hpp>
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 

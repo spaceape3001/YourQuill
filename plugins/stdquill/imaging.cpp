@@ -6,7 +6,7 @@
 
 #include "imaging.hpp"
 
-#include <basic/CmdArgs.hpp>
+#include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
 
 #include <yq/db/IDLock.hpp>
@@ -34,7 +34,7 @@ Size2U    size_for(const Magick::Geometry& sz)
 
 void    init_magicka()
 {
-    Magick::InitializeMagick( CmdArgs::appName().data());
+    Magick::InitializeMagick( BasicApp::app_name().data());
 }
 
 void    update_image(Image img, cdb_options_t opts)

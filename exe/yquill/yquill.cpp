@@ -6,7 +6,7 @@
 
 #include "yquill.hpp"
 
-#include <basic/CmdArgs.hpp>
+#include <basic/BasicApp.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
@@ -63,6 +63,9 @@ bool    initialize(const char* wfile)
         LogPriority::Debug
     #endif
     );
+    
+    yInfo() << "Built with C++ " << __cplusplus;
+    
     
     Meta::init();
     
@@ -168,7 +171,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    CmdArgs     args(argc, argv);
+    BasicApp     app(argc, argv);
     int r = execMain(argc, argv);
     if((r == 0) && (gQuit == Quit::Restart)){
         yNotice() << "Restart requested.";

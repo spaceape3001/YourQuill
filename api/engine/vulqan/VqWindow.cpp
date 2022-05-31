@@ -11,7 +11,7 @@
 */
 
 #include "VqWindow.hpp"
-#include "VqCore.hpp"
+#include "VqUtils.hpp"
 #include "VqInstance.hpp"
 #include "VqGLFW.hpp"
 

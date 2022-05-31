@@ -6,7 +6,7 @@
 
 #include "VqGLFW.hpp"
 #include "VqInstance.hpp"
-#include "VqCore.hpp"
+#include "VqUtils.hpp"
 #include <basic/CollectionUtils.hpp>
 
 namespace yq {

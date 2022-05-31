@@ -16,13 +16,13 @@
 //  Also it's about me developing the API in the first place .... :)
 
 
-#include <basic/CmdArgs.hpp>
+#include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/Safety.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/shader/Shader.hpp>
-#include <engine/vulqan/VqCore.hpp>
+#include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFencePool.hpp>
 #include <engine/vulqan/VqGLFW.hpp>
@@ -343,28 +343,19 @@ struct HelloApp {
     }
 };
 
-void    createPipelines(VqWindow& win, const std::vector<Ref<const Shader>>& shaders)
-{
-
-
-
-
-}
 
 
 
 int main(int argc, char* argv[])
 {
-    CmdArgs cargs(argc, argv);
-    log_to_std_error(LogPriority::Debug);
-    Meta::init();
+    BasicApp app(argc, argv);
     load_plugin_dir("plugin");
     Meta::freeze();
     
-    HelloApp        app;
-    if(!app.instance.good())
+    HelloApp        app2;
+    if(!app2.instance.good())
         return 0;
-    app.run();
+    app2.run();
     
     std::cout << "Hello World!\n";
     return 0;

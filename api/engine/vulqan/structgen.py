@@ -53,7 +53,7 @@ structs.sort(key=skey)
 
 written = []
 
-with open('vq_struct_python.hpp', 'w') as f:
+with open('VqStructs.hpp', 'w') as f:
     f.write("""////////////////////////////////////////////////////////////////////////////////
 //
 //  YOUR QUILL

@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/vulqan/VqCore.hpp>
+#include <engine/vulqan/VqUtils.hpp>
 #include <iostream>
 
 int main(int argc, char* argv[])

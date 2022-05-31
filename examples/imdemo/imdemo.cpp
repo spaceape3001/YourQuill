@@ -8,11 +8,11 @@
     Simple "demo" utilitiy
 */
 
-#include <basic/CmdArgs.hpp>
+#include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
-#include <engine/vulqan/VqCore.hpp>
+#include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqGLFW.hpp>
 #include <engine/vulqan/VqInstance.hpp>
 #include <engine/vulqan/VqWindow.hpp>
@@ -22,9 +22,7 @@ using namespace yq;
 
 int main(int argc, char* argv[])
 {
-    CmdArgs cargs(argc, argv);
-    log_to_std_error(LogPriority::Debug);
-    Meta::init();
+    BasicApp cargs(argc, argv);
     load_plugin_dir("plugin");
     Meta::freeze();
     
