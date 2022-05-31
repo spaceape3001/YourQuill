@@ -5,14 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <engine/vulqan/VqUtils.hpp>
-#include <engine/vulqan/VqInstance.hpp>
+#include <engine/vulqan/VqApp.hpp>
 #include <iostream>
 
 using namespace yq;
 
 int main(int argc, char* argv[])
 {
-    VqInstance vi;
+    VqApp vi(argc, argv);
     auto data = yq::vqEnumeratePhysicalDevices();
     std::cout << data.size() << " physical device(s)\n";
     for(const auto& dev : data){

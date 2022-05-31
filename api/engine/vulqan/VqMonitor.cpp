@@ -5,10 +5,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqMonitor.hpp"
-#include "VqGLFW.hpp"
 #include <math/vec/Vec2.hpp>
 #include <math/shape/Rect2.hpp>
 #include <math/shape/Size2.hpp>
+
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 namespace yq {
 

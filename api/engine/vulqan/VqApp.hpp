@@ -13,15 +13,18 @@
 
 #include <vulkan/vulkan_core.h>
 
+#include <set>
 #include <string>
+#include <vector>
 
 namespace yq {
+    class VqWindow;
 
     //! Info for initialization
     struct AppInfo {
     
         //! Application name
-        std::string     app_name        = "(nameless)";
+        std::string     app_name;
         
         //! Engine Name
         std::string     engine_name     = "(nameless)";
@@ -52,14 +55,23 @@ namespace yq {
         
     private:
     
-        static VqApp*           s_app;
-        static VkInstance       s_instance;
+        friend class VqWindow;
     
-        AppInfo                 m_appInfo;
-        VkInstance              m_instance  = nullptr;
+        static VqApp*     s_app;
+        static VkInstance s_instance;
+    
+        AppInfo                             m_appInfo;
+        VkInstance                          m_instance  = nullptr;
+        bool                                m_glfw      = false;
+        std::vector<VkLayerProperties>      m_allLayerProps;
+        std::vector<VkExtensionProperties>  m_allExtensionProps;
+        std::set<std::string>               m_allLayerNames;
+        std::set<std::string>               m_allExtensionNames;
+        std::vector<const char*>            m_extensions;
+        std::vector<const char*>            m_layers;
 
-        void    init();
-        
+        bool    init();
+        void    deinit();
     };
 
 };

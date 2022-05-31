@@ -8,13 +8,11 @@
     Simple "demo" utilitiy
 */
 
-#include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
+#include <engine/vulqan/VqApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
-#include <engine/vulqan/VqGLFW.hpp>
-#include <engine/vulqan/VqInstance.hpp>
 #include <engine/vulqan/VqWindow.hpp>
 #include <iostream>
 
@@ -22,19 +20,13 @@ using namespace yq;
 
 int main(int argc, char* argv[])
 {
-    BasicApp cargs(argc, argv);
-    load_plugin_dir("plugin");
-    Meta::freeze();
-    
-    VqGLFW                  glfw;
-    
-    VqInstance::Info        vi;
+    AppInfo        vi;
     vi.app_name     = "im_demo";
     vi.engine_name  = "YQ";
-    
-    VqInstance instance(vi);
-    if(!instance.good())
-        return 0;
+
+    VqApp app(argc, argv, vi);
+    load_plugin_dir("plugin");
+    app.finalize();
     
     VqWindow::Info      wi;
     wi.title        = "ImGUI Demo!";

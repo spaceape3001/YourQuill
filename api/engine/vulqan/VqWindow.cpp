@@ -10,10 +10,9 @@
     https://vulkan-tutorial.com/
 */
 
+#include "VqApp.hpp"
 #include "VqWindow.hpp"
 #include "VqUtils.hpp"
-#include "VqInstance.hpp"
-#include "VqGLFW.hpp"
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
@@ -22,6 +21,9 @@
 
 #include <algorithm>
 #include <cassert>
+
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 namespace yq {
     void VqWindow::poll_events()
@@ -65,7 +67,7 @@ namespace yq {
         }
 
         if(m_surface){
-            vkDestroySurfaceKHR(VqInstance::vulkan(), m_surface, nullptr);
+            vkDestroySurfaceKHR(VqApp::instance(), m_surface, nullptr);
             m_surface  = nullptr;
         }
 
@@ -95,8 +97,9 @@ namespace yq {
     
     bool VqWindow::_init(const Info& i)
     {
-        const VqInstance*   inst    = VqInstance::singleton();
-        if(!VqInstance::initialized()){
+        VkInstance     inst  = VqApp::instance();
+        const VqApp*   app    = VqApp::app();
+        if(!inst){
             yCritical() << "Vulkan has not been initialized!";
             return false;
         }
@@ -146,9 +149,9 @@ namespace yq {
         dci.queueCreateInfoCount     = (uint32_t) qci.size();
         dci.pEnabledFeatures         = &df;
         
-        dci.enabledLayerCount        = (uint32_t) inst->m_layers.size();
+        dci.enabledLayerCount        = (uint32_t) app->m_layers.size();
         if(dci.enabledLayerCount)
-            dci.ppEnabledLayerNames  = inst->m_layers.data();
+            dci.ppEnabledLayerNames  = app->m_layers.data();
     
         dci.enabledExtensionCount    = (uint32_t) deviceExtensions.size();
         if(!deviceExtensions.empty())
@@ -246,7 +249,7 @@ namespace yq {
 
     bool VqWindow::_init_surface()
     {
-        if(glfwCreateWindowSurface(VqInstance::vulkan(), m_window, nullptr, &m_surface) != VK_SUCCESS){
+        if(glfwCreateWindowSurface(VqApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
             yCritical() << "Unable to create window surface!";
             return false;
         }

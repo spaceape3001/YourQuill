@@ -16,17 +16,15 @@
 //  Also it's about me developing the API in the first place .... :)
 
 
-#include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/Safety.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/shader/Shader.hpp>
+#include <engine/vulqan/VqApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFencePool.hpp>
-#include <engine/vulqan/VqGLFW.hpp>
-#include <engine/vulqan/VqInstance.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
 #include <engine/vulqan/VqShaderStages.hpp>
 #include <engine/vulqan/VqWindow.hpp>
@@ -36,8 +34,6 @@ using namespace yq;
 
 struct HelloApp {
     
-    VqGLFW              glfw;
-    VqInstance          instance;
     Ref<VqWindow>       window;
     ShaderPtr           vert, frag;
     VkPipelineLayout    pipelineLayout  = nullptr;
@@ -51,8 +47,6 @@ struct HelloApp {
     
     HelloApp()
     {
-        if(!instance.good())
-            throw std::runtime_error("Bad vulkan instance");
             
         VqWindow::Info      wi;
         wi.title        = "Hello WORLD!";
@@ -348,13 +342,11 @@ struct HelloApp {
 
 int main(int argc, char* argv[])
 {
-    BasicApp app(argc, argv);
+    VqApp app(argc, argv);
     load_plugin_dir("plugin");
-    Meta::freeze();
+    app.finalize();
     
     HelloApp        app2;
-    if(!app2.instance.good())
-        return 0;
     app2.run();
     
     std::cout << "Hello World!\n";

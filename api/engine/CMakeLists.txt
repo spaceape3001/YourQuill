@@ -32,10 +32,6 @@ set(yq_engine_sources
     ./vulqan/VqFence.hpp
     ./vulqan/VqFencePool.cpp
     ./vulqan/VqFencePool.hpp
-    ./vulqan/VqGLFW.cpp
-    ./vulqan/VqGLFW.hpp
-    ./vulqan/VqInstance.cpp
-    ./vulqan/VqInstance.hpp
     ./vulqan/VqMonitor.cpp
     ./vulqan/VqMonitor.hpp
     ./vulqan/VqShaderStages.cpp
