@@ -32,9 +32,20 @@
 
 using namespace yq;
 
+struct HelloWin : public VqWindow {
+    YQ_OBJECT_DECLARE(HelloWin, VqWindow)
+    
+    HelloWin(const WindowCreateInfo& wci) : VqWindow(wci)
+    {
+    }
+};
+
+YQ_OBJECT_IMPLEMENT(HelloWin)
+
+
 struct HelloApp {
     
-    Ref<VqWindow>       window;
+    Ref<HelloWin>       window;
     ShaderPtr           vert, frag;
     VkPipelineLayout    pipelineLayout  = nullptr;
     VkPipeline          graphicsPipeline = nullptr;
@@ -52,7 +63,7 @@ struct HelloApp {
         wi.title        = "Hello WORLD!";
         wi.resizable    = false;
         wi.size.x       = 1920;
-        window          = new VqWindow(wi);
+        window          = new HelloWin(wi);
         vert            = Shader::load("examples/hello/hello.vert");
         frag            = Shader::load("examples/hello/hello.frag");
         
@@ -96,17 +107,9 @@ struct HelloApp {
         inputAssembly.topology                  = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         inputAssembly.primitiveRestartEnable    = VK_FALSE;
         
-        VkViewport viewport{};
-        viewport.x = 0.0f;
-        viewport.y = 0.0f;
-        viewport.width = (float) window -> m_swapExtent.width;
-        viewport.height = (float) window -> m_swapExtent.height;
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
+        VkViewport viewport = window -> swap_def_viewport();
 
-        VkRect2D scissor{};
-        scissor.offset = {0, 0};
-        scissor.extent = window -> m_swapExtent;
+        VkRect2D scissor = window -> swap_def_scissor();
         
         VqPipelineViewportStateCreateInfo   viewportState{};
         viewportState.viewportCount = 1;
@@ -154,8 +157,7 @@ struct HelloApp {
         colorBlending.blendConstants[2] = 0.0f; // Optional
         colorBlending.blendConstants[3] = 0.0f; // Optional
 
-        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        VqPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.setLayoutCount = 0; // Optional
         pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
         pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
@@ -190,18 +192,18 @@ struct HelloApp {
     
     void createFrameBuffers() 
     {
-        swapChainFramebuffers.resize(window -> m_swapImageViews.size());
-        for (size_t i = 0; i < window -> m_swapImageViews.size(); i++) {
+        swapChainFramebuffers.resize(window -> m_swap.imageViews.size());
+        for (size_t i = 0; i < window -> m_swap.imageViews.size(); i++) {
             VkImageView attachments[] = {
-                window -> m_swapImageViews[i]
+                window -> m_swap.imageViews[i]
             };
 
             VqFramebufferCreateInfo framebufferInfo;
             framebufferInfo.renderPass = window->m_renderPass;
             framebufferInfo.attachmentCount = 1;
             framebufferInfo.pAttachments = attachments;
-            framebufferInfo.width = window->m_swapExtent.width;
-            framebufferInfo.height = window->m_swapExtent.height;
+            framebufferInfo.width = window->swap_width();
+            framebufferInfo.height = window->swap_height();
             framebufferInfo.layers = 1;
 
             if (vkCreateFramebuffer(window->m_device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
@@ -262,7 +264,7 @@ struct HelloApp {
         renderPassInfo.renderPass = window->m_renderPass;
         renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
         renderPassInfo.renderArea.offset = {0, 0};
-        renderPassInfo.renderArea.extent = window->m_swapExtent;
+        renderPassInfo.renderArea.extent = window->m_swap.extents;
 
         VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
         renderPassInfo.clearValueCount = 1;
@@ -280,7 +282,7 @@ struct HelloApp {
     {
         inFlightFence.wait_reset();
         uint32_t imageIndex = 0;
-        vkAcquireNextImageKHR(window->m_device, window->m_swapChain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+        vkAcquireNextImageKHR(window->m_device, window->m_swap.chain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
         vkResetCommandBuffer(commandBuffer, 0);
         recordCommandBuffer(commandBuffer, imageIndex);
         
@@ -318,7 +320,7 @@ struct HelloApp {
 
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores = signalSemaphores;
-        VkSwapchainKHR swapChains[] = {window->m_swapChain};
+        VkSwapchainKHR swapChains[] = {window->m_swap.chain};
         presentInfo.swapchainCount = 1;
         presentInfo.pSwapchains = swapChains;
         presentInfo.pImageIndices = &imageIndex;

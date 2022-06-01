@@ -63,11 +63,8 @@ namespace yq {
         }
     
         _destroy_renderpass();
-        _destroy_swapviews();
-        if(m_swapChain){
-            vkDestroySwapchainKHR(m_device, m_swapChain, nullptr);
-            m_swapChain = nullptr;
-        }
+        
+        m_swap.kill(this);
         
         if(m_device){
             vkDestroyDevice(m_device, nullptr);
@@ -95,13 +92,6 @@ namespace yq {
         }
     }
 
-    void VqWindow::_destroy_swapviews()
-    {
-        for(auto iv : m_swapImageViews){
-            vkDestroyImageView(m_device, iv, nullptr);
-        }
-        m_swapImageViews.clear();
-    }
     
     bool VqWindow::_init(const WindowCreateInfo& i)
     {
@@ -194,16 +184,14 @@ namespace yq {
         m_surfaceFormat.format      = VK_FORMAT_B8G8R8A8_SRGB;
         m_surfaceFormat.colorSpace  = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
     
-        if(!_init_swap())
-            return false;
-        if(!_init_swapviews())
-            return false;
+        m_swap.init(this);
             
         if(!_init_renderpass())
             return false;
             
         return true;
     }
+
 
     bool VqWindow::_init_physical(VkPhysicalDevice dev)
     {
@@ -263,93 +251,7 @@ namespace yq {
         }
         return true;
     }
-
-    bool VqWindow::_init_swap()
-    {
-        VkSurfaceCapabilitiesKHR    capabilities;
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &capabilities);
-        VkExtent2D                  extents;
-        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-            extents = capabilities.currentExtent;
-        } else {
-            int w, h;
-            glfwGetFramebufferSize(m_window, &w, &h);
-            extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-            extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
-        }
-        
-        uint32_t    imageCount    = capabilities.minImageCount + 1;
-        if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
-            imageCount = capabilities.maxImageCount;
-        }
-
-        VqSwapchainCreateInfoKHR    createInfo;
-        createInfo.surface          = m_surface;
-        createInfo.minImageCount    = imageCount;
-        createInfo.imageFormat      = m_surfaceFormat.format;
-        createInfo.imageColorSpace  = m_surfaceFormat.colorSpace;
-        createInfo.imageExtent      = extents;
-        createInfo.imageArrayLayers = 1;    // we're not steroscopic
-        createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-        
-        auto indices                = vqFindQueueFamilies(m_physical, m_surface);
-        uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
-
-        if (indices.graphicsFamily != indices.presentFamily) {
-            createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-            createInfo.queueFamilyIndexCount = 2;
-            createInfo.pQueueFamilyIndices = queueFamilyIndices;
-        } else {
-            createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            createInfo.queueFamilyIndexCount = 0; // Optional
-            createInfo.pQueueFamilyIndices = nullptr; // Optional
-        }        
-        createInfo.preTransform     = capabilities.currentTransform;
-        createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-        createInfo.presentMode      = m_presentMode;
-        createInfo.clipped          = VK_TRUE;
-        
-            // TEMPORARY UNTIL WE GET THE NEW ONE
-        createInfo.oldSwapchain = VK_NULL_HANDLE;
-        
-        if (vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &m_swapChain) != VK_SUCCESS){
-            yCritical() << "Failed to create the SWAP chain!";
-            return false;
-        }
-
-        vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, nullptr);
-        m_swapImages.resize(imageCount);
-        vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, m_swapImages.data());    
-        m_swapExtent    = extents;
-
-        return true;
-    }
-
-    bool    VqWindow::_init_swapviews()
-    {
-        bool    success = true;
-        m_swapImageViews.resize(m_swapImages.size());
-        for(size_t i=0;i<m_swapImages.size(); ++i){
-            VqImageViewCreateInfo   createInfo;
-            createInfo.image        = m_swapImages[i];
-            createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format       = m_surfaceFormat.format;
-            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            createInfo.subresourceRange.baseMipLevel = 0;
-            createInfo.subresourceRange.levelCount = 1;
-            createInfo.subresourceRange.baseArrayLayer = 0;
-            createInfo.subresourceRange.layerCount = 1;
-            if(vkCreateImageView(m_device, &createInfo, nullptr, &m_swapImageViews[i]) != VK_SUCCESS) {
-                success = false;
-                yCritical() << "Failed to create one of the Swap Image Viewers!";
-            }
-        }
-        return success;
-    }
+    
 
     bool    VqWindow::_init_window(const WindowCreateInfo&i)
     {
@@ -561,6 +463,26 @@ namespace yq {
         return ret;
     }
 
+    VkRect2D    VqWindow::swap_def_scissor() const
+    {
+        return m_swap.def_scissor();
+    }
+    
+    VkViewport  VqWindow::swap_def_viewport() const
+    {
+        return m_swap.def_viewport();
+    }
+
+    uint32_t    VqWindow::swap_height() const
+    {
+        return m_swap.extents.height;
+    }
+
+    uint32_t    VqWindow::swap_width() const
+    {
+        return m_swap.extents.width;
+    }
+    
     int  VqWindow::width() const
     {
         if(!m_window)
@@ -573,24 +495,134 @@ namespace yq {
 
     ////////////////////////////////////////////////////////////////////////////////
 
-        VqWindow::SwapChain::SwapChain(VqWindow*)
-        {
-        }
-        
-        VqWindow::SwapChain::~SwapChain()
-        {
-        }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-        VqWindow::RenderPass::RenderPass(VqWindow*)
-        {
-        }
+    VqWindow::RenderPass::RenderPass(VqWindow*)
+    {
+    }
+    
+    VqWindow::RenderPass::~RenderPass()
+    {
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    VkRect2D    VqWindow::SwapChain::def_scissor() const
+    {
+        VkRect2D    ret{};
+        ret.offset  = { 0, 0 };
+        ret.extent  = extents;
+        return ret;
+    }
+    
+    VkViewport  VqWindow::SwapChain::def_viewport() const
+    {
+        VkViewport  ret{};
+        ret.x = 0.0f;
+        ret.y = 0.0f;
+        ret.width = (float) extents.width;
+        ret.height = (float) extents.height;
+        ret.minDepth = 0.0f;
+        ret.maxDepth = 1.0f;
+        return ret;
+    }
         
-        VqWindow::RenderPass::~RenderPass()
-        {
+    bool    VqWindow::SwapChain::init(VqWindow* win)
+    {
+        VkSurfaceCapabilitiesKHR    capabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(win->m_physical, win->m_surface, &capabilities);
+        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+            extents = capabilities.currentExtent;
+        } else {
+            int w, h;
+            glfwGetFramebufferSize(win->m_window, &w, &h);
+            extents = {};
+            extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+            extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
         }
 
+        
+        uint32_t    imageCount    = capabilities.minImageCount + 1;
+        if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
+            imageCount = capabilities.maxImageCount;
+        }
+
+        VqSwapchainCreateInfoKHR    createInfo;
+        createInfo.surface          = win->m_surface;
+        createInfo.minImageCount    = imageCount;
+        createInfo.imageFormat      = win->m_surfaceFormat.format;
+        createInfo.imageColorSpace  = win->m_surfaceFormat.colorSpace;
+        createInfo.imageExtent      = extents;
+        createInfo.imageArrayLayers = 1;    // we're not steroscopic
+        createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        
+        auto indices                = vqFindQueueFamilies(win->m_physical, win->m_surface);
+        uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
+
+        if (indices.graphicsFamily != indices.presentFamily) {
+            createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+            createInfo.queueFamilyIndexCount = 2;
+            createInfo.pQueueFamilyIndices = queueFamilyIndices;
+        } else {
+            createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            createInfo.queueFamilyIndexCount = 0; // Optional
+            createInfo.pQueueFamilyIndices = nullptr; // Optional
+        }        
+        createInfo.preTransform     = capabilities.currentTransform;
+        createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        createInfo.presentMode      = win->m_presentMode;
+        createInfo.clipped          = VK_TRUE;
+        
+            // TEMPORARY UNTIL WE GET THE NEW ONE
+        createInfo.oldSwapchain = VK_NULL_HANDLE;
+        
+        if (vkCreateSwapchainKHR(win->m_device, &createInfo, nullptr, &chain) != VK_SUCCESS){
+            chain   = nullptr;
+            yCritical() << "Failed to create the SWAP chain!";
+            return false;
+        }
+
+        vkGetSwapchainImagesKHR(win->m_device, chain, &imageCount, nullptr);
+        images.resize(imageCount);
+        vkGetSwapchainImagesKHR(win->m_device, chain, &imageCount, images.data());    
+
+        imageViews.resize(images.size(), nullptr);
+        for(size_t i=0;i<images.size(); ++i){
+            VqImageViewCreateInfo   createInfo;
+            createInfo.image        = images[i];
+            createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
+            createInfo.format       = win->m_surfaceFormat.format;
+            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            createInfo.subresourceRange.baseMipLevel = 0;
+            createInfo.subresourceRange.levelCount = 1;
+            createInfo.subresourceRange.baseArrayLayer = 0;
+            createInfo.subresourceRange.layerCount = 1;
+            if(vkCreateImageView(win->m_device, &createInfo, nullptr, &imageViews[i]) != VK_SUCCESS) {
+                yCritical() << "Failed to create one of the Swap Image Viewers!";
+            }
+        }
+        
+        return true;
+    }
+    
+    void    VqWindow::SwapChain::kill(VqWindow* win)
+    {
+        for(auto iv : imageViews){
+            if(iv)
+                vkDestroyImageView(win->m_device, iv, nullptr);
+        }
+        imageViews.clear();
+        if(chain){
+            vkDestroySwapchainKHR(win->m_device, chain, nullptr);
+            chain  = nullptr;
+        }
+    }
+    
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
     

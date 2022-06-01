@@ -23,6 +23,11 @@ namespace yq {
     class VqPipeline;
     class VqInstance;
     
+    struct Pipeline {
+        VkPipeline          pipeline    = nullptr;
+        VkPipelineLayout    layout      = nullptr;
+    };
+    
     
     struct WindowCreateInfo {
         VkPhysicalDevice    device   = nullptr;
@@ -69,6 +74,9 @@ friend struct HelloApp;
         VqWindow(const WindowCreateInfo& i = WindowCreateInfo());
         
         ~VqWindow();
+        
+        Pipeline            make_pipeline(const PipelineConfig&);
+        
 
             //! Calls user's attention to window
         void                attention();
@@ -162,10 +170,16 @@ friend struct HelloApp;
             //! Window size
         Size2I              size() const;
         
-        const VkExtent2D&   swap_extent() const { return m_swapExtent; }
+        //const VkExtent2D&   swap_extent() const { return m_swapExtent; }
         
             //! The Vulkan surface
         VkSurfaceKHR        surface() const { return m_surface; }
+        
+        uint32_t            swap_width() const;
+        uint32_t            swap_height() const;
+        
+        VkRect2D            swap_def_scissor() const;
+        VkViewport          swap_def_viewport() const;
         
             //! Width of the window
         int                 width() const;
@@ -179,7 +193,6 @@ friend struct HelloApp;
         friend class VqPipeline;
         friend struct HelloApp;
         
-        struct SwapChain;
         struct RenderPass;
         struct FrameBuffers;
         struct Command;
@@ -209,30 +222,26 @@ friend struct HelloApp;
         VkPresentModeKHR            m_presentMode;
         VkSurfaceFormatKHR          m_surfaceFormat;
         
-        std::unique_ptr<SwapChain>  m_swap;
+        struct SwapChain {
+            VkSwapchainKHR              chain = nullptr;
+            VkExtent2D                  extents  = { 0, 0 };
+            std::vector<VkImage>        images;
+            std::vector<VkImageView>    imageViews;
+            
+            bool    init(VqWindow*);
+            void    kill(VqWindow*);
+            VkRect2D    def_scissor() const;
+            VkViewport  def_viewport() const;
+        };
+        
+        SwapChain                   m_swap;
+        
+        
         std::unique_ptr<RenderPass> m_render;
         
-        //SwapChain                   m_swap;
-        
-        VkSwapchainKHR              m_swapChain     = nullptr;
-        VkExtent2D                  m_swapExtent    = { 0, 0 };
-        std::vector<VkImage>        m_swapImages;
-        std::vector<VkImageView>    m_swapImageViews;
         VkRenderPass                m_renderPass    = nullptr;
     };
 
-    
-
-    struct VqWindow::SwapChain {
-        VkDevice                device  = nullptr;
-        VkSwapchainKHR          chain   = nullptr;
-        VkExtent2D              extent  = { 0, 0 };
-        std::vector<VkImage>    images;
-        std::vector<VkImage>    imageViews;
-        
-        SwapChain(VqWindow*);
-        ~SwapChain();
-    };
     
     struct VqWindow::RenderPass {
         VkDevice                device  = nullptr;
