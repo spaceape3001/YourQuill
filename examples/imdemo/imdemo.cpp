@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     load_plugin_dir("plugin");
     app.finalize();
     
-    VqWindow::Info      wi;
+    WindowCreateInfo      wi;
     wi.title        = "ImGUI Demo!";
     Ref<VqWindow>   window  = new VqWindow(wi);
     

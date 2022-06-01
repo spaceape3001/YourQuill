@@ -16,6 +16,7 @@
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vec2.hpp>
 
@@ -25,15 +26,22 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
+YQ_OBJECT_IMPLEMENT(yq::VqWindow)
+
 namespace yq {
     void VqWindow::poll_events()
     {
         glfwPollEvents();
     }
     
+    VqWindowInfo::VqWindowInfo(std::string_view kname, ObjectInfo& base, const std::source_location& sl) :
+        ObjectInfo(kname, base, sl)
+    {
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
 
-    VqWindow::VqWindow(const Info&i)
+    VqWindow::VqWindow(const WindowCreateInfo&i)
     {
         _init(i);
     }
@@ -45,25 +53,25 @@ namespace yq {
 
     void VqWindow::_deinit()
     {
-        if(m_logical){
-            vkDeviceWaitIdle(m_logical);
+        if(m_device){
+            vkDeviceWaitIdle(m_device);
         }
     
         if(m_renderPass){
-            vkDestroyRenderPass(m_logical, m_renderPass, nullptr);
+            vkDestroyRenderPass(m_device, m_renderPass, nullptr);
             m_renderPass    = nullptr;
         }
     
         _destroy_renderpass();
         _destroy_swapviews();
         if(m_swapChain){
-            vkDestroySwapchainKHR(m_logical, m_swapChain, nullptr);
+            vkDestroySwapchainKHR(m_device, m_swapChain, nullptr);
             m_swapChain = nullptr;
         }
         
-        if(m_logical){
-            vkDestroyDevice(m_logical, nullptr);
-            m_logical   = nullptr;
+        if(m_device){
+            vkDestroyDevice(m_device, nullptr);
+            m_device   = nullptr;
         }
 
         if(m_surface){
@@ -82,7 +90,7 @@ namespace yq {
     void VqWindow::_destroy_renderpass()
     {
         if(m_renderPass){
-            vkDestroyRenderPass(m_logical, m_renderPass, nullptr);
+            vkDestroyRenderPass(m_device, m_renderPass, nullptr);
             m_renderPass    = nullptr;
         }
     }
@@ -90,12 +98,12 @@ namespace yq {
     void VqWindow::_destroy_swapviews()
     {
         for(auto iv : m_swapImageViews){
-            vkDestroyImageView(m_logical, iv, nullptr);
+            vkDestroyImageView(m_device, iv, nullptr);
         }
         m_swapImageViews.clear();
     }
     
-    bool VqWindow::_init(const Info& i)
+    bool VqWindow::_init(const WindowCreateInfo& i)
     {
         VkInstance     inst  = VqApp::instance();
         const VqApp*   app    = VqApp::app();
@@ -157,7 +165,7 @@ namespace yq {
         if(!deviceExtensions.empty())
             dci.ppEnabledExtensionNames = deviceExtensions.data();
         
-        if(vkCreateDevice(m_physical, &dci, nullptr, &m_logical) != VK_SUCCESS){
+        if(vkCreateDevice(m_physical, &dci, nullptr, &m_device) != VK_SUCCESS){
             yCritical() << "Unable to create logical device!";
             _deinit();
             return false;
@@ -166,8 +174,8 @@ namespace yq {
             /*
                 Graphics queues
             */
-        vkGetDeviceQueue(m_logical, queueInfos.graphicsFamily.value(), 0, &m_graphicsQueue);
-        vkGetDeviceQueue(m_logical, queueInfos.presentFamily.value(), 0, &m_presentQueue);
+        vkGetDeviceQueue(m_device, queueInfos.graphicsFamily.value(), 0, &m_graphicsQueue);
+        vkGetDeviceQueue(m_device, queueInfos.presentFamily.value(), 0, &m_presentQueue);
         
     
         auto    pmodes              = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
@@ -239,7 +247,7 @@ namespace yq {
         renderPassInfo.subpassCount = 1;
         renderPassInfo.pSubpasses = &subpass;
 
-        if (vkCreateRenderPass(m_logical, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) {
+        if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) {
             yCritical() << "Unable to create the render pass!";
             return false;
         } else
@@ -304,14 +312,14 @@ namespace yq {
             // TEMPORARY UNTIL WE GET THE NEW ONE
         createInfo.oldSwapchain = VK_NULL_HANDLE;
         
-        if (vkCreateSwapchainKHR(m_logical, &createInfo, nullptr, &m_swapChain) != VK_SUCCESS){
+        if (vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &m_swapChain) != VK_SUCCESS){
             yCritical() << "Failed to create the SWAP chain!";
             return false;
         }
 
-        vkGetSwapchainImagesKHR(m_logical, m_swapChain, &imageCount, nullptr);
+        vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, nullptr);
         m_swapImages.resize(imageCount);
-        vkGetSwapchainImagesKHR(m_logical, m_swapChain, &imageCount, m_swapImages.data());    
+        vkGetSwapchainImagesKHR(m_device, m_swapChain, &imageCount, m_swapImages.data());    
         m_swapExtent    = extents;
 
         return true;
@@ -335,7 +343,7 @@ namespace yq {
             createInfo.subresourceRange.levelCount = 1;
             createInfo.subresourceRange.baseArrayLayer = 0;
             createInfo.subresourceRange.layerCount = 1;
-            if(vkCreateImageView(m_logical, &createInfo, nullptr, &m_swapImageViews[i]) != VK_SUCCESS) {
+            if(vkCreateImageView(m_device, &createInfo, nullptr, &m_swapImageViews[i]) != VK_SUCCESS) {
                 success = false;
                 yCritical() << "Failed to create one of the Swap Image Viewers!";
             }
@@ -343,7 +351,7 @@ namespace yq {
         return success;
     }
 
-    bool    VqWindow::_init_window(const Info&i)
+    bool    VqWindow::_init_window(const WindowCreateInfo&i)
     {
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_FLOATING, i.floating ? GLFW_TRUE : GLFW_FALSE);
@@ -360,6 +368,7 @@ namespace yq {
         return true;
     }
     
+
     ////////////////////////////////////////////////////////////////////////////////
 
     void VqWindow::attention()
@@ -561,4 +570,33 @@ namespace yq {
         glfwGetWindowSize(m_window, &ret, nullptr);
         return ret;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+        VqWindow::SwapChain::SwapChain(VqWindow*)
+        {
+        }
+        
+        VqWindow::SwapChain::~SwapChain()
+        {
+        }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+        VqWindow::RenderPass::RenderPass(VqWindow*)
+        {
+        }
+        
+        VqWindow::RenderPass::~RenderPass()
+        {
+        }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    YQ_INVOKE(
+        writer<VqWindow>();
+    )
 }
+
+

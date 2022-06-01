@@ -48,7 +48,7 @@ struct HelloApp {
     HelloApp()
     {
             
-        VqWindow::Info      wi;
+        WindowCreateInfo      wi;
         wi.title        = "Hello WORLD!";
         wi.resizable    = false;
         wi.size.x       = 1920;
@@ -70,16 +70,16 @@ struct HelloApp {
     
     ~HelloApp()
     {
-        vkDestroySemaphore(window->m_logical, imageAvailableSemaphore, nullptr);
-        vkDestroySemaphore(window->m_logical, renderFinishedSemaphore, nullptr);
+        vkDestroySemaphore(window->m_device, imageAvailableSemaphore, nullptr);
+        vkDestroySemaphore(window->m_device, renderFinishedSemaphore, nullptr);
         inFlightFence   = {};
-        vkDestroyCommandPool(window->m_logical, commandPool, nullptr);
+        vkDestroyCommandPool(window->m_device, commandPool, nullptr);
         for (auto framebuffer : swapChainFramebuffers) {
-            vkDestroyFramebuffer(window->m_logical, framebuffer, nullptr);
+            vkDestroyFramebuffer(window->m_device, framebuffer, nullptr);
         }
 
-        vkDestroyPipeline(window->m_logical, graphicsPipeline, nullptr);
-        vkDestroyPipelineLayout(window->m_logical, pipelineLayout, nullptr);
+        vkDestroyPipeline(window->m_device, graphicsPipeline, nullptr);
+        vkDestroyPipelineLayout(window->m_device, pipelineLayout, nullptr);
     }
     
     void    createGraphicsPipeline()
@@ -161,7 +161,7 @@ struct HelloApp {
         pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
         pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
-        if (vkCreatePipelineLayout(window->m_logical, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
+        if (vkCreatePipelineLayout(window->m_device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
             throw std::runtime_error("failed to create pipeline layout!");
         }
 
@@ -182,7 +182,7 @@ struct HelloApp {
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
         pipelineInfo.basePipelineIndex = -1; // Optional        
 
-        if (vkCreateGraphicsPipelines(window -> m_logical, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+        if (vkCreateGraphicsPipelines(window -> m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
 
@@ -204,7 +204,7 @@ struct HelloApp {
             framebufferInfo.height = window->m_swapExtent.height;
             framebufferInfo.layers = 1;
 
-            if (vkCreateFramebuffer(window->m_logical, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+            if (vkCreateFramebuffer(window->m_device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
                 throw std::runtime_error("failed to create framebuffer!");
             }
         }    
@@ -217,7 +217,7 @@ struct HelloApp {
         VqCommandPoolCreateInfo poolInfo;
         poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
         poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
-        if (vkCreateCommandPool(window->m_logical, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
+        if (vkCreateCommandPool(window->m_device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
             throw std::runtime_error("failed to create command pool!");
         }
     }
@@ -229,7 +229,7 @@ struct HelloApp {
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocInfo.commandBufferCount = 1;
 
-        if (vkAllocateCommandBuffers(window->m_logical, &allocInfo, &commandBuffer) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(window->m_device, &allocInfo, &commandBuffer) != VK_SUCCESS) {
             throw std::runtime_error("failed to allocate command buffers!");
         }
     }
@@ -238,8 +238,8 @@ struct HelloApp {
     {
         VqSemaphoreCreateInfo   semaphoreInfo;
         
-        if (vkCreateSemaphore(window->m_logical, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
-            vkCreateSemaphore(window->m_logical, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS) {
+        if (vkCreateSemaphore(window->m_device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
+            vkCreateSemaphore(window->m_device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS) {
             throw std::runtime_error("failed to create semaphores!");
         }
         
@@ -280,7 +280,7 @@ struct HelloApp {
     {
         inFlightFence.wait_reset();
         uint32_t imageIndex = 0;
-        vkAcquireNextImageKHR(window->m_logical, window->m_swapChain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+        vkAcquireNextImageKHR(window->m_device, window->m_swapChain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
         vkResetCommandBuffer(commandBuffer, 0);
         recordCommandBuffer(commandBuffer, imageIndex);
         
@@ -333,7 +333,7 @@ struct HelloApp {
             drawFrame();
         }
         
-        vkDeviceWaitIdle(window->m_logical);
+        vkDeviceWaitIdle(window->m_device);
     }
 };
 

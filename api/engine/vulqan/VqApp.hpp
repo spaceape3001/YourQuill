@@ -52,6 +52,7 @@ namespace yq {
         
         static VqApp*           app() { return s_app; }
         static VkInstance       instance();
+        const AppInfo&          app_info() const { return m_appInfo; }
         
     private:
     
