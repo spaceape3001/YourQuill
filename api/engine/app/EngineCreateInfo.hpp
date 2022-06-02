@@ -8,7 +8,7 @@
 
 #include "Required.hpp"
 #include <basic/DbgRel.hpp>
-#include <cstdint.hpp>
+#include <cstdint>
 #include <string>
 
 namespace yq {
@@ -31,7 +31,7 @@ namespace yq {
         uint32_t        vulkan_api      = 0;
         
         //! Add KHRONOS validation layer
-        Required        validation      = YQ_DBGREL( Required::YES, Required::NO);
+        Required        validation      = YQ_DBGREL( Required::Yes, Required::No);
         
         
         EngineCreateInfo(){}

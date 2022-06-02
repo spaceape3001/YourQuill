@@ -11,7 +11,7 @@
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
-#include <engine/vulqan/VqApp.hpp>
+#include <engine/app/EngineApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqWindow.hpp>
 #include <iostream>
@@ -20,11 +20,11 @@ using namespace yq;
 
 int main(int argc, char* argv[])
 {
-    AppInfo        vi;
+    EngineCreateInfo        vi;
     vi.app_name     = "im_demo";
     vi.engine_name  = "YQ";
 
-    VqApp app(argc, argv, vi);
+    EngineApp app(argc, argv, vi);
     load_plugin_dir("plugin");
     app.finalize();
     

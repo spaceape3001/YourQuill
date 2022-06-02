@@ -5,6 +5,12 @@ endif()
 set(yq_engine_sources
     ${engine_test_source}
     
+    ./app/EngineApp.cpp
+    ./app/EngineApp.hpp
+    ./app/EngineAppImpl.hpp
+    ./app/EngineCreateInfo.hpp
+    ./app/Required.hpp
+    
     ./asset/Asset.cpp
     ./asset/Asset.hpp
     ./asset/AssetCache.hpp
@@ -25,8 +31,8 @@ set(yq_engine_sources
     ./texture/TextureLoader.hpp
     ./texture/TextureInfoWriter.hpp
     
-    ./vulqan/VqApp.cpp
-    ./vulqan/VqApp.cpp
+#    ./vulqan/VqApp.cpp
+#    ./vulqan/VqApp.cpp
     ./vulqan/VqEnums.cpp
     ./vulqan/VqFence.cpp
     ./vulqan/VqFence.hpp

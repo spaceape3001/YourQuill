@@ -21,7 +21,7 @@
 #include <basic/Safety.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/shader/Shader.hpp>
-#include <engine/vulqan/VqApp.hpp>
+#include <engine/app/EngineApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFencePool.hpp>
@@ -344,7 +344,8 @@ struct HelloApp {
 
 int main(int argc, char* argv[])
 {
-    VqApp app(argc, argv);
+    EngineCreateInfo        vi;
+    EngineApp app(argc, argv, vi);
     load_plugin_dir("plugin");
     app.finalize();
     

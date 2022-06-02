@@ -22,6 +22,7 @@ namespace yq {
     
     class VqPipeline;
     class VqInstance;
+    struct PipelineConfig;
     
     struct Pipeline {
         VkPipeline          pipeline    = nullptr;

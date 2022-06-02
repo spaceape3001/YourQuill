@@ -10,10 +10,11 @@
     https://vulkan-tutorial.com/
 */
 
-#include "VqApp.hpp"
 #include "VqWindow.hpp"
 #include "VqUtils.hpp"
 
+#include <engine/app/EngineApp.hpp>
+#include <engine/app/EngineAppImpl.hpp>
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
@@ -72,7 +73,7 @@ namespace yq {
         }
 
         if(m_surface){
-            vkDestroySurfaceKHR(VqApp::instance(), m_surface, nullptr);
+            vkDestroySurfaceKHR(EngineApp::instance(), m_surface, nullptr);
             m_surface  = nullptr;
         }
 
@@ -95,12 +96,14 @@ namespace yq {
     
     bool VqWindow::_init(const WindowCreateInfo& i)
     {
-        VkInstance     inst  = VqApp::instance();
-        const VqApp*   app    = VqApp::app();
+        VkInstance     inst  = EngineApp::instance();
         if(!inst){
             yCritical() << "Vulkan has not been initialized!";
             return false;
         }
+        const EngineApp*   appapp    = EngineApp::app();
+        const EngineApp::Impl*  app = appapp->m.get();
+        
         
         if(!_init_physical(i.device))
             return false;
@@ -147,9 +150,9 @@ namespace yq {
         dci.queueCreateInfoCount     = (uint32_t) qci.size();
         dci.pEnabledFeatures         = &df;
         
-        dci.enabledLayerCount        = (uint32_t) app->m_layers.size();
+        dci.enabledLayerCount        = (uint32_t) app->layers.size();
         if(dci.enabledLayerCount)
-            dci.ppEnabledLayerNames  = app->m_layers.data();
+            dci.ppEnabledLayerNames  = app->layers.data();
     
         dci.enabledExtensionCount    = (uint32_t) deviceExtensions.size();
         if(!deviceExtensions.empty())
@@ -245,7 +248,7 @@ namespace yq {
 
     bool VqWindow::_init_surface()
     {
-        if(glfwCreateWindowSurface(VqApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
+        if(glfwCreateWindowSurface(EngineApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
             yCritical() << "Unable to create window surface!";
             return false;
         }
