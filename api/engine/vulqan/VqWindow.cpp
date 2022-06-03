@@ -208,6 +208,16 @@ namespace yq {
             kill();
             return false;
         }
+        
+        if(!m_command.init(this)){
+            kill();
+            return false;
+        }
+            
+        if(!m_sync.init(this)){
+            kill();
+            return false;
+        }
             
         return true;
     }
@@ -218,7 +228,9 @@ namespace yq {
         if(m_device){
             vkDeviceWaitIdle(m_device);
         }
-    
+
+        m_sync.kill(this);
+        m_command.kill(this);
         m_frameBuffers.kill(this);
         m_renderPass.kill(this);
         m_swapChain.kill(this);
@@ -241,6 +253,39 @@ namespace yq {
         m_physical = nullptr;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+
+    bool VqWindow::Command::init(VqWindow* win)
+    {
+        VqQueueFamilyIndices queueFamilyIndices = vqFindQueueFamilies(win->m_physical, win->m_surface);
+
+        VqCommandPoolCreateInfo poolInfo;
+        poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+        if (vkCreateCommandPool(win->m_device, &poolInfo, nullptr, &pool) != VK_SUCCESS) {
+            yError() << "Failed to create command pool!";
+            return false;
+        }
+
+        VqCommandBufferAllocateInfo allocInfo;
+        allocInfo.commandPool = pool;
+        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocInfo.commandBufferCount = 1;
+
+        if (vkAllocateCommandBuffers(win->m_device, &allocInfo, &buffer) != VK_SUCCESS) {
+            yError () << "Failed to allocate command buffers!";
+            return false;
+        }
+        return true;
+    }
+    
+    void VqWindow::Command::kill(VqWindow* win)
+    {
+        if(pool){
+            vkDestroyCommandPool(win->m_device, pool, nullptr);
+            pool    = nullptr;
+        }
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -554,6 +599,130 @@ namespace yq {
             handle  = nullptr;
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    bool VqWindow::Sync::init(VqWindow* win)
+    {
+        VqSemaphoreCreateInfo   semaphoreInfo;
+        
+        if (vkCreateSemaphore(win->m_device, &semaphoreInfo, nullptr, &imageAvailable) != VK_SUCCESS ||
+            vkCreateSemaphore(win->m_device, &semaphoreInfo, nullptr, &renderFinished) != VK_SUCCESS) {
+            
+            yError() << "Failed to create semaphores!";
+            return false;
+        }
+        
+        inFlightFence   = VqFence(*win);
+        if(!inFlightFence.good()){
+            yError() << "Failed to create semaphores!";
+            return false;
+        }
+        return true;
+    }
+    
+    void VqWindow::Sync::kill(VqWindow* win)
+    {
+        if(imageAvailable){
+            vkDestroySemaphore(win->m_device, imageAvailable, nullptr);
+            imageAvailable  = nullptr;
+        }
+        if(renderFinished){
+            vkDestroySemaphore(win->m_device, renderFinished, nullptr);
+            renderFinished  = nullptr;
+        }
+        inFlightFence   = {};
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+
+    bool    VqWindow::record(VkCommandBuffer commandBuffer, uint32_t imageIndex)
+    {
+        VqCommandBufferBeginInfo beginInfo;
+        beginInfo.flags = 0; // Optional
+        beginInfo.pInheritanceInfo = nullptr; // Optional
+
+        if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+            yError() << "Failed to begin recording command buffer!";
+            return false;
+        }
+
+        VqRenderPassBeginInfo renderPassInfo;
+        renderPassInfo.renderPass = m_renderPass.handle;
+        renderPassInfo.framebuffer = m_frameBuffers.buffers[imageIndex];
+        renderPassInfo.renderArea.offset = {0, 0};
+        renderPassInfo.renderArea.extent = m_swapChain.extents;
+
+        VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
+        renderPassInfo.clearValueCount = 1;
+        renderPassInfo.pClearValues = &clearColor;
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    
+        draw(commandBuffer);
+
+        vkCmdEndRenderPass(commandBuffer);
+
+        if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+            yError() << "Failed to record command buffer!";
+            return false;
+        }
+        return true;
+    }
+    
+    bool    VqWindow::draw_frame()
+    {
+        m_sync.inFlightFence.wait_reset();
+        uint32_t imageIndex = 0;
+        vkAcquireNextImageKHR(m_device, m_swapChain.handle, UINT64_MAX, m_sync.imageAvailable, VK_NULL_HANDLE, &imageIndex);
+        vkResetCommandBuffer(m_command.buffer, 0);
+        
+        if(!record(m_command.buffer, imageIndex))
+            return false;
+        
+        VqSubmitInfo submitInfo;
+
+        VkSemaphore waitSemaphores[] = {m_sync.imageAvailable};
+        VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = waitSemaphores;
+        submitInfo.pWaitDstStageMask = waitStages;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &m_command.buffer;
+
+        VkSemaphore signalSemaphores[] = {m_sync.renderFinished};
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = signalSemaphores;
+
+        if (vkQueueSubmit(m_graphicsQueue, 1, &submitInfo, m_sync.inFlightFence) != VK_SUCCESS) {
+            yError() << "Failed to submit draw command buffer!";
+            return false;
+        }
+            
+        VkSubpassDependency dependency{};
+        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        dependency.dstSubpass = 0;
+        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.srcAccessMask = 0;
+        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        
+        VqRenderPassCreateInfo renderPassInfo;
+        renderPassInfo.dependencyCount = 1;
+        renderPassInfo.pDependencies = &dependency;
+
+        VqPresentInfoKHR presentInfo;
+
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = signalSemaphores;
+        VkSwapchainKHR swapChains[] = {m_swapChain.handle};
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = swapChains;
+        presentInfo.pImageIndices = &imageIndex;
+        presentInfo.pResults = nullptr; // Optional
+        vkQueuePresentKHR(m_presentQueue, &presentInfo);
+        return true;
+    }
+    
     
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////

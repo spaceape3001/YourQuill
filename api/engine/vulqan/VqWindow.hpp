@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "VqFence.hpp"
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
 #include <basic/trait/not_copyable.hpp>
@@ -21,11 +22,8 @@ struct HelloApp;
 struct GLFWwindow;
 
 namespace yq {
-    
-    class VqPipeline;
-    class VqInstance;
+
     struct PipelineConfig;
-    
     
     struct WindowCreateInfo {
         VkPhysicalDevice    device   = nullptr;
@@ -183,20 +181,20 @@ friend struct HelloApp;
 
             //! GLFW window handle
         GLFWwindow*         window() const { return m_window; }
-
-    //protected:
-        virtual void        draw(VkCommandBuffer){}
-    
-    //private:
         
-        friend class VqPipeline;
-        friend struct HelloApp;
+        bool                draw_frame();
+
+    protected:
+        virtual void        draw(VkCommandBuffer){}
+        struct Pipeline;
+    
+    private:
         
         struct Command;
-        struct Pipeline;
 
         bool    init(const WindowCreateInfo& i);
         void    kill();
+        bool    record(VkCommandBuffer, uint32_t);
         
         VkPhysicalDevice            m_physical      = nullptr;
         GLFWwindow*                 m_window        = nullptr;
@@ -248,7 +246,19 @@ friend struct HelloApp;
         };
         
         Command                     m_command;
-        VkPipeline                  m_lastPipeline  = nullptr;
+        
+        struct Sync {
+            VkSemaphore         imageAvailable;
+            VkSemaphore         renderFinished;
+            VqFence             inFlightFence;
+
+            bool                    init(VqWindow*);
+            void                    kill(VqWindow*);
+        };
+        
+        Sync                        m_sync;
+        
+        //VkPipeline                  m_lastPipeline  = nullptr;
     };
     
     struct VqWindow::Pipeline {
