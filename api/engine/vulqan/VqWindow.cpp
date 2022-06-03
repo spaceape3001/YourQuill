@@ -149,6 +149,9 @@ namespace yq {
             info.pQueuePriorities    = &quePri;
             qci.push_back(info);
         }
+
+        m_graphicsQueueFamily        = queueInfos.graphicsFamily.value();
+
     
         VkPhysicalDeviceFeatures    df{};
         VqDeviceCreateInfo          dci;
@@ -283,6 +286,7 @@ namespace yq {
     
     void VqWindow::Command::kill(VqWindow* win)
     {
+        buffer  = nullptr;
         if(pool){
             vkDestroyCommandPool(win->m_device, pool, nullptr);
             pool    = nullptr;
@@ -522,7 +526,10 @@ namespace yq {
         }
 
         
-        uint32_t    imageCount    = capabilities.minImageCount + 1;
+        minImageCount               = capabilities.minImageCount;
+        if(minImageCount < 2)
+            minImageCount   = 2;
+        imageCount                  = minImageCount + 1;
         if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
             imageCount = capabilities.maxImageCount;
         }
@@ -538,7 +545,6 @@ namespace yq {
         
         auto indices                = vqFindQueueFamilies(win->m_physical, win->m_surface);
         uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
-
         if (indices.graphicsFamily != indices.presentFamily) {
             createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
             createInfo.queueFamilyIndexCount = 2;
@@ -659,7 +665,7 @@ namespace yq {
         renderPassInfo.pClearValues = &m_clear;
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     
-        draw(commandBuffer);
+        draw_vulqan(commandBuffer);
 
         vkCmdEndRenderPass(commandBuffer);
 
@@ -670,7 +676,7 @@ namespace yq {
         return true;
     }
     
-    bool    VqWindow::draw_frame()
+    bool    VqWindow::draw()
     {
         m_sync.inFlightFence.wait_reset();
         uint32_t imageIndex = 0;
@@ -738,6 +744,16 @@ namespace yq {
     {
         if(m_window)
             glfwSetWindowShouldClose(m_window, GLFW_TRUE);
+    }
+
+    VkCommandBuffer     VqWindow::command_buffer() const
+    {
+        return m_command.buffer;
+    }
+
+    VkCommandPool       VqWindow::command_pool() const
+    {
+        return m_command.pool;
     }
 
     void VqWindow::focus()
@@ -854,6 +870,12 @@ namespace yq {
         return ret;
     }
 
+
+    VkRenderPass VqWindow::render_pass() const
+    {
+        return m_renderPass.handle;
+    }
+
     void        VqWindow::restore()
     {
         if(m_window)
@@ -933,9 +955,19 @@ namespace yq {
         return m_swapChain.def_viewport();
     }
 
+    uint32_t    VqWindow::swap_image_count() const
+    {
+        return m_swapChain.imageCount;
+    }
+
     uint32_t    VqWindow::swap_height() const
     {
         return m_swapChain.extents.height;
+    }
+
+    uint32_t    VqWindow::swap_min_image_count() const
+    {
+        return m_swapChain.minImageCount;
     }
 
     uint32_t    VqWindow::swap_width() const

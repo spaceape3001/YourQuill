@@ -82,6 +82,7 @@ namespace yq {
         std::set<std::string>               m_allExtensionNames;
         std::vector<const char*>            m_extensions;
         std::vector<const char*>            m_layers;
+        VkDebugReportCallbackEXT            m_debug     = nullptr;
         
         bool        init();
         void        kill();

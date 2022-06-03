@@ -84,6 +84,10 @@ namespace yq {
         
         VkColorSpaceKHR     color_space() const { return m_surfaceFormat.colorSpace; }
         
+        VkCommandBuffer     command_buffer() const;
+        
+        VkCommandPool       command_pool() const;
+        
         VkDevice            device() const { return m_device; }
 
             //! Brings window to front & input focus
@@ -93,6 +97,10 @@ namespace yq {
 
             //! Good & initialized window
         bool                good() const { return m_window != nullptr; }
+        
+        VkQueue             graphics_queue() const { return m_graphicsQueue; }
+        
+        uint32_t            graphics_queue_family() const { return m_graphicsQueueFamily; }
 
             //! Height of the window
         int                 height() const;
@@ -138,6 +146,8 @@ namespace yq {
             //! Current window position
         Vec2I               position() const;
         
+        VkRenderPass        render_pass() const;
+        
             //! Restores the window to non-fullscreen/iconify
         void                restore();
 
@@ -176,11 +186,17 @@ namespace yq {
             //! The Vulkan surface
         VkSurfaceKHR        surface() const { return m_surface; }
         
+        VkRect2D            swap_def_scissor() const;
+        
+        VkViewport          swap_def_viewport() const;
+
+        uint32_t            swap_image_count() const;
+        uint32_t            swap_min_image_count() const;
+
         uint32_t            swap_width() const;
+        
         uint32_t            swap_height() const;
         
-        VkRect2D            swap_def_scissor() const;
-        VkViewport          swap_def_viewport() const;
         
             //! Width of the window
         int                 width() const;
@@ -188,10 +204,11 @@ namespace yq {
             //! GLFW window handle
         GLFWwindow*         window() const { return m_window; }
         
-        bool                draw_frame();
+        //  This is the "DRAW" pass, do it all, whatever the result is
+        virtual bool        draw();
 
     protected:
-        virtual void        draw(VkCommandBuffer){}
+        virtual void        draw_vulqan(VkCommandBuffer){}
         struct Pipeline;
     
     private:
@@ -202,12 +219,13 @@ namespace yq {
         void    kill();
         bool    record(VkCommandBuffer, uint32_t);
         
-        VkPhysicalDevice            m_physical      = nullptr;
-        GLFWwindow*                 m_window        = nullptr;
-        VkSurfaceKHR                m_surface       = nullptr;
-        VkQueue                     m_graphicsQueue = nullptr;
-        VkQueue                     m_presentQueue  = nullptr;
-        VkDevice                    m_device        = nullptr;
+        VkPhysicalDevice            m_physical              = nullptr;
+        GLFWwindow*                 m_window                = nullptr;
+        VkSurfaceKHR                m_surface               = nullptr;
+        VkQueue                     m_graphicsQueue         = nullptr;
+        uint32_t                    m_graphicsQueueFamily   = UINT32_MAX;
+        VkQueue                     m_presentQueue          = nullptr;
+        VkDevice                    m_device                = nullptr;
         VkPresentModeKHR            m_presentMode;
         VkSurfaceFormatKHR          m_surfaceFormat;
         VkClearValue                m_clear;
@@ -217,6 +235,8 @@ namespace yq {
             VkExtent2D                  extents  = { 0, 0 };
             std::vector<VkImage>        images;
             std::vector<VkImageView>    imageViews;
+            uint32_t                    imageCount      = 0;
+            uint32_t                    minImageCount   = 0;
             
             bool        init(VqWindow*);
             void        kill(VqWindow*);

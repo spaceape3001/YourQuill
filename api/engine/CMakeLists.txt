@@ -25,6 +25,9 @@ set(yq_engine_sources
     ./texture/TextureLoader.hpp
     ./texture/TextureInfoWriter.hpp
     
+    ./ui/ImWindow.hpp
+    ./ui/ImWindow.cpp
+    
     ./vulqan/VqApp.cpp
     ./vulqan/VqApp.cpp
     ./vulqan/VqEnums.cpp
@@ -36,11 +39,6 @@ set(yq_engine_sources
     ./vulqan/VqMonitor.hpp
     ./vulqan/VqShaderStages.cpp
     ./vulqan/VqShaderStages.hpp
-#    ./vulqan/VqPipelineLayout.cpp
-#    ./vulqan/VqPipelineLayout.hpp
-    
-#   ./vulqan/VqPipeline.cpp
-#    ./vulqan/VqPipeline.hpp
     ./vulqan/VqStructs.hpp
     ./vulqan/VqUtils.cpp
     ./vulqan/VqUtils.hpp
@@ -49,7 +47,7 @@ set(yq_engine_sources
 )
 
 add_library(yqengine SHARED ${yq_engine_sources})
-target_link_libraries(yqengine PUBLIC yqbasic yqconfig ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY})
+target_link_libraries(yqengine PUBLIC yqbasic yqconfig ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui)
 LinkTest(yqengine)
 
 

@@ -60,6 +60,7 @@ namespace yq {
 
 
     std::string_view                        to_string(VkColorSpaceKHR);
+    std::string_view                        to_string(VkDebugReportObjectTypeEXT);
     std::string_view                        to_string(VkFormat);
 }
 

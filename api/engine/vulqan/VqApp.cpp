@@ -33,6 +33,23 @@ namespace yq {
             prior(ec, why);
     }
 
+    
+    VkBool32 vqDebuggingCallback(
+        VkDebugReportFlagsEXT                       flags,
+        VkDebugReportObjectTypeEXT                  objectType,
+        uint64_t                                    object,
+        size_t                                      location,
+        int32_t                                     messageCode,
+        const char*                                 pLayerPrefix,
+        const char*                                 pMessage,
+        void*                                       pUserData
+    )
+    {
+        log4cpp::CategoryStream         yell    = (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) ? yError("vulqan") : ((flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) ? yWarning("vulqan") : yInfo("vulqan"));
+        yell << "Object [" << to_string(objectType) << ": " << object << "] (layer " << pLayerPrefix << "): " << pMessage;
+        return VK_FALSE;
+    }
+
 
     VkInstance_T*    VqApp::instance()
     {
@@ -117,8 +134,10 @@ namespace yq {
         }
 
         m_extensions = vqGlfwRequiredExtensions();
-        if(want_debug)
+        if(want_debug){
             m_extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+            m_extensions.push_back("VK_EXT_debug_report");
+        }
 
             
             /*
@@ -155,12 +174,27 @@ namespace yq {
             yCritical() << "Vulkan instance is NULL!";
         else
             yInfo() << "Vulkan instance created.";
+            
+        if(want_debug){
+            // Get the function pointer (required for any extensions)
+            auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkCreateDebugReportCallbackEXT");
+            VqDebugReportCallbackCreateInfoEXT debug_report_ci;
+            debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+            debug_report_ci.pfnCallback = vqDebuggingCallback;
+            debug_report_ci.pUserData = nullptr;
+            vkCreateDebugReportCallbackEXT(m_instance, &debug_report_ci, nullptr, &m_debug);
+        }
 
         return true;
     }
     
     void        VqApp::kill()
     {
+        if(m_debug){
+            auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkDestroyDebugReportCallbackEXT");
+            vkDestroyDebugReportCallbackEXT(m_instance, m_debug, nullptr);
+        }
+    
         if(m_instance){
             vkDestroyInstance(m_instance, nullptr);
             m_instance  = nullptr;
@@ -178,7 +212,7 @@ namespace yq {
             return;
         while(!win->should_close()){
             glfwPollEvents();
-            win->draw_frame();
+            win->draw();
         }
         
         vkDeviceWaitIdle(win->device());

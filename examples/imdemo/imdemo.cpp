@@ -11,12 +11,33 @@
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/vulqan/VqApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
-#include <engine/vulqan/VqWindow.hpp>
+#include <engine/ui/ImWindow.hpp>
+#include <imgui.h>
 #include <iostream>
 
 using namespace yq;
+
+class DemoWindow : public ImWindow {
+    YQ_OBJECT_DECLARE(DemoWindow, ImWindow)
+public:
+    DemoWindow(const WindowCreateInfo & wci=WindowCreateInfo ()) : ImWindow(wci)
+    {
+    }
+    
+    ~DemoWindow()
+    {
+    }
+    
+    void   draw_imgui() override 
+    {
+        ImGui::ShowDemoWindow();
+    }
+};
+
+YQ_OBJECT_IMPLEMENT(DemoWindow)
 
 int main(int argc, char* argv[])
 {
@@ -30,16 +51,9 @@ int main(int argc, char* argv[])
     
     WindowCreateInfo      wi;
     wi.title        = "ImGUI Demo!";
-    Ref<VqWindow>   window  = new VqWindow(wi);
+    wi.clear        = { 0.0, 0.2, 0.5, 1. };
+    Ref<DemoWindow>   window  = new DemoWindow(wi);
     
-    for(auto& si : vqGetPhysicalDeviceSurfaceFormatsKHR(window->physical(), window->surface())){
-        yInfo() << "Available format: " << to_string(si.format) << " (" << to_string(si.colorSpace) << ")";
-    }
-    
-    
-    while(!window->should_close())
-        VqWindow::poll_events();
-    
-    std::cout << "Hello World!\n";
+    app.run(window.ptr());
     return 0;
 }

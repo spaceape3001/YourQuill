@@ -18,16 +18,11 @@
 
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
-#include <basic/Safety.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/render/PipelineConfig.hpp>
 #include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
-#include <engine/vulqan/VqFence.hpp>
-#include <engine/vulqan/VqFencePool.hpp>
-#include <engine/vulqan/VqPipeline.hpp>
-#include <engine/vulqan/VqShaderStages.hpp>
 #include <engine/vulqan/VqWindow.hpp>
 #include <iostream>
 
@@ -59,7 +54,7 @@ struct HelloWin : public VqWindow {
         triangle.kill(this);
     }
     
-    void        draw(VkCommandBuffer cmdbuf)
+    void        draw_vulqan(VkCommandBuffer cmdbuf)
     {
         vkCmdBindPipeline(cmdbuf, VK_PIPELINE_BIND_POINT_GRAPHICS, triangle.pipeline);
         vkCmdDraw(cmdbuf, 3, 1, 0, 0);
