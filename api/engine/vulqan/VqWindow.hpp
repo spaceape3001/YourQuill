@@ -26,11 +26,6 @@ namespace yq {
     class VqInstance;
     struct PipelineConfig;
     
-    struct Pipeline {
-        VkPipeline          pipeline    = nullptr;
-        VkPipelineLayout    layout      = nullptr;
-    };
-    
     
     struct WindowCreateInfo {
         VkPhysicalDevice    device   = nullptr;
@@ -78,8 +73,6 @@ friend struct HelloApp;
         VqWindow(const WindowCreateInfo& i = WindowCreateInfo());
         
         ~VqWindow();
-        
-        Pipeline            make_pipeline(const PipelineConfig&);
         
 
             //! Calls user's attention to window
@@ -191,13 +184,16 @@ friend struct HelloApp;
             //! GLFW window handle
         GLFWwindow*         window() const { return m_window; }
 
-        
-        
+    //protected:
+        virtual void        draw(VkCommandBuffer){}
+    
     //private:
+        
         friend class VqPipeline;
         friend struct HelloApp;
         
         struct Command;
+        struct Pipeline;
 
         bool    init(const WindowCreateInfo& i);
         void    kill();
@@ -242,7 +238,25 @@ friend struct HelloApp;
         };
         
         FrameBuffers                m_frameBuffers;
+        
+        struct Command {
+            VkCommandPool           pool;
+            VkCommandBuffer         buffer;
+
+            bool                    init(VqWindow*);
+            void                    kill(VqWindow*);
+        };
+        
+        Command                     m_command;
+        VkPipeline                  m_lastPipeline  = nullptr;
     };
     
+    struct VqWindow::Pipeline {
+        VkPipelineLayout    layout      = nullptr;
+        VkPipeline          pipeline    = nullptr;
+        
+        bool    init(VqWindow*, const PipelineConfig&);
+        void    kill(VqWindow*);
+    };
 
 }
