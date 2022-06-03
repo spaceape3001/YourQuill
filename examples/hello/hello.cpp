@@ -80,6 +80,7 @@ struct HelloApp {
         wi.title        = "Hello WORLD!";
         wi.resizable    = false;
         wi.size.x       = 1920;
+        wi.clear        = { 0.f, 0.f, 0.5f, 1.f };
         window          = new HelloWin(wi);
     }
     

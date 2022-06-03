@@ -199,7 +199,7 @@ namespace yq {
 
     template <typename T> struct ColorRgb;
     using ColorRgbD     = ColorRgb<double>;
-    using ColorRgbF     = ColorRgb<double>;
+    using ColorRgbF     = ColorRgb<float>;
     using ColorRgbI     = ColorRgb<int>;
     using ColorRgbU8    = ColorRgb<uint8_t>;
     using ColorRgbU16   = ColorRgb<uint16_t>;

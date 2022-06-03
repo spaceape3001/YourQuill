@@ -12,6 +12,7 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <math/preamble.hpp>
+#include <math/ColorRgb.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vec2.hpp>
 #include <vulkan/vulkan_core.h>
@@ -34,6 +35,9 @@ namespace yq {
             //!  Set to get full screen, windowed otherwise
         VqMonitor               monitor;
         VkPresentModeKHR        pmode   = VK_PRESENT_MODE_FIFO_KHR;
+        
+            //!  This is the background color
+        ColorRgbF               clear   = { 0., 0., 0., 1. };
         
             //!  Set to make always-on-top
         bool                    floating    = false;
@@ -60,7 +64,6 @@ namespace yq {
     class VqWindow : public Object, public RefCount, trait::not_copyable, trait::not_moveable {
         YQ_OBJECT_INFO(VqWindowInfo)
         YQ_OBJECT_DECLARE(VqWindow, Object)
-friend struct HelloApp;
     public:
         
             //! Polls for events (does not loiter)
@@ -138,6 +141,9 @@ friend struct HelloApp;
             //! Restores the window to non-fullscreen/iconify
         void                restore();
 
+            //! Sets the background color
+        void                set_clear(const ColorRgbF&);
+
             //! Sets the window position
         void                set_position(const Vec2I&);
 
@@ -204,6 +210,7 @@ friend struct HelloApp;
         VkDevice                    m_device        = nullptr;
         VkPresentModeKHR            m_presentMode;
         VkSurfaceFormatKHR          m_surfaceFormat;
+        VkClearValue                m_clear;
         
         struct SwapChain {
             VkSwapchainKHR              handle  = nullptr;

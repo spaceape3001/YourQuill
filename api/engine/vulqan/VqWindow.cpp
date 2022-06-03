@@ -218,6 +218,8 @@ namespace yq {
             kill();
             return false;
         }
+        
+        set_clear(i.clear);
             
         return true;
     }
@@ -653,9 +655,8 @@ namespace yq {
         renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = m_swapChain.extents;
 
-        VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
         renderPassInfo.clearValueCount = 1;
-        renderPassInfo.pClearValues = &clearColor;
+        renderPassInfo.pClearValues = &m_clear;
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     
         draw(commandBuffer);
@@ -857,6 +858,11 @@ namespace yq {
     {
         if(m_window)
             glfwRestoreWindow(m_window);
+    }
+
+    void        VqWindow::set_clear(const ColorRgbF&i)
+    {
+        m_clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
     }
 
     void        VqWindow::set_position(const Vec2I& pos)
