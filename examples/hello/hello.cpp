@@ -21,7 +21,7 @@
 #include <basic/Safety.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/shader/Shader.hpp>
-#include <engine/app/EngineApp.hpp>
+#include <engine/vulqan/VqApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFencePool.hpp>
@@ -51,7 +51,6 @@ struct HelloApp {
     VkPipeline          graphicsPipeline = nullptr;
     VkCommandPool       commandPool   = nullptr;
     VkCommandBuffer     commandBuffer = nullptr;
-    std::vector<VkFramebuffer> swapChainFramebuffers;;
     VkSemaphore         imageAvailableSemaphore;
     VkSemaphore         renderFinishedSemaphore;
     VqFence             inFlightFence;
@@ -73,7 +72,6 @@ struct HelloApp {
             throw std::runtime_error("No fragment shader");
             
         createGraphicsPipeline();
-        createFrameBuffers();
         createCommandPool();
         createCommandBuffer();
         createSyncObjects();
@@ -85,9 +83,6 @@ struct HelloApp {
         vkDestroySemaphore(window->m_device, renderFinishedSemaphore, nullptr);
         inFlightFence   = {};
         vkDestroyCommandPool(window->m_device, commandPool, nullptr);
-        for (auto framebuffer : swapChainFramebuffers) {
-            vkDestroyFramebuffer(window->m_device, framebuffer, nullptr);
-        }
 
         vkDestroyPipeline(window->m_device, graphicsPipeline, nullptr);
         vkDestroyPipelineLayout(window->m_device, pipelineLayout, nullptr);
@@ -179,7 +174,7 @@ struct HelloApp {
         pipelineInfo.pColorBlendState = &colorBlending;
         pipelineInfo.pDynamicState = nullptr; // Optional   
         pipelineInfo.layout = pipelineLayout;
-        pipelineInfo.renderPass = window -> m_renderPass;
+        pipelineInfo.renderPass = window -> m_renderPass.handle;
         pipelineInfo.subpass = 0;             
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
         pipelineInfo.basePipelineIndex = -1; // Optional        
@@ -188,28 +183,6 @@ struct HelloApp {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
 
-    }
-    
-    void createFrameBuffers() 
-    {
-        swapChainFramebuffers.resize(window -> m_swap.imageViews.size());
-        for (size_t i = 0; i < window -> m_swap.imageViews.size(); i++) {
-            VkImageView attachments[] = {
-                window -> m_swap.imageViews[i]
-            };
-
-            VqFramebufferCreateInfo framebufferInfo;
-            framebufferInfo.renderPass = window->m_renderPass;
-            framebufferInfo.attachmentCount = 1;
-            framebufferInfo.pAttachments = attachments;
-            framebufferInfo.width = window->swap_width();
-            framebufferInfo.height = window->swap_height();
-            framebufferInfo.layers = 1;
-
-            if (vkCreateFramebuffer(window->m_device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
-                throw std::runtime_error("failed to create framebuffer!");
-            }
-        }    
     }
     
     void createCommandPool() 
@@ -261,10 +234,10 @@ struct HelloApp {
         }
 
         VqRenderPassBeginInfo renderPassInfo;
-        renderPassInfo.renderPass = window->m_renderPass;
-        renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
+        renderPassInfo.renderPass = window->m_renderPass.handle;
+        renderPassInfo.framebuffer = window->m_frameBuffers.buffers[imageIndex];
         renderPassInfo.renderArea.offset = {0, 0};
-        renderPassInfo.renderArea.extent = window->m_swap.extents;
+        renderPassInfo.renderArea.extent = window->m_swapChain.extents;
 
         VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
         renderPassInfo.clearValueCount = 1;
@@ -282,7 +255,7 @@ struct HelloApp {
     {
         inFlightFence.wait_reset();
         uint32_t imageIndex = 0;
-        vkAcquireNextImageKHR(window->m_device, window->m_swap.chain, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+        vkAcquireNextImageKHR(window->m_device, window->m_swapChain.handle, UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
         vkResetCommandBuffer(commandBuffer, 0);
         recordCommandBuffer(commandBuffer, imageIndex);
         
@@ -320,7 +293,7 @@ struct HelloApp {
 
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores = signalSemaphores;
-        VkSwapchainKHR swapChains[] = {window->m_swap.chain};
+        VkSwapchainKHR swapChains[] = {window->m_swapChain.handle};
         presentInfo.swapchainCount = 1;
         presentInfo.pSwapchains = swapChains;
         presentInfo.pImageIndices = &imageIndex;
@@ -344,8 +317,8 @@ struct HelloApp {
 
 int main(int argc, char* argv[])
 {
-    EngineCreateInfo        vi;
-    EngineApp app(argc, argv, vi);
+    AppCreateInfo        vi;
+    VqApp app(argc, argv, vi);
     load_plugin_dir("plugin");
     app.finalize();
     

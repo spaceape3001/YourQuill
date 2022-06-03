@@ -12,8 +12,10 @@
 #include <basic/trait/not_moveable.hpp>
 #include <math/preamble.hpp>
 #include <math/shape/Size2.hpp>
+#include <math/vec/Vec2.hpp>
 #include <vulkan/vulkan_core.h>
 #include <engine/vulqan/VqMonitor.hpp>
+#include <optional>
 
 struct HelloApp;
 struct GLFWwindow;
@@ -33,20 +35,21 @@ namespace yq {
     struct WindowCreateInfo {
         VkPhysicalDevice    device   = nullptr;
     
-        const char*         title    = "(untitled)";
-        Size2I              size     = { 1920, 1080 };
+        const char*             title    = "(untitled)";
+        Size2I                  size     = { 1920, 1080 };
+        std::optional<Vec2I>    position;
             //!  Set to get full screen, windowed otherwise
-        VqMonitor           monitor;
-        VkPresentModeKHR    pmode   = VK_PRESENT_MODE_FIFO_KHR;
+        VqMonitor               monitor;
+        VkPresentModeKHR        pmode   = VK_PRESENT_MODE_FIFO_KHR;
         
             //!  Set to make always-on-top
-        bool                floating    = false;
+        bool                    floating    = false;
         
             //!  Set to make decorated
-        bool                decorated   = true;
+        bool                    decorated   = true;
         
             //!  Set to make user-resizable
-        bool                resizable   = false;
+        bool                    resizable   = false;
         
         WindowCreateInfo(){}
     };
@@ -194,66 +197,51 @@ friend struct HelloApp;
         friend class VqPipeline;
         friend struct HelloApp;
         
-        struct RenderPass;
-        struct FrameBuffers;
         struct Command;
+
+        bool    init(const WindowCreateInfo& i);
+        void    kill();
         
-        void    _deinit();
-
-        void    _destroy_renderpass();
-
-        void    _destroy_swapviews();
-    
-            //! Creates & initializes this window
-        bool    _init(const WindowCreateInfo& i);
-        
-        bool    _init_physical(VkPhysicalDevice);
-        bool    _init_renderpass();
-        bool    _init_surface();
-        bool    _init_swap();
-        bool    _init_swapviews();
-        bool    _init_window(const WindowCreateInfo&);
-
         VkPhysicalDevice            m_physical      = nullptr;
         GLFWwindow*                 m_window        = nullptr;
         VkSurfaceKHR                m_surface       = nullptr;
         VkQueue                     m_graphicsQueue = nullptr;
         VkQueue                     m_presentQueue  = nullptr;
-        VkDevice                    m_device       = nullptr;
+        VkDevice                    m_device        = nullptr;
         VkPresentModeKHR            m_presentMode;
         VkSurfaceFormatKHR          m_surfaceFormat;
         
         struct SwapChain {
-            VkSwapchainKHR              chain = nullptr;
+            VkSwapchainKHR              handle  = nullptr;
             VkExtent2D                  extents  = { 0, 0 };
             std::vector<VkImage>        images;
             std::vector<VkImageView>    imageViews;
             
-            bool    init(VqWindow*);
-            void    kill(VqWindow*);
+            bool        init(VqWindow*);
+            void        kill(VqWindow*);
             VkRect2D    def_scissor() const;
             VkViewport  def_viewport() const;
         };
         
-        SwapChain                   m_swap;
+        SwapChain                   m_swapChain;
         
-        
-        std::unique_ptr<RenderPass> m_render;
-        
-        VkRenderPass                m_renderPass    = nullptr;
-    };
+        struct RenderPass {
+            VkRenderPass            handle  = nullptr;
 
-    
-    struct VqWindow::RenderPass {
-        VkDevice                device  = nullptr;
+            bool                    init(VqWindow*);
+            void                    kill(VqWindow*);
+        };
         
-        RenderPass(VqWindow*);
-        ~RenderPass();
-    };
-    
-    struct VqWindow::FrameBuffers {
-        FrameBuffers(VqWindow*);
-        ~FrameBuffers();
+        RenderPass                  m_renderPass;
+        
+        struct FrameBuffers {
+            std::vector<VkFramebuffer> buffers;
+            
+            bool                    init(VqWindow*);
+            void                    kill(VqWindow*);
+        };
+        
+        FrameBuffers                m_frameBuffers;
     };
     
 

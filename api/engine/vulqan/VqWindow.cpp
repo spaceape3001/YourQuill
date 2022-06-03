@@ -10,11 +10,10 @@
     https://vulkan-tutorial.com/
 */
 
+#include "VqApp.hpp"
 #include "VqWindow.hpp"
 #include "VqUtils.hpp"
 
-#include <engine/app/EngineApp.hpp>
-#include <engine/app/EngineAppImpl.hpp>
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
@@ -44,75 +43,80 @@ namespace yq {
 
     VqWindow::VqWindow(const WindowCreateInfo&i)
     {
-        _init(i);
+        init(i);
     }
     
     VqWindow::~VqWindow()
     {
-        _deinit();
+        kill();
     }
 
-    void VqWindow::_deinit()
+    bool VqWindow::init(const WindowCreateInfo& i)
     {
-        if(m_device){
-            vkDeviceWaitIdle(m_device);
-        }
-    
-        if(m_renderPass){
-            vkDestroyRenderPass(m_device, m_renderPass, nullptr);
-            m_renderPass    = nullptr;
-        }
-    
-        _destroy_renderpass();
-        
-        m_swap.kill(this);
-        
-        if(m_device){
-            vkDestroyDevice(m_device, nullptr);
-            m_device   = nullptr;
-        }
-
-        if(m_surface){
-            vkDestroySurfaceKHR(EngineApp::instance(), m_surface, nullptr);
-            m_surface  = nullptr;
-        }
-
-        if(m_window){
-            glfwDestroyWindow(m_window);
-            m_window    = nullptr;
-        }
-        
-        m_physical = nullptr;
-    }
-
-    void VqWindow::_destroy_renderpass()
-    {
-        if(m_renderPass){
-            vkDestroyRenderPass(m_device, m_renderPass, nullptr);
-            m_renderPass    = nullptr;
-        }
-    }
-
-    
-    bool VqWindow::_init(const WindowCreateInfo& i)
-    {
-        VkInstance     inst  = EngineApp::instance();
+        VkInstance     inst  = VqApp::instance();
         if(!inst){
             yCritical() << "Vulkan has not been initialized!";
             return false;
         }
-        const EngineApp*   appapp    = EngineApp::app();
-        const EngineApp::Impl*  app = appapp->m.get();
         
+        const VqApp*   app    = VqApp::app();
         
-        if(!_init_physical(i.device))
-            return false;
-        if(!_init_window(i))
-            return false;
-        if(!_init_surface())
-            return false;
+            /*
+                First, determine our physical device (GPU, etc)
+            */
         
+        m_physical  = i.device;
+        if(!m_physical){
+                //  NULL specification is fine, we grab the first/suitable one
+                //  TODO ... use the monitor hint
+            m_physical  = vqFirstDevice();
+            if(!m_physical){
+                yCritical() << "Cannot create window without any devices!";
+                return false;
+            }
+        }
 
+            /*
+                --------------------------------------------------------------------------------------------------------
+                GLFW WINDOW STUFF
+                
+                NOTE, once this has been called, all future aborts will need to call
+                kill() to reset our state
+            */
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_FLOATING, i.floating ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_DECORATED, i.decorated ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, i.resizable ? GLFW_TRUE : GLFW_FALSE);
+
+        m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
+        if(!m_window){
+            yError() << "Unable to create window.";
+            kill();
+            return false;
+        }
+        
+        glfwSetWindowUserPointer(m_window, this);
+        
+            //  NOTE ALL FAILURES AFTER THIS POINT REQUIRE A CALL TO KILL()!
+        
+            /*
+                --------------------------------------------------------------------------------------------------------
+                SURFACE
+            */
+
+        if(glfwCreateWindowSurface(inst, m_window, nullptr, &m_surface) != VK_SUCCESS){
+            yCritical() << "Unable to create window surface!";
+            kill();
+            return false;
+        }
+
+            /*
+                --------------------------------------------------------------------------------------------------------
+                LOGICAL DEVICE
+            */
+
+        
         /*
             Create our logical device
         */
@@ -124,12 +128,12 @@ namespace yq {
         auto queueInfos         = vqFindQueueFamilies(m_physical, m_surface);
         if(!queueInfos.graphicsFamily.has_value()){
             yCritical() << "Unable to get a queue with graphic capability!";
-            _deinit();
+            kill();
             return false;
         }
         if(!queueInfos.presentFamily.has_value()){
             yCritical() << "Unable to find a present queue!";
-            _deinit();
+            kill();
             return false;
         }
     
@@ -150,9 +154,9 @@ namespace yq {
         dci.queueCreateInfoCount     = (uint32_t) qci.size();
         dci.pEnabledFeatures         = &df;
         
-        dci.enabledLayerCount        = (uint32_t) app->layers.size();
+        dci.enabledLayerCount        = (uint32_t) app->m_layers.size();
         if(dci.enabledLayerCount)
-            dci.ppEnabledLayerNames  = app->layers.data();
+            dci.ppEnabledLayerNames  = app->m_layers.data();
     
         dci.enabledExtensionCount    = (uint32_t) deviceExtensions.size();
         if(!deviceExtensions.empty())
@@ -160,7 +164,7 @@ namespace yq {
         
         if(vkCreateDevice(m_physical, &dci, nullptr, &m_device) != VK_SUCCESS){
             yCritical() << "Unable to create logical device!";
-            _deinit();
+            kill();
             return false;
         }
         
@@ -177,42 +181,107 @@ namespace yq {
             //yInfo() << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
         //}
 
-    
-            /*
-                SWAP CHAIN
-            */
+        //  cache details.....
     
         m_presentMode               = pmodes.contains(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
             // I know this is available on my card, get smarter later.
         m_surfaceFormat.format      = VK_FORMAT_B8G8R8A8_SRGB;
         m_surfaceFormat.colorSpace  = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
     
-        m_swap.init(this);
+            /*
+                SWAP CHAIN
+            */
             
-        if(!_init_renderpass())
-            return false;
-            
-        return true;
-    }
-
-
-    bool VqWindow::_init_physical(VkPhysicalDevice dev)
-    {
-        if(!dev)
-            dev  = vqFirstDevice();
-        if(!dev){
-            yCritical() << "Cannot create window without any devices!";
+        if(!m_swapChain.init(this)){
+            kill();
             return false;
         }
-        m_physical  = dev;
+        
+        if(!m_renderPass.init(this)){
+            kill();
+            return false;
+        }
+            
+        if(!m_frameBuffers.init(this)){
+            kill();
+            return false;
+        }
+            
         return true;
     }
 
-    bool    VqWindow::_init_renderpass()
+
+    void VqWindow::kill()
+    {
+        if(m_device){
+            vkDeviceWaitIdle(m_device);
+        }
+    
+        m_frameBuffers.kill(this);
+        m_renderPass.kill(this);
+        m_swapChain.kill(this);
+        
+        if(m_device){
+            vkDestroyDevice(m_device, nullptr);
+            m_device   = nullptr;
+        }
+
+        if(m_surface){
+            vkDestroySurfaceKHR(VqApp::instance(), m_surface, nullptr);
+            m_surface  = nullptr;
+        }
+
+        if(m_window){
+            glfwDestroyWindow(m_window);
+            m_window    = nullptr;
+        }
+        
+        m_physical = nullptr;
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    bool VqWindow::FrameBuffers::init(VqWindow* win)
+    {
+        buffers.resize(win -> m_swapChain.imageViews.size(), nullptr);
+        for (size_t i = 0; i < win -> m_swapChain.imageViews.size(); i++) {
+            VkImageView attachments[] = {
+                win -> m_swapChain.imageViews[i]
+            };
+
+            VqFramebufferCreateInfo framebufferInfo;
+            framebufferInfo.renderPass = win->m_renderPass.handle;
+            framebufferInfo.attachmentCount = 1;
+            framebufferInfo.pAttachments = attachments;
+            framebufferInfo.width = win->swap_width();
+            framebufferInfo.height = win->swap_height();
+            framebufferInfo.layers = 1;
+
+            if (vkCreateFramebuffer(win->m_device, &framebufferInfo, nullptr, &buffers[i]) != VK_SUCCESS) {
+                yCritical() << "Failed to create framebuffer!";
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    void VqWindow::FrameBuffers::kill(VqWindow* win)
+    {
+        for (VkFramebuffer fb : buffers) {
+            if(fb)
+                vkDestroyFramebuffer(win->m_device, fb, nullptr);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    bool VqWindow::RenderPass::init(VqWindow* win)
     {
             //  Render pass
         VkAttachmentDescription colorAttachment{};
-        colorAttachment.format = m_surfaceFormat.format;
+        colorAttachment.format = win->m_surfaceFormat.format;
         colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
         colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;        
@@ -238,42 +307,140 @@ namespace yq {
         renderPassInfo.subpassCount = 1;
         renderPassInfo.pSubpasses = &subpass;
 
-        if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) {
+        if (vkCreateRenderPass(win->m_device, &renderPassInfo, nullptr, &handle) != VK_SUCCESS) {
             yCritical() << "Unable to create the render pass!";
             return false;
         } else
             return true;
     }
-
-
-    bool VqWindow::_init_surface()
+    
+    void VqWindow::RenderPass::kill(VqWindow* win)
     {
-        if(glfwCreateWindowSurface(EngineApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
-            yCritical() << "Unable to create window surface!";
-            return false;
+        if(handle){
+            vkDestroyRenderPass(win->m_device, handle, nullptr);
+            handle    = nullptr;
         }
-        return true;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    VkRect2D    VqWindow::SwapChain::def_scissor() const
+    {
+        VkRect2D    ret{};
+        ret.offset  = { 0, 0 };
+        ret.extent  = extents;
+        return ret;
     }
     
-
-    bool    VqWindow::_init_window(const WindowCreateInfo&i)
+    VkViewport  VqWindow::SwapChain::def_viewport() const
     {
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_FLOATING, i.floating ? GLFW_TRUE : GLFW_FALSE);
-        glfwWindowHint(GLFW_DECORATED, i.decorated ? GLFW_TRUE : GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, i.resizable ? GLFW_TRUE : GLFW_FALSE);
+        VkViewport  ret{};
+        ret.x = 0.0f;
+        ret.y = 0.0f;
+        ret.width = (float) extents.width;
+        ret.height = (float) extents.height;
+        ret.minDepth = 0.0f;
+        ret.maxDepth = 1.0f;
+        return ret;
+    }
+        
+    bool    VqWindow::SwapChain::init(VqWindow* win)
+    {
+        VkSurfaceCapabilitiesKHR    capabilities;
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(win->m_physical, win->m_surface, &capabilities);
+        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+            extents = capabilities.currentExtent;
+        } else {
+            int w, h;
+            glfwGetFramebufferSize(win->m_window, &w, &h);
+            extents = {};
+            extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+            extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+        }
 
-        m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
-        if(!m_window){
-            yError() << "Unable to create window.";
+        
+        uint32_t    imageCount    = capabilities.minImageCount + 1;
+        if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
+            imageCount = capabilities.maxImageCount;
+        }
+
+        VqSwapchainCreateInfoKHR    createInfo;
+        createInfo.surface          = win->m_surface;
+        createInfo.minImageCount    = imageCount;
+        createInfo.imageFormat      = win->m_surfaceFormat.format;
+        createInfo.imageColorSpace  = win->m_surfaceFormat.colorSpace;
+        createInfo.imageExtent      = extents;
+        createInfo.imageArrayLayers = 1;    // we're not steroscopic
+        createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        
+        auto indices                = vqFindQueueFamilies(win->m_physical, win->m_surface);
+        uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
+
+        if (indices.graphicsFamily != indices.presentFamily) {
+            createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+            createInfo.queueFamilyIndexCount = 2;
+            createInfo.pQueueFamilyIndices = queueFamilyIndices;
+        } else {
+            createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            createInfo.queueFamilyIndexCount = 0; // Optional
+            createInfo.pQueueFamilyIndices = nullptr; // Optional
+        }        
+        createInfo.preTransform     = capabilities.currentTransform;
+        createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        createInfo.presentMode      = win->m_presentMode;
+        createInfo.clipped          = VK_TRUE;
+        
+            // TEMPORARY UNTIL WE GET THE NEW ONE
+        createInfo.oldSwapchain = VK_NULL_HANDLE;
+        
+        if (vkCreateSwapchainKHR(win->m_device, &createInfo, nullptr, &handle) != VK_SUCCESS){
+            handle   = nullptr;
+            yCritical() << "Failed to create the SWAP chain!";
             return false;
+        }
+
+        vkGetSwapchainImagesKHR(win->m_device, handle, &imageCount, nullptr);
+        images.resize(imageCount);
+        vkGetSwapchainImagesKHR(win->m_device, handle, &imageCount, images.data());    
+
+        imageViews.resize(images.size(), nullptr);
+        for(size_t i=0;i<images.size(); ++i){
+            VqImageViewCreateInfo   createInfo;
+            createInfo.image        = images[i];
+            createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
+            createInfo.format       = win->m_surfaceFormat.format;
+            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            createInfo.subresourceRange.baseMipLevel = 0;
+            createInfo.subresourceRange.levelCount = 1;
+            createInfo.subresourceRange.baseArrayLayer = 0;
+            createInfo.subresourceRange.layerCount = 1;
+            if(vkCreateImageView(win->m_device, &createInfo, nullptr, &imageViews[i]) != VK_SUCCESS) {
+                yCritical() << "Failed to create one of the Swap Image Viewers!";
+            }
         }
         
-        glfwSetWindowUserPointer(m_window, this);
         return true;
     }
     
+    void    VqWindow::SwapChain::kill(VqWindow* win)
+    {
+        for(auto iv : imageViews){
+            if(iv)
+                vkDestroyImageView(win->m_device, iv, nullptr);
+        }
+        imageViews.clear();
+        if(handle){
+            vkDestroySwapchainKHR(win->m_device, handle, nullptr);
+            handle  = nullptr;
+        }
+    }
+    
 
+    ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
 
     void VqWindow::attention()
@@ -468,22 +635,22 @@ namespace yq {
 
     VkRect2D    VqWindow::swap_def_scissor() const
     {
-        return m_swap.def_scissor();
+        return m_swapChain.def_scissor();
     }
     
     VkViewport  VqWindow::swap_def_viewport() const
     {
-        return m_swap.def_viewport();
+        return m_swapChain.def_viewport();
     }
 
     uint32_t    VqWindow::swap_height() const
     {
-        return m_swap.extents.height;
+        return m_swapChain.extents.height;
     }
 
     uint32_t    VqWindow::swap_width() const
     {
-        return m_swap.extents.width;
+        return m_swapChain.extents.width;
     }
     
     int  VqWindow::width() const
@@ -494,136 +661,6 @@ namespace yq {
         int ret;
         glfwGetWindowSize(m_window, &ret, nullptr);
         return ret;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-
-
-    ////////////////////////////////////////////////////////////////////////////////
-
-    VqWindow::RenderPass::RenderPass(VqWindow*)
-    {
-    }
-    
-    VqWindow::RenderPass::~RenderPass()
-    {
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-
-    VkRect2D    VqWindow::SwapChain::def_scissor() const
-    {
-        VkRect2D    ret{};
-        ret.offset  = { 0, 0 };
-        ret.extent  = extents;
-        return ret;
-    }
-    
-    VkViewport  VqWindow::SwapChain::def_viewport() const
-    {
-        VkViewport  ret{};
-        ret.x = 0.0f;
-        ret.y = 0.0f;
-        ret.width = (float) extents.width;
-        ret.height = (float) extents.height;
-        ret.minDepth = 0.0f;
-        ret.maxDepth = 1.0f;
-        return ret;
-    }
-        
-    bool    VqWindow::SwapChain::init(VqWindow* win)
-    {
-        VkSurfaceCapabilitiesKHR    capabilities;
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(win->m_physical, win->m_surface, &capabilities);
-        if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-            extents = capabilities.currentExtent;
-        } else {
-            int w, h;
-            glfwGetFramebufferSize(win->m_window, &w, &h);
-            extents = {};
-            extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-            extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
-        }
-
-        
-        uint32_t    imageCount    = capabilities.minImageCount + 1;
-        if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
-            imageCount = capabilities.maxImageCount;
-        }
-
-        VqSwapchainCreateInfoKHR    createInfo;
-        createInfo.surface          = win->m_surface;
-        createInfo.minImageCount    = imageCount;
-        createInfo.imageFormat      = win->m_surfaceFormat.format;
-        createInfo.imageColorSpace  = win->m_surfaceFormat.colorSpace;
-        createInfo.imageExtent      = extents;
-        createInfo.imageArrayLayers = 1;    // we're not steroscopic
-        createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-        
-        auto indices                = vqFindQueueFamilies(win->m_physical, win->m_surface);
-        uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
-
-        if (indices.graphicsFamily != indices.presentFamily) {
-            createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-            createInfo.queueFamilyIndexCount = 2;
-            createInfo.pQueueFamilyIndices = queueFamilyIndices;
-        } else {
-            createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            createInfo.queueFamilyIndexCount = 0; // Optional
-            createInfo.pQueueFamilyIndices = nullptr; // Optional
-        }        
-        createInfo.preTransform     = capabilities.currentTransform;
-        createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-        createInfo.presentMode      = win->m_presentMode;
-        createInfo.clipped          = VK_TRUE;
-        
-            // TEMPORARY UNTIL WE GET THE NEW ONE
-        createInfo.oldSwapchain = VK_NULL_HANDLE;
-        
-        if (vkCreateSwapchainKHR(win->m_device, &createInfo, nullptr, &chain) != VK_SUCCESS){
-            chain   = nullptr;
-            yCritical() << "Failed to create the SWAP chain!";
-            return false;
-        }
-
-        vkGetSwapchainImagesKHR(win->m_device, chain, &imageCount, nullptr);
-        images.resize(imageCount);
-        vkGetSwapchainImagesKHR(win->m_device, chain, &imageCount, images.data());    
-
-        imageViews.resize(images.size(), nullptr);
-        for(size_t i=0;i<images.size(); ++i){
-            VqImageViewCreateInfo   createInfo;
-            createInfo.image        = images[i];
-            createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format       = win->m_surfaceFormat.format;
-            createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-            createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            createInfo.subresourceRange.baseMipLevel = 0;
-            createInfo.subresourceRange.levelCount = 1;
-            createInfo.subresourceRange.baseArrayLayer = 0;
-            createInfo.subresourceRange.layerCount = 1;
-            if(vkCreateImageView(win->m_device, &createInfo, nullptr, &imageViews[i]) != VK_SUCCESS) {
-                yCritical() << "Failed to create one of the Swap Image Viewers!";
-            }
-        }
-        
-        return true;
-    }
-    
-    void    VqWindow::SwapChain::kill(VqWindow* win)
-    {
-        for(auto iv : imageViews){
-            if(iv)
-                vkDestroyImageView(win->m_device, iv, nullptr);
-        }
-        imageViews.clear();
-        if(chain){
-            vkDestroySwapchainKHR(win->m_device, chain, nullptr);
-            chain  = nullptr;
-        }
     }
     
     ////////////////////////////////////////////////////////////////////////////////
