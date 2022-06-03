@@ -69,46 +69,22 @@ struct HelloWin : public VqWindow {
 YQ_OBJECT_IMPLEMENT(HelloWin)
 
 
-struct HelloApp {
-    
-    Ref<HelloWin>       window;
-    
-    HelloApp()
-    {
-            
-        WindowCreateInfo      wi;
-        wi.title        = "Hello WORLD!";
-        wi.resizable    = false;
-        wi.size.x       = 1920;
-        wi.clear        = { 0.f, 0.f, 0.5f, 1.f };
-        window          = new HelloWin(wi);
-    }
-    
-    ~HelloApp()
-    {
-    }
-
-    void    run()
-    {
-        while(!window->should_close()){
-            VqWindow::poll_events();
-            window->draw_frame();
-        }
-        
-        vkDeviceWaitIdle(window->device());
-    }
-};
-
-
 int main(int argc, char* argv[])
 {
     AppCreateInfo        vi;
+    
     VqApp app(argc, argv, vi);
-    load_plugin_dir("plugin");
+    //load_plugin_dir("plugin");
     app.finalize();
     
-    HelloApp        app2;
-    app2.run();
+    WindowCreateInfo      wi;
+    wi.title        = "Hello WORLD!";
+    wi.resizable    = false;
+    wi.size.x       = 1920;
+    wi.clear        = { 0.f, 0.f, 0.5f, 1.f };
+
+    Ref<HelloWin>   win = new HelloWin(wi);
+    app.run(win.ptr());
     
     std::cout << "Hello World!\n";
     return 0;

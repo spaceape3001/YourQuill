@@ -61,6 +61,12 @@ namespace yq {
         VqApp(int argc, char* argv[], const AppCreateInfo& ci=AppCreateInfo());
         ~VqApp();
         
+        
+        //void    run();
+        
+        //  exec loop tied to a single window
+        void    run(VqWindow*);
+        
     private:
         friend class VqWindow;
         

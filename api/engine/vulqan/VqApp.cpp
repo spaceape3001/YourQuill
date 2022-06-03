@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqApp.hpp"
+#include "VqWindow.hpp"
 
 #include <basic/Logging.hpp>
 #include <basic/ThreadId.hpp>
@@ -169,6 +170,18 @@ namespace yq {
             glfwTerminate();
             m_glfw  = false;
         }
+    }
+
+    void    VqApp::run(VqWindow* win)
+    {
+        if(!win)
+            return;
+        while(!win->should_close()){
+            glfwPollEvents();
+            win->draw_frame();
+        }
+        
+        vkDeviceWaitIdle(win->device());
     }
 
 }
