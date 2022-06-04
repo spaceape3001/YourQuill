@@ -14,18 +14,29 @@ namespace yq {
 
     namespace engine {
 
-        VqShaderStages::VqShaderStages(VkDevice dev, const std::vector<ShaderPtr>& shaders) : m_device(dev)
+        VqShaderStages::VqShaderStages(VkDevice dev, const std::vector<ShaderSpec>& shaders) : m_device(dev)
         {
             m_stages.reserve(shaders.size());
             for(auto& s : shaders){
-                if(!s){
-                    yCritical() << "NULL SHADER detected, skipping";
+                
+                ShaderPtr       sh;
+                if(const ShaderPtr* ptr = std::get_if<ShaderPtr>(&s)){
+                    sh  = *ptr;
+                } else if(const std::string* ptr = std::get_if<std::string>(&s)){
+                    sh  = Shader::get(*ptr);
+                } else {
+                    yWarning() << "Empty shader spec, skipping";
+                    continue;
+                }
+            
+                if(!sh){
+                    yCritical() << "Null/unresolved shader, skipping";
                     continue;
                 }
             
                 VqPipelineShaderStageCreateInfo stage;
                 
-                switch(s->shader_type()){
+                switch(sh->shader_type()){
                 case ShaderType::VERT:
                     stage.stage = VK_SHADER_STAGE_VERTEX_BIT;
                     break;
@@ -53,7 +64,7 @@ namespace yq {
                 m_mask |= stage.stage;
                 stage.pName = "main";
             
-                const ByteArray&    code    = s->payload();
+                const ByteArray&    code    = sh->payload();
                 VqShaderModuleCreateInfo createInfo;
                 createInfo.codeSize = code.size();
                 createInfo.pCode    = reinterpret_cast<const uint32_t*>(code.data());
@@ -66,7 +77,7 @@ namespace yq {
             }        
         }
 
-        VqShaderStages::VqShaderStages(VqWindow& win, const std::vector<ShaderPtr>& shaders) : 
+        VqShaderStages::VqShaderStages(VqWindow& win, const std::vector<ShaderSpec>& shaders) : 
             VqShaderStages(win.logical(), shaders)
         {
         }

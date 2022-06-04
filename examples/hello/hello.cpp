@@ -46,6 +46,8 @@ struct HelloWin : public VqWindow {
 
         PipelineConfig      cfg;
         cfg.shaders     = { vert, frag };
+        cfg.front       = FrontFace::Clockwise;
+        cfg.polymode    = PolygonMode::Fill;
         if(!triangle.init(this, cfg))
             throw std::runtime_error("Unable to create pipeline!");
     }

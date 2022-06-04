@@ -5,15 +5,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
-#include <basic/Ref.hpp>
-#include <string>
-#include <variant>
+#include <basic/Enum.hpp>
+#include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
     namespace engine {
-        class Shader;
-        using ShaderPtr     = Ref<const Shader>;
-        using ShaderSpec    = std::variant<std::monostate, std::string, ShaderPtr>;
+        YQ_ENUM(FrontFace, , 
+            CounterClockwise    = 0,
+            Clockwise = 1
+        )
     }
 }
+YQ_TYPE_DECLARE(yq::engine::FrontFace)

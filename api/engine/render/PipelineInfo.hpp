@@ -9,6 +9,8 @@
 #include <basic/Flag.hpp>
 #include <basic/Meta/Meta.hpp>
 #include <source_location>
+#include "PrimitiveTopology.hpp"
+#include "PolygonMode.hpp"
 
 namespace yq {
     namespace engine {
@@ -26,6 +28,8 @@ namespace yq {
         private:
             PipelineInfo(RenderableInfo*, std::string_view, const std::source_location& sl);
             std::vector<std::string>    m_shaders;
+            PrimitiveTopology           m_topology;
+            PolygonMode                 m_polygons;
         };
         
     }

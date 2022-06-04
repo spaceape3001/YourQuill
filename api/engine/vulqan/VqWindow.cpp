@@ -342,7 +342,7 @@ namespace yq {
             vertexInfo.pVertexAttributeDescriptions     = nullptr;
             
             VqPipelineInputAssemblyStateCreateInfo  inputAssembly;
-            inputAssembly.topology                  = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+            inputAssembly.topology                  = (VkPrimitiveTopology) cfg.topology.value();
             inputAssembly.primitiveRestartEnable    = VK_FALSE;
             
             VkViewport viewport = win -> swap_def_viewport();
@@ -358,10 +358,10 @@ namespace yq {
             VqPipelineRasterizationStateCreateInfo  rasterizer;
             rasterizer.depthClampEnable = VK_FALSE;
             rasterizer.rasterizerDiscardEnable = VK_FALSE;
-            rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+            rasterizer.polygonMode = (VkPolygonMode) cfg.polymode.value();
             rasterizer.lineWidth = 1.0f;
-            rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-            rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+            rasterizer.cullMode = (VkCullModeFlags) cfg.cull.value();
+            rasterizer.frontFace = (VkFrontFace) cfg.front.value();
             rasterizer.depthBiasEnable = VK_FALSE;
             rasterizer.depthBiasConstantFactor = 0.0f; // Optional
             rasterizer.depthBiasClamp = 0.0f; // Optional

@@ -19,8 +19,8 @@ namespace yq {
         class VqShaderStages : trait::not_copyable, trait::not_moveable {
         public:
         
-            VqShaderStages(VqWindow&, const std::vector<ShaderPtr>&);
-            VqShaderStages(VkDevice, const std::vector<ShaderPtr>&);
+            VqShaderStages(VqWindow&, const std::vector<ShaderSpec>&);
+            VqShaderStages(VkDevice, const std::vector<ShaderSpec>&);
             ~VqShaderStages();
             
             uint32_t        mask() const { return m_mask; }

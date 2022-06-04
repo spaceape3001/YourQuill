@@ -10,7 +10,7 @@
 
 namespace yq {
     namespace engine {
-        YQ_ENUM(PrimitiveTopology, , 
+        YQ_ENUM(Topology, , 
             PointList = 0,
             LineList = 1,
             LineStrip = 2,
@@ -26,5 +26,5 @@ namespace yq {
     }
 }
 
-YQ_TYPE_DECLARE(yq::engine::PrimitiveTopology)
+YQ_TYPE_DECLARE(yq::engine::Topology)
 

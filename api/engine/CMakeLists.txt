@@ -12,10 +12,10 @@ set(yq_engine_sources
     ./asset/AssetLoader.hpp
     ./asset/AssetInfoWriter.hpp
     
-    ./enum/EngineEnums.cpp
-    ./enum/PolygonMode.hpp
-    ./enum/PrimitiveTopology.hpp
-    ./enum/StencilOp.hpp
+    ./render/Renderable.cpp
+    ./render/PolygonMode.hpp
+    ./render/PrimitiveTopology.hpp
+    ./render/StencilOp.hpp
     
     ./shader/Shader.cpp
     ./shader/Shader.hpp
