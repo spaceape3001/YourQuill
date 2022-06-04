@@ -11,7 +11,9 @@
 #include <vector>
 
 namespace yq {
-    struct PipelineConfig {
-        std::vector<ShaderPtr>    shaders;
-    };
+    namespace engine {
+        struct PipelineConfig {
+            std::vector<ShaderPtr>    shaders;
+        };
+    }
 }

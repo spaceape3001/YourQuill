@@ -19,6 +19,7 @@
 #include <iostream>
 
 using namespace yq;
+using namespace yq::engine;
 
 class DemoWindow : public ImWindow {
     YQ_OBJECT_DECLARE(DemoWindow, ImWindow)

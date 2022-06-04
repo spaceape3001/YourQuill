@@ -8,12 +8,12 @@
 #include <engine/vulqan/VqApp.hpp>
 #include <iostream>
 
-using namespace yq;
+using namespace yq::engine;
 
 int main(int argc, char* argv[])
 {
     VqApp vi(argc, argv);
-    auto data = yq::vqEnumeratePhysicalDevices();
+    auto data = vqEnumeratePhysicalDevices();
     std::cout << data.size() << " physical device(s)\n";
     for(const auto& dev : data){
         VkPhysicalDeviceProperties  props;

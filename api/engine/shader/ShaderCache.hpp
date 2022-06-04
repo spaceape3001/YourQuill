@@ -11,24 +11,26 @@
 #include <basic/Ref.hpp>
 
 namespace yq {
-    class Shader;
-    class ShaderCache;
+    namespace engine {
+        class Shader;
+        class ShaderCache;
 
-    class ShaderCache : public AssetCache {
-        YQ_OBJECT_DECLARE(ShaderCache, AssetCache)
-    public:
-    
-        static ShaderCache&     singleton();
+        class ShaderCache : public AssetCache {
+            YQ_OBJECT_DECLARE(ShaderCache, AssetCache)
+        public:
         
-        ShaderPtr     get(const std::filesystem::path&);
-        ShaderPtr     get(uint64_t);
-    
-    protected:
-        Ref<const Asset>      load_binary(const std::filesystem::path&) const override;
-    
-    private:
-        ShaderCache();
-        ~ShaderCache();
-    };
+            static ShaderCache&     singleton();
+            
+            ShaderPtr     get(const std::filesystem::path&);
+            ShaderPtr     get(uint64_t);
+        
+        protected:
+            Ref<const Asset>      load_binary(const std::filesystem::path&) const override;
+        
+        private:
+            ShaderCache();
+            ~ShaderCache();
+        };
 
+    }
 }

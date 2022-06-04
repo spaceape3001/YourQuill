@@ -12,27 +12,29 @@
 #include <engine/texture/TextureLoader.hpp>
 
 namespace yq {
-    template <typename C>
-    class TextureInfo::Writer : public AssetInfo::Writer<C> {
-    public:
-        Writer(TextureInfo* textureInfo) : AssetInfo::Writer<C>(textureInfo)
-        {
-        }
-        
-        Writer(TextureInfo& textureInfo) : Writer(&textureInfo)
-        {
-        }
-    };
+    namespace engine {
+        template <typename C>
+        class TextureInfo::Writer : public AssetInfo::Writer<C> {
+        public:
+            Writer(TextureInfo* textureInfo) : AssetInfo::Writer<C>(textureInfo)
+            {
+            }
+            
+            Writer(TextureInfo& textureInfo) : Writer(&textureInfo)
+            {
+            }
+        };
 
-    template <typename C>
-    class TextureLoaderInfo::Writer : public AssetLoaderInfo::Writer<C> {
-    public:
-        Writer(TextureLoaderInfo* textureLoaderInfo) : AssetLoaderInfo::Writer<C>(textureLoaderInfo)
-        {
-        }
-        
-        Writer(TextureLoaderInfo& textureLoaderInfo) : Writer(&textureLoaderInfo)
-        {
-        }
-    };
+        template <typename C>
+        class TextureLoaderInfo::Writer : public AssetLoaderInfo::Writer<C> {
+        public:
+            Writer(TextureLoaderInfo* textureLoaderInfo) : AssetLoaderInfo::Writer<C>(textureLoaderInfo)
+            {
+            }
+            
+            Writer(TextureLoaderInfo& textureLoaderInfo) : Writer(&textureLoaderInfo)
+            {
+            }
+        };
+    }
 }

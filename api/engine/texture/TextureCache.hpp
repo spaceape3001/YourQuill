@@ -9,18 +9,20 @@
 #include <engine/asset/AssetCache.hpp>
 
 namespace yq {
-    class Texture;
-    class TextureLoader;
-    class TextureCache;
+    namespace engine {
+        class Texture;
+        class TextureLoader;
+        class TextureCache;
 
-    
-    class TextureCache : public AssetCache {
-        YQ_OBJECT_DECLARE(TextureCache, AssetCache)
-    public:
-    
-    private:
-        TextureCache();
-        ~TextureCache();
-    };
+        
+        class TextureCache : public AssetCache {
+            YQ_OBJECT_DECLARE(TextureCache, AssetCache)
+        public:
+        
+        private:
+            TextureCache();
+            ~TextureCache();
+        };
 
+    }
 }

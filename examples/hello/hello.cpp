@@ -27,6 +27,7 @@
 #include <iostream>
 
 using namespace yq;
+using namespace yq::engine;
 
 struct HelloWin : public VqWindow {
     YQ_OBJECT_DECLARE(HelloWin, VqWindow)

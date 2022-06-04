@@ -9,6 +9,8 @@
 #include <basic/Ref.hpp>
 
 namespace yq {
-    class Shader;
-    using ShaderPtr     = Ref<const Shader>;
+    namespace engine {
+        class Shader;
+        using ShaderPtr     = Ref<const Shader>;
+    }
 }
