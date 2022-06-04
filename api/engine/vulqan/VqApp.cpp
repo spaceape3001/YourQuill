@@ -18,6 +18,10 @@
 
 namespace yq {
     namespace engine {
+
+        static constexpr const uint32_t kEngineVersion      = YQ_MAKE_VERSION(0, 0, 1);
+        static constexpr const char*    szEngineName        = "YourQuill";
+    
         VqApp*          VqApp::s_app    = nullptr;
         VkInstance      VqApp::s_instance  = nullptr;
 
@@ -50,8 +54,17 @@ namespace yq {
             return VK_FALSE;
         }
 
+        std::string_view    VqApp::engine_name() 
+        {
+            return szEngineName;
+        }
 
-        VkInstance_T*    VqApp::instance()
+        uint32_t            VqApp::engine_version() 
+        {
+            return kEngineVersion;
+        }
+
+        VkInstance_T*       VqApp::instance()
         {
             if(s_instance)  [[ likely ]]
                 return s_instance;
@@ -77,11 +90,8 @@ namespace yq {
         {
             if(m_appInfo.app_name.empty())
                m_appInfo.app_name = app_name();
-            if(m_appInfo.engine_name.empty())
-                m_appInfo.engine_name = "YourQuill";
             if(!m_appInfo.vulkan_api)
                 m_appInfo.vulkan_api  = VK_API_VERSION_1_2;
-
             if((!thread::id()) && !s_app)
                 s_app   = this;
         }
@@ -93,6 +103,32 @@ namespace yq {
                 s_app       = nullptr;
                 s_instance  = nullptr;
             }
+        }
+
+        bool    VqApp::add_layer(const char*z)
+        {
+            if(!z)
+                return false;
+            
+            static const auto availableLayers     = vqNameSet(vqEnumerateInstanceLayerProperties());
+            if(availableLayers.contains(z)){
+                m_layers.push_back(z);
+                return true;
+            }
+            return false;
+        }
+        
+        bool    VqApp::add_extension(const char*z)
+        {
+            if(!z)
+                return false;
+
+            static const auto availableExtensions = vqNameSet(vqEnumerateInstanceExtensionProperties());
+            if(availableExtensions.contains(z)){
+                m_extensions.push_back(z);
+                return true;
+            }
+            return false;
         }
 
         bool    VqApp::init()
@@ -115,28 +151,15 @@ namespace yq {
             if(m_instance)
                 return true;
 
-            static const std::vector<const char*>   kValidationLayers = {
-                "VK_LAYER_KHRONOS_validation"
-            };
+            static const char*  kValidationLayer        = "VK_LAYER_KHRONOS_validation";
             
-            m_allLayerProps     = vqEnumerateInstanceLayerProperties();
-            m_allLayerNames     = vqNameSet(m_allLayerProps);
-            
-            m_allExtensionProps = vqEnumerateInstanceExtensionProperties();
-            m_allExtensionNames = vqNameSet(m_allExtensionProps);
-
             bool    want_debug  = false;
 
             /*
                 Start by scanning the extensions for validation
             */
             if(m_appInfo.validation != Required::NO){
-                for(const char* z : kValidationLayers){
-                    if(m_allLayerNames.contains(z))
-                        m_layers.push_back(z);
-                }
-                
-                if(m_layers.size() != kValidationLayers.size()){
+                if(!add_layer(kValidationLayer)){
                     auto stream    = (m_appInfo.validation == Required::YES) ? yCritical() : yError();
                     stream << "Unable to find validation layers!";
                     if(m_appInfo.validation == Required::YES)
@@ -150,7 +173,36 @@ namespace yq {
                 m_extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
                 m_extensions.push_back("VK_EXT_debug_report");
             }
+            
+            for(auto& x : m_appInfo.layers){
+                if(!x.name)
+                    continue;
+                if(add_layer(x.name)){
+                    yInfo() << "Enabling vulkan layer: " << x.name;
+                    continue;
+                }
+                if(x.req != Required::NO){
+                    auto stream    = (x.req == Required::YES) ? yCritical() : yError();
+                    stream << "Unable to find vulkan layer: " << x.name;
+                    if(x.req == Required::YES)
+                        return false;
+                }
+            }
 
+            for(auto& x : m_appInfo.extensions){
+                if(!x.name)
+                    continue;
+                if(add_extension(x.name)){
+                    yInfo() << "Enabling vulkan extension: " << x.name;
+                    continue;
+                }
+                if(x.req != Required::NO){
+                    auto stream    = (x.req == Required::YES) ? yCritical() : yError();
+                    stream << "Unable to find vulkan extension: " << x.name;
+                    if(x.req == Required::YES)
+                        return false;
+                }
+            }
                 
                 /*
                     Create our device
@@ -159,8 +211,8 @@ namespace yq {
             VqApplicationInfo       lai;
             lai.pApplicationName    = m_appInfo.app_name.c_str();
             lai.applicationVersion  = m_appInfo.app_version;
-            lai.pEngineName         = m_appInfo.engine_name.c_str();
-            lai.engineVersion       = m_appInfo.engine_version;
+            lai.pEngineName         = szEngineName;
+            lai.engineVersion       = kEngineVersion;
             lai.apiVersion          = m_appInfo.vulkan_api;
             
             VqInstanceCreateInfo    createInfo;
@@ -173,18 +225,16 @@ namespace yq {
             if(createInfo.enabledExtensionCount)
                 createInfo.ppEnabledExtensionNames  = m_extensions.data();
                 
-            yInfo() << "Enabled Layer Count -> " << createInfo.enabledLayerCount;
-            
             if(vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS){
                 yCritical() << "Unable to create vulkan instance!";
                 m_instance   = nullptr;
                 return false;
             }
             
-            
-            if(m_instance == nullptr)
+            if(m_instance == nullptr){
                 yCritical() << "Vulkan instance is NULL!";
-            else
+                return false;
+            } else
                 yInfo() << "Vulkan instance created.";
                 
             if(want_debug){

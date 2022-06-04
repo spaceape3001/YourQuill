@@ -44,7 +44,6 @@ int main(int argc, char* argv[])
 {
     AppCreateInfo        vi;
     vi.app_name     = "im_demo";
-    vi.engine_name  = "YQ";
 
     VqApp app(argc, argv, vi);
     load_plugin_dir("plugin");
