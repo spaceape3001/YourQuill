@@ -25,6 +25,7 @@ namespace yq {
             int         refresh_rate    = 0;
             VqVidMode(){}
             VqVidMode(const GLFWvidmode&);
+            constexpr bool    operator==(const VqVidMode&) const noexcept = default;
         };
         
         class VqWindow;

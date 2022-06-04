@@ -14,7 +14,6 @@
 
 #include <tbb/spin_mutex.h>
 
-#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 namespace yq {
@@ -96,13 +95,25 @@ namespace yq {
             }
         }
 
+        bool    VqApp::init()
+        { 
+            return init_vulkan();
+        }
             
-        bool        VqApp::init()
+        void    VqApp::init_glfw()
         {
-            glfwLogging(0,nullptr);
-            glfwInit();
-            m_glfw  = true;
+            if(!m_glfw){
+                glfwLogging(0,nullptr);
+                glfwInit();
+                m_glfw  = true;
+            }
+        }
 
+        bool        VqApp::init_vulkan()
+        {
+            init_glfw();
+            if(m_instance)
+                return true;
 
             static const std::vector<const char*>   kValidationLayers = {
                 "VK_LAYER_KHRONOS_validation"
@@ -207,12 +218,16 @@ namespace yq {
             }
         }
 
-        void    VqApp::run(VqWindow* win)
+        void    VqApp::run_window(VqWindow* win, double amt)
         {
             if(!win)
                 return;
             while(!win->should_close()){
-                glfwPollEvents();
+                if(amt<=0.){
+                    glfwPollEvents();
+                } else { 
+                    glfwWaitEventsTimeout(amt);
+                }
                 win->draw();
             }
             

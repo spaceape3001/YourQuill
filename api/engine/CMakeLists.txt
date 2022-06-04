@@ -11,11 +11,17 @@ set(yq_engine_sources
     ./asset/AssetCompiler.hpp
     ./asset/AssetLoader.hpp
     ./asset/AssetInfoWriter.hpp
-    
-    ./render/Renderable.cpp
+
+    ./render/ColorComponent.hpp    
+    ./render/CullMode.hpp    
+    ./render/FrontFace.hpp    
+    ./render/LogicOp.hpp    
+    ./render/PipelineConfig.hpp    
     ./render/PolygonMode.hpp
-    ./render/PrimitiveTopology.hpp
+    ./render/Renderable.cpp
+    ./render/Renderable.hpp
     ./render/StencilOp.hpp
+    ./render/Topology.hpp
     
     ./shader/Shader.cpp
     ./shader/Shader.hpp

@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
     wi.clear        = { 0.f, 0.f, 0.5f, 1.f };
 
     Ref<HelloWin>   win = new HelloWin(wi);
-    app.run(win.ptr());
+    app.run_window(win.ptr());
     
     std::cout << "Hello World!\n";
     return 0;

@@ -8,6 +8,7 @@
 
 #include <basic/Object.hpp>
 #include <basic/meta/ObjectInfo.hpp>
+#include "PipelineConfig.hpp"
 
 namespace yq {
     namespace engine {
@@ -16,6 +17,14 @@ namespace yq {
         class RenderableInfo : public ObjectInfo {
         public:
             template <typename C> struct Writer;
+            
+            const PipelineConfig*   pipeline(std::string_view) const;
+
+
+            RenderableInfo(std::string_view, ObjectInfo&, const std::source_location& sl = std::source_location::current());
+            
+        private:
+            std::map<std::string, PipelineConfig>   m_pipelines;
         };
 
 

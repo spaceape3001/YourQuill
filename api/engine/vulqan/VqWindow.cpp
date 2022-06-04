@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <cassert>
 
-#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 YQ_OBJECT_IMPLEMENT(yq::engine::VqWindow)

@@ -55,6 +55,6 @@ int main(int argc, char* argv[])
     wi.clear        = { 0.0, 0.2, 0.5, 1. };
     Ref<DemoWindow>   window  = new DemoWindow(wi);
     
-    app.run(window.ptr());
+    app.run_window(window.ptr(), 0.1);
     return 0;
 }

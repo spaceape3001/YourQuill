@@ -10,6 +10,7 @@
 #include <basic/Ref.hpp>
 #include <basic/Set.hpp>
 #include <filesystem>
+#include <tbb/spin_rw_mutex.h>
 
 namespace yq {
     namespace engine {
@@ -67,7 +68,9 @@ namespace yq {
             std::vector<const AssetInfo*>       m_assetInfos;
             std::vector<const AssetLoader*>     m_assetLoaders;
             std::vector<const AssetCompiler*>   m_assetCompilers;
-            
+
+            mutable tbb::spin_rw_mutex          m_mutex;
+            std::map<std::filesystem::path, Ref<const Asset>>   m_cache;
         };
 
     }

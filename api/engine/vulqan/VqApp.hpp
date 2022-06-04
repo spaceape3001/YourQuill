@@ -53,20 +53,51 @@ namespace yq {
         class VqApp;
         class VqWindow;
         
+        /*! \brief Engine/Vulkan application
+        
+        */
         class VqApp : public BasicApp {
         public:
         
+            //! Global application, if any
             static VqApp*       app() { return s_app; }
-            static VkInstance_T*    instance();
+            
+            /*! \brief Vulkan instance
+            
+                If necessary, this will initialize the vulkan *IFF* the app exists and vulkan's not already been
+                initialized.
+            */
+            static VkInstance    instance();
         
-            VqApp(int argc, char* argv[], const AppCreateInfo& ci=AppCreateInfo());
+            /*! \brief Constructor
+            
+                \param[in]  argc    Pass onto me what the main() was given
+                \param[in]  argv    Pass onto me what the main() was given
+                \param[in]  aci     Initialization paraemters for this application
+            */
+            VqApp(int argc, char* argv[], const AppCreateInfo& aci=AppCreateInfo());
             ~VqApp();
             
             
             //void    run();
             
-            //  exec loop tied to a single window
-            void    run(VqWindow*);
+            //!  exec loop tied to a single window
+            void    run_window(VqWindow*, double timeout=0.);
+            
+            
+            /*! \brief Initializes the GLFW
+            
+                This initializes the GLFW.  
+                
+                \note calling instance() or init_vulkan() will automatically initialize GLFW.
+            */
+            void    init_glfw();
+            
+            /*! \brief Initializes vulkan instance
+            
+                \note calling instance() will automatically call this, if necessary.
+            */
+            bool    init_vulkan();
             
         private:
             friend class VqWindow;
@@ -76,7 +107,6 @@ namespace yq {
 
             AppCreateInfo                       m_appInfo;
             VkInstance                          m_instance    = nullptr;
-            bool                                m_glfw        = false;
             std::vector<VkLayerProperties>      m_allLayerProps;
             std::vector<VkExtensionProperties>  m_allExtensionProps;
             std::set<std::string>               m_allLayerNames;
@@ -84,6 +114,7 @@ namespace yq {
             std::vector<const char*>            m_extensions;
             std::vector<const char*>            m_layers;
             VkDebugReportCallbackEXT            m_debug     = nullptr;
+            bool                                m_glfw        = false;
             
             bool        init();
             void        kill();
