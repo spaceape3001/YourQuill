@@ -34,10 +34,10 @@ namespace yq {
         on_stage4([this](){ this->update(); }, sl);
         
         if(!f0.empty())
-            on_change(f0, [this](){ this -> update(); }, sl);
+            on_change(by_file(f0), [this](){ this -> update(); }, sl);
         
         for(std::string_view s : m_files){
-            on_change(folder, s, [this](){ this->update(); }, sl);
+            on_change(by_cache(folder, s), [this](){ this->update(); }, sl);
         }
     }
     

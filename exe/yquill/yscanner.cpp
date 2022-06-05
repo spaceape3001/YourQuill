@@ -207,36 +207,44 @@ void    stage3_documents()
     
     SqlQuery                sn(wksp::db(), "SELECT id FROM Documents WHERE name=? ORDER BY k");
     SqlQuery                sx(wksp::db(), "SELECT id FROM Documents WHERE suffix=? ORDER BY k");
+    SqlQuery                sf(wksp::db(), "SELECT id FROM Documents WHERE folder=? ORDER BY k");
     SqlQuery                sfn(wksp::db(), "SELECT id FROM Documents WHERE folder=? AND name=? ORDER BY k");
     SqlQuery                sfx(wksp::db(), "SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
     
     for(const Stage3* h : handlers){
         SqlQuery::AutoFinish    af;
-        switch(h->method()){
-        case Stage3::ByName:
+        auto& fs    = h->spec();
+        switch(fs.type){
+        case FileSpec::ByCacheDoc:
             af  = sn.autoFinish();
-            sn.bind(1, h->specific());
+            sn.bind(1, fs.str);
             while(sn.step() == SqlQuery::Row){
                 h -> invoke(Document{ sn.v_uint64(1)});
             }
             break;
-        case Stage3::ByExt:
+        case FileSpec::ByCacheExt:
             af  = sx.autoFinish();
-            sx.bind(1, h->specific());
+            sx.bind(1, fs.str);
             while(sx.step() == SqlQuery::Row)
                 h -> invoke(Document{ sx.v_uint64(1)});
             break;
-        case Stage3::ByFolderName:
+        case FileSpec::ByFolder:
+            af  = sf.autoFinish();
+            sf.bind(1, fs.u64);
+            while(sx.step() == SqlQuery::Row)
+                h -> invoke(Document{ sx.v_uint64(1)});
+            break;
+        case FileSpec::ByFolderDoc:
             af  = sfn.autoFinish();
-            sfn.bind(1, h->folder().id);
-            sfn.bind(2, h->specific());
+            sfn.bind(1, fs.u64);
+            sfn.bind(2, fs.str);
             while(sfn.step() == SqlQuery::Row)
                 h -> invoke(Document{ sfn.v_uint64(1)});
             break;
-        case Stage3::ByFolderExt:
+        case FileSpec::ByFolderExt:
             af  = sfx.autoFinish();
-            sfx.bind(1, h->folder().id);
-            sfx.bind(2, h->specific());
+            sfx.bind(1, fs.u64);
+            sfx.bind(2, fs.str);
             while(sfx.step() == SqlQuery::Row)
                 h -> invoke(Document{ sfx.v_uint64(1)});
             break;
@@ -287,25 +295,47 @@ void    dispatch(Change change, Fragment frag, Folder fo, const std::filesystem:
     std::string_view    ext     = file_extension(name);
 
     for(const Notifier* n : changeMap[change]){
-        switch(n->trigger()){
-        case Notifier::ByFile:
-            if(p != n->path())
+        auto& fs = n->spec();
+        switch(fs.type){
+        case FileSpec::Never:
+            continue;
+        case FileSpec::Always:
+            break;
+        case FileSpec::ByFile:
+            #ifdef WIN32
+            if(!is_similar(p.string(), fs.str))
+                continue;
+            #else
+            if(p.string() != fs.str)
+                continue;
+            #endif
+            break;
+        case FileSpec::ByExtension:
+            if(!is_similar(ext, fs.str))
                 continue;
             break;
-        case Notifier::ByFolderDoc:
-            if(fo != n->folder())
-                continue;
-            // fallthrough is deliberate
-        case Notifier::ByDocument:
-            if(!is_similar(name, n->specific()))
+        case FileSpec::ByFolder:
+            if(fo.id != fs.u64)
                 continue;
             break;
-        case Notifier::ByFolderExt:
-            if(fo != n->folder())
+        case FileSpec::ByFolderDoc:
+            if(fo.id != fs.u64)
                 continue;
-            // fallthrough is deliberate
-        case Notifier::ByExtension:
-            if(!is_similar(ext, n->specific()))
+            if(!is_similar(name, fs.str))
+                continue;
+            break;
+        case FileSpec::ByFolderExt:
+            if(fo.id != fs.u64)
+                continue;
+            if(!is_similar(ext, fs.str))
+                continue;
+            break;
+        case FileSpec::ByCacheDoc:
+            if(!is_similar(name, fs.str))
+                continue;
+            break;
+        case FileSpec::ByCacheExt:
+            if(!is_similar(ext, fs.str))
                 continue;
             break;
         default:

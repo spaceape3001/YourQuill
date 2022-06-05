@@ -8,6 +8,7 @@
 
 #include <basic/EnumMap.hpp>
 #include <yq/enum/Change.hpp>
+#include <yq/file/FileSpec.hpp>
 #include <yq/file/Folder.hpp>
 #include <basic/Flag.hpp>
 #include <filesystem>
@@ -24,19 +25,6 @@ namespace yq {
     */
     class Notifier {
     public:
-    
-        enum Trigger {
-            NoTrigger,      //!< No trigger, it's a no-op
-            ByFile,         //!< Change is rigged to specific file, fragment/change invalid
-            ByDocument,     //!< Match name
-            ByExtension,    //!< Change to file extension
-            ByFolderExt,    //!< Change to folder & file extension
-            ByFolderDoc,    //!< Change to folder & doc
-            
-            SpecName,       //!< Signal to the constructor
-            SpecFolderName  //!< Signal to the constructor
-        };
-    
 
         static const std::vector<const Notifier*>&  all();
 
@@ -45,29 +33,24 @@ namespace yq {
 
         struct Writer;
         
-        const std::filesystem::path&    path() const { return m_path; }
-        std::string_view                specific() const { return m_specific; }
-        Folder                          folder() const { return m_folder; }
         std::string_view                description() const { return m_description; }
        
         Flag<Change>                    change() const { return m_change; }
-        Trigger                         trigger() const { return m_trigger; }
         const std::source_location&     source() const { return m_source; }
         int                             order() const { return m_order; }
+        
+        const FileSpec&                 spec() const { return m_spec; }
         
         static const EnumMap<Change,Vector<const Notifier*>>&     change_map();
 
     protected:
-        Notifier(Trigger, Flag<Change>, Folder, std::string_view, const std::filesystem::path&, int order, const std::source_location&);
+        Notifier(Flag<Change>, const FileSpec&, int order, const std::source_location&);
         ~Notifier();
 
     private:
-        std::string             m_specific;
-        std::filesystem::path   m_path;
+        FileSpec                m_spec;
         std::string             m_description;
         std::source_location    m_source;
-        Folder                  m_folder;
-        Trigger                 m_trigger;
         Flag<Change>            m_change;
         int                     m_order;
         

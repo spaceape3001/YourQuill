@@ -20,7 +20,7 @@ namespace yq {
     WebTemplate::WebTemplate(std::string_view p, const std::filesystem::path&f, const std::source_location&sl) : WebPage(hGet, p, sl), m_master(f)
     {
         on_stage4([this](){ this->update(); }, sl);
-        on_change(f, [this](){ this->update(); }, sl);
+        on_change(by_file(f), [this](){ this->update(); }, sl);
     }
     
     void        WebTemplate::update()
@@ -66,7 +66,7 @@ namespace yq {
         if(m_template){
             m_template->m_sources.push_back(FolderStr{f, sv});
             WebTemplate *tmp    = m_template;
-            on_change(f, sv, [tmp](){ tmp -> update(); }, sl);
+            on_change(by_cache(f, sv), [tmp](){ tmp -> update(); }, sl);
         }
         return *this;
     }

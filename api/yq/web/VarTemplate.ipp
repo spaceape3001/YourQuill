@@ -64,7 +64,7 @@ namespace yq {
         if(m_template){
             m_template->m_sources.push_back(FolderStr{f, k});
             VarTemplate *tmp    = m_template;
-            on_change(f, k, [tmp](){ tmp -> update(); }, sl);
+            on_change(by_cache(f, k), [tmp](){ tmp -> update(); }, sl);
         }
         return *this;
     }

@@ -573,23 +573,23 @@ namespace {
             
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_stage3<image_stage3>(z);
+                on_stage3<image_stage3>(by_cache(z));
             
                 //  Organization & users
-            on_stage3<category_stage3>(categories_folder(), "*.cat");
-            on_stage3<tag_stage3>(tags_folder(), "*.tag");
-            on_stage3<user_stage3>(users_folder(), "*.user");
+            on_stage3<category_stage3>(by_cache(categories_folder(), "*.cat"));
+            on_stage3<tag_stage3>(by_cache(tags_folder(), "*.tag"));
+            on_stage3<user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
-            on_stage3<class_s3_create>(classes_folder(), "*.class");
-            on_stage3<field_s3_init>(fields_folder(), "*.field");
-            on_stage3<class_s3_init>(classes_folder(), "*.class");
-            on_stage3<field_s3_classes>(fields_folder(), "*.field");
+            on_stage3<class_s3_create>(by_cache(classes_folder(), "*.class"));
+            on_stage3<field_s3_init>(by_cache(fields_folder(), "*.field"));
+            on_stage3<class_s3_init>(by_cache(classes_folder(), "*.class"));
+            on_stage3<field_s3_classes>(by_cache(fields_folder(), "*.field"));
 
 
                 //  LEAFS & atoms
-            on_stage3<leaf_stage3>("*.y");
-            on_stage3<tag_stage3_leaf>(tags_folder(), "*.tag");
+            on_stage3<leaf_stage3>(by_cache("*.y"));
+            on_stage3<tag_stage3_leaf>(by_cache(tags_folder(), "*.tag"));
 
         
                 //  STAGE 4 global related
@@ -600,31 +600,31 @@ namespace {
             
                 // Images change first (for icon changes)
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_change<image_update>(z);
+                on_change<image_update>(by_cache(z));
 
                 // Rest are less order dependent... 
 
                 
-            on_change<css_update>(gSharedCssFile);
-            on_change<css_update>(top_folder(), ".css");
+            on_change<css_update>(by_file(gSharedCssFile));
+            on_change<css_update>(by_cache(top_folder(), ".css"));
 
-            on_change<page_update>(gSharedPageFile);
-            on_change<page_update>(top_folder(), ".page");
+            on_change<page_update>(by_file(gSharedPageFile));
+            on_change<page_update>(by_cache(top_folder(), ".page"));
                 
-            on_change<category_update>(categories_folder(), "*.cat");
-            on_change<class_update>(classes_folder(), "*.class");
-            on_change<field_update>(fields_folder(), "*.field");
-            on_change<leaf_update>("*.y");
-            on_change<tag_update>(tags_folder(), "*.tag");
-            on_change<user_update>(users_folder(), "*.user");
+            on_change<category_update>(by_cache(categories_folder(), "*.cat"));
+            on_change<class_update>(by_cache(classes_folder(), "*.class"));
+            on_change<field_update>(by_cache(fields_folder(), "*.field"));
+            on_change<leaf_update>(by_cache("*.y"));
+            on_change<tag_update>(by_cache(tags_folder(), "*.tag"));
+            on_change<user_update>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
-                on_change<category_icons>(categories_folder(), z);
-                on_change<class_icons>(classes_folder(), z);
-                on_change<field_icons>(fields_folder(), z);
-                on_change<leaf_icons>(z);
-                on_change<user_icons>(users_folder(), z);
-                on_change<tag_icons>(classes_folder(), z);
+                on_change<category_icons>(by_cache(categories_folder(), z));
+                on_change<class_icons>(by_cache(classes_folder(), z));
+                on_change<field_icons>(by_cache(fields_folder(), z));
+                on_change<leaf_icons>(by_cache(z));
+                on_change<user_icons>(by_cache(users_folder(), z));
+                on_change<tag_icons>(by_cache(classes_folder(), z));
             }
         }
 

@@ -91,39 +91,12 @@ namespace yq {
     }
     
 
-    Notifier::Notifier(Trigger trigger, Flag<Change> changeMask, Folder folder, std::string_view ext, const std::filesystem::path& file, int _order, const std::source_location& sl)
+    Notifier::Notifier(Flag<Change> changeMask, const FileSpec& _spec, int _order, const std::source_location& sl)
     {
-        m_path      = file;
         m_source    = sl;
-        m_folder    = folder;
         m_change    = changeMask;
         m_order     = _order;
-
-        bool        is_extension    = starts(ext, "*.");
-        if(is_extension)
-            ext     = ext.substr(2);
-        m_specific  = ext;
-        
-        switch(trigger){
-        case NoTrigger:
-        case ByFile:
-            break;
-        case ByDocument:
-        case ByExtension:
-        case ByFolderExt:
-        case ByFolderDoc:
-            m_trigger   = trigger;
-            break;
-        case SpecName:
-            m_trigger   = is_extension ? ByExtension : ByDocument;
-            break;
-        case SpecFolderName:
-            m_trigger   = is_extension ? ByFolderExt : ByFolderDoc;
-            break;
-        default:
-            m_trigger   = NoTrigger;
-            break;
-        }
+        m_spec      = _spec;
 
         Repo&   _r = repo();
         _r.all.push_back(this);
@@ -191,23 +164,11 @@ namespace yq {
     }
     
 
-    Stage3::Stage3(Folder f, std::string_view name, int order, const std::source_location&sl) 
+    Stage3::Stage3(const FileSpec& spec, int order, const std::source_location&sl) 
     {
-        bool    is_ext  = starts(name, "*.");
-        if(is_ext)
-            m_specific  = name.substr(2);
-        else
-            m_specific      = name;
-        m_folder        = f;
+        m_spec          = spec;
         m_order         = order;
         m_source        = sl;
-        
-        if(f != Folder()){
-            m_method    = is_ext ? ByFolderExt : ByFolderName;
-        } else {
-            m_method    = is_ext ? ByExt : ByName;
-        }
-        
         repo().all << this;
     }
     
@@ -249,8 +210,8 @@ namespace yq {
     class FunctionalNotifier : public Notifier {
     public:
         std::function<void()>   m_function;
-        FunctionalNotifier(Trigger t, Flag<Change> ch, Folder folder, std::string_view ext, const std::filesystem::path& fname, int _order, std::function<void()> handler, const std::source_location&sl) :
-            Notifier(t, ch, folder, ext, fname, _order, sl), m_function(handler)
+        FunctionalNotifier(Flag<Change> ch, const FileSpec& spec, int _order, std::function<void()> handler, const std::source_location&sl) :
+            Notifier(ch, spec, _order, sl), m_function(handler)
         {
             
         }
@@ -263,23 +224,11 @@ namespace yq {
         
     };
 
-#if 0
-    Notifier::Writer    on_change(const std::filesystem::path&fp, std::function<void()>fn, const std::source_location& sl)
+    Notifier::Writer    on_change(const FileSpec& spec, std::function<void()>fn, const std::source_location& sl)
     {
-        return Notifier::Writer{new FunctionalNotifier(Notifier::ByFile, all_set<Change>(), Folder(), std::string_view(), fp, 0, fn, sl)};
-    }
-#endif
-    
-    Notifier::Writer    on_change(Folder f, std::string_view ext, std::function<void()>fn, const std::source_location& sl)
-    {
-        return Notifier::Writer{new FunctionalNotifier(Notifier::SpecFolderName, all_set<Change>(), f, ext, std::filesystem::path(), 0, fn, sl)};
+        return Notifier::Writer{new FunctionalNotifier(all_set<Change>(), spec, 0, fn, sl)};
     }
     
-    Notifier::Writer    on_change(std::string_view ext, std::function<void()>fn, const std::source_location& sl)
-    {
-        return Notifier::Writer{new FunctionalNotifier(Notifier::SpecName, all_set<Change>(), Folder(), ext, std::filesystem::path(), 0, fn, sl)};
-    }
-
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

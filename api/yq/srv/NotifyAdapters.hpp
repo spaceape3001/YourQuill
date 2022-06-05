@@ -17,8 +17,8 @@ namespace yq {
     class SingleFileNotifier : public Notifier {
     public:
     
-        SingleFileNotifier(Trigger t, Flag<Change> ch, Folder folder, std::string_view ext, const std::filesystem::path& fname, int _order, const std::source_location&sl) :
-            Notifier(t, ch, folder, ext, fname, _order, sl)
+        SingleFileNotifier(Flag<Change> ch, const FileSpec& spec, int _order, const std::source_location&sl) :
+            Notifier(ch, spec, _order, sl)
         {
             
         }
@@ -30,44 +30,28 @@ namespace yq {
         }
     };
     
-    #if 0
     template <void (*FN)()> 
-    Notifier::Writer    on_change(const std::filesystem::path&fp, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(const FileSpec&spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFile, all_set<Change>(), Folder(), std::string_view(), fp, 0, sl)};
-    }
-    #endif
-    
-    template <void (*FN)()> 
-    Notifier::Writer    on_change(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFolderExt, all_set<Change>(), f, ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new SingleFileNotifier<FN>(all_set<Change>(), spec, 0, sl)};
     }
 
     template <void (*FN)()> 
-    Notifier::Writer    on_change(int order, const std::filesystem::path&fp, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(int order, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFile, all_set<Change>(), Folder(), std::string_view(), fp, order, sl)};
-    }
-    
-    template <void (*FN)()> 
-    Notifier::Writer    on_change(int order, Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new SingleFileNotifier<FN>(Notifier::ByFolderExt, all_set<Change>(), f, ext, std::filesystem::path(), order, sl)};
+        return Notifier::Writer{new SingleFileNotifier<FN>(all_set<Change>(), spec, order, sl)};
     }
 
-
-    //Notifier::Writer    on_change(const std::filesystem::path&fp, std::function<void()>, const std::source_location& sl = std::source_location::current());;
-    Notifier::Writer    on_change(std::string_view ext, std::function<void()>, const std::source_location& sl = std::source_location::current());
-    Notifier::Writer    on_change(Folder f, std::string_view ext, std::function<void()>, const std::source_location& sl = std::source_location::current());
+    Notifier::Writer    on_change(const FileSpec&, std::function<void()>, const std::source_location& sl = std::source_location::current());
+    Notifier::Writer    on_change(Folder f, const FileSpec&, std::function<void()>, const std::source_location& sl = std::source_location::current());
 
         ////////////////////////////////////////////////////////////////////////////////
 
     template <void(*FN)(Fragment)>
     class FragmentFileNotifier : public Notifier {
     public:
-        FragmentFileNotifier(Trigger t, Flag<Change> ch, Folder folder, std::string_view ext, const std::filesystem::path& fname, int _order, const std::source_location&sl) :
-            Notifier(t, ch, folder, ext, fname, _order, sl)
+        FragmentFileNotifier(Flag<Change> ch, const FileSpec& spec, int _order, const std::source_location&sl) :
+            Notifier(ch, spec, _order, sl)
         {
         }
 
@@ -79,92 +63,28 @@ namespace yq {
     };
     
     template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecName, all_set<Change>(), Folder(), ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentFileNotifier<FN>(all_set<Change>(), spec, 0, sl)};
     }
 
     template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(ChangeFlags ch, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecFolderName, all_set<Change>(), f, ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentFileNotifier<FN>(ch, spec, 0, sl)};
     }
 
     template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(ChangeFlags ch, std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(int order, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecName, ch, Folder(), ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentFileNotifier<FN>(all_set<Change>(), spec, order, sl)};
     }
 
     template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(ChangeFlags ch, Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(int order, ChangeFlags ch, const FileSpec&spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecFolderName, ch, f, ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentFileNotifier<FN>(ch, spec, order, sl)};
     }
-
-
-    template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(int order, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecName, all_set<Change>(), Folder(), ext, std::filesystem::path(), order, sl)};
-    }
-
-    template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(int order, Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecFolderName, all_set<Change>(), f, ext, std::filesystem::path(), order, sl)};
-    }
-
-    template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(int order, ChangeFlags ch, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecName, ch, Folder(), ext, std::filesystem::path(), order, sl)};
-    }
-
-    template <void (*FN)(Fragment)> 
-    Notifier::Writer    on_change(int order, ChangeFlags ch, Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecFolderName, ch, f, ext, std::filesystem::path(), order, sl)};
-    }
-
-
-    //template <void (*FN)(Fragment)> 
-    //Notifier::Writer    on_add(std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecName, Change::Added, Folder(), ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment)> 
-    //Notifier::Writer    on_add(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecFolderName, Change::Added, f, ext, std::filesystem::path(), 0, sl)};
-    //}
-
-
-    //template <void (*FN)(Fragment)> 
-    //Notifier::Writer    on_modify(std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecName, Change::Modified, Folder(), ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment)> 
-    //Notifier::Writer    on_modify(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecFolderName, Change::Modified, f, ext, std::filesystem::path(), 0, sl)};
-    //}
-
-
-    //template <void (*FN)(Fragment)> 
-    //Notifier::Writer    on_remove(std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecName, Change::Removed, Folder(), ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment)> 
-    //Notifier::Writer    on_remove(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentFileNotifier<FN>(Notifier::SpecFolderName, Change::Removed, f, ext, std::filesystem::path(), 0, sl)};
-    //}
 
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -172,8 +92,8 @@ namespace yq {
     template <void(*FN)(Fragment,Change)>
     class FragmentChangeFileNotifier : public Notifier {
     public:
-        FragmentChangeFileNotifier(Trigger t, Flag<Change> ch, Folder folder, std::string_view ext, const std::filesystem::path& fname, int _order, const std::source_location&sl) :
-            Notifier(t, ch, folder, ext, fname, _order, sl)
+        FragmentChangeFileNotifier(Flag<Change> ch, const FileSpec& spec, int _order, const std::source_location&sl) :
+            Notifier(ch, spec, _order, sl)
         {
         }
 
@@ -185,87 +105,26 @@ namespace yq {
     };
     
     template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecName, all_set<Change>(), Folder(), ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(all_set<Change>(), spec, 0, sl)};
     }
 
     template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(ChangeFlags ch, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecFolderName, all_set<Change>(), f, ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(ch, spec, 0, sl)};
     }
 
     template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(ChangeFlags ch, std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(int order, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecName, ch, Folder(), ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(all_set<Change>(), spec, order, sl)};
     }
 
     template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(ChangeFlags ch, Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
+    Notifier::Writer    on_change(int order, ChangeFlags ch, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecFolderName, ch, f, ext, std::filesystem::path(), 0, sl)};
+        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(ch, spec, order, sl)};
     }
-
-    template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(int order, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecName, all_set<Change>(), Folder(), ext, std::filesystem::path(), order, sl)};
-    }
-
-    template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(int order, Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecFolderName, all_set<Change>(), f, ext, std::filesystem::path(), order, sl)};
-    }
-
-    template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(int order, ChangeFlags ch, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecName, ch, Folder(), ext, std::filesystem::path(), order, sl)};
-    }
-
-    template <void (*FN)(Fragment, Change)> 
-    Notifier::Writer    on_change(int order, ChangeFlags ch, Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    {
-        return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecFolderName, ch, f, ext, std::filesystem::path(), order, sl)};
-    }
-
-    //template <void (*FN)(Fragment, Change)> 
-    //Notifier::Writer    on_add(std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecName, Change::Added, Folder(), ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment, Change)> 
-    //Notifier::Writer    on_add(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecFolderName, Change::Added, f, ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment, Change)> 
-    //Notifier::Writer    on_modify(std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecName, Change::Modified, Folder(), ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment, Change)> 
-    //Notifier::Writer    on_modify(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecFolderName, Change::Modified, f, ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment, Change)> 
-    //Notifier::Writer    on_remove(std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecName, Change::Removed, Folder(), ext, std::filesystem::path(), 0, sl)};
-    //}
-
-    //template <void (*FN)(Fragment, Change)> 
-    //Notifier::Writer    on_remove(Folder f, std::string_view ext, const std::source_location& sl = std::source_location::current())
-    //{
-        //return Notifier::Writer{new FragmentChangeFileNotifier<FN>(Notifier::SpecFolderName, Change::Removed, f, ext, std::filesystem::path(), 0, sl)};
-    //}
-
 }

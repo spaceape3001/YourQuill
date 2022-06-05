@@ -32,6 +32,7 @@ set(yq_sources
     
     ./enum/enum_unity.cpp
 
+    ./file/FileSpec.cpp
     ./file/file.cpp
     
     ./image/image.cpp
