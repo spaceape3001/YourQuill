@@ -29,12 +29,13 @@ namespace yq {
         struct WindowCreateInfo {
             VkPhysicalDevice    device   = nullptr;
         
-            const char*             title    = "(untitled)";
-            Size2I                  size     = { 1920, 1080 };
-            std::optional<Vec2I>    position;
+            const char*                 title    = "(untitled)";
+            Size2I                      size     = { 1920, 1080 };
+            std::optional<Vec2I>        position;
                 //!  Set to get full screen, windowed otherwise
-            VqMonitor               monitor;
-            VkPresentModeKHR        pmode   = VK_PRESENT_MODE_FIFO_KHR;
+            VqMonitor                   monitor;
+            VkPresentModeKHR            pmode   = VK_PRESENT_MODE_FIFO_KHR;
+            
             
                 //!  This is the background color
             ColorRgbF               clear   = { 0., 0., 0., 1. };
@@ -82,7 +83,7 @@ namespace yq {
                 //! Closes (politely) this window....
             void                close();
             
-            VkColorSpaceKHR     color_space() const { return m_surfaceFormat.colorSpace; }
+            VkColorSpaceKHR     color_space() const { return m_surfaceColorSpace; }
             
             VkCommandBuffer     command_buffer() const;
             
@@ -93,14 +94,14 @@ namespace yq {
                 //! Brings window to front & input focus
             void                focus();
             
-            VkFormat            format() const { return m_surfaceFormat.format; }
+            VkFormat            format() const { return m_surfaceFormat; }
 
                 //! Good & initialized window
             bool                good() const { return m_window != nullptr; }
             
-            VkQueue             graphics_queue() const { return m_graphicsQueue; }
+            VkQueue             graphics_queue() const { return m_graphics.queue; }
             
-            uint32_t            graphics_queue_family() const { return m_graphicsQueueFamily; }
+            uint32_t            graphics_queue_family() const { return m_graphics.family; }
 
                 //! Height of the window
             int                 height() const;
@@ -216,76 +217,70 @@ namespace yq {
             struct Command;
 
             bool    init(const WindowCreateInfo& i);
+            bool    init_physical(const WindowCreateInfo& i);
+            bool    init_window(const WindowCreateInfo& i);
+            bool    init_surface();
+            bool    init_logical();
+            bool    init_command_pool();
+            bool    init_render_pass();
+            bool    init_sync();
             void    kill();
             bool    record(VkCommandBuffer, uint32_t);
             
-            VkPhysicalDevice            m_physical              = nullptr;
-            GLFWwindow*                 m_window                = nullptr;
-            VkSurfaceKHR                m_surface               = nullptr;
-            VkQueue                     m_graphicsQueue         = nullptr;
-            uint32_t                    m_graphicsQueueFamily   = UINT32_MAX;
-            VkQueue                     m_presentQueue          = nullptr;
-            VkDevice                    m_device                = nullptr;
-            VkPresentModeKHR            m_presentMode;
-            VkSurfaceFormatKHR          m_surfaceFormat;
-            VkClearValue                m_clear;
+            struct Queue {
+                VkQueue             queue   = nullptr;
+                uint32_t            family  = UINT32_MAX;
+                VkPresentModeKHR    mode    = {};
+                
+                void    kill(VqWindow*);
+            };
             
-            struct SwapChain {
-                VkSwapchainKHR              handle  = nullptr;
-                VkExtent2D                  extents  = { 0, 0 };
+            //! This is what needs to change with every resize!
+            struct DynamicStuff {
                 std::vector<VkImage>        images;
                 std::vector<VkImageView>    imageViews;
-                uint32_t                    imageCount      = 0;
-                uint32_t                    minImageCount   = 0;
-                
-                bool        init(VqWindow*);
-                void        kill(VqWindow*);
+                std::vector<VkFramebuffer>  frameBuffers;
+                VkSwapchainKHR              swapChain           = nullptr;
+                VkCommandBuffer             commandBuffer       = nullptr;
+                VkExtent2D                  extents             = { 0, 0 };
+                uint32_t                    imageCount          = 0;
+                uint32_t                    minImageCount       = 0;
+
                 VkRect2D    def_scissor() const;
                 VkViewport  def_viewport() const;
             };
-            
-            SwapChain                   m_swapChain;
-            
-            struct RenderPass {
-                VkRenderPass            handle  = nullptr;
 
-                bool                    init(VqWindow*);
-                void                    kill(VqWindow*);
-            };
             
-            RenderPass                  m_renderPass;
+            VkPhysicalDevice            m_physical                  = nullptr;
+            GLFWwindow*                 m_window                    = nullptr;
+            VkSurfaceKHR                m_surface                   = nullptr;
+            Queue                       m_graphics, m_present;
             
-            struct FrameBuffers {
-                std::vector<VkFramebuffer> buffers;
-                
-                bool                    init(VqWindow*);
-                void                    kill(VqWindow*);
-            };
-            
-            FrameBuffers                m_frameBuffers;
-            
-            struct Command {
-                VkCommandPool           pool;
-                VkCommandBuffer         buffer;
+            VkQueue                     m_graphicsQueue             = nullptr;
+            uint32_t                    m_graphicsQueueFamily       = UINT32_MAX;
+            VkQueue                     m_presentQueue              = nullptr;
+            VkDevice                    m_device                    = nullptr;
+            VkPresentModeKHR            m_presentMode;
+            VkFormat                    m_surfaceFormat;
+            VkColorSpaceKHR             m_surfaceColorSpace;
+            VkClearValue                m_clear;
+            VkCommandPool               m_commandPool               = nullptr;
+            VkRenderPass                m_renderPass                = nullptr;
+            VkSemaphore                 m_imageAvailableSemaphore   = nullptr;
+            VkSemaphore                 m_renderFinishedSemaphore   = nullptr;
+            VqFence                     m_inFlightFence;
 
-                bool                    init(VqWindow*);
-                void                    kill(VqWindow*);
-            };
-            
-            Command                     m_command;
-            
-            struct Sync {
-                VkSemaphore         imageAvailable;
-                VkSemaphore         renderFinished;
-                VqFence             inFlightFence;
 
-                bool                    init(VqWindow*);
-                void                    kill(VqWindow*);
-            };
             
-            Sync                        m_sync;
+            DynamicStuff            m_dynamic;
+            bool                    init(DynamicStuff&, VkSwapchainKHR old=nullptr);
+            void                    kill(DynamicStuff&);
+            
             
             //VkPipeline                  m_lastPipeline  = nullptr;
+            void        rebuild_onward();
+            virtual void        window_resized(){}
+            virtual void        viewport_changed(){}
         };
         
         struct VqWindow::Pipeline {

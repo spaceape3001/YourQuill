@@ -17,6 +17,7 @@
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
+#include <basic/Safety.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/render/PipelineConfig.hpp>
 #include <math/shape/Size2.hpp>
@@ -53,31 +54,27 @@ namespace yq {
             kill();
         }
 
-        bool VqWindow::init(const WindowCreateInfo& i)
+        bool VqWindow::init_physical(const WindowCreateInfo& i)
         {
-            VkInstance     inst  = VqApp::instance();
-            if(!inst){
-                yCritical() << "Vulkan has not been initialized!";
-                return false;
-            }
-            
-            const VqApp*   app    = VqApp::app();
-            
-                /*
-                    First, determine our physical device (GPU, etc)
-                */
-            
+            if(m_physical)
+                return true;
+        
             m_physical  = i.device;
             if(!m_physical){
-                    //  NULL specification is fine, we grab the first/suitable one
-                    //  TODO ... use the monitor hint
                 m_physical  = vqFirstDevice();
                 if(!m_physical){
                     yCritical() << "Cannot create window without any devices!";
                     return false;
                 }
             }
+            return true;
+        }
 
+        bool VqWindow::init_window(const WindowCreateInfo& i)
+        {
+            if(m_window)    // already initialized
+                return true;
+                
                 /*
                     --------------------------------------------------------------------------------------------------------
                     GLFW WINDOW STUFF
@@ -99,50 +96,47 @@ namespace yq {
             }
             
             glfwSetWindowUserPointer(m_window, this);
-            
-                //  NOTE ALL FAILURES AFTER THIS POINT REQUIRE A CALL TO KILL()!
-            
-                /*
-                    --------------------------------------------------------------------------------------------------------
-                    SURFACE
-                */
+            return true;
+        }
 
-            if(glfwCreateWindowSurface(inst, m_window, nullptr, &m_surface) != VK_SUCCESS){
+        bool VqWindow::init_surface()
+        {
+            if(m_surface)           // already initialized!
+                return true;
+            if(glfwCreateWindowSurface(VqApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
                 yCritical() << "Unable to create window surface!";
                 kill();
                 return false;
             }
+            return true;
+        }
 
-                /*
-                    --------------------------------------------------------------------------------------------------------
-                    LOGICAL DEVICE
-                */
-
-            
-            /*
-                Create our logical device
-            */
-            
+        bool VqWindow::init_logical()
+        {
+            if(m_device)
+                return true;    // already initialized!
+                
             std::vector<const char*> deviceExtensions = {
                 VK_KHR_SWAPCHAIN_EXTENSION_NAME
             };
-        
+
             auto queueInfos         = vqFindQueueFamilies(m_physical, m_surface);
             if(!queueInfos.graphicsFamily.has_value()){
                 yCritical() << "Unable to get a queue with graphic capability!";
-                kill();
                 return false;
             }
             if(!queueInfos.presentFamily.has_value()){
                 yCritical() << "Unable to find a present queue!";
-                kill();
                 return false;
             }
         
             std::vector<VkDeviceQueueCreateInfo> qci;
             float quePri    = 1.0f;
+
+            m_graphics.family           =   queueInfos.graphicsFamily.value();
+            m_present.family            =   queueInfos.presentFamily.value();
             
-            for(uint32_t i : std::set<uint32_t>({ queueInfos.graphicsFamily.value(), queueInfos.presentFamily.value()})){
+            for(uint32_t i : std::set<uint32_t>({ m_graphics.family, m_present.family })){
                 VqDeviceQueueCreateInfo info;
                 info.queueFamilyIndex = i;
                 info.queueCount = 1;
@@ -150,8 +144,11 @@ namespace yq {
                 qci.push_back(info);
             }
 
-            m_graphicsQueueFamily        = queueInfos.graphicsFamily.value();
-
+            const VqApp*   app    = VqApp::app();
+            if(!app){
+                yCritical() << "Unintialized or no application present!";
+                return false;
+            }
         
             VkPhysicalDeviceFeatures    df{};
             VqDeviceCreateInfo          dci;
@@ -169,18 +166,259 @@ namespace yq {
             
             if(vkCreateDevice(m_physical, &dci, nullptr, &m_device) != VK_SUCCESS){
                 yCritical() << "Unable to create logical device!";
-                kill();
                 return false;
             }
             
                 /*
                     Graphics queues
                 */
-            vkGetDeviceQueue(m_device, queueInfos.graphicsFamily.value(), 0, &m_graphicsQueue);
-            vkGetDeviceQueue(m_device, queueInfos.presentFamily.value(), 0, &m_presentQueue);
-            
+            vkGetDeviceQueue(m_device, m_graphics.family, 0, &m_graphics.queue);
+            vkGetDeviceQueue(m_device, m_present.family, 0, &m_present.queue);
+            return true;
+        }
         
-            auto    pmodes              = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
+        bool    VqWindow::init_command_pool()
+        {
+            if(m_commandPool)   // already initialized
+                return true;
+                
+            VqCommandPoolCreateInfo poolInfo;
+            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+            poolInfo.queueFamilyIndex = m_graphics.family;
+            if (vkCreateCommandPool(m_device, &poolInfo, nullptr, &m_commandPool) != VK_SUCCESS) {
+                yError() << "Failed to create command pool!";
+                return false;
+            }
+            return true;
+        }
+
+        bool VqWindow::init_render_pass()
+        {
+            if(m_renderPass)
+                return true;
+                
+                //  Render pass
+            VkAttachmentDescription colorAttachment{};
+            colorAttachment.format = m_surfaceFormat;
+            colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;        
+            colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            
+            VkAttachmentReference colorAttachmentRef{};
+            colorAttachmentRef.attachment = 0;
+            colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+            VkSubpassDescription subpass{};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;        
+
+            subpass.colorAttachmentCount = 1;
+            subpass.pColorAttachments = &colorAttachmentRef;
+            
+            VkRenderPassCreateInfo renderPassInfo{};
+            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            renderPassInfo.attachmentCount = 1;
+            renderPassInfo.pAttachments = &colorAttachment;
+            renderPassInfo.subpassCount = 1;
+            renderPassInfo.pSubpasses = &subpass;
+
+            if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) {
+                yCritical() << "Unable to create the render pass!";
+                return false;
+            } 
+
+            return true;
+        }
+        
+        bool VqWindow::init_sync()
+        {
+            bool    success = true;
+            if(!m_imageAvailableSemaphore){
+                VqSemaphoreCreateInfo   semaphoreInfo;
+                if(vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &m_imageAvailableSemaphore) != VK_SUCCESS){
+                    yCritical() << "Unable to create semaphore for available images!";
+                    success = false;
+                }
+            }
+            if(!m_renderFinishedSemaphore){
+                VqSemaphoreCreateInfo   semaphoreInfo;
+                if(vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &m_renderFinishedSemaphore) != VK_SUCCESS){
+                    yCritical() << "Unable to create semaphore for finished rendering!";
+                    success = false;
+                }
+            }
+            
+            if(!m_inFlightFence){
+                m_inFlightFence   = VqFence(*this);
+                if(!m_inFlightFence.good()){
+                    yError() << "Failed to create fence!";
+                    success = false;
+                }
+            }
+            
+            return success;
+            
+        }
+
+        bool VqWindow::init(DynamicStuff&ds, VkSwapchainKHR old)
+        {
+            //  ----------------------------
+            //      SWAP CHAIN       
+            //  ----------------------------
+            
+            VkSurfaceCapabilitiesKHR    capabilities;
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &capabilities);
+            if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+                ds.extents = capabilities.currentExtent;
+            } else {
+                int w, h;
+                glfwGetFramebufferSize(m_window, &w, &h);
+                ds.extents = {};
+                ds.extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+                ds.extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+            }
+
+            ds.minImageCount               = capabilities.minImageCount;
+            if(ds.minImageCount < 2)
+                ds.minImageCount   = 2;
+            ds.imageCount                  = ds.minImageCount + 1;
+            if (capabilities.maxImageCount > 0 && ds.imageCount > capabilities.maxImageCount) {
+                ds.imageCount = capabilities.maxImageCount;
+            }
+
+            VqSwapchainCreateInfoKHR    createInfo;
+            createInfo.surface          = m_surface;
+            createInfo.minImageCount    = ds.imageCount;
+            createInfo.imageFormat      = m_surfaceFormat;
+            createInfo.imageColorSpace  = m_surfaceColorSpace;
+            createInfo.imageExtent      = ds.extents;
+            createInfo.imageArrayLayers = 1;    // we're not steroscopic
+            createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            
+            uint32_t queueFamilyIndices[] = {m_graphics.family, m_present.family};
+            if (m_graphics.family != m_present.family) {
+                createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+                createInfo.queueFamilyIndexCount = 2;
+                createInfo.pQueueFamilyIndices = queueFamilyIndices;
+            } else {
+                createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+                createInfo.queueFamilyIndexCount = 0; // Optional
+                createInfo.pQueueFamilyIndices = nullptr; // Optional
+            }        
+            createInfo.preTransform     = capabilities.currentTransform;
+            createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+            createInfo.presentMode      = m_present.mode;
+            createInfo.clipped          = VK_TRUE;
+            
+                // TEMPORARY UNTIL WE GET THE NEW ONE
+            createInfo.oldSwapchain = old;
+            
+            if (vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &ds.swapChain) != VK_SUCCESS){
+                ds.swapChain   = nullptr;
+                yCritical() << "Failed to create the SWAP chain!";
+                return false;
+            }
+
+            //  ----------------------------
+            //      IMAGES
+            //  ----------------------------
+
+            vkGetSwapchainImagesKHR(m_device, ds.swapChain, &ds.imageCount, nullptr);
+            ds.images.resize(ds.imageCount, nullptr);
+            vkGetSwapchainImagesKHR(m_device, ds.swapChain, &ds.imageCount, ds.images.data());    
+
+            //  ----------------------------
+            //      IMAGE VIEWS       
+            //  ----------------------------
+
+            ds.imageViews.resize(ds.images.size(), nullptr);
+            for(size_t i=0;i<ds.images.size(); ++i){
+                VqImageViewCreateInfo   createInfo;
+                createInfo.image        = ds.images[i];
+                createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
+                createInfo.format       = m_surfaceFormat;
+                createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+                createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+                createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+                createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+                createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                createInfo.subresourceRange.baseMipLevel = 0;
+                createInfo.subresourceRange.levelCount = 1;
+                createInfo.subresourceRange.baseArrayLayer = 0;
+                createInfo.subresourceRange.layerCount = 1;
+                if(vkCreateImageView(m_device, &createInfo, nullptr, &ds.imageViews[i]) != VK_SUCCESS) {
+                    yCritical() << "Failed to create one of the Swap Image Viewers!";
+                }
+            }
+            
+            //  ----------------------------
+            //      FRAME BUFFER
+            //  ----------------------------
+
+            ds.frameBuffers.resize(ds.imageViews.size(), nullptr);
+            for (size_t i = 0; i < ds.imageViews.size(); i++) {
+                VkImageView attachments[] = {
+                    ds.imageViews[i]
+                };
+
+                VqFramebufferCreateInfo framebufferInfo;
+                framebufferInfo.renderPass = m_renderPass;
+                framebufferInfo.attachmentCount = 1;
+                framebufferInfo.pAttachments = attachments;
+                framebufferInfo.width = ds.extents.width;
+                framebufferInfo.height = ds.extents.height;
+                framebufferInfo.layers = 1;
+
+                if (vkCreateFramebuffer(m_device, &framebufferInfo, nullptr, &ds.frameBuffers[i]) != VK_SUCCESS) {
+                    yCritical() << "Failed to create framebuffer!";
+                    return false;
+                }
+            }
+
+            //  ----------------------------
+            //      COMMAND BUFFER
+            //  ----------------------------
+
+            VqCommandBufferAllocateInfo allocInfo;
+            allocInfo.commandPool = m_commandPool;
+            allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+            allocInfo.commandBufferCount = 1;
+
+            if (vkAllocateCommandBuffers(m_device, &allocInfo, &ds.commandBuffer) != VK_SUCCESS) {
+                yError () << "Failed to allocate command buffers!";
+                return false;
+            }
+
+            return true;            
+        }
+
+        bool VqWindow::init(const WindowCreateInfo& i)
+        {
+            VkInstance     inst  = VqApp::instance();
+            if(!inst){
+                yCritical() << "Vulkan has not been initialized!";
+                return false;
+            }
+            
+            auto    auto_kill   = safety([this](){ kill(); });
+
+            if(!init_physical(i))
+                return false;
+            if(!init_window(i))
+                return false;
+            if(!init_surface())
+                return false;
+            if(!init_logical())
+                return false;
+            
+
+
+                //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
+            
+            auto    pmodes          = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
             
             //for(auto& sf : vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface)){
                 //yInfo() << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
@@ -188,57 +426,72 @@ namespace yq {
 
             //  cache details.....
         
-            m_presentMode               = pmodes.contains(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
+            m_present.mode          = pmodes.contains(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
                 // I know this is available on my card, get smarter later.
-            m_surfaceFormat.format      = VK_FORMAT_B8G8R8A8_SRGB;
-            m_surfaceFormat.colorSpace  = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-        
-                /*
-                    SWAP CHAIN
-                */
+            m_surfaceFormat         = VK_FORMAT_B8G8R8A8_SRGB;
+            m_surfaceColorSpace     = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                 
-            if(!m_swapChain.init(this)){
-                kill();
+            if(!init_command_pool())
                 return false;
-            }
-            
-            if(!m_renderPass.init(this)){
-                kill();
+            if(!init_render_pass())
                 return false;
-            }
-                
-            if(!m_frameBuffers.init(this)){
-                kill();
+            if(!init_sync())
                 return false;
-            }
-            
-            if(!m_command.init(this)){
-                kill();
+            if(!init(m_dynamic))
                 return false;
-            }
-                
-            if(!m_sync.init(this)){
-                kill();
-                return false;
-            }
             
             set_clear(i.clear);
-                
+            auto_kill.clear();  // disarm the safety kill
             return true;
         }
 
+
+        void VqWindow::kill(DynamicStuff&ds)
+        {
+            ds.commandBuffer  = nullptr;
+            for (VkFramebuffer fb : ds.frameBuffers) {
+                if(fb)
+                    vkDestroyFramebuffer(m_device, fb, nullptr);
+            }
+            ds.frameBuffers.clear();
+            for(auto iv : ds.imageViews){
+                if(iv)
+                    vkDestroyImageView(m_device, iv, nullptr);
+            }
+            ds.imageViews.clear();
+            if(ds.swapChain){
+                vkDestroySwapchainKHR(m_device, ds.swapChain, nullptr);
+                ds.swapChain  = nullptr;
+            }
+        }
 
         void VqWindow::kill()
         {
             if(m_device){
                 vkDeviceWaitIdle(m_device);
             }
+            
+            kill(m_dynamic);
+            
+            if(m_imageAvailableSemaphore){
+                vkDestroySemaphore(m_device, m_imageAvailableSemaphore, nullptr);
+                m_imageAvailableSemaphore  = nullptr;
+            }
+            if(m_renderFinishedSemaphore){
+                vkDestroySemaphore(m_device, m_renderFinishedSemaphore, nullptr);
+                m_renderFinishedSemaphore  = nullptr;
+            }
+            m_inFlightFence   = {};
 
-            m_sync.kill(this);
-            m_command.kill(this);
-            m_frameBuffers.kill(this);
-            m_renderPass.kill(this);
-            m_swapChain.kill(this);
+            if(m_renderPass){
+                vkDestroyRenderPass(m_device, m_renderPass, nullptr);
+                m_renderPass    = nullptr;
+            }
+            
+            if(m_commandPool){
+                vkDestroyCommandPool(m_device, m_commandPool, nullptr);
+                m_commandPool    = nullptr;
+            }
             
             if(m_device){
                 vkDestroyDevice(m_device, nullptr);
@@ -256,76 +509,6 @@ namespace yq {
             }
             
             m_physical = nullptr;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-
-        bool VqWindow::Command::init(VqWindow* win)
-        {
-            VqQueueFamilyIndices queueFamilyIndices = vqFindQueueFamilies(win->m_physical, win->m_surface);
-
-            VqCommandPoolCreateInfo poolInfo;
-            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
-            if (vkCreateCommandPool(win->m_device, &poolInfo, nullptr, &pool) != VK_SUCCESS) {
-                yError() << "Failed to create command pool!";
-                return false;
-            }
-
-            VqCommandBufferAllocateInfo allocInfo;
-            allocInfo.commandPool = pool;
-            allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-            allocInfo.commandBufferCount = 1;
-
-            if (vkAllocateCommandBuffers(win->m_device, &allocInfo, &buffer) != VK_SUCCESS) {
-                yError () << "Failed to allocate command buffers!";
-                return false;
-            }
-            return true;
-        }
-        
-        void VqWindow::Command::kill(VqWindow* win)
-        {
-            buffer  = nullptr;
-            if(pool){
-                vkDestroyCommandPool(win->m_device, pool, nullptr);
-                pool    = nullptr;
-            }
-        }
-
-
-        ////////////////////////////////////////////////////////////////////////////////
-
-        bool VqWindow::FrameBuffers::init(VqWindow* win)
-        {
-            buffers.resize(win -> m_swapChain.imageViews.size(), nullptr);
-            for (size_t i = 0; i < win -> m_swapChain.imageViews.size(); i++) {
-                VkImageView attachments[] = {
-                    win -> m_swapChain.imageViews[i]
-                };
-
-                VqFramebufferCreateInfo framebufferInfo;
-                framebufferInfo.renderPass = win->m_renderPass.handle;
-                framebufferInfo.attachmentCount = 1;
-                framebufferInfo.pAttachments = attachments;
-                framebufferInfo.width = win->swap_width();
-                framebufferInfo.height = win->swap_height();
-                framebufferInfo.layers = 1;
-
-                if (vkCreateFramebuffer(win->m_device, &framebufferInfo, nullptr, &buffers[i]) != VK_SUCCESS) {
-                    yCritical() << "Failed to create framebuffer!";
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-        void VqWindow::FrameBuffers::kill(VqWindow* win)
-        {
-            for (VkFramebuffer fb : buffers) {
-                if(fb)
-                    vkDestroyFramebuffer(win->m_device, fb, nullptr);
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -417,12 +600,12 @@ namespace yq {
             pipelineInfo.pColorBlendState = &colorBlending;
             pipelineInfo.pDynamicState = nullptr; // Optional   
             pipelineInfo.layout = layout;
-            pipelineInfo.renderPass = win -> m_renderPass.handle;
+            pipelineInfo.renderPass = win->m_renderPass;
             pipelineInfo.subpass = 0;             
             pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
             pipelineInfo.basePipelineIndex = -1; // Optional        
 
-            if (vkCreateGraphicsPipelines(win -> m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS) {
+            if (vkCreateGraphicsPipelines(win->m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS) {
                 yError() << "Failed to create graphics pipeline!";
                 return false;
             }
@@ -444,206 +627,6 @@ namespace yq {
         
         ////////////////////////////////////////////////////////////////////////////////
 
-        bool VqWindow::RenderPass::init(VqWindow* win)
-        {
-                //  Render pass
-            VkAttachmentDescription colorAttachment{};
-            colorAttachment.format = win->m_surfaceFormat.format;
-            colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;        
-            colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-            
-            VkAttachmentReference colorAttachmentRef{};
-            colorAttachmentRef.attachment = 0;
-            colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-            VkSubpassDescription subpass{};
-            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;        
-
-            subpass.colorAttachmentCount = 1;
-            subpass.pColorAttachments = &colorAttachmentRef;
-            
-            VkRenderPassCreateInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-            renderPassInfo.attachmentCount = 1;
-            renderPassInfo.pAttachments = &colorAttachment;
-            renderPassInfo.subpassCount = 1;
-            renderPassInfo.pSubpasses = &subpass;
-
-            if (vkCreateRenderPass(win->m_device, &renderPassInfo, nullptr, &handle) != VK_SUCCESS) {
-                yCritical() << "Unable to create the render pass!";
-                return false;
-            } else
-                return true;
-        }
-        
-        void VqWindow::RenderPass::kill(VqWindow* win)
-        {
-            if(handle){
-                vkDestroyRenderPass(win->m_device, handle, nullptr);
-                handle    = nullptr;
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-
-        VkRect2D    VqWindow::SwapChain::def_scissor() const
-        {
-            VkRect2D    ret{};
-            ret.offset  = { 0, 0 };
-            ret.extent  = extents;
-            return ret;
-        }
-        
-        VkViewport  VqWindow::SwapChain::def_viewport() const
-        {
-            VkViewport  ret{};
-            ret.x = 0.0f;
-            ret.y = 0.0f;
-            ret.width = (float) extents.width;
-            ret.height = (float) extents.height;
-            ret.minDepth = 0.0f;
-            ret.maxDepth = 1.0f;
-            return ret;
-        }
-            
-        bool    VqWindow::SwapChain::init(VqWindow* win)
-        {
-            VkSurfaceCapabilitiesKHR    capabilities;
-            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(win->m_physical, win->m_surface, &capabilities);
-            if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-                extents = capabilities.currentExtent;
-            } else {
-                int w, h;
-                glfwGetFramebufferSize(win->m_window, &w, &h);
-                extents = {};
-                extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-                extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
-            }
-
-            
-            minImageCount               = capabilities.minImageCount;
-            if(minImageCount < 2)
-                minImageCount   = 2;
-            imageCount                  = minImageCount + 1;
-            if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
-                imageCount = capabilities.maxImageCount;
-            }
-
-            VqSwapchainCreateInfoKHR    createInfo;
-            createInfo.surface          = win->m_surface;
-            createInfo.minImageCount    = imageCount;
-            createInfo.imageFormat      = win->m_surfaceFormat.format;
-            createInfo.imageColorSpace  = win->m_surfaceFormat.colorSpace;
-            createInfo.imageExtent      = extents;
-            createInfo.imageArrayLayers = 1;    // we're not steroscopic
-            createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-            
-            auto indices                = vqFindQueueFamilies(win->m_physical, win->m_surface);
-            uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
-            if (indices.graphicsFamily != indices.presentFamily) {
-                createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-                createInfo.queueFamilyIndexCount = 2;
-                createInfo.pQueueFamilyIndices = queueFamilyIndices;
-            } else {
-                createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-                createInfo.queueFamilyIndexCount = 0; // Optional
-                createInfo.pQueueFamilyIndices = nullptr; // Optional
-            }        
-            createInfo.preTransform     = capabilities.currentTransform;
-            createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode      = win->m_presentMode;
-            createInfo.clipped          = VK_TRUE;
-            
-                // TEMPORARY UNTIL WE GET THE NEW ONE
-            createInfo.oldSwapchain = VK_NULL_HANDLE;
-            
-            if (vkCreateSwapchainKHR(win->m_device, &createInfo, nullptr, &handle) != VK_SUCCESS){
-                handle   = nullptr;
-                yCritical() << "Failed to create the SWAP chain!";
-                return false;
-            }
-
-            vkGetSwapchainImagesKHR(win->m_device, handle, &imageCount, nullptr);
-            images.resize(imageCount);
-            vkGetSwapchainImagesKHR(win->m_device, handle, &imageCount, images.data());    
-
-            imageViews.resize(images.size(), nullptr);
-            for(size_t i=0;i<images.size(); ++i){
-                VqImageViewCreateInfo   createInfo;
-                createInfo.image        = images[i];
-                createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
-                createInfo.format       = win->m_surfaceFormat.format;
-                createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-                createInfo.subresourceRange.baseMipLevel = 0;
-                createInfo.subresourceRange.levelCount = 1;
-                createInfo.subresourceRange.baseArrayLayer = 0;
-                createInfo.subresourceRange.layerCount = 1;
-                if(vkCreateImageView(win->m_device, &createInfo, nullptr, &imageViews[i]) != VK_SUCCESS) {
-                    yCritical() << "Failed to create one of the Swap Image Viewers!";
-                }
-            }
-            
-            return true;
-        }
-        
-        void    VqWindow::SwapChain::kill(VqWindow* win)
-        {
-            for(auto iv : imageViews){
-                if(iv)
-                    vkDestroyImageView(win->m_device, iv, nullptr);
-            }
-            imageViews.clear();
-            if(handle){
-                vkDestroySwapchainKHR(win->m_device, handle, nullptr);
-                handle  = nullptr;
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-
-        bool VqWindow::Sync::init(VqWindow* win)
-        {
-            VqSemaphoreCreateInfo   semaphoreInfo;
-            
-            if (vkCreateSemaphore(win->m_device, &semaphoreInfo, nullptr, &imageAvailable) != VK_SUCCESS ||
-                vkCreateSemaphore(win->m_device, &semaphoreInfo, nullptr, &renderFinished) != VK_SUCCESS) {
-                
-                yError() << "Failed to create semaphores!";
-                return false;
-            }
-            
-            inFlightFence   = VqFence(*win);
-            if(!inFlightFence.good()){
-                yError() << "Failed to create semaphores!";
-                return false;
-            }
-            return true;
-        }
-        
-        void VqWindow::Sync::kill(VqWindow* win)
-        {
-            if(imageAvailable){
-                vkDestroySemaphore(win->m_device, imageAvailable, nullptr);
-                imageAvailable  = nullptr;
-            }
-            if(renderFinished){
-                vkDestroySemaphore(win->m_device, renderFinished, nullptr);
-                renderFinished  = nullptr;
-            }
-            inFlightFence   = {};
-        }
-        
-        ////////////////////////////////////////////////////////////////////////////////
-
         bool    VqWindow::record(VkCommandBuffer commandBuffer, uint32_t imageIndex)
         {
             VqCommandBufferBeginInfo beginInfo;
@@ -656,10 +639,10 @@ namespace yq {
             }
 
             VqRenderPassBeginInfo renderPassInfo;
-            renderPassInfo.renderPass = m_renderPass.handle;
-            renderPassInfo.framebuffer = m_frameBuffers.buffers[imageIndex];
+            renderPassInfo.renderPass = m_renderPass;
+            renderPassInfo.framebuffer = m_dynamic.frameBuffers[imageIndex];
             renderPassInfo.renderArea.offset = {0, 0};
-            renderPassInfo.renderArea.extent = m_swapChain.extents;
+            renderPassInfo.renderArea.extent = m_dynamic.extents;
 
             renderPassInfo.clearValueCount = 1;
             renderPassInfo.pClearValues = &m_clear;
@@ -678,29 +661,29 @@ namespace yq {
         
         bool    VqWindow::draw()
         {
-            m_sync.inFlightFence.wait_reset();
+            m_inFlightFence.wait_reset();
             uint32_t imageIndex = 0;
-            vkAcquireNextImageKHR(m_device, m_swapChain.handle, UINT64_MAX, m_sync.imageAvailable, VK_NULL_HANDLE, &imageIndex);
-            vkResetCommandBuffer(m_command.buffer, 0);
+            vkAcquireNextImageKHR(m_device, m_dynamic.swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+            vkResetCommandBuffer(m_dynamic.commandBuffer, 0);
             
-            if(!record(m_command.buffer, imageIndex))
+            if(!record(m_dynamic.commandBuffer, imageIndex))
                 return false;
             
             VqSubmitInfo submitInfo;
 
-            VkSemaphore waitSemaphores[] = {m_sync.imageAvailable};
+            VkSemaphore waitSemaphores[] = {m_imageAvailableSemaphore};
             VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
             submitInfo.waitSemaphoreCount = 1;
             submitInfo.pWaitSemaphores = waitSemaphores;
             submitInfo.pWaitDstStageMask = waitStages;
             submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &m_command.buffer;
+            submitInfo.pCommandBuffers = &m_dynamic.commandBuffer;
 
-            VkSemaphore signalSemaphores[] = {m_sync.renderFinished};
+            VkSemaphore signalSemaphores[] = {m_renderFinishedSemaphore};
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = signalSemaphores;
 
-            if (vkQueueSubmit(m_graphicsQueue, 1, &submitInfo, m_sync.inFlightFence) != VK_SUCCESS) {
+            if (vkQueueSubmit(m_graphics.queue, 1, &submitInfo, m_inFlightFence) != VK_SUCCESS) {
                 yError() << "Failed to submit draw command buffer!";
                 return false;
             }
@@ -721,12 +704,11 @@ namespace yq {
 
             presentInfo.waitSemaphoreCount = 1;
             presentInfo.pWaitSemaphores = signalSemaphores;
-            VkSwapchainKHR swapChains[] = {m_swapChain.handle};
             presentInfo.swapchainCount = 1;
-            presentInfo.pSwapchains = swapChains;
+            presentInfo.pSwapchains = &m_dynamic.swapChain;
             presentInfo.pImageIndices = &imageIndex;
             presentInfo.pResults = nullptr; // Optional
-            vkQueuePresentKHR(m_presentQueue, &presentInfo);
+            vkQueuePresentKHR(m_present.queue, &presentInfo);
             return true;
         }
         
@@ -748,12 +730,12 @@ namespace yq {
 
         VkCommandBuffer     VqWindow::command_buffer() const
         {
-            return m_command.buffer;
+            return m_dynamic.commandBuffer;
         }
 
         VkCommandPool       VqWindow::command_pool() const
         {
-            return m_command.pool;
+            return m_commandPool;
         }
 
         void VqWindow::focus()
@@ -873,7 +855,7 @@ namespace yq {
 
         VkRenderPass VqWindow::render_pass() const
         {
-            return m_renderPass.handle;
+            return m_renderPass;
         }
 
         void        VqWindow::restore()
@@ -947,32 +929,32 @@ namespace yq {
 
         VkRect2D    VqWindow::swap_def_scissor() const
         {
-            return m_swapChain.def_scissor();
+            return m_dynamic.def_scissor();
         }
         
         VkViewport  VqWindow::swap_def_viewport() const
         {
-            return m_swapChain.def_viewport();
+            return m_dynamic.def_viewport();
         }
 
         uint32_t    VqWindow::swap_image_count() const
         {
-            return m_swapChain.imageCount;
+            return m_dynamic.imageCount;
         }
 
         uint32_t    VqWindow::swap_height() const
         {
-            return m_swapChain.extents.height;
+            return m_dynamic.extents.height;
         }
 
         uint32_t    VqWindow::swap_min_image_count() const
         {
-            return m_swapChain.minImageCount;
+            return m_dynamic.minImageCount;
         }
 
         uint32_t    VqWindow::swap_width() const
         {
-            return m_swapChain.extents.width;
+            return m_dynamic.extents.width;
         }
         
         int  VqWindow::width() const
@@ -987,7 +969,30 @@ namespace yq {
         
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
+
+        VkRect2D    VqWindow::DynamicStuff::def_scissor() const
+        {
+            VkRect2D    ret{};
+            ret.offset  = { 0, 0 };
+            ret.extent  = extents;
+            return ret;
+        }
         
+        VkViewport  VqWindow::DynamicStuff::def_viewport() const
+        {
+            VkViewport  ret{};
+            ret.x = 0.0f;
+            ret.y = 0.0f;
+            ret.width = (float) extents.width;
+            ret.height = (float) extents.height;
+            ret.minDepth = 0.0f;
+            ret.maxDepth = 1.0f;
+            return ret;
+        }
+        
+        ////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////
+
         YQ_INVOKE(
             writer<VqWindow>();
         )
