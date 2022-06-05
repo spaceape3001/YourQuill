@@ -52,6 +52,7 @@ int main(int argc, char* argv[])
     WindowCreateInfo      wi;
     wi.title        = "ImGUI Demo!";
     wi.clear        = { 0.0, 0.2, 0.5, 1. };
+    wi.resizable    = true;
     Ref<DemoWindow>   window  = new DemoWindow(wi);
     
     app.run_window(window.ptr(), 0.1);

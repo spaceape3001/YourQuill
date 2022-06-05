@@ -11,6 +11,7 @@
 */
 
 #include "VqApp.hpp"
+#include "VqLogging.hpp"
 #include "VqShaderStages.hpp"
 #include "VqUtils.hpp"
 #include "VqWindow.hpp"
@@ -44,6 +45,16 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
+        void VqWindow::callback_resize(GLFWwindow* gwin, int, int)
+        {
+            VqWindow    *v  = (VqWindow*) glfwGetWindowUserPointer(gwin);
+            if(v)
+                v -> m_rebuildSwap    = true;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+
+
         VqWindow::VqWindow(const WindowCreateInfo&i)
         {
             init(i);
@@ -63,7 +74,7 @@ namespace yq {
             if(!m_physical){
                 m_physical  = vqFirstDevice();
                 if(!m_physical){
-                    yCritical() << "Cannot create window without any devices!";
+                    vqCritical << "Cannot create window without any devices!";
                     return false;
                 }
             }
@@ -90,12 +101,13 @@ namespace yq {
 
             m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
             if(!m_window){
-                yError() << "Unable to create window.";
+                vqError << "Unable to create window.";
                 kill();
                 return false;
             }
             
             glfwSetWindowUserPointer(m_window, this);
+            glfwSetWindowSizeCallback(m_window, VqWindow::callback_resize);
             return true;
         }
 
@@ -104,7 +116,7 @@ namespace yq {
             if(m_surface)           // already initialized!
                 return true;
             if(glfwCreateWindowSurface(VqApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
-                yCritical() << "Unable to create window surface!";
+                vqCritical << "Unable to create window surface!";
                 kill();
                 return false;
             }
@@ -122,11 +134,11 @@ namespace yq {
 
             auto queueInfos         = vqFindQueueFamilies(m_physical, m_surface);
             if(!queueInfos.graphicsFamily.has_value()){
-                yCritical() << "Unable to get a queue with graphic capability!";
+                vqCritical << "Unable to get a queue with graphic capability!";
                 return false;
             }
             if(!queueInfos.presentFamily.has_value()){
-                yCritical() << "Unable to find a present queue!";
+                vqCritical << "Unable to find a present queue!";
                 return false;
             }
         
@@ -146,7 +158,7 @@ namespace yq {
 
             const VqApp*   app    = VqApp::app();
             if(!app){
-                yCritical() << "Unintialized or no application present!";
+                vqCritical << "Unintialized or no application present!";
                 return false;
             }
         
@@ -165,7 +177,7 @@ namespace yq {
                 dci.ppEnabledExtensionNames = deviceExtensions.data();
             
             if(vkCreateDevice(m_physical, &dci, nullptr, &m_device) != VK_SUCCESS){
-                yCritical() << "Unable to create logical device!";
+                vqCritical << "Unable to create logical device!";
                 return false;
             }
             
@@ -186,7 +198,7 @@ namespace yq {
             poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
             poolInfo.queueFamilyIndex = m_graphics.family;
             if (vkCreateCommandPool(m_device, &poolInfo, nullptr, &m_commandPool) != VK_SUCCESS) {
-                yError() << "Failed to create command pool!";
+                vqError << "Failed to create command pool!";
                 return false;
             }
             return true;
@@ -226,7 +238,7 @@ namespace yq {
             renderPassInfo.pSubpasses = &subpass;
 
             if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) {
-                yCritical() << "Unable to create the render pass!";
+                vqCritical << "Unable to create the render pass!";
                 return false;
             } 
 
@@ -239,14 +251,14 @@ namespace yq {
             if(!m_imageAvailableSemaphore){
                 VqSemaphoreCreateInfo   semaphoreInfo;
                 if(vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &m_imageAvailableSemaphore) != VK_SUCCESS){
-                    yCritical() << "Unable to create semaphore for available images!";
+                    vqCritical << "Unable to create semaphore for available images!";
                     success = false;
                 }
             }
             if(!m_renderFinishedSemaphore){
                 VqSemaphoreCreateInfo   semaphoreInfo;
                 if(vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &m_renderFinishedSemaphore) != VK_SUCCESS){
-                    yCritical() << "Unable to create semaphore for finished rendering!";
+                    vqCritical << "Unable to create semaphore for finished rendering!";
                     success = false;
                 }
             }
@@ -254,7 +266,7 @@ namespace yq {
             if(!m_inFlightFence){
                 m_inFlightFence   = VqFence(*this);
                 if(!m_inFlightFence.good()){
-                    yError() << "Failed to create fence!";
+                    vqError << "Failed to create fence!";
                     success = false;
                 }
             }
@@ -262,6 +274,7 @@ namespace yq {
             return success;
             
         }
+        
 
         bool VqWindow::init(DynamicStuff&ds, VkSwapchainKHR old)
         {
@@ -271,7 +284,7 @@ namespace yq {
             
             VkSurfaceCapabilitiesKHR    capabilities;
             vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &capabilities);
-            if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+            if (capabilities.currentExtent.width == std::numeric_limits<uint32_t>::max()) {
                 ds.extents = capabilities.currentExtent;
             } else {
                 int w, h;
@@ -280,6 +293,18 @@ namespace yq {
                 ds.extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
                 ds.extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
             }
+
+            #if 0
+            int w, h;
+            glfwGetFramebufferSize(m_window, &w, &h);
+            vqInfo << "init dymamic stuff\n"<<
+            "Frame itself is [" << w << 'x' << h << "] vs\n" <<
+            "Image extents is " << ds.extents << '\n' <<
+            "Cur is " << capabilities.currentExtent << '\n' <<
+            "Min is " << capabilities.minImageExtent << '\n' <<
+            "Max is " << capabilities.maxImageExtent
+            ;
+            #endif
 
             ds.minImageCount               = capabilities.minImageCount;
             if(ds.minImageCount < 2)
@@ -318,7 +343,7 @@ namespace yq {
             
             if (vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &ds.swapChain) != VK_SUCCESS){
                 ds.swapChain   = nullptr;
-                yCritical() << "Failed to create the SWAP chain!";
+                vqCritical << "Failed to create the SWAP chain!";
                 return false;
             }
 
@@ -350,7 +375,7 @@ namespace yq {
                 createInfo.subresourceRange.baseArrayLayer = 0;
                 createInfo.subresourceRange.layerCount = 1;
                 if(vkCreateImageView(m_device, &createInfo, nullptr, &ds.imageViews[i]) != VK_SUCCESS) {
-                    yCritical() << "Failed to create one of the Swap Image Viewers!";
+                    vqCritical << "Failed to create one of the Swap Image Viewers!";
                 }
             }
             
@@ -373,7 +398,7 @@ namespace yq {
                 framebufferInfo.layers = 1;
 
                 if (vkCreateFramebuffer(m_device, &framebufferInfo, nullptr, &ds.frameBuffers[i]) != VK_SUCCESS) {
-                    yCritical() << "Failed to create framebuffer!";
+                    vqCritical << "Failed to create framebuffer!";
                     return false;
                 }
             }
@@ -388,7 +413,7 @@ namespace yq {
             allocInfo.commandBufferCount = 1;
 
             if (vkAllocateCommandBuffers(m_device, &allocInfo, &ds.commandBuffer) != VK_SUCCESS) {
-                yError () << "Failed to allocate command buffers!";
+                vqError << "Failed to allocate command buffers!";
                 return false;
             }
 
@@ -421,7 +446,7 @@ namespace yq {
             pool_info.poolSizeCount = (uint32_t) pool_sizes.size();
             pool_info.pPoolSizes    = pool_sizes.data();
             if(vkCreateDescriptorPool(m_device, &pool_info, nullptr, &m_descriptorPool) != VK_SUCCESS){
-                yError() << "Unable to allocate the descriptor pool!";
+                vqError << "Unable to allocate the descriptor pool!";
                 return false;
             }
             return true;
@@ -431,7 +456,7 @@ namespace yq {
         {
             VkInstance     inst  = VqApp::instance();
             if(!inst){
-                yCritical() << "Vulkan has not been initialized!";
+                vqCritical << "Vulkan has not been initialized!";
                 return false;
             }
             
@@ -452,7 +477,7 @@ namespace yq {
             auto    pmodes          = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
             
             //for(auto& sf : vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface)){
-                //yInfo() << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
+                //vqInfo << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
             //}
 
             //  cache details.....
@@ -621,7 +646,7 @@ namespace yq {
             pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
             if (vkCreatePipelineLayout(win->m_device, &pipelineLayoutInfo, nullptr, &layout) != VK_SUCCESS) {
-                yError() << "Failed to create pipeline layout!";
+                vqError << "Failed to create pipeline layout!";
                 return false;
             }
 
@@ -643,7 +668,7 @@ namespace yq {
             pipelineInfo.basePipelineIndex = -1; // Optional        
 
             if (vkCreateGraphicsPipelines(win->m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS) {
-                yError() << "Failed to create graphics pipeline!";
+                vqError << "Failed to create graphics pipeline!";
                 return false;
             }
             return true;
@@ -671,7 +696,7 @@ namespace yq {
             beginInfo.pInheritanceInfo = nullptr; // Optional
 
             if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-                yError() << "Failed to begin recording command buffer!";
+                vqError << "Failed to begin recording command buffer!";
                 return false;
             }
 
@@ -690,7 +715,7 @@ namespace yq {
             vkCmdEndRenderPass(commandBuffer);
 
             if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-                yError() << "Failed to record command buffer!";
+                vqError << "Failed to record command buffer!";
                 return false;
             }
             return true;
@@ -698,6 +723,17 @@ namespace yq {
         
         bool    VqWindow::draw()
         {
+            bool    rebuild = m_rebuildSwap.exchange(false);
+            if(rebuild){
+                vkDeviceWaitIdle(m_device);
+                DynamicStuff        newStuff;
+                init(newStuff, m_dynamic.swapChain);
+                std::swap(m_dynamic, newStuff);
+                kill(newStuff);
+                
+                //  resize notifications...
+            }
+        
             m_inFlightFence.wait_reset();
             uint32_t imageIndex = 0;
             vkAcquireNextImageKHR(m_device, m_dynamic.swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
@@ -721,7 +757,7 @@ namespace yq {
             submitInfo.pSignalSemaphores = signalSemaphores;
 
             if (vkQueueSubmit(m_graphics.queue, 1, &submitInfo, m_inFlightFence) != VK_SUCCESS) {
-                yError() << "Failed to submit draw command buffer!";
+                vqError << "Failed to submit draw command buffer!";
                 return false;
             }
                 

@@ -5,12 +5,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqApp.hpp"
+#include "VqLogging.hpp"
+#include "VqStructs.hpp"
+#include "VqUtils.hpp"
 #include "VqWindow.hpp"
 
 #include <basic/Logging.hpp>
 #include <basic/ThreadId.hpp>
-#include <engine/vulqan/VqStructs.hpp>
-#include <engine/vulqan/VqUtils.hpp>
 
 #include <tbb/spin_mutex.h>
 
@@ -31,7 +32,7 @@ namespace yq {
             if(ec){
                 if(!why)
                     why = "Unknown error";
-                yWarning() << "GLFW error (" << ec << "): " << why;
+                vqWarning << "GLFW error (" << ec << "): " << why;
             }
             if(prior)
                 prior(ec, why);
@@ -49,7 +50,7 @@ namespace yq {
             void*                                       pUserData
         )
         {
-            log4cpp::CategoryStream         yell    = (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) ? yError("vulqan") : ((flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) ? yWarning("vulqan") : yInfo("vulqan"));
+            log4cpp::CategoryStream         yell    = (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) ? vqError : ((flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) ? vqWarning : vqInfo);
             yell << "Object [" << to_string(objectType) << ": " << object << "] (layer " << pLayerPrefix << "): " << pMessage;
             return VK_FALSE;
         }
@@ -69,7 +70,7 @@ namespace yq {
             if(s_instance)  [[ likely ]]
                 return s_instance;
             if(!s_app){
-                yCritical() << "No Engine App has been instantiated!";
+                vqCritical << "No Engine App has been instantiated!";
                 return nullptr;
             }
             
@@ -160,7 +161,7 @@ namespace yq {
             */
             if(m_appInfo.validation != Required::NO){
                 if(!add_layer(kValidationLayer)){
-                    auto stream    = (m_appInfo.validation == Required::YES) ? yCritical() : yError();
+                    auto stream    = (m_appInfo.validation == Required::YES) ? vqCritical : vqError;
                     stream << "Unable to find validation layers!";
                     if(m_appInfo.validation == Required::YES)
                         return false;
@@ -178,11 +179,11 @@ namespace yq {
                 if(!x.name)
                     continue;
                 if(add_layer(x.name)){
-                    yInfo() << "Enabling vulkan layer: " << x.name;
+                    vqInfo << "Enabling vulkan layer: " << x.name;
                     continue;
                 }
                 if(x.req != Required::NO){
-                    auto stream    = (x.req == Required::YES) ? yCritical() : yError();
+                    auto stream    = (x.req == Required::YES) ? vqCritical : vqError;
                     stream << "Unable to find vulkan layer: " << x.name;
                     if(x.req == Required::YES)
                         return false;
@@ -193,11 +194,11 @@ namespace yq {
                 if(!x.name)
                     continue;
                 if(add_extension(x.name)){
-                    yInfo() << "Enabling vulkan extension: " << x.name;
+                    vqInfo << "Enabling vulkan extension: " << x.name;
                     continue;
                 }
                 if(x.req != Required::NO){
-                    auto stream    = (x.req == Required::YES) ? yCritical() : yError();
+                    auto stream    = (x.req == Required::YES) ? vqCritical : vqError;
                     stream << "Unable to find vulkan extension: " << x.name;
                     if(x.req == Required::YES)
                         return false;
@@ -226,16 +227,16 @@ namespace yq {
                 createInfo.ppEnabledExtensionNames  = m_extensions.data();
                 
             if(vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS){
-                yCritical() << "Unable to create vulkan instance!";
+                vqCritical << "Unable to create vulkan instance!";
                 m_instance   = nullptr;
                 return false;
             }
             
             if(m_instance == nullptr){
-                yCritical() << "Vulkan instance is NULL!";
+                vqCritical << "Vulkan instance is NULL!";
                 return false;
             } else
-                yInfo() << "Vulkan instance created.";
+                vqInfo << "Vulkan instance created.";
                 
             if(want_debug){
                 // Get the function pointer (required for any extensions)

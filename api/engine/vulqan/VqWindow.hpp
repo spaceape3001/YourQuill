@@ -279,7 +279,7 @@ namespace yq {
             VqFence                     m_inFlightFence;
             VkDescriptorPool            m_descriptorPool            = nullptr;
             uint32_t                    m_descriptorCount           = 0;
-            bool                        m_rebuildSwap               = false;
+            std::atomic<bool>           m_rebuildSwap               = { false };
 
             
             DynamicStuff            m_dynamic;
@@ -291,6 +291,8 @@ namespace yq {
             void        rebuild_onward();
             virtual void        window_resized(){}
             virtual void        viewport_changed(){}
+            
+            static void callback_resize(GLFWwindow*, int, int);
         };
         
         struct VqWindow::Pipeline {

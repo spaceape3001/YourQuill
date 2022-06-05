@@ -9,7 +9,6 @@
 #include <basic/CollectionUtils.hpp>
 #include <GLFW/glfw3.h>
 
-
 namespace yq {
     namespace engine {
         std::vector<VkExtensionProperties>   vqEnumerateDeviceExtensionProperties(VkPhysicalDevice device, const char* layerName)
@@ -218,3 +217,4 @@ namespace yq {
     }
 
 }
+
