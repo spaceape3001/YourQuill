@@ -8,6 +8,7 @@ add_subdirectory(basic)
 add_subdirectory(math)
 add_subdirectory(yq)
 add_subdirectory(engine)
+add_subdirectory(edit)
 #add_subdirectory(srv)
 #add_subdirectory(plot)
 

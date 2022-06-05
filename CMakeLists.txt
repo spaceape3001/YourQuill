@@ -58,6 +58,7 @@ find_package(GLFW3)
 include(cmake/GroupFiles.cmake)
 include(cmake/LinkTest.cmake)
 
+#   WARNING DEFINITIONS
 add_definitions(-Wfatal-errors -Wno-error=unused-function -Wno-error=unused-variable -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch -DASIO_STANDALONE)
 
 if(Developer_Build)
@@ -111,6 +112,8 @@ set(CMAKE_DEBUG_POSTFIX D)
 #set(CMAKE_RELEASE_POSTFIX YQ)
 
 add_definitions(-Werror)
+
+add_definitions(-DGLFW_INCLUDE_VULKAN=1)
 
 #add_subdirectory(res)
 add_subdirectory(api)
