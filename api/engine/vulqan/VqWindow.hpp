@@ -49,6 +49,9 @@ namespace yq {
                 //!  Set to make user-resizable
             bool                    resizable   = false;
             
+                //!     Set to get descriptors allocated
+            uint32_t                descriptors = 0;
+            
             WindowCreateInfo(){}
         };
         
@@ -66,6 +69,8 @@ namespace yq {
             YQ_OBJECT_INFO(VqWindowInfo)
             YQ_OBJECT_DECLARE(VqWindow, Object)
         public:
+        
+            static constexpr const uint32_t kMinimumDescriptors = 1000;
             
                 //! Polls for events (does not loiter)
             static void poll_events();
@@ -87,7 +92,9 @@ namespace yq {
             
             VkCommandBuffer     command_buffer() const;
             
-            VkCommandPool       command_pool() const;
+            VkCommandPool       command_pool() const { return m_commandPool; }
+            
+            VkDescriptorPool    descriptor_pool() const { return m_descriptorPool; }
             
             VkDevice            device() const { return m_device; }
 
@@ -223,6 +230,7 @@ namespace yq {
             bool    init_logical();
             bool    init_command_pool();
             bool    init_render_pass();
+            bool    init_descriptor_pool(const WindowCreateInfo&i);
             bool    init_sync();
             void    kill();
             bool    record(VkCommandBuffer, uint32_t);
@@ -269,7 +277,9 @@ namespace yq {
             VkSemaphore                 m_imageAvailableSemaphore   = nullptr;
             VkSemaphore                 m_renderFinishedSemaphore   = nullptr;
             VqFence                     m_inFlightFence;
-
+            VkDescriptorPool            m_descriptorPool            = nullptr;
+            uint32_t                    m_descriptorCount           = 0;
+            bool                        m_rebuildSwap               = false;
 
             
             DynamicStuff            m_dynamic;

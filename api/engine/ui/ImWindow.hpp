@@ -30,9 +30,7 @@ namespace yq {
             
         private:
             ImGuiContext*       m_imgui = nullptr;
-            VkDescriptorPool    m_descriptors   = nullptr;
             
-            void    make_descriptors(uint32_t cnt=1000);
             void    upload_fonts();
         };
     }

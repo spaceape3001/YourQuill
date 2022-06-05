@@ -395,6 +395,38 @@ namespace yq {
             return true;            
         }
 
+
+        bool VqWindow::init_descriptor_pool(const WindowCreateInfo&i)
+        {
+            if(m_descriptorPool)
+                return true;
+            m_descriptorCount   = std::max(kMinimumDescriptors,i.descriptors);
+            std::vector<VkDescriptorPoolSize> pool_sizes =
+            {
+                { VK_DESCRIPTOR_TYPE_SAMPLER, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, m_descriptorCount },
+                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, m_descriptorCount }
+            };
+            VqDescriptorPoolCreateInfo pool_info;
+            pool_info.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+            pool_info.maxSets       = m_descriptorCount * pool_sizes.size();
+            pool_info.poolSizeCount = (uint32_t) pool_sizes.size();
+            pool_info.pPoolSizes    = pool_sizes.data();
+            if(vkCreateDescriptorPool(m_device, &pool_info, nullptr, &m_descriptorPool) != VK_SUCCESS){
+                yError() << "Unable to allocate the descriptor pool!";
+                return false;
+            }
+            return true;
+        }
+
         bool VqWindow::init(const WindowCreateInfo& i)
         {
             VkInstance     inst  = VqApp::instance();
@@ -414,7 +446,6 @@ namespace yq {
             if(!init_logical())
                 return false;
             
-
 
                 //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
             
@@ -436,6 +467,8 @@ namespace yq {
             if(!init_render_pass())
                 return false;
             if(!init_sync())
+                return false;
+            if(!init_descriptor_pool(i))
                 return false;
             if(!init(m_dynamic))
                 return false;
@@ -473,6 +506,10 @@ namespace yq {
             
             kill(m_dynamic);
             
+            if(m_descriptorPool){
+                vkDestroyDescriptorPool(m_device, m_descriptorPool, nullptr);
+                m_descriptorPool   = nullptr;
+            }
             if(m_imageAvailableSemaphore){
                 vkDestroySemaphore(m_device, m_imageAvailableSemaphore, nullptr);
                 m_imageAvailableSemaphore  = nullptr;
@@ -731,11 +768,6 @@ namespace yq {
         VkCommandBuffer     VqWindow::command_buffer() const
         {
             return m_dynamic.commandBuffer;
-        }
-
-        VkCommandPool       VqWindow::command_pool() const
-        {
-            return m_commandPool;
         }
 
         void VqWindow::focus()

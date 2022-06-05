@@ -17,8 +17,6 @@ namespace yq {
     namespace engine {
         ImWindow::ImWindow(const WindowCreateInfo& wci) : VqWindow(wci)
         {
-            make_descriptors();
-            
             m_imgui = ImGui::CreateContext();
             ImGui_ImplVulkan_InitInfo vii{};
             
@@ -29,7 +27,7 @@ namespace yq {
             vii.QueueFamily     = graphics_queue_family();
             vii.MinImageCount   = swap_min_image_count();
             vii.ImageCount      = swap_image_count();
-            vii.DescriptorPool  = m_descriptors;
+            vii.DescriptorPool  = descriptor_pool();
             
             ImGui::SetCurrentContext(m_imgui);
             ImGui_ImplGlfw_InitForVulkan(window(), true);
@@ -45,10 +43,6 @@ namespace yq {
             if(m_imgui){
                 ImGui::DestroyContext(m_imgui);
                 m_imgui = nullptr;
-            }
-            if(m_descriptors){
-                vkDestroyDescriptorPool(device(), m_descriptors, nullptr);
-                m_descriptors   = nullptr;
             }
         }
 
@@ -69,30 +63,6 @@ namespace yq {
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), buffer, nullptr);
         }
         
-        void    ImWindow::make_descriptors(uint32_t cnt)
-        {
-            std::vector<VkDescriptorPoolSize> pool_sizes =
-            {
-                { VK_DESCRIPTOR_TYPE_SAMPLER, cnt },
-                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, cnt },
-                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, cnt },
-                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, cnt },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, cnt },
-                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, cnt },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, cnt },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, cnt },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, cnt },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, cnt },
-                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, cnt }
-            };
-            VqDescriptorPoolCreateInfo pool_info;
-            pool_info.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-            pool_info.maxSets       = cnt * pool_sizes.size();
-            pool_info.poolSizeCount = (uint32_t) pool_sizes.size();
-            pool_info.pPoolSizes    = pool_sizes.data();
-            vkCreateDescriptorPool(device(), &pool_info, nullptr, &m_descriptors);
-        }
-
         void    ImWindow::upload_fonts()
         {
             VkCommandBuffer cbuffer = command_buffer();
