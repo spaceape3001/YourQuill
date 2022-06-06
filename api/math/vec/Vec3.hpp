@@ -197,6 +197,12 @@ namespace yq {
         return a;
     }
 
+    template <typename T, typename U>
+    Vec3<product_t<T,U>>    mul_elem(const Vec3<T>&a, const Vec3<T>&b)
+    {
+        return {a.x*b.x, a.y*b.y, a.z*b.z};
+    }
+    
 //  --------------------------------------------------------
 //  DIVISION
 
@@ -224,6 +230,11 @@ namespace yq {
         return a;
     }
 
+    template <typename T, typename U>
+    Vec3<quotient_t<T,U>>    div_elem(const Vec3<T>&a, const Vec3<T>&b)
+    {
+        return {a.x/b.x, a.y/b.y, a.z/b.z};
+    }
 
 //  --------------------------------------------------------
 //  DOT PRODUCT
@@ -246,32 +257,50 @@ namespace yq {
     //  --------------------------------------------------------
     //  ADVANCED FUNCTIONS
 
+    template <typename T>
+    Vec3<T>   abs_elem(const Vec3<T>&a, const Vec3<T>&b)
+    {
+        return {abs(a.x, b.x) && abs(a.y, b.y) && abs(a.z, b.z)};
+    }
+
     //! TRUE if every component of a is less than b
     template <typename T>
-    bool        all_less(const Vec3<T>& a, const Vec3<T>&b)
+    constexpr bool        all_less(const Vec3<T>& a, const Vec3<T>&b)
     {
         return (a.x<b.x) && (a.y<b.y) && (a.z<b.z);
     }
 
     //! TRUE if every component of a is less than (or equal to) b
     template <typename T>
-    bool        all_less_equal(const Vec3<T>& a, const Vec3<T>&b)
+    constexpr bool        all_less_equal(const Vec3<T>& a, const Vec3<T>&b)
     {
         return (a.x<=b.x) && (a.y<=b.y) && (a.z<=b.z);
     }
 
     //! TRUE if every component of a is greater than b
     template <typename T>
-    bool        all_greater(const Vec3<T>& a, const Vec3<T>&b)
+    constexpr bool        all_greater(const Vec3<T>& a, const Vec3<T>&b)
     {
         return (a.x>b.x) && (a.y>b.y) && (a.z>b.z);
     }
 
     //! TRUE if every component of a is greater or equal to b
     template <typename T>
-    bool        all_greater_equal(const Vec3<T>& a, const Vec3<T>&b)
+    constexpr bool        all_greater_equal(const Vec3<T>& a, const Vec3<T>&b)
     {
         return (a.x>=b.x) && (a.y>=b.y) && (a.z>=b.z);
+    }
+    
+    template <typename T>
+    constexpr Vec3<T>   max_elem(const Vec3<T>&a, const Vec3<T>&b)
+    {
+        return {max(a.x, b.x) && max(a.y, b.y) && max(a.z, b.z)};
+    }
+    
+    template <typename T>
+    constexpr Vec3<T>   min_elem(const Vec3<T>&a, const Vec3<T>&b)
+    {
+        return {min(a.x, b.x) && min(a.y, b.y) && min(a.z, b.z)};
     }
 }
 

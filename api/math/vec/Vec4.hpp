@@ -210,6 +210,12 @@ namespace yq {
         return a;
     }
 
+    template <typename T, typename U>
+    Vec4<product_t<T,U>>    mul_elem(const Vec4<T>&a, const Vec4<T>&b)
+    {
+        return {a.x*b.x, a.y*b.y, a.z*b.z, a.w*b.w};
+    }
+    
 //  --------------------------------------------------------
 //  DIVISION
 
@@ -238,6 +244,11 @@ namespace yq {
         return a;
     }
 
+    template <typename T, typename U>
+    Vec4<quotient_t<T,U>>    div_elem(const Vec4<T>&a, const Vec4<T>&b)
+    {
+        return {a.x/b.x, a.y/b.y, a.z/b.z, a.w/b.w};
+    }
 
 //  --------------------------------------------------------
 //  DOT PRODUCT
@@ -260,32 +271,50 @@ namespace yq {
     //  --------------------------------------------------------
     //  ADVANCED FUNCTIONS
 
+    template <typename T>
+    Vec4<T>   abs_elem(const Vec4<T>&a, const Vec4<T>&b)
+    {
+        return {abs(a.x, b.x) && abs(a.y, b.y) && abs(a.z, b.z) && abs(a.w, b.w)};
+    }
+
     //! TRUE if every component of a is less than b
     template <typename T>
-    bool        all_less(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_less(const Vec4<T>& a, const Vec4<T>&b)
     {
         return (a.x<b.x) && (a.y<b.y) && (a.z<b.z) && (a.w<b.w);
     }
 
     //! TRUE if every component of a is less than (or equal to) b
     template <typename T>
-    bool        all_less_equal(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_less_equal(const Vec4<T>& a, const Vec4<T>&b)
     {
         return (a.x<=b.x) && (a.y<=b.y) && (a.z<=b.z) && (a.w<=b.w);
     }
 
     //! TRUE if every component of a is greater than b
     template <typename T>
-    bool        all_greater(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_greater(const Vec4<T>& a, const Vec4<T>&b)
     {
         return (a.x>b.x) && (a.y>b.y) && (a.z>b.z) && (a.w>b.w);
     }
 
     //! TRUE if every component of a is greater or equal to b
     template <typename T>
-    bool        all_greater_equal(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_greater_equal(const Vec4<T>& a, const Vec4<T>&b)
     {
         return (a.x>=b.x) && (a.y>=b.y) && (a.z>=b.z) && (a.w>=b.w);
+    }
+    
+    template <typename T>
+    constexpr Vec4<T>   max_elem(const Vec4<T>&a, const Vec4<T>&b)
+    {
+        return {max(a.x, b.x) && max(a.y, b.y) && max(a.z, b.z) && max(a.w, b.w)};
+    }
+    
+    template <typename T>
+    constexpr Vec4<T>   min_elem(const Vec4<T>&a, const Vec4<T>&b)
+    {
+        return {min(a.x, b.x) && min(a.y, b.y) && min(a.z, b.z) && min(a.w, b.w)};
     }
 }
 

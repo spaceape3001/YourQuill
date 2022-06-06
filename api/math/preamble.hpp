@@ -23,6 +23,7 @@
 
 #include <math/forward.hpp>
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <limits>
@@ -277,6 +278,10 @@ namespace yq {
     template <typename T, typename U>  using product_t     = decltype(T()*U());
     template <typename T, typename U>  using quotient_t    = decltype(T()/U());
     template <typename T> using inverse_t = decltype(T()/square_t<T>());
+    
+    using std::max;
+    using std::min;
+    using std::abs;
     
     namespace trait {
         template <typename T, typename U>  static constexpr const bool self_mul_v = std::is_same_v<T,product_t<T,U>>;

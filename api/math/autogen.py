@@ -509,8 +509,19 @@ namespace yq {
         return a.%(bit)s*b.%(bit)s;
     }
 """ % v.bits[0].args)
-
+        
         f.write("""
+    template <typename T, typename U>
+    %(vector)s<product_t<T,U>>    mul_elem(const %(vector)s<T>&a, const %(vector)s<T>&b)
+    {
+        return {""" % v.args )
+        for b in v.bits:
+            if not b.first:
+                f.write(", ");
+            f.write("a.%(bit)s*b.%(bit)s" % b.args)
+        f.write("""};
+    }
+    
 //  --------------------------------------------------------
 //  DIVISION
 
@@ -554,6 +565,16 @@ namespace yq {
 """ % v.args)
 
         f.write("""
+    template <typename T, typename U>
+    %(vector)s<quotient_t<T,U>>    div_elem(const %(vector)s<T>&a, const %(vector)s<T>&b)
+    {
+        return {""" % v.args )
+        for b in v.bits:
+            if not b.first:
+                f.write(", ");
+            f.write("a.%(bit)s/b.%(bit)s" % b.args)
+        f.write("""};
+    }
 
 //  --------------------------------------------------------
 //  DOT PRODUCT
@@ -586,9 +607,20 @@ namespace yq {
     //  --------------------------------------------------------
     //  ADVANCED FUNCTIONS
 
+    template <typename T>
+    %(vector)s<T>   abs_elem(const %(vector)s<T>&a, const %(vector)s<T>&b)
+    {
+        return {""" % v.args);
+        for b in v.bits:
+            if not b.first:
+                f.write(" && ");
+            f.write("abs(a.%(bit)s, b.%(bit)s)" % b.args);
+        f.write("""};
+    }
+
     //! TRUE if every component of a is less than b
     template <typename T>
-    bool        all_less(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    constexpr bool        all_less(const %(vector)s<T>& a, const %(vector)s<T>&b)
     {
         return """ % v.args);
         for b in v.bits:
@@ -600,7 +632,7 @@ namespace yq {
 
     //! TRUE if every component of a is less than (or equal to) b
     template <typename T>
-    bool        all_less_equal(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    constexpr bool        all_less_equal(const %(vector)s<T>& a, const %(vector)s<T>&b)
     {
         return """ % v.args);
         for b in v.bits:
@@ -612,7 +644,7 @@ namespace yq {
 
     //! TRUE if every component of a is greater than b
     template <typename T>
-    bool        all_greater(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    constexpr bool        all_greater(const %(vector)s<T>& a, const %(vector)s<T>&b)
     {
         return """ % v.args);
         for b in v.bits:
@@ -624,7 +656,7 @@ namespace yq {
 
     //! TRUE if every component of a is greater or equal to b
     template <typename T>
-    bool        all_greater_equal(const %(vector)s<T>& a, const %(vector)s<T>&b)
+    constexpr bool        all_greater_equal(const %(vector)s<T>& a, const %(vector)s<T>&b)
     {
         return """ % v.args);
         for b in v.bits:
@@ -632,6 +664,28 @@ namespace yq {
                 f.write(" && ");
             f.write("(a.%(bit)s>=b.%(bit)s)" % b.args);
         f.write(""";
+    }
+    
+    template <typename T>
+    constexpr %(vector)s<T>   max_elem(const %(vector)s<T>&a, const %(vector)s<T>&b)
+    {
+        return {""" % v.args);
+        for b in v.bits:
+            if not b.first:
+                f.write(" && ");
+            f.write("max(a.%(bit)s, b.%(bit)s)" % b.args);
+        f.write("""};
+    }
+    
+    template <typename T>
+    constexpr %(vector)s<T>   min_elem(const %(vector)s<T>&a, const %(vector)s<T>&b)
+    {
+        return {""" % v.args);
+        for b in v.bits:
+            if not b.first:
+                f.write(" && ");
+            f.write("min(a.%(bit)s, b.%(bit)s)" % b.args);
+        f.write("""};
     }
 }
 
@@ -1367,6 +1421,7 @@ namespace yq {
 for v in VECTORS:
     with open('shape/%(axbox)s.hpp' % v.args, 'w') as f:
         f.write(YQUILL)
+        f.write(ONCE)
         f.write(WARNING)
         f.write("""
 #include <math/preamble.hpp>
@@ -1383,6 +1438,70 @@ namespace yq {
         
         constexpr bool operator==(const %(axbox)s&) const noexcept = default;
     };
+    
+//  --------------------------------------------------------
+//  COMPOSITION
+
+    template <typename T>
+    constexpr %(axbox)s<T> box(const %(vector)s<T>& a, const %(vector)s<T>& b)
+    {
+        return { min_elem(a,b), max_elem(a,b) };
+    }
+    
+    YQ_NAN_1(%(axbox)s, { nan_v<%(vector)s>, nan_v<%(vector)s>});
+    YQ_ZERO_1(%(axbox)s, { zero_v<%(vector)s>, zero_v<%(vector)s>});
+
+//  --------------------------------------------------------
+//  BASIC FUNCTIONS
+
+    template <typename T>
+    bool    valid(const %(axbox)s<T>& a)
+    {
+        return all_lees_equal(a.lo, a.hi);
+    }
+
+    YQ_IS_FINITE_1( %(axbox)s, is_finite(v.lo) && is_finite(v.hi))
+    YQ_IS_NAN_1(%(axbox)s, is_nan(v.lo) || is_nan(v.hi))
+
+//  --------------------------------------------------------
+//  OPERATIONS
+
+    /*! \\brief Union of two AABBs
+    */
+    template <typename T>
+    constexpr %(axbox)s<T> operator|(const %(axbox)s<T>&a, const %(axbox)s<T>&b)
+    {
+        return { min_elem(a.lo, b.lo), max_elem(a.hi, b.hi) };
+    }
+
+    /*! \\brief Intersection of two AABBs
+    */
+    template <typename T>
+    constexpr %(axbox)s<T> operator&(const %(axbox)s<T>&a, const %(axbox)s<T>&b)
+    {
+        return { max_elem(a.lo, b.lo), min_elem(a.hi, b.hi) };
+    }
+
+//  --------------------------------------------------------
+//  ADVANCED FUNCTIONS
+    
+    template <typename T>
+    constexpr bool eclipsed(const %(axbox)s<T>& big, const %(axbox)s<T>& small)
+    {
+        return all_less_equal(big.lo, small.lo) && all_greater_equal(big.hi, small.hi);
+    }
+    
+    template <typename T>
+    constexpr bool inside(const %(axbox)s<T>& bx, const %(vector)s<T>& pt)
+    {
+        return all_less_equal(bx.lo, pt) && all_less_equal(pt, bx.hi);
+    }
+    
+    template <typename T>
+    constexpr bool overlaps(const %(axbox)s<T>& a, const %(axbox)s<T>& b)
+    {
+        return all_less_equal(a.lo, b.hi) && all_greater_equal(a.hi, b.lo);
+    }
 }
 
 """ % v.args)
