@@ -12,9 +12,10 @@
 #include <math/preamble.hpp>
 #include <math/vec/Vec2.hpp>
 
-
 namespace yq {
 
+    /*! \brief Axially aligned box in 2 dimension(s).
+    */
     template <typename T>
     struct AxBox2 {
         using component_t   = T;
@@ -28,7 +29,7 @@ namespace yq {
 //  COMPOSITION
 
     template <typename T>
-    constexpr AxBox2<T> box(const Vec2<T>& a, const Vec2<T>& b)
+    constexpr AxBox2<T> aabb(const Vec2<T>& a, const Vec2<T>& b)
     {
         return { min_elem(a,b), max_elem(a,b) };
     }
@@ -70,6 +71,12 @@ namespace yq {
 //  --------------------------------------------------------
 //  ADVANCED FUNCTIONS
     
+    template <typename T>
+    square_t<T>     area(const AxBox2<T>& bx)
+    {
+        return component_product(bx.hi-bx.lo);
+    }
+
     template <typename T>
     constexpr bool eclipsed(const AxBox2<T>& big, const AxBox2<T>& small)
     {

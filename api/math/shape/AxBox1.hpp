@@ -12,9 +12,10 @@
 #include <math/preamble.hpp>
 #include <math/vec/Vec1.hpp>
 
-
 namespace yq {
 
+    /*! \brief Axially aligned box in 1 dimension(s).
+    */
     template <typename T>
     struct AxBox1 {
         using component_t   = T;
@@ -28,7 +29,7 @@ namespace yq {
 //  COMPOSITION
 
     template <typename T>
-    constexpr AxBox1<T> box(const Vec1<T>& a, const Vec1<T>& b)
+    constexpr AxBox1<T> aabb(const Vec1<T>& a, const Vec1<T>& b)
     {
         return { min_elem(a,b), max_elem(a,b) };
     }

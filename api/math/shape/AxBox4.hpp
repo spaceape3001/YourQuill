@@ -12,9 +12,10 @@
 #include <math/preamble.hpp>
 #include <math/vec/Vec4.hpp>
 
-
 namespace yq {
 
+    /*! \brief Axially aligned box in 4 dimension(s).
+    */
     template <typename T>
     struct AxBox4 {
         using component_t   = T;
@@ -28,7 +29,7 @@ namespace yq {
 //  COMPOSITION
 
     template <typename T>
-    constexpr AxBox4<T> box(const Vec4<T>& a, const Vec4<T>& b)
+    constexpr AxBox4<T> aabb(const Vec4<T>& a, const Vec4<T>& b)
     {
         return { min_elem(a,b), max_elem(a,b) };
     }
@@ -74,6 +75,12 @@ namespace yq {
     constexpr bool eclipsed(const AxBox4<T>& big, const AxBox4<T>& small)
     {
         return all_less_equal(big.lo, small.lo) && all_greater_equal(big.hi, small.hi);
+    }
+
+    template <typename T>
+    auto            hypervolume(const AxBox4<T>& bx)
+    {
+        return component_product(bx.hi-bx.lo);
     }
     
     template <typename T>

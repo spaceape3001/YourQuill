@@ -12,9 +12,10 @@
 #include <math/preamble.hpp>
 #include <math/vec/Vec3.hpp>
 
-
 namespace yq {
 
+    /*! \brief Axially aligned box in 3 dimension(s).
+    */
     template <typename T>
     struct AxBox3 {
         using component_t   = T;
@@ -28,7 +29,7 @@ namespace yq {
 //  COMPOSITION
 
     template <typename T>
-    constexpr AxBox3<T> box(const Vec3<T>& a, const Vec3<T>& b)
+    constexpr AxBox3<T> aabb(const Vec3<T>& a, const Vec3<T>& b)
     {
         return { min_elem(a,b), max_elem(a,b) };
     }
@@ -87,6 +88,13 @@ namespace yq {
     {
         return all_less_equal(a.lo, b.hi) && all_greater_equal(a.hi, b.lo);
     }
+
+    template <typename T>
+    cube_t<T>       volume(const AxBox3<T>& bx)
+    {
+        return component_product(bx.hi-bx.lo);
+    }
+
 }
 
 YQ_TYPE_DECLARE(yq::AxBox3D)

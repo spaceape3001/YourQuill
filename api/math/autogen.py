@@ -103,6 +103,9 @@ class VType:
             abx = self.axbox + ad.key
             ad.args['abxk'] = abx
             ad.args['abxl']  = abx.lower()
+            segx    = self.seg + ad.key
+            ad.args['segk'] = segx
+            ad.args['segl'] = segx.lower()
             self.data.append(ad)
         
         
@@ -1415,104 +1418,6 @@ namespace yq {
         for d in t.data:
             f.write("YQ_TYPE_DECLARE(yq::%(name)s)\n" % d.args)
         f.write('\n')
-        
-    ############################################
-    ##  AXBOX INSTANTIATIONS
-for v in VECTORS:
-    with open('shape/%(axbox)s.hpp' % v.args, 'w') as f:
-        f.write(YQUILL)
-        f.write(ONCE)
-        f.write(WARNING)
-        f.write("""
-#include <math/preamble.hpp>
-#include <math/vec/%(header)s>
-
-
-namespace yq {
-
-    template <typename T>
-    struct %(axbox)s {
-        using component_t   = T;
-        
-        %(vector)s<T>  lo, hi;
-        
-        constexpr bool operator==(const %(axbox)s&) const noexcept = default;
-    };
-    
-//  --------------------------------------------------------
-//  COMPOSITION
-
-    template <typename T>
-    constexpr %(axbox)s<T> box(const %(vector)s<T>& a, const %(vector)s<T>& b)
-    {
-        return { min_elem(a,b), max_elem(a,b) };
-    }
-    
-    YQ_NAN_1(%(axbox)s, { nan_v<%(vector)s>, nan_v<%(vector)s>});
-    YQ_ZERO_1(%(axbox)s, { zero_v<%(vector)s>, zero_v<%(vector)s>});
-
-//  --------------------------------------------------------
-//  BASIC FUNCTIONS
-
-    template <typename T>
-    bool    valid(const %(axbox)s<T>& a)
-    {
-        return all_lees_equal(a.lo, a.hi);
-    }
-
-    YQ_IS_FINITE_1( %(axbox)s, is_finite(v.lo) && is_finite(v.hi))
-    YQ_IS_NAN_1(%(axbox)s, is_nan(v.lo) || is_nan(v.hi))
-
-//  --------------------------------------------------------
-//  OPERATIONS
-
-    /*! \\brief Union of two AABBs
-    */
-    template <typename T>
-    constexpr %(axbox)s<T> operator|(const %(axbox)s<T>&a, const %(axbox)s<T>&b)
-    {
-        return { min_elem(a.lo, b.lo), max_elem(a.hi, b.hi) };
-    }
-
-    /*! \\brief Intersection of two AABBs
-    */
-    template <typename T>
-    constexpr %(axbox)s<T> operator&(const %(axbox)s<T>&a, const %(axbox)s<T>&b)
-    {
-        return { max_elem(a.lo, b.lo), min_elem(a.hi, b.hi) };
-    }
-
-//  --------------------------------------------------------
-//  ADVANCED FUNCTIONS
-    
-    template <typename T>
-    constexpr bool eclipsed(const %(axbox)s<T>& big, const %(axbox)s<T>& small)
-    {
-        return all_less_equal(big.lo, small.lo) && all_greater_equal(big.hi, small.hi);
-    }
-    
-    template <typename T>
-    constexpr bool inside(const %(axbox)s<T>& bx, const %(vector)s<T>& pt)
-    {
-        return all_less_equal(bx.lo, pt) && all_less_equal(pt, bx.hi);
-    }
-    
-    template <typename T>
-    constexpr bool overlaps(const %(axbox)s<T>& a, const %(axbox)s<T>& b)
-    {
-        return all_less_equal(a.lo, b.hi) && all_greater_equal(a.hi, b.lo);
-    }
-}
-
-""" % v.args)
-        
-        for d in v.data:
-            f.write("YQ_TYPE_DECLARE(yq::%(axbox)s%(key)s)\n" % d.args)
-        f.write('\n')
-
-
-        
-
 
     ############################################
     ##  TYPE INSTANTIATIONS
@@ -1530,8 +1435,6 @@ with open('types_python.cpp', 'w') as f:
     for v in VECTORS:
         f.write("#include <math/vec/%(header)s>\n" % v.args)
     f.write('\n')
-    for v in VECTORS:
-        f.write("#include <math/shape/%(axbox)s.hpp>\n" % v.args)
 
     f.write("""
 
@@ -1544,18 +1447,16 @@ using namespace yq;
 
     for v in VECTORS:
         for d in v.data:
-            f.write("YQ_TYPE_IMPLEMENT(yq::%(abxk)s)\n" % d.args)
+            f.write("YQ_TYPE_IMPLEMENT(yq::%(name)s)\n" % d.args)
         f.write('\n')
+
     
     for t in TENSORS:
         for d in t.data:
             f.write("YQ_TYPE_IMPLEMENT(yq::%(name)s)\n" % d.args)
         f.write('\n')
 
-    for v in VECTORS:
-        for d in v.data:
-            f.write("YQ_TYPE_IMPLEMENT(yq::%(name)s)\n" % d.args)
-        f.write('\n')
+
 
     
     f.write("""
@@ -1580,14 +1481,6 @@ YQ_INVOKE(
             f.write('\n')
         f.write('\n')
 
-    for v in VECTORS:
-        for d in v.data:
-            f.write("""
-    auto %(abxl)s = writer<%(abxk)s>();
-    %(abxl)s.property("lo", &%(abxk)s::lo);
-    %(abxl)s.property("hi", &%(abxk)s::hi);
-""" % d.args)
-        f.write('\n')
 
     f.write("""
 )
