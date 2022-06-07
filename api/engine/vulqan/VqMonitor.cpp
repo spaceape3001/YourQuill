@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqMonitor.hpp"
-#include <math/vec/Vec2.hpp>
-#include <math/shape/Rect2.hpp>
+#include <math/vec/Vector2.hpp>
+#include <math/shape/Rectangle2.hpp>
 #include <math/shape/Size2.hpp>
 #include <GLFW/glfw3.h>
 
@@ -64,20 +64,20 @@ namespace yq {
             return ret;
         }
         
-        Vec2I               VqMonitor::position() const
+        Vector2I            VqMonitor::position() const
         {
             if(!m_monitor)
                 return {};
-            Vec2I   ret;
+            Vector2I   ret;
             glfwGetMonitorPos(m_monitor, &ret.x, &ret.y);
             return ret;
         }
 
-        Vec2F               VqMonitor::scale() const
+        Vector2F            VqMonitor::scale() const
         {
             if(!m_monitor)
                 return {};
-            Vec2F   ret;
+            Vector2F   ret;
             glfwGetMonitorContentScale(m_monitor, &ret.x, &ret.y);
             return ret;
         }
@@ -108,11 +108,11 @@ namespace yq {
             return ret;
         }
 
-        Rect2I                 VqMonitor::work_area() const
+        Rectangle2I         VqMonitor::work_area() const
         {
             if(!m_monitor)
                 return {};
-            Rect2I  ret{};
+            Rectangle2I  ret{};
             glfwGetMonitorWorkarea(m_monitor, &ret.position.x, &ret.position.y, &ret.size.x, &ret.size.y);
             return ret;
         }

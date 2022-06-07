@@ -9,92 +9,86 @@
 //
 //  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
 
-#define YQ__API__MATH__TENSOR_1_3__HPP 1
+#define YQ__API__MATH__TENSOR_1_2__HPP 1
 #include <math/preamble.hpp>
-#include <math/vec/Vec1.hpp>
-#include <math/vec/Vec3.hpp>
+#include <math/vec/Vector1.hpp>
+#include <math/vec/Vector2.hpp>
 
 namespace yq {
-    /*! \brief 1x3 second order tensor (ie a matrix)
+    /*! \brief 1x2 second order tensor (ie a matrix)
     
         \tparam[T]  Data type to be used, recommended to be arithmetic in nature
     */
     template <typename T>
-    struct Ten13 {
+    struct Tensor12 {
         using component_type = T;
-        T xx, xy, xz;
+        T xx, xy;
 
-        constexpr bool operator==(const Ten13&) const noexcept = default;
+        constexpr bool operator==(const Tensor12&) const noexcept = default;
     };
         
 //  --------------------------------------------------------
 //  COMPOSITION
 
     template <typename T>
-    constexpr Ten13<T>  columns(const Vec1<T>&x, const Vec1<T>&y, const Vec1<T>&z)
+    constexpr Tensor12<T>  columns(const Vector1<T>&x, const Vector1<T>&y)
     {
         return {
-            x.x, y.x, z.x
+            x.x, y.x
         };
     }
 
     template <typename T>
-    constexpr Ten13<T>  rows(const Vec3<T>&x)
+    constexpr Tensor12<T>  rows(const Vector2<T>&x)
     {
         return {
-            x.x, x.y, x.z
+            x.x, x.y
         };
     }
     
-    YQ_IDENTITY_1(Ten13, {
-        one_v<T>, zero_v<T>, zero_v<T>
+    YQ_IDENTITY_1(Tensor12, {
+        one_v<T>, zero_v<T>
     })
 
-    YQ_NAN_1(Ten13, {
-        nan_v<T>, nan_v<T>, nan_v<T> 
+    YQ_NAN_1(Tensor12, {
+        nan_v<T>, nan_v<T> 
     })
     
-    YQ_ZERO_1(Ten13, {
-        zero_v<T>, zero_v<T>, zero_v<T> 
+    YQ_ZERO_1(Tensor12, {
+        zero_v<T>, zero_v<T> 
      })
     
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
 
 
-    YQ_IS_FINITE_1(Ten13, 
-        is_finite(v.xx) && is_finite(v.xy) && is_finite(v.xz)
+    YQ_IS_FINITE_1(Tensor12, 
+        is_finite(v.xx) && is_finite(v.xy)
     )
     
-    YQ_IS_NAN_1(Ten13,  
-        is_nan(v.xx) || is_nan(v.xy) || is_nan(v.xz)
+    YQ_IS_NAN_1(Tensor12,  
+        is_nan(v.xx) || is_nan(v.xy)
     )
 
 //  --------------------------------------------------------
 //  GETTERS
 
     template <typename T>
-    constexpr Vec1<T>  x_column(const Ten13<T>&v) 
+    constexpr Vector1<T>  x_column(const Tensor12<T>&v) 
     {
         return {v.xx};
     }
 
     template <typename T>
-    constexpr Vec1<T>  y_column(const Ten13<T>&v) 
+    constexpr Vector1<T>  y_column(const Tensor12<T>&v) 
     {
         return {v.xy};
     }
 
     template <typename T>
-    constexpr Vec1<T>  z_column(const Ten13<T>&v) 
+    constexpr Vector2<T>  x_row(const Tensor12<T>&v)
     {
-        return {v.xz};
-    }
-
-    template <typename T>
-    constexpr Vec3<T>  x_row(const Ten13<T>&v)
-    {
-        return {v.xx, v.xy, v.xz};
+        return {v.xx, v.xy};
     }
 
 
@@ -102,32 +96,24 @@ namespace yq {
 //  SETTERS
 
     template <typename T>
-    Ten13<T>& set_x_column(Ten13<T>&ten, const Vec3<T>& v)
+    Tensor12<T>& set_x_column(Tensor12<T>&ten, const Vector2<T>& v)
     {
         ten.xx = v.x;
         return ten;
     }
 
     template <typename T>
-    Ten13<T>& set_y_column(Ten13<T>&ten, const Vec3<T>& v)
+    Tensor12<T>& set_y_column(Tensor12<T>&ten, const Vector2<T>& v)
     {
         ten.xy = v.x;
         return ten;
     }
 
     template <typename T>
-    Ten13<T>& set_z_column(Ten13<T>&ten, const Vec3<T>& v)
-    {
-        ten.xz = v.x;
-        return ten;
-    }
-
-    template <typename T>
-    Ten13<T>& set_x_row(Ten13<T>&ten, const Vec1<T>& v)
+    Tensor12<T>& set_x_row(Tensor12<T>&ten, const Vector1<T>& v)
     {
         ten.xx = v.x;
         ten.xy = v.y;
-        ten.xz = v.z;
         return ten;
     }
 
@@ -135,7 +121,7 @@ namespace yq {
 //  POSITIVE
 
     template <typename T>
-    constexpr Ten13<T>  operator+(const Ten13<T>& a) 
+    constexpr Tensor12<T>  operator+(const Tensor12<T>& a) 
     { 
         return a; 
     }
@@ -145,10 +131,10 @@ namespace yq {
 //  NEGATIVE
 
     template <typename T>
-    constexpr Ten13<T>  operator-(const Ten13<T>& a) 
+    constexpr Tensor12<T>  operator-(const Tensor12<T>& a) 
     {
         return {
-            -a.xx, -a.xy, -a.xz
+            -a.xx, -a.xy
         };
     }
 
@@ -157,17 +143,17 @@ namespace yq {
 //  ADDITION
 
     template <typename T>
-    constexpr Ten13<T>   operator+ (const Ten13<T> &a, const Ten13<T> &b) 
+    constexpr Tensor12<T>   operator+ (const Tensor12<T> &a, const Tensor12<T> &b) 
     {
         return {
-            a.xx+b.xx, a.xy+b.xy, a.xz+b.xz
+            a.xx+b.xx, a.xy+b.xy
         };
     }
 
     template <typename T>
-    Ten13<T>&   operator+=(Ten13<T> &a, const Ten13<T> &b) 
+    Tensor12<T>&   operator+=(Tensor12<T> &a, const Tensor12<T> &b) 
     {
-        a.xx+=b.xx;  a.xy+=b.xy;  a.xz+=b.xz;
+        a.xx+=b.xx;  a.xy+=b.xy;
         return a;
     }
 
@@ -176,18 +162,18 @@ namespace yq {
 //  SUBTRACTION
 
     template <typename T>
-    constexpr Ten13<T>   operator- (const Ten13<T> &a, const Ten13<T> &b) 
+    constexpr Tensor12<T>   operator- (const Tensor12<T> &a, const Tensor12<T> &b) 
     {
         return {
-            a.xx-b.xx, a.xy-b.xy, a.xz-b.xz
+            a.xx-b.xx, a.xy-b.xy
         };
     }
     
 
     template <typename T>
-    Ten13<T>&   operator-=(Ten13<T> &a, const Ten13<T> &b) 
+    Tensor12<T>&   operator-=(Tensor12<T> &a, const Tensor12<T> &b) 
     {
-        a.xx-=b.xx;  a.xy-=b.xy;  a.xz-=b.xz;
+        a.xx-=b.xx;  a.xy-=b.xy;
         return a;
     }
     
@@ -196,47 +182,46 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<T>
-    constexpr Ten13<product_t<T,U>>  operator*(T a, const Ten13<T>& b)
+    constexpr Tensor12<product_t<T,U>>  operator*(T a, const Tensor12<T>& b)
     {
         return {
-            a*b.xx, a*b.xy, a*b.xz
+            a*b.xx, a*b.xy
         };
     }
     
     
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten13<product_t<T,U>>  operator*(const Ten13<T>& a, U b)
+    constexpr Tensor12<product_t<T,U>>  operator*(const Tensor12<T>& a, U b)
     {
         return {
-            a.xx*b, a.xy*b, a.xz*b
+            a.xx*b, a.xy*b
         };
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_mul_v<T,U>)
-    Ten13<product_t<T,U>>  operator*=(const Ten13<T>& a, U b)
+    Tensor12<product_t<T,U>>  operator*=(const Tensor12<T>& a, U b)
     {
-        a.xx*=b; a.xy*=b; a.xz*=b;        
+        a.xx*=b; a.xy*=b;        
         return a;
     }
 
         
     template <typename T, typename U>
-    constexpr Vec1<product_t<T,U>> operator*(const Ten13<T>&a, const Vec3<U>&b)
+    constexpr Vector1<product_t<T,U>> operator*(const Tensor12<T>&a, const Vector2<U>&b)
     {
         return {
-            a.xx*b.x + a.xy*b.y + a.xz*b.z
+            a.xx*b.x + a.xy*b.y
         };
     }
 
     template <typename T, typename U>
-    constexpr Vec3<product_t<T,U>> operator*(const Vec1<T>&a, const Ten13<U>&b)
+    constexpr Vector2<product_t<T,U>> operator*(const Vector1<T>&a, const Tensor12<U>&b)
     {
         return {
             a.x*b.xx,
-            a.x*b.xy,
-            a.x*b.xz
+            a.x*b.xy
         };
     }
 
@@ -246,18 +231,18 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten13<quotient_t<T,U>>  operator/(const Ten13<T>& a, U b)
+    constexpr Tensor12<quotient_t<T,U>>  operator/(const Tensor12<T>& a, U b)
     {
         return {
-            a.xx/b, a.xy/b, a.xz/b
+            a.xx/b, a.xy/b
         };
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_div_v<T,U>)
-    Ten13<quotient_t<T,U>>  operator/=(const Ten13<T>& a, U b)
+    Tensor12<quotient_t<T,U>>  operator/=(const Tensor12<T>& a, U b)
     {
-        a.xx/=b; a.xy/=b; a.xz/=b;        
+        a.xx/=b; a.xy/=b;        
         return a;
     }
 
@@ -265,10 +250,10 @@ namespace yq {
 //  OTIMES PRODUCT
 
     template <typename T, typename U>
-    constexpr Ten13<product_t<T,U>> operator OTIMES(const Vec1<T>&a, const Vec3<U>&b)
+    constexpr Tensor12<product_t<T,U>> operator OTIMES(const Vector1<T>&a, const Vector2<U>&b)
     {
         return {
-            a.x+b.x, a.x+b.y, a.x+b.z
+            a.x+b.x, a.x+b.y
         };
     }
 
@@ -277,8 +262,8 @@ namespace yq {
 
 }
 
-YQ_TYPE_DECLARE(yq::Ten13D)
-YQ_TYPE_DECLARE(yq::Ten13F)
-YQ_TYPE_DECLARE(yq::Ten13I)
-YQ_TYPE_DECLARE(yq::Ten13U)
+YQ_TYPE_DECLARE(yq::Tensor12D)
+YQ_TYPE_DECLARE(yq::Tensor12F)
+YQ_TYPE_DECLARE(yq::Tensor12I)
+YQ_TYPE_DECLARE(yq::Tensor12U)
 

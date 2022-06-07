@@ -9,44 +9,39 @@
 //
 //  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
 
-#define YQ__API__MATH__VECTOR_4__HPP 1
+#define YQ__API__MATH__VECTOR_3__HPP 1
 #include <math/preamble.hpp>
 
 namespace yq {
-    /*! \brief Vector of 4 dimension(s)
+    /*! \brief Vector of 3 dimension(s)
     
-        This is a 4 dimensional cartesian vector of the given type.
+        This is a 3 dimensional cartesian vector of the given type.
         \tparam[T]  Data type to be used, recommended to be arithmetic in nature
     */
     template <typename T>
-    struct Vec4 {
+    struct Vector3 {
         //! Component data type argument to this structure (ie, template parameter T)
         using component_type = T;
 
         /*! \brief Creates a unit-vector in the $(bit)s dimension.
         */
-        static consteval Vec4 unit_x();
+        static consteval Vector3 unit_x();
         /*! \brief Creates a unit-vector in the $(bit)s dimension.
         */
-        static consteval Vec4 unit_y();
+        static consteval Vector3 unit_y();
         /*! \brief Creates a unit-vector in the $(bit)s dimension.
         */
-        static consteval Vec4 unit_z();
-        /*! \brief Creates a unit-vector in the $(bit)s dimension.
-        */
-        static consteval Vec4 unit_w();
+        static consteval Vector3 unit_z();
 
         //! Component for the $(bit)s dimension.
         T       x;
         //! Component for the $(bit)s dimension.
         T       y;
         //! Component for the $(bit)s dimension.
-        T       z;
-        //! Component for the $(bit)s dimension.
-        T       w;;
+        T       z;;
         
         //! Equality operator (using default)
-        constexpr bool operator==(const Vec4&) const noexcept = default;
+        constexpr bool operator==(const Vector3&) const noexcept = default;
     };
     
 //  --------------------------------------------------------
@@ -58,52 +53,46 @@ namespace yq {
         the first argument.
     */
     template <typename T>
-    constexpr Vec4<T> vec(T x, std::type_identity_t<T> y, std::type_identity_t<T> z, std::type_identity_t<T> w)
+    constexpr Vector3<T> vector(T x, std::type_identity_t<T> y, std::type_identity_t<T> z)
     {
-        return {x,y,z,w};
+        return {x,y,z};
     }
     
     template <typename T>
-    consteval Vec4<T> Vec4<T>::unit_x()
+    consteval Vector3<T> Vector3<T>::unit_x()
     {
-        return {one_v<T>,zero_v<T>,zero_v<T>,zero_v<T>};
+        return {one_v<T>,zero_v<T>,zero_v<T>};
     }
 
     template <typename T>
-    consteval Vec4<T> Vec4<T>::unit_y()
+    consteval Vector3<T> Vector3<T>::unit_y()
     {
-        return {zero_v<T>,one_v<T>,zero_v<T>,zero_v<T>};
+        return {zero_v<T>,one_v<T>,zero_v<T>};
     }
 
     template <typename T>
-    consteval Vec4<T> Vec4<T>::unit_z()
+    consteval Vector3<T> Vector3<T>::unit_z()
     {
-        return {zero_v<T>,zero_v<T>,one_v<T>,zero_v<T>};
+        return {zero_v<T>,zero_v<T>,one_v<T>};
     }
 
-    template <typename T>
-    consteval Vec4<T> Vec4<T>::unit_w()
-    {
-        return {zero_v<T>,zero_v<T>,zero_v<T>,one_v<T>};
-    }
-
-    YQ_NAN_1(Vec4, Vec4<T>{nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T>})
-    YQ_ZERO_1(Vec4, Vec4<T>{zero_v<T>, zero_v<T>, zero_v<T>, zero_v<T>})
+    YQ_NAN_1(Vector3, Vector3<T>{nan_v<T>, nan_v<T>, nan_v<T>})
+    YQ_ZERO_1(Vector3, Vector3<T>{zero_v<T>, zero_v<T>, zero_v<T>})
     
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
 
-    YQ_IS_NAN_1(Vec4, is_nan(v.x) || is_nan(v.y) || is_nan(v.z) || is_nan(v.w))
-    YQ_IS_FINITE_1(Vec4, is_finite(v.x) && is_finite(v.y) && is_finite(v.z) && is_finite(v.w))
+    YQ_IS_NAN_1(Vector3, is_nan(v.x) || is_nan(v.y) || is_nan(v.z))
+    YQ_IS_FINITE_1(Vector3, is_finite(v.x) && is_finite(v.y) && is_finite(v.z))
         
     /*! \brief Square of the vector's length
     
         This returns the SQUARE of the given vector's length.
     */
     template <typename T>
-    constexpr square_t<T> length2(const Vec4<T>& a)
+    constexpr square_t<T> length2(const Vector3<T>& a)
     {
-        return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
+        return a.x*a.x + a.y*a.y + a.z*a.z;
     }    
     
     /*! \brief Length of the vector
@@ -112,7 +101,7 @@ namespace yq {
     */
     template <typename T>
     requires trait::has_sqrt_v<T>
-    auto    length(const Vec4<T>& a)
+    auto    length(const Vector3<T>& a)
     {
         return sqrt(length2(a));
     }
@@ -121,7 +110,7 @@ namespace yq {
 //  POSITIVE
 
     template <typename T>
-    constexpr Vec4<T> operator+(const Vec4<T>& a)
+    constexpr Vector3<T> operator+(const Vector3<T>& a)
     {
         return a;
     }
@@ -130,9 +119,9 @@ namespace yq {
 //  NEGATIVE
 
     template <typename T>
-    constexpr Vec4<T> operator-(const Vec4<T>&a)
+    constexpr Vector3<T> operator-(const Vector3<T>&a)
     {
-        return {-a.x,-a.y,-a.z,-a.w};
+        return {-a.x,-a.y,-a.z};
     }
 
 //  --------------------------------------------------------
@@ -140,28 +129,27 @@ namespace yq {
 
     template <typename T>
     requires trait::has_sqrt_v<T>
-    Vec4<quotient_t<T,T>> operator~(const Vec4<T>& a)
+    Vector3<quotient_t<T,T>> operator~(const Vector3<T>& a)
     {
         auto l = one_v<T>/length(a);
-        return {a.x/l, a.y/l, a.z/l, a.w/l};
+        return {a.x/l, a.y/l, a.z/l};
     }
 
 //  --------------------------------------------------------
 //  ADDITION
 
     template <typename T>
-    constexpr Vec4<T> operator+(const Vec4<T>& a, const Vec4<T>& b)
+    constexpr Vector3<T> operator+(const Vector3<T>& a, const Vector3<T>& b)
     {
-        return {a.x+b.x, a.y+b.y, a.z+b.z, a.w+b.w};
+        return {a.x+b.x, a.y+b.y, a.z+b.z};
     }
     
     template <typename T>
-    Vec4<T>& operator+=(Vec4<T>& a, const Vec4<T>& b)
+    Vector3<T>& operator+=(Vector3<T>& a, const Vector3<T>& b)
     {
         a.x += b.x;
         a.y += b.y;
         a.z += b.z;
-        a.w += b.w;
         return a;
     }
 
@@ -169,18 +157,17 @@ namespace yq {
 //  SUBTRACTION
 
     template <typename T>
-    constexpr Vec4<T> operator-(const Vec4<T>& a, const Vec4<T>& b)
+    constexpr Vector3<T> operator-(const Vector3<T>& a, const Vector3<T>& b)
     {
-        return {a.x-b.x, a.y-b.y, a.z-b.z, a.w-b.w};
+        return {a.x-b.x, a.y-b.y, a.z-b.z};
     }
     
     template <typename T>
-    Vec4<T>& operator-=(Vec4<T>& a, const Vec4<T>& b)
+    Vector3<T>& operator-=(Vector3<T>& a, const Vector3<T>& b)
     {
         a.x -= b.x;
         a.y -= b.y;
         a.z -= b.z;
-        a.w -= b.w;
         return a;
     }
 
@@ -190,30 +177,30 @@ namespace yq {
 
     template <typename T, typename U>
     requires (std::is_arithmetic_v<T>)
-    constexpr Vec4<product_t<T,U>> operator*(T a, const Vec4<U>&b)
+    constexpr Vector3<product_t<T,U>> operator*(T a, const Vector3<U>&b)
     {
-        return {a*b.x, a*b.y, a*b.z, a*b.w};
+        return {a*b.x, a*b.y, a*b.z};
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U>)
-    constexpr Vec4<product_t<T,U>> operator*(const Vec4<T>& a, U b)
+    constexpr Vector3<product_t<T,U>> operator*(const Vector3<T>& a, U b)
     {
-        return {a.x*b, a.y*b, a.z*b, a.w*b};
+        return {a.x*b, a.y*b, a.z*b};
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_mul_v<T,U>)
-    Vec4<T>& operator*=(Vec4<T>& a, T b)
+    Vector3<T>& operator*=(Vector3<T>& a, T b)
     {
-        a.w *= b;
+        a.z *= b;
         return a;
     }
 
     template <typename T, typename U>
-    Vec4<product_t<T,U>>    mul_elem(const Vec4<T>&a, const Vec4<T>&b)
+    Vector3<product_t<T,U>>    mul_elem(const Vector3<T>&a, const Vector3<T>&b)
     {
-        return {a.x*b.x, a.y*b.y, a.z*b.z, a.w*b.w};
+        return {a.x*b.x, a.y*b.y, a.z*b.z};
     }
     
 //  --------------------------------------------------------
@@ -221,105 +208,110 @@ namespace yq {
 
     template <typename T, typename U>
     requires (std::is_arithmetic_v<T>)
-    constexpr  Vec4<quotient_t<T,U>> operator/(T a, const  Vec4<U>&b)
+    constexpr  Vector3<quotient_t<T,U>> operator/(T a, const  Vector3<U>&b)
     {
         return (a*b) / length2(b);
     }
 
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U>)
-    constexpr  Vec4<quotient_t<T,U>> operator/(const  Vec4<T>& a, U b)
+    constexpr  Vector3<quotient_t<T,U>> operator/(const  Vector3<T>& a, U b)
     {
-        return {a.x / b, a.y / b, a.z / b, a.w / b};
+        return {a.x / b, a.y / b, a.z / b};
     }
 
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_div_v<T,U>)
-    Vec4<T>& operator/=(Vec4<T>& a, U b)
+    Vector3<T>& operator/=(Vector3<T>& a, U b)
     {
         a.x /= b;
         a.y /= b;
         a.z /= b;
-        a.w /= b;
         return a;
     }
 
     template <typename T, typename U>
-    Vec4<quotient_t<T,U>>    div_elem(const Vec4<T>&a, const Vec4<T>&b)
+    Vector3<quotient_t<T,U>>    div_elem(const Vector3<T>&a, const Vector3<T>&b)
     {
-        return {a.x/b.x, a.y/b.y, a.z/b.z, a.w/b.w};
+        return {a.x/b.x, a.y/b.y, a.z/b.z};
     }
 
 //  --------------------------------------------------------
 //  DOT PRODUCT
 
     template <typename T, typename U>
-    constexpr product_t<T,U> operator DOT (const Vec4<T>& a, const Vec4<U>&b)
+    constexpr product_t<T,U> operator DOT (const Vector3<T>& a, const Vector3<U>&b)
     {
-        return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+        return a.x*b.x + a.y*b.y + a.z*b.z;
     }
 
 //  --------------------------------------------------------
 //  INNER PRODUCT
 
     template <typename T, typename U>
-    constexpr product_t<T,U> operator INNER (const Vec4<T>& a, const Vec4<U>&b)
+    constexpr product_t<T,U> operator INNER (const Vector3<T>& a, const Vector3<U>&b)
     {
-        return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
+        return a.x*b.x + a.y*b.y + a.z*b.z;
     }
 
     //  --------------------------------------------------------
     //  ADVANCED FUNCTIONS
 
     template <typename T>
-    Vec4<T>   abs_elem(const Vec4<T>&a, const Vec4<T>&b)
+    Vector3<T>   abs_elem(const Vector3<T>&a, const Vector3<T>&b)
     {
-        return {abs(a.x, b.x) && abs(a.y, b.y) && abs(a.z, b.z) && abs(a.w, b.w)};
+        return {abs(a.x, b.x) && abs(a.y, b.y) && abs(a.z, b.z)};
     }
 
     //! TRUE if every component of a is less than b
     template <typename T>
-    constexpr bool        all_less(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_less(const Vector3<T>& a, const Vector3<T>&b)
     {
-        return (a.x<b.x) && (a.y<b.y) && (a.z<b.z) && (a.w<b.w);
+        return (a.x<b.x) && (a.y<b.y) && (a.z<b.z);
     }
 
     //! TRUE if every component of a is less than (or equal to) b
     template <typename T>
-    constexpr bool        all_less_equal(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_less_equal(const Vector3<T>& a, const Vector3<T>&b)
     {
-        return (a.x<=b.x) && (a.y<=b.y) && (a.z<=b.z) && (a.w<=b.w);
+        return (a.x<=b.x) && (a.y<=b.y) && (a.z<=b.z);
     }
 
     //! TRUE if every component of a is greater than b
     template <typename T>
-    constexpr bool        all_greater(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_greater(const Vector3<T>& a, const Vector3<T>&b)
     {
-        return (a.x>b.x) && (a.y>b.y) && (a.z>b.z) && (a.w>b.w);
+        return (a.x>b.x) && (a.y>b.y) && (a.z>b.z);
     }
 
     //! TRUE if every component of a is greater or equal to b
     template <typename T>
-    constexpr bool        all_greater_equal(const Vec4<T>& a, const Vec4<T>&b)
+    constexpr bool        all_greater_equal(const Vector3<T>& a, const Vector3<T>&b)
     {
-        return (a.x>=b.x) && (a.y>=b.y) && (a.z>=b.z) && (a.w>=b.w);
+        return (a.x>=b.x) && (a.y>=b.y) && (a.z>=b.z);
     }
     
     template <typename T>
-    constexpr Vec4<T>   max_elem(const Vec4<T>&a, const Vec4<T>&b)
+    cube_t<T>       component_product(const Vector3<T>& a)
     {
-        return {max(a.x, b.x) && max(a.y, b.y) && max(a.z, b.z) && max(a.w, b.w)};
+        return a.x*a.y*a.z;
     }
     
     template <typename T>
-    constexpr Vec4<T>   min_elem(const Vec4<T>&a, const Vec4<T>&b)
+    constexpr Vector3<T>   max_elem(const Vector3<T>&a, const Vector3<T>&b)
     {
-        return {min(a.x, b.x) && min(a.y, b.y) && min(a.z, b.z) && min(a.w, b.w)};
+        return {max(a.x, b.x) && max(a.y, b.y) && max(a.z, b.z)};
+    }
+    
+    template <typename T>
+    constexpr Vector3<T>   min_elem(const Vector3<T>&a, const Vector3<T>&b)
+    {
+        return {min(a.x, b.x) && min(a.y, b.y) && min(a.z, b.z)};
     }
 }
 
-YQ_TYPE_DECLARE(yq::Vec4D)
-YQ_TYPE_DECLARE(yq::Vec4F)
-YQ_TYPE_DECLARE(yq::Vec4I)
-YQ_TYPE_DECLARE(yq::Vec4U)
+YQ_TYPE_DECLARE(yq::Vector3D)
+YQ_TYPE_DECLARE(yq::Vector3F)
+YQ_TYPE_DECLARE(yq::Vector3I)
+YQ_TYPE_DECLARE(yq::Vector3U)
 

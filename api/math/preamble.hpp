@@ -231,35 +231,35 @@ namespace yq {
     using Frac32 = Fraction<int32_t>;
     using Frac64 = Fraction<int64_t>;
     
-    template <typename T> struct Rect2;
-    using Rect2D    = Rect2<double>;
-    using Rect2F    = Rect2<float>;
-    using Rect2I    = Rect2<int>;
-    using Rect2U    = Rect2<unsigned>;
+    template <typename T> struct Rectangle2;
+    using Rectangle2D    = Rectangle2<double>;
+    using Rectangle2F    = Rectangle2<float>;
+    using Rectangle2I    = Rectangle2<int>;
+    using Rectangle2U    = Rectangle2<unsigned>;
 
-    template <typename T> struct Seg1;
-    using Seg1D   = Seg1<double>;
-    using Seg1F   = Seg1<float>;
-    using Seg1I   = Seg1<int>;
-    using Seg1U   = Seg1<unsigned>;
+    template <typename T> struct Segment1;
+    using Segment1D   = Segment1<double>;
+    using Segment1F   = Segment1<float>;
+    using Segment1I   = Segment1<int>;
+    using Segment1U   = Segment1<unsigned>;
 
-    template <typename T> struct Seg2;
-    using Seg2D   = Seg2<double>;
-    using Seg2F   = Seg2<float>;
-    using Seg2I   = Seg2<int>;
-    using Seg2U   = Seg2<unsigned>;
+    template <typename T> struct Segment2;
+    using Segment2D   = Segment2<double>;
+    using Segment2F   = Segment2<float>;
+    using Segment2I   = Segment2<int>;
+    using Segment2U   = Segment2<unsigned>;
 
-    template <typename T> struct Seg3;
-    using Seg3D   = Seg3<double>;
-    using Seg3F   = Seg3<float>;
-    using Seg3I   = Seg3<int>;
-    using Seg3U   = Seg3<unsigned>;
+    template <typename T> struct Segment3;
+    using Segment3D   = Segment3<double>;
+    using Segment3F   = Segment3<float>;
+    using Segment3I   = Segment3<int>;
+    using Segment3U   = Segment3<unsigned>;
 
-    template <typename T> struct Seg4;
-    using Seg4D   = Seg4<double>;
-    using Seg4F   = Seg4<float>;
-    using Seg4I   = Seg4<int>;
-    using Seg4U   = Seg4<unsigned>;
+    template <typename T> struct Segment4;
+    using Segment4D   = Segment4<double>;
+    using Segment4F   = Segment4<float>;
+    using Segment4I   = Segment4<int>;
+    using Segment4U   = Segment4<unsigned>;
     
     template <typename T> struct Size2;
     using Size2D    = Size2<double>;
@@ -287,6 +287,30 @@ namespace yq {
     using Sphere4F   = Sphere4<float>;
     using Sphere4I   = Sphere4<int>;
     using Sphere4U   = Sphere4<unsigned>;
+    
+    template <typename T> struct Tetrahedron3;
+    using Tetrahedron3D   = Tetrahedron3<double>;
+    using Tetrahedron3F   = Tetrahedron3<float>;
+    using Tetrahedron3I   = Tetrahedron3<int>;
+    using Tetrahedron3U   = Tetrahedron3<unsigned>;
+
+    template <typename T> struct Triangle2;
+    using Triangle2D   = Triangle2<double>;
+    using Triangle2F   = Triangle2<float>;
+    using Triangle2I   = Triangle2<int>;
+    using Triangle2U   = Triangle2<unsigned>;
+
+    template <typename T> struct Triangle3;
+    using Triangle3D   = Triangle3<double>;
+    using Triangle3F   = Triangle3<float>;
+    using Triangle3I   = Triangle3<int>;
+    using Triangle3U   = Triangle3<unsigned>;
+
+    template <typename T> struct Triangle4;
+    using Triangle4D   = Triangle4<double>;
+    using Triangle4F   = Triangle4<float>;
+    using Triangle4I   = Triangle4<int>;
+    using Triangle4U   = Triangle4<unsigned>;
 
     
     //! Call this if math isn't getting startup-initialized 

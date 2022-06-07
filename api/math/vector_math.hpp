@@ -6,27 +6,12 @@
 
 #pragma once
 
-#include <math/vector_python.hpp>
-#include <math/tensor_python.hpp>
+#include <math/vec/Vector1.hpp>
+#include <math/vec/Vector2.hpp>
+#include <math/vec/Vector3.hpp>
+#include <math/vec/Vector4.hpp>
 
 namespace yq {
 
-    template <typename T>
-    square_t<T>     component_product(const Vec2<T>& a)
-    {
-        return a.x*a.y;
-    }
-
-    template <typename T>
-    cube_t<T>       component_product(const Vec3<T>& a)
-    {
-        return a.x*a.y*a.z;
-    }
-
-    template <typename T>
-    auto           component_product(const Vec4<T>& a)
-    {
-        return a.x*a.y*a.z*a.w;
-    }
 
 }

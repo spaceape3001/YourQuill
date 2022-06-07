@@ -9,69 +9,57 @@
 //
 //  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
 
-#define YQ__API__MATH__TENSOR_4_1__HPP 1
+#define YQ__API__MATH__TENSOR_2_1__HPP 1
 #include <math/preamble.hpp>
-#include <math/vec/Vec1.hpp>
-#include <math/vec/Vec4.hpp>
+#include <math/vec/Vector1.hpp>
+#include <math/vec/Vector2.hpp>
 
 namespace yq {
-    /*! \brief 4x1 second order tensor (ie a matrix)
+    /*! \brief 2x1 second order tensor (ie a matrix)
     
         \tparam[T]  Data type to be used, recommended to be arithmetic in nature
     */
     template <typename T>
-    struct Ten41 {
+    struct Tensor21 {
         using component_type = T;
         T xx;
         T yx;
-        T zx;
-        T wx;
 
-        constexpr bool operator==(const Ten41&) const noexcept = default;
+        constexpr bool operator==(const Tensor21&) const noexcept = default;
     };
         
 //  --------------------------------------------------------
 //  COMPOSITION
 
     template <typename T>
-    constexpr Ten41<T>  columns(const Vec4<T>&x)
+    constexpr Tensor21<T>  columns(const Vector2<T>&x)
     {
         return {
             x.x,
-            x.y,
-            x.z,
-            x.w
+            x.y
         };
     }
 
     template <typename T>
-    constexpr Ten41<T>  rows(const Vec1<T>&x, const Vec1<T>&y, const Vec1<T>&z, const Vec1<T>&w)
+    constexpr Tensor21<T>  rows(const Vector1<T>&x, const Vector1<T>&y)
     {
         return {
             x.x,
-            y.x,
-            z.x,
-            w.x
+            y.x
         };
     }
     
-    YQ_IDENTITY_1(Ten41, {
+    YQ_IDENTITY_1(Tensor21, {
         one_v<T>,
-        zero_v<T>,
-        zero_v<T>,
         zero_v<T>
     })
 
-    YQ_NAN_1(Ten41, {
-        nan_v<T>,
-        nan_v<T>,
+    YQ_NAN_1(Tensor21, {
         nan_v<T>,
         nan_v<T> 
     })
     
-    YQ_ZERO_1(Ten41, {
-        zero_v<T>,
-        zero_v<T>,
+    YQ_ZERO_1(Tensor21, {
         zero_v<T>,
         zero_v<T> 
      })
@@ -80,51 +68,35 @@ namespace yq {
 //  BASIC FUNCTIONS
 
 
-    YQ_IS_FINITE_1(Ten41, 
+    YQ_IS_FINITE_1(Tensor21, 
         is_finite(v.xx) &&
-        is_finite(v.yx) &&
-        is_finite(v.zx) &&
-        is_finite(v.wx)
+        is_finite(v.yx)
     )
     
-    YQ_IS_NAN_1(Ten41,  
+    YQ_IS_NAN_1(Tensor21,  
         is_nan(v.xx) ||
-        is_nan(v.yx) ||
-        is_nan(v.zx) ||
-        is_nan(v.wx)
+        is_nan(v.yx)
     )
 
 //  --------------------------------------------------------
 //  GETTERS
 
     template <typename T>
-    constexpr Vec4<T>  x_column(const Ten41<T>&v) 
+    constexpr Vector2<T>  x_column(const Tensor21<T>&v) 
     {
-        return {v.xx, v.yx, v.zx, v.wx};
+        return {v.xx, v.yx};
     }
 
     template <typename T>
-    constexpr Vec1<T>  x_row(const Ten41<T>&v)
+    constexpr Vector1<T>  x_row(const Tensor21<T>&v)
     {
         return {v.xx};
     }
 
     template <typename T>
-    constexpr Vec1<T>  y_row(const Ten41<T>&v)
+    constexpr Vector1<T>  y_row(const Tensor21<T>&v)
     {
         return {v.yx};
-    }
-
-    template <typename T>
-    constexpr Vec1<T>  z_row(const Ten41<T>&v)
-    {
-        return {v.zx};
-    }
-
-    template <typename T>
-    constexpr Vec1<T>  w_row(const Ten41<T>&v)
-    {
-        return {v.wx};
     }
 
 
@@ -132,40 +104,24 @@ namespace yq {
 //  SETTERS
 
     template <typename T>
-    Ten41<T>& set_x_column(Ten41<T>&ten, const Vec1<T>& v)
+    Tensor21<T>& set_x_column(Tensor21<T>&ten, const Vector1<T>& v)
     {
         ten.xx = v.x;
         ten.yx = v.y;
-        ten.zx = v.z;
-        ten.wx = v.w;
         return ten;
     }
 
     template <typename T>
-    Ten41<T>& set_x_row(Ten41<T>&ten, const Vec4<T>& v)
+    Tensor21<T>& set_x_row(Tensor21<T>&ten, const Vector2<T>& v)
     {
         ten.xx = v.x;
         return ten;
     }
 
     template <typename T>
-    Ten41<T>& set_y_row(Ten41<T>&ten, const Vec4<T>& v)
+    Tensor21<T>& set_y_row(Tensor21<T>&ten, const Vector2<T>& v)
     {
         ten.yx = v.x;
-        return ten;
-    }
-
-    template <typename T>
-    Ten41<T>& set_z_row(Ten41<T>&ten, const Vec4<T>& v)
-    {
-        ten.zx = v.x;
-        return ten;
-    }
-
-    template <typename T>
-    Ten41<T>& set_w_row(Ten41<T>&ten, const Vec4<T>& v)
-    {
-        ten.wx = v.x;
         return ten;
     }
 
@@ -173,7 +129,7 @@ namespace yq {
 //  POSITIVE
 
     template <typename T>
-    constexpr Ten41<T>  operator+(const Ten41<T>& a) 
+    constexpr Tensor21<T>  operator+(const Tensor21<T>& a) 
     { 
         return a; 
     }
@@ -183,13 +139,11 @@ namespace yq {
 //  NEGATIVE
 
     template <typename T>
-    constexpr Ten41<T>  operator-(const Ten41<T>& a) 
+    constexpr Tensor21<T>  operator-(const Tensor21<T>& a) 
     {
         return {
             -a.xx,
-            -a.yx,
-            -a.zx,
-            -a.wx
+            -a.yx
         };
     }
 
@@ -198,23 +152,19 @@ namespace yq {
 //  ADDITION
 
     template <typename T>
-    constexpr Ten41<T>   operator+ (const Ten41<T> &a, const Ten41<T> &b) 
+    constexpr Tensor21<T>   operator+ (const Tensor21<T> &a, const Tensor21<T> &b) 
     {
         return {
             a.xx+b.xx,
-            a.yx+b.yx,
-            a.zx+b.zx,
-            a.wx+b.wx
+            a.yx+b.yx
         };
     }
 
     template <typename T>
-    Ten41<T>&   operator+=(Ten41<T> &a, const Ten41<T> &b) 
+    Tensor21<T>&   operator+=(Tensor21<T> &a, const Tensor21<T> &b) 
     {
         a.xx+=b.xx;
         a.yx+=b.yx;
-        a.zx+=b.zx;
-        a.wx+=b.wx;
         return a;
     }
 
@@ -223,24 +173,20 @@ namespace yq {
 //  SUBTRACTION
 
     template <typename T>
-    constexpr Ten41<T>   operator- (const Ten41<T> &a, const Ten41<T> &b) 
+    constexpr Tensor21<T>   operator- (const Tensor21<T> &a, const Tensor21<T> &b) 
     {
         return {
             a.xx-b.xx,
-            a.yx-b.yx,
-            a.zx-b.zx,
-            a.wx-b.wx
+            a.yx-b.yx
         };
     }
     
 
     template <typename T>
-    Ten41<T>&   operator-=(Ten41<T> &a, const Ten41<T> &b) 
+    Tensor21<T>&   operator-=(Tensor21<T> &a, const Tensor21<T> &b) 
     {
         a.xx-=b.xx;
         a.yx-=b.yx;
-        a.zx-=b.zx;
-        a.wx-=b.wx;
         return a;
     }
     
@@ -249,57 +195,49 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<T>
-    constexpr Ten41<product_t<T,U>>  operator*(T a, const Ten41<T>& b)
+    constexpr Tensor21<product_t<T,U>>  operator*(T a, const Tensor21<T>& b)
     {
         return {
             a*b.xx,
-            a*b.yx,
-            a*b.zx,
-            a*b.wx
+            a*b.yx
         };
     }
     
     
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten41<product_t<T,U>>  operator*(const Ten41<T>& a, U b)
+    constexpr Tensor21<product_t<T,U>>  operator*(const Tensor21<T>& a, U b)
     {
         return {
             a.xx*b,
-            a.yx*b,
-            a.zx*b,
-            a.wx*b
+            a.yx*b
         };
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_mul_v<T,U>)
-    Ten41<product_t<T,U>>  operator*=(const Ten41<T>& a, U b)
+    Tensor21<product_t<T,U>>  operator*=(const Tensor21<T>& a, U b)
     {
         a.xx*=b;
-        a.yx*=b;
-        a.zx*=b;
-        a.wx*=b;        
+        a.yx*=b;        
         return a;
     }
 
         
     template <typename T, typename U>
-    constexpr Vec4<product_t<T,U>> operator*(const Ten41<T>&a, const Vec1<U>&b)
+    constexpr Vector2<product_t<T,U>> operator*(const Tensor21<T>&a, const Vector1<U>&b)
     {
         return {
             a.xx*b.x,
-            a.yx*b.x,
-            a.zx*b.x,
-            a.wx*b.x
+            a.yx*b.x
         };
     }
 
     template <typename T, typename U>
-    constexpr Vec1<product_t<T,U>> operator*(const Vec4<T>&a, const Ten41<U>&b)
+    constexpr Vector1<product_t<T,U>> operator*(const Vector2<T>&a, const Tensor21<U>&b)
     {
         return {
-            a.x*b.xx + a.y*b.yx + a.z*b.zx + a.w*b.wx
+            a.x*b.xx + a.y*b.yx
         };
     }
 
@@ -309,24 +247,20 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten41<quotient_t<T,U>>  operator/(const Ten41<T>& a, U b)
+    constexpr Tensor21<quotient_t<T,U>>  operator/(const Tensor21<T>& a, U b)
     {
         return {
             a.xx/b,
-            a.yx/b,
-            a.zx/b,
-            a.wx/b
+            a.yx/b
         };
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_div_v<T,U>)
-    Ten41<quotient_t<T,U>>  operator/=(const Ten41<T>& a, U b)
+    Tensor21<quotient_t<T,U>>  operator/=(const Tensor21<T>& a, U b)
     {
         a.xx/=b;
-        a.yx/=b;
-        a.zx/=b;
-        a.wx/=b;        
+        a.yx/=b;        
         return a;
     }
 
@@ -334,13 +268,11 @@ namespace yq {
 //  OTIMES PRODUCT
 
     template <typename T, typename U>
-    constexpr Ten41<product_t<T,U>> operator OTIMES(const Vec4<T>&a, const Vec1<U>&b)
+    constexpr Tensor21<product_t<T,U>> operator OTIMES(const Vector2<T>&a, const Vector1<U>&b)
     {
         return {
             a.x+b.x,
-            a.y+b.x,
-            a.z+b.x,
-            a.w+b.x
+            a.y+b.x
         };
     }
 
@@ -349,8 +281,8 @@ namespace yq {
 
 }
 
-YQ_TYPE_DECLARE(yq::Ten41D)
-YQ_TYPE_DECLARE(yq::Ten41F)
-YQ_TYPE_DECLARE(yq::Ten41I)
-YQ_TYPE_DECLARE(yq::Ten41U)
+YQ_TYPE_DECLARE(yq::Tensor21D)
+YQ_TYPE_DECLARE(yq::Tensor21F)
+YQ_TYPE_DECLARE(yq::Tensor21I)
+YQ_TYPE_DECLARE(yq::Tensor21U)
 

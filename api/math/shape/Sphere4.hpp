@@ -7,7 +7,7 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <math/vec/Vec4.hpp>
+#include <math/vec/Vector4.hpp>
 
 namespace yq {
 
@@ -17,7 +17,7 @@ namespace yq {
     struct Sphere4 {
         using component_t   = T;
 
-        Vec4<T>     pt;
+        Vector4<T>     pt;
         T           r;
         
         constexpr bool operator==(const Sphere4&) const noexcept = default;
@@ -27,13 +27,13 @@ namespace yq {
 //  COMPOSITION
     
     template <typename T>
-    Sphere4<T>  sphere(const Vec4<T>& pt, T r)
+    Sphere4<T>  sphere(const Vector4<T>& pt, T r)
     {
         return {pt, r};
     }
 
-    YQ_NAN_1(Sphere4, { nan_v<Vec4<T>>, nan_v<T> })
-    YQ_ZERO_1(Sphere4, { zero_v<Vec4<T>>, zero_v<T> })
+    YQ_NAN_1(Sphere4, { nan_v<Vector4<T>>, nan_v<T> })
+    YQ_ZERO_1(Sphere4, { zero_v<Vector4<T>>, zero_v<T> })
 
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS

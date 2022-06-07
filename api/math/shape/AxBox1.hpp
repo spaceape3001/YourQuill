@@ -6,7 +6,7 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <math/vec/Vec1.hpp>
+#include <math/vec/Vector1.hpp>
 
 namespace yq {
 
@@ -16,7 +16,7 @@ namespace yq {
     struct AxBox1 {
         using component_t   = T;
         
-        Vec1<T>  lo, hi;
+        Vector1<T>  lo, hi;
         
         constexpr bool operator==(const AxBox1&) const noexcept = default;
     };
@@ -25,13 +25,13 @@ namespace yq {
 //  COMPOSITION
 
     template <typename T>
-    constexpr AxBox1<T> aabb(const Vec1<T>& a, const Vec1<T>& b)
+    constexpr AxBox1<T> aabb(const Vector1<T>& a, const Vector1<T>& b)
     {
         return { min_elem(a,b), max_elem(a,b) };
     }
     
-    YQ_NAN_1(AxBox1, { nan_v<Vec1>, nan_v<Vec1>});
-    YQ_ZERO_1(AxBox1, { zero_v<Vec1>, zero_v<Vec1>});
+    YQ_NAN_1(AxBox1, { nan_v<Vector1>, nan_v<Vector1>});
+    YQ_ZERO_1(AxBox1, { zero_v<Vector1>, zero_v<Vector1>});
 
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
@@ -74,7 +74,7 @@ namespace yq {
     }
     
     template <typename T>
-    constexpr bool inside(const AxBox1<T>& bx, const Vec1<T>& pt)
+    constexpr bool inside(const AxBox1<T>& bx, const Vector1<T>& pt)
     {
         return all_less_equal(bx.lo, pt) && all_less_equal(pt, bx.hi);
     }

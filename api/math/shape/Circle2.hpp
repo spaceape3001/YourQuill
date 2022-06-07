@@ -7,14 +7,14 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <math/vec/Vec2.hpp>
+#include <math/vec/Vector2.hpp>
 
 namespace yq {
     template <typename T>
     struct Circle2 {
         using component_t   = T;
 
-        Vec2<T>     pt;
+        Vector2<T>     pt;
         T           r;
         
         constexpr bool operator==(const Circle2&) const noexcept = default;
@@ -24,13 +24,13 @@ namespace yq {
 //  COMPOSITION
     
     template <typename T>
-    Circle2<T>  circle(const Vec2<T>& pt, T r)
+    Circle2<T>  circle(const Vector2<T>& pt, T r)
     {
         return {pt, r};
     }
 
-    YQ_NAN_1(Circle2, { nan_v<Vec2<T>>, nan_v<T> })
-    YQ_ZERO_1(Circle2, { zero_v<Vec2<T>>, zero_v<T> })
+    YQ_NAN_1(Circle2, { nan_v<Vector2<T>>, nan_v<T> })
+    YQ_ZERO_1(Circle2, { zero_v<Vector2<T>>, zero_v<T> })
 
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS

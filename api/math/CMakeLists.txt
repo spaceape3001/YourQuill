@@ -7,7 +7,6 @@ set(yq_math_sources
     
     ./math.cpp
     ./preamble.hpp
-    ./types_python.cpp
 )
 
 add_library(yqmath SHARED ${yq_math_sources})

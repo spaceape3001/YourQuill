@@ -14,125 +14,125 @@ namespace std { template <typename> class complex; }
 
 namespace yq {
 
-    template <typename T> struct Ten11;
-    using Ten11D = Ten11<double>;
-    using Ten11F = Ten11<float>;
-    using Ten11I = Ten11<int>;
-    using Ten11U = Ten11<unsigned>;
+    template <typename T> struct Tensor11;
+    using Tensor11D = Tensor11<double>;
+    using Tensor11F = Tensor11<float>;
+    using Tensor11I = Tensor11<int>;
+    using Tensor11U = Tensor11<unsigned>;
 
-    template <typename T> struct Ten12;
-    using Ten12D = Ten12<double>;
-    using Ten12F = Ten12<float>;
-    using Ten12I = Ten12<int>;
-    using Ten12U = Ten12<unsigned>;
+    template <typename T> struct Tensor12;
+    using Tensor12D = Tensor12<double>;
+    using Tensor12F = Tensor12<float>;
+    using Tensor12I = Tensor12<int>;
+    using Tensor12U = Tensor12<unsigned>;
 
-    template <typename T> struct Ten13;
-    using Ten13D = Ten13<double>;
-    using Ten13F = Ten13<float>;
-    using Ten13I = Ten13<int>;
-    using Ten13U = Ten13<unsigned>;
+    template <typename T> struct Tensor13;
+    using Tensor13D = Tensor13<double>;
+    using Tensor13F = Tensor13<float>;
+    using Tensor13I = Tensor13<int>;
+    using Tensor13U = Tensor13<unsigned>;
 
-    template <typename T> struct Ten14;
-    using Ten14D = Ten14<double>;
-    using Ten14F = Ten14<float>;
-    using Ten14I = Ten14<int>;
-    using Ten14U = Ten14<unsigned>;
+    template <typename T> struct Tensor14;
+    using Tensor14D = Tensor14<double>;
+    using Tensor14F = Tensor14<float>;
+    using Tensor14I = Tensor14<int>;
+    using Tensor14U = Tensor14<unsigned>;
 
-    template <typename T> struct Ten21;
-    using Ten21D = Ten21<double>;
-    using Ten21F = Ten21<float>;
-    using Ten21I = Ten21<int>;
-    using Ten21U = Ten21<unsigned>;
+    template <typename T> struct Tensor21;
+    using Tensor21D = Tensor21<double>;
+    using Tensor21F = Tensor21<float>;
+    using Tensor21I = Tensor21<int>;
+    using Tensor21U = Tensor21<unsigned>;
 
-    template <typename T> struct Ten22;
-    using Ten22D = Ten22<double>;
-    using Ten22F = Ten22<float>;
-    using Ten22I = Ten22<int>;
-    using Ten22U = Ten22<unsigned>;
+    template <typename T> struct Tensor22;
+    using Tensor22D = Tensor22<double>;
+    using Tensor22F = Tensor22<float>;
+    using Tensor22I = Tensor22<int>;
+    using Tensor22U = Tensor22<unsigned>;
 
-    template <typename T> struct Ten23;
-    using Ten23D = Ten23<double>;
-    using Ten23F = Ten23<float>;
-    using Ten23I = Ten23<int>;
-    using Ten23U = Ten23<unsigned>;
+    template <typename T> struct Tensor23;
+    using Tensor23D = Tensor23<double>;
+    using Tensor23F = Tensor23<float>;
+    using Tensor23I = Tensor23<int>;
+    using Tensor23U = Tensor23<unsigned>;
 
-    template <typename T> struct Ten24;
-    using Ten24D = Ten24<double>;
-    using Ten24F = Ten24<float>;
-    using Ten24I = Ten24<int>;
-    using Ten24U = Ten24<unsigned>;
+    template <typename T> struct Tensor24;
+    using Tensor24D = Tensor24<double>;
+    using Tensor24F = Tensor24<float>;
+    using Tensor24I = Tensor24<int>;
+    using Tensor24U = Tensor24<unsigned>;
 
-    template <typename T> struct Ten31;
-    using Ten31D = Ten31<double>;
-    using Ten31F = Ten31<float>;
-    using Ten31I = Ten31<int>;
-    using Ten31U = Ten31<unsigned>;
+    template <typename T> struct Tensor31;
+    using Tensor31D = Tensor31<double>;
+    using Tensor31F = Tensor31<float>;
+    using Tensor31I = Tensor31<int>;
+    using Tensor31U = Tensor31<unsigned>;
 
-    template <typename T> struct Ten32;
-    using Ten32D = Ten32<double>;
-    using Ten32F = Ten32<float>;
-    using Ten32I = Ten32<int>;
-    using Ten32U = Ten32<unsigned>;
+    template <typename T> struct Tensor32;
+    using Tensor32D = Tensor32<double>;
+    using Tensor32F = Tensor32<float>;
+    using Tensor32I = Tensor32<int>;
+    using Tensor32U = Tensor32<unsigned>;
 
-    template <typename T> struct Ten33;
-    using Ten33D = Ten33<double>;
-    using Ten33F = Ten33<float>;
-    using Ten33I = Ten33<int>;
-    using Ten33U = Ten33<unsigned>;
+    template <typename T> struct Tensor33;
+    using Tensor33D = Tensor33<double>;
+    using Tensor33F = Tensor33<float>;
+    using Tensor33I = Tensor33<int>;
+    using Tensor33U = Tensor33<unsigned>;
 
-    template <typename T> struct Ten34;
-    using Ten34D = Ten34<double>;
-    using Ten34F = Ten34<float>;
-    using Ten34I = Ten34<int>;
-    using Ten34U = Ten34<unsigned>;
+    template <typename T> struct Tensor34;
+    using Tensor34D = Tensor34<double>;
+    using Tensor34F = Tensor34<float>;
+    using Tensor34I = Tensor34<int>;
+    using Tensor34U = Tensor34<unsigned>;
 
-    template <typename T> struct Ten41;
-    using Ten41D = Ten41<double>;
-    using Ten41F = Ten41<float>;
-    using Ten41I = Ten41<int>;
-    using Ten41U = Ten41<unsigned>;
+    template <typename T> struct Tensor41;
+    using Tensor41D = Tensor41<double>;
+    using Tensor41F = Tensor41<float>;
+    using Tensor41I = Tensor41<int>;
+    using Tensor41U = Tensor41<unsigned>;
 
-    template <typename T> struct Ten42;
-    using Ten42D = Ten42<double>;
-    using Ten42F = Ten42<float>;
-    using Ten42I = Ten42<int>;
-    using Ten42U = Ten42<unsigned>;
+    template <typename T> struct Tensor42;
+    using Tensor42D = Tensor42<double>;
+    using Tensor42F = Tensor42<float>;
+    using Tensor42I = Tensor42<int>;
+    using Tensor42U = Tensor42<unsigned>;
 
-    template <typename T> struct Ten43;
-    using Ten43D = Ten43<double>;
-    using Ten43F = Ten43<float>;
-    using Ten43I = Ten43<int>;
-    using Ten43U = Ten43<unsigned>;
+    template <typename T> struct Tensor43;
+    using Tensor43D = Tensor43<double>;
+    using Tensor43F = Tensor43<float>;
+    using Tensor43I = Tensor43<int>;
+    using Tensor43U = Tensor43<unsigned>;
 
-    template <typename T> struct Ten44;
-    using Ten44D = Ten44<double>;
-    using Ten44F = Ten44<float>;
-    using Ten44I = Ten44<int>;
-    using Ten44U = Ten44<unsigned>;
+    template <typename T> struct Tensor44;
+    using Tensor44D = Tensor44<double>;
+    using Tensor44F = Tensor44<float>;
+    using Tensor44I = Tensor44<int>;
+    using Tensor44U = Tensor44<unsigned>;
 
-    template <typename> struct Vec1;
-    using Vec1D = Vec1<double>;
-    using Vec1F = Vec1<float>;
-    using Vec1I = Vec1<int>;
-    using Vec1U = Vec1<unsigned>;
+    template <typename> struct Vector1;
+    using Vector1D = Vector1<double>;
+    using Vector1F = Vector1<float>;
+    using Vector1I = Vector1<int>;
+    using Vector1U = Vector1<unsigned>;
 
-    template <typename> struct Vec2;
-    using Vec2D = Vec2<double>;
-    using Vec2F = Vec2<float>;
-    using Vec2I = Vec2<int>;
-    using Vec2U = Vec2<unsigned>;
+    template <typename> struct Vector2;
+    using Vector2D = Vector2<double>;
+    using Vector2F = Vector2<float>;
+    using Vector2I = Vector2<int>;
+    using Vector2U = Vector2<unsigned>;
 
-    template <typename> struct Vec3;
-    using Vec3D = Vec3<double>;
-    using Vec3F = Vec3<float>;
-    using Vec3I = Vec3<int>;
-    using Vec3U = Vec3<unsigned>;
+    template <typename> struct Vector3;
+    using Vector3D = Vector3<double>;
+    using Vector3F = Vector3<float>;
+    using Vector3I = Vector3<int>;
+    using Vector3U = Vector3<unsigned>;
 
-    template <typename> struct Vec4;
-    using Vec4D = Vec4<double>;
-    using Vec4F = Vec4<float>;
-    using Vec4I = Vec4<int>;
-    using Vec4U = Vec4<unsigned>;
+    template <typename> struct Vector4;
+    using Vector4D = Vector4<double>;
+    using Vector4F = Vector4<float>;
+    using Vector4I = Vector4<int>;
+    using Vector4U = Vector4<unsigned>;
 
 
 }

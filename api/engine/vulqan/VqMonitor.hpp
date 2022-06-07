@@ -46,13 +46,13 @@ namespace yq {
             std::string             name() const;
             
             //! Position of the monitor
-            Vec2I                   position() const;
+            Vector2I                position() const;
             
             //! Physical size of monitor (in MM)
             Size2I                  phys_size_mm() const;
             
             //! Scale of the montior
-            Vec2F                   scale() const;
+            Vector2F                scale() const;
             
             //! Current video mode
             VqVidMode               video_mode_current() const;
@@ -64,7 +64,7 @@ namespace yq {
             
                 This work area is returned in screen coordinates.
             */
-            Rect2I                  work_area() const;
+            Rectangle2I             work_area() const;
             
             constexpr operator bool () const noexcept { return m_monitor != nullptr; }
             constexpr bool    operator==(const VqMonitor&) const noexcept = default;

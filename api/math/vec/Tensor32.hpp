@@ -9,68 +9,62 @@
 //
 //  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
 
-#define YQ__API__MATH__TENSOR_4_2__HPP 1
+#define YQ__API__MATH__TENSOR_3_2__HPP 1
 #include <math/preamble.hpp>
-#include <math/vec/Vec2.hpp>
-#include <math/vec/Vec4.hpp>
+#include <math/vec/Vector2.hpp>
+#include <math/vec/Vector3.hpp>
 
 namespace yq {
-    /*! \brief 4x2 second order tensor (ie a matrix)
+    /*! \brief 3x2 second order tensor (ie a matrix)
     
         \tparam[T]  Data type to be used, recommended to be arithmetic in nature
     */
     template <typename T>
-    struct Ten42 {
+    struct Tensor32 {
         using component_type = T;
         T xx, xy;
         T yx, yy;
         T zx, zy;
-        T wx, wy;
 
-        constexpr bool operator==(const Ten42&) const noexcept = default;
+        constexpr bool operator==(const Tensor32&) const noexcept = default;
     };
         
 //  --------------------------------------------------------
 //  COMPOSITION
 
     template <typename T>
-    constexpr Ten42<T>  columns(const Vec4<T>&x, const Vec4<T>&y)
+    constexpr Tensor32<T>  columns(const Vector3<T>&x, const Vector3<T>&y)
     {
         return {
             x.x, y.x,
             x.y, y.y,
-            x.z, y.z,
-            x.w, y.w
+            x.z, y.z
         };
     }
 
     template <typename T>
-    constexpr Ten42<T>  rows(const Vec2<T>&x, const Vec2<T>&y, const Vec2<T>&z, const Vec2<T>&w)
+    constexpr Tensor32<T>  rows(const Vector2<T>&x, const Vector2<T>&y, const Vector2<T>&z)
     {
         return {
             x.x, x.y,
             y.x, y.y,
-            z.x, z.y,
-            w.x, w.y
+            z.x, z.y
         };
     }
     
-    YQ_IDENTITY_1(Ten42, {
+    YQ_IDENTITY_1(Tensor32, {
         one_v<T>, zero_v<T>,
         zero_v<T>, one_v<T>,
-        zero_v<T>, zero_v<T>,
         zero_v<T>, zero_v<T>
     })
 
-    YQ_NAN_1(Ten42, {
-        nan_v<T>, nan_v<T>,
+    YQ_NAN_1(Tensor32, {
         nan_v<T>, nan_v<T>,
         nan_v<T>, nan_v<T>,
         nan_v<T>, nan_v<T> 
     })
     
-    YQ_ZERO_1(Ten42, {
-        zero_v<T>, zero_v<T>,
+    YQ_ZERO_1(Tensor32, {
         zero_v<T>, zero_v<T>,
         zero_v<T>, zero_v<T>,
         zero_v<T>, zero_v<T> 
@@ -80,57 +74,49 @@ namespace yq {
 //  BASIC FUNCTIONS
 
 
-    YQ_IS_FINITE_1(Ten42, 
+    YQ_IS_FINITE_1(Tensor32, 
         is_finite(v.xx) && is_finite(v.xy) &&
         is_finite(v.yx) && is_finite(v.yy) &&
-        is_finite(v.zx) && is_finite(v.zy) &&
-        is_finite(v.wx) && is_finite(v.wy)
+        is_finite(v.zx) && is_finite(v.zy)
     )
     
-    YQ_IS_NAN_1(Ten42,  
+    YQ_IS_NAN_1(Tensor32,  
         is_nan(v.xx) || is_nan(v.xy) ||
         is_nan(v.yx) || is_nan(v.yy) ||
-        is_nan(v.zx) || is_nan(v.zy) ||
-        is_nan(v.wx) || is_nan(v.wy)
+        is_nan(v.zx) || is_nan(v.zy)
     )
 
 //  --------------------------------------------------------
 //  GETTERS
 
     template <typename T>
-    constexpr Vec4<T>  x_column(const Ten42<T>&v) 
+    constexpr Vector3<T>  x_column(const Tensor32<T>&v) 
     {
-        return {v.xx, v.yx, v.zx, v.wx};
+        return {v.xx, v.yx, v.zx};
     }
 
     template <typename T>
-    constexpr Vec4<T>  y_column(const Ten42<T>&v) 
+    constexpr Vector3<T>  y_column(const Tensor32<T>&v) 
     {
-        return {v.xy, v.yy, v.zy, v.wy};
+        return {v.xy, v.yy, v.zy};
     }
 
     template <typename T>
-    constexpr Vec2<T>  x_row(const Ten42<T>&v)
+    constexpr Vector2<T>  x_row(const Tensor32<T>&v)
     {
         return {v.xx, v.xy};
     }
 
     template <typename T>
-    constexpr Vec2<T>  y_row(const Ten42<T>&v)
+    constexpr Vector2<T>  y_row(const Tensor32<T>&v)
     {
         return {v.yx, v.yy};
     }
 
     template <typename T>
-    constexpr Vec2<T>  z_row(const Ten42<T>&v)
+    constexpr Vector2<T>  z_row(const Tensor32<T>&v)
     {
         return {v.zx, v.zy};
-    }
-
-    template <typename T>
-    constexpr Vec2<T>  w_row(const Ten42<T>&v)
-    {
-        return {v.wx, v.wy};
     }
 
 
@@ -138,27 +124,25 @@ namespace yq {
 //  SETTERS
 
     template <typename T>
-    Ten42<T>& set_x_column(Ten42<T>&ten, const Vec2<T>& v)
+    Tensor32<T>& set_x_column(Tensor32<T>&ten, const Vector2<T>& v)
     {
         ten.xx = v.x;
         ten.yx = v.y;
         ten.zx = v.z;
-        ten.wx = v.w;
         return ten;
     }
 
     template <typename T>
-    Ten42<T>& set_y_column(Ten42<T>&ten, const Vec2<T>& v)
+    Tensor32<T>& set_y_column(Tensor32<T>&ten, const Vector2<T>& v)
     {
         ten.xy = v.x;
         ten.yy = v.y;
         ten.zy = v.z;
-        ten.wy = v.w;
         return ten;
     }
 
     template <typename T>
-    Ten42<T>& set_x_row(Ten42<T>&ten, const Vec4<T>& v)
+    Tensor32<T>& set_x_row(Tensor32<T>&ten, const Vector3<T>& v)
     {
         ten.xx = v.x;
         ten.xy = v.y;
@@ -166,7 +150,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten42<T>& set_y_row(Ten42<T>&ten, const Vec4<T>& v)
+    Tensor32<T>& set_y_row(Tensor32<T>&ten, const Vector3<T>& v)
     {
         ten.yx = v.x;
         ten.yy = v.y;
@@ -174,18 +158,10 @@ namespace yq {
     }
 
     template <typename T>
-    Ten42<T>& set_z_row(Ten42<T>&ten, const Vec4<T>& v)
+    Tensor32<T>& set_z_row(Tensor32<T>&ten, const Vector3<T>& v)
     {
         ten.zx = v.x;
         ten.zy = v.y;
-        return ten;
-    }
-
-    template <typename T>
-    Ten42<T>& set_w_row(Ten42<T>&ten, const Vec4<T>& v)
-    {
-        ten.wx = v.x;
-        ten.wy = v.y;
         return ten;
     }
 
@@ -193,7 +169,7 @@ namespace yq {
 //  POSITIVE
 
     template <typename T>
-    constexpr Ten42<T>  operator+(const Ten42<T>& a) 
+    constexpr Tensor32<T>  operator+(const Tensor32<T>& a) 
     { 
         return a; 
     }
@@ -203,13 +179,12 @@ namespace yq {
 //  NEGATIVE
 
     template <typename T>
-    constexpr Ten42<T>  operator-(const Ten42<T>& a) 
+    constexpr Tensor32<T>  operator-(const Tensor32<T>& a) 
     {
         return {
             -a.xx, -a.xy,
             -a.yx, -a.yy,
-            -a.zx, -a.zy,
-            -a.wx, -a.wy
+            -a.zx, -a.zy
         };
     }
 
@@ -218,23 +193,21 @@ namespace yq {
 //  ADDITION
 
     template <typename T>
-    constexpr Ten42<T>   operator+ (const Ten42<T> &a, const Ten42<T> &b) 
+    constexpr Tensor32<T>   operator+ (const Tensor32<T> &a, const Tensor32<T> &b) 
     {
         return {
             a.xx+b.xx, a.xy+b.xy,
             a.yx+b.yx, a.yy+b.yy,
-            a.zx+b.zx, a.zy+b.zy,
-            a.wx+b.wx, a.wy+b.wy
+            a.zx+b.zx, a.zy+b.zy
         };
     }
 
     template <typename T>
-    Ten42<T>&   operator+=(Ten42<T> &a, const Ten42<T> &b) 
+    Tensor32<T>&   operator+=(Tensor32<T> &a, const Tensor32<T> &b) 
     {
         a.xx+=b.xx;  a.xy+=b.xy;
         a.yx+=b.yx;  a.yy+=b.yy;
         a.zx+=b.zx;  a.zy+=b.zy;
-        a.wx+=b.wx;  a.wy+=b.wy;
         return a;
     }
 
@@ -243,24 +216,22 @@ namespace yq {
 //  SUBTRACTION
 
     template <typename T>
-    constexpr Ten42<T>   operator- (const Ten42<T> &a, const Ten42<T> &b) 
+    constexpr Tensor32<T>   operator- (const Tensor32<T> &a, const Tensor32<T> &b) 
     {
         return {
             a.xx-b.xx, a.xy-b.xy,
             a.yx-b.yx, a.yy-b.yy,
-            a.zx-b.zx, a.zy-b.zy,
-            a.wx-b.wx, a.wy-b.wy
+            a.zx-b.zx, a.zy-b.zy
         };
     }
     
 
     template <typename T>
-    Ten42<T>&   operator-=(Ten42<T> &a, const Ten42<T> &b) 
+    Tensor32<T>&   operator-=(Tensor32<T> &a, const Tensor32<T> &b) 
     {
         a.xx-=b.xx;  a.xy-=b.xy;
         a.yx-=b.yx;  a.yy-=b.yy;
         a.zx-=b.zx;  a.zy-=b.zy;
-        a.wx-=b.wx;  a.wy-=b.wy;
         return a;
     }
     
@@ -269,58 +240,54 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<T>
-    constexpr Ten42<product_t<T,U>>  operator*(T a, const Ten42<T>& b)
+    constexpr Tensor32<product_t<T,U>>  operator*(T a, const Tensor32<T>& b)
     {
         return {
             a*b.xx, a*b.xy,
             a*b.yx, a*b.yy,
-            a*b.zx, a*b.zy,
-            a*b.wx, a*b.wy
+            a*b.zx, a*b.zy
         };
     }
     
     
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten42<product_t<T,U>>  operator*(const Ten42<T>& a, U b)
+    constexpr Tensor32<product_t<T,U>>  operator*(const Tensor32<T>& a, U b)
     {
         return {
             a.xx*b, a.xy*b,
             a.yx*b, a.yy*b,
-            a.zx*b, a.zy*b,
-            a.wx*b, a.wy*b
+            a.zx*b, a.zy*b
         };
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_mul_v<T,U>)
-    Ten42<product_t<T,U>>  operator*=(const Ten42<T>& a, U b)
+    Tensor32<product_t<T,U>>  operator*=(const Tensor32<T>& a, U b)
     {
         a.xx*=b; a.xy*=b;
         a.yx*=b; a.yy*=b;
-        a.zx*=b; a.zy*=b;
-        a.wx*=b; a.wy*=b;        
+        a.zx*=b; a.zy*=b;        
         return a;
     }
 
         
     template <typename T, typename U>
-    constexpr Vec4<product_t<T,U>> operator*(const Ten42<T>&a, const Vec2<U>&b)
+    constexpr Vector3<product_t<T,U>> operator*(const Tensor32<T>&a, const Vector2<U>&b)
     {
         return {
             a.xx*b.x + a.xy*b.y,
             a.yx*b.x + a.yy*b.y,
-            a.zx*b.x + a.zy*b.y,
-            a.wx*b.x + a.wy*b.y
+            a.zx*b.x + a.zy*b.y
         };
     }
 
     template <typename T, typename U>
-    constexpr Vec2<product_t<T,U>> operator*(const Vec4<T>&a, const Ten42<U>&b)
+    constexpr Vector2<product_t<T,U>> operator*(const Vector3<T>&a, const Tensor32<U>&b)
     {
         return {
-            a.x*b.xx + a.y*b.yx + a.z*b.zx + a.w*b.wx,
-            a.x*b.xy + a.y*b.yy + a.z*b.zy + a.w*b.wy
+            a.x*b.xx + a.y*b.yx + a.z*b.zx,
+            a.x*b.xy + a.y*b.yy + a.z*b.zy
         };
     }
 
@@ -330,24 +297,22 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten42<quotient_t<T,U>>  operator/(const Ten42<T>& a, U b)
+    constexpr Tensor32<quotient_t<T,U>>  operator/(const Tensor32<T>& a, U b)
     {
         return {
             a.xx/b, a.xy/b,
             a.yx/b, a.yy/b,
-            a.zx/b, a.zy/b,
-            a.wx/b, a.wy/b
+            a.zx/b, a.zy/b
         };
     }
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_div_v<T,U>)
-    Ten42<quotient_t<T,U>>  operator/=(const Ten42<T>& a, U b)
+    Tensor32<quotient_t<T,U>>  operator/=(const Tensor32<T>& a, U b)
     {
         a.xx/=b; a.xy/=b;
         a.yx/=b; a.yy/=b;
-        a.zx/=b; a.zy/=b;
-        a.wx/=b; a.wy/=b;        
+        a.zx/=b; a.zy/=b;        
         return a;
     }
 
@@ -355,13 +320,12 @@ namespace yq {
 //  OTIMES PRODUCT
 
     template <typename T, typename U>
-    constexpr Ten42<product_t<T,U>> operator OTIMES(const Vec4<T>&a, const Vec2<U>&b)
+    constexpr Tensor32<product_t<T,U>> operator OTIMES(const Vector3<T>&a, const Vector2<U>&b)
     {
         return {
             a.x+b.x, a.x+b.y,
             a.y+b.x, a.y+b.y,
-            a.z+b.x, a.z+b.y,
-            a.w+b.x, a.w+b.y
+            a.z+b.x, a.z+b.y
         };
     }
 
@@ -370,8 +334,8 @@ namespace yq {
 
 }
 
-YQ_TYPE_DECLARE(yq::Ten42D)
-YQ_TYPE_DECLARE(yq::Ten42F)
-YQ_TYPE_DECLARE(yq::Ten42I)
-YQ_TYPE_DECLARE(yq::Ten42U)
+YQ_TYPE_DECLARE(yq::Tensor32D)
+YQ_TYPE_DECLARE(yq::Tensor32F)
+YQ_TYPE_DECLARE(yq::Tensor32I)
+YQ_TYPE_DECLARE(yq::Tensor32U)
 

@@ -22,7 +22,7 @@
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/render/PipelineConfig.hpp>
 #include <math/shape/Size2.hpp>
-#include <math/vec/Vec2.hpp>
+#include <math/vec/Vector2.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -911,11 +911,11 @@ namespace yq {
             return VqMonitor();
         }
 
-        Vec2I       VqWindow::position() const
+        Vector2I    VqWindow::position() const
         {
             if(!m_window)
                 return {};
-            Vec2I   ret;
+            Vector2I   ret;
             glfwGetWindowPos(m_window, &ret.x, &ret.y);
             return ret;
         }
@@ -937,7 +937,7 @@ namespace yq {
             m_clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }
 
-        void        VqWindow::set_position(const Vec2I& pos)
+        void        VqWindow::set_position(const Vector2I& pos)
         {
             set_position(pos.x, pos.y);
         }

@@ -22,7 +22,7 @@ namespace yq {
         constexpr Coord2(T _i, T _j) : i(_i), j(_j) {}
 
         //  todo...
-            // Coord2(const Vec2I&);
+            // Coord2(const Vector2I&);
         constexpr bool operator==(const Coord2&) const noexcept = default;
     };
     

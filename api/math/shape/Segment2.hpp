@@ -6,65 +6,65 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <math/vec/Vec4.hpp>
+#include <math/vec/Vector2.hpp>
 
 namespace yq {
     
-    /*! \brief Segment in 4 dimension(s)
+    /*! \brief Segment in 2 dimension(s)
     */
     template <typename T>
-    struct Seg4 {
+    struct Segment2 {
         using component_t   = T;
 
-        Vec4<T>  a, b;
+        Vector2<T>  a, b;
 
-        constexpr bool operator==(const Seg4&) const noexcept = default;
+        constexpr bool operator==(const Segment2&) const noexcept = default;
     };
 
 //  --------------------------------------------------------
 //  COMPOSITION
 
     template <typename T>
-    constexpr Seg4<T> segment(const Vec4<T>& a, const Vec4<T>& b)
+    constexpr Segment2<T> segment(const Vector2<T>& a, const Vector2<T>& b)
     {
         return { a, b };
     }
     
-    YQ_NAN_1(Seg4, { nan_v<Vec4>, nan_v<Vec4>});
-    YQ_ZERO_1(Seg4, { zero_v<Vec4>, zero_v<Vec4>});
+    YQ_NAN_1(Segment2, { nan_v<Vector2<T>>, nan_v<Vector2<T>>});
+    YQ_ZERO_1(Segment2, { zero_v<Vector2<T>>, zero_v<Vector2<T>>});
 
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
 
-    YQ_IS_FINITE_1( Seg4, is_finite(v.a) && is_finite(v.b))
-    YQ_IS_NAN_1(Seg4, is_nan(v.a) || is_nan(v.b))
+    YQ_IS_FINITE_1( Segment2, is_finite(v.a) && is_finite(v.b))
+    YQ_IS_NAN_1(Segment2, is_nan(v.a) || is_nan(v.b))
     
 //  --------------------------------------------------------
 //  ADVANCED FUNCTIONS
 
     template <typename T>
-    T       length(const Seg4<T>& seg)
+    T       length(const Segment2<T>& seg)
     {
         return length(seg.b-seg.a);
     }
 
     template <typename T>
     requires has_ieee754_v<T>
-    Vec4<T>     midpoint(const Seg4<T>& seg)
+    Vector2<T>     midpoint(const Segment2<T>& seg)
     {
         return ieee754_t<T>(0.5)*(seg.hi+seg.lo);
     }
-
+    
     template <typename T>
     requires has_ieee754_v<T>
-    Vec4<T>     point(const Seg4<T>& seg, ieee754_t<T> f)
+    Vector2<T>     point(const Segment2<T>& seg, ieee754_t<T> f)
     {
         return (one_v<ieee754_t<T>> - f) * seg.a + f * seg.b;
     }
-    
 }
-YQ_TYPE_DECLARE(yq::Seg4D)
-YQ_TYPE_DECLARE(yq::Seg4F)
-YQ_TYPE_DECLARE(yq::Seg4I)
-YQ_TYPE_DECLARE(yq::Seg4U)
+
+YQ_TYPE_DECLARE(yq::Segment2D)
+YQ_TYPE_DECLARE(yq::Segment2F)
+YQ_TYPE_DECLARE(yq::Segment2I)
+YQ_TYPE_DECLARE(yq::Segment2U)
 

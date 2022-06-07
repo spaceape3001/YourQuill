@@ -14,7 +14,7 @@
 #include <math/preamble.hpp>
 #include <math/ColorRgb.hpp>
 #include <math/shape/Size2.hpp>
-#include <math/vec/Vec2.hpp>
+#include <math/vec/Vector2.hpp>
 #include <vulkan/vulkan_core.h>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <optional>
@@ -31,7 +31,7 @@ namespace yq {
         
             const char*                 title    = "(untitled)";
             Size2I                      size     = { 1920, 1080 };
-            std::optional<Vec2I>        position;
+            std::optional<Vector2I>     position;
                 //!  Set to get full screen, windowed otherwise
             VqMonitor                   monitor;
             VkPresentModeKHR            pmode   = VK_PRESENT_MODE_FIFO_KHR;
@@ -152,7 +152,7 @@ namespace yq {
             VkPhysicalDevice    physical() const { return m_physical; }
 
                 //! Current window position
-            Vec2I               position() const;
+            Vector2I            position() const;
             
             VkRenderPass        render_pass() const;
             
@@ -163,7 +163,7 @@ namespace yq {
             void                set_clear(const ColorRgbF&);
 
                 //! Sets the window position
-            void                set_position(const Vec2I&);
+            void                set_position(const Vector2I&);
 
                 //! Sets the window position
             void                set_position(int x, int y);

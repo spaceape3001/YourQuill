@@ -11,7 +11,7 @@
 
 #define YQ__API__MATH__TENSOR_4_4__HPP 1
 #include <math/preamble.hpp>
-#include <math/vec/Vec4.hpp>
+#include <math/vec/Vector4.hpp>
 
 namespace yq {
     /*! \brief 4x4 second order tensor (ie a matrix)
@@ -19,21 +19,21 @@ namespace yq {
         \tparam[T]  Data type to be used, recommended to be arithmetic in nature
     */
     template <typename T>
-    struct Ten44 {
+    struct Tensor44 {
         using component_type = T;
         T xx, xy, xz, xw;
         T yx, yy, yz, yw;
         T zx, zy, zz, zw;
         T wx, wy, wz, ww;
 
-        constexpr bool operator==(const Ten44&) const noexcept = default;
+        constexpr bool operator==(const Tensor44&) const noexcept = default;
     };
         
 //  --------------------------------------------------------
 //  COMPOSITION
 
     template <typename T>
-    constexpr Ten44<T>  columns(const Vec4<T>&x, const Vec4<T>&y, const Vec4<T>&z, const Vec4<T>&w)
+    constexpr Tensor44<T>  columns(const Vector4<T>&x, const Vector4<T>&y, const Vector4<T>&z, const Vector4<T>&w)
     {
         return {
             x.x, y.x, z.x, w.x,
@@ -44,7 +44,7 @@ namespace yq {
     }
 
     template <typename T>
-    constexpr Ten44<T>  diagonal(const Vec4<T>&v)
+    constexpr Tensor44<T>  diagonal(const Vector4<T>&v)
     {
         return {
             v.x, zero_v<T>, zero_v<T>, zero_v<T>,
@@ -55,7 +55,7 @@ namespace yq {
     }
     
     template <typename T>
-    constexpr Ten44<T>  diagonal(T x, std::type_identity_t<T> y, std::type_identity_t<T> z, std::type_identity_t<T> w)
+    constexpr Tensor44<T>  diagonal(T x, std::type_identity_t<T> y, std::type_identity_t<T> z, std::type_identity_t<T> w)
     {
         return {
             x, zero_v<T>, zero_v<T>, zero_v<T>,
@@ -66,7 +66,7 @@ namespace yq {
     }
 
     template <typename T>
-    constexpr Ten44<T>  rows(const Vec4<T>&x, const Vec4<T>&y, const Vec4<T>&z, const Vec4<T>&w)
+    constexpr Tensor44<T>  rows(const Vector4<T>&x, const Vector4<T>&y, const Vector4<T>&z, const Vector4<T>&w)
     {
         return {
             x.x, x.y, x.z, x.w,
@@ -76,21 +76,21 @@ namespace yq {
         };
     }
     
-    YQ_IDENTITY_1(Ten44, {
+    YQ_IDENTITY_1(Tensor44, {
         one_v<T>, zero_v<T>, zero_v<T>, zero_v<T>,
         zero_v<T>, one_v<T>, zero_v<T>, zero_v<T>,
         zero_v<T>, zero_v<T>, one_v<T>, zero_v<T>,
         zero_v<T>, zero_v<T>, zero_v<T>, one_v<T>
     })
 
-    YQ_NAN_1(Ten44, {
+    YQ_NAN_1(Tensor44, {
         nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T>,
         nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T>,
         nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T>,
         nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T> 
     })
     
-    YQ_ZERO_1(Ten44, {
+    YQ_ZERO_1(Tensor44, {
         zero_v<T>, zero_v<T>, zero_v<T>, zero_v<T>,
         zero_v<T>, zero_v<T>, zero_v<T>, zero_v<T>,
         zero_v<T>, zero_v<T>, zero_v<T>, zero_v<T>,
@@ -101,14 +101,14 @@ namespace yq {
 //  BASIC FUNCTIONS
 
 
-    YQ_IS_FINITE_1(Ten44, 
+    YQ_IS_FINITE_1(Tensor44, 
         is_finite(v.xx) && is_finite(v.xy) && is_finite(v.xz) && is_finite(v.xw) &&
         is_finite(v.yx) && is_finite(v.yy) && is_finite(v.yz) && is_finite(v.yw) &&
         is_finite(v.zx) && is_finite(v.zy) && is_finite(v.zz) && is_finite(v.zw) &&
         is_finite(v.wx) && is_finite(v.wy) && is_finite(v.wz) && is_finite(v.ww)
     )
     
-    YQ_IS_NAN_1(Ten44,  
+    YQ_IS_NAN_1(Tensor44,  
         is_nan(v.xx) || is_nan(v.xy) || is_nan(v.xz) || is_nan(v.xw) ||
         is_nan(v.yx) || is_nan(v.yy) || is_nan(v.yz) || is_nan(v.yw) ||
         is_nan(v.zx) || is_nan(v.zy) || is_nan(v.zz) || is_nan(v.zw) ||
@@ -116,7 +116,7 @@ namespace yq {
     )
 
     template <typename T>
-    constexpr Ten44<T>  transpose(const Ten44<T>&v)
+    constexpr Tensor44<T>  transpose(const Tensor44<T>&v)
     {
         return {
             v.xx, v.yx, v.zx, v.wx,
@@ -130,55 +130,55 @@ namespace yq {
 //  GETTERS
 
     template <typename T>
-    constexpr Vec4<T>  diagonal(const Ten44<T>& v)
+    constexpr Vector4<T>  diagonal(const Tensor44<T>& v)
     {
         return {v.xx, v.yy, v.zz, v.ww};
     }
 
     template <typename T>
-    constexpr Vec4<T>  x_column(const Ten44<T>&v) 
+    constexpr Vector4<T>  x_column(const Tensor44<T>&v) 
     {
         return {v.xx, v.yx, v.zx, v.wx};
     }
 
     template <typename T>
-    constexpr Vec4<T>  y_column(const Ten44<T>&v) 
+    constexpr Vector4<T>  y_column(const Tensor44<T>&v) 
     {
         return {v.xy, v.yy, v.zy, v.wy};
     }
 
     template <typename T>
-    constexpr Vec4<T>  z_column(const Ten44<T>&v) 
+    constexpr Vector4<T>  z_column(const Tensor44<T>&v) 
     {
         return {v.xz, v.yz, v.zz, v.wz};
     }
 
     template <typename T>
-    constexpr Vec4<T>  w_column(const Ten44<T>&v) 
+    constexpr Vector4<T>  w_column(const Tensor44<T>&v) 
     {
         return {v.xw, v.yw, v.zw, v.ww};
     }
 
     template <typename T>
-    constexpr Vec4<T>  x_row(const Ten44<T>&v)
+    constexpr Vector4<T>  x_row(const Tensor44<T>&v)
     {
         return {v.xx, v.xy, v.xz, v.xw};
     }
 
     template <typename T>
-    constexpr Vec4<T>  y_row(const Ten44<T>&v)
+    constexpr Vector4<T>  y_row(const Tensor44<T>&v)
     {
         return {v.yx, v.yy, v.yz, v.yw};
     }
 
     template <typename T>
-    constexpr Vec4<T>  z_row(const Ten44<T>&v)
+    constexpr Vector4<T>  z_row(const Tensor44<T>&v)
     {
         return {v.zx, v.zy, v.zz, v.zw};
     }
 
     template <typename T>
-    constexpr Vec4<T>  w_row(const Ten44<T>&v)
+    constexpr Vector4<T>  w_row(const Tensor44<T>&v)
     {
         return {v.wx, v.wy, v.wz, v.ww};
     }
@@ -189,7 +189,7 @@ namespace yq {
 
             
     template <typename T>
-    Ten44<T>&  set_diagonal(Ten44<T>& ten, const Vec4<T>& v)
+    Tensor44<T>&  set_diagonal(Tensor44<T>& ten, const Vector4<T>& v)
     {        ten.xx = v.x;
         ten.yy = v.y;
         ten.zz = v.z;
@@ -199,7 +199,7 @@ namespace yq {
 
 
     template <typename T>
-    Ten44<T>& set_x_column(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_x_column(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.xx = v.x;
         ten.yx = v.y;
@@ -209,7 +209,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>& set_y_column(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_y_column(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.xy = v.x;
         ten.yy = v.y;
@@ -219,7 +219,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>& set_z_column(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_z_column(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.xz = v.x;
         ten.yz = v.y;
@@ -229,7 +229,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>& set_w_column(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_w_column(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.xw = v.x;
         ten.yw = v.y;
@@ -239,7 +239,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>& set_x_row(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_x_row(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.xx = v.x;
         ten.xy = v.y;
@@ -249,7 +249,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>& set_y_row(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_y_row(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.yx = v.x;
         ten.yy = v.y;
@@ -259,7 +259,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>& set_z_row(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_z_row(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.zx = v.x;
         ten.zy = v.y;
@@ -269,7 +269,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>& set_w_row(Ten44<T>&ten, const Vec4<T>& v)
+    Tensor44<T>& set_w_row(Tensor44<T>&ten, const Vector4<T>& v)
     {
         ten.wx = v.x;
         ten.wy = v.y;
@@ -282,7 +282,7 @@ namespace yq {
 //  POSITIVE
 
     template <typename T>
-    constexpr Ten44<T>  operator+(const Ten44<T>& a) 
+    constexpr Tensor44<T>  operator+(const Tensor44<T>& a) 
     { 
         return a; 
     }
@@ -292,7 +292,7 @@ namespace yq {
 //  NEGATIVE
 
     template <typename T>
-    constexpr Ten44<T>  operator-(const Ten44<T>& a) 
+    constexpr Tensor44<T>  operator-(const Tensor44<T>& a) 
     {
         return {
             -a.xx, -a.xy, -a.xz, -a.xw,
@@ -307,7 +307,7 @@ namespace yq {
 //  ADDITION
 
     template <typename T>
-    constexpr Ten44<T>   operator+ (const Ten44<T> &a, const Ten44<T> &b) 
+    constexpr Tensor44<T>   operator+ (const Tensor44<T> &a, const Tensor44<T> &b) 
     {
         return {
             a.xx+b.xx, a.xy+b.xy, a.xz+b.xz, a.xw+b.xw,
@@ -318,7 +318,7 @@ namespace yq {
     }
 
     template <typename T>
-    Ten44<T>&   operator+=(Ten44<T> &a, const Ten44<T> &b) 
+    Tensor44<T>&   operator+=(Tensor44<T> &a, const Tensor44<T> &b) 
     {
         a.xx+=b.xx;  a.xy+=b.xy;  a.xz+=b.xz;  a.xw+=b.xw;
         a.yx+=b.yx;  a.yy+=b.yy;  a.yz+=b.yz;  a.yw+=b.yw;
@@ -332,7 +332,7 @@ namespace yq {
 //  SUBTRACTION
 
     template <typename T>
-    constexpr Ten44<T>   operator- (const Ten44<T> &a, const Ten44<T> &b) 
+    constexpr Tensor44<T>   operator- (const Tensor44<T> &a, const Tensor44<T> &b) 
     {
         return {
             a.xx-b.xx, a.xy-b.xy, a.xz-b.xz, a.xw-b.xw,
@@ -344,7 +344,7 @@ namespace yq {
     
 
     template <typename T>
-    Ten44<T>&   operator-=(Ten44<T> &a, const Ten44<T> &b) 
+    Tensor44<T>&   operator-=(Tensor44<T> &a, const Tensor44<T> &b) 
     {
         a.xx-=b.xx;  a.xy-=b.xy;  a.xz-=b.xz;  a.xw-=b.xw;
         a.yx-=b.yx;  a.yy-=b.yy;  a.yz-=b.yz;  a.yw-=b.yw;
@@ -358,7 +358,7 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<T>
-    constexpr Ten44<product_t<T,U>>  operator*(T a, const Ten44<T>& b)
+    constexpr Tensor44<product_t<T,U>>  operator*(T a, const Tensor44<T>& b)
     {
         return {
             a*b.xx, a*b.xy, a*b.xz, a*b.xw,
@@ -371,7 +371,7 @@ namespace yq {
     
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten44<product_t<T,U>>  operator*(const Ten44<T>& a, U b)
+    constexpr Tensor44<product_t<T,U>>  operator*(const Tensor44<T>& a, U b)
     {
         return {
             a.xx*b, a.xy*b, a.xz*b, a.xw*b,
@@ -383,7 +383,7 @@ namespace yq {
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_mul_v<T,U>)
-    Ten44<product_t<T,U>>  operator*=(const Ten44<T>& a, U b)
+    Tensor44<product_t<T,U>>  operator*=(const Tensor44<T>& a, U b)
     {
         a.xx*=b; a.xy*=b; a.xz*=b; a.xw*=b;
         a.yx*=b; a.yy*=b; a.yz*=b; a.yw*=b;
@@ -393,7 +393,7 @@ namespace yq {
     }
 
     template <typename T, typename U>
-    constexpr Ten44<product_t<T,U>> operator*(const Ten44<T>& a, const Ten44<U>& b)
+    constexpr Tensor44<product_t<T,U>> operator*(const Tensor44<T>& a, const Tensor44<U>& b)
     {
         return {
             a.xx*b.xx + a.xy*b.yx + a.xz*b.zx + a.xw*b.wx,
@@ -420,7 +420,7 @@ namespace yq {
     
     template <typename T, typename U>
     requires trait::self_mul_v<T,U>
-    Ten44<T>& operator*=(Ten44<T>&a, const Ten44<U>& b)
+    Tensor44<T>& operator*=(Tensor44<T>&a, const Tensor44<U>& b)
     {
         a = a * b;
         return a;
@@ -428,7 +428,7 @@ namespace yq {
 
         
     template <typename T, typename U>
-    constexpr Vec4<product_t<T,U>> operator*(const Ten44<T>&a, const Vec4<U>&b)
+    constexpr Vector4<product_t<T,U>> operator*(const Tensor44<T>&a, const Vector4<U>&b)
     {
         return {
             a.xx*b.x + a.xy*b.y + a.xz*b.z + a.xw*b.w,
@@ -439,7 +439,7 @@ namespace yq {
     }
 
     template <typename T, typename U>
-    constexpr Vec4<product_t<T,U>> operator*(const Vec4<T>&a, const Ten44<U>&b)
+    constexpr Vector4<product_t<T,U>> operator*(const Vector4<T>&a, const Tensor44<U>&b)
     {
         return {
             a.x*b.xx + a.y*b.yx + a.z*b.zx + a.w*b.wx,
@@ -451,7 +451,7 @@ namespace yq {
 
     template <typename T, typename U>
     requires trait::self_mul_v<T,U>
-    Vec4<T>& operator*=(Vec4<T>&a, const Ten44<U>& b)
+    Vector4<T>& operator*=(Vector4<T>&a, const Tensor44<U>& b)
     {
         a = a * b;
         return a;
@@ -463,7 +463,7 @@ namespace yq {
 
     template <typename T, typename U>
     requires std::is_arithmetic_v<U>
-    constexpr Ten44<quotient_t<T,U>>  operator/(const Ten44<T>& a, U b)
+    constexpr Tensor44<quotient_t<T,U>>  operator/(const Tensor44<T>& a, U b)
     {
         return {
             a.xx/b, a.xy/b, a.xz/b, a.xw/b,
@@ -475,7 +475,7 @@ namespace yq {
     
     template <typename T, typename U>
     requires (std::is_arithmetic_v<U> && trait::self_div_v<T,U>)
-    Ten44<quotient_t<T,U>>  operator/=(const Ten44<T>& a, U b)
+    Tensor44<quotient_t<T,U>>  operator/=(const Tensor44<T>& a, U b)
     {
         a.xx/=b; a.xy/=b; a.xz/=b; a.xw/=b;
         a.yx/=b; a.yy/=b; a.yz/=b; a.yw/=b;
@@ -488,7 +488,7 @@ namespace yq {
 //  OTIMES PRODUCT
 
     template <typename T, typename U>
-    constexpr Ten44<product_t<T,U>> operator OTIMES(const Vec4<T>&a, const Vec4<U>&b)
+    constexpr Tensor44<product_t<T,U>> operator OTIMES(const Vector4<T>&a, const Vector4<U>&b)
     {
         return {
             a.x+b.x, a.x+b.y, a.x+b.z, a.x+b.w,
@@ -506,15 +506,15 @@ namespace yq {
         \param[in] a    Tensor to take the trace of
     */
     template <typename T>
-    constexpr T     trace(const Ten44<T>& a)
+    constexpr T     trace(const Tensor44<T>& a)
     {
         return a.xx+a.yy+a.zz+a.ww;
     }
 
 }
 
-YQ_TYPE_DECLARE(yq::Ten44D)
-YQ_TYPE_DECLARE(yq::Ten44F)
-YQ_TYPE_DECLARE(yq::Ten44I)
-YQ_TYPE_DECLARE(yq::Ten44U)
+YQ_TYPE_DECLARE(yq::Tensor44D)
+YQ_TYPE_DECLARE(yq::Tensor44F)
+YQ_TYPE_DECLARE(yq::Tensor44I)
+YQ_TYPE_DECLARE(yq::Tensor44U)
 

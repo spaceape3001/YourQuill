@@ -7,14 +7,14 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <math/vec/Vec3.hpp>
+#include <math/vec/Vector3.hpp>
 
 namespace yq {
     template <typename T>
     struct Sphere3 {
         using component_t   = T;
 
-        Vec3<T>     pt;
+        Vector3<T>     pt;
         T           r;
         
         constexpr bool operator==(const Sphere3&) const noexcept = default;
@@ -24,13 +24,13 @@ namespace yq {
 //  COMPOSITION
     
     template <typename T>
-    Sphere3<T>  sphere(const Vec3<T>& pt, T r)
+    Sphere3<T>  sphere(const Vector3<T>& pt, T r)
     {
         return {pt, r};
     }
 
-    YQ_NAN_1(Sphere3, { nan_v<Vec3<T>>, nan_v<T> })
-    YQ_ZERO_1(Sphere3, { zero_v<Vec3<T>>, zero_v<T> })
+    YQ_NAN_1(Sphere3, { nan_v<Vector3<T>>, nan_v<T> })
+    YQ_ZERO_1(Sphere3, { zero_v<Vector3<T>>, zero_v<T> })
 
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
