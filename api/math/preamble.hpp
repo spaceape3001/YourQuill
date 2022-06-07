@@ -20,6 +20,7 @@
 #include <math/trait/has_one.hpp>
 #include <math/trait/has_sqrt.hpp>
 #include <math/trait/has_zero.hpp>
+#include <math/trait/ieee754.hpp>
 
 #include <math/forward.hpp>
 
@@ -198,6 +199,12 @@ namespace yq {
     using AxBox4I   = AxBox4<int>;
     using AxBox4U   = AxBox4<unsigned>;
 
+    template <typename T> struct Circle2;
+    using Circle2D   = Circle2<double>;
+    using Circle2F   = Circle2<float>;
+    using Circle2I   = Circle2<int>;
+    using Circle2U   = Circle2<unsigned>;
+
     template <typename T> struct ColorRgb;
     using ColorRgbD     = ColorRgb<double>;
     using ColorRgbF     = ColorRgb<float>;
@@ -268,7 +275,19 @@ namespace yq {
     using Size2U32  = Size2<int32_t>;
     using Size2U64  = Size2<int64_t>;
     using Size2Z    = Size2<size_t>;
+
+    template <typename T> struct Sphere3;
+    using Sphere3D   = Sphere3<double>;
+    using Sphere3F   = Sphere3<float>;
+    using Sphere3I   = Sphere3<int>;
+    using Sphere3U   = Sphere3<unsigned>;
     
+    template <typename T> struct Sphere4;
+    using Sphere4D   = Sphere4<double>;
+    using Sphere4F   = Sphere4<float>;
+    using Sphere4I   = Sphere4<int>;
+    using Sphere4U   = Sphere4<unsigned>;
+
     
     //! Call this if math isn't getting startup-initialized 
     void        initialize_math();

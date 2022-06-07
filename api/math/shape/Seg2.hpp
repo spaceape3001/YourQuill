@@ -5,10 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-//  WARNING!  WARNING!
-//
-//  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
-
 #include <math/preamble.hpp>
 #include <math/vec/Vec2.hpp>
 
@@ -51,7 +47,20 @@ namespace yq {
     {
         return length(seg.b-seg.a);
     }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vec2<T>     midpoint(const Seg2<T>& seg)
+    {
+        return ieee754_t<T>(0.5)*(seg.hi+seg.lo);
+    }
     
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vec2<T>     point(const Seg2<T>& seg, ieee754_t<T> f)
+    {
+        return (one_v<ieee754_t<T>> - f) * seg.a + f * seg.b;
+    }
 }
 YQ_TYPE_DECLARE(yq::Seg2D)
 YQ_TYPE_DECLARE(yq::Seg2F)

@@ -5,10 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-//  WARNING!  WARNING!
-//
-//  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
-
 #include <math/preamble.hpp>
 #include <math/vec/Vec3.hpp>
 

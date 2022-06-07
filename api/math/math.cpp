@@ -16,12 +16,17 @@
 #include <math/shape/AxBox3.hpp>
 #include <math/shape/AxBox4.hpp>
 
+#include <math/shape/Circle2.hpp>
+
 #include <math/shape/Seg1.hpp>
 #include <math/shape/Seg2.hpp>
 #include <math/shape/Seg3.hpp>
 #include <math/shape/Seg4.hpp>
 
 #include <math/shape/Size2.hpp>
+
+#include <math/shape/Sphere3.hpp>
+#include <math/shape/Sphere4.hpp>
 
 #include <math/vec/Ten11.hpp>
 #include <math/vec/Ten12.hpp>
@@ -73,6 +78,11 @@ YQ_TYPE_IMPLEMENT(yq::AxBox4F)
 YQ_TYPE_IMPLEMENT(yq::AxBox4I)
 YQ_TYPE_IMPLEMENT(yq::AxBox4U)
 
+YQ_TYPE_IMPLEMENT(yq::Circle2D)
+YQ_TYPE_IMPLEMENT(yq::Circle2F)
+YQ_TYPE_IMPLEMENT(yq::Circle2I)
+YQ_TYPE_IMPLEMENT(yq::Circle2U)
+
 YQ_TYPE_IMPLEMENT(yq::ComplexD)
 YQ_TYPE_IMPLEMENT(yq::ComplexF)
 YQ_TYPE_IMPLEMENT(yq::ComplexI)
@@ -112,6 +122,17 @@ YQ_TYPE_IMPLEMENT(yq::Size2D)
 YQ_TYPE_IMPLEMENT(yq::Size2F)
 YQ_TYPE_IMPLEMENT(yq::Size2I)
 YQ_TYPE_IMPLEMENT(yq::Size2U)
+
+YQ_TYPE_IMPLEMENT(yq::Sphere3D)
+YQ_TYPE_IMPLEMENT(yq::Sphere3F)
+YQ_TYPE_IMPLEMENT(yq::Sphere3I)
+YQ_TYPE_IMPLEMENT(yq::Sphere3U)
+
+YQ_TYPE_IMPLEMENT(yq::Sphere4D)
+YQ_TYPE_IMPLEMENT(yq::Sphere4F)
+YQ_TYPE_IMPLEMENT(yq::Sphere4I)
+YQ_TYPE_IMPLEMENT(yq::Sphere4U)
+
 
 YQ_INVOKE(
 
@@ -182,6 +203,22 @@ YQ_INVOKE(
     auto axbox4u = writer<AxBox4U>();
     axbox4u.property("lo", &AxBox4U::lo);
     axbox4u.property("hi", &AxBox4U::hi);
+
+    auto circle2d = writer<Circle2D>();
+    circle2d.property("pt", &Circle2D::pt);
+    circle2d.property("r", &Circle2D::r);
+    
+    auto circle2f = writer<Circle2F>();
+    circle2f.property("pt", &Circle2F::pt);
+    circle2f.property("r", &Circle2F::r);
+
+    auto circle2i = writer<Circle2I>();
+    circle2i.property("pt", &Circle2I::pt);
+    circle2i.property("r", &Circle2I::r);
+
+    auto circle2u = writer<Circle2U>();
+    circle2u.property("pt", &Circle2U::pt);
+    circle2u.property("r", &Circle2U::r);
 
 
     auto complexD = writer<ComplexD>();
@@ -325,6 +362,38 @@ YQ_INVOKE(
     size2u.property("y", &Size2U::y);
     size2u.property("width", &Size2U::width);
     size2u.property("height", &Size2U::height);
+
+    auto sphere3d = writer<Sphere3D>();
+    sphere3d.property("pt", &Sphere3D::pt);
+    sphere3d.property("r", &Sphere3D::r);
+    
+    auto sphere3f = writer<Sphere3F>();
+    sphere3f.property("pt", &Sphere3F::pt);
+    sphere3f.property("r", &Sphere3F::r);
+
+    auto sphere3i = writer<Sphere3I>();
+    sphere3i.property("pt", &Sphere3I::pt);
+    sphere3i.property("r", &Sphere3I::r);
+
+    auto sphere3u = writer<Sphere3U>();
+    sphere3u.property("pt", &Sphere3U::pt);
+    sphere3u.property("r", &Sphere3U::r);
+
+    auto sphere4d = writer<Sphere4D>();
+    sphere4d.property("pt", &Sphere4D::pt);
+    sphere4d.property("r", &Sphere4D::r);
+    
+    auto sphere4f = writer<Sphere4F>();
+    sphere4f.property("pt", &Sphere4F::pt);
+    sphere4f.property("r", &Sphere4F::r);
+
+    auto sphere4i = writer<Sphere4I>();
+    sphere4i.property("pt", &Sphere4I::pt);
+    sphere4i.property("r", &Sphere4I::r);
+
+    auto sphere4u = writer<Sphere4U>();
+    sphere4u.property("pt", &Sphere4U::pt);
+    sphere4u.property("r", &Sphere4U::r);
 );
 
 namespace yq {

@@ -5,10 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-//  WARNING!  WARNING!
-//
-//  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
-
 #include <math/preamble.hpp>
 #include <math/vec/Vec1.hpp>
 
@@ -46,12 +42,26 @@ namespace yq {
 //  --------------------------------------------------------
 //  ADVANCED FUNCTIONS
 
+
     template <typename T>
     T       length(const Seg1<T>& seg)
     {
         return length(seg.b-seg.a);
     }
     
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vec1<T>     midpoint(const Seg1<T>& seg)
+    {
+        return ieee754_t<T>(0.5)*(seg.hi+seg.lo);
+    }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vec1<T>     point(const Seg1<T>& seg, ieee754_t<T> f)
+    {
+        return (one_v<ieee754_t<T>> - f) * seg.a + f * seg.b;
+    }
 }
 YQ_TYPE_DECLARE(yq::Seg1D)
 YQ_TYPE_DECLARE(yq::Seg1F)
