@@ -17,6 +17,7 @@
 #include <math/vec/Vector2.hpp>
 #include <vulkan/vulkan_core.h>
 #include <engine/vulqan/VqMonitor.hpp>
+#include <functional>
 #include <optional>
 
 struct HelloApp;
@@ -216,24 +217,9 @@ namespace yq {
             virtual bool        draw();
 
         protected:
-            virtual void        draw_vulqan(VkCommandBuffer){}
-            struct Pipeline;
         
-        private:
-            
             struct Command;
-
-            bool    init(const WindowCreateInfo& i);
-            bool    init_physical(const WindowCreateInfo& i);
-            bool    init_window(const WindowCreateInfo& i);
-            bool    init_surface();
-            bool    init_logical();
-            bool    init_command_pool();
-            bool    init_render_pass();
-            bool    init_descriptor_pool(const WindowCreateInfo&i);
-            bool    init_sync();
-            void    kill();
-            bool    record(VkCommandBuffer, uint32_t);
+            struct Pipeline;
             
             struct Queue {
                 VkQueue             queue   = nullptr;
@@ -259,38 +245,50 @@ namespace yq {
             };
 
             
-            VkPhysicalDevice            m_physical                  = nullptr;
-            GLFWwindow*                 m_window                    = nullptr;
-            VkSurfaceKHR                m_surface                   = nullptr;
-            Queue                       m_graphics, m_present;
+            VkPhysicalDevice    m_physical                  = nullptr;
+            GLFWwindow*         m_window                    = nullptr;
+            VkSurfaceKHR        m_surface                   = nullptr;
+            Queue               m_graphics, m_present;
             
-            VkQueue                     m_graphicsQueue             = nullptr;
-            uint32_t                    m_graphicsQueueFamily       = UINT32_MAX;
-            VkQueue                     m_presentQueue              = nullptr;
-            VkDevice                    m_device                    = nullptr;
-            VkPresentModeKHR            m_presentMode;
-            VkFormat                    m_surfaceFormat;
-            VkColorSpaceKHR             m_surfaceColorSpace;
-            VkClearValue                m_clear;
-            VkCommandPool               m_commandPool               = nullptr;
-            VkRenderPass                m_renderPass                = nullptr;
-            VkSemaphore                 m_imageAvailableSemaphore   = nullptr;
-            VkSemaphore                 m_renderFinishedSemaphore   = nullptr;
-            VqFence                     m_inFlightFence;
-            VkDescriptorPool            m_descriptorPool            = nullptr;
-            uint32_t                    m_descriptorCount           = 0;
-            std::atomic<bool>           m_rebuildSwap               = { false };
+            VkQueue             m_graphicsQueue             = nullptr;
+            uint32_t            m_graphicsQueueFamily       = UINT32_MAX;
+            VkQueue             m_presentQueue              = nullptr;
+            VkDevice            m_device                    = nullptr;
+            VkPresentModeKHR    m_presentMode;
+            VkFormat            m_surfaceFormat;
+            VkColorSpaceKHR     m_surfaceColorSpace;
+            VkClearValue        m_clear;
+            VkCommandPool       m_commandPool               = nullptr;
+            VkRenderPass        m_renderPass                = nullptr;
+            VkSemaphore         m_imageAvailableSemaphore   = nullptr;
+            VkSemaphore         m_renderFinishedSemaphore   = nullptr;
+            VqFence             m_inFlightFence;
+            VkDescriptorPool    m_descriptorPool            = nullptr;
+            uint32_t            m_descriptorCount           = 0;
+            std::atomic<bool>   m_rebuildSwap               = { false };
 
             
-            DynamicStuff            m_dynamic;
-            bool                    init(DynamicStuff&, VkSwapchainKHR old=nullptr);
-            void                    kill(DynamicStuff&);
-            
+            DynamicStuff        m_dynamic;
             
             //VkPipeline                  m_lastPipeline  = nullptr;
-            void        rebuild_onward();
             virtual void        window_resized(){}
             virtual void        viewport_changed(){}
+            virtual void        draw_vulqan(VkCommandBuffer){}
+            
+        private:
+            bool    init(DynamicStuff&, VkSwapchainKHR old=nullptr);
+            void    kill(DynamicStuff&);
+            bool    init(const WindowCreateInfo& i);
+            bool    init_physical(const WindowCreateInfo& i);
+            bool    init_window(const WindowCreateInfo& i);
+            bool    init_surface();
+            bool    init_logical();
+            bool    init_command_pool();
+            bool    init_render_pass();
+            bool    init_descriptor_pool(const WindowCreateInfo&i);
+            bool    init_sync();
+            void    kill();
+            bool    record(VkCommandBuffer, uint32_t);
             
             static void callback_resize(GLFWwindow*, int, int);
         };
@@ -299,7 +297,7 @@ namespace yq {
             VkPipelineLayout    layout      = nullptr;
             VkPipeline          pipeline    = nullptr;
             
-            bool    init(VqWindow*, const PipelineConfig&);
+            bool    init(VqWindow*, const PipelineConfig&, std::function<void(VkPipelineVertexInputStateCreateInfo&)> visci={});
             void    kill(VqWindow*);
         };
 

@@ -575,15 +575,19 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        bool    VqWindow::Pipeline::init(VqWindow*win, const PipelineConfig&cfg)
+        bool    VqWindow::Pipeline::init(VqWindow*win, const PipelineConfig&cfg, std::function<void(VkPipelineVertexInputStateCreateInfo&)> visci)
         {
             VqShaderStages stages(*win, cfg.shaders);
 
             VqPipelineVertexInputStateCreateInfo    vertexInfo;
-            vertexInfo.vertexBindingDescriptionCount    = 0;
-            vertexInfo.pVertexBindingDescriptions       = nullptr;
-            vertexInfo.vertexAttributeDescriptionCount  = 0;
-            vertexInfo.pVertexAttributeDescriptions     = nullptr;
+            if(visci){
+                visci(vertexInfo);
+            } else {
+                vertexInfo.vertexBindingDescriptionCount    = 0;
+                vertexInfo.pVertexBindingDescriptions       = nullptr;
+                vertexInfo.vertexAttributeDescriptionCount  = 0;
+                vertexInfo.pVertexAttributeDescriptions     = nullptr;
+            }
             
             VqPipelineInputAssemblyStateCreateInfo  inputAssembly;
             inputAssembly.topology                  = (VkPrimitiveTopology) cfg.topology.value();
