@@ -28,6 +28,8 @@
 #include <math/shape/Sphere3.hpp>
 #include <math/shape/Sphere4.hpp>
 
+#include <math/vec/Quaternion3.hpp>
+
 #include <math/vec/Tensor11.hpp>
 #include <math/vec/Tensor12.hpp>
 #include <math/vec/Tensor13.hpp>
@@ -108,6 +110,11 @@ YQ_TYPE_IMPLEMENT(yq::Frac8)
 YQ_TYPE_IMPLEMENT(yq::Frac16)
 YQ_TYPE_IMPLEMENT(yq::Frac32)
 YQ_TYPE_IMPLEMENT(yq::Frac64)
+
+
+YQ_TYPE_IMPLEMENT(yq::Quaternion3D)
+YQ_TYPE_IMPLEMENT(yq::Quaternion3F)
+
 
 YQ_TYPE_IMPLEMENT(yq::Segment1D)
 YQ_TYPE_IMPLEMENT(yq::Segment1F)
@@ -402,7 +409,17 @@ YQ_INVOKE(
     frac64.property("num", &Frac64::num);
     frac64.property("den", &Frac64::den);
     
+    auto quat3d = writer<Quaternion3D>();
+    quat3d.property("w", &Quaternion3D::w);
+    quat3d.property("x", &Quaternion3D::x);
+    quat3d.property("y", &Quaternion3D::y);
+    quat3d.property("z", &Quaternion3D::z);
 
+    auto quat3f = writer<Quaternion3F>();
+    quat3f.property("w", &Quaternion3F::w);
+    quat3f.property("x", &Quaternion3F::x);
+    quat3f.property("y", &Quaternion3F::y);
+    quat3f.property("z", &Quaternion3F::z);
 
     auto seg1d = writer<Segment1D>();
     seg1d.property("a", &Segment1D::a);

@@ -231,6 +231,10 @@ namespace yq {
     using Frac32 = Fraction<int32_t>;
     using Frac64 = Fraction<int64_t>;
     
+    template <typename T> struct Quaternion3;
+    using Quaternion3D  = Quaternion3<double>;
+    using Quaternion3F  = Quaternion3<float>;
+    
     template <typename T> struct Rectangle2;
     using Rectangle2D    = Rectangle2<double>;
     using Rectangle2F    = Rectangle2<float>;
