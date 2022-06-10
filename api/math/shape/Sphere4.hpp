@@ -17,8 +17,8 @@ namespace yq {
     struct Sphere4 {
         using component_t   = T;
 
-        Vector4<T>     pt;
-        T           r;
+        Vector4<T>  point;
+        T           radius;
         
         constexpr bool operator==(const Sphere4&) const noexcept = default;
     };
@@ -27,9 +27,9 @@ namespace yq {
 //  COMPOSITION
     
     template <typename T>
-    Sphere4<T>  sphere(const Vector4<T>& pt, T r)
+    Sphere4<T>  sphere(const Vector4<T>& point, T radius)
     {
-        return {pt, r};
+        return {point, radius};
     }
 
     YQ_NAN_1(Sphere4, { nan_v<Vector4<T>>, nan_v<T> })
@@ -38,8 +38,8 @@ namespace yq {
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
     
-    YQ_IS_FINITE_1(Sphere4, is_finite(v.pt) && is_finite(v.r))
-    YQ_IS_NAN_1(Sphere4, is_nan(v.pt) || is_nan(v.r))
+    YQ_IS_FINITE_1(Sphere4, is_finite(v.point) && is_finite(v.radius))
+    YQ_IS_NAN_1(Sphere4, is_nan(v.point) || is_nan(v.radius))
 
 //  --------------------------------------------------------
 //  ADVANCED FUNCTIONS
@@ -47,7 +47,7 @@ namespace yq {
     template <typename T>
     T           diameter(const Sphere4<T>&a)
     {
-        return a.r + a.r;
+        return a.radius + a.radius;
     }
 
 }

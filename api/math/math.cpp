@@ -96,6 +96,17 @@ YQ_TYPE_IMPLEMENT(yq::Circle2F)
 YQ_TYPE_IMPLEMENT(yq::Circle2I)
 YQ_TYPE_IMPLEMENT(yq::Circle2U)
 
+YQ_TYPE_IMPLEMENT(yq::ColorRgbD)
+YQ_TYPE_IMPLEMENT(yq::ColorRgbF)
+YQ_TYPE_IMPLEMENT(yq::ColorRgbU8)
+YQ_TYPE_IMPLEMENT(yq::ColorRgbU16)
+
+YQ_TYPE_IMPLEMENT(yq::ColorRgbaD)
+YQ_TYPE_IMPLEMENT(yq::ColorRgbaF)
+YQ_TYPE_IMPLEMENT(yq::ColorRgbaU8)
+YQ_TYPE_IMPLEMENT(yq::ColorRgbaU16)
+
+
 YQ_TYPE_IMPLEMENT(yq::ComplexD)
 YQ_TYPE_IMPLEMENT(yq::ComplexF)
 YQ_TYPE_IMPLEMENT(yq::ComplexI)
@@ -344,24 +355,68 @@ YQ_INVOKE(
     axbox4u.property("hi", &AxBox4U::hi);
 
     auto circle2d = writer<Circle2D>();
-    circle2d.property("pt", &Circle2D::pt);
-    circle2d.property("r", &Circle2D::r);
+    circle2d.property("pt", &Circle2D::point);
+    circle2d.property("r", &Circle2D::radius);
     
     auto circle2f = writer<Circle2F>();
-    circle2f.property("pt", &Circle2F::pt);
-    circle2f.property("r", &Circle2F::r);
+    circle2f.property("pt", &Circle2F::point);
+    circle2f.property("r", &Circle2F::radius);
 
     auto circle2i = writer<Circle2I>();
-    circle2i.property("pt", &Circle2I::pt);
-    circle2i.property("r", &Circle2I::r);
+    circle2i.property("pt", &Circle2I::point);
+    circle2i.property("r", &Circle2I::radius);
 
     auto circle2u = writer<Circle2U>();
-    circle2u.property("pt", &Circle2U::pt);
-    circle2u.property("r", &Circle2U::r);
+    circle2u.property("pt", &Circle2U::point);
+    circle2u.property("r", &Circle2U::radius);
 
+    auto rgbd   = writer<ColorRgbD>();
+    rgbd.property("r", &ColorRgbD::red);
+    rgbd.property("g", &ColorRgbD::green);
+    rgbd.property("b", &ColorRgbD::blue);
+
+    auto rgbf   = writer<ColorRgbF>();
+    rgbf.property("r", &ColorRgbF::red);
+    rgbf.property("g", &ColorRgbF::green);
+    rgbf.property("b", &ColorRgbF::blue);
+
+    auto rgbu8   = writer<ColorRgbU8>();
+    rgbu8.property("r", &ColorRgbU8::red);
+    rgbu8.property("g", &ColorRgbU8::green);
+    rgbu8.property("b", &ColorRgbU8::blue);
+
+    auto rgbu16   = writer<ColorRgbU16>();
+    rgbu16.property("r", &ColorRgbU16::red);
+    rgbu16.property("g", &ColorRgbU16::green);
+    rgbu16.property("b", &ColorRgbU16::blue);
+
+    auto rgbad   = writer<ColorRgbaD>();
+    rgbad.property("r", &ColorRgbaD::red);
+    rgbad.property("g", &ColorRgbaD::green);
+    rgbad.property("b", &ColorRgbaD::blue);
+    rgbad.property("a", &ColorRgbaD::alpha);
+
+    auto rgbaf   = writer<ColorRgbaF>();
+    rgbaf.property("r", &ColorRgbaF::red);
+    rgbaf.property("g", &ColorRgbaF::green);
+    rgbaf.property("b", &ColorRgbaF::blue);
+    rgbaf.property("a", &ColorRgbaF::alpha);
+
+    auto rgbau8   = writer<ColorRgbaU8>();
+    rgbau8.property("r", &ColorRgbaU8::red);
+    rgbau8.property("g", &ColorRgbaU8::green);
+    rgbau8.property("b", &ColorRgbaU8::blue);
+    rgbau8.property("a", &ColorRgbaU8::alpha);
+
+    auto rgbau16   = writer<ColorRgbaU16>();
+    rgbau16.property("r", &ColorRgbaU16::red);
+    rgbau16.property("g", &ColorRgbaU16::green);
+    rgbau16.property("b", &ColorRgbaU16::blue);
+    rgbau16.property("a", &ColorRgbaU16::alpha);
+    
 
     auto complexD = writer<ComplexD>();
-    complexD.property("re", (double (ComplexD::*)() const) &ComplexD::real).setter((void(ComplexD::*)(double)) &ComplexD::real);
+    complexD.property("real", (double (ComplexD::*)() const) &ComplexD::real).setter((void(ComplexD::*)(double)) &ComplexD::real);
     complexD.property("im", (double (ComplexD::*)() const) &ComplexD::imag).setter((void(ComplexD::*)(double)) &ComplexD::imag);
 
     auto complexF = writer<ComplexF>();
@@ -394,20 +449,20 @@ YQ_INVOKE(
     coord2u.property("j", &Coord2U::j);
 
     auto frac8  = writer<Frac8>();
-    frac8.property("num", &Frac8::num);
-    frac8.property("den", &Frac8::den);
+    frac8.property("n", &Frac8::num);
+    frac8.property("d", &Frac8::den);
     
     auto frac16 = writer<Frac16>();
-    frac16.property("num", &Frac16::num);
-    frac16.property("den", &Frac16::den);
+    frac16.property("n", &Frac16::num);
+    frac16.property("d", &Frac16::den);
 
     auto frac32 = writer<Frac32>();
-    frac32.property("num", &Frac32::num);
-    frac32.property("den", &Frac32::den);
+    frac32.property("n", &Frac32::num);
+    frac32.property("d", &Frac32::den);
 
     auto frac64 = writer<Frac64>();
-    frac64.property("num", &Frac64::num);
-    frac64.property("den", &Frac64::den);
+    frac64.property("n", &Frac64::num);
+    frac64.property("d", &Frac64::den);
     
     auto quat3d = writer<Quaternion3D>();
     quat3d.property("w", &Quaternion3D::w);
@@ -491,58 +546,58 @@ YQ_INVOKE(
     auto size2d = writer<Size2D>();
     size2d.property("x", &Size2D::x);
     size2d.property("y", &Size2D::y);
-    size2d.property("width", &Size2D::width);
-    size2d.property("height", &Size2D::height);
+    size2d.property("w", &Size2D::width);
+    size2d.property("h", &Size2D::height);
 
     auto size2f = writer<Size2F>();
     size2f.property("x", &Size2F::x);
     size2f.property("y", &Size2F::y);
-    size2f.property("width", &Size2F::width);
-    size2f.property("height", &Size2F::height);
+    size2f.property("w", &Size2F::width);
+    size2f.property("h", &Size2F::height);
 
     auto size2i = writer<Size2I>();
     size2i.property("x", &Size2I::x);
     size2i.property("y", &Size2I::y);
-    size2i.property("width", &Size2I::width);
-    size2i.property("height", &Size2I::height);
+    size2i.property("w", &Size2I::width);
+    size2i.property("h", &Size2I::height);
 
     auto size2u = writer<Size2U>();
     size2u.property("x", &Size2U::x);
     size2u.property("y", &Size2U::y);
-    size2u.property("width", &Size2U::width);
-    size2u.property("height", &Size2U::height);
+    size2u.property("w", &Size2U::width);
+    size2u.property("h", &Size2U::height);
 
     auto sphere3d = writer<Sphere3D>();
-    sphere3d.property("pt", &Sphere3D::pt);
-    sphere3d.property("r", &Sphere3D::r);
+    sphere3d.property("pt", &Sphere3D::point);
+    sphere3d.property("r", &Sphere3D::radius);
     
     auto sphere3f = writer<Sphere3F>();
-    sphere3f.property("pt", &Sphere3F::pt);
-    sphere3f.property("r", &Sphere3F::r);
+    sphere3f.property("pt", &Sphere3F::point);
+    sphere3f.property("r", &Sphere3F::radius);
 
     auto sphere3i = writer<Sphere3I>();
-    sphere3i.property("pt", &Sphere3I::pt);
-    sphere3i.property("r", &Sphere3I::r);
+    sphere3i.property("pt", &Sphere3I::point);
+    sphere3i.property("r", &Sphere3I::radius);
 
     auto sphere3u = writer<Sphere3U>();
-    sphere3u.property("pt", &Sphere3U::pt);
-    sphere3u.property("r", &Sphere3U::r);
+    sphere3u.property("pt", &Sphere3U::point);
+    sphere3u.property("r", &Sphere3U::radius);
 
     auto sphere4d = writer<Sphere4D>();
-    sphere4d.property("pt", &Sphere4D::pt);
-    sphere4d.property("r", &Sphere4D::r);
+    sphere4d.property("pt", &Sphere4D::point);
+    sphere4d.property("r", &Sphere4D::radius);
     
     auto sphere4f = writer<Sphere4F>();
-    sphere4f.property("pt", &Sphere4F::pt);
-    sphere4f.property("r", &Sphere4F::r);
+    sphere4f.property("pt", &Sphere4F::point);
+    sphere4f.property("r", &Sphere4F::radius);
 
     auto sphere4i = writer<Sphere4I>();
-    sphere4i.property("pt", &Sphere4I::pt);
-    sphere4i.property("r", &Sphere4I::r);
+    sphere4i.property("pt", &Sphere4I::point);
+    sphere4i.property("r", &Sphere4I::radius);
 
     auto sphere4u = writer<Sphere4U>();
-    sphere4u.property("pt", &Sphere4U::pt);
-    sphere4u.property("r", &Sphere4U::r);
+    sphere4u.property("pt", &Sphere4U::point);
+    sphere4u.property("r", &Sphere4U::radius);
 
     auto ten11d = writer<Tensor11D>();
     ten11d.property("xx", &Tensor11D::xx);

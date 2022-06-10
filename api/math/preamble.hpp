@@ -208,13 +208,12 @@ namespace yq {
     template <typename T> struct ColorRgb;
     using ColorRgbD     = ColorRgb<double>;
     using ColorRgbF     = ColorRgb<float>;
-    using ColorRgbI     = ColorRgb<int>;
     using ColorRgbU8    = ColorRgb<uint8_t>;
     using ColorRgbU16   = ColorRgb<uint16_t>;
 
     template <typename T> struct ColorRgba;
     using ColorRgbaD    = ColorRgba<double>;
-    using ColorRgbaF    = ColorRgba<double>;
+    using ColorRgbaF    = ColorRgba<float>;
     using ColorRgbaU8   = ColorRgba<uint8_t>;
     using ColorRgbaU16  = ColorRgba<uint16_t>;
     
