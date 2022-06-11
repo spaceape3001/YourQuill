@@ -7,6 +7,7 @@
 #pragma once
 
 #include "VqFence.hpp"
+#include "VqSurface.hpp"
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
 #include <basic/trait/not_copyable.hpp>
@@ -19,6 +20,7 @@
 #include <engine/vulqan/VqMonitor.hpp>
 #include <functional>
 #include <optional>
+#include <memory>
 
 struct HelloApp;
 struct GLFWwindow;
@@ -247,7 +249,9 @@ namespace yq {
             
             VkPhysicalDevice    m_physical                  = nullptr;
             GLFWwindow*         m_window                    = nullptr;
-            VkSurfaceKHR        m_surface                   = nullptr;
+            
+            VqSurface           m_surface;
+//            VkSurfaceKHR        m_surface                   = nullptr;
             Queue               m_graphics, m_present;
             
             VkQueue             m_graphicsQueue             = nullptr;
@@ -281,7 +285,7 @@ namespace yq {
             bool    init(const WindowCreateInfo& i);
             bool    init_physical(const WindowCreateInfo& i);
             bool    init_window(const WindowCreateInfo& i);
-            bool    init_surface();
+            //bool    init_surface();
             bool    init_logical();
             bool    init_command_pool();
             bool    init_render_pass();

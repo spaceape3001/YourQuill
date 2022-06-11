@@ -11,6 +11,7 @@
 */
 
 #include "VqApp.hpp"
+#include "VqException.hpp"
 #include "VqLogging.hpp"
 #include "VqShaderStages.hpp"
 #include "VqUtils.hpp"
@@ -111,17 +112,17 @@ namespace yq {
             return true;
         }
 
-        bool VqWindow::init_surface()
-        {
-            if(m_surface)           // already initialized!
-                return true;
-            if(glfwCreateWindowSurface(VqApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
-                vqCritical << "Unable to create window surface!";
-                kill();
-                return false;
-            }
-            return true;
-        }
+        //bool VqWindow::init_surface()
+        //{
+            //if(m_surface)           // already initialized!
+                //return true;
+            //if(glfwCreateWindowSurface(VqApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
+                //vqCritical << "Unable to create window surface!";
+                //kill();
+                //return false;
+            //}
+            //return true;
+        //}
 
         bool VqWindow::init_logical()
         {
@@ -456,53 +457,61 @@ namespace yq {
 
         bool VqWindow::init(const WindowCreateInfo& i)
         {
-            VkInstance     inst  = VqApp::instance();
-            if(!inst){
-                vqCritical << "Vulkan has not been initialized!";
-                return false;
-            }
-            
-            auto    auto_kill   = safety([this](){ kill(); });
-
-            if(!init_physical(i))
-                return false;
-            if(!init_window(i))
-                return false;
-            if(!init_surface())
-                return false;
-            if(!init_logical())
-                return false;
-            
-
-                //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
-            
-            auto    pmodes          = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
-            
-            //for(auto& sf : vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface)){
-                //vqInfo << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
-            //}
-
-            //  cache details.....
-        
-            m_present.mode          = pmodes.contains(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
-                // I know this is available on my card, get smarter later.
-            m_surfaceFormat         = VK_FORMAT_B8G8R8A8_SRGB;
-            m_surfaceColorSpace     = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+            try {
+                VkInstance     inst  = VqApp::instance();
+                if(!inst){
+                    vqCritical << "Vulkan has not been initialized!";
+                    return false;
+                }
                 
-            if(!init_command_pool())
-                return false;
-            if(!init_render_pass())
-                return false;
-            if(!init_sync())
-                return false;
-            if(!init_descriptor_pool(i))
-                return false;
-            if(!init(m_dynamic))
-                return false;
+//                auto    auto_kill   = safety([this](){ kill(); });
+
+                if(!init_physical(i))
+                    return false;
+                if(!init_window(i))
+                    return false;
+                m_surface   = VqSurface(m_window);
+                //if(!init_surface())
+                    //return false;
+                if(!init_logical())
+                    return false;
+                
+
+                    //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
+                
+                auto    pmodes          = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
+                
+                //for(auto& sf : vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface)){
+                    //vqInfo << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
+                //}
+
+                //  cache details.....
             
-            set_clear(i.clear);
-            auto_kill.clear();  // disarm the safety kill
-            return true;
+                m_present.mode          = pmodes.contains(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
+                    // I know this is available on my card, get smarter later.
+                m_surfaceFormat         = VK_FORMAT_B8G8R8A8_SRGB;
+                m_surfaceColorSpace     = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                    
+                if(!init_command_pool())
+                    return false;
+                if(!init_render_pass())
+                    return false;
+                if(!init_sync())
+                    return false;
+                if(!init_descriptor_pool(i))
+                    return false;
+                if(!init(m_dynamic))
+                    return false;
+                
+                set_clear(i.clear);
+//                auto_kill.clear();  // disarm the safety kill
+                return true;
+            } 
+            catch(VqException& ex){
+                yCritical() << ex.what();
+            }
+            kill();
+            return false;
         }
 
 
@@ -561,11 +570,13 @@ namespace yq {
                 vkDestroyDevice(m_device, nullptr);
                 m_device   = nullptr;
             }
+            
+            m_surface   = {};
 
-            if(m_surface){
-                vkDestroySurfaceKHR(VqApp::instance(), m_surface, nullptr);
-                m_surface  = nullptr;
-            }
+            //if(m_surface){
+                //vkDestroySurfaceKHR(VqApp::instance(), m_surface, nullptr);
+                //m_surface  = nullptr;
+            //}
 
             if(m_window){
                 glfwDestroyWindow(m_window);

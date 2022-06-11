@@ -49,6 +49,7 @@ set(yq_engine_sources
     ./ui/ImWindow.hpp
     ./ui/ImWindow.cpp
     
+    ./vulqan/vulqan.cpp
     ./vulqan/VqApp.cpp
     ./vulqan/VqApp.cpp
     ./vulqan/VqEnums.cpp
@@ -63,6 +64,8 @@ set(yq_engine_sources
     ./vulqan/VqShaderStages.cpp
     ./vulqan/VqShaderStages.hpp
     ./vulqan/VqStructs.hpp
+    ./vulqan/VqSurface.ipp
+    ./vulqan/VqSurface.hpp
     ./vulqan/VqUtils.cpp
     ./vulqan/VqUtils.hpp
     ./vulqan/VqWindow.cpp
