@@ -21,10 +21,10 @@ namespace yq {
             VqSurface() {}
             VqSurface(GLFWwindow*);
             VqSurface(VqSurface&&);
-            ~VqSurface();
-            VkSurfaceKHR        surface() const { return m_surface; }
             VqSurface&          operator=(VqSurface&&);
+            ~VqSurface();
             
+            VkSurfaceKHR        surface() const { return m_surface; }
             operator bool () const { return m_surface != nullptr; }
             operator VkSurfaceKHR() const { return m_surface; }
             

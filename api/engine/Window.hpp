@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "WindowCreateInfo.hpp"
+
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
 #include <basic/trait/not_copyable.hpp>
@@ -15,8 +17,9 @@
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
 #include <engine/vulqan/VqFence.hpp>
-#include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
+#include <engine/vulqan/VqSurface.hpp>
+#include <engine/vulqan/VqWindow.hpp>
 #include <vulkan/vulkan_core.h>
 
 #include <functional>
@@ -29,38 +32,11 @@ struct GLFWwindow;
 namespace yq {
     namespace engine {
         struct PipelineConfig;
+        class VqWindow;
         
-        struct WindowCreateInfo {
-            VkPhysicalDevice    device   = nullptr;
         
-            const char*                 title    = "(untitled)";
-            Size2I                      size     = { 1920, 1080 };
-            std::optional<Vector2I>     position;
-                //!  Set to get full screen, windowed otherwise
-            VqMonitor                   monitor;
-            VkPresentModeKHR            pmode   = VK_PRESENT_MODE_FIFO_KHR;
-            
-            
-                //!  This is the background color
-            ColorRgbaF              clear   = { 0., 0., 0., 1. };
-            
-                //!  Set to make always-on-top
-            bool                    floating    = false;
-            
-                //!  Set to make decorated
-            bool                    decorated   = true;
-            
-                //!  Set to make user-resizable
-            bool                    resizable   = false;
-            
-                //!     Set to get descriptors allocated
-            uint32_t                descriptors = 0;
-            
-            WindowCreateInfo(){}
-        };
-        
-        struct VqWindowInfo : public ObjectInfo {
-            VqWindowInfo(std::string_view, ObjectInfo&, const std::source_location& sl = std::source_location::current());
+        struct WindowInfo : public ObjectInfo {
+            WindowInfo(std::string_view, ObjectInfo&, const std::source_location& sl = std::source_location::current());
         };
         
         
@@ -70,7 +46,7 @@ namespace yq {
             a Vulkan instance.
         */
         class Window : public Object, public RefCount, trait::not_copyable, trait::not_moveable {
-            YQ_OBJECT_INFO(VqWindowInfo)
+            YQ_OBJECT_INFO(WindowInfo)
             YQ_OBJECT_DECLARE(Window, Object)
         public:
         
@@ -221,6 +197,8 @@ namespace yq {
 
         protected:
         
+            friend class VqWindow;
+        
             struct Command;
             struct Pipeline;
             
@@ -249,10 +227,8 @@ namespace yq {
 
             
             VkPhysicalDevice    m_physical                  = nullptr;
-            GLFWwindow*         m_window                    = nullptr;
-            
+            VqWindow            m_window;
             VqSurface           m_surface;
-//            VkSurfaceKHR        m_surface                   = nullptr;
             Queue               m_graphics, m_present;
             
             VkQueue             m_graphicsQueue             = nullptr;
@@ -285,7 +261,7 @@ namespace yq {
             void    kill(DynamicStuff&);
             bool    init(const WindowCreateInfo& i);
             bool    init_physical(const WindowCreateInfo& i);
-            bool    init_window(const WindowCreateInfo& i);
+            //bool    init_window(const WindowCreateInfo& i);
             //bool    init_surface();
             bool    init_logical();
             bool    init_command_pool();

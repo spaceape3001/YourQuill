@@ -40,7 +40,7 @@ namespace yq {
             glfwPollEvents();
         }
         
-        VqWindowInfo::VqWindowInfo(std::string_view kname, ObjectInfo& base, const std::source_location& sl) :
+        WindowInfo::WindowInfo(std::string_view kname, ObjectInfo& base, const std::source_location& sl) :
             ObjectInfo(kname, base, sl)
         {
         }
@@ -82,48 +82,6 @@ namespace yq {
             }
             return true;
         }
-
-        bool Window::init_window(const WindowCreateInfo& i)
-        {
-            if(m_window)    // already initialized
-                return true;
-                
-                /*
-                    --------------------------------------------------------------------------------------------------------
-                    GLFW WINDOW STUFF
-                    
-                    NOTE, once this has been called, all future aborts will need to call
-                    kill() to reset our state
-                */
-
-            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-            glfwWindowHint(GLFW_FLOATING, i.floating ? GLFW_TRUE : GLFW_FALSE);
-            glfwWindowHint(GLFW_DECORATED, i.decorated ? GLFW_TRUE : GLFW_FALSE);
-            glfwWindowHint(GLFW_RESIZABLE, i.resizable ? GLFW_TRUE : GLFW_FALSE);
-
-            m_window = glfwCreateWindow(std::max(1,i.size.width()), std::max(1,i.size.height()), i.title, i.monitor.monitor(), nullptr);
-            if(!m_window){
-                vqError << "Unable to create window.";
-                kill();
-                return false;
-            }
-            
-            glfwSetWindowUserPointer(m_window, this);
-            glfwSetWindowSizeCallback(m_window, Window::callback_resize);
-            return true;
-        }
-
-        //bool Window::init_surface()
-        //{
-            //if(m_surface)           // already initialized!
-                //return true;
-            //if(glfwCreateWindowSurface(Application::vulkan(), m_window, nullptr, &m_surface) != VK_SUCCESS){
-                //vqCritical << "Unable to create window surface!";
-                //kill();
-                //return false;
-            //}
-            //return true;
-        //}
 
         bool Window::init_logical()
         {
@@ -469,11 +427,10 @@ namespace yq {
 
                 if(!init_physical(i))
                     return false;
-                if(!init_window(i))
-                    return false;
+
+                m_window    = VqWindow(this, i);
                 m_surface   = VqSurface(m_window);
-                //if(!init_surface())
-                    //return false;
+
                 if(!init_logical())
                     return false;
                 
@@ -572,17 +529,8 @@ namespace yq {
                 m_device   = nullptr;
             }
             
-            m_surface   = {};
-
-            //if(m_surface){
-                //vkDestroySurfaceKHR(Application::vulkan(), m_surface, nullptr);
-                //m_surface  = nullptr;
-            //}
-
-            if(m_window){
-                glfwDestroyWindow(m_window);
-                m_window    = nullptr;
-            }
+            m_surface       = {};
+            m_window        = {};
             
             m_physical = nullptr;
         }

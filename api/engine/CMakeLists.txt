@@ -71,6 +71,8 @@ set(yq_engine_sources
     ./vulqan/VqSurface.hpp
     ./vulqan/VqUtils.cpp
     ./vulqan/VqUtils.hpp
+    ./vulqan/VqWindow.ipp
+    ./vulqan/VqWindow.hpp
 )
 
 add_library(yqengine SHARED ${yq_engine_sources})
