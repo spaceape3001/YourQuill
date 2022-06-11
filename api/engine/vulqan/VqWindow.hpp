@@ -12,7 +12,7 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <math/preamble.hpp>
-#include <math/ColorRgb.hpp>
+#include <math/ColorRgba.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
 #include <vulkan/vulkan_core.h>
@@ -39,7 +39,7 @@ namespace yq {
             
             
                 //!  This is the background color
-            ColorRgbF               clear   = { 0., 0., 0., 1. };
+            ColorRgbaF              clear   = { 0., 0., 0., 1. };
             
                 //!  Set to make always-on-top
             bool                    floating    = false;
@@ -161,7 +161,7 @@ namespace yq {
             void                restore();
 
                 //! Sets the background color
-            void                set_clear(const ColorRgbF&);
+            void                set_clear(const ColorRgbaF&);
 
                 //! Sets the window position
             void                set_position(const Vector2I&);

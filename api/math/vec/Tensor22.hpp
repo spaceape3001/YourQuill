@@ -25,6 +25,14 @@ namespace yq {
         T yx, yy;
 
         constexpr bool operator==(const Tensor22&) const noexcept = default;
+
+        operator glm::mat<2,2,T,glm::defaultp>() const noexcept 
+        {
+            return {
+                xx, yx,
+                xy, yy
+            };
+        }
     };
         
 //  --------------------------------------------------------

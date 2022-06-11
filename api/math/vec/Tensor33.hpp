@@ -26,6 +26,15 @@ namespace yq {
         T zx, zy, zz;
 
         constexpr bool operator==(const Tensor33&) const noexcept = default;
+
+        operator glm::mat<3,3,T,glm::defaultp>() const noexcept 
+        {
+            return {
+                xx, yx, zx,
+                xy, yy, zy,
+                xz, yz, zz
+            };
+        }
     };
         
 //  --------------------------------------------------------

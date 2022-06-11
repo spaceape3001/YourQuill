@@ -20,6 +20,11 @@ namespace yq {
         T   alpha;
         
         constexpr bool    operator==(const ColorRgba&) const noexcept = default;
+
+        constexpr operator glm::vec<4, T, glm::defaultp>() const noexcept
+        {
+            return { red, green, blue, alpha };
+        }
     };
 
 //  --------------------------------------------------------

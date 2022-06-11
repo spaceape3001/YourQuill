@@ -11,6 +11,7 @@
 #include <math/Coord2.hpp>
 #include <math/Fraction.hpp>
 
+
 #include <math/shape/AxBox1.hpp>
 #include <math/shape/AxBox2.hpp>
 #include <math/shape/AxBox3.hpp>
@@ -64,12 +65,32 @@
 #include <basic/DelayInit.hpp>
 #include <basic/meta/Init.hpp>
 
+#include <math/glm_types.hpp>
 #include <math/vector_math.hpp>
 #include <math/tensor_math.hpp>
 #include <math/shape_math.hpp>
 
 
 using namespace yq;
+
+YQ_TYPE_IMPLEMENT(glm::mat2)
+YQ_TYPE_IMPLEMENT(glm::mat3)
+YQ_TYPE_IMPLEMENT(glm::mat4)
+
+YQ_TYPE_IMPLEMENT(glm::dmat2)
+YQ_TYPE_IMPLEMENT(glm::dmat3)
+YQ_TYPE_IMPLEMENT(glm::dmat4)
+
+YQ_TYPE_IMPLEMENT(glm::vec1)
+YQ_TYPE_IMPLEMENT(glm::vec2)
+YQ_TYPE_IMPLEMENT(glm::vec3)
+YQ_TYPE_IMPLEMENT(glm::vec4)
+
+YQ_TYPE_IMPLEMENT(glm::dvec1)
+YQ_TYPE_IMPLEMENT(glm::dvec2)
+YQ_TYPE_IMPLEMENT(glm::dvec3)
+YQ_TYPE_IMPLEMENT(glm::dvec4)
+
 
 YQ_TYPE_IMPLEMENT(yq::AxBox1D)
 YQ_TYPE_IMPLEMENT(yq::AxBox1F)

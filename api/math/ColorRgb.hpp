@@ -16,9 +16,13 @@ namespace yq {
         T   red;
         T   green;
         T   blue;
-        T   alpha;
         
         constexpr bool    operator==(const ColorRgb&) const noexcept = default;
+
+        constexpr operator glm::vec<3, T, glm::defaultp>() const noexcept
+        {
+            return { red, green, blue };
+        }
     };
 
 //  --------------------------------------------------------

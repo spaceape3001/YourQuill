@@ -19,7 +19,7 @@ namespace yq {
     struct Vector4 {
         //! Component data type argument to this structure (ie, template parameter T)
         using component_type = T;
-
+        
         /*! \brief Creates a unit-vector in the $(bit)s dimension.
         */
         static consteval Vector4 unit_x();
@@ -44,6 +44,11 @@ namespace yq {
         
         //! Equality operator (using default)
         constexpr bool operator==(const Vector4&) const noexcept = default;
+        
+        constexpr operator glm::vec<4, T, glm::defaultp>() const noexcept
+        {
+            return { x, y, z, w };
+        }
     };
     
 //  --------------------------------------------------------

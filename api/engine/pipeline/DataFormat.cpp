@@ -8,6 +8,7 @@
 #include <basic/meta/Init.hpp>
 #include <basic/meta/TypeInfo.hpp>
 #include <math/preamble.hpp>
+#include <math/glm_types.hpp>
 #include <math/ColorRgb.hpp>
 #include <math/ColorRgba.hpp>
 #include <math/vec/Vector1.hpp>
@@ -71,7 +72,15 @@ namespace yq {
                 dfd<Vector4D>(DataFormat::R64G64B64A64_SFLOAT, 2),
                 dfd<Vector4F>(DataFormat::R32G32B32A32_SFLOAT, 1),
                 dfd<Vector4I>(DataFormat::R32G32B32A32_SINT, 1),
-                dfd<Vector4U>(DataFormat::R32G32B32A32_UINT, 1)
+                dfd<Vector4U>(DataFormat::R32G32B32A32_UINT, 1),
+                dfd<glm::vec1>(DataFormat::R32_SFLOAT, 1),
+                dfd<glm::dvec1>(DataFormat::R64_SFLOAT, 1),
+                dfd<glm::vec2>(DataFormat::R32G32_SFLOAT, 1),
+                dfd<glm::dvec2>(DataFormat::R64G64_SFLOAT, 1),
+                dfd<glm::vec3>(DataFormat::R32G32B32_SFLOAT, 1),
+                dfd<glm::dvec3>(DataFormat::R64G64B64_SFLOAT, 2),
+                dfd<glm::vec4>(DataFormat::R32G32B32A32_SFLOAT, 1),
+                dfd<glm::dvec4>(DataFormat::R64G64B64A64_SFLOAT, 2)
             };
             
             return std::span<const DataFormatData>(std::begin(sList), std::end(sList));

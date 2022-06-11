@@ -27,6 +27,16 @@ namespace yq {
         T wx, wy, wz, ww;
 
         constexpr bool operator==(const Tensor44&) const noexcept = default;
+        
+        operator glm::mat<4,4,T,glm::defaultp>() const noexcept 
+        {
+            return {
+                xx, yx, zx, wx,
+                xy, yy, zy, wy,
+                xz, yz, zz, wz,
+                xw, yw, zw, ww
+            };
+        }
     };
         
 //  --------------------------------------------------------

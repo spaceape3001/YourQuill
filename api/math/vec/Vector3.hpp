@@ -42,6 +42,11 @@ namespace yq {
         
         //! Equality operator (using default)
         constexpr bool operator==(const Vector3&) const noexcept = default;
+
+        constexpr operator glm::vec<3, T, glm::defaultp>() const noexcept
+        {
+            return { x, y, z };
+        }
     };
     
 //  --------------------------------------------------------
