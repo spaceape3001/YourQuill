@@ -64,6 +64,8 @@ set(yq_engine_sources
     ./vulqan/VqLogging.hpp
     ./vulqan/VqMonitor.cpp
     ./vulqan/VqMonitor.hpp
+    ./vulqan/VqQueues.ipp
+    ./vulqan/VqQueues.hpp
     ./vulqan/VqShaderStages.cpp
     ./vulqan/VqShaderStages.hpp
     ./vulqan/VqStructs.hpp
@@ -76,6 +78,7 @@ set(yq_engine_sources
 )
 
 add_library(yqengine SHARED ${yq_engine_sources})
+target_compile_definitions(yqengine PRIVATE VK_ENABLE_BETA_EXTENSIONS=1)
 target_link_libraries(yqengine PUBLIC yqbasic yqconfig yqmath ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui stb)
 LinkTest(yqengine)
 

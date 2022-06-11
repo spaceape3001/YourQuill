@@ -93,22 +93,24 @@ namespace yq {
             };
 
             auto queueInfos         = vqFindQueueFamilies(m_physical, m_surface);
-            if(!queueInfos.graphicsFamily.has_value()){
+            if(!queueInfos.graphics.has_value()){
                 vqCritical << "Unable to get a queue with graphic capability!";
                 return false;
             }
-            if(!queueInfos.presentFamily.has_value()){
+            if(!queueInfos.present.has_value()){
                 vqCritical << "Unable to find a present queue!";
                 return false;
             }
         
             std::vector<VkDeviceQueueCreateInfo> qci;
             float quePri    = 1.0f;
+            uint32_t    qgf  = queueInfos.graphics.value();
+            uint32_t    qpf  = queueInfos.present.value();
 
-            m_graphics.family           =   queueInfos.graphicsFamily.value();
-            m_present.family            =   queueInfos.presentFamily.value();
+            for(uint32_t i : std::set<uint32_t>({ qgf, qpf })){
+                if(i == UINT32_MAX)
+                    continue;
             
-            for(uint32_t i : std::set<uint32_t>({ m_graphics.family, m_present.family })){
                 VqDeviceQueueCreateInfo info;
                 info.queueFamilyIndex = i;
                 info.queueCount = 1;
@@ -146,8 +148,8 @@ namespace yq {
                 /*
                     Graphics queues
                 */
-            vkGetDeviceQueue(m_device, m_graphics.family, 0, &m_graphics.queue);
-            vkGetDeviceQueue(m_device, m_present.family, 0, &m_present.queue);
+            m_graphics  = VqQueues(m_device, qgf, 1 );
+            m_present   = VqQueues(m_device, qpf, 1 );
             return true;
         }
         
@@ -158,7 +160,7 @@ namespace yq {
                 
             VqCommandPoolCreateInfo poolInfo;
             poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            poolInfo.queueFamilyIndex = m_graphics.family;
+            poolInfo.queueFamilyIndex = m_graphics.family();
             if (vkCreateCommandPool(m_device, &poolInfo, nullptr, &m_commandPool) != VK_SUCCESS) {
                 vqError << "Failed to create command pool!";
                 return false;
@@ -285,8 +287,8 @@ namespace yq {
             createInfo.imageArrayLayers = 1;    // we're not steroscopic
             createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
             
-            uint32_t queueFamilyIndices[] = {m_graphics.family, m_present.family};
-            if (m_graphics.family != m_present.family) {
+            uint32_t queueFamilyIndices[] = {m_graphics.family(), m_present.family()};
+            if (m_graphics.family() != m_present.family()) {
                 createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
                 createInfo.queueFamilyIndexCount = 2;
                 createInfo.pQueueFamilyIndices = queueFamilyIndices;
@@ -297,7 +299,7 @@ namespace yq {
             }        
             createInfo.preTransform     = capabilities.currentTransform;
             createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode      = m_present.mode;
+            createInfo.presentMode      = m_presentMode;
             createInfo.clipped          = VK_TRUE;
             
                 // TEMPORARY UNTIL WE GET THE NEW ONE
@@ -429,7 +431,7 @@ namespace yq {
                     return false;
 
                 m_window    = VqWindow(this, i);
-                m_surface   = VqSurface(m_window);
+                m_surface   = VqSurface(m_physical, m_window);
 
                 if(!init_logical())
                     return false;
@@ -445,7 +447,7 @@ namespace yq {
 
                 //  cache details.....
             
-                m_present.mode          = pmodes.contains(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
+                m_presentMode          = m_surface.supports(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
                     // I know this is available on my card, get smarter later.
                 m_surfaceFormat         = VK_FORMAT_B8G8R8A8_SRGB;
                 m_surfaceColorSpace     = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
@@ -523,6 +525,9 @@ namespace yq {
                 vkDestroyCommandPool(m_device, m_commandPool, nullptr);
                 m_commandPool    = nullptr;
             }
+            
+            m_graphics      = {};
+            m_present       = {};
             
             if(m_device){
                 vkDestroyDevice(m_device, nullptr);
@@ -760,7 +765,7 @@ namespace yq {
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = signalSemaphores;
 
-            if (vkQueueSubmit(m_graphics.queue, 1, &submitInfo, m_inFlightFence) != VK_SUCCESS) {
+            if (vkQueueSubmit(m_graphics[0], 1, &submitInfo, m_inFlightFence) != VK_SUCCESS) {
                 vqError << "Failed to submit draw command buffer!";
                 return false;
             }
@@ -785,7 +790,7 @@ namespace yq {
             presentInfo.pSwapchains = &m_dynamic.swapChain;
             presentInfo.pImageIndices = &imageIndex;
             presentInfo.pResults = nullptr; // Optional
-            vkQueuePresentKHR(m_present.queue, &presentInfo);
+            vkQueuePresentKHR(m_present[0], &presentInfo);
             return true;
         }
         
@@ -814,6 +819,16 @@ namespace yq {
         {
             if(m_window)
                 glfwFocusWindow(m_window);
+        }
+
+        VkQueue     Window::graphics_queue() const 
+        { 
+            return m_graphics[0]; 
+        }
+        
+        uint32_t    Window::graphics_queue_family() const 
+        { 
+            return m_graphics.family(); 
         }
 
         int  Window::height() const

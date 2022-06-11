@@ -9,7 +9,8 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <vulkan/vulkan_core.h>
-
+#include <set>
+#include <vector>
 
 struct GLFWwindow;
 
@@ -19,7 +20,7 @@ namespace yq {
         class VqSurface : trait::not_copyable {
         public:
             VqSurface() {}
-            VqSurface(GLFWwindow*);
+            VqSurface(VkPhysicalDevice, GLFWwindow*);
             VqSurface(VqSurface&&);
             VqSurface&          operator=(VqSurface&&);
             ~VqSurface();
@@ -28,9 +29,20 @@ namespace yq {
             operator bool () const { return m_surface != nullptr; }
             operator VkSurfaceKHR() const { return m_surface; }
             
+            VkSurfaceCapabilitiesKHR    capabilities() const;
+            
+            bool    supports(VkPresentModeKHR) const;
+            bool    supports(VkFormat) const;
+            
+            VkColorSpaceKHR color_space(VkFormat) const;
+            
         private:
-            void                    dtor();
-            VkSurfaceKHR           m_surface   = nullptr;
+            void    dtor();
+            void    move(VqSurface&&);
+            VkSurfaceKHR                        m_surface   = nullptr;
+            VkPhysicalDevice                    m_physical  = nullptr;
+            std::set<VkPresentModeKHR>          m_presentModes;
+            std::vector<VkSurfaceFormatKHR>     m_formats;
         };
     
     }

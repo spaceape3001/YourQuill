@@ -20,6 +20,7 @@
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqWindow.hpp>
+#include <engine/vulqan/VqQueues.hpp>
 #include <vulkan/vulkan_core.h>
 
 #include <functional>
@@ -86,9 +87,9 @@ namespace yq {
                 //! Good & initialized window
             bool                good() const { return m_window != nullptr; }
             
-            VkQueue             graphics_queue() const { return m_graphics.queue; }
+            VkQueue             graphics_queue() const;
             
-            uint32_t            graphics_queue_family() const { return m_graphics.family; }
+            uint32_t            graphics_queue_family() const;
 
                 //! Height of the window
             int                 height() const;
@@ -202,13 +203,13 @@ namespace yq {
             struct Command;
             struct Pipeline;
             
-            struct Queue {
-                VkQueue             queue   = nullptr;
-                uint32_t            family  = UINT32_MAX;
-                VkPresentModeKHR    mode    = {};
+            //struct Queue {
+                //VkQueue             queue   = nullptr;
+                //uint32_t            family  = UINT32_MAX;
+////                VkPresentModeKHR    mode    = {};
                 
-                void    kill(Window*);
-            };
+                //void    kill(Window*);
+            //};
             
             //! This is what needs to change with every resize!
             struct DynamicStuff {
@@ -229,13 +230,10 @@ namespace yq {
             VkPhysicalDevice    m_physical                  = nullptr;
             VqWindow            m_window;
             VqSurface           m_surface;
-            Queue               m_graphics, m_present;
+            VqQueues            m_graphics, m_present;
             
-            VkQueue             m_graphicsQueue             = nullptr;
-            uint32_t            m_graphicsQueueFamily       = UINT32_MAX;
-            VkQueue             m_presentQueue              = nullptr;
             VkDevice            m_device                    = nullptr;
-            VkPresentModeKHR    m_presentMode;
+            VkPresentModeKHR    m_presentMode               = {};
             VkFormat            m_surfaceFormat;
             VkColorSpaceKHR     m_surfaceColorSpace;
             VkClearValue        m_clear;

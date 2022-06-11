@@ -121,12 +121,18 @@ namespace yq {
             if(count){
                 vkGetPhysicalDeviceQueueFamilyProperties(dev,&count,qfp.data());
                 for(uint32_t i=0;i<count;++i){
-                    if((qfp[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && !ret.graphicsFamily.has_value())
-                        ret.graphicsFamily = i;
+                    if((qfp[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) && !ret.graphics.has_value())
+                        ret.graphics = i;
+                    if((qfp[i].queueFlags & VK_QUEUE_COMPUTE_BIT) && !ret.compute.has_value())
+                        ret.compute = i;
+                    if((qfp[i].queueFlags & VK_QUEUE_VIDEO_DECODE_BIT_KHR) && !ret.videoDecode.has_value())
+                        ret.videoDecode = i;
+                    if((qfp[i].queueFlags & VK_QUEUE_VIDEO_ENCODE_BIT_KHR) && !ret.videoEncode.has_value())
+                        ret.videoEncode = i;
                     VkBool32 presentSupport = false;
                     vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, srf, &presentSupport);
-                    if(presentSupport && !ret.presentFamily.has_value())
-                        ret.presentFamily = i;
+                    if(presentSupport && !ret.present.has_value())
+                        ret.present = i;
                 }
             }
             return ret;

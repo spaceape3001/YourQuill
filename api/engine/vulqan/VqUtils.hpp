@@ -53,8 +53,11 @@ namespace yq {
         
 
         struct VqQueueFamilyIndices {
-            std::optional<uint32_t> graphicsFamily;
-            std::optional<uint32_t> presentFamily;
+            std::optional<uint32_t> graphics;
+            std::optional<uint32_t> compute;
+            std::optional<uint32_t> present;
+            std::optional<uint32_t> videoDecode;
+            std::optional<uint32_t> videoEncode;
         };
 
         VqQueueFamilyIndices                    vqFindQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR);
