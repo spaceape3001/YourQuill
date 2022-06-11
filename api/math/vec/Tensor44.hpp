@@ -85,6 +85,17 @@ namespace yq {
             w.x, w.y, w.z, w.w
         };
     }
+
+    template <typename T, glm::qualifier Q>
+    constexpr Tensor44<T> tensor(const glm::mat<4,4,T,Q>& t)
+    {
+        return {
+            t.x.x, t.y.x, t.z.x, t.w.x,
+            t.x.y, t.y.y, t.z.y, t.w.y,
+            t.x.z, t.y.z, t.z.z, t.w.z,
+            t.x.w, t.y.w, t.z.w, t.w.w
+        };
+    }
     
     YQ_IDENTITY_1(Tensor44, {
         one_v<T>, zero_v<T>, zero_v<T>, zero_v<T>,

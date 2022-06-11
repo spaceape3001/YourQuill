@@ -74,6 +74,15 @@ namespace yq {
         };
     }
     
+    template <typename T, glm::qualifier Q>
+    constexpr Tensor22<T> tensor(const glm::mat<2,2,T,Q>& t)
+    {
+        return {
+            t.x.x, t.y.x, 
+            t.x.y, t.y.y
+        };
+    }
+
     YQ_IDENTITY_1(Tensor22, {
         one_v<T>, zero_v<T>,
         zero_v<T>, one_v<T>

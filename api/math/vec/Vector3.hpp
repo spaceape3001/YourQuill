@@ -63,6 +63,12 @@ namespace yq {
         return {x,y,z};
     }
     
+    template <typename T, glm::qualifier Q>
+    constexpr Vector3<T> vector(const glm::vec<3,T,Q>& v)
+    {
+        return { v.x, v.y, v.z };
+    }
+
     template <typename T>
     consteval Vector3<T> Vector3<T>::unit_x()
     {

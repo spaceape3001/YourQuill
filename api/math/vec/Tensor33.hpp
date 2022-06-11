@@ -79,6 +79,17 @@ namespace yq {
             z.x, z.y, z.z
         };
     }
+
+    template <typename T, glm::qualifier Q>
+    constexpr Tensor33<T> tensor(const glm::mat<3,3,T,Q>& t)
+    {
+        return {
+            t.x.x, t.y.x, t.z.x, 
+            t.x.y, t.y.y, t.z.y, 
+            t.x.z, t.y.z, t.z.z
+        };
+    }
+    
     
     YQ_IDENTITY_1(Tensor33, {
         one_v<T>, zero_v<T>, zero_v<T>,
