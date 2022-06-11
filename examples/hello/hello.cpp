@@ -27,7 +27,7 @@
 #include <math/ColorRgb.hpp>
 #include <math/vec/Vector2.hpp>
 #include <iostream>
-
+#include <chrono>
 #include <glm/glm.hpp>  // temporary
 
 using namespace yq;
@@ -44,6 +44,8 @@ const std::vector<Vertex> vertices = {
     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 };
 
+using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
+
 
 struct HelloWin : public VqWindow {
     YQ_OBJECT_DECLARE(HelloWin, VqWindow)
@@ -51,6 +53,7 @@ struct HelloWin : public VqWindow {
     Pipeline                triangle;
     VkBuffer                vertexBuffer;
     VkDeviceMemory          vertexBufferMemory;
+    timepoint_t             start;
     
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) 
     {
@@ -110,6 +113,8 @@ struct HelloWin : public VqWindow {
         vkMapMemory(m_device, vertexBufferMemory, 0, bufferInfo.size, 0, &data);
         memcpy(data, vertices.data(), (size_t) bufferInfo.size);
         vkUnmapMemory(m_device, vertexBufferMemory);
+        
+        start   = std::chrono::steady_clock::now();
     }
     
     ~HelloWin()
@@ -122,7 +127,12 @@ struct HelloWin : public VqWindow {
     
     void        draw_vulqan(VkCommandBuffer cmdbuf)
     {
-        vkCmdBindPipeline(cmdbuf, VK_PIPELINE_BIND_POINT_GRAPHICS, triangle.pipeline);
+        timepoint_t n   = std::chrono::steady_clock::now();
+        std::chrono::duration<double>  diff    = start - n;
+        uint32_t    sec = (int) diff.count();
+        bool        w = (sec & 1) != 0;
+    
+        vkCmdBindPipeline(cmdbuf, VK_PIPELINE_BIND_POINT_GRAPHICS, w ? triangle.wireframe : triangle.pipeline);
         
         VkBuffer vertexBuffers[] = {vertexBuffer};
         VkDeviceSize offsets[] = {0};

@@ -163,6 +163,8 @@ namespace yq {
             }
         
             VkPhysicalDeviceFeatures    df{};
+            df.fillModeNonSolid         = VK_TRUE;
+
             VqDeviceCreateInfo          dci;
             dci.pQueueCreateInfos        = qci.data();
             dci.queueCreateInfoCount     = (uint32_t) qci.size();
@@ -688,10 +690,26 @@ namespace yq {
             pipelineInfo.subpass = 0;             
             pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
             pipelineInfo.basePipelineIndex = -1; // Optional        
-
+            
+            if(cfg.polymode == PolygonMode::Fill){
+                pipelineInfo.flags  = VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+            } 
             if (vkCreateGraphicsPipelines(win->m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS) {
                 vqError << "Failed to create graphics pipeline!";
                 return false;
+            }
+            
+                // if it's a fill polygon (typical), create a derivative wireframe pipeline
+            if(cfg.polymode == PolygonMode::Fill){
+                pipelineInfo.flags  = VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+                pipelineInfo.basePipelineHandle = pipeline;
+                pipelineInfo.basePipelineIndex  = -1;
+                rasterizer.polygonMode  = VK_POLYGON_MODE_LINE;
+                
+                if (vkCreateGraphicsPipelines(win->m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &wireframe) != VK_SUCCESS) {
+                    vqError << "Failed to create wireframe pipeline!";
+                    return false;
+                }
             }
             return true;
         }
