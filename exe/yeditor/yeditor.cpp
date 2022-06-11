@@ -8,7 +8,7 @@
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
-#include <engine/vulqan/VqApp.hpp>
+#include <engine/Application.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/ui/ImWindow.hpp>
 #include <imgui.h>
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     AppCreateInfo        vi;
     vi.app_name     = "Your Editor";
 
-    VqApp app(argc, argv, vi);
+    Application app(argc, argv, vi);
     load_plugin_dir("plugin");
     app.finalize();
     

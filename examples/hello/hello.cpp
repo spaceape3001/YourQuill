@@ -19,11 +19,11 @@
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
+#include <engine/Application.hpp>
+#include <engine/Window.hpp>
 #include <engine/pipeline/PipelineBuilder.hpp>
 #include <engine/shader/Shader.hpp>
-#include <engine/vulqan/VqApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
-#include <engine/vulqan/VqWindow.hpp>
 #include <math/ColorRgb.hpp>
 #include <math/vec/Vector2.hpp>
 #include <iostream>
@@ -47,8 +47,8 @@ const std::vector<Vertex> vertices = {
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
 
-struct HelloWin : public VqWindow {
-    YQ_OBJECT_DECLARE(HelloWin, VqWindow)
+struct HelloWin : public Window {
+    YQ_OBJECT_DECLARE(HelloWin, Window)
     
     Pipeline                triangle;
     VkBuffer                vertexBuffer;
@@ -68,7 +68,7 @@ struct HelloWin : public VqWindow {
         throw std::runtime_error("failed to find suitable memory type!");
     }
 
-    HelloWin(const WindowCreateInfo& wci) : VqWindow(wci)
+    HelloWin(const WindowCreateInfo& wci) : Window(wci)
     {
         ShaderPtr   vert = Shader::load("examples/hello/hello2.vert");
         ShaderPtr   frag = Shader::load("examples/hello/hello.frag");
@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
 {
     AppCreateInfo        vi;
     
-    VqApp app(argc, argv, vi);
+    Application app(argc, argv, vi);
     //load_plugin_dir("plugin");
     app.finalize();
     

@@ -28,7 +28,7 @@ namespace yq {
             constexpr bool    operator==(const VqVidMode&) const noexcept = default;
         };
         
-        class VqWindow;
+        class Window;
 
         class VqMonitor {
         public:
@@ -70,7 +70,7 @@ namespace yq {
             constexpr bool    operator==(const VqMonitor&) const noexcept = default;
         
         private:
-            friend class VqWindow;
+            friend class Window;
             GLFWmonitor *m_monitor = nullptr;
             VqMonitor(GLFWmonitor *m) : m_monitor(m) {}
         };

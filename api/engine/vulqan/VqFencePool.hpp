@@ -14,7 +14,7 @@
 namespace yq {
 
     namespace engine {
-        class VqWindow;
+        class Window;
 
         /*! \brief Fence pool
         
@@ -27,11 +27,11 @@ namespace yq {
         public:
         
             VqFencePool();
-            VqFencePool(VqWindow&);
+            VqFencePool(Window&);
             VqFencePool(VkDevice);
             ~VqFencePool();
 
-            bool        init(VqWindow&, bool reinit=false);
+            bool        init(Window&, bool reinit=false);
             bool        init(VkDevice, bool reinit=false);
             
             bool        initialized() const { return m_device != nullptr; }

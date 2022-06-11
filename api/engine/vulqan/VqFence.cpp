@@ -6,7 +6,7 @@
 
 #include "VqFence.hpp"
 #include "VqStructs.hpp"
-#include "VqWindow.hpp"
+#include <engine/Window.hpp>
 #include <basic/Logging.hpp>
 
 namespace yq {
@@ -15,7 +15,7 @@ namespace yq {
         {
         }
         
-        VqFence::VqFence(VqWindow& v) : VqFence(v.logical())
+        VqFence::VqFence(Window& v) : VqFence(v.logical())
         {
         }
         

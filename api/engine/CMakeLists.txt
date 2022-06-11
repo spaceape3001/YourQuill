@@ -4,6 +4,11 @@ endif()
 
 set(yq_engine_sources
     ${engine_test_source}
+
+    ./Application.cpp
+    ./Application.cpp
+    ./Window.cpp
+    ./Window.hpp
     
     ./asset/Asset.cpp
     ./asset/Asset.hpp
@@ -50,8 +55,6 @@ set(yq_engine_sources
     ./ui/ImWindow.cpp
     
     ./vulqan/vulqan.cpp
-    ./vulqan/VqApp.cpp
-    ./vulqan/VqApp.cpp
     ./vulqan/VqEnums.cpp
     ./vulqan/VqFence.cpp
     ./vulqan/VqFence.hpp
@@ -68,8 +71,6 @@ set(yq_engine_sources
     ./vulqan/VqSurface.hpp
     ./vulqan/VqUtils.cpp
     ./vulqan/VqUtils.hpp
-    ./vulqan/VqWindow.cpp
-    ./vulqan/VqWindow.hpp
 )
 
 add_library(yqengine SHARED ${yq_engine_sources})

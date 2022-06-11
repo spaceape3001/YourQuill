@@ -10,12 +10,13 @@
     https://vulkan-tutorial.com/
 */
 
-#include "VqApp.hpp"
-#include "VqException.hpp"
-#include "VqLogging.hpp"
-#include "VqShaderStages.hpp"
-#include "VqUtils.hpp"
-#include "VqWindow.hpp"
+#include "Application.hpp"
+#include "Window.hpp"
+
+#include <engine/vulqan/VqException.hpp>
+#include <engine/vulqan/VqLogging.hpp>
+#include <engine/vulqan/VqShaderStages.hpp>
+#include <engine/vulqan/VqUtils.hpp>
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
@@ -30,11 +31,11 @@
 
 #include <GLFW/glfw3.h>
 
-YQ_OBJECT_IMPLEMENT(yq::engine::VqWindow)
+YQ_OBJECT_IMPLEMENT(yq::engine::Window)
 
 namespace yq {
     namespace engine {
-        void VqWindow::poll_events()
+        void Window::poll_events()
         {
             glfwPollEvents();
         }
@@ -46,9 +47,9 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        void VqWindow::callback_resize(GLFWwindow* gwin, int, int)
+        void Window::callback_resize(GLFWwindow* gwin, int, int)
         {
-            VqWindow    *v  = (VqWindow*) glfwGetWindowUserPointer(gwin);
+            Window    *v  = (Window*) glfwGetWindowUserPointer(gwin);
             if(v)
                 v -> m_rebuildSwap    = true;
         }
@@ -56,17 +57,17 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
 
 
-        VqWindow::VqWindow(const WindowCreateInfo&i)
+        Window::Window(const WindowCreateInfo&i)
         {
             init(i);
         }
         
-        VqWindow::~VqWindow()
+        Window::~Window()
         {
             kill();
         }
 
-        bool VqWindow::init_physical(const WindowCreateInfo& i)
+        bool Window::init_physical(const WindowCreateInfo& i)
         {
             if(m_physical)
                 return true;
@@ -82,7 +83,7 @@ namespace yq {
             return true;
         }
 
-        bool VqWindow::init_window(const WindowCreateInfo& i)
+        bool Window::init_window(const WindowCreateInfo& i)
         {
             if(m_window)    // already initialized
                 return true;
@@ -108,15 +109,15 @@ namespace yq {
             }
             
             glfwSetWindowUserPointer(m_window, this);
-            glfwSetWindowSizeCallback(m_window, VqWindow::callback_resize);
+            glfwSetWindowSizeCallback(m_window, Window::callback_resize);
             return true;
         }
 
-        //bool VqWindow::init_surface()
+        //bool Window::init_surface()
         //{
             //if(m_surface)           // already initialized!
                 //return true;
-            //if(glfwCreateWindowSurface(VqApp::instance(), m_window, nullptr, &m_surface) != VK_SUCCESS){
+            //if(glfwCreateWindowSurface(Application::vulkan(), m_window, nullptr, &m_surface) != VK_SUCCESS){
                 //vqCritical << "Unable to create window surface!";
                 //kill();
                 //return false;
@@ -124,7 +125,7 @@ namespace yq {
             //return true;
         //}
 
-        bool VqWindow::init_logical()
+        bool Window::init_logical()
         {
             if(m_device)
                 return true;    // already initialized!
@@ -157,7 +158,7 @@ namespace yq {
                 qci.push_back(info);
             }
 
-            const VqApp*   app    = VqApp::app();
+            const Application*   app    = Application::app();
             if(!app){
                 vqCritical << "Unintialized or no application present!";
                 return false;
@@ -192,7 +193,7 @@ namespace yq {
             return true;
         }
         
-        bool    VqWindow::init_command_pool()
+        bool    Window::init_command_pool()
         {
             if(m_commandPool)   // already initialized
                 return true;
@@ -207,7 +208,7 @@ namespace yq {
             return true;
         }
 
-        bool VqWindow::init_render_pass()
+        bool Window::init_render_pass()
         {
             if(m_renderPass)
                 return true;
@@ -248,7 +249,7 @@ namespace yq {
             return true;
         }
         
-        bool VqWindow::init_sync()
+        bool Window::init_sync()
         {
             bool    success = true;
             if(!m_imageAvailableSemaphore){
@@ -279,7 +280,7 @@ namespace yq {
         }
         
 
-        bool VqWindow::init(DynamicStuff&ds, VkSwapchainKHR old)
+        bool Window::init(DynamicStuff&ds, VkSwapchainKHR old)
         {
             //  ----------------------------
             //      SWAP CHAIN       
@@ -424,7 +425,7 @@ namespace yq {
         }
 
 
-        bool VqWindow::init_descriptor_pool(const WindowCreateInfo&i)
+        bool Window::init_descriptor_pool(const WindowCreateInfo&i)
         {
             if(m_descriptorPool)
                 return true;
@@ -455,10 +456,10 @@ namespace yq {
             return true;
         }
 
-        bool VqWindow::init(const WindowCreateInfo& i)
+        bool Window::init(const WindowCreateInfo& i)
         {
             try {
-                VkInstance     inst  = VqApp::instance();
+                VkInstance     inst  = Application::vulkan();
                 if(!inst){
                     vqCritical << "Vulkan has not been initialized!";
                     return false;
@@ -515,7 +516,7 @@ namespace yq {
         }
 
 
-        void VqWindow::kill(DynamicStuff&ds)
+        void Window::kill(DynamicStuff&ds)
         {
             ds.commandBuffer  = nullptr;
             for (VkFramebuffer fb : ds.frameBuffers) {
@@ -534,7 +535,7 @@ namespace yq {
             }
         }
 
-        void VqWindow::kill()
+        void Window::kill()
         {
             if(m_device){
                 vkDeviceWaitIdle(m_device);
@@ -574,7 +575,7 @@ namespace yq {
             m_surface   = {};
 
             //if(m_surface){
-                //vkDestroySurfaceKHR(VqApp::instance(), m_surface, nullptr);
+                //vkDestroySurfaceKHR(Application::vulkan(), m_surface, nullptr);
                 //m_surface  = nullptr;
             //}
 
@@ -588,7 +589,7 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        bool    VqWindow::Pipeline::init(VqWindow*win, const PipelineConfig&cfg)
+        bool    Window::Pipeline::init(Window*win, const PipelineConfig&cfg)
         {
             VqShaderStages stages(*win, cfg.shaders);
 
@@ -725,7 +726,7 @@ namespace yq {
             return true;
         }
         
-        void    VqWindow::Pipeline::kill(VqWindow*win)
+        void    Window::Pipeline::kill(Window*win)
         {
             if(wireframe){
                 vkDestroyPipeline(win->m_device, wireframe, nullptr);
@@ -744,7 +745,7 @@ namespace yq {
         
         ////////////////////////////////////////////////////////////////////////////////
 
-        bool    VqWindow::record(VkCommandBuffer commandBuffer, uint32_t imageIndex)
+        bool    Window::record(VkCommandBuffer commandBuffer, uint32_t imageIndex)
         {
             VqCommandBufferBeginInfo beginInfo;
             beginInfo.flags = 0; // Optional
@@ -776,7 +777,7 @@ namespace yq {
             return true;
         }
         
-        bool    VqWindow::draw()
+        bool    Window::draw()
         {
             bool    rebuild = m_rebuildSwap.exchange(false);
             if(rebuild){
@@ -844,30 +845,30 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
-        void VqWindow::attention()
+        void Window::attention()
         {
             if(m_window)
                 glfwRequestWindowAttention(m_window);
         }
 
-        void VqWindow::close()
+        void Window::close()
         {
             if(m_window)
                 glfwSetWindowShouldClose(m_window, GLFW_TRUE);
         }
 
-        VkCommandBuffer     VqWindow::command_buffer() const
+        VkCommandBuffer     Window::command_buffer() const
         {
             return m_dynamic.commandBuffer;
         }
 
-        void VqWindow::focus()
+        void Window::focus()
         {
             if(m_window)
                 glfwFocusWindow(m_window);
         }
 
-        int  VqWindow::height() const
+        int  Window::height() const
         {
             if(!m_window)
                 return 0;
@@ -877,75 +878,75 @@ namespace yq {
             return ret;
         }
 
-        void VqWindow::hide()
+        void Window::hide()
         {
             if(m_window)
                 glfwHideWindow(m_window);
         }
 
-        void VqWindow::iconify()
+        void Window::iconify()
         {
             if(m_window)
                 glfwIconifyWindow(m_window);
         }
 
-        bool        VqWindow::is_decorated() const
+        bool        Window::is_decorated() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowAttrib(m_window, GLFW_DECORATED) != 0;
         }
         
-        bool        VqWindow::is_focused() const
+        bool        Window::is_focused() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowAttrib(m_window, GLFW_FOCUSED ) != 0;
         }
         
-        bool        VqWindow::is_floating() const
+        bool        Window::is_floating() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowAttrib(m_window, GLFW_FLOATING) != 0;
         }
         
-        bool        VqWindow::is_fullscreen() const
+        bool        Window::is_fullscreen() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowMonitor(m_window) != nullptr;
         }
         
-        bool        VqWindow::is_hovered() const
+        bool        Window::is_hovered() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowAttrib(m_window, GLFW_HOVERED) != 0;
         }
         
-        bool        VqWindow::is_iconified() const
+        bool        Window::is_iconified() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowAttrib(m_window, GLFW_ICONIFIED) != 0;
         }
 
-        bool        VqWindow::is_maximized() const
+        bool        Window::is_maximized() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowAttrib(m_window, GLFW_MAXIMIZED) != 0;
         }
         
-        bool        VqWindow::is_resizable() const
+        bool        Window::is_resizable() const
         {
             if(!m_window)
                 return false;
             return glfwGetWindowAttrib(m_window, GLFW_RESIZABLE) != 0;
         }
         
-        bool        VqWindow::is_visible() const
+        bool        Window::is_visible() const
         {
             if(!m_window)
                 return false;
@@ -953,20 +954,20 @@ namespace yq {
         }
         
 
-        void        VqWindow::maximize()
+        void        Window::maximize()
         {
             if(m_window)
                 glfwMaximizeWindow(m_window);
         }
 
-        VqMonitor   VqWindow::monitor() const
+        VqMonitor   Window::monitor() const
         {
             if(m_window)
                 return VqMonitor(glfwGetWindowMonitor(m_window));
             return VqMonitor();
         }
 
-        Vector2I    VqWindow::position() const
+        Vector2I    Window::position() const
         {
             if(!m_window)
                 return {};
@@ -976,72 +977,72 @@ namespace yq {
         }
 
 
-        VkRenderPass VqWindow::render_pass() const
+        VkRenderPass Window::render_pass() const
         {
             return m_renderPass;
         }
 
-        void        VqWindow::restore()
+        void        Window::restore()
         {
             if(m_window)
                 glfwRestoreWindow(m_window);
         }
 
-        void        VqWindow::set_clear(const ColorRgbaF&i)
+        void        Window::set_clear(const ColorRgbaF&i)
         {
             m_clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }
 
-        void        VqWindow::set_position(const Vector2I& pos)
+        void        Window::set_position(const Vector2I& pos)
         {
             set_position(pos.x, pos.y);
         }
         
-        void        VqWindow::set_position(int x, int y)
+        void        Window::set_position(int x, int y)
         {
             if(m_window){
                 glfwSetWindowPos(m_window, x, y);
             }
         }
 
-        void        VqWindow::set_size(const Size2I& sz)
+        void        Window::set_size(const Size2I& sz)
         {
             set_size(sz.x, sz.y);
         }
 
-        void        VqWindow::set_size(int w, int h)
+        void        Window::set_size(int w, int h)
         {
             if(m_window){
                 glfwSetWindowSize(m_window, std::max(1, w), std::max(1, h));
             }
         }
 
-        void        VqWindow::set_title(const char*z)
+        void        Window::set_title(const char*z)
         {
             if(m_window && z){
                 glfwSetWindowTitle(m_window, z);
             }
         }
 
-        void        VqWindow::set_title(const std::string&z)
+        void        Window::set_title(const std::string&z)
         {
             set_title(z.c_str());
         }
 
-        bool        VqWindow::should_close() const
+        bool        Window::should_close() const
         {
             if(!m_window) 
                 return true;
             return glfwWindowShouldClose(m_window);
         }
 
-        void        VqWindow::show()
+        void        Window::show()
         {
             if(m_window)
                 glfwShowWindow(m_window);
         }
 
-        Size2I      VqWindow::size() const
+        Size2I      Window::size() const
         {
             if(!m_window)
                 return {};
@@ -1050,37 +1051,37 @@ namespace yq {
             return ret;
         }
 
-        VkRect2D    VqWindow::swap_def_scissor() const
+        VkRect2D    Window::swap_def_scissor() const
         {
             return m_dynamic.def_scissor();
         }
         
-        VkViewport  VqWindow::swap_def_viewport() const
+        VkViewport  Window::swap_def_viewport() const
         {
             return m_dynamic.def_viewport();
         }
 
-        uint32_t    VqWindow::swap_image_count() const
+        uint32_t    Window::swap_image_count() const
         {
             return m_dynamic.imageCount;
         }
 
-        uint32_t    VqWindow::swap_height() const
+        uint32_t    Window::swap_height() const
         {
             return m_dynamic.extents.height;
         }
 
-        uint32_t    VqWindow::swap_min_image_count() const
+        uint32_t    Window::swap_min_image_count() const
         {
             return m_dynamic.minImageCount;
         }
 
-        uint32_t    VqWindow::swap_width() const
+        uint32_t    Window::swap_width() const
         {
             return m_dynamic.extents.width;
         }
         
-        int  VqWindow::width() const
+        int  Window::width() const
         {
             if(!m_window)
                 return 0;
@@ -1093,7 +1094,7 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
-        VkRect2D    VqWindow::DynamicStuff::def_scissor() const
+        VkRect2D    Window::DynamicStuff::def_scissor() const
         {
             VkRect2D    ret{};
             ret.offset  = { 0, 0 };
@@ -1101,7 +1102,7 @@ namespace yq {
             return ret;
         }
         
-        VkViewport  VqWindow::DynamicStuff::def_viewport() const
+        VkViewport  Window::DynamicStuff::def_viewport() const
         {
             VkViewport  ret{};
             ret.x = 0.0f;
@@ -1117,7 +1118,7 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
 
         YQ_INVOKE(
-            writer<VqWindow>();
+            writer<Window>();
         )
     }
 

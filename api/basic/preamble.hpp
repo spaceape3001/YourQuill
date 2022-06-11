@@ -177,6 +177,8 @@ namespace yq {
         //  top answer
         return reinterpret_cast<size_t>(&(reinterpret_cast<T*>((void*) 0)->*member));
     }    
+
+    #define YQ_MAKE_VERSION(major, minor, patch) ((((uint32_t)(major)) << 22) | (((uint32_t)(minor)) << 12) | ((uint32_t)(patch)))
 }
 
 

@@ -11,13 +11,13 @@
 
 namespace yq {
     namespace engine {
-        class VqWindow;
+        class Window;
         
         class VqFence : trait::not_copyable {
         public:
         
             VqFence();
-            VqFence(VqWindow&);
+            VqFence(Window&);
             VqFence(VkDevice);
             
             VqFence(VqFence&&);

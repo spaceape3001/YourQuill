@@ -14,12 +14,12 @@
 namespace yq {
         class Shader;
     namespace engine {
-        class VqWindow;
+        class Window;
         
         class VqShaderStages : trait::not_copyable, trait::not_moveable {
         public:
         
-            VqShaderStages(VqWindow&, const std::vector<ShaderSpec>&);
+            VqShaderStages(Window&, const std::vector<ShaderSpec>&);
             VqShaderStages(VkDevice, const std::vector<ShaderSpec>&);
             ~VqShaderStages();
             

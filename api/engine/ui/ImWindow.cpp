@@ -8,19 +8,19 @@
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <backends/imgui_impl_vulkan.h>
 #include <backends/imgui_impl_glfw.h>
-#include <engine/vulqan/VqApp.hpp>
+#include <engine/Application.hpp>
 #include <engine/vulqan/VqStructs.hpp>
 
 YQ_OBJECT_IMPLEMENT(yq::engine::ImWindow)
 
 namespace yq {
     namespace engine {
-        ImWindow::ImWindow(const WindowCreateInfo& wci) : VqWindow(wci)
+        ImWindow::ImWindow(const WindowCreateInfo& wci) : Window(wci)
         {
             m_imgui = ImGui::CreateContext();
             ImGui_ImplVulkan_InitInfo vii{};
             
-            vii.Instance        = VqApp::instance();
+            vii.Instance        = Application::vulkan();
             vii.PhysicalDevice  = physical();
             vii.Device          = device();
             vii.Queue           = graphics_queue();
@@ -53,7 +53,7 @@ namespace yq {
             ImGui::NewFrame();
             draw_imgui();
             ImGui::Render();
-            if(!VqWindow::draw())
+            if(!Window::draw())
                 return false;
             return true;
         }

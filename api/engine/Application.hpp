@@ -8,6 +8,7 @@
 
 #include <basic/BasicApp.hpp>
 #include <basic/DbgRel.hpp>
+#include <engine/enum/Required.hpp>
 #include <vulkan/vulkan_core.h>
 #include <set>
 #include <vector>
@@ -16,14 +17,7 @@ struct VkInstance_T;
 
 namespace yq {
     namespace engine {
-
-        #define YQ_MAKE_VERSION(major, minor, patch) ((((uint32_t)(major)) << 22) | (((uint32_t)(minor)) << 12) | ((uint32_t)(patch)))
     
-        enum class Required : uint8_t {
-            NO,
-            OPTIONAL,
-            YES
-        };
         
         struct NameRequired {
             const char*     name    = nullptr;
@@ -57,17 +51,17 @@ namespace yq {
         };
 
 
-        class VqApp;
-        class VqWindow;
+        class Application;
+        class Window;
         
         /*! \brief Engine/Vulkan application
         
         */
-        class VqApp : public BasicApp {
+        class Application : public BasicApp {
         public:
         
             //! Global application, if any
-            static VqApp*       app() { return s_app; }
+            static Application*       app() { return s_app; }
             
             //! Name of this engine
             static std::string_view             engine_name();
@@ -80,7 +74,7 @@ namespace yq {
                 If necessary, this will initialize the vulkan *IFF* the app exists and vulkan's not already been
                 initialized.
             */
-            static VkInstance    instance();
+            static VkInstance    vulkan();
         
             /*! \brief Constructor
             
@@ -88,8 +82,8 @@ namespace yq {
                 \param[in]  argv    Pass onto me what the main() was given
                 \param[in]  aci     Initialization paraemters for this application
             */
-            VqApp(int argc, char* argv[], const AppCreateInfo& aci=AppCreateInfo());
-            ~VqApp();
+            Application(int argc, char* argv[], const AppCreateInfo& aci=AppCreateInfo());
+            ~Application();
             
             
             //void    run();
@@ -103,7 +97,7 @@ namespace yq {
                 \param[in] timeout      If positive, throttles the loop to the rate of user input, where timeout 
                                         is the max stall duration.
             */
-            void    run_window(VqWindow*win, double timeout=0.);
+            void    run_window(Window*win, double timeout=0.);
             
             /*! \brief Initializes the GLFW
             
@@ -124,20 +118,20 @@ namespace yq {
             
             
         private:
-            friend class VqWindow;
+            friend class Window;
             
-            static VqApp*               s_app;
-            static VkInstance           s_instance;
+            static Application*                 s_app;
+            static VkInstance                   s_vulkan;
 
             AppCreateInfo                       m_appInfo;
-            VkInstance                          m_instance    = nullptr;
+            VkInstance                          m_vulkan        = nullptr;
             //std::vector<VkLayerProperties>      m_allLayerProps;
             //std::vector<VkExtensionProperties>  m_allExtensionProps;
             //std::set<std::string>               m_allLayerNames;
             //std::set<std::string>               m_allExtensionNames;
             std::vector<const char*>            m_extensions;
             std::vector<const char*>            m_layers;
-            VkDebugReportCallbackEXT            m_debug     = nullptr;
+            VkDebugReportCallbackEXT            m_debug         = nullptr;
             bool                                m_glfw        = false;
             
             bool        add_layer(const char*);

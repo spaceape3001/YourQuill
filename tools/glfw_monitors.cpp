@@ -6,7 +6,7 @@
 
 #include <math/shape/Rectangle2.hpp>
 #include <math/vec/Vector2.hpp>
-#include <engine/vulqan/VqApp.hpp>
+#include <engine/Application.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <iostream>
 
@@ -15,7 +15,7 @@ using namespace yq::engine;
 
 int main(int argc, char* argv[])
 {
-    VqApp   app(argc, argv);
+    Application   app(argc, argv);
     app.init_glfw();
     std::vector<VqMonitor>  monitors    = VqMonitor::enumerate();
     VqMonitor               primary     = VqMonitor::primary();

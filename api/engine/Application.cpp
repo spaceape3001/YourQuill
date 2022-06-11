@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "VqApp.hpp"
-#include "VqLogging.hpp"
-#include "VqStructs.hpp"
-#include "VqUtils.hpp"
-#include "VqWindow.hpp"
+#include "Application.hpp"
+#include "Window.hpp"
+#include <engine/vulqan/VqLogging.hpp>
+#include <engine/vulqan/VqStructs.hpp>
+#include <engine/vulqan/VqUtils.hpp>
 
 #include <basic/Logging.hpp>
 #include <basic/ThreadId.hpp>
@@ -23,8 +23,8 @@ namespace yq {
         static constexpr const uint32_t kEngineVersion      = YQ_MAKE_VERSION(0, 0, 1);
         static constexpr const char*    szEngineName        = "YourQuill";
     
-        VqApp*          VqApp::s_app    = nullptr;
-        VkInstance      VqApp::s_instance  = nullptr;
+        Application*    Application::s_app    = nullptr;
+        VkInstance      Application::s_vulkan  = nullptr;
 
         static void    glfwLogging(int ec, const char* why)
         {
@@ -55,20 +55,20 @@ namespace yq {
             return VK_FALSE;
         }
 
-        std::string_view    VqApp::engine_name() 
+        std::string_view    Application::engine_name() 
         {
             return szEngineName;
         }
 
-        uint32_t            VqApp::engine_version() 
+        uint32_t            Application::engine_version() 
         {
             return kEngineVersion;
         }
 
-        VkInstance_T*       VqApp::instance()
+        VkInstance_T*       Application::vulkan()
         {
-            if(s_instance)  [[ likely ]]
-                return s_instance;
+            if(s_vulkan)  [[ likely ]]
+                return s_vulkan;
             if(!s_app){
                 vqCritical << "No Engine App has been instantiated!";
                 return nullptr;
@@ -76,17 +76,17 @@ namespace yq {
             
             static tbb::spin_mutex  mutex;
             tbb::spin_mutex::scoped_lock    _m(mutex);
-            if(s_instance)
-                return s_instance;
+            if(s_vulkan)
+                return s_vulkan;
             if(!s_app-> init())
                 return nullptr;
-            s_instance  = s_app -> m_instance;
-            return s_instance;
+            s_vulkan  = s_app -> m_vulkan;
+            return s_vulkan;
         }
 
         //  ////////////////////////////////////////////////////////////////////////
 
-        VqApp::VqApp(int argc, char *argv[], const AppCreateInfo& ci) : 
+        Application::Application(int argc, char *argv[], const AppCreateInfo& ci) : 
             BasicApp(argc, argv), m_appInfo(ci)
         {
             if(m_appInfo.app_name.empty())
@@ -97,16 +97,16 @@ namespace yq {
                 s_app   = this;
         }
         
-        VqApp::~VqApp()
+        Application::~Application()
         {
             kill();
             if(this == s_app){
                 s_app       = nullptr;
-                s_instance  = nullptr;
+                s_vulkan    = nullptr;
             }
         }
 
-        bool    VqApp::add_layer(const char*z)
+        bool    Application::add_layer(const char*z)
         {
             if(!z)
                 return false;
@@ -119,7 +119,7 @@ namespace yq {
             return false;
         }
         
-        bool    VqApp::add_extension(const char*z)
+        bool    Application::add_extension(const char*z)
         {
             if(!z)
                 return false;
@@ -132,12 +132,12 @@ namespace yq {
             return false;
         }
 
-        bool    VqApp::init()
+        bool    Application::init()
         { 
             return init_vulkan();
         }
             
-        void    VqApp::init_glfw()
+        void    Application::init_glfw()
         {
             if(!m_glfw){
                 glfwLogging(0,nullptr);
@@ -146,10 +146,10 @@ namespace yq {
             }
         }
 
-        bool        VqApp::init_vulkan()
+        bool        Application::init_vulkan()
         {
             init_glfw();
-            if(m_instance)
+            if(m_vulkan)
                 return true;
 
             static const char*  kValidationLayer        = "VK_LAYER_KHRONOS_validation";
@@ -226,13 +226,13 @@ namespace yq {
             if(createInfo.enabledExtensionCount)
                 createInfo.ppEnabledExtensionNames  = m_extensions.data();
                 
-            if(vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS){
+            if(vkCreateInstance(&createInfo, nullptr, &m_vulkan) != VK_SUCCESS){
                 vqCritical << "Unable to create vulkan instance!";
-                m_instance   = nullptr;
+                m_vulkan   = nullptr;
                 return false;
             }
             
-            if(m_instance == nullptr){
+            if(m_vulkan == nullptr){
                 vqCritical << "Vulkan instance is NULL!";
                 return false;
             } else
@@ -240,27 +240,27 @@ namespace yq {
                 
             if(want_debug){
                 // Get the function pointer (required for any extensions)
-                auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkCreateDebugReportCallbackEXT");
+                auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(m_vulkan, "vkCreateDebugReportCallbackEXT");
                 VqDebugReportCallbackCreateInfoEXT debug_report_ci;
                 debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
                 debug_report_ci.pfnCallback = vqDebuggingCallback;
                 debug_report_ci.pUserData = nullptr;
-                vkCreateDebugReportCallbackEXT(m_instance, &debug_report_ci, nullptr, &m_debug);
+                vkCreateDebugReportCallbackEXT(m_vulkan, &debug_report_ci, nullptr, &m_debug);
             }
 
             return true;
         }
         
-        void        VqApp::kill()
+        void        Application::kill()
         {
             if(m_debug){
-                auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkDestroyDebugReportCallbackEXT");
-                vkDestroyDebugReportCallbackEXT(m_instance, m_debug, nullptr);
+                auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(m_vulkan, "vkDestroyDebugReportCallbackEXT");
+                vkDestroyDebugReportCallbackEXT(m_vulkan, m_debug, nullptr);
             }
         
-            if(m_instance){
-                vkDestroyInstance(m_instance, nullptr);
-                m_instance  = nullptr;
+            if(m_vulkan){
+                vkDestroyInstance(m_vulkan, nullptr);
+                m_vulkan  = nullptr;
             }
             
             if(m_glfw){
@@ -269,7 +269,7 @@ namespace yq {
             }
         }
 
-        void    VqApp::run_window(VqWindow* win, double amt)
+        void    Application::run_window(Window* win, double amt)
         {
             if(!win)
                 return;

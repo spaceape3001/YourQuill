@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include "VqFence.hpp"
-#include "VqSurface.hpp"
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
 #include <basic/trait/not_copyable.hpp>
@@ -16,8 +14,11 @@
 #include <math/ColorRgba.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
-#include <vulkan/vulkan_core.h>
+#include <engine/vulqan/VqFence.hpp>
+#include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
+#include <vulkan/vulkan_core.h>
+
 #include <functional>
 #include <optional>
 #include <memory>
@@ -68,9 +69,9 @@ namespace yq {
             This encapsulates the GLFW & Vulkan into a single window, requires
             a Vulkan instance.
         */
-        class VqWindow : public Object, public RefCount, trait::not_copyable, trait::not_moveable {
+        class Window : public Object, public RefCount, trait::not_copyable, trait::not_moveable {
             YQ_OBJECT_INFO(VqWindowInfo)
-            YQ_OBJECT_DECLARE(VqWindow, Object)
+            YQ_OBJECT_DECLARE(Window, Object)
         public:
         
             static constexpr const uint32_t kMinimumDescriptors = 1000;
@@ -80,9 +81,9 @@ namespace yq {
 
 
                 // Creates a window bound to the specified vulkan instance
-            VqWindow(const WindowCreateInfo& i = WindowCreateInfo());
+            Window(const WindowCreateInfo& i = WindowCreateInfo());
             
-            ~VqWindow();
+            ~Window();
             
 
                 //! Calls user's attention to window
@@ -228,7 +229,7 @@ namespace yq {
                 uint32_t            family  = UINT32_MAX;
                 VkPresentModeKHR    mode    = {};
                 
-                void    kill(VqWindow*);
+                void    kill(Window*);
             };
             
             //! This is what needs to change with every resize!
@@ -297,13 +298,13 @@ namespace yq {
             static void callback_resize(GLFWwindow*, int, int);
         };
         
-        struct VqWindow::Pipeline {
+        struct Window::Pipeline {
             VkPipelineLayout    layout      = nullptr;
             VkPipeline          pipeline    = nullptr;
             VkPipeline          wireframe   = nullptr;
             
-            bool    init(VqWindow*, const PipelineConfig&);
-            void    kill(VqWindow*);
+            bool    init(Window*, const PipelineConfig&);
+            void    kill(Window*);
         };
 
     }

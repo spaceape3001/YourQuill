@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "VqApp.hpp"
 #include "VqUtils.hpp"
 #include <basic/CollectionUtils.hpp>
+#include <engine/Application.hpp>
 #include <GLFW/glfw3.h>
 
 namespace yq {
@@ -54,7 +54,7 @@ namespace yq {
         std::vector<VkPhysicalDeviceGroupProperties>    vqEnumeratePhysicalDeviceGroups(VkInstance inst)
         {
             if(!inst)
-                inst    = VqApp::instance();
+                inst    = Application::vulkan();
             uint32_t    count   = 0;
             vkEnumeratePhysicalDeviceGroups(inst, &count, nullptr);
             std::vector<VkPhysicalDeviceGroupProperties>    ret(count);
@@ -68,7 +68,7 @@ namespace yq {
         std::vector<VkPhysicalDeviceGroupProperties>    vqEnumeratePhysicalDeviceGroupsKHR(VkInstance inst)
         {  
             if(!inst)
-                inst    = VqApp::instance();
+                inst    = Application::vulkan();
             uint32_t    count   = 0;
             vkEnumeratePhysicalDeviceGroupsKHR(inst, &count, nullptr);
             std::vector<VkPhysicalDeviceGroupProperties>    ret(count);
@@ -81,7 +81,7 @@ namespace yq {
         std::vector<VkPhysicalDevice>        vqEnumeratePhysicalDevices(VkInstance inst)
         {
             if(!inst)
-                inst    = VqApp::instance();
+                inst    = Application::vulkan();
             uint32_t    count   = 0;
             vkEnumeratePhysicalDevices(inst, &count, nullptr);
             std::vector<VkPhysicalDevice>    ret(count);
@@ -135,7 +135,7 @@ namespace yq {
         VkPhysicalDevice                     vqFirstDevice(VkInstance inst)
         {
             if(!inst)
-                inst    = VqApp::instance();
+                inst    = Application::vulkan();
             for(VkPhysicalDevice v : vqEnumeratePhysicalDevices(inst)){
                 if(v)
                     return v;

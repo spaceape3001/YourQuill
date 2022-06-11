@@ -6,7 +6,7 @@
 
 #include "VqStructs.hpp"
 #include "VqFencePool.hpp"
-#include "VqWindow.hpp"
+#include <engine/Window.hpp>
 
 namespace yq {
     namespace engine {
@@ -15,7 +15,7 @@ namespace yq {
         {
         }
         
-        VqFencePool::VqFencePool(VqWindow& v) : VqFencePool()
+        VqFencePool::VqFencePool(Window& v) : VqFencePool()
         {
             init(v);
         }
@@ -60,7 +60,7 @@ namespace yq {
             return (i<m_active) ? m_fences[i] : nullptr;
         }
 
-        bool        VqFencePool::init(VqWindow&v, bool reinit)
+        bool        VqFencePool::init(Window&v, bool reinit)
         {
             return init(v.logical(), reinit);
         }
