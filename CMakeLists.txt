@@ -95,7 +95,6 @@ include_directories(3rd/rapidxml-1.13)
 include_directories(3rd/asio/asio/include)
 include_directories(3rd/nlohmann/include)
 include_directories(3rd/pstreams-1.0.3)
-include_directories(3rd/imgui)
 
 if(Feature_PrecompiledHeaders)
     SET(PRECOMPILE_HEADERS util/c++/stdlibs.hpp)

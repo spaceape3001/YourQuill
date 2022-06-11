@@ -11,6 +11,8 @@ add_library(imgui SHARED
     #imgui/misc/freetype/imgui_freetype.cpp
 )
 
+target_include_directories(imgui PUBLIC ./imgui)
+
 target_link_libraries(imgui PUBLIC 
     ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY}
 )

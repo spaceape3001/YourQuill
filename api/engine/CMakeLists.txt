@@ -70,7 +70,7 @@ set(yq_engine_sources
 )
 
 add_library(yqengine SHARED ${yq_engine_sources})
-target_link_libraries(yqengine PUBLIC yqbasic yqconfig yqmath ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui)
+target_link_libraries(yqengine PUBLIC yqbasic yqconfig yqmath ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui stb)
 LinkTest(yqengine)
 
 
