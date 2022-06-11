@@ -64,7 +64,7 @@ namespace yq {
         
             if(!v.empty()){
                 if(alpha){
-                    auto    itr = m_name2value.find(k);
+                    auto    itr = m_name2value.find(v);
                     assert(itr != m_name2value.end());  // shouldn't ever trigger, as it was compilable code
                     if(itr != m_name2value.end())
                         val = itr -> second;

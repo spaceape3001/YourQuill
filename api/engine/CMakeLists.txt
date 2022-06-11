@@ -11,17 +11,22 @@ set(yq_engine_sources
     ./asset/AssetCompiler.hpp
     ./asset/AssetLoader.hpp
     ./asset/AssetInfoWriter.hpp
+    
+    ./pipeline/CullMode.hpp   
+    ./pipeline/DataFormat.cpp 
+    ./pipeline/DataFormat.hpp 
+    ./pipeline/FrontFace.hpp    
+    ./pipeline/Pipeline.cpp
+    ./pipeline/PipelineBuilder.hpp
+    ./pipeline/PipelineConfig.hpp
+    ./pipeline/PolygonMode.hpp
+    ./pipeline/Topology.hpp
 
     ./render/ColorComponent.hpp    
-    ./render/CullMode.hpp    
-    ./render/FrontFace.hpp    
     ./render/LogicOp.hpp    
-    ./render/PipelineConfig.hpp    
-    ./render/PolygonMode.hpp
     ./render/Renderable.cpp
     ./render/Renderable.hpp
     ./render/StencilOp.hpp
-    ./render/Topology.hpp
     
     ./shader/Shader.cpp
     ./shader/Shader.hpp
@@ -60,7 +65,7 @@ set(yq_engine_sources
 )
 
 add_library(yqengine SHARED ${yq_engine_sources})
-target_link_libraries(yqengine PUBLIC yqbasic yqconfig ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui)
+target_link_libraries(yqengine PUBLIC yqbasic yqconfig yqmath ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui)
 LinkTest(yqengine)
 
 

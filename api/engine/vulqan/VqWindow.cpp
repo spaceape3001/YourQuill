@@ -20,7 +20,7 @@
 #include <basic/Logging.hpp>
 #include <basic/Safety.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
-#include <engine/render/PipelineConfig.hpp>
+#include <engine/pipeline/PipelineConfig.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
 
@@ -575,19 +575,37 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        bool    VqWindow::Pipeline::init(VqWindow*win, const PipelineConfig&cfg, std::function<void(VkPipelineVertexInputStateCreateInfo&)> visci)
+        bool    VqWindow::Pipeline::init(VqWindow*win, const PipelineConfig&cfg)
         {
             VqShaderStages stages(*win, cfg.shaders);
 
             VqPipelineVertexInputStateCreateInfo    vertexInfo;
-            if(visci){
-                visci(vertexInfo);
-            } else {
-                vertexInfo.vertexBindingDescriptionCount    = 0;
-                vertexInfo.pVertexBindingDescriptions       = nullptr;
-                vertexInfo.vertexAttributeDescriptionCount  = 0;
-                vertexInfo.pVertexAttributeDescriptions     = nullptr;
+            
+            std::vector<VkVertexInputAttributeDescription>  attrs;
+            std::vector<VkVertexInputBindingDescription>    vbos;
+            
+            for(uint32_t i=0;i<cfg.vbos.size();++i){
+                auto& v = cfg.vbos[i];
+                VkVertexInputBindingDescription b;
+                b.binding   = i;
+                b.stride    = v.stride;
+                b.inputRate = (VkVertexInputRate) v.inputRate.value();
+                vbos.push_back(b);
+                
+                for(auto& va : v.attrs){
+                    VkVertexInputAttributeDescription   a;
+                    a.binding       = i;
+                    a.location      = va.location;
+                    a.offset        = va.offset;
+                    a.format        = (VkFormat) va.format.value();
+                    attrs.push_back(a);
+                }
             }
+
+            vertexInfo.vertexBindingDescriptionCount    = (uint32_t) vbos.size();
+            vertexInfo.pVertexBindingDescriptions       = vbos.data();
+            vertexInfo.vertexAttributeDescriptionCount  = (uint32_t) attrs.size();
+            vertexInfo.pVertexAttributeDescriptions     = attrs.data();
             
             VqPipelineInputAssemblyStateCreateInfo  inputAssembly;
             inputAssembly.topology                  = (VkPrimitiveTopology) cfg.topology.value();
@@ -608,7 +626,7 @@ namespace yq {
             rasterizer.rasterizerDiscardEnable = VK_FALSE;
             rasterizer.polygonMode = (VkPolygonMode) cfg.polymode.value();
             rasterizer.lineWidth = 1.0f;
-            rasterizer.cullMode = (VkCullModeFlags) cfg.cull.value();
+            rasterizer.cullMode = (VkCullModeFlags) cfg.culling.value();
             rasterizer.frontFace = (VkFrontFace) cfg.front.value();
             rasterizer.depthBiasEnable = VK_FALSE;
             rasterizer.depthBiasConstantFactor = 0.0f; // Optional
@@ -680,6 +698,10 @@ namespace yq {
         
         void    VqWindow::Pipeline::kill(VqWindow*win)
         {
+            if(wireframe){
+                vkDestroyPipeline(win->m_device, wireframe, nullptr);
+                wireframe    = nullptr;
+            }
             if(pipeline){
                 vkDestroyPipeline(win->m_device, pipeline, nullptr);
                 pipeline    = nullptr;

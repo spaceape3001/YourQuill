@@ -19,7 +19,7 @@
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
-#include <engine/render/PipelineConfig.hpp>
+#include <engine/pipeline/PipelineBuilder.hpp>
 #include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqApp.hpp>
 #include <engine/vulqan/VqUtils.hpp>
@@ -34,32 +34,8 @@ using namespace yq;
 using namespace yq::engine;
 
 struct Vertex {
-    glm::vec2    position;
+    glm::vec2   position;
     glm::vec3   color;
-    
-    
-    static VkVertexInputBindingDescription getBindingDescription() {
-        VkVertexInputBindingDescription bindingDescription{};
-        bindingDescription.binding = 0;
-        bindingDescription.stride = sizeof(Vertex);
-        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-        return bindingDescription;
-    }
-
-    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() 
-    {
-        std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
-        attributeDescriptions.resize(2);
-        attributeDescriptions[0].binding = 0;
-        attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[0].offset = offsetof(Vertex, position);
-        attributeDescriptions[1].binding = 0;
-        attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
-        return attributeDescriptions;
-    }
 };
 
 const std::vector<Vertex> vertices = {
@@ -99,21 +75,13 @@ struct HelloWin : public VqWindow {
             throw std::runtime_error("No fragment shader");
             
 
-        PipelineConfig      cfg;
-        cfg.shaders     = { vert, frag };
-        cfg.front       = FrontFace::Clockwise;
-        cfg.polymode    = PolygonMode::Fill;
+        PipelineBuilder      cfg;
+        cfg.add_shaders({ vert, frag });
+        cfg.front(FrontFace::Clockwise);
         
-        auto bindingDescription = Vertex::getBindingDescription();
-        auto attributeDescriptions = Vertex::getAttributeDescriptions();
+        cfg.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
         
-        if(!triangle.init(this, cfg, [&](VkPipelineVertexInputStateCreateInfo& vertexInfo){
-
-            vertexInfo.vertexBindingDescriptionCount = 1;
-            vertexInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-            vertexInfo.pVertexBindingDescriptions = &bindingDescription;
-            vertexInfo.pVertexAttributeDescriptions = attributeDescriptions.data();            
-        })){
+        if(!triangle.init(this, cfg)){
             throw std::runtime_error("Unable to create pipeline!");
         }
             

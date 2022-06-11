@@ -296,8 +296,9 @@ namespace yq {
         struct VqWindow::Pipeline {
             VkPipelineLayout    layout      = nullptr;
             VkPipeline          pipeline    = nullptr;
+            VkPipeline          wireframe   = nullptr;
             
-            bool    init(VqWindow*, const PipelineConfig&, std::function<void(VkPipelineVertexInputStateCreateInfo&)> visci={});
+            bool    init(VqWindow*, const PipelineConfig&);
             void    kill(VqWindow*);
         };
 

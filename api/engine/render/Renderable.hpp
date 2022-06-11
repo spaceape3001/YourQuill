@@ -24,7 +24,7 @@ namespace yq {
             RenderableInfo(std::string_view, ObjectInfo&, const std::source_location& sl = std::source_location::current());
             
         private:
-            std::map<std::string, PipelineConfig>   m_pipelines;
+            std::map<std::string, PipelineConfig*>   m_pipelines;
         };
 
 
