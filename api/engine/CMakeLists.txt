@@ -55,6 +55,8 @@ set(yq_engine_sources
     ./ui/ImWindow.cpp
     
     ./vulqan/vulqan.cpp
+    ./vulqan/VqCommandPool.ipp
+    ./vulqan/VqCommandPool.hpp
     ./vulqan/VqEnums.cpp
     ./vulqan/VqFence.cpp
     ./vulqan/VqFence.hpp

@@ -153,20 +153,6 @@ namespace yq {
             return true;
         }
         
-        bool    Window::init_command_pool()
-        {
-            if(m_commandPool)   // already initialized
-                return true;
-                
-            VqCommandPoolCreateInfo poolInfo;
-            poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            poolInfo.queueFamilyIndex = m_graphics.family();
-            if (vkCreateCommandPool(m_device, &poolInfo, nullptr, &m_commandPool) != VK_SUCCESS) {
-                vqError << "Failed to create command pool!";
-                return false;
-            }
-            return true;
-        }
 
         bool Window::init_render_pass()
         {
@@ -452,8 +438,8 @@ namespace yq {
                 m_surfaceFormat         = VK_FORMAT_B8G8R8A8_SRGB;
                 m_surfaceColorSpace     = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     
-                if(!init_command_pool())
-                    return false;
+                m_commandPool           = VqCommandPool(m_device, m_graphics.family());
+                
                 if(!init_render_pass())
                     return false;
                 if(!init_sync())
@@ -521,11 +507,7 @@ namespace yq {
                 m_renderPass    = nullptr;
             }
             
-            if(m_commandPool){
-                vkDestroyCommandPool(m_device, m_commandPool, nullptr);
-                m_commandPool    = nullptr;
-            }
-            
+            m_commandPool   = {};
             m_graphics      = {};
             m_present       = {};
             

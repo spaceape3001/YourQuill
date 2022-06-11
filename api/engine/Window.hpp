@@ -16,6 +16,7 @@
 #include <math/ColorRgba.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
+#include <engine/vulqan/VqCommandPool.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqSurface.hpp>
@@ -231,13 +232,13 @@ namespace yq {
             VqWindow            m_window;
             VqSurface           m_surface;
             VqQueues            m_graphics, m_present;
+            VqCommandPool       m_commandPool;
             
             VkDevice            m_device                    = nullptr;
             VkPresentModeKHR    m_presentMode               = {};
             VkFormat            m_surfaceFormat;
             VkColorSpaceKHR     m_surfaceColorSpace;
             VkClearValue        m_clear;
-            VkCommandPool       m_commandPool               = nullptr;
             VkRenderPass        m_renderPass                = nullptr;
             VkSemaphore         m_imageAvailableSemaphore   = nullptr;
             VkSemaphore         m_renderFinishedSemaphore   = nullptr;
@@ -259,10 +260,7 @@ namespace yq {
             void    kill(DynamicStuff&);
             bool    init(const WindowCreateInfo& i);
             bool    init_physical(const WindowCreateInfo& i);
-            //bool    init_window(const WindowCreateInfo& i);
-            //bool    init_surface();
             bool    init_logical();
-            bool    init_command_pool();
             bool    init_render_pass();
             bool    init_descriptor_pool(const WindowCreateInfo&i);
             bool    init_sync();

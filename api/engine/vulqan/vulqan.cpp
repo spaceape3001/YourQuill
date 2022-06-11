@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "VqCommandPool.ipp"
 #include "VqQueues.ipp"
 #include "VqSurface.ipp"
 #include "VqWindow.ipp"
