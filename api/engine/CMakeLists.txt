@@ -12,21 +12,26 @@ set(yq_engine_sources
     ./asset/AssetLoader.hpp
     ./asset/AssetInfoWriter.hpp
     
-    ./pipeline/CullMode.hpp   
-    ./pipeline/DataFormat.cpp 
-    ./pipeline/DataFormat.hpp 
-    ./pipeline/FrontFace.hpp    
+    ./enum/engine_enums.cpp
+    ./enum/BorderColor.hpp   
+    ./enum/ColorComponent.hpp    
+    ./enum/CullMode.hpp   
+    ./enum/DataFormat.hpp 
+    ./enum/DescriptorType.hpp   
+    ./enum/FilterType.hpp   
+    ./enum/FrontFace.hpp    
+    ./enum/LogicOp.hpp    
+    ./enum/MipmapMode.hpp    
+    ./enum/PolygonMode.hpp
+    ./enum/StencilOp.hpp
+    ./enum/Topology.hpp
+    
     ./pipeline/Pipeline.cpp
     ./pipeline/PipelineBuilder.hpp
     ./pipeline/PipelineConfig.hpp
-    ./pipeline/PolygonMode.hpp
-    ./pipeline/Topology.hpp
 
-    ./render/ColorComponent.hpp    
-    ./render/LogicOp.hpp    
     ./render/Renderable.cpp
     ./render/Renderable.hpp
-    ./render/StencilOp.hpp
     
     ./shader/Shader.cpp
     ./shader/Shader.hpp

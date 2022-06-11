@@ -9,12 +9,12 @@
 #include <engine/shader/ShaderPointer.hpp>
 #include <optional>
 #include <vector>
-#include "CullMode.hpp"
-#include "PolygonMode.hpp"
-#include "Topology.hpp"
-#include "FrontFace.hpp"
-#include "DataFormat.hpp"
-#include "VertexInputRate.hpp"
+#include <engine/enum/CullMode.hpp>
+#include <engine/enum/PolygonMode.hpp>
+#include <engine/enum/Topology.hpp>
+#include <engine/enum/FrontFace.hpp>
+#include <engine/enum/DataFormat.hpp>
+#include <engine/enum/VertexInputRate.hpp>
 
 namespace yq {
     namespace engine {
