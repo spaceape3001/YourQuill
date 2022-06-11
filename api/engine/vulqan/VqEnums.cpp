@@ -393,5 +393,22 @@ namespace yq {
                 return VqFormat(n).key();
             return "(unknown format)";
         }
+        
+        YQ_ENUM(VqPhysicalDeviceType, ,
+            Other = 0,
+            Integrated = 1,
+            Discrete = 2,
+            Virtual = 3,
+            CPU     = 4
+        )
+
+        std::string_view                        to_string(VkPhysicalDeviceType v)
+        {
+            int n   = (int) v;
+            if(VqPhysicalDeviceType::has_value(n))
+                return VqPhysicalDeviceType(n).key();
+            return "(unknown device type)";
+        }
+
     }
 }

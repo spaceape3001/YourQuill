@@ -67,6 +67,7 @@ namespace yq {
         std::string_view                        to_string(VkDebugReportObjectTypeEXT);
         std::string_view                        to_string(VkDynamicState);
         std::string_view                        to_string(VkFormat);
+        std::string_view                        to_string(VkPhysicalDeviceType);
     }
 }
 

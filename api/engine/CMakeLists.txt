@@ -62,6 +62,8 @@ set(yq_engine_sources
     ./vulqan/VqFence.hpp
     ./vulqan/VqFencePool.cpp
     ./vulqan/VqFencePool.hpp
+    ./vulqan/VqGPU.cpp
+    ./vulqan/VqGPU.hpp
     ./vulqan/VqLogging.cpp
     ./vulqan/VqLogging.hpp
     ./vulqan/VqMonitor.cpp
@@ -81,7 +83,7 @@ set(yq_engine_sources
 
 add_library(yqengine SHARED ${yq_engine_sources})
 target_compile_definitions(yqengine PRIVATE VK_ENABLE_BETA_EXTENSIONS=1)
-target_link_libraries(yqengine PUBLIC yqbasic yqconfig yqmath ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui stb)
+target_link_libraries(yqengine PUBLIC yqbasic yqconfig yqmath ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui stb vma)
 LinkTest(yqengine)
 
 

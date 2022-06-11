@@ -18,6 +18,7 @@
 #include <math/vec/Vector2.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
 #include <engine/vulqan/VqFence.hpp>
+#include <engine/vulqan/VqGPU.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqWindow.hpp>
@@ -187,6 +188,8 @@ namespace yq {
             
             uint32_t            swap_height() const;
             
+            bool                valid() const { return window() != nullptr; }
+            
             
                 //! Width of the window
             int                 width() const;
@@ -228,7 +231,7 @@ namespace yq {
             };
 
             
-            VkPhysicalDevice    m_physical                  = nullptr;
+            VqGPU               m_physical                  = nullptr;
             VqWindow            m_window;
             VqSurface           m_surface;
             VqQueues            m_graphics, m_present;

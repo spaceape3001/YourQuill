@@ -19,10 +19,12 @@ namespace yq {
     namespace engine {
         VqSurface::VqSurface(VkPhysicalDevice phys, GLFWwindow* win) : m_physical(phys)
         {
-            if(glfwCreateWindowSurface(Application::vulkan(), win, nullptr, &m_surface) != VK_SUCCESS)
-                throw VqException("Unable to create window surface!");
-            m_presentModes  = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(phys, m_surface));
-            m_formats       = vqGetPhysicalDeviceSurfaceFormatsKHR(phys, m_surface);
+            if(win){
+                if(glfwCreateWindowSurface(Application::vulkan(), win, nullptr, &m_surface) != VK_SUCCESS)
+                    throw VqException("Unable to create window surface!");
+                m_presentModes  = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(phys, m_surface));
+                m_formats       = vqGetPhysicalDeviceSurfaceFormatsKHR(phys, m_surface);
+            }
         }
         
         VqSurface::VqSurface(VqSurface&&mv)

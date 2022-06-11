@@ -59,6 +59,7 @@ namespace yq {
 
         Window::Window(const WindowCreateInfo&i)
         {
+        yInfo() << "Creating window....";
             init(i);
         }
         
@@ -67,21 +68,21 @@ namespace yq {
             kill();
         }
 
-        bool Window::init_physical(const WindowCreateInfo& i)
-        {
-            if(m_physical)
-                return true;
+        //bool Window::init_physical(const WindowCreateInfo& i)
+        //{
+            //if(m_physical)
+                //return true;
         
-            m_physical  = i.device;
-            if(!m_physical){
-                m_physical  = vqFirstDevice();
-                if(!m_physical){
-                    vqCritical << "Cannot create window without any devices!";
-                    return false;
-                }
-            }
-            return true;
-        }
+            //m_physical  = i.device;
+            //if(!m_physical){
+                //m_physical  = vqFirstDevice();
+                //if(!m_physical){
+                    //vqCritical << "Cannot create window without any devices!";
+                    //return false;
+                //}
+            //}
+            //return true;
+        //}
 
         bool Window::init_logical()
         {
@@ -406,15 +407,20 @@ namespace yq {
         {
             try {
                 VkInstance     inst  = Application::vulkan();
-                if(!inst){
-                    vqCritical << "Vulkan has not been initialized!";
-                    return false;
-                }
+                if(!inst)
+                    throw VqException("Vulkan has not been initialized!");
                 
-//                auto    auto_kill   = safety([this](){ kill(); });
+                
+                VkPhysicalDevice    gpu = i.device;
+                gpu  = i.device;
+                if(!gpu){
+                    gpu  = vqFirstDevice();
+                    if(!gpu)
+                        throw VqException("Cannot create window without any devices!");
+                }
 
-                if(!init_physical(i))
-                    return false;
+                m_physical   = VqGPU(gpu);
+                yNotice() << "Using (" << to_string(m_physical.device_type()) << "): " << m_physical.device_name();
 
                 m_window    = VqWindow(this, i);
                 m_surface   = VqSurface(m_physical, m_window);
@@ -424,14 +430,6 @@ namespace yq {
                 
 
                     //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
-                
-                auto    pmodes          = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
-                
-                //for(auto& sf : vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface)){
-                    //vqInfo << "Format available... " << to_string(sf.format) << "/" << to_string(sf.colorSpace);
-                //}
-
-                //  cache details.....
             
                 m_presentMode          = m_surface.supports(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
                     // I know this is available on my card, get smarter later.
@@ -519,7 +517,7 @@ namespace yq {
             m_surface       = {};
             m_window        = {};
             
-            m_physical = nullptr;
+            m_physical = {};
         }
 
         ////////////////////////////////////////////////////////////////////////////////
