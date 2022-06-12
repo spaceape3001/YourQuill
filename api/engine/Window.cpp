@@ -299,38 +299,6 @@ namespace yq {
             return true;            
         }
 
-
-        bool Window::init_descriptor_pool(const WindowCreateInfo&i)
-        {
-            if(m_descriptorPool)
-                return true;
-            m_descriptorCount   = std::max(kMinimumDescriptors,i.descriptors);
-            std::vector<VkDescriptorPoolSize> pool_sizes =
-            {
-                { VK_DESCRIPTOR_TYPE_SAMPLER, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, m_descriptorCount },
-                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, m_descriptorCount }
-            };
-            VqDescriptorPoolCreateInfo pool_info;
-            pool_info.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-            pool_info.maxSets       = m_descriptorCount * pool_sizes.size();
-            pool_info.poolSizeCount = (uint32_t) pool_sizes.size();
-            pool_info.pPoolSizes    = pool_sizes.data();
-            if(vkCreateDescriptorPool(m_device, &pool_info, nullptr, &m_descriptorPool) != VK_SUCCESS){
-                vqError << "Unable to allocate the descriptor pool!";
-                return false;
-            }
-            return true;
-        }
-
         bool Window::init(const WindowCreateInfo& i)
         {
             try {
@@ -370,9 +338,8 @@ namespace yq {
                 m_imageAvailableSemaphore   = VqSemaphore(m_device);
                 m_renderFinishedSemaphore   = VqSemaphore(m_device);
                 m_inFlightFence             = VqFence(m_device);
+                m_descriptorPool            = VqDescriptorPool(m_device, i.descriptors);
 
-                if(!init_descriptor_pool(i))
-                    return false;
                 if(!init(m_dynamic))
                     return false;
                 
@@ -415,11 +382,7 @@ namespace yq {
             
             kill(m_dynamic);
             
-            if(m_descriptorPool){
-                vkDestroyDescriptorPool(m_device, m_descriptorPool, nullptr);
-                m_descriptorPool   = nullptr;
-            }
-            
+            m_descriptorPool            = {};
             m_imageAvailableSemaphore   = {};
             m_renderFinishedSemaphore   = {};
             m_inFlightFence             = {};

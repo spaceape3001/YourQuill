@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqCommandPool.ipp"
+#include "VqDescriptorPool.ipp"
 #include "VqEnums.ipp"
 #include "VqFence.ipp"
 #include "VqFencePool.ipp"

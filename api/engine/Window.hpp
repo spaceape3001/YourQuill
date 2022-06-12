@@ -17,6 +17,7 @@
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
+#include <engine/vulqan/VqDescriptorPool.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqGPU.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
@@ -235,9 +236,10 @@ namespace yq {
             VqGPU               m_physical;
             VqWindow            m_window;
             VqSurface           m_surface;
+
+
             VqQueues            m_graphics, m_present;
             VqCommandPool       m_commandPool;
-            
             VkDevice            m_device                    = nullptr;
             VkPresentModeKHR    m_presentMode               = {};
             VkFormat            m_surfaceFormat;
@@ -247,8 +249,7 @@ namespace yq {
             VqSemaphore         m_imageAvailableSemaphore;
             VqSemaphore         m_renderFinishedSemaphore;
             VqFence             m_inFlightFence;
-            VkDescriptorPool    m_descriptorPool            = nullptr;
-            uint32_t            m_descriptorCount           = 0;
+            VqDescriptorPool    m_descriptorPool;
             std::atomic<bool>   m_rebuildSwap               = { false };
 
             
@@ -265,8 +266,6 @@ namespace yq {
             bool    init(const WindowCreateInfo& i);
             bool    init_physical(const WindowCreateInfo& i);
             bool    init_logical();
-//            bool    init_render_pass();
-            bool    init_descriptor_pool(const WindowCreateInfo&i);
             void    kill();
             bool    record(VkCommandBuffer, uint32_t);
             
