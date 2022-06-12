@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqCommandPool.ipp"
+#include "VqGPU.ipp"
 #include "VqQueues.ipp"
 #include "VqSurface.ipp"
 #include "VqWindow.ipp"
