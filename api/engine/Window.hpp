@@ -16,6 +16,7 @@
 #include <math/ColorRgba.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
+#include <engine/vulqan/VqCommandBuffers.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
 #include <engine/vulqan/VqDescriptorPool.hpp>
 #include <engine/vulqan/VqFence.hpp>
@@ -74,7 +75,7 @@ namespace yq {
                 //! Closes (politely) this window....
             void                close();
             
-            VkColorSpaceKHR     color_space() const { return m_surfaceColorSpace; }
+            VkColorSpaceKHR     color_space() const { return m_surface.color_space(); }
             
             VkCommandBuffer     command_buffer() const;
             
@@ -87,7 +88,7 @@ namespace yq {
                 //! Brings window to front & input focus
             void                focus();
             
-            VkFormat            format() const { return m_surfaceFormat; }
+            VkFormat            format() const { return m_surface.format(); }
 
                 //! Good & initialized window
             bool                good() const { return m_window != nullptr; }
@@ -223,7 +224,7 @@ namespace yq {
                 std::vector<VkImageView>    imageViews;
                 std::vector<VkFramebuffer>  frameBuffers;
                 VkSwapchainKHR              swapChain           = nullptr;
-                VkCommandBuffer             commandBuffer       = nullptr;
+                VqCommandBuffers            commandBuffers;
                 VkExtent2D                  extents             = { 0, 0 };
                 uint32_t                    imageCount          = 0;
                 uint32_t                    minImageCount       = 0;
@@ -242,8 +243,8 @@ namespace yq {
             VqCommandPool       m_commandPool;
             VkDevice            m_device                    = nullptr;
             VkPresentModeKHR    m_presentMode               = {};
-            VkFormat            m_surfaceFormat;
-            VkColorSpaceKHR     m_surfaceColorSpace;
+            //VkFormat            m_surfaceFormat;
+            //VkColorSpaceKHR     m_surfaceColorSpace;
             VkClearValue        m_clear;
             VqRenderPass        m_renderPass;
             VqSemaphore         m_imageAvailableSemaphore;

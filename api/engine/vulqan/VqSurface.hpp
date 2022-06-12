@@ -29,6 +29,9 @@ namespace yq {
             operator bool () const { return m_surface != nullptr; }
             operator VkSurfaceKHR() const { return m_surface; }
             
+            VkFormat            format() const { return m_format; }
+            VkColorSpaceKHR     color_space() const { return m_colorSpace; }
+            
             VkSurfaceCapabilitiesKHR    capabilities() const;
             
             bool    supports(VkPresentModeKHR) const;
@@ -43,6 +46,8 @@ namespace yq {
             VkPhysicalDevice                    m_physical  = nullptr;
             std::set<VkPresentModeKHR>          m_presentModes;
             std::vector<VkSurfaceFormatKHR>     m_formats;
+            VkFormat                            m_format;
+            VkColorSpaceKHR                     m_colorSpace;
         };
     
     }

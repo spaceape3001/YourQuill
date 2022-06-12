@@ -24,6 +24,10 @@ namespace yq {
                     throw VqException("Unable to create window surface!");
                 m_presentModes  = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(phys, m_surface));
                 m_formats       = vqGetPhysicalDeviceSurfaceFormatsKHR(phys, m_surface);
+                
+                // right now, cheating
+                m_format        = VK_FORMAT_B8G8R8A8_SRGB;
+                m_colorSpace    = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
             }
         }
         
@@ -76,6 +80,8 @@ namespace yq {
             steal(m_physical, mv.m_physical);
             m_presentModes  = std::move(mv.m_presentModes);
             m_formats       = std::move(mv.m_formats);
+            m_format        = mv.m_format;
+            m_colorSpace    = mv.m_colorSpace;
         }
 
         bool    VqSurface::supports(VkPresentModeKHR p) const

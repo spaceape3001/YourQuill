@@ -26,6 +26,7 @@ namespace yq {
             VkCommandPool       pool() const { return m_pool; }
             operator bool () const { return m_pool != nullptr; }
             operator VkCommandPool() const { return m_pool; }
+            VkDevice            device() const { return m_device; }
             
         private:
             void    dtor();

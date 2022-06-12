@@ -196,8 +196,8 @@ namespace yq {
             VqSwapchainCreateInfoKHR    createInfo;
             createInfo.surface          = m_surface;
             createInfo.minImageCount    = ds.imageCount;
-            createInfo.imageFormat      = m_surfaceFormat;
-            createInfo.imageColorSpace  = m_surfaceColorSpace;
+            createInfo.imageFormat      = m_surface.format();
+            createInfo.imageColorSpace  = m_surface.color_space();
             createInfo.imageExtent      = ds.extents;
             createInfo.imageArrayLayers = 1;    // we're not steroscopic
             createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
@@ -243,7 +243,7 @@ namespace yq {
                 VqImageViewCreateInfo   createInfo;
                 createInfo.image        = ds.images[i];
                 createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
-                createInfo.format       = m_surfaceFormat;
+                createInfo.format       = m_surface.format();
                 createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
                 createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
                 createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -286,15 +286,7 @@ namespace yq {
             //      COMMAND BUFFER
             //  ----------------------------
 
-            VqCommandBufferAllocateInfo allocInfo;
-            allocInfo.commandPool = m_commandPool;
-            allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-            allocInfo.commandBufferCount = 1;
-
-            if (vkAllocateCommandBuffers(m_device, &allocInfo, &ds.commandBuffer) != VK_SUCCESS) {
-                vqError << "Failed to allocate command buffers!";
-                return false;
-            }
+            ds.commandBuffers   = VqCommandBuffers(m_commandPool, 1);
 
             return true;            
         }
@@ -328,9 +320,6 @@ namespace yq {
                     //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
             
                 m_presentMode          = m_surface.supports(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
-                    // I know this is available on my card, get smarter later.
-                m_surfaceFormat         = VK_FORMAT_B8G8R8A8_SRGB;
-                m_surfaceColorSpace     = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
                     
                 m_commandPool           = VqCommandPool(m_device, m_graphics.family());
                 
@@ -357,7 +346,7 @@ namespace yq {
 
         void Window::kill(DynamicStuff&ds)
         {
-            ds.commandBuffer  = nullptr;
+            ds.commandBuffers  = {};
             for (VkFramebuffer fb : ds.frameBuffers) {
                 if(fb)
                     vkDestroyFramebuffer(m_device, fb, nullptr);
@@ -450,13 +439,16 @@ namespace yq {
                 
                 //  resize notifications...
             }
+            
+            VkCommandBuffer cmdbuf = m_dynamic.commandBuffers[0];
+            
         
             m_inFlightFence.wait_reset();
             uint32_t imageIndex = 0;
             vkAcquireNextImageKHR(m_device, m_dynamic.swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
-            vkResetCommandBuffer(m_dynamic.commandBuffer, 0);
+            vkResetCommandBuffer(cmdbuf, 0);
             
-            if(!record(m_dynamic.commandBuffer, imageIndex))
+            if(!record(cmdbuf, imageIndex))
                 return false;
             
             VqSubmitInfo submitInfo;
@@ -464,10 +456,10 @@ namespace yq {
             VkSemaphore waitSemaphores[] = {m_imageAvailableSemaphore};
             VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
             submitInfo.waitSemaphoreCount = 1;
-            submitInfo.pWaitSemaphores = waitSemaphores;
-            submitInfo.pWaitDstStageMask = waitStages;
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &m_dynamic.commandBuffer;
+            submitInfo.pWaitSemaphores      = waitSemaphores;
+            submitInfo.pWaitDstStageMask    = waitStages;
+            submitInfo.commandBufferCount   = (uint32_t) m_dynamic.commandBuffers.size();
+            submitInfo.pCommandBuffers      = m_dynamic.commandBuffers.data();
 
             VkSemaphore signalSemaphores[] = {m_renderFinishedSemaphore};
             submitInfo.signalSemaphoreCount = 1;
@@ -478,18 +470,6 @@ namespace yq {
                 return false;
             }
                 
-            VkSubpassDependency dependency{};
-            dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-            dependency.dstSubpass = 0;
-            dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            dependency.srcAccessMask = 0;
-            dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-            
-            VqRenderPassCreateInfo renderPassInfo;
-            renderPassInfo.dependencyCount = 1;
-            renderPassInfo.pDependencies = &dependency;
-
             VqPresentInfoKHR presentInfo;
 
             presentInfo.waitSemaphoreCount = 1;
@@ -520,7 +500,7 @@ namespace yq {
 
         VkCommandBuffer     Window::command_buffer() const
         {
-            return m_dynamic.commandBuffer;
+            return m_dynamic.commandBuffers[0];
         }
 
         void Window::focus()
