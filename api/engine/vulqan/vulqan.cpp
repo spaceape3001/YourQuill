@@ -7,6 +7,7 @@
 #include "VqCommandBuffers.ipp"
 #include "VqCommandPool.ipp"
 #include "VqDescriptorPool.ipp"
+#include "VqDevice.ipp"
 #include "VqEnums.ipp"
 #include "VqFence.ipp"
 #include "VqFencePool.ipp"

@@ -56,105 +56,64 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-
         Window::Window(const WindowCreateInfo&i)
         {
-        yInfo() << "Creating window....";
-            init(i);
+            try {
+                VkInstance     inst  = Application::vulkan();
+                if(!inst)
+                    throw VqException("Vulkan has not been initialized!");
+                
+                
+                VkPhysicalDevice    gpu = i.device;
+                gpu  = i.device;
+                if(!gpu){
+                    gpu  = vqFirstDevice();
+                    if(!gpu)
+                        throw VqException("Cannot create window without any devices!");
+                }
+
+                m_physical                  = VqGPU(gpu);
+                yNotice() << "Using (" << to_string(m_physical.device_type()) << "): " << m_physical.device_name();
+
+                m_window                    = VqWindow(this, i);
+                m_surface                   = VqSurface(m_physical, m_window);
+                
+                DeviceCreateInfo    dci;
+                dci.extensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+                m_device                    = VqDevice(m_surface, dci);
+
+                //if(!init_logical())
+                    //throw VqException("");
+                
+
+                    //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
+            
+                m_presentMode               = m_surface.supports(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
+                    
+                m_commandPool               = VqCommandPool(m_device, m_device.graphics().family());
+                
+                m_renderPass                = VqRenderPass(this);
+                m_imageAvailableSemaphore   = VqSemaphore(m_device);
+                m_renderFinishedSemaphore   = VqSemaphore(m_device);
+                m_inFlightFence             = VqFence(m_device);
+                m_descriptorPool            = VqDescriptorPool(m_device, i.descriptors);
+
+                if(!init(m_dynamic))
+                    throw VqException("");
+                
+                set_clear(i.clear);
+                return;
+            } 
+            catch(VqException& ex){
+                yCritical() << ex.what();
+            }
+            kill();
         }
         
         Window::~Window()
         {
             kill();
         }
-
-        //bool Window::init_physical(const WindowCreateInfo& i)
-        //{
-            //if(m_physical)
-                //return true;
-        
-            //m_physical  = i.device;
-            //if(!m_physical){
-                //m_physical  = vqFirstDevice();
-                //if(!m_physical){
-                    //vqCritical << "Cannot create window without any devices!";
-                    //return false;
-                //}
-            //}
-            //return true;
-        //}
-
-        bool Window::init_logical()
-        {
-            if(m_device)
-                return true;    // already initialized!
-                
-            std::vector<const char*> deviceExtensions = {
-                VK_KHR_SWAPCHAIN_EXTENSION_NAME
-            };
-
-            auto queueInfos         = vqFindQueueFamilies(m_physical, m_surface);
-            if(!queueInfos.graphics.has_value()){
-                vqCritical << "Unable to get a queue with graphic capability!";
-                return false;
-            }
-            if(!queueInfos.present.has_value()){
-                vqCritical << "Unable to find a present queue!";
-                return false;
-            }
-        
-            std::vector<VkDeviceQueueCreateInfo> qci;
-            float quePri    = 1.0f;
-            uint32_t    qgf  = queueInfos.graphics.value();
-            uint32_t    qpf  = queueInfos.present.value();
-
-            for(uint32_t i : std::set<uint32_t>({ qgf, qpf })){
-                if(i == UINT32_MAX)
-                    continue;
-            
-                VqDeviceQueueCreateInfo info;
-                info.queueFamilyIndex = i;
-                info.queueCount = 1;
-                info.pQueuePriorities    = &quePri;
-                qci.push_back(info);
-            }
-
-            const Application*   app    = Application::app();
-            if(!app){
-                vqCritical << "Unintialized or no application present!";
-                return false;
-            }
-        
-            VkPhysicalDeviceFeatures    df{};
-            df.fillModeNonSolid         = VK_TRUE;
-
-            VqDeviceCreateInfo          dci;
-            dci.pQueueCreateInfos        = qci.data();
-            dci.queueCreateInfoCount     = (uint32_t) qci.size();
-            dci.pEnabledFeatures         = &df;
-            
-            dci.enabledLayerCount        = (uint32_t) app->m_layers.size();
-            if(dci.enabledLayerCount)
-                dci.ppEnabledLayerNames  = app->m_layers.data();
-        
-            dci.enabledExtensionCount    = (uint32_t) deviceExtensions.size();
-            if(!deviceExtensions.empty())
-                dci.ppEnabledExtensionNames = deviceExtensions.data();
-            
-            if(vkCreateDevice(m_physical, &dci, nullptr, &m_device) != VK_SUCCESS){
-                vqCritical << "Unable to create logical device!";
-                return false;
-            }
-            
-                /*
-                    Graphics queues
-                */
-            m_graphics  = VqQueues(m_device, qgf, 1 );
-            m_present   = VqQueues(m_device, qpf, 1 );
-            return true;
-        }
-        
-        
 
         bool Window::init(DynamicStuff&ds, VkSwapchainKHR old)
         {
@@ -202,8 +161,8 @@ namespace yq {
             createInfo.imageArrayLayers = 1;    // we're not steroscopic
             createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
             
-            uint32_t queueFamilyIndices[] = {m_graphics.family(), m_present.family()};
-            if (m_graphics.family() != m_present.family()) {
+            uint32_t queueFamilyIndices[] = {m_device.graphics().family(), m_device.present().family()};
+            if (m_device.graphics().family() != m_device.present().family()) {
                 createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
                 createInfo.queueFamilyIndexCount = 2;
                 createInfo.pQueueFamilyIndices = queueFamilyIndices;
@@ -291,58 +250,6 @@ namespace yq {
             return true;            
         }
 
-        bool Window::init(const WindowCreateInfo& i)
-        {
-            try {
-                VkInstance     inst  = Application::vulkan();
-                if(!inst)
-                    throw VqException("Vulkan has not been initialized!");
-                
-                
-                VkPhysicalDevice    gpu = i.device;
-                gpu  = i.device;
-                if(!gpu){
-                    gpu  = vqFirstDevice();
-                    if(!gpu)
-                        throw VqException("Cannot create window without any devices!");
-                }
-
-                m_physical   = VqGPU(gpu);
-                yNotice() << "Using (" << to_string(m_physical.device_type()) << "): " << m_physical.device_name();
-
-                m_window    = VqWindow(this, i);
-                m_surface   = VqSurface(m_physical, m_window);
-
-                if(!init_logical())
-                    return false;
-                
-
-                    //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
-            
-                m_presentMode          = m_surface.supports(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
-                    
-                m_commandPool           = VqCommandPool(m_device, m_graphics.family());
-                
-                m_renderPass                = VqRenderPass(this);
-                m_imageAvailableSemaphore   = VqSemaphore(m_device);
-                m_renderFinishedSemaphore   = VqSemaphore(m_device);
-                m_inFlightFence             = VqFence(m_device);
-                m_descriptorPool            = VqDescriptorPool(m_device, i.descriptors);
-
-                if(!init(m_dynamic))
-                    return false;
-                
-                set_clear(i.clear);
-//                auto_kill.clear();  // disarm the safety kill
-                return true;
-            } 
-            catch(VqException& ex){
-                yCritical() << ex.what();
-            }
-            kill();
-            return false;
-        }
-
 
         void Window::kill(DynamicStuff&ds)
         {
@@ -377,16 +284,16 @@ namespace yq {
             m_inFlightFence             = {};
             m_renderPass                = {};
             m_commandPool               = {};
-            m_graphics                  = {};
-            m_present                   = {};
+            //m_graphics                  = {};
+            //m_present                   = {};
+            m_device                    = {};
+            //if(m_device){
+                //vkDestroyDevice(m_device, nullptr);
+                //m_device   = nullptr;
+            //}
             
-            if(m_device){
-                vkDestroyDevice(m_device, nullptr);
-                m_device   = nullptr;
-            }
-            
-            m_surface       = {};
-            m_window        = {};
+            m_surface                   = {};
+            m_window                    = {};
             
             m_physical = {};
         }
@@ -465,7 +372,7 @@ namespace yq {
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = signalSemaphores;
 
-            if (vkQueueSubmit(m_graphics[0], 1, &submitInfo, m_inFlightFence) != VK_SUCCESS) {
+            if (vkQueueSubmit(m_device.graphics(0), 1, &submitInfo, m_inFlightFence) != VK_SUCCESS) {
                 vqError << "Failed to submit draw command buffer!";
                 return false;
             }
@@ -478,7 +385,7 @@ namespace yq {
             presentInfo.pSwapchains = &m_dynamic.swapChain;
             presentInfo.pImageIndices = &imageIndex;
             presentInfo.pResults = nullptr; // Optional
-            vkQueuePresentKHR(m_present[0], &presentInfo);
+            vkQueuePresentKHR(m_device.present(0), &presentInfo);
             return true;
         }
         
@@ -511,12 +418,12 @@ namespace yq {
 
         VkQueue     Window::graphics_queue() const 
         { 
-            return m_graphics[0]; 
+            return m_device.graphics(0); 
         }
         
         uint32_t    Window::graphics_queue_family() const 
         { 
-            return m_graphics.family(); 
+            return m_device.graphics().family(); 
         }
 
         int  Window::height() const

@@ -61,6 +61,8 @@ set(yq_engine_sources
     ./vulqan/VqCommandPool.hpp
     ./vulqan/VqDescriptorPool.ipp
     ./vulqan/VqDescriptorPool.hpp
+    ./vulqan/VqDevice.ipp
+    ./vulqan/VqDevice.hpp
     ./vulqan/VqEnums.ipp
     ./vulqan/VqFence.ipp
     ./vulqan/VqFence.hpp

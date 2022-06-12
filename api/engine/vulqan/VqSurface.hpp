@@ -25,20 +25,18 @@ namespace yq {
             VqSurface&          operator=(VqSurface&&);
             ~VqSurface();
             
-            VkSurfaceKHR        surface() const { return m_surface; }
             operator bool () const { return m_surface != nullptr; }
             operator VkSurfaceKHR() const { return m_surface; }
-            
-            VkFormat            format() const { return m_format; }
-            VkColorSpaceKHR     color_space() const { return m_colorSpace; }
-            
+
             VkSurfaceCapabilitiesKHR    capabilities() const;
-            
-            bool    supports(VkPresentModeKHR) const;
-            bool    supports(VkFormat) const;
-            
-            VkColorSpaceKHR color_space(VkFormat) const;
-            
+            VkColorSpaceKHR             color_space(VkFormat) const;
+            VkColorSpaceKHR             color_space() const { return m_colorSpace; }
+            VkFormat                    format() const { return m_format; }
+            VkPhysicalDevice            physical() const { return m_physical; }
+            bool                        supports(VkPresentModeKHR) const;
+            bool                        supports(VkFormat) const;
+            VkSurfaceKHR                surface() const { return m_surface; }
+
         private:
             void    dtor();
             void    move(VqSurface&&);

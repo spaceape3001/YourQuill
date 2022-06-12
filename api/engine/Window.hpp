@@ -19,6 +19,7 @@
 #include <engine/vulqan/VqCommandBuffers.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
 #include <engine/vulqan/VqDescriptorPool.hpp>
+#include <engine/vulqan/VqDevice.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqGPU.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
@@ -237,20 +238,16 @@ namespace yq {
             VqGPU               m_physical;
             VqWindow            m_window;
             VqSurface           m_surface;
-
-
-            VqQueues            m_graphics, m_present;
+            VqDevice            m_device;
             VqCommandPool       m_commandPool;
-            VkDevice            m_device                    = nullptr;
             VkPresentModeKHR    m_presentMode               = {};
-            //VkFormat            m_surfaceFormat;
-            //VkColorSpaceKHR     m_surfaceColorSpace;
-            VkClearValue        m_clear;
             VqRenderPass        m_renderPass;
             VqSemaphore         m_imageAvailableSemaphore;
             VqSemaphore         m_renderFinishedSemaphore;
             VqFence             m_inFlightFence;
             VqDescriptorPool    m_descriptorPool;
+
+            VkClearValue        m_clear;
             std::atomic<bool>   m_rebuildSwap               = { false };
 
             
@@ -264,8 +261,6 @@ namespace yq {
         private:
             bool    init(DynamicStuff&, VkSwapchainKHR old=nullptr);
             void    kill(DynamicStuff&);
-            bool    init(const WindowCreateInfo& i);
-            bool    init_physical(const WindowCreateInfo& i);
             bool    init_logical();
             void    kill();
             bool    record(VkCommandBuffer, uint32_t);
