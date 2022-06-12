@@ -68,8 +68,12 @@ set(yq_engine_sources
     ./vulqan/VqFence.hpp
     ./vulqan/VqFencePool.ipp
     ./vulqan/VqFencePool.hpp
+    ./vulqan/VqFramebuffers.cpp
+    ./vulqan/VqFramebuffers.hpp
     ./vulqan/VqGPU.ipp
     ./vulqan/VqGPU.hpp
+    ./vulqan/VqImageViews.cpp
+    ./vulqan/VqImageViews.hpp
     ./vulqan/VqLogging.ipp
     ./vulqan/VqLogging.hpp
     ./vulqan/VqMonitor.ipp

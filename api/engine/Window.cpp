@@ -197,54 +197,10 @@ namespace yq {
             //      IMAGE VIEWS       
             //  ----------------------------
 
-            ds.imageViews.resize(ds.images.size(), nullptr);
-            for(size_t i=0;i<ds.images.size(); ++i){
-                VqImageViewCreateInfo   createInfo;
-                createInfo.image        = ds.images[i];
-                createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
-                createInfo.format       = m_surface.format();
-                createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-                createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-                createInfo.subresourceRange.baseMipLevel = 0;
-                createInfo.subresourceRange.levelCount = 1;
-                createInfo.subresourceRange.baseArrayLayer = 0;
-                createInfo.subresourceRange.layerCount = 1;
-                if(vkCreateImageView(m_device, &createInfo, nullptr, &ds.imageViews[i]) != VK_SUCCESS) {
-                    vqCritical << "Failed to create one of the Swap Image Viewers!";
-                }
-            }
-            
-            //  ----------------------------
-            //      FRAME BUFFER
-            //  ----------------------------
 
-            ds.frameBuffers.resize(ds.imageViews.size(), nullptr);
-            for (size_t i = 0; i < ds.imageViews.size(); i++) {
-                VkImageView attachments[] = {
-                    ds.imageViews[i]
-                };
 
-                VqFramebufferCreateInfo framebufferInfo;
-                framebufferInfo.renderPass = m_renderPass;
-                framebufferInfo.attachmentCount = 1;
-                framebufferInfo.pAttachments = attachments;
-                framebufferInfo.width = ds.extents.width;
-                framebufferInfo.height = ds.extents.height;
-                framebufferInfo.layers = 1;
-
-                if (vkCreateFramebuffer(m_device, &framebufferInfo, nullptr, &ds.frameBuffers[i]) != VK_SUCCESS) {
-                    vqCritical << "Failed to create framebuffer!";
-                    return false;
-                }
-            }
-
-            //  ----------------------------
-            //      COMMAND BUFFER
-            //  ----------------------------
-
+            ds.imageViews   = VqImageViews(m_device, m_surface, ds.images);
+            ds.frameBuffers = VqFramebuffers(m_device, m_renderPass, ds.extents, ds.imageViews);
             ds.commandBuffers   = VqCommandBuffers(m_commandPool, 1);
 
             return true;            
@@ -254,16 +210,8 @@ namespace yq {
         void Window::kill(DynamicStuff&ds)
         {
             ds.commandBuffers  = {};
-            for (VkFramebuffer fb : ds.frameBuffers) {
-                if(fb)
-                    vkDestroyFramebuffer(m_device, fb, nullptr);
-            }
-            ds.frameBuffers.clear();
-            for(auto iv : ds.imageViews){
-                if(iv)
-                    vkDestroyImageView(m_device, iv, nullptr);
-            }
-            ds.imageViews.clear();
+            ds.frameBuffers     = {};
+            ds.imageViews       = {};
             if(ds.swapChain){
                 vkDestroySwapchainKHR(m_device, ds.swapChain, nullptr);
                 ds.swapChain  = nullptr;

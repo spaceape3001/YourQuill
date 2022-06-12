@@ -21,7 +21,9 @@
 #include <engine/vulqan/VqDescriptorPool.hpp>
 #include <engine/vulqan/VqDevice.hpp>
 #include <engine/vulqan/VqFence.hpp>
+#include <engine/vulqan/VqFramebuffers.hpp>
 #include <engine/vulqan/VqGPU.hpp>
+#include <engine/vulqan/VqImageViews.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqRenderPass.hpp>
 #include <engine/vulqan/VqSemaphore.hpp>
@@ -222,13 +224,13 @@ namespace yq {
             //! This is what needs to change with every resize!
             struct DynamicStuff {
                 std::vector<VkImage>        images;
-                std::vector<VkImageView>    imageViews;
-                std::vector<VkFramebuffer>  frameBuffers;
                 VkSwapchainKHR              swapChain           = nullptr;
                 VqCommandBuffers            commandBuffers;
                 VkExtent2D                  extents             = { 0, 0 };
                 uint32_t                    imageCount          = 0;
                 uint32_t                    minImageCount       = 0;
+                VqImageViews                imageViews;
+                VqFramebuffers              frameBuffers;
 
                 VkRect2D    def_scissor() const;
                 VkViewport  def_viewport() const;
