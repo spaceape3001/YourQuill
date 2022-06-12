@@ -21,5 +21,6 @@
 #include "VqSemaphore.ipp"
 #include "VqShaderStages.ipp"
 #include "VqSurface.ipp"
+#include "VqSwapchain.ipp"
 #include "VqUtils.ipp"
 #include "VqWindow.ipp"

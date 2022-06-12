@@ -36,6 +36,7 @@ namespace yq {
             bool                        supports(VkPresentModeKHR) const;
             bool                        supports(VkFormat) const;
             VkSurfaceKHR                surface() const { return m_surface; }
+            GLFWwindow*                 window() const { return m_window; }
 
         private:
             void    dtor();
@@ -46,6 +47,7 @@ namespace yq {
             std::vector<VkSurfaceFormatKHR>     m_formats;
             VkFormat                            m_format;
             VkColorSpaceKHR                     m_colorSpace;
+            GLFWwindow*                         m_window    = nullptr;
         };
     
     }

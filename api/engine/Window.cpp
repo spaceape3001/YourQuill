@@ -78,20 +78,14 @@ namespace yq {
                 m_window                    = VqWindow(this, i);
                 m_surface                   = VqSurface(m_physical, m_window);
                 
-                DeviceCreateInfo    dci;
+                VqDevice::Config    dci;
                 dci.extensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
                 m_device                    = VqDevice(m_surface, dci);
 
-                //if(!init_logical())
-                    //throw VqException("");
-                
-
-                    //  EVENTUALLY ENCAPSULATE THE FOLLOWING....
-            
+           
                 m_presentMode               = m_surface.supports(i.pmode) ? i.pmode : VK_PRESENT_MODE_FIFO_KHR;
                     
                 m_commandPool               = VqCommandPool(m_device, m_device.graphics().family());
-                
                 m_renderPass                = VqRenderPass(this);
                 m_imageAvailableSemaphore   = VqSemaphore(m_device);
                 m_renderFinishedSemaphore   = VqSemaphore(m_device);
@@ -117,90 +111,15 @@ namespace yq {
 
         bool Window::init(DynamicStuff&ds, VkSwapchainKHR old)
         {
-            //  ----------------------------
-            //      SWAP CHAIN       
-            //  ----------------------------
+            VqSwapchain::Config scfg;
+            scfg.pmode      = m_presentMode;
+            scfg.old        = old;
+            ds.swapchain    = VqSwapchain(m_device, m_surface, scfg);
             
-            VkSurfaceCapabilitiesKHR    capabilities = m_surface.capabilities();
-            if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
-                ds.extents = capabilities.currentExtent;
-            } else {
-                int w, h;
-                glfwGetFramebufferSize(m_window, &w, &h);
-                ds.extents = {};
-                ds.extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-                ds.extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
-            }
-
-            #if 0
-            int w, h;
-            glfwGetFramebufferSize(m_window, &w, &h);
-            vqInfo << "init dymamic stuff\n"<<
-            "Frame itself is [" << w << 'x' << h << "] vs\n" <<
-            "Image extents is " << ds.extents << '\n' <<
-            "Cur is " << capabilities.currentExtent << '\n' <<
-            "Min is " << capabilities.minImageExtent << '\n' <<
-            "Max is " << capabilities.maxImageExtent
-            ;
-            #endif
-
-            ds.minImageCount               = capabilities.minImageCount;
-            if(ds.minImageCount < 2)
-                ds.minImageCount   = 2;
-            ds.imageCount                  = ds.minImageCount + 1;
-            if (capabilities.maxImageCount > 0 && ds.imageCount > capabilities.maxImageCount) {
-                ds.imageCount = capabilities.maxImageCount;
-            }
-
-            VqSwapchainCreateInfoKHR    createInfo;
-            createInfo.surface          = m_surface;
-            createInfo.minImageCount    = ds.imageCount;
-            createInfo.imageFormat      = m_surface.format();
-            createInfo.imageColorSpace  = m_surface.color_space();
-            createInfo.imageExtent      = ds.extents;
-            createInfo.imageArrayLayers = 1;    // we're not steroscopic
-            createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-            
-            uint32_t queueFamilyIndices[] = {m_device.graphics().family(), m_device.present().family()};
-            if (m_device.graphics().family() != m_device.present().family()) {
-                createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-                createInfo.queueFamilyIndexCount = 2;
-                createInfo.pQueueFamilyIndices = queueFamilyIndices;
-            } else {
-                createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-                createInfo.queueFamilyIndexCount = 0; // Optional
-                createInfo.pQueueFamilyIndices = nullptr; // Optional
-            }        
-            createInfo.preTransform     = capabilities.currentTransform;
-            createInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode      = m_presentMode;
-            createInfo.clipped          = VK_TRUE;
-            
-                // TEMPORARY UNTIL WE GET THE NEW ONE
-            createInfo.oldSwapchain = old;
-            
-            if (vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &ds.swapChain) != VK_SUCCESS){
-                ds.swapChain   = nullptr;
-                vqCritical << "Failed to create the SWAP chain!";
-                return false;
-            }
-
-            //  ----------------------------
-            //      IMAGES
-            //  ----------------------------
-
-            vkGetSwapchainImagesKHR(m_device, ds.swapChain, &ds.imageCount, nullptr);
-            ds.images.resize(ds.imageCount, nullptr);
-            vkGetSwapchainImagesKHR(m_device, ds.swapChain, &ds.imageCount, ds.images.data());    
-
-            //  ----------------------------
-            //      IMAGE VIEWS       
-            //  ----------------------------
-
-
-
+            ds.images       = ds.swapchain.images();
+            ds.imageCount   = ds.images.size();
             ds.imageViews       = VqImageViews(m_device, m_surface, ds.images);
-            ds.frameBuffers     = VqFrameBuffers(m_device, m_renderPass, ds.extents, ds.imageViews);
+            ds.frameBuffers     = VqFrameBuffers(m_device, m_renderPass, ds.swapchain.extents(), ds.imageViews);
             ds.commandBuffers   = VqCommandBuffers(m_commandPool, 1);
 
             return true;            
@@ -212,10 +131,7 @@ namespace yq {
             ds.commandBuffers  = {};
             ds.frameBuffers     = {};
             ds.imageViews       = {};
-            if(ds.swapChain){
-                vkDestroySwapchainKHR(m_device, ds.swapChain, nullptr);
-                ds.swapChain  = nullptr;
-            }
+            ds.swapchain        = {};
         }
 
         void Window::kill()
@@ -232,13 +148,7 @@ namespace yq {
             m_inFlightFence             = {};
             m_renderPass                = {};
             m_commandPool               = {};
-            //m_graphics                  = {};
-            //m_present                   = {};
             m_device                    = {};
-            //if(m_device){
-                //vkDestroyDevice(m_device, nullptr);
-                //m_device   = nullptr;
-            //}
             
             m_surface                   = {};
             m_window                    = {};
@@ -265,7 +175,7 @@ namespace yq {
             renderPassInfo.renderPass = m_renderPass;
             renderPassInfo.framebuffer = m_dynamic.frameBuffers[imageIndex];
             renderPassInfo.renderArea.offset = {0, 0};
-            renderPassInfo.renderArea.extent = m_dynamic.extents;
+            renderPassInfo.renderArea.extent = m_dynamic.swapchain.extents();
 
             renderPassInfo.clearValueCount = 1;
             renderPassInfo.pClearValues = &m_clear;
@@ -288,7 +198,7 @@ namespace yq {
             if(rebuild){
                 vkDeviceWaitIdle(m_device);
                 DynamicStuff        newStuff;
-                init(newStuff, m_dynamic.swapChain);
+                init(newStuff, m_dynamic.swapchain);
                 std::swap(m_dynamic, newStuff);
                 kill(newStuff);
                 
@@ -300,7 +210,7 @@ namespace yq {
         
             m_inFlightFence.wait_reset();
             uint32_t imageIndex = 0;
-            vkAcquireNextImageKHR(m_device, m_dynamic.swapChain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+            vkAcquireNextImageKHR(m_device, m_dynamic.swapchain, UINT64_MAX, m_imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
             vkResetCommandBuffer(cmdbuf, 0);
             
             if(!record(cmdbuf, imageIndex))
@@ -326,11 +236,13 @@ namespace yq {
             }
                 
             VqPresentInfoKHR presentInfo;
+            
+            VkSwapchainKHR      swapchain   = m_dynamic.swapchain;
 
             presentInfo.waitSemaphoreCount = 1;
             presentInfo.pWaitSemaphores = signalSemaphores;
             presentInfo.swapchainCount = 1;
-            presentInfo.pSwapchains = &m_dynamic.swapChain;
+            presentInfo.pSwapchains = &swapchain;
             presentInfo.pImageIndices = &imageIndex;
             presentInfo.pResults = nullptr; // Optional
             vkQueuePresentKHR(m_device.present(0), &presentInfo);
@@ -559,12 +471,12 @@ namespace yq {
 
         VkRect2D    Window::swap_def_scissor() const
         {
-            return m_dynamic.def_scissor();
+            return m_dynamic.swapchain.def_scissor();
         }
         
         VkViewport  Window::swap_def_viewport() const
         {
-            return m_dynamic.def_viewport();
+            return m_dynamic.swapchain.def_viewport();
         }
 
         uint32_t    Window::swap_image_count() const
@@ -574,17 +486,17 @@ namespace yq {
 
         uint32_t    Window::swap_height() const
         {
-            return m_dynamic.extents.height;
+            return m_dynamic.swapchain.height();
         }
 
         uint32_t    Window::swap_min_image_count() const
         {
-            return m_dynamic.minImageCount;
+            return m_dynamic.swapchain.min_image_count();
         }
 
         uint32_t    Window::swap_width() const
         {
-            return m_dynamic.extents.width;
+            return m_dynamic.swapchain.width();
         }
         
         int  Window::width() const
@@ -597,28 +509,6 @@ namespace yq {
             return ret;
         }
         
-        ////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////
-
-        VkRect2D    Window::DynamicStuff::def_scissor() const
-        {
-            VkRect2D    ret{};
-            ret.offset  = { 0, 0 };
-            ret.extent  = extents;
-            return ret;
-        }
-        
-        VkViewport  Window::DynamicStuff::def_viewport() const
-        {
-            VkViewport  ret{};
-            ret.x = 0.0f;
-            ret.y = 0.0f;
-            ret.width = (float) extents.width;
-            ret.height = (float) extents.height;
-            ret.minDepth = 0.0f;
-            ret.maxDepth = 1.0f;
-            return ret;
-        }
         
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////

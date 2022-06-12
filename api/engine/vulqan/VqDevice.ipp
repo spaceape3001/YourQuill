@@ -17,7 +17,7 @@
 
 namespace yq {
     namespace engine {
-        VqDevice::VqDevice(const VqSurface&surf, const DeviceCreateInfo& dci)
+        VqDevice::VqDevice(const VqSurface&surf, const Config& dci)
         {
             const Application*   app    = Application::app();
             if(!app)

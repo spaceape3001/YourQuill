@@ -28,6 +28,7 @@ namespace yq {
                 // right now, cheating
                 m_format        = VK_FORMAT_B8G8R8A8_SRGB;
                 m_colorSpace    = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+                m_window        = win;
             }
         }
         
@@ -82,6 +83,7 @@ namespace yq {
             m_formats       = std::move(mv.m_formats);
             m_format        = mv.m_format;
             m_colorSpace    = mv.m_colorSpace;
+            m_window        = mv.m_window;
         }
 
         bool    VqSurface::supports(VkPresentModeKHR p) const

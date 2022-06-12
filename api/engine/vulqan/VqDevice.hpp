@@ -19,16 +19,19 @@ namespace yq {
         
         using QueueSpec = std::variant<std::monostate, uint32_t, std::vector<float>>;
         
-        struct DeviceCreateInfo {
-            std::vector<const char*>    extensions;
-            QueueSpec                   graphics;
-            QueueSpec                   present;
-        };
-        
         class VqDevice : trait::not_copyable {
         public:
+        
+            struct Config {
+                std::vector<const char*>    extensions;
+                QueueSpec                   graphics;
+                QueueSpec                   present;
+                
+                Config(){}
+            };
+        
             VqDevice(){}
-            explicit VqDevice(const VqSurface&, const DeviceCreateInfo& dci=DeviceCreateInfo());
+            explicit VqDevice(const VqSurface&, const Config& dci=Config());
             VqDevice(VqDevice&&);
             VqDevice& operator=(VqDevice&&);
             ~VqDevice();

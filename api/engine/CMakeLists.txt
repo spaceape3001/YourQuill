@@ -91,6 +91,8 @@ set(yq_engine_sources
     ./vulqan/VqStructs.hpp
     ./vulqan/VqSurface.ipp
     ./vulqan/VqSurface.hpp
+    ./vulqan/VqSwapchain.ipp
+    ./vulqan/VqSwapchain.hpp
     ./vulqan/VqUtils.ipp
     ./vulqan/VqUtils.hpp
     ./vulqan/VqWindow.ipp
