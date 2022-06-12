@@ -19,7 +19,7 @@ namespace yq {
         public:
     
             VqWindow(){}
-            VqWindow(Window*, const WindowCreateInfo& wci=WindowCreateInfo());
+            explicit VqWindow(Window*, const WindowCreateInfo& wci=WindowCreateInfo());
             VqWindow(VqWindow&&);
             VqWindow& operator=(VqWindow&&);
             ~VqWindow();

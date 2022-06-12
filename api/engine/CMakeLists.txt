@@ -72,6 +72,8 @@ set(yq_engine_sources
     ./vulqan/VqPipeline.hpp
     ./vulqan/VqQueues.ipp
     ./vulqan/VqQueues.hpp
+    ./vulqan/VqRenderPass.ipp
+    ./vulqan/VqRenderPass.hpp
     ./vulqan/VqSemaphore.ipp
     ./vulqan/VqSemaphore.hpp
     ./vulqan/VqShaderStages.ipp

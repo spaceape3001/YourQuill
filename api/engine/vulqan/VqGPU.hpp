@@ -14,7 +14,7 @@ namespace yq {
         public:
         
             VqGPU() {}
-            VqGPU(VkPhysicalDevice);
+            explicit VqGPU(VkPhysicalDevice);
             VqGPU(const VqGPU&);
             VqGPU& operator=(const VqGPU&);
             ~VqGPU();

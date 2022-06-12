@@ -15,7 +15,7 @@ namespace yq {
         public:
         
             VqFence(){}
-            VqFence(VkDevice);
+            explicit VqFence(VkDevice);
             
             VqFence(VqFence&&);
             VqFence&    operator=(VqFence&&);

@@ -20,6 +20,7 @@
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqGPU.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
+#include <engine/vulqan/VqRenderPass.hpp>
 #include <engine/vulqan/VqSemaphore.hpp>
 #include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqWindow.hpp>
@@ -242,7 +243,7 @@ namespace yq {
             VkFormat            m_surfaceFormat;
             VkColorSpaceKHR     m_surfaceColorSpace;
             VkClearValue        m_clear;
-            VkRenderPass        m_renderPass                = nullptr;
+            VqRenderPass        m_renderPass;
             VqSemaphore         m_imageAvailableSemaphore;
             VqSemaphore         m_renderFinishedSemaphore;
             VqFence             m_inFlightFence;
@@ -264,7 +265,7 @@ namespace yq {
             bool    init(const WindowCreateInfo& i);
             bool    init_physical(const WindowCreateInfo& i);
             bool    init_logical();
-            bool    init_render_pass();
+//            bool    init_render_pass();
             bool    init_descriptor_pool(const WindowCreateInfo&i);
             void    kill();
             bool    record(VkCommandBuffer, uint32_t);

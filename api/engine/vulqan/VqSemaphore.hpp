@@ -14,7 +14,7 @@ namespace yq {
         class VqSemaphore : trait::not_copyable {
         public:
             VqSemaphore(){}
-            VqSemaphore(VkDevice);
+            explicit VqSemaphore(VkDevice);
             VqSemaphore(VqSemaphore&&);
             VqSemaphore& operator=(VqSemaphore&&);
             ~VqSemaphore();

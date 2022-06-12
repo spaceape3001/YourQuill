@@ -154,46 +154,6 @@ namespace yq {
             return true;
         }
         
-
-        bool Window::init_render_pass()
-        {
-            if(m_renderPass)
-                return true;
-                
-                //  Render pass
-            VkAttachmentDescription colorAttachment{};
-            colorAttachment.format = m_surfaceFormat;
-            colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-            colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;        
-            colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-            colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-            
-            VkAttachmentReference colorAttachmentRef{};
-            colorAttachmentRef.attachment = 0;
-            colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-            VkSubpassDescription subpass{};
-            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;        
-
-            subpass.colorAttachmentCount = 1;
-            subpass.pColorAttachments = &colorAttachmentRef;
-            
-            VqRenderPassCreateInfo renderPassInfo{};
-            renderPassInfo.attachmentCount = 1;
-            renderPassInfo.pAttachments = &colorAttachment;
-            renderPassInfo.subpassCount = 1;
-            renderPassInfo.pSubpasses = &subpass;
-
-            if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) {
-                vqCritical << "Unable to create the render pass!";
-                return false;
-            } 
-
-            return true;
-        }
         
 
         bool Window::init(DynamicStuff&ds, VkSwapchainKHR old)
@@ -406,9 +366,7 @@ namespace yq {
                     
                 m_commandPool           = VqCommandPool(m_device, m_graphics.family());
                 
-                if(!init_render_pass())
-                    return false;
-                    
+                m_renderPass                = VqRenderPass(this);
                 m_imageAvailableSemaphore   = VqSemaphore(m_device);
                 m_renderFinishedSemaphore   = VqSemaphore(m_device);
                 m_inFlightFence             = VqFence(m_device);
@@ -461,18 +419,14 @@ namespace yq {
                 vkDestroyDescriptorPool(m_device, m_descriptorPool, nullptr);
                 m_descriptorPool   = nullptr;
             }
+            
             m_imageAvailableSemaphore   = {};
             m_renderFinishedSemaphore   = {};
             m_inFlightFence             = {};
-
-            if(m_renderPass){
-                vkDestroyRenderPass(m_device, m_renderPass, nullptr);
-                m_renderPass    = nullptr;
-            }
-            
-            m_commandPool   = {};
-            m_graphics      = {};
-            m_present       = {};
+            m_renderPass                = {};
+            m_commandPool               = {};
+            m_graphics                  = {};
+            m_present                   = {};
             
             if(m_device){
                 vkDestroyDevice(m_device, nullptr);

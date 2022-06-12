@@ -12,6 +12,7 @@
 #include "VqLogging.ipp"
 #include "VqMonitor.ipp"
 #include "VqQueues.ipp"
+#include "VqRenderPass.ipp"
 #include "VqSemaphore.ipp"
 #include "VqShaderStages.ipp"
 #include "VqSurface.ipp"
