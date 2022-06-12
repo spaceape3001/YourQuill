@@ -199,7 +199,7 @@ namespace yq {
         {
             std::set<std::string> ret;
             for(const auto& v : props)
-                ret << std::string(v.extensionName);
+                ret.insert(std::string(v.extensionName));
             return ret;
         }
 
@@ -207,7 +207,7 @@ namespace yq {
         {
             std::set<std::string> ret;
             for(const auto& v : props)
-                ret << std::string(v.layerName);
+                ret.insert(std::string(v.layerName));
             return ret;
         }
 
