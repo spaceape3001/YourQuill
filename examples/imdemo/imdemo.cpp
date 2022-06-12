@@ -53,8 +53,9 @@ int main(int argc, char* argv[])
     wi.title        = "ImGUI Demo!";
     wi.clear        = { 0.0, 0.2, 0.5, 1. };
     wi.resizable    = true;
+    //wi.pmode        = VK_PRESENT_MODE_IMMEDIATE_KHR;  // <-< Set this if you want to see how fast your CPU & GPU can go!  (Metrics under Tools menu.)
     Ref<DemoWindow>   window  = new DemoWindow(wi);
     
-    app.run_window(window.ptr(), 0.1);
+    app.run_window(window.ptr(), 0.0);
     return 0;
 }

@@ -179,6 +179,13 @@ namespace yq {
     }    
 
     #define YQ_MAKE_VERSION(major, minor, patch) ((((uint32_t)(major)) << 22) | (((uint32_t)(minor)) << 12) | ((uint32_t)(patch)))
+    
+    template <typename T>
+    void    steal(T*& ptr, T*& other)
+    {
+        ptr     = other;
+        other   = nullptr;
+    }
 }
 
 

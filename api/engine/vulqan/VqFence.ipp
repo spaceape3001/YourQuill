@@ -4,61 +4,54 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
+#include "VqException.hpp"
 #include "VqFence.hpp"
 #include "VqStructs.hpp"
-#include <engine/Window.hpp>
-#include <basic/Logging.hpp>
 
 namespace yq {
     namespace engine {
-        VqFence::VqFence()
+        VqFence::VqFence(VkDevice dev)
         {
-        }
-        
-        VqFence::VqFence(Window& v) : VqFence(v.logical())
-        {
-        }
-        
-        VqFence::VqFence(VkDevice v)
-        {
-            m_device    = v;
-            if(v){
-                VqFenceCreateInfo   fci;
-                fci.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-                VkResult    r   = vkCreateFence(m_device, &fci, nullptr,  &m_fence);
-                if(r != VK_SUCCESS){
-                    yError() << "Unable to create vulkan fence!";
-                    m_device    = nullptr;
-                    m_fence     = nullptr;
-                }
-            }
+            if(!dev)
+                return ;
+            m_device    = dev;
+            VqFenceCreateInfo   fci;
+            fci.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+            if(vkCreateFence(m_device, &fci, nullptr,  &m_fence) != VK_SUCCESS)
+                throw VqException("Unable to create fence!");
         }
 
         void        VqFence::dtor()
         {
-            if(m_fence && m_device){
+            if(m_fence){
                 vkDestroyFence(m_device, m_fence, nullptr);
                 m_fence     = nullptr;
-                m_device    = nullptr;
             }
+            m_device    = nullptr;
         }
         
         VqFence::VqFence(VqFence&&mv)
         {
-            std::swap(m_fence, mv.m_fence);
-            std::swap(m_device, mv.m_device);
+                move(std::move(mv));
         }
         
         VqFence&    VqFence::operator=(VqFence&& mv)
         {
             if(this != &mv){
                 dtor();
-                std::swap(m_fence, mv.m_fence);
-                std::swap(m_device, mv.m_device);
+                move(std::move(mv));
             }
             return *this;
         }
         
+        void    VqFence::move(VqFence&&mv)
+        {
+            steal(m_fence, mv.m_fence);
+            steal(m_device, mv.m_device);
+        }
+
         VkResult    VqFence::reset()
         {
             if(!m_fence) [[unlikely]]

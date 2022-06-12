@@ -20,6 +20,7 @@
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqGPU.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
+#include <engine/vulqan/VqSemaphore.hpp>
 #include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqWindow.hpp>
 #include <engine/vulqan/VqQueues.hpp>
@@ -205,7 +206,6 @@ namespace yq {
             friend class VqWindow;
         
             struct Command;
-            struct Pipeline;
             
             //struct Queue {
                 //VkQueue             queue   = nullptr;
@@ -231,7 +231,7 @@ namespace yq {
             };
 
             
-            VqGPU               m_physical                  = nullptr;
+            VqGPU               m_physical;
             VqWindow            m_window;
             VqSurface           m_surface;
             VqQueues            m_graphics, m_present;
@@ -243,8 +243,8 @@ namespace yq {
             VkColorSpaceKHR     m_surfaceColorSpace;
             VkClearValue        m_clear;
             VkRenderPass        m_renderPass                = nullptr;
-            VkSemaphore         m_imageAvailableSemaphore   = nullptr;
-            VkSemaphore         m_renderFinishedSemaphore   = nullptr;
+            VqSemaphore         m_imageAvailableSemaphore;
+            VqSemaphore         m_renderFinishedSemaphore;
             VqFence             m_inFlightFence;
             VkDescriptorPool    m_descriptorPool            = nullptr;
             uint32_t            m_descriptorCount           = 0;
@@ -266,21 +266,12 @@ namespace yq {
             bool    init_logical();
             bool    init_render_pass();
             bool    init_descriptor_pool(const WindowCreateInfo&i);
-            bool    init_sync();
             void    kill();
             bool    record(VkCommandBuffer, uint32_t);
             
             static void callback_resize(GLFWwindow*, int, int);
         };
         
-        struct Window::Pipeline {
-            VkPipelineLayout    layout      = nullptr;
-            VkPipeline          pipeline    = nullptr;
-            VkPipeline          wireframe   = nullptr;
-            
-            bool    init(Window*, const PipelineConfig&);
-            void    kill(Window*);
-        };
 
     }
 }

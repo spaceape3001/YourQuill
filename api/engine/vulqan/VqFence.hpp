@@ -11,13 +11,10 @@
 
 namespace yq {
     namespace engine {
-        class Window;
-        
         class VqFence : trait::not_copyable {
         public:
         
-            VqFence();
-            VqFence(Window&);
+            VqFence(){}
             VqFence(VkDevice);
             
             VqFence(VqFence&&);
@@ -26,16 +23,17 @@ namespace yq {
             VkResult    wait(uint64_t timeout=UINT64_MAX) const;
             VkResult    reset();
             
-            VkFence     vulkan() const { return m_fence; }
+            VkFence     fence() const { return m_fence; }
             
-            operator VkFence() const noexcept { return m_fence; }
+            operator    VkFence() const noexcept { return m_fence; }
             
             VkResult    wait_reset(uint64_t timeout=UINT64_MAX);
             
             bool        good() const { return m_fence != nullptr; }
         
         private:
-            void            dtor();
+            void    dtor();
+            void    move(VqFence&&);
             VkDevice        m_device = nullptr;
             VkFence         m_fence  = nullptr;
         };

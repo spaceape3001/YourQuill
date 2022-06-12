@@ -72,10 +72,8 @@ namespace yq {
 
         void    VqSurface::move(VqSurface&&mv)
         {
-            m_surface       = mv.m_surface;
-            mv.m_surface    = nullptr;
-            m_physical      = mv.m_physical;
-            mv.m_physical   = nullptr;
+            steal(m_surface, mv.m_surface);
+            steal(m_physical, mv.m_physical);
             m_presentModes  = std::move(mv.m_presentModes);
             m_formats       = std::move(mv.m_formats);
         }

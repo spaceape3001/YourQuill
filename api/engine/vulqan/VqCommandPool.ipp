@@ -7,6 +7,7 @@
 #include "VqCommandPool.hpp"
 #include "VqException.hpp"
 #include "VqStructs.hpp"
+#include <basic/preamble.hpp>
 
 namespace yq {
     namespace engine {
@@ -48,9 +49,8 @@ namespace yq {
         
         void    VqCommandPool::move(VqCommandPool&& mv)
         {
-            m_device    = mv.m_device;
-            m_pool      = mv.m_pool;
-            mv.m_pool   = nullptr;
+            steal(m_device, mv.m_device);
+            steal(m_pool, mv.m_pool);
         }
         
     }

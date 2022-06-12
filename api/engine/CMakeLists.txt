@@ -57,25 +57,29 @@ set(yq_engine_sources
     ./vulqan/vulqan.cpp
     ./vulqan/VqCommandPool.ipp
     ./vulqan/VqCommandPool.hpp
-    ./vulqan/VqEnums.cpp
-    ./vulqan/VqFence.cpp
+    ./vulqan/VqEnums.ipp
+    ./vulqan/VqFence.ipp
     ./vulqan/VqFence.hpp
-    ./vulqan/VqFencePool.cpp
+    ./vulqan/VqFencePool.ipp
     ./vulqan/VqFencePool.hpp
     ./vulqan/VqGPU.ipp
     ./vulqan/VqGPU.hpp
-    ./vulqan/VqLogging.cpp
+    ./vulqan/VqLogging.ipp
     ./vulqan/VqLogging.hpp
-    ./vulqan/VqMonitor.cpp
+    ./vulqan/VqMonitor.ipp
     ./vulqan/VqMonitor.hpp
+    ./vulqan/VqPipeline.cpp
+    ./vulqan/VqPipeline.hpp
     ./vulqan/VqQueues.ipp
     ./vulqan/VqQueues.hpp
-    ./vulqan/VqShaderStages.cpp
+    ./vulqan/VqSemaphore.ipp
+    ./vulqan/VqSemaphore.hpp
+    ./vulqan/VqShaderStages.ipp
     ./vulqan/VqShaderStages.hpp
     ./vulqan/VqStructs.hpp
     ./vulqan/VqSurface.ipp
     ./vulqan/VqSurface.hpp
-    ./vulqan/VqUtils.cpp
+    ./vulqan/VqUtils.ipp
     ./vulqan/VqUtils.hpp
     ./vulqan/VqWindow.ipp
     ./vulqan/VqWindow.hpp

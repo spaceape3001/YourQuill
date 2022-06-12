@@ -181,8 +181,7 @@ namespace yq {
             subpass.colorAttachmentCount = 1;
             subpass.pColorAttachments = &colorAttachmentRef;
             
-            VkRenderPassCreateInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+            VqRenderPassCreateInfo renderPassInfo{};
             renderPassInfo.attachmentCount = 1;
             renderPassInfo.pAttachments = &colorAttachment;
             renderPassInfo.subpassCount = 1;
@@ -196,36 +195,6 @@ namespace yq {
             return true;
         }
         
-        bool Window::init_sync()
-        {
-            bool    success = true;
-            if(!m_imageAvailableSemaphore){
-                VqSemaphoreCreateInfo   semaphoreInfo;
-                if(vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &m_imageAvailableSemaphore) != VK_SUCCESS){
-                    vqCritical << "Unable to create semaphore for available images!";
-                    success = false;
-                }
-            }
-            if(!m_renderFinishedSemaphore){
-                VqSemaphoreCreateInfo   semaphoreInfo;
-                if(vkCreateSemaphore(m_device, &semaphoreInfo, nullptr, &m_renderFinishedSemaphore) != VK_SUCCESS){
-                    vqCritical << "Unable to create semaphore for finished rendering!";
-                    success = false;
-                }
-            }
-            
-            if(!m_inFlightFence){
-                m_inFlightFence   = VqFence(*this);
-                if(!m_inFlightFence.good()){
-                    vqError << "Failed to create fence!";
-                    success = false;
-                }
-            }
-            
-            return success;
-            
-        }
-        
 
         bool Window::init(DynamicStuff&ds, VkSwapchainKHR old)
         {
@@ -233,9 +202,8 @@ namespace yq {
             //      SWAP CHAIN       
             //  ----------------------------
             
-            VkSurfaceCapabilitiesKHR    capabilities;
-            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &capabilities);
-            if (capabilities.currentExtent.width == std::numeric_limits<uint32_t>::max()) {
+            VkSurfaceCapabilitiesKHR    capabilities = m_surface.capabilities();
+            if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
                 ds.extents = capabilities.currentExtent;
             } else {
                 int w, h;
@@ -440,8 +408,11 @@ namespace yq {
                 
                 if(!init_render_pass())
                     return false;
-                if(!init_sync())
-                    return false;
+                    
+                m_imageAvailableSemaphore   = VqSemaphore(m_device);
+                m_renderFinishedSemaphore   = VqSemaphore(m_device);
+                m_inFlightFence             = VqFence(m_device);
+
                 if(!init_descriptor_pool(i))
                     return false;
                 if(!init(m_dynamic))
@@ -490,15 +461,9 @@ namespace yq {
                 vkDestroyDescriptorPool(m_device, m_descriptorPool, nullptr);
                 m_descriptorPool   = nullptr;
             }
-            if(m_imageAvailableSemaphore){
-                vkDestroySemaphore(m_device, m_imageAvailableSemaphore, nullptr);
-                m_imageAvailableSemaphore  = nullptr;
-            }
-            if(m_renderFinishedSemaphore){
-                vkDestroySemaphore(m_device, m_renderFinishedSemaphore, nullptr);
-                m_renderFinishedSemaphore  = nullptr;
-            }
-            m_inFlightFence   = {};
+            m_imageAvailableSemaphore   = {};
+            m_renderFinishedSemaphore   = {};
+            m_inFlightFence             = {};
 
             if(m_renderPass){
                 vkDestroyRenderPass(m_device, m_renderPass, nullptr);
@@ -520,161 +485,7 @@ namespace yq {
             m_physical = {};
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
 
-        bool    Window::Pipeline::init(Window*win, const PipelineConfig&cfg)
-        {
-            VqShaderStages stages(*win, cfg.shaders);
-
-            VqPipelineVertexInputStateCreateInfo    vertexInfo;
-            
-            std::vector<VkVertexInputAttributeDescription>  attrs;
-            std::vector<VkVertexInputBindingDescription>    vbos;
-            
-            for(uint32_t i=0;i<cfg.vbos.size();++i){
-                auto& v = cfg.vbos[i];
-                VkVertexInputBindingDescription b;
-                b.binding   = i;
-                b.stride    = v.stride;
-                b.inputRate = (VkVertexInputRate) v.inputRate.value();
-                vbos.push_back(b);
-                
-                for(auto& va : v.attrs){
-                    VkVertexInputAttributeDescription   a;
-                    a.binding       = i;
-                    a.location      = va.location;
-                    a.offset        = va.offset;
-                    a.format        = (VkFormat) va.format.value();
-                    attrs.push_back(a);
-                }
-            }
-
-            vertexInfo.vertexBindingDescriptionCount    = (uint32_t) vbos.size();
-            vertexInfo.pVertexBindingDescriptions       = vbos.data();
-            vertexInfo.vertexAttributeDescriptionCount  = (uint32_t) attrs.size();
-            vertexInfo.pVertexAttributeDescriptions     = attrs.data();
-            
-            VqPipelineInputAssemblyStateCreateInfo  inputAssembly;
-            inputAssembly.topology                  = (VkPrimitiveTopology) cfg.topology.value();
-            inputAssembly.primitiveRestartEnable    = VK_FALSE;
-            
-            VkViewport viewport = win -> swap_def_viewport();
-
-            VkRect2D scissor = win -> swap_def_scissor();
-            
-            VqPipelineViewportStateCreateInfo   viewportState{};
-            viewportState.viewportCount = 1;
-            viewportState.pViewports = &viewport;
-            viewportState.scissorCount = 1;
-            viewportState.pScissors = &scissor;
-            
-            VqPipelineRasterizationStateCreateInfo  rasterizer;
-            rasterizer.depthClampEnable = VK_FALSE;
-            rasterizer.rasterizerDiscardEnable = VK_FALSE;
-            rasterizer.polygonMode = (VkPolygonMode) cfg.polymode.value();
-            rasterizer.lineWidth = 1.0f;
-            rasterizer.cullMode = (VkCullModeFlags) cfg.culling.value();
-            rasterizer.frontFace = (VkFrontFace) cfg.front.value();
-            rasterizer.depthBiasEnable = VK_FALSE;
-            rasterizer.depthBiasConstantFactor = 0.0f; // Optional
-            rasterizer.depthBiasClamp = 0.0f; // Optional
-            rasterizer.depthBiasSlopeFactor = 0.0f; // Optional
-
-            VqPipelineMultisampleStateCreateInfo multisampling;
-            multisampling.sampleShadingEnable = VK_FALSE;
-            multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-            multisampling.minSampleShading = 1.0f; // Optional
-            multisampling.pSampleMask = nullptr; // Optional
-            multisampling.alphaToCoverageEnable = VK_FALSE; // Optional
-            multisampling.alphaToOneEnable = VK_FALSE; // Optional
-
-            VkPipelineColorBlendAttachmentState colorBlendAttachment{};
-            colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-            colorBlendAttachment.blendEnable = VK_FALSE;
-            colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
-            colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-            colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD; // Optional
-            colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
-            colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-            colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD; // Optional
-            
-            VqPipelineColorBlendStateCreateInfo colorBlending;
-            colorBlending.logicOpEnable = VK_FALSE;
-            colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
-            colorBlending.attachmentCount = 1;
-            colorBlending.pAttachments = &colorBlendAttachment;
-            colorBlending.blendConstants[0] = 0.0f; // Optional
-            colorBlending.blendConstants[1] = 0.0f; // Optional
-            colorBlending.blendConstants[2] = 0.0f; // Optional
-            colorBlending.blendConstants[3] = 0.0f; // Optional
-
-            VqPipelineLayoutCreateInfo pipelineLayoutInfo{};
-            pipelineLayoutInfo.setLayoutCount = 0; // Optional
-            pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
-            pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
-            pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
-
-            if (vkCreatePipelineLayout(win->m_device, &pipelineLayoutInfo, nullptr, &layout) != VK_SUCCESS) {
-                vqError << "Failed to create pipeline layout!";
-                return false;
-            }
-
-            VqGraphicsPipelineCreateInfo pipelineInfo;
-            pipelineInfo << stages;
-            
-            pipelineInfo.pVertexInputState = &vertexInfo;
-            pipelineInfo.pInputAssemblyState = &inputAssembly;
-            pipelineInfo.pViewportState = &viewportState;
-            pipelineInfo.pRasterizationState = &rasterizer;
-            pipelineInfo.pMultisampleState = &multisampling;
-            pipelineInfo.pDepthStencilState = nullptr; // Optional
-            pipelineInfo.pColorBlendState = &colorBlending;
-            pipelineInfo.pDynamicState = nullptr; // Optional   
-            pipelineInfo.layout = layout;
-            pipelineInfo.renderPass = win->m_renderPass;
-            pipelineInfo.subpass = 0;             
-            pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
-            pipelineInfo.basePipelineIndex = -1; // Optional        
-            
-            if(cfg.polymode == PolygonMode::Fill){
-                pipelineInfo.flags  = VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
-            } 
-            if (vkCreateGraphicsPipelines(win->m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &pipeline) != VK_SUCCESS) {
-                vqError << "Failed to create graphics pipeline!";
-                return false;
-            }
-            
-                // if it's a fill polygon (typical), create a derivative wireframe pipeline
-            if(cfg.polymode == PolygonMode::Fill){
-                pipelineInfo.flags  = VK_PIPELINE_CREATE_DERIVATIVE_BIT;
-                pipelineInfo.basePipelineHandle = pipeline;
-                pipelineInfo.basePipelineIndex  = -1;
-                rasterizer.polygonMode  = VK_POLYGON_MODE_LINE;
-                
-                if (vkCreateGraphicsPipelines(win->m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &wireframe) != VK_SUCCESS) {
-                    vqError << "Failed to create wireframe pipeline!";
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-        void    Window::Pipeline::kill(Window*win)
-        {
-            if(wireframe){
-                vkDestroyPipeline(win->m_device, wireframe, nullptr);
-                wireframe    = nullptr;
-            }
-            if(pipeline){
-                vkDestroyPipeline(win->m_device, pipeline, nullptr);
-                pipeline    = nullptr;
-            }
-            if(layout){
-                vkDestroyPipelineLayout(win->m_device, layout, nullptr);
-                layout      = nullptr;
-            }
-                
-        }
         
         ////////////////////////////////////////////////////////////////////////////////
 

@@ -36,16 +36,14 @@ namespace yq {
         
         VqWindow::VqWindow(VqWindow&& mv)
         {
-            m_window    = mv.m_window;
-            mv.m_window = nullptr;
+            steal(m_window, mv.m_window);
         }
         
         VqWindow& VqWindow::operator=(VqWindow&&mv)
         {
             if(this != &mv){
                 dtor();
-                m_window    = mv.m_window;
-                mv.m_window = nullptr;
+                steal(m_window, mv.m_window);
             }
             return *this;
         }

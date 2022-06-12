@@ -24,6 +24,7 @@
 #include <engine/pipeline/PipelineBuilder.hpp>
 #include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqUtils.hpp>
+#include <engine/vulqan/VqPipeline.hpp>
 #include <math/ColorRgb.hpp>
 #include <math/vec/Vector2.hpp>
 #include <iostream>
@@ -50,7 +51,7 @@ using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 struct HelloWin : public Window {
     YQ_OBJECT_DECLARE(HelloWin, Window)
     
-    Pipeline                triangle;
+    VqPipeline              triangle;
     VkBuffer                vertexBuffer;
     VkDeviceMemory          vertexBufferMemory;
     timepoint_t             start;
@@ -84,7 +85,8 @@ struct HelloWin : public Window {
         
         cfg.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
         
-        if(!triangle.init(this, cfg)){
+        triangle    = VqPipeline(this, cfg);
+        if(!triangle.good()){
             throw std::runtime_error("Unable to create pipeline!");
         }
             
@@ -119,7 +121,7 @@ struct HelloWin : public Window {
     
     ~HelloWin()
     {
-        triangle.kill(this);
+        triangle = {};
 
         vkDestroyBuffer(m_device, vertexBuffer, nullptr);
         vkFreeMemory(m_device, vertexBufferMemory, nullptr);
@@ -132,7 +134,7 @@ struct HelloWin : public Window {
         uint32_t    sec = (int) diff.count();
         bool        w = (sec & 1) != 0;
     
-        vkCmdBindPipeline(cmdbuf, VK_PIPELINE_BIND_POINT_GRAPHICS, w ? triangle.wireframe : triangle.pipeline);
+        vkCmdBindPipeline(cmdbuf, VK_PIPELINE_BIND_POINT_GRAPHICS, w ? triangle.wireframe() : triangle.pipeline());
         
         VkBuffer vertexBuffers[] = {vertexBuffer};
         VkDeviceSize offsets[] = {0};
