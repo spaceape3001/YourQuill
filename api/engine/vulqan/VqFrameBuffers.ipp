@@ -4,8 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
 #include "VqException.hpp"
-#include "VqFramebuffers.hpp"
+#include "VqFrameBuffers.hpp"
 #include "VqRenderPass.hpp"
 #include "VqStructs.hpp"
 #include "VqSurface.hpp"
@@ -13,7 +15,7 @@
 
 namespace yq {
     namespace engine {
-        VqFramebuffers::VqFramebuffers(VkDevice dev, VqRenderPass&render, const VkExtent2D&extents, const std::vector<VkImageView>&imageviews) : m_device(dev)
+        VqFrameBuffers::VqFrameBuffers(VkDevice dev, VqRenderPass&render, const VkExtent2D&extents, const std::vector<VkImageView>&imageviews) : m_device(dev)
         {
             if(imageviews.empty())
                 return ;
@@ -33,12 +35,12 @@ namespace yq {
             }
         }
         
-        VqFramebuffers::VqFramebuffers(VqFramebuffers&&mv)
+        VqFrameBuffers::VqFrameBuffers(VqFrameBuffers&&mv)
         {
             move(std::move(mv));
         }
         
-        VqFramebuffers&          VqFramebuffers::operator=(VqFramebuffers&& mv)
+        VqFrameBuffers&          VqFrameBuffers::operator=(VqFrameBuffers&& mv)
         {
             if(this != &mv){
                 dtor();
@@ -47,17 +49,17 @@ namespace yq {
             return *this;
         }
         
-        VqFramebuffers::~VqFramebuffers()
+        VqFrameBuffers::~VqFrameBuffers()
         {
             dtor();
         }
         
-        VkFramebuffer     VqFramebuffers::operator[](size_t i) const
+        VkFramebuffer     VqFrameBuffers::operator[](size_t i) const
         {
             return framebuffer(i);
         }
         
-        VkFramebuffer     VqFramebuffers::framebuffer(size_t i) const
+        VkFramebuffer     VqFrameBuffers::framebuffer(size_t i) const
         {
             if(i<m_framebuffers.size())
                 return m_framebuffers[i];
@@ -65,7 +67,7 @@ namespace yq {
         }
         
         
-        void    VqFramebuffers::dtor()
+        void    VqFrameBuffers::dtor()
         {
             for(auto iv : m_framebuffers){
                 if(iv)
@@ -74,7 +76,7 @@ namespace yq {
             m_framebuffers.clear();
         }
         
-        void    VqFramebuffers::move(VqFramebuffers&&mv)
+        void    VqFrameBuffers::move(VqFrameBuffers&&mv)
         {
             steal(m_device, mv.m_device);
             m_framebuffers = std::move(mv.m_framebuffers);

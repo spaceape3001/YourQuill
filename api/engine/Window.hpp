@@ -21,7 +21,7 @@
 #include <engine/vulqan/VqDescriptorPool.hpp>
 #include <engine/vulqan/VqDevice.hpp>
 #include <engine/vulqan/VqFence.hpp>
-#include <engine/vulqan/VqFramebuffers.hpp>
+#include <engine/vulqan/VqFrameBuffers.hpp>
 #include <engine/vulqan/VqGPU.hpp>
 #include <engine/vulqan/VqImageViews.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
@@ -230,7 +230,7 @@ namespace yq {
                 uint32_t                    imageCount          = 0;
                 uint32_t                    minImageCount       = 0;
                 VqImageViews                imageViews;
-                VqFramebuffers              frameBuffers;
+                VqFrameBuffers              frameBuffers;
 
                 VkRect2D    def_scissor() const;
                 VkViewport  def_viewport() const;

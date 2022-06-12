@@ -199,8 +199,8 @@ namespace yq {
 
 
 
-            ds.imageViews   = VqImageViews(m_device, m_surface, ds.images);
-            ds.frameBuffers = VqFramebuffers(m_device, m_renderPass, ds.extents, ds.imageViews);
+            ds.imageViews       = VqImageViews(m_device, m_surface, ds.images);
+            ds.frameBuffers     = VqFrameBuffers(m_device, m_renderPass, ds.extents, ds.imageViews);
             ds.commandBuffers   = VqCommandBuffers(m_commandPool, 1);
 
             return true;            

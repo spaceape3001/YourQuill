@@ -15,13 +15,13 @@ namespace yq {
     namespace engine {
         class VqRenderPass;
     
-        class VqFramebuffers : trait::not_copyable {
+        class VqFrameBuffers : trait::not_copyable {
         public:
-            VqFramebuffers() {}
-            VqFramebuffers(VkDevice, VqRenderPass&, const VkExtent2D&, const std::vector<VkImageView>&images);
-            VqFramebuffers(VqFramebuffers&&);
-            VqFramebuffers&          operator=(VqFramebuffers&&);
-            ~VqFramebuffers();
+            VqFrameBuffers() {}
+            VqFrameBuffers(VkDevice, VqRenderPass&, const VkExtent2D&, const std::vector<VkImageView>&images);
+            VqFrameBuffers(VqFrameBuffers&&);
+            VqFrameBuffers&          operator=(VqFrameBuffers&&);
+            ~VqFrameBuffers();
             
             VkFramebuffer           operator[](size_t) const;
             VkFramebuffer           framebuffer(size_t) const;
@@ -32,7 +32,7 @@ namespace yq {
         private:
             
             void    dtor();
-            void    move(VqFramebuffers&&);
+            void    move(VqFrameBuffers&&);
 
             VkDevice                    m_device;
             std::vector<VkFramebuffer>  m_framebuffers;
