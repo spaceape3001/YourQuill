@@ -25,10 +25,14 @@ set(yq_engine_sources
     ./enum/DescriptorType.hpp   
     ./enum/FilterType.hpp   
     ./enum/FrontFace.hpp    
+    ./enum/ImageLayout.hpp
+    ./enum/ImageTiling.hpp
+    ./enum/ImageType.hpp
     ./enum/LogicOp.hpp    
     ./enum/MipmapMode.hpp    
     ./enum/PolygonMode.hpp
     ./enum/StencilOp.hpp
+    ./enum/SystemAllocationScope.hpp
     ./enum/Topology.hpp
     
     ./pipeline/Pipeline.cpp
