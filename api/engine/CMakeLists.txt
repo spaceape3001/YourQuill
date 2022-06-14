@@ -20,6 +20,7 @@ set(yq_engine_sources
     ./enum/engine_enums.cpp
     ./enum/BorderColor.hpp   
     ./enum/ColorComponent.hpp    
+    ./enum/ComponentSwizzle.hpp
     ./enum/CullMode.hpp   
     ./enum/DataFormat.hpp 
     ./enum/DescriptorType.hpp   
@@ -31,7 +32,10 @@ set(yq_engine_sources
     ./enum/LogicOp.hpp    
     ./enum/MipmapMode.hpp    
     ./enum/PolygonMode.hpp
+    ./enum/SamplerAddressMode.hpp
+    ./enum/SamplerMipmapMode.hpp
     ./enum/StencilOp.hpp
+    ./enum/SubpassContents.hpp
     ./enum/SystemAllocationScope.hpp
     ./enum/Topology.hpp
     
