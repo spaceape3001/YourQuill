@@ -59,6 +59,9 @@ set(yq_engine_sources
     ./texture/TextureLoader.hpp
     ./texture/TextureInfoWriter.hpp
     
+    ./ui/ImWidget.cpp
+    ./ui/ImWidget.hpp
+    ./ui/ImWidgetInfoWriter.hpp
     ./ui/ImWindow.hpp
     ./ui/ImWindow.cpp
     

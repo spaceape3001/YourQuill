@@ -67,6 +67,7 @@ namespace yq {
         LOADER          = 1ULL << 15,
         CACHE           = 1ULL << 16,
         COMPILER        = 1ULL << 17,
+        WIDGET          = 1ULL << 18,
         
         STATE           = 1ULL << 26, //!< "State" property
         STATIC          = 1ULL << 27, //!< Non-object specific (global variables, functions, etc)
