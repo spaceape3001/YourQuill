@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "PipelineBuilder.hpp"
+#include "StdPushConstant.hpp"
 
 #include <basic/meta/Init.hpp>
 #include <basic/meta/TypeInfo.hpp>
@@ -148,6 +149,19 @@ namespace yq {
         const PipelineConfig*   PipelineBuilder::copy() const
         {
             return new PipelineConfig(m_config);
+        }
+
+        void    PipelineBuilder::push_constant(PushConfig::Type v)
+        {
+            switch(v){
+            case PushConfig::Full:
+            case PushConfig::View:
+                m_config.push.type  = v;
+                m_config.push.size  = sizeof(StdPushConstant);
+                break;
+            default:
+                break;
+            }
         }
 
     }

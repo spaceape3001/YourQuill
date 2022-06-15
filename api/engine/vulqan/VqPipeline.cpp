@@ -13,6 +13,7 @@
 #include <basic/Logging.hpp>
 #include <engine/Window.hpp>
 #include <engine/pipeline/PipelineConfig.hpp>
+#include <engine/pipeline/StdPushConstant.hpp>
 
 namespace yq {
     namespace engine {
@@ -22,6 +23,8 @@ namespace yq {
             m_device    = win->device();
             try {
                 VqShaderStages stages(m_device, cfg.shaders);
+                
+                m_shaderMask    = stages.mask();
 
                 VqPipelineVertexInputStateCreateInfo    vertexInfo;
                 
@@ -104,12 +107,36 @@ namespace yq {
                 colorBlending.blendConstants[1] = 0.0f; // Optional
                 colorBlending.blendConstants[2] = 0.0f; // Optional
                 colorBlending.blendConstants[3] = 0.0f; // Optional
+                
 
+                VkPushConstantRange push{};
+                if(cfg.push.type != PushConfig::None){
+                    push.offset     = 0;
+                    switch(cfg.push.type){
+                    case PushConfig::Full:
+                    case PushConfig::View:
+                        push.size   = sizeof(StdPushConstant);
+                        break;
+                    case PushConfig::Custom:
+                        push.size   = cfg.push.size;
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                
                 VqPipelineLayoutCreateInfo pipelineLayoutInfo{};
                 pipelineLayoutInfo.setLayoutCount = 0; // Optional
                 pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
-                pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
-                pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
+                if(push.size != 0){
+                    push.stageFlags = m_shaderMask;
+                    pipelineLayoutInfo.pushConstantRangeCount = 1;
+                    pipelineLayoutInfo.pPushConstantRanges = &push;
+                } else {
+                    pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
+                    pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
+                }
+
 
                 if (vkCreatePipelineLayout(m_device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) 
                     throw VqException("Failed to create pipeline layout!");
@@ -196,6 +223,7 @@ namespace yq {
             steal(m_pipeline, mv.m_pipeline);
             steal(m_wireframe, mv.m_wireframe);
             steal(m_layout, mv.m_layout);
+            m_shaderMask    = mv.m_shaderMask;
         }
         
 

@@ -14,6 +14,7 @@
 #include <engine/enum/Topology.hpp>
 #include <engine/enum/FrontFace.hpp>
 #include <engine/enum/DataFormat.hpp>
+#include <engine/enum/PushConstant.hpp>
 #include <engine/enum/VertexInputRate.hpp>
 
 namespace yq {
@@ -31,6 +32,18 @@ namespace yq {
             VertexInputRate         inputRate;
         };
         
+        struct PushConfig {
+            enum Type {
+                None        = 0,
+                Full,
+                View,
+                Custom
+            };
+            
+            size_t          size    = 0;
+            Type            type    = None;
+        };
+        
         struct PipelineConfig {
             std::vector<ShaderSpec>     shaders;
             std::vector<VBOConfig>      vbos;
@@ -38,6 +51,7 @@ namespace yq {
             PolygonMode                 polymode    = PolygonMode::Fill;
             FrontFace                   front       = FrontFace::CounterClockwise;
             CullMode                    culling     = CullMode::Back;
+            PushConfig                  push        = {};
         };
     }
 }

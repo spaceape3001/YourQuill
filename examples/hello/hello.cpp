@@ -30,6 +30,7 @@
 #include <iostream>
 #include <chrono>
 #include <glm/glm.hpp>  // temporary
+#include <math.h>
 
 using namespace yq;
 using namespace yq::engine;
@@ -37,6 +38,10 @@ using namespace yq::engine;
 struct Vertex {
     glm::vec2   position;
     glm::vec3   color;
+};
+
+struct Warp {
+    float   amt = 0;
 };
 
 const std::vector<Vertex> vertices = {
@@ -71,7 +76,7 @@ struct HelloWin : public Window {
 
     HelloWin(const WindowCreateInfo& wci) : Window(wci)
     {
-        ShaderPtr   vert = Shader::load("examples/hello/hello2.vert");
+        ShaderPtr   vert = Shader::load("examples/hello/hello3.vert");
         ShaderPtr   frag = Shader::load("examples/hello/hello.frag");
         if(!vert)
             throw std::runtime_error("No vertex shader");
@@ -82,6 +87,7 @@ struct HelloWin : public Window {
         PipelineBuilder      cfg;
         cfg.add_shaders({ vert, frag });
         cfg.front(FrontFace::Clockwise);
+        cfg.push_constant<Warp>();
         
         cfg.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
         
@@ -134,7 +140,10 @@ struct HelloWin : public Window {
         uint32_t    sec = (int) diff.count();
         bool        w = (sec & 1) != 0;
     
+        Warp    warp { (float)( 1.0 + 0.5*sin(diff.count())) };
+    
         vkCmdBindPipeline(cmdbuf, VK_PIPELINE_BIND_POINT_GRAPHICS, w ? triangle.wireframe() : triangle.pipeline());
+        vkCmdPushConstants(cmdbuf, triangle.layout(), triangle.shader_mask(), 0, sizeof(Warp), &warp);
         
         VkBuffer vertexBuffers[] = {vertexBuffer};
         VkDeviceSize offsets[] = {0};

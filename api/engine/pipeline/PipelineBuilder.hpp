@@ -64,6 +64,16 @@ namespace yq {
             operator const PipelineConfig&() const { return m_config; }
             const PipelineConfig*   copy() const;
             
+            
+            template <typename T>
+            void    push_constant()
+            {
+                m_config.push.type  = PushConfig::Custom;
+                m_config.push.size  = sizeof(T);
+            }
+            
+            void    push_constant(PushConfig::Type);
+            
         private:
             PipelineConfig          m_config;
             std::set<uint32_t>      m_locations;
