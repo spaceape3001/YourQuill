@@ -3,11 +3,8 @@
 //  YOUR QUILL
 //
 ////////////////////////////////////////////////////////////////////////////////
-#pragma once
 
-//  WARNING!  WARNING!
-//
-//  THIS FILE IS AUTO-GENERATED, CHANGES WILL BE CLOBBERED!
+#pragma once
 
 #define YQ__API__MATH__VECTOR_3__HPP 1
 #include <math/preamble.hpp>
