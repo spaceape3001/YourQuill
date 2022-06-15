@@ -14,7 +14,6 @@
 #include <engine/enum/Topology.hpp>
 #include <engine/enum/FrontFace.hpp>
 #include <engine/enum/DataFormat.hpp>
-#include <engine/enum/PushConstant.hpp>
 #include <engine/enum/VertexInputRate.hpp>
 
 namespace yq {
