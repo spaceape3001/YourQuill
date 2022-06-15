@@ -98,6 +98,161 @@ namespace yq {
 //  MULTIPLICATION
 
     template <typename T, typename U>
+    Segment1<product_t<T,U>>    operator*(const Segment1<T>&a, const Tensor11<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment2<product_t<T,U>>    operator*(const Segment1<T>&a, const Tensor12<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment3<product_t<T,U>>    operator*(const Segment1<T>&a, const Tensor13<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment4<product_t<T,U>>    operator*(const Segment1<T>&a, const Tensor14<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment1<product_t<T,U>>    operator*(const Segment2<T>&a, const Tensor21<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment2<product_t<T,U>>    operator*(const Segment2<T>&a, const Tensor22<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment3<product_t<T,U>>    operator*(const Segment2<T>&a, const Tensor23<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment4<product_t<T,U>>    operator*(const Segment2<T>&a, const Tensor24<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment1<product_t<T,U>>    operator*(const Segment3<T>&a, const Tensor31<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment2<product_t<T,U>>    operator*(const Segment3<T>&a, const Tensor32<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment3<product_t<T,U>>    operator*(const Segment3<T>&a, const Tensor33<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment4<product_t<T,U>>    operator*(const Segment3<T>&a, const Tensor34<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment1<product_t<T,U>>    operator*(const Segment4<T>&a, const Tensor41<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment2<product_t<T,U>>    operator*(const Segment4<T>&a, const Tensor42<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment3<product_t<T,U>>    operator*(const Segment4<T>&a, const Tensor43<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    template <typename T, typename U>
+    Segment4<product_t<T,U>>    operator*(const Segment4<T>&a, const Tensor44<T>&b)
+    {
+        return { a.a * b, a.b * b };
+    }
+
+    //  ----------------------------------------------
+
+    template <typename T, typename U>
+    Triangle2<product_t<T,U>>    operator*(const Triangle2<T>&a, const Tensor22<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle3<product_t<T,U>>    operator*(const Triangle2<T>&a, const Tensor23<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle4<product_t<T,U>>    operator*(const Triangle2<T>&a, const Tensor24<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle2<product_t<T,U>>    operator*(const Triangle3<T>&a, const Tensor32<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle3<product_t<T,U>>    operator*(const Triangle3<T>&a, const Tensor33<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle4<product_t<T,U>>    operator*(const Triangle3<T>&a, const Tensor34<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle2<product_t<T,U>>    operator*(const Triangle4<T>&a, const Tensor42<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle3<product_t<T,U>>    operator*(const Triangle4<T>&a, const Tensor43<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+    template <typename T, typename U>
+    Triangle4<product_t<T,U>>    operator*(const Triangle4<T>&a, const Tensor44<T>&b)
+    {
+        return { a.a * b, a.b * b, a.c*b };
+    }
+
+
+    //  ----------------------------------------------
+
+    template <typename T, typename U>
     Segment1<product_t<T,U>>    operator*(const Tensor11<T>&a, const Segment1<T>&b)
     {
         return { a * b.a, a * b.b };
@@ -192,6 +347,8 @@ namespace yq {
     {
         return { a * b.a, a * b.b };
     }
+
+    //  ----------------------------------------------
 
     
     template <typename T, typename U>
