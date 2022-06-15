@@ -12,6 +12,7 @@
 #include <math/vec/Vector2.hpp>
 
 namespace yq {
+
     /*! \brief 1x2 second order tensor (ie a matrix)
     
         \tparam[T]  Data type to be used, recommended to be arithmetic in nature

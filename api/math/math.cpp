@@ -143,6 +143,11 @@ YQ_TYPE_IMPLEMENT(yq::Frac16)
 YQ_TYPE_IMPLEMENT(yq::Frac32)
 YQ_TYPE_IMPLEMENT(yq::Frac64)
 
+YQ_TYPE_IMPLEMENT(yq::Normal2D)
+YQ_TYPE_IMPLEMENT(yq::Normal2F)
+
+YQ_TYPE_IMPLEMENT(yq::Normal3D)
+YQ_TYPE_IMPLEMENT(yq::Normal3F)
 
 YQ_TYPE_IMPLEMENT(yq::Quaternion3D)
 YQ_TYPE_IMPLEMENT(yq::Quaternion3F)
@@ -484,6 +489,18 @@ YQ_INVOKE(
     auto frac64 = writer<Frac64>();
     frac64.property("n", &Frac64::num);
     frac64.property("d", &Frac64::den);
+    
+    auto norm2d = writer<Normal2D>();
+    norm2d.property("dir", &Normal2D::direction);
+
+    auto norm2f = writer<Normal2F>();
+    norm2f.property("dir", &Normal2F::direction);
+
+    auto norm3d = writer<Normal3D>();
+    norm3d.property("dir", &Normal3D::direction);
+    
+    auto norm3f = writer<Normal3F>();
+    norm3f.property("dir", &Normal3F::direction);
     
     auto quat3d = writer<Quaternion3D>();
     quat3d.property("w", &Quaternion3D::w);

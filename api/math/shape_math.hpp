@@ -11,6 +11,8 @@
 #include <math/shape/AxBox3.hpp>
 #include <math/shape/AxBox4.hpp>
 #include <math/shape/Circle2.hpp>
+#include <math/shape/Normal2.hpp>
+#include <math/shape/Normal3.hpp>
 #include <math/shape/Segment1.hpp>
 #include <math/shape/Segment2.hpp>
 #include <math/shape/Segment3.hpp>
