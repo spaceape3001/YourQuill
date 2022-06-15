@@ -38,6 +38,8 @@ namespace yq {
             return { x  };
         }
     };
+
+    YQ_IEEE754_1(Vector1)
     
 //  --------------------------------------------------------
 //  COMPOSITION

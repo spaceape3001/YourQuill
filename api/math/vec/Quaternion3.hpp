@@ -23,6 +23,8 @@ namespace yq {
         constexpr bool operator==(const Quaternion3&) const noexcept = default;
     };
 
+    YQ_IEEE754_1(Quaternion3)
+
 //  --------------------------------------------------------
 //  COMPOSITION
 

@@ -28,6 +28,8 @@ namespace yq {
 
         constexpr bool operator==(const Tensor32&) const noexcept = default;
     };
+
+    YQ_IEEE754_1(Tensor32)
         
 //  --------------------------------------------------------
 //  COMPOSITION

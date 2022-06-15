@@ -26,6 +26,8 @@ namespace yq {
 
         constexpr bool operator==(const Tensor13&) const noexcept = default;
     };
+
+    YQ_IEEE754_1(Tensor13)
         
 //  --------------------------------------------------------
 //  COMPOSITION
