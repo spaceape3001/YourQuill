@@ -242,6 +242,11 @@ namespace yq {
     using Normal3D  = Normal3<double>;
     using Normal3F  = Normal3<float>;
 
+
+    template <typename T> struct Plane3;
+    using Plane3D       = Plane3<double>;
+    using Plane3F       = Plane3<float>;
+
     template <typename T> struct Quaternion3;
     using Quaternion3D  = Quaternion3<double>;
     using Quaternion3F  = Quaternion3<float>;

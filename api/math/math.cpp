@@ -19,6 +19,11 @@
 
 #include <math/shape/Circle2.hpp>
 
+#include <math/shape/Normal2.hpp>
+#include <math/shape/Normal3.hpp>
+
+#include <math/shape/Plane3.hpp>
+
 #include <math/shape/Segment1.hpp>
 #include <math/shape/Segment2.hpp>
 #include <math/shape/Segment3.hpp>
@@ -148,6 +153,9 @@ YQ_TYPE_IMPLEMENT(yq::Normal2F)
 
 YQ_TYPE_IMPLEMENT(yq::Normal3D)
 YQ_TYPE_IMPLEMENT(yq::Normal3F)
+
+YQ_TYPE_IMPLEMENT(yq::Plane3D)
+YQ_TYPE_IMPLEMENT(yq::Plane3F)
 
 YQ_TYPE_IMPLEMENT(yq::Quaternion3D)
 YQ_TYPE_IMPLEMENT(yq::Quaternion3F)
