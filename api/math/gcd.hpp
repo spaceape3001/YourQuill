@@ -27,4 +27,14 @@ namespace yq {
         return a;
     }
 
+    /*! \brief Greatest common divisor in template parameters
+    */
+    template <int, int> struct GCD;
+    template <int A> struct GCD<A, 0> { enum { V = A }; };
+    template <int A, int B> struct GCD {
+       enum {
+           P   = (A>B)?(A-B):(B-A),
+           V   = GCD<B,P>::V
+       };
+    };
 }
