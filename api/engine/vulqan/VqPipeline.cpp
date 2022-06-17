@@ -129,7 +129,10 @@ namespace yq {
                 pipelineLayoutInfo.setLayoutCount = 0; // Optional
                 pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
                 if(push.size != 0){
-                    push.stageFlags = m_shaderMask;
+                    if(cfg.push.shaders)
+                        push.stageFlags = cfg.push.shaders;
+                    else
+                        push.stageFlags = m_shaderMask;
                     pipelineLayoutInfo.pushConstantRangeCount = 1;
                     pipelineLayoutInfo.pPushConstantRanges = &push;
                 } else {

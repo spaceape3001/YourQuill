@@ -28,6 +28,7 @@ namespace yq {
         struct VBOConfig {
             std::vector<VBOAttr>    attrs;
             uint32_t                stride      = 0;
+            uint32_t                shaders     = 0;    //  shader mask
             VertexInputRate         inputRate;
         };
         
@@ -41,6 +42,7 @@ namespace yq {
             
             size_t          size    = 0;
             Type            type    = None;
+            uint32_t        shaders = 0;            // shader mask (0 implies shaders)
         };
         
         struct PipelineConfig {
