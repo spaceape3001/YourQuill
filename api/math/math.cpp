@@ -24,6 +24,10 @@
 
 #include <math/shape/Plane3.hpp>
 
+#include <math/shape/Ray2.hpp>
+#include <math/shape/Ray3.hpp>
+#include <math/shape/Ray4.hpp>
+
 #include <math/shape/Segment1.hpp>
 #include <math/shape/Segment2.hpp>
 #include <math/shape/Segment3.hpp>
@@ -33,6 +37,12 @@
 
 #include <math/shape/Sphere3.hpp>
 #include <math/shape/Sphere4.hpp>
+
+#include <math/shape/Tetrahedron3.hpp>
+
+#include <math/shape/Triangle2.hpp>
+#include <math/shape/Triangle3.hpp>
+#include <math/shape/Triangle4.hpp>
 
 #include <math/vec/Quaternion3.hpp>
 
@@ -56,11 +66,6 @@
 #include <math/vec/Tensor43.hpp>
 #include <math/vec/Tensor44.hpp>
 
-#include <math/shape/Tetrahedron3.hpp>
-
-#include <math/shape/Triangle2.hpp>
-#include <math/shape/Triangle3.hpp>
-#include <math/shape/Triangle4.hpp>
 
 #include <math/vec/Vector1.hpp>
 #include <math/vec/Vector2.hpp>
@@ -160,6 +165,14 @@ YQ_TYPE_IMPLEMENT(yq::Plane3F)
 YQ_TYPE_IMPLEMENT(yq::Quaternion3D)
 YQ_TYPE_IMPLEMENT(yq::Quaternion3F)
 
+YQ_TYPE_IMPLEMENT(yq::Ray2D)
+YQ_TYPE_IMPLEMENT(yq::Ray2F)
+
+YQ_TYPE_IMPLEMENT(yq::Ray3D)
+YQ_TYPE_IMPLEMENT(yq::Ray3F)
+
+YQ_TYPE_IMPLEMENT(yq::Ray4D)
+YQ_TYPE_IMPLEMENT(yq::Ray4F)
 
 YQ_TYPE_IMPLEMENT(yq::Segment1D)
 YQ_TYPE_IMPLEMENT(yq::Segment1F)
@@ -521,6 +534,31 @@ YQ_INVOKE(
     quat3f.property("x", &Quaternion3F::x);
     quat3f.property("y", &Quaternion3F::y);
     quat3f.property("z", &Quaternion3F::z);
+    
+    auto ray2d = writer<Ray2D>();
+    ray2d.property("pt", &Ray2D::point);
+    ray2d.property("dir", &Ray2D::direction);
+
+    auto ray2f = writer<Ray2F>();
+    ray2f.property("pt", &Ray2F::point);
+    ray2f.property("dir", &Ray2F::direction);
+
+    auto ray3d = writer<Ray3D>();
+    ray3d.property("pt", &Ray3D::point);
+    ray3d.property("dir", &Ray3D::direction);
+
+    auto ray3f = writer<Ray3F>();
+    ray3f.property("pt", &Ray3F::point);
+    ray3f.property("dir", &Ray3F::direction);
+
+    auto ray4d = writer<Ray4D>();
+    ray4d.property("pt", &Ray4D::point);
+    ray4d.property("dir", &Ray4D::direction);
+
+    auto ray4f = writer<Ray4F>();
+    ray4f.property("pt", &Ray4F::point);
+    ray4f.property("dir", &Ray4F::direction);
+
 
     auto seg1d = writer<Segment1D>();
     seg1d.property("a", &Segment1D::a);

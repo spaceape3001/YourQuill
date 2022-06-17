@@ -36,14 +36,14 @@ namespace yq {
         return { ~Vector3<T>{x,y,z} };
     }
     
-    YQ_NAN_1(Normal3, { nan_v<T>, nan_v<T>, nan_v<T> })
-    YQ_ZERO_1(Normal3, { zero_v<T>, zero_v<T>, zero_v<T> })
+    YQ_NAN_1(Normal3, { nan_v<Vector3<T>> })
+    YQ_ZERO_1(Normal3, { zero_v<Vector3<T>> })
     
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
 
-    YQ_IS_NAN_1(Normal3, is_nan(v.x) || is_nan(v.y) || is_nan(v.z))
-    YQ_IS_FINITE_1(Normal3, is_finite(v.x) && is_finite(v.y) && is_nan(v.z))
+    YQ_IS_NAN_1(Normal3, is_nan(v.direction))
+    YQ_IS_FINITE_1(Normal3, is_finite(v.direction))
 }
 
 YQ_TYPE_DECLARE(yq::Normal3D)

@@ -36,14 +36,14 @@ namespace yq {
         return { ~Vector2<T>{x,y} };
     }
     
-    YQ_NAN_1(Normal2, { nan_v<T>, nan_v<T> })
-    YQ_ZERO_1(Normal2, { zero_v<T>, zero_v<T> })
+    YQ_NAN_1(Normal2, { nan_v<Vector2<T>> })
+    YQ_ZERO_1(Normal2, { zero_v<Vector2<T>> })
     
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
 
-    YQ_IS_NAN_1(Normal2, is_nan(v.x) || is_nan(v.y))
-    YQ_IS_FINITE_1(Normal2, is_finite(v.x) && is_finite(v.y))
+    YQ_IS_NAN_1(Normal2, is_nan(v.direction))
+    YQ_IS_FINITE_1(Normal2, is_finite(v.direction))
     
     
 }

@@ -251,6 +251,18 @@ namespace yq {
     using Quaternion3D  = Quaternion3<double>;
     using Quaternion3F  = Quaternion3<float>;
     
+    template <typename T> struct Ray2;
+    using Ray2D = Ray2<double>;
+    using Ray2F = Ray2<float>;
+
+    template <typename T> struct Ray3;
+    using Ray3D = Ray3<double>;
+    using Ray3F = Ray3<float>;
+
+    template <typename T> struct Ray4;
+    using Ray4D = Ray4<double>;
+    using Ray4F = Ray4<float>;
+    
     template <typename T> struct Rectangle2;
     using Rectangle2D    = Rectangle2<double>;
     using Rectangle2F    = Rectangle2<float>;
