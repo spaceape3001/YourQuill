@@ -406,7 +406,7 @@ namespace yq {
                 glfwRestoreWindow(m_window);
         }
 
-        void        Window::set_clear(const ColorRgbaF&i)
+        void        Window::set_clear(const RGBA4F&i)
         {
             m_clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }

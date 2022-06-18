@@ -20,7 +20,6 @@
     For structures, it's adding in the proper stype assignment. 
 */
 
-
 namespace yq {
     namespace engine {
         std::vector<VkExtensionProperties>              vqEnumerateDeviceExtensionProperties(VkPhysicalDevice, const char* layerName=nullptr);

@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 #include <math/preamble.hpp>
-#include <math/ColorRgb.hpp>
+#include <math/RGB.hpp>
 #include <math/shape/Size2.hpp>
 
 struct GLFWmonitor;
@@ -21,7 +21,7 @@ namespace yq {
 
         struct VqVidMode {
             Size2I      size            = {};
-            ColorRgbI   bits            = {};
+            RGB3I       bits            = {};
             int         refresh_rate    = 0;
             VqVidMode(){}
             VqVidMode(const GLFWvidmode&);

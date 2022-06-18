@@ -13,7 +13,6 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <math/preamble.hpp>
-#include <math/ColorRgba.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
 #include <engine/vulqan/VqCommandBuffers.hpp>
@@ -151,7 +150,7 @@ namespace yq {
             void                restore();
 
                 //! Sets the background color
-            void                set_clear(const ColorRgbaF&);
+            void                set_clear(const RGBA4F&);
 
                 //! Sets the window position
             void                set_position(const Vector2I&);

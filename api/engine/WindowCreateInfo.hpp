@@ -7,7 +7,7 @@
 #pragma once
 
 #include <math/preamble.hpp>
-#include <math/ColorRgba.hpp>
+#include <math/RGBA.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
@@ -28,19 +28,19 @@ namespace yq {
             
             
                 //!  This is the background color
-            ColorRgbaF              clear   = { 0., 0., 0., 1. };
+            RGBA4F                      clear   = { 0., 0., 0., 1. };
             
                 //!  Set to make always-on-top
-            bool                    floating    = false;
+            bool                        floating    = false;
             
                 //!  Set to make decorated
-            bool                    decorated   = true;
+            bool                        decorated   = true;
             
                 //!  Set to make user-resizable
-            bool                    resizable   = false;
+            bool                        resizable   = false;
             
                 //!     Set to get descriptors allocated
-            uint32_t                descriptors = 0;
+            uint32_t                    descriptors = 0;
             
             WindowCreateInfo(){}
         };
