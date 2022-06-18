@@ -21,48 +21,21 @@ namespace yq {
         constexpr operator double() const { return (double) num / (double) den; }
     };
 
-    //  This is a FIXED fraction
-    template <int N, int D=(int) 1>
-    struct FRACTION {
-        static_assert(D != 0, "Denominator can never be zero!");
-        
-        static constexpr const int    NUM     = N;
-        static constexpr const int    DEN     = D;
-        static constexpr const int    CF      = GCD<N,D>::V;
-        static constexpr const int    PNUM    = N / CF;
-        static constexpr const int    PDEN    = D / CF;
-        static constexpr const int    SNUM = (D<0)?-PNUM:PNUM;
-        static constexpr const int    SDEN = (D<0)?-PDEN:PDEN;
-        
-        using Simplified    = FRACTION<SNUM,SDEN>;
-        
-        template <class F>
-        using Add = typename FRACTION<N*F::DEN+F::NUM*D,D*F::DEN>::Simplified;
 
-        template <class F>
-        using Sub = typename FRACTION<N*F::DEN-F::NUM*D,D*F::DEN>::Simplified;
-        
-        template <class F>
-        using Mult = typename FRACTION<N*F::NUM,D*F::DEN>::Simplified;
-        
-        template <class F>
-        using Div = typename FRACTION<N*F::DEN,D*F::NUM>::Simplified;
-        
-        static constexpr const Fraction  VALUE   = { NUM, DEN };
-    };
+//  --------------------------------------------------------
+//  COMPOSITION
 
-
-    template <typename I>
-    constexpr auto i_power(std::make_signed_t<I> base, std::make_unsigned_t<I> exp)
+    template <int N, int D>
+    consteval Fraction<int>  fraction(const FRACTION<N,D>&)
     {
-        std::make_signed_t<I>   result{1};
-        for(; exp; exp >>= 1){
-            if(exp & 1)
-                result *= base;
-            base *= base;
-        }
-        return result;
+        return Fraction<int>{N,D};
     }
+
+
+    YQ_ZERO_1(Fraction, { zero_v<T>, one_v<T> })
+
+//  --------------------------------------------------------
+//  BASIC/CRITICAL FUNCTIONS
     
     template <typename I>
     bool        is_valid(Fraction<I> a)
@@ -80,23 +53,47 @@ namespace yq {
     }
    
     template <typename I>
+    constexpr auto i_power(std::make_signed_t<I> base, std::make_unsigned_t<I> exp)
+    {
+        std::make_signed_t<I>   result{1};
+        for(; exp; exp >>= 1){
+            if(exp & 1)
+                result *= base;
+            base *= base;
+        }
+        return result;
+    }
+
+//  --------------------------------------------------------
+//  POSITIVE
+
+    template <typename I>
     constexpr Fraction<I> operator+(Fraction<I> a)
     {
         return a;
     }
    
+//  --------------------------------------------------------
+//  NEGATIVE
+
     template <typename I>
     constexpr Fraction<I> operator-(Fraction<I> a)
     {
         return { -a.num, a.den };
     }
     
+//  --------------------------------------------------------
+//  NORMALIZATION
+
+//  --------------------------------------------------------
+//  ADDITION
+
     template <typename I>
     constexpr Fraction<I> operator+(Fraction<I> a, Fraction<I> b)
     {
         return Fraction<I>{ a.num*b.den+a.den*b.num, a.den*b.den };
     }
-    
+
     template <typename I>
     Fraction<I>&  operator+=(Fraction<I>&a, Fraction<I>b)
     {
@@ -104,6 +101,9 @@ namespace yq {
         return a;
     }
     
+//  --------------------------------------------------------
+//  SUBTRACTION
+
     template <typename I>
     constexpr Fraction<I> operator-(Fraction<I> a, Fraction<I> b)
     {
@@ -117,6 +117,9 @@ namespace yq {
         return a;
     }
     
+//  --------------------------------------------------------
+//  MULTIPLICATION
+
     template <typename I>
     constexpr Fraction<I> operator*(Fraction<I> a, Fraction<I>b)
     {
@@ -129,6 +132,10 @@ namespace yq {
         a = a * b;
         return a;
     }
+
+//  --------------------------------------------------------
+//  DIVISION
+
 
     template <typename I>
     constexpr Fraction<I> operator/(Fraction<I> a, Fraction<I>b)
@@ -143,8 +150,11 @@ namespace yq {
         return a;
     }
 
+//  --------------------------------------------------------
+//  POWERS
+
     template <typename I>
-    constexpr Fraction<I> operator^(Fraction<I>a, I b)
+    constexpr Fraction<I> operator^(Fraction<I>a, std::type_identity_t<I> b)
     {
         I     n   = 1;
         I     d   = 1;
@@ -177,6 +187,8 @@ namespace yq {
         return (lt < rt) ? std::strong_ordering::less : std::strong_ordering::greater;
     }
     
+//  --------------------------------------------------------
+//  ADVANCED FUNCTIONS
    
     template <typename S, typename I>
     S&  as_stream(S& s, Fraction<I> f)

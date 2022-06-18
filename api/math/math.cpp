@@ -6,10 +6,11 @@
 
 #include <math/preamble.hpp>
 #include <math/Complex.hpp>
-#include <math/ColorRgb.hpp>
-#include <math/ColorRgba.hpp>
 #include <math/Coord2.hpp>
+#include <math/Dimension.hpp>
 #include <math/Fraction.hpp>
+#include <math/RGB.hpp>
+#include <math/RGBA.hpp>
 
 
 #include <math/shape/AxBox1.hpp>
@@ -127,16 +128,6 @@ YQ_TYPE_IMPLEMENT(yq::Circle2F)
 YQ_TYPE_IMPLEMENT(yq::Circle2I)
 YQ_TYPE_IMPLEMENT(yq::Circle2U)
 
-YQ_TYPE_IMPLEMENT(yq::ColorRgbD)
-YQ_TYPE_IMPLEMENT(yq::ColorRgbF)
-YQ_TYPE_IMPLEMENT(yq::ColorRgbU8)
-YQ_TYPE_IMPLEMENT(yq::ColorRgbU16)
-
-YQ_TYPE_IMPLEMENT(yq::ColorRgbaD)
-YQ_TYPE_IMPLEMENT(yq::ColorRgbaF)
-YQ_TYPE_IMPLEMENT(yq::ColorRgbaU8)
-YQ_TYPE_IMPLEMENT(yq::ColorRgbaU16)
-
 
 YQ_TYPE_IMPLEMENT(yq::ComplexD)
 YQ_TYPE_IMPLEMENT(yq::ComplexF)
@@ -148,10 +139,13 @@ YQ_TYPE_IMPLEMENT(yq::Coord2F)
 YQ_TYPE_IMPLEMENT(yq::Coord2I)
 YQ_TYPE_IMPLEMENT(yq::Coord2U)
 
-YQ_TYPE_IMPLEMENT(yq::Frac8)
-YQ_TYPE_IMPLEMENT(yq::Frac16)
-YQ_TYPE_IMPLEMENT(yq::Frac32)
-YQ_TYPE_IMPLEMENT(yq::Frac64)
+YQ_TYPE_IMPLEMENT(yq::Dimension)
+
+
+YQ_TYPE_IMPLEMENT(yq::FractionI)
+//YQ_TYPE_IMPLEMENT(yq::Frac16)
+//YQ_TYPE_IMPLEMENT(yq::Frac32)
+//YQ_TYPE_IMPLEMENT(yq::Frac64)
 
 YQ_TYPE_IMPLEMENT(yq::Normal2D)
 YQ_TYPE_IMPLEMENT(yq::Normal2F)
@@ -173,6 +167,16 @@ YQ_TYPE_IMPLEMENT(yq::Ray3F)
 
 YQ_TYPE_IMPLEMENT(yq::Ray4D)
 YQ_TYPE_IMPLEMENT(yq::Ray4F)
+
+YQ_TYPE_IMPLEMENT(yq::RGB3D)
+YQ_TYPE_IMPLEMENT(yq::RGB3F)
+YQ_TYPE_IMPLEMENT(yq::RGB3U8)
+YQ_TYPE_IMPLEMENT(yq::RGB3U16)
+
+YQ_TYPE_IMPLEMENT(yq::RGBA4D)
+YQ_TYPE_IMPLEMENT(yq::RGBA4F)
+YQ_TYPE_IMPLEMENT(yq::RGBA4U8)
+YQ_TYPE_IMPLEMENT(yq::RGBA4U16)
 
 YQ_TYPE_IMPLEMENT(yq::Segment1D)
 YQ_TYPE_IMPLEMENT(yq::Segment1F)
@@ -310,7 +314,6 @@ YQ_TYPE_IMPLEMENT(yq::Triangle4F)
 YQ_TYPE_IMPLEMENT(yq::Triangle4I)
 YQ_TYPE_IMPLEMENT(yq::Triangle4U)
 
-
 YQ_TYPE_IMPLEMENT(yq::Vector1D)
 YQ_TYPE_IMPLEMENT(yq::Vector1F)
 YQ_TYPE_IMPLEMENT(yq::Vector1I)
@@ -330,6 +333,7 @@ YQ_TYPE_IMPLEMENT(yq::Vector4D)
 YQ_TYPE_IMPLEMENT(yq::Vector4F)
 YQ_TYPE_IMPLEMENT(yq::Vector4I)
 YQ_TYPE_IMPLEMENT(yq::Vector4U)
+
 
 YQ_INVOKE(
 
@@ -417,50 +421,6 @@ YQ_INVOKE(
     circle2u.property("pt", &Circle2U::point);
     circle2u.property("r", &Circle2U::radius);
 
-    auto rgbd   = writer<ColorRgbD>();
-    rgbd.property("r", &ColorRgbD::red);
-    rgbd.property("g", &ColorRgbD::green);
-    rgbd.property("b", &ColorRgbD::blue);
-
-    auto rgbf   = writer<ColorRgbF>();
-    rgbf.property("r", &ColorRgbF::red);
-    rgbf.property("g", &ColorRgbF::green);
-    rgbf.property("b", &ColorRgbF::blue);
-
-    auto rgbu8   = writer<ColorRgbU8>();
-    rgbu8.property("r", &ColorRgbU8::red);
-    rgbu8.property("g", &ColorRgbU8::green);
-    rgbu8.property("b", &ColorRgbU8::blue);
-
-    auto rgbu16   = writer<ColorRgbU16>();
-    rgbu16.property("r", &ColorRgbU16::red);
-    rgbu16.property("g", &ColorRgbU16::green);
-    rgbu16.property("b", &ColorRgbU16::blue);
-
-    auto rgbad   = writer<ColorRgbaD>();
-    rgbad.property("r", &ColorRgbaD::red);
-    rgbad.property("g", &ColorRgbaD::green);
-    rgbad.property("b", &ColorRgbaD::blue);
-    rgbad.property("a", &ColorRgbaD::alpha);
-
-    auto rgbaf   = writer<ColorRgbaF>();
-    rgbaf.property("r", &ColorRgbaF::red);
-    rgbaf.property("g", &ColorRgbaF::green);
-    rgbaf.property("b", &ColorRgbaF::blue);
-    rgbaf.property("a", &ColorRgbaF::alpha);
-
-    auto rgbau8   = writer<ColorRgbaU8>();
-    rgbau8.property("r", &ColorRgbaU8::red);
-    rgbau8.property("g", &ColorRgbaU8::green);
-    rgbau8.property("b", &ColorRgbaU8::blue);
-    rgbau8.property("a", &ColorRgbaU8::alpha);
-
-    auto rgbau16   = writer<ColorRgbaU16>();
-    rgbau16.property("r", &ColorRgbaU16::red);
-    rgbau16.property("g", &ColorRgbaU16::green);
-    rgbau16.property("b", &ColorRgbaU16::blue);
-    rgbau16.property("a", &ColorRgbaU16::alpha);
-    
 
     auto complexD = writer<ComplexD>();
     complexD.property("real", (double (ComplexD::*)() const) &ComplexD::real).setter((void(ComplexD::*)(double)) &ComplexD::real);
@@ -495,10 +455,11 @@ YQ_INVOKE(
     coord2u.property("i", &Coord2U::i);
     coord2u.property("j", &Coord2U::j);
 
-    auto frac8  = writer<Frac8>();
-    frac8.property("n", &Frac8::num);
-    frac8.property("d", &Frac8::den);
+    auto fraci  = writer<FractionI>();
+    fraci.property("n", &FractionI::num);
+    fraci.property("d", &FractionI::den);
     
+/*
     auto frac16 = writer<Frac16>();
     frac16.property("n", &Frac16::num);
     frac16.property("d", &Frac16::den);
@@ -510,6 +471,7 @@ YQ_INVOKE(
     auto frac64 = writer<Frac64>();
     frac64.property("n", &Frac64::num);
     frac64.property("d", &Frac64::den);
+*/
     
     auto norm2d = writer<Normal2D>();
     norm2d.property("dir", &Normal2D::direction);
@@ -559,7 +521,50 @@ YQ_INVOKE(
     ray4f.property("pt", &Ray4F::point);
     ray4f.property("dir", &Ray4F::direction);
 
+    auto rgbd   = writer<RGB3D>();
+    rgbd.property("r", &RGB3D::red);
+    rgbd.property("g", &RGB3D::green);
+    rgbd.property("b", &RGB3D::blue);
 
+    auto rgbf   = writer<RGB3F>();
+    rgbf.property("r", &RGB3F::red);
+    rgbf.property("g", &RGB3F::green);
+    rgbf.property("b", &RGB3F::blue);
+
+    auto rgbu8   = writer<RGB3U8>();
+    rgbu8.property("r", &RGB3U8::red);
+    rgbu8.property("g", &RGB3U8::green);
+    rgbu8.property("b", &RGB3U8::blue);
+
+    auto rgbu16   = writer<RGB3U16>();
+    rgbu16.property("r", &RGB3U16::red);
+    rgbu16.property("g", &RGB3U16::green);
+    rgbu16.property("b", &RGB3U16::blue);
+
+    auto rgbad   = writer<RGBA4D>();
+    rgbad.property("r", &RGBA4D::red);
+    rgbad.property("g", &RGBA4D::green);
+    rgbad.property("b", &RGBA4D::blue);
+    rgbad.property("a", &RGBA4D::alpha);
+
+    auto rgbaf   = writer<RGBA4F>();
+    rgbaf.property("r", &RGBA4F::red);
+    rgbaf.property("g", &RGBA4F::green);
+    rgbaf.property("b", &RGBA4F::blue);
+    rgbaf.property("a", &RGBA4F::alpha);
+
+    auto rgbau8   = writer<RGBA4U8>();
+    rgbau8.property("r", &RGBA4U8::red);
+    rgbau8.property("g", &RGBA4U8::green);
+    rgbau8.property("b", &RGBA4U8::blue);
+    rgbau8.property("a", &RGBA4U8::alpha);
+
+    auto rgbau16   = writer<RGBA4U16>();
+    rgbau16.property("r", &RGBA4U16::red);
+    rgbau16.property("g", &RGBA4U16::green);
+    rgbau16.property("b", &RGBA4U16::blue);
+    rgbau16.property("a", &RGBA4U16::alpha);
+    
     auto seg1d = writer<Segment1D>();
     seg1d.property("a", &Segment1D::a);
     seg1d.property("b", &Segment1D::b);
