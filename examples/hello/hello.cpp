@@ -25,7 +25,7 @@
 #include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
-#include <math/ColorRgb.hpp>
+#include <math/RGB.hpp>
 #include <math/vec/Vector2.hpp>
 #include <iostream>
 #include <chrono>
