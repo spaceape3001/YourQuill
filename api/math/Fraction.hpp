@@ -11,7 +11,7 @@
 
 namespace yq {
 
-    template <typename I>
+    template <typename I=int>
     struct Fraction {
         static_assert(std::is_integral_v<I>, "Template parameter I must be an integer!");
     
@@ -20,6 +20,37 @@ namespace yq {
 
         constexpr operator double() const { return (double) num / (double) den; }
     };
+
+    //  This is a FIXED fraction
+    template <int N, int D=(int) 1>
+    struct FRACTION {
+        static_assert(D != 0, "Denominator can never be zero!");
+        
+        static constexpr const int    NUM     = N;
+        static constexpr const int    DEN     = D;
+        static constexpr const int    CF      = GCD<N,D>::V;
+        static constexpr const int    PNUM    = N / CF;
+        static constexpr const int    PDEN    = D / CF;
+        static constexpr const int    SNUM = (D<0)?-PNUM:PNUM;
+        static constexpr const int    SDEN = (D<0)?-PDEN:PDEN;
+        
+        using Simplified    = FRACTION<SNUM,SDEN>;
+        
+        template <class F>
+        using Add = typename FRACTION<N*F::DEN+F::NUM*D,D*F::DEN>::Simplified;
+
+        template <class F>
+        using Sub = typename FRACTION<N*F::DEN-F::NUM*D,D*F::DEN>::Simplified;
+        
+        template <class F>
+        using Mult = typename FRACTION<N*F::NUM,D*F::DEN>::Simplified;
+        
+        template <class F>
+        using Div = typename FRACTION<N*F::DEN,D*F::NUM>::Simplified;
+        
+        static constexpr const Fraction  VALUE   = { NUM, DEN };
+    };
+
 
     template <typename I>
     constexpr auto i_power(std::make_signed_t<I> base, std::make_unsigned_t<I> exp)
@@ -175,9 +206,12 @@ namespace yq {
     {
         return as_stream(s, f);
     }
+    
+    
+    
 }
 
-YQ_TYPE_DECLARE(yq::Frac8)
-YQ_TYPE_DECLARE(yq::Frac16)
-YQ_TYPE_DECLARE(yq::Frac32)
-YQ_TYPE_DECLARE(yq::Frac64)
+YQ_TYPE_DECLARE(yq::FractionI)
+//YQ_TYPE_DECLARE(yq::Frac16)
+//YQ_TYPE_DECLARE(yq::Frac32)
+//YQ_TYPE_DECLARE(yq::Frac64)
