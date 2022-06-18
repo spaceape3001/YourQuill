@@ -1,20 +1,26 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
-#include "UMks.hpp"
+#include <math/MKS.hpp>
 
 namespace yq {
     template <typename T, typename DIM, double K>
-    struct UScalar {
+    struct SCALED {
         using dimension         = DIM;
         using component_type    = T;
         static constexpr const double   FACTOR = K;
         
         T       value = {};
         
-        auto operator<=>(const UScalar& b) const noexcept = default;
+        auto operator<=>(const SCALED& b) const noexcept = default;
         
-        operator UMks<T,DIM>() const noexcept { return { T(value*K) }; }
+        operator MKS<T,DIM>() const noexcept { return { T(value*K) }; }
         
-        UScalar&    operator=(const UMks<T,DIM>& v) 
+        SCALED&    operator=(const MKS<T,DIM>& v) 
         {
             value   = T(v / K);
             return *this;
@@ -25,22 +31,22 @@ namespace yq {
 //  COMPOSITION
 
     template <typename T, typename DIM, double K>
-    UMks<T,DIM> mks(const UScalar<T,DIM,K>& v)
+    MKS<T,DIM> mks(const SCALED<T,DIM,K>& v)
     {
-        return (UMks<T,DIM>) v;
+        return (MKS<T,DIM>) v;
     }
 
     template <typename T, typename DIM, double K>
-    struct nan_eval<UScalar<T,DIM,K>> : public std::true_type {
-        static consteval UScalar<T,DIM,K> make()
+    struct nan_eval<SCALED<T,DIM,K>> : public std::true_type {
+        static consteval SCALED<T,DIM,K> make()
         {                                                   
             return { nan_v<T> };
         }                                                   
     };
 
     template <typename T, typename DIM, double K>
-    struct zero_eval<UScalar<T,DIM,K>> : public std::true_type {
-        static consteval UScalar<T,DIM,K> make()
+    struct zero_eval<SCALED<T,DIM,K>> : public std::true_type {
+        static consteval SCALED<T,DIM,K> make()
         {
             return { T{} };
         }
@@ -56,13 +62,13 @@ namespace yq {
 //  BASIC FUNCTIONS
 
     template <typename T, typename DIM, double K>
-    bool is_finite(const UScalar<T,DIM,K>& v)
+    bool is_finite(const SCALED<T,DIM,K>& v)
     {
         return is_finite(v.value);
     }
 
     template <typename T, typename DIM, double K>
-    bool is_nan(const UScalar<T,DIM,K>& v)
+    bool is_nan(const SCALED<T,DIM,K>& v)
     {
         return is_nan(v.value);
     }
@@ -71,7 +77,7 @@ namespace yq {
 //  POSITIVE
 
     template <typename T, typename DIM, double K>
-    UScalar<T,DIM,K> operator+(const UScalar<T,DIM,K>& a)
+    SCALED<T,DIM,K> operator+(const SCALED<T,DIM,K>& a)
     {
         return a;
     }
@@ -81,7 +87,7 @@ namespace yq {
 //  NEGATIVE
 
     template <typename T, typename DIM, double K>
-    UScalar<T,DIM,K> operator-(const UScalar<T,DIM,K>& a)
+    SCALED<T,DIM,K> operator-(const SCALED<T,DIM,K>& a)
     {
         return { -a.value };
     }
