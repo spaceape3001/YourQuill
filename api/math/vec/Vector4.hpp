@@ -8,6 +8,7 @@
 
 #define YQ__API__MATH__VECTOR_4__HPP 1
 #include <math/preamble.hpp>
+#include <math/trig.hpp>
 
 namespace yq {
     /*! \brief Vector of 4 dimension(s)
@@ -116,6 +117,12 @@ namespace yq {
         return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
     }    
     
+    template <typename T>
+    constexpr square_t<T> operator^(const Vector4<T>& a,two_t)
+    {
+        return a.x*a.x + a.y*a.y + a.z*a.z + a.w*a.w;
+    }    
+
     /*! \brief Length of the vector
         
         This returns the length of the given vector.
@@ -313,6 +320,21 @@ namespace yq {
     constexpr bool        all_greater_equal(const Vector4<T>& a, const Vector4<T>&b)
     {
         return (a.x>=b.x) && (a.y>=b.y) && (a.z>=b.z) && (a.w>=b.w);
+    }
+
+    template <typename T>
+    requires (std::is_floating_point_v<T> && trait::has_sqrt_v<T>)
+    MKS<T,dim::Angle>       angle(const Vector4<T>&a, const Vector4<T>& b)
+    {
+        return acos( std::clamp<T>( (a*b)/(length(a)*length(b)), -one_v<T>, one_v<T>));
+    }
+    
+    template <typename T, typename DIM1, typename DIM2>
+    requires (std::is_floating_point_v<T> && trait::has_sqrt_v<T>)
+    MKS<T,dim::Angle>       angle(const Vector4<MKS<T,DIM1>>&a, const Vector4<MKS<T,DIM2>>& b)
+    {
+        using one_t = MKS<T,dim::None>;
+        return acos( std::clamp<one_t>( (a*b)/(length(a)*length(b)), -one_v<T>, one_v<T>));
     }
     
     template <typename T>

@@ -1763,6 +1763,8 @@ namespace yq {
     }
 }
 
+//  TODO ... custom (derived) type info for units.
+
 YQ_TYPE_DECLARE(yq::unit::Acre)
 YQ_TYPE_DECLARE(yq::unit::Ampere)
 YQ_TYPE_DECLARE(yq::unit::Arcminute)

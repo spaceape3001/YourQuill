@@ -8,6 +8,7 @@
 
 #define YQ__API__MATH__VECTOR_2__HPP 1
 #include <math/preamble.hpp>
+#include <math/trig.hpp>
 
 namespace yq {
     /*! \brief Vector of 2 dimension(s)
@@ -63,6 +64,26 @@ namespace yq {
         return { v.x, v.y };
     }
 
+    //! Creates a two dimension unit vector
+    //!
+    //! \param a    Counter-clockwise angle from +x
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Vector2<T>  ccw(MKS<T,dim::Angle> a)
+    {
+        return { cos(a), sin(a) };
+    }
+
+    //! Creates a two dimension unit vector
+    //!
+    //! \param a    Clockwise angle from +y
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Vector2<T>  cw(MKS<T,dim::Angle> a)
+    {
+        return { sin(a), cos(a) };
+    }
+
     template <typename T>
     consteval Vector2<T> Vector2<T>::unit_x()
     {
@@ -94,6 +115,12 @@ namespace yq {
         return a.x*a.x + a.y*a.y;
     }    
     
+    template <typename T>
+    constexpr square_t<T> operator^(const Vector2<T>& a,two_t)
+    {
+        return a.x*a.x + a.y*a.y;
+    }    
+
     /*! \brief Length of the vector
         
         This returns the length of the given vector.
@@ -288,9 +315,69 @@ namespace yq {
     }
     
     template <typename T>
+    requires (std::is_floating_point_v<T> && trait::has_sqrt_v<T>)
+    MKS<T,dim::Angle>       angle(const Vector2<T>&a, const Vector2<T>& b)
+    {
+        return acos( std::clamp<T>( (a*b)/(length(a)*length(b)), -one_v<T>, one_v<T>));
+    }
+    
+    template <typename T, typename DIM1, typename DIM2>
+    requires (std::is_floating_point_v<T> && trait::has_sqrt_v<T>)
+    MKS<T,dim::Angle>       angle(const Vector2<MKS<T,DIM1>>&a, const Vector2<MKS<T,DIM2>>& b)
+    {
+        using one_t = MKS<T,dim::None>;
+        return acos( std::clamp<one_t>( (a*b)/(length(a)*length(b)), -one_v<T>, one_v<T>));
+    }
+
+    /*! \brief Counter clockwise (euler) angle
+    
+        Computes the euler angle of the vector, ie, counter-clockwise from the +X axis.
+    */
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    MKS<T,dim::Angle>   ccw(const Vector2<T>& a)
+    {
+        return atan(a.y, a.x);
+    }
+
+    /*! \brief Counter clockwise (euler) angle
+    
+        Computes the euler angle of the vector, ie, counter-clockwise from the +X axis.
+    */
+    template <typename T, typename DIM>
+    requires std::is_floating_point_v<T>
+    MKS<T,dim::Angle>   ccw(const Vector2<MKS<T,DIM>>& a)
+    {
+        return atan(a.y, a.x);
+    }
+
+
+    template <typename T>
     square_t<T>     component_product(const Vector2<T>& a)
     {
         return a.x*a.y;
+    }
+
+    /*! \brief Clockwise angle
+    
+        Computes the angle of the vector from the +Y axis.
+    */
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    MKS<T,dim::Angle>   cw(const Vector2<T>& a)
+    {
+        return atan(a.y, a.x);
+    }
+
+    /*! \brief Clockwise angle
+    
+        Computes the angle of the vector from the +Y axis.
+    */
+    template <typename T, typename DIM>
+    requires std::is_floating_point_v<T>
+    MKS<T,dim::Angle>   cw(const Vector2<MKS<T,DIM>>& a)
+    {
+        return atan(a.y, a.x);
     }
 
     template <typename T>

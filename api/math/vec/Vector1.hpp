@@ -83,6 +83,12 @@ namespace yq {
         return a.x*a.x;
     }    
     
+    template <typename T>
+    constexpr square_t<T> operator^(const Vector1<T>& a,two_t)
+    {
+        return a.x*a.x;
+    }    
+
     /*! \brief Length of the vector
         
         This returns the length of the given vector.

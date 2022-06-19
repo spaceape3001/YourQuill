@@ -115,6 +115,12 @@ namespace yq {
     }
 
     template <typename T, typename DIM>
+    auto operator^(const MKS<T,DIM>& v,three_t)
+    {
+        return MKS<cube_t<T>, typename DIM::template _pow_<3,1>>{ v.value * v.value * v.value };
+    }
+
+    template <typename T, typename DIM>
     bool is_finite(const MKS<T,DIM>& v)
     {
         return is_finite(v.value);
@@ -140,6 +146,11 @@ namespace yq {
         return MKS<square_t<T>, typename DIM::template _pow_<2,1>>{ v.value * v.value };
     }
 
+    template <typename T, typename DIM>
+    auto operator^(const MKS<T,DIM>& v, two_t)
+    {
+        return MKS<square_t<T>, typename DIM::template _pow_<2,1>>{ v.value * v.value };
+    }
 
 //  --------------------------------------------------------
 //  POSITIVE
