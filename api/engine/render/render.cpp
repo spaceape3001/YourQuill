@@ -29,7 +29,7 @@ namespace yq {
         RenderObject::RenderObject()    = default;
         RenderObject:: ~RenderObject()  = default;
 
-        Tensor44D   RenderObject::calc_model_matrix() const
+        Tensor44D   RenderObject::calc_local() const
         {
             Tensor33D   T   = tensor(m_orientation.value) * diagonal(m_scale.value);
             return Tensor44D(
@@ -37,17 +37,6 @@ namespace yq {
                 T.yx, T.yy, T.yz, m_position.value.y,
                 T.zx, T.zy, T.zz, m_position.value.z,
                 0., 0., 0., 1.
-            );
-        }
-
-        Tensor44F   RenderObject::calc_model_matrix_float() const
-        {
-            Tensor33D   T   = tensor(m_orientation.value) * diagonal(m_scale.value);
-            return Tensor44F(
-                (float) T.xx, (float) T.xy, (float) T.xz, (float) m_position.value.x,
-                (float) T.yx, (float) T.yy, (float) T.yz, (float) m_position.value.y,
-                (float) T.zx, (float) T.zy, (float) T.zz, (float) m_position.value.z,
-                0.f, 0.f, 0.f, 1.f
             );
         }
 

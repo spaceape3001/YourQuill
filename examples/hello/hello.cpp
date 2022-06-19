@@ -15,13 +15,15 @@
 
 //  Also it's about me developing the API in the first place .... :)
 
-
+#include <basic/DelayInit.hpp>
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/Application.hpp>
 #include <engine/Window.hpp>
 #include <engine/pipeline/PipelineBuilder.hpp>
+#include <engine/render/RenderObject.hpp>
+#include <engine/render/RenderObjectInfoWriter.hpp>
 #include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqCommand.hpp>
 #include <engine/vulqan/VqUtils.hpp>
@@ -45,7 +47,7 @@ struct Warp {
     float   amt = 0;
 };
 
-const std::vector<Vertex> vertices = {
+const Vertex vertices[] = {
     {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
     {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
@@ -53,19 +55,19 @@ const std::vector<Vertex> vertices = {
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
+struct HelloTriangle : public Renderable {
+    YQ_OBJECT_DECLARE(HelloTriangle, Renderable)
 
-struct HelloWin : public Window {
-    YQ_OBJECT_DECLARE(HelloWin, Window)
-    
-    VqPipeline              triangle;
-    VkBuffer                vertexBuffer;
-    VkDeviceMemory          vertexBufferMemory;
-    timepoint_t             start;
-    
+    std::span<const Vertex>     m_vbo;
+    VqPipeline                  m_pipeline;
+    VkBuffer                    m_vertexBuffer          = nullptr;
+    VkDeviceMemory              m_vertexBufferMemory    = nullptr;
+    Window*                     m_window                = nullptr;
+
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) 
     {
         VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(m_physical, &memProperties);
+        vkGetPhysicalDeviceMemoryProperties(m_window->physical(), &memProperties);
         for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
             if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
                 return i;
@@ -74,9 +76,10 @@ struct HelloWin : public Window {
 
         throw std::runtime_error("failed to find suitable memory type!");
     }
-
-    HelloWin(const WindowCreateInfo& wci) : Window(wci)
+    
+    HelloTriangle(Window*w) : m_window(w)
     {
+        m_vbo     = std::span<const Vertex>(vertices, sizeof(vertices)/sizeof(Vertex));
         ShaderPtr   vert = Shader::load("examples/hello/hello3.vert");
         ShaderPtr   frag = Shader::load("examples/hello/hello.frag");
         if(!vert)
@@ -92,67 +95,94 @@ struct HelloWin : public Window {
         
         cfg.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
         
-        triangle    = VqPipeline(this, cfg);
-        if(!triangle.good()){
+        m_pipeline    = VqPipeline(m_window, cfg);
+        if(!m_pipeline.good()){
             throw std::runtime_error("Unable to create pipeline!");
         }
             
         VqBufferCreateInfo  bufferInfo;
-        bufferInfo.size = sizeof(vertices[0]) * vertices.size();
+        bufferInfo.size = sizeof(Vertex) * m_vbo.size();
         bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-        if (vkCreateBuffer(m_device, &bufferInfo, nullptr, &vertexBuffer) != VK_SUCCESS){
+        if (vkCreateBuffer(w->device(), &bufferInfo, nullptr, &m_vertexBuffer) != VK_SUCCESS){
             throw std::runtime_error("Unable to create vertex buffer!");
         }
 
         VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(m_device, vertexBuffer, &memRequirements);
+        vkGetBufferMemoryRequirements(w->device(), m_vertexBuffer, &memRequirements);
 
         VqMemoryAllocateInfo allocInfo;
         allocInfo.allocationSize = memRequirements.size;
         allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-        if (vkAllocateMemory(m_device, &allocInfo, nullptr, &vertexBufferMemory) != VK_SUCCESS) {
+        if (vkAllocateMemory(w->device(), &allocInfo, nullptr, &m_vertexBufferMemory) != VK_SUCCESS) {
             throw std::runtime_error("failed to allocate vertex buffer memory!");
         }        
 
-        vkBindBufferMemory(m_device, vertexBuffer, vertexBufferMemory, 0);
+        vkBindBufferMemory(w->device(), m_vertexBuffer, m_vertexBufferMemory, 0);
         void* data;
-        vkMapMemory(m_device, vertexBufferMemory, 0, bufferInfo.size, 0, &data);
-        memcpy(data, vertices.data(), (size_t) bufferInfo.size);
-        vkUnmapMemory(m_device, vertexBufferMemory);
-        
+        vkMapMemory(w->device(), m_vertexBufferMemory, 0, bufferInfo.size, 0, &data);
+        memcpy(data, m_vbo.data(), (size_t) bufferInfo.size);
+        vkUnmapMemory(w->device(), m_vertexBufferMemory);
+    }
+    
+    ~HelloTriangle()
+    {
+        m_pipeline  = {};
+        vkDestroyBuffer(m_window->device(), m_vertexBuffer, nullptr);
+        vkFreeMemory(m_window->device(), m_vertexBufferMemory, nullptr);
+    }
+    
+    void    render(VkCommandBuffer cmdbuf, double time)
+    {
+        uint32_t    sec = (int) time;
+        bool        w = (sec & 1) != 0;
+        Warp    warp { (float)( 1.0 + 0.5*sin(time)) };
+
+        VkBuffer vertexBuffers[] = {m_vertexBuffer};
+        VkDeviceSize offsets[] = {0};
+    
+        VqCommand       cmd;
+        cmd.pipeline    = w ? m_pipeline.wireframe() : m_pipeline.pipeline();
+        cmd.layout      = m_pipeline.layout();
+        cmd.push        = VqCommand::Push{ &warp, sizeof(warp), m_pipeline.shader_mask() };
+        cmd.vbo         = VqCommand::VBO{ vertexBuffers, offsets, 1 };
+        cmd.draw        = VqCommand::Draw{ 3 };
+        record_draw(cmdbuf, cmd);
+    }
+};
+
+YQ_INVOKE(
+    [[maybe_unused]] auto ht   = writer<HelloTriangle>();
+)
+
+YQ_OBJECT_IMPLEMENT(HelloTriangle)
+
+
+struct HelloWin : public Window {
+    YQ_OBJECT_DECLARE(HelloWin, Window)
+    
+    timepoint_t             start;
+    HelloTriangle*          triangle = nullptr;
+
+    HelloWin(const WindowCreateInfo& wci) : Window(wci)
+    {
         start   = std::chrono::steady_clock::now();
+        triangle = new HelloTriangle(this);
     }
     
     ~HelloWin()
     {
-        triangle = {};
-
-        vkDestroyBuffer(m_device, vertexBuffer, nullptr);
-        vkFreeMemory(m_device, vertexBufferMemory, nullptr);
+        delete triangle;
+        triangle    = nullptr;
     }
     
     void        draw_vulqan(VkCommandBuffer cmdbuf)
     {
         timepoint_t n   = std::chrono::steady_clock::now();
         std::chrono::duration<double>  diff    = start - n;
-        uint32_t    sec = (int) diff.count();
-        bool        w = (sec & 1) != 0;
-        Warp    warp { (float)( 1.0 + 0.5*sin(diff.count())) };
-
-        VkBuffer vertexBuffers[] = {vertexBuffer};
-        VkDeviceSize offsets[] = {0};
-    
-        VqCommand       cmd;
-        cmd.pipeline    = w ? triangle.wireframe() : triangle.pipeline();
-        cmd.layout      = triangle.layout();
-        cmd.push        = VqCommand::Push{ &warp, sizeof(warp), triangle.shader_mask() };
-        cmd.vbo         = VqCommand::VBO{ vertexBuffers, offsets, 1 };
-        cmd.draw        = VqCommand::Draw{ 3 };
-        
-        record_draw(cmdbuf, cmd);
+        triangle->render(cmdbuf, diff.count());
     }
 };
 

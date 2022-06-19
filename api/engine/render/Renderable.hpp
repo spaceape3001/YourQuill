@@ -14,6 +14,8 @@ namespace yq {
     namespace engine {
         class Renderable;
         
+        
+        
         class RenderableInfo : public ObjectInfo {
         public:
             template <typename C> struct Writer;
