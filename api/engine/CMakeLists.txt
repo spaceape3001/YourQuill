@@ -42,9 +42,12 @@ set(yq_engine_sources
     ./pipeline/Pipeline.cpp
     ./pipeline/PipelineBuilder.hpp
     ./pipeline/PipelineConfig.hpp
-
-    ./render/Renderable.cpp
+    
+    ./render/render.cpp
     ./render/Renderable.hpp
+    ./render/RenderableInfoWriter.hpp
+    ./render/RenderObject.hpp
+    ./render/RenderObjectInfoWriter.hpp
     
     ./shader/Shader.cpp
     ./shader/Shader.hpp

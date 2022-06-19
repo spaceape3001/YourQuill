@@ -30,8 +30,8 @@ namespace yq {
         return { min_elem(a,b), max_elem(a,b) };
     }
     
-    YQ_NAN_1(AxBox4, { nan_v<Vector4>, nan_v<Vector4>});
-    YQ_ZERO_1(AxBox4, { zero_v<Vector4>, zero_v<Vector4>});
+    YQ_NAN_1(AxBox4, { nan_v<Vector4<T>>, nan_v<Vector4<T>>});
+    YQ_ZERO_1(AxBox4, { zero_v<Vector4<T>>, zero_v<Vector4<T>>});
 
 //  --------------------------------------------------------
 //  BASIC FUNCTIONS
