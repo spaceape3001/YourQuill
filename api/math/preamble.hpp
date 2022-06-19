@@ -269,6 +269,7 @@ namespace yq {
     template <typename> struct Normal2;
     template <typename> struct Normal3;
     template <typename> struct Plane3;
+    template <typename> struct Pose3;
     template <typename> struct Quaternion3;
     template <typename> struct Ray2;
     template <typename> struct Ray3;
@@ -787,18 +788,6 @@ namespace yq {
     using Rectangle2I               = Rectangle2<int>;
     using Rectangle2U               = Rectangle2<unsigned>;
 
-    using RGB3D                     = RGB<double>;
-    using RGB3F                     = RGB<float>;
-    using RGB3I                     = RGB<int>;
-    using RGB3U                     = RGB<unsigned>;
-    using RGB3U8                    = RGB<uint8_t>;
-    using RGB3U16                   = RGB<uint16_t>;
-
-    using RGBA4D                    = RGBA<double>;
-    using RGBA4F                    = RGBA<float>;
-    using RGBA4U8                   = RGBA<uint8_t>;
-    using RGBA4U16                  = RGBA<uint16_t>;
-    
     using Segment1D                 = Segment1<double>;
     using Segment1F                 = Segment1<float>;
     using Segment1I                 = Segment1<int>;
@@ -864,7 +853,25 @@ namespace yq {
     using Triangle4U                = Triangle4<unsigned>;
 
     //  ------------------------------------------------
+    //  FORWARD DECLARE Colors
+
+    using RGB3D                     = RGB<double>;
+    using RGB3F                     = RGB<float>;
+    using RGB3I                     = RGB<int>;
+    using RGB3U                     = RGB<unsigned>;
+    using RGB3U8                    = RGB<uint8_t>;
+    using RGB3U16                   = RGB<uint16_t>;
+
+    using RGBA4D                    = RGBA<double>;
+    using RGBA4F                    = RGBA<float>;
+    using RGBA4U8                   = RGBA<uint8_t>;
+    using RGBA4U16                  = RGBA<uint16_t>;
+    
+    //  ------------------------------------------------
     //  Miscellaneous
+    
+    using Pose3D        = Pose3<double>;
+    using Pose3F        = Pose3<float>;
 
     //! Call this if math isn't getting startup-initialized 
     void        initialize_math();
