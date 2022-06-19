@@ -15,21 +15,6 @@
 #include <math/preamble.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
-#include <engine/vulqan/VqCommandBuffers.hpp>
-#include <engine/vulqan/VqCommandPool.hpp>
-#include <engine/vulqan/VqDescriptorPool.hpp>
-#include <engine/vulqan/VqDevice.hpp>
-#include <engine/vulqan/VqFence.hpp>
-#include <engine/vulqan/VqFrameBuffers.hpp>
-#include <engine/vulqan/VqGPU.hpp>
-#include <engine/vulqan/VqImageViews.hpp>
-#include <engine/vulqan/VqMonitor.hpp>
-#include <engine/vulqan/VqRenderPass.hpp>
-#include <engine/vulqan/VqSemaphore.hpp>
-#include <engine/vulqan/VqSurface.hpp>
-#include <engine/vulqan/VqSwapchain.hpp>
-#include <engine/vulqan/VqWindow.hpp>
-#include <engine/vulqan/VqQueues.hpp>
 #include <vulkan/vulkan_core.h>
 
 #include <functional>
@@ -43,6 +28,8 @@ namespace yq {
     namespace engine {
         struct PipelineConfig;
         class VqWindow;
+        struct VqInternal;
+        class VqAllocator;
         
         
         struct WindowInfo : public ObjectInfo {
@@ -78,23 +65,23 @@ namespace yq {
                 //! Closes (politely) this window....
             void                close();
             
-            VkColorSpaceKHR     color_space() const { return m_surface.color_space(); }
+            VkColorSpaceKHR     color_space() const;
             
             VkCommandBuffer     command_buffer() const;
             
-            VkCommandPool       command_pool() const { return m_commandPool; }
+            VkCommandPool       command_pool() const;
             
-            VkDescriptorPool    descriptor_pool() const { return m_descriptorPool; }
+            VkDescriptorPool    descriptor_pool() const;
             
-            VkDevice            device() const { return m_device; }
+            VkDevice            device() const;
 
                 //! Brings window to front & input focus
             void                focus();
             
-            VkFormat            format() const { return m_surface.format(); }
+            VkFormat            format() const;
 
                 //! Good & initialized window
-            bool                good() const { return m_window != nullptr; }
+            bool                good() const { return m != nullptr; }
             
             VkQueue             graphics_queue() const;
             
@@ -130,7 +117,7 @@ namespace yq {
             bool                is_visible() const;
             
                 //! Our device (logical)
-            VkDevice            logical() const { return m_device; }
+            VkDevice            logical() const;
 
             
                 //! Maximizes widnow
@@ -139,7 +126,7 @@ namespace yq {
                 //! Monitor (if fullscreen)
             VqMonitor           monitor() const;
 
-            VkPhysicalDevice    physical() const { return m_physical; }
+            VkPhysicalDevice    physical() const;
 
                 //! Current window position
             Vector2I            position() const;
@@ -182,7 +169,7 @@ namespace yq {
             //const VkExtent2D&   swap_extent() const { return m_swapExtent; }
             
                 //! The Vulkan surface
-            VkSurfaceKHR        surface() const { return m_surface; }
+            VkSurfaceKHR        surface() const;
             
             VkRect2D            swap_def_scissor() const;
             
@@ -195,71 +182,32 @@ namespace yq {
             
             uint32_t            swap_height() const;
             
-            bool                valid() const { return window() != nullptr; }
-            
             
                 //! Width of the window
             int                 width() const;
 
                 //! GLFW window handle
-            GLFWwindow*         window() const { return m_window; }
+            GLFWwindow*         window() const;
             
             //  This is the "DRAW" pass, do it all, whatever the result is
             virtual bool        draw();
 
+            operator VqInternal&  () { return *m; }
+
         protected:
         
+            friend struct VqInternal;
             friend class VqWindow;
         
-            struct Command;
-            
-            //struct Queue {
-                //VkQueue             queue   = nullptr;
-                //uint32_t            family  = UINT32_MAX;
-////                VkPresentModeKHR    mode    = {};
-                
-                //void    kill(Window*);
-            //};
-            
-            //! This is what needs to change with every resize!
-            struct DynamicStuff {
-                std::vector<VkImage>        images;
-                VqSwapchain                 swapchain;
-                VqCommandBuffers            commandBuffers;
-                uint32_t                    imageCount          = 0;
-                VqImageViews                imageViews;
-                VqFrameBuffers              frameBuffers;
-            };
-
-            
-            VqGPU               m_physical;
-            VqWindow            m_window;
-            VqSurface           m_surface;
-            VqDevice            m_device;
-            VqCommandPool       m_commandPool;
-            VkPresentModeKHR    m_presentMode               = {};
-            VqRenderPass        m_renderPass;
-            VqSemaphore         m_imageAvailableSemaphore;
-            VqSemaphore         m_renderFinishedSemaphore;
-            VqFence             m_inFlightFence;
-            VqDescriptorPool    m_descriptorPool;
-
-            VkClearValue        m_clear;
-            std::atomic<bool>   m_rebuildSwap               = { false };
-
-            
-            DynamicStuff        m_dynamic;
-            
             //VkPipeline                  m_lastPipeline  = nullptr;
             virtual void        window_resized(){}
             virtual void        viewport_changed(){}
             virtual void        draw_vulqan(VkCommandBuffer){}
             
+            
         private:
-            bool    init(DynamicStuff&, VkSwapchainKHR old=nullptr);
-            void    kill(DynamicStuff&);
-            bool    init_logical();
-            void    kill();
+            std::unique_ptr<VqInternal>   m;
+
             bool    record(VkCommandBuffer, uint32_t);
             
             static void callback_resize(GLFWwindow*, int, int);

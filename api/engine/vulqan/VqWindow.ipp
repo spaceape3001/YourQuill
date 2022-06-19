@@ -5,13 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqException.hpp"
+#include "VqInternal.hpp"
 #include "VqWindow.hpp"
-#include <GLFW/glfw3.h>
 #include <engine/Window.hpp>
+#include <GLFW/glfw3.h>
 
 namespace yq {
     namespace engine {
-        VqWindow::VqWindow(Window* w, const WindowCreateInfo& wci)
+        VqWindow::VqWindow(VqInternal& w, const WindowCreateInfo& wci)
         {
                 /*
                     --------------------------------------------------------------------------------------------------------
@@ -30,8 +31,15 @@ namespace yq {
             if(!m_window)
                 throw VqException("Unable to create GLFW window");
             
-            glfwSetWindowUserPointer(m_window, w);
-            glfwSetWindowSizeCallback(m_window, Window::callback_resize);
+            glfwSetWindowUserPointer(m_window, &w);
+            glfwSetWindowSizeCallback(m_window, [](GLFWwindow* gwin, int, int){
+                VqInternal    *v  = (VqInternal*) glfwGetWindowUserPointer(gwin);
+                if(v){
+                    v -> rebuildSwap    = true;
+                    if(v->user)
+                        v->user->window_resized();
+                }
+            });
         }
         
         VqWindow::VqWindow(VqWindow&& mv)

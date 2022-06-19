@@ -69,6 +69,10 @@ set(yq_engine_sources
     ./ui/ImWindow.cpp
     
     ./vulqan/vulqan.cpp
+    ./vulqan/VqAllocator.hpp
+    ./vulqan/VqAllocator.ipp
+    ./vulqan/VqBuffer.hpp
+    ./vulqan/VqBuffer.ipp
     ./vulqan/VqCommand.ipp
     ./vulqan/VqCommand.hpp
     ./vulqan/VqCommandBuffers.ipp
@@ -90,6 +94,8 @@ set(yq_engine_sources
     ./vulqan/VqGPU.hpp
     ./vulqan/VqImageViews.ipp
     ./vulqan/VqImageViews.hpp
+    ./vulqan/VqInternal.cpp
+    ./vulqan/VqInternal.hpp
     ./vulqan/VqLogging.ipp
     ./vulqan/VqLogging.hpp
     ./vulqan/VqMonitor.ipp

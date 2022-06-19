@@ -12,12 +12,12 @@
 namespace yq {
     namespace engine {
         struct PipelineConfig;
-        class Window;
+        struct VqInternal;
         
         class VqPipeline : trait::not_copyable {
         public:
             VqPipeline(){}
-            VqPipeline(Window*, const PipelineConfig&);
+            VqPipeline(VqInternal&, const PipelineConfig&);
             VqPipeline(VqPipeline&&);
             VqPipeline& operator=(VqPipeline&&);
             ~VqPipeline();

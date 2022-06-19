@@ -8,6 +8,7 @@
 
 #include "VqRenderPass.hpp"
 #include "VqStructs.hpp"
+#include "VqInternal.hpp"
 #include "VqException.hpp"
 #include <basic/preamble.hpp>
 #include <engine/Window.hpp>
@@ -15,15 +16,13 @@
 namespace yq {
     namespace engine {
 
-        VqRenderPass::VqRenderPass(Window* win)
+        VqRenderPass::VqRenderPass(VqInternal& win)
         {
-            if(!win)
-                return ;
-            m_device        = win->device();
+            m_device        = win.device;
 
                 //  Render pass
             VkAttachmentDescription colorAttachment{};
-            colorAttachment.format = win->format();
+            colorAttachment.format = win.surface.format();
             colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
             colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;        

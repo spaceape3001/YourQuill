@@ -25,6 +25,7 @@
 #include <engine/render/RenderObject.hpp>
 #include <engine/render/RenderObjectInfoWriter.hpp>
 #include <engine/shader/Shader.hpp>
+#include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqCommand.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
@@ -57,29 +58,12 @@ using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
 struct HelloTriangle : public Renderable {
     YQ_OBJECT_DECLARE(HelloTriangle, Renderable)
-
-    std::span<const Vertex>     m_vbo;
     VqPipeline                  m_pipeline;
-    VkBuffer                    m_vertexBuffer          = nullptr;
-    VkDeviceMemory              m_vertexBufferMemory    = nullptr;
+    VqBuffer                    m_vbo;
     Window*                     m_window                = nullptr;
-
-    uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) 
-    {
-        VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(m_window->physical(), &memProperties);
-        for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
-            if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
-                return i;
-            }
-        }
-
-        throw std::runtime_error("failed to find suitable memory type!");
-    }
     
     HelloTriangle(Window*w) : m_window(w)
     {
-        m_vbo     = std::span<const Vertex>(vertices, sizeof(vertices)/sizeof(Vertex));
         ShaderPtr   vert = Shader::load("examples/hello/hello3.vert");
         ShaderPtr   frag = Shader::load("examples/hello/hello.frag");
         if(!vert)
@@ -95,43 +79,18 @@ struct HelloTriangle : public Renderable {
         
         cfg.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
         
-        m_pipeline    = VqPipeline(m_window, cfg);
+        m_pipeline    = VqPipeline(*w, cfg);
         if(!m_pipeline.good()){
             throw std::runtime_error("Unable to create pipeline!");
         }
-            
-        VqBufferCreateInfo  bufferInfo;
-        bufferInfo.size = sizeof(Vertex) * m_vbo.size();
-        bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-        if (vkCreateBuffer(w->device(), &bufferInfo, nullptr, &m_vertexBuffer) != VK_SUCCESS){
-            throw std::runtime_error("Unable to create vertex buffer!");
-        }
-
-        VkMemoryRequirements memRequirements;
-        vkGetBufferMemoryRequirements(w->device(), m_vertexBuffer, &memRequirements);
-
-        VqMemoryAllocateInfo allocInfo;
-        allocInfo.allocationSize = memRequirements.size;
-        allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-        if (vkAllocateMemory(w->device(), &allocInfo, nullptr, &m_vertexBufferMemory) != VK_SUCCESS) {
-            throw std::runtime_error("failed to allocate vertex buffer memory!");
-        }        
-
-        vkBindBufferMemory(w->device(), m_vertexBuffer, m_vertexBufferMemory, 0);
-        void* data;
-        vkMapMemory(w->device(), m_vertexBufferMemory, 0, bufferInfo.size, 0, &data);
-        memcpy(data, m_vbo.data(), (size_t) bufferInfo.size);
-        vkUnmapMemory(w->device(), m_vertexBufferMemory);
+        
+        m_vbo   = VqBuffer(*w, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, vertices);
     }
     
     ~HelloTriangle()
     {
         m_pipeline  = {};
-        vkDestroyBuffer(m_window->device(), m_vertexBuffer, nullptr);
-        vkFreeMemory(m_window->device(), m_vertexBufferMemory, nullptr);
+        m_vbo       = {};
     }
     
     void    render(VkCommandBuffer cmdbuf, double time)
@@ -140,7 +99,7 @@ struct HelloTriangle : public Renderable {
         bool        w = (sec & 1) != 0;
         Warp    warp { (float)( 1.0 + 0.5*sin(time)) };
 
-        VkBuffer vertexBuffers[] = {m_vertexBuffer};
+        VkBuffer vertexBuffers[] = {m_vbo};
         VkDeviceSize offsets[] = {0};
     
         VqCommand       cmd;
@@ -201,10 +160,10 @@ int main(int argc, char* argv[])
     wi.title        = "Hello WORLD!";
     wi.resizable    = true;
     wi.size.x       = 1920;
-    wi.clear        = { 0.f, 0.f, 0.5f, 1.f };
+    wi.clear        = { 0.f, 0.1f, 0.2f, 1.f };
 
     Ref<HelloWin>   win = new HelloWin(wi);
-    if(!win->valid())
+    if(!win->good())
         return -1;
     
     app.run_window(win.ptr());

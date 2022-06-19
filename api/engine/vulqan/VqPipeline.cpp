@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqException.hpp"
+#include "VqInternal.hpp"
 #include "VqLogging.hpp"
 #include "VqPipeline.hpp"
 #include "VqShaderStages.hpp"
@@ -14,13 +15,15 @@
 #include <engine/Window.hpp>
 #include <engine/pipeline/PipelineConfig.hpp>
 #include <engine/pipeline/StdPushConstant.hpp>
+#include <math/shape/Size2.hpp>
+#include <math/shape/Rectangle2.hpp>
 
 namespace yq {
     namespace engine {
         
-        VqPipeline::VqPipeline(Window* win, const PipelineConfig& cfg)
+        VqPipeline::VqPipeline(VqInternal& win, const PipelineConfig& cfg)
         {
-            m_device    = win->device();
+            m_device    = win.device;
             try {
                 VqShaderStages stages(m_device, cfg.shaders);
                 
@@ -58,9 +61,9 @@ namespace yq {
                 inputAssembly.topology                  = (VkPrimitiveTopology) cfg.topology.value();
                 inputAssembly.primitiveRestartEnable    = VK_FALSE;
                 
-                VkViewport viewport = win -> swap_def_viewport();
+                VkViewport viewport = win.dynamic.swapchain.def_viewport();
 
-                VkRect2D scissor = win -> swap_def_scissor();
+                VkRect2D scissor = win.dynamic.swapchain.def_scissor();
                 
                 VqPipelineViewportStateCreateInfo   viewportState{};
                 viewportState.viewportCount = 1;
@@ -156,7 +159,7 @@ namespace yq {
                 pipelineInfo.pColorBlendState = &colorBlending;
                 pipelineInfo.pDynamicState = nullptr; // Optional   
                 pipelineInfo.layout = m_layout;
-                pipelineInfo.renderPass = win->render_pass();
+                pipelineInfo.renderPass = win.renderPass;
                 pipelineInfo.subpass = 0;             
                 pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
                 pipelineInfo.basePipelineIndex = -1; // Optional        

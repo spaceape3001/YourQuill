@@ -16,7 +16,7 @@ namespace yq {
         class VqRenderPass : trait::not_copyable {
         public:
             VqRenderPass(){}
-            explicit VqRenderPass(Window*);
+            explicit VqRenderPass(VqInternal&);
             VqRenderPass(VqRenderPass&&);
             VqRenderPass& operator=(VqRenderPass&&);
             ~VqRenderPass();
