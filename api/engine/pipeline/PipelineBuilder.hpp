@@ -152,7 +152,7 @@ namespace yq {
             {
                 if(loc != UINT32_MAX){
                     for(uint32_t i=loc; i<loc+req; ++i){
-                        auto j = m_pipeline->m_locations.insert(i);
+                        [[maybe_unused]] auto j = m_pipeline->m_locations.insert(i);
                         assert(j.second && "Location already assigned!");
                     }
                     return loc;
