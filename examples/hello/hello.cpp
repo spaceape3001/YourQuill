@@ -23,6 +23,7 @@
 #include <engine/Window.hpp>
 #include <engine/pipeline/PipelineBuilder.hpp>
 #include <engine/shader/Shader.hpp>
+#include <engine/vulqan/VqCommand.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
 #include <math/RGB.hpp>
@@ -139,17 +140,19 @@ struct HelloWin : public Window {
         std::chrono::duration<double>  diff    = start - n;
         uint32_t    sec = (int) diff.count();
         bool        w = (sec & 1) != 0;
-    
         Warp    warp { (float)( 1.0 + 0.5*sin(diff.count())) };
-    
-        vkCmdBindPipeline(cmdbuf, VK_PIPELINE_BIND_POINT_GRAPHICS, w ? triangle.wireframe() : triangle.pipeline());
-        vkCmdPushConstants(cmdbuf, triangle.layout(), triangle.shader_mask(), 0, sizeof(Warp), &warp);
-        
+
         VkBuffer vertexBuffers[] = {vertexBuffer};
         VkDeviceSize offsets[] = {0};
-        vkCmdBindVertexBuffers(cmdbuf, 0, 1, vertexBuffers, offsets);        
+    
+        VqCommand       cmd;
+        cmd.pipeline    = w ? triangle.wireframe() : triangle.pipeline();
+        cmd.layout      = triangle.layout();
+        cmd.push        = VqCommand::Push{ &warp, sizeof(warp), triangle.shader_mask() };
+        cmd.vbo         = VqCommand::VBO{ vertexBuffers, offsets, 1 };
+        cmd.draw        = VqCommand::Draw{ 3 };
         
-        vkCmdDraw(cmdbuf, 3, 1, 0, 0);
+        record_draw(cmdbuf, cmd);
     }
 };
 

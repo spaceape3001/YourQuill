@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "VqCommand.ipp"
 #include "VqCommandBuffers.ipp"
 #include "VqCommandPool.ipp"
 #include "VqDescriptorPool.ipp"

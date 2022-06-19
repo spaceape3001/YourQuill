@@ -66,6 +66,8 @@ set(yq_engine_sources
     ./ui/ImWindow.cpp
     
     ./vulqan/vulqan.cpp
+    ./vulqan/VqCommand.ipp
+    ./vulqan/VqCommand.hpp
     ./vulqan/VqCommandBuffers.ipp
     ./vulqan/VqCommandBuffers.hpp
     ./vulqan/VqCommandPool.ipp
