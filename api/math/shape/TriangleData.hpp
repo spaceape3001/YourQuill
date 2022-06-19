@@ -1,0 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace yq {
+    template <typename V>
+    struct TriangleData {
+        V   a, b, c;
+        
+        constexpr bool operator==(const TriangleData&) const noexcept = default;
+    };
+}

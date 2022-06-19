@@ -7,19 +7,10 @@
 
 #include <math/preamble.hpp>
 #include <math/vec/Vector1.hpp>
+#include "SegmentData.hpp"
 
 namespace yq {
     
-    /*! \brief Segment in 1 dimension(s)
-    */
-    template <typename T>
-    struct Segment1 {
-        using component_t   = T;
-
-        Vector1<T>  a, b;
-
-        constexpr bool operator==(const Segment1&) const noexcept = default;
-    };
 
 //  --------------------------------------------------------
 //  COMPOSITION

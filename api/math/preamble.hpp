@@ -258,6 +258,10 @@ namespace yq {
     {
         return (int)(floor(r)+std::copysign(0.1,r));
     }
+    
+    template <typename> struct SegmentData;
+    template <typename> struct TetrahedronData;
+    template <typename> struct TriangleData;
 
     template <typename> struct AxBox1;
     template <typename> struct AxBox2;
@@ -277,10 +281,6 @@ namespace yq {
     template <typename> struct Rectangle2;
     template <typename> struct RGB;
     template <typename> struct RGBA;
-    template <typename> struct Segment1;
-    template <typename> struct Segment2;
-    template <typename> struct Segment3;
-    template <typename> struct Segment4;
     template <typename> struct Size2;
     template <typename> struct Sphere3;
     template <typename> struct Sphere4;
@@ -300,14 +300,20 @@ namespace yq {
     template <typename> struct Tensor42;
     template <typename> struct Tensor43;
     template <typename> struct Tensor44;
-    template <typename> struct Tetrahedron3;
-    template <typename> struct Triangle2;
-    template <typename> struct Triangle3;
-    template <typename> struct Triangle4;
     template <typename> struct Vector1;
     template <typename> struct Vector2;
     template <typename> struct Vector3;
     template <typename> struct Vector4;
+
+    template <typename T> using Segment1        = SegmentData<Vector1<T>>;
+    template <typename T> using Segment2        = SegmentData<Vector2<T>>;
+    template <typename T> using Segment3        = SegmentData<Vector3<T>>;
+    template <typename T> using Segment4        = SegmentData<Vector4<T>>;
+    template <typename T> using Tetrahedron3    = TetrahedronData<Vector3<T>>;
+    template <typename T> using Triangle2       = TriangleData<Vector2<T>>;
+    template <typename T> using Triangle3       = TriangleData<Vector3<T>>;
+    template <typename T> using Triangle4       = TriangleData<Vector4<T>>;
+    
 
     //  ------------------------------------------------
     //  COMPLEX NUMBERS

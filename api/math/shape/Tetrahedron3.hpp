@@ -8,17 +8,9 @@
 
 #include <math/preamble.hpp>
 #include <math/vec/Vector3.hpp>
+#include "TetrahedronData.hpp"
 
 namespace yq {
-    template <typename T>
-    struct Tetrahedron3 {
-        using component_t   = T;
-
-        Vector3<T>     a, b, c, d;
-
-        constexpr bool operator==(const Tetrahedron3&) const noexcept = default;
-    };
-
 //  --------------------------------------------------------
 //  COMPOSITION
 

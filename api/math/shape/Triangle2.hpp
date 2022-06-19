@@ -6,19 +6,11 @@
 
 #pragma once
 
+#include "TriangleData.hpp"
 #include <math/preamble.hpp>
 #include <math/vec/Vector2.hpp>
 
 namespace yq {
-    template <typename T>
-    struct Triangle2 {
-        using component_t   = T;
-
-        Vector2<T>     a, b, c;
-
-        constexpr bool operator==(const Triangle2&) const noexcept = default;
-    };
-
 //  --------------------------------------------------------
 //  COMPOSITION
 
