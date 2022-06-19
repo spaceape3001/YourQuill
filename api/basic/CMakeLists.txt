@@ -16,6 +16,7 @@ set(basic_sources
     ./Array2.hpp
     ./BasicApp.cpp
     ./BasicApp.hpp
+    ./BasicBuffer.hpp
     ./ByteArray.hpp
     ./CollectionUtils.hpp
     ./Comma.hpp
