@@ -57,9 +57,9 @@ namespace yq {
 //  --------------------------------------------------------
 //  COMPOSITION
 
-    /*! \brief Creates a $(N)d dimensioal vector
+    /*! \brief Creates a 4 dimensioal vector
     
-        Helper function to create a $(N) dimensional cartesian vector where the component type is deduced from
+        Helper function to create a 4 dimensional cartesian vector where the component type is deduced from
         the first argument.
     */
     template <typename T>

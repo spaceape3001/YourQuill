@@ -11,6 +11,7 @@
 #include <math/Fraction.hpp>
 #include <math/RGB.hpp>
 #include <math/RGBA.hpp>
+#include <math/Pose3.hpp>
 
 
 #include <math/shape/AxBox1.hpp>
@@ -156,6 +157,9 @@ YQ_TYPE_IMPLEMENT(yq::Normal3F)
 
 YQ_TYPE_IMPLEMENT(yq::Plane3D)
 YQ_TYPE_IMPLEMENT(yq::Plane3F)
+
+YQ_TYPE_IMPLEMENT(yq::Pose3D)
+YQ_TYPE_IMPLEMENT(yq::Pose3F)
 
 YQ_TYPE_IMPLEMENT(yq::Quaternion3D)
 YQ_TYPE_IMPLEMENT(yq::Quaternion3F)
@@ -771,6 +775,14 @@ YQ_INVOKE(
     auto norm3f = writer<Normal3F>();
     norm3f.property("dir", &Normal3F::direction);
     
+    auto pose3d = writer<Pose3D>();
+    pose3d.property("ori", &Pose3D::orientation);
+    pose3d.property("pos", &Pose3D::position);
+    
+    auto pose3f = writer<Pose3F>();
+    pose3f.property("ori", &Pose3F::orientation);
+    pose3f.property("pos", &Pose3F::position);
+
     auto quat3d = writer<Quaternion3D>();
     quat3d.property("w", &Quaternion3D::w);
     quat3d.property("x", &Quaternion3D::x);

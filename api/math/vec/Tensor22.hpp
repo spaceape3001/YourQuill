@@ -8,6 +8,7 @@
 
 #define YQ__API__MATH__TENSOR_2_2__HPP 1
 #include <math/preamble.hpp>
+#include <math/trig.hpp>
 #include <math/vec/Vector2.hpp>
 
 namespace yq {
@@ -63,6 +64,7 @@ namespace yq {
             zero_v<T>, y
         };
     }
+    
 
     template <typename T>
     constexpr Tensor22<T>  rows(const Vector2<T>&x, const Vector2<T>&y)
@@ -73,6 +75,19 @@ namespace yq {
         };
     }
     
+    //! Creates a matrix that can rotate a vector by the specfied angle
+    //! In the counter-clockwise direction
+    template <typename T>
+    constexpr Tensor22<T>   rotation2(MKS<T,dim::Angle> r)
+    {
+        auto c  = cos(r);
+        auto s  = sin(r);
+        return {
+            c, -s,
+            s, c
+        };
+    }
+
     template <typename T, glm::qualifier Q>
     constexpr Tensor22<T> tensor(const glm::mat<2,2,T,Q>& t)
     {

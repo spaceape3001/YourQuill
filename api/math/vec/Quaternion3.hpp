@@ -31,6 +31,31 @@ namespace yq {
     YQ_NAN_1(Quaternion3, Vector4<T>{nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T>})
     YQ_ZERO_1(Quaternion3, Vector4<T>{zero_v<T>, zero_v<T>, zero_v<T>, zero_v<T>})
 
+    /*! \brief Creates a quaternion
+    */
+    template <typename T>
+    constexpr Quaternion3<T> quaternion(T w, std::type_identity_t<T> x, std::type_identity_t<T> y, std::type_identity_t<T> z)
+    {
+        return {w,x,y,z};
+    }
+
+    template <typename T>
+    Quaternion3<T>  rotor_x(MKS<T,dim::Angle> v)
+    {
+        return Quaternion3<T>(cos(0.5*v), sin(0.5*v), 0., 0.);
+    }
+
+    template <typename T>
+    Quaternion3<T>  rotor_y(MKS<T,dim::Angle> v)
+    {
+        return Quaternion3<T>(cos(0.5*v), 0., sin(0.5*v), 0.);
+    }
+
+    template <typename T>
+    Quaternion3<T>  rotor_z(MKS<T,dim::Angle> v)
+    {
+        return Quaternion3<T>(cos(0.5*v), 0., 0., sin(0.5*v));
+    }
 
 //  --------------------------------------------------------
 //  GETTERS
@@ -55,11 +80,18 @@ namespace yq {
     }
 
     template <typename T>
+    constexpr square_t<T>  operator^(const Quaternion3<T>&a, two_t)
+    {
+        return a.w*a.w+a.x*a.x+a.y*a.y+a.z*a.z;
+    }
+
+    template <typename T>
     requires trait::has_sqrt_v<T>
     constexpr T  length(const Quaternion3<T>&a) 
     {
         return sqrt(length2(a));
     }
+    
 
     YQ_IS_NAN_1(Quaternion3, is_nan(v.x) || is_nan(v.y) || is_nan(v.z) || is_nan(v.w))
     YQ_IS_FINITE_1(Quaternion3, is_finite(v.x) && is_finite(v.y) && is_finite(v.z) && is_finite(v.w))

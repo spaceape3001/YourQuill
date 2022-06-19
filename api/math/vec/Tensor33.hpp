@@ -8,6 +8,7 @@
 
 #define YQ__API__MATH__TENSOR_3_3__HPP 1
 #include <math/preamble.hpp>
+#include <math/trig.hpp>
 #include <math/vec/Vector3.hpp>
 
 namespace yq {
@@ -68,6 +69,69 @@ namespace yq {
             zero_v<T>, zero_v<T>, z
         };
     }
+
+    template <typename T>
+    Tensor33<T> hpr33(MKS<T,dim::Angle> hdg, MKS<T,dim::Angle> pitch, MKS<T,dim::Angle> roll)
+    {
+        auto ch = cos(hdg);
+        auto sh = sin(hdg);
+
+        auto cp = cos(pitch);
+        auto sp = sin(pitch);
+
+        auto cr = cos(roll);
+        auto sr = sin(roll);
+        
+        return {
+            ch*cp, sh*cp, -sp,
+            ch*sp*sr-sh*cr, sh*sp*sr+ch*cr, cp*sr,
+            ch*sp*cr+sh*sr, sh*sp*cr-ch*sr, cp*cr
+        };
+    }
+
+    //! Creates a matrix that can rotate a vector by the specfied angle
+    //! In the counter-clockwise direction
+    template <typename T>
+    constexpr Tensor33<T>   rotation3X(MKS<T,dim::Angle> r)
+    {
+        auto c  = cos(r);
+        auto s  = sin(r);
+        return {
+            1., 0., 0.,
+            0., c, -s,
+            0., s, c
+        };
+    }
+
+    //! Creates a matrix that can rotate a vector by the specfied angle
+    //! In the counter-clockwise direction
+    template <typename T>
+    constexpr Tensor33<T>   rotation3Y(MKS<T,dim::Angle> r)
+    {
+        auto c  = cos(r);
+        auto s  = sin(r);
+        return {
+            c, 0., -s,
+            0., 1., 0.,
+            s, 0., c
+        };
+    }
+
+
+    //! Creates a matrix that can rotate a vector by the specfied angle
+    //! In the counter-clockwise direction
+    template <typename T>
+    constexpr Tensor33<T>   rotation3Z(MKS<T,dim::Angle> r)
+    {
+        auto c  = cos(r);
+        auto s  = sin(r);
+        return {
+            1., 0., 0.,
+            0., c, -s,
+            0., s, c
+        };
+    }
+
 
     template <typename T>
     constexpr Tensor33<T>  rows(const Vector3<T>&x, const Vector3<T>&y, const Vector3<T>&z)
