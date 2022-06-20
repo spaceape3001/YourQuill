@@ -20,7 +20,7 @@
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/Application.hpp>
-#include <engine/Window.hpp>
+#include <engine/MainWindow.hpp>
 #include <engine/PipelineBuilder.hpp>
 #include <engine/Render3D.hpp>
 #include <engine/Render3DInfoWriter.hpp>
@@ -37,7 +37,6 @@
 #include <math.h>
 
 using namespace yq;
-using namespace yq::engine;
 
 struct Vertex {
     glm::vec2   position;
@@ -60,9 +59,9 @@ struct HelloTriangle : public Rendered {
     YQ_OBJECT_DECLARE(HelloTriangle, Rendered)
     VqPipeline                  m_pipeline;
     VqBuffer                    m_vbo;
-    Window*                     m_window                = nullptr;
+    MainWindow*                     m_window                = nullptr;
     
-    HelloTriangle(Window*w) : m_window(w)
+    HelloTriangle(MainWindow*w) : m_window(w)
     {
         ShaderPtr   vert = Shader::load("examples/hello/hello3.vert");
         ShaderPtr   frag = Shader::load("examples/hello/hello.frag");
@@ -119,13 +118,13 @@ YQ_INVOKE(
 YQ_OBJECT_IMPLEMENT(HelloTriangle)
 
 
-struct HelloWin : public Window {
-    YQ_OBJECT_DECLARE(HelloWin, Window)
+struct HelloWin : public MainWindow {
+    YQ_OBJECT_DECLARE(HelloWin, MainWindow)
     
     timepoint_t             start;
     Ref<HelloTriangle>      triangle;
 
-    HelloWin(const WindowCreateInfo& wci) : Window(wci)
+    HelloWin(const WindowCreateInfo& wci) : MainWindow(wci)
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);

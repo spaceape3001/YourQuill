@@ -24,6 +24,8 @@ set(yq_engine_sources
     ./ImWidgetInfoWriter.hpp
     ./ImWindow.hpp
     ./ImWindow.cpp
+    ./MainWindow.cpp
+    ./MainWindow.hpp
     ./Pipeline.cpp
     ./PipelineBuilder.hpp
     ./PipelineConfig.hpp
@@ -44,8 +46,6 @@ set(yq_engine_sources
     ./TextureCache.hpp
     ./TextureLoader.hpp
     ./TextureInfoWriter.hpp
-    ./Window.cpp
-    ./Window.hpp
     
     ./enum/BorderColor.hpp   
     ./enum/ColorComponent.hpp    

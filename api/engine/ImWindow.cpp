@@ -15,7 +15,7 @@ YQ_OBJECT_IMPLEMENT(yq::engine::ImWindow)
 
 namespace yq {
     namespace engine {
-        ImWindow::ImWindow(const WindowCreateInfo& wci) : Window(wci)
+        ImWindow::ImWindow(const WindowCreateInfo& wci) : MainWindow(wci)
         {
             m_imgui = ImGui::CreateContext();
             ImGui_ImplVulkan_InitInfo vii{};
@@ -53,7 +53,7 @@ namespace yq {
             ImGui::NewFrame();
             draw_imgui();
             ImGui::Render();
-            if(!Window::draw())
+            if(!MainWindow::draw())
                 return false;
             return true;
         }

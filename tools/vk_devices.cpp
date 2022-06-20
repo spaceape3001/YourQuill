@@ -8,7 +8,7 @@
 #include <engine/Application.hpp>
 #include <iostream>
 
-using namespace yq::engine;
+using namespace yq;
 
 int main(int argc, char* argv[])
 {

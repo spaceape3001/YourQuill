@@ -11,7 +11,7 @@
 #include <iostream>
 
 using std::cout;
-using namespace yq::engine;
+using namespace yq;
 
 int main(int argc, char* argv[])
 {

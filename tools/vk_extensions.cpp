@@ -9,7 +9,7 @@
 
 int main(int argc, char* argv[])
 {
-    auto data = yq::engine::vqEnumerateInstanceExtensionProperties();
+    auto data = yq::vqEnumerateInstanceExtensionProperties();
     std::cout << data.size() << " vulkan extension(s)\n";
     for(const auto& lay : data)
         std::cout << '\t' << lay.extensionName << '\n';

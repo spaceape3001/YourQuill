@@ -13,27 +13,25 @@
 #include <vector>
 
 namespace yq {
-        class Shader;
-    namespace engine {
-        class Window;
+    class Shader;
+    class MainWindow;
+    
+    class VqShaderStages : trait::not_copyable, trait::not_moveable {
+    public:
+    
+        VqShaderStages(MainWindow&, const std::vector<ShaderSpec>&);
+        VqShaderStages(VkDevice, const std::vector<ShaderSpec>&);
+        ~VqShaderStages();
         
-        class VqShaderStages : trait::not_copyable, trait::not_moveable {
-        public:
+        uint32_t        mask() const { return m_mask; }
         
-            VqShaderStages(Window&, const std::vector<ShaderSpec>&);
-            VqShaderStages(VkDevice, const std::vector<ShaderSpec>&);
-            ~VqShaderStages();
-            
-            uint32_t        mask() const { return m_mask; }
-            
-            friend VkGraphicsPipelineCreateInfo&  operator<<(VkGraphicsPipelineCreateInfo&, const VqShaderStages&);
-            
-        private:
-            std::vector<VkPipelineShaderStageCreateInfo>    m_stages;
-            VkDevice                                        m_device    = nullptr;
-            uint32_t                                        m_mask      = 0;
-            
-        };
-    }
-
+        friend VkGraphicsPipelineCreateInfo&  operator<<(VkGraphicsPipelineCreateInfo&, const VqShaderStages&);
+        
+    private:
+        std::vector<VkPipelineShaderStageCreateInfo>    m_stages;
+        VkDevice                                        m_device    = nullptr;
+        uint32_t                                        m_mask      = 0;
+        
+    };
 }
+

@@ -67,8 +67,7 @@ with open('VqStructs.hpp', 'w') as f:
 
 #include <vulkan/vulkan_core.h>
 
-namespace yq {
-    namespace engine {""")
+namespace yq {""")
 
 
     for s in structs:
@@ -76,15 +75,14 @@ namespace yq {
             continue;
         written.append(s['vk'])
         f.write("""
-        struct %(vq)s : public %(vk)s {
-            %(vq)s() : %(vk)s{} 
-            {
-                sType   = %(enum)s;
-            }
-        };
+    struct %(vq)s : public %(vk)s {
+        %(vq)s() : %(vk)s{} 
+        {
+            sType   = %(enum)s;
+        }
+    };
 """ % s)
 
     f.write("""
-    }
 }
 """)
