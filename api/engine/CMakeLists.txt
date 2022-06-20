@@ -15,7 +15,7 @@ set(yq_engine_sources
 
     ./Application.hpp
     ./Application.ipp
-    ./Camera.cpp
+    ./Camera.ipp
     ./Camera.hpp
     ./CameraProxy.hpp
     ./CameraInfoWriter.hpp
@@ -38,6 +38,7 @@ set(yq_engine_sources
     ./Resource.cpp
     ./Resource.hpp
     ./ResourceCache.hpp
+    ./ResourceCache.cpp
     ./ResourceCompiler.hpp
     ./ResourceLoader.hpp
     ./ResourceInfoWriter.hpp
@@ -57,7 +58,7 @@ set(yq_engine_sources
     ./enum/ColorComponent.hpp    
     ./enum/ComponentSwizzle.hpp
     ./enum/CullMode.hpp   
-    ./enum/DataActivity
+    ./enum/DataActivity.hpp
     ./enum/DataFormat.hpp 
     ./enum/DescriptorType.hpp   
     ./enum/FilterType.hpp   

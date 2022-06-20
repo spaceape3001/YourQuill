@@ -16,6 +16,7 @@
 #include <config/DirConfig.hpp>
 
 #include <engine/ResultCC.hpp>
+#include <atomic>
 
 YQ_OBJECT_IMPLEMENT(yq::Shader)
 YQ_OBJECT_IMPLEMENT(yq::ShaderCache)

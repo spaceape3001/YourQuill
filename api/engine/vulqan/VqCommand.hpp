@@ -25,6 +25,10 @@ namespace yq {
             size_t                  first   = 0;
         };
         
+        struct UBO {
+            // TODO
+        };
+        
         struct Push {   
             const void*             data    = nullptr;
             size_t                  size    = 0;
@@ -43,6 +47,7 @@ namespace yq {
         VkPipeline              pipeline    = nullptr;
         VkPipelineLayout        layout      = nullptr;
         std::optional<Push>     push;
+        std::optional<UBO>      ubo;
         std::optional<VBO>      vbo;
         std::optional<Draw>     draw;
     };

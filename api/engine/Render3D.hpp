@@ -36,9 +36,6 @@ namespace yq {
         //  The model matrix in relation to its parent
         Tensor44D          calc_local() const;
         
-        Render3D();
-        virtual ~Render3D();
-        
         //  Computes the model to world matrix
         glm::dmat4                      model2world() const;
         
@@ -49,13 +46,20 @@ namespace yq {
         const Vector3D&                 scale() const { return m_space.scale; }
         const Quaternion3D&             orientation() const { return m_space.orientation; }
         const AxBox3D&                  bounds() const { return m_bounds; }
+        const SimpleSpace&              space() const { return m_space; }
         
         void                            set_position(const Vector3D&);
         void                            set_scale(const Vector3D&);
         void                            set_orientation(const Quaternion3D&);
         void                            set_bounds(const AxBox3D&);
+        void                            set_space(const SimpleSpace&);
         
-        virtual Ref<Render3D>           clone() const = 0;
+        virtual Ref<Render3D>           clone() const { return {}; }
+        
+    protected:
+        
+        Render3D();
+        virtual ~Render3D();
         
     private:
         Render3D*                       m_parent    = nullptr;

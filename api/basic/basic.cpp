@@ -35,6 +35,7 @@
 #include "StreamOps.ipp"
 #include "TextUtils.ipp"
 #include "ThreadId.ipp"
+#include "UniqueID.ipp"
 #include "Url.ipp"
 #include "VersionSpec.ipp"
 #include "XmlFile.ipp"

@@ -8,6 +8,7 @@
 
 #include <basic/Object.hpp>
 #include <basic/meta/ObjectInfo.hpp>
+#include <basic/UniqueID.hpp>
 #include <engine/PipelineConfig.hpp>
 
 namespace yq {
@@ -32,11 +33,11 @@ namespace yq {
         If you want it to show up on the viewport, it needs to be renderable, and thus derived
         from this thing.
     */
-    class Rendered : public Object, public RefCount {
+    class Rendered : public Object, public RefCount, public UniqueID {
         YQ_OBJECT_INFO(RenderedInfo);
         YQ_OBJECT_DECLARE(Rendered, Object)
     public:    
-        uint64_t        id() const { return m_id; }
+        uint64_t        id() const { return UniqueID::id(); }
         uint64_t        revision() const { return m_revision; }
     
     protected:
@@ -47,7 +48,6 @@ namespace yq {
         void            changed();
     
     private:
-        uint64_t   m_id         = 0;
         uint64_t   m_revision   = 0;
     };
 

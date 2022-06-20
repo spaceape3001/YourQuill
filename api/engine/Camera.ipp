@@ -11,7 +11,6 @@
 #include "CameraInfoWriter.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/meta/Init.hpp>
-#include <atomic>
 
 namespace yq {
 
@@ -32,13 +31,7 @@ namespace yq {
 
     Camera::Camera()
     {
-        static std::atomic<uint64_t>    next = { 0 };
-        m_id        = ++next;
         m_revision  = 0;
-    }
-    
-    Camera::Camera(const Camera&) : Camera()
-    {
     }
 
     Camera::~Camera()
@@ -52,14 +45,15 @@ namespace yq {
 
     CameraProxy     Camera::proxy(const CameraParams&p) const
     {
-        return { m_id, m_revision, world2screen(p) };
+        return { id(), revision(), world2screen(p) };
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     YQ_INVOKE(
-        [[maybe_unused]] auto rend   = writer<Camera>();
+        auto cam   = writer<Camera>();
+        cam.property("id", &Camera::id);
     )
 }
 

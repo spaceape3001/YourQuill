@@ -10,6 +10,13 @@
 #include <engine/Rendered.hpp>
 
 namespace yq {
+    /*! \brief Frame of things to be rendered, both cameras & items.
+    
+    *//*
+        To get things to be rendered, the general process should go...
+        
+        RenderFrame -> ProxyFrame -> VqObjectFrame -> VqCommands
+    */
     struct RenderFrame : public RefCount {
         std::vector<CameraPtr>      cameras;
         std::vector<RenderedPtr>    rendereds;

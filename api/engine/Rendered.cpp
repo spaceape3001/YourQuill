@@ -25,8 +25,6 @@ namespace yq {
 
     Rendered::Rendered()
     {
-        static std::atomic<uint64_t>    next = { 0 };
-        m_id        = ++next;
         m_revision  = 0;
     }
     
@@ -47,7 +45,8 @@ namespace yq {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     YQ_INVOKE(
-        [[maybe_unused]] auto rend   = writer<Rendered>();
+        auto rend   = writer<Rendered>();
+        rend.property("id", &Rendered::id);
     )
 }
 
