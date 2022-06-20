@@ -8,6 +8,7 @@
 
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
+#include <math/Size2.hpp>
 
 #include <glm/glm.hpp>
 
@@ -26,6 +27,11 @@ namespace yq {
         struct CameraProxy;
 
 
+        struct CameraParams {
+            Size2D          screen{};
+        };
+
+
         /*! \brief Shows up on the screen
         
             If you want it to show up on the viewport, it needs to be renderable, and thus derived
@@ -40,10 +46,10 @@ namespace yq {
             uint64_t        revision() const { return m_revision; }
         
             //! Returns the transform to go world -> screen space
-            virtual glm::dmat4  world2screen() const = 0;
+            virtual glm::dmat4  world2screen(const CameraParams&) const = 0;
         
-            CameraProxy     proxy() const;
-        
+            CameraProxy     proxy(const CameraParams&) const;
+
         protected:
             Camera();
             Camera(const Camera&);

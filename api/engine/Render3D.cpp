@@ -27,7 +27,7 @@ namespace yq {
 
         Tensor44D   Render3D::calc_local() const
         {
-            return m_space.value.local2parent();
+            return m_space.local2parent();
         }
 
         glm::dmat4  Render3D::model2world() const
@@ -46,22 +46,19 @@ namespace yq {
 
         void        Render3D::set_orientation(const Quaternion3D&v)
         {
-            m_space.value.orientation   = v;
-            m_space.dirty               = true;
+            m_space.orientation   = v;
             changed();
         }
 
         void        Render3D::set_position(const Vector3D&v)
         {
-            m_space.value.position      = v;
-            m_space.dirty               = true;
+            m_space.position      = v;
             changed();
         }
         
         void        Render3D::set_scale(const Vector3D&v)
         {
-            m_space.value.scale         = v;
-            m_space.dirty               = true;
+            m_space.scale         = v;
             changed();
         }
 

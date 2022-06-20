@@ -51,9 +51,9 @@ namespace yq {
             ++m_revision;
         }
 
-        CameraProxy     Camera::proxy() const
+        CameraProxy     Camera::proxy(const CameraParams&p) const
         {
-            return { m_id, m_revision, world2screen() };
+            return { m_id, m_revision, world2screen(p) };
         }
         
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

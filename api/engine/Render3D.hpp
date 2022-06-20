@@ -46,10 +46,10 @@ namespace yq {
             Render3D*                       parent() { return m_parent; }
             const Render3D*                 parent() const { return m_parent; }
             
-            const Vector3D&                 position() const { return m_space.value.position; }
-            const Vector3D&                 scale() const { return m_space.value.scale; }
-            const Quaternion3D&             orientation() const { return m_space.value.orientation; }
-            const AxBox3D&                  bounds() const { return m_bounds.value; }
+            const Vector3D&                 position() const { return m_space.position; }
+            const Vector3D&                 scale() const { return m_space.scale; }
+            const Quaternion3D&             orientation() const { return m_space.orientation; }
+            const AxBox3D&                  bounds() const { return m_bounds; }
             
             void                            set_position(const Vector3D&);
             void                            set_scale(const Vector3D&);
@@ -63,10 +63,10 @@ namespace yq {
             std::vector<Ref<Render3D>>      m_children;
             
             //! This is the coordinate space for the object (position, scale, & orientation)
-            Dirty<SimpleSpace>              m_space;
+            SimpleSpace                     m_space;
             
             //! Bounding box of the render object in its x/y/z axis
-            Dirty<AxBox3D>                  m_bounds        = { nan_v<AxBox3D> };
+            AxBox3D                         m_bounds        = { nan_v<AxBox3D> };
         };
 
     }

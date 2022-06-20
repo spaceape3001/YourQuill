@@ -5,8 +5,11 @@ endif()
 set(yq_asset_sources
     ${asset_test_source}
     
-    ./NullCamera.cpp
+    ./asset.cpp
+    ./NullCamera.ipp
     ./NullCamera.hpp
+    ./SpaceCamera.ipp
+    ./SpaceCamera.hpp
 )
 
 add_library(yqasset SHARED ${yq_asset_sources})
