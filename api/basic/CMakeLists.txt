@@ -8,13 +8,15 @@ endif()
 set(basic_sources
     ${basic_test_source}
     
-    ./AbstractFile.cpp
+    ./basic.cpp
+    
+    ./AbstractFile.ipp
     ./AbstractFile.hpp
-    ./Any.cpp
+    ./Any.ipp
     ./Any.hpp
     ./Array1.hpp
     ./Array2.hpp
-    ./BasicApp.cpp
+    ./BasicApp.ipp
     ./BasicApp.hpp
     ./BasicBuffer.hpp
     ./ByteArray.hpp
@@ -22,155 +24,155 @@ set(basic_sources
     ./Comma.hpp
     ./Compare.hpp
     ./Concat.hpp
-    ./ContentType.cpp
+    ./ContentType.ipp
     ./ContentType.hpp
-    ./Curl.cpp
+    ./Curl.ipp
     ./Curl.hpp
     ./DbgRel.hpp
     ./Deque.hpp
-    ./DelayInit.cpp
+    ./DelayInit.ipp
     ./DelayInit.hpp
     ./DiffEngine.hpp
-    ./DirUtils.cpp
+    ./DirUtils.ipp
     ./DirUtils.hpp
-    ./Encode64.cpp
+    ./Encode64.ipp
     ./Encode64.hpp
-    ./Enum.cpp
+    ./Enum.ipp
     ./Enum.hpp
     ./EnumMap.hpp
-    ./Execute.cpp
+    ./Execute.ipp
     ./Execute.hpp
     ./Guarded.hpp
-    ./FileUtils.cpp
+    ./FileUtils.ipp
     ./FileUtils.hpp
     ./FixedBuffer.hpp
-    ./Flag.cpp
+    ./Flag.ipp
     ./Flag.hpp
-    ./Format.cpp
+    ./Format.ipp
     ./Format.hpp
     ./Hash.hpp
     ./Http.hpp
     ./HttpOp.hpp
-    ./HttpParser.cpp
+    ./HttpParser.ipp
     ./HttpParser.hpp
-    ./HttpStatus.cpp
+    ./HttpStatus.ipp
     ./HttpStatus.hpp
     ./IgCase.hpp
-    ./IgCase.cpp
+    ./IgCase.ipp
     ./IntRange.hpp
     ./Iter32.hpp
     ./IterW.hpp
     ./KV.hpp
     ./List.hpp
     ./LogFwd.hpp
-    ./Logging.cpp
+    ./Logging.ipp
     ./Logging.hpp
     ./Map.hpp
     ./MultiMap.hpp
-    ./Object.cpp
+    ./Object.ipp
     ./Object.hpp
-    ./PidFile.cpp
+    ./PidFile.ipp
     ./PidFile.hpp
-    ./PluginLoader.cpp
+    ./PluginLoader.ipp
     ./PluginLoader.hpp
-    ./Random.cpp
+    ./Random.ipp
     ./Random.hpp
-    ./Ref.cpp
+    ./Ref.ipp
     ./Ref.hpp
     ./Result.hpp
     ./RevIgCase.hpp
-    ./RevIgCase.cpp
+    ./RevIgCase.ipp
     ./Safety.hpp
     ./Set.hpp
     ./Span.hpp
-    ./SqlError.cpp
+    ./SqlError.ipp
     ./SqlError.hpp
-    ./SqlLite.cpp
+    ./SqlLite.ipp
     ./SqlLite.hpp
     ./SqlLogging.hpp
-    ./SqlQuery.cpp
+    ./SqlQuery.ipp
     ./SqlQuery.hpp
-    ./SqlUtils.cpp
+    ./SqlUtils.ipp
     ./SqlUtils.hpp
     ./Stack.hpp
-    ./Stream.cpp
+    ./Stream.ipp
     ./Stream.hpp
-    ./StreamOps.cpp
+    ./StreamOps.ipp
     ./StreamOps.hpp
-    ./TextUtils.cpp
+    ./TextUtils.ipp
     ./TextUtils.hpp
-    ./ThreadId.cpp
+    ./ThreadId.ipp
     ./ThreadId.hpp
     ./Touched.hpp
-    ./Url.cpp
+    ./Url.ipp
     ./Url.hpp
     ./Vector.hpp
     ./Version.hpp
     ./VersionSpec.hpp
-    ./VersionSpec.cpp
-    ./XmlFile.cpp
+    ./VersionSpec.ipp
+    ./XmlFile.ipp
     ./XmlFile.hpp
-    ./XmlObject.cpp
+    ./XmlObject.ipp
     ./XmlObject.hpp
     ./XmlSerialize.hpp
-    ./XmlUtils.cpp
+    ./XmlUtils.ipp
     ./XmlUtils.hpp
     
     ./meta/AnyDef.hpp
     ./meta/AnyImpl.hpp
-    ./meta/ArgInfo.cpp
+    ./meta/ArgInfo.ipp
     ./meta/ArgInfo.hpp
-    ./meta/CompoundInfo.cpp
+    ./meta/CompoundInfo.ipp
     ./meta/CompoundInfo.hpp
     ./meta/CompoundInfoDynamic.hpp
     ./meta/CompoundInfoStatic.hpp
     ./meta/DataBlock.hpp
     ./meta/DynamicPropGetter.hpp
     ./meta/DynamicPropSetter.hpp
-    ./meta/Global.cpp
+    ./meta/Global.ipp
     ./meta/Global.hpp
     ./meta/GlobalInfoWriter.hpp
     ./meta/InfoBinder.hpp
     ./meta/Init.hpp
-    ./meta/Meta.cpp
+    ./meta/Meta.ipp
     ./meta/Meta.hpp
-    ./meta/MetaRepo.cpp
+    ./meta/MetaRepo.ipp
     ./meta/MetaRepo.hpp
-    ./meta/MetaWriter.cpp
+    ./meta/MetaWriter.ipp
     ./meta/MetaWriter.hpp
-    ./meta/MethodInfo.cpp
+    ./meta/MethodInfo.ipp
     ./meta/MethodInfo.hpp
     ./meta/MethodInfoWriter.hpp
-    ./meta/ObjectInfo.cpp
+    ./meta/ObjectInfo.ipp
     ./meta/ObjectInfo.hpp
     ./meta/ObjectInfoWriter.hpp
-    ./meta/PropGetter.cpp
+    ./meta/PropGetter.ipp
     ./meta/PropGetter.hpp
-    ./meta/PropSetter.cpp
+    ./meta/PropSetter.ipp
     ./meta/PropSetter.hpp
-    ./meta/PropertyInfo.cpp
+    ./meta/PropertyInfo.ipp
     ./meta/PropertyInfo.hpp
     ./meta/PropertyInfoWriter.hpp
     ./meta/ReservedIDs.hpp
     ./meta/StaticPropGetter.hpp
     ./meta/StaticPropSetter.hpp
-    ./meta/StdTypes.cpp
-    ./meta/TypeInfo.cpp
+    ./meta/StdTypes.ipp
+    ./meta/TypeInfo.ipp
     ./meta/TypeInfo.hpp
     ./meta/TypeInfoWriter.hpp
 
-    ./stream/Bytes.cpp
+    ./stream/Bytes.ipp
     ./stream/Bytes.hpp
-    ./stream/First.cpp
+    ./stream/First.ipp
     ./stream/First.hpp
-    ./stream/File.cpp
+    ./stream/File.ipp
     ./stream/File.hpp
-    ./stream/LineCol.cpp
+    ./stream/LineCol.ipp
     ./stream/LineCol.hpp
-    ./stream/OSFile.cpp
+    ./stream/OSFile.ipp
     ./stream/OSFile.hpp
     ./stream/Text.hpp
-    ./stream/Text.cpp
+    ./stream/Text.ipp
 
     ./trait/always_false.hpp
     ./trait/always_true.hpp
