@@ -3,20 +3,19 @@
 //  YOUR QUILL
 //
 ////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include <basic/Enum.hpp>
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    namespace engine {
-        YQ_ENUM(Tristate, ,
-            INHERIT     = 1,
-            NO          = 0,
-            YES         = 2
-        );
-    }
+    YQ_ENUM(Tristate, ,
+        INHERIT     = 1,
+        NO          = 0,
+        YES         = 2
+    );
 }
 
-YQ_TYPE_DECLARE(yq::engine::Tristate)
+YQ_TYPE_DECLARE(yq::Tristate)
 

@@ -9,11 +9,9 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    namespace engine {
-        YQ_ENUM(SubpassContents, ,
-            Inline = 0,
-            SecondaryCommandBuffers = 1
-        )
-    }
+    YQ_ENUM(SubpassContents, ,
+        Inline = 0,
+        SecondaryCommandBuffers = 1
+    )
 }
-YQ_TYPE_DECLARE(yq::engine::SubpassContents)
+YQ_TYPE_DECLARE(yq::SubpassContents)
