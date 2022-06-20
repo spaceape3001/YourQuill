@@ -8,6 +8,7 @@
 
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/Rendered.hpp>
+#include <basic/Mutable.hpp>
 
 namespace yq {
     template <typename C>

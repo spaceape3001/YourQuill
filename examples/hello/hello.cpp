@@ -104,7 +104,8 @@ struct HelloTriangle : public Rendered {
         VqCommand       cmd;
         cmd.pipeline    = w ? m_pipeline.wireframe() : m_pipeline.pipeline();
         cmd.layout      = m_pipeline.layout();
-        cmd.push        = VqCommand::Push{ &warp, sizeof(warp), m_pipeline.shader_mask() };
+        cmd.push        = warp; // VqCommand::Push{ &warp, sizeof(warp), m_pipeline.shader_mask() };
+        cmd.push_mask   = m_pipeline.shader_mask();
         cmd.vbo         = VqCommand::VBO{ vertexBuffers, offsets, 1 };
         cmd.draw        = VqCommand::Draw{ 3 };
         record_draw(cmdbuf, cmd);

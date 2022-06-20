@@ -84,6 +84,8 @@ set(yq_engine_sources
     ./vulqan/VqCommand.hpp
     ./vulqan/VqCommandBuffers.ipp
     ./vulqan/VqCommandBuffers.hpp
+#    ./vulqan/VqCommandFrame.cpp
+    ./vulqan/VqCommandFrame.hpp
     ./vulqan/VqCommandPool.ipp
     ./vulqan/VqCommandPool.hpp
     ./vulqan/VqDescriptorPool.ipp
@@ -107,6 +109,10 @@ set(yq_engine_sources
     ./vulqan/VqLogging.hpp
     ./vulqan/VqMonitor.ipp
     ./vulqan/VqMonitor.hpp
+#    ./vulqan/VqObject.cpp
+    ./vulqan/VqObject.hpp
+#    ./vulqan/VqObjectFrame.cpp
+    ./vulqan/VqObjectFrame.hpp
     ./vulqan/VqPipeline.cpp
     ./vulqan/VqPipeline.hpp
     ./vulqan/VqQueues.ipp

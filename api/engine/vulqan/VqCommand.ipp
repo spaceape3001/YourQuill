@@ -12,18 +12,18 @@ namespace yq {
     struct VqCmdState {
         VkCommandBuffer     buffer;
         VkPipeline          pipeline    = nullptr;
+        VkPipelineLayout    layout      = nullptr;
     
         void    apply(const VqCommand& cmd)
         {
             if(cmd.pipeline && (cmd.pipeline != pipeline)){
                 vkCmdBindPipeline(buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, cmd.pipeline);
-                pipeline    =    cmd.pipeline;
+                pipeline    =   cmd.pipeline;
+                layout      =   cmd.layout;
             }
             
-            if(cmd.layout && cmd.push){
-                const auto& p = *(cmd.push);
-                vkCmdPushConstants(buffer, cmd.layout, p.mask, 0, p.size, p.data);
-            }
+            if(cmd.push_mask)
+                vkCmdPushConstants(buffer, layout, cmd.push_mask, 0, cmd.push.size(), cmd.push.data());
             
             if(cmd.vbo){
                 const auto& v = *(cmd.vbo);
