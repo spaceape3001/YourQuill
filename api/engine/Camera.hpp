@@ -8,6 +8,7 @@
 
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
+#include <basic/Revision.hpp>
 #include <basic/UniqueID.hpp>
 #include <math/Size2.hpp>
 
@@ -37,13 +38,12 @@ namespace yq {
         If you want it to show up on the viewport, it needs to be renderable, and thus derived
         from this thing.
     */
-    class Camera : public Object, public RefCount, public UniqueID {
+    class Camera : public Object, public RefCount, public UniqueID, public Revision {
         YQ_OBJECT_INFO(CameraInfo);
         YQ_OBJECT_DECLARE(Camera, Object)
     public:    
     
         uint64_t        id() const { return UniqueID::id(); }
-        uint64_t        revision() const { return m_revision; }
     
         //! Returns the transform to go world -> screen space
         virtual glm::dmat4  world2screen(const CameraParams&) const = 0;
@@ -53,11 +53,6 @@ namespace yq {
     protected:
         Camera();
         ~Camera();
-    
-        void            changed();
-    
-    private:
-        uint64_t    m_revision = 0;
     };
     
     using CameraPtr     = Ref<Camera>;

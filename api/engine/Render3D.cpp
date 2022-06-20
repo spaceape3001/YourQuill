@@ -20,13 +20,16 @@ namespace yq {
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Render3D::Render3D()    = default;
+    Render3D::Render3D() : m_parent(nullptr, this), m_children(this), m_space(this), m_bounds(nan_v<AxBox3D>, this)
+    {
+    }
+    
     Render3D::~Render3D()   = default;
 
 
     Tensor44D   Render3D::calc_local() const
     {
-        return m_space.local2parent();
+        return m_space->local2parent();
     }
 
     glm::dmat4  Render3D::model2world() const
@@ -40,31 +43,26 @@ namespace yq {
     void        Render3D::set_bounds(const AxBox3D&v)
     {
         m_bounds    = v;
-        changed();
     }
 
     void        Render3D::set_orientation(const Quaternion3D&v)
     {
-        m_space.orientation   = v;
-        changed();
+        m_space.edit().orientation   = v;
     }
 
     void        Render3D::set_position(const Vector3D&v)
     {
-        m_space.position      = v;
-        changed();
+        m_space.edit().position      = v;
     }
     
     void        Render3D::set_scale(const Vector3D&v)
     {
-        m_space.scale         = v;
-        changed();
+        m_space.edit().scale         = v;
     }
 
     void        Render3D::set_space(const SimpleSpace&v)
     {
         m_space = v;
-        changed();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

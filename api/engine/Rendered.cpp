@@ -25,7 +25,6 @@ namespace yq {
 
     Rendered::Rendered()
     {
-        m_revision  = 0;
     }
     
     Rendered::Rendered(const Rendered&) : Rendered()
@@ -34,11 +33,6 @@ namespace yq {
 
     Rendered::~Rendered()
     {
-    }
-
-    void    Rendered::changed()
-    {
-        ++m_revision;
     }
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

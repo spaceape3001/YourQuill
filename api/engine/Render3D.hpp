@@ -8,6 +8,7 @@
 
 #include <basic/Dirty.hpp>
 #include <basic/Object.hpp>
+#include <basic/Mutable.hpp>
 #include <basic/Ref.hpp>
 #include <basic/meta/ObjectInfo.hpp>
 #include <engine/PipelineConfig.hpp>
@@ -39,12 +40,12 @@ namespace yq {
         //  Computes the model to world matrix
         glm::dmat4                      model2world() const;
         
-        Render3D*                       parent() { return m_parent; }
+        //Render3D*                       parent() { return m_parent; }
         const Render3D*                 parent() const { return m_parent; }
         
-        const Vector3D&                 position() const { return m_space.position; }
-        const Vector3D&                 scale() const { return m_space.scale; }
-        const Quaternion3D&             orientation() const { return m_space.orientation; }
+        const Vector3D&                 position() const { return m_space->position; }
+        const Vector3D&                 scale() const { return m_space->scale; }
+        const Quaternion3D&             orientation() const { return m_space->orientation; }
         const AxBox3D&                  bounds() const { return m_bounds; }
         const SimpleSpace&              space() const { return m_space; }
         
@@ -62,14 +63,14 @@ namespace yq {
         virtual ~Render3D();
         
     private:
-        Render3D*                       m_parent    = nullptr;
-        std::vector<Ref<Render3D>>      m_children;
+        Mutable<Render3D*>                      m_parent;
+        Mutable<std::vector<Ref<Render3D>>>     m_children;
         
         //! This is the coordinate space for the object (position, scale, & orientation)
-        SimpleSpace                     m_space;
+        Mutable<SimpleSpace>                    m_space;
         
         //! Bounding box of the render object in its x/y/z axis
-        AxBox3D                         m_bounds        = { nan_v<AxBox3D> };
+        Mutable<AxBox3D>                        m_bounds;
     };
 
 }

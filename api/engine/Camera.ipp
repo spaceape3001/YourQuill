@@ -31,16 +31,10 @@ namespace yq {
 
     Camera::Camera()
     {
-        m_revision  = 0;
     }
 
     Camera::~Camera()
     {
-    }
-
-    void    Camera::changed()
-    {
-        ++m_revision;
     }
 
     CameraProxy     Camera::proxy(const CameraParams&p) const

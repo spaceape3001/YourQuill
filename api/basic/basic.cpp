@@ -27,6 +27,7 @@
 #include "Random.ipp"
 #include "Ref.ipp"
 #include "RevIgCase.ipp"
+#include "Revision.ipp"
 #include "SqlError.ipp"
 #include "SqlLite.ipp"
 #include "SqlQuery.ipp"

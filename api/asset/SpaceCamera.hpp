@@ -7,6 +7,7 @@
 #pragma once
 
 #include <engine/Camera.hpp>
+#include <basic/Mutable.hpp>
 #include <math/SimpleSpace.hpp>
 #include <math/Units.hpp>
 
@@ -22,11 +23,11 @@ namespace yq {
         double                  far() const { return m_far; }
         Degree                  fov() const { return m_fov; }
         double                  near() const { return m_near; }
-        const Quaternion3D&     orientation() const { return m_space.orientation; }
-        const Vector3D&         position() const { return m_space.position; }
+        const Quaternion3D&     orientation() const { return m_space->orientation; }
+        const Vector3D&         position() const { return m_space->position; }
 
         glm::dmat4              projection_matrix(const Size2D&) const;
-        const Vector3D&         scale() const { return m_space.scale; }
+        const Vector3D&         scale() const { return m_space->scale; }
 
         void                    set_far(double);
         void                    set_near(double);
@@ -37,9 +38,9 @@ namespace yq {
         glm::dmat4              view_matrix() const;
 
     private:
-        SimpleSpace     m_space;
-        Degree          m_fov   = 70_deg;
-        double          m_near  = -1.;
-        double          m_far   = -1.;
+        Mutable<SimpleSpace>    m_space;
+        Mutable<Degree>         m_fov;
+        Mutable<double>         m_near;
+        Mutable<double>         m_far;
     };
 }
