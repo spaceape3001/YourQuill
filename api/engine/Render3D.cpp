@@ -16,6 +16,7 @@ namespace yq {
         Render3DInfo::Render3DInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
             RenderedInfo(name, base, sl)
         {
+            set_option(RENDER3D);
         }
         
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -23,9 +24,18 @@ namespace yq {
         Render3D::Render3D()    = default;
         Render3D::~Render3D()   = default;
 
+
         Tensor44D   Render3D::calc_local() const
         {
             return m_space.value.local2parent();
+        }
+
+        glm::dmat4  Render3D::model2world() const
+        {
+            Tensor44D       T   = calc_local();
+            for(const Render3D* p = m_parent; p; p = p -> m_parent)
+                T   = p->calc_local() * T;
+            return T;
         }
 
         void        Render3D::set_bounds(const AxBox3D&v)

@@ -9,7 +9,6 @@
 #include <basic/Object.hpp>
 #include <basic/meta/ObjectInfo.hpp>
 #include <engine/PipelineConfig.hpp>
-#include <atomic>
 
 namespace yq {
     namespace engine {
@@ -51,10 +50,11 @@ namespace yq {
             void            changed();
         
         private:
-            uint64_t                m_id        = 0;
-            uint64_t                m_pad[7];   // to bump the revision to the next cache line
-            std::atomic<uint64_t>   m_revision{0};
+            uint64_t   m_id         = 0;
+            uint64_t   m_revision   = 0;
         };
+
+        using RenderedPtr   = Ref<Rendered>;
 
     }
 }

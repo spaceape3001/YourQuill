@@ -26,6 +26,9 @@ namespace yq {
         
         //! Calculates the local to parent transform
         Tensor44D       local2parent() const;
+
+        //! Calculates the parent to local transform
+        Tensor44D       parent2local() const;
     };
     
 }

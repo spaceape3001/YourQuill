@@ -13,6 +13,10 @@ set(yq_engine_sources
     ./AssetCompiler.hpp
     ./AssetLoader.hpp
     ./AssetInfoWriter.hpp
+    ./Camera.cpp
+    ./Camera.hpp
+    ./CameraProxy.hpp
+    ./CameraInfoWriter.hpp
     ./ImWidget.cpp
     ./ImWidget.hpp
     ./ImWidgetInfoWriter.hpp

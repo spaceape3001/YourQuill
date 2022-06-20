@@ -40,6 +40,12 @@ namespace yq {
             Render3D();
             virtual ~Render3D();
             
+            //  Computes the model to world matrix
+            glm::dmat4                      model2world() const;
+            
+            Render3D*                       parent() { return m_parent; }
+            const Render3D*                 parent() const { return m_parent; }
+            
             const Vector3D&                 position() const { return m_space.value.position; }
             const Vector3D&                 scale() const { return m_space.value.scale; }
             const Quaternion3D&             orientation() const { return m_space.value.orientation; }

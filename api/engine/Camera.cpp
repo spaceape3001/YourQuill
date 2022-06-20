@@ -4,8 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Rendered.hpp"
-#include "RenderedInfoWriter.hpp"
+//#pragma once
+
+#include "Camera.hpp"
+#include "CameraProxy.hpp"
+#include "CameraInfoWriter.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/meta/Init.hpp>
 #include <atomic>
@@ -16,41 +19,50 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        RenderedInfo::RenderedInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
+        CameraInfo::CameraInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
             ObjectInfo(name, base, sl)
         {
-            set_option(RENDERED);
+            set_option(CAMERA);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        Rendered::Rendered()
+        bool CameraProxy::operator==(const CameraProxy&) const noexcept = default;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Camera::Camera()
         {
             static std::atomic<uint64_t>    next = { 0 };
             m_id        = ++next;
             m_revision  = 0;
         }
         
-        Rendered::Rendered(const Rendered&) : Rendered()
+        Camera::Camera(const Camera&) : Camera()
         {
         }
 
-        Rendered::~Rendered()
+        Camera::~Camera()
         {
         }
 
-        void    Rendered::changed()
+        void    Camera::changed()
         {
             ++m_revision;
+        }
+
+        CameraProxy     Camera::proxy() const
+        {
+            return { m_id, m_revision, world2screen() };
         }
         
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         YQ_INVOKE(
-            [[maybe_unused]] auto rend   = writer<Rendered>();
+            [[maybe_unused]] auto rend   = writer<Camera>();
         )
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::engine::Rendered)
+YQ_OBJECT_IMPLEMENT(yq::engine::Camera)
