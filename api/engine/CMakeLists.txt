@@ -1,3 +1,9 @@
+################################################################################
+##
+##  YOUR QUILL
+##
+################################################################################
+
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/test.cpp)
     set(engine_test_source ./test.cpp)
 endif()
@@ -51,6 +57,7 @@ set(yq_engine_sources
     ./enum/ColorComponent.hpp    
     ./enum/ComponentSwizzle.hpp
     ./enum/CullMode.hpp   
+    ./enum/DataActivity
     ./enum/DataFormat.hpp 
     ./enum/DescriptorType.hpp   
     ./enum/FilterType.hpp   

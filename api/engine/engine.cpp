@@ -12,6 +12,7 @@
 #include "enum/ColorComponent.hpp"
 #include "enum/ComponentSwizzle.hpp"
 #include "enum/CullMode.hpp"
+#include "enum/DataActivity.hpp"
 #include "enum/DataFormat.hpp"
 #include "enum/DescriptorType.hpp"
 #include "enum/FilterType.hpp"
@@ -64,6 +65,7 @@ YQ_TYPE_IMPLEMENT(yq::ColorComponent)
 YQ_TYPE_IMPLEMENT(yq::ColorComponentFlags)
 YQ_TYPE_IMPLEMENT(yq::ComponentSwizzle)
 YQ_TYPE_IMPLEMENT(yq::CullMode)
+YQ_TYPE_IMPLEMENT(yq::DataActivity)
 YQ_TYPE_IMPLEMENT(yq::DataFormat)
 YQ_TYPE_IMPLEMENT(yq::DescriptorType)
 YQ_TYPE_IMPLEMENT(yq::FilterType)

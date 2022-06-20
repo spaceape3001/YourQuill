@@ -13,7 +13,6 @@
 namespace yq {
     class Rendered;
     
-    
     class RenderedInfo : public ObjectInfo {
     public:
         template <typename C> struct Writer;

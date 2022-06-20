@@ -1,3 +1,9 @@
+################################################################################
+##
+##  YOUR QUILL
+##
+################################################################################
+
 add_library(yqconfig SHARED ./DirConfig.cpp ./DirConfig.hpp)
 
 target_compile_definitions(yqconfig PRIVATE
