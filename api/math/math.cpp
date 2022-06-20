@@ -83,6 +83,7 @@
 #include <math/shape_math.hpp>
 #include <math/Units.hpp>
 
+#include <math/SimpleSpace.ipp>
 
 using namespace yq;
 

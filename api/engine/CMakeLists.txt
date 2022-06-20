@@ -44,10 +44,10 @@ set(yq_engine_sources
     ./pipeline/PipelineConfig.hpp
     
     ./render/render.cpp
-    ./render/Renderable.hpp
-    ./render/RenderableInfoWriter.hpp
-    ./render/RenderObject.hpp
-    ./render/RenderObjectInfoWriter.hpp
+    ./render/Rendered.hpp
+    ./render/RenderedInfoWriter.hpp
+    ./render/Render3D.hpp
+    ./render/Render3DInfoWriter.hpp
     
     ./shader/Shader.cpp
     ./shader/Shader.hpp

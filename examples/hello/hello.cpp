@@ -22,8 +22,8 @@
 #include <engine/Application.hpp>
 #include <engine/Window.hpp>
 #include <engine/pipeline/PipelineBuilder.hpp>
-#include <engine/render/RenderObject.hpp>
-#include <engine/render/RenderObjectInfoWriter.hpp>
+#include <engine/render/Render3D.hpp>
+#include <engine/render/Render3DInfoWriter.hpp>
 #include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqCommand.hpp>
@@ -56,8 +56,8 @@ const Vertex vertices[] = {
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
-struct HelloTriangle : public Renderable {
-    YQ_OBJECT_DECLARE(HelloTriangle, Renderable)
+struct HelloTriangle : public Rendered {
+    YQ_OBJECT_DECLARE(HelloTriangle, Rendered)
     VqPipeline                  m_pipeline;
     VqBuffer                    m_vbo;
     Window*                     m_window                = nullptr;
@@ -123,7 +123,7 @@ struct HelloWin : public Window {
     YQ_OBJECT_DECLARE(HelloWin, Window)
     
     timepoint_t             start;
-    HelloTriangle*          triangle = nullptr;
+    Ref<HelloTriangle>      triangle;
 
     HelloWin(const WindowCreateInfo& wci) : Window(wci)
     {
@@ -133,7 +133,6 @@ struct HelloWin : public Window {
     
     ~HelloWin()
     {
-        delete triangle;
         triangle    = nullptr;
     }
     

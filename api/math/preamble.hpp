@@ -273,6 +273,7 @@ namespace yq {
     template <typename> struct Normal2;
     template <typename> struct Normal3;
     template <typename> struct Plane3;
+    //template <typename> struct Pose2;
     template <typename> struct Pose3;
     template <typename> struct Quaternion3;
     template <typename> struct Ray2;
@@ -876,6 +877,11 @@ namespace yq {
     //  ------------------------------------------------
     //  Miscellaneous
     
+    struct SimpleSpace;
+    
+    //using Pose2D        = Pose2<double>;
+    //using Pose2F        = Pose2<float>;
+
     using Pose3D        = Pose3<double>;
     using Pose3F        = Pose3<float>;
 

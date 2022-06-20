@@ -12,18 +12,18 @@
 
 namespace yq {
     namespace engine {
-        class Renderable;
+        class Rendered;
         
         
         
-        class RenderableInfo : public ObjectInfo {
+        class RenderedInfo : public ObjectInfo {
         public:
             template <typename C> struct Writer;
             
             const PipelineConfig*   pipeline(std::string_view) const;
 
 
-            RenderableInfo(std::string_view, ObjectInfo&, const std::source_location& sl = std::source_location::current());
+            RenderedInfo(std::string_view, ObjectInfo&, const std::source_location& sl = std::source_location::current());
             
         private:
             std::map<std::string, PipelineConfig*>   m_pipelines;
@@ -34,13 +34,15 @@ namespace yq {
         
             If you want it to show up on the viewport, it needs to be renderable, and thus derived
             from this thing.
-            
         */
-        class Renderable : public Object {
-            YQ_OBJECT_INFO(RenderableInfo);
-            YQ_OBJECT_DECLARE(Renderable, Object)
+        class Rendered : public Object, public RefCount {
+            YQ_OBJECT_INFO(RenderedInfo);
+            YQ_OBJECT_DECLARE(Rendered, Object)
         public:    
+            bool            is_dirty() const { return m_dirty; }
         
+        protected:
+            bool            m_dirty     = true;
         };
 
     }

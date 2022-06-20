@@ -6,18 +6,19 @@
 
 #pragma once
 
-#include <engine/render/RenderableInfoWriter.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
+#include <engine/render/Rendered.hpp>
 
 namespace yq {
     namespace engine {
         template <typename C>
-        class RenderObjectInfo::Writer : public RenderableInfo::Writer<C> {
+        class RenderedInfo::Writer : public ObjectInfo::Writer<C> {
         public:
-            Writer(RenderObjectInfo* renderInfo) : RenderableInfo::Writer<C>(renderInfo)
+            Writer(RenderedInfo* renderInfo) : ObjectInfo::Writer<C>(renderInfo)
             {
             }
             
-            Writer(RenderObjectInfo& renderInfo) : Writer(&renderInfo)
+            Writer(RenderedInfo& renderInfo) : Writer(&renderInfo)
             {
             }
         };
