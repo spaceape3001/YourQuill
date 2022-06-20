@@ -62,7 +62,7 @@ namespace yq {
         return m_space.parent2local();
     }
 
-    glm::dmat4  SpaceCamera::world2screen(const engine::CameraParams&p) const
+    glm::dmat4  SpaceCamera::world2screen(const CameraParams&p) const
     {
         return view_matrix() * projection_matrix(p.screen);
     }

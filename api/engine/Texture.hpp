@@ -9,25 +9,23 @@
 #include <engine/Asset.hpp>
 
 namespace yq {
-    namespace engine {
-        class Texture;
-        class TextureLoader;
-        class TextureCache;
+    class Texture;
+    class TextureLoader;
+    class TextureCache;
 
-        class TextureInfo : public AssetInfo {
-        public:
-            template <typename C> class Writer;
+    class TextureInfo : public AssetInfo {
+    public:
+        template <typename C> class Writer;
 
-            TextureInfo(std::string_view zName, const AssetInfo& base, const std::source_location& sl=std::source_location::current());
-            
-        protected:
-        };
+        TextureInfo(std::string_view zName, const AssetInfo& base, const std::source_location& sl=std::source_location::current());
         
-        class Texture : public Asset {
-            YQ_OBJECT_INFO(TextureInfo)
-            YQ_OBJECT_DECLARE(Texture, Asset)
-        public:
-        };
+    protected:
+    };
+    
+    class Texture : public Asset {
+        YQ_OBJECT_INFO(TextureInfo)
+        YQ_OBJECT_DECLARE(Texture, Asset)
+    public:
+    };
 
-    }
 }

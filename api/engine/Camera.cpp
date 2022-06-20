@@ -14,55 +14,53 @@
 #include <atomic>
 
 namespace yq {
-    namespace engine {
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        CameraInfo::CameraInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
-            ObjectInfo(name, base, sl)
-        {
-            set_option(CAMERA);
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        bool CameraProxy::operator==(const CameraProxy&) const noexcept = default;
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        Camera::Camera()
-        {
-            static std::atomic<uint64_t>    next = { 0 };
-            m_id        = ++next;
-            m_revision  = 0;
-        }
-        
-        Camera::Camera(const Camera&) : Camera()
-        {
-        }
-
-        Camera::~Camera()
-        {
-        }
-
-        void    Camera::changed()
-        {
-            ++m_revision;
-        }
-
-        CameraProxy     Camera::proxy(const CameraParams&p) const
-        {
-            return { m_id, m_revision, world2screen(p) };
-        }
-        
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        YQ_INVOKE(
-            [[maybe_unused]] auto rend   = writer<Camera>();
-        )
+    CameraInfo::CameraInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
+        ObjectInfo(name, base, sl)
+    {
+        set_option(CAMERA);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    bool CameraProxy::operator==(const CameraProxy&) const noexcept = default;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Camera::Camera()
+    {
+        static std::atomic<uint64_t>    next = { 0 };
+        m_id        = ++next;
+        m_revision  = 0;
+    }
+    
+    Camera::Camera(const Camera&) : Camera()
+    {
+    }
+
+    Camera::~Camera()
+    {
+    }
+
+    void    Camera::changed()
+    {
+        ++m_revision;
+    }
+
+    CameraProxy     Camera::proxy(const CameraParams&p) const
+    {
+        return { m_id, m_revision, world2screen(p) };
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    YQ_INVOKE(
+        [[maybe_unused]] auto rend   = writer<Camera>();
+    )
 }
 
-YQ_OBJECT_IMPLEMENT(yq::engine::Camera)
+YQ_OBJECT_IMPLEMENT(yq::Camera)

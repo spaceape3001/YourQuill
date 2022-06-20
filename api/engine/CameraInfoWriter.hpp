@@ -10,17 +10,15 @@
 #include <engine/Camera.hpp>
 
 namespace yq {
-    namespace engine {
-        template <typename C>
-        class CameraInfo::Writer : public ObjectInfo::Writer<C> {
-        public:
-            Writer(CameraInfo* renderInfo) : ObjectInfo::Writer<C>(renderInfo)
-            {
-            }
-            
-            Writer(CameraInfo& renderInfo) : Writer(&renderInfo)
-            {
-            }
-        };
-    }
+    template <typename C>
+    class CameraInfo::Writer : public ObjectInfo::Writer<C> {
+    public:
+        Writer(CameraInfo* renderInfo) : ObjectInfo::Writer<C>(renderInfo)
+        {
+        }
+        
+        Writer(CameraInfo& renderInfo) : Writer(&renderInfo)
+        {
+        }
+    };
 }

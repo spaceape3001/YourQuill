@@ -10,8 +10,8 @@
 #include <vulkan/vulkan_core.h>
 
 namespace yq {
+    struct PipelineConfig;
     namespace engine {
-        struct PipelineConfig;
         struct VqInternal;
         
         class VqPipeline : trait::not_copyable {

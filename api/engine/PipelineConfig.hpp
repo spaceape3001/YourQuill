@@ -17,42 +17,40 @@
 #include <engine/enum/VertexInputRate.hpp>
 
 namespace yq {
-    namespace engine {
+
+    struct VBOAttr {
+        DataFormat      format;
+        uint32_t        location    = UINT32_MAX;
+        uint32_t        offset      = 0;
+    };
+
+    struct VBOConfig {
+        std::vector<VBOAttr>    attrs;
+        uint32_t                stride      = 0;
+        uint32_t                shaders     = 0;    //  shader mask
+        VertexInputRate         inputRate;
+    };
     
-        struct VBOAttr {
-            DataFormat      format;
-            uint32_t        location    = UINT32_MAX;
-            uint32_t        offset      = 0;
-        };
-    
-        struct VBOConfig {
-            std::vector<VBOAttr>    attrs;
-            uint32_t                stride      = 0;
-            uint32_t                shaders     = 0;    //  shader mask
-            VertexInputRate         inputRate;
+    struct PushConfig {
+        enum Type {
+            None        = 0,
+            Full,
+            View,
+            Custom
         };
         
-        struct PushConfig {
-            enum Type {
-                None        = 0,
-                Full,
-                View,
-                Custom
-            };
-            
-            size_t          size    = 0;
-            Type            type    = None;
-            uint32_t        shaders = 0;            // shader mask (0 implies shaders)
-        };
-        
-        struct PipelineConfig {
-            std::vector<ShaderSpec>     shaders;
-            std::vector<VBOConfig>      vbos;
-            Topology                    topology    = Topology::TriangleList;
-            PolygonMode                 polymode    = PolygonMode::Fill;
-            FrontFace                   front       = FrontFace::CounterClockwise;
-            CullMode                    culling     = CullMode::Back;
-            PushConfig                  push        = {};
-        };
-    }
+        size_t          size    = 0;
+        Type            type    = None;
+        uint32_t        shaders = 0;            // shader mask (0 implies shaders)
+    };
+    
+    struct PipelineConfig {
+        std::vector<ShaderSpec>     shaders;
+        std::vector<VBOConfig>      vbos;
+        Topology                    topology    = Topology::TriangleList;
+        PolygonMode                 polymode    = PolygonMode::Fill;
+        FrontFace                   front       = FrontFace::CounterClockwise;
+        CullMode                    culling     = CullMode::Back;
+        PushConfig                  push        = {};
+    };
 }

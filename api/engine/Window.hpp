@@ -25,8 +25,8 @@ struct HelloApp;
 struct GLFWwindow;
 
 namespace yq {
+    struct PipelineConfig;
     namespace engine {
-        struct PipelineConfig;
         class VqWindow;
         struct VqInternal;
         class VqAllocator;

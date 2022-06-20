@@ -10,10 +10,8 @@
 #include <engine/Rendered.hpp>
 
 namespace yq {
-    namespace engine {
-        struct RenderFrame : public RefCount {
-            std::vector<CameraPtr>      cameras;
-            std::vector<RenderedPtr>    rendereds;
-        };
-    }
+    struct RenderFrame : public RefCount {
+        std::vector<CameraPtr>      cameras;
+        std::vector<RenderedPtr>    rendereds;
+    };
 }

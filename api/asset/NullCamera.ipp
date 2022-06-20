@@ -8,7 +8,7 @@
 
 namespace yq {
 
-    glm::dmat4  NullCamera::world2screen(const engine::CameraParams&) const 
+    glm::dmat4  NullCamera::world2screen(const CameraParams&) const 
     {
         return {
             1., 0., 0., 0.,

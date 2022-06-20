@@ -11,11 +11,11 @@
 #include <math/Units.hpp>
 
 namespace yq {
-    class SpaceCamera : public engine::Camera {
-        YQ_OBJECT_DECLARE(SpaceCamera, engine::Camera)
+    class SpaceCamera : public Camera {
+        YQ_OBJECT_DECLARE(SpaceCamera, Camera)
     public:
     
-        glm::dmat4  world2screen(const engine::CameraParams&) const override;
+        glm::dmat4  world2screen(const CameraParams&) const override;
         SpaceCamera();
         ~SpaceCamera();
 

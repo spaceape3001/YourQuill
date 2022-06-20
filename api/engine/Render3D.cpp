@@ -11,68 +11,66 @@
 #include <atomic>
 
 namespace yq {
-    namespace engine {
 
-        Render3DInfo::Render3DInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
-            RenderedInfo(name, base, sl)
-        {
-            set_option(RENDER3D);
-        }
-        
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        Render3D::Render3D()    = default;
-        Render3D::~Render3D()   = default;
-
-
-        Tensor44D   Render3D::calc_local() const
-        {
-            return m_space.local2parent();
-        }
-
-        glm::dmat4  Render3D::model2world() const
-        {
-            Tensor44D       T   = calc_local();
-            for(const Render3D* p = m_parent; p; p = p -> m_parent)
-                T   = p->calc_local() * T;
-            return T;
-        }
-
-        void        Render3D::set_bounds(const AxBox3D&v)
-        {
-            m_bounds    = v;
-            changed();
-        }
-
-        void        Render3D::set_orientation(const Quaternion3D&v)
-        {
-            m_space.orientation   = v;
-            changed();
-        }
-
-        void        Render3D::set_position(const Vector3D&v)
-        {
-            m_space.position      = v;
-            changed();
-        }
-        
-        void        Render3D::set_scale(const Vector3D&v)
-        {
-            m_space.scale         = v;
-            changed();
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        YQ_INVOKE(
-            auto robj   = writer<Render3D>();
-            robj.property("pos", &Render3D::position).setter(&Render3D::set_position);
-            robj.property("scale", &Render3D::scale).setter(&Render3D::set_scale);
-            robj.property("ori", &Render3D::orientation).setter(&Render3D::set_orientation);
-            robj.property("bounds", &Render3D::bounds).setter(&Render3D::set_bounds);
-        )
+    Render3DInfo::Render3DInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
+        RenderedInfo(name, base, sl)
+    {
+        set_option(RENDER3D);
     }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Render3D::Render3D()    = default;
+    Render3D::~Render3D()   = default;
+
+
+    Tensor44D   Render3D::calc_local() const
+    {
+        return m_space.local2parent();
+    }
+
+    glm::dmat4  Render3D::model2world() const
+    {
+        Tensor44D       T   = calc_local();
+        for(const Render3D* p = m_parent; p; p = p -> m_parent)
+            T   = p->calc_local() * T;
+        return T;
+    }
+
+    void        Render3D::set_bounds(const AxBox3D&v)
+    {
+        m_bounds    = v;
+        changed();
+    }
+
+    void        Render3D::set_orientation(const Quaternion3D&v)
+    {
+        m_space.orientation   = v;
+        changed();
+    }
+
+    void        Render3D::set_position(const Vector3D&v)
+    {
+        m_space.position      = v;
+        changed();
+    }
+    
+    void        Render3D::set_scale(const Vector3D&v)
+    {
+        m_space.scale         = v;
+        changed();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    YQ_INVOKE(
+        auto robj   = writer<Render3D>();
+        robj.property("pos", &Render3D::position).setter(&Render3D::set_position);
+        robj.property("scale", &Render3D::scale).setter(&Render3D::set_scale);
+        robj.property("ori", &Render3D::orientation).setter(&Render3D::set_orientation);
+        robj.property("bounds", &Render3D::bounds).setter(&Render3D::set_bounds);
+    )
 }
 
-YQ_OBJECT_IMPLEMENT(yq::engine::Render3D)
+YQ_OBJECT_IMPLEMENT(yq::Render3D)
