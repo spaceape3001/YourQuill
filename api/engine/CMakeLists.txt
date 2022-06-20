@@ -9,12 +9,6 @@ set(yq_engine_sources
 
     ./Application.hpp
     ./Application.ipp
-    ./Asset.cpp
-    ./Asset.hpp
-    ./AssetCache.hpp
-    ./AssetCompiler.hpp
-    ./AssetLoader.hpp
-    ./AssetInfoWriter.hpp
     ./Camera.cpp
     ./Camera.hpp
     ./CameraProxy.hpp
@@ -35,6 +29,12 @@ set(yq_engine_sources
     ./Render3D.hpp
     ./Render3D.cpp
     ./Render3DInfoWriter.hpp
+    ./Resource.cpp
+    ./Resource.hpp
+    ./ResourceCache.hpp
+    ./ResourceCompiler.hpp
+    ./ResourceLoader.hpp
+    ./ResourceInfoWriter.hpp
     ./Shader.cpp
     ./Shader.hpp
     ./ShaderCache.hpp

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/AssetCache.hpp>
+#include <engine/ResourceCache.hpp>
 
 namespace yq {
     class Texture;
@@ -14,8 +14,8 @@ namespace yq {
     class TextureCache;
 
     
-    class TextureCache : public AssetCache {
-        YQ_OBJECT_DECLARE(TextureCache, AssetCache)
+    class TextureCache : public ResourceCache {
+        YQ_OBJECT_DECLARE(TextureCache, ResourceCache)
     public:
     
     private:

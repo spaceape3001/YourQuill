@@ -6,16 +6,16 @@
 
 #pragma once
 
-#include <engine/AssetInfoWriter.hpp>
+#include <engine/ResourceInfoWriter.hpp>
 #include <engine/Texture.hpp>
 #include <engine/TextureCache.hpp>
 #include <engine/TextureLoader.hpp>
 
 namespace yq {
     template <typename C>
-    class TextureInfo::Writer : public AssetInfo::Writer<C> {
+    class TextureInfo::Writer : public ResourceInfo::Writer<C> {
     public:
-        Writer(TextureInfo* textureInfo) : AssetInfo::Writer<C>(textureInfo)
+        Writer(TextureInfo* textureInfo) : ResourceInfo::Writer<C>(textureInfo)
         {
         }
         
@@ -25,9 +25,9 @@ namespace yq {
     };
 
     template <typename C>
-    class TextureLoaderInfo::Writer : public AssetLoaderInfo::Writer<C> {
+    class TextureLoaderInfo::Writer : public ResourceLoaderInfo::Writer<C> {
     public:
-        Writer(TextureLoaderInfo* textureLoaderInfo) : AssetLoaderInfo::Writer<C>(textureLoaderInfo)
+        Writer(TextureLoaderInfo* textureLoaderInfo) : ResourceLoaderInfo::Writer<C>(textureLoaderInfo)
         {
         }
         

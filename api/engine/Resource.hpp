@@ -13,20 +13,20 @@
 #include <filesystem>
 
 namespace yq {
-    class Asset;
-    class AssetInfo;
-    class AssetLoader;
-    class AssetCache;
+    class Resource;
+    class ResourceInfo;
+    class ResourceLoader;
+    class ResourceCache;
     
 
-    class AssetInfo : public ObjectInfo {
+    class ResourceInfo : public ObjectInfo {
     public:
         template <typename C> class Writer;
 
-        AssetInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
+        ResourceInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
         
         //! Loads the asset from native binary format (whatever that is)
-        //virtual Ref<Asset>  load_binary(const std::filesystem::path&) { return nullptr; }
+        //virtual Ref<Resource>  load_binary(const std::filesystem::path&) { return nullptr; }
         
     protected:
     };
@@ -36,9 +36,9 @@ namespace yq {
         An asset is something that can be loaded by the engine, and used in some predefined fashion.  
         (ie, texture, shader, sounds, etc)  
     */
-    class Asset : public Object, public RefCount {
-        YQ_OBJECT_INFO(AssetInfo)
-        YQ_OBJECT_DECLARE(Asset, Object)
+    class Resource : public Object, public RefCount {
+        YQ_OBJECT_INFO(ResourceInfo)
+        YQ_OBJECT_DECLARE(Resource, Object)
     public:
         
         virtual size_t      data_size() const = 0;
@@ -46,7 +46,7 @@ namespace yq {
         //! Saves data to native binary format (whatever that is)
         virtual bool        save_binary(const std::filesystem::path&) const = 0;
         
-        /*! \brief Asset ID
+        /*! \brief Resource ID
         
             This is the asset ID, as it resides in the asset cache.  
             If the ID is zero, then it's not from the asset cache.    
@@ -68,7 +68,7 @@ namespace yq {
         static std::filesystem::path    search(const path_vector_t& paths, const std::filesystem::path& file);
         
     private:
-        friend class AssetCache;
+        friend class ResourceCache;
         uint64_t        m_id    = 0;
     };
 }

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/Asset.hpp>
+#include <engine/Resource.hpp>
 #include <engine/ShaderPointer.hpp>
 #include <engine/enum/ShaderType.hpp>
 #include <basic/ByteArray.hpp>
@@ -18,20 +18,20 @@ namespace yq {
     class ShaderCache;
     struct ResultCC;
 
-    class ShaderInfo : public AssetInfo {
+    class ShaderInfo : public ResourceInfo {
     public:
         template <typename C> class Writer;
 
-        ShaderInfo(std::string_view zName, const AssetInfo& base, const std::source_location& sl=std::source_location::current());
+        ShaderInfo(std::string_view zName, const ResourceInfo& base, const std::source_location& sl=std::source_location::current());
         
     protected:
     };
     
     
         //! Shader is a Vulkan compatible shader (compiled)
-    class Shader : public Asset {
+    class Shader : public Resource {
         YQ_OBJECT_INFO(ShaderInfo)
-        YQ_OBJECT_DECLARE(Shader, Asset)
+        YQ_OBJECT_DECLARE(Shader, Resource)
     public:
     
 

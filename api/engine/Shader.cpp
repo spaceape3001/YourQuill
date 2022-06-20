@@ -137,8 +137,8 @@ namespace yq {
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    ShaderInfo::ShaderInfo(std::string_view zName, const AssetInfo& base, const std::source_location& sl) :
-        AssetInfo(zName, base, sl)
+    ShaderInfo::ShaderInfo(std::string_view zName, const ResourceInfo& base, const std::source_location& sl) :
+        ResourceInfo(zName, base, sl)
     {
         set_option(SHADER);
     }
@@ -238,7 +238,7 @@ namespace yq {
 
     std::filesystem::path    Shader::search(const std::filesystem::path& fp)
     {
-        return Asset::search(directories(), fp);
+        return Resource::search(directories(), fp);
     }
 
     ResultCC    Shader::validate(const std::filesystem::path& source)
@@ -293,7 +293,7 @@ namespace yq {
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    ShaderCache::ShaderCache() : AssetCache(meta<ShaderCache>())
+    ShaderCache::ShaderCache() : ResourceCache(meta<ShaderCache>())
     {
     }
     
@@ -306,17 +306,17 @@ namespace yq {
         //  right now, hard-code to the manual method so we can bait & switch on the caching
         return Shader::load(fp);
     
-        //Ref<const Asset>  ret = AssetCache::get(fp);
+        //Ref<const Resource>  ret = ResourceCache::get(fp);
         //return ShaderPtr(static_cast<const Shader*>(ret.ptr()));
     }
     
     ShaderPtr   ShaderCache::get(uint64_t i)
     {
-        Ref<const Asset>  ret = AssetCache::get(i);
+        Ref<const Resource>  ret = ResourceCache::get(i);
         return ShaderPtr(static_cast<const Shader*>(ret.ptr()));
     }
 
-    Ref<const Asset>    ShaderCache::load_binary(const std::filesystem::path& fp) const
+    Ref<const Resource>    ShaderCache::load_binary(const std::filesystem::path& fp) const
     {
         return Shader::do_load(fp, ShaderType(), false);
     }
@@ -325,16 +325,16 @@ namespace yq {
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    ShaderCompilerInfo::ShaderCompilerInfo(std::string_view zName, const AssetCompilerInfo& base, const std::source_location& sl) :
-        AssetCompilerInfo(zName, base, sl)
+    ShaderCompilerInfo::ShaderCompilerInfo(std::string_view zName, const ResourceCompilerInfo& base, const std::source_location& sl) :
+        ResourceCompilerInfo(zName, base, sl)
     {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
 
-    ShaderLoaderInfo::ShaderLoaderInfo(std::string_view zName, const AssetLoaderInfo& base, const std::source_location& sl) :
-        AssetLoaderInfo(zName, base, sl)
+    ShaderLoaderInfo::ShaderLoaderInfo(std::string_view zName, const ResourceLoaderInfo& base, const std::source_location& sl) :
+        ResourceLoaderInfo(zName, base, sl)
     {
     }
 

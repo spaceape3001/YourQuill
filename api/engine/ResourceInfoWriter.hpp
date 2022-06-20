@@ -7,38 +7,38 @@
 #pragma once
 
 #include <basic/meta/ObjectInfoWriter.hpp>
-#include <engine/Asset.hpp>
-#include <engine/AssetCache.hpp>
-#include <engine/AssetCompiler.hpp>
-#include <engine/AssetLoader.hpp>
+#include <engine/Resource.hpp>
+#include <engine/ResourceCache.hpp>
+#include <engine/ResourceCompiler.hpp>
+#include <engine/ResourceLoader.hpp>
 
 namespace yq {
     template <typename C>
-    class AssetInfo::Writer : public ObjectInfo::Writer<C> {
+    class ResourceInfo::Writer : public ObjectInfo::Writer<C> {
     public:
-        Writer(AssetInfo* assetInfo) : ObjectInfo::Writer<C>(assetInfo)
+        Writer(ResourceInfo* assetInfo) : ObjectInfo::Writer<C>(assetInfo)
         {
         }
         
-        Writer(AssetInfo& assetInfo) : Writer(&assetInfo)
+        Writer(ResourceInfo& assetInfo) : Writer(&assetInfo)
         {
         }
     };
 
     template <typename C>
-    class AssetCacheInfo::Writer : public ObjectInfo::Writer<C> {
+    class ResourceCacheInfo::Writer : public ObjectInfo::Writer<C> {
     public:
-        Writer(AssetCacheInfo* assetCacheInfo) : ObjectInfo::Writer<C>(assetCacheInfo)
+        Writer(ResourceCacheInfo* assetCacheInfo) : ObjectInfo::Writer<C>(assetCacheInfo)
         {
         }
         
-        Writer(AssetCacheInfo& assetCacheInfo) : Writer(&assetCacheInfo)
+        Writer(ResourceCacheInfo& assetCacheInfo) : Writer(&assetCacheInfo)
         {
         }
         
-        Writer&     asset(const AssetInfo& ai)
+        Writer&     asset(const ResourceInfo& ai)
         {
-            AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+            ResourceCacheInfo* aci = static_cast<ResourceCacheInfo*>(Meta::Writer::m_meta);
             if(aci)
                 aci -> m_asset  = &ai;
             return *this;
@@ -51,9 +51,9 @@ namespace yq {
             return *this;
         }
         
-        Writer&     compiler(const AssetCompilerInfo&ai)
+        Writer&     compiler(const ResourceCompilerInfo&ai)
         {
-            AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+            ResourceCacheInfo* aci = static_cast<ResourceCacheInfo*>(Meta::Writer::m_meta);
             if(aci)
                 aci -> m_compiler = &ai;
             return *this;
@@ -67,9 +67,9 @@ namespace yq {
             return *this;
         }
         
-        Writer& loader(const AssetLoaderInfo& ali)
+        Writer& loader(const ResourceLoaderInfo& ali)
         {
-            AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+            ResourceCacheInfo* aci = static_cast<ResourceCacheInfo*>(Meta::Writer::m_meta);
             if(aci)
                 aci -> m_loader = &ali;
             return *this;
@@ -84,43 +84,43 @@ namespace yq {
     };
 
     template <typename C>
-    class AssetCompilerInfo::Writer : public ObjectInfo::Writer<C> {
+    class ResourceCompilerInfo::Writer : public ObjectInfo::Writer<C> {
     public:
         Writer& extension(std::string_view v)
         {
-            AssetCompilerInfo*     ali = static_cast<AssetCompilerInfo*>(Meta::Writer::m_meta);
+            ResourceCompilerInfo*     ali = static_cast<ResourceCompilerInfo*>(Meta::Writer::m_meta);
             if(ali)
                 ali -> m_extensions.insert(std::string(v));
             return *this;
         }
 
-        Writer(AssetCompilerInfo* assetCompilerInfo) : ObjectInfo::Writer<C>(assetCompilerInfo)
+        Writer(ResourceCompilerInfo* assetCompilerInfo) : ObjectInfo::Writer<C>(assetCompilerInfo)
         {
         }
         
-        Writer(AssetCompilerInfo& assetCompilerInfo) : Writer(&assetCompilerInfo)
+        Writer(ResourceCompilerInfo& assetCompilerInfo) : Writer(&assetCompilerInfo)
         {
         }
     };
 
     template <typename C>
-    class AssetLoaderInfo::Writer : public ObjectInfo::Writer<C> {
+    class ResourceLoaderInfo::Writer : public ObjectInfo::Writer<C> {
     public:
         
         Writer& extension(std::string_view v)
         {
-            AssetLoaderInfo*     ali = static_cast<AssetLoaderInfo*>(Meta::Writer::m_meta);
+            ResourceLoaderInfo*     ali = static_cast<ResourceLoaderInfo*>(Meta::Writer::m_meta);
             if(ali)
                 ali -> m_extensions.insert(std::string(v));
             return *this;
         }
     
     
-        Writer(AssetLoaderInfo* assetLoaderInfo) : ObjectInfo::Writer<C>(assetLoaderInfo)
+        Writer(ResourceLoaderInfo* assetLoaderInfo) : ObjectInfo::Writer<C>(assetLoaderInfo)
         {
         }
         
-        Writer(AssetLoaderInfo& assetLoaderInfo) : Writer(&assetLoaderInfo)
+        Writer(ResourceLoaderInfo& assetLoaderInfo) : Writer(&assetLoaderInfo)
         {
         }
     };

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/AssetCache.hpp>
+#include <engine/ResourceCache.hpp>
 #include <engine/ShaderPointer.hpp>
 #include <basic/Ref.hpp>
 
@@ -14,8 +14,8 @@ namespace yq {
     class Shader;
     class ShaderCache;
 
-    class ShaderCache : public AssetCache {
-        YQ_OBJECT_DECLARE(ShaderCache, AssetCache)
+    class ShaderCache : public ResourceCache {
+        YQ_OBJECT_DECLARE(ShaderCache, ResourceCache)
     public:
     
         static ShaderCache&     singleton();
@@ -24,7 +24,7 @@ namespace yq {
         ShaderPtr     get(uint64_t);
     
     protected:
-        Ref<const Asset>      load_binary(const std::filesystem::path&) const override;
+        Ref<const Resource>      load_binary(const std::filesystem::path&) const override;
     
     private:
         ShaderCache();

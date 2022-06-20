@@ -4,15 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "AssetInfoWriter.hpp"
+#include "ResourceInfoWriter.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>
 #include <config/DirConfig.hpp>
 
-YQ_OBJECT_IMPLEMENT(yq::Asset)
-YQ_OBJECT_IMPLEMENT(yq::AssetCache)
-YQ_OBJECT_IMPLEMENT(yq::AssetCompiler)
-YQ_OBJECT_IMPLEMENT(yq::AssetLoader)
+YQ_OBJECT_IMPLEMENT(yq::Resource)
+YQ_OBJECT_IMPLEMENT(yq::ResourceCache)
+YQ_OBJECT_IMPLEMENT(yq::ResourceCompiler)
+YQ_OBJECT_IMPLEMENT(yq::ResourceLoader)
 
 namespace yq {
     namespace {
@@ -58,13 +58,13 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    AssetInfo::AssetInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
+    ResourceInfo::ResourceInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
         ObjectInfo(zName, base, sl)
     {
         set_option(ASSET);
     }
 
-    std::filesystem::path    Asset::search(const path_vector_t& paths, const std::filesystem::path& fp)
+    std::filesystem::path    Resource::search(const path_vector_t& paths, const std::filesystem::path& fp)
     {
         if(fp.is_absolute())
             return fp;
@@ -82,13 +82,13 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    AssetCacheInfo::AssetCacheInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
+    ResourceCacheInfo::ResourceCacheInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
         ObjectInfo(zName, base, sl)
     {
         set_option(CACHE);
     }
 
-    AssetCache::AssetCache(const AssetCacheInfo&)      // can't rely on the virtual working.....
+    ResourceCache::ResourceCache(const ResourceCacheInfo&)      // can't rely on the virtual working.....
     {
     }
     
@@ -99,20 +99,20 @@ namespace yq {
         So, /home/user/foobar/mytexture.xpm -> /tmp/yquill/.binary/home/user/foobar/mytexture.xpm
     */
 
-    Ref<Asset>          AssetCache::get(const std::filesystem::path& fp)
+    Ref<Resource>          ResourceCache::get(const std::filesystem::path& fp)
     {
-        return Ref<Asset>();    // todo
+        return Ref<Resource>();    // todo
     }
     
-    Ref<Asset>          AssetCache::get(uint64_t i)
+    Ref<Resource>          ResourceCache::get(uint64_t i)
     {
-        return Ref<Asset>();    // todo
+        return Ref<Resource>();    // todo
     }
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    AssetCompilerInfo::AssetCompilerInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
+    ResourceCompilerInfo::ResourceCompilerInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
         ObjectInfo(zName, base, sl)
     {
         set_option(COMPILER);
@@ -121,7 +121,7 @@ namespace yq {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    AssetLoaderInfo::AssetLoaderInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
+    ResourceLoaderInfo::ResourceLoaderInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
         ObjectInfo(zName, base, sl)
     {
         set_option(LOADER);
