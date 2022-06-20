@@ -12,10 +12,10 @@
 #include <engine/Shader.hpp>
 #include <math/glm_types.hpp>
 #include <math/RGBA.hpp>
-#include <math/vec/Vector1.hpp>
-#include <math/vec/Vector2.hpp>
-#include <math/vec/Vector3.hpp>
-#include <math/vec/Vector4.hpp>
+#include <math/Vector1.hpp>
+#include <math/Vector2.hpp>
+#include <math/Vector3.hpp>
+#include <math/Vector4.hpp>
 
 
 namespace yq {

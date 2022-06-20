@@ -30,7 +30,7 @@
 #include <engine/vulqan/VqUtils.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
 #include <math/RGB.hpp>
-#include <math/vec/Vector2.hpp>
+#include <math/Vector2.hpp>
 #include <iostream>
 #include <chrono>
 #include <glm/glm.hpp>  // temporary

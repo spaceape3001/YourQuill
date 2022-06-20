@@ -206,9 +206,9 @@ vmath.write(WARNING)
 vmath.write('\n')
 
 for v in VECTORS:
-    vmath.write("#include <math/vec/%s>\n" % v.header)
+    vmath.write("#include <math/%s>\n" % v.header)
 for t in TENSORS:
-    vmath.write("#include <math/vec/%s>\n" % t.header)
+    vmath.write("#include <math/%s>\n" % t.header)
     
 vmath.write("""
 
@@ -710,9 +710,9 @@ tmath.write(WARNING)
 tmath.write('\n')
 
 for v in VECTORS:
-    tmath.write("#include <math/vec/%s>\n" % v.header)
+    tmath.write("#include <math/%s>\n" % v.header)
 for t in TENSORS:
-    tmath.write("#include <math/vec/%s>\n" % t.header)
+    tmath.write("#include <math/%s>\n" % t.header)
     
 tmath.write("""
 
@@ -731,13 +731,13 @@ for t in TENSORS:
 """ % t.args)
 
         if t.n < t.m:
-            f.write("#include <math/vec/%s>\n" % t.colv.header)
-            f.write("#include <math/vec/%s>\n" % t.rowv.header)
+            f.write("#include <math/%s>\n" % t.colv.header)
+            f.write("#include <math/%s>\n" % t.rowv.header)
         elif t.n > t.m:
-            f.write("#include <math/vec/%s>\n" % t.rowv.header)
-            f.write("#include <math/vec/%s>\n" % t.colv.header)
+            f.write("#include <math/%s>\n" % t.rowv.header)
+            f.write("#include <math/%s>\n" % t.colv.header)
         else:
-            f.write("#include <math/vec/%s>\n" % t.rowv.header)
+            f.write("#include <math/%s>\n" % t.rowv.header)
 
         f.write("""
 namespace yq {
@@ -1430,10 +1430,10 @@ with open('types_python.cpp', 'w') as f:
 
 """)
     for t in TENSORS:
-        f.write("#include <math/vec/%(header)s>\n" % t.args)
+        f.write("#include <math/%(header)s>\n" % t.args)
     f.write('\n')
     for v in VECTORS:
-        f.write("#include <math/vec/%(header)s>\n" % v.args)
+        f.write("#include <math/%(header)s>\n" % v.args)
     f.write('\n')
 
     f.write("""
@@ -1506,7 +1506,7 @@ for v in VECTORS:
         f.write(WARNING)
         f.write("""
 #include <math/preamble.hpp>
-#include <math/vec/%(header)s>
+#include <math/%(header)s>
 
 namespace yq {
 
@@ -1603,7 +1603,7 @@ for v in VECTORS:
         f.write(WARNING)
         f.write("""
 #include <math/preamble.hpp>
-#include <math/vec/%(header)s>
+#include <math/%(header)s>
 
 namespace yq {
     
@@ -1656,9 +1656,9 @@ namespace yq {
 ##  FROM TYPE-PYTHON GENERATION
 
     for v in VECTORS:
-        f.write("#include <math/shape/%(axbox)s.hpp>\n" % v.args)
+        f.write("#include <math/%(axbox)s.hpp>\n" % v.args)
     for v in VECTORS:
-        f.write("#include <math/shape/%(seg)s.hpp>\n" % v.args)
+        f.write("#include <math/%(seg)s.hpp>\n" % v.args)
 
 
 

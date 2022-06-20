@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <math/shape/Rectangle2.hpp>
-#include <math/vec/Vector2.hpp>
+#include <math/Rectangle2.hpp>
+#include <math/Vector2.hpp>
 #include <engine/Application.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <iostream>

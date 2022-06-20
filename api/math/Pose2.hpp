@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <math/vec/Vector2.hpp>
-#include <math/vec/Tensor22.hpp>
+#include <math/Vector2.hpp>
+#include <math/Tensor22.hpp>
 #include <math/MKS.hpp>
 #include <math/SCALED.hpp>
 

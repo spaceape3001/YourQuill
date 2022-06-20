@@ -10,7 +10,7 @@
 #include <string>
 #include <math/preamble.hpp>
 #include <math/RGB.hpp>
-#include <math/shape/Size2.hpp>
+#include <math/Size2.hpp>
 
 struct GLFWmonitor;
 struct GLFWvidmode;

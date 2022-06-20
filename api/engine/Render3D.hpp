@@ -13,7 +13,7 @@
 #include <engine/PipelineConfig.hpp>
 #include <engine/Rendered.hpp>
 #include <math/SimpleSpace.hpp>
-#include <math/shape/AxBox3.hpp>
+#include <math/AxBox3.hpp>
 
 namespace yq {
     namespace engine {

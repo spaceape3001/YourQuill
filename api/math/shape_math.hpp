@@ -6,23 +6,23 @@
 
 #pragma once
 
-#include <math/shape/AxBox1.hpp>
-#include <math/shape/AxBox2.hpp>
-#include <math/shape/AxBox3.hpp>
-#include <math/shape/AxBox4.hpp>
-#include <math/shape/Circle2.hpp>
-#include <math/shape/Normal2.hpp>
-#include <math/shape/Normal3.hpp>
-#include <math/shape/Plane3.hpp>
-#include <math/shape/Ray2.hpp>
-#include <math/shape/Ray3.hpp>
-#include <math/shape/Ray4.hpp>
-#include <math/shape/Segment1.hpp>
-#include <math/shape/Segment2.hpp>
-#include <math/shape/Segment3.hpp>
-#include <math/shape/Segment4.hpp>
-#include <math/shape/Sphere3.hpp>
-#include <math/shape/Sphere4.hpp>
+#include <math/AxBox1.hpp>
+#include <math/AxBox2.hpp>
+#include <math/AxBox3.hpp>
+#include <math/AxBox4.hpp>
+#include <math/Circle2.hpp>
+#include <math/Normal2.hpp>
+#include <math/Normal3.hpp>
+#include <math/Plane3.hpp>
+#include <math/Ray2.hpp>
+#include <math/Ray3.hpp>
+#include <math/Ray4.hpp>
+#include <math/Segment1.hpp>
+#include <math/Segment2.hpp>
+#include <math/Segment3.hpp>
+#include <math/Segment4.hpp>
+#include <math/Sphere3.hpp>
+#include <math/Sphere4.hpp>
 #include "vector_math.hpp"
 #include "tensor_math.hpp"
 

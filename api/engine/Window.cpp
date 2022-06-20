@@ -24,8 +24,8 @@
 #include <basic/Safety.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/PipelineConfig.hpp>
-#include <math/shape/Size2.hpp>
-#include <math/vec/Vector2.hpp>
+#include <math/Size2.hpp>
+#include <math/Vector2.hpp>
 
 #include <algorithm>
 #include <cassert>

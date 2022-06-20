@@ -15,8 +15,8 @@
 #include <engine/Window.hpp>
 #include <engine/PipelineConfig.hpp>
 #include <engine/StdPushConstant.hpp>
-#include <math/shape/Size2.hpp>
-#include <math/shape/Rectangle2.hpp>
+#include <math/Size2.hpp>
+#include <math/Rectangle2.hpp>
 
 namespace yq {
     namespace engine {

@@ -14,65 +14,65 @@
 #include <math/Pose3.hpp>
 
 
-#include <math/shape/AxBox1.hpp>
-#include <math/shape/AxBox2.hpp>
-#include <math/shape/AxBox3.hpp>
-#include <math/shape/AxBox4.hpp>
+#include <math/AxBox1.hpp>
+#include <math/AxBox2.hpp>
+#include <math/AxBox3.hpp>
+#include <math/AxBox4.hpp>
 
-#include <math/shape/Circle2.hpp>
+#include <math/Circle2.hpp>
 
-#include <math/shape/Normal2.hpp>
-#include <math/shape/Normal3.hpp>
+#include <math/Normal2.hpp>
+#include <math/Normal3.hpp>
 
-#include <math/shape/Plane3.hpp>
+#include <math/Plane3.hpp>
 
-#include <math/shape/Ray2.hpp>
-#include <math/shape/Ray3.hpp>
-#include <math/shape/Ray4.hpp>
+#include <math/Ray2.hpp>
+#include <math/Ray3.hpp>
+#include <math/Ray4.hpp>
 
-#include <math/shape/Segment1.hpp>
-#include <math/shape/Segment2.hpp>
-#include <math/shape/Segment3.hpp>
-#include <math/shape/Segment4.hpp>
+#include <math/Segment1.hpp>
+#include <math/Segment2.hpp>
+#include <math/Segment3.hpp>
+#include <math/Segment4.hpp>
 
-#include <math/shape/Size2.hpp>
+#include <math/Size2.hpp>
 
-#include <math/shape/Sphere3.hpp>
-#include <math/shape/Sphere4.hpp>
+#include <math/Sphere3.hpp>
+#include <math/Sphere4.hpp>
 
-#include <math/shape/Tetrahedron3.hpp>
+#include <math/Tetrahedron3.hpp>
 
-#include <math/shape/Triangle2.hpp>
-#include <math/shape/Triangle3.hpp>
-#include <math/shape/Triangle4.hpp>
+#include <math/Triangle2.hpp>
+#include <math/Triangle3.hpp>
+#include <math/Triangle4.hpp>
 
-#include <math/vec/Quaternion3.hpp>
+#include <math/Quaternion3.hpp>
 
-#include <math/vec/Tensor11.hpp>
-#include <math/vec/Tensor12.hpp>
-#include <math/vec/Tensor13.hpp>
-#include <math/vec/Tensor14.hpp>
+#include <math/Tensor11.hpp>
+#include <math/Tensor12.hpp>
+#include <math/Tensor13.hpp>
+#include <math/Tensor14.hpp>
 
-#include <math/vec/Tensor21.hpp>
-#include <math/vec/Tensor22.hpp>
-#include <math/vec/Tensor23.hpp>
-#include <math/vec/Tensor24.hpp>
+#include <math/Tensor21.hpp>
+#include <math/Tensor22.hpp>
+#include <math/Tensor23.hpp>
+#include <math/Tensor24.hpp>
 
-#include <math/vec/Tensor31.hpp>
-#include <math/vec/Tensor32.hpp>
-#include <math/vec/Tensor33.hpp>
-#include <math/vec/Tensor34.hpp>
+#include <math/Tensor31.hpp>
+#include <math/Tensor32.hpp>
+#include <math/Tensor33.hpp>
+#include <math/Tensor34.hpp>
 
-#include <math/vec/Tensor41.hpp>
-#include <math/vec/Tensor42.hpp>
-#include <math/vec/Tensor43.hpp>
-#include <math/vec/Tensor44.hpp>
+#include <math/Tensor41.hpp>
+#include <math/Tensor42.hpp>
+#include <math/Tensor43.hpp>
+#include <math/Tensor44.hpp>
 
 
-#include <math/vec/Vector1.hpp>
-#include <math/vec/Vector2.hpp>
-#include <math/vec/Vector3.hpp>
-#include <math/vec/Vector4.hpp>
+#include <math/Vector1.hpp>
+#include <math/Vector2.hpp>
+#include <math/Vector3.hpp>
+#include <math/Vector4.hpp>
 
 #include <basic/DelayInit.hpp>
 #include <basic/meta/Init.hpp>

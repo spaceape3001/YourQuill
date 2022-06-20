@@ -13,8 +13,8 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <math/preamble.hpp>
-#include <math/shape/Size2.hpp>
-#include <math/vec/Vector2.hpp>
+#include <math/Size2.hpp>
+#include <math/Vector2.hpp>
 #include <vulkan/vulkan_core.h>
 
 #include <functional>

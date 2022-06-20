@@ -8,8 +8,8 @@
 
 #include <math/preamble.hpp>
 #include <math/RGBA.hpp>
-#include <math/shape/Size2.hpp>
-#include <math/vec/Vector2.hpp>
+#include <math/Size2.hpp>
+#include <math/Vector2.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <vulkan/vulkan_core.h>
 #include <optional>
