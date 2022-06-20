@@ -5,8 +5,10 @@ endif()
 set(yq_engine_sources
     ${engine_test_source}
 
-    ./Application.cpp
-    ./Application.cpp
+    ./engine.cpp
+
+    ./Application.hpp
+    ./Application.ipp
     ./Asset.cpp
     ./Asset.hpp
     ./AssetCache.hpp
@@ -45,7 +47,6 @@ set(yq_engine_sources
     ./Window.cpp
     ./Window.hpp
     
-    ./enum/engine_enums.cpp
     ./enum/BorderColor.hpp   
     ./enum/ColorComponent.hpp    
     ./enum/ComponentSwizzle.hpp
@@ -67,7 +68,6 @@ set(yq_engine_sources
     ./enum/SystemAllocationScope.hpp
     ./enum/Topology.hpp
     
-    ./vulqan/vulqan.cpp
     ./vulqan/VqAllocator.hpp
     ./vulqan/VqAllocator.ipp
     ./vulqan/VqBuffer.hpp
