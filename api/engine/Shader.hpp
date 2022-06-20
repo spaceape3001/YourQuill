@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <engine/asset/Asset.hpp>
-#include <engine/shader/ShaderPointer.hpp>
-#include <engine/shader/ShaderType.hpp>
+#include <engine/Asset.hpp>
+#include <engine/ShaderPointer.hpp>
+#include <engine/enum/ShaderType.hpp>
 #include <basic/ByteArray.hpp>
 
 namespace yq {

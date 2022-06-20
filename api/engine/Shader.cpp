@@ -15,7 +15,7 @@
 
 #include <config/DirConfig.hpp>
 
-#include <engine/asset/ResultCC.hpp>
+#include <engine/ResultCC.hpp>
 
 YQ_OBJECT_IMPLEMENT(yq::engine::Shader)
 YQ_OBJECT_IMPLEMENT(yq::engine::ShaderCache)
@@ -392,8 +392,3 @@ namespace yq {
 }
 
 YQ_OBJECT_IMPLEMENT(yq::engine::GLSLCompiler)
-YQ_TYPE_IMPLEMENT(yq::engine::ShaderType)
-YQ_TYPE_IMPLEMENT(yq::engine::ShaderTypeFlags)
-
-
-

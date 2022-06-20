@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/texture/TextureInfoWriter.hpp>
+#include <engine/TextureInfoWriter.hpp>
 #include <basic/DelayInit.hpp>
 
 YQ_OBJECT_IMPLEMENT(yq::engine::Texture)

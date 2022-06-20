@@ -9,7 +9,7 @@
 
 #include <basic/meta/Init.hpp>
 #include <basic/meta/TypeInfo.hpp>
-#include <engine/shader/Shader.hpp>
+#include <engine/Shader.hpp>
 #include <math/glm_types.hpp>
 #include <math/RGBA.hpp>
 #include <math/vec/Vector1.hpp>

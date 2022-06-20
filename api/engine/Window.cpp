@@ -23,7 +23,7 @@
 #include <basic/Logging.hpp>
 #include <basic/Safety.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
-#include <engine/pipeline/PipelineConfig.hpp>
+#include <engine/PipelineConfig.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/vec/Vector2.hpp>
 

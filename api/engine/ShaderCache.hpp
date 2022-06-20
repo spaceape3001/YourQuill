@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <engine/asset/AssetCache.hpp>
-#include <engine/shader/ShaderPointer.hpp>
+#include <engine/AssetCache.hpp>
+#include <engine/ShaderPointer.hpp>
 #include <basic/Ref.hpp>
 
 namespace yq {

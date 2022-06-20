@@ -7,10 +7,10 @@
 #pragma once
 
 #include <basic/meta/ObjectInfoWriter.hpp>
-#include <engine/asset/Asset.hpp>
-#include <engine/asset/AssetCache.hpp>
-#include <engine/asset/AssetCompiler.hpp>
-#include <engine/asset/AssetLoader.hpp>
+#include <engine/Asset.hpp>
+#include <engine/AssetCache.hpp>
+#include <engine/AssetCompiler.hpp>
+#include <engine/AssetLoader.hpp>
 
 namespace yq {
     namespace engine {

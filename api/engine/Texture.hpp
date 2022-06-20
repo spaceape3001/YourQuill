@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/asset/Asset.hpp>
+#include <engine/Asset.hpp>
 
 namespace yq {
     namespace engine {

@@ -21,10 +21,12 @@
 #include "PolygonMode.hpp"
 #include "SamplerAddressMode.hpp"
 #include "SamplerMipmapMode.hpp"
+#include "ShaderType.hpp"
 #include "StencilOp.hpp"
 #include "SubpassContents.hpp"
 #include "SystemAllocationScope.hpp"
 #include "Topology.hpp"
+#include "Tristate.hpp"
 #include "VertexInputRate.hpp"
 
 YQ_TYPE_IMPLEMENT(yq::engine::BorderColor)
@@ -44,7 +46,10 @@ YQ_TYPE_IMPLEMENT(yq::engine::MipmapMode)
 YQ_TYPE_IMPLEMENT(yq::engine::PolygonMode)
 YQ_TYPE_IMPLEMENT(yq::engine::SamplerAddressMode)
 YQ_TYPE_IMPLEMENT(yq::engine::SamplerMipmapMode)
+YQ_TYPE_IMPLEMENT(yq::engine::ShaderType)
+YQ_TYPE_IMPLEMENT(yq::engine::ShaderTypeFlags)
 YQ_TYPE_IMPLEMENT(yq::engine::StencilOp)
 YQ_TYPE_IMPLEMENT(yq::engine::SubpassContents)
 YQ_TYPE_IMPLEMENT(yq::engine::SystemAllocationScope)
 YQ_TYPE_IMPLEMENT(yq::engine::Topology)
+YQ_TYPE_IMPLEMENT(yq::engine::Tristate)

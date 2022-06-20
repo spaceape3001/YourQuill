@@ -7,15 +7,39 @@ set(yq_engine_sources
 
     ./Application.cpp
     ./Application.cpp
+    ./Asset.cpp
+    ./Asset.hpp
+    ./AssetCache.hpp
+    ./AssetCompiler.hpp
+    ./AssetLoader.hpp
+    ./AssetInfoWriter.hpp
+    ./ImWidget.cpp
+    ./ImWidget.hpp
+    ./ImWidgetInfoWriter.hpp
+    ./ImWindow.hpp
+    ./ImWindow.cpp
+    ./Pipeline.cpp
+    ./PipelineBuilder.hpp
+    ./PipelineConfig.hpp
+    ./Rendered.cpp
+    ./Rendered.hpp
+    ./RenderedInfoWriter.hpp
+    ./Render3D.hpp
+    ./Render3D.cpp
+    ./Render3DInfoWriter.hpp
+    ./Shader.cpp
+    ./Shader.hpp
+    ./ShaderCache.hpp
+    ./ShaderCompiler.hpp
+    ./ShaderLoader.hpp
+    ./ShaderInfoWriter.hpp
+    ./Texture.cpp
+    ./Texture.hpp
+    ./TextureCache.hpp
+    ./TextureLoader.hpp
+    ./TextureInfoWriter.hpp
     ./Window.cpp
     ./Window.hpp
-    
-    ./asset/Asset.cpp
-    ./asset/Asset.hpp
-    ./asset/AssetCache.hpp
-    ./asset/AssetCompiler.hpp
-    ./asset/AssetLoader.hpp
-    ./asset/AssetInfoWriter.hpp
     
     ./enum/engine_enums.cpp
     ./enum/BorderColor.hpp   
@@ -38,35 +62,6 @@ set(yq_engine_sources
     ./enum/SubpassContents.hpp
     ./enum/SystemAllocationScope.hpp
     ./enum/Topology.hpp
-    
-    ./pipeline/Pipeline.cpp
-    ./pipeline/PipelineBuilder.hpp
-    ./pipeline/PipelineConfig.hpp
-    
-    ./render.cpp
-    ./Rendered.hpp
-    ./RenderedInfoWriter.hpp
-    ./Render3D.hpp
-    ./Render3DInfoWriter.hpp
-    
-    ./shader/Shader.cpp
-    ./shader/Shader.hpp
-    ./shader/ShaderCache.hpp
-    ./shader/ShaderCompiler.hpp
-    ./shader/ShaderLoader.hpp
-    ./shader/ShaderInfoWriter.hpp
-    
-    ./texture/Texture.cpp
-    ./texture/Texture.hpp
-    ./texture/TextureCache.hpp
-    ./texture/TextureLoader.hpp
-    ./texture/TextureInfoWriter.hpp
-    
-    ./ui/ImWidget.cpp
-    ./ui/ImWidget.hpp
-    ./ui/ImWidgetInfoWriter.hpp
-    ./ui/ImWindow.hpp
-    ./ui/ImWindow.cpp
     
     ./vulqan/vulqan.cpp
     ./vulqan/VqAllocator.hpp

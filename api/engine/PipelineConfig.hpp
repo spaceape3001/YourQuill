@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/shader/ShaderPointer.hpp>
+#include <engine/ShaderPointer.hpp>
 #include <optional>
 #include <vector>
 #include <engine/enum/CullMode.hpp>

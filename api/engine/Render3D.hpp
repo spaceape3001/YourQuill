@@ -10,7 +10,7 @@
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
 #include <basic/meta/ObjectInfo.hpp>
-#include <engine/pipeline/PipelineConfig.hpp>
+#include <engine/PipelineConfig.hpp>
 #include <engine/Rendered.hpp>
 #include <math/SimpleSpace.hpp>
 #include <math/shape/AxBox3.hpp>

@@ -8,7 +8,7 @@
 
 #include <basic/Object.hpp>
 #include <basic/meta/ObjectInfo.hpp>
-#include <engine/pipeline/PipelineConfig.hpp>
+#include <engine/PipelineConfig.hpp>
 #include <atomic>
 
 namespace yq {

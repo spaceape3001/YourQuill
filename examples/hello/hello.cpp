@@ -21,10 +21,10 @@
 #include <basic/meta/Meta.hpp>
 #include <engine/Application.hpp>
 #include <engine/Window.hpp>
-#include <engine/pipeline/PipelineBuilder.hpp>
+#include <engine/PipelineBuilder.hpp>
 #include <engine/Render3D.hpp>
 #include <engine/Render3DInfoWriter.hpp>
-#include <engine/shader/Shader.hpp>
+#include <engine/Shader.hpp>
 #include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqCommand.hpp>
 #include <engine/vulqan/VqUtils.hpp>

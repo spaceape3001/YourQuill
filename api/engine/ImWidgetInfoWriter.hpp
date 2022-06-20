@@ -7,7 +7,7 @@
 #pragma once
 
 #include <basic/meta/ObjectInfoWriter.hpp>
-#include <engine/ui/ImWidget.hpp>
+#include <engine/ImWidget.hpp>
 
 namespace yq {
     namespace engine {

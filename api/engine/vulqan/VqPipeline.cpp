@@ -13,8 +13,8 @@
 
 #include <basic/Logging.hpp>
 #include <engine/Window.hpp>
-#include <engine/pipeline/PipelineConfig.hpp>
-#include <engine/pipeline/StdPushConstant.hpp>
+#include <engine/PipelineConfig.hpp>
+#include <engine/StdPushConstant.hpp>
 #include <math/shape/Size2.hpp>
 #include <math/shape/Rectangle2.hpp>
 
