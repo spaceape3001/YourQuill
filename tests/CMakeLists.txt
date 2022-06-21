@@ -18,5 +18,6 @@ yq_test(strings)
 yq_test(variants)
 yq_test(vector2)
 yq_test(vector3)
+yq_test(vector4)
 
 
