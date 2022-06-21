@@ -13,6 +13,7 @@ endmacro()
 #add_subdirectory(fraction)
 
 yq_test(encode64)
+yq_test(fraction)
 yq_test(http)
 yq_test(strings)
 yq_test(variants)
