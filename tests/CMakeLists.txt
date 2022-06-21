@@ -17,5 +17,6 @@ yq_test(http)
 yq_test(strings)
 yq_test(variants)
 yq_test(vector2)
+yq_test(vector3)
 
 
