@@ -343,6 +343,18 @@ namespace yq {
         return a.x*a.y*a.z*a.w;
     }
 
+    template <typename T, typename R>
+    bool is_close(const R& compare, const Vector4<T>& actual, const Vector4<T>& expected)
+    {
+        return compare(length(actual-expected), length(expected));
+    }
+    
+    template <typename T, typename R>
+    bool is_close(const R& compare, const Vector4<T>& actual, std::type_identity_t<T> x, std::type_identity_t<T> y, std::type_identity_t<T> z,std::type_identity_t<T>w)
+    {
+        return is_close(compare, actual, Vector4<T>{x, y, z, w} );
+    }
+
     template <typename T>
     constexpr Vector4<T>   max_elem(const Vector4<T>&a, const Vector4<T>&b)
     {

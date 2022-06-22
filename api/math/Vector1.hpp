@@ -290,6 +290,18 @@ namespace yq {
         return (a.x>=b.x);
     }
     
+    template <typename T, typename R>
+    bool is_close(const R& compare, const Vector1<T>& actual, const Vector1<T>& expected)
+    {
+        return compare(length(actual-expected), length(expected));
+    }
+
+    template <typename T, typename R>
+    bool is_close(const R& compare, const Vector1<T>& actual, std::type_identity_t<T> x)
+    {
+        return is_close(compare, actual, Vector1<T>{x} );
+    }
+
     template <typename T>
     constexpr Vector1<T>   max_elem(const Vector1<T>&a, const Vector1<T>&b)
     {

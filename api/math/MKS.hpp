@@ -292,6 +292,17 @@ namespace yq {
 //  --------------------------------------------------------
 //  ADVANCED FUNCTIONS
 
+    template <typename T, typename DIM, typename R>
+    bool is_close(const R& compare, MKS<T,DIM> actual, MKS<T,DIM> expected)
+    {
+        return compare(actual.value - expected.value, expected.value);
+    }
+
+    template <typename T, typename DIM, typename R>
+    bool is_close(const R& compare, MKS<T,DIM> actual, std::type_identity_t<T> v)
+    {
+        return is_close(compare, actual, MKS<T,DIM>{v});
+    }
 
 //  --------------------------------------------------------
 //  CONDITIONAL INCLUDES

@@ -380,6 +380,18 @@ namespace yq {
         return atan(a.y, a.x);
     }
 
+    template <typename T, typename R>
+    bool is_close(const R& compare, const Vector2<T>& actual, const Vector2<T>& expected)
+    {
+        return compare(length(actual-expected), length(expected));
+    }
+
+    template <typename T, typename R>
+    bool is_close(const R& compare, const Vector2<T>& actual, std::type_identity_t<T> x, std::type_identity_t<T> y)
+    {
+        return is_close(compare, actual, Vector2<T>{x, y} );
+    }
+
     template <typename T>
     constexpr Vector2<T>   max_elem(const Vector2<T>&a, const Vector2<T>&b)
     {

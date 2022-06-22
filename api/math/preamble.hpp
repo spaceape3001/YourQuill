@@ -259,6 +259,13 @@ namespace yq {
         return (int)(floor(r)+std::copysign(0.1,r));
     }
     
+    template <typename T, typename R>
+    requires std::is_floating_point_v<T>
+    bool    is_close(const R& compare, T actual, T expected)
+    {
+        return compare(actual-expected, expected);
+    }
+    
     template <typename> struct SegmentData;
     template <typename> struct TetrahedronData;
     template <typename> struct TriangleData;
