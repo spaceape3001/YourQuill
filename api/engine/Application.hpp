@@ -17,97 +17,99 @@
 struct VkInstance_T;
 
 namespace yq {
+    namespace engine {
 
-    class Application;
-    class MainWindow;
-    
-    /*! \brief Engine/Vulkan application
-    
-    */
-    class Application : public BasicApp {
-    public:
-    
-        //! Global application, if any
-        static Application*       app() { return s_app; }
+        class Application;
+        class Vulqan;
         
-        //! Name of this engine
-        static std::string_view             engine_name();
+        /*! \brief Engine/Vulkan application
         
-        //! Version of this engine
-        static uint32_t                     engine_version();
-
-        /*! \brief Vulkan instance
-        
-            If necessary, this will initialize the vulkan *IFF* the app exists and vulkan's not already been
-            initialized.
         */
-        static VkInstance    vulkan();
-    
-        /*! \brief Constructor
+        class Application : public BasicApp {
+        public:
         
-            \param[in]  argc    Pass onto me what the main() was given
-            \param[in]  argv    Pass onto me what the main() was given
-            \param[in]  aci     Initialization paraemters for this application
-        */
-        Application(int argc, char* argv[], const AppCreateInfo& aci=AppCreateInfo());
-        ~Application();
-        
-        
-        //void    run();
-        
-        /*!  Simple exec loop for a single window.
-        
-            Meant as a convienence function to run a single window in a tight event/draw loop
-            until the window is ready to be closed
+            //! Global application, if any
+            static Application*       app() { return s_app; }
             
-            \param[in] win          MainWindow to watch
-            \param[in] timeout      If positive, throttles the loop to the rate of user input, where timeout 
-                                    is the max stall duration.
-        */
-        void    run_window(MainWindow*win, double timeout=0.);
-        
-        /*! \brief Initializes the GLFW
-        
-            This initializes the GLFW.  
+            //! Name of this engine
+            static std::string_view             engine_name();
             
-            \note calling instance() or init_vulkan() will automatically initialize GLFW.
-        */
-        void    init_glfw();
-        
-        /*! \brief Initializes vulkan instance
-        
-            \note calling instance() will automatically call this, if necessary.
-        */
-        bool    init_vulkan();
-        
-        const std::vector<const char*>&     extensions() const { return m_extensions; }
-        const std::vector<const char*>&     layers() const { return m_layers; }
-        
-        
-    private:
-        friend class MainWindow;
-        
-        static Application*                 s_app;
-        static VkInstance                   s_vulkan;
+            //! Version of this engine
+            static uint32_t                     engine_version();
 
-        AppCreateInfo                       m_appInfo;
-        VkInstance                          m_vulkan        = nullptr;
-        //std::vector<VkLayerProperties>      m_allLayerProps;
-        //std::vector<VkExtensionProperties>  m_allExtensionProps;
-        //std::set<std::string>               m_allLayerNames;
-        //std::set<std::string>               m_allExtensionNames;
-        std::vector<const char*>            m_extensions;
-        std::vector<const char*>            m_layers;
-        VkDebugReportCallbackEXT            m_debug         = nullptr;
-        bool                                m_glfw        = false;
+            /*! \brief Vulkan instance
+            
+                If necessary, this will initialize the vulkan *IFF* the app exists and vulkan's not already been
+                initialized.
+            */
+            static VkInstance    vulkan();
         
-        bool        add_layer(const char*);
-        bool        add_extension(const char*);
-        
-        
-        bool        init();
-        void        kill();
-        
-    };
+            /*! \brief Constructor
+            
+                \param[in]  argc    Pass onto me what the main() was given
+                \param[in]  argv    Pass onto me what the main() was given
+                \param[in]  aci     Initialization paraemters for this application
+            */
+            Application(int argc, char* argv[], const AppCreateInfo& aci=AppCreateInfo());
+            ~Application();
+            
+            
+            //void    run();
+            
+            /*!  Simple exec loop for a single window.
+            
+                Meant as a convienence function to run a single window in a tight event/draw loop
+                until the window is ready to be closed
+                
+                \param[in] win          Vulqan to watch
+                \param[in] timeout      If positive, throttles the loop to the rate of user input, where timeout 
+                                        is the max stall duration.
+            */
+            void    run_window(Vulqan*win, double timeout=0.);
+            
+            /*! \brief Initializes the GLFW
+            
+                This initializes the GLFW.  
+                
+                \note calling instance() or init_vulkan() will automatically initialize GLFW.
+            */
+            void    init_glfw();
+            
+            /*! \brief Initializes vulkan instance
+            
+                \note calling instance() will automatically call this, if necessary.
+            */
+            bool    init_vulkan();
+            
+            const std::vector<const char*>&     extensions() const { return m_extensions; }
+            const std::vector<const char*>&     layers() const { return m_layers; }
+            
+            
+        private:
+            friend class Vulqan;
+            
+            static Application*                 s_app;
+            static VkInstance                   s_vulkan;
 
+            AppCreateInfo                       m_appInfo;
+            VkInstance                          m_vulkan        = nullptr;
+            //std::vector<VkLayerProperties>      m_allLayerProps;
+            //std::vector<VkExtensionProperties>  m_allExtensionProps;
+            //std::set<std::string>               m_allLayerNames;
+            //std::set<std::string>               m_allExtensionNames;
+            std::vector<const char*>            m_extensions;
+            std::vector<const char*>            m_layers;
+            VkDebugReportCallbackEXT            m_debug         = nullptr;
+            bool                                m_glfw        = false;
+            
+            bool        add_layer(const char*);
+            bool        add_extension(const char*);
+            
+            
+            bool        init();
+            void        kill();
+            
+        };
+
+    }
 }

@@ -20,7 +20,7 @@
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/Application.hpp>
-#include <engine/MainWindow.hpp>
+#include <engine/Vulqan.hpp>
 #include <engine/PipelineBuilder.hpp>
 #include <engine/Render3D.hpp>
 #include <engine/Render3DInfoWriter.hpp>
@@ -37,6 +37,7 @@
 #include <math.h>
 
 using namespace yq;
+using namespace yq::engine;
 
 struct Vertex {
     glm::vec2   position;
@@ -55,13 +56,13 @@ const Vertex vertices[] = {
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
-struct HelloTriangle : public Rendered {
-    YQ_OBJECT_DECLARE(HelloTriangle, Rendered)
+struct HelloTriangle : public engine::Rendered {
+    YQ_OBJECT_DECLARE(HelloTriangle, engine::Rendered)
     VqPipeline                  m_pipeline;
     VqBuffer                    m_vbo;
-    MainWindow*                     m_window                = nullptr;
+    Vulqan*                     m_window                = nullptr;
     
-    HelloTriangle(MainWindow*w) : m_window(w)
+    HelloTriangle(Vulqan*w) : m_window(w)
     {
         ShaderPtr   vert = Shader::load("examples/hello/hello3.vert");
         ShaderPtr   frag = Shader::load("examples/hello/hello.frag");
@@ -119,13 +120,13 @@ YQ_INVOKE(
 YQ_OBJECT_IMPLEMENT(HelloTriangle)
 
 
-struct HelloWin : public MainWindow {
-    YQ_OBJECT_DECLARE(HelloWin, MainWindow)
+struct HelloWin : public engine::Vulqan {
+    YQ_OBJECT_DECLARE(HelloWin, engine::Vulqan)
     
     timepoint_t             start;
     Ref<HelloTriangle>      triangle;
 
-    HelloWin(const WindowCreateInfo& wci) : MainWindow(wci)
+    HelloWin(const WindowCreateInfo& wci) : Vulqan(wci)
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);

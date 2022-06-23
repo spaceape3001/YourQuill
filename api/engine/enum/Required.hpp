@@ -9,9 +9,11 @@
 #include <cstdint>
 
 namespace yq {
-    enum class Required : uint8_t {
-        NO,
-        OPTIONAL,
-        YES
-    };
+    namespace engine {
+        enum class Required : uint8_t {
+            NO,
+            OPTIONAL,
+            YES
+        };
+    }
 }

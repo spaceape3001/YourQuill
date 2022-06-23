@@ -10,24 +10,26 @@
 #include <vulkan/vulkan_core.h>
 
 namespace yq {
-    class VqSemaphore : trait::not_copyable {
-    public:
-        VqSemaphore(){}
-        explicit VqSemaphore(VkDevice);
-        VqSemaphore(VqSemaphore&&);
-        VqSemaphore& operator=(VqSemaphore&&);
-        ~VqSemaphore();
+    namespace engine {
+        class VqSemaphore : trait::not_copyable {
+        public:
+            VqSemaphore(){}
+            explicit VqSemaphore(VkDevice);
+            VqSemaphore(VqSemaphore&&);
+            VqSemaphore& operator=(VqSemaphore&&);
+            ~VqSemaphore();
+            
+            bool    good() const noexcept { return m_semaphore != nullptr; }
+            operator bool() const noexcept { return good(); }
+            operator VkSemaphore() const noexcept { return m_semaphore; }
+            VkSemaphore semaphore() const noexcept { return m_semaphore; }
         
-        bool    good() const noexcept { return m_semaphore != nullptr; }
-        operator bool() const noexcept { return good(); }
-        operator VkSemaphore() const noexcept { return m_semaphore; }
-        VkSemaphore semaphore() const noexcept { return m_semaphore; }
-    
-    private:
-        void    dtor();
-        void    move(VqSemaphore&&);
-        
-        VkDevice    m_device    = nullptr;
-        VkSemaphore m_semaphore = nullptr;
-    };
+        private:
+            void    dtor();
+            void    move(VqSemaphore&&);
+            
+            VkDevice    m_device    = nullptr;
+            VkSemaphore m_semaphore = nullptr;
+        };
+    }
 }

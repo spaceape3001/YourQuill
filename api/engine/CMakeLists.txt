@@ -24,8 +24,8 @@ set(yq_engine_sources
     ./ImWidgetInfoWriter.hpp
     ./ImWindow.hpp
     ./ImWindow.cpp
-    ./MainWindow.cpp
-    ./MainWindow.hpp
+    ./Vulqan.cpp
+    ./Vulqan.hpp
     ./Pipeline.cpp
     ./PipelineBuilder.hpp
     ./PipelineConfig.hpp

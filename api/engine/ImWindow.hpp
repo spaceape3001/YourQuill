@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/MainWindow.hpp>
+#include <engine/Vulqan.hpp>
 #include <imgui.h>
 
 namespace yq {
@@ -14,8 +14,8 @@ namespace yq {
 
         /*! \brief Base window class for pure ImGUI windows
         */
-        class ImWindow : public MainWindow {
-            YQ_OBJECT_DECLARE(ImWindow, MainWindow)
+        class ImWindow : public Vulqan {
+            YQ_OBJECT_DECLARE(ImWindow, Vulqan)
         public:
             ImWindow(const WindowCreateInfo& wci = WindowCreateInfo());
             ~ImWindow();

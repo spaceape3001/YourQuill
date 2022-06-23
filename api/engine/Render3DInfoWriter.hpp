@@ -10,15 +10,17 @@
 #include <engine/RenderedInfoWriter.hpp>
 
 namespace yq {
-    template <typename C>
-    class Render3DInfo::Writer : public RenderedInfo::Writer<C> {
-    public:
-        Writer(Render3DInfo* renderInfo) : RenderedInfo::Writer<C>(renderInfo)
-        {
-        }
-        
-        Writer(Render3DInfo& renderInfo) : Writer(&renderInfo)
-        {
-        }
-    };
+    namespace engine {
+        template <typename C>
+        class Render3DInfo::Writer : public RenderedInfo::Writer<C> {
+        public:
+            Writer(Render3DInfo* renderInfo) : RenderedInfo::Writer<C>(renderInfo)
+            {
+            }
+            
+            Writer(Render3DInfo& renderInfo) : Writer(&renderInfo)
+            {
+            }
+        };
+    }
 }

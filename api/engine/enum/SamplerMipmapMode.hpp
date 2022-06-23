@@ -9,9 +9,11 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(SamplerMipmapMode, ,
-        Nearest = 0,
-        Linear = 1
-    )
+    namespace engine {
+        YQ_ENUM(SamplerMipmapMode, ,
+            Nearest = 0,
+            Linear = 1
+        )
+    }
 }
-YQ_TYPE_DECLARE(yq::SamplerMipmapMode)
+YQ_TYPE_DECLARE(yq::engine::SamplerMipmapMode)

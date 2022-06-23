@@ -9,10 +9,12 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(ImageTiling, ,
-        Optimal = 0,
-        Linear = 1,
-        DRMFormat = 1000158000
-    )
+    namespace engine {
+        YQ_ENUM(ImageTiling, ,
+            Optimal = 0,
+            Linear = 1,
+            DRMFormat = 1000158000
+        )
+    }
 }
-YQ_TYPE_DECLARE(yq::ImageTiling)
+YQ_TYPE_DECLARE(yq::engine::ImageTiling)

@@ -13,11 +13,11 @@
 
 namespace yq {
     namespace asset {
-        class SpaceCamera : public Camera {
-            YQ_OBJECT_DECLARE(SpaceCamera, Camera)
+        class SpaceCamera : public engine::Camera {
+            YQ_OBJECT_DECLARE(SpaceCamera, engine::Camera)
         public:
         
-            glm::dmat4  world2screen(const CameraParams&) const override;
+            glm::dmat4  world2screen(const engine::CameraParams&) const override;
             SpaceCamera();
             ~SpaceCamera();
 

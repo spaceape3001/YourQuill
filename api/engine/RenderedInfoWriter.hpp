@@ -11,15 +11,17 @@
 #include <basic/Mutable.hpp>
 
 namespace yq {
-    template <typename C>
-    class RenderedInfo::Writer : public ObjectInfo::Writer<C> {
-    public:
-        Writer(RenderedInfo* renderInfo) : ObjectInfo::Writer<C>(renderInfo)
-        {
-        }
-        
-        Writer(RenderedInfo& renderInfo) : Writer(&renderInfo)
-        {
-        }
-    };
+    namespace engine {
+        template <typename C>
+        class RenderedInfo::Writer : public ObjectInfo::Writer<C> {
+        public:
+            Writer(RenderedInfo* renderInfo) : ObjectInfo::Writer<C>(renderInfo)
+            {
+            }
+            
+            Writer(RenderedInfo& renderInfo) : Writer(&renderInfo)
+            {
+            }
+        };
+    }
 }

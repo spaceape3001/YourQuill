@@ -9,11 +9,13 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(FilterType, , 
-        Nearest = 0,
-        Linear = 1,
-        Cubic = 1000015000
-    )
+    namespace engine {
+        YQ_ENUM(FilterType, , 
+            Nearest = 0,
+            Linear = 1,
+            Cubic = 1000015000
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::FilterType)
+YQ_TYPE_DECLARE(yq::engine::FilterType)

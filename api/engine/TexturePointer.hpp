@@ -9,6 +9,8 @@
 #include <basic/Ref.hpp>
 
 namespace yq {
-    class Texture;
-    using TexturePtr    = Ref<const Texture>;
+    namespace engine {
+        class Texture;
+        using TexturePtr    = Ref<const Texture>;
+    }
 }

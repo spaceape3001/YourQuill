@@ -9,10 +9,11 @@
 #include <cstdint.hpp>
 
 namespace yq {
-    
-    struct VqObject {
-        uint64_t        object      = 0;
-        uint64_t        revision    = 0;
-    };
-    
+    namespace engine {
+        struct VqObject {
+            uint64_t        object      = 0;
+            uint64_t        revision    = 0;
+        };
+        
+    }
 }

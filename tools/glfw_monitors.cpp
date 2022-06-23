@@ -12,6 +12,7 @@
 
 using std::cout;
 using namespace yq;
+using namespace yq::engine;
 
 int main(int argc, char* argv[])
 {

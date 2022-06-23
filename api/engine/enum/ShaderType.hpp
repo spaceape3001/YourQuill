@@ -11,18 +11,20 @@
 #include <basic/Flag.hpp>
 
 namespace yq {
-    YQ_ENUM(ShaderType, ,
-        UNKNOWN,
-        VERT,
-        TESE,
-        TESC,
-        FRAG,
-        GEOM,
-        COMP
-    )
-    
-    using ShaderTypeFlags   = Flag<ShaderType>;
+    namespace engine {
+        YQ_ENUM(ShaderType, ,
+            UNKNOWN,
+            VERT,
+            TESE,
+            TESC,
+            FRAG,
+            GEOM,
+            COMP
+        )
+        
+        using ShaderTypeFlags   = Flag<ShaderType>;
+    }
 }
 
-YQ_TYPE_DECLARE(yq::ShaderType)
-YQ_TYPE_DECLARE(yq::ShaderTypeFlags)
+YQ_TYPE_DECLARE(yq::engine::ShaderType)
+YQ_TYPE_DECLARE(yq::engine::ShaderTypeFlags)

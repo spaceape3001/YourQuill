@@ -9,10 +9,12 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(MipmapMode, , 
-        Nearest = 0,
-        Linear = 1
-    )
+    namespace engine {
+        YQ_ENUM(MipmapMode, , 
+            Nearest = 0,
+            Linear = 1
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::MipmapMode)
+YQ_TYPE_DECLARE(yq::engine::MipmapMode)

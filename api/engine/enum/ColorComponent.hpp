@@ -10,15 +10,17 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(ColorComponent, , 
-        Red     = 0,
-        Green   = 1,
-        Blue    = 2,
-        Alpha   = 3
-    )
-    
-    using ColorComponentFlags   = Flag<ColorComponent>;
+    namespace engine {
+        YQ_ENUM(ColorComponent, , 
+            Red     = 0,
+            Green   = 1,
+            Blue    = 2,
+            Alpha   = 3
+        )
+        
+        using ColorComponentFlags   = Flag<ColorComponent>;
+    }
 }
 
-YQ_TYPE_DECLARE(yq::ColorComponent)
-YQ_TYPE_DECLARE(yq::ColorComponentFlags)
+YQ_TYPE_DECLARE(yq::engine::ColorComponent)
+YQ_TYPE_DECLARE(yq::engine::ColorComponentFlags)

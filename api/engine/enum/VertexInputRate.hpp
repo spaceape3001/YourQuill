@@ -10,10 +10,12 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(VertexInputRate, , 
-        Vertex = 0,
-        Instance = 1
-    )
+    namespace engine {
+        YQ_ENUM(VertexInputRate, , 
+            Vertex = 0,
+            Instance = 1
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::VertexInputRate)
+YQ_TYPE_DECLARE(yq::engine::VertexInputRate)

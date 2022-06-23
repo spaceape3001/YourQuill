@@ -9,12 +9,14 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(PolygonMode, , 
-        Fill = 0,
-        Line = 1,
-        Point = 2,
-        FillRectangleNV = 1000153000
-    )
+    namespace engine {
+        YQ_ENUM(PolygonMode, , 
+            Fill = 0,
+            Line = 1,
+            Point = 2,
+            FillRectangleNV = 1000153000
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::PolygonMode)
+YQ_TYPE_DECLARE(yq::engine::PolygonMode)

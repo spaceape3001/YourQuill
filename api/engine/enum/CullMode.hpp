@@ -9,12 +9,14 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(CullMode, , 
-        None    = 0,
-        Front   = 1,
-        Back    = 2,
-        FrontBack   = 3
-    )
+    namespace engine {
+        YQ_ENUM(CullMode, , 
+            None    = 0,
+            Front   = 1,
+            Back    = 2,
+            FrontBack   = 3
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::CullMode)
+YQ_TYPE_DECLARE(yq::engine::CullMode)

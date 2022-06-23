@@ -9,10 +9,12 @@
 #include <basic/meta/InfoBinder.hpp>
 
 namespace yq {
-    YQ_ENUM(ImageType, ,
-        Is1D = 0,
-        Is2D = 1,
-        Is3D = 2
-    )
+    namespace engine {
+        YQ_ENUM(ImageType, ,
+            Is1D = 0,
+            Is2D = 1,
+            Is3D = 2
+        )
+    }
 }
-YQ_TYPE_DECLARE(yq::ImageType)
+YQ_TYPE_DECLARE(yq::engine::ImageType)
