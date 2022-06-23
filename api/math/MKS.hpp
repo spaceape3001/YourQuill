@@ -266,7 +266,7 @@ namespace yq {
     }
 
     template <typename T, typename U, typename DIMT, typename DIMU>
-    MKS<quotient_t<T,U>,typename DIMT::template _div_<DIMU>> operator*(const MKS<T,DIMT>& a, const MKS<U,DIMU>& b)
+    MKS<quotient_t<T,U>,typename DIMT::template _div_<DIMU>> operator/(const MKS<T,DIMT>& a, const MKS<U,DIMU>& b)
     {
         return { a.value / b.value };
     }

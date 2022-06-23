@@ -22,7 +22,15 @@ namespace yq {
         
         SCALED&    operator=(const MKS<T,DIM>& v) 
         {
-            value   = T(v / K);
+            value   = v.value / K;
+            return *this;
+        }
+        
+        template <double K2>
+        requires (K2 != K)
+        SCALED&     operator=(const SCALED<T,DIM,K2>& v)
+        {
+            value   = v.value * (K2/K);
             return *this;
         }
     };
@@ -92,6 +100,107 @@ namespace yq {
         return { -a.value };
     }
 
+
+//  --------------------------------------------------------
+//  ADDITION
+
+    template <typename T, typename DIM, double K>
+    MKS<T,DIM>    operator+(const MKS<T,DIM>& a, const SCALED<T,DIM,K>& b)
+    {
+        return { a.value + b.value*K };
+    }
+
+    template <typename T, typename DIM, double K>
+    MKS<T,DIM>    operator+(const SCALED<T,DIM,K>& a, const MKS<T,DIM>& b)
+    {
+        return { a.value*K + b.value };
+    }
+
+    template <typename T, typename DIM, double K>
+    SCALED<T,DIM,K>    operator+(const SCALED<T,DIM,K>& a, const SCALED<T,DIM,K>& b)
+    {
+        return { a.value + b.value };
+    }
+
+    template <typename T, typename DIM, double K, double K2>
+    requires (K != K2)
+    SCALED<T,DIM,K>    operator+(const SCALED<T,DIM,K>& a, const SCALED<T,DIM,K2>& b)
+    {
+        return { a.value + b.value*(K2/K) };
+    }
+    
+    template <typename T, typename DIM, double K>
+    SCALED<T,DIM,K>&    operator+=(SCALED<T,DIM,K>& a, const MKS<T,DIM>& b)
+    {
+        a.value += b.value/K;
+        return a;
+    }
+
+    template <typename T, typename DIM, double K>
+    SCALED<T,DIM,K>&    operator+=(SCALED<T,DIM,K>& a, const SCALED<T,DIM,K>& b)
+    {
+        a.value += b.value;
+        return a;
+    }
+
+    template <typename T, typename DIM, double K, double K2>
+    requires (K != K2)
+    SCALED<T,DIM,K>&    operator+=(SCALED<T,DIM,K>& a, const SCALED<T,DIM,K2>& b)
+    {
+        a.value += b.value * (K2/K);
+        return a;
+    }
+
+//  --------------------------------------------------------
+//  SUBTRACTION
+
+    template <typename T, typename DIM, double K>
+    MKS<T,DIM>    operator-(const MKS<T,DIM>& a, const SCALED<T,DIM,K>& b)
+    {
+        return { a.value - b.value*K };
+    }
+
+    template <typename T, typename DIM, double K>
+    MKS<T,DIM>    operator-(const SCALED<T,DIM,K>& a, const MKS<T,DIM>& b)
+    {
+        return { a.value*K - b.value };
+    }
+
+    template <typename T, typename DIM, double K>
+    SCALED<T,DIM,K>    operator-(const SCALED<T,DIM,K>& a, const SCALED<T,DIM,K>& b)
+    {
+        return { a.value - b.value };
+    }
+
+    template <typename T, typename DIM, double K, double K2>
+    requires (K != K2)
+    SCALED<T,DIM,K>    operator-(const SCALED<T,DIM,K>& a, const SCALED<T,DIM,K2>& b)
+    {
+        return { a.value - b.value*(K2/K) };
+    }
+    
+    template <typename T, typename DIM, double K>
+    SCALED<T,DIM,K>&    operator-=(SCALED<T,DIM,K>& a, const MKS<T,DIM>& b)
+    {
+        a.value -= b.value/K;
+        return a;
+    }
+
+    template <typename T, typename DIM, double K>
+    SCALED<T,DIM,K>&    operator-=(SCALED<T,DIM,K>& a, const SCALED<T,DIM,K>& b)
+    {
+        a.value -= b.value;
+        return a;
+    }
+
+    template <typename T, typename DIM, double K, double K2>
+    requires (K != K2)
+    SCALED<T,DIM,K>&    operator-=(SCALED<T,DIM,K>& a, const SCALED<T,DIM,K2>& b)
+    {
+        a.value -= b.value * (K2/K);
+        return a;
+    }
+    
 //  --------------------------------------------------------
 //  ADVANCED FUNCTIONS
 
