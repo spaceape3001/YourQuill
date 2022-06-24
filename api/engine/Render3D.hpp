@@ -52,7 +52,10 @@ namespace yq {
             
             void                            set_position(const Vector3D&);
             void                            set_scale(const Vector3D&);
+            void                            set_scaling(double);
             void                            set_orientation(const Quaternion3D&);
+            void                            set_heading(Radian hdg);
+            void                            set_hpr(Radian hdg, Radian pitch, Radian roll);
             void                            set_bounds(const AxBox3D&);
             void                            set_space(const SimpleSpace&);
             

@@ -30,6 +30,8 @@ namespace yq {
         class VqWindow;
         struct VqInternal;
         class VqAllocator;
+        struct Scene;
+        struct Perspective;
         
         
         struct WindowInfo : public ObjectInfo {
@@ -193,6 +195,8 @@ namespace yq {
             virtual bool        draw();
 
             operator VqInternal&  () { return *m; }
+
+            void                render(VkCommandBuffer, const Scene&, const Perspective&);
 
         protected:
         

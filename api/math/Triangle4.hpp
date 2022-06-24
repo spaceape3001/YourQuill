@@ -14,11 +14,11 @@ namespace yq {
 //  --------------------------------------------------------
 //  COMPOSITION
 
-    template <typename T>
-    Triangle4<T>    triangle(const Vector4<T>& a, const Vector4<T>& b, const Vector4<T>& c)
-    {
-        return { a, b, c };
-    }
+    //template <typename T>
+    //Triangle4<T>    triangle(const Vector4<T>& a, const Vector4<T>& b, const Vector4<T>& c)
+    //{
+        //return { a, b, c };
+    //}
 
     YQ_NAN_1(Triangle4, { nan_v<Vector3<T>>, nan_v<Vector3<T>>, nan_v<Vector3<T>> })
     YQ_ZERO_1(Triangle4, { zero_v<Vector3<T>>, zero_v<Vector3<T>>, zero_v<Vector3<T>> })

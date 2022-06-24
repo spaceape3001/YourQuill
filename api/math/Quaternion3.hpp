@@ -315,6 +315,13 @@ namespace yq {
 
     template <typename T>
     requires std::is_floating_point_v<T>
+    Quaternion3<T>  hpr(const MKS<T,dim::Angle>& hdg, const MKS<T,dim::Angle>& pitch, const MKS<T,dim::Angle>& roll)
+    {
+        return rotor_z(hdg) * rotor_y(pitch) * rotor_x(pitch);
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
     Quaternion3<T>  quaternion(const Tensor33<T>& t)
     {
         Quaternion3<T>  ret;

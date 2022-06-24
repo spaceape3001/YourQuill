@@ -11,6 +11,8 @@
 */
 
 #include "Application.hpp"
+#include "Perspective.hpp"
+#include "Scene.hpp"
 #include "Vulqan.hpp"
 
 #include <engine/vulqan/VqException.hpp>
@@ -335,6 +337,15 @@ namespace yq {
             return ret;
         }
 
+        void    Vulqan::render(VkCommandBuffer buf, const Scene& scene, const Perspective& p)
+        {   
+            if(!p.camera){
+                yCritical() << "Camera not detected!\n";
+                return ;
+            }
+
+            //  TODO.....
+        }
 
         VkRenderPass Vulqan::render_pass() const
         {

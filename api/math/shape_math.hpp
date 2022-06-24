@@ -17,6 +17,8 @@
 #include <math/Ray2.hpp>
 #include <math/Ray3.hpp>
 #include <math/Ray4.hpp>
+#include <math/RGB.hpp>
+#include <math/RGBA.hpp>
 #include <math/Segment1.hpp>
 #include <math/Segment2.hpp>
 #include <math/Segment3.hpp>
@@ -98,6 +100,32 @@ namespace yq {
             a.pt.z + r,
             a.pt.w + r
         }};
+    }
+    
+    
+    template <typename T>
+    TriangleData<RGB<T>>     rgb(const TriangleData<RGBA<T>>& t)
+    {
+        return { rgb(t.a), rgb(t.b), rgb(t.c)};
+    }
+
+    template <typename T>
+    TriangleData<RGBA<T>>     rgba(const TriangleData<RGB<T>>& t, std::type_identity_t<T> a)
+    {
+        return { rgba(t.a, a), rgba(t.b, a), rgba(t.c, a)};
+    }
+    
+    
+    template <typename T>
+    Triangle2<T>   xy(const Triangle3<T>& a)
+    {
+        return { xy(a.a), xy(a.b), xy(a.c) };
+    }
+    
+    template <typename T>
+    Triangle3<T>   xy(const Triangle2<T>& a, std::type_identity_t<T> z)
+    {
+        return { xy(a.a, z), xy(a.b, z), xy(a.c, z) };
     }
     
 //  --------------------------------------------------------

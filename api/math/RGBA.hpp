@@ -47,6 +47,13 @@ namespace yq {
         return {clr.red,clr.green,clr.blue,a};
     }
 
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    RGBA<T> rgba(RGB<T>& clr)
+    {
+        return {clr.red, clr.green, clr.blue, one_v<T>};
+    }
+
     YQ_NAN_1(RGBA, {nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T>})
     YQ_ZERO_1(RGBA, {zero_v<T>, zero_v<T>, zero_v<T>, zero_v<T>})
     

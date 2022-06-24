@@ -24,8 +24,7 @@ set(yq_engine_sources
     ./ImWidgetInfoWriter.hpp
     ./ImWindow.hpp
     ./ImWindow.cpp
-    ./Vulqan.cpp
-    ./Vulqan.hpp
+    ./Perspective.hpp
     ./Pipeline.cpp
     ./PipelineBuilder.hpp
     ./PipelineConfig.hpp
@@ -42,6 +41,7 @@ set(yq_engine_sources
     ./ResourceCompiler.hpp
     ./ResourceLoader.hpp
     ./ResourceInfoWriter.hpp
+    ./Scene.hpp
     ./Shader.cpp
     ./Shader.hpp
     ./ShaderCache.hpp
@@ -53,6 +53,8 @@ set(yq_engine_sources
     ./TextureCache.hpp
     ./TextureLoader.hpp
     ./TextureInfoWriter.hpp
+    ./Vulqan.cpp
+    ./Vulqan.hpp
     
     ./enum/BorderColor.hpp   
     ./enum/ColorComponent.hpp    

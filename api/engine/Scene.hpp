@@ -6,21 +6,24 @@
 
 #pragma once
 
-#include <engine/Camera.hpp>
 #include <engine/Rendered.hpp>
+#include <math/RGB.hpp>
 
 namespace yq {
     namespace engine {
-        /*! \brief Frame of things to be rendered, both cameras & items.
+        /*! \brief Frame of things to be rendered
+        
+            This will include lighting (eventually) & rendred objects.
         
         *//*
             To get things to be rendered, the general process should go...
             
-            RenderFrame -> ProxyFrame -> VqObjectFrame -> VqCommands
+            Scene -> Frame -> VqCommands
         */
-        struct RenderFrame : public RefCount {
-            std::vector<CameraPtr>      cameras;
-            std::vector<RenderedPtr>    rendereds;
+        struct Scene {
+            std::vector<RenderedPtr>    things;
+            std::optional<RGB3F>        background;
         };
+        
     }
 }

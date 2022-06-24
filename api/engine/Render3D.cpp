@@ -46,6 +46,16 @@ namespace yq {
             m_bounds    = v;
         }
 
+        void        Render3D::set_heading(Radian hdg)
+        {
+            m_space.edit().orientation  = rotor_z(hdg);
+        }
+
+        void        Render3D::set_hpr(Radian hdg, Radian pitch, Radian roll)
+        {
+            m_space.edit().orientation  = yq::hpr(hdg, pitch, roll);
+        }
+
         void        Render3D::set_orientation(const Quaternion3D&v)
         {
             m_space.edit().orientation   = v;
@@ -56,6 +66,11 @@ namespace yq {
             m_space.edit().position      = v;
         }
         
+        void        Render3D::set_scaling(double v)
+        {
+            m_space.edit().scale        = { v, v, v };
+        }
+
         void        Render3D::set_scale(const Vector3D&v)
         {
             m_space.edit().scale         = v;

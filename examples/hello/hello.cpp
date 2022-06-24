@@ -15,11 +15,16 @@
 
 //  Also it's about me developing the API in the first place .... :)
 
+#include <asset/Colors.hpp>
+#include <asset/NullCamera.hpp>
+#include <asset/Triangle.hpp>
 #include <basic/DelayInit.hpp>
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
 #include <basic/meta/Meta.hpp>
 #include <engine/Application.hpp>
+#include <engine/Scene.hpp>
+#include <engine/Perspective.hpp>
 #include <engine/Vulqan.hpp>
 #include <engine/PipelineBuilder.hpp>
 #include <engine/Render3D.hpp>
@@ -31,12 +36,16 @@
 #include <engine/vulqan/VqPipeline.hpp>
 #include <math/RGB.hpp>
 #include <math/Vector2.hpp>
+#include <math/shape_math.hpp>
+#include <math/Triangle2.hpp>
+#include <math/Triangle3.hpp>
 #include <iostream>
 #include <chrono>
 #include <glm/glm.hpp>  // temporary
 #include <math.h>
 
 using namespace yq;
+using namespace yq::asset;
 using namespace yq::engine;
 
 struct Vertex {
@@ -53,6 +62,9 @@ const Vertex vertices[] = {
     {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 };
+
+const auto  TriPoints   = Triangle2D{{0., -0.5},{0.5,0.5}, {-0.5, 0.5}};
+const auto  TriColors   = TriangleData<RGB3F>{ (RGB3F) color::Red, (RGB3F) color::Green, (RGB3F) color::Blue };
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
@@ -125,11 +137,17 @@ struct HelloWin : public engine::Vulqan {
     
     timepoint_t             start;
     Ref<HelloTriangle>      triangle;
+    Ref<Triangle>           tri2;
+    Scene                   scene;
+    Perspective             view;
 
     HelloWin(const WindowCreateInfo& wci) : Vulqan(wci)
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);
+        tri2        = new yq::asset::Triangle(xy(TriPoints, 0.01), rgba(TriColors, 1.) );
+        scene.things.push_back(tri2);
+        view.camera = new NullCamera;
     }
     
     ~HelloWin()
@@ -141,7 +159,9 @@ struct HelloWin : public engine::Vulqan {
     {
         timepoint_t n   = std::chrono::steady_clock::now();
         std::chrono::duration<double>  diff    = start - n;
+        tri2->set_heading( Degree(diff.count()) );
         triangle->render(cmdbuf, diff.count());
+        render(cmdbuf, scene, view);
     }
 };
 

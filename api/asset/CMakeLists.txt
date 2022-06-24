@@ -16,6 +16,8 @@ set(yq_asset_sources
     ./NullCamera.hpp
     ./SpaceCamera.ipp
     ./SpaceCamera.hpp
+    ./Triangle.cpp
+    ./Triangle.hpp
 )
 
 add_library(yqasset SHARED ${yq_asset_sources})
