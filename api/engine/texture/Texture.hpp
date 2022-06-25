@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/resource/Resource.hpp>
+#include <engine/asset/Asset.hpp>
 
 namespace yq {
     namespace engine {
@@ -14,18 +14,18 @@ namespace yq {
         class TextureLoader;
         class TextureCache;
 
-        class TextureInfo : public ResourceInfo {
+        class TextureInfo : public AssetInfo {
         public:
             template <typename C> class Writer;
 
-            TextureInfo(std::string_view zName, const ResourceInfo& base, const std::source_location& sl=std::source_location::current());
+            TextureInfo(std::string_view zName, const AssetInfo& base, const std::source_location& sl=std::source_location::current());
             
         protected:
         };
         
-        class Texture : public Resource {
+        class Texture : public Asset {
             YQ_OBJECT_INFO(TextureInfo)
-            YQ_OBJECT_DECLARE(Texture, Resource)
+            YQ_OBJECT_DECLARE(Texture, Asset)
         public:
         };
 

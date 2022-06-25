@@ -14,17 +14,17 @@
 
 namespace yq {
     namespace engine {
-        class Resource;
-        class ResourceInfo;
-        class ResourceLoader;
-        class ResourceCache;
+        class Asset;
+        class AssetInfo;
+        class AssetLoader;
+        class AssetCache;
         
 
-        class ResourceLoaderInfo : public ObjectInfo {
+        class AssetLoaderInfo : public ObjectInfo {
         public:
             template <typename C> class Writer;
 
-            ResourceLoaderInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
+            AssetLoaderInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
 
             const StringSet&    extensions() const { return m_extensions; }
 
@@ -37,12 +37,12 @@ namespace yq {
         
             This function LOADS an asset from file into INTERNAL memory
         */
-        class ResourceLoader : public Object {
-            YQ_OBJECT_INFO(ResourceLoaderInfo)
-            YQ_OBJECT_DECLARE(ResourceLoader, Object)
+        class AssetLoader : public Object {
+            YQ_OBJECT_INFO(AssetLoaderInfo)
+            YQ_OBJECT_DECLARE(AssetLoader, Object)
         public:
         
-            virtual Ref<Resource>      load_asset(const std::filesystem::path&) const = 0;
+            virtual Ref<Asset>      load_asset(const std::filesystem::path&) const = 0;
         };
         
 

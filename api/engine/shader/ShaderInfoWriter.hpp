@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/resource/ResourceInfoWriter.hpp>
+#include <engine/asset/AssetInfoWriter.hpp>
 #include <engine/shader/Shader.hpp>
 #include <engine/shader/ShaderCache.hpp>
 #include <engine/shader/ShaderCompiler.hpp>
@@ -15,9 +15,9 @@
 namespace yq {
     namespace engine {
         template <typename C>
-        class ShaderInfo::Writer : public ResourceInfo::Writer<C> {
+        class ShaderInfo::Writer : public AssetInfo::Writer<C> {
         public:
-            Writer(ShaderInfo* shaderInfo) : ResourceInfo::Writer<C>(shaderInfo)
+            Writer(ShaderInfo* shaderInfo) : AssetInfo::Writer<C>(shaderInfo)
             {
             }
             
@@ -28,9 +28,9 @@ namespace yq {
 
 
         template <typename C>
-        class ShaderCompilerInfo::Writer : public ResourceCompilerInfo::Writer<C> {
+        class ShaderCompilerInfo::Writer : public AssetCompilerInfo::Writer<C> {
         public:
-            Writer(ShaderCompilerInfo* shaderCompilerInfo) : ResourceCompilerInfo::Writer<C>(shaderCompilerInfo)
+            Writer(ShaderCompilerInfo* shaderCompilerInfo) : AssetCompilerInfo::Writer<C>(shaderCompilerInfo)
             {
             }
             
@@ -40,9 +40,9 @@ namespace yq {
         };
 
        template <typename C>
-        class ShaderLoaderInfo::Writer : public ResourceLoaderInfo::Writer<C> {
+        class ShaderLoaderInfo::Writer : public AssetLoaderInfo::Writer<C> {
         public:
-            Writer(ShaderLoaderInfo* shaderLoaderInfo) : ResourceLoaderInfo::Writer<C>(shaderLoaderInfo)
+            Writer(ShaderLoaderInfo* shaderLoaderInfo) : AssetLoaderInfo::Writer<C>(shaderLoaderInfo)
             {
             }
             

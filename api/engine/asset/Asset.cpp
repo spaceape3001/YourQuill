@@ -4,13 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Resource.hpp"
-#include "ResourceInfoWriter.hpp"
+#include "Asset.hpp"
+#include "AssetInfoWriter.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>
 #include <config/DirConfig.hpp>
 
-YQ_OBJECT_IMPLEMENT(yq::engine::Resource)
+YQ_OBJECT_IMPLEMENT(yq::engine::Asset)
 
 namespace yq {
     namespace engine {
@@ -34,7 +34,7 @@ namespace yq {
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        ResourceInfo::ResourceInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
+        AssetInfo::AssetInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
             ObjectInfo(zName, base, sl)
         {
             set_option(ASSET);
@@ -43,19 +43,19 @@ namespace yq {
         
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        const path_vector_t&             Resource::search_path()
+        const path_vector_t&             Asset::search_path()
         {
             static const path_vector_t sp = make_resource_search_path();
             return sp;
         }
         
-        const std::filesystem::path&     Resource::binary_root()
+        const std::filesystem::path&     Asset::binary_root()
         {
             static const std::filesystem::path  fp = make_binary_cache_root();
             return fp;
         }
         
-        std::filesystem::path            Resource::resolve(const std::filesystem::path&p)
+        std::filesystem::path            Asset::resolve(const std::filesystem::path&p)
         {
             static path_vector_t  s_paths = search_path();
             if(p.is_absolute())
@@ -70,14 +70,14 @@ namespace yq {
             return std::filesystem::absolute(p);    //  last test
         }
         
-        std::filesystem::path            Resource::binary_path(const std::filesystem::path& p)
+        std::filesystem::path            Asset::binary_path(const std::filesystem::path& p)
         {
             static const std::filesystem::path  b_cache = make_binary_cache_root();
             return b_cache.string() + p.string();
         }
         
 
-        std::filesystem::path    Resource::search(const path_vector_t& paths, const std::filesystem::path& fp)
+        std::filesystem::path    Asset::search(const path_vector_t& paths, const std::filesystem::path& fp)
         {
             if(fp.is_absolute())
                 return fp;
@@ -94,17 +94,17 @@ namespace yq {
 
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        Resource::Resource()
+        Asset::Asset()
         {
         }
         
-        Resource::~Resource()
+        Asset::~Asset()
         {
         }
         
         YQ_INVOKE(
-            auto res = writer<Resource>();
-            res.property("id", &Resource::id);
+            auto res = writer<Asset>();
+            res.property("id", &Asset::id);
         )
     }
 }

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/resource/ResourceCompiler.hpp>
+#include <engine/asset/AssetCompiler.hpp>
 #include <basic/Ref.hpp>
 
 namespace yq {
@@ -14,18 +14,18 @@ namespace yq {
         class Shader;
         class ShaderCompiler;
         
-        class ShaderCompilerInfo : public ResourceCompilerInfo {
+        class ShaderCompilerInfo : public AssetCompilerInfo {
         public:
             template <typename C> class Writer;
 
-            ShaderCompilerInfo(std::string_view zName, const ResourceCompilerInfo& base, const std::source_location& sl=std::source_location::current());
+            ShaderCompilerInfo(std::string_view zName, const AssetCompilerInfo& base, const std::source_location& sl=std::source_location::current());
 
         protected:
         };
         
-        class ShaderCompiler : public ResourceCompiler {
+        class ShaderCompiler : public AssetCompiler {
             YQ_OBJECT_INFO(ShaderCompilerInfo)
-            YQ_OBJECT_DECLARE(ShaderCompiler, ResourceCompiler)
+            YQ_OBJECT_DECLARE(ShaderCompiler, AssetCompiler)
         public:
 
         };

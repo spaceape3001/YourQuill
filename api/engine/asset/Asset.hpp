@@ -15,32 +15,32 @@
 
 namespace yq {
     namespace engine {
-        class Resource;
-        class ResourceInfo;
-        class ResourceLoader;
-        class ResourceCache;
+        class Asset;
+        class AssetInfo;
+        class AssetLoader;
+        class AssetCache;
         
 
-        class ResourceInfo : public ObjectInfo {
+        class AssetInfo : public ObjectInfo {
         public:
             template <typename C> class Writer;
 
-            ResourceInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
+            AssetInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
             
             //! Loads the asset from native binary format (whatever that is)
-            //virtual Ref<Resource>  load_binary(const std::filesystem::path&) { return nullptr; }
+            //virtual Ref<Asset>  load_binary(const std::filesystem::path&) { return nullptr; }
             
         protected:
         };
         
         /*! \brief An asset of the graphics engine
         
-            An asset is something that can be loaded by the engine, and used in some predefined fashion.  
-            (ie, texture, shader, sounds, etc)  
+            An asset (here) is something that can be loaded by the engine, and used in some predefined fashion.  
+            (ie, texture, shader, sounds, etc)  Which is why the asset-library also exists, predefined cameras & shapes
         */
-        class Resource : public Object, public RefCount, public UniqueID {
-            YQ_OBJECT_INFO(ResourceInfo)
-            YQ_OBJECT_DECLARE(Resource, Object)
+        class Asset : public Object, public RefCount, public UniqueID {
+            YQ_OBJECT_INFO(AssetInfo)
+            YQ_OBJECT_DECLARE(Asset, Object)
         public:
             virtual size_t      data_size() const = 0;
             
@@ -68,8 +68,8 @@ namespace yq {
             static std::filesystem::path            search(const path_vector_t& paths, const std::filesystem::path& file);
         
         protected:
-            Resource();
-            virtual ~Resource();
+            Asset();
+            virtual ~Asset();
         };
     }
 }

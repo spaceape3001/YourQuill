@@ -25,11 +25,18 @@ set(yq_engine_sources
     ./Vulqan.cpp
     ./Vulqan.hpp
 
+    ./asset/Asset.cpp
+    ./asset/Asset.hpp
+    ./asset/AssetCache.hpp
+    ./asset/AssetCache.cpp
+    ./asset/AssetCompiler.hpp
+    ./asset/AssetLoader.hpp
+    ./asset/AssetInfoWriter.hpp
+    
     ./camera/Camera.ipp
     ./camera/Camera.hpp
     ./camera/CameraProxy.hpp
     ./camera/CameraInfoWriter.hpp
-
     
     ./enum/BorderColor.hpp   
     ./enum/ColorComponent.hpp    
@@ -63,13 +70,6 @@ set(yq_engine_sources
     ./render/Render3D.cpp
     ./render/Render3DInfoWriter.hpp
 
-    ./resource/Resource.cpp
-    ./resource/Resource.hpp
-    ./resource/ResourceCache.hpp
-    ./resource/ResourceCache.cpp
-    ./resource/ResourceCompiler.hpp
-    ./resource/ResourceLoader.hpp
-    ./resource/ResourceInfoWriter.hpp
 
     ./shader/Shader.cpp
     ./shader/Shader.hpp

@@ -16,8 +16,8 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
-        TextureInfo::TextureInfo(std::string_view zName, const ResourceInfo& base, const std::source_location& sl) :
-            ResourceInfo(zName, base, sl)
+        TextureInfo::TextureInfo(std::string_view zName, const AssetInfo& base, const std::source_location& sl) :
+            AssetInfo(zName, base, sl)
         {
             set_option(TEXTURE);
         }
@@ -25,7 +25,7 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
-        TextureCache::TextureCache() : ResourceCache(meta<TextureCache>())
+        TextureCache::TextureCache() : AssetCache(meta<TextureCache>())
         {
         }
         
@@ -36,8 +36,8 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
-        TextureLoaderInfo::TextureLoaderInfo(std::string_view zName, const ResourceLoaderInfo& base, const std::source_location& sl) :
-            ResourceLoaderInfo(zName, base, sl)
+        TextureLoaderInfo::TextureLoaderInfo(std::string_view zName, const AssetLoaderInfo& base, const std::source_location& sl) :
+            AssetLoaderInfo(zName, base, sl)
         {
         }
 
@@ -46,7 +46,7 @@ namespace yq {
         
         YQ_INVOKE(
             auto ti = writer<Texture>();
-            ti.description("Texture Resource");
+            ti.description("Texture Asset");
             
             auto tc = writer<TextureCache>();
             tc.asset<Texture>();
