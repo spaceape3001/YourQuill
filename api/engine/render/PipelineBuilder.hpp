@@ -7,6 +7,7 @@
 #pragma once
 
 #include "PipelineConfig.hpp"
+#include "PipelineUtils.hpp"
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <set>
@@ -15,83 +16,54 @@
 
 namespace yq {
     namespace engine {
-        struct DataFormatData {
-            unsigned int        type_id     = 0;    //!< Meta type ID
-            unsigned int        bindings    = 1;    //!< Number of bindings to be used
-            DataFormat          format;             //!< Data format
-        };
-        
-        std::span<const DataFormatData>   data_format_data();
 
-        DataFormat      data_format(const TypeInfo&);
-        template <typename T>
-        DataFormat      data_format()
-        {
-            return data_format(meta<T>());
-        }
-        
-        unsigned int    data_binding(const TypeInfo&);
-        
-        unsigned int    min_binding(size_t);
-        
-        template <typename T>
-        unsigned int    min_binding()
-        {
-            return min_binding(sizeof(T));
-        }
-        
-        template <typename T>
-        unsigned int    data_binding()
-        {
-            return data_binding(meta<T>());
-        }
-
-
-        class PipelineBuilder : trait::not_copyable, trait::not_moveable {
+        class PipelineBuilder {
         public:
         
-            void    add_shader(ShaderSpec);
-            void    add_shaders(std::initializer_list<ShaderSpec>);
-            void    topology(Topology);
-            void    polygons(PolygonMode);
-            void    front(FrontFace);
-            void    culling(CullMode);
-        
-            template <typename V> struct VBO;
-            template <typename V>
-            VBO<V>     vbo(uint32_t location=UINT32_MAX);
+            PipelineConfig&     config;
+            //  Used to track which locations have been used.
             
-            operator const PipelineConfig&() const { return m_config; }
-            const PipelineConfig*   copy() const;
-            
-            
+            void        shader(ShaderSpec);
+            void        shaders(std::initializer_list<ShaderSpec>);
+            void        topology(Topology);
+            void        polygons(PolygonMode);
+            void        front(FrontFace);
+            void        culling(CullMode);
+
             template <typename T>
-            void    push_constant()
+            void        push()
             {
-                m_config.push.type  = PushConfig::Custom;
-                m_config.push.size  = sizeof(T);
+                config.push.type  = PushConfig::Custom;
+                config.push.size  = sizeof(T);
             }
             
-            void    push_constant(PushConfig::Type);
+            void        push(PushConfig::Type);
             
-        private:
-            PipelineConfig          m_config;
-            std::set<uint32_t>      m_locations;
-        };
+            template <typename V> struct VBO;
+            template <typename V>
+            VBO<V>      vbo(uint32_t location=UINT32_MAX);
         
+            PipelineBuilder(PipelineConfig& cfg);
+
+        private:
+            std::set<uint32_t>  m_locations;
+            uint32_t    location_filter(uint32_t loc, uint32_t req);
+        };
+
+
         template <typename V>
         class PipelineBuilder::VBO : public VBOConfig, trait::not_copyable {
         public:
         
-            VBO(PipelineBuilder* cfg, uint32_t loc) : m_pipeline(cfg), m_location(loc) 
+            VBO(PipelineBuilder* cfg, uint32_t loc) : m_builder(cfg), m_location(loc) 
             {
                 stride  = sizeof(V);
             }
             
             VBO(VBO& mv) : VBOConfig(std::move(mv))
             {
-                m_pipeline      = mv.m_pipeline;
-                mv.m_pipeline   = nullptr;
+                m_builder      = mv.m_builder;
+                mv.m_builder   = nullptr;
                 m_location      = mv.m_location;
             }
             
@@ -100,8 +72,8 @@ namespace yq {
             {
                 if(this != &mv){
                     VBOConfig::operator=(std::move(mv));
-                    m_pipeline      = mv.m_pipeline;
-                    mv.m_pipeline   = nullptr;
+                    m_builder      = mv.m_builder;
+                    mv.m_builder   = nullptr;
                     m_location      = mv.m_location;
                 }
                 return *this;
@@ -109,7 +81,7 @@ namespace yq {
             
             ~VBO()
             {
-                if(!m_pipeline)
+                if(!m_builder)
                     return ;
                 if(attrs.empty()){
                     if constexpr (is_type_v<V>){
@@ -117,7 +89,7 @@ namespace yq {
                     }
                 }
                 assert(!attrs.empty());
-                m_pipeline -> m_config.vbos.push_back(*this);
+                m_builder -> config.vbos.push_back(*this);
             }
 
             VBO&     rate(VertexInputRate vr)
@@ -145,32 +117,8 @@ namespace yq {
 
         private:
 
-            PipelineBuilder*    m_pipeline;
-            uint32_t            m_location;
-            
-            uint32_t    location_filter(uint32_t loc, uint32_t req)
-            {
-                if(loc != UINT32_MAX){
-                    for(uint32_t i=loc; i<loc+req; ++i){
-                        [[maybe_unused]] auto j = m_pipeline->m_locations.insert(i);
-                        assert(j.second && "Location already assigned!");
-                    }
-                    return loc;
-                }
-                
-                if(m_pipeline->m_locations.empty()){
-                    for(uint32_t i=0; i<req; ++i){
-                        m_pipeline->m_locations.insert(i);
-                    }
-                    return 0;
-                }
-                
-                loc = *(m_pipeline->m_locations.rbegin()) + 1;
-                for(uint32_t i=0; i<req; ++i){
-                    m_pipeline->m_locations.insert(i+loc);
-                }
-                return loc;
-            }
+            PipelineBuilder*    m_builder   = nullptr;
+            uint32_t            m_location  = 0;
             
             template <typename A>
             requires is_type_v<A>
@@ -181,11 +129,15 @@ namespace yq {
             
             void    attr_impl(DataFormat df, uint32_t loc, uint32_t offset, uint32_t bindReq)
             {
+                if(!m_builder)
+                    return ;
+                    
                 assert((df != DataFormat()) && "Bad data format!");
                 if(df == DataFormat())
                     return ;
+                    
                 VBOAttr     a;
-                a.location  = location_filter(loc, bindReq);
+                a.location  = m_builder->location_filter(loc, bindReq);
                 a.offset    = offset;
                 a.format    = df;
                 attrs.push_back(a);

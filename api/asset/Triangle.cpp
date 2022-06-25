@@ -13,7 +13,8 @@ namespace yq {
     namespace asset {
         void Triangle::initInfo()
         {
-            [[maybe_unused]] auto w = writer<Triangle>();
+            auto w = writer<Triangle>();
+            [[maybe_unused]] auto p = w.pipeline();
             
             //  TODO
         }

@@ -53,6 +53,9 @@ namespace yq {
             FrontFace                   front       = FrontFace::CounterClockwise;
             CullMode                    culling     = CullMode::Back;
             PushConfig                  push        = {};
+            
+            PipelineConfig();
+            ~PipelineConfig();
         };
     }
 }

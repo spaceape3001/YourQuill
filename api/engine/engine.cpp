@@ -6,6 +6,7 @@
 
 #include "Application.ipp"
 #include "camera/Camera.ipp"
+#include "render/PipelineUtils.ipp"
 
 #include <basic/meta/Init.hpp>
 

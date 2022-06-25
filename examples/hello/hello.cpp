@@ -84,12 +84,13 @@ struct HelloTriangle : public engine::Rendered {
             throw std::runtime_error("No fragment shader");
             
 
-        PipelineBuilder      cfg;
-        cfg.add_shaders({ vert, frag });
-        cfg.front(FrontFace::Clockwise);
-        cfg.push_constant<Warp>();
+        PipelineConfig      cfg;
+        PipelineBuilder      build(cfg);
+        build.shaders({ vert, frag });
+        build.front(FrontFace::Clockwise);
+        build.push<Warp>();
         
-        cfg.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
+        build.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
         
         m_pipeline    = VqPipeline(*w, cfg);
         if(!m_pipeline.good()){
