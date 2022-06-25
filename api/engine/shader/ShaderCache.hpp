@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <engine/ResourceCache.hpp>
-#include <engine/ShaderPointer.hpp>
+#include <engine/resource/ResourceCache.hpp>
+#include <engine/shader/ShaderPointer.hpp>
 #include <basic/Ref.hpp>
 
 namespace yq {

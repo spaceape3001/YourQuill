@@ -11,8 +11,8 @@
 #include <basic/Mutable.hpp>
 #include <basic/Ref.hpp>
 #include <basic/meta/ObjectInfo.hpp>
-#include <engine/PipelineConfig.hpp>
-#include <engine/Rendered.hpp>
+#include <engine/render/PipelineConfig.hpp>
+#include <engine/render/Rendered.hpp>
 #include <math/SimpleSpace.hpp>
 #include <math/AxBox3.hpp>
 

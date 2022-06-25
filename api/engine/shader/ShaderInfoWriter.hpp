@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <engine/ResourceInfoWriter.hpp>
-#include <engine/Shader.hpp>
-#include <engine/ShaderCache.hpp>
-#include <engine/ShaderCompiler.hpp>
-#include <engine/ShaderLoader.hpp>
+#include <engine/resource/ResourceInfoWriter.hpp>
+#include <engine/shader/Shader.hpp>
+#include <engine/shader/ShaderCache.hpp>
+#include <engine/shader/ShaderCompiler.hpp>
+#include <engine/shader/ShaderLoader.hpp>
 
 namespace yq {
     namespace engine {

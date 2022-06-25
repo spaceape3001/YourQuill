@@ -15,17 +15,19 @@
 #include "Scene.hpp"
 #include "Vulqan.hpp"
 
+#include <basic/CollectionUtils.hpp>
+#include <basic/Logging.hpp>
+#include <basic/Safety.hpp>
+#include <basic/meta/ObjectInfoWriter.hpp>
+
+#include <engine/render/PipelineConfig.hpp>
+
 #include <engine/vulqan/VqException.hpp>
 #include <engine/vulqan/VqInternal.hpp>
 #include <engine/vulqan/VqLogging.hpp>
 #include <engine/vulqan/VqShaderStages.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 
-#include <basic/CollectionUtils.hpp>
-#include <basic/Logging.hpp>
-#include <basic/Safety.hpp>
-#include <basic/meta/ObjectInfoWriter.hpp>
-#include <engine/PipelineConfig.hpp>
 #include <math/Size2.hpp>
 #include <math/Vector2.hpp>
 

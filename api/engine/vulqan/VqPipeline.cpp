@@ -13,8 +13,8 @@
 
 #include <basic/Logging.hpp>
 #include <engine/Vulqan.hpp>
-#include <engine/PipelineConfig.hpp>
-#include <engine/StdPushConstant.hpp>
+#include <engine/render/PipelineConfig.hpp>
+#include <engine/render/StdPushConstant.hpp>
 #include <math/Size2.hpp>
 #include <math/Rectangle2.hpp>
 

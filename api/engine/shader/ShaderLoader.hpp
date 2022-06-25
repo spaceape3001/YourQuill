@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/ResourceLoader.hpp>
+#include <engine/resource/ResourceLoader.hpp>
 #include <basic/Ref.hpp>
 
 namespace yq {

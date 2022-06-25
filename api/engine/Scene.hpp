@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/Rendered.hpp>
+#include <engine/render/Rendered.hpp>
 #include <math/RGB.hpp>
 
 namespace yq {
@@ -23,6 +23,7 @@ namespace yq {
         struct Scene {
             std::vector<RenderedPtr>    things;
             std::optional<RGB3F>        background;
+            float                       utime   = 0.;   // This is passed into the standard push constant
         };
         
     }

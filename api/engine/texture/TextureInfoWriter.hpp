@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <engine/ResourceInfoWriter.hpp>
-#include <engine/Texture.hpp>
-#include <engine/TextureCache.hpp>
-#include <engine/TextureLoader.hpp>
+#include <engine/resource/ResourceInfoWriter.hpp>
+#include <engine/texture/Texture.hpp>
+#include <engine/texture/TextureCache.hpp>
+#include <engine/texture/TextureLoader.hpp>
 
 namespace yq {
     namespace engine {

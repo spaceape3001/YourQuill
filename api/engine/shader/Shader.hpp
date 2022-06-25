@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <engine/Resource.hpp>
-#include <engine/ShaderPointer.hpp>
+#include <engine/resource/Resource.hpp>
+#include <engine/shader/ShaderPointer.hpp>
 #include <engine/enum/ShaderType.hpp>
 #include <basic/ByteArray.hpp>
 

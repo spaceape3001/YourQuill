@@ -10,7 +10,7 @@
 #include <basic/meta/ObjectInfo.hpp>
 #include <basic/UniqueID.hpp>
 #include <basic/Revision.hpp>
-#include <engine/PipelineConfig.hpp>
+#include <engine/render/PipelineConfig.hpp>
 
 namespace yq {
     namespace engine {

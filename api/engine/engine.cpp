@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Application.ipp"
-#include "Camera.ipp"
+#include "camera/Camera.ipp"
 
 #include <basic/meta/Init.hpp>
 

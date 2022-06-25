@@ -15,46 +15,21 @@ set(yq_engine_sources
 
     ./Application.hpp
     ./Application.ipp
-    ./Camera.ipp
-    ./Camera.hpp
-    ./CameraProxy.hpp
-    ./CameraInfoWriter.hpp
     ./ImWidget.cpp
     ./ImWidget.hpp
     ./ImWidgetInfoWriter.hpp
     ./ImWindow.hpp
     ./ImWindow.cpp
     ./Perspective.hpp
-    ./Pipeline.cpp
-    ./PipelineBuilder.hpp
-    ./PipelineConfig.hpp
-    ./Rendered.cpp
-    ./Rendered.hpp
-    ./RenderedInfoWriter.hpp
-    ./Render3D.hpp
-    ./Render3D.cpp
-    ./Render3DInfoWriter.hpp
-    ./Resource.cpp
-    ./Resource.hpp
-    ./ResourceCache.hpp
-    ./ResourceCache.cpp
-    ./ResourceCompiler.hpp
-    ./ResourceLoader.hpp
-    ./ResourceInfoWriter.hpp
     ./Scene.hpp
-    ./Shader.cpp
-    ./Shader.hpp
-    ./ShaderCache.hpp
-    ./ShaderCompiler.hpp
-    ./ShaderLoader.hpp
-    ./ShaderInfoWriter.hpp
-    ./Texture.cpp
-    ./Texture.hpp
-    ./TextureCache.hpp
-    ./TextureLoader.hpp
-    ./TextureInfoWriter.hpp
     ./Vulqan.cpp
     ./Vulqan.hpp
+
+    ./camera/Camera.ipp
+    ./camera/Camera.hpp
+    ./camera/CameraProxy.hpp
+    ./camera/CameraInfoWriter.hpp
+
     
     ./enum/BorderColor.hpp   
     ./enum/ColorComponent.hpp    
@@ -78,6 +53,37 @@ set(yq_engine_sources
     ./enum/SystemAllocationScope.hpp
     ./enum/Topology.hpp
     
+    ./render/Pipeline.cpp
+    ./render/PipelineBuilder.hpp
+    ./render/PipelineConfig.hpp
+    ./render/Rendered.cpp
+    ./render/Rendered.hpp
+    ./render/RenderedInfoWriter.hpp
+    ./render/Render3D.hpp
+    ./render/Render3D.cpp
+    ./render/Render3DInfoWriter.hpp
+
+    ./resource/Resource.cpp
+    ./resource/Resource.hpp
+    ./resource/ResourceCache.hpp
+    ./resource/ResourceCache.cpp
+    ./resource/ResourceCompiler.hpp
+    ./resource/ResourceLoader.hpp
+    ./resource/ResourceInfoWriter.hpp
+
+    ./shader/Shader.cpp
+    ./shader/Shader.hpp
+    ./shader/ShaderCache.hpp
+    ./shader/ShaderCompiler.hpp
+    ./shader/ShaderLoader.hpp
+    ./shader/ShaderInfoWriter.hpp
+
+    ./texture/Texture.cpp
+    ./texture/Texture.hpp
+    ./texture/TextureCache.hpp
+    ./texture/TextureLoader.hpp
+    ./texture/TextureInfoWriter.hpp
+
     ./vulqan/VqAllocator.hpp
     ./vulqan/VqAllocator.ipp
     ./vulqan/VqBuffer.hpp

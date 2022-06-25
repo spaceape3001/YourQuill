@@ -7,7 +7,7 @@
 #include "Triangle.hpp"
 #include <math/Triangle3.hpp>
 #include <math/shape_math.hpp>
-#include <engine/Render3DInfoWriter.hpp>
+#include <engine/render/Render3DInfoWriter.hpp>
 
 namespace yq {
     namespace asset {

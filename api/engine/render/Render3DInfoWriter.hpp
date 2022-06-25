@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <engine/Render3D.hpp>
-#include <engine/RenderedInfoWriter.hpp>
+#include <engine/render/Render3D.hpp>
+#include <engine/render/RenderedInfoWriter.hpp>
 
 namespace yq {
     namespace engine {

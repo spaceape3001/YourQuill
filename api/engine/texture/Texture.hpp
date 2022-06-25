@@ -6,29 +6,27 @@
 
 #pragma once
 
-#include <engine/ResourceLoader.hpp>
-#include <basic/Ref.hpp>
+#include <engine/resource/Resource.hpp>
 
 namespace yq {
     namespace engine {
         class Texture;
         class TextureLoader;
         class TextureCache;
-        
-        class TextureLoaderInfo : public ResourceLoaderInfo {
+
+        class TextureInfo : public ResourceInfo {
         public:
             template <typename C> class Writer;
 
-            TextureLoaderInfo(std::string_view zName, const ResourceLoaderInfo& base, const std::source_location& sl=std::source_location::current());
-
+            TextureInfo(std::string_view zName, const ResourceInfo& base, const std::source_location& sl=std::source_location::current());
+            
         protected:
         };
         
-        class TextureLoader : public ResourceLoader {
-            YQ_OBJECT_INFO(TextureLoaderInfo)
-            YQ_OBJECT_DECLARE(TextureLoader, ResourceLoader)
+        class Texture : public Resource {
+            YQ_OBJECT_INFO(TextureInfo)
+            YQ_OBJECT_DECLARE(Texture, Resource)
         public:
-        
         };
 
     }

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/ResourceCache.hpp>
+#include <engine/resource/ResourceCache.hpp>
 
 namespace yq {
     namespace engine {
