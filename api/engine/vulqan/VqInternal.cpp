@@ -11,6 +11,7 @@
 #include <basic/Logging.hpp>
 #include <engine/Application.hpp>
 #include <engine/Vulqan.hpp>
+#include <engine/render/Pipeline.hpp>
 
 namespace yq {
     namespace engine {
@@ -53,6 +54,10 @@ namespace yq {
                 throw VqException("");
             
             set_clear(i.clear);
+            
+            builder = std::thread([this](){
+                this->run();
+            });
         }
 
         bool VqInternal::init(VqDynamic&ds, VkSwapchainKHR old)
@@ -73,9 +78,17 @@ namespace yq {
 
         VqInternal::~VqInternal()
         {
+            terminating = true;
+            builder.join();
             if(device){
                 vkDeviceWaitIdle(device);
             }
+            
+            for(auto& i : pipelines){
+                if(i.second)
+                    delete i.second;
+            }
+            pipelines.clear();
             
             kill(dynamic);
             
@@ -102,10 +115,33 @@ namespace yq {
             ds.imageViews       = {};
             ds.swapchain        = {};
         }
+
+        void    VqInternal::run()
+        {
+            using namespace std::chrono_literals;
+            while(!terminating){
+                std::this_thread::sleep_for(1ms);
+            }
+        }
+
+        const VqPipeline* VqInternal::pipeline(const Pipeline*pipe)
+        {
+            if(!pipe)
+                return nullptr;
+            auto i = pipelines.find(pipe->id());
+            if(i != pipelines.end())
+                return i->second;
+            
+            // eventually a task/queue... (later)
+            VqPipeline*     p   = new VqPipeline(*this, pipe);
+            pipelines[pipe->id()]   = p;
+            return p;
+        }
         
         void    VqInternal::set_clear(const RGBA4F&i)
         {
             clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }
+        
     }
 }

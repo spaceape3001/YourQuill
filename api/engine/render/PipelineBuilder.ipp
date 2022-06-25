@@ -15,23 +15,30 @@
 namespace yq {
     namespace engine {
 
-        PipelineBuilder::PipelineBuilder(PipelineConfig& cfg) : config(cfg)
+        PipelineBuilder::~PipelineBuilder() = default;
+
+        PipelineBuilder::PipelineBuilder(PipelineConfig*cfg) : m_config(cfg)
         {
-            for(auto& vbo : cfg.vbos)
+            for(auto& vbo : cfg->vbos)
                 for(auto & a : vbo.attrs)
             {
                 m_locations.insert(a.location);     // won't be perfect, should help though
             }
         }
+        
+
+        PipelineBuilder::PipelineBuilder(PipelineConfig& cfg) : PipelineBuilder(&cfg)
+        {
+        }
 
         void    PipelineBuilder::culling(CullMode v)
         {
-            config.culling    = v;
+            m_config->culling    = v;
         }
         
         void    PipelineBuilder::front(FrontFace v)
         {
-            config.front = v;
+            m_config->front = v;
         }
 
         uint32_t    PipelineBuilder::location_filter(uint32_t loc, uint32_t req)
@@ -60,17 +67,17 @@ namespace yq {
         
         void    PipelineBuilder::polygons(PolygonMode v)
         {
-            config.polymode   = v;
+            m_config->polymode   = v;
         }
         
 
-        void    PipelineBuilder::push(PushConfig::Type v)
+        void    PipelineBuilder::push(PushConfigType v)
         {
             switch(v){
-            case PushConfig::Full:
-            case PushConfig::View:
-                config.push.type  = v;
-                config.push.size  = sizeof(StdPushConstant);
+            case PushConfigType::Full:
+            case PushConfigType::View:
+                m_config->push.type  = v;
+                m_config->push.size  = sizeof(StdPushConstant);
                 break;
             default:
                 break;
@@ -79,19 +86,19 @@ namespace yq {
 
         void    PipelineBuilder::shader(ShaderSpec ss)
         {
-            config.shaders.push_back(ss);
+            m_config->shaders.push_back(ss);
         }
         
         void    PipelineBuilder::shaders(std::initializer_list<ShaderSpec>sspecs)
         {
             for(const ShaderSpec& ss : sspecs)
-                config.shaders.push_back(ss);
+                m_config->shaders.push_back(ss);
         }
         
             
         void    PipelineBuilder::topology(Topology v)
         {
-            config.topology = v;
+            m_config->topology = v;
         }
         
 

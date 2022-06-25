@@ -14,6 +14,7 @@
 #include <basic/Logging.hpp>
 #include <engine/Vulqan.hpp>
 #include <engine/render/PipelineConfig.hpp>
+#include <engine/render/Pipeline.hpp>
 #include <engine/render/StdPushConstant.hpp>
 #include <math/Size2.hpp>
 #include <math/Rectangle2.hpp>
@@ -24,7 +25,7 @@ namespace yq {
         {
             m_device    = win.device;
             try {
-                VqShaderStages stages(m_device, cfg.shaders);
+                VqShaderStages stages(win.device, cfg.shaders);
                 
                 m_shaderMask    = stages.mask();
 
@@ -112,14 +113,14 @@ namespace yq {
                 
 
                 VkPushConstantRange push{};
-                if(cfg.push.type != PushConfig::None){
+                if(cfg.push.type != PushConfigType::None){
                     push.offset     = 0;
                     switch(cfg.push.type){
-                    case PushConfig::Full:
-                    case PushConfig::View:
+                    case PushConfigType::Full:
+                    case PushConfigType::View:
                         push.size   = sizeof(StdPushConstant);
                         break;
-                    case PushConfig::Custom:
+                    case PushConfigType::Custom:
                         push.size   = cfg.push.size;
                         break;
                     default:
@@ -143,7 +144,7 @@ namespace yq {
                 }
 
 
-                if (vkCreatePipelineLayout(m_device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) 
+                if (vkCreatePipelineLayout(win.device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) 
                     throw VqException("Failed to create pipeline layout!");
 
                 VqGraphicsPipelineCreateInfo pipelineInfo;
@@ -165,7 +166,7 @@ namespace yq {
                 
                 if(cfg.polymode == PolygonMode::Fill)
                     pipelineInfo.flags  = VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
-                if (vkCreateGraphicsPipelines(m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline) != VK_SUCCESS) 
+                if (vkCreateGraphicsPipelines(win.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline) != VK_SUCCESS) 
                     throw VqException("Failed to create graphics pipeline!");
                 
                     // if it's a fill polygon (typical), create a derivative wireframe pipeline
@@ -175,30 +176,21 @@ namespace yq {
                     pipelineInfo.basePipelineIndex  = -1;
                     rasterizer.polygonMode  = VK_POLYGON_MODE_LINE;
                     
-                    if (vkCreateGraphicsPipelines(m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_wireframe) != VK_SUCCESS)
+                    if (vkCreateGraphicsPipelines(win.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_wireframe) != VK_SUCCESS)
                         throw VqException("Failed to create wireframe pipeline!");
                 }
-                return;
             }
             catch(VqException& ex)
             {
-                vqError << ex.what();
-            }
-            dtor();
-        }
-        
-        VqPipeline::VqPipeline(VqPipeline&& mv)
-        {
-            move(std::move(mv));
-        }
-        
-        VqPipeline& VqPipeline::operator=(VqPipeline&& mv)
-        {
-            if(this != &mv){
+                vqCritical << ex.what();
                 dtor();
-                move(std::move(mv));
+                throw;      // rethrow it.
             }
-            return *this;
+        }
+
+        VqPipeline::VqPipeline(VqInternal&win, const Pipeline*p) : VqPipeline(win, p->config())
+        {
+            //
         }
         
         VqPipeline::~VqPipeline()
@@ -208,27 +200,21 @@ namespace yq {
         
         void    VqPipeline::dtor()
         {
-            if(m_wireframe){
-                vkDestroyPipeline(m_device, m_wireframe, nullptr);
-                m_wireframe = nullptr;
-            }
-            if(m_pipeline){
-                vkDestroyPipeline(m_device, m_pipeline, nullptr);
-                m_pipeline  = nullptr;
-            }
-            if(m_layout){
-                vkDestroyPipelineLayout(m_device, m_layout, nullptr);
-                m_layout = nullptr;
+            if(m_device){
+                if(m_wireframe){
+                    vkDestroyPipeline(m_device, m_wireframe, nullptr);
+                    m_wireframe = nullptr;
+                }
+                if(m_pipeline){
+                    vkDestroyPipeline(m_device, m_pipeline, nullptr);
+                    m_pipeline  = nullptr;
+                }
+                if(m_layout){
+                    vkDestroyPipelineLayout(m_device, m_layout, nullptr);
+                    m_layout    = nullptr;
+                }
             }
         }
-        
-        void    VqPipeline::move(VqPipeline&& mv)
-        {
-            steal(m_device, mv.m_device);
-            steal(m_pipeline, mv.m_pipeline);
-            steal(m_wireframe, mv.m_wireframe);
-            steal(m_layout, mv.m_layout);
-            m_shaderMask    = mv.m_shaderMask;
-        }
+
     }
 }

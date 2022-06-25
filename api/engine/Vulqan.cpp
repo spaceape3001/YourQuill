@@ -105,6 +105,9 @@ namespace yq {
         
         bool    Vulqan::draw()
         {
+            ++m->tick;      // frame
+            auto start  = std::chrono::high_resolution_clock::now();
+            
             bool    rebuild = m->rebuildSwap.exchange(false);
             if(rebuild){
                 vkDeviceWaitIdle(m->device);
@@ -116,10 +119,10 @@ namespace yq {
                 //  resize notifications...
             }
             
-            VkCommandBuffer cmdbuf = m->dynamic.commandBuffers[0];
             
-        
+            VkCommandBuffer cmdbuf = m->dynamic.commandBuffers[0];
             m->inFlightFence.wait_reset();
+
             uint32_t imageIndex = 0;
             vkAcquireNextImageKHR(m->device, m->dynamic.swapchain, UINT64_MAX, m->imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
             vkResetCommandBuffer(cmdbuf, 0);
@@ -157,6 +160,9 @@ namespace yq {
             presentInfo.pImageIndices = &imageIndex;
             presentInfo.pResults = nullptr; // Optional
             vkQueuePresentKHR(m->device.present(0), &presentInfo);
+            
+            auto end = std::chrono::high_resolution_clock::now();
+            m->draw_time    = (end-start).count();
             return true;
         }
         
@@ -344,6 +350,16 @@ namespace yq {
             if(!p.camera){
                 yCritical() << "Camera not detected!\n";
                 return ;
+            }
+    
+            CameraParams        cparams;
+            cparams.screen      = (Size2D) size();
+            [[maybe_unused]] glm::dmat4  cam = p.camera->world2screen(cparams);
+            
+            for(const Rendered* r : scene.things){
+                [[maybe_unused]] auto p = m->pipeline(r->pipeline());
+                
+                //VkCommand       cmd;
             }
 
             //  TODO.....

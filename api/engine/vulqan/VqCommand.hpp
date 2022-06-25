@@ -19,7 +19,6 @@ namespace yq {
             \note This is the basics, only what is needed for the buffer, nothing more.
         */
         struct VqCommand {
-            static constexpr const size_t   MAX_PUSH    = 256;
             struct VBO {
                 const VkBuffer*         buffers = nullptr;
                 const VkDeviceSize*     offsets = nullptr;

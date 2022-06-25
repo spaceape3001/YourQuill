@@ -8,13 +8,16 @@
 #include <math/Triangle3.hpp>
 #include <math/shape_math.hpp>
 #include <engine/render/Render3DInfoWriter.hpp>
+#include <engine/shader/Shader.hpp>
 
 namespace yq {
     namespace asset {
         void Triangle::initInfo()
         {
             auto w = writer<Triangle>();
-            [[maybe_unused]] auto p = w.pipeline();
+            auto p = w.pipeline();
+            p.shader("assets/triangle.vert");
+            p.shader("assets/triangle.frag");
             
             //  TODO
         }

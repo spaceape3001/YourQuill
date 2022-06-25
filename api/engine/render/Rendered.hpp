@@ -10,6 +10,7 @@
 #include <basic/meta/ObjectInfo.hpp>
 #include <basic/UniqueID.hpp>
 #include <basic/Revision.hpp>
+#include <engine/enum/Tristate.hpp>
 #include <engine/render/PipelineConfig.hpp>
 
 namespace yq {
@@ -47,8 +48,10 @@ namespace yq {
 
             uint64_t            id() const { return UniqueID::id(); }
             const Pipeline*   pipeline() const;
-            template <typename C> struct TypedPipeline;
             bool                is_culled() const { return m_culled; }
+            
+            Tristate            wireframe() const { return m_wireframe; }
+            void                set_wireframe(Tristate);
 
         protected:
             Rendered();
@@ -58,7 +61,8 @@ namespace yq {
             // NULL defaults to primary pipeline
             const Pipeline*     m_pipeline      = nullptr;
             
-            bool    m_culled    = false;
+            Tristate        m_wireframe;
+            bool            m_culled    = false;
         };
 
         using RenderedPtr   = Ref<Rendered>;

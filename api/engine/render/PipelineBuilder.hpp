@@ -20,7 +20,6 @@ namespace yq {
         class PipelineBuilder {
         public:
         
-            PipelineConfig&     config;
             //  Used to track which locations have been used.
             
             void        shader(ShaderSpec);
@@ -33,21 +32,26 @@ namespace yq {
             template <typename T>
             void        push()
             {
-                config.push.type  = PushConfig::Custom;
-                config.push.size  = sizeof(T);
+                m_config->push.type  = PushConfigType::Custom;
+                m_config->push.size  = sizeof(T);
             }
             
-            void        push(PushConfig::Type);
+            void        push(PushConfigType);
             
             template <typename V> struct VBO;
             template <typename V>
             VBO<V>      vbo(uint32_t location=UINT32_MAX);
         
             PipelineBuilder(PipelineConfig& cfg);
+            ~PipelineBuilder();
+
+        protected:
+            PipelineBuilder(PipelineConfig*);
 
         private:
-            std::set<uint32_t>  m_locations;
-            uint32_t    location_filter(uint32_t loc, uint32_t req);
+            PipelineConfig* const   m_config;
+            std::set<uint32_t>      m_locations;
+            uint32_t                location_filter(uint32_t loc, uint32_t req);
         };
 
 
@@ -62,9 +66,9 @@ namespace yq {
             
             VBO(VBO& mv) : VBOConfig(std::move(mv))
             {
-                m_builder      = mv.m_builder;
-                mv.m_builder   = nullptr;
-                m_location      = mv.m_location;
+                m_builder           = mv.m_builder;
+                mv.m_builder        = nullptr;
+                m_location          = mv.m_location;
             }
             
             
@@ -72,8 +76,8 @@ namespace yq {
             {
                 if(this != &mv){
                     VBOConfig::operator=(std::move(mv));
-                    m_builder      = mv.m_builder;
-                    mv.m_builder   = nullptr;
+                    m_builder       = mv.m_builder;
+                    mv.m_builder    = nullptr;
                     m_location      = mv.m_location;
                 }
                 return *this;
@@ -89,7 +93,7 @@ namespace yq {
                     }
                 }
                 assert(!attrs.empty());
-                m_builder -> config.vbos.push_back(*this);
+                m_builder -> m_config->vbos.push_back(*this);
             }
 
             VBO&     rate(VertexInputRate vr)

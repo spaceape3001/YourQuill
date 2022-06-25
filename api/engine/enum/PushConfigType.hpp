@@ -5,18 +5,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
-#include <cstdint.hpp>
-#include <unordered_map>
+#include <cstdint>
 
 namespace yq {
     namespace engine {
-
-        struct VqObject;
-
-        struct VqObjectFrame {
-            std::unordered_map<uint64_t, VqObject*> objects;
+        enum PushConfigType : uint8_t {
+            None        = 0,
+            Full,
+            View,
+            Custom
         };
-
     }
 }

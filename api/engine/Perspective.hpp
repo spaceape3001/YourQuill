@@ -7,6 +7,7 @@
 #pragma once
 
 #include <engine/camera/Camera.hpp>
+#include <engine/enum/Tristate.hpp>
 #include <math/Rectangle2.hpp>
 #include <math/RGB.hpp>
 #include <optional>
@@ -18,6 +19,7 @@ namespace yq {
             CameraCPtr                  camera;
             std::optional<RGB3F>        background;
             std::optional<Rectangle2D>  screen;
+            Tristate                    wireframe   = Tristate::NO;
         };
     }
 }

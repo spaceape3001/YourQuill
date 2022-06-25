@@ -21,6 +21,14 @@ namespace yq {
         
         constexpr T   width() const { return x; }
         constexpr T   height() const { return y; }
+        
+        template <typename U>
+        requires (std::is_integral_v<T> && std::is_floating_point_v<U> && !std::is_same_v<T,U>)
+        constexpr operator Size2<U>() const 
+        {
+            return { (U) x, (U) y };
+        }
+        
     };
 
     YQ_NAN_1(Size2, Size2<T>{ nan_v<T>, nan_v<T> })

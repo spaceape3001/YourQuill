@@ -9,6 +9,7 @@
 #include "render/PipelineBuilder.ipp"
 #include "render/PipelineConfig.ipp"
 #include "render/PipelineUtils.ipp"
+#include "render/PipelineWriter.ipp"
 
 #include <basic/meta/Init.hpp>
 

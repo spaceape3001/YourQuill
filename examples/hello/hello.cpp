@@ -70,7 +70,7 @@ using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
 struct HelloTriangle : public engine::Rendered {
     YQ_OBJECT_DECLARE(HelloTriangle, engine::Rendered)
-    VqPipeline                  m_pipeline;
+    std::unique_ptr<VqPipeline> m_pipeline;
     VqBuffer                    m_vbo;
     Vulqan*                     m_window                = nullptr;
     
@@ -92,10 +92,7 @@ struct HelloTriangle : public engine::Rendered {
         
         build.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
         
-        m_pipeline    = VqPipeline(*w, cfg);
-        if(!m_pipeline.good()){
-            throw std::runtime_error("Unable to create pipeline!");
-        }
+        m_pipeline    = std::make_unique<VqPipeline>(*w, cfg);
         
         m_vbo   = VqBuffer(*w, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, vertices);
     }
@@ -116,10 +113,10 @@ struct HelloTriangle : public engine::Rendered {
         VkDeviceSize offsets[] = {0};
     
         VqCommand       cmd;
-        cmd.pipeline    = w ? m_pipeline.wireframe() : m_pipeline.pipeline();
-        cmd.layout      = m_pipeline.layout();
+        cmd.pipeline    = w ? m_pipeline->wireframe() : m_pipeline->pipeline();
+        cmd.layout      = m_pipeline->layout();
         cmd.push        = warp; // VqCommand::Push{ &warp, sizeof(warp), m_pipeline.shader_mask() };
-        cmd.push_mask   = m_pipeline.shader_mask();
+        cmd.push_mask   = m_pipeline->shader_mask();
         cmd.vbo         = VqCommand::VBO{ vertexBuffers, offsets, 1 };
         cmd.draw        = VqCommand::Draw{ 3 };
         record_draw(cmdbuf, cmd);

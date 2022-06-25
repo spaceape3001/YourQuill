@@ -6,14 +6,11 @@
 
 #pragma once
 
-#include <cstdint.hpp>
+#include <sys/types.h>
 
 namespace yq {
     namespace engine {
-        struct VqObject {
-            uint64_t        object      = 0;
-            uint64_t        revision    = 0;
-        };
-        
+        static constexpr const size_t   MAX_PUSH    = 256;
     }
 }
+

@@ -7,9 +7,12 @@
 #pragma once
 
 #include <basic/meta/Meta.hpp>
+#include <engine/EngineConfig.hpp>
 #include <engine/render/PipelineConfig.hpp>
 
 namespace yq {
+    template <size_t> class BasicBuffer;
+
     namespace engine {
         class Rendered;
         class RenderedInfo;
@@ -31,16 +34,23 @@ namespace yq {
             
             Once built, this thing is expected to be immutable & fixed.
         */
-        class Pipeline : public Meta, public PipelineConfig {
+        class Pipeline : public Meta {
         public:
             
+            class Writer;
         
             const RenderedInfo*     rendered() const { return m_rendered; }
+            
+            bool                    has_push() const { return m_config.push.type != PushConfigType::None; }
+            virtual void            get_push(const Rendered*, BasicBuffer<MAX_PUSH>&) const {}
+            
+            const PipelineConfig&   config() const { return m_config; }
         
         protected:
             Pipeline(std::string_view, const std::source_location& sl);
             Pipeline(std::string_view, RenderedInfo* parent, const std::source_location& sl);
             
+            PipelineConfig          m_config;
             const RenderedInfo*     m_rendered    = nullptr;
         };
         

@@ -11,6 +11,7 @@
 #include <vector>
 #include <engine/enum/CullMode.hpp>
 #include <engine/enum/PolygonMode.hpp>
+#include <engine/enum/PushConfigType.hpp>
 #include <engine/enum/Topology.hpp>
 #include <engine/enum/FrontFace.hpp>
 #include <engine/enum/DataFormat.hpp>
@@ -33,15 +34,8 @@ namespace yq {
         };
         
         struct PushConfig {
-            enum Type {
-                None        = 0,
-                Full,
-                View,
-                Custom
-            };
-            
             size_t          size    = 0;
-            Type            type    = None;
+            PushConfigType  type    = PushConfigType::None;
             uint32_t        shaders = 0;            // shader mask (0 implies shaders)
         };
         
