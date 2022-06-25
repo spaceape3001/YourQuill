@@ -21,8 +21,6 @@ set(yq_engine_sources
     ./asset/AssetCache.cpp
     
     ./render/Pipeline.cpp
-    ./render/PipelineBuilder.cpp
-    ./render/PipelineConfig.cpp
     ./render/Rendered.cpp
     ./render/Render3D.cpp
 
