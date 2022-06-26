@@ -20,6 +20,7 @@ set(yq_engine_sources
     ./asset/Asset.cpp
     ./asset/AssetCache.cpp
     
+    ./render/BufferObjectInfo.cpp
     ./render/Pipeline.cpp
     ./render/Rendered.cpp
     ./render/Render3D.cpp

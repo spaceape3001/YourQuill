@@ -7,6 +7,7 @@
 #pragma once
 
 #include <basic/BasicBuffer.hpp>
+#include <engine/EngineConfig.hpp>
 #include <vulkan/vulkan_core.h>
 #include <optional>
 #include <span>

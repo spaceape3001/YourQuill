@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Render3D.hpp"
-#include "Render3DInfoWriter.hpp"
+#include "RenderWriter.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/meta/Init.hpp>
 #include <atomic>

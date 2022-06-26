@@ -7,8 +7,9 @@
 #include "Triangle.hpp"
 #include <math/Triangle3.hpp>
 #include <math/shape_math.hpp>
-#include <engine/render/Render3DInfoWriter.hpp>
+#include <engine/render/RenderWriter.hpp>
 #include <engine/shader/Shader.hpp>
+#include <basic/preamble.hpp>
 
 namespace yq {
     namespace asset {
@@ -16,20 +17,25 @@ namespace yq {
         {
             auto w = writer<Triangle>();
             auto p = w.pipeline();
+            
             p.shader("assets/triangle.vert");
             p.shader("assets/triangle.frag");
             
-            //  TODO
+            p.static_vertex(&Triangle::m_positions, "positions"sv);
+            p.static_vertex(&Triangle::m_colors, "colors"sv);
+            
+            p.push(yq::engine::PushConfigType::Full);
         }
 
         Triangle::Triangle(const Triangle3D&tri, const TriangleData<RGBA4F>& colors)
         {
-            m_corners[0].position   = (glm::dvec3) tri.a;
-            m_corners[0].color      = colors.a;
-            m_corners[1].position   = (glm::dvec3) tri.b;
-            m_corners[1].color      = colors.b;
-            m_corners[2].position   = (glm::dvec3) tri.c;
-            m_corners[2].color      = colors.c;
+            m_positions[0]  = (glm::dvec3) tri.a;
+            m_positions[1]  = (glm::dvec3) tri.b;
+            m_positions[2]  = (glm::dvec3) tri.c;
+
+            m_colors[0]     = colors.a;
+            m_colors[1]     = colors.b;
+            m_colors[2]     = colors.c;
         }
         
         Triangle::~Triangle()

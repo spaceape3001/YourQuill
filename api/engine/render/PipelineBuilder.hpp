@@ -47,11 +47,11 @@ namespace yq {
 
         protected:
             PipelineBuilder(PipelineConfig*);
+            uint32_t                location_filter(uint32_t loc, uint32_t req);
 
         private:
             PipelineConfig* const   m_config;
             std::set<uint32_t>      m_locations;
-            uint32_t                location_filter(uint32_t loc, uint32_t req);
         };
 
 

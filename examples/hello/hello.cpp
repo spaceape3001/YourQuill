@@ -28,7 +28,7 @@
 #include <engine/Vulqan.hpp>
 #include <engine/render/PipelineBuilder.hpp>
 #include <engine/render/Render3D.hpp>
-#include <engine/render/Render3DInfoWriter.hpp>
+#include <engine/render/RenderWriter.hpp>
 #include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqCommand.hpp>
@@ -64,7 +64,7 @@ const Vertex vertices[] = {
 };
 
 const auto  TriPoints   = Triangle2D{{0., -0.5},{0.5,0.5}, {-0.5, 0.5}};
-const auto  TriColors   = TriangleData<RGB3F>{ (RGB3F) color::Red, (RGB3F) color::Green, (RGB3F) color::Blue };
+const auto  TriColors   = TriangleData<RGB3F>{ (RGB3F) color::Black, (RGB3F) color::White, (RGB3F) color::Orange };
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
@@ -90,7 +90,11 @@ struct HelloTriangle : public engine::Rendered {
         build.front(FrontFace::Clockwise);
         build.push<Warp>();
         
-        build.vbo<Vertex>().attribute(&Vertex::position, DataFormat::R32G32_SFLOAT, 0).attribute(&Vertex::color, DataFormat::R32G32B32_SFLOAT, 1);
+        {
+            auto v = build.vbo<Vertex>();
+            v.attribute<glm::vec2>(&Vertex::position, 0);
+            v.attribute<glm::vec3>(&Vertex::color, 1);
+        }
         
         m_pipeline    = std::make_unique<VqPipeline>(*w, cfg);
         

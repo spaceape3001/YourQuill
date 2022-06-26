@@ -14,8 +14,13 @@ namespace yq {
     template <size_t> class BasicBuffer;
 
     namespace engine {
+        class IndexBufferObjectInfo;
         class Rendered;
         class RenderedInfo;
+        class UniformBufferObjectInfo;
+        class VertexBufferObjectInfo;
+        
+        template <typename> class TypedPipelineBuilder;
         
         /*
             The pipeline is a vulkan concept, however, we need it here.  Config remains as is, however, we need to 
@@ -42,16 +47,29 @@ namespace yq {
             const RenderedInfo*     rendered() const { return m_rendered; }
             
             bool                    has_push() const { return m_config.push.type != PushConfigType::None; }
-            virtual void            get_push(const Rendered*, BasicBuffer<MAX_PUSH>&) const {}
+            //virtual void            get_push(const Rendered*, BasicBuffer<MAX_PUSH>&) const {}
             
             const PipelineConfig&   config() const { return m_config; }
         
+            const std::vector<const IndexBufferObjectInfo*>&    index_buffers() const { return m_ibos; }
+            const std::vector<const UniformBufferObjectInfo*>&  uniform_buffers() const { return m_ubos; }
+            const std::vector<const VertexBufferObjectInfo*>&   vertex_buffers() const { return m_vbos; }
+        
         protected:
+            friend class IndexBufferObjectInfo;
+            friend class UniformBufferObjectInfo;
+            friend class VertexBufferObjectInfo;
+            template <typename> friend class TypedPipelineBuilder;
+            
             Pipeline(std::string_view, const std::source_location& sl);
             Pipeline(std::string_view, RenderedInfo* parent, const std::source_location& sl);
             
-            PipelineConfig          m_config;
-            const RenderedInfo*     m_rendered    = nullptr;
+            
+            PipelineConfig                          m_config;
+            const RenderedInfo*                     m_rendered    = nullptr;
+            std::vector<const IndexBufferObjectInfo*>      m_ibos;
+            std::vector<const UniformBufferObjectInfo*>    m_ubos;
+            std::vector<const VertexBufferObjectInfo*>     m_vbos;
         };
         
     }

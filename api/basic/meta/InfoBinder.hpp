@@ -66,6 +66,12 @@ namespace yq {
     }
 
     template <typename T>
+    const auto&    meta_unsafe()
+    {
+        return InfoBinder<T>::bind();
+    }
+
+    template <typename T>
     auto           writer()
     {
         static_assert(InfoBinder<T>::Defined, "Must be meta-declared!");
