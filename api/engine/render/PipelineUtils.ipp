@@ -20,11 +20,11 @@ namespace yq {
         namespace {
             
             template <typename T>
-            DataFormatData                dfd(DataFormat df, unsigned int bindings=0)
+            DataFormatData                dfd(DataFormat df, unsigned int bindings=0, IndexType it=IndexType())
             {
                 if(!bindings)
                     bindings    = min_binding<T>();
-                return DataFormatData{ meta<T>().id(), bindings, df };
+                return DataFormatData{ meta<T>().id(), bindings, df, it };
             }
         
             auto    make_data_map()
@@ -40,6 +40,14 @@ namespace yq {
                 std::unordered_map<unsigned int, unsigned int>  ret;
                 for(const DataFormatData& d : data_format_data())
                     ret[d.type_id]  = d.bindings;
+                return ret;
+            }
+            
+            auto    make_index_type_map()
+            {
+                std::unordered_map<unsigned int, IndexType>     ret;
+                for(const DataFormatData& d : data_format_data())
+                    ret[d.type_id]  = d.index;
                 return ret;
             }
         }
@@ -78,7 +86,10 @@ namespace yq {
                 dfd<glm::vec3>(DataFormat::R32G32B32_SFLOAT, 1),
                 dfd<glm::dvec3>(DataFormat::R64G64B64_SFLOAT, 2),
                 dfd<glm::vec4>(DataFormat::R32G32B32A32_SFLOAT, 1),
-                dfd<glm::dvec4>(DataFormat::R64G64B64A64_SFLOAT, 2)
+                dfd<glm::dvec4>(DataFormat::R64G64B64A64_SFLOAT, 2),
+                dfd<uint8_t>(DataFormat::R8_UINT, 1, IndexType::uint8),
+                dfd<uint16_t>(DataFormat::R16_UINT, 1, IndexType::uint16),
+                dfd<uint32_t>(DataFormat::R32_UINT, 1, IndexType::uint32)
             };
             
             return std::span<const DataFormatData>(std::begin(sList), std::end(sList));
@@ -105,6 +116,15 @@ namespace yq {
         unsigned int    min_binding(size_t cb)
         {
             return (unsigned int)((cb + sizeof(Vector2D) - 1) / sizeof(Vector2D));
+        }
+
+        IndexType       index_type(const TypeInfo&ti)
+        {
+            static auto the_map     = make_index_type_map();
+            auto    i  = the_map.find(ti.id());
+            if(i != the_map.end())
+                return i->second;
+            return IndexType::none;
         }
     }
 }

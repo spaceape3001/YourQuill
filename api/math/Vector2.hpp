@@ -277,6 +277,15 @@ namespace yq {
         return a.x*b.x + a.y*b.y;
     }
 
+//  --------------------------------------------------------
+//  CROSS PRODUCT
+
+    template <typename T, typename U>
+    constexpr product_t<T,U> operator CROSS (const Vector2<T>& a, const Vector2<U>&b)
+    {
+        return a.x*b.y-a.y*b.x;
+    }
+
     //  --------------------------------------------------------
     //  ADVANCED FUNCTIONS
 

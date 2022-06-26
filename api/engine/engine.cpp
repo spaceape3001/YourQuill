@@ -6,6 +6,7 @@
 
 #include "Application.ipp"
 #include "camera/Camera.ipp"
+#include "render/BufferObjectInfo.ipp"
 #include "render/PipelineBuilder.ipp"
 #include "render/PipelineConfig.ipp"
 #include "render/PipelineUtils.ipp"
@@ -24,6 +25,7 @@
 #include "enum/ImageLayout.hpp"
 #include "enum/ImageTiling.hpp"
 #include "enum/ImageType.hpp"
+#include "enum/IndexType.hpp"
 #include "enum/LogicOp.hpp"
 #include "enum/MipmapMode.hpp"
 #include "enum/PolygonMode.hpp"
@@ -77,6 +79,7 @@ YQ_TYPE_IMPLEMENT(yq::engine::FrontFace)
 YQ_TYPE_IMPLEMENT(yq::engine::ImageLayout)
 YQ_TYPE_IMPLEMENT(yq::engine::ImageTiling)
 YQ_TYPE_IMPLEMENT(yq::engine::ImageType)
+YQ_TYPE_IMPLEMENT(yq::engine::IndexType)
 YQ_TYPE_IMPLEMENT(yq::engine::LogicOp)
 YQ_TYPE_IMPLEMENT(yq::engine::MipmapMode)
 YQ_TYPE_IMPLEMENT(yq::engine::PolygonMode)

@@ -12,7 +12,7 @@
 #include <asset/Colors.hpp>
 #include <asset/NullCamera.hpp>
 #include <asset/SpaceCamera.hpp>
-#include <asset/Triangle.hpp>
+#include <asset/ColorTriangle.hpp>
 
 #include <basic/DelayInit.hpp>
 #include <basic/TextUtils.hpp>
@@ -103,7 +103,7 @@ struct CameraWin : public ImWindow {
         view.camera = cam.ptr(); // new NullCamera; 
         #endif
         
-        Ref<Triangle>   tri = new Triangle(TriData);
+        Ref<ColorTriangle>   tri = new ColorTriangle(TriData);
         tri->set_scaling(0.5);
         scene.things.push_back(tri);
     }

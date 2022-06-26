@@ -12,12 +12,12 @@
 
 namespace yq {
     namespace asset {
-        class Triangle : public engine::Render3D {
-            YQ_OBJECT_DECLARE(Triangle, engine::Render3D)
+        class ColorTriangle : public engine::Render3D {
+            YQ_OBJECT_DECLARE(ColorTriangle, engine::Render3D)
         public:
         
-            Triangle(const TriangleData<ColorVertex2D>&);
-            ~Triangle();
+            ColorTriangle(const TriangleData<ColorVertex2D>&);
+            ~ColorTriangle();
             
             static void initInfo();
             

@@ -274,6 +274,19 @@ namespace yq {
     }
 
 //  --------------------------------------------------------
+//  CROSS PRODUCT
+
+    template <typename T, typename U>
+    constexpr Vector3<product_t<T,U>> operator CROSS (const Vector3<T>& a, const Vector3<U>&b)
+    {
+        return { 
+            a.y*b.z-a.z*b.y, 
+            a.z*b.x-a.x*b.z, 
+            a.x*b.y-a.y*b.x 
+        };
+    }
+
+//  --------------------------------------------------------
 //  INNER PRODUCT
 
     template <typename T, typename U>
@@ -282,8 +295,8 @@ namespace yq {
         return a.x*b.x + a.y*b.y + a.z*b.z;
     }
 
-    //  --------------------------------------------------------
-    //  ADVANCED FUNCTIONS
+//  --------------------------------------------------------
+//  ADVANCED FUNCTIONS
 
     template <typename T>
     Vector3<T>   abs_elem(const Vector3<T>&a, const Vector3<T>&b)

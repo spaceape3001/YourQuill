@@ -17,7 +17,7 @@
 
 #include <asset/Colors.hpp>
 #include <asset/NullCamera.hpp>
-#include <asset/Triangle.hpp>
+#include <asset/ColorTriangle.hpp>
 #include <basic/DelayInit.hpp>
 #include <basic/Logging.hpp>
 #include <basic/PluginLoader.hpp>
@@ -141,7 +141,7 @@ struct HelloWin : public engine::Vulqan {
     
     timepoint_t             start;
     Ref<HelloTriangle>      triangle;
-    Ref<Triangle>           tri2;
+    Ref<ColorTriangle>      tri2;
     Scene                   scene;
     Perspective             view;
 
@@ -149,7 +149,7 @@ struct HelloWin : public engine::Vulqan {
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);
-        tri2        = new yq::asset::Triangle(TriData);
+        tri2        = new yq::asset::ColorTriangle(TriData);
         tri2->set_position({0.,0.,0.1});
         scene.things.push_back(tri2);
         view.camera = new NullCamera;

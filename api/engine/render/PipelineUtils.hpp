@@ -8,6 +8,7 @@
 
 #include <basic/meta/InfoBinder.hpp>
 #include <engine/enum/DataFormat.hpp>
+#include <engine/enum/IndexType.hpp>
 #include <span>
 
 namespace yq {
@@ -17,6 +18,7 @@ namespace yq {
             unsigned int        type_id     = 0;    //!< Meta type ID
             unsigned int        bindings    = 1;    //!< Number of bindings to be used
             DataFormat          format;             //!< Data format
+            IndexType           index;
         };
         
         std::span<const DataFormatData>   data_format_data();
@@ -43,5 +45,15 @@ namespace yq {
         {
             return data_binding(meta<T>());
         }
+        
+        IndexType       index_type(const TypeInfo&);
+        
+        template <typename T>
+        IndexType       index_type()
+        {
+            return index_type(meta<T>());
+        }
+        
+        
     }
 }

@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Triangle.hpp"
-#include <math/Triangle3.hpp>
+#include "ColorTriangle.hpp"
+#include <math/TriangleData.hpp>
 #include <math/shape_math.hpp>
 #include <engine/render/RenderWriter.hpp>
 #include <engine/shader/Shader.hpp>
@@ -13,15 +13,15 @@
 
 namespace yq {
     namespace asset {
-        void Triangle::initInfo()
+        void ColorTriangle::initInfo()
         {
-            auto w = writer<Triangle>();
+            auto w = writer<ColorTriangle>();
             auto p = w.pipeline();
             
-            p.shader("assets/triangle.vert");
-            p.shader("assets/triangle.frag");
+            p.shader("assets/colored.vert");
+            p.shader("assets/colored.frag");
 
-            p.static_vertex(&Triangle::m_vertex, "vertex"sv)
+            p.static_vertex(&ColorTriangle::m_vertex, "vertex"sv)
                 .attribute(&ColorVertexData::position)
                 .attribute(&ColorVertexData::color)
             ;
@@ -29,7 +29,7 @@ namespace yq {
             p.push(yq::engine::PushConfigType::Full);
         }
 
-        Triangle::Triangle(const TriangleData<ColorVertex2D>&tri)
+        ColorTriangle::ColorTriangle(const TriangleData<ColorVertex2D>&tri)
         {
             m_vertex[0] = tri.a;
             m_vertex[1] = tri.b;
@@ -37,13 +37,13 @@ namespace yq {
             m_draw.vertex_count  = 3;
         }
         
-        Triangle::~Triangle()
+        ColorTriangle::~ColorTriangle()
         {
         }
         
         YQ_INVOKE(
-            Triangle::initInfo();
+            ColorTriangle::initInfo();
         );
     }
 }
-YQ_OBJECT_IMPLEMENT(yq::asset::Triangle)
+YQ_OBJECT_IMPLEMENT(yq::asset::ColorTriangle)
