@@ -27,7 +27,13 @@ namespace yq {
         template <typename DIM>
         bool    InputDouble(const char* label, MKS<double,DIM>* v, MKS<double,DIM> step = { 0.0 }, MKS<double,DIM> step_fast = { 0.0 }, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
         {
-            return ImGui::InputDouble(label, &v.value, step.value, step_fast.value, format, flags);
+            return ImGui::InputDouble(label, (double*) v, step.value, step_fast.value, format, flags);
+        }
+
+        template <typename DIM, double K>
+        bool    InputDouble(const char* label, SCALED<double,DIM,K>* v, SCALED<double,DIM,K> step = { 0.0 }, SCALED<double,DIM,K> step_fast = { 0.0 }, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
+        {
+            return ImGui::InputDouble(label, (double*) v, step.value, step_fast.value, format, flags);
         }
 
         template <typename DIM>
