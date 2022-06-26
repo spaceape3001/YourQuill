@@ -23,7 +23,7 @@ namespace yq {
             
         private:
             std::array<ColorVertexData,4>   m_vertex;
-            std::array<uint16_t,6>          m_index;
+//            std::array<uint16_t,6>          m_index;
         };
     }
 }

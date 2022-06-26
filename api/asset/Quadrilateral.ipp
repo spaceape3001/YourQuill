@@ -15,6 +15,8 @@ namespace yq {
     namespace asset {
         void Quadrilateral::initInfo()
         {
+            static const uint16_t   kIndices[] = { 0, 1, 2, 2, 3, 0 };
+        
             auto w = writer<Quadrilateral>();
             auto p = w.pipeline();
             
@@ -26,7 +28,7 @@ namespace yq {
                 .attribute(&ColorVertexData::color)
             ;
             
-            p.static_index(&Quadrilateral::m_index, "index"sv);
+            p.common_index(kIndices, "index"sv);
             
             p.push(yq::engine::PushConfigType::Full);
         }
@@ -37,11 +39,6 @@ namespace yq {
             m_vertex[1] = tri.b;
             m_vertex[2] = tri.c;
             m_vertex[3] = tri.d;
-            
-            m_index     = { 0, 1, 2, 2, 3, 0 };
-            
-            m_draw.index_count  = 6;
-            m_draw.vertex_count  = 4;
         }
         
         Quadrilateral::~Quadrilateral()
