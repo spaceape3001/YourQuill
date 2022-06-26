@@ -8,13 +8,13 @@
 
 namespace yq {
     namespace asset {
-        glm::dmat4  NullCamera::world2screen(const engine::CameraParams&) const 
+        glm::dmat4  NullCamera::world2screen(const engine::CameraParams&cp) const 
         {
             return {
-                1., 0., 0., 0.,
-                0., 1., 0., 0.,
-                0., 0., 1., 0.,
-                0., 0., 0., 1.
+                1.,  0.,  0.,  0.,
+                0.,  1.,  0.,  0.,
+                0.,  0.,  1.,  0.,
+                0.,  0.,  0.,  1.
             };
         }
         

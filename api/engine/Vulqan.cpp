@@ -184,7 +184,7 @@ namespace yq {
     
             CameraParams        cparams;
             cparams.screen      = (Size2D) size();
-            [[maybe_unused]] glm::dmat4  cam = pr.camera->world2screen(cparams);
+            glm::dmat4          cam_matrix = pr.camera->world2screen(cparams);
             
             VkPipeline          prev_pipeline   = nullptr;
             StdPushConstant     stdPush;
@@ -227,12 +227,12 @@ namespace yq {
                 switch(pipe->push_type()){
                 case PushConfigType::Full:
                     if(r3){
-                        stdPush.matrix  = cam * r3->model2world();
+                        stdPush.matrix  = cam_matrix * r3->model2world();
                         vkCmdPushConstants(buf, vklay, shader_mask, 0, sizeof(stdPush), &stdPush );
                     }
                     break;
                 case PushConfigType::View:
-                    stdPush.matrix  = cam;
+                    stdPush.matrix  = cam_matrix;
                     vkCmdPushConstants(buf, vklay, shader_mask, 0, sizeof(stdPush), &stdPush );
                     break;
                 case PushConfigType::Custom:

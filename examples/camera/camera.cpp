@@ -12,6 +12,7 @@
 #include <asset/Colors.hpp>
 #include <asset/NullCamera.hpp>
 #include <asset/SpaceCamera.hpp>
+#include <asset/TargetCamera.hpp>
 #include <asset/Triangle.hpp>
 #include <asset/Quadrilateral.hpp>
 
@@ -102,7 +103,7 @@ struct CameraWin : public ImWindow {
             }
         );
         
-        view.camera = add_camera(&meta<NullCamera>());
+        view.camera = add_camera(&meta<TargetCamera>());
 
         #if 0
         cam         = new SpaceCamera;
@@ -189,7 +190,7 @@ struct CameraWin : public ImWindow {
         }
     
         if(show_control){
-            if(Begin("Camera", &show_camera)){
+            if(BeginChild("Camera")){
             #if 0
             
                 gui::ToggleButton("motion", &slave_clock);
@@ -215,8 +216,7 @@ struct CameraWin : public ImWindow {
                 if(InputDouble3("Scale", &scale))
                     cam->set_scale(scale);
             #endif
-            
-                End();
+                EndChild();
             }
         }
     }

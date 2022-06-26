@@ -6,14 +6,16 @@
 
 #include "SpaceCamera.hpp"
 #include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_projection.hpp>
 
 namespace yq {
     namespace asset {
         SpaceCamera::SpaceCamera() : 
             m_space(this),
             m_fov(70_deg, this),
-            m_near(-1., this),
-            m_far(1., this)
+            m_near(0.1, this),
+            m_far(10., this)
         {
         }
         
@@ -23,7 +25,9 @@ namespace yq {
         
         glm::dmat4  SpaceCamera::projection_matrix(const Size2D&sz) const
         {
-            return glm::perspectiveFovNO<double>( glm::radians(m_fov->value), sz.width(), sz.height(), m_near, m_far);
+            glm::dmat4 ret =  glm::perspective<double>(glm::radians(m_fov.get().value), (double) sz.width() / (double) sz.height(), m_near, m_far);
+            ret[1][1] *= -1;
+            return ret;
         }
 
         void        SpaceCamera::set_far(double v)
