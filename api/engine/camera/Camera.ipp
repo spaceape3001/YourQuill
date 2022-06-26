@@ -17,11 +17,27 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+        struct CameraInfo::Repo {
+            std::vector<const CameraInfo*> all;
+        };
+        
+        CameraInfo::Repo& CameraInfo::repo()
+        {
+            static Repo* s_repo = new Repo;
+            return *s_repo;
+        }
+
+        const std::vector<const CameraInfo*>&    CameraInfo::all()
+        {
+            return repo().all;
+        }
 
         CameraInfo::CameraInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
             ObjectInfo(name, base, sl)
         {
             set_option(CAMERA);
+            repo().all.push_back(this);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,6 +58,11 @@ namespace yq {
         {
             return { id(), revision(), world2screen(p) };
         }
+
+        void            Camera::set_name(const std::string& v)
+        {
+            m_name  = v;
+        }
         
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +70,8 @@ namespace yq {
         YQ_INVOKE(
             auto cam   = writer<Camera>();
             cam.property("id", &Camera::id);
+            cam.property("name", &Camera::name).setter(&Camera::set_name);
+            cam.abstract();
         )
     }
 }

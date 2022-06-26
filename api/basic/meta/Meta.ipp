@@ -85,8 +85,7 @@ namespace yq {
     {
         assert(thread_safe_write());
         
-        //  strip out the yq namespace
-        m_name      = str_start(zName, "yq::");
+        set_name(zName);
         m_label     = m_name;                       // default (can be overriden)
         m_parent    = parent;
         m_source    = sl;
@@ -112,6 +111,17 @@ namespace yq {
     bool  Meta::has_tag(std::string_view k) const
     {
         return m_tags.contains(k);
+    }
+
+    void  Meta::set_name(std::string_view v) 
+    { 
+        //  strip out the yq namespace
+        m_name = str_start(v, "yq::");
+        auto ecolon = m_name.find_last_of(':');
+        if(ecolon != std::string_view::npos){
+            m_stem  = m_name.substr(ecolon+1);
+        } else
+            m_stem  = m_name;
     }
 
     void  Meta::sweep()

@@ -15,6 +15,7 @@
 #include <asset/Triangle.hpp>
 
 #include <basic/DelayInit.hpp>
+#include <basic/TextUtils.hpp>
 #include <engine/Application.hpp>
 #include <engine/Scene.hpp>
 #include <engine/Perspective.hpp>
@@ -46,21 +47,58 @@ using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 struct CameraWin : public ImWindow {
     YQ_OBJECT_DECLARE(CameraWin, engine::ImWindow)
 
+    std::vector<const CameraInfo*>      cam_infos;
+    Map<std::string,Ref<Camera>,IgCase> cameras;
+
     timepoint_t             start;
     Ref<SpaceCamera>        cam;
     Scene                   scene;
     Perspective             view;
     bool                    show_camera = true;
     bool                    slave_clock = true;
+    bool                    show_control    = true;
+
+    Camera*     add_camera(const CameraInfo* ci)
+    {
+        Ref<Camera> c   = static_cast<Camera*>(ci->create());
+        if(!c)
+            return nullptr;
+        
+        std::string     base(ci->name_stem());
+        std::string     candidate   = base;
+        for(unsigned int n=2; cameras.contains(candidate); ++n)
+            candidate   = base + ':' + to_string(n);
+        c->set_name(candidate);
+        cameras[candidate]  = c;
+        return c;
+    }
 
     CameraWin(const WindowCreateInfo& wci) : ImWindow(wci)
     {
         start   = std::chrono::steady_clock::now();
+        
+        for(const CameraInfo* i : CameraInfo::all()){
+            if(i->is_abstract())
+                continue;
+            cam_infos.push_back(i);
+        }
+        
+        std::sort(cam_infos.begin(), cam_infos.end(), 
+            [](const CameraInfo* a, const CameraInfo* b)
+            {
+                return is_less_igCase(a->name_stem(), b->name_stem());
+            }
+        );
+        
+        view.camera = add_camera(&meta<NullCamera>());
+
+        #if 0
         cam         = new SpaceCamera;
         cam->set_orientation(hpr((Radian) 0._deg, (Radian) -90._deg, (Radian) 0._deg));
         cam->set_near(.01);
         cam->set_far(200.);
         view.camera = cam.ptr(); // new NullCamera; 
+        #endif
         
         Ref<Triangle>   tri = new Triangle(xy(TriPoints, 0.0), rgba(TriColors, 0.5));
         tri->set_scaling(0.5);
@@ -69,9 +107,10 @@ struct CameraWin : public ImWindow {
 
     void        draw_vulqan(VkCommandBuffer cmdbuf) override
     {
-        timepoint_t n   = std::chrono::steady_clock::now();
         
+        #if 0
         if(slave_clock){
+            timepoint_t n   = std::chrono::steady_clock::now();
             std::chrono::duration<double>  diff    = start - n;
         
             Degree      angle{ diff.count() };
@@ -83,6 +122,7 @@ struct CameraWin : public ImWindow {
             cam->set_position(p2);
             cam->set_orientation(rotor_y((Radian) -angle));
         }
+        #endif
 
         render(cmdbuf, scene, view);
         ImWindow::draw_vulqan(cmdbuf);
@@ -90,31 +130,76 @@ struct CameraWin : public ImWindow {
     
     void    draw_imgui() override
     {
-        if(Begin("Camera", &show_camera)){
-            gui::ToggleButton("motion", &slave_clock);
-        
-            Vector3D        pos = cam->position();
-            if(InputDouble3("position", &pos) && !slave_clock)
-                cam->set_position(pos);
-            Quaternion3D    orient  = cam->orientation();
-            if(InputDouble4("orientation", &orient) && !slave_clock)
-                cam->set_orientation( ~orient);
-        
-            double          n   = cam->near();
-            if(InputDouble("Near", &n))
-                cam->set_near(n);
-            double          f   = cam->far();
-            if(InputDouble("Far", &f))
-                cam->set_far(f);
-            Degree          fov = cam->fov();
-            if(InputDouble("FOV", &fov, 0.1_deg))
-                cam->set_fov(fov);
-        
-            Vector3D    scale   = cam->scale();
-            if(InputDouble3("Scale", &scale))
-                cam->set_scale(scale);
-
-            End();
+        if(BeginMainMenuBar()){
+            if(BeginMenu("Camera")){
+                if(BeginMenu("Create")){
+                    for(const CameraInfo* ci : cam_infos){
+                        std::string txt(ci->name_stem());
+                        if(MenuItem(txt.c_str())){
+                            Camera*c    = add_camera(ci);
+                            if(c){
+                                view.camera = c;
+                            }
+                        }
+                    }
+                
+                    EndMenu();
+                }
+                
+                if(BeginMenu("Switch")){
+                    for(auto& ci : cameras){
+                        if(RadioButton(ci.first.c_str(), ci.second.ptr() == view.camera.ptr())){
+                            view.camera = ci.second.ptr();
+                        }
+                    }
+                
+                    EndMenu();
+                }
+                Checkbox("Control", &show_control);
+                Separator();
+                if(MenuItem("Exit"))
+                    close();
+                EndMenu();
+            }
+            if(BeginMenu("Shape")){
+                if(BeginMenu("Create")){
+                    EndMenu();
+                }
+                EndMenu();
+            }
+            EndMainMenuBar();
+        }
+    
+        if(show_control){
+            if(Begin("Camera", &show_camera)){
+            #if 0
+            
+                gui::ToggleButton("motion", &slave_clock);
+            
+                Vector3D        pos = cam->position();
+                if(InputDouble3("position", &pos) && !slave_clock)
+                    cam->set_position(pos);
+                Quaternion3D    orient  = cam->orientation();
+                if(InputDouble4("orientation", &orient) && !slave_clock)
+                    cam->set_orientation( ~orient);
+            
+                double          n   = cam->near();
+                if(InputDouble("Near", &n))
+                    cam->set_near(n);
+                double          f   = cam->far();
+                if(InputDouble("Far", &f))
+                    cam->set_far(f);
+                Degree          fov = cam->fov();
+                if(InputDouble("FOV", &fov, 0.1_deg))
+                    cam->set_fov(fov);
+            
+                Vector3D    scale   = cam->scale();
+                if(InputDouble3("Scale", &scale))
+                    cam->set_scale(scale);
+            #endif
+            
+                End();
+            }
         }
     }
     

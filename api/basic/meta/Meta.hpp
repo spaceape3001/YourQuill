@@ -169,9 +169,11 @@ namespace yq {
         bool                            is_object() const { return (m_flags & OBJECT) != 0; }
         bool                            is_type() const { return (m_flags & TYPE) != 0; }
         
-        const std::string_view&         label() const { return m_label; }
+        std::string_view                label() const { return m_label; }
 
-        const std::string_view&         name() const { return m_name; }
+        std::string_view                name() const { return m_name; }
+        std::string_view                name_stem() const { return m_stem; }
+        
         
         //  MAY BE NULL
         const Meta*                     parent() const { return m_parent; }
@@ -215,7 +217,7 @@ namespace yq {
         
         void    set_option(options_t v) { m_flags |= v; }
         void    set_options(options_t v) { m_flags |= v; }
-        void    set_name(std::string_view v) { m_name = v; }
+        void    set_name(std::string_view v);
         
         
     private:
@@ -226,6 +228,7 @@ namespace yq {
         std::string_view                m_description;
         std::string_view                m_label;
         std::string_view                m_name;
+        std::string_view                m_stem;
         Vector<const Meta*>             m_children;
         const Meta*                     m_parent    = nullptr;
         std::source_location            m_source;
