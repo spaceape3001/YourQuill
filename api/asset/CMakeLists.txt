@@ -12,7 +12,6 @@ set(yq_asset_sources
     ${asset_test_source}
     
     ./asset.cpp
-    ./ColorQuadrilateral.cpp
 )
 
 add_library(yqasset SHARED ${yq_asset_sources})

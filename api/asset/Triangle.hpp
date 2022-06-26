@@ -12,18 +12,18 @@
 
 namespace yq {
     namespace asset {
-        class ColorQuadrilateral : public engine::Render3D {
-            YQ_OBJECT_DECLARE(ColorQuadrilateral, engine::Render3D)
+        class Triangle : public engine::Render3D {
+            YQ_OBJECT_DECLARE(Triangle, engine::Render3D)
         public:
         
-            ColorQuadrilateral(const QuadrilateralData<ColorVertex2D>&);
-            ~ColorQuadrilateral();
+            Triangle(const TriangleData<ColorVertex2D>&);
+            ~Triangle();
             
             static void initInfo();
             
         private:
-            std::array<ColorVertexData,4>   m_vertex;
-            std::array<uint16_t,6>          m_index;
+        
+            std::array<ColorVertexData,3>        m_vertex;
         };
     }
 }

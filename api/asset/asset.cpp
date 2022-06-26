@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ColorTriangle.ipp"
 #include "NullCamera.ipp"
+#include "Quadrilateral.ipp"
 #include "SpaceCamera.ipp"
+#include "Triangle.ipp"

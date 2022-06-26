@@ -12,8 +12,8 @@
 #include <asset/Colors.hpp>
 #include <asset/NullCamera.hpp>
 #include <asset/SpaceCamera.hpp>
-#include <asset/ColorTriangle.hpp>
-#include <asset/ColorQuadrilateral.hpp>
+#include <asset/Triangle.hpp>
+#include <asset/Quadrilateral.hpp>
 
 #include <basic/DelayInit.hpp>
 #include <basic/TextUtils.hpp>
@@ -112,11 +112,11 @@ struct CameraWin : public ImWindow {
         view.camera = cam.ptr(); // new NullCamera; 
         #endif
         
-        Ref<ColorTriangle>   tri = new ColorTriangle(TriData);
+        Ref<Triangle>   tri = new Triangle(TriData);
         tri->set_scaling(0.5);
         scene.things.push_back(tri);
         
-        Ref<ColorQuadrilateral> quad = new ColorQuadrilateral(QuadData);
+        Ref<Quadrilateral> quad = new Quadrilateral(QuadData);
         quad->set_scaling(0.5);
         quad->set_heading( (Radian) 45._deg );
         quad->set_position({ 0.5, 0.5, 0. });
