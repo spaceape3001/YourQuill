@@ -13,6 +13,7 @@
 #include <asset/NullCamera.hpp>
 #include <asset/SpaceCamera.hpp>
 #include <asset/ColorTriangle.hpp>
+#include <asset/ColorQuadrilateral.hpp>
 
 #include <basic/DelayInit.hpp>
 #include <basic/TextUtils.hpp>
@@ -30,6 +31,7 @@
 #include <math/trig.hpp>
 #include <math/Triangle2.hpp>
 #include <math/Triangle3.hpp>
+#include <math/QuadrilateralData.hpp>
 #include <imgui.h>
 #include <chrono>
 
@@ -46,6 +48,13 @@ const auto  TriData   = TriangleData<ColorVertex2D> {
 };
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
+
+const auto QuadData = QuadrilateralData<ColorVertex2D> {
+    { {-1.0, 1.0}, color::Green },
+    { {1.0, 1.0}, color::Blue },
+    { {0.5, -1.0}, color::Yellow },
+    { {-0.5, -1.0}, color::Red }
+};
 
 struct CameraWin : public ImWindow {
     YQ_OBJECT_DECLARE(CameraWin, engine::ImWindow)
@@ -106,6 +115,12 @@ struct CameraWin : public ImWindow {
         Ref<ColorTriangle>   tri = new ColorTriangle(TriData);
         tri->set_scaling(0.5);
         scene.things.push_back(tri);
+        
+        Ref<ColorQuadrilateral> quad = new ColorQuadrilateral(QuadData);
+        quad->set_scaling(0.5);
+        quad->set_heading( (Radian) 45._deg );
+        quad->set_position({ 0.5, 0.5, 0. });
+        scene.things.push_back(quad);
     }
 
     void        draw_vulqan(VkCommandBuffer cmdbuf) override

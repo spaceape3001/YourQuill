@@ -40,6 +40,8 @@ namespace yq {
             operator bool() const noexcept { return good(); }
             operator VkBuffer() const noexcept { return m_buffer; }
             VkBuffer buffer() const noexcept { return m_buffer; }
+            
+            size_t  size() const { return m_size; }
         
         private:
             void    dtor();

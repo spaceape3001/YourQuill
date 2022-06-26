@@ -22,7 +22,6 @@ set(yq_engine_sources
     ./gui/ImWindow.cpp
     ./gui/StdEdits.cpp
     
-    ./render/BufferObjectInfo.cpp
     ./render/Pipeline.cpp
     ./render/Rendered.cpp
     ./render/Render3D.cpp

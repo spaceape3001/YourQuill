@@ -306,11 +306,88 @@ namespace yq {
                     }
                 }
                 
+                bool    indexed = false;
+                size_t  idx_count   = 0;
+                
+                //  =================================================
+                //      INDEX BUFFERS
+                for(const IndexBufferObjectInfo* ibo : pipe->index_buffers()){
+                    if(!ibo) [[ unlikely ]]
+                        continue;
+                        
+                    if(ibo->index_type() == IndexType::none)[[ unlikely ]]
+                        continue;
+                    ViBuffer*   buffer  = nullptr;
+                    Tristate    update;
+
+                    DataActivity    da  = ibo->data_activity();
+                    bool            check   = false;
+                    bool            fast    = false;
+                    bool            bnew    = false;
+                    switch(da){
+                    case DataActivity::UNSURE:
+                        continue;
+                    case DataActivity::COMMON:
+                        std::tie(buffer, bnew)  = vp -> buffer(ibo->id());
+                        break;
+                    case DataActivity::STATIC:
+                        std::tie(buffer, bnew)  = vo -> buffer(ibo->id());
+                        break;
+                    case DataActivity::DYNAMIC:
+                        std::tie(buffer, bnew)  = vo -> buffer(ibo->id());
+                        check   = true;
+                        break;
+                    case DataActivity::REFRESH:
+                        std::tie(buffer, bnew)  = vo -> buffer(ibo->id());
+                        check   = true;
+                        fast    = true;
+                        break;
+                    }
+                    
+                    
+                    if(bnew || check){
+                        BufferData  bd    = ibo->get(r);
+                        if(!bd.data || !bd.size)
+                            continue;
+                        if(bnew || fast || (check && bd.revision != buffer->rev)){
+                            // optimize this ... later
+                            buffer -> vq    = std::make_unique<VqBuffer>(*m, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, bd.data, bd.size);
+                            buffer -> rev   = bd.revision;
+                        }
+                    }
+                    
+                    if(buffer->vq && buffer->vq->buffer()){
+                        VkBuffer        vb  = buffer->vq->buffer();
+                        
+                        // recover the size... (yeah, short-sighted...)
+                        switch(ibo->index_type()){
+                        case IndexType::uint32:
+                            idx_count   = buffer->vq->size() / sizeof(uint32_t);
+                            break;
+                        case IndexType::uint16:
+                            idx_count   = buffer->vq->size() / sizeof(uint16_t);
+                            break;
+                        case IndexType::uint8:
+                            idx_count   = buffer->vq->size();
+                            break;
+                        default:
+                            break;
+                        }
+                        vkCmdBindIndexBuffer(buf, vb, 0, (VkIndexType)(ibo->index_type().value()));
+                        indexed         = true;
+                        break;
+                    }                    
+                }
+
                 //if(!buffers.empty())
                     //vkCmdBindVertexBuffers(buf, 0, buffers.size(), buffers.data(), offsets.data());
              
                 const auto& dc = r->draw();
-                vkCmdDraw(buf, dc.vertex_count, 1, 0, 0);
+                if(indexed){
+                    vkCmdDrawIndexed(buf, idx_count, 1, 0, 0, 0);
+                } else {
+                    vkCmdDraw(buf, dc.vertex_count, 1, 0, 0);
+                }
             }
         }        
         
