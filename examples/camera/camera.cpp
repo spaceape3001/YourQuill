@@ -39,8 +39,11 @@ using namespace yq::gui;
 using namespace yq::asset;
 using namespace yq::engine;
 
-const auto  TriPoints   = Triangle2D{{1.0,1.0}, {0., -1},{-1., 1.}};
-const auto  TriColors   = TriangleData<RGB3F>{ (RGB3F) color::Red, (RGB3F) color::White, (RGB3F) color::Blue };
+const auto  TriData   = TriangleData<ColorVertex2D> {
+    { {1.0,1.0}, color::Red },
+    { {0., -1}, color::White },
+    { {-1., 1.}, color::Blue }
+};
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
@@ -100,7 +103,7 @@ struct CameraWin : public ImWindow {
         view.camera = cam.ptr(); // new NullCamera; 
         #endif
         
-        Ref<Triangle>   tri = new Triangle(xy(TriPoints, 0.0), rgba(TriColors, 0.5));
+        Ref<Triangle>   tri = new Triangle(TriData);
         tri->set_scaling(0.5);
         scene.things.push_back(tri);
     }

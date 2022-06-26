@@ -266,6 +266,7 @@ namespace yq {
         return compare(actual-expected, expected);
     }
     
+    template <typename> struct QuadrilateralData;
     template <typename> struct SegmentData;
     template <typename> struct TetrahedronData;
     template <typename> struct TriangleData;
@@ -321,6 +322,9 @@ namespace yq {
     template <typename T> using Triangle2       = TriangleData<Vector2<T>>;
     template <typename T> using Triangle3       = TriangleData<Vector3<T>>;
     template <typename T> using Triangle4       = TriangleData<Vector4<T>>;
+    template <typename T> using Quadrilateral2  = QuadrilateralData<Vector2<T>>;
+    template <typename T> using Quadrilateral3  = QuadrilateralData<Vector3<T>>;
+    template <typename T> using Quadrilateral4  = QuadrilateralData<Vector4<T>>;
     
 
     //  ------------------------------------------------
@@ -786,6 +790,13 @@ namespace yq {
 
     using Plane3D                   = Plane3<double>;
     using Plane3F                   = Plane3<float>;
+
+    using Quadrilateral2D           = Quadrilateral2<double>;
+    using Quadrilateral2F           = Quadrilateral2<float>;
+    using Quadrilateral3D           = Quadrilateral3<double>;
+    using Quadrilateral3F           = Quadrilateral3<float>;
+    using Quadrilateral4D           = Quadrilateral4<double>;
+    using Quadrilateral4F           = Quadrilateral4<float>;
 
     
     using Ray2D                     = Ray2<double>;

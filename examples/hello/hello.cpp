@@ -63,8 +63,11 @@ const Vertex vertices[] = {
     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 };
 
-const auto  TriPoints   = Triangle2D{{0.5,0.5}, {0., -0.5},{-0.5, 0.5}};
-const auto  TriColors   = TriangleData<RGB3F>{ (RGB3F) color::Black, (RGB3F) color::White, (RGB3F) color::Orange };
+const auto  TriData   = TriangleData<ColorVertex2D>{ 
+    { {0.5, 0.5}, color::Black },
+    { {0.0,-0.5}, color::White },
+    { {-0.5, 0.5}, color::Orange }
+};
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
@@ -146,7 +149,8 @@ struct HelloWin : public engine::Vulqan {
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);
-        tri2        = new yq::asset::Triangle(xy(TriPoints, 0.1), rgba(TriColors, 0.5) );
+        tri2        = new yq::asset::Triangle(TriData);
+        tri2->set_position({0.,0.,0.1});
         scene.things.push_back(tri2);
         view.camera = new NullCamera;
     }

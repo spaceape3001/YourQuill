@@ -12,12 +12,6 @@ set(yq_asset_sources
     ${asset_test_source}
     
     ./asset.cpp
-    ./NullCamera.ipp
-    ./NullCamera.hpp
-    ./SpaceCamera.ipp
-    ./SpaceCamera.hpp
-    ./Triangle.cpp
-    ./Triangle.hpp
 )
 
 add_library(yqasset SHARED ${yq_asset_sources})

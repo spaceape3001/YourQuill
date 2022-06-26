@@ -20,6 +20,7 @@ namespace yq {
         
         struct RenderDraw {
             uint32_t    vertex_count     = 0;
+            uint32_t    index_count      = 0;
             uint32_t    instance_count   = 1;
         };
 

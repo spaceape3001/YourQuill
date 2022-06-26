@@ -6,3 +6,4 @@
 
 #include "NullCamera.ipp"
 #include "SpaceCamera.ipp"
+#include "Triangle.ipp"
