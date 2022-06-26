@@ -10,6 +10,7 @@
 
 #include <glm/glm.hpp>
 #include "ColorVertex2D.hpp"
+#include "ColorVertex3D.hpp"
 #include "vector_math.hpp"
 #include "RGBA.hpp"
 
@@ -24,6 +25,11 @@ namespace yq {
     inline ColorVertex2D::operator ColorVertexData() const
     {
         return { (glm::dvec3) xy(position, 0.), rgba((RGB3F) color, 1.f) };
+    }
+
+    inline ColorVertex3D::operator ColorVertexData() const
+    {
+        return { (glm::dvec3) position, rgba((RGB3F) color, 1.f) };
     }
 }
 
