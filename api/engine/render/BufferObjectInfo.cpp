@@ -63,9 +63,10 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        VertexBufferObjectInfo::VertexBufferObjectInfo(std::string_view n, Pipeline* p, const std::source_location& sl) : BufferObjectInfo(n, p, sl)
+        VertexBufferObjectInfo::VertexBufferObjectInfo(std::string_view n, Pipeline* p, const std::source_location& sl) : BufferObjectInfo(n, p, sl), m_binding(0)
         {
             if(p){
+                m_binding       = p->m_vbos.size();
                 p->m_vbos.push_back(this);
             }
         }

@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
     WindowCreateInfo      wi;
     wi.title        = "Hello WORLD!";
     wi.resizable    = true;
-    wi.size.x       = 1920;
+    wi.size         = { 1920, 1080 };
     wi.clear        = { 0.f, 0.1f, 0.2f, 1.f };
 
     Ref<HelloWin>   win = new HelloWin(wi);

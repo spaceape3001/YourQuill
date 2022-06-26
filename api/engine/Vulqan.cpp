@@ -302,7 +302,7 @@ namespace yq {
                     if(buffer->vq && buffer->vq->buffer()){
                         VkBuffer        vb  = buffer->vq->buffer();
                         VkDeviceSize    zero{};
-                        vkCmdBindVertexBuffers(buf, vbo->location(), 1, &vb, &zero);
+                        vkCmdBindVertexBuffers(buf, vbo->binding(), 1, &vb, &zero);
                     }
                 }
                 

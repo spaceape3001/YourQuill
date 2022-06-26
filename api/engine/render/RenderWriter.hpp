@@ -72,6 +72,25 @@ namespace yq {
             }
         };
         
+        template <typename BO, typename C, typename T, typename A>
+        struct MBA_MutableStdVector : public BO {
+            typedef Mutable<std::vector<T,A>> (C::*FN);
+            FN m_fn;
+            
+            MBA_MutableStdVector(FN fn, std::string_view name, Pipeline* parent, const std::source_location& sl) : 
+                BO(name, parent, sl), m_fn(fn)
+            {
+            }
+            
+            BufferData get(const Rendered* r) const
+            {
+                if(!r)
+                    return {};
+                const Mutable<std::vector<T,A>>& data = (static_cast<const C*>(r)->*m_fn);
+                return BufferData{ data.get().data(), data.get().size()*sizeof(T), data.revision()};
+            }
+        };
+
         template <typename BO, typename C, typename T, size_t N>
         struct MBA_StdArray : public BO {
             typedef std::array<T,N> (C::*FN);
@@ -88,6 +107,26 @@ namespace yq {
                     return {};
                 const std::array<T,N>& data = (static_cast<const C*>(r)->*m_fn);
                 return BufferData{ data.data(), N*sizeof(T) };
+            }
+        };
+
+
+        template <typename BO, typename C, typename T, size_t N>
+        struct MBA_MutableStdArray : public BO {
+            typedef Mutable<std::array<T,N>> (C::*FN);
+            FN m_fn;
+            
+            MBA_MutableStdArray(FN fn, std::string_view name, Pipeline* parent, const std::source_location& sl) : 
+                BO(name, parent, sl), m_fn(fn)
+            {
+            }
+            
+            BufferData get(const Rendered* r) const
+            {
+                if(!r)
+                    return {};
+                const Mutable<std::array<T,N>>& data = (static_cast<const C*>(r)->*m_fn);
+                return BufferData{ data.get().data(), N*sizeof(T), data.revision() };
             }
         };
 
@@ -234,6 +273,30 @@ namespace yq {
                 return vertex<T>(new MBA_StdVector<VertexBufferObjectInfo, C, T, A>(p, n, m_myPipeline, sl), DataActivity::STATIC, loc);
             }
             
+            template <typename T, size_t N>
+            PipelineBuilder::VBO<T>        dynamic_vertex(Mutable<std::array<T,N>> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
+            {
+                return vertex<T>(new MBA_MutableStdArray<VertexBufferObjectInfo, C, T, N>(p, n, m_myPipeline, sl), DataActivity::DYNAMIC, loc);
+            }
+
+            template <typename T, typename A>
+            PipelineBuilder::VBO<T>        dynamic_vertex(Mutable<std::vector<T,A>> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
+            {
+                return vertex<T>(new MBA_MutableStdVector<VertexBufferObjectInfo, C, T, A>(p, n, m_myPipeline, sl), DataActivity::DYNAMIC, loc);
+            }
+
+            template <typename T, size_t N>
+            PipelineBuilder::VBO<T>        refresh_vertex(std::array<T,N> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
+            {
+                return vertex<T>(new MBA_StdArray<VertexBufferObjectInfo, C, T, N>(p, n, m_myPipeline, sl), DataActivity::REFRESH, loc);
+            }
+
+            template <typename T, typename A>
+            PipelineBuilder::VBO<T>        refresh_vertex(std::vector<T,A> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
+            {
+                return vertex<T>(new MBA_StdVector<VertexBufferObjectInfo, C, T, A>(p, n, m_myPipeline, sl), DataActivity::REFRESH, loc);
+            }
+
         private:
         
             template <typename T>
