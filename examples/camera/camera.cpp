@@ -103,15 +103,15 @@ struct CameraWin : public ImWindow {
             }
         );
         
-        view.camera = add_camera(&meta<TargetCamera>());
-
-        #if 0
-        cam         = new SpaceCamera;
-        cam->set_orientation(hpr((Radian) 0._deg, (Radian) -90._deg, (Radian) 0._deg));
-        cam->set_near(.01);
-        cam->set_far(200.);
-        view.camera = cam.ptr(); // new NullCamera; 
-        #endif
+        Camera*     c   = add_camera(&meta<SpaceCamera>());
+        
+        view.camera = c;
+        
+        cam     = static_cast<SpaceCamera*>(c);
+        cam->set_position({-10, 0, -5.});
+        cam->set_orientation(hpr((Radian) 0._deg, (Radian) 45._deg, (Radian) 0._deg));
+        cam->set_near(.1);
+        cam->set_far(20.);
         
         Ref<Triangle>   tri = new Triangle(TriData);
         tri->set_scaling(0.5);
@@ -191,16 +191,44 @@ struct CameraWin : public ImWindow {
     
         if(show_control){
             if(BeginChild("Camera")){
-            #if 0
+            #if 1
+                bool    changed = false;
             
                 gui::ToggleButton("motion", &slave_clock);
             
                 Vector3D        pos = cam->position();
-                if(InputDouble3("position", &pos) && !slave_clock)
+                if(InputDouble3("position", &pos))
                     cam->set_position(pos);
                 Quaternion3D    orient  = cam->orientation();
-                if(InputDouble4("orientation", &orient) && !slave_clock)
+                if(Button("+ roll")){
+                    orient  = rotor_x((Radian)10._deg) * orient;
+                    changed = true;
+                }
+                if(Button("- roll")){
+                    orient  = rotor_x((Radian) -10._deg) * orient;
+                    changed = true;
+                }
+                if(Button("+ pitch")){
+                    orient  = rotor_y((Radian)10._deg) * orient;
+                    changed = true;
+                }
+                if(Button("- pitch")){
+                    orient  = rotor_y((Radian) -10._deg) * orient;
+                    changed = true;
+                }
+                if(Button("+ yaw")){
+                    orient  = rotor_z((Radian)10._deg) * orient;
+                    changed = true;
+                }
+                if(Button("- yaw")){
+                    orient  = rotor_z((Radian) -10._deg) * orient;
+                    changed = true;
+                }
+
+                if(InputDouble4("orientation", &orient) || changed)
                     cam->set_orientation( ~orient);
+                
+            
             
                 double          n   = cam->near();
                 if(InputDouble("Near", &n))

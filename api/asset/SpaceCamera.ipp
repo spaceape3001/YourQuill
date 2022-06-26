@@ -25,7 +25,11 @@ namespace yq {
         
         glm::dmat4  SpaceCamera::projection_matrix(const Size2D&sz) const
         {
-            glm::dmat4 ret =  glm::perspective<double>(glm::radians(m_fov.get().value), (double) sz.width() / (double) sz.height(), m_near, m_far);
+            glm::dmat4 ret =  glm::perspective(
+                                    (double) glm::radians(m_fov.get().value), 
+                                    (double) sz.width() / (double) sz.height(),
+                                    m_near.get(), m_far.get()
+            );
             ret[1][1] *= -1;
             return ret;
         }
@@ -67,7 +71,7 @@ namespace yq {
 
         glm::dmat4  SpaceCamera::world2screen(const engine::CameraParams&p) const
         {
-            return view_matrix() * projection_matrix(p.screen);
+            return projection_matrix(p.screen) * view_matrix();
         }
     }
 }
