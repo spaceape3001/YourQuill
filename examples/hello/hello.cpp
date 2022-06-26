@@ -63,7 +63,7 @@ const Vertex vertices[] = {
     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 };
 
-const auto  TriPoints   = Triangle2D{{0., -0.5},{0.5,0.5}, {-0.5, 0.5}};
+const auto  TriPoints   = Triangle2D{{0.5,0.5}, {0., -0.5},{-0.5, 0.5}};
 const auto  TriColors   = TriangleData<RGB3F>{ (RGB3F) color::Black, (RGB3F) color::White, (RGB3F) color::Orange };
 
 using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
@@ -76,8 +76,8 @@ struct HelloTriangle : public engine::Rendered {
     
     HelloTriangle(Vulqan*w) : m_window(w)
     {
-        ShaderPtr   vert = Shader::load("examples/hello/hello3.vert");
-        ShaderPtr   frag = Shader::load("examples/hello/hello.frag");
+        ShaderPtr   vert = Shader::load("examples/hello3.vert");
+        ShaderPtr   frag = Shader::load("examples/hello.frag");
         if(!vert)
             throw std::runtime_error("No vertex shader");
         if(!frag)
@@ -90,11 +90,10 @@ struct HelloTriangle : public engine::Rendered {
         build.front(FrontFace::Clockwise);
         build.push<Warp>();
         
-        {
-            auto v = build.vbo<Vertex>();
-            v.attribute<glm::vec2>(&Vertex::position, 0);
-            v.attribute<glm::vec3>(&Vertex::color, 1);
-        }
+        build.vbo<Vertex>()
+            .attribute<glm::vec2>(&Vertex::position)
+            .attribute<glm::vec3>(&Vertex::color)
+        ;
         
         m_pipeline    = std::make_unique<VqPipeline>(*w, cfg);
         
@@ -147,7 +146,7 @@ struct HelloWin : public engine::Vulqan {
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);
-        tri2        = new yq::asset::Triangle(xy(TriPoints, 0.01), rgba(TriColors, 1.) );
+        tri2        = new yq::asset::Triangle(xy(TriPoints, 0.1), rgba(TriColors, 0.5) );
         scene.things.push_back(tri2);
         view.camera = new NullCamera;
     }

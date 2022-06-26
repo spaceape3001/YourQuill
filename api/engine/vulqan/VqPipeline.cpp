@@ -188,10 +188,6 @@ namespace yq {
             }
         }
 
-        VqPipeline::VqPipeline(VqInternal&win, const Pipeline*p) : VqPipeline(win, p->config())
-        {
-            //
-        }
         
         VqPipeline::~VqPipeline()
         {

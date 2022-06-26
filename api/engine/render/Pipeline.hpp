@@ -19,6 +19,7 @@ namespace yq {
         class RenderedInfo;
         class UniformBufferObjectInfo;
         class VertexBufferObjectInfo;
+        class PushBufferObjectInfo;
         
         template <typename> class TypedPipelineBuilder;
         
@@ -47,6 +48,7 @@ namespace yq {
             const RenderedInfo*     rendered() const { return m_rendered; }
             
             bool                    has_push() const { return m_config.push.type != PushConfigType::None; }
+            PushConfigType          push_type() const { return m_config.push.type; }
             //virtual void            get_push(const Rendered*, BasicBuffer<MAX_PUSH>&) const {}
             
             const PipelineConfig&   config() const { return m_config; }
@@ -54,6 +56,7 @@ namespace yq {
             const std::vector<const IndexBufferObjectInfo*>&    index_buffers() const { return m_ibos; }
             const std::vector<const UniformBufferObjectInfo*>&  uniform_buffers() const { return m_ubos; }
             const std::vector<const VertexBufferObjectInfo*>&   vertex_buffers() const { return m_vbos; }
+            const PushBufferObjectInfo*                         push_buffer() const { return m_push; }
         
         protected:
             friend class IndexBufferObjectInfo;
@@ -65,11 +68,12 @@ namespace yq {
             Pipeline(std::string_view, RenderedInfo* parent, const std::source_location& sl);
             
             
-            PipelineConfig                          m_config;
-            const RenderedInfo*                     m_rendered    = nullptr;
-            std::vector<const IndexBufferObjectInfo*>      m_ibos;
-            std::vector<const UniformBufferObjectInfo*>    m_ubos;
-            std::vector<const VertexBufferObjectInfo*>     m_vbos;
+            PipelineConfig                                  m_config;
+            const RenderedInfo*                             m_rendered    = nullptr;
+            const PushBufferObjectInfo*                     m_push  = nullptr;
+            std::vector<const IndexBufferObjectInfo*>       m_ibos;
+            std::vector<const UniformBufferObjectInfo*>     m_ubos;
+            std::vector<const VertexBufferObjectInfo*>      m_vbos;
         };
         
     }

@@ -68,7 +68,7 @@ namespace yq {
                 if(!r)
                     return {};
                 const std::vector<T,A>& data = (static_cast<const C*>(r)->*m_fn);
-                return BufferData{ (const char*) data.data(), data.size()*sizeof(T) };
+                return BufferData{ data.data(), data.size()*sizeof(T) };
             }
         };
         
@@ -87,7 +87,7 @@ namespace yq {
                 if(!r)
                     return {};
                 const std::array<T,N>& data = (static_cast<const C*>(r)->*m_fn);
-                return BufferData{ (const char*) data.data(), N*sizeof(T) };
+                return BufferData{ data.data(), N*sizeof(T) };
             }
         };
 
@@ -106,7 +106,7 @@ namespace yq {
                 if(!r)
                     return {};
                 const T* data = (static_cast<const C*>(r)->*m_fn);
-                return BufferData{ (const char*) data, N*sizeof(T) };
+                return BufferData{ data, N*sizeof(T) };
             }
         };
 
@@ -223,15 +223,15 @@ namespace yq {
 #endif
 
             template <typename T, size_t N>
-            void        static_vertex(std::array<T,N> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
+            PipelineBuilder::VBO<T>        static_vertex(std::array<T,N> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
             {
-                vertex<T>(new MBA_StdArray<VertexBufferObjectInfo, C, T, N>(p, n, m_myPipeline, sl), DataActivity::STATIC, loc);
+                return vertex<T>(new MBA_StdArray<VertexBufferObjectInfo, C, T, N>(p, n, m_myPipeline, sl), DataActivity::STATIC, loc);
             }
 
             template <typename T, typename A>
-            void        static_vertex(std::vector<T,A> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
+            PipelineBuilder::VBO<T>        static_vertex(std::vector<T,A> C::*p, std::string_view n, uint32_t loc=UINT32_MAX, const std::source_location&sl = std::source_location::current())
             {
-                vertex<T>(new MBA_StdVector<VertexBufferObjectInfo, C, T, A>(p, n, m_myPipeline, sl), DataActivity::STATIC, loc);
+                return vertex<T>(new MBA_StdVector<VertexBufferObjectInfo, C, T, A>(p, n, m_myPipeline, sl), DataActivity::STATIC, loc);
             }
             
         private:
@@ -247,31 +247,17 @@ namespace yq {
             {
             }
             
-            template <typename T>
-            void        vertex(VertexBufferObjectInfo* buffer, DataActivity::enum_t act, uint32_t loc)
+            template <typename V>
+            PipelineBuilder::VBO<V> vertex(VertexBufferObjectInfo* buffer, DataActivity::enum_t act, uint32_t loc)
             {
-                static_assert(is_type_v<T>, "T must be meta type defined!");
-                uint32_t    req = data_binding<T>();
-                DataFormat  fmt = data_format<T>();
-                
-                loc = PipelineBuilder::location_filter(loc, req);
-                
-                buffer->set_data_type(&meta<T>());
-                buffer->set_location(loc);
-                buffer->set_data_format(fmt);
                 buffer -> set_data_activity(act);
-                
-                VBOAttr     a;
-                a.format    = fmt;
-                a.location  = loc;
-                a.offset    = 0;
-                VBOConfig   c;
-                c.attrs.push_back(a);
-                c.stride    = sizeof(T);
-                c.inputRate = VertexInputRate::Vertex;
-                m_myPipeline->m_config.vbos.push_back(c);
+                return PipelineBuilder::VBO<V>(this, 
+                    [buffer](uint32_t loc)
+                    { 
+                        buffer->set_location(loc);
+                    }
+                );
             }
-            
             
         
             TypedPipeline<C>*   m_myPipeline = nullptr;

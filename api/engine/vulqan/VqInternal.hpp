@@ -46,21 +46,51 @@ namespace yq {
             VqFrameBuffers              frameBuffers;
         };
         
-        struct ViObject {
-            uint64_t            obj     = 0;
-            uint64_t            rev     = 0;
-            uint64_t            pipe    = 0;
-            
-            //  These are for object-wide VBOs
-            std::vector<VqVBO>  vbos;
-        };
-        
         //  TODO.... 
         struct ViShader {
         };
 
+        struct ViBuffer : trait::not_copyable, trait::not_moveable {
+            std::unique_ptr<VqBuffer>   vq;
+            uint64_t                    rev = 0;
+            
+            ViBuffer();
+            ~ViBuffer();
+        };
+
+        struct ViBufferMap : trait::not_copyable, trait::not_moveable {
+            std::map<uint64_t, ViBuffer*>    buffers;
+            std::pair<ViBuffer*,bool>    buffer(uint64_t i)
+            {
+                auto j = buffers.find(i);
+                if(j!=buffers.end())
+                    return {j->second,false};
+                ViBuffer*p  = new ViBuffer;
+                buffers[i] = p;
+                return {p,true};
+            }
+            
+            ViBufferMap();
+            ~ViBufferMap();
+        };
+
+        struct ViPipeline : public ViBufferMap {
+            std::unique_ptr<VqPipeline> vq;
+            
+            ViPipeline();
+            ~ViPipeline();
+        };
+        
+        struct ViObject : public ViBufferMap {
+        
+            ViObject();
+            ~ViObject();
+        };
+        
+
 
         struct VqInternal : trait::not_copyable, trait::not_moveable {
+            const uint64_t      id;
             Vulqan*             user                        = nullptr;
             VkInstance          instance                    = nullptr;
             VqGPU               physical;
@@ -86,16 +116,17 @@ namespace yq {
             uint64_t            pad[8];
             std::atomic<bool>   terminating                 = false;
             
-            std::map<uint64_t, VqPipeline*>     pipelines;
+            std::map<uint64_t, ViPipeline*>     pipelines;
             std::map<uint64_t, ViObject*>       objects;
+            
+            std::pair<ViPipeline*,bool>     pipeline(uint64_t i);
+            std::pair<ViObject*,bool>       object(uint64_t i);
             
             bool    init(VqDynamic&, VkSwapchainKHR old=nullptr);
             void    kill(VqDynamic&);
             void    set_clear(const RGBA4F&);
             
             void    run();
-            
-            const VqPipeline*   pipeline(const Pipeline*);
             
             
             VqInternal(const WindowCreateInfo&, Vulqan*);

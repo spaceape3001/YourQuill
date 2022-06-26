@@ -13,6 +13,7 @@
 #include <set>
 #include <span>
 #include <cassert>
+#include <functional>
 
 namespace yq {
     namespace engine {
@@ -39,8 +40,10 @@ namespace yq {
             void        push(PushConfigType);
             
             template <typename V> struct VBO;
+            
+            //! Used to create VBOs by those outside the render's pipeline writer
             template <typename V>
-            VBO<V>      vbo(uint32_t location=UINT32_MAX);
+            VBO<V>      vbo();
         
             PipelineBuilder(PipelineConfig& cfg);
             ~PipelineBuilder();
@@ -59,16 +62,15 @@ namespace yq {
         class PipelineBuilder::VBO : public VBOConfig, trait::not_copyable {
         public:
         
-            VBO(PipelineBuilder* cfg, uint32_t loc) : m_builder(cfg), m_location(loc) 
+            VBO(PipelineBuilder* cfg, std::function<void(uint32_t)> info={}) : m_builder(cfg), m_info(info)
             {
                 stride  = sizeof(V);
             }
             
             VBO(VBO& mv) : VBOConfig(std::move(mv))
             {
-                m_builder           = mv.m_builder;
-                mv.m_builder        = nullptr;
-                m_location          = mv.m_location;
+                steal(m_builder, mv.m_builder);
+                m_info              = std::move(mv.m_info);
             }
             
             
@@ -76,9 +78,8 @@ namespace yq {
             {
                 if(this != &mv){
                     VBOConfig::operator=(std::move(mv));
-                    m_builder       = mv.m_builder;
-                    mv.m_builder    = nullptr;
-                    m_location      = mv.m_location;
+                    steal(m_builder, mv.m_builder);
+                    m_info          = std::move(mv.m_info);
                 }
                 return *this;
             }
@@ -89,10 +90,15 @@ namespace yq {
                     return ;
                 if(attrs.empty()){
                     if constexpr (is_type_v<V>){
-                        typed_attribute<V>(m_location, 0);
+                        typed_attribute<V>(0);
                     }
                 }
                 assert(!attrs.empty());
+                
+                if(m_info && !attrs.empty()){
+                    m_info(attrs.front().location);
+                }
+                
                 m_builder -> m_config->vbos.push_back(*this);
             }
 
@@ -104,34 +110,34 @@ namespace yq {
             
             template  <typename M>
             requires is_type_v<M>
-            VBO& attribute(M V::*member, uint32_t location = UINT32_MAX)
+            VBO& attribute(M V::*member)
             {
-                typed_attribute<M>(location, (uint32_t) member_offset(member));
+                typed_attribute<M>((uint32_t) member_offset(member));
                 return *this;
             }
             
             template  <typename M>
             requires (!is_type_v<M>)
-            VBO& attribute(M V::*member, DataFormat fmt, uint32_t location = UINT32_MAX)
+            VBO& attribute(M V::*member, DataFormat fmt)
             {
-                attr_impl(fmt, location, (uint32_t) member_offset(member), min_binding<M>());
+                attr_impl(fmt, (uint32_t) member_offset(member), min_binding<M>());
                 return *this;
             }
             
 
         private:
 
-            PipelineBuilder*    m_builder   = nullptr;
-            uint32_t            m_location  = 0;
+            PipelineBuilder*                m_builder   = nullptr;
+            std::function<void(uint32_t)>   m_info      = nullptr;
             
             template <typename A>
             requires is_type_v<A>
-            void    typed_attribute(uint32_t loc, uint32_t offset)
+            void    typed_attribute(uint32_t offset)
             {
-                attr_impl(data_format<A>(), loc, offset, min_binding<A>());
+                attr_impl(data_format<A>(), offset, min_binding<A>());
             }
             
-            void    attr_impl(DataFormat df, uint32_t loc, uint32_t offset, uint32_t bindReq)
+            void    attr_impl(DataFormat df, uint32_t offset, uint32_t bindReq)
             {
                 if(!m_builder)
                     return ;
@@ -141,7 +147,7 @@ namespace yq {
                     return ;
                     
                 VBOAttr     a;
-                a.location  = m_builder->location_filter(loc, bindReq);
+                a.location  = m_builder->location_filter(UINT32_MAX, bindReq);
                 a.offset    = offset;
                 a.format    = df;
                 attrs.push_back(a);
@@ -150,9 +156,9 @@ namespace yq {
         };
 
         template <typename V>
-        PipelineBuilder::VBO<V>     PipelineBuilder::vbo(uint32_t location)
+        PipelineBuilder::VBO<V>     PipelineBuilder::vbo()
         {
-            return VBO<V>(this, location);
+            return VBO<V>(this);
         }
     }
 }

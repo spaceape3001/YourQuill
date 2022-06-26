@@ -4,8 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "VqBuffer.hpp"
 #include "VqInternal.hpp"
 #include "VqException.hpp"
+#include "VqPipeline.hpp"
 #include "VqStructs.hpp"
 #include "VqUtils.hpp"
 #include <basic/Logging.hpp>
@@ -15,7 +17,62 @@
 
 namespace yq {
     namespace engine {
-        VqInternal::VqInternal(const WindowCreateInfo& i, Vulqan *w)
+
+        ViBuffer::ViBuffer()
+        {
+        }
+        
+        ViBuffer::~ViBuffer()
+        {
+        }
+        
+        ////////////////////////////////////////////////////////////////////////////////
+
+        ViBufferMap::ViBufferMap()
+        {
+        }
+        
+        ViBufferMap::~ViBufferMap()
+        {
+            for(auto& b : buffers){
+                if(b.second)
+                    delete b.second;
+            }
+            buffers.clear();
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+
+        ViObject::ViObject()
+        {
+        }
+        
+        ViObject::~ViObject()
+        {
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+
+        ViPipeline::ViPipeline()
+        {
+        }
+        
+        ViPipeline::~ViPipeline()
+        {
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////
+
+        namespace {
+            uint64_t    genInternalId()
+            {
+                static std::atomic<uint64_t>    last{0};
+                return ++last;
+            }
+        }
+    
+        VqInternal::VqInternal(const WindowCreateInfo& i, Vulqan *w) : id(genInternalId())
         {
             user        = w;
             
@@ -84,6 +141,12 @@ namespace yq {
                 vkDeviceWaitIdle(device);
             }
             
+            for(auto& i : objects){
+                if(i.second)
+                    delete i.second;
+            }
+            objects.clear();
+
             for(auto& i : pipelines){
                 if(i.second)
                     delete i.second;
@@ -124,24 +187,31 @@ namespace yq {
             }
         }
 
-        const VqPipeline* VqInternal::pipeline(const Pipeline*pipe)
-        {
-            if(!pipe)
-                return nullptr;
-            auto i = pipelines.find(pipe->id());
-            if(i != pipelines.end())
-                return i->second;
-            
-            // eventually a task/queue... (later)
-            VqPipeline*     p   = new VqPipeline(*this, pipe);
-            pipelines[pipe->id()]   = p;
-            return p;
-        }
-        
         void    VqInternal::set_clear(const RGBA4F&i)
         {
             clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }
+
+        std::pair<ViPipeline*,bool>    VqInternal::pipeline(uint64_t i)
+        {
+            auto j = pipelines.find(i);
+            if(j!=pipelines.end())
+                return {j->second,false};
+            ViPipeline* p   = new ViPipeline;
+            pipelines[i]    = p;
+            return {p, true};
+        }
+        
+        std::pair<ViObject*,bool>    VqInternal::object(uint64_t i)
+        {
+            auto j = objects.find(i);
+            if(j!=objects.end())
+                return {j->second,false};
+            ViObject* p   = new ViObject;
+            objects[i]    = p;
+            return {p, true};
+        }
+        
         
     }
 }

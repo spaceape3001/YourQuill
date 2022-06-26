@@ -25,15 +25,15 @@ namespace yq {
             m_activity  = v;
         }
         
-        void    BufferObjectInfo::set_data_format(DataFormat fmt)
-        {
-            m_format        = fmt;
-        }
+        //void    BufferObjectInfo::set_data_format(DataFormat fmt)
+        //{
+            //m_format        = fmt;
+        //}
         
-        void    BufferObjectInfo::set_data_type(const TypeInfo* ti)
-        {
-            m_type          = ti;
-        }
+        //void    BufferObjectInfo::set_data_type(const TypeInfo* ti)
+        //{
+            //m_type          = ti;
+        //}
         
         void    BufferObjectInfo::set_location(uint32_t l)
         {

@@ -18,6 +18,11 @@ namespace yq {
         class Rendered;
         class Pipeline;
         
+        struct RenderDraw {
+            uint32_t    vertex_count     = 0;
+            uint32_t    instance_count   = 1;
+        };
+
         
         class RenderedInfo : public ObjectInfo {
         public:
@@ -52,6 +57,8 @@ namespace yq {
             
             Tristate            wireframe() const { return m_wireframe; }
             void                set_wireframe(Tristate);
+            
+            RenderDraw          draw() const { return m_draw; }
 
         protected:
             Rendered();
@@ -63,6 +70,7 @@ namespace yq {
             
             Tristate        m_wireframe;
             bool            m_culled    = false;
+            RenderDraw      m_draw;
         };
 
         using RenderedPtr   = Ref<Rendered>;

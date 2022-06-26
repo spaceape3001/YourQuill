@@ -20,8 +20,17 @@
 #include <basic/Safety.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 
+#include <engine/render/IndexBufferObjectInfo.hpp>
+#include <engine/render/Pipeline.hpp>
 #include <engine/render/PipelineConfig.hpp>
+#include <engine/render/PushBufferObjectInfo.hpp>
+#include <engine/render/Rendered.hpp>
+#include <engine/render/Render3D.hpp>
+#include <engine/render/StdPushConstant.hpp>
+#include <engine/render/UniformBufferObjectInfo.hpp>
+#include <engine/render/VertexBufferObjectInfo.hpp>
 
+#include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqException.hpp>
 #include <engine/vulqan/VqInternal.hpp>
 #include <engine/vulqan/VqLogging.hpp>
@@ -165,10 +174,149 @@ namespace yq {
             m->draw_time    = (end-start).count();
             return true;
         }
-        
+
+        void    Vulqan::render(VkCommandBuffer buf, const Scene& scene, const Perspective& pr)
+        {   
+            if(!pr.camera){
+                yCritical() << "Camera not detected!\n";
+                return ;
+            }
+    
+            CameraParams        cparams;
+            cparams.screen      = (Size2D) size();
+            [[maybe_unused]] glm::dmat4  cam = pr.camera->world2screen(cparams);
+            
+            VkPipeline          prev_pipeline   = nullptr;
+            StdPushConstant     stdPush;
+            
+            for(const Rendered* r : scene.things){
+                const Pipeline* pipe    = r->pipeline();
+                if(!pipe){
+                    continue;
+                }
+                    
+                const Render3D *r3  = dynamic_cast<const Render3D*>(r);
+
+                ViPipeline*     vp      = nullptr;
+                ViObject*       vo      = nullptr;
+                bool            pnew      = false;
+                bool            onew      = false;
+                
+                std::tie( vp, pnew )    = m->pipeline(pipe->id());
+                std::tie( vo, onew )    = m->object(r->id());
+                
+                if(pnew)
+                    vp->vq        = std::make_unique<VqPipeline>(*m, pipe->config());
+                
+                uint32_t            shader_mask = vp->vq->shader_mask();
+                Tristate            wireframe   = (r->wireframe() == Tristate::INHERIT) ? pr.wireframe : r->wireframe();
+                VkPipeline          vkpipe  = (wireframe == Tristate::YES) ? vp->vq->wireframe() : vp->vq->pipeline();
+                VkPipelineLayout    vklay   = vp->vq->layout();
+            
+                //  =================================================
+                //      SET THE PIPELINE
+            
+                if(vkpipe && (vkpipe != prev_pipeline)){
+                    vkCmdBindPipeline(buf, VK_PIPELINE_BIND_POINT_GRAPHICS, vkpipe);
+                    prev_pipeline   = vkpipe;
+                }
+                
+                //  =================================================
+                //      PUSH THE CONSTANTS
+
+                switch(pipe->push_type()){
+                case PushConfigType::Full:
+                    if(r3){
+                        stdPush.matrix  = cam * r3->model2world();
+                        vkCmdPushConstants(buf, vklay, shader_mask, 0, sizeof(stdPush), &stdPush );
+                    }
+                    break;
+                case PushConfigType::View:
+                    stdPush.matrix  = cam;
+                    vkCmdPushConstants(buf, vklay, shader_mask, 0, sizeof(stdPush), &stdPush );
+                    break;
+                case PushConfigType::Custom:
+                    {
+                        const PushBufferObjectInfo* pbo = pipe->push_buffer();
+                        if(pbo){
+                            BufferData      bd  = pbo->get(r);
+                            if(bd.data && bd.size)
+                                vkCmdPushConstants(buf, vklay, shader_mask, 0, bd.size, bd.data);
+                        }
+                    }
+                    break;
+                case PushConfigType::None:
+                default:
+                    // no push constant desired... which is fine.
+                    break;
+                }
+                
+                //  =================================================
+                //      VERTEX BUFFERS
+                
+                //std::vector<VkBuffer>       buffers;
+                //std::vector<VkDeviceSize>   offsets;
+                
+                for(const VertexBufferObjectInfo* vbo : pipe->vertex_buffers()){
+                    if(!vbo) [[unlikely]]
+                        continue;
+                    ViBuffer*   buffer  = nullptr;
+                    Tristate    update;
+
+                    DataActivity    da  = vbo->data_activity();
+                    bool            check   = false;
+                    bool            fast    = false;
+                    bool            bnew    = false;
+                    switch(da){
+                    case DataActivity::UNSURE:
+                        continue;
+                    case DataActivity::COMMON:
+                        std::tie(buffer, bnew)  = vp -> buffer(vbo->id());
+                        break;
+                    case DataActivity::STATIC:
+                        std::tie(buffer, bnew)  = vo -> buffer(vbo->id());
+                        break;
+                    case DataActivity::DYNAMIC:
+                        std::tie(buffer, bnew)  = vo -> buffer(vbo->id());
+                        check   = true;
+                        break;
+                    case DataActivity::REFRESH:
+                        std::tie(buffer, bnew)  = vo -> buffer(vbo->id());
+                        check   = true;
+                        fast    = true;
+                        break;
+                    }
+                    
+                    
+                    if(bnew || check){
+                        BufferData  bd    = vbo->get(r);
+                        if(!bd.data || !bd.size)
+                            continue;
+                        if(bnew || fast || (check && bd.revision != buffer->rev)){
+                            // optimize this ... later
+                            buffer -> vq    = std::make_unique<VqBuffer>(*m, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, bd.data, bd.size);
+                            buffer -> rev   = bd.revision;
+                        }
+                    }
+                    
+                    if(buffer->vq && buffer->vq->buffer()){
+                        VkBuffer        vb  = buffer->vq->buffer();
+                        VkDeviceSize    zero{};
+                        vkCmdBindVertexBuffers(buf, vbo->location(), 1, &vb, &zero);
+                    }
+                }
+                
+                //if(!buffers.empty())
+                    //vkCmdBindVertexBuffers(buf, 0, buffers.size(), buffers.data(), offsets.data());
+             
+                const auto& dc = r->draw();
+                vkCmdDraw(buf, dc.vertex_count, 1, 0, 0);
+            }
+        }        
         
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
+
 
         void Vulqan::attention()
         {
@@ -345,25 +493,7 @@ namespace yq {
             return ret;
         }
 
-        void    Vulqan::render(VkCommandBuffer buf, const Scene& scene, const Perspective& p)
-        {   
-            if(!p.camera){
-                yCritical() << "Camera not detected!\n";
-                return ;
-            }
-    
-            CameraParams        cparams;
-            cparams.screen      = (Size2D) size();
-            [[maybe_unused]] glm::dmat4  cam = p.camera->world2screen(cparams);
-            
-            for(const Rendered* r : scene.things){
-                [[maybe_unused]] auto p = m->pipeline(r->pipeline());
-                
-                //VkCommand       cmd;
-            }
 
-            //  TODO.....
-        }
 
         VkRenderPass Vulqan::render_pass() const
         {

@@ -7,15 +7,15 @@
 #pragma once
 
 #include <basic/trait/not_copyable.hpp>
+#include <basic/trait/not_moveable.hpp>
 #include <vulkan/vulkan_core.h>
-#include <engine/enum/DataActivity.hpp>
-#include <engine/enum/PushConfigType.hpp>
 
 namespace yq {
     namespace engine {
         struct PipelineConfig;
         struct VqInternal;
         class Pipeline;
+        class VqBuffer;
 
 
         struct VqVBO {  // temporarily here....
@@ -26,7 +26,6 @@ namespace yq {
         public:
         
             VqPipeline(VqInternal&, const PipelineConfig&);
-            VqPipeline(VqInternal&, const Pipeline*);
             ~VqPipeline();
             
             bool                    good() const noexcept { return m_pipeline != nullptr; }
@@ -49,7 +48,6 @@ namespace yq {
             VkPipeline              m_wireframe = nullptr;
             uint64_t                m_id            = 0;
             uint32_t                m_shaderMask    = 0;
-            PushConfigType          m_push      = PushConfigType::None;
         };
 
     }

@@ -21,8 +21,13 @@ namespace yq {
             static void initInfo();
             
         private:
-            std::array<glm::vec3,3>    m_positions;
-            std::array<glm::vec4,3>    m_colors;
+        
+            struct Vertex {
+                glm::vec3       position;
+                glm::vec4       color;
+            };
+        
+            std::array<Vertex,3>        m_vertex;
         };
     }
 }

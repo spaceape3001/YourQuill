@@ -20,22 +20,21 @@ namespace yq {
             
             p.shader("assets/triangle.vert");
             p.shader("assets/triangle.frag");
-            
-            p.static_vertex(&Triangle::m_positions, "positions"sv);
-            p.static_vertex(&Triangle::m_colors, "colors"sv);
+
+            p.static_vertex(&Triangle::m_vertex, "vertex"sv)
+                .attribute(&Vertex::position)
+                .attribute(&Vertex::color)
+            ;
             
             p.push(yq::engine::PushConfigType::Full);
         }
 
         Triangle::Triangle(const Triangle3D&tri, const TriangleData<RGBA4F>& colors)
         {
-            m_positions[0]  = (glm::dvec3) tri.a;
-            m_positions[1]  = (glm::dvec3) tri.b;
-            m_positions[2]  = (glm::dvec3) tri.c;
-
-            m_colors[0]     = colors.a;
-            m_colors[1]     = colors.b;
-            m_colors[2]     = colors.c;
+            m_vertex[0] = { (glm::dvec3) tri.a, colors.a };
+            m_vertex[1] = { (glm::dvec3) tri.b, colors.b };
+            m_vertex[2] = { (glm::dvec3) tri.c, colors.c };
+            m_draw.vertex_count  = 3;
         }
         
         Triangle::~Triangle()

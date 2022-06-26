@@ -11,7 +11,7 @@
 namespace yq {
     namespace engine {
         YQ_ENUM(DataActivity, , 
-            //! Make zero expectations, ie, typically assume the worse, little-to-no optimizing
+            //! Make zero expectations, ie, gets ignored
             UNSURE  = 0,
         
             //! Data is shared between *ALL* things of same class
