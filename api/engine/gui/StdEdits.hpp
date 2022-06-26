@@ -24,6 +24,10 @@ namespace yq {
         bool    InputDouble3(const char* label, double v[3], const char* format = "%.3lf", ImGuiInputTextFlags flags = 0);
         bool    InputDouble4(const char* label, double v[4], const char* format = "%.3fl", ImGuiInputTextFlags flags = 0);
 
+        //! Renders a toggle-slider switch
+        //! From https://github.com/ocornut/imgui/issues/1537
+        void    ToggleButton(const char* str_id, bool* v);
+
         bool    VSliderDouble(const char* label, const ImVec2& size, double* v, double v_min, double v_max, const char* format = "%.l3f", ImGuiSliderFlags flags = 0);
         bool    VSliderDouble(const char* label, const ImVec2& size, double& v, double v_min, double v_max, const char* format = "%.l3f", ImGuiSliderFlags flags = 0);
 
