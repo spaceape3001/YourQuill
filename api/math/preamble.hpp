@@ -906,8 +906,10 @@ namespace yq {
     //! Call this if math isn't getting startup-initialized 
     void        initialize_math();
 
+    template <typename T> using unity_t = decltype(T()/T());
     template <typename T> using square_t = decltype(T()*T());
     template <typename T> using cube_t   = decltype(T()*T()*T());
+    template <typename T> using fourth_t = decltype(T()*T()*T()*T());
     template <typename T, typename U>  using product_t     = decltype(T()*U());
     template <typename T, typename U>  using quotient_t    = decltype(T()/U());
     template <typename T> using inverse_t = decltype(T()/square_t<T>());
