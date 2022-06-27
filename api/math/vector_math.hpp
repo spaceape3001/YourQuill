@@ -10,11 +10,34 @@
 #include <math/Vector2.hpp>
 #include <math/Vector3.hpp>
 #include <math/Vector4.hpp>
+#include <math/Units.hpp>
 
 namespace yq {
 
 //  --------------------------------------------------------
 //  COMPOSITION
+
+    inline Vector2D     ccw(Radian v)
+    {
+        return { cos(v), sin(v) };
+    }
+    
+    inline  Vector3D    ccw(Radian az, Radian el)
+    {
+        double  c  = cos(el);
+        return { c*cos(az), c*sin(az), sin(el) };
+    }
+
+    inline Vector2D     clockwise(Radian v)
+    {
+        return { sin(v), cos(v) };
+    }
+
+    inline Vector3D     clockwise(Radian az, Radian el)
+    {
+        double  c  = cos(el);
+        return { c*sin(az), c*cos(az), sin(el) };
+    }
 
     template <typename T>
     Vector2<T> xy( const Vector3<T>& a)
