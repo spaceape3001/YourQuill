@@ -73,6 +73,27 @@ namespace yq {
         return {zero_v<T>,one_v<T>};
     }
 
+    constexpr Vector2D operator "" _x2(unsigned long long int v)
+    {
+        return {(double) v, 0.};
+    }
+
+    constexpr Vector2D operator "" _x2(long double v)
+    {
+        return {(double) v, 0.};
+    }
+
+    constexpr Vector2D operator "" _y2(unsigned long long int v)
+    {
+        return {0., (double) v};
+    }
+
+    constexpr Vector2D operator "" _y2(long double v)
+    {
+        return {0., (double) v};
+    }
+
+
     YQ_NAN_1(Vector2, Vector2<T>{nan_v<T>, nan_v<T>})
     YQ_ZERO_1(Vector2, Vector2<T>{zero_v<T>, zero_v<T>})
     

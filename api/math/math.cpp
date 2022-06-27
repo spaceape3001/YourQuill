@@ -19,7 +19,16 @@
 #include <math/AxBox3.hpp>
 #include <math/AxBox4.hpp>
 
+#include <math/Bivector2.hpp>
+#include <math/Bivector3.hpp>
+#include <math/Bivector4.hpp>
+
 #include <math/Circle2.hpp>
+
+#include <math/Multivector1.hpp>
+#include <math/Multivector2.hpp>
+#include <math/Multivector3.hpp>
+#include <math/Multivector4.hpp>
 
 #include <math/Normal2.hpp>
 #include <math/Normal3.hpp>
@@ -46,6 +55,7 @@
 #include <math/Triangle3.hpp>
 #include <math/Triangle4.hpp>
 
+#include <math/Quadvector4.hpp>
 #include <math/Quaternion3.hpp>
 
 #include <math/Tensor11.hpp>
@@ -68,6 +78,8 @@
 #include <math/Tensor43.hpp>
 #include <math/Tensor44.hpp>
 
+#include <math/Trivector3.hpp>
+#include <math/Trivector4.hpp>
 
 #include <math/Vector1.hpp>
 #include <math/Vector2.hpp>
@@ -126,6 +138,15 @@ YQ_TYPE_IMPLEMENT(yq::AxBox4F)
 YQ_TYPE_IMPLEMENT(yq::AxBox4I)
 YQ_TYPE_IMPLEMENT(yq::AxBox4U)
 
+YQ_TYPE_IMPLEMENT(yq::Bivector2D)
+YQ_TYPE_IMPLEMENT(yq::Bivector2F)
+
+YQ_TYPE_IMPLEMENT(yq::Bivector3D)
+YQ_TYPE_IMPLEMENT(yq::Bivector3F)
+
+YQ_TYPE_IMPLEMENT(yq::Bivector4D)
+YQ_TYPE_IMPLEMENT(yq::Bivector4F)
+
 YQ_TYPE_IMPLEMENT(yq::Circle2D)
 YQ_TYPE_IMPLEMENT(yq::Circle2F)
 YQ_TYPE_IMPLEMENT(yq::Circle2I)
@@ -150,6 +171,18 @@ YQ_TYPE_IMPLEMENT(yq::FractionI)
 //YQ_TYPE_IMPLEMENT(yq::Frac32)
 //YQ_TYPE_IMPLEMENT(yq::Frac64)
 
+YQ_TYPE_IMPLEMENT(yq::Multivector1D)
+YQ_TYPE_IMPLEMENT(yq::Multivector1F)
+
+YQ_TYPE_IMPLEMENT(yq::Multivector2D)
+YQ_TYPE_IMPLEMENT(yq::Multivector2F)
+
+YQ_TYPE_IMPLEMENT(yq::Multivector3D)
+YQ_TYPE_IMPLEMENT(yq::Multivector3F)
+
+YQ_TYPE_IMPLEMENT(yq::Multivector4D)
+YQ_TYPE_IMPLEMENT(yq::Multivector4F)
+
 YQ_TYPE_IMPLEMENT(yq::Normal2D)
 YQ_TYPE_IMPLEMENT(yq::Normal2F)
 
@@ -161,6 +194,9 @@ YQ_TYPE_IMPLEMENT(yq::Plane3F)
 
 YQ_TYPE_IMPLEMENT(yq::Pose3D)
 YQ_TYPE_IMPLEMENT(yq::Pose3F)
+
+YQ_TYPE_IMPLEMENT(yq::Quadvector4D)
+YQ_TYPE_IMPLEMENT(yq::Quadvector4F)
 
 YQ_TYPE_IMPLEMENT(yq::Quaternion3D)
 YQ_TYPE_IMPLEMENT(yq::Quaternion3F)
@@ -319,6 +355,13 @@ YQ_TYPE_IMPLEMENT(yq::Triangle4D)
 YQ_TYPE_IMPLEMENT(yq::Triangle4F)
 YQ_TYPE_IMPLEMENT(yq::Triangle4I)
 YQ_TYPE_IMPLEMENT(yq::Triangle4U)
+
+YQ_TYPE_IMPLEMENT(yq::Trivector3D)
+YQ_TYPE_IMPLEMENT(yq::Trivector3F)
+
+YQ_TYPE_IMPLEMENT(yq::Trivector4D)
+YQ_TYPE_IMPLEMENT(yq::Trivector4F)
+
 
 YQ_TYPE_IMPLEMENT(yq::Vector1D)
 YQ_TYPE_IMPLEMENT(yq::Vector1F)
@@ -696,6 +739,42 @@ YQ_INVOKE(
     axbox4u.property("lo", &AxBox4U::lo);
     axbox4u.property("hi", &AxBox4U::hi);
 
+
+    auto bivec2d = writer<Bivector2D>();
+    bivec2d.property("xy", &Bivector2D::xy);
+
+    auto bivec2f = writer<Bivector2F>();
+    bivec2f.property("xy", &Bivector2F::xy);
+
+
+    auto bivec3d = writer<Bivector3D>();
+    bivec3d.property("xy", &Bivector3D::xy);
+    bivec3d.property("yz", &Bivector3D::yz);
+    bivec3d.property("zx", &Bivector3D::zx);
+
+    auto bivec3f = writer<Bivector3F>();
+    bivec3f.property("xy", &Bivector3F::xy);
+    bivec3f.property("yz", &Bivector3F::yz);
+    bivec3f.property("zx", &Bivector3F::zx);
+
+
+    auto bivec4d = writer<Bivector4D>();
+    bivec4d.property("xy", &Bivector4D::xy);
+    bivec4d.property("yz", &Bivector4D::yz);
+    bivec4d.property("zw", &Bivector4D::zw);
+    bivec4d.property("wx", &Bivector4D::wx);
+    bivec4d.property("xz", &Bivector4D::xz);
+    bivec4d.property("yw", &Bivector4D::yw);
+
+    auto bivec4f = writer<Bivector4F>();
+    bivec4f.property("xy", &Bivector4F::xy);
+    bivec4f.property("yz", &Bivector4F::yz);
+    bivec4f.property("zw", &Bivector4F::zw);
+    bivec4f.property("wx", &Bivector4F::wx);
+    bivec4f.property("xz", &Bivector4F::xz);
+    bivec4f.property("yw", &Bivector4F::yw);
+
+
     auto circle2d = writer<Circle2D>();
     circle2d.property("pt", &Circle2D::point);
     circle2d.property("r", &Circle2D::radius);
@@ -763,7 +842,56 @@ YQ_INVOKE(
     frac64.property("n", &Frac64::num);
     frac64.property("d", &Frac64::den);
 */
+
+    auto mul1d  = writer<Multivector1D>();
+    mul1d.property("b0", &Multivector1D::b0);
+    mul1d.property("b1", &Multivector1D::b1);
+
+    auto mul1f  = writer<Multivector1F>();
+    mul1f.property("b0", &Multivector1F::b0);
+    mul1f.property("b1", &Multivector1F::b1);
     
+    
+    auto mul2d  = writer<Multivector2D>();
+    mul2d.property("b0", &Multivector2D::b0);
+    mul2d.property("b1", &Multivector2D::b1);
+    mul2d.property("b2", &Multivector2D::b2);
+
+    auto mul2f  = writer<Multivector2F>();
+    mul2f.property("b0", &Multivector2F::b0);
+    mul2f.property("b1", &Multivector2F::b1);
+    mul2f.property("b2", &Multivector2F::b2);
+    
+    
+    auto mul3d  = writer<Multivector3D>();
+    mul3d.property("b0", &Multivector3D::b0);
+    mul3d.property("b1", &Multivector3D::b1);
+    mul3d.property("b2", &Multivector3D::b2);
+    mul3d.property("b3", &Multivector3D::b3);
+
+    auto mul3f  = writer<Multivector3F>();
+    mul3f.property("b0", &Multivector3F::b0);
+    mul3f.property("b1", &Multivector3F::b1);
+    mul3f.property("b2", &Multivector3F::b2);
+    mul3f.property("b3", &Multivector3F::b3);
+    
+
+    auto mul4d  = writer<Multivector4D>();
+    mul4d.property("b0", &Multivector4D::b0);
+    mul4d.property("b1", &Multivector4D::b1);
+    mul4d.property("b2", &Multivector4D::b2);
+    mul4d.property("b3", &Multivector4D::b3);
+    mul4d.property("b4", &Multivector4D::b4);
+
+    auto mul4f  = writer<Multivector4F>();
+    mul4f.property("b0", &Multivector4F::b0);
+    mul4f.property("b1", &Multivector4F::b1);
+    mul4f.property("b2", &Multivector4F::b2);
+    mul4f.property("b3", &Multivector4F::b3);
+    mul4f.property("b4", &Multivector4F::b4);
+    
+
+
     auto norm2d = writer<Normal2D>();
     norm2d.property("dir", &Normal2D::direction);
 
@@ -783,6 +911,13 @@ YQ_INVOKE(
     auto pose3f = writer<Pose3F>();
     pose3f.property("ori", &Pose3F::orientation);
     pose3f.property("pos", &Pose3F::position);
+
+    auto quadvec4d = writer<Quadvector4D>();
+    quadvec4d.property("xyzw", &Quadvector4D::xyzw);
+
+    auto quadvec4f = writer<Quadvector4F>();
+    quadvec4f.property("xyzw", &Quadvector4F::xyzw);
+
 
     auto quat3d = writer<Quaternion3D>();
     quat3d.property("w", &Quaternion3D::w);
@@ -1618,6 +1753,25 @@ YQ_INVOKE(
     triangle4u.property("c", &Triangle4U::c);
 
 
+    auto trivec3d = writer<Trivector3D>();
+    trivec3d.property("xyz", &Trivector3D::xyz);
+
+    auto trivec3f = writer<Trivector3F>();
+    trivec3f.property("xyz", &Trivector3F::xyz);
+    
+
+    auto trivec4d = writer<Trivector4D>();
+    trivec4d.property("xyz", &Trivector4D::xyz);
+    trivec4d.property("yzw", &Trivector4D::yzw);
+    trivec4d.property("zwx", &Trivector4D::zwx);
+    trivec4d.property("wxy", &Trivector4D::wxy);
+
+    auto trivec4f = writer<Trivector4F>();
+    trivec4f.property("xyz", &Trivector4F::xyz);
+    trivec4f.property("yzw", &Trivector4F::yzw);
+    trivec4f.property("zwx", &Trivector4F::zwx);
+    trivec4f.property("wxy", &Trivector4F::wxy);
+    
 
     auto vec1d = writer<Vector1D>();
     vec1d.property("x", &Vector1D::x);

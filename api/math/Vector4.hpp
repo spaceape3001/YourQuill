@@ -96,6 +96,46 @@ namespace yq {
         return {zero_v<T>,zero_v<T>,zero_v<T>,one_v<T>};
     }
 
+    constexpr Vector4D operator "" _x4(unsigned long long int v)
+    {
+        return {(double) v, 0., 0., 0.};
+    }
+
+    constexpr Vector4D operator "" _x4(long double v)
+    {
+        return {(double) v, 0., 0., 0.};
+    }
+
+    constexpr Vector4D operator "" _y4(unsigned long long int v)
+    {
+        return {0., (double) v, 0., 0.};
+    }
+
+    constexpr Vector4D operator "" _y4(long double v)
+    {
+        return {0., (double) v, 0., 0.};
+    }
+
+    constexpr Vector4D operator "" _z4(unsigned long long int v)
+    {
+        return {0., 0., (double) v, 0.};
+    }
+
+    constexpr Vector4D operator "" _z4(long double v)
+    {
+        return {0., 0., (double) v, 0.};
+    }
+
+    constexpr Vector4D operator "" _w4(unsigned long long int v)
+    {
+        return {0., 0., 0., (double) v};
+    }
+
+    constexpr Vector4D operator "" _w4(long double v)
+    {
+        return {0., 0., 0., (double) v};
+    }
+
     YQ_NAN_1(Vector4, Vector4<T>{nan_v<T>, nan_v<T>, nan_v<T>, nan_v<T>})
     YQ_ZERO_1(Vector4, Vector4<T>{zero_v<T>, zero_v<T>, zero_v<T>, zero_v<T>})
     

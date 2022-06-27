@@ -275,14 +275,22 @@ namespace yq {
     template <typename> struct AxBox2;
     template <typename> struct AxBox3;
     template <typename> struct AxBox4;
+    template <typename> struct Bivector2;
+    template <typename> struct Bivector3;
+    template <typename> struct Bivector4;
     template <typename> struct Circle2;
     template <typename> struct Coord2;
     template <typename> struct Fraction;
+    template <typename> struct Multivector1;
+    template <typename> struct Multivector2;
+    template <typename> struct Multivector3;
+    template <typename> struct Multivector4;
     template <typename> struct Normal2;
     template <typename> struct Normal3;
     template <typename> struct Plane3;
     //template <typename> struct Pose2;
     template <typename> struct Pose3;
+    template <typename> struct Quadvector4;
     template <typename> struct Quaternion3;
     template <typename> struct Ray2;
     template <typename> struct Ray3;
@@ -309,6 +317,8 @@ namespace yq {
     template <typename> struct Tensor42;
     template <typename> struct Tensor43;
     template <typename> struct Tensor44;
+    template <typename> struct Trivector3;
+    template <typename> struct Trivector4;
     template <typename> struct Vector1;
     template <typename> struct Vector2;
     template <typename> struct Vector3;
@@ -638,6 +648,30 @@ namespace yq {
     //  ------------------------------------------------
     //  FORWARD DECLARE VECTORS & TENSOR (RELATED)
     
+    using Bivector2D                = Bivector2<double>;
+    using Bivector2F                = Bivector2<float>;
+    
+    using Bivector3D                = Bivector3<double>;
+    using Bivector3F                = Bivector3<float>;
+
+    using Bivector4D                = Bivector4<double>;
+    using Bivector4F                = Bivector4<float>;
+    
+    using Multivector1D             = Multivector1<double>;
+    using Multivector1F             = Multivector1<float>;
+    
+    using Multivector2D             = Multivector2<double>;
+    using Multivector2F             = Multivector2<float>;
+
+    using Multivector3D             = Multivector3<double>;
+    using Multivector3F             = Multivector3<float>;
+
+    using Multivector4D             = Multivector4<double>;
+    using Multivector4F             = Multivector4<float>;
+
+    using Quadvector4D              = Quadvector4<double>;
+    using Quadvector4F              = Quadvector4<float>;
+
     using Quaternion3D              = Quaternion3<double>;
     using Quaternion3F              = Quaternion3<float>;
 
@@ -720,6 +754,12 @@ namespace yq {
     using Tensor44F                 = Tensor44<float>;
     using Tensor44I                 = Tensor44<int>;
     using Tensor44U                 = Tensor44<unsigned>;    
+
+    using Trivector3D               = Trivector3<double>;
+    using Trivector3F               = Trivector3<float>;
+
+    using Trivector4D               = Trivector4<double>;
+    using Trivector4F               = Trivector4<float>;
 
     using Vector1D                  = Vector1<double>;
     using Vector1F                  = Vector1<float>;

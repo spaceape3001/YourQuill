@@ -84,6 +84,37 @@ namespace yq {
         return {zero_v<T>,zero_v<T>,one_v<T>};
     }
 
+    constexpr Vector3D operator "" _x3(unsigned long long int v)
+    {
+        return {(double) v, 0., 0.};
+    }
+
+    constexpr Vector3D operator "" _x3(long double v)
+    {
+        return {(double) v, 0., 0.};
+    }
+
+    constexpr Vector3D operator "" _y3(unsigned long long int v)
+    {
+        return {0., (double) v, 0.};
+    }
+
+    constexpr Vector3D operator "" _y3(long double v)
+    {
+        return {0., (double) v, 0.};
+    }
+
+    constexpr Vector3D operator "" _z3(unsigned long long int v)
+    {
+        return {0., 0., (double) v};
+    }
+
+    constexpr Vector3D operator "" _z3(long double v)
+    {
+        return {0., 0., (double) v};
+    }
+
+
     YQ_NAN_1(Vector3, Vector3<T>{nan_v<T>, nan_v<T>, nan_v<T>})
     YQ_ZERO_1(Vector3, Vector3<T>{zero_v<T>, zero_v<T>, zero_v<T>})
     

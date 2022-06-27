@@ -61,6 +61,16 @@ namespace yq {
         return {one_v<T>};
     }
 
+    constexpr Vector1D operator "" _x1(unsigned long long int v)
+    {
+        return {(double) v};
+    }
+
+    constexpr Vector1D operator "" _x1(long double v)
+    {
+        return {(double) v};
+    }
+
     YQ_NAN_1(Vector1, Vector1<T>{nan_v<T>})
     YQ_ZERO_1(Vector1, Vector1<T>{zero_v<T>})
     
