@@ -400,7 +400,40 @@ namespace yq {
             max_elem(max_elem(tri.a, tri.b), tri.c)
         };
     }
-        template <typename T>
+
+    template <typename T>
+    Circle2<T>  circle(const Vector2<T>& point, T radius)
+    {
+        return {point, radius};
+    }
+
+    template <typename T>
+    Normal2<T>     normal(const Vector2<T>& dir) 
+    {
+        return { ~dir };
+    }
+
+    template <typename T>
+    Normal3<T>     normal(const Vector3<T>& dir) 
+    {
+        return { ~dir };
+    }
+    
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Normal2<T>     normal(T x, std::type_identity_t<T> y)
+    {
+        return { ~Vector2<T>{x,y} };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Normal3<T>     normal(T x, std::type_identity_t<T> y, std::type_identity_t<T> z)
+    {
+        return { ~Vector3<T>{x,y,z} };
+    }
+
+    template <typename T>
     Polygon2<T> polygon(const AxBox2<T>& ax)
     {
         return { { southwest(ax), southeast(ax), northeast(ax), northwest(ax) } };
@@ -473,7 +506,66 @@ namespace yq {
         return { rgba(t.a, a), rgba(t.b, a), rgba(t.c, a)};
     }
     
+    template <typename T>
+    constexpr Segment1<T> segment(const Vector1<T>& a, const Vector1<T>& b)
+    {
+        return { a, b };
+    }
     
+    template <typename T>
+    constexpr Segment2<T> segment(const Vector2<T>& a, const Vector2<T>& b)
+    {
+        return { a, b };
+    }
+    
+    template <typename T>
+    constexpr Segment3<T> segment(const Vector3<T>& a, const Vector3<T>& b)
+    {
+        return { a, b };
+    }
+    
+    template <typename T>
+    constexpr Segment4<T> segment(const Vector4<T>& a, const Vector4<T>& b)
+    {
+        return { a, b };
+    }
+
+    template <typename T>
+    Sphere3<T>  sphere(const Vector3<T>& point, T radius)
+    {
+        return {point, radius};
+    }
+
+    template <typename T>
+    Sphere4<T>  sphere(const Vector4<T>& point, T radius)
+    {
+        return {point, radius};
+    }
+
+    template <typename T>
+    Tetrahedron3<T>    tetrahedron(const Vector3<T>& a, const Vector3<T>& b, const Vector3<T>& c, const Vector3<T>& d)
+    {
+        return { a, b, c };
+    }
+
+    template <typename T>
+    Triangle2<T>    triangle(const Vector2<T>& a, const Vector2<T>& b, const Vector2<T>& c)
+    {
+        return { a, b, c };
+    }
+    
+    template <typename T>
+    Triangle3<T>    triangle(const Vector3<T>& a, const Vector3<T>& b, const Vector3<T>& c)
+    {
+        return { a, b, c };
+    }
+
+    template <typename T>
+    Triangle4<T>    triangle(const Vector4<T>& a, const Vector4<T>& b, const Vector4<T>& c)
+    {
+        return { a, b, c };
+    }
+
     template <typename T>
     Triangle2<T>   xy(const Triangle3<T>& a)
     {
@@ -904,6 +996,13 @@ namespace yq {
     }
 
     template <typename T>
+    square_t<T> area(const Circle2<T>& a)
+    {
+        return std::numbers::pi_v<ieee754_t<T>> * (a.radius*a.radius);
+    }
+    
+
+    template <typename T>
     square_t<T>    area(const Polygon2<T>& poly)
     {
         return 0.5*abs(point_area(poly.vertex));
@@ -916,9 +1015,39 @@ namespace yq {
     }
 
     template <typename T>
+    square_t<T>     area(const Sphere3<T>& sp)
+    {
+        return 4.0*pi*(sp.radius*sp.radius);
+    }
+
+    template <typename T>
     square_t<T>    area(const Triangle2<T>& tri)
     {
         return 0.5*abs(point_area(tri));
+    }
+
+    template <typename T>
+    T   circumference(const Circle2<T>& a)
+    {
+        return ieee754_t<T>(2.) * std::numbers::pi_v<ieee754_t<T>> * a.radius;
+    }
+
+    template <typename T>
+    T           diameter(const Circle2<T>&a)
+    {
+        return a.radius + a.radius;
+    }
+
+    template <typename T>
+    T           diameter(const Sphere3<T>&a)
+    {
+        return a.radius + a.radius;
+    }
+
+    template <typename T>
+    T           diameter(const Sphere4<T>&a)
+    {
+        return a.radius + a.radius;
     }
 
     template <typename T>
@@ -1065,11 +1194,71 @@ namespace yq {
     }
 
     template <typename T>
+    T       length(const Segment1<T>& seg)
+    {
+        return length(seg.b-seg.a);
+    }
+    
+    template <typename T>
+    T       length(const Segment2<T>& seg)
+    {
+        return length(seg.b-seg.a);
+    }
+
+    template <typename T>
+    T       length(const Segment3<T>& seg)
+    {
+        return length(seg.b-seg.a);
+    }
+    
+
+    template <typename T>
+    T       length(const Segment4<T>& seg)
+    {
+        return length(seg.b-seg.a);
+    }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vector1<T>     midpoint(const Segment1<T>& seg)
+    {
+        return ieee754_t<T>(0.5)*(seg.hi+seg.lo);
+    }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vector2<T>     midpoint(const Segment2<T>& seg)
+    {
+        return ieee754_t<T>(0.5)*(seg.hi+seg.lo);
+    }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vector3<T>     midpoint(const Segment3<T>& seg)
+    {
+        return ieee754_t<T>(0.5)*(seg.hi+seg.lo);
+    }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vector4<T>     midpoint(const Segment4<T>& seg)
+    {
+        return ieee754_t<T>(0.5)*(seg.hi+seg.lo);
+    }
+
+
+    template <typename T>
     T       perimeter(const AxBox2<T>& ax)
     {
         return 2. * component_sum(ax.hi-ax.lo);
     }
     
+    template <typename T>
+    T   permimeter(const Circle2<T>& a)
+    {
+        return ieee754_t<T>(2.) * std::numbers::pi_v<ieee754_t<T>> * a.radius;
+    }
+
     template <typename T>
     requires trait::has_sqrt_v<square_t<T>>
     T       perimeter(const Polygon2<T>& poly)
@@ -1116,7 +1305,6 @@ namespace yq {
         return length(quad.b-quad.a)+length(quad.c-quad.b)+length(quad.d-quad.c)+length(quad.a-quad.d);
     }
     
-
     template <typename T>
     requires trait::has_sqrt_v<square_t<T>>
     T       perimeter(const Triangle2<T>& tri)
@@ -1139,9 +1327,43 @@ namespace yq {
     }
 
     template <typename T>
+    requires has_ieee754_v<T>
+    Vector1<T>     point(const Segment1<T>& seg, ieee754_t<T> f)
+    {
+        return (one_v<ieee754_t<T>> - f) * seg.a + f * seg.b;
+    }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vector2<T>     point(const Segment2<T>& seg, ieee754_t<T> f)
+    {
+        return (one_v<ieee754_t<T>> - f) * seg.a + f * seg.b;
+    }
+
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vector3<T>     point(const Segment3<T>& seg, ieee754_t<T> f)
+    {
+        return (one_v<ieee754_t<T>> - f) * seg.a + f * seg.b;
+    }
+    
+    template <typename T>
+    requires has_ieee754_v<T>
+    Vector4<T>     point(const Segment4<T>& seg, ieee754_t<T> f)
+    {
+        return (one_v<ieee754_t<T>> - f) * seg.a + f * seg.b;
+    }
+
+    template <typename T>
     cube_t<T>       volume(const AxBox3<T>& bx)
     {
         return component_product(bx.hi-bx.lo);
+    }
+    
+    template <typename T>
+    cube_t<T>       volume(const Sphere3<T>&sp)
+    {
+        return (4.0/3.0)*pi*(sp.radius*sp.radius8sp.radius);
     }
 
 }

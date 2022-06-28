@@ -11,6 +11,11 @@
 #include <math/Vector4.hpp>
 
 namespace yq {
+
+    YQ_IEEE754_1(Triangle4)
+
+
+
 //  --------------------------------------------------------
 //  COMPOSITION
 

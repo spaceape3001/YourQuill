@@ -21,14 +21,10 @@ namespace yq {
         constexpr bool operator==(const Plane3&) const noexcept = default;
     };
 
-//  --------------------------------------------------------
-//  COMPOSITION
-
+    YQ_IEEE754_1(Plane3)
     YQ_NAN_1(Plane3, { nan_v<Normal3<ieee754_t<T>>>, nan_v<T> })
     YQ_ZERO_1(Plane3, { zero_v<Normal3<ieee754_t<T>>>, zero_v<T> })
     
-//  --------------------------------------------------------
-//  BASIC FUNCTIONS
     
     YQ_IS_FINITE_1(Plane3, is_finite(v.normal) && is_finite(v.distance))
     YQ_IS_NAN_1(Plane3, is_nan(v.normal) || is_nan(v.distance))
