@@ -1033,6 +1033,24 @@ namespace yq {
     {
         return a.x*a.y*a.z*a.w;
     }
+    
+    template <typename T>
+    T   component_sum(const Vector2<T>& a)
+    {
+        return a.x + a.y;
+    }
+
+    template <typename T>
+    T   component_sum(const Vector3<T>& a)
+    {
+        return a.x + a.y + a.z;
+    }
+
+    template <typename T>
+    T   component_sum(const Vector4<T>& a)
+    {
+        return a.x + a.y + a.z + a.w;
+    }
 
     template <typename T, typename R>
     bool is_close(const R& compare, const Vector1<T>& actual, const Vector1<T>& expected)

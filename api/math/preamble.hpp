@@ -266,6 +266,7 @@ namespace yq {
         return compare(actual-expected, expected);
     }
     
+    template <typename> struct PolygonData;
     template <typename> struct QuadrilateralData;
     template <typename> struct SegmentData;
     template <typename> struct TetrahedronData;
@@ -333,9 +334,9 @@ namespace yq {
     template <typename T> using Triangle3       = TriangleData<Vector3<T>>;
     template <typename T> using Triangle4       = TriangleData<Vector4<T>>;
     template <typename T> using Quadrilateral2  = QuadrilateralData<Vector2<T>>;
-    template <typename T> using Quadrilateral3  = QuadrilateralData<Vector3<T>>;
-    template <typename T> using Quadrilateral4  = QuadrilateralData<Vector4<T>>;
-    
+    template <typename T> using Polygon2        = PolygonData<Vector2<T>>;
+    template <typename T> using Polygon3        = PolygonData<Vector3<T>>;
+    template <typename T> using Polygon4        = PolygonData<Vector4<T>>;
 
     //  ------------------------------------------------
     //  COMPLEX NUMBERS
@@ -827,17 +828,22 @@ namespace yq {
     using Normal3D                  = Normal3<double>;
     using Normal3F                  = Normal3<float>;
 
-
     using Plane3D                   = Plane3<double>;
     using Plane3F                   = Plane3<float>;
+    
+    using Polygon2D                 = Polygon2<double>;
+    using Polygon2F                 = Polygon2<float>;
+
+    using Polygon3D                 = Polygon3<double>;
+    using Polygon3F                 = Polygon3<float>;
+    
+    using Polygon4D                 = Polygon4<double>;
+    using Polygon4F                 = Polygon4<float>;
 
     using Quadrilateral2D           = Quadrilateral2<double>;
     using Quadrilateral2F           = Quadrilateral2<float>;
-    using Quadrilateral3D           = Quadrilateral3<double>;
-    using Quadrilateral3F           = Quadrilateral3<float>;
-    using Quadrilateral4D           = Quadrilateral4<double>;
-    using Quadrilateral4F           = Quadrilateral4<float>;
-
+    using Quadrilateral2I           = Quadrilateral2<int>;
+    using Quadrilateral2U           = Quadrilateral2<unsigned>;
     
     using Ray2D                     = Ray2<double>;
     using Ray2F                     = Ray2<float>;

@@ -39,6 +39,8 @@
 #include <math/Ray3.hpp>
 #include <math/Ray4.hpp>
 
+#include <math/Rectangle2.hpp>
+
 #include <math/Segment1.hpp>
 #include <math/Segment2.hpp>
 #include <math/Segment3.hpp>
@@ -54,6 +56,8 @@
 #include <math/Triangle2.hpp>
 #include <math/Triangle3.hpp>
 #include <math/Triangle4.hpp>
+
+#include <math/Quadrilateral2.hpp>
 
 #include <math/Quadvector4.hpp>
 #include <math/Quaternion3.hpp>
@@ -195,6 +199,11 @@ YQ_TYPE_IMPLEMENT(yq::Plane3F)
 YQ_TYPE_IMPLEMENT(yq::Pose3D)
 YQ_TYPE_IMPLEMENT(yq::Pose3F)
 
+YQ_TYPE_IMPLEMENT(yq::Quadrilateral2D)
+YQ_TYPE_IMPLEMENT(yq::Quadrilateral2F)
+YQ_TYPE_IMPLEMENT(yq::Quadrilateral2I)
+YQ_TYPE_IMPLEMENT(yq::Quadrilateral2U)
+
 YQ_TYPE_IMPLEMENT(yq::Quadvector4D)
 YQ_TYPE_IMPLEMENT(yq::Quadvector4F)
 
@@ -219,6 +228,11 @@ YQ_TYPE_IMPLEMENT(yq::RGBA4D)
 YQ_TYPE_IMPLEMENT(yq::RGBA4F)
 YQ_TYPE_IMPLEMENT(yq::RGBA4U8)
 YQ_TYPE_IMPLEMENT(yq::RGBA4U16)
+
+YQ_TYPE_IMPLEMENT(yq::Rectangle2D)
+YQ_TYPE_IMPLEMENT(yq::Rectangle2F)
+YQ_TYPE_IMPLEMENT(yq::Rectangle2I)
+YQ_TYPE_IMPLEMENT(yq::Rectangle2U)
 
 YQ_TYPE_IMPLEMENT(yq::Segment1D)
 YQ_TYPE_IMPLEMENT(yq::Segment1F)
@@ -911,6 +925,31 @@ YQ_INVOKE(
     auto pose3f = writer<Pose3F>();
     pose3f.property("ori", &Pose3F::orientation);
     pose3f.property("pos", &Pose3F::position);
+    
+    auto quad2d = writer<Quadrilateral2D>();
+    quad2d.property("a", &Quadrilateral2D::a);
+    quad2d.property("b", &Quadrilateral2D::b);
+    quad2d.property("c", &Quadrilateral2D::c);
+    quad2d.property("d", &Quadrilateral2D::d);
+
+    auto quad2f = writer<Quadrilateral2F>();
+    quad2f.property("a", &Quadrilateral2F::a);
+    quad2f.property("b", &Quadrilateral2F::b);
+    quad2f.property("c", &Quadrilateral2F::c);
+    quad2f.property("d", &Quadrilateral2F::d);
+
+    auto quad2i = writer<Quadrilateral2I>();
+    quad2i.property("a", &Quadrilateral2I::a);
+    quad2i.property("b", &Quadrilateral2I::b);
+    quad2i.property("c", &Quadrilateral2I::c);
+    quad2i.property("d", &Quadrilateral2I::d);
+
+    auto quad2u = writer<Quadrilateral2U>();
+    quad2u.property("a", &Quadrilateral2U::a);
+    quad2u.property("b", &Quadrilateral2U::b);
+    quad2u.property("c", &Quadrilateral2U::c);
+    quad2u.property("d", &Quadrilateral2U::d);
+
 
     auto quadvec4d = writer<Quadvector4D>();
     quadvec4d.property("xyzw", &Quadvector4D::xyzw);
@@ -999,6 +1038,23 @@ YQ_INVOKE(
     rgbau16.property("b", &RGBA4U16::blue);
     rgbau16.property("a", &RGBA4U16::alpha);
     
+    
+    auto rect2d = writer<Rectangle2D>();
+    rect2d.property("pos", &Rectangle2D::position);
+    rect2d.property("size", &Rectangle2D::size);
+
+    auto rect2f = writer<Rectangle2F>();
+    rect2f.property("pos", &Rectangle2F::position);
+    rect2f.property("size", &Rectangle2F::size);
+
+    auto rect2i = writer<Rectangle2I>();
+    rect2i.property("pos", &Rectangle2I::position);
+    rect2i.property("size", &Rectangle2I::size);
+    
+    auto rect2u = writer<Rectangle2U>();
+    rect2u.property("pos", &Rectangle2U::position);
+    rect2u.property("size", &Rectangle2U::size);
+
     auto seg1d = writer<Segment1D>();
     seg1d.property("a", &Segment1D::a);
     seg1d.property("b", &Segment1D::b);
