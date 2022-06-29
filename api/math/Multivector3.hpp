@@ -14,20 +14,40 @@
 namespace yq {
     template <typename T>
     struct Multivector3 {
-        unity_t<T>      b0;
-        Vector3<T>      b1;
-        Bivector3<T>    b2;
-        Trivector3<T>   b3;
+        unity_t<T>      a;
+        T               x, y, z;
+        square_t<T>     xy, yz, zx;
+        cube_t<T>       xyz;
         
         bool operator==(const Multivector3&) const = default;
     };
 
     YQ_IEEE754_1(Multivector3)
-    YQ_NAN_1(Multivector3, Multivector3<T>{nan_v<unity_t<T>>, nan_v<Vector3<T>>, nan_v<Bivector3<T>>, nan_v<Trivector3<T>>})
-    YQ_ZERO_1(Multivector3, Multivector3<T>{zero_v<unity_t<T>>, zero_v<Vector3<T>>, zero_v<Bivector3<T>>, zero_v<Trivector3<T>>})
+    YQ_NAN_1(Multivector3, Multivector3<T>{
+        nan_v<unity_t<T>>, 
+        nan_v<T>, nan_v<T>, nan_v<T>, 
+        nan_v<square_t<T>>, nan_v<square_t<T>>, nan_v<square_t<T>>, 
+        nan_v<cube_t<T>>
+    })
+    YQ_ZERO_1(Multivector3, Multivector3<T>{
+        zero_v<unity_t<T>>, 
+        zero_v<T>, zero_v<T>, zero_v<T>, 
+        zero_v<square_t<T>>, zero_v<square_t<T>>, zero_v<square_t<T>>, 
+        zero_v<cube_t<T>>
+    })
     
-    YQ_IS_NAN_1(Multivector3, is_nan(v.b0) || is_nan(v.b1) || is_nan(v.b2) || is_nan(v.b3) )
-    YQ_IS_FINITE_1(Multivector3, is_finite(v.b0) && is_finite(v.b1) && is_finite(v.b2) && is_finite(v.b3))
+    YQ_IS_NAN_1(Multivector3, 
+        is_nan(v.a) || 
+        is_nan(v.x) || is_nan(v.y) || is_nan(v.z) || 
+        is_nan(v.xy) || is_nan(v.yz) || is_nan(v.zx) || 
+        is_nan(v.xyz)
+    )
+    YQ_IS_FINITE_1(Multivector3, 
+        is_finite(v.a) && 
+        is_finite(v.x) && is_finite(v.y) && is_finite(v.z) && 
+        is_finite(v.xy) && is_finite(v.yz) && is_finite(v.zx) && 
+        is_finite(v.xyz)
+    )
 }
 
 YQ_TYPE_DECLARE(Multivector3D)

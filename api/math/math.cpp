@@ -858,53 +858,84 @@ YQ_INVOKE(
 */
 
     auto mul1d  = writer<Multivector1D>();
-    mul1d.property("b0", &Multivector1D::b0);
-    mul1d.property("b1", &Multivector1D::b1);
+    mul1d.property("a", &Multivector1D::a);
+    mul1d.property("x", &Multivector1D::x);
 
     auto mul1f  = writer<Multivector1F>();
-    mul1f.property("b0", &Multivector1F::b0);
-    mul1f.property("b1", &Multivector1F::b1);
+    mul1f.property("a", &Multivector1F::a);
+    mul1f.property("x", &Multivector1F::x);
     
     
     auto mul2d  = writer<Multivector2D>();
-    mul2d.property("b0", &Multivector2D::b0);
-    mul2d.property("b1", &Multivector2D::b1);
-    mul2d.property("b2", &Multivector2D::b2);
+    mul2d.property("a", &Multivector2D::a);
+    mul2d.property("x", &Multivector2D::x);
+    mul2d.property("y", &Multivector2D::y);
+    mul2d.property("xy", &Multivector2D::xy);
 
     auto mul2f  = writer<Multivector2F>();
-    mul2f.property("b0", &Multivector2F::b0);
-    mul2f.property("b1", &Multivector2F::b1);
-    mul2f.property("b2", &Multivector2F::b2);
+    mul2f.property("a", &Multivector2F::a);
+    mul2f.property("x", &Multivector2F::x);
+    mul2f.property("y", &Multivector2F::y);
+    mul2f.property("xy", &Multivector2F::xy);
     
     
     auto mul3d  = writer<Multivector3D>();
-    mul3d.property("b0", &Multivector3D::b0);
-    mul3d.property("b1", &Multivector3D::b1);
-    mul3d.property("b2", &Multivector3D::b2);
-    mul3d.property("b3", &Multivector3D::b3);
+    mul3d.property("a", &Multivector3D::a);
+    mul3d.property("x", &Multivector3D::x);
+    mul3d.property("y", &Multivector3D::y);
+    mul3d.property("z", &Multivector3D::z);
+    mul3d.property("xy", &Multivector3D::xy);
+    mul3d.property("yz", &Multivector3D::yz);
+    mul3d.property("zx", &Multivector3D::zx);
+    mul3d.property("xyz", &Multivector3D::xyz);
 
     auto mul3f  = writer<Multivector3F>();
-    mul3f.property("b0", &Multivector3F::b0);
-    mul3f.property("b1", &Multivector3F::b1);
-    mul3f.property("b2", &Multivector3F::b2);
-    mul3f.property("b3", &Multivector3F::b3);
+    mul3f.property("a", &Multivector3F::a);
+    mul3f.property("x", &Multivector3F::x);
+    mul3f.property("y", &Multivector3F::y);
+    mul3f.property("z", &Multivector3F::z);
+    mul3f.property("xy", &Multivector3F::xy);
+    mul3f.property("yz", &Multivector3F::yz);
+    mul3f.property("zx", &Multivector3F::zx);
+    mul3f.property("xyz", &Multivector3F::xyz);
     
 
     auto mul4d  = writer<Multivector4D>();
-    mul4d.property("b0", &Multivector4D::b0);
-    mul4d.property("b1", &Multivector4D::b1);
-    mul4d.property("b2", &Multivector4D::b2);
-    mul4d.property("b3", &Multivector4D::b3);
-    mul4d.property("b4", &Multivector4D::b4);
+    mul4d.property("a", &Multivector4D::a);
+    mul4d.property("x", &Multivector4D::x);
+    mul4d.property("y", &Multivector4D::y);
+    mul4d.property("z", &Multivector4D::z);
+    mul4d.property("w", &Multivector4D::w);
+    mul4d.property("xy", &Multivector4D::xy);
+    mul4d.property("yz", &Multivector4D::yz);
+    mul4d.property("zw", &Multivector4D::zw);
+    mul4d.property("wx", &Multivector4D::wx);
+    mul4d.property("xz", &Multivector4D::xz);
+    mul4d.property("yw", &Multivector4D::yw);
+    mul4d.property("xyz", &Multivector4D::xyz);
+    mul4d.property("yzw", &Multivector4D::yzw);
+    mul4d.property("zwx", &Multivector4D::zwx);
+    mul4d.property("wxy", &Multivector4D::wxy);
+    mul4d.property("xyzw", &Multivector4D::xyzw);
 
     auto mul4f  = writer<Multivector4F>();
-    mul4f.property("b0", &Multivector4F::b0);
-    mul4f.property("b1", &Multivector4F::b1);
-    mul4f.property("b2", &Multivector4F::b2);
-    mul4f.property("b3", &Multivector4F::b3);
-    mul4f.property("b4", &Multivector4F::b4);
+    mul4f.property("a", &Multivector4F::a);
+    mul4f.property("x", &Multivector4F::x);
+    mul4f.property("y", &Multivector4F::y);
+    mul4f.property("z", &Multivector4F::z);
+    mul4f.property("w", &Multivector4F::w);
+    mul4f.property("xy", &Multivector4F::xy);
+    mul4f.property("yz", &Multivector4F::yz);
+    mul4f.property("zw", &Multivector4F::zw);
+    mul4f.property("wx", &Multivector4F::wx);
+    mul4f.property("xz", &Multivector4F::xz);
+    mul4f.property("yw", &Multivector4F::yw);
+    mul4f.property("xyz", &Multivector4F::xyz);
+    mul4f.property("yzw", &Multivector4F::yzw);
+    mul4f.property("zwx", &Multivector4F::zwx);
+    mul4f.property("wxy", &Multivector4F::wxy);
+    mul4f.property("xyzw", &Multivector4F::xyzw);
     
-
 
     auto norm2d = writer<Normal2D>();
     norm2d.property("dir", &Normal2D::direction);
