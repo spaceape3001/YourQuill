@@ -133,8 +133,6 @@ namespace yq {
     void    TypeInfo::sweep_impl() 
     {
         CompoundInfo::sweep_impl();
-        gather(m_methods);
-        gather(m_properties);
     }
 }
 
