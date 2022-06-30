@@ -9,7 +9,7 @@
 #include <basic/FileUtils.hpp>
 #include <basic/Safety.hpp>
 #include <basic/Vector.hpp>
-#include <basic/Iter32.hpp>
+#include <basic/IterUtf8.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Result.hpp>
@@ -205,7 +205,7 @@ namespace yq {
         
         
         Mode        mode    = Start;
-        iter32(input, [&](char32_t c){
+        iter_utf8(input, [&](char32_t c){
             switch(mode){
             case Start:
                 if(is_alnum(c)){

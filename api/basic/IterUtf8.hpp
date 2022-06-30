@@ -28,11 +28,11 @@ namespace yq {
     /*! \brief Used to iterate through the string as char32_t
         \note This stores a REFERENCE to the string!  and do NOT modify the string
     */
-    class Iter32 {
+    class IterUtf8 {
     public:
-        Iter32(std::string_view s) : Iter32(s.data(), s.size()) {}
-        Iter32(Iter32&&) = default;
-        Iter32&  operator=(Iter32&&) = default;
+        IterUtf8(std::string_view s) : IterUtf8(s.data(), s.size()) {}
+        IterUtf8(IterUtf8&&) = default;
+        IterUtf8&  operator=(IterUtf8&&) = default;
         
         char32_t  next()
         {
@@ -60,7 +60,7 @@ namespace yq {
         operator bool () const { return more(); }
         operator const char*() const { return m_data; }
         
-        constexpr Iter32(const char*z, size_t n) :
+        constexpr IterUtf8(const char*z, size_t n) :
             m_begin(z), 
             m_data(z), 
             m_end(z+n), 
@@ -70,9 +70,9 @@ namespace yq {
         }
         
     private:
-        Iter32(std::string_view&&) = delete;
-        Iter32(const Iter32&) = delete;
-        Iter32& operator=(const Iter32&) = delete;
+        IterUtf8(std::string_view&&) = delete;
+        IterUtf8(const IterUtf8&) = delete;
+        IterUtf8& operator=(const IterUtf8&) = delete;
         
         const char*     m_begin;
         const char*     m_data;
@@ -90,7 +90,7 @@ namespace yq {
         Current forms... for a boolean return, allows for abort.   
     */
     template <typename Pred>
-    bool  iter32(const char* s, size_t n, Pred pred)
+    bool  iter_utf8(const char* s, size_t n, Pred pred)
     {
         const char* p   = s;
         const char* e   = p + n;
@@ -123,9 +123,9 @@ namespace yq {
         This iterates the string, calling the provided predicate for every char32_t value.
     */
     template <typename Pred>
-    bool  iter32(const std::string_view&s, Pred pred)
+    bool  iter_utf8(const std::string_view&s, Pred pred)
     {
-        return iter32(s.data(), s.size(), pred);
+        return iter_utf8(s.data(), s.size(), pred);
     }
     
 
@@ -135,7 +135,7 @@ namespace yq {
         Predicate returning FALSE will abort the iteration.
     */
     template <typename Pred>
-    bool  iter32_abort(const char* s, size_t n, Pred pred)
+    bool  iter_utf8_abort(const char* s, size_t n, Pred pred)
     {
         const char* p   = s;
         const char* e   = p + n;
@@ -173,9 +173,9 @@ namespace yq {
         Predicate returning FALSE will abort the iteration.
     */
     template <typename Pred>
-    bool  iter32_abort(const std::string_view&s, Pred pred)
+    bool  iter_utf8_abort(const std::string_view&s, Pred pred)
     {
-        return iter32_abort(s.data(), s.size(), pred);
+        return iter_utf8_abort(s.data(), s.size(), pred);
     }
 
     /*! \brief Filters by accepting characters
@@ -184,7 +184,7 @@ namespace yq {
         accepted by the predicate (ie, returns true).
     */
     template <typename Pred>
-    std::string  iter32_accept(const char* s, size_t n, Pred pred)
+    std::string  iter_utf8_accept(const char* s, size_t n, Pred pred)
     {
     
         std::string      ret;
@@ -214,9 +214,9 @@ namespace yq {
         accepted by the predicate (ie, returns true).
     */
     template <typename Pred>
-    std::string  iter32_accept(const std::string_view&s, Pred pred)
+    std::string  iter_utf8_accept(const std::string_view&s, Pred pred)
     {
-        return iter32_accept(s.data(), s.size(), pred);
+        return iter_utf8_accept(s.data(), s.size(), pred);
     }
     
     /*! \brief Iterates across string with find
@@ -225,7 +225,7 @@ namespace yq {
         Predicate returning FALSE will abort the iteration.
     */
     template <typename Pred>
-    const char*  iter32_find(const char* s, size_t n, Pred pred)
+    const char*  iter_utf8_find(const char* s, size_t n, Pred pred)
     {
         const char* p   = s;
         const char* e   = p + n;
@@ -251,7 +251,7 @@ namespace yq {
         rejected by the predicate (ie, returns true).
     */
     template <typename Pred>
-    std::string  iter32_reject(const char* s, size_t n, Pred pred)
+    std::string  iter_utf8_reject(const char* s, size_t n, Pred pred)
     {
     
         std::string      ret;
@@ -281,9 +281,9 @@ namespace yq {
         rejected by the predicate (ie, returns true).
     */
     template <typename Pred>
-    std::string  iter32_reject(const std::string_view& s, Pred pred)
+    std::string  iter_utf8_reject(const std::string_view& s, Pred pred)
     {
-        return iter32_reject(s.data(), s.size(), pred);
+        return iter_utf8_reject(s.data(), s.size(), pred);
     }
     
     

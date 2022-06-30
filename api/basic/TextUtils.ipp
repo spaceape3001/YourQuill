@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "TextUtils.hpp"
-#include <basic/Iter32.hpp>
+#include <basic/IterUtf8.hpp>
 #include <basic/IterW.hpp>
 
 #include <basic/Compare.hpp>
@@ -191,7 +191,7 @@ namespace yq {
         if(s && n){
             ret.reserve(n);
             bool        space = true;
-            iter32(s, n, [&](char32_t c){
+            iter_utf8(s, n, [&](char32_t c){
                 if(is_space(c)){
                     space   = true;
                     ret += c;
@@ -230,8 +230,8 @@ namespace yq {
 
     Compare compare_igCase(std::string_view sa, std::string_view sb)
     {
-        Iter32  a(sa);
-        Iter32  b(sb);
+        IterUtf8  a(sa);
+        IterUtf8  b(sb);
         
         for(;;){
             char32_t  ca  = a.next();
@@ -315,7 +315,7 @@ namespace yq {
     {
         size_t  ret = 0;
         if(s && n){
-            iter32(s, n, [&](char32_t){ ++ret; });
+            iter_utf8(s, n, [&](char32_t){ ++ret; });
         }
         return ret;
     }
@@ -345,7 +345,7 @@ namespace yq {
     {
         size_t ret=0;
         if(s && n){
-            iter32(s, n, [&](char32_t c){ 
+            iter_utf8(s, n, [&](char32_t c){ 
                 if(c == ch) 
                     ++ret; 
             });
@@ -383,7 +383,7 @@ namespace yq {
         size_t  ret = 0;
         if(s && n){
             ch  = to_lower(ch);
-            iter32(s, n, [&](char32_t c){
+            iter_utf8(s, n, [&](char32_t c){
                 if(to_lower(c) == ch)
                     ++ret;
             });
@@ -399,7 +399,7 @@ namespace yq {
     size_t  count_start_spaces(std::string_view a)
     {
         size_t  ret   = 0;
-        iter32_abort(a, [&](char32_t ch) -> bool {
+        iter_utf8_abort(a, [&](char32_t ch) -> bool {
             if(is_space(ch)){
                 ++ret;
                 return true;
@@ -428,7 +428,7 @@ namespace yq {
     char32_t  first_non_blank_char(std::string_view a)
     {
         char32_t  ret   = 0;
-        iter32_abort(a, [&](char32_t ch) -> bool {
+        iter_utf8_abort(a, [&](char32_t ch) -> bool {
             if(!is_space(ch)){
                 ret = ch;
                 return false;
@@ -586,7 +586,7 @@ namespace yq {
         std::vector<std::string_view>   ret;
         const char*                     z = s;
         size_t                          i = 0;
-        iter32(s, n, [&](const char*p, char32_t){
+        iter_utf8(s, n, [&](const char*p, char32_t){
             if(i >= width){
                 ret.push_back(std::string_view(z, p));
                 z   = p;
@@ -607,7 +607,7 @@ namespace yq {
     bool  is_alpha(const char*s, size_t n)
     {
         bool    ret = true;
-        return iter32_abort(s, n, [&](char32_t ch) -> bool {
+        return iter_utf8_abort(s, n, [&](char32_t ch) -> bool {
             ret = ret &&  is_alpha(ch);
             return ret;
         });
@@ -622,7 +622,7 @@ namespace yq {
     bool  is_blank(const char*s, size_t n)
     {
         bool    ret = true;
-        return iter32_abort(s, n, [&](char32_t ch) -> bool {
+        return iter_utf8_abort(s, n, [&](char32_t ch) -> bool {
             ret = ret &&  is_blank(ch);
             return ret;
         });
@@ -691,7 +691,7 @@ namespace yq {
     bool  is_space(std::string_view a)
     {
         bool    ret = true;
-        return iter32_abort(a, [&](char32_t ch) -> bool {
+        return iter_utf8_abort(a, [&](char32_t ch) -> bool {
             ret = ret &&  is_space(ch);
             return ret;
         });
@@ -850,7 +850,7 @@ namespace yq {
         
         if(s && n){
             ret.reserve(n);
-            iter32(s, n, [&](const char* p, int len, char32_t ch){
+            iter_utf8(s, n, [&](const char* p, int len, char32_t ch){
                 if(is_space(ch)){
                     space   = true;
                 } else {
@@ -938,7 +938,7 @@ namespace yq {
         Vector<std::string_view>    ret;
         if(s && n){
             const char*     z0  = s;
-            iter32(s, n, [&](const char*z, char32_t wc){
+            iter_utf8(s, n, [&](const char*z, char32_t wc){
                 if(wc == ch){
                     ret.push_back(std::string_view(z0, z));
                     z0      = z;
@@ -960,7 +960,7 @@ namespace yq {
         if(s && n){
             const char*     z0  = s;
             if(number){
-                iter32(s, n, [&](const char*z, char32_t wc){
+                iter_utf8(s, n, [&](const char*z, char32_t wc){
                     if(wc == ch){
                         if(--number){
                             ret.push_back(std::string_view(z0, z));
@@ -1013,7 +1013,7 @@ namespace yq {
         if(s && n){
             ch = to_lower(ch);
             const char*     z0  = s;
-            iter32(s, n, [&](const char*z, char32_t wc){
+            iter_utf8(s, n, [&](const char*z, char32_t wc){
                 if(to_lower(wc) == ch){
                     ret.push_back(std::string_view(z0, z));
                     z0      = z;
@@ -1100,7 +1100,7 @@ namespace yq {
         std::string  ret;
         ret.reserve(n);
         if(s && n){
-            iter32(s, n, [&](const char*p, int len, char32_t ch){
+            iter_utf8(s, n, [&](const char*p, int len, char32_t ch){
                 if(len && !is_space(ch)){
                     ret.append(p, len);
                 }
@@ -1126,7 +1126,7 @@ namespace yq {
 
     const char*  strnchr(const char*s, size_t n, char32_t ch)
     {
-        return iter32_find(s, n, [&](char32_t c) -> bool {
+        return iter_utf8_find(s, n, [&](char32_t c) -> bool {
             return ch == c;
         });
     }
@@ -1150,7 +1150,7 @@ namespace yq {
     const char*  strnchr_igCase(const char*s, size_t n, char32_t ch)
     {   
         ch  = to_lower(ch);
-        return iter32_find(s, n, [&](char32_t c) -> bool {
+        return iter_utf8_find(s, n, [&](char32_t c) -> bool {
             return ch == to_lower(c);
         });
     }
@@ -1564,7 +1564,7 @@ namespace yq {
     {
         std::string ret;
         ret.reserve(s.size());
-        iter32(s, [&](char32_t ch){
+        iter_utf8(s, [&](char32_t ch){
             ret += to_lower(ch);
         });
         return ret;
@@ -1871,7 +1871,7 @@ namespace yq {
 
         const char* s   = nullptr;
         const char* e   = nullptr;
-        iter32(sv, [&](const char* z, char32_t ch){
+        iter_utf8(sv, [&](const char* z, char32_t ch){
             if(!is_space(ch)){
                 e   = z;
                 if(!s)
@@ -1905,7 +1905,7 @@ namespace yq {
             return std::string_view();
 
         const char* e   = nullptr;
-        iter32(sv, [&](const char* z, char32_t ch){
+        iter_utf8(sv, [&](const char* z, char32_t ch){
             if(!is_space(ch)){
                 e   = z;
             }
@@ -1935,7 +1935,7 @@ namespace yq {
             return std::string_view();
 
         const char* s   = nullptr;
-        iter32_abort(sv, [&](const char* z, char32_t ch) -> bool {
+        iter_utf8_abort(sv, [&](const char* z, char32_t ch) -> bool {
             if(!is_space(ch)){
                 s   = z;
                 return false;

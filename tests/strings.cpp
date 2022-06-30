@@ -6,7 +6,7 @@
 
 #include <boost/ut.hpp>
 #include <basic/Vector.hpp>
-#include <basic/Iter32.hpp>
+#include <basic/IterUtf8.hpp>
 #include <basic/TextUtils.hpp>
 
 namespace ut = boost::ut;
@@ -294,9 +294,9 @@ CREATE TABLE CTags (\n\
         expect( true == starts_igCase("BODY {", "body") );
     };
     
-    "iter32"_test = [](){
+    "iter_utf8"_test = [](){
         std::string_view    txt = "² ";
-        Iter32      a(txt);
+        IterUtf8      a(txt);
         char32_t    ch  = a.next();
         expect(U'²' == ch);
     };

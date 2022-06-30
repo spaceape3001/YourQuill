@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //#pragma once
-#include "Iter32.hpp"
+#include "IterUtf8.hpp"
 
 namespace yq {
     int utf8_decode(char32_t&ch, const char*z, size_t n)
