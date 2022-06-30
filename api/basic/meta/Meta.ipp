@@ -14,17 +14,6 @@
 
 namespace yq {
 
-    namespace {
-        std::string_view     str_start(std::string_view z, const char* pat)
-        {
-            size_t i;
-            for(i=0; (i<z.size()) && *pat; ++i, ++pat)
-                if(z[i] != *pat)
-                    return z;
-            return z.substr(i);
-        }
-    }
-
     const Vector<const Meta*>&   Meta::all()
     {
         assert(thread_safe_read());
@@ -116,7 +105,10 @@ namespace yq {
     void  Meta::set_name(std::string_view v) 
     { 
         //  strip out the yq namespace
-        m_name = str_start(v, "yq::");
+        if(starts(v, "yq::"))
+            m_name  = v.substr(4);
+        else
+            m_name = v;
         auto ecolon = m_name.find_last_of(':');
         if(ecolon != std::string_view::npos){
             m_stem  = m_name.substr(ecolon+1);

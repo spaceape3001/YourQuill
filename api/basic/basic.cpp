@@ -20,6 +20,7 @@
 #include "HttpParser.ipp"
 #include "HttpStatus.ipp"
 #include "IgCase.ipp"
+#include "Iter32.ipp"
 #include "Logging.ipp"
 #include "Object.ipp"
 #include "PidFile.ipp"

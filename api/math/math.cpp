@@ -1934,7 +1934,6 @@ YQ_INVOKE(
     vec4u.property("y", &Vector4U::y);
     vec4u.property("z", &Vector4U::z);
     vec4u.property("w", &Vector4U::w);
-
 );
 
 namespace yq {

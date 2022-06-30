@@ -94,7 +94,7 @@ namespace yq {
         m_flags |= TYPE;
         
         Repo&   r  = repo();
-        assert("no duplicate typenames!" && !r.types.lut.has(zName)); 
+        assert("no duplicate typenames!" && !r.types.lut.has(name())); 
         
         r.types << this;
     }

@@ -67,6 +67,7 @@ set(basic_sources
     ./IgCase.ipp
     ./IntRange.hpp
     ./Iter32.hpp
+    ./Iter32.ipp
     ./IterW.hpp
     ./KV.hpp
     ./List.hpp

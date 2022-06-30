@@ -16,6 +16,14 @@
 #include <string_view>
 
 namespace yq {
+    /*! Decodes one CHARACTER to a unicode string
+    
+        This may be multiple bytes, if those bytes are missing, it's considered an error
+        and (-1) is returned.
+        
+        \return Number of bytes this character consumed
+    */
+    int utf8_decode(char32_t&, const char*, size_t);
 
     /*! \brief Used to iterate through the string as char32_t
         \note This stores a REFERENCE to the string!  and do NOT modify the string
@@ -30,7 +38,7 @@ namespace yq {
         {
             char32_t ret = 0;
             if(m_data && (m_data < m_end) && !m_error){
-                int len = std::mbrtoc32(&ret, m_data, m_end-m_data, &m_state);
+                int len = utf8_decode(ret, m_data, m_end-m_data);
                 if(len > 0){
                     m_data     += len;
                 } else {
@@ -56,7 +64,6 @@ namespace yq {
             m_begin(z), 
             m_data(z), 
             m_end(z+n), 
-            m_state{},
             m_error(false)
         {
             assert(z || !n);
@@ -70,7 +77,6 @@ namespace yq {
         const char*     m_begin;
         const char*     m_data;
         const char*     m_end;
-        std::mbstate_t  m_state;
         bool            m_error;
     };
     
@@ -88,11 +94,10 @@ namespace yq {
     {
         const char* p   = s;
         const char* e   = p + n;
-        std::mbstate_t  state{};
         char32_t     wc = 0;
         int          len = 0;
 
-        while((p < e) && ((len = std::mbrtoc32(&wc, p, e-p, &state)) > 0)){
+        while((p < e) && ((len = utf8_decode(wc, p, e-p)) > 0)){
             if constexpr (std::is_invocable_v<Pred, char32_t>){
                     // In this case, a simple character
                 pred(wc);
@@ -134,11 +139,10 @@ namespace yq {
     {
         const char* p   = s;
         const char* e   = p + n;
-        std::mbstate_t  state{};
         char32_t     wc = 0;
         int          len = 0;
 
-        while((p < e) && ((len = std::mbrtoc32(&wc, p, e-p, &state)) > 0)){
+        while((p < e) && ((len = utf8_decode(wc, p, e-p)) > 0)){
             if constexpr (std::is_invocable_r_v<bool, Pred, char32_t>){
                 if(!pred(wc))
                     break;
@@ -188,11 +192,10 @@ namespace yq {
             ret.reserve(n);
             const char* p   = s;
             const char* e   = p + n;
-            std::mbstate_t  state{};
             char32_t     wc = 0;
             int         len = 0;
 
-            while((p < e) && ((len = std::mbrtoc32(&wc, p, e-p, &state)) > 0)){
+            while((p < e) && ((len = utf8_decode(wc, p, e-p)) > 0)){
                 if constexpr (std::is_invocable_r_v<bool, Pred, char32_t>){
                     if(pred(wc))
                         ret.append(p, len);
@@ -226,11 +229,10 @@ namespace yq {
     {
         const char* p   = s;
         const char* e   = p + n;
-        std::mbstate_t  state{};
         char32_t     wc = 0;
         int          len = 0;
 
-        while((p < e) && ((len = std::mbrtoc32(&wc, p, e-p, &state)) > 0)){
+        while((p < e) && ((len = utf8_decode(wc, p, e-p)) > 0)){
             if constexpr (std::is_invocable_r_v<bool, Pred, char32_t>){
                 if(pred(wc))
                     return p;
@@ -257,11 +259,10 @@ namespace yq {
             ret.reserve(n);
             const char* p   = s;
             const char* e   = p + n;
-            std::mbstate_t  state{};
             char32_t     wc = 0;
             int         len = 0;
 
-            while((p < e) && ((len = std::mbrtoc32(&wc, p, e-p, &state)) > 0)){
+            while((p < e) && ((len = utf8_decode(wc, p, e-p)) > 0)){
                 if constexpr (std::is_invocable_r_v<bool, Pred, char32_t>){
                     if(!pred(wc))
                         ret.append(p, len);

@@ -6,6 +6,7 @@
 
 #include <boost/ut.hpp>
 #include <basic/Vector.hpp>
+#include <basic/Iter32.hpp>
 #include <basic/TextUtils.hpp>
 
 namespace ut = boost::ut;
@@ -291,6 +292,28 @@ CREATE TABLE CTags (\n\
     
     "starts_igCase"_test = [](){
         expect( true == starts_igCase("BODY {", "body") );
+    };
+    
+    "iter32"_test = [](){
+        std::string_view    txt = "² ";
+        Iter32      a(txt);
+        char32_t    ch  = a.next();
+        expect(U'²' == ch);
+    };
+    
+    "equal_test"_test = [](){
+        std::string_view    a   = "unit::Centimeter";
+        std::string_view    b   = "unit::Centimeter²";
+        expect( true == (a != b ));
+    };
+    
+    "equal_isCase"_test = [](){
+        
+        std::string_view    a   = "unit::Centimeter";
+        std::string_view    b   = "unit::Centimeter²";
+    
+        expect( true == is_less_igCase(a,b));
+        expect( true == !is_less_igCase(b,a));
     };
 };
 
