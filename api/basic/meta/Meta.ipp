@@ -78,6 +78,9 @@ namespace yq {
         m_label     = m_name;                       // default (can be overriden)
         m_parent    = parent;
         m_source    = sl;
+        
+        if(parent)
+            parent->m_children.push_back(this);
 
         auto& _r     = repo();
         if(i < M_USER){
