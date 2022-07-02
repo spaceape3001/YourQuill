@@ -2048,6 +2048,90 @@ namespace yq {
     //  --------------------------------------------------------
     //  MULTIPLICATION
 
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Bivector2<T> operator*(T a, const Bivector2<T>& b)
+    {
+        return { a*b.xy };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Bivector3<T> operator*(T a, const Bivector3<T>& b)
+    {
+        return { a*b.xy, a*b.yz, a*b.zx };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Bivector4<T> operator*(T a, const Bivector4<T>& b)
+    {
+        return { a*b.xy, a*b.yz, a*b.zw, a*b.wx, a*b.xz, a*b.yw };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Trivector3<T> operator*(T a, const Trivector3<T>& b)
+    {
+        return { a*b.xyz };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Trivector4<T> operator*(T a, const Trivector4<T>& b)
+    {
+        return { a*b.xyz, a*b.yzw, a*b.zwx, a*b.wxy, };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Quadvector4<T> operator*(T a, const Quadvector4<T>& b)
+    {
+        return { a*b.xyzw };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Multivector1<T> operator*(T a, const Multivector1<T>&b)
+    {
+        return { a*b.a, a*b.x };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Multivector2<T> operator*(T a, const Multivector2<T>&b)
+    {
+        return { 
+            a*b.a, 
+            a*b.x, a*b.y, 
+            a*b.xy 
+        };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Multivector3<T> operator*(T a, const Multivector3<T>&b)
+    {
+        return { 
+            a*b.a, 
+            a*b.x, a*b.y, a*b.z,
+            a*b.xy, a*b.yz, a*b.zx,
+            a*b.xyz
+        };
+    }
+
+    template <typename T>
+    requires std::is_floating_point_v<T>
+    Multivector4<T> operator*(T a, const Multivector4<T>&b)
+    {
+        return { 
+            a*b.a, 
+            a*b.x, a*b.y, a*b.z, a*b.w,
+            a*b.xy, a*b.yz, a*b.zw, a*b.wx, a*b.xz, a*b.yw,
+            a*b.xyz, a*b.yzw, a*b.zwx, a*b.wxy,
+            a*b.xyz
+        };
+    }
 
     //  --------------------------------------------------------
     //  DIVISION
