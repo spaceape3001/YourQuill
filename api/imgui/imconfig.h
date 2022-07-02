@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <math/Vector2.hpp>
+
 //---- Define assertion handler. Defaults to calling assert().
 // If your macro uses multiple statements, make sure is enclosed in a 'do { .. } while (0)' block so it can be used as a single statement.
 //#define IM_ASSERT(_EXPR)  MyAssert(_EXPR)
@@ -50,13 +52,13 @@
 //#define IMGUI_DISABLE_SSE                                 // Disable use of SSE intrinsics even if available
 
 //---- Include imgui_user.h at the end of imgui.h as a convenience
-//#define IMGUI_INCLUDE_IMGUI_USER_H
+#define IMGUI_INCLUDE_IMGUI_USER_H 1
 
 //---- Pack colors to BGRA8 instead of RGBA8 (to avoid converting from one to another)
 //#define IMGUI_USE_BGRA_PACKED_COLOR
 
 //---- Use 32-bit for ImWchar (default is 16-bit) to support unicode planes 1-16. (e.g. point beyond 0xFFFF like emoticons, dingbats, symbols, shapes, ancient languages, etc...)
-//#define IMGUI_USE_WCHAR32
+#define IMGUI_USE_WCHAR32   1
 
 //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
 // By default the embedded implementations are declared static and not available outside of Dear ImGui sources files.
@@ -73,7 +75,7 @@
 //---- Use FreeType to build and rasterize the font atlas (instead of stb_truetype which is embedded by default in Dear ImGui)
 // Requires FreeType headers to be available in the include path. Requires program to be compiled with 'misc/freetype/imgui_freetype.cpp' (in this repository) + the FreeType library (not provided).
 // On Windows you may use vcpkg with 'vcpkg install freetype --triplet=x64-windows' + 'vcpkg integrate install'.
-//#define IMGUI_ENABLE_FREETYPE
+#define IMGUI_ENABLE_FREETYPE
 
 //---- Use stb_truetype to build and rasterize the font atlas (default)
 // The only purpose of this define is if you want force compilation of the stb_truetype backend ALONG with the FreeType backend.
@@ -90,6 +92,13 @@
         constexpr ImVec4(const MyVec4& f) : x(f.x), y(f.y), z(f.z), w(f.w) {}   \
         operator MyVec4() const { return MyVec4(x,y,z,w); }
 */
+
+#define IM_VEC2_CLASS_EXTRA                                                                 \
+        constexpr ImVec2(const yq::Vector2D& v) : x((float) v.x), y((float) v.y) {}         \
+        constexpr operator yq::Vector2D() const { return { x, y }; }                        \
+        constexpr ImVec2(const yq::Vector2F& v) : x(v.x), y(v.y) {}                         \
+        constexpr operator yq::Vector2F() const { return { x, y }; }
+
 
 //---- Use 32-bit vertex indices (default is 16-bit) is one way to allow large meshes with more than 64K vertices.
 // Your renderer backend will need to support it (most example renderer backends support both 16/32-bit indices).
