@@ -22,6 +22,7 @@
 #include "IgCase.ipp"
 #include "IterUtf8.ipp"
 #include "Logging.ipp"
+#include "MetaObject.ipp"
 #include "Object.ipp"
 #include "PidFile.ipp"
 #include "PluginLoader.ipp"
