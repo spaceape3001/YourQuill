@@ -10,10 +10,6 @@
 [submodule "3rd/nlohmann"]
 	path = 3rd/nlohmann
 	url = https://github.com/nlohmann/json.git
-[submodule "3rd/imgui"]
-	path = 3rd/imgui
-	url = https://github.com/ocornut/imgui.git
-	branch = docking
 [submodule "3rd/stb"]
 	path = 3rd/stb
 	url = https://github.com/nothings/stb.git
