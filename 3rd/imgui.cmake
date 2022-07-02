@@ -17,6 +17,8 @@ add_library(imgui SHARED
     #imgui/misc/freetype/imgui_freetype.cpp
 )
 
+target_compile_definitions(imgui PRIVATE -DIMGUI_USE_WCHAR32=1)
+
 target_include_directories(imgui PUBLIC ./imgui)
 
 target_link_libraries(imgui PUBLIC 
