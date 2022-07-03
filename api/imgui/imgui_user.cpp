@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "imgui.h"
 #include "imgui_user.h"
 
 namespace ImGui {
@@ -27,7 +28,7 @@ namespace ImGui {
         return DragScalarN(label, ImGuiDataType_Double, v, 2, v_speed, &v_min, &v_max, format, flags);
     }
 
-    bool    DragDouble2(const char* label, Vector2D*v, float speed, double v_min, double v_max, const char* format, ImGuiSliderFlags flags)
+    bool    DragDouble2(const char* label, yq::Vector2D*v, float speed, double v_min, double v_max, const char* format, ImGuiSliderFlags flags)
     {
         return DragDouble2(label, (double*) v, speed, v_min, v_max, format, flags);
     }
@@ -37,7 +38,7 @@ namespace ImGui {
         return DragScalarN(label, ImGuiDataType_Double, v, 3, v_speed, &v_min, &v_max, format, flags);
     }
     
-    bool    DragDouble3(const char* label, Vector3D*v, float speed, double v_min, double v_max, const char* format, ImGuiSliderFlags flags)
+    bool    DragDouble3(const char* label, yq::Vector3D*v, float speed, double v_min, double v_max, const char* format, ImGuiSliderFlags flags)
     {
         return DragDouble3(label, (double*) v, speed, v_min, v_max, format, flags);
     }
@@ -47,7 +48,7 @@ namespace ImGui {
         return DragScalarN(label, ImGuiDataType_Double, v, 4, v_speed, &v_min, &v_max, format, flags);
     }
     
-    bool    DragDouble4(const char* label, Vector4D*v, float speed, double v_min, double v_max, const char* format, ImGuiSliderFlags flags)
+    bool    DragDouble4(const char* label, yq::Vector4D*v, float speed, double v_min, double v_max, const char* format, ImGuiSliderFlags flags)
     {
         return DragDouble4(label, (double*) v, speed, v_min, v_max, format, flags);
     }
@@ -57,7 +58,7 @@ namespace ImGui {
         return InputScalarN(label, ImGuiDataType_Double, v, 2, NULL, NULL, format, flags);
     }
     
-    bool    InputDouble2(const char* label, Vector2D*v, const char* format, ImGuiInputTextFlags flags)
+    bool    InputDouble2(const char* label, yq::Vector2D*v, const char* format, ImGuiInputTextFlags flags)
     {
         return InputScalarN(label, ImGuiDataType_Double, v, 2, NULL, NULL, format, flags);
     }
@@ -67,7 +68,7 @@ namespace ImGui {
         return InputScalarN(label, ImGuiDataType_Double, v, 3, NULL, NULL, format, flags);
     }
     
-    bool    InputDouble3(const char* label, Vector3D*v, const char* format, ImGuiInputTextFlags flags)
+    bool    InputDouble3(const char* label, yq::Vector3D*v, const char* format, ImGuiInputTextFlags flags)
     {
         return InputScalarN(label, ImGuiDataType_Double, v, 3, NULL, NULL, format, flags);
     }
@@ -77,12 +78,12 @@ namespace ImGui {
         return InputScalarN(label, ImGuiDataType_Double, v, 4, NULL, NULL, format, flags);
     }
 
-    bool    InputDouble4(const char* label, Vector4D*v, const char* format, ImGuiInputTextFlags flags)
+    bool    InputDouble4(const char* label, yq::Vector4D*v, const char* format, ImGuiInputTextFlags flags)
     {
         return InputScalarN(label, ImGuiDataType_Double, v, 4, NULL, NULL, format, flags);
     }
 
-    bool    InputDouble4(const char* label, Quaternion3D*v, const char* format, ImGuiInputTextFlags flags)
+    bool    InputDouble4(const char* label, yq::Quaternion3D*v, const char* format, ImGuiInputTextFlags flags)
     {
         return InputScalarN(label, ImGuiDataType_Double, v, 4, NULL, NULL, format, flags);
     }

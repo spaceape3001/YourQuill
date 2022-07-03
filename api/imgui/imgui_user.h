@@ -34,41 +34,41 @@ namespace ImGui {
     bool    VSliderDouble(const char* label, const ImVec2& size, double& v, double v_min, double v_max, const char* format = "%.l3f", ImGuiSliderFlags flags = 0);
 
 
-    bool    DragDouble2(const char* label, Vector2D*, float speed, double v_min=0.0, double v_max=0.0, const char* format="%.3lf", ImGuiSliderFlags flags=0);
-    bool    DragDouble3(const char* label, Vector3D*, float speed, double v_min=0.0, double v_max=0.0, const char* format="%.3lf", ImGuiSliderFlags flags=0);
-    bool    DragDouble4(const char* label, Vector4D*, float speed, double v_min=0.0, double v_max=0.0, const char* format="%.3lf", ImGuiSliderFlags flags=0);
+    bool    DragDouble2(const char* label, yq::Vector2D*, float speed, double v_min=0.0, double v_max=0.0, const char* format="%.3lf", ImGuiSliderFlags flags=0);
+    bool    DragDouble3(const char* label, yq::Vector3D*, float speed, double v_min=0.0, double v_max=0.0, const char* format="%.3lf", ImGuiSliderFlags flags=0);
+    bool    DragDouble4(const char* label, yq::Vector4D*, float speed, double v_min=0.0, double v_max=0.0, const char* format="%.3lf", ImGuiSliderFlags flags=0);
 
-    bool    InputDouble2(const char* label, Vector2D*, const char* format = "%.3lf", ImGuiInputTextFlags flags = 0);
-    bool    InputDouble3(const char* label, Vector3D*, const char* format = "%.3lf", ImGuiInputTextFlags flags = 0);
-    bool    InputDouble4(const char* label, Vector4D*, const char* format = "%.3fl", ImGuiInputTextFlags flags = 0);
-    bool    InputDouble4(const char* label, Quaternion3D*, const char* format = "%.3fl", ImGuiInputTextFlags flags = 0);
+    bool    InputDouble2(const char* label, yq::Vector2D*, const char* format = "%.3lf", ImGuiInputTextFlags flags = 0);
+    bool    InputDouble3(const char* label, yq::Vector3D*, const char* format = "%.3lf", ImGuiInputTextFlags flags = 0);
+    bool    InputDouble4(const char* label, yq::Vector4D*, const char* format = "%.3fl", ImGuiInputTextFlags flags = 0);
+    bool    InputDouble4(const char* label, yq::Quaternion3D*, const char* format = "%.3fl", ImGuiInputTextFlags flags = 0);
     
     template <typename DIM>
-    bool    InputDouble(const char* label, MKS<double,DIM>* v, MKS<double,DIM> step = { 0.0 }, MKS<double,DIM> step_fast = { 0.0 }, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
+    bool    InputDouble(const char* label, yq::MKS<double,DIM>* v, yq::MKS<double,DIM> step = { 0.0 }, yq::MKS<double,DIM> step_fast = { 0.0 }, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
     {
         return InputDouble(label, (double*) v, step.value, step_fast.value, format, flags);
     }
 
     template <typename DIM, double K>
-    bool    InputDouble(const char* label, SCALED<double,DIM,K>* v, SCALED<double,DIM,K> step = { 0.0 }, SCALED<double,DIM,K> step_fast = { 0.0 }, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
+    bool    InputDouble(const char* label, yq::SCALED<double,DIM,K>* v, yq::SCALED<double,DIM,K> step = { 0.0 }, yq::SCALED<double,DIM,K> step_fast = { 0.0 }, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
     {
         return InputDouble(label, (double*) v, step.value, step_fast.value, format, flags);
     }
 
     template <typename DIM>
-    bool    InputDouble2(const char* label, Vector2<MKS<double,DIM>>* v, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
+    bool    InputDouble2(const char* label, yq::Vector2<yq::MKS<double,DIM>>* v, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
     {
         return InputDouble2(label, (double*) v, format, flags);
     }
 
     template <typename DIM>
-    bool    InputDouble3(const char* label, Vector3<MKS<double,DIM>>* v, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
+    bool    InputDouble3(const char* label, yq::Vector3<yq::MKS<double,DIM>>* v, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
     {
         return InputDouble3(label, (double*) v, format, flags);
     }
 
     template <typename DIM>
-    bool    InputDouble4(const char* label, Vector4<MKS<double,DIM>>* v, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
+    bool    InputDouble4(const char* label, yq::Vector4<yq::MKS<double,DIM>>* v, const char* format = "%.6f", ImGuiInputTextFlags flags = 0)
     {
         return InputDouble4(label, (double*) v, format, flags);
     }
