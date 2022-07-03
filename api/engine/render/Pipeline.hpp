@@ -7,7 +7,7 @@
 #pragma once
 
 #include <basic/meta/Meta.hpp>
-#include <engine/EngineConfig.hpp>
+#include <engine/preamble.hpp>
 #include <engine/render/PipelineConfig.hpp>
 
 namespace yq {

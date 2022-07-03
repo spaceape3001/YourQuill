@@ -5,22 +5,28 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <basic/Object.hpp>
-#include <basic/Ref.hpp>
-#include <basic/UniqueID.hpp>
+#include <basic/MetaObject.hpp>
 
 namespace yq {
     namespace engine {
     
         struct SimData;
 
-        class TaskableInfo : public ObjectInfo {
+        class TaskableInfo : public MetaObjectInfo {
+        public:
+            template <typename C> class Writer;
+            TaskableInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl=std::source_location::current());
         };
     
-        class Taskable : public Object, public RefCount, public UniqueID {
+        class Taskable : public MetaObject {
+            YQ_OBJECT_INFO(TaskableInfo)
+            YQ_OBJECT_DECLARE(Taskable, MetaObject)
         public:
             virtual void    step(SimData&) = 0;
-            virtual ~Taskable(){}
+            
+        protected:
+            Taskable();
+            virtual ~Taskable();
         };
         
     }

@@ -10,7 +10,8 @@
 
 namespace yq {
     namespace engine {
-        static constexpr const size_t   MAX_PUSH    = 256;
+        static constexpr const size_t   MAX_PUSH                = 256;
+        static constexpr const size_t   MAX_FRAMES_IN_FLIGHT    = 2;
     }
 }
 

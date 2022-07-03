@@ -22,7 +22,6 @@
 #include <engine/Scene.hpp>
 #include <engine/Perspective.hpp>
 #include <engine/gui/ImWindow.hpp>
-#include <engine/gui/MathEdits.hpp>
 
 #include <math/RGB.hpp>
 #include <math/Vector2.hpp>
@@ -38,7 +37,6 @@
 
 using namespace ImGui;
 using namespace yq;
-using namespace yq::gui;
 using namespace yq::asset;
 using namespace yq::engine;
 
@@ -194,7 +192,7 @@ struct CameraWin : public ImWindow {
             #if 1
                 bool    changed = false;
             
-                gui::ToggleButton("motion", &slave_clock);
+                ToggleButton("motion", &slave_clock);
             
                 Vector3D        pos = cam->position();
                 if(InputDouble3("position", &pos))
