@@ -73,6 +73,14 @@ using timepoint_t   = std::chrono::time_point<std::chrono::steady_clock>;
 
 struct HelloTriangle : public engine::Rendered {
     YQ_OBJECT_DECLARE(HelloTriangle, engine::Rendered)
+    
+    struct MyUBO {
+        glm::mat4   model;
+        glm::mat4   view;
+        glm::mat4   proj;
+        glm::vec4   dope;
+    };
+    
     std::unique_ptr<VqPipeline> m_pipeline;
     VqBuffer                    m_vbo;
     Vulqan*                     m_window                = nullptr;
@@ -97,6 +105,7 @@ struct HelloTriangle : public engine::Rendered {
             .attribute<glm::vec2>(&Vertex::position)
             .attribute<glm::vec3>(&Vertex::color)
         ;
+        build.ubo();
         
         m_pipeline    = std::make_unique<VqPipeline>(*w, cfg);
         

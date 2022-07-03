@@ -101,6 +101,12 @@ namespace yq {
             m_config->topology = v;
         }
         
+        void    PipelineBuilder::ubo(size_t cnt)
+        {
+            UBOConfig   u;
+            u.count = cnt;
+            m_config->ubos.push_back(u);
+        }
 
     }
 }

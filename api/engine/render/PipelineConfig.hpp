@@ -33,6 +33,11 @@ namespace yq {
             VertexInputRate         inputRate;
         };
         
+        struct UBOConfig {
+            uint32_t            count   = 1;
+            uint32_t            stage   = 0;
+        };
+        
         struct PushConfig {
             size_t          size    = 0;
             PushConfigType  type    = PushConfigType::None;
@@ -42,6 +47,7 @@ namespace yq {
         struct PipelineConfig {
             std::vector<ShaderSpec>     shaders;
             std::vector<VBOConfig>      vbos;
+            std::vector<UBOConfig>      ubos;
             Topology                    topology    = Topology::TriangleList;
             PolygonMode                 polymode    = PolygonMode::Fill;
             FrontFace                   front       = FrontFace::CounterClockwise;

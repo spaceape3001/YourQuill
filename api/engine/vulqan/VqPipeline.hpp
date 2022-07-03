@@ -46,6 +46,7 @@ namespace yq {
             VkPipelineLayout        m_layout    = nullptr;
             VkPipeline              m_pipeline  = nullptr;
             VkPipeline              m_wireframe = nullptr;
+            VkDescriptorSetLayout   m_descriptorSetLayout   = nullptr;
             uint64_t                m_id            = 0;
             uint32_t                m_shaderMask    = 0;
         };

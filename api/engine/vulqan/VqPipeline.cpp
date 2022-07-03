@@ -33,6 +33,7 @@ namespace yq {
                 
                 std::vector<VkVertexInputAttributeDescription>  attrs;
                 std::vector<VkVertexInputBindingDescription>    vbos;
+                std::vector<VkDescriptorSetLayoutBinding>       ubos;
                 
                 for(uint32_t i=0;i<cfg.vbos.size();++i){
                     auto& v = cfg.vbos[i];
@@ -51,6 +52,28 @@ namespace yq {
                         attrs.push_back(a);
                     }
                 }
+
+                if(!cfg.ubos.empty()){
+                    for(uint32_t    i   = 0;i<cfg.ubos.size();++i){
+                        auto& u = cfg.ubos[i];
+                        VkDescriptorSetLayoutBinding a;
+                        a.binding           = i;
+                        a.descriptorCount   = u.count;
+                        a.descriptorType    = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                        if(u.stage)
+                            a.stageFlags    = u.stage;
+                        else
+                            a.stageFlags    = m_shaderMask;
+                        ubos.push_back(a);
+                    }
+                    VqDescriptorSetLayoutCreateInfo layoutInfo;
+                    layoutInfo.bindingCount = ubos.size();
+                    layoutInfo.pBindings    = ubos.data();
+                    if(vkCreateDescriptorSetLayout(win.device, &layoutInfo, nullptr, &m_descriptorSetLayout) != VK_SUCCESS)
+                        throw VqException("Unable to create a descriptor set layout.");
+                }
+                    
+
 
                 vertexInfo.vertexBindingDescriptionCount    = (uint32_t) vbos.size();
                 vertexInfo.pVertexBindingDescriptions       = vbos.data();
@@ -142,6 +165,10 @@ namespace yq {
                     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
                     pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
                 }
+                if(m_descriptorSetLayout){
+                    pipelineLayoutInfo.setLayoutCount   = 1;
+                    pipelineLayoutInfo.pSetLayouts      = &m_descriptorSetLayout;
+                }
 
 
                 if (vkCreatePipelineLayout(win.device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) 
@@ -197,6 +224,10 @@ namespace yq {
         void    VqPipeline::dtor()
         {
             if(m_device){
+                if(m_descriptorSetLayout){
+                    vkDestroyDescriptorSetLayout(m_device, m_descriptorSetLayout, nullptr);
+                    m_descriptorSetLayout   = nullptr;
+                }
                 if(m_wireframe){
                     vkDestroyPipeline(m_device, m_wireframe, nullptr);
                     m_wireframe = nullptr;

@@ -47,6 +47,8 @@ namespace yq {
         
             PipelineBuilder(PipelineConfig& cfg);
             ~PipelineBuilder();
+            
+            void        ubo(size_t cnt=1);
 
         protected:
             PipelineBuilder(PipelineConfig*);
