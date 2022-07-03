@@ -8,9 +8,14 @@
 
 #include "MetaObject.hpp"
 #include "DelayInit.hpp"
-#include "meta/ObjectInfoWriter.hpp"
+#include "MetaObjectInfoWriter.hpp"
 
 namespace yq {
+    MetaObjectInfo::MetaObjectInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) : 
+        ObjectInfo(zName, base, sl)
+    {
+    }
+
     MetaObject::MetaObject()
     {
     }
