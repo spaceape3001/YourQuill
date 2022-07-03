@@ -8,7 +8,7 @@
 
 #include <basic/MetaObject.hpp>
 #include <basic/Revision.hpp>
-#include <engine/enum/Tristate.hpp>
+#include <engine/preamble.hpp>
 #include <engine/render/PipelineConfig.hpp>
 
 namespace yq {

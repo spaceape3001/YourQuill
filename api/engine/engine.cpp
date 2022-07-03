@@ -13,32 +13,7 @@
 
 #include <basic/meta/Init.hpp>
 
-#include "enum/BorderColor.hpp"
-#include "enum/ColorComponent.hpp"
-#include "enum/ComponentSwizzle.hpp"
-#include "enum/CullMode.hpp"
-#include "enum/DataActivity.hpp"
-#include "enum/DataFormat.hpp"
-#include "enum/DescriptorType.hpp"
-#include "enum/FilterType.hpp"
-#include "enum/FrontFace.hpp"
-#include "enum/ImageLayout.hpp"
-#include "enum/ImageTiling.hpp"
-#include "enum/ImageType.hpp"
-#include "enum/IndexType.hpp"
-#include "enum/LogicOp.hpp"
-#include "enum/MipmapMode.hpp"
-#include "enum/PolygonMode.hpp"
-#include "enum/SamplerAddressMode.hpp"
-#include "enum/SamplerMipmapMode.hpp"
-#include "enum/ShaderType.hpp"
-#include "enum/StencilOp.hpp"
-#include "enum/SubpassContents.hpp"
-#include "enum/SystemAllocationScope.hpp"
-#include "enum/Topology.hpp"
-#include "enum/Tristate.hpp"
-#include "enum/VertexInputRate.hpp"
-
+#include "preamble.hpp"
 
 #include "vulqan/VqAllocator.ipp"
 #include "vulqan/VqBuffer.ipp"

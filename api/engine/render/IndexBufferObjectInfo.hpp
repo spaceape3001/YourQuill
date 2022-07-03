@@ -8,7 +8,7 @@
 
 #include <basic/meta/Meta.hpp>
 #include "BufferObjectInfo.hpp"
-#include <engine/enum/IndexType.hpp>
+#include <engine/preamble.hpp>
 
 namespace yq {
     namespace engine {

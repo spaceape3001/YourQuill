@@ -7,8 +7,7 @@
 #pragma once
 
 #include <basic/meta/InfoBinder.hpp>
-#include <engine/enum/DataFormat.hpp>
-#include <engine/enum/IndexType.hpp>
+#include <engine/preamble.hpp>
 #include <span>
 
 namespace yq {

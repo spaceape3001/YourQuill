@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "AppCreateInfo.hpp"
 #include <basic/BasicApp.hpp>
 #include <basic/DbgRel.hpp>
-#include <engine/enum/Required.hpp>
+#include <engine/preamble.hpp>
+#include <engine/AppCreateInfo.hpp>
 #include <vulkan/vulkan_core.h>
 #include <set>
 #include <vector>

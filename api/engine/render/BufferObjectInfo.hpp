@@ -7,8 +7,7 @@
 #pragma once
 
 #include <basic/meta/Meta.hpp>
-#include <engine/enum/DataActivity.hpp>
-#include <engine/enum/DataFormat.hpp>
+#include <engine/preamble.hpp>
 
 namespace yq {
     namespace engine {

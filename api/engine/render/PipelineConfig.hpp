@@ -6,16 +6,9 @@
 
 #pragma once
 
-#include <engine/shader/ShaderPointer.hpp>
 #include <optional>
 #include <vector>
-#include <engine/enum/CullMode.hpp>
-#include <engine/enum/PolygonMode.hpp>
-#include <engine/enum/PushConfigType.hpp>
-#include <engine/enum/Topology.hpp>
-#include <engine/enum/FrontFace.hpp>
-#include <engine/enum/DataFormat.hpp>
-#include <engine/enum/VertexInputRate.hpp>
+#include <engine/preamble.hpp>
 
 namespace yq {
     namespace engine {

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/shader/ShaderPointer.hpp>
+#include <engine/preamble.hpp>
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 #include <vulkan/vulkan_core.h>
