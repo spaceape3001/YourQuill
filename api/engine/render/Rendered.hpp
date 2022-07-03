@@ -6,9 +6,7 @@
 
 #pragma once
 
-#include <basic/Object.hpp>
-#include <basic/meta/ObjectInfo.hpp>
-#include <basic/UniqueID.hpp>
+#include <basic/MetaObject.hpp>
 #include <basic/Revision.hpp>
 #include <engine/enum/Tristate.hpp>
 #include <engine/render/PipelineConfig.hpp>
@@ -24,7 +22,7 @@ namespace yq {
         };
 
         
-        class RenderedInfo : public ObjectInfo {
+        class RenderedInfo : public MetaObjectInfo {
         public:
             template <typename C> struct Writer;
 
@@ -46,9 +44,9 @@ namespace yq {
             If you want it to show up on the viewport, it needs to be renderable, and thus derived
             from this thing.
         */
-        class Rendered : public Object, public RefCount, public UniqueID, public Revision {
+        class Rendered : public MetaObject, public Revision {
             YQ_OBJECT_INFO(RenderedInfo);
-            YQ_OBJECT_DECLARE(Rendered, Object)
+            YQ_OBJECT_DECLARE(Rendered, MetaObject)
         public:    
 
             uint64_t            id() const { return UniqueID::id(); }

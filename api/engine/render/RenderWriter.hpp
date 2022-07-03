@@ -423,9 +423,9 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         template <typename C>
-        class RenderedInfo::Writer : public ObjectInfo::Writer<C> {
+        class RenderedInfo::Writer : public MetaObjectInfo::Writer<C> {
         public:
-            Writer(RenderedInfo* renderInfo) : ObjectInfo::Writer<C>(renderInfo), m_rendered(renderInfo)
+            Writer(RenderedInfo* renderInfo) : MetaObjectInfo::Writer<C>(renderInfo), m_rendered(renderInfo)
             {
             }
             

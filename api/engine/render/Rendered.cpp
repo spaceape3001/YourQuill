@@ -33,7 +33,7 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         RenderedInfo::RenderedInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
-            ObjectInfo(name, base, sl)
+            MetaObjectInfo(name, base, sl)
         {
             set_option(RENDERED);
         }
