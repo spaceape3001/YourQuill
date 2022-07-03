@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <basic/Object.hpp>
+#include <basic/MetaObject.hpp>
 #include <basic/Ref.hpp>
 #include <basic/Set.hpp>
 #include <basic/SizeTimestamp.hpp>
@@ -21,7 +21,7 @@ namespace yq {
         class AssetCache;
         
 
-        class AssetInfo : public ObjectInfo {
+        class AssetInfo : public MetaObjectInfo {
         public:
             template <typename C> class Writer;
 
@@ -38,9 +38,9 @@ namespace yq {
             An asset (here) is something that can be loaded by the engine, and used in some predefined fashion.  
             (ie, texture, shader, sounds, etc)  Which is why the asset-library also exists, predefined cameras & shapes
         */
-        class Asset : public Object, public RefCount, public UniqueID {
+        class Asset : public MetaObject {
             YQ_OBJECT_INFO(AssetInfo)
-            YQ_OBJECT_DECLARE(Asset, Object)
+            YQ_OBJECT_DECLARE(Asset, MetaObject)
         public:
             virtual size_t      data_size() const = 0;
             
@@ -51,8 +51,6 @@ namespace yq {
             static const std::filesystem::path&     binary_root();
             static std::filesystem::path            resolve(const std::filesystem::path&);
             static std::filesystem::path            binary_path(const std::filesystem::path&);
-            
-            uint64_t id() const { return UniqueID::id(); }
             
             /*! Searches the given vector for the specified file
             

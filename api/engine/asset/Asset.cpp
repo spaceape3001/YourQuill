@@ -35,7 +35,7 @@ namespace yq {
         //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
         AssetInfo::AssetInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) :
-            ObjectInfo(zName, base, sl)
+            MetaObjectInfo(zName, base, sl)
         {
             set_option(ASSET);
         }
@@ -103,8 +103,7 @@ namespace yq {
         }
         
         YQ_INVOKE(
-            auto res = writer<Asset>();
-            res.property("id", &Asset::id);
+            [[maybe_unused]] auto res = writer<Asset>();
         )
     }
 }
