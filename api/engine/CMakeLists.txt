@@ -25,7 +25,6 @@ set(yq_engine_sources
     ./render/Rendered.cpp
     ./render/Render3D.cpp
 
-    ./sim/sim.cpp
     ./shader/Shader.cpp
 
     ./texture/Texture.cpp

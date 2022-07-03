@@ -7,7 +7,7 @@
 #pragma once
 
 #include <engine/preamble.hpp>
-#include <engine/camera/Camera.hpp>
+#include <engine/Camera.hpp>
 #include <math/Rectangle2.hpp>
 #include <math/RGB.hpp>
 #include <optional>

@@ -28,7 +28,19 @@ namespace yq {
             Taskable();
             virtual ~Taskable();
         };
-        
+
+        template <typename C>
+        class TaskableInfo::Writer : public MetaObjectInfo::Writer<C> {
+        public:
+            Writer(TaskableInfo* assetInfo) : MetaObjectInfo::Writer<C>(assetInfo)
+            {
+            }
+            
+            Writer(TaskableInfo& assetInfo) : Writer(&assetInfo)
+            {
+            }
+        };
+
     }
 }
 

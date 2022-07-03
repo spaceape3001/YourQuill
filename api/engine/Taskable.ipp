@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Taskable.hpp"
-#include "TaskableInfoWriter.hpp"
 #include <basic/DelayInit.hpp>
 
 namespace yq {

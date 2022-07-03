@@ -44,12 +44,11 @@ namespace yq {
             If you want it to show up on the viewport, it needs to be renderable, and thus derived
             from this thing.
         */
-        class Rendered : public MetaObject, public Revision {
+        class Rendered : public MetaObject {
             YQ_OBJECT_INFO(RenderedInfo);
             YQ_OBJECT_DECLARE(Rendered, MetaObject)
         public:    
 
-            uint64_t            id() const { return UniqueID::id(); }
             const Pipeline*   pipeline() const;
             bool                is_culled() const { return m_culled; }
             

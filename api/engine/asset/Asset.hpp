@@ -20,7 +20,6 @@ namespace yq {
         class AssetLoader;
         class AssetCache;
         
-
         class AssetInfo : public MetaObjectInfo {
         public:
             template <typename C> class Writer;
@@ -68,6 +67,18 @@ namespace yq {
         protected:
             Asset();
             virtual ~Asset();
+        };
+
+        template <typename C>
+        class AssetInfo::Writer : public MetaObjectInfo::Writer<C> {
+        public:
+            Writer(AssetInfo* assetInfo) : MetaObjectInfo::Writer<C>(assetInfo)
+            {
+            }
+            
+            Writer(AssetInfo& assetInfo) : Writer(&assetInfo)
+            {
+            }
         };
     }
 }

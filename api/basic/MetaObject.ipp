@@ -8,7 +8,6 @@
 
 #include "MetaObject.hpp"
 #include "DelayInit.hpp"
-#include "MetaObjectInfoWriter.hpp"
 
 namespace yq {
     MetaObjectInfo::MetaObjectInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) : 
@@ -26,7 +25,8 @@ namespace yq {
 
     YQ_INVOKE(
         auto mo = writer<MetaObject>();
-        mo.property("id", &MetaObject::id);
+        mo.property("id",       &MetaObject::id).description("ID");
+        mo.property("revision", &MetaObject::revision).description("Revision Number");
     )
 }
 

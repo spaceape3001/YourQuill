@@ -6,9 +6,8 @@
 
 //#pragma once
 
-#include <engine/camera/Camera.hpp>
+#include <engine/Camera.hpp>
 #include <engine/camera/CameraProxy.hpp>
-#include <engine/camera/CameraInfoWriter.hpp>
 #include <basic/DelayInit.hpp>
 #include <basic/meta/Init.hpp>
 

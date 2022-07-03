@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include <basic/MetaObjectInfoWriter.hpp>
 #include <engine/asset/Asset.hpp>
 #include <engine/asset/AssetCache.hpp>
 #include <engine/asset/AssetCompiler.hpp>
@@ -14,17 +13,6 @@
 
 namespace yq {
     namespace engine {
-        template <typename C>
-        class AssetInfo::Writer : public MetaObjectInfo::Writer<C> {
-        public:
-            Writer(AssetInfo* assetInfo) : MetaObjectInfo::Writer<C>(assetInfo)
-            {
-            }
-            
-            Writer(AssetInfo& assetInfo) : Writer(&assetInfo)
-            {
-            }
-        };
 
         template <typename C>
         class AssetCacheInfo::Writer : public ObjectInfo::Writer<C> {

@@ -72,8 +72,7 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         YQ_INVOKE(
-            auto rend   = writer<Rendered>();
-            rend.property("id", &Rendered::id);
+            [[maybe_unused]] auto rend   = writer<Rendered>();
         )
     }
 }

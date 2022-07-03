@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/camera/Camera.hpp>
+#include <engine/Camera.hpp>
 #include <basic/Mutable.hpp>
 #include <math/SimpleSpace.hpp>
 #include <math/Units.hpp>

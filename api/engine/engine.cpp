@@ -5,7 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Application.ipp"
-#include "camera/Camera.ipp"
+#include "Camera.ipp"
+#include "Taskable.ipp"
+#include "preamble.hpp"
+
 #include "render/BufferObjectInfo.ipp"
 #include "render/PipelineBuilder.ipp"
 #include "render/PipelineConfig.ipp"
@@ -13,7 +16,6 @@
 
 #include <basic/meta/Init.hpp>
 
-#include "preamble.hpp"
 
 #include "vulqan/VqAllocator.ipp"
 #include "vulqan/VqBuffer.ipp"

@@ -578,9 +578,16 @@ namespace yq {
             Instance = 1
         )
         
+        class Camera;
+        using CameraPtr     = Ref<Camera>;
+        using CameraCPtr    = Ref<const Camera>;
+        
         class Shader;
         using ShaderPtr     = Ref<const Shader>;
         using ShaderSpec    = std::variant<std::monostate, std::string, ShaderPtr>;
+
+        class Texture;
+        using TexturePtr    = Ref<const Texture>;
     }
 }
 

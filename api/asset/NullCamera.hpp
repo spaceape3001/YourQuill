@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/camera/Camera.hpp>
+#include <engine/Camera.hpp>
 
 namespace yq {
     namespace asset {

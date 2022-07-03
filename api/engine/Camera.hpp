@@ -7,9 +7,7 @@
 #pragma once
 
 #include <basic/MetaObject.hpp>
-#include <basic/Ref.hpp>
-#include <basic/Revision.hpp>
-#include <basic/UniqueID.hpp>
+#include <engine/preamble.hpp>
 #include <math/Size2.hpp>
 
 #include <glm/glm.hpp>
@@ -44,7 +42,7 @@ namespace yq {
             If you want it to show up on the viewport, it needs to be renderable, and thus derived
             from this thing.
         */
-        class Camera : public MetaObject, public Revision {
+        class Camera : public MetaObject {
             YQ_OBJECT_INFO(CameraInfo);
             YQ_OBJECT_DECLARE(Camera, MetaObject)
         public:    
@@ -64,8 +62,17 @@ namespace yq {
             std::string         m_name;
         };
         
-        using CameraPtr     = Ref<Camera>;
-        using CameraCPtr    = Ref<const Camera>;
+        template <typename C>
+        class CameraInfo::Writer : public MetaObjectInfo::Writer<C> {
+        public:
+            Writer(CameraInfo* renderInfo) : MetaObjectInfo::Writer<C>(renderInfo)
+            {
+            }
+            
+            Writer(CameraInfo& renderInfo) : Writer(&renderInfo)
+            {
+            }
+        };
 
     }
 }
