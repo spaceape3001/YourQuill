@@ -23,7 +23,7 @@ namespace yq {
 
             static const std::vector<const CameraInfo*>&    all();
             
-            CameraInfo(std::string_view, ObjectInfo&, const std::source_location& sl = std::source_location::current());
+            CameraInfo(std::string_view, MetaObjectInfo&, const std::source_location& sl = std::source_location::current());
         private:
             struct Repo;
             static Repo& repo();
@@ -65,11 +65,11 @@ namespace yq {
         template <typename C>
         class CameraInfo::Writer : public MetaObjectInfo::Writer<C> {
         public:
-            Writer(CameraInfo* renderInfo) : MetaObjectInfo::Writer<C>(renderInfo)
+            Writer(CameraInfo* cameraInfo) : MetaObjectInfo::Writer<C>(cameraInfo)
             {
             }
             
-            Writer(CameraInfo& renderInfo) : Writer(&renderInfo)
+            Writer(CameraInfo& cameraInfo) : Writer(&cameraInfo)
             {
             }
         };

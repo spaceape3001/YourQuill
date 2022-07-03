@@ -14,17 +14,6 @@
 
 namespace yq {
     namespace engine {
-        template <typename C>
-        class ShaderInfo::Writer : public AssetInfo::Writer<C> {
-        public:
-            Writer(ShaderInfo* shaderInfo) : AssetInfo::Writer<C>(shaderInfo)
-            {
-            }
-            
-            Writer(ShaderInfo& shaderInfo) : Writer(&shaderInfo)
-            {
-            }
-        };
 
 
         template <typename C>

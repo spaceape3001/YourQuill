@@ -4,10 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "preamble.hpp"
 #include "Application.ipp"
 #include "Camera.ipp"
+#include "Event.ipp"
+#include "Manipulator.ipp"
 #include "Taskable.ipp"
-#include "preamble.hpp"
+#include "Tool.ipp"
+#include "Undo.ipp"
+#include "Widget.ipp"
 
 #include "render/BufferObjectInfo.ipp"
 #include "render/PipelineBuilder.ipp"

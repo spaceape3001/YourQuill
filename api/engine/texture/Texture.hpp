@@ -27,6 +27,10 @@ namespace yq {
             YQ_OBJECT_INFO(TextureInfo)
             YQ_OBJECT_DECLARE(Texture, Asset)
         public:
+        
+        protected:
+            Texture();
+            ~Texture();
         };
 
         template <typename C>

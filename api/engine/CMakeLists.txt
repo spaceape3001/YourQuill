@@ -18,7 +18,6 @@ set(yq_engine_sources
     ./asset/Asset.cpp
     ./asset/AssetCache.cpp
     
-    ./gui/ImWidget.cpp
     ./gui/ImWindow.cpp
     
     ./render/Pipeline.cpp

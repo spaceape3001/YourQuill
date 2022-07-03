@@ -32,7 +32,7 @@ namespace yq {
             return repo().all;
         }
 
-        CameraInfo::CameraInfo(std::string_view name, ObjectInfo& base, const std::source_location& sl) : 
+        CameraInfo::CameraInfo(std::string_view name, MetaObjectInfo& base, const std::source_location& sl) : 
             MetaObjectInfo(name, base, sl)
         {
             set_option(CAMERA);

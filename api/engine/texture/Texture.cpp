@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <engine/texture/Texture.hpp>
 #include <engine/texture/TextureInfoWriter.hpp>
 #include <basic/DelayInit.hpp>
 
@@ -20,6 +21,14 @@ namespace yq {
             AssetInfo(zName, base, sl)
         {
             set_option(TEXTURE);
+        }
+
+        Texture::Texture()
+        {
+        }
+        
+        Texture::~Texture()
+        {
         }
 
         ////////////////////////////////////////////////////////////////////////////////
