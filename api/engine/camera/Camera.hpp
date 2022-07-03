@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <basic/Object.hpp>
+#include <basic/MetaObject.hpp>
 #include <basic/Ref.hpp>
 #include <basic/Revision.hpp>
 #include <basic/UniqueID.hpp>
@@ -19,7 +19,7 @@ namespace yq {
 
         class Camera;
         
-        class CameraInfo : public ObjectInfo {
+        class CameraInfo : public MetaObjectInfo {
         public:
             template <typename C> struct Writer;
 
@@ -44,12 +44,10 @@ namespace yq {
             If you want it to show up on the viewport, it needs to be renderable, and thus derived
             from this thing.
         */
-        class Camera : public Object, public RefCount, public UniqueID, public Revision {
+        class Camera : public MetaObject, public Revision {
             YQ_OBJECT_INFO(CameraInfo);
-            YQ_OBJECT_DECLARE(Camera, Object)
+            YQ_OBJECT_DECLARE(Camera, MetaObject)
         public:    
-        
-            uint64_t        id() const { return UniqueID::id(); }
         
             //! Returns the transform to go world -> screen space
             virtual glm::dmat4  world2screen(const CameraParams&) const = 0;

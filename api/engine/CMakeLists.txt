@@ -20,12 +20,12 @@ set(yq_engine_sources
     
     ./gui/ImWidget.cpp
     ./gui/ImWindow.cpp
-    ./gui/StdEdits.cpp
     
     ./render/Pipeline.cpp
     ./render/Rendered.cpp
     ./render/Render3D.cpp
 
+    ./sim/sim.cpp
     ./shader/Shader.cpp
 
     ./texture/Texture.cpp
