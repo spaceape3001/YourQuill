@@ -577,14 +577,25 @@ namespace yq {
             Vertex = 0,
             Instance = 1
         )
+
+        class Asset;
+        class AssetInfo;
+        class AssetLoader;
         
         class Camera;
         using CameraPtr     = Ref<Camera>;
         using CameraCPtr    = Ref<const Camera>;
         
+        class Event;
+        
+        struct ResultCC;
+        
         class Shader;
         using ShaderPtr     = Ref<const Shader>;
         using ShaderSpec    = std::variant<std::monostate, std::string, ShaderPtr>;
+        
+        class Taskable;
+        class TaskableInfo;
 
         class Texture;
         using TexturePtr    = Ref<const Texture>;

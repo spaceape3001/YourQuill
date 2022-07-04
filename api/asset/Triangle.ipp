@@ -8,7 +8,7 @@
 #include <math/TriangleData.hpp>
 #include <math/shape_math.hpp>
 #include <engine/render/RenderWriter.hpp>
-#include <engine/shader/Shader.hpp>
+#include <engine/Shader.hpp>
 #include <basic/preamble.hpp>
 
 namespace yq {

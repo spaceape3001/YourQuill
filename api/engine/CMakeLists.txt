@@ -15,8 +15,9 @@ set(yq_engine_sources
 
     ./Vulqan.cpp
 
-    ./asset/Asset.cpp
-    ./asset/AssetCache.cpp
+    ./Asset.cpp
+    ./Shader.cpp
+    ./Texture.cpp
     
     ./gui/ImWindow.cpp
     
@@ -24,9 +25,7 @@ set(yq_engine_sources
     ./render/Rendered.cpp
     ./render/Render3D.cpp
 
-    ./shader/Shader.cpp
 
-    ./texture/Texture.cpp
 
 #    ./vulqan/VqCommandFrame.cpp
     ./vulqan/VqInternal.cpp

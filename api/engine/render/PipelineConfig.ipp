@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "PipelineConfig.hpp"
-#include <engine/shader/Shader.hpp>
+#include <engine/Shader.hpp>
 
 namespace yq {
     namespace engine {

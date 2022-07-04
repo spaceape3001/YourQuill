@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ShaderInfoWriter.hpp"
+#include "Shader.hpp"
 
 #include <basic/DelayInit.hpp>
 #include <basic/Execute.hpp>
@@ -15,13 +15,11 @@
 
 #include <config/DirConfig.hpp>
 
-#include <engine/util/ResultCC.hpp>
+#include <engine/AssetCache.hpp>
+#include <engine/ResultCC.hpp>
+
 #include <atomic>
 
-YQ_OBJECT_IMPLEMENT(yq::engine::Shader)
-YQ_OBJECT_IMPLEMENT(yq::engine::ShaderCache)
-YQ_OBJECT_IMPLEMENT(yq::engine::ShaderCompiler)
-YQ_OBJECT_IMPLEMENT(yq::engine::ShaderLoader)
 
 namespace yq {
     namespace engine {
@@ -134,6 +132,27 @@ namespace yq {
                 return ret;
             }
         }
+
+
+        ////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////
+        class ShaderCache : public AssetCache {
+            YQ_OBJECT_DECLARE(ShaderCache, AssetCache)
+        public:
+        
+            static ShaderCache&     singleton();
+            
+            ShaderPtr     get(const std::filesystem::path&);
+            ShaderPtr     get(uint64_t);
+        
+        protected:
+            Ref<const Asset>      load_binary(const std::filesystem::path&) const override;
+        
+        private:
+            ShaderCache();
+            ~ShaderCache();
+        };
+
 
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -391,5 +410,10 @@ namespace yq {
         )
     }
 
-    YQ_OBJECT_IMPLEMENT(yq::engine::GLSLCompiler)
 }
+
+YQ_OBJECT_IMPLEMENT(yq::engine::GLSLCompiler)
+YQ_OBJECT_IMPLEMENT(yq::engine::Shader)
+YQ_OBJECT_IMPLEMENT(yq::engine::ShaderCache)
+YQ_OBJECT_IMPLEMENT(yq::engine::ShaderCompiler)
+YQ_OBJECT_IMPLEMENT(yq::engine::ShaderLoader)

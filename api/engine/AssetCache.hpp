@@ -6,9 +6,7 @@
 
 #pragma once
 
-#include <basic/Object.hpp>
-#include <basic/Ref.hpp>
-#include <basic/Set.hpp>
+#include "Asset.hpp"
 #include <filesystem>
 #include <tbb/spin_rw_mutex.h>
 
@@ -46,7 +44,7 @@ namespace yq {
         
             Most all engine components will query the cache for the data, if not present, loads it.  (Compiling first, if necessary)
         */
-        class AssetCache : public Object {
+        class AssetCache : public Object, trait::not_copyable, trait::not_moveable {
             YQ_OBJECT_INFO(AssetCacheInfo)
             YQ_OBJECT_DECLARE(AssetCache, Object)
         public:
@@ -61,6 +59,7 @@ namespace yq {
 
 
             AssetCache(const AssetCacheInfo&);      // can't rely on the virtual working.....
+            ~AssetCache();
 
             virtual Ref<const Asset>  load_binary(const std::filesystem::path&) const = 0;
             
@@ -73,5 +72,63 @@ namespace yq {
             std::map<std::filesystem::path, Ref<const Asset>>   m_cache;
         };
 
+
+        template <typename C>
+        class AssetCacheInfo::Writer : public ObjectInfo::Writer<C> {
+        public:
+            Writer(AssetCacheInfo* assetCacheInfo) : ObjectInfo::Writer<C>(assetCacheInfo)
+            {
+            }
+            
+            Writer(AssetCacheInfo& assetCacheInfo) : Writer(&assetCacheInfo)
+            {
+            }
+            
+            Writer&     asset(const AssetInfo& ai)
+            {
+                AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+                if(aci)
+                    aci -> m_asset  = &ai;
+                return *this;
+            }
+            
+            template <typename A>
+            Writer&     asset()
+            {
+                asset(meta<A>());
+                return *this;
+            }
+            
+            Writer&     compiler(const AssetCompilerInfo&ai)
+            {
+                AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+                if(aci)
+                    aci -> m_compiler = &ai;
+                return *this;
+            }
+            
+            
+            template <typename A>
+            Writer&     compiler()
+            {
+                compiler(meta<A>());
+                return *this;
+            }
+            
+            Writer& loader(const AssetLoaderInfo& ali)
+            {
+                AssetCacheInfo* aci = static_cast<AssetCacheInfo*>(Meta::Writer::m_meta);
+                if(aci)
+                    aci -> m_loader = &ali;
+                return *this;
+            }
+            
+            template <typename A>
+            Writer&     loader()
+            {
+                loader(meta<A>());
+                return *this;
+            }
+        };
     }
 }

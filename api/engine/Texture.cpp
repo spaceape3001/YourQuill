@@ -4,16 +4,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <engine/texture/Texture.hpp>
-#include <engine/texture/TextureInfoWriter.hpp>
 #include <basic/DelayInit.hpp>
-
-YQ_OBJECT_IMPLEMENT(yq::engine::Texture)
-YQ_OBJECT_IMPLEMENT(yq::engine::TextureCache)
-YQ_OBJECT_IMPLEMENT(yq::engine::TextureLoader)
+#include <engine/AssetCache.hpp>
+#include <engine/Texture.hpp>
 
 namespace yq {
     namespace engine {
+        class TextureCache : public AssetCache {
+            YQ_OBJECT_DECLARE(TextureCache, AssetCache)
+        public:
+        
+        private:
+            TextureCache();
+            ~TextureCache();
+        };
+
+
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
@@ -68,4 +74,8 @@ namespace yq {
     }
 
 }
+
+YQ_OBJECT_IMPLEMENT(yq::engine::Texture)
+YQ_OBJECT_IMPLEMENT(yq::engine::TextureCache)
+YQ_OBJECT_IMPLEMENT(yq::engine::TextureLoader)
 

@@ -9,7 +9,7 @@
 
 #include <basic/meta/Init.hpp>
 #include <basic/meta/TypeInfo.hpp>
-#include <engine/shader/Shader.hpp>
+#include <engine/Shader.hpp>
 
 
 namespace yq {

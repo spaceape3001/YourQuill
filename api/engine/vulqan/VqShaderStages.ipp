@@ -8,7 +8,7 @@
 #include "VqShaderStages.hpp"
 #include <engine/Vulqan.hpp>
 #include <basic/Logging.hpp>
-#include <engine/shader/Shader.hpp>
+#include <engine/Shader.hpp>
 
 namespace yq {
     namespace engine {

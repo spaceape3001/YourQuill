@@ -24,12 +24,12 @@
 #include <basic/meta/Meta.hpp>
 #include <engine/Application.hpp>
 #include <engine/Scene.hpp>
+#include <engine/Shader.hpp>
 #include <engine/Perspective.hpp>
 #include <engine/Vulqan.hpp>
 #include <engine/render/PipelineBuilder.hpp>
 #include <engine/render/Render3D.hpp>
 #include <engine/render/RenderWriter.hpp>
-#include <engine/shader/Shader.hpp>
 #include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqCommand.hpp>
 #include <engine/vulqan/VqUtils.hpp>

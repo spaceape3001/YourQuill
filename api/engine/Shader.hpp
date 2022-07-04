@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <engine/asset/Asset.hpp>
+#include <engine/Asset.hpp>
 #include <engine/preamble.hpp>
 #include <basic/ByteArray.hpp>
 
@@ -18,6 +18,10 @@ namespace yq {
         class ShaderCache;
         struct ResultCC;
 
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         class ShaderInfo : public AssetInfo {
         public:
             template <typename C> class Writer;
@@ -26,11 +30,9 @@ namespace yq {
             
         protected:
         };
-        
-        
+
             //! Shader is a Vulkan compatible shader (compiled)
         class Shader : public Asset {
-            YQ_OBJECT_INFO(ShaderInfo)
             YQ_OBJECT_DECLARE(Shader, Asset)
         public:
         
@@ -144,7 +146,7 @@ namespace yq {
             std::filesystem::path   m_file;
             SizeTimestamp           m_szt;
         };
-        
+
         template <typename C>
         class ShaderInfo::Writer : public AssetInfo::Writer<C> {
         public:
@@ -157,5 +159,66 @@ namespace yq {
             }
         };
 
-    }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        class ShaderCompilerInfo : public AssetCompilerInfo {
+        public:
+            template <typename C> class Writer;
+
+            ShaderCompilerInfo(std::string_view zName, const AssetCompilerInfo& base, const std::source_location& sl=std::source_location::current());
+
+        protected:
+        };
+        
+        class ShaderCompiler : public AssetCompiler {
+            YQ_OBJECT_INFO(ShaderCompilerInfo)
+            YQ_OBJECT_DECLARE(ShaderCompiler, AssetCompiler)
+        public:
+
+        };
+
+        template <typename C>
+        class ShaderCompilerInfo::Writer : public AssetCompilerInfo::Writer<C> {
+        public:
+            Writer(ShaderCompilerInfo* shaderCompilerInfo) : AssetCompilerInfo::Writer<C>(shaderCompilerInfo)
+            {
+            }
+            
+            Writer(ShaderCompilerInfo& shaderCompilerInfo) : Writer(&shaderCompilerInfo)
+            {
+            }
+        };
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        class ShaderLoaderInfo : public AssetLoaderInfo {
+        public:
+            template <typename C> class Writer;
+
+            ShaderLoaderInfo(std::string_view zName, const AssetLoaderInfo& base, const std::source_location& sl=std::source_location::current());
+
+        protected:
+        };
+        
+        class ShaderLoader : public AssetLoader {
+            YQ_OBJECT_INFO(ShaderLoaderInfo)
+            YQ_OBJECT_DECLARE(ShaderLoader, AssetLoader)
+        public:
+        };
+
+        template <typename C>
+        class ShaderLoaderInfo::Writer : public AssetLoaderInfo::Writer<C> {
+        public:
+            Writer(ShaderLoaderInfo* shaderLoaderInfo) : AssetLoaderInfo::Writer<C>(shaderLoaderInfo)
+            {
+            }
+            
+            Writer(ShaderLoaderInfo& shaderLoaderInfo) : Writer(&shaderLoaderInfo)
+            {
+            }
+        };
+   }
 }
