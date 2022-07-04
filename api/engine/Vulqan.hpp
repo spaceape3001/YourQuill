@@ -28,7 +28,7 @@ namespace yq {
     namespace engine {
         struct PipelineConfig;
         class VqWindow;
-        struct VqInternal;
+        struct VqVisualizer;
         class VqAllocator;
         struct Scene;
         struct Perspective;
@@ -194,13 +194,13 @@ namespace yq {
             //  This is the "DRAW" pass, do it all, whatever the result is
             virtual bool        draw();
 
-            operator VqInternal&  () { return *m; }
+            operator VqVisualizer&  () { return *m; }
 
             void                render(VkCommandBuffer, const Scene&, const Perspective&);
 
         protected:
         
-            friend struct VqInternal;
+            friend struct VqVisualizer;
             friend class VqWindow;
         
             //VkPipeline                  m_lastPipeline  = nullptr;
@@ -210,7 +210,7 @@ namespace yq {
             
             
         private:
-            std::unique_ptr<VqInternal>   m;
+            std::unique_ptr<VqVisualizer>   m;
 
             bool    record(VkCommandBuffer, uint32_t);
             

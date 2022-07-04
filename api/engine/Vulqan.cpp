@@ -32,7 +32,7 @@
 
 #include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqException.hpp>
-#include <engine/vulqan/VqInternal.hpp>
+#include <engine/vulqan/VqVisualizer.hpp>
 #include <engine/vulqan/VqLogging.hpp>
 #include <engine/vulqan/VqShaderStages.hpp>
 #include <engine/vulqan/VqUtils.hpp>
@@ -64,7 +64,7 @@ namespace yq {
         Vulqan::Vulqan(const WindowCreateInfo&i)
         {
             try {
-                m           = std::make_unique<VqInternal>(i,this);
+                m           = std::make_unique<VqVisualizer>(i,this);
             }
             catch(VqException& ex){
                 yCritical() << ex.what();

@@ -89,7 +89,7 @@ namespace yq {
         
 
 
-        struct VqInternal : trait::not_copyable, trait::not_moveable {
+        struct VqVisualizer : trait::not_copyable, trait::not_moveable {
             const uint64_t      id;
             Vulqan*             user                        = nullptr;
             VkInstance          instance                    = nullptr;
@@ -129,8 +129,8 @@ namespace yq {
             void    run();
             
             
-            VqInternal(const WindowCreateInfo&, Vulqan*);
-            ~VqInternal();
+            VqVisualizer(const WindowCreateInfo&, Vulqan*);
+            ~VqVisualizer();
         };
     }
 }

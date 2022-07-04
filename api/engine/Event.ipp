@@ -10,6 +10,8 @@
 
 namespace yq {
     namespace engine {
+        Command::~Command() = default;
         Event::~Event() = default;
+        Input::~Input() = default;
     }
 }

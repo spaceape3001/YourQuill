@@ -5,14 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqException.hpp"
-#include "VqInternal.hpp"
+#include "VqVisualizer.hpp"
 #include "VqWindow.hpp"
 #include <engine/Vulqan.hpp>
 #include <GLFW/glfw3.h>
 
 namespace yq {
     namespace engine {
-        VqWindow::VqWindow(VqInternal& w, const WindowCreateInfo& wci)
+        VqWindow::VqWindow(VqVisualizer& w, const WindowCreateInfo& wci)
         {
                 /*
                     --------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace yq {
             
             glfwSetWindowUserPointer(m_window, &w);
             glfwSetWindowSizeCallback(m_window, [](GLFWwindow* gwin, int, int){
-                VqInternal    *v  = (VqInternal*) glfwGetWindowUserPointer(gwin);
+                VqVisualizer    *v  = (VqVisualizer*) glfwGetWindowUserPointer(gwin);
                 if(v){
                     v -> rebuildSwap    = true;
                     if(v->user)

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqException.hpp"
-#include "VqInternal.hpp"
+#include "VqVisualizer.hpp"
 #include "VqLogging.hpp"
 #include "VqPipeline.hpp"
 #include "VqShaderStages.hpp"
@@ -21,7 +21,7 @@
 
 namespace yq {
     namespace engine {
-        VqPipeline::VqPipeline(VqInternal& win, const PipelineConfig& cfg)
+        VqPipeline::VqPipeline(VqVisualizer& win, const PipelineConfig& cfg)
         {
             m_device    = win.device;
             try {

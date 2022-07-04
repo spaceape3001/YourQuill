@@ -13,7 +13,7 @@
 
 namespace yq {
     namespace engine {
-        struct VqInternal;
+        struct VqVisualizer;
         
         class VqBuffer : trait::not_copyable {
         public:
@@ -21,16 +21,16 @@ namespace yq {
         
             VqBuffer(){}
             
-            VqBuffer(VqInternal&, VkBufferUsageFlags, const void*, size_t);
+            VqBuffer(VqVisualizer&, VkBufferUsageFlags, const void*, size_t);
             
             template <typename T>
-            VqBuffer(VqInternal&, VkBufferUsageFlags, std::span<T>);
+            VqBuffer(VqVisualizer&, VkBufferUsageFlags, std::span<T>);
 
             template <typename T>
-            VqBuffer(VqInternal&, VkBufferUsageFlags, std::span<const T>);
+            VqBuffer(VqVisualizer&, VkBufferUsageFlags, std::span<const T>);
 
             template <typename T, size_t N>
-            VqBuffer(VqInternal&, VkBufferUsageFlags, const T(&)[N]);
+            VqBuffer(VqVisualizer&, VkBufferUsageFlags, const T(&)[N]);
 
             VqBuffer(VqBuffer&&);
             VqBuffer& operator=(VqBuffer&&);
@@ -57,20 +57,20 @@ namespace yq {
         };
 
         template <typename T>
-        VqBuffer::VqBuffer(VqInternal& w, VkBufferUsageFlags flags, std::span<T> data) : 
+        VqBuffer::VqBuffer(VqVisualizer& w, VkBufferUsageFlags flags, std::span<T> data) : 
             VqBuffer(w, flags, data.data(), data.size() * sizeof(T))
         {
         }
         
 
         template <typename T>
-        VqBuffer::VqBuffer(VqInternal& w, VkBufferUsageFlags flags, std::span<const T>data) :
+        VqBuffer::VqBuffer(VqVisualizer& w, VkBufferUsageFlags flags, std::span<const T>data) :
             VqBuffer(w, flags, data.data(), data.size() * sizeof(T))
         {
         }
 
         template <typename T, size_t N>
-        VqBuffer::VqBuffer(VqInternal&w, VkBufferUsageFlags flags, const T (&data) [N]) : 
+        VqBuffer::VqBuffer(VqVisualizer&w, VkBufferUsageFlags flags, const T (&data) [N]) : 
             VqBuffer(w,flags, data,N*sizeof(T))
         {
         }

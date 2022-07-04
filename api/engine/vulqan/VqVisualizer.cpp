@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqBuffer.hpp"
-#include "VqInternal.hpp"
+#include "VqVisualizer.hpp"
 #include "VqException.hpp"
 #include "VqPipeline.hpp"
 #include "VqStructs.hpp"
@@ -72,7 +72,7 @@ namespace yq {
             }
         }
     
-        VqInternal::VqInternal(const WindowCreateInfo& i, Vulqan *w) : id(genInternalId())
+        VqVisualizer::VqVisualizer(const WindowCreateInfo& i, Vulqan *w) : id(genInternalId())
         {
             user        = w;
             
@@ -117,7 +117,7 @@ namespace yq {
             });
         }
 
-        bool VqInternal::init(VqDynamic&ds, VkSwapchainKHR old)
+        bool VqVisualizer::init(VqDynamic&ds, VkSwapchainKHR old)
         {
             VqSwapchain::Config scfg;
             scfg.pmode          = presentMode;
@@ -133,7 +133,7 @@ namespace yq {
             return true;            
         }
 
-        VqInternal::~VqInternal()
+        VqVisualizer::~VqVisualizer()
         {
             terminating = true;
             builder.join();
@@ -171,7 +171,7 @@ namespace yq {
         }
 
 
-        void VqInternal::kill(VqDynamic&ds)
+        void VqVisualizer::kill(VqDynamic&ds)
         {
             ds.commandBuffers   = {};
             ds.frameBuffers     = {};
@@ -179,7 +179,7 @@ namespace yq {
             ds.swapchain        = {};
         }
 
-        void    VqInternal::run()
+        void    VqVisualizer::run()
         {
             using namespace std::chrono_literals;
             while(!terminating){
@@ -187,12 +187,12 @@ namespace yq {
             }
         }
 
-        void    VqInternal::set_clear(const RGBA4F&i)
+        void    VqVisualizer::set_clear(const RGBA4F&i)
         {
             clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }
 
-        std::pair<ViPipeline*,bool>    VqInternal::pipeline(uint64_t i)
+        std::pair<ViPipeline*,bool>    VqVisualizer::pipeline(uint64_t i)
         {
             auto j = pipelines.find(i);
             if(j!=pipelines.end())
@@ -202,7 +202,7 @@ namespace yq {
             return {p, true};
         }
         
-        std::pair<ViObject*,bool>    VqInternal::object(uint64_t i)
+        std::pair<ViObject*,bool>    VqVisualizer::object(uint64_t i)
         {
             auto j = objects.find(i);
             if(j!=objects.end())
