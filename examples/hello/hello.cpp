@@ -26,7 +26,7 @@
 #include <engine/Scene.hpp>
 #include <engine/Shader.hpp>
 #include <engine/Perspective.hpp>
-#include <engine/Vulqan.hpp>
+#include <engine/Viewer.hpp>
 #include <engine/render/PipelineBuilder.hpp>
 #include <engine/render/Render3D.hpp>
 #include <engine/render/RenderWriter.hpp>
@@ -83,9 +83,9 @@ struct HelloTriangle : public engine::Rendered {
     
     std::unique_ptr<VqPipeline> m_pipeline;
     VqBuffer                    m_vbo;
-    Vulqan*                     m_window                = nullptr;
+    Viewer*                     m_window                = nullptr;
     
-    HelloTriangle(Vulqan*w) : m_window(w)
+    HelloTriangle(Viewer*w) : m_window(w)
     {
         ShaderPtr   vert = Shader::load("examples/hello3.vert");
         ShaderPtr   frag = Shader::load("examples/hello.frag");
@@ -145,8 +145,8 @@ YQ_INVOKE(
 YQ_OBJECT_IMPLEMENT(HelloTriangle)
 
 
-struct HelloWin : public engine::Vulqan {
-    YQ_OBJECT_DECLARE(HelloWin, engine::Vulqan)
+struct HelloWin : public engine::Viewer {
+    YQ_OBJECT_DECLARE(HelloWin, engine::Viewer)
     
     timepoint_t             start;
     Ref<HelloTriangle>      triangle;
@@ -154,7 +154,7 @@ struct HelloWin : public engine::Vulqan {
     Scene                   scene;
     Perspective             view;
 
-    HelloWin(const WindowCreateInfo& wci) : Vulqan(wci)
+    HelloWin(const WindowCreateInfo& wci) : Viewer(wci)
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);

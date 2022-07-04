@@ -7,13 +7,13 @@
 #pragma once
 
 #include "VqAllocator.hpp"
-#include "VqVisualizer.hpp"
+#include <engine/Visualizer.hpp>
 #include <basic/preamble.hpp>
 #include <engine/Application.hpp>
 
 namespace yq {
     namespace engine {
-        VqAllocator::VqAllocator(VqVisualizer& win, size_t chunkSize)
+        VqAllocator::VqAllocator(Visualizer& win, size_t chunkSize)
         {
             VmaAllocatorCreateInfo  createInfo{};
             createInfo.instance         = Application::vulkan();

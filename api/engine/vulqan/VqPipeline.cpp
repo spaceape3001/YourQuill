@@ -5,14 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqException.hpp"
-#include "VqVisualizer.hpp"
+#include <engine/Visualizer.hpp>
 #include "VqLogging.hpp"
 #include "VqPipeline.hpp"
 #include "VqShaderStages.hpp"
 #include "VqStructs.hpp"
 
 #include <basic/Logging.hpp>
-#include <engine/Vulqan.hpp>
+#include <engine/Viewer.hpp>
 #include <engine/render/PipelineConfig.hpp>
 #include <engine/render/Pipeline.hpp>
 #include <engine/render/StdPushConstant.hpp>
@@ -21,7 +21,7 @@
 
 namespace yq {
     namespace engine {
-        VqPipeline::VqPipeline(VqVisualizer& win, const PipelineConfig& cfg)
+        VqPipeline::VqPipeline(Visualizer& win, const PipelineConfig& cfg)
         {
             m_device    = win.device;
             try {

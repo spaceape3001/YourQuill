@@ -8,14 +8,14 @@
 
 #include "VqRenderPass.hpp"
 #include "VqStructs.hpp"
-#include "VqVisualizer.hpp"
+#include <engine/Visualizer.hpp>
 #include "VqException.hpp"
 #include <basic/preamble.hpp>
-#include <engine/Vulqan.hpp>
+#include <engine/Viewer.hpp>
 
 namespace yq {
     namespace engine {
-        VqRenderPass::VqRenderPass(VqVisualizer& win)
+        VqRenderPass::VqRenderPass(Visualizer& win)
         {
             m_device        = win.device;
 

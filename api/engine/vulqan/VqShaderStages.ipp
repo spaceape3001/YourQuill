@@ -6,7 +6,7 @@
 
 #include "VqUtils.hpp"
 #include "VqShaderStages.hpp"
-#include <engine/Vulqan.hpp>
+#include <engine/Viewer.hpp>
 #include <basic/Logging.hpp>
 #include <engine/Shader.hpp>
 
@@ -75,7 +75,7 @@ namespace yq {
             }        
         }
 
-        VqShaderStages::VqShaderStages(Vulqan& win, const std::vector<ShaderSpec>& shaders) : 
+        VqShaderStages::VqShaderStages(Viewer& win, const std::vector<ShaderSpec>& shaders) : 
             VqShaderStages(win.logical(), shaders)
         {
         }

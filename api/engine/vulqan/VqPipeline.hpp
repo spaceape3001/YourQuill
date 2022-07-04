@@ -13,7 +13,7 @@
 namespace yq {
     namespace engine {
         struct PipelineConfig;
-        struct VqVisualizer;
+        struct Visualizer;
         class Pipeline;
         class VqBuffer;
 
@@ -25,7 +25,7 @@ namespace yq {
         class VqPipeline : trait::not_copyable, trait::not_moveable {
         public:
         
-            VqPipeline(VqVisualizer&, const PipelineConfig&);
+            VqPipeline(Visualizer&, const PipelineConfig&);
             ~VqPipeline();
             
             bool                    good() const noexcept { return m_pipeline != nullptr; }

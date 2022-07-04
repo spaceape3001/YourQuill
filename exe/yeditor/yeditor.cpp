@@ -10,7 +10,7 @@
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/Application.hpp>
 #include <engine/vulqan/VqUtils.hpp>
-#include <engine/gui/ImWindow.hpp>
+#include <engine/ImWindow.hpp>
 #include <imgui.h>
 #include <iostream>
 

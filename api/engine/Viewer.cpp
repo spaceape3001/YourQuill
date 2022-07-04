@@ -13,7 +13,7 @@
 #include "Application.hpp"
 #include "Perspective.hpp"
 #include "Scene.hpp"
-#include "Vulqan.hpp"
+#include "Viewer.hpp"
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
@@ -32,7 +32,7 @@
 
 #include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqException.hpp>
-#include <engine/vulqan/VqVisualizer.hpp>
+#include <engine/Visualizer.hpp>
 #include <engine/vulqan/VqLogging.hpp>
 #include <engine/vulqan/VqShaderStages.hpp>
 #include <engine/vulqan/VqUtils.hpp>
@@ -45,11 +45,11 @@
 
 #include <GLFW/glfw3.h>
 
-YQ_OBJECT_IMPLEMENT(yq::engine::Vulqan)
+YQ_OBJECT_IMPLEMENT(yq::engine::Viewer)
 
 namespace yq {
     namespace engine {
-        void Vulqan::poll_events()
+        void Viewer::poll_events()
         {
             glfwPollEvents();
         }
@@ -61,17 +61,17 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        Vulqan::Vulqan(const WindowCreateInfo&i)
+        Viewer::Viewer(const WindowCreateInfo&i)
         {
             try {
-                m           = std::make_unique<VqVisualizer>(i,this);
+                m           = std::make_unique<Visualizer>(i,this);
             }
             catch(VqException& ex){
                 yCritical() << ex.what();
             }
         }
         
-        Vulqan::~Vulqan()
+        Viewer::~Viewer()
         {
             m           = nullptr;
         }
@@ -80,7 +80,7 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        bool    Vulqan::record(VkCommandBuffer commandBuffer, uint32_t imageIndex)
+        bool    Viewer::record(VkCommandBuffer commandBuffer, uint32_t imageIndex)
         {
             VqCommandBufferBeginInfo beginInfo;
             beginInfo.flags = 0; // Optional
@@ -112,7 +112,7 @@ namespace yq {
             return true;
         }
         
-        bool    Vulqan::draw()
+        bool    Viewer::draw()
         {
             ++m->tick;      // frame
             auto start  = std::chrono::high_resolution_clock::now();
@@ -175,7 +175,7 @@ namespace yq {
             return true;
         }
 
-        void    Vulqan::render(VkCommandBuffer buf, const Scene& scene, const Perspective& pr)
+        void    Viewer::render(VkCommandBuffer buf, const Scene& scene, const Perspective& pr)
         {   
             if(!pr.camera){
                 yCritical() << "Camera not detected!\n";
@@ -395,65 +395,65 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
 
 
-        void Vulqan::attention()
+        void Viewer::attention()
         {
             if(m->window)
                 glfwRequestWindowAttention(m->window);
         }
 
-        void Vulqan::close()
+        void Viewer::close()
         {
             if(m->window)
                 glfwSetWindowShouldClose(m->window, GLFW_TRUE);
         }
 
-        VkColorSpaceKHR     Vulqan::color_space() const 
+        VkColorSpaceKHR     Viewer::color_space() const 
         { 
             return m->surface.color_space(); 
         }
 
-        VkCommandBuffer     Vulqan::command_buffer() const
+        VkCommandBuffer     Viewer::command_buffer() const
         {
             return m->dynamic.commandBuffers[0];
         }
 
-        VkCommandPool       Vulqan::command_pool() const 
+        VkCommandPool       Viewer::command_pool() const 
         { 
             return m->commandPool; 
         }
         
-        VkDescriptorPool    Vulqan::descriptor_pool() const 
+        VkDescriptorPool    Viewer::descriptor_pool() const 
         { 
             return m->descriptorPool; 
         }
         
-        VkDevice            Vulqan::device() const 
+        VkDevice            Viewer::device() const 
         { 
             return m->device; 
         }
 
-        void Vulqan::focus()
+        void Viewer::focus()
         {
             if(m->window)
                 glfwFocusWindow(m->window);
         }
 
-        VkFormat    Vulqan::format() const 
+        VkFormat    Viewer::format() const 
         { 
             return m->surface.format(); 
         }
 
-        VkQueue     Vulqan::graphics_queue() const 
+        VkQueue     Viewer::graphics_queue() const 
         { 
             return m->device.graphics(0); 
         }
         
-        uint32_t    Vulqan::graphics_queue_family() const 
+        uint32_t    Viewer::graphics_queue_family() const 
         { 
             return m->device.graphics().family(); 
         }
 
-        int  Vulqan::height() const
+        int  Viewer::height() const
         {
             if(!m->window)
                 return 0;
@@ -463,105 +463,105 @@ namespace yq {
             return ret;
         }
 
-        void Vulqan::hide()
+        void Viewer::hide()
         {
             if(m->window)
                 glfwHideWindow(m->window);
         }
 
-        void Vulqan::iconify()
+        void Viewer::iconify()
         {
             if(m->window)
                 glfwIconifyWindow(m->window);
         }
 
-        bool        Vulqan::is_decorated() const
+        bool        Viewer::is_decorated() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_DECORATED) != 0;
         }
         
-        bool        Vulqan::is_focused() const
+        bool        Viewer::is_focused() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_FOCUSED ) != 0;
         }
         
-        bool        Vulqan::is_floating() const
+        bool        Viewer::is_floating() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_FLOATING) != 0;
         }
         
-        bool        Vulqan::is_fullscreen() const
+        bool        Viewer::is_fullscreen() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowMonitor(m->window) != nullptr;
         }
         
-        bool        Vulqan::is_hovered() const
+        bool        Viewer::is_hovered() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_HOVERED) != 0;
         }
         
-        bool        Vulqan::is_iconified() const
+        bool        Viewer::is_iconified() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_ICONIFIED) != 0;
         }
 
-        bool        Vulqan::is_maximized() const
+        bool        Viewer::is_maximized() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_MAXIMIZED) != 0;
         }
         
-        bool        Vulqan::is_resizable() const
+        bool        Viewer::is_resizable() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_RESIZABLE) != 0;
         }
         
-        bool        Vulqan::is_visible() const
+        bool        Viewer::is_visible() const
         {
             if(!m->window)
                 return false;
             return glfwGetWindowAttrib(m->window, GLFW_VISIBLE) != 0;
         }
         
-        VkDevice    Vulqan::logical() const 
+        VkDevice    Viewer::logical() const 
         { 
             return m->device; 
         }
 
-        void        Vulqan::maximize()
+        void        Viewer::maximize()
         {
             if(m->window)
                 glfwMaximizeWindow(m->window);
         }
 
-        VqMonitor   Vulqan::monitor() const
+        VqMonitor   Viewer::monitor() const
         {
             if(m->window)
                 return VqMonitor(glfwGetWindowMonitor(m->window));
             return VqMonitor();
         }
 
-        VkPhysicalDevice    Vulqan::physical() const 
+        VkPhysicalDevice    Viewer::physical() const 
         { 
             return m->physical; 
         }
 
-        Vector2I    Vulqan::position() const
+        Vector2I    Viewer::position() const
         {
             if(!m->window)
                 return {};
@@ -572,72 +572,72 @@ namespace yq {
 
 
 
-        VkRenderPass Vulqan::render_pass() const
+        VkRenderPass Viewer::render_pass() const
         {
             return m->renderPass;
         }
 
-        void        Vulqan::restore()
+        void        Viewer::restore()
         {
             if(m->window)
                 glfwRestoreWindow(m->window);
         }
 
-        void        Vulqan::set_clear(const RGBA4F&i)
+        void        Viewer::set_clear(const RGBA4F&i)
         {
             m->set_clear(i);
         }
 
-        void        Vulqan::set_position(const Vector2I& pos)
+        void        Viewer::set_position(const Vector2I& pos)
         {
             set_position(pos.x, pos.y);
         }
         
-        void        Vulqan::set_position(int x, int y)
+        void        Viewer::set_position(int x, int y)
         {
             if(m->window){
                 glfwSetWindowPos(m->window, x, y);
             }
         }
 
-        void        Vulqan::set_size(const Size2I& sz)
+        void        Viewer::set_size(const Size2I& sz)
         {
             set_size(sz.x, sz.y);
         }
 
-        void        Vulqan::set_size(int w, int h)
+        void        Viewer::set_size(int w, int h)
         {
             if(m->window){
                 glfwSetWindowSize(m->window, std::max(1, w), std::max(1, h));
             }
         }
 
-        void        Vulqan::set_title(const char*z)
+        void        Viewer::set_title(const char*z)
         {
             if(m->window && z){
                 glfwSetWindowTitle(m->window, z);
             }
         }
 
-        void        Vulqan::set_title(const std::string&z)
+        void        Viewer::set_title(const std::string&z)
         {
             set_title(z.c_str());
         }
 
-        bool        Vulqan::should_close() const
+        bool        Viewer::should_close() const
         {
             if(!m->window) 
                 return true;
             return glfwWindowShouldClose(m->window);
         }
 
-        void        Vulqan::show()
+        void        Viewer::show()
         {
             if(m->window)
                 glfwShowWindow(m->window);
         }
 
-        Size2I      Vulqan::size() const
+        Size2I      Viewer::size() const
         {
             if(!m->window)
                 return {};
@@ -646,42 +646,42 @@ namespace yq {
             return ret;
         }
 
-        VkSurfaceKHR        Vulqan::surface() const 
+        VkSurfaceKHR        Viewer::surface() const 
         { 
             return m->surface; 
         }
 
-        VkRect2D    Vulqan::swap_def_scissor() const
+        VkRect2D    Viewer::swap_def_scissor() const
         {
             return m->dynamic.swapchain.def_scissor();
         }
         
-        VkViewport  Vulqan::swap_def_viewport() const
+        VkViewport  Viewer::swap_def_viewport() const
         {
             return m->dynamic.swapchain.def_viewport();
         }
 
-        uint32_t    Vulqan::swap_image_count() const
+        uint32_t    Viewer::swap_image_count() const
         {
             return m->dynamic.imageCount;
         }
 
-        uint32_t    Vulqan::swap_height() const
+        uint32_t    Viewer::swap_height() const
         {
             return m->dynamic.swapchain.height();
         }
 
-        uint32_t    Vulqan::swap_min_image_count() const
+        uint32_t    Viewer::swap_min_image_count() const
         {
             return m->dynamic.swapchain.min_image_count();
         }
 
-        uint32_t    Vulqan::swap_width() const
+        uint32_t    Viewer::swap_width() const
         {
             return m->dynamic.swapchain.width();
         }
         
-        int  Vulqan::width() const
+        int  Viewer::width() const
         {
             if(!m->window)
                 return 0;
@@ -691,7 +691,7 @@ namespace yq {
             return ret;
         }
         
-        GLFWwindow*         Vulqan::window() const 
+        GLFWwindow*         Viewer::window() const 
         { 
             return m->window; 
         }
@@ -700,7 +700,7 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
 
         YQ_INVOKE(
-            writer<Vulqan>();
+            writer<Viewer>();
         )
     }
 }

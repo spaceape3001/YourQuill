@@ -39,6 +39,9 @@ namespace yq {
                 //!  Set to make user-resizable
             bool                        resizable   = false;
             
+                //!  Set to enable imgui
+            bool                        imgui       = false;
+            
                 //!     Set to get descriptors allocated
             uint32_t                    descriptors = 0;
             

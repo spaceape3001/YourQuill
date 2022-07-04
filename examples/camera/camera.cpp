@@ -21,7 +21,7 @@
 #include <engine/Application.hpp>
 #include <engine/Scene.hpp>
 #include <engine/Perspective.hpp>
-#include <engine/gui/ImWindow.hpp>
+#include <engine/ImWindow.hpp>
 
 #include <math/RGB.hpp>
 #include <math/Vector2.hpp>

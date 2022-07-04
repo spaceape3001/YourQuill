@@ -15,12 +15,12 @@
 namespace yq {
     namespace engine {
         class Shader;
-        class Vulqan;
+        class Viewer;
         
         class VqShaderStages : trait::not_copyable, trait::not_moveable {
         public:
         
-            VqShaderStages(Vulqan&, const std::vector<ShaderSpec>&);
+            VqShaderStages(Viewer&, const std::vector<ShaderSpec>&);
             VqShaderStages(VkDevice, const std::vector<ShaderSpec>&);
             ~VqShaderStages();
             

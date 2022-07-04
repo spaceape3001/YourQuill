@@ -28,7 +28,7 @@ namespace yq {
     namespace engine {
         struct PipelineConfig;
         class VqWindow;
-        struct VqVisualizer;
+        struct Visualizer;
         class VqAllocator;
         struct Scene;
         struct Perspective;
@@ -44,9 +44,9 @@ namespace yq {
             This encapsulates the GLFW & Vulkan into a single window, requires
             a Vulkan instance.
         */
-        class Vulqan : public Object, public RefCount, trait::not_copyable, trait::not_moveable {
+        class Viewer : public Object, public RefCount, trait::not_copyable, trait::not_moveable {
             YQ_OBJECT_INFO(WindowInfo)
-            YQ_OBJECT_DECLARE(Vulqan, Object)
+            YQ_OBJECT_DECLARE(Viewer, Object)
         public:
         
             static constexpr const uint32_t kMinimumDescriptors = 1000;
@@ -56,9 +56,9 @@ namespace yq {
 
 
                 // Creates a window bound to the specified vulkan instance
-            Vulqan(const WindowCreateInfo& i = WindowCreateInfo());
+            Viewer(const WindowCreateInfo& i = WindowCreateInfo());
             
-            ~Vulqan();
+            ~Viewer();
             
 
                 //! Calls user's attention to window
@@ -165,7 +165,7 @@ namespace yq {
                 //! Show the window
             void                show();
 
-                //! Vulqan size
+                //! Viewer size
             Size2I              size() const;
             
             //const VkExtent2D&   swap_extent() const { return m_swapExtent; }
@@ -194,13 +194,13 @@ namespace yq {
             //  This is the "DRAW" pass, do it all, whatever the result is
             virtual bool        draw();
 
-            operator VqVisualizer&  () { return *m; }
+            operator Visualizer&  () { return *m; }
 
             void                render(VkCommandBuffer, const Scene&, const Perspective&);
 
         protected:
         
-            friend struct VqVisualizer;
+            friend struct Visualizer;
             friend class VqWindow;
         
             //VkPipeline                  m_lastPipeline  = nullptr;
@@ -210,7 +210,7 @@ namespace yq {
             
             
         private:
-            std::unique_ptr<VqVisualizer>   m;
+            std::unique_ptr<Visualizer>   m;
 
             bool    record(VkCommandBuffer, uint32_t);
             

@@ -20,7 +20,7 @@ namespace yq {
     namespace engine {
 
         class Application;
-        class Vulqan;
+        class Viewer;
         
         /*! \brief Engine/Vulkan application
         
@@ -61,11 +61,11 @@ namespace yq {
                 Meant as a convienence function to run a single window in a tight event/draw loop
                 until the window is ready to be closed
                 
-                \param[in] win          Vulqan to watch
+                \param[in] win          Viewer to watch
                 \param[in] timeout      If positive, throttles the loop to the rate of user input, where timeout 
                                         is the max stall duration.
             */
-            void    run_window(Vulqan*win, double timeout=0.);
+            void    run_window(Viewer*win, double timeout=0.);
             
             /*! \brief Initializes the GLFW
             
@@ -86,7 +86,7 @@ namespace yq {
             
             
         private:
-            friend class Vulqan;
+            friend class Viewer;
             
             static Application*                 s_app;
             static VkInstance                   s_vulkan;

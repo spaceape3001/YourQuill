@@ -12,12 +12,12 @@
 
 namespace yq {
     namespace engine {
-        class VqVisualizer;
+        class Visualizer;
 
         class VqAllocator : trait::not_copyable {
         public:
             VqAllocator(){}
-            explicit VqAllocator(VqVisualizer&, size_t chunkSize=0);
+            explicit VqAllocator(Visualizer&, size_t chunkSize=0);
             VqAllocator(VqAllocator&&);
             VqAllocator& operator=(VqAllocator&&);
             ~VqAllocator();

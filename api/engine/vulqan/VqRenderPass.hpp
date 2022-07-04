@@ -11,12 +11,12 @@
 
 namespace yq {
     namespace engine {
-        class Vulqan;
+        class Viewer;
         
         class VqRenderPass : trait::not_copyable {
         public:
             VqRenderPass(){}
-            explicit VqRenderPass(VqVisualizer&);
+            explicit VqRenderPass(Visualizer&);
             VqRenderPass(VqRenderPass&&);
             VqRenderPass& operator=(VqRenderPass&&);
             ~VqRenderPass();

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Application.hpp"
-#include "Vulqan.hpp"
+#include "Viewer.hpp"
 #include <engine/vulqan/VqLogging.hpp>
 #include <engine/vulqan/VqStructs.hpp>
 #include <engine/vulqan/VqUtils.hpp>
@@ -269,7 +269,7 @@ namespace yq {
             }
         }
 
-        void    Application::run_window(Vulqan* win, double amt)
+        void    Application::run_window(Viewer* win, double amt)
         {
             if(!win)
                 return;

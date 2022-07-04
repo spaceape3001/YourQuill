@@ -13,7 +13,7 @@
 
 namespace yq {
     namespace engine {
-        class Vulqan;
+        class Viewer;
 
         /*! \brief Fence pool
         
@@ -26,11 +26,11 @@ namespace yq {
         public:
         
             VqFencePool();
-            VqFencePool(Vulqan&);
+            VqFencePool(Viewer&);
             VqFencePool(VkDevice);
             ~VqFencePool();
 
-            bool        init(Vulqan&, bool reinit=false);
+            bool        init(Viewer&, bool reinit=false);
             bool        init(VkDevice, bool reinit=false);
             
             bool        initialized() const { return m_device != nullptr; }

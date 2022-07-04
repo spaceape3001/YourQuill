@@ -8,12 +8,12 @@
 
 #include "VqBuffer.hpp"
 #include "VqException.hpp"
-#include "VqVisualizer.hpp"
+#include <engine/Visualizer.hpp>
 #include "VqStructs.hpp"
 
 namespace yq {
     namespace engine {
-        VqBuffer::VqBuffer(VqVisualizer&iq, VkBufferUsageFlags uf, const void* data, size_t sz) 
+        VqBuffer::VqBuffer(Visualizer&iq, VkBufferUsageFlags uf, const void* data, size_t sz) 
         {
             assert(data);
             assert(sz);

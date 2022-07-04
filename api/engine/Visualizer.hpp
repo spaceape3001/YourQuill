@@ -32,7 +32,7 @@
 
 namespace yq {
     namespace engine {
-        class Vulqan;
+        class Viewer;
         struct WindowCreateInfo;
         struct VqObject;
         
@@ -89,9 +89,9 @@ namespace yq {
         
 
 
-        struct VqVisualizer : trait::not_copyable, trait::not_moveable {
+        struct Visualizer : trait::not_copyable, trait::not_moveable {
             const uint64_t      id;
-            Vulqan*             user                        = nullptr;
+            Viewer*             user                        = nullptr;
             VkInstance          instance                    = nullptr;
             VqGPU               physical;
             VqWindow            window;
@@ -129,8 +129,8 @@ namespace yq {
             void    run();
             
             
-            VqVisualizer(const WindowCreateInfo&, Vulqan*);
-            ~VqVisualizer();
+            Visualizer(const WindowCreateInfo&, Viewer*);
+            ~Visualizer();
         };
     }
 }

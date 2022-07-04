@@ -14,12 +14,12 @@ struct GLFWwindow;
 
 namespace yq {
     namespace engine {
-        class VqVisualizer;
+        class Visualizer;
         class VqWindow : trait::not_copyable {
         public:
 
             VqWindow(){}
-            explicit VqWindow(VqVisualizer&, const WindowCreateInfo& wci=WindowCreateInfo());
+            explicit VqWindow(Visualizer&, const WindowCreateInfo& wci=WindowCreateInfo());
             VqWindow(VqWindow&&);
             VqWindow& operator=(VqWindow&&);
             ~VqWindow();

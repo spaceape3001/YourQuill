@@ -13,13 +13,13 @@ set(yq_engine_sources
 
     ./engine.cpp
 
-    ./Vulqan.cpp
+    ./Viewer.cpp
 
     ./Asset.cpp
     ./Shader.cpp
     ./Texture.cpp
     
-    ./gui/ImWindow.cpp
+    ./ImWindow.cpp
     
     ./render/Pipeline.cpp
     ./render/Rendered.cpp
