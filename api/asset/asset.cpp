@@ -7,5 +7,6 @@
 #include "NullCamera.ipp"
 #include "Quadrilateral.ipp"
 #include "SpaceCamera.ipp"
+#include "SpaceManipulator.ipp"
 #include "TargetCamera.ipp"
 #include "Triangle.ipp"
