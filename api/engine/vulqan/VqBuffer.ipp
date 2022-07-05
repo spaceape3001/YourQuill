@@ -20,7 +20,7 @@ namespace yq {
             
             m_size      = sz;
             m_device    = viz.m_device;
-            m_allocator = viz.allocator;
+            m_allocator = viz.m_allocator;
             
             VqBufferCreateInfo  bufferInfo;
             bufferInfo.size         = m_size;

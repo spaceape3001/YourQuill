@@ -1109,9 +1109,19 @@ namespace yq {
                 m_videoDecode.set(m_device, videoDecWeights.size());
 
             //  ================================
+            //  ALLOCATOR
+
+            VmaAllocatorCreateInfo      allocatorCreateInfo;
+            allocatorCreateInfo.instance                        = m_instance;
+            allocatorCreateInfo.physicalDevice                  = m_physical;
+            allocatorCreateInfo.device                          = m_device;
+            allocatorCreateInfo.vulkanApiVersion                = app->app_info().vulkan_api;
+            allocatorCreateInfo.preferredLargeHeapBlockSize     = (VkDeviceSize) vci.chunk_size;
+            vmaCreateAllocator(&allocatorCreateInfo, &m_allocator);
+
+            //  ================================
             //  OLDER STUFF
 
-            allocator                   = VqAllocator(*this);
        
             VkPresentModeKHR pmdef      = (VkPresentModeKHR) vci.pmode.value();
        
@@ -1164,7 +1174,10 @@ namespace yq {
             renderPass                  = {};
             commandPool                 = {};
             
-            allocator                   = {};
+            if(m_allocator){
+                vmaDestroyAllocator(m_allocator);
+                m_allocator = nullptr;
+            }
             
             if(m_device){
                 vkDestroyDevice(m_device, nullptr);

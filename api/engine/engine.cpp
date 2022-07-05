@@ -22,7 +22,6 @@
 #include <basic/meta/Init.hpp>
 
 
-#include "vulqan/VqAllocator.ipp"
 #include "vulqan/VqBuffer.ipp"
 #include "vulqan/VqCommand.ipp"
 #include "vulqan/VqCommandBuffers.ipp"

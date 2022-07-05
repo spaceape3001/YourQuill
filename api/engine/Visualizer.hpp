@@ -9,7 +9,6 @@
 #include <basic/UniqueID.hpp>
 #include <engine/preamble.hpp>
 #include <engine/ViewerCreateInfo.hpp>
-#include <engine/vulqan/VqAllocator.hpp>
 #include <engine/vulqan/VqCommandBuffers.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
 #include <engine/vulqan/VqDescriptorPool.hpp>
@@ -23,6 +22,7 @@
 #include <engine/vulqan/VqSwapchain.hpp>
 #include <math/preamble.hpp>
 
+#include <vk_mem_alloc.h>
 #include <imgui.h>
 
 #include <atomic>
@@ -120,8 +120,8 @@ namespace yq {
             std::vector<const char*>            m_extensions;
             VkDevice                            m_device            = nullptr;
             ViQueues                            m_graphic, m_present, m_compute, m_videoEncode, m_videoDecode;
+            VmaAllocator                        m_allocator      = nullptr;
             
-            VqAllocator         allocator;
             VqCommandPool       commandPool;
             VkPresentModeKHR    presentMode                 = {};
             VqRenderPass        renderPass;
