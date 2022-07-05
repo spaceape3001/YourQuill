@@ -43,7 +43,6 @@
 #include "vulqan/VqSurface.ipp"
 #include "vulqan/VqSwapchain.ipp"
 #include "vulqan/VqUtils.ipp"
-#include "vulqan/VqWindow.ipp"
 
 
 

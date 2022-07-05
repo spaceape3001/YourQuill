@@ -8,6 +8,7 @@
 
 #include <basic/UniqueID.hpp>
 #include <engine/preamble.hpp>
+#include <engine/ViewerCreateInfo.hpp>
 #include <engine/vulqan/VqAllocator.hpp>
 #include <engine/vulqan/VqCommandBuffers.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
@@ -22,11 +23,13 @@
 #include <engine/vulqan/VqSemaphore.hpp>
 #include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqSwapchain.hpp>
-#include <engine/vulqan/VqWindow.hpp>
 #include <engine/vulqan/VqQueues.hpp>
 #include <math/preamble.hpp>
 #include <atomic>
 #include <thread>
+
+struct GLFWwindow;
+
 
 namespace yq {
     namespace engine {
@@ -91,13 +94,14 @@ namespace yq {
             This structure is the raw vulkan/GLFW/etc
         */
         struct Visualizer : public UniqueID {
+            ViewerCreateInfo                    create_info;
             Viewer*                             user        = nullptr;
             VkInstance                          instance    = nullptr;
             VkPhysicalDevice                    physical    = nullptr;
             VkPhysicalDeviceProperties          device_info;
             VkPhysicalDeviceMemoryProperties    memory_info;
+            GLFWwindow*                         window   = nullptr;
             
-            VqWindow            window;
             VqSurface           surface;
             VqDevice            device;
             VqAllocator         allocator;
@@ -134,11 +138,15 @@ namespace yq {
             
             Visualizer(const ViewerCreateInfo&, Viewer*);
             ~Visualizer();
+            void                _ctor();
+            void                _dtor();
 
             std::string_view    device_name() const;
             uint32_t            max_memory_allocation_count() const noexcept;
             uint32_t            max_push_constants_size() const noexcept;
             uint32_t            max_viewports() const noexcept;
+            
+            static void         callback_resize(GLFWwindow*, int, int);
             
         };
     }

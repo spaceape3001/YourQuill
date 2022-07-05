@@ -754,16 +754,49 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
+        
+        void         Visualizer::callback_resize(GLFWwindow* win, int, int)
+        {
+            Visualizer    *v  = (Visualizer*) glfwGetWindowUserPointer(win);
+            if(v){
+                v -> rebuildSwap    = true;
+                if(v->user)
+                    v->user->window_resized();
+            }
+        }
+        
+        //  ----------------------------------------------------------------------------
 
         Visualizer::Visualizer(const ViewerCreateInfo& i, Viewer *w) 
         {
+            create_info = i;
             user        = w;
             
+            try {
+                _ctor();
+            }
+            catch(VqException& ex)
+            {
+                _dtor();
+                throw;
+            }
+        }
+
+        Visualizer::~Visualizer()
+        {
+            _dtor();
+        }
+
+
+
+        void Visualizer::_ctor()
+        {
+
             instance    = Application::vulkan();
             if(!instance)
                 throw VqException("Vulkan has not been initialized!");
 
-            physical                    = i.device;
+            physical                    = create_info.device;
             if(!physical){
                 physical  = vqFirstDevice();
                 if(!physical)
@@ -774,7 +807,22 @@ namespace yq {
             vkGetPhysicalDeviceMemoryProperties(physical, &memory_info);
             
             yNotice() << "Using (" << to_string(device_info.deviceType) << "): " << device_name();
-            window                      = VqWindow(*this, i);
+
+            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+            glfwWindowHint(GLFW_FLOATING, create_info.floating ? GLFW_TRUE : GLFW_FALSE);
+            glfwWindowHint(GLFW_DECORATED, create_info.decorated ? GLFW_TRUE : GLFW_FALSE);
+            glfwWindowHint(GLFW_RESIZABLE, create_info.resizable ? GLFW_TRUE : GLFW_FALSE);
+            
+            int wx  = std::max(1,create_info.size.width());
+            int wy  = std::max(1,create_info.size.height());
+
+            window = glfwCreateWindow(wx, wy, create_info.title, create_info.monitor.monitor(), nullptr);
+            if(!window)
+                throw VqException("Unable to create GLFW window");
+            
+            glfwSetWindowUserPointer(window, this);
+            glfwSetWindowSizeCallback(window, callback_resize);
+
 
             surface                     = VqSurface(physical, window);
             
@@ -783,7 +831,7 @@ namespace yq {
             device                      = VqDevice(surface, dci);
             allocator                   = VqAllocator(*this);
        
-            VkPresentModeKHR pmdef      = (VkPresentModeKHR) i.pmode.value();
+            VkPresentModeKHR pmdef      = (VkPresentModeKHR) create_info.pmode.value();
        
             presentMode                 = surface.supports(pmdef) ? pmdef : VK_PRESENT_MODE_FIFO_KHR;
                 
@@ -792,36 +840,20 @@ namespace yq {
             imageAvailableSemaphore     = VqSemaphore(device);
             renderFinishedSemaphore     = VqSemaphore(device);
             inFlightFence               = VqFence(device);
-            descriptorPool              = VqDescriptorPool(device, i.descriptors);
+            descriptorPool              = VqDescriptorPool(device, create_info.descriptors);
 
             if(!init(dynamic))
                 throw VqException("");
             
-            set_clear(i.clear);
+            set_clear(create_info.clear);
             
             builder = std::thread([this](){
                 this->run();
             });
         }
+        
 
-
-        bool Visualizer::init(VqDynamic&ds, VkSwapchainKHR old)
-        {
-            VqSwapchain::Config scfg;
-            scfg.pmode          = presentMode;
-            scfg.old            = old;
-            ds.swapchain        = VqSwapchain(device, surface, scfg);
-            
-            ds.images           = ds.swapchain.images();
-            ds.imageCount       = ds.images.size();
-            ds.imageViews       = VqImageViews(device, surface, ds.images);
-            ds.frameBuffers     = VqFrameBuffers(device, renderPass, ds.swapchain.extents(), ds.imageViews);
-            ds.commandBuffers   = VqCommandBuffers(commandPool, 1);
-
-            return true;            
-        }
-
-        Visualizer::~Visualizer()
+        void Visualizer::_dtor()
         {
             terminating = true;
             builder.join();
@@ -855,8 +887,31 @@ namespace yq {
             
             surface                     = {};
             window                      = {};
-            physical                    = {};
+            
+            if(window){
+                glfwDestroyWindow(window);
+                window                  = nullptr;
+            }
+            physical                    = nullptr;
         }
+
+
+        bool Visualizer::init(VqDynamic&ds, VkSwapchainKHR old)
+        {
+            VqSwapchain::Config scfg;
+            scfg.pmode          = presentMode;
+            scfg.old            = old;
+            ds.swapchain        = VqSwapchain(device, surface, scfg);
+            
+            ds.images           = ds.swapchain.images();
+            ds.imageCount       = ds.images.size();
+            ds.imageViews       = VqImageViews(device, surface, ds.images);
+            ds.frameBuffers     = VqFrameBuffers(device, renderPass, ds.swapchain.extents(), ds.imageViews);
+            ds.commandBuffers   = VqCommandBuffers(commandPool, 1);
+
+            return true;            
+        }
+
 
 
         void Visualizer::kill(VqDynamic&ds)
