@@ -446,7 +446,7 @@ namespace yq {
 
         VkDescriptorPool    Viewer::descriptor_pool() const 
         { 
-            return m->descriptorPool; 
+            return m->m_descriptorPool; 
         }
         
         VkDevice  Viewer::device() const 
@@ -1120,6 +1120,34 @@ namespace yq {
             vmaCreateAllocator(&allocatorCreateInfo, &m_allocator);
 
             //  ================================
+            //  DESCRIPTOR POOL
+
+            uint32_t    descriptorCount   = std::max(MIN_DESCRIPTOR_COUNT, vci.descriptors);
+
+            std::vector<VkDescriptorPoolSize> descriptorPoolSizes =
+            {
+                { VK_DESCRIPTOR_TYPE_SAMPLER, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, descriptorCount },
+                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, descriptorCount }
+            };
+            VqDescriptorPoolCreateInfo descriptorPoolInfo;
+            descriptorPoolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+            descriptorPoolInfo.maxSets       = descriptorCount * descriptorPoolSizes.size();
+            descriptorPoolInfo.poolSizeCount = (uint32_t) descriptorPoolSizes.size();
+            descriptorPoolInfo.pPoolSizes    = descriptorPoolSizes.data();
+            if(vkCreateDescriptorPool(m_device, &descriptorPoolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS)
+                throw VqException("Unable to allocate the descriptor pool!");
+
+
+            //  ================================
             //  OLDER STUFF
 
        
@@ -1132,7 +1160,6 @@ namespace yq {
             imageAvailableSemaphore     = VqSemaphore(m_device);
             renderFinishedSemaphore     = VqSemaphore(m_device);
             inFlightFence               = VqFence(m_device);
-            descriptorPool              = VqDescriptorPool(m_device, vci.descriptors);
 
             if(!init(dynamic))
                 throw VqException("");
@@ -1167,12 +1194,16 @@ namespace yq {
             
             kill(dynamic);
             
-            descriptorPool              = {};
             imageAvailableSemaphore     = {};
             renderFinishedSemaphore     = {};
             inFlightFence               = {};
             renderPass                  = {};
             commandPool                 = {};
+            
+            if(m_descriptorPool){
+                vkDestroyDescriptorPool(m_device, m_descriptorPool, nullptr);
+                m_descriptorPool        = nullptr;
+            }
             
             if(m_allocator){
                 vmaDestroyAllocator(m_allocator);
@@ -1181,24 +1212,24 @@ namespace yq {
             
             if(m_device){
                 vkDestroyDevice(m_device, nullptr);
-                m_device            = nullptr;
+                m_device                = nullptr;
             }
-            m_graphic.queues.clear();
-            m_present.queues.clear();
-            m_compute.queues.clear();
-            m_videoEncode   = {};
-            m_videoDecode   = {};
+            m_graphic                   = {};
+            m_present                   = {};
+            m_compute                   = {};
+            m_videoEncode               = {};
+            m_videoDecode               = {};
             
             if(m_surface){
                 vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
-                m_surface           = nullptr;
+                m_surface               = nullptr;
             }
-            m_physical              = nullptr;
+            m_physical                  = nullptr;
             if(m_window){
                 glfwDestroyWindow(m_window);
-                m_window            = nullptr;
+                m_window                = nullptr;
             }
-            m_physical              = nullptr;
+            m_physical                  = nullptr;
         }
 
 

@@ -26,7 +26,6 @@
 #include "vulqan/VqCommand.ipp"
 #include "vulqan/VqCommandBuffers.ipp"
 #include "vulqan/VqCommandPool.ipp"
-#include "vulqan/VqDescriptorPool.ipp"
 #include "vulqan/VqEnums.ipp"
 #include "vulqan/VqFence.ipp"
 #include "vulqan/VqFencePool.ipp"

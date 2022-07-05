@@ -11,7 +11,6 @@
 #include <engine/ViewerCreateInfo.hpp>
 #include <engine/vulqan/VqCommandBuffers.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
-#include <engine/vulqan/VqDescriptorPool.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFrameBuffers.hpp>
 #include <engine/vulqan/VqImageViews.hpp>
@@ -120,7 +119,8 @@ namespace yq {
             std::vector<const char*>            m_extensions;
             VkDevice                            m_device            = nullptr;
             ViQueues                            m_graphic, m_present, m_compute, m_videoEncode, m_videoDecode;
-            VmaAllocator                        m_allocator      = nullptr;
+            VmaAllocator                        m_allocator         = nullptr;
+            VkDescriptorPool                    m_descriptorPool    = nullptr;
             
             VqCommandPool       commandPool;
             VkPresentModeKHR    presentMode                 = {};
@@ -128,7 +128,6 @@ namespace yq {
             VqSemaphore         imageAvailableSemaphore;
             VqSemaphore         renderFinishedSemaphore;
             VqFence             inFlightFence;
-            VqDescriptorPool    descriptorPool;
 
             VkClearValue        clear;
             std::atomic<bool>   rebuildSwap                 = { false };
