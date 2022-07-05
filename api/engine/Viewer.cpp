@@ -103,7 +103,7 @@ namespace yq {
             }
 
             VqRenderPassBeginInfo renderPassInfo;
-            renderPassInfo.renderPass = m->renderPass;
+            renderPassInfo.renderPass = m->m_renderPass;
             renderPassInfo.framebuffer = m->dynamic.frameBuffers[imageIndex];
             renderPassInfo.renderArea.offset = {0, 0};
             renderPassInfo.renderArea.extent = m->dynamic.swapchain.extents();
@@ -610,7 +610,7 @@ namespace yq {
 
         VkRenderPass Viewer::render_pass() const
         {
-            return m->renderPass;
+            return m->m_renderPass;
         }
 
         void        Viewer::restore()
@@ -1214,30 +1214,38 @@ namespace yq {
             m_descriptorCount   = std::max(MIN_DESCRIPTOR_COUNT, vci.descriptors);
             m_thread            = std::make_unique<ViThread>(*this);
             
+            //  ================================
+            //  RENDER PASS
 
-            //std::vector<VkDescriptorPoolSize> descriptorPoolSizes =
-            //{
-                //{ VK_DESCRIPTOR_TYPE_SAMPLER, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, descriptorCount },
-                //{ VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, descriptorCount }
-            //};
-            //VqDescriptorPoolCreateInfo descriptorPoolInfo;
-            //descriptorPoolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-            //descriptorPoolInfo.maxSets       = descriptorCount * descriptorPoolSizes.size();
-            //descriptorPoolInfo.poolSizeCount = (uint32_t) descriptorPoolSizes.size();
-            //descriptorPoolInfo.pPoolSizes    = descriptorPoolSizes.data();
-            //if(vkCreateDescriptorPool(m_device, &descriptorPoolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS)
-                //throw VqException("Unable to allocate the descriptor pool!");
+            VkAttachmentDescription colorAttachment{};
+            colorAttachment.format          = m_surfaceFormat;
+            colorAttachment.samples         = VK_SAMPLE_COUNT_1_BIT;
+            colorAttachment.loadOp          = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorAttachment.storeOp         = VK_ATTACHMENT_STORE_OP_STORE;        
+            colorAttachment.stencilLoadOp   = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+            colorAttachment.stencilStoreOp  = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            colorAttachment.initialLayout   = VK_IMAGE_LAYOUT_UNDEFINED;
+            colorAttachment.finalLayout     = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            
+            VkAttachmentReference colorAttachmentRef{};
+            colorAttachmentRef.attachment = 0;
+            colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+            VkSubpassDescription subpass{};
+            subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;        
 
+            subpass.colorAttachmentCount = 1;
+            subpass.pColorAttachments = &colorAttachmentRef;
+            
+            VqRenderPassCreateInfo renderPassInfo;
+            renderPassInfo.attachmentCount = 1;
+            renderPassInfo.pAttachments = &colorAttachment;
+            renderPassInfo.subpassCount = 1;
+            renderPassInfo.pSubpasses = &subpass;
+
+            if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) 
+                throw VqException("Unable to create the render pass!");
+                
             //  ================================
             //  OLDER STUFF
 
@@ -1246,7 +1254,6 @@ namespace yq {
        
             presentMode                 = does_surface_support(pmdef) ? pmdef : VK_PRESENT_MODE_FIFO_KHR;
                 
-            renderPass                  = VqRenderPass(*this);
             imageAvailableSemaphore     = VqSemaphore(m_device);
             renderFinishedSemaphore     = VqSemaphore(m_device);
             inFlightFence               = VqFence(m_device);
@@ -1287,7 +1294,11 @@ namespace yq {
             imageAvailableSemaphore     = {};
             renderFinishedSemaphore     = {};
             inFlightFence               = {};
-            renderPass                  = {};
+            
+            if(m_renderPass){
+                vkDestroyRenderPass(m_device, m_renderPass, nullptr);
+                m_renderPass = nullptr;
+            }
             
             m_thread                    = {};
             
@@ -1329,7 +1340,7 @@ namespace yq {
             ds.images           = ds.swapchain.images();
             ds.imageCount       = ds.images.size();
             ds.imageViews       = VqImageViews(*this, ds.images);
-            ds.frameBuffers     = VqFrameBuffers(m_device, renderPass, ds.swapchain.extents(), ds.imageViews);
+            ds.frameBuffers     = VqFrameBuffers(m_device, m_renderPass, ds.swapchain.extents(), ds.imageViews);
             ds.commandBuffers   = VqCommandBuffers(m_device, m_thread->graphic, 1);
 
             return true;            

@@ -186,7 +186,7 @@ namespace yq {
                 pipelineInfo.pColorBlendState = &colorBlending;
                 pipelineInfo.pDynamicState = nullptr; // Optional   
                 pipelineInfo.layout = m_layout;
-                pipelineInfo.renderPass = viz.renderPass;
+                pipelineInfo.renderPass = viz.m_renderPass;
                 pipelineInfo.subpass = 0;             
                 pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
                 pipelineInfo.basePipelineIndex = -1; // Optional        

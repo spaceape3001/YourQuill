@@ -8,13 +8,12 @@
 
 #include "VqException.hpp"
 #include "VqFrameBuffers.hpp"
-#include "VqRenderPass.hpp"
 #include "VqStructs.hpp"
 #include <basic/preamble.hpp>
 
 namespace yq {
     namespace engine {
-        VqFrameBuffers::VqFrameBuffers(VkDevice dev, VqRenderPass&render, const VkExtent2D&extents, const std::vector<VkImageView>&imageviews) : m_device(dev)
+        VqFrameBuffers::VqFrameBuffers(VkDevice dev, VkRenderPass render, const VkExtent2D&extents, const std::vector<VkImageView>&imageviews) : m_device(dev)
         {
             if(imageviews.empty())
                 return ;

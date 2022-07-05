@@ -18,7 +18,7 @@ namespace yq {
         class VqFrameBuffers : trait::not_copyable {
         public:
             VqFrameBuffers() {}
-            VqFrameBuffers(VkDevice, VqRenderPass&, const VkExtent2D&, const std::vector<VkImageView>&images);
+            VqFrameBuffers(VkDevice, VkRenderPass, const VkExtent2D&, const std::vector<VkImageView>&images);
             VqFrameBuffers(VqFrameBuffers&&);
             VqFrameBuffers&          operator=(VqFrameBuffers&&);
             ~VqFrameBuffers();

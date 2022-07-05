@@ -15,7 +15,6 @@
 #include <engine/vulqan/VqImageViews.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
-#include <engine/vulqan/VqRenderPass.hpp>
 #include <engine/vulqan/VqSemaphore.hpp>
 #include <engine/vulqan/VqSwapchain.hpp>
 #include <math/preamble.hpp>
@@ -97,6 +96,7 @@ namespace yq {
             bool valid() const { return family != UINT32_MAX; }
         };
         
+            // eventually multithread...
         struct ViThread {
             VkDevice                        device              = nullptr;
             VkDescriptorPool                descriptors         = nullptr;
@@ -108,7 +108,7 @@ namespace yq {
             void    dtor();
         };
         
-            // eventually multithread...
+            //  and so we can be more efficient in rendering
         struct ViFrame {
             VkDevice                device          = nullptr;
             VkCommandBuffer         cmdBuf          = nullptr;
@@ -116,6 +116,7 @@ namespace yq {
             VkImageView             imageView       = nullptr;
             VkSemaphore             imageAvailable  = nullptr;
             VkSemaphore             renderFinished  = nullptr;
+            VkFence                 fence           = nullptr;
             
             ViFrame();
             ~ViFrame();
@@ -148,12 +149,11 @@ namespace yq {
             VmaAllocator                        m_allocator             = nullptr;
             uint32_t                            m_descriptorCount       = 0;
             VkCommandPoolCreateFlags            m_cmdPoolCreateFlags    = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            
             std::unique_ptr<ViThread>           m_thread;
+            VkRenderPass                        m_renderPass            = nullptr;
             
             
             VkPresentModeKHR    presentMode                 = {};
-            VqRenderPass        renderPass;
             VqSemaphore         imageAvailableSemaphore;
             VqSemaphore         renderFinishedSemaphore;
             VqFence             inFlightFence;
