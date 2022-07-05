@@ -426,7 +426,7 @@ namespace yq {
 
         VkCommandPool  Viewer::command_pool() const 
         { 
-            return m->commandPool; 
+            return m->m_thread->graphic; 
         }
         
         VkQueue  Viewer::compute_queue(uint32_t i) const
@@ -446,7 +446,7 @@ namespace yq {
 
         VkDescriptorPool    Viewer::descriptor_pool() const 
         { 
-            return m->m_descriptorPool; 
+            return m->m_thread->descriptors; 
         }
         
         VkDevice  Viewer::device() const 
@@ -802,6 +802,21 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
+        ViFrame::ViFrame()
+        {
+        }
+        
+        ViFrame::~ViFrame()
+        {
+            dtor();
+        }
+        
+        void    ViFrame::dtor()
+        {
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+
         ViObject::ViObject()
         {
         }
@@ -840,6 +855,80 @@ namespace yq {
             if(i<queues.size()) [[likely]]
                 return queues[i];
             return nullptr;
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////
+
+        ViThread::ViThread(Visualizer& viz) : device(viz.m_device)
+        {
+            try {
+                std::vector<VkDescriptorPoolSize> descriptorPoolSizes =
+                {
+                    { VK_DESCRIPTOR_TYPE_SAMPLER, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, viz.m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, viz.m_descriptorCount }
+                };
+                VqDescriptorPoolCreateInfo descriptorPoolInfo;
+                descriptorPoolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+                descriptorPoolInfo.maxSets       = viz.m_descriptorCount * descriptorPoolSizes.size();
+                descriptorPoolInfo.poolSizeCount = (uint32_t) descriptorPoolSizes.size();
+                descriptorPoolInfo.pPoolSizes    = descriptorPoolSizes.data();
+                if(vkCreateDescriptorPool(device, &descriptorPoolInfo, nullptr, &descriptors) != VK_SUCCESS)
+                    throw VqException("Unable to allocate the descriptor pool!");
+
+                VqCommandPoolCreateInfo poolInfo;
+                poolInfo.flags              = viz.m_cmdPoolCreateFlags;
+                
+                if(viz.m_graphic.valid()){
+                    poolInfo.queueFamilyIndex   = viz.m_graphic.family;
+                    if (vkCreateCommandPool(device, &poolInfo, nullptr, &graphic) != VK_SUCCESS) 
+                        throw VqException("Failed to create a graphic command pool!");
+                }
+                if(viz.m_compute.valid()){
+                    poolInfo.queueFamilyIndex   = viz.m_compute.family;
+                    if (vkCreateCommandPool(device, &poolInfo, nullptr, &compute) != VK_SUCCESS) 
+                        throw VqException("Failed to create a compute command pool!");
+                }
+            }
+            catch(VqException& ex)
+            {
+                dtor();
+                throw;
+            }
+        }
+        
+        ViThread::~ViThread()
+        {
+            dtor();
+        }
+        
+        void    ViThread::dtor()
+        {
+            if(device){
+                if(descriptors){
+                    vkDestroyDescriptorPool(device, descriptors, nullptr);
+                    descriptors = nullptr;
+                }
+                if(graphic){
+                    vkDestroyCommandPool(device, graphic, nullptr);
+                    graphic = nullptr;
+                }
+                if(compute){
+                    vkDestroyCommandPool(device, compute, nullptr);
+                    compute = nullptr;
+                }
+                device  = nullptr;
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1120,31 +1209,33 @@ namespace yq {
             vmaCreateAllocator(&allocatorCreateInfo, &m_allocator);
 
             //  ================================
-            //  DESCRIPTOR POOL
+            //  DESCRIPTOR & COMMAND POOL
 
-            uint32_t    descriptorCount   = std::max(MIN_DESCRIPTOR_COUNT, vci.descriptors);
+            m_descriptorCount   = std::max(MIN_DESCRIPTOR_COUNT, vci.descriptors);
+            m_thread            = std::make_unique<ViThread>(*this);
+            
 
-            std::vector<VkDescriptorPoolSize> descriptorPoolSizes =
-            {
-                { VK_DESCRIPTOR_TYPE_SAMPLER, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, descriptorCount },
-                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, descriptorCount }
-            };
-            VqDescriptorPoolCreateInfo descriptorPoolInfo;
-            descriptorPoolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-            descriptorPoolInfo.maxSets       = descriptorCount * descriptorPoolSizes.size();
-            descriptorPoolInfo.poolSizeCount = (uint32_t) descriptorPoolSizes.size();
-            descriptorPoolInfo.pPoolSizes    = descriptorPoolSizes.data();
-            if(vkCreateDescriptorPool(m_device, &descriptorPoolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS)
-                throw VqException("Unable to allocate the descriptor pool!");
+            //std::vector<VkDescriptorPoolSize> descriptorPoolSizes =
+            //{
+                //{ VK_DESCRIPTOR_TYPE_SAMPLER, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, descriptorCount },
+                //{ VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, descriptorCount }
+            //};
+            //VqDescriptorPoolCreateInfo descriptorPoolInfo;
+            //descriptorPoolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+            //descriptorPoolInfo.maxSets       = descriptorCount * descriptorPoolSizes.size();
+            //descriptorPoolInfo.poolSizeCount = (uint32_t) descriptorPoolSizes.size();
+            //descriptorPoolInfo.pPoolSizes    = descriptorPoolSizes.data();
+            //if(vkCreateDescriptorPool(m_device, &descriptorPoolInfo, nullptr, &m_descriptorPool) != VK_SUCCESS)
+                //throw VqException("Unable to allocate the descriptor pool!");
 
 
             //  ================================
@@ -1155,7 +1246,6 @@ namespace yq {
        
             presentMode                 = does_surface_support(pmdef) ? pmdef : VK_PRESENT_MODE_FIFO_KHR;
                 
-            commandPool                 = VqCommandPool(m_device, m_graphic.family);
             renderPass                  = VqRenderPass(*this);
             imageAvailableSemaphore     = VqSemaphore(m_device);
             renderFinishedSemaphore     = VqSemaphore(m_device);
@@ -1198,12 +1288,8 @@ namespace yq {
             renderFinishedSemaphore     = {};
             inFlightFence               = {};
             renderPass                  = {};
-            commandPool                 = {};
             
-            if(m_descriptorPool){
-                vkDestroyDescriptorPool(m_device, m_descriptorPool, nullptr);
-                m_descriptorPool        = nullptr;
-            }
+            m_thread                    = {};
             
             if(m_allocator){
                 vmaDestroyAllocator(m_allocator);
@@ -1244,7 +1330,7 @@ namespace yq {
             ds.imageCount       = ds.images.size();
             ds.imageViews       = VqImageViews(*this, ds.images);
             ds.frameBuffers     = VqFrameBuffers(m_device, renderPass, ds.swapchain.extents(), ds.imageViews);
-            ds.commandBuffers   = VqCommandBuffers(commandPool, 1);
+            ds.commandBuffers   = VqCommandBuffers(m_device, m_thread->graphic, 1);
 
             return true;            
         }

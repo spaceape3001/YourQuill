@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqCommandBuffers.hpp"
-#include "VqCommandPool.hpp"
 #include "VqException.hpp"
 #include "VqStructs.hpp"
 #include <basic/preamble.hpp>
@@ -13,10 +12,10 @@
 namespace yq {
     namespace engine {
 
-        VqCommandBuffers::VqCommandBuffers(const VqCommandPool&pool, uint32_t count, VkCommandBufferLevel level)
+        VqCommandBuffers::VqCommandBuffers(VkDevice dev, VkCommandPool pool, uint32_t count, VkCommandBufferLevel level)
         {
-            m_device    = pool.device();
-            m_pool      = pool.pool();
+            m_device    = dev;
+            m_pool      = pool;
             if(!count)
                 return;
 

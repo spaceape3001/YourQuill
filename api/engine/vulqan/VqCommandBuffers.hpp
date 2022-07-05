@@ -17,7 +17,7 @@ namespace yq {
         class VqCommandBuffers : trait::not_copyable {
         public:
             VqCommandBuffers(){}
-            explicit VqCommandBuffers(const VqCommandPool&, uint32_t count=1, VkCommandBufferLevel level=VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+            explicit VqCommandBuffers(VkDevice, VkCommandPool, uint32_t count=1, VkCommandBufferLevel level=VK_COMMAND_BUFFER_LEVEL_PRIMARY);
             VqCommandBuffers(VqCommandBuffers&&);
             VqCommandBuffers& operator=(VqCommandBuffers&&);
             ~VqCommandBuffers();

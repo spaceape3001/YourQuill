@@ -10,7 +10,6 @@
 #include <engine/preamble.hpp>
 #include <engine/ViewerCreateInfo.hpp>
 #include <engine/vulqan/VqCommandBuffers.hpp>
-#include <engine/vulqan/VqCommandPool.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFrameBuffers.hpp>
 #include <engine/vulqan/VqImageViews.hpp>
@@ -95,7 +94,34 @@ namespace yq {
             void    set(VkDevice, uint32_t cnt);
             ~ViQueues();
             VkQueue operator[](uint32_t i) const;
+            bool valid() const { return family != UINT32_MAX; }
         };
+        
+        struct ViThread {
+            VkDevice                        device              = nullptr;
+            VkDescriptorPool                descriptors         = nullptr;
+            VkCommandPool                   graphic             = nullptr;
+            VkCommandPool                   compute             = nullptr;
+            
+            ViThread(Visualizer&);
+            ~ViThread();
+            void    dtor();
+        };
+        
+            // eventually multithread...
+        struct ViFrame {
+            VkDevice                device          = nullptr;
+            VkCommandBuffer         cmdBuf          = nullptr;
+            VkImage                 image           = nullptr;
+            VkImageView             imageView       = nullptr;
+            VkSemaphore             imageAvailable  = nullptr;
+            VkSemaphore             renderFinished  = nullptr;
+            
+            ViFrame();
+            ~ViFrame();
+            void    dtor();
+        };
+        
         
 
         /*! \brief Visualizer is the private data for the viewer
@@ -105,24 +131,27 @@ namespace yq {
             \note Eventually this will merge into viewer itself
         */
         struct Visualizer : public UniqueID {
-            Viewer*                             m_viewer            = nullptr;
-            VkInstance                          m_instance          = nullptr;
-            VkPhysicalDevice                    m_physical          = nullptr;
+            Viewer*                             m_viewer                = nullptr;
+            VkInstance                          m_instance              = nullptr;
+            VkPhysicalDevice                    m_physical              = nullptr;
             VkPhysicalDeviceProperties          m_deviceInfo;
             VkPhysicalDeviceMemoryProperties    m_memoryInfo;
-            GLFWwindow*                         m_window            = nullptr;
-            VkSurfaceKHR                        m_surface           = nullptr;
+            GLFWwindow*                         m_window                = nullptr;
+            VkSurfaceKHR                        m_surface               = nullptr;
             std::set<VkPresentModeKHR>          m_presentModes;
             std::vector<VkSurfaceFormatKHR>     m_surfaceFormats;
             VkFormat                            m_surfaceFormat;
             VkColorSpaceKHR                     m_surfaceColorSpace;
             std::vector<const char*>            m_extensions;
-            VkDevice                            m_device            = nullptr;
+            VkDevice                            m_device                = nullptr;
             ViQueues                            m_graphic, m_present, m_compute, m_videoEncode, m_videoDecode;
-            VmaAllocator                        m_allocator         = nullptr;
-            VkDescriptorPool                    m_descriptorPool    = nullptr;
+            VmaAllocator                        m_allocator             = nullptr;
+            uint32_t                            m_descriptorCount       = 0;
+            VkCommandPoolCreateFlags            m_cmdPoolCreateFlags    = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
             
-            VqCommandPool       commandPool;
+            std::unique_ptr<ViThread>           m_thread;
+            
+            
             VkPresentModeKHR    presentMode                 = {};
             VqRenderPass        renderPass;
             VqSemaphore         imageAvailableSemaphore;
