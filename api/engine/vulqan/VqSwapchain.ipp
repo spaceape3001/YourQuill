@@ -5,27 +5,26 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "VqSwapchain.hpp"
-#include "VqDevice.hpp"
 #include "VqException.hpp"
 #include "VqStructs.hpp"
-#include "VqSurface.hpp"
 
 #include <basic/preamble.hpp>
+#include <engine/Visualizer.hpp>
 #include <GLFW/glfw3.h>
 #include <algorithm>
 #include <limits>
 
 namespace yq {
     namespace engine {
-        VqSwapchain::VqSwapchain(VqDevice& device, VqSurface& surface, const Config& cfg) : m_device(device)
+        VqSwapchain::VqSwapchain(Visualizer& viz, const Config& cfg) : m_device(viz.m_device)
         {
 
-            VkSurfaceCapabilitiesKHR    capabilities = surface.capabilities();
+            VkSurfaceCapabilitiesKHR    capabilities = viz.surface_capabilities();
             if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
                 m_extents = capabilities.currentExtent;
             } else {
                 int w, h;
-                glfwGetFramebufferSize(surface.window(), &w, &h);
+                glfwGetFramebufferSize(viz.m_window, &w, &h);
                 m_extents = {};
                 m_extents.width    = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
                 m_extents.height   = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
@@ -33,7 +32,7 @@ namespace yq {
 
             #if 0
             int w, h;
-            glfwGetFramebufferSize(m_window, &w, &h);
+            glfwGetFramebufferSize(viz.m_window, &w, &h);
             vqInfo << "init dymamic stuff\n"<<
             "Frame itself is [" << w << 'x' << h << "] vs\n" <<
             "Image extents is " << ds.extents << '\n' <<
@@ -52,16 +51,16 @@ namespace yq {
             }
 
             VqSwapchainCreateInfoKHR    createInfo;
-            createInfo.surface          = surface;
+            createInfo.surface          = viz.m_surface;
             createInfo.minImageCount    = imageCount;
-            createInfo.imageFormat      = surface.format();
-            createInfo.imageColorSpace  = surface.color_space();
+            createInfo.imageFormat      = viz.m_surfaceFormat;
+            createInfo.imageColorSpace  = viz.m_surfaceColorSpace;
             createInfo.imageExtent      = m_extents;
             createInfo.imageArrayLayers = 1;    // we're not steroscopic
             createInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
             
-            uint32_t queueFamilyIndices[] = {device.graphics().family(), device.present().family()};
-            if (device.graphics().family() != device.present().family()) {
+            uint32_t queueFamilyIndices[] = {viz.m_graphic.family, viz.m_present.family};
+            if (viz.m_graphic.family != viz.m_present.family) {
                 createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
                 createInfo.queueFamilyIndexCount = 2;
                 createInfo.pQueueFamilyIndices = queueFamilyIndices;
@@ -78,7 +77,7 @@ namespace yq {
                 // TEMPORARY UNTIL WE GET THE NEW ONE
             createInfo.oldSwapchain     = cfg.old;
             
-            if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &m_swapchain) != VK_SUCCESS)
+            if (vkCreateSwapchainKHR(viz.m_device, &createInfo, nullptr, &m_swapchain) != VK_SUCCESS)
                 throw VqException("Failed to create the SWAP chain!");
         }
         

@@ -13,12 +13,12 @@
 
 namespace yq {
     namespace engine {
-        class VqSurface;
+        class Visualizer;
 
         class VqImageViews : trait::not_copyable {
         public:
             VqImageViews() {}
-            VqImageViews(VkDevice, const VqSurface&, const std::vector<VkImage>&images);
+            VqImageViews(const Visualizer&, const std::vector<VkImage>&images);
             VqImageViews(VqImageViews&&);
             VqImageViews&          operator=(VqImageViews&&);
             ~VqImageViews();

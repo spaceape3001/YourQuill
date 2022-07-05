@@ -17,8 +17,8 @@ namespace yq {
         {
             VmaAllocatorCreateInfo  createInfo{};
             createInfo.instance         = Application::vulkan();
-            createInfo.physicalDevice   = win.physical;
-            createInfo.device           = win.device;
+            createInfo.physicalDevice   = win.m_physical;
+            createInfo.device           = win.m_device;
             vmaCreateAllocator(&createInfo, &m_allocator);
         }
         

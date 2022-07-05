@@ -10,7 +10,6 @@
 #include "VqFrameBuffers.hpp"
 #include "VqRenderPass.hpp"
 #include "VqStructs.hpp"
-#include "VqSurface.hpp"
 #include <basic/preamble.hpp>
 
 namespace yq {

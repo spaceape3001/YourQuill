@@ -13,7 +13,6 @@
 #include <engine/vulqan/VqCommandBuffers.hpp>
 #include <engine/vulqan/VqCommandPool.hpp>
 #include <engine/vulqan/VqDescriptorPool.hpp>
-#include <engine/vulqan/VqDevice.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFrameBuffers.hpp>
 #include <engine/vulqan/VqImageViews.hpp>
@@ -21,11 +20,13 @@
 #include <engine/vulqan/VqPipeline.hpp>
 #include <engine/vulqan/VqRenderPass.hpp>
 #include <engine/vulqan/VqSemaphore.hpp>
-#include <engine/vulqan/VqSurface.hpp>
 #include <engine/vulqan/VqSwapchain.hpp>
-#include <engine/vulqan/VqQueues.hpp>
 #include <math/preamble.hpp>
+
+#include <imgui.h>
+
 #include <atomic>
+#include <set>
 #include <thread>
 
 struct GLFWwindow;
@@ -88,22 +89,38 @@ namespace yq {
             ~ViObject();
         };
         
+        struct ViQueues {
+            std::vector<VkQueue>    queues;
+            uint32_t                family   = UINT32_MAX;
+            
+            void    set(VkDevice, uint32_t cnt);
+            ~ViQueues();
+            VkQueue operator[](uint32_t i) const;
+        };
+        
 
         /*! \brief Visualizer is the private data for the viewer
                 
             This structure is the raw vulkan/GLFW/etc
+            
+            \note Eventually this will merge into viewer itself
         */
         struct Visualizer : public UniqueID {
-            ViewerCreateInfo                    create_info;
-            Viewer*                             user        = nullptr;
-            VkInstance                          instance    = nullptr;
-            VkPhysicalDevice                    physical    = nullptr;
-            VkPhysicalDeviceProperties          device_info;
-            VkPhysicalDeviceMemoryProperties    memory_info;
-            GLFWwindow*                         window   = nullptr;
+            Viewer*                             m_viewer            = nullptr;
+            VkInstance                          m_instance          = nullptr;
+            VkPhysicalDevice                    m_physical          = nullptr;
+            VkPhysicalDeviceProperties          m_deviceInfo;
+            VkPhysicalDeviceMemoryProperties    m_memoryInfo;
+            GLFWwindow*                         m_window            = nullptr;
+            VkSurfaceKHR                        m_surface           = nullptr;
+            std::set<VkPresentModeKHR>          m_presentModes;
+            std::vector<VkSurfaceFormatKHR>     m_surfaceFormats;
+            VkFormat                            m_surfaceFormat;
+            VkColorSpaceKHR                     m_surfaceColorSpace;
+            std::vector<const char*>            m_extensions;
+            VkDevice                            m_device            = nullptr;
+            ViQueues                            m_graphic, m_present, m_compute, m_videoEncode, m_videoDecode;
             
-            VqSurface           surface;
-            VqDevice            device;
             VqAllocator         allocator;
             VqCommandPool       commandPool;
             VkPresentModeKHR    presentMode                 = {};
@@ -138,15 +155,24 @@ namespace yq {
             
             Visualizer(const ViewerCreateInfo&, Viewer*);
             ~Visualizer();
-            void                _ctor();
+            void                _ctor(const ViewerCreateInfo&);
             void                _dtor();
 
-            std::string_view    device_name() const;
-            uint32_t            max_memory_allocation_count() const noexcept;
-            uint32_t            max_push_constants_size() const noexcept;
-            uint32_t            max_viewports() const noexcept;
-            
-            static void         callback_resize(GLFWwindow*, int, int);
+            std::string_view            device_name() const;
+            bool                        does_surface_support(VkPresentModeKHR) const;
+            bool                        does_surface_support(VkFormat) const;
+
+
+            uint32_t                    max_memory_allocation_count() const noexcept;
+            uint32_t                    max_push_constants_size() const noexcept;
+            uint32_t                    max_viewports() const noexcept;
+            VkSurfaceCapabilitiesKHR    surface_capabilities() const;
+
+            VkColorSpaceKHR             surface_color_space(VkFormat) const;
+            VkFormat                    surface_format() const { return m_surfaceFormat; }
+
+
+            static void                 callback_resize(GLFWwindow*, int, int);
             
         };
     }

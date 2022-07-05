@@ -21,11 +21,11 @@
 
 namespace yq {
     namespace engine {
-        VqPipeline::VqPipeline(Visualizer& win, const PipelineConfig& cfg)
+        VqPipeline::VqPipeline(Visualizer& viz, const PipelineConfig& cfg)
         {
-            m_device    = win.device;
+            m_device    = viz.m_device;
             try {
-                VqShaderStages stages(win.device, cfg.shaders);
+                VqShaderStages stages(viz.m_device, cfg.shaders);
                 
                 m_shaderMask    = stages.mask();
 
@@ -69,7 +69,7 @@ namespace yq {
                     VqDescriptorSetLayoutCreateInfo layoutInfo;
                     layoutInfo.bindingCount = ubos.size();
                     layoutInfo.pBindings    = ubos.data();
-                    if(vkCreateDescriptorSetLayout(win.device, &layoutInfo, nullptr, &m_descriptorSetLayout) != VK_SUCCESS)
+                    if(vkCreateDescriptorSetLayout(viz.m_device, &layoutInfo, nullptr, &m_descriptorSetLayout) != VK_SUCCESS)
                         throw VqException("Unable to create a descriptor set layout.");
                 }
                     
@@ -84,9 +84,9 @@ namespace yq {
                 inputAssembly.topology                  = (VkPrimitiveTopology) cfg.topology.value();
                 inputAssembly.primitiveRestartEnable    = VK_FALSE;
                 
-                VkViewport viewport = win.dynamic.swapchain.def_viewport();
+                VkViewport viewport = viz.dynamic.swapchain.def_viewport();
 
-                VkRect2D scissor = win.dynamic.swapchain.def_scissor();
+                VkRect2D scissor = viz.dynamic.swapchain.def_scissor();
                 
                 VqPipelineViewportStateCreateInfo   viewportState{};
                 viewportState.viewportCount = 1;
@@ -171,7 +171,7 @@ namespace yq {
                 }
 
 
-                if (vkCreatePipelineLayout(win.device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) 
+                if (vkCreatePipelineLayout(viz.m_device, &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS) 
                     throw VqException("Failed to create pipeline layout!");
 
                 VqGraphicsPipelineCreateInfo pipelineInfo;
@@ -186,14 +186,14 @@ namespace yq {
                 pipelineInfo.pColorBlendState = &colorBlending;
                 pipelineInfo.pDynamicState = nullptr; // Optional   
                 pipelineInfo.layout = m_layout;
-                pipelineInfo.renderPass = win.renderPass;
+                pipelineInfo.renderPass = viz.renderPass;
                 pipelineInfo.subpass = 0;             
                 pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
                 pipelineInfo.basePipelineIndex = -1; // Optional        
                 
                 if(cfg.polymode == PolygonMode::Fill)
                     pipelineInfo.flags  = VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
-                if (vkCreateGraphicsPipelines(win.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline) != VK_SUCCESS) 
+                if (vkCreateGraphicsPipelines(viz.m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline) != VK_SUCCESS) 
                     throw VqException("Failed to create graphics pipeline!");
                 
                     // if it's a fill polygon (typical), create a derivative wireframe pipeline
@@ -203,7 +203,7 @@ namespace yq {
                     pipelineInfo.basePipelineIndex  = -1;
                     rasterizer.polygonMode  = VK_POLYGON_MODE_LINE;
                     
-                    if (vkCreateGraphicsPipelines(win.device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_wireframe) != VK_SUCCESS)
+                    if (vkCreateGraphicsPipelines(viz.m_device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_wireframe) != VK_SUCCESS)
                         throw VqException("Failed to create wireframe pipeline!");
                 }
             }

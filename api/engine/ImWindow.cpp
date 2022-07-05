@@ -23,8 +23,8 @@ namespace yq {
             vii.Instance        = Application::vulkan();
             vii.PhysicalDevice  = physical();
             vii.Device          = device();
-            vii.Queue           = graphics_queue();
-            vii.QueueFamily     = graphics_queue_family();
+            vii.Queue           = graphic_queue();
+            vii.QueueFamily     = graphic_queue_family();
             vii.MinImageCount   = swap_min_image_count();
             vii.ImageCount      = swap_image_count();
             vii.DescriptorPool  = descriptor_pool();
@@ -78,7 +78,7 @@ namespace yq {
             end_info.commandBufferCount = 1;
             end_info.pCommandBuffers = &cbuffer;
             vkEndCommandBuffer(cbuffer);
-            vkQueueSubmit(graphics_queue(), 1, &end_info, VK_NULL_HANDLE);
+            vkQueueSubmit(graphic_queue(), 1, &end_info, VK_NULL_HANDLE);
             vkDeviceWaitIdle(device());
             ImGui_ImplVulkan_DestroyFontUploadObjects();
         }

@@ -12,8 +12,7 @@
 
 namespace yq {
     namespace engine {
-        class VqDevice;
-        class VqSurface;
+        class Visualizer;
 
         class VqSwapchain : trait::not_copyable {
         public:
@@ -26,7 +25,7 @@ namespace yq {
             };
         
             VqSwapchain(){}
-            VqSwapchain(VqDevice&, VqSurface&, const Config& cfg = Config());
+            VqSwapchain(Visualizer&, const Config& cfg = Config());
             VqSwapchain(VqSwapchain&&);
             VqSwapchain& operator=(VqSwapchain&&);
             ~VqSwapchain();

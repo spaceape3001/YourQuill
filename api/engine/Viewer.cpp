@@ -78,6 +78,8 @@ namespace yq {
             catch(VqException& ex){
                 yCritical() << ex.what();
             }
+            
+            m_title     = i.title;
         }
         
         Viewer::~Viewer()
@@ -128,7 +130,7 @@ namespace yq {
             
             bool    rebuild = m->rebuildSwap.exchange(false);
             if(rebuild){
-                vkDeviceWaitIdle(m->device);
+                vkDeviceWaitIdle(m->m_device);
                 VqDynamic        newStuff;
                 m->init(newStuff, m->dynamic.swapchain);
                 std::swap(m->dynamic, newStuff);
@@ -142,7 +144,7 @@ namespace yq {
             m->inFlightFence.wait_reset();
 
             uint32_t imageIndex = 0;
-            vkAcquireNextImageKHR(m->device, m->dynamic.swapchain, UINT64_MAX, m->imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+            vkAcquireNextImageKHR(m->m_device, m->dynamic.swapchain, UINT64_MAX, m->imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
             vkResetCommandBuffer(cmdbuf, 0);
             
             if(!record(cmdbuf, imageIndex))
@@ -162,7 +164,7 @@ namespace yq {
             submitInfo.signalSemaphoreCount = 1;
             submitInfo.pSignalSemaphores = signalSemaphores;
 
-            if (vkQueueSubmit(m->device.graphics(0), 1, &submitInfo, m->inFlightFence) != VK_SUCCESS) {
+            if (vkQueueSubmit(graphic_queue(), 1, &submitInfo, m->inFlightFence) != VK_SUCCESS) {
                 vqError << "Failed to submit draw command buffer!";
                 return false;
             }
@@ -177,7 +179,7 @@ namespace yq {
             presentInfo.pSwapchains = &swapchain;
             presentInfo.pImageIndices = &imageIndex;
             presentInfo.pResults = nullptr; // Optional
-            vkQueuePresentKHR(m->device.present(0), &presentInfo);
+            vkQueuePresentKHR(present_queue(), &presentInfo);
             
             auto end = std::chrono::high_resolution_clock::now();
             m->draw_time    = (end-start).count();
@@ -406,180 +408,205 @@ namespace yq {
 
         void Viewer::attention()
         {
-            if(m->window)
-                glfwRequestWindowAttention(m->window);
+            if(m->m_window)
+                glfwRequestWindowAttention(m->m_window);
         }
 
         void Viewer::close()
         {
-            if(m->window)
-                glfwSetWindowShouldClose(m->window, GLFW_TRUE);
+            if(m->m_window)
+                glfwSetWindowShouldClose(m->m_window, GLFW_TRUE);
         }
 
-        VkColorSpaceKHR     Viewer::color_space() const 
-        { 
-            return m->surface.color_space(); 
-        }
 
-        VkCommandBuffer     Viewer::command_buffer() const
+        VkCommandBuffer  Viewer::command_buffer() const
         {
             return m->dynamic.commandBuffers[0];
         }
 
-        VkCommandPool       Viewer::command_pool() const 
+        VkCommandPool  Viewer::command_pool() const 
         { 
             return m->commandPool; 
         }
         
+        VkQueue  Viewer::compute_queue(uint32_t i) const
+        {
+            return m->m_compute[i];
+        }
+        
+        uint32_t  Viewer::compute_queue_count() const
+        {
+            return (uint32_t) m->m_compute.queues.size();
+        }
+        
+        uint32_t  Viewer::compute_queue_family() const
+        {
+            return m->m_compute.family;
+        }
+
         VkDescriptorPool    Viewer::descriptor_pool() const 
         { 
             return m->descriptorPool; 
         }
         
-        VkDevice            Viewer::device() const 
+        VkDevice  Viewer::device() const 
         { 
-            return m->device; 
+            return m->m_device; 
         }
 
         void Viewer::focus()
         {
-            if(m->window)
-                glfwFocusWindow(m->window);
+            if(m && m->m_window)
+                glfwFocusWindow(m->m_window);
         }
 
-        VkFormat    Viewer::format() const 
-        { 
-            return m->surface.format(); 
-        }
-
-        VkQueue     Viewer::graphics_queue() const 
-        { 
-            return m->device.graphics(0); 
+        VkQueue     Viewer::graphic_queue(uint32_t i) const
+        {
+            return m->m_graphic[i];
         }
         
-        uint32_t    Viewer::graphics_queue_family() const 
-        { 
-            return m->device.graphics().family(); 
+        uint32_t    Viewer::graphic_queue_count() const
+        {
+            return (uint32_t) m->m_graphic.queues.size();
         }
+        
+        uint32_t    Viewer::graphic_queue_family() const
+        {
+            return m->m_graphic.family;
+        }
+
 
         int  Viewer::height() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return 0;
         
             int ret;
-            glfwGetWindowSize(m->window, nullptr, &ret);
+            glfwGetWindowSize(m->m_window, nullptr, &ret);
             return ret;
         }
 
         void Viewer::hide()
         {
-            if(m->window)
-                glfwHideWindow(m->window);
+            if(m->m_window)
+                glfwHideWindow(m->m_window);
         }
 
         void Viewer::iconify()
         {
-            if(m->window)
-                glfwIconifyWindow(m->window);
+            if(m->m_window)
+                glfwIconifyWindow(m->m_window);
         }
 
         bool        Viewer::is_decorated() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_DECORATED) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_DECORATED) != 0;
         }
         
         bool        Viewer::is_focused() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_FOCUSED ) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_FOCUSED ) != 0;
         }
         
         bool        Viewer::is_floating() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_FLOATING) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_FLOATING) != 0;
         }
         
         bool        Viewer::is_fullscreen() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowMonitor(m->window) != nullptr;
+            return glfwGetWindowMonitor(m->m_window) != nullptr;
         }
         
         bool        Viewer::is_hovered() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_HOVERED) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_HOVERED) != 0;
         }
         
         bool        Viewer::is_iconified() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_ICONIFIED) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_ICONIFIED) != 0;
         }
 
         bool        Viewer::is_maximized() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_MAXIMIZED) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_MAXIMIZED) != 0;
         }
         
         bool        Viewer::is_resizable() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_RESIZABLE) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_RESIZABLE) != 0;
         }
         
         bool        Viewer::is_visible() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->window, GLFW_VISIBLE) != 0;
+            return glfwGetWindowAttrib(m->m_window, GLFW_VISIBLE) != 0;
         }
         
         VkDevice    Viewer::logical() const 
         { 
-            return m->device; 
+            return m->m_device; 
         }
 
         void        Viewer::maximize()
         {
-            if(m->window)
-                glfwMaximizeWindow(m->window);
+            if(m->m_window)
+                glfwMaximizeWindow(m->m_window);
         }
 
         VqMonitor   Viewer::monitor() const
         {
-            if(m->window)
-                return VqMonitor(glfwGetWindowMonitor(m->window));
+            if(m->m_window)
+                return VqMonitor(glfwGetWindowMonitor(m->m_window));
             return VqMonitor();
         }
 
         VkPhysicalDevice    Viewer::physical() const 
         { 
-            return m->physical; 
+            return m->m_physical; 
         }
 
         Vector2I    Viewer::position() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return {};
             Vector2I   ret;
-            glfwGetWindowPos(m->window, &ret.x, &ret.y);
+            glfwGetWindowPos(m->m_window, &ret.x, &ret.y);
             return ret;
         }
 
-
+        VkQueue      Viewer::present_queue(uint32_t i) const
+        {
+            return m->m_present[i];
+        }
+        
+        uint32_t     Viewer::present_queue_count() const
+        {
+            return (uint32_t) m->m_present.queues.size();
+        }
+        
+        uint32_t     Viewer::present_queue_family() const
+        {
+            return m->m_present.family;
+        }
 
         VkRenderPass Viewer::render_pass() const
         {
@@ -588,8 +615,8 @@ namespace yq {
 
         void        Viewer::restore()
         {
-            if(m->window)
-                glfwRestoreWindow(m->window);
+            if(m->m_window)
+                glfwRestoreWindow(m->m_window);
         }
 
         void        Viewer::set_clear(const RGBA4F&i)
@@ -604,8 +631,8 @@ namespace yq {
         
         void        Viewer::set_position(int x, int y)
         {
-            if(m->window){
-                glfwSetWindowPos(m->window, x, y);
+            if(m->m_window){
+                glfwSetWindowPos(m->m_window, x, y);
             }
         }
 
@@ -616,15 +643,16 @@ namespace yq {
 
         void        Viewer::set_size(int w, int h)
         {
-            if(m->window){
-                glfwSetWindowSize(m->window, std::max(1, w), std::max(1, h));
+            if(m->m_window){
+                glfwSetWindowSize(m->m_window, std::max(1, w), std::max(1, h));
             }
         }
 
         void        Viewer::set_title(const char*z)
         {
-            if(m->window && z){
-                glfwSetWindowTitle(m->window, z);
+            if(m->m_window && z){
+                glfwSetWindowTitle(m->m_window, z);
+                m_title = z;
             }
         }
 
@@ -635,29 +663,39 @@ namespace yq {
 
         bool        Viewer::should_close() const
         {
-            if(!m->window) 
+            if(!m->m_window) 
                 return true;
-            return glfwWindowShouldClose(m->window);
+            return glfwWindowShouldClose(m->m_window);
         }
 
         void        Viewer::show()
         {
-            if(m->window)
-                glfwShowWindow(m->window);
+            if(m->m_window)
+                glfwShowWindow(m->m_window);
         }
 
         Size2I      Viewer::size() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return {};
             Size2I  ret;
-            glfwGetWindowSize(m->window, &ret.x, &ret.y);
+            glfwGetWindowSize(m->m_window, &ret.x, &ret.y);
             return ret;
         }
 
         VkSurfaceKHR        Viewer::surface() const 
         { 
-            return m->surface; 
+            return m->m_surface; 
+        }
+
+        VkFormat            Viewer::surface_format() const
+        {
+            return m->m_surfaceFormat;
+        }
+
+        VkColorSpaceKHR  Viewer::surface_color_space() const 
+        { 
+            return m->m_surfaceColorSpace; 
         }
 
         VkRect2D    Viewer::swap_def_scissor() const
@@ -690,19 +728,49 @@ namespace yq {
             return m->dynamic.swapchain.width();
         }
         
+        VkQueue   Viewer::video_decode_queue(uint32_t i) const
+        {
+            return m->m_videoDecode[i];
+        }
+        
+        uint32_t  Viewer::video_decode_queue_count() const
+        {
+            return (uint32_t) m->m_videoDecode.queues.size();
+        }
+        
+        uint32_t  Viewer::video_decode_queue_family() const
+        {
+            return m->m_videoDecode.family;
+        }
+
+        VkQueue   Viewer::video_encode_queue(uint32_t i) const
+        {
+            return m->m_videoEncode[i];
+        }
+        
+        uint32_t  Viewer::video_encode_queue_count() const
+        {
+            return (uint32_t) m->m_videoEncode.queues.size();
+        }
+
+        uint32_t  Viewer::video_encode_queue_family() const
+        {
+            return m->m_videoEncode.family;
+        }
+
         int  Viewer::width() const
         {
-            if(!m->window)
+            if(!m->m_window)
                 return 0;
         
             int ret;
-            glfwGetWindowSize(m->window, &ret, nullptr);
+            glfwGetWindowSize(m->m_window, &ret, nullptr);
             return ret;
         }
         
         GLFWwindow*         Viewer::window() const 
         { 
-            return m->window; 
+            return m->m_window; 
         }
         
         ////////////////////////////////////////////////////////////////////////////////
@@ -753,6 +821,28 @@ namespace yq {
         }
 
         ////////////////////////////////////////////////////////////////////////////////
+
+        void    ViQueues::set(VkDevice dev, uint32_t cnt)
+        {
+            queues.clear();
+            queues.resize(cnt, nullptr);
+            for(uint32_t i=0;i<cnt;++i)
+                vkGetDeviceQueue(dev, family, i, &queues[i]);
+        }
+        
+        ViQueues::~ViQueues()
+        {
+            queues.clear();
+        }
+
+        VkQueue ViQueues::operator[](uint32_t i) const
+        {
+            if(i<queues.size()) [[likely]]
+                return queues[i];
+            return nullptr;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
         
         void         Visualizer::callback_resize(GLFWwindow* win, int, int)
@@ -760,20 +850,20 @@ namespace yq {
             Visualizer    *v  = (Visualizer*) glfwGetWindowUserPointer(win);
             if(v){
                 v -> rebuildSwap    = true;
-                if(v->user)
-                    v->user->window_resized();
+                assert(v->m_viewer);
+                if(v->m_viewer) [[likely]]
+                    v->m_viewer->window_resized();
             }
         }
         
         //  ----------------------------------------------------------------------------
 
-        Visualizer::Visualizer(const ViewerCreateInfo& i, Viewer *w) 
+        Visualizer::Visualizer(const ViewerCreateInfo& vci, Viewer *w) 
         {
-            create_info = i;
-            user        = w;
+            m_viewer        = w;
             
             try {
-                _ctor();
+                _ctor(vci);
             }
             catch(VqException& ex)
             {
@@ -787,65 +877,257 @@ namespace yq {
             _dtor();
         }
 
+        namespace {
+            std::vector<float>      make_weights(const VqQueueSpec& qs, uint32_t mincnt=0)
+            { 
+                if(const std::vector<float>*p = std::get_if<std::vector<float>>(&qs)){
+                    if((!p->empty()) && (p->size() >= (size_t) mincnt))
+                        return *p;
+                }
+                uint32_t    cnt = mincnt;
+                if(const uint32_t* p = std::get_if<uint32_t>(&qs))
+                    cnt = std::max(cnt, *p);
+                if(const bool* p = std::get_if<bool>(&qs)){
+                    if(*p)
+                        cnt = std::max<uint32_t>(cnt, 1);
+                }
+                if(cnt){
+                    std::vector<float> ret;
+                    ret.resize(cnt, 1.);
+                    return ret;
+                }
+                return std::vector<float>();
+            }
+        }
 
 
-        void Visualizer::_ctor()
+        void Visualizer::_ctor(const ViewerCreateInfo& vci)
         {
+            Application*   app    = Application::app();
+            if(!app)
+                throw VqException("Unintialized or no application present!");
 
-            instance    = Application::vulkan();
-            if(!instance)
+            app -> init_vulkan();
+
+            m_instance    = app->instance();
+            if(!m_instance)
                 throw VqException("Vulkan has not been initialized!");
 
-            physical                    = create_info.device;
-            if(!physical){
-                physical  = vqFirstDevice();
-                if(!physical)
-                    throw VqException("Cannot create window without any devices!");
+
+
+            //  ================================
+            //  SELECT GPU (ie, physical device)
+
+            m_physical                    = vci.device;
+            if(!m_physical){
+                m_physical  = vqFirstDevice();
+                if(!m_physical)
+                    throw VqException("Cannot create m_window without any devices!");
             }
             
-            vkGetPhysicalDeviceProperties(physical, &device_info);
-            vkGetPhysicalDeviceMemoryProperties(physical, &memory_info);
+            vkGetPhysicalDeviceProperties(m_physical, &m_deviceInfo);
+            vkGetPhysicalDeviceMemoryProperties(m_physical, &m_memoryInfo);
             
-            yNotice() << "Using (" << to_string(device_info.deviceType) << "): " << device_name();
+            yNotice() << "Using (" << to_string(m_deviceInfo.deviceType) << "): " << device_name();
+
+            //  ================================
+            //  CREATE GLFW WINDOW
 
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-            glfwWindowHint(GLFW_FLOATING, create_info.floating ? GLFW_TRUE : GLFW_FALSE);
-            glfwWindowHint(GLFW_DECORATED, create_info.decorated ? GLFW_TRUE : GLFW_FALSE);
-            glfwWindowHint(GLFW_RESIZABLE, create_info.resizable ? GLFW_TRUE : GLFW_FALSE);
+            glfwWindowHint(GLFW_FLOATING, vci.floating ? GLFW_TRUE : GLFW_FALSE);
+            glfwWindowHint(GLFW_DECORATED, vci.decorated ? GLFW_TRUE : GLFW_FALSE);
+            glfwWindowHint(GLFW_RESIZABLE, vci.resizable ? GLFW_TRUE : GLFW_FALSE);
             
-            int wx  = std::max(1,create_info.size.width());
-            int wy  = std::max(1,create_info.size.height());
+            int wx  = std::max(1,vci.size.width());
+            int wy  = std::max(1,vci.size.height());
 
-            window = glfwCreateWindow(wx, wy, create_info.title, create_info.monitor.monitor(), nullptr);
-            if(!window)
-                throw VqException("Unable to create GLFW window");
+            m_window = glfwCreateWindow(wx, wy, vci.title, vci.monitor.monitor(), nullptr);
+            if(!m_window)
+                throw VqException("Unable to create GLFW m_window");
             
-            glfwSetWindowUserPointer(window, this);
-            glfwSetWindowSizeCallback(window, callback_resize);
+            //  Register pointer & callbacks
+            glfwSetWindowUserPointer(m_window, this);
+            glfwSetWindowSizeCallback(m_window, callback_resize);
 
+            //  ================================
+            //  GLFW "SURFACE"
 
-            surface                     = VqSurface(physical, window);
+            if(glfwCreateWindowSurface(m_instance, m_window, nullptr, &m_surface) != VK_SUCCESS)
+                throw VqException("Unable to create window surface!");
+            m_presentModes          = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
+            m_surfaceFormats        = vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface);
             
-            VqDevice::Config    dci;
-            dci.extensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-            device                      = VqDevice(surface, dci);
+            // right now, cheating on format & color space
+            m_surfaceFormat         = VK_FORMAT_B8G8R8A8_SRGB;
+            m_surfaceColorSpace     = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+
+            //  ================================
+            //  LOGICAL DEVICE CREATION
+            //
+            //  Buckle up, this is a long one
+
+                // list extensions, augmenting with swap chain
+                
+            std::vector<const char*>    devExtensions = vci.extensions;
+            devExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+
+                //  Query the GPU for valid queue families
+            auto queueInfos         = vqFindQueueFamilies(m_physical, m_surface);
+            
+                //  And we need to create them... so request
+            std::vector<VkDeviceQueueCreateInfo> qci;
+            
+                //  graphic is required....
+            std::vector<float>  graphicWeights  = make_weights(vci.graphic, 1);
+            if(!queueInfos.graphics.has_value()){
+                throw VqException("No graphic queue capability!");
+            } else {
+                m_graphic.family        = queueInfos.graphics.value();
+                VqDeviceQueueCreateInfo info;
+                info.queueFamilyIndex   = m_graphic.family;
+                info.queueCount         = (uint32_t) graphicWeights.size();
+                info.pQueuePriorities   = graphicWeights.data();
+                qci.push_back(info);
+            }
+            
+                //  present is required....
+            std::vector<float>  presentWeights  = make_weights(vci.present, 1);
+            if(!queueInfos.present.has_value()){
+                throw VqException("No graphic queue capability!");
+            } else {
+                m_present.family        = queueInfos.present.value();
+                VqDeviceQueueCreateInfo info;
+                info.queueFamilyIndex   = m_present.family;
+                info.queueCount         = (uint32_t) presentWeights.size();
+                info.pQueuePriorities   = presentWeights.data();
+                qci.push_back(info);
+            }
+            
+                //  Determine if compute is requested, create the request
+            std::vector<float>  computeWeights  = make_weights(vci.compute, 0);
+            if(!computeWeights.empty()){
+                if(!queueInfos.compute.has_value()){
+                    throw VqException("No compute queue capability!");
+                } else {
+                    m_compute.family        = queueInfos.compute.value();
+                    VqDeviceQueueCreateInfo info;
+                    info.queueFamilyIndex   = m_compute.family;
+                    info.queueCount         = (uint32_t) computeWeights.size();
+                    info.pQueuePriorities   = computeWeights.data();
+                    qci.push_back(info);
+                }
+            }
+
+                //  Determine if video decoding is requested, create the request
+            std::vector<float>  videoDecWeights = make_weights(vci.video_decode, 0);
+            if(!videoDecWeights.empty()){
+                if(!queueInfos.videoDecode.has_value()){
+                    throw VqException("No video decode queue capability!");
+                } else {
+                    m_videoDecode.family    = queueInfos.videoDecode.value();
+                    VqDeviceQueueCreateInfo info;
+                    info.queueFamilyIndex   = m_videoDecode.family;
+                    info.queueCount         = (uint32_t) videoDecWeights.size();
+                    info.pQueuePriorities   = videoDecWeights.data();
+                    qci.push_back(info);
+                }
+            }
+            
+                //  Determine if video encoding is requested, create the request
+            std::vector<float>  videoEncWeights = make_weights(vci.video_encode, 0);
+            if(!videoEncWeights.empty()){
+                if(!queueInfos.videoEncode.has_value()){
+                    throw VqException("No video encode queue capability!");
+                } else {
+                    m_videoEncode.family    = queueInfos.videoEncode.value();
+                    VqDeviceQueueCreateInfo info;
+                    info.queueFamilyIndex   = m_videoEncode.family;
+                    info.queueCount         = (uint32_t) videoEncWeights.size();
+                    info.pQueuePriorities   = videoEncWeights.data();
+                    qci.push_back(info);
+                }
+            }
+            
+            std::sort(qci.begin(), qci.end(), [](const VkDeviceQueueCreateInfo& a, const VkDeviceQueueCreateInfo& b) -> bool {
+                return a.queueFamilyIndex < b.queueFamilyIndex;
+            });
+            
+            for(size_t i=0;i<qci.size()-1;++i){
+                VkDeviceQueueCreateInfo&    prev  = qci[i];
+                VkDeviceQueueCreateInfo&    next  = qci[i+1];
+                if(prev.queueFamilyIndex != next.queueFamilyIndex)
+                    continue;
+                
+                //  carry the request forward
+                if(next.queueCount < prev.queueCount){
+                    //  steal the pointer
+                    next.queueCount         = prev.queueCount;
+                    next.pQueuePriorities   = prev.pQueuePriorities;
+                }
+                prev.queueFamilyIndex   = UINT32_MAX;
+            }
+            
+            auto qitr = std::remove_if(qci.begin(), qci.end(), [](const VkDeviceQueueCreateInfo& a) -> bool {
+                return a.queueFamilyIndex == UINT32_MAX;
+            });
+            if(qitr != qci.end())
+                qci.erase(qitr, qci.end());
+                    
+            //  And with that, we have the queues all lined up, ready to be created.
+
+            VkPhysicalDeviceFeatures    gpu_features{};
+            if(vci.fill_non_solid)
+                gpu_features.fillModeNonSolid    = VK_TRUE;
+
+            VqDeviceCreateInfo          deviceCreateInfo;
+            deviceCreateInfo.pQueueCreateInfos        = qci.data();
+            deviceCreateInfo.queueCreateInfoCount     = (uint32_t) qci.size();
+            deviceCreateInfo.pEnabledFeatures         = &gpu_features;
+            
+            const auto& layers = app->layers();
+            
+            deviceCreateInfo.enabledLayerCount          = (uint32_t) layers.size();
+            if(deviceCreateInfo.enabledLayerCount)
+                deviceCreateInfo.ppEnabledLayerNames    = layers.data();
+        
+            deviceCreateInfo.enabledExtensionCount      = (uint32_t) devExtensions.size();
+            deviceCreateInfo.ppEnabledExtensionNames    = devExtensions.data();
+            
+            if(vkCreateDevice(m_physical, &deviceCreateInfo, nullptr, &m_device) != VK_SUCCESS)
+                throw VqException("Unable to create logical device!");
+            
+            //  ================================
+            //  GETTING THE QUEUES
+
+            m_graphic.set(m_device, graphicWeights.size());
+            m_present.set(m_device, presentWeights.size());
+            if(m_compute.family != UINT32_MAX)
+                m_compute.set(m_device, computeWeights.size());
+            if(m_videoEncode.family != UINT32_MAX)
+                m_videoEncode.set(m_device, videoEncWeights.size());
+            if(m_videoDecode.family != UINT32_MAX)
+                m_videoDecode.set(m_device, videoDecWeights.size());
+
+            //  ================================
+            //  OLDER STUFF
+
             allocator                   = VqAllocator(*this);
        
-            VkPresentModeKHR pmdef      = (VkPresentModeKHR) create_info.pmode.value();
+            VkPresentModeKHR pmdef      = (VkPresentModeKHR) vci.pmode.value();
        
-            presentMode                 = surface.supports(pmdef) ? pmdef : VK_PRESENT_MODE_FIFO_KHR;
+            presentMode                 = does_surface_support(pmdef) ? pmdef : VK_PRESENT_MODE_FIFO_KHR;
                 
-            commandPool                 = VqCommandPool(device, device.graphics().family());
+            commandPool                 = VqCommandPool(m_device, m_graphic.family);
             renderPass                  = VqRenderPass(*this);
-            imageAvailableSemaphore     = VqSemaphore(device);
-            renderFinishedSemaphore     = VqSemaphore(device);
-            inFlightFence               = VqFence(device);
-            descriptorPool              = VqDescriptorPool(device, create_info.descriptors);
+            imageAvailableSemaphore     = VqSemaphore(m_device);
+            renderFinishedSemaphore     = VqSemaphore(m_device);
+            inFlightFence               = VqFence(m_device);
+            descriptorPool              = VqDescriptorPool(m_device, vci.descriptors);
 
             if(!init(dynamic))
                 throw VqException("");
             
-            set_clear(create_info.clear);
+            set_clear(vci.clear);
             
             builder = std::thread([this](){
                 this->run();
@@ -857,8 +1139,8 @@ namespace yq {
         {
             terminating = true;
             builder.join();
-            if(device){
-                vkDeviceWaitIdle(device);
+            if(m_device){
+                vkDeviceWaitIdle(m_device);
             }
             
             for(auto& i : objects){
@@ -883,16 +1165,27 @@ namespace yq {
             commandPool                 = {};
             
             allocator                   = {};
-            device                      = {};
             
-            surface                     = {};
-            window                      = {};
-            
-            if(window){
-                glfwDestroyWindow(window);
-                window                  = nullptr;
+            if(m_device){
+                vkDestroyDevice(m_device, nullptr);
+                m_device            = nullptr;
             }
-            physical                    = nullptr;
+            m_graphic.queues.clear();
+            m_present.queues.clear();
+            m_compute.queues.clear();
+            m_videoEncode   = {};
+            m_videoDecode   = {};
+            
+            if(m_surface){
+                vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
+                m_surface           = nullptr;
+            }
+            m_physical              = nullptr;
+            if(m_window){
+                glfwDestroyWindow(m_window);
+                m_window            = nullptr;
+            }
+            m_physical              = nullptr;
         }
 
 
@@ -901,12 +1194,12 @@ namespace yq {
             VqSwapchain::Config scfg;
             scfg.pmode          = presentMode;
             scfg.old            = old;
-            ds.swapchain        = VqSwapchain(device, surface, scfg);
+            ds.swapchain        = VqSwapchain(*this, scfg);
             
             ds.images           = ds.swapchain.images();
             ds.imageCount       = ds.images.size();
-            ds.imageViews       = VqImageViews(device, surface, ds.images);
-            ds.frameBuffers     = VqFrameBuffers(device, renderPass, ds.swapchain.extents(), ds.imageViews);
+            ds.imageViews       = VqImageViews(*this, ds.images);
+            ds.frameBuffers     = VqFrameBuffers(m_device, renderPass, ds.swapchain.extents(), ds.imageViews);
             ds.commandBuffers   = VqCommandBuffers(commandPool, 1);
 
             return true;            
@@ -960,25 +1253,54 @@ namespace yq {
 
         std::string_view        Visualizer::device_name() const
         {
-            return std::string_view(device_info.deviceName, strnlen(device_info.deviceName, VK_MAX_PHYSICAL_DEVICE_NAME_SIZE));
+            return std::string_view(m_deviceInfo.deviceName, strnlen(m_deviceInfo.deviceName, VK_MAX_PHYSICAL_DEVICE_NAME_SIZE));
+        }
+
+
+        bool    Visualizer::does_surface_support(VkPresentModeKHR p) const
+        {
+            return m_presentModes.contains(p);
+        }
+        
+        bool    Visualizer::does_surface_support(VkFormat fmt) const
+        {
+            for(auto& f : m_surfaceFormats)
+                if(fmt == f.format)
+                    return true;
+            return false;
         }
 
         uint32_t    Visualizer::max_memory_allocation_count() const noexcept 
         { 
-            return device_info.limits.maxMemoryAllocationCount; 
+            return m_deviceInfo.limits.maxMemoryAllocationCount; 
         }
         
         uint32_t    Visualizer::max_push_constants_size() const noexcept 
         { 
-            return device_info.limits.maxPushConstantsSize; 
+            return m_deviceInfo.limits.maxPushConstantsSize; 
         }
         
         uint32_t    Visualizer::max_viewports() const noexcept 
         { 
-            return device_info.limits.maxViewports; 
+            return m_deviceInfo.limits.maxViewports; 
+        }
+
+        VkSurfaceCapabilitiesKHR    Visualizer::surface_capabilities() const
+        {
+            VkSurfaceCapabilitiesKHR    ret;
+            if(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physical, m_surface, &ret) != VK_SUCCESS)
+                throw VqException("Unable to get surface capabilities");
+            return ret;
         }
 
 
+        VkColorSpaceKHR Visualizer::surface_color_space(VkFormat fmt) const
+        {
+            for(auto& f : m_surfaceFormats)
+                if(fmt == f.format)
+                    return f.colorSpace;
+            return VK_COLOR_SPACE_MAX_ENUM_KHR;
+        }
         
         YQ_INVOKE(
             writer<Viewer>();

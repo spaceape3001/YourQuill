@@ -67,11 +67,14 @@ namespace yq {
                 //! Closes (politely) this window....
             void                close();
             
-            VkColorSpaceKHR     color_space() const;
             
             VkCommandBuffer     command_buffer() const;
             
             VkCommandPool       command_pool() const;
+
+            VkQueue             compute_queue(uint32_t i=0) const;
+            uint32_t            compute_queue_count() const;
+            uint32_t            compute_queue_family() const;
             
             VkDescriptorPool    descriptor_pool() const;
             
@@ -80,14 +83,13 @@ namespace yq {
                 //! Brings window to front & input focus
             void                focus();
             
-            VkFormat            format() const;
 
                 //! Good & initialized window
             bool                good() const { return m != nullptr; }
             
-            VkQueue             graphics_queue() const;
-            
-            uint32_t            graphics_queue_family() const;
+            VkQueue             graphic_queue(uint32_t i=0) const;
+            uint32_t            graphic_queue_count() const;
+            uint32_t            graphic_queue_family() const;
 
                 //! Height of the window
             int                 height() const;
@@ -133,6 +135,10 @@ namespace yq {
                 //! Current window position
             Vector2I            position() const;
             
+            VkQueue             present_queue(uint32_t i=0) const;
+            uint32_t            present_queue_count() const;
+            uint32_t            present_queue_family() const;
+
             VkRenderPass        render_pass() const;
             
                 //! Restores the window to non-fullscreen/iconify
@@ -172,6 +178,10 @@ namespace yq {
             
                 //! The Vulkan surface
             VkSurfaceKHR        surface() const;
+
+            VkColorSpaceKHR     surface_color_space() const;
+
+            VkFormat            surface_format() const;
             
             VkRect2D            swap_def_scissor() const;
             
@@ -183,6 +193,17 @@ namespace yq {
             uint32_t            swap_width() const;
             
             uint32_t            swap_height() const;
+            
+            const std::string&  title() const { return m_title; }
+
+            VkQueue             video_decode_queue(uint32_t i=0) const;
+            uint32_t            video_decode_queue_count() const;
+            uint32_t            video_decode_queue_family() const;
+
+            VkQueue             video_encode_queue(uint32_t i=0) const;
+            uint32_t            video_encode_queue_count() const;
+            uint32_t            video_encode_queue_family() const;
+
             
             
                 //! Width of the window
@@ -210,7 +231,9 @@ namespace yq {
             
             
         private:
-            std::unique_ptr<Visualizer>   m;
+        
+            std::string                     m_title;
+            std::unique_ptr<Visualizer>     m;
 
             bool    record(VkCommandBuffer, uint32_t);
             

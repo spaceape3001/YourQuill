@@ -13,14 +13,14 @@
 
 namespace yq {
     namespace engine {
-        VqBuffer::VqBuffer(Visualizer&iq, VkBufferUsageFlags uf, const void* data, size_t sz) 
+        VqBuffer::VqBuffer(Visualizer&viz, VkBufferUsageFlags uf, const void* data, size_t sz) 
         {
             assert(data);
             assert(sz);
             
             m_size      = sz;
-            m_device    = iq.device;
-            m_allocator = iq.allocator;
+            m_device    = viz.m_device;
+            m_allocator = viz.allocator;
             
             VqBufferCreateInfo  bufferInfo;
             bufferInfo.size         = m_size;

@@ -9,19 +9,19 @@
 #include "VqException.hpp"
 #include "VqImageViews.hpp"
 #include "VqStructs.hpp"
-#include "VqSurface.hpp"
+#include <engine/Visualizer.hpp>
 #include <basic/preamble.hpp>
 
 namespace yq {
     namespace engine {
-        VqImageViews::VqImageViews(VkDevice dev, const VqSurface&surf, const std::vector<VkImage>&images) : m_device(dev)
+        VqImageViews::VqImageViews(const Visualizer&viz, const std::vector<VkImage>&images) : m_device(viz.m_device)
         {
             if(images.empty())
                 return ;
                 
             VqImageViewCreateInfo   createInfo;
             createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format       = surf.format();
+            createInfo.format       = viz.surface_format();
             createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
             createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
             createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;

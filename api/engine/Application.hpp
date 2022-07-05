@@ -84,6 +84,10 @@ namespace yq {
             const std::vector<const char*>&     extensions() const { return m_extensions; }
             const std::vector<const char*>&     layers() const { return m_layers; }
             
+            const AppCreateInfo&                app_info() const { return m_appInfo; }
+            
+            VkInstance                          instance() const { return m_vulkan; }
+            
             
         private:
             friend class Viewer;
