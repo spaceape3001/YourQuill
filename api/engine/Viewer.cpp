@@ -78,8 +78,9 @@ namespace yq {
             catch(VqException& ex){
                 yCritical() << ex.what();
             }
-            
+            set_clear_color(i.clear);
             m_title     = i.title;
+            yNotice() << "Using (" << to_string(gpu_type()) << "): " << gpu_name();
         }
         
         Viewer::~Viewer()
@@ -109,7 +110,8 @@ namespace yq {
             renderPassInfo.renderArea.extent = m->dynamic.swapchain.extents();
 
             renderPassInfo.clearValueCount = 1;
-            renderPassInfo.pClearValues = &m->clear;
+            VkClearValue                cv  = m->m_clearValue;
+            renderPassInfo.pClearValues = &cv;
             vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         
             draw_vulqan(commandBuffer);
@@ -128,7 +130,7 @@ namespace yq {
             ++m->tick;      // frame
             auto start  = std::chrono::high_resolution_clock::now();
             
-            bool    rebuild = m->rebuildSwap.exchange(false);
+            bool    rebuild = m->m_rebuildSwap.exchange(false);
             if(rebuild){
                 vkDeviceWaitIdle(m->m_device);
                 VqDynamic        newStuff;
@@ -412,6 +414,15 @@ namespace yq {
                 glfwRequestWindowAttention(m->m_window);
         }
 
+        RGBA4F Viewer::clear_color() const
+        {
+            VkClearValue    cv  = m->m_clearValue;
+            return { 
+                cv.color.float32[0], cv.color.float32[1], 
+                cv.color.float32[2], cv.color.float32[3] 
+            };
+        }
+
         void Viewer::close()
         {
             if(m->m_window)
@@ -460,6 +471,17 @@ namespace yq {
                 glfwFocusWindow(m->m_window);
         }
 
+        std::string_view    Viewer::gpu_name() const
+        {
+            return std::string_view(m->m_deviceInfo.deviceName, strnlen(m->m_deviceInfo.deviceName, VK_MAX_PHYSICAL_DEVICE_NAME_SIZE));
+        }
+
+        VkPhysicalDeviceType    Viewer::gpu_type() const
+        {
+            return m->m_deviceInfo.deviceType;
+        }
+
+        
         VkQueue     Viewer::graphic_queue(uint32_t i) const
         {
             return m->m_graphic[i];
@@ -566,6 +588,22 @@ namespace yq {
             return m->m_device; 
         }
 
+
+        uint32_t    Viewer::max_memory_allocation_count() const  
+        { 
+            return m->m_deviceInfo.limits.maxMemoryAllocationCount; 
+        }
+        
+        uint32_t    Viewer::max_push_constants_size() const 
+        { 
+            return m->m_deviceInfo.limits.maxPushConstantsSize; 
+        }
+        
+        uint32_t    Viewer::max_viewports() const 
+        { 
+            return m->m_deviceInfo.limits.maxViewports; 
+        }
+
         void        Viewer::maximize()
         {
             if(m->m_window)
@@ -591,6 +629,16 @@ namespace yq {
             Vector2I   ret;
             glfwGetWindowPos(m->m_window, &ret.x, &ret.y);
             return ret;
+        }
+
+        PresentMode  Viewer::present_mode() const
+        {
+            return m->m_presentMode;
+        }
+
+        const std::set<PresentMode>&     Viewer::present_modes_available() const
+        {
+            return m->m_presentModes;
         }
 
         VkQueue      Viewer::present_queue(uint32_t i) const
@@ -619,14 +667,22 @@ namespace yq {
                 glfwRestoreWindow(m->m_window);
         }
 
-        void        Viewer::set_clear(const RGBA4F&i)
+        void        Viewer::set_clear_color(const RGBA4F&i)
         {
-            m->set_clear(i);
+            m->m_clearValue = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }
 
         void        Viewer::set_position(const Vector2I& pos)
         {
             set_position(pos.x, pos.y);
+        }
+
+        void        Viewer::set_present_mode(PresentMode pm)
+        {
+            if(m->m_presentModes.contains(pm) && (pm != m->m_presentMode)){
+                m->m_presentMode    = pm;
+                m->m_rebuildSwap    = true;
+            }
         }
         
         void        Viewer::set_position(int x, int y)
@@ -681,6 +737,19 @@ namespace yq {
             Size2I  ret;
             glfwGetWindowSize(m->m_window, &ret.x, &ret.y);
             return ret;
+        }
+
+        bool                Viewer::supports(VkFormat fmt) const
+        {
+            for(auto& f : m->m_surfaceFormats)
+                if(fmt == f.format)
+                    return true;
+            return false;
+        }
+        
+        bool                Viewer::supports(PresentMode pm) const
+        {
+            return m->m_presentModes.contains(pm);
         }
 
         VkSurfaceKHR        Viewer::surface() const 
@@ -938,7 +1007,7 @@ namespace yq {
         {
             Visualizer    *v  = (Visualizer*) glfwGetWindowUserPointer(win);
             if(v){
-                v -> rebuildSwap    = true;
+                v -> m_rebuildSwap    = true;
                 assert(v->m_viewer);
                 if(v->m_viewer) [[likely]]
                     v->m_viewer->window_resized();
@@ -1017,7 +1086,6 @@ namespace yq {
             vkGetPhysicalDeviceProperties(m_physical, &m_deviceInfo);
             vkGetPhysicalDeviceMemoryProperties(m_physical, &m_memoryInfo);
             
-            yNotice() << "Using (" << to_string(m_deviceInfo.deviceType) << "): " << device_name();
 
             //  ================================
             //  CREATE GLFW WINDOW
@@ -1043,7 +1111,9 @@ namespace yq {
 
             if(glfwCreateWindowSurface(m_instance, m_window, nullptr, &m_surface) != VK_SUCCESS)
                 throw VqException("Unable to create window surface!");
-            m_presentModes          = make_set(vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface));
+                
+            for(auto pm : vqGetPhysicalDeviceSurfacePresentModesKHR(m_physical, m_surface))
+                m_presentModes.insert((PresentMode::enum_t) pm);
             m_surfaceFormats        = vqGetPhysicalDeviceSurfaceFormatsKHR(m_physical, m_surface);
             
             // right now, cheating on format & color space
@@ -1245,23 +1315,23 @@ namespace yq {
 
             if (vkCreateRenderPass(m_device, &renderPassInfo, nullptr, &m_renderPass) != VK_SUCCESS) 
                 throw VqException("Unable to create the render pass!");
+
+            //  ================================
+            //  PRESENT MODE
+
+            m_presentMode               = m_presentModes.contains(vci.pmode) ? vci.pmode : PresentMode{ PresentMode::Fifo };
+                
                 
             //  ================================
             //  OLDER STUFF
 
        
-            VkPresentModeKHR pmdef      = (VkPresentModeKHR) vci.pmode.value();
-       
-            presentMode                 = does_surface_support(pmdef) ? pmdef : VK_PRESENT_MODE_FIFO_KHR;
-                
             imageAvailableSemaphore     = VqSemaphore(m_device);
             renderFinishedSemaphore     = VqSemaphore(m_device);
             inFlightFence               = VqFence(m_device);
 
             if(!init(dynamic))
                 throw VqException("");
-            
-            set_clear(vci.clear);
             
             builder = std::thread([this](){
                 this->run();
@@ -1333,7 +1403,7 @@ namespace yq {
         bool Visualizer::init(VqDynamic&ds, VkSwapchainKHR old)
         {
             VqSwapchain::Config scfg;
-            scfg.pmode          = presentMode;
+            scfg.pmode          = (VkPresentModeKHR) m_presentMode.value();
             scfg.old            = old;
             ds.swapchain        = VqSwapchain(*this, scfg);
             
@@ -1364,10 +1434,6 @@ namespace yq {
             }
         }
 
-        void    Visualizer::set_clear(const RGBA4F&i)
-        {
-            clear = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
-        }
 
         std::pair<ViPipeline*,bool>    Visualizer::pipeline(uint64_t i)
         {
@@ -1391,40 +1457,6 @@ namespace yq {
 
         //////////////////////////////////////
 
-
-        std::string_view        Visualizer::device_name() const
-        {
-            return std::string_view(m_deviceInfo.deviceName, strnlen(m_deviceInfo.deviceName, VK_MAX_PHYSICAL_DEVICE_NAME_SIZE));
-        }
-
-
-        bool    Visualizer::does_surface_support(VkPresentModeKHR p) const
-        {
-            return m_presentModes.contains(p);
-        }
-        
-        bool    Visualizer::does_surface_support(VkFormat fmt) const
-        {
-            for(auto& f : m_surfaceFormats)
-                if(fmt == f.format)
-                    return true;
-            return false;
-        }
-
-        uint32_t    Visualizer::max_memory_allocation_count() const noexcept 
-        { 
-            return m_deviceInfo.limits.maxMemoryAllocationCount; 
-        }
-        
-        uint32_t    Visualizer::max_push_constants_size() const noexcept 
-        { 
-            return m_deviceInfo.limits.maxPushConstantsSize; 
-        }
-        
-        uint32_t    Visualizer::max_viewports() const noexcept 
-        { 
-            return m_deviceInfo.limits.maxViewports; 
-        }
 
         VkSurfaceCapabilitiesKHR    Visualizer::surface_capabilities() const
         {

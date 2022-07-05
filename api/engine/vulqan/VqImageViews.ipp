@@ -21,7 +21,7 @@ namespace yq {
                 
             VqImageViewCreateInfo   createInfo;
             createInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
-            createInfo.format       = viz.surface_format();
+            createInfo.format       = viz.m_surfaceFormat;
             createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
             createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
             createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;

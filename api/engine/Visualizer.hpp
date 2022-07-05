@@ -7,6 +7,8 @@
 #pragma once
 
 #include <basic/UniqueID.hpp>
+#include <basic/Guarded.hpp>
+
 #include <engine/preamble.hpp>
 #include <engine/ViewerCreateInfo.hpp>
 #include <engine/vulqan/VqCommandBuffers.hpp>
@@ -139,7 +141,7 @@ namespace yq {
             VkPhysicalDeviceMemoryProperties    m_memoryInfo;
             GLFWwindow*                         m_window                = nullptr;
             VkSurfaceKHR                        m_surface               = nullptr;
-            std::set<VkPresentModeKHR>          m_presentModes;
+            std::set<PresentMode>               m_presentModes;
             std::vector<VkSurfaceFormatKHR>     m_surfaceFormats;
             VkFormat                            m_surfaceFormat;
             VkColorSpaceKHR                     m_surfaceColorSpace;
@@ -151,15 +153,13 @@ namespace yq {
             VkCommandPoolCreateFlags            m_cmdPoolCreateFlags    = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
             std::unique_ptr<ViThread>           m_thread;
             VkRenderPass                        m_renderPass            = nullptr;
+            PresentMode                         m_presentMode;
+            std::atomic<bool>                   m_rebuildSwap           = { false };
+            Guarded<VkClearValue>               m_clearValue;
             
-            
-            VkPresentModeKHR    presentMode                 = {};
             VqSemaphore         imageAvailableSemaphore;
             VqSemaphore         renderFinishedSemaphore;
             VqFence             inFlightFence;
-
-            VkClearValue        clear;
-            std::atomic<bool>   rebuildSwap                 = { false };
 
             VqDynamic           dynamic;
             uint64_t            tick                        = 0;
@@ -176,7 +176,6 @@ namespace yq {
             
             bool    init(VqDynamic&, VkSwapchainKHR old=nullptr);
             void    kill(VqDynamic&);
-            void    set_clear(const RGBA4F&);
 
             void    run();
             
@@ -186,19 +185,10 @@ namespace yq {
             void                _ctor(const ViewerCreateInfo&);
             void                _dtor();
 
-            std::string_view            device_name() const;
-            bool                        does_surface_support(VkPresentModeKHR) const;
-            bool                        does_surface_support(VkFormat) const;
 
-
-            uint32_t                    max_memory_allocation_count() const noexcept;
-            uint32_t                    max_push_constants_size() const noexcept;
-            uint32_t                    max_viewports() const noexcept;
             VkSurfaceCapabilitiesKHR    surface_capabilities() const;
 
             VkColorSpaceKHR             surface_color_space(VkFormat) const;
-            VkFormat                    surface_format() const { return m_surfaceFormat; }
-
 
             static void                 callback_resize(GLFWwindow*, int, int);
             

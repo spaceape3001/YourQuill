@@ -63,6 +63,8 @@ namespace yq {
 
                 //! Calls user's attention to window
             void                attention();
+            
+            RGBA4F              clear_color() const;
 
                 //! Closes (politely) this window....
             void                close();
@@ -86,6 +88,12 @@ namespace yq {
 
                 //! Good & initialized window
             bool                good() const { return m != nullptr; }
+            
+                //! Returns the name of the GPU/physical device
+            std::string_view    gpu_name() const;
+            
+                //! Returns the type of the GPU/physical device
+            VkPhysicalDeviceType    gpu_type() const;
             
             VkQueue             graphic_queue(uint32_t i=0) const;
             uint32_t            graphic_queue_count() const;
@@ -123,6 +131,9 @@ namespace yq {
                 //! Our device (logical)
             VkDevice            logical() const;
 
+            uint32_t            max_memory_allocation_count() const;
+            uint32_t            max_push_constants_size() const;
+            uint32_t            max_viewports() const;
             
                 //! Maximizes widnow
             void                maximize();
@@ -135,6 +146,10 @@ namespace yq {
                 //! Current window position
             Vector2I            position() const;
             
+            PresentMode         present_mode() const;
+            
+            const std::set<PresentMode>&     present_modes_available() const;
+            
             VkQueue             present_queue(uint32_t i=0) const;
             uint32_t            present_queue_count() const;
             uint32_t            present_queue_family() const;
@@ -145,13 +160,15 @@ namespace yq {
             void                restore();
 
                 //! Sets the background color
-            void                set_clear(const RGBA4F&);
+            void                set_clear_color(const RGBA4F&);
 
                 //! Sets the window position
             void                set_position(const Vector2I&);
 
                 //! Sets the window position
             void                set_position(int x, int y);
+            
+            void                set_present_mode(PresentMode);
 
                 //! Sets window size
             void                set_size(const Size2I&);
@@ -182,6 +199,9 @@ namespace yq {
             VkColorSpaceKHR     surface_color_space() const;
 
             VkFormat            surface_format() const;
+            
+            bool                supports(VkFormat) const;
+            bool                supports(PresentMode) const;
             
             VkRect2D            swap_def_scissor() const;
             
