@@ -20,7 +20,7 @@ using namespace yq::engine;
 class EditorWindow : public ImWindow {
     YQ_OBJECT_DECLARE(EditorWindow, ImWindow)
 public:
-    EditorWindow(const WindowCreateInfo & wci=WindowCreateInfo ()) : ImWindow(wci)
+    EditorWindow(const ViewerCreateInfo & wci=ViewerCreateInfo ()) : ImWindow(wci)
     {
     }
     
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     load_plugin_dir("plugin");
     app.finalize();
     
-    WindowCreateInfo      wi;
+    ViewerCreateInfo      wi;
     wi.title        = "Your Editor!";
     wi.clear        = { 0.0, 0.0, 0.0, 1. };
     Ref<EditorWindow>   window  = new EditorWindow(wi);

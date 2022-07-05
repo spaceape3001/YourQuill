@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <basic/UniqueID.hpp>
 #include <engine/preamble.hpp>
 #include <engine/vulqan/VqAllocator.hpp>
 #include <engine/vulqan/VqCommandBuffers.hpp>
@@ -25,15 +26,13 @@
 #include <engine/vulqan/VqWindow.hpp>
 #include <engine/vulqan/VqQueues.hpp>
 #include <math/preamble.hpp>
-#include <basic/trait/not_copyable.hpp>
-#include <basic/trait/not_moveable.hpp>
 #include <atomic>
 #include <thread>
 
 namespace yq {
     namespace engine {
         class Viewer;
-        struct WindowCreateInfo;
+        struct ViewerCreateInfo;
         struct VqObject;
         
         //! This is what needs to change with every resize!
@@ -89,8 +88,7 @@ namespace yq {
         
 
 
-        struct Visualizer : trait::not_copyable, trait::not_moveable {
-            const uint64_t      id;
+        struct Visualizer : public UniqueID {
             Viewer*             user                        = nullptr;
             VkInstance          instance                    = nullptr;
             VqGPU               physical;
@@ -129,7 +127,7 @@ namespace yq {
             void    run();
             
             
-            Visualizer(const WindowCreateInfo&, Viewer*);
+            Visualizer(const ViewerCreateInfo&, Viewer*);
             ~Visualizer();
         };
     }

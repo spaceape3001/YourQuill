@@ -28,7 +28,6 @@ set(yq_engine_sources
 
 
 #    ./vulqan/VqCommandFrame.cpp
-    ./vulqan/VqVisualizer.cpp
 #    ./vulqan/VqObject.cpp
 #    ./vulqan/VqObjectFrame.cpp
     ./vulqan/VqPipeline.cpp

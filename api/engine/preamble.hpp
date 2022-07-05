@@ -489,6 +489,15 @@ namespace yq {
             Point = 2,
             FillRectangleNV = 1000153000
         )
+        
+        YQ_ENUM(PresentMode, ,
+            Immediate = 0,
+            Mailbox = 1,
+            Fifo = 2,
+            FifoRelaxed = 3,
+            SharedDeemand = 1000111000,
+            SharedContinuous = 1000111001
+        )
 
         enum PushConfigType : uint8_t {
             None        = 0,
@@ -599,6 +608,9 @@ namespace yq {
 
         class Texture;
         using TexturePtr    = Ref<const Texture>;
+        
+        class Viewer;
+        class Visualizer;
     }
 }
 
@@ -620,6 +632,7 @@ YQ_TYPE_DECLARE(yq::engine::IndexType)
 YQ_TYPE_DECLARE(yq::engine::LogicOp)
 YQ_TYPE_DECLARE(yq::engine::MipmapMode)
 YQ_TYPE_DECLARE(yq::engine::PolygonMode)
+YQ_TYPE_DECLARE(yq::engine::PresentMode)
 YQ_TYPE_DECLARE(yq::engine::SamplerAddressMode)
 YQ_TYPE_DECLARE(yq::engine::SamplerMipmapMode)
 YQ_TYPE_DECLARE(yq::engine::ShaderType)

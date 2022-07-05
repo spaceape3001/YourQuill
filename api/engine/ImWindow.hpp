@@ -17,7 +17,7 @@ namespace yq {
         class ImWindow : public Viewer {
             YQ_OBJECT_DECLARE(ImWindow, Viewer)
         public:
-            ImWindow(const WindowCreateInfo& wci = WindowCreateInfo());
+            ImWindow(const ViewerCreateInfo& wci = ViewerCreateInfo());
             ~ImWindow();
 
             virtual bool        draw() override;

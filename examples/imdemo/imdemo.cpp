@@ -24,7 +24,7 @@ using namespace yq::engine;
 class DemoWindow : public ImWindow {
     YQ_OBJECT_DECLARE(DemoWindow, ImWindow)
 public:
-    DemoWindow(const WindowCreateInfo & wci=WindowCreateInfo ()) : ImWindow(wci)
+    DemoWindow(const ViewerCreateInfo & wci=ViewerCreateInfo ()) : ImWindow(wci)
     {
     }
     
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     load_plugin_dir("plugin");
     app.finalize();
     
-    WindowCreateInfo      wi;
+    ViewerCreateInfo      wi;
     wi.title        = "ImGUI Demo!";
     wi.clear        = { 0.0, 0.2, 0.5, 1. };
     wi.resizable    = true;

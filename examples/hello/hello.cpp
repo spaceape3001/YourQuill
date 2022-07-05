@@ -154,7 +154,7 @@ struct HelloWin : public engine::Viewer {
     Scene                   scene;
     Perspective             view;
 
-    HelloWin(const WindowCreateInfo& wci) : Viewer(wci)
+    HelloWin(const ViewerCreateInfo& wci) : Viewer(wci)
     {
         start   = std::chrono::steady_clock::now();
         triangle = new HelloTriangle(this);
@@ -190,7 +190,7 @@ int main(int argc, char* argv[])
     //load_plugin_dir("plugin");
     app.finalize();
     
-    WindowCreateInfo      wi;
+    ViewerCreateInfo      wi;
     wi.title        = "Hello WORLD!";
     wi.resizable    = true;
     wi.size         = { 1920, 1080 };

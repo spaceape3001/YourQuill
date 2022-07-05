@@ -84,7 +84,7 @@ struct CameraWin : public ImWindow {
         return c;
     }
 
-    CameraWin(const WindowCreateInfo& wci) : ImWindow(wci)
+    CameraWin(const ViewerCreateInfo& wci) : ImWindow(wci)
     {
         start   = std::chrono::steady_clock::now();
         
@@ -259,7 +259,7 @@ int main(int argc, char* argv[])
     //load_plugin_dir("plugin");
     app.finalize();
     
-    WindowCreateInfo      wi;
+    ViewerCreateInfo      wi;
     wi.title        = "Cameras!";
     wi.resizable    = true;
     wi.size         = { 1920, 1080 };

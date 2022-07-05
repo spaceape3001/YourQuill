@@ -8,7 +8,7 @@
 
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
-#include <engine/WindowCreateInfo.hpp>
+#include <engine/ViewerCreateInfo.hpp>
 
 struct GLFWwindow;
 
@@ -19,7 +19,7 @@ namespace yq {
         public:
 
             VqWindow(){}
-            explicit VqWindow(Visualizer&, const WindowCreateInfo& wci=WindowCreateInfo());
+            explicit VqWindow(Visualizer&, const ViewerCreateInfo& wci=ViewerCreateInfo());
             VqWindow(VqWindow&&);
             VqWindow& operator=(VqWindow&&);
             ~VqWindow();

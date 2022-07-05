@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "WindowCreateInfo.hpp"
+#include "ViewerCreateInfo.hpp"
 
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
@@ -56,7 +56,7 @@ namespace yq {
 
 
                 // Creates a window bound to the specified vulkan instance
-            Viewer(const WindowCreateInfo& i = WindowCreateInfo());
+            Viewer(const ViewerCreateInfo& i = ViewerCreateInfo());
             
             ~Viewer();
             

@@ -12,7 +12,7 @@
 
 namespace yq {
     namespace engine {
-        VqWindow::VqWindow(Visualizer& w, const WindowCreateInfo& wci)
+        VqWindow::VqWindow(Visualizer& w, const ViewerCreateInfo& wci)
         {
                 /*
                     --------------------------------------------------------------------------------------------------------
