@@ -11,13 +11,10 @@
 
 #include <engine/preamble.hpp>
 #include <engine/ViewerCreateInfo.hpp>
-#include <engine/vulqan/VqCommandBuffers.hpp>
-#include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFrameBuffers.hpp>
 #include <engine/vulqan/VqImageViews.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
-#include <engine/vulqan/VqSemaphore.hpp>
 #include <engine/vulqan/VqSwapchain.hpp>
 #include <math/preamble.hpp>
 
@@ -41,7 +38,7 @@ namespace yq {
         struct VqDynamic {
             std::vector<VkImage>        images;
             VqSwapchain                 swapchain;
-            VqCommandBuffers            commandBuffers;
+            //VqCommandBuffers            commandBuffers;
             uint32_t                    imageCount          = 0;
             VqImageViews                imageViews;
             VqFrameBuffers              frameBuffers;
@@ -112,10 +109,8 @@ namespace yq {
         
             //  and so we can be more efficient in rendering
         struct ViFrame {
-            VkDevice                device          = nullptr;
-            VkCommandBuffer         cmdBuf          = nullptr;
-            VkImage                 image           = nullptr;
-            VkImageView             imageView       = nullptr;
+            Visualizer*             viz             = nullptr;
+            VkCommandBuffer         commandBuffer   = nullptr;
             VkSemaphore             imageAvailable  = nullptr;
             VkSemaphore             renderFinished  = nullptr;
             VkFence                 fence           = nullptr;
@@ -123,8 +118,12 @@ namespace yq {
             ViFrame();
             ~ViFrame();
             void    dtor();
+            void    ctor(Visualizer&);
+            VkResult    wait_reset(uint64_t timeout=UINT64_MAX);
         };
         
+        struct ViSwapchain {
+        };
         
 
         /*! \brief Visualizer is the private data for the viewer
@@ -156,13 +155,14 @@ namespace yq {
             PresentMode                         m_presentMode;
             std::atomic<bool>                   m_rebuildSwap           = { false };
             Guarded<VkClearValue>               m_clearValue;
+            uint64_t                            m_tick                  = 0;
+            ViFrame                             m_frames[MAX_FRAMES_IN_FLIGHT];
             
-            VqSemaphore         imageAvailableSemaphore;
-            VqSemaphore         renderFinishedSemaphore;
-            VqFence             inFlightFence;
+            //VqSemaphore         imageAvailableSemaphore;
+            //VqSemaphore         renderFinishedSemaphore;
+            //VqFence             inFlightFence;
 
             VqDynamic           dynamic;
-            uint64_t            tick                        = 0;
             double              draw_time                   = 0;
             std::thread         builder;
             uint64_t            pad[8];

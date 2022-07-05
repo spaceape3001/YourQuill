@@ -127,7 +127,7 @@ namespace yq {
         
         bool    Viewer::draw()
         {
-            ++m->tick;      // frame
+            ++m->m_tick;      // frame
             auto start  = std::chrono::high_resolution_clock::now();
             
             bool    rebuild = m->m_rebuildSwap.exchange(false);
@@ -141,32 +141,33 @@ namespace yq {
                 //  resize notifications...
             }
             
+            ViFrame&    frame   = m->m_frames[m->m_tick%MAX_FRAMES_IN_FLIGHT];
             
-            VkCommandBuffer cmdbuf = m->dynamic.commandBuffers[0];
-            m->inFlightFence.wait_reset();
+            
+            frame.wait_reset();
 
             uint32_t imageIndex = 0;
-            vkAcquireNextImageKHR(m->m_device, m->dynamic.swapchain, UINT64_MAX, m->imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
-            vkResetCommandBuffer(cmdbuf, 0);
+            vkAcquireNextImageKHR(m->m_device, m->dynamic.swapchain, UINT64_MAX, frame.imageAvailable, VK_NULL_HANDLE, &imageIndex);
+            vkResetCommandBuffer(frame.commandBuffer, 0);
             
-            if(!record(cmdbuf, imageIndex))
+            if(!record(frame.commandBuffer, imageIndex))
                 return false;
             
             VqSubmitInfo submitInfo;
 
-            VkSemaphore waitSemaphores[] = {m->imageAvailableSemaphore};
+            VkSemaphore waitSemaphores[] = { frame.imageAvailable };
             VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
             submitInfo.waitSemaphoreCount = 1;
             submitInfo.pWaitSemaphores      = waitSemaphores;
             submitInfo.pWaitDstStageMask    = waitStages;
-            submitInfo.commandBufferCount   = (uint32_t) m->dynamic.commandBuffers.size();
-            submitInfo.pCommandBuffers      = m->dynamic.commandBuffers.data();
+            submitInfo.commandBufferCount   = 1;
+            submitInfo.pCommandBuffers      = &frame.commandBuffer;
 
-            VkSemaphore signalSemaphores[] = {m->renderFinishedSemaphore};
+            VkSemaphore signalSemaphores[]  = {frame.renderFinished};
             submitInfo.signalSemaphoreCount = 1;
-            submitInfo.pSignalSemaphores = signalSemaphores;
+            submitInfo.pSignalSemaphores    = signalSemaphores;
 
-            if (vkQueueSubmit(graphic_queue(), 1, &submitInfo, m->inFlightFence) != VK_SUCCESS) {
+            if (vkQueueSubmit(graphic_queue(), 1, &submitInfo, frame.fence) != VK_SUCCESS) {
                 vqError << "Failed to submit draw command buffer!";
                 return false;
             }
@@ -432,7 +433,7 @@ namespace yq {
 
         VkCommandBuffer  Viewer::command_buffer() const
         {
-            return m->dynamic.commandBuffers[0];
+            return m->m_frames[ m->m_tick % MAX_FRAMES_IN_FLIGHT ].commandBuffer;
         }
 
         VkCommandPool  Viewer::command_pool() const 
@@ -882,6 +883,67 @@ namespace yq {
         
         void    ViFrame::dtor()
         {
+            if(viz){
+                if(commandBuffer && viz->m_thread->graphic){
+                    vkFreeCommandBuffers(viz->m_device, viz->m_thread->graphic, 1, &commandBuffer);
+                    commandBuffer   = nullptr;
+                }
+                
+                if(imageAvailable){
+                    vkDestroySemaphore(viz->m_device, imageAvailable, nullptr);
+                    imageAvailable  = nullptr;
+                }
+                
+                if(renderFinished){
+                    vkDestroySemaphore(viz->m_device, renderFinished, nullptr);
+                    renderFinished  = nullptr;
+                }
+                
+                if(fence){
+                    vkDestroyFence(viz->m_device, fence, nullptr);
+                    fence   = nullptr;
+                }
+                
+                viz = nullptr;
+            }
+        }
+
+        void    ViFrame::ctor(Visualizer& viz_)
+        {
+            viz  = &viz_;
+ 
+            try {
+                VqCommandBufferAllocateInfo allocInfo;
+                allocInfo.commandPool           = viz->m_thread->graphic;
+                allocInfo.level                 = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+                allocInfo.commandBufferCount    = 1;
+                if (vkAllocateCommandBuffers(viz->m_device, &allocInfo, &commandBuffer) != VK_SUCCESS) 
+                    throw VqException("Failed to allocate command buffers!");
+
+                VqFenceCreateInfo   fci;
+                fci.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+                if(vkCreateFence(viz->m_device, &fci, nullptr,  &fence) != VK_SUCCESS)
+                    throw VqException("Unable to create fence!");
+
+                VqSemaphoreCreateInfo   info;
+                if(vkCreateSemaphore(viz->m_device, &info, nullptr, &imageAvailable) != VK_SUCCESS)
+                    throw VqException("Unable to create semaphore!");
+                if(vkCreateSemaphore(viz->m_device, &info, nullptr, &renderFinished) != VK_SUCCESS)
+                    throw VqException("Unable to create semaphore!");
+            } 
+            catch(VqException& ex)
+            {
+                dtor();
+                throw;
+            }
+        }
+
+        VkResult  ViFrame::wait_reset(uint64_t timeout)
+        {
+            VkResult    r = vkWaitForFences(viz->m_device, 1, &fence, VK_TRUE, timeout);
+            if(r != VK_SUCCESS)
+                return r;
+            return vkResetFences(viz->m_device, 1, &fence);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1321,14 +1383,17 @@ namespace yq {
 
             m_presentMode               = m_presentModes.contains(vci.pmode) ? vci.pmode : PresentMode{ PresentMode::Fifo };
                 
+            //  ================================
+            //  FRAMES
+            
+            for(auto& f : m_frames)
+                f.ctor(*this);
+
                 
             //  ================================
             //  OLDER STUFF
 
        
-            imageAvailableSemaphore     = VqSemaphore(m_device);
-            renderFinishedSemaphore     = VqSemaphore(m_device);
-            inFlightFence               = VqFence(m_device);
 
             if(!init(dynamic))
                 throw VqException("");
@@ -1361,9 +1426,8 @@ namespace yq {
             
             kill(dynamic);
             
-            imageAvailableSemaphore     = {};
-            renderFinishedSemaphore     = {};
-            inFlightFence               = {};
+            for(auto& f : m_frames)
+                f.dtor();
             
             if(m_renderPass){
                 vkDestroyRenderPass(m_device, m_renderPass, nullptr);
@@ -1411,7 +1475,7 @@ namespace yq {
             ds.imageCount       = ds.images.size();
             ds.imageViews       = VqImageViews(*this, ds.images);
             ds.frameBuffers     = VqFrameBuffers(m_device, m_renderPass, ds.swapchain.extents(), ds.imageViews);
-            ds.commandBuffers   = VqCommandBuffers(m_device, m_thread->graphic, 1);
+            //ds.commandBuffers   = VqCommandBuffers(m_device, m_thread->graphic, 1);
 
             return true;            
         }
@@ -1420,7 +1484,7 @@ namespace yq {
 
         void Visualizer::kill(VqDynamic&ds)
         {
-            ds.commandBuffers   = {};
+            //ds.commandBuffers   = {};
             ds.frameBuffers     = {};
             ds.imageViews       = {};
             ds.swapchain        = {};
