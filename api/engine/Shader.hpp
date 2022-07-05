@@ -59,22 +59,22 @@ namespace yq {
             static const path_vector_t&   directories();
 
             //!  Gets or loads specified shader
-            static ShaderPtr      get(const std::filesystem::path&);
+            static ShaderCPtr      get(const std::filesystem::path&);
 
             //!  Gets specified shader
-            static ShaderPtr      get(uint64_t);
+            static ShaderCPtr      get(uint64_t);
             
             /*! \brief Compiles & Loads shader
             
                 This compiles and loads the shaders (bypassing the cache).
             */
-            static ShaderPtr      load(const std::filesystem::path&);
+            static ShaderCPtr      load(const std::filesystem::path&);
 
             /*! \brief Compiles & Loads shader
             
                 This compiles and loads the shaders (bypassing the cache).
             */
-            static ShaderPtr      load(const ByteArray& glsl, ShaderType);
+            static ShaderCPtr      load(const ByteArray& glsl, ShaderType);
             
             /*! \brief Searches for a shader
             
@@ -131,7 +131,7 @@ namespace yq {
             Shader();
             
             //! Raw load (from absolute file)
-            static ShaderPtr      do_load(const std::filesystem::path&, ShaderType st, unsigned int options);
+            static ShaderCPtr      do_load(const std::filesystem::path&, ShaderType st, unsigned int options);
 
             enum {
                 //! Compiles the shader

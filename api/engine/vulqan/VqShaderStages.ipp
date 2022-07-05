@@ -17,8 +17,8 @@ namespace yq {
             m_stages.reserve(shaders.size());
             for(auto& s : shaders){
                 
-                ShaderPtr       sh;
-                if(const ShaderPtr* ptr = std::get_if<ShaderPtr>(&s)){
+                ShaderCPtr       sh;
+                if(const ShaderCPtr* ptr = std::get_if<ShaderCPtr>(&s)){
                     sh  = *ptr;
                 } else if(const std::string* ptr = std::get_if<std::string>(&s)){
                     sh  = Shader::get(*ptr);

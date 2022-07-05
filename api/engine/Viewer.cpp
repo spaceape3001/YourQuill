@@ -18,6 +18,7 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/Safety.hpp>
+#include <basic/TextUtils.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 
 #include <engine/render/IndexBufferObjectInfo.hpp>
@@ -762,15 +763,17 @@ namespace yq {
             if(!instance)
                 throw VqException("Vulkan has not been initialized!");
 
-            VkPhysicalDevice    pdev    = i.device;
-            pdev  = i.device;
-            if(!pdev){
-                pdev  = vqFirstDevice();
-                if(!pdev)
+            physical                    = i.device;
+            if(!physical){
+                physical  = vqFirstDevice();
+                if(!physical)
                     throw VqException("Cannot create window without any devices!");
             }
-            physical                    = VqGPU(pdev);
-            yNotice() << "Using (" << to_string(physical.device_type()) << "): " << physical.device_name();
+            
+            vkGetPhysicalDeviceProperties(physical, &device_info);
+            vkGetPhysicalDeviceMemoryProperties(physical, &memory_info);
+            
+            yNotice() << "Using (" << to_string(device_info.deviceType) << "): " << device_name();
             window                      = VqWindow(*this, i);
 
             surface                     = VqSurface(physical, window);
@@ -800,6 +803,7 @@ namespace yq {
                 this->run();
             });
         }
+
 
         bool Visualizer::init(VqDynamic&ds, VkSwapchainKHR old)
         {
@@ -895,6 +899,31 @@ namespace yq {
             objects[i]    = p;
             return {p, true};
         }
+
+        //////////////////////////////////////
+
+
+        std::string_view        Visualizer::device_name() const
+        {
+            return std::string_view(device_info.deviceName, strnlen(device_info.deviceName, VK_MAX_PHYSICAL_DEVICE_NAME_SIZE));
+        }
+
+        uint32_t    Visualizer::max_memory_allocation_count() const noexcept 
+        { 
+            return device_info.limits.maxMemoryAllocationCount; 
+        }
+        
+        uint32_t    Visualizer::max_push_constants_size() const noexcept 
+        { 
+            return device_info.limits.maxPushConstantsSize; 
+        }
+        
+        uint32_t    Visualizer::max_viewports() const noexcept 
+        { 
+            return device_info.limits.maxViewports; 
+        }
+
+
         
         YQ_INVOKE(
             writer<Viewer>();

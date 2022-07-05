@@ -33,7 +33,6 @@
 #include "vulqan/VqFence.ipp"
 #include "vulqan/VqFencePool.ipp"
 #include "vulqan/VqFrameBuffers.ipp"
-#include "vulqan/VqGPU.ipp"
 #include "vulqan/VqImageViews.ipp"
 #include "vulqan/VqLogging.ipp"
 #include "vulqan/VqMonitor.ipp"

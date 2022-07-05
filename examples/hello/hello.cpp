@@ -87,8 +87,8 @@ struct HelloTriangle : public engine::Rendered {
     
     HelloTriangle(Viewer*w) : m_window(w)
     {
-        ShaderPtr   vert = Shader::load("examples/hello3.vert");
-        ShaderPtr   frag = Shader::load("examples/hello.frag");
+        ShaderCPtr   vert = Shader::load("examples/hello3.vert");
+        ShaderCPtr   frag = Shader::load("examples/hello.frag");
         if(!vert)
             throw std::runtime_error("No vertex shader");
         if(!frag)

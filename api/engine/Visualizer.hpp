@@ -15,7 +15,6 @@
 #include <engine/vulqan/VqDevice.hpp>
 #include <engine/vulqan/VqFence.hpp>
 #include <engine/vulqan/VqFrameBuffers.hpp>
-#include <engine/vulqan/VqGPU.hpp>
 #include <engine/vulqan/VqImageViews.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
@@ -87,11 +86,17 @@ namespace yq {
         };
         
 
-
+        /*! \brief Visualizer is the private data for the viewer
+                
+            This structure is the raw vulkan/GLFW/etc
+        */
         struct Visualizer : public UniqueID {
-            Viewer*             user                        = nullptr;
-            VkInstance          instance                    = nullptr;
-            VqGPU               physical;
+            Viewer*                             user        = nullptr;
+            VkInstance                          instance    = nullptr;
+            VkPhysicalDevice                    physical    = nullptr;
+            VkPhysicalDeviceProperties          device_info;
+            VkPhysicalDeviceMemoryProperties    memory_info;
+            
             VqWindow            window;
             VqSurface           surface;
             VqDevice            device;
@@ -123,12 +128,18 @@ namespace yq {
             bool    init(VqDynamic&, VkSwapchainKHR old=nullptr);
             void    kill(VqDynamic&);
             void    set_clear(const RGBA4F&);
-            
+
             void    run();
             
             
             Visualizer(const ViewerCreateInfo&, Viewer*);
             ~Visualizer();
+
+            std::string_view    device_name() const;
+            uint32_t            max_memory_allocation_count() const noexcept;
+            uint32_t            max_push_constants_size() const noexcept;
+            uint32_t            max_viewports() const noexcept;
+            
         };
     }
 }

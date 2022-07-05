@@ -597,11 +597,14 @@ namespace yq {
         
         class Event;
         
+        class Manipulator;
+        using ManipulatorPtr    = Ref<Manipulator>;
+        
         struct ResultCC;
         
         class Shader;
-        using ShaderPtr     = Ref<const Shader>;
-        using ShaderSpec    = std::variant<std::monostate, std::string, ShaderPtr>;
+        using ShaderCPtr        = Ref<const Shader>;
+        using ShaderSpec        = std::variant<std::monostate, std::string, ShaderCPtr>;
         
         class Taskable;
         class TaskableInfo;
