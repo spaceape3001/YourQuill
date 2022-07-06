@@ -21,7 +21,7 @@
 #include <engine/Application.hpp>
 #include <engine/Scene.hpp>
 #include <engine/Perspective.hpp>
-#include <engine/ImWindow.hpp>
+#include <engine/Viewer.hpp>
 
 #include <math/RGB.hpp>
 #include <math/Vector2.hpp>
@@ -55,8 +55,8 @@ const auto QuadData = QuadrilateralData<ColorVertex2D> {
     { {-0.5, -1.0}, color::Red }
 };
 
-struct CameraWin : public ImWindow {
-    YQ_OBJECT_DECLARE(CameraWin, engine::ImWindow)
+struct CameraWin : public engine::Viewer {
+    YQ_OBJECT_DECLARE(CameraWin, engine::Viewer)
 
     std::vector<const CameraInfo*>      cam_infos;
     Map<std::string,Ref<Camera>,IgCase> cameras;
@@ -84,7 +84,7 @@ struct CameraWin : public ImWindow {
         return c;
     }
 
-    CameraWin(const ViewerCreateInfo& wci) : ImWindow(wci)
+    CameraWin(const ViewerCreateInfo& wci) : Viewer(wci)
     {
         start   = std::chrono::steady_clock::now();
         
@@ -142,7 +142,7 @@ struct CameraWin : public ImWindow {
         #endif
 
         render(cmdbuf, scene, view);
-        ImWindow::draw_vulqan(cmdbuf);
+        //Window::draw_vulqan(cmdbuf);
     }
     
     void    draw_imgui() override
@@ -264,6 +264,7 @@ int main(int argc, char* argv[])
     wi.resizable    = true;
     wi.size         = { 1920, 1080 };
     wi.clear        = { 0.1f, 0.1f, 0.2f, 1.f };
+    wi.imgui        = true;
 
     Ref<CameraWin>   win = new CameraWin(wi);
     if(!win->good())

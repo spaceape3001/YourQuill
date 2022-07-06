@@ -9,18 +9,18 @@
 #include <basic/meta/Meta.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/Application.hpp>
+#include <engine/Viewer.hpp>
 #include <engine/vulqan/VqUtils.hpp>
-#include <engine/ImWindow.hpp>
 #include <imgui.h>
 #include <iostream>
 
 using namespace yq;
 using namespace yq::engine;
 
-class EditorWindow : public ImWindow {
-    YQ_OBJECT_DECLARE(EditorWindow, ImWindow)
+class EditorWindow : public Viewer {
+    YQ_OBJECT_DECLARE(EditorWindow, Viewer)
 public:
-    EditorWindow(const ViewerCreateInfo & wci=ViewerCreateInfo ()) : ImWindow(wci)
+    EditorWindow(const ViewerCreateInfo & wci=ViewerCreateInfo ()) : Viewer(wci)
     {
     }
     
@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
     ViewerCreateInfo      wi;
     wi.title        = "Your Editor!";
     wi.clear        = { 0.0, 0.0, 0.0, 1. };
+    wi.imgui        = true;
     Ref<EditorWindow>   window  = new EditorWindow(wi);
     
     app.run_window(window.ptr(), 0.1);

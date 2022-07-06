@@ -52,6 +52,7 @@ namespace yq {
         {
             log4cpp::CategoryStream         yell    = (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) ? vqError : ((flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) ? vqWarning : vqInfo);
             yell << "Object [" << to_string(objectType) << ": " << object << "] (layer " << pLayerPrefix << "): " << pMessage;
+        //assert(false && "Exiting");
             return VK_FALSE;
         }
 

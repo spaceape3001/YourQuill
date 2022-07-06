@@ -7,6 +7,8 @@
 #include "imgui.h"
 #include "imgui_user.h"
 
+thread_local ImGuiContext* MyImGuiTLS   = nullptr;
+
 namespace ImGui {
     bool Checkbox(const char*z, bool&v)
     {

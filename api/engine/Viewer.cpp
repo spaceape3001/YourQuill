@@ -10,16 +10,17 @@
     https://vulkan-tutorial.com/
 */
 
-#include "Application.hpp"
 #include "Perspective.hpp"
 #include "Scene.hpp"
-#include "Viewer.hpp"
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/Safety.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
+
+#include <engine/Application.hpp>
+#include <engine/Viewer.hpp>
 
 #include <engine/render/IndexBufferObjectInfo.hpp>
 #include <engine/render/Pipeline.hpp>
@@ -49,12 +50,12 @@
 
 #include <GLFW/glfw3.h>
 
-#include <basic/Logging.hpp>
-#include <engine/Application.hpp>
-#include <engine/Viewer.hpp>
-#include <engine/render/Pipeline.hpp>
+#include <imgui.h>
+#include <backends/imgui_impl_vulkan.h>
+#include <backends/imgui_impl_glfw.h>
 
 YQ_OBJECT_IMPLEMENT(yq::engine::Viewer)
+
 
 namespace yq {
     namespace engine {
@@ -102,8 +103,47 @@ namespace yq {
                 //  Register pointer & callbacks
                 glfwSetWindowUserPointer(m_window, this);
                 glfwSetWindowSizeCallback(m_window, callback_resize);
-                
+
                 m_viz   = std::make_unique<Visualizer>(vci,this);
+                
+                if(vci.imgui){
+                    m_imgui = ImGui::CreateContext();
+
+                    ImGui_ImplVulkan_InitInfo vii{};
+                    
+                    vii.Instance        = Application::vulkan();
+                    vii.PhysicalDevice  = m_viz->m_physical;
+                    vii.Device          = m_viz->m_device;
+                    vii.Queue           = m_viz->m_graphic[0];
+                    vii.QueueFamily     = m_viz->m_graphic.family;
+                    vii.MinImageCount   = m_viz->m_swapchain->minImageCount;
+                    vii.ImageCount      = m_viz->m_swapchain->imageCount;
+                    vii.DescriptorPool  = m_viz->m_thread->descriptors;
+                    
+                    ImGui::SetCurrentContext(m_imgui);
+                    ImGui_ImplGlfw_InitForVulkan(m_window, true);
+                    ImGui_ImplVulkan_Init(&vii, m_viz->m_renderPass);
+                    
+                    //  Uploading fonts....
+                    
+                    VkCommandBuffer cbuffer = m_viz->m_frames[0]->commandBuffer;
+
+                    vkResetCommandPool(m_viz->m_device, m_viz->m_thread->graphic, 0);
+                    VqCommandBufferBeginInfo begin_info;
+                    begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+                    vkBeginCommandBuffer(cbuffer, &begin_info);
+
+                    ImGui_ImplVulkan_CreateFontsTexture(cbuffer);
+
+                    VqSubmitInfo end_info;
+                    end_info.commandBufferCount = 1;
+                    end_info.pCommandBuffers = &cbuffer;
+                    vkEndCommandBuffer(cbuffer);
+                    vkQueueSubmit(m_viz->m_graphic[0], 1, &end_info, VK_NULL_HANDLE);
+                    vkDeviceWaitIdle(m_viz->m_device);
+                    ImGui_ImplVulkan_DestroyFontUploadObjects();
+                }
+
 
                 set_clear_color(vci.clear);
                 m_title     = vci.title;
@@ -123,10 +163,18 @@ namespace yq {
 
         void    Viewer::_dtor()
         {
-            m_viz       = nullptr;
+            if(m_imgui){
+                ImGui::SetCurrentContext(m_imgui);
+                ImGui_ImplVulkan_Shutdown();
+                ImGui_ImplGlfw_Shutdown();
+                ImGui::DestroyContext(m_imgui);
+                ImGui::SetCurrentContext(nullptr);
+                m_imgui     = nullptr;
+            }
+            m_viz           = nullptr;
             if(m_window){
                 glfwDestroyWindow(m_window);
-                m_window                = nullptr;
+                m_window    = nullptr;
             }
         }
 
@@ -137,10 +185,22 @@ namespace yq {
         {
             ++m_frameNumber;
             auto start = std::chrono::high_resolution_clock::now();
+            if(m_imgui){
+                ImGui::SetCurrentContext(m_imgui);
+                ImGui_ImplVulkan_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+                draw_imgui();
+                ImGui::Render();
+            }
             m_viz->graphic_draw();
             auto end   = std::chrono::high_resolution_clock::now();
             m_drawTime          = Second((end-start).count());
             return true;
+        }
+
+        void    Viewer::draw_vulqan(VkCommandBuffer cmdbuf)
+        {
         }
 
         void    Viewer::render(VkCommandBuffer buf, const Scene& scene, const Perspective& pr)
@@ -1398,6 +1458,10 @@ namespace yq {
             deviceCreateInfo.enabledExtensionCount      = (uint32_t) devExtensions.size();
             deviceCreateInfo.ppEnabledExtensionNames    = devExtensions.data();
             
+            VqPhysicalDeviceVulkan12Features            v12features;
+            v12features.bufferDeviceAddress = true;
+            deviceCreateInfo.pNext          = &v12features;
+            
             if(vkCreateDevice(m_physical, &deviceCreateInfo, nullptr, &m_device) != VK_SUCCESS)
                 throw VqException("Unable to create logical device!");
             
@@ -1416,7 +1480,7 @@ namespace yq {
             //  ================================
             //  ALLOCATOR
 
-            VmaAllocatorCreateInfo      allocatorCreateInfo;
+            VmaAllocatorCreateInfo      allocatorCreateInfo{};
             allocatorCreateInfo.instance                        = m_instance;
             allocatorCreateInfo.physicalDevice                  = m_physical;
             allocatorCreateInfo.device                          = m_device;
@@ -1475,10 +1539,15 @@ namespace yq {
 
             
             m_swapchain     = new ViSwapchain(this);
+
+            //  ================================
+            //  IMGUI (optional)
+                
             
             //  ================================
             //  OLDER STUFF
 
+            
             
             //builder = std::thread([this](){
                 //this->run();
@@ -1647,6 +1716,8 @@ namespace yq {
             vkCmdBeginRenderPass(cmd, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         
             m_viewer->draw_vulqan(cmd);
+            if(m_viewer->m_imgui)
+                ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), cmd, nullptr);
 
             vkCmdEndRenderPass(cmd);
 

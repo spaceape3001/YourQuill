@@ -19,8 +19,6 @@ set(yq_engine_sources
     ./Shader.cpp
     ./Texture.cpp
     
-    ./ImWindow.cpp
-    
     ./render/Pipeline.cpp
     ./render/Rendered.cpp
     ./render/Render3D.cpp

@@ -162,11 +162,6 @@ namespace yq {
             ViFrame*                            m_frames[MAX_FRAMES_IN_FLIGHT]  = {};
             ViSwapchain*                        m_swapchain             = nullptr;
             
-            //VqSemaphore         imageAvailableSemaphore;
-            //VqSemaphore         renderFinishedSemaphore;
-            //VqFence             inFlightFence;
-
-            
             //std::thread         builder;
             //uint64_t            pad[8];
             //std::atomic<bool>   terminating                 = false;

@@ -13,7 +13,7 @@
 #include <basic/meta/Meta.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <engine/Application.hpp>
-#include <engine/ImWindow.hpp>
+#include <engine/Viewer.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 #include <imgui.h>
 #include <iostream>
@@ -21,10 +21,10 @@
 using namespace yq;
 using namespace yq::engine;
 
-class DemoWindow : public ImWindow {
-    YQ_OBJECT_DECLARE(DemoWindow, ImWindow)
+class DemoWindow : public Viewer {
+    YQ_OBJECT_DECLARE(DemoWindow, Viewer)
 public:
-    DemoWindow(const ViewerCreateInfo & wci=ViewerCreateInfo ()) : ImWindow(wci)
+    DemoWindow(const ViewerCreateInfo & wci=ViewerCreateInfo ()) : Viewer(wci)
     {
     }
     
@@ -53,6 +53,7 @@ int main(int argc, char* argv[])
     wi.title        = "ImGUI Demo!";
     wi.clear        = { 0.0, 0.2, 0.5, 1. };
     wi.resizable    = true;
+    wi.imgui        = true;
     //wi.pmode        = VK_PRESENT_MODE_IMMEDIATE_KHR;  // <-< Set this if you want to see how fast your CPU & GPU can go!  (Metrics under Tools menu.)
     Ref<DemoWindow>   window  = new DemoWindow(wi);
     

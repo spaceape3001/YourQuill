@@ -22,8 +22,8 @@
 #include <optional>
 #include <memory>
 
-struct HelloApp;
 struct GLFWwindow;
+struct ImGuiContext;
 
 namespace yq {
     namespace engine {
@@ -236,7 +236,7 @@ namespace yq {
             GLFWwindow*         window() const;
             
             //  This is the "DRAW" pass, do it all, whatever the result is
-            virtual bool        draw();
+            bool                draw();
 
             operator Visualizer&  () { return *m_viz; }
 
@@ -250,7 +250,10 @@ namespace yq {
             //VkPipeline                  m_lastPipeline  = nullptr;
             virtual void        window_resized(){}
             virtual void        viewport_changed(){}
-            virtual void        draw_vulqan(VkCommandBuffer){}
+            
+            //  called if ImGUI is enabled
+            virtual void        draw_imgui(){}
+            virtual void        draw_vulqan(VkCommandBuffer);
             
             
         private:
@@ -260,6 +263,7 @@ namespace yq {
             std::string                     m_title;
             uint64_t                        m_frameNumber   = 0;
             unit::Second                    m_drawTime      = {};
+            ImGuiContext*                   m_imgui         = nullptr;
 
             void    _dtor();
             bool    record(VkCommandBuffer, uint32_t);

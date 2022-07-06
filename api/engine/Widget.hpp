@@ -11,7 +11,7 @@
 namespace yq {
     namespace engine {
     
-        struct UIData;
+        class Viewer;
     
         class WidgetInfo : public MetaObjectInfo {
         public:
@@ -30,12 +30,15 @@ namespace yq {
             YQ_OBJECT_DECLARE(Widget, MetaObject)
         public:
         
-            void    draw(UIData&);
+            void    draw();
             
         protected:
+            friend class Viewer;
+            
             Widget();
             ~Widget();
             
+            Viewer*                     m_viewer    = nullptr;
             Widget*                     m_parent    = nullptr;
             std::vector<Ref<Widget>>    m_children;
         };
