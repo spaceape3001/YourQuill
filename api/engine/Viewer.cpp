@@ -58,11 +58,6 @@ YQ_OBJECT_IMPLEMENT(yq::engine::Viewer)
 
 namespace yq {
     namespace engine {
-        void Viewer::poll_events()
-        {
-            glfwPollEvents();
-        }
-        
         WindowInfo::WindowInfo(std::string_view kname, ObjectInfo& base, const std::source_location& sl) :
             ObjectInfo(kname, base, sl)
         {
@@ -70,114 +65,81 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        Viewer::Viewer(const ViewerCreateInfo&i)
+        void         Viewer::callback_resize(GLFWwindow* win, int, int)
+        {
+            Viewer    *v  = (Viewer*) glfwGetWindowUserPointer(win);
+            if(v){
+                v -> m_viz -> m_rebuildSwap    = true;
+                if(v) [[likely]]
+                    v->window_resized();
+            }
+        }
+        
+        void Viewer::poll_events()
+        {
+            glfwPollEvents();
+        }
+
+        //  ----------------------------------------------------------------------------
+
+        Viewer::Viewer(const ViewerCreateInfo&vci)
         {
             try {
-                m           = std::make_unique<Visualizer>(i,this);
+                Application::vulkan();
+                
+                glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+                glfwWindowHint(GLFW_FLOATING, vci.floating ? GLFW_TRUE : GLFW_FALSE);
+                glfwWindowHint(GLFW_DECORATED, vci.decorated ? GLFW_TRUE : GLFW_FALSE);
+                glfwWindowHint(GLFW_RESIZABLE, vci.resizable ? GLFW_TRUE : GLFW_FALSE);
+                
+                int wx  = std::max(1,vci.size.width());
+                int wy  = std::max(1,vci.size.height());
+
+                m_window = glfwCreateWindow(wx, wy, vci.title, vci.monitor.monitor(), nullptr);
+                if(!m_window)
+                    throw VqException("Unable to create GLFW m_window");
+                
+                //  Register pointer & callbacks
+                glfwSetWindowUserPointer(m_window, this);
+                glfwSetWindowSizeCallback(m_window, callback_resize);
+                
+                m_viz   = std::make_unique<Visualizer>(vci,this);
+
+                set_clear_color(vci.clear);
+                m_title     = vci.title;
+                yNotice() << "Using (" << to_string(gpu_type()) << "): " << gpu_name();
             }
             catch(VqException& ex){
                 yCritical() << ex.what();
+                _dtor();
                 throw;
             }
-            set_clear_color(i.clear);
-            m_title     = i.title;
-            yNotice() << "Using (" << to_string(gpu_type()) << "): " << gpu_name();
         }
         
         Viewer::~Viewer()
         {
-            m           = nullptr;
+            _dtor();
         }
 
+        void    Viewer::_dtor()
+        {
+            m_viz       = nullptr;
+            if(m_window){
+                glfwDestroyWindow(m_window);
+                m_window                = nullptr;
+            }
+        }
 
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        bool    Viewer::record(VkCommandBuffer commandBuffer, uint32_t imageIndex)
-        {
-            VqCommandBufferBeginInfo beginInfo;
-            beginInfo.flags = 0; // Optional
-            beginInfo.pInheritanceInfo = nullptr; // Optional
-
-            if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-                vqError << "Failed to begin recording command buffer!";
-                return false;
-            }
-
-            VqRenderPassBeginInfo renderPassInfo;
-            renderPassInfo.renderPass = m->m_renderPass;
-            renderPassInfo.framebuffer = m->m_swapchain->frameBuffers[imageIndex];
-            renderPassInfo.renderArea.offset = {0, 0};
-            renderPassInfo.renderArea.extent = m->m_swapchain->extents;
-
-            renderPassInfo.clearValueCount = 1;
-            VkClearValue                cv  = m->m_clearValue;
-            renderPassInfo.pClearValues = &cv;
-            vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        
-            draw_vulqan(commandBuffer);
-
-            vkCmdEndRenderPass(commandBuffer);
-
-            if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-                vqError << "Failed to record command buffer!";
-                return false;
-            }
-            return true;
-        }
-        
         bool    Viewer::draw()
         {
-            ++m->m_tick;      // frame
-            auto start  = std::chrono::high_resolution_clock::now();
-            
-            m->check_rebuild();
-
-            ViFrame&    frame   = m->frame();
-            
-            
-            frame.wait_reset();
-
-            uint32_t imageIndex = 0;
-            vkAcquireNextImageKHR(m->m_device, m->m_swapchain->swapchain, UINT64_MAX, frame.imageAvailable, VK_NULL_HANDLE, &imageIndex);
-            vkResetCommandBuffer(frame.commandBuffer, 0);
-            
-            if(!record(frame.commandBuffer, imageIndex))
-                return false;
-            
-            VqSubmitInfo submitInfo;
-
-            VkSemaphore waitSemaphores[] = { frame.imageAvailable };
-            VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-            submitInfo.waitSemaphoreCount = 1;
-            submitInfo.pWaitSemaphores      = waitSemaphores;
-            submitInfo.pWaitDstStageMask    = waitStages;
-            submitInfo.commandBufferCount   = 1;
-            submitInfo.pCommandBuffers      = &frame.commandBuffer;
-
-            VkSemaphore signalSemaphores[]  = {frame.renderFinished};
-            submitInfo.signalSemaphoreCount = 1;
-            submitInfo.pSignalSemaphores    = signalSemaphores;
-
-            if (vkQueueSubmit(graphic_queue(), 1, &submitInfo, frame.fence) != VK_SUCCESS) {
-                vqError << "Failed to submit draw command buffer!";
-                return false;
-            }
-                
-            VqPresentInfoKHR presentInfo;
-            
-            VkSwapchainKHR      swapchain   = m->m_swapchain->swapchain;
-
-            presentInfo.waitSemaphoreCount = 1;
-            presentInfo.pWaitSemaphores = signalSemaphores;
-            presentInfo.swapchainCount = 1;
-            presentInfo.pSwapchains = &swapchain;
-            presentInfo.pImageIndices = &imageIndex;
-            presentInfo.pResults = nullptr; // Optional
-            vkQueuePresentKHR(present_queue(), &presentInfo);
-            
-            auto end = std::chrono::high_resolution_clock::now();
-            m->draw_time    = (end-start).count();
+            ++m_frameNumber;
+            auto start = std::chrono::high_resolution_clock::now();
+            m_viz->graphic_draw();
+            auto end   = std::chrono::high_resolution_clock::now();
+            m_drawTime          = Second((end-start).count());
             return true;
         }
 
@@ -208,11 +170,11 @@ namespace yq {
                 bool            pnew      = false;
                 bool            onew      = false;
                 
-                std::tie( vp, pnew )    = m->pipeline(pipe->id());
-                std::tie( vo, onew )    = m->object(r->id());
+                std::tie( vp, pnew )    = m_viz->pipeline(pipe->id());
+                std::tie( vo, onew )    = m_viz->object(r->id());
                 
                 if(pnew)
-                    vp->vq        = std::make_unique<VqPipeline>(*m, pipe->config());
+                    vp->vq        = std::make_unique<VqPipeline>(*m_viz, pipe->config());
                 
                 uint32_t            shader_mask = vp->vq->shader_mask();
                 Tristate            wireframe   = (r->wireframe() == Tristate::INHERIT) ? pr.wireframe : r->wireframe();
@@ -300,7 +262,7 @@ namespace yq {
                             continue;
                         if(bnew || fast || (check && bd.revision != buffer->rev)){
                             // optimize this ... later
-                            buffer -> vq    = std::make_unique<VqBuffer>(*m, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, bd.data, bd.size);
+                            buffer -> vq    = std::make_unique<VqBuffer>(*m_viz, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, bd.data, bd.size);
                             buffer -> rev   = bd.revision;
                         }
                     }
@@ -357,7 +319,7 @@ namespace yq {
                             continue;
                         if(bnew || fast || (check && bd.revision != buffer->rev)){
                             // optimize this ... later
-                            buffer -> vq    = std::make_unique<VqBuffer>(*m, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, bd.data, bd.size);
+                            buffer -> vq    = std::make_unique<VqBuffer>(*m_viz, VK_BUFFER_USAGE_INDEX_BUFFER_BIT, bd.data, bd.size);
                             buffer -> rev   = bd.revision;
                         }
                     }
@@ -403,13 +365,13 @@ namespace yq {
 
         void Viewer::attention()
         {
-            if(m->m_window)
-                glfwRequestWindowAttention(m->m_window);
+            if(m_viz->m_window)
+                glfwRequestWindowAttention(m_viz->m_window);
         }
 
         RGBA4F Viewer::clear_color() const
         {
-            VkClearValue    cv  = m->m_clearValue;
+            VkClearValue    cv  = m_viz->m_clearValue;
             return { 
                 cv.color.float32[0], cv.color.float32[1], 
                 cv.color.float32[2], cv.color.float32[3] 
@@ -418,251 +380,251 @@ namespace yq {
 
         void Viewer::close()
         {
-            if(m->m_window)
-                glfwSetWindowShouldClose(m->m_window, GLFW_TRUE);
+            if(m_viz->m_window)
+                glfwSetWindowShouldClose(m_viz->m_window, GLFW_TRUE);
         }
 
 
         VkCommandBuffer  Viewer::command_buffer() const
         {
-            return m->frame().commandBuffer;
+            return m_viz->frame().commandBuffer;
         }
 
         VkCommandPool  Viewer::command_pool() const 
         { 
-            return m->m_thread->graphic; 
+            return m_viz->m_thread->graphic; 
         }
         
         VkQueue  Viewer::compute_queue(uint32_t i) const
         {
-            return m->m_compute[i];
+            return m_viz->m_compute[i];
         }
         
         uint32_t  Viewer::compute_queue_count() const
         {
-            return (uint32_t) m->m_compute.queues.size();
+            return (uint32_t) m_viz->m_compute.queues.size();
         }
         
         uint32_t  Viewer::compute_queue_family() const
         {
-            return m->m_compute.family;
+            return m_viz->m_compute.family;
         }
 
         VkDescriptorPool    Viewer::descriptor_pool() const 
         { 
-            return m->m_thread->descriptors; 
+            return m_viz->m_thread->descriptors; 
         }
         
         VkDevice  Viewer::device() const 
         { 
-            return m->m_device; 
+            return m_viz->m_device; 
         }
 
         void Viewer::focus()
         {
-            if(m && m->m_window)
-                glfwFocusWindow(m->m_window);
+            if(m_viz && m_viz->m_window)
+                glfwFocusWindow(m_viz->m_window);
         }
 
         std::string_view    Viewer::gpu_name() const
         {
-            return std::string_view(m->m_deviceInfo.deviceName, strnlen(m->m_deviceInfo.deviceName, VK_MAX_PHYSICAL_DEVICE_NAME_SIZE));
+            return std::string_view(m_viz->m_deviceInfo.deviceName, strnlen(m_viz->m_deviceInfo.deviceName, VK_MAX_PHYSICAL_DEVICE_NAME_SIZE));
         }
 
         VkPhysicalDeviceType    Viewer::gpu_type() const
         {
-            return m->m_deviceInfo.deviceType;
+            return m_viz->m_deviceInfo.deviceType;
         }
 
         
         VkQueue     Viewer::graphic_queue(uint32_t i) const
         {
-            return m->m_graphic[i];
+            return m_viz->m_graphic[i];
         }
         
         uint32_t    Viewer::graphic_queue_count() const
         {
-            return (uint32_t) m->m_graphic.queues.size();
+            return (uint32_t) m_viz->m_graphic.queues.size();
         }
         
         uint32_t    Viewer::graphic_queue_family() const
         {
-            return m->m_graphic.family;
+            return m_viz->m_graphic.family;
         }
 
 
         int  Viewer::height() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return 0;
         
             int ret;
-            glfwGetWindowSize(m->m_window, nullptr, &ret);
+            glfwGetWindowSize(m_viz->m_window, nullptr, &ret);
             return ret;
         }
 
         void Viewer::hide()
         {
-            if(m->m_window)
-                glfwHideWindow(m->m_window);
+            if(m_viz->m_window)
+                glfwHideWindow(m_viz->m_window);
         }
 
         void Viewer::iconify()
         {
-            if(m->m_window)
-                glfwIconifyWindow(m->m_window);
+            if(m_viz->m_window)
+                glfwIconifyWindow(m_viz->m_window);
         }
 
         bool        Viewer::is_decorated() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_DECORATED) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_DECORATED) != 0;
         }
         
         bool        Viewer::is_focused() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_FOCUSED ) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_FOCUSED ) != 0;
         }
         
         bool        Viewer::is_floating() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_FLOATING) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_FLOATING) != 0;
         }
         
         bool        Viewer::is_fullscreen() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowMonitor(m->m_window) != nullptr;
+            return glfwGetWindowMonitor(m_viz->m_window) != nullptr;
         }
         
         bool        Viewer::is_hovered() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_HOVERED) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_HOVERED) != 0;
         }
         
         bool        Viewer::is_iconified() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_ICONIFIED) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_ICONIFIED) != 0;
         }
 
         bool        Viewer::is_maximized() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_MAXIMIZED) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_MAXIMIZED) != 0;
         }
         
         bool        Viewer::is_resizable() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_RESIZABLE) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_RESIZABLE) != 0;
         }
         
         bool        Viewer::is_visible() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return false;
-            return glfwGetWindowAttrib(m->m_window, GLFW_VISIBLE) != 0;
+            return glfwGetWindowAttrib(m_viz->m_window, GLFW_VISIBLE) != 0;
         }
         
         VkDevice    Viewer::logical() const 
         { 
-            return m->m_device; 
+            return m_viz->m_device; 
         }
 
 
         uint32_t    Viewer::max_memory_allocation_count() const  
         { 
-            return m->m_deviceInfo.limits.maxMemoryAllocationCount; 
+            return m_viz->m_deviceInfo.limits.maxMemoryAllocationCount; 
         }
         
         uint32_t    Viewer::max_push_constants_size() const 
         { 
-            return m->m_deviceInfo.limits.maxPushConstantsSize; 
+            return m_viz->m_deviceInfo.limits.maxPushConstantsSize; 
         }
         
         uint32_t    Viewer::max_viewports() const 
         { 
-            return m->m_deviceInfo.limits.maxViewports; 
+            return m_viz->m_deviceInfo.limits.maxViewports; 
         }
 
         void        Viewer::maximize()
         {
-            if(m->m_window)
-                glfwMaximizeWindow(m->m_window);
+            if(m_viz->m_window)
+                glfwMaximizeWindow(m_viz->m_window);
         }
 
         VqMonitor   Viewer::monitor() const
         {
-            if(m->m_window)
-                return VqMonitor(glfwGetWindowMonitor(m->m_window));
+            if(m_viz->m_window)
+                return VqMonitor(glfwGetWindowMonitor(m_viz->m_window));
             return VqMonitor();
         }
 
         VkPhysicalDevice    Viewer::physical() const 
         { 
-            return m->m_physical; 
+            return m_viz->m_physical; 
         }
 
         Vector2I    Viewer::position() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return {};
             Vector2I   ret;
-            glfwGetWindowPos(m->m_window, &ret.x, &ret.y);
+            glfwGetWindowPos(m_viz->m_window, &ret.x, &ret.y);
             return ret;
         }
 
         PresentMode  Viewer::present_mode() const
         {
-            return m->m_presentMode;
+            return m_viz->m_presentMode;
         }
 
         const std::set<PresentMode>&     Viewer::present_modes_available() const
         {
-            return m->m_presentModes;
+            return m_viz->m_presentModes;
         }
 
         VkQueue      Viewer::present_queue(uint32_t i) const
         {
-            return m->m_present[i];
+            return m_viz->m_present[i];
         }
         
         uint32_t     Viewer::present_queue_count() const
         {
-            return (uint32_t) m->m_present.queues.size();
+            return (uint32_t) m_viz->m_present.queues.size();
         }
         
         uint32_t     Viewer::present_queue_family() const
         {
-            return m->m_present.family;
+            return m_viz->m_present.family;
         }
 
         VkRenderPass Viewer::render_pass() const
         {
-            return m->m_renderPass;
+            return m_viz->m_renderPass;
         }
 
         void        Viewer::restore()
         {
-            if(m->m_window)
-                glfwRestoreWindow(m->m_window);
+            if(m_viz->m_window)
+                glfwRestoreWindow(m_viz->m_window);
         }
 
         void        Viewer::set_clear_color(const RGBA4F&i)
         {
-            m->m_clearValue = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
+            m_viz->m_clearValue = VkClearValue{{{ i.red, i.green, i.blue, i.alpha }}};
         }
 
         void        Viewer::set_position(const Vector2I& pos)
@@ -672,16 +634,16 @@ namespace yq {
 
         void        Viewer::set_present_mode(PresentMode pm)
         {
-            if(m->m_presentModes.contains(pm) && (pm != m->m_presentMode)){
-                m->m_presentMode    = pm;
-                m->m_rebuildSwap    = true;
+            if(m_viz->m_presentModes.contains(pm) && (pm != m_viz->m_presentMode)){
+                m_viz->m_presentMode    = pm;
+                m_viz->m_rebuildSwap    = true;
             }
         }
         
         void        Viewer::set_position(int x, int y)
         {
-            if(m->m_window){
-                glfwSetWindowPos(m->m_window, x, y);
+            if(m_viz->m_window){
+                glfwSetWindowPos(m_viz->m_window, x, y);
             }
         }
 
@@ -692,15 +654,15 @@ namespace yq {
 
         void        Viewer::set_size(int w, int h)
         {
-            if(m->m_window){
-                glfwSetWindowSize(m->m_window, std::max(1, w), std::max(1, h));
+            if(m_viz->m_window){
+                glfwSetWindowSize(m_viz->m_window, std::max(1, w), std::max(1, h));
             }
         }
 
         void        Viewer::set_title(const char*z)
         {
-            if(m->m_window && z){
-                glfwSetWindowTitle(m->m_window, z);
+            if(m_viz->m_window && z){
+                glfwSetWindowTitle(m_viz->m_window, z);
                 m_title = z;
             }
         }
@@ -712,29 +674,29 @@ namespace yq {
 
         bool        Viewer::should_close() const
         {
-            if(!m->m_window) 
+            if(!m_viz->m_window) 
                 return true;
-            return glfwWindowShouldClose(m->m_window);
+            return glfwWindowShouldClose(m_viz->m_window);
         }
 
         void        Viewer::show()
         {
-            if(m->m_window)
-                glfwShowWindow(m->m_window);
+            if(m_viz->m_window)
+                glfwShowWindow(m_viz->m_window);
         }
 
         Size2I      Viewer::size() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return {};
             Size2I  ret;
-            glfwGetWindowSize(m->m_window, &ret.x, &ret.y);
+            glfwGetWindowSize(m_viz->m_window, &ret.x, &ret.y);
             return ret;
         }
 
         bool                Viewer::supports(VkFormat fmt) const
         {
-            for(auto& f : m->m_surfaceFormats)
+            for(auto& f : m_viz->m_surfaceFormats)
                 if(fmt == f.format)
                     return true;
             return false;
@@ -742,97 +704,97 @@ namespace yq {
         
         bool                Viewer::supports(PresentMode pm) const
         {
-            return m->m_presentModes.contains(pm);
+            return m_viz->m_presentModes.contains(pm);
         }
 
         VkSurfaceKHR        Viewer::surface() const 
         { 
-            return m->m_surface; 
+            return m_viz->m_surface; 
         }
 
         VkFormat            Viewer::surface_format() const
         {
-            return m->m_surfaceFormat;
+            return m_viz->m_surfaceFormat;
         }
 
         VkColorSpaceKHR  Viewer::surface_color_space() const 
         { 
-            return m->m_surfaceColorSpace; 
+            return m_viz->m_surfaceColorSpace; 
         }
 
         VkRect2D    Viewer::swap_def_scissor() const
         {
-            return m->m_swapchain->def_scissor();
+            return m_viz->m_swapchain->def_scissor();
         }
         
         VkViewport  Viewer::swap_def_viewport() const
         {
-            return m->m_swapchain->def_viewport();
+            return m_viz->m_swapchain->def_viewport();
         }
 
         uint32_t    Viewer::swap_image_count() const
         {
-            return m->m_swapchain->imageCount;
+            return m_viz->m_swapchain->imageCount;
         }
 
         uint32_t    Viewer::swap_height() const
         {
-            return m->m_swapchain->height();
+            return m_viz->m_swapchain->height();
         }
 
         uint32_t    Viewer::swap_min_image_count() const
         {
-            return m->m_swapchain->minImageCount;
+            return m_viz->m_swapchain->minImageCount;
         }
 
         uint32_t    Viewer::swap_width() const
         {
-            return m->m_swapchain->width();
+            return m_viz->m_swapchain->width();
         }
         
         VkQueue   Viewer::video_decode_queue(uint32_t i) const
         {
-            return m->m_videoDecode[i];
+            return m_viz->m_videoDecode[i];
         }
         
         uint32_t  Viewer::video_decode_queue_count() const
         {
-            return (uint32_t) m->m_videoDecode.queues.size();
+            return (uint32_t) m_viz->m_videoDecode.queues.size();
         }
         
         uint32_t  Viewer::video_decode_queue_family() const
         {
-            return m->m_videoDecode.family;
+            return m_viz->m_videoDecode.family;
         }
 
         VkQueue   Viewer::video_encode_queue(uint32_t i) const
         {
-            return m->m_videoEncode[i];
+            return m_viz->m_videoEncode[i];
         }
         
         uint32_t  Viewer::video_encode_queue_count() const
         {
-            return (uint32_t) m->m_videoEncode.queues.size();
+            return (uint32_t) m_viz->m_videoEncode.queues.size();
         }
 
         uint32_t  Viewer::video_encode_queue_family() const
         {
-            return m->m_videoEncode.family;
+            return m_viz->m_videoEncode.family;
         }
 
         int  Viewer::width() const
         {
-            if(!m->m_window)
+            if(!m_viz->m_window)
                 return 0;
         
             int ret;
-            glfwGetWindowSize(m->m_window, &ret, nullptr);
+            glfwGetWindowSize(m_viz->m_window, &ret, nullptr);
             return ret;
         }
         
         GLFWwindow*         Viewer::window() const 
         { 
-            return m->m_window; 
+            return m_viz->m_window; 
         }
         
         ////////////////////////////////////////////////////////////////////////////////
@@ -922,14 +884,6 @@ namespace yq {
                 
                 viz = nullptr;
             }
-        }
-
-        VkResult  ViFrame::wait_reset(uint64_t timeout)
-        {
-            VkResult    r = vkWaitForFences(viz->m_device, 1, &fence, VK_TRUE, timeout);
-            if(r != VK_SUCCESS)
-                return r;
-            return vkResetFences(viz->m_device, 1, &fence);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1225,22 +1179,11 @@ namespace yq {
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
         
-        void         Visualizer::callback_resize(GLFWwindow* win, int, int)
-        {
-            Visualizer    *v  = (Visualizer*) glfwGetWindowUserPointer(win);
-            if(v){
-                v -> m_rebuildSwap    = true;
-                assert(v->m_viewer);
-                if(v->m_viewer) [[likely]]
-                    v->m_viewer->window_resized();
-            }
-        }
-        
-        //  ----------------------------------------------------------------------------
 
         Visualizer::Visualizer(const ViewerCreateInfo& vci, Viewer *w) 
         {
             m_viewer        = w;
+            m_window        = w->m_window;
             
             try {
                 _ctor(vci);
@@ -1307,26 +1250,7 @@ namespace yq {
             
             vkGetPhysicalDeviceProperties(m_physical, &m_deviceInfo);
             vkGetPhysicalDeviceMemoryProperties(m_physical, &m_memoryInfo);
-            
 
-            //  ================================
-            //  CREATE GLFW WINDOW
-
-            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-            glfwWindowHint(GLFW_FLOATING, vci.floating ? GLFW_TRUE : GLFW_FALSE);
-            glfwWindowHint(GLFW_DECORATED, vci.decorated ? GLFW_TRUE : GLFW_FALSE);
-            glfwWindowHint(GLFW_RESIZABLE, vci.resizable ? GLFW_TRUE : GLFW_FALSE);
-            
-            int wx  = std::max(1,vci.size.width());
-            int wy  = std::max(1,vci.size.height());
-
-            m_window = glfwCreateWindow(wx, wy, vci.title, vci.monitor.monitor(), nullptr);
-            if(!m_window)
-                throw VqException("Unable to create GLFW m_window");
-            
-            //  Register pointer & callbacks
-            glfwSetWindowUserPointer(m_window, this);
-            glfwSetWindowSizeCallback(m_window, callback_resize);
 
             //  ================================
             //  GLFW "SURFACE"
@@ -1564,10 +1488,10 @@ namespace yq {
 
         void Visualizer::_dtor()
         {
-            if(m_device){
-                vkDeviceWaitIdle(m_device);
-            }
-            
+            if(!m_device)
+                return ;
+            vkDeviceWaitIdle(m_device);
+
             for(auto& i : objects){
                 if(i.second)
                     delete i.second;
@@ -1617,36 +1541,128 @@ namespace yq {
                 m_surface               = nullptr;
             }
             m_physical                  = nullptr;
-            if(m_window){
-                glfwDestroyWindow(m_window);
-                m_window                = nullptr;
-            }
-            m_physical                  = nullptr;
+            m_window                    = nullptr;
+            m_viewer                    = nullptr;
         }
 
-        void    Visualizer::check_rebuild(bool force)
+        bool Visualizer::check_rebuild(bool force)
         {
             if(force){
                 m_rebuildSwap   = false;
             } else {
                 force       = m_rebuildSwap.exchange(false);
                 if(!force)
-                    return ;
+                    return false;
             }
         
             vkDeviceWaitIdle(m_device);
             ViSwapchain*    newchain    = new ViSwapchain(this);
             std::swap(newchain, m_swapchain);
             delete newchain;
+            return true;
         }
 
-
-        void    Visualizer::run()
+        bool  Visualizer::graphic_draw()
         {
-            using namespace std::chrono_literals;
-            while(!terminating){
-                std::this_thread::sleep_for(1ms);
+            ViFrame&    f   = frame();
+            vkWaitForFences(m_device, 1, &f.fence, VK_TRUE, UINT64_MAX);
+
+            uint32_t imageIndex = 0;
+            VkResult res    = vkAcquireNextImageKHR(m_device, m_swapchain->swapchain, UINT64_MAX, f.imageAvailable, VK_NULL_HANDLE, &imageIndex);
+            bool    force   = false;
+            switch(res){
+            case VK_SUCCESS:
+                break;
+            case VK_SUBOPTIMAL_KHR:
+            case VK_ERROR_OUT_OF_DATE_KHR:
+                force       = true;
+                break;
+            default:
+                vqError << "Unable to acquire next image!";
+                return false;
             }
+            
+            if(check_rebuild(force))
+                return true;
+
+            vkResetFences(m_device, 1, &f.fence);
+            vkResetCommandBuffer(f.commandBuffer, 0);
+            
+            if(!graphic_record(f.commandBuffer, imageIndex))
+                return false;
+            
+            VqSubmitInfo submitInfo;
+
+            VkSemaphore waitSemaphores[] = { f.imageAvailable };
+            VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+            submitInfo.waitSemaphoreCount = 1;
+            submitInfo.pWaitSemaphores      = waitSemaphores;
+            submitInfo.pWaitDstStageMask    = waitStages;
+            submitInfo.commandBufferCount   = 1;
+            submitInfo.pCommandBuffers      = &f.commandBuffer;
+
+            VkSemaphore signalSemaphores[]  = {f.renderFinished};
+            submitInfo.signalSemaphoreCount = 1;
+            submitInfo.pSignalSemaphores    = signalSemaphores;
+
+            if (vkQueueSubmit(m_graphic[0], 1, &submitInfo, f.fence) != VK_SUCCESS) {
+                vqError << "Failed to submit draw command buffer!";
+                return false;
+            }
+                
+            VqPresentInfoKHR presentInfo;
+
+            presentInfo.waitSemaphoreCount = 1;
+            presentInfo.pWaitSemaphores = signalSemaphores;
+            presentInfo.swapchainCount = 1;
+            presentInfo.pSwapchains = &m_swapchain->swapchain;
+            presentInfo.pImageIndices = &imageIndex;
+            presentInfo.pResults = nullptr; // Optional
+            vkQueuePresentKHR(m_present[0], &presentInfo);
+            
+            ++m_tick;
+            return true;
+        }
+        
+        bool  Visualizer::graphic_record(VkCommandBuffer cmd, uint32_t imgIndex)
+        {
+            VqCommandBufferBeginInfo beginInfo;
+            beginInfo.flags = 0; // Optional
+            beginInfo.pInheritanceInfo = nullptr; // Optional
+
+            if (vkBeginCommandBuffer(cmd, &beginInfo) != VK_SUCCESS) {
+                vqError << "Failed to begin recording command buffer!";
+                return false;
+            }
+
+            VqRenderPassBeginInfo renderPassInfo;
+            renderPassInfo.renderPass = m_renderPass;
+            renderPassInfo.framebuffer = m_swapchain->frameBuffers[imgIndex];
+            renderPassInfo.renderArea.offset = {0, 0};
+            renderPassInfo.renderArea.extent = m_swapchain->extents;
+
+            renderPassInfo.clearValueCount = 1;
+            VkClearValue                cv  = m_clearValue;
+            renderPassInfo.pClearValues = &cv;
+            vkCmdBeginRenderPass(cmd, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        
+            m_viewer->draw_vulqan(cmd);
+
+            vkCmdEndRenderPass(cmd);
+
+            if (vkEndCommandBuffer(cmd) != VK_SUCCESS) {
+                vqError << "Failed to record command buffer!";
+                return false;
+            }
+            return true;
+        }
+
+        void  Visualizer::run()
+        {
+            //using namespace std::chrono_literals;
+            //while(!terminating){
+                //std::this_thread::sleep_for(1ms);
+            //}
         }
 
 

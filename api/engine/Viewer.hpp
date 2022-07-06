@@ -15,6 +15,7 @@
 #include <math/preamble.hpp>
 #include <math/Size2.hpp>
 #include <math/Vector2.hpp>
+#include <math/Units.hpp>
 #include <vulkan/vulkan_core.h>
 
 #include <functional>
@@ -85,9 +86,11 @@ namespace yq {
                 //! Brings window to front & input focus
             void                focus();
             
+            uint64_t            frame_number() const { return m_frameNumber; }
+            
 
                 //! Good & initialized window
-            bool                good() const { return m != nullptr; }
+            bool                good() const { return m_viz != nullptr; }
             
                 //! Returns the name of the GPU/physical device
             std::string_view    gpu_name() const;
@@ -235,7 +238,7 @@ namespace yq {
             //  This is the "DRAW" pass, do it all, whatever the result is
             virtual bool        draw();
 
-            operator Visualizer&  () { return *m; }
+            operator Visualizer&  () { return *m_viz; }
 
             void                render(VkCommandBuffer, const Scene&, const Perspective&);
 
@@ -252,9 +255,13 @@ namespace yq {
             
         private:
         
+            GLFWwindow*                     m_window    = nullptr;
+            std::unique_ptr<Visualizer>     m_viz;
             std::string                     m_title;
-            std::unique_ptr<Visualizer>     m;
+            uint64_t                        m_frameNumber   = 0;
+            unit::Second                    m_drawTime      = {};
 
+            void    _dtor();
             bool    record(VkCommandBuffer, uint32_t);
             
             static void callback_resize(GLFWwindow*, int, int);

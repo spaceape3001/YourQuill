@@ -106,7 +106,6 @@ namespace yq {
             ViFrame(Visualizer*);
             ~ViFrame();
             void    dtor();
-            VkResult    wait_reset(uint64_t timeout=UINT64_MAX);
         };
         
         struct ViSwapchain {
@@ -138,11 +137,11 @@ namespace yq {
         */
         struct Visualizer : public UniqueID {
             Viewer*                             m_viewer                = nullptr;
+            GLFWwindow*                         m_window                = nullptr;
             VkInstance                          m_instance              = nullptr;
             VkPhysicalDevice                    m_physical              = nullptr;
             VkPhysicalDeviceProperties          m_deviceInfo;
             VkPhysicalDeviceMemoryProperties    m_memoryInfo;
-            GLFWwindow*                         m_window                = nullptr;
             VkSurfaceKHR                        m_surface               = nullptr;
             std::set<PresentMode>               m_presentModes;
             std::vector<VkSurfaceFormatKHR>     m_surfaceFormats;
@@ -168,10 +167,9 @@ namespace yq {
             //VqFence             inFlightFence;
 
             
-            double              draw_time                   = 0;
-            std::thread         builder;
-            uint64_t            pad[8];
-            std::atomic<bool>   terminating                 = false;
+            //std::thread         builder;
+            //uint64_t            pad[8];
+            //std::atomic<bool>   terminating                 = false;
             
             std::map<uint64_t, ViPipeline*>     pipelines;
             std::map<uint64_t, ViObject*>       objects;
@@ -192,12 +190,14 @@ namespace yq {
 
             VkColorSpaceKHR             surface_color_space(VkFormat) const;
 
-            static void                 callback_resize(GLFWwindow*, int, int);
-            
+            bool                        graphic_draw();
+            bool                        graphic_record(VkCommandBuffer, uint32_t); // may have extents (later)
+
+
             const ViFrame&              frame() const { return *(m_frames[m_tick%MAX_FRAMES_IN_FLIGHT]); }
             ViFrame&                    frame() { return *(m_frames[m_tick%MAX_FRAMES_IN_FLIGHT]); }
             
-            void                        check_rebuild(bool force=false);
+            bool                        check_rebuild(bool force=false);
             
         };
     }
