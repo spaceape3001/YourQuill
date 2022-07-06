@@ -77,6 +77,7 @@ namespace yq {
             }
             catch(VqException& ex){
                 yCritical() << ex.what();
+                throw;
             }
             set_clear_color(i.clear);
             m_title     = i.title;
@@ -105,9 +106,9 @@ namespace yq {
 
             VqRenderPassBeginInfo renderPassInfo;
             renderPassInfo.renderPass = m->m_renderPass;
-            renderPassInfo.framebuffer = m->dynamic.frameBuffers[imageIndex];
+            renderPassInfo.framebuffer = m->m_swapchain->frameBuffers[imageIndex];
             renderPassInfo.renderArea.offset = {0, 0};
-            renderPassInfo.renderArea.extent = m->dynamic.swapchain.extents();
+            renderPassInfo.renderArea.extent = m->m_swapchain->extents;
 
             renderPassInfo.clearValueCount = 1;
             VkClearValue                cv  = m->m_clearValue;
@@ -130,24 +131,15 @@ namespace yq {
             ++m->m_tick;      // frame
             auto start  = std::chrono::high_resolution_clock::now();
             
-            bool    rebuild = m->m_rebuildSwap.exchange(false);
-            if(rebuild){
-                vkDeviceWaitIdle(m->m_device);
-                VqDynamic        newStuff;
-                m->init(newStuff, m->dynamic.swapchain);
-                std::swap(m->dynamic, newStuff);
-                m->kill(newStuff);
-                
-                //  resize notifications...
-            }
-            
-            ViFrame&    frame   = m->m_frames[m->m_tick%MAX_FRAMES_IN_FLIGHT];
+            m->check_rebuild();
+
+            ViFrame&    frame   = m->frame();
             
             
             frame.wait_reset();
 
             uint32_t imageIndex = 0;
-            vkAcquireNextImageKHR(m->m_device, m->dynamic.swapchain, UINT64_MAX, frame.imageAvailable, VK_NULL_HANDLE, &imageIndex);
+            vkAcquireNextImageKHR(m->m_device, m->m_swapchain->swapchain, UINT64_MAX, frame.imageAvailable, VK_NULL_HANDLE, &imageIndex);
             vkResetCommandBuffer(frame.commandBuffer, 0);
             
             if(!record(frame.commandBuffer, imageIndex))
@@ -174,7 +166,7 @@ namespace yq {
                 
             VqPresentInfoKHR presentInfo;
             
-            VkSwapchainKHR      swapchain   = m->dynamic.swapchain;
+            VkSwapchainKHR      swapchain   = m->m_swapchain->swapchain;
 
             presentInfo.waitSemaphoreCount = 1;
             presentInfo.pWaitSemaphores = signalSemaphores;
@@ -433,7 +425,7 @@ namespace yq {
 
         VkCommandBuffer  Viewer::command_buffer() const
         {
-            return m->m_frames[ m->m_tick % MAX_FRAMES_IN_FLIGHT ].commandBuffer;
+            return m->frame().commandBuffer;
         }
 
         VkCommandPool  Viewer::command_pool() const 
@@ -770,32 +762,32 @@ namespace yq {
 
         VkRect2D    Viewer::swap_def_scissor() const
         {
-            return m->dynamic.swapchain.def_scissor();
+            return m->m_swapchain->def_scissor();
         }
         
         VkViewport  Viewer::swap_def_viewport() const
         {
-            return m->dynamic.swapchain.def_viewport();
+            return m->m_swapchain->def_viewport();
         }
 
         uint32_t    Viewer::swap_image_count() const
         {
-            return m->dynamic.imageCount;
+            return m->m_swapchain->imageCount;
         }
 
         uint32_t    Viewer::swap_height() const
         {
-            return m->dynamic.swapchain.height();
+            return m->m_swapchain->height();
         }
 
         uint32_t    Viewer::swap_min_image_count() const
         {
-            return m->dynamic.swapchain.min_image_count();
+            return m->m_swapchain->minImageCount;
         }
 
         uint32_t    Viewer::swap_width() const
         {
-            return m->dynamic.swapchain.width();
+            return m->m_swapchain->width();
         }
         
         VkQueue   Viewer::video_decode_queue(uint32_t i) const
@@ -872,8 +864,32 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        ViFrame::ViFrame()
+        ViFrame::ViFrame(Visualizer* viz_) : viz(viz_)
         {
+            try {
+                VqCommandBufferAllocateInfo allocInfo;
+                allocInfo.commandPool           = viz->m_thread->graphic;
+                allocInfo.level                 = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+                allocInfo.commandBufferCount    = 1;
+                if (vkAllocateCommandBuffers(viz->m_device, &allocInfo, &commandBuffer) != VK_SUCCESS) 
+                    throw VqException("Failed to allocate command buffers!");
+
+                VqFenceCreateInfo   fci;
+                fci.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+                if(vkCreateFence(viz->m_device, &fci, nullptr,  &fence) != VK_SUCCESS)
+                    throw VqException("Unable to create fence!");
+
+                VqSemaphoreCreateInfo   info;
+                if(vkCreateSemaphore(viz->m_device, &info, nullptr, &imageAvailable) != VK_SUCCESS)
+                    throw VqException("Unable to create semaphore!");
+                if(vkCreateSemaphore(viz->m_device, &info, nullptr, &renderFinished) != VK_SUCCESS)
+                    throw VqException("Unable to create semaphore!");
+            } 
+            catch(VqException& ex)
+            {
+                dtor();
+                throw;
+            }
         }
         
         ViFrame::~ViFrame()
@@ -905,36 +921,6 @@ namespace yq {
                 }
                 
                 viz = nullptr;
-            }
-        }
-
-        void    ViFrame::ctor(Visualizer& viz_)
-        {
-            viz  = &viz_;
- 
-            try {
-                VqCommandBufferAllocateInfo allocInfo;
-                allocInfo.commandPool           = viz->m_thread->graphic;
-                allocInfo.level                 = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-                allocInfo.commandBufferCount    = 1;
-                if (vkAllocateCommandBuffers(viz->m_device, &allocInfo, &commandBuffer) != VK_SUCCESS) 
-                    throw VqException("Failed to allocate command buffers!");
-
-                VqFenceCreateInfo   fci;
-                fci.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-                if(vkCreateFence(viz->m_device, &fci, nullptr,  &fence) != VK_SUCCESS)
-                    throw VqException("Unable to create fence!");
-
-                VqSemaphoreCreateInfo   info;
-                if(vkCreateSemaphore(viz->m_device, &info, nullptr, &imageAvailable) != VK_SUCCESS)
-                    throw VqException("Unable to create semaphore!");
-                if(vkCreateSemaphore(viz->m_device, &info, nullptr, &renderFinished) != VK_SUCCESS)
-                    throw VqException("Unable to create semaphore!");
-            } 
-            catch(VqException& ex)
-            {
-                dtor();
-                throw;
             }
         }
 
@@ -988,46 +974,220 @@ namespace yq {
             return nullptr;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////
+
+        ViSwapchain::ViSwapchain(Visualizer* viz_) : viz(viz_)
+        {
+            try {
+                if(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(viz->m_physical, viz->m_surface, &capabilities) != VK_SUCCESS)
+                    throw VqException("Unable to get surface capabilities");
+                if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+                    extents = capabilities.currentExtent;
+                } else {
+                    int w, h;
+                    glfwGetFramebufferSize(viz->m_window, &w, &h);
+                    extents = {};
+                    extents.width       = std::clamp((uint32_t) w, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+                    extents.height      = std::clamp((uint32_t) h, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+                }
+
+                #if 0
+                int w, h;
+                glfwGetFramebufferSize(viz.m_window, &w, &h);
+                vqInfo << "init dymamic stuff\n"<<
+                "Frame itself is [" << w << 'x' << h << "] vs\n" <<
+                "Image extents is " << ds.extents << '\n' <<
+                "Cur is " << capabilities.currentExtent << '\n' <<
+                "Min is " << capabilities.minImageExtent << '\n' <<
+                "Max is " << capabilities.maxImageExtent
+                ;
+                #endif
+
+                minImageCount               = capabilities.minImageCount;
+                if(minImageCount < 2)
+                    minImageCount   = 2;
+                imageCount                  = minImageCount + 1;
+                if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
+                    imageCount = capabilities.maxImageCount;
+                }
+
+                VqSwapchainCreateInfoKHR    swapInfo;
+                swapInfo.surface          = viz->m_surface;
+                swapInfo.minImageCount    = imageCount;
+                swapInfo.imageFormat      = viz->m_surfaceFormat;
+                swapInfo.imageColorSpace  = viz->m_surfaceColorSpace;
+                swapInfo.imageExtent      = extents;
+                swapInfo.imageArrayLayers = 1;    // we're not steroscopic (YET)  <-- OCULUS HERE
+                swapInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+                
+                uint32_t queueFamilyIndices[] = {viz->m_graphic.family, viz->m_present.family};
+                if (viz->m_graphic.family != viz->m_present.family) {
+                    swapInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+                    swapInfo.queueFamilyIndexCount = 2;
+                    swapInfo.pQueueFamilyIndices = queueFamilyIndices;
+                } else {
+                    swapInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+                    swapInfo.queueFamilyIndexCount = 0; // Optional
+                    swapInfo.pQueueFamilyIndices = nullptr; // Optional
+                }        
+                swapInfo.preTransform     = capabilities.currentTransform;
+                swapInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+                swapInfo.presentMode      = (VkPresentModeKHR) viz->m_presentMode.value();
+                swapInfo.clipped          = VK_TRUE;
+                
+                    // TEMPORARY UNTIL WE GET THE NEW ONE
+                if(viz->m_swapchain){
+                    swapInfo.oldSwapchain = viz->m_swapchain->swapchain;
+                } else {
+                    swapInfo.oldSwapchain = nullptr;
+                }
+                    
+                if (vkCreateSwapchainKHR(viz->m_device, &swapInfo, nullptr, &swapchain) != VK_SUCCESS)
+                    throw VqException("Failed to create the SWAP chain!");
+
+                if(vkGetSwapchainImagesKHR(viz->m_device, swapchain, &imageCount, nullptr) != VK_SUCCESS)
+                    throw VqException("Unable to get image count.");
+                images.resize(imageCount, nullptr);
+                if(vkGetSwapchainImagesKHR(viz->m_device, swapchain, &imageCount, images.data()) != VK_SUCCESS)
+                    throw VqException("Unable to get images!");
+                                
+                imageViews.resize(imageCount, nullptr);
+
+                VqImageViewCreateInfo       imageViewInfo;
+                imageViewInfo.viewType     = VK_IMAGE_VIEW_TYPE_2D;
+                imageViewInfo.format       = viz->m_surfaceFormat;
+                imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+                imageViewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+                imageViewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+                imageViewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+                imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+                imageViewInfo.subresourceRange.baseMipLevel = 0;
+                imageViewInfo.subresourceRange.levelCount = 1;
+                imageViewInfo.subresourceRange.baseArrayLayer = 0;
+                imageViewInfo.subresourceRange.layerCount = 1;
+                
+                for(size_t i=0; i<imageCount; ++i){
+                    imageViewInfo.image        = images[i];
+                    if(vkCreateImageView(viz->m_device, &imageViewInfo, nullptr, &imageViews[i]) != VK_SUCCESS) 
+                        throw VqException("Failed to create one of the Swap Image Viewers!");
+                }                
+                
+                frameBuffers.resize(imageCount, nullptr);
+
+                VqFramebufferCreateInfo   frameBufferInfo;
+                frameBufferInfo.renderPass       = viz->m_renderPass;
+                frameBufferInfo.attachmentCount  = 1;
+                frameBufferInfo.width            = extents.width;
+                frameBufferInfo.height           = extents.height;
+                frameBufferInfo.layers           = 1;
+
+                for(size_t i=0;i<imageCount;++i){
+                    frameBufferInfo.pAttachments = &imageViews[i];
+                    if (vkCreateFramebuffer(viz->m_device, &frameBufferInfo, nullptr, &frameBuffers[i]) != VK_SUCCESS) 
+                        throw VqException("Failed to create framebuffer!");
+                }
+            }
+            catch(VqException& ex){
+                dtor();
+                throw;
+            }
+        }
+        
+        ViSwapchain::~ViSwapchain()
+        {
+            dtor();
+        }
+        
+        void    ViSwapchain::dtor()
+        {
+            if(viz){
+                for(size_t i=0;i<imageCount;++i){
+                    if((i < frameBuffers.size()) && frameBuffers[i])
+                        vkDestroyFramebuffer(viz->m_device, frameBuffers[i], nullptr);
+                    if((i < imageViews.size()) && imageViews[i])
+                        vkDestroyImageView(viz->m_device, imageViews[i], nullptr);
+                }
+                frameBuffers.clear();
+                imageViews.clear();
+                images.clear();
+                if(swapchain){
+                    vkDestroySwapchainKHR(viz->m_device, swapchain, nullptr);
+                    swapchain  = nullptr;
+                }
+                viz = nullptr;
+            }
+        }
+
+        VkRect2D  ViSwapchain::def_scissor() const
+        {
+            VkRect2D    ret{};
+            ret.offset  = { 0, 0 };
+            ret.extent  = extents;
+            return ret;
+        }
+        
+        VkViewport  ViSwapchain::def_viewport() const
+        {
+            VkViewport  ret{};
+            ret.x = 0.0f;
+            ret.y = 0.0f;
+            ret.width = (float) extents.width;
+            ret.height = (float) extents.height;
+            ret.minDepth = 0.0f;
+            ret.maxDepth = 1.0f;
+            return ret;
+        }
+        
+        uint32_t  ViSwapchain::width() const 
+        { 
+            return extents.width; 
+        }
+        
+        uint32_t  ViSwapchain::height() const 
+        { 
+            return extents.height; 
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
-        ViThread::ViThread(Visualizer& viz) : device(viz.m_device)
+        ViThread::ViThread(Visualizer* viz_) : viz(viz_)
         {
             try {
                 std::vector<VkDescriptorPoolSize> descriptorPoolSizes =
                 {
-                    { VK_DESCRIPTOR_TYPE_SAMPLER, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, viz.m_descriptorCount },
-                    { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, viz.m_descriptorCount }
+                    { VK_DESCRIPTOR_TYPE_SAMPLER, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, viz->m_descriptorCount },
+                    { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, viz->m_descriptorCount }
                 };
                 VqDescriptorPoolCreateInfo descriptorPoolInfo;
                 descriptorPoolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-                descriptorPoolInfo.maxSets       = viz.m_descriptorCount * descriptorPoolSizes.size();
+                descriptorPoolInfo.maxSets       = viz->m_descriptorCount * descriptorPoolSizes.size();
                 descriptorPoolInfo.poolSizeCount = (uint32_t) descriptorPoolSizes.size();
                 descriptorPoolInfo.pPoolSizes    = descriptorPoolSizes.data();
-                if(vkCreateDescriptorPool(device, &descriptorPoolInfo, nullptr, &descriptors) != VK_SUCCESS)
+                if(vkCreateDescriptorPool(viz->m_device, &descriptorPoolInfo, nullptr, &descriptors) != VK_SUCCESS)
                     throw VqException("Unable to allocate the descriptor pool!");
 
                 VqCommandPoolCreateInfo poolInfo;
-                poolInfo.flags              = viz.m_cmdPoolCreateFlags;
+                poolInfo.flags              = viz->m_cmdPoolCreateFlags;
                 
-                if(viz.m_graphic.valid()){
-                    poolInfo.queueFamilyIndex   = viz.m_graphic.family;
-                    if (vkCreateCommandPool(device, &poolInfo, nullptr, &graphic) != VK_SUCCESS) 
+                if(viz->m_graphic.valid()){
+                    poolInfo.queueFamilyIndex   = viz->m_graphic.family;
+                    if (vkCreateCommandPool(viz->m_device, &poolInfo, nullptr, &graphic) != VK_SUCCESS) 
                         throw VqException("Failed to create a graphic command pool!");
                 }
-                if(viz.m_compute.valid()){
-                    poolInfo.queueFamilyIndex   = viz.m_compute.family;
-                    if (vkCreateCommandPool(device, &poolInfo, nullptr, &compute) != VK_SUCCESS) 
+                if(viz->m_compute.valid()){
+                    poolInfo.queueFamilyIndex   = viz->m_compute.family;
+                    if (vkCreateCommandPool(viz->m_device, &poolInfo, nullptr, &compute) != VK_SUCCESS) 
                         throw VqException("Failed to create a compute command pool!");
                 }
             }
@@ -1045,20 +1205,20 @@ namespace yq {
         
         void    ViThread::dtor()
         {
-            if(device){
+            if(viz){
                 if(descriptors){
-                    vkDestroyDescriptorPool(device, descriptors, nullptr);
+                    vkDestroyDescriptorPool(viz->m_device, descriptors, nullptr);
                     descriptors = nullptr;
                 }
                 if(graphic){
-                    vkDestroyCommandPool(device, graphic, nullptr);
+                    vkDestroyCommandPool(viz->m_device, graphic, nullptr);
                     graphic = nullptr;
                 }
                 if(compute){
-                    vkDestroyCommandPool(device, compute, nullptr);
+                    vkDestroyCommandPool(viz->m_device, compute, nullptr);
                     compute = nullptr;
                 }
-                device  = nullptr;
+                viz  = nullptr;
             }
         }
 
@@ -1344,7 +1504,7 @@ namespace yq {
             //  DESCRIPTOR & COMMAND POOL
 
             m_descriptorCount   = std::max(MIN_DESCRIPTOR_COUNT, vci.descriptors);
-            m_thread            = std::make_unique<ViThread>(*this);
+            m_thread            = std::make_unique<ViThread>(this);
             
             //  ================================
             //  RENDER PASS
@@ -1387,27 +1547,23 @@ namespace yq {
             //  FRAMES
             
             for(auto& f : m_frames)
-                f.ctor(*this);
+                f   = new ViFrame(this);
 
-                
+            
+            m_swapchain     = new ViSwapchain(this);
+            
             //  ================================
             //  OLDER STUFF
 
-       
-
-            if(!init(dynamic))
-                throw VqException("");
             
-            builder = std::thread([this](){
-                this->run();
-            });
+            //builder = std::thread([this](){
+                //this->run();
+            //});
         }
         
 
         void Visualizer::_dtor()
         {
-            terminating = true;
-            builder.join();
             if(m_device){
                 vkDeviceWaitIdle(m_device);
             }
@@ -1424,10 +1580,15 @@ namespace yq {
             }
             pipelines.clear();
             
-            kill(dynamic);
+            if(m_swapchain){
+                delete m_swapchain;
+                m_swapchain = nullptr;
+            }
             
-            for(auto& f : m_frames)
-                f.dtor();
+            for(auto& f : m_frames){
+                delete f;
+                f   = nullptr;
+            }
             
             if(m_renderPass){
                 vkDestroyRenderPass(m_device, m_renderPass, nullptr);
@@ -1463,32 +1624,22 @@ namespace yq {
             m_physical                  = nullptr;
         }
 
-
-        bool Visualizer::init(VqDynamic&ds, VkSwapchainKHR old)
+        void    Visualizer::check_rebuild(bool force)
         {
-            VqSwapchain::Config scfg;
-            scfg.pmode          = (VkPresentModeKHR) m_presentMode.value();
-            scfg.old            = old;
-            ds.swapchain        = VqSwapchain(*this, scfg);
-            
-            ds.images           = ds.swapchain.images();
-            ds.imageCount       = ds.images.size();
-            ds.imageViews       = VqImageViews(*this, ds.images);
-            ds.frameBuffers     = VqFrameBuffers(m_device, m_renderPass, ds.swapchain.extents(), ds.imageViews);
-            //ds.commandBuffers   = VqCommandBuffers(m_device, m_thread->graphic, 1);
-
-            return true;            
+            if(force){
+                m_rebuildSwap   = false;
+            } else {
+                force       = m_rebuildSwap.exchange(false);
+                if(!force)
+                    return ;
+            }
+        
+            vkDeviceWaitIdle(m_device);
+            ViSwapchain*    newchain    = new ViSwapchain(this);
+            std::swap(newchain, m_swapchain);
+            delete newchain;
         }
 
-
-
-        void Visualizer::kill(VqDynamic&ds)
-        {
-            //ds.commandBuffers   = {};
-            ds.frameBuffers     = {};
-            ds.imageViews       = {};
-            ds.swapchain        = {};
-        }
 
         void    Visualizer::run()
         {

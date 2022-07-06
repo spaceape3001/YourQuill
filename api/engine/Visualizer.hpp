@@ -11,11 +11,8 @@
 
 #include <engine/preamble.hpp>
 #include <engine/ViewerCreateInfo.hpp>
-#include <engine/vulqan/VqFrameBuffers.hpp>
-#include <engine/vulqan/VqImageViews.hpp>
 #include <engine/vulqan/VqMonitor.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
-#include <engine/vulqan/VqSwapchain.hpp>
 #include <math/preamble.hpp>
 
 #include <vk_mem_alloc.h>
@@ -34,15 +31,6 @@ namespace yq {
         struct ViewerCreateInfo;
         struct VqObject;
         
-        //! This is what needs to change with every resize!
-        struct VqDynamic {
-            std::vector<VkImage>        images;
-            VqSwapchain                 swapchain;
-            //VqCommandBuffers            commandBuffers;
-            uint32_t                    imageCount          = 0;
-            VqImageViews                imageViews;
-            VqFrameBuffers              frameBuffers;
-        };
         
         //  TODO.... 
         struct ViShader {
@@ -97,12 +85,12 @@ namespace yq {
         
             // eventually multithread...
         struct ViThread {
-            VkDevice                        device              = nullptr;
-            VkDescriptorPool                descriptors         = nullptr;
-            VkCommandPool                   graphic             = nullptr;
-            VkCommandPool                   compute             = nullptr;
+            Visualizer*         viz                 = nullptr;
+            VkDescriptorPool    descriptors         = nullptr;
+            VkCommandPool       graphic             = nullptr;
+            VkCommandPool       compute             = nullptr;
             
-            ViThread(Visualizer&);
+            ViThread(Visualizer*);
             ~ViThread();
             void    dtor();
         };
@@ -115,14 +103,30 @@ namespace yq {
             VkSemaphore             renderFinished  = nullptr;
             VkFence                 fence           = nullptr;
             
-            ViFrame();
+            ViFrame(Visualizer*);
             ~ViFrame();
             void    dtor();
-            void    ctor(Visualizer&);
             VkResult    wait_reset(uint64_t timeout=UINT64_MAX);
         };
         
         struct ViSwapchain {
+            Visualizer*                 viz             = nullptr;
+            VkSwapchainKHR              swapchain       = nullptr;
+            VkExtent2D                  extents         = {};
+            uint32_t                    minImageCount   = 0;
+            uint32_t                    imageCount      = 0;
+            std::vector<VkImage>        images;
+            std::vector<VkImageView>    imageViews;
+            std::vector<VkFramebuffer>  frameBuffers;
+            VkSurfaceCapabilitiesKHR    capabilities;
+
+            ViSwapchain(Visualizer*);
+            ~ViSwapchain();
+            void        dtor();
+            VkRect2D    def_scissor() const;
+            VkViewport  def_viewport() const;
+            uint32_t    width() const;
+            uint32_t    height() const;
         };
         
 
@@ -156,13 +160,14 @@ namespace yq {
             std::atomic<bool>                   m_rebuildSwap           = { false };
             Guarded<VkClearValue>               m_clearValue;
             uint64_t                            m_tick                  = 0;
-            ViFrame                             m_frames[MAX_FRAMES_IN_FLIGHT];
+            ViFrame*                            m_frames[MAX_FRAMES_IN_FLIGHT]  = {};
+            ViSwapchain*                        m_swapchain             = nullptr;
             
             //VqSemaphore         imageAvailableSemaphore;
             //VqSemaphore         renderFinishedSemaphore;
             //VqFence             inFlightFence;
 
-            VqDynamic           dynamic;
+            
             double              draw_time                   = 0;
             std::thread         builder;
             uint64_t            pad[8];
@@ -174,9 +179,6 @@ namespace yq {
             std::pair<ViPipeline*,bool>     pipeline(uint64_t i);
             std::pair<ViObject*,bool>       object(uint64_t i);
             
-            bool    init(VqDynamic&, VkSwapchainKHR old=nullptr);
-            void    kill(VqDynamic&);
-
             void    run();
             
             
@@ -191,6 +193,11 @@ namespace yq {
             VkColorSpaceKHR             surface_color_space(VkFormat) const;
 
             static void                 callback_resize(GLFWwindow*, int, int);
+            
+            const ViFrame&              frame() const { return *(m_frames[m_tick%MAX_FRAMES_IN_FLIGHT]); }
+            ViFrame&                    frame() { return *(m_frames[m_tick%MAX_FRAMES_IN_FLIGHT]); }
+            
+            void                        check_rebuild(bool force=false);
             
         };
     }

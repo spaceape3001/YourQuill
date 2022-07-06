@@ -84,9 +84,9 @@ namespace yq {
                 inputAssembly.topology                  = (VkPrimitiveTopology) cfg.topology.value();
                 inputAssembly.primitiveRestartEnable    = VK_FALSE;
                 
-                VkViewport viewport = viz.dynamic.swapchain.def_viewport();
+                VkViewport viewport = viz.m_swapchain->def_viewport();
 
-                VkRect2D scissor = viz.dynamic.swapchain.def_scissor();
+                VkRect2D scissor = viz.m_swapchain->def_scissor();
                 
                 VqPipelineViewportStateCreateInfo   viewportState{};
                 viewportState.viewportCount = 1;

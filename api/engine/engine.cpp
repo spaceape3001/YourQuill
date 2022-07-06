@@ -25,12 +25,9 @@
 #include "vulqan/VqBuffer.ipp"
 #include "vulqan/VqCommand.ipp"
 #include "vulqan/VqEnums.ipp"
-#include "vulqan/VqFrameBuffers.ipp"
-#include "vulqan/VqImageViews.ipp"
 #include "vulqan/VqLogging.ipp"
 #include "vulqan/VqMonitor.ipp"
 #include "vulqan/VqShaderStages.ipp"
-#include "vulqan/VqSwapchain.ipp"
 #include "vulqan/VqUtils.ipp"
 
 
