@@ -34,6 +34,12 @@ namespace yq {
         
         //  TODO.... 
         struct ViShader {
+            VkDevice        device      = nullptr;
+            VkShaderModule  shader      = nullptr;
+            uint32_t        stageMask   = 0;
+            
+            ViShader();
+            ~ViShader();
         };
 
         struct ViBuffer : trait::not_copyable, trait::not_moveable {
@@ -161,6 +167,12 @@ namespace yq {
             uint64_t                            m_tick                  = 0;
             ViFrame*                            m_frames[MAX_FRAMES_IN_FLIGHT]  = {};
             ViSwapchain*                        m_swapchain             = nullptr;
+            std::map<uint64_t, ViShader*>       m_shaders;
+            
+            
+            std::pair<ViShader*,bool>           shader(const ShaderSpec&);
+            std::pair<ViShader*,bool>           shader(uint64_t);
+            
             
             //std::thread         builder;
             //uint64_t            pad[8];

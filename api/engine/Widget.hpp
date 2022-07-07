@@ -12,6 +12,7 @@ namespace yq {
     namespace engine {
     
         class Viewer;
+        struct UiData;
     
         class WidgetInfo : public MetaObjectInfo {
         public:
@@ -30,7 +31,7 @@ namespace yq {
             YQ_OBJECT_DECLARE(Widget, MetaObject)
         public:
         
-            void    draw();
+            void    draw(UiData&);
             
         protected:
             friend class Viewer;

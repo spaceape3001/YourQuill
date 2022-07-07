@@ -988,6 +988,23 @@ namespace yq {
             return nullptr;
         }
 
+
+        ////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////
+
+        ViShader::ViShader()
+        {
+        }
+        
+        ViShader::~ViShader()
+        {
+            if(device && shader){
+                vkDestroyShaderModule(device, shader, nullptr);
+                device  = nullptr;
+                shader  = nullptr;
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////
 
@@ -1755,6 +1772,63 @@ namespace yq {
             ViObject* p   = new ViObject;
             objects[i]    = p;
             return {p, true};
+        }
+
+        std::pair<ViShader*,bool>    Visualizer::shader(const ShaderSpec&ss)
+        {
+            ShaderCPtr       sh;
+            if(const ShaderCPtr* ptr = std::get_if<ShaderCPtr>(&s)){
+                sh  = *ptr;
+            } else if(const std::string* ptr = std::get_if<std::string>(&s)){
+                sh  = Shader::get(*ptr); 
+            } 
+            if(!sh)
+                return { nullptr, false };
+            
+            auto j = m_shaders.find(sh->id());
+            if(j != shaders.end())
+                return { j->second, false };
+            
+            uint32_t    mask    = 0;
+            
+            switch(sh->shader_type()){
+            case ShaderType::VERT:
+                mask = VK_SHADER_STAGE_VERTEX_BIT;
+                break;
+            case ShaderType::TESC:
+                mask = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+                break;
+            case ShaderType::TESE:
+                mask = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+                break;
+            case ShaderType::FRAG:
+                mask = VK_SHADER_STAGE_FRAGMENT_BIT;
+                break;
+            case ShaderType::GEOM:
+                mask = VK_SHADER_STAGE_GEOMETRY_BIT;
+                break;
+            case ShaderType::COMP:
+                mask = VK_SHADER_STAGE_COMPUTE_BIT;
+                break;
+            case ShaderType::UNKNOWN:
+            default:
+                return { nullptr, false };
+            }
+                
+            VkShaderModule* sm  = nullptr;
+            
+            const ByteArray&    code    = sh->payload();
+            VqShaderModuleCreateInfo createInfo;
+            createInfo.codeSize = code.size();
+            createInfo.pCode    = reinterpret_cast<const uint32_t*>(code.data());
+            if (vkCreateShaderModule(m_device, &createInfo, nullptr, &stage.module) != VK_SUCCESS) {
+                yError() << "Unable to create shader module.";
+                return { nullptr, false };
+            }
+            
+            ViShader* p = new ViShader{ m_device, sm, mask };
+            shaders[sh->id()]   = p;
+            return { p, true };
         }
 
         //////////////////////////////////////

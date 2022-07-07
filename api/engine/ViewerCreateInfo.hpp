@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "Widget.hpp"
 #include <math/preamble.hpp>
 #include <math/RGBA.hpp>
 #include <math/Size2.hpp>
@@ -49,7 +50,7 @@ namespace yq {
             
                 //!  Set to enable fill of non-solid features
             bool                        fill_non_solid  = true;
-            
+                
                 //!  Set to alter graphic queue capability
             VqQueueSpec                 graphic;
 

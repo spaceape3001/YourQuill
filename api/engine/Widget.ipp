@@ -27,10 +27,10 @@ namespace yq {
             m_children.clear();
         }
 
-        void    Widget::draw()
+        void    Widget::draw(UiData& uid)
         {
             for(auto& w : m_children)
-                w->draw();
+                w->draw(uid);
         }
     }
 }
