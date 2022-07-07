@@ -18,6 +18,8 @@
 #include <vk_mem_alloc.h>
 #include <imgui.h>
 
+#include <tbb/spin_rw_mutex.h>
+
 #include <atomic>
 #include <set>
 #include <thread>
@@ -31,16 +33,22 @@ namespace yq {
         struct ViewerCreateInfo;
         struct VqObject;
         
+        using ViTick    = std::atomic<uint64_t>;
+        
         
         //  TODO.... 
-        struct ViShader {
-            VkDevice        device      = nullptr;
-            VkShaderModule  shader      = nullptr;
-            uint32_t        stageMask   = 0;
+        struct ViShader : public RefCount {
+            VkDevice        device  = nullptr;
+            VkShaderModule  shader  = nullptr;
+            mutable ViTick  tick    = 0;
+            uint32_t        mask    = 0;
             
             ViShader();
             ~ViShader();
         };
+        
+        using ViShaderCPtr  = Ref<const ViShader>;
+
 
         struct ViBuffer : trait::not_copyable, trait::not_moveable {
             std::unique_ptr<VqBuffer>   vq;
@@ -134,6 +142,13 @@ namespace yq {
             uint32_t    height() const;
         };
         
+        template <typename T>
+        struct ViMap {
+            std::map<uint64_t, T>           map;
+            mutable tbb::spin_rw_mutex      mutex;
+            char                            pad[64-sizeof(map)-sizeof(mutex)];
+        };
+        
 
         /*! \brief Visualizer is the private data for the viewer
                 
@@ -142,6 +157,8 @@ namespace yq {
             \note Eventually this will merge into viewer itself
         */
         struct Visualizer : public UniqueID {
+            ViMap<ViShaderCPtr>                 m_shaders;
+        
             Viewer*                             m_viewer                = nullptr;
             GLFWwindow*                         m_window                = nullptr;
             VkInstance                          m_instance              = nullptr;
@@ -167,11 +184,12 @@ namespace yq {
             uint64_t                            m_tick                  = 0;
             ViFrame*                            m_frames[MAX_FRAMES_IN_FLIGHT]  = {};
             ViSwapchain*                        m_swapchain             = nullptr;
-            std::map<uint64_t, ViShader*>       m_shaders;
             
             
-            std::pair<ViShader*,bool>           shader(const ShaderSpec&);
-            std::pair<ViShader*,bool>           shader(uint64_t);
+            ViShaderCPtr                        shader(const ShaderSpec&);
+            ViShaderCPtr                        shader(uint64_t) const;
+            size_t                              shader_count() const;
+            void                                shader_purge(uint64_t);
             
             
             //std::thread         builder;

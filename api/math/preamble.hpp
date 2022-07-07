@@ -300,6 +300,7 @@ namespace yq {
     template <typename> struct RGB;
     template <typename> struct RGBA;
     template <typename> struct Size2;
+    template <typename> struct Size3;
     template <typename> struct Sphere3;
     template <typename> struct Sphere4;
     template <typename> struct Tensor11;
@@ -892,6 +893,20 @@ namespace yq {
     using Size2U32                  = Size2<int32_t>;
     using Size2U64                  = Size2<int64_t>;
     using Size2Z                    = Size2<size_t>;
+
+    using Size3D                    = Size3<double>;
+    using Size3F                    = Size3<float>;
+    using Size3I                    = Size3<int>;
+    using Size3I8                   = Size3<int8_t>;
+    using Size3I16                  = Size3<int16_t>;
+    using Size3I33                  = Size3<int32_t>;
+    using Size3I64                  = Size3<int64_t>;
+    using Size3U                    = Size3<unsigned>;
+    using Size3U8                   = Size3<int8_t>;
+    using Size3U16                  = Size3<int16_t>;
+    using Size3U33                  = Size3<int32_t>;
+    using Size3U64                  = Size3<int64_t>;
+    using Size3Z                    = Size3<size_t>;
 
     using Sphere3D                  = Sphere3<double>;
     using Sphere3F                  = Sphere3<float>;

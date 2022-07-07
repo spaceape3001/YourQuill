@@ -47,6 +47,7 @@
 #include <math/Segment4.hpp>
 
 #include <math/Size2.hpp>
+#include <math/Size3.hpp>
 
 #include <math/Sphere3.hpp>
 #include <math/Sphere4.hpp>
@@ -258,6 +259,11 @@ YQ_TYPE_IMPLEMENT(yq::Size2D)
 YQ_TYPE_IMPLEMENT(yq::Size2F)
 YQ_TYPE_IMPLEMENT(yq::Size2I)
 YQ_TYPE_IMPLEMENT(yq::Size2U)
+
+YQ_TYPE_IMPLEMENT(yq::Size3D)
+YQ_TYPE_IMPLEMENT(yq::Size3F)
+YQ_TYPE_IMPLEMENT(yq::Size3I)
+YQ_TYPE_IMPLEMENT(yq::Size3U)
 
 YQ_TYPE_IMPLEMENT(yq::Sphere3D)
 YQ_TYPE_IMPLEMENT(yq::Sphere3F)
@@ -1152,7 +1158,7 @@ YQ_INVOKE(
     auto seg4u = writer<Segment4U>();
     seg4u.property("a", &Segment4U::a);
     seg4u.property("b", &Segment4U::b);
-    
+
     auto size2d = writer<Size2D>();
     size2d.property("x", &Size2D::x);
     size2d.property("y", &Size2D::y);
@@ -1176,6 +1182,39 @@ YQ_INVOKE(
     size2u.property("y", &Size2U::y);
     size2u.property("w", &Size2U::width);
     size2u.property("h", &Size2U::height);
+
+    auto size3d = writer<Size3D>();
+    size3d.property("x", &Size3D::x);
+    size3d.property("y", &Size3D::y);
+    size3d.property("z", &Size3D::z);
+    size3d.property("w", &Size3D::width);
+    size3d.property("h", &Size3D::height);
+    size3d.property("d", &Size3D::depth);
+
+    auto size3f = writer<Size3F>();
+    size3f.property("x", &Size3F::x);
+    size3f.property("y", &Size3F::y);
+    size3f.property("z", &Size3F::z);
+    size3f.property("w", &Size3F::width);
+    size3f.property("h", &Size3F::height);
+    size3f.property("d", &Size3F::depth);
+
+    auto size3i = writer<Size3I>();
+    size3i.property("x", &Size3I::x);
+    size3i.property("y", &Size3I::y);
+    size3i.property("z", &Size3I::z);
+    size3i.property("w", &Size3I::width);
+    size3i.property("h", &Size3I::height);
+    size3i.property("d", &Size3I::depth);
+
+    auto size3u = writer<Size3U>();
+    size3u.property("x", &Size3U::x);
+    size3u.property("y", &Size3U::y);
+    size3u.property("z", &Size3U::z);
+    size3u.property("w", &Size3U::width);
+    size3u.property("h", &Size3U::height);
+    size3u.property("d", &Size3U::depth);
+
 
     auto sphere3d = writer<Sphere3D>();
     sphere3d.property("pt", &Sphere3D::point);

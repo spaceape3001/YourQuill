@@ -10,8 +10,12 @@
     https://vulkan-tutorial.com/
 */
 
+#include "Application.hpp"
 #include "Perspective.hpp"
 #include "Scene.hpp"
+#include "Shader.hpp"
+#include "Viewer.hpp"
+#include "Visualizer.hpp"
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
@@ -19,8 +23,6 @@
 #include <basic/TextUtils.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 
-#include <engine/Application.hpp>
-#include <engine/Viewer.hpp>
 
 #include <engine/render/IndexBufferObjectInfo.hpp>
 #include <engine/render/Pipeline.hpp>
@@ -31,8 +33,6 @@
 #include <engine/render/StdPushConstant.hpp>
 #include <engine/render/UniformBufferObjectInfo.hpp>
 #include <engine/render/VertexBufferObjectInfo.hpp>
-
-#include <engine/Visualizer.hpp>
 
 #include <engine/vulqan/VqBuffer.hpp>
 #include <engine/vulqan/VqException.hpp>
@@ -1774,65 +1774,153 @@ namespace yq {
             return {p, true};
         }
 
-        std::pair<ViShader*,bool>    Visualizer::shader(const ShaderSpec&ss)
-        {
-            ShaderCPtr       sh;
-            if(const ShaderCPtr* ptr = std::get_if<ShaderCPtr>(&s)){
-                sh  = *ptr;
-            } else if(const std::string* ptr = std::get_if<std::string>(&s)){
-                sh  = Shader::get(*ptr); 
-            } 
-            if(!sh)
-                return { nullptr, false };
+        //  ----------------------------------------------------------------------------
+        //  SHADER MANAGEMENT
+
+            ViShaderCPtr                Visualizer::shader(const ShaderSpec&ss)
+            {
+                //  ================================
+                //  Resolve the request
             
-            auto j = m_shaders.find(sh->id());
-            if(j != shaders.end())
-                return { j->second, false };
-            
-            uint32_t    mask    = 0;
-            
-            switch(sh->shader_type()){
-            case ShaderType::VERT:
-                mask = VK_SHADER_STAGE_VERTEX_BIT;
-                break;
-            case ShaderType::TESC:
-                mask = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-                break;
-            case ShaderType::TESE:
-                mask = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-                break;
-            case ShaderType::FRAG:
-                mask = VK_SHADER_STAGE_FRAGMENT_BIT;
-                break;
-            case ShaderType::GEOM:
-                mask = VK_SHADER_STAGE_GEOMETRY_BIT;
-                break;
-            case ShaderType::COMP:
-                mask = VK_SHADER_STAGE_COMPUTE_BIT;
-                break;
-            case ShaderType::UNKNOWN:
-            default:
-                return { nullptr, false };
-            }
+                ShaderCPtr       sh;
+                if(const ShaderCPtr* ptr = std::get_if<ShaderCPtr>(&ss)){
+                    sh  = *ptr;
+                } else if(const std::string* ptr = std::get_if<std::string>(&ss)){
+                    sh  = Shader::get(*ptr); 
+                } 
+                if(!sh)
+                    return nullptr;
                 
-            VkShaderModule* sm  = nullptr;
-            
-            const ByteArray&    code    = sh->payload();
-            VqShaderModuleCreateInfo createInfo;
-            createInfo.codeSize = code.size();
-            createInfo.pCode    = reinterpret_cast<const uint32_t*>(code.data());
-            if (vkCreateShaderModule(m_device, &createInfo, nullptr, &stage.module) != VK_SUCCESS) {
-                yError() << "Unable to create shader module.";
-                return { nullptr, false };
+                if(sh->shader_type() == ShaderType::UNKNOWN)
+                    return nullptr;
+                
+                //  ================================
+                //  Check for existing
+
+                ViShaderCPtr ret  = nullptr;
+                {
+                    tbb::spin_rw_mutex::scoped_lock    _lock(m_shaders.mutex, false);
+                    auto j = m_shaders.map.find(sh->id());
+                    if(j != m_shaders.map.end())
+                        ret = j->second;
+                }
+                
+                if(ret){
+                    ret -> tick = m_tick;
+                    return ret;
+                }
+                
+                //  ================================
+                //   Create a shader module
+                
+                uint32_t    mask    = 0;
+                
+                switch(sh->shader_type()){
+                case ShaderType::VERT:
+                    mask = VK_SHADER_STAGE_VERTEX_BIT;
+                    break;
+                case ShaderType::TESC:
+                    mask = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+                    break;
+                case ShaderType::TESE:
+                    mask = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+                    break;
+                case ShaderType::FRAG:
+                    mask = VK_SHADER_STAGE_FRAGMENT_BIT;
+                    break;
+                case ShaderType::GEOM:
+                    mask = VK_SHADER_STAGE_GEOMETRY_BIT;
+                    break;
+                case ShaderType::COMP:
+                    mask = VK_SHADER_STAGE_COMPUTE_BIT;
+                    break;
+                default:
+                    return nullptr;
+                }
+                    
+                VkShaderModule  sm  = nullptr;
+                
+                const ByteArray&    code    = sh->payload();
+                VqShaderModuleCreateInfo createInfo;
+                createInfo.codeSize = code.size();
+                createInfo.pCode    = reinterpret_cast<const uint32_t*>(code.data());
+                if (vkCreateShaderModule(m_device, &createInfo, nullptr, &sm) != VK_SUCCESS) {
+                    yError() << "Unable to create shader module.";
+                    return nullptr ;
+                }
+                
+                //  ================================
+                //   Create our tracker
+
+                ViShader*  p = new ViShader;
+                p->device   = m_device;
+                p->shader   = sm;
+                p->mask     = mask;
+                p->tick     = m_tick;
+                
+                ViShaderCPtr    ours(p);
+                
+                //  ================================
+                //   Register it (checking for collisions)
+                
+                {
+                    tbb::spin_rw_mutex::scoped_lock _lock(m_shaders.mutex, true);
+                    auto j    = m_shaders.map.emplace(sh->id(), ours);
+                    if(j.second) [[likely]]
+                        return ours;
+                    ret = j.first->second;   // Somebody beat us to it... use theirs
+                    if(!ret){ [[unlikely]]  // It's NULL (shouldn't happen)
+                        m_shaders.map[sh->id()] = ours;
+                        return ours;
+                    }
+                }
+
+                //  ================================
+                //   Collision!
+
+                return ret;
             }
-            
-            ViShader* p = new ViShader{ m_device, sm, mask };
-            shaders[sh->id()]   = p;
-            return { p, true };
-        }
 
-        //////////////////////////////////////
+            ViShaderCPtr  Visualizer::shader(uint64_t i) const
+            {
+                ViShaderCPtr     ret = nullptr;
+                {
+                    tbb::spin_rw_mutex::scoped_lock _lock(m_shaders.mutex, false);
+                    auto j  = m_shaders.map.find(i);
+                    if(j == m_shaders.map.end())
+                        return nullptr;
+                    ret = j->second;
+                }
+                
+                if(ret)
+                    ret -> tick = m_tick;
+                return ret;
+            }
 
+            size_t   Visualizer::shader_count() const
+            {
+                tbb::spin_rw_mutex::scoped_lock _lock(m_shaders.mutex, false);
+                return m_shaders.map.size();
+            }
+
+            void    Visualizer::shader_purge(uint64_t cutoff)
+            {
+                std::vector<ViShaderCPtr>   trash;
+                trash.reserve(shader_count());
+                {
+                    tbb::spin_rw_mutex::scoped_lock _lock(m_shaders.mutex, true);
+                    for(auto i=m_shaders.map.begin(), last=m_shaders.map.end(); i!=last; ){
+                        if((!i->second) || (i->second->tick < cutoff)){
+                            trash.push_back(std::move(i->second));
+                            i = m_shaders.map.erase(i);
+                        } else
+                            ++i;
+                    }
+                }
+            }
+
+        //  ----------------------------------------------------------------------------
+        //  ----------------------------------------------------------------------------
 
         VkSurfaceCapabilitiesKHR    Visualizer::surface_capabilities() const
         {
