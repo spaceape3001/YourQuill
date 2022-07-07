@@ -38,7 +38,6 @@
 #include <engine/vulqan/VqException.hpp>
 #include <engine/vulqan/VqLogging.hpp>
 #include <engine/vulqan/VqPipeline.hpp>
-#include <engine/vulqan/VqShaderStages.hpp>
 #include <engine/vulqan/VqStructs.hpp>
 #include <engine/vulqan/VqUtils.hpp>
 
@@ -1612,6 +1611,11 @@ namespace yq {
                 m_allocator = nullptr;
             }
             
+            {
+                tbb::spin_rw_mutex::scoped_lock _lock(m_shaders.mutex, true);
+                m_shaders.map.clear();
+            }
+            
             if(m_device){
                 vkDestroyDevice(m_device, nullptr);
                 m_device                = nullptr;
@@ -1813,7 +1817,7 @@ namespace yq {
                 //  ================================
                 //   Create a shader module
                 
-                uint32_t    mask    = 0;
+                VkShaderStageFlagBits    mask    = {};
                 
                 switch(sh->shader_type()){
                 case ShaderType::VERT:

@@ -36,12 +36,11 @@ namespace yq {
         using ViTick    = std::atomic<uint64_t>;
         
         
-        //  TODO.... 
         struct ViShader : public RefCount {
-            VkDevice        device  = nullptr;
-            VkShaderModule  shader  = nullptr;
-            mutable ViTick  tick    = 0;
-            uint32_t        mask    = 0;
+            VkDevice                device  = nullptr;
+            VkShaderModule          shader  = nullptr;
+            mutable ViTick          tick    = 0;
+            VkShaderStageFlagBits   mask    = {};
             
             ViShader();
             ~ViShader();
@@ -146,7 +145,6 @@ namespace yq {
         struct ViMap {
             std::map<uint64_t, T>           map;
             mutable tbb::spin_rw_mutex      mutex;
-            char                            pad[64-sizeof(map)-sizeof(mutex)];
         };
         
 
@@ -157,7 +155,7 @@ namespace yq {
             \note Eventually this will merge into viewer itself
         */
         struct Visualizer : public UniqueID {
-            ViMap<ViShaderCPtr>                 m_shaders;
+            alignas(64) ViMap<ViShaderCPtr>     m_shaders;
         
             Viewer*                             m_viewer                = nullptr;
             GLFWwindow*                         m_window                = nullptr;

@@ -8,7 +8,6 @@
 #include <engine/Visualizer.hpp>
 #include "VqLogging.hpp"
 #include "VqPipeline.hpp"
-#include "VqShaderStages.hpp"
 #include "VqStructs.hpp"
 
 #include <basic/Logging.hpp>
@@ -25,10 +24,23 @@ namespace yq {
         {
             m_device    = viz.m_device;
             try {
-                VqShaderStages stages(viz.m_device, cfg.shaders);
-                
-                m_shaderMask    = stages.mask();
+            
+                std::vector<VkPipelineShaderStageCreateInfo>    stages;
+                m_shaderMask        = 0;
+                for(auto& s : cfg.shaders){
+                    ViShaderCPtr    vs  = viz.shader(s);
+                    if(!vs)
+                        continue;
+                        
+                    VqPipelineShaderStageCreateInfo stage;
+                    stage.stage     = vs->mask;
+                    stage.pName     = "main";
+                    stage.module    = vs->shader;
+                    stages.push_back(stage);
 
+                    m_shaderMask |= vs->mask;
+                }
+                
                 VqPipelineVertexInputStateCreateInfo    vertexInfo;
                 
                 std::vector<VkVertexInputAttributeDescription>  attrs;
@@ -175,7 +187,9 @@ namespace yq {
                     throw VqException("Failed to create pipeline layout!");
 
                 VqGraphicsPipelineCreateInfo pipelineInfo;
-                pipelineInfo << stages;
+                pipelineInfo.stageCount     = stages.size();
+                if(pipelineInfo.stageCount)
+                   pipelineInfo.pStages     = stages.data();
                 
                 pipelineInfo.pVertexInputState = &vertexInfo;
                 pipelineInfo.pInputAssemblyState = &inputAssembly;

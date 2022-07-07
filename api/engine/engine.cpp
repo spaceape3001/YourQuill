@@ -27,7 +27,6 @@
 #include "vulqan/VqEnums.ipp"
 #include "vulqan/VqLogging.ipp"
 #include "vulqan/VqMonitor.ipp"
-#include "vulqan/VqShaderStages.ipp"
 #include "vulqan/VqUtils.ipp"
 
 
