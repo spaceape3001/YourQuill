@@ -7,24 +7,25 @@
 #pragma once
 
 #include <math/preamble.hpp>
+#include <basic/Coord.hpp>
 
 namespace yq {
-    template <typename T>
-    struct Coord2 {
+    //template <typename T>
+    //struct Coord2 {
     
-        static_assert(std::is_arithmetic_v<T>, "Template parameter T must be arithmetic type.");
+        //static_assert(std::is_arithmetic_v<T>, "Template parameter T must be arithmetic type.");
 
-        T      i = zero_v<T>;
-        T      j = zero_v<T>;
+        //T      i = zero_v<T>;
+        //T      j = zero_v<T>;
 
-        constexpr Coord2() {}
-        explicit constexpr Coord2(T d) : i(d), j(d) {}
-        constexpr Coord2(T _i, T _j) : i(_i), j(_j) {}
+        //constexpr Coord2() {}
+        //explicit constexpr Coord2(T d) : i(d), j(d) {}
+        //constexpr Coord2(T _i, T _j) : i(_i), j(_j) {}
 
-        //  todo...
-            // Coord2(const Vector2I&);
-        constexpr bool operator==(const Coord2&) const noexcept = default;
-    };
+        ////  todo...
+            //// Coord2(const Vector2I&);
+        //constexpr bool operator==(const Coord2&) const noexcept = default;
+    //};
     
     YQ_NAN_1(Coord2, Coord2<T>{ nan_v<T>, nan_v<T> })
     YQ_IS_NAN_1(Coord2, is_nan(v.i) || is_nan(v.j) )

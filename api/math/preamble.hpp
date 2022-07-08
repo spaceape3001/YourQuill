@@ -280,7 +280,6 @@ namespace yq {
     template <typename> struct Bivector3;
     template <typename> struct Bivector4;
     template <typename> struct Circle2;
-    template <typename> struct Coord2;
     template <typename> struct Fraction;
     template <typename> struct Multivector1;
     template <typename> struct Multivector2;
@@ -814,8 +813,8 @@ namespace yq {
 
     using Coord2D                   = Coord2<double>;
     using Coord2F                   = Coord2<float>;
-    using Coord2I                   = Coord2<int>;
-    using Coord2U                   = Coord2<unsigned>;
+    //using Coord2I                   = Coord2<int>;
+    //using Coord2U                   = Coord2<unsigned>;
 
     using FractionI                 = Fraction<int>;
     //using Fraction8      = Fraction<int8_t>;

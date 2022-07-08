@@ -81,6 +81,41 @@ namespace yq {
     template <typename T> class Stack;
     template <typename T> class Vector;
     
+
+        // COORDINATES
+    template <typename, uint8_t>    struct Coord;
+    
+
+    template <typename T> using Coord1 = Coord<T,1>;
+    using Coord1I   = Coord1<int>;
+    using Coord1U   = Coord1<unsigned int>;
+    using Coord1Z   = Coord1<size_t>;
+
+    template <typename T> using Coord2 = Coord<T,2>;
+    using Coord2I   = Coord2<int>;
+    using Coord2U   = Coord2<unsigned int>;
+    using Coord2Z   = Coord2<size_t>;
+
+    template <typename T> using Coord3 = Coord<T,3>;
+    using Coord3I   = Coord3<int>;
+    using Coord3U   = Coord3<unsigned int>;
+    using Coord3Z   = Coord3<size_t>;
+
+    template <typename T> using Coord4 = Coord<T,4>;
+    using Coord4I   = Coord4<int>;
+    using Coord4U   = Coord4<unsigned int>;
+    using Coord4Z   = Coord4<size_t>;
+
+    template <typename T> using Coord5 = Coord<T,5>;
+    using Coord5I   = Coord5<int>;
+    using Coord5U   = Coord5<unsigned int>;
+    using Coord5Z   = Coord5<size_t>;
+
+    template <typename T> using Coord6 = Coord<T,6>;
+    using Coord6I   = Coord6<int>;
+    using Coord6U   = Coord6<unsigned int>;
+    using Coord6Z   = Coord6<size_t>;
+
         // RESULTS
     
     using any_r             = Result<Any>;
