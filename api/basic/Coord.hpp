@@ -10,55 +10,6 @@
 #include <type_traits>
 
 namespace yq {
-    template <typename T>
-    struct Coord<T,1> {
-        using component_type    = T;
-        static constexpr const uint8_t  DIMS    = 1;
-        T       i;
-        constexpr bool operator==(const Coord&) const noexcept = default;
-    };
-
-    template <typename T>
-    struct Coord<T,2> {
-        using component_type    = T;
-        static constexpr const uint8_t  DIMS    = 2;
-        T       i, j;
-        constexpr bool operator==(const Coord&) const noexcept = default;
-    };
-
-    template <typename T>
-    struct Coord<T,3> {
-        using component_type    = T;
-        static constexpr const uint8_t  DIMS    = 3;
-        T       i, j, k;
-        constexpr bool operator==(const Coord&) const noexcept = default;
-    };
-
-    template <typename T>
-    struct Coord<T,4> {
-        using component_type    = T;
-        static constexpr const uint8_t  DIMS    = 4;
-        T       i, j, k, l;
-        constexpr bool operator==(const Coord&) const noexcept = default;
-    };
-
-    template <typename T>
-    struct Coord<T,5> {
-        using component_type    = T;
-        static constexpr const uint8_t  DIMS    = 5;
-        T       i, j, k, l, m;
-        constexpr bool operator==(const Coord&) const noexcept = default;
-    };
-
-    template <typename T>
-    struct Coord<T,6> {
-        using component_type    = T;
-        static constexpr const uint8_t  DIMS    = 6;
-        T       i, j, k, l, m, n;
-        constexpr bool operator==(const Coord&) const noexcept = default;
-    };
-    
-    
     template <typename T, uint8_t N>
     constexpr T   get(const Coord<T,N>& c, uint8_t i)
     {
@@ -87,5 +38,17 @@ namespace yq {
         
         template <typename T>
         inline constexpr bool is_coord_v = is_coord<T>::value;
+    }
+    
+    template <typename T, uint8_t N>
+    constexpr Coord<T,N>  operator+(const Coord<T,N>& a) noexcept
+    {
+        return a;
+    }
+    
+    template <typename T, uint8_t N>
+    consteval uint8_t dims(const Coord<T,N>&) noexcept
+    {
+        return N;
     }
 }
