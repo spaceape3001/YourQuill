@@ -7,10 +7,10 @@
 #include "Editor.hpp"
 #include <imgui.h>
 
-YQ_OBJECT_IMPLEMENT(yq::edit::Editor)
+YQ_OBJECT_IMPLEMENT(yq::engine::Editor)
 
 namespace yq {
-    namespace edit {
+    namespace engine {
         EditorInfo::EditorInfo(std::string_view n, engine::WidgetInfo& base, const std::source_location& sl) : WidgetInfo(n, base, sl)
         {
         }

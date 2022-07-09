@@ -16,7 +16,7 @@ add_subdirectory(yq)
 add_subdirectory(imgui)
 add_subdirectory(engine)
 add_subdirectory(asset)
-add_subdirectory(edit)
+#add_subdirectory(edit)
 #add_subdirectory(srv)
 #add_subdirectory(plot)
 

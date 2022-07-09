@@ -11,8 +11,8 @@
 #include <filesystem>
 
 namespace yq {
-    namespace edit {
-        class EditorInfo : public engine::WidgetInfo {
+    namespace engine {
+        class EditorInfo : public WidgetInfo {
         public:
             
             template <typename C>  struct Writer;
@@ -22,7 +22,7 @@ namespace yq {
         
         using EditorSpec    = std::variant<std::monostate, uint64_t, std::filesystem::path>;
         
-        class Editor : public engine::Widget {
+        class Editor : public Widget {
             YQ_OBJECT_INFO(EditorInfo)
             YQ_OBJECT_DECLARE(Editor, engine::Widget)
         public:
@@ -44,10 +44,10 @@ namespace yq {
         };
 
         template <typename C>
-        class EditorInfo::Writer : public engine::WidgetInfo::Writer<C> {
+        class EditorInfo::Writer : public WidgetInfo::Writer<C> {
         public:
         
-            Writer(EditorInfo* editorInfo) : engine::WidgetInfo::Writer<C>(editorInfo)
+            Writer(EditorInfo* editorInfo) : WidgetInfo::Writer<C>(editorInfo)
             {
             }
             

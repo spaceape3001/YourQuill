@@ -7,6 +7,7 @@
 #include "preamble.hpp"
 #include "Application.ipp"
 #include "Camera.ipp"
+#include "Editor.ipp"
 #include "Event.ipp"
 #include "Manipulator.ipp"
 #include "Taskable.ipp"
