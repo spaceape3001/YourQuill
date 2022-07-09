@@ -65,14 +65,113 @@ namespace yq {
 
         ////////////////////////////////////////////////////////////////////////////////
 
-        void         Viewer::callback_resize(GLFWwindow* win, int, int)
+        void  Viewer::callback_character(GLFWwindow* window, unsigned int codepoint)
         {
-            Viewer    *v  = (Viewer*) glfwGetWindowUserPointer(win);
+            ImGui_ImplGlfw_CharCallback(window, codepoint);
+        }
+        
+        void  Viewer::callback_cursor_enter(GLFWwindow* window, int entered)
+        {
+            ImGui_ImplGlfw_CursorEnterCallback(window, entered);
+        }
+        
+        void  Viewer::callback_cursor_position(GLFWwindow* window, double xpos, double ypos)
+        {
+            ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
+            
+            Viewer* v   = (Viewer*) glfwGetWindowUserPointer(window);
+            if(v){
+                v->m_cursorPos  = { xpos, ypos };
+            }
+        }
+        
+        void  Viewer::callback_drop(GLFWwindow* window, int count, const char** paths)
+        {
+        }
+        
+        void  Viewer::callback_framebuffer_size(GLFWwindow* window, int width, int height)
+        {
+            Viewer    *v  = (Viewer*) glfwGetWindowUserPointer(window);
             if(v){
                 v -> m_viz -> m_rebuildSwap    = true;
                 if(v) [[likely]]
                     v->window_resized();
             }
+            yInfo() << "Frame size changed!";
+        }
+        
+        void  Viewer::callback_joystick(int jid, int event)
+        {
+            yInfo() << "Joystick callback";
+        }
+        
+        void  Viewer::callback_key(GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+        }
+        
+        void  Viewer::callback_monitor(GLFWmonitor* monitor, int event)
+        {
+            ImGui_ImplGlfw_MonitorCallback(monitor, event);
+        }
+        
+        void  Viewer::callback_mouse_button(GLFWwindow* window, int button, int action, int mods)
+        {
+            ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+            yInfo() << "Mouse button!";
+        }
+        
+        void  Viewer::callback_scroll(GLFWwindow* window, double xoffset, double yoffset)
+        {
+            ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+            yInfo() << "Scroll Wheel button!";
+        }
+
+        void  Viewer::callback_window_close(GLFWwindow* window)
+        {
+            yInfo() << "Window close requested";
+        }
+        
+        void  Viewer::callback_window_focus(GLFWwindow* window, int focused)
+        {
+            ImGui_ImplGlfw_WindowFocusCallback(window, focused);
+            yInfo() << "Window focus changed!";
+        }
+        
+        void  Viewer::callback_window_iconify(GLFWwindow* window, int iconified)
+        {
+            yInfo() << "Viewer iconified";
+        }
+        
+        void  Viewer::callback_window_maximize(GLFWwindow* window, int maximized)
+        {
+            yInfo() << "Viewer maximized";
+        }
+        
+        void  Viewer::callback_window_position(GLFWwindow* window, int xpos, int ypos)
+        {
+            yInfo() << "Viewer moved!";
+        }
+        
+        void  Viewer::callback_window_refresh(GLFWwindow* window)
+        {
+            yInfo() << "Viewer refresh!"; // (ignoring)
+        }
+        
+        void  Viewer::callback_window_scale(GLFWwindow* window, float xscale, float yscale)
+        {
+            yInfo() << "Viewer rescaled!";
+        }
+        
+        void  Viewer::callback_window_size(GLFWwindow* window, int x, int y)
+        {
+            Viewer    *v  = (Viewer*) glfwGetWindowUserPointer(window);
+            if(v){
+                v -> m_viz -> m_rebuildSwap    = true;
+                if(v) [[likely]]
+                    v->window_resized();
+            }
+            yInfo() << "Viewer resized!";
         }
         
         void Viewer::poll_events()
@@ -101,7 +200,25 @@ namespace yq {
                 
                 //  Register pointer & callbacks
                 glfwSetWindowUserPointer(m_window, this);
-                glfwSetWindowSizeCallback(m_window, callback_resize);
+                
+                glfwSetCharCallback(m_window, callback_character);
+                glfwSetCursorEnterCallback(m_window, callback_cursor_enter);
+                glfwSetCursorPosCallback(m_window, callback_cursor_position);
+                glfwSetDropCallback(m_window, callback_drop);
+                glfwSetFramebufferSizeCallback(m_window, callback_framebuffer_size);
+                glfwSetKeyCallback(m_window, callback_key);
+                [[maybe_unused]] static auto fn2 = glfwSetJoystickCallback( callback_joystick );
+                [[maybe_unused]] static auto fn1 = glfwSetMonitorCallback( callback_monitor);
+                glfwSetMouseButtonCallback(m_window, callback_mouse_button);
+                glfwSetScrollCallback(m_window, callback_scroll);
+                glfwSetWindowCloseCallback(m_window, callback_window_close);
+                glfwSetWindowContentScaleCallback(m_window, callback_window_scale);
+                glfwSetWindowFocusCallback(m_window, callback_window_focus);
+                glfwSetWindowIconifyCallback(m_window, callback_window_iconify);
+                glfwSetWindowMaximizeCallback(m_window, callback_window_maximize);
+                glfwSetWindowPosCallback(m_window, callback_window_position);
+                glfwSetWindowRefreshCallback(m_window, callback_window_refresh);
+                glfwSetWindowSizeCallback(m_window, callback_window_size);
 
                 m_viz   = std::make_unique<Visualizer>(vci,this);
                 
@@ -120,7 +237,7 @@ namespace yq {
                     vii.DescriptorPool  = m_viz->m_thread->descriptors;
                     
                     ImGui::SetCurrentContext(m_imgui);
-                    ImGui_ImplGlfw_InitForVulkan(m_window, true);
+                    ImGui_ImplGlfw_InitForVulkan(m_window, false);
                     ImGui_ImplVulkan_Init(&vii, m_viz->m_renderPass);
                     
                     //  Uploading fonts....
