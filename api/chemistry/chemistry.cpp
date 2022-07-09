@@ -4,14 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "preamble.hpp"
+#include <basic/meta/Init.hpp>
 
-#include <math/preamble.hpp>
-#include <basic/Enum.hpp>
-#include <basic/meta/InfoBinder.hpp>
-
-namespace yq {
-    namespace physics {
-    }
-}
-
+YQ_TYPE_IMPLEMENT(yq::chemistry::Phase)
