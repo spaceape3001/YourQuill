@@ -6,10 +6,15 @@
 
 #pragma once
 #include "preamble.hpp"
+#include "IntRange.hpp"
 #include <cassert>
 #include <type_traits>
+#include <algorithm>
 
 namespace yq {
+    using std::min;
+    using std::max;
+    
     template <typename T, uint8_t N>
     constexpr T   get(const Coord<T,N>& c, uint8_t i)
     {
@@ -50,5 +55,91 @@ namespace yq {
     consteval uint8_t dims(const Coord<T,N>&) noexcept
     {
         return N;
+    }
+    
+    template <typename T, uint8_t N>
+    requires std::is_integral_v<T>
+    constexpr Coord<IntRange<T>,N>  range(const Coord<T,N>&a, const Coord<T,N>&b)
+    {
+        union {
+            IntRange<T> values[N];
+            Coord<IntRange<T>,N>    ret;
+        };
+        for(uint8_t n=0;n<N;++n)
+            values[n]  = range(get(a, n), get(b,n));
+        return ret;
+    }
+    
+    
+    template <typename T, uint8_t N>
+    constexpr bool  all_greater_equal(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) < get(rhs,n))
+                return false;
+        return true;
+    }
+
+    template <typename T, uint8_t N>
+    constexpr bool  all_greater(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) <= get(rhs,n))
+                return false;
+        return true;
+    }
+
+    template <typename T, uint8_t N>
+    constexpr bool  all_less(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) >= get(rhs,n))
+                return false;
+        return true;
+    }
+
+    template <typename T, uint8_t N>
+    constexpr bool  all_less_equal(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) > get(rhs,n))
+                return false;
+        return true;
+    }
+
+    template <typename T, uint8_t N>
+    constexpr bool  any_greater(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) > get(rhs,n))
+                return true;
+        return false;
+    }
+    
+    template <typename T, uint8_t N>
+    constexpr bool  any_greater_equal(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) >= get(rhs,n))
+                return true;
+        return false;
+    }
+
+    template <typename T, uint8_t N>
+    constexpr bool  any_less(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) < get(rhs,n))
+                return true;
+        return false;
+    }
+
+    template <typename T, uint8_t N>
+    constexpr bool  any_less_equal(const Coord<T,N>& lhs, const Coord<T,N>& rhs)
+    {
+        for(uint8_t n=0;n<N;++n)
+            if(get(lhs,n) <= get(rhs,n))
+                return true;
+        return false;
     }
 }

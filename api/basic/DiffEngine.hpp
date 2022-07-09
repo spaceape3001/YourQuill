@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <basic/Array1.hpp>
-#include <basic/IntRange.hpp>
+#include <basic/Array.hpp>
 #include <vector>
 
 namespace yq {
@@ -29,7 +28,7 @@ namespace yq {
     struct DiffEngine {
         const std::vector<VA>&   A;
         const std::vector<VB>&   B;
-        Array1<ssize_t>     Vf, Vb;
+        ZArray1<ssize_t,ssize_t>     Vf, Vb;
         Equivalent          equiv;
         Added               added;
         Removed             removed;
@@ -45,8 +44,8 @@ namespace yq {
             A(a), B(b), equiv(eq), added(ad), removed(rm), untouched(ut)
         {
             ssize_t mx  = a.size() + b.size() + 1;
-            Vf.resize(-mx-1, mx+2, 0ULL);
-            Vb.resize(-mx-1, mx+2, 0ULL);
+            Vf.resize({-mx-1}, {mx+2}, 0ULL);
+            Vb.resize({-mx-1}, {mx+2}, 0ULL);
         }
 
         Match   middleSnake(const SSizeRange& X, const SSizeRange& Y)

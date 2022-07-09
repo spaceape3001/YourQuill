@@ -16,6 +16,19 @@ namespace yq {
         static constexpr const uint8_t  DIMS    = 5;
         T       i, j, k, l, m;
         constexpr bool operator==(const Coord&) const noexcept = default;
+
+        template <typename U>
+        requires (!std::is_same_v<T,U>)
+        explicit constexpr operator Coord<U,5>() const noexcept
+        {
+            return { (U) i, (U) j, (U) k, (U) l, (U) m };
+        }
+
+        Coord& operator=(T v)
+        {
+            i = j = k = l = m = v;
+            return *this;
+        }
     };
 
 
@@ -37,6 +50,43 @@ namespace yq {
 
     //  --------------------------------------------------------
     //  BASIC FUNCTIONS
+
+    template <typename T>
+    constexpr Coord5<T> max(const Coord5<T>&a, const Coord5<T>& b)
+    {
+        return { 
+            max(a.i, b.i), 
+            max(a.j, b.j), 
+            max(a.k, b.k), 
+            max(a.l, b.l), 
+            max(a.m, b.m)
+        };
+    }
+
+    template <typename T>
+    constexpr Coord5<T> min(const Coord5<T>&a, const Coord5<T>& b)
+    {
+        return { 
+            min(a.i, b.i), 
+            min(a.j, b.j), 
+            min(a.k, b.k), 
+            min(a.l, b.l), 
+            min(a.m, b.m)
+        };
+    }
+
+    template <typename T>
+    constexpr auto product(const Coord5<T>& a)
+    {
+        return a.i*a.j*a.k*a.l*a.m;
+    }
+
+    template <typename T>
+    constexpr T sum(const Coord5<T>& a)
+    {
+        return a.i+a.j+a.k+a.l+a.m;
+    }
+
 
     //  --------------------------------------------------------
     //  POSITIVE

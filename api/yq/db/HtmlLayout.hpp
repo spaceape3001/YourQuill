@@ -7,7 +7,7 @@
 #pragma once
 
 #include <basic/trait/always_false.hpp>
-#include <basic/Array2.hpp>
+#include <basic/Array.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 
@@ -22,20 +22,19 @@ namespace yq {
     template <typename T>
     Array2<T>   colwise(const std::vector<T>& data, unsigned int cols)
     {
-        Array2<T>   ret;
         if(cols < 1)
             cols    = 1;
         unsigned int         rows    = (data.size() + cols - 1) / cols;
         if(rows < 1)
             rows    = 1;
-        ret.resize(rows, cols);
+        Array2<T>   ret({rows, cols});    
         for(unsigned int i=0;i<cols;++i)
             for(unsigned int j=0;j<rows;++j)
         {
             size_t  n   = (size_t) i * (size_t) rows + (size_t) j;
             if(n >= data.size())
                 continue;
-            ret(j,i)   = data[n];
+            ret({j,i})   = data[n];
         }
         return ret;
     }
@@ -43,20 +42,19 @@ namespace yq {
     template <typename T>
     Array2<T>   rowwise(const std::vector<T>& data, unsigned int cols)
     {
-        Array2<T>   ret;
         if(cols < 1)
             cols    = 1;
         unsigned int         rows    = (data.size() + cols - 1) / cols;
         if(rows < 1)
             rows    = 1;
-        ret.resize(rows, cols);
+        Array2<T>   ret({rows, cols});    
         for(unsigned int i=0;i<cols;++i)
             for(unsigned int j=0;j<rows;++j)
         {
             size_t  n   = (size_t) j * (size_t) cols + (size_t) i;
             if(n >= data.size())
                 continue;
-            ret(j,i)   = data[n];
+            ret({j,i})   = data[n];
         }
         return ret;
     }

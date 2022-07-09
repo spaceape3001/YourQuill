@@ -67,21 +67,6 @@ namespace yq {
     template <typename> struct Result;
     template <typename> struct Span;
     
-        // COLLECTIONS
-    template <typename T> class Array1;
-    template <typename T> class Array2;
-    template <typename T> class Deque;
-    template <typename E, typename V> class EnumMap;
-    template <typename K, typename V>   class Hash;
-    template <typename> class List;
-    template <typename K, typename V, typename C=std::less<K>> class Map;
-    template <typename K, typename V, typename C=std::less<K>> class MultiMap;
-    template <typename T, typename C=std::less<T>> class Set;
-    template <typename T> struct Span;
-    template <typename T> class Stack;
-    template <typename T> class Vector;
-    
-
         // COORDINATES
     template <typename, uint8_t>    struct Coord;
     
@@ -115,6 +100,44 @@ namespace yq {
     using Coord6I   = Coord6<int>;
     using Coord6U   = Coord6<unsigned int>;
     using Coord6Z   = Coord6<size_t>;
+
+
+        // COLLECTIONS
+    template <typename DATA, typename COORD, bool ORIGIN=false, bool GHOST=false> class Array;
+    
+    template <typename T, typename I=unsigned int> using Array1 = Array<std::vector<T>, Coord1<I>, false, false>;
+    template <typename T, typename I=unsigned int> using Array2 = Array<std::vector<T>, Coord2<I>, false, false>;
+    template <typename T, typename I=unsigned int> using Array3 = Array<std::vector<T>, Coord3<I>, false, false>;
+    template <typename T, typename I=unsigned int> using Array4 = Array<std::vector<T>, Coord4<I>, false, false>;
+    template <typename T, typename I=unsigned int> using Array5 = Array<std::vector<T>, Coord5<I>, false, false>;
+    template <typename T, typename I=unsigned int> using Array6 = Array<std::vector<T>, Coord6<I>, false, false>;
+    
+    template <typename T, typename I=int> using ZArray1 = Array<std::vector<T>, Coord1<I>, true, false>;
+    template <typename T, typename I=int> using ZArray2 = Array<std::vector<T>, Coord2<I>, true, false>;
+    template <typename T, typename I=int> using ZArray3 = Array<std::vector<T>, Coord3<I>, true, false>;
+    template <typename T, typename I=int> using ZArray4 = Array<std::vector<T>, Coord4<I>, true, false>;
+    template <typename T, typename I=int> using ZArray5 = Array<std::vector<T>, Coord5<I>, true, false>;
+    template <typename T, typename I=int> using ZArray6 = Array<std::vector<T>, Coord6<I>, true, false>;
+
+    template <typename T, typename I=int> using ZGArray1 = Array<std::vector<T>, Coord1<I>, true, true>;
+    template <typename T, typename I=int> using ZGArray2 = Array<std::vector<T>, Coord2<I>, true, true>;
+    template <typename T, typename I=int> using ZGArray3 = Array<std::vector<T>, Coord3<I>, true, true>;
+    template <typename T, typename I=int> using ZGArray4 = Array<std::vector<T>, Coord4<I>, true, true>;
+    template <typename T, typename I=int> using ZGArray5 = Array<std::vector<T>, Coord5<I>, true, true>;
+    template <typename T, typename I=int> using ZGArray6 = Array<std::vector<T>, Coord6<I>, true, true>;
+
+
+    template <typename T> class Deque;
+    template <typename E, typename V> class EnumMap;
+    template <typename K, typename V>   class Hash;
+    template <typename> class List;
+    template <typename K, typename V, typename C=std::less<K>> class Map;
+    template <typename K, typename V, typename C=std::less<K>> class MultiMap;
+    template <typename T, typename C=std::less<T>> class Set;
+    template <typename T> struct Span;
+    template <typename T> class Stack;
+    template <typename T> class Vector;
+    
 
         // RESULTS
     

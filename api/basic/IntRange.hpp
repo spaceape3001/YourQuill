@@ -51,7 +51,7 @@ namespace yq {
         bool            not_empty() const { return low != high; }
         
         
-        auto operator<=>(const IntRange&) const = default;
+        bool operator==(const IntRange&) const = default;
 
         const T         low, high;
     };
@@ -59,7 +59,7 @@ namespace yq {
 
     /*! \brief Creates an iterable object from the specified range */
     template <typename T>
-    IntRange<T> range(T a, T b)
+    constexpr IntRange<T> range(T a, T b) noexcept
     {
         return IntRange<T>{a,b};
     }

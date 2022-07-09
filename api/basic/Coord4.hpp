@@ -16,6 +16,19 @@ namespace yq {
         static constexpr const uint8_t  DIMS    = 4;
         T       i, j, k, l;
         constexpr bool operator==(const Coord&) const noexcept = default;
+
+        template <typename U>
+        requires (!std::is_same_v<T,U>)
+        explicit constexpr operator Coord<U,4>() const noexcept
+        {
+            return { (U) i, (U) j, (U) k, (U) l };
+        }
+
+        Coord& operator=(T v)
+        {
+            i = j = k = l = v;
+            return *this;
+        }
     };
 
 
@@ -37,6 +50,40 @@ namespace yq {
 
     //  --------------------------------------------------------
     //  BASIC FUNCTIONS
+
+    template <typename T>
+    constexpr Coord4<T> max(const Coord4<T>&a, const Coord4<T>& b)
+    {
+        return { 
+            max(a.i, b.i), 
+            max(a.j, b.j), 
+            max(a.k, b.k), 
+            max(a.l, b.l)
+        };
+    }
+
+    template <typename T>
+    constexpr Coord4<T> min(const Coord4<T>&a, const Coord4<T>& b)
+    {
+        return { 
+            min(a.i, b.i), 
+            min(a.j, b.j), 
+            min(a.k, b.k), 
+            min(a.l, b.l)
+        };
+    }
+
+    template <typename T>
+    constexpr auto product(const Coord4<T>& a)
+    {
+        return a.i*a.j*a.k*a.l;
+    }
+
+    template <typename T>
+    constexpr T sum(const Coord4<T>& a)
+    {
+        return a.i+a.j+a.k+a.l;
+    }
 
     //  --------------------------------------------------------
     //  POSITIVE
