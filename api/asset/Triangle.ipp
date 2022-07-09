@@ -4,6 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
 #include "Triangle.hpp"
 #include <math/TriangleData.hpp>
 #include <math/shape_math.hpp>

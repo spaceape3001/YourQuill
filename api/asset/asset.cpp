@@ -9,4 +9,5 @@
 #include "SpaceCamera.ipp"
 #include "SpaceManipulator.ipp"
 #include "TargetCamera.ipp"
+#include "Tetrahedron.ipp"
 #include "Triangle.ipp"
