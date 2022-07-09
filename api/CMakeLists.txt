@@ -12,6 +12,7 @@
 add_subdirectory(config)
 add_subdirectory(basic)
 add_subdirectory(math)
+add_subdirectory(physics)
 add_subdirectory(yq)
 add_subdirectory(imgui)
 add_subdirectory(engine)
