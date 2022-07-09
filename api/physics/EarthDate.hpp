@@ -10,7 +10,6 @@
 #include <span>
 
 namespace yq {
-
     namespace earth {
 
         /*! Standard (european) earth-date
@@ -44,7 +43,5 @@ namespace yq {
         
         //! Table of known leap seconds
         std::span<Date>    leap_seconds();
-        
     }
-
 }
