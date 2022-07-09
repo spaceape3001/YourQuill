@@ -34,6 +34,12 @@ macro(physics_test name)
     add_test(NAME ${name} COMMAND test_${name} ${ARGN})
 endmacro()
 
+macro(earth_test name)
+    add_executable(test_${name} ${name}.cpp)
+    target_link_libraries(test_${name} PRIVATE yqearth ${TBB_LIBRARIES})
+    add_test(NAME ${name} COMMAND test_${name} ${ARGN})
+endmacro()
+
 #add_subdirectory(fraction)
 
 basic_test(encode64)
@@ -49,6 +55,6 @@ math_test(vector2)
 math_test(vector3)
 math_test(vector4)
 
-physics_test(earthdates)
+earth_test(earthdates)
 
 
