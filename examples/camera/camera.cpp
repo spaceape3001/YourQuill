@@ -13,6 +13,7 @@
 #include <asset/NullCamera.hpp>
 #include <asset/SpaceCamera.hpp>
 #include <asset/TargetCamera.hpp>
+#include <asset/Tetrahedron.hpp>
 #include <asset/Triangle.hpp>
 #include <asset/Quadrilateral.hpp>
 
@@ -29,9 +30,10 @@
 #include <math/vector_math.hpp>
 #include <math/Units.hpp>
 #include <math/trig.hpp>
+#include <math/QuadrilateralData.hpp>
+#include <math/TetrahedronData.hpp>
 #include <math/Triangle2.hpp>
 #include <math/Triangle3.hpp>
-#include <math/QuadrilateralData.hpp>
 #include <imgui.h>
 #include <chrono>
 
@@ -39,6 +41,48 @@ using namespace ImGui;
 using namespace yq;
 using namespace yq::asset;
 using namespace yq::engine;
+
+const auto  NorthData = TetrahedronData<ColorVertex3D>{
+    {{  0.,  1.,  0. }, color::White },
+    {{ -1., -1., -1. }, color::Blue },
+    {{  1., -1., -1. }, color::Blue },
+    {{  0.,  0.,  1. }, color::Blue }
+};
+
+const auto  SouthData = TetrahedronData<ColorVertex3D>{
+    {{  0.,  1.,  0. }, color::White },
+    {{ -1., -1., -1. }, color::Yellow },
+    {{  1., -1., -1. }, color::Yellow },
+    {{  0.,  0.,  1. }, color::Yellow }
+};
+
+const auto  EastData = TetrahedronData<ColorVertex3D>{
+    {{  1.,  0.,  0. }, color::White },
+    {{ -1., -1., -1. }, color::Red },
+    {{ -1.,  1., -1. }, color::Red },
+    {{  0.,  0.,  1. }, color::Red }
+};
+
+const auto  WestData = TetrahedronData<ColorVertex3D>{
+    {{ -1.,  0.,  0. }, color::White },
+    {{  1., -1., -1. }, color::Cyan },
+    {{  1.,  1., -1. }, color::Cyan },
+    {{  0.,  0.,  1. }, color::Cyan }
+};
+
+const auto  TopData = TetrahedronData<ColorVertex3D>{
+    {{  0.,  0.,  1. }, color::White },
+    {{ -1., -1., -1. }, color::Green },
+    {{  1., -1., -1. }, color::Green },
+    {{  0.,  1., -1. }, color::Green }
+};
+
+const auto  BottomData = TetrahedronData<ColorVertex3D>{
+    {{  0.,  0., -1. }, color::White },
+    {{ -1., -1.,  1. }, color::Magenta },
+    {{  1., -1.,  1. }, color::Magenta },
+    {{  0.,  1.,  1. }, color::Magenta }
+};
 
 const auto  TriData   = TriangleData<ColorVertex2D> {
     { {1.0,1.0}, color::Red },
@@ -115,6 +159,30 @@ struct CameraWin : public engine::Viewer {
         tri->set_scaling(0.5);
         scene.things.push_back(tri);
         
+        Ref<Tetrahedron>    dir     = new Tetrahedron(NorthData);
+        dir->set_position({0., 5., 0. });
+        scene.things.push_back(dir);
+
+        dir     = new Tetrahedron(SouthData);
+        dir->set_position({0., -5., 0. });
+        scene.things.push_back(dir);
+            
+        dir     = new Tetrahedron(EastData);
+        dir->set_position({5., 0., 0. });
+        scene.things.push_back(dir);
+
+        dir     = new Tetrahedron(WestData);
+        dir->set_position({-5., 0., 0. });
+        scene.things.push_back(dir);
+        
+        dir     = new Tetrahedron(TopData);
+        dir->set_position({0., 0., 5. });
+        scene.things.push_back(dir);
+        
+        dir     = new Tetrahedron(BottomData);
+        dir->set_position({0., 0., -5. });
+        scene.things.push_back(dir);
+            
         Ref<Quadrilateral> quad = new Quadrilateral(QuadData);
         quad->set_scaling(0.5);
         quad->set_heading( (Radian) 45._deg );
