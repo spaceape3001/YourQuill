@@ -10,6 +10,10 @@
 #include <math/AxBox2.hpp>
 #include <math/AxBox3.hpp>
 #include <math/AxBox4.hpp>
+#include <math/AxCorners1.hpp>
+#include <math/AxCorners2.hpp>
+#include <math/AxCorners3.hpp>
+#include <math/AxCorners4.hpp>
 #include <math/Circle2.hpp>
 #include <math/Normal2.hpp>
 #include <math/Normal3.hpp>
@@ -405,6 +409,67 @@ namespace yq {
     Circle2<T>  circle(const Vector2<T>& point, T radius)
     {
         return {point, radius};
+    }
+    
+    template <typename T>
+    AxCorners1<Vector1<T>>  corners(const AxBox1<T>& v)
+    {
+        return { 
+            v.lo,
+            v.hi
+        };
+    }
+
+    template <typename T>
+    AxCorners2<Vector2<T>>  corners(const AxBox2<T>& v)
+    {
+        return { 
+            v.lo,
+            { v.lo.x, v.hi.y }, 
+            { v.hi.x, v.lo.y }, 
+            v.hi
+        };
+    }
+
+    template <typename T>
+    AxCorners3<Vector3<T>>  corners(const AxBox3<T>& v)
+    {
+        return { 
+            v.lo,
+            { v.lo.x, v.lo.y, v.hi.z  }, 
+            { v.lo.x, v.hi.y, v.lo.z  }, 
+            { v.lo.x, v.hi.y, v.hi.z  }, 
+            { v.hi.x, v.lo.y, v.lo.z  }, 
+            { v.hi.x, v.lo.y, v.hi.z  }, 
+            { v.hi.x, v.hi.y, v.lo.z  }, 
+            v.hi
+        };
+    }
+
+    template <typename T>
+    AxCorners4<Vector4<T>>  corners(const AxBox4<T>& v)
+    {
+        return { 
+            v.lo, 
+            
+            { v.lo.x, v.lo.y, v.lo.z, v.hi.w  }, 
+            { v.lo.x, v.lo.y, v.hi.z, v.lo.w  }, 
+            { v.lo.x, v.lo.y, v.hi.z, v.hi.w  }, 
+            { v.lo.x, v.hi.y, v.lo.z, v.lo.w  }, 
+            { v.lo.x, v.hi.y, v.lo.z, v.hi.w  }, 
+            { v.lo.x, v.hi.y, v.hi.z, v.lo.w  }, 
+            { v.lo.x, v.hi.y, v.hi.z, v.hi.w  }, 
+             
+            { v.hi.x, v.lo.y, v.lo.z, v.lo.w  }, 
+            { v.hi.x, v.lo.y, v.lo.z, v.hi.w  }, 
+            { v.hi.x, v.lo.y, v.hi.z, v.lo.w  }, 
+            { v.hi.x, v.lo.y, v.hi.z, v.hi.w  }, 
+            { v.hi.x, v.hi.y, v.lo.z, v.lo.w  }, 
+            { v.hi.x, v.hi.y, v.lo.z, v.hi.w  }, 
+            { v.hi.x, v.hi.y, v.hi.z, v.lo.w  }, 
+            
+            v.hi
+        };
     }
 
     template <typename T>

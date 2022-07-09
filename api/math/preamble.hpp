@@ -276,6 +276,10 @@ namespace yq {
     template <typename> struct AxBox2;
     template <typename> struct AxBox3;
     template <typename> struct AxBox4;
+    template <typename> struct AxCorners1;
+    template <typename> struct AxCorners2;
+    template <typename> struct AxCorners3;
+    template <typename> struct AxCorners4;
     template <typename> struct Bivector2;
     template <typename> struct Bivector3;
     template <typename> struct Bivector4;
