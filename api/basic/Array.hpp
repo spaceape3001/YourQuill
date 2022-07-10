@@ -8,12 +8,11 @@
 #include <concepts>
 #include <basic/trait/can_add.hpp>
 #include <basic/trait/can_two_multiply.hpp>
-#include <basic/trait/is_stdarray.hpp>
-#include <basic/trait/is_stdspan.hpp>
-#include <basic/trait/is_stdvector.hpp>
 #include "preamble.hpp"
 #include "Coords.hpp"
 #include "IntRange.hpp"
+#include <vector>
+#include <span>
 
 namespace yq {
     
@@ -66,15 +65,18 @@ namespace yq {
                 [](uint8_p a, uint8_p b) -> bool { return a.second > b.second; }
             );
         
-            size_t  ret[N] = {};
+            union {
+                size_t          values[N] = {};
+                Coord<size_t,N> ret;
+            };
             size_t  z       = 1ULL;
             for(uint8_t n=0;n<N;++n){
                 uint8_t i = rote[n].first;
-                ret[i]  = z;
+                values[i]  = z;
                 z *= get(sizes, i);
             }
             
-            return *reinterpret_cast<Coord<size_t, N>*>(ret);
+            return ret;
         }
         
         template <typename T>
@@ -85,11 +87,37 @@ namespace yq {
         }
     }
     
+    template <typename I, uint8_t N, bool ORIGIN, bool GHOST>
+    struct ArrayCoord {
+        static_assert((1 <= N) && (N <= 6), "Invalid dimension count!");
+
+        static constexpr const uint8_t  DIMS    = N;
+
+        using coord_type    = Coord<I,N>;
+        using index_type    = I;
+
+        static constexpr const bool origin_flag  = ORIGIN;
+        static constexpr const bool ghost_flag   = GHOST;
+
+        static constexpr const bool is_signed   = std::is_signed_v<I>;
+        static constexpr const bool is_unsigned = std::is_unsigned_v<I>;
+        static_assert((ORIGIN || GHOST) ? is_signed : true, "Origin & ghost features REQUIRE signed index type.");
+    };
+    
+    namespace trait {
+        template <typename> struct is_array_coord : std::false_type {};
+        template <typename I, uint8_t N, bool ORIGIN, bool GHOST>
+        struct is_array_coord<ArrayCoord<I,N,ORIGIN,GHOST>> : std::true_type {};
+        template <typename T>
+        inline constexpr bool is_array_coord_v = is_array_coord<T>::value;
+    }
     
     
     /*! \brief "Array"
     
-        \tparam DATA     container (ie, vector, span, etc)
+        \tparam DATA     Data type to be stored
+        \tparam COORD    Array coordinate descriptor.
+        
         \tparam COORD    Coordinate type, expected to be Coord
         \tparam ORIGIN   True to enable to set origin
         \tparam GHOST    True to inflate sizes by a padding (per side)
@@ -129,29 +157,30 @@ namespace yq {
             
             
     */
-    template <typename DATA, typename COORD, bool ORIGIN, bool GHOST>
+    template <typename DATA, typename COORD>
     class Array {
     public:
     
-        static_assert(trait::is_coord_v<COORD>, "COORD must be a coordinate object!");
-        static_assert((1 <= COORD::DIMS) && (COORD::DIMS <= 6), "Invalid dimension count!");
+        static_assert(trait::is_array_coord_v<COORD>, "COORD parameter must be ArrayCoord based!");
 
-        using container_type    = DATA;
-        using value_type        = typename DATA::value_type;
-        using coord_type        = COORD;
-        using index_type        = typename COORD::component_type;
+        using value_type        = DATA;
+        using coord_type        = typename COORD::coord_type;
+        using index_type        = typename COORD::index_type;
     
-        static constexpr const bool         is_resizeable   = trait::is_stdvector_v<DATA>;
-        static constexpr const bool         is_array        = trait::is_stdarray_v<DATA>;
-        static constexpr const bool         is_span         = trait::is_stdspan_v<DATA>;
-        static constexpr const bool         is_vector       = trait::is_stdvector_v<DATA>;
+        //static constexpr const bool         is_resizeable   = trait::is_stdvector_v<DATA>;
+        //static constexpr const bool         is_array        = trait::is_stdarray_v<DATA>;
+        //static constexpr const bool         is_span         = trait::is_stdspan_v<DATA>;
+        //static constexpr const bool         is_vector       = trait::is_stdvector_v<DATA>;
         static constexpr const bool         is_constant     = std::is_const_v<value_type>;
         static constexpr const bool         is_mutable      = !std::is_const_v<value_type>;
         static constexpr const bool         is_signed       = std::is_signed_v<index_type>;
         static constexpr const bool         is_unsigned     = std::is_unsigned_v<index_type>;
+        
+        static constexpr const bool         ORIGIN          = COORD::origin_flag;
+        static constexpr const bool         GHOST           = COORD::ghost_flag;
         static constexpr const uint8_t      DIMS            = COORD::DIMS;
 
-        static_assert(std::is_integral_v<index_type>, "COORD must be integer based");
+        static_assert(std::is_integral_v<index_type>, "Coordinate-index must be integer based");
 
         using size_c            = Coord<size_t, DIMS>;
         using uint8_c           = Coord<uint8_t, DIMS>;
@@ -160,8 +189,8 @@ namespace yq {
 
         
         template <typename=void>
-        requires (!ORIGIN && !GHOST && is_vector)
-        explicit Array(const COORD& c, const value_type& v={})
+        requires (!ORIGIN && !GHOST)
+        explicit Array(const coord_type& c, const value_type& v={})
         {
             set_count(c);
             build(v);
@@ -171,20 +200,19 @@ namespace yq {
         /*! \brief Builds up the vector
         
             *IF* the vector option is chosen, then this will 
-            recompute & build according to the current specifications.
+            restale & build according to the current specifications.
         */
-        template <typename=void>
-        requires (is_vector)
-        bool                    build(const value_type& v = {})
+        bool    build(const value_type& v = {})
         {
             if(needs_compute())
                 compute();
             
-            if(!m_data.empty())
-                m_data.clear();
+            if(!m_vector.empty())
+                m_vector.clear();
                 
             try {
-                m_data.resize(m_total, v);
+                m_vector.resize(m_calc.total, v);
+                m_data  = m_vector;
                 return true;
             } 
             catch (std::bad_alloc&)
@@ -197,42 +225,44 @@ namespace yq {
         */
         void    clear()
         {
-            *this   = {};
+            m_vector.clear();
+            m_data  = {};
+            m_calc  = {};
         }
 
         template <typename=void>
         requires (DIMS == 2)
         range_type          columns() const
         {
-            return range(m_softLo.j, m_softHi.j);
+            return range(m_calc.softLo.j, m_calc.softHi.j);
         }
 
 
-        /*! \brief Recomputes dimensions & stride
+        /*! \brief Restales dimensions & stride
         
-            This computes the strides, dimensions, and total size required.
+            This stales the strides, dimensions, and total size required.
         */
         void                compute()
         {
-            m_dim           = (size_c) m_count;
+            m_calc.dim           = (size_c) m_calc.count;
             if constexpr (GHOST)
-                m_dim       = m_dim  + (size_c) m_ghostLo + (size_c) m_ghostHi;
-            m_stride        = impl::array_comingle<DIMS>(m_dim, m_order);
-            m_total         = product(m_dim);
-            m_softLo        = m_zero;
-            m_softHi        = m_zero + m_count;
-            m_hardLo        = m_zero - m_ghostLo;
-            m_hardHi        = m_softHi + m_ghostHi;
-            m_compute       = false;
+                m_calc.dim       = m_calc.dim  + (size_c) m_calc.ghostLo + (size_c) m_calc.ghostHi;
+            m_calc.stride        = impl::array_comingle<DIMS>(m_calc.dim, m_calc.order);
+            m_calc.total         = product(m_calc.dim);
+            m_calc.softLo        = m_calc.zero;
+            m_calc.softHi        = m_calc.zero + m_calc.count;
+            m_calc.hardLo        = m_calc.zero - m_calc.ghostLo;
+            m_calc.hardHi        = m_calc.softHi + m_calc.ghostHi;
+            m_calc.stale       = false;
         }
 
         /*! \brief Counts per dimension
         
             These are the user specified counts (below). 
         */
-        constexpr const COORD&  count() const noexcept
+        constexpr const coord_type&  count() const noexcept
         {
-            return m_count;
+            return m_calc.count;
         }
         
         
@@ -240,16 +270,16 @@ namespace yq {
         
             This is the count plus any ghost, updated with compute().
         */
-        constexpr const COORD&  dim() const noexcept
+        constexpr const coord_type&  dim() const noexcept
         {
-            return m_dim;
+            return m_calc.dim;
         }
         
-        /*! \brief Reference to the underlying data
+        /*! \brief Pointer to the underlying data
         */
-        constexpr const DATA&   data() const noexcept
+        constexpr const value_type* data() const noexcept
         { 
-            return m_data; 
+            return m_data.data(); 
         }
 
         /*! \brief Checks for an empty container
@@ -261,15 +291,13 @@ namespace yq {
             return m_data.empty();
         }
         
-        
-        
         /*! \brief Ghost on high-side
         
             This is the current ghost configuration for the high-side of indices.
         */
-        constexpr const COORD&  ghost_high() const noexcept
+        constexpr const coord_type&  ghost_high() const noexcept
         { 
-            return m_ghostHi; 
+            return m_calc.ghostHi; 
         }
 
 
@@ -277,47 +305,47 @@ namespace yq {
         
             This is the current ghost configuration for the low-side of indices.
         */
-        constexpr const COORD&  ghost_low() const noexcept
+        constexpr const coord_type&  ghost_low() const noexcept
         { 
-            return m_ghostLo; 
+            return m_calc.ghostLo; 
         }
 
         /*! \brief FULL upper-index value
         
             Always available, this routine returns the first invalid coordinate on the high side per dim.
         */
-        constexpr const COORD&  hard_high() const noexcept
+        constexpr const coord_type&  hard_high() const noexcept
         {
-            return m_hardHi;
+            return m_calc.hardHi;
         }
 
         /*! \brief FULL lower-index value
         
             Always available, this routine returns the lower valid coordinate per dim.
         */
-        constexpr const COORD&  hard_low() const noexcept
+        constexpr const coord_type&  hard_low() const noexcept
         {
-            return m_hardLo;
+            return m_calc.hardLo;
         }
         
         /*! \brief FULL lower-index value
         
             Always available, this routine returns the lower valid coordinate per dim.
         */
-        constexpr const COORD&  hard_lower() const noexcept
+        constexpr const coord_type&  hard_lower() const noexcept
         {
-            return m_hardLo;
+            return m_calc.hardLo;
         }
 
         constexpr ranges_type hard_ranges() const noexcept
         {
-            return range(m_hardLo, m_hardHi);
+            return range(m_calc.hardLo, m_calc.hardHi);
         }
 
-        constexpr ranges_type hard_ranges(const COORD& bumper) const noexcept
+        constexpr ranges_type hard_ranges(const coord_type& bumper) const noexcept
         {
-            COORD   L   = hard_low();
-            COORD   U   = hard_upper() - bumper;
+            coord_type   L   = hard_low();
+            coord_type   U   = hard_upper() - bumper;
             return range(L, max(L,U));
         }
 
@@ -330,33 +358,33 @@ namespace yq {
         
             Always available, this routine returns the first invalid coordinate on the high side per dim.
         */
-        constexpr const COORD&  hard_upper() const noexcept
+        constexpr const coord_type&  hard_upper() const noexcept
         {
-            return m_hardHi;
+            return m_calc.hardHi;
         }
 
-        constexpr const COORD & high() const noexcept
+        constexpr const coord_type&  high() const noexcept
         {
-            return m_softHi;
+            return m_calc.softHi;
         }
         
         /*! \brief Index mapping function
         
             \note No bounds checking is done, an index is returned.
         */
-        constexpr size_t    index(const COORD& c) const noexcept
+        constexpr size_t    index(const coord_type& c) const noexcept
         {
-            COORD   l;
+            coord_type   l;
             if constexpr (!GHOST && !ORIGIN){
                 l   = c;
             } else
-                l   = c - m_hardLo;
-            return sum( m_stride * (size_c) l );
+                l   = c - m_calc.hardLo;
+            return sum( m_calc.stride * (size_c) l );
         }
         
         /*! \brief Tests for a coordinate in the ghost-region
         */
-        constexpr bool      is_ghost(const COORD& c) const noexcept
+        constexpr bool      is_ghost(const coord_type& c) const noexcept
         {
             if constexpr (GHOST){
                 return is_valid(c) && !is_interior(c);
@@ -367,12 +395,12 @@ namespace yq {
         
         /*! \brief Tests for a coordinate in the interior (non-ghost)
         */
-        constexpr bool      is_interior(const COORD&c) const noexcept
+        constexpr bool      is_interior(const coord_type&c) const noexcept
         {
             if constexpr (ORIGIN || is_signed){
-                return all_greater_equal(m_softLo, c) && all_less(c, m_softHi);
+                return all_greater_equal(m_calc.softLo, c) && all_less(c, m_calc.softHi);
             } else {
-                return all_less(c, m_softHi);
+                return all_less(c, m_calc.softHi);
             }
         }
         
@@ -380,7 +408,7 @@ namespace yq {
         
             (Should be opposite of is_valid)
         */
-        constexpr bool  is_exterior(const COORD& c) const noexcept
+        constexpr bool  is_exterior(const coord_type& c) const noexcept
         {
             return !is_valid(c);
         }
@@ -392,17 +420,17 @@ namespace yq {
         */
         constexpr bool  is_good() const noexcept
         {
-            return (m_data.size() >= m_total) && !m_compute;
+            return (m_data.size() >= m_calc.total) && !m_calc.stale;
         }
 
         /*! \brief Tests that coordinate is either interior or ghots
         */
-        constexpr bool  is_valid(const COORD& c) const noexcept
+        constexpr bool  is_valid(const coord_type& c) const noexcept
         {
             if constexpr (GHOST || ORIGIN || is_signed){
-                return all_greater_equal(m_hardLo, c) && all_less(c, m_hardHi);
+                return all_greater_equal(m_calc.hardLo, c) && all_less(c, m_calc.hardHi);
             } else {
-                return all_less(c, m_hardHi);
+                return all_less(c, m_calc.hardHi);
             }
         }
 
@@ -411,14 +439,14 @@ namespace yq {
             This is the low-side coordinate for each dimension.  
             (Only valid for non-ghost).
         */
-        constexpr const COORD & low() const noexcept
+        constexpr const coord_type & low() const noexcept
         {
-            return m_softLo;
+            return m_calc.softLo;
         }
         
         template <typename F>
         requires (std::is_floating_point_v<F> && trait::can_add_v<value_type> && trait::can_two_multiply_v<value_type,F>)
-        value_type  linear(const COORD& c, const Coord<F,DIMS>& frac) const
+        value_type  linear(const coord_type& c, const Coord<F,DIMS>& frac) const
         {
             value_type  ret = {};
             linear_march(index(c), frac, 0, (F) 1., [&](size_t idx, F f){
@@ -436,14 +464,14 @@ namespace yq {
         */
         bool    needs_compute() const noexcept
         {
-            return m_compute;
+            return m_calc.stale;
         }
 
         /*! \brief Permutation order 
         */
         constexpr uint8_c   permutation() const noexcept
         { 
-            return m_order; 
+            return m_calc.order; 
         }
         
         constexpr ranges_type ranges() const noexcept
@@ -455,10 +483,10 @@ namespace yq {
         
             The bumper can be used to not hit the edge of the domain (ie, 2)
         */
-        constexpr ranges_type ranges(const COORD& bumper) const noexcept
+        constexpr ranges_type ranges(const coord_type& bumper) const noexcept
         {
-            COORD   L   = low();
-            COORD   U   = high() - bumper;
+            coord_type   L   = low();
+            coord_type   U   = high() - bumper;
             return range(L, max(L,U));
         }
 
@@ -476,8 +504,8 @@ namespace yq {
             This resizes a vector-based array, equivalent to set_limits() & build().
         */
         template <typename=void>
-        requires (is_vector && ORIGIN && !GHOST)
-        void    resize(const COORD&a, const COORD& b, const value_type& v = {})
+        requires (ORIGIN && !GHOST)
+        void    resize(const coord_type&a, const coord_type& b, const value_type& v = {})
         {
             set_limits(a, b);
             build(v);
@@ -488,8 +516,8 @@ namespace yq {
             This resizes a vector-based array, equivalent to set_limits() & build().
         */
         template <typename=void>
-        requires (is_vector && !ORIGIN && !GHOST)
-        void    resize(const COORD&sz, const value_type& v = {})
+        requires (!ORIGIN && !GHOST)
+        void    resize(const coord_type&sz, const value_type& v = {})
         {
             set_count(sz);
             build(v);
@@ -499,20 +527,20 @@ namespace yq {
         requires (DIMS == 2)
         range_type          rows() const
         {
-            return range(m_softLo.j, m_softHi.j);
+            return range(m_calc.softLo.j, m_calc.softHi.j);
         }
 
         /*! \brief Set the counts for the array
         
             This is LIKELY what you want.  
-            Resizes the count, requires a recompute & rebuild.
+            Resizes the count, requires a restale & rebuild.
             
             \note It'll force the counts to be at least one
         */
-        void    set_count(const COORD& v) noexcept
+        void    set_count(const coord_type& v) noexcept
         {
-            m_count     = max(v, impl::uniform_coord<index_type, DIMS>(1));
-            m_compute   = true;
+            m_calc.count     = max(v, impl::uniform_coord<index_type, DIMS>(1));
+            m_calc.stale   = true;
         }
         
         /*! \brief Sets the count (uniform)
@@ -521,23 +549,36 @@ namespace yq {
         */
         void    set_count(index_type v) noexcept
         {
-            m_count     = max(v, index_type{1});
-            m_compute   = true;
+            m_calc.count     = max(v, index_type{1});
+            m_calc.stale   = true;
         }
     
     
-        /*! \brief Sets the data object (copies)
+        /*! \brief Sets the data object by copying in the vector
         */
-        void    set_data(const DATA& d) 
+        void    set_data_copy(const std::vector<value_type>& d) 
         {
-            m_data      = d;
+            m_vector    = d;
+            m_data      = m_vector;
         }
         
-        /*! \brief Sets the data object (moves)
+        /*! \brief Sets the data object by moving in the vector
         */
-        void    set_data(DATA&& d) 
+        void    set_data_move(value_type&& d) 
         {
-            m_data      = std::move(d);
+            m_vector    = std::move(d);
+            m_data      = m_vector;
+        }
+        
+        /*! \brief Sets the data object by copying the span
+        
+            \note THIS DOES NOT TAKE OWNERSHIP OF THE DATA, the span must remain VALID
+            for the entire lifetime of use!
+        */
+        void    set_data_span(const std::span<value_type>& d)
+        {
+            m_vector.clear();
+            m_data      = d;
         }
 
         /*! \brief Sets the ghost 
@@ -549,10 +590,10 @@ namespace yq {
         */
         template <typename=void>
         requires GHOST
-        void    set_ghost(const COORD&v) noexcept
+        void    set_ghost(const coord_type&v) noexcept
         {
-            m_ghostLo   = m_ghostHi     = std::max(v, {});
-            m_compute   = true;
+            m_calc.ghostLo   = m_calc.ghostHi     = std::max(v, {});
+            m_calc.stale   = true;
         }
         
         /*! \brief Sets the ghost 
@@ -564,8 +605,8 @@ namespace yq {
         requires GHOST
         void    set_ghost(index_type v) noexcept
         {
-            m_ghostLo   = m_ghostHi     = std::max(v, {});
-            m_compute   = true;
+            m_calc.ghostLo   = m_calc.ghostHi     = std::max(v, {});
+            m_calc.stale   = true;
         }
 
         /*! \brief Sets the high-side ghost 
@@ -576,10 +617,10 @@ namespace yq {
         */
         template <typename=void>
         requires GHOST
-        void    set_ghost_high(const COORD&v) noexcept
+        void    set_ghost_high(const coord_type&v) noexcept
         {
-            m_ghostHi   = max(v, {});
-            m_compute   = true;
+            m_calc.ghostHi   = max(v, {});
+            m_calc.stale   = true;
         }
         
         /*! \brief Sets the high-side ghost 
@@ -592,8 +633,8 @@ namespace yq {
         requires GHOST
         void    set_ghost_high(index_type v) noexcept
         {
-            m_ghostHi   = max(v, {});
-            m_compute   = true;
+            m_calc.ghostHi   = max(v, {});
+            m_calc.stale   = true;
         }
 
         /*! \brief Sets the low-side ghost 
@@ -604,10 +645,10 @@ namespace yq {
         */
         template <typename=void>
         requires GHOST
-        void    set_ghost_low(const COORD&v) noexcept
+        void    set_ghost_low(const coord_type&v) noexcept
         {
-            m_ghostLo   = max(v, {});
-            m_compute   = true;
+            m_calc.ghostLo   = max(v, {});
+            m_calc.stale   = true;
         }
 
         /*! \brief Sets the low-side ghost 
@@ -620,21 +661,21 @@ namespace yq {
         requires GHOST
         void    set_ghost_low(index_type v) noexcept
         {
-            m_ghostLo   = max(v, {});
-            m_compute   = true;
+            m_calc.ghostLo   = max(v, {});
+            m_calc.stale   = true;
         }
 
         /*! \brief Sets counts & zero based on the values
         */
         template <typename=void>
         requires ORIGIN
-        void    set_limits(const COORD& a, const COORD& b) noexcept
+        void    set_limits(const coord_type& a, const coord_type& b) noexcept
         {
-            COORD L = min(a,b);
-            COORD U = max(a,b);
-            m_zero      = L;
-            m_count     = U - L;
-            m_compute   = true;
+            coord_type L = min(a,b);
+            coord_type U = max(a,b);
+            m_calc.zero      = L;
+            m_calc.count     = U - L;
+            m_calc.stale   = true;
         }
         
         /*! \brief Sets the low-side "zero"
@@ -643,9 +684,9 @@ namespace yq {
         */
         template <typename=void>
         requires ORIGIN
-        void    set_low(const COORD& v) noexcept
+        void    set_low(const coord_type& v) noexcept
         {
-            m_zero      = v;
+            m_calc.zero      = v;
         }
     
         /*! \brief Sets the low-side "zero"
@@ -656,8 +697,8 @@ namespace yq {
         requires ORIGIN
         void    set_low(index_type v) noexcept
         {
-            m_zero      = v;
-            m_compute   = true;
+            m_calc.zero      = v;
+            m_calc.stale   = true;
         }
         
         /*! \brief Sets the permutation order
@@ -666,8 +707,8 @@ namespace yq {
         */
         void    set_permutation(const uint8_c& v) noexcept
         {
-            m_order     = v;
-            m_compute   = true;
+            m_calc.order     = v;
+            m_calc.stale   = true;
         }
 
         /*! \brief Sets permutation to ascending
@@ -692,7 +733,6 @@ namespace yq {
             set_permutation(impl::coord_descending<DIMS>());
         }
         
-        
 
         /*! \brief Number of elements in the data
         */
@@ -704,27 +744,27 @@ namespace yq {
             Always available, this routine returns the first non-interior 
             coordinate on the high side per dim.
         */
-        constexpr const COORD& soft_high() const noexcept
+        constexpr const coord_type& soft_high() const noexcept
         {
-            return m_softHi;
+            return m_calc.softHi;
         }
 
         /*! \brief Interior lower-index value
         
             Always available, this routine returns the lower interior coordinate per dim.
         */
-        constexpr const COORD&    soft_low() const noexcept
+        constexpr const coord_type&    soft_low() const noexcept
         {
-            return m_softLo;
+            return m_calc.softLo;
         }
 
         /*! \brief Interior lower-index value
         
             Always available, this routine returns the lower interior coordinate per dim.
         */
-        constexpr const COORD&    soft_lower() const noexcept
+        constexpr const coord_type&    soft_lower() const noexcept
         {
-            return m_softLo;
+            return m_calc.softLo;
         }
 
         constexpr ranges_type soft_ranges() const noexcept
@@ -732,14 +772,14 @@ namespace yq {
             return range(soft_low(), soft_high());
         }
         
-        constexpr ranges_type soft_ranges(const COORD& bumper) const noexcept
+        constexpr ranges_type soft_ranges(const coord_type& bumper) const noexcept
         {
-            COORD L = soft_low();
-            COORD U = soft_high() - bumper;
+            coord_type L = soft_low();
+            coord_type U = soft_high() - bumper;
             return range(L, max(L,U));
         }
 
-        constexpr ranges_type soft_ranges(index_type bumper) const noexcept
+        constexpr ranges_type  soft_ranges(index_type bumper) const noexcept
         {
             return soft_ranges(impl::uniform_coord<index_type, DIMS>(bumper));
         }
@@ -749,14 +789,19 @@ namespace yq {
             Always available, this routine returns the first non-interior 
             coordinate on the high side per dim.
         */
-        constexpr const COORD& soft_upper() const noexcept
+        constexpr const coord_type&  soft_upper() const noexcept
         {
-            return m_softHi;
+            return m_calc.softHi;
         }
 
-        constexpr size_t    total_bytes() const noexcept
+        constexpr const size_c&  stride() const noexcept
         {
-            return m_total * sizeof(value_type);
+            return m_calc.stride();
+        }
+
+        constexpr size_t  total_bytes() const noexcept
+        {
+            return m_calc.total * sizeof(value_type);
         }
 
 
@@ -767,7 +812,7 @@ namespace yq {
         */
         constexpr size_t    total_elements() const noexcept
         {
-            return m_total;
+            return m_calc.total;
         }
         
         /*! \brief TRUE if the array's data is undersized.
@@ -777,7 +822,7 @@ namespace yq {
             return size() < total_elements();
         }
         
-        const value_type&    operator()( const COORD& c) const 
+        const value_type&    operator()( const coord_type& c) const 
         {
             size_t  idx = index(c);
             if(idx >= m_data.size()) [[unlikely]]
@@ -787,7 +832,7 @@ namespace yq {
         
         template <typename=void>
         requires is_mutable
-        value_type&    operator()( const COORD& c)
+        value_type&    operator()( const coord_type& c)
         {
             size_t  idx = index(c);
             if(idx >= m_data.size()) [[unlikely]]
@@ -908,36 +953,98 @@ namespace yq {
         constexpr auto crend() const noexcept { return m_data.cend(); }
 
         Array() = default;
-        Array(const DATA& cp) : m_data(cp) {}
-        Array(DATA&& mv) : m_data(std::move(mv)) {}
-        Array(const Array&) = default;
-        Array(Array&&) = default;
-        Array& operator=(const Array&) = default;
-        Array& operator=(Array&&) = default;
+        Array(const std::vector<value_type>& cp) : m_vector(cp)
+        {
+            m_data  = m_vector;
+        }
+        
+        Array(std::vector<value_type>&& mv) : m_vector(std::move(mv))
+        {
+            m_data  = m_vector;
+        }
+        
+        Array(const Array&cp)
+        {
+            m_vector    = cp.m_vector;
+            if(m_vector.empty()){
+                m_data  = cp.m_data;
+            } else {
+                m_data  = m_vector;
+            }
+            m_calc      = cp.m_calc;
+        }
+        
+        Array(Array&&mv)
+        {
+            m_vector        = std::move(mv.m_vector);
+            if(m_vector.empty()){
+                m_data  = mv.m_data;
+            } else {
+                m_data  = m_vector;
+            }
+            m_calc      = mv.m_calc;
+        }
+        
+        Array& operator=(const Array&cp)
+        {
+            if(&cp != this){
+                m_vector    = cp.m_vector;
+                if(m_vector.empty()){
+                    m_data  = cp.m_data;
+                } else {
+                    m_data  = m_vector;
+                }
+                m_calc  = cp.m_calc;
+            }
+            return *this;
+        }
+        
+        Array& operator=(Array&&mv)
+        {
+            if(&mv != this){
+                m_vector    = std::move(mv.m_vector);
+                if(m_vector.empty()){
+                    m_data  = mv.m_data;
+                } else {
+                    m_data  = m_vector;
+                }
+                m_calc  = mv.m_calc;
+            }
+            return *this;
+        }
+        
         ~Array() = default;
-        bool    operator==(const Array&) const = default;
+        bool    operator==(const Array&rhs) const
+        {
+            return (m_calc == rhs.m_calc) && (m_data == rhs.m_data);
+        }
     
     private:
         
-        DATA        m_data;
+        std::vector<value_type>   m_vector;
+        std::span<value_type>     m_data;
         
-        size_c      m_stride    = {};   // multipliers for coord -> index
-        size_c      m_dim       = {};   // total sizes per axis
+        struct Calc {
+            size_c              stride;     // multipliers for coord -> index
+            size_c              dim;        // total sizes per axis
 
-        union {
-            COORD   m_zero      = {};
-            COORD   m_softLo;
-        };
-        
-        COORD       m_count     = {};   // our size (as user-defined)
-        COORD       m_ghostLo   = {};
-        COORD       m_ghostHi   = {};
-        COORD       m_softHi    = {};
-        COORD       m_hardLo    = {};
-        COORD       m_hardHi    = {};
-        size_t      m_total     = 0ULL; //  total size (required by numbers)
-        uint8_c     m_order     = {};
-        bool        m_compute   = false;
+            union {
+                coord_type      zero;
+                coord_type      softLo;
+            };
+            
+            coord_type          count;      // our size (as user-defined)
+            coord_type          ghostLo;
+            coord_type          ghostHi;
+            coord_type          softHi;
+            coord_type          hardLo;
+            coord_type          hardHi;
+            size_t              total;      //  total size (required by numbers)
+            uint8_c             order;
+            bool                stale;      //  "stale" needs recompute
+            
+            bool operator==(const Calc&) const = default;
+        }               m_calc  = {};
         
         template <typename F, typename Pred>
         requires (std::is_floating_point_v<F> && trait::can_add_v<value_type> && trait::can_two_multiply_v<value_type,F>)
@@ -946,7 +1053,7 @@ namespace yq {
             if(n<DIMS){
                 F   g   = get(frac, n);
                 linear_march<F,Pred>(idx, n+1, prod*((F) 1.-g), pred);
-                linear_march<F,Pred>(idx+get(m_stride, n), n+1, prod*g, pred);
+                linear_march<F,Pred>(idx+get(m_calc.stride, n), n+1, prod*g, pred);
             } else {
                 pred(idx, prod);
             }
