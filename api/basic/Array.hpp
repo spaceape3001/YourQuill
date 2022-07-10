@@ -60,7 +60,7 @@ namespace yq {
             uint8_p rote[N];
             
             for(uint8_t n=0;n<N;++n)
-                rote[N] = { N-n-1, get(order, n) };
+                rote[n] = { N-n-1, get(order, n) };
             std::stable_sort(std::begin(rote), std::end(rote), 
                 [](uint8_p a, uint8_p b) -> bool { return a.second > b.second; }
             );
