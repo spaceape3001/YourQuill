@@ -52,6 +52,11 @@ namespace yq {
                 return m_pixels.total();
             }
 
+            size_t  pixel_size() const 
+            {
+                return sizeof(T);
+            }
+
             size_t  width() const override 
             { 
                 return (size_t) m_pixels.count().x; 
