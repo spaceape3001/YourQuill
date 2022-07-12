@@ -12,6 +12,8 @@
 
 namespace yq {
     namespace asset {
+    
+        /*! \brief A quadrilateral, taking in four points */
         class Quadrilateral : public engine::Render3D {
             YQ_OBJECT_DECLARE(Quadrilateral, engine::Render3D)
         public:
