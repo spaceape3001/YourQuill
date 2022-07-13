@@ -17,6 +17,14 @@
 namespace yq {
     
     namespace impl {
+    
+        /*! \brief Ascending coordinate
+        
+            Simple utility to produce an ascending uint8_t coordinate, ie {1,2,3,4,5} 
+            which would be perfect for your luggage!
+            
+            \tparam N  Dimension size
+        */
         template <uint8_t N>
         consteval Coord<uint8_t, N> coord_ascending()
         {
@@ -29,6 +37,12 @@ namespace yq {
             return ret;
         }
 
+        /*! \brief Descending coordinate
+        
+            Simple utility to produce a descending uint8_t coordinate, ie {5,4,3,2,1}.
+
+            \tparam N  Dimension size
+        */
         template <uint8_t N>
         consteval Coord<uint8_t, N> coord_descending()
         {
@@ -41,6 +55,14 @@ namespace yq {
             return ret;
         }
         
+        /*! \brief Uniform coordinate
+        
+            Simple utility to produce an uniform coordinate
+        
+            \tparam N   Dimension size
+            \tparam T   Coordinate index type type
+            \param[in]  val Value to use
+        */
         template <typename T, uint8_t N>
         constexpr Coord<T, N>   uniform_coord(T val)
         {
@@ -53,6 +75,11 @@ namespace yq {
             return ret;
         }
         
+        /*! \brief Determines the strides based on order
+        
+            This utility computes the stride based on the sizes using the order.  It's not super-effecient, 
+            but it'll get the job done, and it's not a frequently called routine.
+        */
         template <uint8_t N>
         Coord<size_t, N>        array_comingle(const Coord<size_t,N>& sizes, const Coord<uint8_t,N>& order)
         {
@@ -78,7 +105,12 @@ namespace yq {
             
             return ret;
         }
+     
+        /*! \brief Reference to thread-safe bad data
         
+            Rather than throwing exceptions, the array class uses this for a thread-safe buffer that
+            can be mutated (and later ignored) for bad coordinate calls.
+        */
         template <typename T>
         T&      thread_safe_bad_data()
         {
@@ -87,8 +119,14 @@ namespace yq {
         }
     }
     
+    /*! Configration for the array
+    
+        This is an internal class used to configuring the array.  
+        It's used to avoid the overload of template parameters that's otherwise needed.   
+        (As the configuration details *may* change for new features, this seemed reasonable
+    */
     template <typename I, uint8_t N, bool ORIGIN, bool GHOST>
-    struct ArrayCoord {
+    struct ArrayConfig {
         static_assert((1 <= N) && (N <= 6), "Invalid dimension count!");
 
         static constexpr const uint8_t  DIMS    = N;
@@ -107,7 +145,7 @@ namespace yq {
     namespace trait {
         template <typename> struct is_array_coord : std::false_type {};
         template <typename I, uint8_t N, bool ORIGIN, bool GHOST>
-        struct is_array_coord<ArrayCoord<I,N,ORIGIN,GHOST>> : std::true_type {};
+        struct is_array_coord<ArrayConfig<I,N,ORIGIN,GHOST>> : std::true_type {};
         template <typename T>
         inline constexpr bool is_array_coord_v = is_array_coord<T>::value;
     }
@@ -161,7 +199,7 @@ namespace yq {
     class Array {
     public:
     
-        static_assert(trait::is_array_coord_v<COORD>, "COORD parameter must be ArrayCoord based!");
+        static_assert(trait::is_array_coord_v<COORD>, "COORD parameter must be ArrayConfig based!");
 
         using value_type        = DATA;
         using coord_type        = typename COORD::coord_type;
