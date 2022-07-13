@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     std::vector<VqMonitor>  monitors    = VqMonitor::enumerate();
     VqMonitor               primary     = VqMonitor::primary();
     
-    cout << monitors.size() << "Monitors";
+    cout << monitors.size() << "Monitors\n";
     size_t      N   = monitors.size();
     for(size_t i=0;i<N; ++i){
         auto v  = monitors[i];
