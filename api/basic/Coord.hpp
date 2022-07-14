@@ -15,6 +15,14 @@ namespace yq {
     using std::min;
     using std::max;
     
+    /*! \brief Gets the specified coordinate dimension index
+    
+        \tparam T   index type to the coordinate
+        \tparam N   number of dimensions 
+        \param c    Coordinate itself
+        \param i    integer index of the dimension to get
+        \return the coordinate's index value for the given index
+    */
     template <typename T, uint8_t N>
     constexpr T   get(const Coord<T,N>& c, uint8_t i)
     {
@@ -22,6 +30,14 @@ namespace yq {
         return ((const T*)&c)[i];
     }
 
+    /*! \brief Editable reference the specified coordinate dimension index
+    
+        \tparam T   index type to the coordinate
+        \tparam N   number of dimensions 
+        \param c    Coordinate itself
+        \param i    integer index of the dimension to get
+        \return REFERENCE to the coordinate's index value for the given index
+    */
     template <typename T, uint8_t N>
     constexpr T&  edit(Coord<T,N>& c, uint8_t i)
     {
@@ -29,6 +45,14 @@ namespace yq {
         return ((const T*)&c)[i];
     }
 
+    /*! \brief Sets the specified coordinate value
+    
+        \tparam T   index type to the coordinate
+        \tparam N   number of dimensions 
+        \param c    Coordinate itself to be set
+        \param i    integer index of the dimension to get
+        \param v    integer value to set
+    */
     template <typename T, uint8_t N>
     void set (Coord<T,N>& c, uint8_t i, T v)
     {
@@ -41,22 +65,34 @@ namespace yq {
         template <typename T, uint8_t N>
         struct is_coord<Coord<T,N>> : std::true_type {};
         
+        /*! \brief Trait to test for a coordinate based type
+        */
         template <typename T>
         inline constexpr bool is_coord_v = is_coord<T>::value;
     }
     
+    /*! \brief Positive operator
+    */
     template <typename T, uint8_t N>
     constexpr Coord<T,N>  operator+(const Coord<T,N>& a) noexcept
     {
         return a;
     }
     
+    /*! \brief Returns N for the number of dimensions
+        
+        Used in templated code to return the dimensions of the object
+    */
     template <typename T, uint8_t N>
     consteval uint8_t dims(const Coord<T,N>&) noexcept
     {
         return N;
     }
     
+    /*! \brief Returns a collection of ranges, one per dimension, going from a to b
+    
+        This returns an integer range, one per dimension, that'll go from a to b.
+    */
     template <typename T, uint8_t N>
     requires std::is_integral_v<T>
     constexpr Coord<IntRange<T>,N>  range(const Coord<T,N>&a, const Coord<T,N>&b)
