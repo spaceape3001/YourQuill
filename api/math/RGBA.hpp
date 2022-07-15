@@ -10,14 +10,20 @@
 #include <math/RGB.hpp>
 
 namespace yq {
+
+
+    /*! \brief Simple structure for RGBA color data
+    
+        \tparam T   type of the component
+    */
     template <typename T>
     struct RGBA {
         using component_type = T;
     
-        T   red;
-        T   green;
-        T   blue;
-        T   alpha;
+        T   red;        //!< Red data
+        T   green;      //!< Green data
+        T   blue;       //!< Blue data
+        T   alpha;      //!< Alpha data
         
         constexpr bool    operator==(const RGBA&) const noexcept = default;
 
