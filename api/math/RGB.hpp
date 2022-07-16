@@ -9,13 +9,16 @@
 #include <math/preamble.hpp>
 
 namespace yq {
+
+    /*! \brief Simple structure for RGB color
+    */
     template <typename T>
     struct RGB {
         using component_type = T;
     
-        T   red;
-        T   green;
-        T   blue;
+        T   red;    //!< Red data
+        T   green;  //!< Green data
+        T   blue;   //!< Blue data
         
         constexpr bool    operator==(const RGB&) const noexcept = default;
 
