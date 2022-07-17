@@ -142,6 +142,7 @@ namespace yq {
         {
             if(!m_glfw){
                 glfwLogging(0,nullptr);
+                glfwInitHint(GLFW_JOYSTICK_HAT_BUTTONS, GLFW_FALSE);
                 glfwInit();
                 m_glfw  = true;
             }
