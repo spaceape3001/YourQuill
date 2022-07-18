@@ -14,10 +14,15 @@
 namespace yq {
     namespace engine {
 
+        /*! \brief Convience wrapper around GLFW Joysticks
+        */
         struct VqJoystick {
             const uint8_t  id = 0;
-            
+          
+            //! Vector of all gamepads
             static std::vector<VqJoystick>      gamepads();
+            
+            //! Vector of all joysticks
             static std::vector<VqJoystick>      joysticks();
             
             //! State of the joystick/gamepad axes
