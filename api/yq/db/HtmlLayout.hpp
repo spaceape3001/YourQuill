@@ -27,14 +27,14 @@ namespace yq {
         unsigned int         rows    = (data.size() + cols - 1) / cols;
         if(rows < 1)
             rows    = 1;
-        Array2<T>   ret({rows, cols});    
+        Array2<T>   ret(Coord2U{rows, cols});    
         for(unsigned int i=0;i<cols;++i)
             for(unsigned int j=0;j<rows;++j)
         {
             size_t  n   = (size_t) i * (size_t) rows + (size_t) j;
             if(n >= data.size())
                 continue;
-            ret({j,i})   = data[n];
+            ret(j,i)   = data[n];
         }
         return ret;
     }
@@ -47,7 +47,7 @@ namespace yq {
         unsigned int         rows    = (data.size() + cols - 1) / cols;
         if(rows < 1)
             rows    = 1;
-        Array2<T>   ret({rows, cols});    
+        Array2<T>   ret(Coord2U{rows, cols});    
         for(unsigned int i=0;i<cols;++i)
             for(unsigned int j=0;j<rows;++j)
         {

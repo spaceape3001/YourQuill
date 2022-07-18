@@ -565,7 +565,7 @@ namespace yq {
         requires (DIMS == 2)
         range_type          rows() const
         {
-            return range(m_calc.softLo.j, m_calc.softHi.j);
+            return range(m_calc.softLo.i, m_calc.softHi.i);
         }
 
         /*! \brief Set the counts for the array
