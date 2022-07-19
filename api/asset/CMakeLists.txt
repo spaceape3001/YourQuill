@@ -15,7 +15,7 @@ set(yq_asset_sources
 )
 
 add_library(yqasset SHARED ${yq_asset_sources})
-target_link_libraries(yqasset PUBLIC yqbasic yqmath yqengine)
+target_link_libraries(yqasset PUBLIC  yqengine)
 LinkTest(yqasset)
 
 

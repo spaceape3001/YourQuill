@@ -7,6 +7,9 @@
 add_executable(ask ask.cpp)
 target_link_libraries(ask ${CURL_LIBRARIES})
 
+add_executable(glfw_joysticks glfw_joysticks.cpp)
+target_link_libraries(glfw_joysticks yqengine)
+
 add_executable(glfw_monitors glfw_monitors.cpp)
 target_link_libraries(glfw_monitors yqengine)
 
@@ -14,7 +17,7 @@ add_executable(kvtree kvtree.cpp)
 target_link_libraries(kvtree yq)
 
 add_executable(metavalues metavalues.cpp)
-target_link_libraries(metavalues yq yqmath)
+target_link_libraries(metavalues yq yqcore)
 
 add_executable(sqlquery sqlquery.cpp)
 target_link_libraries(sqlquery yq)

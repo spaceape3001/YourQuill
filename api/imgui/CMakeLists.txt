@@ -37,6 +37,7 @@ target_link_libraries(imgui PUBLIC
     ${FREETYPE_LIBRARIES}
     ${GLFW3_LIBRARY} 
     ${Vulkan_LIBRARIES} 
+    yqcore
 )
     
 LinkTest(imgui)

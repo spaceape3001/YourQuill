@@ -23,9 +23,8 @@ set(yq_engine_sources
     ./render/Rendered.cpp
     ./render/Render3D.cpp
 
-
-
 #    ./vulqan/VqCommandFrame.cpp
+       
 #    ./vulqan/VqObject.cpp
 #    ./vulqan/VqObjectFrame.cpp
     ./vulqan/VqPipeline.cpp
@@ -33,7 +32,7 @@ set(yq_engine_sources
 
 add_library(yqengine SHARED ${yq_engine_sources})
 target_compile_definitions(yqengine PRIVATE VK_ENABLE_BETA_EXTENSIONS=1)
-target_link_libraries(yqengine PUBLIC yqbasic yqconfig yqmath ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui stb vma)
+target_link_libraries(yqengine PUBLIC yqcore yqconfig ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui stb vma)
 LinkTest(yqengine)
 
 

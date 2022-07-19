@@ -104,7 +104,7 @@ ENDIF()
 
 target_link_libraries(yq 
     PUBLIC 
-        yqbasic
+        yqcore
         yqconfig
 )
 

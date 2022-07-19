@@ -329,7 +329,7 @@ int main(int argc, char* argv[])
     
     ViewerCreateInfo      wi;
     wi.title        = "Cameras!";
-    wi.resizable    = true;
+    wi.resizable    = false;
     wi.size         = { 1920, 1080 };
     wi.clear        = { 0.1f, 0.1f, 0.2f, 1.f };
     wi.imgui        = true;

@@ -13,6 +13,6 @@ set(stdquill_SOURCES
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
 target_include_directories( stdquill PRIVATE ${ImageMagick_INCLUDE_DIRS}) 
-target_link_libraries( stdquill PUBLIC yq yqmath ${ImageMagick_LIBRARIES})
+target_link_libraries( stdquill PUBLIC yq yqcore ${ImageMagick_LIBRARIES})
 
 LinkTest(stdquill)
