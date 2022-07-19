@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="60.4011mm"
+   height="82.119911mm"
+   viewBox="0 0 60.4011 82.119911"
+   version="1.1"
+   id="svg2638"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   sodipodi:docname="death.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2640"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="2.587745"
+     inkscape:cx="-131.96818"
+     inkscape:cy="171.9644"
+     inkscape:window-width="3840"
+     inkscape:window-height="2108"
+     inkscape:window-x="-5"
+     inkscape:window-y="-5"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="axonomgrid"
+       id="grid3485"
+       originx="-103.58822"
+       originy="-58.993686" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2635" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-103.58822,-58.993689)">
+    <path
+       style="fill:#808080;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 103.96018,135.19261 0.006,-40.480599 c 0,0 -4.443249,-35.884867 24.49103,-35.584155 29.31151,0.304632 29.03175,11.583467 28.98201,35.314794 -0.0511,24.38002 -46.89537,46.40443 -46.89537,46.40443 z"
+       id="path3913"
+       sodipodi:nodetypes="ccsscc" />
+    <path
+       style="fill:#e6e6e6;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 110.37223,140.77758 0.006,-40.4806 c 0,0 -4.44325,-35.884866 24.49103,-35.584154 29.31151,0.304632 29.03175,11.583467 28.98201,35.314794 -0.0511,24.38002 -1.37468,40.95321 -1.37468,40.95321 z"
+       id="path3913-5"
+       sodipodi:nodetypes="ccsscc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:22.5778px;line-height:125%;font-family:Baskerville;-inkscape-font-specification:'Baskerville, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#808080;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="110.951"
+       y="103.21866"
+       id="text4107"><tspan
+         sodipodi:role="line"
+         id="tspan4105"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:22.5778px;font-family:Baskerville;-inkscape-font-specification:'Baskerville, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.264583px"
+         x="110.951"
+         y="103.21866">R.I.P.</tspan></text>
+  </g>
+</svg>
