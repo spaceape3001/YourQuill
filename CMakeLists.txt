@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-cmake_minimum_required(VERSION 3.20.0)      # Modern CMake please
+cmake_minimum_required(VERSION 3.23.0)      # Modern CMake please
 project(YourQuill VERSION 0.0.0.2)
 
 include(cmake/CheckCxxVersions.cmake)
