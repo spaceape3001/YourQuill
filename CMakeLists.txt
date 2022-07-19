@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.23.0)      # Modern CMake please
 project(YourQuill VERSION 0.0.0.2)
 
-include(cmake/CheckCxxVersions.cmake)
+include(yq-core/cmake/CheckCxxVersions.cmake)
 
 if( "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
         # Mixing source and binary output is asking for trouble, best to avoid it
@@ -20,7 +20,7 @@ if(UNIX AND NOT APPLE)
     get_filename_component(CMAKE_BUILD_TYPE ${CMAKE_BINARY_DIR} NAME)
 endif()
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/yq-core/cmake ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 set(CMAKE_CONFIGURATION_TYPES Debug;Release)
 
 set(CMAKE_CXX_STANDARD 23)                  # C++20 is the standard (may be bumped in the future)
@@ -61,8 +61,8 @@ message("Vulkan should be in " $ENV{VULKAN_SDK})
 
 find_package(GLFW3)
 
-include(cmake/GroupFiles.cmake)
-include(cmake/LinkTest.cmake)
+include(yq-core/cmake/GroupFiles.cmake)
+include(yq-core/cmake/LinkTest.cmake)
 
 #   WARNING DEFINITIONS
 add_definitions(-Wfatal-errors -Wno-error=unused-function -Wno-error=unused-variable -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch -DASIO_STANDALONE)
@@ -89,18 +89,17 @@ if(Feature_BuildTime)
 endif()
 
 
-include_directories(${TBB_INCLUDE_DIR})
+
 include_directories(${LOG4CPP_INCLUDE_DIR})
 if(EXISTS apix)
     #   apix is intended as a local experimental API
     #include_directories(apix)
 endif()
+
 include_directories(api)
 include_directories(${CMAKE_BINARY_DIR}/api)
-include_directories(3rd/rapidxml-1.13)
 include_directories(3rd/asio/asio/include)
 include_directories(3rd/nlohmann/include)
-include_directories(3rd/pstreams-1.0.3)
 
 if(Feature_PrecompiledHeaders)
     SET(PRECOMPILE_HEADERS util/c++/stdlibs.hpp)
@@ -121,6 +120,7 @@ add_definitions(-Werror)
 add_definitions(-DGLFW_INCLUDE_VULKAN=1)
 
 #add_subdirectory(res)
+add_subdirectory(yq-core)
 add_subdirectory(api)
 #if(Feature_Experimental AND EXISTS apix)
     #add_subdirectory(apix)
@@ -130,7 +130,6 @@ if(Feature_Experimental AND EXISTS pluginx)
     #add_subdirectory(pluginx)
 endif()
 if(Feature_UnitTests)
-    include_directories(3rd/ut/include)
     add_subdirectory(tests)
     if(Feature_Experimental AND EXISTS testx)
         #add_subdirectory(testx)

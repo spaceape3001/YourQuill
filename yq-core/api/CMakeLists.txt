@@ -44,6 +44,8 @@ target_link_libraries(${PROJECT_NAME}
         ${TBB_LIBRARIES}
         ${CURL_LIBRARIES}
         ${SQLite3_LIBRARY}
+        pstreams
+        RapidXml
 )
 
 target_include_directories(${PROJECT_NAME}
