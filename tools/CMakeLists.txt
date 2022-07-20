@@ -36,5 +36,5 @@ target_link_libraries(vk_layers yqengine)
 add_executable(wkspinfo wkspinfo.cpp)
 target_link_libraries(wkspinfo yq)
 
-add_executable(xmlread xmlread.cpp)
+
 

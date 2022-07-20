@@ -6,9 +6,14 @@
 
 project(yqcore)
 
-find_package(CURL)
+find_package(CURL REQUIRED)
 find_package(Log4cpp REQUIRED)
-#find_package(TBB REQUIRED)
+find_package(TBB REQUIRED)
+find_package(glm REQUIRED)
+find_package(SQLite3 REQUIRED)
+
+message("INCLUDE ${Sqlite3_INCLUDE_DIRS}")
+
 
 #   This is a testing file, excluded from GIT, used for quick test compilation 
 #   of code before sliding it into the appropriate spot of the build.
@@ -51,9 +56,11 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}
+        ${TBB_INCLUDE_DIR}
+        ${LOG4CPP_INCLUDE_DIR}
+        ${Sqlite3_INCLUDE_DIRS}
 )
 
 LinkTest(${PROJECT_NAME})
-
 
 
