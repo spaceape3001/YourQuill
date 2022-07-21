@@ -51,6 +51,7 @@ target_link_libraries(${PROJECT_NAME}
         ${SQLite3_LIBRARY}
         pstreams
         RapidXml
+        json
 )
 
 target_include_directories(${PROJECT_NAME}

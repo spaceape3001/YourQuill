@@ -1,12 +1,6 @@
 [submodule "3rd/asio"]
 	path = 3rd/asio
 	url = https://github.com/chriskohlhoff/asio.git
-[submodule "3rd/jsoncpp"]
-	path = 3rd/jsoncpp
-	url = https://github.com/open-source-parsers/jsoncpp.git
-[submodule "3rd/nlohmann"]
-	path = 3rd/nlohmann
-	url = https://github.com/nlohmann/json.git
 [submodule "3rd/stb"]
 	path = 3rd/stb
 	url = https://github.com/nothings/stb.git

@@ -4,48 +4,17 @@
 ##
 ################################################################################
 
-cmake_minimum_required(VERSION 3.23.0)      # Modern CMake please
-project(YourQuill VERSION 0.0.0.2)
+cmake_minimum_required(VERSION 3.23.0)
+project(YourQuill VERSION 0.0.0.3)
+include(yq-utility/YourQuill.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+add_subdirectory(yq-utility)
 
-include(yq-core/cmake/CheckCxxVersions.cmake)
 
-if( "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
-        # Mixing source and binary output is asking for trouble, best to avoid it
-    message(SEND_ERROR "Building into the source directory is NOT recommended, choose another destination.")
-endif()
-
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-    set(CMAKE_GENERATOR "Unix Makefiles")
-    get_filename_component(CMAKE_BUILD_TYPE ${CMAKE_BINARY_DIR} NAME)
-endif()
-
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/yq-core/cmake ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-set(CMAKE_CONFIGURATION_TYPES Debug;Release)
-
-set(CMAKE_CXX_STANDARD 23)                  # C++20 is the standard (may be bumped in the future)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-option(Feature_ApiDocumentation "Enable Doxygen API Generation?" ON)
-option(Feature_UnitTests "Enable Unit Tests" ON)
-set(ENABLE_GLM OFF)
-option(Feature_BuildTime "Print out build times" ON)
-option(Feature_Experimental "Enable Experimental Features" ON)
-option(Feature_PrecompiledHeaders "Enable Precompiled Headers" ON)
-option(Developer_Build "Set for a development build" ON) # Disable for release-release
-
-message( "Build Type is " ${CMAKE_BUILD_TYPE})
-
-find_package(CURL)
-find_package(Log4cpp REQUIRED)
-find_package(TBB REQUIRED)
+# find_package(CURL)
+# find_package(Log4cpp REQUIRED)
+# find_package(TBB REQUIRED)
 find_package(Graphviz)
-find_package(SQLite3 REQUIRED)
 find_package(ImageMagick COMPONENTS Magick++)
 
 # find_package(libzip REQUIRED)
@@ -61,11 +30,9 @@ message("Vulkan should be in " $ENV{VULKAN_SDK})
 
 find_package(GLFW3)
 
-include(yq-core/cmake/GroupFiles.cmake)
-include(yq-core/cmake/LinkTest.cmake)
 
 #   WARNING DEFINITIONS
-add_definitions(-Wfatal-errors -Wno-error=unused-function -Wno-error=unused-variable -Wall -fno-strict-aliasing -D_GNU_SOURCE -fdiagnostics-color -fdiagnostics-show-template-tree -fno-elide-type -fdiagnostics-path-format=inline-events -fdiagnostics-generate-patch -DASIO_STANDALONE)
+add_definitions(-DASIO_STANDALONE)
 
 if(Developer_Build)
     add_definitions(-DDEV_BUILD=1)
@@ -82,11 +49,7 @@ if(Feature_ApiDocumentation)
     endif()
 endif()
 
-enable_testing()
 
-if(Feature_BuildTime)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
-endif()
 
 
 
@@ -102,7 +65,7 @@ include_directories(3rd/asio/asio/include)
 include_directories(3rd/nlohmann/include)
 
 if(Feature_PrecompiledHeaders)
-    SET(PRECOMPILE_HEADERS util/c++/stdlibs.hpp)
+    # SET(PRECOMPILE_HEADERS util/c++/stdlibs.hpp)
 endif()
 
     #   We add support for "experimental" directories, either "s->x" or x appended.
@@ -120,7 +83,6 @@ add_definitions(-Werror)
 add_definitions(-DGLFW_INCLUDE_VULKAN=1)
 
 #add_subdirectory(res)
-add_subdirectory(yq-core)
 add_subdirectory(api)
 #if(Feature_Experimental AND EXISTS apix)
     #add_subdirectory(apix)
