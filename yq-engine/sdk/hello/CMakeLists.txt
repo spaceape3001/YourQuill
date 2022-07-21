@@ -1,2 +1,2 @@
 add_executable(hello hello.cpp)
-target_link_libraries(hello yqengine yqasset)
+target_link_libraries(hello yqengine)

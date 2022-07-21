@@ -13,7 +13,7 @@
 #include <basic/TextUtils.hpp>
 #include <basic/meta/Init.hpp>
 
-#include <config/DirConfig.hpp>
+#include <YqEngineConfig.hpp>
 
 #include <engine/AssetCache.hpp>
 #include <engine/ResultCC.hpp>

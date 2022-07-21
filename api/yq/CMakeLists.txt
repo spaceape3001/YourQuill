@@ -104,8 +104,8 @@ ENDIF()
 
 target_link_libraries(yq 
     PUBLIC 
-        yqcore
-        yqconfig
+        yqutility
+	yqconfig
 )
 
 LinkTest(yq)
