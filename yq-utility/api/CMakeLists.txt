@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-project(yqcore)
+project(yqutility)
 
 find_package(CURL REQUIRED)
 find_package(Log4cpp REQUIRED)

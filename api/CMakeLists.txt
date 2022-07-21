@@ -11,9 +11,6 @@
 
 add_subdirectory(config)
 add_subdirectory(yq)
-add_subdirectory(imgui)
-add_subdirectory(engine)
-add_subdirectory(asset)
 #add_subdirectory(srv)
 #add_subdirectory(plot)
 

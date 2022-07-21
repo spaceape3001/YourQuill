@@ -33,12 +33,11 @@ if(NOT YOUR_QUILL_CMAKE)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${CMAKE_BINARY_DIR}/bin)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
     set(CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    set(CMAKE_DEBUG_POSTFIX D)
 
-    option(Feature_ApiDocumentation "Enable Doxygen API Generation?" ON)
-    option(Feature_UnitTests "Enable Unit Tests" ON)
+    #option(Feature_ApiDocumentation "Enable Doxygen API Generation?" ON)
     option(Feature_BuildTime "Print out build times" ON)
-    option(Feature_Experimental "Enable Experimental Features" ON)
-    option(Feature_PrecompiledHeaders "Enable Precompiled Headers" ON)
+    # option(Feature_PrecompiledHeaders "Enable Precompiled Headers" ON)
     option(Developer_Build "Set for a development build" ON) # Disable for release-release
 
     message( "Build Type is " ${CMAKE_BUILD_TYPE})
