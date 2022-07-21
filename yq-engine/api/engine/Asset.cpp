@@ -6,9 +6,9 @@
 
 #include "Asset.hpp"
 #include "AssetCache.hpp"
+#include <YqEngineConfig.hpp>
 #include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>
-#include <config/DirConfig.hpp>
 
 YQ_OBJECT_IMPLEMENT(yq::engine::Asset)
 YQ_OBJECT_IMPLEMENT(yq::engine::AssetCache)

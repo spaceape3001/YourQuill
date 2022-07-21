@@ -20,6 +20,8 @@ endif()
 add_library(yqengine SHARED 
     ${test_source}
     
+    ./YqEngineConfig.cpp
+    
     ./stb.cpp
     ./vma.cpp
     
@@ -58,6 +60,7 @@ target_compile_definitions(yqengine
     PUBLIC
         GLFW_INCLUDE_VULKAN=1
     PRIVATE 
+        "-DYQ_DATA_DIR=\"${CMAKE_CURRENT_LIST_DIR}/data\"" 
         VK_ENABLE_BETA_EXTENSIONS=1
         IMGUI_USE_WCHAR32=1 
 )

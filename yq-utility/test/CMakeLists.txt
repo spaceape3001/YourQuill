@@ -6,7 +6,7 @@
 
 macro(core_test name)
     add_executable(test_${name} ${name}.cpp)
-    target_link_libraries(test_${name} PRIVATE yqcore BoostUT)
+    target_link_libraries(test_${name} PRIVATE yqutility BoostUT)
     add_test(NAME ${name} COMMAND test_${name} ${ARGN})
 endmacro()
 
