@@ -1,3 +1,6 @@
 [submodule "3rd/asio"]
 	path = 3rd/asio
 	url = https://github.com/chriskohlhoff/asio.git
+[submodule "yq-toolbox"]
+	path = yq-toolbox
+	url = https://github.com/spaceape3001/yq-toolbox.git
