@@ -5,7 +5,7 @@ if("${PROJECT_NAME}" STREQUAL "")
     
     #   TODO.... add in verbage
     
-    include(${YQ_UTILTIY_DIR}/YourQuill.cmake)
+    include(${YQ_TOOLBOX_DIR}/YourQuill.cmake)
 endif()
 
 add_subdirectory(3rd)

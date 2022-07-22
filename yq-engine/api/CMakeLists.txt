@@ -4,6 +4,7 @@
 ##
 ################################################################################
 
+project(yqengine)
 
 find_package(GLFW3 REQUIRED)
 
@@ -66,7 +67,7 @@ target_compile_definitions(yqengine
 )
 target_link_libraries(yqengine 
     PUBLIC  
-        yqutility 
+        yqtoolbox
         stb 
         vma 
         ${FREETYPE_LIBRARIES}
