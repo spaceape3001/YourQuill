@@ -8,7 +8,7 @@ add_executable(kvtree kvtree.cpp)
 target_link_libraries(kvtree yq)
 
 add_executable(metavalues metavalues.cpp)
-target_link_libraries(metavalues yq yqutility)
+target_link_libraries(metavalues yq yqtoolbox)
 
 add_executable(sqlquery sqlquery.cpp)
 target_link_libraries(sqlquery yq)
