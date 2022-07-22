@@ -11,7 +11,5 @@
 
 add_subdirectory(config)
 add_subdirectory(yq)
-#add_subdirectory(srv)
-#add_subdirectory(plot)
 
 
