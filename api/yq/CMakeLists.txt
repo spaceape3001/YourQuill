@@ -4,6 +4,8 @@
 ##
 ################################################################################
 
+include(${YOUR_QUILL_EXTERNAL}/asio.cmake)
+
 #   Some of the major libraries will be combined into a single "unity-style" library for
 #   cohesiveness (and the ability to cross-link).  Other libraries will be added independently.
 #
@@ -104,7 +106,8 @@ ENDIF()
 
 target_link_libraries(yq 
     PUBLIC 
-        yqtoolbox
+    yqtoolbox
+    asio
 	yqconfig
 )
 
