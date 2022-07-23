@@ -1,9 +1,9 @@
 [submodule "3rd/asio"]
 	path = 3rd/asio
 	url = https://github.com/chriskohlhoff/asio.git
-[submodule "yq-toolbox"]
+[submodule "toolbox"]
 	path = toolbox
 	url = https://github.com/spaceape3001/yq-toolbox.git
-[submodule "yq-external"]
+[submodule "external"]
 	path = external
 	url = https://github.com/spaceape3001/yq-external.git

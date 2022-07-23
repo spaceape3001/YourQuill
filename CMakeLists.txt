@@ -6,10 +6,10 @@
 
 cmake_minimum_required(VERSION 3.23.0)
 project(YourQuill VERSION 0.0.0.3)
-include(yq-external/configure.cmake)
-include(yq-toolbox/configure.cmake)
-add_subdirectory(yq-toolbox)
-add_subdirectory(yq-vulqan)
+include(external/configure.cmake)
+include(toolbox/configure.cmake)
+add_subdirectory(toolbox)
+add_subdirectory(vulqan)
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
