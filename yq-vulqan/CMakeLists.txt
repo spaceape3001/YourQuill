@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23.0)
 
 if("${PROJECT_NAME}" STREQUAL "")
-    project(YourQuil VERSION 0.0.0.3)
+    project(YourQuill VERSION 0.0.0.3)
     
     #   TODO.... add in verbage
     

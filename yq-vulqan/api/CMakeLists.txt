@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-project(yqengine)
+project(yqvulqan)
 
 find_package(GLFW3 REQUIRED)
 
@@ -18,7 +18,7 @@ if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/test.cpp)
 endif()
 
 
-add_library(yqengine SHARED 
+add_library(${PROJECT_NAME} SHARED 
     ${test_source}
     
     ./YqEngineConfig.cpp
@@ -57,7 +57,7 @@ add_library(yqengine SHARED
     ./imgui/misc/freetype/imgui_freetype.cpp
 
 )
-target_compile_definitions(yqengine 
+target_compile_definitions(${PROJECT_NAME} 
     PUBLIC
         GLFW_INCLUDE_VULKAN=1
     PRIVATE 
@@ -65,7 +65,7 @@ target_compile_definitions(yqengine
         VK_ENABLE_BETA_EXTENSIONS=1
         IMGUI_USE_WCHAR32=1 
 )
-target_link_libraries(yqengine 
+target_link_libraries(${PROJECT_NAME} 
     PUBLIC  
         yqtoolbox
         stb 
@@ -74,7 +74,7 @@ target_link_libraries(yqengine
         ${Vulkan_LIBRARIES} 
         ${GLFW3_LIBRARY}
 )
-target_include_directories(yqengine 
+target_include_directories(${PROJECT_NAME} 
     PUBLIC 
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/imgui        
@@ -82,8 +82,6 @@ target_include_directories(yqengine
         ${FREETYPE_INCLUDE_DIRS}
 )
 
-LinkTest(yqengine)
+LinkTest(${PROJECT_NAME})
 
-
-# target_link_libraries(yqengine PUBLIC yqcore yqconfig ${Vulkan_LIBRARIES} ${GLFW3_LIBRARY} imgui stb vma)
 

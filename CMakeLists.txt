@@ -11,8 +11,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 option(Feature_Experimental "Enable Experimental Features" OFF)
 
+#add_subdirectory(yq-external)
 add_subdirectory(yq-toolbox)
-add_subdirectory(yq-engine)
+add_subdirectory(yq-vulqan)
 
 
 find_package(Graphviz)
