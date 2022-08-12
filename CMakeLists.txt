@@ -6,10 +6,12 @@
 
 cmake_minimum_required(VERSION 3.23.0)
 project(YourQuill VERSION 0.0.0.3)
-include(external/configure.cmake)
-include(toolbox/configure.cmake)
-add_subdirectory(toolbox)
-add_subdirectory(vulqan)
+include(yq-external/configure.cmake)
+include(yq-toolbox/configure.cmake)
+add_subdirectory(yq-toolbox)
+add_subdirectory(yq-kernel)
+add_subdirectory(yq-server)
+add_subdirectory(yq-vulqan)
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
@@ -67,6 +69,6 @@ if(Feature_Experimental AND EXISTS play)
     add_subdirectory(play)
 endif()
 
-add_subdirectory(qt)
+add_subdirectory(yq-qtapps)
 
 
