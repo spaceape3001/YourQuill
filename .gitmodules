@@ -1,12 +1,12 @@
 [submodule "toolbox"]
-	path = toolbox
+	path = yq-toolbox
 	url = https://github.com/spaceape3001/yq-toolbox.git
 [submodule "external"]
-	path = external
+	path = yq-external
 	url = https://github.com/spaceape3001/yq-external.git
 [submodule "vulqan"]
-	path = vulqan
+	path = yq-vulqan
 	url = https://github.com/spaceape3001/yq-vulqan.git
 [submodule "qt"]
-	path = qt
+	path = yq-qtapps
 	url = https://github.com/spaceape3001/yq-qt.git
