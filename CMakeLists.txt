@@ -69,6 +69,5 @@ if(Feature_Experimental AND EXISTS play)
     add_subdirectory(play)
 endif()
 
-add_subdirectory(yq-qtapps)
 
 
