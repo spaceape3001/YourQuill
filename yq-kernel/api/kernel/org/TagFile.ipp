@@ -7,31 +7,10 @@
 #pragma once
 
 #include "TagFile.hpp"
-#include <basic/TextUtils.hpp>
 #include <kernel/bit/KeyValue.hpp>
 #include <kernel/io/Strings.hpp>
 
 namespace yq {
-    Tag::Data& Tag::Data::merge(const Data&b, bool fOverride)
-    {
-        set_if_empty(leaf, b.leaf, fOverride);
-        set_if_empty(name, b.name, fOverride);
-        set_if_empty(brief, b.brief, fOverride);
-        set_if_empty(notes, b.notes, fOverride);
-        return *this;
-    }
-
-    void    Tag::Data::reset() 
-    {
-        name.clear();
-        leaf.clear();
-        brief.clear();
-        notes.clear();
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-
-
     void    Tag::File::reset() 
     {
         Data::reset();

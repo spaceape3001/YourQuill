@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/atom/Field.hpp>
-#include <yq/atom/Value.hpp>
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/atom/Field.hpp>
+#include <kernel/atom/Value.hpp>
+#include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Sorted.hpp>
 
 namespace yq {
@@ -19,20 +19,20 @@ namespace yq {
     };
 
     namespace cdb {
-        std::string     brief(Value);
-        std::string     data(Value);
+        std::string             brief(Value);
+        std::string             data(Value);
     
-        Value           db_value(Field, std::string_view, bool* wasCreated=nullptr);
+        Value                   db_value(Field, std::string_view, bool* wasCreated=nullptr);
         
-        bool            exists(Value);
-        bool            exists_value(uint64_t);
+        bool                    exists(Value);
+        bool                    exists_value(uint64_t);
         
-        Field           field(Value);
-        Value::Info     info(Value);
+        Field                   field(Value);
+        Value::Info             info(Value);
         
-        Value           value(uint64_t);
-        Vector<Value>   values(Field, Sorted=Sorted{});
-        Set<Value>      values_set(Field);
+        Value                   value(uint64_t);
+        std::vector<Value>      values(Field, Sorted=Sorted{});
+        std::set<Value>         values_set(Field);
         
     }
 }

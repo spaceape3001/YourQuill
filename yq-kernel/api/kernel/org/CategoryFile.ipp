@@ -7,21 +7,10 @@
 #pragma once
 
 #include "CategoryFile.hpp"
-#include <basic/TextUtils.hpp>
 #include <kernel/bit/KeyValue.hpp>
 #include <kernel/io/Strings.hpp>
 
 namespace yq {
-    Category::Data&   Category::Data::merge(const Data&b, bool fOverride)
-    {
-        set_if_empty(name, b.name, fOverride);
-        set_if_empty(brief, b.brief, fOverride);
-        set_if_empty(notes, b.notes, fOverride);
-        return *this;
-    }
-
-////////////////////////////////////////////////////////////////////////////////
-
     void    Category::File::reset() 
     {
         *(Data*) this = Data{};

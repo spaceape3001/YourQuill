@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <yq/atom/ClassFile.hpp>
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/atom/ClassFile.hpp>
+#include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Sorted.hpp>
-#include <yq/file/Document.hpp>
-#include <yq/image/Image.hpp>
-#include <yq/org/Category.hpp>
+#include <kernel/file/Document.hpp>
+#include <kernel/image/Image.hpp>
+#include <kernel/org/Category.hpp>
 
 //#include "Graph.hpp"
 

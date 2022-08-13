@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/atom/Field.hpp>
+#include <kernel/atom/Field.hpp>
 #include <kernel/enum/Multiplicity.hpp>
 #include <kernel/enum/Restriction.hpp>
 #include <basic/Map.hpp>

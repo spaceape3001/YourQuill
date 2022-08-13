@@ -9,9 +9,12 @@
 #include <compare>
 #include <cstdint>
 #include <initializer_list>
+#include <memory>
 #include <string_view>
 
 namespace yq {
+
+    template <typename> class IDLock;
 
     /*! \brief Field of the class
 

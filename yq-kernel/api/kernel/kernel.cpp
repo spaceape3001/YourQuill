@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+
 #include <kernel/enum/Access.hpp>
 #include <kernel/enum/AssertDeny.hpp>
 #include <kernel/enum/AttrKind.hpp>
@@ -42,6 +43,18 @@ YQ_TYPE_IMPLEMENT(yq::SizeDesc)
 YQ_TYPE_IMPLEMENT(yq::Submit)
 YQ_TYPE_IMPLEMENT(yq::Vcs)
 
+#include "atom/AtomCDB.ipp"
+#include "atom/Class.ipp"
+#include "atom/ClassCDB.ipp"
+#include "atom/ClassData.ipp"
+#include "atom/ClassFile.ipp"
+#include "atom/Field.ipp"
+#include "atom/FieldCDB.ipp"
+#include "atom/FieldData.ipp"
+#include "atom/FieldFile.ipp"
+#include "atom/ValueCDB.ipp"
+#include "atom/ValueData.ipp"
+#include "atom/ValueFile.ipp"
 #include "bit/Context.ipp"
 #include "bit/Copyright.ipp"
 #include "bit/KeyValue.ipp"
@@ -57,12 +70,16 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "image/ImageCDB.ipp"
 #include "io/StdFile.ipp"
 #include "io/StdObject.ipp"
+#include "leaf/LeafData.ipp"
 #include "leaf/LeafFile.ipp"
 #include "leaf/LeafCDB.ipp"
 #include "org/CategoryCDB.ipp"
+#include "org/CategoryData.ipp"
 #include "org/CategoryFile.ipp"
 #include "org/TagCDB.ipp"
+#include "org/TagData.ipp"
 #include "org/TagFile.ipp"
+#include "wksp/QuillData.ipp"
 #include "wksp/QuillFile.ipp"
 
 #include "directories.hpp"
@@ -80,9 +97,12 @@ namespace yq {
         }
     }
     
+    template class IDLock<Atom>;
     template class IDLock<Category>;
+    template class IDLock<Class>;
     template class IDLock<Directory>;
     template class IDLock<Document>;
+    template class IDLock<Field>;
     template class IDLock<Folder>;
     template class IDLock<Fragment>;
     template class IDLock<Leaf>;

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/atom/Value.hpp>
+#include <kernel/atom/Value.hpp>
 #include <basic/Vector.hpp>
 
 namespace yq {
