@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "wksp/QuillFile.ipp"
-
 #include <kernel/enum/Access.hpp>
 #include <kernel/enum/AssertDeny.hpp>
 #include <kernel/enum/AttrKind.hpp>
@@ -48,7 +46,24 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "bit/Copyright.ipp"
 #include "bit/KeyValue.ipp"
 #include "bit/Policy.ipp"
+#include "db/DBUtils.ipp"
+#include "db/IDLockImpl.ipp"
+#include "db/SQ.ipp"
+#include "file/DirectoryCDB.ipp"
+#include "file/DocumentCDB.ipp"
+#include "file/FolderCDB.ipp"
+#include "file/FragmentCDB.ipp"
+#include "file/RootCDB.ipp"
+#include "image/ImageCDB.ipp"
 #include "io/StdFile.ipp"
+#include "io/StdObject.ipp"
+#include "leaf/LeafFile.ipp"
+#include "leaf/LeafCDB.ipp"
+#include "org/CategoryCDB.ipp"
+#include "org/CategoryFile.ipp"
+#include "org/TagCDB.ipp"
+#include "org/TagFile.ipp"
+#include "wksp/QuillFile.ipp"
 
 #include "directories.hpp"
 
@@ -64,5 +79,13 @@ namespace yq {
             return YQ_SHARE_DIRS;
         }
     }
+    
+    template class IDLock<Category>;
+    template class IDLock<Directory>;
+    template class IDLock<Document>;
+    template class IDLock<Folder>;
+    template class IDLock<Fragment>;
+    template class IDLock<Leaf>;
+    template class IDLock<Tag>;
 }
 
