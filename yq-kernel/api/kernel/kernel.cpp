@@ -4,7 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <kernel/enum/Access.hpp>
 #include <kernel/enum/AssertDeny.hpp>
 #include <kernel/enum/AttrKind.hpp>
@@ -55,6 +54,8 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "atom/ValueCDB.ipp"
 #include "atom/ValueData.ipp"
 #include "atom/ValueFile.ipp"
+#include "attr/AttributeCDB.ipp"
+#include "attr/AttributeDiff.ipp"
 #include "bit/Context.ipp"
 #include "bit/Copyright.ipp"
 #include "bit/KeyValue.ipp"
@@ -64,6 +65,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "db/SQ.ipp"
 #include "file/DirectoryCDB.ipp"
 #include "file/DocumentCDB.ipp"
+#include "file/FileSpec.ipp"
 #include "file/FolderCDB.ipp"
 #include "file/FragmentCDB.ipp"
 #include "file/RootCDB.ipp"
@@ -79,6 +81,9 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "org/TagCDB.ipp"
 #include "org/TagData.ipp"
 #include "org/TagFile.ipp"
+#include "rule/Action.ipp"
+#include "rule/Constraint.ipp"
+#include "rule/Trigger.ipp"
 #include "user/Authentication.ipp"
 #include "user/UserCDB.ipp"
 #include "user/UserData.ipp"

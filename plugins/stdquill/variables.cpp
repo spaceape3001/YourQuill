@@ -15,7 +15,7 @@
 #include <kernel/atom/AtomCDB.hpp>
 #include <kernel/atom/ClassCDB.hpp>
 #include <kernel/atom/FieldCDB.hpp>
-#include <yq/attr/AttributeCDB.hpp>
+#include <kernel/attr/AttributeCDB.hpp>
 #include <kernel/file/DirectoryCDB.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>

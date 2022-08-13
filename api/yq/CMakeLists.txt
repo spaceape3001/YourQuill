@@ -33,7 +33,6 @@ set(yq_sources
     
     ./db/db.cpp
     
-    ./file/FileSpec.cpp
     ./file/file.cpp
     
     ./image/image.cpp
@@ -53,8 +52,6 @@ set(yq_sources
     
 
     ./org/orgsys.cpp
-
-    ./rule/rule.cpp
 
     
     ./srv/srv_unity.cpp

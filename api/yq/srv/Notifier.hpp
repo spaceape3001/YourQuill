@@ -8,7 +8,7 @@
 
 #include <basic/EnumMap.hpp>
 #include <kernel/enum/Change.hpp>
-#include <yq/file/FileSpec.hpp>
+#include <kernel/file/FileSpec.hpp>
 #include <kernel/file/Folder.hpp>
 #include <basic/Flag.hpp>
 #include <filesystem>

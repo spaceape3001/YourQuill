@@ -9,7 +9,7 @@
 #include <basic/preamble.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/file/Folder.hpp>
-#include <yq/file/FileSpec.hpp>
+#include <kernel/file/FileSpec.hpp>
 #include <source_location>
 #include <filesystem>
 

@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <yq/attr/Attribute.hpp>
 #include <yq/attr/AttributeArg.hpp>
-#include <yq/attr/AttributeCDB.hpp>
-#include <yq/attr/AttributeDiff.hpp>
+#include <kernel/attr/AttributeCDB.hpp>
+#include <kernel/attr/AttributeDiff.hpp>
 #include <yq/attr/AttributeHtml.hpp>
