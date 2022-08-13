@@ -9,7 +9,7 @@
 #include <compare>
 #include <cstdint>
 #include <initializer_list>
-#include <yq/enum/SizeDesc.hpp>
+#include <kernel/enum/SizeDesc.hpp>
 #include <math/Size2.hpp>
 
 namespace yq {

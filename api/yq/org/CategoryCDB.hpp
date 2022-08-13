@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/db/CacheFwd.hpp>
-#include <yq/enum/Sorted.hpp>
+#include <kernel/enum/Sorted.hpp>
 #include <yq/file/Document.hpp>
 #include <yq/image/Image.hpp>
 #include <yq/org/Category.hpp>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 namespace yq {
     WebContext::WebContext(asio::io_context& _io_ctx) :io_ctx(_io_ctx)

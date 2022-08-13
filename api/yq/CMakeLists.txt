@@ -31,14 +31,14 @@ set(yq_sources
     
     ./attr/attr.cpp
     
-    ./bit/bit_unity.cpp
+    #./bit/bit_unity.cpp
     
-    ./c++/NaN.hpp
+    #./c++/NaN.hpp
     
     
     ./db/db.cpp
     
-    ./enum/enum_unity.cpp
+    #./enum/enum_unity.cpp
 
     ./file/FileSpec.cpp
     ./file/file.cpp
@@ -90,7 +90,7 @@ set(yq_sources
     ./web/WebVariable.hpp
     ./web/WebVariable.ipp
     
-    ./wksp/Workspace.cpp
+    #./wksp/Workspace.cpp
     ./wksp/wksp.cpp
 )
 
@@ -108,7 +108,7 @@ target_link_libraries(yq
     PUBLIC 
     yqtoolbox
     asio
-	yqconfig
+    yqkernel
 )
 
 LinkTest(yq)

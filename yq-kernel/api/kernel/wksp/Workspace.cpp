@@ -17,10 +17,11 @@
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 
-#include <config/DirConfig.hpp>
+//#include <config/DirConfig.hpp>
 
-#include <yq/file/Root.hpp>
-#include <yq/wksp/QuillFile.hpp>
+#include <kernel/directories.hpp>
+#include <kernel/file/Root.hpp>
+#include <kernel/wksp/QuillFile.hpp>
 
 #include <atomic>
 #include <pwd.h>
@@ -275,6 +276,12 @@ namespace yq {
             host            = BasicApp::hostname();
             tmp             = BasicApp::temp_dir();
 
+
+            for(const std::filesystem::path& p : cfg.share_dirs){
+                if(!access(p.c_str(), R_OK|X_OK))
+                    shared_dirs.push_back(p);
+            }
+
             //  build out share directories
             const std::filesystem::path& hdir   = BasicApp::user_home();
             if(!hdir.empty()){
@@ -285,11 +292,14 @@ namespace yq {
                 if(!::access(hd.c_str(), R_OK|X_OK))
                     shared_dirs.push_back(hd);
             }
-
+            
             #ifdef DEV_BUILD
-                const char* sd  = build::share_directory();
-                if(!access(sd, R_OK|X_OK))
-                    shared_dirs.push_back(std::filesystem::path(sd));
+                const char* sd  = kernel::share_directories();
+                vsplit(std::string_view(sd), ';', [&](std::string_view v){
+                    std::filesystem::path   p(v);
+                    if(!access(p.c_str(), X_OK|R_OK))
+                        shared_dirs.push_back(p);
+                });
             #endif
 
             #ifdef __unix__

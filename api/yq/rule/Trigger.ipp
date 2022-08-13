@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Trigger.hpp"
-#include <yq/io/Strings.hpp>
+#include <kernel/io/Strings.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <basic/XmlUtils.hpp>
 

@@ -28,7 +28,7 @@
 #include "FragmentHtml.hpp"
 #include "FragmentPost.hpp"
 
-#include "Root.hpp"
+#include <kernel/file/Root.hpp>
 #include "RootArg.hpp"
 #include "RootCDB.hpp"
 #include "RootHtml.hpp"
@@ -47,7 +47,7 @@
 #include <basic/HttpParser.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 
 #include <yq/db/IDLock.ipp>

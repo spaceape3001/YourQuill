@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/atom/Field.hpp>
-#include <yq/enum/Multiplicity.hpp>
-#include <yq/enum/Restriction.hpp>
+#include <kernel/enum/Multiplicity.hpp>
+#include <kernel/enum/Restriction.hpp>
 #include <basic/Map.hpp>
 #include <basic/Set.hpp>
 #include <memory>

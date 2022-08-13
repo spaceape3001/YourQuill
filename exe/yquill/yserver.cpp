@@ -27,7 +27,7 @@
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebPage.hpp>
 #include <yq/web/WebRedirect.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 #include <fstream>
 #include <syncstream>

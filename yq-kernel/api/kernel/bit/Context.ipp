@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Context.hpp"
-#include <yq/io/Strings.hpp>
+#include <kernel/bit/Context.hpp>
+#include <kernel/io/Strings.hpp>
 #include <basic/XmlUtils.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/stream/Text.hpp>

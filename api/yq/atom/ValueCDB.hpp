@@ -9,7 +9,7 @@
 #include <yq/atom/Field.hpp>
 #include <yq/atom/Value.hpp>
 #include <yq/db/CacheFwd.hpp>
-#include <yq/enum/Sorted.hpp>
+#include <kernel/enum/Sorted.hpp>
 
 namespace yq {
 

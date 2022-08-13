@@ -9,7 +9,7 @@
 #include <yq/db/CacheFwd.hpp>
 #include <yq/file/Document.hpp>
 #include <yq/leaf/Leaf.hpp>
-#include <yq/enum/Sorted.hpp>
+#include <kernel/enum/Sorted.hpp>
 #include <yq/image/Image.hpp>
 #include <yq/org/Tag.hpp>
 #include <yq/org/TagFile.hpp>

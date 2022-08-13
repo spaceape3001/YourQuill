@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/bit/Context.hpp>
+#include <kernel/bit/Context.hpp>
 #include <basic/Set.hpp>
-#include <yq/enum/Permission.hpp>
+#include <kernel/enum/Permission.hpp>
 #include <basic/Ref.hpp>
 #include <yq/wksp/Authentication.hpp>
 #include <yq/wksp/User.hpp>

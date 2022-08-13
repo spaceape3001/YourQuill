@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/db/CacheFwd.hpp>
-#include <yq/enum/DataRole.hpp>
-#include <yq/enum/Sorted.hpp>
+#include <kernel/enum/DataRole.hpp>
+#include <kernel/enum/Sorted.hpp>
 #include <yq/file/Document.hpp>
 #include <yq/file/Folder.hpp>
 #include <yq/image/Image.hpp>

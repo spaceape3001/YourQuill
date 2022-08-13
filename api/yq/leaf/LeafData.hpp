@@ -7,8 +7,8 @@
 #pragma once
 
 #include <yq/leaf/Leaf.hpp>
-#include <yq/bit/Context.hpp>
-#include <yq/bit/KeyValue.hpp>
+#include <kernel/bit/Context.hpp>
+#include <kernel/bit/KeyValue.hpp>
 
 namespace yq {
 

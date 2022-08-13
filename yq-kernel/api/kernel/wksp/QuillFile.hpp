@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/db/StdFile.hpp>
-#include <yq/wksp/QuillData.hpp>
+#include <kernel/io/StdFile.hpp>
+#include <kernel/wksp/QuillData.hpp>
 
 namespace yq {
 

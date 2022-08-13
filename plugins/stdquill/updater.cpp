@@ -40,7 +40,7 @@
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 
 using namespace yq;

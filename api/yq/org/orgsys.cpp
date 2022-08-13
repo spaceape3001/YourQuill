@@ -22,8 +22,8 @@
 
 #include <yq/atom/Class.hpp>
 #include <yq/atom/Field.hpp>
-#include <yq/bit/KeyValue.hpp>
-#include <yq/io/Strings.hpp>
+#include <kernel/bit/KeyValue.hpp>
+#include <kernel/io/Strings.hpp>
 #include <yq/db/HtmlLayout.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/db/SQ.hpp>
@@ -31,7 +31,7 @@
 #include <yq/file/DocumentHtml.hpp>
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/FragmentCDB.hpp>
-#include <yq/file/Root.hpp>
+#include <kernel/file/Root.hpp>
 #include <yq/file/RootHtml.hpp>
 #include <yq/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>
@@ -40,7 +40,7 @@
 #include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 #include <yq/db/IDLock.ipp>
 

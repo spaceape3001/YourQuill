@@ -36,7 +36,7 @@
 
 #include <basic/stream/Text.hpp>
 
-#include <yq/bit/Copyright.hpp>
+#include <kernel/bit/Copyright.hpp>
 #include <yq/db/HtmlLayout.hpp>
 #include <yq/db/NKI.hpp>
 #include <yq/util/Markdown.hpp>
@@ -49,7 +49,7 @@
 #include <yq/web/WebRedirect.hpp>
 #include <yq/web/WebTemplate.hpp>
 #include <yq/web/Template.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 using namespace yq;
 using namespace yq::arg;

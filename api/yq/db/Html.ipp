@@ -12,7 +12,7 @@
 #include <basic/StreamOps.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 #include <basic/Logging.hpp>
 

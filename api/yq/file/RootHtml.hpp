@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/db/Html.hpp>
-#include <yq/enum/DataRole.hpp>
+#include <kernel/enum/DataRole.hpp>
 
 namespace yq {
     struct Root;

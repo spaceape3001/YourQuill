@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/db/Html.hpp>
-#include <yq/enum/SizeDesc.hpp>
+#include <kernel/enum/SizeDesc.hpp>
 
 namespace yq {
     struct Image;

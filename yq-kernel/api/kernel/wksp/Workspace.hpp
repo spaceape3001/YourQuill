@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/file/RootFwd.hpp>
+#include <kernel/file/RootFwd.hpp>
 #include <basic/Enum.hpp>
 #include <basic/Flag.hpp>
 #include <functional>
@@ -48,10 +48,11 @@ namespace yq {
         };
         
         struct Config {
-            std::filesystem::path   spec;
-            FNDbFlags               db_flags    = nullptr;
-            unsigned int            options     = kStdOpts;
-            App                     app;
+            std::filesystem::path               spec;
+            FNDbFlags                           db_flags    = nullptr;
+            unsigned int                        options     = kStdOpts;
+            App                                 app         = App::ANY;
+            std::vector<std::filesystem::path>  share_dirs;
         };
         
             // an EMPTY path initializes us to NO workspace, all workspace-specific items will be blank

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <basic/EnumMap.hpp>
-#include <yq/enum/Change.hpp>
+#include <kernel/enum/Change.hpp>
 #include <yq/file/FileSpec.hpp>
 #include <yq/file/Folder.hpp>
 #include <basic/Flag.hpp>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/enum/DataRole.hpp>
+#include <kernel/enum/DataRole.hpp>
 
 namespace yq {
     struct Root;

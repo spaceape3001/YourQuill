@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/enum/SizeDesc.hpp>
-#include <yq/enum/Submit.hpp>
-#include <yq/enum/Reset.hpp>
+#include <kernel/enum/SizeDesc.hpp>
+#include <kernel/enum/Submit.hpp>
+#include <kernel/enum/Reset.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <optional>
 

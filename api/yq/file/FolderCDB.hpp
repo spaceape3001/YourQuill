@@ -8,7 +8,7 @@
 
 #include "Folder.hpp"
 #include <yq/db/CacheFwd.hpp>
-#include <yq/enum/Sorted.hpp>
+#include <kernel/enum/Sorted.hpp>
 #include <yq/image/Image.hpp>
 #include <vector>
 

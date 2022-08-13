@@ -7,10 +7,10 @@
 #pragma once
 
 #include "RootFwd.hpp"
-#include <yq/bit/Policy.hpp>
+#include <kernel/bit/Policy.hpp>
+#include <kernel/enum/Access.hpp>
+#include <kernel/enum/Vcs.hpp>
 #include <basic/EnumMap.hpp>
-#include <yq/enum/Access.hpp>
-#include <yq/enum/Vcs.hpp>
 #include <basic/Flag.hpp>
 
 

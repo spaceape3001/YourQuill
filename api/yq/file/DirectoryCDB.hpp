@@ -8,7 +8,7 @@
 
 #include <yq/db/CacheFwd.hpp>
 #include <basic/Set.hpp>
-#include <yq/enum/Sorted.hpp>
+#include <kernel/enum/Sorted.hpp>
 #include <yq/file/Directory.hpp>
 #include <yq/file/Folder.hpp>
 

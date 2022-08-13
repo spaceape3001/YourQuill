@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/enum/AssertDeny.hpp>
+#include <kernel/enum/AssertDeny.hpp>
 #include <basic/preamble.hpp>
 
 namespace yq {

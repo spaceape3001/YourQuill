@@ -23,7 +23,7 @@
 #include <yq/file/DocumentCDB.hpp>
 #include <yq/file/FolderCDB.hpp>
 #include <yq/file/FragmentCDB.hpp>
-#include <yq/file/Root.hpp>
+#include <kernel/file/Root.hpp>
 #include <yq/file/RootCDB.hpp>
 #include <yq/io/DirWatcher.hpp>
 #include <yq/srv/FileWatch.hpp>
@@ -31,7 +31,7 @@
 #include <yq/srv/Stage2.hpp>
 #include <yq/srv/Stage3.hpp>
 #include <yq/srv/Stage4.hpp>
-#include <yq/wksp/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 
 #include <chrono>
