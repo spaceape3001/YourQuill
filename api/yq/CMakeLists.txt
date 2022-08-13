@@ -83,7 +83,6 @@ set(yq_sources
     ./web/WebVariable.hpp
     ./web/WebVariable.ipp
     
-    #./wksp/Workspace.cpp
     ./wksp/wksp.cpp
 )
 
