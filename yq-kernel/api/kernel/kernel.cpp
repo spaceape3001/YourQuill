@@ -79,6 +79,10 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "org/TagCDB.ipp"
 #include "org/TagData.ipp"
 #include "org/TagFile.ipp"
+#include "user/Authentication.ipp"
+#include "user/UserCDB.ipp"
+#include "user/UserData.ipp"
+#include "user/UserFile.ipp"
 #include "wksp/QuillData.ipp"
 #include "wksp/QuillFile.ipp"
 
@@ -107,5 +111,6 @@ namespace yq {
     template class IDLock<Fragment>;
     template class IDLock<Leaf>;
     template class IDLock<Tag>;
+    template class IDLock<User>;
 }
 
