@@ -7,7 +7,7 @@
 #pragma once
 
 #include <kernel/io/StdFile.hpp>
-#include <yq/wksp/UserData.hpp>
+#include <kernel/user/UserData.hpp>
 
 namespace yq {
     class User::File : public StdFile, public User::Data {

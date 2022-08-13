@@ -30,7 +30,7 @@
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebVariable.hpp>
-#include <yq/wksp/UserCDB.hpp>
+#include <kernel/user/UserCDB.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 using namespace yq;

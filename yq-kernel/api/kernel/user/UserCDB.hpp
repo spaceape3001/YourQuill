@@ -10,7 +10,7 @@
 #include <kernel/enum/Sorted.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/image/Image.hpp>
-#include <yq/wksp/UserFile.hpp>
+#include <kernel/user/UserFile.hpp>
 
 namespace yq {
     struct Fragment;

@@ -6,12 +6,13 @@
 
 #pragma once
 
-#include <kernel/bit/Context.hpp>
-#include <basic/Set.hpp>
-#include <kernel/enum/Permission.hpp>
 #include <basic/Ref.hpp>
-#include <yq/wksp/Authentication.hpp>
-#include <yq/wksp/User.hpp>
+#include <basic/Set.hpp>
+
+#include <kernel/bit/Context.hpp>
+#include <kernel/enum/Permission.hpp>
+#include <kernel/user/Authentication.hpp>
+#include <kernel/user/User.hpp>
 
 #include <memory>
 #include <vector>
