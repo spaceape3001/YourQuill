@@ -22,7 +22,7 @@ namespace yq {
     */
     class Stage4 {
     public:
-        static const Vector<const Stage4*>&    all();
+        static const std::vector<const Stage4*>&    all();
         
         virtual void    invoke() const = 0;
         

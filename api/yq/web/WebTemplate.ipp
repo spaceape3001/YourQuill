@@ -12,8 +12,8 @@
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
 #include <basic/FileUtils.hpp>
-#include <yq/srv/NotifyAdapters.hpp>
-#include <yq/srv/Stage4.hpp>
+#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/Stage4.hpp>
 
 namespace yq {
 

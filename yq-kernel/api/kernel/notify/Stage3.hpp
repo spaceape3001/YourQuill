@@ -24,7 +24,7 @@ namespace yq {
     */
     class Stage3 {
     public:
-        static const Vector<const Stage3*>&    all();
+        static const std::vector<const Stage3*>&    all();
         
         virtual void    invoke(Document) const = 0;
 

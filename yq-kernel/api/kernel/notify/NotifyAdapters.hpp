@@ -43,7 +43,7 @@ namespace yq {
     }
 
     Notifier::Writer    on_change(const FileSpec&, std::function<void()>, const std::source_location& sl = std::source_location::current());
-    Notifier::Writer    on_change(Folder f, const FileSpec&, std::function<void()>, const std::source_location& sl = std::source_location::current());
+    //Notifier::Writer    on_change(Folder f, const FileSpec&, std::function<void()>, const std::source_location& sl = std::source_location::current());
 
         ////////////////////////////////////////////////////////////////////////////////
 

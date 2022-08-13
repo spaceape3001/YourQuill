@@ -26,11 +26,11 @@
 #include <kernel/file/Root.hpp>
 #include <kernel/file/RootCDB.hpp>
 #include <yq/io/DirWatcher.hpp>
-#include <yq/srv/FileWatch.hpp>
-#include <yq/srv/Notifier.hpp>
-#include <yq/srv/Stage2.hpp>
-#include <yq/srv/Stage3.hpp>
-#include <yq/srv/Stage4.hpp>
+#include <kernel/notify/FileWatch.hpp>
+#include <kernel/notify/Notifier.hpp>
+#include <kernel/notify/Stage2.hpp>
+#include <kernel/notify/Stage3.hpp>
+#include <kernel/notify/Stage4.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 

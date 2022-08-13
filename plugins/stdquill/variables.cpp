@@ -25,13 +25,14 @@
 #include <kernel/leaf/LeafCDB.hpp>
 #include <kernel/org/CategoryCDB.hpp>
 #include <kernel/org/TagCDB.hpp>
+#include <kernel/user/UserCDB.hpp>
+#include <kernel/wksp/Workspace.hpp>
+
 #include <yq/web/VarTemplate.hpp>
 #include <yq/web/WebAdapters.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebVariable.hpp>
-#include <kernel/user/UserCDB.hpp>
-#include <kernel/wksp/Workspace.hpp>
 
 using namespace yq;
 

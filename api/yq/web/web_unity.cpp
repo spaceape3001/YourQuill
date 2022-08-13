@@ -28,10 +28,11 @@
 #include <basic/stream/Bytes.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/stream/Text.hpp>
-#include <yq/srv/NotifyAdapters.hpp>
-#include <yq/srv/Stage4.hpp>
 #include <basic/Encode64.hpp>
 #include <basic/TextUtils.hpp>
+
+#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/Stage4.hpp>
 
 
 #include <asio/write.hpp>

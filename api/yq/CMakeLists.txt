@@ -53,14 +53,6 @@ set(yq_sources
 
     ./org/orgsys.cpp
 
-    
-    ./srv/srv_unity.cpp
-    ./srv/Notifier.hpp
-    ./srv/NotifyAdapters.hpp
-    ./srv/Stage2.hpp
-    ./srv/Stage3.hpp
-    ./srv/Stage4.hpp
-    
     ./util/Markdown.cpp
     ./util/Markdown.hpp
     

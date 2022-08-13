@@ -35,11 +35,11 @@
 #include <basic/stream/Text.hpp>
 
 #include <kernel/db/SQ.hpp>
-#include <yq/srv/FileWatch.hpp>
-#include <yq/srv/NotifyAdapters.hpp>
-#include <yq/srv/Stage2.hpp>
-#include <yq/srv/Stage3.hpp>
-#include <yq/srv/Stage4.hpp>
+#include <kernel/notify/FileWatch.hpp>
+#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/Stage2.hpp>
+#include <kernel/notify/Stage3.hpp>
+#include <kernel/notify/Stage4.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 
