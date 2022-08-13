@@ -8,9 +8,9 @@
 
 #include "WebHtml.hpp"
 #include "WebTemplate.hpp"
-#include <yq/file/DocumentCDB.hpp>
-#include <yq/file/FolderCDB.hpp>
-#include <yq/file/FragmentCDB.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
 #include <basic/FileUtils.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage4.hpp>

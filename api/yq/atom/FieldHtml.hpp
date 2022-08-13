@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/db/Html.hpp>
-#include "Class.hpp"
+#include <kernel/atom/Class.hpp>
 
 namespace yq {
     struct Field;

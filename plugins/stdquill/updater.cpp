@@ -34,7 +34,7 @@
 #include <basic/stream/Bytes.hpp>
 #include <basic/stream/Text.hpp>
 
-#include <yq/db/SQ.hpp>
+#include <kernel/db/SQ.hpp>
 #include <yq/srv/FileWatch.hpp>
 #include <yq/srv/NotifyAdapters.hpp>
 #include <yq/srv/Stage2.hpp>

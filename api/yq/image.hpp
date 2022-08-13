@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/image/Image.hpp>
+#include <kernel/image/Image.hpp>
 #include <yq/image/ImageArg.hpp>
-#include <yq/image/ImageCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>
 #include <yq/image/ImagePost.hpp>

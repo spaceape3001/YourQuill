@@ -19,12 +19,12 @@
 #include <basic/ThreadId.hpp>
 #include <basic/Vector.hpp>
 
-#include <yq/file/DirectoryCDB.hpp>
-#include <yq/file/DocumentCDB.hpp>
-#include <yq/file/FolderCDB.hpp>
-#include <yq/file/FragmentCDB.hpp>
+#include <kernel/file/DirectoryCDB.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
-#include <yq/file/RootCDB.hpp>
+#include <kernel/file/RootCDB.hpp>
 #include <yq/io/DirWatcher.hpp>
 #include <yq/srv/FileWatch.hpp>
 #include <yq/srv/Notifier.hpp>

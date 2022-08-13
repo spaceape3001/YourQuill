@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/atom/ClassData.hpp>
+#include <kernel/atom/ClassData.hpp>
 #include <kernel/io/StdFile.hpp>
 
 #define CLASS_XML_RESAVE 0

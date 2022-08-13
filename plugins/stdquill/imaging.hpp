@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/db/CacheFwd.hpp>
 
 namespace yq {
     struct Image;

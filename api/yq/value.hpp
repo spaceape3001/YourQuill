@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <yq/atom/Value.hpp>
+#include <kernel/atom/Value.hpp>
 #include <yq/atom/ValueArg.hpp>
-#include <yq/atom/ValueCDB.hpp>
-#include <yq/atom/ValueData.hpp>
-#include <yq/atom/ValueFile.hpp>
+#include <kernel/atom/ValueCDB.hpp>
+#include <kernel/atom/ValueData.hpp>
+#include <kernel/atom/ValueFile.hpp>
 #include <yq/atom/ValueHtml.hpp>
-#include <yq/db/IDLock.hpp>
+#include <kernel/db/IDLock.hpp>

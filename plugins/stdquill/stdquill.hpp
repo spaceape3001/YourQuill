@@ -19,8 +19,8 @@
 //#include <yq/atom/Atom.hpp>
 //#include <yq/atom/Class.hpp>
 //#include <yq/atom/Field.hpp>
-#include <yq/bit/Copyright.hpp>
-#include <yq/enum/SubmitLabel.hpp>
+#include <kernel/bit/Copyright.hpp>
+#include <kernel/enum/SubmitLabel.hpp>
 //#include <yq/leaf/Leaf.hpp>
 #include <basic/Logging.hpp>
 #include <basic/StreamOps.hpp>

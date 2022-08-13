@@ -9,7 +9,7 @@
 #include <basic/EnumMap.hpp>
 #include <kernel/enum/Change.hpp>
 #include <yq/file/FileSpec.hpp>
-#include <yq/file/Folder.hpp>
+#include <kernel/file/Folder.hpp>
 #include <basic/Flag.hpp>
 #include <filesystem>
 #include <source_location>

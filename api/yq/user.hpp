@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/db/IDLock.hpp>
+#include <kernel/db/IDLock.hpp>
 #include <yq/wksp/User.hpp>
 #include <yq/wksp/UserArg.hpp>
 #include <yq/wksp/UserCDB.hpp>

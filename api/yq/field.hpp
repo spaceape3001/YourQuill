@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <yq/atom/Field.hpp>
+#include <kernel/atom/Field.hpp>
 #include <yq/atom/FieldArg.hpp>
-#include <yq/atom/FieldCDB.hpp>
-#include <yq/atom/FieldData.hpp>
-#include <yq/atom/FieldFile.hpp>
+#include <kernel/atom/FieldCDB.hpp>
+#include <kernel/atom/FieldData.hpp>
+#include <kernel/atom/FieldFile.hpp>
 #include <yq/atom/FieldHtml.hpp>
 #include <yq/atom/FieldPost.hpp>
-#include <yq/db/IDLock.hpp>
+#include <kernel/db/IDLock.hpp>

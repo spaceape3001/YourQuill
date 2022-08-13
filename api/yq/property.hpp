@@ -6,4 +6,4 @@
 
 #pragma once
 
-#include <yq/atom/Property.hpp>
+#include <kernel/atom/Property.hpp>

@@ -4,42 +4,35 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Directory.hpp"
+#include <kernel/file/DirectoryCDB.hpp>
 #include "DirectoryArg.hpp"
-#include "DirectoryCDB.hpp"
 #include "DirectoryHtml.hpp"
 #include "DirectoryPost.hpp"
 
-#include "Document.hpp"
+#include <kernel/file/DocumentCDB.hpp>
 #include "DocumentArg.hpp"
-#include "DocumentCDB.hpp"
 #include "DocumentHtml.hpp"
 #include "DocumentPost.hpp"
 
-#include "Folder.hpp"
+#include <kernel/file/FolderCDB.hpp>
 #include "FolderArg.hpp"
-#include "FolderCDB.hpp"
 #include "FolderHtml.hpp"
 #include "FolderPost.hpp"
 
-#include "Fragment.hpp"
+#include <kernel/file/FragmentCDB.hpp>
 #include "FragmentArg.hpp"
-#include "FragmentCDB.hpp"
 #include "FragmentHtml.hpp"
 #include "FragmentPost.hpp"
 
 #include <kernel/file/Root.hpp>
+#include <kernel/file/RootCDB.hpp>
 #include "RootArg.hpp"
-#include "RootCDB.hpp"
 #include "RootHtml.hpp"
 #include "RootPost.hpp"
 
 #include <basic/CollectionUtils.hpp>
-#include <yq/db/IDLock.hpp>
-#include <yq/db/NKI.hpp>
-#include <yq/db/SQ.hpp>
-#include <yq/image/Image.hpp>
-#include <yq/image/ImageCDB.hpp>
+#include <kernel/db/NKI.hpp>
+#include <kernel/image/ImageCDB.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/StreamOps.hpp>
@@ -50,11 +43,7 @@
 #include <kernel/wksp/Workspace.hpp>
 
 
-#include <yq/db/IDLock.ipp>
-
 namespace yq {
-    template class IDLock<Fragment>;
-
 ////////////////////////////////////////////////////////////////////////////////
 //  DIRECTORY
 ////////////////////////////////////////////////////////////////////////////////

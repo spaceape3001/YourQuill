@@ -6,11 +6,12 @@
 
 #pragma once
 
-#include <yq/atom/Class.hpp>
-#include <yq/atom/FieldFile.hpp>
-#include <yq/db/CacheFwd.hpp>
-#include <yq/image/Image.hpp>
-#include <yq/org/Category.hpp>
+#include <kernel/atom/Class.hpp>
+#include <kernel/atom/FieldFile.hpp>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/enum/Sorted.hpp>
+#include <kernel/image/Image.hpp>
+#include <kernel/org/Category.hpp>
 
 namespace yq {
     struct Field;

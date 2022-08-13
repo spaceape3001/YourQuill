@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/atom/Class.hpp>
+#include <kernel/atom/Class.hpp>
 #include <basic/Map.hpp>
 #include <basic/Set.hpp>
 #include <memory>

@@ -38,7 +38,7 @@
 
 #include <kernel/bit/Copyright.hpp>
 #include <yq/db/HtmlLayout.hpp>
-#include <yq/db/NKI.hpp>
+#include <kernel/db/NKI.hpp>
 #include <yq/util/Markdown.hpp>
 #include <yq/web/JsonAdapter.hpp>
 #include <yq/web/WebAdapters.hpp>

@@ -9,14 +9,14 @@
 #include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
 
-#include <yq/db/IDLock.hpp>
-#include <yq/db/SQ.hpp>
-#include <yq/file/Document.hpp>
-#include <yq/file/DocumentCDB.hpp>
-#include <yq/file/Fragment.hpp>
-#include <yq/file/FragmentCDB.hpp>
-#include <yq/image/Image.hpp>
-#include <yq/image/ImageCDB.hpp>
+#include <kernel/db/IDLock.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/Document.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/Fragment.hpp>
+#include <kernel/file/FragmentCDB.hpp>
+#include <kernel/image/Image.hpp>
+#include <kernel/image/ImageCDB.hpp>
 
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning

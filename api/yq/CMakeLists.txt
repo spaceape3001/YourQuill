@@ -31,6 +31,8 @@ set(yq_sources
     
     ./attr/attr.cpp
     
+    ./db/db.cpp
+    
     ./file/FileSpec.cpp
     ./file/file.cpp
     

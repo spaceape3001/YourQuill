@@ -4,45 +4,39 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Category.hpp"
+#include <kernel/org/CategoryCDB.hpp>
+#include <kernel/org/CategoryFile.hpp>
 #include "CategoryArg.hpp"
-#include "CategoryCDB.hpp"
-#include "CategoryData.hpp"
-#include "CategoryFile.hpp"
 #include "CategoryHtml.hpp"
 #include "CategoryPost.hpp"
 
-#include "Tag.hpp"
+#include <kernel/org/TagCDB.hpp>
+#include <kernel/org/TagFile.hpp>
 #include "TagArg.hpp"
-#include "TagCDB.hpp"
-#include "TagData.hpp"
-#include "TagFile.hpp"
 #include "TagHtml.hpp"
 #include "TagPost.hpp"
 
-#include <yq/atom/Class.hpp>
-#include <yq/atom/Field.hpp>
+#include <kernel/atom/Class.hpp>
+#include <kernel/atom/Field.hpp>
 #include <kernel/bit/KeyValue.hpp>
 #include <kernel/io/Strings.hpp>
 #include <yq/db/HtmlLayout.hpp>
-#include <yq/db/NKI.hpp>
-#include <yq/db/SQ.hpp>
-#include <yq/file/DocumentCDB.hpp>
+#include <kernel/db/NKI.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/DocumentCDB.hpp>
 #include <yq/file/DocumentHtml.hpp>
-#include <yq/file/FolderCDB.hpp>
-#include <yq/file/FragmentCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <yq/file/RootHtml.hpp>
-#include <yq/image/ImageCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
 #include <yq/image/ImageHtml.hpp>
 #include <basic/FileUtils.hpp>
-#include <yq/leaf/LeafCDB.hpp>
+#include <kernel/leaf/LeafCDB.hpp>
 #include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
 #include <kernel/wksp/Workspace.hpp>
-
-#include <yq/db/IDLock.ipp>
 
 namespace yq {
 

@@ -15,7 +15,7 @@
 #include <basic/preamble.hpp>
 #include <basic/DiffEngine.hpp>
 #include <kernel/bit/KeyValue.hpp>
-#include <yq/db/SQ.hpp>
+#include <kernel/db/SQ.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <yq/web/WebContext.hpp>

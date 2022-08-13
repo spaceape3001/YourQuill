@@ -9,8 +9,8 @@
 #include "Template.hpp"
 #include "WebVariable.hpp"
 
-#include <yq/db/CacheFwd.hpp>
-#include <yq/file/Folder.hpp>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/file/Folder.hpp>
 #include <basic/Guarded.hpp>
 
 namespace yq {

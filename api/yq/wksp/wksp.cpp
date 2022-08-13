@@ -21,14 +21,14 @@
 #include <kernel/bit/KeyValue.hpp>
 #include <basic/CollectionUtils.hpp>
 #include <yq/db/HtmlLayout.hpp>
-#include <yq/db/SQ.hpp>
-#include <yq/file/DocumentCDB.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/DocumentCDB.hpp>
 #include <yq/file/DocumentHtml.hpp>
-#include <yq/file/FolderCDB.hpp>
-#include <yq/file/FragmentCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <yq/file/RootHtml.hpp>
-#include <yq/image/ImageCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
 #include <kernel/io/Strings.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
 #include <basic/StreamOps.hpp>
@@ -37,7 +37,7 @@
 #include <yq/web/WebHtml.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
-#include <yq/db/IDLock.ipp>
+#include <kernel/db/IDLock.ipp>
 
 YQ_OBJECT_IMPLEMENT(yq::Authentication)
 YQ_OBJECT_IMPLEMENT(yq::auth::AutoAccept)

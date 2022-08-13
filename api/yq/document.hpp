@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/file/Document.hpp>
+#include <kernel/file/Document.hpp>
 #include <yq/file/DocumentArg.hpp>
-#include <yq/file/DocumentCDB.hpp>
+#include <kernel/file/DocumentCDB.hpp>
 #include <yq/file/DocumentHtml.hpp>
 #include <yq/file/DocumentPost.hpp>

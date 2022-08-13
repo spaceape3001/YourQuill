@@ -8,8 +8,8 @@
 
 #include "Attribute.hpp"
 
-#include <yq/db/CacheFwd.hpp>
-#include <yq/file/Document.hpp>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/file/Document.hpp>
 #include <vector>
 
 namespace yq {

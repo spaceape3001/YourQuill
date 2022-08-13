@@ -4,17 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Graph.hpp"
-#include "GraphCDB.hpp"
-#include "Image.hpp"
+#include <kernel/image/GraphCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
 #include "ImageArg.hpp"
-#include "ImageCDB.hpp"
 #include "ImageHtml.hpp"
 #include "ImagePost.hpp"
 
-#include <yq/file/DocumentCDB.hpp>
-#include <yq/file/FolderCDB.hpp>
-#include <yq/file/FragmentCDB.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
 #include <yq/file/FragmentHtml.hpp>
 #include <kernel/file/Root.hpp>
 #include <basic/StreamOps.hpp>

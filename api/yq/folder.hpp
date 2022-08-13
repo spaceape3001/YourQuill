@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/file/Folder.hpp>
+#include <kernel/file/Folder.hpp>
 #include <yq/file/FolderArg.hpp>
-#include <yq/file/FolderCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
 #include <yq/file/FolderHtml.hpp>
 #include <yq/file/FolderPost.hpp>

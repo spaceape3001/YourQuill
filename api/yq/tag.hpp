@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <yq/org/Tag.hpp>
+#include <kernel/org/Tag.hpp>
 #include <yq/org/TagArg.hpp>
-#include <yq/org/TagCDB.hpp>
-#include <yq/org/TagData.hpp>
-#include <yq/org/TagFile.hpp>
+#include <kernel/org/TagCDB.hpp>
+#include <kernel/org/TagData.hpp>
+#include <kernel/org/TagFile.hpp>
 #include <yq/org/TagHtml.hpp>
 #include <yq/org/TagPost.hpp>

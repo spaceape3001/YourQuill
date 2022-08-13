@@ -4,31 +4,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Leaf.hpp"
+#include <kernel/leaf/LeafCDB.hpp>
+#include <kernel/leaf/LeafFile.hpp>
+#include <kernel/leaf/LeafLog.hpp>
 #include "LeafArg.hpp"
-#include "LeafCDB.hpp"
-#include "LeafData.hpp"
-#include "LeafFile.hpp"
 #include "LeafHtml.hpp"
-#include "LeafLog.hpp"
 #include "LeafPost.hpp"
 
 #include <basic/CollectionUtils.hpp>
-#include <yq/db/NKI.hpp>
-#include <yq/db/SQ.hpp>
-#include <yq/file/DocumentCDB.hpp>
-#include <yq/file/FolderCDB.hpp>
-#include <yq/file/FragmentCDB.hpp>
+#include <kernel/db/NKI.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
-#include <yq/image/ImageCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
 #include <basic/FileUtils.hpp>
-#include <yq/org/TagCDB.hpp>
+#include <kernel/org/TagCDB.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/stream/Text.hpp>
 #include <yq/web/WebContext.hpp>
 #include <yq/web/WebHtml.hpp>
-
-#include <yq/db/IDLock.ipp>
 
 namespace yq {
 

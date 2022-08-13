@@ -4,14 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "FragmentCDB.hpp"
 #include "FileSpec.hpp"
 
-#include <yq/atom/Class.hpp>
-#include <yq/atom/ClassCDB.hpp>
-#include <yq/file/Folder.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
+#include <kernel/atom/ClassCDB.hpp>
+#include <kernel/file/Folder.hpp>
+#include <kernel/file/FragmentCDB.hpp>
 
 namespace yq {
     FileSpec        by_file(const std::filesystem::path&fp)

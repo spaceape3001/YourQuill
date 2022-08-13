@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/atom/Atom.hpp>
+#include <kernel/atom/Atom.hpp>
 #include <yq/atom/AtomArg.hpp>
-#include <yq/atom/AtomCDB.hpp>
+#include <kernel/atom/AtomCDB.hpp>
 #include <yq/atom/AtomHtml.hpp>
 #include <yq/atom/AtomPost.hpp>
-#include <yq/db/IDLock.hpp>
+#include <kernel/db/IDLock.hpp>
