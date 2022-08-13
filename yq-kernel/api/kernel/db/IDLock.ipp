@@ -6,10 +6,10 @@
 
 #pragma once
 
+#include "IDLock.hpp"
 #include <unordered_map>
 #include <tbb/spin_mutex.h>
 #include <basic/trait/not_moveable.hpp>
-#include <yq/db/IDLock.hpp>
 
 namespace yq {
 

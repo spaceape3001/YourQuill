@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/org/Category.hpp>
+#include <kernel/org/Category.hpp>
 
 namespace yq {
     struct Category::Data {

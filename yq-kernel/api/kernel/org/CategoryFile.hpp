@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/org/CategoryData.hpp>
+#include <kernel/org/CategoryData.hpp>
 #include <kernel/io/StdFile.hpp>
 
 namespace yq {

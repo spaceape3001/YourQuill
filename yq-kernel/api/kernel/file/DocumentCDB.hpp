@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/DataRole.hpp>
 #include <kernel/enum/Sorted.hpp>
-#include <yq/file/Document.hpp>
-#include <yq/file/Folder.hpp>
-#include <yq/image/Image.hpp>
+#include <kernel/file/Document.hpp>
+#include <kernel/file/Folder.hpp>
+#include <kernel/image/Image.hpp>
 #include <basic/Http.hpp>
 
 namespace yq {

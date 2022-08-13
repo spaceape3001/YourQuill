@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
-#include <yq/file/Document.hpp>
-#include <yq/leaf/Leaf.hpp>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/file/Document.hpp>
+#include <kernel/leaf/Leaf.hpp>
 #include <kernel/enum/Sorted.hpp>
-#include <yq/image/Image.hpp>
-#include <yq/org/Tag.hpp>
-#include <yq/org/TagFile.hpp>
+#include <kernel/image/Image.hpp>
+#include <kernel/org/Tag.hpp>
+#include <kernel/org/TagFile.hpp>
 
 namespace yq {
     

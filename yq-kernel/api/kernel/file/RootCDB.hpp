@@ -6,7 +6,9 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/enum/Sorted.hpp>
+#include <filesystem>
 
 namespace yq {
     class Root;

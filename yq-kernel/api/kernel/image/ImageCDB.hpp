@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/SizeDesc.hpp>
-#include <yq/image/Image.hpp>
+#include <kernel/image/Image.hpp>
 #include <basic/ContentType.hpp>
 
 

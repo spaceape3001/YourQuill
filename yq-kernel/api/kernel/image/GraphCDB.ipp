@@ -6,13 +6,12 @@
 
 #pragma once
 
-#include <yq/image/Image.hpp>
+#include "GraphCDB.hpp"
 
 namespace yq {
     namespace cdb {
-        struct NKI {
-            std::string key, name;
-            Image       icon;
-        };
+    
+        //  TODO
+        
     }
 }

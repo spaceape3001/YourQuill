@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/db/CacheFwd.hpp>
 #include <basic/Set.hpp>
 #include <kernel/enum/Sorted.hpp>
-#include <yq/file/Directory.hpp>
-#include <yq/file/Folder.hpp>
+#include <kernel/file/Directory.hpp>
+#include <kernel/file/Folder.hpp>
 
 #include <filesystem>
 #include <vector>

@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <yq/db/CacheFwd.hpp>
+#include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Sorted.hpp>
-#include <yq/file/Document.hpp>
-#include <yq/image/Image.hpp>
-#include <yq/org/Category.hpp>
-#include <yq/org/CategoryData.hpp>
-#include <yq/org/CategoryFile.hpp>
+#include <kernel/file/Document.hpp>
+#include <kernel/image/Image.hpp>
+#include <kernel/org/Category.hpp>
+#include <kernel/org/CategoryData.hpp>
+#include <kernel/org/CategoryFile.hpp>
 
 namespace yq {
 

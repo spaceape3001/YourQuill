@@ -31,15 +31,6 @@ set(yq_sources
     
     ./attr/attr.cpp
     
-    #./bit/bit_unity.cpp
-    
-    #./c++/NaN.hpp
-    
-    
-    ./db/db.cpp
-    
-    #./enum/enum_unity.cpp
-
     ./file/FileSpec.cpp
     ./file/file.cpp
     
