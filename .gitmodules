@@ -7,3 +7,6 @@
 [submodule "vulqan"]
 	path = yq-vulqan
 	url = https://github.com/spaceape3001/yq-vulqan.git
+[submodule "yq-kernel"]
+	path = yq-kernel
+	url = https://github.com/spaceape3001/yq-kernel.git
