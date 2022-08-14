@@ -10,7 +10,7 @@ include(yq-external/configure.cmake)
 include(yq-toolbox/configure.cmake)
 add_subdirectory(yq-toolbox)
 add_subdirectory(yq-kernel)
-add_subdirectory(yq-server)
+add_subdirectory(yq-http)
 add_subdirectory(yq-vulqan)
 
 
