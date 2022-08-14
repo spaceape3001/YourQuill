@@ -31,46 +31,17 @@ set(yq_sources
     
     ./attr/attr.cpp
     
-    ./db/db.cpp
-    
     ./file/file.cpp
     
     ./image/image.cpp
     
-    ./io/DirWatcher.cpp
-    ./io/DirWatcher.hpp
-    
-    ./ipc/ipc_unity.cpp
-
     ./leaf/leaf.cpp
 
     #./log/LogFile.cpp
     #./log/LogFile.hpp
-    
-    ./meta/MetaHtml.cpp
-    ./meta/MetaHtml.hpp
-    
 
     ./org/orgsys.cpp
 
-    ./util/Markdown.cpp
-    ./util/Markdown.hpp
-    
-
-    ./web/web_unity.cpp
-    ./web/JsonAdapter.hpp
-    ./web/PageTemplate.hpp
-    ./web/PageTemplate.ipp
-    ./web/WebAdapters.hpp
-    ./web/WebAdapters.ipp
-    ./web/WebContext.hpp
-    ./web/WebContext.ipp
-    ./web/WebHtml.hpp
-    ./web/WebHtml.ipp
-    ./web/WebPage.hpp
-    ./web/WebPage.ipp
-    ./web/WebVariable.hpp
-    ./web/WebVariable.ipp
     
     ./wksp/wksp.cpp
 )

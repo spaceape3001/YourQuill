@@ -25,7 +25,7 @@
 #include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <kernel/file/RootCDB.hpp>
-#include <yq/io/DirWatcher.hpp>
+#include <http/ipc/DirWatcher.hpp>
 #include <kernel/notify/FileWatch.hpp>
 #include <kernel/notify/Notifier.hpp>
 #include <kernel/notify/Stage2.hpp>

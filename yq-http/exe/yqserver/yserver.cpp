@@ -22,11 +22,11 @@
 
 #include <basic/stream/Text.hpp>
 
-#include <yq/web/WebAdapters.hpp>
-#include <yq/web/WebContext.hpp>
-#include <yq/web/WebHtml.hpp>
-#include <yq/web/WebPage.hpp>
-#include <yq/web/WebRedirect.hpp>
+#include <http/web/WebAdapters.hpp>
+#include <http/web/WebContext.hpp>
+#include <http/web/WebHtml.hpp>
+#include <http/web/WebPage.hpp>
+#include <http/web/WebRedirect.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 #include <fstream>

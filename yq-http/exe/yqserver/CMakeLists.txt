@@ -4,12 +4,12 @@
 ##
 ################################################################################
 
-add_executable(yquill 
+add_executable(yqserver
     yquill.cpp 
     yquill.hpp 
     yscanner.cpp
     yserver.cpp
 )
-target_link_libraries(yquill yq )
-target_include_directories(yquill PRIVATE .)
+target_link_libraries(yqserver yqtoolbox yqkernel yqhttp asio )
+target_include_directories(yqserver PRIVATE .)
 

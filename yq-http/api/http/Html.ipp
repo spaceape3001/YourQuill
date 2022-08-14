@@ -10,8 +10,8 @@
 #include "HtmlLayout.hpp"
 #include <basic/Execute.hpp>
 #include <basic/StreamOps.hpp>
-#include <yq/web/WebContext.hpp>
-#include <yq/web/WebHtml.hpp>
+#include <http/web/WebContext.hpp>
+#include <http/web/WebHtml.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 #include <basic/Logging.hpp>

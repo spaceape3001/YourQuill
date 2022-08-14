@@ -4,5 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "meta/MetaHtml.ipp"
+
 #include "Html.ipp"
 #include "Post.ipp"
+#include "ipc/DirWatcher.ipp"
+#include "ipc/ipcPackets.hpp"
+#include "ipc/ipcSocket.ipp"
+#include "util/Markdown.ipp"

@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <yq/db/Html.hpp>
+#include <http/Html.hpp>
 #include <basic/Http.hpp>
-#include <yq/web/WebPage.hpp>
-#include <yq/web/WebVariable.hpp>
+#include <http/web/WebPage.hpp>
+#include <http/web/WebVariable.hpp>
 
 #include <initializer_list>
 #include <string_view>
