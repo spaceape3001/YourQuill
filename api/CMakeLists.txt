@@ -30,8 +30,6 @@ target_include_directories(yqkernel
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
-message(${YOUR_QUILL_KERNEL})
-
 target_compile_definitions(yqkernel 
     PRIVATE
         -DDEV_BUILD=1
