@@ -1,0 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <http/file/DocumentArg.hpp>
+#include <http/file/DocumentHtml.hpp>
+#include <http/file/DocumentPost.hpp>
+#include <kernel/file/Document.hpp>
+#include <kernel/file/DocumentCDB.hpp>

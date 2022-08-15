@@ -8,9 +8,9 @@
 
 #include <basic/ByteArray.hpp>
 #include <basic/Guarded.hpp>
-#include <yq/web/PageTemplate.hpp>
-#include <yq/web/TypedBytes.hpp>
-#include <yq/web/Template.hpp>
+#include <http/web/PageTemplate.hpp>
+#include <http/web/TypedBytes.hpp>
+#include <http/web/Template.hpp>
 #include <string>
 
 using namespace yq;

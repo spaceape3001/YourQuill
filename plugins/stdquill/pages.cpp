@@ -37,18 +37,18 @@
 #include <basic/stream/Text.hpp>
 
 #include <kernel/bit/Copyright.hpp>
-#include <yq/db/HtmlLayout.hpp>
+#include <http/HtmlLayout.hpp>
 #include <kernel/db/NKI.hpp>
-#include <yq/util/Markdown.hpp>
-#include <yq/web/JsonAdapter.hpp>
-#include <yq/web/WebAdapters.hpp>
-#include <yq/web/WebContext.hpp>
-#include <yq/web/WebHtml.hpp>
-#include <yq/web/WebImage.hpp>
-#include <yq/web/WebPage.hpp>
-#include <yq/web/WebRedirect.hpp>
-#include <yq/web/WebTemplate.hpp>
-#include <yq/web/Template.hpp>
+#include <http/util/Markdown.hpp>
+#include <http/web/JsonAdapter.hpp>
+#include <http/web/WebAdapters.hpp>
+#include <http/web/WebContext.hpp>
+#include <http/web/WebHtml.hpp>
+#include <http/web/WebImage.hpp>
+#include <http/web/WebPage.hpp>
+#include <http/web/WebRedirect.hpp>
+#include <http/web/WebTemplate.hpp>
+#include <http/web/Template.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 using namespace yq;

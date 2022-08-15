@@ -28,11 +28,11 @@
 #include <kernel/user/UserCDB.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
-#include <yq/web/VarTemplate.hpp>
-#include <yq/web/WebAdapters.hpp>
-#include <yq/web/WebHtml.hpp>
-#include <yq/web/WebContext.hpp>
-#include <yq/web/WebVariable.hpp>
+#include <http/web/VarTemplate.hpp>
+#include <http/web/WebAdapters.hpp>
+#include <http/web/WebHtml.hpp>
+#include <http/web/WebContext.hpp>
+#include <http/web/WebVariable.hpp>
 
 using namespace yq;
 

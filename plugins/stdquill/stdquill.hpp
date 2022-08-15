@@ -26,11 +26,11 @@
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/Guarded.hpp>
-#include <yq/web/WebContext.hpp>
-#include <yq/web/WebHtml.hpp>
-#include <yq/web/WebPage.hpp>
-#include <yq/web/WebAdapters.hpp>
-#include <yq/web/WebTemplate.hpp>
+#include <http/web/WebContext.hpp>
+#include <http/web/WebHtml.hpp>
+#include <http/web/WebPage.hpp>
+#include <http/web/WebAdapters.hpp>
+#include <http/web/WebTemplate.hpp>
 
 namespace yq {
     struct Atom;

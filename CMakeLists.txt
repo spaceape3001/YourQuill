@@ -8,8 +8,11 @@ cmake_minimum_required(VERSION 3.23.0)
 project(YourQuill VERSION 0.0.0.3)
 include(yq-external/configure.cmake)
 include(yq-toolbox/configure.cmake)
+include(yq-kernel/configure.cmake)
 add_subdirectory(yq-toolbox)
 add_subdirectory(yq-kernel)
+#   temporary
+include(yq-external/asio.cmake)
 add_subdirectory(yq-http)
 add_subdirectory(yq-vulqan)
 
@@ -54,7 +57,7 @@ include_directories(3rd/asio/asio/include)
 
 
 
-add_subdirectory(api)
+#add_subdirectory(api)
 add_subdirectory(plugins)
 add_subdirectory(tests)
 add_subdirectory(tools)
