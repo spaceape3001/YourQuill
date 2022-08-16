@@ -31,6 +31,11 @@ namespace yq {
     */
     std::string_view    web_title(std::string_view);
 
+    /*! \brief Html streaming object
+    
+        This is the web HTML streaming object, used for registered functions to generate html.  
+        Technically, this is a helper, not required, but very helpful.
+    */
     class WebHtml : public Stream {
     public:
 
