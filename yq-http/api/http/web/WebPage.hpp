@@ -109,7 +109,10 @@ namespace yq {
         */
         virtual void    handle(WebContext&) const = 0;
         
+        //! TRUE if anonymous posting is allowed
         bool                        anonymouse_posting() const;
+        
+        //! List of arguments expected for GET/POST queries
         const std::vector<Arg>&     args() const { return m_args; }
         //! Primary content type
         ContentType                 content_type() const { return m_content_type; }

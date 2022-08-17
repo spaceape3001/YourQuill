@@ -28,6 +28,13 @@ namespace yq {
     }
 
 
+    /*! \brief Variable for text substitution
+    
+        The default HTML output allows has a minimal level of text
+        substitution (With {{ and }} ), this represents a registered
+        variable for it, that allows for the text to be delayed 
+        and computed at demand time.  (ie, it can change between invocations)
+    */
     class WebVariable : public Meta {
     public:
     
