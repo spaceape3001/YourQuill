@@ -17,6 +17,10 @@
 
 namespace yq {
 
+    /*! \brief Information fro a directory
+    
+        This is the fast-data return for the "info" below.
+    */
     struct Directory::Info {
         Folder                  folder;
         bool                    hidden      = false;
@@ -115,10 +119,20 @@ namespace yq {
         
         std::vector<Folder>             folder_path(Directory);
 
-
+        /*! \brief TRUE if the directory is marked as hidden
+        */
         bool                            hidden(Directory);
+        
+        /*! \brief One stop information
+        
+            This reduces the sql query count to one for the commonly needed information.
+        */
         Directory::Info                 info(Directory);
 
+        /*! \brief Key for the directory
+        
+            This returns the key (path relative to root) for the given directory.
+        */
         std::string                     key(Directory);
 
         //std::string                 label(Directory);
