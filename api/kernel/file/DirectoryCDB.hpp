@@ -80,13 +80,47 @@ namespace yq {
         */
         Set<Directory>  child_directories_set(Directory par);
 
-        std::vector<DirString>          child_directories_with_names(Directory, Sorted sorted=Sorted());
+        /*! \brief List of child directories with names
+        
+            \param[in] par      Parent directory
+            \param[in] sorted   Flag to sort by name
+        */
+        std::vector<DirString>          child_directories_with_names(Directory par, Sorted sorted=Sorted());
 
-        Directory                       child_directory(Directory, std::string_view );
-        Fragment                        child_fragment(Directory, std::string_view );
-        std::vector<Fragment>           child_fragments(Directory, Sorted sorted=Sorted());
-        size_t                          child_fragments_count(Directory);
-        Set<Fragment>              child_fragments_set(Directory);
+        /*! \brief Child directory with name
+            \param[in] par      Parent directory
+            \param[in] ck       Key for child directory
+            \return FIRST directory that matches
+        */
+        Directory                       child_directory(Directory, std::string_view ck);
+        
+        /*! \brief Fragment with name
+        
+            \param[in] par      Parent directory
+            \param[in] ck       Key for frment
+            
+            \return FIRST fragment that matches
+        */
+        Fragment                        child_fragment(Directory par, std::string_view ck);
+        
+        /*! \brief All fragments for directory
+        
+            \param[in] par      Parent directory
+            \param[in] sorted   Flag to sort by name
+            \return VECTOR of fragments
+        */
+        std::vector<Fragment>           child_fragments(Directory par, Sorted sorted=Sorted());
+        
+        /*! \brief Number of fragments for directory
+            \param[in] par      Parent directory
+            \return COUNT (as shown in the database)
+        */
+        size_t                          child_fragments_count(Directory par);
+        
+        /*! \brief All fragments for directory as ordered set
+            \param[in] par      Parent directory
+        */
+        Set<Fragment>              child_fragments_set(Directory par);
 
 
 
