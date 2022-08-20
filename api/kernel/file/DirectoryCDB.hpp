@@ -137,19 +137,59 @@ namespace yq {
 
         std::pair<Directory, Folder>    db_directory(Directory, std::string_view , bool *wasCreated=nullptr);
 
-        Directory                       directory(uint64_t);
-        Directory                       directory(const std::filesystem::path&);
+        /*! \brief Gets directory by ID
+        
+            This verifies the directory by ID and returns it.
+            
+            \param[in] id   The ID of the directory
+            
+            \return Directory if valid, zero if not.
+        */
+        Directory                       directory(uint64_t id);
+        
+        /*! \brief Gets directory by path
+        
+            This returns the directory associated by the given path.
+            
+            \param[in] p    The path of the directory
+
+            \return Directory if valid, zero if not.
+        */
+        Directory                       directory(const std::filesystem::path& p);
         
             //std::vector<Document>      documents(Directory);   // TODO
 
-        void                            erase(Directory);
+        /*! \brief Erases the directory
+        
+            This removes the given directory from the database, used rarely, 
+            and generally by the scanner.
+            
+            \parma[in] d    Directory to exist
+        */
+        void                            erase(Directory d);
 
-        bool                            exists(Directory);
+        /*! \brief Verifies the given directory exists in the cache database
+        
+            \param[in] d    Directory to check
+            \return TRUE if the directory is in the cache database.
+        */
+        bool                            exists(Directory d);
 
-        bool                            exists_directory(uint64_t);
+        /*! \brief Verifies the given directory's ID exists in the cache database
+        
+            \param[in] id   Directory ID to check
+            \return TRUE if the directory is in the cache database.
+        */
+        bool                            exists_directory(uint64_t id);
 
-
-        Folder                          folder(Directory);
+        /*! \brief Folder for given directory
+        
+            This returns the folder associated with the specified directory.
+            
+            \param[in] d    Directory to check
+            \return Folder if found, empty folder otherwise
+        */
+        Folder                          folder(Directory d);
         
         std::vector<Folder>             folder_path(Directory);
 
