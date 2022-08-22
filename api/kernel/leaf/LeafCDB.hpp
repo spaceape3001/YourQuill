@@ -64,12 +64,18 @@ namespace yq {
 
         //Folder                    detail_folder(Leaf);
 
+
+        /*! Document for leaf
+        */
         Document                    document(Leaf);
         
         //! Removes this leaf from the database
         void                        erase(Leaf);
         
+        //! Tests for existence of leaf
         bool                        exists(Leaf);
+
+        //! Tests for existence of leaf
         bool                        exists_leaf(uint64_t);
         Image                       icon(Leaf);
         Leaf::Info                  info(Leaf, bool autoKeyToName=false);
