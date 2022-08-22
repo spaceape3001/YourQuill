@@ -30,16 +30,37 @@ namespace yq {
 
         using LeafFragDoc = std::pair<Fragment,Leaf::SharedFile>;
 
+        /*! \brief All atoms that are leafs
+        
+            This returns all atoms that are also associated with leafs.
+            \param[in] sorted   Set to YES to have result sorted by key
+        */
         std::vector<Atom>           all_leaf_atoms(Sorted sorted=Sorted());
+        
+        /*! \brief Count of atoms that are the primary from a leaf
+        */
         size_t                      all_leaf_atoms_count();
 
+        /*! \brief All leafs
+            \param[in] sorted   Set to YES to have result sorted by key
+        */
         std::vector<Leaf>           all_leafs(Sorted sorted=Sorted());
+        
+        //! \brief  Count of leafs
         size_t                      all_leafs_count();
+        
+        //! \brief Primary atom for the leaf
         Atom                        atom(Leaf);
         
+        //! \brief Brief description of the leaf
         std::string                 brief(Leaf);
 
-        Leaf                        db_leaf(Document, bool*wasCreated=nullptr);
+        /*! \brief Used to create/get a leaf ID from a document 
+        
+            \param[in]  doc             Document 
+            \param[out] wasCreated      Pointer to boolean for true/false of creation
+        */
+        Leaf                        db_leaf(Document doc, bool*wasCreated=nullptr);
 
         //Folder                    detail_folder(Leaf);
 
