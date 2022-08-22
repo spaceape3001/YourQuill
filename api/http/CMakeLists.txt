@@ -13,8 +13,8 @@ endif()
 
 add_library(yqhttp SHARED
     ${http_test_source}
-    ./http/http.cpp
-    ./http/web/web_unity.cpp
+    ./http.cpp
+    ./web/web_unity.cpp
 )
 
 target_link_libraries(yqhttp
@@ -27,7 +27,7 @@ target_link_libraries(yqhttp
 
 target_include_directories(yqhttp 
     PUBLIC 
-        ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/..
 )
 
 LinkTest(yqhttp)

@@ -6,15 +6,14 @@
 
 cmake_minimum_required(VERSION 3.23.0)
 project(YourQuill VERSION 0.0.0.3)
-include(yq-external/configure.cmake)
 include(yq-toolbox/configure.cmake)
 include(yq-kernel/configure.cmake)
 add_subdirectory(yq-toolbox)
 add_subdirectory(yq-kernel)
 #   temporary
-include(yq-external/asio.cmake)
-add_subdirectory(yq-http)
+# add_subdirectory(yq-http)
 add_subdirectory(yq-vulqan)
+add_subdirectory(3rd)
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
