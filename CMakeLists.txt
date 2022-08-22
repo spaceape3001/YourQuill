@@ -10,8 +10,6 @@ include(yq-toolbox/configure.cmake)
 include(yq-kernel/configure.cmake)
 add_subdirectory(yq-toolbox)
 add_subdirectory(yq-kernel)
-#   temporary
-# add_subdirectory(yq-http)
 add_subdirectory(yq-vulqan)
 add_subdirectory(3rd)
 
@@ -20,7 +18,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 option(Feature_Experimental "Enable Experimental Features" OFF)
 
-#add_subdirectory(yq-external)
 
 
 find_package(Graphviz)
@@ -44,9 +41,6 @@ if(Feature_ApiDocumentation)
     endif()
 endif()
 
-include_directories(api)
-include_directories(${CMAKE_BINARY_DIR}/api)
-include_directories(3rd/asio/asio/include)
 
 
     #   We add support for "experimental" directories, either "s->x" or x appended.
@@ -56,7 +50,7 @@ include_directories(3rd/asio/asio/include)
 
 
 
-#add_subdirectory(api)
+add_subdirectory(api)
 add_subdirectory(plugins)
 add_subdirectory(tests)
 add_subdirectory(tools)
