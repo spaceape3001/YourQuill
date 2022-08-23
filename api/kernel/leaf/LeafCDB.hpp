@@ -65,52 +65,116 @@ namespace yq {
         //Folder                    detail_folder(Leaf);
 
 
-        /*! Document for leaf
+        /*! \brief Document for leaf
         */
         Document                    document(Leaf);
         
-        //! Removes this leaf from the database
+        //! \brief Removes this leaf from the database
         void                        erase(Leaf);
         
-        //! Tests for existence of leaf
+        //! \brief Tests for existence of leaf
         bool                        exists(Leaf);
 
-        //! Tests for existence of leaf
+        //! \brief Tests for existence of leaf
         bool                        exists_leaf(uint64_t);
+        
+        //! \brief Icon for leaf
         Image                       icon(Leaf);
+        
+        //! \brief One stop info for leaf
+        //! \param[in] autoKeyToName    If true, an empty name will be replaced by the key.
         Leaf::Info                  info(Leaf, bool autoKeyToName=false);
+        
+        //! Detects if atom is also primary for leaf
         bool                        is_leaf(Atom);
         
+        //! Key for the leaf
         std::string                 key(Leaf);
+        
+        //! Label for the leaf
         std::string                 label(Leaf);
         
+        /*! \brief ID to leaf
+         *      
+         *  Verifies the ID is valid, and converts it to a leaf
+         */
         Leaf                        leaf(uint64_t);
+        
+        //! \brief Looking up a leaf by string (case insensitive)
         Leaf                        leaf(std::string_view);
 
+        //! \brief Leaf of an atom
         Leaf                        leaf(Atom);
+        
+        //! \brief Document for an atom
         Leaf                        leaf(Document, bool calc=false);
         //Leaf                        leaf(Folder);
 
+        //! \brief Leaf by a title
         Leaf                        leaf_by_title(std::string_view);
 
+        /*! \brief Leaf document
+         *  
+         *  This loads a SINGLE fragment into a leaf structure.
+         *  \note This may be incomplete as there can be multiple fragments to a leaf.
+         */
         Leaf::SharedFile            leaf_doc(Fragment, unsigned int options=0);
         
+        /*! \brief Merged Leaf structure
+         *  
+         *  This FUSES all fragments together for a single, cohesive view of the leaf.
+        */
         Leaf::SharedData            merged(Leaf, cdb_options_t opts=0);
+        
+        /*! \brief Name/Key/Icon for leaf
+        
+            This returns the Name, Key, & Icon for a leaf, using a single SQL statement.
+            \param[in] autoKeyToName    If true, an empty name will be replaced by the key.
+        */
         NKI                         nki(Leaf, bool autoKeyToName=false);
+        
         //! \brief Returns the FIRST leaf fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
         Leaf::SharedFile            read(Leaf, const Root*, cdb_options_t opts=0);
+        
+        /*! \brief Returns ALL leaf fragments
+        
+            This returns a vector of ALL leaf fragments for leaf.  (No merging)
+        */
         std::vector<LeafFragDoc>    reads(Leaf, cdb_options_t opts=0);
+
+        /*! \brief Returns leaf fragments for given root
+        
+            This returns a vector of fragments for given leaf.  (No merging)
+            
+            \note this will only be one, at most on a case-insensitive file system.  However, on a case sensitive
+            file system, this may be multiple.
+        */
         std::vector<LeafFragDoc>    reads(Leaf, class Root*, cdb_options_t opts=0);
 
+        //! Tests if given leaf has the given tag
         bool                        tagged(Leaf, Tag);
+        
+        //! All tags for leaf
         std::vector<Tag>            tags(Leaf);
+
+        //! All tags for leaf as a set
         std::set<Tag>               tags_set(Leaf);
 
+        //! Title for the leaf
         std::string                 title(Leaf);
 
+        /*! Updates the leaf data
+        
+            \note This updates ONLY the leaf data, no associations are
+            covered.
+            
+            \return The merged data.
+        */
         Leaf::SharedData            update(Leaf, cdb_options_t opts=0);
+        
+        //! Updates the leaf icon
         void                        update_icon(Leaf);
 
         //!  \brief   Returns a writable document
