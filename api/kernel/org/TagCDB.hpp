@@ -29,13 +29,22 @@ namespace yq {
     namespace cdb {
         using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
  
+        /*! \brief Get all tags
+            \param[in] sorted   Set to have tags sorted by key
+        */
         std::vector<Tag>        all_tags(Sorted sorted=Sorted());
+        /*! \brief Total number of tags
+        */
         size_t                  all_tags_count();
         
         //! Searches for the best image for the tag
         Image                   best_image(Tag);
+        /*! \brief Brief description of tag
+        */
         std::string             brief(Tag);
 
+        /*! \brief Creates/Gets a tag by document
+        */
         Tag                     db_tag(Document, bool* wasCreated=nullptr);
         Tag                     db_tag(Fragment, bool* wasCreated=nullptr);
         Tag                     db_tag(std::string_view,  bool* wasCreated=nullptr);
