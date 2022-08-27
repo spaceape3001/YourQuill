@@ -86,50 +86,13 @@ namespace {
 }
 
 #include "p_admin.ipp"
+#include "p_api_wksp.ipp"
+#include "p_atom.ipp"
+#include "p_dev_atom.ipp"
+#include "p_dev_category.ipp"
 
 namespace {
 
-    json    page_api_wksp(WebContext&ctx)
-    {
-        json    ret{
-            { "author", wksp::author() },
-            { "abbreviation", wksp::abbreviation() },
-            { "bkcolor", gBkColor },
-            { "copyright", wksp::copyright().text },
-            { "c_stance", wksp::copyright().stance.key() },
-            { "c_from", wksp::copyright().from },
-            { "c_to", wksp::copyright().to },
-            { "color", gTextColor },
-            { "name", wksp::name() }
-        };
-        if(ctx.is_local()){
-            ret["quill"] = wksp::quill_file().string();
-            ret["cache"] = wksp::cache().string();
-        }
-        return ret;
-    }
-
-    json    page_api_wksp_quill(WebContext&ctx)
-    {
-        json    ret;
-        if(ctx.is_local()){
-            ret["quill"] = wksp::quill_file().string();
-        }
-        return ret;
-    }
-
-    void page_atom(WebHtml& h)
-    {
-        //   this will redirect the atom appropriately
-        h << "TODO";
-    }
-    
-    void page_atoms(WebHtml& h)
-    {
-        //   this will be a search-spot for the appropriate atoms
-        h << "TODO";
-    }
-    
 
     void page_class(WebHtml& h)
     {
@@ -157,99 +120,7 @@ namespace {
         ctx.tx_content = gCss;
     }
 
-    void page_dev_atom(WebHtml& h)
-    {
-        Atom a = atom(h);
-        if(!a)
-            throw HttpStatus::BadArgument;
-        
-        Atom::Info  i   = info(a);
-        
-        h.title() << "Atom (" << label(a) << ")";
 
-        auto ta = h.table();
-        h.kvrow("ID") << a.id;
-        h.kvrow("Name") << i.name;
-        h.kvrow("Key") << i.key;
-        h.kvrow("Abbreviation") << i.abbr;
-        h.kvrow("Brief") << i.brief;
-        //h.kvrow("Leaf") << dev(i.leaf);
-    }
-    
-    void page_dev_atom_classes(WebHtml&h)
-    {
-        Atom a = atom(h);
-        if(!a)
-            throw HttpStatus::BadArgument;
-        h.title() << "Atom (" << label(a) << "): Classes";
-        dev_table(h, classes(a, Sorted::YES));
-    }
-    
-    void page_dev_atom_documents(WebHtml& h)
-    {
-        Atom a = atom(h);
-        if(!a)
-            throw HttpStatus::BadArgument;
-        h.title() << "Atom (" << label(a) << "): Documents";
-        dev_table(h, documents(a, Sorted::YES));
-    }
-    
-    void page_dev_atom_tags(WebHtml& h)
-    {
-        Atom a = atom(h);
-        if(!a)
-            throw HttpStatus::BadArgument;
-        h.title() << "Atom (" << label(a) << "): Tags";
-        dev_table(h, tags(a, Sorted::YES));
-    }
-
-    void page_dev_atoms(WebHtml&h)
-    {
-        h.title() << "All Atoms";
-        dev_table(h, all_atoms(Sorted::YES));
-    }
-
-    void    page_dev_categories(WebHtml&h)
-    {
-        h.title() << "All Categories!";
-        dev_table(h, all_categories(Sorted::YES));
-    }
-
-    void    page_dev_category(WebHtml& h)
-    {
-        Category    cat = category(h);
-        if(!cat)
-            throw HttpStatus::BadArgument;
-        Category::Info  i   = info(cat);
-        
-        h.title() << "Category (" << cdb::label(cat) << ")";
-        auto ta = h.table();
-        
-        h.kvrow("ID") << cat.id;
-        h.kvrow("Key") << i.key;
-        h.kvrow("Name") << i.name;
-        h.kvrow("Brief") << i.brief;
-    }
-    
-    void    page_dev_category_classes(WebHtml& h)
-    {
-        Category    cat = category(h);
-        if(!cat)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Category (" << cdb::label(cat) << "): In Classes";
-        dev_table(h, classes(cat));
-    }
-
-    void    page_dev_category_fields(WebHtml& h)
-    {
-        Category    cat = category(h);
-        if(!cat)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Category (" << cdb::label(cat) << "): In Fields";
-        dev_table(h, fields(cat));
-    }
 
     void    page_dev_class(WebHtml& h)
     {
@@ -1172,11 +1043,13 @@ namespace {
     {
         reg_webtemplate("/", wksp::shared("std/index"sv)).source(".index");
         
-        reg_webpage<page_api_wksp>("/api/wksp"sv); 
-        reg_webpage<page_api_wksp_quill>("/api/wksp/quill"sv); 
+        reg_admin();
+        reg_api_wksp();
+        reg_atom();
+        reg_dev_atom();
+        reg_dev_category();
         
-        reg_webpage<page_atom>("/atom").argument("ID", "Atom ID");
-        reg_webpage<page_atoms>("/atoms");
+        
         reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){
             bool    now = wi.hasImage();
             if(gHasBackground.exchange(now) != now)
@@ -1189,19 +1062,6 @@ namespace {
         reg_webpage<page_css>("/css");
         reg_webtemplate("/dev", wksp::shared("std/developer"sv)).source(".developer");
         reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
-        reg_webgroup({
-            reg_webpage<page_dev_atom>("/dev/atom").argument("id", "Atom ID").label("Info"),
-            reg_webpage<page_dev_atom_classes>("/dev/atom/classes").argument("id", "Atom ID").label("Classes"),
-            reg_webpage<page_dev_atom_documents>("/dev/atom/documents").argument("id", "Atom ID").label("Docs"),
-            reg_webpage<page_dev_atom_tags>("/dev/atom/tags").argument("id", "Atom ID").label("Tags")
-        });
-        reg_webpage<page_dev_atoms>("/dev/atoms");
-        reg_webpage<page_dev_categories>("/dev/categories"); 
-        reg_webgroup({
-            reg_webpage<page_dev_category>("/dev/category").argument("id", "Category ID").label("Info"),
-            reg_webpage<page_dev_category_classes>("/dev/category/classes").argument("id", "Category ID").label("Classes"),
-            reg_webpage<page_dev_category_fields>("/dev/category/fields").argument("id", "Category ID").label("Fields")
-        });
         reg_webgroup({
             reg_webpage<page_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),
             reg_webpage<page_dev_class_tags>("/dev/class/tags").argument("id", "Class ID").label("Tags"),
