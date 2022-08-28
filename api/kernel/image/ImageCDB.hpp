@@ -38,37 +38,54 @@ namespace yq {
             //! Creates/Retrieves an image record in the cache database
         Image                   db_image(Fragment, bool *wasCreated=nullptr);
 
+            //! Document for image
         Document                document(Image);
 
             //! Removes this image from the cache
         void                    erase(Image);
 
+            //! TRUE if the image exists (in cache database)
         bool                    exists(Image);
+
+            //! TRUE if the image exists (in cache database)
         bool                    exists_image(uint64_t);
         
-
+            //! Fragment for image
         Fragment                fragment(Image);
 
+            //! Icon for root
         Image                   icon(const Root*);
 
             //! Returns an image from a document, if it already exists in the cache
         Image                   image(Document);
+        
+            //! Image from fragment
         Image                   image(Fragment);
 
+            //! Image from key
         Image                   image(std::string_view);
 
             //! Returns an image from a document, if it already exists in the cache
         Image                   image(uint64_t);
 
+            //! TRUE if it's a raster type
         bool                    is_raster(ContentType);
+
+            //! TRUE if it's a raster type
         bool                    is_raster(Image);
 
+            //! Mime type for image
         ContentType             mime_type(Image);
         
         //std::vector<Image>
         
+            //! Thumnail for image
         Thumbnail               thumbnail(Image, SizeDesc sz=SizeDesc::Small);
+
+            //! Thumnail for image
         Thumbnail               thumbnail(Image, std::string_view alt, SizeDesc sz=SizeDesc::Small);
+
+            //! Update root icon
         void                    update_root(const Root*, Image);
     }
 }
