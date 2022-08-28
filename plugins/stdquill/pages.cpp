@@ -88,31 +88,21 @@ namespace {
 #include "p_admin.ipp"
 #include "p_api_wksp.ipp"
 #include "p_atom.ipp"
+#include "p_class.ipp"
 #include "p_dev_atom.ipp"
 #include "p_dev_category.ipp"
+#include "p_dev_class.ipp"
+#include "p_dev_directory.ipp"
+#include "p_dev_document.ipp"
+#include "p_dev_field.ipp"
+#include "p_dev_folder.ipp"
+#include "p_dev_fragment.ipp"
+#include "p_dev_meta.ipp"
+#include "p_dev_root.ipp"
+#include "p_dev_web.ipp"
 
 namespace {
 
-
-    void page_class(WebHtml& h)
-    {
-        Class x = class_(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Info for class " << cdb::label(x);
-        h << "TODO!";
-    }
-    
-    void page_class_atoms(WebHtml&h)
-    {
-        Class x = class_(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-
-        h.title() << cdb::plural(x);
-        h << "TODO!";
-    }
 
     void    page_css(WebContext& ctx)
     {
@@ -120,171 +110,6 @@ namespace {
         ctx.tx_content = gCss;
     }
 
-
-
-    void    page_dev_class(WebHtml& h)
-    {
-        Class   c   = class_(h);
-        if(!c)
-            throw HttpStatus::BadArgument;
-            
-        Class::Info i  = info(c);
-        h.title() << "Class (" << label(c) << ")";
-        auto ta = h.table();
-        h.kvrow("ID") << c.id;
-        h.kvrow("Name") << i.name;
-        h.kvrow("Plural") << i.plural;
-        h.kvrow("Category") << dev(i.category);
-        h.kvrow("Brief") << i.brief;
-        h.kvrow("Aliases") << join(def_aliases(c), ", ");
-        h.kvrow("Prefixes") << join(def_prefixes(c), ", ");
-        h.kvrow("Suffixes") << join(def_suffixes(c), ", ");
-        h.kvrow("Binding") << i.binding;
-    }
-    
-    void    page_dev_class_tags(WebHtml& h)
-    {
-        Class   c   = class_(h);
-        if(!c)
-            throw HttpStatus::BadArgument;
-            
-        h.title() << "Class (" << label(c) << "): Tags";
-        dev_table(h, tags(c, Sorted::YES));
-        
-    }
-    
-    void    page_dev_class_def_fields(WebHtml&h)
-    {
-        Class   c   = class_(h);
-        if(!c)
-            throw HttpStatus::BadArgument;
-
-        h.title() << "Class (" << label(c) << "): Def Fields";
-        dev_table(h, def_fields(c, Sorted::YES));
-    }
-
-    void    page_dev_classes(WebHtml&h)
-    {
-        h.title() << "All Classes";
-        dev_table(h, all_classes(Sorted::YES));
-    }
-
-    void    page_dev_directories(WebHtml& h)
-    {
-        h.title("All Directories");
-        dev_table(h, all_directories(Sorted::YES));
-    }
-    
-    void    page_dev_directory(WebHtml& h)
-    {
-        Directory   x   = directory(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        Directory   p   = parent(x);
-        Folder      f   = folder(x);
-        const Root* rt  = root(x);
-        
-        dev_title(h, x);
-        auto ta = h.table();
-        h.kvrow("ID") << x.id;
-        h.kvrow("Key") << key(x);
-        h.kvrow("Folder") << dev(f);
-        h.kvrow("Hidden") << hidden(x);
-        if(p)
-            h.kvrow("Parent") << dev(p);
-        if(rt)
-            h.kvrow("Root") << dev(rt);
-    }
-    
-    void    page_dev_directory_fragments(WebHtml& h)
-    {
-        Directory   x   = directory(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        dev_title(h, x, "Fragments");
-        dev_table(h, child_fragments(x, Sorted::YES));
-    }
-
-    void    page_dev_directory_subdirs(WebHtml& h)
-    {
-        Directory   x   = directory(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        dev_title(h, x, "Subdirectories");
-        dev_table(h, child_directories(x, Sorted::YES));
-    }
-
-    void    page_dev_document(WebHtml&h)
-    {
-        Document    doc = document(h);
-        if(!doc)
-            throw HttpStatus::BadArgument;
-            
-        auto i = cdb::info(doc);
-
-        h.title() << "Document (" << i.key << ")";
-
-        auto t = h.table();
-        h.kvrow("ID") << doc.id;
-        h.kvrow("Folder") << dev(i.folder);
-        h.kvrow("Fragments") << cdb::fragments_count(doc);
-        h.kvrow("Hidden") << i.hidden;
-        
-        if(is_similar(i.suffix, "class")){
-            h.kvrow("Is class") << dev(cdb::class_(doc));
-        } else if(is_similar(i.suffix, "field")){
-            h.kvrow("Is field") << dev(cdb::field(doc));
-        } else if(is_similar(i.suffix, "user")){
-            h.kvrow("Is user") << dev(cdb::user(doc));
-        } else if(is_similar(i.suffix, "tag")){
-            h.kvrow("Is tag") << dev(cdb::tag(doc));
-        } else if(is_similar(i.suffix, "y")){
-            h.kvrow("Is leaf") << dev(cdb::leaf(doc));
-        }
-        
-        h.kvrow("Key") << i.key;
-        h.kvrow("Name") << i.name;
-        h.kvrow("Removed") << i.removed;
-        h.kvrow("SKey") << i.skey;
-        h.kvrow("SKey B") << i.skeyb;
-        h.kvrow("SKey C") << i.skeyc;
-        h.kvrow("Suffix") << i.suffix;
-    }
-    
-    void    page_dev_document_attributes(WebHtml&h)
-    {
-        Document    doc = document(h);
-        if(!doc)
-            throw HttpStatus::BadArgument;
-        h.title() << "Document (" << cdb::key(doc) << "): Attributes";
-        dev_table(h, cdb::attributes(doc));
-    }
-    
-    void    page_dev_document_fragments(WebHtml&h)
-    {
-        Document    doc = document(h);
-        if(!doc)
-            throw HttpStatus::BadArgument;
-        h.title() << "Document (" << cdb::key(doc) << "): Fragments";
-        dev_table(h, cdb::fragments(doc));
-    }
-    
-    void    page_dev_document_roots(WebHtml&h)
-    {
-        Document    doc = document(h);
-        if(!doc)
-            throw HttpStatus::BadArgument;
-        h.title() << "Document (" << cdb::key(doc) << "): Roots";
-        dev_table(h, cdb::roots(doc));
-    }
-    
-    void    page_dev_documents(WebHtml& h)
-    {
-        h.title("Listing of Documents");
-        dev_table(h, all_documents(Sorted::YES));
-    }
 
     void    page_dev_echo(WebHtml& h)
     {
@@ -335,179 +160,6 @@ namespace {
         }
     }
 
-    void    page_dev_field(WebHtml& h)
-    {
-        Field fld = field(h);
-        if(!fld)
-            throw HttpStatus::BadArgument;
-        Field::Info i   = info(fld);
-        h.title() << "Field (" << cdb::label(fld) << ")";
-        auto ta = h.table();
-        h.kvrow("ID") << fld.id;
-        h.kvrow("Key") << i.key;
-        h.kvrow("Class") << dev(i.class_);
-        h.kvrow("Name") << i.name;
-        h.kvrow("Plural") << i.plural;
-        h.kvrow("Brief") << i.brief;
-        h.kvrow("Category") << dev(i.category);
-    }
-    
-    void    page_dev_field_tags(WebHtml& h)
-    {
-        Field fld = field(h);
-        if(!fld)
-            throw HttpStatus::BadArgument;
-        h.title() << "Field (" << cdb::label(fld) << "): Tags";
-        dev_table(h, tags(fld, Sorted::YES));
-    }
-
-    void    page_dev_fields(WebHtml& h)
-    {
-        h.title() << "All Fields";
-        dev_table(h, all_fields(Sorted::YES));
-    }
-
-
-    void    page_dev_folder(WebHtml&h)
-    {
-        bool    detected;
-        Folder  x   = folder(h, &detected);
-        if(!x){
-            if(detected)
-                throw HttpStatus::BadArgument;
-            //  redirect...once we get a streaming API to it
-            x       = top_folder();
-        }
-
-        
-        auto i = info(x);
-        h.title() << "Folder (" << i.key << ")";
-        auto t = h.table();
-        h.kvrow("ID") << x.id;
-        h.kvrow("Name") << i.name;
-        h.kvrow("Key") << "'" << i.key << "'";
-        h.kvrow("Parent") << dev(i.parent);
-        h.kvrow("Hidden") << i.hidden;
-        h.kvrow("Removed") << i.removed;
-        h.kvrow("Sub-Key") << i.skey;
-        h.kvrow("Brief") << i.brief;
-        h.kvrow("Folders") << child_folders_count(x);
-        h.kvrow("Documents") << child_documents_count(x);
-    }
-    
-    void    page_dev_folder_directories(WebHtml&h)
-    {
-        Folder  x   = folder(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        h.title() << "Folder (" << key(x) << "): Directories";
-        dev_table(h, directories(x));
-    }
-
-    void    page_dev_folder_documents(WebHtml&h)
-    {
-        Folder  x   = folder(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Folder (" << key(x) << "): Documents";
-        dev_table(h, child_documents(x));
-    }
-
-    void    page_dev_folder_fragments(WebHtml&h)
-    {
-        Folder  x   = folder(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Folder (" << key(x) << "): Fragments";
-        dev_table(h, child_fragments(x));
-    }
-
-    void    page_dev_folder_subs(WebHtml&h)
-    {
-        Folder  x   = folder(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Folder (" << key(x) << "): Sub-Folders";
-        dev_table(h, child_folders(x));
-    }
-
-    void    page_dev_folders(WebHtml& h)
-    {
-        h.title("Listing of Folders");
-        dev_table(h, all_folders(Sorted::YES));
-    }
-
-    void    page_dev_fragment(WebHtml&h)
-    {
-        Fragment    x = fragment(h, nullptr);
-        if(!x)
-            throw HttpStatus::BadArgument;
-
-        auto i = info(x);
-        h.title() << "Fragment (" << i.path.string() << ")";
-
-        auto _t = h.table();
-        h.kvrow("ID") << x.id;
-        h.kvrow("Document") << dev(i.document);
-        h.kvrow("Directory") << dev(i.directory);
-        h.kvrow("Folder") << dev(i.folder);
-        h.kvrow("Hidden") << i.hidden;
-        h.kvrow("Modified") << i.modified << " ns.";
-        h.kvrow("Name") << i.name;
-        h.kvrow("Path") << i.path;
-        h.kvrow("Removed") << i.removed;
-        h.kvrow("Rescan") << i.rescan;
-        h.kvrow("Root") << dev(i.root);
-        h.kvrow("Size") << i.size;
-    }
-    
-    void    page_dev_fragment_content(WebHtml& h)
-    {
-        Fragment    x = fragment(h, nullptr);
-        if(!x)
-            throw HttpStatus::BadArgument;
-            
-        std::string     sfx = suffix(x).ext;
-
-        h.title() << "Fragment (" << path(x) << "): Content";
-        ContentType     ct = mimeTypeForExt( sfx);
-        if(isImage(ct)){
-            h << "<img src=\"/dev/fragment/image?" << h.context().url.query << "\" alt=\"Raw Image\">";
-        } else if(isTextual(ct) || !ct){
-            if(!is_similar(sfx, "usr")){ // blank out user files (avoid passwords)
-                h << "<pre>";
-                std::string s = frag_string(x);
-                html_escape_write(h, s);
-                h << "</pre>";
-            }
-        } else if(isAudio(ct)){
-            h.p() << "Audio File... TODO";
-        } else if(isMovie(ct)){
-            h.p() << "Movie File... TODO";
-        } else {
-            h.p() << "Unimplemented type: " << mimeType(ct);
-        }
-    }
-
-    void    dev_fragment_image(WebContext& ctx)
-    {
-        Fragment x  = fragment(ctx, nullptr);
-        if(!x)  
-            throw HttpStatus::BadArgument;
-    
-        auto ext = suffix(x).ext;
-        ctx.tx_content_type = mimeTypeForExt( ext );
-        ctx.tx_content      = std::make_shared<ByteArray>(frag_bytes(x));
-    }
-
-    void    page_dev_fragments(WebHtml& h)
-    {
-        h.title("Listing of Fragments");
-        dev_table(h, all_fragments(Sorted::YES));
-    }
 
     void    page_dev_hello(WebHtml& out)
     {
@@ -571,121 +223,6 @@ namespace {
     }
 
 
-    void page_dev_meta_object(WebHtml&h)
-    {
-        const ObjectInfo*   obj = object_info(h);
-        if(!obj)
-            throw HttpStatus::BadArgument;
-            
-        h.title() << "Object Info (" << obj -> name() << ")";
-        auto ta = h.table();
-        
-        h.kvrow("ID") << obj -> id();
-        h.kvrow("Name") << obj -> name();
-        h.kvrow("Base") << dev(obj->base());
-        h.kvrow("Description") << obj->description();
-        h.kvrow("Size") << obj->size();
-        h.kvrow("Abstract?") << obj->is_abstract();
-    }
-    
-    void page_dev_meta_object_all_base(WebHtml&h)
-    {
-        const ObjectInfo*   obj = object_info(h);
-        if(!obj)
-            throw HttpStatus::BadArgument;
-            
-        h.title() << "Object Info (" << obj -> name() << "): All Bases";
-        dev_table(h, obj->bases(true).all);
-    }
-
-    void page_dev_meta_object_all_derived(WebHtml&h)
-    {
-        const ObjectInfo*   obj = object_info(h);
-        if(!obj)
-            throw HttpStatus::BadArgument;
-            
-        h.title() << "Object Info (" << obj -> name() << "): All Derived";
-        dev_table(h, obj->deriveds(true).all);
-    }
-
-    void page_dev_meta_object_all_properties(WebHtml&h)
-    {
-        const ObjectInfo*   obj = object_info(h);
-        if(!obj)
-            throw HttpStatus::BadArgument;
-            
-        h.title() << "Object Info (" << obj -> name() << "): All Properties";
-        dev_table(h, obj->properties(true).all);
-    }
-
-    void page_dev_meta_object_derived(WebHtml&h)
-    {
-        const ObjectInfo*   obj = object_info(h);
-        if(!obj)
-            throw HttpStatus::BadArgument;
-            
-        h.title() << "Object Info (" << obj -> name() << "): Derived";
-        dev_table(h, obj->deriveds(false).all);
-    }
-
-    void page_dev_meta_object_properties(WebHtml&h)
-    {
-        const ObjectInfo*   obj = object_info(h);
-        if(!obj)
-            throw HttpStatus::BadArgument;
-            
-        h.title() << "Object Info (" << obj -> name() << "): Properties";
-        dev_table(h, obj->properties(false).all);
-    }
-    
-    void    page_dev_meta_objects(WebHtml&h)
-    {
-        h.title() << "All Meta Objects";
-        dev_table(h, ObjectInfo::all());
-    }
-
-    void    page_dev_meta_type(WebHtml& h)
-    {
-        const TypeInfo* type    = type_info(h);
-        if(!type)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Type Info (" << type->name() << ")";
-        auto ta = h.table();
-        h.kvrow("ID") << type -> id();
-        h.kvrow("Name") << type->name();
-        h.kvrow("Aliases") << join(type->aliases(), ", ");
-        h.kvrow("Size") << type->size();
-        
-        
-        h.kvrow("Small?") << type->is_small();
-        h.kvrow("Parsable?") << type->can_parse();
-        h.kvrow("Writable?") << type->can_write();
-        h.kvrow("Printable?") << type->can_print();
-        
-        Any     def(type);
-        h.kvrow("Default") << "'" << def.printable() << "'";
-
-        h.kvrow("Properties") << type->property_count();
-        h.kvrow("Methods") << type->method_count();
-    }
-    
-    void    page_dev_meta_type_properties(WebHtml& h)
-    {
-        const TypeInfo* type    = type_info(h);
-        if(!type)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Type Info (" << type->name() << "): Properties";
-        dev_table(h, type->properties());
-    }
-    
-    void page_dev_meta_types(WebHtml&h)
-    {
-        h.title() << "All Type Infos";
-        dev_table(h, TypeInfo::all());
-    }
-
     void page_dev_mimetypes(WebHtml&h)
     {
         h.title("Mime Types");
@@ -695,80 +232,6 @@ namespace {
             h << "<tr><td>" << ct.value() << "</td><td>" << ct.key() << "</td><td>" << mimeType(ct) << "</td></tr>\n";
     }
 
-    void    page_dev_root(WebHtml& h)
-    {
-        const Root* rt   = root(h);
-        if(!rt)
-            rt          = wksp::root(0);
-        
-        h.title() << "Root (" << rt->name << ")";
-        
-        auto tab   = h.table();
-        h.kvrow("ID") << rt->id;
-        h.kvrow("Depth") << rt -> depth;
-        h.kvrow("Key") << rt -> key;
-        h.kvrow("Name") << rt -> name;
-        h.kvrow("Path") << rt -> path;
-        h.kvrow("Template") << rt -> is_template;
-        h.kvrow("Total Directories") << all_directories_count(rt);
-        h.kvrow("Total Fragments") << all_fragments_count(rt);
-        h <<"<tr><td colspan=\"2\"><hr></td></tr>\n";
-        
-        for(DataRole dr : DataRole::all_values()){
-            std::string n   = "Policy ";
-            n += dr.key();
-            h.kvrow(n) << rt->policy(dr).key();
-        }
-        
-    }
-    
-    void    page_dev_root_all_directories(WebHtml& h)
-    {
-        const Root* rt   = root(h);
-        if(!rt)
-            rt          = wksp::root(0);
-
-        h.title() << "Root (" << rt->name << "): All Directories";
-        dev_table(h, all_directories(rt, Sorted::YES));
-    }
-    
-    void    page_dev_root_all_fragments(WebHtml& h)
-    {
-        const Root* rt  = root(h);
-        if(!rt)
-            rt          = wksp::root(0);
-            
-        h.title() << "Root (" << rt->name << "): All Fragments";
-        dev_table(h, all_fragments(rt, Sorted::YES));
-    }
-
-    void    page_dev_root_directories(WebHtml& h)
-    {
-        const Root* rt   = root(h);
-        if(!rt)
-            rt          = wksp::root(0);
-            
-        h.title() << "Root (" << rt->name << "): Directories";
-        
-        dev_table(h, directories(rt, Sorted::YES));
-    }
-
-    void    page_dev_root_fragments(WebHtml& h)
-    {
-        const Root* rt   = root(h);
-        if(!rt)
-            rt          = wksp::root(0);
-
-        h.title() << "Root (" << rt->name << "): Fragments";
-
-        dev_table(h, fragments(rt, Sorted::YES));
-    }
-    
-    void    page_dev_roots(WebHtml& h)
-    {
-        h.title() << "All Roots";
-        dev_table(h, wksp::roots());
-    }
 
     void page_dev_server(WebHtml&h)
     {
@@ -907,40 +370,6 @@ namespace {
         dev_table(h, cdb::all_users(Sorted::YES));
     }
 
-    void    page_dev_webdirs(WebHtml&h)
-    {
-        h.title("All WebDirs");
-        dev_table(h, web::directory_map());
-    }
-
-    void page_dev_webexts(WebHtml& h)
-    {
-        h.title("All WebExts");
-        dev_table(h, web::extension_map());
-    }
-    
-    void page_dev_webglobs(WebHtml& h)
-    {
-        h.title("All WebGlobs");
-        dev_table(h, web::glob_map());
-    }
-
-    void page_dev_webpages(WebHtml& h)
-    {
-        h.title("All WebPages");
-        
-        h << "<div class=\"explain\">"
-          << "List of all registered (specific) web-pages.  Directories & GLOBs not included."
-          << "</div>\n";
-        
-        dev_table(h, web::page_map(), true);
-    }
-
-    void page_dev_webvars(WebHtml& h)
-    {
-        h.title("All WebVariables");
-        dev_table(h, web::variable_map());
-    }
 
     void  page_dev_wksp(WebHtml& h)
     {
@@ -1046,8 +475,18 @@ namespace {
         reg_admin();
         reg_api_wksp();
         reg_atom();
+        reg_class();
         reg_dev_atom();
         reg_dev_category();
+        reg_dev_class();
+        reg_dev_directory();
+        reg_dev_document();
+        reg_dev_field();
+        reg_dev_folder();
+        reg_dev_fragment();
+        reg_dev_meta();
+        reg_dev_root();
+        reg_dev_web();
         
         
         reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){
@@ -1055,52 +494,10 @@ namespace {
             if(gHasBackground.exchange(now) != now)
                 update_css();
         });
-        reg_webgroup({
-            reg_webpage<page_class>("/class").argument("ID", "Class ID").label("Overview"),
-            reg_webpage<page_class_atoms>("/class/atoms").argument("ID", "Class ID").label("Atoms")
-        });
         reg_webpage<page_css>("/css");
         reg_webtemplate("/dev", wksp::shared("std/developer"sv)).source(".developer");
         reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
-        reg_webgroup({
-            reg_webpage<page_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),
-            reg_webpage<page_dev_class_tags>("/dev/class/tags").argument("id", "Class ID").label("Tags"),
-            reg_webpage<page_dev_class_def_fields>("/dev/class/def_fields").argument("id", "Class ID").label("Def Fields")
-        });
-        reg_webpage<page_dev_classes>("/dev/classes");
-        reg_webpage<page_dev_directories>("/dev/directories");
-        reg_webgroup({
-            reg_webpage<page_dev_directory>("/dev/directory").argument("id", "Directory ID").label("Info"),
-            reg_webpage<page_dev_directory_fragments>("/dev/directory/fragments").argument("id", "Directory ID").label("Frags"),
-            reg_webpage<page_dev_directory_subdirs>("/dev/directory/subdirs").argument("id", "Directory ID").label("Subdirs")
-        });
-        reg_webgroup({
-            reg_webpage<page_dev_document>("/dev/document").argument("id", "Document ID").label("Info"),
-            reg_webpage<page_dev_document_attributes>("/dev/document/attributes").argument("id", "Document ID").label("Attributes"),
-            reg_webpage<page_dev_document_fragments>("/dev/document/fragments").argument("id", "Document ID").label("Fragments"),
-            reg_webpage<page_dev_document_roots>("/dev/document/roots").argument("id", "Document ID").label("Roots")
-        });
-        reg_webpage<page_dev_documents>("/dev/documents"); 
         reg_webpage<page_dev_echo>({hGet, hPost}, "/dev/echo");
-        reg_webgroup({
-            reg_webpage<page_dev_field>("/dev/field").argument("id", "Field ID").label("Info"),
-            reg_webpage<page_dev_field_tags>("/dev/field/tags").argument("id", "Field ID").label("Fields")
-        });
-        reg_webpage<page_dev_fields>("/dev/fields");
-        reg_webgroup({
-            reg_webpage<page_dev_folder>("/dev/folder").label("Info"),
-            reg_webpage<page_dev_folder_directories>("/dev/folder/dirs").label("Dirs"),
-            reg_webpage<page_dev_folder_documents>("/dev/folder/docs").label("Docs"),
-            reg_webpage<page_dev_folder_fragments>("/dev/folder/frags").label("Frags"),
-            reg_webpage<page_dev_folder_subs>("/dev/folder/subs").label("Subs")
-        });
-        reg_webpage<page_dev_folders>("/dev/folders");
-        reg_webgroup({
-            reg_webpage<page_dev_fragment>("/dev/fragment").description("Developer info for a fragment").argument("id", "Fragment ID").label("Info"),
-            reg_webpage<page_dev_fragment_content>("/dev/fragment/content").description("Content for fragment").argument("id", "Fragment ID").label("Content")
-        });
-        reg_webpage<dev_fragment_image>("/dev/fragment/image").argument("id", "ID for fragment"); 
-        reg_webpage<page_dev_fragments>("/dev/fragments");
         reg_webpage<page_dev_hello>("/dev/hello");
         reg_webpage<page_dev_image>("/dev/image");
         reg_webpage<page_dev_images>("/dev/images"); 
@@ -1108,29 +505,7 @@ namespace {
             reg_webpage<page_dev_leaf>("/dev/leaf").argument("id", "Leaf ID").label("Info")
         });
         reg_webpage<page_dev_leafs>("/dev/leafs");
-        reg_webgroup({
-            reg_webpage<page_dev_meta_object>("/dev/meta/object").label("Info"),
-            reg_webpage<page_dev_meta_object_derived>("/dev/meta/object/derived").label("Derived"),
-            reg_webpage<page_dev_meta_object_properties>("/dev/meta/object/properties").label("Properties"),
-            reg_webpage<page_dev_meta_object_all_base>("/dev/meta/object/all_base").label("All Base"),
-            reg_webpage<page_dev_meta_object_all_derived>("/dev/meta/object/all_derived").label("All Derived"),
-            reg_webpage<page_dev_meta_object_all_properties>("/dev/meta/object/all_properties").label("All Properties")
-        });
-        reg_webpage<page_dev_meta_objects>("/dev/meta/objects"); 
-        reg_webgroup({
-            reg_webpage<page_dev_meta_type>("/dev/meta/type").label("Info"),
-            reg_webpage<page_dev_meta_type_properties>("/dev/meta/type/properties").label("Properties")
-        });
-        reg_webpage<page_dev_meta_types>("/dev/meta/types");
         reg_webpage<page_dev_mimetypes>("/dev/mimetypes");
-        reg_webgroup({
-            reg_webpage<page_dev_root>("/dev/root").argument("id", "Root ID").label("Info"),
-            reg_webpage<page_dev_root_directories>("/dev/root/dirs").argument("id", "Root ID").label("Dirs"),
-            reg_webpage<page_dev_root_fragments>("/dev/root/frags").argument("id", "Root ID").label("Frags"),
-            reg_webpage<page_dev_root_all_directories>("/dev/root/all_dirs").argument("id", "Root ID").label("AllDirs"),
-            reg_webpage<page_dev_root_all_fragments>("/dev/root/all_frags").argument("id", "Root ID").label("AllFrags")
-        });
-        reg_webpage<page_dev_roots>("/dev/roots");
         reg_webpage<page_dev_server>("/dev/server").local();
         reg_webpage<page_dev_sql_table>("/dev/sql/table").local().argument("table", "SQL Table Name");
         reg_webpage<page_dev_sql_tables>("/dev/sql/tables", "SQL Tables").local();
@@ -1143,11 +518,6 @@ namespace {
         });
         reg_webpage<page_dev_tags>("/dev/tags");
         reg_webpage<dev_page_users>("/dev/users");
-        reg_webpage<page_dev_webdirs>("/dev/web/directories");
-        reg_webpage<page_dev_webexts>("/dev/web/extensions"); 
-        reg_webpage<page_dev_webglobs>("/dev/web/globs");
-        reg_webpage<page_dev_webpages>("/dev/web/pages");
-        reg_webpage<page_dev_webvars>("/dev/web/variables");
         reg_webgroup({
             reg_webpage<page_dev_wksp>("/dev/wksp").label("Info"),
             reg_webpage<page_dev_wksp_roots>("/dev/wksp/roots").label("Roots")
