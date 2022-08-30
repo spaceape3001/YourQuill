@@ -97,8 +97,12 @@ namespace {
 #include "p_dev_field.ipp"
 #include "p_dev_folder.ipp"
 #include "p_dev_fragment.ipp"
+#include "p_dev_image.ipp"
+#include "p_dev_leaf.ipp"
 #include "p_dev_meta.ipp"
 #include "p_dev_root.ipp"
+#include "p_dev_sql.ipp"
+#include "p_dev_tag.ipp"
 #include "p_dev_web.ipp"
 
 namespace {
@@ -174,55 +178,6 @@ namespace {
             out.kvrow(hv.first) << hv.second;
     }
     
-    void page_dev_image(WebHtml& h)
-    {
-        Image   img = image(h);
-        if(!img)
-            throw HttpStatus::BadArgument;
-        
-        Fragment    frag    = fragment(img);
-        Document    doc     = document(img);
-        const Root* rt      = root(frag);
-        if(!rt)
-            throw HttpStatus::BadArgument;
-        
-        h.title() << "Image [" << rt->key << "](" << label(doc) << ")";
-        h << img;
-    }
-
-    void page_dev_images(WebHtml& h)
-    {
-        h.title("All Images");
-        dev_table(h, all_images());
-    }
-
-    void page_dev_leaf(WebHtml&h)
-    {
-        Leaf    x   = leaf(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        auto i = cdb::info(x);
-            
-        h.title() << "Leaf (" << i.key << ")";
-        auto t = h.table();
-        h.kvrow("ID") << x.id;
-        h.kvrow("Key") << i.key;
-        h.kvrow("Title") << i.title;
-        h.kvrow("Brief") << i.brief;
-        h.kvrow("Document") << dev(i.doc);
-        h.kvrow("Atom") << dev(i.atom);
-   }
-    
-    //  we'll do more (later)
-
-    void    page_dev_leafs(WebHtml&h)
-    {
-        h.title("All Leafs");
-        dev_table(h, all_leafs(Sorted::YES));
-    }
-
-
     void page_dev_mimetypes(WebHtml&h)
     {
         h.title("Mime Types");
@@ -278,98 +233,12 @@ namespace {
         }
     }
 
-    void page_dev_sql_table(WebHtml& h)
-    {
-        int i, cc, count;
-        std::string table = h.context().find_query("table");
-        if(table.empty())
-            throw HttpStatus::BadArgument;
-        
-        auto& db    = wksp::db();
-        if(!db.has_table(table))
-            throw HttpStatus::NotFound;
-
-        std::string cmd = "SELECT * FROM " + table;
-        SqlQuery    sql(db, cmd);
-        if(!sql.valid())
-            throw HttpStatus::InternalError;
-
-        h.title() << "Sql Table: " << table;
-        
-//        bool    first   = false;
-        
-        auto _table = h.table();
-
-        h << "<tr>";
-        cc  = sql.column_count();
-        for(i=1;i<=cc;++i)
-            h << "<th>" << sql.column_name(i) << "</th>";
-        h << "</tr>\n";
-        
-        count   = 0;
-        SqlQuery::Result    r;
-        while((r = sql.step()) == SqlQuery::Row){
-            ++ count;
-            h << "<tr>";
-            for(i=1;i<=cc;++i){
-                h << "<td>";
-                html_escape_write(h, sql.v_text(i));
-                h << "</td>";
-            }
-            h << "</tr>\n";
-        }
-        
-        h << "</table>\n";
-        h.paragraph() << "This table has " << count << " row(s).";
-    }
-    
-    void page_dev_sql_tables(WebHtml& out)
-    {
-        auto list = out.numbers();
-        for(auto& s : wksp::db().tables())
-            out.li() << "<a href=\"/dev/sql/table?table=" << web_encode(s) << "\">" << s << "</a>\n";
-    }
-    
-    void    page_dev_tag(WebHtml& h)
-    {
-        Tag x   = tag(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        auto i = info(x);
-        
-        dev_title(h, x);
-        auto ta = h.table();
-        h.kvrow("ID") << x.id;
-        h.kvrow("Name") << i.name;
-        h.kvrow("Key") << i.key;
-        h.kvrow("Brief") << i.brief;
-        h.kvrow("Document") << dev(i.doc);
-        h.kvrow("Leaf"); //  << dev(leaf(x_tag));
-        h.kvrow("Image");
-    }
-    
-    void    page_dev_tag_classes(WebHtml& h)
-    {
-        Tag x   = tag(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-        
-        dev_title(h, x, "Classes");
-        dev_table(h, classes(x));
-    }
-
-    void    page_dev_tags(WebHtml& out)
-    {
-        out.title("All Tags");
-        dev_table(out, all_tags());
-    }
 
     void    dev_page_users(WebHtml& h)
     {
         h.title() << "All Users";
         dev_table(h, cdb::all_users(Sorted::YES));
     }
-
 
     void  page_dev_wksp(WebHtml& h)
     {
@@ -484,10 +353,13 @@ namespace {
         reg_dev_field();
         reg_dev_folder();
         reg_dev_fragment();
+        reg_dev_image();
+        reg_dev_leaf();
         reg_dev_meta();
         reg_dev_root();
-        reg_dev_web();
-        
+        reg_dev_sql();
+        reg_dev_tag();
+        reg_dev_web();        
         
         reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){
             bool    now = wi.hasImage();
@@ -499,24 +371,8 @@ namespace {
         reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
         reg_webpage<page_dev_echo>({hGet, hPost}, "/dev/echo");
         reg_webpage<page_dev_hello>("/dev/hello");
-        reg_webpage<page_dev_image>("/dev/image");
-        reg_webpage<page_dev_images>("/dev/images"); 
-        reg_webgroup({
-            reg_webpage<page_dev_leaf>("/dev/leaf").argument("id", "Leaf ID").label("Info")
-        });
-        reg_webpage<page_dev_leafs>("/dev/leafs");
         reg_webpage<page_dev_mimetypes>("/dev/mimetypes");
         reg_webpage<page_dev_server>("/dev/server").local();
-        reg_webpage<page_dev_sql_table>("/dev/sql/table").local().argument("table", "SQL Table Name");
-        reg_webpage<page_dev_sql_tables>("/dev/sql/tables", "SQL Tables").local();
-        reg_webgroup({
-            reg_webpage<page_dev_tag>("/dev/tag")
-                .argument("id", "Tag id (number)")
-                .argument("key", "Tag key (string)")
-                .argument("tag", "Tag key/identifier").label("Info"),
-            reg_webpage<page_dev_tag_classes>("/dev/tag/classes").argument("id", "Tag id (number)").label("Classes")
-        });
-        reg_webpage<page_dev_tags>("/dev/tags");
         reg_webpage<dev_page_users>("/dev/users");
         reg_webgroup({
             reg_webpage<page_dev_wksp>("/dev/wksp").label("Info"),
