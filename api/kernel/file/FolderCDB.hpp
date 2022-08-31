@@ -43,54 +43,88 @@ namespace yq {
         */
         size_t                          all_folders_count();
 
-
+        //! Brief description for folder
         std::string                     brief(Folder);
         
-        
+        //! Folder for category definition files
         consteval Folder                categories_folder() { return Folder{Folder::CATEGORIES}; }
 
+        //! Gets named child of folder
         DocOrFold                       child(Folder, std::string_view );
 
+        //! Number of things in folder
         size_t                          child_count(Folder);
 
+        //! Gets named child document
         Document                        child_document(Folder, std::string_view );
 
+        //! Gets all documents of folder
         std::vector<Document>           child_documents(Folder, unsigned opts=0);
+
+        //! Gets all documents of folder
         std::vector<Document>           child_documents(Folder, Sorted sorted);
+
+        //! Gets count of child documents for folder
         size_t                          child_documents_count(Folder, unsigned opts=0);
+        
+        //! Gets child documents with given suffix
         std::vector<Document>           child_documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
+        
+        //! Gets child documens excluding given suffix
         std::vector<Document>           child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
 
+        //! Gets named child folder
         Folder                          child_folder(Folder, std::string_view );
 
+        //! Gets all child folders
         std::vector<Folder>             child_folders(Folder, unsigned int opts=0);
+
+        //! Gets all child folders
         std::vector<Folder>             child_folders(Folder, Sorted sorted);
+        
+        //! Counts numbers of child folders
         size_t                          child_folders_count(Folder, unsigned int opts=0);
 
-
+        //! Gets child fragments
         std::vector<Fragment>           child_fragments(Folder, Sorted sorted=Sorted());
+        
+        
+        //! Gets number of child fragments
+        //! \note number of fragments may be different than documents (by design)
         size_t                          child_fragments_count(Folder);
 
     #if 0
         std::string                     child_key(Folder);
     #endif
 
+        //! Children of folder
         std::vector<DocOrFold>          children(Folder,Sorted sorted=Sorted());
 
+        //! Children (& names) of folder
         std::vector<DocOrFoldStr>       children_and_names(Folder);
 
+        //! Folder for atom class definition files
         consteval Folder                classes_folder() { return Folder{Folder::CLASSES}; }
+        
+        //! Generic config folder used for things w/o a dedicated folder
         consteval Folder                config_folder() { return Folder{Folder::CONFIG}; }
 
         //std::vector<uint8_t>         data(Fragment);   // TODO
 
-
+        //! Creates a folder in the cache database
         Folder                          db_folder(Folder, std::string_view , bool *wasCreated=nullptr);
         
+        //! All directories that make this folder (not children)
         std::vector<Directory>          directories(Folder, Sorted sorted=Sorted());
+
+        //! Directories that make this folder under specific root (not children)
         std::vector<Directory>          directories(Folder, const Root*, Sorted sorted=Sorted());
         
+        //! Number of directories making this folder
         size_t                          directories_count(Folder);
+
+        //! Number of directories making this folder under specific root
+        //! \note On Windows, this will be no more than one, however, this can be many on any case-sensitive file system
         std::vector<Directory>          directories_count(Folder, const Root*);
         
 
