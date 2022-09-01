@@ -128,60 +128,80 @@ namespace yq {
         std::vector<Directory>          directories_count(Folder, const Root*);
         
 
-        Document                        document(std::string_view );
-        Document                        document(uint64_t);
-        
-
-
+        //! Checks for folder existence
         bool                            exists(Folder);
+
+        //! Checks for folder existence in root
         bool                            exists(Folder, const Root*);
 
+        //! Checks for folder existence
         bool                            exists_folder(uint64_t);
         
+        //! Folder for field definitions
         consteval Folder                fields_folder() { return Folder{Folder::FIELDS}; }
 
+        //! First directory used to define this folder
         Directory                       first_directory(Folder);
+
+        //! First directory used to define this folder in root
         Directory                       first_directory(Folder, const Root*);
 
 
-        /*! \brief Returns the FIRST document encountered
+        /*! \brief Returns the FIRST document encountered, based on sub-key
         */
         Document                        first_document(Folder, std::initializer_list<std::string_view>);
+
+        /*! \brief Returns the FIRST document encountered, based on sub-key
+        */
         Document                        first_document(Folder, const std::vector<std::string>&);
 
+        //! Folder that contains said fragment
         Folder                          folder(Fragment);
 
+        //! Folder by ID
         Folder                          folder(uint64_t);
+        
+        //! Folder by key
         Folder                          folder(std::string_view );
         
+        //! List of folders reaching specified folder
         std::vector<Folder>             folder_path(Folder);
         
 
-
+        //! TRUE if folder is hidden
         bool                            hidden(Folder);
         
+        //! Icon for folder
         Image                           icon(Folder);
 
+        //! Information for folder
         Folder::Info                    info(Folder);
 
+        //! Key for folder
         std::string                     key(Folder);
-
+    
+        //! Label for folder
         std::string                     label(Folder);
         
+        //! Make folder's directory under root (on drive)
         void                            make_directory(Folder, const Root*);
 
-
+        //! Name for folder
         std::string                     name(Folder);
 
+        //! Name/Key/Icon for folder
         NKI                             nki(Folder, bool autoKeyToName=false);
 
+        //! Parent folder for folder
         Folder                          parent(Folder);
 
+        //! TRUE if the folder's been removed from drive
         bool                            removed(Folder);
         
-        
+        //! List of roots that have a directory for folder
         std::vector<const Root*>        roots(Folder);
 
+        //! Count of roots where this folder may be found
         size_t                          roots_count(Folder);
 
 
@@ -189,9 +209,13 @@ namespace yq {
 
         std::string                     skeyb(Folder);    //!< Key inside the directory (w/o extensions)
 
-
+        //! Folder for tag definitions
         consteval Folder                tags_folder() { return Folder{Folder::TAGS}; }
+        
+        //! Top folder (only one)
         consteval Folder                top_folder() { return Folder{Folder::TOP}; }
+        
+        //! Folder for user definitions
         consteval Folder                users_folder() { return Folder{Folder::USERS}; }
 
 
