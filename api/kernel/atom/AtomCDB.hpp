@@ -90,24 +90,41 @@ namespace yq {
         */
         size_t                  all_atoms_count(Tag tag);
 
-
+        //! Gets atom by ID
         Atom                    atom(uint64_t);
+
+        //! Gets atom by key
         Atom                    atom(std::string_view );
+
+        //! Gets atom by document and sub-key
         Atom                    atom(Document, std::string_view );
-        std::vector<Atom>       atoms(Atom, Sorted sorted=Sorted{});
+        
+        //! Atoms in document
         std::vector<Atom>       atoms(Document, Sorted sorted=Sorted());
         
+        //! All atoms with name
         std::vector<Atom>       atoms_by_name(std::string_view , Sorted sorted=Sorted{});
         
-        size_t                  atoms_count(Atom);
+        //! Number of atoms defined in document
         size_t                  atoms_count(Document);
         
+        //! Brief description of atom
         std::string             brief(Atom);
-        
+
+        //! Child atoms of specified parent
+        std::vector<Atom>       child_atoms(Atom, Sorted sorted=Sorted{});
+
+        //! Count of child atoms
+        size_t                  child_atoms_count(Atom);
+
+        //! Classes of the atom
         std::vector<Class>      classes(Atom, Sorted sorted=Sorted{});
-        std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
+        
+        //std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
+        
+        //! Count of classes for atom
         size_t                  classes_count(Atom);
-        size_t                  classes_count(Atom,Document);
+        //size_t                  classes_count(Atom,Document);
         
         
         /*! \brief Creates an atom in the CACHE database
@@ -135,34 +152,45 @@ namespace yq {
         */
         Atom                    db_atom(Document doc, std::string_view k, bool* wasCreated=nullptr);
         
-        
+        //! Documents that define this atom
         std::vector<Document>   documents(Atom, Sorted sorted=Sorted{});
+        
+        //! Count of documents defining/mentioning atom
         size_t                  documents_count(Atom);
 
-      
+        //! TRUE if atom exists
         bool                    exists(Atom);
 
+        //! TRUE if atom exists
         bool                    exists_atom(uint64_t);
 
-
+        //! Icon for atom
         Image                   icon(Atom);
         
+        //! Inbound edges for atom
         std::vector<Atom>            inbound(Atom);
 
+        //! Information for atom
         Atom::Info              info(Atom);
 
+        //! TRUE if atom is specified class
         bool                    is(Atom, Class);
         //bool                    is_all(Atom, std::initializer_list<Class>);
         //bool                    is_any(Atom, std::initializer_list<Class>);
         
+        //! TRUE if this atom is also a leaf
         bool                    is_leaf(Atom);
 
+        //! Key for the atom
         std::string             key(Atom);
 
+        //! Label for the atom
         std::string             label(Atom);
         
+        //! Leaf for atom (might not have one)
         Leaf                    leaf(Atom);
-
+    
+        //! Name for the atom
         std::string             name(Atom);
         
         /*! \brief Name/Key/Icon for an Atom
@@ -172,20 +200,29 @@ namespace yq {
         */
         NKI                     nki(Atom a, bool autoKeyToName=false);
         
+        //! Outbound edges for atom
         std::vector<Atom>            outbound(Atom);
         
+        //! parent for atom
         Atom                    parent(Atom);
 
+        //! Sub-key for atom
         std::string             skey(Atom);
 
-        
+        //! Tags for atom
         std::vector<Tag>        tags(Atom, Sorted sorted=Sorted{});
-        std::vector<Tag>        tags(Atom, Document, Sorted sorted=Sorted{});
-        size_t                  tags_count(Atom);
-        size_t                  tags_count(Atom, Document);
 
+        //! Tags for atom 
+        //std::vector<Tag>        tags(Atom, Document, Sorted sorted=Sorted{});
+        
+        //! Count of tags for atom
+        size_t                  tags_count(Atom);
+        //size_t                  tags_count(Atom, Document);
+
+        //! TRUE if the atom has been taged
         bool                    tagged(Atom, Tag);
 
+        //! Title for atom
         std::string             title(Atom);    // kept for comptibility
 
     }

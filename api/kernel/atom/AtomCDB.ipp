@@ -137,26 +137,6 @@ namespace yq {
             return atom(ks);
         }
         
-        
-        namespace {
-            std::vector<Atom>        atoms_sorted(Atom a)
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE parent=? ORDER BY k");
-                return s.vec<Atom>(a.id);
-            }
-            
-            std::vector<Atom>        atoms_unsorted(Atom a)
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE parent=?");
-                return s.vec<Atom>(a.id);
-            }
-            
-        }
-
-        std::vector<Atom>            atoms(Atom a, Sorted sorted)
-        {
-            return sorted ? atoms_sorted(a) : atoms_unsorted(a);
-        }
 
         namespace {
             std::vector<Atom>    atoms_sorted(Document doc)
@@ -210,6 +190,33 @@ namespace yq {
             return s.str(a.id);
         }
         
+        
+        namespace {
+            std::vector<Atom>        child_atoms_sorted(Atom a)
+            {
+                static thread_local SQ s("SELECT id FROM Atoms WHERE parent=? ORDER BY k");
+                return s.vec<Atom>(a.id);
+            }
+            
+            std::vector<Atom>        child_atoms_unsorted(Atom a)
+            {
+                static thread_local SQ s("SELECT id FROM Atoms WHERE parent=?");
+                return s.vec<Atom>(a.id);
+            }
+            
+        }
+
+        std::vector<Atom>            child_atoms(Atom a, Sorted sorted)
+        {
+            return sorted ? child_atoms_sorted(a) : child_atoms_unsorted(a);
+        }
+
+        size_t              child_atoms_count(Atom a)
+        {
+            static thread_local SQ s("SELECT COUNT(1) FROM Atoms WHERE parent=?");
+            return s.size(a);
+        }
+
         namespace {
             std::vector<Class>    classes_sorted(Atom a)
             {
