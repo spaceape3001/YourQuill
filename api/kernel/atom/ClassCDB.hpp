@@ -58,41 +58,78 @@ namespace yq {
         */
         size_t                      all_classes_count();
         
+        //! Alternative keys for class
         string_set_t                alternative_keys(Class);
         
-        
+        //! Binding for class?
         std::string                 binding(Class);
-
+        
+        //! Brief for class
         std::string                 brief(Class);
         
+        //! Category for class
         Category                    category(Class);
 
+        //! Gets class by ID
         Class                       class_(uint64_t);
+        
+        //! Gets class by defining document
         Class                       class_(Document, bool calc=false);
+        
+        //! Gets class by key
         Class                       class_(std::string_view );
 
+        //! Gets the specified class fragment as data
         Class::SharedFile           class_doc(Fragment, cdb_options_t opts=0);
         
+        //! Gets all classes matching the set of keys
         std::vector<Class>          classes(const string_set_t&, bool noisy=false);
+        
+        //! Gets all classes that are tagged
         std::vector<Class>          classes(Tag, Sorted sorted=Sorted{});
+        
+        //! Gets all classes matching the set of keys as a set
         std::set<Class>             classes_set(const string_set_t&, bool noisy=false);
+
+        //! Gets all classes matching the set of keys as a set
         std::set<Class>             classes_set(const string_view_set_t&, bool noisy=false);
         
+        //! Creates the specified class from document
         Class                       db_class(Document, bool *wasCreated=nullptr);
+        
+        //! Creates the specified class from key
         Class                       db_class(std::string_view, bool *wasCreated=nullptr);
         
+        //! Defined aliases for class
         string_set_t                def_aliases(Class);
+        
+        //! Defined derived classes for class
         std::vector<Class>          def_derived(Class, Sorted sorted=Sorted());
+        
+        //! Defined fields for class
         std::vector<Field>          def_fields(Class c, Sorted sorted=Sorted{});
+        
+        //! Defined reverses for class
         std::vector<Class>          def_reverse(Class, Sorted sorted=Sorted());
+        
+        //! Defined prefixes for class
         string_set_t                def_prefixes(Class);
+        
+        //! Defined sources for class
         std::vector<Class>          def_source(Class, Sorted sorted=Sorted());
+        
+        //! Defined suffixes for class
         string_set_t                def_suffixes(Class);
+        
+        //! Defined targets for class
         std::vector<Class>          def_target(Class, Sorted sorted=Sorted());
+        
+        //! Defined use (ie bases) for class
         std::vector<Class>          def_use(Class, Sorted sorted=Sorted());
         
         //Graph                   dep_graph(Class);
 
+        //! all derives for this class
         std::vector<Class>          dependents(Class, Sorted sorted=Sorted());
 
                 //  Rank here is number of hops
