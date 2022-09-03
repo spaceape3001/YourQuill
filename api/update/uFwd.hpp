@@ -8,6 +8,9 @@
 
 #include <cstdint>
 #include <string>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/db/SQ.hpp>
+
 
 /*
     The UPDATE is here because this analysis can suck in a database, therefore the updater needs a parallel
@@ -15,4 +18,5 @@
 */
 
 namespace yq {
+    using namespace cdb;
 }

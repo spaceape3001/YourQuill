@@ -24,6 +24,11 @@
 #include <yq/user.hpp>
 #include <yq/value.hpp>
 
+#include <update/uAtom.hpp>
+#include <update/uClass.hpp>
+#include <update/uField.hpp>
+#include <update/uLeaf.hpp>
+
 #include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
