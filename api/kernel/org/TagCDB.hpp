@@ -166,12 +166,6 @@ namespace yq {
         /*! \brief Tags for key-set */
         std::set<Tag>           tags_set(const string_view_set_t&, bool noisy=false);
 
-        //! Updates Tag Icon
-        void                    update_icon(Tag);
-        
-        //! Updates the tag data
-        Tag::SharedData         update(Tag, cdb_options_t opts=0);
-
         //!  \brief   Returns a writable document
         //!
         //!     \note the path will be CREATED by this method.

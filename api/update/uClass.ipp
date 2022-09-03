@@ -7,13 +7,6 @@
 #pragma once
 
 #include "uClass.hpp"
-#include <basic/CollectionUtils.hpp>
-#include <basic/Vector.hpp>
-#include <kernel/atom/ClassCDB.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/org/CategoryCDB.hpp>
-#include <kernel/org/TagCDB.hpp>
 
 namespace yq {
 
