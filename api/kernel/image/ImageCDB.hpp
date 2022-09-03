@@ -85,7 +85,5 @@ namespace yq {
             //! Thumnail for image
         Thumbnail               thumbnail(Image, std::string_view alt, SizeDesc sz=SizeDesc::Small);
 
-            //! Update root icon
-        void                    update_root(const Root*, Image);
     }
 }

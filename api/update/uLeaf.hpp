@@ -23,4 +23,18 @@ namespace yq {
 
     //! Note, not thread-safe, call from ONE thread only!
     ULeaf&  uget(Leaf);
+
+
+    /*! Updates the leaf data
+    
+        \note This updates ONLY the leaf data, no associations are
+        covered.
+        
+        \return The merged data.
+    */
+    Leaf::SharedData            update(Leaf, cdb_options_t opts=0);
+    
+    //! Updates the leaf icon
+    void                        update_icon(Leaf);
+
 }
