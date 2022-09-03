@@ -13,8 +13,8 @@ endif()
 
 add_library(yqkernel SHARED
     ${kernel_test_source}
-    ./kernel/kernel.cpp
-    ./kernel/wksp/Workspace.cpp
+    ./kernel.cpp
+    ./wksp/Workspace.cpp
 )
 
 target_link_libraries(yqkernel
@@ -23,11 +23,6 @@ target_link_libraries(yqkernel
 
     PRIVATE
         RapidXml
-)
-
-target_include_directories(yqkernel 
-    PUBLIC 
-        ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_compile_definitions(yqkernel 

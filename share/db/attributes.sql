@@ -18,3 +18,9 @@ CREATE TABLE Attributes (
     value       VARCHAR(255) COLLATE NOCASE
 );
 
+    --  Inferred/Deduced attributes
+CREATE TABLE Inferrence (
+    src         INTEGER DEFAULT 0 NOT NULL,
+    tgt         INTEGER DEFAULT 0 NOT NULL
+);
+

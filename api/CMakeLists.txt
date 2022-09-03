@@ -9,6 +9,7 @@
 #
 #   Files should be listed alphabetically
 
+add_subdirectory(kernel)
 add_subdirectory(http)
 add_subdirectory(update)
 #add_subdirectory(config)
