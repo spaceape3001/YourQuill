@@ -6,6 +6,15 @@
 
 #pragma once
 
+/*
+
+    LEAF is a markdown document with attributes defined at the top.
+    
+    LEAF will posit an atom, the defacto "home" for a (big/important) scope atom, 
+    however, an atom can be defined elsewhere.
+
+*/
+
 namespace {
   void    leaf_icons(Fragment frag)
     {

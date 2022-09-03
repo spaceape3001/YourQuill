@@ -15,7 +15,4 @@
 */
 
 namespace yq {
-    namespace update {
-        static constexpr const size_t       kExtraAdd       = 1024;
-    }
 }

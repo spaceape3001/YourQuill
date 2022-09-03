@@ -61,6 +61,7 @@ namespace {
 
 }
 
+#include "u_atom.ipp"
 #include "u_category.ipp"
 #include "u_class.ipp"
 #include "u_css.ipp"
