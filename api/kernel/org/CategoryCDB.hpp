@@ -129,11 +129,6 @@ namespace yq {
         //! Sets the name for the category
         bool                    set_name(Category, std::string_view, class Root* rt=nullptr);
 
-        //! Update cache data for category (from files)
-        Category::SharedData    update(Category, cdb_options_t opts=0);
-        
-        //! Update category's icon
-        void                    update_icon(Category);
 
         //!  \brief   Returns a writable document
         //!
