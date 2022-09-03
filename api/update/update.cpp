@@ -13,6 +13,7 @@
 #include <kernel/org/CategoryCDB.hpp>
 #include <kernel/org/TagCDB.hpp>
 #include <kernel/org/TagFile.hpp>
+#include <kernel/user/UserCDB.hpp>
 
 #include "uAtom.ipp"
 #include "uCategory.ipp"
@@ -20,4 +21,5 @@
 #include "uField.ipp"
 //#include "uLeaf.ipp"
 #include "uTag.ipp"
+#include "uUser.ipp"
 

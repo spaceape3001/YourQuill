@@ -31,6 +31,7 @@
 #include <update/uImage.hpp>
 #include <update/uLeaf.hpp>
 #include <update/uTag.hpp>
+#include <update/uUser.hpp>
 
 #include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>

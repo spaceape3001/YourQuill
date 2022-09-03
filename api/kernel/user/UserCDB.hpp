@@ -116,12 +116,6 @@ namespace yq {
         //! User fragments under specified root
         Vector<UserFragDoc>     reads(User, class Root*, cdb_options_t opts=0);
 
-        //! Updates user data from files, return merged data
-        User::SharedData        update(User, cdb_options_t opts=0);
-        
-        //! Updates user icon
-        void                    update_icon(User);
-
         //! Finds user with matching key
         User                    user(std::string_view);
         

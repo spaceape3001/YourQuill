@@ -8,7 +8,6 @@
 
 #include "uTag.hpp"
 
-
 namespace yq {
     Tag::SharedData         update(Tag x, cdb_options_t opts)
     {
