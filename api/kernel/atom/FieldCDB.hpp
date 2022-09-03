@@ -127,9 +127,6 @@ namespace yq {
 
         bool                    tagged(Field, Tag);
 
-        Field::SharedData       update(Field, cdb_options_t opts=0);
-        void                    update_icon(Field);
-
 
         //!  \brief   Returns a writable document
         //!
