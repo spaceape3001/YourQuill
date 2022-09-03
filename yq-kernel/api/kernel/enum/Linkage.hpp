@@ -1,0 +1,23 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <basic/meta/InfoBinder.hpp>
+#include <basic/Enum.hpp>
+
+namespace yq {
+
+    YQ_ENUM(Linkage, ,
+        None,
+        Any,
+        Indirect,
+        Direct
+    )
+
+}
+
+YQ_TYPE_DECLARE(yq::Linkage)
