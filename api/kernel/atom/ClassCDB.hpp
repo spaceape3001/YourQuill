@@ -211,9 +211,6 @@ namespace yq {
         std::vector<Class::Rank>    uses_ranked(Class);
         std::vector<Class::Rank>    uses_ranked(Class, int64_t depth);
 
-        Class::SharedData           update(Class, cdb_options_t opts=0);
-        void                        update_icon(Class);
-
 
         //!  \brief   Returns a writable document
         //!
