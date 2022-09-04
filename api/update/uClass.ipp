@@ -9,16 +9,60 @@
 #include "uClass.hpp"
 
 namespace yq {
-
     UClass&  uget(Class a)
     {
-        static Vector<UClass*>   s_data;
-        s_data.resize_if_under(a.id+1, 512, nullptr);
+        static std::map<uint64_t, UClass*>  s_data;
         UClass*& p  = s_data[a.id];
         if(!p)
             p       = new UClass(a);
         return *p;
     }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    void    UClass::s3_create(Document doc)
+    {
+        uget(db_class(doc));
+    }
+
+    void    UClass::s3_initialize(Document doc)
+    {
+        Class   x = db_class(doc);
+        UClass& u = uget(x);
+        
+        if(!u.reload(DONT_LOCK))
+            return ;
+        u.u_header();
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    UClass::UClass(Class a) : k(cdb::key(a)), cls(a) 
+    {
+    }
+
+    bool    UClass::reload()
+    {
+        auto nd     = merged(cls, DONT_LOCK|IS_UPDATE);
+        if(!nd){
+            yWarning() << "Class '" << k << "' has no data!";
+            return false;
+        }
+        data    = nd;
+        return true;
+    }
+
+    void    UClass::u_header()
+    {
+        static thread_local SQ uInfo("UPDATE Classes SET name=?, plural=?, brief=? WHERE id=?");
+        uInfo.bind(1, data->name);
+        uInfo.bind(2, data->plural);
+        uInfo.bind(3, data->brief);
+        uInfo.bind(4, id);
+        uInfo.exec();
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     Class::SharedData   update(Class x, cdb_options_t opts)
     {

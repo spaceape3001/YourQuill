@@ -6,6 +6,10 @@
 
 #pragma once
 
+/*
+    This file provides the hooks that calls the update in uTag, binding it from the registration.
+*/
+
 namespace {
     void    tag_stage3(Document doc)
     {

@@ -12,10 +12,10 @@ namespace {
         update_icon(class_(document(frag), true));
     }
 
-    void    class_s3_create(Document doc)
-    {
-        db_class(doc);
-    }
+    //void    class_s3_create(Document doc)
+    //{
+        //db_class(doc);
+    //}
 
     void    class_s3_init(Document doc)
     {
