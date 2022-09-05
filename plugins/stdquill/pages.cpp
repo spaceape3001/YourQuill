@@ -58,52 +58,8 @@ using namespace yq::html;
 
 #include "common.hpp"
 
-
-namespace {
-
-    void    dev_title(WebHtml& h, Directory x, std::string_view extra=std::string_view())
-    {
-        auto t = h.title();
-        const Root* rt  = root(x);
-        
-        h << "Directory ";
-        if(rt)
-            h << '[' << rt->key << ']';
-        h << '(' << key(x) << ')';
-        if(!extra.empty()){
-            h << ": " << extra;
-        }
-    }
-
-    void    dev_title(WebHtml& h, Tag x, std::string_view extra=std::string_view())
-    {
-        auto t = h.title();
-        auto i = nki(x);
-        h << "Tag \"" << i.name << "\" (" << i.key << ")";
-        if(!extra.empty())
-            h << ": " << extra;
-    }
-}
-
-#include "p_admin.ipp"
 #include "p_api_wksp.ipp"
-#include "p_atom.ipp"
-#include "p_class.ipp"
-#include "p_dev_atom.ipp"
-#include "p_dev_category.ipp"
-#include "p_dev_class.ipp"
-#include "p_dev_directory.ipp"
-#include "p_dev_document.ipp"
-#include "p_dev_field.ipp"
-#include "p_dev_folder.ipp"
-#include "p_dev_fragment.ipp"
-#include "p_dev_image.ipp"
-#include "p_dev_leaf.ipp"
-#include "p_dev_meta.ipp"
-#include "p_dev_root.ipp"
-#include "p_dev_sql.ipp"
-#include "p_dev_tag.ipp"
-#include "p_dev_web.ipp"
+
 
 namespace {
 
@@ -341,26 +297,8 @@ namespace {
     {
         reg_webtemplate("/", wksp::shared("std/index"sv)).source(".index");
         
-        reg_admin();
         reg_api_wksp();
-        reg_atom();
-        reg_class();
-        reg_dev_atom();
-        reg_dev_category();
-        reg_dev_class();
-        reg_dev_directory();
-        reg_dev_document();
-        reg_dev_field();
-        reg_dev_folder();
-        reg_dev_fragment();
-        reg_dev_image();
-        reg_dev_leaf();
-        reg_dev_meta();
-        reg_dev_root();
-        reg_dev_sql();
-        reg_dev_tag();
-        reg_dev_web();        
-        
+
         reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){
             bool    now = wi.hasImage();
             if(gHasBackground.exchange(now) != now)

@@ -7,6 +7,20 @@
 #pragma once
 
 namespace {
+    void    dev_title(WebHtml& h, Directory x, std::string_view extra=std::string_view())
+    {
+        auto t = h.title();
+        const Root* rt  = root(x);
+        
+        h << "Directory ";
+        if(rt)
+            h << '[' << rt->key << ']';
+        h << '(' << key(x) << ')';
+        if(!extra.empty()){
+            h << ": " << extra;
+        }
+    }
+
     void    page_dev_directories(WebHtml& h)
     {
         h.title("All Directories");

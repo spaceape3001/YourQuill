@@ -7,6 +7,15 @@
 #pragma once
 
 namespace {
+    void    dev_title(WebHtml& h, Tag x, std::string_view extra=std::string_view())
+    {
+        auto t = h.title();
+        auto i = nki(x);
+        h << "Tag \"" << i.name << "\" (" << i.key << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+
     void    page_dev_tag(WebHtml& h)
     {
         Tag x   = tag(h);
