@@ -8,6 +8,8 @@
 
 #include <cstdint>
 #include <string>
+#include <basic/trait/not_copyable.hpp>
+#include <basic/trait/not_moveable.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/db/SQ.hpp>
 #include <math/Count16.hpp>

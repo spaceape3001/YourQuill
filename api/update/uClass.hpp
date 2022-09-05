@@ -15,7 +15,7 @@
 #include <kernel/org/Tag.hpp>
 
 namespace yq {
-    struct UClass {
+    struct UClass : trait::not_copyable, trait::not_moveable  {
         const std::string       k;
         union {
             const uint64_t      id;
@@ -36,7 +36,7 @@ namespace yq {
         bool                    edge    = false;
         bool                    deleted = false;
         
-        UClass(Class a);
+        explicit UClass(Class a);
         
         bool                    reload(cdb_options_t opts=0);
         

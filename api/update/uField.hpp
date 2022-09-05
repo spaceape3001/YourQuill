@@ -11,14 +11,18 @@
 #include <kernel/file/Document.hpp>
 
 namespace yq {
-    struct UField {
+    struct UField : trait::not_copyable, trait::not_moveable {
+        const std::string       k;
         union {
             const uint64_t      id;
             const Field         field;
             const Document      doc;
         };
         bool                deleted = false;
-        UField(Field a) : field(a) {}
+        explicit UField(Field a);
+
+        //! Creates the database-lookups only
+        static void             s3_create(Document);
     };
 
     //! Note, not thread-safe, call from ONE thread only!

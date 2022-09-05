@@ -11,16 +11,25 @@
 #include <kernel/db/SQ.hpp>
 
 namespace yq {
+
     ULeaf&  uget(Leaf a)
     {
-        static Vector<ULeaf*>   s_data;
-        s_data.resize_if_under(a.id+1, 4096, nullptr);
+        static std::map<uint64_t, ULeaf*>   s_data;
         ULeaf*& p   = s_data[a.id];
         if(!p)
             p       = new ULeaf(a);
         return *p;
     }
 
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    ULeaf::ULeaf(Leaf a) : k(cdb::key(a)), leaf(a) 
+    {
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     Leaf::SharedData         update(Leaf x, cdb_options_t opts)
     {

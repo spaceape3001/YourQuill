@@ -15,13 +15,28 @@
 namespace yq {
     UField&  uget(Field a)
     {
-        static Vector<UField*>   s_data;
-        s_data.resize_if_under(a.id+1, 1024, nullptr);
+        static std::map<uint64_t, UField*>   s_data;
         UField*& p  = s_data[a.id];
         if(!p)
             p       = new UField(a);
         return *p;
     }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        //! Creates the database-lookups only
+    void    UField::s3_create(Document doc)
+    {
+        uget(db_field(doc));
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    UField::UField(Field a) : k(cdb::key(a)), field(a) 
+    {
+    }
+
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     Field::SharedData       update(Field x, cdb_options_t opts)
     {

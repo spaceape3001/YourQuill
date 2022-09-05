@@ -156,6 +156,8 @@ namespace {
             
                 //  Classes & fields
             on_stage3<UClass::s3_create>(by_cache(classes_folder(), "*.class"));
+            on_stage3<UField::s3_create>(by_cache(fields_folder(), "*.field"));
+            
             on_stage3<field_s3_init>(by_cache(fields_folder(), "*.field"));
             on_stage3<class_s3_init>(by_cache(classes_folder(), "*.class"));
             on_stage3<field_s3_classes>(by_cache(fields_folder(), "*.field"));

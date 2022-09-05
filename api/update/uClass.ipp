@@ -30,7 +30,7 @@ namespace yq {
         Class   x = db_class(doc);
         UClass& u = uget(x);
         
-        if(!u.reload(DONT_LOCK))
+        if(!u.reload(DONT_LOCK|IS_UPDATE))
             return ;
         u.u_header();
     }
@@ -41,9 +41,9 @@ namespace yq {
     {
     }
 
-    bool    UClass::reload()
+    bool    UClass::reload(cdb_options_t opts)
     {
-        auto nd     = merged(cls, DONT_LOCK|IS_UPDATE);
+        auto nd     = merged(cls, opts);
         if(!nd){
             yWarning() << "Class '" << k << "' has no data!";
             return false;
