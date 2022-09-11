@@ -65,16 +65,24 @@ using namespace yq::html;
 #include "p_dev_class.ipp"
 #include "p_dev_directory.ipp"
 #include "p_dev_document.ipp"
+#include "p_dev_echo.ipp"
 #include "p_dev_field.ipp"
 #include "p_dev_folder.ipp"
 #include "p_dev_fragment.ipp"
+#include "p_dev_hello.ipp"
 #include "p_dev_image.ipp"
 #include "p_dev_leaf.ipp"
 #include "p_dev_meta.ipp"
+#include "p_dev_mimetypes.ipp"
 #include "p_dev_root.ipp"
+#include "p_dev_server.ipp"
 #include "p_dev_sql.ipp"
 #include "p_dev_tag.ipp"
+#include "p_dev_user.ipp"
 #include "p_dev_web.ipp"
+#include "p_image.ipp"
+
+#include "x_markdown.ipp"
 
 namespace {
     void    reg_me()
@@ -87,16 +95,24 @@ namespace {
         reg_dev_class();
         reg_dev_directory();
         reg_dev_document();
+        reg_dev_echo();
         reg_dev_field();
         reg_dev_folder();
         reg_dev_fragment();
+        reg_dev_hello();
         reg_dev_image();
         reg_dev_leaf();
         reg_dev_meta();
+        reg_dev_mimetypes();
         reg_dev_root();
+        reg_dev_server();
         reg_dev_sql();
         reg_dev_tag();
-        reg_dev_web();        
+        reg_dev_user();
+        reg_dev_web();
+        reg_image();
+        
+        reg_x_markdown();        
     }
     
     
