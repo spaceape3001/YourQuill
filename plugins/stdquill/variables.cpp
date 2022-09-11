@@ -287,7 +287,7 @@ namespace {
         reg_webvar<var_folder_count>("folder_count")
             .description("Total number of folders in the cache database.");
             
-        reg_webvar("footer", wksp::shared("std/footer"sv))
+        reg_webvar("footer", wksp::shared("www/footer.ht"sv))
             .source(".footer")
             .description("Footer used by the standarad page template.  Read from the /.footer file, treated as a template.");
             
@@ -333,7 +333,7 @@ namespace {
         reg_webvar<var_ssid>("ssid")
             .description("Current session ID");
             
-        reg_webvar("summary", wksp::shared("std/summary"sv))
+        reg_webvar("summary", wksp::shared("www/summary.ht"sv))
             .source(".summary")
             .description("Summary of the project used by the default home page.  Read from the /.summary file, treated as a template.");;
 

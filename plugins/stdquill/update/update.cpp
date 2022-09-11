@@ -72,8 +72,8 @@ alignas(64) std::filesystem::path       gSharedPageFile;
 
 namespace {
     static constexpr const char*    kPage               = ".page";
-    static const std::string_view       kStdCSS         = "std/css";
-    static const std::string_view       kStdPage        = "std/page";
+    static const std::string_view       kStdCSS         = "www/css";
+    static const std::string_view       kStdPage        = "www/page.ht";
 }
 
 

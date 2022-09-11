@@ -126,23 +126,24 @@ namespace {
         
         reg_x_markdown();        
 
-        reg_webtemplate("/", wksp::shared("std/index"sv)).source(".index");
+        reg_webtemplate("/", wksp::shared("www/index.ht"sv)).source(".index");
 
         reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){
             bool    now = wi.hasImage();
             if(gHasBackground.exchange(now) != now)
                 update_css();
         });
-        reg_webtemplate("/dev", wksp::shared("std/developer"sv)).source(".developer");
+        reg_webtemplate("/dev", wksp::shared("www/developer.ht"sv)).source(".developer");
         reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
         
-        reg_webtemplate("/help", wksp::shared("std/help"sv));
+        reg_webtemplate("/help", wksp::shared("www/help.ht"sv));
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));
         reg_webpage("/img/yquill.svg", wksp::shared("www/img/yquill.svg"sv));   // precaching
         reg_webpage("/js/**", wksp::shared("www/js/jquery.js"sv));
         reg_webpage("/js/jquery.js", wksp::shared("www/js/jquery.js"sv));      // precaching
         reg_webimage("/logo", wksp::shared("www/img/yquill.svg"sv), Folder(), ".logo").alt_path("/favicon.ico");
+        reg_webpage("/pkg/**", wksp::shared_all("www/pkg"sv));
     }
     
     
