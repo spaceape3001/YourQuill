@@ -6,14 +6,14 @@
 
 set(stdquill_SOURCES 
     ./imaging.cpp
-    ./pages.cpp
-    ./updater.cpp
+    #common.cpp
     ./variables.cpp
+    ./page/page.cpp
+    ./update/update.cpp
 )
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
-target_include_directories( stdquill PRIVATE ${ImageMagick_INCLUDE_DIRS}) 
-target_link_libraries( stdquill PUBLIC yqtoolbox yqkernel yqhttp yqupdate asio ${ImageMagick_LIBRARIES})
+target_include_directories( stdquill PRIVATE . ${ImageMagick_INCLUDE_DIRS}) 
+target_link_libraries( stdquill PUBLIC yqtoolbox yqkernel yqhttp asio ${ImageMagick_LIBRARIES})
 
 LinkTest(stdquill)
-

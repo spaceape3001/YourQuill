@@ -4,6 +4,45 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <basic/CollectionUtils.hpp>
+#include <basic/DelayInit.hpp>
+#include <basic/DirUtils.hpp>
+#include <basic/FileUtils.hpp>
+#include <basic/Logging.hpp>
+#include <basic/StreamOps.hpp>
+#include <basic/TextUtils.hpp>
+#include <basic/Vector.hpp>
+
+#include <basic/stream/Bytes.hpp>
+#include <basic/stream/Text.hpp>
+
+#include <kernel/atom/ClassCDB.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/Root.hpp>
+#include <kernel/image/ImageCDB.hpp>
+#include <kernel/leaf/LeafCDB.hpp>
+#include <kernel/leaf/LeafData.hpp>
+#include <kernel/notify/FileWatch.hpp>
+#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/Stage2.hpp>
+#include <kernel/notify/Stage3.hpp>
+#include <kernel/notify/Stage4.hpp>
+#include <kernel/org/CategoryCDB.hpp>
+#include <kernel/org/TagCDB.hpp>
+#include <kernel/org/TagFile.hpp>
+#include <kernel/user/UserCDB.hpp>
+#include <kernel/wksp/Workspace.hpp>
+
+#include "uAtom.ipp"
+#include "uCategory.ipp"
+#include "uClass.ipp"
+#include "uField.ipp"
+#include "uImage.ipp"
+#include "uLeaf.ipp"
+#include "uTag.ipp"
+#include "uUser.ipp"
+
 #include "common.hpp"
 #include "imaging.hpp"
 
@@ -24,37 +63,6 @@
 #include <yq/user.hpp>
 #include <yq/value.hpp>
 
-#include <update/uAtom.hpp>
-#include <update/uCategory.hpp>
-#include <update/uClass.hpp>
-#include <update/uField.hpp>
-#include <update/uImage.hpp>
-#include <update/uLeaf.hpp>
-#include <update/uTag.hpp>
-#include <update/uUser.hpp>
-
-#include <basic/DelayInit.hpp>
-#include <basic/DirUtils.hpp>
-#include <basic/FileUtils.hpp>
-#include <basic/Logging.hpp>
-#include <basic/StreamOps.hpp>
-#include <basic/TextUtils.hpp>
-
-#include <basic/stream/Bytes.hpp>
-#include <basic/stream/Text.hpp>
-
-#include <kernel/db/SQ.hpp>
-#include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/NotifyAdapters.hpp>
-#include <kernel/notify/Stage2.hpp>
-#include <kernel/notify/Stage3.hpp>
-#include <kernel/notify/Stage4.hpp>
-#include <kernel/wksp/Workspace.hpp>
-
-
-using namespace yq;
-using namespace yq::cdb;
-
 alignas(64) Guarded<std::string>        gTextColor;
 alignas(64) Guarded<std::string>        gBkColor;
 alignas(64) std::atomic<bool>           gHasBackground{false};
@@ -63,25 +71,11 @@ alignas(64) std::filesystem::path       gSharedCssFile;
 alignas(64) std::filesystem::path       gSharedPageFile;
 
 namespace {
-    static constexpr const char*    kPage       = ".page";
-
+    static constexpr const char*    kPage               = ".page";
     static const std::string_view       kStdCSS         = "std/css";
     static const std::string_view       kStdPage        = "std/page";
-
 }
 
-#include "u_atom.ipp"
-#include "u_category.ipp"
-#include "u_class.ipp"
-#include "u_css.ipp"
-#include "u_field.ipp"
-#include "u_image.ipp"
-#include "u_leaf.ipp"
-
-    
-    //  ================================================================================================================
-    //      PAGE
-    //  ================================================================================================================
 
 
 namespace {
@@ -114,20 +108,18 @@ namespace {
     }
 }
 
+#include "u_atom.ipp"
+#include "u_category.ipp"
+#include "u_class.ipp"
+#include "u_css.ipp"
+#include "u_field.ipp"
+#include "u_image.ipp"
+#include "u_leaf.ipp"
 #include "u_tag.ipp"
 #include "u_user.ipp"
 
 
-    //  ================================================================================================================
-    //      VALUES
-    //  ================================================================================================================
 
-
-
-
-    //  ================================================================================================================
-    //      REGISTRATION
-    //  ================================================================================================================
 namespace {
 
         void reg_me()
@@ -148,6 +140,7 @@ namespace {
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
                 on_stage3<image_stage3>(by_cache(z));
+
             
                 //  Organization & users
             on_stage3<category_stage3>(by_cache(categories_folder(), "*.cat"));
@@ -208,9 +201,3 @@ namespace {
         
     YQ_INVOKE( reg_me(); )
 }
-        
-
-//#include "update/s3_field.ipp"
-//#include "update/u_field.ipp"
-
-

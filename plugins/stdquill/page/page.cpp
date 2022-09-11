@@ -51,6 +51,8 @@
 #include <http/web/Template.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
+#include "common.hpp"
+
 using namespace yq;
 using namespace yq::arg;
 using namespace yq::cdb;
@@ -58,8 +60,10 @@ using namespace yq::html;
 
 
 #include "p_admin.ipp"
+#include "p_api_wksp.ipp"
 #include "p_atom.ipp"
 #include "p_class.ipp"
+#include "p_css.ipp"
 #include "p_dev_atom.ipp"
 #include "p_dev_category.ipp"
 #include "p_dev_class.ipp"
@@ -80,7 +84,10 @@ using namespace yq::html;
 #include "p_dev_tag.ipp"
 #include "p_dev_user.ipp"
 #include "p_dev_web.ipp"
+#include "p_dev_wksp.ipp"
 #include "p_image.ipp"
+#include "p_leaf.ipp"
+#include "p_user.ipp"
 
 #include "x_markdown.ipp"
 
@@ -88,8 +95,10 @@ namespace {
     void    reg_me()
     {
         reg_admin();
+        reg_api_wksp();
         reg_atom();
         reg_class();
+        reg_css();
         reg_dev_atom();
         reg_dev_category();
         reg_dev_class();
@@ -110,9 +119,30 @@ namespace {
         reg_dev_tag();
         reg_dev_user();
         reg_dev_web();
+        reg_dev_wksp();
         reg_image();
+        reg_leaf();
+        reg_user();
         
         reg_x_markdown();        
+
+        reg_webtemplate("/", wksp::shared("std/index"sv)).source(".index");
+
+        reg_webimage("/background", std::filesystem::path(), Folder(), ".background").post([](WebImage& wi){
+            bool    now = wi.hasImage();
+            if(gHasBackground.exchange(now) != now)
+                update_css();
+        });
+        reg_webtemplate("/dev", wksp::shared("std/developer"sv)).source(".developer");
+        reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
+        
+        reg_webtemplate("/help", wksp::shared("std/help"sv));
+        reg_webpage("/help/**", wksp::shared_all("www/help"sv));
+        reg_webpage("/img/**", wksp::shared_all("www/img"sv));
+        reg_webpage("/img/yquill.svg", wksp::shared("www/img/yquill.svg"sv));   // precaching
+        reg_webpage("/js/**", wksp::shared("www/js/jquery.js"sv));
+        reg_webpage("/js/jquery.js", wksp::shared("www/js/jquery.js"sv));      // precaching
+        reg_webimage("/logo", wksp::shared("www/img/yquill.svg"sv), Folder(), ".logo").alt_path("/favicon.ico");
     }
     
     

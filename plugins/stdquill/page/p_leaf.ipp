@@ -7,7 +7,13 @@
 #pragma once
 
 namespace {
-    void    reg_image()
+    void    page_leaf(WebHtml& h)
     {
+        //  BIG FAT TODO!
+    }
+
+    void    reg_leaf()
+    {
+        reg_webpage<page_leaf>("/leaf").argument("id", "Leaf ID");
     }
 }
