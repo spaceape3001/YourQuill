@@ -95,12 +95,19 @@ namespace yq {
         //  called to script (will be pushed to the end of the document)
         WebAutoClose  script();
         
+        void            add_hscript(std::string_view);
+        void            add_hcss(std::string_view);
+        
         operator const WebContext& () const noexcept { return m_context; }
         operator WebContext& () noexcept { return m_context; }
+        
+        const string_vector_t&  h_scripts() const { return m_hScripts; }
+        const string_vector_t&  h_css() const { return m_hCss; }
         
     private:
         WebContext&         m_context;
         ByteArray*          m_dest = nullptr;
+        string_vector_t     m_hScripts, m_hCss;
         enum Target {
             BODY,
             TITLE,

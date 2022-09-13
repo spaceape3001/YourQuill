@@ -4,7 +4,7 @@
 		<META charset="utf-8" />
 		<TITLE>{{TITLE}}</TITLE>
 		<LINK rel="stylesheet" type="text/css" href="/css" />
-    	<SCRIPT src="/js/jquery.js" ></SCRIPT>
+    	<SCRIPT src="/js/jquery.js" ></SCRIPT>{{HTML_SCRIPT}}{{HTML_CSS}}
 	</HEAD>
 	<BODY>
 		<TABLE WIDTH="100%">

@@ -11,18 +11,35 @@
 namespace yq {
     PageTemplate::PageTemplate(std::string&&data) : m_data(std::move(data))
     {
-        std::string_view    t   = web_title(m_data);
         std::string_view    p;
-        if(!t.empty()){
-            const char* z0  = t.data()+t.size();
-            const char* z1  = m_data.data() + m_data.size();
-            p       = std::string_view(z0, z1);
-            t       = trimmed(t);
-            m_title   = new Template(t);
+        std::string_view    t;
+        if(starts(m_data, "#!")){   // we're using the web-template form
+            const char* z   = vsplit(m_data, '\n', [&](std::string_view y) -> const char* {
+                if(y.empty())
+                    return y.data();
+                if(!starts(y, "#!"))
+                    return y.data();
+                if(starts_igCase(y, "#!script ")){
+                    m_scripts.push_back(trimmed(y.substr(9)));
+                } else if(starts_igCase(y, "#!css ")){
+                    m_css.push_back(trimmed(y.substr(6)));
+                } else if(starts_igCase(y, "#!! ")){
+                    m_headers.push_back(trimmed(y.substr(4)));
+                } else {
+                    t       = trimmed(y.substr(2));
+                }
+                return nullptr;
+            });
+            if(z){
+                p   = m_data;
+                p   = p.substr(z - m_data.data());
+            }
         } else {
-            p   = m_data;
+            p       = m_data;
         }
-        
+    
+        if(!t.empty())
+            m_title   = new Template(t);
         m_body          = new Template(p);
     }
     
@@ -36,12 +53,17 @@ namespace yq {
     
     void    PageTemplate::execute(WebHtml&h) const
     {
+        for(auto& s : m_scripts)
+            h.add_hscript(s);
+        for(auto& s : m_css)
+            h.add_hcss(s);
         if(m_title){
             auto ti = h.title();
             m_title->execute(h);
         }
-        if(m_body)
+        if(m_body){
             m_body -> execute(h);
+        }
     }
     
 }

@@ -136,6 +136,7 @@ namespace {
         reg_webtemplate("/dev", wksp::shared("www/developer.ht"sv)).source(".developer");
         reg_webpage("/dev/**", wksp::shared_all("www/dev"sv));
         
+        reg_webtemplate("/files", wksp::shared("www/files.ht"sv));
         reg_webtemplate("/help", wksp::shared("www/help.ht"sv));
         reg_webpage("/help/**", wksp::shared_all("www/help"sv));
         reg_webpage("/img/**", wksp::shared_all("www/img"sv));

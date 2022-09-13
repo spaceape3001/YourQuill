@@ -32,6 +32,16 @@ namespace yq {
         run_me();
     }
 
+    void    WebHtml::add_hscript(std::string_view s)
+    {
+        m_hScripts.push_back(copy(s));
+    }
+    
+    void    WebHtml::add_hcss(std::string_view s)
+    {
+        m_hCss.push_back(copy(s));
+    }
+
     void    WebHtml::run_me()
     {
         auto& ba = byteArrayFor(m_context);

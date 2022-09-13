@@ -25,8 +25,11 @@ namespace yq {
         void    execute(WebHtml&) const;
     
     private:
-        std::string     m_data;
-        Ref<Template>   m_body;
-        Ref<Template>   m_title;
+        std::string             m_data;
+        string_view_vector_t    m_css;
+        string_view_vector_t    m_scripts;
+        string_view_vector_t    m_headers;  // other header things....
+        Ref<Template>           m_body;
+        Ref<Template>           m_title;
     };
 }

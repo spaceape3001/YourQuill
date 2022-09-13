@@ -7,6 +7,7 @@
 #include <basic/DelayInit.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Http.hpp>
+#include <basic/Logging.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
@@ -35,6 +36,19 @@
 using namespace yq;
 
 namespace {
+    void    add_script(WebHtml& str, std::string_view name)
+    {
+        switch(mimeTypeForExt(file_extension(name))){
+        case ContentType::javascript:
+            str << "\t\t<script srce=\"/js/" << name << "\">\n";
+            break;
+        default:
+            //  do nothing if unclear...
+            break;
+        }
+    }
+
+
     void    var_abbr(WebHtml&h)
     {
         html_escape_write(h, wksp::abbreviation());
@@ -117,6 +131,27 @@ namespace {
         html_escape_write(h, wksp::host());
     }
     
+    void    var_html_css(WebHtml&h)
+    {
+        for(auto s : h.h_css()){
+            h << "\n\t\t		<LINK rel=\"stylesheet\" type=\"text/css\" href=\"" << s << "\" />";
+        }
+    }
+
+    void    var_html_script(WebHtml&h)
+    {
+        
+        for(auto name : h.h_scripts()){
+            switch(mimeTypeForExt(file_extension(name))){
+            case ContentType::javascript:
+                h << "\n\t\t<SCRIPT src=\"/js/" << name << "\"></SCRIPT>";
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
     void    var_image_count(WebHtml&h)
     {
         h << cdb::all_images_count();
@@ -157,18 +192,6 @@ namespace {
         h << h.context().var_script;
     }
 
-
-    void    add_script(WebHtml& str, std::string_view name)
-    {
-        switch(mimeTypeForExt(file_extension(name))){
-        case ContentType::javascript:
-            str << "\t\t<script srce=\"/js/" << name << "\">\n";
-            break;
-        default:
-            //  do nothing if unclear...
-            break;
-        }
-    }
     
     void    var_scripts(WebHtml& h)
     {
@@ -302,6 +325,12 @@ namespace {
         reg_webvar<var_host>("host")
             .description("Host name of the computer this program is running on.");
             
+        reg_webvar<var_html_css>("html_css")
+            .description("Used for page-template css");
+
+        reg_webvar<var_html_script>("html_script")
+            .description("Used for page-template scripts");
+        
         reg_webvar<var_image_count>("image_count")
             .description("Total number of images in the cache database.");
             
