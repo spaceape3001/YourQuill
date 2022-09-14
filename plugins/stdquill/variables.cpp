@@ -144,7 +144,7 @@ namespace {
         for(auto name : h.h_scripts()){
             switch(mimeTypeForExt(file_extension(name))){
             case ContentType::javascript:
-                h << "\n\t\t<SCRIPT src=\"/js/" << name << "\"></SCRIPT>";
+                h << "\n\t\t<SCRIPT src=\"" << name << "\"></SCRIPT>";
                 break;
             default:
                 break;
