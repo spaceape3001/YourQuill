@@ -44,7 +44,7 @@ namespace asio {
     template <uint64_t N>
     const_buffer    buffer(const FixedBuffer<N>& dp)
     {
-        return buffer(dp.data(), dp.count());
+        return buffer(dp.data(), dp.size());
     }
 }
 
@@ -800,7 +800,7 @@ public:
             if(!m_eod){
                 if(m_current -> rx_body.size()){
                     m_rxMode        = RxBody;
-                    m_rxSoFar       = m_current->rx.count() - m_next;
+                    m_rxSoFar       = m_current->rx.size() - m_next;
                     if(m_rxSoFar)
                         memcpy(m_current->rx_body.data(), m_current->rx.data()+m_next, m_rxSoFar);
                     m_next          = 0;
@@ -905,13 +905,13 @@ public:
             }
         } else if(isError(ctx->status)){
             // reset the content buffer
-            ctx -> tx.count(0);
+            ctx -> tx.clear();
             if(sq.html_data.size()){
                 ctx -> tx_header("Content-Type", "text/html");
                 ctx -> tx_header("Content-Length", to_string_view(sq.html_data.size()));
             }
         } else if(isRedirect(ctx->status)){
-            ctx -> tx.count(0);
+            ctx -> tx.clear();
             ctx -> tx_header("Location", to_string(ctx -> tx_redirect));
         }
         
