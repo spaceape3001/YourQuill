@@ -33,10 +33,12 @@ namespace yq {
     using ClassPair     = std::pair<Class,Class>;
     using DirOrFrag     = std::variant<bool,Directory,Fragment>;
     using DocOrFold     = std::variant<bool,Document,Folder>;
+    using DocOrFolder   = std::variant<bool,Document,Folder>;
     using DirOrFragStr  = std::pair<DirOrFrag,std::string>;
     using DocOrFoldStr  = std::pair<DocOrFold,std::string>;
     using DirString     = std::pair<Directory,std::string>;
     using DocString     = std::pair<Document,std::string>;
+    using DocStr        = std::pair<Document,std::string>;
     using FolderStr     = std::pair<Folder,std::string>;
     using FragmentStr   = std::pair<Fragment,std::string>;
 

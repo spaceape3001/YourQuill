@@ -73,6 +73,12 @@ namespace yq {
         //! Gets child documens excluding given suffix
         std::vector<Document>           child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
 
+        //! Gets all documents & keys of folder
+        std::vector<DocString>          child_documents_with_skey(Folder, unsigned opts=0);
+
+        //! Gets all documents & sub-keys of folder (sorted by key)
+        std::vector<DocString>          child_documents_with_skey(Folder, Sorted sorted);
+
         //! Gets named child folder
         Folder                          child_folder(Folder, std::string_view );
 
@@ -85,6 +91,12 @@ namespace yq {
         //! Counts numbers of child folders
         size_t                          child_folders_count(Folder, unsigned int opts=0);
 
+        //! Gets all child folders
+        std::vector<FolderStr>          child_folders_with_skey(Folder, unsigned int opts=0);
+
+        //! Gets all child folders
+        std::vector<FolderStr>          child_folders_with_skey(Folder, Sorted sorted);
+
         //! Gets child fragments
         std::vector<Fragment>           child_fragments(Folder, Sorted sorted=Sorted());
         
@@ -96,12 +108,6 @@ namespace yq {
     #if 0
         std::string                     child_key(Folder);
     #endif
-
-        //! Children of folder
-        std::vector<DocOrFold>          children(Folder,Sorted sorted=Sorted());
-
-        //! Children (& names) of folder
-        std::vector<DocOrFoldStr>       children_and_names(Folder);
 
         //! Folder for atom class definition files
         consteval Folder                classes_folder() { return Folder{Folder::CLASSES}; }

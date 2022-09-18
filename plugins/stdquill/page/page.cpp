@@ -38,6 +38,7 @@
 
 #include <kernel/bit/Copyright.hpp>
 #include <http/HtmlLayout.hpp>
+#include <kernel/db/SQ.hpp>
 #include <kernel/db/NKI.hpp>
 #include <http/util/Markdown.hpp>
 #include <http/web/JsonAdapter.hpp>
@@ -85,6 +86,7 @@ using namespace yq::html;
 #include "p_dev_user.ipp"
 #include "p_dev_web.ipp"
 #include "p_dev_wksp.ipp"
+#include "p_explorer.ipp"
 #include "p_image.ipp"
 #include "p_leaf.ipp"
 #include "p_user.ipp"
@@ -120,6 +122,7 @@ namespace {
         reg_dev_user();
         reg_dev_web();
         reg_dev_wksp();
+        reg_explorer();
         reg_image();
         reg_leaf();
         reg_user();

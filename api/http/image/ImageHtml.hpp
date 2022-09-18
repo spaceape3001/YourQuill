@@ -14,6 +14,7 @@ namespace yq {
     struct Thumbnail;
 
     namespace html {
+
     
         WebHtml&    operator<<(WebHtml&, Image);
         WebHtml&    operator<<(WebHtml&, Dev<Image>);

@@ -148,6 +148,28 @@ namespace yq {
             return sorted ? child_documents_by_suffix_excluding_sorted(f,sfx) : child_documents_by_suffix_excluding_unsorted(f,sfx);
         }
 
+        //! Gets all documents & keys of folder
+        std::vector<DocString>          child_documents_with_skey(Folder f, unsigned opts)
+        {
+            static thread_local SQ  s1("SELECT id, sk FROM Documents WHERE folder=? AND hidden=0");
+            static thread_local SQ  s2("SELECT id, sk FROM Documents WHERE folder=? AND hidden=0 ORDER BY sk");
+            static thread_local SQ  s3("SELECT id, sk FROM Documents WHERE folder=?");
+            static thread_local SQ  s4("SELECT id, sk FROM Documents WHERE folder=? ORDER BY sk");
+            
+            SQ& s = (opts & HIDDEN) ? ((opts & BEST_SORT) ? s4 : s3 ) : ((opts & BEST_SORT) ? s2 : s1);
+            auto s_af = s.af();
+            std::vector<DocString>  ret;
+            s.bind(1, f.id);
+            while(s.step() == SqlQuery::Row)
+                ret.push_back(DocString{ s.v_uint64(1), s.v_string(2) });
+            return ret;
+        }
+
+        std::vector<DocString>          child_documents_with_skey(Folder f, Sorted sorted)
+        {
+            return child_documents_with_skey(f, HIDDEN | (sorted ? BEST_SORT : 0));
+        }
+
         Folder              child_folder(Folder f, std::string_view ck)
         {
             static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND ck=? LIMIT 1");
@@ -156,23 +178,13 @@ namespace yq {
 
         std::vector<Folder>      child_folders(Folder f, unsigned opts)
         {
-            if(opts & BEST_SORT){
-                if(opts & HIDDEN){
-                    static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? ORDER BY sk");
-                    return s.vec<Folder>(f.id);
-                } else {
-                    static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk");
-                    return s.vec<Folder>(f.id);
-                }
-            } else {
-                if(opts & HIDDEN){
-                    static thread_local SQ    s("SELECT id FROM Folders WHERE parent=?");
-                    return s.vec<Folder>(f.id);
-                } else {
-                    static thread_local SQ    s("SELECT id FROM Folders WHERE parent=? AND hidden=0");
-                    return s.vec<Folder>(f.id);
-                }
-            }
+            static thread_local SQ    s1("SELECT id FROM Folders WHERE parent=? ORDER BY sk");
+            static thread_local SQ    s2("SELECT id FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk");
+            static thread_local SQ    s3("SELECT id FROM Folders WHERE parent=?");
+            static thread_local SQ    s4("SELECT id FROM Folders WHERE parent=? AND hidden=0");
+            
+            SQ& s   = (opts&HIDDEN)?((opts&BEST_SORT)?s1:s3):((opts&BEST_SORT)?s2:s4);
+            return s.vec<Folder>(f.id);
         }
 
         std::vector<Folder>      child_folders(Folder f, Sorted sorted)
@@ -192,6 +204,25 @@ namespace yq {
             }
         }
 
+        std::vector<FolderStr>          child_folders_with_skey(Folder f, unsigned int opts)
+        {
+            static thread_local SQ      s1("SELECT id, sk FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk");
+            static thread_local SQ      s2("SELECT id, sk FROM Folders WHERE parent=? ORDER BY sk");
+            static thread_local SQ      s3("SELECT id, sk FROM Folders WHERE parent=? AND hidden=0");
+            static thread_local SQ      s4("SELECT id, sk FROM Folders WHERE parent=?");
+            SQ& s   = (opts&HIDDEN)?((opts&BEST_SORT)?s2:s4):((opts&BEST_SORT)?s1:s3);
+            std::vector<FolderStr>      ret;
+            auto   s_af = s.af();
+            s.bind(1, f.id);
+            while(s.step() == SqlQuery::Row)
+                ret.push_back(FolderStr{ s.v_uint64(1), s.v_string(2) });
+            return ret;
+        }
+
+        std::vector<FolderStr>          child_folders_with_skey(Folder f, Sorted sorted)
+        {
+            return child_folders_with_skey(f, HIDDEN | (sorted ? BEST_SORT : 0));
+        }
 
         namespace {
             std::vector<Fragment>    child_fragments_sorted(Folder f)
@@ -222,9 +253,6 @@ namespace yq {
         std::string                 child_key(Folder);
     #endif
 
-        std::vector<DocOrFold>   children(Folder, Sorted sorted);           // TODO
-        std::vector<DocOrFoldStr>    children_and_names(Folder);     // TODO
-        
         
         Folder              db_folder(Folder f, std::string_view ck, bool *wasCreated)
         {

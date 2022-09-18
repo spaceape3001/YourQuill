@@ -69,7 +69,7 @@ namespace yq {
                 //h << "&size=" << t.size.key();
             h << "\" alt=\"";
             html_escape_write(h, n);
-            h << "'\" class=\"" << t.size << "\"/>";
+            h << "\" class=\"" << t.size << "\"/>";
             return h;
         }
 
