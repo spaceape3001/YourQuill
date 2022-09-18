@@ -105,6 +105,7 @@ namespace {
             ee.doc      = { sd.v_uint64(1) };
             ee.skey     = sd.v_string(2);
             ee.name     = sd.v_string(3);
+            ee.type     = ExplorerEntry::IsDocument;
             if(ee.name.empty())
                 ee.label    = ee.skey;
             else
@@ -120,35 +121,57 @@ namespace {
         return ret;
     }
     
+    bool    decode_do_roots(const WebContext&ctx)
+    {
+        std::string     s   = ctx.find_query("roots");
+        if(s.empty())
+            return false;
+        return to_boolean(s).value;
+    }
+    
     void    page_explorer(WebHtml&h)
     {
         Folder  x       = folder(h);
         if(!x)
             x           = top_folder();
+        bool  do_roots  = decode_do_roots(h.context());
+        std::string opts    = do_roots ? "&roots=1" : "";
             
         std::vector<ExplorerEntry>  entries = query_explorer_entries(x, HIDDEN);
         static const auto& icons  = file_extension_icons();
     
+        if(x == top_folder()){
+            h.title("/");
+        } else {
+            h.title(cdb::key(x));
+        }
+        
+        h << "<div id=\"explorer\">\n";
+    
         auto tac = h.table();
         auto iz = h.context().session.icon_size;
         html::columns(h, entries,  [&](const ExplorerEntry& ee){
+            if(ee.type == ExplorerEntry::None)
+                return ;
             if(ee.icon != Image{}){
-                h << Thumbnail{ee.icon.id, h.context().session.icon_size };
+                h << Thumbnail{ee.icon.id, iz };
             } else if(ee.type == ExplorerEntry::IsFolder){
-                h << "<img src=\"/img/folder.svg\">";
+                h << "<img src=\"/img/folder.svg\" class=\"" << iz << "\">";
             } else {
                 std::string k   = icons.get(ee.suffix);
                 if(!k.empty()){
-                    h << "<img src=\"" << k << "\">";
+                    h << "<img src=\"" << k << "\" class=\"" << iz << "\">";
                 } else {
-                    h << "<img src=\"/img/document.svg\">";
+                    h << "<img src=\"/img/document.svg\" class=\"" << iz << "\">";
                 }
             }
         }, [&](const ExplorerEntry& ee){
+            if(ee.type == ExplorerEntry::None)
+                return ;
             bool    isLink  = false;
             switch(ee.type){
             case ExplorerEntry::IsFolder:
-                h << "<a href=\"/explore?folder=" << ee.folder.id << "\">";
+                h << "<a href=\"/explore?folder=" << ee.folder.id << opts << "\">";
                 isLink  = true;
                 break;
             case ExplorerEntry::IsDocument:
@@ -160,7 +183,19 @@ namespace {
             html_escape_write(h, ee.skey);
             if(isLink)
                 h << "</a>";
+                
+            if(do_roots){
+                h << "<br><font size=-2>[&nbsp;";
+                for(const Root* rt : ee.roots){
+                    if(!rt)
+                        continue;
+                    h << rt->key << "&nbsp;";
+                }
+                h << "]</font>";
+            }
         });
+        
+        h << "</div>\n";
     }
 
     void    reg_explorer()
