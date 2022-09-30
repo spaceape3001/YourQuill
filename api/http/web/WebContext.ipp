@@ -7,6 +7,7 @@
 #pragma once
 
 #include <kernel/wksp/Workspace.hpp>
+#include <string_view>
 
 namespace yq {
     WebContext::WebContext(asio::io_context& _io_ctx) :io_ctx(_io_ctx)
@@ -51,7 +52,7 @@ namespace yq {
             return ;
 
         if(rx_post.empty() && !rx_body.empty()){
-            rx_post_raw = parse_parameters(rx_body);
+            rx_post_raw = parse_parameters(std::string_view(rx_body.data(), rx_body.size()));
             rx_post     = web_decode(rx_post_raw);
         }
     }

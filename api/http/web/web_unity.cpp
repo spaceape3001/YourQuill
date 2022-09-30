@@ -171,6 +171,11 @@ namespace yq {
             s << ch;
         });
     }
+
+    void            html_escape_write(Stream& s, const std::vector<char>&sv)
+    {
+        return html_escape_write(s, std::string_view(sv.data(), sv.size()));
+    }
     
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

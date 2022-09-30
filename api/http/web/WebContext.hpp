@@ -88,7 +88,7 @@ namespace yq {
         std::filesystem::path           resolved_file;
         
         //! The received content
-        std::vector<char>               rx_body;
+        Vector<char>                    rx_body;
 
         ContentType                     rx_content_type;
 

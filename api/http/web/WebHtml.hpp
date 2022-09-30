@@ -126,6 +126,7 @@ namespace yq {
 
     std::string     html_escape(std::string_view);
     void            html_escape_write(Stream& s, std::string_view);
+    void            html_escape_write(Stream& s, const std::vector<char>&);
     
     
     class WebAutoClose {

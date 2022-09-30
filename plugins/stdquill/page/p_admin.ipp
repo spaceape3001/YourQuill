@@ -45,6 +45,8 @@ namespace {
         if(!t)
             throw HttpStatus::UnableToPerform;
     
+        yInfo() << "Created category " << cdb::key(t) << " in root " << rt->path;
+    
         if(edit_now){
             Url url;
             url.path    = "/admin/category";
