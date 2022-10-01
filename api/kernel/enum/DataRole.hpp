@@ -15,6 +15,8 @@ namespace yq {
 
     */
     YQ_ENUM(DataRole, , 
+        NoRole,
+        
         //!  For all non-specific stuff
         Other,
         

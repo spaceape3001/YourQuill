@@ -35,6 +35,8 @@ namespace {
         const Root* rt      = post::root(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
+        if(!rt->is_writable(DataRole::Config))
+            throw HttpStatus::Forbidden;
             
         std::string     k   = post::key(ctx);
         if(k.empty())
@@ -108,6 +110,8 @@ namespace {
         const Root* rt      = post::root(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
+        if(!rt->is_writable(DataRole::Config))
+            throw HttpStatus::Forbidden;
             
         std::string     k   = post::key(ctx);
         if(k.empty())
@@ -169,6 +173,8 @@ namespace {
         const Root* rt      = post::root(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
+        if(!rt->is_writable(DataRole::Config))
+            throw HttpStatus::Forbidden;
             
         std::string     k   = post::key(ctx);
         if(k.empty())
@@ -231,6 +237,10 @@ namespace {
         
         bool  edit_now      = ctx.edit_now();
         const Root* rt      = post::root(ctx);
+        if(!rt)
+            throw HttpStatus::BadArgument;
+        if(!rt->is_writable(DataRole::Config))
+            throw HttpStatus::Forbidden;
             
         std::string     k   = post::key(ctx);
         if(k.empty())
@@ -290,6 +300,8 @@ namespace {
         const Root* rt      = post::root(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
+        if(!rt->is_writable(DataRole::Users))
+            throw HttpStatus::Forbidden;
             
         std::string     k   = post::key(ctx);
         if(k.empty())

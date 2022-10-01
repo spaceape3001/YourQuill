@@ -97,7 +97,7 @@ namespace yq {
             h << "Add Category:<br>";
             h << ikey();
             h << "<br><hr width=\"10%\">\n";
-            h << iroot( DataRole::Config );
+            h << iroot( DataRole::Config, Access::ReadWrite);
             h << "<hr width=\"10%\">\n";
             h << iedit();
             h << "<hr width=\"10%\">\n";
