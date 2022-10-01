@@ -8,8 +8,10 @@
 
 #include "uFwd.hpp"
 #include <kernel/atom/Atom.hpp>
+#include <kernel/attr/Attribute.hpp>
 
 namespace yq {
+
     struct UAtom {
         union {
             const uint64_t    id;
@@ -21,4 +23,6 @@ namespace yq {
 
     //! Note, not thread-safe, call from ONE thread only!
     UAtom&  uget(Atom);
+    
+    void    update_attributes(Atom, const Attribute::Report&, cdb_options_t = 0);
 }

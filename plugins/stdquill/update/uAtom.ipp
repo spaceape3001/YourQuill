@@ -20,5 +20,9 @@ namespace yq {
             p       = new UAtom(a);
         return *p;
     }
+
+    void    update_attributes(Atom at, const Attribute::Report& rep, cdb_options_t)
+    {
+    }
 }
 

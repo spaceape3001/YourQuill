@@ -66,33 +66,42 @@ namespace yq {
             //! Best sort available (equiv to Sorted::YES)
             BEST_SORT               = 1 << 1,
             
+            //! Startup phase (might be important)
+            STARTUP                 = 1 << 2,
+            
+            REMOVED                 = 1 << 3,
+            
+            CREATED                 = 1 << 4,
+            
             // Update flags
             
             //! Consider this an "update" so reset the fragment to "updated" 
             //! \note Only the scanner should be using this, may cause issues for otherrs to set this
-            IS_UPDATE               = 1 << 2,
+            IS_UPDATE               = 1 << 5,
+            
             //! Ignore attributes
-            IGNORE_ATTRIBUTES       = 1 << 3,
+            IGNORE_ATTRIBUTES       = 1 << 6,
+            
             //! Ignore context
-            IGNORE_CONTEXT          = 1 << 4,
+            IGNORE_CONTEXT          = 1 << 7,
             
-            OVERRIDE                = 1 << 5,
+            OVERRIDE                = 1 << 8,
             
-            ALLOW_EMPTY             = 1 << 6,
+            ALLOW_EMPTY             = 1 << 9,
             
             //! Skip biograph (in users/groups)
-            SKIP_BIO                = 1 << 7,
+            SKIP_BIO                = 1 << 10,
             
-            DONT_LOCK               = 1 << 8,
+            DONT_LOCK               = 1 << 11,
 
-            U_ICON                  = 1 << 9,
+            U_ICON                  = 1 << 12,
             
             // DO INFO
-            U_INFO                  = 1 << 10,
+            U_INFO                  = 1 << 13,
             
-            U_TAGS                  = 1 << 11,
+            U_TAGS                  = 1 << 14,
             
-            U_LEAF                  = 1 << 12
+            U_LEAF                  = 1 << 15
             
         };
         
