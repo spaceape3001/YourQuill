@@ -71,31 +71,11 @@ namespace yq {
        
             bool                difference(std::vector<Attribute::Diff>& items, const std::vector<Attribute::KVUA>& old, const KVTree& kvs, ssize_t depth)
             {
-                bool    chg     = diff_it(old, kvs.subs, is_similar_kv, 
-                    [&](SSizeRange Y){
-                        for(ssize_t y  : Y){
-                            auto& kv    = items.emplace_back();
-                            kv.chg      = Attribute::Diff::INSERT;
-                            kv.key      = kvs.subs[y].key;
-                            kv.value    = kvs.subs[y].data;
-                            kv.uid      = kvs.subs[y].id;
-                            kv.nidx     = y;
-                        }
-                    }, 
-                    [&](SSizeRange X){
-                        for(ssize_t x  : X){
-                            auto& kv    = items.emplace_back();
-                            kv.chg      = Attribute::Diff::DELETE;
-                            kv.key      = old[x].key;
-                            kv.value    = old[x].value;
-                            kv.attr     = old[x].attr;
-                            kv.uid      = old[x].uid;
-                            kv.oidx     = x;
-                        }
-                    }, 
-                    [&](SSizeRange X, SSizeRange Y){
+                bool    chg = false;
+                diff::diff_engine(old, kvs.subs, is_similar_kv, 
+                    [&](SizeRange X, SizeRange Y){
                         assert(X.count() == Y.count());
-                        for(ssize_t  r : SSizeRange{0,std::min(X.count(),Y.count())}){
+                        for(ssize_t  r : SizeRange{0,std::min(X.count(),Y.count())}){
                             auto& c = items.emplace_back();
                             c.nidx  = Y.low+r;
                             c.oidx  = X.low+r;
@@ -108,7 +88,30 @@ namespace yq {
                             c.attr  = a.attr;
                             c.chg   = 0;
                         }
-                    }
+                    },
+                    [&](SizeRange Y){
+                        for(size_t y  : Y){
+                            auto& kv    = items.emplace_back();
+                            kv.chg      = Attribute::Diff::INSERT;
+                            kv.key      = kvs.subs[y].key;
+                            kv.value    = kvs.subs[y].data;
+                            kv.uid      = kvs.subs[y].id;
+                            kv.nidx     = y;
+                        }
+                        chg     = true;
+                    }, 
+                    [&](SizeRange X){
+                        for(size_t x  : X){
+                            auto& kv    = items.emplace_back();
+                            kv.chg      = Attribute::Diff::DELETE;
+                            kv.key      = old[x].key;
+                            kv.value    = old[x].value;
+                            kv.attr     = old[x].attr;
+                            kv.uid      = old[x].uid;
+                            kv.oidx     = x;
+                        }
+                        chg     = true;
+                    } 
                 );
                 
                 for(auto& r : items){
