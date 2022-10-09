@@ -23,10 +23,10 @@ namespace yq {
 
         Technically "stage 5", this is a notification that a particular file has changed
     */
-    class Notifier {
+    class FileNotifier {
     public:
 
-        static const std::vector<const Notifier*>&  all();
+        static const std::vector<const FileNotifier*>&  all();
 
         // generic "change" handler
         virtual bool                    change(Fragment,Change) const = 0;
@@ -41,11 +41,11 @@ namespace yq {
         
         const FileSpec&                 spec() const { return m_spec; }
         
-        static const EnumMap<Change,Vector<const Notifier*>>&     change_map();
+        static const EnumMap<Change,Vector<const FileNotifier*>>&     change_map();
 
     protected:
-        Notifier(Flag<Change>, const FileSpec&, int order, const std::source_location&);
-        ~Notifier();
+        FileNotifier(Flag<Change>, const FileSpec&, int order, const std::source_location&);
+        ~FileNotifier();
 
     private:
         FileSpec                m_spec;
@@ -58,9 +58,9 @@ namespace yq {
         static Repo&            repo();
     };
 
-    struct Notifier::Writer {
+    struct FileNotifier::Writer {
         Writer&     description(std::string_view);
-        Notifier*   importer  = nullptr;
+        FileNotifier*   importer  = nullptr;
     };
 
 }

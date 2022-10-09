@@ -24,7 +24,7 @@
 #include <kernel/leaf/LeafCDB.hpp>
 #include <kernel/leaf/LeafData.hpp>
 #include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/FileNotifyAdapters.hpp>
 #include <kernel/notify/Stage2.hpp>
 #include <kernel/notify/Stage3.hpp>
 #include <kernel/notify/Stage4.hpp>

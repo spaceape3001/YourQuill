@@ -78,7 +78,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "notify/FileWatch.ipp"
 #include "notify/FunctionalNotifier.ipp"
 #include "notify/FunctionalStage4.ipp"
-#include "notify/Notifier.ipp"
+#include "notify/FileNotifier.ipp"
 #include "notify/Stage2.ipp"
 #include "notify/Stage3.ipp"
 #include "notify/Stage4.ipp"

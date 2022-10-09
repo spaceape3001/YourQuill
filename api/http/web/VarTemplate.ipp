@@ -13,7 +13,7 @@
 #include <kernel/file/FragmentCDB.hpp>
 #include <basic/FileUtils.hpp>
 #include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/FileNotifyAdapters.hpp>
 #include <kernel/notify/Stage4.hpp>
 
 namespace yq {

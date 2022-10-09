@@ -119,8 +119,8 @@ bool    initialize(const char* wfile)
         db_run_script_file(fname, db);
     });
     
+    Meta::init();
 
-    Meta::freeze();
     wksp::set_db_init();
     
     n = 0;
@@ -136,6 +136,7 @@ bool    initialize(const char* wfile)
     yInfo() << "Stage 4: Finalization.";
     stage4_finalize();
     yInfo() << "Stage 5: Flushing write-ahead-log.";
+    Meta::freeze();
     db.checkpoint();
     return true;
 }

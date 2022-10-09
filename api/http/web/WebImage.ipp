@@ -13,7 +13,7 @@
 #include <kernel/file/Fragment.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/FileNotifyAdapters.hpp>
 #include <kernel/notify/Stage4.hpp>
 #include <basic/StreamOps.hpp>
 #include <basic/stream/Text.hpp>

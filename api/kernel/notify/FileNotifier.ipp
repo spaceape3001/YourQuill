@@ -6,32 +6,32 @@
 
 #pragma once
 
-#include "Notifier.hpp"
+#include "FileNotifier.hpp"
 
 namespace yq {
-    struct Notifier::Repo {
-        std::vector<const Notifier*>    all;
-        EnumMap<Change,Vector<const Notifier*>> byChange;
+    struct FileNotifier::Repo {
+        std::vector<const FileNotifier*>    all;
+        EnumMap<Change,Vector<const FileNotifier*>> byChange;
     };
     
-    Notifier::Repo&  Notifier::repo()
+    FileNotifier::Repo&  FileNotifier::repo()
     {
         static Repo s_repo;
         return s_repo;
     }
 
-    const std::vector<const Notifier*>&  Notifier::all()
+    const std::vector<const FileNotifier*>&  FileNotifier::all()
     {
         return repo().all;
     }
     
-    const EnumMap<Change,Vector<const Notifier*>>&     Notifier::change_map()
+    const EnumMap<Change,Vector<const FileNotifier*>>&     FileNotifier::change_map()
     {
         return repo().byChange;
     }
     
 
-    Notifier::Notifier(Flag<Change> changeMask, const FileSpec& _spec, int _order, const std::source_location& sl)
+    FileNotifier::FileNotifier(Flag<Change> changeMask, const FileSpec& _spec, int _order, const std::source_location& sl)
     {
         m_source    = sl;
         m_change    = changeMask;
@@ -45,11 +45,11 @@ namespace yq {
                 _r.byChange[c] << this;
     }
     
-    Notifier::~Notifier()
+    FileNotifier::~FileNotifier()
     {
     }
 
-    Notifier::Writer&     Notifier::Writer::description(std::string_view d)
+    FileNotifier::Writer&     FileNotifier::Writer::description(std::string_view d)
     {
         if(importer)
             importer -> m_description = d;

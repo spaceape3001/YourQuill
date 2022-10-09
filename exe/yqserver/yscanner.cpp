@@ -27,7 +27,7 @@
 #include <kernel/file/RootCDB.hpp>
 #include <http/ipc/DirWatcher.hpp>
 #include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/Notifier.hpp>
+#include <kernel/notify/FileNotifier.hpp>
 #include <kernel/notify/Stage2.hpp>
 #include <kernel/notify/Stage3.hpp>
 #include <kernel/notify/Stage4.hpp>
@@ -275,11 +275,11 @@ std::string_view    filename(std::string_view fn)
     return fn.substr(n+1);
 }
 
-EnumMap<Change,Vector<const Notifier*>> change_map()
+EnumMap<Change,Vector<const FileNotifier*>> change_map()
 {
-    EnumMap<Change,Vector<const Notifier*>> ret = Notifier::change_map();
+    EnumMap<Change,Vector<const FileNotifier*>> ret = FileNotifier::change_map();
     for(Change c : Change::all_values()){
-        ret[c].stable_sort([](const Notifier*a, const Notifier*b) -> bool {
+        ret[c].stable_sort([](const FileNotifier*a, const FileNotifier*b) -> bool {
             return a->order() < b->order();
         });
     }
@@ -289,12 +289,12 @@ EnumMap<Change,Vector<const Notifier*>> change_map()
 
 void    dispatch(Change change, Fragment frag, Folder fo, const std::filesystem::path& p)
 {
-    static EnumMap<Change,Vector<const Notifier*>> changeMap = change_map();
+    static EnumMap<Change,Vector<const FileNotifier*>> changeMap = change_map();
 
     std::string_view    name    = filename(p.native());
     std::string_view    ext     = file_extension(name);
 
-    for(const Notifier* n : changeMap[change]){
+    for(const FileNotifier* n : changeMap[change]){
         auto& fs = n->spec();
         switch(fs.type){
         case FileSpec::Never:

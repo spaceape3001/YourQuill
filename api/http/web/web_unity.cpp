@@ -31,7 +31,7 @@
 #include <basic/Encode64.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <kernel/notify/NotifyAdapters.hpp>
+#include <kernel/notify/FileNotifyAdapters.hpp>
 #include <kernel/notify/Stage4.hpp>
 
 
