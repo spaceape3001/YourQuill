@@ -75,6 +75,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "leaf/LeafData.ipp"
 #include "leaf/LeafFile.ipp"
 #include "leaf/LeafCDB.ipp"
+#include "notify/AtomNotifier.ipp"
 #include "notify/FileWatch.ipp"
 #include "notify/FunctionalNotifier.ipp"
 #include "notify/FunctionalStage4.ipp"
