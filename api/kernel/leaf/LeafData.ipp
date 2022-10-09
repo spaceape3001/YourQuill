@@ -46,7 +46,11 @@ namespace yq {
 
     string_view_set_t Leaf::Data::classes() const
     {
-        return attrs.values_set(zClass);
+        string_view_set_t   tmp;
+        for(std::string_view v : attrs.values_set(zClass)){
+            tmp.insert(trimmed(v));
+        }
+        return tmp;
     }
 
     void        Leaf::Data::classes(const string_view_set_t&s)

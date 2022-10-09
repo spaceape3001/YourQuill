@@ -258,6 +258,16 @@ namespace yq {
         std::vector<Class>            db_classes(const string_set_t& all)
         {
             std::vector<Class>   ret;
+            ret.reserve(all.size());
+            for(std::string_view  s: all)
+                ret.push_back(db_class(s));
+            return ret;
+        }
+
+        std::vector<Class>             db_classes(const string_view_set_t& all)
+        {
+            std::vector<Class>   ret;
+            ret.reserve(all.size());
             for(std::string_view  s: all)
                 ret.push_back(db_class(s));
             return ret;

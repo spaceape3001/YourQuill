@@ -97,7 +97,10 @@ namespace yq {
         Atom                    atom(std::string_view );
 
         //! Gets atom by document and sub-key
-        Atom                    atom(Document, std::string_view );
+        Atom                    atom(Document, std::string_view sk=std::string_view());
+        
+        //! Atoms of a particular class
+        std::vector<Atom>       atoms(Class, Sorted sorted=Sorted());
         
         //! Atoms in document
         std::vector<Atom>       atoms(Document, Sorted sorted=Sorted());
@@ -119,8 +122,11 @@ namespace yq {
 
         //! Classes of the atom
         std::vector<Class>      classes(Atom, Sorted sorted=Sorted{});
+
+        //! Classes of the atom defined by said document
+        std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
         
-        //std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
+        std::vector<ClassU64Pair> classes_and_hops(Atom, Document);
         
         //! Count of classes for atom
         size_t                  classes_count(Atom);

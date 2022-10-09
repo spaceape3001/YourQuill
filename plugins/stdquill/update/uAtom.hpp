@@ -24,5 +24,5 @@ namespace yq {
     //! Note, not thread-safe, call from ONE thread only!
     UAtom&  uget(Atom);
     
-    void    update_attributes(Atom, const Attribute::Report&, cdb_options_t = 0);
+    void    update_attributes(Atom, Document, const Attribute::Report&, cdb_options_t = 0, const ClassSet& cset=ClassSet());
 }

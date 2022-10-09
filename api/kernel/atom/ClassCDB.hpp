@@ -100,6 +100,12 @@ namespace yq {
         //! Creates the specified class from key
         Class                       db_class(std::string_view, bool *wasCreated=nullptr);
         
+        //! Creates all classes
+        std::vector<Class>          db_classes(const string_view_set_t&);
+
+        //! Creates all classes
+        std::vector<Class>           db_classes(const string_set_t&);
+        
         //! Defined aliases for class
         string_set_t                def_aliases(Class);
         

@@ -41,6 +41,8 @@ namespace yq {
     using DocStr        = std::pair<Document,std::string>;
     using FolderStr     = std::pair<Folder,std::string>;
     using FragmentStr   = std::pair<Fragment,std::string>;
+    using ClassSet      = std::set<Class>;
+    using ClassU64Pair  = std::pair<Class,uint64_t>;
 
     // used for extension specifications
     struct ExtensionView {
@@ -55,7 +57,7 @@ namespace yq {
     inline ExtensionView extension(std::string_view x) { return { x }; }
 
     namespace cdb {
-
+    
         struct NKI;
 
 

@@ -35,6 +35,10 @@ CREATE TABLE AClasses (
     doc     INTEGER NOT NULL,
         -- class of interest
     class   INTEGER NOT NULL,
+    
+        -- how direct the definition is (ie, how many other class definitions it must reach through.
+    hops    INTEGER DEFAULT 0,
+    
     UNIQUE(atom,doc,class) ON CONFLICT IGNORE
 );
 

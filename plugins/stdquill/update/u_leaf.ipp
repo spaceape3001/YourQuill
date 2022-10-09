@@ -53,9 +53,11 @@ namespace {
             rep.exec_reindex();
             rep.exec_removals();
             xa              = atom(doc);
+            
         }
         
-        update_attributes(xa, rep, opts);
+        std::set<Class>     clsset = make_set(db_classes(data->classes()));
+        update_attributes(xa, doc, rep, opts, clsset);
         
         if(created)
             update_icon(x);

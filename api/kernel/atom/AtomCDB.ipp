@@ -137,6 +137,24 @@ namespace yq {
             return atom(ks);
         }
         
+        namespace {
+            std::vector<Atom>    atoms_sorted(Class cls)
+            {
+                static thread_local SQ s("SELECT DISTINCT atom FROM AClasses INNER JOIN Atoms ON AClasses.atom=Atoms.id WHERE class=? ORDER BY Atoms.k");
+                return s.vec<Atom>(cls.id);
+            }
+
+            std::vector<Atom>    atoms_unsorted(Class cls)
+            {
+                static thread_local SQ s("SELECT DISTINCT atom FROM AClasses WHERE class=?");
+                return s.vec<Atom>(cls.id);
+            }
+        }
+
+        std::vector<Atom>       atoms(Class cls, Sorted sorted)
+        {
+            return sorted ? atoms_sorted(cls) : atoms_unsorted(cls);
+        }
 
         namespace {
             std::vector<Atom>    atoms_sorted(Document doc)
@@ -220,13 +238,13 @@ namespace yq {
         namespace {
             std::vector<Class>    classes_sorted(Atom a)
             {
-                static thread_local SQ s("SELECT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? ORDER BY Classes.k");
+                static thread_local SQ s("SELECT DISTINCT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? ORDER BY Classes.k");
                 return s.vec<Class>(a.id);
             }
             
             std::vector<Class>    classes_unsorted(Atom a)
             {
-                static thread_local SQ s("SELECT class FROM AClasses WHERE atom=?");
+                static thread_local SQ s("SELECT DISTINCT class FROM AClasses WHERE atom=?");
                 return s.vec<Class>(a.id);
             }
         }
@@ -256,6 +274,22 @@ namespace yq {
             return sorted ? classes_sorted(a,d) : classes_unsorted(a,d);
         }
         
+        std::vector<ClassU64Pair> classes_and_hops(Atom a, Document d) 
+        {
+            std::vector<ClassU64Pair> ret;
+
+            static thread_local SQ s("SELECT class, hops FROM AClasses WHERE atom=? AND doc=?");
+            auto s_af           = s.af();
+            
+            s.bind(1, a.id);
+            s.bind(2, d.id);
+            
+            while(s.step() == SqlQuery::Row)
+                ret.push_back(ClassU64Pair{Class{s.v_uint64(1)}, s.v_uint64(2)});
+            
+            return ret;
+        }
+
         size_t              classes_count(Atom a)
         {
             static thread_local SQ s("SELECT COUNT(DISTINCT class) FROM AClasses WHERE atom=?");

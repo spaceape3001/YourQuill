@@ -77,6 +77,25 @@ namespace {
 }
 
 
+struct Sigma {
+    unsigned short  count   = USHRT_MAX;
+    
+    Sigma& operator=(unsigned short v)
+    {
+        count   = v;
+        return *this;
+    }
+    
+    Sigma&  operator <<= (unsigned short v)
+    {
+        count = std::min(v, count);
+        return *this;
+    }
+    
+    constexpr auto operator<=>(const Sigma&) const noexcept = default;
+    
+};
+
 
 namespace {
     void    page__(cdb_options_t opts=0)
