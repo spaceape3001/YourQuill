@@ -33,6 +33,36 @@ namespace yq {
 
 
     namespace update {
+        void    image_erase(Image x)
+        {
+            using cdb::SQ;
+            
+            if(!x)
+                return ;
+                
+            static thread_local SQ stmts[] = {
+                SQ("UPDATE Atoms SET icon=0 WHERE icon=?"),
+                SQ("UPDATE Categories SET icon=0 WHERE icon=?"),
+                SQ("UPDATE Classes SET icon=0 WHERE icon=?"),
+                SQ("UPDATE Documents SET icon=0 WHERE icon=?"),
+                SQ("UPDATE Fields SET icon=0 WHERE icon=?"),
+                SQ("UPDATE Leafs SET icon=0 WHERE icon=?"),
+                SQ("UPDATE Tags SET icon=0 WHERE icon=?"),
+                SQ("DELETE FROM Images WHERE id=?")
+            };
+            
+            if(!x)
+                return ;
+                
+            for(auto& sq : stmts)
+                sq.exec(x.id);
+        }
+        
+        void    image_erase(Fragment frag)
+        {
+            image_erase(cdb::image(frag));
+        }
+
         void    image_notify(Fragment frag, Change chg)
         {
             switch(chg){
@@ -41,7 +71,7 @@ namespace yq {
                 image_thumbnails(cdb::db_image(frag));
                 break;
             case Change::Removed:
-                cdb::erase(cdb::image(frag));
+                image_erase(frag);
                 break;
             default:
                 break;

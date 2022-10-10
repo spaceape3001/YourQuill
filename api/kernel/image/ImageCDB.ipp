@@ -136,26 +136,6 @@ namespace yq {
             return document(fragment(i));
         }
 
-        void                erase(Image x)
-        {
-            static thread_local SQ stmts[] = {
-                SQ("UPDATE Atoms SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Categories SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Classes SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Documents SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Fields SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Leafs SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Tags SET icon=0 WHERE icon=?"),
-                SQ("DELETE FROM Images WHERE id=?")
-            };
-            
-            if(!x)
-                return ;
-                
-            for(auto& sq : stmts)
-                sq.exec(x.id);
-        }
-
         bool                exists(Image i)
         {
             return exists_image(i.id);

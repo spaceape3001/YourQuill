@@ -15,6 +15,10 @@ namespace yq {
     struct Document;
 
     namespace update {
+            //! Removes this image from the cache
+        void    image_erase(Image);
+            //! Removes this image from the cache
+        void    image_erase(Fragment);
         void    image_notify(Fragment, Change);
         void    image_stage2();
         void    image_stage3(Document);

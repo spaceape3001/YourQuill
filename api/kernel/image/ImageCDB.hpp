@@ -41,9 +41,6 @@ namespace yq {
             //! Document for image
         Document                document(Image);
 
-            //! Removes this image from the cache
-        void                    erase(Image);
-
             //! TRUE if the image exists (in cache database)
         bool                    exists(Image);
 
