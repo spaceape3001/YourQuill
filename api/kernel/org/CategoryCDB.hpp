@@ -77,9 +77,6 @@ namespace yq {
         */
         Document                document(Category);
         
-        //! \brief Erases the category from the cache
-        void                    erase(Category);
-        
         //! \brief Checks for category existance
         bool                    exists(Category);
 

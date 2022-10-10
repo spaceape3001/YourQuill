@@ -35,7 +35,7 @@
 #include <kernel/wksp/Workspace.hpp>
 
 #include "uAtom.ipp"
-#include "uCategory.ipp"
+//#include "uCategory.ipp"
 #include "uClass.ipp"
 #include "uField.ipp"
 #include "uLeaf.ipp"
@@ -126,7 +126,7 @@ namespace {
 }
 
 #include "u_atom.ipp"
-#include "u_category.ipp"
+//#include "u_category.ipp"
 #include "u_class.ipp"
 #include "u_css.ipp"
 #include "u_field.ipp"
@@ -135,6 +135,7 @@ namespace {
 #include "u_tag.ipp"
 #include "u_user.ipp"
 
+#include <update/uCategory.hpp>
 #include <update/uImage.hpp>
 
 namespace {
@@ -161,7 +162,7 @@ namespace {
 
             
                 //  Organization & users
-            on_stage3<category_stage3>(by_cache(categories_folder(), "*.cat"));
+            on_stage3<update::category_stage3>(by_cache(categories_folder(), "*.cat"));
             on_stage3<tag_stage3>(by_cache(tags_folder(), "*.tag"));
             on_stage3<user_stage3>(by_cache(users_folder(), "*.user"));
             
@@ -198,7 +199,7 @@ namespace {
             on_change<page_update>(by_file(gSharedPageFile));
             on_change<page_update>(by_cache(top_folder(), ".page"));
                 
-            on_change<category_update>(by_cache(categories_folder(), "*.cat"));
+            on_change<update::category_notify>(by_cache(categories_folder(), "*.cat"));
             on_change<class_update>(by_cache(classes_folder(), "*.class"));
             on_change<field_update>(by_cache(fields_folder(), "*.field"));
             on_change<leaf_update>(by_cache("*.y"));
@@ -206,7 +207,7 @@ namespace {
             on_change<user_update>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
-                on_change<category_icons>(by_cache(categories_folder(), z));
+                on_change<update::category_notify_icons>(by_cache(categories_folder(), z));
                 on_change<class_icons>(by_cache(classes_folder(), z));
                 on_change<field_icons>(by_cache(fields_folder(), z));
                 on_change<leaf_icons>(by_cache(z));

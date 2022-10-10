@@ -175,20 +175,6 @@ namespace yq {
             return exists(t) ? Document{t.id} : Document{};
         }    
 
-        void                erase(Category x)
-        {
-            static thread_local SQ  stmts[] = {
-                SQ( "UPDATE Classes SET category=0 WHERE category=?" ),
-                SQ( "DELETE FROM Categories WHERE id=?" )
-            };
-            
-            if(!x)
-                return ;
-            
-            for(auto& sq : stmts)
-                sq.exec(x.id);
-        }
-
         bool                exists(Category t)
         {
             return exists_category(t.id);
