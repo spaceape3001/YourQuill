@@ -60,9 +60,6 @@ namespace yq {
         
         //! \brief Document for user
         Document                document(User);
-    
-        //! Removes the user from the cache
-        void                    erase(User);
         
         //! Checks for user existance (in cache database)
         bool                    exists(User);

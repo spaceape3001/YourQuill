@@ -111,12 +111,6 @@ namespace yq {
             return exists(u) ? Document{u.id} : Document{};
         }
     
-        void                    erase(User u)
-        {
-            static thread_local SQ d("DELETE FROM Users WHERE id=?");
-            d.exec(u.id);
-        }
-        
         bool                    exists(User u)
         {
             return exists_user(u.id);

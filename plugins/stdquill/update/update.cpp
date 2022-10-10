@@ -40,7 +40,7 @@
 #include "uField.ipp"
 #include "uLeaf.ipp"
 
-#include "uUser.ipp"
+//#include "uUser.ipp"
 
 #include "common.hpp"
 
@@ -58,7 +58,7 @@
 #include <yq/property.hpp>
 #include <yq/root.hpp>
 
-#include <yq/user.hpp>
+//#include <yq/user.hpp>
 #include <yq/value.hpp>
 
 alignas(64) Guarded<std::string>        gTextColor;
@@ -133,11 +133,12 @@ namespace {
 //#include "u_image.ipp"
 #include "u_leaf.ipp"
 //#include "u_tag.ipp"
-#include "u_user.ipp"
+//#include "u_user.ipp"
 
 #include <update/uCategory.hpp>
 #include <update/uImage.hpp>
 #include <update/uTag.hpp>
+#include <update/uUser.hpp>
 
 namespace {
 
@@ -165,7 +166,7 @@ namespace {
                 //  Organization & users
             on_stage3<update::category_stage3>(by_cache(categories_folder(), "*.cat"));
             on_stage3<update::tag_stage3>(by_cache(tags_folder(), "*.tag"));
-            on_stage3<user_stage3>(by_cache(users_folder(), "*.user"));
+            on_stage3<update::user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
             on_stage3<UClass::s3_create>(by_cache(classes_folder(), "*.class"));
@@ -205,13 +206,13 @@ namespace {
             on_change<field_update>(by_cache(fields_folder(), "*.field"));
             on_change<leaf_update>(by_cache("*.y"));
             on_change<update::tag_notify>(by_cache(tags_folder(), "*.tag"));
-            on_change<user_update>(by_cache(users_folder(), "*.user"));
+            on_change<update::user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
                 on_change<class_icons>(by_cache(classes_folder(), z));
                 on_change<field_icons>(by_cache(fields_folder(), z));
                 on_change<leaf_icons>(by_cache(z));
-                on_change<user_icons>(by_cache(users_folder(), z));
+                on_change<update::user_notify_icons>(by_cache(users_folder(), z));
 
                 on_change<update::category_notify_icons>(by_cache(categories_folder(), z));
                 on_change<update::tag_notify_icons>(by_cache(tags_folder(), z));
