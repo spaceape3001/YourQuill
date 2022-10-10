@@ -6,10 +6,11 @@
 
 #pragma once
 
-#include "uFwd.hpp"
-#include <kernel/image/Image.hpp>
-
 namespace yq {
-        //! Update root icon
-    void                    update_root(const Root*, Image);
+    struct Root;
+    struct Image;
+    
+    namespace update {
+        void    set_root_icon(const Root*, Image);
+    }
 }

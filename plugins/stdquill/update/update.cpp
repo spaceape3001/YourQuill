@@ -38,13 +38,11 @@
 #include "uCategory.ipp"
 #include "uClass.ipp"
 #include "uField.ipp"
-#include "uImage.ipp"
 #include "uLeaf.ipp"
 #include "uTag.ipp"
 #include "uUser.ipp"
 
 #include "common.hpp"
-//#include "imaging.hpp"
 
 #include <yq/atom.hpp>
 #include <yq/attribute.hpp>
