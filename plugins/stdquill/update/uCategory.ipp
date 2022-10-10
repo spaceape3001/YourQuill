@@ -26,7 +26,7 @@ namespace yq {
         }
     }
     
-    Category::SharedData           update(Category x, cdb_options_t opts)
+    Category::SharedData           update_this(Category x, cdb_options_t opts)
     {
         if(!x)
             return Category::SharedData();

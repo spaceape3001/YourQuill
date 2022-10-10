@@ -64,7 +64,7 @@ namespace yq {
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    Class::SharedData   update(Class x, cdb_options_t opts)
+    Class::SharedData   update_this(Class x, cdb_options_t opts)
     {
         if(!x)
             return Class::SharedData{};

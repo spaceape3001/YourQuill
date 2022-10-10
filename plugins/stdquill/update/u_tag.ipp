@@ -14,7 +14,7 @@ namespace {
     void    tag_stage3(Document doc)
     {
         Tag     x       = db_tag(doc);
-        Tag::SharedData data = update(x, DONT_LOCK|U_INFO|U_ICON);
+        Tag::SharedData data = update_this(x, DONT_LOCK|U_INFO|U_ICON);
         if(!data){
             yWarning() << "Unable to initialize tag '" << key(x) << "'";
             return ;
@@ -56,7 +56,7 @@ namespace {
             opts |= U_ICON;
         
 
-        Tag::SharedData data = update(x, opts);
+        Tag::SharedData data = update_this(x, opts);
         if(!data){
             yWarning() << "Unable to update tag '" << key(x) << "'";
             return ;

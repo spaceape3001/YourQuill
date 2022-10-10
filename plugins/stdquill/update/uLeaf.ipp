@@ -31,7 +31,7 @@ namespace yq {
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    Leaf::SharedData         update(Leaf x, cdb_options_t opts)
+    Leaf::SharedData         update_this(Leaf x, cdb_options_t opts)
     {
         if(!x)
             return Leaf::SharedData();

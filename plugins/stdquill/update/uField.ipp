@@ -38,7 +38,7 @@ namespace yq {
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    Field::SharedData       update(Field x, cdb_options_t opts)
+    Field::SharedData       update_this(Field x, cdb_options_t opts)
     {
         if(!x)
             return Field::SharedData();

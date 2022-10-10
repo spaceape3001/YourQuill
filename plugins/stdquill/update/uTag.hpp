@@ -24,7 +24,7 @@ namespace yq {
     UTag&  uget(Tag);
     
     //! Updates the tag data
-    Tag::SharedData         update(Tag, cdb_options_t opts=0);
+    Tag::SharedData         update_this(Tag, cdb_options_t opts=0);
 
     //! Updates Tag Icon
     void                    update_icon(Tag);

@@ -10,7 +10,7 @@
 
 namespace yq {
 
-    User::SharedData         update(User x, cdb_options_t opts)
+    User::SharedData         update_this(User x, cdb_options_t opts)
     {
         if(!x)
             return User::SharedData();

@@ -12,7 +12,9 @@
 #include <basic/trait/not_moveable.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/db/SQ.hpp>
-#include <math/Count16.hpp>
+#include <math/Counter.hpp>
+#include <update/DefRes.hpp>
+#include <kernel/bit/Connection.hpp>
 
 /*
     The UPDATE is here because this analysis can suck in a database, therefore the updater needs a parallel
@@ -25,21 +27,9 @@ namespace yq {
     template <typename T>
     struct URefSet {
         std::set<T>             defined;
-        std::map<T,Count16>     all;
+        std::map<T,HCountU16>   all;
     };
     
-    template <typename T>
-    struct UDefResolved {
-        T   defined;
-        T   resolved;
-    };
-    
-    template <typename F, typename T>
-    struct UConnection {
-        F           from;
-        T           to;
-        constexpr auto operator<=>(const UConnection&) const = default;
-    };
-    
-    using UClassCxn = UConnection<Class, Class>;
+    template <typename T> 
+    using UDefResolved  = update::DefRes<T>;
 }

@@ -19,7 +19,7 @@ namespace yq {
     public:
         static const std::vector<const AtomNotifier*>& all();
         
-        virtual void        change(Class, Atom, Change) const = 0;
+        virtual void        change(Atom, Class, Change) const = 0;
         struct Writer;
         
         std::string_view                description() const { return m_description; }

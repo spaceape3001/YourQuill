@@ -34,7 +34,7 @@ namespace {
         if(created)
             opts |= U_ICON | CREATED;
         
-        Leaf::SharedData data   = update(x, opts|U_INFO);
+        Leaf::SharedData data   = update_this(x, opts|U_INFO);
         if(!data){
             yWarning() << "Unable to initialize leaf '" << key(x) << "'";
             return ;
@@ -57,7 +57,7 @@ namespace {
         }
         
         std::set<Class>     clsset = make_set(db_classes(data->classes()));
-        update_attributes(xa, doc, rep, opts, clsset);
+        update_atom(xa, doc, rep, opts, clsset);
         
         if(created)
             update_icon(x);

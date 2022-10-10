@@ -21,7 +21,7 @@ namespace {
     {
         Class x = db_class(doc);
 
-        Class::SharedData       data    = update(x, DONT_LOCK|IS_UPDATE|U_INFO|U_ICON|U_TAGS);
+        Class::SharedData       data    = update_this(x, DONT_LOCK|IS_UPDATE|U_INFO|U_ICON|U_TAGS);
         if(!data)
             yWarning() << "Unable to update class '" << key(x) << "'";
     }
@@ -45,7 +45,7 @@ namespace {
         if(created)
             opts |= U_ICON;
             
-        Class::SharedData   data    = update(x, opts);
+        Class::SharedData   data    = update_this(x, opts);
         if(!data){
             yWarning() << "Unable to update class '" << key(x) << "'";
             return ;

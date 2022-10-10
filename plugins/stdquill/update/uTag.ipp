@@ -9,7 +9,7 @@
 #include "uTag.hpp"
 
 namespace yq {
-    Tag::SharedData         update(Tag x, cdb_options_t opts)
+    Tag::SharedData         update_this(Tag x, cdb_options_t opts)
     {
         if(!x)
             return Tag::SharedData();

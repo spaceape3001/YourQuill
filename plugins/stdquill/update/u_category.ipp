@@ -15,7 +15,7 @@ namespace {
     void    category_stage3(Document doc)
     {
         Category    x       = db_category(doc);
-        Category::SharedData data = update(x, DONT_LOCK|U_INFO|U_ICON|IS_UPDATE);
+        Category::SharedData data = update_this(x, DONT_LOCK|U_INFO|U_ICON|IS_UPDATE);
         if(!data){
             yWarning() << "Unable to update category '" << key(x) << "' due to lack of data";
             return ;
@@ -41,7 +41,7 @@ namespace {
         if(created)
             opts |= U_ICON;
 
-        Category::SharedData data = update(x, opts);
+        Category::SharedData data = update_this(x, opts);
         if(!data){
             yWarning() << "Unable to update category '" << key(x) << "' due to lack of data";
             return ;

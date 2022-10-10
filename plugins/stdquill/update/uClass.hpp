@@ -52,6 +52,6 @@ namespace yq {
     //! Note, not thread-safe, call from ONE thread only!
     UClass&  uget(Class);
 
-    Class::SharedData           update(Class, cdb_options_t opts=0);
+    Class::SharedData           update_this(Class, cdb_options_t opts=0);
     void                        update_icon(Class);
 }

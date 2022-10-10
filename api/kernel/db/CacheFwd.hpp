@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <map>
 #include <set>
 #include <string>
 #include <string_view>
@@ -30,6 +31,8 @@ namespace yq {
     class TypeInfo;
     class ByteArray;
 
+    template <typename F, typename T> struct Connection;
+
     using ClassPair     = std::pair<Class,Class>;
     using DirOrFrag     = std::variant<bool,Directory,Fragment>;
     using DocOrFold     = std::variant<bool,Document,Folder>;
@@ -43,6 +46,9 @@ namespace yq {
     using FragmentStr   = std::pair<Fragment,std::string>;
     using ClassSet      = std::set<Class>;
     using ClassU64Pair  = std::pair<Class,uint64_t>;
+    
+    using ClassCxn      = Connection<Class,Class>;
+    using ClassU64Map   = std::map<Class,uint64_t>;
 
     // used for extension specifications
     struct ExtensionView {
@@ -53,6 +59,7 @@ namespace yq {
         std::string             ext;
         operator ExtensionView() const noexcept { return { ext }; }
     };
+
     
     inline ExtensionView extension(std::string_view x) { return { x }; }
 

@@ -11,6 +11,7 @@
 #include <basic/Vector.hpp>
 #include <kernel/atom/AtomCDB.hpp>
 #include <kernel/db/SQ.hpp>
+#include <kernel/notify/AtomNotifier.hpp>
 
 namespace yq {
     UAtom&  uget(Atom a)
@@ -73,7 +74,7 @@ namespace yq {
     }
     
 
-    void    update_attributes(Atom at, Document doc, const Attribute::Report& rep, cdb_options_t, const ClassSet& cset)
+    void    update_atom(Atom at, Document doc, const Attribute::Report& rep, cdb_options_t, const ClassSet& cset)
     {
 //yInfo() << "Update on " << cdb::key(at) << " ... with " << cset.size() << " class(es)";
         ClassSet    oldcls    = make_set(cdb::classes(at));
@@ -81,7 +82,33 @@ namespace yq {
         determine_hops(newhops, cset);
         update_aclasses(at, doc, newhops);
         ClassSet    newcls    = make_set(cdb::classes(at));
-        auto        clschgs   = add_remove(oldcls, newcls);
+        auto        clschgs   = changes(oldcls, newcls);
+        
+        static auto&    anotes  = AtomNotifier::change_map();
+        
+        for(Class c : clschgs.removed){
+            for(const AtomNotifier* an : anotes[Change::Removed]){
+                if(!an)
+                    continue;
+                an -> change(at, c, Change::Removed);
+            }
+        }
+        
+        for(Class c : clschgs.added){
+            for(const AtomNotifier* an : anotes[Change::Added]){
+                if(!an)
+                    continue;
+                an -> change(at, c, Change::Added);
+            }
+        }
+        
+        for(Class c : clschgs.same){
+            for(const AtomNotifier* an : anotes[Change::Modified]){
+                if(!an)
+                    continue;
+                an -> change(at, c, Change::Modified);
+            }
+        }
         
         
     }

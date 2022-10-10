@@ -25,7 +25,7 @@ namespace {
     void    field_s3_init(Document doc)
     {
         Field            x   = db_field(doc);
-        Field::SharedData data   = update(x, DONT_LOCK|U_INFO|U_ICON|U_TAGS);
+        Field::SharedData data   = update_this(x, DONT_LOCK|U_INFO|U_ICON|U_TAGS);
         if(!data){
             yWarning() << "Unable to initialize field '" << key(x) << "'";
             return ;
@@ -64,7 +64,7 @@ namespace {
         if(created)
             opts |= U_ICON;
             
-        Field::SharedData   data    = update(x, opts);
+        Field::SharedData   data    = update_this(x, opts);
         if(!data){
             yWarning() << "Unable to update field '" << key(x) << "'";
             return ;
