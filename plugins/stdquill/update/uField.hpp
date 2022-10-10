@@ -28,7 +28,7 @@ namespace yq {
     //! Note, not thread-safe, call from ONE thread only!
     UField&  uget(Field);
 
-    Field::SharedData       update_this(Field, cdb::cdb_options_t opts=0);
+    Field::SharedData       update_this(Field, cdb_options_t opts=0);
     void                    update_icon(Field);
 
 }

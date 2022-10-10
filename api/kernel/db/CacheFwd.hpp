@@ -63,6 +63,8 @@ namespace yq {
     
     inline ExtensionView extension(std::string_view x) { return { x }; }
 
+    using cdb_options_t         = unsigned int;
+
     namespace cdb {
     
         struct NKI;
@@ -114,7 +116,6 @@ namespace yq {
             
         };
         
-        using cdb_options_t         = unsigned int;
     
         /*! Base key of the argument
         

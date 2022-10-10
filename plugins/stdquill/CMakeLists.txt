@@ -5,7 +5,7 @@
 ################################################################################
 
 set(stdquill_SOURCES 
-    ./imaging.cpp
+    #./imaging.cpp
     #common.cpp
     ./variables.cpp
     ./page/page.cpp

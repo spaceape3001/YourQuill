@@ -44,7 +44,7 @@
 #include "uUser.ipp"
 
 #include "common.hpp"
-#include "imaging.hpp"
+//#include "imaging.hpp"
 
 #include <yq/atom.hpp>
 #include <yq/attribute.hpp>
@@ -132,17 +132,18 @@ namespace {
 #include "u_class.ipp"
 #include "u_css.ipp"
 #include "u_field.ipp"
-#include "u_image.ipp"
+//#include "u_image.ipp"
 #include "u_leaf.ipp"
 #include "u_tag.ipp"
 #include "u_user.ipp"
 
-
+#include <update/uImage.hpp>
 
 namespace {
 
         void reg_me()
         {
+            using namespace yq;
         
             //  -----------------------------------------------
             //  WARNING... the following can be order dependent
@@ -154,11 +155,11 @@ namespace {
             gSharedPageFile     = wksp::shared(kStdPage);
 
                 //  I wanna get this separate, but for now....
-            on_stage2<init_magicka>();
+            on_stage2<update::image_stage2>();
             
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_stage3<image_stage3>(by_cache(z));
+                on_stage3<update::image_stage3>(by_cache(z));
 
             
                 //  Organization & users
@@ -188,7 +189,7 @@ namespace {
             
                 // Images change first (for icon changes)
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_change<image_update>(by_cache(z));
+                on_change<update::image_notify>(by_cache(z));
 
                 // Rest are less order dependent... 
 
