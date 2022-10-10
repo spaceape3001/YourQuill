@@ -66,10 +66,6 @@ namespace yq {
         /*! \brief Gets the tag's document
         */
         Document                document(Tag);
-
-        /*! \brief Erases the tag
-        */
-        void                    erase(Tag);
         
         /*! \brief Checks for tags existance
         */

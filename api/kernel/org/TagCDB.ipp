@@ -129,18 +129,6 @@ namespace yq {
             return exists(t) ? Document{t.id} : Document{};
         }    
 
-        void                erase(Tag x)
-        {
-            static thread_local SQ  stmts[] = {
-                SQ( "DELETE FROM CTags WHERE tag=?" ),
-                SQ( "DELETE FROM FTags WHERE tag=?" ),
-                SQ( "DELETE FROM LTags WHERE tag=?" ),
-                SQ( "DELETE FROM Tags WHERE id=?" )
-            };
-            for(auto& sq : stmts)
-                sq.exec(x.id);
-        }
-
         bool                exists(Tag t)
         {
             return exists_tag(t.id);

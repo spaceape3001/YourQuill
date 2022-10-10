@@ -44,13 +44,13 @@ namespace yq {
             if(!x)
                 return ;
 
-            static thread_local cdb::SQ u1("UPDATE Categories SET icon=? WHERE id=?");
-            static thread_local cdb::SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-
             Document    doc     = cdb::document(x);
             Image       img     = cdb::best_image(doc);
             
             if(img != cdb::icon(x)){
+                static thread_local cdb::SQ u1("UPDATE Categories SET icon=? WHERE id=?");
+                static thread_local cdb::SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+                
                 u1.exec(img.id, x.id);
                 u2.exec(doc.id, x.id);
             }

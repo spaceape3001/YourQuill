@@ -30,34 +30,34 @@
 #include <kernel/notify/Stage4.hpp>
 #include <kernel/org/CategoryCDB.hpp>
 #include <kernel/org/TagCDB.hpp>
-#include <kernel/org/TagFile.hpp>
+
 #include <kernel/user/UserCDB.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 #include "uAtom.ipp"
-//#include "uCategory.ipp"
+
 #include "uClass.ipp"
 #include "uField.ipp"
 #include "uLeaf.ipp"
-#include "uTag.ipp"
+
 #include "uUser.ipp"
 
 #include "common.hpp"
 
 #include <yq/atom.hpp>
 #include <yq/attribute.hpp>
-#include <yq/category.hpp>
+
 #include <yq/class.hpp>
 #include <yq/directory.hpp>
 #include <yq/document.hpp>
 #include <yq/field.hpp>
 #include <yq/folder.hpp>
 #include <yq/fragment.hpp>
-#include <yq/image.hpp>
+
 #include <yq/leaf.hpp>
 #include <yq/property.hpp>
 #include <yq/root.hpp>
-#include <yq/tag.hpp>
+
 #include <yq/user.hpp>
 #include <yq/value.hpp>
 
@@ -132,11 +132,12 @@ namespace {
 #include "u_field.ipp"
 //#include "u_image.ipp"
 #include "u_leaf.ipp"
-#include "u_tag.ipp"
+//#include "u_tag.ipp"
 #include "u_user.ipp"
 
 #include <update/uCategory.hpp>
 #include <update/uImage.hpp>
+#include <update/uTag.hpp>
 
 namespace {
 
@@ -163,7 +164,7 @@ namespace {
             
                 //  Organization & users
             on_stage3<update::category_stage3>(by_cache(categories_folder(), "*.cat"));
-            on_stage3<tag_stage3>(by_cache(tags_folder(), "*.tag"));
+            on_stage3<update::tag_stage3>(by_cache(tags_folder(), "*.tag"));
             on_stage3<user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
@@ -177,7 +178,7 @@ namespace {
 
                 //  LEAFS & atoms
             on_stage3<leaf_stage3>(by_cache("*.y"));
-            on_stage3<tag_stage3_leaf>(by_cache(tags_folder(), "*.tag"));
+            on_stage3<update::tag_stage3_leaf>(by_cache(tags_folder(), "*.tag"));
 
         
                 //  STAGE 4 global related
@@ -203,16 +204,17 @@ namespace {
             on_change<class_update>(by_cache(classes_folder(), "*.class"));
             on_change<field_update>(by_cache(fields_folder(), "*.field"));
             on_change<leaf_update>(by_cache("*.y"));
-            on_change<tag_update>(by_cache(tags_folder(), "*.tag"));
+            on_change<update::tag_notify>(by_cache(tags_folder(), "*.tag"));
             on_change<user_update>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
-                on_change<update::category_notify_icons>(by_cache(categories_folder(), z));
                 on_change<class_icons>(by_cache(classes_folder(), z));
                 on_change<field_icons>(by_cache(fields_folder(), z));
                 on_change<leaf_icons>(by_cache(z));
                 on_change<user_icons>(by_cache(users_folder(), z));
-                on_change<tag_icons>(by_cache(classes_folder(), z));
+
+                on_change<update::category_notify_icons>(by_cache(categories_folder(), z));
+                on_change<update::tag_notify_icons>(by_cache(tags_folder(), z));
             }
         }
 
