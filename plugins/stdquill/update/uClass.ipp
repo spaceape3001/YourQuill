@@ -80,16 +80,16 @@ namespace yq {
         
         std::string     k   = key(x);
 
-        static thread_local SQ iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
-        static thread_local SQ iPrefix("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
-        static thread_local SQ iSuffix("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
-        static thread_local SQ iLookup("INSERT INTO CLookup (class, k, priority) VALUES (?,?,0)");
+        //static thread_local SQ iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
+        //static thread_local SQ iPrefix("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
+        //static thread_local SQ iSuffix("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
+        //static thread_local SQ iLookup("INSERT INTO CLookup (class, k, priority) VALUES (?,?,0)");
         static thread_local SQ iTag("INSERT INTO CTags (class, tag) VALUES (?,?)");
         
-        static thread_local SQ dAlias("DELETE FROM CAlias WHERE class=? AND alias=?");
-        static thread_local SQ dPrefix("DELETE FROM CPrefix WHERE class=? AND prefix=?");
-        static thread_local SQ dSuffix("DELETE FROM CSuffix WHERE class=? AND suffix=?");
-        static thread_local SQ dLookup("DELETE FROM CLookup WHERE class=? AND k=?");
+        //static thread_local SQ dAlias("DELETE FROM CAlias WHERE class=? AND alias=?");
+        //static thread_local SQ dPrefix("DELETE FROM CPrefix WHERE class=? AND prefix=?");
+        //static thread_local SQ dSuffix("DELETE FROM CSuffix WHERE class=? AND suffix=?");
+        //static thread_local SQ dLookup("DELETE FROM CLookup WHERE class=? AND k=?");
         static thread_local SQ dTag("DELETE FROM CTags WHERE class=? AND tag=?");
 
         static thread_local SQ uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
@@ -103,7 +103,8 @@ namespace yq {
             uInfo.bind(5, data->binding);
             uInfo.bind(6, x.id);
             uInfo.exec();
-            
+
+                #if 0
             string_set_t    old_aliases         = def_aliases(x);
             string_set_t    old_prefixes        = def_prefixes(x);
             string_set_t    old_suffixes        = def_suffixes(x);
@@ -144,6 +145,7 @@ namespace yq {
 
             iLookup.batch(x.id, ch_alternative.added);
             dLookup.batch(x.id, ch_alternative.removed);
+            #endif
         }
         
         if(opts & U_TAGS){

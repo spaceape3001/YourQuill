@@ -64,6 +64,11 @@ namespace yq {
         //! Alternative keys for class
         string_set_t                alternative_keys(Class);
         
+        std::vector<Class>          base_classes(Class, Sorted sorted=Sorted());
+        size_t                      base_classes_count(Class);
+        std::vector<Class::Rank>    base_classes_ranked(Class, Sorted sorted=Sorted());
+        std::vector<Class::Rank>    base_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
+
         //! Binding for class?
         std::string                 binding(Class);
         
@@ -111,48 +116,48 @@ namespace yq {
         std::vector<Class>           db_classes(const string_set_t&);
         
         //! Defined aliases for class
-        string_set_t                def_aliases(Class);
+        //string_set_t                def_aliases(Class);
         
         //! Defined derived classes for class
-        std::vector<Class>          def_derived(Class, Sorted sorted=Sorted());
+        //std::vector<Class>          def_derived(Class, Sorted sorted=Sorted());
         
         //! Defined fields for class
-        std::vector<Field>          def_fields(Class c, Sorted sorted=Sorted{});
+        //std::vector<Field>          def_fields(Class c, Sorted sorted=Sorted{});
         
         //! Defined reverses for class
-        std::vector<Class>          def_reverse(Class, Sorted sorted=Sorted());
+        //std::vector<Class>          def_reverse(Class, Sorted sorted=Sorted());
         
         //! Defined prefixes for class
-        string_set_t                def_prefixes(Class);
+        //string_set_t                def_prefixes(Class);
         
         //! Defined sources for class
-        std::vector<Class>          def_source(Class, Sorted sorted=Sorted());
+        //std::vector<Class>          def_source(Class, Sorted sorted=Sorted());
         
         //! Defined suffixes for class
-        string_set_t                def_suffixes(Class);
+        //string_set_t                def_suffixes(Class);
         
         //! Defined targets for class
-        std::vector<Class>          def_target(Class, Sorted sorted=Sorted());
+        //std::vector<Class>          def_target(Class, Sorted sorted=Sorted());
         
         //! Defined use (ie bases) for class
-        std::vector<Class>          def_use(Class, Sorted sorted=Sorted());
+        //std::vector<Class>          def_use(Class, Sorted sorted=Sorted());
         
         //Graph                   dep_graph(Class);
 
         //! all derives for this class
-        std::vector<Class>          dependents(Class, Sorted sorted=Sorted());
+        std::vector<Class>          derived_classes(Class, Sorted sorted=Sorted());
 
                 //  Rank here is number of hops
-        std::vector<Class::Rank>    dependents_ranked(Class, Sorted sorted=Sorted());
+        std::vector<Class::Rank>    derived_classes_ranked(Class, Sorted sorted=Sorted());
 
                 //  Rank here is number of hops
-        std::vector<Class::Rank>    dependents_ranked_limited(Class, uint64_t maxDepth, Sorted sorted=Sorted());
+        std::vector<Class::Rank>    derived_classes_ranked_limited(Class, uint64_t maxDepth, Sorted sorted=Sorted());
         
         //Document                document(Atom);
         Document                    document(Class);
         
-        std::vector<Class>          edges_in(Class, Sorted sorted=Sorted());
-        std::vector<Class>          edges_out(Class, Sorted sorted=Sorted());
+        std::vector<Class>          edge_classes_in(Class, Sorted sorted=Sorted());
+        std::vector<Class>          edge_classes_out(Class, Sorted sorted=Sorted());
       
       
         bool                        exists(Class);
@@ -173,7 +178,7 @@ namespace yq {
         bool                        is_all(Class, std::initializer_list<Class>);
         bool                        is_any(Class, std::initializer_list<Class>);
 
-        //bool                    is_edge(Class);
+        bool                        is_edge(Class);
         //bool                    is_tagged(Class, Tag);
 
         std::string                 key(Class);
@@ -218,10 +223,6 @@ namespace yq {
         size_t                      target_classes_count(Class);
 
 
-        std::vector<Class>          uses(Class, Sorted sorted=Sorted());
-        size_t                      uses_count(Class);
-        std::vector<Class::Rank>    uses_ranked(Class, Sorted sorted=Sorted());
-        std::vector<Class::Rank>    uses_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
 
         //!  \brief   Returns a writable document
         //!

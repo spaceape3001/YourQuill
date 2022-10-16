@@ -181,9 +181,9 @@ namespace yq {
 
             static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base, hops) VALUES (?,?,?)");
 
-            ClassCountMap   bases  = cdb::make_count_map(cdb::uses_ranked(x));
+            ClassCountMap   bases  = cdb::make_count_map(cdb::base_classes_ranked(x));
             for(auto & itr : bases){
-                for(auto& cr : cdb::uses_ranked(itr.first)){
+                for(auto& cr : cdb::base_classes_ranked(itr.first)){
                     if(bases.contains(cr.cls))        // already in our base list
                         continue;
                     uint64_t    cnt   = 1ULL + itr.second + cr.rank;
