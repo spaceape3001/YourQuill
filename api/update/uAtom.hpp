@@ -4,12 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uClass.ipp"
-#include "uField.ipp"
-#include "uLeaf.ipp"
+#pragma once
 
-#include "uCategory.ipp"
-#include "uImage.ipp"
-#include "uRoot.ipp"
-#include "uTag.ipp"
-#include "uUser.ipp"
+namespace yq {
+    namespace update {
+    }
+}

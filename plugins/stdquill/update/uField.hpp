@@ -29,6 +29,5 @@ namespace yq {
     UField&  uget(Field);
 
     Field::SharedData       update_this(Field, cdb_options_t opts=0);
-    void                    update_icon(Field);
 
 }

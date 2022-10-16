@@ -44,7 +44,7 @@ namespace yq {
             return Field::SharedData();
             
         if(opts & U_ICON)
-            update_icon(x);
+            update::field_icon(x);
 
         Field::SharedData data = merged(x, IS_UPDATE | opts);
         if(!data)
@@ -99,23 +99,6 @@ namespace yq {
         //  AND MORE TO GO.....
         
         return data;
-    }
-    
-    void                update_icon(Field x)
-    {
-        if(!x)
-            return ;
-            
-        Document    doc     = document(x);
-        Image       img     = best_image(doc);
-        
-        static thread_local SQ u1("UPDATE Fields SET icon=? WHERE id=?");
-        static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-
-        if(icon(doc) != img){
-            u1.exec(img.id, x.id);
-            u2.exec(doc.id, x.id);
-        }
     }
 }
 

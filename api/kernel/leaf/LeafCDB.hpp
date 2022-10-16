@@ -69,8 +69,6 @@ namespace yq {
         */
         Document                    document(Leaf);
         
-        //! \brief Removes this leaf from the database
-        void                        erase(Leaf);
         
         //! \brief Tests for existence of leaf
         bool                        exists(Leaf);

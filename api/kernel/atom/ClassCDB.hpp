@@ -150,9 +150,6 @@ namespace yq {
         std::vector<Class>          edges_out(Class, Sorted sorted=Sorted());
       
       
-        //! Removes the class from the cache
-        void                        erase(Class);
-      
         bool                        exists(Class);
 
         bool                        exists_class(uint64_t);

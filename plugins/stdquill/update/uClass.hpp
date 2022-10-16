@@ -23,18 +23,18 @@ namespace yq {
             const Document      doc;
         };
         
-        URefSet<Class>          base;
-        URefSet<Class>          derived;
-        URefSet<Class>          source;
-        URefSet<Class>          target;
-        URefSet<Class>          reverse;
-        URefSet<Field>          fields;
-        UDefResolved<Image>     icon;
-        Class::SharedData       data;
-        UDefResolved<Category>  category;
+        URefSet<Class>          base;       // In cache
+        URefSet<Class>          derived;    // In cache
+        URefSet<Class>          source;     // Don't need these
+        URefSet<Class>          target;     // Don't need these
+        URefSet<Class>          reverse;    // Don't need these
+        URefSet<Field>          fields;     // In cache
+        UDefResolved<Image>     icon;           //  in cache...
+        Class::SharedData       data;           //  nope, jettison
+        UDefResolved<Category>  category;       //  in cache
         
-        bool                    edge    = false;
-        bool                    deleted = false;
+        bool                    edge    = false;    // in cache
+        bool                    deleted = false;    // not an issue
         
         explicit UClass(Class a);
         
@@ -53,5 +53,4 @@ namespace yq {
     UClass&  uget(Class);
 
     Class::SharedData           update_this(Class, cdb_options_t opts=0);
-    void                        update_icon(Class);
 }

@@ -40,17 +40,12 @@ namespace {
             iClass.batch(x.id, ids_for(classes_set(data->classes, true)));
     }
     
-    void    field_icons(Fragment frag)
-    {
-        update_icon(field(document(frag), true));
-    }
-    
     void    field_update(Fragment frag, Change chg)
     {
         Document    doc = document(frag);
         if(chg == Change::Removed){
             if(fragments_count(doc) <= 1){
-                erase(field(doc));
+                update::field_erase(doc);
                 return ;
             }
         }

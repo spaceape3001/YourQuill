@@ -8,6 +8,8 @@
 
 #include "uClass.hpp"
 
+#include <update/uClass.hpp>
+
 namespace yq {
     UClass&  uget(Class a)
     {
@@ -70,7 +72,7 @@ namespace yq {
             return Class::SharedData{};
 
         if(opts & U_ICON)
-            update_icon(x);
+            update::class_icon(x);
         
         Class::SharedData data = merged(x, opts);
         if(!data)
@@ -155,23 +157,5 @@ namespace yq {
         
         return data;
     }
-    
-    
-    void                update_icon(Class x)
-    {
-        if(!x)
-            return ;
-            
-        static thread_local SQ u1("UPDATE Classes SET icon=? WHERE id=?");
-        static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-
-        Document    doc     = document(x);
-        Image       img     = best_image(doc);
-        if(img != icon(x)){
-            u1.exec(img.id, x.id);
-            u2.exec(doc.id, x.id);
-        }
-    }
-
 }
 

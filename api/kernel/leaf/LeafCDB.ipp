@@ -138,15 +138,6 @@ namespace yq {
             return exists(l) ?  Document{l.id} : Document{};
         }
         
-        void                erase(Leaf x)
-        {
-            static thread_local SQ  stmts[] = {
-                SQ( "DELETE FROM LTags WHERE leaf=?" ),
-                SQ( "DELETE FROM Leafs WHERE id=?" )
-            };
-            for(auto& sq : stmts)
-                sq.exec(x.id);
-        }
 
         bool                exists(Leaf l)
         {

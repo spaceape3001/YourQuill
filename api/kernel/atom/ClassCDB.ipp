@@ -512,23 +512,6 @@ namespace yq {
             return sorted ? edges_out_sorted(c) : edges_out_unsorted(c);
         }
 
-        void                erase(Class x)
-        {
-            static thread_local SQ stmts[] = {
-                SQ("DELETE FROM CAlias WHERE class=?"),
-                SQ("DELETE FROM CPrefix WHERE class=?"),
-                SQ("DELETE FROM CSuffix WHERE class=?"),
-                SQ("DELETE FROM CTags WHERE class=?"),
-                SQ("DELETE FROM CLookup WHERE class=? AND priority=1"),
-                SQ("DELETE FROM Classes WHERE id=?")
-            };
-            
-            if(!x)
-                return ;
-                
-            for(auto& sq : stmts)
-                sq.exec(x.id);
-        }
 
         bool                exists(Class c)
         {

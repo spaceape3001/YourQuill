@@ -7,10 +7,10 @@
 #pragma once
 
 namespace {
-    void    class_icons(Fragment frag)
-    {
-        update_icon(class_(document(frag), true));
-    }
+    //void    class_icons(Fragment frag)
+    //{
+        //update_icon(class_(document(frag), true));
+    //}
 
     //void    class_s3_create(Document doc)
     //{
@@ -31,7 +31,7 @@ namespace {
         Document    doc = document(frag);
         if(chg == Change::Removed){
             if(fragments_count(doc) <= 1){
-                erase(class_(doc));
+                update::class_erase(doc);
                 return ;
             }
         }

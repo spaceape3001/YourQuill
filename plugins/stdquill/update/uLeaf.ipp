@@ -7,6 +7,7 @@
 #pragma once
 
 #include "uLeaf.hpp"
+
 #include <basic/Vector.hpp>
 #include <kernel/db/SQ.hpp>
 
@@ -37,7 +38,7 @@ namespace yq {
             return Leaf::SharedData();
         
         if(opts & U_ICON)
-            update_icon(x);
+            update::leaf_icon(x);
         
         auto data  = merged(x, opts|IS_UPDATE);
         if(!data)
@@ -76,22 +77,6 @@ namespace yq {
         }
         
         return data;
-    }
-
-    void                update_icon(Leaf x)
-    {
-        if(!x)
-            return ;
-            
-        Document    doc     = document(x);
-        Image       img     = best_image(doc);
-        static thread_local SQ u1("UPDATE Leafs SET icon=? WHERE id=?");
-        static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
-
-        if(icon(x) != img){
-            u1.exec(img.id, x.id);
-            u2.exec(doc.id, x.id);
-        }
     }
 }
 

@@ -68,9 +68,6 @@ namespace yq {
         
         Document                document(Field);
 
-        //! Erases the field from the cache
-        void                    erase(Field);
-
         bool                    exists(Field);
         bool                    exists_field(uint64_t);
 

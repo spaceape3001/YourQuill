@@ -16,12 +16,6 @@
 */
 
 namespace {
-  void    leaf_icons(Fragment frag)
-    {
-        if(hidden(folder(frag)))
-            return;
-        update_icon(leaf(document(frag), true));
-    }
     
     void    leaf_change(Document doc, cdb_options_t opts)
     {
@@ -60,11 +54,11 @@ namespace {
         update_atom(xa, doc, rep, opts, clsset);
         
         if(created)
-            update_icon(x);
+            update::leaf_icon(x);
 
         if(opts & REMOVED){
             if(fragments_count(doc) <= 1)
-                erase(x);
+                update::leaf_erase(x);
         }
     }
 

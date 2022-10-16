@@ -177,21 +177,6 @@ namespace yq {
             return Document(f.id);
         }
         
-        void                erase(Field x)
-        {
-            static thread_local SQ stmts[] = {
-                SQ("DELETE FROM CFields WHERE field=?"),
-                SQ("DELETE FROM FTags WHERE field=?"),
-                SQ("DELETE FROM Fields WHERE id=?")
-            };
-
-            if(!x)
-                return ;
-            
-            for(auto& sq : stmts)
-                sq.exec(x.id);
-        }
-
         
         bool                exists(Field f)
         {

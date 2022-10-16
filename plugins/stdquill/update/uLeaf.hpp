@@ -35,7 +35,4 @@ namespace yq {
     */
     Leaf::SharedData            update_this(Leaf, cdb_options_t opts=0);
     
-    //! Updates the leaf icon
-    void                        update_icon(Leaf);
-
 }

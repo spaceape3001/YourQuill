@@ -68,10 +68,10 @@ namespace yq {
         Category                db_category(Document, bool* was_created=nullptr);
         /*! \brief Gets/Creates category by fragment
         */
-        Category                db_category(Fragment f, bool* wasCreated);
+        Category                db_category(Fragment f, bool* wasCreated=nullptr);
         /*! \brief Gets/Creates category by key
         */
-        Category                db_category(std::string_view k, bool* wasCreated);
+        Category                db_category(std::string_view k, bool* wasCreated=nullptr);
         
         /*! \brief Document that defines category
         */
