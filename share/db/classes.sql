@@ -25,7 +25,7 @@ CREATE TABLE CDepends (
     class       INTEGER NOT NULL,
     base        INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
-    hops        INTEGER NOT NULL DEFAULT 0,
+    hops        INTEGER NOT NULL,
     UNIQUE(class,base) ON CONFLICT IGNORE
 );
 

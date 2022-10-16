@@ -7,6 +7,7 @@
 #pragma once
 
 #include <http/Html.hpp>
+#include <kernel/atom/Class.hpp>
 
 namespace yq {
     struct Class;
@@ -22,6 +23,7 @@ namespace yq {
         void        admin_table(WebHtml&, const std::vector<Class>&);
         void        new_class_control(WebHtml&, std::string_view npath);
         void        dev_table(WebHtml&, const std::vector<Class>&);
+        void        dev_table(WebHtml&, const std::vector<Class::Rank>&, std::string_view rankName);
     }
 }
 

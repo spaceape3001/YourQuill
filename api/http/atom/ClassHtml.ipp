@@ -136,6 +136,17 @@ namespace yq {
             }
         }
 
+        void        dev_table(WebHtml& h, const std::vector<Class::Rank>&data, std::string_view rankName)
+        {
+            auto ta = h.table();
+            h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>" << rankName << "</th></tr>\n";
+            for(const Class::Rank& cr : data){
+                auto i = cdb::info(cr.cls);
+                h << "<tr><td>" << dev_id(cr.cls) << "</td><td>" << i.key << "</td><td>" << i.name 
+                    << "</td><td>" << cr.rank << "</td></tr>\n";
+            }
+        }
+
         void        new_class_control(WebHtml&h, std::string_view npath)
         {
             Url url;

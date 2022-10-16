@@ -32,25 +32,24 @@ namespace yq {
             {
                 return make_filename(k, Class::szExtension);
             }
+            
+            inline std::vector<Class::Rank>     exec_class_rank_vector(SQ& s)
+            {
+                std::vector<Class::Rank>    ret;
+                while(s.step() == SqlQuery::Row)
+                    ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
+                s.reset();
+                return ret;
+            }
         }
 
-        namespace {
-            std::vector<Class>    all_classes_sorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Classes ORDER BY K");
-                return s.vec<Class>();
-            }
-            
-            std::vector<Class>    all_classes_unsorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Classes");
-                return s.vec<Class>();
-            }
-        }
 
         std::vector<Class>  all_classes(Sorted sorted)
         {
-            return sorted ? all_classes_sorted() : all_classes_unsorted();
+            static thread_local SQ    qs("SELECT id FROM Classes ORDER BY K");
+            static thread_local SQ    qu("SELECT id FROM Classes");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>();
         }
 
         size_t  all_classes_count()
@@ -159,25 +158,6 @@ namespace yq {
             }
             return ret;
         }
-        
-        namespace {
-            std::vector<Class>          classes_unsorted(Tag x)
-            {
-                static thread_local SQ s("SELECT class FROM CTags WHERE tag=?");
-                return s.vec<Class>(x.id);
-            }
-
-            std::vector<Class>          classes_sorted(Tag x)
-            {
-                static thread_local SQ s("SELECT class FROM CTags INNER JOIN Classes ON CTags.class=Classes.id WHERE tag=? ORDER BY Classes.k");
-                return s.vec<Class>(x.id);
-            }
-        }
-        
-        std::vector<Class>          classes(Tag x, Sorted sorted)
-        {
-            return sorted ? classes_sorted(x) : classes_unsorted(x);
-        }
 
         std::set<Class>     classes_set(const string_set_t&sset, bool noisy)
         {
@@ -217,6 +197,13 @@ namespace yq {
             return ret;
         }
         
+        std::vector<Class>          classes_with_tag(Tag x, Sorted sorted)
+        {
+            static thread_local SQ qs("SELECT class FROM CTags INNER JOIN Classes ON CTags.class=Classes.id WHERE tag=? ORDER BY Classes.k");
+            static thread_local SQ qu("SELECT class FROM CTags WHERE tag=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(x.id);
+        }
 
         Class               db_class(std::string_view k, bool *wasCreated)
         {
@@ -366,44 +353,21 @@ namespace yq {
             static thread_local SQ  s("SELECT suffix FROM CSuffix WHERE class=?");
             return s.sset(c.id);
         }
-
-        namespace {
-            std::vector<Class>        def_target_sorted(Class c)
-            {
-                static thread_local SQ s("SELECT target FROM CTargets INNER JOIN Classes ON CTargetDef.target=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
-                return s.vec<Class>(c.id);
-            }
-
-            std::vector<Class>        def_target_unsorted(Class c)
-            {
-                static thread_local SQ s("SELECT target FROM CTargets WHERE class=? AND hops=0");
-                return s.vec<Class>(c.id);
-            }
-        }
-        
         
         std::vector<Class>           def_target(Class c, Sorted sorted)
         {
-            return sorted ? def_target_sorted(c) : def_target_unsorted(c);
-        }
-
-        namespace {
-            std::vector<Class>        def_use_sorted(Class c)
-            {
-                static thread_local SQ s("SELECT base FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
-                return s.vec<Class>(c.id);
-            }
-
-            std::vector<Class>        def_use_unsorted(Class c)
-            {
-                static thread_local SQ s("SELECT base FROM CDepends WHERE class=? AND hops=0");
-                return s.vec<Class>(c.id);
-            }
+            static thread_local SQ qs("SELECT target FROM CTargets INNER JOIN Classes ON CTargetDef.target=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
+            static thread_local SQ qu("SELECT target FROM CTargets WHERE class=? AND hops=0");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(c.id);
         }
 
         std::vector<Class>           def_use(Class c, Sorted sorted)
         {
-            return sorted ? def_use_sorted(c) : def_use_unsorted(c);
+            static thread_local SQ qs("SELECT base FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
+            static thread_local SQ qu("SELECT base FROM CDepends WHERE class=? AND hops=0");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(c.id);
         }
 
         // disabled until graphs are working
@@ -413,47 +377,32 @@ namespace yq {
             //return s.as<Graph>(c.id);
         //}
         
-        namespace {
-            std::vector<Class>        dependents_sorted(Class c)
-            {
-                static thread_local SQ    s("SELECT class FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY Classes.k");
-                return s.vec<Class>(c.id);
-            }
-            
-            std::vector<Class>        dependents_unsorted(Class c)
-            {
-                static thread_local SQ    s("SELECT class FROM CDepends WHERE base=?");
-                return s.vec<Class>(c.id);
-            }
-        }
-        
-
         std::vector<Class>       dependents(Class c, Sorted sorted)
         {
-            return sorted ? dependents_sorted(c) : dependents_unsorted(c);
+            static thread_local SQ    qs("SELECT class FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY Classes.k");
+            static thread_local SQ    qu("SELECT class FROM CDepends WHERE base=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(c.id);
         }
         
-        std::vector<Class::Rank>    dependents_ranked(Class c)
+        std::vector<Class::Rank>    dependents_ranked(Class c, Sorted sorted)
         {
-            static thread_local SQ  s("SELECT class, hops FROM CDepends WHERE base=?");
-            auto s_af = s.af();
+            static thread_local SQ  qs("SELECT class, hops FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY hops, Classes.k");
+            static thread_local SQ  qu("SELECT class, hops FROM CDepends WHERE base=?");
+            SQ& s = sorted ? qs : qu;
             s.bind(1, c.id);
-            std::vector<Class::Rank>    ret;
-            while(s.step() == SqlQuery::Row)
-                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
-            return ret;
+            return exec_class_rank_vector(s);
         }
-
-        std::vector<Class::Rank>    dependents_ranked(Class c, int64_t depth)
+        
+        std::vector<Class::Rank>    dependent_limited_ranked(Class c, uint64_t maxDepth, Sorted sorted)
         {
-            static thread_local SQ  s("SELECT class, hops FROM CDepends WHERE base=? AND hops<=depth");
-            auto s_af = s.af();
+            static thread_local SQ qs("SELECT class, hops FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? AND hops<=? ORDER BY hops, Classes.k");
+            static thread_local SQ qu("SELECT class, hops FROM CDepends WHERE base=? AND hops<=?");
+            
+            SQ& s = sorted ? qs : qu;
             s.bind(1, c.id);
-            s.bind(2, depth);
-            std::vector<Class::Rank>    ret;
-            while(s.step() == SqlQuery::Row)
-                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
-            return ret;
+            s.bind(2, maxDepth);
+            return exec_class_rank_vector(s);
         }
 
         Folder              detail_folder(Class c)
@@ -565,23 +514,12 @@ namespace yq {
             return s.as<Image>(c.id);
         }
         
-        namespace {
-            std::vector<Class>        inbound_sorted(Class c)
-            {
-                static thread_local SQ s("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.cleass=Classes.id WHERE target=? ORDER BY Classes.K");
-                return s.vec<Class>(c.id);
-            }
-            
-            std::vector<Class>        inbound_unsorted(Class c)
-            {
-                static thread_local SQ s("SELECT class FROM CTargets WHERE target=?");
-                return s.vec<Class>(c.id);
-            }
-        }
-        
-        std::vector<Class>           inbound(Class c, Sorted sorted)
+        std::vector<Class>           inbound_classes(Class c, Sorted sorted)
         {
-            return sorted ? inbound_sorted(c) : inbound_unsorted(c);
+            static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.cleass=Classes.id WHERE target=? ORDER BY Classes.K");
+            static thread_local SQ qu("SELECT class FROM CTargets WHERE target=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(c.id);
         }
         
         Class::Info         info(Class c, bool autoKey)
@@ -691,6 +629,13 @@ namespace yq {
             return c;
         }
         
+        std::map<Class,HCountU64>   make_count_map(const std::vector<Class::Rank>& data)
+        {
+            std::map<Class,HCountU64>   ret;
+            for(const  Class::Rank& cr : data)
+                ret[cr.cls]     = HCountU64{(uint64_t) cr.rank};
+            return ret;
+        }
 
         Class::SharedData            merged(Class c, cdb_options_t opts)
         {
@@ -730,23 +675,12 @@ namespace yq {
         }
         
         
-        namespace {
-            std::vector<Class>    outbound_sorted(Class c)
-            {
-                static thread_local SQ s("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
-                return s.vec<Class>(c.id);
-            }
-
-            std::vector<Class>    outbound_unsorted(Class c)
-            {
-                static thread_local SQ s("SELECT class FROM CSources WHERE source=?");
-                return s.vec<Class>(c.id);
-            }
-        }
-
-        std::vector<Class>           outbound(Class c, Sorted sorted)
+        std::vector<Class>           outbound_classes(Class c, Sorted sorted)
         {
-            return sorted ? outbound_sorted(c) : outbound_unsorted(c);
+            static thread_local SQ qs("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
+            static thread_local SQ qu("SELECT class FROM CSources WHERE source=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(c.id);
         }
 
         
@@ -784,43 +718,21 @@ namespace yq {
             return ret;
         }
         
-        namespace {
-            std::vector<Class>    reverses_sorted(Class c)
-            {
-                static thread_local SQ    s("SELECT reverse FROM CReverses INNER JOIN Classes ON CReverses.reverse=Classes.id WHERE class=? ORDER BY Classes.K");
-                return s.vec<Class>(c.id);
-            }
-
-            std::vector<Class>    reverses_unsorted(Class c)
-            {
-                static thread_local SQ    s("SELECT reverse FROM CReverses WHERE class=?");
-                return s.vec<Class>(c.id);
-            }
-        }
-        
-        
         std::vector<Class>       reverses(Class c, Sorted sorted)
         {
-            return sorted ? reverses_sorted(c) : reverses_unsorted(c);
+            static thread_local SQ    qs("SELECT reverse FROM CReverses INNER JOIN Classes ON CReverses.reverse=Classes.id WHERE class=? ORDER BY Classes.K");
+            static thread_local SQ    qu("SELECT reverse FROM CReverses WHERE class=?");
+            SQ& s   = sorted ? qs : qu;
+            return s.vec<Class>(c.id);
         }
         
-        namespace {
-            std::vector<Class>    sources_sorted(Class c)
-            {
-                static thread_local SQ    s("SELECT source FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY Classes.K");
-                return s.vec<Class>(c.id);
-            }
-
-            std::vector<Class>    sources_unsorted(Class c)
-            {
-                static thread_local SQ    s("SELECT source FROM CSources WHERE class=?");
-                return s.vec<Class>(c.id);
-            }
-        }
-
         std::vector<Class>  sources(Class c, Sorted sorted)
         {
-            return sorted ? sources_sorted(c) : sources_unsorted(c);
+            static thread_local SQ    qs("SELECT source FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY Classes.K");
+            static thread_local SQ    qu("SELECT source FROM CSources WHERE class=?");
+
+            SQ& s   = sorted ? qs : qu;
+            return s.vec<Class>(c.id);
         }
 
         size_t  sources_count(Class c)
@@ -828,7 +740,25 @@ namespace yq {
             static thread_local SQ    s("SELECT COUNT(1) FROM CSources WHERE class=?");
             return s.size(c.id);
         }
+        
+        std::vector<Class::Rank>    source_classes_ranked(Class c, Sorted sorted)
+        {
+            static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN Classes ON CSources.source=Classes.id CSources.source=Classes.id WHERE class=? ORDER BY hops, Classes.k");
+            static thread_local SQ  qu("SELECT source, hops FROM CSources WHERE class=?");
+            SQ&     s   = sorted ? qs : qu;
+            s.bind(1, c.id);
+            return exec_class_rank_vector(s);
+        }
 
+        std::vector<Class::Rank>    source_classes_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
+        {
+            static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN Classes ON CSources.source=Classes.id CSources.source=Classes.id  WHERE class=? AND hops<=? ORDER BY hops, Classes.k");
+            static thread_local SQ  qu("SELECT source, hops FROM CSources WHERE class=? AND hops<=?");
+            SQ&     s   = sorted ? qs : qu;
+            s.bind(1, c.id);
+            s.bind(2, maxDepth);
+            return exec_class_rank_vector(s);
+        }
 
         std::set<Tag>               tag_set(Class c)
         {
@@ -921,30 +851,25 @@ namespace yq {
             static thread_local SQ s("SELECT COUNT(1) FROM CDepends WHERE class=?");
             return s.size(c.id);
         }
-
-        std::vector<Class::Rank>    uses_ranked(Class c)
-        {
-            static thread_local SQ  s("SELECT base, hops FROM CDepends WHERE class=?");
-            auto s_af = s.af();
-            s.bind(1, c.id);
-            std::vector<Class::Rank>    ret;
-            while(s.step() == SqlQuery::Row)
-                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
-            return ret;
-        }
-
-        std::vector<Class::Rank>    uses_ranked(Class c, int64_t depth)
-        {
-            static thread_local SQ  s("SELECT base, hops FROM CDepends WHERE class=? AND hops<=depth");
-            auto s_af = s.af();
-            s.bind(1, c.id);
-            s.bind(2, depth);
-            std::vector<Class::Rank>    ret;
-            while(s.step() == SqlQuery::Row)
-                ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
-            return ret;
-        }
         
+        std::vector<Class::Rank>    uses_ranked(Class c, Sorted sorted)
+        {
+            static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? ORDER BY hops,Classes.k");
+            static thread_local SQ  qu("SELECT base,hops FROM CDepends WHERE class=?");
+            SQ& s = sorted ? qs : qu;
+            s.bind(1, c.id);
+            return exec_class_rank_vector(s);
+        }
+
+        std::vector<Class::Rank>    uses_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
+        {
+            static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? AND hops<=? ORDER BY hops,Classes.k");
+            static thread_local SQ  qu("SELECT base,hops FROM CDepends WHERE class=? AND hops<=?");
+            SQ& s   = sorted ? qs : qu;
+            s.bind(1, c.id);
+            s.bind(2, maxDepth);
+            return exec_class_rank_vector(s);
+        }
 
         Class::SharedFile        writable(Class c, const Root* rt, cdb_options_t opts)
         {

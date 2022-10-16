@@ -15,6 +15,7 @@
 #include <kernel/file/FragmentCDB.hpp>
 #include <kernel/image/ImageCDB.hpp>
 #include <kernel/org/CategoryCDB.hpp>
+#include <kernel/org/TagCDB.hpp>
 
 namespace yq {
     namespace update {
@@ -98,6 +99,104 @@ namespace yq {
             iInfo.bind(7, dp->binding); // Maybe....?
             iInfo.exec();
             
+            static thread_local cdb::SQ iTag("INSERT INTO CTags (class, tag) VALUES (?, ?)");
+            for(std::string_view tk : dp->tags){
+                Tag     t   = cdb::db_tag(tk);
+                if(!t){
+                    yWarning() << "Uncreatable tag " << tk << " referenced in class " << k;
+                    continue;
+                }
+                iTag.bind(1, doc.id);
+                iTag.bind(2, t.id);
+                iTag.exec();
+            }
         }
+
+        void    class_stage3_pass2_bind(Document doc)
+        {
+            Class   x       = cdb::db_class(doc);
+            auto dp         = cdb::merged(x, cdb::DONT_LOCK);
+            if(!dp)
+                return ;
+            
+            static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base, hops) VALUES (?,?,0)");
+            for(std::string_view ck : dp->use){
+                Class   y   = cdb::db_class(ck);
+                if(!y){
+                    yWarning() << "Uncreatable USE " << ck << " referenced in class " << cdb::key(x);
+                    continue;
+                }
+                
+                iUse.bind(1, x.id);
+                iUse.bind(2, y.id);
+                iUse.exec();
+            }
+            
+            static thread_local cdb::SQ iTarget("INSERT INTO CTargets (class, target, hops) VALUES (?,?,0)");
+            for(std::string_view ck : dp->targets){
+                Class   y = cdb::db_class(ck);
+                if(!y){
+                    yWarning() << "Uncreatable TARGET " << ck << " referenced in class " << cdb::key(x);
+                    continue;
+                }
+
+                iTarget.bind(1, x.id);
+                iTarget.bind(2, y.id);
+                iTarget.exec();
+            }
+            
+            static thread_local cdb::SQ iSource("INSERT INTO CSources (class, source, hops) VALUES (?,?,0)");
+            for(std::string_view ck : dp->sources){
+                Class   y = cdb::db_class(ck);
+                if(!y){
+                    yWarning() << "Uncreatable SOURCE " << ck << " referenced in class " << cdb::key(x);
+                    continue;
+                }
+
+                iSource.bind(1, x.id);
+                iSource.bind(2, y.id);
+                iSource.exec();
+            }
+
+            static thread_local cdb::SQ iReverse("INSERT INTO CReverses (class, reverse, hops) VALUES (?,?,0)");
+            for(std::string_view ck : dp->reverse){
+                Class   y = cdb::db_class(ck);
+                if(!y){
+                    yWarning() << "Uncreatable REVERSE " << ck << " referenced in class " << cdb::key(x);
+                    continue;
+                }
+
+                iReverse.bind(1, x.id);
+                iReverse.bind(2, y.id);
+                iReverse.exec();
+            }
+        }
+        
+        void    class_stage3_pass3_extend(Document doc)
+        {
+            Class x = cdb::db_class(doc);
+            if(!x)
+                return;
+
+
+            static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base, hops) VALUES (?,?,?)");
+
+            ClassCountMap   bases  = cdb::make_count_map(cdb::uses_ranked(x));
+            for(auto & itr : bases){
+                for(auto& cr : cdb::uses_ranked(itr.first)){
+                    if(bases.contains(cr.cls))        // already in our base list
+                        continue;
+                    uint64_t    cnt   = 1ULL + itr.second + cr.rank;
+                    bases[cr.cls]     = HCountU64{ cnt };  // insert so we don't override
+                    iUse.bind(1, x.id);
+                    iUse.bind(2, cr.cls.id);
+                    iUse.bind(3, cnt);
+                    iUse.exec();
+                    iUse.reset();
+                }
+            }
+        }
+        
     }
 }
+

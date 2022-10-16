@@ -41,7 +41,7 @@ namespace {
             throw HttpStatus::BadArgument;
         
         dev_title(h, x, "Classes");
-        dev_table(h, classes(x));
+        dev_table(h, classes_with_tag(x));
     }
 
     void    page_dev_tags(WebHtml& out)

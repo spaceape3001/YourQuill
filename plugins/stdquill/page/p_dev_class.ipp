@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include <kernel/db/SQ.hpp>
 
 namespace {
 
@@ -28,6 +29,36 @@ namespace {
         h.kvrow("Binding") << i.binding;
     }
     
+    void    page_dev_class_base(WebHtml&h)
+    {
+        Class   x   = class_(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+        
+        h.title() << "Class (" << label(x) << "): Use/Base";
+        dev_table(h, cdb::uses_ranked(x, Sorted::YES), "Hops");
+    }
+    
+    void    page_dev_class_derived(WebHtml&h)
+    {
+        Class   x   = class_(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+
+        h.title() << "Class (" << label(x) << "): Use/Base";
+        dev_table(h, cdb::dependents_ranked(x, Sorted::YES), "Hops");
+    }
+
+    void    page_dev_class_sources(WebHtml&h)
+    {
+        Class   x   = class_(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+
+        h.title() << "Class (" << label(x) << "): Sources";
+        dev_table(h, cdb::source_classes_ranked(x, Sorted::YES), "Hops");
+    }
+
     void    page_dev_class_tags(WebHtml& h)
     {
         Class   c   = class_(h);
@@ -70,6 +101,9 @@ namespace {
     {
         reg_webgroup({
             reg_webpage<page_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),
+            reg_webpage<page_dev_class_base>("/dev/class/base").argument("id", "Class ID").label("Base"),
+            reg_webpage<page_dev_class_derived>("/dev/class/derived").argument("id", "Class ID").label("Derived"),
+            reg_webpage<page_dev_class_sources>("/dev/class/sources").argument("id", "Class ID").label("Sources"),
             reg_webpage<page_dev_class_tags>("/dev/class/tags").argument("id", "Class ID").label("Tags"),
             reg_webpage<page_dev_class_def_fields>("/dev/class/def_fields").argument("id", "Class ID").label("Def Fields"),
             reg_webpage<page_dev_class_atoms>("/dev/class/atoms").argument("id", "Class ID").label("Atoms")

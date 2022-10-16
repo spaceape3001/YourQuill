@@ -12,6 +12,7 @@
 #include <kernel/file/Document.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/org/Category.hpp>
+#include <math/Counter.hpp>
 
 //#include "Graph.hpp"
 
@@ -42,6 +43,8 @@ namespace yq {
         int64_t     rank    = 0;
         constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
     };
+    
+    using ClassCountMap = std::map<Class,HCountU64>;
 
     namespace cdb {
         using ClassFragDoc      = std::pair<Fragment, Class::SharedFile>;
@@ -85,8 +88,6 @@ namespace yq {
         //! Gets all classes matching the set of keys
         std::vector<Class>          classes(const string_set_t&, bool noisy=false);
         
-        //! Gets all classes that are tagged
-        std::vector<Class>          classes(Tag, Sorted sorted=Sorted{});
         
         //! Gets all classes matching the set of keys as a set
         std::set<Class>             classes_set(const string_set_t&, bool noisy=false);
@@ -94,6 +95,9 @@ namespace yq {
         //! Gets all classes matching the set of keys as a set
         std::set<Class>             classes_set(const string_view_set_t&, bool noisy=false);
         
+        //! Gets all classes that are tagged
+        std::vector<Class>          classes_with_tag(Tag, Sorted sorted=Sorted{});
+
         //! Creates the specified class from document
         Class                       db_class(Document, bool *wasCreated=nullptr);
         
@@ -139,12 +143,13 @@ namespace yq {
         std::vector<Class>          dependents(Class, Sorted sorted=Sorted());
 
                 //  Rank here is number of hops
-        std::vector<Class::Rank>    dependents_ranked(Class);
-        std::vector<Class::Rank>    dependents_ranked(Class, int64_t maxDepth);
+        std::vector<Class::Rank>    dependents_ranked(Class, Sorted sorted=Sorted());
+
+                //  Rank here is number of hops
+        std::vector<Class::Rank>    dependents_ranked_limited(Class, uint64_t maxDepth, Sorted sorted=Sorted());
         
         //Document                document(Atom);
         Document                    document(Class);
-
         
         std::vector<Class>          edges_in(Class, Sorted sorted=Sorted());
         std::vector<Class>          edges_out(Class, Sorted sorted=Sorted());
@@ -160,7 +165,7 @@ namespace yq {
         Image                       icon(Class);
         
         //std::vector<Atom>            inbound(Atom);
-        std::vector<Class>          inbound(Class, Sorted sorted=Sorted());
+        std::vector<Class>          inbound_classes(Class, Sorted sorted=Sorted());
 
         Class::Info                 info(Class, bool autoKeyToName=false);
 
@@ -176,13 +181,15 @@ namespace yq {
 
         Class::SharedData           merged(Class, cdb_options_t opts=0);
         Class                       make_class(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
+        
+        ClassCountMap               make_count_map(const std::vector<Class::Rank>&);
 
         std::string                 name(Class);
         
         NKI                         nki(Class, bool autoKeyToName=false);
         
         //std::vector<Atom>            outbound(Atom);
-        std::vector<Class>          outbound(Class, Sorted sorted=Sorted());
+        std::vector<Class>          outbound_classes(Class, Sorted sorted=Sorted());
         
         std::string                 plural(Class);
         
@@ -197,23 +204,24 @@ namespace yq {
 
         std::vector<Class>          reverses(Class, Sorted sorted=Sorted());
         
-        std::vector<Class>          sources(Class, Sorted sorted=Sorted());
-        size_t                      sources_count(Class);
+        std::vector<Class>          source_classes(Class, Sorted sorted=Sorted());
+        size_t                      source_classes_count(Class);
+        std::vector<Class::Rank>    source_classes_ranked(Class, Sorted sorted=Sorted());
+        std::vector<Class::Rank>    source_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
         
         
         std::set<Tag>               tag_set(Class);
         std::vector<Tag>            tags(Class, Sorted sorted=Sorted());
         size_t                      tags_count(Class);
 
-        std::vector<Class>          targets(Class, Sorted sorted=Sorted());
-        size_t                      targets_count(Class);
+        std::vector<Class>          target_classes(Class, Sorted sorted=Sorted());
+        size_t                      target_classes_count(Class);
 
 
         std::vector<Class>          uses(Class, Sorted sorted=Sorted());
         size_t                      uses_count(Class);
-        std::vector<Class::Rank>    uses_ranked(Class);
-        std::vector<Class::Rank>    uses_ranked(Class, int64_t depth);
-
+        std::vector<Class::Rank>    uses_ranked(Class, Sorted sorted=Sorted());
+        std::vector<Class::Rank>    uses_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
 
         //!  \brief   Returns a writable document
         //!
