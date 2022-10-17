@@ -29,23 +29,14 @@ namespace yq {
             {
                 return make_filename(k, Tag::szExtension);
             }
-            
-            std::vector<Tag>     all_tags_sorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Tags ORDER BY k");
-                return s.vec<Tag>();
-            }
-            
-            std::vector<Tag>     all_tags_unsorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Tags");
-                return s.vec<Tag>();
-            }
         }
 
         std::vector<Tag>         all_tags(Sorted sorted)
         {
-            return sorted ? all_tags_sorted() : all_tags_unsorted();
+            static thread_local SQ    qs("SELECT id FROM Tags ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Tags");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Tag>();
         }
         
         size_t                      all_tags_count()

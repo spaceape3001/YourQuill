@@ -41,24 +41,12 @@ namespace yq {
             return s.sset(f.id);
         }
         
-
-        namespace {
-            std::vector<Field>    all_fields_sorted()
-            {
-                static thread_local SQ s("SELECT id FROM Fields ORDER BY k");
-                return s.vec<Field>();
-            }
-            
-            std::vector<Field>    all_fields_unsorted()
-            {
-                static thread_local SQ s("SELECT id FROM Fields");
-                return s.vec<Field>();
-            }
-        }
-        
         std::vector<Field>           all_fields(Sorted sorted)
         {
-            return sorted ? all_fields_sorted() : all_fields_unsorted();
+            static thread_local SQ qs("SELECT id FROM Fields ORDER BY k");
+            static thread_local SQ qu("SELECT id FROM Fields");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Field>();
         }
         
         size_t              all_fields_count()
@@ -87,23 +75,12 @@ namespace yq {
         }
 
         
-        namespace {
-            std::vector<Class>       classes_sorted(Field f)
-            {
-                static thread_local SQ s("SELECT class FROM CFields INNER JOIN Classes ON CFields.class=Classes.id WHERE field=? ORDER BY Classes.k");
-                return s.vec<Class>(f.id);
-            }
-
-            std::vector<Class>       classes_unsorted(Field f)
-            {
-                static thread_local SQ s("SELECT class FROM CFields WHERE field=?");
-                return s.vec<Class>(f.id);
-            }
-        }
-        
         std::vector<Class>       classes(Field f, Sorted sorted)
         {
-            return sorted ? classes_sorted(f) : classes_unsorted(f);
+            static thread_local SQ qs("SELECT class FROM CFields INNER JOIN Classes ON CFields.class=Classes.id WHERE field=? ORDER BY Classes.k");
+            static thread_local SQ qu("SELECT class FROM CFields WHERE field=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(f.id);
         }
 
         std::set<uint64_t>        data_types(Field f)
@@ -423,23 +400,12 @@ namespace yq {
             return ret;
         }
 
-        namespace {
-            std::vector<Tag>  tags_sorted(Field f)
-            {
-                static thread_local SQ s("SELECT tag FROM FTags INNER JOIN Tags ON FTags.tag=Tags.id WHERE field=? ORDER BY Tags.K");
-                return s.vec<Tag>(f.id);
-            }
-            
-            std::vector<Tag>  tags_unsorted(Field f)
-            {
-                static thread_local SQ s("SELECT tag FROM FTags WHERE field=?");
-                return s.vec<Tag>(f.id);
-            }
-        }
-        
         std::vector<Tag>  tags(Field f, Sorted sorted)
         {
-            return sorted ? tags_sorted(f) : tags_unsorted(f);
+            static thread_local SQ qs("SELECT tag FROM FTags INNER JOIN Tags ON FTags.tag=Tags.id WHERE field=? ORDER BY Tags.K");
+            static thread_local SQ qu("SELECT tag FROM FTags WHERE field=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Tag>(f.id);
         }
 
         
@@ -451,8 +417,8 @@ namespace yq {
 
         std::set<Tag>            tags_set(Field f)
         {
-                static thread_local SQ s("SELECT tag FROM FTags WHERE field=?");
-                return s.set<Tag>(f.id);
+            static thread_local SQ s("SELECT tag FROM FTags WHERE field=?");
+            return s.set<Tag>(f.id);
         }
 
         Field::SharedFile        writable(Field f, const Root* rt, cdb_options_t opts)

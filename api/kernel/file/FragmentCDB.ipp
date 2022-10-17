@@ -19,23 +19,12 @@
 
 namespace yq {
     namespace cdb {
-        namespace {
-            std::vector<Fragment>    all_fragments_sorted()
-            {
-                static thread_local SQ s("SELECT id FROM Fragments ORDER BY path");
-                return s.vec<Fragment>();
-            }
-            
-            std::vector<Fragment>    all_fragments_unsorted()
-            {
-                static thread_local SQ s("SELECT id FROM Fragments");
-                return s.vec<Fragment>();
-            }
-        }
-        
         std::vector<Fragment>    all_fragments(Sorted sorted)
         {
-            return sorted ? all_fragments_sorted() : all_fragments_unsorted();
+            static thread_local SQ qs("SELECT id FROM Fragments ORDER BY path");
+            static thread_local SQ qu("SELECT id FROM Fragments");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Fragment>();
         }
         
         size_t              all_fragments_count()
@@ -44,23 +33,12 @@ namespace yq {
             return s.size();
         }
         
-        namespace {
-            std::vector<Fragment>    all_fragments_suffix_sorted(std::string_view sfx)
-            {
-                static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
-                return s.vec<Fragment>(sfx);
-            }
-            
-            std::vector<Fragment>    all_fragments_suffix_unsorted(std::string_view sfx)
-            {
-                static thread_local SQ s("SELECT id FROM Fragments WHERE suffix=?");
-                return s.vec<Fragment>(sfx);
-            }
-        }
-
         std::vector<Fragment>    all_fragments_suffix(std::string_view sfx, Sorted sorted)
         {
-            return sorted ? all_fragments_suffix_sorted(sfx) : all_fragments_suffix_unsorted(sfx);
+            static thread_local SQ qs("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
+            static thread_local SQ qu("SELECT id FROM Fragments WHERE suffix=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Fragment>(sfx);
         }
 
 

@@ -82,23 +82,12 @@ namespace yq {
         std::string                 child_key(Directory);       //<! Key inside the directory (with extensions)
     #endif
 
-        namespace {
-            std::vector<Directory>   child_directories_sorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=? ORDER BY name");
-                return s.vec<Directory>(d.id);
-            }
-
-            std::vector<Directory>   child_directories_unsorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Directories WHERE parent=?");
-                return s.vec<Directory>(d.id);
-            }
-        }
-        
         std::vector<Directory>   child_directories(Directory d, Sorted sorted)
         {
-            return sorted ? child_directories_sorted(d) : child_directories_unsorted(d);
+            static thread_local SQ    qs("SELECT id FROM Directories WHERE parent=? ORDER BY name");
+            static thread_local SQ    qu("SELECT id FROM Directories WHERE parent=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Directory>(d.id);
         }
         
         size_t              child_directories_count(Directory d)
@@ -113,54 +102,26 @@ namespace yq {
             return s.set<Directory>(d.id);
         }
 
-        namespace {
-            std::vector<DirString>   child_directories_with_names_sorted(Directory dir)
-            {
-                std::vector<DirString>   ret;
-                static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=?");
-                s.bind(1,dir.id);
-                while(s.step() == SqlQuery::Row){
-                    ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
-                }
-                s.reset();
-                return ret;
-            }
-            
-            std::vector<DirString>   child_directories_with_names_unsorted(Directory dir)
-            {
-                std::vector<DirString>   ret;
-                static thread_local SQ    s("SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
-                s.bind(1,dir.id);
-                while(s.step() == SqlQuery::Row){
-                    ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
-                }
-                s.reset();
-                return ret;
-            }
-        }
-
         std::vector<DirString>   child_directories_with_names(Directory dir, Sorted sorted)
         {
-            return sorted ? child_directories_with_names_sorted(dir) : child_directories_with_names_unsorted(dir);
+            std::vector<DirString>   ret;
+            static thread_local SQ    qs("SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
+            static thread_local SQ    qu("SELECT id,name FROM Directories WHERE parent=?");
+            SQ& s = sorted ? qs : qu;
+            s.bind(1,dir.id);
+            while(s.step() == SqlQuery::Row){
+                ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
+            }
+            s.reset();
+            return ret;
         }
 
-        namespace {
-            std::vector<Fragment>    child_fragments_sorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
-                return s.vec<Fragment>(d.id);
-            }
-
-            std::vector<Fragment>    child_fragments_unsorted(Directory d)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
-                return s.vec<Fragment>(d.id);
-            }
-        }
-        
         std::vector<Fragment>    child_fragments(Directory d, Sorted sorted)
         {
-            return sorted ? child_fragments_sorted(d) : child_fragments_unsorted(d);
+            static thread_local SQ    qs("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
+            static thread_local SQ    qu("SELECT id FROM Fragments WHERE dir=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Fragment>(d.id);
         }
 
         size_t              child_fragments_count(Directory d)

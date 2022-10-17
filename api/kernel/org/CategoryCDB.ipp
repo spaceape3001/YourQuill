@@ -28,23 +28,14 @@ namespace yq {
             {
                 return make_filename(k, Category::szExtension);
             }
-            
-            std::vector<Category>     all_categories_sorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Categories ORDER BY k");
-                return s.vec<Category>();
-            }
-            
-            std::vector<Category>     all_categories_unsorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Categories");
-                return s.vec<Category>();
-            }
         }
 
         std::vector<Category>         all_categories(Sorted sorted)
         {
-            return sorted ? all_categories_sorted() : all_categories_unsorted();
+            static thread_local SQ    qs("SELECT id FROM Categories ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Categories");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Category>();
         }
         
         size_t                      all_categories_count()

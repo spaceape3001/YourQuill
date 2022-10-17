@@ -91,24 +91,13 @@ namespace yq {
         {
             return exists_value(i) ? Value{i} : Value{};
         }
-        
-        namespace {
-            std::vector<Value>   values_sorted(Field f)
-            {
-                static thread_local SQ s("SELECT values FROM Vals WHERE field=? ORDER BY data");
-                return s.vec<Value>(f.id);
-            }
-
-            std::vector<Value>   values_unsorted(Field f)
-            {
-                static thread_local SQ s("SELECT values FROM Vals WHERE field=?");
-                return s.vec<Value>(f.id);
-            }
-        }
 
         std::vector<Value>   values(Field f, Sorted sorted)
         {
-            return sorted ? values_sorted(f) : values_unsorted(f);
+            static thread_local SQ qs("SELECT values FROM Vals WHERE field=? ORDER BY data");
+            static thread_local SQ qu("SELECT values FROM Vals WHERE field=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Value>(f.id);
         }
         
         std::set<Value>      values_set(Field f)

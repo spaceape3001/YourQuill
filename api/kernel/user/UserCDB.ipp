@@ -27,23 +27,14 @@ namespace yq {
             {
                 return make_filename(k, User::szExtension);
             }
-
-            Vector<User>     all_users_sorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Users ORDER BY k");
-                return s.vec<User>();
-            }
-            
-            Vector<User>     all_users_unsorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Users");
-                return s.vec<User>();
-            }
         }
 
         Vector<User>       all_users(Sorted sorted)
         {
-            return sorted ? all_users_sorted() : all_users_unsorted();
+            static thread_local SQ    qs("SELECT id FROM Users ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Users");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<User>();
         }
         
         size_t                  all_users_count()

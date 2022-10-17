@@ -19,23 +19,12 @@
 
 namespace yq {
     namespace cdb {
-        namespace {
-            std::vector<Document>    all_documents_sorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Documents ORDER BY k");
-                return s.vec<Document>();
-            }
-            
-            std::vector<Document>    all_documents_unsorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Documents");
-                return s.vec<Document>();
-            }
-        }
-        
         std::vector<Document>    all_documents(Sorted sorted)
         {
-            return sorted ? all_documents_sorted() : all_documents_unsorted();
+            static thread_local SQ    qs("SELECT id FROM Documents ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Documents");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Document>();
         }
         
         size_t              all_documents_count()
@@ -44,23 +33,12 @@ namespace yq {
             return s.size();
         }
         
-        namespace {
-            std::vector<Document>    all_documents_suffix_sorted(std::string_view sfx)
-            {
-                static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
-                return s.vec<Document>(sfx);
-            }
-
-            std::vector<Document>    all_documents_suffix_unsorted(std::string_view sfx)
-            {
-                static thread_local SQ    s("SELECT id FROM Documents WHERE suffix=?");
-                return s.vec<Document>(sfx);
-            }
-        }
-        
         std::vector<Document>    all_documents_suffix(std::string_view sfx, Sorted sorted)
         {
-            return sorted ? all_documents_suffix_sorted(sfx) : all_documents_suffix_unsorted(sfx);
+            static thread_local SQ    qs("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Documents WHERE suffix=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Document>(sfx);
         }
 
         std::string             base_key(Document doc)
@@ -270,25 +248,14 @@ namespace yq {
             return sorted ? fragments_sorted(d) : fragments_unsorted(d);
         }
         
-        namespace {
-            std::vector<Fragment>    fragments_sorted(Document d, const Root* rt)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
-                return s.vec<Fragment>(d.id, rt->id);
-            }
-
-            std::vector<Fragment>    fragments_unsorted(Document d, const Root* rt)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=?");
-                return s.vec<Fragment>(d.id, rt->id);
-            }
-        }
-        
         std::vector<Fragment>    fragments(Document d, const Root* rt, Sorted sorted)
         {
             if(!rt)
                 return std::vector<Fragment>();
-            return sorted ? fragments_sorted(d,rt) : fragments_unsorted(d,rt);
+            static thread_local SQ    qs("SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
+            static thread_local SQ    qu("SELECT id FROM Fragments WHERE document=? AND root=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Fragment>(d.id, rt->id);
         }
         
         std::vector<Fragment>    fragments(Document d, const Root* rt, Sorted::Value sorted)

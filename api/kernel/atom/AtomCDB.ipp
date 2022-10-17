@@ -42,63 +42,29 @@ namespace yq {
             return s.str(a.id);
         }
 
-        namespace {
-            std::vector<Atom>        all_atoms_sorted()
-            {
-                static thread_local SQ s("SELECT id FROM Atoms ORDER BY k");
-                return s.vec<Atom>();
-            }
-
-            std::vector<Atom>        all_atoms_unsorted()
-            {
-                static thread_local SQ s("SELECT id FROM Atoms");
-                return s.vec<Atom>();
-            }
-        }
-        
-
         std::vector<Atom>        all_atoms(Sorted sorted)
         {
-            return sorted ? all_atoms_sorted() : all_atoms_unsorted();
-        }
-        
-        namespace {
-            std::vector<Atom>    all_atoms_sorted(Class c)
-            {
-                        // I think this SQL is right.....
-                static thread_local SQ s("SELECT atom FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE class=? ORDER BY Classes.k");
-                return s.vec<Atom>(c.id);
-            }
-
-            std::vector<Atom>    all_atoms_unsorted(Class c)
-            {
-                static thread_local SQ s("SELECT atom FROM AClasses WHERE class=?");
-                return s.vec<Atom>(c.id);
-            }
+            static thread_local SQ qs("SELECT id FROM Atoms ORDER BY k");
+            static thread_local SQ qu("SELECT id FROM Atoms");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>();
         }
         
         std::vector<Atom>        all_atoms(Class c,Sorted sorted)
         {
-            return sorted ? all_atoms_sorted(c) : all_atoms_unsorted(c);
-        }
-        
-        namespace {
-            std::vector<Atom>    all_atoms_sorted(Tag t)
-            {
-                static thread_local SQ s("SELECT atom FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE tag=? ORDER BY Tags.k");
-                return s.vec<Atom>(t.id);
-            }
-
-            std::vector<Atom>    all_atoms_unsorted(Tag t)
-            {
-                static thread_local SQ s("SELECT atom FROM ATags WHERE tag=?");
-                return s.vec<Atom>(t.id);
-            }
+                    // I think this SQL is right.....
+            static thread_local SQ qs("SELECT atom FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE class=? ORDER BY Classes.k");
+            static thread_local SQ qu("SELECT atom FROM AClasses WHERE class=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>(c.id);
         }
         
         std::vector<Atom>        all_atoms(Tag t,Sorted sorted)
         {
-            return sorted ? all_atoms_sorted(t) : all_atoms_unsorted(t);
+            static thread_local SQ qs("SELECT atom FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE tag=? ORDER BY Tags.k");
+            static thread_local SQ qu("SELECT atom FROM ATags WHERE tag=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>(t.id);
         }
         
         size_t              all_atoms_count()
@@ -137,63 +103,28 @@ namespace yq {
             return atom(ks);
         }
         
-        namespace {
-            std::vector<Atom>    atoms_sorted(Class cls)
-            {
-                static thread_local SQ s("SELECT DISTINCT atom FROM AClasses INNER JOIN Atoms ON AClasses.atom=Atoms.id WHERE class=? ORDER BY Atoms.k");
-                return s.vec<Atom>(cls.id);
-            }
-
-            std::vector<Atom>    atoms_unsorted(Class cls)
-            {
-                static thread_local SQ s("SELECT DISTINCT atom FROM AClasses WHERE class=?");
-                return s.vec<Atom>(cls.id);
-            }
-        }
-
         std::vector<Atom>       atoms(Class cls, Sorted sorted)
         {
-            return sorted ? atoms_sorted(cls) : atoms_unsorted(cls);
+            static thread_local SQ qs("SELECT DISTINCT atom FROM AClasses INNER JOIN Atoms ON AClasses.atom=Atoms.id WHERE class=? ORDER BY Atoms.k");
+            static thread_local SQ qu("SELECT DISTINCT atom FROM AClasses WHERE class=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>(cls.id);
         }
 
-        namespace {
-            std::vector<Atom>    atoms_sorted(Document doc)
-            {
-                static thread_local SQ s("SELECT atom FROM ADocuments INNER JOIN Atoms ON ADocuments.atom=Atoms.id WHERE doc=? ORDER BY Atoms.k");
-                return s.vec<Atom>(doc.id);
-            }
-
-            std::vector<Atom>    atoms_unsorted(Document doc)
-            {
-                static thread_local SQ s("SELECT atom FROM ADocuments WHERE doc=?");
-                return s.vec<Atom>(doc.id);
-            }
-        }
-        
         std::vector<Atom>        atoms(Document doc, Sorted sorted)
         {
-            return sorted ? atoms_sorted(doc) : atoms_unsorted(doc);
+            static thread_local SQ qs("SELECT atom FROM ADocuments INNER JOIN Atoms ON ADocuments.atom=Atoms.id WHERE doc=? ORDER BY Atoms.k");
+            static thread_local SQ qu("SELECT atom FROM ADocuments WHERE doc=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>(doc.id);
         }
-        
-        namespace {
-            std::vector<Atom>     atoms_by_name_sorted(std::string_view  n)
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE name=? ORDER BY k");
-                return s.vec<Atom>(n);
-            }
-            
-            std::vector<Atom>     atoms_by_name_unsorted(std::string_view  n)
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE name=?");
-                return s.vec<Atom>(n);
-            }
-        }
-        
         
         std::vector<Atom>             atoms_by_name(std::string_view  n, Sorted sorted)
         {
-            return sorted ? atoms_by_name_sorted(n) : atoms_by_name_unsorted(n);
-            std::vector<Atom>     ret;
+            static thread_local SQ qs("SELECT id FROM Atoms WHERE name=? ORDER BY k");
+            static thread_local SQ qu("SELECT id FROM Atoms WHERE name=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>(n);
         }
 
         size_t              atoms_count(Document doc)
@@ -207,26 +138,13 @@ namespace yq {
             static thread_local SQ s("SELECT brief FROM Atoms WHERE id=?");
             return s.str(a.id);
         }
-        
-        
-        namespace {
-            std::vector<Atom>        child_atoms_sorted(Atom a)
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE parent=? ORDER BY k");
-                return s.vec<Atom>(a.id);
-            }
-            
-            std::vector<Atom>        child_atoms_unsorted(Atom a)
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE parent=?");
-                return s.vec<Atom>(a.id);
-            }
-            
-        }
 
         std::vector<Atom>            child_atoms(Atom a, Sorted sorted)
         {
-            return sorted ? child_atoms_sorted(a) : child_atoms_unsorted(a);
+            static thread_local SQ qs("SELECT id FROM Atoms WHERE parent=? ORDER BY k");
+            static thread_local SQ qu("SELECT id FROM Atoms WHERE parent=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>(a.id);
         }
 
         size_t              child_atoms_count(Atom a)
@@ -234,44 +152,21 @@ namespace yq {
             static thread_local SQ s("SELECT COUNT(1) FROM Atoms WHERE parent=?");
             return s.size(a);
         }
-
-        namespace {
-            std::vector<Class>    classes_sorted(Atom a)
-            {
-                static thread_local SQ s("SELECT DISTINCT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? ORDER BY Classes.k");
-                return s.vec<Class>(a.id);
-            }
-            
-            std::vector<Class>    classes_unsorted(Atom a)
-            {
-                static thread_local SQ s("SELECT DISTINCT class FROM AClasses WHERE atom=?");
-                return s.vec<Class>(a.id);
-            }
-        }
-        
         
         std::vector<Class>       classes(Atom a, Sorted sorted)
         {
-            return sorted ? classes_sorted(a) : classes_unsorted(a);
-        }
-        
-        namespace {
-            std::vector<Class>    classes_sorted(Atom a, Document d)
-            {
-                static thread_local SQ s("SELECT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? AND doc=? ORDER BY Classes.k");
-                return s.vec<Class>(a.id, d.id);
-            }
-
-            std::vector<Class>    classes_unsorted(Atom a, Document d)
-            {
-                static thread_local SQ s("SELECT class FROM AClasses WHERE atom=? AND doc=?");
-                return s.vec<Class>(a.id, d.id);
-            }
+            static thread_local SQ qs("SELECT DISTINCT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? ORDER BY Classes.k");
+            static thread_local SQ qu("SELECT DISTINCT class FROM AClasses WHERE atom=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(a.id);
         }
         
         std::vector<Class>       classes(Atom a, Document d, Sorted sorted)
         {
-            return sorted ? classes_sorted(a,d) : classes_unsorted(a,d);
+            static thread_local SQ qs("SELECT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? AND doc=? ORDER BY Classes.k");
+            static thread_local SQ qu("SELECT class FROM AClasses WHERE atom=? AND doc=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Class>(a.id, d.id);
         }
         
         std::vector<ClassU64Pair> classes_and_hops(Atom a, Document d) 
@@ -512,44 +407,21 @@ namespace yq {
             static thread_local SQ s("SELECT sk FROM Atoms WHERE id=?");
             return s.str(a.id);
         }
-
-        namespace {
-            std::vector<Tag>          tags_sorted(Atom a)
-            {
-                static thread_local SQ s("SELECT DISTINCT tag FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE atom=? ORDER BY Tags.k");
-                return s.vec<Tag>(a.id);
-            }
-
-            std::vector<Tag>          tags_unsorted(Atom a)
-            {
-                static thread_local SQ s("SELECT DISTINCT tag FROM ATags WHERE atom=?");
-                return s.vec<Tag>(a.id);
-            }
-        }
         
         std::vector<Tag>              tags(Atom a, Sorted sorted)
         {
-            return sorted ? tags_sorted(a) : tags_unsorted(a);
+            static thread_local SQ qs("SELECT DISTINCT tag FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE atom=? ORDER BY Tags.k");
+            static thread_local SQ qu("SELECT DISTINCT tag FROM ATags WHERE atom=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Tag>(a.id);
         }
         
-        namespace {
-            std::vector<Tag>          tags_sorted(Atom a, Document d)
-            {
-                static thread_local SQ s("SELECT tag FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE atom=? AND doc=? ORDER BY Tags.k");
-                return s.vec<Tag>(a.id,d.id);
-            }
-
-            std::vector<Tag>          tags_unsorted(Atom a, Document d)
-            {
-                static thread_local SQ s("SELECT tag FROM ATags WHERE atom=? AND doc=?");
-                return s.vec<Tag>(a.id,d.id);
-            }
-        }
-        
-
         std::vector<Tag>              tags(Atom a, Document d, Sorted sorted)
         {
-            return sorted ? tags_sorted(a,d) : tags_unsorted(a,d);
+            static thread_local SQ qs("SELECT tag FROM ATags INNER JOIN Tags ON ATags.tag=Tags.id WHERE atom=? AND doc=? ORDER BY Tags.k");
+            static thread_local SQ qu("SELECT tag FROM ATags WHERE atom=? AND doc=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Tag>(a.id,d.id);
         }
 
         bool                tagged(Atom a, Tag t)

@@ -29,26 +29,13 @@ namespace yq {
                 return make_filename(k, Leaf::szExtension);
             }
         }
-
-
-        namespace {
-            std::vector<Atom>    all_leaf_atoms_sorted()
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE isLeaf=1 ORDER BY k");
-                return s.vec<Atom>();
-            }
-            
-            std::vector<Atom>    all_leaf_atoms_unsorted()
-            {
-                static thread_local SQ s("SELECT id FROM Atoms WHERE leaf!=0");
-                return s.vec<Atom>();
-            }
-        }
-        
         
         std::vector<Atom>        all_leaf_atoms(Sorted sorted)
         {
-            return sorted ? all_leaf_atoms_sorted() : all_leaf_atoms_unsorted();
+            static thread_local SQ qs("SELECT id FROM Atoms WHERE isLeaf=1 ORDER BY k");
+            static thread_local SQ qu("SELECT id FROM Atoms WHERE leaf!=0");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Atom>();
         }
         
         size_t              all_leaf_atoms_count()

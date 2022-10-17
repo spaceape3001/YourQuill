@@ -19,23 +19,12 @@
 
 namespace yq {
     namespace cdb {
-       namespace {
-            std::vector<Folder>  all_folders_sorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Folders ORDER BY k");
-                return s.vec<Folder>();
-            }
-
-            std::vector<Folder>  all_folders_unsorted()
-            {
-                static thread_local SQ    s("SELECT id FROM Folders");
-                return s.vec<Folder>();
-            }
-        }
-
         std::vector<Folder>      all_folders(Sorted sorted)
         {
-            return sorted ? all_folders_sorted() : all_folders_unsorted();
+            static thread_local SQ    qs("SELECT id FROM Folders ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Folders");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Folder>();
         }
         
         size_t              all_folders_count()
@@ -109,43 +98,20 @@ namespace yq {
             }
         }
         
-        namespace {
-            std::vector<Document>    child_documents_by_suffix_sorted(Folder f, std::string_view sfx)
-            {
-                static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
-                return s.vec<Document>(f.id, sfx);
-            }
-
-            std::vector<Document>    child_documents_by_suffix_unsorted(Folder f, std::string_view sfx)
-            {
-                static thread_local SQ    s("SELECT id FROM Documents WHERE folder=? AND suffix=?");
-                return s.vec<Document>(f.id, sfx);
-            }
-        }
-        
         std::vector<Document>    child_documents_by_suffix(Folder f, std::string_view sfx, Sorted sorted)
         {
-            return sorted ? child_documents_by_suffix_sorted(f, sfx) : child_documents_by_suffix_unsorted(f,sfx);
-        }
-        
-        
-        namespace {
-            std::vector<Document>    child_documents_by_suffix_excluding_sorted(Folder f, std::string_view sfx)
-            {
-                static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=? ORDER BY k");
-                return s.vec<Document>(f.id, sfx);
-            }
-            
-            std::vector<Document>    child_documents_by_suffix_excluding_unsorted(Folder f, std::string_view sfx)
-            {
-                static thread_local SQ    s("SELECT id FROM Documents WHERE folder!=? AND suffix=?");
-                return s.vec<Document>(f.id, sfx);
-            }
+            static thread_local SQ    qs("SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Documents WHERE folder=? AND suffix=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Document>(f.id, sfx);
         }
         
         std::vector<Document>    child_documents_by_suffix_excluding(Folder f, std::string_view sfx, Sorted sorted)
         {
-            return sorted ? child_documents_by_suffix_excluding_sorted(f,sfx) : child_documents_by_suffix_excluding_unsorted(f,sfx);
+            static thread_local SQ    qs("SELECT id FROM Documents WHERE folder!=? AND suffix=? ORDER BY k");
+            static thread_local SQ    qu("SELECT id FROM Documents WHERE folder!=? AND suffix=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Document>(f.id, sfx);
         }
 
         //! Gets all documents & keys of folder
@@ -224,23 +190,12 @@ namespace yq {
             return child_folders_with_skey(f, HIDDEN | (sorted ? BEST_SORT : 0));
         }
 
-        namespace {
-            std::vector<Fragment>    child_fragments_sorted(Folder f)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE folder=? ORDER BY path");
-                return s.vec<Fragment>(f.id);
-            }
-
-            std::vector<Fragment>    child_fragments_unsorted(Folder f)
-            {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE folder=?");
-                return s.vec<Fragment>(f.id);
-            }
-        }
-        
         std::vector<Fragment>    child_fragments(Folder f, Sorted sorted)
         {
-            return sorted ? child_fragments_sorted(f) : child_fragments_unsorted(f);
+            static thread_local SQ    qs("SELECT id FROM Fragments WHERE folder=? ORDER BY path");
+            static thread_local SQ    qu("SELECT id FROM Fragments WHERE folder=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Fragment>(f.id);
         }
         
         size_t              child_fragments_count(Folder f)
@@ -299,23 +254,12 @@ namespace yq {
             }    
         }
         
-        namespace {
-            std::vector<Directory>   directories_sorted(Folder f)
-            {
-                static thread_local SQ    s("SELECT id FROM Directories WHERE folder=? ORDER BY name");
-                return s.vec<Directory>(f.id);
-            }
-            
-            std::vector<Directory>   directories_unsorted(Folder f)
-            {
-                static thread_local SQ    s("SELECT id FROM Directories WHERE folder=?");
-                return s.vec<Directory>(f.id);
-            }
-        }
-        
         std::vector<Directory>   directories(Folder f, Sorted sorted)
         {
-            return sorted ? directories_sorted(f) : directories_unsorted(f);
+            static thread_local SQ    qs("SELECT id FROM Directories WHERE folder=? ORDER BY name");
+            static thread_local SQ    qu("SELECT id FROM Directories WHERE folder=?");
+            SQ& s = sorted ? qs : qu;
+            return s.vec<Directory>(f.id);
         }
         
         size_t              directories_count(Folder f)
