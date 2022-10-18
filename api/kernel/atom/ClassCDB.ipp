@@ -514,12 +514,21 @@ namespace yq {
         
         std::vector<Class>           inbound_classes(Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.cleass=Classes.id WHERE target=? ORDER BY Classes.K");
+            static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY Classes.K");
             static thread_local SQ qu("SELECT class FROM CTargets WHERE target=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<Class>(c.id);
         }
         
+        std::vector<Class::Rank>      inbound_classes_ranked(Class c, Sorted sorted)
+        {
+            static thread_local SQ qs("SELECT class,hops_cls FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY hops_cls,Classes.K");
+            static thread_local SQ qu("SELECT class,hops_cls FROM CTargets WHERE target=?");
+            SQ& s = sorted ? qs : qu;
+            s.bind(1, c.id);
+            return exec_class_rank_vector(s);
+        }
+
         Class::Info         info(Class c, bool autoKey)
         {
             Class::Info    ret;
@@ -684,6 +693,14 @@ namespace yq {
             return s.vec<Class>(c.id);
         }
 
+        std::vector<Class::Rank>     outbound_classes_ranked(Class c, Sorted sorted)
+        {
+            static thread_local SQ qs("SELECT class,hops_cls FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY hops_cls,Classes.K");
+            static thread_local SQ qu("SELECT class,hops_cls FROM CSources WHERE source=?");
+            SQ& s = sorted ? qs : qu;
+            s.bind(1, c.id);
+            return exec_class_rank_vector(s);
+        }
         
         std::string             plural(Class c)
         {
@@ -743,8 +760,8 @@ namespace yq {
         
         std::vector<Class::Rank>    source_classes_ranked(Class c, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY hops, Classes.k");
-            static thread_local SQ  qu("SELECT source, hops FROM CSources WHERE class=?");
+            static thread_local SQ  qs("SELECT source, hops_src FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY hops_src, Classes.k");
+            static thread_local SQ  qu("SELECT source, hops_src FROM CSources WHERE class=?");
             SQ&     s   = sorted ? qs : qu;
             s.bind(1, c.id);
             return exec_class_rank_vector(s);
@@ -752,8 +769,8 @@ namespace yq {
 
         std::vector<Class::Rank>    source_classes_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? AND hops<=? ORDER BY hops, Classes.k");
-            static thread_local SQ  qu("SELECT source, hops FROM CSources WHERE class=? AND hops<=?");
+            static thread_local SQ  qs("SELECT source, hops_src FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? AND hops<=? ORDER BY hops_src, Classes.k");
+            static thread_local SQ  qu("SELECT source, hops_src FROM CSources WHERE class=? AND hops<=?");
             SQ&     s   = sorted ? qs : qu;
             s.bind(1, c.id);
             s.bind(2, maxDepth);

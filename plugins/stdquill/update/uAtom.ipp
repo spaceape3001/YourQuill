@@ -7,7 +7,6 @@
 #pragma once
 
 #include "uAtom.hpp"
-#include "uClass.hpp"
 #include <basic/Vector.hpp>
 #include <kernel/atom/AtomCDB.hpp>
 #include <kernel/db/SQ.hpp>

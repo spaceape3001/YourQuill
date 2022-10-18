@@ -22,6 +22,8 @@ namespace yq {
 
         void    class_icon(Class);
         
+        void    class_notify(Fragment, Change);
+        
         void    class_notify_icons(Fragment, Change);
         
         //!     First pass to make sure the class is created.
@@ -33,5 +35,7 @@ namespace yq {
         
         //!     Extends the base classes all the way
         void    class_stage3_pass3_extend(Document);
+        
+        void    class_update(Class);
     }
 }

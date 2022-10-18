@@ -25,14 +25,14 @@ CREATE TABLE CDepends (
     class       INTEGER NOT NULL,
     base        INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
-    hops        INTEGER NOT NULL,
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,base) ON CONFLICT IGNORE
 );
 
 CREATE TABLE CEdges (
     class   INTEGER NOT NULL,
     source  INTEGER NOT NULL,
-    target INTEGER NOT NULL,
+    target  INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
     hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,source,target) ON CONFLICT IGNORE
@@ -72,7 +72,8 @@ CREATE TABLE CSources (
     class       INTEGER NOT NULL,
     source      INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
-    hops        INTEGER NOT NULL DEFAULT 0,
+    hops_cls    INTEGER NOT NULL DEFAULT 0,
+    hops_src    INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,source) ON CONFLICT IGNORE
 );
 
@@ -92,7 +93,8 @@ CREATE TABLE CTargets (
     class       INTEGER NOT NULL,
     target      INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
-    hops        INTEGER NOT NULL DEFAULT 0,
+    hops_cls    INTEGER NOT NULL DEFAULT 0,
+    hops_tgt    INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,target) ON CONFLICT IGNORE
 );
 

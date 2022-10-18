@@ -171,6 +171,7 @@ namespace yq {
         
         //std::vector<Atom>            inbound(Atom);
         std::vector<Class>          inbound_classes(Class, Sorted sorted=Sorted());
+        std::vector<Class::Rank>    inbound_classes_ranked(Class, Sorted sorted=Sorted());
 
         Class::Info                 info(Class, bool autoKeyToName=false);
 
@@ -195,6 +196,7 @@ namespace yq {
         
         //std::vector<Atom>            outbound(Atom);
         std::vector<Class>          outbound_classes(Class, Sorted sorted=Sorted());
+        std::vector<Class::Rank>    outbound_classes_ranked(Class, Sorted sorted=Sorted());
         
         std::string                 plural(Class);
         

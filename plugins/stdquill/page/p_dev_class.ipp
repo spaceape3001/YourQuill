@@ -49,6 +49,26 @@ namespace {
         dev_table(h, cdb::derived_classes_ranked(x, Sorted::YES), "Hops");
     }
 
+    void    page_dev_class_inbound(WebHtml&h)
+    {
+        Class   x   = class_(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+
+        h.title() << "Class (" << label(x) << "): Inbound";
+        dev_table(h, cdb::inbound_classes_ranked(x, Sorted::YES), "Hops");
+    }
+
+    void    page_dev_class_outbound(WebHtml&h)
+    {
+        Class   x   = class_(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+
+        h.title() << "Class (" << label(x) << "): Outbound";
+        dev_table(h, cdb::outbound_classes_ranked(x, Sorted::YES), "Hops");
+    }
+
     void    page_dev_class_sources(WebHtml&h)
     {
         Class   x   = class_(h);
@@ -116,7 +136,9 @@ namespace {
             reg_webpage<page_dev_class_base>("/dev/class/base").argument("id", "Class ID").label("Base"),
             reg_webpage<page_dev_class_derived>("/dev/class/derived").argument("id", "Class ID").label("Derived"),
             reg_webpage<page_dev_class_sources>("/dev/class/sources").argument("id", "Class ID").label("Sources"),
-            reg_webpage<page_dev_class_targets>("/dev/class/targets").argument("id", "Class ID").label("Sources"),
+            reg_webpage<page_dev_class_targets>("/dev/class/targets").argument("id", "Class ID").label("Targets"),
+            reg_webpage<page_dev_class_inbound>("/dev/class/inbound").argument("id", "Class ID").label("Inbound"),
+            reg_webpage<page_dev_class_outbound>("/dev/class/outbound").argument("id", "Class ID").label("Outbound"),
             reg_webpage<page_dev_class_tags>("/dev/class/tags").argument("id", "Class ID").label("Tags"),
             //reg_webpage<page_dev_class_def_fields>("/dev/class/def_fields").argument("id", "Class ID").label("Def Fields"),
             reg_webpage<page_dev_class_atoms>("/dev/class/atoms").argument("id", "Class ID").label("Atoms")

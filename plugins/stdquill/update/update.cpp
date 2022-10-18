@@ -44,7 +44,6 @@
 
 #include "uAtom.ipp"
 
-#include "uClass.ipp"
 #include "uField.ipp"
 #include "uLeaf.ipp"
 
@@ -134,14 +133,9 @@ namespace {
 }
 
 #include "u_atom.ipp"
-//#include "u_category.ipp"
-#include "u_class.ipp"
 #include "u_css.ipp"
 #include "u_field.ipp"
-//#include "u_image.ipp"
 #include "u_leaf.ipp"
-//#include "u_tag.ipp"
-//#include "u_user.ipp"
 
 
 namespace {
@@ -218,7 +212,7 @@ namespace {
             on_change<page_update>(by_cache(top_folder(), ".page"));
                 
             on_change<update::category_notify>(by_cache(categories_folder(), "*.cat"));
-            on_change<class_update>(classes_lookup);
+            on_change<update::class_notify>(classes_lookup);
             on_change<field_update>(fields_lookup);
             on_change<leaf_update>(leafs_lookup);
             on_change<update::tag_notify>(tags_lookup);

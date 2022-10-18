@@ -7,6 +7,7 @@
 #pragma once
 
 #include "uClass.hpp"
+#include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <kernel/atom/ClassCDB.hpp>
 #include <kernel/atom/ClassData.hpp>
@@ -58,6 +59,69 @@ namespace yq {
                     // we'll eventually do inheritance....
                 u1.exec(img.id, x.id);
                 u2.exec(doc.id, x.id);
+            }
+        }
+
+        void    class_notify(Fragment frag, Change chg)
+        {
+            Document    doc = cdb::document(frag);
+            if(chg == Change::Removed){
+                if(cdb::fragments_count(doc) <= 1){
+                    update::class_erase(doc);
+                    return ;
+                }
+            }
+
+            bool        created = false;
+            Class       x   = cdb::db_class(doc, &created);
+            if(!x)
+                return ;
+
+            if(!x)
+                return;
+            
+            Class::SharedData data = cdb::merged(x, cdb::DONT_LOCK|cdb::IS_UPDATE);
+            if(!data)
+                return;
+            
+            Category    cat;
+            if(!data->category.empty())
+                cat = cdb::db_category(data->category);
+
+            static thread_local cdb::SQ uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
+
+            uInfo.bind(1, data->name);
+            uInfo.bind(2, data->plural);
+            uInfo.bind(3, data->brief);
+            uInfo.bind(4, cat.id);
+            uInfo.bind(5, data->binding);
+            uInfo.bind(6, x.id);
+            uInfo.exec();
+
+            
+            static thread_local cdb::SQ iTag("INSERT INTO CTags (class, tag) VALUES (?,?)");
+            static thread_local cdb::SQ dTag("DELETE FROM CTags WHERE class=? AND tag=?");
+
+            std::set<Tag>   new_tags = cdb::tags_set(data->tags, true);
+            
+            if(created){
+                class_icon(x);
+                for(Tag t : new_tags)
+                    iTag.exec(x.id, t.id);
+
+                //  TODO inheritance....
+                
+            } else {
+                std::set<Tag>   old_tags = make_set(cdb::tags(x));
+                auto ch_tag = add_remove(old_tags, new_tags);
+                for(Tag t : ch_tag.added)
+                    iTag.exec(x.id, t.id);
+                for(Tag t : ch_tag.removed)
+                    dTag.exec(x.id, t.id);
+                    
+                // Do class analysis here
+
+                //  TODO inheritance....
             }
         }
 
@@ -119,7 +183,7 @@ namespace yq {
             if(!dp)
                 return ;
             
-            static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base, hops) VALUES (?,?,0)");
+            static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base) VALUES (?,?)");
             for(std::string_view ck : dp->use){
                 Class   y   = cdb::db_class(ck);
                 if(!y){
@@ -132,7 +196,7 @@ namespace yq {
                 iUse.exec();
             }
             
-            static thread_local cdb::SQ iTarget("INSERT INTO CTargets (class, target, hops) VALUES (?,?,0)");
+            static thread_local cdb::SQ iTarget("INSERT INTO CTargets (class, target) VALUES (?,?)");
             for(std::string_view ck : dp->targets){
                 Class   y = cdb::db_class(ck);
                 if(!y){
@@ -145,7 +209,7 @@ namespace yq {
                 iTarget.exec();
             }
             
-            static thread_local cdb::SQ iSource("INSERT INTO CSources (class, source, hops) VALUES (?,?,0)");
+            static thread_local cdb::SQ iSource("INSERT INTO CSources (class, source) VALUES (?,?)");
             for(std::string_view ck : dp->sources){
                 Class   y = cdb::db_class(ck);
                 if(!y){
@@ -158,7 +222,7 @@ namespace yq {
                 iSource.exec();
             }
 
-            static thread_local cdb::SQ iReverse("INSERT INTO CReverses (class, reverse, hops) VALUES (?,?,0)");
+            static thread_local cdb::SQ iReverse("INSERT INTO CReverses (class, reverse) VALUES (?,?)");
             for(std::string_view ck : dp->reverse){
                 Class   y = cdb::db_class(ck);
                 if(!y){
@@ -197,6 +261,9 @@ namespace yq {
             }
         }
         
+        void    class_update(Class x)
+        {
+        }
     }
 }
 
