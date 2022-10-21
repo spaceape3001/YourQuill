@@ -178,11 +178,11 @@ namespace {
             on_stage3<update::field_stage3_pass1_declare>(fields_lookup);
             
             
-            on_stage3<UClass::s3_create>(classes_lookup);
+            //on_stage3<UClass::s3_create>(classes_lookup);
             on_stage3<UField::s3_create>(fields_lookup);
             
             on_stage3<field_s3_init>(fields_lookup);
-            on_stage3<class_s3_init>(classes_lookup);
+            //on_stage3<class_s3_init>(classes_lookup);
             on_stage3<field_s3_classes>(fields_lookup);
 
 

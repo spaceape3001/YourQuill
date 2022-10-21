@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "uAtom.hpp"
+
 namespace yq {
     namespace update {
     }

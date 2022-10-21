@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <kernel/atom/Atom.hpp>
+#include <kernel/attr/Attribute.hpp>
+
 namespace yq {
     namespace update {
     }

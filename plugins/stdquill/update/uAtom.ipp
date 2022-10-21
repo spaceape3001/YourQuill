@@ -25,6 +25,7 @@ namespace yq {
     
     using ClsHopsMap   = std::map<Class,uint64_t>;
     
+    /*
     void    determine_hops(ClsHopsMap& hops, const ClassSet& cset, uint64_t depth=0)
     {
         for(Class c : cset){
@@ -34,6 +35,7 @@ namespace yq {
             determine_hops(hops, uget(c).base.defined, depth+1);
         }
     }
+    */
     
     void    update_aclasses(Atom at, Document doc, const ClsHopsMap& nmap)
     {
@@ -78,8 +80,8 @@ namespace yq {
 //yInfo() << "Update on " << cdb::key(at) << " ... with " << cset.size() << " class(es)";
         ClassSet    oldcls    = make_set(cdb::classes(at));
         ClsHopsMap  newhops;
-        determine_hops(newhops, cset);
-        update_aclasses(at, doc, newhops);
+        //determine_hops(newhops, cset);
+        //update_aclasses(at, doc, newhops);
         ClassSet    newcls    = make_set(cdb::classes(at));
         auto        clschgs   = changes(oldcls, newcls);
         

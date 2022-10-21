@@ -68,6 +68,7 @@ namespace yq {
         size_t                      base_classes_count(Class);
         std::vector<Class::Rank>    base_classes_ranked(Class, Sorted sorted=Sorted());
         std::vector<Class::Rank>    base_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
+        ClassCountMap               base_classes_ranked_merged_map(const ClassSet&);
 
         //! Binding for class?
         std::string                 binding(Class);

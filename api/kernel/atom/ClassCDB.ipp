@@ -97,6 +97,16 @@ namespace yq {
             return exec_class_rank_vector(s);
         }
 
+        ClassCountMap               base_classes_ranked_merged_map(const ClassSet&cset)
+        {
+            ClassCountMap   ret;
+            for(Class c : cset){
+                for(Class::Rank cr : base_classes_ranked(c))
+                    ret[cr.cls].set_smaller(HCountU64{cr.rank});
+            }
+            return ret;
+        }
+
         std::string  binding(Class c)
         {
             static thread_local SQ  s("SELECT binding FROM Classes WHERE id=?");
