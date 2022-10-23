@@ -22,6 +22,6 @@ namespace yq {
         
         void    field_notify_icons(Fragment, Change);
         
-        void    field_stage3_pass1_declare(Document);
+        void    field_stage3_pass1_create(Document);
     }
 }

@@ -102,7 +102,7 @@ namespace yq {
             ClassCountMap   ret;
             for(Class c : cset){
                 for(Class::Rank cr : base_classes_ranked(c))
-                    ret[cr.cls].set_smaller(HCountU64{cr.rank});
+                    ret[cr.cls].set_smaller(HCountU64{(uint64_t) cr.rank});
             }
             return ret;
         }

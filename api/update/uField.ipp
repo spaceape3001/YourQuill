@@ -58,7 +58,7 @@ namespace yq {
             field_icon(cdb::field(cdb::document(frag), true));
         }
 
-        void    field_stage3_pass1_declare(Document doc)
+        void    field_stage3_pass1_create(Document doc)
         {
             cdb::db_field(doc);
         }

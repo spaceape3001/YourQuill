@@ -222,6 +222,7 @@ namespace yq {
                 iSource.exec();
             }
 
+#if 0
             static thread_local cdb::SQ iReverse("INSERT INTO CReverses (class, reverse) VALUES (?,?)");
             for(std::string_view ck : dp->reverse){
                 Class   y = cdb::db_class(ck);
@@ -234,6 +235,8 @@ namespace yq {
                 iReverse.bind(2, y.id);
                 iReverse.exec();
             }
+#endif
+
         }
         
         void    class_stage3_pass3_extend(Document doc)
@@ -246,19 +249,33 @@ namespace yq {
             static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base, hops) VALUES (?,?,?)");
 
             ClassCountMap   bases  = cdb::make_count_map(cdb::base_classes_ranked(x));
-            for(auto & itr : bases){
+            ClassCountMap   copy    = bases;
+            for(auto & itr : copy){
                 for(auto& cr : cdb::base_classes_ranked(itr.first)){
                     if(bases.contains(cr.cls))        // already in our base list
                         continue;
                     uint64_t    cnt   = 1ULL + itr.second + cr.rank;
                     bases[cr.cls]     = HCountU64{ cnt };  // insert so we don't override
-                    iUse.bind(1, x.id);
-                    iUse.bind(2, cr.cls.id);
-                    iUse.bind(3, cnt);
-                    iUse.exec();
-                    iUse.reset();
                 }
             }
+
+            for(auto & itr : bases){
+                if(!itr.second.cnt)
+                    continue;
+                    
+                iUse.bind(1, x.id);
+                iUse.bind(2, itr.first.id);
+                iUse.bind(3, itr.second.cnt);
+                iUse.exec();
+                iUse.reset();
+            }
+        }
+
+        void    class_stage3_pass4_deduce(Document doc)
+        {
+            Class x = cdb::db_class(doc);
+            if(!x)
+                return;
         }
         
         void    class_update(Class x)

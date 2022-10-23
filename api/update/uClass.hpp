@@ -36,6 +36,9 @@ namespace yq {
         //!     Extends the base classes all the way
         void    class_stage3_pass3_extend(Document);
         
+        //!     Deduces targets/sources/etc from the class (after fields)
+        void    class_stage3_pass4_deduce(Document);
+        
         void    class_update(Class);
     }
 }

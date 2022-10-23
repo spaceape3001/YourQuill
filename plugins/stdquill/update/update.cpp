@@ -175,7 +175,7 @@ namespace {
             on_stage3<update::class_stage3_pass2_bind>(classes_lookup);
             on_stage3<update::class_stage3_pass3_extend>(classes_lookup);
             
-            on_stage3<update::field_stage3_pass1_declare>(fields_lookup);
+            on_stage3<update::field_stage3_pass1_create>(fields_lookup);
             
             
             //on_stage3<UClass::s3_create>(classes_lookup);
