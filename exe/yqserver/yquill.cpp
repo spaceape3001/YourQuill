@@ -79,6 +79,14 @@ bool    initialize(const char* wfile)
     }
 
     size_t n = load_plugin_dir("plugin");
+    n += load_plugin_dir("plugin/yqserver");
+    auto& templates = wksp::templates();
+    for_all_children("plugin/yqserver", dir::NO_FILES, [&](const std::filesystem::path& subdir){
+        std::string s   = subdir.filename().string();
+        if(templates.contains(s)){
+            n += load_plugin_dir(subdir);
+        }
+    });
     for(auto& fp : wksp::resolve_all(".plugin"sv))
         n += load_plugin_dir(fp);
     yInfo() << "Loaded " << n << " Plugins.";

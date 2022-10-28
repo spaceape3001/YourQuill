@@ -4,6 +4,9 @@
 ##
 ################################################################################
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${PLUGIN_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PLUGIN_DIR})
+
 set(stdquill_SOURCES 
     #./imaging.cpp
     #common.cpp
@@ -13,7 +16,8 @@ set(stdquill_SOURCES
 )
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
-target_include_directories( stdquill PRIVATE . ${ImageMagick_INCLUDE_DIRS}) 
-target_link_libraries( stdquill PUBLIC yqtoolbox yqkernel yqupdate yqhttp asio ${ImageMagick_LIBRARIES})
+target_include_directories( stdquill PRIVATE . ) 
+target_link_libraries( stdquill PUBLIC yqtoolbox yqkernel yqupdate yqhttp asio)
 
 LinkTest(stdquill)
+

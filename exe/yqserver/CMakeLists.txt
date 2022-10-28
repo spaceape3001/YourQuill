@@ -12,4 +12,6 @@ add_executable(yqserver
 )
 target_link_libraries(yqserver yqtoolbox yqkernel yqhttp asio )
 
-
+SET(PLUGIN_DIR ${CMAKE_BINARY_DIR}/bin/plugin/yqserver)
+SET(CMAKE_SHARED_LIBRARY_PREFIX "")
+add_subdirectory(plugins)
