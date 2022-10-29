@@ -7,10 +7,11 @@
 #include "yquill.hpp"
 
 #include <basic/BasicApp.hpp>
-#include <basic/PluginLoader.hpp>
+#include <basic/DelayInit.hpp>
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
+#include <basic/PluginLoader.hpp>
 #include <basic/SqlLite.hpp>
 #include <basic/SqlQuery.hpp>
 #include <basic/SqlUtils.hpp>
@@ -80,15 +81,20 @@ bool    initialize(const char* wfile)
 
     size_t n = load_plugin_dir("plugin");
     n += load_plugin_dir("plugin/yqserver");
+    DelayInit::init_all();
     auto& templates = wksp::templates();
+    DelayInit::init_all();
     for_all_children("plugin/yqserver", dir::NO_FILES, [&](const std::filesystem::path& subdir){
         std::string s   = subdir.filename().string();
         if(templates.contains(s)){
             n += load_plugin_dir(subdir);
+            DelayInit::init_all();
         }
     });
-    for(auto& fp : wksp::resolve_all(".plugin"sv))
+    for(auto& fp : wksp::resolve_all(".plugin"sv)){
         n += load_plugin_dir(fp);
+        DelayInit::init_all();
+    }
     yInfo() << "Loaded " << n << " Plugins.";
     Meta::init();
     
