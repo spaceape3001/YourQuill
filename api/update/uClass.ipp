@@ -163,6 +163,8 @@ namespace yq {
             iInfo.bind(7, dp->binding); // Maybe....?
             iInfo.exec();
             
+            Class   x{doc.id};
+            
             static thread_local cdb::SQ iTag("INSERT INTO CTags (class, tag) VALUES (?, ?)");
             for(std::string_view tk : dp->tags){
                 Tag     t   = cdb::db_tag(tk);
@@ -174,6 +176,32 @@ namespace yq {
                 iTag.bind(2, t.id);
                 iTag.exec();
             }
+            
+            static thread_local cdb::SQ iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
+            
+            for(auto& p : dp->prefixes){
+                std::string a   = p+k;
+                iAlias.exec(x.id, a);
+             
+                for(auto& s : dp->suffixes){
+                    a   = p+k+s;
+                    iAlias.exec(x.id, a);
+                }
+            }
+            
+            for(auto& s : dp->suffixes){
+                std::string a   = k+s;
+                iAlias.exec(x.id, a);
+            }
+            
+            static thread_local cdb::SQ iPrefix("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
+            for(auto& p : dp->prefixes)
+                iPrefix.exec(x.id, p);
+                
+            static thread_local cdb::SQ iSuffix("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
+            for(auto& s : dp->suffixes)
+                iSuffix.exec(x.id, s);
+            
         }
 
         void    class_stage3_pass2_bind(Document doc)
@@ -276,6 +304,12 @@ namespace yq {
             Class x = cdb::db_class(doc);
             if(!x)
                 return;
+                
+                
+            /* This should be the finalize step... */
+            
+            ClassCountMap   bases  = cdb::make_count_map(cdb::base_classes_ranked(x));
+            
         }
         
         void    class_update(Class x)

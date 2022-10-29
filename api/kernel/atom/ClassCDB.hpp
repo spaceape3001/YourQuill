@@ -68,7 +68,7 @@ namespace yq {
         size_t                      base_classes_count(Class);
         std::vector<Class::Rank>    base_classes_ranked(Class, Sorted sorted=Sorted());
         std::vector<Class::Rank>    base_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
-        ClassCountMap               base_classes_ranked_merged_map(const ClassSet&);
+        ClassCountMap               base_classes_ranked_merged_map(const ClassSet&, bool inSet=false);
 
         //! Binding for class?
         std::string                 binding(Class);
@@ -154,6 +154,9 @@ namespace yq {
                 //  Rank here is number of hops
         std::vector<Class::Rank>    derived_classes_ranked_limited(Class, uint64_t maxDepth, Sorted sorted=Sorted());
         
+            // Rank is the number of hops
+        ClassCountMap               derived_classes_ranked_merged_map(const ClassSet&, bool inSet=false);
+
         //Document                document(Atom);
         Document                    document(Class);
         

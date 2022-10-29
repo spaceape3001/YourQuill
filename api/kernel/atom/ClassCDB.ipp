@@ -97,10 +97,12 @@ namespace yq {
             return exec_class_rank_vector(s);
         }
 
-        ClassCountMap               base_classes_ranked_merged_map(const ClassSet&cset)
+        ClassCountMap               base_classes_ranked_merged_map(const ClassSet&cset, bool inSet)
         {
             ClassCountMap   ret;
             for(Class c : cset){
+                if(inSet)
+                    ret[c]  = { 0 };
                 for(Class::Rank cr : base_classes_ranked(c))
                     ret[cr.cls].set_smaller(HCountU64{(uint64_t) cr.rank});
             }
@@ -452,6 +454,19 @@ namespace yq {
             s.bind(2, maxDepth);
             return exec_class_rank_vector(s);
         }
+
+        ClassCountMap               derived_classes_ranked_merged_map(const ClassSet&cset, bool inSet)
+        {
+            ClassCountMap   ret;
+            for(Class c : cset){
+                if(inSet)
+                    ret[c]  = { 0 };
+                for(Class::Rank cr : derived_classes_ranked(c))
+                    ret[cr.cls].set_smaller(HCountU64{(uint64_t) cr.rank});
+            }
+            return ret;
+        }
+
 
         Folder              detail_folder(Class c)
         {

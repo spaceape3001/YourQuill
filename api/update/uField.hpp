@@ -20,8 +20,9 @@ namespace yq {
 
         void    field_icon(Field);
         
+        void    field_notify(Fragment, Change);
         void    field_notify_icons(Fragment, Change);
         
-        void    field_stage3_pass1_create(Document);
+        void    field_stage3(Document);
     }
 }

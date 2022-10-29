@@ -175,16 +175,8 @@ namespace {
             on_stage3<update::class_stage3_pass2_bind>(classes_lookup);
             on_stage3<update::class_stage3_pass3_extend>(classes_lookup);
             
-            on_stage3<update::field_stage3_pass1_create>(fields_lookup);
+            on_stage3<update::field_stage3>(fields_lookup);
             
-            
-            //on_stage3<UClass::s3_create>(classes_lookup);
-            on_stage3<UField::s3_create>(fields_lookup);
-            
-            on_stage3<field_s3_init>(fields_lookup);
-            //on_stage3<class_s3_init>(classes_lookup);
-            on_stage3<field_s3_classes>(fields_lookup);
-
 
                 //  LEAFS & atoms
             on_stage3<update::leaf_stage3_pass1_declare>(leafs_lookup);
@@ -213,7 +205,7 @@ namespace {
                 
             on_change<update::category_notify>(by_cache(categories_folder(), "*.cat"));
             on_change<update::class_notify>(classes_lookup);
-            on_change<field_update>(fields_lookup);
+            on_change<update::field_notify>(fields_lookup);
             on_change<leaf_update>(leafs_lookup);
             on_change<update::tag_notify>(tags_lookup);
             on_change<update::user_notify>(by_cache(users_folder(), "*.user"));

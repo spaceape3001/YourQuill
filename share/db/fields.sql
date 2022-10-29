@@ -59,11 +59,11 @@ CREATE TABLE Fields (
 -- INSERT INTO Fields (id, class, k, name, anycls) VALUES (1, 0, '%', 'Title', 1);
 
 -- Defined classes this field applies to
-CREATE TABLE FDefClass (
-    field       INTEGER NOT NULL,
-    class       INTEGER NOT NULL,
-    UNIQUE(field,class)
-);
+--CREATE TABLE FDefClass (
+--    field       INTEGER NOT NULL,
+--    class       INTEGER NOT NULL,
+--    UNIQUE(field,class)
+--);
 
 CREATE TABLE FAlias (
     field       INTEGER NOT NULL,
@@ -71,6 +71,7 @@ CREATE TABLE FAlias (
     UNIQUE(field, alias)
 );
 
+-- note string is always implicit
 CREATE TABLE FDataTypes (
     field       INTEGER NOT NULL,
         -- this comes out of the meta system
@@ -81,6 +82,7 @@ CREATE TABLE FDataTypes (
 CREATE TABLE FAtomTypes (
     field       INTEGER NOT NULL,
     class       INTEGER NOT NULL,
+    hops        INTEGER NOT NULL,
     UNIQUE(field,class)
 );
 
