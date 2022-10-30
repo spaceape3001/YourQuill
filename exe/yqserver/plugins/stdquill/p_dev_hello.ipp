@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_dev_hello(WebHtml& out)
+    void    p_dev_hello(WebHtml& out)
     {
         out.title("HELLO WORLD!");
         
@@ -22,6 +22,6 @@ namespace {
     
     void    reg_dev_hello()
     {
-        reg_webpage<page_dev_hello>("/dev/hello");
+        reg_webpage<p_dev_hello>("/dev/hello");
     }
 }

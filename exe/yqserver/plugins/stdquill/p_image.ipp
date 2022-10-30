@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_image(WebContext& ctx)
+    void    p_image(WebContext& ctx)
     {
         Image   img = image(ctx);
         if(!img)
@@ -18,7 +18,7 @@ namespace {
         ctx.tx_content      = std::make_shared<ByteArray>(by);
     }
 
-    void    page_thumbnail(WebContext& ctx)
+    void    p_thumbnail(WebContext& ctx)
     {
         Image   img = image(ctx);
         if(!img)
@@ -37,8 +37,8 @@ namespace {
 
     void    reg_image()
     {
-        reg_webpage<page_image>("/image").argument("id", "ID for the image");
-        reg_webpage<page_thumbnail>("/thumbnail").argument("id", "ID for the image");
+        reg_webpage<p_image>("/image").argument("id", "ID for the image");
+        reg_webpage<p_thumbnail>("/thumbnail").argument("id", "ID for the image");
 
     }
 }

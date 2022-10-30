@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_user(WebHtml& h)
+    void    p_user(WebHtml& h)
     {
         User    u   = arg::user(h);
         if(!u)
@@ -19,6 +19,6 @@ namespace {
 
     void    reg_user()
     {
-        reg_webpage<page_user>("/user");
+        reg_webpage<p_user>("/user");
     }
 }

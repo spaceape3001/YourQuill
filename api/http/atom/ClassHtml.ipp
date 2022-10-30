@@ -19,6 +19,7 @@
 #include <kernel/atom/ClassCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <kernel/image/ImageCDB.hpp>
+#include <http/image/ImageHtml.hpp>
 #include <http/HtmlLayout.hpp>
 
 namespace yq {

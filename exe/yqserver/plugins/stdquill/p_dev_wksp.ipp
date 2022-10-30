@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void  page_dev_wksp(WebHtml& h)
+    void  p_dev_wksp(WebHtml& h)
     {
         h.title() << "Workspace '" << wksp::name() << "'";
         
@@ -28,7 +28,7 @@ namespace {
         h.kvrow("Templates") << join(wksp::templates(), ", ");
     }
 
-    void    page_dev_wksp_roots(WebHtml&h)
+    void    p_dev_wksp_roots(WebHtml&h)
     {
         h.title("Workspace Roots");
         dev_table(h, wksp::roots());
@@ -37,8 +37,8 @@ namespace {
     void    reg_dev_wksp()
     {
         reg_webgroup({
-            reg_webpage<page_dev_wksp>("/dev/wksp").label("Info"),
-            reg_webpage<page_dev_wksp_roots>("/dev/wksp/roots").label("Roots")
+            reg_webpage<p_dev_wksp>("/dev/wksp").label("Info"),
+            reg_webpage<p_dev_wksp_roots>("/dev/wksp/roots").label("Roots")
         });
     }
 }

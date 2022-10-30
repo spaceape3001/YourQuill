@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    json    page_api_wksp(WebContext&ctx)
+    json    p_api_wksp(WebContext&ctx)
     {
         json    ret{
             { "author", wksp::author() },
@@ -27,7 +27,7 @@ namespace {
         return ret;
     }
 
-    json    page_api_wksp_quill(WebContext&ctx)
+    json    p_api_wksp_quill(WebContext&ctx)
     {
         json    ret;
         if(ctx.is_local()){
@@ -38,7 +38,7 @@ namespace {
 
     void    reg_api_wksp()
     {
-        reg_webpage<page_api_wksp>("/api/wksp"sv); 
-        reg_webpage<page_api_wksp_quill>("/api/wksp/quill"sv); 
+        reg_webpage<p_api_wksp>("/api/wksp"sv); 
+        reg_webpage<p_api_wksp_quill>("/api/wksp/quill"sv); 
     }
 }

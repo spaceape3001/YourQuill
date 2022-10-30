@@ -21,13 +21,13 @@ namespace {
         }
     }
 
-    void    page_dev_directories(WebHtml& h)
+    void    p_dev_directories(WebHtml& h)
     {
         h.title("All Directories");
         dev_table(h, all_directories(Sorted::YES));
     }
     
-    void    page_dev_directory(WebHtml& h)
+    void    p_dev_directory(WebHtml& h)
     {
         Directory   x   = directory(h);
         if(!x)
@@ -48,7 +48,7 @@ namespace {
             h.kvrow("Root") << dev(rt);
     }
     
-    void    page_dev_directory_fragments(WebHtml& h)
+    void    p_dev_directory_fragments(WebHtml& h)
     {
         Directory   x   = directory(h);
         if(!x)
@@ -58,7 +58,7 @@ namespace {
         dev_table(h, child_fragments(x, Sorted::YES));
     }
 
-    void    page_dev_directory_subdirs(WebHtml& h)
+    void    p_dev_directory_subdirs(WebHtml& h)
     {
         Directory   x   = directory(h);
         if(!x)
@@ -70,11 +70,11 @@ namespace {
     
     void    reg_dev_directory()
     {
-        reg_webpage<page_dev_directories>("/dev/directories");
+        reg_webpage<p_dev_directories>("/dev/directories");
         reg_webgroup({
-            reg_webpage<page_dev_directory>("/dev/directory").argument("id", "Directory ID").label("Info"),
-            reg_webpage<page_dev_directory_fragments>("/dev/directory/fragments").argument("id", "Directory ID").label("Frags"),
-            reg_webpage<page_dev_directory_subdirs>("/dev/directory/subdirs").argument("id", "Directory ID").label("Subdirs")
+            reg_webpage<p_dev_directory>("/dev/directory").argument("id", "Directory ID").label("Info"),
+            reg_webpage<p_dev_directory_fragments>("/dev/directory/fragments").argument("id", "Directory ID").label("Frags"),
+            reg_webpage<p_dev_directory_subdirs>("/dev/directory/subdirs").argument("id", "Directory ID").label("Subdirs")
         });
     }
 }

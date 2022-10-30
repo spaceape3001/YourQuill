@@ -9,7 +9,7 @@
 
 namespace {
 
-    void    page_dev_class(WebHtml& h)
+    void    p_dev_class(WebHtml& h)
     {
         Class   c   = class_(h);
         if(!c)
@@ -29,7 +29,7 @@ namespace {
         h.kvrow("Binding") << i.binding;
     }
     
-    void    page_dev_class_atoms(WebHtml&h)
+    void    p_dev_class_atoms(WebHtml&h)
     {
         Class   c   = class_(h);
         if(!c)
@@ -39,7 +39,7 @@ namespace {
         dev_table(h, atoms(c, Sorted::YES));
     }
     
-    void    page_dev_class_base(WebHtml&h)
+    void    p_dev_class_base(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
@@ -49,7 +49,7 @@ namespace {
         dev_table(h, cdb::base_classes_ranked(x, Sorted::YES), "Hops");
     }
     
-    void    page_dev_class_derived(WebHtml&h)
+    void    p_dev_class_derived(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
@@ -59,7 +59,7 @@ namespace {
         dev_table(h, cdb::derived_classes_ranked(x, Sorted::YES), "Hops");
     }
 
-    void    page_dev_class_fields(WebHtml&h)
+    void    p_dev_class_fields(WebHtml&h)
     {
         Class   c   = class_(h);
         if(!c)
@@ -69,7 +69,7 @@ namespace {
         dev_table(h, fields(c, Sorted::YES));
     }
 
-    void    page_dev_class_inbound(WebHtml&h)
+    void    p_dev_class_inbound(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
@@ -79,7 +79,7 @@ namespace {
         dev_table(h, cdb::inbound_classes_ranked(x, Sorted::YES), "Hops");
     }
 
-    void    page_dev_class_outbound(WebHtml&h)
+    void    p_dev_class_outbound(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
@@ -89,7 +89,7 @@ namespace {
         dev_table(h, cdb::outbound_classes_ranked(x, Sorted::YES), "Hops");
     }
 
-    void    page_dev_class_sources(WebHtml&h)
+    void    p_dev_class_sources(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
@@ -99,7 +99,7 @@ namespace {
         dev_table(h, cdb::source_classes_ranked(x, Sorted::YES), "Hops");
     }
 
-    void    page_dev_class_tags(WebHtml& h)
+    void    p_dev_class_tags(WebHtml& h)
     {
         Class   c   = class_(h);
         if(!c)
@@ -109,7 +109,7 @@ namespace {
         dev_table(h, tags(c, Sorted::YES));
         
     }
-    void    page_dev_class_targets(WebHtml&h)
+    void    p_dev_class_targets(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
@@ -121,7 +121,7 @@ namespace {
 
     
     /*
-    void    page_dev_class_def_fields(WebHtml&h)
+    void    p_dev_class_def_fields(WebHtml&h)
     {
         Class   c   = class_(h);
         if(!c)
@@ -132,7 +132,7 @@ namespace {
     }
     */
 
-    void    page_dev_classes(WebHtml&h)
+    void    p_dev_classes(WebHtml&h)
     {
         h.title() << "All Classes";
         dev_table(h, all_classes(Sorted::YES));
@@ -142,18 +142,18 @@ namespace {
     void reg_dev_class()
     {
         reg_webgroup({
-            reg_webpage<page_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),
-            reg_webpage<page_dev_class_base>("/dev/class/base").argument("id", "Class ID").label("Base"),
-            reg_webpage<page_dev_class_derived>("/dev/class/derived").argument("id", "Class ID").label("Derived"),
-            reg_webpage<page_dev_class_sources>("/dev/class/sources").argument("id", "Class ID").label("Sources"),
-            reg_webpage<page_dev_class_targets>("/dev/class/targets").argument("id", "Class ID").label("Targets"),
-            reg_webpage<page_dev_class_inbound>("/dev/class/inbound").argument("id", "Class ID").label("Inbound"),
-            reg_webpage<page_dev_class_outbound>("/dev/class/outbound").argument("id", "Class ID").label("Outbound"),
-            reg_webpage<page_dev_class_tags>("/dev/class/tags").argument("id", "Class ID").label("Tags"),
-            reg_webpage<page_dev_class_fields>("/dev/class/fields").argument("id", "Class ID").label("Fields"),
-            //reg_webpage<page_dev_class_def_fields>("/dev/class/def_fields").argument("id", "Class ID").label("Def Fields"),
-            reg_webpage<page_dev_class_atoms>("/dev/class/atoms").argument("id", "Class ID").label("Atoms")
+            reg_webpage<p_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),
+            reg_webpage<p_dev_class_base>("/dev/class/base").argument("id", "Class ID").label("Base"),
+            reg_webpage<p_dev_class_derived>("/dev/class/derived").argument("id", "Class ID").label("Derived"),
+            reg_webpage<p_dev_class_sources>("/dev/class/sources").argument("id", "Class ID").label("Sources"),
+            reg_webpage<p_dev_class_targets>("/dev/class/targets").argument("id", "Class ID").label("Targets"),
+            reg_webpage<p_dev_class_inbound>("/dev/class/inbound").argument("id", "Class ID").label("Inbound"),
+            reg_webpage<p_dev_class_outbound>("/dev/class/outbound").argument("id", "Class ID").label("Outbound"),
+            reg_webpage<p_dev_class_tags>("/dev/class/tags").argument("id", "Class ID").label("Tags"),
+            reg_webpage<p_dev_class_fields>("/dev/class/fields").argument("id", "Class ID").label("Fields"),
+            //reg_webpage<p_dev_class_def_fields>("/dev/class/def_fields").argument("id", "Class ID").label("Def Fields"),
+            reg_webpage<p_dev_class_atoms>("/dev/class/atoms").argument("id", "Class ID").label("Atoms")
         });
-        reg_webpage<page_dev_classes>("/dev/classes");
+        reg_webpage<p_dev_classes>("/dev/classes");
     }
 }

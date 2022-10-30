@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_dev_echo(WebHtml& h)
+    void    p_dev_echo(WebHtml& h)
     {
         auto& ctx   = h.context();
         ctx.decode_query();
@@ -58,6 +58,6 @@ namespace {
 
     void    reg_dev_echo()
     {
-        reg_webpage<page_dev_echo>({hGet, hPost}, "/dev/echo");
+        reg_webpage<p_dev_echo>({hGet, hPost}, "/dev/echo");
     }
 }

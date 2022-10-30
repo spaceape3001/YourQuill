@@ -39,7 +39,7 @@ namespace yq {
         std::string alt;
         
         bool operator==(const Thumbnail&) const = default;
-        operator bool() const { return img; }
+        operator bool() const { return img != Image{}; }
     };
 
 }

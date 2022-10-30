@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_dev_document(WebHtml&h)
+    void    p_dev_document(WebHtml&h)
     {
         Document    doc = document(h);
         if(!doc)
@@ -44,7 +44,7 @@ namespace {
         h.kvrow("Suffix") << i.suffix;
     }
     
-    void    page_dev_document_attributes(WebHtml&h)
+    void    p_dev_document_attributes(WebHtml&h)
     {
         Document    doc = document(h);
         if(!doc)
@@ -53,7 +53,7 @@ namespace {
         dev_table(h, cdb::attributes(doc));
     }
     
-    void    page_dev_document_fragments(WebHtml&h)
+    void    p_dev_document_fragments(WebHtml&h)
     {
         Document    doc = document(h);
         if(!doc)
@@ -62,7 +62,7 @@ namespace {
         dev_table(h, cdb::fragments(doc));
     }
     
-    void    page_dev_document_roots(WebHtml&h)
+    void    p_dev_document_roots(WebHtml&h)
     {
         Document    doc = document(h);
         if(!doc)
@@ -71,7 +71,7 @@ namespace {
         dev_table(h, cdb::roots(doc));
     }
     
-    void    page_dev_documents(WebHtml& h)
+    void    p_dev_documents(WebHtml& h)
     {
         h.title("Listing of Documents");
         dev_table(h, all_documents(Sorted::YES));
@@ -80,11 +80,11 @@ namespace {
     void    reg_dev_document()
     {
         reg_webgroup({
-            reg_webpage<page_dev_document>("/dev/document").argument("id", "Document ID").label("Info"),
-            reg_webpage<page_dev_document_attributes>("/dev/document/attributes").argument("id", "Document ID").label("Attributes"),
-            reg_webpage<page_dev_document_fragments>("/dev/document/fragments").argument("id", "Document ID").label("Fragments"),
-            reg_webpage<page_dev_document_roots>("/dev/document/roots").argument("id", "Document ID").label("Roots")
+            reg_webpage<p_dev_document>("/dev/document").argument("id", "Document ID").label("Info"),
+            reg_webpage<p_dev_document_attributes>("/dev/document/attributes").argument("id", "Document ID").label("Attributes"),
+            reg_webpage<p_dev_document_fragments>("/dev/document/fragments").argument("id", "Document ID").label("Fragments"),
+            reg_webpage<p_dev_document_roots>("/dev/document/roots").argument("id", "Document ID").label("Roots")
         });
-        reg_webpage<page_dev_documents>("/dev/documents"); 
+        reg_webpage<p_dev_documents>("/dev/documents"); 
     }
 }

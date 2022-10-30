@@ -4,12 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uClass.ipp"
 #include "uField.ipp"
 #include "uLeaf.ipp"
 
-#include "uCategory.ipp"
-#include "uImage.ipp"
-#include "uRoot.ipp"
-#include "uTag.ipp"
 #include "uUser.ipp"

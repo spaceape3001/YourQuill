@@ -16,7 +16,7 @@ namespace {
             h << ": " << extra;
     }
 
-    void    page_dev_tag(WebHtml& h)
+    void    p_dev_tag(WebHtml& h)
     {
         Tag x   = tag(h);
         if(!x)
@@ -34,7 +34,7 @@ namespace {
         h.kvrow("Image");
     }
     
-    void    page_dev_tag_classes(WebHtml& h)
+    void    p_dev_tag_classes(WebHtml& h)
     {
         Tag x   = tag(h);
         if(!x)
@@ -44,7 +44,7 @@ namespace {
         dev_table(h, classes_with_tag(x));
     }
 
-    void    page_dev_tags(WebHtml& out)
+    void    p_dev_tags(WebHtml& out)
     {
         out.title("All Tags");
         dev_table(out, all_tags());
@@ -53,12 +53,12 @@ namespace {
     void    reg_dev_tag()
     {
         reg_webgroup({
-            reg_webpage<page_dev_tag>("/dev/tag")
+            reg_webpage<p_dev_tag>("/dev/tag")
                 .argument("id", "Tag id (number)")
                 .argument("key", "Tag key (string)")
                 .argument("tag", "Tag key/identifier").label("Info"),
-            reg_webpage<page_dev_tag_classes>("/dev/tag/classes").argument("id", "Tag id (number)").label("Classes")
+            reg_webpage<p_dev_tag_classes>("/dev/tag/classes").argument("id", "Tag id (number)").label("Classes")
         });
-        reg_webpage<page_dev_tags>("/dev/tags");
+        reg_webpage<p_dev_tags>("/dev/tags");
     }
 }

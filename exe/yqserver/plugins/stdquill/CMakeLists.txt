@@ -16,8 +16,20 @@ set(stdquill_SOURCES
 )
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
-target_include_directories( stdquill PRIVATE . ) 
-target_link_libraries( stdquill PUBLIC yqtoolbox yqkernel yqupdate yqhttp asio)
+target_include_directories( stdquill 
+    PRIVATE 
+        . 
+        ${ImageMagick_INCLUDE_DIRS}
+) 
+target_link_libraries( stdquill 
+    PUBLIC 
+        yqtoolbox 
+        yqkernel 
+        yqupdate 
+        yqhttp 
+        asio
+        ${ImageMagick_LIBRARIES}
+)
 
 LinkTest(stdquill)
 

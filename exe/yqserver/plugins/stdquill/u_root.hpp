@@ -10,7 +10,5 @@ namespace yq {
     struct Root;
     struct Image;
     
-    namespace update {
-        void    set_root_icon(const Root*, Image);
-    }
+    void    u_set_root_icon(const Root*, Image);
 }

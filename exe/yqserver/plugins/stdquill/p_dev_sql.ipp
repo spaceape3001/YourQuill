@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void page_dev_sql_table(WebHtml& h)
+    void p_dev_sql_table(WebHtml& h)
     {
         int i, cc, count;
         std::string table = h.context().find_query("table");
@@ -52,7 +52,7 @@ namespace {
         h.paragraph() << "This table has " << count << " row(s).";
     }
     
-    void page_dev_sql_tables(WebHtml& out)
+    void p_dev_sql_tables(WebHtml& out)
     {
         auto list = out.numbers();
         for(auto& s : wksp::db().tables())
@@ -61,7 +61,7 @@ namespace {
     
     void    reg_dev_sql()
     {
-        reg_webpage<page_dev_sql_table>("/dev/sql/table").local().argument("table", "SQL Table Name");
-        reg_webpage<page_dev_sql_tables>("/dev/sql/tables", "SQL Tables").local();
+        reg_webpage<p_dev_sql_table>("/dev/sql/table").local().argument("table", "SQL Table Name");
+        reg_webpage<p_dev_sql_tables>("/dev/sql/tables", "SQL Tables").local();
     }
 }

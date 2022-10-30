@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void page_dev_mimetypes(WebHtml&h)
+    void p_dev_mimetypes(WebHtml&h)
     {
         h.title("Mime Types");
         auto ta = h.table();
@@ -18,6 +18,6 @@ namespace {
 
     void    reg_dev_mimetypes()
     {
-        reg_webpage<page_dev_mimetypes>("/dev/mimetypes");
+        reg_webpage<p_dev_mimetypes>("/dev/mimetypes");
     }
 }

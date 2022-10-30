@@ -8,7 +8,7 @@
 
 namespace {
 
-    void page_dev_meta_object(WebHtml&h)
+    void p_dev_meta_object(WebHtml&h)
     {
         const ObjectInfo*   obj = object_info(h);
         if(!obj)
@@ -25,7 +25,7 @@ namespace {
         h.kvrow("Abstract?") << obj->is_abstract();
     }
     
-    void page_dev_meta_object_all_base(WebHtml&h)
+    void p_dev_meta_object_all_base(WebHtml&h)
     {
         const ObjectInfo*   obj = object_info(h);
         if(!obj)
@@ -35,7 +35,7 @@ namespace {
         dev_table(h, obj->bases(true).all);
     }
 
-    void page_dev_meta_object_all_derived(WebHtml&h)
+    void p_dev_meta_object_all_derived(WebHtml&h)
     {
         const ObjectInfo*   obj = object_info(h);
         if(!obj)
@@ -45,7 +45,7 @@ namespace {
         dev_table(h, obj->deriveds(true).all);
     }
 
-    void page_dev_meta_object_all_properties(WebHtml&h)
+    void p_dev_meta_object_all_properties(WebHtml&h)
     {
         const ObjectInfo*   obj = object_info(h);
         if(!obj)
@@ -55,7 +55,7 @@ namespace {
         dev_table(h, obj->properties(true).all);
     }
 
-    void page_dev_meta_object_derived(WebHtml&h)
+    void p_dev_meta_object_derived(WebHtml&h)
     {
         const ObjectInfo*   obj = object_info(h);
         if(!obj)
@@ -65,7 +65,7 @@ namespace {
         dev_table(h, obj->deriveds(false).all);
     }
 
-    void page_dev_meta_object_properties(WebHtml&h)
+    void p_dev_meta_object_properties(WebHtml&h)
     {
         const ObjectInfo*   obj = object_info(h);
         if(!obj)
@@ -75,13 +75,13 @@ namespace {
         dev_table(h, obj->properties(false).all);
     }
     
-    void    page_dev_meta_objects(WebHtml&h)
+    void    p_dev_meta_objects(WebHtml&h)
     {
         h.title() << "All Meta Objects";
         dev_table(h, ObjectInfo::all());
     }
 
-    void    page_dev_meta_type(WebHtml& h)
+    void    p_dev_meta_type(WebHtml& h)
     {
         const TypeInfo* type    = type_info(h);
         if(!type)
@@ -107,7 +107,7 @@ namespace {
         h.kvrow("Methods") << type->method_count();
     }
     
-    void    page_dev_meta_type_properties(WebHtml& h)
+    void    p_dev_meta_type_properties(WebHtml& h)
     {
         const TypeInfo* type    = type_info(h);
         if(!type)
@@ -117,7 +117,7 @@ namespace {
         dev_table(h, type->properties());
     }
     
-    void page_dev_meta_types(WebHtml&h)
+    void p_dev_meta_types(WebHtml&h)
     {
         h.title() << "All Type Infos";
         dev_table(h, TypeInfo::all());
@@ -126,18 +126,18 @@ namespace {
     void    reg_dev_meta()
     {
         reg_webgroup({
-            reg_webpage<page_dev_meta_object>("/dev/meta/object").label("Info"),
-            reg_webpage<page_dev_meta_object_derived>("/dev/meta/object/derived").label("Derived"),
-            reg_webpage<page_dev_meta_object_properties>("/dev/meta/object/properties").label("Properties"),
-            reg_webpage<page_dev_meta_object_all_base>("/dev/meta/object/all_base").label("All Base"),
-            reg_webpage<page_dev_meta_object_all_derived>("/dev/meta/object/all_derived").label("All Derived"),
-            reg_webpage<page_dev_meta_object_all_properties>("/dev/meta/object/all_properties").label("All Properties")
+            reg_webpage<p_dev_meta_object>("/dev/meta/object").label("Info"),
+            reg_webpage<p_dev_meta_object_derived>("/dev/meta/object/derived").label("Derived"),
+            reg_webpage<p_dev_meta_object_properties>("/dev/meta/object/properties").label("Properties"),
+            reg_webpage<p_dev_meta_object_all_base>("/dev/meta/object/all_base").label("All Base"),
+            reg_webpage<p_dev_meta_object_all_derived>("/dev/meta/object/all_derived").label("All Derived"),
+            reg_webpage<p_dev_meta_object_all_properties>("/dev/meta/object/all_properties").label("All Properties")
         });
-        reg_webpage<page_dev_meta_objects>("/dev/meta/objects"); 
+        reg_webpage<p_dev_meta_objects>("/dev/meta/objects"); 
         reg_webgroup({
-            reg_webpage<page_dev_meta_type>("/dev/meta/type").label("Info"),
-            reg_webpage<page_dev_meta_type_properties>("/dev/meta/type/properties").label("Properties")
+            reg_webpage<p_dev_meta_type>("/dev/meta/type").label("Info"),
+            reg_webpage<p_dev_meta_type_properties>("/dev/meta/type/properties").label("Properties")
         });
-        reg_webpage<page_dev_meta_types>("/dev/meta/types");
+        reg_webpage<p_dev_meta_types>("/dev/meta/types");
     }
 }

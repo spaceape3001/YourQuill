@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void page_dev_image(WebHtml& h)
+    void p_dev_image(WebHtml& h)
     {
         Image   img = image(h);
         if(!img)
@@ -23,7 +23,7 @@ namespace {
         h << img;
     }
 
-    void page_dev_images(WebHtml& h)
+    void p_dev_images(WebHtml& h)
     {
         h.title("All Images");
         dev_table(h, all_images());
@@ -31,7 +31,7 @@ namespace {
 
     void    reg_dev_image()
     {
-        reg_webpage<page_dev_image>("/dev/image");
-        reg_webpage<page_dev_images>("/dev/images"); 
+        reg_webpage<p_dev_image>("/dev/image");
+        reg_webpage<p_dev_images>("/dev/images"); 
     }
 }

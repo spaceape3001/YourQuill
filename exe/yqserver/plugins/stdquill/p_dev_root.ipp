@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_dev_root(WebHtml& h)
+    void    p_dev_root(WebHtml& h)
     {
         const Root* rt   = root(h);
         if(!rt)
@@ -34,7 +34,7 @@ namespace {
         
     }
     
-    void    page_dev_root_all_directories(WebHtml& h)
+    void    p_dev_root_all_directories(WebHtml& h)
     {
         const Root* rt   = root(h);
         if(!rt)
@@ -44,7 +44,7 @@ namespace {
         dev_table(h, all_directories(rt, Sorted::YES));
     }
     
-    void    page_dev_root_all_fragments(WebHtml& h)
+    void    p_dev_root_all_fragments(WebHtml& h)
     {
         const Root* rt  = root(h);
         if(!rt)
@@ -54,7 +54,7 @@ namespace {
         dev_table(h, all_fragments(rt, Sorted::YES));
     }
 
-    void    page_dev_root_directories(WebHtml& h)
+    void    p_dev_root_directories(WebHtml& h)
     {
         const Root* rt   = root(h);
         if(!rt)
@@ -65,7 +65,7 @@ namespace {
         dev_table(h, directories(rt, Sorted::YES));
     }
 
-    void    page_dev_root_fragments(WebHtml& h)
+    void    p_dev_root_fragments(WebHtml& h)
     {
         const Root* rt   = root(h);
         if(!rt)
@@ -76,7 +76,7 @@ namespace {
         dev_table(h, fragments(rt, Sorted::YES));
     }
     
-    void    page_dev_roots(WebHtml& h)
+    void    p_dev_roots(WebHtml& h)
     {
         h.title() << "All Roots";
         dev_table(h, wksp::roots());
@@ -85,12 +85,12 @@ namespace {
     void    reg_dev_root()
     {
         reg_webgroup({
-            reg_webpage<page_dev_root>("/dev/root").argument("id", "Root ID").label("Info"),
-            reg_webpage<page_dev_root_directories>("/dev/root/dirs").argument("id", "Root ID").label("Dirs"),
-            reg_webpage<page_dev_root_fragments>("/dev/root/frags").argument("id", "Root ID").label("Frags"),
-            reg_webpage<page_dev_root_all_directories>("/dev/root/all_dirs").argument("id", "Root ID").label("AllDirs"),
-            reg_webpage<page_dev_root_all_fragments>("/dev/root/all_frags").argument("id", "Root ID").label("AllFrags")
+            reg_webpage<p_dev_root>("/dev/root").argument("id", "Root ID").label("Info"),
+            reg_webpage<p_dev_root_directories>("/dev/root/dirs").argument("id", "Root ID").label("Dirs"),
+            reg_webpage<p_dev_root_fragments>("/dev/root/frags").argument("id", "Root ID").label("Frags"),
+            reg_webpage<p_dev_root_all_directories>("/dev/root/all_dirs").argument("id", "Root ID").label("AllDirs"),
+            reg_webpage<p_dev_root_all_fragments>("/dev/root/all_frags").argument("id", "Root ID").label("AllFrags")
         });
-        reg_webpage<page_dev_roots>("/dev/roots");
+        reg_webpage<p_dev_roots>("/dev/roots");
     }
 }

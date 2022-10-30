@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_dev_fragment(WebHtml&h)
+    void    p_dev_fragment(WebHtml&h)
     {
         Fragment    x = fragment(h, nullptr);
         if(!x)
@@ -31,7 +31,7 @@ namespace {
         h.kvrow("Size") << i.size;
     }
     
-    void    page_dev_fragment_content(WebHtml& h)
+    void    p_dev_fragment_content(WebHtml& h)
     {
         Fragment    x = fragment(h, nullptr);
         if(!x)
@@ -70,7 +70,7 @@ namespace {
         ctx.tx_content      = std::make_shared<ByteArray>(frag_bytes(x));
     }
 
-    void    page_dev_fragments(WebHtml& h)
+    void    p_dev_fragments(WebHtml& h)
     {
         h.title("Listing of Fragments");
         dev_table(h, all_fragments(Sorted::YES));
@@ -79,10 +79,10 @@ namespace {
     void    reg_dev_fragment()
     {
         reg_webgroup({
-            reg_webpage<page_dev_fragment>("/dev/fragment").description("Developer info for a fragment").argument("id", "Fragment ID").label("Info"),
-            reg_webpage<page_dev_fragment_content>("/dev/fragment/content").description("Content for fragment").argument("id", "Fragment ID").label("Content")
+            reg_webpage<p_dev_fragment>("/dev/fragment").description("Developer info for a fragment").argument("id", "Fragment ID").label("Info"),
+            reg_webpage<p_dev_fragment_content>("/dev/fragment/content").description("Content for fragment").argument("id", "Fragment ID").label("Content")
         });
         reg_webpage<dev_fragment_image>("/dev/fragment/image").argument("id", "ID for fragment"); 
-        reg_webpage<page_dev_fragments>("/dev/fragments");
+        reg_webpage<p_dev_fragments>("/dev/fragments");
     }
 }

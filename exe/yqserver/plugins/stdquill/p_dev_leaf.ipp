@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void page_dev_leaf(WebHtml&h)
+    void p_dev_leaf(WebHtml&h)
     {
         Leaf    x   = leaf(h);
         if(!x)
@@ -27,7 +27,7 @@ namespace {
     
     //  we'll do more (later)
 
-    void    page_dev_leafs(WebHtml&h)
+    void    p_dev_leafs(WebHtml&h)
     {
         h.title("All Leafs");
         dev_table(h, all_leafs(Sorted::YES));
@@ -36,8 +36,8 @@ namespace {
     void    reg_dev_leaf()
     {
         reg_webgroup({
-            reg_webpage<page_dev_leaf>("/dev/leaf").argument("id", "Leaf ID").label("Info")
+            reg_webpage<p_dev_leaf>("/dev/leaf").argument("id", "Leaf ID").label("Info")
         });
-        reg_webpage<page_dev_leafs>("/dev/leafs");
+        reg_webpage<p_dev_leafs>("/dev/leafs");
     }
 }

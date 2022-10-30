@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void    page_admin_categories(WebHtml& h)
+    void    p_admin_categories(WebHtml& h)
     {
         h.title() << "Categories for [" << html_escape(wksp::name()) << "]";
 
@@ -24,7 +24,7 @@ namespace {
         admin_table(h, cdb::all_categories(Sorted::YES));
     }
     
-    void    page_admin_categories_create(WebContext& ctx)
+    void    p_admin_categories_create(WebContext& ctx)
     {
         if(!ctx.can_edit())
             throw HttpStatus::Unauthorized;
@@ -62,7 +62,7 @@ namespace {
         }
     }
     
-    void    page_admin_category(WebHtml& h)
+    void    p_admin_category(WebHtml& h)
     {
         Category    c = category(h);
         if(!c)
@@ -72,7 +72,7 @@ namespace {
         h << "TODO Category " << label(c);
     }
     
-    void    page_admin_class(WebHtml& h)
+    void    p_admin_class(WebHtml& h)
     {
         Class c = class_(h);
         if(!c)
@@ -82,7 +82,7 @@ namespace {
         h << "TODO Class " << label(c);
     }
 
-    void    page_admin_classes(WebHtml& h)
+    void    p_admin_classes(WebHtml& h)
     {
         h.title() << "Classes for [" << html_escape(wksp::name()) << "]";
 
@@ -99,7 +99,7 @@ namespace {
         admin_table(h, cdb::all_classes(Sorted::YES));
     }
     
-    void    page_admin_classes_create(WebContext& ctx)
+    void    p_admin_classes_create(WebContext& ctx)
     {
         if(!ctx.can_edit())
             throw HttpStatus::Unauthorized;
@@ -135,7 +135,7 @@ namespace {
         }
     }
     
-    void    page_admin_field(WebHtml&h)
+    void    p_admin_field(WebHtml&h)
     {
         Field f = field(h);
         if(!f)
@@ -145,7 +145,7 @@ namespace {
         h << "TODO Field " << label(f);
     }
 
-    void    page_admin_fields(WebHtml& h)
+    void    p_admin_fields(WebHtml& h)
     {
         h.title() << "Fields for [" << html_escape(wksp::name()) << "]";
 
@@ -162,7 +162,7 @@ namespace {
         admin_table(h,  cdb::all_fields(Sorted::YES));
     }
 
-    void    page_admin_fields_create(WebContext& ctx)
+    void    p_admin_fields_create(WebContext& ctx)
     {
         if(!ctx.can_edit())
             throw HttpStatus::Unauthorized;
@@ -200,7 +200,7 @@ namespace {
         }
     }
 
-    void    page_admin_tags(WebHtml& h)
+    void    p_admin_tags(WebHtml& h)
     {
         h.title() << "Tags for [" << html_escape(wksp::name()) << "]";
 
@@ -218,7 +218,7 @@ namespace {
 
     }
 
-    void    page_admin_tag(WebHtml& h)
+    void    p_admin_tag(WebHtml& h)
     {
         Tag     t   = arg::tag(h);
         if(!t)
@@ -228,7 +228,7 @@ namespace {
         h << "TODO... tag " << label(t);
     }
 
-    void    page_admin_tags_create(WebContext& ctx)
+    void    p_admin_tags_create(WebContext& ctx)
     {
         if(!ctx.can_edit())
             throw HttpStatus::Unauthorized;
@@ -265,7 +265,7 @@ namespace {
         }
     }
 
-    void    page_admin_user(WebHtml&h)
+    void    p_admin_user(WebHtml&h)
     {
         User    u   = user(h);
         if(!u)
@@ -275,7 +275,7 @@ namespace {
         h << "TODO (User " << name(u) << ")";
     }
 
-    void    page_admin_users(WebHtml&h)
+    void    p_admin_users(WebHtml&h)
     {
         h.title() << "Users for [" << html_escape(wksp::name()) << "]";
         
@@ -289,7 +289,7 @@ namespace {
         admin_table(h, cdb::all_users(Sorted::YES));
     }
     
-    void    page_admin_users_create(WebContext& ctx)
+    void    p_admin_users_create(WebContext& ctx)
     {
         if(!ctx.can_edit())
             throw HttpStatus::Unauthorized;
@@ -329,21 +329,21 @@ namespace {
     {
         reg_webgroup({
             reg_webtemplate("/admin", wksp::shared("std/admin"sv)).source(".admin").label("Info"),
-            reg_webpage<page_admin_categories>("/admin/categories").label("Categories"),
-            reg_webpage<page_admin_classes>("/admin/classes").label("Classes"),
-            reg_webpage<page_admin_fields>("/admin/fields").label("Fields"),
-            reg_webpage<page_admin_tags>("/admin/tags").label("Tags"),
-            reg_webpage<page_admin_users>("/admin/users").label("Users")
+            reg_webpage<p_admin_categories>("/admin/categories").label("Categories"),
+            reg_webpage<p_admin_classes>("/admin/classes").label("Classes"),
+            reg_webpage<p_admin_fields>("/admin/fields").label("Fields"),
+            reg_webpage<p_admin_tags>("/admin/tags").label("Tags"),
+            reg_webpage<p_admin_users>("/admin/users").label("Users")
         });
-        reg_webpage<page_admin_categories_create>(hPost, "/admin/categories/create");
-        reg_webpage<page_admin_category>("/admin/category").argument("id", "Category ID");
-        reg_webpage<page_admin_class>("/admin/class").argument("id", "Class ID");
-        reg_webpage<page_admin_classes_create>(hPost, "/admin/classes/create");
-        reg_webpage<page_admin_field>("/admin/field").argument("id", "Field ID");
-        reg_webpage<page_admin_fields_create>(hPost, "/admin/fields/create");
-        reg_webpage<page_admin_tag>("/admin/tag").argument("id", "Tag ID");;
-        reg_webpage<page_admin_tags_create>(hPost, "/admin/tags/create");
-        reg_webpage<page_admin_user>("/admin/user").argument("id", "User ID");
-        reg_webpage<page_admin_users_create>(hPost, "/admin/users/create");
+        reg_webpage<p_admin_categories_create>(hPost, "/admin/categories/create");
+        reg_webpage<p_admin_category>("/admin/category").argument("id", "Category ID");
+        reg_webpage<p_admin_class>("/admin/class").argument("id", "Class ID");
+        reg_webpage<p_admin_classes_create>(hPost, "/admin/classes/create");
+        reg_webpage<p_admin_field>("/admin/field").argument("id", "Field ID");
+        reg_webpage<p_admin_fields_create>(hPost, "/admin/fields/create");
+        reg_webpage<p_admin_tag>("/admin/tag").argument("id", "Tag ID");;
+        reg_webpage<p_admin_tags_create>(hPost, "/admin/tags/create");
+        reg_webpage<p_admin_user>("/admin/user").argument("id", "User ID");
+        reg_webpage<p_admin_users_create>(hPost, "/admin/users/create");
     }
 }

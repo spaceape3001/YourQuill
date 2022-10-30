@@ -7,13 +7,13 @@
 #pragma once
 
 namespace {
-    void    page_leaf(WebHtml& h)
+    void    p_leaf(WebHtml& h)
     {
         //  BIG FAT TODO!
     }
 
     void    reg_leaf()
     {
-        reg_webpage<page_leaf>("/leaf").argument("id", "Leaf ID");
+        reg_webpage<p_leaf>("/leaf").argument("id", "Leaf ID");
     }
 }

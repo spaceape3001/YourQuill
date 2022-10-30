@@ -34,12 +34,9 @@
 #include <kernel/user/UserCDB.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
-#include <update/uCategory.hpp>
-#include <update/uClass.hpp>
 #include <update/uField.hpp>
-#include <update/uImage.hpp>
+
 #include <update/uLeaf.hpp>
-#include <update/uTag.hpp>
 #include <update/uUser.hpp>
 
 #include "uAtom.ipp"
@@ -133,10 +130,14 @@ namespace {
 }
 
 #include "u_atom.ipp"
+#include "u_category.ipp"
+#include "u_class.ipp"
 #include "u_css.ipp"
 #include "u_field.ipp"
+#include "u_image.ipp"
 #include "u_leaf.ipp"
-
+#include "u_root.ipp"
+#include "u_tag.ipp"
 
 namespace {
 
@@ -154,11 +155,11 @@ namespace {
             gSharedPageFile     = wksp::shared(kStdPage);
 
                 //  I wanna get this separate, but for now....
-            on_stage2<update::image_stage2>();
+            on_stage2<u_image_stage2>();
             
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_stage3<update::image_stage3>(by_cache(z));
+                on_stage3<u_image_stage3>(by_cache(z));
 
             auto    classes_lookup  = by_cache(classes_folder(), "*.class");
             auto    fields_lookup   = by_cache(fields_folder(), "*.field");
@@ -166,14 +167,14 @@ namespace {
             auto    tags_lookup     = by_cache(tags_folder(), "*.tag");
             
                 //  Organization & users
-            on_stage3<update::category_stage3>(by_cache(categories_folder(), "*.cat"));
-            on_stage3<update::tag_stage3>(tags_lookup);
+            on_stage3<u_category_stage3>(by_cache(categories_folder(), "*.cat"));
+            on_stage3<u_tag_stage3>(tags_lookup);
             on_stage3<update::user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
-            on_stage3<update::class_stage3_pass1_create>(classes_lookup);
-            on_stage3<update::class_stage3_pass2_bind>(classes_lookup);
-            on_stage3<update::class_stage3_pass3_extend>(classes_lookup);
+            on_stage3<u_class_stage3_pass1_create>(classes_lookup);
+            on_stage3<u_class_stage3_pass2_bind>(classes_lookup);
+            on_stage3<u_class_stage3_pass3_extend>(classes_lookup);
             
             on_stage3<update::field_stage3>(fields_lookup);
             
@@ -181,7 +182,7 @@ namespace {
                 //  LEAFS & atoms
             on_stage3<update::leaf_stage3_pass1_declare>(leafs_lookup);
             on_stage3<leaf_stage3>(leafs_lookup);
-            on_stage3<update::tag_stage3_leaf>(by_cache(tags_folder(), "*.tag"));
+            on_stage3<u_tag_stage3_leaf>(by_cache(tags_folder(), "*.tag"));
 
         
                 //  STAGE 4 global related
@@ -192,7 +193,7 @@ namespace {
             
                 // Images change first (for icon changes)
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_change<update::image_notify>(by_cache(z));
+                on_change<u_image_notify>(by_cache(z));
 
                 // Rest are less order dependent... 
 
@@ -203,21 +204,21 @@ namespace {
             on_change<page_update>(by_file(gSharedPageFile));
             on_change<page_update>(by_cache(top_folder(), ".page"));
                 
-            on_change<update::category_notify>(by_cache(categories_folder(), "*.cat"));
-            on_change<update::class_notify>(classes_lookup);
+            on_change<u_category_notify>(by_cache(categories_folder(), "*.cat"));
+            on_change<u_class_notify>(classes_lookup);
             on_change<update::field_notify>(fields_lookup);
             on_change<leaf_update>(leafs_lookup);
-            on_change<update::tag_notify>(tags_lookup);
+            on_change<u_tag_notify>(tags_lookup);
             on_change<update::user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
-                on_change<update::class_notify_icons>(by_cache(classes_folder(), z));
+                on_change<u_class_notify_icons>(by_cache(classes_folder(), z));
                 on_change<update::field_notify_icons>(by_cache(fields_folder(), z));
                 on_change<update::leaf_notify_icons>(by_cache(z));
                 on_change<update::user_notify_icons>(by_cache(users_folder(), z));
 
-                on_change<update::category_notify_icons>(by_cache(categories_folder(), z));
-                on_change<update::tag_notify_icons>(by_cache(tags_folder(), z));
+                on_change<u_category_notify_icons>(by_cache(categories_folder(), z));
+                on_change<u_tag_notify_icons>(by_cache(tags_folder(), z));
             }
         }
 

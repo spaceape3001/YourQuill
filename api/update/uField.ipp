@@ -7,13 +7,18 @@
 #pragma once
 
 #include "uField.hpp"
+#include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/meta/TypeInfo.hpp>
+#include <kernel/atom/ClassCDB.hpp>
 #include <kernel/atom/FieldCDB.hpp>
 #include <kernel/atom/FieldData.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
+#include <kernel/org/CategoryCDB.hpp>
+#include <kernel/org/TagCDB.hpp>
 
 namespace yq {
     namespace update {

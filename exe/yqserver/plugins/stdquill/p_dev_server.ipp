@@ -7,7 +7,7 @@
 #pragma once
 
 namespace {
-    void page_dev_server(WebHtml&h)
+    void p_dev_server(WebHtml&h)
     {
         h.title("Server Information");
         auto ta  = h.table();
@@ -54,6 +54,6 @@ namespace {
 
     void    reg_dev_server()
     {
-        reg_webpage<page_dev_server>("/dev/server").local();
+        reg_webpage<p_dev_server>("/dev/server").local();
     }
 }

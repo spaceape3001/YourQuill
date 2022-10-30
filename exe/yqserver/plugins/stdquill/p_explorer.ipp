@@ -129,7 +129,7 @@ namespace {
         return to_boolean(s).value;
     }
     
-    void    page_explorer(WebHtml&h)
+    void    p_explorer(WebHtml&h)
     {
         Folder  x       = folder(h);
         if(!x)
@@ -200,6 +200,6 @@ namespace {
 
     void    reg_explorer()
     {
-        reg_webpage<page_explorer>("/explore");
+        reg_webpage<p_explorer>("/explore");
     }
 }
