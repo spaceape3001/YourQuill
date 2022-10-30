@@ -13,7 +13,7 @@
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/db/SQ.hpp>
 #include <math/Counter.hpp>
-#include <update/DefRes.hpp>
+#include <kernel/update/DefRes.hpp>
 #include <kernel/bit/Connection.hpp>
 
 /*

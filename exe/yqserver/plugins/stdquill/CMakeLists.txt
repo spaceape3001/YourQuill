@@ -25,7 +25,6 @@ target_link_libraries( stdquill
     PUBLIC 
         yqtoolbox 
         yqkernel 
-        yqupdate 
         yqhttp 
         asio
         ${ImageMagick_LIBRARIES}

@@ -34,17 +34,6 @@
 #include <kernel/user/UserCDB.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
-#include <update/uField.hpp>
-
-#include <update/uLeaf.hpp>
-
-#include "uAtom.ipp"
-
-#include "uField.ipp"
-#include "uLeaf.ipp"
-
-//#include "uUser.ipp"
-
 #include "common.hpp"
 
 #include <yq/atom.hpp>
@@ -96,6 +85,9 @@ struct Sigma {
     constexpr auto operator<=>(const Sigma&) const noexcept = default;
     
 };
+
+using namespace yq;
+using namespace yq::cdb;
 
 
 namespace {
@@ -176,12 +168,12 @@ namespace {
             on_stage3<u_class_stage3_pass2_bind>(classes_lookup);
             on_stage3<u_class_stage3_pass3_extend>(classes_lookup);
             
-            on_stage3<update::field_stage3>(fields_lookup);
+            on_stage3<u_field_stage3>(fields_lookup);
             
 
                 //  LEAFS & atoms
-            on_stage3<update::leaf_stage3_pass1_declare>(leafs_lookup);
-            on_stage3<leaf_stage3>(leafs_lookup);
+            on_stage3<u_leaf_stage3_pass1_declare>(leafs_lookup);
+            on_stage3<u_leaf_stage3>(leafs_lookup);
             on_stage3<u_tag_stage3_leaf>(by_cache(tags_folder(), "*.tag"));
 
         
@@ -206,15 +198,15 @@ namespace {
                 
             on_change<u_category_notify>(by_cache(categories_folder(), "*.cat"));
             on_change<u_class_notify>(classes_lookup);
-            on_change<update::field_notify>(fields_lookup);
-            on_change<leaf_update>(leafs_lookup);
+            on_change<u_field_notify>(fields_lookup);
+            on_change<u_leaf_update>(leafs_lookup);
             on_change<u_tag_notify>(tags_lookup);
             on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
                 on_change<u_class_notify_icons>(by_cache(classes_folder(), z));
-                on_change<update::field_notify_icons>(by_cache(fields_folder(), z));
-                on_change<update::leaf_notify_icons>(by_cache(z));
+                on_change<u_field_notify_icons>(by_cache(fields_folder(), z));
+                on_change<u_leaf_notify_icons>(by_cache(z));
                 on_change<u_user_notify_icons>(by_cache(users_folder(), z));
 
                 on_change<u_category_notify_icons>(by_cache(categories_folder(), z));
