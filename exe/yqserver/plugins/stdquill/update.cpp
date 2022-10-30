@@ -37,7 +37,6 @@
 #include <update/uField.hpp>
 
 #include <update/uLeaf.hpp>
-#include <update/uUser.hpp>
 
 #include "uAtom.ipp"
 
@@ -138,6 +137,7 @@ namespace {
 #include "u_leaf.ipp"
 #include "u_root.ipp"
 #include "u_tag.ipp"
+#include "u_user.ipp"
 
 namespace {
 
@@ -169,7 +169,7 @@ namespace {
                 //  Organization & users
             on_stage3<u_category_stage3>(by_cache(categories_folder(), "*.cat"));
             on_stage3<u_tag_stage3>(tags_lookup);
-            on_stage3<update::user_stage3>(by_cache(users_folder(), "*.user"));
+            on_stage3<u_user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
             on_stage3<u_class_stage3_pass1_create>(classes_lookup);
@@ -209,13 +209,13 @@ namespace {
             on_change<update::field_notify>(fields_lookup);
             on_change<leaf_update>(leafs_lookup);
             on_change<u_tag_notify>(tags_lookup);
-            on_change<update::user_notify>(by_cache(users_folder(), "*.user"));
+            on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
                 on_change<u_class_notify_icons>(by_cache(classes_folder(), z));
                 on_change<update::field_notify_icons>(by_cache(fields_folder(), z));
                 on_change<update::leaf_notify_icons>(by_cache(z));
-                on_change<update::user_notify_icons>(by_cache(users_folder(), z));
+                on_change<u_user_notify_icons>(by_cache(users_folder(), z));
 
                 on_change<u_category_notify_icons>(by_cache(categories_folder(), z));
                 on_change<u_tag_notify_icons>(by_cache(tags_folder(), z));
