@@ -11,8 +11,8 @@ set(stdquill_SOURCES
     #./imaging.cpp
     #common.cpp
     ./variables.cpp
-    ./page/page.cpp
-    ./update/update.cpp
+    ./page.cpp
+    ./update.cpp
 )
 
 add_library( stdquill SHARED ${stdquill_SOURCES} )
