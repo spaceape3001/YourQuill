@@ -148,9 +148,8 @@ namespace {
         reg_webpage("/js/jquery.js", wksp::shared("www/js/jquery.js"sv));      // precaching
         reg_webimage("/logo", wksp::shared("www/img/yquill.svg"sv), Folder(), ".logo").alt_path("/favicon.ico");
         reg_webpage("/pkg/**", wksp::shared_all("www/pkg"sv));
+
     }
-    
-    
     
     YQ_INVOKE(reg_me();)
 }
