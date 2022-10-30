@@ -518,7 +518,7 @@ namespace yq {
         
         std::vector<Field>       fields(Class c, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT field FROM CFields INNER JOIN Fields ON CFields.field=Fields.id WHERE class=? ORDER BY Fields.K");
+            static thread_local SQ  qs("SELECT field FROM CFields INNER JOIN Fields ON CFields.field=Fields.id WHERE CFields.class=? ORDER BY Fields.K");
             static thread_local SQ  qu("SELECT field FROM CFields WHERE class=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<Field>(c.id);
