@@ -6,36 +6,36 @@
 
 #pragma once
 
-#include "AtomNotifier.hpp"
+#include "AtomFieldNotifier.hpp"
 
 namespace yq {
-    struct AtomNotifier::Repo {
-        std::vector<const AtomNotifier*>    all;
-        EnumMap<Change,Vector<const AtomNotifier*>> byChange;
+    struct AtomFieldNotifier::Repo {
+        std::vector<const AtomFieldNotifier*>    all;
+        EnumMap<Change,Vector<const AtomFieldNotifier*>> byChange;
     };
     
 
-    AtomNotifier::Repo&            AtomNotifier::repo()
+    AtomFieldNotifier::Repo&            AtomFieldNotifier::repo()
     {
         static Repo s_repo;
         return s_repo;
     }
         
-    const std::vector<const AtomNotifier*>& AtomNotifier::all()
+    const std::vector<const AtomFieldNotifier*>& AtomFieldNotifier::all()
     {
         return repo().all;
     }
     
-    const EnumMap<Change,Vector<const AtomNotifier*>>&     AtomNotifier::change_map()
+    const EnumMap<Change,Vector<const AtomFieldNotifier*>>&     AtomFieldNotifier::change_map()
     {
         return repo().byChange;
     }
 
-    AtomNotifier::AtomNotifier(Flag<Change> changeMask, Class cls, const std::source_location& sl)
+    AtomFieldNotifier::AtomFieldNotifier(Flag<Change> changeMask, Field fld, const std::source_location& sl)
     {
         m_source        = sl;
         m_change        = changeMask;
-        m_class         = cls;
+        m_field         = fld;
         
         Repo& _r = repo();
         _r.all.push_back(this);
@@ -44,11 +44,11 @@ namespace yq {
                 _r.byChange[c] << this;
     }
     
-    AtomNotifier::~AtomNotifier()
+    AtomFieldNotifier::~AtomFieldNotifier()
     {
     }
 
-    AtomNotifier::Writer&     AtomNotifier::Writer::description(std::string_view d)
+    AtomFieldNotifier::Writer&     AtomFieldNotifier::Writer::description(std::string_view d)
     {
         if(importer)
             importer -> m_description = d;

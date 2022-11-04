@@ -63,7 +63,9 @@ namespace yq {
     
     inline ExtensionView extension(std::string_view x) { return { x }; }
 
-    using cdb_options_t         = unsigned int;
+
+    //! Generic options bitmask
+    using cdb_options_t         = uint64_t;
 
     namespace cdb {
     
@@ -112,7 +114,13 @@ namespace yq {
             
             U_TAGS                  = 1 << 14,
             
-            U_LEAF                  = 1 << 15
+            U_LEAF                  = 1 << 15,
+            
+            U_ATTRIBUTES            = 1 << 16,
+            U_EDGES                 = 1 << 17
+            
+            //  Bits 24-47 are reserved for library-scoped uses
+            //  Bits 48-63 are reserved for local uses
             
         };
         

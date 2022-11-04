@@ -29,75 +29,33 @@
 
 namespace {
 
-    Leaf::SharedData         update_this(Leaf x, cdb_options_t opts);
-    
-    void    u_leaf_change(Document doc, cdb_options_t opts)
+    void         u_leaf(Document doc, cdb_options_t opts)
     {
         bool    created = false;
         Leaf        x   = (opts & REMOVED) ? cdb::leaf(doc) : cdb::db_leaf(doc, &created);
         if(!x)
             return ;
-            
+        
         created = created || (opts & STARTUP);
         if(created)
             opts |= U_ICON | CREATED;
-        
-        Leaf::SharedData data   = update_this(x, opts|U_INFO);
-        if(!data){
-            yWarning() << "Unable to initialize leaf '" << key(x) << "'";
-            return ;
-        }
-        
-        Attribute::Report   rep;
-        Atom                xa;
-        
-        if(created){
-            rep             = diff::additions(doc, data->attrs);
-            rep.exec_inserts();
-            xa              = db_atom(doc);
-        } else {
-            rep             = diff::changes(doc, data->attrs);
-            rep.exec_inserts();
-            rep.exec_reindex();
-            rep.exec_removals();
-            xa              = atom(doc);
-            
-        }
-        
-        std::set<Class>     clsset = make_set(db_classes(data->classes()));
-        update_atom(xa, doc, rep, opts, clsset);
-        
-        if(created)
-            u_leaf_icon(x);
 
-        if(opts & REMOVED){
-            if(fragments_count(doc) <= 1)
-                u_leaf_erase(x);
-        }
-    }
-
-    Leaf::SharedData         update_this(Leaf x, cdb_options_t opts)
-    {
-        if(!x)
-            return Leaf::SharedData();
-        
         if(opts & U_ICON)
             u_leaf_icon(x);
+
+        auto dp  = merged(x, opts|IS_UPDATE);
+        if(!dp){
+            yWarning() << "Unable to load/merge leaf data for '" << key(x) << "'";
+            return;
+        }
         
-        auto data  = merged(x, opts|IS_UPDATE);
-        if(!data)
-            return Leaf::SharedData();
-
-        static thread_local SQ dTag("DELETE FROM LTags WHERE leaf=? AND tag=?");
-        static thread_local SQ iTag("INSERT INTO LTags (leaf, tag) VALUES (?,?)");
         static thread_local SQ uInfo("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
-
         if(opts & U_INFO){
-            std::string_view title   = data->title();
-            std::string_view abbr    = data->abbr();
-            std::string_view brief   = data->brief();
+            std::string_view title   = dp->title();
+            std::string_view abbr    = dp->abbr();
+            std::string_view brief   = dp->brief();
             if(title.empty())
-                title       = data->attrs.value(kv::key({"nick", "name"}));
+                title       = dp->attrs.value(kv::key({"nick", "name"}));
             
             if(title.empty()){
                 uInfo.bind(1, key(x));  // fall back (for now) 
@@ -110,41 +68,48 @@ namespace {
             uInfo.exec();
         }
         
+        static thread_local SQ dTag("DELETE FROM LTags WHERE leaf=? AND tag=?");
+        static thread_local SQ iTag("INSERT INTO LTags (leaf, tag) VALUES (?,?)");
+        
         if(opts & U_TAGS){
             std::set<Tag>   old_tags = tags_set(x);
-            std::set<Tag>   new_tags = tags_set(data->tags(), true);
+            std::set<Tag>   new_tags = tags_set(dp->tags(), true);
 
             auto ch_tag = add_remove(old_tags, new_tags);
             iTag.batch(x.id, ids_for(ch_tag.added));
             dTag.batch(x.id, ids_for(ch_tag.removed));
-            
+        }
+
+        Attribute::Report   rep;
+        Atom                xa;
+        
+        if(created){
+            xa              = db_atom(doc);
+        } else {
+            xa              = atom(doc);
         }
         
-        return data;
-    }
-    
-    void    u_leaf_stage3(Document doc)
-    {
-        if(hidden(folder(doc)))
-            return;
-        
-        u_leaf_change(doc, STARTUP | DONT_LOCK | U_TAGS );
-    }
-    
-    void    u_leaf_update(Fragment frag, Change chg)
-    {
-        if(hidden(folder(frag)))
-            return;
-        cdb_options_t   opts    = IS_UPDATE | U_TAGS;
-        if(chg == Change::Removed)
-            opts |= REMOVED;
-        
-        u_leaf_change(document(frag), opts);
-    }
-}
+        if(opts & U_ATTRIBUTES){
+            if(created){
+                rep             = diff::additions(doc, dp->attrs);
+                rep.exec_inserts();
+            } else {
+                rep             = diff::changes(doc, dp->attrs);
+                rep.exec_inserts();
+                rep.exec_reindex();
+                rep.exec_removals();
+            }
 
+            std::set<Class>     clsset = make_set(db_classes(dp->classes()));
+            u_atom(xa, doc, rep, opts, clsset);
 
-namespace yq {
+            if(opts & REMOVED){
+                if(fragments_count(doc) <= 1)
+                    u_leaf_erase(x);
+            }
+        }
+    }
+
     void    u_leaf_erase(Leaf x)
     {
         static thread_local cdb::SQ  stmts[] = {
@@ -155,10 +120,13 @@ namespace yq {
             sq.exec(x.id);
     }
 
+#if 0
+    //  UNUSED
     void    u_leaf_erase(Document doc)
     {
         u_leaf_erase(cdb::leaf(doc));
     }
+#endif
     
     void    u_leaf_icon(Leaf x)
     {
@@ -175,6 +143,17 @@ namespace yq {
             u2.exec(doc.id, x.id);
         }
     }
+    
+    void    u_leaf_notify(Fragment frag, Change chg)
+    {
+        if(hidden(folder(frag)))
+            return;
+        cdb_options_t   opts    = IS_UPDATE | U_TAGS | U_ATTRIBUTES | U_INFO;
+        if(chg == Change::Removed)
+            opts |= REMOVED;
+        
+        u_leaf(document(frag), opts);
+    }
 
     void    u_leaf_notify_icons(Fragment frag, Change)
     {
@@ -183,9 +162,16 @@ namespace yq {
         
     void    u_leaf_stage3_pass1_declare(Document doc)
     {
-        Leaf    xl  = cdb::db_leaf(doc);
-        Atom    xa  = cdb::db_atom(doc);
-        
-        //  do more
+        if(hidden(folder(doc)))
+            return;
+
+        u_leaf(doc, DONT_LOCK|STARTUP|U_TAGS|U_INFO);
+    }
+    
+    void    u_leaf_stage3_pass2_attributes(Document doc)
+    {
+        if(hidden(folder(doc)))
+            return;
+        u_leaf(doc, DONT_LOCK|U_ATTRIBUTES);
     }
 }

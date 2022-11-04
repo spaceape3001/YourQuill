@@ -9,8 +9,7 @@
 #include <kernel/atom/Atom.hpp>
 #include <kernel/attr/Attribute.hpp>
 
-namespace yq {
-
-    
-    void    update_atom(Atom, Document, const Attribute::Report&, cdb_options_t = 0, const ClassSet& cset=ClassSet());
+namespace {
+    void    u_atom(Atom, Document, const Attribute::Report&, cdb_options_t = 0, const ClassSet& cset=ClassSet());
 }
+

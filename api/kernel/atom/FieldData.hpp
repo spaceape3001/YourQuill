@@ -35,7 +35,7 @@ namespace yq {
         Restriction             restriction;
         uint64_t                max_count = 0;       //!< Maximum count (zero is unlimited)
 
-        //Vector<Rule>            rules; (going to DTN)
+        //Vector<Rule>            rules; (going to DTN?)
         
         Data&                  merge(const Data&, bool fOverride);
     };

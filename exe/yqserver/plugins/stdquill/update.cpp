@@ -173,8 +173,8 @@ namespace {
 
                 //  LEAFS & atoms
             on_stage3<u_leaf_stage3_pass1_declare>(leafs_lookup);
-            on_stage3<u_leaf_stage3>(leafs_lookup);
-            on_stage3<u_tag_stage3_leaf>(by_cache(tags_folder(), "*.tag"));
+            on_stage3<u_leaf_stage3_pass2_attributes>(leafs_lookup);
+            on_stage3<u_tag_stage3_leaf>(tags_lookup);
 
         
                 //  STAGE 4 global related
@@ -199,7 +199,7 @@ namespace {
             on_change<u_category_notify>(by_cache(categories_folder(), "*.cat"));
             on_change<u_class_notify>(classes_lookup);
             on_change<u_field_notify>(fields_lookup);
-            on_change<u_leaf_update>(leafs_lookup);
+            on_change<u_leaf_notify>(leafs_lookup);
             on_change<u_tag_notify>(tags_lookup);
             on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             
