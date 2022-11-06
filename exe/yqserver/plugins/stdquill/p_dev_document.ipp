@@ -24,15 +24,15 @@ namespace {
         h.kvrow("Hidden") << i.hidden;
         
         if(is_similar(i.suffix, "class")){
-            h.kvrow("Is class") << dev(cdb::class_(doc));
+            h.kvrow("As Class") << dev(cdb::class_(doc));
         } else if(is_similar(i.suffix, "field")){
-            h.kvrow("Is field") << dev(cdb::field(doc));
+            h.kvrow("As Field") << dev(cdb::field(doc));
         } else if(is_similar(i.suffix, "user")){
-            h.kvrow("Is user") << dev(cdb::user(doc));
+            h.kvrow("As User") << dev(cdb::user(doc));
         } else if(is_similar(i.suffix, "tag")){
-            h.kvrow("Is tag") << dev(cdb::tag(doc));
+            h.kvrow("As Tag") << dev(cdb::find_tag(doc));
         } else if(is_similar(i.suffix, "y")){
-            h.kvrow("Is leaf") << dev(cdb::leaf(doc));
+            h.kvrow("As Leaf") << dev(cdb::leaf(doc));
         }
         
         h.kvrow("Key") << i.key;

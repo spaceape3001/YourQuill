@@ -35,7 +35,7 @@ namespace yq {
     
     void    u_tag_erase(Document doc)
     {
-        u_tag_erase(cdb::tag(doc));
+        u_tag_erase(cdb::find_tag(doc));
     }
 
     void    u_tag_icon(Tag x)
@@ -83,7 +83,7 @@ namespace yq {
     
     void    u_tag_notify_icons(Fragment frag,Change)
     {
-        u_tag_icon(cdb::tag(cdb::document(frag), true));
+        u_tag_icon(cdb::find_tag(cdb::document(frag), true));
     }
 
     void    u_tag_stage3(Document doc) 

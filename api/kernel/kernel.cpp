@@ -87,6 +87,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "org/CategoryCDB.ipp"
 #include "org/CategoryData.ipp"
 #include "org/CategoryFile.ipp"
+#include "org/Tag.ipp"
 #include "org/TagCDB.ipp"
 #include "org/TagData.ipp"
 #include "org/TagFile.ipp"

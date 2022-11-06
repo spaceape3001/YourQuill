@@ -31,7 +31,9 @@ namespace yq {
             }
         }
 
-        std::vector<Tag>         all_tags(Sorted sorted)
+        // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+        std::vector<Tag>    all_tags(Sorted sorted)
         {
             static thread_local SQ    qs("SELECT id FROM Tags ORDER BY k");
             static thread_local SQ    qu("SELECT id FROM Tags");
@@ -39,11 +41,115 @@ namespace yq {
             return s.vec<Tag>();
         }
         
-        size_t                      all_tags_count()
+        size_t              count_tags()
         {
             static thread_local SQ s("SELECT COUNT(1) FROM Tags");
             return s.size();
         }
+
+        bool                exists_tag(uint64_t i)
+        {
+            static thread_local SQ s("SELECT 1 FROM Tags WHERE id=? LIMIT 1");
+            return s.present(i);
+        }
+
+        Tag                 find_tag(std::string_view k)
+        {
+            static thread_local SQ    s("SELECT id FROM Tags WHERE k=?");
+            return s.as<Tag>(k);
+        }
+        
+        Tag                 find_tag(uint64_t i)
+        {
+            return exists_tag(i) ? Tag{i} : Tag{};
+        }
+        
+        Tag                 find_tag(Document doc, bool calc)
+        {
+            if(!doc)
+                return Tag{};
+            if(exists_tag(doc.id))
+                return Tag{doc.id};
+            if(calc && (folder(doc) == tags_folder())){
+                std::string k   = base_key(doc);
+                return find_tag(k);
+            }
+            return Tag{};
+        }
+
+        std::vector<Tag>             find_tags(const string_set_t&keys, bool noisy)
+        {
+            std::vector<Tag> ret;
+            for(const std::string& s : keys){
+                if(s.empty())
+                    continue;
+                    
+                Tag t   = find_tag(s);
+                if(!t){
+                    if(noisy)
+                        yWarning() << "Unable to find tag: " << s;
+                    continue;
+                }
+                ret.push_back(t);
+            }
+            return ret;
+        }
+
+        std::vector<Tag>             find_tags(const string_view_set_t&keys, bool noisy)
+        {
+            std::vector<Tag> ret;
+            for(const std::string_view& s : keys){
+                if(s.empty())
+                    continue;
+                    
+                Tag t   = find_tag(s);
+                if(!t){
+                    if(noisy)
+                        yWarning() << "Unable to find tag: " << s;
+                    continue;
+                }
+                ret.push_back(t);
+            }
+            return ret;
+        }
+
+        std::set<Tag>           find_tags_set(const string_set_t& keys, bool noisy)
+        {
+            std::set<Tag> ret;
+            for(const std::string& s : keys){
+                if(s.empty())
+                    continue;
+                    
+                Tag t   = find_tag(s);
+                if(!t){
+                    if(noisy)
+                        yWarning() << "Unable to find tag: " << s;
+                    continue;
+                }
+                ret.insert(t);
+            }
+            return ret;
+        }
+
+        std::set<Tag>           find_tags_set(const string_view_set_t& keys, bool noisy)
+        {
+            std::set<Tag> ret;
+            for(std::string_view s : keys){
+                if(s.empty())
+                    continue;
+                    
+                Tag t   = find_tag(s);
+                if(!t){
+                    if(noisy)
+                        yWarning() << "Unable to find tag: " << s;
+                    continue;
+                }
+                ret.insert(t);
+            }
+            return ret;
+        }        
+        
+        // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
         Image   best_image(Tag x)
         {
@@ -58,6 +164,87 @@ namespace yq {
             static thread_local SQ    s("SELECT brief FROM Tags WHERE id=?");
             return s.str(t.id);
         }
+
+        Document            document(Tag t)
+        {
+            return valid(t) ? Document{t.id} : Document{};
+        }    
+
+        Image               icon(Tag t)
+        {
+            static thread_local SQ    s("SELECT icon FROM Tags WHERE id=? LIMIT 1");
+            return s.as<Image>(t.id);
+        }
+        
+        
+        Tag::Info           info(Tag t, bool autoKey)
+        {
+            Tag::Info    ret;
+            static thread_local SQ    s("SELECT brief,k,name,icon,leaf FROM Tags WHERE id=?");
+            auto s_af = s.af();
+            s.bind(1, t.id);
+            if(s.step() == SqlQuery::Row){
+                ret.brief       = s.v_text(1);
+                ret.doc         = Document(t.id);
+                ret.key         = s.v_text(2);
+                ret.name        = s.v_text(3);
+                if(autoKey && ret.name.empty())
+                    ret.name    = ret.key;
+                ret.icon        = Image{ s.v_uint64(4) };
+                ret.leaf        = Leaf{ s.v_uint64(5) };
+            }
+            return ret;
+        }
+        
+
+        std::string key(Tag t)
+        {
+            static thread_local SQ    s("SELECT k FROM Tags WHERE id=?");
+            return s.str(t.id);
+        }
+        
+        std::string label(Tag t)
+        {
+            static thread_local SQ    s("SELECT ifnull(name,k) FROM Tags WHERE id=?");
+            return s.str(t.id);
+        }
+        
+        Leaf                leaf(Tag t)
+        {
+            static thread_local SQ    s("SELECT leaf FROM Tags WHERE id=?");
+            return s.as<Leaf>(t.id);
+        }
+        
+        std::string    name(Tag t)
+        {
+            static thread_local SQ    s("SELECT name FROM Tags WHERE id=?");
+            return s.str(t.id);
+        }
+        
+        
+        NKI                 nki(Tag t, bool autoKey)
+        {
+            static thread_local SQ    s("SELECT name,icon,k FROM Tags WHERE id=?");
+            auto s_af = s.af();
+            s.bind(1, t.id);
+            if(s.step() == SqlQuery::Row){
+                NKI  ret;
+                ret.name    = s.v_text(1);
+                ret.icon    = Image(s.v_uint64(2)) ;
+                ret.key     = s.v_text(3);
+                if(autoKey && ret.name.empty())
+                    ret.name    = ret.key;
+                return ret;
+            }
+            return NKI{};
+        }
+
+        bool                valid(Tag t)
+        {
+            return t.id && exists_tag(t.id);
+        }
+
+        // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
         Tag                 db_tag(Document doc, bool* wasCreated)
         {
@@ -115,67 +302,6 @@ namespace yq {
             return ret;
         }
 
-        Document            document(Tag t)
-        {
-            return exists(t) ? Document{t.id} : Document{};
-        }    
-
-        bool                exists(Tag t)
-        {
-            return exists_tag(t.id);
-        }
-
-
-        bool                exists_tag(uint64_t i)
-        {
-            static thread_local SQ s("SELECT 1 FROM Tags WHERE id=? LIMIT 1");
-            return s.present(i);
-        }
-
-        Image               icon(Tag t)
-        {
-            static thread_local SQ    s("SELECT icon FROM Tags WHERE id=? LIMIT 1");
-            return s.as<Image>(t.id);
-        }
-        
-        
-        Tag::Info           info(Tag t, bool autoKey)
-        {
-            Tag::Info    ret;
-            static thread_local SQ    s("SELECT brief,k,name,icon,leaf FROM Tags WHERE id=?");
-            auto s_af = s.af();
-            s.bind(1, t.id);
-            if(s.step() == SqlQuery::Row){
-                ret.brief       = s.v_text(1);
-                ret.doc         = Document(t.id);
-                ret.key         = s.v_text(2);
-                ret.name        = s.v_text(3);
-                if(autoKey && ret.name.empty())
-                    ret.name    = ret.key;
-                ret.icon        = Image{ s.v_uint64(4) };
-                ret.leaf        = Leaf{ s.v_uint64(5) };
-            }
-            return ret;
-        }
-        
-
-        std::string key(Tag t)
-        {
-            static thread_local SQ    s("SELECT k FROM Tags WHERE id=?");
-            return s.str(t.id);
-        }
-        
-        std::string label(Tag t)
-        {
-            static thread_local SQ    s("SELECT ifnull(name,k) FROM Tags WHERE id=?");
-            return s.str(t.id);
-        }
-        
-        Leaf                leaf(Tag t)
-        {
-            static thread_local SQ    s("SELECT leaf FROM Tags WHERE id=?");
-            return s.as<Leaf>(t.id);
-        }
 
         Tag                     make_tag(std::string_view k, const Root* rt, cdb_options_t opts, bool* wasCreated)
         {
@@ -242,29 +368,6 @@ namespace yq {
             return ret;
         }
         
-        std::string    name(Tag t)
-        {
-            static thread_local SQ    s("SELECT name FROM Tags WHERE id=?");
-            return s.str(t.id);
-        }
-        
-        
-        NKI                 nki(Tag t, bool autoKey)
-        {
-            static thread_local SQ    s("SELECT name,icon,k FROM Tags WHERE id=?");
-            auto s_af = s.af();
-            s.bind(1, t.id);
-            if(s.step() == SqlQuery::Row){
-                NKI  ret;
-                ret.name    = s.v_text(1);
-                ret.icon    = Image(s.v_uint64(2)) ;
-                ret.key     = s.v_text(3);
-                if(autoKey && ret.name.empty())
-                    ret.name    = ret.key;
-                return ret;
-            }
-            return NKI{};
-        }
         
         Tag::SharedFile          read(Tag t, const Root* rt, cdb_options_t opts)
         {
@@ -321,29 +424,7 @@ namespace yq {
             return tf -> save();
         }
         
-        Tag                 tag(std::string_view k)
-        {
-            static thread_local SQ    s("SELECT id FROM Tags WHERE k=?");
-            return s.as<Tag>(k);
-        }
-        
-        Tag                 tag(uint64_t i)
-        {
-            return exists_tag(i) ? Tag{i} : Tag{};
-        }
-        
-        Tag                  tag(Document doc, bool calc)
-        {
-            if(!doc)
-                return Tag{};
-            if(exists_tag(doc.id))
-                return Tag{doc.id};
-            if(calc && (folder(doc) == tags_folder())){
-                std::string k   = base_key(doc);
-                return tag(k);
-            }
-            return Tag{};
-        }
+
 
         Tag::SharedFile      tag_doc(Fragment f, cdb_options_t opts)
         {
@@ -377,59 +458,7 @@ namespace yq {
             return td;
         }
 
-        std::vector<Tag>             tags(const string_set_t&keys, bool noisy)
-        {
-            std::vector<Tag> ret;
-            for(const std::string& s : keys){
-                if(s.empty())
-                    continue;
-                    
-                Tag t   = tag(s);
-                if(!t){
-                    if(noisy)
-                        yWarning() << "Unable to find tag: " << s;
-                    continue;
-                }
-                ret.push_back(t);
-            }
-            return ret;
-        }
 
-        std::set<Tag>           tags_set(const string_set_t& keys, bool noisy)
-        {
-            std::set<Tag> ret;
-            for(const std::string& s : keys){
-                if(s.empty())
-                    continue;
-                    
-                Tag t   = tag(s);
-                if(!t){
-                    if(noisy)
-                        yWarning() << "Unable to find tag: " << s;
-                    continue;
-                }
-                ret.insert(t);
-            }
-            return ret;
-        }
-
-        std::set<Tag>           tags_set(const string_view_set_t& keys, bool noisy)
-        {
-            std::set<Tag> ret;
-            for(std::string_view s : keys){
-                if(s.empty())
-                    continue;
-                    
-                Tag t   = tag(s);
-                if(!t){
-                    if(noisy)
-                        yWarning() << "Unable to find tag: " << s;
-                    continue;
-                }
-                ret.insert(t);
-            }
-            return ret;
-        }
 
         //void                    update(Tag t, Leaf l)
         //{

@@ -42,7 +42,7 @@ namespace yq {
         constexpr uint64_t  get_id() const { return id; }
         
         //  --------------------------------------
-        //  These all QUERY the cache database....
+        //  These all QUERY the cache (either direct or via CURL)
         //  --------------------------------------
         
         /*! \brief Returns all atoms in the cache database

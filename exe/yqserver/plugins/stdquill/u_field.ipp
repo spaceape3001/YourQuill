@@ -190,7 +190,7 @@ namespace yq {
         Field   x   = { doc.id };
         
         static thread_local SQ iTag("INSERT INTO FTags (field, tag) VALUES (?,?)");
-        for(Tag t : tags_set(dp->tags, true))
+        for(Tag t : find_tags_set(dp->tags, true))
             iTag.exec(x.id, t.id);
 
         static thread_local SQ iAlias("INSERT INTO FAlias (field, alias) VALUES (?,?)");

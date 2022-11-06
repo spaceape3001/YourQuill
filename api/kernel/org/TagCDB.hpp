@@ -12,19 +12,10 @@
 #include <kernel/enum/Sorted.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/org/Tag.hpp>
+#include <kernel/org/TagInfo.hpp>
 #include <kernel/org/TagFile.hpp>
 
 namespace yq {
-    
-    struct Tag::Info {
-        std::string     brief;
-        Document        doc;
-        std::string     key;
-        Image           icon;
-        Leaf            leaf;
-        std::string     name;
-        bool operator==(const Info&) const = default;
-    };
 
     namespace cdb {
         using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
@@ -33,15 +24,87 @@ namespace yq {
             \param[in] sorted   Set to have tags sorted by key
         */
         std::vector<Tag>        all_tags(Sorted sorted=Sorted());
+        
         /*! \brief Total number of tags
         */
-        size_t                  all_tags_count();
+        size_t                  count_tags();
+
+        /*! \brief Checks for tags existance
+        */
+        bool                    exists_tag(uint64_t);
+
+        /*! \brief Looks up tag by ID
+        */
+        Tag                     find_tag(uint64_t);
+
+        /*! \brief Looks up tag by key
+        */
+        Tag                     find_tag(std::string_view);
+        
+        /*! \brief Looks up tag by document
+        */
+        Tag                     find_tag(Document, bool calc=false);
+
+        /*! \brief Tags for key-set */
+        std::vector<Tag>        find_tags(const string_set_t&, bool noisy=false);
+        
+        /*! \brief Tags for key-set */
+        std::vector<Tag>        find_tags(const string_view_set_t&, bool noisy=false);
+
+        /*! \brief Tags for key-set */
+        std::set<Tag>           find_tags_set(const string_set_t&, bool noisy=false);
+        
+        /*! \brief Tags for key-set */
+        std::set<Tag>           find_tags_set(const string_view_set_t&, bool noisy=false);
+
+        // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        //  To distinguish the ones taking in a Tag as a primary argument
         
         //! Searches for the best image for the tag
         Image                   best_image(Tag);
         /*! \brief Brief description of tag
         */
         std::string             brief(Tag);
+
+        /*! \brief Gets the tag's document
+        */
+        Document                document(Tag);
+
+        /*! \brief Icon for tag
+        */
+        Image                   icon(Tag);
+        
+        /*! \brief Info for tag
+        */
+        Tag::Info               info(Tag, bool autoKeyToName=false);
+
+        /*! \brief Key for tag
+        */
+        std::string             key(Tag);
+        
+        /*! \brief Label for tag
+        */
+        std::string             label(Tag);
+        
+        /*! \brief Leaf for tag
+        */
+        Leaf                    leaf(Tag t);
+        
+        /*! \brief Name for tag
+        */
+        std::string             name(Tag);
+        
+        /*! \brief Name, Key, and Icon for tag
+        */
+        NKI                     nki(Tag, bool autoKeyToName=false);
+
+
+        /*! \brief Checks for tag's validity
+        */
+        bool                    valid(Tag);
+
+        // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        //  TODO (sort later)
 
         /*! \brief Creates/Gets a tag by document
         */
@@ -63,40 +126,11 @@ namespace yq {
         */
         std::vector<Tag>        db_tags(const string_set_t&);
 
-        /*! \brief Gets the tag's document
-        */
-        Document                document(Tag);
         
-        /*! \brief Checks for tags existance
-        */
-        bool                    exists(Tag);
 
-        /*! \brief Checks for tags existance
-        */
-        bool                    exists_tag(uint64_t);
         
-        /*! \brief Icon for tag
-        */
-        Image                   icon(Tag);
-        
-        /*! \brief Info for tag
-        */
-        Tag::Info               info(Tag, bool autoKeyToName=false);
-
         //bool                    is_tagged(Field, Tag);
 
-        /*! \brief Key for tag
-        */
-        std::string             key(Tag);
-        
-        /*! \brief Label for tag
-        */
-        std::string             label(Tag);
-        
-        /*! \brief Leaf for tag
-        */
-        Leaf                    leaf(Tag t);
-        
         /*! \brief Makes a tag
         */
         Tag                     make_tag(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
@@ -107,13 +141,6 @@ namespace yq {
         */
         Tag::SharedData         merged(Tag, cdb_options_t opts=0);
         
-        /*! \brief Name for tag
-        */
-        std::string             name(Tag);
-        
-        /*! \brief Name, Key, and Icon for tag
-        */
-        NKI                     nki(Tag, bool autoKeyToName=false);
     
         //! \brief Returns the FIRST tag fragment that qualifies
         //! 
@@ -140,27 +167,9 @@ namespace yq {
         */
         bool                    set_notes(Tag, std::string_view, class Root* rt=nullptr);
         
-        /*! \brief Looks up tag by key
-        */
-        Tag                     tag(std::string_view);
-        
-        /*! \brief Looks up tag by ID
-        */
-        Tag                     tag(uint64_t);
-
-        /*! \brief Looks up tag by document
-        */
-        Tag                     tag(Document, bool calc=false);
-        
         //! \brief Tag File (&Data) for fragment
         Tag::SharedFile         tag_doc(Fragment, cdb_options_t opts=0);
 
-        /*! \brief Tags for key-set */
-        std::vector<Tag>        tags(const string_set_t&, bool noisy=false);
-        /*! \brief Tags for key-set */
-        std::set<Tag>           tags_set(const string_set_t&, bool noisy=false);
-        /*! \brief Tags for key-set */
-        std::set<Tag>           tags_set(const string_view_set_t&, bool noisy=false);
 
         //!  \brief   Returns a writable document
         //!

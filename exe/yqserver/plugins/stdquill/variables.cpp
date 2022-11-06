@@ -235,7 +235,7 @@ namespace {
     
     void    var_tag_count(WebHtml& h)
     {
-        h << cdb::all_tags_count();
+        h << cdb::count_tags();
     }
 
     void    var_templates(WebHtml&h)

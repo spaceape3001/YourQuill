@@ -21,7 +21,7 @@ namespace yq {
             if(arg_string.empty())
                 return Tag{};
                 
-            Tag t   = cdb::tag( arg_string);
+            Tag t   = cdb::find_tag( arg_string);
             if(t)
                 return t;
             uint64_t    i = to_uint64( arg_string).value;
@@ -89,7 +89,7 @@ namespace yq {
         
         Tag tag_key(std::string_view arg_string)
         {
-            return cdb::tag(trimmed(arg_string));
+            return cdb::find_tag(trimmed(arg_string));
         }
         
         Tag tag_key(const WebContext&ctx, std::string_view arg_name, bool *detected)

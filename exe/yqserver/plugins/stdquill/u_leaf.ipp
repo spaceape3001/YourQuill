@@ -82,7 +82,7 @@ namespace {
         
         if(opts & U_TAGS){
             std::set<Tag>   old_tags = tags_set(x);
-            std::set<Tag>   new_tags = tags_set(dp->tags(), true);
+            std::set<Tag>   new_tags = find_tags_set(dp->tags(), true);
 
             auto ch_tag = add_remove(old_tags, new_tags);
             iTag.batch(x.id, ids_for(ch_tag.added));

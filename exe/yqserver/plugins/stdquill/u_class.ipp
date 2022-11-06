@@ -101,7 +101,7 @@ namespace yq {
         static thread_local cdb::SQ iTag("INSERT INTO CTags (class, tag) VALUES (?,?)");
         static thread_local cdb::SQ dTag("DELETE FROM CTags WHERE class=? AND tag=?");
 
-        std::set<Tag>   new_tags = cdb::tags_set(data->tags, true);
+        std::set<Tag>   new_tags = cdb::find_tags_set(data->tags, true);
         
         if(created){
             u_class_icon(x);
