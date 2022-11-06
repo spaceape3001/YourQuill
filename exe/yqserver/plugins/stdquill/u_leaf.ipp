@@ -29,15 +29,7 @@
 
 namespace {
 
-    struct InitLeaf {
-        Leaf::SharedData    data;
-        Atom                atom;
-        Attribute::Report   attrs;
-    };
-    
-    static std::map<Leaf, InitLeaf>    iLeafs;
-
-
+    #if 0
     void         u_leaf(Document doc, cdb_options_t opts)
     {
         bool    created = false;
@@ -118,6 +110,7 @@ namespace {
             }
         }
     }
+    #endif
 
     void    u_leaf_erase(Leaf x)
     {
@@ -161,7 +154,18 @@ namespace {
         if(chg == Change::Removed)
             opts |= REMOVED;
         
-        u_leaf(document(frag), opts);
+        Document    doc = document(frag);
+        Leaf        x   = cdb::db_leaf(document(frag));
+        
+        auto dp   = cdb::merged(x, IS_UPDATE | DONT_LOCK);
+        if(!dp){
+            yWarning() << "Unable to load leaf data for '" << cdb::key(doc) << "'";
+            return ;
+        }
+        
+        u_atom(dp->attrs, doc);
+        
+        //  if there's any context stuff, do it here.....
     }
 
     void    u_leaf_notify_icons(Fragment frag, Change)
@@ -169,7 +173,7 @@ namespace {
         u_leaf_icon(cdb::leaf(cdb::document(frag), true));
     }
         
-    void    u_leaf_stage3_pass1(Document doc)
+    void    s3_leaf_pass1(Document doc)
     {
         if(hidden(folder(doc)))
             return;
@@ -182,27 +186,27 @@ namespace {
 
         u_leaf_icon(x);
         
-        InitLeaf&   ix  = iLeafs[x];
-        ix.data     = cdb::merged(x, IS_UPDATE | DONT_LOCK);
-        if(!ix.data){
+        auto dp   = cdb::merged(x, IS_UPDATE | DONT_LOCK);
+        if(!dp){
             yWarning() << "Unable to load leaf data for '" << cdb::key(doc) << "'";
             return ;
         }
         
-        
-
-        u_leaf(doc, DONT_LOCK|STARTUP|U_TAGS|U_INFO);
+        Atom xa = s3_atom_create(dp->attrs, doc);
+        s3_atom_bind(xa);
+        s3_atom_notify(xa);
     }
     
-    void    u_leaf_stage3_pass2(Document doc)
+    void    s3_leaf_pass2(Document doc)
     {
         if(hidden(folder(doc)))
             return;
-        u_leaf(doc, DONT_LOCK|U_ATTRIBUTES);
-    }
-
-    void    u_leaf_stage4_cleanup()
-    {
-        iLeafs.clear();
+        
+        Atom xa = cdb::find_atom(doc);
+        if(!xa)
+            return;
+            
+        s3_atom_bind(xa);
+        s3_atom_notify(xa);
     }
 }

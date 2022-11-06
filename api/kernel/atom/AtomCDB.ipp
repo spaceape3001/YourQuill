@@ -14,6 +14,7 @@
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/org/Tag.hpp>
+#include <math/Counter.hpp>
 
 namespace yq {
     namespace cdb {
@@ -310,6 +311,20 @@ namespace yq {
             
             while(s.step() == SqlQuery::Row)
                 ret.push_back(ClassU64Pair{Class{s.v_uint64(1)}, s.v_uint64(2)});
+            
+            return ret;
+        }
+
+        ClassCountMap               classes_and_hops_map(Atom a)
+        {
+            ClassCountMap   ret;
+            static thread_local SQ s("SELECT class, hops FROM AClasses WHERE atom=?");
+            auto s_af           = s.af();
+            
+            s.bind(1, a.id);
+            
+            while(s.step() == SqlQuery::Row)
+                ret[Class{s.v_uint64(1)}] = { s.v_uint64(2)};
             
             return ret;
         }

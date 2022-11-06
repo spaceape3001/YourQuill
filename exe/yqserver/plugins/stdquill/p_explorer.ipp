@@ -11,10 +11,12 @@
 
 namespace {
     
+    #if 0
     bool    isLess_Key_DocOrFoldStr(const DocOrFoldStr& a, const DocOrFoldStr& b)
     {
         return is_less_igCase(a.second, b.second);
     }
+    #endif
     
     struct ExplorerEntry {
         enum Type {
@@ -32,20 +34,24 @@ namespace {
         ExplorerEntry(){}
     };
     
+    #if 0
     bool    isLess_ExplorerEntry_label(const ExplorerEntry& a, const ExplorerEntry& b)
     {
         return is_less_igCase(a.label, b.label);
     }
+    #endif
     
     bool    isLess_ExplorerEntry_skey(const ExplorerEntry& a, const ExplorerEntry& b)
     {
         return is_less_igCase(a.skey, b.skey);
     }
 
+    #if 0
     bool    isLess_ExplorerEntry_name(const ExplorerEntry& a, const ExplorerEntry& b)
     {
         return is_less_igCase(a.name, b.name);
     }
+    #endif
     
     string_map_t    make_file_extension_icons()
     {

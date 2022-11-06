@@ -20,6 +20,6 @@ namespace yq {
         struct Info;
         uint64_t  id = 0ULL;
         constexpr auto    operator<=>(const Directory&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr operator uint64_t() const { return id; }
     };
 }

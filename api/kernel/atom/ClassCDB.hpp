@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <kernel/atom/ClassInfo.hpp>
 #include <kernel/atom/ClassFile.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Sorted.hpp>
@@ -23,28 +24,8 @@ namespace yq {
     struct Field;
     struct Tag;
     
-    struct Class::Info {
-        std::string key;
-        Category    category;
-        std::string binding;
-        //Graph       deps;
-        Document    doc;
-        Image       icon;
-        std::string name;
-        std::string plural;
-        std::string brief;
-        bool        edge    = false;
-
-        bool operator==(const Info&) const = default;
-    };
     
-    struct Class::Rank {
-        Class       cls;
-        int64_t     rank    = 0;
-        constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
-    };
     
-    using ClassCountMap = std::map<Class,HCountU64>;
 
     namespace cdb {
         using ClassFragDoc      = std::pair<Fragment, Class::SharedFile>;

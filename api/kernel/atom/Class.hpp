@@ -39,4 +39,10 @@ namespace yq {
         constexpr auto    operator<=>(const Class&rhs) const noexcept = default;
         constexpr operator bool() const noexcept { return id != 0ULL; }
     };
+
+    struct Class::Rank {
+        Class       cls;
+        int64_t     rank    = 0;
+        constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
+    };
 }

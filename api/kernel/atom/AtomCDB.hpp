@@ -189,8 +189,11 @@ namespace yq {
         
         //! True if the atom exists in database
         bool                 valid(Atom);
+        
+        //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        std::vector<ClassU64Pair> classes_and_hops(Atom);
+        std::vector<ClassU64Pair>   classes_and_hops(Atom);
+        ClassCountMap               classes_and_hops_map(Atom);
         
         
         /*! \brief Creates an atom in the CACHE database

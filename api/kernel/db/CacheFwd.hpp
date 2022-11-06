@@ -13,6 +13,7 @@
 #include <utility>
 #include <variant>
 #include <vector>
+#include <math/preamble.hpp>
 
 namespace yq {
     struct Atom;
@@ -50,6 +51,7 @@ namespace yq {
     
     using ClassCxn      = Connection<Class,Class>;
     using ClassU64Map   = std::map<Class,uint64_t>;
+    using ClassCountMap = std::map<Class,HCountU64>;
 
     // used for extension specifications
     struct ExtensionView {

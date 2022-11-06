@@ -77,12 +77,62 @@ namespace {
     {
         std::vector<AtomClassChange>    ret;
         
-        //ClsHopsMap    omap = make_map(cdb::classes_and_hops(at));
-        //ClsHopsMap    omap = make_map(cdb::classes_and_hops(at));
-        
-        // TODO
-        
+        ClassCountMap   omap    = cdb::classes_and_hops_map(at);
+        ClassCountMap   nmap    = cdb::base_classes_ranked_merged_map(classes, true);
+        map_difference_exec(omap, nmap, 
+            [&](const ClassCountMap::value_type&pp){    // REMOVED
+                AtomClassChange acc;
+                acc.atom    = at;
+                acc.cls     = pp.first;
+                acc.chg     = Change::Removed;
+                ret.push_back(acc);
+
+                static thread_local SQ  d("DELETE FROM AClasses WHERE atom=? AND class=?");
+                auto d_af   = d.af();
+                d.bind(1, at.id);
+                d.bind(2, pp.first.id);
+                d.exec();
+            },
+            [&](const ClassCountMap::value_type& pp){   // MODIFIED
+                AtomClassChange acc;
+                acc.atom    = at;
+                acc.cls     = pp.first;
+                acc.chg     = Change::Modified;
+                ret.push_back(acc);
+
+                static thread_local SQ  u("UPDATE AClasses SET hops=? WHERE atom=? AND class=?");
+                auto u_af   = u.af();
+                u.bind(1, pp.second);
+                u.bind(2, at.id);
+                u.bind(3, pp.first.id);
+                u.exec();
+            },
+            [&](const ClassCountMap::value_type& pp){   // INSERTED
+                AtomClassChange acc;
+                acc.atom    = at;
+                acc.cls     = pp.first;
+                acc.chg     = Change::Added;
+                ret.push_back(acc);
+                
+                static thread_local SQ  i("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?,?)");
+                auto i_af   = i.af();
+                i.bind(1, at.id);
+                i.bind(2, pp.first.id);
+                i.bind(3, pp.second);
+                i.exec();
+            }
+        );
         return ret;
+    }
+
+    std::vector<AtomClassChange>    atu_classes(Atom at, const string_view_set_t& clskeys)
+    {
+        return atu_classes(at, make_set(cdb::db_classes(clskeys)));
+    }
+    
+    std::vector<AtomClassChange>    atu_classes(Atom at, const KVTree& attrs)
+    {
+        return atu_classes(at, attrs.values_set(svL_aClass));
     }
 
     void    ati_tags(Atom at, const TagSet& tags)
@@ -122,66 +172,44 @@ namespace {
         ati_classes(x, attrs);
         atu_title(x, attrs);
         ati_tags(x, attrs);
+        return x;
     }
     
-    void    u_atom_create_notify(Atom)
+    void    s3_atom_bind(Atom, bool recursive=true)
+    {
+    }
+
+    void    s3_atom_notify(Atom, bool recursive=true)
     {
     }
     
-    Atom    u_atom_update(const KVTree& attrs, Document doc)
+    void    i_atom(Atom x, const KVTree& attrs)
     {
-        return Atom{};
+        ati_classes(x, attrs);
+        atu_title(x, attrs);
+        ati_tags(x, attrs);
     }
     
-    
-    /*
-    void    determine_hops(ClsHopsMap& hops, const ClassSet& cset, uint64_t depth=0)
+    void    u_atom(Atom x, const KVTree& attrs)
     {
-        for(Class c : cset){
-            if(hops.contains(c))
-                continue;
-            hops[c]     = depth;
-            determine_hops(hops, uget(c).base.defined, depth+1);
+        atu_classes(x, attrs);
+        atu_title(x, attrs);
+    }
+    
+    Atom    u_atom(const KVTree& attrs, Document doc)
+    {
+        bool    created = false;
+        Atom    x   = cdb::db_atom(doc, &created);
+        if(created){
+            i_atom(x, attrs);
+        } else {
+            u_atom(x, attrs);
         }
+        return x;
     }
-    */
     
-    void    update_aclasses(Atom at, Document doc, const ClsHopsMap& nmap)
-    {
-        ClsHopsMap    omap = make_map(cdb::classes_and_hops(at));
-        map_difference_exec(omap, nmap, 
-            [&](const ClassU64Pair& pp) {
-                static thread_local SQ  d("DELETE FROM AClasses WHERE atom=? AND doc=? AND class=?");
-                auto d_af   = d.af();
-                d.bind(1, at.id);
-                d.bind(2, doc.id);
-                d.bind(3, pp.first.id);
-                d.exec();
-            },
-            
-            [&](const ClassU64Pair& pp) {
-                static thread_local SQ  u("UPDATE AClasses SET hops=? WHERE atom=? AND doc=? AND class=?");
-                auto u_af   = u.af();
-                u.bind(1, pp.second);
-                u.bind(2, at.id);
-                u.bind(3, doc.id);
-                u.bind(4, pp.first.id);
-                u.exec();
-            },
-            
-        
-            [&](const ClassU64Pair& pp){
-                //  it's an addition
-                static thread_local SQ  i("INSERT INTO AClasses (atom, doc, class, hops) VALUES (?,?,?,?)");
-                auto i_af   = i.af();
-                i.bind(1, at.id);
-                i.bind(2, doc.id);
-                i.bind(3, pp.first.id);
-                i.bind(4, pp.second);
-                i.exec();
-            }
-        );
-    }
+
+#if 0
     
 
     void    u_atom(Atom at, Document doc, const Attribute::Report& rep, cdb_options_t opts, const ClassSet& cset)
@@ -219,8 +247,8 @@ namespace {
                 //an -> change(at, c, Change::Modified);
             }
         }
-        
-        
     }
+#endif
+
 }
 
