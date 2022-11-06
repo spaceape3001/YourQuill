@@ -153,6 +153,7 @@ namespace yq {
             string_set_t            available;      // Available templates
             std::filesystem::path   cache;          // Cache location
             Copyright               copyright;      // Copyright info of the workspace
+            CacheData               data = { CacheData::DB };
             FNDbFlags               db_flags = nullptr;
             std::atomic<bool>       db_init;
             std::filesystem::path   dot;            // DOT excutable
@@ -731,6 +732,11 @@ namespace yq {
             return impl().copyright;
         }
         
+        const CacheData&                data()
+        {
+            return impl().data;
+        }
+
         const std::filesystem::path&    dot()
         {
             return impl().dot;

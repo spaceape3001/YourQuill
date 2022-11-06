@@ -23,6 +23,17 @@ namespace yq {
 
 
     namespace wksp {
+        
+        struct CacheData {
+            enum Type : uint8_t {
+                NONE    = 0,    //!< No data source configured
+                DB,             //!< Use local cache database 
+                CURL            //!< Use curl (remote)
+            };
+            
+            Type    type = NONE;
+        };
+    
     
         static constexpr const char*    szQuillFile = ".yquill";
         static constexpr const char*    szConfigDir = ".config";
@@ -97,6 +108,8 @@ namespace yq {
 
         //! Copyright information
         const Copyright&                copyright();
+        
+        const CacheData&                data();
         
         //! This connection is READ_ONLY!
         SqlLite&                        db();
