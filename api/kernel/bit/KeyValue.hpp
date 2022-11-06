@@ -615,7 +615,7 @@ namespace yq {
             string_view_vector_t  ret;
             all(m, [&](const KeyValue& a){
                 if(!a.data.empty())
-                    ret << a.data;
+                    ret << trimmed(a.data);
             });
             return ret;
         }
@@ -661,7 +661,7 @@ namespace yq {
                 if(!a.data.empty()){
                     vsplit(a.data, sep, [&](std::string_view v){
                         if(!v.empty())
-                            ret << v;
+                            ret << trimmed(v);
                     });
                 }
             });
