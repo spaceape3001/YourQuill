@@ -124,9 +124,9 @@ namespace yq {
         std::vector<Class>      classes(Atom, Sorted sorted=Sorted{});
 
         //! Classes of the atom defined by said document
-        std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
+        //std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
         
-        std::vector<ClassU64Pair> classes_and_hops(Atom, Document);
+        std::vector<ClassU64Pair> classes_and_hops(Atom);
         
         //! Count of classes for atom
         size_t                  classes_count(Atom);
@@ -159,10 +159,10 @@ namespace yq {
         Atom                    db_atom(Document doc, std::string_view k, bool* wasCreated=nullptr);
         
         //! Documents that define this atom
-        std::vector<Document>   documents(Atom, Sorted sorted=Sorted{});
+        //std::vector<Document>   documents(Atom, Sorted sorted=Sorted{});
         
         //! Count of documents defining/mentioning atom
-        size_t                  documents_count(Atom);
+        //size_t                  documents_count(Atom);
 
         //! TRUE if atom exists
         bool                    exists(Atom);
@@ -180,12 +180,16 @@ namespace yq {
         Atom::Info              info(Atom);
 
         //! TRUE if atom is specified class
+        [[deprecated]]
         bool                    is(Atom, Class);
         //bool                    is_all(Atom, std::initializer_list<Class>);
         //bool                    is_any(Atom, std::initializer_list<Class>);
         
         //! TRUE if this atom is also a leaf
         bool                    is_leaf(Atom);
+
+        //! TRUE if the atom has been taged
+        bool                    is_tagged(Atom, Tag);
 
         //! Key for the atom
         std::string             key(Atom);
@@ -225,8 +229,6 @@ namespace yq {
         size_t                  tags_count(Atom);
         //size_t                  tags_count(Atom, Document);
 
-        //! TRUE if the atom has been taged
-        bool                    tagged(Atom, Tag);
 
         //! Title for atom
         std::string             title(Atom);    // kept for comptibility

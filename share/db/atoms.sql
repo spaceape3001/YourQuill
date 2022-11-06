@@ -18,44 +18,43 @@ CREATE TABLE Atoms (
     parent      INTEGER DEFAULT 0,
 	icon        VARCHAR(255),
 	brief       VARCHAR(255),
+	is_edge     BOOL DEFAULT 0,
+	    -- this is the title
 	name        VARCHAR(255)
-);
-
-    --  All documents that instantiate this atom (can be plural)
-CREATE TABLE ADocuments (
-    atom        INTEGER NOT NULL,
-    doc         INTEGER NOT NULL,
-    UNIQUE(atom,doc) ON CONFLICT IGNORE
 );
 
 CREATE TABLE AClasses (
         -- atom of interest
     atom    INTEGER NOT NULL,
-        -- document where this was defined
-    doc     INTEGER NOT NULL,
         -- class of interest
     class   INTEGER NOT NULL,
     
         -- how direct the definition is (ie, how many other class definitions it must reach through.
     hops    INTEGER DEFAULT 0,
     
-    UNIQUE(atom,doc,class) ON CONFLICT IGNORE
+    UNIQUE(atom,class) ON CONFLICT IGNORE
 );
 
 CREATE TABLE ATags (
         -- atom of interest
     atom    INTEGER NOT NULL,
-        -- document this was defined
-    doc     INTEGER NOT NULL,
         -- tag of interest
     tag     INTEGER NOT NULL,
-    UNIQUE(atom,doc,tag) ON CONFLICT IGNORE
+    UNIQUE(atom,tag) ON CONFLICT IGNORE
 );
 
     --  note, the edge's parent is the source, always defined
 CREATE TABLE AEdges (
-    atom    INTEGER NOT NULL UNIQUE,
-    target  VARCHAR(255),
-    tgtid   INTEGER
+    --  source class
+    source  INTEGER NOT NULL,
+    
+    --  edge class
+    edge    INTEGER NOT NULL,
+    
+    --  target class
+    target  INTEGER NOT NULL DEFAULT 0,
+
+    --  target specification (for when the target's not resolved)
+    tgtspec VARCHAR(255)
 );
 

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <basic/preamble.hpp>
+
 namespace yq {
 
     static constexpr const char*    szAbbr              = "abbr";
@@ -186,5 +188,16 @@ namespace yq {
     static constexpr const char*    szYQWiki            = "yq_wiki";
     static constexpr const char*    szYQWorkspace       = "yq_workspace";
     static constexpr const char*    szZero              = "zero";
+    
+    
+    static constexpr const string_view_initializer_list_t svL_aAbbreviation     = { "%abbr"sv, "%abbreviation"sv };
+    static constexpr const string_view_initializer_list_t svL_aBrief            = { "%brief"sv, "%desc"sv, "%description"sv };
+    static constexpr const string_view_initializer_list_t svL_aClass            = { "%is"sv, "%cls"sv, "%class"sv, "%use"sv, "%as"sv, "%atom"sv };
+    static constexpr const string_view_initializer_list_t svL_aEnd              = { "%end"sv };
+    static constexpr const string_view_initializer_list_t svL_aFormat           = { "%fmt"sv, "%format"sv };
+    static constexpr const string_view_initializer_list_t svL_aNote             = { "%note"sv, "%notes"sv };
+    static constexpr const string_view_initializer_list_t svL_aStart            = { "%start"sv };
+    static constexpr const string_view_initializer_list_t svL_aTag              = { "%tag"sv, "%tags"sv };
+    static constexpr const string_view_initializer_list_t svL_aTitle            = { "%"sv, "%leaf"sv, "%title"sv };
 
 }
