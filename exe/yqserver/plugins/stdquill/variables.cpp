@@ -56,7 +56,7 @@ namespace {
     
     void    var_atom_count(WebHtml&h)
     {
-        h << cdb::all_atoms_count();
+        h << cdb::count_atoms();
     }
     
     void    var_attribute_count(WebHtml&h)

@@ -11,6 +11,7 @@
 #include <initializer_list>
 #include <string_view>
 #include <string>
+#include <basic/meta/InfoBinder.hpp>
 #include <kernel/enum/Sorted.hpp>
 
 namespace yq {
@@ -20,6 +21,7 @@ namespace yq {
     struct Image;
     struct Leaf;
     struct Tag;
+
 
     struct Edge;
     
@@ -36,6 +38,8 @@ namespace yq {
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Atom&rhs) const = default; 
         constexpr operator uint64_t() const { return id; }
+        
+        constexpr uint64_t  get_id() const { return id; }
         
         //  --------------------------------------
         //  These all QUERY the cache database....
@@ -236,3 +240,6 @@ namespace yq {
     };
 
 }
+
+YQ_TYPE_DECLARE(Atom)
+

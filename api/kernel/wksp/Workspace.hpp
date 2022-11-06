@@ -21,20 +21,17 @@ namespace yq {
         using root_path_map_t   = Map<std::filesystem::path, const Root*>;
     #endif
 
+    struct Oracle {
+        enum Type : uint8_t {
+            NONE    = 0,    //!< No data source configured
+            DB,             //!< Use local cache database 
+            CURL            //!< Use curl (remote)
+        };
+        
+        Type    type = NONE;
+    };
 
     namespace wksp {
-        
-        struct CacheData {
-            enum Type : uint8_t {
-                NONE    = 0,    //!< No data source configured
-                DB,             //!< Use local cache database 
-                CURL            //!< Use curl (remote)
-            };
-            
-            Type    type = NONE;
-        };
-    
-    
         static constexpr const char*    szQuillFile = ".yquill";
         static constexpr const char*    szConfigDir = ".config";
     
@@ -109,7 +106,7 @@ namespace yq {
         //! Copyright information
         const Copyright&                copyright();
         
-        const CacheData&                data();
+        const Oracle&                   oracle();
         
         //! This connection is READ_ONLY!
         SqlLite&                        db();

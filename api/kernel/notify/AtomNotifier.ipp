@@ -6,36 +6,36 @@
 
 #pragma once
 
-#include "AtomClassNotifier.hpp"
+#include "AtomNotifier.hpp"
 
 namespace yq {
-    struct AtomClassNotifier::Repo {
-        std::vector<const AtomClassNotifier*>    all;
-        EnumMap<Change,Vector<const AtomClassNotifier*>> byChange;
+    struct AtomNotifier::Repo {
+        std::vector<const AtomNotifier*>    all;
+        EnumMap<Change,Vector<const AtomNotifier*>> byChange;
     };
     
 
-    AtomClassNotifier::Repo&            AtomClassNotifier::repo()
+    AtomNotifier::Repo&            AtomNotifier::repo()
     {
         static Repo s_repo;
         return s_repo;
     }
         
-    const std::vector<const AtomClassNotifier*>& AtomClassNotifier::all()
+    const std::vector<const AtomNotifier*>& AtomNotifier::all()
     {
         return repo().all;
     }
     
-    const EnumMap<Change,Vector<const AtomClassNotifier*>>&     AtomClassNotifier::change_map()
+    const EnumMap<Change,Vector<const AtomNotifier*>>&     AtomNotifier::change_map()
     {
         return repo().byChange;
     }
 
-    AtomClassNotifier::AtomClassNotifier(Flag<Change> changeMask, Class cls, const std::source_location& sl)
+    AtomNotifier::AtomNotifier(Flag<Change> changeMask, const AtomSpec& spec, const std::source_location& sl)
     {
         m_source        = sl;
         m_change        = changeMask;
-        m_class         = cls;
+        m_spec          = spec;
         
         Repo& _r = repo();
         _r.all.push_back(this);
@@ -44,11 +44,11 @@ namespace yq {
                 _r.byChange[c] << this;
     }
     
-    AtomClassNotifier::~AtomClassNotifier()
+    AtomNotifier::~AtomNotifier()
     {
     }
 
-    AtomClassNotifier::Writer&     AtomClassNotifier::Writer::description(std::string_view d)
+    AtomNotifier::Writer&     AtomNotifier::Writer::description(std::string_view d)
     {
         if(importer)
             importer -> m_description = d;

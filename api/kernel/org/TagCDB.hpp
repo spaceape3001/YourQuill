@@ -57,11 +57,11 @@ namespace yq {
 
         /*! \brief Creates tags by keys
         */
-        std::vector<Tag>        db_tags(string_view_set_t);
+        std::vector<Tag>        db_tags(const string_view_set_t&);
 
         /*! \brief Creates tags by keys
         */
-        std::vector<Tag>        db_tags(string_set_t);
+        std::vector<Tag>        db_tags(const string_set_t&);
 
         /*! \brief Gets the tag's document
         */

@@ -153,7 +153,6 @@ namespace yq {
             string_set_t            available;      // Available templates
             std::filesystem::path   cache;          // Cache location
             Copyright               copyright;      // Copyright info of the workspace
-            CacheData               data = { CacheData::DB };
             FNDbFlags               db_flags = nullptr;
             std::atomic<bool>       db_init;
             std::filesystem::path   dot;            // DOT excutable
@@ -166,6 +165,7 @@ namespace yq {
             std::string             luser;          // local user
             std::filesystem::path   markdown;       // Markdown location
             std::string             name;           // Workspace name
+            Oracle                  oracle;
             std::filesystem::path   perl;           // Perl path
             //std::filesystem::path   pid;            // PID file location?
             uint16_t                port = 0;       // Our designated port number
@@ -363,7 +363,6 @@ namespace yq {
                 wkspError << "Bad directory for workspace --> " << qdir;
                 return false;
             }
-            
                 
             aux             = std::move(doc.aux_ports);
             port            = doc.port;
@@ -395,7 +394,8 @@ namespace yq {
                 cache       = tmp / "cache";
             } else
                 cache       = absolute_proximate(doc.cache, tmp);
-            
+
+            oracle.type = Oracle::DB;   // TODO ... curl
 
             string_set_t    rSeen;
             Root*           rt  = new Root(qdir, PolicyMap(Access::ReadWrite));
@@ -732,11 +732,6 @@ namespace yq {
             return impl().copyright;
         }
         
-        const CacheData&                data()
-        {
-            return impl().data;
-        }
-
         const std::filesystem::path&    dot()
         {
             return impl().dot;
@@ -775,6 +770,11 @@ namespace yq {
         std::string_view                name()
         {
             return impl().name;
+        }
+
+        const Oracle&                   oracle()
+        {
+            return impl().oracle;
         }
         
         const std::filesystem::path&    perl()

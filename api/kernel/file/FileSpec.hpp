@@ -25,29 +25,21 @@ namespace yq {
             ByCacheExt,         //!< By file extension (any folder)
             ByFolder,           //!< All in Folder
             ByFolderExt,        //!< By folder + extension
-            ByFolderDoc,        //!< By folder + document name
-            ByClassKey,         //!< By atom class (key)
-            ByClassId           //!< By atom class (ID)
+            ByFolderDoc         //!< By folder + document name
         };
     
         std::string             str;
         uint64_t                u64     = 0;
         Type                    type    = Never;
         
-        bool    is_class() const;
-        
-        bool    match(Class) const;
         bool    match(Fragment) const;
         bool    match(Folder, std::string_view) const;
         bool    match(const std::filesystem::path&) const;
-        bool    match_class(std::string_view) const;
     };
     
     FileSpec        by_file(const std::filesystem::path&);
     FileSpec        by_cache(std::string_view);
     FileSpec        by_cache(Folder);
     FileSpec        by_cache(Folder, std::string_view);
-    FileSpec        by_class(std::string_view);
-    FileSpec        by_class(Class);
 }
 

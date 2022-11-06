@@ -42,6 +42,7 @@ YQ_TYPE_IMPLEMENT(yq::SizeDesc)
 YQ_TYPE_IMPLEMENT(yq::Submit)
 YQ_TYPE_IMPLEMENT(yq::Vcs)
 
+#include "atom/Atom.ipp"
 #include "atom/AtomCDB.ipp"
 #include "atom/Class.ipp"
 #include "atom/ClassCDB.ipp"
@@ -75,8 +76,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "leaf/LeafData.ipp"
 #include "leaf/LeafFile.ipp"
 #include "leaf/LeafCDB.ipp"
-#include "notify/AtomClassNotifier.ipp"
-#include "notify/AtomFieldNotifier.ipp"
+#include "notify/AtomNotifier.ipp"
 #include "notify/FileWatch.ipp"
 #include "notify/FunctionalNotifier.ipp"
 #include "notify/FunctionalStage4.ipp"

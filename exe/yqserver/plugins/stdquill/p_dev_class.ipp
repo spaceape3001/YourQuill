@@ -36,7 +36,7 @@ namespace {
             throw HttpStatus::BadArgument;
 
         h.title() << "Class (" << label(c) << "): Atoms";
-        dev_table(h, atoms(c, Sorted::YES));
+        dev_table(h, cdb::all_atoms(c, Sorted::YES));
     }
     
     void    p_dev_class_base(WebHtml&h)

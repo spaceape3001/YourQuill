@@ -172,8 +172,8 @@ namespace {
             
 
                 //  LEAFS & atoms
-            on_stage3<u_leaf_stage3_pass1_declare>(leafs_lookup);
-            on_stage3<u_leaf_stage3_pass2_attributes>(leafs_lookup);
+            on_stage3<u_leaf_stage3_pass1>(leafs_lookup);
+            on_stage3<u_leaf_stage3_pass2>(leafs_lookup);
             on_stage3<u_tag_stage3_leaf>(tags_lookup);
 
         
@@ -181,7 +181,7 @@ namespace {
 
             on_stage4<css_stage4>();        // <---  Must come AFTER background stage4
             on_stage4<page_stage4>();
-            
+            on_stage4<u_leaf_stage4_cleanup>();
             
                 // Images change first (for icon changes)
             for(const char* z : Image::kSupportedExtensionWildcards)

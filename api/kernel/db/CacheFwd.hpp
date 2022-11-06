@@ -46,6 +46,7 @@ namespace yq {
     using FragmentStr   = std::pair<Fragment,std::string>;
     using ClassSet      = std::set<Class>;
     using ClassU64Pair  = std::pair<Class,uint64_t>;
+    using TagSet        = std::set<Tag>;
     
     using ClassCxn      = Connection<Class,Class>;
     using ClassU64Map   = std::map<Class,uint64_t>;

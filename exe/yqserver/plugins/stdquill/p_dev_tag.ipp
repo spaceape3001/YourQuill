@@ -34,6 +34,16 @@ namespace {
         h.kvrow("Image");
     }
     
+    void    p_dev_tag_atoms(WebHtml& h)
+    {
+        Tag x   = tag(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+        
+        dev_title(h, x, "Atoms");
+        dev_table(h, cdb::all_atoms(x));
+    }
+
     void    p_dev_tag_classes(WebHtml& h)
     {
         Tag x   = tag(h);
@@ -57,6 +67,7 @@ namespace {
                 .argument("id", "Tag id (number)")
                 .argument("key", "Tag key (string)")
                 .argument("tag", "Tag key/identifier").label("Info"),
+            reg_webpage<p_dev_tag_atoms>("/dev/tag/atoms").argument("id", "Tag id (number)").label("Atoms"),
             reg_webpage<p_dev_tag_classes>("/dev/tag/classes").argument("id", "Tag id (number)").label("Classes")
         });
         reg_webpage<p_dev_tags>("/dev/tags");

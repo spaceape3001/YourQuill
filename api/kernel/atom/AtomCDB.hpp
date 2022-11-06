@@ -7,6 +7,7 @@
 #pragma once
 
 #include <kernel/atom/Atom.hpp>
+#include <kernel/atom/AtomInfo.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Sorted.hpp>
 #include <kernel/image/Image.hpp>
@@ -17,32 +18,14 @@ namespace yq {
     struct Class;
     struct Document;
     struct Tag;
-
-    struct Atom::Info {
-        std::string     abbr;
-        std::string     brief;
-        std::string     key;
-        Leaf            leaf; 
-        std::string     name;
-        Image           icon;
-        bool operator==(const Info&) const = default;
-    };
-
+    
     namespace cdb {
-        
-        /*! \brief Returns the short abbreviation for atom
-        
-            \param[in]  a   Atom of interest
-            \return The standard abbreviation
-        */
-        std::string            abbreviation(Atom a);
-
         /*! \brief Returns all atoms in the cache database
             \param[in] sorted   Yes/no for sorting by key. (default is no)
             \return std::vector of the found atoms
         */
-        std::vector<Atom>       all_atoms(Sorted sorted=Sorted{});
-        
+        std::vector<Atom>    all_atoms(Sorted sorted=Sorted{});
+
         /*! \brief Returns all atoms in the cache database for given class
         
             This will select ALL atoms that have listed (directly or indirectly) 
@@ -52,8 +35,16 @@ namespace yq {
             \param[in] sorted   Yes/no for sorting by key (default is no)
             \return std::vector of the found atoms
         */
-        std::vector<Atom>       all_atoms(Class cls,Sorted sorted=Sorted());
+        std::vector<Atom>    all_atoms(Class cls, Sorted sorted=Sorted{});
+
+        /*! \brief Returns all atoms in the cache database defined by the given document
         
+            \param[in] doc      Containing document
+            \param[in] sorted   Yes/no for sorting by key (default is no)
+            \return std::vector of the found atoms
+        */
+        std::vector<Atom>    all_atoms(Document doc, Sorted sorted=Sorted{});
+
         /*! \brief Returns all atoms in the cache database with the given tag
         
             This will select ALL atoms that have been tagged by the specified
@@ -63,13 +54,13 @@ namespace yq {
             \param[in] sorted   Yes/no for sorting by key (default is no)
             \return std::vector of the found atoms
         */
-        std::vector<Atom>       all_atoms(Tag tag,Sorted sorted=Sorted());
-        
+        std::vector<Atom>    all_atoms(Tag tag, Sorted sorted=Sorted{});
+
         /*! \brief Counts the number of atoms in the database
             \return The count
         */
-        size_t                  all_atoms_count();
-        
+        size_t               count_atoms();
+
         /*! \brief Counts the number of atoms in the database for the given class
         
             This will count ALL atoms that have listed (directly or indirectly)
@@ -78,8 +69,17 @@ namespace yq {
             \param[in] cls      Class to select for
             \return The count
         */
-        size_t                  all_atoms_count(Class cls);
+        size_t               count_atoms(Class cls);
+
+        /*! \brief Counts the number of atoms in the database defined by the specified document
         
+            This counts all atoms in the database that have been defined by the given document
+            
+            \param[in] doc      Containing document
+            \return The count
+        */
+        size_t               count_atoms(Document doc);
+
         /*! \brief Counts the number of atoms in the database tagged by the given tag
         
             This counts all atoms in the database that have been tagged by the specified
@@ -88,49 +88,109 @@ namespace yq {
             \param[in] tag      Tag to select for
             \return The count
         */
-        size_t                  all_atoms_count(Tag tag);
+        size_t               count_atoms(Tag tag);
+        //Atom                 create(Document);
+        bool                 exists_atom(uint64_t);
 
         //! Gets atom by ID
-        Atom                    atom(uint64_t);
+        Atom                 find_atom(uint64_t);
 
         //! Gets atom by key
-        Atom                    atom(std::string_view );
+        Atom                 find_atom(std::string_view);
+
+        //! Gets first atom defined by document
+        Atom                 find_atom(Document doc);
 
         //! Gets atom by document and sub-key
-        Atom                    atom(Document, std::string_view sk=std::string_view());
-        
-        //! Atoms of a particular class
-        std::vector<Atom>       atoms(Class, Sorted sorted=Sorted());
-        
-        //! Atoms in document
-        std::vector<Atom>       atoms(Document, Sorted sorted=Sorted());
-        
+        Atom                 find_atom(Document doc, std::string_view ck);
+
         //! All atoms with name
-        std::vector<Atom>       atoms_by_name(std::string_view , Sorted sorted=Sorted{});
+        std::vector<Atom>    named_atoms(std::string_view n, Sorted sorted=Sorted{});
+
+        // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        //  To distinguish the ones taking in a Atom as a primary argument
+
+        /*! \brief Returns the short abbreviation for atom
         
-        //! Number of atoms defined in document
-        size_t                  atoms_count(Document);
-        
+            \param[in]  a   Atom of interest
+            \return The standard abbreviation
+        */
+        std::string          abbreviation(Atom a);
+
         //! Brief description of atom
-        std::string             brief(Atom);
+        std::string          brief(Atom a);
 
         //! Child atoms of specified parent
-        std::vector<Atom>       child_atoms(Atom, Sorted sorted=Sorted{});
+        std::vector<Atom>    children(Atom a,Sorted sorted=Sorted{});
 
-        //! Count of child atoms
-        size_t                  child_atoms_count(Atom);
+        //! Counts child atoms of specified parent
+        size_t               children_count(Atom a);
 
         //! Classes of the atom
-        std::vector<Class>      classes(Atom, Sorted sorted=Sorted{});
+        std::vector<Class>   classes(Atom a,Sorted sorted=Sorted{});
 
-        //! Classes of the atom defined by said document
-        //std::vector<Class>      classes(Atom, Document, Sorted sorted=Sorted{});
-        
-        std::vector<ClassU64Pair> classes_and_hops(Atom);
-        
         //! Count of classes for atom
-        size_t                  classes_count(Atom);
-        //size_t                  classes_count(Atom,Document);
+        size_t               classes_count(Atom a);
+        
+        //! Defining document for atom
+        Document             document(Atom);
+
+        //! Icon for atom
+        Image                icon(Atom);
+
+        //! Information for atom
+        Atom::Info           info(Atom);
+
+        //! TRUE if atom is specified class
+        bool                 is(Atom,Class);
+        
+        //! TRUE if atom has been tagged with given tag
+        bool                 is(Atom,Tag);
+        
+        //! TRUE if the atom is an edge
+        bool                 is_edge(Atom);
+
+        //! TRUE if this atom is also a leaf
+        bool                 is_leaf(Atom);
+
+        //! Key for the atom
+        std::string          key(Atom);
+
+        //! Label for the atom
+        std::string          label(Atom);
+
+        //! Leaf for atom (might not have one)
+        Leaf                 leaf(Atom);
+
+        //! Name for the atom
+        std::string          name(Atom);
+
+        /*! \brief Name/Key/Icon for an Atom
+        
+            \param a                Atom
+            \param autoKeyToName    if TRUE, will auto-fill empty names with keys
+        */
+        cdb::NKI             nki(Atom,bool autoKeyToName=false);
+
+        //! parent for atom
+        Atom                 parent(Atom);
+
+        //! Sub-key for atom
+        std::string          skey(Atom);
+
+        //! Tags for atom
+        std::vector<Tag>     tags(Atom,Sorted sorted=Sorted{});
+
+        //! Count of tags for atom
+        size_t               tags_count(Atom);
+        
+        //! Title for the atom
+        std::string          title(Atom);
+        
+        //! True if the atom exists in database
+        bool                 valid(Atom);
+
+        std::vector<ClassU64Pair> classes_and_hops(Atom);
         
         
         /*! \brief Creates an atom in the CACHE database
@@ -164,75 +224,14 @@ namespace yq {
         //! Count of documents defining/mentioning atom
         //size_t                  documents_count(Atom);
 
-        //! TRUE if atom exists
-        bool                    exists(Atom);
-
-        //! TRUE if atom exists
-        bool                    exists_atom(uint64_t);
-
-        //! Icon for atom
-        Image                   icon(Atom);
         
         //! Inbound edges for atom
         std::vector<Atom>            inbound(Atom);
 
-        //! Information for atom
-        Atom::Info              info(Atom);
-
-        //! TRUE if atom is specified class
-        [[deprecated]]
-        bool                    is(Atom, Class);
-        //bool                    is_all(Atom, std::initializer_list<Class>);
-        //bool                    is_any(Atom, std::initializer_list<Class>);
-        
-        //! TRUE if this atom is also a leaf
-        bool                    is_leaf(Atom);
-
-        //! TRUE if the atom has been taged
-        bool                    is_tagged(Atom, Tag);
-
-        //! Key for the atom
-        std::string             key(Atom);
-
-        //! Label for the atom
-        std::string             label(Atom);
-        
-        //! Leaf for atom (might not have one)
-        Leaf                    leaf(Atom);
-    
-        //! Name for the atom
-        std::string             name(Atom);
-        
-        /*! \brief Name/Key/Icon for an Atom
-        
-            \param a                Atom
-            \param autoKeyToName    if TRUE, will auto-fill empty names with keys
-        */
-        NKI                     nki(Atom a, bool autoKeyToName=false);
         
         //! Outbound edges for atom
         std::vector<Atom>            outbound(Atom);
         
-        //! parent for atom
-        Atom                    parent(Atom);
-
-        //! Sub-key for atom
-        std::string             skey(Atom);
-
-        //! Tags for atom
-        std::vector<Tag>        tags(Atom, Sorted sorted=Sorted{});
-
-        //! Tags for atom 
-        //std::vector<Tag>        tags(Atom, Document, Sorted sorted=Sorted{});
-        
-        //! Count of tags for atom
-        size_t                  tags_count(Atom);
-        //size_t                  tags_count(Atom, Document);
-
-
-        //! Title for atom
-        std::string             title(Atom);    // kept for comptibility
-
     }
 
 }

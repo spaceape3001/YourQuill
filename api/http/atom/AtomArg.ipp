@@ -20,7 +20,7 @@ namespace yq {
             if(arg_string.empty())
                 return Atom{};
                 
-            Atom t   = cdb::atom( arg_string);
+            Atom t   = cdb::find_atom( arg_string);
             if(t)
                 return t;
             uint64_t    i = to_uint64( arg_string).value;
@@ -88,7 +88,7 @@ namespace yq {
         
         Atom atom_key(std::string_view arg_string)
         {
-            return cdb::atom(trimmed(arg_string));
+            return cdb::find_atom(trimmed(arg_string));
         }
         
         Atom atom_key(const WebContext&ctx, std::string_view arg_name, bool *detected)

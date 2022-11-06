@@ -24,6 +24,8 @@ namespace {
 
     void    u_leaf_notify_icons(Fragment, Change);
     
-    void    u_leaf_stage3_pass1_declare(Document);
-    void    u_leaf_stage3_pass2_attributes(Document);
+    void    u_leaf_stage3_pass1(Document);
+    void    u_leaf_stage3_pass2(Document);
+    
+    void    u_leaf_stage4_cleanup();
 }

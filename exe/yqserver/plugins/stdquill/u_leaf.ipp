@@ -29,6 +29,15 @@
 
 namespace {
 
+    struct InitLeaf {
+        Leaf::SharedData    data;
+        Atom                atom;
+        Attribute::Report   attrs;
+    };
+    
+    static std::map<Leaf, InitLeaf>    iLeafs;
+
+
     void         u_leaf(Document doc, cdb_options_t opts)
     {
         bool    created = false;
@@ -86,7 +95,7 @@ namespace {
         if(created){
             xa              = db_atom(doc);
         } else {
-            xa              = atom(doc);
+            xa              = find_atom(doc);
         }
         
         if(opts & U_ATTRIBUTES){
@@ -160,18 +169,40 @@ namespace {
         u_leaf_icon(cdb::leaf(cdb::document(frag), true));
     }
         
-    void    u_leaf_stage3_pass1_declare(Document doc)
+    void    u_leaf_stage3_pass1(Document doc)
     {
         if(hidden(folder(doc)))
             return;
+        
+        Leaf    x   = cdb::db_leaf(doc);
+        if(!x){
+            yWarning() << "Unable to create leaf for '" << cdb::key(doc) << "'";
+            return;
+        }
+
+        u_leaf_icon(x);
+        
+        InitLeaf&   ix  = iLeafs[x];
+        ix.data     = cdb::merged(x, IS_UPDATE | DONT_LOCK);
+        if(!ix.data){
+            yWarning() << "Unable to load leaf data for '" << cdb::key(doc) << "'";
+            return ;
+        }
+        
+        
 
         u_leaf(doc, DONT_LOCK|STARTUP|U_TAGS|U_INFO);
     }
     
-    void    u_leaf_stage3_pass2_attributes(Document doc)
+    void    u_leaf_stage3_pass2(Document doc)
     {
         if(hidden(folder(doc)))
             return;
         u_leaf(doc, DONT_LOCK|U_ATTRIBUTES);
+    }
+
+    void    u_leaf_stage4_cleanup()
+    {
+        iLeafs.clear();
     }
 }
