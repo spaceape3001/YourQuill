@@ -11,7 +11,6 @@
 #include <kernel/atom/AtomCDB.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/io/Strings.hpp>
-#include <kernel/notify/AtomNotifier.hpp>
 
 namespace {
 
@@ -35,19 +34,7 @@ namespace {
 
     
     using ClsHopsMap   = std::map<Class,uint64_t>;
-    
-    struct AtomClassChange {
-        Atom        atom;
-        Class       cls;
-        Change      chg;
-    };
 
-    struct AtomTagChange {
-        Atom        atom;
-        Tag         tag;
-        Change      chg;
-    };
-    
     //! Used for inserting classes on a (known to be) new atom
     //! \param[in]  Atom to associate these classes with
     //! \param[in]  
@@ -73,19 +60,14 @@ namespace {
         ati_classes(at, attrs.values_set(svL_aClass));
     }
     
-    std::vector<AtomClassChange>    atu_classes(Atom at, const ClassSet& classes)
+    SetChanges<Class>   atu_classes(Atom at, const ClassSet& classes)
     {
-        std::vector<AtomClassChange>    ret;
-        
+        SetChanges<Class>   ret;
         ClassCountMap   omap    = cdb::classes_and_hops_map(at);
         ClassCountMap   nmap    = cdb::base_classes_ranked_merged_map(classes, true);
         map_difference_exec(omap, nmap, 
             [&](const ClassCountMap::value_type&pp){    // REMOVED
-                AtomClassChange acc;
-                acc.atom    = at;
-                acc.cls     = pp.first;
-                acc.chg     = Change::Removed;
-                ret.push_back(acc);
+                ret.removed.insert(pp.first);
 
                 static thread_local SQ  d("DELETE FROM AClasses WHERE atom=? AND class=?");
                 auto d_af   = d.af();
@@ -94,11 +76,7 @@ namespace {
                 d.exec();
             },
             [&](const ClassCountMap::value_type& pp){   // MODIFIED
-                AtomClassChange acc;
-                acc.atom    = at;
-                acc.cls     = pp.first;
-                acc.chg     = Change::Modified;
-                ret.push_back(acc);
+                ret.modified.insert(pp.first);
 
                 static thread_local SQ  u("UPDATE AClasses SET hops=? WHERE atom=? AND class=?");
                 auto u_af   = u.af();
@@ -108,11 +86,7 @@ namespace {
                 u.exec();
             },
             [&](const ClassCountMap::value_type& pp){   // INSERTED
-                AtomClassChange acc;
-                acc.atom    = at;
-                acc.cls     = pp.first;
-                acc.chg     = Change::Added;
-                ret.push_back(acc);
+                ret.added.insert(pp.first);
                 
                 static thread_local SQ  i("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?,?)");
                 auto i_af   = i.af();
@@ -125,15 +99,17 @@ namespace {
         return ret;
     }
 
-    std::vector<AtomClassChange>    atu_classes(Atom at, const string_view_set_t& clskeys)
+    SetChanges<Class>   atu_classes(Atom at, const string_view_set_t& clskeys)
     {
         return atu_classes(at, make_set(cdb::db_classes(clskeys)));
     }
     
-    std::vector<AtomClassChange>    atu_classes(Atom at, const KVTree& attrs)
+    SetChanges<Class>   atu_classes(Atom at, const KVTree& attrs)
     {
         return atu_classes(at, attrs.values_set(svL_aClass));
     }
+
+    //  ---------------------------------------------------------------------------------------------------------------
 
     void    ati_tags(Atom at, const TagSet& tags)
     {
@@ -155,22 +131,88 @@ namespace {
         ati_tags(at, attrs.values_set(svL_aTag));
     }
     
-    void    atu_title(Atom at, const KVTree& attrs)
+    SetChanges<Tag>    atu_tags(Atom at, const TagSet& tags)
+    {
+        TagSet              otags   = cdb::tags(at);
+        SetChanges<Tag> ret = add_remove(otags, tags);
+        if(!ret.removed.empty()){
+            static thread_local SQ dTag("DELETE FROM ATags WHERE atom=? AND tag=?");
+            dTag.batch(at.id, ret.tags.removed);
+        }
+        if(!ret.added.empty()){
+            static thread_local SQ iTag("INSERT INTO ATags (atom, tag) VALUES (?, ?)");
+            iTag.exec(at.id, ret.tags.added);
+        }
+        return ret;
+    }
+    
+    SetChanges<Tag>    atu_tags(Atom at, const string_view_set_t& tagkeys)
+    {
+        return atu_tags(at, make_set(cdb::db_tags(tagkeys)));
+    }
+
+    SetChanges<Tag>    atu_tags(AtomChangeData& acd, Atom at, const KVTree& attrs)
+    {
+        return atu_tags(at, attrs.values_set(svL_aTag));
+    }
+
+    //  ---------------------------------------------------------------------------------------------------------------
+    
+    std::string     atq_title(Atom at, const KVTree& attrs)
+    {
+        std::string    t   = std::string(attrs.value(svL_aTitle));
+        if(!t)
+            return t;
+        return cdb::key(at);
+    }
+    
+    void    ati_title(Atom at, const KVTree& attrs)
     {
         static thread_local SQ uTitle("UPDATE Atoms SET name=? WHERE id=?");
-        std::string    t   = std::string(attrs.value(svL_aTitle));
-        if(t.empty())
-            t   = cdb::key(at);
+        std::string    t   = atq_title(at, attrs);
         uTitle.bind(1, t);
         uTitle.bind(2, at);
         uTitle.exec();
     }
     
+    bool    atu_title(Atom at, const KVTree& attrs)
+    {
+        std::string     n   = cdb::name(at);
+        static thread_local SQ uTitle("UPDATE Atoms SET name=? WHERE id=?");
+        std::string    t   = atq_title(at, attrs);
+        if(t != n){
+            uTitle.bind(1, t);
+            uTitle.bind(2, at);
+            uTitle.exec();
+            return true;
+        } else
+            return false;
+    }
+
+    //  ---------------------------------------------------------------------------------------------------------------
+    
+    void    u_atom_execute(const AtomChangeData&)
+    {
+        // TODO.....
+    }
+
+    void    i_atom_notify(Atom x, bool recursive=true)
+    {
+        AtomChangeData  acd;
+        acd.atom            = x;
+        acd.doc             = cdb::document(x);
+        acd.classes.added   = make_set(cdb::classes(x));
+        acd.tags.added      = make_set(cdb::tags(x));
+        acd.title           = true;
+        u_atom_execute(acd);
+    }
+
+
     Atom    s3_atom_create(const KVTree& attrs, Document doc)
     {
         Atom        x   = cdb::db_atom(doc);
         ati_classes(x, attrs);
-        atu_title(x, attrs);
+        ati_title(x, attrs);
         ati_tags(x, attrs);
         return x;
     }
@@ -179,21 +221,28 @@ namespace {
     {
     }
 
-    void    s3_atom_notify(Atom, bool recursive=true)
+    void    s3_atom_notify(Atom x, bool recursive=true)
     {
+        i_atom_notify(x, recursive);
     }
     
     void    i_atom(Atom x, const KVTree& attrs)
     {
         ati_classes(x, attrs);
-        atu_title(x, attrs);
+        ati_title(x, attrs);
         ati_tags(x, attrs);
+        i_atom_notify(x);
     }
     
     void    u_atom(Atom x, const KVTree& attrs)
     {
-        atu_classes(x, attrs);
-        atu_title(x, attrs);
+        AtomChangeData acd;
+        acd.doc         = cdb::document(x);
+        acd.atom        = x;
+        acd.classes     = atu_classes(x, attrs);
+        acd.title       = atu_title(x, attrs);
+        acd.tags        = atu_tags(acd, x, attrs);
+        u_atom_execute(acd);
     }
     
     Atom    u_atom(const KVTree& attrs, Document doc)

@@ -12,6 +12,7 @@
 #include <kernel/atom/Atom.hpp>
 #include <kernel/atom/AtomSpec.hpp>
 #include <kernel/atom/Class.hpp>
+#include <kernel/atom/Field.hpp>
 #include <kernel/attr/AttributeDiff.hpp>
 #include <kernel/enum/Change.hpp>
 #include <vector>
@@ -23,6 +24,9 @@ namespace yq {
         Document                    doc;
         Atom                        atom;
         SetChanges<Class>           classes;
+        SetChanges<Field>           fields;
+        SetChanges<Tag>             tags;
+        bool                        title   = false;
         std::span<Attribute::Diff>  diffs;  //< Will be empty for STARTUP
     };
 
