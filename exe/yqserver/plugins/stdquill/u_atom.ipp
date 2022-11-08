@@ -9,6 +9,7 @@
 #include "u_atom.hpp"
 #include <basic/Vector.hpp>
 #include <kernel/atom/AtomCDB.hpp>
+#include <kernel/attr/AttributeCDB.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/io/Strings.hpp>
 
@@ -133,15 +134,17 @@ namespace {
     
     SetChanges<Tag>    atu_tags(Atom at, const TagSet& tags)
     {
-        TagSet              otags   = cdb::tags(at);
+        TagSet              otags   = make_set(cdb::tags(at));
         SetChanges<Tag> ret = add_remove(otags, tags);
         if(!ret.removed.empty()){
             static thread_local SQ dTag("DELETE FROM ATags WHERE atom=? AND tag=?");
-            dTag.batch(at.id, ret.tags.removed);
+            for(Tag t : ret.removed)
+                dTag.exec(at.id, t.id);
         }
         if(!ret.added.empty()){
             static thread_local SQ iTag("INSERT INTO ATags (atom, tag) VALUES (?, ?)");
-            iTag.exec(at.id, ret.tags.added);
+            for(Tag t : ret.added)
+                iTag.exec(at.id, t.id);
         }
         return ret;
     }
@@ -161,7 +164,7 @@ namespace {
     std::string     atq_title(Atom at, const KVTree& attrs)
     {
         std::string    t   = std::string(attrs.value(svL_aTitle));
-        if(!t)
+        if(!t.empty())
             return t;
         return cdb::key(at);
     }
@@ -191,6 +194,24 @@ namespace {
 
     //  ---------------------------------------------------------------------------------------------------------------
     
+    void    ati_attributes(Atom at, const KVTree& attrs)
+    {
+        Document    doc = cdb::document(at);
+        auto rep    = diff::additions(doc, attrs);
+        rep.exec_inserts();
+    }
+
+    void    atu_attributes(Atom at, const KVTree& attrs)
+    {
+        Document    doc = cdb::document(at);
+        auto rep = diff::changes(doc, attrs);
+        rep.exec_inserts();
+        rep.exec_reindex();
+        rep.exec_removals();
+    }
+
+    //  ---------------------------------------------------------------------------------------------------------------
+
     void    u_atom_execute(const AtomChangeData&)
     {
         // TODO.....
@@ -214,6 +235,7 @@ namespace {
         ati_classes(x, attrs);
         ati_title(x, attrs);
         ati_tags(x, attrs);
+        ati_attributes(x, attrs);
         return x;
     }
     
@@ -231,6 +253,7 @@ namespace {
         ati_classes(x, attrs);
         ati_title(x, attrs);
         ati_tags(x, attrs);
+        ati_attributes(x, attrs);
         i_atom_notify(x);
     }
     
@@ -242,6 +265,7 @@ namespace {
         acd.classes     = atu_classes(x, attrs);
         acd.title       = atu_title(x, attrs);
         acd.tags        = atu_tags(acd, x, attrs);
+        atu_attributes(x, attrs);
         u_atom_execute(acd);
     }
     

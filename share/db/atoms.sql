@@ -23,6 +23,13 @@ CREATE TABLE Atoms (
 	name        VARCHAR(255)
 );
 
+CREATE TABLE AAttributes (
+    atom    INTEGER NOT NULL,
+    attr    INTEGER NOT NULL,
+    
+    UNIQUE(atom,attr) ON CONFLICT IGNORE
+);
+
 CREATE TABLE AClasses (
         -- atom of interest
     atom    INTEGER NOT NULL,
