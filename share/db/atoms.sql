@@ -13,19 +13,20 @@ CREATE TABLE Atoms (
     abbr        VARCHAR(255),
         -- left here until it's all switched over....
     doc         INTEGER NOT NULL,
-    leaf        INTEGER DEFAULT 0,
+    leaf        INTEGER NOT NULL DEFAULT 0,
         -- Parent atom (for composition)
-    parent      INTEGER DEFAULT 0,
+    parent      INTEGER NOT NULL DEFAULT 0,
 	icon        VARCHAR(255),
 	brief       VARCHAR(255),
-	is_edge     BOOL DEFAULT 0,
+	is_edge     BOOL NOT NULL DEFAULT 0,
 	    -- this is the title
 	name        VARCHAR(255)
 );
 
-CREATE TABLE AAttributes (
+CREATE TABLE AProperties (
     atom    INTEGER NOT NULL,
     attr    INTEGER NOT NULL,
+    field   INTEGER NOT NULL DEFAULT 0,
     
     UNIQUE(atom,attr) ON CONFLICT IGNORE
 );

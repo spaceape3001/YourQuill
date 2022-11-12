@@ -11,7 +11,12 @@
 #include <kernel/notify/AtomNotifier.hpp>
 
 namespace {
-    void    u_atom(Atom, Document, const Attribute::Report&, cdb_options_t = 0, const ClassSet& cset=ClassSet());
-    void    i_atom_create(const KVTree& attrs, Document doc, Atom par=Atom());
+
+    /*! \brief Creates the atom from the attributes
+    
+        \note the creation will MODIFY/DESTROY the attributes.
+    */
+    Atom    s3_atom_create(KVTree& attrs, Document doc);
 }
+
 

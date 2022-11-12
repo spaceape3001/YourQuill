@@ -26,7 +26,8 @@ namespace yq {
         SetChanges<Class>           classes;
         SetChanges<Field>           fields;
         SetChanges<Tag>             tags;
-        bool                        title   = false;
+        bool                        title           = false;
+        bool                        abbreviation    = false;
         std::span<Attribute::Diff>  diffs;  //< Will be empty for STARTUP
     };
 

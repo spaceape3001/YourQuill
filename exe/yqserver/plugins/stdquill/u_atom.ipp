@@ -56,9 +56,12 @@ namespace {
         ati_classes(at, make_set(cdb::db_classes(clskeys)));
     }
     
-    void    ati_classes(Atom at, const KVTree& attrs)
+    void    ati_classes(Atom at, KVTree& attrs, bool autoDeleteKeys=true)
     {
-        ati_classes(at, attrs.values_set(svL_aClass));
+        auto clskeys    = attrs.values_set(svL_aClass);
+        if(autoDeleteKeys)
+            attrs.erase_all(svL_aClass);
+        return ati_classes(at, clskeys);
     }
     
     SetChanges<Class>   atu_classes(Atom at, const ClassSet& classes)
@@ -105,10 +108,14 @@ namespace {
         return atu_classes(at, make_set(cdb::db_classes(clskeys)));
     }
     
-    SetChanges<Class>   atu_classes(Atom at, const KVTree& attrs)
+    SetChanges<Class>   atu_classes(Atom at, KVTree& attrs, bool autoDeleteKeys=true)
     {
-        return atu_classes(at, attrs.values_set(svL_aClass));
+        auto clskeys    = attrs.values_set(svL_aClass);
+        if(autoDeleteKeys)
+            attrs.erase_all(svL_aClass);
+        return atu_classes(at, clskeys);
     }
+    
 
     //  ---------------------------------------------------------------------------------------------------------------
 
@@ -127,9 +134,12 @@ namespace {
         ati_tags(at, make_set(cdb::db_tags(tagkeys)));
     }
     
-    void    ati_tags(Atom at, const KVTree& attrs)
+    void    ati_tags(Atom at, KVTree& attrs, bool autoDeleteKeys=true)
     {
-        ati_tags(at, attrs.values_set(svL_aTag));
+        auto tagkeys = attrs.values_set(svL_aTag);
+        if(autoDeleteKeys)
+            attrs.erase_all(svL_aTag);
+        ati_tags(at, tagkeys);
     }
     
     SetChanges<Tag>    atu_tags(Atom at, const TagSet& tags)
@@ -154,9 +164,12 @@ namespace {
         return atu_tags(at, make_set(cdb::db_tags(tagkeys)));
     }
 
-    SetChanges<Tag>    atu_tags(AtomChangeData& acd, Atom at, const KVTree& attrs)
+    SetChanges<Tag>    atu_tags(AtomChangeData& acd, Atom at, KVTree& attrs, bool autoDeleteKeys=true)
     {
-        return atu_tags(at, attrs.values_set(svL_aTag));
+        auto tagkeys = attrs.values_set(svL_aTag);
+        if(autoDeleteKeys)
+            attrs.erase_all(svL_aTag);
+        return atu_tags(at, tagkeys);
     }
 
     //  ---------------------------------------------------------------------------------------------------------------
@@ -193,15 +206,45 @@ namespace {
     }
 
     //  ---------------------------------------------------------------------------------------------------------------
+
+    std::string     atq_abbr(Atom at, const KVTree& attrs)
+    {
+        return std::string(attrs.value(svL_aAbbreviation));
+    }
     
-    void    ati_attributes(Atom at, const KVTree& attrs)
+    void    ati_abbr(Atom at, const KVTree& attrs)
+    {
+        static thread_local SQ uTitle("UPDATE Atoms SET abbr=? WHERE id=?");
+        std::string    t   = atq_abbr(at, attrs);
+        uTitle.bind(1, t);
+        uTitle.bind(2, at);
+        uTitle.exec();
+    }
+    
+    bool    atu_abbr(Atom at, const KVTree& attrs)
+    {
+        std::string     n   = cdb::abbreviation(at);
+        static thread_local SQ uTitle("UPDATE Atoms SET abbr=? WHERE id=?");
+        std::string    t   = atq_abbr(at, attrs);
+        if(t != n){
+            uTitle.bind(1, t);
+            uTitle.bind(2, at);
+            uTitle.exec();
+            return true;
+        } else
+            return false;
+    }
+
+    //  ---------------------------------------------------------------------------------------------------------------
+    
+    void    ati_attributes(Atom at, KVTree& attrs)
     {
         Document    doc = cdb::document(at);
         auto rep    = diff::additions(doc, attrs);
         rep.exec_inserts();
     }
 
-    void    atu_attributes(Atom at, const KVTree& attrs)
+    void    atu_attributes(Atom at, KVTree& attrs)
     {
         Document    doc = cdb::document(at);
         auto rep = diff::changes(doc, attrs);
@@ -225,15 +268,17 @@ namespace {
         acd.classes.added   = make_set(cdb::classes(x));
         acd.tags.added      = make_set(cdb::tags(x));
         acd.title           = true;
+        acd.abbreviation    = true;
         u_atom_execute(acd);
     }
 
 
-    Atom    s3_atom_create(const KVTree& attrs, Document doc)
+    Atom    s3_atom_create(KVTree& attrs, Document doc)
     {
         Atom        x   = cdb::db_atom(doc);
         ati_classes(x, attrs);
         ati_title(x, attrs);
+        ati_abbr(x, attrs);
         ati_tags(x, attrs);
         ati_attributes(x, attrs);
         return x;
@@ -248,28 +293,30 @@ namespace {
         i_atom_notify(x, recursive);
     }
     
-    void    i_atom(Atom x, const KVTree& attrs)
+    void    i_atom(Atom x, KVTree& attrs)
     {
         ati_classes(x, attrs);
         ati_title(x, attrs);
         ati_tags(x, attrs);
+        ati_abbr(x, attrs);
         ati_attributes(x, attrs);
         i_atom_notify(x);
     }
     
-    void    u_atom(Atom x, const KVTree& attrs)
+    void    u_atom(Atom x, KVTree& attrs)
     {
         AtomChangeData acd;
-        acd.doc         = cdb::document(x);
-        acd.atom        = x;
-        acd.classes     = atu_classes(x, attrs);
-        acd.title       = atu_title(x, attrs);
-        acd.tags        = atu_tags(acd, x, attrs);
+        acd.doc             = cdb::document(x);
+        acd.atom            = x;
+        acd.classes         = atu_classes(x, attrs);
+        acd.title           = atu_title(x, attrs);
+        acd.abbreviation    = atu_abbr(x, attrs);
+        acd.tags            = atu_tags(acd, x, attrs);
         atu_attributes(x, attrs);
         u_atom_execute(acd);
     }
     
-    Atom    u_atom(const KVTree& attrs, Document doc)
+    Atom    u_atom(KVTree& attrs, Document doc)
     {
         bool    created = false;
         Atom    x   = cdb::db_atom(doc, &created);
