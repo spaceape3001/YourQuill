@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <kernel/preamble.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/leaf/Leaf.hpp>

@@ -9,8 +9,8 @@
 #include "CategoryCDB.hpp"
 #include <basic/ByteArray.hpp>
 #include <basic/FileUtils.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/atom/Field.hpp>
+#include <kernel/agw/Class.hpp>
+#include <kernel/agw/Field.hpp>
 #include <kernel/db/IDLock.hpp>
 #include <kernel/db/NKI.hpp>
 #include <kernel/db/SQ.hpp>
@@ -115,10 +115,10 @@ namespace yq {
             return td;
         }
 
-        std::vector<Class>  classes(Category cat)
+        agw::ClassVector  classes(Category cat)
         {
             static thread_local SQ s("SELECT id FROM Classes WHERE category=?");
-            return s.vec<Class>(cat.id);
+            return s.vec<agw::Class>(cat.id);
         }
 
         Category                 db_category(Document doc, bool* wasCreated)
@@ -178,10 +178,10 @@ namespace yq {
             return s.present(i);
         }
 
-        std::vector<Field>      fields(Category cat)
+        agw::FieldVector   fields(Category cat)
         {
             static thread_local SQ s("SELECT id FROM Fields WHERE category=?");
-            return s.vec<Field>(cat.id);
+            return s.vec<agw::Field>(cat.id);
         }
 
         Image               icon(Category t)

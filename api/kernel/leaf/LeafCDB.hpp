@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kernel/atom/Atom.hpp>
+#include <kernel/agw/Atom.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Sorted.hpp>
 #include <kernel/file/Document.hpp>
@@ -17,7 +17,7 @@
 namespace yq {
 
     struct Leaf::Info {
-        Atom            atom;       
+        agw::Atom       atom;       
         Document        doc;
         std::string     key;
         std::string     title;
@@ -35,7 +35,7 @@ namespace yq {
             This returns all atoms that are also associated with leafs.
             \param[in] sorted   Set to YES to have result sorted by key
         */
-        std::vector<Atom>           all_leaf_atoms(Sorted sorted=Sorted());
+        agw::AtomVector             all_leaf_atoms(Sorted sorted=Sorted());
         
         /*! \brief Count of atoms that are the primary from a leaf
         */
@@ -50,7 +50,7 @@ namespace yq {
         size_t                      all_leafs_count();
         
         //! \brief Primary atom for the leaf
-        Atom                        atom(Leaf);
+        agw::Atom                   atom(Leaf);
         
         //! \brief Brief description of the leaf
         std::string                 brief(Leaf);
@@ -84,8 +84,11 @@ namespace yq {
         Leaf::Info                  info(Leaf, bool autoKeyToName=false);
         
         //! Detects if atom is also primary for leaf
-        bool                        is_leaf(Atom);
+        bool                        is_leaf(agw::Atom);
         
+        //! Tests if given leaf has the given tag
+        bool                        is_tagged(Leaf, Tag);
+
         //! Key for the leaf
         std::string                 key(Leaf);
         
@@ -102,7 +105,7 @@ namespace yq {
         Leaf                        leaf(std::string_view);
 
         //! \brief Leaf of an atom
-        Leaf                        leaf(Atom);
+        Leaf                        leaf(agw::Atom);
         
         //! \brief Document for an atom
         Leaf                        leaf(Document, bool calc=false);
@@ -151,8 +154,6 @@ namespace yq {
         */
         std::vector<LeafFragDoc>    reads(Leaf, class Root*, cdb_options_t opts=0);
 
-        //! Tests if given leaf has the given tag
-        bool                        tagged(Leaf, Tag);
         
         //! All tags for leaf
         std::vector<Tag>            tags(Leaf);

@@ -12,19 +12,10 @@
 #include <string_view>
 #include <string>
 #include <basic/meta/InfoBinder.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/enum/Sorted.hpp>
 
 namespace yq {
-    template <typename> class IDLock;
-    struct Atom;
-    struct Document;
-    struct Image;
-    struct Leaf;
-
-    namespace cdb {
-        struct NKI;
-    }
-
     /*! Tag in the cache database
     */
     struct Tag {
@@ -45,12 +36,12 @@ namespace yq {
         //  --------------------------------------
 
         static std::vector<Tag> all(Sorted sorted=Sorted{});
-        static std::vector<Tag> all(Atom, Sorted sorted=Sorted{});
+        static std::vector<Tag> all(agw::Atom, Sorted sorted=Sorted{});
         static std::vector<Tag> all(const string_set_t&);
         static std::vector<Tag> all(const string_view_set_t&);
         
         static size_t           count();
-        static size_t           count(Atom);
+        static size_t           count(agw::Atom);
 
         static bool             exists(uint64_t);
         

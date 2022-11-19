@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <kernel/preamble.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Sorted.hpp>
 #include <kernel/file/Document.hpp>
@@ -18,8 +19,6 @@ namespace yq {
 
     struct Document;
     struct Fragment;
-    struct Field;
-    struct Class;
     
     struct Category::Info {
         std::string key;
@@ -61,7 +60,7 @@ namespace yq {
         
         /*! \brief All classes under category
         */
-        std::vector<Class>      classes(Category);
+        agw::ClassVector       classes(Category);
         
         /*! \brief Gets/Creates category by document
         */
@@ -84,7 +83,7 @@ namespace yq {
         bool                    exists_category(uint64_t);
 
         //! All fields under category
-        std::vector<Field>      fields(Category);
+        agw::FieldVector        fields(Category);
         
         //! Icon for category
         Image                   icon(Category);
