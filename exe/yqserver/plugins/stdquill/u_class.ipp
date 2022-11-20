@@ -9,8 +9,8 @@
 #include "u_class.hpp"
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
-#include <kernel/atom/ClassCDB.hpp>
-#include <kernel/atom/ClassData.hpp>
+#include <kernel/agw/ClassCDB.hpp>
+#include <kernel/agw/ClassData.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>

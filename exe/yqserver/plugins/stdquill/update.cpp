@@ -16,7 +16,7 @@
 #include <basic/stream/Bytes.hpp>
 #include <basic/stream/Text.hpp>
 
-#include <kernel/atom/ClassCDB.hpp>
+#include <kernel/agw/ClassCDB.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/Root.hpp>

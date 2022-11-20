@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <kernel/atom/Atom.hpp>
-#include <kernel/attr/Attribute.hpp>
+#include <kernel/agw/Atom.hpp>
+#include <kernel/agw/Attribute.hpp>
 #include <kernel/notify/AtomNotifier.hpp>
 
 namespace {
@@ -16,7 +16,7 @@ namespace {
     
         \note the creation will MODIFY/DESTROY the attributes.
     */
-    Atom    s3_atom_create(KVTree& attrs, Document doc);
+    yq::agw::Atom    s3_atom_create(KVTree& attrs, Document doc);
 }
 
 

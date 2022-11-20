@@ -13,6 +13,8 @@
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
+#include <kernel/preamble.hpp>
+
 #include <http/web/PageTemplate.hpp>
 #include <http/web/TypedBytes.hpp>
 #include <http/web/Template.hpp>
@@ -35,16 +37,9 @@
 #include <http/web/WebAdapters.hpp>
 #include <http/web/WebTemplate.hpp>
 
-namespace yq {
-    struct Atom;
-    struct Class;
-    struct Field;
-    struct Leaf;
-}
-
-
 
 using namespace yq;
+using namespace yq::agw;
 
 using SharedByteArray   = std::shared_ptr<ByteArray>;
 

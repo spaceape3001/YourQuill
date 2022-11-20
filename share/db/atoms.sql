@@ -25,7 +25,7 @@ CREATE TABLE Atoms (
 );
 
 -- ATOM PROPERTIES
-CREATE TABLE Properties (
+CREATE TABLE AProperties (
     -- Triple key?  Adding in a property ID
     id      INTEGER PRIMARY KEY,
     --  Atom 

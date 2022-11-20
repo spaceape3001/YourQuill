@@ -9,7 +9,7 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 
-#include <kernel/atom/Class.hpp>
+#include <kernel/agw/Class.hpp>
 #include <kernel/db/CacheFwd.hpp>
 #include <kernel/enum/Change.hpp>
 

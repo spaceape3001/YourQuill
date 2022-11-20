@@ -7,11 +7,9 @@
 #pragma once
 
 #include <kernel/enum/Change.hpp>
+#include <kernel/preamble.hpp>
 
-namespace yq {
-    struct Field;
-    struct Document;
-    struct Fragment;
+namespace {
     
     //! Erases the field from the cache
     void    u_field_erase(Field);

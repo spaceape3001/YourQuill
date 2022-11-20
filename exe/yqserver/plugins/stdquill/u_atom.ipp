@@ -8,8 +8,8 @@
 
 #include "u_atom.hpp"
 #include <basic/Vector.hpp>
-#include <kernel/atom/AtomCDB.hpp>
-#include <kernel/attr/AttributeCDB.hpp>
+#include <kernel/agw/AtomCDB.hpp>
+#include <kernel/agw/AttributeCDB.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/io/Strings.hpp>
 
