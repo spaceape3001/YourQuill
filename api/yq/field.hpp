@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <http/atom/FieldArg.hpp>
-#include <http/atom/FieldHtml.hpp>
-#include <http/atom/FieldPost.hpp>
-#include <kernel/atom/Field.hpp>
-#include <kernel/atom/FieldCDB.hpp>
-#include <kernel/atom/FieldData.hpp>
-#include <kernel/atom/FieldFile.hpp>
+#include <http/agw/FieldArg.hpp>
+#include <http/agw/FieldHtml.hpp>
+#include <http/agw/FieldPost.hpp>
+#include <kernel/agw/Field.hpp>
+#include <kernel/agw/FieldCDB.hpp>
+#include <kernel/agw/FieldData.hpp>
+#include <kernel/agw/FieldFile.hpp>
 #include <kernel/db/IDLock.hpp>

@@ -9,17 +9,17 @@
 #include "FieldHtml.hpp"
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
-#include <http/atom/ClassHtml.hpp>
+#include <http/agw/ClassHtml.hpp>
 #include <http/file/RootHtml.hpp>
 #include <http/web/WebContext.hpp>
 #include <http/web/WebHtml.hpp>
-#include <kernel/atom/FieldCDB.hpp>
+#include <kernel/agw/FieldCDB.hpp>
 #include <kernel/image/ImageCDB.hpp>
 #include <http/HtmlLayout.hpp>
 
 namespace yq {
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Field v)
+        WebHtml&    operator<<(WebHtml&h, agw::Field v)
         {
             Thumbnail th = cdb::thumbnail(cdb::icon(v), h.context().session.icon_size);
             
@@ -32,7 +32,7 @@ namespace yq {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, Dev<Field> v)
+        WebHtml&    operator<<(WebHtml&h, Dev<agw::Field> v)
         {
             if(v.data)
                 h << "<a href=\"/dev/field?id=" << v.data.id << "\">";
@@ -42,7 +42,7 @@ namespace yq {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, DevID<Field> v)
+        WebHtml&    operator<<(WebHtml&h, DevID<agw::Field> v)
         {
             if(v.data)
                 h << "<a href=\"/dev/field?id=" << v.data.id << "\">";
@@ -52,12 +52,12 @@ namespace yq {
             return h;
         }
 
-        void        admin_table(WebHtml&h, const std::vector<Field>&fields)
+        void        admin_table(WebHtml&h, const std::vector<agw::Field>&fields)
         {
             auto tac = h.table();
             auto iz = h.context().session.icon_size;
             html::columns(h, fields, 
-                [&](Field c)
+                [&](agw::Field c)
                 {
                     if(c){
                         Image   i   = cdb::icon(c);
@@ -67,7 +67,7 @@ namespace yq {
                             h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
                     }
                 },
-                [&](Field c)
+                [&](agw::Field c)
                 {
                     if(c){
                         h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
@@ -76,11 +76,11 @@ namespace yq {
             );
         }
         
-        void        dev_table(WebHtml&h, const std::vector<Field>& fields)
+        void        dev_table(WebHtml&h, const std::vector<agw::Field>& fields)
         {
             auto t = h.table();
             h << "<tr><th>ID</th><th>Class</th><th>Key</th><th>Name</th><th>Brief</th>\n";
-            for(Field f : fields){
+            for(agw::Field f : fields){
                 auto i = cdb::info(f);
                 h << "<tr><td>" << dev_id(f) << "</td><td>" << dev(i.class_) << "</td><td>" 
                     << i.key <<"</td><td>" << i.name << "</td><td>"
@@ -88,7 +88,7 @@ namespace yq {
             }
         }
 
-        void        new_field_control(WebHtml&h, std::string_view npath, Class c)
+        void        new_field_control(WebHtml&h, std::string_view npath, agw::Class c)
         {
             Url url;
             url.path=copy(npath);

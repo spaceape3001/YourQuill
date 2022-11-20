@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <http/atom/ValueArg.hpp>
-#include <http/atom/ValueHtml.hpp>
-#include <kernel/atom/Value.hpp>
-#include <kernel/atom/ValueCDB.hpp>
-#include <kernel/atom/ValueData.hpp>
-#include <kernel/atom/ValueFile.hpp>
+#include <http/agw/ValueArg.hpp>
+#include <http/agw/ValueHtml.hpp>
+#include <kernel/agw/Value.hpp>
+#include <kernel/agw/ValueCDB.hpp>
+#include <kernel/agw/ValueData.hpp>
+#include <kernel/agw/ValueFile.hpp>
 #include <kernel/db/IDLock.hpp>

@@ -12,12 +12,15 @@
 
 namespace yq {
     struct WebContext;
-    struct Class;
+    
+    namespace agw {
+        struct Class;
+    }
     
     namespace post {
         //! Finds root, by ID
-        Class class_(WebContext&, bool *detected=nullptr);
-        Class class_(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Class class_(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+        agw::Class class_(WebContext&, bool *detected=nullptr);
+        agw::Class class_(WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        agw::Class class_(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
 }

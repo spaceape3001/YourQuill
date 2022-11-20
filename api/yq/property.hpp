@@ -6,4 +6,4 @@
 
 #pragma once
 
-#include <kernel/atom/Property.hpp>
+#include <kernel/agw/Property.hpp>

@@ -10,13 +10,13 @@
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/stream/Text.hpp>
-#include <http/atom/ClassArg.hpp>
+#include <http/agw/ClassArg.hpp>
 #include <http/file/DocumentHtml.hpp>
 #include <http/file/RootHtml.hpp>
 #include <http/web/WebContext.hpp>
 #include <http/web/WebHtml.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/atom/ClassCDB.hpp>
+#include <kernel/agw/Class.hpp>
+#include <kernel/agw/ClassCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <kernel/image/ImageCDB.hpp>
 #include <http/image/ImageHtml.hpp>
@@ -26,7 +26,7 @@ namespace yq {
 
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Class v)
+        WebHtml&    operator<<(WebHtml&h, agw::Class v)
         {
             Thumbnail th = cdb::thumbnail(cdb::icon(v), h.context().session.icon_size);
             if(v)
@@ -40,7 +40,7 @@ namespace yq {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, Dev<Class> v)
+        WebHtml&    operator<<(WebHtml&h, Dev<agw::Class> v)
         {
             if(v.data)
                 h << "<a href=\"/dev/class?id=" << v.data.id << "\">";
@@ -50,7 +50,7 @@ namespace yq {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, DevID<Class> v)
+        WebHtml&    operator<<(WebHtml&h, DevID<agw::Class> v)
         {
             if(v.data)
                 h << "<a href=\"/dev/class?id=" << v.data.id << "\">";
@@ -60,7 +60,7 @@ namespace yq {
             return h;
         }
 
-        WebHtml&    operator<<(WebHtml&h, const Edit<Class>& v)
+        WebHtml&    operator<<(WebHtml&h, const Edit<agw::Class>& v)
         {
             Url             url;
             url.path        = "/admin/class/edit";
@@ -68,7 +68,7 @@ namespace yq {
             if(!rt)
                 rt          = h.context().def_root(DataRole::Config);
 
-            Class   c   = v.value;
+            agw::Class   c   = v.value;
             if(!c)
                 c       = arg::class_(h);
             
@@ -87,7 +87,7 @@ namespace yq {
             return h;
         }
 
-        WebHtml&    operator<<(WebHtml&h, const Plural<Class>& v)
+        WebHtml&    operator<<(WebHtml&h, const Plural<agw::Class>& v)
         {
             Thumbnail th = cdb::thumbnail(cdb::icon(v.data), h.context().session.icon_size);
             if(v.data)
@@ -101,12 +101,12 @@ namespace yq {
             return h;
         }
 
-        void        admin_table(WebHtml&h, const std::vector<Class>&classes)
+        void        admin_table(WebHtml&h, const agw::ClassVector&classes)
         {
             auto tac = h.table();
             auto iz = h.context().session.icon_size;
             html::columns(h, classes, 
-                [&](Class c)
+                [&](agw::Class c)
                 {
                     if(c){
                         Image   i   = cdb::icon(c);
@@ -116,7 +116,7 @@ namespace yq {
                             h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
                     }
                 },
-                [&](Class c)
+                [&](agw::Class c)
                 {
                     if(c){
                         h << "<a href=\"/admin/class?id=" << c.id << "\">" << cdb::label(c) << "</a>";
@@ -126,22 +126,22 @@ namespace yq {
         }
         
 
-        void        dev_table(WebHtml&h, const std::vector<Class>& classes)
+        void        dev_table(WebHtml&h, const agw::ClassVector& classes)
         {
             auto ta = h.table();
             h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Doc</th><th>Brief</th></tr>\n";
-            for(Class c : classes){
+            for(agw::Class c : classes){
                 auto i = cdb::info(c);
                 h << "<tr><td>" << dev_id(c) << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" 
                     << dev(i.doc) << "</td><td>" << i.brief << "</td></tr>\n";
             }
         }
 
-        void        dev_table(WebHtml& h, const std::vector<Class::Rank>&data, std::string_view rankName)
+        void        dev_table(WebHtml& h, const std::vector<agw::Class::Rank>&data, std::string_view rankName)
         {
             auto ta = h.table();
             h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>" << rankName << "</th></tr>\n";
-            for(const Class::Rank& cr : data){
+            for(const agw::Class::Rank& cr : data){
                 auto i = cdb::info(cr.cls);
                 h << "<tr><td>" << dev_id(cr.cls) << "</td><td>" << i.key << "</td><td>" << i.name 
                     << "</td><td>" << cr.rank << "</td></tr>\n";
