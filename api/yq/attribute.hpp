@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <http/agw/AttributeArg.hpp>
-#include <http/agw/AttributeHtml.hpp>
-#include <kernel/agw/AttributeCDB.hpp>
-#include <kernel/agw/AttributeDiff.hpp>
+#include <http/AttributeArg.hpp>
+#include <http/AttributeHtml.hpp>
+#include <kernel/AttributeCDB.hpp>
+#include <kernel/AttributeDiff.hpp>

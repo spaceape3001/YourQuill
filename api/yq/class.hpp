@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <http/agw/ClassArg.hpp>
-#include <http/agw/ClassHtml.hpp>
-#include <http/agw/ClassPost.hpp>
-#include <kernel/agw/Class.hpp>
-#include <kernel/agw/ClassCDB.hpp>
-#include <kernel/agw/ClassData.hpp>
-#include <kernel/agw/ClassFile.hpp>
-#include <kernel/db/IDLock.hpp>
+#include <http/ClassArg.hpp>
+#include <http/ClassHtml.hpp>
+#include <http/ClassPost.hpp>
+#include <kernel/Class.hpp>
+#include <kernel/ClassCDB.hpp>
+#include <kernel/ClassData.hpp>
+#include <kernel/ClassFile.hpp>
+#include <kernel/IDLock.hpp>

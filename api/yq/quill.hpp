@@ -6,5 +6,5 @@
 
 #pragma once
 
-#include <kernel/wksp/QuillData.hpp>
-#include <kernel/wksp/QuillFile.hpp>
+#include <kernel/QuillData.hpp>
+#include <kernel/QuillFile.hpp>

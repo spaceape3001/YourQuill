@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <http/leaf/LeafArg.hpp>
-#include <http/leaf/LeafHtml.hpp>
-#include <kernel/leaf/Leaf.hpp>
-#include <kernel/leaf/LeafCDB.hpp>
-#include <kernel/leaf/LeafData.hpp>
-#include <kernel/leaf/LeafFile.hpp>
-#include <kernel/leaf/LeafLog.hpp>
-#include <kernel/db/IDLock.hpp>
+#include <http/LeafArg.hpp>
+#include <http/LeafHtml.hpp>
+#include <kernel/Leaf.hpp>
+#include <kernel/LeafCDB.hpp>
+#include <kernel/LeafData.hpp>
+#include <kernel/LeafFile.hpp>
+#include <kernel/LeafLog.hpp>
+#include <kernel/IDLock.hpp>

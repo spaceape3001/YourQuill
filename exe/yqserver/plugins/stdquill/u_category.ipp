@@ -9,12 +9,12 @@
 #include "u_category.hpp"
 
 #include <basic/Logging.hpp>
-#include <kernel/db/SQ.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/org/CategoryCDB.hpp>
-#include <kernel/org/CategoryData.hpp>
+#include <kernel/SQ.hpp>
+#include <kernel/DocumentCDB.hpp>
+#include <kernel/FragmentCDB.hpp>
+#include <kernel/ImageCDB.hpp>
+#include <kernel/CategoryCDB.hpp>
+#include <kernel/CategoryData.hpp>
 
 namespace yq {
     struct Category;

@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <http/agw/AtomArg.hpp>
-#include <http/agw/AtomHtml.hpp>
-#include <http/agw/AtomPost.hpp>
-#include <kernel/agw/Atom.hpp>
-#include <kernel/agw/AtomCDB.hpp>
-#include <kernel/db/IDLock.hpp>
+#include <http/AtomArg.hpp>
+#include <http/AtomHtml.hpp>
+#include <http/AtomPost.hpp>
+#include <kernel/Atom.hpp>
+#include <kernel/AtomCDB.hpp>
+#include <kernel/IDLock.hpp>

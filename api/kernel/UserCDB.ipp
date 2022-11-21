@@ -11,7 +11,7 @@
 #include <basic/ByteArray.hpp>
 #include <basic/Logging.hpp>
 #include <kernel/IDLock.hpp>
-//#include <kernel/db/NKI.hpp>
+//#include <kernel/NKI.hpp>
 #include <kernel/SQ.hpp>
 #include <kernel/DocumentCDB.hpp>
 #include <kernel/FolderCDB.hpp>

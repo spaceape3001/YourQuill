@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <kernel/db/SQ.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/image/Image.hpp>
+#include <kernel/SQ.hpp>
+#include <kernel/Root.hpp>
+#include <kernel/Image.hpp>
 
 namespace yq {
     void    u_set_root_icon(const Root*rt, Image img)

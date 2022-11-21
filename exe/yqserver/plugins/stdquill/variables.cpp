@@ -11,27 +11,27 @@
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <kernel/agw/AtomCDB.hpp>
-#include <kernel/agw/AttributeCDB.hpp>
-#include <kernel/agw/ClassCDB.hpp>
-#include <kernel/agw/FieldCDB.hpp>
-#include <kernel/file/DirectoryCDB.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/file/RootCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/leaf/LeafCDB.hpp>
-#include <kernel/org/CategoryCDB.hpp>
-#include <kernel/org/TagCDB.hpp>
-#include <kernel/user/UserCDB.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <kernel/AtomCDB.hpp>
+#include <kernel/AttributeCDB.hpp>
+#include <kernel/ClassCDB.hpp>
+#include <kernel/FieldCDB.hpp>
+#include <kernel/DirectoryCDB.hpp>
+#include <kernel/DocumentCDB.hpp>
+#include <kernel/FolderCDB.hpp>
+#include <kernel/FragmentCDB.hpp>
+#include <kernel/RootCDB.hpp>
+#include <kernel/ImageCDB.hpp>
+#include <kernel/LeafCDB.hpp>
+#include <kernel/CategoryCDB.hpp>
+#include <kernel/TagCDB.hpp>
+#include <kernel/UserCDB.hpp>
+#include <kernel/Workspace.hpp>
 
-#include <http/web/VarTemplate.hpp>
-#include <http/web/WebAdapters.hpp>
-#include <http/web/WebHtml.hpp>
-#include <http/web/WebContext.hpp>
-#include <http/web/WebVariable.hpp>
+#include <http/VarTemplate.hpp>
+#include <http/WebAdapters.hpp>
+#include <http/WebHtml.hpp>
+#include <http/WebContext.hpp>
+#include <http/WebVariable.hpp>
 
 using namespace yq;
 

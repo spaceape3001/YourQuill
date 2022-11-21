@@ -7,10 +7,10 @@
 #pragma once
 
 #include <kernel/preamble.hpp>
-#include <kernel/enum/SizeDesc.hpp>
-#include <kernel/enum/Submit.hpp>
-#include <kernel/enum/Reset.hpp>
-#include <http/web/WebHtml.hpp>
+#include <kernel/SizeDesc.hpp>
+#include <kernel/Submit.hpp>
+#include <kernel/Reset.hpp>
+#include <http/WebHtml.hpp>
 #include <optional>
 
 namespace yq {

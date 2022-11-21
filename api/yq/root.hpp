@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <http/file/RootArg.hpp>
-#include <http/file/RootHtml.hpp>
-#include <http/file/RootPost.hpp>
+#include <http/RootArg.hpp>
+#include <http/RootHtml.hpp>
+#include <http/RootPost.hpp>
 
-#include <kernel/file/Root.hpp>
-#include <kernel/file/RootCDB.hpp>
+#include <kernel/Root.hpp>
+#include <kernel/RootCDB.hpp>

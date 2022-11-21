@@ -9,11 +9,11 @@
 #include "u_user.hpp"
 
 #include <basic/Logging.hpp>
-#include <kernel/db/SQ.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/user/UserCDB.hpp>
+#include <kernel/SQ.hpp>
+#include <kernel/DocumentCDB.hpp>
+#include <kernel/FragmentCDB.hpp>
+#include <kernel/ImageCDB.hpp>
+#include <kernel/UserCDB.hpp>
 
 namespace yq {
     void    u_user_erase(User u)

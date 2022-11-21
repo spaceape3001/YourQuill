@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Change.hpp>
-#include <kernel/user/User.hpp>
+#include <kernel/CacheFwd.hpp>
+#include <kernel/Change.hpp>
+#include <kernel/User.hpp>
 
 namespace yq {
     //! Removes the user from the cache

@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Change.hpp>
-#include <kernel/org/Tag.hpp>
+#include <kernel/CacheFwd.hpp>
+#include <kernel/Change.hpp>
+#include <kernel/Tag.hpp>
 
 namespace yq {
     struct Document;

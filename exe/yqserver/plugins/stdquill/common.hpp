@@ -15,9 +15,9 @@
 
 #include <kernel/preamble.hpp>
 
-#include <http/web/PageTemplate.hpp>
-#include <http/web/TypedBytes.hpp>
-#include <http/web/Template.hpp>
+#include <http/PageTemplate.hpp>
+#include <http/TypedBytes.hpp>
+#include <http/Template.hpp>
 
 
 
@@ -27,19 +27,18 @@
 //#include <yq/atom/Atom.hpp>
 //#include <yq/atom/Class.hpp>
 //#include <yq/atom/Field.hpp>
-#include <kernel/bit/Copyright.hpp>
-#include <kernel/enum/Submit.hpp>
+#include <kernel/Copyright.hpp>
+#include <kernel/Submit.hpp>
 //#include <yq/leaf/Leaf.hpp>
 
-#include <http/web/WebContext.hpp>
-#include <http/web/WebHtml.hpp>
-#include <http/web/WebPage.hpp>
-#include <http/web/WebAdapters.hpp>
-#include <http/web/WebTemplate.hpp>
+#include <http/WebContext.hpp>
+#include <http/WebHtml.hpp>
+#include <http/WebPage.hpp>
+#include <http/WebAdapters.hpp>
+#include <http/WebTemplate.hpp>
 
 
 using namespace yq;
-using namespace yq::agw;
 
 using SharedByteArray   = std::shared_ptr<ByteArray>;
 

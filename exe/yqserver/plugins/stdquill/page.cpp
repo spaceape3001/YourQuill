@@ -36,21 +36,21 @@
 
 #include <basic/stream/Text.hpp>
 
-#include <kernel/bit/Copyright.hpp>
+#include <kernel/Copyright.hpp>
 #include <http/HtmlLayout.hpp>
-#include <kernel/db/SQ.hpp>
-#include <kernel/db/NKI.hpp>
-#include <http/util/Markdown.hpp>
-#include <http/web/JsonAdapter.hpp>
-#include <http/web/WebAdapters.hpp>
-#include <http/web/WebContext.hpp>
-#include <http/web/WebHtml.hpp>
-#include <http/web/WebImage.hpp>
-#include <http/web/WebPage.hpp>
-#include <http/web/WebRedirect.hpp>
-#include <http/web/WebTemplate.hpp>
-#include <http/web/Template.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <kernel/SQ.hpp>
+#include <kernel/NKI.hpp>
+#include <http/Markdown.hpp>
+#include <http/JsonAdapter.hpp>
+#include <http/WebAdapters.hpp>
+#include <http/WebContext.hpp>
+#include <http/WebHtml.hpp>
+#include <http/WebImage.hpp>
+#include <http/WebPage.hpp>
+#include <http/WebRedirect.hpp>
+#include <http/WebTemplate.hpp>
+#include <http/Template.hpp>
+#include <kernel/Workspace.hpp>
 
 #include "common.hpp"
 

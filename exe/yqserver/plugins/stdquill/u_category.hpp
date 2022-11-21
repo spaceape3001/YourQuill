@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Change.hpp>
-#include <kernel/org/Category.hpp>
+#include <kernel/CacheFwd.hpp>
+#include <kernel/Change.hpp>
+#include <kernel/Category.hpp>
 
 namespace yq {
     

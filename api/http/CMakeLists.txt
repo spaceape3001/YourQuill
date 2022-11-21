@@ -14,7 +14,7 @@ endif()
 add_library(yqhttp SHARED
     ${http_test_source}
     ./http.cpp
-    ./web/web_unity.cpp
+    ./web_unity.cpp
 )
 
 target_link_libraries(yqhttp

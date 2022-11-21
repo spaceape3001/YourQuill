@@ -11,15 +11,15 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/meta/TypeInfo.hpp>
-#include <kernel/agw/ClassCDB.hpp>
-#include <kernel/agw/FieldCDB.hpp>
-#include <kernel/agw/FieldData.hpp>
-#include <kernel/db/SQ.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/org/CategoryCDB.hpp>
-#include <kernel/org/TagCDB.hpp>
+#include <kernel/ClassCDB.hpp>
+#include <kernel/FieldCDB.hpp>
+#include <kernel/FieldData.hpp>
+#include <kernel/SQ.hpp>
+#include <kernel/DocumentCDB.hpp>
+#include <kernel/FragmentCDB.hpp>
+#include <kernel/ImageCDB.hpp>
+#include <kernel/CategoryCDB.hpp>
+#include <kernel/TagCDB.hpp>
 
 #if 0
 namespace {
