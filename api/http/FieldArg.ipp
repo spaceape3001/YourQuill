@@ -9,7 +9,10 @@
 #include "FieldArg.hpp"
 
 #include <basic/TextUtils.hpp>
+
+#include <http/Post.hpp>
 #include <http/WebContext.hpp>
+
 #include <kernel/FieldCDB.hpp>
 
 namespace yq {
@@ -105,6 +108,40 @@ namespace yq {
             if(detected)
                 *detected   = !arg_string.empty();
             return field_key(arg_string);
+        }
+    }
+
+    namespace post {
+        Field field(WebContext&ctx, bool *detected)
+        {
+            ctx.decode_post();
+            
+            if(detected)
+                *detected   = false;
+                
+            std::string    k    = ctx.rx_post.first("field");
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
+                return arg::field_id(k);
+            }
+            return Field();
+        }
+        
+        Field field(WebContext&ctx, std::string_view arg_name, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_name));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::field_id(arg_string);
+        }
+        
+        Field field(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+        {
+            std::string     arg_string = ctx.rx_post.first(copy(arg_names));
+            if(detected)
+                *detected   = !arg_string.empty();
+            return arg::field_id(arg_string);
         }
     }
 }

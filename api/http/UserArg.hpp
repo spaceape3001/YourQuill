@@ -31,5 +31,12 @@ namespace yq {
         User user_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         User user_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
+
+    namespace post {
+        //! Finds root, by ID
+        User user(WebContext&, bool *detected=nullptr);
+        User user(WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        User user(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+    }
 }
 

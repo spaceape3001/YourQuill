@@ -30,4 +30,11 @@ namespace yq {
         const Root* root_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         const Root* root_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
+
+    namespace post {
+        //! Finds root, by ID
+        const Root* root(WebContext&, bool *detected=nullptr);
+        const Root* root(WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        const Root* root(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+    }
 }

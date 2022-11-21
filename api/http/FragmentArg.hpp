@@ -33,4 +33,11 @@ namespace yq {
         Fragment fragment_key(const WebContext&, std::string_view arg_name, const Root* rt, bool *detected=nullptr);
         Fragment fragment_key(const WebContext&, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected=nullptr);
     }
+
+    namespace post {
+        //! Finds root, by ID
+        Fragment fragment(WebContext&, bool *detected=nullptr);
+        Fragment fragment(WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        Fragment fragment(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+    }
 }

@@ -8,7 +8,6 @@
 
 #include <http/TagArg.hpp>
 #include <http/TagHtml.hpp>
-#include <http/TagPost.hpp>
 
 #include <kernel/Tag.hpp>
 #include <kernel/TagCDB.hpp>

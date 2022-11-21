@@ -8,6 +8,6 @@
 
 #include <http/FolderArg.hpp>
 #include <http/FolderHtml.hpp>
-#include <http/FolderPost.hpp>
+
 #include <kernel/Folder.hpp>
 #include <kernel/FolderCDB.hpp>

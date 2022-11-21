@@ -8,6 +8,6 @@
 
 #include <http/ImageArg.hpp>
 #include <http/ImageHtml.hpp>
-#include <http/ImagePost.hpp>
+
 #include <kernel/Image.hpp>
 #include <kernel/ImageCDB.hpp>

@@ -8,7 +8,7 @@
 
 #include <http/ClassArg.hpp>
 #include <http/ClassHtml.hpp>
-#include <http/ClassPost.hpp>
+
 #include <kernel/Class.hpp>
 #include <kernel/ClassCDB.hpp>
 #include <kernel/ClassData.hpp>

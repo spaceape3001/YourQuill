@@ -33,4 +33,11 @@ namespace yq {
         Document document_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
 
     }
+
+    namespace post {
+        //! Finds root, by ID
+        Document document(WebContext&, bool *detected=nullptr);
+        Document document(WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        Document document(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+    }
 }

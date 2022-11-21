@@ -8,6 +8,6 @@
 
 #include <http/DocumentArg.hpp>
 #include <http/DocumentHtml.hpp>
-#include <http/DocumentPost.hpp>
+
 #include <kernel/Document.hpp>
 #include <kernel/DocumentCDB.hpp>

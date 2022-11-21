@@ -6,51 +6,58 @@
 
 #include "Html.ipp"
 #include "Post.ipp"
+
 #include "AtomArg.ipp"
 #include "AtomHtml.ipp"
-#include "AtomPost.ipp"
+
 #include "AttributeArg.ipp"
 #include "AttributeHtml.ipp"
-#include "ClassArg.ipp"
-#include "ClassHtml.ipp"
-#include "ClassPost.ipp"
-#include "FieldArg.ipp"
-#include "FieldHtml.ipp"
-#include "FieldPost.ipp"
-#include "ValueArg.ipp"
-#include "ValueHtml.ipp"
-#include "DirectoryArg.ipp"
-#include "DirectoryHtml.ipp"
-#include "DirectoryPost.ipp"
-#include "DocumentArg.ipp"
-#include "DocumentHtml.ipp"
-#include "DocumentPost.ipp"
-#include "FolderArg.ipp"
-#include "FolderHtml.ipp"
-#include "FolderPost.ipp"
-#include "FragmentArg.ipp"
-#include "FragmentHtml.ipp"
-#include "FragmentPost.ipp"
-#include "RootArg.ipp"
-#include "RootHtml.ipp"
-#include "RootPost.ipp"
-#include "ImageArg.ipp"
-#include "ImageHtml.ipp"
-#include "ImagePost.ipp"
-#include "DirWatcher.ipp"
-#include "ipcPackets.hpp"
-#include "ipcSocket.ipp"
-#include "LeafArg.ipp"
-#include "LeafHtml.ipp"
-#include "LeafPost.ipp"
-#include "MetaHtml.ipp"
+
 #include "CategoryArg.ipp"
 #include "CategoryHtml.ipp"
-#include "CategoryPost.ipp"
+
+#include "ClassArg.ipp"
+#include "ClassHtml.ipp"
+
+#include "DirectoryArg.ipp"
+#include "DirectoryHtml.ipp"
+
+#include "DirWatcher.ipp"
+
+#include "DocumentArg.ipp"
+#include "DocumentHtml.ipp"
+
+#include "FieldArg.ipp"
+#include "FieldHtml.ipp"
+
+#include "FolderArg.ipp"
+#include "FolderHtml.ipp"
+
+#include "FragmentArg.ipp"
+#include "FragmentHtml.ipp"
+
+#include "ImageArg.ipp"
+#include "ImageHtml.ipp"
+
+#include "LeafArg.ipp"
+#include "LeafHtml.ipp"
+
+#include "MetaHtml.ipp"
+
+
+#include "RootArg.ipp"
+#include "RootHtml.ipp"
+
 #include "TagArg.ipp"
 #include "TagHtml.ipp"
-#include "TagPost.ipp"
+
 #include "UserArg.ipp"
 #include "UserHtml.ipp"
-#include "UserPost.ipp"
+
+#include "ValueArg.ipp"
+#include "ValueHtml.ipp"
+
+#include "ipcPackets.hpp"
+#include "ipcSocket.ipp"
+
 #include "Markdown.ipp"
