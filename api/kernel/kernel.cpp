@@ -5,23 +5,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <kernel/enum/Access.hpp>
-#include <kernel/enum/AssertDeny.hpp>
-#include <kernel/enum/AttrKind.hpp>
-#include <kernel/enum/CalSystem.hpp>
-#include <kernel/enum/Change.hpp>
-#include <kernel/enum/DataRole.hpp>
-#include <kernel/enum/FileType.hpp>
-#include <kernel/enum/Format.hpp>
-#include <kernel/enum/Linkage.hpp>
-#include <kernel/enum/Multiplicity.hpp>
-#include <kernel/enum/Permission.hpp>
-#include <kernel/enum/Reset.hpp>
-#include <kernel/enum/Restriction.hpp>
-#include <kernel/enum/SizeDesc.hpp>
-#include <kernel/enum/Sorted.hpp>
-#include <kernel/enum/Submit.hpp>
-#include <kernel/enum/Vcs.hpp>
+#include <kernel/Access.hpp>
+#include <kernel/AssertDeny.hpp>
+#include <kernel/AttrKind.hpp>
+#include <kernel/CalSystem.hpp>
+#include <kernel/Change.hpp>
+#include <kernel/DataRole.hpp>
+#include <kernel/FileType.hpp>
+#include <kernel/Format.hpp>
+#include <kernel/Linkage.hpp>
+#include <kernel/Multiplicity.hpp>
+#include <kernel/Permission.hpp>
+#include <kernel/Reset.hpp>
+#include <kernel/Restriction.hpp>
+#include <kernel/SizeDesc.hpp>
+#include <kernel/Submit.hpp>
+#include <kernel/Vcs.hpp>
 
 #include <basic/meta/Init.hpp>
 
@@ -43,64 +42,73 @@ YQ_TYPE_IMPLEMENT(yq::SizeDesc)
 YQ_TYPE_IMPLEMENT(yq::Submit)
 YQ_TYPE_IMPLEMENT(yq::Vcs)
 
-#include "agw/Atom.ipp"
-#include "agw/AtomCDB.ipp"
-#include "agw/AttributeCDB.ipp"
-#include "agw/AttributeDiff.ipp"
-#include "agw/Class.ipp"
-#include "agw/ClassCDB.ipp"
-#include "agw/ClassData.ipp"
-#include "agw/ClassFile.ipp"
-#include "agw/Field.ipp"
-#include "agw/FieldCDB.ipp"
-#include "agw/FieldData.ipp"
-#include "agw/FieldFile.ipp"
-#include "agw/ValueCDB.ipp"
-#include "agw/ValueData.ipp"
-#include "agw/ValueFile.ipp"
-#include "bit/Context.ipp"
-#include "bit/Copyright.ipp"
-#include "bit/KeyValue.ipp"
-#include "bit/Policy.ipp"
-#include "db/DBUtils.ipp"
-#include "db/IDLockImpl.ipp"
-#include "db/SQ.ipp"
-#include "file/DirectoryCDB.ipp"
-#include "file/DocumentCDB.ipp"
-#include "file/FileSpec.ipp"
-#include "file/FolderCDB.ipp"
-#include "file/FragmentCDB.ipp"
-#include "file/RootCDB.ipp"
-#include "image/ImageCDB.ipp"
-#include "io/StdFile.ipp"
-#include "io/StdObject.ipp"
-#include "leaf/LeafData.ipp"
-#include "leaf/LeafFile.ipp"
-#include "leaf/LeafCDB.ipp"
-#include "notify/AtomNotifier.ipp"
-#include "notify/FileWatch.ipp"
-#include "notify/FunctionalNotifier.ipp"
-#include "notify/FunctionalStage4.ipp"
-#include "notify/FileNotifier.ipp"
-#include "notify/Stage2.ipp"
-#include "notify/Stage3.ipp"
-#include "notify/Stage4.ipp"
-#include "org/CategoryCDB.ipp"
-#include "org/CategoryData.ipp"
-#include "org/CategoryFile.ipp"
-#include "org/Tag.ipp"
-#include "org/TagCDB.ipp"
-#include "org/TagData.ipp"
-#include "org/TagFile.ipp"
+#include "Atom.ipp"
+#include "AtomCDB.ipp"
+#include "AttributeCDB.ipp"
+#include "AttributeDiff.ipp"
+#include "CategoryCDB.ipp"
+#include "CategoryData.ipp"
+#include "CategoryFile.ipp"
+#include "Class.ipp"
+#include "ClassCDB.ipp"
+#include "ClassData.ipp"
+#include "ClassFile.ipp"
+#include "Field.ipp"
+#include "FieldCDB.ipp"
+#include "FieldData.ipp"
+#include "FieldFile.ipp"
+#include "Tag.ipp"
+#include "TagCDB.ipp"
+#include "TagData.ipp"
+#include "TagFile.ipp"
+#include "ValueCDB.ipp"
+#include "ValueData.ipp"
+#include "ValueFile.ipp"
+
+#include "Context.ipp"
+#include "Copyright.ipp"
+#include "KeyValue.ipp"
+#include "Policy.ipp"
+
+#include "DBUtils.ipp"
+#include "IDLockImpl.ipp"
+#include "SQ.ipp"
+
+#include "DirectoryCDB.ipp"
+#include "DocumentCDB.ipp"
+#include "FileSpec.ipp"
+#include "FolderCDB.ipp"
+#include "FragmentCDB.ipp"
+#include "QuillData.ipp"
+#include "QuillFile.ipp"
+#include "RootCDB.ipp"
+
+#include "ImageCDB.ipp"
+
+#include "StdFile.ipp"
+#include "StdObject.ipp"
+
+#include "LeafData.ipp"
+#include "LeafFile.ipp"
+#include "LeafCDB.ipp"
+
+#include "AtomNotifier.ipp"
+#include "FileWatch.ipp"
+#include "FunctionalNotifier.ipp"
+#include "FunctionalStage4.ipp"
+#include "FileNotifier.ipp"
+#include "Stage2.ipp"
+#include "Stage3.ipp"
+#include "Stage4.ipp"
+
 #include "rule/Action.ipp"
 #include "rule/Constraint.ipp"
 #include "rule/Trigger.ipp"
-#include "user/Authentication.ipp"
-#include "user/UserCDB.ipp"
-#include "user/UserData.ipp"
-#include "user/UserFile.ipp"
-#include "wksp/QuillData.ipp"
-#include "wksp/QuillFile.ipp"
+#include "Authentication.ipp"
+
+#include "UserCDB.ipp"
+#include "UserData.ipp"
+#include "UserFile.ipp"
 
 #include "directories.hpp"
 
@@ -117,12 +125,12 @@ namespace yq {
         }
     }
     
-    template class IDLock<agw::Atom>;
+    template class IDLock<Atom>;
     template class IDLock<Category>;
-    template class IDLock<agw::Class>;
+    template class IDLock<Class>;
     template class IDLock<Directory>;
     template class IDLock<Document>;
-    template class IDLock<agw::Field>;
+    template class IDLock<Field>;
     template class IDLock<Folder>;
     template class IDLock<Fragment>;
     template class IDLock<Leaf>;
