@@ -14,7 +14,7 @@ endif()
 add_library(yqkernel SHARED
     ${kernel_test_source}
     ./kernel.cpp
-    ./Workspace.cpp
+    ./wksp/Workspace.cpp
 )
 
 target_link_libraries(yqkernel
