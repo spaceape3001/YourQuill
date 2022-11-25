@@ -46,15 +46,15 @@ namespace yq {
 
         agw::ClassVector  all_classes(Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT id FROM Classes ORDER BY K");
-            static thread_local SQ    qu("SELECT id FROM Classes");
+            static thread_local SQ    qs("SELECT id FROM agw::Classes ORDER BY K");
+            static thread_local SQ    qu("SELECT id FROM agw::Classes");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>();
         }
 
         size_t  all_classes_count()
         {
-            static thread_local SQ    s("SELECT COUNT(1) FROM Classes");
+            static thread_local SQ    s("SELECT COUNT(1) FROM agw::Classes");
             return s.size();
         }
 
@@ -66,7 +66,7 @@ namespace yq {
         
         agw::ClassVector   base_classes(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT base FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? ORDER BY Classes.k");
+            static thread_local SQ    qs("SELECT base FROM CDepends INNER JOIN agw::Classes ON CDepends.base=agw::Classes.id WHERE class=? ORDER BY agw::Classes.k");
             static thread_local SQ    qu("SELECT base FROM CDepends WHERE class=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -80,7 +80,7 @@ namespace yq {
         
         std::vector<agw::Class::Rank>    base_classes_ranked(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? ORDER BY hops,Classes.k");
+            static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN agw::Classes ON CDepends.base=agw::Classes.id WHERE class=? ORDER BY hops,agw::Classes.k");
             static thread_local SQ  qu("SELECT base,hops FROM CDepends WHERE class=?");
             SQ& s = sorted ? qs : qu;
             s.bind(1, c.id);
@@ -89,7 +89,7 @@ namespace yq {
 
         std::vector<agw::Class::Rank>    base_classes_ranked_limited(agw::Class c, uint64_t maxDepth, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? AND hops<=? ORDER BY hops,Classes.k");
+            static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN agw::Classes ON CDepends.base=agw::Classes.id WHERE class=? AND hops<=? ORDER BY hops,agw::Classes.k");
             static thread_local SQ  qu("SELECT base,hops FROM CDepends WHERE class=? AND hops<=?");
             SQ& s   = sorted ? qs : qu;
             s.bind(1, c.id);
@@ -111,19 +111,19 @@ namespace yq {
 
         std::string  binding(agw::Class c)
         {
-            static thread_local SQ  s("SELECT binding FROM Classes WHERE id=?");
+            static thread_local SQ  s("SELECT binding FROM agw::Classes WHERE id=?");
             return s.str(c.id);
         }
 
         std::string  brief(agw::Class c)
         {
-            static thread_local SQ    s("SELECT brief FROM Classes WHERE id=?");
+            static thread_local SQ    s("SELECT brief FROM agw::Classes WHERE id=?");
             return s.str(c.id);
         }
         
         Category  category(agw::Class c)
         {
-            static thread_local SQ s("SELECT category FROM Classes WHERE id=?");
+            static thread_local SQ s("SELECT category FROM agw::Classes WHERE id=?");
             return s.as<Category>(c.id);
         }
 
@@ -244,7 +244,7 @@ namespace yq {
         
         agw::ClassVector          classes_with_tag(Tag x, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class FROM CTags INNER JOIN Classes ON CTags.class=Classes.id WHERE tag=? ORDER BY Classes.k");
+            static thread_local SQ qs("SELECT class FROM CTags INNER JOIN agw::Classes ON CTags.class=agw::Classes.id WHERE tag=? ORDER BY agw::Classes.k");
             static thread_local SQ qu("SELECT class FROM CTags WHERE tag=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(x.id);
@@ -266,7 +266,7 @@ namespace yq {
             if(k.empty())
                 return agw::Class();
         
-            static thread_local SQ    i("INSERT OR FAIL INTO Classes (id,k) VALUES (?,?)");
+            static thread_local SQ    i("INSERT OR FAIL INTO agw::Classes (id,k) VALUES (?,?)");
             static thread_local SQ    i2("INSERT OR REPLACE INTO CLookup (class,k,priority) VALUES (?,?,1)");
             auto i_lk   = i.af();
 
@@ -316,7 +316,7 @@ namespace yq {
         namespace {
             agw::ClassVector           def_derived_sorted(agw::Class c)
             {   
-                static thread_local SQ s("SELECT class FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? AND hops=0 ORDER BY Classes.k");
+                static thread_local SQ s("SELECT class FROM CDepends INNER JOIN agw::Classes ON CDepends.class=agw::Classes.id WHERE base=? AND hops=0 ORDER BY agw::Classes.k");
                 return s.vec<agw::Class>();
             }
 
@@ -360,7 +360,7 @@ namespace yq {
         namespace {
             agw::ClassVector        def_reverse_sorted(agw::Class c)
             {
-                static thread_local SQ s("SELECT reverse FROM CReverses INNER JOIN Classes ON CReverseDef.reverse=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
+                static thread_local SQ s("SELECT reverse FROM CReverses INNER JOIN agw::Classes ON CReverseDef.reverse=agw::Classes.id WHERE class=? AND hops=0 ORDER BY agw::Classes.k");
                 return s.vec<agw::Class>(c.id);
             }
 
@@ -379,7 +379,7 @@ namespace yq {
         namespace {
             agw::ClassVector        def_source_sorted(agw::Class c)
             {
-                static thread_local SQ s("SELECT source FROM CSources INNER JOIN Classes ON CSourceDef.source=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
+                static thread_local SQ s("SELECT source FROM CSources INNER JOIN agw::Classes ON CSourceDef.source=agw::Classes.id WHERE class=? AND hops=0 ORDER BY agw::Classes.k");
                 return s.vec<agw::Class>(c.id);
             }
 
@@ -403,7 +403,7 @@ namespace yq {
         
         agw::ClassVector           def_target(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT target FROM CTargets INNER JOIN Classes ON CTargetDef.target=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
+            static thread_local SQ qs("SELECT target FROM CTargets INNER JOIN agw::Classes ON CTargetDef.target=agw::Classes.id WHERE class=? AND hops=0 ORDER BY agw::Classes.k");
             static thread_local SQ qu("SELECT target FROM CTargets WHERE class=? AND hops=0");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -411,7 +411,7 @@ namespace yq {
 
         agw::ClassVector           def_use(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT base FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? AND hops=0 ORDER BY Classes.k");
+            static thread_local SQ qs("SELECT base FROM CDepends INNER JOIN agw::Classes ON CDepends.base=agw::Classes.id WHERE class=? AND hops=0 ORDER BY agw::Classes.k");
             static thread_local SQ qu("SELECT base FROM CDepends WHERE class=? AND hops=0");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -423,13 +423,13 @@ namespace yq {
         // disabled until graphs are working
         //Graph               dep_graph(agw::Class c)
         //{   
-            //static thread_local SQ    s("SELECT deps FROM Classes WHERE id=?");
+            //static thread_local SQ    s("SELECT deps FROM agw::Classes WHERE id=?");
             //return s.as<Graph>(c.id);
         //}
         
         agw::ClassVector       derived_classes(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT class FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY Classes.k");
+            static thread_local SQ    qs("SELECT class FROM CDepends INNER JOIN agw::Classes ON CDepends.class=agw::Classes.id WHERE base=? ORDER BY agw::Classes.k");
             static thread_local SQ    qu("SELECT class FROM CDepends WHERE base=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -437,7 +437,7 @@ namespace yq {
         
         std::vector<agw::Class::Rank>    derived_classes_ranked(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT class, hops FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY hops, Classes.k");
+            static thread_local SQ  qs("SELECT class, hops FROM CDepends INNER JOIN agw::Classes ON CDepends.class=agw::Classes.id WHERE base=? ORDER BY hops, agw::Classes.k");
             static thread_local SQ  qu("SELECT class, hops FROM CDepends WHERE base=?");
             SQ& s = sorted ? qs : qu;
             s.bind(1, c.id);
@@ -446,7 +446,7 @@ namespace yq {
         
         std::vector<agw::Class::Rank>    derived_classes_limited_ranked(agw::Class c, uint64_t maxDepth, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class, hops FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? AND hops<=? ORDER BY hops, Classes.k");
+            static thread_local SQ qs("SELECT class, hops FROM CDepends INNER JOIN agw::Classes ON CDepends.class=agw::Classes.id WHERE base=? AND hops<=? ORDER BY hops, agw::Classes.k");
             static thread_local SQ qu("SELECT class, hops FROM CDepends WHERE base=? AND hops<=?");
             
             SQ& s = sorted ? qs : qu;
@@ -482,7 +482,7 @@ namespace yq {
         
         agw::ClassVector      edge_classes_in(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY Classes.K");
+            static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN agw::Classes ON CTargets.class=agw::Classes.id WHERE target=? ORDER BY agw::Classes.K");
             static thread_local SQ qu("SELECT class FROM CTargets WHERE target=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -490,7 +490,7 @@ namespace yq {
         
         agw::ClassVector      edge_classes_out(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
+            static thread_local SQ qs("SELECT class FROM CSources INNER JOIN agw::Classes ON CSources.class=agw::Classes.id WHERE source=? ORDER BY agw::Classes.K");
             static thread_local SQ qu("SELECT class FROM CSources WHERE source=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -506,7 +506,7 @@ namespace yq {
 
         bool                exists_class(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Classes WHERE id=?");
+            static thread_local SQ s("SELECT 1 FROM agw::Classes WHERE id=?");
             return s.present(i);
         }
         
@@ -533,13 +533,13 @@ namespace yq {
         
         Image                   icon(agw::Class c)
         {
-            static thread_local SQ    s("SELECT icon FROM Classes WHERE id=? LIMIT 1");
+            static thread_local SQ    s("SELECT icon FROM agw::Classes WHERE id=? LIMIT 1");
             return s.as<Image>(c.id);
         }
         
         agw::ClassVector           inbound_classes(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY Classes.K");
+            static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN agw::Classes ON CTargets.class=agw::Classes.id WHERE target=? ORDER BY agw::Classes.K");
             static thread_local SQ qu("SELECT class FROM CTargets WHERE target=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -547,7 +547,7 @@ namespace yq {
         
         std::vector<agw::Class::Rank>      inbound_classes_ranked(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class,hops_cls FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY hops_cls,Classes.K");
+            static thread_local SQ qs("SELECT class,hops_cls FROM CTargets INNER JOIN agw::Classes ON CTargets.class=agw::Classes.id WHERE target=? ORDER BY hops_cls,agw::Classes.K");
             static thread_local SQ qu("SELECT class,hops_cls FROM CTargets WHERE target=?");
             SQ& s = sorted ? qs : qu;
             s.bind(1, c.id);
@@ -557,7 +557,7 @@ namespace yq {
         agw::Class::Info         info(agw::Class c, bool autoKey)
         {
             agw::Class::Info    ret;
-            static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps, category, binding FROM Classes WHERE id=?");
+            static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps, category, binding FROM agw::Classes WHERE id=?");
             auto s_af = s.af();
             s.bind(1, c.id);
             if(s.step() == SqlQuery::Row){
@@ -602,13 +602,13 @@ namespace yq {
 
         bool                is_edge(agw::Class c)
         {
-            static thread_local SQ    s("SELECT edge FROM Classes WHERE id=?");
+            static thread_local SQ    s("SELECT edge FROM agw::Classes WHERE id=?");
             return s.boolean(c.id);
         }
         
         std::string             key(agw::Class c)
         {
-            static thread_local SQ    s("SELECT k FROM Classes WHERE id=? LIMIT 1");
+            static thread_local SQ    s("SELECT k FROM agw::Classes WHERE id=? LIMIT 1");
             return s.str(c.id);
         }
         
@@ -620,7 +620,7 @@ namespace yq {
                 s   = key(c);
             return s;
 
-            //static thread_local SQ    s("SELECT ifnull(name,k) FROM Classes WHERE id=?");
+            //static thread_local SQ    s("SELECT ifnull(name,k) FROM agw::Classes WHERE id=?");
             //return s.str(c.id);
         }
 
@@ -688,13 +688,13 @@ namespace yq {
 
         std::string             name(agw::Class c)
         {
-            static thread_local SQ    s("SELECT name FROM Classes WHERE id=?");
+            static thread_local SQ    s("SELECT name FROM agw::Classes WHERE id=?");
             return s.str(c.id);
         }
 
         NKI                 nki(agw::Class c, bool autoKey)
         {
-            static thread_local SQ    s("SELECT name,icon,k FROM Classes WHERE id=?");
+            static thread_local SQ    s("SELECT name,icon,k FROM agw::Classes WHERE id=?");
             auto s_af = s.af();
             s.bind(1, c.id);
             if(s.step() == SqlQuery::Row){
@@ -712,7 +712,7 @@ namespace yq {
         
         agw::ClassVector           outbound_classes(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
+            static thread_local SQ qs("SELECT class FROM CSources INNER JOIN agw::Classes ON CSources.class=agw::Classes.id WHERE source=? ORDER BY agw::Classes.K");
             static thread_local SQ qu("SELECT class FROM CSources WHERE source=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -720,7 +720,7 @@ namespace yq {
 
         std::vector<agw::Class::Rank>     outbound_classes_ranked(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class,hops_cls FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY hops_cls,Classes.K");
+            static thread_local SQ qs("SELECT class,hops_cls FROM CSources INNER JOIN agw::Classes ON CSources.class=agw::Classes.id WHERE source=? ORDER BY hops_cls,agw::Classes.K");
             static thread_local SQ qu("SELECT class,hops_cls FROM CSources WHERE source=?");
             SQ& s = sorted ? qs : qu;
             s.bind(1, c.id);
@@ -729,7 +729,7 @@ namespace yq {
         
         std::string             plural(agw::Class c)
         {
-            static thread_local SQ    s("SELECT plural FROM Classes WHERE id=?");
+            static thread_local SQ    s("SELECT plural FROM agw::Classes WHERE id=?");
             return s.str(c.id);
         }
 
@@ -762,7 +762,7 @@ namespace yq {
         
         agw::ClassVector       reverses(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT reverse FROM CReverses INNER JOIN Classes ON CReverses.reverse=Classes.id WHERE class=? ORDER BY Classes.K");
+            static thread_local SQ    qs("SELECT reverse FROM CReverses INNER JOIN agw::Classes ON CReverses.reverse=agw::Classes.id WHERE class=? ORDER BY agw::Classes.K");
             static thread_local SQ    qu("SELECT reverse FROM CReverses WHERE class=?");
             SQ& s   = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);
@@ -770,7 +770,7 @@ namespace yq {
         
         agw::ClassVector  sources(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT source FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY Classes.K");
+            static thread_local SQ    qs("SELECT source FROM CSources INNER JOIN agw::Classes ON CSources.source=agw::Classes.id WHERE class=? ORDER BY agw::Classes.K");
             static thread_local SQ    qu("SELECT source FROM CSources WHERE class=?");
 
             SQ& s   = sorted ? qs : qu;
@@ -785,7 +785,7 @@ namespace yq {
         
         std::vector<agw::Class::Rank>    source_classes_ranked(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT source, hops_src FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY hops_src, Classes.k");
+            static thread_local SQ  qs("SELECT source, hops_src FROM CSources INNER JOIN agw::Classes ON CSources.source=agw::Classes.id WHERE class=? ORDER BY hops_src, agw::Classes.k");
             static thread_local SQ  qu("SELECT source, hops_src FROM CSources WHERE class=?");
             SQ&     s   = sorted ? qs : qu;
             s.bind(1, c.id);
@@ -794,7 +794,7 @@ namespace yq {
 
         std::vector<agw::Class::Rank>    source_classes_ranked_limited(agw::Class c, uint64_t maxDepth, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT source, hops_src FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? AND hops<=? ORDER BY hops_src, Classes.k");
+            static thread_local SQ  qs("SELECT source, hops_src FROM CSources INNER JOIN agw::Classes ON CSources.source=agw::Classes.id WHERE class=? AND hops<=? ORDER BY hops_src, agw::Classes.k");
             static thread_local SQ  qu("SELECT source, hops_src FROM CSources WHERE class=? AND hops<=?");
             SQ&     s   = sorted ? qs : qu;
             s.bind(1, c.id);
@@ -831,7 +831,7 @@ namespace yq {
 
         agw::ClassVector       target_classes(agw::Class c, Sorted sorted)
         {
-            static thread_local SQ  qs("SELECT target FROM CTargets INNER JOIN Classes ON CTargets.target=Classes.id WHERE class=? ORDER BY Classes.k");
+            static thread_local SQ  qs("SELECT target FROM CTargets INNER JOIN agw::Classes ON CTargets.target=agw::Classes.id WHERE class=? ORDER BY agw::Classes.k");
             static thread_local SQ  qu("SELECT target FROM CTargets WHERE class=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(c.id);

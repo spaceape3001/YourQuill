@@ -9,7 +9,7 @@
 #include "u_leaf.hpp"
 
 #include <basic/Logging.hpp>
-#include <kernel/agw/AtomCDB.hpp>
+#include <kernel/atom/AtomCDB.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>

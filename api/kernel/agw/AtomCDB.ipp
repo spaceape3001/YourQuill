@@ -30,7 +30,7 @@ namespace yq {
         agw::AtomVector   all_atoms(agw::Class cls, Sorted sorted)
         {
                     // I think this SQL is right.....
-            static thread_local SQ qs("SELECT atom FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE class=? ORDER BY Classes.k");
+            static thread_local SQ qs("SELECT atom FROM AClasses INNER JOIN agw::Classes ON AClasses.class=agw::Classes.id WHERE class=? ORDER BY agw::Classes.k");
             static thread_local SQ qu("SELECT atom FROM AClasses WHERE class=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Atom>(cls.id);
@@ -149,7 +149,7 @@ namespace yq {
 
         std::vector<agw::Class>  classes(agw::Atom a, Sorted sorted) 
         {
-            static thread_local SQ qs("SELECT class FROM AClasses INNER JOIN Classes ON AClasses.class=Classes.id WHERE atom=? ORDER BY Classes.k");
+            static thread_local SQ qs("SELECT class FROM AClasses INNER JOIN agw::Classes ON AClasses.class=agw::Classes.id WHERE atom=? ORDER BY agw::Classes.k");
             static thread_local SQ qu("SELECT class FROM AClasses WHERE atom=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<agw::Class>(a);

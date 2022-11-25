@@ -11,10 +11,10 @@
 #include <basic/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <kernel/agw/AtomCDB.hpp>
-#include <kernel/agw/AttributeCDB.hpp>
-#include <kernel/agw/ClassCDB.hpp>
-#include <kernel/agw/FieldCDB.hpp>
+#include <kernel/atom/AtomCDB.hpp>
+#include <kernel/atom/ClassCDB.hpp>
+#include <kernel/atom/FieldCDB.hpp>
+#include <kernel/attr/AttributeCDB.hpp>
 #include <kernel/file/DirectoryCDB.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>

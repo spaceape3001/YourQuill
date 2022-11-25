@@ -7,8 +7,12 @@
 #pragma once
 
 #include <kernel/enum/Change.hpp>
-#include <kernel/preamble.hpp>
 
+namespace yq {
+    struct Leaf;
+    struct Document;
+    struct Fragment;
+}
 
 namespace {
     //! Erases the leaf

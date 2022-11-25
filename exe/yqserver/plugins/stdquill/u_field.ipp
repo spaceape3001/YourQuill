@@ -11,9 +11,9 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/meta/TypeInfo.hpp>
-#include <kernel/agw/ClassCDB.hpp>
-#include <kernel/agw/FieldCDB.hpp>
-#include <kernel/agw/FieldData.hpp>
+#include <kernel/atom/ClassCDB.hpp>
+#include <kernel/atom/FieldCDB.hpp>
+#include <kernel/atom/FieldData.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
@@ -84,7 +84,7 @@ namespace {
 }
 #endif
 
-namespace {
+namespace yq {
     void    u_field_erase(Field x)
     {
         static thread_local SQ stmts[] = {
