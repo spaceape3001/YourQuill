@@ -7,14 +7,14 @@
 #pragma once
 
 #include <http/Html.hpp>
-#include <kernel/preamble.hpp>
 
 namespace yq {
+    struct Atom;
     namespace html {
-        WebHtml&    operator<<(WebHtml&, agw::Atom);
-        WebHtml&    operator<<(WebHtml&, Dev<agw::Atom>);
-        WebHtml&    operator<<(WebHtml&, DevID<agw::Atom>);
-        void        dev_table(WebHtml&, const agw::AtomVector&);
+        WebHtml&    operator<<(WebHtml&, Atom);
+        WebHtml&    operator<<(WebHtml&, Dev<Atom>);
+        WebHtml&    operator<<(WebHtml&, DevID<Atom>);
+        void        dev_table(WebHtml&, const std::vector<Atom>&);
     }
 }
 

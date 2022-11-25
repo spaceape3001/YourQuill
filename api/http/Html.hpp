@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
 #include <kernel/enum/SizeDesc.hpp>
 #include <kernel/enum/Submit.hpp>
 #include <kernel/enum/Reset.hpp>

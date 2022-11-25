@@ -12,6 +12,7 @@
 
 namespace yq {
     struct Folder;
+    struct Class;
     struct Fragment;
     
     struct FileSpec {

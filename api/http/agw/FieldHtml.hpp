@@ -7,19 +7,17 @@
 #pragma once
 
 #include <http/Html.hpp>
-#include <kernel/agw/Class.hpp>
+#include <kernel/atom/Class.hpp>
 
 namespace yq {
-    namespace agw {
-        struct Field;
-    }
+    struct Field;
     namespace html {
-        WebHtml&    operator<<(WebHtml&, agw::Field);
-        WebHtml&    operator<<(WebHtml&, Dev<agw::Field>);
-        WebHtml&    operator<<(WebHtml&, DevID<agw::Field>);
-        void        admin_table(WebHtml&, const std::vector<agw::Field>&);
-        void        new_field_control(WebHtml&, std::string_view npath, agw::Class c=agw::Class{});
-        void        dev_table(WebHtml&, const std::vector<agw::Field>&);
+        WebHtml&    operator<<(WebHtml&, Field);
+        WebHtml&    operator<<(WebHtml&, Dev<Field>);
+        WebHtml&    operator<<(WebHtml&, DevID<Field>);
+        void        admin_table(WebHtml&, const std::vector<Field>&);
+        void        new_field_control(WebHtml&, std::string_view npath, Class c=Class{});
+        void        dev_table(WebHtml&, const std::vector<Field>&);
     }
 }
 

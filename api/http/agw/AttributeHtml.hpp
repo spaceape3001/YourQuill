@@ -10,12 +10,10 @@
 #include <vector>
 
 namespace yq {
-    namespace agw {
-        struct Attribute;
-    }
+    struct Attribute;
     
     namespace html {
-        void    dev_table(WebHtml&, const agw::AttributeVector&);
+        void    dev_table(WebHtml&, const std::vector<Attribute>&);
     }
 }
 
