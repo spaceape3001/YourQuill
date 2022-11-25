@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <http/Html.hpp>
+#include <vector>
+
+namespace yq {
+    namespace agw {
+        struct Attribute;
+    }
+    
+    namespace html {
+        void    dev_table(WebHtml&, const agw::AttributeVector&);
+    }
+}
+

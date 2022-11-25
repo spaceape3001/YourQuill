@@ -9,13 +9,13 @@
 #include "u_leaf.hpp"
 
 #include <basic/Logging.hpp>
-#include <kernel/AtomCDB.hpp>
-#include <kernel/SQ.hpp>
-#include <kernel/DocumentCDB.hpp>
-#include <kernel/FragmentCDB.hpp>
-#include <kernel/ImageCDB.hpp>
-#include <kernel/LeafCDB.hpp>
-#include <kernel/LeafData.hpp>
+#include <kernel/agw/AtomCDB.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
+#include <kernel/leaf/LeafCDB.hpp>
+#include <kernel/leaf/LeafData.hpp>
 
 
 /*

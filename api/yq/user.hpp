@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <http/UserArg.hpp>
-#include <http/UserHtml.hpp>
-#include <http/UserPost.hpp>
-#include <kernel/IDLock.hpp>
-#include <kernel/User.hpp>
-#include <kernel/UserCDB.hpp>
-#include <kernel/UserData.hpp>
-#include <kernel/UserFile.hpp>
+#include <http/user/UserArg.hpp>
+#include <http/user/UserHtml.hpp>
+#include <http/user/UserPost.hpp>
+#include <kernel/db/IDLock.hpp>
+#include <kernel/user/User.hpp>
+#include <kernel/user/UserCDB.hpp>
+#include <kernel/user/UserData.hpp>
+#include <kernel/user/UserFile.hpp>

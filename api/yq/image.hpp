@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <http/ImageArg.hpp>
-#include <http/ImageHtml.hpp>
-#include <http/ImagePost.hpp>
-#include <kernel/Image.hpp>
-#include <kernel/ImageCDB.hpp>
+#include <http/image/ImageArg.hpp>
+#include <http/image/ImageHtml.hpp>
+#include <http/image/ImagePost.hpp>
+#include <kernel/image/Image.hpp>
+#include <kernel/image/ImageCDB.hpp>

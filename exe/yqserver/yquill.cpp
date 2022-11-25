@@ -19,7 +19,7 @@
 #include <basic/ThreadId.hpp>
 
 #include <basic/meta/Meta.hpp>
-#include <kernel/Workspace.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 #include <iostream>
 

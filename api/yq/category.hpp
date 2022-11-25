@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <http/CategoryArg.hpp>
-#include <http/CategoryHtml.hpp>
-#include <http/CategoryPost.hpp>
-#include <kernel/Category.hpp>
-#include <kernel/CategoryCDB.hpp>
-#include <kernel/CategoryData.hpp>
-#include <kernel/CategoryFile.hpp>
+#include <http/org/CategoryArg.hpp>
+#include <http/org/CategoryHtml.hpp>
+#include <http/org/CategoryPost.hpp>
+#include <kernel/org/Category.hpp>
+#include <kernel/org/CategoryCDB.hpp>
+#include <kernel/org/CategoryData.hpp>
+#include <kernel/org/CategoryFile.hpp>

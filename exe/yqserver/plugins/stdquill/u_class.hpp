@@ -9,9 +9,9 @@
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
 
-#include <kernel/Class.hpp>
-#include <kernel/CacheFwd.hpp>
-#include <kernel/Change.hpp>
+#include <kernel/agw/Class.hpp>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/enum/Change.hpp>
 
 namespace yq {
     //! Removes the class from the cache

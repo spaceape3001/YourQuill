@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <kernel/CacheFwd.hpp>
-#include <kernel/Change.hpp>
+#include <kernel/db/CacheFwd.hpp>
+#include <kernel/enum/Change.hpp>
 
 namespace yq {
     struct Image;

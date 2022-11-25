@@ -16,23 +16,23 @@
 #include <basic/stream/Bytes.hpp>
 #include <basic/stream/Text.hpp>
 
-#include <kernel/ClassCDB.hpp>
-#include <kernel/SQ.hpp>
-#include <kernel/DocumentCDB.hpp>
-#include <kernel/Root.hpp>
-#include <kernel/ImageCDB.hpp>
-#include <kernel/LeafCDB.hpp>
-#include <kernel/LeafData.hpp>
-#include <kernel/FileWatch.hpp>
-#include <kernel/FileNotifyAdapters.hpp>
-#include <kernel/Stage2.hpp>
-#include <kernel/Stage3.hpp>
-#include <kernel/Stage4.hpp>
-#include <kernel/CategoryCDB.hpp>
-#include <kernel/TagCDB.hpp>
+#include <kernel/agw/ClassCDB.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/Root.hpp>
+#include <kernel/image/ImageCDB.hpp>
+#include <kernel/leaf/LeafCDB.hpp>
+#include <kernel/leaf/LeafData.hpp>
+#include <kernel/notify/FileWatch.hpp>
+#include <kernel/notify/FileNotifyAdapters.hpp>
+#include <kernel/notify/Stage2.hpp>
+#include <kernel/notify/Stage3.hpp>
+#include <kernel/notify/Stage4.hpp>
+#include <kernel/org/CategoryCDB.hpp>
+#include <kernel/org/TagCDB.hpp>
 
-#include <kernel/UserCDB.hpp>
-#include <kernel/Workspace.hpp>
+#include <kernel/user/UserCDB.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 #include "common.hpp"
 

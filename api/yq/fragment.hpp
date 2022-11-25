@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <http/FragmentArg.hpp>
-#include <http/FragmentHtml.hpp>
-#include <http/FragmentPost.hpp>
-#include <kernel/IDLock.hpp>
-#include <kernel/Fragment.hpp>
-#include <kernel/FragmentCDB.hpp>
+#include <http/file/FragmentArg.hpp>
+#include <http/file/FragmentHtml.hpp>
+#include <http/file/FragmentPost.hpp>
+#include <kernel/db/IDLock.hpp>
+#include <kernel/file/Fragment.hpp>
+#include <kernel/file/FragmentCDB.hpp>

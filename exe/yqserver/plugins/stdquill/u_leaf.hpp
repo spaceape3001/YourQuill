@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kernel/Change.hpp>
+#include <kernel/enum/Change.hpp>
 #include <kernel/preamble.hpp>
 
 

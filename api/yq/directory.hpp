@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <http/DirectoryArg.hpp>
-#include <http/DirectoryHtml.hpp>
-#include <http/DirectoryPost.hpp>
-#include <kernel/Directory.hpp>
-#include <kernel/DirectoryCDB.hpp>
+#include <http/file/DirectoryArg.hpp>
+#include <http/file/DirectoryHtml.hpp>
+#include <http/file/DirectoryPost.hpp>
+#include <kernel/file/Directory.hpp>
+#include <kernel/file/DirectoryCDB.hpp>

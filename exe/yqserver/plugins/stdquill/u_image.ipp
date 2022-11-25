@@ -10,11 +10,11 @@
 
 #include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
-#include <kernel/IDLock.hpp>
-#include <kernel/SQ.hpp>
-#include <kernel/DocumentCDB.hpp>
-#include <kernel/FragmentCDB.hpp>
-#include <kernel/ImageCDB.hpp>
+#include <kernel/db/IDLock.hpp>
+#include <kernel/db/SQ.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
+#include <kernel/image/ImageCDB.hpp>
 
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning

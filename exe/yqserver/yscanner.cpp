@@ -19,19 +19,19 @@
 #include <basic/ThreadId.hpp>
 #include <basic/Vector.hpp>
 
-#include <kernel/DirectoryCDB.hpp>
-#include <kernel/DocumentCDB.hpp>
-#include <kernel/FolderCDB.hpp>
-#include <kernel/FragmentCDB.hpp>
-#include <kernel/Root.hpp>
-#include <kernel/RootCDB.hpp>
-#include <http/DirWatcher.hpp>
-#include <kernel/FileWatch.hpp>
-#include <kernel/FileNotifier.hpp>
-#include <kernel/Stage2.hpp>
-#include <kernel/Stage3.hpp>
-#include <kernel/Stage4.hpp>
-#include <kernel/Workspace.hpp>
+#include <kernel/file/DirectoryCDB.hpp>
+#include <kernel/file/DocumentCDB.hpp>
+#include <kernel/file/FolderCDB.hpp>
+#include <kernel/file/FragmentCDB.hpp>
+#include <kernel/file/Root.hpp>
+#include <kernel/file/RootCDB.hpp>
+#include <http/ipc/DirWatcher.hpp>
+#include <kernel/notify/FileWatch.hpp>
+#include <kernel/notify/FileNotifier.hpp>
+#include <kernel/notify/Stage2.hpp>
+#include <kernel/notify/Stage3.hpp>
+#include <kernel/notify/Stage4.hpp>
+#include <kernel/wksp/Workspace.hpp>
 
 
 #include <chrono>

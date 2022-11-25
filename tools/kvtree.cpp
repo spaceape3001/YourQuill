@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <kernel/KeyValue.hpp>
+#include <kernel/bit/KeyValue.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/TextUtils.hpp>

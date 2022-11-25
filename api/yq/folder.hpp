@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <http/FolderArg.hpp>
-#include <http/FolderHtml.hpp>
-#include <http/FolderPost.hpp>
-#include <kernel/Folder.hpp>
-#include <kernel/FolderCDB.hpp>
+#include <http/file/FolderArg.hpp>
+#include <http/file/FolderHtml.hpp>
+#include <http/file/FolderPost.hpp>
+#include <kernel/file/Folder.hpp>
+#include <kernel/file/FolderCDB.hpp>
