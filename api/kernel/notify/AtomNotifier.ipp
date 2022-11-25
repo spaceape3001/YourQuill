@@ -31,7 +31,7 @@ namespace yq {
         return repo().byChange;
     }
 
-    AtomNotifier::AtomNotifier(Flag<Change> changeMask, const agw::AtomSpec& spec, const std::source_location& sl)
+    AtomNotifier::AtomNotifier(Flag<Change> changeMask, const AtomSpec& spec, const std::source_location& sl)
     {
         m_source        = sl;
         m_change        = changeMask;

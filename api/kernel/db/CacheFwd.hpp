@@ -14,15 +14,27 @@
 #include <variant>
 #include <vector>
 #include <math/preamble.hpp>
-#include <kernel/preamble.hpp>
 
 namespace yq {
+    struct Atom;
+    struct Attribute;
+    struct Class;
+    struct Directory;
+    struct Document;
+    struct Folder;
+    struct Fragment;
+    struct Graph;
+    struct Image;
+    struct Leaf;
+    struct Root;
+    struct Tag;
+    struct User;
     class TypeInfo;
     class ByteArray;
 
     template <typename F, typename T> struct Connection;
 
-    //using ClassPair     = std::pair<Class,Class>;
+    using ClassPair     = std::pair<Class,Class>;
     using DirOrFrag     = std::variant<bool,Directory,Fragment>;
     using DocOrFold     = std::variant<bool,Document,Folder>;
     using DocOrFolder   = std::variant<bool,Document,Folder>;
@@ -33,13 +45,13 @@ namespace yq {
     using DocStr        = std::pair<Document,std::string>;
     using FolderStr     = std::pair<Folder,std::string>;
     using FragmentStr   = std::pair<Fragment,std::string>;
-    //using ClassSet      = std::set<Class>;
-    //using ClassU64Pair  = std::pair<Class,uint64_t>;
+    using ClassSet      = std::set<Class>;
+    using ClassU64Pair  = std::pair<Class,uint64_t>;
     using TagSet        = std::set<Tag>;
     
-    //using ClassCxn      = Connection<Class,Class>;
-    //using ClassU64Map   = std::map<Class,uint64_t>;
-    //using ClassCountMap = std::map<Class,HCountU64>;
+    using ClassCxn      = Connection<Class,Class>;
+    using ClassU64Map   = std::map<Class,uint64_t>;
+    using ClassCountMap = std::map<Class,HCountU64>;
 
     // used for extension specifications
     struct ExtensionView {

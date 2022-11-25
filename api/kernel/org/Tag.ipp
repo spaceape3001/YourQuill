@@ -12,7 +12,7 @@
 #include <basic/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/meta/Init.hpp>
-#include <kernel/agw/AtomCDB.hpp>
+#include <kernel/atom/AtomCDB.hpp>
 #include <kernel/db/NKI.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/file/DocumentCDB.hpp>
@@ -36,7 +36,7 @@ namespace yq {
         }
     }
 
-    std::vector<Tag>        Tag::all(agw::Atom a, Sorted sorted)
+    std::vector<Tag>        Tag::all(Atom a, Sorted sorted)
     {
         static const auto& oracle   = wksp::oracle();
         switch(oracle.type){
@@ -88,7 +88,7 @@ namespace yq {
         }
     }
 
-    size_t                  Tag::count(agw::Atom a)
+    size_t                  Tag::count(Atom a)
     {
         static const auto& oracle   = wksp::oracle();
         switch(oracle.type){

@@ -4,7 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <kernel/enum/Access.hpp>
 #include <kernel/enum/AssertDeny.hpp>
 #include <kernel/enum/AttrKind.hpp>
@@ -43,21 +42,21 @@ YQ_TYPE_IMPLEMENT(yq::SizeDesc)
 YQ_TYPE_IMPLEMENT(yq::Submit)
 YQ_TYPE_IMPLEMENT(yq::Vcs)
 
-#include "agw/Atom.ipp"
-#include "agw/AtomCDB.ipp"
-#include "agw/AttributeCDB.ipp"
-#include "agw/AttributeDiff.ipp"
-#include "agw/Class.ipp"
-#include "agw/ClassCDB.ipp"
-#include "agw/ClassData.ipp"
-#include "agw/ClassFile.ipp"
-#include "agw/Field.ipp"
-#include "agw/FieldCDB.ipp"
-#include "agw/FieldData.ipp"
-#include "agw/FieldFile.ipp"
-#include "agw/ValueCDB.ipp"
-#include "agw/ValueData.ipp"
-#include "agw/ValueFile.ipp"
+#include "atom/Atom.ipp"
+#include "atom/AtomCDB.ipp"
+#include "atom/Class.ipp"
+#include "atom/ClassCDB.ipp"
+#include "atom/ClassData.ipp"
+#include "atom/ClassFile.ipp"
+#include "atom/Field.ipp"
+#include "atom/FieldCDB.ipp"
+#include "atom/FieldData.ipp"
+#include "atom/FieldFile.ipp"
+#include "atom/ValueCDB.ipp"
+#include "atom/ValueData.ipp"
+#include "atom/ValueFile.ipp"
+#include "attr/AttributeCDB.ipp"
+#include "attr/AttributeDiff.ipp"
 #include "bit/Context.ipp"
 #include "bit/Copyright.ipp"
 #include "bit/KeyValue.ipp"
@@ -117,12 +116,12 @@ namespace yq {
         }
     }
     
-    template class IDLock<agw::Atom>;
+    template class IDLock<Atom>;
     template class IDLock<Category>;
-    template class IDLock<agw::Class>;
+    template class IDLock<Class>;
     template class IDLock<Directory>;
     template class IDLock<Document>;
-    template class IDLock<agw::Field>;
+    template class IDLock<Field>;
     template class IDLock<Folder>;
     template class IDLock<Fragment>;
     template class IDLock<Leaf>;

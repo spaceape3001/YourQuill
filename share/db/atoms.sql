@@ -19,28 +19,16 @@ CREATE TABLE Atoms (
 	icon        VARCHAR(255),
 	brief       VARCHAR(255),
 	is_edge     BOOL NOT NULL DEFAULT 0,
-	
 	    -- this is the title
 	name        VARCHAR(255)
 );
 
--- ATOM PROPERTIES
-CREATE TABLE Properties (
-    -- Triple key?  Adding in a property ID
-    id      INTEGER PRIMARY KEY,
-    --  Atom 
+CREATE TABLE AProperties (
     atom    INTEGER NOT NULL,
-    --  Attribute
     attr    INTEGER NOT NULL,
-    --  Field (if any)
     field   INTEGER NOT NULL DEFAULT 0,
-    --  Edge Atom ID (if any)
-    edge    INTEGER NOT NULL DEFAULT 0,
     
-    --  What this attribute resolves to using the above field?
-    resolve INTEGER NOT NULL DEFAULT 0,
-    
-    UNIQUE(atom,attr,field) ON CONFLICT IGNORE
+    UNIQUE(atom,attr) ON CONFLICT IGNORE
 );
 
 CREATE TABLE AClasses (

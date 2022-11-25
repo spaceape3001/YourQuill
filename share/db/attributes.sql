@@ -16,7 +16,6 @@ CREATE TABLE Attributes (
     uid         VARCHAR(255) COLLATE NOCASE,
         -- value of the attribute (generic text)
     value       VARCHAR(255) COLLATE NOCASE,
-    
     title       VARCHAR(255) COLLATE NOCASE
 );
 

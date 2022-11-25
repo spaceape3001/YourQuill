@@ -8,6 +8,7 @@
 
 #include <basic/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
+#include <kernel/atom/ClassCDB.hpp>
 #include <kernel/file/Folder.hpp>
 #include <kernel/file/FragmentCDB.hpp>
 
@@ -66,6 +67,22 @@ namespace yq {
         return ret;
     }
     
+    //FileSpec        by_class(std::string_view sv)
+    //{
+        //FileSpec    ret;
+        //ret.type        = FileSpec::ByClassKey;
+        //ret.str         = sv;
+        //return ret;
+    //}
+
+    //FileSpec        by_class(Class c)
+    //{
+        //FileSpec    ret;
+        //ret.type    = FileSpec::ByClassId;
+        //ret.u64     = c.id;
+        //return ret;
+    //}
+
     bool    FileSpec::match(Fragment frag) const
     {
         return match(cdb::folder(frag), cdb::name(frag));

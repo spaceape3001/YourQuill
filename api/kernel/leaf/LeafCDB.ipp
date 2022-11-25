@@ -30,12 +30,12 @@ namespace yq {
             }
         }
         
-        agw::AtomVector        all_leaf_atoms(Sorted sorted)
+        std::vector<Atom>        all_leaf_atoms(Sorted sorted)
         {
             static thread_local SQ qs("SELECT id FROM Atoms WHERE isLeaf=1 ORDER BY k");
             static thread_local SQ qu("SELECT id FROM Atoms WHERE leaf!=0");
             SQ& s = sorted ? qs : qu;
-            return s.vec<agw::Atom>();
+            return s.vec<Atom>();
         }
         
         size_t              all_leaf_atoms_count()
@@ -44,12 +44,23 @@ namespace yq {
             return s.size();
         }
         
+        namespace {
+            std::vector<Leaf>    all_leafs_sorted()
+            {
+                static thread_local SQ s("SELECT id FROM Leafs ORDER BY k");
+                return s.vec<Leaf>();
+            }
+
+            std::vector<Leaf>    all_leafs_unsorted()
+            {
+                static thread_local SQ s("SELECT id FROM Leafs");
+                return s.vec<Leaf>();
+            }
+        }
+        
         std::vector<Leaf>        all_leafs(Sorted sorted)
         {
-            static thread_local SQ qs("SELECT id FROM Leafs ORDER BY k");
-            static thread_local SQ qu("SELECT id FROM Leafs");
-            SQ& s = sorted ? qs : qu;
-            return s.vec<Leaf>();
+            return sorted ? all_leafs_sorted() : all_leafs_unsorted();
         }
         
         size_t              all_leafs_count()
@@ -59,10 +70,10 @@ namespace yq {
         }
         
 
-        agw::Atom          atom(Leaf l)
+        Atom                atom(Leaf l)
         {
             static thread_local SQ s("SELECT atom FROM Leafs WHERE id=? LIMIT 1");
-            return s.as<agw::Atom>(l.id);
+            return s.as<Atom>(l.id);
         }
         
         
@@ -138,7 +149,7 @@ namespace yq {
         Leaf::Info          info(Leaf l, bool autoKey)
         {
             Leaf::Info    ret;
-            static thread_local SQ s("SELECT k, title, atom FROM Leafs WHERE id=?");
+            static thread_local SQ s("SELECT k, title FROM Leafs WHERE id=?");
             auto s_af = s.af();
             s.bind(1, l.id);
             if(s.step() == SqlQuery::Row){
@@ -147,18 +158,12 @@ namespace yq {
                 ret.title   = s.v_string(2);
                 if(autoKey && ret.title.empty())
                     ret.title   = ret.key;
-                ret.atom    = { s.v_uint64(3) };
             }
             return ret;
         }
 
-        //bool                    is_leaf(agw::Atom);
+        //bool                    is_leaf(Atom);
         
-        bool                        is_tagged(Leaf l, Tag t)
-        {
-            static thread_local SQ s("SELECT 1 FROM LTags WHERE leaf=? AND tag=? LIMIT 1");
-            return s.present(l.id, t.id);
-        }
         
         std::string             key(Leaf l)
         {
@@ -318,6 +323,11 @@ namespace yq {
             return ret;
         }
 
+        bool                        tagged(Leaf l, Tag t)
+        {
+            static thread_local SQ s("SELECT 1 FROM LTags WHERE leaf=? AND tag=? LIMIT 1");
+            return s.present(l.id, t.id);
+        }
         
         std::vector<Tag>            tags(Leaf l)
         {
