@@ -11,7 +11,9 @@
 
 namespace yq {
     
-    struct Field;
+    namespace agw {
+        struct Field;
+    }
     struct WebContext;
     
     namespace arg {
@@ -30,13 +32,6 @@ namespace yq {
         Field field_key(std::string_view arg_string);
         Field field_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Field field_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
-
-    namespace post {
-        //! Finds root, by ID
-        Field field(WebContext&, bool *detected=nullptr);
-        Field field(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Field field(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
 }
 

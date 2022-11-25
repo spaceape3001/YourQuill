@@ -8,6 +8,7 @@
 
 #include <http/RootArg.hpp>
 #include <http/RootHtml.hpp>
+#include <http/RootPost.hpp>
 
 #include <kernel/Root.hpp>
 #include <kernel/RootCDB.hpp>

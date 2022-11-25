@@ -35,12 +35,5 @@ namespace yq {
         Leaf leaf_title(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Leaf leaf_title(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
-
-    namespace post {
-        //! Finds root, by ID
-        Leaf leaf(WebContext&, bool *detected=nullptr);
-        Leaf leaf(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Leaf leaf(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
 }
 

@@ -16,7 +16,6 @@
 #include <kernel/preamble.hpp>
 
 #include <http/PageTemplate.hpp>
-#include <http/Post.hpp>
 #include <http/TypedBytes.hpp>
 #include <http/Template.hpp>
 

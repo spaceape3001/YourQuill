@@ -32,11 +32,4 @@ namespace yq {
         Folder folder_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Folder folder_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
-
-    namespace post {
-        //! Finds root, by ID
-        Folder folder(WebContext&, bool *detected=nullptr);
-        Folder folder(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Folder folder(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
 }

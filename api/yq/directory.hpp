@@ -8,6 +8,6 @@
 
 #include <http/DirectoryArg.hpp>
 #include <http/DirectoryHtml.hpp>
-
+#include <http/DirectoryPost.hpp>
 #include <kernel/Directory.hpp>
 #include <kernel/DirectoryCDB.hpp>

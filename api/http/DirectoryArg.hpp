@@ -32,11 +32,4 @@ namespace yq {
         Directory directory_key(const WebContext&, std::string_view arg_name, const Root* rt=nullptr, bool *detected=nullptr);
         Directory directory_key(const WebContext&, std::initializer_list<std::string_view> arg_names, const Root* rt=nullptr, bool *detected=nullptr);
     }
-
-    namespace post {
-        //! Finds root, by ID
-        Directory directory(WebContext&, bool *detected=nullptr);
-        Directory directory(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Directory directory(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
 }

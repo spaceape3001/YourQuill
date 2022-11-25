@@ -30,12 +30,5 @@ namespace yq {
         Category category_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Category category_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
-
-    namespace post {
-        //! Finds root, by ID
-        Category category(WebContext&, bool *detected=nullptr);
-        Category category(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Category category(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
 }
 

@@ -31,12 +31,5 @@ namespace yq {
         Atom atom_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Atom atom_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
-
-    namespace post {
-        //! Finds root, by ID
-        Atom atom(WebContext&, bool *detected=nullptr);
-        Atom atom(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Atom atom(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
 }
 

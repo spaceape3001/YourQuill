@@ -10,7 +10,9 @@
 #include <string_view>
 
 namespace yq {
-    struct Class;
+    namespace agw {
+        struct Class;
+    }
     struct WebContext;
     
     namespace arg {
@@ -29,13 +31,6 @@ namespace yq {
         Class class_key(std::string_view arg_string);
         Class class_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Class class_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
-
-    namespace post {
-        //! Finds root, by ID
-        Class class_(WebContext&, bool *detected=nullptr);
-        Class class_(WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Class class_(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
 }
 
