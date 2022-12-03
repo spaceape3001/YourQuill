@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <cstdint>
-#include <compare>
+#include <kernel/preamble.hpp>
 
 namespace yq {
     /*! \brief Document in the cache
@@ -18,7 +17,9 @@ namespace yq {
     struct Document {
         struct Info;
         uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Document&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Document&rhs) const noexcept = default;
+        constexpr operator uint64_t () const noexcept { return id; }
     };
 }
+
+YQ_TYPE_DECLARE(yq::Document)

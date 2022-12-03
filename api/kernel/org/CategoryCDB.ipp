@@ -11,8 +11,8 @@
 #include <basic/FileUtils.hpp>
 #include <kernel/atom/Class.hpp>
 #include <kernel/atom/Field.hpp>
-#include <kernel/db/IDLock.hpp>
 #include <kernel/db/NKI.hpp>
+#include <kernel/db/IDLock.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>

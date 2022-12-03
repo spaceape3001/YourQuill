@@ -6,9 +6,8 @@
 
 #pragma once
 
+#include <kernel/preamble.hpp>
 #include <kernel/atom/Atom.hpp>
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/leaf/Leaf.hpp>

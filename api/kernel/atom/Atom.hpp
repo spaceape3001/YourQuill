@@ -6,29 +6,9 @@
 
 #pragma once
 
-#include <compare>
-#include <cstdint>
-#include <initializer_list>
-#include <string_view>
-#include <string>
-#include <basic/meta/InfoBinder.hpp>
-#include <kernel/enum/Sorted.hpp>
+#include <kernel/preamble.hpp>
 
 namespace yq {
-    template <typename> class IDLock;
-    struct Class;
-    struct Document;
-    struct Image;
-    struct Leaf;
-    struct Tag;
-
-
-    struct Edge;
-    
-    namespace cdb {
-        struct NKI;
-    }
-
     /*! \brief Atom in the cache
         This structure represents an atom in the cache
     */
@@ -36,10 +16,8 @@ namespace yq {
         struct Info;
         using Lock = IDLock<Atom>;
         uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Atom&rhs) const = default; 
-        constexpr operator uint64_t() const { return id; }
-        
-        constexpr uint64_t  get_id() const { return id; }
+        constexpr auto    operator<=>(const Atom&rhs) const noexcept = default; 
+        constexpr operator uint64_t() const noexcept { return id; }
         
         //  --------------------------------------
         //  These all QUERY the cache (either direct or via CURL)
@@ -216,7 +194,7 @@ namespace yq {
             
             \param[in] autoKeyToName    Will substitute in the key for no name
         */
-        cdb::NKI            nki(bool autoKeyToName=false) const;
+        NKI                 nki(bool autoKeyToName=false) const;
         
         //! Parent/owning atom
         Atom                parent() const;
@@ -241,5 +219,5 @@ namespace yq {
 
 }
 
-YQ_TYPE_DECLARE(Atom)
+YQ_TYPE_DECLARE(yq::Atom)
 

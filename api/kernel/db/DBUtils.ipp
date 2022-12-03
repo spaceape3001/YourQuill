@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "CacheFwd.hpp"
+#include <kernel/preamble.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/meta/TypeInfo.hpp>
 

@@ -6,16 +6,12 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/user/UserFile.hpp>
 
 namespace yq {
-    struct Fragment;
-    struct Root;
-
     struct User::Info {
         Document        doc;
         std::string     key;
@@ -29,10 +25,9 @@ namespace yq {
         bool operator==(const Info&) const = default;
     };
 
-
+    using UserFragDoc  = std::pair<Fragment, User::SharedFile>;
 
     namespace cdb {
-        using UserFragDoc  = std::pair<Fragment, User::SharedFile>;
 
         /*! \brief List of all users
         

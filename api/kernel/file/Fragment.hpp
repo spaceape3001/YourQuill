@@ -6,12 +6,9 @@
 
 #pragma once
 
-#include <cstdint>
-#include <compare>
+#include <kernel/preamble.hpp>
 
 namespace yq {
-
-    template <typename> class IDLock;
 
     /*! \brief Represents single fragment
     */
@@ -19,7 +16,9 @@ namespace yq {
         struct Info;
         using Lock = IDLock<Fragment>;
         uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Fragment& rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Fragment& rhs) const noexcept = default;
+        constexpr operator uint64_t() const noexcept { return id != 0ULL; }
     };
 }
+
+YQ_TYPE_DECLARE(yq::Fragment)

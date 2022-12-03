@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <compare>
+#include <cstdint>
 #include <map>
 #include <set>
 #include <string>
@@ -13,26 +15,39 @@
 #include <utility>
 #include <variant>
 #include <vector>
+#include <basic/meta/InfoBinder.hpp>
 #include <math/preamble.hpp>
 
 namespace yq {
+    template <typename> class IDLock;
+
+    class ByteArray;
+
     struct Atom;
     struct Attribute;
+    struct Category;
+    struct Character;
     struct Class;
     struct Directory;
     struct Document;
+    struct Edge;
+    struct Entity;
+    struct Event;
+    struct Field;
     struct Folder;
     struct Fragment;
     struct Graph;
     struct Image;
     struct Leaf;
+    struct Place;
+    struct Property;
     struct Root;
     struct Tag;
     struct User;
-    class TypeInfo;
-    class ByteArray;
 
     template <typename F, typename T> struct Connection;
+
+    struct NKI;
 
     using ClassPair     = std::pair<Class,Class>;
     using DirOrFrag     = std::variant<bool,Directory,Fragment>;
@@ -53,28 +68,25 @@ namespace yq {
     using ClassU64Map   = std::map<Class,uint64_t>;
     using ClassCountMap = std::map<Class,HCountU64>;
 
-    // used for extension specifications
-    struct ExtensionView {
-        std::string_view        ext;
-    };
-
-    struct Extension {
-        std::string             ext;
-        operator ExtensionView() const noexcept { return { ext }; }
-    };
-
-    
-    inline ExtensionView extension(std::string_view x) { return { x }; }
-
-
     //! Generic options bitmask
     using cdb_options_t         = uint64_t;
 
+
+    /*! \brief Sorted for passing into functions
+
+        Different sort of enum, intended for function calls.
+    */
+    struct Sorted {
+        //  Note, this is done as a structure so we can do the operator bool() on it
+        enum Value : uint8_t { NO = 0, YES };
+        Value   value;
+        constexpr Sorted() : value(NO) {}
+        constexpr Sorted(Value v) : value(v) {}
+        operator bool() const { return value != NO; }
+    };
+
+
     namespace cdb {
-    
-        struct NKI;
-
-
         enum {
             //! Include hidden things
             HIDDEN                  = 1 << 0,
@@ -156,5 +168,19 @@ namespace yq {
         }
         
         std::set<uint64_t>              ids_for(const std::vector<const TypeInfo*>&);
+
+       // used for extension specifications
+        struct ExtensionView {
+            std::string_view        ext;
+        };
+
+        struct Extension {
+            std::string             ext;
+            operator ExtensionView() const noexcept { return { ext }; }
+        };
+
+        
+        inline ExtensionView extension(std::string_view x) { return { x }; }
     }
 }
+

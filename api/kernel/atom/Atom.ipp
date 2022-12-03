@@ -20,9 +20,6 @@
 #include <kernel/org/Tag.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
-
-YQ_TYPE_IMPLEMENT(yq::Atom)
-
 namespace yq {
     std::vector<Atom>   Atom::all(Sorted sorted)
     {
@@ -456,7 +453,7 @@ namespace yq {
         }
     }
     
-    cdb::NKI            Atom::nki(bool autoKeyToName) const
+    NKI                 Atom::nki(bool autoKeyToName) const
     {
         static const auto& oracle   = wksp::oracle();
         switch(oracle.type){

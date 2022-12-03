@@ -9,7 +9,7 @@
 #include "Template.hpp"
 #include "WebVariable.hpp"
 
-#include <kernel/db/CacheFwd.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/file/Folder.hpp>
 #include <basic/Guarded.hpp>
 

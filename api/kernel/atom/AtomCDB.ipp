@@ -243,13 +243,13 @@ namespace yq {
             return s.str(a);
         }
         
-        cdb::NKI            nki(Atom a, bool autoKey) 
+        NKI            nki(Atom a, bool autoKey) 
         {
             static thread_local SQ    s("SELECT name,icon,k FROM Atoms WHERE id=?");
             auto s_af = s.af();
             s.bind(1, a.id);
             if(s.step() == SqlQuery::Row){
-                cdb::NKI  ret;
+                NKI  ret;
                 ret.name    = s.v_string(1);
                 ret.icon    = Image{s.v_uint64(2)};
                 ret.key     = s.v_string(3);
@@ -257,7 +257,7 @@ namespace yq {
                     ret.name    = ret.key;
                 return ret;
             }
-            return cdb::NKI();
+            return NKI();
         }
 
         Atom                parent(Atom a) 

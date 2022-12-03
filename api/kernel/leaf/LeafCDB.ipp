@@ -10,8 +10,8 @@
 #include <basic/ByteArray.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <kernel/db/IDLock.hpp>
 #include <kernel/db/NKI.hpp>
+#include <kernel/db/IDLock.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>

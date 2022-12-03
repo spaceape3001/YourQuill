@@ -6,9 +6,7 @@
 
 #pragma once
 
-#include <compare>
-#include <cstdint>
-
+#include <kernel/preamble.hpp>
 
 namespace yq {
 
@@ -21,7 +19,9 @@ namespace yq {
         struct KVUA;
 
         uint64_t    id  = 0ULL;
-        constexpr auto    operator<=>(const Attribute&rhs) const = default; 
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Attribute&rhs) const noexcept = default; 
+        constexpr operator uint64_t() const noexcept { return id; }
     };
 }
+
+YQ_TYPE_DECLARE(yq::Attribute)

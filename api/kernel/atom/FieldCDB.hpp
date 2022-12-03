@@ -8,15 +8,10 @@
 
 #include <kernel/atom/Class.hpp>
 #include <kernel/atom/FieldFile.hpp>
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/org/Category.hpp>
 
 namespace yq {
-    struct Field;
-    struct TypeInfo;
-
     struct Field::Info {
         Class           class_;
         Image           icon;
@@ -34,7 +29,6 @@ namespace yq {
    };
 
     namespace cdb {
-        using FieldFragDoc      = std::pair<Fragment, Field::SharedFile>;
         
         string_set_t            aliases(Field);
 

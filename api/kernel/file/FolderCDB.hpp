@@ -7,15 +7,11 @@
 #pragma once
 
 #include "Folder.hpp"
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/image/Image.hpp>
 #include <vector>
 
 namespace yq {
-    class Root;
-    class ByteArray;
-    
 
     struct Folder::Info {
         std::string     brief;

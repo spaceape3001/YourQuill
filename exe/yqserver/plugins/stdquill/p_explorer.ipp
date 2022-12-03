@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <basic/TextUtils.hpp>
-#include <basic/DirUtils.hpp>
-
 namespace {
     
     #if 0
@@ -208,4 +205,5 @@ namespace {
     {
         reg_webpage<p_explorer>("/explore");
     }
+    YQ_INVOKE(reg_explorer();)
 }

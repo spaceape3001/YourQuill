@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/org/Category.hpp>
@@ -16,10 +15,6 @@
 
 namespace yq {
 
-    struct Document;
-    struct Fragment;
-    struct Field;
-    struct Class;
     
     struct Category::Info {
         std::string key;

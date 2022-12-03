@@ -19,8 +19,6 @@
 #include <kernel/image/Image.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
-YQ_TYPE_IMPLEMENT(yq::Tag)
-
 
 namespace yq {
     std::vector<Tag>        Tag::all(Sorted sorted)
@@ -259,7 +257,7 @@ namespace yq {
         }
     }
 
-    cdb::NKI                Tag::nki(bool autoKeyToName) const
+    NKI                     Tag::nki(bool autoKeyToName) const
     {
         static const auto& oracle   = wksp::oracle();
         switch(oracle.type){

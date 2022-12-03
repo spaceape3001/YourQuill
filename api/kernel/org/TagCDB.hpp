@@ -6,19 +6,18 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/leaf/Leaf.hpp>
-#include <kernel/enum/Sorted.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/org/Tag.hpp>
 #include <kernel/org/TagInfo.hpp>
 #include <kernel/org/TagFile.hpp>
 
 namespace yq {
-
+    using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
+    
     namespace cdb {
-        using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
  
         /*! \brief Get all tags
             \param[in] sorted   Set to have tags sorted by key

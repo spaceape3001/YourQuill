@@ -8,17 +8,11 @@
 
 #include <kernel/atom/Atom.hpp>
 #include <kernel/atom/AtomInfo.hpp>
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/leaf/Leaf.hpp>
 #include <vector>
 
 namespace yq {
-    struct Class;
-    struct Document;
-    struct Tag;
-    
     namespace cdb {
         /*! \brief Returns all atoms in the cache database
             \param[in] sorted   Yes/no for sorting by key. (default is no)
@@ -170,7 +164,7 @@ namespace yq {
             \param a                Atom
             \param autoKeyToName    if TRUE, will auto-fill empty names with keys
         */
-        cdb::NKI             nki(Atom,bool autoKeyToName=false);
+        NKI                 nki(Atom,bool autoKeyToName=false);
 
         //! parent for atom
         Atom                 parent(Atom);

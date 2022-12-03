@@ -13,8 +13,8 @@
 #include <basic/meta/TypeInfo.hpp>
 #include <kernel/atom/ClassCDB.hpp>
 #include <kernel/atom/FieldFile.hpp>
-#include <kernel/db/IDLock.hpp>
 #include <kernel/db/NKI.hpp>
+#include <kernel/db/IDLock.hpp>
 #include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>

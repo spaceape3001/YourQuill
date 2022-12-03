@@ -12,7 +12,7 @@
 namespace yq {
     struct Graph {
         uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Graph& rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Graph& rhs) const noexcept = default;
+        constexpr operator uint64_t () const noexcept { return id; }
     };
 }

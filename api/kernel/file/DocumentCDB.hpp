@@ -6,18 +6,14 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/enum/DataRole.hpp>
-#include <kernel/enum/Sorted.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/file/Folder.hpp>
 #include <kernel/image/Image.hpp>
 #include <basic/Http.hpp>
 
 namespace yq {
-    struct Fragment;
-    struct Root;
-    class ByteArray;
 
     struct Document::Info {
         Folder          folder;
@@ -33,10 +29,10 @@ namespace yq {
         
         bool operator==(const Info&) const = default;
     };
+    
+    
 
     namespace cdb {
-        struct NKI;
-
         std::vector<Document>           all_documents(Sorted sorted=Sorted());
         size_t                          all_documents_count();
         std::vector<Document>           all_documents_suffix(std::string_view , Sorted sorted=Sorted());
@@ -86,9 +82,7 @@ namespace yq {
         Fragment                        fragment(Document, DataRole);
         
         std::vector<Fragment>           fragments(Document, Sorted sorted=Sorted());
-        std::vector<Fragment>           fragments(Document, Sorted::Value sorted);
         std::vector<Fragment>           fragments(Document, const Root*, Sorted sorted=Sorted());
-        std::vector<Fragment>           fragments(Document, const Root*, Sorted::Value sorted);
         std::vector<Fragment>           fragments(Document, DataRole, Sorted sorted=Sorted());
 
         size_t                          fragments_count(Document);

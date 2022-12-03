@@ -6,10 +6,9 @@
 
 #pragma once
 
+#include <kernel/preamble.hpp>
 #include <kernel/atom/Field.hpp>
 #include <kernel/atom/Value.hpp>
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
 
 namespace yq {
 

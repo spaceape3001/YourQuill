@@ -6,25 +6,9 @@
 
 #pragma once
 
-#include <compare>
-#include <cstdint>
-#include <memory>
-#include <string_view>
-#include <string>
-#include <basic/meta/InfoBinder.hpp>
-#include <kernel/enum/Sorted.hpp>
+#include <kernel/preamble.hpp>
 
 namespace yq {
-    template <typename> class IDLock;
-    struct Atom;
-    struct Document;
-    struct Image;
-    struct Leaf;
-
-    namespace cdb {
-        struct NKI;
-    }
-
     /*! Tag in the cache database
     */
     struct Tag {
@@ -37,8 +21,8 @@ namespace yq {
         using Lock  = IDLock<Tag>;
         
         uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Tag&rhs) const = default;
-        constexpr operator uint64_t() const { return id; }
+        constexpr auto    operator<=>(const Tag&rhs) const noexcept = default;
+        constexpr operator uint64_t() const noexcept { return id; }
 
         //  --------------------------------------
         //  These all QUERY the cache (either direct or via CURL)
@@ -67,10 +51,10 @@ namespace yq {
         std::string             label() const;
         Leaf                    leaf() const;
         std::string             name() const;
-        cdb::NKI                nki(bool autoKeyToName=false) const;
+        NKI                     nki(bool autoKeyToName=false) const;
         bool                    valid() const;
     };
     
 }
 
-YQ_TYPE_DECLARE(Tag)
+YQ_TYPE_DECLARE(yq::Tag)

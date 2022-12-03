@@ -6,16 +6,10 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
+#include <kernel/preamble.hpp>
 #include <filesystem>
 
 namespace yq {
-    class Root;
-    class ByteArray;
-    struct Directory;
-    struct Fragment;
-    
     namespace cdb {
 
         /*! \brief All directories for root

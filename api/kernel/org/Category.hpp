@@ -6,13 +6,9 @@
 
 #pragma once
 
-#include <compare>
-#include <cstdint>
-#include <memory>
+#include <kernel/preamble.hpp>
 
 namespace yq {
-
-    template <typename> class IDLock;
 
     /*! \brief Atom class in the cache
 
@@ -28,7 +24,9 @@ namespace yq {
         using SharedFile = std::shared_ptr<File>;
         
         uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Category&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Category&rhs) const noexcept = default;
+        constexpr operator uint64_t() const noexcept { return id; }
     };
 }
+
+YQ_TYPE_DECLARE(yq::Category)

@@ -6,19 +6,16 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/file/Directory.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/file/Folder.hpp>
 #include <kernel/file/Fragment.hpp>
 #include <kernel/enum/DataRole.hpp>
-#include <kernel/enum/Sorted.hpp>
+
 #include <filesystem>
 
 namespace yq {
-    class Root;
-    class ByteArray;
-    
     struct Fragment::Info {
         Document                document;
         Directory               directory;

@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <cstdint>
-#include <compare>
+#include <kernel/preamble.hpp>
 
 namespace yq {
 
@@ -19,7 +18,9 @@ namespace yq {
     struct Folder {
         struct Info;
         uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Folder&rhs) const = default;
+        constexpr auto    operator<=>(const Folder&rhs) const noexcept = default;
+        constexpr operator uint64_t() const noexcept { return id; }
+        
         static constexpr const uint64_t TOP         = 1ULL;
         static constexpr const uint64_t CONFIG      = 2ULL;
         static constexpr const uint64_t CATEGORIES  = 3ULL;
@@ -27,10 +28,12 @@ namespace yq {
         static constexpr const uint64_t FIELDS      = 5ULL;
         static constexpr const uint64_t TAGS        = 6ULL;
         static constexpr const uint64_t USERS       = 7ULL;
-        constexpr operator bool() const { return id != 0ULL; }
     };
 
     namespace cdb {
         static constexpr const uint64_t     kMaxFixedFolder = Folder::USERS;
     }
 }
+
+YQ_TYPE_DECLARE(yq::Folder)
+

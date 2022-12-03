@@ -8,7 +8,7 @@
 
 #include "Attribute.hpp"
 
-#include <kernel/db/CacheFwd.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/file/Document.hpp>
 #include <vector>
 

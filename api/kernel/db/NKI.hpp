@@ -9,10 +9,8 @@
 #include <kernel/image/Image.hpp>
 
 namespace yq {
-    namespace cdb {
-        struct NKI {
-            std::string key, name;
-            Image       icon;
-        };
-    }
+    struct NKI {
+        std::string key, name;
+        Image       icon;
+    };
 }

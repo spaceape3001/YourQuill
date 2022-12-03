@@ -11,6 +11,7 @@
 #include <initializer_list>
 #include <kernel/enum/SizeDesc.hpp>
 #include <math/Size2.hpp>
+#include <kernel/preamble.hpp>
 
 namespace yq {
 
@@ -29,8 +30,8 @@ namespace yq {
         };
 
         uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Image& rhs) const = default;
-        operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Image& rhs) const noexcept = default;
+        constexpr operator uint64_t () const noexcept { return id; }
     };
 
     struct Thumbnail {
@@ -43,3 +44,5 @@ namespace yq {
     };
 
 }
+
+YQ_TYPE_DECLARE(yq::Image)

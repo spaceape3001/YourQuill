@@ -18,7 +18,6 @@
 #include <kernel/enum/Reset.hpp>
 #include <kernel/enum/Restriction.hpp>
 #include <kernel/enum/SizeDesc.hpp>
-#include <kernel/enum/Sorted.hpp>
 #include <kernel/enum/Submit.hpp>
 #include <kernel/enum/Vcs.hpp>
 
@@ -52,6 +51,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "atom/FieldCDB.ipp"
 #include "atom/FieldData.ipp"
 #include "atom/FieldFile.ipp"
+#include "atom/Property.hpp"
 #include "atom/ValueCDB.ipp"
 #include "atom/ValueData.ipp"
 #include "atom/ValueFile.ipp"
@@ -103,6 +103,23 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 
 #include "directories.hpp"
 
+YQ_TYPE_IMPLEMENT(yq::Atom)
+YQ_TYPE_IMPLEMENT(yq::Attribute)
+YQ_TYPE_IMPLEMENT(yq::Category)
+YQ_TYPE_IMPLEMENT(yq::Class)
+YQ_TYPE_IMPLEMENT(yq::Directory)
+YQ_TYPE_IMPLEMENT(yq::Document)
+//YQ_TYPE_IMPLEMENT(yq::Edge)
+YQ_TYPE_IMPLEMENT(yq::Field)
+YQ_TYPE_IMPLEMENT(yq::Folder)
+YQ_TYPE_IMPLEMENT(yq::Fragment)
+YQ_TYPE_IMPLEMENT(yq::Image)
+YQ_TYPE_IMPLEMENT(yq::Leaf)
+YQ_TYPE_IMPLEMENT(yq::Property)
+YQ_TYPE_IMPLEMENT(yq::Tag)
+YQ_TYPE_IMPLEMENT(yq::User)
+YQ_TYPE_IMPLEMENT(yq::Value)
+
 namespace yq {
     namespace kernel {
         const char*     build_root()
@@ -127,5 +144,8 @@ namespace yq {
     template class IDLock<Leaf>;
     template class IDLock<Tag>;
     template class IDLock<User>;
+    
+    namespace {
+    }
 }
 

@@ -6,11 +6,7 @@
 
 #pragma once
 
-#include <compare>
-#include <cstdint>
-#include <memory>
-#include <initializer_list>
-#include <string_view>
+#include <kernel/preamble.hpp>
 
 namespace yq {
 
@@ -37,7 +33,7 @@ namespace yq {
 
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Class&rhs) const noexcept = default;
-        constexpr operator bool() const noexcept { return id != 0ULL; }
+        constexpr operator uint64_t() const noexcept { return id != 0ULL; }
     };
 
     struct Class::Rank {
@@ -45,4 +41,8 @@ namespace yq {
         int64_t     rank    = 0;
         constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
     };
+
+    using ClassFragDoc      = std::pair<Fragment, Class::SharedFile>;
 }
+
+YQ_TYPE_DECLARE(yq::Class)

@@ -6,11 +6,10 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
+#include <kernel/preamble.hpp>
 #include <vector>
 
 namespace yq {
-    class ByteArray;
     namespace cdb {
         struct Graph;
 

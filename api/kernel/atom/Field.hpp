@@ -6,15 +6,9 @@
 
 #pragma once
 
-#include <compare>
-#include <cstdint>
-#include <initializer_list>
-#include <memory>
-#include <string_view>
+#include <kernel/preamble.hpp>
 
 namespace yq {
-
-    template <typename> class IDLock;
 
     /*! \brief Field of the class
 
@@ -41,6 +35,10 @@ namespace yq {
 
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Field&rhs) const noexcept = default;
-        constexpr operator bool() const noexcept { return id != 0ULL; }
+        constexpr operator uint64_t() const noexcept { return id; }
     };
+
+    using FieldFragDoc      = std::pair<Fragment, Field::SharedFile>;
 }
+
+YQ_TYPE_DECLARE(yq::Field)

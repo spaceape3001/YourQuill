@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kernel/db/CacheFwd.hpp>
+#include <kernel/preamble.hpp>
 #include <kernel/enum/SizeDesc.hpp>
 #include <kernel/image/Image.hpp>
 #include <basic/ContentType.hpp>

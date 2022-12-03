@@ -6,10 +6,9 @@
 
 #pragma once
 
+#include <kernel/preamble.hpp>
 #include <kernel/atom/ClassInfo.hpp>
 #include <kernel/atom/ClassFile.hpp>
-#include <kernel/db/CacheFwd.hpp>
-#include <kernel/enum/Sorted.hpp>
 #include <kernel/file/Document.hpp>
 #include <kernel/image/Image.hpp>
 #include <kernel/org/Category.hpp>
@@ -19,17 +18,7 @@
 
 
 namespace yq {
-
-    struct Fragment;
-    struct Field;
-    struct Tag;
-    
-    
-    
-
     namespace cdb {
-        using ClassFragDoc      = std::pair<Fragment, Class::SharedFile>;
-        
 
         /*! \brief All classes in the cache database
         

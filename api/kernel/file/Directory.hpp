@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <cstdint>
-#include <compare>
+#include <kernel/preamble.hpp>
 
 namespace yq {
 
@@ -19,7 +18,9 @@ namespace yq {
     struct Directory {
         struct Info;
         uint64_t  id = 0ULL;
-        constexpr auto    operator<=>(const Directory&rhs) const = default;
-        constexpr operator uint64_t() const { return id; }
+        constexpr auto    operator<=>(const Directory&rhs) const noexcept = default;
+        constexpr operator uint64_t() const noexcept { return id; }
     };
 }
+
+YQ_TYPE_DECLARE(yq::Directory)

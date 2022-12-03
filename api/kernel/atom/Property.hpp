@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include <compare>
-#include <cstdint>
+#include <kernel/preamble.hpp>
 
 namespace yq {
     /*! \brief Predefined value for a field
@@ -17,8 +16,9 @@ namespace yq {
     struct Property {
 
         uint64_t  id  = 0ULL;
-        constexpr auto    operator<=>(const Property&rhs) const = default;
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr auto    operator<=>(const Property&rhs) const noexcept = default;
+        constexpr operator uint64_t () const noexcept { return id; }
     };
 }
 
+YQ_TYPE_DECLARE(yq::Property)
