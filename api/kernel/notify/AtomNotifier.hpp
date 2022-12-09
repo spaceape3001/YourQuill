@@ -6,6 +6,11 @@
 
 #pragma once
 
+#include <functional>
+#include <source_location>
+#include <span>
+#include <vector>
+
 #include <basic/CollectionUtils.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/Vector.hpp>
@@ -15,8 +20,6 @@
 #include <kernel/atom/Field.hpp>
 #include <kernel/attr/AttributeDiff.hpp>
 #include <kernel/enum/Change.hpp>
-#include <vector>
-#include <source_location>
 
 namespace yq {
 
@@ -67,4 +70,37 @@ namespace yq {
         Writer&     description(std::string_view);
         AtomNotifier*   importer  = nullptr;
     };
+    
+        /* Not enough worry for separate file of adapters */
+    
+    template <void (*FN)(const AtomChangeData&)>
+    class ACDAtomNofiierAdapter : public AtomNotifier {
+    public:
+        ACDAtomNofiierAdapter(Flag<Change> ch, const AtomSpec& spec, const std::source_location& sl) :
+            AtomNotifier(ch, spec, sl)
+        {
+        }
+        
+        void        change(const AtomChangeData&acd) const override
+        {
+            FN(acd);
+        }
+    };
+    
+    template <void (*FN)(const AtomChangeData&)>
+    AtomNotifier::Writer on_change(const AtomSpec& spec, const std::source_location& sl = std::source_location::current())
+    {
+        return AtomNotifier::Writer(new ACDAtomNofiierAdapter<FN>(all_set<Change>(), spec, sl));
+    }
+
+    template <void (*FN)(const AtomChangeData&)>
+    AtomNotifier::Writer on_change(ChangeFlags chg, const AtomSpec& spec, const std::source_location& sl = std::source_location::current())
+    {
+        return AtomNotifier::Writer(new ACDAtomNofiierAdapter<FN>(chg, spec, sl));
+    }
+    
+    
+    AtomNotifier::Writer on_change(const AtomSpec&, std::function<void(const AtomChangeData&)>, const std::source_location& sl = std::source_location::current());
+    AtomNotifier::Writer on_change(ChangeFlags, const AtomSpec&, std::function<void(const AtomChangeData&)>, const std::source_location& sl = std::source_location::current());
+    
 }

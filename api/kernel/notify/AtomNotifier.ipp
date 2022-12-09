@@ -54,4 +54,34 @@ namespace yq {
             importer -> m_description = d;
         return *this;
     }
+
+    //  ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    class FunctionalAtomNotifyAdapter : public AtomNotifier {
+    public:
+    
+        FunctionalAtomNotifyAdapter(std::function<void(const AtomChangeData&)> fn, Flag<Change> ch, const AtomSpec& spec, const std::source_location& sl) :
+            AtomNotifier(ch, spec, sl), m_function(fn)
+        {
+        }
+    
+        void        change(const AtomChangeData&acd) const
+        {
+            m_function(acd);
+        }
+
+    private:
+        std::function<void(const AtomChangeData&)>  m_function;
+    };
+
+    AtomNotifier::Writer on_change(const AtomSpec&spec, std::function<void(const AtomChangeData&)>fn, const std::source_location& sl)
+    {
+        return AtomNotifier::Writer(new FunctionalAtomNotifyAdapter(fn, all_set<Change>(), spec, sl));
+    }
+    
+    AtomNotifier::Writer on_change(ChangeFlags chg, const AtomSpec& spec, std::function<void(const AtomChangeData&)>fn, const std::source_location& sl)
+    {
+        return AtomNotifier::Writer(new FunctionalAtomNotifyAdapter(fn, chg, spec, sl));
+    }
+    
 }

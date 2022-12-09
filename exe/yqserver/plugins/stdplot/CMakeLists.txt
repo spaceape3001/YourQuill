@@ -14,7 +14,13 @@ set(stdplot_SOURCES
 
 add_library( stdplot SHARED ${stdplot_SOURCES} )
 target_include_directories( stdplot PRIVATE . ) 
-target_link_libraries( stdplot PUBLIC yqtoolbox yqkernel)
+target_link_libraries( stdplot 
+    PUBLIC 
+        yqtoolbox 
+        yqkernel
+        yqhttp
+        asio
+)
 
 LinkTest(stdplot)
 

@@ -12,7 +12,7 @@
 namespace yq {
     AtomSpec        by_class(std::string_view k)
     {
-        return AtomSpec{ k, 0, AtomSpec::ByClassKey };
+        return AtomSpec{ copy(k), 0, AtomSpec::ByClassKey };
     }
     
     AtomSpec        by_class(Class c)
@@ -22,12 +22,36 @@ namespace yq {
     
     AtomSpec        by_field(std::string_view k)
     {
-        return AtomSpec{ k, 0, AtomSpec::ByFieldKey };
+        return AtomSpec{ copy(k), 0, AtomSpec::ByFieldKey };
     }
     
     AtomSpec        by_field(Field f)
     {
         return AtomSpec{ {}, f.id, AtomSpec::ByFieldId };
+    }
+
+    Class   AtomSpec::class_() const
+    {
+        switch(type){
+        case ByClassKey:
+            return cdb::class_(str);
+        case ByClassId:
+            return Class{ u64 };
+        default:
+            return Class();
+        }
+    }
+    
+    Field   AtomSpec::field() const
+    {
+        switch(type){
+        case ByFieldKey:
+            return cdb::field(str);
+        case ByFieldId:
+            return Field{ u64 };
+        default:
+            return Field{};
+        }
     }
 
     bool    AtomSpec::is_class() const
@@ -76,7 +100,7 @@ namespace yq {
             return false;
         case Always:
             return true;
-        case ByfieldId:
+        case ByFieldId:
             return f.id == u64;
         case ByFieldKey:
             return f == cdb::field(str);

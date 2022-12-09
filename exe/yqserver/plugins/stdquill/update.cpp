@@ -188,10 +188,10 @@ namespace {
 
         void    ati_classes(Atom at, KVTree& attrs, bool autoDeleteKeys=true)
         {
-            auto clskeys    = attrs.values_set(svL_aClass);
+            auto clskeys    = copy(attrs.values_set(svL_aClass));
             if(autoDeleteKeys)
                 attrs.erase_all(svL_aClass);
-            return ati_classes(at, clskeys);
+            return ati_classes(at, to_string_view_set(clskeys));
         }
 
         SetChanges<Class>   atu_classes(Atom at, const ClassSet& classes)
@@ -385,9 +385,54 @@ namespace {
 
         //  ---------------------------------------------------------------------------------------------------------------
 
-        void    u_atom_execute(const AtomChangeData&)
+        bool    triggered(const AtomChangeData&acd, const AtomNotifier*an)
         {
-            // TODO.....
+            Class   c;
+            Field   f;
+            const AtomSpec&  as  = an->spec();
+            switch(as.type){
+            case AtomSpec::Never:
+                return false;
+            case AtomSpec::Always:
+                return true;
+            case AtomSpec::ByClassKey:
+            case AtomSpec::ByClassId:
+                c   = as.class_();
+                if(an->change().is_set(Change::Added))
+                    return acd.classes.added.contains(c);
+                if(an->change().is_set(Change::Removed))
+                    return acd.classes.removed.contains(c);
+                if(an->change().is_set(Change::Modified))
+                    return acd.classes.modified.contains(c);
+                if(an->change().is_set(Change::None))
+                    return acd.classes.same.contains(c);
+                return false;
+            case AtomSpec::ByFieldKey:
+            case AtomSpec::ByFieldId:
+                f   = as.field();
+                if(an->change().is_set(Change::Added))
+                    return acd.fields.added.contains(f);
+                if(an->change().is_set(Change::Removed))
+                    return acd.fields.removed.contains(f);
+                if(an->change().is_set(Change::Modified))
+                    return acd.fields.modified.contains(f);
+                if(an->change().is_set(Change::None))
+                    return acd.fields.same.contains(f);
+                return false;
+            default:
+                return false;
+            }
+        }
+
+        void    u_atom_execute(const AtomChangeData&acd)
+        {
+            static const std::vector<const AtomNotifier*>&  notifiers   = AtomNotifier::all();
+            for(const AtomNotifier* an : notifiers){
+                if(!an) [[unlikely]]
+                    continue;
+                if(triggered(acd, an))
+                    an -> change(acd);
+            }
         }
 
         void    i_atom_notify(Atom x, bool recursive=true)
@@ -400,6 +445,8 @@ namespace {
             acd.title           = true;
             acd.abbreviation    = true;
             u_atom_execute(acd);
+            
+            //  If recursive
         }
 
 

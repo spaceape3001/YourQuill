@@ -43,6 +43,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 
 #include "atom/Atom.ipp"
 #include "atom/AtomCDB.ipp"
+#include "atom/AtomSpec.ipp"
 #include "atom/Class.ipp"
 #include "atom/ClassCDB.ipp"
 #include "atom/ClassData.ipp"

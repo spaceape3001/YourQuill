@@ -32,6 +32,10 @@ namespace yq {
         bool    is_class() const;
         bool    is_field() const;
         
+        Class   class_() const;
+        Field   field() const;
+        
+        
         bool    match(Class) const;
         bool    match(Field) const;
         bool    match_field(std::string_view) const;
