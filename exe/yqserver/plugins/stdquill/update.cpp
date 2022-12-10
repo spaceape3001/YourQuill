@@ -181,17 +181,12 @@ namespace {
         }
 
         //! Used for inserting classes on a (known to be) new atom
-        void    ati_classes(Atom at, const string_view_set_t& clskeys)
-        {
-            ati_classes(at, make_set(cdb::db_classes(clskeys)));
-        }
-
         void    ati_classes(Atom at, KVTree& attrs, bool autoDeleteKeys=true)
         {
-            auto clskeys    = copy(attrs.values_set(svL_aClass));
+            auto clsset     = make_set(cdb::db_classes(attrs.values_set(svL_aClass)));
             if(autoDeleteKeys)
                 attrs.erase_all(svL_aClass);
-            return ati_classes(at, to_string_view_set(clskeys));
+            return ati_classes(at, clsset);
         }
 
         SetChanges<Class>   atu_classes(Atom at, const ClassSet& classes)
@@ -233,17 +228,12 @@ namespace {
             return ret;
         }
 
-        SetChanges<Class>   atu_classes(Atom at, const string_view_set_t& clskeys)
-        {
-            return atu_classes(at, make_set(cdb::db_classes(clskeys)));
-        }
-
         SetChanges<Class>   atu_classes(Atom at, KVTree& attrs, bool autoDeleteKeys=true)
         {
-            auto clskeys    = attrs.values_set(svL_aClass);
+            auto clsset     = make_set(cdb::db_classes(attrs.values_set(svL_aClass)));
             if(autoDeleteKeys)
                 attrs.erase_all(svL_aClass);
-            return atu_classes(at, clskeys);
+            return atu_classes(at, clsset);
         }
 
 
@@ -259,17 +249,12 @@ namespace {
             }
         }
 
-        void    ati_tags(Atom at, const string_view_set_t& tagkeys)
-        {
-            ati_tags(at, make_set(cdb::db_tags(tagkeys)));
-        }
-
         void    ati_tags(Atom at, KVTree& attrs, bool autoDeleteKeys=true)
         {
-            auto tagkeys = attrs.values_set(svL_aTag);
+            auto tagset = make_set(cdb::db_tags(attrs.values_set(svL_aTag)));
             if(autoDeleteKeys)
                 attrs.erase_all(svL_aTag);
-            ati_tags(at, tagkeys);
+            ati_tags(at, tagset);
         }
 
         SetChanges<Tag>    atu_tags(Atom at, const TagSet& tags)
@@ -289,17 +274,12 @@ namespace {
             return ret;
         }
 
-        SetChanges<Tag>    atu_tags(Atom at, const string_view_set_t& tagkeys)
-        {
-            return atu_tags(at, make_set(cdb::db_tags(tagkeys)));
-        }
-
         SetChanges<Tag>    atu_tags(AtomChangeData& acd, Atom at, KVTree& attrs, bool autoDeleteKeys=true)
         {
-            auto tagkeys = attrs.values_set(svL_aTag);
+            auto tagset = make_set(cdb::db_tags(attrs.values_set(svL_aTag)));
             if(autoDeleteKeys)
                 attrs.erase_all(svL_aTag);
-            return atu_tags(at, tagkeys);
+            return atu_tags(at, tagset);
         }
 
         //  ---------------------------------------------------------------------------------------------------------------
