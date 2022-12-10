@@ -46,7 +46,7 @@ namespace yq {
 
         std::vector<Atom>   all_atoms(Tag tag, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT atom FROM ATags INNER JOIN Tags ON ATags.atom=Atoms.id WHERE tag=? ORDER BY Atoms.k");
+            static thread_local SQ qs("SELECT atom FROM ATags INNER JOIN Atoms ON ATags.atom=Atoms.id WHERE tag=? ORDER BY Atoms.k");
             static thread_local SQ qu("SELECT atom FROM ATags WHERE tag=?");
             SQ& s = sorted ? qs : qu;
             return s.vec<Atom>(tag.id);
