@@ -63,7 +63,7 @@ namespace yq {
         bool        SQ::boolean()
         {
             auto _af = af();
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_bool(1);
             return false;
         }
@@ -72,7 +72,7 @@ namespace yq {
         {
             auto _af = af();
             bind(1, (int64_t) i);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_bool(1);
             return false;
         }
@@ -82,7 +82,7 @@ namespace yq {
             auto _af = af();
             bind(1, (int64_t) i);
             bind(2, (int64_t) j);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_bool(1);
             return false;
         }
@@ -92,7 +92,7 @@ namespace yq {
             auto _af = af();
             bind(1, (int64_t) i);
             bind(2, j);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_bool(1);
             return false;
         }
@@ -127,7 +127,7 @@ namespace yq {
         std::filesystem::path   SQ::path()
         {
             auto _af = af();
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return std::filesystem::path(v_text(1));
             return std::filesystem::path();
         }
@@ -136,7 +136,7 @@ namespace yq {
         {
             auto _af = af();
             bind(1, (int64_t) i);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return std::filesystem::path(v_text(1));
             return std::filesystem::path();
         }
@@ -144,14 +144,14 @@ namespace yq {
         bool        SQ::present()
         {
             auto _af = af();
-            return step() == Row;
+            return step() == SQResult::Row;
         }
         
         bool        SQ::present(uint64_t i)
         {
             auto _af = af();
             bind(1, (int64_t) i);
-            return step() == Row;
+            return step() == SQResult::Row;
         }
         
         bool        SQ::present(uint64_t i, uint64_t j)
@@ -159,7 +159,7 @@ namespace yq {
             auto _af = af();
             bind(1, (int64_t) i);
             bind(2, (int64_t) j);
-            return step() == Row;
+            return step() == SQResult::Row;
         }
         
 
@@ -168,7 +168,7 @@ namespace yq {
             auto _af = af();
             bind(1, (int64_t) i);
             bind(2, j);
-            return step() == Row;
+            return step() == SQResult::Row;
         }
 
         size_t      SQ::size()
@@ -195,7 +195,7 @@ namespace yq {
         {
             string_set_t  ret;
             auto _af = af();
-            while(step() == Row){
+            while(step() == SQResult::Row){
                 ret << copy(v_text(1));
             }
             return ret;
@@ -206,7 +206,7 @@ namespace yq {
             StringSet  ret;
             auto _af = af();
             bind(1, (int64_t) i);
-            while(step() == Row){
+            while(step() == SQResult::Row){
                 ret << copy(v_text(1));
             }
             return ret;
@@ -215,7 +215,7 @@ namespace yq {
         std::string     SQ::str()
         {
             auto _af = af();
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return copy(v_text(1));
             return std::string();
         }
@@ -224,7 +224,7 @@ namespace yq {
         {
             auto _af = af();
             bind(1, (int64_t) i);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return copy(v_text(1));
             return std::string();
         }
@@ -233,7 +233,7 @@ namespace yq {
         uint64_t    SQ::u64()
         {
             auto _af = af();
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_uint64(1);
             return 0ULL;
         }
@@ -242,7 +242,7 @@ namespace yq {
         {
             auto _af = af();
             bind(1, (int64_t) i);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_uint64(1);
             return 0ULL;
         }
@@ -252,7 +252,7 @@ namespace yq {
             auto _af = af();
             bind(1, (int64_t) i);
             bind(2, (int64_t) j);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return (uint64_t) v_int64(1);
             return 0ULL;
         }
@@ -262,7 +262,7 @@ namespace yq {
             auto _af = af();
             bind(1, (int64_t) i);
             bind(2, j);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_uint64(1);
             return 0ULL;
         }
@@ -271,7 +271,7 @@ namespace yq {
         {
             auto _af = af();
             bind(1, i);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_uint64(1);
             return 0ULL;
         }
@@ -281,7 +281,7 @@ namespace yq {
         {
             auto _af = af();
             bind(1, i);
-            if(step() == Row)
+            if(step() == SQResult::Row)
                 return v_uint64(1);
             return 0ULL;
         }

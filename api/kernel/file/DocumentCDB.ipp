@@ -100,7 +100,7 @@ namespace yq {
                 return ret;
             } else {
                 s.bind(1,k);
-                if(s.step() == SqlQuery::Row){
+                if(s.step() == SQResult::Row){
                     Document    ret{s.v_uint64(1)};
                     // separate because I occasionally need to print during debugging
                     return ret;
@@ -311,7 +311,7 @@ namespace yq {
             Document::Info        ret;
             static thread_local SQ    s("SELECT k, sk, name, skb, folder, suffix, removed, hidden, icon, skc FROM Documents WHERE id=?");
             s.bind(1, d.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.key     = s.v_text(1);
                 ret.skey    = s.v_text(2);
                 ret.name    = s.v_text(3);
@@ -343,7 +343,7 @@ namespace yq {
             static thread_local SQ  s("SELECT mime FROM Documents WHERE id=? LIMIT 1");
             auto af = s.af();
             s.bind(1, d.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 return (ContentType::enum_t) s.v_int(1);
             } else 
                 return ContentType();
@@ -360,7 +360,7 @@ namespace yq {
             static thread_local SQ    s("SELECT name,icon,k FROM Documents WHERE id=?");
             auto s_af = s.af();
             s.bind(1, d.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 NKI  ret;
                 ret.name    = s.v_text(1);
                 ret.icon    = Image(s.v_uint64(2)) ;
@@ -389,7 +389,7 @@ namespace yq {
             static thread_local SQ    s("SELECT DISTINCT root FROM Fragments WHERE document=?");
             auto s_af       = s.af();
             s.bind(1, d.id);
-            while(s.step() == SqlQuery::Row){
+            while(s.step() == SQResult::Row){
                 const Root*r    = wksp::root(s.v_uint64(1));
                 if(r)
                     ret.push_back(r);

@@ -36,7 +36,7 @@ namespace yq {
             inline std::vector<Class::Rank>     exec_class_rank_vector(SQ& s)
             {
                 std::vector<Class::Rank>    ret;
-                while(s.step() == SqlQuery::Row)
+                while(s.step() == SQResult::Row)
                     ret.push_back({ Class(s.v_uint64(1)), s.v_int64(2)});
                 s.reset();
                 return ret;
@@ -560,7 +560,7 @@ namespace yq {
             static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps, category, binding FROM Classes WHERE id=?");
             auto s_af = s.af();
             s.bind(1, c.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.key         = s.v_string(1);
                 ret.doc         = Document(c.id);
                 ret.edge        = s.v_bool(2);
@@ -697,7 +697,7 @@ namespace yq {
             static thread_local SQ    s("SELECT name,icon,k FROM Classes WHERE id=?");
             auto s_af = s.af();
             s.bind(1, c.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 NKI  ret;
                 ret.name    = s.v_string(1);
                 ret.icon    = Image{s.v_uint64(2)};

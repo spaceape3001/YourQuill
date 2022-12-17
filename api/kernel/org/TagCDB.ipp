@@ -183,7 +183,7 @@ namespace yq {
             static thread_local SQ    s("SELECT brief,k,name,icon,leaf FROM Tags WHERE id=?");
             auto s_af = s.af();
             s.bind(1, t.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.brief       = s.v_text(1);
                 ret.doc         = Document(t.id);
                 ret.key         = s.v_text(2);
@@ -227,7 +227,7 @@ namespace yq {
             static thread_local SQ    s("SELECT name,icon,k FROM Tags WHERE id=?");
             auto s_af = s.af();
             s.bind(1, t.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 NKI  ret;
                 ret.name    = s.v_text(1);
                 ret.icon    = Image(s.v_uint64(2)) ;
@@ -263,7 +263,7 @@ namespace yq {
             
             i.bind(1, k);
             i.bind(2, doc.id);
-            if(i.step(false) == SqlQuery::Done){
+            if(i.step(false) == SQResult::Done){
                 if(wasCreated)
                     *wasCreated = true;
                 return Tag{doc.id};

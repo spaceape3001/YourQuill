@@ -113,7 +113,7 @@ namespace yq {
             static thread_local SQ s("SELECT k,value,uid,idx,doc,parent FROM Attributes WHERE id=?");
             auto s_af = s.af();
             s.bind(1, a.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.key    = s.v_string(1);
                 ret.value  = s.v_string(2);
                 ret.uid    = s.v_string(3);
@@ -136,7 +136,7 @@ namespace yq {
             static thread_local SQ s("SELECT k,value,uid,id,idx FROM Attributes WHERE parent=? ORDER BY idx");
             auto s_af = s.af();
             s.bind(1, a.id);
-            while(s.step() == SqlQuery::Row){
+            while(s.step() == SQResult::Row){
                 ret.push_back(Attribute::KVUA{
                     s.v_string(1),
                     s.v_string(2),
@@ -155,7 +155,7 @@ namespace yq {
             static thread_local SQ s("SELECT k,value,uid,id,idx FROM Attributes WHERE doc=? AND parent=0 ORDER BY idx");
             auto s_af = s.af();
             s.bind(1, d.id);
-            while(s.step() == SqlQuery::Row){
+            while(s.step() == SQResult::Row){
                 ret.push_back(Attribute::KVUA{
                     s.v_string(1),
                     s.v_string(2),

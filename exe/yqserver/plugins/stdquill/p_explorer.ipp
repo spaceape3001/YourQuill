@@ -84,7 +84,7 @@ namespace {
         SQ& sf  = (opts&HIDDEN) ? sf2 : sf1;
         auto af = sf.af();
         sf.bind(1, x.id);
-        while(sf.step() == SqlQuery::Row){
+        while(sf.step() == SQResult::Row){
             ExplorerEntry   ee;
             ee.folder   = { sf.v_uint64(1) };
             ee.type     = ExplorerEntry::IsFolder;
@@ -103,7 +103,7 @@ namespace {
         auto bf = sd.af();
         sd.bind(1, x.id);
         
-        while(sd.step() == SqlQuery::Row){
+        while(sd.step() == SQResult::Row){
             ExplorerEntry   ee;
             ee.doc      = { sd.v_uint64(1) };
             ee.skey     = sd.v_string(2);

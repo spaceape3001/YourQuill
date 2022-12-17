@@ -152,7 +152,7 @@ namespace yq {
             static thread_local SQ s("SELECT k, title FROM Leafs WHERE id=?");
             auto s_af = s.af();
             s.bind(1, l.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.doc     = Document(l.id);
                 ret.key     = s.v_string(1);
                 ret.title   = s.v_string(2);
@@ -284,7 +284,7 @@ namespace yq {
             static thread_local SQ    s("SELECT title,icon,k FROM Leafs WHERE id=?");
             auto s_af = s.af();
             s.bind(1, l.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 NKI  ret;
                 ret.name    = s.v_string(1);
                 ret.icon    = Image(s.v_uint64(2)) ;

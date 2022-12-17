@@ -88,7 +88,7 @@ namespace yq {
                 return Directory(i.last_id());
             } else {
                 s.bind(1, rt->path);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return Directory(s.v_uint64(1));
                 cdbError << "Unable to get directory ID";
                 return Directory();

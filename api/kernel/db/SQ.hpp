@@ -107,7 +107,7 @@ namespace yq {
             {
                 std::set<U>  ret;
                 auto _af  = af();
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.insert(U{v_uint64(1)});
                 }
                 return ret;
@@ -119,7 +119,7 @@ namespace yq {
                 std::set<U>  ret;
                 auto _af  = af();
                 bind(1, (int64_t) i);
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.insert(U{v_uint64(1)});
                 }
                 return ret;
@@ -132,7 +132,7 @@ namespace yq {
                 auto _af  = af();
                 bind(1, (int64_t) i);
                 bind(2, (int64_t) j);
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.insert(U{v_uint64(1)});
                 }
                 return ret;
@@ -162,7 +162,7 @@ namespace yq {
             {
                 std::vector<U>  ret;
                 auto _af  = af();
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.push_back(U{v_uint64(1)});
                 }
                 return ret;
@@ -174,7 +174,7 @@ namespace yq {
                 std::vector<U>  ret;
                 auto _af  = af();
                 bind(1, (int64_t) i);
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.push_back(U{v_uint64(1)});
                 }
                 return ret;
@@ -187,7 +187,7 @@ namespace yq {
                 auto _af  = af();
                 bind(1, (int64_t) i);
                 bind(2, (int64_t) j);
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.push_back(U{v_uint64(1)});
                 }
                 return ret;
@@ -200,7 +200,7 @@ namespace yq {
                 auto _af  = af();
                 bind(1, (int64_t) i);
                 bind(2, j);
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.push_back(U{v_uint64(1)});
                 }
                 return ret;
@@ -212,7 +212,7 @@ namespace yq {
                 std::vector<U>  ret;
                 auto _af  = af();
                 bind(1, i);
-                while(step() == Row){
+                while(step() == SQResult::Row){
                     ret.push_back(U{v_uint64(1)});
                 }
                 return ret;

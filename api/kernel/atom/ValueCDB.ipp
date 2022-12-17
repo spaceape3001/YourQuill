@@ -40,14 +40,14 @@ namespace yq {
 
             i.bind(1, field.id);
             i.bind(2, data);
-            if(i.step(false) == SqlQuery::Done){
+            if(i.step(false) == SQResult::Done){
                 if(wasCreated)
                     *wasCreated = true;
                 return Value{(uint64_t) i.last_id()};
             } else {
                 s.bind(1, field.id);
                 s.bind(2, data);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return Value{s.v_uint64(1)};
                 cdbError << "Unable to get value ID";
                 return Value();
@@ -79,7 +79,7 @@ namespace yq {
             static thread_local SQ s("SELECT field, brief, data FROM Vals WHERE id=?");
             auto af = s.af();
             s.bind(1, v.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.field   = Field{ s.v_uint64(1) };
                 ret.brief   = s.v_string(2);
                 ret.data    = s.v_string(3);

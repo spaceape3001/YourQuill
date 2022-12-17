@@ -68,7 +68,7 @@ namespace yq {
                 static thread_local SQ s("SELECT large FROM Images WHERE id=?");
                 auto s_af   = s.af();
                 s.bind(1, img.id);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return s.v_bytes(1);
                 return ByteArray();
             }
@@ -78,7 +78,7 @@ namespace yq {
                 static thread_local SQ s("SELECT medium FROM Images WHERE id=?");
                 auto s_af   = s.af();
                 s.bind(1, img.id);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return s.v_bytes(1);
                 return ByteArray();
             }
@@ -88,7 +88,7 @@ namespace yq {
                 static thread_local SQ s("SELECT small FROM Images WHERE id=?");
                 auto s_af   = s.af();
                 s.bind(1, img.id);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return s.v_bytes(1);
                 return ByteArray();
             }
@@ -208,7 +208,7 @@ namespace yq {
             static thread_local SQ s("SELECT type FROM Images WHERE id=?");
             auto s_af   = s.af();
             s.bind(1, i.id);
-            if(s.step() == SqlQuery::Row)
+            if(s.step() == SQResult::Row)
                 return ContentType( s.v_int(1));
             return ContentType();
         }

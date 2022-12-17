@@ -919,8 +919,8 @@ namespace {
         h << "</tr>\n";
         
         count   = 0;
-        SqlQuery::Result    r;
-        while((r = sql.step()) == SqlQuery::Row){
+        SQResult    r;
+        while((r = sql.step()) == SQResult::Row){
             ++ count;
             h << "<tr>";
             for(i=1;i<=cc;++i){

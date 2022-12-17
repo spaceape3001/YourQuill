@@ -126,7 +126,7 @@ namespace yq {
             auto s_af = s.af();
             std::vector<DocString>  ret;
             s.bind(1, f.id);
-            while(s.step() == SqlQuery::Row)
+            while(s.step() == SQResult::Row)
                 ret.push_back(DocString{ s.v_uint64(1), s.v_string(2) });
             return ret;
         }
@@ -180,7 +180,7 @@ namespace yq {
             std::vector<FolderStr>      ret;
             auto   s_af = s.af();
             s.bind(1, f.id);
-            while(s.step() == SqlQuery::Row)
+            while(s.step() == SQResult::Row)
                 ret.push_back(FolderStr{ s.v_uint64(1), s.v_string(2) });
             return ret;
         }
@@ -247,7 +247,7 @@ namespace yq {
                 return Folder{(uint64_t) i.last_id()};
             } else {
                 s.bind(1,k);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return Folder{s.v_uint64(1)};
                 cdbError << "Unable to get folder ID";
                 return Folder{};
@@ -307,7 +307,7 @@ namespace yq {
             auto af = s.af();
             s.bind(1, fo.id);
             s.bind(2, r->id);
-            if(s.step() == SqlQuery::Row)
+            if(s.step() == SQResult::Row)
                 return Directory{ s.v_uint64(1)};
             return Directory{};
         }
@@ -368,7 +368,7 @@ namespace yq {
             Folder::Info        ret;
             static thread_local SQ    s("SELECT k, sk, parent, name, brief, hidden, removed, icon FROM Folders WHERE id=?");
             s.bind(1,f.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.key         = s.v_text(1);
                 ret.skey        = s.v_text(2);
                 ret.parent      = Folder(s.v_uint64(3));
@@ -413,7 +413,7 @@ namespace yq {
             static thread_local SQ    s("SELECT name,icon,k FROM Folders WHERE id=?");
             auto s_af = s.af();
             s.bind(1, f.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 NKI  ret;
                 ret.name    = s.v_text(1);
                 ret.icon    = Image(s.v_uint64(2)) ;
@@ -443,7 +443,7 @@ namespace yq {
             static thread_local SQ    s("SELECT DISTINCT root FROM Directories WHERE folder=?");
             auto s_af       = s.af();
             s.bind(1, f.id);
-            while(s.step() == SqlQuery::Row){
+            while(s.step() == SQResult::Row){
                 const Root*r    = wksp::root(s.v_uint64(1));
                 if(r)
                     ret.push_back(r);

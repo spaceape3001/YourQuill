@@ -87,7 +87,7 @@ namespace yq {
                 return { Fragment((uint64_t) i.last_id()), a };
             } else {
                 s.bind(1,p);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return { Fragment(s.v_uint64(1)), a };
                 cdbError << "Unable to get fragment ID";
                 return {};
@@ -244,7 +244,7 @@ namespace yq {
 
             static thread_local SQ    s("SELECT document, dir, folder, modified, name, path, removed, rescan, bytes, hidden, root FROM Fragments WHERE id=?");
             s.bind(1, f.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.document    = Document(s.v_uint64(1));
                 ret.directory   = Directory(s.v_uint64(2));
                 ret.folder      = Folder(s.v_uint64(3));
@@ -319,7 +319,7 @@ namespace yq {
             static thread_local SQ    s("SELECT root FROM Fragments WHERE id=?");
             auto s_af   = s.af();
             s.bind(1, f.id);
-            if(s.step() == SqlQuery::Row)
+            if(s.step() == SQResult::Row)
                 return wksp::root(s.v_uint64(1));
             return nullptr;
         }

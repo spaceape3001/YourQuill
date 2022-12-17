@@ -237,7 +237,7 @@ namespace yq {
             static thread_local SQ s("SELECT k, class, name, pkey, plural, brief, category FROM Fields WHERE id=?");
             auto s_af = s.af();
             s.bind(1, f.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.key     = s.v_string(1);
                 ret.class_  = Class(s.v_uint64(2));
                 ret.name    = s.v_string(3);
@@ -341,7 +341,7 @@ namespace yq {
             static thread_local SQ    s("SELECT name,icon,k FROM Fields WHERE id=?");
             auto s_af = s.af();
             s.bind(1, f.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 NKI  ret;
                 ret.name    = s.v_string(1);
                 ret.icon    = Image(s.v_uint64(2)) ;

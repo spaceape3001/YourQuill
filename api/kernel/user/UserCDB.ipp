@@ -47,7 +47,7 @@ namespace yq {
         {
             static thread_local SQ s("SELECT 1 FROM Users LIMIT 1");
             auto af = s.af();
-            return s.step() == SqlQuery::Row;
+            return s.step() == SQResult::Row;
         }
 
         std::string             brief(User u)
@@ -73,7 +73,7 @@ namespace yq {
             
             i.bind(1, k);
             i.bind(2, doc.id);
-            if(i.step(false) == SqlQuery::Done){
+            if(i.step(false) == SQResult::Done){
                 if(wasCreated)
                     *wasCreated = true;
                 return User{doc.id};
@@ -125,7 +125,7 @@ namespace yq {
             static thread_local SQ  s("SELECT k,name,icon,brief,is_admin,is_owner,is_reader,is_writer FROM Users WHERE id=?");
             auto s_af = s.af();
             s.bind(1, u.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.key     = s.v_text(1);
                 ret.name    = s.v_text(2);
                 ret.doc     = Document{u.id};

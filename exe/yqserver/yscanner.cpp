@@ -218,34 +218,34 @@ void    stage3_documents()
         case FileSpec::ByCacheDoc:
             af  = sn.autoFinish();
             sn.bind(1, fs.str);
-            while(sn.step() == SqlQuery::Row){
+            while(sn.step() == SQResult::Row){
                 h -> invoke(Document{ sn.v_uint64(1)});
             }
             break;
         case FileSpec::ByCacheExt:
             af  = sx.autoFinish();
             sx.bind(1, fs.str);
-            while(sx.step() == SqlQuery::Row)
+            while(sx.step() == SQResult::Row)
                 h -> invoke(Document{ sx.v_uint64(1)});
             break;
         case FileSpec::ByFolder:
             af  = sf.autoFinish();
             sf.bind(1, fs.u64);
-            while(sx.step() == SqlQuery::Row)
+            while(sx.step() == SQResult::Row)
                 h -> invoke(Document{ sx.v_uint64(1)});
             break;
         case FileSpec::ByFolderDoc:
             af  = sfn.autoFinish();
             sfn.bind(1, fs.u64);
             sfn.bind(2, fs.str);
-            while(sfn.step() == SqlQuery::Row)
+            while(sfn.step() == SQResult::Row)
                 h -> invoke(Document{ sfn.v_uint64(1)});
             break;
         case FileSpec::ByFolderExt:
             af  = sfx.autoFinish();
             sfx.bind(1, fs.u64);
             sfx.bind(2, fs.str);
-            while(sfx.step() == SqlQuery::Row)
+            while(sfx.step() == SQResult::Row)
                 h -> invoke(Document{ sfx.v_uint64(1)});
             break;
         default:

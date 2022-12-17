@@ -109,7 +109,7 @@ namespace yq {
             static thread_local SQ    qu("SELECT id,name FROM Directories WHERE parent=?");
             SQ& s = sorted ? qs : qu;
             s.bind(1,dir.id);
-            while(s.step() == SqlQuery::Row){
+            while(s.step() == SQResult::Row){
                 ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
             }
             s.reset();
@@ -184,7 +184,7 @@ namespace yq {
                 return { Directory((uint64_t) i.last_id()), f};
             } else {
                 s.bind(1, p);
-                if(s.step() == SqlQuery::Row)
+                if(s.step() == SQResult::Row)
                     return { Directory(s.v_uint64(1)), f };
                 cdbError << "Unable to get directory ID";
                 return {};
@@ -270,7 +270,7 @@ namespace yq {
             Directory::Info        ret;
             static thread_local SQ    s("SELECT folder, name, parent, path, removed, root, hidden FROM Directories WHERE id=?");
             s.bind(1, d.id);
-            if(s.step() == SqlQuery::Row){
+            if(s.step() == SQResult::Row){
                 ret.folder  = Folder(s.v_uint64(1));
                 ret.name    = s.v_text(2);
                 ret.parent  = Directory(s.v_uint64(3));
@@ -319,7 +319,7 @@ namespace yq {
             static thread_local SQ    s("SELECT root FROM Directories WHERE id=?");
             auto s_lk   = s.af();
             s.bind(1, d.id);
-            if(s.step() == SqlQuery::Row)
+            if(s.step() == SQResult::Row)
                 return wksp::root(s.v_uint64(1));
             return nullptr;
         }
