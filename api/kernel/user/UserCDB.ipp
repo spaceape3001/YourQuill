@@ -12,12 +12,12 @@
 #include <basic/Logging.hpp>
 #include <kernel/db/IDLock.hpp>
 //#include <kernel/db/NKI.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <kernel/image/ImageCDB.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 namespace yq {
@@ -31,28 +31,28 @@ namespace yq {
 
         Vector<User>       all_users(Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT id FROM Users ORDER BY k");
-            static thread_local SQ    qu("SELECT id FROM Users");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Users ORDER BY k");
+            static thread_local CacheQuery    qu("SELECT id FROM Users");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<User>();
         }
         
         size_t                  all_users_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Users");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Users");
             return s.size();
         }
 
         bool                    any_users()
         {
-            static thread_local SQ s("SELECT 1 FROM Users LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Users LIMIT 1");
             auto af = s.af();
             return s.step() == SQResult::Row;
         }
 
         std::string             brief(User u)
         {
-            static thread_local SQ s("SELECT brief FROM Users WHERE id=?");
+            static thread_local CacheQuery s("SELECT brief FROM Users WHERE id=?");
             return s.str(u.id);
         }
 
@@ -68,7 +68,7 @@ namespace yq {
             if(k.empty())
                 return User();
             
-            static thread_local SQ    i("INSERT OR FAIL INTO Users (k,id) VALUES (?,?)");
+            static thread_local CacheQuery    i("INSERT OR FAIL INTO Users (k,id) VALUES (?,?)");
             auto i_lk   = i.af();
             
             i.bind(1, k);
@@ -109,20 +109,20 @@ namespace yq {
 
         bool                    exists_user(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Users WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Users WHERE id=? LIMIT 1");
             return s.present(i);
         }
         
         Image                   icon(User u)
         {
-            static thread_local SQ    s("SELECT icon FROM Users WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT icon FROM Users WHERE id=? LIMIT 1");
             return s.as<Image>(u.id);
         }
         
         User::Info              info(User u, bool autoKeyToName)
         {
             User::Info  ret;
-            static thread_local SQ  s("SELECT k,name,icon,brief,is_admin,is_owner,is_reader,is_writer FROM Users WHERE id=?");
+            static thread_local CacheQuery  s("SELECT k,name,icon,brief,is_admin,is_owner,is_reader,is_writer FROM Users WHERE id=?");
             auto s_af = s.af();
             s.bind(1, u.id);
             if(s.step() == SQResult::Row){
@@ -144,38 +144,38 @@ namespace yq {
 
         bool                    is_admin(User u)
         {
-            static thread_local SQ s("SELECT is_admin FROM Users WHERE id=?");
+            static thread_local CacheQuery s("SELECT is_admin FROM Users WHERE id=?");
             return s.boolean(u.id);
         }
         
         bool                    is_owner(User u)
         {
-            static thread_local SQ s("SELECT is_owner FROM Users WHERE id=?");
+            static thread_local CacheQuery s("SELECT is_owner FROM Users WHERE id=?");
             return s.boolean(u.id);
         }
         
         bool                    is_reader(User u)
         {
-            static thread_local SQ s("SELECT is_reader FROM Users WHERE id=?");
+            static thread_local CacheQuery s("SELECT is_reader FROM Users WHERE id=?");
             return s.boolean(u.id);
         }
         
         bool                    is_writer(User u)
         {
-            static thread_local SQ s("SELECT is_writer FROM Users WHERE id=?");
+            static thread_local CacheQuery s("SELECT is_writer FROM Users WHERE id=?");
             return s.boolean(u.id);
         }
         
 
         std::string             key(User u)
         {
-            static thread_local SQ    s("SELECT k FROM Users WHERE id=?");
+            static thread_local CacheQuery    s("SELECT k FROM Users WHERE id=?");
             return s.str(u.id);
         }
         
         std::string             label(User u)
         {
-            static thread_local SQ    s("SELECT ifnull(name,k) FROM Users WHERE id=?");
+            static thread_local CacheQuery    s("SELECT ifnull(name,k) FROM Users WHERE id=?");
             return s.str(u.id);
         }
 
@@ -236,7 +236,7 @@ namespace yq {
         
         std::string             name(User u)
         {
-            static thread_local SQ    s("SELECT name FROM Users WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name FROM Users WHERE id=?");
             return s.str(u.id);
         }
 
@@ -264,7 +264,7 @@ namespace yq {
 
         User                    user(std::string_view k)
         {
-            static thread_local SQ    s("SELECT id FROM Users WHERE k=?");
+            static thread_local CacheQuery    s("SELECT id FROM Users WHERE k=?");
             return s.as<User>(k);
         }
         

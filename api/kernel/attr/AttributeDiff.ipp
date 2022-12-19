@@ -13,7 +13,7 @@
 #include <basic/IntRange.hpp>
 
 #include <kernel/bit/KeyValue.hpp>
-#include <kernel/db/SQ.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 
 #include <cassert>
 

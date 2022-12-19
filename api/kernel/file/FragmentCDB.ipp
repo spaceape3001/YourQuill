@@ -11,33 +11,33 @@
 #include <basic/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <kernel/db/IDLock.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DirectoryCDB.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/Root.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 namespace yq {
     namespace cdb {
         std::vector<Fragment>    all_fragments(Sorted sorted)
         {
-            static thread_local SQ qs("SELECT id FROM Fragments ORDER BY path");
-            static thread_local SQ qu("SELECT id FROM Fragments");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT id FROM Fragments ORDER BY path");
+            static thread_local CacheQuery qu("SELECT id FROM Fragments");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Fragment>();
         }
         
         size_t              all_fragments_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Fragments");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Fragments");
             return s.size();
         }
         
         std::vector<Fragment>    all_fragments_suffix(std::string_view sfx, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
-            static thread_local SQ qu("SELECT id FROM Fragments WHERE suffix=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT id FROM Fragments WHERE suffix=? ORDER BY path");
+            static thread_local CacheQuery qu("SELECT id FROM Fragments WHERE suffix=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Fragment>(sfx);
         }
 
@@ -68,8 +68,8 @@ namespace yq {
             const Root*     rt  = root(dirParent);
             
             
-            static thread_local SQ    i("INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder,suffix) VALUES (?,?,?,?,?,?,?)");
-            static thread_local SQ    s("SELECT id FROM Fragments WHERE path=?");
+            static thread_local CacheQuery    i("INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder,suffix) VALUES (?,?,?,?,?,?,?)");
+            static thread_local CacheQuery    s("SELECT id FROM Fragments WHERE path=?");
             auto s_lk   = s.af();
             auto i_lk   = i.af();
             
@@ -96,13 +96,13 @@ namespace yq {
         
         Directory           directory(Fragment f)
         {
-            static thread_local SQ    s("SELECT dir FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT dir FROM Fragments WHERE id=?");
             return s.as<Directory>(f.id);
         }
 
         Document            document(Fragment f)
         {
-            static thread_local SQ    s("SELECT document FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT document FROM Fragments WHERE id=?");
             return s.as<Document>(f.id);
         }
 
@@ -113,7 +113,7 @@ namespace yq {
                 
             Document    doc = document(f);
             {
-                static thread_local SQ d("DELETE FROM Fragments WHERE id=?");
+                static thread_local CacheQuery d("DELETE FROM Fragments WHERE id=?");
                 d.bind(1, f.id);
                 d.step();
                 d.reset();
@@ -124,7 +124,7 @@ namespace yq {
             
             size_t  fc  = fragments_count(doc);
             if(!fc){
-                static thread_local SQ d("DELETE FROM Documents WHERE id=?");
+                static thread_local CacheQuery d("DELETE FROM Documents WHERE id=?");
                 d.bind(1, doc.id);
                 d.step();
                 d.reset();
@@ -138,13 +138,13 @@ namespace yq {
 
         bool                exists_fragment(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Fragments WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Fragments WHERE id=? LIMIT 1");
             return s.present(i);
         }
         
         Folder              folder(Fragment f)
         {
-            static thread_local SQ    s("SELECT folder FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT folder FROM Fragments WHERE id=?");
             return s.as<Folder>(f.id);
         }
 
@@ -206,13 +206,13 @@ namespace yq {
 
         Fragment            fragment(const std::filesystem::path&k)
         {
-            static thread_local SQ   s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
+            static thread_local CacheQuery   s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
             return s.as<Fragment>(k);
         }
 
         Fragment            fragment(std::string_view k)
         {
-            static thread_local SQ    s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT id FROM Fragments WHERE path=? LIMIT 1");
             return s.as<Fragment>(k);
         }
         
@@ -234,7 +234,7 @@ namespace yq {
 
         bool                hidden(Fragment f)
         {
-            static thread_local SQ    s("SELECT hidden FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT hidden FROM Fragments WHERE id=?");
             return s.boolean(f.id);
         }
         
@@ -242,7 +242,7 @@ namespace yq {
         {
             Fragment::Info        ret;
 
-            static thread_local SQ    s("SELECT document, dir, folder, modified, name, path, removed, rescan, bytes, hidden, root FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT document, dir, folder, modified, name, path, removed, rescan, bytes, hidden, root FROM Fragments WHERE id=?");
             s.bind(1, f.id);
             if(s.step() == SQResult::Row){
                 ret.document    = Document(s.v_uint64(1));
@@ -273,13 +273,13 @@ namespace yq {
 
         uint64_t                modified(Fragment f)
         {
-            static thread_local SQ    s("SELECT modified FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT modified FROM Fragments WHERE id=?");
             return s.u64(f.id);
         }
         
         std::string             name(Fragment f)
         {
-            static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name FROM Fragments WHERE id=?");
             return s.str(f.id);
         }
         
@@ -290,19 +290,19 @@ namespace yq {
 
         std::filesystem::path   path(Fragment f)
         {
-            static thread_local SQ    s("SELECT path FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT path FROM Fragments WHERE id=?");
             return s.path(f.id);
         }
         
         bool                removed(Fragment f)
         {
-            static thread_local SQ    s("SELECT removed FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT removed FROM Fragments WHERE id=?");
             return s.boolean(f.id);
         }
         
         void                rescan(Fragment f)
         {
-            static thread_local SQ    u("UPDATE Fragments SET rescan=1 WHERE id=?");
+            static thread_local CacheQuery    u("UPDATE Fragments SET rescan=1 WHERE id=?");
             u.bind(1, f.id);
             u.step();
             u.reset();
@@ -310,13 +310,13 @@ namespace yq {
         
         bool                rescanning(Fragment f)
         {
-            static thread_local SQ    s("SELECT rescan FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT rescan FROM Fragments WHERE id=?");
             return s.boolean(f.id);
         }
 
         const Root*         root(Fragment f)
         {
-            static thread_local SQ    s("SELECT root FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT root FROM Fragments WHERE id=?");
             auto s_af   = s.af();
             s.bind(1, f.id);
             if(s.step() == SQResult::Row)
@@ -326,13 +326,13 @@ namespace yq {
 
         size_t              size(Fragment f)
         {
-            static thread_local SQ    s("SELECT bytes FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT bytes FROM Fragments WHERE id=?");
             return s.size(f.id);
         }
         
         std::string             skey(Fragment f)
         {
-            static thread_local SQ    s("SELECT name FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name FROM Fragments WHERE id=?");
             return s.str(f.id);
         }
         
@@ -344,7 +344,7 @@ namespace yq {
 
         Extension              suffix(Fragment f)
         {
-            static thread_local SQ    s("SELECT suffix FROM Fragments WHERE id=?");
+            static thread_local CacheQuery    s("SELECT suffix FROM Fragments WHERE id=?");
             return { s.str(f.id) };
         }
 
@@ -353,7 +353,7 @@ namespace yq {
             std::filesystem::path   p           = path(f);
             SizeTimestamp   sz  = file_size_and_timestamp(p.c_str());
         
-            static thread_local SQ    u("UPDATE Fragments SET bytes=?,modified=?,removed=?,rescan=0 WHERE id=?");
+            static thread_local CacheQuery    u("UPDATE Fragments SET bytes=?,modified=?,removed=?,rescan=0 WHERE id=?");
             u.bind(1, sz.size);
             u.bind(2, sz.nanoseconds());
             u.bind(3, !sz.exists);

@@ -12,7 +12,6 @@
 #include <basic/TextUtils.hpp>
 #include <kernel/db/NKI.hpp>
 #include <kernel/db/IDLock.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
@@ -20,6 +19,7 @@
 #include <kernel/image/ImageCDB.hpp>
 #include <kernel/leaf/LeafFile.hpp>
 #include <kernel/org/TagCDB.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace cdb {
@@ -32,28 +32,28 @@ namespace yq {
         
         std::vector<Atom>        all_leaf_atoms(Sorted sorted)
         {
-            static thread_local SQ qs("SELECT id FROM Atoms WHERE isLeaf=1 ORDER BY k");
-            static thread_local SQ qu("SELECT id FROM Atoms WHERE leaf!=0");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT id FROM Atoms WHERE isLeaf=1 ORDER BY k");
+            static thread_local CacheQuery qu("SELECT id FROM Atoms WHERE leaf!=0");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Atom>();
         }
         
         size_t              all_leaf_atoms_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Atoms WHERE leaf!=0");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Atoms WHERE leaf!=0");
             return s.size();
         }
         
         namespace {
             std::vector<Leaf>    all_leafs_sorted()
             {
-                static thread_local SQ s("SELECT id FROM Leafs ORDER BY k");
+                static thread_local CacheQuery s("SELECT id FROM Leafs ORDER BY k");
                 return s.vec<Leaf>();
             }
 
             std::vector<Leaf>    all_leafs_unsorted()
             {
-                static thread_local SQ s("SELECT id FROM Leafs");
+                static thread_local CacheQuery s("SELECT id FROM Leafs");
                 return s.vec<Leaf>();
             }
         }
@@ -65,14 +65,14 @@ namespace yq {
         
         size_t              all_leafs_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Leafs");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Leafs");
             return s.size();
         }
         
 
         Atom                atom(Leaf l)
         {
-            static thread_local SQ s("SELECT atom FROM Leafs WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT atom FROM Leafs WHERE id=? LIMIT 1");
             return s.as<Atom>(l.id);
         }
         
@@ -95,7 +95,7 @@ namespace yq {
                 return Leaf();
             }
             
-            static thread_local SQ i("INSERT INTO Leafs (id,k) VALUES (?,?)");
+            static thread_local CacheQuery i("INSERT INTO Leafs (id,k) VALUES (?,?)");
             auto i_af   = i.af();
             i.bind(1,doc.id);
             i.bind(2, k);
@@ -134,14 +134,14 @@ namespace yq {
 
         bool                exists_leaf(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Leafs WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Leafs WHERE id=? LIMIT 1");
             return s.present(i);
         }
 
         
         Image               icon(Leaf l)
         {
-            static thread_local SQ    s("SELECT icon FROM Leafs WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT icon FROM Leafs WHERE id=? LIMIT 1");
             return s.as<Image>(l.id);
         }
         
@@ -149,7 +149,7 @@ namespace yq {
         Leaf::Info          info(Leaf l, bool autoKey)
         {
             Leaf::Info    ret;
-            static thread_local SQ s("SELECT k, title FROM Leafs WHERE id=?");
+            static thread_local CacheQuery s("SELECT k, title FROM Leafs WHERE id=?");
             auto s_af = s.af();
             s.bind(1, l.id);
             if(s.step() == SQResult::Row){
@@ -167,13 +167,13 @@ namespace yq {
         
         std::string             key(Leaf l)
         {
-            static thread_local SQ s("SELECT k FROM Leafs WHERE id=?");
+            static thread_local CacheQuery s("SELECT k FROM Leafs WHERE id=?");
             return s.str(l.id);
         }
 
         std::string             label(Leaf l)
         {
-            static thread_local SQ    s("SELECT ifnull(title,k) FROM Leafs WHERE id=?");
+            static thread_local CacheQuery    s("SELECT ifnull(title,k) FROM Leafs WHERE id=?");
             return s.str(l.id);
         }
         
@@ -185,7 +185,7 @@ namespace yq {
 
         Leaf                leaf(std::string_view  k)
         {
-            static thread_local SQ s("SELECT id FROM Leafs WHERE k=?");
+            static thread_local CacheQuery s("SELECT id FROM Leafs WHERE k=?");
             return s.as<Leaf>(k);
         }
 
@@ -211,7 +211,7 @@ namespace yq {
 
         Leaf                    leaf_by_title(std::string_view k)
         {
-            static thread_local SQ    s("SELECT id FROM Leafs WHERE title like ? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT id FROM Leafs WHERE title like ? LIMIT 1");
             return s.as<Leaf>(k);
         }
         
@@ -281,7 +281,7 @@ namespace yq {
 
         NKI                 nki(Leaf l, bool autoKey)
         {
-            static thread_local SQ    s("SELECT title,icon,k FROM Leafs WHERE id=?");
+            static thread_local CacheQuery    s("SELECT title,icon,k FROM Leafs WHERE id=?");
             auto s_af = s.af();
             s.bind(1, l.id);
             if(s.step() == SQResult::Row){
@@ -325,25 +325,25 @@ namespace yq {
 
         bool                        tagged(Leaf l, Tag t)
         {
-            static thread_local SQ s("SELECT 1 FROM LTags WHERE leaf=? AND tag=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM LTags WHERE leaf=? AND tag=? LIMIT 1");
             return s.present(l.id, t.id);
         }
         
         std::vector<Tag>            tags(Leaf l)
         {
-            static thread_local SQ s("SELECT tag FROM LTags WHERE leaf=?");
+            static thread_local CacheQuery s("SELECT tag FROM LTags WHERE leaf=?");
             return s.vec<Tag>(l.id);
         }
         
         std::set<Tag>               tags_set(Leaf l)
         {
-            static thread_local SQ s("SELECT tag FROM LTags WHERE leaf=?");
+            static thread_local CacheQuery s("SELECT tag FROM LTags WHERE leaf=?");
             return s.set<Tag>(l.id);
         }
 
         std::string             title(Leaf l)
         {
-            static thread_local SQ s("SELECT title FROM Leafs WHERE id=?");
+            static thread_local CacheQuery s("SELECT title FROM Leafs WHERE id=?");
             return s.str(l.id);
         }
 

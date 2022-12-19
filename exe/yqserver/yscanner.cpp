@@ -31,6 +31,7 @@
 #include <kernel/notify/Stage2.hpp>
 #include <kernel/notify/Stage3.hpp>
 #include <kernel/notify/Stage4.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 
@@ -205,11 +206,11 @@ void    stage3_documents()
         return a->order() < b->order();
     });
     
-    SqlQuery                sn(wksp::db(), "SELECT id FROM Documents WHERE name=? ORDER BY k");
-    SqlQuery                sx(wksp::db(), "SELECT id FROM Documents WHERE suffix=? ORDER BY k");
-    SqlQuery                sf(wksp::db(), "SELECT id FROM Documents WHERE folder=? ORDER BY k");
-    SqlQuery                sfn(wksp::db(), "SELECT id FROM Documents WHERE folder=? AND name=? ORDER BY k");
-    SqlQuery                sfx(wksp::db(), "SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
+    CacheQuery  sn("SELECT id FROM Documents WHERE name=? ORDER BY k");
+    CacheQuery  sx("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
+    CacheQuery  sf("SELECT id FROM Documents WHERE folder=? ORDER BY k");
+    CacheQuery  sfn("SELECT id FROM Documents WHERE folder=? AND name=? ORDER BY k");
+    CacheQuery  sfx("SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
     
     for(const Stage3* h : handlers){
         SqlQuery::AutoFinish    af;

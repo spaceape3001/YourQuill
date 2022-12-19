@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+
 #include <kernel/enum/Access.hpp>
 #include <kernel/enum/AssertDeny.hpp>
 #include <kernel/enum/AttrKind.hpp>
@@ -64,7 +65,6 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "bit/Policy.ipp"
 #include "db/DBUtils.ipp"
 #include "db/IDLockImpl.ipp"
-#include "db/SQ.ipp"
 #include "file/DirectoryCDB.ipp"
 #include "file/DocumentCDB.ipp"
 #include "file/FileSpec.ipp"
@@ -96,11 +96,13 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "rule/Constraint.ipp"
 #include "rule/Trigger.ipp"
 #include "user/Authentication.ipp"
+#include "wksp/CacheQuery.ipp"
+#include "wksp/CacheStatement.ipp"
+#include "wksp/QuillData.ipp"
+#include "wksp/QuillFile.ipp"
 #include "user/UserCDB.ipp"
 #include "user/UserData.ipp"
 #include "user/UserFile.ipp"
-#include "wksp/QuillData.ipp"
-#include "wksp/QuillFile.ipp"
 
 #include "directories.hpp"
 

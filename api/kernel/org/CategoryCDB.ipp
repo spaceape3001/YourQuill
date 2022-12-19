@@ -13,12 +13,12 @@
 #include <kernel/atom/Field.hpp>
 #include <kernel/db/NKI.hpp>
 #include <kernel/db/IDLock.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <kernel/image/ImageCDB.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 namespace yq {
@@ -32,15 +32,15 @@ namespace yq {
 
         std::vector<Category>         all_categories(Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT id FROM Categories ORDER BY k");
-            static thread_local SQ    qu("SELECT id FROM Categories");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Categories ORDER BY k");
+            static thread_local CacheQuery    qu("SELECT id FROM Categories");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Category>();
         }
         
         size_t                      all_categories_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Categories");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Categories");
             return s.size();
         }
 
@@ -54,13 +54,13 @@ namespace yq {
 
         std::string                 brief(Category t)
         {
-            static thread_local SQ    s("SELECT brief FROM Categories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT brief FROM Categories WHERE id=?");
             return s.str(t.id);
         }
 
         Category                 category(std::string_view k)
         {
-            static thread_local SQ    s("SELECT id FROM Categories WHERE k=?");
+            static thread_local CacheQuery    s("SELECT id FROM Categories WHERE k=?");
             return s.as<Category>(k);
         }
         
@@ -117,7 +117,7 @@ namespace yq {
 
         std::vector<Class>  classes(Category cat)
         {
-            static thread_local SQ s("SELECT id FROM Classes WHERE category=?");
+            static thread_local CacheQuery s("SELECT id FROM Classes WHERE category=?");
             return s.vec<Class>(cat.id);
         }
 
@@ -133,7 +133,7 @@ namespace yq {
             if(k.empty())
                 return Category();
             
-            static thread_local SQ    i("INSERT OR FAIL INTO Categories (k,id) VALUES (?,?)");
+            static thread_local CacheQuery    i("INSERT OR FAIL INTO Categories (k,id) VALUES (?,?)");
             auto i_lk   = i.af();
             
             i.bind(1, k);
@@ -174,19 +174,19 @@ namespace yq {
 
         bool                exists_category(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Categories WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Categories WHERE id=? LIMIT 1");
             return s.present(i);
         }
 
         std::vector<Field>      fields(Category cat)
         {
-            static thread_local SQ s("SELECT id FROM Fields WHERE category=?");
+            static thread_local CacheQuery s("SELECT id FROM Fields WHERE category=?");
             return s.vec<Field>(cat.id);
         }
 
         Image               icon(Category t)
         {
-            static thread_local SQ    s("SELECT icon FROM Categories WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT icon FROM Categories WHERE id=? LIMIT 1");
             return s.as<Image>(t.id);
         }
         
@@ -194,7 +194,7 @@ namespace yq {
         Category::Info           info(Category t, bool autoKey)
         {
             Category::Info    ret;
-            static thread_local SQ    s("SELECT brief,k,name,icon FROM Categories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT brief,k,name,icon FROM Categories WHERE id=?");
             auto s_af = s.af();
             s.bind(1, t.id);
             if(s.step() == SQResult::Row){
@@ -212,13 +212,13 @@ namespace yq {
 
         std::string key(Category t)
         {
-            static thread_local SQ    s("SELECT k FROM Categories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT k FROM Categories WHERE id=?");
             return s.str(t.id);
         }
         
         std::string label(Category t)
         {
-            static thread_local SQ    s("SELECT ifnull(name,k) FROM Categories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT ifnull(name,k) FROM Categories WHERE id=?");
             return s.str(t.id);
         }
         
@@ -294,14 +294,14 @@ namespace yq {
         
         std::string    name(Category t)
         {
-            static thread_local SQ    s("SELECT name FROM Categories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name FROM Categories WHERE id=?");
             return s.str(t.id);
         }
         
         
         NKI                 nki(Category t, bool autoKey)
         {
-            static thread_local SQ    s("SELECT name,icon,k FROM Categories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name,icon,k FROM Categories WHERE id=?");
             auto s_af = s.af();
             s.bind(1, t.id);
             if(s.step() == SQResult::Row){

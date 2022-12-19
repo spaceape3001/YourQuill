@@ -11,39 +11,39 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <kernel/db/NKI.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/Fragment.hpp>
 #include <kernel/file/Root.hpp>
 #include <kernel/wksp/Workspace.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace cdb {
         std::vector<Document>    all_documents(Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT id FROM Documents ORDER BY k");
-            static thread_local SQ    qu("SELECT id FROM Documents");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Documents ORDER BY k");
+            static thread_local CacheQuery    qu("SELECT id FROM Documents");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Document>();
         }
         
         size_t              all_documents_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Documents");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Documents");
             return s.size();
         }
         
         std::vector<Document>    all_documents_suffix(std::string_view sfx, Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
-            static thread_local SQ    qu("SELECT id FROM Documents WHERE suffix=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Documents WHERE suffix=? ORDER BY k");
+            static thread_local CacheQuery    qu("SELECT id FROM Documents WHERE suffix=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Document>(sfx);
         }
 
         std::string             base_key(Document doc)
         {
-            static thread_local SQ    s("SELECT skb FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT skb FROM Documents WHERE id=?");
             return s.str(doc.id);
         }
 
@@ -76,8 +76,8 @@ namespace yq {
             std::string_view     base    = (y != std::string_view::npos ) ? ak.substr(0,y) : ak;
             std::string_view     skc     = (x != std::string_view::npos ) ? ak.substr(0,x) : ak;
             
-            static thread_local SQ    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,skb,hidden,mime,skc) VALUES (?,?,?,?,?,?,?,?,?)");
-            static thread_local SQ    s("SELECT id FROM Documents WHERE k=?");
+            static thread_local CacheQuery    i("INSERT OR FAIL INTO Documents (k,sk,name,folder,suffix,skb,hidden,mime,skc) VALUES (?,?,?,?,?,?,?,?,?)");
+            static thread_local CacheQuery    s("SELECT id FROM Documents WHERE k=?");
             
             auto s_lk   = s.af();
             auto i_lk   = i.af();
@@ -113,7 +113,7 @@ namespace yq {
 
         Document            document(std::string_view k)
         {
-            static thread_local SQ    s("SELECT id FROM Documents WHERE k=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT id FROM Documents WHERE k=? LIMIT 1");
             return s.as<Document>(k);
         }
         
@@ -131,13 +131,13 @@ namespace yq {
         {
             if(!rt)
                 return false;
-            static thread_local SQ s("SELECT 1 FROM Fragments WHERE document=? AND root=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Fragments WHERE document=? AND root=? LIMIT 1");
             return s.present(doc.id, rt->id);
         }
 
         bool                exists_document(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Documents WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Documents WHERE id=? LIMIT 1");
             return s.present(i);
         }
 
@@ -163,7 +163,7 @@ namespace yq {
 
         Fragment            first_fragment(Document d)
         {
-            static thread_local SQ s("SELECT id FROM Fragments WHERE document=? ORDER BY root LIMIT 1");
+            static thread_local CacheQuery s("SELECT id FROM Fragments WHERE document=? ORDER BY root LIMIT 1");
             return s.as<Fragment>(d.id);
         }
         
@@ -172,7 +172,7 @@ namespace yq {
             if(!rt)
                 return first_fragment(d);
                 
-            static thread_local SQ s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
             return s.as<Fragment>(d.id, rt->id);
         }
 
@@ -188,7 +188,7 @@ namespace yq {
         
         Folder              folder(Document d)
         {
-            static thread_local SQ    s("SELECT folder FROM Documents WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT folder FROM Documents WHERE id=? LIMIT 1");
             return s.as<Folder>(d.id);
         }
 
@@ -202,7 +202,7 @@ namespace yq {
         
         Fragment            fragment(Document d)
         {
-            static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT id FROM Fragments WHERE document=? LIMIT 1");
             return s.as<Fragment>(d.id);
         }
         
@@ -210,7 +210,7 @@ namespace yq {
         {
             if(!rt)
                 return Fragment{};
-            static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT id FROM Fragments WHERE document=? AND root=? LIMIT 1");
             return s.as<Fragment>(d.id, rt->id);
         }
         
@@ -227,13 +227,13 @@ namespace yq {
         namespace {
             std::vector<Fragment>    fragments_sorted(Document d)
             {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE document=? ORDER BY path");
+                static thread_local CacheQuery    s("SELECT id FROM Fragments WHERE document=? ORDER BY path");
                 return s.vec<Fragment>(d.id);
             }
 
             std::vector<Fragment>    fragments_unsorted(Document d)
             {
-                static thread_local SQ    s("SELECT id FROM Fragments WHERE document=?");
+                static thread_local CacheQuery    s("SELECT id FROM Fragments WHERE document=?");
                 return s.vec<Fragment>(d.id);
             }
         }
@@ -252,9 +252,9 @@ namespace yq {
         {
             if(!rt)
                 return std::vector<Fragment>();
-            static thread_local SQ    qs("SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
-            static thread_local SQ    qu("SELECT id FROM Fragments WHERE document=? AND root=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Fragments WHERE document=? AND root=? ORDER BY path");
+            static thread_local CacheQuery    qu("SELECT id FROM Fragments WHERE document=? AND root=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Fragment>(d.id, rt->id);
         }
         
@@ -273,7 +273,7 @@ namespace yq {
         
         size_t              fragments_count(Document d)
         {
-            static thread_local SQ    s("SELECT COUNT(1) FROM Fragments WHERE document=?");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Fragments WHERE document=?");
             return s.size(d.id);
         }
         
@@ -282,19 +282,19 @@ namespace yq {
             if(!rt)
                 return 0;
                 
-            static thread_local SQ    s("SELECT COUNT(1) FROM Fragments WHERE document=? AND root=?");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Fragments WHERE document=? AND root=?");
             return s.size(d.id, rt->id);
         }
 
         bool                hidden(Document d)
         {
-            static thread_local SQ    s("SELECT hidden FROM Documents WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT hidden FROM Documents WHERE id=? LIMIT 1");
             return s.boolean(d.id);
         }
         
         void                hide(Document d)
         {
-            static thread_local SQ u("UPDATE Documents SET hidden=1 WHERE id=?");
+            static thread_local CacheQuery u("UPDATE Documents SET hidden=1 WHERE id=?");
             u.bind(1, d.id);
             u.exec();
             u.reset();
@@ -302,14 +302,14 @@ namespace yq {
         
         Image               icon(Document d) 
         {
-            static thread_local SQ    s("SELECT icon FROM Documents WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT icon FROM Documents WHERE id=? LIMIT 1");
             return s.as<Image>(d.id);
         }
         
         Document::Info      info(Document d)
         {
             Document::Info        ret;
-            static thread_local SQ    s("SELECT k, sk, name, skb, folder, suffix, removed, hidden, icon, skc FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT k, sk, name, skb, folder, suffix, removed, hidden, icon, skc FROM Documents WHERE id=?");
             s.bind(1, d.id);
             if(s.step() == SQResult::Row){
                 ret.key     = s.v_text(1);
@@ -329,7 +329,7 @@ namespace yq {
         
         std::string             key(Document d)
         {
-            static thread_local SQ    s("SELECT k FROM Documents WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT k FROM Documents WHERE id=? LIMIT 1");
             return s.str(d.id);
         }
 
@@ -340,7 +340,7 @@ namespace yq {
 
         ContentType             mime_type(Document d)
         {
-            static thread_local SQ  s("SELECT mime FROM Documents WHERE id=? LIMIT 1");
+            static thread_local CacheQuery  s("SELECT mime FROM Documents WHERE id=? LIMIT 1");
             auto af = s.af();
             s.bind(1, d.id);
             if(s.step() == SQResult::Row){
@@ -351,13 +351,13 @@ namespace yq {
         
         std::string             name(Document d)
         {
-            static thread_local SQ    s("SELECT name FROM Documents WHERE id=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT name FROM Documents WHERE id=? LIMIT 1");
             return s.str(d.id);
         }
 
         NKI                 nki(Document d, bool autoKey)
         {
-            static thread_local SQ    s("SELECT name,icon,k FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name,icon,k FROM Documents WHERE id=?");
             auto s_af = s.af();
             s.bind(1, d.id);
             if(s.step() == SQResult::Row){
@@ -379,14 +379,14 @@ namespace yq {
         
         bool                removed(Document d)
         {
-            static thread_local SQ    s("SELECT removed FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT removed FROM Documents WHERE id=?");
             return s.boolean(d.id);
         }
 
         std::vector<const Root*> roots(Document d)
         {
             std::vector<const Root*> ret;
-            static thread_local SQ    s("SELECT DISTINCT root FROM Fragments WHERE document=?");
+            static thread_local CacheQuery    s("SELECT DISTINCT root FROM Fragments WHERE document=?");
             auto s_af       = s.af();
             s.bind(1, d.id);
             while(s.step() == SQResult::Row){
@@ -399,13 +399,13 @@ namespace yq {
 
         size_t              roots_count(Document d)
         {
-            static thread_local SQ    s("SELECT COUNT(DISTINCT root) FROM Fragments WHERE document=?");
+            static thread_local CacheQuery    s("SELECT COUNT(DISTINCT root) FROM Fragments WHERE document=?");
             return s.size(d.id);
         }
 
         void                set_mime_type(Document doc, ContentType ct)
         {
-            static thread_local SQ  u("UPDATE Documents SET mime=? WHERE id=?");
+            static thread_local CacheQuery  u("UPDATE Documents SET mime=? WHERE id=?");
             u.bind(1, ct.value());
             u.bind(2, doc.id);
             u.step(true);
@@ -414,7 +414,7 @@ namespace yq {
         
         void                show(Document d)
         {
-            static thread_local SQ u("UPDATE Documents SET hidden=0 WHERE id=?");
+            static thread_local CacheQuery u("UPDATE Documents SET hidden=0 WHERE id=?");
             u.bind(1, d.id);
             u.step(true);
             u.reset();
@@ -422,25 +422,25 @@ namespace yq {
         
         std::string             skey(Document d)
         {
-            static thread_local SQ    s("SELECT sk FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT sk FROM Documents WHERE id=?");
             return s.str(d.id);
         }
         
         std::string             skeyb(Document d)
         {
-            static thread_local SQ    s("SELECT skb FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT skb FROM Documents WHERE id=?");
             return s.str(d.id);
         }
 
         std::string             skeyc(Document d)
         {
-            static thread_local SQ    s("SELECT skc FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT skc FROM Documents WHERE id=?");
             return s.str(d.id);
         }
 
         Extension               suffix(Document d)
         {
-            static thread_local SQ    s("SELECT suffix FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT suffix FROM Documents WHERE id=?");
             return { s.str(d.id) };
         }
 

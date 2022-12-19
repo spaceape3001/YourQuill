@@ -70,7 +70,15 @@ namespace yq {
 
     //! Generic options bitmask
     using cdb_options_t         = uint64_t;
+    
+    class CacheStatement;
+    class CacheQuery;
+    
+    template <typename C, typename ... Params> 
+    class SqlQueryMap;
 
+    template <typename ... Params>
+    using CacheQueryMap   = SqlQueryMap<CacheStatement, Params...>;
 
     /*! \brief Sorted for passing into functions
 
@@ -87,6 +95,9 @@ namespace yq {
 
 
     namespace cdb {
+    
+        using SQ    = CacheQuery;
+    
         enum {
             //! Include hidden things
             HIDDEN                  = 1 << 0,

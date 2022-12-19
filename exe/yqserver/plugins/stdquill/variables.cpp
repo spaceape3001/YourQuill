@@ -25,6 +25,7 @@
 #include <kernel/org/CategoryCDB.hpp>
 #include <kernel/org/TagCDB.hpp>
 #include <kernel/user/UserCDB.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 #include <http/web/VarTemplate.hpp>

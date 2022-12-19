@@ -25,7 +25,6 @@
 #include <kernel/atom/Property.hpp>
 #include <kernel/atom/ValueCDB.hpp>
 #include <kernel/attr/AttributeCDB.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/Root.hpp>
 #include <kernel/image/ImageCDB.hpp>
@@ -42,6 +41,7 @@
 #include <kernel/org/TagCDB.hpp>
 #include <kernel/user/User.hpp>
 #include <kernel/user/UserCDB.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 #include "common.hpp"

@@ -8,24 +8,24 @@
 
 #include "ImageCDB.hpp"
 #include <basic/ByteArray.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
 
     namespace cdb {
         std::vector<Image>      all_images()
         {
-            static thread_local SQ s("SELECT id FROM Images");
+            static thread_local CacheQuery s("SELECT id FROM Images");
             return s.vec<Image>();
         }
         
         size_t                  all_images_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Images");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Images");
             return s.size();
         }
 
@@ -65,7 +65,7 @@ namespace yq {
             
             ByteArray           bytes_large(Image img)
             {
-                static thread_local SQ s("SELECT large FROM Images WHERE id=?");
+                static thread_local CacheQuery s("SELECT large FROM Images WHERE id=?");
                 auto s_af   = s.af();
                 s.bind(1, img.id);
                 if(s.step() == SQResult::Row)
@@ -75,7 +75,7 @@ namespace yq {
 
             ByteArray           bytes_medium(Image img)
             {
-                static thread_local SQ s("SELECT medium FROM Images WHERE id=?");
+                static thread_local CacheQuery s("SELECT medium FROM Images WHERE id=?");
                 auto s_af   = s.af();
                 s.bind(1, img.id);
                 if(s.step() == SQResult::Row)
@@ -85,7 +85,7 @@ namespace yq {
 
             ByteArray          bytes_small(Image img)
             {
-                static thread_local SQ s("SELECT small FROM Images WHERE id=?");
+                static thread_local CacheQuery s("SELECT small FROM Images WHERE id=?");
                 auto s_af   = s.af();
                 s.bind(1, img.id);
                 if(s.step() == SQResult::Row)
@@ -114,7 +114,7 @@ namespace yq {
 
         Image               db_image(Fragment frag, bool *wasCreated)
         {
-            static thread_local SQ i("INSERT OR FAIL INTO Images (id,type) VALUES (?,?)");
+            static thread_local CacheQuery i("INSERT OR FAIL INTO Images (id,type) VALUES (?,?)");
             
             auto ext    = suffix(frag).ext;
             auto i_af   = i.af();
@@ -143,7 +143,7 @@ namespace yq {
 
         bool                exists_image(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Images WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Images WHERE id=? LIMIT 1");
             return s.present(i);
         }
 
@@ -156,7 +156,7 @@ namespace yq {
         {
             if(!rt)
                 return Image();
-            static thread_local SQ s("SELECT icon FROM RootIcons WHERE root=?");
+            static thread_local CacheQuery s("SELECT icon FROM RootIcons WHERE root=?");
             return s.as<Image>(rt->id);
         }
 
@@ -205,7 +205,7 @@ namespace yq {
         
         ContentType         mime_type(Image i)
         {
-            static thread_local SQ s("SELECT type FROM Images WHERE id=?");
+            static thread_local CacheQuery s("SELECT type FROM Images WHERE id=?");
             auto s_af   = s.af();
             s.bind(1, i.id);
             if(s.step() == SQResult::Row)

@@ -14,7 +14,7 @@
 #include <kernel/atom/Field.hpp>
 #include <kernel/db/NKI.hpp>
 #include <kernel/db/IDLock.hpp>
-#include <kernel/db/SQ.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>

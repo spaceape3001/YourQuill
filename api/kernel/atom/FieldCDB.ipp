@@ -15,7 +15,6 @@
 #include <kernel/atom/FieldFile.hpp>
 #include <kernel/db/NKI.hpp>
 #include <kernel/db/IDLock.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
@@ -23,6 +22,7 @@
 #include <kernel/image/ImageCDB.hpp>
 #include <kernel/org/CategoryCDB.hpp>
 #include <kernel/org/TagCDB.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 namespace yq {
@@ -37,55 +37,55 @@ namespace yq {
 
         string_set_t            aliases(Field f)
         {
-            static thread_local SQ s("SELECT alias FROM FAlias WHERE field=?");
+            static thread_local CacheQuery s("SELECT alias FROM FAlias WHERE field=?");
             return s.sset(f.id);
         }
         
         std::vector<Field>           all_fields(Sorted sorted)
         {
-            static thread_local SQ qs("SELECT id FROM Fields ORDER BY k");
-            static thread_local SQ qu("SELECT id FROM Fields");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT id FROM Fields ORDER BY k");
+            static thread_local CacheQuery qu("SELECT id FROM Fields");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Field>();
         }
         
         size_t              all_fields_count()
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM Fields");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Fields");
             return s.size();
         }
         
         
         std::string             brief(Field f)
         {
-            static thread_local SQ s("SELECT brief FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT brief FROM Fields WHERE id=?");
             return s.str(f.id);
         }
 
         Category  category(Field f)
         {
-            static thread_local SQ s("SELECT category FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT category FROM Fields WHERE id=?");
             return s.as<Category>(f.id);
         }
         
         Class               class_(Field f)
         {
-            static thread_local SQ s("SELECT class FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT class FROM Fields WHERE id=?");
             return s.as<Class>(f.id);
         }
 
         
         std::vector<Class>       classes(Field f, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT class FROM CFields INNER JOIN Classes ON CFields.class=Classes.id WHERE field=? ORDER BY Classes.k");
-            static thread_local SQ qu("SELECT class FROM CFields WHERE field=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT class FROM CFields INNER JOIN Classes ON CFields.class=Classes.id WHERE field=? ORDER BY Classes.k");
+            static thread_local CacheQuery qu("SELECT class FROM CFields WHERE field=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Class>(f.id);
         }
 
         std::set<uint64_t>        data_types(Field f)
         {
-            static thread_local SQ    s("SELECT type FROM FDataTypes WHERE field=?");
+            static thread_local CacheQuery    s("SELECT type FROM FDataTypes WHERE field=?");
             return s.set<uint64_t>(f.id);
         }
 
@@ -111,7 +111,7 @@ namespace yq {
                 ck  = ck.substr(n+1);
             }
 
-            static thread_local SQ i("INSERT INTO Fields (id, k, class, ck) VALUES (?,?,?,?)");
+            static thread_local CacheQuery i("INSERT INTO Fields (id, k, class, ck) VALUES (?,?,?,?)");
             auto i_af = i.af();
             i.bind(1, doc.id);
             i.bind(2, k);
@@ -133,13 +133,13 @@ namespace yq {
         namespace {
             std::vector<Class>           def_classes_sorted(Field f)
             {
-                static thread_local SQ s("SELECT class FROM CFields INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
+                static thread_local CacheQuery s("SELECT class FROM CFields INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
                 return s.vec<Class>(f.id);
             }
 
             std::vector<Class>           def_classes_unsorted(Field f)
             {
-                static thread_local SQ s("SELECT class FROM CFields WHERE field=?");
+                static thread_local CacheQuery s("SELECT class FROM CFields WHERE field=?");
                 return s.vec<Class>(f.id);
             }
         }
@@ -163,7 +163,7 @@ namespace yq {
 
         bool                exists_field(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT 1 FROM Fields WHERE id=?");
             return s.present(i);
         }
 
@@ -187,7 +187,7 @@ namespace yq {
 
         Field                   field(std::string_view k)
         {
-            static thread_local SQ s("SELECT 1 FROM Fields WHERE k=?");
+            static thread_local CacheQuery s("SELECT 1 FROM Fields WHERE k=?");
             return s.as<Field>(k);
         }
 
@@ -226,7 +226,7 @@ namespace yq {
 
         Image               icon(Field f)
         {
-            static thread_local SQ    s("SELECT icon FROM Fields WHERE id=?");
+            static thread_local CacheQuery    s("SELECT icon FROM Fields WHERE id=?");
             return s.as<Image>(f.id);
         }
         
@@ -234,7 +234,7 @@ namespace yq {
         Field::Info         info(Field f, bool autoKey)
         {
             Field::Info        ret;
-            static thread_local SQ s("SELECT k, class, name, pkey, plural, brief, category FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT k, class, name, pkey, plural, brief, category FROM Fields WHERE id=?");
             auto s_af = s.af();
             s.bind(1, f.id);
             if(s.step() == SQResult::Row){
@@ -253,7 +253,7 @@ namespace yq {
         
         std::string             key(Field f)
         {
-            static thread_local SQ s("SELECT k FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT k FROM Fields WHERE id=?");
             return s.str(f.id);
         }
         
@@ -264,7 +264,7 @@ namespace yq {
                 s       = key(f);
             return s;
 
-            //static thread_local SQ    s("SELECT coalesce(name,ck,k) FROM Fields WHERE id=?");
+            //static thread_local CacheQuery    s("SELECT coalesce(name,ck,k) FROM Fields WHERE id=?");
             //return s.str(f.id);
         }
 
@@ -332,13 +332,13 @@ namespace yq {
 
         std::string             name(Field f)
         {
-            static thread_local SQ    s("SELECT name FROM Fields WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name FROM Fields WHERE id=?");
             return s.str(f.id);
         }
 
         NKI                     nki(Field f, bool autoKeyToName)
         {
-            static thread_local SQ    s("SELECT name,icon,k FROM Fields WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name,icon,k FROM Fields WHERE id=?");
             auto s_af = s.af();
             s.bind(1, f.id);
             if(s.step() == SQResult::Row){
@@ -362,13 +362,13 @@ namespace yq {
         
         std::string             pkey(Field f)
         {
-            static thread_local SQ s("SELECT pkey FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT pkey FROM Fields WHERE id=?");
             return s.str(f.id);
         }
         
         std::string             plural(Field f)
         {
-            static thread_local SQ s("SELECT plural FROM Fields WHERE id=?");
+            static thread_local CacheQuery s("SELECT plural FROM Fields WHERE id=?");
             return s.str(f.id);
         }
         
@@ -402,22 +402,22 @@ namespace yq {
 
         std::vector<Tag>  tags(Field f, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT tag FROM FTags INNER JOIN Tags ON FTags.tag=Tags.id WHERE field=? ORDER BY Tags.K");
-            static thread_local SQ qu("SELECT tag FROM FTags WHERE field=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT tag FROM FTags INNER JOIN Tags ON FTags.tag=Tags.id WHERE field=? ORDER BY Tags.K");
+            static thread_local CacheQuery qu("SELECT tag FROM FTags WHERE field=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Tag>(f.id);
         }
 
         
         size_t  tags_count(Field f)
         {
-            static thread_local SQ s("SELECT COUNT(1) FROM FTags WHERE field=?");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM FTags WHERE field=?");
             return s.size(f.id);
         }
 
         std::set<Tag>            tags_set(Field f)
         {
-            static thread_local SQ s("SELECT tag FROM FTags WHERE field=?");
+            static thread_local CacheQuery s("SELECT tag FROM FTags WHERE field=?");
             return s.set<Tag>(f.id);
         }
 

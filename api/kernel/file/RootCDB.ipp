@@ -8,11 +8,11 @@
 
 #include "RootCDB.hpp"
 #include <basic/DirUtils.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/DirectoryCDB.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
 #include <kernel/file/Root.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 namespace yq {
@@ -22,9 +22,9 @@ namespace yq {
             if(!rt)
                 return std::vector<Directory>();
 
-            static thread_local SQ    qs("SELECT id FROM Directories WHERE root=? ORDER BY path");
-            static thread_local SQ    qu("SELECT id FROM Directories WHERE root=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Directories WHERE root=? ORDER BY path");
+            static thread_local CacheQuery    qu("SELECT id FROM Directories WHERE root=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Directory>(rt->id);
         }
         
@@ -33,7 +33,7 @@ namespace yq {
             if(!rt)
                 return 0;
 
-            static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE root=?");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Directories WHERE root=?");
             return s.size(rt->id);
         }
         
@@ -41,9 +41,9 @@ namespace yq {
         {
             if(!rt)
                 return std::vector<Fragment>();
-            static thread_local SQ qs("SELECT id FROM Fragments WHERE root=? ORDER BY path");
-            static thread_local SQ qu("SELECT id FROM Fragments WHERE root=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT id FROM Fragments WHERE root=? ORDER BY path");
+            static thread_local CacheQuery qu("SELECT id FROM Fragments WHERE root=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Fragment>(rt->id);
         }
         
@@ -51,7 +51,7 @@ namespace yq {
         {
             if(!rt)
                 return 0;
-            static thread_local SQ s("SELECT COUNT(1) FROM Fragments WHERE root=?");
+            static thread_local CacheQuery s("SELECT COUNT(1) FROM Fragments WHERE root=?");
             return s.size(rt->id);
         }
 
@@ -74,8 +74,8 @@ namespace yq {
             if(!rt)
                 return Directory();
                 
-            static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
-            static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
+            static thread_local CacheQuery    i("INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
+            static thread_local CacheQuery    s("SELECT id FROM Directories WHERE path=?");
             
             auto s_lk   = s.af();
             auto i_lk   = i.af();
@@ -107,9 +107,9 @@ namespace yq {
             if(!rt)
                 return std::vector<Directory>();
                 
-            static thread_local SQ    qs("SELECT id FROM Directories WHERE parent=0 AND root=?");
-            static thread_local SQ    qu("SELECT id FROM Directories WHERE parent=0 AND root=? ORDER BY NAME");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Directories WHERE parent=0 AND root=?");
+            static thread_local CacheQuery    qu("SELECT id FROM Directories WHERE parent=0 AND root=? ORDER BY NAME");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Directory>(rt->id);
         }
 
@@ -117,7 +117,7 @@ namespace yq {
         {
             if(!rt)
                 return 0;
-            static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE parent=0 AND root=?");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Directories WHERE parent=0 AND root=?");
             return s.size(rt->id);
         }
         

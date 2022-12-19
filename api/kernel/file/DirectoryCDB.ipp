@@ -8,11 +8,11 @@
 
 #include "DirectoryCDB.hpp"
 #include <basic/TextUtils.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/file/Folder.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/Fragment.hpp>
 #include <kernel/file/Root.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 
@@ -22,18 +22,18 @@ namespace yq {
         {
             if(opts & BEST_SORT){
                 if(opts & HIDDEN){
-                    static thread_local SQ    s("SELECT id FROM Directories ORDER BY path");
+                    static thread_local CacheQuery    s("SELECT id FROM Directories ORDER BY path");
                     return s.vec<Directory>();
                 } else {
-                    static thread_local SQ    s("SELECT id FROM Directories WHERE hidden=0 ORDER BY path");
+                    static thread_local CacheQuery    s("SELECT id FROM Directories WHERE hidden=0 ORDER BY path");
                     return s.vec<Directory>();
                 }
             } else {
                 if(opts & HIDDEN){
-                    static thread_local SQ    s("SELECT id FROM Directories");
+                    static thread_local CacheQuery    s("SELECT id FROM Directories");
                     return s.vec<Directory>();
                 } else {
-                    static thread_local SQ    s("SELECT id FROM Directories WHERE hidden=0");
+                    static thread_local CacheQuery    s("SELECT id FROM Directories WHERE hidden=0");
                     return s.vec<Directory>();
                 }
             }
@@ -46,7 +46,7 @@ namespace yq {
 
         size_t              all_directories_count()
         {
-            static thread_local SQ    s("SELECT COUNT(1) FROM Directories");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Directories");
             return s.size();
         }
         
@@ -68,13 +68,13 @@ namespace yq {
 
         Directory           child_directory(Directory d, std::string_view k)
         {
-            static thread_local SQ s("SELECT id FROM Directories WHERE parent=? AND name=?");
+            static thread_local CacheQuery s("SELECT id FROM Directories WHERE parent=? AND name=?");
             return s.as<Directory>(d.id, k);
         }
 
         Fragment            child_fragment(Directory d, std::string_view k)
         {
-            static thread_local SQ s("SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT id FROM Fragments WHERE dir=? AND name=? LIMIT 1");
             return s.as<Fragment>(d.id, k);
         }
 
@@ -84,30 +84,30 @@ namespace yq {
 
         std::vector<Directory>   child_directories(Directory d, Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT id FROM Directories WHERE parent=? ORDER BY name");
-            static thread_local SQ    qu("SELECT id FROM Directories WHERE parent=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Directories WHERE parent=? ORDER BY name");
+            static thread_local CacheQuery    qu("SELECT id FROM Directories WHERE parent=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Directory>(d.id);
         }
         
         size_t              child_directories_count(Directory d)
         {
-            static thread_local SQ    s("SELECT COUNT(1) FROM Directories WHERE parent=?");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Directories WHERE parent=?");
             return s.size(d.id);
         }
         
         Set<Directory>             child_directories_set(Directory d)
         {
-            static thread_local SQ    s("SELECT id FROM Directories WHERE parent=?");
+            static thread_local CacheQuery    s("SELECT id FROM Directories WHERE parent=?");
             return s.set<Directory>(d.id);
         }
 
         std::vector<DirString>   child_directories_with_names(Directory dir, Sorted sorted)
         {
             std::vector<DirString>   ret;
-            static thread_local SQ    qs("SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
-            static thread_local SQ    qu("SELECT id,name FROM Directories WHERE parent=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id,name FROM Directories WHERE parent=? ORDER BY path");
+            static thread_local CacheQuery    qu("SELECT id,name FROM Directories WHERE parent=?");
+            CacheQuery& s = sorted ? qs : qu;
             s.bind(1,dir.id);
             while(s.step() == SQResult::Row){
                 ret.push_back(DirString(Directory(s.v_uint64(1)), s.v_text(1)));
@@ -118,21 +118,21 @@ namespace yq {
 
         std::vector<Fragment>    child_fragments(Directory d, Sorted sorted)
         {
-            static thread_local SQ    qs("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
-            static thread_local SQ    qu("SELECT id FROM Fragments WHERE dir=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery    qs("SELECT id FROM Fragments WHERE dir=? ORDER BY path");
+            static thread_local CacheQuery    qu("SELECT id FROM Fragments WHERE dir=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Fragment>(d.id);
         }
 
         size_t              child_fragments_count(Directory d)
         {
-            static thread_local SQ        s("SELECT COUNT(1) FROM Fragments WHERE dir=?");
+            static thread_local CacheQuery        s("SELECT COUNT(1) FROM Fragments WHERE dir=?");
             return s.size(d.id);
         }
 
         Set<Fragment>    child_fragments_set(Directory d)
         {
-            static thread_local SQ    s("SELECT id FROM Fragments WHERE dir=?");
+            static thread_local CacheQuery    s("SELECT id FROM Fragments WHERE dir=?");
             return s.set<Fragment>(d.id);
         }
 
@@ -167,8 +167,8 @@ namespace yq {
             p += k;
             
                 
-            static thread_local SQ    i("INSERT OR FAIL INTO Directories (path,root,folder,parent,name) VALUES (?,?,?,?,?)");
-            static thread_local SQ    s("SELECT id FROM Directories WHERE path=?");
+            static thread_local CacheQuery    i("INSERT OR FAIL INTO Directories (path,root,folder,parent,name) VALUES (?,?,?,?,?)");
+            static thread_local CacheQuery    s("SELECT id FROM Directories WHERE path=?");
             auto s_lk   = s.af();
             auto i_lk   = i.af();
 
@@ -202,7 +202,7 @@ namespace yq {
         {
             if(p.empty())
                 return Directory();
-            static thread_local SQ    s("SELECT id FROM Directories WHERE path=? LIMIT 1");
+            static thread_local CacheQuery    s("SELECT id FROM Directories WHERE path=? LIMIT 1");
             return s.as<Directory>(p);
         }
         
@@ -218,7 +218,7 @@ namespace yq {
                 return ;
             
             {
-                static thread_local SQ dq("DELETE FROM Directories WHERE id=?");
+                static thread_local CacheQuery dq("DELETE FROM Directories WHERE id=?");
                 dq.bind(1, d.id);
                 dq.step();
                 dq.reset();
@@ -229,7 +229,7 @@ namespace yq {
             
             size_t dc = directories_count(f);
             if(!dc){
-                static thread_local SQ dq("DELETE FROM Folders WHERE id=?");
+                static thread_local CacheQuery dq("DELETE FROM Folders WHERE id=?");
                 dq.bind(1, f.id);
                 dq.step();
                 dq.reset();
@@ -243,13 +243,13 @@ namespace yq {
         
         bool                exists_directory(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Directories WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Directories WHERE id=? LIMIT 1");
             return s.present(i);
         }
 
         Folder              folder(Directory d)
         {
-            static thread_local SQ    s("SELECT folder FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT folder FROM Directories WHERE id=?");
             return s.as<Folder>(d.id);
         }
 
@@ -261,14 +261,14 @@ namespace yq {
 
         bool                hidden(Directory d)
         {
-            static thread_local SQ    s("SELECT hidden FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT hidden FROM Directories WHERE id=?");
             return s.boolean(d.id);
         }
         
         Directory::Info     info(Directory d)
         {
             Directory::Info        ret;
-            static thread_local SQ    s("SELECT folder, name, parent, path, removed, root, hidden FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT folder, name, parent, path, removed, root, hidden FROM Directories WHERE id=?");
             s.bind(1, d.id);
             if(s.step() == SQResult::Row){
                 ret.folder  = Folder(s.v_uint64(1));
@@ -292,31 +292,31 @@ namespace yq {
 
         std::string             name(Directory d)
         {
-            static thread_local SQ    s("SELECT name FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name FROM Directories WHERE id=?");
             return s.str(d.id);
         }
         
         Directory           parent(Directory d)
         {
-            static thread_local SQ    s("SELECT parent FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT parent FROM Directories WHERE id=?");
             return s.as<Directory>(d.id);
         }
 
         std::filesystem::path   path(Directory d)
         {
-            static thread_local SQ    s("SELECT path FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT path FROM Directories WHERE id=?");
             return s.path(d.id);
         }
        
         bool                removed(Directory d)
         {
-            static thread_local SQ    s("SELECT removed FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT removed FROM Directories WHERE id=?");
             return s.boolean(d.id);
         }
         
         const Root*         root(Directory d)
         {
-            static thread_local SQ    s("SELECT root FROM Directories WHERE id=?");
+            static thread_local CacheQuery    s("SELECT root FROM Directories WHERE id=?");
             auto s_lk   = s.af();
             s.bind(1, d.id);
             if(s.step() == SQResult::Row)
@@ -326,7 +326,7 @@ namespace yq {
         
         std::string             skey(Directory d)
         {
-            static thread_local SQ    s("SELECT name FROM Documents WHERE id=?");
+            static thread_local CacheQuery    s("SELECT name FROM Documents WHERE id=?");
             return s.str(d.id);
         }
 

@@ -8,19 +8,20 @@
 
 #include "ValueCDB.hpp"
 #include <kernel/atom/Field.hpp>
-#include <kernel/db/SQ.hpp>
+#include <kernel/wksp/CacheLogging.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace cdb {
         std::string     brief(Value v)
         {
-            static thread_local SQ s("SELECT brief FROM Vals WHERE id=?");
+            static thread_local CacheQuery s("SELECT brief FROM Vals WHERE id=?");
             return s.str(v.id);
         }
         
         std::string     data(Value v)
         {
-            static thread_local SQ s("SELECT data FROM Vals WHERE id=?");
+            static thread_local CacheQuery s("SELECT data FROM Vals WHERE id=?");
             return s.str(v.id);
         }
     
@@ -32,8 +33,8 @@ namespace yq {
             if(data.empty() || !field)
                 return Value();
             
-            static thread_local SQ i("INSERT INTO Vals OR FAIL (field, data) VALUES (?,?)");
-            static thread_local SQ s("SELECT id FROM Vals WHERE field=? AND data=?");
+            static thread_local CacheQuery i("INSERT INTO Vals OR FAIL (field, data) VALUES (?,?)");
+            static thread_local CacheQuery s("SELECT id FROM Vals WHERE field=? AND data=?");
             
             auto iaf = i.af();
             auto saf = s.af();
@@ -62,13 +63,13 @@ namespace yq {
         
         bool            exists_value(uint64_t i)
         {
-            static thread_local SQ s("SELECT 1 FROM Vals WHERE id=? LIMIT 1");
+            static thread_local CacheQuery s("SELECT 1 FROM Vals WHERE id=? LIMIT 1");
             return s.present(i);
         }
 
         Field           field(Value v)
         {
-            static thread_local SQ s("SELECT field FROM Vals WHERE id=?");
+            static thread_local CacheQuery s("SELECT field FROM Vals WHERE id=?");
             return s.as<Field>(v.id);
         }
         
@@ -76,7 +77,7 @@ namespace yq {
         {
             Value::Info ret;
 
-            static thread_local SQ s("SELECT field, brief, data FROM Vals WHERE id=?");
+            static thread_local CacheQuery s("SELECT field, brief, data FROM Vals WHERE id=?");
             auto af = s.af();
             s.bind(1, v.id);
             if(s.step() == SQResult::Row){
@@ -94,15 +95,15 @@ namespace yq {
 
         std::vector<Value>   values(Field f, Sorted sorted)
         {
-            static thread_local SQ qs("SELECT values FROM Vals WHERE field=? ORDER BY data");
-            static thread_local SQ qu("SELECT values FROM Vals WHERE field=?");
-            SQ& s = sorted ? qs : qu;
+            static thread_local CacheQuery qs("SELECT values FROM Vals WHERE field=? ORDER BY data");
+            static thread_local CacheQuery qu("SELECT values FROM Vals WHERE field=?");
+            CacheQuery& s = sorted ? qs : qu;
             return s.vec<Value>(f.id);
         }
         
         std::set<Value>      values_set(Field f)
         {
-            static thread_local SQ s("SELECT values FROM Vals WHERE field=?");
+            static thread_local CacheQuery s("SELECT values FROM Vals WHERE field=?");
             return s.set<Value>(f.id);
         }
     }

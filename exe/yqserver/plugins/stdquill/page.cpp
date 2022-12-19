@@ -37,8 +37,8 @@
 #include <basic/stream/Text.hpp>
 
 #include <kernel/bit/Copyright.hpp>
-#include <kernel/db/SQ.hpp>
 #include <kernel/db/NKI.hpp>
+#include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
 #include <http/HtmlLayout.hpp>
