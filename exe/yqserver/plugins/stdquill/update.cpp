@@ -1170,6 +1170,7 @@ namespace {
                 cat = db_category(dp->category);
 
             Image       img     = best_image(doc);
+            
 
             static thread_local SQ iField("INSERT INTO FIELDS (id,k,class,ck,expected,icon,name,plural,pkey,brief,multi,restrict,category,maxcnt,anycls) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 

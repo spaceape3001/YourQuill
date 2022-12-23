@@ -13,14 +13,17 @@
 #include <kernel/file/FragmentCDB.hpp>
 #include <basic/FileUtils.hpp>
 #include <kernel/notify/FileNotifyAdapters.hpp>
+#include <kernel/notify/FileWatch.hpp>
 #include <kernel/notify/Stage4.hpp>
 
 namespace yq {
 
-    WebTemplate::WebTemplate(std::string_view p, const std::filesystem::path&f, const std::source_location&sl) : WebPage(hGet, p, sl), m_master(f)
+    WebTemplate::WebTemplate(std::string_view p, const std::filesystem::path&f, const std::source_location&sl) : 
+        WebPage(hGet, p, sl), m_master(f)
     {
         on_stage4([this](){ this->update(); }, sl);
-        on_change(by_file(f), [this](){ this->update(); }, sl);
+        if(!f.empty())
+            on_watch(f, [this](){ this->update(); }, sl);
     }
     
     void        WebTemplate::update()

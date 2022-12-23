@@ -21,7 +21,8 @@ namespace yq {
     VarTemplate::VarTemplate(std::string_view k, const std::filesystem::path&f, const std::source_location&sl) : WebVariable(k, sl), m_master(f)
     {
         on_stage4([this](){ this->update(); }, sl);
-        on_change(f, [this](){ this->update(); }, sl);
+        if(!f.empty())
+            on_watch(f, [this](){ this->update(); }, sl);
     }
     
     void    VarTemplate::update()

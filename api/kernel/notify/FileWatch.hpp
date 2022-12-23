@@ -45,12 +45,12 @@ namespace yq {
     };
     
     template <void (*FN)()>
-    void on_change(const std::filesystem::path&fp, const std::source_location& sl=std::source_location::current())
+    void on_watch(const std::filesystem::path&fp, const std::source_location& sl=std::source_location::current())
     {
         new VoidFileWatch<FN>(fp, sl);
     }
     
-    void on_change(const std::filesystem::path&, std::function<void()>, const std::source_location& sl=std::source_location::current());
+    void on_watch(const std::filesystem::path&, std::function<void()>, const std::source_location& sl=std::source_location::current());
 
 
     template <void (*FN)(const std::filesystem::path&)>
@@ -64,7 +64,7 @@ namespace yq {
     };
     
     template <void (*FN)(const std::filesystem::path&)>
-    void on_change(const std::filesystem::path&fp, const std::source_location& sl)
+    void on_watch(const std::filesystem::path&fp, const std::source_location& sl)
     {
         new PathFileWatch<FN>(fp, sl);
     }

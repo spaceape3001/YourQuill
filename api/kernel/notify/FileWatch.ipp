@@ -50,7 +50,7 @@ namespace yq {
         }
     };
 
-    void on_change(const std::filesystem::path&fp, std::function<void()>fn, const std::source_location& sl)
+    void on_watch(const std::filesystem::path&fp, std::function<void()>fn, const std::source_location& sl)
     {
         new FunctionalFileWatch(fn, fp, sl);
     }
