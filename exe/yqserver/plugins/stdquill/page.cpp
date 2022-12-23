@@ -524,7 +524,7 @@ namespace {
     void    reg_me()
     {
         reg_webgroup({
-            reg_webtemplate("/admin", wksp::shared("std/admin"sv)).source(".admin").label("Info"),
+            reg_webtemplate("/admin", wksp::shared("www/admin.ht"sv)).source(".admin").label("Info"),
             reg_webpage<p_admin_categories>("/admin/categories").label("Categories"),
             reg_webpage<p_admin_classes>("/admin/classes").label("Classes"),
             reg_webpage<p_admin_fields>("/admin/fields").label("Fields"),
