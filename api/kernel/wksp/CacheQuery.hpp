@@ -16,9 +16,11 @@
 
 namespace yq {
 
+    /*! \brief Like SqlQuery but bound with the cache database
+    */
     class CacheQuery : public CacheStatement, public trait::not_copyable, public trait::not_moveable {
     public:
-        CacheQuery(std::string_view, bool isPersistent=true);
+        CacheQuery(std::string_view sql, bool isPersistent=true);
         ~CacheQuery();
     };
     

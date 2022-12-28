@@ -92,6 +92,7 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 #include "org/TagCDB.ipp"
 #include "org/TagData.ipp"
 #include "org/TagFile.ipp"
+#include "plot/CharacterCDB.ipp"
 #include "rule/Action.ipp"
 #include "rule/Constraint.ipp"
 #include "rule/Trigger.ipp"

@@ -92,6 +92,33 @@ namespace yq {
         constexpr Sorted(Value v) : value(v) {}
         operator bool() const { return value != NO; }
     };
+    
+    namespace trait {
+        template <typename> struct is_id_object : public std::false_type {};
+        template <> struct is_id_object<Atom> : public std::true_type {};
+        template <> struct is_id_object<Attribute> : public std::true_type {};
+        template <> struct is_id_object<Category> : public std::true_type {};
+        template <> struct is_id_object<Character> : public std::true_type {};
+        template <> struct is_id_object<Class> : public std::true_type {};
+        template <> struct is_id_object<Directory> : public std::true_type {};
+        template <> struct is_id_object<Document> : public std::true_type {};
+        template <> struct is_id_object<Edge> : public std::true_type {};
+        template <> struct is_id_object<Entity> : public std::true_type {};
+        template <> struct is_id_object<Event> : public std::true_type {};
+        template <> struct is_id_object<Field> : public std::true_type {};
+        template <> struct is_id_object<Folder> : public std::true_type {};
+        template <> struct is_id_object<Fragment> : public std::true_type {};
+        template <> struct is_id_object<Graph> : public std::true_type {};
+        template <> struct is_id_object<Image> : public std::true_type {};
+        template <> struct is_id_object<Leaf> : public std::true_type {};
+        template <> struct is_id_object<Place> : public std::true_type {};
+        template <> struct is_id_object<Property> : public std::true_type {};
+            // Note, ROOT is not one
+        template <> struct is_id_object<Tag> : public std::true_type {};
+        template <> struct is_id_object<User> : public std::true_type {};
+        
+        template <typename T> static constexpr bool is_id_object_v = is_id_object<T>::value;
+    }
 
 
     namespace cdb {
@@ -192,6 +219,20 @@ namespace yq {
 
         
         inline ExtensionView extension(std::string_view x) { return { x }; }
+        
+        /*! \brief Blindly remaps a vector of id-objects
+        */
+        template <typename A, typename B>
+        std::vector<B>  blind_remap(const std::vector<A>& old, B)
+        {
+            static_assert(trait::is_id_object_v<A>);
+            static_assert(trait::is_id_object_v<B>);
+            std::vector<B>  ret;
+            ret.reserve(old.size());
+            for(const A& a : old)
+                ret.push_back(B{a.id});
+            return ret;
+        }
     }
 }
 

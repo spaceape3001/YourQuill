@@ -56,7 +56,7 @@ namespace {
     void p_dev_atoms(WebHtml&h)
     {
         h.title() << "All Atoms";
-        dev_table(h, cdb::all_atoms(Sorted::YES));
+        dev_table(h, all_atoms(Sorted::YES));
     }
 
     void    p_dev_categories(WebHtml&h)
@@ -72,7 +72,7 @@ namespace {
             throw HttpStatus::BadArgument;
         Category::Info  i   = info(cat);
         
-        h.title() << "Category (" << cdb::label(cat) << ")";
+        h.title() << "Category (" << label(cat) << ")";
         auto ta = h.table();
         
         h.kvrow("ID") << cat.id;
@@ -87,7 +87,7 @@ namespace {
         if(!cat)
             throw HttpStatus::BadArgument;
         
-        h.title() << "Category (" << cdb::label(cat) << "): In Classes";
+        h.title() << "Category (" << label(cat) << "): In Classes";
         dev_table(h, classes(cat));
     }
 
@@ -97,7 +97,7 @@ namespace {
         if(!cat)
             throw HttpStatus::BadArgument;
         
-        h.title() << "Category (" << cdb::label(cat) << "): In Fields";
+        h.title() << "Category (" << label(cat) << "): In Fields";
         dev_table(h, fields(cat));
     }
 
@@ -129,7 +129,7 @@ namespace {
             throw HttpStatus::BadArgument;
 
         h.title() << "Class (" << label(c) << "): Atoms";
-        dev_table(h, cdb::all_atoms(c, Sorted::YES));
+        dev_table(h, all_atoms(c, Sorted::YES));
     }
     
     void    p_dev_class_base(WebHtml&h)
@@ -139,7 +139,7 @@ namespace {
             throw HttpStatus::BadArgument;
         
         h.title() << "Class (" << label(x) << "): Base";
-        dev_table(h, cdb::base_classes_ranked(x, Sorted::YES), "Hops");
+        dev_table(h, base_classes_ranked(x, Sorted::YES), "Hops");
     }
     
     void    p_dev_class_derived(WebHtml&h)
@@ -149,7 +149,7 @@ namespace {
             throw HttpStatus::BadArgument;
 
         h.title() << "Class (" << label(x) << "): Derived";
-        dev_table(h, cdb::derived_classes_ranked(x, Sorted::YES), "Hops");
+        dev_table(h, derived_classes_ranked(x, Sorted::YES), "Hops");
     }
 
     void    p_dev_class_fields(WebHtml&h)
@@ -169,7 +169,7 @@ namespace {
             throw HttpStatus::BadArgument;
 
         h.title() << "Class (" << label(x) << "): Inbound";
-        dev_table(h, cdb::inbound_classes_ranked(x, Sorted::YES), "Hops");
+        dev_table(h, inbound_classes_ranked(x, Sorted::YES), "Hops");
     }
 
     void    p_dev_class_outbound(WebHtml&h)
@@ -179,7 +179,7 @@ namespace {
             throw HttpStatus::BadArgument;
 
         h.title() << "Class (" << label(x) << "): Outbound";
-        dev_table(h, cdb::outbound_classes_ranked(x, Sorted::YES), "Hops");
+        dev_table(h, outbound_classes_ranked(x, Sorted::YES), "Hops");
     }
 
     void    p_dev_class_sources(WebHtml&h)
@@ -189,7 +189,7 @@ namespace {
             throw HttpStatus::BadArgument;
 
         h.title() << "Class (" << label(x) << "): Sources";
-        dev_table(h, cdb::source_classes_ranked(x, Sorted::YES), "Hops");
+        dev_table(h, source_classes_ranked(x, Sorted::YES), "Hops");
     }
 
     void    p_dev_class_tags(WebHtml& h)
@@ -209,7 +209,7 @@ namespace {
             throw HttpStatus::BadArgument;
 
         h.title() << "Class (" << label(x) << "): Sources";
-        dev_table(h, cdb::source_classes_ranked(x, Sorted::YES), "Hops");
+        dev_table(h, source_classes_ranked(x, Sorted::YES), "Hops");
     }
 
     
@@ -298,26 +298,26 @@ namespace {
         if(!doc)
             throw HttpStatus::BadArgument;
             
-        auto i = cdb::info(doc);
+        auto i = info(doc);
 
         h.title() << "Document (" << i.key << ")";
 
         auto t = h.table();
         h.kvrow("ID") << doc.id;
         h.kvrow("Folder") << dev(i.folder);
-        h.kvrow("Fragments") << cdb::fragments_count(doc);
+        h.kvrow("Fragments") << fragments_count(doc);
         h.kvrow("Hidden") << i.hidden;
         
         if(is_similar(i.suffix, "class")){
-            h.kvrow("As Class") << dev(cdb::class_(doc));
+            h.kvrow("As Class") << dev(class_(doc));
         } else if(is_similar(i.suffix, "field")){
-            h.kvrow("As Field") << dev(cdb::field(doc));
+            h.kvrow("As Field") << dev(field(doc));
         } else if(is_similar(i.suffix, "user")){
-            h.kvrow("As User") << dev(cdb::user(doc));
+            h.kvrow("As User") << dev(user(doc));
         } else if(is_similar(i.suffix, "tag")){
-            h.kvrow("As Tag") << dev(cdb::find_tag(doc));
+            h.kvrow("As Tag") << dev(find_tag(doc));
         } else if(is_similar(i.suffix, "y")){
-            h.kvrow("As Leaf") << dev(cdb::leaf(doc));
+            h.kvrow("As Leaf") << dev(leaf(doc));
         }
         
         h.kvrow("Key") << i.key;
@@ -334,8 +334,8 @@ namespace {
         Document    doc = document(h);
         if(!doc)
             throw HttpStatus::BadArgument;
-        h.title() << "Document (" << cdb::key(doc) << "): Attributes";
-        dev_table(h, cdb::attributes(doc));
+        h.title() << "Document (" << key(doc) << "): Attributes";
+        dev_table(h, attributes(doc));
     }
     
     void    p_dev_document_fragments(WebHtml&h)
@@ -343,8 +343,8 @@ namespace {
         Document    doc = document(h);
         if(!doc)
             throw HttpStatus::BadArgument;
-        h.title() << "Document (" << cdb::key(doc) << "): Fragments";
-        dev_table(h, cdb::fragments(doc));
+        h.title() << "Document (" << key(doc) << "): Fragments";
+        dev_table(h, fragments(doc));
     }
     
     void    p_dev_document_roots(WebHtml&h)
@@ -352,8 +352,8 @@ namespace {
         Document    doc = document(h);
         if(!doc)
             throw HttpStatus::BadArgument;
-        h.title() << "Document (" << cdb::key(doc) << "): Roots";
-        dev_table(h, cdb::roots(doc));
+        h.title() << "Document (" << key(doc) << "): Roots";
+        dev_table(h, roots(doc));
     }
     
     void    p_dev_documents(WebHtml& h)
@@ -417,7 +417,7 @@ namespace {
         if(!fld)
             throw HttpStatus::BadArgument;
         Field::Info i   = info(fld);
-        h.title() << "Field (" << cdb::label(fld) << ")";
+        h.title() << "Field (" << label(fld) << ")";
         auto ta = h.table();
         h.kvrow("ID") << fld.id;
         h.kvrow("Key") << i.key;
@@ -433,7 +433,7 @@ namespace {
         Field fld = field(h);
         if(!fld)
             throw HttpStatus::BadArgument;
-        h.title() << "Field (" << cdb::label(fld) << "): Tags";
+        h.title() << "Field (" << label(fld) << "): Tags";
         dev_table(h, tags(fld, Sorted::YES));
     }
 
@@ -626,7 +626,7 @@ namespace {
         if(!x)
             throw HttpStatus::BadArgument;
         
-        auto i = cdb::info(x);
+        auto i = info(x);
             
         h.title() << "Leaf (" << i.key << ")";
         auto t = h.table();
@@ -977,7 +977,7 @@ namespace {
             throw HttpStatus::BadArgument;
         
         dev_title(h, x, "Atoms");
-        dev_table(h, cdb::all_atoms(x));
+        dev_table(h, all_atoms(x));
     }
 
     void    p_dev_tag_classes(WebHtml& h)
@@ -999,7 +999,7 @@ namespace {
     void    p_dev_users(WebHtml& h)
     {
         h.title() << "All Users";
-        dev_table(h, cdb::all_users(Sorted::YES));
+        dev_table(h, all_users(Sorted::YES));
     }
 
     void    p_dev_webdirs(WebHtml&h)
@@ -1049,7 +1049,7 @@ namespace {
         h.kvrow("Cache") << wksp::cache();
         h.kvrow("Color (Background)") << gBkColor.get();
         h.kvrow("Color (Text)") << gTextColor.get();
-        //h.kvrow("Config") << dev(cdb::config_folder());
+        //h.kvrow("Config") << dev(config_folder());
         h.kvrow("Copyright") << wksp::copyright().text;
         h.kvrow("Key") << wksp::quill_key();
         h.kvrow("Host") << wksp::host();

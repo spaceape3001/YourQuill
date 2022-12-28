@@ -50,6 +50,7 @@
 #include "org/TagArg.ipp"
 #include "org/TagHtml.ipp"
 #include "org/TagPost.ipp"
+#include "plot/CharacterHtml.ipp"
 #include "user/UserArg.ipp"
 #include "user/UserHtml.ipp"
 #include "user/UserPost.ipp"

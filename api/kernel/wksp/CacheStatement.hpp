@@ -11,6 +11,8 @@
 #include <set>
 
 namespace yq {
+    /*! \brief SQL bound against the cache 
+    */
     class CacheStatement : public SqlStatement {
     public:
         CacheStatement();

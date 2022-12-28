@@ -25,7 +25,13 @@
 #include <http/web/WebTemplate.hpp>
 #include <http/web/Template.hpp>
 
+#include <kernel/plot/CharacterCDB.hpp>
+#include <http/plot/CharacterHtml.hpp>
+
 using namespace yq;
+//using namespace yq::arg;
+using namespace yq::cdb;
+using namespace yq::html;
 
 namespace {
     void    p_dev_books(WebHtml& h)
@@ -37,7 +43,7 @@ namespace {
     void    p_dev_characters(WebHtml& h)
     {
         h.title() << "All Characters";
-        h << "(still under construction)";
+        dev_table(h, all_characters(Sorted::YES));
     }
 
     void    p_dev_events(WebHtml& h)

@@ -1,20 +1,20 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include <cstdint>
-#include "PlotFwd.hpp"
+#include <kernel/preamble.hpp>
 
-struct Atom;
+namespace yq {
 
-struct Character {
-    uint64_t            id = 0ULL;
-    constexpr auto    operator<=>(const Character&rhs) const = default; 
-    constexpr operator bool() const { return id != 0ULL; }
-};
-
-namespace cdb {
-    Vector<Character>   all_characters();
-
-    Character           character(Atom);
-    Character           db_character(Atom);
+    /*! \brief Character in the cache database */
+    struct Character {
+        uint64_t            id = 0ULL;
+        constexpr auto    operator<=>(const Character&rhs) const = default; 
+        constexpr operator bool() const { return id != 0ULL; }
+    };
 }
-
