@@ -8,6 +8,8 @@ CREATE TABLE Classes (
     icon        INTEGER NOT NULL DEFAULT 0,
     category    INTEGER NOT NULL DEFAULT 0,
     binding     VARCHAR(255),
+    url         VARCHAR(255),
+    devurl      VARCHAR(255),
     
         -- dependency graph!
     deps        INTEGER,
