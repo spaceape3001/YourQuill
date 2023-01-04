@@ -29,6 +29,8 @@ namespace yq {
         prefixes += b.prefixes;
         aliases += b.aliases;
         tags += b.tags;
+        set_if_empty(url, b.url, fOverride);
+        set_if_empty(dev_url, b.dev_url, fOverride);
         return *this;
     }
 }

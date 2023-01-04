@@ -843,6 +843,19 @@ namespace yq {
             return s.size(c.id);
         }
 
+        std::string                 url(Class c)
+        {
+            static thread_local SQ    s("SELECT url FROM Classes WHERE class=?");
+            return s.str(c.id);
+        }
+
+        std::string                 url_dev(Class c)
+        {
+            static thread_local SQ    s("SELECT devurl FROM Classes WHERE class=?");
+            return s.str(c.id);
+        }
+        
+
         Class::SharedFile        writable(Class c, const Root* rt, cdb_options_t opts)
         {
             if(!c)

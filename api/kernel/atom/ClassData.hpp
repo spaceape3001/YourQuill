@@ -48,6 +48,9 @@ namespace yq {
         // Following will be expanded upon... (in database)
         std::string             category;       //!< Category for this class to be under
         std::string             binding;        //!< Primary Column that binds for edges.   Empty will imply the key as default.
+        
+        std::string             url;            //!< Path for the URL for type
+        std::string             dev_url;        //!< Path for the URL for type
 
         Data&                   merge(const Data&, bool fOverride);
     };

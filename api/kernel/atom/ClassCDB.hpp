@@ -127,6 +127,9 @@ namespace yq {
             // Rank is the number of hops
         ClassCountMap               derived_classes_ranked_merged_map(const ClassSet&, bool inSet=false);
 
+        //! Dev url
+        std::string                 dev_url(Class);
+
         //Document                document(Atom);
         Document                    document(Class);
         
@@ -198,6 +201,8 @@ namespace yq {
         std::vector<Class>          target_classes(Class, Sorted sorted=Sorted());
         size_t                      target_classes_count(Class);
 
+        //! Returns the URL path for the class type
+        std::string                 url(Class);
 
 
         //!  \brief   Returns a writable document

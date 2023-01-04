@@ -48,6 +48,7 @@ namespace yq {
         suffixes        = read_child_string_set(xn, szSuffix);
         tags            = read_child_string_set(xn, szTag);
         category        = read_child(xn, szCategory, x_string);
+        url             = read_child(xn, szUrl, x_string);
         return true;
     }
     #endif
@@ -69,6 +70,8 @@ namespace yq {
         suffixes       += attrs.values_set("suffix");
         tags           += attrs.values_set("tag");
         category        = attrs.value("category");
+        url             = attrs.value("url");
+        dev_url         = attrs.value("devurl");
         return true;
     }
     
@@ -102,6 +105,10 @@ namespace yq {
             attrs.set("tag", join(tags, ","));
         if(!category.empty())
             attrs.set("category", category);
+        if(!url.empty())
+            attrs.set("url", url);
+        if(!dev_url.empty())
+            attrs.set("devurl", dev_url);
         return true;
     }
 

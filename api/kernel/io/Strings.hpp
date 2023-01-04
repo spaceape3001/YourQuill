@@ -166,6 +166,7 @@ namespace yq {
     static constexpr const char*    szUse               = "use";
     static constexpr const char*    szUser              = "user";
     static constexpr const char*    szUntil             = "until";
+    static constexpr const char*    szUrl               = "url";
     static constexpr const char*    szValue             = "value";
     static constexpr const char*    szVcs               = "vcs";
     static constexpr const char*    szVersion           = "version";
