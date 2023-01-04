@@ -773,7 +773,7 @@ namespace {
             
             Image       img     = cdb::best_image(doc);
 
-            static thread_local cdb::SQ iInfo("INSERT OR REPLACE INTO Classes (id,k,name,plural,brief,category,binding,icon) VALUES (?,?,?,?,?,?,?,?)");
+            static thread_local cdb::SQ iInfo("INSERT OR REPLACE INTO Classes (id,k,name,plural,brief,category,binding,icon,url,devurl) VALUES (?,?,?,?,?,?,?,?,?,?)");
             iInfo.bind(1, doc.id);
             iInfo.bind(2, k);
             iInfo.bind(3, name);
@@ -782,6 +782,8 @@ namespace {
             iInfo.bind(6, cat.id);
             iInfo.bind(7, dp->binding); // Maybe....?
             iInfo.bind(8, img.id);
+            iInfo.bind(9, dp->url);
+            iInfo.bind(10, dp->dev_url);
             iInfo.exec();
             
             Class   x{doc.id};
@@ -1227,9 +1229,12 @@ namespace {
             
             static thread_local SQ iClassA("INSERT INTO CFields (class, field, hops) VALUES (?, ?, -1)");
             static thread_local SQ iClass( "INSERT INTO CFields (class, field, hops) VALUES (?, ?, ?)");
+            
             if(anycls){
                 for(Class c : all_classes())
                     iClassA.exec(c.id, x.id);
+                    
+                
             } else {
                 for(auto& itr : derived_classes_ranked(cls)){
                     iClass.bind(1, itr.cls.id);
@@ -1238,6 +1243,9 @@ namespace {
                     iClass.exec();
                 }
             }
+            
+            
+            
         }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
