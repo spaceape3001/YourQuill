@@ -149,7 +149,7 @@ namespace yq {
         Leaf::Info          info(Leaf l, bool autoKey)
         {
             Leaf::Info    ret;
-            static thread_local CacheQuery s("SELECT k, title FROM Leafs WHERE id=?");
+            static thread_local CacheQuery s("SELECT k, title, atom, icon, abbr, brief FROM Leafs WHERE id=?");
             auto s_af = s.af();
             s.bind(1, l.id);
             if(s.step() == SQResult::Row){
@@ -158,6 +158,10 @@ namespace yq {
                 ret.title   = s.v_string(2);
                 if(autoKey && ret.title.empty())
                     ret.title   = ret.key;
+                ret.atom    = { s.v_uint64(3) };
+                ret.icon    = { s.v_uint64(4) };
+                ret.abbr    = s.v_string(5);
+                ret.brief   = s.v_string(6);
             }
             return ret;
         }

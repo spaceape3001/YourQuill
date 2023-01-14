@@ -21,6 +21,7 @@ namespace yq {
         std::string     key;
         std::string     title;
         std::string     brief;
+        std::string     abbr;
         Image           icon;
         bool operator==(const Info&) const = default;
     };

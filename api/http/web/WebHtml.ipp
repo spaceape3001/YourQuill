@@ -235,6 +235,12 @@ namespace yq {
         return WebAutoClose(*this, "</pre>"sv);
     }
 
+    void            WebHtml::pre(std::string_view s)
+    {
+        auto wt = pre();
+        html_escape_write(*this, s);
+    }
+
     WebAutoClose  WebHtml::script()
     {
         Target  oldTarget   = m_target;

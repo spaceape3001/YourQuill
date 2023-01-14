@@ -171,7 +171,7 @@ namespace {
         //! \param[in]  
         void    ati_classes(Atom at, const ClassSet& classes)
         {
-            static thread_local SQ  iClass("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?)");
+            static thread_local CacheQuery  iClass("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?)");
             for(auto& itr : cdb::base_classes_ranked_merged_map(classes, true)){
                 iClass.bind(1, at.id);
                 iClass.bind(2, itr.first.id);
@@ -198,7 +198,7 @@ namespace {
                 [&](const ClassCountMap::value_type&pp){    // REMOVED
                     ret.removed.insert(pp.first);
 
-                    static thread_local SQ  d("DELETE FROM AClasses WHERE atom=? AND class=?");
+                    static thread_local CacheQuery  d("DELETE FROM AClasses WHERE atom=? AND class=?");
                     auto d_af   = d.af();
                     d.bind(1, at.id);
                     d.bind(2, pp.first.id);
@@ -207,7 +207,7 @@ namespace {
                 [&](const ClassCountMap::value_type& pp){   // MODIFIED
                     ret.modified.insert(pp.first);
 
-                    static thread_local SQ  u("UPDATE AClasses SET hops=? WHERE atom=? AND class=?");
+                    static thread_local CacheQuery  u("UPDATE AClasses SET hops=? WHERE atom=? AND class=?");
                     auto u_af   = u.af();
                     u.bind(1, pp.second);
                     u.bind(2, at.id);
@@ -217,7 +217,7 @@ namespace {
                 [&](const ClassCountMap::value_type& pp){   // INSERTED
                     ret.added.insert(pp.first);
                     
-                    static thread_local SQ  i("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?,?)");
+                    static thread_local CacheQuery  i("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?,?)");
                     auto i_af   = i.af();
                     i.bind(1, at.id);
                     i.bind(2, pp.first.id);
@@ -241,7 +241,7 @@ namespace {
 
         void    ati_tags(Atom at, const TagSet& tags)
         {
-            static thread_local SQ iTag("INSERT INTO ATags (atom, tag) VALUES (?,?)");
+            static thread_local CacheQuery iTag("INSERT INTO ATags (atom, tag) VALUES (?,?)");
             for(Tag t : tags){
                 iTag.bind(1, at.id);
                 iTag.bind(2, t.id);
@@ -262,12 +262,12 @@ namespace {
             TagSet              otags   = make_set(cdb::tags(at));
             SetChanges<Tag> ret = add_remove(otags, tags);
             if(!ret.removed.empty()){
-                static thread_local SQ dTag("DELETE FROM ATags WHERE atom=? AND tag=?");
+                static thread_local CacheQuery dTag("DELETE FROM ATags WHERE atom=? AND tag=?");
                 for(Tag t : ret.removed)
                     dTag.exec(at.id, t.id);
             }
             if(!ret.added.empty()){
-                static thread_local SQ iTag("INSERT INTO ATags (atom, tag) VALUES (?, ?)");
+                static thread_local CacheQuery iTag("INSERT INTO ATags (atom, tag) VALUES (?, ?)");
                 for(Tag t : ret.added)
                     iTag.exec(at.id, t.id);
             }
@@ -294,7 +294,7 @@ namespace {
 
         void    ati_title(Atom at, const KVTree& attrs)
         {
-            static thread_local SQ uTitle("UPDATE Atoms SET name=? WHERE id=?");
+            static thread_local CacheQuery uTitle("UPDATE Atoms SET name=? WHERE id=?");
             std::string    t   = atq_title(at, attrs);
             uTitle.bind(1, t);
             uTitle.bind(2, at);
@@ -304,7 +304,7 @@ namespace {
         bool    atu_title(Atom at, const KVTree& attrs)
         {
             std::string     n   = cdb::name(at);
-            static thread_local SQ uTitle("UPDATE Atoms SET name=? WHERE id=?");
+            static thread_local CacheQuery uTitle("UPDATE Atoms SET name=? WHERE id=?");
             std::string    t   = atq_title(at, attrs);
             if(t != n){
                 uTitle.bind(1, t);
@@ -324,7 +324,7 @@ namespace {
 
         void    ati_abbr(Atom at, const KVTree& attrs)
         {
-            static thread_local SQ uTitle("UPDATE Atoms SET abbr=? WHERE id=?");
+            static thread_local CacheQuery uTitle("UPDATE Atoms SET abbr=? WHERE id=?");
             std::string    t   = atq_abbr(at, attrs);
             uTitle.bind(1, t);
             uTitle.bind(2, at);
@@ -334,7 +334,7 @@ namespace {
         bool    atu_abbr(Atom at, const KVTree& attrs)
         {
             std::string     n   = cdb::abbreviation(at);
-            static thread_local SQ uTitle("UPDATE Atoms SET abbr=? WHERE id=?");
+            static thread_local CacheQuery uTitle("UPDATE Atoms SET abbr=? WHERE id=?");
             std::string    t   = atq_abbr(at, attrs);
             if(t != n){
                 uTitle.bind(1, t);
@@ -433,6 +433,7 @@ namespace {
         Atom    s3_atom_create(KVTree& attrs, Document doc)
         {
             Atom        x   = cdb::db_atom(doc);
+            
             ati_classes(x, attrs);
             ati_title(x, attrs);
             ati_abbr(x, attrs);
@@ -535,9 +536,9 @@ namespace {
         
         void    u_category_erase(Category x)
         {
-            static thread_local cdb::SQ  stmts[] = {
-                cdb::SQ( "UPDATE Classes SET category=0 WHERE category=?" ),
-                cdb::SQ( "DELETE FROM Categories WHERE id=?" )
+            static thread_local CacheQuery  stmts[] = {
+                CacheQuery( "UPDATE Classes SET category=0 WHERE category=?" ),
+                CacheQuery( "DELETE FROM Categories WHERE id=?" )
             };
             
             if(!x)
@@ -561,8 +562,8 @@ namespace {
             Image       img     = cdb::best_image(doc);
             
             if(img != cdb::icon(x)){
-                static thread_local cdb::SQ u1("UPDATE Categories SET icon=? WHERE id=?");
-                static thread_local cdb::SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+                static thread_local CacheQuery u1("UPDATE Categories SET icon=? WHERE id=?");
+                static thread_local CacheQuery u2("UPDATE Documents SET icon=? WHERE id=?");
                 
                 u1.exec(img.id, x.id);
                 u2.exec(doc.id, x.id);
@@ -624,7 +625,7 @@ namespace {
                 return Category::SharedData();
                 
             if(opts & cdb::U_INFO){
-                static thread_local cdb::SQ u("UPDATE Categories SET name=?,brief=? WHERE id=?");
+                static thread_local CacheQuery u("UPDATE Categories SET name=?,brief=? WHERE id=?");
                 u.bind(1, data->name);
                 u.bind(2, data->brief);
                 u.bind(3, x.id);
@@ -640,15 +641,13 @@ namespace {
 
         void                u_class_erase(Class x)
         {
-            using cdb::SQ;
-            
-            static thread_local cdb::SQ stmts[] = {
-                SQ("DELETE FROM CAlias WHERE class=?"),
-                SQ("DELETE FROM CPrefix WHERE class=?"),
-                SQ("DELETE FROM CSuffix WHERE class=?"),
-                SQ("DELETE FROM CTags WHERE class=?"),
-                SQ("DELETE FROM CLookup WHERE class=? AND priority=1"),
-                SQ("DELETE FROM Classes WHERE id=?")
+            static thread_local CacheQuery stmts[] = {
+                CacheQuery("DELETE FROM CAlias WHERE class=?"),
+                CacheQuery("DELETE FROM CPrefix WHERE class=?"),
+                CacheQuery("DELETE FROM CSuffix WHERE class=?"),
+                CacheQuery("DELETE FROM CTags WHERE class=?"),
+                CacheQuery("DELETE FROM CLookup WHERE class=? AND priority=1"),
+                CacheQuery("DELETE FROM Classes WHERE id=?")
             };
             
             if(!x)
@@ -668,8 +667,8 @@ namespace {
             if(!x)
                 return ;
                 
-            static thread_local cdb::SQ u1("UPDATE Classes SET icon=? WHERE id=?");
-            static thread_local cdb::SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            static thread_local CacheQuery u1("UPDATE Classes SET icon=? WHERE id=?");
+            static thread_local CacheQuery u2("UPDATE Documents SET icon=? WHERE id=?");
 
             Document    doc     = cdb::document(x);
             Image       img     = cdb::best_image(doc);
@@ -706,7 +705,7 @@ namespace {
             if(!data->category.empty())
                 cat = cdb::db_category(data->category);
 
-            static thread_local cdb::SQ uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
+            static thread_local CacheQuery uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=? WHERE id=?");
 
             uInfo.bind(1, data->name);
             uInfo.bind(2, data->plural);
@@ -717,8 +716,8 @@ namespace {
             uInfo.exec();
 
             
-            static thread_local cdb::SQ iTag("INSERT INTO CTags (class, tag) VALUES (?,?)");
-            static thread_local cdb::SQ dTag("DELETE FROM CTags WHERE class=? AND tag=?");
+            static thread_local CacheQuery iTag("INSERT INTO CTags (class, tag) VALUES (?,?)");
+            static thread_local CacheQuery dTag("DELETE FROM CTags WHERE class=? AND tag=?");
 
             std::set<Tag>   new_tags = cdb::find_tags_set(data->tags, true);
             
@@ -773,7 +772,7 @@ namespace {
             
             Image       img     = cdb::best_image(doc);
 
-            static thread_local cdb::SQ iInfo("INSERT OR REPLACE INTO Classes (id,k,name,plural,brief,category,binding,icon,url,devurl) VALUES (?,?,?,?,?,?,?,?,?,?)");
+            static thread_local CacheQuery iInfo("INSERT OR REPLACE INTO Classes (id,k,name,plural,brief,category,binding,icon,url,devurl) VALUES (?,?,?,?,?,?,?,?,?,?)");
             iInfo.bind(1, doc.id);
             iInfo.bind(2, k);
             iInfo.bind(3, name);
@@ -788,7 +787,7 @@ namespace {
             
             Class   x{doc.id};
             
-            static thread_local cdb::SQ iTag("INSERT INTO CTags (class, tag) VALUES (?, ?)");
+            static thread_local CacheQuery iTag("INSERT INTO CTags (class, tag) VALUES (?, ?)");
             for(std::string_view tk : dp->tags){
                 Tag     t   = cdb::db_tag(tk);
                 if(!t){
@@ -800,7 +799,7 @@ namespace {
                 iTag.exec();
             }
             
-            static thread_local cdb::SQ iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
+            static thread_local CacheQuery iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
             
             for(auto& p : dp->prefixes){
                 std::string a   = p+k;
@@ -817,11 +816,11 @@ namespace {
                 iAlias.exec(x.id, a);
             }
             
-            static thread_local cdb::SQ iPrefix("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
+            static thread_local CacheQuery iPrefix("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
             for(auto& p : dp->prefixes)
                 iPrefix.exec(x.id, p);
                 
-            static thread_local cdb::SQ iSuffix("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
+            static thread_local CacheQuery iSuffix("INSERT INTO CSuffix (class, suffix) VALUES (?,?)");
             for(auto& s : dp->suffixes)
                 iSuffix.exec(x.id, s);
             
@@ -834,7 +833,7 @@ namespace {
             if(!dp)
                 return ;
             
-            static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base) VALUES (?,?)");
+            static thread_local CacheQuery iUse("INSERT INTO CDepends (class, base) VALUES (?,?)");
             for(std::string_view ck : dp->use){
                 Class   y   = cdb::db_class(ck);
                 if(!y){
@@ -847,7 +846,7 @@ namespace {
                 iUse.exec();
             }
             
-            static thread_local cdb::SQ iTarget("INSERT INTO CTargets (class, target) VALUES (?,?)");
+            static thread_local CacheQuery iTarget("INSERT INTO CTargets (class, target) VALUES (?,?)");
             for(std::string_view ck : dp->targets){
                 Class   y = cdb::db_class(ck);
                 if(!y){
@@ -860,7 +859,7 @@ namespace {
                 iTarget.exec();
             }
             
-            static thread_local cdb::SQ iSource("INSERT INTO CSources (class, source) VALUES (?,?)");
+            static thread_local CacheQuery iSource("INSERT INTO CSources (class, source) VALUES (?,?)");
             for(std::string_view ck : dp->sources){
                 Class   y = cdb::db_class(ck);
                 if(!y){
@@ -874,7 +873,7 @@ namespace {
             }
 
         #if 0
-            static thread_local cdb::SQ iReverse("INSERT INTO CReverses (class, reverse) VALUES (?,?)");
+            static thread_local CacheQuery iReverse("INSERT INTO CReverses (class, reverse) VALUES (?,?)");
             for(std::string_view ck : dp->reverse){
                 Class   y = cdb::db_class(ck);
                 if(!y){
@@ -897,7 +896,7 @@ namespace {
                 return;
 
 
-            static thread_local cdb::SQ iUse("INSERT INTO CDepends (class, base, hops) VALUES (?,?,?)");
+            static thread_local CacheQuery iUse("INSERT INTO CDepends (class, base, hops) VALUES (?,?,?)");
 
             ClassCountMap   bases  = cdb::make_count_map(cdb::base_classes_ranked(x));
             ClassCountMap   copy    = bases;
@@ -1039,7 +1038,7 @@ namespace {
                 return ;
             }
             
-            static thread_local SQ iAtoms("INSERT INTO FAtomTypes (field, class) VALUES (?,?)");
+            static thread_local CacheQuery iAtoms("INSERT INTO FAtomTypes (field, class) VALUES (?,?)");
             iAtoms.batch(x.id, ids_for(classes_set(data->atoms, true)));
         }
 
@@ -1053,7 +1052,7 @@ namespace {
                 return ;
             }
             
-            static thread_local SQ iClass("INSERT INTO CFields (field, class, hops) VALUES (?, ?, 0)");
+            static thread_local CacheQuery iClass("INSERT INTO CFields (field, class, hops) VALUES (?, ?, 0)");
             
             Class   c = class_(x);
             if(c){
@@ -1093,10 +1092,10 @@ namespace {
 
         void    u_field_erase(Field x)
         {
-            static thread_local SQ stmts[] = {
-                SQ("DELETE FROM CFields WHERE field=?"),
-                SQ("DELETE FROM FTags WHERE field=?"),
-                SQ("DELETE FROM Fields WHERE id=?")
+            static thread_local CacheQuery stmts[] = {
+                CacheQuery("DELETE FROM CFields WHERE field=?"),
+                CacheQuery("DELETE FROM FTags WHERE field=?"),
+                CacheQuery("DELETE FROM Fields WHERE id=?")
             };
 
             if(!x)
@@ -1119,8 +1118,8 @@ namespace {
             Document    doc     = document(x);
             Image       img     = best_image(doc);
             
-            static thread_local SQ u1("UPDATE Fields SET icon=? WHERE id=?");
-            static thread_local SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            static thread_local CacheQuery u1("UPDATE Fields SET icon=? WHERE id=?");
+            static thread_local CacheQuery u2("UPDATE Documents SET icon=? WHERE id=?");
 
             if(icon(x) != img){
                 u1.exec(img.id, x.id);
@@ -1174,7 +1173,7 @@ namespace {
             Image       img     = best_image(doc);
             
 
-            static thread_local SQ iField("INSERT INTO FIELDS (id,k,class,ck,expected,icon,name,plural,pkey,brief,multi,restrict,category,maxcnt,anycls) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            static thread_local CacheQuery iField("INSERT INTO FIELDS (id,k,class,ck,expected,icon,name,plural,pkey,brief,multi,restrict,category,maxcnt,anycls) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 
             iField.bind(1, doc.id);
             iField.bind(2, k);
@@ -1196,15 +1195,15 @@ namespace {
             
             Field   x   = { doc.id };
             
-            static thread_local SQ iTag("INSERT INTO FTags (field, tag) VALUES (?,?)");
+            static thread_local CacheQuery iTag("INSERT INTO FTags (field, tag) VALUES (?,?)");
             for(Tag t : find_tags_set(dp->tags, true))
                 iTag.exec(x.id, t.id);
 
-            static thread_local SQ iAlias("INSERT INTO FAlias (field, alias) VALUES (?,?)");
+            static thread_local CacheQuery iAlias("INSERT INTO FAlias (field, alias) VALUES (?,?)");
             for(std::string_view s : dp->aliases)
                 iAlias.exec(x.id, s);
 
-            static thread_local SQ iDataType("INSERT INTO FDataTypes (field, type) VALUES (?,?)");
+            static thread_local CacheQuery iDataType("INSERT INTO FDataTypes (field, type) VALUES (?,?)");
             for(std::string_view s : dp->types){
                 const TypeInfo* ti  = TypeInfo::find(s);
                 if(!ti){
@@ -1215,7 +1214,7 @@ namespace {
                 iDataType.exec(x.id, ti->id());
             }
             
-            static thread_local SQ iAtomType("INSERT INTO FAtomTypes (field, class, hops) VALUES (?, ?, ?)");
+            static thread_local CacheQuery iAtomType("INSERT INTO FAtomTypes (field, class, hops) VALUES (?, ?, ?)");
             auto cset   = make_set(db_classes(dp->atoms));
             for(auto itr : derived_classes_ranked_merged_map(cset, true)){
                 iAtomType.bind(1, x.id);
@@ -1224,11 +1223,11 @@ namespace {
                 iAtomType.exec();
             }
 
-            static thread_local SQ iClass0("INSERT INTO CFields (class, field, hops) VALUES (?, ?, 0)");
+            static thread_local CacheQuery iClass0("INSERT INTO CFields (class, field, hops) VALUES (?, ?, 0)");
             iClass0.exec(cls.id, x.id);
             
-            static thread_local SQ iClassA("INSERT INTO CFields (class, field, hops) VALUES (?, ?, -1)");
-            static thread_local SQ iClass( "INSERT INTO CFields (class, field, hops) VALUES (?, ?, ?)");
+            static thread_local CacheQuery iClassA("INSERT INTO CFields (class, field, hops) VALUES (?, ?, -1)");
+            static thread_local CacheQuery iClass( "INSERT INTO CFields (class, field, hops) VALUES (?, ?, ?)");
             
             if(anycls){
                 for(Class c : all_classes())
@@ -1262,20 +1261,18 @@ namespace {
 
         void    u_image_erase(Image x)
         {
-            using cdb::SQ;
-            
             if(!x)
                 return ;
                 
-            static thread_local SQ stmts[] = {
-                SQ("UPDATE Atoms SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Categories SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Classes SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Documents SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Fields SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Leafs SET icon=0 WHERE icon=?"),
-                SQ("UPDATE Tags SET icon=0 WHERE icon=?"),
-                SQ("DELETE FROM Images WHERE id=?")
+            static thread_local CacheQuery stmts[] = {
+                CacheQuery("UPDATE Atoms SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Categories SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Classes SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Documents SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Fields SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Leafs SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Tags SET icon=0 WHERE icon=?"),
+                CacheQuery("DELETE FROM Images WHERE id=?")
             };
             
             if(!x)
@@ -1326,7 +1323,7 @@ namespace {
             Magick::Blob            bS, bM, bL;
             Fragment                frag = cdb::fragment(img);
             
-            static thread_local cdb::SQ u("UPDATE Images SET small=?,medium=?,large=? WHERE id=?");
+            static thread_local CacheQuery u("UPDATE Images SET small=?,medium=?,large=? WHERE id=?");
             auto u_af = u.af();
 
             std::filesystem::path   fp  = cdb::path(frag);
@@ -1431,7 +1428,7 @@ namespace {
                 return;
             }
             
-            static thread_local SQ uInfo("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
+            static thread_local CacheQuery uInfo("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
             if(opts & U_INFO){
                 std::string_view title   = dp->title();
                 std::string_view abbr    = dp->abbr();
@@ -1450,8 +1447,8 @@ namespace {
                 uInfo.exec();
             }
             
-            static thread_local SQ dTag("DELETE FROM LTags WHERE leaf=? AND tag=?");
-            static thread_local SQ iTag("INSERT INTO LTags (leaf, tag) VALUES (?,?)");
+            static thread_local CacheQuery dTag("DELETE FROM LTags WHERE leaf=? AND tag=?");
+            static thread_local CacheQuery iTag("INSERT INTO LTags (leaf, tag) VALUES (?,?)");
             
             if(opts & U_TAGS){
                 std::set<Tag>   old_tags = tags_set(x);
@@ -1495,9 +1492,9 @@ namespace {
 
         void    u_leaf_erase(Leaf x)
         {
-            static thread_local cdb::SQ  stmts[] = {
-                cdb::SQ( "DELETE FROM LTags WHERE leaf=?" ),
-                cdb::SQ( "DELETE FROM Leafs WHERE id=?" )
+            static thread_local CacheQuery  stmts[] = {
+                CacheQuery( "DELETE FROM LTags WHERE leaf=?" ),
+                CacheQuery( "DELETE FROM Leafs WHERE id=?" )
             };
             for(auto& sq : stmts)
                 sq.exec(x.id);
@@ -1518,8 +1515,8 @@ namespace {
                 
             Document    doc     = cdb::document(x);
             Image       img     = cdb::best_image(doc);
-            static thread_local cdb::SQ u1("UPDATE Leafs SET icon=? WHERE id=?");
-            static thread_local cdb::SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            static thread_local CacheQuery u1("UPDATE Leafs SET icon=? WHERE id=?");
+            static thread_local CacheQuery u2("UPDATE Documents SET icon=? WHERE id=?");
 
             if(cdb::icon(x) != img){
                 u1.exec(img.id, x.id);
@@ -1553,6 +1550,18 @@ namespace {
         {
             u_leaf_icon(cdb::leaf(cdb::document(frag), true));
         }
+        
+        void    u_leaf_title(Leaf x, Leaf::SharedData dp)
+        {
+            auto t = dp->title();
+            if(t != cdb::title(x)){
+                static thread_local CacheQuery u("UPDATE Leafs SET title=? WHERE id=?");
+                auto u_af = u.af();
+                u.bind(1, t);
+                u.bind(2, x.id);
+                u.exec();
+            }
+        }
             
         void    s3_leaf_pass1(Document doc)
         {
@@ -1573,9 +1582,17 @@ namespace {
                 return ;
             }
             
+            u_leaf_title(x, dp);
+            
             Atom xa = s3_atom_create(dp->attrs, doc);
             s3_atom_bind(xa);
             s3_atom_notify(xa);
+            
+            static thread_local CacheQuery u("UPDATE Leafs SET atom=? WHERE id=?");
+            auto u_af = u.af();
+            u.bind(1, xa.id);
+            u.bind(2, x.id);
+            u.exec();
         }
 
         void    s3_leaf_pass2(Document doc)
@@ -1600,7 +1617,7 @@ namespace {
             if(!rt)
                 return ;
                 
-            static thread_local cdb::SQ r("REPLACE INTO RootIcons (root, icon) VALUES (?, ?)");
+            static thread_local CacheQuery r("REPLACE INTO RootIcons (root, icon) VALUES (?, ?)");
             auto r_af = r.af();
             r.bind(1, rt->id);
             r.bind(2, img.id);
@@ -1616,13 +1633,11 @@ namespace {
 
         void    u_tag_erase(Tag x)
         {
-            using cdb::SQ;
-            
-            static thread_local SQ  stmts[] = {
-                SQ( "DELETE FROM CTags WHERE tag=?" ),
-                SQ( "DELETE FROM FTags WHERE tag=?" ),
-                SQ( "DELETE FROM LTags WHERE tag=?" ),
-                SQ( "DELETE FROM Tags WHERE id=?" )
+            static thread_local CacheQuery  stmts[] = {
+                CacheQuery( "DELETE FROM CTags WHERE tag=?" ),
+                CacheQuery( "DELETE FROM FTags WHERE tag=?" ),
+                CacheQuery( "DELETE FROM LTags WHERE tag=?" ),
+                CacheQuery( "DELETE FROM Tags WHERE id=?" )
             };
             for(auto& sq : stmts)
                 sq.exec(x.id);
@@ -1642,8 +1657,8 @@ namespace {
             Image       img     = cdb::best_image(doc);
 
             if(cdb::icon(x) != img){
-                static thread_local cdb::SQ u1("UPDATE Tags SET icon=? WHERE id=?");
-                static thread_local cdb::SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+                static thread_local CacheQuery u1("UPDATE Tags SET icon=? WHERE id=?");
+                static thread_local CacheQuery u2("UPDATE Documents SET icon=? WHERE id=?");
                 u1.exec(img.id, x.id);
                 u2.exec(doc.id, x.id);
             }
@@ -1713,8 +1728,8 @@ namespace {
             if(!data)
                 return Tag::SharedData();
              
-            static thread_local cdb::SQ uInfo("UPDATE Tags SET name=?,brief=? WHERE id=?");
-            static thread_local cdb::SQ uLeaf("UPDATE Tags SET leaf=? WHERE id=?");
+            static thread_local CacheQuery uInfo("UPDATE Tags SET name=?,brief=? WHERE id=?");
+            static thread_local CacheQuery uLeaf("UPDATE Tags SET leaf=? WHERE id=?");
             
             if(opts&cdb::U_INFO){
                 uInfo.bind(1, data->name);
@@ -1741,7 +1756,7 @@ namespace {
 
         void    u_user_erase(User u)
         {
-            static thread_local cdb::SQ d("DELETE FROM Users WHERE id=?");
+            static thread_local CacheQuery d("DELETE FROM Users WHERE id=?");
             d.exec(u.id);
         }
 
@@ -1757,8 +1772,8 @@ namespace {
                 
             Document    doc     = cdb::document(x);
             Image       img     = cdb::best_image(doc);
-            static thread_local cdb::SQ u1("UPDATE Users SET icon=? WHERE id=?");
-            static thread_local cdb::SQ u2("UPDATE Documents SET icon=? WHERE id=?");
+            static thread_local CacheQuery u1("UPDATE Users SET icon=? WHERE id=?");
+            static thread_local CacheQuery u2("UPDATE Documents SET icon=? WHERE id=?");
             
             if(cdb::icon(x) != img){
                 u1.exec(img.id, x.id);
@@ -1821,7 +1836,7 @@ namespace {
             if(!data)
                 return User::SharedData();
 
-            static thread_local cdb::SQ uInfo("UPDATE Users SET name=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=? WHERE id=?");
+            static thread_local CacheQuery uInfo("UPDATE Users SET name=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=? WHERE id=?");
             if(opts & cdb::U_INFO){
                 uInfo.bind(1, data->name);
                 uInfo.bind(2, data->brief);

@@ -8,6 +8,10 @@ H3 {
     margin-left: 4em;
 }
 
+IMG.leaf {
+    max-width: 100%;
+}
+
 IMG.nh {
     vertical-align: middle;
     max-width: 2em;
@@ -16,8 +20,9 @@ IMG.nh {
 
 TABLE.attrs {
     outline-style:groove;
-    width:40%;
-    
+    width:30%;
+    margin-left:2em;
+    margin-right:2em;
 }
 caption.attrs {
     font-variant: small-caps;

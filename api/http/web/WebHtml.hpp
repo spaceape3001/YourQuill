@@ -87,6 +87,9 @@ namespace yq {
         WebAutoClose  p();
         WebAutoClose  paragraph();
         WebAutoClose  pre();
+        
+        void            pre(std::string_view);
+        
         WebAutoClose  table(std::string_view cls=std::string_view());
         WebAutoClose  title();
         WebAutoClose  u();
