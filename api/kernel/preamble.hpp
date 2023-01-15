@@ -170,7 +170,10 @@ namespace yq {
             U_LEAF                  = 1 << 15,
             
             U_ATTRIBUTES            = 1 << 16,
-            U_EDGES                 = 1 << 17
+            U_EDGES                 = 1 << 17,
+            
+            
+            ROOTS                   = 1 << 20
             
             //  Bits 24-47 are reserved for library-scoped uses
             //  Bits 48-63 are reserved for local uses
