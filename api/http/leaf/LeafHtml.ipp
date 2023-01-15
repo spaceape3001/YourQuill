@@ -18,11 +18,12 @@ namespace yq {
         {
             Thumbnail th = cdb::thumbnail(cdb::icon(l), h.context().session.icon_size);
             
+            h << "<a href=\"/wiki?key=" << cdb::key(l) << "\">";
             // start the url (later)
             if(th)
                 h << th << " ";
             h << cdb::label(l);
-            //  end the url(later)
+            h << "</a>";
             return h;
         }
 
