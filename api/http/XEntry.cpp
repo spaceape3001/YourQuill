@@ -10,6 +10,8 @@
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/leaf/LeafCDB.hpp>
 #include <kernel/wksp/CacheQuery.hpp>
+#include <kernel/wksp/Workspace.hpp>
+#include <http/file/DocumentHtml.hpp>
 
 namespace yq {
 
@@ -34,6 +36,36 @@ namespace yq {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
+
+    std::string_view    XEntry::Details::get_link(Type t) const
+    {
+        switch(t){
+        case IsFolder:
+            return link.folder;
+        case IsDocument:
+            return link.document;
+        case IsLeaf:
+            return link.leaf;
+        default:
+            return std::string_view();
+        }
+    }
+    
+    bool                XEntry::Details::get_query(Type t) const
+    {
+        switch(t){
+        case IsFolder:
+            return query.folders;
+        case IsDocument:
+            return query.documents;
+        case IsLeaf:
+            return query.leafs;
+        default:
+            return false;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
     
     XEntry::XEntry(const XEntry&) = default;
     XEntry::XEntry(XEntry&&) = default;
@@ -45,21 +77,122 @@ namespace yq {
     //XEntry::XEntry(Document);
     //XEntry::XEntry(Folder);
 
-    ////////////////////////////////////////////////////////////////////////////////
-
-    size_t                XEntry::query_documents(std::vector<XEntry>&ret, Folder x, unsigned int opts)
+    std::string_view    XEntry::link(const Details&dt) const
     {
-        static thread_local CacheQuery  sd1("SELECT id,sk,name,icon,suffix FROM Documents WHERE folder=? and hidden=0 ORDER BY sk");
-        static thread_local CacheQuery  sd2("SELECT id,sk,name,icon,suffix FROM Documents WHERE folder=? ORDER BY sk");
+        return dt.get_link(type);
+    }
 
+    WebAutoClose    XEntry::write_link(class WebHtml&h, const Details& dt) const
+    {
+        std::string_view    s   = dt.get_link(type);
+        if(s.empty())
+            return WebAutoClose();
+        if(key.empty())
+            return WebAutoClose();
+        h << "<a href=\"" << s;
+        html_escape_write(h, key);
+        h << "\">";
+        return WebAutoClose(h, "</a>");
+    }
+
+    void    XEntry::write_thumbnail(class WebHtml&h, const Details& dt) const
+    {
+        static const auto& icons  = html::file_extension_icons();
+        
+        if(icon != Image{}){
+            h << Thumbnail{ icon.id, dt.icon_size };
+            return;
+        }
+        
+        switch(type){
+        case IsFolder:
+            if(icon != Image{}){
+                h << Thumbnail{ icon.id, dt.icon_size };
+            } else 
+                h << "<img src=\"/img/folder.svg\" class=\"" << dt.icon_size << "\">";
+            break;
+        case IsDocument:
+            if(icon != Image{}){
+                h << Thumbnail{ icon.id, dt.icon_size };
+            } else {
+                std::string k   = icons.get(suffix);
+                if(!k.empty()){
+                    h << "<img src=\"" << k << "\" class=\"" << dt.icon_size << "\">";
+                } else {
+                    h << "<img src=\"/img/document.svg\" class=\"" << dt.icon_size << "\">";
+                }
+            }
+            break;
+        case IsLeaf:
+            if(icon != Image{}){
+                h << Thumbnail{ icon.id, dt.icon_size };
+            } else {
+                h << "<img src=\"/img/ext/y.svg\" class=\"" << dt.icon_size << "\">";
+            }
+            break;
+        case None:
+        default:
+            if(icon != Image{}){
+                h << Thumbnail{ icon.id, dt.icon_size };
+            }
+            break;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    struct XSQ : public CacheQuery {
+        std::string         sqldata;
+        XSQ(std::string&& sql) : CacheQuery(sql), sqldata(std::move(sql)) 
+        {
+        }
+    };
+    
+    
+    struct XEntry::Tokens {
+        XSQ     visible_skey;
+        XSQ     hidden_skey;
+    
+        Tokens(std::string_view basis, std::string_view visible, std::string_view order_skey) : 
+            visible_skey(concat({basis, visible, order_skey})), 
+            hidden_skey(concat({basis, order_skey}))
+        {
+        }
+        
+        XSQ& operator[](const Details& dt) 
+        {
+            return dt.option.hidden ? hidden_skey : visible_skey;
+        }
+        
+    };
+
+    std::vector<XEntry>  XEntry::query(Folder x, const Details& dt)
+    {
+        std::vector<XEntry> ret;
+        if(dt.query.folders)
+            query_folders(ret, x, dt);
+        if(dt.query.documents)
+            query_documents(ret, x, dt);
+        if(dt.query.leafs)
+            query_leafs(ret, x, dt);
+        if(dt.option.merge)
+            std::stable_sort( ret.begin(), ret.end(), XEntry::isLess_skey);
+        return ret;
+    }
+    
+
+    size_t                XEntry::query_documents(std::vector<XEntry>&ret, Folder x, const Details& dt)
+    {
+        static thread_local Tokens sql("SELECT id,sk,name,icon,suffix,k FROM Documents WHERE folder=?", " and hidden=0", " ORDER BY sk");
+        
         size_t      cnt = 0;
-        CacheQuery& sd  = (opts&cdb::HIDDEN) ? sd2 : sd1;
+        CacheQuery& sd  = sql[dt];
         auto bf = sd.af();
         sd.bind(1, x.id);
         
         while(sd.step() == SQResult::Row){
             XEntry   ee;
-            ee.doc      = { sd.v_uint64(1) };
+            ee.document = { sd.v_uint64(1) };
             ee.skey     = sd.v_string(2);
             ee.name     = sd.v_string(3);
             ee.type     = IsDocument;
@@ -69,8 +202,9 @@ namespace yq {
                 ee.label    = ee.name;
             ee.icon     = Image{ sd.v_uint64(4) };
             ee.suffix   = sd.v_string(5);
-            if(opts & cdb::ROOTS)
-                ee.roots    = cdb::roots( ee.doc );
+            ee.key      = sd.v_string(6);
+            if(dt.option.roots)
+                ee.roots    = cdb::roots( ee.document );
             ret.push_back(ee);
             ++cnt;
         }
@@ -78,19 +212,11 @@ namespace yq {
         return cnt;
     }
 
-    std::vector<XEntry>   XEntry::query_documents(Folder x, unsigned int opts)
+    size_t                XEntry::query_folders(std::vector<XEntry>&ret, Folder x, const Details& dt)
     {
-        std::vector<XEntry> ret;
-        query_documents(ret, x, opts);
-        return ret;
-    }
-    
-    size_t                XEntry::query_folders(std::vector<XEntry>&ret, Folder x, unsigned int opts)
-    {
-        static thread_local CacheQuery  sf1("SELECT id,sk,name,icon FROM Folders WHERE parent=? and hidden=0 ORDER BY sk");
-        static thread_local CacheQuery  sf2("SELECT id,sk,name,icon FROM Folders WHERE parent=? ORDER BY sk");
+        static thread_local Tokens  sql("SELECT id,sk,name,icon,k FROM Folders WHERE parent=?", " and hidden=0", " ORDER BY sk");
         size_t      cnt = 0;
-        CacheQuery& sf  = (opts&cdb::HIDDEN) ? sf2 : sf1;
+        CacheQuery& sf  = sql[dt];
         auto af = sf.af();
         sf.bind(1, x.id);
         while(sf.step() == SQResult::Row){
@@ -104,7 +230,8 @@ namespace yq {
             else
                 ee.label    = ee.name;
             ee.icon     = Image{ sf.v_uint64(4) };
-            if(opts & cdb::ROOTS)
+            ee.key      = sf.v_string(5);
+            if(dt.option.roots)
                 ee.roots    = cdb::roots( ee.folder );
             ret.push_back(ee);
             ++cnt;
@@ -112,20 +239,12 @@ namespace yq {
         return cnt;
     }
     
-
-    std::vector<XEntry>   XEntry::query_folders(Folder x, unsigned int opts)
-    {
-        std::vector<XEntry> ret;
-        query_folders(ret, x, opts);
-        return ret;
-    }
     
-    size_t                XEntry::query_leafs(std::vector<XEntry>&ret, Folder x, unsigned int opts)
+    size_t                XEntry::query_leafs(std::vector<XEntry>&ret, Folder x, const Details& dt)
     {
-        static thread_local CacheQuery  sl1("SELECT id,Documents.sk,title,icon FROM Leafs INNER JOIN ON Leafs.id=Documents.id WHERE Documents.parent=? and Documents.hidden=0ORDER BY Documents.sk");
-        static thread_local CacheQuery  sl2("SELECT id,Documents.sk,title,icon FROM Leafs INNER JOIN ON Leafs.id=Documents.id WHERE Documents.parent=? ORDER BY Documents.sk");
+        static thread_local Tokens      sql("SELECT Leafs.id,Documents.skc,Leafs.title,Leafs.icon,Leafs.k FROM Leafs INNER JOIN Documents ON Leafs.id=Documents.id WHERE Documents.folder=?", " and Documents.hidden=0", " ORDER BY Documents.sk");
         size_t      cnt = 0;
-        CacheQuery& sf  = (opts&cdb::HIDDEN) ? sl2 : sl1;
+        CacheQuery& sf  = sql[dt];
         auto af = sf.af();
         sf.bind(1, x.id);
         while(sf.step() == SQResult::Row){
@@ -139,19 +258,13 @@ namespace yq {
             else
                 ee.label    = ee.title;
             ee.icon     = Image{ sf.v_uint64(4) };
-            if(opts & cdb::ROOTS)
-                ee.roots    = cdb::roots( ee.doc );
+            ee.key      = sf.v_string(5);
+            if(dt.option.roots)
+                ee.roots    = cdb::roots( ee.document );
             ret.push_back(ee);
             ++cnt;
         }
         return cnt;
-    }
-
-    std::vector<XEntry>   XEntry::query_leafs(Folder x, unsigned int opts)
-    {
-        std::vector<XEntry> ret;
-        query_leafs(ret, x, opts);
-        return ret;
     }
 
 

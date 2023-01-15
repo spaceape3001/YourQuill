@@ -5,18 +5,22 @@
 </div>
 <p>
 
+<script type="text/javascript">
+    document.write("FooBar");
+</script>
+
 <table class="nh">
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/folder-documents.svg"/></td>
-        <td class="nh-link"><a href="/explore">Files &amp; Folders</a></td>
+        <td class="nh-link"><a href="/file/explore">Files &amp; Folders</a></td>
     </tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/categories.svg"/></td>
         <td class="nh-link">Categories</td>
     </tr>
     <tr class="nh">
-        <td></td>
-        <td class="nh-link">Browse</td>
+        <td class="nh-icon"><img class="nh" src="img/browse.svg"/></td>
+        <td class="nh-link"><a href="/wiki/browse">Browse Wiki</a> (<a href="/wiki/random">RANDOM</a>)</td>
     </tr>
     <tr><td colspan="2"><hr width="50%" /></td></tr>
     <tr class="nh">

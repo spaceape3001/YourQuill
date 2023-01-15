@@ -154,17 +154,17 @@ TD.icon img {
     object-fit: contain;
 }
 
-img.small {
+img.Small {
     max-width: 32px;
     max-height: 24px;
 }
 
-img.medium {
+img.Medium {
     max-width: 64px;
     max-height: 48px;
 }
 
-img.large {
+img.Large {
     max-width: 128px;
     max-height: 96px;
 }

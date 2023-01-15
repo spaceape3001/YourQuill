@@ -4,12 +4,13 @@
 		<META charset="utf-8" />
 		<TITLE>{{TITLE}}</TITLE>
 		<LINK rel="stylesheet" type="text/css" href="/css" />
-    	<SCRIPT src="/js/jquery.js" ></SCRIPT>{{HTML_SCRIPT}}{{HTML_CSS}}
+    	<SCRIPT src="/js/jquery.js" ></SCRIPT>
+    	<SCRIPT src="/js/common.js" ></SCRIPT>{{HTML_SCRIPT}}{{HTML_CSS}}
 	</HEAD>
 	<BODY>
 		<TABLE WIDTH="100%">
 			<TR>
-				<TH ROWSPAN="2"><A HREF="/{{HOME}}"><IMG CLASS="large" SRC="/logo" BORDER="0" ALT="{{ABBREVIATION}}"></A></TH>
+				<TH ROWSPAN="2"><A HREF="/{{HOME}}"><IMG CLASS="Large" SRC="/logo" BORDER="0" ALT="{{ABBREVIATION}}"></A></TH>
 				<TH />
 				<TH ALIGN="right" VALIGN="top">
 				<DIV id="pleaseLogin">
@@ -47,7 +48,8 @@
 				<TD COLSPAN="3"><HR></TD>
 			</TR>
 			<TR>
-				<TD COLSPAN="3">{{BODY}}</TD>
+			    <TD>NAVBAR</TD>
+				<TD COLSPAN="2">{{BODY}}</TD>
 			</TR>
 			<TR>
 				<TD COLSPAN="3"><HR></TD>

@@ -137,6 +137,8 @@ namespace yq {
     
         using CloseHandler  = std::function<void(WebHtml&)>;
 
+        WebAutoClose(){}
+
         WebAutoClose(WebHtml&, std::string_view );
 
         WebAutoClose(WebHtml&, CloseHandler);

@@ -7,6 +7,7 @@
 #pragma once
 
 #include "DocumentHtml.hpp"
+#include <basic/DirUtils.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/image/ImageCDB.hpp>
 
@@ -67,5 +68,28 @@ namespace yq {
                   << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" << i.suffix << "</td></tr>\n";
             }
         }
+
+        string_map_t    make_file_extension_icons()
+        {
+            string_map_t    ret;
+            
+            dir::for_all_children(wksp::shared_all("www/img/ext"sv), dir::NO_DIRS, [&](const std::filesystem::path& p){
+                auto sfx = p.extension();
+                if(!is_similar(sfx.c_str(), ".svg"))
+                    return;
+                auto file           = p.filename();
+                auto key            = p.stem();
+                ret[key.c_str()]    = "/img/ext/"s + file.c_str();
+            });
+            
+            return ret;
+        }
+        
+        const string_map_t& file_extension_icons()
+        {
+            static string_map_t     s_data  = make_file_extension_icons();
+            return s_data;
+        }
+
     }
 }

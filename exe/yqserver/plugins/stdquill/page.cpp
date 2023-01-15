@@ -516,7 +516,7 @@ namespace {
 
 #include "p_dev.ipp"
 #include "p_explorer.ipp"
-#include "p_leaf.ipp"
+#include "p_wiki.ipp"
 
 
 namespace {
@@ -563,7 +563,7 @@ namespace {
         
         reg_webpage<p_image>("/image").argument("id", "ID for the image");
         
-        reg_leaf();
+        reg_wiki();
         
         reg_webpage<p_thumbnail>("/thumbnail").argument("id", "ID for the image");
         reg_webpage<p_user>("/user");
