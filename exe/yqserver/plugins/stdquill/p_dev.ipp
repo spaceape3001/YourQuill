@@ -764,6 +764,16 @@ namespace {
         h.kvrow("Methods") << type->method_count();
     }
     
+    void    p_dev_meta_type_methods(WebHtml& h)
+    {
+        const TypeInfo* type    = type_info(h);
+        if(!type)
+            throw HttpStatus::BadArgument;
+        
+        h.title() << "Type Info (" << type->name() << "): Methods";
+        dev_table(h, type->methods());
+    }
+    
     void    p_dev_meta_type_properties(WebHtml& h)
     {
         const TypeInfo* type    = type_info(h);
@@ -773,7 +783,7 @@ namespace {
         h.title() << "Type Info (" << type->name() << "): Properties";
         dev_table(h, type->properties());
     }
-    
+
     void p_dev_meta_types(WebHtml&h)
     {
         h.title() << "All Type Infos";
@@ -1178,6 +1188,7 @@ namespace {
         reg_webpage<p_dev_meta_objects>("/dev/meta/objects"); 
         reg_webgroup({
             reg_webpage<p_dev_meta_type>("/dev/meta/type").label("Info"),
+            reg_webpage<p_dev_meta_type_methods>("/dev/meta/methods").label("Methods"),
             reg_webpage<p_dev_meta_type_properties>("/dev/meta/type/properties").label("Properties")
         });
         reg_webpage<p_dev_meta_types>("/dev/meta/types");

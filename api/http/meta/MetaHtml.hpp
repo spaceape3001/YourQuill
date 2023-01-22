@@ -41,6 +41,11 @@ namespace yq {
     }
 
     namespace html {
+        WebHtml&    operator<<(WebHtml&, DevID<const Meta*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const Meta*>);
+    }
+
+    namespace html {
         WebHtml&    operator<<(WebHtml&, DevID<const ObjectInfo*>);
         WebHtml&    operator<<(WebHtml&, Dev<const ObjectInfo*>);
         void    dev_table(WebHtml&, const std::vector<const ObjectInfo*>&);
@@ -48,10 +53,15 @@ namespace yq {
     }
 
     namespace html {
+        WebHtml&    operator<<(WebHtml&, DevID<const MethodInfo*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const MethodInfo*>);
+        void    dev_table(WebHtml&, const std::vector<const MethodInfo*>&);
+    }
+
+    namespace html {
         WebHtml&    operator<<(WebHtml&, DevID<const PropertyInfo*>);
         WebHtml&    operator<<(WebHtml&, Dev<const PropertyInfo*>);
         void    dev_table(WebHtml&, const std::vector<const PropertyInfo*>&);
-        
     }
 
     namespace arg {

@@ -5,6 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <http/meta/MetaHtml.hpp>
+#include <basic/meta/ArgInfo.hpp>
+#include <basic/meta/MethodInfo.hpp>
 #include <basic/meta/ObjectInfo.hpp>
 #include <basic/meta/PropertyInfo.hpp>
 #include <basic/meta/TypeInfo.hpp>
@@ -15,8 +17,87 @@
 #include <http/web/WebVariable.hpp>
 
 namespace yq {
-    namespace arg {
 
+////////////////////////////////////////////////////////////////////////////////
+//  META
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace html {
+        WebHtml&    operator<<(WebHtml&h, Dev<const Meta*>v)
+        {
+            if(v.data){
+                h << v.data->name();
+                //h << "<a href=\"/dev/meta/object?id=" << v.data->id() << "\">" << v.data->name() << "</a>";
+            } else {
+                h << "(null meta-info)";
+            }
+            return h;
+        }
+
+        WebHtml&    operator<<(WebHtml&h, DevID<const Meta*>v)
+        {
+            if(v.data){
+                h << v.data->id();
+                //h << "<a href=\"/dev/meta/object?id=" << v.data->id() << "\">" << v.data->id() << "</a>";
+            } else {
+                h << "(null meta)";
+            }
+            return h;
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+//  METHODS
+////////////////////////////////////////////////////////////////////////////////
+
+    namespace html {
+        WebHtml&    operator<<(WebHtml&h, Dev<const MethodInfo*> v)
+        {
+            if(v.data){
+                h << v.data->name();
+                //h << "<a href=\"/dev/meta/object?id=" << v.data->id() << "\">" << v.data->name() << "</a>";
+            } else {
+                h << "(null method-info)";
+            }
+            return h;
+        }
+        
+        WebHtml&    operator<<(WebHtml&h, DevID<const MethodInfo*> v)
+        {
+            if(v.data){
+                h << v.data->id();
+                //h << "<a href=\"/dev/meta/object?id=" << v.data->id() << "\">" << v.data->id() << "</a>";
+            } else {
+                h << "(null method-info)";
+            }
+            return h;
+        }
+        
+        void    dev_table(WebHtml&h, const std::vector<const MethodInfo*>& methods)
+        {
+            auto ta = h.table();
+            h << "<tr><th>ID</th><th>Name</th><th>Result</th><th>Const</th><th>Static</th><th>Description</th></tr>\n";
+            for(const MethodInfo* mi : methods){
+                h << "<tr><td>"  << dev_id(mi) 
+                  << "</td><td>" << dev(mi) 
+                  << "</td><td>";
+                  
+                if(mi->result())
+                    h << dev(&mi->result()->type());
+                    
+                h << "</td><td>" << mi->is_const() 
+                  << "</td><td>" << mi->is_static() 
+                  << "</td><td>" << mi->description() 
+                  << "</td></tr>\n";
+            }
+        }
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+//  OBJECTS
+////////////////////////////////////////////////////////////////////////////////
+    
+    namespace arg {
         const ObjectInfo* object_info(std::string_view  arg_string)
         {
             arg_string   = trimmed(arg_string);
