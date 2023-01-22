@@ -11,7 +11,6 @@
 #include <basic/DirUtils.hpp>
 #include <basic/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <basic/meta/Global.hpp>
 #include <basic/meta/Init.hpp>
 #include <basic/SqlLite.hpp>
 #include <basic/TextUtils.hpp>

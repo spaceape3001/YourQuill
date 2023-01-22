@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <basic/Global.hpp>
+
 namespace {
     void p_dev_atom(WebHtml& h)
     {
@@ -584,6 +586,23 @@ namespace {
         h.title("Listing of Fragments");
         dev_table(h, all_fragments(Sorted::YES));
     }
+    
+    void    p_dev_globals(WebHtml& h)
+    {
+        h.title("Listing of Global Variables");
+        auto _t = h.table();
+        for(std::string_view k : global::variable::names()){
+            h << "<tr><th align=\"left\">" << k << "</th><td>";
+            auto [v,ec] = global::variable::get(k);
+            if(ec != std::error_code()){
+                h << "error: " << ec.message();
+            } else {
+                html_escape_write(h, v.printable());
+                h << " [ type: " << v.type().name() << "]";
+            }
+            h << "</td></tr>\n";
+        }
+    }
  
     void    p_dev_hello(WebHtml& out)
     {
@@ -1135,6 +1154,8 @@ namespace {
         });
         reg_webpage<dev_fragment_image>("/dev/fragment/image").argument("id", "ID for fragment"); 
         reg_webpage<p_dev_fragments>("/dev/fragments");
+ 
+        reg_webpage<p_dev_globals>("/dev/globals").local();
  
         reg_webpage<p_dev_hello>("/dev/hello");
 
