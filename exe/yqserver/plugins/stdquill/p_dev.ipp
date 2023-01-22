@@ -595,10 +595,10 @@ namespace {
             h << "<tr><th align=\"left\">" << k << "</th><td>";
             auto [v,ec] = global::variable::get(k);
             if(ec != std::error_code()){
-                h << "error: " << ec.message();
+                h << "<b>[error]</b></td><td> " << ec.message();
             } else {
+                h << "<i>[" << v.type().name() << "]</i></td><td>";
                 html_escape_write(h, v.printable());
-                h << " [ type: " << v.type().name() << "]";
             }
             h << "</td></tr>\n";
         }
