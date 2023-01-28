@@ -16,7 +16,7 @@ namespace yq {
         *(Data*) this = Data{};
     }
 
-    bool    Category::File::read(KVTree&&attrs, std::string_view fname) 
+    bool    Category::File::read(KVTree&&attrs, std::string_view) 
     { 
         name        = attrs.value(szName);
         brief       = attrs.value(szBrief);

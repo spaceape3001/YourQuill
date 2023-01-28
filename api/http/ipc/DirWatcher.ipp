@@ -31,7 +31,11 @@ namespace yq {
         return -1;
     }
 
-    void        DirWatcher::diag_print(const std::string& watchedFile, const std::string_view& name)
+    void    DirWatcher::dispatch(std::string_view, const inotify_event&, std::string_view) 
+    {
+    }
+
+    void        DirWatcher::diag_print(std::string_view watchedFile, std::string_view name)
     {
         yInfo() << "File change detected: " << watchedFile << "/" << name;
     }

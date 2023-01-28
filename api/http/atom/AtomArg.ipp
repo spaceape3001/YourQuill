@@ -32,12 +32,18 @@ namespace yq {
         Atom atom(const WebContext&ctx, bool *detected)
         {
             std::string    k    = ctx.find_query("id");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return atom_id(k);
+            }
             
             k       = ctx.find_query("key");
-            if(!k.empty())
+            if(!k.empty()){
+                if(detected)
+                    *detected   = true;
                 return atom_key(k);
+            }
             
             k       = ctx.find_query("atom");
             if(!k.empty())

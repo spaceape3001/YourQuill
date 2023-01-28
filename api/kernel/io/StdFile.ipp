@@ -52,6 +52,31 @@ namespace yq {
         }
     }
 
+    bool        StdFile::read(KVTree&&, std::string_view, std::string_view) 
+    { 
+        return true; 
+    }
+    
+    bool        StdFile::write(KVTree&, Stream&) const 
+    { 
+        return true; 
+    }
+
+    bool        StdFile::read(KVTree&&, std::string_view) 
+    { 
+        return true; 
+    }
+    
+    bool        StdFile::write(KVTree&) const 
+    { 
+        return true; 
+    }
+    
+    bool        StdFile::read(const XmlDocument&, std::string_view) 
+    { 
+        return true; 
+    }
+
     bool        StdFile::write(yq::Stream& buffer) const
     {
         KVTree          tree;

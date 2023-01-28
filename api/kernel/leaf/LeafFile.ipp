@@ -18,7 +18,7 @@ namespace yq {
         Data::reset();
     }
     
-    bool    Leaf::File::read(KVTree&&tree, std::string_view body, std::string_view fname) 
+    bool    Leaf::File::read(KVTree&&tree, std::string_view body, std::string_view) 
     {
         attrs               = std::move(tree);
         read_kv(context, body);

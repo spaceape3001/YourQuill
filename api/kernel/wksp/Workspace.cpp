@@ -111,7 +111,7 @@ namespace yq {
                 return BadDir;
             }
 
-            std::filesystem::path       read_file_from(uint16_t port)
+            std::filesystem::path       read_file_from([[maybe_unused]] uint16_t port)
             {
                 return std::filesystem::path(); // TODO (it'll use CURL, path TBD)
             }

@@ -39,7 +39,7 @@ namespace yq {
     }
     #endif
 
-    bool    Tag::File::read(KVTree&&attrs, std::string_view fname) 
+    bool    Tag::File::read(KVTree&&attrs, std::string_view) 
     {
         name    = attrs.value(kv::key({"%", "name"}));
         brief   = attrs.value("brief");

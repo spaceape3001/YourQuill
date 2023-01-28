@@ -52,7 +52,7 @@ namespace yq {
     }
     #endif
 
-    bool    Field::File::read(KVTree&&attrs, std::string_view fname) 
+    bool    Field::File::read(KVTree&&attrs, std::string_view) 
     {
         name            = attrs.value(kv::key({ "%", "name" }));
         pkey            = attrs.value("pkey");

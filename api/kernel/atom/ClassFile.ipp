@@ -53,7 +53,7 @@ namespace yq {
     }
     #endif
     
-    bool    Class::File::read(KVTree&&attrs, std::string_view fname) 
+    bool    Class::File::read(KVTree&&attrs, std::string_view) 
     {
         name            = attrs.value(kv::key({"%", "name"}));
         plural          = attrs.value("plural");

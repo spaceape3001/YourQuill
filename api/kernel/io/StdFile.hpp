@@ -35,18 +35,18 @@ namespace yq {
         //  override depending on has_body() above
         
         //! Override to read with body
-        virtual bool        read(KVTree&&, std::string_view body, std::string_view fname) { return true; }
+        virtual bool        read(KVTree&&, std::string_view body, std::string_view fname);
         
         //! Override to write with body
-        virtual bool        write(KVTree&, Stream&) const { return true; }
+        virtual bool        write(KVTree&, Stream&) const;
 
         //! Override to read without body
-        virtual bool        read(KVTree&&, std::string_view fname) { return true; }
+        virtual bool        read(KVTree&&, std::string_view fname);
         
         //! Override to write without body
-        virtual bool        write(KVTree&) const { return true; }
+        virtual bool        write(KVTree&) const;
         
         //! Override to read from XML instead
-        virtual bool        read(const XmlDocument&, std::string_view fname) { return true; }
+        virtual bool        read(const XmlDocument&, std::string_view fname);
     };
 }

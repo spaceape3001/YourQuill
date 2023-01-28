@@ -11,7 +11,7 @@
 namespace yq {
 
 
-    Leaf::Data&   Leaf::Data::merge(const Data&b, bool fOverride)
+    Leaf::Data&   Leaf::Data::merge(const Data&b, bool)
     {
         attrs.fusion(b.attrs);
         context += b.context;

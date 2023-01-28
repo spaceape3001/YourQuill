@@ -157,7 +157,7 @@ bool    initialize(const char* wfile)
 
 
 
-int execMain(int argc, char* argv[])
+int execMain(int, char* argv[])
 {
     if(!initialize(argv[1]))
         return -1;

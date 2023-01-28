@@ -33,8 +33,8 @@ namespace yq {
     protected:
 
         //  called when an event happened
-        virtual void    dispatch(const std::string& watchedFile, const inotify_event& event, const std::string_view& name) {}
-        void            diag_print(const std::string& watchedFile, const std::string_view& name);
+        virtual void    dispatch(std::string_view, const inotify_event& event, std::string_view name);
+        void            diag_print(std::string_view watchedFile, std::string_view name);
         
     private:
 
