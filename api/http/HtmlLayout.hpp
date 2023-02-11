@@ -72,7 +72,7 @@ namespace yq {
                     } else if constexpr (std::is_invocable_v<Pred, WebHtml&, T>){
                         p(h, values(i,j));
                     } else {
-                        static_assert(trait::always_false_v<Pred>, "Argument deduction failed");
+                        static_assert(always_false_v<Pred>, "Argument deduction failed");
                     }
                     h << "</td>";
                 }
@@ -92,7 +92,7 @@ namespace yq {
                     } else if constexpr (std::is_invocable_v<Pred1, WebHtml&, T>){
                         p1(h, values(i,j));
                     } else {
-                        static_assert(trait::always_false_v<Pred1>, "Argument deduction failed");
+                        static_assert(always_false_v<Pred1>, "Argument deduction failed");
                     }
                     h << "</td><td>";
                     if constexpr (std::is_invocable_v<Pred2, T>){
@@ -100,7 +100,7 @@ namespace yq {
                     } else if constexpr (std::is_invocable_v<Pred2, WebHtml&, T>){
                         p2(h, values(i,j));
                     } else {
-                        static_assert(trait::always_false_v<Pred2>, "Argument deduction failed");
+                        static_assert(always_false_v<Pred2>, "Argument deduction failed");
                     }
                     h << "</td>";
                 }

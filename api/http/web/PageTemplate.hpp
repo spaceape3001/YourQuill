@@ -16,7 +16,7 @@ namespace yq {
 
     /*! \brief HTML Web Template
     */
-    class PageTemplate : public RefCount, trait::not_copyable, trait::not_moveable {
+    class PageTemplate : public RefCount, not_copyable, not_moveable {
     public:
    
         PageTemplate(std::string&&);

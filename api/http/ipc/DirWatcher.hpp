@@ -16,7 +16,7 @@
 
 namespace yq {
 
-    class DirWatcher : trait::not_copyable, trait::not_moveable {
+    class DirWatcher : not_copyable, not_moveable {
     public:
         DirWatcher();
         ~DirWatcher();

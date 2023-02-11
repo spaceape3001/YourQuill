@@ -13,7 +13,8 @@
 
 namespace yq {
 
-    struct IDLockRepo : trait::not_copyable, trait::not_moveable {
+
+    struct IDLockRepo : not_copyable, not_moveable {
         struct Data {
             uint8_t count = 0;    // not having more than 254 contentions....
         };

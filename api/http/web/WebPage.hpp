@@ -155,7 +155,7 @@ namespace yq {
         std::string_view  description;
     };
     
-    class WebPage::Writer : public Meta::Writer, trait::not_copyable {
+    class WebPage::Writer : public Meta::Writer, public yq::not_copyable {
     public:
         
         //! Allows for an alternate path (if we're pure-page no extensions)

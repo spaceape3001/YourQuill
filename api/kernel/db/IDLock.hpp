@@ -15,7 +15,7 @@ namespace yq {
     struct IDLockRepo;
 
     template <typename ID>
-    class IDLock : trait::not_copyable {
+    class IDLock : not_copyable {
     
     public:
     
