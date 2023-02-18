@@ -248,7 +248,7 @@ namespace yq {
             }
             
             Leaf::SharedFile     td  = std::make_shared<Leaf::File>();
-            if(!td->load(std::move(ch), fp)){
+            if(td->load(std::move(ch), fp) != std::error_code()){
                 yError() << "Unable to read " << fp;
                 return Leaf::SharedFile();
             }

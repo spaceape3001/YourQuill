@@ -67,6 +67,7 @@ namespace {
 
         h << "<p><div class=\"explain\">"
           << "Categories are used to group classes and fields into order for display purposes."
+          << "See <a href=\"/help/category.md\">HELP</a> for assistance."
           << "</div><p>\n";
 
         if(h.context().can_edit()){
@@ -142,6 +143,7 @@ namespace {
 
         h << "<p><div class=\"explain\">"
           << "Classes declare the atom classifications that are to be tracked in the cache database."
+          << "See <a href=\"/help/class.md\">HELP</a> for assistance."
           << "</div><p>\n";
 
         if(h.context().can_edit()){
@@ -205,6 +207,7 @@ namespace {
 
         h << "<p><div class=\"explain\">"
           << "Fields declare the atom properties that are to be tracked in the cache database."
+          << "See <a href=\"/help/field.md\">HELP</a> for assistance."
           << "</div><p>\n";
 
         if(h.context().can_edit()){
@@ -259,7 +262,8 @@ namespace {
         h.title() << "Tags for [" << html_escape(wksp::name()) << "]";
 
         h << "<p><div class=\"explain\">"
-          << "Tags can annotate leafs, classes, fields, atoms, and more with a specific trait."
+          << "Tags can annotate leafs, classes, fields, atoms, and more with a specific trait.  "
+          << "See <a href=\"/help/tag.md\">HELP</a> for assistance."
           << "</div><p>\n";
 
         if(h.context().can_edit()){

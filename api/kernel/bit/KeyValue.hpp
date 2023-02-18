@@ -155,7 +155,7 @@ namespace yq {
         
         struct Parsed {
             std::string_view    body;
-            bool                good = false;
+            std::error_code     ec;
         };
         
         Parsed                      parse(std::string_view buffer, std::string_view fname, unsigned int opts=RECURSIVE);

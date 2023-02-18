@@ -32,7 +32,13 @@ namespace yq {
         \var Restriction::Enumerate
         \brief Restricts the values to the specified, enumerated list
     */
-    YQ_ENUM(Restriction, , Default, Any, Suggest, Track, Enumerate)
+    YQ_ENUM(Restriction, , 
+        Default, 
+        Any, 
+        Suggest, 
+        Track, 
+        Enumerate
+    )
 
 }
 

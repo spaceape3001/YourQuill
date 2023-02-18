@@ -34,7 +34,7 @@ namespace yq {
         }
     }
 
-    bool    QuillFile::read(KVTree&&attrs, std::string_view) 
+    std::error_code     QuillFile::read(KVTree&&attrs, std::string_view) 
     {
         abbr            = attrs.value(kv::key( "abbr", "abbreviation" ));
         author          = attrs.value(kv::key("author"));
@@ -71,7 +71,7 @@ namespace yq {
         attrs.all(kv::key("template", "t"), [&](const KeyValue& a){
             templates << parse_root(a);
         });
-        return true;
+        return std::error_code(); 
     }
 
     namespace {
@@ -95,7 +95,7 @@ namespace yq {
         }
     }
 
-    bool    QuillFile::write(KVTree& attrs) const
+    std::error_code     QuillFile::write(KVTree& attrs) const
     {
         if(!name.empty())
             attrs << KeyValue(szName, name);
@@ -159,6 +159,6 @@ namespace yq {
             write_onto(a, r);
             attrs << a;
         }
-        return true;
+        return std::error_code(); 
     }
 }

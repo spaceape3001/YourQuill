@@ -4,6 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
 #include "StdFile.hpp"
 
 #include <kernel/bit/KeyValue.hpp>
@@ -13,7 +15,12 @@
 #include <rapidxml.hpp>
 
 namespace yq {
-    bool        StdFile::read(ByteArray&&buffer, std::string_view fname) 
+
+    namespace errors {
+        using bad_std_syntax    = error_db::entry<"Bad Key/Value Parsing">;
+    }
+
+    std::error_code    StdFile::read(ByteArray&&buffer, std::string_view fname) 
     {
         std::string_view    file    = buffer.as_view();
         if(xml_read() && starts_igCase(file, "<?xml")){
@@ -24,15 +31,15 @@ namespace yq {
             } catch(const rapidxml::parse_error& pe){
                 size_t  pt  = pe.where<char>() - buffer.data();
                 yError() << "Xml parse error: " << pe.what() << " (at byte " << pt << ") : " << fname;
-                return false;
+                return errors::xml_bad_syntax();
             }
             
-            if(!read(doc,fname))
-                return false;
+            std::error_code ec  = read(doc,fname);
+            if(ec != errors::none() || !xml_auto_convert())
+                return ec;
             
             //  overwrite with key-value
-            save_to(fname);
-            return true;
+            return save_to(fname);
         } else {
             KVTree      tree;
             
@@ -42,9 +49,10 @@ namespace yq {
             if(recursive_attributes())
                 opts |= KVTree::RECURSIVE;
             
+                // which will e boolean until key-values return std::error_code
             auto ret    = tree.parse(buffer.as_view(), fname, opts);
-            if(!ret.good) [[unlikely]]
-                return false;
+            if(ret.ec != std::error_code()) [[unlikely]]
+                return ret.ec;
             if(has_body())
                 return read(std::move(tree), ret.body, fname);
             else
@@ -52,48 +60,50 @@ namespace yq {
         }
     }
 
-    bool        StdFile::read(KVTree&&, std::string_view, std::string_view) 
+    std::error_code     StdFile::read(KVTree&&, std::string_view, std::string_view) 
     { 
-        return true; 
+        return errors::none();
     }
     
-    bool        StdFile::write(KVTree&, Stream&) const 
+    std::error_code StdFile::write(KVTree&, Stream&) const 
     { 
-        return true; 
+        return errors::none();
     }
 
-    bool        StdFile::read(KVTree&&, std::string_view) 
+    std::error_code     StdFile::read(KVTree&&, std::string_view) 
     { 
-        return true; 
+        return errors::none();
     }
     
-    bool        StdFile::write(KVTree&) const 
+    std::error_code    StdFile::write(KVTree&) const 
     { 
-        return true; 
+        return errors::none();
     }
     
-    bool        StdFile::read(const XmlDocument&, std::string_view) 
+    std::error_code  StdFile::read(const XmlDocument&, std::string_view) 
     { 
-        return true; 
+        return errors::none();
     }
 
-    bool        StdFile::write(yq::Stream& buffer) const
+    std::error_code    StdFile::write(yq::Stream& buffer) const
     {
         KVTree          tree;
         std::string     body;
+        std::error_code ec;
         
         if(has_body()){
             stream::Text        text(body);
-            if(!write(tree, text))
-                return false;
+            ec  = write(tree, text);
         } else {
-            if(!write(tree))
-                return false;
+            ec  = write(tree);
         }
+        
+        if(ec != errors::none())
+            return ec;
         
         tree.write(buffer);
         if(!body.empty())
             buffer << '\n' << body;
-        return true;
+        return errors::none();
     }
 }

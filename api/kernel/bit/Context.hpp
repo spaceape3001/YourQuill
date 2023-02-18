@@ -23,8 +23,8 @@ namespace yq {
         bool        operator==(const Context&) const = default;
     };
 
-    bool       read_kv(std::vector<Context>&, std::string_view);
-    void       write_kv(Stream&, const std::vector<Context>&);
+    std::error_code     read_kv(std::vector<Context>&, std::string_view);
+    void                write_kv(Stream&, const std::vector<Context>&);
 
     Context         x_context(const XmlNode*);
     bool            read_xn(Context&, const XmlNode*);

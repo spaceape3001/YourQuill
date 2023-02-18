@@ -107,7 +107,7 @@ namespace yq {
             }
             
             Category::SharedFile  td = std::make_shared<Category::File>();
-            if(!td->load(std::move(ch), fp)){
+            if(td->load(std::move(ch), fp) != std::error_code()){
                 yError() << "Unable to parse category file: " << fp;
                 return Category::SharedFile();
             }
@@ -350,7 +350,7 @@ namespace yq {
             if(!tf)
                 return false;
             tf -> brief     = k;
-            return tf -> save();
+            return tf -> save() == std::error_code();
         }
         
         bool                set_name(Category t, std::string_view k, class Root* rt)
@@ -359,7 +359,7 @@ namespace yq {
             if(!tf)
                 return false;
             tf -> name     = k;
-            return tf -> save();
+            return tf -> save() == std::error_code();
         }
         
         

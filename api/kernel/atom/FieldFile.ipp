@@ -10,8 +10,13 @@
 #include <basic/XmlUtils.hpp>
 #include <kernel/bit/KeyValue.hpp>
 #include <kernel/io/Strings.hpp>
+#include <basic/ErrorDB.hpp>
 
 namespace yq {
+
+    namespace errors {
+        using no_field_in_file  = error_db::entry<"No field found in file">;
+    }
 
     void Field::File::reset() 
     {
@@ -19,18 +24,18 @@ namespace yq {
     }
 
     #if FIELD_XML_RESAVE
-    bool    Field::File::read(const XmlDocument& doc, std::string_view fname) 
+    std::error_code    Field::File::read(const XmlDocument& doc, std::string_view fname) 
     {
         const XmlNode*  xn  = doc.first_node(szYQField);
         if(!xn){
             yError() << "No appropriate root element!  In: '" << fname << "'";
-            return false;
+            return errors::xml_no_root_element();
         }
         
         xn      = xn -> first_node(szField);
         if(!xn){
             yError() << "No field! In: " << fname << "'";
-            return false;
+            return errors::no_field_in_file();
         }
 
         pkey            = read_child(xn, szPKey, x_string);
@@ -48,11 +53,11 @@ namespace yq {
         multiplicity    = read_child(xn, szMultiple, x_enum<Multiplicity>);
         restriction     = read_child(xn, szRestrict, x_enum<Restriction>);
         max_count       = read_child(xn, szMaxCount, x_uint64).value;
-        return true;
+        return std::error_code();
     }
     #endif
 
-    bool    Field::File::read(KVTree&&attrs, std::string_view) 
+    std::error_code    Field::File::read(KVTree&&attrs, std::string_view) 
     {
         name            = attrs.value(kv::key({ "%", "name" }));
         pkey            = attrs.value("pkey");
@@ -69,10 +74,10 @@ namespace yq {
         multiplicity    = Multiplicity(attrs.value("multiple"));
         restriction     = Restriction(attrs.value("restrict"));
         max_count       = to_uint(attrs.value("max")).value;
-        return true;
+        return std::error_code();
     }
     
-    bool    Field::File::write(KVTree&attrs) const 
+    std::error_code    Field::File::write(KVTree&attrs) const 
     {
         if(!name.empty())
             attrs.set("%", name);
@@ -103,6 +108,6 @@ namespace yq {
             attrs.set("restrict", restriction.key());
         if(max_count)
             attrs.set("max", to_string(max_count));
-        return true;
+        return std::error_code();
     }
 }

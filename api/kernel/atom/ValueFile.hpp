@@ -15,8 +15,8 @@ namespace yq {
     public:
     
     protected:
-        virtual bool    read(const XmlDocument&, std::string_view fname) = 0;
-        virtual bool    write(XmlDocument&) const = 0;
+        virtual std::error_code    read(const XmlDocument&, std::string_view fname) override = 0;
+        virtual std::error_code    write(XmlDocument&) const override = 0;
     };
 
 }

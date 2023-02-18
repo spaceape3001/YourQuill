@@ -49,7 +49,7 @@ namespace yq {
         }
     }
 
-    bool       read_kv(std::vector<Context>& context, std::string_view body)
+    std::error_code       read_kv(std::vector<Context>& context, std::string_view body)
     {
         Context             cur;
         stream::Text        pipe(cur.data);
@@ -94,7 +94,7 @@ namespace yq {
         
         if(cur != Context())
             context.push_back(cur);
-        return true;
+        return std::error_code();
     }
     
     void       write_kv(Stream& pipe, const std::vector<Context>& contexts)

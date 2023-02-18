@@ -17,20 +17,24 @@ namespace yq {
         *(Data*) this   = Data{};
     }
 
+    namespace errors {
+        using no_class_in_file  = error_db::entry<"No class found in the file.">;
+    }
+    
     
     #if CLASS_XML_RESAVE
-    bool    Class::File::read(const XmlDocument&doc, std::string_view fname) 
+    std::error_code    Class::File::read(const XmlDocument&doc, std::string_view fname) 
     {
         const XmlNode*  xn  = doc.first_node(szYQClass);
         if(!xn){
             yError() << "No appropriate root element!  In: '" << fname << "'";
-            return false;
+            return errors::xml_no_root_element();
         }
         
         xn      = xn -> first_node(szClass);
         if(!xn){
             yError() << "No class! In: " << fname << "'";
-            return false;
+            return errors::no_class_in_file();
         }
         
         name            = read_child(xn, szName, x_string);
@@ -49,11 +53,11 @@ namespace yq {
         tags            = read_child_string_set(xn, szTag);
         category        = read_child(xn, szCategory, x_string);
         url             = read_child(xn, szUrl, x_string);
-        return true;
+        return errors::none();
     }
     #endif
     
-    bool    Class::File::read(KVTree&&attrs, std::string_view) 
+    std::error_code    Class::File::read(KVTree&&attrs, std::string_view) 
     {
         name            = attrs.value(kv::key({"%", "name"}));
         plural          = attrs.value("plural");
@@ -72,10 +76,10 @@ namespace yq {
         category        = attrs.value("category");
         url             = attrs.value("url");
         dev_url         = attrs.value("devurl");
-        return true;
+        return errors::none();
     }
     
-    bool    Class::File::write(KVTree&attrs) const 
+    std::error_code    Class::File::write(KVTree&attrs) const 
     {
         if(!name.empty())
             attrs.set("%", name);
@@ -109,7 +113,7 @@ namespace yq {
             attrs.set("url", url);
         if(!dev_url.empty())
             attrs.set("devurl", dev_url);
-        return true;
+        return errors::none();
     }
 
 }

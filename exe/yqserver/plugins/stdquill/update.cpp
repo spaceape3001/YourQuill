@@ -44,6 +44,8 @@
 #include <kernel/wksp/CacheQuery.hpp>
 #include <kernel/wksp/Workspace.hpp>
 
+#include <math/Size2.hxx>
+
 #include "common.hpp"
 
 #include <yq/atom.hpp>

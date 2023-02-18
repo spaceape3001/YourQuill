@@ -20,7 +20,7 @@ namespace yq {
     protected:
         virtual void    reset() override;
 
-        virtual bool    read(KVTree&&, std::string_view fname) override;
-        virtual bool    write(KVTree&) const override;
+        virtual std::error_code   read(KVTree&&, std::string_view fname) override;
+        virtual std::error_code   write(KVTree&) const override;
     };
 }

@@ -29,10 +29,10 @@ namespace yq {
         virtual void    reset() override;
         
         #if TAG_XML_RESAVE
-        virtual bool    read(const XmlDocument&, std::string_view fname) override;
+        virtual std::error_code     read(const XmlDocument&, std::string_view fname) override;
         #endif
         
-        virtual bool    read(KVTree&&, std::string_view fname) override;
-        virtual bool    write(KVTree&) const override;
+        virtual std::error_code     read(KVTree&&, std::string_view fname) override;
+        virtual std::error_code     write(KVTree&) const override;
     };
 }

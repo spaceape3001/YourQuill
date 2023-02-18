@@ -199,6 +199,7 @@ namespace yq {
     static constexpr const string_view_initializer_list_t svL_aNote             = { "%note"sv, "%notes"sv };
     static constexpr const string_view_initializer_list_t svL_aStart            = { "%start"sv };
     static constexpr const string_view_initializer_list_t svL_aTag              = { "%tag"sv, "%tags"sv };
+    static constexpr const string_view_initializer_list_t svL_aTagName          = { "%"sv, "name"sv };
     static constexpr const string_view_initializer_list_t svL_aTitle            = { "%"sv, "%leaf"sv, "%title"sv };
-
+    
 }

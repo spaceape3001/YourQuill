@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     if(do_body)
         opts |= KVTree::BODY;
     auto ret =tree.parse(bytes, zfile, opts);
-    if(!ret.good)
+    if(ret.ec != std::error_code())
         return -1;
     print(tree);
     if(!ret.body.empty())

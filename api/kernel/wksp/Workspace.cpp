@@ -334,7 +334,7 @@ namespace yq {
             std::filesystem::path   q   = resolve(cfg.spec, static_cast<bool>(qoptions & SEARCH));
             
             QuillFile       doc;
-            if(!doc.load(q)){
+            if(doc.load(q) != std::error_code()){
                 wkspError << "Unable to load the file: " << q;
                 return false;
             }
@@ -565,7 +565,7 @@ namespace yq {
                     }
                     
                     QuillFile        sub;
-                    if(!sub.load(qf)){
+                    if(sub.load(qf) != std::error_code()){
                         wkspWarning << "Unable to read Quill fragment: " << qf;
                         continue;
                     }
@@ -616,7 +616,7 @@ namespace yq {
                     }
                     
                     QuillFile        sub;
-                    if(!sub.load(qf)){
+                    if(sub.load(qf) != std::error_code()){
                         wkspWarning << "Unable to read Quill fragment: " << qf;
                         continue;
                     }

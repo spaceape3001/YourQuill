@@ -213,6 +213,9 @@ namespace yq {
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+    namespace errors {
+    }
+
     namespace {
 
         void    add_attr(Vector<KeyValue>&datas, size_t&i, KeyValue&v)
@@ -242,7 +245,7 @@ namespace yq {
     KVTree::Parsed   KVTree::parse(std::string_view buffer, std::string_view fname, unsigned int opts)
     {
         if(buffer.empty())
-            return { std::string_view(), true };
+            return { std::string_view(), errors::none() };
             
         enum class Mode {
             SPACE,          //!< Space at start of line
@@ -462,7 +465,7 @@ namespace yq {
         }
         
 
-        Parsed  ret{ std::string_view(), true };
+        Parsed  ret{ std::string_view(), errors::none() };
         if(datas.empty())
             return ret;
 

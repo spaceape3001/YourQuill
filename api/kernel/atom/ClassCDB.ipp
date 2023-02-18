@@ -176,7 +176,7 @@ namespace yq {
             }
                 
             Class::SharedFile  td = std::make_shared<Class::File>();
-            if(!td->load(std::move(ch), fp)){
+            if(td->load(std::move(ch), fp) != std::error_code()){
                 yError() << "Unable to read " << fp;
                 return Class::SharedFile();
             }

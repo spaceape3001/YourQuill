@@ -23,9 +23,9 @@ namespace yq {
         virtual void    reset() override;
 
         //! Override to read with body
-        virtual bool        read(KVTree&&, std::string_view body, std::string_view fname) override;
+        virtual std::error_code         read(KVTree&&, std::string_view body, std::string_view fname) override;
         
         //! Override to write with body
-        virtual bool        write(KVTree&, Stream&) const override;
+        virtual std::error_code         write(KVTree&, Stream&) const override;
     };
 }

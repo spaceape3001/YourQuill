@@ -403,7 +403,7 @@ namespace yq {
             if(!tf)
                 return false;
             tf -> brief     = k;
-            return tf -> save();
+            return tf -> save() == std::error_code();
         }
         
         bool                set_name(Tag t, std::string_view k, class Root* rt)
@@ -412,7 +412,7 @@ namespace yq {
             if(!tf)
                 return false;
             tf -> name     = k;
-            return tf -> save();
+            return tf -> save() == std::error_code();
         }
         
         bool                set_notes(Tag t, std::string_view k, class Root* rt)
@@ -421,7 +421,7 @@ namespace yq {
             if(!tf)
                 return false;
             tf -> notes      = k;
-            return tf -> save();
+            return tf -> save() == std::error_code();
         }
         
 
@@ -450,7 +450,7 @@ namespace yq {
             }
             
             Tag::SharedFile  td = std::make_shared<Tag::File>();
-            if(!td->load(std::move(ch), fp)){
+            if(td->load(std::move(ch), fp) != std::error_code()){
                 yError() << "Unable to parse tag file: " << fp;
                 return Tag::SharedFile();
             }

@@ -25,28 +25,31 @@ namespace yq {
         
         //! Enable if we tolerate XML loading (not saving)
         virtual bool        xml_read() const { return false; }
+        
+        //! Enabled to seamless rewrite XML to STD format
+        virtual bool        xml_auto_convert() const { return true; }
 
     protected:
         //! Reading (from abstract file)
-        virtual bool        read(ByteArray&&buffer, std::string_view fname) override;
+        virtual std::error_code     read(ByteArray&&buffer, std::string_view fname) override;
         //! Writing (from abstract file)
-        virtual bool        write(Stream&) const override;
+        virtual std::error_code     write(Stream&) const override;
         
         //  override depending on has_body() above
         
         //! Override to read with body
-        virtual bool        read(KVTree&&, std::string_view body, std::string_view fname);
+        virtual std::error_code     read(KVTree&&, std::string_view body, std::string_view fname);
         
         //! Override to write with body
-        virtual bool        write(KVTree&, Stream&) const;
+        virtual std::error_code     write(KVTree&, Stream&) const;
 
         //! Override to read without body
-        virtual bool        read(KVTree&&, std::string_view fname);
+        virtual std::error_code     read(KVTree&&, std::string_view fname);
         
         //! Override to write without body
-        virtual bool        write(KVTree&) const;
+        virtual std::error_code     write(KVTree&) const;
         
         //! Override to read from XML instead
-        virtual bool        read(const XmlDocument&, std::string_view fname);
+        virtual std::error_code     read(const XmlDocument&, std::string_view fname);
     };
 }

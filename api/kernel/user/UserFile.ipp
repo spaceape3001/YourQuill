@@ -10,14 +10,20 @@
 #include <basic/Logging.hpp>
 #include <kernel/bit/KeyValue.hpp>
 #include <kernel/io/Strings.hpp>
+#include <basic/ErrorDB.hpp>
 
 namespace yq {
+
+    namespace errors {
+        using unable_to_load_authentication = error_db::entry<"Unable to load the authentication from the file">;
+    }
+
     void  User::File::reset() 
     {
         Data::reset();
     }
 
-    bool        User::File::read(KVTree&&attrs, std::string_view body, std::string_view fname) 
+    std::error_code         User::File::read(KVTree&&attrs, std::string_view body, std::string_view fname) 
     { 
         name        = attrs.value(szName);
         brief       = attrs.value(szBrief);
@@ -28,19 +34,20 @@ namespace yq {
             authentication = Authentication::load(*a);
             if(!authentication){
                 yError() << "Bad Authentication on file " << fname;
-                return false;
+                return errors::unable_to_load_authentication();
             }
         }
         
         if(!skip_bio){
-            if(!read_kv(bio, body))
-                return false;
+            std::error_code  ec = read_kv(bio, body);
+            if(ec != std::error_code())
+                return ec;
         }
         
-        return true; 
+        return std::error_code(); 
     }
     
-    bool        User::File::write(KVTree&attrs, Stream&str) const
+    std::error_code         User::File::write(KVTree&attrs, Stream&str) const
     {
         if(!name.empty())
             attrs.set(szName, name);
@@ -55,7 +62,7 @@ namespace yq {
             attrs << kva;
         }
         write_kv(str, bio);
-        return true;
+        return std::error_code(); 
     }
     
     

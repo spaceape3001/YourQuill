@@ -18,14 +18,13 @@ namespace yq {
         Data::reset();
     }
     
-    bool    Leaf::File::read(KVTree&&tree, std::string_view body, std::string_view) 
+    std::error_code   Leaf::File::read(KVTree&&tree, std::string_view body, std::string_view) 
     {
         attrs               = std::move(tree);
-        read_kv(context, body);
-        return true;
+        return read_kv(context, body);
     }
     
-    bool    Leaf::File::write(Stream& pipe) const
+    std::error_code   Leaf::File::write(Stream& pipe) const
     {
         attrs.write(pipe);
         
@@ -34,7 +33,7 @@ namespace yq {
             write_kv(pipe, context);
         }
         
-        return true;
+        return std::error_code();
     }
     
 }

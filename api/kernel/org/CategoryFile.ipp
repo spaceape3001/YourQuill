@@ -16,15 +16,15 @@ namespace yq {
         *(Data*) this = Data{};
     }
 
-    bool    Category::File::read(KVTree&&attrs, std::string_view) 
+    std::error_code    Category::File::read(KVTree&&attrs, std::string_view) 
     { 
         name        = attrs.value(szName);
         brief       = attrs.value(szBrief);
         notes       = attrs.value(szNotes);
-        return true; 
+        return std::error_code(); 
     }
         
-    bool    Category::File::write(KVTree&attrs) const 
+    std::error_code    Category::File::write(KVTree&attrs) const 
     { 
         if(!name.empty())
             attrs.set(szName, name);
@@ -32,7 +32,7 @@ namespace yq {
             attrs.set(szBrief, brief);
         if(!notes.empty())
             attrs.set(szNotes, notes);
-        return true; 
+        return std::error_code(); 
     }
 }
 
