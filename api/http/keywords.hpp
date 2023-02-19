@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+/*
+    This file is about making new keywords that can be used in the constructors and function overloads.
+*/
+
+namespace yq {
+
+    struct class_t {};
+    static constexpr const class_t  CLASS;
+
+
+}

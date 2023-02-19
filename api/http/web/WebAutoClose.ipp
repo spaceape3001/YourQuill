@@ -10,9 +10,7 @@ namespace yq {
     WebAutoClose::WebAutoClose(WebHtml&wh, std::string_view sv) : 
         m_html(&wh)
     {
-        m_close = [sv](WebHtml&h) {
-            h << sv;
-        };
+        _closer(sv);
     }
     
     WebAutoClose::WebAutoClose(WebHtml& wh, CloseHandler onClose) : m_html(&wh), m_close(onClose)
@@ -25,7 +23,7 @@ namespace yq {
     }
     
     WebAutoClose& WebAutoClose::operator=(WebAutoClose&&mv)
-    {
+    {   
         if(&mv != this){
             close();
             std::swap(m_html, mv.m_html);
@@ -37,6 +35,13 @@ namespace yq {
     WebAutoClose::~WebAutoClose()
     {
         close();
+    }
+    
+    void    WebAutoClose::_closer(std::string_view sv)
+    {
+        m_close = [sv](WebHtml&h) {
+            h << sv;
+        };
     }
     
     void    WebAutoClose::close()

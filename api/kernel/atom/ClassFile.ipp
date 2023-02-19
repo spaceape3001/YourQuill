@@ -82,7 +82,7 @@ namespace yq {
     std::error_code    Class::File::write(KVTree&attrs) const 
     {
         if(!name.empty())
-            attrs.set("%", name);
+            attrs.set("name", name);
         if(!plural.empty())
             attrs.set("plural", plural);
         if(!brief.empty())

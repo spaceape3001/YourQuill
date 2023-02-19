@@ -11,15 +11,12 @@
 #include <basic/Stream.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>
+#include <basic/trait/not_copyable.hpp>
 #include <functional>
+#include <http/preamble.hpp>
+#include <math/preamble.hpp>
 
 namespace yq {
-    struct WebContext;
-    class Stream;
-    class ByteArray;
-    struct Root;
-    
-    class WebAutoClose;
     
     
     /*! \brief Web Title
@@ -89,8 +86,9 @@ namespace yq {
         WebAutoClose  pre();
         
         void            pre(std::string_view);
-        
-        WebAutoClose  table(std::string_view cls=std::string_view());
+
+        HtmlTable     table();
+        HtmlTable     table(class_t, std::string_view);
         WebAutoClose  title();
         WebAutoClose  u();
         WebAutoClose  underline();
@@ -107,6 +105,13 @@ namespace yq {
         const string_vector_t&  h_scripts() const { return m_hScripts; }
         const string_vector_t&  h_css() const { return m_hCss; }
         
+        /*! \brief used to add class definition
+        
+            If the class Id is empty, nothing is done.  If it's specified, then it's prepended with a space and
+            declared (HTML escaped)
+        */
+        void    _class(std::string_view);
+
     private:
         WebContext&         m_context;
         ByteArray*          m_dest = nullptr;
@@ -118,6 +123,7 @@ namespace yq {
             DEST
         };
         Target              m_target     = BODY;
+
     };
 
     template <typename T>
@@ -132,7 +138,7 @@ namespace yq {
     void            html_escape_write(Stream& s, const std::vector<char>&);
     
     
-    class WebAutoClose {
+    class WebAutoClose : private not_copyable {
     public:
     
         using CloseHandler  = std::function<void(WebHtml&)>;
@@ -154,6 +160,9 @@ namespace yq {
             return *this;
         }
     
+// debugging use only
+WebHtml*    z_html() const { return m_html; }    
+    
     protected:
         friend class WebHtml;
         WebHtml*        m_html  = nullptr;
@@ -163,6 +172,54 @@ namespace yq {
         WebAutoClose(const WebAutoClose&) = delete;
         WebAutoClose& operator=(const WebAutoClose&) = delete;
         void                    close();
+        void    _closer(std::string_view);
+    };
+ 
+    class HtmlTable : public WebAutoClose {
+    public:
+    
+        class Row;
+    
+        HtmlTable();
+        HtmlTable(HtmlTable&&);
+        HtmlTable& operator=(HtmlTable&&);
+        ~HtmlTable();
+    
+        Row    row();
+    
+    private:
+        friend class WebHtml;
+        explicit HtmlTable(WebHtml&);
+    };
+    
+    class HtmlTable::Row : public WebAutoClose {
+    public:
+    
+        Row(){}
+        Row(Row&&);
+        Row& operator=(Row&&);
+        ~Row();
+        
+    
+        Row&   header(std::string_view);
+        Row&   cell(std::string_view);
+        
+        WebAutoClose    header(class_t, std::string_view);
+        WebAutoClose    cell(class_t, std::string_view);
+        WebAutoClose    cell(class_t, std::string_view, const Size2U&);
+
+        WebAutoClose    header();
+        WebAutoClose    cell();
+        WebAutoClose    cell(const Size2U&);
+        
+    private:
+        friend class HtmlTable;
+        Row(HtmlTable&);
+        
+        void    _size(const Size2U&);
+        
+        WebAutoClose    _header(std::string_view clsId);
+        WebAutoClose    _cell(std::string_view clsId, const Size2U&);
     };
     
 }

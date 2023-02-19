@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include <math/Size2.hpp>
 
 namespace yq {
 
@@ -81,6 +82,14 @@ namespace yq {
         return true;
     }
     
+    void    WebHtml::_class(std::string_view clsId)
+    {
+        if(!clsId.empty()){
+            *this << " class=\"";
+            html_escape_write(*this, clsId);
+            *this << "\"";
+        }
+    }
     
     //  ------------------------------
 
@@ -249,16 +258,19 @@ namespace yq {
             h.m_target  = oldTarget;
         });
     }
-    
-    
-    WebAutoClose        WebHtml::table(std::string_view cls)
+
+    HtmlTable           WebHtml::table()
     {
-        if(cls.empty()){
-            *this << "<table>";
-        } else {
-            *this << "<table class=\"" << cls << "\">";
-        }
-        return WebAutoClose(*this, "</table>\n"sv);
+        *this << "<table>";
+        return HtmlTable(*this);
+    }
+    
+    HtmlTable        WebHtml::table(class_t, std::string_view cls)
+    {
+        *this << "<table";
+        _class(cls);
+        *this << ">";
+        return HtmlTable(*this);
     }
 
     WebAutoClose  WebHtml::title()
@@ -282,4 +294,132 @@ namespace yq {
         return WebAutoClose(*this, "</u>"sv);
     }
     
+    //  -----------------------------------------------
+
+    HtmlTable::HtmlTable()
+    {
+    }
+
+    HtmlTable::HtmlTable(WebHtml& h) : WebAutoClose(h, "</table>\n"sv)
+    {   
+    }
+    
+    HtmlTable::HtmlTable(HtmlTable&&mv) : WebAutoClose(std::move(mv))
+    {
+    }
+    
+    HtmlTable& HtmlTable::operator=(HtmlTable&&mv)
+    {
+        WebAutoClose::operator=(std::move(mv));
+        return *this;
+    }
+    
+    HtmlTable::~HtmlTable()
+    {
+    }
+
+    HtmlTable::Row    HtmlTable::row()
+    {
+        if(m_html){
+            *m_html << "<tr>";
+            return Row(*this);
+        } else
+            return Row();
+    }
+
+    //  -----------------------------------------------
+
+    HtmlTable::Row::Row(HtmlTable& h) : WebAutoClose(*(h.m_html), "</tr>\n"sv)
+    {
+    }
+    
+    HtmlTable::Row::~Row()
+    {
+    }
+
+    WebAutoClose    HtmlTable::Row::_cell(std::string_view clsId, const Size2U&sz)
+    {
+        if(m_html){
+            *m_html << "<td";
+            m_html -> _class(clsId);
+            _size(sz);
+            *m_html << ">";
+            return WebAutoClose(*m_html, "</td>");
+        } else
+            return WebAutoClose();
+    }
+
+    WebAutoClose    HtmlTable::Row::_header(std::string_view clsId)
+    {
+        if(m_html){
+            *m_html << "<th";
+            m_html -> _class(clsId);
+            *m_html << ">";
+            return WebAutoClose(*m_html, "</th>");
+        } else
+            return WebAutoClose();
+    }
+    
+    
+    void    HtmlTable::Row::_size(const Size2U& sz)
+    {
+        if(sz.x > 1)
+            *m_html << " colspan=\"" << sz.x << "\"";
+        if(sz.y > 1)
+            *m_html << " rowspan=\"" << sz.x << "\"";
+    }
+    
+    WebAutoClose    HtmlTable::Row::cell()
+    {
+        return _cell("", ZERO);
+    }
+    
+    WebAutoClose    HtmlTable::Row::cell(const Size2U&sz)
+    {
+        return _cell("", sz);
+    }
+
+    WebAutoClose    HtmlTable::Row::cell(class_t, std::string_view clsId)
+    {
+        return _cell(clsId, ZERO);
+    }
+
+    WebAutoClose    HtmlTable::Row::cell(class_t, std::string_view clsId, const Size2U& sz)
+    {
+        return _cell(clsId, sz);
+    }
+
+    HtmlTable::Row&   HtmlTable::Row::cell(std::string_view txt)
+    {
+        if(m_html){
+            auto h = cell();
+            html_escape_write(*m_html, txt);
+        }
+        return *this;
+    }
+
+
+    WebAutoClose    HtmlTable::Row::header()
+    {
+        return _header("");
+    }
+    
+    
+    WebAutoClose    HtmlTable::Row::header(class_t, std::string_view clsId)
+    {
+        return _header(clsId);
+    }
+    
+
+    HtmlTable::Row&   HtmlTable::Row::header(std::string_view txt)
+    {
+        if(m_html){
+            auto h = header();
+            html_escape_write(*m_html, txt);
+        }
+        return *this;
+    }
+    
+    
+
 }

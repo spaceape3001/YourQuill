@@ -12,11 +12,16 @@ All tags are defined in the tags folder (<tt>/.tags</tt>), and they have a corre
     
 This attribute defines the proper name for the tag, this can correct for capitalization, and/or characters not available on the filesystem.  Alternatively, it can be a full name, whereas it's easier to write a shorter name in all the files.
 
+*SINGLE* use only, others will be ignored
+
+
 ### Brief Description Attribute
 
     brief   (Description)
     
 This is a brief one-liner description for what this tag is about (story, capability, etc).
+
+*SINGLE* use only, others will be ignored
 
 ### Short Notes Attribute
 
@@ -24,9 +29,14 @@ This is a brief one-liner description for what this tag is about (story, capabil
     
 These are brief explanatory notes to help remember what this tag is for.  Again, one line.
 
+*SINGLE* use only, others will be ignored
+
 ### Reference Leaf Attribute
 
     leaf    (key)
     
 This attribute allows for the tag to be tied back to a specific leaf wiki page.
+
+*SINGLE* use only, others will be ignored
+
 

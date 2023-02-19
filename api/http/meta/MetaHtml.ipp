@@ -404,15 +404,16 @@ namespace yq {
         void    dev_table(WebHtml&h, const std::vector<const TypeInfo*>& types)
         {
             auto ta = h.table();
-            h << "<tr><th>ID</th><th>Name</th><th>Size</th><th>Description</th></tr>\n";
+            ta.row().header("ID").header("Name").header("Size").header("Description").header("Stream?").header("Print?").header("Parse?");
             for(const TypeInfo* ti : types){
                 if(!ti)
                     continue;
-                h << "<tr><td>"  << dev_id(ti) 
-                  << "</td><td>" << dev(ti) 
-                  << "</td><td>" << ti->size() 
-                  << "</td><td>" << ti->description() 
-                  << "</td></tr>\n";
+                
+                auto tr = ta.row();
+                tr.cell() << dev_id(ti);
+                tr.cell() << dev(ti);
+                tr.cell() << ti->size();
+                tr.cell() << ti->description();
             }
         }
     }
