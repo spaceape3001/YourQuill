@@ -337,6 +337,10 @@ namespace {
     {
         h.title() << "Users for [" << html_escape(wksp::name()) << "]";
         
+        h << "<p><div class=\"explain\">"
+          << "Users are people allowed to view/modify the database from the web-interface."
+          << "See <a href=\"/help/user.md\">HELP</a> for assistance."
+          << "</div><p>\n";
         
         if(h.context().can_edit()){
             h << "<table align=\"right\" width=\"30%\"><tr><td>\n";

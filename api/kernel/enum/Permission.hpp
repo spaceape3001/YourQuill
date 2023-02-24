@@ -22,7 +22,9 @@ namespace yq {
         //! Author rights
         Writer,
         //! Reading rights
-        Reader
+        Reader,
+        //! Guest role
+        Guest
     )
     
     using Permissions  = Flag<Permission>;

@@ -43,7 +43,13 @@ namespace yq {
             any moment.  A value w/o date or time restraints will be valid
             throughout time.  
     */
-    YQ_ENUM(Multiplicity, , Default, Once, Many, Serial, All )
+    YQ_ENUM(Multiplicity, , 
+        Default, 
+        Once, 
+        Many, 
+        Serial, 
+        All 
+    )
 
 }
 

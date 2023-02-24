@@ -25,11 +25,11 @@ namespace yq {
 
     std::error_code         User::File::read(KVTree&&attrs, std::string_view body, std::string_view fname) 
     { 
-        name        = attrs.value(szName);
-        brief       = attrs.value(szBrief);
-        permissions = Permissions(attrs.value(szPermission));
+        name        = attrs.value(kv::key({"%", "name"}));
+        brief       = attrs.value("brief");
+        permissions = Permissions(attrs.value("permission"));
         
-        const KeyValue* a   = attrs.first(szAuthentication);
+        const KeyValue* a   = attrs.first(kv::key({"auth", "authentication"}));
         if(a){
             authentication = Authentication::load(*a);
             if(!authentication){
@@ -50,14 +50,14 @@ namespace yq {
     std::error_code         User::File::write(KVTree&attrs, Stream&str) const
     {
         if(!name.empty())
-            attrs.set(szName, name);
+            attrs.set("name", name);
         if(!brief.empty())
-            attrs.set(szBrief, brief);
+            attrs.set("brief", brief);
         if(permissions != Permissions())
-            attrs.set(szPermission, permissions.as_string());
+            attrs.set("permission", permissions.as_string());
         if(authentication){
             KeyValue        kva;
-            kva.key         = szAuthentication;
+            kva.key         = "authentication";
             authentication -> save(kva);
             attrs << kva;
         }

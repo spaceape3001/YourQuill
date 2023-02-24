@@ -70,9 +70,9 @@ namespace yq {
         classes        += attrs.values_set("class");
         types          += attrs.values_set("type");
         atoms          += attrs.values_set("atom");
-        expected        = attrs.value("expected");
-        multiplicity    = Multiplicity(attrs.value("multiple"));
-        restriction     = Restriction(attrs.value("restrict"));
+        expected        = attrs.value(kv::key({ "expect", "expected"}));
+        multiplicity    = Multiplicity(attrs.value(kv::key({"allow", "multiple"})));
+        restriction     = Restriction(attrs.value(kv::key({"control", "restrict"})));
         max_count       = to_uint(attrs.value("max")).value;
         return std::error_code();
     }
@@ -101,11 +101,12 @@ namespace yq {
             attrs.set("type", join(types, ","));
         if(!atoms.empty())
             attrs.set("atom", join(atoms, ","));
-        
+        if(!expected.empty())
+            attrs.set("expect", expected);
         if(multiplicity != Multiplicity())
-            attrs.set("multiple", multiplicity.key());
+            attrs.set("allow", multiplicity.key());
         if(restriction != Restriction())
-            attrs.set("restrict", restriction.key());
+            attrs.set("control", restriction.key());
         if(max_count)
             attrs.set("max", to_string(max_count));
         return std::error_code();

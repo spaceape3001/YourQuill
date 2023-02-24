@@ -4,7 +4,7 @@ The class is short for "classification" which means type of [Atom](atom.md).  A 
 
 ## Files
 
-All classes are defined in the classes folder (<tt>/.classes</tt>), and they have a corresponding <tt>*.class</tt> file extension.  This file follows the standard format, however, context is not currently supported.
+All classes are defined in the classes folder (`/.classes`), and they have a corresponding `*.class` file extension.  This file follows the standard format, however, context is not currently supported.
 
 ### Key
 
@@ -12,7 +12,7 @@ The filename of the class definition is taken as the class key.  This is case in
 
 ### Class Name Attribute
 
-    name    (Name of the tag)
+    name    (Name of the class)
 
 This attribute defines the proper name for the class, this can correct for capitalization, and/or characters not available on the filesystem.  Alternatively, it can be a full name, whereas it's easier to write a shorter name in all the files.
 
