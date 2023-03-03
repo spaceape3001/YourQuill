@@ -10,7 +10,7 @@
 #include <basic/Set.hpp>
 #include <basic/Vector.hpp>
 #include <basic/TextUtils.hpp>
-#include <basic/Result.hpp>
+#include <set>
 
 //#include <basic/Logging.hpp>
 
@@ -143,7 +143,7 @@ namespace yq {
         string_view_set_t           values_set(Match, const std::string_view& sep=",") const;
         
         template <typename Match>
-        Set<uint16_t>               values_set_u16(Match, const std::string_view& sep=",") const;
+        std::set<uint16_t>          values_set_u16(Match, const std::string_view& sep=",") const;
         
         KVTree&                     operator+=(KVTree&&);
         KVTree&                     operator+=(const KVTree&);
@@ -670,7 +670,7 @@ namespace yq {
     }
     
     template <typename Match>
-    Set<uint16_t> KVTree::values_set_u16(Match m, const std::string_view& sep) const
+    std::set<uint16_t> KVTree::values_set_u16(Match m, const std::string_view& sep) const
     {
         if constexpr ( std::is_same_v<Match, const char*>) {
             return values_set_u16( kv::key(m), sep );
@@ -683,11 +683,11 @@ namespace yq {
         } else if constexpr ( std::is_same_v<Match, std::initializer_list<const char*>>) {
             return values_set_u16( kv::key(m), sep );
         } else {
-            Set<uint16_t>   ret;
+            std::set<uint16_t>   ret;
             for(const std::string_view& v : values_set(m, sep)){
                 auto r = to_uint16(v);
                 if(r.good)
-                    ret << r.value;
+                    ret.insert(r.value);
             }
             return ret;
         }

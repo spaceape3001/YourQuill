@@ -593,12 +593,12 @@ namespace {
         auto _t = h.table();
         for(std::string_view k : global::variable::names()){
             h << "<tr><th align=\"left\">" << k << "</th><td>";
-            auto [v,ec] = global::variable::get(k);
-            if(ec != std::error_code()){
-                h << "<b>[error]</b></td><td> " << ec.message();
+            auto v = global::variable::get(k);
+            if(!v){
+                h << "<b>[error]</b></td><td> " << v.error().message();
             } else {
-                h << "<i>[" << v.type().name() << "]</i></td><td>";
-                html_escape_write(h, v.printable());
+                h << "<i>[" << v->type().name() << "]</i></td><td>";
+                html_escape_write(h, v->printable());
             }
             h << "</td></tr>\n";
         }

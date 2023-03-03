@@ -10,7 +10,7 @@
 #include <basic/Logging.hpp>
 #include <basic/XmlUtils.hpp>
 #include <kernel/io/Strings.hpp>
-#include <basic/Errors.hpp>
+#include <basic/errors.hpp>
 
 namespace yq {
 
