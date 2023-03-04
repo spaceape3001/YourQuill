@@ -18,15 +18,12 @@ namespace yq {
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return Folder{};
+                return Folder();
                 
             Folder t   = cdb::folder( arg_string);
             if(t)
                 return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_folder(i))
-                return Folder{i};
-            return Folder{};
+            return folder_id(arg_string);
         }
         
         Folder folder(const WebContext&ctx, bool *detected)
@@ -55,7 +52,7 @@ namespace yq {
                     *detected   = true;
                 return folder(k);
             }
-            return Folder{};
+            return Folder();
         }
         
         Folder folder(const WebContext&ctx, std::string_view arg_name, bool *detected)
@@ -76,10 +73,12 @@ namespace yq {
         
         Folder folder_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_folder(i))
-                return Folder{i};
-            return Folder{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return Folder();
+            if(!cdb::exists_folder(*vv))
+                return Folder();
+            return Folder(*vv);
         }
 
         Folder folder_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

@@ -44,6 +44,8 @@
 #include "leaf/LeafHtml.ipp"
 #include "leaf/LeafPost.ipp"
 #include "meta/MetaHtml.ipp"
+#include "meta/MetaObjectArg.ipp"
+#include "meta/MetaTypeArg.ipp"
 #include "org/CategoryArg.ipp"
 #include "org/CategoryHtml.ipp"
 #include "org/CategoryPost.ipp"

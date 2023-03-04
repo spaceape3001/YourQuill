@@ -51,8 +51,8 @@ namespace yq {
         }
         if(a){
             copyright.text    = a->data;
-            copyright.from    = to_ushort(a->value(kv::key("from"))).value;
-            copyright.to      = to_ushort(a->value(kv::key("to"))).value;
+            copyright.from    = to_ushort(a->value(kv::key("from"))).value_or(0);
+            copyright.to      = to_ushort(a->value(kv::key("to"))).value_or(0);
         }
         
         home            = attrs.value(kv::key("home"));
@@ -60,9 +60,9 @@ namespace yq {
         local_user      = attrs.value(kv::key("local", "user", "local_user"));
         log_dir         = attrs.value(kv::key("logs"));
         name            = attrs.value(kv::key("name", "%"));
-        port            = to_uint16(attrs.value(kv::key("port"))).value;
-        read_timeout    = to_uinteger(attrs.value(kv::key("timeout"))).value;
-        threads         = to_uinteger(attrs.value(kv::key("threads"))).value;
+        port            = to_uint16(attrs.value(kv::key("port"))).value_or(0);
+        read_timeout    = to_uinteger(attrs.value(kv::key("timeout"))).value_or(0);
+        threads         = to_uinteger(attrs.value(kv::key("threads"))).value_or(0);
         temp_dir        = attrs.value(kv::key("temp", "tmp", "tempdir", "temp_dir"));
         
         attrs.all(kv::key("root", "r"), [&](const KeyValue& a){

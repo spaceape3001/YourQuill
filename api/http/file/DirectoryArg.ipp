@@ -22,7 +22,7 @@ namespace yq {
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return Directory{};
+                return Directory();
                 
             Folder      folder = folder_key(arg_string);
             if(folder)
@@ -62,7 +62,7 @@ namespace yq {
                     *detected   = true;
                 return directory(k, rt);
             }
-            return Directory{};
+            return Directory();
         }
         
         Directory directory(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
@@ -83,10 +83,12 @@ namespace yq {
         
         Directory directory_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_directory(i))
-                return Directory{i};
-            return Directory{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return Directory();
+            if(!cdb::exists_directory(*vv))
+                return Directory();
+            return Directory(*vv);
         }
 
         Directory directory_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

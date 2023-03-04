@@ -18,15 +18,12 @@ namespace yq {
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return Field{};
+                return Field();
                 
             Field t   = cdb::field( arg_string);
             if(t)
                 return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_field(i))
-                return Field{i};
-            return Field{};
+            return field_id(arg_string);
         }
         
         Field field(const WebContext&ctx, bool *detected)
@@ -42,7 +39,7 @@ namespace yq {
             k       = ctx.find_query("field");
             if(!k.empty())
                 return field(k);
-            return Field{};
+            return Field();
         }
         
         
@@ -64,10 +61,12 @@ namespace yq {
 
         Field field_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_field(i))
-                return Field{i};
-            return Field{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return Field();
+            if(!cdb::exists_field(*vv))
+                return Field();
+            return Field(*vv);
         }
 
         Field field_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

@@ -13,7 +13,7 @@ namespace yq {
 
     using PolicyMap     = EnumMap<DataRole,Access>;
 
-    Result<Access>      decode_access(std::string_view arg);
+    Expect<Access>      decode_access(std::string_view arg);
 
     /*! \brief Merges access levels
 

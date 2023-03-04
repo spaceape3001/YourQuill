@@ -27,7 +27,7 @@ namespace yq {
 
     unsigned int                WebContext::columns() const
     {
-        unsigned int c  = to_uinteger(find_query({"cols", "columns"})).value;
+        unsigned int c  = to_uinteger(find_query({"cols", "columns"})).value_or(0);
         if(c)
             return c;
         if(session.columns)

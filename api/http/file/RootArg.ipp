@@ -22,11 +22,10 @@ namespace yq {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
                 return nullptr;
-                
             const Root* t   = wksp::root( arg_string);
             if(t)
                 return t;
-            return wksp::root(to_uint64( arg_string).value);
+            return root_id(arg_string);
         }
         
         const Root* root(const WebContext&ctx, bool *detected)
@@ -75,7 +74,10 @@ namespace yq {
 
         const Root* root_id(std::string_view arg_string)
         {
-            return wksp::root(to_uint64(arg_string).value);
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return nullptr;
+            return wksp::root(*vv);
         }
 
         const Root* root_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

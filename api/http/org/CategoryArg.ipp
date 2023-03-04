@@ -24,10 +24,7 @@ namespace yq {
             Category t   = cdb::category( arg_string);
             if(t)
                 return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_category(i))
-                return Category{i};
-            return Category{};
+            return category_id(arg_string);
         }
         
         Category category(const WebContext&ctx, bool *detected)
@@ -65,10 +62,12 @@ namespace yq {
 
         Category category_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_category(i))
-                return Category{i};
-            return Category{};
+            auto vv     = to_uint64(arg_string);
+            if(!vv)
+                return Category{};
+            if(!cdb::exists_category(*vv))
+                return Category{};
+            return Category{*vv};
         }
 
         Category category_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

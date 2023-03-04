@@ -24,10 +24,7 @@ namespace yq {
             Tag t   = cdb::find_tag( arg_string);
             if(t)
                 return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_tag(i))
-                return Tag{i};
-            return Tag{};
+            return tag_id(arg_string);
         }
         
         Tag tag(const WebContext&ctx, bool *detected)
@@ -65,10 +62,12 @@ namespace yq {
 
         Tag tag_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_tag(i))
-                return Tag{i};
-            return Tag{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return Tag{};
+            if(!cdb::exists_tag(*vv))
+                return Tag{};
+            return Tag{*vv};
         }
 
         Tag tag_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

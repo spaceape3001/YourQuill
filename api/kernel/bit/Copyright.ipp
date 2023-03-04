@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Copyright.hpp"
+#include <kernel/errors.hpp>
 
 namespace yq {
 
@@ -42,19 +43,24 @@ namespace yq {
     }
 
 
-    Result<Copyright>   x_copyright(const XmlNode* xn)
+    Expect<Copyright>   x_copyright(const XmlNode* xn)
     {
         auto    stance  = read_attribute(xn, szStance, x_enum<AssertDeny>);
+        if(!stance)
+            return errors::bad_copyright_stance();
         auto    from    = read_attribute(xn, szFrom, x_ushort);
+        if(!from)
+            return errors::bad_copyright_from();
         auto    to      = read_attribute(xn, szTo, x_ushort);
+        if(!to)
+            return errors::bad_copyright_to();
         
         Copyright   res;
-        res.stance  = stance.value;
-        res.from    = from.value;
-        res.to      = to.value;
+        res.stance  = *stance;
+        res.from    = *from;
+        res.to      = *to;
         res.text    = to_string(xn);
-        
-        return {res, stance.good && from.good && to.good };
+        return res;
     }
 
     void                write_xn(XmlNode* xb, const Copyright&v)

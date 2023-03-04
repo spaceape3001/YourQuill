@@ -38,7 +38,7 @@ namespace yq {
         void    merge(const Copyright&);
     };
 
-    Result<Copyright>   x_copyright(const XmlNode*);
+    Expect<Copyright>   x_copyright(const XmlNode*);
     void                write_xn(XmlNode* xb, const Copyright&);
 
 }

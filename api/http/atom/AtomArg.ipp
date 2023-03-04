@@ -18,15 +18,12 @@ namespace yq {
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return Atom{};
+                return Atom();
                 
             Atom t   = cdb::find_atom( arg_string);
             if(t)
                 return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_atom(i))
-                return Atom{i};
-            return Atom{};
+            return atom_id(arg_string);
         }
         
         Atom atom(const WebContext&ctx, bool *detected)
@@ -48,7 +45,7 @@ namespace yq {
             k       = ctx.find_query("atom");
             if(!k.empty())
                 return atom(k);
-            return Atom{};
+            return Atom();
         }
         
         
@@ -70,10 +67,12 @@ namespace yq {
 
         Atom atom_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_atom(i))
-                return Atom{i};
-            return Atom{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return Atom();
+            if(!cdb::exists_atom(*vv))
+                return Atom();
+            return Atom(*vv);
         }
 
         Atom atom_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

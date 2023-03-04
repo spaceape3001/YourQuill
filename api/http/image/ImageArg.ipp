@@ -16,13 +16,12 @@ namespace yq {
     namespace arg {
         Image image(std::string_view  arg_string)
         {
-            arg_string   = trimmed(arg_string);
-            if(arg_string.empty())
-                return Image{};
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_image(i))
-                return Image{i};
-            return Image{};
+            auto vv = to_uint64( arg_string);
+            if(!vv)
+                return Image();
+            if(!cdb::exists_image(*vv))
+                return Image();
+            return Image(*vv);
         }
         
         Image image(const WebContext&ctx, bool *detected)
@@ -33,7 +32,7 @@ namespace yq {
             k       = ctx.find_query("image");
             if(!k.empty())
                 return image(k);
-            return Image{};
+            return Image();
         }
         
         

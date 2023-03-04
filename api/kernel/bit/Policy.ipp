@@ -8,23 +8,24 @@
 
 #include "Policy.hpp"
 #include <basic/EnumMap.hpp>
+#include <basic/errors.hpp>
 
 namespace yq {
 
-    Result<Access>      decode_access(std::string_view arg)
+    Expect<Access>      decode_access(std::string_view arg)
     {
         auto    ac  = Access::value_for(arg);
-        if(ac.good)
-            return { ac.value, true };
+        if(ac)
+            return *ac;
         if(is_similar(arg, "first"))
-            return { Access(Access::WriteFirst), true };
+            return Access::WriteFirst;
         if(is_similar(arg, "write"))
-            return { Access(Access::ReadWrite), true };
+            return Access::ReadWrite;
         if(is_similar(arg, "read"))
-            return { Access(Access::ReadOnly), true };
+            return Access::ReadOnly;
         if(is_similar(arg, "deny"))
-            return { Access(Access::NoAccess), true };
-        return {};
+            return Access::NoAccess;
+        return errors::bad_argument();
     }
 
 

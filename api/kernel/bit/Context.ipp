@@ -17,8 +17,8 @@ namespace yq {
     {
         ret.title   = read_attribute(xn, szTitle, x_string);
         ret.icon    = read_attribute(xn, szIcon, x_string);
-        ret.order   = read_attribute(xn, szOrder, x_integer).value;
-        ret.format  = read_attribute(xn, szFormat, x_enum<Format>).value;
+        ret.order   = read_attribute(xn, szOrder, x_integer).value_or(0);
+        ret.format  = read_attribute(xn, szFormat, x_enum<Format>).value_or(Format());
         ret.data    = to_string(xn);
         return true;
     }
@@ -76,7 +76,7 @@ namespace yq {
                 } else if(is_similar(cmd, szFormat)){
                     cur.format      = Format(arg);
                 } else if(is_similar(cmd, szOrder)){
-                    cur.order       = to_uint(arg).value;
+                    cur.order       = to_uint(arg).value_or(0);
                 } else if(is_similar(cmd, szIcon)){
                     cur.icon        = std::string(arg);
                 } 

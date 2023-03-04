@@ -19,7 +19,7 @@ namespace yq {
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return Leaf{};
+                return Leaf();
                 
             Leaf t   = cdb::leaf( arg_string);
             if(t)
@@ -28,10 +28,7 @@ namespace yq {
             if(t)
                 return t;
                 
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_leaf(i))
-                return Leaf{i};
-            return Leaf{};
+            return leaf_id(arg_string);
         }
         
         Leaf leaf(const WebContext&ctx, bool *detected)
@@ -47,7 +44,7 @@ namespace yq {
             k       = ctx.find_query("leaf");
             if(!k.empty())
                 return leaf(k);
-            return Leaf{};
+            return Leaf();
         }
         
         
@@ -69,10 +66,12 @@ namespace yq {
 
         Leaf leaf_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_leaf(i))
-                return Leaf{i};
-            return Leaf{};
+            auto vv   = to_uint64(arg_string);
+            if(!vv)
+                return Leaf();
+            if(!cdb::exists_leaf(*vv))
+                return Leaf();
+            return Leaf(*vv);
         }
 
         Leaf leaf_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

@@ -686,8 +686,8 @@ namespace yq {
             std::set<uint16_t>   ret;
             for(const std::string_view& v : values_set(m, sep)){
                 auto r = to_uint16(v);
-                if(r.good)
-                    ret.insert(r.value);
+                if(r)
+                    ret.insert(*r);
             }
             return ret;
         }

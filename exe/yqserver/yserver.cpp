@@ -821,14 +821,14 @@ public:
             }
         } else if(is_similar(hv.key, "Content-Length")){
             auto t = to_uint64(hv.value);
-            if(t.good){
-                if(t.value > config.maxRxBody){
+            if(t){
+                if(*t > config.maxRxBody){
                     m_current -> status     = HttpStatus::PayloadTooLarge;
                     m_rxMode        = RxError;
                     return;
                 }
                 
-                m_current -> rx_body.resize(t.value);
+                m_current -> rx_body.resize(*t);
             }
         } else if(is_similar(hv.key, "Content-Type")){
             m_current -> rx_content_type         = ContentType(hv.value);
@@ -845,13 +845,13 @@ public:
 
         MethodUriVersion  muri      = parse_method_uri(v);
         auto m = HttpOp::value_for(muri.method);
-        if(!m.good){
+        if(!m){
             dispatch(HttpStatus::MethodNotAllowed);
             m_rxMode    = RxError;
             return ;
         }
         
-        m_current -> method   = m.value;
+        m_current -> method   = *m;
         if(muri.uri.empty()){
             dispatch(HttpStatus::MissingURI);
             m_rxMode    = RxError;

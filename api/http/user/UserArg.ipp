@@ -19,15 +19,12 @@ namespace yq {
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return User{};
+                return User();
                 
             User t   = cdb::user( arg_string);
             if(t)
                 return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_user(i))
-                return User{i};
-            return User{};
+            return user_id(arg_string);
         }
         
         User user(const WebContext&ctx, bool *detected)
@@ -55,7 +52,7 @@ namespace yq {
                     *detected = true;
                 return user(k);
             }
-            return User{};
+            return User();
         }
         
         User user(const WebContext&ctx, std::string_view arg_name, bool *detected)
@@ -77,10 +74,12 @@ namespace yq {
 
         User user_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_user(i))
-                return User{i};
-            return User{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return User();
+            if(!cdb::exists_user(*vv))
+                return User();
+            return User(*vv);
         }
 
         User user_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

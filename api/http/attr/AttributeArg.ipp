@@ -19,7 +19,7 @@ namespace yq {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
                 return Attribute{};
-            uint64_t    i = to_uint64( arg_string).value;
+            uint64_t    i = to_uint64( arg_string).value_or(0);
             if(cdb::exists_attribute(i))
                 return Attribute{i};
             return Attribute{};

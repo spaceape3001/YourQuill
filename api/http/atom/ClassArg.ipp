@@ -18,15 +18,12 @@ namespace yq {
         {
             arg_string   = trimmed(arg_string);
             if(arg_string.empty())
-                return Class{};
+                return Class();
                 
             Class t   = cdb::class_( arg_string);
             if(t)
                 return t;
-            uint64_t    i = to_uint64( arg_string).value;
-            if(cdb::exists_class(i))
-                return Class{i};
-            return Class{};
+            return class_id(arg_string);
         }
         
         Class class_(const WebContext&ctx, bool *detected)
@@ -42,7 +39,7 @@ namespace yq {
             k       = ctx.find_query("class");
             if(!k.empty())
                 return class_(k);
-            return Class{};
+            return Class();
         }
         
         
@@ -64,10 +61,12 @@ namespace yq {
 
         Class class_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_class(i))
-                return Class{i};
-            return Class{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return Class();
+            if(!cdb::exists_class(*vv))
+                return Class();
+            return Class{*vv};
         }
 
         Class class_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

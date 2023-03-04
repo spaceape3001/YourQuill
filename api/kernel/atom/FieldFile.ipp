@@ -73,7 +73,7 @@ namespace yq {
         expected        = attrs.value(kv::key({ "expect", "expected"}));
         multiplicity    = Multiplicity(attrs.value(kv::key({"allow", "multiple"})));
         restriction     = Restriction(attrs.value(kv::key({"control", "restrict"})));
-        max_count       = to_uint(attrs.value("max")).value;
+        max_count       = to_uint(attrs.value("max")).value_or(0);
         return std::error_code();
     }
     

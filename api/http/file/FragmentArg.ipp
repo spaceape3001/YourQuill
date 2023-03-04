@@ -82,10 +82,12 @@ namespace yq {
         
         Fragment fragment_id(std::string_view arg_string)
         {
-            uint64_t    i   = to_uint64(arg_string).value;
-            if(cdb::exists_fragment(i))
-                return Fragment{i};
-            return Fragment{};
+            auto vv = to_uint64(arg_string);
+            if(!vv)
+                return Fragment();
+            if(!cdb::exists_fragment(*vv))
+                return Fragment();
+            return Fragment(*vv);
         }
 
         Fragment fragment_id(const WebContext&ctx, std::string_view arg_name, bool *detected)

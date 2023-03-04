@@ -22,7 +22,7 @@ namespace {
         std::string     s   = ctx.find_query("roots");
         if(s.empty())
             return false;
-        return to_boolean(s).value;
+        return to_boolean(s).value_or(false);
     }
     
     void    p_explorer(WebHtml&h)
