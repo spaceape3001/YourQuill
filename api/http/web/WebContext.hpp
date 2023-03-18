@@ -114,7 +114,7 @@ namespace yq {
         //std::vector<HttpDataPtr>        rx_buffers;
 
         //! Session Data
-        //! \note this data will not persist across sessions unless the *set* method is called
+        //! \note this data will not persist across connections unless the *set* method is called
         SessionData                     session;
 
         //! Status to reply with

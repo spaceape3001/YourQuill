@@ -6,9 +6,15 @@
 
 cmake_minimum_required(VERSION 3.23.0)
 project(YourQuill VERSION 0.0.0.3 LANGUAGES CXX)
+
+option(Feature_Qt5 "Deploy Qt5 (API and Apps)" ON)
+
 include(yq-toolbox/configure.cmake)
 add_subdirectory(yq-toolbox)
 add_subdirectory(yq-vulqan)
+if(Feature_Qt5)
+    add_subdirectory(qt-utilities)
+endif()
 add_subdirectory(3rd)
 
 
