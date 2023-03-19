@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "config.hpp"
 #include "yquill.hpp"
 
 #include <basic/BasicApp.hpp>
@@ -28,6 +29,11 @@ using namespace yq;
 
 volatile Quit   gQuit = Quit::No;
 
+ConfigParams          configData;
+const ConfigParams&   config = configData;
+
+ConfigParams::ConfigParams() = default;
+ConfigParams::~ConfigParams() = default;
 
 void    sigQuit(int)
 {

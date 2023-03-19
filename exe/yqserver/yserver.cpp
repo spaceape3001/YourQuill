@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "yquill.hpp"
+#include "config.hpp"
 #include <asio.hpp>
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
@@ -99,40 +100,6 @@ struct Context : public WebContext, public RefCount {
 
 
 namespace {
-
-    struct {
-        //! Time session's considered "stale"
-        time_t              autoLogout      = 900;
-        
-        //! Scan every five seconds for "stale" sessions
-        time_t              staleScan       = 5;
-        
-        //! Require a new login every.... so often
-        time_t              forceLogin      = 3600;
-        
-        //! Renew the cookie (&magic) this time-interval
-        time_t              renewCookie     = 300;
-        
-        //! When to purge sessions
-        time_t              idlePrune       = 450;
-        
-        //! How often to prune the table
-        time_t              pruneInterval   = 60;
-        
-        //! Old magic is tolerated for this long
-        time_t              oldMagic        = 5;
-        
-        std::string         cookieName      = "yq";
-
-        VersionSpec         version         = http10();
-        unsigned int        sizeSSID        = 12;
-        unsigned int        sizeMAGIC       = 32;
-        
-            // max Rx body before complaining
-        size_t              maxRxBody       = 6 << 20ULL;
-        
-    }  config;
-
     struct {
         tbb::spin_rw_mutex                      mutex;
         Map<std::string_view, Ref<Session>>     lut;
