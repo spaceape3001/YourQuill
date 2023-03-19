@@ -46,6 +46,15 @@ struct ConfigParams {
     
         // max Rx body before complaining
     size_t              maxRxBody       = 6 << 20ULL;
+
+    //! TRUE to get metrics for file scanning
+    //bool                fileScanMetrics        = false;
+    
+    //! Interval for file scanning ticks
+    //  unsigned int        fileScanTickInterval   = 100;
+    
+    
+    uint16_t            port            = 0;
     
     ConfigParams();
     ~ConfigParams();

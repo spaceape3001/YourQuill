@@ -914,7 +914,7 @@ class HttpServer {
 public:
 
     HttpServer() : 
-        m_acceptor(m_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), wksp::port())), 
+        m_acceptor(m_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), config.port)), 
         m_socket(m_context)
     {
     }
@@ -962,7 +962,6 @@ YQ_INVOKE(
 void        run_server(yq::Vector<std::thread>&  threads)
 {
     genStatus();
-    yInfo() << "Launching Quill HttpServer for '" << wksp::name() << "' on Port " << wksp::port() << ".";
     
     unsigned int        num_threads = wksp::threads();
     unsigned int        num_proc    = yq::thread::num_processors();
@@ -978,6 +977,7 @@ void        run_server(yq::Vector<std::thread>&  threads)
     num_threads         = std::min(2U, num_threads);
     #endif
         
+    yInfo() << "Launching Quill HttpServer for '" << wksp::name() << "' on Port " << config.port << ".\n";
     
     HttpServer* server      = new HttpServer;
     server -> start();

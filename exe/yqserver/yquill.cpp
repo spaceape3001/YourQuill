@@ -84,6 +84,10 @@ bool    initialize(const char* wfile)
         yCritical() << "Unable to initialize database!";
         return false;
     }
+    
+    if(!configData.port)
+        configData.port = wksp::port();
+    
 
     size_t n = load_plugin_dir("plugin");
     n += load_plugin_dir("plugin/yqserver");
