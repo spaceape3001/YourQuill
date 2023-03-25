@@ -8,9 +8,12 @@
 
 #include <ctime>
 #include <string>
+#include <vector>
 #include <basic/VersionSpec.hpp>
 
 struct ConfigParams {
+    using svlist_t = std::vector<std::string_view>;
+
     //! Time session's considered "stale"
     time_t              autoLogout      = 900;
     
@@ -55,6 +58,9 @@ struct ConfigParams {
     
     
     uint16_t            port            = 0;
+    
+    //! Top level things to not ingest into the scanner system
+    svlist_t            topFolder_exclude = { ".cache", ".db", ".git", ".help", ".img", ".js", ".logs", ".quill", ".svn", ".users", ".yquill" };
     
     ConfigParams();
     ~ConfigParams();

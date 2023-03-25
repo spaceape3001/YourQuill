@@ -529,6 +529,17 @@ namespace {
 
 namespace {
 
+    path_vector_t       make_dir_set(std::string_view sname, std::string_view wname)
+    {
+        path_vector_t   ret;
+        for(const Root* rt : wksp::roots())
+            ret.push_back(rt -> resolve(wname));
+        for(auto& p : wksp::shared_all(sname))
+            ret.push_back(p);
+        return ret;
+    }
+
+
     void    reg_me()
     {
         reg_webgroup({
@@ -590,10 +601,10 @@ namespace {
         
         reg_webtemplate("/files", wksp::shared("www/files.ht"sv));
         reg_webtemplate("/help", wksp::shared("www/help.ht"sv));
-        reg_webpage("/help/**", wksp::shared_all("www/help"sv));
-        reg_webpage("/img/**", wksp::shared_all("www/img"sv));
+        reg_webpage("/help/**", make_dir_set(".help"sv, "www/help"sv));
+        reg_webpage("/img/**", make_dir_set(".img", "www/img"sv));
         reg_webpage("/img/yquill.svg", wksp::shared("www/img/yquill.svg"sv));   // precaching
-        reg_webpage("/js/**", wksp::shared("www/js/jquery.js"sv));
+        reg_webpage("/js/**", make_dir_set(".js", "www/js"sv));
         reg_webpage("/js/jquery.js", wksp::shared("www/js/jquery.js"sv));      // precaching
         reg_webimage("/logo", wksp::shared("www/img/yquill.svg"sv), Folder(), ".logo").alt_path("/favicon.ico");
         reg_webpage("/pkg/**", wksp::shared_all("www/pkg"sv));

@@ -112,24 +112,12 @@ bool    ignore(Folder f, std::string_view n)
         return true;
     if(n == "..")
         return true;
-    if(n == ". ")   // Don't know how this got onto the drive in the first place...
+    if(n == ". ")   // Don't know how this got onto the drive in the first place... still bad
         return true;
         
     if(f == cdb::top_folder()){
         // weed out reserved files
-        if(is_similar(n, ".cache"))
-            return true;
-        if(is_similar(n, ".git"))
-            return true;
-        if(is_similar(n, ".logs"))
-            return true;
-        if(is_similar(n, ".quill"))
-            return true;
-        if(is_similar(n, ".svn"))
-            return true;
-        if(is_similar(n, ".users"))
-            return true;
-        if(is_similar(n, ".yquill"))
+        if(is_in(n, config.topFolder_exclude))
             return true;
     }
 
