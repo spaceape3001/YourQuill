@@ -5,7 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <math/Size2.hpp>
+
+#include <http/web/WebHtml.hpp>
+#include <math/shape/Size2.hpp>
 
 namespace yq {
 
