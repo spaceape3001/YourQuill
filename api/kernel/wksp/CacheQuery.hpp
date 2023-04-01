@@ -7,7 +7,7 @@
 #pragma once
 
 #include <basic/Logging.hpp>
-#include <basic/SqlQueryMap.hpp>
+#include <sql/SqlQueryMap.hpp>
 #include <kernel/wksp/CacheStatement.hpp>
 
 #include <set>

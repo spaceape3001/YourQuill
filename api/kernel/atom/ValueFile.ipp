@@ -8,9 +8,9 @@
 
 #include "ValueFile.hpp"
 #include <basic/Logging.hpp>
-#include <basic/XmlUtils.hpp>
+#include <io/XmlUtils.hpp>
 #include <kernel/io/Strings.hpp>
-#include <basic/errors.hpp>
+#include <io/errors.hpp>
 
 namespace yq {
 

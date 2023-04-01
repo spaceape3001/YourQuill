@@ -12,16 +12,16 @@
 
 #include <basic/DelayInit.hpp>
 #include <basic/CollectionUtils.hpp>
-#include <basic/FixedBuffer.hpp>
+#include <io/FixedBuffer.hpp>
 #include <basic/HttpParser.hpp>
 #include <basic/Logging.hpp>
 #include <basic/Random.hpp>
 #include <basic/Ref.hpp>
-#include <basic/StreamOps.hpp>
+#include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 
-#include <basic/stream/Text.hpp>
+#include <io/stream/Text.hpp>
 
 #include <http/web/WebAdapters.hpp>
 #include <http/web/WebContext.hpp>

@@ -8,7 +8,7 @@
 
 #include "TagCDB.hpp"
 #include <basic/ByteArray.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Set.hpp>
 #include <kernel/db/IDLock.hpp>
 #include <kernel/db/NKI.hpp>

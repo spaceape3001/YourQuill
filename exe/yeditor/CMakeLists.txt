@@ -6,6 +6,6 @@
 
 SET(yeditor_sources ./yeditor.cpp)
 add_executable(yeditor ${yeditor_sources})
-target_link_libraries(yeditor yqkernel yqvulqan)
+target_link_libraries(yeditor yqkernel tachyon)
 
 

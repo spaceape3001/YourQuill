@@ -7,7 +7,7 @@
 #pragma once
 
 #include "RootCDB.hpp"
-#include <basic/DirUtils.hpp>
+#include <io/DirUtils.hpp>
 #include <kernel/file/DirectoryCDB.hpp>
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>

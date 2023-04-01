@@ -10,7 +10,7 @@
 #include <basic/DelayInit.hpp>
 #include <basic/Guarded.hpp>
 #include <basic/Logging.hpp>
-#include <basic/StreamOps.hpp>
+#include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
 #include <kernel/preamble.hpp>

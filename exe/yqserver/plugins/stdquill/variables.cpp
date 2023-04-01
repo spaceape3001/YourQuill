@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <basic/DelayInit.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Http.hpp>
 #include <basic/Logging.hpp>
-#include <basic/StreamOps.hpp>
+#include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
 #include <kernel/atom/AtomCDB.hpp>

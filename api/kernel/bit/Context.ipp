@@ -8,9 +8,9 @@
 
 #include <kernel/bit/Context.hpp>
 #include <kernel/io/Strings.hpp>
-#include <basic/XmlUtils.hpp>
-#include <basic/StreamOps.hpp>
-#include <basic/stream/Text.hpp>
+#include <io/XmlUtils.hpp>
+#include <io/StreamOps.hpp>
+#include <io/stream/Text.hpp>
 
 namespace yq {
     bool        read_xn(Context&ret, const XmlNode*xn)

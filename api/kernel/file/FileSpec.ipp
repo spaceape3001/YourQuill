@@ -6,7 +6,7 @@
 
 #include "FileSpec.hpp"
 
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <kernel/atom/ClassCDB.hpp>
 #include <kernel/file/Folder.hpp>

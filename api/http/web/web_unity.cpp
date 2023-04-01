@@ -23,11 +23,11 @@
 #include <basic/Safety.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/Map.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <basic/stream/Bytes.hpp>
-#include <basic/StreamOps.hpp>
-#include <basic/stream/Text.hpp>
+#include <io/stream/Bytes.hpp>
+#include <io/StreamOps.hpp>
+#include <io/stream/Text.hpp>
 #include <basic/Encode64.hpp>
 #include <basic/TextUtils.hpp>
 

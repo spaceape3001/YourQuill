@@ -7,7 +7,7 @@
 #pragma once
 
 #include "FieldHtml.hpp"
-#include <basic/StreamOps.hpp>
+#include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <http/atom/ClassHtml.hpp>
 #include <http/file/RootHtml.hpp>

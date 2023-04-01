@@ -9,7 +9,7 @@
 #include "Action.hpp"
 #include <kernel/io/Strings.hpp>
 #include <basic/meta/ObjectInfoWriter.hpp>
-#include <basic/XmlUtils.hpp>
+#include <io/XmlUtils.hpp>
 
 namespace yq {
 

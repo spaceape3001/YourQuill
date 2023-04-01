@@ -7,9 +7,9 @@
 #pragma once
 
 #include "ClassHtml.hpp"
-#include <basic/StreamOps.hpp>
+#include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
-#include <basic/stream/Text.hpp>
+#include <io/stream/Text.hpp>
 #include <http/atom/ClassArg.hpp>
 #include <http/file/DocumentHtml.hpp>
 #include <http/file/RootHtml.hpp>

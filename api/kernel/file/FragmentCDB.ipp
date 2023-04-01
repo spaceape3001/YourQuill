@@ -8,7 +8,7 @@
 
 #include "FragmentCDB.hpp"
 #include <basic/ByteArray.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <kernel/db/IDLock.hpp>
 #include <kernel/file/DirectoryCDB.hpp>

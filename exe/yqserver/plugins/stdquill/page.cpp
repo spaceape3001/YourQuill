@@ -23,18 +23,18 @@
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/DelayInit.hpp>
-#include <basic/DirUtils.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/DirUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <basic/SqlLite.hpp>
-#include <basic/SqlQuery.hpp>
-#include <basic/StreamOps.hpp>
+#include <sql/SqlLite.hpp>
+#include <sql/SqlQuery.hpp>
+#include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
 #include <basic/meta/ObjectInfo.hpp>
 #include <basic/meta/TypeInfo.hpp>
 
-#include <basic/stream/Text.hpp>
+#include <io/stream/Text.hpp>
 
 #include <kernel/bit/Copyright.hpp>
 #include <kernel/db/NKI.hpp>

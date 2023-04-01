@@ -8,11 +8,11 @@
 
 #include <basic/BasicApp.hpp>
 #include <basic/DelayInit.hpp>
-#include <basic/DirUtils.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/DirUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/meta/Init.hpp>
-#include <basic/SqlLite.hpp>
+#include <sql/SqlLite.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 

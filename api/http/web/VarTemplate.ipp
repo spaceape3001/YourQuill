@@ -11,7 +11,7 @@
 #include <kernel/file/DocumentCDB.hpp>
 #include <kernel/file/FolderCDB.hpp>
 #include <kernel/file/FragmentCDB.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <kernel/notify/FileWatch.hpp>
 #include <kernel/notify/FileNotifyAdapters.hpp>
 #include <kernel/notify/Stage4.hpp>

@@ -15,8 +15,8 @@
 #include <kernel/notify/FileWatch.hpp>
 #include <kernel/notify/FileNotifyAdapters.hpp>
 #include <kernel/notify/Stage4.hpp>
-#include <basic/StreamOps.hpp>
-#include <basic/stream/Text.hpp>
+#include <io/StreamOps.hpp>
+#include <io/stream/Text.hpp>
 
 namespace yq {
     WebImage::WebImage(std::string_view kpath, const std::filesystem::path& f0, Folder folder, std::string_view prefix, const std::source_location&sl) : 

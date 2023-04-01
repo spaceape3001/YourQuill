@@ -8,7 +8,7 @@
 
 #include "CategoryCDB.hpp"
 #include <basic/ByteArray.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <kernel/atom/Class.hpp>
 #include <kernel/atom/Field.hpp>
 #include <kernel/db/NKI.hpp>

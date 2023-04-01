@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <basic/SqlStatement.hpp>
+#include <sql/SqlStatement.hpp>
 #include <filesystem>
 #include <set>
 

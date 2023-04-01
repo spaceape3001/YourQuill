@@ -7,8 +7,8 @@
 #pragma once
 
 #include <basic/Url.hpp>
-#include <basic/StreamOps.hpp>
-#include <basic/Stream.hpp>
+#include <io/StreamOps.hpp>
+#include <io/Stream.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>
 #include <basic/trait/not_copyable.hpp>

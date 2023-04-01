@@ -9,7 +9,7 @@
 #include "ClassCDB.hpp"
 #include <basic/ByteArray.hpp>
 #include <basic/CollectionUtils.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <kernel/atom/ClassFile.hpp>
 #include <kernel/atom/Field.hpp>
 #include <kernel/db/NKI.hpp>

@@ -7,17 +7,17 @@
 #include <basic/BasicApp.hpp>
 #include <basic/CollectionUtils.hpp>
 #include <basic/DelayInit.hpp>
-#include <basic/DirUtils.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/DirUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <basic/StreamOps.hpp>
+#include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/Vector.hpp>
 
 #include <basic/meta/TypeInfo.hpp>
 
-#include <basic/stream/Bytes.hpp>
-#include <basic/stream/Text.hpp>
+#include <io/stream/Bytes.hpp>
+#include <io/stream/Text.hpp>
 
 #include <kernel/atom/AtomCDB.hpp>
 #include <kernel/atom/ClassCDB.hpp>

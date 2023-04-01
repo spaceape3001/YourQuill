@@ -9,7 +9,7 @@
 #include "Atom.hpp"
 #include "AtomCDB.hpp"
 
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/meta/Init.hpp>
 #include <kernel/atom/Class.hpp>

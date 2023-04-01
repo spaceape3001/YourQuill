@@ -9,13 +9,13 @@
 
 #include <basic/BasicApp.hpp>
 #include <basic/DelayInit.hpp>
-#include <basic/DirUtils.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/DirUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <basic/PluginLoader.hpp>
-#include <basic/SqlLite.hpp>
-#include <basic/SqlQuery.hpp>
-#include <basic/SqlUtils.hpp>
+#include <io/PluginLoader.hpp>
+#include <sql/SqlLite.hpp>
+#include <sql/SqlQuery.hpp>
+#include <sql/SqlUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 

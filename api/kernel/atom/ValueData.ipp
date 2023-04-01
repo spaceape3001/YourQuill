@@ -8,7 +8,7 @@
 
 #include "ValueData.hpp"
 #include <basic/TextUtils.hpp>
-#include <basic/XmlUtils.hpp>
+#include <io/XmlUtils.hpp>
 #include <kernel/io/Strings.hpp>
 
 namespace yq {

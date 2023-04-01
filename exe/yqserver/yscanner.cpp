@@ -9,13 +9,13 @@
 
 #include <basic/Compare.hpp>
 #include <basic/Deque.hpp>
-#include <basic/DirUtils.hpp>
+#include <io/DirUtils.hpp>
 #include <basic/EnumMap.hpp>
-#include <basic/FileUtils.hpp>
+#include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/Set.hpp>
-#include <basic/SqlLite.hpp>
-#include <basic/SqlQuery.hpp>
+#include <sql/SqlLite.hpp>
+#include <sql/SqlQuery.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 #include <basic/Vector.hpp>

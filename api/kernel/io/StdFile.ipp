@@ -9,7 +9,7 @@
 #include "StdFile.hpp"
 
 #include <kernel/bit/KeyValue.hpp>
-#include <basic/stream/Text.hpp>
+#include <io/stream/Text.hpp>
 #include <basic/ByteArray.hpp>
 
 #include <rapidxml.hpp>

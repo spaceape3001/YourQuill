@@ -9,7 +9,7 @@
 #include "StdObject.hpp"
 #include <kernel/bit/KeyValue.hpp>
 #include <basic/meta/Init.hpp>
-#include <basic/stream/Text.hpp>
+#include <io/stream/Text.hpp>
 
 namespace yq {
     Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)
