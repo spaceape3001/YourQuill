@@ -31,8 +31,8 @@
 #include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <basic/meta/ObjectInfo.hpp>
-#include <basic/meta/TypeInfo.hpp>
+#include <meta/ObjectInfo.hpp>
+#include <meta/TypeInfo.hpp>
 
 #include <io/stream/Text.hpp>
 

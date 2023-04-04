@@ -7,11 +7,11 @@
 #pragma once
 
 #include <http/meta/MetaHtml.hpp>
-#include <basic/meta/ArgInfo.hpp>
-#include <basic/meta/MethodInfo.hpp>
-#include <basic/meta/ObjectInfo.hpp>
-#include <basic/meta/PropertyInfo.hpp>
-#include <basic/meta/TypeInfo.hpp>
+#include <meta/ArgInfo.hpp>
+#include <meta/MethodInfo.hpp>
+#include <meta/ObjectInfo.hpp>
+#include <meta/PropertyInfo.hpp>
+#include <meta/TypeInfo.hpp>
 #include <basic/TextUtils.hpp>
 #include <http/web/WebContext.hpp>
 #include <http/web/WebHtml.hpp>

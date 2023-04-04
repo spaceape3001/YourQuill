@@ -15,7 +15,7 @@
 #include <utility>
 #include <variant>
 #include <vector>
-#include <basic/meta/InfoBinder.hpp>
+#include <meta/InfoBinder.hpp>
 #include <math/preamble.hpp>
 
 namespace yq {

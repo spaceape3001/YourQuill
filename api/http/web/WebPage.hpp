@@ -9,8 +9,8 @@
 //#include <kernel/enum/change.hpp>
 #include <trait/not_copyable.hpp>
 #include <basic/EnumMap.hpp>
-#include <basic/meta/Meta.hpp>
-#include <basic/meta/MetaWriter.hpp>
+#include <meta/Meta.hpp>
+#include <meta/MetaWriter.hpp>
 #include <basic/Http.hpp>
 #include <basic/Flag.hpp>
 

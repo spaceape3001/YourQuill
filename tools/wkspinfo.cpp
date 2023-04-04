@@ -10,7 +10,7 @@
 
 #include <basic/BasicApp.hpp>
 #include <basic/Logging.hpp>
-#include <basic/meta/Meta.hpp>
+#include <meta/Meta.hpp>
 #include <basic/TextUtils.hpp>
 
 #include <kernel/file/Root.hpp>

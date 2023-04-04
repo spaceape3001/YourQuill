@@ -7,7 +7,7 @@
 #pragma once
 
 #include <http/meta/MetaObjectArg.hpp>
-#include <basic/meta/ObjectInfo.hpp>
+#include <meta/ObjectInfo.hpp>
 #include <basic/TextUtils.hpp>
 #include <http/web/WebContext.hpp>
 

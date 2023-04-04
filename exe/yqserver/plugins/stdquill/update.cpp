@@ -14,7 +14,7 @@
 #include <basic/TextUtils.hpp>
 #include <basic/Vector.hpp>
 
-#include <basic/meta/TypeInfo.hpp>
+#include <meta/TypeInfo.hpp>
 
 #include <io/stream/Bytes.hpp>
 #include <io/stream/Text.hpp>

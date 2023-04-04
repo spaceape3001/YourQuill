@@ -22,7 +22,7 @@
 #include <kernel/enum/Submit.hpp>
 #include <kernel/enum/Vcs.hpp>
 
-#include <basic/meta/Init.hpp>
+#include <meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::Access)
 YQ_TYPE_IMPLEMENT(yq::AssertDeny)

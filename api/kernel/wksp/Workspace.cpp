@@ -11,7 +11,7 @@
 #include <io/DirUtils.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
-#include <basic/meta/Init.hpp>
+#include <meta/Init.hpp>
 #include <sql/SqlLite.hpp>
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>

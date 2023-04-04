@@ -6,7 +6,7 @@
 
 #include <kernel/preamble.hpp>
 #include <basic/TextUtils.hpp>
-#include <basic/meta/TypeInfo.hpp>
+#include <meta/TypeInfo.hpp>
 
 namespace yq {
     namespace cdb {

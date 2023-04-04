@@ -8,7 +8,7 @@
 
 #include "StdObject.hpp"
 #include <kernel/bit/KeyValue.hpp>
-#include <basic/meta/Init.hpp>
+#include <meta/Init.hpp>
 #include <io/stream/Text.hpp>
 
 namespace yq {

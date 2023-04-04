@@ -11,7 +11,7 @@
 
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <basic/meta/Init.hpp>
+#include <meta/Init.hpp>
 #include <kernel/atom/AtomCDB.hpp>
 #include <kernel/db/NKI.hpp>
 #include <kernel/file/Document.hpp>

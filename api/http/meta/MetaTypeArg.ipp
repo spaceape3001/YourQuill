@@ -7,8 +7,8 @@
 #pragma once
 
 #include <http/meta/MetaTypeArg.hpp>
-#include <basic/meta/ArgInfo.hpp>
-#include <basic/meta/TypeInfo.hpp>
+#include <meta/ArgInfo.hpp>
+#include <meta/TypeInfo.hpp>
 #include <basic/TextUtils.hpp>
 #include <http/web/WebContext.hpp>
 
