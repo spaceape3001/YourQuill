@@ -9,7 +9,7 @@
 #include "IDLock.hpp"
 #include <unordered_map>
 #include <tbb/spin_mutex.h>
-#include <basic/trait/not_moveable.hpp>
+#include <trait/not_moveable.hpp>
 
 namespace yq {
 

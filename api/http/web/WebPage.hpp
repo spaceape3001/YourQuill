@@ -7,7 +7,7 @@
 #pragma once
 
 //#include <kernel/enum/change.hpp>
-#include <basic/trait/not_copyable.hpp>
+#include <trait/not_copyable.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/meta/Meta.hpp>
 #include <basic/meta/MetaWriter.hpp>

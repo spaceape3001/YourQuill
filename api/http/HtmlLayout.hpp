@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <basic/trait/always_false.hpp>
+#include <trait/always_false.hpp>
 #include <basic/Array.hpp>
 #include <http/web/WebContext.hpp>
 #include <http/web/WebHtml.hpp>

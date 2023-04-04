@@ -9,8 +9,8 @@
 #include <string>
 #include <string_view>
 #include <basic/Map.hpp>
-#include <basic/trait/not_copyable.hpp>
-#include <basic/trait/not_moveable.hpp>
+#include <trait/not_copyable.hpp>
+#include <trait/not_moveable.hpp>
 #include <sys/inotify.h>
 
 

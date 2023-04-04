@@ -11,7 +11,7 @@
 #include <io/Stream.hpp>
 #include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>
-#include <basic/trait/not_copyable.hpp>
+#include <trait/not_copyable.hpp>
 #include <functional>
 #include <http/preamble.hpp>
 #include <math/preamble.hpp>
