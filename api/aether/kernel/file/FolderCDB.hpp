@@ -7,8 +7,8 @@
 #pragma once
 
 #include "Folder.hpp"
-#include <kernel/preamble.hpp>
-#include <kernel/image/Image.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/image/Image.hpp>
 #include <vector>
 
 namespace yq {

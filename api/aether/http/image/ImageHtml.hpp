@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <http/Html.hpp>
-#include <kernel/enum/SizeDesc.hpp>
+#include <aether/http/Html.hpp>
+#include <aether/kernel/enum/SizeDesc.hpp>
 
 namespace yq {
     struct Image;

@@ -9,8 +9,8 @@
 #include "CategoryArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <http/web/WebContext.hpp>
-#include <kernel/org/CategoryCDB.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/kernel/org/CategoryCDB.hpp>
 
 namespace yq {
 

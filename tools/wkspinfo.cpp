@@ -13,8 +13,8 @@
 #include <meta/Meta.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <kernel/file/Root.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 int main(int argc, char* argv[])
 {

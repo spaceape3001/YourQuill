@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 #include <string_view>
 
 namespace yq {

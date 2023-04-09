@@ -9,9 +9,9 @@
 #include <compare>
 #include <cstdint>
 #include <initializer_list>
-#include <kernel/enum/SizeDesc.hpp>
+#include <aether/kernel/enum/SizeDesc.hpp>
 #include <math/shape/Size2.hpp>
-#include <kernel/preamble.hpp>
+#include <aether/kernel/preamble.hpp>
 
 namespace yq {
 

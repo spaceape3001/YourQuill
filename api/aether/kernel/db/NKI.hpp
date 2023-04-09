@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kernel/image/Image.hpp>
+#include <aether/kernel/image/Image.hpp>
 
 namespace yq {
     struct NKI {

@@ -8,8 +8,8 @@
 
 #include "DocumentHtml.hpp"
 #include <io/DirUtils.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
 
 namespace yq {
 

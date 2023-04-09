@@ -8,9 +8,9 @@
 
 #include "CategoryPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <http/org/CategoryArg.hpp>
-#include <http/web/WebContext.hpp>
-#include <kernel/org/Category.hpp>
+#include <aether/http/org/CategoryArg.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/kernel/org/Category.hpp>
 
 namespace yq {
     namespace post {

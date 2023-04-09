@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <kernel/atom/AtomCDB.hpp>
-#include <kernel/atom/ClassCDB.hpp>
-#include <kernel/plot/CharacterCDB.hpp>
+#include <aether/kernel/atom/AtomCDB.hpp>
+#include <aether/kernel/atom/ClassCDB.hpp>
+#include <aether/kernel/plot/CharacterCDB.hpp>
 
 namespace yq::cdb {
     std::vector<Character>      all_characters(Sorted sorted)

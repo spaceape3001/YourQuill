@@ -8,13 +8,13 @@
 
 #include "WebHtml.hpp"
 #include "WebTemplate.hpp"
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
 #include <io/FileUtils.hpp>
-#include <kernel/notify/FileNotifyAdapters.hpp>
-#include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/Stage4.hpp>
+#include <aether/kernel/notify/FileNotifyAdapters.hpp>
+#include <aether/kernel/notify/FileWatch.hpp>
+#include <aether/kernel/notify/Stage4.hpp>
 
 namespace yq {
 

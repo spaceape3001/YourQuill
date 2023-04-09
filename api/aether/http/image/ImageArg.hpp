@@ -9,7 +9,7 @@
 #include <initializer_list>
 #include <string_view>
 
-#include <kernel/enum/SizeDesc.hpp>
+#include <aether/kernel/enum/SizeDesc.hpp>
 
 namespace yq {
     struct Image;

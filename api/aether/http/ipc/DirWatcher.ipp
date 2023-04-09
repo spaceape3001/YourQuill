@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DirWatcher.hpp"
-#include <http/ipc/ipcBuffer.hpp>
+#include <aether/http/ipc/ipcBuffer.hpp>
 #include <basic/Logging.hpp>
 #include <basic/TextUtils.hpp>
 #include <vector>

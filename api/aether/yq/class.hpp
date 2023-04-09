@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <http/atom/ClassArg.hpp>
-#include <http/atom/ClassHtml.hpp>
-#include <http/atom/ClassPost.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/atom/ClassCDB.hpp>
-#include <kernel/atom/ClassData.hpp>
-#include <kernel/atom/ClassFile.hpp>
-#include <kernel/db/IDLock.hpp>
+#include <aether/http/atom/ClassArg.hpp>
+#include <aether/http/atom/ClassHtml.hpp>
+#include <aether/http/atom/ClassPost.hpp>
+#include <aether/kernel/atom/Class.hpp>
+#include <aether/kernel/atom/ClassCDB.hpp>
+#include <aether/kernel/atom/ClassData.hpp>
+#include <aether/kernel/atom/ClassFile.hpp>
+#include <aether/kernel/db/IDLock.hpp>

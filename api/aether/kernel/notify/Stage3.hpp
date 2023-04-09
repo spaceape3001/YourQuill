@@ -7,9 +7,9 @@
 #pragma once
 
 #include <basic/preamble.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/file/Folder.hpp>
-#include <kernel/file/FileSpec.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/file/Folder.hpp>
+#include <aether/kernel/file/FileSpec.hpp>
 #include <source_location>
 #include <filesystem>
 

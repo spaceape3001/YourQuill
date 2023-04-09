@@ -7,7 +7,7 @@
 #pragma once
 
 #include "AttributeCDB.hpp"
-#include <kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace cdb {

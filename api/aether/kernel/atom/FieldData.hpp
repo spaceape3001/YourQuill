@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <kernel/atom/Field.hpp>
-#include <kernel/enum/Multiplicity.hpp>
-#include <kernel/enum/Restriction.hpp>
+#include <aether/kernel/atom/Field.hpp>
+#include <aether/kernel/enum/Multiplicity.hpp>
+#include <aether/kernel/enum/Restriction.hpp>
 #include <basic/Map.hpp>
 #include <basic/Set.hpp>
 #include <memory>

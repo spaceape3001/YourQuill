@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/file/Directory.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/file/Folder.hpp>
-#include <kernel/file/Fragment.hpp>
-#include <kernel/enum/DataRole.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/file/Directory.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/file/Folder.hpp>
+#include <aether/kernel/file/Fragment.hpp>
+#include <aether/kernel/enum/DataRole.hpp>
 
 #include <filesystem>
 

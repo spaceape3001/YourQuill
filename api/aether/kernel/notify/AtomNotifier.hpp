@@ -14,12 +14,12 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/Vector.hpp>
-#include <kernel/atom/Atom.hpp>
-#include <kernel/atom/AtomSpec.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/atom/Field.hpp>
-#include <kernel/attr/AttributeDiff.hpp>
-#include <kernel/enum/Change.hpp>
+#include <aether/kernel/atom/Atom.hpp>
+#include <aether/kernel/atom/AtomSpec.hpp>
+#include <aether/kernel/atom/Class.hpp>
+#include <aether/kernel/atom/Field.hpp>
+#include <aether/kernel/attr/AttributeDiff.hpp>
+#include <aether/kernel/enum/Change.hpp>
 
 namespace yq {
 

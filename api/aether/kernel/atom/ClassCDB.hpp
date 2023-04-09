@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/atom/ClassInfo.hpp>
-#include <kernel/atom/ClassFile.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/org/Category.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/atom/ClassInfo.hpp>
+#include <aether/kernel/atom/ClassFile.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/org/Category.hpp>
 #include <math/Counter.hpp>
 
 //#include "Graph.hpp"

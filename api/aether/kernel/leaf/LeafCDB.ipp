@@ -10,16 +10,16 @@
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <kernel/db/NKI.hpp>
-#include <kernel/db/IDLock.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/leaf/LeafFile.hpp>
-#include <kernel/org/TagCDB.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/db/NKI.hpp>
+#include <aether/kernel/db/IDLock.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
+#include <aether/kernel/leaf/LeafFile.hpp>
+#include <aether/kernel/org/TagCDB.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace cdb {

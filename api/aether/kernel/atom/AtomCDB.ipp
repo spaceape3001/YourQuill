@@ -8,12 +8,12 @@
 
 #include "AtomCDB.hpp"
 #include <basic/TextUtils.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/db/NKI.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/org/Tag.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/atom/Class.hpp>
+#include <aether/kernel/db/NKI.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/org/Tag.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
 #include <math/Counter.hpp>
 
 namespace yq {

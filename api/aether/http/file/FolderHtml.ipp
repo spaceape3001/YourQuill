@@ -7,8 +7,8 @@
 #pragma once
 
 #include "FolderHtml.hpp"
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
 
 namespace yq {
     namespace html {

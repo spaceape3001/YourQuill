@@ -8,8 +8,8 @@
 
 #include "Attribute.hpp"
 
-#include <kernel/preamble.hpp>
-#include <kernel/file/Document.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/file/Document.hpp>
 #include <vector>
 
 namespace yq {

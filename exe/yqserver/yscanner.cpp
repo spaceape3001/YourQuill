@@ -20,20 +20,20 @@
 #include <basic/ThreadId.hpp>
 #include <basic/Vector.hpp>
 
-#include <kernel/file/DirectoryCDB.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/file/RootCDB.hpp>
-#include <http/ipc/DirWatcher.hpp>
-#include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/FileNotifier.hpp>
-#include <kernel/notify/Stage2.hpp>
-#include <kernel/notify/Stage3.hpp>
-#include <kernel/notify/Stage4.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/file/DirectoryCDB.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/file/RootCDB.hpp>
+#include <aether/http/ipc/DirWatcher.hpp>
+#include <aether/kernel/notify/FileWatch.hpp>
+#include <aether/kernel/notify/FileNotifier.hpp>
+#include <aether/kernel/notify/Stage2.hpp>
+#include <aether/kernel/notify/Stage3.hpp>
+#include <aether/kernel/notify/Stage4.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 
 #include <chrono>

@@ -9,8 +9,8 @@
 #include "ImageArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <http/web/WebContext.hpp>
-#include <kernel/image/ImageCDB.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
 
 namespace yq {
     namespace arg {

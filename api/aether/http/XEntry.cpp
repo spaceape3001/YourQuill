@@ -6,12 +6,12 @@
 
 #include "XEntry.hpp"
 #include <basic/TextUtils.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/leaf/LeafCDB.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
-#include <http/file/DocumentHtml.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/leaf/LeafCDB.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
+#include <aether/http/file/DocumentHtml.hpp>
 
 namespace yq {
 

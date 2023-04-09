@@ -4,22 +4,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <yq/atom.hpp>
-#include <yq/attribute.hpp>
-#include <yq/category.hpp>
-#include <yq/class.hpp>
-#include <yq/directory.hpp>
-#include <yq/document.hpp>
-#include <yq/folder.hpp>
-#include <yq/field.hpp>
-#include <yq/fragment.hpp>
-#include <yq/image.hpp>
-#include <yq/leaf.hpp>
-#include <yq/meta.hpp>
-#include <yq/property.hpp>
-#include <yq/root.hpp>
-#include <yq/tag.hpp>
-#include <yq/user.hpp>
+#include <aether/yq/atom.hpp>
+#include <aether/yq/attribute.hpp>
+#include <aether/yq/category.hpp>
+#include <aether/yq/class.hpp>
+#include <aether/yq/directory.hpp>
+#include <aether/yq/document.hpp>
+#include <aether/yq/folder.hpp>
+#include <aether/yq/field.hpp>
+#include <aether/yq/fragment.hpp>
+#include <aether/yq/image.hpp>
+#include <aether/yq/leaf.hpp>
+#include <aether/yq/meta.hpp>
+#include <aether/yq/property.hpp>
+#include <aether/yq/root.hpp>
+#include <aether/yq/tag.hpp>
+#include <aether/yq/user.hpp>
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/DelayInit.hpp>
@@ -36,22 +36,22 @@
 
 #include <io/stream/Text.hpp>
 
-#include <kernel/bit/Copyright.hpp>
-#include <kernel/db/NKI.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/bit/Copyright.hpp>
+#include <aether/kernel/db/NKI.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
-#include <http/HtmlLayout.hpp>
-#include <http/util/Markdown.hpp>
-#include <http/web/JsonAdapter.hpp>
-#include <http/web/WebAdapters.hpp>
-#include <http/web/WebContext.hpp>
-#include <http/web/WebHtml.hpp>
-#include <http/web/WebImage.hpp>
-#include <http/web/WebPage.hpp>
-#include <http/web/WebRedirect.hpp>
-#include <http/web/WebTemplate.hpp>
-#include <http/web/Template.hpp>
+#include <aether/http/HtmlLayout.hpp>
+#include <aether/http/util/Markdown.hpp>
+#include <aether/http/web/JsonAdapter.hpp>
+#include <aether/http/web/WebAdapters.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/http/web/WebHtml.hpp>
+#include <aether/http/web/WebImage.hpp>
+#include <aether/http/web/WebPage.hpp>
+#include <aether/http/web/WebRedirect.hpp>
+#include <aether/http/web/WebTemplate.hpp>
+#include <aether/http/web/Template.hpp>
 
 #include "common.hpp"
 

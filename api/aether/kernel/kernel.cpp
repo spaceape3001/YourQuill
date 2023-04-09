@@ -5,22 +5,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <kernel/enum/Access.hpp>
-#include <kernel/enum/AssertDeny.hpp>
-#include <kernel/enum/AttrKind.hpp>
-#include <kernel/enum/CalSystem.hpp>
-#include <kernel/enum/Change.hpp>
-#include <kernel/enum/DataRole.hpp>
-#include <kernel/enum/FileType.hpp>
-#include <kernel/enum/Format.hpp>
-#include <kernel/enum/Linkage.hpp>
-#include <kernel/enum/Multiplicity.hpp>
-#include <kernel/enum/Permission.hpp>
-#include <kernel/enum/Reset.hpp>
-#include <kernel/enum/Restriction.hpp>
-#include <kernel/enum/SizeDesc.hpp>
-#include <kernel/enum/Submit.hpp>
-#include <kernel/enum/Vcs.hpp>
+#include <aether/kernel/enum/Access.hpp>
+#include <aether/kernel/enum/AssertDeny.hpp>
+#include <aether/kernel/enum/AttrKind.hpp>
+#include <aether/kernel/enum/CalSystem.hpp>
+#include <aether/kernel/enum/Change.hpp>
+#include <aether/kernel/enum/DataRole.hpp>
+#include <aether/kernel/enum/FileType.hpp>
+#include <aether/kernel/enum/Format.hpp>
+#include <aether/kernel/enum/Linkage.hpp>
+#include <aether/kernel/enum/Multiplicity.hpp>
+#include <aether/kernel/enum/Permission.hpp>
+#include <aether/kernel/enum/Reset.hpp>
+#include <aether/kernel/enum/Restriction.hpp>
+#include <aether/kernel/enum/SizeDesc.hpp>
+#include <aether/kernel/enum/Submit.hpp>
+#include <aether/kernel/enum/Vcs.hpp>
 
 #include <meta/Init.hpp>
 

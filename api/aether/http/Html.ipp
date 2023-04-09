@@ -10,9 +10,9 @@
 #include "HtmlLayout.hpp"
 #include <io/Execute.hpp>
 #include <io/StreamOps.hpp>
-#include <http/web/WebContext.hpp>
-#include <http/web/WebHtml.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/http/web/WebHtml.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 #include <basic/Logging.hpp>
 

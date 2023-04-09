@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <kernel/atom/Atom.hpp>
-#include <kernel/atom/AtomInfo.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/leaf/Leaf.hpp>
+#include <aether/kernel/atom/Atom.hpp>
+#include <aether/kernel/atom/AtomInfo.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/leaf/Leaf.hpp>
 #include <vector>
 
 namespace yq {

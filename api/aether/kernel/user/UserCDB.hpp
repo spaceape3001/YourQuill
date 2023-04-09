@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/user/UserFile.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/user/UserFile.hpp>
 
 namespace yq {
     struct User::Info {

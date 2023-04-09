@@ -7,8 +7,8 @@
 #pragma once
 
 #include "CharacterHtml.hpp"
-#include <kernel/atom/AtomCDB.hpp>
-#include <kernel/plot/CharacterCDB.hpp>
+#include <aether/kernel/atom/AtomCDB.hpp>
+#include <aether/kernel/plot/CharacterCDB.hpp>
 
 namespace yq {
     namespace html {

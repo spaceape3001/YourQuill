@@ -6,20 +6,20 @@
 
 #include <iostream>
 
-#include <yq/ShareDir.hpp>
-#include <yq/Wksp.hpp>
+#include <aether/yq/ShareDir.hpp>
+#include <aether/yq/Wksp.hpp>
 
 #include <srv/Page.hpp>
 #include <srv/Scanner.hpp>
 #include <srv/Session.hpp>
 #include <srv/TLSGlobals.hpp>
 
-#include <yq/CmdArgs.hpp>
-#include <yq/FileUtils.hpp>
-#include <yq/LogFile.hpp>
-#include <yq/Logging.hpp>
-#include <yq/Safety.hpp>
-#include <yq/SqlUtils.hpp>
+#include <aether/yq/CmdArgs.hpp>
+#include <aether/yq/FileUtils.hpp>
+#include <aether/yq/LogFile.hpp>
+#include <aether/yq/Logging.hpp>
+#include <aether/yq/Safety.hpp>
+#include <aether/yq/SqlUtils.hpp>
 
 #include <httpserver/httpcookie.h>
 #include <httpserver/httplistener.h>

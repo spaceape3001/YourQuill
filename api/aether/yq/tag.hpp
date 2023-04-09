@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <http/org/TagArg.hpp>
-#include <http/org/TagHtml.hpp>
-#include <http/org/TagPost.hpp>
+#include <aether/http/org/TagArg.hpp>
+#include <aether/http/org/TagHtml.hpp>
+#include <aether/http/org/TagPost.hpp>
 
-#include <kernel/org/Tag.hpp>
-#include <kernel/org/TagCDB.hpp>
-#include <kernel/org/TagData.hpp>
-#include <kernel/org/TagFile.hpp>
+#include <aether/kernel/org/Tag.hpp>
+#include <aether/kernel/org/TagCDB.hpp>
+#include <aether/kernel/org/TagData.hpp>
+#include <aether/kernel/org/TagFile.hpp>

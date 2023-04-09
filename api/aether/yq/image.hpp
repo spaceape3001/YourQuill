@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <http/image/ImageArg.hpp>
-#include <http/image/ImageHtml.hpp>
-#include <http/image/ImagePost.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/image/ImageCDB.hpp>
+#include <aether/http/image/ImageArg.hpp>
+#include <aether/http/image/ImageHtml.hpp>
+#include <aether/http/image/ImagePost.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>

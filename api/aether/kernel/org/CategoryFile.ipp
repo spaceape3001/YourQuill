@@ -7,8 +7,8 @@
 #pragma once
 
 #include "CategoryFile.hpp"
-#include <kernel/bit/KeyValue.hpp>
-#include <kernel/io/Strings.hpp>
+#include <aether/kernel/bit/KeyValue.hpp>
+#include <aether/kernel/io/Strings.hpp>
 
 namespace yq {
     void    Category::File::reset() 

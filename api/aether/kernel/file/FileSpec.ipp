@@ -8,9 +8,9 @@
 
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <kernel/atom/ClassCDB.hpp>
-#include <kernel/file/Folder.hpp>
-#include <kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/atom/ClassCDB.hpp>
+#include <aether/kernel/file/Folder.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
 
 namespace yq {
     FileSpec        by_file(const std::filesystem::path&fp)

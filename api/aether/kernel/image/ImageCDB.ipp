@@ -8,11 +8,11 @@
 
 #include "ImageCDB.hpp"
 #include <basic/ByteArray.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
 

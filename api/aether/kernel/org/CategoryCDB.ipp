@@ -9,17 +9,17 @@
 #include "CategoryCDB.hpp"
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/atom/Field.hpp>
-#include <kernel/db/NKI.hpp>
-#include <kernel/db/IDLock.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/atom/Class.hpp>
+#include <aether/kernel/atom/Field.hpp>
+#include <aether/kernel/db/NKI.hpp>
+#include <aether/kernel/db/IDLock.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 namespace yq {
     namespace cdb {

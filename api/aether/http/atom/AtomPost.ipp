@@ -8,9 +8,9 @@
 
 #include "AtomPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <http/atom/AtomArg.hpp>
-#include <http/web/WebContext.hpp>
-#include <kernel/atom/Atom.hpp>
+#include <aether/http/atom/AtomArg.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/kernel/atom/Atom.hpp>
 
 namespace yq {
 

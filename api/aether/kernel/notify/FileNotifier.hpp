@@ -7,9 +7,9 @@
 #pragma once
 
 #include <basic/EnumMap.hpp>
-#include <kernel/enum/Change.hpp>
-#include <kernel/file/FileSpec.hpp>
-#include <kernel/file/Folder.hpp>
+#include <aether/kernel/enum/Change.hpp>
+#include <aether/kernel/file/FileSpec.hpp>
+#include <aether/kernel/file/Folder.hpp>
 #include <basic/Flag.hpp>
 #include <filesystem>
 #include <source_location>

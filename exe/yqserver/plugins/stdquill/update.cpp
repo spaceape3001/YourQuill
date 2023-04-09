@@ -19,51 +19,51 @@
 #include <io/stream/Bytes.hpp>
 #include <io/stream/Text.hpp>
 
-#include <kernel/atom/AtomCDB.hpp>
-#include <kernel/atom/ClassCDB.hpp>
-#include <kernel/atom/FieldCDB.hpp>
-#include <kernel/atom/Property.hpp>
-#include <kernel/atom/ValueCDB.hpp>
-#include <kernel/attr/AttributeCDB.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/io/Strings.hpp>
-#include <kernel/leaf/LeafCDB.hpp>
-#include <kernel/leaf/LeafData.hpp>
-#include <kernel/notify/AtomNotifier.hpp>
-#include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/FileNotifyAdapters.hpp>
-#include <kernel/notify/Stage2.hpp>
-#include <kernel/notify/Stage3.hpp>
-#include <kernel/notify/Stage4.hpp>
-#include <kernel/org/CategoryCDB.hpp>
-#include <kernel/org/TagCDB.hpp>
-#include <kernel/user/User.hpp>
-#include <kernel/user/UserCDB.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/atom/AtomCDB.hpp>
+#include <aether/kernel/atom/ClassCDB.hpp>
+#include <aether/kernel/atom/FieldCDB.hpp>
+#include <aether/kernel/atom/Property.hpp>
+#include <aether/kernel/atom/ValueCDB.hpp>
+#include <aether/kernel/attr/AttributeCDB.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
+#include <aether/kernel/io/Strings.hpp>
+#include <aether/kernel/leaf/LeafCDB.hpp>
+#include <aether/kernel/leaf/LeafData.hpp>
+#include <aether/kernel/notify/AtomNotifier.hpp>
+#include <aether/kernel/notify/FileWatch.hpp>
+#include <aether/kernel/notify/FileNotifyAdapters.hpp>
+#include <aether/kernel/notify/Stage2.hpp>
+#include <aether/kernel/notify/Stage3.hpp>
+#include <aether/kernel/notify/Stage4.hpp>
+#include <aether/kernel/org/CategoryCDB.hpp>
+#include <aether/kernel/org/TagCDB.hpp>
+#include <aether/kernel/user/User.hpp>
+#include <aether/kernel/user/UserCDB.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 #include <math/shape/Size2.hxx>
 
 #include "common.hpp"
 
-#include <yq/atom.hpp>
-#include <yq/attribute.hpp>
+#include <aether/yq/atom.hpp>
+#include <aether/yq/attribute.hpp>
 
-#include <yq/class.hpp>
-#include <yq/directory.hpp>
-#include <yq/document.hpp>
-#include <yq/field.hpp>
-#include <yq/folder.hpp>
-#include <yq/fragment.hpp>
+#include <aether/yq/class.hpp>
+#include <aether/yq/directory.hpp>
+#include <aether/yq/document.hpp>
+#include <aether/yq/field.hpp>
+#include <aether/yq/folder.hpp>
+#include <aether/yq/fragment.hpp>
 
-#include <yq/leaf.hpp>
-#include <yq/property.hpp>
-#include <yq/root.hpp>
+#include <aether/yq/leaf.hpp>
+#include <aether/yq/property.hpp>
+#include <aether/yq/root.hpp>
 
-//#include <yq/user.hpp>
-#include <yq/value.hpp>
+//#include <aether/yq/user.hpp>
+#include <aether/yq/value.hpp>
 
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "AttributeHtml.hpp"
-#include <kernel/attr/AttributeCDB.hpp>
+#include <aether/kernel/attr/AttributeCDB.hpp>
 
 namespace yq {
     namespace html {

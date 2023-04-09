@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/enum/SizeDesc.hpp>
-#include <kernel/image/Image.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/enum/SizeDesc.hpp>
+#include <aether/kernel/image/Image.hpp>
 #include <basic/ContentType.hpp>
 
 

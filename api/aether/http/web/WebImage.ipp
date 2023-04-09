@@ -8,13 +8,13 @@
 
 #include "WebImage.hpp"
 
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/Fragment.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/FileNotifyAdapters.hpp>
-#include <kernel/notify/Stage4.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/file/Fragment.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/notify/FileWatch.hpp>
+#include <aether/kernel/notify/FileNotifyAdapters.hpp>
+#include <aether/kernel/notify/Stage4.hpp>
 #include <io/StreamOps.hpp>
 #include <io/stream/Text.hpp>
 

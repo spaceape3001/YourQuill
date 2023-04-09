@@ -6,7 +6,7 @@
 
 #pragma once
 
-//#include <kernel/enum/change.hpp>
+//#include <aether/kernel/enum/change.hpp>
 #include <trait/not_copyable.hpp>
 #include <basic/EnumMap.hpp>
 #include <meta/Meta.hpp>

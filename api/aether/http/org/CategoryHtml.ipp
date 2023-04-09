@@ -8,13 +8,13 @@
 
 #include "CategoryHtml.hpp"
 #include <basic/TextUtils.hpp>
-#include <http/file/DocumentHtml.hpp>
-#include <http/file/RootHtml.hpp>
-#include <http/web/WebContext.hpp>
-#include <http/web/WebHtml.hpp>
-#include <kernel/image/ImageCDB.hpp>
-#include <kernel/org/CategoryCDB.hpp>
-#include <http/HtmlLayout.hpp>
+#include <aether/http/file/DocumentHtml.hpp>
+#include <aether/http/file/RootHtml.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/http/web/WebHtml.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
+#include <aether/kernel/org/CategoryCDB.hpp>
+#include <aether/http/HtmlLayout.hpp>
 
 namespace yq {
     namespace html {

@@ -7,16 +7,16 @@
 #include <basic/DelayInit.hpp>
 #include <basic/Logging.hpp>
 
-#include <kernel/atom/AtomCDB.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/atom/ClassCDB.hpp>
+#include <aether/kernel/atom/AtomCDB.hpp>
+#include <aether/kernel/atom/Class.hpp>
+#include <aether/kernel/atom/ClassCDB.hpp>
 
-#include <kernel/notify/AtomNotifier.hpp>
-#include <kernel/notify/FileWatch.hpp>
-#include <kernel/notify/FileNotifyAdapters.hpp>
-#include <kernel/notify/Stage2.hpp>
-#include <kernel/notify/Stage3.hpp>
-#include <kernel/notify/Stage4.hpp>
+#include <aether/kernel/notify/AtomNotifier.hpp>
+#include <aether/kernel/notify/FileWatch.hpp>
+#include <aether/kernel/notify/FileNotifyAdapters.hpp>
+#include <aether/kernel/notify/Stage2.hpp>
+#include <aether/kernel/notify/Stage3.hpp>
+#include <aether/kernel/notify/Stage4.hpp>
 
 using namespace yq;
 

@@ -9,10 +9,10 @@
 #include <basic/Ref.hpp>
 #include <basic/Set.hpp>
 
-#include <kernel/bit/Context.hpp>
-#include <kernel/enum/Permission.hpp>
-#include <kernel/user/Authentication.hpp>
-#include <kernel/user/User.hpp>
+#include <aether/kernel/bit/Context.hpp>
+#include <aether/kernel/enum/Permission.hpp>
+#include <aether/kernel/user/Authentication.hpp>
+#include <aether/kernel/user/User.hpp>
 
 #include <memory>
 #include <vector>

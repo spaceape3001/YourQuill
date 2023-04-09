@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Copyright.hpp"
-#include <kernel/errors.hpp>
+#include <aether/kernel/errors.hpp>
 
 namespace yq {
 

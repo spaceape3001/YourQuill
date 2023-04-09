@@ -9,7 +9,7 @@
 #include "ValueFile.hpp"
 #include <basic/Logging.hpp>
 #include <io/XmlUtils.hpp>
-#include <kernel/io/Strings.hpp>
+#include <aether/kernel/io/Strings.hpp>
 #include <io/errors.hpp>
 
 namespace yq {

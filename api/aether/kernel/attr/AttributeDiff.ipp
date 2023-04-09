@@ -12,8 +12,8 @@
 #include <basic/DiffEngine.hpp>
 #include <basic/IntRange.hpp>
 
-#include <kernel/bit/KeyValue.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/bit/KeyValue.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
 
 #include <cassert>
 

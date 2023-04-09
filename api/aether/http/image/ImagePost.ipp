@@ -8,9 +8,9 @@
 
 #include "ImagePost.hpp"
 #include <basic/TextUtils.hpp>
-#include <http/image/ImageArg.hpp>
-#include <http/web/WebContext.hpp>
-#include <kernel/image/Image.hpp>
+#include <aether/http/image/ImageArg.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/kernel/image/Image.hpp>
 
 namespace yq {
     namespace post {

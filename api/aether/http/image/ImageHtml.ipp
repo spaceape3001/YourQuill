@@ -7,12 +7,12 @@
 #pragma once
 
 #include "ImageHtml.hpp"
-#include <http/file/FragmentHtml.hpp>
-#include <http/web/WebContext.hpp>
-#include <http/web/WebHtml.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/image/ImageCDB.hpp>
+#include <aether/http/file/FragmentHtml.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/http/web/WebHtml.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/image/ImageCDB.hpp>
 
 namespace yq {
     namespace html {

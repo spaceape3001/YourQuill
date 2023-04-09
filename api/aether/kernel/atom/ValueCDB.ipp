@@ -7,9 +7,9 @@
 #pragma once
 
 #include "ValueCDB.hpp"
-#include <kernel/atom/Field.hpp>
-#include <kernel/wksp/CacheLogging.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/atom/Field.hpp>
+#include <aether/kernel/wksp/CacheLogging.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace cdb {

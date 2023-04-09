@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/plot/Character.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/plot/Character.hpp>
 
 namespace yq {
     namespace cdb {

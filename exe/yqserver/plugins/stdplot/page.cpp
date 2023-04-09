@@ -14,19 +14,19 @@
 
 #include <io/stream/Text.hpp>
 
-#include <http/HtmlLayout.hpp>
+#include <aether/http/HtmlLayout.hpp>
 
-#include <http/web/WebAdapters.hpp>
-#include <http/web/WebContext.hpp>
-#include <http/web/WebHtml.hpp>
-#include <http/web/WebImage.hpp>
-#include <http/web/WebPage.hpp>
-#include <http/web/WebRedirect.hpp>
-#include <http/web/WebTemplate.hpp>
-#include <http/web/Template.hpp>
+#include <aether/http/web/WebAdapters.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/http/web/WebHtml.hpp>
+#include <aether/http/web/WebImage.hpp>
+#include <aether/http/web/WebPage.hpp>
+#include <aether/http/web/WebRedirect.hpp>
+#include <aether/http/web/WebTemplate.hpp>
+#include <aether/http/web/Template.hpp>
 
-#include <kernel/plot/CharacterCDB.hpp>
-#include <http/plot/CharacterHtml.hpp>
+#include <aether/kernel/plot/CharacterCDB.hpp>
+#include <aether/http/plot/CharacterHtml.hpp>
 
 using namespace yq;
 //using namespace yq::arg;

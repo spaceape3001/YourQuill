@@ -10,12 +10,12 @@
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <kernel/db/IDLock.hpp>
-#include <kernel/file/DirectoryCDB.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/db/IDLock.hpp>
+#include <aether/kernel/file/DirectoryCDB.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 namespace yq {
     namespace cdb {

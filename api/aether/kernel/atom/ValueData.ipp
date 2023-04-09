@@ -9,7 +9,7 @@
 #include "ValueData.hpp"
 #include <basic/TextUtils.hpp>
 #include <io/XmlUtils.hpp>
-#include <kernel/io/Strings.hpp>
+#include <aether/kernel/io/Strings.hpp>
 
 namespace yq {
     Value::Data&   Value::Data::merge(const Data&b, bool fOverride)

@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <http/Html.hpp>
+#include <aether/http/Html.hpp>
 #include <basic/Http.hpp>
-#include <http/web/WebPage.hpp>
-#include <http/web/WebVariable.hpp>
+#include <aether/http/web/WebPage.hpp>
+#include <aether/http/web/WebVariable.hpp>
 
 #include <initializer_list>
 #include <string_view>

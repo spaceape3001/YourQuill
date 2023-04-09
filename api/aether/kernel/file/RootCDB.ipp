@@ -8,12 +8,12 @@
 
 #include "RootCDB.hpp"
 #include <io/DirUtils.hpp>
-#include <kernel/file/DirectoryCDB.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/FragmentCDB.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/file/DirectoryCDB.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/FragmentCDB.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 namespace yq {
     namespace cdb {

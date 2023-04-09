@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Constraint.hpp"
-#include <kernel/io/Strings.hpp>
+#include <aether/kernel/io/Strings.hpp>
 #include <meta/ObjectInfoWriter.hpp>
 #include <io/XmlUtils.hpp>
 

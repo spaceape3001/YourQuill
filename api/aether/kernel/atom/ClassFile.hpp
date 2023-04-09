@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <kernel/atom/ClassData.hpp>
-#include <kernel/io/StdFile.hpp>
+#include <aether/kernel/atom/ClassData.hpp>
+#include <aether/kernel/io/StdFile.hpp>
 
 #define CLASS_XML_RESAVE 0
 

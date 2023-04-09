@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/leaf/Leaf.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/org/Tag.hpp>
-#include <kernel/org/TagInfo.hpp>
-#include <kernel/org/TagFile.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/leaf/Leaf.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/org/Tag.hpp>
+#include <aether/kernel/org/TagInfo.hpp>
+#include <aether/kernel/org/TagFile.hpp>
 
 namespace yq {
     using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;

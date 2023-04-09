@@ -8,12 +8,12 @@
 
 #include "DirectoryCDB.hpp"
 #include <basic/TextUtils.hpp>
-#include <kernel/file/Folder.hpp>
-#include <kernel/file/FolderCDB.hpp>
-#include <kernel/file/Fragment.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/file/Folder.hpp>
+#include <aether/kernel/file/FolderCDB.hpp>
+#include <aether/kernel/file/Fragment.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 
 namespace yq {

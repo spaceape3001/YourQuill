@@ -8,9 +8,9 @@
 
 #include "UserPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <http/user/UserArg.hpp>
-#include <http/web/WebContext.hpp>
-#include <kernel/user/User.hpp>
+#include <aether/http/user/UserArg.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/kernel/user/User.hpp>
 
 namespace yq {
     namespace post {

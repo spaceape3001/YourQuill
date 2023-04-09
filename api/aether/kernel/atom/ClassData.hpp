@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kernel/atom/Class.hpp>
+#include <aether/kernel/atom/Class.hpp>
 #include <basic/Map.hpp>
 #include <basic/Set.hpp>
 #include <memory>

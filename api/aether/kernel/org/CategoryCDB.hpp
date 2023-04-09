@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/org/Category.hpp>
-#include <kernel/org/CategoryData.hpp>
-#include <kernel/org/CategoryFile.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/org/Category.hpp>
+#include <aether/kernel/org/CategoryData.hpp>
+#include <aether/kernel/org/CategoryFile.hpp>
 
 namespace yq {
 

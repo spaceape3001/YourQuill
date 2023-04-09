@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <kernel/preamble.hpp>
-#include <kernel/atom/Atom.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/leaf/Leaf.hpp>
+#include <aether/kernel/preamble.hpp>
+#include <aether/kernel/atom/Atom.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/leaf/Leaf.hpp>
 #include <vector>
 
 namespace yq {

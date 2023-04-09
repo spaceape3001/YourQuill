@@ -9,13 +9,13 @@
 #include "FolderCDB.hpp"
 #include <io/DirUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <kernel/db/NKI.hpp>
-#include <kernel/file/Directory.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/file/Fragment.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/wksp/CacheQuery.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/db/NKI.hpp>
+#include <aether/kernel/file/Directory.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/file/Fragment.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 namespace yq {
     namespace cdb {

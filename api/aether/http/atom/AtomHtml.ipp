@@ -7,7 +7,7 @@
 #pragma once
 
 #include "AtomHtml.hpp"
-#include <kernel/atom/AtomCDB.hpp>
+#include <aether/kernel/atom/AtomCDB.hpp>
 
 namespace yq {
     namespace html {

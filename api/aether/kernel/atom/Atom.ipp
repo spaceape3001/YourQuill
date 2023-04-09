@@ -12,13 +12,13 @@
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <meta/Init.hpp>
-#include <kernel/atom/Class.hpp>
-#include <kernel/db/NKI.hpp>
-#include <kernel/file/Document.hpp>
-#include <kernel/file/DocumentCDB.hpp>
-#include <kernel/image/Image.hpp>
-#include <kernel/org/Tag.hpp>
-#include <kernel/wksp/Workspace.hpp>
+#include <aether/kernel/atom/Class.hpp>
+#include <aether/kernel/db/NKI.hpp>
+#include <aether/kernel/file/Document.hpp>
+#include <aether/kernel/file/DocumentCDB.hpp>
+#include <aether/kernel/image/Image.hpp>
+#include <aether/kernel/org/Tag.hpp>
+#include <aether/kernel/wksp/Workspace.hpp>
 
 namespace yq {
     std::vector<Atom>   Atom::all(Sorted sorted)

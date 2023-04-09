@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <kernel/bit/Context.hpp>
-#include <kernel/io/Strings.hpp>
+#include <aether/kernel/bit/Context.hpp>
+#include <aether/kernel/io/Strings.hpp>
 #include <io/XmlUtils.hpp>
 #include <io/StreamOps.hpp>
 #include <io/stream/Text.hpp>

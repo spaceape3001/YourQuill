@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <kernel/wksp/CacheQuery.hpp>
+#include <aether/kernel/wksp/CacheQuery.hpp>
 
 namespace yq {
     CacheQuery::CacheQuery(std::string_view sql, bool isPersistent)

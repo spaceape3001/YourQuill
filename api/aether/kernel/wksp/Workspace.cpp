@@ -16,11 +16,11 @@
 #include <basic/TextUtils.hpp>
 #include <basic/ThreadId.hpp>
 
-//#include <config/DirConfig.hpp>
+//#include <aether/config/DirConfig.hpp>
 
-#include <kernel/directories.hpp>
-#include <kernel/file/Root.hpp>
-#include <kernel/wksp/QuillFile.hpp>
+#include <aether/kernel/directories.hpp>
+#include <aether/kernel/file/Root.hpp>
+#include <aether/kernel/wksp/QuillFile.hpp>
 
 #include <atomic>
 #include <pwd.h>

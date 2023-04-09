@@ -6,8 +6,8 @@
 
 #include "AtomSpec.hpp"
 #include <basic/TextUtils.hpp>
-#include <kernel/atom/ClassCDB.hpp>
-#include <kernel/atom/FieldCDB.hpp>
+#include <aether/kernel/atom/ClassCDB.hpp>
+#include <aether/kernel/atom/FieldCDB.hpp>
 
 namespace yq {
     AtomSpec        by_class(std::string_view k)

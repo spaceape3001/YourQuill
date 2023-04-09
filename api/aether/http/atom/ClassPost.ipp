@@ -8,9 +8,9 @@
 
 #include "ClassPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <http/atom/ClassArg.hpp>
-#include <http/web/WebContext.hpp>
-#include <kernel/atom/Class.hpp>
+#include <aether/http/atom/ClassArg.hpp>
+#include <aether/http/web/WebContext.hpp>
+#include <aether/kernel/atom/Class.hpp>
 
 namespace yq {
     namespace post {
