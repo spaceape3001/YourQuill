@@ -533,8 +533,8 @@ namespace {
     {
         path_vector_t   ret;
         for(const Root* rt : wksp::roots())
-            ret.push_back(rt -> resolve(wname));
-        for(auto& p : wksp::shared_all(sname))
+            ret.push_back(rt -> resolve(sname));
+        for(auto& p : wksp::shared_all(wname))
             ret.push_back(p);
         return ret;
     }
