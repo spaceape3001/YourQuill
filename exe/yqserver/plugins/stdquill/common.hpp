@@ -13,29 +13,29 @@
 #include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <aether/kernel/preamble.hpp>
+#include <mithril/kernel/preamble.hpp>
 
-#include <aether/http/web/PageTemplate.hpp>
-#include <aether/http/web/TypedBytes.hpp>
-#include <aether/http/web/Template.hpp>
+#include <mithril/http/web/PageTemplate.hpp>
+#include <mithril/http/web/TypedBytes.hpp>
+#include <mithril/http/web/Template.hpp>
 
 
 
 //#include <db/html_common.hpp>
 
 
-//#include <aether/yq/atom/Atom.hpp>
-//#include <aether/yq/atom/Class.hpp>
-//#include <aether/yq/atom/Field.hpp>
-#include <aether/kernel/bit/Copyright.hpp>
-#include <aether/kernel/enum/Submit.hpp>
-//#include <aether/yq/leaf/Leaf.hpp>
+//#include <mithril/yq/atom/Atom.hpp>
+//#include <mithril/yq/atom/Class.hpp>
+//#include <mithril/yq/atom/Field.hpp>
+#include <mithril/kernel/bit/Copyright.hpp>
+#include <mithril/kernel/enum/Submit.hpp>
+//#include <mithril/yq/leaf/Leaf.hpp>
 
-#include <aether/http/web/WebContext.hpp>
-#include <aether/http/web/WebHtml.hpp>
-#include <aether/http/web/WebPage.hpp>
-#include <aether/http/web/WebAdapters.hpp>
-#include <aether/http/web/WebTemplate.hpp>
+#include <mithril/http/web/WebContext.hpp>
+#include <mithril/http/web/WebHtml.hpp>
+#include <mithril/http/web/WebPage.hpp>
+#include <mithril/http/web/WebAdapters.hpp>
+#include <mithril/http/web/WebTemplate.hpp>
 
 
 using namespace yq;

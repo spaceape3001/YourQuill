@@ -1,1 +1,1 @@
-add_subdirectory(aether)
+add_subdirectory(mithril)

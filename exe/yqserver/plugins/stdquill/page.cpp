@@ -4,22 +4,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <aether/yq/atom.hpp>
-#include <aether/yq/attribute.hpp>
-#include <aether/yq/category.hpp>
-#include <aether/yq/class.hpp>
-#include <aether/yq/directory.hpp>
-#include <aether/yq/document.hpp>
-#include <aether/yq/folder.hpp>
-#include <aether/yq/field.hpp>
-#include <aether/yq/fragment.hpp>
-#include <aether/yq/image.hpp>
-#include <aether/yq/leaf.hpp>
-#include <aether/yq/meta.hpp>
-#include <aether/yq/property.hpp>
-#include <aether/yq/root.hpp>
-#include <aether/yq/tag.hpp>
-#include <aether/yq/user.hpp>
+#include <mithril/yq/atom.hpp>
+#include <mithril/yq/attribute.hpp>
+#include <mithril/yq/category.hpp>
+#include <mithril/yq/class.hpp>
+#include <mithril/yq/directory.hpp>
+#include <mithril/yq/document.hpp>
+#include <mithril/yq/folder.hpp>
+#include <mithril/yq/field.hpp>
+#include <mithril/yq/fragment.hpp>
+#include <mithril/yq/image.hpp>
+#include <mithril/yq/leaf.hpp>
+#include <mithril/yq/meta.hpp>
+#include <mithril/yq/property.hpp>
+#include <mithril/yq/root.hpp>
+#include <mithril/yq/tag.hpp>
+#include <mithril/yq/user.hpp>
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/DelayInit.hpp>
@@ -36,22 +36,22 @@
 
 #include <io/stream/Text.hpp>
 
-#include <aether/kernel/bit/Copyright.hpp>
-#include <aether/kernel/db/NKI.hpp>
-#include <aether/kernel/wksp/CacheQuery.hpp>
-#include <aether/kernel/wksp/Workspace.hpp>
+#include <mithril/kernel/bit/Copyright.hpp>
+#include <mithril/kernel/db/NKI.hpp>
+#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/kernel/wksp/Workspace.hpp>
 
-#include <aether/http/HtmlLayout.hpp>
-#include <aether/http/util/Markdown.hpp>
-#include <aether/http/web/JsonAdapter.hpp>
-#include <aether/http/web/WebAdapters.hpp>
-#include <aether/http/web/WebContext.hpp>
-#include <aether/http/web/WebHtml.hpp>
-#include <aether/http/web/WebImage.hpp>
-#include <aether/http/web/WebPage.hpp>
-#include <aether/http/web/WebRedirect.hpp>
-#include <aether/http/web/WebTemplate.hpp>
-#include <aether/http/web/Template.hpp>
+#include <mithril/http/HtmlLayout.hpp>
+#include <mithril/http/util/Markdown.hpp>
+#include <mithril/http/web/JsonAdapter.hpp>
+#include <mithril/http/web/WebAdapters.hpp>
+#include <mithril/http/web/WebContext.hpp>
+#include <mithril/http/web/WebHtml.hpp>
+#include <mithril/http/web/WebImage.hpp>
+#include <mithril/http/web/WebPage.hpp>
+#include <mithril/http/web/WebRedirect.hpp>
+#include <mithril/http/web/WebTemplate.hpp>
+#include <mithril/http/web/Template.hpp>
 
 #include "common.hpp"
 

@@ -19,51 +19,51 @@
 #include <io/stream/Bytes.hpp>
 #include <io/stream/Text.hpp>
 
-#include <aether/kernel/atom/AtomCDB.hpp>
-#include <aether/kernel/atom/ClassCDB.hpp>
-#include <aether/kernel/atom/FieldCDB.hpp>
-#include <aether/kernel/atom/Property.hpp>
-#include <aether/kernel/atom/ValueCDB.hpp>
-#include <aether/kernel/attr/AttributeCDB.hpp>
-#include <aether/kernel/file/DocumentCDB.hpp>
-#include <aether/kernel/file/Root.hpp>
-#include <aether/kernel/image/ImageCDB.hpp>
-#include <aether/kernel/io/Strings.hpp>
-#include <aether/kernel/leaf/LeafCDB.hpp>
-#include <aether/kernel/leaf/LeafData.hpp>
-#include <aether/kernel/notify/AtomNotifier.hpp>
-#include <aether/kernel/notify/FileWatch.hpp>
-#include <aether/kernel/notify/FileNotifyAdapters.hpp>
-#include <aether/kernel/notify/Stage2.hpp>
-#include <aether/kernel/notify/Stage3.hpp>
-#include <aether/kernel/notify/Stage4.hpp>
-#include <aether/kernel/org/CategoryCDB.hpp>
-#include <aether/kernel/org/TagCDB.hpp>
-#include <aether/kernel/user/User.hpp>
-#include <aether/kernel/user/UserCDB.hpp>
-#include <aether/kernel/wksp/CacheQuery.hpp>
-#include <aether/kernel/wksp/Workspace.hpp>
+#include <mithril/kernel/atom/AtomCDB.hpp>
+#include <mithril/kernel/atom/ClassCDB.hpp>
+#include <mithril/kernel/atom/FieldCDB.hpp>
+#include <mithril/kernel/atom/Property.hpp>
+#include <mithril/kernel/atom/ValueCDB.hpp>
+#include <mithril/kernel/attr/AttributeCDB.hpp>
+#include <mithril/kernel/file/DocumentCDB.hpp>
+#include <mithril/kernel/file/Root.hpp>
+#include <mithril/kernel/image/ImageCDB.hpp>
+#include <mithril/kernel/io/Strings.hpp>
+#include <mithril/kernel/leaf/LeafCDB.hpp>
+#include <mithril/kernel/leaf/LeafData.hpp>
+#include <mithril/kernel/notify/AtomNotifier.hpp>
+#include <mithril/kernel/notify/FileWatch.hpp>
+#include <mithril/kernel/notify/FileNotifyAdapters.hpp>
+#include <mithril/kernel/notify/Stage2.hpp>
+#include <mithril/kernel/notify/Stage3.hpp>
+#include <mithril/kernel/notify/Stage4.hpp>
+#include <mithril/kernel/org/CategoryCDB.hpp>
+#include <mithril/kernel/org/TagCDB.hpp>
+#include <mithril/kernel/user/User.hpp>
+#include <mithril/kernel/user/UserCDB.hpp>
+#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/kernel/wksp/Workspace.hpp>
 
 #include <math/shape/Size2.hxx>
 
 #include "common.hpp"
 
-#include <aether/yq/atom.hpp>
-#include <aether/yq/attribute.hpp>
+#include <mithril/yq/atom.hpp>
+#include <mithril/yq/attribute.hpp>
 
-#include <aether/yq/class.hpp>
-#include <aether/yq/directory.hpp>
-#include <aether/yq/document.hpp>
-#include <aether/yq/field.hpp>
-#include <aether/yq/folder.hpp>
-#include <aether/yq/fragment.hpp>
+#include <mithril/yq/class.hpp>
+#include <mithril/yq/directory.hpp>
+#include <mithril/yq/document.hpp>
+#include <mithril/yq/field.hpp>
+#include <mithril/yq/folder.hpp>
+#include <mithril/yq/fragment.hpp>
 
-#include <aether/yq/leaf.hpp>
-#include <aether/yq/property.hpp>
-#include <aether/yq/root.hpp>
+#include <mithril/yq/leaf.hpp>
+#include <mithril/yq/property.hpp>
+#include <mithril/yq/root.hpp>
 
-//#include <aether/yq/user.hpp>
-#include <aether/yq/value.hpp>
+//#include <mithril/yq/user.hpp>
+#include <mithril/yq/value.hpp>
 
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning

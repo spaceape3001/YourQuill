@@ -23,12 +23,12 @@
 
 #include <io/stream/Text.hpp>
 
-#include <aether/http/web/WebAdapters.hpp>
-#include <aether/http/web/WebContext.hpp>
-#include <aether/http/web/WebHtml.hpp>
-#include <aether/http/web/WebPage.hpp>
-#include <aether/http/web/WebRedirect.hpp>
-#include <aether/kernel/wksp/Workspace.hpp>
+#include <mithril/http/web/WebAdapters.hpp>
+#include <mithril/http/web/WebContext.hpp>
+#include <mithril/http/web/WebHtml.hpp>
+#include <mithril/http/web/WebPage.hpp>
+#include <mithril/http/web/WebRedirect.hpp>
+#include <mithril/kernel/wksp/Workspace.hpp>
 
 #include <fstream>
 #include <syncstream>
