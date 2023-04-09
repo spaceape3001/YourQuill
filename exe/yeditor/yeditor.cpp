@@ -8,19 +8,21 @@
 #include <io/PluginLoader.hpp>
 #include <meta/Meta.hpp>
 #include <meta/ObjectInfoWriter.hpp>
-#include <engine/Application.hpp>
-#include <engine/Viewer.hpp>
+#include <tachyon/Application.hpp>
+#include <tachyon/Viewer.hpp>
+#include <tachyon/ViewerCreateInfo.hpp>
+#include <tachyon/ui/Widget.hpp>
 
 #include <imgui.h>
 #include <iostream>
 
 using namespace yq;
-using namespace yq::engine;
+using namespace yq::tachyon;
 
-class EditorWindow : public Viewer {
-    YQ_OBJECT_DECLARE(EditorWindow, Viewer)
+class EditorWindow : public Widget {
+    YQ_OBJECT_DECLARE(EditorWindow, Widget)
 public:
-    EditorWindow(const ViewerCreateInfo & wci=ViewerCreateInfo ()) : Viewer(wci)
+    EditorWindow()
     {
     }
     
@@ -28,7 +30,7 @@ public:
     {
     }
     
-    void   draw_imgui() override 
+    void   imgui_(tachyon::ViContext&u) override 
     {
         // temporary
         ImGui::ShowDemoWindow();
@@ -51,8 +53,7 @@ int main(int argc, char* argv[])
     wi.title        = "Your Editor!";
     wi.clear        = { 0.0, 0.0, 0.0, 1. };
     wi.imgui        = true;
-    Ref<EditorWindow>   window  = new EditorWindow(wi);
-    
-    app.run_window(window.ptr(), 0.1);
+    Ref<Viewer>   window  = new Viewer(wi, new EditorWindow);
+    app.run(window.ptr(), {0.1});
     return 0;
 }
