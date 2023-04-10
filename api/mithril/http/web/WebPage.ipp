@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
     
     WebPage::WebPage(HttpOps _methods, std::string_view p, const std::source_location& sl) : Meta(p, sl)
     {

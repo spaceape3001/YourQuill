@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
     WebVariable::WebVariable(std::string_view n, const std::source_location& sl) : Meta(n, sl)
     {
         WLOCK

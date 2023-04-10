@@ -35,6 +35,8 @@
 #include <tbb/spin_rw_mutex.h>
 
 using namespace yq;
+using namespace yq::mithril;
+
 
 namespace asio {
     const_buffer    buffer(const std::shared_ptr<ByteArray>& dp)
@@ -949,7 +951,8 @@ public:
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-void    var_sthreads(WebHtml&h)
+
+void    var_sthreads(yq::mithril::WebHtml&h)
 {
     h << gServerThreads;
 }
@@ -990,6 +993,4 @@ void        run_server(yq::Vector<std::thread>&  threads)
         });
     }
 }
-
-
 

@@ -39,6 +39,7 @@
 
 
 using namespace yq;
+using namespace yq::mithril;
 
 using SharedByteArray   = std::shared_ptr<ByteArray>;
 

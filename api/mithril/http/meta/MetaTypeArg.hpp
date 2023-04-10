@@ -11,8 +11,11 @@
 #include <vector>
 
 namespace yq {
-    struct WebContext;
     struct TypeInfo;
+}
+
+namespace yq::mithril {
+    struct WebContext;
     
     namespace arg {
         //! Finds type_info, tries key first, then by ID

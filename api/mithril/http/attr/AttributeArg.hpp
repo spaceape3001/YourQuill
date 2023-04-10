@@ -9,7 +9,7 @@
 #include <initializer_list>
 #include <string_view>
 
-namespace yq {
+namespace yq::mithril {
     struct Attribute;
     struct WebContext;
 

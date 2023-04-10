@@ -11,7 +11,7 @@
 #include <nlohmann/json.hpp>
 #include <io/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     template <nlohmann::json (*FN)(WebContext&)>
     class JSONWebAdapter : public WebPage {

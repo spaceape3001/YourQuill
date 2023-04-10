@@ -9,7 +9,7 @@
 #include <mithril/http/web/WebHtml.hpp>
 #include <math/shape/Size2.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     namespace {
         ByteArray&      byteArrayFor(WebContext& ctx)

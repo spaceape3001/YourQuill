@@ -16,13 +16,15 @@
 #include <vector>
 
 namespace yq {
-    struct WebContext;
-    class WebHtml;
     struct ObjectInfo;
     class PropertyInfo;
     struct TypeInfo;
-    
+}
 
+namespace yq::mithril {
+    struct WebContext;
+    class WebHtml;
+    
     namespace html {
         WebHtml&    operator<<(WebHtml&, DevID<const Meta*>);
         WebHtml&    operator<<(WebHtml&, Dev<const Meta*>);

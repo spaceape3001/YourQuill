@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
     WebAutoClose::WebAutoClose(WebHtml&wh, std::string_view sv) : 
         m_html(&wh)
     {

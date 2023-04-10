@@ -9,5 +9,5 @@
 #include "ValueHtml.hpp"
 #include <mithril/kernel/atom/ValueCDB.hpp>
 
-namespace yq {
+namespace yq::mithril::html {
 }

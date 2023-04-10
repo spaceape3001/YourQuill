@@ -9,7 +9,7 @@
 #include "WebPage.hpp"
 #include "WebVariable.hpp"
 
-namespace yq {
+namespace yq::mithril {
 
     template <void (*FN)(WebContext&)>
     class SimpleWebAdapter : public WebPage {

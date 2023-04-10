@@ -26,6 +26,10 @@ namespace asio {
 }
 
 namespace yq {
+    struct QueryStripped;
+}
+
+namespace yq::mithril {
     class WebPage;
     struct Root;
     
@@ -41,9 +45,6 @@ namespace yq {
         bool                inspect_submit  = false;
         bool                admin           = false;
     };
-    
-    struct QueryStripped;
-    
     
     struct WebContext  {
         enum : uint64_t {

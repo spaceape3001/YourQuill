@@ -9,10 +9,11 @@
 #include <string_view>
 #include <basic/Stack.hpp>
 
-
 namespace yq {
     class Stream;
-    
+}
+
+namespace yq::mithril {
     struct MarkdownConfig;
     
     class Markdown {

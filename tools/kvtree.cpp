@@ -11,6 +11,7 @@
 #include <basic/ByteArray.hpp>
 
 using namespace yq;
+using namespace yq::mithril;
 
 void    print(const KVTree& tree, unsigned int depth=0)
 {

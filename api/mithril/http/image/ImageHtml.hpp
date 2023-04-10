@@ -9,7 +9,7 @@
 #include <mithril/http/Html.hpp>
 #include <mithril/kernel/enum/SizeDesc.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Image;
     struct Thumbnail;
 

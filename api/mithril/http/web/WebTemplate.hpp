@@ -13,7 +13,7 @@
 #include <mithril/kernel/file/Folder.hpp>
 #include <basic/Guarded.hpp>
 
-namespace yq {
+namespace yq::mithril {
     class WebHtml;
     struct WebContext;
 

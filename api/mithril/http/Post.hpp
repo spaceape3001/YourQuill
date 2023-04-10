@@ -8,7 +8,7 @@
 
 #include <string>
 
-namespace yq {
+namespace yq::mithril {
     struct WebContext;
     
     namespace post {

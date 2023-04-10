@@ -41,6 +41,7 @@
 #include <mutex>
 
 using namespace yq;
+using namespace yq::mithril;
 
 static constexpr const bool         kScanMetrics        = false;
 static constexpr const unsigned int kScanTickInterval   = 100;
@@ -57,7 +58,7 @@ static constexpr const unsigned int kScanTickInterval   = 100;
 #define sWarning         yWarning("scanner")
 
 struct RootPath {
-    const yq::Root*             root    = nullptr;
+    const yq::mithril::Root*    root    = nullptr;
     std::filesystem::path       path;       //!< Relative path if root present, absolute otherwise
 };
 

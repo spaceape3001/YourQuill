@@ -16,7 +16,7 @@
 #include <mithril/http/preamble.hpp>
 #include <math/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
     
     
     /*! \brief Web Title

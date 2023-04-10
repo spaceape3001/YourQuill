@@ -12,7 +12,7 @@
 #include <mithril/http/web/WebHtml.hpp>
 
 
-namespace yq {
+namespace yq::mithril {
 
     /*! \brief Creates an Array2, column wise
     

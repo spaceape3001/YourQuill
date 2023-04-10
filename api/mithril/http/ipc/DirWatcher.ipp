@@ -10,7 +10,7 @@
 #include <basic/TextUtils.hpp>
 #include <vector>
 
-namespace yq {
+namespace yq::mithril {
 
     DirWatcher::DirWatcher()
     {

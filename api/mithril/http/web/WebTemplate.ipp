@@ -16,7 +16,7 @@
 #include <mithril/kernel/notify/FileWatch.hpp>
 #include <mithril/kernel/notify/Stage4.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     WebTemplate::WebTemplate(std::string_view p, const std::filesystem::path&f, const std::source_location&sl) : 
         WebPage(hGet, p, sl), m_master(f)

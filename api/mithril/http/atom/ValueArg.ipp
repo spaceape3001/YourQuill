@@ -12,5 +12,5 @@
 #include <mithril/http/web/WebContext.hpp>
 #include <mithril/kernel/atom/ValueCDB.hpp>
 
-namespace yq {
+namespace yq::mithril {
 }

@@ -16,14 +16,15 @@
 #include <mithril/kernel/file/Root.hpp>
 #include <mithril/kernel/wksp/Workspace.hpp>
 
+using namespace yq;
+using namespace yq::mithril;
+
 int main(int argc, char* argv[])
 {
     if(argc < 2){
         std::cerr << "Usage: wksp_read (workspace)\n";
         return -1;
     }
-    
-    using namespace yq;
     
     BasicApp args(argc, argv);
     

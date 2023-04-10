@@ -9,7 +9,7 @@
 #include <mithril/kernel/wksp/Workspace.hpp>
 #include <string_view>
 
-namespace yq {
+namespace yq::mithril {
     WebContext::WebContext(asio::io_context& _io_ctx) :io_ctx(_io_ctx)
     {
     }

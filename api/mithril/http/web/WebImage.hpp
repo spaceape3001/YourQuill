@@ -12,7 +12,7 @@
 #include "TypedBytes.hpp"
 #include <vector>
 
-namespace yq {
+namespace yq::mithril {
     class WebImage : public WebPage {
     public:
     

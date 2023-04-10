@@ -35,9 +35,10 @@
 #include <mithril/http/web/WebVariable.hpp>
 
 using namespace yq;
+using namespace yq::mithril;
 
 namespace {
-    void    add_script(WebHtml& str, std::string_view name)
+    void    add_script(yq::mithril::WebHtml& str, std::string_view name)
     {
         switch(mimeTypeForExt(file_extension(name))){
         case ContentType::javascript:

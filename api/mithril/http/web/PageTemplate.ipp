@@ -8,7 +8,7 @@
 
 #include "PageTemplate.hpp"
 
-namespace yq {
+namespace yq::mithril {
     PageTemplate::PageTemplate(std::string&&data) : m_data(std::move(data))
     {
         std::string_view    p;

@@ -42,7 +42,7 @@
 
 #include "WebRepo.ipp"
 
-namespace yq {
+namespace yq::mithril {
     namespace {
         const Set<std::string_view, IgCase>&     httpEntities()
         {

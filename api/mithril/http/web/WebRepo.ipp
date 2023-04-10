@@ -25,7 +25,7 @@
     tbb::spin_rw_mutex::scoped_lock     _lock(_r.mutex, true);
 
 
-namespace yq {
+namespace yq::mithril {
     using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
     using WebVarMap     = Map<std::string_view, const WebVariable*, IgCase>;
 

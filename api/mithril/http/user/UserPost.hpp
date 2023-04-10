@@ -10,7 +10,7 @@
 #include <string_view>
 #include <mithril/http/Post.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct WebContext;
     struct User;
     

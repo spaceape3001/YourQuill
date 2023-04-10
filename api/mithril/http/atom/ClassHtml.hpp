@@ -9,7 +9,7 @@
 #include <mithril/http/Html.hpp>
 #include <mithril/kernel/atom/Class.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Class;
     namespace html {
         WebHtml&    operator<<(WebHtml&, Class);

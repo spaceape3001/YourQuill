@@ -8,7 +8,7 @@
 
 #include <mithril/http/Html.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Document;
     namespace html {
         //WebHtml&    operator<<(WebHtml&, Document);

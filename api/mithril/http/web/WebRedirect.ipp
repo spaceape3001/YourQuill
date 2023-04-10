@@ -8,7 +8,7 @@
 
 #include "WebRedirect.hpp"
 
-namespace yq {
+namespace yq::mithril {
     namespace redirect {
         WebRedirect     found(const Url& v)
         {

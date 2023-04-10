@@ -105,7 +105,8 @@ struct Sigma {
 };
 
 using namespace yq;
-using namespace yq::cdb;
+using namespace yq::mithril;
+using namespace yq::mithril::cdb;
 
 
 namespace {

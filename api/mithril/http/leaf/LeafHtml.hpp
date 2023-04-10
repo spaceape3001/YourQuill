@@ -9,7 +9,7 @@
 #include <mithril/http/Html.hpp>
 #include <vector>
 
-namespace yq {
+namespace yq::mithril {
     struct Leaf;
     namespace html {
         WebHtml&    operator<<(WebHtml&, Leaf);

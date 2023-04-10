@@ -13,7 +13,7 @@
 #include <mithril/kernel/wksp/Workspace.hpp>
 #include <mithril/http/file/DocumentHtml.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     bool XEntry::isLess_label(const XEntry& a, const XEntry& b)
     {

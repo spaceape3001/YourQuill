@@ -30,8 +30,9 @@
 
 using namespace yq;
 //using namespace yq::arg;
-using namespace yq::cdb;
-using namespace yq::html;
+using namespace yq::mithril;
+using namespace yq::mithril::cdb;
+using namespace yq::mithril::html;
 
 namespace {
     void    p_dev_books(WebHtml& h)

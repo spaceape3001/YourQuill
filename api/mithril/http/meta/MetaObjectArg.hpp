@@ -10,8 +10,11 @@
 #include <string_view>
 
 namespace yq {
-    struct WebContext;
     struct ObjectInfo;
+}
+
+namespace yq::mithril {
+    struct WebContext;
     
     namespace arg {
         //! Finds object_info, tries key first, then by ID

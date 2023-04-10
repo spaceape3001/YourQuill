@@ -9,12 +9,16 @@
 #include <mithril/http/keywords.hpp>
 
 namespace yq {
+    class ByteArray;
+    class Stream;
+}
+
+
+namespace yq::mithril {
     struct WebContext;
     struct Root;
     
-    class ByteArray;
     class HtmlTable;
-    class Stream;
     class WebAutoClose;
     class WebHtml;
 

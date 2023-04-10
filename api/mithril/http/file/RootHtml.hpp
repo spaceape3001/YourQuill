@@ -10,7 +10,7 @@
 #include <mithril/kernel/enum/Access.hpp>
 #include <mithril/kernel/enum/DataRole.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Root;
     
     namespace html {

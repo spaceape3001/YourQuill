@@ -18,7 +18,7 @@
 #include <mithril/http/web/WebPage.hpp>
 #include <mithril/http/web/WebVariable.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
 ////////////////////////////////////////////////////////////////////////////////
 //  META

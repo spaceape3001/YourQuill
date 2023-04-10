@@ -9,7 +9,7 @@
 #include <basic/ByteArray.hpp>
 #include <basic/Ref.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct TypedBytes : public RefCount {
     
         std::shared_ptr<ByteArray>  data;

@@ -11,9 +11,6 @@
 */
 
 namespace yq {
-
     struct class_t {};
     static constexpr const class_t  CLASS;
-
-
 }

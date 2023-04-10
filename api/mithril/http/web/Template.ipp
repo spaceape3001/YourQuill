@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
     Template::Template(ContentType ct) : m_type(ct)
     {
         parse(szDefaultTemplate);

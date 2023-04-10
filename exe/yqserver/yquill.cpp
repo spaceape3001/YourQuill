@@ -26,6 +26,7 @@
 
 
 using namespace yq;
+using namespace yq::mithril;
 
 volatile Quit   gQuit = Quit::No;
 

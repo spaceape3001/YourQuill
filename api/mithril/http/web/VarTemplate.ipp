@@ -16,7 +16,7 @@
 #include <mithril/kernel/notify/FileNotifyAdapters.hpp>
 #include <mithril/kernel/notify/Stage4.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     VarTemplate::VarTemplate(std::string_view k, const std::filesystem::path&f, const std::source_location&sl) : WebVariable(k, sl), m_master(f)
     {

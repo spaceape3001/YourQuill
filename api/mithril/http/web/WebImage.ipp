@@ -18,7 +18,7 @@
 #include <io/StreamOps.hpp>
 #include <io/stream/Text.hpp>
 
-namespace yq {
+namespace yq::mithril {
     WebImage::WebImage(std::string_view kpath, const std::filesystem::path& f0, Folder folder, std::string_view prefix, const std::source_location&sl) : 
         WebPage(hGet, kpath, sl), 
         m_fallback(f0)

@@ -19,6 +19,7 @@
 #include <mithril/kernel/notify/Stage4.hpp>
 
 using namespace yq;
+using namespace yq::mithril;
 
 namespace {
     Class   cCharacter;

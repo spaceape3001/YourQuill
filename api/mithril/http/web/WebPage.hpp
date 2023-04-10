@@ -17,7 +17,7 @@
 #include <functional>
 #include <source_location>
 
-namespace yq {
+namespace yq::mithril {
     struct Folder;
     class HttpRequest;
     class HttpResponse;

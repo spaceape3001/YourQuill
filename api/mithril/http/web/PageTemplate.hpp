@@ -12,7 +12,7 @@
 #include <trait/not_moveable.hpp>
 #include <basic/Ref.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     /*! \brief HTML Web Template
     */

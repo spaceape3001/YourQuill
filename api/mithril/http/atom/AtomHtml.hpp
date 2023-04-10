@@ -8,8 +8,9 @@
 
 #include <mithril/http/Html.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Atom;
+    
     namespace html {
         WebHtml&    operator<<(WebHtml&, Atom);
         WebHtml&    operator<<(WebHtml&, Dev<Atom>);

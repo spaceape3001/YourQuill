@@ -19,7 +19,7 @@
 
 using std::literals::string_view_literals::operator""sv;
 
-namespace yq {
+namespace yq::mithril {
     void            html_escape_write(Stream& s, std::string_view);
 
     Markdown::Markdown(Stream& s, const Config&c) : m_stream(s), m_config(c)

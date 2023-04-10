@@ -14,7 +14,7 @@
 #include <sys/inotify.h>
 
 
-namespace yq {
+namespace yq::mithril {
 
     class DirWatcher : not_copyable, not_moveable {
     public:

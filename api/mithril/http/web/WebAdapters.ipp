@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
 
     namespace {
        class SimpleWebFileHandler : public WebPage {

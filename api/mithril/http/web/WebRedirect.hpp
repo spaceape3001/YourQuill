@@ -9,7 +9,7 @@
 #include <basic/Http.hpp>
 #include <basic/Url.hpp>
     
-namespace yq {
+namespace yq::mithril {
 
     struct WebRedirect {
         Url         where;

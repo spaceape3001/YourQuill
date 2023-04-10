@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
     Ref<TypedBytes> TypedBytes::info(const std::filesystem::path& fp)
     {
         Ref<TypedBytes>     ret = new TypedBytes(fp);

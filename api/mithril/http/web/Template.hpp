@@ -14,7 +14,7 @@
 #include <basic/Ref.hpp>
 
 
-namespace yq {
+namespace yq::mithril {
     class WebHtml;
     struct WebContext;
 

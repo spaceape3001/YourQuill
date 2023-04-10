@@ -11,7 +11,7 @@
 
 #include <mithril/kernel/enum/SizeDesc.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Image;
     struct WebContext;
 

@@ -11,6 +11,9 @@
 
 namespace yq {
     class Stream;
+}
+
+namespace yq::mithril {
     struct WebContext;
     class WebVariable;
     

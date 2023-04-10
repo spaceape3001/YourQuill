@@ -9,7 +9,7 @@
 #include <mithril/http/Html.hpp>
 #include <vector>
 
-namespace yq {
+namespace yq::mithril {
     struct Attribute;
     
     namespace html {
