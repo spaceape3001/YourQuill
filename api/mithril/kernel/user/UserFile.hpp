@@ -9,7 +9,7 @@
 #include <mithril/kernel/io/StdFile.hpp>
 #include <mithril/kernel/user/UserData.hpp>
 
-namespace yq {
+namespace yq::mithril {        
     class User::File : public StdFile, public User::Data {
     public:
     

@@ -14,7 +14,7 @@
 
 //#include <basic/Logging.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct KeyValue;
 
 
@@ -692,7 +692,4 @@ namespace yq {
             return ret;
         }
     }
-
-
-    
 }

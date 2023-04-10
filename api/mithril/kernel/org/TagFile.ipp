@@ -10,10 +10,11 @@
 #include <mithril/kernel/bit/KeyValue.hpp>
 #include <basic/ErrorDB.hpp>
 
-namespace yq {
-    namespace errors {
-        using no_tag_in_file    = error_db::entry<"No tag found in file">;
-    }
+namespace yq::errors {
+    using no_tag_in_file    = error_db::entry<"No tag found in file">;
+}
+    
+namespace yq::mithril {
 
     void    Tag::File::reset() 
     {

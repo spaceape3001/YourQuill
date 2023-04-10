@@ -14,8 +14,7 @@
 #include <vector>
 #include <filesystem>
 
-namespace yq {
-
+namespace yq::mithril {
     /*! \brief Like SqlQuery but bound with the cache database
     */
     class CacheQuery : public CacheStatement, not_copyable, not_moveable {
@@ -23,6 +22,4 @@ namespace yq {
         CacheQuery(std::string_view sql, bool isPersistent=true);
         ~CacheQuery();
     };
-    
-    
 }

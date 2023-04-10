@@ -9,15 +9,16 @@
 #include <basic/Enum.hpp>
 
 namespace yq {
+    namespace mithril {
 
-    YQ_ENUM(Format, , 
-        Markdown, 
-        ASCII, 
-        Plain, 
-        Html, 
-        Novel 
-    )
-
+        YQ_ENUM(Format, , 
+            Markdown, 
+            ASCII, 
+            Plain, 
+            Html, 
+            Novel 
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::Format)
+YQ_TYPE_DECLARE(yq::mithril::Format)

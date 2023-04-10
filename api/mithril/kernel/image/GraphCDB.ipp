@@ -9,9 +9,11 @@
 #include "GraphCDB.hpp"
 
 namespace yq {
-    namespace cdb {
-    
-        //  TODO
+    namespace mithril {
+        namespace cdb {
         
+            //  TODO
+            
+        }
     }
 }

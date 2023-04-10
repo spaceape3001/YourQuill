@@ -11,8 +11,7 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/TextUtils.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     User::Data&  User::Data::merge(const Data&b, bool fOverride)
     {
         set_if_empty(name, b.name, fOverride);

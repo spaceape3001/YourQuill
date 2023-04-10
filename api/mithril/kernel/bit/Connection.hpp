@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
 
     template <typename F, typename T>
     struct Connection {

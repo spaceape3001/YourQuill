@@ -9,7 +9,7 @@
 #include <mithril/kernel/atom/ClassCDB.hpp>
 #include <mithril/kernel/atom/FieldCDB.hpp>
 
-namespace yq {
+namespace yq::mithril {
     AtomSpec        by_class(std::string_view k)
     {
         return AtomSpec{ copy(k), 0, AtomSpec::ByClassKey };

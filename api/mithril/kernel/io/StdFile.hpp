@@ -11,8 +11,12 @@
 
 namespace yq {
     class Stream;
-    class KVTree;
     class ByteArray;
+}
+
+
+namespace yq::mithril {
+    class KVTree;
 
     class StdFile : public AbstractFile {
     public:

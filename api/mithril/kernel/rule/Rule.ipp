@@ -9,7 +9,7 @@
 #include "Rule.hpp"
 #include <meta/ObjectInfoWriter.hpp>
 
-namespace yq {
+namespace yq::mithril {    
 /*
     Rule&       Rule::merge(const Rule&b, bool fOverride)
     {
@@ -74,5 +74,5 @@ namespace yq {
 
 }
 
-YQ_OBJECT_IMPLEMENT(yq::Rule)
+YQ_OBJECT_IMPLEMENT(yq::mithril::Rule)
 

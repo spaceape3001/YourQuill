@@ -11,7 +11,7 @@
 
 #define CLASS_XML_RESAVE 0
 
-namespace yq {
+namespace yq::mithril {
 
     //! Atom classes (including fields)
     class Class::File : public StdFile, public Data {
@@ -36,5 +36,4 @@ namespace yq {
         virtual std::error_code    read(KVTree&&, std::string_view fname) override;
         virtual std::error_code    write(KVTree&) const override;
     };
-
 }

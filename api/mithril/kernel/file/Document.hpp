@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
     /*! \brief Document in the cache
 
         This represents a document in the cache, which is case insensitive and
@@ -22,4 +22,4 @@ namespace yq {
     };
 }
 
-YQ_TYPE_DECLARE(yq::Document)
+YQ_TYPE_DECLARE(yq::mithril::Document)

@@ -9,8 +9,7 @@
 #include <mithril/kernel/io/StdFile.hpp>
 #include <mithril/kernel/wksp/QuillData.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     class QuillFile : public StdFile, public QuillData {
     public:
 

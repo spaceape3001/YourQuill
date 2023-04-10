@@ -11,8 +11,7 @@
 #include <mithril/kernel/image/Image.hpp>
 #include <vector>
 
-namespace yq {
-
+namespace yq::mithril {
     struct Folder::Info {
         std::string     brief;
         bool            hidden      = false;

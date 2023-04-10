@@ -13,8 +13,7 @@
 #include <basic/Set.hpp>
 #include <basic/Vector.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     struct Copyright;
 
     struct QuillData {

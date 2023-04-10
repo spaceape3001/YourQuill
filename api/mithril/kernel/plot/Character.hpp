@@ -9,8 +9,7 @@
 #include <cstdint>
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     /*! \brief Character in the cache database */
     struct Character {
         uint64_t            id = 0ULL;

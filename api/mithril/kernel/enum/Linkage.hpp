@@ -10,14 +10,16 @@
 #include <basic/Enum.hpp>
 
 namespace yq {
+    namespace mithril {
 
-    YQ_ENUM(Linkage, ,
-        None,
-        Any,
-        Indirect,
-        Direct
-    )
+        YQ_ENUM(Linkage, ,
+            None,
+            Any,
+            Indirect,
+            Direct
+        )
 
+    }
 }
 
-YQ_TYPE_DECLARE(yq::Linkage)
+YQ_TYPE_DECLARE(yq::mithril::Linkage)

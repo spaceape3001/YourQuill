@@ -9,7 +9,7 @@
 #include <mithril/kernel/enum/Access.hpp>
 #include <mithril/kernel/enum/DataRole.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     using PolicyMap     = EnumMap<DataRole,Access>;
 
@@ -29,5 +29,4 @@ namespace yq {
     PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b);
     PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b, Access limit);
     PolicyMap   moderate(Access a, const PolicyMap& b);
-
 }

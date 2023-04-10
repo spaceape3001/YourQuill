@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
     template <typename> class IDLock;
 
     /*! User in the cache database
@@ -28,4 +28,4 @@ namespace yq {
     };
 }
 
-YQ_TYPE_DECLARE(yq::User)
+YQ_TYPE_DECLARE(yq::mithril::User)

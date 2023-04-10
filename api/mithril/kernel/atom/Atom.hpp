@@ -8,7 +8,8 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
+
     /*! \brief Atom in the cache
         This structure represents an atom in the cache
     */
@@ -216,8 +217,7 @@ namespace yq {
         //! TRUE if id is non-zero AND in the database
         bool                valid() const;
     };
-
 }
 
-YQ_TYPE_DECLARE(yq::Atom)
+YQ_TYPE_DECLARE(yq::mithril::Atom)
 

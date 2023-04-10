@@ -8,7 +8,7 @@
 
 #include "AttributeCDB.hpp"
 
-namespace yq {
+namespace yq::mithril {        
     struct KVTree;
     struct KeyValue;
     

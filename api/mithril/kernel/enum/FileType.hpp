@@ -11,13 +11,16 @@
 
 namespace yq {
 
-    /*! \brief File Type 
-    */
-    YQ_ENUM(FileType, ,
-        Default,
-        KeyValue,
-        Xml
-    )
+    namespace mithril {
+
+        /*! \brief File Type 
+        */
+        YQ_ENUM(FileType, ,
+            Default,
+            KeyValue,
+            Xml
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::FileType)
+YQ_TYPE_DECLARE(yq::mithril::FileType)

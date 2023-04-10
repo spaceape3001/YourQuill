@@ -11,8 +11,11 @@
 #include <vector>
 
 namespace yq {
-    struct Root;
     class Stream;
+}
+
+namespace yq::mithril {
+    struct Root;
 
     struct Context {
         std::string     icon, title, data;

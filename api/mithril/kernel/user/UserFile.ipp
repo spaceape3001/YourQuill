@@ -12,12 +12,11 @@
 #include <mithril/kernel/io/Strings.hpp>
 #include <basic/ErrorDB.hpp>
 
-namespace yq {
+namespace yq::errors {
+    using unable_to_load_authentication = error_db::entry<"Unable to load the authentication from the file">;
+}
 
-    namespace errors {
-        using unable_to_load_authentication = error_db::entry<"Unable to load the authentication from the file">;
-    }
-
+namespace yq::mithril {
     void  User::File::reset() 
     {
         Data::reset();

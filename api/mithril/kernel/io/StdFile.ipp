@@ -14,12 +14,11 @@
 
 #include <rapidxml.hpp>
 
-namespace yq {
+namespace yq::errors {
+    using bad_std_syntax    = error_db::entry<"Bad Key/Value Parsing">;
+}
 
-    namespace errors {
-        using bad_std_syntax    = error_db::entry<"Bad Key/Value Parsing">;
-    }
-
+namespace yq::mithril {
     std::error_code    StdFile::read(ByteArray&&buffer, std::string_view fname) 
     {
         std::string_view    file    = buffer.as_view();

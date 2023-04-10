@@ -1,4 +1,8 @@
 #include "Group.hpp"
 
-namespace cdb {
+namespace yq {
+    namespace mithril {
+        namespace cdb {
+        }
+    }
 }

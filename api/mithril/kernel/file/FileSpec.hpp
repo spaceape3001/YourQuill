@@ -11,7 +11,7 @@
 #include <string_view>
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Folder;
     struct Class;
     struct Fragment;
@@ -43,4 +43,3 @@ namespace yq {
     FileSpec        by_cache(Folder);
     FileSpec        by_cache(Folder, std::string_view);
 }
-

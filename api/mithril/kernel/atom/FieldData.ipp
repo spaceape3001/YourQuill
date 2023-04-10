@@ -9,8 +9,7 @@
 #include "FieldData.hpp"
 #include <basic/TextUtils.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     Field::Data&  Field::Data::merge(const Data&b, bool fOverride)
     {
         set_if_empty(pkey, b.pkey, fOverride);
@@ -42,5 +41,4 @@ namespace yq {
         //}
         return *this;
     }
-
 }

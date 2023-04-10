@@ -8,8 +8,7 @@
 
 #include "QuillData.hpp"
 
-namespace yq {
-
+namespace yq::mithril {
     void    QuillData::reset()
     {
         *this = {};

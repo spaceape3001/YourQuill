@@ -11,7 +11,7 @@
 #include <basic/Set.hpp>
 #include <memory>
 
-namespace yq {
+namespace yq::mithril {
 
     struct Class::Data {
         std::string             name;           //!< Name of this (may or may not be a key)

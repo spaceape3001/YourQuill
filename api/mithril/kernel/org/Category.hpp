@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     /*! \brief Atom class in the cache
 
@@ -29,4 +29,4 @@ namespace yq {
     };
 }
 
-YQ_TYPE_DECLARE(yq::Category)
+YQ_TYPE_DECLARE(yq::mithril::Category)

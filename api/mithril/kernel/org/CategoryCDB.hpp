@@ -13,7 +13,7 @@
 #include <mithril/kernel/org/CategoryData.hpp>
 #include <mithril/kernel/org/CategoryFile.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     
     struct Category::Info {

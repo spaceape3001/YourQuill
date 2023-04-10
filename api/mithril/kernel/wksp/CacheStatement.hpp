@@ -10,7 +10,7 @@
 #include <filesystem>
 #include <set>
 
-namespace yq {
+namespace yq::mithril {        
     /*! \brief SQL bound against the cache 
     */
     class CacheStatement : public SqlStatement {

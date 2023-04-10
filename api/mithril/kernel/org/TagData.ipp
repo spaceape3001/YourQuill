@@ -9,7 +9,8 @@
 #include "TagData.hpp"
 #include <basic/TextUtils.hpp>
 
-namespace yq {
+namespace yq::mithril {
+
     Tag::Data& Tag::Data::merge(const Data&b, bool fOverride)
     {
         set_if_empty(leaf, b.leaf, fOverride);
@@ -27,4 +28,3 @@ namespace yq {
         notes.clear();
     }
 }
-

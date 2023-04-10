@@ -6,13 +6,12 @@
 
 #pragma once
 
-#include "Attribute.hpp"
-
+#include <mithril/kernel/attr/Attribute.hpp>
 #include <mithril/kernel/preamble.hpp>
 #include <mithril/kernel/file/Document.hpp>
 #include <vector>
 
-namespace yq {
+namespace yq::mithril {
     struct Attribute::Info {
         std::string     key, value, uid;
         Document        doc;
@@ -75,4 +74,3 @@ namespace yq {
         std::string             value(Attribute);
     }
 }
-

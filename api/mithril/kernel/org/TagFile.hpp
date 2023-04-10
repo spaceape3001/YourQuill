@@ -11,7 +11,7 @@
 
 #define TAG_XML_RESAVE  0
 
-namespace yq {
+namespace yq::mithril {
 
     class Tag::File : public StdFile, public Data {
     public:

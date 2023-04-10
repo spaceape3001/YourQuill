@@ -9,7 +9,7 @@
 #include <mithril/kernel/atom/Value.hpp>
 #include <basic/Vector.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Value::Data {
         std::string     brief, notes, data;
         

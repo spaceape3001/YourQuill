@@ -19,8 +19,7 @@
 
 #pragma once
 
-namespace yq {
-
+namespace yq::mithril {
     struct User::Data {
         std::string             name;
         Ref<Authentication>     authentication;

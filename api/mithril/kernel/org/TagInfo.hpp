@@ -11,8 +11,7 @@
 #include <mithril/kernel/image/Image.hpp>
 #include <mithril/kernel/org/Tag.hpp>
 
-namespace yq {
-    
+namespace yq::mithril {
     struct Tag::Info {
         std::string     brief;
         Document        doc;

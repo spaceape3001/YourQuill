@@ -9,8 +9,7 @@
 #include <basic/XmlObject.hpp>
 #include <basic/Ref.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     //  Still a work in progress....
     //  might go into elements....
     class Rule : public XmlObject, public RefCount {

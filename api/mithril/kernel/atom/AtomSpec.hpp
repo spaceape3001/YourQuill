@@ -10,7 +10,7 @@
 #include <string>
 #include <string_view>
 
-namespace yq {
+namespace yq::mithril {
     struct Folder;
     struct Class;
     struct Fragment;
@@ -47,4 +47,3 @@ namespace yq {
     AtomSpec        by_field(std::string_view);
     AtomSpec        by_field(Field);
 }
-

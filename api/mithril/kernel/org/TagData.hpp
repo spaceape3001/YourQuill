@@ -8,8 +8,7 @@
 
 #include <mithril/kernel/org/Tag.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     struct Tag::Data {
 
         std::string      leaf;
@@ -24,5 +23,4 @@ namespace yq {
         Data&       merge(const Data&, bool fOverride=false);
         void        reset();
     };
-    
 }

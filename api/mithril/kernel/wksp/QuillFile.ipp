@@ -11,8 +11,7 @@
 #include <mithril/kernel/bit/KeyValue.hpp>
 #include <mithril/kernel/io/Strings.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     void    QuillFile::reset() 
     {
         QuillData::reset();

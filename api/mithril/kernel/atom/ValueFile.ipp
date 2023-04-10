@@ -10,10 +10,10 @@
 #include <basic/Logging.hpp>
 #include <io/XmlUtils.hpp>
 #include <mithril/kernel/io/Strings.hpp>
+#include <mithril/kernel/errors.hpp>
 #include <io/errors.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     std::error_code Value::ListFile::read(const XmlDocument&doc, std::string_view fname)
     {
         const XmlNode*  xn  = doc.first_node(szYQValues);

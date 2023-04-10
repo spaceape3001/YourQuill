@@ -8,8 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
 
     /*! \brief Folder of the cache/workspace
 
@@ -35,5 +34,5 @@ namespace yq {
     }
 }
 
-YQ_TYPE_DECLARE(yq::Folder)
+YQ_TYPE_DECLARE(yq::mithril::Folder)
 

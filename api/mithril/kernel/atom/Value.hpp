@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
     /*! \brief Predefined value for a field
     
         This is a predefined attribute value for a field
@@ -25,4 +25,4 @@ namespace yq {
     };
 }
 
-YQ_TYPE_DECLARE(yq::Value)
+YQ_TYPE_DECLARE(yq::mithril::Value)

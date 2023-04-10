@@ -14,7 +14,7 @@
 #include <memory>
 
 
-namespace yq {
+namespace yq::mithril {
     struct Field::Data {
         std::string             pkey;           //!< Key if plural (ie, eyes vs eye)
         std::string             name;           //!< Name of this (may or may not be a key)
@@ -39,5 +39,4 @@ namespace yq {
         
         Data&                  merge(const Data&, bool fOverride);
     };
-
 }

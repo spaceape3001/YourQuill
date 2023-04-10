@@ -9,7 +9,7 @@
 #include <mithril/kernel/preamble.hpp>
 #include <mithril/kernel/plot/Character.hpp>
 
-namespace yq {
+namespace yq::mithril {        
     namespace cdb {
         std::vector<Character>      all_characters(Sorted sorted=Sorted());
         Atom                        atom(Character);

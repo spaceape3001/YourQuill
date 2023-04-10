@@ -12,11 +12,11 @@
 #include <mithril/kernel/io/Strings.hpp>
 #include <basic/ErrorDB.hpp>
 
-namespace yq {
-
-    namespace errors {
+namespace yq::errors {
         using no_field_in_file  = error_db::entry<"No field found in file">;
-    }
+}
+
+namespace yq::mithril {
 
     void Field::File::reset() 
     {

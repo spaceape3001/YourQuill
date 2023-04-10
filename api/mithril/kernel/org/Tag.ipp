@@ -20,7 +20,7 @@
 #include <mithril/kernel/wksp/Workspace.hpp>
 
 
-namespace yq {
+namespace yq::mithril {
     std::vector<Tag>        Tag::all(Sorted sorted)
     {
         static const auto& oracle   = wksp::oracle();

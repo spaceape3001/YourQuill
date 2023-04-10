@@ -8,7 +8,7 @@
 #include <mithril/kernel/io/StdObject.hpp>
 
 
-namespace yq {
+namespace yq::mithril {        
     class Authentication : public StdObject {
         YQ_STD_OBJECT_ABSTRACT(Authentication, StdObject);
     public:

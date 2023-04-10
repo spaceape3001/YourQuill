@@ -10,7 +10,7 @@
 #include <mithril/kernel/image/Image.hpp>
 #include <mithril/kernel/leaf/Leaf.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Atom::Info {
         std::string     abbr;
         std::string     brief;

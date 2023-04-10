@@ -10,8 +10,7 @@
 #include <mithril/kernel/atom/Field.hpp>
 #include <mithril/kernel/atom/Value.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     struct Value::Info {
         Field       field;
         std::string brief, data;

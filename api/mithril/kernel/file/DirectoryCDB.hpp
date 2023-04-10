@@ -14,7 +14,7 @@
 #include <filesystem>
 #include <vector>
 
-namespace yq {
+namespace yq::mithril {
 
     /*! \brief Information fro a directory
     

@@ -9,8 +9,7 @@
 #include <mithril/kernel/enum/AssertDeny.hpp>
 #include <basic/preamble.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     struct Copyright {
 
         //! Text of the licence (or disclaimer)
@@ -40,5 +39,4 @@ namespace yq {
 
     Expect<Copyright>   x_copyright(const XmlNode*);
     void                write_xn(XmlNode* xb, const Copyright&);
-
 }

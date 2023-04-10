@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     /*! \brief Represents single fragment
     */
@@ -21,4 +21,4 @@ namespace yq {
     };
 }
 
-YQ_TYPE_DECLARE(yq::Fragment)
+YQ_TYPE_DECLARE(yq::mithril::Fragment)

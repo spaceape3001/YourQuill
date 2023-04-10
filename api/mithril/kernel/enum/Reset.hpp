@@ -10,10 +10,12 @@
 #include <basic/Enum.hpp>
 
 namespace yq {
+    namespace mithril {
 
-    YQ_ENUM(Reset,,
-        Default
-    )
+        YQ_ENUM(Reset,,
+            Default
+        )
+    }
 }
 
-YQ_TYPE_DECLARE(yq::Reset)
+YQ_TYPE_DECLARE(yq::mithril::Reset)

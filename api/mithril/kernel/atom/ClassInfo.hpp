@@ -11,7 +11,7 @@
 #include <mithril/kernel/image/Image.hpp>
 #include <mithril/kernel/org/Category.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Class::Info {
         std::string key;
         Category    category;

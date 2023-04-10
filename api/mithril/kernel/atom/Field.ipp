@@ -10,7 +10,7 @@
 #include <basic/TextUtils.hpp>
 #include <mithril/kernel/atom/FieldCDB.hpp>
 
-namespace yq {
+namespace yq::mithril {
     bool Field::less_key(Field a, Field b)
     {
         return is_less_igCase(cdb::key(a), cdb::key(b));

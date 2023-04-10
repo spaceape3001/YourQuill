@@ -11,7 +11,7 @@
 
 #define FIELD_XML_RESAVE 0
 
-namespace yq {
+namespace yq::mithril {
     class Field::File : public StdFile, public Data {
     public:
 

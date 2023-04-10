@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     /*! \brief Directory 
 
@@ -23,4 +23,4 @@ namespace yq {
     };
 }
 
-YQ_TYPE_DECLARE(yq::Directory)
+YQ_TYPE_DECLARE(yq::mithril::Directory)

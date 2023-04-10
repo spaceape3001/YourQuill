@@ -11,7 +11,7 @@
 #include <meta/Init.hpp>
 #include <io/stream/Text.hpp>
 
-namespace yq {
+namespace yq::mithril {
     Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)
     {
         const ObjectInfo*   obj = ObjectInfo::find(keyvalue.data);
@@ -68,4 +68,4 @@ namespace yq {
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::StdObject)
+YQ_OBJECT_IMPLEMENT(yq::mithril::StdObject)

@@ -9,8 +9,7 @@
 #include <mithril/kernel/org/CategoryData.hpp>
 #include <mithril/kernel/io/StdFile.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     class Category::File : public StdFile, public Data {
     public:
 

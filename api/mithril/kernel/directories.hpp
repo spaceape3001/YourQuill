@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace yq {
+namespace yq::mithril {
     namespace kernel {
         //! The compiled build directory path
         const char*     build_root();

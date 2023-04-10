@@ -12,7 +12,7 @@
 #include <io/StreamOps.hpp>
 #include <io/stream/Text.hpp>
 
-namespace yq {
+namespace yq::mithril {
     bool        read_xn(Context&ret, const XmlNode*xn)
     {
         ret.title   = read_attribute(xn, szTitle, x_string);

@@ -17,8 +17,7 @@
 
 #include <cassert>
 
-namespace yq {
-
+namespace yq::mithril {
     namespace diff {
         namespace {
             bool    is_same(const Attribute::KVUA& a, const KeyValue& b) 
@@ -72,7 +71,7 @@ namespace yq {
             bool                difference(std::vector<Attribute::Diff>& items, const std::vector<Attribute::KVUA>& old, const KVTree& kvs, ssize_t depth)
             {
                 bool    chg = false;
-                diff::diff_engine(old, kvs.subs, is_similar_kv, 
+                yq::diff::diff_engine(old, kvs.subs, is_similar_kv, 
                     [&](SizeRange X, SizeRange Y){
                         assert(X.count() == Y.count());
                         for(ssize_t  r : SizeRange{0,std::min(X.count(),Y.count())}){

@@ -13,7 +13,7 @@
 #include <mithril/kernel/image/Image.hpp>
 #include <basic/Http.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     struct Document::Info {
         Folder          folder;

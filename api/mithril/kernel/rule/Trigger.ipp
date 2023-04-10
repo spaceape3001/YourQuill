@@ -11,8 +11,7 @@
 #include <meta/ObjectInfoWriter.hpp>
 #include <io/XmlUtils.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     Ref<Trigger>     x_trigger(const XmlNode* xn)
     {
         const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
@@ -36,5 +35,5 @@ namespace yq {
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::Trigger)
+YQ_OBJECT_IMPLEMENT(yq::mithril::Trigger)
 

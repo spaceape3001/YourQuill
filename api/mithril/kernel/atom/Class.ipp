@@ -10,7 +10,7 @@
 #include "ClassCDB.hpp"
 #include <basic/TextUtils.hpp>
 
-namespace yq {
+namespace yq::mithril {
     bool Class::less_key(Class a, Class b)
     {
         return is_less_igCase(cdb::key(a), cdb::key(b));

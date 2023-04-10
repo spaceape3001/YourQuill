@@ -9,8 +9,7 @@
 #include <basic/XmlObject.hpp>
 #include <basic/Ref.hpp>
 
-namespace yq {
-    
+namespace yq::mithril {
     class Action : public XmlObject, public RefCount {
         YQ_OBJECT_DECLARE(Action, XmlObject)
     public:

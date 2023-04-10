@@ -24,23 +24,23 @@
 
 #include <meta/Init.hpp>
 
-YQ_TYPE_IMPLEMENT(yq::Access)
-YQ_TYPE_IMPLEMENT(yq::AssertDeny)
-YQ_TYPE_IMPLEMENT(yq::AttrKind)
-YQ_TYPE_IMPLEMENT(yq::CalSystem)
-YQ_TYPE_IMPLEMENT(yq::Change)
-YQ_TYPE_IMPLEMENT(yq::DataRole)
-YQ_TYPE_IMPLEMENT(yq::FileType)
-YQ_TYPE_IMPLEMENT(yq::Format)
-YQ_TYPE_IMPLEMENT(yq::Linkage)
-YQ_TYPE_IMPLEMENT(yq::Multiplicity)
-YQ_TYPE_IMPLEMENT(yq::Permission)
-YQ_TYPE_IMPLEMENT(yq::Permissions)
-YQ_TYPE_IMPLEMENT(yq::Reset)
-YQ_TYPE_IMPLEMENT(yq::Restriction)
-YQ_TYPE_IMPLEMENT(yq::SizeDesc)
-YQ_TYPE_IMPLEMENT(yq::Submit)
-YQ_TYPE_IMPLEMENT(yq::Vcs)
+YQ_TYPE_IMPLEMENT(yq::mithril::Access)
+YQ_TYPE_IMPLEMENT(yq::mithril::AssertDeny)
+YQ_TYPE_IMPLEMENT(yq::mithril::AttrKind)
+YQ_TYPE_IMPLEMENT(yq::mithril::CalSystem)
+YQ_TYPE_IMPLEMENT(yq::mithril::Change)
+YQ_TYPE_IMPLEMENT(yq::mithril::DataRole)
+YQ_TYPE_IMPLEMENT(yq::mithril::FileType)
+YQ_TYPE_IMPLEMENT(yq::mithril::Format)
+YQ_TYPE_IMPLEMENT(yq::mithril::Linkage)
+YQ_TYPE_IMPLEMENT(yq::mithril::Multiplicity)
+YQ_TYPE_IMPLEMENT(yq::mithril::Permission)
+YQ_TYPE_IMPLEMENT(yq::mithril::Permissions)
+YQ_TYPE_IMPLEMENT(yq::mithril::Reset)
+YQ_TYPE_IMPLEMENT(yq::mithril::Restriction)
+YQ_TYPE_IMPLEMENT(yq::mithril::SizeDesc)
+YQ_TYPE_IMPLEMENT(yq::mithril::Submit)
+YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 
 #include "atom/Atom.ipp"
 #include "atom/AtomCDB.ipp"
@@ -107,24 +107,24 @@ YQ_TYPE_IMPLEMENT(yq::Vcs)
 
 #include "directories.hpp"
 
-YQ_TYPE_IMPLEMENT(yq::Atom)
-YQ_TYPE_IMPLEMENT(yq::Attribute)
-YQ_TYPE_IMPLEMENT(yq::Category)
-YQ_TYPE_IMPLEMENT(yq::Class)
-YQ_TYPE_IMPLEMENT(yq::Directory)
-YQ_TYPE_IMPLEMENT(yq::Document)
-//YQ_TYPE_IMPLEMENT(yq::Edge)
-YQ_TYPE_IMPLEMENT(yq::Field)
-YQ_TYPE_IMPLEMENT(yq::Folder)
-YQ_TYPE_IMPLEMENT(yq::Fragment)
-YQ_TYPE_IMPLEMENT(yq::Image)
-YQ_TYPE_IMPLEMENT(yq::Leaf)
-YQ_TYPE_IMPLEMENT(yq::Property)
-YQ_TYPE_IMPLEMENT(yq::Tag)
-YQ_TYPE_IMPLEMENT(yq::User)
-YQ_TYPE_IMPLEMENT(yq::Value)
+YQ_TYPE_IMPLEMENT(yq::mithril::Atom)
+YQ_TYPE_IMPLEMENT(yq::mithril::Attribute)
+YQ_TYPE_IMPLEMENT(yq::mithril::Category)
+YQ_TYPE_IMPLEMENT(yq::mithril::Class)
+YQ_TYPE_IMPLEMENT(yq::mithril::Directory)
+YQ_TYPE_IMPLEMENT(yq::mithril::Document)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Edge)
+YQ_TYPE_IMPLEMENT(yq::mithril::Field)
+YQ_TYPE_IMPLEMENT(yq::mithril::Folder)
+YQ_TYPE_IMPLEMENT(yq::mithril::Fragment)
+YQ_TYPE_IMPLEMENT(yq::mithril::Image)
+YQ_TYPE_IMPLEMENT(yq::mithril::Leaf)
+YQ_TYPE_IMPLEMENT(yq::mithril::Property)
+YQ_TYPE_IMPLEMENT(yq::mithril::Tag)
+YQ_TYPE_IMPLEMENT(yq::mithril::User)
+YQ_TYPE_IMPLEMENT(yq::mithril::Value)
 
-namespace yq {
+namespace yq::mithril {
     namespace kernel {
         const char*     build_root()
         {
@@ -152,4 +152,3 @@ namespace yq {
     namespace {
     }
 }
-

@@ -9,7 +9,7 @@
 #include <mithril/kernel/atom/ValueData.hpp>
 #include <io/XmlFile.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     class Value::ListFile : public ListData, public XmlFile {
     public:

@@ -11,7 +11,8 @@
 #include <io/XmlUtils.hpp>
 #include <mithril/kernel/io/Strings.hpp>
 
-namespace yq {
+namespace yq::mithril {
+
     Value::Data&   Value::Data::merge(const Data&b, bool fOverride)
     {
         set_if_empty(notes, b.notes, fOverride);

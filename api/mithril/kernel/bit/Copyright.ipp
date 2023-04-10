@@ -9,8 +9,7 @@
 #include "Copyright.hpp"
 #include <mithril/kernel/errors.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     bool    Copyright::empty() const
     {
         return !not_null();

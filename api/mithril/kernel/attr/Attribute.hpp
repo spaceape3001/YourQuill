@@ -8,8 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     /*! \brief Attribute of documents
     */
     struct Attribute {
@@ -24,4 +23,4 @@ namespace yq {
     };
 }
 
-YQ_TYPE_DECLARE(yq::Attribute)
+YQ_TYPE_DECLARE(yq::mithril::Attribute)

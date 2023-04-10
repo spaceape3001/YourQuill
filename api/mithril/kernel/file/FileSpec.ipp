@@ -12,7 +12,7 @@
 #include <mithril/kernel/file/Folder.hpp>
 #include <mithril/kernel/file/FragmentCDB.hpp>
 
-namespace yq {
+namespace yq::mithril {
     FileSpec        by_file(const std::filesystem::path&fp)
     {
         FileSpec    ret;
@@ -139,8 +139,6 @@ namespace yq {
             return false;
         }
     }
-    
-    
     
 }
 

@@ -15,7 +15,7 @@
 
 #include <filesystem>
 
-namespace yq {
+namespace yq::mithril {
     struct Fragment::Info {
         Document                document;
         Directory               directory;

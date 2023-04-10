@@ -10,7 +10,7 @@
 #include <basic/EnumMap.hpp>
 #include <basic/errors.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     Expect<Access>      decode_access(std::string_view arg)
     {

@@ -9,7 +9,7 @@
 #include <basic/Object.hpp>
 #include <basic/Ref.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct KeyValue;
 
     /*!  A "Standard Object"

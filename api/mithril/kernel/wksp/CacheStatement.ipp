@@ -11,7 +11,7 @@
 #include <mithril/kernel/wksp/CacheStatement.hpp>
 #include <mithril/kernel/wksp/Workspace.hpp>
 
-namespace yq {
+namespace yq::mithril {        
     CacheStatement::CacheStatement()
     {
         _database(wksp::db());

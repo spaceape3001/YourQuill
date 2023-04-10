@@ -9,8 +9,10 @@
 #include <mithril/kernel/image/Image.hpp>
 
 namespace yq {
-    struct NKI {
-        std::string key, name;
-        Image       icon;
-    };
+    namespace mithril {
+        struct NKI {
+            std::string key, name;
+            Image       icon;
+        };
+    }
 }

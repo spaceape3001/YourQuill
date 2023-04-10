@@ -14,8 +14,7 @@
 #include <basic/Flag.hpp>
 
 
-namespace yq {
-
+namespace yq::mithril {
     namespace wksp { struct Impl; }
 
     /*! \brief Represents a "root" directory for the workspace, all keys are relative to one of these.
@@ -99,8 +98,5 @@ namespace yq {
         Root&    operator=(Root&&) = delete;
         
     };
-
-
-
 
 }

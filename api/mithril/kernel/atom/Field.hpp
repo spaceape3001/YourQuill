@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     /*! \brief Field of the class
 
@@ -41,4 +41,4 @@ namespace yq {
     using FieldFragDoc      = std::pair<Fragment, Field::SharedFile>;
 }
 
-YQ_TYPE_DECLARE(yq::Field)
+YQ_TYPE_DECLARE(yq::mithril::Field)

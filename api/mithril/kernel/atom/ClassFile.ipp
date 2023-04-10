@@ -11,15 +11,17 @@
 #include <mithril/kernel/bit/KeyValue.hpp>
 #include <mithril/kernel/io/Strings.hpp>
 
-namespace yq {
+namespace yq::errors {
+    using no_class_in_file  = error_db::entry<"No class found in the file.">;
+}
+
+namespace yq::mithril {
+
     void    Class::File::reset() 
     {
         *(Data*) this   = Data{};
     }
 
-    namespace errors {
-        using no_class_in_file  = error_db::entry<"No class found in the file.">;
-    }
     
     
     #if CLASS_XML_RESAVE
@@ -53,7 +55,7 @@ namespace yq {
         tags            = read_child_string_set(xn, szTag);
         category        = read_child(xn, szCategory, x_string);
         url             = read_child(xn, szUrl, x_string);
-        return errors::none();
+        return std::error_code();
     }
     #endif
     
@@ -76,7 +78,7 @@ namespace yq {
         category        = attrs.value("category");
         url             = attrs.value("url");
         dev_url         = attrs.value("devurl");
-        return errors::none();
+        return std::error_code();
     }
     
     std::error_code    Class::File::write(KVTree&attrs) const 
@@ -113,7 +115,7 @@ namespace yq {
             attrs.set("url", url);
         if(!dev_url.empty())
             attrs.set("devurl", dev_url);
-        return errors::none();
+        return std::error_code();
     }
 
 }

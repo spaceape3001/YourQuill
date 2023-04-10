@@ -10,7 +10,7 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/TextUtils.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
     Class::Data&      Class::Data::merge(const Class::Data&b, bool fOverride)
     {

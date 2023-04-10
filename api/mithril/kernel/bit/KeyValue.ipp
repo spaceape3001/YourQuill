@@ -13,8 +13,7 @@
 #include <basic/TextUtils.hpp>
 #include <basic/ByteArray.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
 #if 0
     namespace {
         string_view_set_t   make_set(const std::vector<const KeyValue*>&subs, const std::string_view& sep)
@@ -212,10 +211,6 @@ namespace yq {
 
 
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    namespace errors {
-    }
-
     namespace {
 
         void    add_attr(Vector<KeyValue>&datas, size_t&i, KeyValue&v)
@@ -670,7 +665,5 @@ namespace yq {
         }
 
             //  ------------------------------------------------------------------------------------------------
-
     }
-
 }

@@ -8,8 +8,7 @@
 
 #include <mithril/kernel/preamble.hpp>
 
-namespace yq {
-
+namespace yq::mithril {
     template <typename> class IDLock;
 
     /*! \brief Atom class in the cache
@@ -45,4 +44,4 @@ namespace yq {
     using ClassFragDoc      = std::pair<Fragment, Class::SharedFile>;
 }
 
-YQ_TYPE_DECLARE(yq::Class)
+YQ_TYPE_DECLARE(yq::mithril::Class)

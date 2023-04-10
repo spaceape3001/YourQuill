@@ -10,7 +10,7 @@
 #include <mithril/kernel/bit/KeyValue.hpp>
 #include <mithril/kernel/io/Strings.hpp>
 
-namespace yq {
+namespace yq::mithril {        
     void    Category::File::reset() 
     {
         *(Data*) this = Data{};
@@ -35,4 +35,3 @@ namespace yq {
         return std::error_code(); 
     }
 }
-

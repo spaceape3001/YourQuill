@@ -8,7 +8,7 @@
 
 #include <mithril/kernel/org/Category.hpp>
 
-namespace yq {
+namespace yq::mithril {
     struct Category::Data {
         std::string     name;
         std::string     brief;
