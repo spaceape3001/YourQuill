@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/kernel/leaf/Leaf.hpp>
-#include <mithril/kernel/bit/Context.hpp>
-#include <mithril/kernel/bit/KeyValue.hpp>
+#include <mithril/leaf/Leaf.hpp>
+#include <mithril/bit/Context.hpp>
+#include <mithril/bit/KeyValue.hpp>
 
 namespace yq {
     namespace mithril {

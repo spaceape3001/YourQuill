@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/bit/Context.hpp>
-#include <mithril/kernel/io/Strings.hpp>
+#include <mithril/bit/Context.hpp>
+#include <mithril/io/Strings.hpp>
 #include <io/XmlUtils.hpp>
 #include <io/StreamOps.hpp>
 #include <io/stream/Text.hpp>

@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include "AttributeDiff.hpp"
-#include "AttributeCDB.hpp"
+#include <mithril/attribute/AttributeDiff.hpp>
+#include <mithril/attribute/AttributeCDB.hpp>
 
 #include <basic/DiffEngine.hpp>
 #include <basic/IntRange.hpp>
 
-#include <mithril/kernel/bit/KeyValue.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/bit/KeyValue.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 
 #include <cassert>
 

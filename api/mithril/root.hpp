@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/http/file/RootArg.hpp>
-#include <mithril/http/file/RootHtml.hpp>
-#include <mithril/http/file/RootPost.hpp>
+#include <mithril/root/RootArg.hpp>
+#include <mithril/root/RootHtml.hpp>
+#include <mithril/root/RootPost.hpp>
 
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/file/RootCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/root/RootCDB.hpp>

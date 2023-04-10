@@ -8,13 +8,13 @@
 
 #include "VarTemplate.hpp"
 #include "WebHtml.hpp"
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 #include <io/FileUtils.hpp>
-#include <mithril/kernel/notify/FileWatch.hpp>
-#include <mithril/kernel/notify/FileNotifyAdapters.hpp>
-#include <mithril/kernel/notify/Stage4.hpp>
+#include <mithril/notify/FileWatch.hpp>
+#include <mithril/notify/FileNotifyAdapters.hpp>
+#include <mithril/notify/Stage4.hpp>
 
 namespace yq::mithril {
 

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "TagFile.hpp"
-#include <mithril/kernel/bit/KeyValue.hpp>
+#include <mithril/bit/KeyValue.hpp>
 #include <basic/ErrorDB.hpp>
 
 namespace yq::errors {

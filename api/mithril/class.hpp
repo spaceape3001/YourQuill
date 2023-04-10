@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/http/atom/ClassArg.hpp>
-#include <mithril/http/atom/ClassHtml.hpp>
-#include <mithril/http/atom/ClassPost.hpp>
-#include <mithril/kernel/atom/Class.hpp>
-#include <mithril/kernel/atom/ClassCDB.hpp>
-#include <mithril/kernel/atom/ClassData.hpp>
-#include <mithril/kernel/atom/ClassFile.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
+#include <mithril/class/ClassArg.hpp>
+#include <mithril/class/ClassHtml.hpp>
+#include <mithril/class/ClassPost.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/class/ClassData.hpp>
+#include <mithril/class/ClassFile.hpp>
+#include <mithril/db/IDLock.hpp>

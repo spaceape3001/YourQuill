@@ -7,10 +7,10 @@
 #pragma once
 
 #include "LeafHtml.hpp"
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/kernel/leaf/LeafCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml& h, Leaf l)

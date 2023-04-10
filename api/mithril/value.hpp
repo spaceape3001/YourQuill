@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/http/atom/ValueArg.hpp>
-#include <mithril/http/atom/ValueHtml.hpp>
-#include <mithril/kernel/atom/Value.hpp>
-#include <mithril/kernel/atom/ValueCDB.hpp>
-#include <mithril/kernel/atom/ValueData.hpp>
-#include <mithril/kernel/atom/ValueFile.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
+#include <mithril/value/ValueArg.hpp>
+#include <mithril/value/ValueHtml.hpp>
+#include <mithril/value/Value.hpp>
+#include <mithril/value/ValueCDB.hpp>
+#include <mithril/value/ValueData.hpp>
+#include <mithril/value/ValueFile.hpp>
+#include <mithril/db/IDLock.hpp>

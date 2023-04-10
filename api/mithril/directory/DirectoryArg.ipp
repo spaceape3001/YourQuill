@@ -9,11 +9,11 @@
 #include "DirectoryArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/FolderArg.hpp>
-#include <mithril/http/file/RootArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/DirectoryCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
+#include <mithril/folder/FolderArg.hpp>
+#include <mithril/root/RootArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/directory/DirectoryCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
 
 namespace yq::mithril::arg {
 

@@ -14,12 +14,12 @@
 #include <basic/CollectionUtils.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/Vector.hpp>
-#include <mithril/kernel/atom/Atom.hpp>
-#include <mithril/kernel/atom/AtomSpec.hpp>
-#include <mithril/kernel/atom/Class.hpp>
-#include <mithril/kernel/atom/Field.hpp>
-#include <mithril/kernel/attr/AttributeDiff.hpp>
-#include <mithril/kernel/enum/Change.hpp>
+#include <mithril/atom/Atom.hpp>
+#include <mithril/atom/AtomSpec.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/field/Field.hpp>
+#include <mithril/attribute/AttributeDiff.hpp>
+#include <mithril/enum/Change.hpp>
 
 namespace yq {
     namespace mithril {

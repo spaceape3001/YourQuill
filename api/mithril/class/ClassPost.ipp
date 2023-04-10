@@ -8,9 +8,9 @@
 
 #include "ClassPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/atom/ClassArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/atom/Class.hpp>
+#include <mithril/class/ClassArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/class/Class.hpp>
 
 namespace yq::mithril::post {
 

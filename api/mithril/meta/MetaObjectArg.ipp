@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/http/meta/MetaObjectArg.hpp>
+#include <mithril/meta/MetaObjectArg.hpp>
 #include <meta/ObjectInfo.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
+#include <mithril/web/WebContext.hpp>
 
 namespace yq::mithril::arg {
     const ObjectInfo* object_info(std::string_view  arg_string)

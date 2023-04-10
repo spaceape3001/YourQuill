@@ -9,8 +9,8 @@
 #include "ImageArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/image/ImageCDB.hpp>
 
 namespace yq::mithril::arg {
     Image image(std::string_view  arg_string)

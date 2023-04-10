@@ -7,9 +7,9 @@
 #pragma once
 
 #include <basic/preamble.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/file/Folder.hpp>
-#include <mithril/kernel/file/FileSpec.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/file/FileSpec.hpp>
 #include <source_location>
 #include <filesystem>
 

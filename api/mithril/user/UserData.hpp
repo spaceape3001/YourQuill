@@ -9,10 +9,10 @@
 #include <basic/Ref.hpp>
 #include <basic/Set.hpp>
 
-#include <mithril/kernel/bit/Context.hpp>
-#include <mithril/kernel/enum/Permission.hpp>
-#include <mithril/kernel/user/Authentication.hpp>
-#include <mithril/kernel/user/User.hpp>
+#include <mithril/bit/Context.hpp>
+#include <mithril/enum/Permission.hpp>
+#include <mithril/auth/Authentication.hpp>
+#include <mithril/user/User.hpp>
 
 #include <memory>
 #include <vector>

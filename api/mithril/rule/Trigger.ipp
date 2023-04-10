@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Trigger.hpp"
-#include <mithril/kernel/io/Strings.hpp>
+#include <mithril/rule/Trigger.hpp>
+#include <mithril/io/Strings.hpp>
 #include <meta/ObjectInfoWriter.hpp>
 #include <io/XmlUtils.hpp>
 

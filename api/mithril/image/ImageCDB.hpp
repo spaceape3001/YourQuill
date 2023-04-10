@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/enum/SizeDesc.hpp>
-#include <mithril/kernel/image/Image.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/enum/SizeDesc.hpp>
+#include <mithril/image/Image.hpp>
 #include <basic/ContentType.hpp>
 
 

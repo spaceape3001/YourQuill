@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/http/file/FolderArg.hpp>
-#include <mithril/http/file/FolderHtml.hpp>
-#include <mithril/http/file/FolderPost.hpp>
-#include <mithril/kernel/file/Folder.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
+#include <mithril/folder/FolderArg.hpp>
+#include <mithril/folder/FolderHtml.hpp>
+#include <mithril/folder/FolderPost.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/folder/FolderCDB.hpp>

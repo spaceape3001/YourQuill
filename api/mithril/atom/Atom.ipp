@@ -6,19 +6,19 @@
 
 #pragma once
 
-#include "Atom.hpp"
-#include "AtomCDB.hpp"
+#include <mithril/atom/Atom.hpp>
+#include <mithril/atom/AtomCDB.hpp>
 
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <meta/Init.hpp>
-#include <mithril/kernel/atom/Class.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/org/Tag.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril {
     std::vector<Atom>   Atom::all(Sorted sorted)

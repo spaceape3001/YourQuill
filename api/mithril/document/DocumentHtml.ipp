@@ -8,8 +8,8 @@
 
 #include "DocumentHtml.hpp"
 #include <io/DirUtils.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
 
 namespace yq::mithril::html {
     //WebHtml&    operator<<(WebHtml&, Document);

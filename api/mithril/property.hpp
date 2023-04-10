@@ -6,4 +6,4 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/Property.hpp>
+#include <mithril/atom/Property.hpp>

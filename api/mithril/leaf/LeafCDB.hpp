@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/atom/Atom.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/atom/Atom.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/leaf/Leaf.hpp>
 #include <vector>
 
 namespace yq {

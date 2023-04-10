@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "AttributeHtml.hpp"
-#include <mithril/kernel/attr/AttributeCDB.hpp>
+#include <mithril/attribute/AttributeHtml.hpp>
+#include <mithril/attribute/AttributeCDB.hpp>
 
 namespace yq::mithril::html {
     void    dev_table(WebHtml&h, const std::vector<Attribute>&table)

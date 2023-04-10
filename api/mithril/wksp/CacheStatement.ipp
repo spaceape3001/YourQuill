@@ -8,8 +8,8 @@
 
 #include <basic/Set.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/wksp/CacheStatement.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/wksp/CacheStatement.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril {        
     CacheStatement::CacheStatement()

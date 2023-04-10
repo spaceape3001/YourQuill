@@ -6,11 +6,10 @@
 
 #pragma once
 
-#include "AtomArg.hpp"
-
+#include <mithril/atom/AtomArg.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/atom/AtomCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/atom/AtomCDB.hpp>
 
 namespace yq::mithril::arg {
     Atom atom(std::string_view  arg_string)

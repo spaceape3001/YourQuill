@@ -8,12 +8,13 @@
 
 #include "DirectoryCDB.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/file/Folder.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/Fragment.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/Fragment.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/wksp/CacheLogging.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 
 namespace yq::mithril::cdb {

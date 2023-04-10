@@ -39,6 +39,7 @@ public:
 
 YQ_OBJECT_IMPLEMENT(EditorWindow)
 
+//  MOTTO:  Detangling Photons
 
 int main(int argc, char* argv[])
 {

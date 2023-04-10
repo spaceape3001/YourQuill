@@ -8,6 +8,9 @@ project(mithril)
 
 add_library(${PROJECT_NAME} SHARED
     mithril/mithril.cpp
+    mithril/http/XEntry.cpp
+    mithril/web/web_unity.cpp
+    mithril/wksp/Workspace.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -31,5 +34,3 @@ target_compile_definitions(${PROJECT_NAME}
 
 LinkTest(${PROJECT_NAME})
 
-
-add_subdirectory(mithril)

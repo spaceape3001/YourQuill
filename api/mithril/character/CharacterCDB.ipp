@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/AtomCDB.hpp>
-#include <mithril/kernel/atom/ClassCDB.hpp>
-#include <mithril/kernel/plot/CharacterCDB.hpp>
+#include <mithril/atom/AtomCDB.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/character/CharacterCDB.hpp>
 
 namespace yq::mithril {
     namespace cdb {

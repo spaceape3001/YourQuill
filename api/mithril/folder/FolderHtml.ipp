@@ -7,8 +7,8 @@
 #pragma once
 
 #include "FolderHtml.hpp"
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
 
 namespace yq::mithril::html {
     //WebHtml&    operator<<(WebHtml&, Folder);

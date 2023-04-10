@@ -10,9 +10,9 @@
 #include "HtmlLayout.hpp"
 #include <io/Execute.hpp>
 #include <io/StreamOps.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 #include <basic/Logging.hpp>
 

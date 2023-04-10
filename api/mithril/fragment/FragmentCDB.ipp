@@ -10,12 +10,12 @@
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
-#include <mithril/kernel/file/DirectoryCDB.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/db/IDLock.hpp>
+#include <mithril/directory/DirectoryCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Fragment>    all_fragments(Sorted sorted)

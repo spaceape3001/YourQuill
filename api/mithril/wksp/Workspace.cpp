@@ -18,9 +18,9 @@
 
 //#include <mithril/config/DirConfig.hpp>
 
-#include <mithril/kernel/directories.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/QuillFile.hpp>
+#include <mithril/directories.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/quill/QuillFile.hpp>
 
 #include <atomic>
 #include <pwd.h>

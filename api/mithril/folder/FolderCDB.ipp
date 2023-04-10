@@ -9,13 +9,13 @@
 #include "FolderCDB.hpp"
 #include <io/DirUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/file/Directory.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/Fragment.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/directory/Directory.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/fragment/Fragment.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Folder>      all_folders(Sorted sorted)

@@ -9,8 +9,8 @@
 #include "Template.hpp"
 #include "WebVariable.hpp"
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/file/Folder.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/folder/Folder.hpp>
 #include <basic/Guarded.hpp>
 
 namespace yq::mithril {

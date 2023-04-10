@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/org/Tag.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/leaf/Leaf.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/tag/Tag.hpp>
 
 namespace yq::mithril {
     struct Tag::Info {

@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/kernel/enum/SizeDesc.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/file/Folder.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
+#include <mithril/enum/SizeDesc.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/leaf/Leaf.hpp>
 
 namespace yq::mithril {
     

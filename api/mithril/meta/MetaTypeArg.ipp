@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/http/meta/MetaTypeArg.hpp>
+#include <mithril/meta/MetaTypeArg.hpp>
 #include <meta/ArgInfo.hpp>
 #include <meta/TypeInfo.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
+#include <mithril/web/WebContext.hpp>
 
 namespace yq::mithril::arg {
     const TypeInfo* type_info(std::string_view  arg_string)

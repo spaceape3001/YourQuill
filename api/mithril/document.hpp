@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/http/file/DocumentArg.hpp>
-#include <mithril/http/file/DocumentHtml.hpp>
-#include <mithril/http/file/DocumentPost.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
+#include <mithril/document/DocumentArg.hpp>
+#include <mithril/document/DocumentHtml.hpp>
+#include <mithril/document/DocumentPost.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/document/DocumentCDB.hpp>

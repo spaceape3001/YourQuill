@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "Constraint.hpp"
-#include <mithril/kernel/io/Strings.hpp>
+#include <mithril/rule/Constraint.hpp>
+#include <mithril/io/Strings.hpp>
 #include <meta/ObjectInfoWriter.hpp>
 #include <io/XmlUtils.hpp>
 

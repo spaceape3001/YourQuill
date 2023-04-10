@@ -8,9 +8,9 @@
 
 #include "DirectoryPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/DirectoryArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/Directory.hpp>
+#include <mithril/directory/DirectoryArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/directory/Directory.hpp>
 
 namespace yq::mithril::post {
     Directory directory(WebContext&ctx, bool *detected)

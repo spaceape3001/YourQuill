@@ -9,8 +9,8 @@
 #include "UserArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/user/UserCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/user/UserCDB.hpp>
 
 namespace yq::mithril::arg {
     User user(std::string_view  arg_string)

@@ -9,7 +9,7 @@
 #include "ValueData.hpp"
 #include <basic/TextUtils.hpp>
 #include <io/XmlUtils.hpp>
-#include <mithril/kernel/io/Strings.hpp>
+#include <mithril/io/Strings.hpp>
 
 namespace yq::mithril {
 

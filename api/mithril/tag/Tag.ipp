@@ -12,12 +12,12 @@
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <meta/Init.hpp>
-#include <mithril/kernel/atom/AtomCDB.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/atom/AtomCDB.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 
 namespace yq::mithril {

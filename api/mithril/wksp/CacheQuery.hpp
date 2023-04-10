@@ -8,7 +8,7 @@
 
 #include <basic/Logging.hpp>
 #include <sql/SqlQueryMap.hpp>
-#include <mithril/kernel/wksp/CacheStatement.hpp>
+#include <mithril/wksp/CacheStatement.hpp>
 
 #include <set>
 #include <vector>

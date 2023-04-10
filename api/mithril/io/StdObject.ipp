@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StdObject.hpp"
-#include <mithril/kernel/bit/KeyValue.hpp>
+#include <mithril/bit/KeyValue.hpp>
 #include <meta/Init.hpp>
 #include <io/stream/Text.hpp>
 

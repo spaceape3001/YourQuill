@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/FieldData.hpp>
-#include <mithril/kernel/io/StdFile.hpp>
+#include <mithril/field/FieldData.hpp>
+#include <mithril/io/StdFile.hpp>
 
 #define FIELD_XML_RESAVE 0
 

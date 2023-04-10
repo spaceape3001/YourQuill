@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/http/leaf/LeafArg.hpp>
-#include <mithril/http/leaf/LeafHtml.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
-#include <mithril/kernel/leaf/LeafCDB.hpp>
-#include <mithril/kernel/leaf/LeafData.hpp>
-#include <mithril/kernel/leaf/LeafFile.hpp>
-#include <mithril/kernel/leaf/LeafLog.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
+#include <mithril/leaf/LeafArg.hpp>
+#include <mithril/leaf/LeafHtml.hpp>
+#include <mithril/leaf/Leaf.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
+#include <mithril/leaf/LeafData.hpp>
+#include <mithril/leaf/LeafFile.hpp>
+#include <mithril/leaf/LeafLog.hpp>
+#include <mithril/db/IDLock.hpp>

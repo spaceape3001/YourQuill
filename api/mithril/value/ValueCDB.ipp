@@ -7,9 +7,9 @@
 #pragma once
 
 #include "ValueCDB.hpp"
-#include <mithril/kernel/atom/Field.hpp>
-#include <mithril/kernel/wksp/CacheLogging.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/field/Field.hpp>
+#include <mithril/wksp/CacheLogging.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
     std::string     brief(Value v)

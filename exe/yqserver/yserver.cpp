@@ -23,12 +23,12 @@
 
 #include <io/stream/Text.hpp>
 
-#include <mithril/http/web/WebAdapters.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/http/web/WebPage.hpp>
-#include <mithril/http/web/WebRedirect.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/web/WebAdapters.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/web/WebPage.hpp>
+#include <mithril/web/WebRedirect.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 #include <fstream>
 #include <syncstream>

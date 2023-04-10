@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/org/Category.hpp>
+#include <mithril/category/Category.hpp>
 
 namespace yq::mithril {
     struct Category::Data {

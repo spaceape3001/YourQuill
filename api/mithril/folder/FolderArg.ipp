@@ -9,8 +9,8 @@
 #include "FolderArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/folder/FolderCDB.hpp>
 
 namespace yq::mithril::arg {
     Folder folder(std::string_view  arg_string)

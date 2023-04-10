@@ -13,8 +13,8 @@
 #include <meta/Meta.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/file/Root.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 using namespace yq;
 using namespace yq::mithril;

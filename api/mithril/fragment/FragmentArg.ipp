@@ -9,11 +9,11 @@
 #include "FragmentArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/DocumentArg.hpp>
-#include <mithril/http/file/RootArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
+#include <mithril/document/DocumentArg.hpp>
+#include <mithril/root/RootArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 
 namespace yq::mithril::arg {
 

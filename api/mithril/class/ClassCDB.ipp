@@ -10,19 +10,19 @@
 #include <basic/ByteArray.hpp>
 #include <basic/CollectionUtils.hpp>
 #include <io/FileUtils.hpp>
-#include <mithril/kernel/atom/ClassFile.hpp>
-#include <mithril/kernel/atom/Field.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/kernel/org/CategoryCDB.hpp>
-#include <mithril/kernel/org/TagCDB.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/class/ClassFile.hpp>
+#include <mithril/field/Field.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/db/IDLock.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/category/CategoryCDB.hpp>
+#include <mithril/tag/TagCDB.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::cdb {
 

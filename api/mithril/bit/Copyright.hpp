@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/enum/AssertDeny.hpp>
+#include <mithril/enum/AssertDeny.hpp>
 #include <basic/preamble.hpp>
 
 namespace yq::mithril {

@@ -9,8 +9,8 @@
 #include "LeafArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/leaf/LeafCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
 
 namespace yq::mithril::arg {
     Leaf leaf(std::string_view  arg_string)

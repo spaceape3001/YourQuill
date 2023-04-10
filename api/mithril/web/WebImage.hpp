@@ -7,7 +7,7 @@
 #pragma once
 
 #include "WebPage.hpp"
-#include <mithril/kernel/file/Folder.hpp>
+#include <mithril/folder/Folder.hpp>
 #include <basic/Guarded.hpp>
 #include "TypedBytes.hpp"
 #include <vector>

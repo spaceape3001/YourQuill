@@ -10,8 +10,8 @@
 //#include "WebSession.hpp"
 #include <asio/ip/address.hpp>
 #include <basic/MultiMap.hpp>
-#include <mithril/kernel/enum/DataRole.hpp>
-#include <mithril/kernel/enum/SizeDesc.hpp>
+#include <mithril/enum/DataRole.hpp>
+#include <mithril/enum/SizeDesc.hpp>
 #include <basic/Http.hpp>
 #include <basic/Url.hpp>
 #include <basic/VersionSpec.hpp>

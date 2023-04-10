@@ -7,8 +7,8 @@
 #pragma once
 
 #include "Folder.hpp"
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/image/Image.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/image/Image.hpp>
 #include <vector>
 
 namespace yq::mithril {

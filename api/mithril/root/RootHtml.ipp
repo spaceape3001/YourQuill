@@ -8,12 +8,12 @@
 
 #include "RootHtml.hpp"
 #include <basic/HttpParser.hpp>
-#include <mithril/http/file/RootArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/file/RootCDB.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/root/RootArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/root/RootCDB.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Dev<const Root*> v)

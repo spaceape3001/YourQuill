@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "AtomPost.hpp"
+#include <mithril/atom/AtomPost.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/http/atom/AtomArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/atom/Atom.hpp>
+#include <mithril/atom/AtomArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril::post {
     Atom atom(WebContext&ctx, bool *detected)

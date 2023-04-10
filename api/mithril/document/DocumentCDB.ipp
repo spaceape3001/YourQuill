@@ -10,12 +10,12 @@
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/Fragment.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/Fragment.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/wksp/Workspace.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Document>    all_documents(Sorted sorted)

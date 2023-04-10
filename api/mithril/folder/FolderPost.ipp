@@ -8,9 +8,9 @@
 
 #include "FolderPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/FolderArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/Folder.hpp>
+#include <mithril/folder/FolderArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/folder/Folder.hpp>
 
 namespace yq::mithril::post {
     Folder folder(WebContext&ctx, bool *detected)

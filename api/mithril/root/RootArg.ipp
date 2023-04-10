@@ -9,9 +9,9 @@
 #include "RootArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/RootCDB.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/root/RootCDB.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::arg {
 

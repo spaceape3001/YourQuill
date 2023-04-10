@@ -8,11 +8,11 @@
 
 #include "ImageCDB.hpp"
 #include <basic/ByteArray.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace mithril {

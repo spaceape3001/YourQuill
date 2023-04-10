@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/Value.hpp>
+#include <mithril/value/Value.hpp>
 #include <basic/Vector.hpp>
 
 namespace yq::mithril {

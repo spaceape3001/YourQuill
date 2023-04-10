@@ -8,13 +8,13 @@
 
 #include "UserHtml.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/DocumentHtml.hpp>
-#include <mithril/http/file/RootHtml.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/kernel/user/UserCDB.hpp>
-#include <mithril/http/HtmlLayout.hpp>
+#include <mithril/document/DocumentHtml.hpp>
+#include <mithril/root/RootHtml.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/user/UserCDB.hpp>
+#include <mithril/html/HtmlLayout.hpp>
 
 namespace yq::mithril::html {
 

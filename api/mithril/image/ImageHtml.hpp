@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/http/Html.hpp>
-#include <mithril/kernel/enum/SizeDesc.hpp>
+#include <mithril/html/Html.hpp>
+#include <mithril/enum/SizeDesc.hpp>
 
 namespace yq::mithril {
     struct Image;

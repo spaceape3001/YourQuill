@@ -8,8 +8,8 @@
 
 #include "UserFile.hpp"
 #include <basic/Logging.hpp>
-#include <mithril/kernel/bit/KeyValue.hpp>
-#include <mithril/kernel/io/Strings.hpp>
+#include <mithril/bit/KeyValue.hpp>
+#include <mithril/io/Strings.hpp>
 #include <basic/ErrorDB.hpp>
 
 namespace yq::errors {

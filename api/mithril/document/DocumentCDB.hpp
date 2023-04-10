@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/enum/DataRole.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/file/Folder.hpp>
-#include <mithril/kernel/image/Image.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/enum/DataRole.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/image/Image.hpp>
 #include <basic/Http.hpp>
 
 namespace yq::mithril {

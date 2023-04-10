@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
+#include <mithril/preamble.hpp>
 #include <basic/Set.hpp>
-#include <mithril/kernel/file/Directory.hpp>
-#include <mithril/kernel/file/Folder.hpp>
+#include <mithril/directory/Directory.hpp>
+#include <mithril/folder/Folder.hpp>
 
 #include <filesystem>
 #include <vector>

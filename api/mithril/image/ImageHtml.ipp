@@ -7,12 +7,12 @@
 #pragma once
 
 #include "ImageHtml.hpp"
-#include <mithril/http/file/FragmentHtml.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
+#include <mithril/fragment/FragmentHtml.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml& h, Image i)

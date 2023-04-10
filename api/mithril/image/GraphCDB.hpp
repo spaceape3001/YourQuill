@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
+#include <mithril/preamble.hpp>
 #include <vector>
 
 namespace yq {

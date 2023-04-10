@@ -9,17 +9,17 @@
 #include "CategoryCDB.hpp"
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
-#include <mithril/kernel/atom/Class.hpp>
-#include <mithril/kernel/atom/Field.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/field/Field.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/db/IDLock.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::cdb {
     namespace {

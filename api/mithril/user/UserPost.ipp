@@ -8,9 +8,9 @@
 
 #include "UserPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/user/UserArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/user/User.hpp>
+#include <mithril/user/UserArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/user/User.hpp>
 
 namespace yq::mithril::post {
     User user(WebContext&ctx, bool *detected)

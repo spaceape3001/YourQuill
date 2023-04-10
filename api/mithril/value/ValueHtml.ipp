@@ -7,7 +7,7 @@
 #pragma once
 
 #include "ValueHtml.hpp"
-#include <mithril/kernel/atom/ValueCDB.hpp>
+#include <mithril/value/ValueCDB.hpp>
 
 namespace yq::mithril::html {
 }

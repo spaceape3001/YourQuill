@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "AtomSpec.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/atom/ClassCDB.hpp>
-#include <mithril/kernel/atom/FieldCDB.hpp>
+#include <mithril/atom/AtomSpec.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/field/FieldCDB.hpp>
 
 namespace yq::mithril {
     AtomSpec        by_class(std::string_view k)

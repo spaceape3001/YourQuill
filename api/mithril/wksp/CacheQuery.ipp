@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril {        
     CacheQuery::CacheQuery(std::string_view sql, bool isPersistent)

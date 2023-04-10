@@ -36,22 +36,22 @@
 
 #include <io/stream/Text.hpp>
 
-#include <mithril/kernel/bit/Copyright.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/bit/Copyright.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
-#include <mithril/http/HtmlLayout.hpp>
-#include <mithril/http/util/Markdown.hpp>
-#include <mithril/http/web/JsonAdapter.hpp>
-#include <mithril/http/web/WebAdapters.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/http/web/WebImage.hpp>
-#include <mithril/http/web/WebPage.hpp>
-#include <mithril/http/web/WebRedirect.hpp>
-#include <mithril/http/web/WebTemplate.hpp>
-#include <mithril/http/web/Template.hpp>
+#include <mithril/HtmlLayout.hpp>
+#include <mithril/util/Markdown.hpp>
+#include <mithril/web/JsonAdapter.hpp>
+#include <mithril/web/WebAdapters.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/web/WebImage.hpp>
+#include <mithril/web/WebPage.hpp>
+#include <mithril/web/WebRedirect.hpp>
+#include <mithril/web/WebTemplate.hpp>
+#include <mithril/web/Template.hpp>
 
 #include "common.hpp"
 

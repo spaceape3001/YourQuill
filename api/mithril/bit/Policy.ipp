@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "Policy.hpp"
+#include <mithril/bit/Policy.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/errors.hpp>
 

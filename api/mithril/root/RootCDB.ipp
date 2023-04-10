@@ -8,12 +8,12 @@
 
 #include "RootCDB.hpp"
 #include <io/DirUtils.hpp>
-#include <mithril/kernel/file/DirectoryCDB.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/directory/DirectoryCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Directory>   all_directories(const Root*rt, Sorted sorted)

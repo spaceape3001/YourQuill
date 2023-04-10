@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/ClassData.hpp>
-#include <mithril/kernel/io/StdFile.hpp>
+#include <mithril/class/ClassData.hpp>
+#include <mithril/io/StdFile.hpp>
 
 #define CLASS_XML_RESAVE 0
 

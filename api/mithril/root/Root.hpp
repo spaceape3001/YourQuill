@@ -7,9 +7,9 @@
 #pragma once
 
 #include "RootFwd.hpp"
-#include <mithril/kernel/bit/Policy.hpp>
-#include <mithril/kernel/enum/Access.hpp>
-#include <mithril/kernel/enum/Vcs.hpp>
+#include <mithril/bit/Policy.hpp>
+#include <mithril/enum/Access.hpp>
+#include <mithril/enum/Vcs.hpp>
 #include <basic/EnumMap.hpp>
 #include <basic/Flag.hpp>
 

@@ -8,9 +8,9 @@
 
 #include "LeafPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/leaf/LeafArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
+#include <mithril/leaf/LeafArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/leaf/Leaf.hpp>
 
 namespace yq::mithril::post {
     Leaf leaf(WebContext&ctx, bool *detected)

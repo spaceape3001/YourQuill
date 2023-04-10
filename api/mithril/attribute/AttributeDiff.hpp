@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "AttributeCDB.hpp"
+#include <mithril/attribute/AttributeCDB.hpp>
 
 namespace yq::mithril {        
     struct KVTree;

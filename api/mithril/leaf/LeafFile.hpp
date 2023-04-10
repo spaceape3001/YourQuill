@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/io/StdFile.hpp>
-#include <mithril/kernel/leaf/LeafData.hpp>
+#include <mithril/io/StdFile.hpp>
+#include <mithril/leaf/LeafData.hpp>
 
 namespace yq {
     namespace mithril {

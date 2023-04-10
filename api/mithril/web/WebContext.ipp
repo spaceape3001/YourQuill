@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/wksp/Workspace.hpp>
 #include <string_view>
 
 namespace yq::mithril {

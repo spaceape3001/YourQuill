@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/http/Html.hpp>
-#include <mithril/kernel/atom/Class.hpp>
+#include <mithril/html/Html.hpp>
+#include <mithril/class/Class.hpp>
 
 namespace yq::mithril {
     struct Field;

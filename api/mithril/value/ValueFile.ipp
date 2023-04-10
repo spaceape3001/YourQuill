@@ -9,8 +9,8 @@
 #include "ValueFile.hpp"
 #include <basic/Logging.hpp>
 #include <io/XmlUtils.hpp>
-#include <mithril/kernel/io/Strings.hpp>
-#include <mithril/kernel/errors.hpp>
+#include <mithril/io/Strings.hpp>
+#include <mithril/errors.hpp>
 #include <io/errors.hpp>
 
 namespace yq::mithril {

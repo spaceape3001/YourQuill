@@ -8,7 +8,7 @@
 
 #include <initializer_list>
 #include <string_view>
-#include <mithril/http/Post.hpp>
+#include <mithril/html/Post.hpp>
 
 namespace yq::mithril {
     struct WebContext;

@@ -6,7 +6,7 @@
 
 #pragma once
 
-//#include <mithril/kernel/enum/change.hpp>
+//#include <mithril/enum/change.hpp>
 #include <trait/not_copyable.hpp>
 #include <basic/EnumMap.hpp>
 #include <meta/Meta.hpp>

@@ -10,16 +10,16 @@
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/kernel/leaf/LeafFile.hpp>
-#include <mithril/kernel/org/TagCDB.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/db/IDLock.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/leaf/LeafFile.hpp>
+#include <mithril/tag/TagCDB.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq {
     namespace mithril {

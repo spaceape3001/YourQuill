@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/http/org/TagArg.hpp>
-#include <mithril/http/org/TagHtml.hpp>
-#include <mithril/http/org/TagPost.hpp>
+#include <mithril/tag/TagArg.hpp>
+#include <mithril/tag/TagHtml.hpp>
+#include <mithril/tag/TagPost.hpp>
 
-#include <mithril/kernel/org/Tag.hpp>
-#include <mithril/kernel/org/TagCDB.hpp>
-#include <mithril/kernel/org/TagData.hpp>
-#include <mithril/kernel/org/TagFile.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithril/tag/TagCDB.hpp>
+#include <mithril/tag/TagData.hpp>
+#include <mithril/tag/TagFile.hpp>

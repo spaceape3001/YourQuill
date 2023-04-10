@@ -31,8 +31,8 @@
 #include <basic/Encode64.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <mithril/kernel/notify/FileNotifyAdapters.hpp>
-#include <mithril/kernel/notify/Stage4.hpp>
+#include <mithril/notify/FileNotifyAdapters.hpp>
+#include <mithril/notify/Stage4.hpp>
 
 
 #include <asio/write.hpp>

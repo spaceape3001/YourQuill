@@ -8,9 +8,9 @@
 
 #include "TagPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/org/TagArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/org/Tag.hpp>
+#include <mithril/tag/TagArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/tag/Tag.hpp>
 
 namespace yq::mithril::post {
     Tag tag(WebContext&ctx, bool *detected)

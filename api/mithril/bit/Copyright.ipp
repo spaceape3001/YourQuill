@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Copyright.hpp"
-#include <mithril/kernel/errors.hpp>
+#include <mithril/errors.hpp>
 
 namespace yq::mithril {
     bool    Copyright::empty() const

@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/Field.hpp>
-#include <mithril/kernel/enum/Multiplicity.hpp>
-#include <mithril/kernel/enum/Restriction.hpp>
+#include <mithril/field/Field.hpp>
+#include <mithril/enum/Multiplicity.hpp>
+#include <mithril/enum/Restriction.hpp>
 #include <basic/Map.hpp>
 #include <basic/Set.hpp>
 #include <memory>

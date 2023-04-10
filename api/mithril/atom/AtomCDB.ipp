@@ -6,14 +6,15 @@
 
 #pragma once
 
-#include "AtomCDB.hpp"
+#include <mithril/atom/AtomCDB.hpp>
+
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/atom/Class.hpp>
-#include <mithril/kernel/db/NKI.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/org/Tag.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/db/NKI.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 #include <math/Counter.hpp>
 
 namespace yq::mithril::cdb {

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/file/RootFwd.hpp>
+#include <mithril/root/RootFwd.hpp>
 #include <basic/Enum.hpp>
 #include <basic/Flag.hpp>
 #include <functional>

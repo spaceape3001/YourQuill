@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/image/Image.hpp>
+#include <mithril/image/Image.hpp>
 
 namespace yq {
     namespace mithril {

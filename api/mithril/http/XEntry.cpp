@@ -6,12 +6,12 @@
 
 #include "XEntry.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/leaf/LeafCDB.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
-#include <mithril/http/file/DocumentHtml.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
+#include <mithril/document/DocumentHtml.hpp>
 
 namespace yq::mithril {
 

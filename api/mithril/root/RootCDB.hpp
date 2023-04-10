@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
+#include <mithril/preamble.hpp>
 #include <filesystem>
 
 namespace yq::mithril::cdb {

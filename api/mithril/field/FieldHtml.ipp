@@ -9,13 +9,13 @@
 #include "FieldHtml.hpp"
 #include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/http/atom/ClassHtml.hpp>
-#include <mithril/http/file/RootHtml.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/kernel/atom/FieldCDB.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/http/HtmlLayout.hpp>
+#include <mithril/class/ClassHtml.hpp>
+#include <mithril/root/RootHtml.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/field/FieldCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/html/HtmlLayout.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Field v)

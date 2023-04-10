@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "AttributeArg.hpp"
+#include <mithril/attribute/AttributeArg.hpp>
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/attr/AttributeCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/attribute/AttributeCDB.hpp>
 
 namespace yq::mithril::arg {
     Attribute attribute(std::string_view  arg_string)

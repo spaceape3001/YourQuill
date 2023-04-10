@@ -9,8 +9,8 @@
 #include "DocumentArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/document/DocumentCDB.hpp>
 
 namespace yq::mithril::arg {
 

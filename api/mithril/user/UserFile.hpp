@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/io/StdFile.hpp>
-#include <mithril/kernel/user/UserData.hpp>
+#include <mithril/io/StdFile.hpp>
+#include <mithril/user/UserData.hpp>
 
 namespace yq::mithril {        
     class User::File : public StdFile, public User::Data {

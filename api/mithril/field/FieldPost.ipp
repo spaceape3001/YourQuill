@@ -8,9 +8,9 @@
 
 #include "FieldPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/atom/FieldArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/atom/Field.hpp>
+#include <mithril/field/FieldArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/field/Field.hpp>
 
 namespace yq::mithril::post {
     Field field(WebContext&ctx, bool *detected)

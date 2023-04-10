@@ -8,8 +8,8 @@
 
 #include "RootPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/RootArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
+#include <mithril/root/RootArg.hpp>
+#include <mithril/web/WebContext.hpp>
 
 namespace yq::mithril::post {
     const Root* root(WebContext&ctx, bool *detected)

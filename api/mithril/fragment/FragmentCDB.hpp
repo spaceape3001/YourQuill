@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/file/Directory.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/file/Folder.hpp>
-#include <mithril/kernel/file/Fragment.hpp>
-#include <mithril/kernel/enum/DataRole.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/directory/Directory.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/fragment/Fragment.hpp>
+#include <mithril/enum/DataRole.hpp>
 
 #include <filesystem>
 

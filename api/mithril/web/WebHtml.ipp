@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/http/web/WebHtml.hpp>
+#include <mithril/web/WebHtml.hpp>
 #include <math/shape/Size2.hpp>
 
 namespace yq::mithril {

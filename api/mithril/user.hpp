@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/http/user/UserArg.hpp>
-#include <mithril/http/user/UserHtml.hpp>
-#include <mithril/http/user/UserPost.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
-#include <mithril/kernel/user/User.hpp>
-#include <mithril/kernel/user/UserCDB.hpp>
-#include <mithril/kernel/user/UserData.hpp>
-#include <mithril/kernel/user/UserFile.hpp>
+#include <mithril/user/UserArg.hpp>
+#include <mithril/user/UserHtml.hpp>
+#include <mithril/user/UserPost.hpp>
+#include <mithril/db/IDLock.hpp>
+#include <mithril/user/User.hpp>
+#include <mithril/user/UserCDB.hpp>
+#include <mithril/user/UserData.hpp>
+#include <mithril/user/UserFile.hpp>

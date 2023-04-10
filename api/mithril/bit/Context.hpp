@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/enum/Format.hpp>
+#include <mithril/enum/Format.hpp>
 #include <basic/preamble.hpp>
 #include <vector>
 

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "DirectoryHtml.hpp"
-#include <mithril/kernel/file/DirectoryCDB.hpp>
+#include <mithril/directory/DirectoryCDB.hpp>
 
 namespace yq::mithril::html {
     //WebHtml&    operator<<(WebHtml&, Directory);

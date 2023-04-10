@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/http/keywords.hpp>
+#include <mithril/keywords.hpp>
 
 namespace yq {
     class ByteArray;

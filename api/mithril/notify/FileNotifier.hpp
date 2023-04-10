@@ -7,9 +7,9 @@
 #pragma once
 
 #include <basic/EnumMap.hpp>
-#include <mithril/kernel/enum/Change.hpp>
-#include <mithril/kernel/file/FileSpec.hpp>
-#include <mithril/kernel/file/Folder.hpp>
+#include <mithril/enum/Change.hpp>
+#include <mithril/file/FileSpec.hpp>
+#include <mithril/folder/Folder.hpp>
 #include <basic/Flag.hpp>
 #include <filesystem>
 #include <source_location>

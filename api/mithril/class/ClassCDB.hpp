@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/atom/ClassInfo.hpp>
-#include <mithril/kernel/atom/ClassFile.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/org/Category.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/class/ClassInfo.hpp>
+#include <mithril/class/ClassFile.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/category/Category.hpp>
 #include <math/Counter.hpp>
 
 //#include "Graph.hpp"

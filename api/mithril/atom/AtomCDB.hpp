@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/Atom.hpp>
-#include <mithril/kernel/atom/AtomInfo.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
+#include <mithril/atom/Atom.hpp>
+#include <mithril/atom/AtomInfo.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/leaf/Leaf.hpp>
 #include <vector>
 
 namespace yq::mithril::cdb {

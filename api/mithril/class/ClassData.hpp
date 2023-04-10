@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/Class.hpp>
+#include <mithril/class/Class.hpp>
 #include <basic/Map.hpp>
 #include <basic/Set.hpp>
 #include <memory>

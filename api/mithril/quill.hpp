@@ -6,5 +6,5 @@
 
 #pragma once
 
-#include <mithril/kernel/wksp/QuillData.hpp>
-#include <mithril/kernel/wksp/QuillFile.hpp>
+#include <mithril/quill/QuillData.hpp>
+#include <mithril/quill/QuillFile.hpp>

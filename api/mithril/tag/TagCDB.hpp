@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/org/Tag.hpp>
-#include <mithril/kernel/org/TagInfo.hpp>
-#include <mithril/kernel/org/TagFile.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/leaf/Leaf.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithril/tag/TagInfo.hpp>
+#include <mithril/tag/TagFile.hpp>
 
 namespace yq::mithril {
         using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;

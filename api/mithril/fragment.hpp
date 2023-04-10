@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/http/file/FragmentArg.hpp>
-#include <mithril/http/file/FragmentHtml.hpp>
-#include <mithril/http/file/FragmentPost.hpp>
-#include <mithril/kernel/db/IDLock.hpp>
-#include <mithril/kernel/file/Fragment.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
+#include <mithril/fragment/FragmentArg.hpp>
+#include <mithril/fragment/FragmentHtml.hpp>
+#include <mithril/fragment/FragmentPost.hpp>
+#include <mithril/db/IDLock.hpp>
+#include <mithril/fragment/Fragment.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>

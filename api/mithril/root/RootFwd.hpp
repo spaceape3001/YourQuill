@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/kernel/enum/DataRole.hpp>
+#include <mithril/enum/DataRole.hpp>
 
 namespace yq {
     template <typename E, typename V> class EnumMap;

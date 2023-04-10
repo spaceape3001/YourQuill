@@ -8,7 +8,7 @@
 
 #include "Post.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
+#include <mithril/web/WebContext.hpp>
 
 namespace yq::mithril::post {
     std::string     key(WebContext&ctx)

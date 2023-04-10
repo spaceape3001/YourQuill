@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cstdint>
-#include <mithril/kernel/preamble.hpp>
+#include <mithril/preamble.hpp>
 
 namespace yq::mithril {
     /*! \brief Character in the cache database */

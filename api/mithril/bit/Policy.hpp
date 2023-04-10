@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/enum/Access.hpp>
-#include <mithril/kernel/enum/DataRole.hpp>
+#include <mithril/enum/Access.hpp>
+#include <mithril/enum/DataRole.hpp>
 
 namespace yq::mithril {
 

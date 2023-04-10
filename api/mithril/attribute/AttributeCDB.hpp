@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/kernel/attr/Attribute.hpp>
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/file/Document.hpp>
+#include <mithril/attribute/Attribute.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
 #include <vector>
 
 namespace yq::mithril {

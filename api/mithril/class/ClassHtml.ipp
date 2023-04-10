@@ -10,17 +10,17 @@
 #include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 #include <io/stream/Text.hpp>
-#include <mithril/http/atom/ClassArg.hpp>
-#include <mithril/http/file/DocumentHtml.hpp>
-#include <mithril/http/file/RootHtml.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/kernel/atom/Class.hpp>
-#include <mithril/kernel/atom/ClassCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/http/image/ImageHtml.hpp>
-#include <mithril/http/HtmlLayout.hpp>
+#include <mithril/class/ClassArg.hpp>
+#include <mithril/document/DocumentHtml.hpp>
+#include <mithril/root/RootHtml.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/image/ImageHtml.hpp>
+#include <mithril/html/HtmlLayout.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Class v)

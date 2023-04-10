@@ -9,8 +9,8 @@
 #include "ValueArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/atom/ValueCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/value/ValueCDB.hpp>
 
 namespace yq::mithril {
 }

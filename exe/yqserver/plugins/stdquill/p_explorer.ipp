@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/http/XEntry.hpp>
+#include <mithril/XEntry.hpp>
 
 namespace {
     

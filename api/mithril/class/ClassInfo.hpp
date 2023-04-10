@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/Class.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/org/Category.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/category/Category.hpp>
 
 namespace yq::mithril {
     struct Class::Info {

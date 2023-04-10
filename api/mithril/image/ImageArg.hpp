@@ -9,7 +9,7 @@
 #include <initializer_list>
 #include <string_view>
 
-#include <mithril/kernel/enum/SizeDesc.hpp>
+#include <mithril/enum/SizeDesc.hpp>
 
 namespace yq::mithril {
     struct Image;

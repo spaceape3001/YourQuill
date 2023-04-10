@@ -8,9 +8,9 @@
 
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/kernel/atom/ClassCDB.hpp>
-#include <mithril/kernel/file/Folder.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 
 namespace yq::mithril {
     FileSpec        by_file(const std::filesystem::path&fp)

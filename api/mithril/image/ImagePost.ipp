@@ -8,9 +8,9 @@
 
 #include "ImagePost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/image/ImageArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/image/Image.hpp>
+#include <mithril/image/ImageArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/image/Image.hpp>
 
 namespace yq::mithril::post {
     Image image(WebContext&ctx, bool *detected)

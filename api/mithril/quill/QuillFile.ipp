@@ -8,8 +8,8 @@
 
 #include "QuillFile.hpp"
 
-#include <mithril/kernel/bit/KeyValue.hpp>
-#include <mithril/kernel/io/Strings.hpp>
+#include <mithril/bit/KeyValue.hpp>
+#include <mithril/io/Strings.hpp>
 
 namespace yq::mithril {
     void    QuillFile::reset() 

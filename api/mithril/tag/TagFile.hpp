@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/org/TagData.hpp>
-#include <mithril/kernel/io/StdFile.hpp>
+#include <mithril/tag/TagData.hpp>
+#include <mithril/io/StdFile.hpp>
 
 #define TAG_XML_RESAVE  0
 

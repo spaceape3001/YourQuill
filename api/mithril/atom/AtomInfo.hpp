@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/kernel/atom/Atom.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/leaf/Leaf.hpp>
+#include <mithril/atom/Atom.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/leaf/Leaf.hpp>
 
 namespace yq::mithril {
     struct Atom::Info {

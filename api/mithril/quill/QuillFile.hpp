@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/kernel/io/StdFile.hpp>
-#include <mithril/kernel/wksp/QuillData.hpp>
+#include <mithril/io/StdFile.hpp>
+#include <mithril/quill/QuillData.hpp>
 
 namespace yq::mithril {
     class QuillFile : public StdFile, public QuillData {

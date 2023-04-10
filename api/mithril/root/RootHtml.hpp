@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/http/Html.hpp>
-#include <mithril/kernel/enum/Access.hpp>
-#include <mithril/kernel/enum/DataRole.hpp>
+#include <mithril/html/Html.hpp>
+#include <mithril/enum/Access.hpp>
+#include <mithril/enum/DataRole.hpp>
 
 namespace yq::mithril {
     struct Root;

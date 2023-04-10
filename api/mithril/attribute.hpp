@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/http/attr/AttributeArg.hpp>
-#include <mithril/http/attr/AttributeHtml.hpp>
-#include <mithril/kernel/attr/AttributeCDB.hpp>
-#include <mithril/kernel/attr/AttributeDiff.hpp>
+#include <mithril/attribute/AttributeArg.hpp>
+#include <mithril/attribute/AttributeHtml.hpp>
+#include <mithril/attribute/AttributeCDB.hpp>
+#include <mithril/attribute/AttributeDiff.hpp>

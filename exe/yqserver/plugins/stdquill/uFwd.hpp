@@ -10,11 +10,11 @@
 #include <string>
 #include <basic/trait/not_copyable.hpp>
 #include <basic/trait/not_moveable.hpp>
-#include <mithril/kernel/db/CacheFwd.hpp>
-#include <mithril/kernel/db/SQ.hpp>
+#include <mithril/db/CacheFwd.hpp>
+#include <mithril/db/SQ.hpp>
 #include <math/Counter.hpp>
-#include <mithril/kernel/update/DefRes.hpp>
-#include <mithril/kernel/bit/Connection.hpp>
+#include <mithril/update/DefRes.hpp>
+#include <mithril/bit/Connection.hpp>
 
 /*
     The UPDATE is here because this analysis can suck in a database, therefore the updater needs a parallel

@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/http/org/CategoryArg.hpp>
-#include <mithril/http/org/CategoryHtml.hpp>
-#include <mithril/http/org/CategoryPost.hpp>
-#include <mithril/kernel/org/Category.hpp>
-#include <mithril/kernel/org/CategoryCDB.hpp>
-#include <mithril/kernel/org/CategoryData.hpp>
-#include <mithril/kernel/org/CategoryFile.hpp>
+#include <mithril/category/CategoryArg.hpp>
+#include <mithril/category/CategoryHtml.hpp>
+#include <mithril/category/CategoryPost.hpp>
+#include <mithril/category/Category.hpp>
+#include <mithril/category/CategoryCDB.hpp>
+#include <mithril/category/CategoryData.hpp>
+#include <mithril/category/CategoryFile.hpp>

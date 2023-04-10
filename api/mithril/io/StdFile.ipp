@@ -8,7 +8,8 @@
 
 #include "StdFile.hpp"
 
-#include <mithril/kernel/bit/KeyValue.hpp>
+#include <io/errors.hpp>
+#include <mithril/bit/KeyValue.hpp>
 #include <io/stream/Text.hpp>
 #include <basic/ByteArray.hpp>
 

@@ -9,8 +9,8 @@
 #include "ClassArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/atom/ClassCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/class/ClassCDB.hpp>
 
 namespace yq::mithril::arg {
     Class class_(std::string_view  arg_string)

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/http/image/ImageArg.hpp>
-#include <mithril/http/image/ImageHtml.hpp>
-#include <mithril/http/image/ImagePost.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
+#include <mithril/image/ImageArg.hpp>
+#include <mithril/image/ImageHtml.hpp>
+#include <mithril/image/ImagePost.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/image/ImageCDB.hpp>

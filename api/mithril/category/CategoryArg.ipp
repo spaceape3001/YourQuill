@@ -9,8 +9,8 @@
 #include "CategoryArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/org/CategoryCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/category/CategoryCDB.hpp>
 
 namespace yq::mithril::arg {
     Category category(std::string_view  arg_string)

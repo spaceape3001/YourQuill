@@ -6,17 +6,17 @@
 
 #pragma once
 
-#include <mithril/http/meta/MetaHtml.hpp>
+#include <mithril/meta/MetaHtml.hpp>
 #include <meta/ArgInfo.hpp>
 #include <meta/MethodInfo.hpp>
 #include <meta/ObjectInfo.hpp>
 #include <meta/PropertyInfo.hpp>
 #include <meta/TypeInfo.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/http/web/WebPage.hpp>
-#include <mithril/http/web/WebVariable.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/web/WebPage.hpp>
+#include <mithril/web/WebVariable.hpp>
 
 namespace yq::mithril {
 

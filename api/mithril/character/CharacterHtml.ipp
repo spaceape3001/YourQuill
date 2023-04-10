@@ -7,8 +7,8 @@
 #pragma once
 
 #include "CharacterHtml.hpp"
-#include <mithril/kernel/atom/AtomCDB.hpp>
-#include <mithril/kernel/plot/CharacterCDB.hpp>
+#include <mithril/atom/AtomCDB.hpp>
+#include <mithril/character/CharacterCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Character v)

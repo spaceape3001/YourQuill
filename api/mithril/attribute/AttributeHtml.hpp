@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/http/Html.hpp>
+#include <mithril/html/Html.hpp>
 #include <vector>
 
 namespace yq::mithril {

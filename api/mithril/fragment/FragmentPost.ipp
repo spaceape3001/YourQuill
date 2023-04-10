@@ -8,9 +8,9 @@
 
 #include "FragmentPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/FragmentArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/Fragment.hpp>
+#include <mithril/fragment/FragmentArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/fragment/Fragment.hpp>
 
 namespace yq::mithril::post {
     Fragment fragment(WebContext&ctx, bool *detected)

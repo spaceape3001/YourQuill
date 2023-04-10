@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "AtomHtml.hpp"
-#include <mithril/kernel/atom/AtomCDB.hpp>
+#include <mithril/atom/AtomHtml.hpp>
+#include <mithril/atom/AtomCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Atom v)

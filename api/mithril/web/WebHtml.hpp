@@ -13,7 +13,7 @@
 #include <basic/Ref.hpp>
 #include <trait/not_copyable.hpp>
 #include <functional>
-#include <mithril/http/preamble.hpp>
+#include <mithril/preamble.hpp>
 #include <math/preamble.hpp>
 
 namespace yq::mithril {

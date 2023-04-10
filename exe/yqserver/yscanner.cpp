@@ -20,20 +20,20 @@
 #include <basic/ThreadId.hpp>
 #include <basic/Vector.hpp>
 
-#include <mithril/kernel/file/DirectoryCDB.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/file/Root.hpp>
-#include <mithril/kernel/file/RootCDB.hpp>
-#include <mithril/http/ipc/DirWatcher.hpp>
-#include <mithril/kernel/notify/FileWatch.hpp>
-#include <mithril/kernel/notify/FileNotifier.hpp>
-#include <mithril/kernel/notify/Stage2.hpp>
-#include <mithril/kernel/notify/Stage3.hpp>
-#include <mithril/kernel/notify/Stage4.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/file/DirectoryCDB.hpp>
+#include <mithril/file/DocumentCDB.hpp>
+#include <mithril/file/FolderCDB.hpp>
+#include <mithril/file/FragmentCDB.hpp>
+#include <mithril/file/Root.hpp>
+#include <mithril/file/RootCDB.hpp>
+#include <mithril/ipc/DirWatcher.hpp>
+#include <mithril/notify/FileWatch.hpp>
+#include <mithril/notify/FileNotifier.hpp>
+#include <mithril/notify/Stage2.hpp>
+#include <mithril/notify/Stage3.hpp>
+#include <mithril/notify/Stage4.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 
 #include <chrono>

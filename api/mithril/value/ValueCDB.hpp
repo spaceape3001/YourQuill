@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/atom/Field.hpp>
-#include <mithril/kernel/atom/Value.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/field/Field.hpp>
+#include <mithril/value/Value.hpp>
 
 namespace yq::mithril {
     struct Value::Info {

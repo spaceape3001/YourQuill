@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/user/UserFile.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/user/UserFile.hpp>
 
 namespace yq::mithril {        
     struct User::Info {

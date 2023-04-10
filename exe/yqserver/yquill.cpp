@@ -20,7 +20,7 @@
 #include <basic/ThreadId.hpp>
 
 #include <meta/Meta.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 #include <iostream>
 

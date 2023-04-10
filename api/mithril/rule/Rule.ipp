@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "Rule.hpp"
+#include <mithril/rule/Rule.hpp>
 #include <meta/ObjectInfoWriter.hpp>
 
 namespace yq::mithril {    

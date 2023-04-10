@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DirWatcher.hpp"
-#include <mithril/http/ipc/ipcBuffer.hpp>
+#include <mithril/ipc/ipcBuffer.hpp>
 #include <basic/Logging.hpp>
 #include <basic/TextUtils.hpp>
 #include <vector>

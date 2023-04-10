@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/kernel/bit/KeyValue.hpp>
+#include <mithril/bit/KeyValue.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/Logging.hpp>
 #include <basic/TextUtils.hpp>

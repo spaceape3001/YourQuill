@@ -9,8 +9,8 @@
 #include "TagArg.hpp"
 
 #include <basic/TextUtils.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/org/TagCDB.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/tag/TagCDB.hpp>
 
 namespace yq::mithril::arg {
     Tag tag(std::string_view  arg_string)

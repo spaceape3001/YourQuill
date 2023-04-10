@@ -8,9 +8,9 @@
 
 #include "CategoryPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/org/CategoryArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/org/Category.hpp>
+#include <mithril/category/CategoryArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/category/Category.hpp>
 
 namespace yq::mithril::post {
     Category category(WebContext&ctx, bool *detected)

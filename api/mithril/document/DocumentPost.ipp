@@ -8,9 +8,9 @@
 
 #include "DocumentPost.hpp"
 #include <basic/TextUtils.hpp>
-#include <mithril/http/file/DocumentArg.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/kernel/file/Document.hpp>
+#include <mithril/document/DocumentArg.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/document/Document.hpp>
 
 namespace yq::mithril::post {
     Document document(WebContext&ctx, bool *detected)

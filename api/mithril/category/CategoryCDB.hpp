@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <mithril/kernel/preamble.hpp>
-#include <mithril/kernel/file/Document.hpp>
-#include <mithril/kernel/image/Image.hpp>
-#include <mithril/kernel/org/Category.hpp>
-#include <mithril/kernel/org/CategoryData.hpp>
-#include <mithril/kernel/org/CategoryFile.hpp>
+#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/category/Category.hpp>
+#include <mithril/category/CategoryData.hpp>
+#include <mithril/category/CategoryFile.hpp>
 
 namespace yq::mithril {
 

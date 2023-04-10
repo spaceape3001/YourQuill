@@ -11,28 +11,28 @@
 #include <io/StreamOps.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <mithril/kernel/atom/AtomCDB.hpp>
-#include <mithril/kernel/atom/ClassCDB.hpp>
-#include <mithril/kernel/atom/FieldCDB.hpp>
-#include <mithril/kernel/attr/AttributeCDB.hpp>
-#include <mithril/kernel/file/DirectoryCDB.hpp>
-#include <mithril/kernel/file/DocumentCDB.hpp>
-#include <mithril/kernel/file/FolderCDB.hpp>
-#include <mithril/kernel/file/FragmentCDB.hpp>
-#include <mithril/kernel/file/RootCDB.hpp>
-#include <mithril/kernel/image/ImageCDB.hpp>
-#include <mithril/kernel/leaf/LeafCDB.hpp>
-#include <mithril/kernel/org/CategoryCDB.hpp>
-#include <mithril/kernel/org/TagCDB.hpp>
-#include <mithril/kernel/user/UserCDB.hpp>
-#include <mithril/kernel/wksp/CacheQuery.hpp>
-#include <mithril/kernel/wksp/Workspace.hpp>
+#include <mithril/atom/AtomCDB.hpp>
+#include <mithril/atom/ClassCDB.hpp>
+#include <mithril/atom/FieldCDB.hpp>
+#include <mithril/attr/AttributeCDB.hpp>
+#include <mithril/file/DirectoryCDB.hpp>
+#include <mithril/file/DocumentCDB.hpp>
+#include <mithril/file/FolderCDB.hpp>
+#include <mithril/file/FragmentCDB.hpp>
+#include <mithril/file/RootCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
+#include <mithril/org/CategoryCDB.hpp>
+#include <mithril/org/TagCDB.hpp>
+#include <mithril/user/UserCDB.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
-#include <mithril/http/web/VarTemplate.hpp>
-#include <mithril/http/web/WebAdapters.hpp>
-#include <mithril/http/web/WebHtml.hpp>
-#include <mithril/http/web/WebContext.hpp>
-#include <mithril/http/web/WebVariable.hpp>
+#include <mithril/web/VarTemplate.hpp>
+#include <mithril/web/WebAdapters.hpp>
+#include <mithril/web/WebHtml.hpp>
+#include <mithril/web/WebContext.hpp>
+#include <mithril/web/WebVariable.hpp>
 
 using namespace yq;
 using namespace yq::mithril;
