@@ -48,22 +48,22 @@
 
 #include "common.hpp"
 
-#include <mithril/yq/atom.hpp>
-#include <mithril/yq/attribute.hpp>
+#include <mithril/atom.hpp>
+#include <mithril/attribute.hpp>
 
-#include <mithril/yq/class.hpp>
-#include <mithril/yq/directory.hpp>
-#include <mithril/yq/document.hpp>
-#include <mithril/yq/field.hpp>
-#include <mithril/yq/folder.hpp>
-#include <mithril/yq/fragment.hpp>
+#include <mithril/class.hpp>
+#include <mithril/directory.hpp>
+#include <mithril/document.hpp>
+#include <mithril/field.hpp>
+#include <mithril/folder.hpp>
+#include <mithril/fragment.hpp>
 
-#include <mithril/yq/leaf.hpp>
-#include <mithril/yq/property.hpp>
-#include <mithril/yq/root.hpp>
+#include <mithril/leaf.hpp>
+#include <mithril/property.hpp>
+#include <mithril/root.hpp>
 
-//#include <mithril/yq/user.hpp>
-#include <mithril/yq/value.hpp>
+//#include <mithril/user.hpp>
+#include <mithril/value.hpp>
 
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning

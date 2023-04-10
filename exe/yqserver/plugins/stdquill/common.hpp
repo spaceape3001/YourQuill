@@ -24,12 +24,12 @@
 //#include <db/html_common.hpp>
 
 
-//#include <mithril/yq/atom/Atom.hpp>
-//#include <mithril/yq/atom/Class.hpp>
-//#include <mithril/yq/atom/Field.hpp>
+//#include <mithril/atom/Atom.hpp>
+//#include <mithril/atom/Class.hpp>
+//#include <mithril/atom/Field.hpp>
 #include <mithril/kernel/bit/Copyright.hpp>
 #include <mithril/kernel/enum/Submit.hpp>
-//#include <mithril/yq/leaf/Leaf.hpp>
+//#include <mithril/leaf/Leaf.hpp>
 
 #include <mithril/http/web/WebContext.hpp>
 #include <mithril/http/web/WebHtml.hpp>

@@ -20,6 +20,7 @@ add_library(yqkernel SHARED
 target_link_libraries(yqkernel
     PUBLIC 
         yqtoolbox
+        mithril
 
     PRIVATE
         RapidXml

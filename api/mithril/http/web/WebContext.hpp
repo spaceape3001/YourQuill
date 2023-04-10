@@ -15,9 +15,9 @@
 #include <basic/Http.hpp>
 #include <basic/Url.hpp>
 #include <basic/VersionSpec.hpp>
-// #include <mithril/yq/text/KV.hpp>
+// #include <mithril/text/KV.hpp>
 #include <basic/ByteArray.hpp>
-//#include <mithril/yq/web/HttpHeader.hpp>
+//#include <mithril/web/HttpHeader.hpp>
 #include <nlohmann/json.hpp>
 #include <time.h>
 

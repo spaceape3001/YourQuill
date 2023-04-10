@@ -22,6 +22,7 @@ target_link_libraries(yqhttp
     PUBLIC 
         yqtoolbox
         yqkernel
+        
     PRIVATE
         asio
 )

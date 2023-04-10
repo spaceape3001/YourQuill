@@ -7,7 +7,7 @@
 #pragma once
 
 #include "SizeDesc.hpp"
-#include <mithril/yq/web/WebContext.hpp>
+#include <mithril/web/WebContext.hpp>
 
 namespace yq {
     namespace mithril {
