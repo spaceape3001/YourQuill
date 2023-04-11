@@ -20,13 +20,13 @@
 #include <io/stream/Text.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/ClassCDB.hpp>
-#include <mithril/atom/FieldCDB.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/field/FieldCDB.hpp>
 #include <mithril/atom/Property.hpp>
-#include <mithril/atom/ValueCDB.hpp>
-#include <mithril/attr/AttributeCDB.hpp>
-#include <mithril/file/DocumentCDB.hpp>
-#include <mithril/file/Root.hpp>
+#include <mithril/value/ValueCDB.hpp>
+#include <mithril/attribute/AttributeCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/root/Root.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/io/Strings.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
@@ -37,8 +37,8 @@
 #include <mithril/notify/Stage2.hpp>
 #include <mithril/notify/Stage3.hpp>
 #include <mithril/notify/Stage4.hpp>
-#include <mithril/org/CategoryCDB.hpp>
-#include <mithril/org/TagCDB.hpp>
+#include <mithril/category/CategoryCDB.hpp>
+#include <mithril/tag/TagCDB.hpp>
 #include <mithril/user/User.hpp>
 #include <mithril/user/UserCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>

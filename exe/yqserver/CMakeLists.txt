@@ -10,7 +10,7 @@ add_executable(yqserver
     yscanner.cpp
     yserver.cpp
 )
-target_link_libraries(yqserver yqtoolbox yqkernel yqhttp asio )
+target_link_libraries(yqserver yqtoolbox mithril asio )
 
 SET(PLUGIN_DIR ${CMAKE_BINARY_DIR}/bin/plugin/yqserver)
 SET(CMAKE_SHARED_LIBRARY_PREFIX "")

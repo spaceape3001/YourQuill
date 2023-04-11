@@ -20,12 +20,12 @@
 #include <basic/ThreadId.hpp>
 #include <basic/Vector.hpp>
 
-#include <mithril/file/DirectoryCDB.hpp>
-#include <mithril/file/DocumentCDB.hpp>
-#include <mithril/file/FolderCDB.hpp>
-#include <mithril/file/FragmentCDB.hpp>
-#include <mithril/file/Root.hpp>
-#include <mithril/file/RootCDB.hpp>
+#include <mithril/directory/DirectoryCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/root/RootCDB.hpp>
 #include <mithril/ipc/DirWatcher.hpp>
 #include <mithril/notify/FileWatch.hpp>
 #include <mithril/notify/FileNotifier.hpp>

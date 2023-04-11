@@ -8,8 +8,8 @@
 #include <basic/Logging.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/Class.hpp>
-#include <mithril/atom/ClassCDB.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/class/ClassCDB.hpp>
 
 #include <mithril/notify/AtomNotifier.hpp>
 #include <mithril/notify/FileWatch.hpp>

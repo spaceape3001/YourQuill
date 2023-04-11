@@ -41,7 +41,7 @@
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
-#include <mithril/HtmlLayout.hpp>
+#include <mithril/html/HtmlLayout.hpp>
 #include <mithril/util/Markdown.hpp>
 #include <mithril/web/JsonAdapter.hpp>
 #include <mithril/web/WebAdapters.hpp>

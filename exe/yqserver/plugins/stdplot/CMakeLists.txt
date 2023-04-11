@@ -17,8 +17,7 @@ target_include_directories( stdplot PRIVATE . )
 target_link_libraries( stdplot 
     PUBLIC 
         yqtoolbox 
-        yqkernel
-        yqhttp
+        mithril
         asio
 )
 

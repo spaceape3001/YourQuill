@@ -14,7 +14,7 @@
 
 #include <io/stream/Text.hpp>
 
-#include <mithril/HtmlLayout.hpp>
+#include <mithril/html/HtmlLayout.hpp>
 
 #include <mithril/web/WebAdapters.hpp>
 #include <mithril/web/WebContext.hpp>
@@ -25,8 +25,8 @@
 #include <mithril/web/WebTemplate.hpp>
 #include <mithril/web/Template.hpp>
 
-#include <mithril/plot/CharacterCDB.hpp>
-#include <mithril/plot/CharacterHtml.hpp>
+#include <mithril/character/CharacterCDB.hpp>
+#include <mithril/character/CharacterHtml.hpp>
 
 using namespace yq;
 //using namespace yq::arg;
