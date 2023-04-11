@@ -208,4 +208,16 @@ namespace yq::mithril {
             return YQ_SHARE_DIRS;
         }
     }
+
+    template class IDLock<Atom>;
+    template class IDLock<Category>;
+    template class IDLock<Class>;
+    template class IDLock<Directory>;
+    template class IDLock<Document>;
+    template class IDLock<Field>;
+    template class IDLock<Folder>;
+    template class IDLock<Fragment>;
+    template class IDLock<Leaf>;
+    template class IDLock<Tag>;
+    template class IDLock<User>;
 }
