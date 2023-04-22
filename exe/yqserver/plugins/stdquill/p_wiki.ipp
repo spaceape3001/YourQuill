@@ -132,7 +132,7 @@ namespace {
     void    p_wiki_random(WebContext& c)
     {
         Leaf x  = random_pick(cdb::all_leafs(Sorted::NO));
-        std::string s   = "/wiki?key="s + cdb::key(x);
+        std::string s   = "/wiki/view?key="s + cdb::key(x);
         throw redirect::see_other(s);
     }
 
