@@ -8,15 +8,11 @@
 
 #include <tachyon/ui/Widget.hpp>
 
-struct Config;
-
 class MainWindow : public yq::tachyon::Widget {
     YQ_OBJECT_DECLARE(MainWindow, yq::tachyon::Widget)
 public:
 
-    Config&                         m_config;
-
-    MainWindow(Config& cfg);
+    MainWindow();
     ~MainWindow();
     
     void   imgui_(yq::tachyon::ViContext&u) override;
