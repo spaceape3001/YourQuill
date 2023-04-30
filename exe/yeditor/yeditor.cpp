@@ -4,6 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "WorkspaceSelector.ipp"
+#include "MainWindow.ipp"
+#include "Config.ipp"
+#include "History.ipp"
+
 #include <basic/Logging.hpp>
 #include <basic/TextUtils.hpp>
 #include <sql/SqlLite.hpp>
@@ -14,69 +19,18 @@
 #include <tachyon/Viewer.hpp>
 #include <tachyon/ViewerCreateInfo.hpp>
 #include <tachyon/ui/Widget.hpp>
-#include <tachyon/widget/Stacked.hpp>
 
 #include <mithril/wksp/Workspace.hpp>
 
 #include <imgui.h>
 #include <iostream>
-
+#include <nlohmann/json.hpp>
 
 using namespace yq;
 using namespace yq::mithril;
 using namespace yq::tachyon;
 
-struct Config {
-    std::vector<std::filesystem::path>      history;
-    
-    Config()
-    {
-    }
-    
-    ~Config()
-    {
-    }
-    
-    void    load()
-    {
-    }
-};
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class MainWindow : public Widget {
-    YQ_OBJECT_DECLARE(MainWindow, Widget)
-public:
-
-    Config&                         m_config;
-
-    MainWindow(Config& cfg) : m_config(cfg)
-    {
-    }
-    
-    ~MainWindow()
-    {
-    }
-    
-    void   imgui_(tachyon::ViContext&u) override 
-    {
-        if(ImGui::BeginMainMenuBar()){
-            
-        
-            ImGui::EndMainMenuBar();
-        }
-
-        ImGui::ShowDemoWindow();
-    }
-
-
-    bool    edit(const std::filesystem::path& pth)
-    {
-        return false;
-    }
-};
-
-YQ_OBJECT_IMPLEMENT(MainWindow)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,58 +55,7 @@ YQ_OBJECT_IMPLEMENT(MainWindow)
     }
 
 
-class WorkspaceSelector : public Widget {
-    YQ_OBJECT_DECLARE(WorkspaceSelector, Widget)
-public:
-
-    Config& m_config;
-
-    WorkspaceSelector(Config& cfg) : m_config(cfg) 
-    {
-    }
-    
-    ~WorkspaceSelector()
-    {
-    }
-    
-    
-    void    toMain()
-    {
-        viewer() -> set_widget(new MainWindow(m_config));
-    }
-    
-    void    attempt(const std::filesystem::path& pth)
-    {
-    }
-    
-    
-    void   imgui_(ViContext&u) override 
-    {
-        ImGui::ShowMetricsWindow();
-        ImGui::Begin("Workspace Selection", nullptr, ImGuiWindowFlags_NoCollapse);
-        
-            ImGui::Text("Workspace needs to be selected");
-            
-            //End();
-        //}
-        
-        if(ImGui::Button("Okay")){
-            toMain();
-        }
-        
-        ImGui::End();
-    }
-    
-    void        vulkan_(ViContext& ctx) override
-    {
-        //  a simple background will go here... 
-    }
-};
-YQ_OBJECT_IMPLEMENT(WorkspaceSelector)
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 //  MOTTO:  Detangling Photons
@@ -168,8 +71,6 @@ int main(int argc, char* argv[])
     load_plugin_dir("plugin");
     
     Config          cfg;
-    cfg.load();
-    
     MainWindow*     mw = nullptr;
 
     for(int i=1;i<argc;++i){
