@@ -56,7 +56,8 @@ namespace yq::mithril::wksp {
         ANY = 0,
         BROKER,
         UPDATER,
-        SERVER
+        SERVER,
+        EDITOR
     };
     
     struct Config {

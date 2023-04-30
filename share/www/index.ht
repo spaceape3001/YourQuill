@@ -25,7 +25,7 @@
     <tr><td colspan="2"><hr width="50%" /></td></tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/characters.svg"/></td>
-        <td class="nh-link">Characters</td>
+        <td class="nh-link"><a href="/characters">Characters</a></td>
     </tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/essays.svg"/></td>

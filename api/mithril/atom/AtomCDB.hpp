@@ -48,6 +48,7 @@ namespace yq::mithril::cdb {
         \return std::vector of the found atoms
     */
     std::vector<Atom>    all_atoms(Tag tag, Sorted sorted=Sorted{});
+    
 
     /*! \brief Counts the number of atoms in the database
         \return The count
@@ -109,6 +110,8 @@ namespace yq::mithril::cdb {
         \return The standard abbreviation
     */
     std::string          abbreviation(Atom a);
+
+    std::vector<Attribute>  attributes(Atom, Sorted sorted=Sorted{});
 
     //! Brief description of atom
     std::string          brief(Atom a);

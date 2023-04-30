@@ -7,6 +7,7 @@
 #pragma once
 
 #include <mithril/atom/AtomCDB.hpp>
+#include <mithril/attribute/Attribute.hpp>
 
 #include <basic/TextUtils.hpp>
 #include <mithril/class/Class.hpp>
@@ -124,6 +125,14 @@ namespace yq::mithril::cdb {
     {
         static thread_local CacheQuery s("SELECT abbr FROM Atoms WHERE id=?");
         return s.str(a);
+    }
+    
+    std::vector<Attribute>  attributes(Atom a, Sorted sorted)
+    {
+        static thread_local CacheQuery qs("SELECT attr FROM AProperties INNER JOIN Attributes ON AProperties.attr=Attributes.id WHERE atom=? ORDER BY Attributes.k");
+        static thread_local CacheQuery qu("SELECT attr FROM AProperties WHERE atom=?");
+        CacheQuery& s = sorted ? qs : qu;
+        return s.vec<Attribute>(a);
     }
     
     std::string         brief(Atom a) 

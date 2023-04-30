@@ -16,15 +16,10 @@ CREATE TABLE Attributes (
     uid         VARCHAR(255) COLLATE NOCASE,
         -- value of the attribute (generic text)
     value       VARCHAR(255) COLLATE NOCASE,
-    title       VARCHAR(255) COLLATE NOCASE
-);
-
-    --  Inferred/Deduced attributes
-CREATE TABLE Inferrence (
-    src         INTEGER DEFAULT 0 NOT NULL,
-    tgt         INTEGER DEFAULT 0 NOT NULL
-);
-
-    --  Note, looking to combine properties into attributes, they're basically
-    --  the same thing, therefore the attribute (& associations) will get more complicated
+    title       VARCHAR(255) COLLATE NOCASE,
     
+        -- what attribute contributed to this attribute (if indirect)
+    inferrence  INTEGER DEFAULT 0
+);
+
+

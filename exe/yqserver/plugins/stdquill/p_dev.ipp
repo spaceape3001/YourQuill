@@ -28,6 +28,15 @@ namespace {
         //h.kvrow("Leaf") << dev(i.leaf);
     }
     
+    void p_dev_atom_attributes(WebHtml& h)
+    {
+        Atom a = atom(h);
+        if(!a)
+            throw HttpStatus::BadArgument;
+        h.title() << "Atom (" << label(a) << "): Attributes";
+        dev_table(h, attributes(a, Sorted::YES));
+    }
+    
     void p_dev_atom_classes(WebHtml&h)
     {
         Atom a = atom(h);
@@ -1098,6 +1107,7 @@ namespace {
     {
         reg_webgroup({
             reg_webpage<p_dev_atom>("/dev/atom").argument("id", "Atom ID").label("Info"),
+            reg_webpage<p_dev_atom_attributes>("/dev/atom/attributes").argument("id", "Atom ID").label("Attributes"),
             reg_webpage<p_dev_atom_classes>("/dev/atom/classes").argument("id", "Atom ID").label("Classes"),
             //reg_webpage<p_dev_atom_documents>("/dev/atom/documents").argument("id", "Atom ID").label("Docs"),
             reg_webpage<p_dev_atom_tags>("/dev/atom/tags").argument("id", "Atom ID").label("Tags")

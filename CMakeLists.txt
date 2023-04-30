@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-cmake_minimum_required(VERSION 3.23.0)
+cmake_minimum_required(VERSION 3.26.0)
 project(YourQuill VERSION 0.0.0.3 LANGUAGES CXX)
 
 option(Feature_Qt5 "Deploy Qt5 (API and Apps)" ON)

@@ -35,6 +35,24 @@ using namespace yq::mithril::cdb;
 using namespace yq::mithril::html;
 
 namespace {
+    void    p_characters(WebHtml& h)
+    {
+        //  Search parameters go here... execute the search
+        std::vector<Character>  chars   = all_characters(Sorted::YES);
+        
+        
+        //  Form the title... 
+        h.title() << "Characters";
+        
+        h << "<p><i>(Search Bar will go here)</i></p>\n";
+        
+        //  And results
+        
+        
+        
+        dev_table(h, all_characters(Sorted::YES));
+    }
+
     void    p_dev_books(WebHtml& h)
     {
         h.title() << "All Books";
@@ -73,6 +91,8 @@ namespace {
 
     void    reg_me()
     {
+        reg_webpage<p_characters>("/characters");
+
         reg_webpage<p_dev_books>("/dev/books");
         reg_webpage<p_dev_characters>("/dev/characters");
         reg_webpage<p_dev_events>("/dev/events");

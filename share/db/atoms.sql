@@ -26,9 +26,17 @@ CREATE TABLE Atoms (
 CREATE TABLE AProperties (
     atom    INTEGER NOT NULL,
     attr    INTEGER NOT NULL,
+    
+        -- if empty, means the fields not been assigned
     field   INTEGER NOT NULL DEFAULT 0,
     
-    UNIQUE(atom,attr) ON CONFLICT IGNORE
+        -- if this is an edge, the originating source
+    source  INTEGER NOT NULL DEFAULT 0,
+    
+        -- if this is an edge, the resulting target
+    target  INTEGER NOT NULL DEFAULT 0,
+    
+    UNIQUE(atom,attr,field) ON CONFLICT IGNORE
 );
 
 CREATE TABLE AClasses (
