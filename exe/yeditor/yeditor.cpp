@@ -15,7 +15,7 @@
 #include <tachyon/Application.hpp>
 #include <tachyon/Viewer.hpp>
 #include <tachyon/ViewerCreateInfo.hpp>
-#include <tachyon/ui/Widget.hpp>
+#include <tachyon/Widget.hpp>
 
 #include <mithril/wksp/Workspace.hpp>
 
@@ -25,6 +25,20 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
+
+#include <mithril/atom/AtomCDB.hpp>
+#include <mithril/attribute/AttributeCDB.hpp>
+#include <mithril/category/CategoryCDB.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/directory/DirectoryCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/field/FieldCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
+#include <mithril/tag/TagCDB.hpp>
+#include <mithril/user/UserCDB.hpp>
 
 using namespace yq;
 using namespace yq::mithril;
@@ -36,6 +50,92 @@ std::filesystem::path   gConfigDir;
 std::filesystem::path   gConfigFile;
 
 /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class Explorer : public Widget {
+    YQ_OBJECT_DECLARE(Explorer, Widget)
+public:
+};
+
+YQ_OBJECT_IMPLEMENT(Explorer)
+
+class RealmStatistics : public Widget {
+    YQ_OBJECT_DECLARE(RealmStatistics, Widget)
+public:
+
+    RealmStatistics(){}
+    ~RealmStatistics(){}
+    
+    struct RowCDB {
+        const char* z   = nullptr;
+        uint64_t    v   = 0;
+    };
+    
+    void   imgui_(ViContext&u) override
+    {
+        RowCDB     cacheData[] = {
+            { "Atoms", cdb::count_atoms() },
+            { "Categories", cdb::all_categories_count() },
+            { "Classes", cdb::all_classes_count() },
+            { "Directories", cdb::all_directories_count() },
+            { "Documents", cdb::all_documents_count() },
+            { "Fields", cdb::all_fields_count() },
+            { "Fragments", cdb::all_fragments_count() },
+            { "Images", cdb::all_images_count() },
+            { "Leafs", cdb::all_leafs_count() },
+            { "Tags", cdb::count_tags() },
+            { "Users", cdb::all_users_count() }
+        };
+    
+        using namespace ImGui;
+        Begin("Statistics");
+        if(BeginTable("Cache DB", 2)){
+            for(RowCDB& r : cacheData){
+                TableNextRow();
+                TableNextColumn();
+                Text(r.z);
+                TableNextColumn();
+                Text("%u", (unsigned int) r.v);
+            }
+            EndTable();
+        }
+        End();
+    }
+};
+
+YQ_OBJECT_IMPLEMENT(RealmStatistics)
+
+class ClassStatistics : public Widget {
+    YQ_OBJECT_DECLARE(ClassStatistics, Widget)
+public:
+
+    ClassStatistics(){}
+    ~ClassStatistics(){}
+    
+    void   imgui_(ViContext&u) override
+    {
+        std::vector<Class>  classes = cdb::all_classes(Sorted::YES);
+        
+        using namespace ImGui;
+        Begin("Statistics");
+        if(BeginTable("Cache DB", 2)){
+            for(Class c : classes){
+                TableNextRow();
+                TableNextColumn();
+                
+                std::string     k   = cdb::label(c);
+                Text(k.c_str());
+                TableNextColumn();
+                
+                unsigned int    v   = (unsigned int) cdb::count_atoms(c);
+                Text("%u", v);
+            }
+            EndTable();
+        }
+        End();
+    }
+};
+
+YQ_OBJECT_IMPLEMENT(ClassStatistics)
 
 class MainWindow : public Widget {
     YQ_OBJECT_DECLARE(MainWindow, Widget)
@@ -54,6 +154,18 @@ public:
         using namespace ImGui;
         
         if(BeginMainMenuBar()){
+            if(BeginMenu("Realm")){
+                
+                if(MenuItem("Statistics")){
+                    add_child(new RealmStatistics);
+                }
+            
+                if(MenuItem("Claases")){
+                    add_child(new ClassStatistics);
+                }
+            
+                EndMenu();
+            }
             
         
             EndMainMenuBar();
