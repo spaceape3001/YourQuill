@@ -25,8 +25,12 @@
 #include <mithril/web/WebTemplate.hpp>
 #include <mithril/web/Template.hpp>
 
-#include <mithril/character/CharacterCDB.hpp>
-#include <mithril/character/CharacterHtml.hpp>
+#include <mithril/book.hpp>
+#include <mithril/character.hpp>
+#include <mithril/group.hpp>
+#include <mithril/event.hpp>
+#include <mithril/place.hpp>
+#include <mithril/thing.hpp>
 
 using namespace yq;
 //using namespace yq::arg;
@@ -34,7 +38,27 @@ using namespace yq::mithril;
 using namespace yq::mithril::cdb;
 using namespace yq::mithril::html;
 
+#include "p_dev.ipp"
+
 namespace {
+    void p_books(WebHtml& h)
+    {
+        //  Search parameters go here... execute the search
+        std::vector<Book>  books   = all_books(Sorted::YES);
+        
+        
+        //  Form the title... 
+        h.title() << "Books";
+        
+        h << "<p><i>(Search Bar will go here)</i></p>\n";
+        
+        //  And results
+        
+        
+        
+        dev_table(h, books);
+    }
+
     void    p_characters(WebHtml& h)
     {
         //  Search parameters go here... execute the search
@@ -50,55 +74,92 @@ namespace {
         
         
         
-        dev_table(h, all_characters(Sorted::YES));
+        dev_table(h, chars);
     }
 
-    void    p_dev_books(WebHtml& h)
+    void p_events(WebHtml& h)
     {
-        h.title() << "All Books";
-        h << "(still under construction)";
-    }
-    
-    void    p_dev_characters(WebHtml& h)
-    {
-        h.title() << "All Characters";
-        dev_table(h, all_characters(Sorted::YES));
-    }
-
-    void    p_dev_events(WebHtml& h)
-    {
-        h.title() << "All Events";
-        h << "(still under construction)";
-    }
-
-    void    p_dev_organizations(WebHtml& h)
-    {
-        h.title() << "All Organizations";
-        h << "(still under construction)";
+        //  Search parameters go here... execute the search
+        std::vector<Event>  events   = all_events(Sorted::YES);
+        
+        
+        //  Form the title... 
+        h.title() << "Events";
+        
+        h << "<p><i>(Search Bar will go here)</i></p>\n";
+        
+        //  And results
+        
+        
+        
+        dev_table(h, events);
     }
 
-    void    p_dev_places(WebHtml& h)
+    void p_groups(WebHtml& h)
     {
-        h.title() << "All Places";
-        h << "(still under construction)";
+        //  Search parameters go here... execute the search
+        std::vector<Group>  groups   = all_groups(Sorted::YES);
+        
+        
+        //  Form the title... 
+        h.title() << "Groups";
+        
+        h << "<p><i>(Search Bar will go here)</i></p>\n";
+        
+        //  And results
+        
+        
+        
+        dev_table(h, groups);
     }
-    
-    void    p_dev_things(WebHtml& h)
+
+    void p_places(WebHtml& h)
     {
-        h.title() << "All Things";
-        h << "(still under construction)";
+        //  Search parameters go here... execute the search
+        std::vector<Place>  places   = all_places(Sorted::YES);
+        
+        
+        //  Form the title... 
+        h.title() << "Places";
+        
+        h << "<p><i>(Search Bar will go here)</i></p>\n";
+        
+        //  And results
+        
+        
+        
+        dev_table(h, places);
+    }
+
+    void p_things(WebHtml& h)
+    {
+        //  Search parameters go here... execute the search
+        std::vector<Thing>  things   = all_things(Sorted::YES);
+        
+        
+        //  Form the title... 
+        h.title() << "Things";
+        
+        h << "<p><i>(Search Bar will go here)</i></p>\n";
+        
+        //  And results
+        
+        
+        
+        dev_table(h, things);
     }
 
     void    reg_me()
     {
+        reg_webpage<p_books>("/books");
         reg_webpage<p_characters>("/characters");
+        reg_webpage<p_events>("/events");
+        reg_webpage<p_groups>("/groups");
+        reg_webpage<p_places>("/places");
+        reg_webpage<p_things>("/things");
 
-        reg_webpage<p_dev_books>("/dev/books");
-        reg_webpage<p_dev_characters>("/dev/characters");
-        reg_webpage<p_dev_events>("/dev/events");
-        reg_webpage<p_dev_organizations>("/dev/organizations");
-        reg_webpage<p_dev_places>("/dev/places");
-        reg_webpage<p_dev_things>("/dev/things");
+        reg_dev();
+
     
         yInfo() << "Standard plot pages registered";
     }

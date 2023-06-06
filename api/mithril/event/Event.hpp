@@ -1,21 +1,22 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
-#include "PlotFwd.hpp"
+#include <cstdint>
+#include <mithril/preamble.hpp>
 
-namespace yq {
-    namespace mithril {
-
-        struct Event {
-            uint64_t            id = 0ULL;
-            constexpr auto    operator<=>(const Event&rhs) const = default; 
-            constexpr operator bool() const { return id != 0ULL; }
-        };
-
-
-        namespace cdb {
-            Event           db_event(Atom);
-            Event           event(Atom);
-        }
-    }
+namespace yq::mithril {
+    /*! \brief Event in the cache database */
+    struct Event {
+        using Lock = IDLock<Event>;
+        uint64_t            id = 0ULL;
+        constexpr auto    operator<=>(const Event&rhs) const = default; 
+        constexpr operator bool() const { return id != 0ULL; }
+    };
 }
 
+YQ_TYPE_DECLARE(yq::mithril::Event)

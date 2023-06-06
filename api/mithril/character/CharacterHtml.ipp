@@ -8,6 +8,7 @@
 
 #include "CharacterHtml.hpp"
 #include <mithril/atom/AtomCDB.hpp>
+#include <mithril/atom/AtomHtml.hpp>
 #include <mithril/character/CharacterCDB.hpp>
 
 namespace yq::mithril::html {

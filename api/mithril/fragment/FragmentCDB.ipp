@@ -16,6 +16,7 @@
 #include <mithril/root/Root.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
+#include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Fragment>    all_fragments(Sorted sorted)
@@ -159,7 +160,7 @@ namespace yq::mithril::cdb {
         if(!(opts & DONT_LOCK)){
             lk = Fragment::Lock::read(f);
             if(!lk){
-                yWarning() << "Unable to get read lock on fragment: " << p;
+                cdbWarning << "Unable to get read lock on fragment: " << p;
                 return ByteArray();
             }
         }
@@ -185,7 +186,7 @@ namespace yq::mithril::cdb {
         if(!(opts & DONT_LOCK)){
             lk = Fragment::Lock::read(f);
             if(!lk){
-                yWarning() << "Unable to get read lock on fragment: " << p;
+                cdbWarning << "Unable to get read lock on fragment: " << p;
                 return std::string();
             }
         }

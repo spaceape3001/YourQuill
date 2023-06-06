@@ -24,6 +24,10 @@
     </tr>
     <tr><td colspan="2"><hr width="50%" /></td></tr>
     <tr class="nh">
+        <td class="nh-icon"><img class="nh" src="img/books.svg"/></td>
+        <td class="nh-link"><a href="/books">Books</a></td>
+    </tr>
+    <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/characters.svg"/></td>
         <td class="nh-link"><a href="/characters">Characters</a></td>
     </tr>
@@ -33,11 +37,11 @@
     </tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/groups.svg"/></td>
-        <td class="nh-link">Groups &amp; Organizations</td>
+        <td class="nh-link"><a href="/groups">Groups &amp; Organizations</groups:</td>
     </tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/places.svg"/></td>
-        <td class="nh-link">Places</td>
+        <td class="nh-link"><a href="/places">Places</td></td>
     </tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/stories.svg"/></td>
@@ -47,7 +51,7 @@
         </td><td class="nh-link">Tidbits &amp; Misc</td></tr>
     <tr class="nh">
         <td class="nh-icon"><img class="nh" src="img/events.svg"/></td>
-        <td class="nh-link">Timeline (Events)</td>
+        <td class="nh-link"><a href="/events">Timeline (Events)</a></td>
     </tr>
     <tr><td colspan="2"><hr width="50%" /></td></tr>
     <tr class="nh">

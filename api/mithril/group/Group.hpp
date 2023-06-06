@@ -1,17 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
-#include "PlotFwd.hpp"
+#include <cstdint>
+#include <mithril/preamble.hpp>
 
-namespace yq {
-    namespace mithril {
-        struct Group {
-            uint64_t            id = 0ULL;
-            constexpr auto    operator<=>(const Group&rhs) const = default; 
-            constexpr operator bool() const { return id != 0ULL; }
-        };
-
-
-        namespace cdb {
-        }
-    }
+namespace yq::mithril {
+    /*! \brief Group (of entities/etc) in the cache database */
+    struct Group {
+        using Lock = IDLock<Group>;
+        uint64_t            id = 0ULL;
+        constexpr auto    operator<=>(const Group&rhs) const = default; 
+        constexpr operator bool() const { return id != 0ULL; }
+    };
 }
+YQ_TYPE_DECLARE(yq::mithril::Group)

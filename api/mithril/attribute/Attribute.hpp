@@ -16,6 +16,7 @@ namespace yq::mithril {
         struct Diff;
         struct Report;
         struct KVUA;
+        using Lock = IDLock<Attribute>;
 
         uint64_t    id  = 0ULL;
         constexpr auto    operator<=>(const Attribute&rhs) const noexcept = default; 

@@ -14,6 +14,7 @@
 #include <mithril/root/Root.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
+#include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Directory>   all_directories(const Root*rt, Sorted sorted)

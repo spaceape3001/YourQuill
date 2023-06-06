@@ -17,3 +17,4 @@ namespace yq::mithril {
         constexpr operator bool() const { return id != 0ULL; }
     };
 }
+YQ_TYPE_DECLARE(yq::mithril::Character)

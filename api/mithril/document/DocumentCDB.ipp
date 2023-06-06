@@ -16,6 +16,7 @@
 #include <mithril/root/Root.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
+#include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Document>    all_documents(Sorted sorted)

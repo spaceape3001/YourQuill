@@ -11,9 +11,8 @@
 
 namespace yq {
     namespace mithril {
+        struct Graph;
         namespace cdb {
-            struct Graph;
-
             std::vector<Graph>      all_graphs();
             size_t                  all_graphs_count();
             Graph                   db_graph(std::string_view dot_data, std::string_view name);

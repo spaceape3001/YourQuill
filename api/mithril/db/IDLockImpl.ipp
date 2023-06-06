@@ -10,7 +10,6 @@
 
 namespace yq {
     namespace mithril {
-        
         bool    IDLockRepo::inc_read(uint64_t i)
         {
             tbb::spin_mutex::scoped_lock    _lock(mutex);
