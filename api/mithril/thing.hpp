@@ -11,3 +11,4 @@
 #include <mithril/thing/ThingHtml.hpp>
 //#include <mithril/thing/ThingPost.hpp>
 #include <mithril/thing/ThingCDB.hpp>
+#include <mithril/db/IDLock.hpp>

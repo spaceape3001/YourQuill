@@ -48,7 +48,6 @@ namespace yq::mithril::cdb {
         \return std::vector of the found atoms
     */
     std::vector<Atom>    all_atoms(Tag tag, Sorted sorted=Sorted{});
-    
 
     /*! \brief Counts the number of atoms in the database
         \return The count
@@ -84,6 +83,8 @@ namespace yq::mithril::cdb {
     */
     size_t               count_atoms(Tag tag);
     //Atom                 create(Document);
+    
+    bool                exists(Atom a);
     bool                 exists_atom(uint64_t);
 
     //! Gets atom by ID
@@ -171,11 +172,20 @@ namespace yq::mithril::cdb {
     //! parent for atom
     Atom                 parent(Atom);
 
+    std::vector<Atom::Property> properties(Atom, Sorted sorted=Sorted{});
+    std::vector<Atom::Property> properties(Atom, Attribute, Sorted sorted=Sorted{});
+    std::vector<Atom::Property> properties(Atom, Field, Sorted sorted=Sorted{});
+
+    size_t                  properties_count(Atom);
+    size_t                  properties_count(Atom, Attribute);
+    size_t                  properties_count(Atom, Field);
+
     //! Sub-key for atom
     std::string          skey(Atom);
 
     //! Tags for atom
     std::vector<Tag>     tags(Atom,Sorted sorted=Sorted{});
+
 
     //! Count of tags for atom
     size_t               tags_count(Atom);
@@ -186,8 +196,24 @@ namespace yq::mithril::cdb {
     //! True if the atom exists in database
     bool                 valid(Atom);
     
-    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+    // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    //  Atom Properties
+    
+    Atom                    atom(Atom::Property);
+    
+    Attribute               attribute(Atom::Property);
+    
+    bool                    exists_atom_property(uint64_t);
+    bool                    exists(Atom::Property);
+    
+    Field                   field(Atom::Property);
+    
+    Atom::PropertyInfo      info(Atom::Property);
+    
+    Atom                    source(Atom::Property);
+    Atom                    target(Atom::Property);
+    
+    // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     std::vector<ClassU64Pair>   classes_and_hops(Atom);
     ClassCountMap               classes_and_hops_map(Atom);
     

@@ -10,6 +10,8 @@
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/character.hpp>
+#include <mithril/event.hpp>
 
 #include <mithril/notify/AtomNotifier.hpp>
 #include <mithril/notify/FileWatch.hpp>
@@ -27,19 +29,19 @@ namespace {
     
     void    u_characters(const AtomChangeData&acd)
     {
-        yInfo() << "Character class detected. [" << cdb::key(acd.atom) << "]";
+        //yInfo() << "Character class detected. [" << cdb::key(acd.atom) << "]";
     }
     
     void    u_events(const AtomChangeData&acd)
     {
-        yInfo() << "Event class detected. [" << cdb::key(acd.atom) << "]";
+        //yInfo() << "Event class detected. [" << cdb::key(acd.atom) << "]";
     }
 
     void    reg_stage2()
     {
         yInfo() << "Plog stage 2";
-        cCharacter  = cdb::db_class("Character");
-        cEvent   = cdb::db_class("Event");
+        cCharacter  = cdb::character_class();
+        cEvent   = cdb::event_class();
         on_change<u_characters>(by_class(cCharacter));
         on_change<u_events>(by_class(cEvent));
     }

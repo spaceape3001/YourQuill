@@ -30,5 +30,18 @@ namespace yq::mithril {
         Atom atom_key(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Atom atom_key(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
     }
+
+    namespace arg {
+        //! Finds atom_property, by ID
+        Atom::Property atom_property(std::string_view arg_string);
+        Atom::Property atom_property(const WebContext&, bool *detected=nullptr);
+        Atom::Property atom_property(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        Atom::Property atom_property(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+
+        //! Finds atom_property by ID
+        Atom::Property atom_property_id(std::string_view arg_string);
+        Atom::Property atom_property_id(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
+        Atom::Property atom_property_id(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
+    }
 }
 

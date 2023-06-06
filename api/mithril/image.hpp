@@ -11,3 +11,4 @@
 #include <mithril/image/ImagePost.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/image/ImageCDB.hpp>
+#include <mithril/db/IDLock.hpp>

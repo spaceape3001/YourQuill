@@ -15,7 +15,7 @@ namespace yq::mithril {
         uint64_t            id = 0ULL;
         using Lock = IDLock<Book>;
         constexpr auto    operator<=>(const Book&rhs) const = default; 
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr operator bool() const { return id; }
     };
 }
 

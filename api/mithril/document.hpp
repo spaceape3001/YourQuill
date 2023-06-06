@@ -11,3 +11,4 @@
 #include <mithril/document/DocumentPost.hpp>
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/db/IDLock.hpp>

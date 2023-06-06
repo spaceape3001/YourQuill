@@ -24,6 +24,7 @@ CREATE TABLE Atoms (
 );
 
 CREATE TABLE AProperties (
+    id      INTEGER PRIMARY KEY,
     atom    INTEGER NOT NULL,
     attr    INTEGER NOT NULL,
     
@@ -61,13 +62,13 @@ CREATE TABLE ATags (
 
     --  note, the edge's parent is the source, always defined
 CREATE TABLE AEdges (
-    --  source class
+    --  source atom
     source  INTEGER NOT NULL,
     
-    --  edge class
+    --  edge atom
     edge    INTEGER NOT NULL,
     
-    --  target class
+    --  target atom
     target  INTEGER NOT NULL DEFAULT 0,
 
     --  target specification (for when the target's not resolved)

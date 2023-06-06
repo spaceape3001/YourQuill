@@ -34,7 +34,6 @@ namespace yq::mithril::cdb {
         return s.size(d.id);
     }
 
-
     //! Gets top-level attirbutes
     std::vector<Attribute>   attributes(Document d)
     {

@@ -26,6 +26,8 @@ namespace yq {
     namespace mithril {
         template <typename> class IDLock;
 
+        using id_t    = uint64_t;
+
         struct Atom;
         struct Attribute;
         struct Book;
@@ -99,33 +101,39 @@ namespace yq {
             operator bool() const { return value != NO; }
         };
         
-        template <typename> struct is_id_object : public std::false_type {};
-        template <> struct is_id_object<Atom> : public std::true_type {};
-        template <> struct is_id_object<Attribute> : public std::true_type {};
-        template <> struct is_id_object<Book> : public std::true_type {};
-        template <> struct is_id_object<Category> : public std::true_type {};
-        template <> struct is_id_object<Character> : public std::true_type {};
-        template <> struct is_id_object<Class> : public std::true_type {};
-        template <> struct is_id_object<Directory> : public std::true_type {};
-        template <> struct is_id_object<Document> : public std::true_type {};
-        template <> struct is_id_object<Edge> : public std::true_type {};
-        template <> struct is_id_object<Entity> : public std::true_type {};
-        template <> struct is_id_object<Event> : public std::true_type {};
-        template <> struct is_id_object<Field> : public std::true_type {};
-        template <> struct is_id_object<Folder> : public std::true_type {};
-        template <> struct is_id_object<Fragment> : public std::true_type {};
-        template <> struct is_id_object<Graph> : public std::true_type {};
-        template <> struct is_id_object<Group> : public std::true_type {};
-        template <> struct is_id_object<Image> : public std::true_type {};
-        template <> struct is_id_object<Leaf> : public std::true_type {};
-        template <> struct is_id_object<Place> : public std::true_type {};
-        //template <> struct is_id_object<Property> : public std::true_type {};
-            // Note, ROOT is not one
-        template <> struct is_id_object<Tag> : public std::true_type {};
-        template <> struct is_id_object<Thing> : public std::true_type {};
-        template <> struct is_id_object<User> : public std::true_type {};
+        template <typename T>
+        concept cdb_object = requires(T a) 
+        {
+            { a.id } -> std::convertible_to<id_t>;
+        };
         
-        template <typename T> static constexpr bool is_id_object_v = is_id_object<T>::value;
+        //template <typename> struct is_id_object : public std::false_type {};
+        //template <> struct is_id_object<Atom> : public std::true_type {};
+        //template <> struct is_id_object<Attribute> : public std::true_type {};
+        //template <> struct is_id_object<Book> : public std::true_type {};
+        //template <> struct is_id_object<Category> : public std::true_type {};
+        //template <> struct is_id_object<Character> : public std::true_type {};
+        //template <> struct is_id_object<Class> : public std::true_type {};
+        //template <> struct is_id_object<Directory> : public std::true_type {};
+        //template <> struct is_id_object<Document> : public std::true_type {};
+        //template <> struct is_id_object<Edge> : public std::true_type {};
+        //template <> struct is_id_object<Entity> : public std::true_type {};
+        //template <> struct is_id_object<Event> : public std::true_type {};
+        //template <> struct is_id_object<Field> : public std::true_type {};
+        //template <> struct is_id_object<Folder> : public std::true_type {};
+        //template <> struct is_id_object<Fragment> : public std::true_type {};
+        //template <> struct is_id_object<Graph> : public std::true_type {};
+        //template <> struct is_id_object<Group> : public std::true_type {};
+        //template <> struct is_id_object<Image> : public std::true_type {};
+        //template <> struct is_id_object<Leaf> : public std::true_type {};
+        //template <> struct is_id_object<Place> : public std::true_type {};
+        ////template <> struct is_id_object<Property> : public std::true_type {};
+            //// Note, ROOT is not one
+        //template <> struct is_id_object<Tag> : public std::true_type {};
+        //template <> struct is_id_object<Thing> : public std::true_type {};
+        //template <> struct is_id_object<User> : public std::true_type {};
+        
+        //template <typename T> static constexpr bool is_id_object_v = is_id_object<T>::value;
 
 
         namespace cdb {
@@ -197,25 +205,25 @@ namespace yq {
             
             std::string                     make_filename(std::string_view k, const char* ext);
             
-            template <typename C>
-            std::set<uint64_t>              ids_for(const std::set<C>& cs)
+            template <cdb_object C>
+            std::set<id_t>                  ids_for(const std::set<C>& cs)
             {
-                std::set<uint64_t> ret;
+                std::set<id_t> ret;
                 for(auto& c : cs)
                     ret.insert(c.id);
                 return ret;
             }
 
-            template <typename C>
-            std::vector<uint64_t>           ids_for(const std::vector<C>& cs)
+            template <cdb_object C>
+            std::vector<id_t>               ids_for(const std::vector<C>& cs)
             {
-                std::vector<uint64_t> ret;
+                std::vector<id_t> ret;
                 for(auto& c : cs)
                     ret.insert(c.id);
                 return ret;
             }
             
-            std::set<uint64_t>              ids_for(const std::vector<const TypeInfo*>&);
+            std::set<id_t>                  ids_for(const std::vector<const TypeInfo*>&);
 
            // used for extension specifications
             struct ExtensionView {
@@ -232,11 +240,9 @@ namespace yq {
             
             /*! \brief Blindly remaps a vector of id-objects
             */
-            template <typename A, typename B>
+            template <cdb_object A, cdb_object B>
             std::vector<B>  blind_remap(const std::vector<A>& old, B)
             {
-                static_assert(is_id_object_v<A>);
-                static_assert(is_id_object_v<B>);
                 std::vector<B>  ret;
                 ret.reserve(old.size());
                 for(const A& a : old)

@@ -9,6 +9,7 @@
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/character/CharacterCDB.hpp>
+#include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Character>      all_characters(Sorted sorted)

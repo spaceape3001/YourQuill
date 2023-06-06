@@ -37,6 +37,15 @@ namespace {
         dev_table(h, attributes(a, Sorted::YES));
     }
     
+    void p_dev_atom_children(WebHtml& h)
+    {
+        Atom a = atom(h);
+        if(!a)
+            throw HttpStatus::BadArgument;
+        h.title() << "Atom (" << label(a) << "): Children (Atoms)";
+        dev_table(h, children(a, Sorted::YES));
+    }
+
     void p_dev_atom_classes(WebHtml&h)
     {
         Atom a = atom(h);
@@ -54,6 +63,31 @@ namespace {
         //h.title() << "Atom (" << label(a) << "): Documents";
         //dev_table(h, documents(a, Sorted::YES));
     //}
+
+    void p_dev_atom_property(WebHtml& h)
+    {
+        Atom::Property p = atom_property(h);
+        if(!p)
+            throw HttpStatus::BadArgument;
+        h.title() << "Atom Property (" << p.id << ")";
+        auto ta = h.table();
+        auto i = info(p);
+        h.kvrow("ID") << p.id;
+        h.kvrow("Atom") << dev(i.atom);
+        h.kvrow("Attribute") << dev(i.attr);
+        h.kvrow("Field") << dev(i.field);
+        h.kvrow("Source") << dev(i.source);
+        h.kvrow("Target") << dev(i.target);
+    }
+
+    void p_dev_atom_properties(WebHtml& h)
+    {
+        Atom a = atom(h);
+        if(!a)
+            throw HttpStatus::BadArgument;
+        h.title() << "Atom (" << label(a) << "): Properties";
+        dev_table(h, properties(a, Sorted::YES));
+    }
     
     void p_dev_atom_tags(WebHtml& h)
     {
@@ -68,6 +102,23 @@ namespace {
     {
         h.title() << "All Atoms";
         dev_table(h, all_atoms(Sorted::YES));
+    }
+    
+    void    p_dev_attribute(WebHtml& h)
+    {
+        Attribute a = attribute(h);
+        if(!a)
+            throw HttpStatus::BadArgument;
+        h.title() << "Attribute " << a.id;
+        auto t = h.table();
+        h.kvrow("Atom") << a.id;
+        h.kvrow("Field") << dev(field(a));
+    }
+
+    void    p_dev_attributes(WebHtml&h)
+    {
+        h.title() << "All Attributes";
+        dev_table(h, all_attributes());
     }
 
     void    p_dev_categories(WebHtml&h)
@@ -1108,11 +1159,15 @@ namespace {
         reg_webgroup({
             reg_webpage<p_dev_atom>("/dev/atom").argument("id", "Atom ID").label("Info"),
             reg_webpage<p_dev_atom_attributes>("/dev/atom/attributes").argument("id", "Atom ID").label("Attributes"),
+            reg_webpage<p_dev_atom_children>("/dev/atom/children").argument("id", "Atom ID").label("Children"),
             reg_webpage<p_dev_atom_classes>("/dev/atom/classes").argument("id", "Atom ID").label("Classes"),
             //reg_webpage<p_dev_atom_documents>("/dev/atom/documents").argument("id", "Atom ID").label("Docs"),
+            reg_webpage<p_dev_atom_properties>("/dev/atom/properties").argument("id", "Atom ID").label("Properties"),
             reg_webpage<p_dev_atom_tags>("/dev/atom/tags").argument("id", "Atom ID").label("Tags")
         });
+        reg_webpage<p_dev_atom_property>("/dev/atom_property").argument("id", "Atom Property ID");
         reg_webpage<p_dev_atoms>("/dev/atoms");
+        reg_webpage<p_dev_attributes>("/dev/attributes");
 
         reg_webpage<p_dev_categories>("/dev/categories"); 
         reg_webgroup({

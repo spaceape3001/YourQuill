@@ -73,7 +73,6 @@ namespace {
         //  And results
         
         
-        
         dev_table(h, chars);
     }
 

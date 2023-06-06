@@ -14,7 +14,7 @@ namespace yq::mithril {
     struct Character {
         uint64_t            id = 0ULL;
         constexpr auto    operator<=>(const Character&rhs) const = default; 
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr operator bool() const { return id; }
     };
 }
 YQ_TYPE_DECLARE(yq::mithril::Character)

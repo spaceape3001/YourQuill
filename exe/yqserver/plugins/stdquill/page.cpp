@@ -16,7 +16,6 @@
 #include <mithril/image.hpp>
 #include <mithril/leaf.hpp>
 #include <mithril/meta.hpp>
-#include <mithril/property.hpp>
 #include <mithril/root.hpp>
 #include <mithril/tag.hpp>
 #include <mithril/user.hpp>

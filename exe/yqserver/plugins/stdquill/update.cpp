@@ -22,7 +22,6 @@
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
-#include <mithril/atom/Property.hpp>
 #include <mithril/value/ValueCDB.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
@@ -59,7 +58,6 @@
 #include <mithril/fragment.hpp>
 
 #include <mithril/leaf.hpp>
-#include <mithril/property.hpp>
 #include <mithril/root.hpp>
 
 //#include <mithril/user.hpp>
@@ -350,11 +348,35 @@ namespace {
 
         //  ---------------------------------------------------------------------------------------------------------------
 
+        void    add_prop(Atom atom, Attribute attr)
+        {
+            static thread_local CacheQuery iProp("INSERT INTO AProperties (atom, attr) VALUES (?,?)");
+            iProp.bind(1, atom.id);
+            iProp.bind(2, attr.id);
+            iProp.exec();
+        }
+
+        void    add_properties(Atom at, std::span<const Attribute::Diff> rep)
+        {
+            for(const Attribute::Diff& i : rep){
+                if(i.added() && i.attr){
+                    add_prop(at, i.attr);
+                }
+            }
+        }
+
+        #if 0
+        void    del_properties(Atom at, std::span<const Attribute::Diff> rep)
+        {
+        }
+        #endif
+
         void    ati_attributes(Atom at, KVTree& attrs)
         {
             Document    doc = cdb::document(at);
             auto rep    = diff::additions(doc, attrs);
             rep.exec_inserts();
+            add_properties(at, rep.items);
         }
 
         void    atu_attributes(Atom at, KVTree& attrs)
@@ -362,7 +384,9 @@ namespace {
             Document    doc = cdb::document(at);
             auto rep = diff::changes(doc, attrs);
             rep.exec_inserts();
+            add_properties(at, rep.items);
             rep.exec_reindex();
+            //del_properties(at, rep);
             rep.exec_removals();
         }
 

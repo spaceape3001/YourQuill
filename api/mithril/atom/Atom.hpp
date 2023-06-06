@@ -15,11 +15,15 @@ namespace yq::mithril {
     */
     struct Atom {
         struct Info;
+        struct Property;
+        struct PropertyInfo;
+        
         using Lock = IDLock<Atom>;
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Atom&rhs) const noexcept = default; 
         constexpr operator uint64_t() const noexcept { return id; }
         
+        #if 0
         //  --------------------------------------
         //  These all QUERY the cache (either direct or via CURL)
         //  --------------------------------------
@@ -118,13 +122,15 @@ namespace yq::mithril {
             \param[in] ck   Sub-key for the atom
         */
         static Atom     find(Document doc, std::string_view ck);
+#endif        
         
         /*! Computes a full key based on document and sub-key
             \param[in] doc  Document of interest
             \param[in] ck   Sub-key for the atom
         */
         static std::string  full_key(Document doc, std::string_view ck);
-        
+
+#if 0
         /*! Gets all atoms with the specified name
 
             \param[in] n        The name
@@ -216,6 +222,13 @@ namespace yq::mithril {
         
         //! TRUE if id is non-zero AND in the database
         bool                valid() const;
+        #endif
+    };
+    
+    struct Atom::Property {
+        uint64_t  id  = 0ULL;
+        constexpr auto    operator<=>(const Property&rhs) const noexcept = default; 
+        constexpr operator uint64_t() const noexcept { return id; }
     };
 }
 

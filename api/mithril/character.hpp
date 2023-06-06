@@ -11,3 +11,4 @@
 #include <mithril/character/CharacterHtml.hpp>
 //#include <mithril/character/CharacterPost.hpp>
 #include <mithril/character/CharacterCDB.hpp>
+#include <mithril/db/IDLock.hpp>

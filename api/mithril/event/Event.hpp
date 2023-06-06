@@ -15,7 +15,7 @@ namespace yq::mithril {
         using Lock = IDLock<Event>;
         uint64_t            id = 0ULL;
         constexpr auto    operator<=>(const Event&rhs) const = default; 
-        constexpr operator bool() const { return id != 0ULL; }
+        constexpr operator bool() const { return id; }
     };
 }
 
