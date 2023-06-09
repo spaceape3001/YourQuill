@@ -2,5 +2,5 @@
 plural   Names
 category 
 type     String
-alias   %
+usurp    %
 

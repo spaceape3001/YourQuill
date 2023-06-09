@@ -106,6 +106,31 @@ using namespace yq;
 using namespace yq::mithril;
 using namespace yq::mithril::cdb;
 
+struct UClass;
+struct UField;
+
+static constexpr const size_t       kMinAlloc   = 1024uz;
+
+//  configured at stage 3... only
+struct UField {
+    static UField&  get(Field f)
+    {
+        static std::vector<UField>      s_lookup(kMinAlloc);
+        if(s_lookup.size() <= f.id)
+            s_lookup.resize(f.id+kMinAlloc);
+        return s_lookup[f.id];
+    }
+};
+
+struct UClass {
+    static UClass&  get(Class c)
+    {
+        static std::vector<UClass>      s_lookup(kMinAlloc);
+        if(s_lookup.size() <= c.id)
+            s_lookup.resize(c.id+kMinAlloc);
+        return s_lookup[c.id];
+    }
+};
 
 namespace {
     void    page__(cdb_options_t opts=0)
@@ -814,6 +839,8 @@ namespace {
             
             Class   x{doc.id};
             
+            UClass& u   = UClass::get(x);
+            
             static thread_local CacheQuery iTag("INSERT INTO CTags (class, tag) VALUES (?, ?)");
             for(std::string_view tk : dp->tags){
                 Tag     t   = cdb::db_tag(tk);
@@ -1222,6 +1249,8 @@ namespace {
             
             Field   x   = { doc.id };
             
+            UField& u   = UField::get(x);
+            
             static thread_local CacheQuery iTag("INSERT INTO FTags (field, tag) VALUES (?,?)");
             for(Tag t : find_tags_set(dp->tags, true))
                 iTag.exec(x.id, t.id);
@@ -1229,6 +1258,10 @@ namespace {
             static thread_local CacheQuery iAlias("INSERT INTO FAlias (field, alias) VALUES (?,?)");
             for(std::string_view s : dp->aliases)
                 iAlias.exec(x.id, s);
+
+            static thread_local CacheQuery iUsurp("INSERT INTO FAlias (field, alias, usurp) VALUES (?,?, 1)");
+            for(std::string_view s : dp->usurpes)
+                iUsurp.exec(x.id, s);
 
             static thread_local CacheQuery iDataType("INSERT INTO FDataTypes (field, type) VALUES (?,?)");
             for(std::string_view s : dp->types){
@@ -1259,8 +1292,6 @@ namespace {
             if(anycls){
                 for(Class c : all_classes())
                     iClassA.exec(c.id, x.id);
-                    
-                
             } else {
                 for(auto& itr : derived_classes_ranked(cls)){
                     iClass.bind(1, itr.cls.id);

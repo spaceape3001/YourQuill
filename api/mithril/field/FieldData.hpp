@@ -23,6 +23,7 @@ namespace yq::mithril {
         std::string             notes;          //!< User scoped notes
         std::string             category;       //!< Organization of fields
         
+        string_set_t            usurpes;        //!< Can usurp these attribute (if otherwise unspecified)
         string_set_t            aliases;        //!< Aliases to this field name
         string_set_t            tags;           //!< List tof tags applied to this field
         string_set_t            classes;        //!< Classes *WE* support

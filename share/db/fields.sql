@@ -68,6 +68,7 @@ CREATE TABLE Fields (
 CREATE TABLE FAlias (
     field       INTEGER NOT NULL,
     alias       VARCHAR(255) NOT NULL COLLATE NOCASE,
+    usurp       BOOLEAN NOT NULL DEFAULT 0,
     UNIQUE(field, alias)
 );
 
