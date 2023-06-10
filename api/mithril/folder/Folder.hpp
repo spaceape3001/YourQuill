@@ -12,7 +12,7 @@ namespace yq::mithril {
 
     /*! \brief Folder of the cache/workspace
 
-        Folder represents a fusion of the same named directory across the roots of the worksapce (case insensitive).
+        Folder represents a fusion of the same named directory across the root_dirs of the worksapce (case insensitive).
     */
     struct Folder {
         struct Info;

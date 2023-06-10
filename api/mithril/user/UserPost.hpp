@@ -15,7 +15,7 @@ namespace yq::mithril {
     struct User;
     
     namespace post {
-        //! Finds root, by ID
+        //! Finds root_dir, by ID
         User user(WebContext&, bool *detected=nullptr);
         User user(WebContext&, std::string_view arg_name, bool *detected=nullptr);
         User user(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);

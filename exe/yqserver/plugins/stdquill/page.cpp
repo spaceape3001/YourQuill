@@ -87,7 +87,7 @@ namespace {
         ctx.decode_post();
         
         bool  edit_now      = ctx.edit_now();
-        const Root* rt      = post::root(ctx);
+        const RootDir* rt      = post::root_dir(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
         if(!rt->is_writable(DataRole::Config))
@@ -102,7 +102,7 @@ namespace {
         if(!t)
             throw HttpStatus::UnableToPerform;
     
-        yInfo() << "Created category " << cdb::key(t) << " in root " << rt->path;
+        yInfo() << "Created category " << cdb::key(t) << " in root_dir " << rt->path;
     
         if(edit_now){
             Url url;
@@ -110,7 +110,7 @@ namespace {
             stream::Text    qu(url.query);
             qu << "id=" << t.id;
             if(rt)
-                qu << "&root=" << rt->id;
+                qu << "&root_dir=" << rt->id;
             throw redirect::see_other(url);
         } else {
             ctx.return_to_sender();
@@ -163,7 +163,7 @@ namespace {
         ctx.decode_post();
         
         bool  edit_now      = ctx.edit_now();
-        const Root* rt      = post::root(ctx);
+        const RootDir* rt      = post::root_dir(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
         if(!rt->is_writable(DataRole::Config))
@@ -184,7 +184,7 @@ namespace {
             stream::Text    qu(url.query);
             qu << "id=" << t.id;
             if(rt)
-                qu << "&root=" << rt->id;
+                qu << "&root_dir=" << rt->id;
             throw redirect::see_other(url);
         } else {
             ctx.return_to_sender();
@@ -227,7 +227,7 @@ namespace {
         ctx.decode_post();
         
         bool  edit_now      = ctx.edit_now();
-        const Root* rt      = post::root(ctx);
+        const RootDir* rt      = post::root_dir(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
         if(!rt->is_writable(DataRole::Config))
@@ -250,7 +250,7 @@ namespace {
             stream::Text    qu(url.query);
             qu << "id=" << t.id;
             if(rt)
-                qu << "&root=" << rt->id;
+                qu << "&root_dir=" << rt->id;
             throw redirect::see_other(url);
         } else {
             ctx.return_to_sender();
@@ -294,7 +294,7 @@ namespace {
         ctx.decode_post();
         
         bool  edit_now      = ctx.edit_now();
-        const Root* rt      = post::root(ctx);
+        const RootDir* rt      = post::root_dir(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
         if(!rt->is_writable(DataRole::Config))
@@ -316,7 +316,7 @@ namespace {
             stream::Text    qu(url.query);
             qu << "id=" << t.id;
             if(rt)
-                qu << "&root=" << rt->id;
+                qu << "&root_dir=" << rt->id;
             throw redirect::see_other(url);
         } else {
             ctx.return_to_sender();
@@ -359,7 +359,7 @@ namespace {
         ctx.decode_post();
         
         bool  edit_now      = ctx.edit_now();
-        const Root* rt      = post::root(ctx);
+        const RootDir* rt      = post::root_dir(ctx);
         if(!rt)
             throw HttpStatus::BadArgument;
         if(!rt->is_writable(DataRole::Users))
@@ -380,7 +380,7 @@ namespace {
             stream::Text    qu(url.query);
             qu << "id=" << t.id;
             if(rt)
-                qu << "&root=" << rt->id;
+                qu << "&root_dir=" << rt->id;
             throw redirect::see_other(url);
         } else {
             ctx.return_to_sender();
@@ -532,7 +532,7 @@ namespace {
     path_vector_t       make_dir_set(std::string_view sname, std::string_view wname)
     {
         path_vector_t   ret;
-        for(const Root* rt : wksp::roots())
+        for(const RootDir* rt : wksp::root_dirs())
             ret.push_back(rt -> resolve(sname));
         for(auto& p : wksp::shared_all(wname))
             ret.push_back(p);

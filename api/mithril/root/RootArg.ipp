@@ -15,18 +15,18 @@
 
 namespace yq::mithril::arg {
 
-    const Root* root(std::string_view  arg_string)
+    const RootDir* root_dir(std::string_view  arg_string)
     {
         arg_string   = trimmed(arg_string);
         if(arg_string.empty())
             return nullptr;
-        const Root* t   = wksp::root( arg_string);
+        const RootDir* t   = wksp::root_dir( arg_string);
         if(t)
             return t;
         return root_id(arg_string);
     }
     
-    const Root* root(const WebContext&ctx, bool *detected)
+    const RootDir* root_dir(const WebContext&ctx, bool *detected)
     {
         if(detected)
             *detected   = false;
@@ -45,40 +45,40 @@ namespace yq::mithril::arg {
             return root_key(k);
         }
         
-        k       = ctx.find_query("root");
+        k       = ctx.find_query("root_dir");
         if(!k.empty()){
             if(detected)
                 *detected   = true;
-            return root(k);
+            return root_dir(k);
         }
         return nullptr;
     }
     
-    const Root* root(const WebContext&ctx, std::string_view arg_name, bool *detected)
+    const RootDir* root_dir(const WebContext&ctx, std::string_view arg_name, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
             *detected   = !arg_string.empty();
-        return root(arg_string);
+        return root_dir(arg_string);
     }
     
-    const Root* root(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+    const RootDir* root_dir(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)
             *detected   = !arg_string.empty();
-        return root(arg_string);
+        return root_dir(arg_string);
     }
 
-    const Root* root_id(std::string_view arg_string)
+    const RootDir* root_id(std::string_view arg_string)
     {
         auto vv = to_uint64(arg_string);
         if(!vv)
             return nullptr;
-        return wksp::root(*vv);
+        return wksp::root_dir(*vv);
     }
 
-    const Root* root_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
+    const RootDir* root_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -86,7 +86,7 @@ namespace yq::mithril::arg {
         return root_id(arg_string);
     }
     
-    const Root* root_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+    const RootDir* root_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)
@@ -94,12 +94,12 @@ namespace yq::mithril::arg {
         return root_id(arg_string);
     }
     
-    const Root* root_key(std::string_view arg_string)
+    const RootDir* root_key(std::string_view arg_string)
     {
-        return wksp::root(trimmed(arg_string));
+        return wksp::root_dir(trimmed(arg_string));
     }
     
-    const Root* root_key(const WebContext&ctx, std::string_view arg_name, bool *detected)
+    const RootDir* root_key(const WebContext&ctx, std::string_view arg_name, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -107,7 +107,7 @@ namespace yq::mithril::arg {
         return root_key(arg_string);
     }
     
-    const Root* root_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+    const RootDir* root_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)

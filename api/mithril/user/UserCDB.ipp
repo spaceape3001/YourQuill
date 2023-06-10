@@ -15,7 +15,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
@@ -178,7 +178,7 @@ namespace yq::mithril::cdb {
         return s.str(u.id);
     }
 
-    User                    make_user(std::string_view k, const Root* rt, cdb_options_t opts, bool* wasCreated)
+    User                    make_user(std::string_view k, const RootDir* rt, cdb_options_t opts, bool* wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
@@ -189,7 +189,7 @@ namespace yq::mithril::cdb {
         if(!rt)
             rt  = wksp::root_first(DataRole::Users);
         if(!rt){
-            yError() << "No root specified to create the user in!";
+            yError() << "No root_dir specified to create the user in!";
             return User{};
         }
         
@@ -250,7 +250,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
-    Vector<UserFragDoc> reads(User u, class Root*rt, cdb_options_t opts)
+    Vector<UserFragDoc> reads(User u, class RootDir*rt, cdb_options_t opts)
     {
         Vector<UserFragDoc>  ret;
         for(Fragment f : fragments(document(u), rt)){
@@ -319,7 +319,7 @@ namespace yq::mithril::cdb {
     }
     
 
-    User::SharedFile          write(User u, const Root*rt, cdb_options_t opts)
+    User::SharedFile          write(User u, const RootDir*rt, cdb_options_t opts)
     {
         if(!u)
             return User::SharedFile();
@@ -330,7 +330,7 @@ namespace yq::mithril::cdb {
             return User::SharedFile();
         }
         if(rt && !rt->is_writable(DataRole::Users)){
-            yWarning() << "write(User '" << key(u) << "'): Root " << rt->key << " cannot be written to!";
+            yWarning() << "write(User '" << key(u) << "'): RootDir " << rt->key << " cannot be written to!";
             return User::SharedFile();
         }
         Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Users);

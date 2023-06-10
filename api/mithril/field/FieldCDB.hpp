@@ -91,11 +91,11 @@ namespace yq::mithril::cdb {
     
     //Leaf                    leaf(Atom
     
-    Field                   make_field(std::string_view, Class, const Root* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
+    Field                   make_field(std::string_view, Class, const RootDir* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
     
 
     Field::SharedData       merged(Field, cdb_options_t opts=0);
-    //Class                   make_class(std::string_view , const Root* rt=nullptr);
+    //Class                   make_class(std::string_view , const RootDir* rt=nullptr);
 
     std::string             name(Field);
     
@@ -109,10 +109,10 @@ namespace yq::mithril::cdb {
     //! \brief Returns the FIRST class fragment that qualifies
     //! 
     //!     Will not create a fragment, though (so can return NULL)
-    Field::SharedFile       read(Field, const Root*, cdb_options_t opts=0);
+    Field::SharedFile       read(Field, const RootDir*, cdb_options_t opts=0);
 
     std::vector<FieldFragDoc>   reads(Field, cdb_options_t opts=0);
-    std::vector<FieldFragDoc>   reads(Field, class Root*, cdb_options_t opts=0);
+    std::vector<FieldFragDoc>   reads(Field, class RootDir*, cdb_options_t opts=0);
 
     std::vector<Tag>            tags(Field, Sorted sorted=Sorted());
     size_t                      tags_count(Field);
@@ -126,5 +126,5 @@ namespace yq::mithril::cdb {
     //!     \note the path will be CREATED by this method.
     //!
     //!     If the document already exists, it will be read in.
-    Field::SharedFile       writable(Field, const Root*, cdb_options_t opts=0);
+    Field::SharedFile       writable(Field, const RootDir*, cdb_options_t opts=0);
 }

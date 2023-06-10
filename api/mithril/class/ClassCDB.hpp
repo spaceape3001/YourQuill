@@ -161,7 +161,7 @@ namespace yq::mithril::cdb {
     std::string                 label(Class);
 
     Class::SharedData           merged(Class, cdb_options_t opts=0);
-    Class                       make_class(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
+    Class                       make_class(std::string_view, const RootDir* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
     
     ClassCountMap               make_count_map(const std::vector<Class::Rank>&);
 
@@ -179,10 +179,10 @@ namespace yq::mithril::cdb {
     //! \brief Returns the FIRST class fragment that qualifies
     //! 
     //!     Will not create a fragment, though (so can return NULL)
-    Class::SharedFile           read(Class, const Root*, cdb_options_t opts=0);
+    Class::SharedFile           read(Class, const RootDir*, cdb_options_t opts=0);
 
     std::vector<ClassFragDoc>   reads(Class, cdb_options_t opts=0);
-    std::vector<ClassFragDoc>   reads(Class, class Root*, cdb_options_t opts=0);
+    std::vector<ClassFragDoc>   reads(Class, class RootDir*, cdb_options_t opts=0);
 
     std::vector<Class>          reverses(Class, Sorted sorted=Sorted());
     
@@ -208,5 +208,5 @@ namespace yq::mithril::cdb {
     //!     \note the path will be CREATED by this method.
     //!
     //!     If the document already exists, it will be read in.
-    Class::SharedFile           writable(Class, const Root*, cdb_options_t opts=0);
+    Class::SharedFile           writable(Class, const RootDir*, cdb_options_t opts=0);
 }

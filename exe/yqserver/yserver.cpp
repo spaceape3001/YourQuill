@@ -88,7 +88,7 @@ struct Context : public WebContext, public RefCount {
     virtual void    set_admin(bool) override;
     virtual void    set_auto_edit(bool f) override;
     virtual void    set_columns(unsigned int v) override;
-    virtual void    set_def_root(const Root*rt) override;
+    virtual void    set_def_root(const RootDir*rt) override;
     virtual void    set_logged_in(bool v) override;
     virtual void    set_inspect_submit(bool v) override;
     virtual void    set_icon_size(SizeDesc v) override;
@@ -360,7 +360,7 @@ namespace {
         }
     }
     
-    void    Context::set_def_root(const Root*rt) 
+    void    Context::set_def_root(const RootDir*rt) 
     {
         if(ss){
             {

@@ -296,7 +296,7 @@ namespace {
     void    dev_title(WebHtml& h, Directory x, std::string_view extra=std::string_view())
     {
         auto t = h.title();
-        const Root* rt  = root(x);
+        const RootDir* rt  = root_dir(x);
         
         h << "Directory ";
         if(rt)
@@ -320,7 +320,7 @@ namespace {
             throw HttpStatus::BadArgument;
         Directory   p   = parent(x);
         Folder      f   = folder(x);
-        const Root* rt  = root(x);
+        const RootDir* rt  = root_dir(x);
         
         dev_title(h, x);
         auto ta = h.table();
@@ -331,7 +331,7 @@ namespace {
         if(p)
             h.kvrow("Parent") << dev(p);
         if(rt)
-            h.kvrow("Root") << dev(rt);
+            h.kvrow("RootDir") << dev(rt);
     }
     
     void    p_dev_directory_fragments(WebHtml& h)
@@ -415,7 +415,7 @@ namespace {
         if(!doc)
             throw HttpStatus::BadArgument;
         h.title() << "Document (" << key(doc) << "): Roots";
-        dev_table(h, roots(doc));
+        dev_table(h, root_dirs(doc));
     }
     
     void    p_dev_documents(WebHtml& h)
@@ -598,7 +598,7 @@ namespace {
         h.kvrow("Path") << i.path;
         h.kvrow("Removed") << i.removed;
         h.kvrow("Rescan") << i.rescan;
-        h.kvrow("Root") << dev(i.root);
+        h.kvrow("RootDir") << dev(i.root_dir);
         h.kvrow("Size") << i.size;
     }
     
@@ -685,7 +685,7 @@ namespace {
         
         Fragment    frag    = fragment(img);
         Document    doc     = document(img);
-        const Root* rt      = root(frag);
+        const RootDir* rt      = root_dir(frag);
         if(!rt)
             throw HttpStatus::BadArgument;
         
@@ -861,11 +861,11 @@ namespace {
 
     void    p_dev_root(WebHtml& h)
     {
-        const Root* rt   = root(h);
+        const RootDir* rt   = root_dir(h);
         if(!rt)
-            rt          = wksp::root(0);
+            rt          = wksp::root_dir(0);
         
-        h.title() << "Root (" << rt->name << ")";
+        h.title() << "RootDir (" << rt->name << ")";
         
         auto tab   = h.table();
         h.kvrow("ID") << rt->id;
@@ -888,42 +888,42 @@ namespace {
     
     void    p_dev_root_all_directories(WebHtml& h)
     {
-        const Root* rt   = root(h);
+        const RootDir* rt   = root_dir(h);
         if(!rt)
-            rt          = wksp::root(0);
+            rt          = wksp::root_dir(0);
 
-        h.title() << "Root (" << rt->name << "): All Directories";
+        h.title() << "RootDir (" << rt->name << "): All Directories";
         dev_table(h, all_directories(rt, Sorted::YES));
     }
     
     void    p_dev_root_all_fragments(WebHtml& h)
     {
-        const Root* rt  = root(h);
+        const RootDir* rt  = root_dir(h);
         if(!rt)
-            rt          = wksp::root(0);
+            rt          = wksp::root_dir(0);
             
-        h.title() << "Root (" << rt->name << "): All Fragments";
+        h.title() << "RootDir (" << rt->name << "): All Fragments";
         dev_table(h, all_fragments(rt, Sorted::YES));
     }
 
     void    p_dev_root_directories(WebHtml& h)
     {
-        const Root* rt   = root(h);
+        const RootDir* rt   = root_dir(h);
         if(!rt)
-            rt          = wksp::root(0);
+            rt          = wksp::root_dir(0);
             
-        h.title() << "Root (" << rt->name << "): Directories";
+        h.title() << "RootDir (" << rt->name << "): Directories";
         
         dev_table(h, directories(rt, Sorted::YES));
     }
 
     void    p_dev_root_fragments(WebHtml& h)
     {
-        const Root* rt   = root(h);
+        const RootDir* rt   = root_dir(h);
         if(!rt)
-            rt          = wksp::root(0);
+            rt          = wksp::root_dir(0);
 
-        h.title() << "Root (" << rt->name << "): Fragments";
+        h.title() << "RootDir (" << rt->name << "): Fragments";
 
         dev_table(h, fragments(rt, Sorted::YES));
     }
@@ -931,7 +931,7 @@ namespace {
     void    p_dev_roots(WebHtml& h)
     {
         h.title() << "All Roots";
-        dev_table(h, wksp::roots());
+        dev_table(h, wksp::root_dirs());
     }
     
     void p_dev_server(WebHtml&h)
@@ -960,7 +960,7 @@ namespace {
         {
             auto r = h.kvrow("Roots");
             r << "<OL>";
-            for(const Root* rt : wksp::roots())
+            for(const RootDir* rt : wksp::root_dirs())
                 r << "<LI>[" << rt -> key << "]: " << rt->path;
             r << "</OL>";
         }
@@ -1151,7 +1151,7 @@ namespace {
     void    p_dev_wksp_roots(WebHtml&h)
     {
         h.title("Workspace Roots");
-        dev_table(h, wksp::roots());
+        dev_table(h, wksp::root_dirs());
     }
 
     void    reg_dev()
@@ -1202,7 +1202,7 @@ namespace {
             reg_webpage<p_dev_document>("/dev/document").argument("id", "Document ID").label("Info"),
             reg_webpage<p_dev_document_attributes>("/dev/document/attributes").argument("id", "Document ID").label("Attributes"),
             reg_webpage<p_dev_document_fragments>("/dev/document/fragments").argument("id", "Document ID").label("Fragments"),
-            reg_webpage<p_dev_document_roots>("/dev/document/roots").argument("id", "Document ID").label("Roots")
+            reg_webpage<p_dev_document_roots>("/dev/document/root_dirs").argument("id", "Document ID").label("Roots")
         });
         reg_webpage<p_dev_documents>("/dev/documents"); 
 
@@ -1261,11 +1261,11 @@ namespace {
         reg_webpage<p_dev_mimetypes>("/dev/mimetypes");
 
         reg_webgroup({
-            reg_webpage<p_dev_root>("/dev/root").argument("id", "Root ID").label("Info"),
-            reg_webpage<p_dev_root_directories>("/dev/root/dirs").argument("id", "Root ID").label("Dirs"),
-            reg_webpage<p_dev_root_fragments>("/dev/root/frags").argument("id", "Root ID").label("Frags"),
-            reg_webpage<p_dev_root_all_directories>("/dev/root/all_dirs").argument("id", "Root ID").label("AllDirs"),
-            reg_webpage<p_dev_root_all_fragments>("/dev/root/all_frags").argument("id", "Root ID").label("AllFrags")
+            reg_webpage<p_dev_root>("/dev/root").argument("id", "RootDir ID").label("Info"),
+            reg_webpage<p_dev_root_directories>("/dev/root/dirs").argument("id", "RootDir ID").label("Dirs"),
+            reg_webpage<p_dev_root_fragments>("/dev/root/frags").argument("id", "RootDir ID").label("Frags"),
+            reg_webpage<p_dev_root_all_directories>("/dev/root/all_dirs").argument("id", "RootDir ID").label("AllDirs"),
+            reg_webpage<p_dev_root_all_fragments>("/dev/root/all_frags").argument("id", "RootDir ID").label("AllFrags")
         });
         reg_webpage<p_dev_roots>("/dev/roots");
 

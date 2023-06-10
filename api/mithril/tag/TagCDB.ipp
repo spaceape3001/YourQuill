@@ -15,7 +15,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
@@ -301,7 +301,7 @@ namespace yq::mithril::cdb {
     }
 
 
-    Tag                     make_tag(std::string_view k, const Root* rt, cdb_options_t opts, bool* wasCreated)
+    Tag                     make_tag(std::string_view k, const RootDir* rt, cdb_options_t opts, bool* wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
@@ -313,7 +313,7 @@ namespace yq::mithril::cdb {
         if(!rt)
             rt  = wksp::root_first(DataRole::Config);
         if(!rt){
-            yError() << "No root specified to create the tag in!";
+            yError() << "No root_dir specified to create the tag in!";
             return Tag{};
         }
         
@@ -367,7 +367,7 @@ namespace yq::mithril::cdb {
     }
     
     
-    Tag::SharedFile          read(Tag t, const Root* rt, cdb_options_t opts)
+    Tag::SharedFile          read(Tag t, const RootDir* rt, cdb_options_t opts)
     {
         return tag_doc(fragment(document(t), rt), opts);
     }
@@ -384,7 +384,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::vector<TagFragDoc>    reads(Tag t, class Root* rt, cdb_options_t opts)
+    std::vector<TagFragDoc>    reads(Tag t, class RootDir* rt, cdb_options_t opts)
     {
         std::vector<TagFragDoc>  ret;
         for(Fragment f : fragments(document(t), rt)){
@@ -395,7 +395,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
-    bool                set_brief(Tag t, std::string_view k, class Root* rt)
+    bool                set_brief(Tag t, std::string_view k, class RootDir* rt)
     {
         auto tf = write(t, rt);
         if(!tf)
@@ -404,7 +404,7 @@ namespace yq::mithril::cdb {
         return tf -> save() == std::error_code();
     }
     
-    bool                set_name(Tag t, std::string_view k, class Root* rt)
+    bool                set_name(Tag t, std::string_view k, class RootDir* rt)
     {
         auto tf = write(t, rt);
         if(!tf)
@@ -413,7 +413,7 @@ namespace yq::mithril::cdb {
         return tf -> save() == std::error_code();
     }
     
-    bool                set_notes(Tag t, std::string_view k, class Root* rt)
+    bool                set_notes(Tag t, std::string_view k, class RootDir* rt)
     {
         auto tf = write(t, rt);
         if(!tf)
@@ -466,7 +466,7 @@ namespace yq::mithril::cdb {
 
 
     
-    Tag::SharedFile         write(Tag t, const Root* rt, cdb_options_t opts)
+    Tag::SharedFile         write(Tag t, const RootDir* rt, cdb_options_t opts)
     {
         if(!t)
             return Tag::SharedFile();
@@ -477,7 +477,7 @@ namespace yq::mithril::cdb {
             return Tag::SharedFile();
         }
         if(rt && !rt->is_writable(DataRole::Config)){
-            yWarning() << "write(Tag '" << key(t) << "'): Root " << rt->key << " cannot be written to!";
+            yWarning() << "write(Tag '" << key(t) << "'): RootDir " << rt->key << " cannot be written to!";
             return Tag::SharedFile();
         }
         Fragment    f   = rt ? fragment(d, rt) : writable(d, DataRole::Config);

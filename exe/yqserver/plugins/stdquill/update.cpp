@@ -25,7 +25,7 @@
 #include <mithril/value/ValueCDB.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/io/Strings.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
@@ -243,7 +243,7 @@ namespace {
                 [&](const ClassCountMap::value_type& pp){   // INSERTED
                     ret.added.insert(pp.first);
                     
-                    static thread_local CacheQuery  i("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?,?)");
+                    static thread_local CacheQuery  i("INSERT INTO AClasses (atom, class, hops) VALUES (?,?,?)");
                     auto i_af   = i.af();
                     i.bind(1, at.id);
                     i.bind(2, pp.first.id);
@@ -1670,12 +1670,12 @@ namespace {
     //  ROOT
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        void    u_set_root_icon(const Root*rt, Image img)
+        void    u_set_root_icon(const RootDir*rt, Image img)
         {
             if(!rt)
                 return ;
                 
-            static thread_local CacheQuery r("REPLACE INTO RootIcons (root, icon) VALUES (?, ?)");
+            static thread_local CacheQuery r("REPLACE INTO RootIcons (root_dir, icon) VALUES (?, ?)");
             auto r_af = r.af();
             r.bind(1, rt->id);
             r.bind(2, img.id);

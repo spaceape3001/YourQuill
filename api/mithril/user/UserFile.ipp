@@ -69,7 +69,7 @@ namespace yq::mithril {
     //{
         //const XmlNode*  xn  = doc.first_node(szYQUser);
         //if(!xn){
-            //yError() << "No appropriate root element!  In: '" << fname << "'";
+            //yError() << "No appropriate root_dir element!  In: '" << fname << "'";
             //return false;
         //}
         

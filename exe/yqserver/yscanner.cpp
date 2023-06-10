@@ -24,7 +24,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/root/RootCDB.hpp>
 #include <mithril/ipc/DirWatcher.hpp>
 #include <mithril/notify/FileWatch.hpp>
@@ -58,15 +58,15 @@ static constexpr const unsigned int kScanTickInterval   = 100;
 #define sWarning         yWarning("scanner")
 
 struct RootPath {
-    const yq::mithril::Root*    root    = nullptr;
-    std::filesystem::path       path;       //!< Relative path if root present, absolute otherwise
+    const yq::mithril::RootDir*    root_dir    = nullptr;
+    std::filesystem::path       path;       //!< Relative path if root_dir present, absolute otherwise
 };
 
 RootPath    rootPath(const std::filesystem::path&fp)
 {
-    static const std::vector<const Root*>& roots = wksp::roots();
+    static const std::vector<const RootDir*>& roots = wksp::root_dirs();
     
-    for(const Root* r : roots){
+    for(const RootDir* r : roots){
         std::error_code         ec;
         std::filesystem::path   p   = std::filesystem::relative(fp, r->path, ec);
         if(ec != std::error_code())
@@ -149,7 +149,7 @@ void    stage1_scan()
 {
     Deque<DQ1>      queue;
     
-    for(const Root* rt : wksp::roots())
+    for(const RootDir* rt : wksp::root_dirs())
         queue << DQ1{cdb::top_folder(), cdb::db_root(rt), rt->path};
     
     while(!queue.empty()){
@@ -382,7 +382,7 @@ void    stage6_sweep()
 {
     Deque<DQ1>      queue;
     
-    for(const Root* rt : wksp::roots())
+    for(const RootDir* rt : wksp::root_dirs())
         queue << DQ1{cdb::top_folder(), cdb::db_root(rt), rt->path};
 
     while(!queue.empty()){

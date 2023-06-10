@@ -51,7 +51,7 @@ WebHtml&    operator<<(WebHtml&h, input::key)
 }
 
 WebHtml&    operator<<(WebHtml&h, input::edit_req);
-WebHtml&    operator<<(WebHtml&h, input::root);
+WebHtml&    operator<<(WebHtml&h, input::root_dir);
 WebHtml&    operator<<(WebHtml&h, const input::check&);
 WebHtml&    operator<<(WebHtml&h, const input::hidden&);
 WebHtml&    operator<<(WebHtml&h, const input::label&);

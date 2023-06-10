@@ -45,19 +45,19 @@ namespace yq::mithril {
                         continue;
                     if(ref.id != i->id)
                         continue;
-                    if(!is_similar(ref.root, i->root))
+                    if(!is_similar(ref.root_dir, i->root_dir))
                         continue;
                 }
                 return dst.end();
             }
 
-            void    fuse(std::vector<AttrData>& dst, const std::vector<AttrData>& src, const Root* rt)
+            void    fuse(std::vector<AttrData>& dst, const std::vector<AttrData>& src, const RootDir* rt)
             {
                 for(const AttrData& a : src){
                     switch(a.action){
                     case Action::Add:
                         dst << a;
-                        dst.back().root = rt -> key();
+                        dst.back().root_dir = rt -> key();
                         break;
                     case Action::Modify: {
                         auto i = find(dst, a);

@@ -11,54 +11,54 @@
 
 namespace yq::mithril::cdb {
 
-    /*! \brief All directories for root
+    /*! \brief All directories for root_dir
     */
-    std::vector<Directory>     all_directories(const Root*, Sorted sorted=Sorted());
+    std::vector<Directory>     all_directories(const RootDir*, Sorted sorted=Sorted());
     
-    //! \brief Count of directories under root
-    size_t                     all_directories_count(const Root*);
+    //! \brief Count of directories under root_dir
+    size_t                     all_directories_count(const RootDir*);
 
-    //! \brief All fragments for root
-    std::vector<Fragment>      all_fragments(const Root*,Sorted sorted=Sorted());
+    //! \brief All fragments for root_dir
+    std::vector<Fragment>      all_fragments(const RootDir*,Sorted sorted=Sorted());
     
-    //! \brief Count of all fragments for root.
-    size_t                     all_fragments_count(const Root*);
+    //! \brief Count of all fragments for root_dir.
+    size_t                     all_fragments_count(const RootDir*);
     
-    //! Number of roots
+    //! Number of root_dirs
     size_t                     all_roots_count();
 
-    //! Immediate children of root (no subs)
-    std::vector<DirOrFrag>     children(const Root*,Sorted sorted=Sorted());
+    //! Immediate children of root_dir (no subs)
+    std::vector<DirOrFrag>     children(const RootDir*,Sorted sorted=Sorted());
 
-    //! Create root directory
-    Directory                  db_root(const Root*, bool *wasCreated=nullptr);
+    //! Create root_dir directory
+    Directory                  db_root(const RootDir*, bool *wasCreated=nullptr);
 
-    //! Top Directory for root
-    Directory                  directory(const Root*);
-    //Directory                  directory(const Root*, std::string_view);
+    //! Top Directory for root_dir
+    Directory                  directory(const RootDir*);
+    //Directory                  directory(const RootDir*, std::string_view);
     
-    //! Top directories for root (should be one)
-    std::vector<Directory>     directories(const Root*, Sorted sorted=Sorted());
+    //! Top directories for root_dir (should be one)
+    std::vector<Directory>     directories(const RootDir*, Sorted sorted=Sorted());
     
-    //! Count of top directories for root (should be one)
-    size_t                     directories_count(const Root*);
+    //! Count of top directories for root_dir (should be one)
+    size_t                     directories_count(const RootDir*);
 
     //! True if the relative file exists
-    bool                       exists(const Root*, std::string_view );
+    bool                       exists(const RootDir*, std::string_view );
 
-    //! Fragment for resolving root
-    Fragment                   fragment(const Root*, std::string_view );
+    //! Fragment for resolving root_dir
+    Fragment                   fragment(const RootDir*, std::string_view );
     
-    //! Child fragments for root top directory
-    std::vector<Fragment>      fragments(const Root*, Sorted sorted=Sorted());
+    //! Child fragments for root_dir top directory
+    std::vector<Fragment>      fragments(const RootDir*, Sorted sorted=Sorted());
 
-    //! Key of root (already on structure)
-    std::string                key(const Root*);
-
-    //! Resolves the path, optionally creating the directories
-    std::filesystem::path      path(const Root*, std::string_view , bool fMakePath=false);
+    //! Key of root_dir (already on structure)
+    std::string                key(const RootDir*);
 
     //! Resolves the path, optionally creating the directories
-    std::filesystem::path      path(const Root*, Document, bool fMakePath=false);          // goes to root
+    std::filesystem::path      path(const RootDir*, std::string_view , bool fMakePath=false);
+
+    //! Resolves the path, optionally creating the directories
+    std::filesystem::path      path(const RootDir*, Document, bool fMakePath=false);          // goes to root_dir
 
 }

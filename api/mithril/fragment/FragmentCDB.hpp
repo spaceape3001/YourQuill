@@ -26,7 +26,7 @@ namespace yq::mithril {
         std::filesystem::path   path;
         bool                    removed     = false;
         bool                    rescan      = false;
-        const Root*             root        = nullptr;
+        const RootDir*             root_dir        = nullptr;
         size_t                  size        = 0;
         
         bool operator==(const Info&) const = default;
@@ -140,8 +140,8 @@ namespace yq::mithril {
         //! TRUE if fragment has been flagged for rescanning
         bool                            rescanning(Fragment);
         
-        //! Root for this fragment
-        const Root*                     root(Fragment);
+        //! RootDir for this fragment
+        const RootDir*                     root_dir(Fragment);
         
         //! Recorded file size for fragment
         size_t                          size(Fragment);

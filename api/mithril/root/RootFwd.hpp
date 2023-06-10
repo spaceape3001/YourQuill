@@ -13,10 +13,10 @@ namespace yq {
 }
 
 namespace yq::mithril {
-    struct Root;
-    using root_map_t            = Map<std::string_view,const Root*,IgCase>;
-    using root_vector_t         = Vector<const Root*>;
-    using root_role_map_t       = EnumMap<DataRole, const Root*>;
-    using root_role_vec_map_t   = EnumMap<DataRole, Vector<const Root*>>;
+    struct RootDir;
+    using root_map_t            = Map<std::string_view,const RootDir*,IgCase>;
+    using root_vector_t         = Vector<const RootDir*>;
+    using root_role_map_t       = EnumMap<DataRole, const RootDir*>;
+    using root_role_vec_map_t   = EnumMap<DataRole, Vector<const RootDir*>>;
 }
 

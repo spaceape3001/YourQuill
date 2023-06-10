@@ -10,5 +10,5 @@
 #include <mithril/root/RootHtml.hpp>
 #include <mithril/root/RootPost.hpp>
 
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/root/RootCDB.hpp>

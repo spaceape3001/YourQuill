@@ -15,11 +15,11 @@ namespace yq {
 }
 
 namespace yq::mithril {
-    struct Root;
+    struct RootDir;
 
     struct Context {
         std::string     icon, title, data;
-        const Root*     root = nullptr;
+        const RootDir*  root_dir = nullptr;
         Format          format;
         int             order=0;
         

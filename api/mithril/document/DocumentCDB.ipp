@@ -13,7 +13,7 @@
 #include <mithril/db/NKI.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/Fragment.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/CacheLogging.hpp>
@@ -127,7 +127,7 @@ namespace yq::mithril::cdb {
         return exists_document(d.id);
     }
 
-    bool                exists(Document doc, const Root* rt)
+    bool                exists(Document doc, const RootDir* rt)
     {
         if(!rt)
             return false;
@@ -167,7 +167,7 @@ namespace yq::mithril::cdb {
         return s.as<Fragment>(d.id);
     }
     
-    Fragment            first_fragment(Document d, const Root*rt)
+    Fragment            first_fragment(Document d, const RootDir*rt)
     {
         if(!rt)
             return first_fragment(d);
@@ -178,7 +178,7 @@ namespace yq::mithril::cdb {
 
     Fragment            first_fragment(Document d, DataRole dr)
     {
-        for(const Root* rt : wksp::root_reads()[dr]){
+        for(const RootDir* rt : wksp::root_reads()[dr]){
             Fragment f = first_fragment(d,rt);
             if(f)
                 return f;
@@ -206,7 +206,7 @@ namespace yq::mithril::cdb {
         return s.as<Fragment>(d.id);
     }
     
-    Fragment            fragment(Document d, const Root* rt)
+    Fragment            fragment(Document d, const RootDir* rt)
     {
         if(!rt)
             return Fragment{};
@@ -216,7 +216,7 @@ namespace yq::mithril::cdb {
     
     Fragment            fragment(Document d, DataRole dr)
     {
-        for(const Root* r : wksp::root_reads(dr)){
+        for(const RootDir* r : wksp::root_reads(dr)){
             Fragment    f   = fragment(d, r);
             if(f)
                 return f;
@@ -248,7 +248,7 @@ namespace yq::mithril::cdb {
         return sorted ? fragments_sorted(d) : fragments_unsorted(d);
     }
     
-    std::vector<Fragment>    fragments(Document d, const Root* rt, Sorted sorted)
+    std::vector<Fragment>    fragments(Document d, const RootDir* rt, Sorted sorted)
     {
         if(!rt)
             return std::vector<Fragment>();
@@ -258,7 +258,7 @@ namespace yq::mithril::cdb {
         return s.vec<Fragment>(d.id, rt->id);
     }
     
-    std::vector<Fragment>    fragments(Document d, const Root* rt, Sorted::Value sorted)
+    std::vector<Fragment>    fragments(Document d, const RootDir* rt, Sorted::Value sorted)
     {
         return fragments(d, rt, Sorted{sorted});
     }
@@ -266,7 +266,7 @@ namespace yq::mithril::cdb {
     std::vector<Fragment>    fragments(Document d, DataRole dr, Sorted sorted)
     {
         std::vector<Fragment>    ret;
-        for(const Root* rt : wksp::root_reads()[dr])
+        for(const RootDir* rt : wksp::root_reads()[dr])
             ret += fragments(d,rt,sorted);
         return ret;
     }
@@ -277,7 +277,7 @@ namespace yq::mithril::cdb {
         return s.size(d.id);
     }
     
-    size_t              fragments_count(Document d, const Root*rt)
+    size_t              fragments_count(Document d, const RootDir*rt)
     {
         if(!rt)
             return 0;
@@ -383,14 +383,14 @@ namespace yq::mithril::cdb {
         return s.boolean(d.id);
     }
 
-    std::vector<const Root*> roots(Document d)
+    std::vector<const RootDir*> root_dirs(Document d)
     {
-        std::vector<const Root*> ret;
+        std::vector<const RootDir*> ret;
         static thread_local CacheQuery    s("SELECT DISTINCT root FROM Fragments WHERE document=?");
         auto s_af       = s.af();
         s.bind(1, d.id);
         while(s.step() == SQResult::Row){
-            const Root*r    = wksp::root(s.v_uint64(1));
+            const RootDir*r    = wksp::root_dir(s.v_uint64(1));
             if(r)
                 ret.push_back(r);
         }
@@ -446,7 +446,7 @@ namespace yq::mithril::cdb {
 
     Fragment            writable(Document d, DataRole dr)
     {
-        for(const Root* rt : wksp::root_writes()[dr]){
+        for(const RootDir* rt : wksp::root_writes()[dr]){
             Fragment f = first_fragment(d, rt);
             if(f)
                 return f;

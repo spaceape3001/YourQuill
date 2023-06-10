@@ -51,8 +51,8 @@ namespace yq {
                 //! Fragment for image
             Fragment                fragment(Image);
 
-                //! Icon for root
-            Image                   icon(const Root*);
+                //! Icon for root_dir
+            Image                   icon(const RootDir*);
 
                 //! Returns an image from a document, if it already exists in the cache
             Image                   image(Document);

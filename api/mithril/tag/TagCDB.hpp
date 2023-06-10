@@ -134,7 +134,7 @@ namespace yq::mithril::cdb {
 
     /*! \brief Makes a tag
     */
-    Tag                     make_tag(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
+    Tag                     make_tag(std::string_view, const RootDir* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
     
     /*! \brief Merged data for tag
     
@@ -146,27 +146,27 @@ namespace yq::mithril::cdb {
     //! \brief Returns the FIRST tag fragment that qualifies
     //! 
     //!     Will not create a fragment, though (so can return NULL)
-    Tag::SharedFile         read(Tag, const Root*, cdb_options_t opts=0);
+    Tag::SharedFile         read(Tag, const RootDir*, cdb_options_t opts=0);
     
     /*! \brief All fragments for tag
     */
     std::vector<TagFragDoc> reads(Tag, cdb_options_t opts=0);
 
-    /*! \brief Fragments for tag in root
+    /*! \brief Fragments for tag in root_dir
     */
-    std::vector<TagFragDoc> reads(Tag, class Root*, cdb_options_t opts=0);
+    std::vector<TagFragDoc> reads(Tag, class RootDir*, cdb_options_t opts=0);
     
     /*! \brief Sets the brief information for tag
     */
-    bool                    set_brief(Tag, std::string_view, class Root* rt=nullptr);
+    bool                    set_brief(Tag, std::string_view, class RootDir* rt=nullptr);
 
     /*! \brief Sets the name  information for tag
     */
-    bool                    set_name(Tag, std::string_view, class Root* rt=nullptr);
+    bool                    set_name(Tag, std::string_view, class RootDir* rt=nullptr);
 
     /*! \brief Sets the notes information for tag
     */
-    bool                    set_notes(Tag, std::string_view, class Root* rt=nullptr);
+    bool                    set_notes(Tag, std::string_view, class RootDir* rt=nullptr);
     
     //! \brief Tag File (&Data) for fragment
     Tag::SharedFile         tag_doc(Fragment, cdb_options_t opts=0);
@@ -177,5 +177,5 @@ namespace yq::mithril::cdb {
     //!     \note the path will be CREATED by this method.
     //!
     //!     If the document already exists, it will be read in.
-    Tag::SharedFile         write(Tag, const Root*, cdb_options_t opts=0);
+    Tag::SharedFile         write(Tag, const RootDir*, cdb_options_t opts=0);
 };

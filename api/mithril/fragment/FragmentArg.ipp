@@ -17,7 +17,7 @@
 
 namespace yq::mithril::arg {
 
-    Fragment fragment(std::string_view  arg_string, const Root* rt)
+    Fragment fragment(std::string_view  arg_string, const RootDir* rt)
     {
         arg_string   = trimmed(arg_string);
         if(arg_string.empty())
@@ -30,7 +30,7 @@ namespace yq::mithril::arg {
         return fragment_id(arg_string);
     }
     
-    Fragment fragment(const WebContext&ctx, const Root* rt, bool *detected)
+    Fragment fragment(const WebContext&ctx, const RootDir* rt, bool *detected)
     {
         if(detected)
             *detected   = false;
@@ -42,9 +42,9 @@ namespace yq::mithril::arg {
             return fragment_id(k);
         }
         
-        k   = ctx.find_query("root");
+        k   = ctx.find_query("root_dir");
         if(!k.empty())
-            rt  = root(k);
+            rt  = root_dir(k);
 
         k       = ctx.find_query("key");
         if(!k.empty()){
@@ -62,7 +62,7 @@ namespace yq::mithril::arg {
         return Fragment{};
     }
     
-    Fragment fragment(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
+    Fragment fragment(const WebContext&ctx, std::string_view arg_name, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -70,7 +70,7 @@ namespace yq::mithril::arg {
         return fragment(arg_string, rt);
     }
     
-    Fragment fragment(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
+    Fragment fragment(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)
@@ -104,7 +104,7 @@ namespace yq::mithril::arg {
         return fragment_id(arg_string);
     }
     
-    Fragment fragment_key(std::string_view arg_string, const Root* rt)
+    Fragment fragment_key(std::string_view arg_string, const RootDir* rt)
     {
         Document  doc  = document_key(arg_string);
         if(!doc)
@@ -112,7 +112,7 @@ namespace yq::mithril::arg {
         return cdb::first_fragment(doc, rt);
     }
     
-    Fragment fragment_key(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
+    Fragment fragment_key(const WebContext&ctx, std::string_view arg_name, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -120,7 +120,7 @@ namespace yq::mithril::arg {
         return fragment_key(arg_string, rt);
     }
     
-    Fragment fragment_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
+    Fragment fragment_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)

@@ -57,12 +57,12 @@ namespace yq::mithril::html {
     template <typename T>
     struct Edit {
         T           value;
-        const Root* root = nullptr;
+        const RootDir* root_dir = nullptr;
         bool        force_inspect = false;
     };
     
     template <typename T>
-    Edit<T> edit(T v, const Root* rt=nullptr, bool force=false)
+    Edit<T> edit(T v, const RootDir* rt=nullptr, bool force=false)
     {
         return Edit<T>{v, rt, force};
     }
@@ -335,7 +335,7 @@ namespace yq::mithril::html {
 namespace yq::mithril {
 
     template <typename T>
-    WebAutoClose        WebHtml::edit(T v, const Root* r, bool forceInspect)
+    WebAutoClose        WebHtml::edit(T v, const RootDir* r, bool forceInspect)
     {
         (*this) << html::edit(v, r, forceInspect);
         return WebAutoClose(*this, "</form>\n");

@@ -18,9 +18,9 @@ namespace yq::mithril {
     }
 
     namespace {
-        QuillData::Root    parse_root(const KeyValue& a)
+        QuillData::RootDir    parse_root(const KeyValue& a)
         {
-            QuillData::Root ret;
+            QuillData::RootDir ret;
             ret.path    = trimmed(a.data);
             ret.key     = trimmed(a.value(kv::key( "key", "k" )));
             ret.color   = a.value(kv::key("color"));
@@ -65,7 +65,7 @@ namespace yq::mithril {
         temp_dir        = attrs.value(kv::key("temp", "tmp", "tempdir", "temp_dir"));
         
         attrs.all(kv::key("root", "r"), [&](const KeyValue& a){
-            roots << parse_root(a);
+            root_dirs << parse_root(a);
         });
         attrs.all(kv::key("template", "t"), [&](const KeyValue& a){
             templates << parse_root(a);
@@ -74,7 +74,7 @@ namespace yq::mithril {
     }
 
     namespace {
-        void    write_onto(KeyValue& a, const QuillData::Root& r)
+        void    write_onto(KeyValue& a, const QuillData::RootDir& r)
         {
             a.data = r.path;
             if(!r.key.empty())
@@ -146,7 +146,7 @@ namespace yq::mithril {
         if(threads)
             attrs << KeyValue("threads", to_string(threads));
         
-        for(const auto & r : roots){
+        for(const auto & r : root_dirs){
             KeyValue   a;
             a.key   = "root";
             write_onto(a, r);

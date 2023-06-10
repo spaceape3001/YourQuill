@@ -17,7 +17,7 @@
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/class/ClassCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/image/ImageHtml.hpp>
 #include <mithril/html/HtmlLayout.hpp>
@@ -61,7 +61,7 @@ namespace yq::mithril::html {
     {
         Url             url;
         url.path        = "/admin/class/edit";
-        const Root* rt  = v.root;
+        const RootDir* rt  = v.root_dir;
         if(!rt)
             rt          = h.context().def_root(DataRole::Config);
 
@@ -76,7 +76,7 @@ namespace yq::mithril::html {
             if(rt){
                 if(c)
                     args << '&';
-                args << "root=" << rt->id;
+                args << "root_dir=" << rt->id;
             }
         }
         

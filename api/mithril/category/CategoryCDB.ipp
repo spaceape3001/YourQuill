@@ -16,7 +16,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
@@ -221,7 +221,7 @@ namespace yq::mithril::cdb {
         return s.str(t.id);
     }
     
-    Category                     make_category(std::string_view k, const Root* rt, cdb_options_t opts, bool *wasCreated)
+    Category                     make_category(std::string_view k, const RootDir* rt, cdb_options_t opts, bool *wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
@@ -232,7 +232,7 @@ namespace yq::mithril::cdb {
         if(!rt)
             rt  = wksp::root_first(DataRole::Config);
         if(!rt){
-            yError() << "No root specified to create the category in!";
+            yError() << "No root_dir specified to create the category in!";
             return Category{};
         }
         std::string     tfn = category_filename(k);
@@ -315,7 +315,7 @@ namespace yq::mithril::cdb {
         return NKI{};
     }
     
-    Category::SharedFile          read(Category t, const Root* rt, cdb_options_t opts)
+    Category::SharedFile          read(Category t, const RootDir* rt, cdb_options_t opts)
     {
         return category_doc(fragment(document(t), rt), opts);
     }
@@ -332,7 +332,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::vector<CatFragDoc>    reads(Category t, class Root* rt, cdb_options_t opts)
+    std::vector<CatFragDoc>    reads(Category t, class RootDir* rt, cdb_options_t opts)
     {
         std::vector<CatFragDoc>  ret;
         for(Fragment f : fragments(document(t), rt)){
@@ -343,7 +343,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
-    bool                set_brief(Category t, std::string_view k, class Root* rt)
+    bool                set_brief(Category t, std::string_view k, class RootDir* rt)
     {
         auto tf = write(t, rt);
         if(!tf)
@@ -352,7 +352,7 @@ namespace yq::mithril::cdb {
         return tf -> save() == std::error_code();
     }
     
-    bool                set_name(Category t, std::string_view k, class Root* rt)
+    bool                set_name(Category t, std::string_view k, class RootDir* rt)
     {
         auto tf = write(t, rt);
         if(!tf)
@@ -362,7 +362,7 @@ namespace yq::mithril::cdb {
     }
     
     
-    Category::SharedFile         write(Category t, const Root* rt, cdb_options_t opts)
+    Category::SharedFile         write(Category t, const RootDir* rt, cdb_options_t opts)
     {
         if(!t)
             return Category::SharedFile();
@@ -373,7 +373,7 @@ namespace yq::mithril::cdb {
             return Category::SharedFile();
         }
         if(rt && !rt->is_writable(DataRole::Config)){
-            yWarning() << "write(Category '" << key(t) << "'): Root " << rt->key << " cannot be written to!";
+            yWarning() << "write(Category '" << key(t) << "'): RootDir " << rt->key << " cannot be written to!";
             return Category::SharedFile();
         }
             

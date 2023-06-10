@@ -15,7 +15,7 @@ namespace yq::mithril {
     struct Folder;
     
     namespace post {
-        //! Finds root, by ID
+        //! Finds root_dir, by ID
         Folder folder(WebContext&, bool *detected=nullptr);
         Folder folder(WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Folder folder(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);

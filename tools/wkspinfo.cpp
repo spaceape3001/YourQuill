@@ -13,7 +13,7 @@
 #include <meta/Meta.hpp>
 #include <basic/TextUtils.hpp>
 
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 using namespace yq;
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
         << "-------------------\n"
     ;
     
-    for(const Root* rt : wksp::roots())
+    for(const RootDir* rt : wksp::root_dirs())
         std::cout << rt->id << " [" << rt->key << "] " << rt->path << "\n";
     
     return 0;

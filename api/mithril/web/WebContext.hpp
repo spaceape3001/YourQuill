@@ -31,12 +31,12 @@ namespace yq {
 
 namespace yq::mithril {
     class WebPage;
-    struct Root;
+    struct RootDir;
     
     struct SessionData {
         std::string_view    ssid;
         std::string         username;
-        const Root*         def_root        = nullptr;
+        const RootDir*         def_root        = nullptr;
         unsigned int        columns         = 0;
         SizeDesc            icon_size       = SizeDesc::Small;
         bool                auto_edit       = false;
@@ -174,7 +174,7 @@ namespace yq::mithril {
         //! Decodes body to json
         void                            decode_json();
         
-        const Root*                     def_root(DataRole) const;
+        const RootDir*                     def_root(DataRole) const;
         
         bool                            edit_now();
         
@@ -207,7 +207,7 @@ namespace yq::mithril {
         virtual void                    set_admin(bool) = 0;
         virtual void                    set_auto_edit(bool) = 0;
         virtual void                    set_columns(unsigned int) = 0;
-        virtual void                    set_def_root(const Root*) = 0;
+        virtual void                    set_def_root(const RootDir*) = 0;
         virtual void                    set_inspect_submit(bool) = 0;
         virtual void                    set_icon_size(SizeDesc) = 0;
         virtual void                    set_logged_in(bool) = 0;

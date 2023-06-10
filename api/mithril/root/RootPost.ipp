@@ -12,14 +12,14 @@
 #include <mithril/web/WebContext.hpp>
 
 namespace yq::mithril::post {
-    const Root* root(WebContext&ctx, bool *detected)
+    const RootDir* root_dir(WebContext&ctx, bool *detected)
     {
         ctx.decode_post();
         
         if(detected)
             *detected   = false;
             
-        std::string    k    = ctx.rx_post.first("root");
+        std::string    k    = ctx.rx_post.first("root_dir");
         if(!k.empty()){
             if(detected)
                 *detected   = true;
@@ -28,7 +28,7 @@ namespace yq::mithril::post {
         return nullptr;
     }
     
-    const Root* root(WebContext&ctx, std::string_view arg_name, bool *detected)
+    const RootDir* root_dir(WebContext&ctx, std::string_view arg_name, bool *detected)
     {
         std::string     arg_string = ctx.rx_post.first(copy(arg_name));
         if(detected)
@@ -36,7 +36,7 @@ namespace yq::mithril::post {
         return arg::root_id(arg_string);
     }
     
-    const Root* root(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+    const RootDir* root_dir(WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
     {
         std::string     arg_string = ctx.rx_post.first(copy(arg_names));
         if(detected)

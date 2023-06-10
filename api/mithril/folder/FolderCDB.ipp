@@ -13,7 +13,7 @@
 #include <mithril/directory/Directory.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/fragment/Fragment.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <mithril/wksp/CacheLogging.hpp>
@@ -60,7 +60,30 @@ namespace yq::mithril::cdb {
         static thread_local CacheQuery s("SELECT id FROM Documents WHERE folder=? AND sk=?");
         return s.as<Document>(f.id, k);
     }
-    
+
+    Document        child_document(Folder f, uint64_t n, Sorted sorted)
+    {
+        return child_document(f, n, HIDDEN | (sorted ? BEST_SORT : 0));
+    }
+
+    Document        child_document(Folder f, uint64_t n, unsigned opts)
+    {
+        static thread_local CacheQuery  qsh("SELECT id FROM Documents WHERE folder=? ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  qsv("SELECT id FROM Documents WHERE folder=? AND hidden=0 ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  quh("SELECT id FROM Documents WHERE folder=? LIMIT 1,?");
+        static thread_local CacheQuery  quv("SELECT id FROM Documents WHERE folder=? AND hidden=0 LIMIT 1,?");
+
+        CacheQuery& s   = (opts & BEST_SORT) ? ((opts & HIDDEN) ? qsh : qsv) : ((opts & HIDDEN) ? quh : quv);
+        auto af = s.af();
+        
+        s.bind(1, f);
+        s.bind(2, n);
+        
+        if(s.step() == SQResult::Row)
+            return Document(s.v_uint64(1));
+        return Document();
+    }
+
     std::vector<Document>    child_documents(Folder f, unsigned opts)
     {
         if(opts & BEST_SORT){
@@ -141,6 +164,28 @@ namespace yq::mithril::cdb {
         static thread_local CacheQuery    s("SELECT id FROM Folders WHERE parent=? AND ck=? LIMIT 1");
         return s.as<Folder>(f.id, ck);
     }
+
+    Folder                          child_folder(Folder f, uint64_t n, Sorted sorted)
+    {
+        return child_folder(f, n, HIDDEN | (sorted ? BEST_SORT : 0));
+    }
+
+    Folder                          child_folder(Folder f, uint64_t n, unsigned int opts)
+    {
+        static thread_local CacheQuery  qsh("SELECT id FROM Folders WHERE parent=? ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  qsv("SELECT id FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  quh("SELECT id FROM Folders WHERE parent=? LIMIT 1,?");
+        static thread_local CacheQuery  quv("SELECT id FROM Folders WHERE parent=? AND hidden=0 LIMIT 1,?");
+
+        CacheQuery& s   = (opts & BEST_SORT) ? ((opts & HIDDEN) ? qsh : qsv) : ((opts & HIDDEN) ? quh : quv);
+        auto af = s.af();
+        s.bind(1, f);
+        s.bind(2, n);
+        if(s.step() == SQResult::Row)
+            return Folder(s.v_uint64(1));
+        return Folder();
+    }
+    
 
     std::vector<Folder>      child_folders(Folder f, unsigned opts)
     {
@@ -273,7 +318,7 @@ namespace yq::mithril::cdb {
         return exists_folder(f.id);
     }
 
-    bool                exists(Folder fo, const Root*rt)
+    bool                exists(Folder fo, const RootDir*rt)
     {
         if(!rt)
             return false;
@@ -296,7 +341,7 @@ namespace yq::mithril::cdb {
         return s.as<Directory>(fo.id);
     }
     
-    Directory           first_directory(Folder fo, const Root*r)
+    Directory           first_directory(Folder fo, const RootDir*r)
     {
         if(!r)
             return first_directory(fo);
@@ -393,7 +438,7 @@ namespace yq::mithril::cdb {
         return key(f);
     }
     
-    void    make_directory(Folder fo, const Root* rt)
+    void    make_directory(Folder fo, const RootDir* rt)
     {
         if(!rt)
             return ;
@@ -437,14 +482,14 @@ namespace yq::mithril::cdb {
         return s.boolean(f.id);
     }
     
-    std::vector<const Root*> roots(Folder f)
+    std::vector<const RootDir*> root_dirs(Folder f)
     {
-        std::vector<const Root*> ret;
+        std::vector<const RootDir*> ret;
         static thread_local CacheQuery    s("SELECT DISTINCT root FROM Directories WHERE folder=?");
         auto s_af       = s.af();
         s.bind(1, f.id);
         while(s.step() == SQResult::Row){
-            const Root*r    = wksp::root(s.v_uint64(1));
+            const RootDir*r    = wksp::root_dir(s.v_uint64(1));
             if(r)
                 ret.push_back(r);
         }

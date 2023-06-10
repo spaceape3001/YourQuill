@@ -42,6 +42,13 @@
     <file alias="icon/download064.png">openIcon/64/run-build.png</file>
     <file alias="icon/download128.png">openIcon/128/run-build.png</file>
     
+    <file alias="icon/folder016.png">openIcon/16/inode-directory.png</file>
+    <file alias="icon/folder024.png">openIcon/24/inode-directory.png</file>
+    <file alias="icon/folder032.png">openIcon/32/inode-directory.png</file>
+    <file alias="icon/folder048.png">openIcon/48/inode-directory.png</file>
+    <file alias="icon/folder064.png">openIcon/64/inode-directory.png</file>
+    <file alias="icon/folder128.png">openIcon/128/inode-directory.png</file>
+
     <file alias="icon/fore024.png">openIcon/24/arrow-right-3.png</file>
     <file alias="icon/fore032.png">openIcon/32/arrow-right-3.png</file>
     <file alias="icon/fore048.png">openIcon/48/arrow-right-3.png</file>

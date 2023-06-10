@@ -15,7 +15,7 @@ namespace yq::mithril {
     struct Leaf;
     
     namespace post {
-        //! Finds root, by ID
+        //! Finds root_dir, by ID
         Leaf leaf(WebContext&, bool *detected=nullptr);
         Leaf leaf(WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Leaf leaf(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);

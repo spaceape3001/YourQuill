@@ -18,7 +18,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
@@ -624,7 +624,7 @@ namespace yq::mithril::cdb {
     }
 
 
-    Class                make_class(std::string_view k, const Root* rt, cdb_options_t opts, bool *wasCreated)
+    Class                make_class(std::string_view k, const RootDir* rt, cdb_options_t opts, bool *wasCreated)
     {
         if(k.empty()){
             yError() << "Cannot create a BLANK class.";
@@ -635,7 +635,7 @@ namespace yq::mithril::cdb {
         if(!rt)
             rt      = wksp::root_first(DataRole::Config);
         if(!rt){
-            yError() << "No root specified to create the class in!";
+            yError() << "No root_dir specified to create the class in!";
             return Class{};
         }
         
@@ -732,7 +732,7 @@ namespace yq::mithril::cdb {
         return s.str(c.id);
     }
 
-    Class::SharedFile        read(Class c, const Root*rt, cdb_options_t opts)
+    Class::SharedFile        read(Class c, const RootDir*rt, cdb_options_t opts)
     {
         return class_doc(fragment(document(c), rt), opts);
     }
@@ -748,7 +748,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::vector<ClassFragDoc>  reads(Class c, class Root*rt, cdb_options_t opts)
+    std::vector<ClassFragDoc>  reads(Class c, class RootDir*rt, cdb_options_t opts)
     {
         std::vector<ClassFragDoc>  ret;
         for(Fragment f : fragments(document(c), rt)){
@@ -855,7 +855,7 @@ namespace yq::mithril::cdb {
     }
     
 
-    Class::SharedFile        writable(Class c, const Root* rt, cdb_options_t opts)
+    Class::SharedFile        writable(Class c, const RootDir* rt, cdb_options_t opts)
     {
         if(!c)
             return Class::SharedFile();
@@ -865,7 +865,7 @@ namespace yq::mithril::cdb {
             return Class::SharedFile();
         }
         if(rt && !rt->is_writable(DataRole::Config)){
-            yWarning() << "write(Class '" << key(c) << "'): Root " << rt->key << " cannot be written to!";
+            yWarning() << "write(Class '" << key(c) << "'): RootDir " << rt->key << " cannot be written to!";
             return Class::SharedFile();
         }
 

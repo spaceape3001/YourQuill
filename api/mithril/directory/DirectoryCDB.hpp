@@ -27,7 +27,7 @@ namespace yq::mithril {
         Directory               parent;
         std::filesystem::path   path;
         bool                    removed     = false;
-        const Root*             root        = nullptr;
+        const RootDir*             root_dir        = nullptr;
         
         bool operator==(const Info&) const = default;
     };
@@ -204,7 +204,7 @@ namespace yq::mithril {
 
         /*! \brief Key for the directory
         
-            This returns the key (path relative to root) for the given directory.
+            This returns the key (path relative to root_dir) for the given directory.
         */
         std::string                     key(Directory);
 
@@ -216,7 +216,7 @@ namespace yq::mithril {
         std::filesystem::path           path(Directory);
 
         bool                            removed(Directory);
-        const Root*                     root(Directory);
+        const RootDir*                     root_dir(Directory);
         std::string                     skey(Directory);  //!< Key inside the directory
         std::string                     skeyb(Directory); //!< Key inside the directory (w/o extensions)
     }

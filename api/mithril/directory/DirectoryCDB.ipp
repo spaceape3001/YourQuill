@@ -11,7 +11,7 @@
 #include <mithril/folder/Folder.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/Fragment.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheLogging.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
@@ -154,7 +154,7 @@ namespace yq::mithril::cdb {
             *wasCreated = false;
         if(k.empty() || !dirParent)
             return {};
-        const Root* rt  = root(dirParent);
+        const RootDir* rt  = root_dir(dirParent);
         if(!rt)
             return {};
 
@@ -191,7 +191,7 @@ namespace yq::mithril::cdb {
         }
     }
     
-    //Fragment                db_fragment(Document, const Root*); // TODO
+    //Fragment                db_fragment(Document, const RootDir*); // TODO
 
     Directory           directory(uint64_t i)
     {
@@ -276,7 +276,7 @@ namespace yq::mithril::cdb {
             ret.parent  = Directory(s.v_uint64(3));
             ret.path    = s.v_text(4);
             ret.removed = s.v_bool(5);
-            ret.root    = wksp::root(s.v_uint64(6));
+            ret.root_dir    = wksp::root_dir(s.v_uint64(6));
             ret.hidden  = s.v_bool(7);
         }
         s.reset();
@@ -314,13 +314,13 @@ namespace yq::mithril::cdb {
         return s.boolean(d.id);
     }
     
-    const Root*         root(Directory d)
+    const RootDir*         root_dir(Directory d)
     {
         static thread_local CacheQuery    s("SELECT root FROM Directories WHERE id=?");
         auto s_lk   = s.af();
         s.bind(1, d.id);
         if(s.step() == SQResult::Row)
-            return wksp::root(s.v_uint64(1));
+            return wksp::root_dir(s.v_uint64(1));
         return nullptr;
     }
     

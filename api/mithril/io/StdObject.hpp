@@ -22,7 +22,7 @@ namespace yq::mithril {
     
         /*! Creates the standard object
             
-            The standard object load/save routines will assume that the "data" of the root key-value
+            The standard object load/save routines will assume that the "data" of the root_dir key-value
             represents the class name (from the meta system).
 
             \param[in] keyvalue Configuration (where "data" is assumed to be type)

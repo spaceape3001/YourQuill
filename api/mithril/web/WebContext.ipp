@@ -65,7 +65,7 @@ namespace yq::mithril {
         }
     }
 
-    const Root*         WebContext::def_root(DataRole dr) const
+    const RootDir*         WebContext::def_root(DataRole dr) const
     {
         if(session.def_root)
             return session.def_root;

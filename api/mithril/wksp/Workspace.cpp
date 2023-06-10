@@ -19,7 +19,7 @@
 //#include <mithril/config/DirConfig.hpp>
 
 #include <mithril/directories.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/quill/QuillFile.hpp>
 
 #include <atomic>
@@ -172,13 +172,13 @@ namespace yq::mithril::wksp {
         std::string             qkey;           // Quill key
         unsigned int            qoptions = 0;
         std::filesystem::path   qspec;          // What's provided
-        root_vector_t           roots;          // ALL roots active in this wokrspace
-        root_role_map_t         rfirst;         // First-write roots (will be the first item in rwrite -- can be NULL)
-        root_map_t              rkey;           // Root by key
-        root_path_map_t         rpath;          // Root by path
-        root_role_vec_map_t     rread;          // Root read order based on the data role
+        root_vector_t           root_dirs;          // ALL root_dirs active in this wokrspace
+        root_role_map_t         rfirst;         // First-write root_dirs (will be the first item in rwrite -- can be NULL)
+        root_map_t              rkey;           // RootDir by key
+        root_path_map_t         rpath;          // RootDir by path
+        root_role_vec_map_t     rread;          // RootDir read order based on the data role
         unsigned int            rtimeout = 0;   // Read timeout on HTTP server
-        root_role_vec_map_t     rwrite;         // Root write order based on te data role
+        root_role_vec_map_t     rwrite;         // RootDir write order based on te data role
         path_vector_t           shared_dirs;    // Shared directories
         std::filesystem::path   smartypants;    // Smarthpants script location
         std::time_t             start;          // Start time
@@ -200,10 +200,10 @@ namespace yq::mithril::wksp {
         bool    do_init(const Config& cfg);
         void    load(const QuillFile&doc, StringSet& rSeen, PolicyMap rPolicy, PolicyMap tPolicy, bool fTemplate, unsigned depth, SetSpots&qs);
 
-        std::pair<Root*, bool>  make_root(const std::filesystem::path&);
+        std::pair<RootDir*, bool>  make_root(const std::filesystem::path&);
         path_vector_t           template_directories(const std::string_view&);
         
-        Vector<Root*>           editable_roots();
+        Vector<RootDir*>           editable_roots();
         
     };
     
@@ -396,8 +396,8 @@ namespace yq::mithril::wksp {
         oracle.type = Oracle::DB;   // TODO ... curl
 
         string_set_t    rSeen;
-        Root*           rt  = new Root(qdir, PolicyMap(Access::ReadWrite));
-        roots << rt;
+        RootDir*           rt  = new RootDir(qdir, PolicyMap(Access::ReadWrite));
+        root_dirs << rt;
         rpath["."sv]              = rt;
         rpath[qdir]             = rt;
         rkey["."sv]               = rt;
@@ -428,7 +428,7 @@ namespace yq::mithril::wksp {
         load(doc, rSeen, PolicyMap(Access::ReadWrite), PolicyMap((qoptions&TEMPLATES_RO) ? Access::ReadOnly : Access::ReadWrite), false, 0, qs);
         
 
-        roots.sort([](const Root* a, const Root* b){
+        root_dirs.sort([](const RootDir* a, const RootDir* b){
             if(a->is_template != b->is_template)
                 return a->is_template < b->is_template;
             if(a->depth != b->depth)
@@ -436,16 +436,16 @@ namespace yq::mithril::wksp {
             return a->id < b->id;
         });
         
-        Vector<Root*>   eroots  = editable_roots();
+        Vector<RootDir*>   eroots  = editable_roots();
         
-        for(Root* r2 : eroots){
+        for(RootDir* r2 : eroots){
             std::filesystem::path  cd      = r2 -> path / szConfigDir;
             mkdir(cd.c_str(), kDirMode);
         }
         
         StringSet   keys;
         uint64_t    i   = 0;
-        for(Root* r2 : eroots){  // give everything IDs and record the keys
+        for(RootDir* r2 : eroots){  // give everything IDs and record the keys
             r2 -> id = i++;
             if(dir_type(r2 -> path) != WriteDir){
                 for(DataRole dr : DataRole::all_values())
@@ -455,7 +455,7 @@ namespace yq::mithril::wksp {
         }
         
         //  make sure everything has a key, default is the number
-        for(Root* r2 : eroots){
+        for(RootDir* r2 : eroots){
             if(!r2->key.empty())
                 continue;
             std::string s   = to_string(r2->id);
@@ -480,7 +480,7 @@ namespace yq::mithril::wksp {
         //  Sort out the writers
         for(DataRole dr : DataRole::all_values()){
             bool    hasFirst    = false;
-            for(Root* r3 : eroots){
+            for(RootDir* r3 : eroots){
                 if(r3->access[dr] == Access::WriteFirst){
                     if(hasFirst)    
                         r3->access[dr]   = Access::ReadWrite;
@@ -490,7 +490,7 @@ namespace yq::mithril::wksp {
             }
 
             if(!hasFirst){
-                for(Root* r3 : eroots){
+                for(RootDir* r3 : eroots){
                     if(r3->access[dr]     == Access::WriteFirst) {
                         r3 -> access[dr]    = Access::WriteFirst;
                         hasFirst    = true;
@@ -502,7 +502,7 @@ namespace yq::mithril::wksp {
             if(!hasFirst)
                 rfirst[dr]   = nullptr;
 
-            for(Root* r3 : eroots){
+            for(RootDir* r3 : eroots){
                 switch(r3->access[dr]){
                 case Access::WriteFirst:
                     rfirst[dr]     = r3;
@@ -522,11 +522,11 @@ namespace yq::mithril::wksp {
         return true;
     }
 
-    Vector<Root*>       Impl::editable_roots()
+    Vector<RootDir*>       Impl::editable_roots()
     {
-        Vector<Root*>  ret;
-        for(const Root* r : roots)
-            ret << const_cast<Root*>(r);
+        Vector<RootDir*>  ret;
+        for(const RootDir* r : root_dirs)
+            ret << const_cast<RootDir*>(r);
         return ret;
     }
 
@@ -539,7 +539,7 @@ namespace yq::mithril::wksp {
                 
             PolicyMap   pm2 = moderate(tPolicy, rs.policy);
             for(const std::filesystem::path& t : template_directories(rs.path)){
-                Root*   rt          = nullptr;
+                RootDir*   rt          = nullptr;
                 bool    rcre        = false;
                 std::tie(rt,rcre)   = make_root(t);
                 if(rcre)
@@ -574,7 +574,7 @@ namespace yq::mithril::wksp {
         }
             
         if(!fTemplate){
-            for(auto& rs : doc.roots){
+            for(auto& rs : doc.root_dirs){
                         // TODO ... need the equivalent to the QDir magic....
                 std::filesystem::path    rpp   = rs.path.c_str(); // absolute_proximate( rs.path, qdir);
                 if(rpp == ".")
@@ -584,7 +584,7 @@ namespace yq::mithril::wksp {
 
                 PolicyMap   pm2 = moderate(rPolicy, rs.policy);    
                 
-                Root*   rt      = nullptr;
+                RootDir*   rt      = nullptr;
                 bool    rcre    = false;
                 std::tie(rt,rcre)   = make_root(rpp);
                 if(rcre)
@@ -605,7 +605,7 @@ namespace yq::mithril::wksp {
                 rt->color         = rs.color;
                 rt->icon          = rs.icon;
                 
-                if(!rcre)       // should only trigger for the root, avoid a nasty recursion
+                if(!rcre)       // should only trigger for the root_dir, avoid a nasty recursion
                     continue;
                     
                 std::filesystem::path     qf  = rpp / szQuillFile;
@@ -660,15 +660,15 @@ namespace yq::mithril::wksp {
         }
     }
 
-    std::pair<Root*, bool>  Impl::make_root(const std::filesystem::path& s)
+    std::pair<RootDir*, bool>  Impl::make_root(const std::filesystem::path& s)
     {
-        const Root*   r = rpath.get(s, nullptr);
+        const RootDir*   r = rpath.get(s, nullptr);
         if(r)
-            return { const_cast<Root*>(r), false };
+            return { const_cast<RootDir*>(r), false };
         
-        Root* r2        = new Root(s);
-        r2 -> id        = roots.size();
-        roots << r2;
+        RootDir* r2        = new RootDir(s);
+        r2 -> id        = root_dirs.size();
+        root_dirs << r2;
         rpath[s]        = r2;
         return { r2, true };
     }
@@ -824,7 +824,7 @@ namespace yq::mithril::wksp {
     path_vector_t                   resolve_all(const std::string_view& sv, bool templatesOnly)
     {
         path_vector_t       ret;
-        for(const Root* r : impl().roots){
+        for(const RootDir* r : impl().root_dirs){
             if(templatesOnly && !r->is_template)
                 continue;
             std::filesystem::path   p   = r->resolve(sv);
@@ -834,30 +834,30 @@ namespace yq::mithril::wksp {
         return ret;
     }
     
-    const Root*                     root(uint64_t j)
+    const RootDir*                     root_dir(uint64_t j)
     {
         auto& i = impl();
-        if(j >= i.roots.size())
+        if(j >= i.root_dirs.size())
             return nullptr;
-        return i.roots[j];
+        return i.root_dirs[j];
     }
     
-    const Root*                     root(const std::filesystem::path&p)
+    const RootDir*                     root_dir(const std::filesystem::path&p)
     {
         return impl().rpath.get(p, nullptr);
     }
     
-    const Root*                     root(std::string_view k)
+    const RootDir*                     root_dir(std::string_view k)
     {
         return impl().rkey.get(k, nullptr);
     }
 
     uint64_t                        root_count()
     {
-        return impl().roots.size();
+        return impl().root_dirs.size();
     }
     
-    const Root*                     root_first(DataRole dr)
+    const RootDir*                     root_first(DataRole dr)
     {
         return impl().rfirst[dr];
     }
@@ -892,9 +892,9 @@ namespace yq::mithril::wksp {
         return impl().rwrite[dr];
     }
     
-    const root_vector_t&            roots()
+    const root_vector_t&            root_dirs()
     {
-        return impl().roots;
+        return impl().root_dirs;
     }
 
 
@@ -1029,12 +1029,17 @@ namespace yq::mithril::wksp {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 namespace yq::mithril {
-    const Root*  Root::by_key(const std::string_view&k)
+    const RootDir*  RootDir::by_id(uint64_t u)
     {
-        return wksp::root(k);
+        return wksp::root_dir(u);
     }
 
-    Root::Root(const std::filesystem::path&s) : path(s)
+    const RootDir*  RootDir::by_key(const std::string_view&k)
+    {
+        return wksp::root_dir(k);
+    }
+
+    RootDir::RootDir(const std::filesystem::path&s) : path(s)
     {
         if(dir::child_exists(s, ".svn"))
             vcs |= Vcs::SVN;
@@ -1042,27 +1047,27 @@ namespace yq::mithril {
             vcs |= Vcs::GIT;
     }
 
-    Root::Root(const std::filesystem::path&s, PolicyMap pm) : Root(s)
+    RootDir::RootDir(const std::filesystem::path&s, PolicyMap pm) : RootDir(s)
     {
         access  = pm;
     }
 
 
-    Root::~Root()
+    RootDir::~RootDir()
     {
     }
 
-    bool        Root::has_git() const
+    bool        RootDir::has_git() const
     {
         return vcs.is_set(Vcs::GIT);
     }
 
-    bool        Root::has_subversion() const
+    bool        RootDir::has_subversion() const
     {
         return vcs.is_set(Vcs::SVN);
     }
 
-    bool        Root::is_good(DataRole dr, Access ac) const
+    bool        RootDir::is_good(DataRole dr, Access ac) const
     {
         switch(ac){
         case Access::ReadOnly:
@@ -1077,7 +1082,7 @@ namespace yq::mithril {
         }
     }
 
-    bool        Root::is_readable(DataRole dr) const
+    bool        RootDir::is_readable(DataRole dr) const
     {
         switch(policy(dr)){
         case Access::Default:
@@ -1090,7 +1095,7 @@ namespace yq::mithril {
         }
     }
 
-    bool        Root::is_writable(DataRole dr) const
+    bool        RootDir::is_writable(DataRole dr) const
     {
         switch(policy(dr)){
         case Access::Default:
@@ -1102,18 +1107,18 @@ namespace yq::mithril {
         }
     }
 
-    bool        Root::is_write_first(DataRole dr) const
+    bool        RootDir::is_write_first(DataRole dr) const
     {
         return policy(dr) == Access::WriteFirst;
     }
 
 
-    Access      Root::policy(DataRole dr) const
+    Access      RootDir::policy(DataRole dr) const
     {
         return access.get(dr);
     }
 
-    std::filesystem::path   Root::resolve(const std::filesystem::path& z) const
+    std::filesystem::path   RootDir::resolve(const std::filesystem::path& z) const
     {
         return path / z;
     }

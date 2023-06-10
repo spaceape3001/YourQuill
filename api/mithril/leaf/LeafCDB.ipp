@@ -15,7 +15,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/leaf/LeafFile.hpp>
 #include <mithril/tag/TagCDB.hpp>
@@ -227,9 +227,9 @@ namespace yq {
 
                 std::filesystem::path       fp  = path(f);
 
-                const Root* rt  = root(f);
+                const RootDir* rt  = root_dir(f);
                 if(!rt)
-                    yWarning() << "No root for: " << fp;
+                    yWarning() << "No root_dir for: " << fp;
 
                 Fragment::Lock  lk;
                 if(!(opts & DONT_LOCK)){
@@ -255,7 +255,7 @@ namespace yq {
                 }
                 td -> set_file(fp);
                 for(auto& ctx : td -> context)
-                    ctx.root    = rt;
+                    ctx.root_dir    = rt;
                 return td;
             }
 
@@ -301,7 +301,7 @@ namespace yq {
                 return NKI{};
             }
 
-            Leaf::SharedFile         read(Leaf l, const Root* rt, cdb_options_t opts)
+            Leaf::SharedFile         read(Leaf l, const RootDir* rt, cdb_options_t opts)
             {
                 return leaf_doc(fragment(document(l), rt), opts);
             }
@@ -317,7 +317,7 @@ namespace yq {
                 return ret;
             }
 
-            std::vector<LeafFragDoc>   reads(Leaf l, class Root*rt, cdb_options_t opts)
+            std::vector<LeafFragDoc>   reads(Leaf l, class RootDir*rt, cdb_options_t opts)
             {
                 std::vector<LeafFragDoc>  ret;
                 for(Fragment f : fragments(document(l), rt)){
@@ -354,7 +354,7 @@ namespace yq {
 
 
 
-            Leaf::SharedFile         write(Leaf l, const Root* rt, cdb_options_t opts)
+            Leaf::SharedFile         write(Leaf l, const RootDir* rt, cdb_options_t opts)
             {
                 if(!l)
                     return Leaf::SharedFile();
@@ -364,7 +364,7 @@ namespace yq {
                     return Leaf::SharedFile();
                 }
                 if(rt && !rt->is_writable(DataRole::DB)){
-                    yWarning() << "write(Leaf '" << key(l) << "'): Root " << rt->key << " cannot be written to!";
+                    yWarning() << "write(Leaf '" << key(l) << "'): RootDir " << rt->key << " cannot be written to!";
                     return Leaf::SharedFile();
                 }
 

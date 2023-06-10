@@ -19,9 +19,9 @@ namespace yq::mithril {
     struct Copyright;
 
     #ifdef WIN32
-        using root_path_map_t   = Map<std::filesystem::path, const Root*, IgCase>;
+        using root_path_map_t   = Map<std::filesystem::path, const RootDir*, IgCase>;
     #else
-        using root_path_map_t   = Map<std::filesystem::path, const Root*>;
+        using root_path_map_t   = Map<std::filesystem::path, const RootDir*>;
     #endif
 
     struct Oracle {
@@ -97,7 +97,7 @@ namespace yq::mithril::wksp {
     
     /*! \brief Set of "other" ports
     
-        Given the chaining capability of the quill roots, this lists "other" ports to check to see if the
+        Given the chaining capability of the quill root_dirs, this lists "other" ports to check to see if the
         server is active.
     */
     const Set<uint16_t>&            aux_ports();
@@ -168,22 +168,22 @@ namespace yq::mithril::wksp {
     //! Any read timeout metric
     unsigned int                    read_timeout();
     
-    //! Resolves across all the roots
+    //! Resolves across all the root_dirs
     path_vector_t                   resolve_all(const std::string_view&, bool templatesOnly=false);
     
-    //! Root by ID....
-    const Root*                     root(uint64_t);
-    const Root*                     root(std::string_view);
-    const Root*                     root(const std::filesystem::path&);
+    //! RootDir by ID....
+    const RootDir*                  root_dir(uint64_t);
+    const RootDir*                  root_dir(std::string_view);
+    const RootDir*                  root_dir(const std::filesystem::path&);
     uint64_t                        root_count();
-    const Root*                     root_first(DataRole);
+    const RootDir*                  root_first(DataRole);
     const root_role_map_t&          root_firsts();
     const root_path_map_t&          root_path_map();
     const root_role_vec_map_t&      root_reads();
     const root_vector_t&            root_reads(DataRole);
     const root_role_vec_map_t&      root_writes();
     const root_vector_t&            root_writes(DataRole);
-    const root_vector_t&            roots();
+    const root_vector_t&            root_dirs();
 
     std::filesystem::path           shared(const std::string_view&);
     std::filesystem::path           shared(const std::filesystem::path&);

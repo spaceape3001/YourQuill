@@ -53,6 +53,12 @@ namespace yq::mithril {
         //! Gets named child document
         Document                        child_document(Folder, std::string_view );
 
+        //! Gets the specified nth child of folder
+        Document                        child_document(Folder, uint64_t, Sorted sorted);
+
+        //! Gets the specified nth child of folder
+        Document                        child_document(Folder, uint64_t, unsigned opts=0);
+
         //! Gets all documents of folder
         std::vector<Document>           child_documents(Folder, unsigned opts=0);
 
@@ -77,6 +83,11 @@ namespace yq::mithril {
         //! Gets named child folder
         Folder                          child_folder(Folder, std::string_view );
 
+        //! Gets the specified nth child of folder
+        Folder                          child_folder(Folder, uint64_t, Sorted sorted);
+
+        Folder                          child_folder(Folder, uint64_t, unsigned int opts=0);
+        
         //! Gets all child folders
         std::vector<Folder>             child_folders(Folder, unsigned int opts=0);
 
@@ -118,22 +129,22 @@ namespace yq::mithril {
         //! All directories that make this folder (not children)
         std::vector<Directory>          directories(Folder, Sorted sorted=Sorted());
 
-        //! Directories that make this folder under specific root (not children)
-        std::vector<Directory>          directories(Folder, const Root*, Sorted sorted=Sorted());
+        //! Directories that make this folder under specific root_dir (not children)
+        std::vector<Directory>          directories(Folder, const RootDir*, Sorted sorted=Sorted());
         
         //! Number of directories making this folder
         size_t                          directories_count(Folder);
 
-        //! Number of directories making this folder under specific root
+        //! Number of directories making this folder under specific root_dir
         //! \note On Windows, this will be no more than one, however, this can be many on any case-sensitive file system
-        std::vector<Directory>          directories_count(Folder, const Root*);
+        std::vector<Directory>          directories_count(Folder, const RootDir*);
         
 
         //! Checks for folder existence
         bool                            exists(Folder);
 
-        //! Checks for folder existence in root
-        bool                            exists(Folder, const Root*);
+        //! Checks for folder existence in root_dir
+        bool                            exists(Folder, const RootDir*);
 
         //! Checks for folder existence
         bool                            exists_folder(uint64_t);
@@ -144,8 +155,8 @@ namespace yq::mithril {
         //! First directory used to define this folder
         Directory                       first_directory(Folder);
 
-        //! First directory used to define this folder in root
-        Directory                       first_directory(Folder, const Root*);
+        //! First directory used to define this folder in root_dir
+        Directory                       first_directory(Folder, const RootDir*);
 
 
         /*! \brief Returns the FIRST document encountered, based on sub-key
@@ -184,8 +195,8 @@ namespace yq::mithril {
         //! Label for folder
         std::string                     label(Folder);
         
-        //! Make folder's directory under root (on drive)
-        void                            make_directory(Folder, const Root*);
+        //! Make folder's directory under root_dir (on drive)
+        void                            make_directory(Folder, const RootDir*);
 
         //! Name for folder
         std::string                     name(Folder);
@@ -199,10 +210,10 @@ namespace yq::mithril {
         //! TRUE if the folder's been removed from drive
         bool                            removed(Folder);
         
-        //! List of roots that have a directory for folder
-        std::vector<const Root*>        roots(Folder);
+        //! List of root_dirs that have a directory for folder
+        std::vector<const RootDir*>        root_dirs(Folder);
 
-        //! Count of roots where this folder may be found
+        //! Count of root_dirs where this folder may be found
         size_t                          roots_count(Folder);
 
 

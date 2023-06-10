@@ -11,20 +11,20 @@
 #include <mithril/enum/DataRole.hpp>
 
 namespace yq::mithril {
-    struct Root;
+    struct RootDir;
     
     namespace html {
-        WebHtml&    operator<<(WebHtml&, const Root*);
-        WebHtml&    operator<<(WebHtml&, Dev<const Root*>);
-        WebHtml&    operator<<(WebHtml&, DevID<const Root*>);
-        void        dev_table(WebHtml&, const std::vector<const Root*>&);
+        WebHtml&    operator<<(WebHtml&, const RootDir*);
+        WebHtml&    operator<<(WebHtml&, Dev<const RootDir*>);
+        WebHtml&    operator<<(WebHtml&, DevID<const RootDir*>);
+        void        dev_table(WebHtml&, const std::vector<const RootDir*>&);
         
         struct ControlRoot {
         };
 
         struct IRoot {
-            std::string_view    msg = "Change Root:";
-            const Root*         root = nullptr;
+            std::string_view    msg = "Change RootDir:";
+            const RootDir*         root_dir = nullptr;
             DataRole            role;
             Access              access;
         };
@@ -37,10 +37,10 @@ namespace yq::mithril {
             return ret;
         }
 
-        inline IRoot iroot(const Root* rt, Access ac=Access()) 
+        inline IRoot iroot(const RootDir* rt, Access ac=Access()) 
         {
             IRoot ret;
-            ret.root    = rt;
+            ret.root_dir    = rt;
             ret.access  = ac;
             return ret;
         }

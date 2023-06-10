@@ -94,7 +94,7 @@ namespace yq::mithril {
         std::string             label(Category);
         
         //! Makes a category 
-        Category                make_category(std::string_view, const Root* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
+        Category                make_category(std::string_view, const RootDir* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
         
         //! FUSED document data for category
         Category::SharedData    merged(Category, cdb_options_t opts=0);
@@ -108,18 +108,18 @@ namespace yq::mithril {
         //! \brief Returns the FIRST category fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        Category::SharedFile    read(Category, const Root*, cdb_options_t opts=0);
+        Category::SharedFile    read(Category, const RootDir*, cdb_options_t opts=0);
         
         //! All fragments for the category
         std::vector<CatFragDoc> reads(Category, cdb_options_t opts=0);
         //! Fragments for the category under specified root
-        std::vector<CatFragDoc> reads(Category, class Root*, cdb_options_t opts=0);
+        std::vector<CatFragDoc> reads(Category, class RootDir*, cdb_options_t opts=0);
 
         //! Sets the brief for the category
-        bool                    set_brief(Category, std::string_view, class Root* rt=nullptr);
+        bool                    set_brief(Category, std::string_view, class RootDir* rt=nullptr);
         
         //! Sets the name for the category
-        bool                    set_name(Category, std::string_view, class Root* rt=nullptr);
+        bool                    set_name(Category, std::string_view, class RootDir* rt=nullptr);
 
 
         //!  \brief   Returns a writable document
@@ -127,6 +127,6 @@ namespace yq::mithril {
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        Category::SharedFile    write(Category, const Root*, cdb_options_t opts=0);
+        Category::SharedFile    write(Category, const RootDir*, cdb_options_t opts=0);
     }
 }

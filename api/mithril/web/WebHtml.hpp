@@ -53,7 +53,7 @@ namespace yq::mithril {
         const WebContext&   context() const { return m_context; }
         
         template <typename T>
-        WebAutoClose        edit(T, const Root* r=nullptr, bool forceInspect=false);
+        WebAutoClose        edit(T, const RootDir* r=nullptr, bool forceInspect=false);
         
         void      run_me();
         

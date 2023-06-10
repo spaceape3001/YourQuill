@@ -186,7 +186,7 @@ namespace {
     
     void    var_root_count(WebHtml&h)
     {
-        h << wksp::roots().size();
+        h << wksp::root_dirs().size();
     }
     
     void    var_script(WebHtml&h)
@@ -353,7 +353,7 @@ namespace {
             .description("Name of the project/universe.");
             
         reg_webvar<var_root_count>("root_count")
-            .description("Total number of roots (template & non-template) in the project/workspace.");
+            .description("Total number of root_dirs (template & non-template) in the project/workspace.");
             
         reg_webvar<var_script>("script")
             .description("Javascript used with the standard page template.");

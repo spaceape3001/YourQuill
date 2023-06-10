@@ -17,7 +17,7 @@
 
 namespace yq::mithril::arg {
 
-    Directory directory(std::string_view  arg_string, const Root* rt)
+    Directory directory(std::string_view  arg_string, const RootDir* rt)
     {
         arg_string   = trimmed(arg_string);
         if(arg_string.empty())
@@ -30,7 +30,7 @@ namespace yq::mithril::arg {
         return directory_id(arg_string);
     }
     
-    Directory directory(const WebContext&ctx, const Root* rt, bool *detected)
+    Directory directory(const WebContext&ctx, const RootDir* rt, bool *detected)
     {
         std::string    k;
         
@@ -44,9 +44,9 @@ namespace yq::mithril::arg {
             return directory_id(k);
         }
         
-        k   = ctx.find_query("root");
+        k   = ctx.find_query("root_dir");
         if(!k.empty())
-            rt  = root(k);
+            rt  = root_dir(k);
 
         k       = ctx.find_query("key");
         if(!k.empty()){
@@ -64,7 +64,7 @@ namespace yq::mithril::arg {
         return Directory();
     }
     
-    Directory directory(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
+    Directory directory(const WebContext&ctx, std::string_view arg_name, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -72,7 +72,7 @@ namespace yq::mithril::arg {
         return directory(arg_string, rt);
     }
     
-    Directory directory(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
+    Directory directory(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)
@@ -107,7 +107,7 @@ namespace yq::mithril::arg {
     }
     
     
-    Directory directory_key(std::string_view arg_string, const Root* rt)
+    Directory directory_key(std::string_view arg_string, const RootDir* rt)
     {
         Folder  folder  = folder_key(arg_string);
         if(!folder)
@@ -115,7 +115,7 @@ namespace yq::mithril::arg {
         return cdb::first_directory(folder, rt);
     }
     
-    Directory directory_key(const WebContext&ctx, std::string_view arg_name, const Root* rt, bool *detected)
+    Directory directory_key(const WebContext&ctx, std::string_view arg_name, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -123,7 +123,7 @@ namespace yq::mithril::arg {
         return directory_key(arg_string, rt);
     }
     
-    Directory directory_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const Root* rt, bool *detected)
+    Directory directory_key(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, const RootDir* rt, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)

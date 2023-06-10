@@ -13,7 +13,7 @@
 #include <mithril/db/IDLock.hpp>
 #include <mithril/directory/DirectoryCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <mithril/wksp/CacheLogging.hpp>
@@ -65,7 +65,7 @@ namespace yq::mithril::cdb {
         Document        a   = db_document(f, k);
         std::filesystem::path         p   = path(dirParent) / k;
         std::string         sfx = suffix(a).ext;
-        const Root*     rt  = root(dirParent);
+        const RootDir*     rt  = root_dir(dirParent);
         
         
         static thread_local CacheQuery    i("INSERT OR FAIL INTO Fragments (path,name,dir,root,document,folder,suffix) VALUES (?,?,?,?,?,?,?)");
@@ -255,7 +255,7 @@ namespace yq::mithril::cdb {
             ret.rescan      = s.v_bool(8);
             ret.size        = s.v_uint64(9);
             ret.hidden      = s.v_bool(10);
-            ret.root        = wksp::root(s.v_uint64(11));
+            ret.root_dir        = wksp::root_dir(s.v_uint64(11));
         }
         s.reset();
         return ret;
@@ -314,13 +314,13 @@ namespace yq::mithril::cdb {
         return s.boolean(f.id);
     }
 
-    const Root*         root(Fragment f)
+    const RootDir*         root_dir(Fragment f)
     {
         static thread_local CacheQuery    s("SELECT root FROM Fragments WHERE id=?");
         auto s_af   = s.af();
         s.bind(1, f.id);
         if(s.step() == SQResult::Row)
-            return wksp::root(s.v_uint64(1));
+            return wksp::root_dir(s.v_uint64(1));
         return nullptr;
     }
 

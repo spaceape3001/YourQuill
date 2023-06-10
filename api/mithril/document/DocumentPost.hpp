@@ -15,7 +15,7 @@ namespace yq::mithril {
     struct Document;
     
     namespace post {
-        //! Finds root, by ID
+        //! Finds root_dir, by ID
         Document document(WebContext&, bool *detected=nullptr);
         Document document(WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Document document(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);

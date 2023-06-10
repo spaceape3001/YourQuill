@@ -54,12 +54,12 @@ namespace yq::mithril {
         Document                        document(uint64_t);
         
         bool                            exists(Document);
-        /*! \brief Document existence with Root
+        /*! \brief Document existence with RootDir
         
-            Checks to see if the document has a fragment with the specified root.  
-            Will return FALSE if root is null.
+            Checks to see if the document has a fragment with the specified root_dir.  
+            Will return FALSE if root_dir is null.
         */
-        bool                            exists(Document, const Root*);
+        bool                            exists(Document, const RootDir*);
         bool                            exists_document(uint64_t);
 
         /*! \brief Returns the FIRST document encountered
@@ -68,7 +68,7 @@ namespace yq::mithril {
         Document                        first_document(const std::vector<std::string>&);
 
         Fragment                        first_fragment(Document);
-        Fragment                        first_fragment(Document, const Root*);
+        Fragment                        first_fragment(Document, const RootDir*);
         Fragment                        first_fragment(Document, DataRole);
 
         Folder                          folder(Document);
@@ -78,15 +78,15 @@ namespace yq::mithril {
         /*! \brief Returns the first fragmment found for the given document
         */
         Fragment                        fragment(Document);
-        Fragment                        fragment(Document, const Root*);
+        Fragment                        fragment(Document, const RootDir*);
         Fragment                        fragment(Document, DataRole);
         
         std::vector<Fragment>           fragments(Document, Sorted sorted=Sorted());
-        std::vector<Fragment>           fragments(Document, const Root*, Sorted sorted=Sorted());
+        std::vector<Fragment>           fragments(Document, const RootDir*, Sorted sorted=Sorted());
         std::vector<Fragment>           fragments(Document, DataRole, Sorted sorted=Sorted());
 
         size_t                          fragments_count(Document);
-        size_t                          fragments_count(Document, const Root*);
+        size_t                          fragments_count(Document, const RootDir*);
 
         bool                            hidden(Document);
         
@@ -112,9 +112,9 @@ namespace yq::mithril {
 
         /*! \brief Roots for document
         
-            All the roots that has at least one fragment for the given document.
+            All the root_dirs that has at least one fragment for the given document.
         */
-        std::vector<const Root*>        roots(Document);
+        std::vector<const RootDir*>        root_dirs(Document);
 
         size_t                          roots_count(Document);
 

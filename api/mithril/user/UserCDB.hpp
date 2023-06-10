@@ -90,13 +90,13 @@ namespace yq::mithril::cdb {
     /*! \brief Makes a user
     
         \param[in] k            Key (ie username)
-        \param[in] rt           Root to create it in, null goes for default
+        \param[in] rt           RootDir to create it in, null goes for default
         \param[in] opts         options
         \param[in] wasCreated   returns TRUE if created
         
         \return Valid user if successful, empty otherwise
     */
-    User                    make_user(std::string_view k, const Root* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
+    User                    make_user(std::string_view k, const RootDir* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
     
     //! Merged user data
     User::SharedData        merged(User, cdb_options_t opts=0);
@@ -106,8 +106,8 @@ namespace yq::mithril::cdb {
     
     //! All user fragments
     Vector<UserFragDoc>     reads(User, cdb_options_t opts=0);
-    //! User fragments under specified root
-    Vector<UserFragDoc>     reads(User, class Root*, cdb_options_t opts=0);
+    //! User fragments under specified root_dir
+    Vector<UserFragDoc>     reads(User, class RootDir*, cdb_options_t opts=0);
 
     //! Finds user with matching key
     User                    user(std::string_view);
@@ -127,5 +127,5 @@ namespace yq::mithril::cdb {
     //!     \note the path will be CREATED by this method.
     //!
     //!     If the document already exists, it will be read in.
-    User::SharedFile        write(User, const Root*, cdb_options_t opts=0);
+    User::SharedFile        write(User, const RootDir*, cdb_options_t opts=0);
 }

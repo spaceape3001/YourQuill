@@ -14,7 +14,7 @@
 
 namespace yq::mithril {
     
-    struct Root;
+    struct RootDir;
     class WebHtml;
     class WebAutoClose;
     
@@ -44,8 +44,8 @@ namespace yq::mithril {
             struct {
                     //! Search for hidden things
                 bool    hidden      = false;
-                    //! Want root distinctions
-                bool    roots       = false;
+                    //! Want root_dir distinctions
+                bool    root_dirs       = false;
                     //! Sort the entries by skey's, otherwise kept in folder/document/leaf order
                 bool    merge       = false;
             } option;
@@ -68,7 +68,7 @@ namespace yq::mithril {
         
         Image                       icon;
         std::string                 key, skey, name, label, suffix, title;
-        std::vector<const Root*>    roots;
+        std::vector<const RootDir*>    root_dirs;
         
         XEntry(){}
         XEntry(Leaf);

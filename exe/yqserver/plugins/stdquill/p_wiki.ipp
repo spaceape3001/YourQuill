@@ -15,11 +15,11 @@ namespace {
     {
         if(!ctx.title.empty())
             return ctx.title;
-        if(ctx.root){
-            if(!ctx.root->name.empty())
-                return ctx.root->name;
-            if(!ctx.root->key.empty())
-                return ctx.root->key;
+        if(ctx.root_dir){
+            if(!ctx.root_dir->name.empty())
+                return ctx.root_dir->name;
+            if(!ctx.root_dir->key.empty())
+                return ctx.root_dir->key;
         }
         return std::string_view();
     }

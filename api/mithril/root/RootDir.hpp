@@ -17,48 +17,51 @@
 namespace yq::mithril {
     namespace wksp { struct Impl; }
 
-    /*! \brief Represents a "root" directory for the workspace, all keys are relative to one of these.
+    /*! \brief Represents a "root_dir" directory for the workspace, all keys are relative to one of these.
     */
-    struct Root {
+    struct RootDir {
         friend struct wksp::Impl;
         
-        //! Access policy for this root
+        //! Access policy for this root_dir
         EnumMap<DataRole, Access>   access;
         
-        //! Suggestive color for this root
+        //! Suggestive color for this root_dir
         std::string                 color;
         
         //! Used by the workspace during load to shuffle into order
         uint64_t                    depth           = 0;  
         
-        //! Filename of the icon for this root
+        //! Filename of the icon for this root_dir
         std::string                 icon;               // file
         
-        //! ID for this root
+        //! ID for this root_dir
         uint64_t                    id              = 0;
         
         //! TRUE if this was loaded as a template
         bool                        is_template     = false;
         
-        //! Short key for this root (user defined)
+        //! Short key for this root_dir (user defined)
         std::string                 key;
         
-        //! Name of this root
+        //! Name of this root_dir
         std::string                 name;
         
-        //! Path to the root (assume case-sensitive)
+        //! Path to the root_dir (assume case-sensitive)
         const std::filesystem::path path;
         
-        //! Detected version control systems active for the root
+        //! Detected version control systems active for the root_dir
         Flag<Vcs>                   vcs;
         
-        //! Look up the root by key
-        static const Root*  by_key(const std::string_view&);
+        //! Look up the root_dir by key
+        static const RootDir*  by_key(const std::string_view&);
 
-        //! TRUE if this root is controlled by GIT
+        //! Look up the root_dir by key
+        static const RootDir*  by_id(uint64_t);
+
+        //! TRUE if this root_dir is controlled by GIT
         bool                has_git() const;
         
-        //! TRUE if this root is controlled by subverision
+        //! TRUE if this root_dir is controlled by subverision
         bool                has_subversion() const;
 
         //  version control (NYI)
@@ -77,7 +80,7 @@ namespace yq::mithril {
         bool                is_writable(DataRole) const;
         bool                is_write_first(DataRole) const;
 
-        //! Resolves a relative file to this root (file existence not checked)
+        //! Resolves a relative file to this root_dir (file existence not checked)
         std::filesystem::path   resolve(const std::filesystem::path&) const;
         
         //! Returns the policy (from the map) for the particular data role
@@ -85,17 +88,17 @@ namespace yq::mithril {
         
     private:
 
-        Root(const std::filesystem::path&);
-        Root(const std::filesystem::path&, PolicyMap);
+        RootDir(const std::filesystem::path&);
+        RootDir(const std::filesystem::path&, PolicyMap);
 
 
-        Root(const Root&) = delete;
-        Root(Root&&) = delete;
+        RootDir(const RootDir&) = delete;
+        RootDir(RootDir&&) = delete;
         
-        ~Root();
+        ~RootDir();
         
-        Root&    operator=(const Root&) = delete;
-        Root&    operator=(Root&&) = delete;
+        RootDir&    operator=(const RootDir&) = delete;
+        RootDir&    operator=(RootDir&&) = delete;
         
     };
 

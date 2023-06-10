@@ -18,7 +18,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
@@ -266,7 +266,7 @@ namespace yq::mithril::cdb {
         //return s.str(f.id);
     }
 
-    Field                       make_field(std::string_view kf, Class c, const Root* rt, cdb_options_t opts, bool *wasCreated)
+    Field                       make_field(std::string_view kf, Class c, const RootDir* rt, cdb_options_t opts, bool *wasCreated)
     {
     
         if(wasCreated)
@@ -278,7 +278,7 @@ namespace yq::mithril::cdb {
         if(!rt)
             rt      = wksp::root_first(DataRole::Config);
         if(!rt){
-            yError() << "No root specified to create the class in!";
+            yError() << "No root_dir specified to create the class in!";
             return Field{};
         }
         
@@ -371,7 +371,7 @@ namespace yq::mithril::cdb {
     }
     
 
-    Field::SharedFile        read(Field f, const Root*rt, cdb_options_t opts)
+    Field::SharedFile        read(Field f, const RootDir*rt, cdb_options_t opts)
     {
         return field_doc(fragment(document(f), rt), opts);
     }
@@ -387,7 +387,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::vector<FieldFragDoc>  reads(Field f, class Root*rt, cdb_options_t opts)
+    std::vector<FieldFragDoc>  reads(Field f, class RootDir*rt, cdb_options_t opts)
     {
         std::vector<FieldFragDoc>  ret;
         for(Fragment ff : fragments(document(f), rt)){
@@ -419,7 +419,7 @@ namespace yq::mithril::cdb {
         return s.set<Tag>(f.id);
     }
 
-    Field::SharedFile        writable(Field f, const Root* rt, cdb_options_t opts)
+    Field::SharedFile        writable(Field f, const RootDir* rt, cdb_options_t opts)
     {
         if(!f)
             return Field::SharedFile();
@@ -430,7 +430,7 @@ namespace yq::mithril::cdb {
             return Field::SharedFile();
         }
         if(rt && !rt->is_writable(DataRole::Config)){
-            yWarning() << "write(Field '" << key(f) << "'): Root " << rt->key << " cannot be written to!";
+            yWarning() << "write(Field '" << key(f) << "'): RootDir " << rt->key << " cannot be written to!";
             return Field::SharedFile();
         }
 

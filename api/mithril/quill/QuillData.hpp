@@ -17,7 +17,7 @@ namespace yq::mithril {
     struct Copyright;
 
     struct QuillData {
-        struct Root;
+        struct RootDir;
 
         //! Abbreviation
         std::string             abbr;
@@ -56,14 +56,14 @@ namespace yq::mithril {
         //! Read timeout
         unsigned int            read_timeout    = 0;
         
-        //! Root data directories
-        Vector<Root>            roots;
+        //! RootDir data directories
+        Vector<RootDir>            root_dirs;
 
         //! Temporary directory is here
         std::string             temp_dir;
         
-        //! Root templates
-        Vector<Root>            templates;
+        //! RootDir templates
+        Vector<RootDir>            templates;
         
         //! Number of threads to spawn...
         unsigned int            threads         = 0;
@@ -72,7 +72,7 @@ namespace yq::mithril {
         
     };
 
-    struct QuillData::Root {
+    struct QuillData::RootDir {
         std::string     key;
         std::string     name;
         std::string     path;
@@ -83,8 +83,8 @@ namespace yq::mithril {
         
         //  users directory.... (default will be ./.users)
         
-        Root() = default;
-        explicit Root(const std::string_view& p) : path(p) {}
-        ~Root(){}
+        RootDir() = default;
+        explicit RootDir(const std::string_view& p) : path(p) {}
+        ~RootDir(){}
     };
 }

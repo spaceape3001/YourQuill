@@ -11,13 +11,13 @@
 #include <mithril/directory/DirectoryCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
-    std::vector<Directory>   all_directories(const Root*rt, Sorted sorted)
+    std::vector<Directory>   all_directories(const RootDir*rt, Sorted sorted)
     {
         if(!rt)
             return std::vector<Directory>();
@@ -28,7 +28,7 @@ namespace yq::mithril::cdb {
         return s.vec<Directory>(rt->id);
     }
     
-    size_t              all_directories_count(const Root*rt)
+    size_t              all_directories_count(const RootDir*rt)
     {
         if(!rt)
             return 0;
@@ -37,7 +37,7 @@ namespace yq::mithril::cdb {
         return s.size(rt->id);
     }
     
-    std::vector<Fragment>    all_fragments(const Root*rt, Sorted sorted)
+    std::vector<Fragment>    all_fragments(const RootDir*rt, Sorted sorted)
     {
         if(!rt)
             return std::vector<Fragment>();
@@ -47,7 +47,7 @@ namespace yq::mithril::cdb {
         return s.vec<Fragment>(rt->id);
     }
     
-    size_t              all_fragments_count(const Root*rt)
+    size_t              all_fragments_count(const RootDir*rt)
     {
         if(!rt)
             return 0;
@@ -57,17 +57,17 @@ namespace yq::mithril::cdb {
 
     size_t                      all_roots_count()
     {
-        return wksp::roots().size();
+        return wksp::root_dirs().size();
     }
     
-    std::vector<DirOrFrag>   children(const Root* rt, Sorted sorted)
+    std::vector<DirOrFrag>   children(const RootDir* rt, Sorted sorted)
     {
         return children(directory(rt), sorted);
     }
     
     std::vector<uint8_t>         data(Fragment);     // TODO
     
-    Directory           db_root(const Root*rt, bool *wasCreated)
+    Directory           db_root(const RootDir*rt, bool *wasCreated)
     {
         if(wasCreated)
             *wasCreated = false;
@@ -95,14 +95,14 @@ namespace yq::mithril::cdb {
         }
     }
 
-    Directory           directory(const Root*rt)
+    Directory           directory(const RootDir*rt)
     {
         if(!rt)
             return Directory();
         return directory(rt->path);
     }
     
-    std::vector<Directory>   directories(const Root*rt, Sorted sorted)
+    std::vector<Directory>   directories(const RootDir*rt, Sorted sorted)
     {
         if(!rt)
             return std::vector<Directory>();
@@ -113,7 +113,7 @@ namespace yq::mithril::cdb {
         return s.vec<Directory>(rt->id);
     }
 
-    size_t              directories_count(const Root* rt)
+    size_t              directories_count(const RootDir* rt)
     {
         if(!rt)
             return 0;
@@ -121,7 +121,7 @@ namespace yq::mithril::cdb {
         return s.size(rt->id);
     }
     
-    bool                exists(const Root*rt, std::string_view z)
+    bool                exists(const RootDir*rt, std::string_view z)
     {
         if(!rt)
             return false;
@@ -129,7 +129,7 @@ namespace yq::mithril::cdb {
     }
     
 
-    Fragment            fragment(const Root*rt, std::string_view z)
+    Fragment            fragment(const RootDir*rt, std::string_view z)
     {
         if(!rt)
             return Fragment{};
@@ -137,19 +137,19 @@ namespace yq::mithril::cdb {
     }
 
     
-    std::vector<Fragment>    fragments(const Root*rt, Sorted sorted)
+    std::vector<Fragment>    fragments(const RootDir*rt, Sorted sorted)
     {
         return child_fragments(directory(rt), sorted);
     }
 
-    std::string             key(const Root*rt)
+    std::string             key(const RootDir*rt)
     {
         if(!rt)
             return std::string();
         return rt->key;
     }
     
-    std::filesystem::path   path(const Root*rt, std::string_view z, bool fMakePath)
+    std::filesystem::path   path(const RootDir*rt, std::string_view z, bool fMakePath)
     {
         std::filesystem::path   p =  rt -> resolve(z);
         if(fMakePath && !p.empty())
@@ -157,7 +157,7 @@ namespace yq::mithril::cdb {
         return p;
     }
     
-    std::filesystem::path   path(const Root*rt, Document doc, bool fMakePath)
+    std::filesystem::path   path(const RootDir*rt, Document doc, bool fMakePath)
     {
         return path(rt, key(doc), fMakePath);
     }

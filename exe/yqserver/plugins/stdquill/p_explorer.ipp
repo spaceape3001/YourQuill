@@ -19,7 +19,7 @@ namespace {
 
     bool    decode_do_roots(const WebContext&ctx)
     {
-        std::string     s   = ctx.find_query("roots");
+        std::string     s   = ctx.find_query("root_dirs");
         if(s.empty())
             return false;
         return to_boolean(s).value_or(false);
@@ -35,14 +35,14 @@ namespace {
         XEntry::Details     detail;
         detail.option.hidden       = true;
         if(do_roots)
-            detail.option.roots    = true;
+            detail.option.root_dirs    = true;
 
         detail.icon_size            = h.context().session.icon_size;
         {
             stream::Text    link(detail.link.folder);
             link << "/file/explore?";
             if(do_roots)
-                link << "roots=1&";
+                link << "root_dirs=1&";
             link << "folder=";
         }
         
@@ -78,7 +78,7 @@ namespace {
                     }
                     if(do_roots){
                         h << "<br><font size=-2>[&nbsp;";
-                        for(const Root* rt : ee.roots){
+                        for(const RootDir* rt : ee.root_dirs){
                             if(!rt)
                                 continue;
                             h << rt->key << "&nbsp;";

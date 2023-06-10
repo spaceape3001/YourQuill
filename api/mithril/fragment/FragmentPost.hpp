@@ -15,7 +15,7 @@ namespace yq::mithril {
     struct Fragment;
     
     namespace post {
-        //! Finds root, by ID
+        //! Finds root_dir, by ID
         Fragment fragment(WebContext&, bool *detected=nullptr);
         Fragment fragment(WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Fragment fragment(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);

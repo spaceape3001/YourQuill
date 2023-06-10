@@ -11,7 +11,13 @@ add_executable(${PROJECT_NAME}
     DreamApp.hpp 
     DreamApp.cpp 
     DreamMW.hpp 
-    DreamMW.cpp 
+    DreamMW.cpp
+    FileTree.hpp
+    FileTree.cpp
+    FolderViewIcons.hpp
+    FolderViewIcons.cpp
+    IdEncoding.hpp 
+    IdEncoding.cpp 
     main.cpp 
 )
 

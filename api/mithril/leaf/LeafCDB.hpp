@@ -135,7 +135,7 @@ namespace yq {
             //! \brief Returns the FIRST leaf fragment that qualifies
             //! 
             //!     Will not create a fragment, though (so can return NULL)
-            Leaf::SharedFile            read(Leaf, const Root*, cdb_options_t opts=0);
+            Leaf::SharedFile            read(Leaf, const RootDir*, cdb_options_t opts=0);
             
             /*! \brief Returns ALL leaf fragments
             
@@ -143,14 +143,14 @@ namespace yq {
             */
             std::vector<LeafFragDoc>    reads(Leaf, cdb_options_t opts=0);
 
-            /*! \brief Returns leaf fragments for given root
+            /*! \brief Returns leaf fragments for given root_dir
             
                 This returns a vector of fragments for given leaf.  (No merging)
                 
                 \note this will only be one, at most on a case-insensitive file system.  However, on a case sensitive
                 file system, this may be multiple.
             */
-            std::vector<LeafFragDoc>    reads(Leaf, class Root*, cdb_options_t opts=0);
+            std::vector<LeafFragDoc>    reads(Leaf, class RootDir*, cdb_options_t opts=0);
 
             //! Tests if given leaf has the given tag
             bool                        tagged(Leaf, Tag);
@@ -169,7 +169,7 @@ namespace yq {
             //!     \note the path will be CREATED by this method.
             //!
             //!     If the document already exists, it will be read in.
-            Leaf::SharedFile            write(Leaf, const Root*, cdb_options_t opts=0);
+            Leaf::SharedFile            write(Leaf, const RootDir*, cdb_options_t opts=0);
 
         }
     }

@@ -15,7 +15,7 @@ namespace yq::mithril {
     struct Class;
     
     namespace post {
-        //! Finds root, by ID
+        //! Finds class, by ID
         Class class_(WebContext&, bool *detected=nullptr);
         Class class_(WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Class class_(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);

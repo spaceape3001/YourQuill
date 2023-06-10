@@ -11,7 +11,7 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq {
@@ -153,7 +153,7 @@ namespace yq {
                 return exists(i) ? Fragment{i.id} : Fragment{};
             }
             
-            Image               icon(const Root* rt)
+            Image               icon(const RootDir* rt)
             {
                 if(!rt)
                     return Image();

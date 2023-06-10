@@ -48,7 +48,7 @@ namespace yq {
         struct Leaf;
         struct Place;
         struct Property;
-        struct Root;
+        struct RootDir;
         struct Tag;
         struct Thing;
         struct User;
@@ -252,7 +252,7 @@ namespace yq {
         }
 
         struct WebContext;
-        struct Root;
+        struct RootDir;
         
         class HtmlTable;
         class WebAutoClose;

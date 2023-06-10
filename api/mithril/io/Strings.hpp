@@ -133,7 +133,7 @@ namespace yq::mithril {
     static constexpr const char*    szResult            = "result";
     static constexpr const char*    szReverse           = "reverse";
     static constexpr const char*    szRole              = "role";
-    static constexpr const char*    szRoot              = "root";
+    static constexpr const char*    szRoot              = "root_dir";
     static constexpr const char*    szRules_            = "_rules_";
     static constexpr const char*    szServer            = "server";
     static constexpr const char*    szShow              = "show";

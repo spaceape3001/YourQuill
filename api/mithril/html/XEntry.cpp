@@ -203,8 +203,8 @@ namespace yq::mithril {
             ee.icon     = Image{ sd.v_uint64(4) };
             ee.suffix   = sd.v_string(5);
             ee.key      = sd.v_string(6);
-            if(dt.option.roots)
-                ee.roots    = cdb::roots( ee.document );
+            if(dt.option.root_dirs)
+                ee.root_dirs    = cdb::root_dirs( ee.document );
             ret.push_back(ee);
             ++cnt;
         }
@@ -231,8 +231,8 @@ namespace yq::mithril {
                 ee.label    = ee.name;
             ee.icon     = Image{ sf.v_uint64(4) };
             ee.key      = sf.v_string(5);
-            if(dt.option.roots)
-                ee.roots    = cdb::roots( ee.folder );
+            if(dt.option.root_dirs)
+                ee.root_dirs    = cdb::root_dirs( ee.folder );
             ret.push_back(ee);
             ++cnt;
         }
@@ -259,8 +259,8 @@ namespace yq::mithril {
                 ee.label    = ee.title;
             ee.icon     = Image{ sf.v_uint64(4) };
             ee.key      = sf.v_string(5);
-            if(dt.option.roots)
-                ee.roots    = cdb::roots( ee.document );
+            if(dt.option.root_dirs)
+                ee.root_dirs    = cdb::root_dirs( ee.document );
             ret.push_back(ee);
             ++cnt;
         }

@@ -15,7 +15,7 @@ namespace yq::mithril {
     struct Image;
     
     namespace post {
-        //! Finds root, by ID
+        //! Finds root_dir, by ID
         Image image(WebContext&, bool *detected=nullptr);
         Image image(WebContext&, std::string_view arg_name, bool *detected=nullptr);
         Image image(WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);

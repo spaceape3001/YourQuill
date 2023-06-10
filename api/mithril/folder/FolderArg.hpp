@@ -11,7 +11,7 @@
 
 namespace yq::mithril {
     struct WebContext;
-    struct Root;
+    struct RootDir;
     struct Folder;
     
     namespace arg {
