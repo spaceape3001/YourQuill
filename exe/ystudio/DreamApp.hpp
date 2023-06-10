@@ -17,6 +17,8 @@ public:
     DreamApp(int&, char**);
     ~DreamApp();
     
+    bool                configure();
+    
     const QUrl&         home() const { return m_home; }
     
 private:

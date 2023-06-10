@@ -7,9 +7,9 @@
 #pragma once
 
 #include <gluon/app/SubWindow.hpp>
-#include <QUrl>
+//#include <QUrl>
 //#include <QTextBrowser>
-#include <basic/Url.hpp>
+//#include <basic/Url.hpp>
 #include <QWebEnginePage>
 #include <QWebEngineView>
 
@@ -22,11 +22,6 @@ class Browser : public yq::gluon::SubWindow {
     
     class View;
     class Page;
-    //class Popup;
-    
-    //class Viewer;
-    
-    static Expect<Url>  toValidUrl(const QUrl&);
     
     View*       view() { return m_view; }
     const View* view() const { return m_view; }
@@ -44,7 +39,7 @@ private slots:
     
     void    returnPressed();
     void    urlChanged(const QUrl&);
-    //void    reload();
+    void    refresh();
     
 signals:
     void                actionRequested(const QUrl&);
@@ -84,30 +79,3 @@ public:
     ~Page();
 };
 
-#if 0
-class Browser::Popup : public QWidget {
-    Q_OBJECT
-public:
-    Popup(QWebEngineProfile* profile);
-    View*   view() const;
-private slots:
-    void handleGeometryChangeRequested(const QRect &newGeometry);
-private:
-    QLineEdit*  m_url   = nullptr;
-    View*       m_view  = nullptr;
-};
-#endif
-
-#if 0
-class Browser::Viewer : public QTextBrowser {
-    Q_OBJECT
-public:
-    Viewer();
-    ~Viewer();
-    virtual QVariant 	loadResource(int type, const QUrl &name) override;
-
-signals:
-    void                actionRequested(const QUrl&);
-
-};
-#endif

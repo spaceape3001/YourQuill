@@ -7,11 +7,10 @@
 #include "Browser.hpp"
 #include "DreamApp.hpp"
 
-#include <basic/ErrorDB.hpp>
+//#include <basic/ErrorDB.hpp>
 #include <gluon/app/MainWindow.hpp>
 #include <gluon/core/Logging.hpp>
 #include <gluon/core/Utilities.hpp>
-#include <io/Curl.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 #include <QWebEngineProfile>
@@ -26,29 +25,6 @@
 
 using namespace yq;
 using namespace yq::gluon;
-
-////////////////////////////////////////////////////////////////////////////////
-Expect<Url>  Browser::toValidUrl(const QUrl& url)
-{
-    if(url.port() != yq::mithril::wksp::port())
-        return unexpected<"Bad port">();
-    QString    sch  = url.scheme().toLower();
-    if((sch != "http") && (sch != "https"))
-        return unexpected<"Bad scheme">();
-    QString h   = url.host();
-    if((h.toLower() != "localhost") && !QHostAddress(h).isLoopback())
-        return unexpected<"Not localhost">();
-    
-    Url u;
-    u.scheme    = url.scheme().toStdString();
-    u.host      = url.host().toStdString();
-    u.port      = yq::mithril::wksp::port();
-    u.path      = url.path().toStdString();
-    u.fragment  = url.fragment().toStdString();
-    u.query     = url.query().toStdString();
-    return u;
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 Browser::Page::Page(QWebEngineProfile*profile, QObject*parent) : 
@@ -114,53 +90,6 @@ void        Browser::View::handle_renderProcessTerminated(QWebEnginePage::Render
 }
 
 
-
-#if 0
-
-Browser::Viewer::Viewer()
-{
-}
-
-Browser::Viewer::~Viewer()
-{
-}
-
-QVariant 	Browser::Viewer::loadResource(int type, const QUrl &url) 
-{
-    yInfo() << "Request to load resource(" << type << ", " << url << ")";
-
-    if(url.scheme().toLower() == "yq"){
-        //  this is action, nothing else....
-        actionRequested(url);
-        return QVariant();
-    }
-    
-    auto x  = toValidUrl(url);
-    if(!x){
-        yInfo() << "Unable to load (" << url << "): " << x.error();
-        return QVariant();
-    }
-    
-    Curl    io;
-    io.set_url(*x);
-    HttpStatus  s   = io.exec();
-    if(isError(s)){
-        yInfo() << "HTTP (" << url << ") Error " << s.value() << " " << yq::statusMessage(s);
-        return QVariant();
-    }
-    
-    if(isRedirect(s)){
-        yInfo() << "HTTP (" << url << ") Redirect " << s.value() << " " << yq::statusMessage(s) << " UNIMPLEMENTED";
-        return QVariant();
-    }
-    
-    auto data       = io.rx();
-    return QByteArray((const char*) data.data(), data.size());
-}
-
-#endif
-
-
 ////////////////////////////////////////////////////////////////////////////////
 
 Browser::Browser(QWebEngineProfile*profile, QWidget* parent) : Browser(QUrl(), profile, parent) 
@@ -181,7 +110,7 @@ Browser::Browser(const QUrl& location, QWebEngineProfile*profile, QWidget* paren
     m_fore          = new QAction(fetchIcon(":yq/icon/fore%1.png"), tr("Fore"), this);
     connect(m_fore,    &QAction::triggered, m_view, &QWebEngineView::forward);
     
-    m_reload        = new QAction(fetchIcon(":yq/icon/reload%1.png"), tr("Reload"), this);
+    m_reload        = new QAction(fetchIcon(":yq/icon/refresh%1.png"), tr("Reload"), this);
     connect(m_reload, &QAction::triggered, m_view, &QWebEngineView::reload);
     
     m_stop          = new QAction(fetchIcon(":yq/icon/cancel%1.png"), tr("Stop"), this);
@@ -220,10 +149,20 @@ Browser::~Browser()
 {
 }
 
+void    Browser::goHome()
+{
+    m_view->setUrl(DreamApp::app()->home());
+}
+
 void    Browser::navigate(const QUrl&u)
 {
     if(!u.isEmpty())
         m_view->setUrl(u);
+}
+
+void    Browser::refresh()
+{
+    m_view -> reload();
 }
 
 void    Browser::returnPressed()
@@ -231,12 +170,6 @@ void    Browser::returnPressed()
     QString     text    = m_url->text().trimmed();
     QUrl        newUrl  = QUrl::fromUserInput(text);
     m_view->setUrl(newUrl);
-}
-
-void    Browser::goHome()
-{
-    QUrl where(QString("http://localhost:%1/").arg(yq::mithril::wksp::port()));
-    m_view->setUrl(where);
 }
 
 void    Browser::urlChanged(const QUrl&u)

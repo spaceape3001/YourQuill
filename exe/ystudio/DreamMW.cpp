@@ -25,11 +25,14 @@ DreamMW::DreamMW()
     updateTitle();
     
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
+    addAction("refresh", "Refresh").icon(fetchIcon(":yq/icon/refresh%1.png")).shortcut("F5");
+    
     makeMenu("studio", "Studio",
         QStringList() << "browser"
     );
-    
-    //menu("Studio");
+    makeMenu("view", "View",
+        QStringList() << "refresh"
+    );
 }
 
 DreamMW::~DreamMW()
