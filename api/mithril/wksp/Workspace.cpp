@@ -19,6 +19,7 @@
 //#include <mithril/config/DirConfig.hpp>
 
 #include <mithril/directories.hpp>
+#include <mithril/root/Root.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/quill/QuillFile.hpp>
 
@@ -1031,6 +1032,11 @@ namespace yq::mithril::wksp {
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 namespace yq::mithril {
+    const RootDir*  root_dir(Root rt)
+    {
+        return RootDir::by_id(rt.id);
+    }
+
     const RootDir*  RootDir::by_id(uint64_t u)
     {
         return wksp::root_dir(u);

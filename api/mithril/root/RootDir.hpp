@@ -101,5 +101,8 @@ namespace yq::mithril {
         RootDir&    operator=(RootDir&&) = delete;
         
     };
-
+    
+    //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
+    const RootDir*  root_dir(Root);
 }

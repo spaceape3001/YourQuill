@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <mithril/root/Root.hpp>
 #include <mithril/root/RootArg.hpp>
 #include <mithril/root/RootHtml.hpp>
 #include <mithril/root/RootPost.hpp>

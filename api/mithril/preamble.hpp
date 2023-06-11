@@ -48,6 +48,7 @@ namespace yq {
         struct Leaf;
         struct Place;
         struct Property;
+        struct Root;
         struct RootDir;
         struct Tag;
         struct Thing;

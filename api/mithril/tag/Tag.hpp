@@ -23,6 +23,7 @@ namespace yq::mithril {
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Tag&rhs) const noexcept = default;
         constexpr operator uint64_t() const noexcept { return id; }
+#if 0        
 
         //  --------------------------------------
         //  These all QUERY the cache (either direct or via CURL)
@@ -53,6 +54,7 @@ namespace yq::mithril {
         std::string             name() const;
         NKI                     nki(bool autoKeyToName=false) const;
         bool                    valid() const;
+#endif
     };
     
 }
