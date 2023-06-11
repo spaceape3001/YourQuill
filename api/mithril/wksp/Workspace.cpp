@@ -446,7 +446,7 @@ namespace yq::mithril::wksp {
         StringSet   keys;
         uint64_t    i   = 0;
         for(RootDir* r2 : eroots){  // give everything IDs and record the keys
-            r2 -> id = i++;
+            r2 -> id = ++i;
             if(dir_type(r2 -> path) != WriteDir){
                 for(DataRole dr : DataRole::all_values())
                     r2 -> access[dr]    = moderate(r2 -> access[dr], Access::ReadOnly);
@@ -837,9 +837,11 @@ namespace yq::mithril::wksp {
     const RootDir*                     root_dir(uint64_t j)
     {
         auto& i = impl();
-        if(j >= i.root_dirs.size())
+        if(!j)
             return nullptr;
-        return i.root_dirs[j];
+        if(j > i.root_dirs.size())
+            return nullptr;
+        return i.root_dirs[j-1];
     }
     
     const RootDir*                     root_dir(const std::filesystem::path&p)
