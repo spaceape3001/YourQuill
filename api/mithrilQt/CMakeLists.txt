@@ -16,7 +16,6 @@ set(CMAKE_AUTOMOC ON)
 add_library(${PROJECT_NAME} SHARED
     id/IdColumn.hpp
     id/IdColumn.ipp
-    id/IdProvider.hpp
     id/id.cpp
 )
 

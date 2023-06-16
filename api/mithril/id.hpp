@@ -6,10 +6,3 @@
 
 #pragma once
 
-#include "IdColumn.hpp"
-
-namespace yq::mithril {
-    IdColumn::IdColumn() = default;
-    IdColumn::~IdColumn() = default;
-    
-}

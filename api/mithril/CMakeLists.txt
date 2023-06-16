@@ -23,6 +23,7 @@ add_library(${PROJECT_NAME} SHARED
     folder.cpp
     fragment.cpp
     group.cpp
+    id.cpp
     image.cpp
     leaf.cpp
     meta.cpp

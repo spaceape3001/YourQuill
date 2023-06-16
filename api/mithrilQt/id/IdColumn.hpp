@@ -6,9 +6,10 @@
 
 #pragma once
 
-#include <mithril/Id.hpp>
+#include <mithril/id/Id.hpp>
 #include <QVariant>
 #include <functional>
+#include <meta/Generator.hpp>
 
 namespace yq::gluon {
     class Delegate;
@@ -21,13 +22,11 @@ namespace yq::mithril {
     class IdColumn {
     public:
     
-        using VariantFN     = std::function<QVariant(uint64_t)>;
-        using AddFN         = std::function<uint64_t(QVariant)>;
-        using SetFN         = std::function<std::error_code(uint64_t, QVariant)>;
-        using DropFN        = std::function<std::error_code(uint64_t, std::span<const uint64_t>)>;
+        using VariantFN     = std::function<QVariant(Id)>;
+        using AddFN         = std::function<Id(QVariant)>;
+        using SetFN         = std::function<std::error_code(Id, QVariant)>;
+        using DropFN        = std::function<std::error_code(Id, std::span<const Id>)>;
         using DelegateFN    = std::function<Delegate*()>;
-        
-        using PublishFN     = std::function<IdColumn*()>;
 
         AddFN           fnAdd;
         VariantFN       fnDecoration;
@@ -45,18 +44,6 @@ namespace yq::mithril {
         IdColumn();
         ~IdColumn();
 
-        template <size_t N>
-        static void         publish(const char(&s)[N], PublishFN &&fn)
-        {
-            publish_(std::string_view(s,N), std::move(fn));
-        }
-
-        static IdColumn*    create(std::string_view);
-
-    private:
-        static void         publish_(std::string_view, PublishFN&&);
-    
-        struct Repo;
-        static Repo&    repo();
+        using Factory   = Generator<const IdColumn>;
     };
 }
