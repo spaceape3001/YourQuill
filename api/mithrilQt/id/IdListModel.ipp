@@ -11,54 +11,21 @@
 namespace yq::mithril {
     
     
-    IdListModel::IdListModel(IdProvider::UPtr provider, IdColumn::UPtr column, QObject*parent) :
-        QAbstractListModel(parent), IdModel(std::move(provider)), m_column(std::move(column))
+    IdListModel::IdListModel(Id i, IdProvider::UPtr&& provider, QObject*parent) :
+        IdModel(Type::List, i, std::move(provider), parent)
     {
-        _load();
-    }
-    
-    IdListModel::IdListModel(IdProvider::UPtr provider, IdColumn::UPtr column, std::vector<IdFilter::UPtr>&& filters, QObject*parent) :
-        QAbstractListModel(parent), IdModel(std::move(provider), std::move(filters)),  m_column(std::move(column))
-    {
-        _load();
     }
     
     IdListModel::~IdListModel()
     {
     }
-    
-    void    IdListModel::_load()
-    {
-        m_data  = _fetch();
-    }
 
-
-    QVariant        IdListModel::data(const QModelIndex&idx, int role) const
+    void    IdListModel::setColumn(IdColumn&&col)
     {
-        if(role == Qt::DisplayRole)
-            return idx.row()+1;
-        return QVariant();
-    }
-    
-    Qt::ItemFlags   IdListModel::flags(const QModelIndex& idx) const
-    {
-        return QAbstractListModel::flags(idx);
-    }
-
-    void            IdListModel::reload()
-    {
-        beginResetModel();
-        _load();
-        endResetModel();
-    }
-
-    int             IdListModel::rowCount(const QModelIndex&) const 
-    {
-        return m_data.size();
-    }
-    
-    bool            IdListModel::setData(const QModelIndex&, const QVariant&, int ) 
-    {
-        return false;
+        if(m_columns.empty()){
+            m_columns.push_back(col);
+        } else {
+            m_columns[0]        = std::move(col);
+        }
     }
 }

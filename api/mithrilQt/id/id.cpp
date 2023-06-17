@@ -5,14 +5,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <tbb/spin_rw_mutex.h>  // avoids emit issues
-
-#include "IdTableModel.ipp"
+#include <concepts>
 
 #include "IdColumn.ipp"
-#include "IdListModel.ipp"
 #include "IdModel.ipp"
+#include "IdItemModel.ipp"
+#include "IdListModel.ipp"
+#include "IdTableModel.ipp"
 
+#include "moc_IdModel.cpp"
+#include "moc_IdItemModel.cpp"
 #include "moc_IdListModel.cpp"
 #include "moc_IdTableModel.cpp"
-//#include "moc_IdColumn.cpp"
-//#include "moc_IdProvider.cpp"

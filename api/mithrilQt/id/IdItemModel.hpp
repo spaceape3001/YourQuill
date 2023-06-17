@@ -9,16 +9,17 @@
 #include <mithrilQt/id/IdModel.hpp>
 
 namespace yq::mithril {
-    class IdTableModel : public IdModel {
+    class IdItemModel : public IdModel {
         Q_OBJECT
     public:
-        IdTableModel(Id, IdProvider::UPtr, QObject*parent=nullptr);
-        ~IdTableModel();
+        IdItemModel(Id, IdProvider::UPtr, TreeDetector&&, ProviderGenerator&&, QObject*parent=nullptr);
+        ~IdItemModel();
     
     protected:
         void    setColumns(std::vector<IdColumn>&&);
         void    addColumn(IdColumn&&);
         void    addColumn(size_t before, IdColumn&&);
     };
-}
 
+
+}

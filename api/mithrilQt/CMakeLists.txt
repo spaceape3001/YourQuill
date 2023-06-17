@@ -22,6 +22,8 @@ add_library(${PROJECT_NAME} SHARED
     id/IdModel.ipp
     id/IdTableModel.hpp
     id/IdTableModel.ipp
+    id/IdItemModel.hpp
+    id/IdItemModel.ipp
     id/id.cpp
 )
 
