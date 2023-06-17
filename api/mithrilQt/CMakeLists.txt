@@ -16,6 +16,12 @@ set(CMAKE_AUTOMOC ON)
 add_library(${PROJECT_NAME} SHARED
     id/IdColumn.hpp
     id/IdColumn.ipp
+    id/IdListModel.hpp
+    id/IdListModel.ipp
+    id/IdModel.hpp
+    id/IdModel.ipp
+    id/IdTableModel.hpp
+    id/IdTableModel.ipp
     id/id.cpp
 )
 

@@ -9,7 +9,6 @@
 #include <mithril/id/Id.hpp>
 #include <QVariant>
 #include <functional>
-#include <meta/Generator.hpp>
 
 namespace yq::gluon {
     class Delegate;
@@ -22,6 +21,8 @@ namespace yq::mithril {
     class IdColumn {
     public:
     
+        using UPtr      = std::unique_ptr<const IdColumn>;
+
         using VariantFN     = std::function<QVariant(Id)>;
         using AddFN         = std::function<Id(QVariant)>;
         using SetFN         = std::function<std::error_code(Id, QVariant)>;
@@ -44,6 +45,5 @@ namespace yq::mithril {
         IdColumn();
         ~IdColumn();
 
-        using Factory   = Generator<const IdColumn>;
     };
 }

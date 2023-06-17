@@ -12,7 +12,10 @@
 namespace yq::mithril {
     class IdProvider {
     public:
-        using Factory           = Generator<const IdProvider*>;
+        using UPtr      = std::unique_ptr<const IdProvider>;
+        using Factory   = Generator<const IdProvider*>;
+        
+        
         virtual std::vector<Id>     fetch() const = 0;
         virtual ~IdProvider(){}
     };
