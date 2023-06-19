@@ -27,6 +27,8 @@ namespace yq::mithril::cdb {
     //! Number of root_dirs
     size_t                     all_roots_count();
 
+    std::vector<Root>           all_roots();
+
     //! Immediate children of root_dir (no subs)
     std::vector<DirOrFrag>     children(const RootDir*,Sorted sorted=Sorted());
 

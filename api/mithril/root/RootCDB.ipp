@@ -11,6 +11,7 @@
 #include <mithril/directory/DirectoryCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/Root.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
@@ -53,6 +54,16 @@ namespace yq::mithril::cdb {
             return 0;
         static thread_local CacheQuery s("SELECT COUNT(1) FROM Fragments WHERE root=?");
         return s.size(rt->id);
+    }
+
+    std::vector<Root>           all_roots()
+    {
+        size_t  n   = all_roots_count();
+        std::vector<Root>   ret;
+        ret.reserve(n);
+        for(size_t i=1;i<=n;++i)
+            ret.push_back(Root(i));
+        return ret;
     }
 
     size_t                      all_roots_count()

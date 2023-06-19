@@ -11,11 +11,16 @@
 #include "table/BookTable.hpp"
 #include "table/CharacterTable.hpp"
 #include "table/ClassTable.hpp"
+#include "table/DirectoryTable.hpp"
+#include "table/DocumentTable.hpp"
 #include "table/EventTable.hpp"
 #include "table/FieldTable.hpp"
+#include "table/FolderTable.hpp"
+#include "table/FragmentTable.hpp"
 #include "table/GameTable.hpp"
 #include "table/LeafTable.hpp"
 #include "table/PlaceTable.hpp"
+#include "table/RootTable.hpp"
 #include "table/TagTable.hpp"
 
 #include <mithril/wksp/Workspace.hpp>
@@ -43,11 +48,16 @@ DreamMW::DreamMW()
     addAction("bookTable", "Books").connect(this, &DreamMW::newBookTable);
     addAction("characterTable", "Characters").connect(this, &DreamMW::newCharacterTable);
     addAction("classTable", "Classes").connect(this, &DreamMW::newClassTable);
+    addAction("directoryTable", "Directories").connect(this, &DreamMW::newDirectoryTable);
+    addAction("documentTable", "Documents").connect(this, &DreamMW::newDocumentTable);
     addAction("eventTable", "Events").connect(this, &DreamMW::newEventTable);
     addAction("fieldTable", "Fields").connect(this, &DreamMW::newFieldTable);
+    addAction("folderTable", "Folders").connect(this, &DreamMW::newFolderTable);
+    addAction("fragmentTable", "Fragments").connect(this, &DreamMW::newFragmentTable);
     addAction("gameTable", "Games").connect(this, &DreamMW::newGameTable);
     addAction("leafTable", "Leafs").connect(this, &DreamMW::newLeafTable);
     addAction("placeTable", "Places").connect(this, &DreamMW::newPlaceTable);
+    addAction("rootTable", "Roots").connect(this, &DreamMW::newRootTable);
     addAction("tagTable", "Tags").connect(this, &DreamMW::newTagTable);
     
     makeMenu("studio", "Studio",
@@ -58,11 +68,16 @@ DreamMW::DreamMW()
             << "bookTable"
             << "characterTable"
             << "classTable"
+            << "directoryTable"
+            << "documentTable"
             << "eventTable"
             << "fieldTable"
+            << "folderTable"
+            << "fragmentTable"
             << "gameTable"
             << "leafTable"
             << "placeTable"
+            << "rootTable"
             << "tagTable"
     );
     makeMenu("view", "View",
@@ -108,6 +123,20 @@ void    DreamMW::newClassTable()
     addWindow(tt);
 }
 
+void    DreamMW::newDirectoryTable()
+{
+    DirectoryTable*  tt  = new DirectoryTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
+void    DreamMW::newDocumentTable()
+{
+    DocumentTable*  tt  = new DocumentTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
 void    DreamMW::newEventTable()
 {
     EventTable*  tt  = new EventTable;
@@ -118,6 +147,20 @@ void    DreamMW::newEventTable()
 void    DreamMW::newFieldTable()
 {
     FieldTable*  tt  = new FieldTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
+void    DreamMW::newFolderTable()
+{
+    FolderTable*  tt  = new FolderTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
+void    DreamMW::newFragmentTable()
+{
+    FragmentTable*  tt  = new FragmentTable;
     tt->refresh();
     addWindow(tt);
 }
@@ -144,6 +187,13 @@ MainWindow*  DreamMW::newMain()
 void    DreamMW::newPlaceTable()
 {
     PlaceTable*  tt  = new PlaceTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
+void    DreamMW::newRootTable()
+{
+    RootTable*  tt  = new RootTable;
     tt->refresh();
     addWindow(tt);
 }

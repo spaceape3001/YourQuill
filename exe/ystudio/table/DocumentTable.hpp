@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class DocumentTable : public IdTableT<Document> {
+    Q_OBJECT
+public:
+    DocumentTable(QWidget*parent=nullptr);
+    ~DocumentTable();
+};

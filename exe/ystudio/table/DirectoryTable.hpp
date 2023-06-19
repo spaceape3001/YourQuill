@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class DirectoryTable : public IdTableT<Directory> {
+    Q_OBJECT
+public:
+    DirectoryTable(QWidget*parent=nullptr);
+    ~DirectoryTable();
+};

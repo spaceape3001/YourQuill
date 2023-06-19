@@ -26,10 +26,15 @@ public slots:
     void    newBookTable();
     void    newCharacterTable();
     void    newClassTable();
+    void    newDirectoryTable();
+    void    newDocumentTable();
     void    newEventTable();
     void    newFieldTable();
+    void    newFolderTable();
+    void    newFragmentTable();
     void    newGameTable();
     void    newLeafTable();
     void    newPlaceTable();
+    void    newRootTable();
     void    newTagTable();
 };

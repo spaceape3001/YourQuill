@@ -32,14 +32,24 @@ add_executable(${PROJECT_NAME}
     table/CharacterTable.cpp
     table/ClassTable.hpp
     table/ClassTable.cpp
+    table/DirectoryTable.hpp
+    table/DirectoryTable.cpp
+    table/DocumentTable.hpp
+    table/DocumentTable.cpp
     table/EventTable.hpp
     table/EventTable.cpp
     table/FieldTable.hpp
     table/FieldTable.cpp
+    table/FolderTable.hpp
+    table/FolderTable.cpp
+    table/FragmentTable.hpp
+    table/FragmentTable.cpp
     table/GameTable.hpp
     table/GameTable.cpp
     table/LeafTable.hpp
     table/LeafTable.cpp
+    table/RootTable.hpp
+    table/RootTable.cpp
     table/PlaceTable.hpp
     table/PlaceTable.cpp
     table/TagTable.hpp

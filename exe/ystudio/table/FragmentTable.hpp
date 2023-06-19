@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class FragmentTable : public IdTableT<Fragment> {
+    Q_OBJECT
+public:
+    FragmentTable(QWidget*parent=nullptr);
+    ~FragmentTable();
+};

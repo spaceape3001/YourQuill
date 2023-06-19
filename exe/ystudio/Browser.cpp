@@ -98,7 +98,7 @@ Browser::Browser(QWebEngineProfile*profile, QWidget* parent) : Browser(QUrl(), p
 
 Browser::Browser(const QUrl& location, QWebEngineProfile*profile, QWidget* parent) : SubWindow(parent)
 {
-    m_page          = new Page(profile, this);
+    m_page          = new Page(profile);
     m_view          = new View(m_page);
     
     m_url                   = new QLineEdit;
@@ -147,6 +147,7 @@ Browser::Browser(const QUrl& location, QWebEngineProfile*profile, QWidget* paren
 
 Browser::~Browser()
 {
+    m_page -> deleteLater();
 }
 
 void    Browser::goHome()
