@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/book.hpp>
-#include <mithril/atom/AtomCDB.hpp>
 #include "BookTable.hpp"
 
 
@@ -15,10 +14,14 @@ BookTable::BookTable(QWidget*parent) : IdTableT<Book>(
     }, parent
 )
 {
-    makeColumn<uint64_t> ("ID"sv, [](Book b) -> uint64_t { return b.id; });
-    makeColumn<std::string> ("Name", [](Book b) -> std::string {
-        return cdb::name(cdb::atom(b));
+    makeColumn<std::string> ("Key", [](Book b) -> std::string {
+        return cdb::key(b);
     });
+    makeColumn<std::string> ("Title", [](Book b) -> std::string {
+        return cdb::title(b);
+    });
+
+    setWindowTitle(tr("Books"));
 }
 
 BookTable::~BookTable()

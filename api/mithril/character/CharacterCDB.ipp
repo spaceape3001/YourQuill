@@ -37,5 +37,15 @@ namespace yq::mithril::cdb {
     {
         return is(Atom(ch.id), character_class());
     }
+
+    std::string                 key(Character ch)
+    {
+        return key(atom(ch));
+    }
+
+    std::string                 name(Character ch)
+    {
+        return name(atom(ch));
+    }
     
 }

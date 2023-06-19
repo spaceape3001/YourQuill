@@ -85,5 +85,12 @@ namespace yq::mithril {
         {
             m_model->addColumn<S,T>(label, fn);
         }
+        
+        void    setVHeader(std::function<QVariant(S)>fn)
+        {
+            m_model->m_vHeader  = [fn](Id i){
+                return fn(i.as<S>());
+            };
+        }
     };
 }

@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/game.hpp>
-#include <mithril/atom/AtomCDB.hpp>
 #include "GameTable.hpp"
 
 
@@ -15,10 +14,14 @@ GameTable::GameTable(QWidget*parent) : IdTableT<Game>(
     }, parent
 )
 {
-    makeColumn<uint64_t> ("ID"sv, [](Game b) -> uint64_t { return b.id; });
-    makeColumn<std::string> ("Name", [](Game b) -> std::string {
-        return cdb::name(cdb::atom(b));
+    makeColumn<std::string>("Key", [](Game g) -> std::string {
+        return cdb::key(g);
     });
+    makeColumn<std::string> ("Title", [](Game g) -> std::string {
+        return cdb::title(g);
+    });
+
+    setWindowTitle(tr("Games"));
 }
 
 GameTable::~GameTable()

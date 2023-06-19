@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/place.hpp>
-#include <mithril/atom/AtomCDB.hpp>
 #include "PlaceTable.hpp"
 
 
@@ -15,10 +14,13 @@ PlaceTable::PlaceTable(QWidget*parent) : IdTableT<Place>(
     }, parent
 )
 {
-    makeColumn<uint64_t> ("ID"sv, [](Place b) -> uint64_t { return b.id; });
-    makeColumn<std::string> ("Name", [](Place b) -> std::string {
-        return cdb::name(cdb::atom(b));
+    makeColumn<std::string>("Key", [](Place p) -> std::string {
+        return cdb::key(p);
     });
+    makeColumn<std::string> ("Name", [](Place p) -> std::string {
+        return cdb::name(p);
+    });
+    setWindowTitle(tr("Places"));
 }
 
 PlaceTable::~PlaceTable()

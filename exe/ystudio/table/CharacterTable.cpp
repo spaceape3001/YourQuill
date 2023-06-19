@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/character.hpp>
-#include <mithril/atom/AtomCDB.hpp>
 #include "CharacterTable.hpp"
 
 
@@ -15,10 +14,13 @@ CharacterTable::CharacterTable(QWidget*parent) : IdTableT<Character>(
     }, parent
 )
 {
-    makeColumn<uint64_t> ("ID"sv, [](Character b) -> uint64_t { return b.id; });
-    makeColumn<std::string> ("Name", [](Character b) -> std::string {
-        return cdb::name(cdb::atom(b));
+    makeColumn<std::string>("Key", [](Character ch) -> std::string {
+        return cdb::key(ch);
     });
+    makeColumn<std::string> ("Name", [](Character ch) -> std::string {
+        return cdb::name(ch);
+    });
+    setWindowTitle(tr("Characters"));
 }
 
 CharacterTable::~CharacterTable()

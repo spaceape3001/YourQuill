@@ -36,5 +36,14 @@ namespace yq::mithril::cdb {
     {
         return is(Atom(ch.id), event_class());
     }
+
+    std::string         key(Event evt)
+    {
+        return key(atom(evt));
+    }
     
+    std::string                     title(Event evt)
+    {
+        return name(atom(evt));
+    }
 }

@@ -17,5 +17,7 @@ namespace yq::mithril {
         Class                       character_class();
         bool                        exists(Character);
         bool                        exists_character(uint64_t);
+        std::string                 key(Character);
+        std::string                 name(Character);
     }
 }

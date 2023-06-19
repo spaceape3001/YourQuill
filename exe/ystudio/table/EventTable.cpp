@@ -15,10 +15,13 @@ EventTable::EventTable(QWidget*parent) : IdTableT<Event>(
     }, parent
 )
 {
-    makeColumn<uint64_t> ("ID"sv, [](Event b) -> uint64_t { return b.id; });
-    makeColumn<std::string> ("Name", [](Event b) -> std::string {
-        return cdb::name(cdb::atom(b));
+    makeColumn<std::string>("Key", [](Event ev) -> std::string {
+        return cdb::key(ev);
     });
+    makeColumn<std::string> ("Title", [](Event ev) -> std::string {
+        return cdb::title(ev);
+    });
+    setWindowTitle(tr("Events"));
 }
 
 EventTable::~EventTable()

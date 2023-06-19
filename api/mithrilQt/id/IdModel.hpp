@@ -17,6 +17,8 @@ class QVariant;
 
 namespace yq::mithril {
     class IdColumn;
+    class IdTable;
+    template <typename> class IdTableT;
     
     class IdModel : public QAbstractItemModel {
         Q_OBJECT
@@ -24,6 +26,7 @@ namespace yq::mithril {
     
         using TreeDetector          = std::function<bool(Id)>;
         using ProviderGenerator     = std::function<IdProvider&&(Id)>;
+        using VariantFN             = IdColumn::VariantFN;
     
         enum class AddPolicy {
             None,
@@ -78,6 +81,9 @@ namespace yq::mithril {
         void            update(const QModelIndex& idx=QModelIndex());
 
     protected:
+    
+        friend class IdTable;
+        template <typename> friend class IdTableT;
         
         struct Node {
             Id const                    id;
@@ -95,6 +101,8 @@ namespace yq::mithril {
             
             size_t                      indexOf(const Node*) const;
             
+            Id                          child(size_t) const;
+            
             std::vector<Id>             fetch() const;
             void                        reload();
         };
@@ -104,8 +112,13 @@ namespace yq::mithril {
         ProviderGenerator               m_treeGenerator;
         Node                            m_root;
         std::vector<IdColumn>           m_columns;
-        AddPolicy                       m_addPolicy = AddPolicy::None;
-        bool                            m_readOnly  = false;
+        AddPolicy                       m_addPolicy     = AddPolicy::None;
+        bool                            m_readOnly      = false;
+        bool                            m_anyColAdd     = false;    // true if ANY column can trigger adds
+        bool                            m_dropEnabled   = false;
+        bool                            m_showVHeader   = true;
+        bool                            m_showHHeader   = true;
+        VariantFN                       m_vHeader;
         
         virtual ~IdModel();
         
@@ -120,6 +133,7 @@ namespace yq::mithril {
         IdModel(Type, Id, IdProvider&&, QObject*parent=nullptr);
 
         void            _load();
+        void            _updateCols();
 
     };
     

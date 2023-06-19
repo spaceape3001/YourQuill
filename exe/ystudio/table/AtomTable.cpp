@@ -14,10 +14,14 @@ AtomTable::AtomTable(QWidget*parent) : IdTableT<Atom>(
     }, parent
 )
 {
-    makeColumn<uint64_t> ("ID"sv, [](Atom a) -> uint64_t { return a.id; });
+    makeColumn<std::string>("Key", [](Atom a) -> std::string {
+        return cdb::key(a);
+    });
     makeColumn<std::string> ("Name", [](Atom a) -> std::string {
         return cdb::name(a);
     });
+    
+    setWindowTitle(tr("Atoms"));
 }
 
 AtomTable::~AtomTable()

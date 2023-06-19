@@ -24,6 +24,12 @@ namespace yq::mithril {
         template <cdb_object S>
         constexpr Id(S s) noexcept : value(id_encode(s)) {}
         explicit constexpr Id(uint64_t v) noexcept  : value(v) {}
+        
+        template <cdb_object S>
+        constexpr S   as() const noexcept
+        {
+            return id_decode<S>(value);
+        }
     };
     
     using IdProvider    = std::function<std::vector<Id>()>;

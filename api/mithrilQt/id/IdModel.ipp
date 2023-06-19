@@ -27,22 +27,30 @@ namespace yq::mithril {
         m_root.reload();
     }
 
+    void    IdModel::_updateCols()
+    {
+        m_anyColAdd = false;
+        for(size_t n=0; n<m_columns.size(); ++n){
+            IdColumn& col   = m_columns[n];
+            col.number    = n;
+            m_anyColAdd = m_anyColAdd || col.fnAdd;
+        }
+    }
+
     void    IdModel::addColumn(IdColumn&& col)
     {
-        col.number  = m_columns.size();
         m_columns.push_back(std::move(col));
+        _updateCols();
     }
     
     void    IdModel::addColumn(size_t before, IdColumn&& col)
     {
         if(before < m_columns.size()){
             m_columns.insert(m_columns.begin()+before, std::move(col));
-            for(size_t n=before; n<m_columns.size(); ++n)
-                m_columns[n].number    = n;
         } else {
-            col.number  = m_columns.size();
             m_columns.push_back(std::move(col));
         }
+        _updateCols();
     }
 
     const IdColumn* IdModel::column(size_t n) const
@@ -100,9 +108,24 @@ namespace yq::mithril {
     Qt::ItemFlags   IdModel::flags(const QModelIndex& idx) const 
     {
         const IdColumn* col   = column((size_t) idx.column());
-        if(!col)
-            return Qt::NoItemFlags;
-        return Qt::NoItemFlags;
+        const Node*n    = node(idx);
+        
+        Qt::ItemFlags       ret   = Qt::NoItemFlags;
+        ret |= Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+        if(n && col){
+            // ret |= Qt::ItemIsDragEnabled //  TODO 
+            if(!m_readOnly){
+                if(col->fnSet)
+                    ret |= Qt::ItemIsEditable;
+                if(m_dropEnabled && col->fnDrop)
+                    ret |= Qt::ItemIsDropEnabled;
+            }
+        } else {
+            if((m_addPolicy != AddPolicy::None) && col->fnAdd)
+                ret |= Qt::ItemIsEditable;
+        }
+        
+        return ret;
     }
     
     QVariant        IdModel::headerData(int n, Qt::Orientation ori, int role) const 
@@ -111,11 +134,19 @@ namespace yq::mithril {
             return QVariant();
         switch(ori){
         case Qt::Horizontal:
-            if(n>=0 && n<(int) m_columns.size())
+            if(m_showHHeader && n>=0 && n<(int) m_columns.size())
                 return m_columns[n].label;
             break;
         case Qt::Vertical:
-            return n+1;
+            if(m_showVHeader){
+                Id  i   = m_root.child((size_t) n);
+                if(m_vHeader){
+                    return m_vHeader(i);
+                } else {
+                    return (quint64) i.id();
+                }
+            }
+            break;
         }
         return QVariant();
     }
@@ -183,24 +214,23 @@ namespace yq::mithril {
         } else {
             m_columns[0]        = std::move(col);
         }
+        _updateCols();
     }
 
     void            IdModel::setColumn(size_t n, IdColumn&&col)
     {
         if(n<m_columns.size()){
             m_columns[n]        = std::move(col);
-            m_columns[n].number = n;
         } else {
-            col.number  = m_columns.size();
             m_columns.push_back(col);
         }
+        _updateCols();
     }
 
     void    IdModel::setColumns(std::vector<IdColumn>&& cols)
     {
         m_columns       = std::move(cols);
-        for(size_t n=0;n<m_columns.size();++n)
-            m_columns[n].number = n;
+        _updateCols();
     }
     
     bool            IdModel::setData(const QModelIndex&idx, const QVariant&, int ) 
@@ -285,6 +315,16 @@ namespace yq::mithril {
     IdModel::Node::~Node()
     {
         purge();
+    }
+
+    Id          IdModel::Node::child(size_t i) const
+    {
+        if(i>=children.size())
+            return Id{};
+        const Node* n   = children[i];
+        if(!n)
+            return Id{};
+        return n->id;
     }
 
     std::vector<Id>     IdModel::Node::fetch() const

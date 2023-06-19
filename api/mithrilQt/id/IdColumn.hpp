@@ -29,19 +29,19 @@ namespace yq::mithril {
         using DropFN        = std::function<std::error_code(Id, std::span<const Id>)>;
         using DelegateFN    = std::function<Delegate*()>;
 
-        AddFN           fnAdd;
-        VariantFN       fnDecoration;
-        VariantFN       fnDisplay;
-        DelegateFN      fnDelegate;
-        DropFN          fnDrop;
-        VariantFN       fnEdit;
-        SetFN           fnSet;
-        VariantFN       fnSort;
+        AddFN           fnAdd;              //!< Call if column is add-aware
+        VariantFN       fnDecoration;       //!< Decoration data
+        VariantFN       fnDisplay;          //!< Display data (mandatory)
+        DelegateFN      fnDelegate;         //!< Delegate creator (can be non-existent)
+        DropFN          fnDrop;             //!< Drop data here
+        VariantFN       fnEdit;             //!< Edit data expected
+        SetFN           fnSet;              //!< May work
+        VariantFN       fnSort;             //!< Overrides display
 
-        QVariant        addMsg;
-        QVariant        defVal;
-        QVariant        label;
-        unsigned int    number = 0;
+        QVariant        addMsg;             //!< Add message
+        QVariant        label;              //!< Header label
+        QVariant        defVal;             //!< Value if the ID is bad
+        unsigned int    number = 0;         //!< Column number, tracked by IdModel
 
         IdColumn();
         ~IdColumn();

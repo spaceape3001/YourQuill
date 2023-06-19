@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class LeafTable : public IdTableT<Leaf> {
+    Q_OBJECT
+public:
+    LeafTable(QWidget*parent=nullptr);
+    ~LeafTable();
+};

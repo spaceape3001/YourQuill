@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class ClassTable : public IdTableT<Class> {
+    Q_OBJECT
+public:
+    ClassTable(QWidget*parent=nullptr);
+    ~ClassTable();
+};

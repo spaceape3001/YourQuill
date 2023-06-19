@@ -30,12 +30,20 @@ add_executable(${PROJECT_NAME}
     table/BookTable.cpp
     table/CharacterTable.hpp
     table/CharacterTable.cpp
+    table/ClassTable.hpp
+    table/ClassTable.cpp
     table/EventTable.hpp
     table/EventTable.cpp
+    table/FieldTable.hpp
+    table/FieldTable.cpp
     table/GameTable.hpp
     table/GameTable.cpp
+    table/LeafTable.hpp
+    table/LeafTable.cpp
     table/PlaceTable.hpp
     table/PlaceTable.cpp
+    table/TagTable.hpp
+    table/TagTable.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} 

@@ -17,5 +17,7 @@ namespace yq::mithril {
         Class               game_class();
         bool                exists(Game);
         bool                exists_game(uint64_t);
+        std::string         key(Game);
+        std::string         title(Game);
     }
 }

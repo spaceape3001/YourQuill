@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class TagTable : public IdTableT<Tag> {
+    Q_OBJECT
+public:
+    TagTable(QWidget*parent=nullptr);
+    ~TagTable();
+};

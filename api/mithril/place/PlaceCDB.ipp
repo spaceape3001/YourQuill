@@ -21,6 +21,21 @@ namespace yq::mithril::cdb {
         return Atom{ ch.id };
     }
 
+    bool  exists(Place ch)
+    {
+        return is(Atom(ch.id), place_class());
+    }
+
+    std::string         key(Place p)
+    {
+        return key(atom(p));
+    }
+    
+    std::string         name(Place p)
+    {
+        return name(atom(p));
+    }
+
     Place  place(Atom at)
     {
         return is(at, place_class()) ? Place(at.id) : Place();
@@ -32,9 +47,4 @@ namespace yq::mithril::cdb {
         return cls;
     }
 
-    bool  exists(Place ch)
-    {
-        return is(Atom(ch.id), place_class());
-    }
-    
 }

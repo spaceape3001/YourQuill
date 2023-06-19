@@ -10,9 +10,13 @@
 #include "table/AtomTable.hpp"
 #include "table/BookTable.hpp"
 #include "table/CharacterTable.hpp"
+#include "table/ClassTable.hpp"
 #include "table/EventTable.hpp"
+#include "table/FieldTable.hpp"
 #include "table/GameTable.hpp"
+#include "table/LeafTable.hpp"
 #include "table/PlaceTable.hpp"
+#include "table/TagTable.hpp"
 
 #include <mithril/wksp/Workspace.hpp>
 #include <gluon/core/Utilities.hpp>
@@ -38,8 +42,13 @@ DreamMW::DreamMW()
     addAction("atomTable", "Atoms").connect(this, &DreamMW::newAtomTable);
     addAction("bookTable", "Books").connect(this, &DreamMW::newBookTable);
     addAction("characterTable", "Characters").connect(this, &DreamMW::newCharacterTable);
-    addAction("eventTable", "Events").connect(this, &DreamMW::newBookTable);
-    addAction("placeTable", "Places").connect(this, &DreamMW::newBookTable);
+    addAction("classTable", "Classes").connect(this, &DreamMW::newClassTable);
+    addAction("eventTable", "Events").connect(this, &DreamMW::newEventTable);
+    addAction("fieldTable", "Fields").connect(this, &DreamMW::newFieldTable);
+    addAction("gameTable", "Games").connect(this, &DreamMW::newGameTable);
+    addAction("leafTable", "Leafs").connect(this, &DreamMW::newLeafTable);
+    addAction("placeTable", "Places").connect(this, &DreamMW::newPlaceTable);
+    addAction("tagTable", "Tags").connect(this, &DreamMW::newTagTable);
     
     makeMenu("studio", "Studio",
         QStringList() 
@@ -48,8 +57,13 @@ DreamMW::DreamMW()
             << "atomTable" 
             << "bookTable"
             << "characterTable"
+            << "classTable"
             << "eventTable"
+            << "fieldTable"
+            << "gameTable"
+            << "leafTable"
             << "placeTable"
+            << "tagTable"
     );
     makeMenu("view", "View",
         QStringList() << "refresh"
@@ -87,6 +101,13 @@ void    DreamMW::newCharacterTable()
     addWindow(tt);
 }
 
+void    DreamMW::newClassTable()
+{
+    ClassTable*  tt  = new ClassTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
 void    DreamMW::newEventTable()
 {
     EventTable*  tt  = new EventTable;
@@ -94,9 +115,23 @@ void    DreamMW::newEventTable()
     addWindow(tt);
 }
 
+void    DreamMW::newFieldTable()
+{
+    FieldTable*  tt  = new FieldTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
 void    DreamMW::newGameTable()
 {
     GameTable*  tt  = new GameTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
+void    DreamMW::newLeafTable()
+{
+    LeafTable*  tt  = new LeafTable;
     tt->refresh();
     addWindow(tt);
 }
@@ -109,6 +144,13 @@ MainWindow*  DreamMW::newMain()
 void    DreamMW::newPlaceTable()
 {
     PlaceTable*  tt  = new PlaceTable;
+    tt->refresh();
+    addWindow(tt);
+}
+
+void    DreamMW::newTagTable()
+{
+    TagTable*  tt  = new TagTable;
     tt->refresh();
     addWindow(tt);
 }

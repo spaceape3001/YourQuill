@@ -25,7 +25,11 @@ public slots:
     void    newBrowser();
     void    newBookTable();
     void    newCharacterTable();
+    void    newClassTable();
     void    newEventTable();
+    void    newFieldTable();
     void    newGameTable();
+    void    newLeafTable();
     void    newPlaceTable();
+    void    newTagTable();
 };
