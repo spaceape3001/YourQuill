@@ -158,7 +158,7 @@ namespace yq::mithril {
             if( d.type() != id_type_v<S> )
                 return QVariant();
             S   s(d.id());
-            if constexpr (std::is_same_v<T,std::string_view> || std::is_same_v<T,std::string_view>){
+            if constexpr (std::is_same_v<T,std::string_view> || std::is_same_v<T,std::string>){
                 return QVariant(qString(fn(s)));
             } else {
                 return QVariant::fromValue(fn(s));

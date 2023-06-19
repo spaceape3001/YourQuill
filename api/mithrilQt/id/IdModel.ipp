@@ -151,7 +151,7 @@ namespace yq::mithril {
         if(!pn)
             return QModelIndex();
         const Node* gpn = pn->parent;
-        if(gpn)
+        if(!gpn)
             return QModelIndex();
         size_t row = gpn->indexOf(n);
         return createIndex(row, child.column(), pn);

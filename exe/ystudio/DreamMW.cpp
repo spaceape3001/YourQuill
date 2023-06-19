@@ -43,7 +43,9 @@ DreamMW::~DreamMW()
 
 void    DreamMW::newBookTable()
 {
-    addWindow(new BookTable);
+    BookTable*  bt  = new BookTable;
+    bt->model()->reload();
+    addWindow(bt);
 }
 
 void    DreamMW::newBrowser()
