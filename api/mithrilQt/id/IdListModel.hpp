@@ -12,10 +12,7 @@ namespace yq::mithril {
     class IdListModel : public IdModel {
         Q_OBJECT
     public:
-        IdListModel(Id, IdProvider::UPtr&&, QObject*parent=nullptr);
+        IdListModel(Id, IdProvider&&, QObject*parent=nullptr);
         ~IdListModel();
-        
-    protected:
-        void    setColumn(IdColumn&&);
     };
 }

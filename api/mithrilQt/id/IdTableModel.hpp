@@ -12,13 +12,9 @@ namespace yq::mithril {
     class IdTableModel : public IdModel {
         Q_OBJECT
     public:
-        IdTableModel(Id, IdProvider::UPtr, QObject*parent=nullptr);
+        IdTableModel(Id, IdProvider&&, QObject*parent=nullptr);
         ~IdTableModel();
     
-    protected:
-        void    setColumns(std::vector<IdColumn>&&);
-        void    addColumn(IdColumn&&);
-        void    addColumn(size_t before, IdColumn&&);
     };
 }
 

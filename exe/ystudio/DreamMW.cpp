@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DreamMW.hpp"
+#include "BookTable.hpp"
 #include "Browser.hpp"
 #include <mithril/wksp/Workspace.hpp>
 #include <gluon/core/Utilities.hpp>
@@ -26,9 +27,10 @@ DreamMW::DreamMW()
     
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
     addAction("refresh", "Refresh").icon(fetchIcon(":yq/icon/refresh%1.png")).shortcut("F5");
+    addAction("bookTable", "Books").connect(this, &DreamMW::newBookTable);
     
     makeMenu("studio", "Studio",
-        QStringList() << "browser"
+        QStringList() << "browser" << "bookTable"
     );
     makeMenu("view", "View",
         QStringList() << "refresh"
@@ -37,6 +39,11 @@ DreamMW::DreamMW()
 
 DreamMW::~DreamMW()
 {
+}
+
+void    DreamMW::newBookTable()
+{
+    addWindow(new BookTable);
 }
 
 void    DreamMW::newBrowser()

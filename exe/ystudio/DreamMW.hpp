@@ -22,4 +22,5 @@ public slots:
     void    updateTitle();
     
     void    newBrowser();
+    void    newBookTable();
 };

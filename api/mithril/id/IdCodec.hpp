@@ -20,7 +20,7 @@ namespace yq::mithril {
     template <cdb_object S>
     constexpr uint64_t          id_encode(S s) noexcept
     {
-        return encode(id_type_v<S>, s.id);
+        return id_encode(id_type_v<S>, s.id);
     }
     
     constexpr IdType            id_type_of(uint64_t v) noexcept

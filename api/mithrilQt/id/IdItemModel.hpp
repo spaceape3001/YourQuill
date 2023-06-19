@@ -12,13 +12,8 @@ namespace yq::mithril {
     class IdItemModel : public IdModel {
         Q_OBJECT
     public:
-        IdItemModel(Id, IdProvider::UPtr, TreeDetector&&, ProviderGenerator&&, QObject*parent=nullptr);
+        IdItemModel(Id, IdProvider&&, TreeDetector&&, ProviderGenerator&&, QObject*parent=nullptr);
         ~IdItemModel();
-    
-    protected:
-        void    setColumns(std::vector<IdColumn>&&);
-        void    addColumn(IdColumn&&);
-        void    addColumn(size_t before, IdColumn&&);
     };
 
 

@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class BookTable : public IdTableT<Book> {
+    Q_OBJECT
+public:
+    BookTable(QWidget*parent=nullptr);
+    ~BookTable();
+};

@@ -31,16 +31,17 @@ namespace yq::mithril {
 
         AddFN           fnAdd;
         VariantFN       fnDecoration;
-        VariantFN       fnDisplayData;
+        VariantFN       fnDisplay;
         DelegateFN      fnDelegate;
         DropFN          fnDrop;
-        VariantFN       fnEditData;
+        VariantFN       fnEdit;
         SetFN           fnSet;
-        VariantFN       fnSortData;
+        VariantFN       fnSort;
 
         QVariant        addMsg;
         QVariant        defVal;
         QVariant        label;
+        unsigned int    number = 0;
 
         IdColumn();
         ~IdColumn();

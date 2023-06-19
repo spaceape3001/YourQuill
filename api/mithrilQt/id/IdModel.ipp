@@ -13,7 +13,7 @@
 
 namespace yq::mithril {
 
-    IdModel::IdModel(Type t, Id i, IdProvider::UPtr&& p, QObject*parent) : 
+    IdModel::IdModel(Type t, Id i, IdProvider&& p, QObject*parent) : 
         QAbstractItemModel(parent), m_type(t), m_root(this, i, nullptr, std::move(p))
     {
     }
@@ -25,6 +25,24 @@ namespace yq::mithril {
     void    IdModel::_load()
     {
         m_root.reload();
+    }
+
+    void    IdModel::addColumn(IdColumn&& col)
+    {
+        col.number  = m_columns.size();
+        m_columns.push_back(std::move(col));
+    }
+    
+    void    IdModel::addColumn(size_t before, IdColumn&& col)
+    {
+        if(before < m_columns.size()){
+            m_columns.insert(m_columns.begin()+before, std::move(col));
+            for(size_t n=before; n<m_columns.size(); ++n)
+                m_columns[n].number    = n;
+        } else {
+            col.number  = m_columns.size();
+            m_columns.push_back(std::move(col));
+        }
     }
 
     const IdColumn* IdModel::column(size_t n) const
@@ -50,13 +68,33 @@ namespace yq::mithril {
         if(!col)
             return QVariant();
 
+        const Node*   n   = node(idx);
+        if(!n)
+            return QVariant();
+
         switch(role){
         case Qt::DisplayRole:
+            if(!n->id)
+                return col -> addMsg;
+            if(col->fnDisplay)
+                return col->fnDisplay(n->id);
+            break;
         case Qt::EditRole:
-            return idx.row() + idx.column() + 1;
+            if(!n->id)
+                return col -> defVal;
+            if(col->fnEdit)
+                return col->fnEdit(n->id);
+            if(col->fnDisplay)
+                return col->fnDisplay(n->id);
+            break;
+        case Qt::DecorationRole:
+            if(col->fnDecoration)
+                return col->fnDecoration(n->id);
+            break;
         default:
-            return QVariant();
+            break;
         }
+        return QVariant();
     }
     
     Qt::ItemFlags   IdModel::flags(const QModelIndex& idx) const 
@@ -69,11 +107,15 @@ namespace yq::mithril {
     
     QVariant        IdModel::headerData(int n, Qt::Orientation ori, int role) const 
     {
+        if(role != Qt::DisplayRole) 
+            return QVariant();
         switch(ori){
         case Qt::Horizontal:
+            if(n>=0 && n<(int) m_columns.size())
+                return m_columns[n].label;
             break;
         case Qt::Vertical:
-            break;
+            return n+1;
         }
         return QVariant();
     }
@@ -133,6 +175,33 @@ namespace yq::mithril {
         const Node* n   = node(idx);
         return n->children.size();
     }
+
+    void    IdModel::setColumn(IdColumn&&col)
+    {
+        if(m_columns.empty()){
+            m_columns.push_back(col);
+        } else {
+            m_columns[0]        = std::move(col);
+        }
+    }
+
+    void            IdModel::setColumn(size_t n, IdColumn&&col)
+    {
+        if(n<m_columns.size()){
+            m_columns[n]        = std::move(col);
+            m_columns[n].number = n;
+        } else {
+            col.number  = m_columns.size();
+            m_columns.push_back(col);
+        }
+    }
+
+    void    IdModel::setColumns(std::vector<IdColumn>&& cols)
+    {
+        m_columns       = std::move(cols);
+        for(size_t n=0;n<m_columns.size();++n)
+            m_columns[n].number = n;
+    }
     
     bool            IdModel::setData(const QModelIndex&idx, const QVariant&, int ) 
     {
@@ -144,12 +213,12 @@ namespace yq::mithril {
     }
     
 
-    void            IdModel::setFilters(std::vector<IdFilter::UPtr>&& filters)
+    void            IdModel::setFilters(std::vector<IdFilter>&& filters)
     {
         m_root.filters  = std::move(filters);
     }
 
-    void            IdModel::setFilters(const QModelIndex&idx, std::vector<IdFilter::UPtr>&&filters)
+    void            IdModel::setFilters(const QModelIndex&idx, std::vector<IdFilter>&&filters)
     {
         Node*   n   = node(idx);
         n->filters  = std::move(filters);
@@ -208,7 +277,7 @@ namespace yq::mithril {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    IdModel::Node::Node(IdModel*m, Id  i, Node*p, IdProvider::UPtr&& ipu) : 
+    IdModel::Node::Node(IdModel*m, Id  i, Node*p, IdProvider&& ipu) : 
         id(i), model(m), parent(p), provider(std::move(ipu))
     {
     }
@@ -222,7 +291,7 @@ namespace yq::mithril {
     {
         std::vector<Id> ret;
         if(provider){
-            std::vector<Id> them    = provider->fetch();
+            std::vector<Id> them    = provider();
             if(filters.empty()){
                 ret = std::move(them);
             } else {
@@ -230,7 +299,7 @@ namespace yq::mithril {
                 for(Id i : them){
                     bool    rej = false;
                     for(auto& f : filters){
-                        if(!f->accept(i)){
+                        if(!f(i)){
                             rej = true;
                             break;
                         }
@@ -263,18 +332,18 @@ namespace yq::mithril {
     void    IdModel::Node::reload()
     {
         purge();
-        auto d  = provider->fetch();
+        auto d  = provider();
         children.reserve(d.size());
         for(Id i : d){
             if(!filters.empty()){
                 bool    rej    = false;
                 for(auto& f : filters)
-                    rej = rej || f->accept(i);
+                    rej = rej || f(i);
                 if(rej)
                     continue;
             }
             
-            IdProvider::UPtr   upp;
+            IdProvider    upp;
             bool                branch  = false;
             if(model->isTree() && model->m_treeGenerator && model->m_treeDetect && model->m_treeDetect(i)){
                 upp     = std::move(model->m_treeGenerator(i));

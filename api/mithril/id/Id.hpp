@@ -8,6 +8,7 @@
 
 #include <mithril/id/IdType.hpp>
 #include <mithril/id/IdCodec.hpp>
+#include <functional>
 
 namespace yq::mithril {
     struct Id {
@@ -24,4 +25,8 @@ namespace yq::mithril {
         constexpr Id(S s) noexcept : value(id_encode(s)) {}
         explicit constexpr Id(uint64_t v) noexcept  : value(v) {}
     };
+    
+    using IdProvider    = std::function<std::vector<Id>()>;
+    using IdFilter      = std::function<bool(Id)>;
+    
 }

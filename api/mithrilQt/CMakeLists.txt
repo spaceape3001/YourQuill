@@ -20,8 +20,8 @@ add_library(${PROJECT_NAME} SHARED
     id/IdListModel.ipp
     id/IdModel.hpp
     id/IdModel.ipp
-    id/IdTableModel.hpp
-    id/IdTableModel.ipp
+    id/IdTable.hpp
+    id/IdTable.ipp
     id/IdItemModel.hpp
     id/IdItemModel.ipp
     id/id.cpp

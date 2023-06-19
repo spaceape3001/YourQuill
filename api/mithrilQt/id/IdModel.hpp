@@ -7,9 +7,10 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <gluon/delegate/Delegate.hpp>
 #include <mithril/id/Id.hpp>
-#include <mithril/id/IdProvider.hpp>
-#include <mithril/id/IdFilter.hpp>
+#include <mithrilQt/id/IdColumn.hpp>
+#include <gluon/core/Utilities.hpp>
 
 class QModelIndex;
 class QVariant;
@@ -17,13 +18,12 @@ class QVariant;
 namespace yq::mithril {
     class IdColumn;
     
-
     class IdModel : public QAbstractItemModel {
         Q_OBJECT
     public:
     
         using TreeDetector          = std::function<bool(Id)>;
-        using ProviderGenerator     = std::function<IdProvider::UPtr(Id)>;
+        using ProviderGenerator     = std::function<IdProvider&&(Id)>;
     
         enum class AddPolicy {
             None,
@@ -40,8 +40,8 @@ namespace yq::mithril {
     
         //! Sets new filters (for the root node)
         //! \note Call a reload after setting filters
-        void            setFilters(std::vector<IdFilter::UPtr>&&);
-        void            setFilters(const QModelIndex&, std::vector<IdFilter::UPtr>&&);
+        void            setFilters(std::vector<IdFilter>&&);
+        void            setFilters(const QModelIndex&, std::vector<IdFilter>&&);
     
         const IdColumn* column(size_t) const;
         size_t          columnCount() const;
@@ -51,12 +51,24 @@ namespace yq::mithril {
         QVariant        headerData(int, Qt::Orientation, int) const override;
         QModelIndex     index(int row, int column, const QModelIndex&parent) const override;
         QModelIndex     parent(const QModelIndex&) const override;
-        int             rowCount(const QModelIndex&) const override;
+        int             rowCount(const QModelIndex& idx=QModelIndex()) const override;
         bool            setData(const QModelIndex&, const QVariant&, int ) override;
 
         bool            isList() const { return m_type == Type::List; }
         bool            isTable() const { return m_type == Type::Table; }
         bool            isTree() const { return m_type == Type::Tree; }
+
+        void            setColumn(IdColumn&&);
+        void            setColumn(size_t, IdColumn&&);
+        void            setColumns(std::vector<IdColumn>&&);
+        void            addColumn(IdColumn&&);
+        void            addColumn(size_t before, IdColumn&&);
+
+        template <cdb_object S, typename T>
+        void            addColumn(std::string_view label, std::function<T(S)>);
+
+        const std::vector<IdColumn>& columns() const { return m_columns; }
+
 
     public slots:
         //! Reload/reset the list with current data
@@ -71,13 +83,13 @@ namespace yq::mithril {
             Id const                    id;
             IdModel* const              model;
             Node* const                 parent;
-            IdProvider::UPtr const      provider;
+            IdProvider const            provider;
             
             std::vector<Node*>          children;
             std::set<Id>                ids;
-            std::vector<IdFilter::UPtr> filters;
+            std::vector<IdFilter>       filters;
             
-            Node(IdModel*, Id, Node*p, IdProvider::UPtr&& ipu={});
+            Node(IdModel*, Id, Node*p, IdProvider&& ipu={});
             ~Node();
             void                        purge();
             
@@ -105,7 +117,7 @@ namespace yq::mithril {
         
         [[nodiscard]] EndCue   resetModel();
         
-        IdModel(Type, Id, IdProvider::UPtr&&, QObject*parent=nullptr);
+        IdModel(Type, Id, IdProvider&&, QObject*parent=nullptr);
 
         void            _load();
 
@@ -136,5 +148,34 @@ namespace yq::mithril {
         void _move(EndCue&&);
     };
 
+    template <cdb_object S, typename T>
+    void    IdModel::addColumn(std::string_view label, std::function<T(S)> fn)
+    {
+        using namespace yq::gluon;
+        IdColumn    col;
+        col.label       = QString::fromUtf8(label.data(), label.size());
+        col.fnDisplay   = [fn](Id d) -> QVariant {
+            if( d.type() != id_type_v<S> )
+                return QVariant();
+            S   s(d.id());
+            if constexpr (std::is_same_v<T,std::string_view> || std::is_same_v<T,std::string_view>){
+                return QVariant(qString(fn(s)));
+            } else {
+                return QVariant::fromValue(fn(s));
+            }
+        };
+        
+        if constexpr (QMetaTypeId<T>::Defined){
+            using namespace yq::gluon;
+            const DelegateInfo* di  = DelegateInfo::byQtType(qMetaTypeId<T>());
+            if(di){
+                col.fnDelegate      = [di]()->Delegate* {
+                    return static_cast<Delegate*>(di->create());
+                };
+            }
+        }
+        
+        addColumn(std::move(col));
+    }
 }
 

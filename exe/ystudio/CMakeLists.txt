@@ -12,6 +12,8 @@ set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
 add_executable(${PROJECT_NAME} 
+    BookTable.hpp
+    BookTable.cpp
     Browser.hpp
     Browser.cpp
     DreamApp.hpp 
@@ -28,6 +30,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
     gluon 
     mithril 
+    mithrilQt
     YQResources 
     Qt6::Network
     Qt6::WebEngineCore
