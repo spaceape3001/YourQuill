@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class PlaceTable : public IdTableT<Place> {
+    Q_OBJECT
+public:
+    PlaceTable(QWidget*parent=nullptr);
+    ~PlaceTable();
+};

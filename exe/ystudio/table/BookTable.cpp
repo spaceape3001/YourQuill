@@ -7,7 +7,6 @@
 #include <mithril/book.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 #include "BookTable.hpp"
-#include <basic/Logging.hpp>
 
 
 BookTable::BookTable(QWidget*parent) : IdTableT<Book>(

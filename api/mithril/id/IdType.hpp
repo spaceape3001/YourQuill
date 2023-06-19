@@ -36,6 +36,7 @@ namespace yq::mithril {
         Field,
         Folder,
         Fragment,
+        Game,
         Graph,
         Group,
         Image,
@@ -68,6 +69,7 @@ namespace yq::mithril {
     idtype(Field)
     idtype(Folder)
     idtype(Fragment)
+    idtype(Game)
     idtype(Graph)
     idtype(Group)
     idtype(Image)

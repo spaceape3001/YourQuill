@@ -6,9 +6,13 @@
 
 #pragma once
 
-#include "IdEncoding.hpp"
+#include <mithrilQt/id/IdTable.hpp>
 
-class MiProvider {
+using namespace yq::mithril;
+
+class EventTable : public IdTableT<Event> {
+    Q_OBJECT
 public:
-
+    EventTable(QWidget*parent=nullptr);
+    ~EventTable();
 };

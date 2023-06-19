@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class CharacterTable : public IdTableT<Character> {
+    Q_OBJECT
+public:
+    CharacterTable(QWidget*parent=nullptr);
+    ~CharacterTable();
+};

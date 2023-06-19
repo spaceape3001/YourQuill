@@ -21,6 +21,11 @@ public:
 public slots:
     void    updateTitle();
     
+    void    newAtomTable();
     void    newBrowser();
     void    newBookTable();
+    void    newCharacterTable();
+    void    newEventTable();
+    void    newGameTable();
+    void    newPlaceTable();
 };

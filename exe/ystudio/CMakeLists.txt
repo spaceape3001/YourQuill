@@ -12,8 +12,6 @@ set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
 add_executable(${PROJECT_NAME} 
-    BookTable.hpp
-    BookTable.cpp
     Browser.hpp
     Browser.cpp
     DreamApp.hpp 
@@ -25,6 +23,19 @@ add_executable(${PROJECT_NAME}
     #FolderViewIcons.hpp
     #FolderViewIcons.cpp
     main.cpp 
+
+    table/AtomTable.hpp
+    table/AtomTable.cpp
+    table/BookTable.hpp
+    table/BookTable.cpp
+    table/CharacterTable.hpp
+    table/CharacterTable.cpp
+    table/EventTable.hpp
+    table/EventTable.cpp
+    table/GameTable.hpp
+    table/GameTable.cpp
+    table/PlaceTable.hpp
+    table/PlaceTable.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} 

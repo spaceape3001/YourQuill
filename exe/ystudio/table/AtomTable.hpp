@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdTable.hpp>
+
+using namespace yq::mithril;
+
+class AtomTable : public IdTableT<Atom> {
+    Q_OBJECT
+public:
+    AtomTable(QWidget*parent=nullptr);
+    ~AtomTable();
+};

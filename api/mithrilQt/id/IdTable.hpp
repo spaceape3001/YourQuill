@@ -31,6 +31,10 @@ namespace yq::mithril {
         View*           view() { return m_view; }
         const View*     view() const { return m_view; }
         
+    public slots:
+        void            refresh();
+        void            update();
+        
     protected:
         Model*  m_model = nullptr;
         View*   m_view  = nullptr;

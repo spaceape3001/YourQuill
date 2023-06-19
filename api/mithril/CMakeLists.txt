@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME} SHARED
     field.cpp
     folder.cpp
     fragment.cpp
+    game.cpp
     group.cpp
     id.cpp
     image.cpp

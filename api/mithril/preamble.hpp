@@ -42,6 +42,7 @@ namespace yq {
         struct Field;
         struct Folder;
         struct Fragment;
+        struct Game;
         struct Graph;
         struct Group;
         struct Image;

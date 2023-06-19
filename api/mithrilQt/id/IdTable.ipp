@@ -41,6 +41,16 @@ namespace yq::mithril {
         m_model -> addColumn(before, std::move(col));
     }
 
+    void    IdTable::refresh()
+    {
+        m_model -> reload();
+    }
+    
+    void    IdTable::update()
+    {
+        m_model -> update();
+    }
+
     //  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     IdTable::Model::Model(Id i, IdProvider&& p, QObject*parent) :
