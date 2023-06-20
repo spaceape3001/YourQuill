@@ -9,6 +9,7 @@
 #include "document/DocumentCDB.ipp"
 #include "document/DocumentHtml.ipp"
 #include "document/DocumentPost.ipp"
+#include "document/DocumentProvider.ipp"
 
 #include "db/IDLock.ipp"
 

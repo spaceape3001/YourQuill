@@ -9,6 +9,7 @@
 #include "folder/FolderCDB.ipp"
 #include "folder/FolderHtml.ipp"
 #include "folder/FolderPost.ipp"
+#include "folder/FolderProvider.ipp"
 
 #include "db/IDLock.ipp"
 #include <meta/Init.hpp>

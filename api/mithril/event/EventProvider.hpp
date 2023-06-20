@@ -5,16 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
-#include <mithrilQt/id/IdModel.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
-    class IdTableModel : public IdModel {
-        Q_OBJECT
-    public:
-        IdTableModel(Id, IdProvider&&, QObject*parent=nullptr);
-        ~IdTableModel();
-    
-    };
+    namespace provider {
+        IdProvider  all_events();
+    }
 }
-

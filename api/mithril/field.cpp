@@ -12,6 +12,7 @@
 #include "field/FieldFile.ipp"
 #include "field/FieldHtml.ipp"
 #include "field/FieldPost.ipp"
+#include "field/FieldProvider.ipp"
 
 #include "db/IDLock.ipp"
 #include <meta/Init.hpp>

@@ -7,8 +7,6 @@
 #pragma once
 
 #include "IdModel.hpp"
-#include "IdListModel.hpp"
-#include "IdTableModel.hpp"
 #include "IdColumn.hpp"
 
 namespace yq::mithril {

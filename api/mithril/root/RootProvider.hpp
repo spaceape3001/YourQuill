@@ -5,17 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
-#include "IdTableModel.hpp"
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
-    IdTableModel::IdTableModel(Id i, IdProvider&& p, QObject*parent) :
-        IdModel(Type::Table, i, std::move(p), parent)
-    {
-    }
-        
-    IdTableModel::~IdTableModel()
-    {
+    namespace provider {
+        IdProvider  all_roots();
     }
 }
-

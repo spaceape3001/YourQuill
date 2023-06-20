@@ -8,6 +8,7 @@
 #include "directory/DirectoryCDB.ipp"
 #include "directory/DirectoryHtml.ipp"
 #include "directory/DirectoryPost.ipp"
+#include "directory/DirectoryProvider.ipp"
 
 #include "db/IDLock.ipp"
 

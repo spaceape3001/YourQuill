@@ -9,6 +9,7 @@
 #include "atom/AtomCDB.ipp"
 #include "atom/AtomHtml.ipp"
 #include "atom/AtomPost.ipp"
+#include "atom/AtomProvider.ipp"
 #include "atom/AtomSpec.ipp"
 
 #include "db/IDLock.ipp"

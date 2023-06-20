@@ -12,6 +12,7 @@
 #include "tag/TagFile.ipp"
 #include "tag/TagHtml.ipp"
 #include "tag/TagPost.ipp"
+#include "tag/TagProvider.ipp"
 
 #include "db/IDLock.ipp"
 #include <meta/Init.hpp>

@@ -11,6 +11,7 @@
 #include "class/ClassFile.ipp"
 #include "class/ClassHtml.ipp"
 #include "class/ClassPost.ipp"
+#include "class/ClassProvider.ipp"
 
 #include "db/IDLock.ipp"
 

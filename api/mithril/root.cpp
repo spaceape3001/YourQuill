@@ -9,3 +9,4 @@
 #include "root/RootCDB.ipp"
 #include "root/RootHtml.ipp"
 #include "root/RootPost.ipp"
+#include "root/RootProvider.ipp"

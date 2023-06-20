@@ -191,5 +191,43 @@ namespace yq::mithril {
         
         addColumn(std::move(col));
     }
+    
+    template <typename S>
+    class IdModelT : public IdModel {
+    public:
+        static IdProvider toProvider(std::function<std::vector<S>()> fn)
+        {
+            return [fn]() -> std::vector<Id>{
+                return ids(fn());
+            };
+        }
+
+        static IdProvider toProvider(S rt, std::function<std::vector<S>(S)> fn)
+        {
+            return [rt, fn]() -> std::vector<Id>{
+                return ids(fn(rt));
+            };
+        }
+
+        IdModelT(Type t, IdProvider&& p, QObject*parent=nullptr) :
+            IdModel(t, std::move(p), parent) {}
+        
+        IdModelT(Type t, S s, IdProvider&& p, QObject*parent=nullptr) :
+            IdModel(t, s, std::move(p), parent) {}
+
+        void    setVHeader(std::function<QVariant(S)>fn)
+        {
+            m_vHeader  = [fn](Id i){
+                return fn(i.as<S>());
+            };
+        }
+
+        template <typename T>
+        void    makeColumn(std::string_view label, std::function<T(S)> fn)
+        {
+            addColumn<S,T>(label, fn);
+        }
+    };
+    
 }
 

@@ -34,5 +34,10 @@ namespace yq::mithril {
     
     using IdProvider    = std::function<std::vector<Id>()>;
     using IdFilter      = std::function<bool(Id)>;
-    
+ 
+    template <cdb_object S>
+    std::vector<Id> ids(std::vector<S> them)
+    {
+        return std::vector<Id>(them.begin(), them.end());
+    }
 }

@@ -8,6 +8,7 @@
 #include "game/GameCDB.ipp"
 #include "game/GameHtml.ipp"
 //#include "game/GamePost.ipp"
+#include "game/GameProvider.ipp"
 
 #include "db/IDLock.ipp"
 

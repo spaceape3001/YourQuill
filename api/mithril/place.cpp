@@ -8,6 +8,7 @@
 #include "place/PlaceCDB.ipp"
 #include "place/PlaceHtml.ipp"
 //#include "place/PlacePost.ipp"
+#include "place/PlaceProvider.ipp"
 
 #include "db/IDLock.ipp"
 

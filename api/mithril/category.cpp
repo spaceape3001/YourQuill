@@ -10,6 +10,7 @@
 #include "category/CategoryFile.ipp"
 #include "category/CategoryHtml.ipp"
 #include "category/CategoryPost.ipp"
+#include "category/CategoryProvider.ipp"
 
 #include "db/IDLock.ipp"
 

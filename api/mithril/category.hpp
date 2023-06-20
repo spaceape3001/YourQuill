@@ -13,4 +13,5 @@
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/category/CategoryData.hpp>
 #include <mithril/category/CategoryFile.hpp>
+#include <mithril/category/CategoryProvider.hpp>
 #include <mithril/db/IDLock.hpp>

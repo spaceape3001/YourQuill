@@ -6,6 +6,7 @@
 
 #include "event/EventCDB.ipp"
 #include "event/EventHtml.ipp"
+#include "event/EventProvider.ipp"
 
 #include "db/IDLock.ipp"
 #include <meta/Init.hpp>

@@ -8,6 +8,7 @@
 #include "book/BookCDB.ipp"
 #include "book/BookHtml.ipp"
 //#include "book/BookPost.ipp"
+#include "book/BookProvider.ipp"
 
 #include "db/IDLock.ipp"
 
