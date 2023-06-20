@@ -14,17 +14,16 @@ namespace yq::mithril {
     class AtomModel : public IdModelT<Atom> {
         Q_OBJECT
     public:
-    
-        static std::span<const Column>  defColumns();
-    
-        AtomModel(Type t) : AtomModel(t, ALL) {}
-        AtomModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        AtomModel(Type t, QObject*parent=nullptr) : AtomModel(t, ALL, parent) {}
+        AtomModel(Type t, all_t, QObject* parent=nullptr);
         ~AtomModel();
         
         using IdModelT<Atom>::addColumn;
         void    addColumn(Column);
         
+        void    addColumns(std::span<const Column> columns);
+        
     private:
-        AtomModel(Type t, Atom, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        AtomModel(Type t, Atom, IdProvider&&, QObject*parent);
     };
 }

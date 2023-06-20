@@ -14,6 +14,9 @@ namespace yq::mithril {
     class LeafTable : public IdTableT<Leaf> {
         Q_OBJECT
     public:
+
+        static std::span<const Column>  defColumns();
+
         LeafTable(all_t, QWidget*parent=nullptr);
         LeafTable(all_t, std::initializer_list<Column> columns, QWidget*parent=nullptr);
         LeafTable(all_t, std::span<const Column> columns, QWidget*parent=nullptr);

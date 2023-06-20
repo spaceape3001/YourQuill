@@ -15,16 +15,15 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
-    
-        EventModel(Type t) : EventModel(t, ALL) {}
-        EventModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        EventModel(Type t, QObject* parent=nullptr) : EventModel(t, ALL, parent) {}
+        EventModel(Type t, all_t, QObject* parent=nullptr);
         ~EventModel();
         
         using IdModelT<Event>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        EventModel(Type t, Event, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        EventModel(Type t, Event, IdProvider&&, QObject*parent);
     };
 }

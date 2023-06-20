@@ -15,16 +15,15 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
-    
-        TagModel(Type t) : TagModel(t, ALL) {}
-        TagModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        TagModel(Type t, QObject* parent=nullptr) : TagModel(t, ALL, parent) {}
+        TagModel(Type t, all_t, QObject* parent=nullptr);
         ~TagModel();
         
         using IdModelT<Tag>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        TagModel(Type t, Tag, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        TagModel(Type t, Tag, IdProvider&&, QObject*parent);
     };
 }

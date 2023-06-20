@@ -14,6 +14,9 @@ namespace yq::mithril {
     class FieldTable : public IdTableT<Field> {
         Q_OBJECT
     public:
+
+        static std::span<const Column>  defColumns();
+    
         FieldTable(all_t, QWidget*parent=nullptr);
         FieldTable(all_t, std::initializer_list<Column> columns, QWidget*parent=nullptr);
         FieldTable(all_t, std::span<const Column> columns, QWidget*parent=nullptr);

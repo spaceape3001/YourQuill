@@ -11,8 +11,13 @@
 
 
 namespace yq::mithril {
+    std::span<const Column>  CategoryTable::defColumns() 
+    {
+        static Column   s_data[] = { Column::Key, Column::Name };
+        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+    }
 
-    CategoryTable::CategoryTable(all_t, QWidget*parent) : CategoryTable(ALL, CategoryModel::defColumns(), parent)
+    CategoryTable::CategoryTable(all_t, QWidget*parent) : CategoryTable(ALL, defColumns(), parent)
     {
     }
     
@@ -22,8 +27,10 @@ namespace yq::mithril {
     }
     
     CategoryTable::CategoryTable(all_t, std::span<const Column> columns, QWidget*parent) : 
-        IdTableT<Category>(new CategoryModel(IdModel::Type::Table, ALL, columns), parent)
+        IdTableT<Category>(new CategoryModel(IdModel::Type::Table, ALL), parent)
     {
+        model()->addColumns(columns);
+        model()->reload();
         setWindowTitle("Categories");
     }
 

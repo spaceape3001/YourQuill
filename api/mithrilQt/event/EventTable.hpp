@@ -14,6 +14,8 @@ namespace yq::mithril {
     class EventTable : public IdTableT<Event> {
         Q_OBJECT
     public:
+        static std::span<const Column>  defColumns();
+    
         EventTable(all_t, QWidget*parent=nullptr);
         EventTable(all_t, std::initializer_list<Column> columns, QWidget*parent=nullptr);
         EventTable(all_t, std::span<const Column> columns, QWidget*parent=nullptr);

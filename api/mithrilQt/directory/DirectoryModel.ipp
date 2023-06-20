@@ -11,23 +11,14 @@
 #include <mithril/directory/DirectoryProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  DirectoryModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Hidden, Column::Path };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    DirectoryModel::DirectoryModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        DirectoryModel(t, Directory(), provider::all_directories(), cols, parent)
+    DirectoryModel::DirectoryModel(Type t, all_t, QObject* parent) : 
+        DirectoryModel(t, Directory(), provider::all_directories(), parent)
     {
     }
 
-    DirectoryModel::DirectoryModel(Type t, Directory rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    DirectoryModel::DirectoryModel(Type t, Directory rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Directory>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     DirectoryModel::~DirectoryModel()
@@ -55,6 +46,12 @@ namespace yq::mithril {
         default:
             break;
         }
+    }
+
+    void    DirectoryModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
     }
     
 }

@@ -11,8 +11,14 @@
 
 
 namespace yq::mithril {
+    std::span<const Column>  DocumentTable::defColumns() 
+    {
+        static Column   s_data[] = { Column::Key, Column::Name };
+        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+    }
 
-    DocumentTable::DocumentTable(all_t, QWidget*parent) : DocumentTable(ALL, DocumentModel::defColumns(), parent)
+
+    DocumentTable::DocumentTable(all_t, QWidget*parent) : DocumentTable(ALL, defColumns(), parent)
     {
     }
     
@@ -22,8 +28,10 @@ namespace yq::mithril {
     }
     
     DocumentTable::DocumentTable(all_t, std::span<const Column> columns, QWidget*parent) : 
-        IdTableT<Document>(new DocumentModel(IdModel::Type::Table, ALL, columns), parent)
+        IdTableT<Document>(new DocumentModel(IdModel::Type::Table, ALL), parent)
     {
+        model()->addColumns(columns);
+        model()->reload();
         setWindowTitle("Documents");
     }
 

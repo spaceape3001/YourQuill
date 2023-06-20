@@ -11,23 +11,14 @@
 #include <mithril/leaf/LeafProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  LeafModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Title };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    LeafModel::LeafModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        LeafModel(t, Leaf(), provider::all_leafs(), cols, parent)
+    LeafModel::LeafModel(Type t, all_t, QObject* parent) : 
+        LeafModel(t, Leaf(), provider::all_leafs(), parent)
     {
     }
 
-    LeafModel::LeafModel(Type t, Leaf rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    LeafModel::LeafModel(Type t, Leaf rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Leaf>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     LeafModel::~LeafModel()
@@ -51,4 +42,9 @@ namespace yq::mithril {
         }
     }
     
+    void    LeafModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
+    }
 }

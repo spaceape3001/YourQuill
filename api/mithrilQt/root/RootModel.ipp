@@ -11,23 +11,14 @@
 #include <mithril/root/RootProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  RootModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Path };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    RootModel::RootModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        RootModel(t, Root(), provider::all_roots(), cols, parent)
+    RootModel::RootModel(Type t, all_t, QObject* parent) : 
+        RootModel(t, Root(), provider::all_roots(), parent)
     {
     }
 
-    RootModel::RootModel(Type t, Root rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    RootModel::RootModel(Type t, Root rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Root>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     RootModel::~RootModel()
@@ -57,4 +48,9 @@ namespace yq::mithril {
         }
     }
     
+    void    RootModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
+    }
 }

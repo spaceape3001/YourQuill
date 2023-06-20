@@ -11,23 +11,14 @@
 #include <mithril/field/FieldProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  FieldModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    FieldModel::FieldModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        FieldModel(t, Field(), provider::all_fields(), cols, parent)
+    FieldModel::FieldModel(Type t, all_t, QObject* parent) : 
+        FieldModel(t, Field(), provider::all_fields(), parent)
     {
     }
 
-    FieldModel::FieldModel(Type t, Field rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    FieldModel::FieldModel(Type t, Field rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Field>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     FieldModel::~FieldModel()
@@ -51,4 +42,9 @@ namespace yq::mithril {
         }
     }
     
+    void    FieldModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
+    }
 }

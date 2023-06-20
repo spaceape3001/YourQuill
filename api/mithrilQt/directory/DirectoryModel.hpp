@@ -15,16 +15,15 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
-    
-        DirectoryModel(Type t) : DirectoryModel(t, ALL) {}
-        DirectoryModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        DirectoryModel(Type t, QObject* parent=nullptr) : DirectoryModel(t, ALL, parent) {}
+        DirectoryModel(Type t, all_t, QObject* parent=nullptr);
         ~DirectoryModel();
         
         using IdModelT<Directory>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        DirectoryModel(Type t, Directory, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        DirectoryModel(Type t, Directory, IdProvider&&, QObject*parent);
     };
 }

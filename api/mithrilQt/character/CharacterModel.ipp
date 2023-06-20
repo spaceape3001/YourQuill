@@ -11,23 +11,14 @@
 #include <mithril/character/CharacterProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  CharacterModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    CharacterModel::CharacterModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        CharacterModel(t, Character(), provider::all_characters(), cols, parent)
+    CharacterModel::CharacterModel(Type t, all_t, QObject* parent) : 
+        CharacterModel(t, Character(), provider::all_characters(), parent)
     {
     }
 
-    CharacterModel::CharacterModel(Type t, Character rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    CharacterModel::CharacterModel(Type t, Character rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Character>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     CharacterModel::~CharacterModel()
@@ -51,4 +42,9 @@ namespace yq::mithril {
         }
     }
     
+    void    CharacterModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
+    }
 }

@@ -15,16 +15,16 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
     
-        LeafModel(Type t) : LeafModel(t, ALL) {}
-        LeafModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        LeafModel(Type t, QObject* parent=nullptr) : LeafModel(t, ALL, parent) {}
+        LeafModel(Type t, all_t, QObject* parent=nullptr);
         ~LeafModel();
         
         using IdModelT<Leaf>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        LeafModel(Type t, Leaf, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        LeafModel(Type t, Leaf, IdProvider&&, QObject*parent);
     };
 }

@@ -11,23 +11,14 @@
 #include <mithril/class/ClassProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  ClassModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    ClassModel::ClassModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        ClassModel(t, Class(), provider::all_classes(), cols, parent)
+    ClassModel::ClassModel(Type t, all_t, QObject* parent) : 
+        ClassModel(t, Class(), provider::all_classes(), parent)
     {
     }
 
-    ClassModel::ClassModel(Type t, Class rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    ClassModel::ClassModel(Type t, Class rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Class>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     ClassModel::~ClassModel()
@@ -49,6 +40,12 @@ namespace yq::mithril {
         default:
             break;
         }
+    }
+
+    void    ClassModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
     }
     
 }

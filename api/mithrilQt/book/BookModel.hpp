@@ -15,16 +15,15 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
-    
-        BookModel(Type t) : BookModel(t, ALL) {}
-        BookModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        BookModel(Type t,QObject* parent=nullptr) : BookModel(t, ALL, parent) {}
+        BookModel(Type t, all_t, QObject* parent=nullptr);
         ~BookModel();
         
         using IdModelT<Book>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        BookModel(Type t, Book, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        BookModel(Type t, Book, IdProvider&&, QObject*parent);
     };
 }

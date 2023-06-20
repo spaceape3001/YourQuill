@@ -11,23 +11,14 @@
 #include <mithril/atom/AtomProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  AtomModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    AtomModel::AtomModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        AtomModel(t, Atom(), provider::all_atoms(), cols, parent)
+    AtomModel::AtomModel(Type t, all_t, QObject* parent) : 
+        AtomModel(t, Atom(), provider::all_atoms(), parent)
     {
     }
 
-    AtomModel::AtomModel(Type t, Atom rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    AtomModel::AtomModel(Type t, Atom rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Atom>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     AtomModel::~AtomModel()
@@ -50,5 +41,10 @@ namespace yq::mithril {
             break;
         }
     }
-    
+
+    void    AtomModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
+    }
 }

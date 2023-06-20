@@ -15,16 +15,15 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
-    
-        PlaceModel(Type t) : PlaceModel(t, ALL) {}
-        PlaceModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        PlaceModel(Type t, QObject* parent=nullptr) : PlaceModel(t, ALL, parent) {}
+        PlaceModel(Type t, all_t, QObject* parent=nullptr);
         ~PlaceModel();
         
         using IdModelT<Place>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        PlaceModel(Type t, Place, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        PlaceModel(Type t, Place, IdProvider&&, QObject*parent);
     };
 }

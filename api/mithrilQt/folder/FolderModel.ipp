@@ -11,23 +11,14 @@
 #include <mithril/folder/FolderProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  FolderModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    FolderModel::FolderModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        FolderModel(t, Folder(), provider::all_folders(), cols, parent)
+    FolderModel::FolderModel(Type t, all_t, QObject* parent) : 
+        FolderModel(t, Folder(), provider::all_folders(), parent)
     {
     }
 
-    FolderModel::FolderModel(Type t, Folder rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    FolderModel::FolderModel(Type t, Folder rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Folder>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     FolderModel::~FolderModel()
@@ -49,6 +40,12 @@ namespace yq::mithril {
         default:
             break;
         }
+    }
+
+    void    FolderModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
     }
     
 }

@@ -11,23 +11,14 @@
 #include <mithril/fragment/FragmentProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  FragmentModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Path };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    FragmentModel::FragmentModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        FragmentModel(t, Fragment(), provider::all_fragments(), cols, parent)
+    FragmentModel::FragmentModel(Type t, all_t, QObject* parent) : 
+        FragmentModel(t, Fragment(), provider::all_fragments(), parent)
     {
     }
 
-    FragmentModel::FragmentModel(Type t, Fragment rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    FragmentModel::FragmentModel(Type t, Fragment rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Fragment>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     FragmentModel::~FragmentModel()
@@ -52,6 +43,12 @@ namespace yq::mithril {
         default:
             break;
         }
+    }
+
+    void    FragmentModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
     }
     
 }

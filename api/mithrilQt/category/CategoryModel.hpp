@@ -15,16 +15,15 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
-    
-        CategoryModel(Type t) : CategoryModel(t, ALL) {}
-        CategoryModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        CategoryModel(Type t, QObject* parent=nullptr) : CategoryModel(t, ALL, parent) {}
+        CategoryModel(Type t, all_t, QObject* parent=nullptr);
         ~CategoryModel();
         
         using IdModelT<Category>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        CategoryModel(Type t, Category, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        CategoryModel(Type t, Category, IdProvider&&, QObject*parent);
     };
 }

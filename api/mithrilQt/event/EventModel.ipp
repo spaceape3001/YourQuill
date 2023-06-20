@@ -11,23 +11,14 @@
 #include <mithril/event/EventProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  EventModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Title };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    EventModel::EventModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        EventModel(t, Event(), provider::all_events(), cols, parent)
+    EventModel::EventModel(Type t, all_t, QObject* parent) : 
+        EventModel(t, Event(), provider::all_events(), parent)
     {
     }
 
-    EventModel::EventModel(Type t, Event rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    EventModel::EventModel(Type t, Event rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Event>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     EventModel::~EventModel()
@@ -49,6 +40,12 @@ namespace yq::mithril {
         default:
             break;
         }
+    }
+
+    void    EventModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
     }
     
 }

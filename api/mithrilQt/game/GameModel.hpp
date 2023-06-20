@@ -15,16 +15,16 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::span<const Column>  defColumns();
     
-        GameModel(Type t) : GameModel(t, ALL) {}
-        GameModel(Type t, all_t, std::span<const Column> cols=defColumns(), QObject* parent=nullptr);
+        GameModel(Type t, QObject* parent=nullptr) : GameModel(t, ALL, parent) {}
+        GameModel(Type t, all_t, QObject* parent=nullptr);
         ~GameModel();
         
         using IdModelT<Game>::addColumn;
         void    addColumn(Column);
+        void    addColumns(std::span<const Column> columns);
         
     private:
-        GameModel(Type t, Game, IdProvider&&, std::span<const Column> cols, QObject*parent);
+        GameModel(Type t, Game, IdProvider&&, QObject*parent);
     };
 }

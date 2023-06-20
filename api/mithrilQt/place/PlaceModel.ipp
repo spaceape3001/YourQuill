@@ -11,23 +11,14 @@
 #include <mithril/place/PlaceProvider.hpp>
 
 namespace yq::mithril {
-    std::span<const Column>  PlaceModel::defColumns() 
-    {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
-    }
-
-    PlaceModel::PlaceModel(Type t, all_t, std::span<const Column> cols, QObject* parent) : 
-        PlaceModel(t, Place(), provider::all_places(), cols, parent)
+    PlaceModel::PlaceModel(Type t, all_t, QObject* parent) : 
+        PlaceModel(t, Place(), provider::all_places(), parent)
     {
     }
 
-    PlaceModel::PlaceModel(Type t, Place rt, IdProvider&& prov, std::span<const Column> cols, QObject*parent) : 
+    PlaceModel::PlaceModel(Type t, Place rt, IdProvider&& prov, QObject*parent) : 
         IdModelT<Place>(t, rt, std::move(prov), parent)
     {
-        for(Column c : cols)
-            addColumn(c);
-        reload();
     }
     
     PlaceModel::~PlaceModel()
@@ -51,4 +42,9 @@ namespace yq::mithril {
         }
     }
     
+    void    PlaceModel::addColumns(std::span<const Column> columns)
+    {
+        for(Column c : columns)
+            addColumn(c);
+    }
 }

@@ -11,8 +11,14 @@
 
 
 namespace yq::mithril {
+    std::span<const Column>  PlaceTable::defColumns() 
+    {
+        static Column   s_data[] = { Column::Key, Column::Name };
+        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+    }
 
-    PlaceTable::PlaceTable(all_t, QWidget*parent) : PlaceTable(ALL, PlaceModel::defColumns(), parent)
+
+    PlaceTable::PlaceTable(all_t, QWidget*parent) : PlaceTable(ALL, defColumns(), parent)
     {
     }
     
@@ -22,8 +28,10 @@ namespace yq::mithril {
     }
     
     PlaceTable::PlaceTable(all_t, std::span<const Column> columns, QWidget*parent) : 
-        IdTableT<Place>(new PlaceModel(IdModel::Type::Table, ALL, columns), parent)
+        IdTableT<Place>(new PlaceModel(IdModel::Type::Table, ALL), parent)
     {
+        model()->addColumns(columns);
+        model()->reload();
         setWindowTitle("Places");
     }
 

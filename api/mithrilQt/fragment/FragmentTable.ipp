@@ -11,8 +11,14 @@
 
 
 namespace yq::mithril {
+    std::span<const Column>  FragmentTable::defColumns() 
+    {
+        static Column   s_data[] = { Column::Key, Column::Path };
+        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+    }
 
-    FragmentTable::FragmentTable(all_t, QWidget*parent) : FragmentTable(ALL, FragmentModel::defColumns(), parent)
+
+    FragmentTable::FragmentTable(all_t, QWidget*parent) : FragmentTable(ALL, defColumns(), parent)
     {
     }
     
@@ -22,8 +28,10 @@ namespace yq::mithril {
     }
     
     FragmentTable::FragmentTable(all_t, std::span<const Column> columns, QWidget*parent) : 
-        IdTableT<Fragment>(new FragmentModel(IdModel::Type::Table, ALL, columns), parent)
+        IdTableT<Fragment>(new FragmentModel(IdModel::Type::Table, ALL), parent)
     {
+        model()->addColumns(columns);
+        model()->reload();
         setWindowTitle("Fragments");
     }
 

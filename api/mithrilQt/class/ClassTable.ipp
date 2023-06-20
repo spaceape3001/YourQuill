@@ -11,8 +11,14 @@
 
 
 namespace yq::mithril {
+    std::span<const Column>  ClassTable::defColumns() 
+    {
+        static Column   s_data[] = { Column::Key, Column::Name };
+        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+    }
 
-    ClassTable::ClassTable(all_t, QWidget*parent) : ClassTable(ALL, ClassModel::defColumns(), parent)
+
+    ClassTable::ClassTable(all_t, QWidget*parent) : ClassTable(ALL, defColumns(), parent)
     {
     }
     
@@ -22,8 +28,10 @@ namespace yq::mithril {
     }
     
     ClassTable::ClassTable(all_t, std::span<const Column> columns, QWidget*parent) : 
-        IdTableT<Class>(new ClassModel(IdModel::Type::Table, ALL, columns), parent)
+        IdTableT<Class>(new ClassModel(IdModel::Type::Table, ALL), parent)
     {
+        model()->addColumns(columns);
+        model()->reload();
         setWindowTitle("Classes");
     }
 

@@ -14,6 +14,8 @@ namespace yq::mithril {
     class AtomTable : public IdTableT<Atom> {
         Q_OBJECT
     public:
+        static std::span<const Column>  defColumns();
+
         AtomTable(all_t, QWidget*parent=nullptr);
         AtomTable(all_t, std::initializer_list<Column> columns, QWidget*parent=nullptr);
         AtomTable(all_t, std::span<const Column> columns, QWidget*parent=nullptr);
