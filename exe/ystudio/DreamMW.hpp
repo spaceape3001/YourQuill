@@ -24,6 +24,7 @@ public slots:
     void    newAtomTable();
     void    newBrowser();
     void    newBookTable();
+    void    newCategoryTable();
     void    newCharacterTable();
     void    newClassTable();
     void    newDirectoryTable();

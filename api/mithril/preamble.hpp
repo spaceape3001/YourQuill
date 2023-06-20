@@ -108,35 +108,6 @@ namespace yq {
         {
             { a.id } -> std::convertible_to<id_t>;
         };
-        
-        //template <typename> struct is_id_object : public std::false_type {};
-        //template <> struct is_id_object<Atom> : public std::true_type {};
-        //template <> struct is_id_object<Attribute> : public std::true_type {};
-        //template <> struct is_id_object<Book> : public std::true_type {};
-        //template <> struct is_id_object<Category> : public std::true_type {};
-        //template <> struct is_id_object<Character> : public std::true_type {};
-        //template <> struct is_id_object<Class> : public std::true_type {};
-        //template <> struct is_id_object<Directory> : public std::true_type {};
-        //template <> struct is_id_object<Document> : public std::true_type {};
-        //template <> struct is_id_object<Edge> : public std::true_type {};
-        //template <> struct is_id_object<Entity> : public std::true_type {};
-        //template <> struct is_id_object<Event> : public std::true_type {};
-        //template <> struct is_id_object<Field> : public std::true_type {};
-        //template <> struct is_id_object<Folder> : public std::true_type {};
-        //template <> struct is_id_object<Fragment> : public std::true_type {};
-        //template <> struct is_id_object<Graph> : public std::true_type {};
-        //template <> struct is_id_object<Group> : public std::true_type {};
-        //template <> struct is_id_object<Image> : public std::true_type {};
-        //template <> struct is_id_object<Leaf> : public std::true_type {};
-        //template <> struct is_id_object<Place> : public std::true_type {};
-        ////template <> struct is_id_object<Property> : public std::true_type {};
-            //// Note, ROOT is not one
-        //template <> struct is_id_object<Tag> : public std::true_type {};
-        //template <> struct is_id_object<Thing> : public std::true_type {};
-        //template <> struct is_id_object<User> : public std::true_type {};
-        
-        //template <typename T> static constexpr bool is_id_object_v = is_id_object<T>::value;
-
 
         namespace cdb {
         

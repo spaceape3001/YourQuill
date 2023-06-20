@@ -16,8 +16,6 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        IdTable(Id, IdProvider&&, QWidget* parent=nullptr);
-        IdTable(IdProvider&&, QWidget*parent=nullptr);
         ~IdTable();
         
         void            addColumn(IdColumn&&);
@@ -26,8 +24,8 @@ namespace yq::mithril {
         class Model;
         class View;
         
-        Model*          model() { return m_model; }
-        const Model*    model() const { return m_model; }
+        IdModel*        model() { return m_model; }
+        const IdModel*  model() const { return m_model; }
         View*           view() { return m_view; }
         const View*     view() const { return m_view; }
         
@@ -36,25 +34,20 @@ namespace yq::mithril {
         void            update();
         
     protected:
-        Model*  m_model = nullptr;
-        View*   m_view  = nullptr;
+        IdTable(IdModel*, QWidget* parent=nullptr);
+
+        IdModel*    m_model = nullptr;
+        View*       m_view  = nullptr;
     };
 
-
-    class IdTable::Model : public IdModel {
-        Q_OBJECT
-    public:
-        Model(Id, IdProvider&&, QObject*parent=nullptr);
-        ~Model();
-    };
     
     class IdTable::View : public QTableView {
         Q_OBJECT
     public:
-        View(Model*, QWidget*parent=nullptr);
+        View(IdModel*, QWidget*parent=nullptr);
         ~View();
     private:
-        Model*  m_model = nullptr;
+        IdModel*    m_model = nullptr;
     };
 
     
@@ -62,19 +55,13 @@ namespace yq::mithril {
     class IdTableT : public IdTable {
     public:
     
-        IdTableT(std::function<std::vector<S>()> fn, QWidget*parent)  :
-            IdTable([fn]()->std::vector<Id>{
-                std::vector<S>  data    = fn();
-                return std::vector<Id>(data.begin(), data.end());
-            }, parent)
+        IdTableT(std::function<std::vector<S>()> fn, QWidget*parent)  : 
+            IdTable( new IdModelT<S>(IdModel::Type::Table, IdModelT<S>::toProvider(fn)), parent )
         {
         }
         
-        IdTableT(S root, std::function<std::vector<S>(S)> fn, QWidget*parent) : 
-            IdTable(root, [fn,root]()->std::vector<Id>{
-                std::vector<S> data = fn(root);
-                return std::vector<Id>(data.begin(), data.end());
-            }, parent)
+        IdTableT(S root, std::function<std::vector<S>(S)> fn, QWidget*parent)  : 
+            IdTable( new IdModelT<S>(root, IdModel::Type::Table, IdModelT<S>::toProvider(fn)), parent )
         {
         }
         
@@ -83,14 +70,20 @@ namespace yq::mithril {
         template <typename T>
         void    makeColumn(std::string_view label, std::function<T(S)> fn)
         {
-            m_model->addColumn<S,T>(label, fn);
+            model()->template makeColumn<T>(label, std::move(fn));
         }
         
         void    setVHeader(std::function<QVariant(S)>fn)
         {
-            m_model->m_vHeader  = [fn](Id i){
-                return fn(i.as<S>());
-            };
+            model()->setVHeader(std::move(fn));
+        }
+        
+        IdModelT<S>*            model() { return static_cast<IdModelT<S>*>(m_model); }
+        const IdModelT<S>*      model() const { return static_cast<IdModelT<S>*>(m_model); }
+
+    protected:
+        IdTableT(IdModelT<S>* mdl, QWidget*parent) : IdTable(mdl, parent)
+        {
         }
     };
 }

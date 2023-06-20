@@ -18,9 +18,7 @@ namespace yq::mithril {
     using ::yq::gluon::Delegate;
     
     //! Generic column model (used by the other models)
-    class IdColumn {
-    public:
-    
+    struct IdColumn {
         using UPtr      = std::unique_ptr<const IdColumn>;
 
         using VariantFN     = std::function<QVariant(Id)>;

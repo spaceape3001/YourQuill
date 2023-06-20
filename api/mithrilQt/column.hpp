@@ -1,0 +1,22 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace yq::mithril {
+    /*! Enumerated list of columns 
+    */
+    enum class Column {
+        None,
+        Hidden,
+        Id,
+        Key,
+        Name,
+        Path,
+        Template,
+        Title
+    };
+}

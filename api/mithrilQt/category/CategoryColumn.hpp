@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace yq::mithril {
+    struct IdColumn;
+    namespace column {
+        IdColumn    category_id();
+        IdColumn    category_key();
+        IdColumn    category_name();
+    }
+}
+

@@ -210,7 +210,7 @@ namespace yq::mithril {
         }
 
         IdModelT(Type t, IdProvider&& p, QObject*parent=nullptr) :
-            IdModel(t, std::move(p), parent) {}
+            IdModel(t, Id(), std::move(p), parent) {}
         
         IdModelT(Type t, S s, IdProvider&& p, QObject*parent=nullptr) :
             IdModel(t, s, std::move(p), parent) {}

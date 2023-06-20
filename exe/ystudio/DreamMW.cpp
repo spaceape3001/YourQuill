@@ -7,21 +7,22 @@
 #include "DreamMW.hpp"
 #include "Browser.hpp"
 
-#include "table/AtomTable.hpp"
-#include "table/BookTable.hpp"
-#include "table/CharacterTable.hpp"
-#include "table/ClassTable.hpp"
-#include "table/DirectoryTable.hpp"
-#include "table/DocumentTable.hpp"
-#include "table/EventTable.hpp"
-#include "table/FieldTable.hpp"
-#include "table/FolderTable.hpp"
-#include "table/FragmentTable.hpp"
-#include "table/GameTable.hpp"
-#include "table/LeafTable.hpp"
-#include "table/PlaceTable.hpp"
-#include "table/RootTable.hpp"
-#include "table/TagTable.hpp"
+#include <mithrilQt/atom/AtomTable.hpp>
+#include <mithrilQt/book/BookTable.hpp>
+#include <mithrilQt/category/CategoryTable.hpp>
+#include <mithrilQt/character/CharacterTable.hpp>
+#include <mithrilQt/class/ClassTable.hpp>
+#include <mithrilQt/directory/DirectoryTable.hpp>
+#include <mithrilQt/document/DocumentTable.hpp>
+#include <mithrilQt/event/EventTable.hpp>
+#include <mithrilQt/field/FieldTable.hpp>
+#include <mithrilQt/folder/FolderTable.hpp>
+#include <mithrilQt/fragment/FragmentTable.hpp>
+#include <mithrilQt/game/GameTable.hpp>
+#include <mithrilQt/leaf/LeafTable.hpp>
+#include <mithrilQt/place/PlaceTable.hpp>
+#include <mithrilQt/root/RootTable.hpp>
+#include <mithrilQt/tag/TagTable.hpp>
 
 #include <mithril/wksp/Workspace.hpp>
 #include <gluon/core/Utilities.hpp>
@@ -46,6 +47,7 @@ DreamMW::DreamMW()
 
     addAction("atomTable", "Atoms").connect(this, &DreamMW::newAtomTable);
     addAction("bookTable", "Books").connect(this, &DreamMW::newBookTable);
+    addAction("categoryTable", "Categories").connect(this, &DreamMW::newCategoryTable);
     addAction("characterTable", "Characters").connect(this, &DreamMW::newCharacterTable);
     addAction("classTable", "Classes").connect(this, &DreamMW::newClassTable);
     addAction("directoryTable", "Directories").connect(this, &DreamMW::newDirectoryTable);
@@ -66,6 +68,7 @@ DreamMW::DreamMW()
             << "--" 
             << "atomTable" 
             << "bookTable"
+            << "categoryTable"
             << "characterTable"
             << "classTable"
             << "directoryTable"
@@ -91,17 +94,12 @@ DreamMW::~DreamMW()
 
 void    DreamMW::newAtomTable()
 {
-    AtomTable*  tt  = new AtomTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new AtomTable(ALL));
 }
-
 
 void    DreamMW::newBookTable()
 {
-    BookTable*  tt  = new BookTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new BookTable(ALL));
 }
 
 void    DreamMW::newBrowser()
@@ -109,74 +107,59 @@ void    DreamMW::newBrowser()
     addWindow(new Browser(QString("http://localhost:%1/").arg(wksp::port())));
 }
 
+void    DreamMW::newCategoryTable()
+{
+    addWindow(new CategoryTable(ALL));
+}
+
 void    DreamMW::newCharacterTable()
 {
-    CharacterTable*  tt  = new CharacterTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new CharacterTable(ALL));
 }
 
 void    DreamMW::newClassTable()
 {
-    ClassTable*  tt  = new ClassTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new ClassTable(ALL));
 }
 
 void    DreamMW::newDirectoryTable()
 {
-    DirectoryTable*  tt  = new DirectoryTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new DirectoryTable(ALL));
 }
 
 void    DreamMW::newDocumentTable()
 {
-    DocumentTable*  tt  = new DocumentTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new DocumentTable(ALL));
 }
 
 void    DreamMW::newEventTable()
 {
-    EventTable*  tt  = new EventTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new EventTable(ALL));
 }
 
 void    DreamMW::newFieldTable()
 {
-    FieldTable*  tt  = new FieldTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new FieldTable(ALL));
 }
 
 void    DreamMW::newFolderTable()
 {
-    FolderTable*  tt  = new FolderTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new FolderTable(ALL));
 }
 
 void    DreamMW::newFragmentTable()
 {
-    FragmentTable*  tt  = new FragmentTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new FragmentTable(ALL));
 }
 
 void    DreamMW::newGameTable()
 {
-    GameTable*  tt  = new GameTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new GameTable(ALL));
 }
 
 void    DreamMW::newLeafTable()
 {
-    LeafTable*  tt  = new LeafTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new LeafTable(ALL));
 }
 
 MainWindow*  DreamMW::newMain()
@@ -186,23 +169,17 @@ MainWindow*  DreamMW::newMain()
 
 void    DreamMW::newPlaceTable()
 {
-    PlaceTable*  tt  = new PlaceTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new PlaceTable(ALL));
 }
 
 void    DreamMW::newRootTable()
 {
-    RootTable*  tt  = new RootTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new RootTable(ALL));
 }
 
 void    DreamMW::newTagTable()
 {
-    TagTable*  tt  = new TagTable;
-    tt->refresh();
-    addWindow(tt);
+    addWindow(new TagTable(ALL));
 }
 
 void    DreamMW::updateTitle()
