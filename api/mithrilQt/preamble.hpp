@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <basic/Flags.hpp>
+
 namespace yq::mithril {
     /*! Enumerated list of columns 
     */
@@ -19,4 +21,12 @@ namespace yq::mithril {
         Template,
         Title
     };
+    
+    enum class ColOpt : uint8_t {
+        Set,
+        Add,
+        Icon
+    };
+    
+    using ColOpts   = Flags<ColOpt>;
 }

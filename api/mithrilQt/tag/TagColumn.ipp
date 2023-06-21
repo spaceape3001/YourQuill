@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithrilQt/id/IdColumn.hpp>
+#include "TagColumn.hpp"
 #include <mithril/tag/TagCDB.hpp>
 #include <gluon/core/Utilities.hpp>
 
@@ -14,40 +14,56 @@ namespace yq::mithril::column {
     IdColumn    tag_id()
     {
         IdColumn    ret;
-        ret.fnDisplay   = [](Id i) -> QVariant {
-            Tag    a   = i.as<Tag>();
-            if(!a)
-                return QVariant();
-            return (quint64) a.id;
-        };
-        ret.label   = "ID";
+        ret.fnDisplay   = displayFN::tag_id();
+        ret.label       = "ID";
         return ret;
     }
     
     IdColumn    tag_key()
     {
         IdColumn    ret;
-        ret.fnDisplay   = [](Id i) -> QVariant {
-            Tag    a   = i.as<Tag>();
-            if(!a)
-                return QVariant();
-            return gluon::qString(cdb::key(a));
-        };
-        ret.label   = "Key";
+        ret.fnDisplay   = displayFN::tag_key();
+        ret.label       = "Key";
         return ret;
     }
     
     IdColumn    tag_name()
     {
         IdColumn    ret;
-        ret.fnDisplay   = [](Id i) -> QVariant {
+        ret.fnDisplay   = displayFN::tag_name();
+        ret.label       = "Name";
+        return ret;
+    }
+}
+
+namespace yq::mithril::displayFN {
+    IdColumn::VariantFN  tag_id()
+    {
+        return [](Id i) -> QVariant {
+            Tag    a   = i.as<Tag>();
+            if(!a)
+                return QVariant();
+            return (quint64) a.id;
+        };
+    }
+    
+    IdColumn::VariantFN  tag_key()
+    {
+        return [](Id i) -> QVariant {
+            Tag    a   = i.as<Tag>();
+            if(!a)
+                return QVariant();
+            return gluon::qString(cdb::key(a));
+        };
+    }
+    
+    IdColumn::VariantFN  tag_name()
+    {
+        return [](Id i) -> QVariant {
             Tag    a   = i.as<Tag>();
             if(!a)
                 return QVariant();
             return gluon::qString(cdb::name(a));
         };
-        ret.label   = "Name";
-        return ret;
     }
 }
-
