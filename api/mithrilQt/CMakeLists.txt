@@ -117,10 +117,12 @@ add_library(${PROJECT_NAME} SHARED
     id/IdListModel.ipp
     id/IdModel.hpp
     id/IdModel.ipp
-    id/IdTable.hpp
-    id/IdTable.ipp
     id/IdItemModel.hpp
     id/IdItemModel.ipp
+    id/IdTable.hpp
+    id/IdTable.ipp
+    id/IdTableView.hpp
+    id/IdTableView.ipp
     id/id.cpp
     
     leaf/LeafColumn.hpp
