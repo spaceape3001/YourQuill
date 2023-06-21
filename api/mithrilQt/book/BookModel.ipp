@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    BookModel::addColumn(Column col)
+    void    BookModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::book_id());
+            addColumn(column::book_id(opts));
             break;
         case Column::Key:
-            addColumn(column::book_key());
+            addColumn(column::book_key(opts));
             break;
         case Column::Title:
-            addColumn(column::book_title());
+            addColumn(column::book_title(opts));
             break;
         default:
             break;

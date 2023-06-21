@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdModel.hpp>
 #include <mithril/document/Document.hpp>
 #include <mithrilQt/preamble.hpp>
@@ -20,7 +21,7 @@ namespace yq::mithril {
         ~DocumentModel();
         
         using IdModelT<Document>::addColumn;
-        void    addColumn(Column);
+        void    addColumn(Column, ColOpts opts=ColOpts());
         void    addColumns(std::span<const Column> columns);
         
     private:

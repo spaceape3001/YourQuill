@@ -6,13 +6,14 @@
 
 #pragma once
 
+#include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
 namespace yq::mithril {
     namespace column {
-        IdColumn  folder_id();
-        IdColumn  folder_key();
-        IdColumn  folder_name();
+        IdColumn  folder_id(ColOpts opts=ColOpts());
+        IdColumn  folder_key(ColOpts opts=ColOpts());
+        IdColumn  folder_name(ColOpts opts=ColOpts());
     }
     namespace displayFN {
         IdColumn::VariantFN  folder_id();

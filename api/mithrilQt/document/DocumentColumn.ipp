@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
-    IdColumn    document_id()
+    IdColumn    document_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::document_id();
@@ -19,7 +19,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    document_key()
+    IdColumn    document_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::document_key();
@@ -27,7 +27,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    document_name()
+    IdColumn    document_name(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::document_name();

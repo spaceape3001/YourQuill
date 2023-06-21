@@ -25,20 +25,20 @@ namespace yq::mithril {
     {
     }
     
-    void    FragmentModel::addColumn(Column col)
+    void    FragmentModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::fragment_id());
+            addColumn(column::fragment_id(opts));
             break;
         case Column::Key:
-            addColumn(column::fragment_key());
+            addColumn(column::fragment_key(opts));
             break;
         case Column::Name:
-            addColumn(column::fragment_name());
+            addColumn(column::fragment_name(opts));
             break;
         case Column::Path:
-            addColumn(column::fragment_path());
+            addColumn(column::fragment_path(opts));
             break;
         default:
             break;

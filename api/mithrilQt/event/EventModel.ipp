@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    EventModel::addColumn(Column col)
+    void    EventModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::event_id());
+            addColumn(column::event_id(opts));
             break;
         case Column::Key:
-            addColumn(column::event_key());
+            addColumn(column::event_key(opts));
             break;
         case Column::Title:
-            addColumn(column::event_title());
+            addColumn(column::event_title(opts));
             break;
         default:
             break;

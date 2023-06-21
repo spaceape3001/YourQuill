@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    CharacterModel::addColumn(Column col)
+    void    CharacterModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::character_id());
+            addColumn(column::character_id(opts));
             break;
         case Column::Key:
-            addColumn(column::character_key());
+            addColumn(column::character_key(opts));
             break;
         case Column::Name:
-            addColumn(column::character_name());
+            addColumn(column::character_name(opts));
             break;
         default:
             break;

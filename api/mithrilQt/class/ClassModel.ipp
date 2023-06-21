@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    ClassModel::addColumn(Column col)
+    void    ClassModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::class_id());
+            addColumn(column::class_id(opts));
             break;
         case Column::Key:
-            addColumn(column::class_key());
+            addColumn(column::class_key(opts));
             break;
         case Column::Name:
-            addColumn(column::class_name());
+            addColumn(column::class_name(opts));
             break;
         default:
             break;

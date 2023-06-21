@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    AtomModel::addColumn(Column col)
+    void    AtomModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::atom_id());
+            addColumn(column::atom_id(opts));
             break;
         case Column::Key:
-            addColumn(column::atom_key());
+            addColumn(column::atom_key(opts));
             break;
         case Column::Name:
-            addColumn(column::atom_name());
+            addColumn(column::atom_name(opts));
             break;
         default:
             break;

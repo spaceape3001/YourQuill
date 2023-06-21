@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    LeafModel::addColumn(Column col)
+    void    LeafModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::leaf_id());
+            addColumn(column::leaf_id(opts));
             break;
         case Column::Key:
-            addColumn(column::leaf_key());
+            addColumn(column::leaf_key(opts));
             break;
         case Column::Title:
-            addColumn(column::leaf_title());
+            addColumn(column::leaf_title(opts));
             break;
         default:
             break;

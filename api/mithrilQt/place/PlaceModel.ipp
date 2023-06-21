@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    PlaceModel::addColumn(Column col)
+    void    PlaceModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::place_id());
+            addColumn(column::place_id(opts));
             break;
         case Column::Key:
-            addColumn(column::place_key());
+            addColumn(column::place_key(opts));
             break;
         case Column::Name:
-            addColumn(column::place_name());
+            addColumn(column::place_name(opts));
             break;
         default:
             break;

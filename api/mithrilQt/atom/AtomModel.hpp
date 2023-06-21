@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdModel.hpp>
 #include <mithril/atom/Atom.hpp>
 #include <mithrilQt/preamble.hpp>
@@ -19,7 +20,7 @@ namespace yq::mithril {
         ~AtomModel();
         
         using IdModelT<Atom>::addColumn;
-        void    addColumn(Column);
+        void    addColumn(Column, ColOpts opts=ColOpts());
         
         void    addColumns(std::span<const Column> columns);
         

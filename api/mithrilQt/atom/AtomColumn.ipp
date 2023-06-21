@@ -11,7 +11,7 @@
 #include "AtomColumn.hpp"
 
 namespace yq::mithril::column {
-    IdColumn    atom_id()
+    IdColumn    atom_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::atom_id();
@@ -19,7 +19,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    atom_key()
+    IdColumn    atom_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::atom_key();
@@ -27,7 +27,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    atom_name()
+    IdColumn    atom_name(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::atom_name();

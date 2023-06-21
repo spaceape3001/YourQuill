@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    DocumentModel::addColumn(Column col)
+    void    DocumentModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::document_id());
+            addColumn(column::document_id(opts));
             break;
         case Column::Key:
-            addColumn(column::document_key());
+            addColumn(column::document_key(opts));
             break;
         case Column::Name:
-            addColumn(column::document_name());
+            addColumn(column::document_name(opts));
             break;
         default:
             break;

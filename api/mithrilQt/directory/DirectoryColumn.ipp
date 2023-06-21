@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
-    IdColumn    directory_hidden()
+    IdColumn    directory_hidden(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::directory_hidden();
@@ -19,7 +19,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    directory_id()
+    IdColumn    directory_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::directory_id();
@@ -27,7 +27,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    directory_key()
+    IdColumn    directory_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::directory_key();
@@ -35,7 +35,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    directory_name()
+    IdColumn    directory_name(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::directory_name();
@@ -43,7 +43,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    directory_path()
+    IdColumn    directory_path(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::directory_path();

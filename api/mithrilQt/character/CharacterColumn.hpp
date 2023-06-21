@@ -6,14 +6,15 @@
 
 #pragma once
 
+#include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
 namespace yq::mithril {
     struct IdColumn;
     namespace column {
-        IdColumn  character_id();
-        IdColumn  character_key();
-        IdColumn  character_name();
+        IdColumn  character_id(ColOpts opts=ColOpts());
+        IdColumn  character_key(ColOpts opts=ColOpts());
+        IdColumn  character_name(ColOpts opts=ColOpts());
     }
     namespace displayFN {
         IdColumn::VariantFN  character_id();

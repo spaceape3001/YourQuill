@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
-    IdColumn    game_id()
+    IdColumn    game_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::game_id();
@@ -19,7 +19,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    game_key()
+    IdColumn    game_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::game_key();
@@ -27,7 +27,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    game_title()
+    IdColumn    game_title(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::game_title();

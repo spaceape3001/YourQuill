@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    GameModel::addColumn(Column col)
+    void    GameModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::game_id());
+            addColumn(column::game_id(opts));
             break;
         case Column::Key:
-            addColumn(column::game_key());
+            addColumn(column::game_key(opts));
             break;
         case Column::Title:
-            addColumn(column::game_title());
+            addColumn(column::game_title(opts));
             break;
         default:
             break;

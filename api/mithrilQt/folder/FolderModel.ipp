@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    FolderModel::addColumn(Column col)
+    void    FolderModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::folder_id());
+            addColumn(column::folder_id(opts));
             break;
         case Column::Key:
-            addColumn(column::folder_key());
+            addColumn(column::folder_key(opts));
             break;
         case Column::Name:
-            addColumn(column::folder_name());
+            addColumn(column::folder_name(opts));
             break;
         default:
             break;

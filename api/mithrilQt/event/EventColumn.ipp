@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
-    IdColumn    event_id()
+    IdColumn    event_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::event_id();
@@ -19,7 +19,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    event_key()
+    IdColumn    event_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::event_key();
@@ -27,7 +27,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    event_title()
+    IdColumn    event_title(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::event_title();

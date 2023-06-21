@@ -25,17 +25,17 @@ namespace yq::mithril {
     {
     }
     
-    void    TagModel::addColumn(Column col)
+    void    TagModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Id:
-            addColumn(column::tag_id());
+            addColumn(column::tag_id(opts));
             break;
         case Column::Key:
-            addColumn(column::tag_key());
+            addColumn(column::tag_key(opts));
             break;
         case Column::Name:
-            addColumn(column::tag_name());
+            addColumn(column::tag_name(opts));
             break;
         default:
             break;

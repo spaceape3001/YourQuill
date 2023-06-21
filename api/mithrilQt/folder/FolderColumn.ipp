@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
-    IdColumn    folder_id()
+    IdColumn    folder_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::folder_id();
@@ -19,7 +19,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    folder_key()
+    IdColumn    folder_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::folder_key();
@@ -27,7 +27,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    folder_name()
+    IdColumn    folder_name(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::folder_name();

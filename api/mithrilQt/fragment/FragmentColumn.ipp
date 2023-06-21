@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
-    IdColumn    fragment_id()
+    IdColumn    fragment_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::fragment_id();
@@ -19,7 +19,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    fragment_key()
+    IdColumn    fragment_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::fragment_key();
@@ -27,7 +27,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    fragment_name()
+    IdColumn    fragment_name(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::fragment_name();
@@ -35,7 +35,7 @@ namespace yq::mithril::column {
         return ret;
     }
 
-    IdColumn    fragment_path()
+    IdColumn    fragment_path(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::fragment_path();

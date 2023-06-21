@@ -25,23 +25,23 @@ namespace yq::mithril {
     {
     }
     
-    void    DirectoryModel::addColumn(Column col)
+    void    DirectoryModel::addColumn(Column col, ColOpts opts)
     {
         switch(col){
         case Column::Hidden:
-            addColumn(column::directory_hidden());
+            addColumn(column::directory_hidden(opts));
             break;
         case Column::Id:
-            addColumn(column::directory_id());
+            addColumn(column::directory_id(opts));
             break;
         case Column::Key:
-            addColumn(column::directory_key());
+            addColumn(column::directory_key(opts));
             break;
         case Column::Name:
-            addColumn(column::directory_name());
+            addColumn(column::directory_name(opts));
             break;
         case Column::Path:
-            addColumn(column::directory_path());
+            addColumn(column::directory_path(opts));
             break;
         default:
             break;

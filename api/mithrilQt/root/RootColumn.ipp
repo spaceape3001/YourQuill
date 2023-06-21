@@ -13,7 +13,7 @@
 #include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
-    IdColumn    root_id()
+    IdColumn    root_id(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::root_id();
@@ -21,7 +21,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    root_key()
+    IdColumn    root_key(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::root_key();
@@ -29,7 +29,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    root_name()
+    IdColumn    root_name(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::root_name();
@@ -37,7 +37,7 @@ namespace yq::mithril::column {
         return ret;
     }
 
-    IdColumn    root_path()
+    IdColumn    root_path(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::root_path();
@@ -45,7 +45,7 @@ namespace yq::mithril::column {
         return ret;
     }
     
-    IdColumn    root_template()
+    IdColumn    root_template(ColOpts opts)
     {
         IdColumn    ret;
         ret.fnDisplay   = displayFN::root_template();
