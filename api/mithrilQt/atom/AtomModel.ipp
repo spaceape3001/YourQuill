@@ -11,6 +11,20 @@
 #include <mithril/atom/AtomProvider.hpp>
 
 namespace yq::mithril {
+    std::optional<IdColumn>     AtomModel::resolve(Column col, ColOpts opts)
+    {
+        switch(col){
+        case Column::Id:
+            return column::atom_id(opts);
+        case Column::Key:
+            return column::atom_key(opts);
+        case Column::Name:
+            return column::atom_name(opts);
+        default:
+            return {};
+        }
+    }
+
     AtomModel::AtomModel(Type t, all_t, QObject* parent) : 
         AtomModel(t, Atom(), provider::all_atoms(), parent)
     {
@@ -27,24 +41,21 @@ namespace yq::mithril {
     
     void    AtomModel::addColumn(Column col, ColOpts opts)
     {
-        switch(col){
-        case Column::Id:
-            addColumn(column::atom_id(opts));
-            break;
-        case Column::Key:
-            addColumn(column::atom_key(opts));
-            break;
-        case Column::Name:
-            addColumn(column::atom_name(opts));
-            break;
-        default:
-            break;
-        }
+        auto    cc  = resolve(col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
     }
 
     void    AtomModel::addColumns(std::span<const Column> columns)
     {
         for(Column c : columns)
             addColumn(c);
+    }
+
+    void    AtomModel::setColumn(Column col, ColOpts opts)
+    {
+        auto    cc = resolve(col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
     }
 }

@@ -14,7 +14,7 @@ namespace yq::mithril {
     class TagList : public IdListT<Tag> {
         Q_OBJECT
     public:
-        static constexpr const Column   defColumn   = Column::Name;
+        static constexpr const Column   defColumn   = Column::Key;
     
         TagList(all_t, QWidget*parent=nullptr);
         TagList(all_t, Column col, QWidget*parent=nullptr);

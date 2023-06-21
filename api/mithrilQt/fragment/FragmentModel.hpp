@@ -16,6 +16,8 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
+        static std::optional<IdColumn>     resolve(Column, ColOpts opts=ColOpts());
+
         FragmentModel(Type t, QObject* parent=nullptr) : FragmentModel(t, ALL, parent) {}
         FragmentModel(Type t, all_t, QObject* parent=nullptr);
         ~FragmentModel();
@@ -24,6 +26,9 @@ namespace yq::mithril {
         void    addColumn(Column, ColOpts opts=ColOpts());
         void    addColumns(std::span<const Column> columns);
         
+        using IdModelT<Fragment>::setColumn;
+        void    setColumn(Column, ColOpts opts=ColOpts());
+
     private:
         FragmentModel(Type t, Fragment, IdProvider&&, QObject*parent);
     };

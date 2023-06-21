@@ -11,6 +11,20 @@
 #include <mithril/folder/FolderProvider.hpp>
 
 namespace yq::mithril {
+    std::optional<IdColumn>     FolderModel::resolve(Column col, ColOpts opts)
+    {
+        switch(col){
+        case Column::Id:
+            return column::folder_id(opts);
+        case Column::Key:
+            return column::folder_key(opts);
+        case Column::Name:
+            return column::folder_name(opts);
+        default:
+            return {};
+        }
+    }
+
     FolderModel::FolderModel(Type t, all_t, QObject* parent) : 
         FolderModel(t, Folder(), provider::all_folders(), parent)
     {
@@ -27,25 +41,22 @@ namespace yq::mithril {
     
     void    FolderModel::addColumn(Column col, ColOpts opts)
     {
-        switch(col){
-        case Column::Id:
-            addColumn(column::folder_id(opts));
-            break;
-        case Column::Key:
-            addColumn(column::folder_key(opts));
-            break;
-        case Column::Name:
-            addColumn(column::folder_name(opts));
-            break;
-        default:
-            break;
-        }
+        auto    cc  = resolve(col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
     }
 
     void    FolderModel::addColumns(std::span<const Column> columns)
     {
         for(Column c : columns)
             addColumn(c);
+    }
+
+    void    FolderModel::setColumn(Column col, ColOpts opts)
+    {
+        auto    cc = resolve(col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
     }
     
 }

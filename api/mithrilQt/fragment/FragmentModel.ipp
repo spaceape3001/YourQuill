@@ -11,6 +11,23 @@
 #include <mithril/fragment/FragmentProvider.hpp>
 
 namespace yq::mithril {
+    std::optional<IdColumn>     FragmentModel::resolve(Column col, ColOpts opts)
+    {
+        switch(col){
+        case Column::Id:
+            return column::fragment_id(opts);
+        case Column::Key:
+            return column::fragment_key(opts);
+        case Column::Name:
+            return column::fragment_name(opts);
+        case Column::Path:
+            return column::fragment_path(opts);
+            break;
+        default:
+            return {};
+        }
+    }
+
     FragmentModel::FragmentModel(Type t, all_t, QObject* parent) : 
         FragmentModel(t, Fragment(), provider::all_fragments(), parent)
     {
@@ -27,22 +44,9 @@ namespace yq::mithril {
     
     void    FragmentModel::addColumn(Column col, ColOpts opts)
     {
-        switch(col){
-        case Column::Id:
-            addColumn(column::fragment_id(opts));
-            break;
-        case Column::Key:
-            addColumn(column::fragment_key(opts));
-            break;
-        case Column::Name:
-            addColumn(column::fragment_name(opts));
-            break;
-        case Column::Path:
-            addColumn(column::fragment_path(opts));
-            break;
-        default:
-            break;
-        }
+        auto    cc  = resolve(col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
     }
 
     void    FragmentModel::addColumns(std::span<const Column> columns)
@@ -51,4 +55,10 @@ namespace yq::mithril {
             addColumn(c);
     }
     
+    void    FragmentModel::setColumn(Column col, ColOpts opts)
+    {
+        auto    cc = resolve(col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
+    }
 }

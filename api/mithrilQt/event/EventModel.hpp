@@ -16,6 +16,8 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
+        static std::optional<IdColumn>     resolve(Column, ColOpts opts=ColOpts());
+
         EventModel(Type t, QObject* parent=nullptr) : EventModel(t, ALL, parent) {}
         EventModel(Type t, all_t, QObject* parent=nullptr);
         ~EventModel();
@@ -24,6 +26,9 @@ namespace yq::mithril {
         void    addColumn(Column, ColOpts opts=ColOpts());
         void    addColumns(std::span<const Column> columns);
         
+        using IdModelT<Event>::setColumn;
+        void    setColumn(Column, ColOpts opts=ColOpts());
+
     private:
         EventModel(Type t, Event, IdProvider&&, QObject*parent);
     };

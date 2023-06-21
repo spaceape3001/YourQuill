@@ -11,6 +11,24 @@
 #include <mithril/root/RootProvider.hpp>
 
 namespace yq::mithril {
+    std::optional<IdColumn>     RootModel::resolve(Column col, ColOpts opts)
+    {
+        switch(col){
+        case Column::Id:
+            return column::root_id(opts);
+        case Column::Key:
+            return column::root_key(opts);
+        case Column::Name:
+            return column::root_name(opts);
+        case Column::Path:
+            return column::root_path(opts);
+        case Column::Template:
+            return column::root_template(opts);
+        default:
+            return {};
+        }
+    }
+
     RootModel::RootModel(Type t, all_t, QObject* parent) : 
         RootModel(t, Root(), provider::all_roots(), parent)
     {
@@ -27,30 +45,21 @@ namespace yq::mithril {
     
     void    RootModel::addColumn(Column col, ColOpts opts)
     {
-        switch(col){
-        case Column::Id:
-            addColumn(column::root_id(opts));
-            break;
-        case Column::Key:
-            addColumn(column::root_key(opts));
-            break;
-        case Column::Name:
-            addColumn(column::root_name(opts));
-            break;
-        case Column::Path:
-            addColumn(column::root_path(opts));
-            break;
-        case Column::Template:
-            addColumn(column::root_template(opts));
-            break;
-        default:
-            break;
-        }
+        auto    cc  = resolve(col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
     }
     
     void    RootModel::addColumns(std::span<const Column> columns)
     {
         for(Column c : columns)
             addColumn(c);
+    }
+
+    void    RootModel::setColumn(Column col, ColOpts opts)
+    {
+        auto    cc = resolve(col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
     }
 }

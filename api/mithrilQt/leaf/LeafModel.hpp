@@ -16,6 +16,7 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
+        static std::optional<IdColumn>     resolve(Column, ColOpts opts=ColOpts());
     
         LeafModel(Type t, QObject* parent=nullptr) : LeafModel(t, ALL, parent) {}
         LeafModel(Type t, all_t, QObject* parent=nullptr);
@@ -24,7 +25,10 @@ namespace yq::mithril {
         using IdModelT<Leaf>::addColumn;
         void    addColumn(Column, ColOpts opts=ColOpts());
         void    addColumns(std::span<const Column> columns);
-        
+ 
+        using IdModelT<Leaf>::setColumn;
+        void    setColumn(Column, ColOpts opts=ColOpts());
+       
     private:
         LeafModel(Type t, Leaf, IdProvider&&, QObject*parent);
     };

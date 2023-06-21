@@ -16,6 +16,8 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
+        static std::optional<IdColumn>     resolve(Column, ColOpts opts=ColOpts());
+
         ClassModel(Type t, QObject* parent=nullptr) : ClassModel(t, ALL, parent) {}
         ClassModel(Type t, all_t, QObject* parent=nullptr);
         ~ClassModel();
@@ -24,6 +26,9 @@ namespace yq::mithril {
         void    addColumn(Column, ColOpts opts=ColOpts());
         void    addColumns(std::span<const Column> columns);
         
+        using IdModelT<Class>::setColumn;
+        void    setColumn(Column, ColOpts opts=ColOpts());
+
     private:
         ClassModel(Type t, Class, IdProvider&&, QObject*parent);
     };

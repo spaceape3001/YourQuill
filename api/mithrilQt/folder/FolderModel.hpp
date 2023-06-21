@@ -16,6 +16,8 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
+        static std::optional<IdColumn>     resolve(Column, ColOpts opts=ColOpts());
+
         FolderModel(Type t, QObject* parent=nullptr) : FolderModel(t, ALL, parent) {}
         FolderModel(Type t, all_t, QObject* parent=nullptr);
         ~FolderModel();
@@ -24,6 +26,9 @@ namespace yq::mithril {
         void    addColumn(Column, ColOpts opts=ColOpts());
         void    addColumns(std::span<const Column> columns);
         
+        using IdModelT<Folder>::setColumn;
+        void    setColumn(Column, ColOpts opts=ColOpts());
+
     private:
         FolderModel(Type t, Folder, IdProvider&&, QObject*parent);
     };

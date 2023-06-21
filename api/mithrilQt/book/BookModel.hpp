@@ -16,6 +16,8 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
+        static std::optional<IdColumn>     resolve(Column, ColOpts opts=ColOpts());
+
         BookModel(Type t,QObject* parent=nullptr) : BookModel(t, ALL, parent) {}
         BookModel(Type t, all_t, QObject* parent=nullptr);
         ~BookModel();
@@ -24,6 +26,8 @@ namespace yq::mithril {
         void    addColumn(Column, ColOpts opts=ColOpts());
         void    addColumns(std::span<const Column> columns);
         
+        using IdModelT<Book>::setColumn;
+        void    setColumn(Column, ColOpts opts=ColOpts());
     private:
         BookModel(Type t, Book, IdProvider&&, QObject*parent);
     };

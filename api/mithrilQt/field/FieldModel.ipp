@@ -11,6 +11,20 @@
 #include <mithril/field/FieldProvider.hpp>
 
 namespace yq::mithril {
+    std::optional<IdColumn>     FieldModel::resolve(Column col, ColOpts opts)
+    {
+        switch(col){
+        case Column::Id:
+            return column::field_id(opts);
+        case Column::Key:
+            return column::field_key(opts);
+        case Column::Name:
+            return column::field_name(opts);
+        default:
+            return {};
+        }
+    }
+
     FieldModel::FieldModel(Type t, all_t, QObject* parent) : 
         FieldModel(t, Field(), provider::all_fields(), parent)
     {
@@ -27,24 +41,21 @@ namespace yq::mithril {
     
     void    FieldModel::addColumn(Column col, ColOpts opts)
     {
-        switch(col){
-        case Column::Id:
-            addColumn(column::field_id(opts));
-            break;
-        case Column::Key:
-            addColumn(column::field_key(opts));
-            break;
-        case Column::Name:
-            addColumn(column::field_name(opts));
-            break;
-        default:
-            break;
-        }
+        auto    cc  = resolve(col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
     }
     
     void    FieldModel::addColumns(std::span<const Column> columns)
     {
         for(Column c : columns)
             addColumn(c);
+    }
+
+    void    FieldModel::setColumn(Column col, ColOpts opts)
+    {
+        auto    cc = resolve(col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
     }
 }

@@ -11,6 +11,20 @@
 #include <mithril/class/ClassProvider.hpp>
 
 namespace yq::mithril {
+    std::optional<IdColumn>     ClassModel::resolve(Column col, ColOpts opts)
+    {
+        switch(col){
+        case Column::Id:
+            return column::class_id(opts);
+        case Column::Key:
+            return column::class_key(opts);
+        case Column::Name:
+            return column::class_name(opts);
+        default:
+            return {};
+        }
+    }
+
     ClassModel::ClassModel(Type t, all_t, QObject* parent) : 
         ClassModel(t, Class(), provider::all_classes(), parent)
     {
@@ -27,25 +41,22 @@ namespace yq::mithril {
     
     void    ClassModel::addColumn(Column col, ColOpts opts)
     {
-        switch(col){
-        case Column::Id:
-            addColumn(column::class_id(opts));
-            break;
-        case Column::Key:
-            addColumn(column::class_key(opts));
-            break;
-        case Column::Name:
-            addColumn(column::class_name(opts));
-            break;
-        default:
-            break;
-        }
+        auto    cc  = resolve(col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
     }
 
     void    ClassModel::addColumns(std::span<const Column> columns)
     {
         for(Column c : columns)
             addColumn(c);
+    }
+
+    void    ClassModel::setColumn(Column col, ColOpts opts)
+    {
+        auto    cc = resolve(col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
     }
     
 }
