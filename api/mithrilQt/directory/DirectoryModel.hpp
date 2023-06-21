@@ -8,7 +8,7 @@
 
 #include <mithrilQt/id/IdModel.hpp>
 #include <mithril/directory/Directory.hpp>
-#include <mithrilQt/column.hpp>
+#include <mithrilQt/preamble.hpp>
 
 namespace yq::mithril {
     class DirectoryModel : public IdModelT<Directory> {

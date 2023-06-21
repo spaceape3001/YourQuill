@@ -8,7 +8,7 @@
 
 #include <mithrilQt/id/IdModel.hpp>
 #include <mithril/field/Field.hpp>
-#include <mithrilQt/column.hpp>
+#include <mithrilQt/preamble.hpp>
 
 namespace yq::mithril {
     class FieldModel : public IdModelT<Field> {

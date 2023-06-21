@@ -8,7 +8,7 @@
 
 #include <mithrilQt/id/IdModel.hpp>
 #include <mithril/game/Game.hpp>
-#include <mithrilQt/column.hpp>
+#include <mithrilQt/preamble.hpp>
 
 namespace yq::mithril {
     class GameModel : public IdModelT<Game> {

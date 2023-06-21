@@ -8,7 +8,7 @@
 
 #include <mithrilQt/id/IdModel.hpp>
 #include <mithril/category/Category.hpp>
-#include <mithrilQt/column.hpp>
+#include <mithrilQt/preamble.hpp>
 
 namespace yq::mithril {
     class CategoryModel : public IdModelT<Category> {

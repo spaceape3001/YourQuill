@@ -8,7 +8,7 @@
 
 #include <mithrilQt/id/IdModel.hpp>
 #include <mithril/folder/Folder.hpp>
-#include <mithrilQt/column.hpp>
+#include <mithrilQt/preamble.hpp>
 
 namespace yq::mithril {
     class FolderModel : public IdModelT<Folder> {

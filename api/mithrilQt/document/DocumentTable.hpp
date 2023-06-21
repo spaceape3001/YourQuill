@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithrilQt/column.hpp>
+#include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
