@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CategoryColumn.ipp"
+#include "CategoryList.ipp"
 #include "CategoryModel.ipp"
 #include "CategoryTable.ipp"
 
+#include "moc_CategoryList.cpp"
 #include "moc_CategoryModel.cpp"
 #include "moc_CategoryTable.cpp"

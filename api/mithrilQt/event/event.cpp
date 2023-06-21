@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EventColumn.ipp"
+#include "EventList.ipp"
 #include "EventModel.ipp"
 #include "EventTable.ipp"
 
+#include "moc_EventList.cpp"
 #include "moc_EventModel.cpp"
 #include "moc_EventTable.cpp"

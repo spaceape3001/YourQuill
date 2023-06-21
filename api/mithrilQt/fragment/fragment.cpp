@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FragmentColumn.ipp"
+#include "FragmentList.ipp"
 #include "FragmentModel.ipp"
 #include "FragmentTable.ipp"
 
+#include "moc_FragmentList.cpp"
 #include "moc_FragmentModel.cpp"
 #include "moc_FragmentTable.cpp"

@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DocumentColumn.ipp"
+#include "DocumentList.ipp"
 #include "DocumentModel.ipp"
 #include "DocumentTable.ipp"
 
+#include "moc_DocumentList.cpp"
 #include "moc_DocumentModel.cpp"
 #include "moc_DocumentTable.cpp"

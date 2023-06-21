@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FieldColumn.ipp"
+#include "FieldList.ipp"
 #include "FieldModel.ipp"
 #include "FieldTable.ipp"
 
+#include "moc_FieldList.cpp"
 #include "moc_FieldModel.cpp"
 #include "moc_FieldTable.cpp"

@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "BookColumn.ipp"
+#include "BookList.ipp"
 #include "BookModel.ipp"
 #include "BookTable.ipp"
 
+#include "moc_BookList.cpp"
 #include "moc_BookModel.cpp"
 #include "moc_BookTable.cpp"

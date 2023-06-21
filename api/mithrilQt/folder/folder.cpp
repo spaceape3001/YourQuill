@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FolderColumn.ipp"
+#include "FolderList.ipp"
 #include "FolderModel.ipp"
 #include "FolderTable.ipp"
 
 #include "moc_FolderModel.cpp"
 #include "moc_FolderTable.cpp"
+#include "moc_FolderList.cpp"

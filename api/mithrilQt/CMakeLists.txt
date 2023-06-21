@@ -17,6 +17,8 @@ add_library(${PROJECT_NAME} SHARED
     
     atom/AtomColumn.hpp
     atom/AtomColumn.ipp
+    atom/AtomList.hpp
+    atom/AtomList.ipp
     atom/AtomModel.hpp
     atom/AtomModel.ipp
     atom/AtomTable.hpp
@@ -25,6 +27,8 @@ add_library(${PROJECT_NAME} SHARED
 
     book/BookColumn.hpp
     book/BookColumn.ipp
+    book/BookList.hpp
+    book/BookList.ipp
     book/BookModel.hpp
     book/BookModel.ipp
     book/BookTable.hpp
@@ -33,6 +37,8 @@ add_library(${PROJECT_NAME} SHARED
     
     category/CategoryColumn.hpp
     category/CategoryColumn.ipp
+    category/CategoryList.hpp
+    category/CategoryList.ipp
     category/CategoryModel.hpp
     category/CategoryModel.ipp
     category/CategoryTable.hpp
@@ -41,6 +47,8 @@ add_library(${PROJECT_NAME} SHARED
     
     character/CharacterColumn.hpp
     character/CharacterColumn.ipp
+    character/CharacterList.hpp
+    character/CharacterList.ipp
     character/CharacterModel.hpp
     character/CharacterModel.ipp
     character/CharacterTable.hpp
@@ -49,6 +57,8 @@ add_library(${PROJECT_NAME} SHARED
     
     class/ClassColumn.hpp
     class/ClassColumn.ipp
+    class/ClassList.hpp
+    class/ClassList.ipp
     class/ClassModel.hpp
     class/ClassModel.ipp
     class/ClassTable.hpp
@@ -57,6 +67,8 @@ add_library(${PROJECT_NAME} SHARED
     
     directory/DirectoryColumn.hpp
     directory/DirectoryColumn.ipp
+    directory/DirectoryList.hpp
+    directory/DirectoryList.ipp
     directory/DirectoryModel.hpp
     directory/DirectoryModel.ipp
     directory/DirectoryTable.hpp
@@ -65,6 +77,8 @@ add_library(${PROJECT_NAME} SHARED
     
     document/DocumentColumn.hpp
     document/DocumentColumn.ipp
+    document/DocumentList.hpp
+    document/DocumentList.ipp
     document/DocumentModel.hpp
     document/DocumentModel.ipp
     document/DocumentTable.hpp
@@ -73,6 +87,8 @@ add_library(${PROJECT_NAME} SHARED
     
     event/EventColumn.hpp
     event/EventColumn.ipp
+    event/EventList.hpp
+    event/EventList.ipp
     event/EventModel.hpp
     event/EventModel.ipp
     event/EventTable.hpp
@@ -81,6 +97,8 @@ add_library(${PROJECT_NAME} SHARED
     
     field/FieldColumn.hpp
     field/FieldColumn.ipp
+    field/FieldList.hpp
+    field/FieldList.ipp
     field/FieldModel.hpp
     field/FieldModel.ipp
     field/FieldTable.hpp
@@ -89,6 +107,8 @@ add_library(${PROJECT_NAME} SHARED
     
     folder/FolderColumn.hpp
     folder/FolderColumn.ipp
+    folder/FolderList.hpp
+    folder/FolderList.ipp
     folder/FolderModel.hpp
     folder/FolderModel.ipp
     folder/FolderTable.hpp
@@ -97,6 +117,8 @@ add_library(${PROJECT_NAME} SHARED
     
     fragment/FragmentColumn.hpp
     fragment/FragmentColumn.ipp
+    fragment/FragmentList.hpp
+    fragment/FragmentList.ipp
     fragment/FragmentModel.hpp
     fragment/FragmentModel.ipp
     fragment/FragmentTable.hpp
@@ -105,6 +127,8 @@ add_library(${PROJECT_NAME} SHARED
     
     game/GameColumn.hpp
     game/GameColumn.ipp
+    game/GameList.hpp
+    game/GameList.ipp
     game/GameModel.hpp
     game/GameModel.ipp
     game/GameTable.hpp
@@ -133,6 +157,8 @@ add_library(${PROJECT_NAME} SHARED
     
     leaf/LeafColumn.hpp
     leaf/LeafColumn.ipp
+    leaf/LeafList.hpp
+    leaf/LeafList.ipp
     leaf/LeafModel.hpp
     leaf/LeafModel.ipp
     leaf/LeafTable.hpp
@@ -141,6 +167,8 @@ add_library(${PROJECT_NAME} SHARED
     
     place/PlaceColumn.hpp
     place/PlaceColumn.ipp
+    place/PlaceList.hpp
+    place/PlaceList.ipp
     place/PlaceModel.hpp
     place/PlaceModel.ipp
     place/PlaceTable.hpp
@@ -149,6 +177,8 @@ add_library(${PROJECT_NAME} SHARED
     
     root/RootColumn.hpp
     root/RootColumn.ipp
+    root/RootList.hpp
+    root/RootList.ipp
     root/RootModel.hpp
     root/RootModel.ipp
     root/RootTable.hpp

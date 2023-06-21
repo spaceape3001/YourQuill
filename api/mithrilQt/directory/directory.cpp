@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DirectoryColumn.ipp"
+#include "DirectoryList.ipp"
 #include "DirectoryModel.ipp"
 #include "DirectoryTable.ipp"
 
+#include "moc_DirectoryList.cpp"
 #include "moc_DirectoryModel.cpp"
 #include "moc_DirectoryTable.cpp"

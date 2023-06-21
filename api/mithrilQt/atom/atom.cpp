@@ -5,8 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "AtomColumn.ipp"
+#include "AtomList.ipp"
 #include "AtomModel.ipp"
 #include "AtomTable.ipp"
 
+#include "moc_AtomList.cpp"
 #include "moc_AtomModel.cpp"
 #include "moc_AtomTable.cpp"
