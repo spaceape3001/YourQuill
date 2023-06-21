@@ -214,6 +214,11 @@ namespace yq {
                 return ContentType();
             }
 
+            uint64_t                modified(Image img)
+            {
+                return modified(fragment(img));
+            }
+
             Thumbnail               thumbnail(Image i, SizeDesc sz) 
             { 
                 return { i, sz }; 

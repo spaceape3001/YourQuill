@@ -75,7 +75,9 @@ namespace yq {
                 //! Mime type for image
             ContentType             mime_type(Image);
             
-            //std::vector<Image>
+            //! Last Modified time code
+            uint64_t                modified(Image);
+
             
                 //! Thumnail for image
             Thumbnail               thumbnail(Image, SizeDesc sz=SizeDesc::Small);

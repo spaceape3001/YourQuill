@@ -125,6 +125,10 @@ add_library(${PROJECT_NAME} SHARED
     id/IdTableView.ipp
     id/id.cpp
     
+    image/ImageUtils.hpp
+    image/ImageUtils.ipp
+    image/image.cpp
+    
     leaf/LeafColumn.hpp
     leaf/LeafColumn.ipp
     leaf/LeafModel.hpp
