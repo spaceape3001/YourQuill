@@ -6,13 +6,17 @@
 
 #pragma once
 
-#include <mithrilQt/id/IdModel.hpp>
+#include <QTreeView>
 
 namespace yq::mithril {
-    class IdListModel : public IdModel {
+    class IdModel;
+
+    class IdTreeView : public QTreeView {
         Q_OBJECT
     public:
-        IdListModel(Id, IdProvider&&, QObject*parent=nullptr);
-        ~IdListModel();
+        IdTreeView(IdModel*, QWidget*parent=nullptr);
+        ~IdTreeView();
+    private:
+        IdModel*    m_model = nullptr;
     };
 }

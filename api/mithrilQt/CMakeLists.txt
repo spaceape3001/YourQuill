@@ -113,16 +113,18 @@ add_library(${PROJECT_NAME} SHARED
 
     id/IdColumn.hpp
     id/IdColumn.ipp
-    id/IdListModel.hpp
-    id/IdListModel.ipp
+    id/IdList.hpp
+    id/IdList.ipp
+    id/IdListView.hpp
+    id/IdListView.ipp
     id/IdModel.hpp
     id/IdModel.ipp
-    id/IdItemModel.hpp
-    id/IdItemModel.ipp
     id/IdTable.hpp
     id/IdTable.ipp
     id/IdTableView.hpp
     id/IdTableView.ipp
+    id/IdTreeView.hpp
+    id/IdTreeView.ipp
     id/id.cpp
     
     image/ImageUtils.hpp
@@ -155,6 +157,8 @@ add_library(${PROJECT_NAME} SHARED
     
     tag/TagColumn.hpp
     tag/TagColumn.ipp
+    tag/TagList.hpp
+    tag/TagList.ipp
     tag/TagModel.hpp
     tag/TagModel.ipp
     tag/TagTable.hpp

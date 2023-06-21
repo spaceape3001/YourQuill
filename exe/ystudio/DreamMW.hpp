@@ -37,5 +37,6 @@ public slots:
     void    newLeafTable();
     void    newPlaceTable();
     void    newRootTable();
+    void    newTagList();
     void    newTagTable();
 };

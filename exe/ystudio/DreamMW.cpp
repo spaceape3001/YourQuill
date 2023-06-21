@@ -22,6 +22,7 @@
 #include <mithrilQt/leaf/LeafTable.hpp>
 #include <mithrilQt/place/PlaceTable.hpp>
 #include <mithrilQt/root/RootTable.hpp>
+#include <mithrilQt/tag/TagList.hpp>
 #include <mithrilQt/tag/TagTable.hpp>
 
 #include <mithril/wksp/Workspace.hpp>
@@ -61,6 +62,7 @@ DreamMW::DreamMW()
     addAction("placeTable", "Places").connect(this, &DreamMW::newPlaceTable);
     addAction("rootTable", "Roots").connect(this, &DreamMW::newRootTable);
     addAction("tagTable", "Tags").connect(this, &DreamMW::newTagTable);
+    addAction("tagList", "Tag List").connect(this, &DreamMW::newTagList);
     
     makeMenu("studio", "Studio",
         QStringList() 
@@ -82,6 +84,8 @@ DreamMW::DreamMW()
             << "placeTable"
             << "rootTable"
             << "tagTable"
+            << "--"
+            << "tagList"
     );
     makeMenu("view", "View",
         QStringList() << "refresh"
@@ -175,6 +179,11 @@ void    DreamMW::newPlaceTable()
 void    DreamMW::newRootTable()
 {
     addWindow(new RootTable(ALL));
+}
+
+void    DreamMW::newTagList()
+{
+    addWindow(new TagList(ALL));
 }
 
 void    DreamMW::newTagTable()

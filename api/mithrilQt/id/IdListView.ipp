@@ -6,18 +6,19 @@
 
 #pragma once
 
-#include "IdListModel.hpp"
+#include "IdModel.hpp"
+#include "IdListView.hpp"
 
 namespace yq::mithril {
-    
-    
-    IdListModel::IdListModel(Id i, IdProvider&& provider, QObject*parent) :
-        IdModel(Type::List, i, std::move(provider), parent)
+    IdListView::IdListView(IdModel*m, QWidget*parent) : QListView(parent), m_model(m)
     {
+        assert(m);
+        setModel(m);
     }
     
-    IdListModel::~IdListModel()
+    IdListView::~IdListView()
     {
     }
 
 }
+

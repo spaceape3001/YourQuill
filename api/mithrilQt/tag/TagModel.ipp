@@ -11,6 +11,20 @@
 #include <mithril/tag/TagProvider.hpp>
 
 namespace yq::mithril {
+    std::optional<IdColumn>     TagModel::resolve(Column col, ColOpts opts)
+    {
+        switch(col){
+        case Column::Id:
+            return column::tag_id(opts);
+        case Column::Key:
+            return column::tag_key(opts);
+        case Column::Name:
+            return column::tag_name(opts);
+        default:
+            return {};
+        }
+    }
+
     TagModel::TagModel(Type t, all_t, QObject* parent) : 
         TagModel(t, Tag(), provider::all_tags(), parent)
     {
@@ -27,25 +41,22 @@ namespace yq::mithril {
     
     void    TagModel::addColumn(Column col, ColOpts opts)
     {
-        switch(col){
-        case Column::Id:
-            addColumn(column::tag_id(opts));
-            break;
-        case Column::Key:
-            addColumn(column::tag_key(opts));
-            break;
-        case Column::Name:
-            addColumn(column::tag_name(opts));
-            break;
-        default:
-            break;
-        }
+        auto    cc  = resolve(col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
     }
 
     void    TagModel::addColumns(std::span<const Column> columns)
     {
         for(Column c : columns)
             addColumn(c);
+    }
+ 
+    void    TagModel::setColumn(Column col, ColOpts opts)
+    {
+        auto    cc = resolve(col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
     }
     
 }

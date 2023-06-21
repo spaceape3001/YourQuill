@@ -1,0 +1,63 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <mithrilQt/id/IdModel.hpp>
+#include <QWidget>
+#include <functional>
+
+namespace yq::mithril {
+    class IdListView;
+
+    class IdList : public QWidget {
+        Q_OBJECT
+    public:
+    
+        ~IdList();
+        
+        IdModel*            model() { return m_model; }
+        const IdModel*      model() const { return m_model; }
+        IdListView*         view() { return m_view; }
+        const IdListView*   view() const { return m_view; }
+        
+    public slots:
+        void            refresh();
+        void            update();
+        
+    protected:
+        IdList(IdModel*, QWidget* parent=nullptr);
+
+        IdModel*        m_model = nullptr;
+        IdListView*     m_view  = nullptr;
+    };
+
+    
+    
+    template <typename S>
+    class IdListT : public IdList {
+    public:
+    
+        IdListT(std::function<std::vector<S>()> fn, QWidget*parent)  : 
+            IdList( new IdModelT<S>(IdModel::Type::List, IdModelT<S>::toProvider(fn)), parent )
+        {
+        }
+        
+        IdListT(S root, std::function<std::vector<S>(S)> fn, QWidget*parent)  : 
+            IdList( new IdModelT<S>(root, IdModel::Type::List, IdModelT<S>::toProvider(fn)), parent )
+        {
+        }
+        
+
+        IdModelT<S>*            model() { return static_cast<IdModelT<S>*>(m_model); }
+        const IdModelT<S>*      model() const { return static_cast<IdModelT<S>*>(m_model); }
+
+    protected:
+        IdListT(IdModelT<S>* mdl, QWidget*parent) : IdList(mdl, parent)
+        {
+        }
+    };
+}
