@@ -16,6 +16,9 @@ namespace yq::mithril {
         IdColumn  atom_name(ColOpts opts=ColOpts());
     }
 
+    namespace decorationFN {
+        IdColumn::VariantFN  atom_icon();
+    }
     namespace displayFN {
         IdColumn::VariantFN  atom_id();
         IdColumn::VariantFN  atom_key();
