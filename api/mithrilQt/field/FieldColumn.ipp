@@ -7,8 +7,9 @@
 #pragma once
 
 #include "FieldColumn.hpp"
-#include <mithril/field/FieldCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/field/FieldCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    field_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Name";
         return ret;
     }
+
+    void    reg_field_columns()
+    {
+        IdColumn::declare<Field>(Column::Id,    field_id);
+        IdColumn::declare<Field>(Column::Key,   field_key);
+        IdColumn::declare<Field>(Column::Name,  field_name);
+    }
+    
+    YQ_INVOKE(reg_field_columns();)
 }
 
 namespace yq::mithril::displayFN {

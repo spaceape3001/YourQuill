@@ -7,8 +7,9 @@
 #pragma once
 
 #include "LeafColumn.hpp"
-#include <mithril/leaf/LeafCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    leaf_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Title";
         return ret;
     }
+
+    void    reg_leaf_columns()
+    {
+        IdColumn::declare<Leaf>(Column::Id,    leaf_id);
+        IdColumn::declare<Leaf>(Column::Key,   leaf_key);
+        IdColumn::declare<Leaf>(Column::Title, leaf_title);
+    }
+    
+    YQ_INVOKE(reg_leaf_columns();)
 }
 
 namespace yq::mithril::displayFN {

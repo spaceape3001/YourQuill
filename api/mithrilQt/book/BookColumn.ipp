@@ -7,8 +7,10 @@
 #pragma once
 
 #include "BookColumn.hpp"
-#include <mithril/book/BookCDB.hpp>
+
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/book/BookCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    book_id(ColOpts opts)
@@ -34,6 +36,15 @@ namespace yq::mithril::column {
         ret.label       = "Title";
         return ret;
     }
+
+    void    reg_book_columns()
+    {
+        IdColumn::declare<Book>(Column::Id,    book_id);
+        IdColumn::declare<Book>(Column::Key,   book_key);
+        IdColumn::declare<Book>(Column::Title, book_title);
+    }
+    
+    YQ_INVOKE(reg_book_columns();)
 }
 
 namespace yq::mithril::displayFN {

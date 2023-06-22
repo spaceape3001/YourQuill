@@ -7,8 +7,9 @@
 #pragma once
 
 #include "GameColumn.hpp"
-#include <mithril/game/GameCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/game/GameCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    game_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Title";
         return ret;
     }
+
+    void    reg_game_columns()
+    {
+        IdColumn::declare<Game>(Column::Id,    game_id);
+        IdColumn::declare<Game>(Column::Key,   game_key);
+        IdColumn::declare<Game>(Column::Title, game_title);
+    }
+    
+    YQ_INVOKE(reg_game_columns();)
 }
 
 namespace yq::mithril::displayFN {

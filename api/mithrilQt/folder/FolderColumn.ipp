@@ -7,8 +7,9 @@
 #pragma once
 
 #include "FolderColumn.hpp"
-#include <mithril/folder/FolderCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/folder/FolderCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    folder_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Name";
         return ret;
     }
+
+    void    reg_folder_columns()
+    {
+        IdColumn::declare<Folder>(Column::Id,    folder_id);
+        IdColumn::declare<Folder>(Column::Key,   folder_key);
+        IdColumn::declare<Folder>(Column::Name,  folder_name);
+    }
+    
+    YQ_INVOKE(reg_folder_columns();)
 }
 
 namespace yq::mithril::displayFN {

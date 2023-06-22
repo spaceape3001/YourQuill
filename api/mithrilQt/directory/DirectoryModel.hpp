@@ -16,18 +16,9 @@ namespace yq::mithril {
         Q_OBJECT
     public:
     
-        static std::optional<IdColumn>     resolve(Column, ColOpts opts=ColOpts());
-
         DirectoryModel(Type t, QObject* parent=nullptr) : DirectoryModel(t, ALL, parent) {}
         DirectoryModel(Type t, all_t, QObject* parent=nullptr);
         ~DirectoryModel();
-        
-        using IdModelT<Directory>::addColumn;
-        void    addColumn(Column, ColOpts opts=ColOpts());
-        void    addColumns(std::span<const Column> columns);
-
-        using IdModelT<Directory>::setColumn;
-        void    setColumn(Column, ColOpts opts=ColOpts());
         
     private:
         DirectoryModel(Type t, Directory, IdProvider&&, QObject*parent);

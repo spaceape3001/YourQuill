@@ -7,8 +7,9 @@
 #pragma once
 
 #include "CategoryColumn.hpp"
-#include <mithril/category/CategoryCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/category/CategoryCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    category_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Name";
         return ret;
     }
+
+    void    reg_category_columns()
+    {
+        IdColumn::declare<Category>(Column::Id,    category_id);
+        IdColumn::declare<Category>(Column::Key,   category_key);
+        IdColumn::declare<Category>(Column::Name,  category_name);
+    }
+    
+    YQ_INVOKE(reg_category_columns();)
 }
 
 namespace yq::mithril::displayFN {

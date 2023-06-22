@@ -7,8 +7,9 @@
 #pragma once
 
 #include "EventColumn.hpp"
-#include <mithril/event/EventCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/event/EventCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    event_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Title";
         return ret;
     }
+
+    void    reg_event_columns()
+    {
+        IdColumn::declare<Event>(Column::Id,    event_id);
+        IdColumn::declare<Event>(Column::Key,   event_key);
+        IdColumn::declare<Event>(Column::Title, event_title);
+    }
+    
+    YQ_INVOKE(reg_event_columns();)
 }
 
 namespace yq::mithril::displayFN {

@@ -7,8 +7,9 @@
 #pragma once
 
 #include "FragmentColumn.hpp"
-#include <mithril/fragment/FragmentCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    fragment_id(ColOpts opts)
@@ -41,6 +42,14 @@ namespace yq::mithril::column {
         ret.fnDisplay   = displayFN::fragment_path();
         ret.label       = "Path";
         return ret;
+    }
+
+    void    reg_fragment_columns()
+    {
+        IdColumn::declare<Fragment>(Column::Id,         fragment_id);
+        IdColumn::declare<Fragment>(Column::Key,        fragment_key);
+        IdColumn::declare<Fragment>(Column::Name,       fragment_name);
+        IdColumn::declare<Fragment>(Column::Path,       fragment_path);
     }
 }
 

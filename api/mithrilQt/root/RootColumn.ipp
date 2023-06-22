@@ -7,10 +7,11 @@
 #pragma once
 
 #include "RootColumn.hpp"
+#include <basic/DelayInit.hpp>
+#include <gluon/core/Utilities.hpp>
 #include <mithril/root/Root.hpp>
 #include <mithril/root/RootCDB.hpp>
 #include <mithril/root/RootDir.hpp>
-#include <gluon/core/Utilities.hpp>
 
 namespace yq::mithril::column {
     IdColumn    root_id(ColOpts opts)
@@ -52,6 +53,17 @@ namespace yq::mithril::column {
         ret.label       = "Template";
         return ret;
     }
+
+    void    reg_root_columns()
+    {
+        IdColumn::declare<Root>(Column::Id,         root_id);
+        IdColumn::declare<Root>(Column::Key,        root_key);
+        IdColumn::declare<Root>(Column::Name,       root_name);
+        IdColumn::declare<Root>(Column::Path,       root_path);
+        IdColumn::declare<Root>(Column::Template,   root_template);
+    }
+    
+    YQ_INVOKE(reg_root_columns();)
 }
 
 namespace yq::mithril::displayFN {

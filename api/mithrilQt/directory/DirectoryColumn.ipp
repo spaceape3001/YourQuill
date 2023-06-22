@@ -7,8 +7,9 @@
 #pragma once
 
 #include "DirectoryColumn.hpp"
-#include <mithril/directory/DirectoryCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/directory/DirectoryCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    directory_hidden(ColOpts opts)
@@ -49,6 +50,15 @@ namespace yq::mithril::column {
         ret.fnDisplay   = displayFN::directory_path();
         ret.label       = "Path";
         return ret;
+    }
+
+    void    reg_directory_columns()
+    {
+        IdColumn::declare<Directory>(Column::Hidden,     directory_hidden);
+        IdColumn::declare<Directory>(Column::Id,         directory_id);
+        IdColumn::declare<Directory>(Column::Key,        directory_key);
+        IdColumn::declare<Directory>(Column::Name,       directory_name);
+        IdColumn::declare<Directory>(Column::Path,       directory_path);
     }
 }
 

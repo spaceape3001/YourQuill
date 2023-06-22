@@ -7,8 +7,9 @@
 #pragma once
 
 #include "DocumentColumn.hpp"
-#include <mithril/document/DocumentCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/document/DocumentCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    document_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Name";
         return ret;
     }
+
+    void    reg_document_columns()
+    {
+        IdColumn::declare<Document>(Column::Id,    document_id);
+        IdColumn::declare<Document>(Column::Key,   document_key);
+        IdColumn::declare<Document>(Column::Name,  document_name);
+    }
+    
+    YQ_INVOKE(reg_document_columns();)
 }
 
 namespace yq::mithril::displayFN {

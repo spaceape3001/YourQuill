@@ -7,8 +7,9 @@
 #pragma once
 
 #include "CharacterColumn.hpp"
-#include <mithril/character/CharacterCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/character/CharacterCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    character_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Name";
         return ret;
     }
+
+    void    reg_character_columns()
+    {
+        IdColumn::declare<Character>(Column::Id,    character_id);
+        IdColumn::declare<Character>(Column::Key,   character_key);
+        IdColumn::declare<Character>(Column::Name,  character_name);
+    }
+    
+    YQ_INVOKE(reg_character_columns();)
 }
 
 namespace yq::mithril::displayFN {

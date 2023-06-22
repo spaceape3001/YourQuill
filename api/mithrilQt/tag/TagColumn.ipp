@@ -7,8 +7,9 @@
 #pragma once
 
 #include "TagColumn.hpp"
-#include <mithril/tag/TagCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/tag/TagCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    tag_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Name";
         return ret;
     }
+
+    void    reg_tag_columns()
+    {
+        IdColumn::declare<Tag>(Column::Id,    tag_id);
+        IdColumn::declare<Tag>(Column::Key,   tag_key);
+        IdColumn::declare<Tag>(Column::Name,  tag_name);
+    }
+    
+    YQ_INVOKE(reg_tag_columns();)
 }
 
 namespace yq::mithril::displayFN {

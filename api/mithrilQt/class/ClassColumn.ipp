@@ -7,10 +7,10 @@
 #pragma once
 
 #include "ClassColumn.hpp"
+#include <basic/DelayInit.hpp>
+#include <gluon/core/Utilities.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithrilQt/image/ImageUtils.hpp>
-#include <gluon/core/Utilities.hpp>
-#include <basic/DelayInit.hpp>
 #include <QIcon>
 
 namespace yq::mithril::column {

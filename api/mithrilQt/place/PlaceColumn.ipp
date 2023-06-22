@@ -7,8 +7,9 @@
 #pragma once
 
 #include "PlaceColumn.hpp"
-#include <mithril/place/PlaceCDB.hpp>
+#include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/place/PlaceCDB.hpp>
 
 namespace yq::mithril::column {
     IdColumn    place_id(ColOpts opts)
@@ -34,6 +35,15 @@ namespace yq::mithril::column {
         ret.label       = "Name";
         return ret;
     }
+
+    void    reg_place_columns()
+    {
+        IdColumn::declare<Place>(Column::Id,    place_id);
+        IdColumn::declare<Place>(Column::Key,   place_key);
+        IdColumn::declare<Place>(Column::Name,  place_name);
+    }
+    
+    YQ_INVOKE(reg_place_columns();)
 }
 
 namespace yq::mithril::displayFN {
