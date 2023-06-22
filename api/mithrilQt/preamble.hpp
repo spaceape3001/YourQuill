@@ -29,4 +29,9 @@ namespace yq::mithril {
     };
     
     using ColOpts   = Flags<ColOpt>;
+    
+    struct ColumnSpec {
+        Column  column;
+        ColOpts options = {};
+    };
 }

@@ -35,6 +35,18 @@ namespace yq::mithril {
         }
     }
 
+    void    IdModel::addColumn(ColumnSpec cspec)
+    {
+        addColumn(cspec.column, cspec.options);
+    }
+    
+    void    IdModel::addColumn(Column col, ColOpts opts)
+    {
+        std::optional<IdColumn> cc  = IdColumn::create(m_idType, col, opts);
+        if(cc)
+            addColumn(std::move(*cc));
+    }
+
     void    IdModel::addColumn(IdColumn&& col)
     {
         m_columns.push_back(std::move(col));
@@ -49,6 +61,18 @@ namespace yq::mithril {
             m_columns.push_back(std::move(col));
         }
         _updateCols();
+    }
+
+    void            IdModel::addColumns(std::span<const Column> cols)
+    {
+        for(Column c : cols)
+            addColumn(c);
+    }
+    
+    void            IdModel::addColumns(std::span<const ColumnSpec> cols)
+    {
+        for(auto & c : cols)
+            addColumn(c);
     }
 
     const IdColumn* IdModel::column(size_t n) const
@@ -203,6 +227,18 @@ namespace yq::mithril {
     {
         const Node* n   = node(idx);
         return n->children.size();
+    }
+
+    void    IdModel::setColumn(Column col, ColOpts opts)
+    {
+        std::optional<IdColumn> cc  = IdColumn::create(m_idType, col, opts);
+        if(cc)
+            setColumn(std::move(*cc));
+    }
+
+    void    IdModel::setColumn(ColumnSpec cspec)
+    {
+        setColumn(cspec.column, cspec.options);
     }
 
     void    IdModel::setColumn(IdColumn&&col)

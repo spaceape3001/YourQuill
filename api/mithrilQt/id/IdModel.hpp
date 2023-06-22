@@ -40,11 +40,17 @@ namespace yq::mithril {
             Table,
             Tree
         };
-    
-        //! Sets new filters (for the root node)
-        //! \note Call a reload after setting filters
-        void            setFilters(std::vector<IdFilter>&&);
-        void            setFilters(const QModelIndex&, std::vector<IdFilter>&&);
+
+        void            addColumn(ColumnSpec);
+        void            addColumn(IdColumn&&);
+        void            addColumn(Column, ColOpts={});
+        void            addColumn(size_t before, IdColumn&&);
+
+        template <cdb_object S, typename T>
+        void            addColumn(std::string_view label, std::function<T(S)>);
+
+        void            addColumns(std::span<const Column>);
+        void            addColumns(std::span<const ColumnSpec>);
     
         const IdColumn* column(size_t) const;
         size_t          columnCount() const;
@@ -61,14 +67,17 @@ namespace yq::mithril {
         bool            isTable() const { return m_type == Type::Table; }
         bool            isTree() const { return m_type == Type::Tree; }
 
+        void            setColumn(ColumnSpec);
+        void            setColumn(Column, ColOpts={});
         void            setColumn(IdColumn&&);
         void            setColumn(size_t, IdColumn&&);
-        void            setColumns(std::vector<IdColumn>&&);
-        void            addColumn(IdColumn&&);
-        void            addColumn(size_t before, IdColumn&&);
 
-        template <cdb_object S, typename T>
-        void            addColumn(std::string_view label, std::function<T(S)>);
+        void            setColumns(std::vector<IdColumn>&&);
+        
+        //! Sets new filters (for the root node)
+        //! \note Call a reload after setting filters
+        void            setFilters(std::vector<IdFilter>&&);
+        void            setFilters(const QModelIndex&, std::vector<IdFilter>&&);
 
         const std::vector<IdColumn>& columns() const { return m_columns; }
 
@@ -107,6 +116,7 @@ namespace yq::mithril {
             void                        reload();
         };
     
+    
         Type                            m_type              = Type::None;
         TreeDetector                    m_treeDetect;
         ProviderGenerator               m_treeGenerator;
@@ -119,6 +129,7 @@ namespace yq::mithril {
         bool                            m_showVHeader   = true;
         bool                            m_showHHeader   = true;
         VariantFN                       m_vHeader;
+        IdType                          m_idType        = IdType::Unknown;
         
         virtual ~IdModel();
         
@@ -210,10 +221,13 @@ namespace yq::mithril {
         }
 
         IdModelT(Type t, IdProvider&& p, QObject*parent=nullptr) :
-            IdModel(t, Id(), std::move(p), parent) {}
+            IdModelT(t, S(), std::move(p), parent) {}
         
         IdModelT(Type t, S s, IdProvider&& p, QObject*parent=nullptr) :
-            IdModel(t, s, std::move(p), parent) {}
+            IdModel(t, s, std::move(p), parent) 
+        {
+            m_idType    = id_type_v<S>;
+        }
 
         void    setVHeader(std::function<QVariant(S)>fn)
         {

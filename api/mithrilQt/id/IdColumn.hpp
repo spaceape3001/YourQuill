@@ -6,9 +6,11 @@
 
 #pragma once
 
+#include <mithrilQt/preamble.hpp>
 #include <mithril/id/Id.hpp>
 #include <QVariant>
 #include <functional>
+#include <optional>
 
 namespace yq::gluon {
     class Delegate;
@@ -44,5 +46,20 @@ namespace yq::mithril {
         IdColumn();
         ~IdColumn();
 
+        using CreateFN      = IdColumn (*)(ColOpts);
+        
+        static bool                     hasColumn(IdType, Column);
+        static std::optional<IdColumn>  create(IdType, Column, ColOpts opts={});
+        static void                     declare(IdType, Column, CreateFN);
+        
+        template <cdb_object S>
+        static void                     declare(Column col, CreateFN fn)
+        {
+            declare(id_type_v<S>, col, fn);
+        }
+        
+        struct Repo;
+        struct Key;
+        static Repo& repo();
     };
 }

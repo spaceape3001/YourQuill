@@ -104,19 +104,19 @@ Browser::Browser(const QUrl& location, QWebEngineProfile*profile, QWidget* paren
     m_url                   = new QLineEdit;
     connect(m_url, &QLineEdit::returnPressed, this, &Browser::returnPressed);
     
-    m_back          = new QAction(fetchIcon(":yq/icon/back%1.png"), tr("Back"), this);
+    m_back          = new QAction(fetchIcon(":/yq/icon/back%1.png"), tr("Back"), this);
     connect(m_back, &QAction::triggered, m_view, &QWebEngineView::back);
     
-    m_fore          = new QAction(fetchIcon(":yq/icon/fore%1.png"), tr("Fore"), this);
+    m_fore          = new QAction(fetchIcon(":/yq/icon/fore%1.png"), tr("Fore"), this);
     connect(m_fore,    &QAction::triggered, m_view, &QWebEngineView::forward);
     
-    m_reload        = new QAction(fetchIcon(":yq/icon/refresh%1.png"), tr("Reload"), this);
+    m_reload        = new QAction(fetchIcon(":/yq/icon/refresh%1.png"), tr("Reload"), this);
     connect(m_reload, &QAction::triggered, m_view, &QWebEngineView::reload);
     
-    m_stop          = new QAction(fetchIcon(":yq/icon/cancel%1.png"), tr("Stop"), this);
+    m_stop          = new QAction(fetchIcon(":/yq/icon/cancel%1.png"), tr("Stop"), this);
     connect(m_stop, &QAction::triggered, m_view, &QWebEngineView::stop);
     
-    m_home          = new QAction(fetchIcon(":yq/icon/home%1.png"), tr("Home"), this);
+    m_home          = new QAction(fetchIcon(":/yq/icon/home%1.png"), tr("Home"), this);
     connect(m_home, &QAction::triggered, this, &Browser::goHome);
     
         //  Create the nav-bar

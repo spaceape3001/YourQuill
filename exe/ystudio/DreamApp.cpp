@@ -17,12 +17,6 @@
 #include <io/PluginLoader.hpp>
 #include <nlohmann/json.hpp>
 
-namespace yq {
-    namespace resources {
-        void    initialize();
-    }
-}
-
 using namespace yq;
 using namespace yq::gluon;
 using namespace yq::mithril;
@@ -32,8 +26,6 @@ DreamApp*    DreamApp::s_app    = nullptr;
 
 DreamApp::DreamApp(int& argc, char**argv) : yq::gluon::Application(argc, argv)
 {
-    yq::resources::initialize();
-    
     if(!s_app)
         s_app   = this;
         

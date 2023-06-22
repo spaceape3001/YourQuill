@@ -11,10 +11,10 @@
 
 
 namespace yq::mithril {
-    std::span<const Column>  ClassTable::defColumns() 
+    std::span<const ColumnSpec>  ClassTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon }, { Column::Name } };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
 
@@ -22,12 +22,12 @@ namespace yq::mithril {
     {
     }
     
-    ClassTable::ClassTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    ClassTable::ClassTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         ClassTable(ALL, span(columns), parent)
     {
     }
     
-    ClassTable::ClassTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    ClassTable::ClassTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Class>(new ClassModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

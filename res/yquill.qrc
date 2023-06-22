@@ -75,6 +75,8 @@
     <file alias="icon/save048.png">openIcon/48/document-save-5.png</file>
     <file alias="icon/save064.png">openIcon/64/document-save-5.png</file>
     <file alias="icon/save128.png">openIcon/128/document-save-5.png</file>
+    
+    <file alias="generic/class.svg">openIcon/svg/emblem-what.svg</file>
 
 </qresource>
 </RCC>
