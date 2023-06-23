@@ -12,13 +12,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 add_executable(${PROJECT_NAME} 
+    Dock.hpp
+    Dock.cpp
+
     DreamApp.hpp 
     DreamApp.cpp 
     DreamMW.hpp 
     DreamMW.cpp
 
-    Dock.hpp
-    Dock.cpp
 
     #Explorer.cpp
     #Explorer.hpp

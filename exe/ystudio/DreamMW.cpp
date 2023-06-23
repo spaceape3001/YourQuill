@@ -9,7 +9,7 @@
 #include <basic/Logging.hpp>
 #include <gluon/core/Logging.hpp>
 
-#include "dock/XFiles.hpp"
+#include "Dock.hpp"
 #include "WebBrowser.hpp"
 
 #include <mithrilQt/atom/AtomTable.hpp>
@@ -33,7 +33,7 @@
 #include <mithril/wksp/Workspace.hpp>
 #include <gluon/core/Utilities.hpp>
 
-#include <format>
+#include <QMenu>
 
 using namespace yq;
 using namespace yq::gluon;
@@ -47,11 +47,35 @@ DreamMW::DreamMW()
     enableDetachableTabs();
     enableAutoEnableCmds();
     
-    m_files = new XFiles;
-    addDock(Qt::LeftDockWidgetArea, m_files);
-    
     resize(1920,1080);
     updateTitle();
+    
+    std::vector<QAction*>   dockActions;
+    for(const DockInfo* di : DockInfo::all()){
+        if(!di->isCreatable())
+            continue;
+        Object* obj = di->create();
+        if(!obj)
+            continue;
+        
+        Dock*   d   = static_cast<Dock*>(obj);
+        
+        QAction* act    = new QAction;
+        d->m_action = act;
+
+        act->setText(di->label());
+        act->setIcon(di->icon());
+        act->setShortcut(di->shortcut());
+        act->setToolTip(di->toolTip());
+        act->setCheckable(true);
+        act->setChecked(di->isAutoStart());
+        d->setVisible(di->isAutoStart());
+        d->setAllowedAreas(di->allowedAreas());
+
+        connect(act, &QAction::triggered, d, &Dock::triggered);
+        addDock(di->startArea(), d);
+        dockActions.push_back(act);
+    }
     
     
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
@@ -91,8 +115,12 @@ DreamMW::DreamMW()
         QStringList()
     );
 
+    for(QAction* act : dockActions)
+        viewMenu -> addAction(act);
+
     addToMenu(viewMenu,
         QStringList()
+            << "--"
             << "refresh"
     );
     

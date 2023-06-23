@@ -93,7 +93,8 @@ namespace {
     void    reg_xfiles()
     {
         auto w = writer<XFiles>();
-        w.label("File Dock");
+        w.label("File Explorer");
+        w.autoStart();
     }
     YQ_INVOKE(reg_xfiles();)
 }
