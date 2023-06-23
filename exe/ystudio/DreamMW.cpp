@@ -5,7 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DreamMW.hpp"
-#include "Browser.hpp"
+
+#include <mithrilApp/web/WebBrowser.hpp>
 
 #include <mithrilQt/atom/AtomTable.hpp>
 #include <mithrilQt/book/BookTable.hpp>
@@ -44,7 +45,7 @@ DreamMW::DreamMW()
     updateTitle();
     
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
-    addAction("refresh", "Refresh").icon(fetchIcon(":yq/icon/refresh%1.png")).shortcut("F5");
+    addAction("refresh", "Refresh").icon(QIcon(":/icon/refresh.svg")).shortcut("F5");
 
     addAction("atomTable", "Atoms").connect(this, &DreamMW::newAtomTable);
     addAction("bookTable", "Books").connect(this, &DreamMW::newBookTable);
@@ -108,7 +109,7 @@ void    DreamMW::newBookTable()
 
 void    DreamMW::newBrowser()
 {
-    addWindow(new Browser(QString("http://localhost:%1/").arg(wksp::port())));
+    addWindow(new WebBrowser);
 }
 
 void    DreamMW::newCategoryTable()

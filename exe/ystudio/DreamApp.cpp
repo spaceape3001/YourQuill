@@ -8,6 +8,8 @@
 
 #include <QWebEngineSettings>
 
+#include <mithrilApp/web/WebBrowser.hpp>
+
 #include <basic/Url.hpp>
 #include <gluon/core/Logging.hpp>
 #include <io/Curl.hpp>
@@ -88,8 +90,10 @@ bool    DreamApp::configure()
     m_home.setPort(pp);
     m_home.setPath("/");
     
+    WebBrowser::setHomeUrl(m_home);
+    
     load_plugin_dir("plugin");
-    load_plugin_dir("plugin/ystudio");
+    //load_plugin_dir("plugin/ystudio");
     return true;
 }
 

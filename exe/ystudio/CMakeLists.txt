@@ -12,8 +12,8 @@ set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
 add_executable(${PROJECT_NAME} 
-    Browser.hpp
-    Browser.cpp
+    #Browser.hpp
+    #Browser.cpp
     DreamApp.hpp 
     DreamApp.cpp 
     DreamMW.hpp 
@@ -28,6 +28,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
     gluon 
     mithril 
+    mithrilApp
     mithrilQt
     YQResources 
     Qt6::Network
