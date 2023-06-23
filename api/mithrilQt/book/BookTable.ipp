@@ -10,10 +10,10 @@
 #include "BookModel.hpp"
 
 namespace yq::mithril {
-    std::span<const Column>  BookTable::defColumns() 
+    std::span<const ColumnSpec>  BookTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Title };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon}, Column::Title };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
 
@@ -21,12 +21,12 @@ namespace yq::mithril {
     {
     }
     
-    BookTable::BookTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    BookTable::BookTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         BookTable(ALL, span(columns), parent)
     {
     }
     
-    BookTable::BookTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    BookTable::BookTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Book>(new BookModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

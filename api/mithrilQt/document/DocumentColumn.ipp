@@ -14,6 +14,35 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon qIcon(Document doc)
+    {
+        static QIcon                        qico(":/generic/document.svg");
+        static std::map<std::string, QIcon> qrepo;
+        
+        if(!doc)
+            return QIcon();
+            
+        Image   img = cdb::icon(doc);
+        if(img)
+            return qIcon(img);
+        
+        cdb::Extension   ext = cdb::suffix(doc);
+        if(!ext.ext.empty()){
+            auto [i,f]  = qrepo.try_emplace(ext.ext, QIcon());
+            if(f){
+                QString     fname   = QString(":/ext/%1.svg").arg(QString::fromStdString(ext.ext)).toLower();
+                i->second   = QIcon(fname);
+                if(i->second.isNull())
+                    i->second   = qico;
+            }
+            return i->second;
+        }
+        
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    document_id(ColOpts opts)
     {
@@ -58,15 +87,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  document_icon()
     {
-        static QIcon    qico(":/generic/document.svg");
         return [](Id i) -> QVariant {
-            Document   a   = i.as<Document>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Document>());
         };
     }
 }

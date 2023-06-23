@@ -14,11 +14,11 @@ namespace yq::mithril {
     class TagTable : public IdTableT<Tag> {
         Q_OBJECT
     public:
-        static std::span<const Column>  defColumns();
+        static std::span<const ColumnSpec>  defColumns();
     
         TagTable(all_t, QWidget*parent=nullptr);
-        TagTable(all_t, std::initializer_list<Column> columns, QWidget*parent=nullptr);
-        TagTable(all_t, std::span<const Column> columns, QWidget*parent=nullptr);
+        TagTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
+        TagTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~TagTable();
         
         TagModel*          model();

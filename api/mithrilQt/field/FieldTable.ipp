@@ -11,10 +11,10 @@
 
 
 namespace yq::mithril {
-    std::span<const Column>  FieldTable::defColumns() 
+    std::span<const ColumnSpec>  FieldTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = {{ Column::Key, ColOpt::Icon}, Column::Name };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
 
@@ -22,12 +22,12 @@ namespace yq::mithril {
     {
     }
     
-    FieldTable::FieldTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    FieldTable::FieldTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         FieldTable(ALL, span(columns), parent)
     {
     }
     
-    FieldTable::FieldTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    FieldTable::FieldTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Field>(new FieldModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

@@ -7,11 +7,14 @@
 #pragma once
 
 #include "ImageUtils.hpp"
+#include <basic/ThreadId.hpp>
+#include <gluon/core/IgCaseQ.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
-#include <basic/ThreadId.hpp>
 #include <QIcon>
 #include <unordered_map>
+
+using namespace yq::gluon;
 
 namespace yq::mithril {
     namespace {
@@ -47,5 +50,4 @@ namespace yq::mithril {
         ii.icon = QIcon(QString::fromStdString(p.string()));
         return ii.icon;
     }
-
 }

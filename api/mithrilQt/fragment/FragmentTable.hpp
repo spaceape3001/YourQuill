@@ -15,11 +15,11 @@ namespace yq::mithril {
         Q_OBJECT
     public:
 
-        static std::span<const Column>  defColumns();
+        static std::span<const ColumnSpec>  defColumns();
 
         FragmentTable(all_t, QWidget*parent=nullptr);
-        FragmentTable(all_t, std::initializer_list<Column> columns, QWidget*parent=nullptr);
-        FragmentTable(all_t, std::span<const Column> columns, QWidget*parent=nullptr);
+        FragmentTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
+        FragmentTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~FragmentTable();
         
         FragmentModel*          model();

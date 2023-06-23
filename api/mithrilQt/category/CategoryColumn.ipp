@@ -14,6 +14,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Category cat)
+    {
+        static QIcon    qico(":/generic/category.svg");
+        if(!cat)
+            return QIcon();
+        Image   img = cdb::icon(cat);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    category_id(ColOpts opts)
     {
@@ -58,15 +71,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  category_icon()
     {
-        static QIcon    qico(":/generic/category.svg");
         return [](Id i) -> QVariant {
-            Category   a   = i.as<Category>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Category>());
         };
     }
 }

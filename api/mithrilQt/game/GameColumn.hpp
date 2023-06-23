@@ -9,7 +9,11 @@
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
+class QIcon;
+
 namespace yq::mithril {
+    QIcon   qIcon(Game);
+    
     namespace column {
         IdColumn  game_id(ColOpts opts=ColOpts());
         IdColumn  game_key(ColOpts opts=ColOpts());

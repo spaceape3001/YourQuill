@@ -12,6 +12,7 @@ find_package(TBB REQUIRED)
 #find_package(Qt5 COMPONENTS Core Gui Widgets)
 
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 add_library(${PROJECT_NAME} SHARED
     
@@ -194,6 +195,8 @@ add_library(${PROJECT_NAME} SHARED
     tag/TagTable.hpp
     tag/TagTable.ipp
     tag/tag.cpp
+    
+    mithrilQt.qrc
 )
 
 target_link_libraries(${PROJECT_NAME}

@@ -16,6 +16,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon  qIcon(Book b)
+    {
+        static QIcon    qico(":/generic/book.svg");
+        if(!b)
+            return QIcon();
+        Image   img = cdb::icon(b);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    book_id(ColOpts opts)
     {
@@ -60,15 +73,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  book_icon()
     {
-        static QIcon    qico(":/generic/book.svg");
         return [](Id i) -> QVariant {
-            Book   a   = i.as<Book>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Book>());
         };
     }
 }

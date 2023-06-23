@@ -14,6 +14,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Field fld)
+    {
+        static QIcon    qico(":/generic/field.svg");
+        if(!fld)
+            return QIcon();
+        Image   img = cdb::icon(fld);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    field_id(ColOpts opts)
     {
@@ -58,15 +71,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  field_icon()
     {
-        static QIcon    qico(":/generic/field.svg");
         return [](Id i) -> QVariant {
-            Field   a   = i.as<Field>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Field>());
         };
     }
 }

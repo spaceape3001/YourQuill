@@ -14,6 +14,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Tag t)
+    {
+        static QIcon    qico(":/generic/tag.svg");
+        if(!t)
+            return QIcon();
+        Image   img = cdb::icon(t);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    tag_id(ColOpts opts)
     {
@@ -58,15 +71,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  tag_icon()
     {
-        static QIcon    qico(":/generic/tag.svg");
         return [](Id i) -> QVariant {
-            Tag   a   = i.as<Tag>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Tag>());
         };
     }
 }

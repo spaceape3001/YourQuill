@@ -9,7 +9,10 @@
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
+class QIcon;
+
 namespace yq::mithril {
+    QIcon   qIcon(Folder);
     namespace column {
         IdColumn  folder_id(ColOpts opts=ColOpts());
         IdColumn  folder_key(ColOpts opts=ColOpts());

@@ -14,6 +14,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Event evt)
+    {
+        static QIcon    qico(":/generic/event.svg");
+        if(!evt)
+            return QIcon();
+        Image   img = cdb::icon(evt);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    event_id(ColOpts opts)
     {
@@ -58,15 +71,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  event_icon()
     {
-        static QIcon    qico(":/generic/event.svg");
         return [](Id i) -> QVariant {
-            Event   a   = i.as<Event>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Event>());
         };
     }
 }

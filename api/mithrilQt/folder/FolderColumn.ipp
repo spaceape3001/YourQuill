@@ -14,6 +14,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Folder f)
+    {
+        static QIcon    qico(":/generic/folder.svg");
+        if(!f)
+            return QIcon();
+        Image   img = cdb::icon(f);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    folder_id(ColOpts opts)
     {
@@ -59,15 +72,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  folder_icon()
     {
-        static QIcon    qico(":/generic/folder.svg");
         return [](Id i) -> QVariant {
-            Folder   a   = i.as<Folder>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Folder>());
         };
     }
 }

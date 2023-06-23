@@ -11,10 +11,10 @@
 
 
 namespace yq::mithril {
-    std::span<const Column>  GameTable::defColumns() 
+    std::span<const ColumnSpec>  GameTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Title };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon}, Column::Title };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
 
@@ -22,12 +22,12 @@ namespace yq::mithril {
     {
     }
     
-    GameTable::GameTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    GameTable::GameTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         GameTable(ALL, span(columns), parent)
     {
     }
     
-    GameTable::GameTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    GameTable::GameTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Game>(new GameModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

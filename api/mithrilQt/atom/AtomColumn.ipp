@@ -14,6 +14,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Atom a)
+    {
+        static QIcon    qico(":/generic/atom.svg");
+        if(!a)
+            return QIcon();
+        Image   img = cdb::icon(a);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    atom_id(ColOpts opts)
     {
@@ -58,15 +71,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  atom_icon()
     {
-        static QIcon    qico(":/generic/atom.svg");
         return [](Id i) -> QVariant {
-            Atom   a   = i.as<Atom>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Atom>());
         };
     }
 }

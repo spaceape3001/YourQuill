@@ -11,10 +11,10 @@
 
 
 namespace yq::mithril {
-    std::span<const Column>  LeafTable::defColumns() 
+    std::span<const ColumnSpec>  LeafTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Title };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon}, Column::Title };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
 
@@ -22,12 +22,12 @@ namespace yq::mithril {
     {
     }
     
-    LeafTable::LeafTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    LeafTable::LeafTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         LeafTable(ALL, span(columns), parent)
     {
     }
     
-    LeafTable::LeafTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    LeafTable::LeafTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Leaf>(new LeafModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

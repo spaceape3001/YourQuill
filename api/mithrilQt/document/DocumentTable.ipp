@@ -11,10 +11,10 @@
 
 
 namespace yq::mithril {
-    std::span<const Column>  DocumentTable::defColumns() 
+    std::span<const ColumnSpec>  DocumentTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon}, Column::Name };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
 
@@ -22,12 +22,12 @@ namespace yq::mithril {
     {
     }
     
-    DocumentTable::DocumentTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    DocumentTable::DocumentTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         DocumentTable(ALL, span(columns), parent)
     {
     }
     
-    DocumentTable::DocumentTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    DocumentTable::DocumentTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Document>(new DocumentModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

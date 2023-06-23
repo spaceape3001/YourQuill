@@ -11,22 +11,22 @@
 
 
 namespace yq::mithril {
-    std::span<const Column>  EventTable::defColumns() 
+    std::span<const ColumnSpec>  EventTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Title };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon}, Column::Title };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
     EventTable::EventTable(all_t, QWidget*parent) : EventTable(ALL, defColumns(), parent)
     {
     }
     
-    EventTable::EventTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    EventTable::EventTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         EventTable(ALL, span(columns), parent)
     {
     }
     
-    EventTable::EventTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    EventTable::EventTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Event>(new EventModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

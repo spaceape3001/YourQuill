@@ -13,7 +13,7 @@
 namespace yq::mithril {
     std::span<const ColumnSpec>  ClassTable::defColumns() 
     {
-        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon }, { Column::Name } };
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon }, Column::Name };
         return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 

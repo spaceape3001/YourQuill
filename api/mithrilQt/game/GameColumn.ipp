@@ -14,6 +14,19 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Game g)
+    {
+        static QIcon    qico(":/generic/game.svg");
+        if(!g)
+            return QIcon();
+        Image   img = cdb::icon(g);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
 namespace yq::mithril::column {
     IdColumn    game_id(ColOpts opts)
     {
@@ -58,15 +71,8 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  game_icon()
     {
-        static QIcon    qico(":/generic/game.svg");
         return [](Id i) -> QVariant {
-            Game   a   = i.as<Game>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Game>());
         };
     }
 }

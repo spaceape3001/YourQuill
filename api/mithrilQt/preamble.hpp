@@ -33,5 +33,7 @@ namespace yq::mithril {
     struct ColumnSpec {
         Column  column;
         ColOpts options = {};
+        
+        constexpr ColumnSpec(Column c=Column::None, ColOpts opts={}) noexcept : column(c), options(opts) {}
     };
 }

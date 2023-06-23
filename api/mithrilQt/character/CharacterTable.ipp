@@ -10,22 +10,22 @@
 #include "CharacterModel.hpp"
 
 namespace yq::mithril {
-    std::span<const Column>  CharacterTable::defColumns() 
+    std::span<const ColumnSpec>  CharacterTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Name };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon}, Column::Name };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
     CharacterTable::CharacterTable(all_t, QWidget*parent) : CharacterTable(ALL, defColumns(), parent)
     {
     }
     
-    CharacterTable::CharacterTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    CharacterTable::CharacterTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         CharacterTable(ALL, span(columns), parent)
     {
     }
     
-    CharacterTable::CharacterTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    CharacterTable::CharacterTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Character>(new CharacterModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

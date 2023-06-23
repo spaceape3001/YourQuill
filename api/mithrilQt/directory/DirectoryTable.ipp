@@ -12,22 +12,22 @@
 
 namespace yq::mithril {
 
-    std::span<const Column>  DirectoryTable::defColumns() 
+    std::span<const ColumnSpec>  DirectoryTable::defColumns() 
     {
-        static Column   s_data[] = { Column::Key, Column::Hidden, Column::Path };
-        return std::span<const Column>(std::begin(s_data), std::end(s_data));
+        static ColumnSpec   s_data[] = { { Column::Key, ColOpt::Icon}, Column::Hidden, Column::Path };
+        return std::span<const ColumnSpec>(std::begin(s_data), std::end(s_data));
     }
 
     DirectoryTable::DirectoryTable(all_t, QWidget*parent) : DirectoryTable(ALL, defColumns(), parent)
     {
     }
     
-    DirectoryTable::DirectoryTable(all_t, std::initializer_list<Column> columns, QWidget*parent) : 
+    DirectoryTable::DirectoryTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent) : 
         DirectoryTable(ALL, span(columns), parent)
     {
     }
     
-    DirectoryTable::DirectoryTable(all_t, std::span<const Column> columns, QWidget*parent) : 
+    DirectoryTable::DirectoryTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
         IdTableT<Directory>(new DirectoryModel(IdModel::Type::Table, ALL), parent)
     {
         model()->addColumns(columns);

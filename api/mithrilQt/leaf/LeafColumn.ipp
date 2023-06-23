@@ -14,6 +14,20 @@
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
+namespace yq::mithril {
+    QIcon   qIcon(Leaf l)
+    {
+        static QIcon    qico(":/generic/leaf.svg");
+        if(!l)
+            return QIcon();
+        Image   img = cdb::icon(l);
+        if(img)
+            return qIcon(img);
+        return qico;
+    }
+}
+
+
 namespace yq::mithril::column {
     IdColumn    leaf_id(ColOpts opts)
     {
@@ -58,19 +72,11 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  leaf_icon()
     {
-        static QIcon    qico(":/generic/leaf.svg");
         return [](Id i) -> QVariant {
-            Leaf   a   = i.as<Leaf>();
-            if(!a)
-                return QVariant();
-            Image   img = cdb::icon(a);
-            if(img)
-                return qIcon(img);
-            return qico;
+            return qIcon(i.as<Leaf>());
         };
     }
 }
-
 
 namespace yq::mithril::displayFN {
     IdColumn::VariantFN  leaf_id()
