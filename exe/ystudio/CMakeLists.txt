@@ -28,7 +28,6 @@ add_executable(${PROJECT_NAME}
     WebBrowser.cpp
 
     dock/XFiles.hpp
-    dock/XFilesImpl.hpp
     dock/XFiles.cpp
 
     main.cpp 

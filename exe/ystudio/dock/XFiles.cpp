@@ -5,7 +5,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XFiles.hpp"
-#include "XFilesImpl.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/TextUtils.hpp>
 #include <gluon/core/Utilities.hpp>
@@ -166,4 +165,3 @@ const XFiles::Model*    XFiles::View::model() const
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "moc_XFiles.cpp"
-#include "moc_XFilesImpl.cpp"
