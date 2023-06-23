@@ -17,15 +17,18 @@ add_executable(${PROJECT_NAME}
     DreamMW.hpp 
     DreamMW.cpp
 
+    Dock.hpp
+    Dock.cpp
+
     #Explorer.cpp
     #Explorer.hpp
 
     WebBrowser.hpp
     WebBrowser.cpp
 
-    XFiles.hpp
-    XFilesImpl.hpp
-    XFiles.cpp
+    dock/XFiles.hpp
+    dock/XFilesImpl.hpp
+    dock/XFiles.cpp
 
     main.cpp 
     ystudio.qrc
@@ -39,6 +42,11 @@ target_link_libraries(${PROJECT_NAME}
     Qt6::Network
     Qt6::WebEngineCore
     Qt6::WebEngineWidgets
+)
+
+target_include_directories(${PROJECT_NAME}
+PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}
 )
 
 

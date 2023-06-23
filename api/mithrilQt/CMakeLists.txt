@@ -144,6 +144,8 @@ add_library(${PROJECT_NAME} SHARED
     id/IdListView.ipp
     id/IdModel.hpp
     id/IdModel.ipp
+    id/IdSignalMapper.hpp
+    id/IdSignalMapper.ipp
     id/IdTable.hpp
     id/IdTable.ipp
     id/IdTableView.hpp

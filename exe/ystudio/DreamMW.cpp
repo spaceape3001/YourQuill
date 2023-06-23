@@ -9,7 +9,7 @@
 #include <basic/Logging.hpp>
 #include <gluon/core/Logging.hpp>
 
-#include "XFiles.hpp"
+#include "dock/XFiles.hpp"
 #include "WebBrowser.hpp"
 
 #include <mithrilQt/atom/AtomTable.hpp>

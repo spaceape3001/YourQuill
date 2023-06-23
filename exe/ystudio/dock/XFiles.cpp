@@ -6,6 +6,7 @@
 
 #include "XFiles.hpp"
 #include "XFilesImpl.hpp"
+#include <basic/DelayInit.hpp>
 #include <basic/TextUtils.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/document/DocumentCDB.hpp>
@@ -16,6 +17,8 @@
 using namespace yq;
 using namespace yq::gluon;
 using namespace yq::mithril;
+
+YQ_OBJECT_IMPLEMENT(XFiles)
 
 namespace {
 
@@ -86,18 +89,31 @@ namespace {
             return QVariant();
         }
     }
+    
+    void    reg_xfiles()
+    {
+        auto w = writer<XFiles>();
+        w.label("File Dock");
+    }
+    YQ_INVOKE(reg_xfiles();)
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XFiles::XFiles(QWidget*parent) : IdTreeView(new Model())
+XFiles::XFiles(QWidget*parent) : Dock(parent)
 {
+    m_model = new Model();
+    m_view  = new View(m_model);
+    setWidget(m_view);
+    
     setWindowTitle("Files");
 }
 
 XFiles::~XFiles()
 {
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -126,16 +142,25 @@ XFiles::Model::~Model()
 {
 }
 
-XFiles::Model*          XFiles::model()
+////////////////////////////////////////////////////////////////////////////////
+
+XFiles::View::View(Model*m, QWidget*parent) : IdTreeView(m)
+{
+}
+
+XFiles::View::~View()
+{
+}
+
+XFiles::Model*          XFiles::View::model()
 {
     return static_cast<Model*>(m_model);
 }
 
-const XFiles::Model*    XFiles::model() const
+const XFiles::Model*    XFiles::View::model() const
 {
     return static_cast<const Model*>(m_model);
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
