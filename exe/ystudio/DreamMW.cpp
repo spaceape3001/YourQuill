@@ -77,6 +77,9 @@ DreamMW::DreamMW()
         dockActions.push_back(act);
     }
     
+    std::sort(dockActions.begin(), dockActions.end(), [](const QAction*a, const QAction*b)->bool {
+        return QString::compare(a->text(), b->text(), Qt::CaseInsensitive) < 0;
+    });
     
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
     addAction("refresh", "Refresh").icon(QIcon(":/icon/refresh.svg")).shortcut("F5");

@@ -224,8 +224,10 @@ namespace yq::mithril {
 
     void            IdModel::reload()
     {
-        auto rr = resetModel();
-        _load();
+        if(m_enableReload){
+            auto rr = resetModel();
+            _load();
+        }
     }
 
     IdModel::EndCue   IdModel::resetModel()
@@ -306,7 +308,9 @@ namespace yq::mithril {
     
     void            IdModel::update(const QModelIndex&)
     {
-        reload();   // TODO (get fancier with diffs)
+        if(m_enableReload){
+            reload();   // TODO (get fancier with diffs)
+        }
     }
 
 ////////////////////////////////////////////////////////////////////////////////

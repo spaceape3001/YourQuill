@@ -147,6 +147,7 @@ namespace yq::mithril {
         bool                            m_dropEnabled   = false;
         bool                            m_showVHeader   = true;
         bool                            m_showHHeader   = true;
+        bool                            m_enableReload  = true;
         VariantFN                       m_vHeader;
         IdType                          m_idType        = IdType::Unknown;
         

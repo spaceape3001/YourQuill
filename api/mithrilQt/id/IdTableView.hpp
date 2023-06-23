@@ -16,7 +16,7 @@ namespace yq::mithril {
     public:
         IdTableView(IdModel*, QWidget*parent=nullptr);
         ~IdTableView();
-    private:
+    protected:
         IdModel*    m_model = nullptr;
     };
 }
