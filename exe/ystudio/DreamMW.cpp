@@ -53,6 +53,7 @@ DreamMW::DreamMW()
     resize(1920,1080);
     updateTitle();
     
+    
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
     addAction("refresh", "Refresh").icon(QIcon(":/icon/refresh.svg")).shortcut("F5");
 
@@ -74,7 +75,28 @@ DreamMW::DreamMW()
     addAction("tagTable", "Tags").connect(this, &DreamMW::newTagTable);
     addAction("tagList", "Tag List").connect(this, &DreamMW::newTagList);
     
-    makeMenu("studio", "Studio",
+    QMenu* fileMenu     = makeMenu("file", "File");
+    QMenu* editMenu     = makeMenu("edit", "Edit");
+    QMenu* viewMenu     = makeMenu("view", "View");
+    QMenu* studioMenu   = makeMenu("studio", "Studio");
+    QMenu* windowMenu   = makeMenu("window", "Window");
+    QMenu* helpMenu     = makeMenu("help", "Help");
+    QMenu* debugMenu    = makeMenu("debug", "Debug");
+
+    addToMenu(fileMenu,
+        QStringList()
+    );
+
+    addToMenu(editMenu,
+        QStringList()
+    );
+
+    addToMenu(viewMenu,
+        QStringList()
+            << "refresh"
+    );
+    
+    addToMenu(studioMenu,
         QStringList() 
             << "browser" 
             << "--" 
@@ -97,10 +119,19 @@ DreamMW::DreamMW()
             << "--"
             << "tagList"
     );
-    makeMenu("view", "View",
-        QStringList() << "refresh"
+    
+    addToMenu(windowMenu,
+        QStringList()
     );
  
+    addToMenu(helpMenu,
+        QStringList()
+    );
+
+    addToMenu(debugMenu,
+        QStringList()
+    );
+
     //  I do *NOT* know why this isn't working on X11.  
     //  Qt will otherwise render it, but *NOT* as a window icon. 
     //  Figure it's something in the file, but I know not what that is.
