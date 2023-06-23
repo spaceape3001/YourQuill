@@ -10,37 +10,54 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
+#include <QIcon>
+
+namespace yq::mithril {
+    QIcon qIcon(Fragment)
+    {
+        static QIcon s_ico(":/generic/fragment.svg");
+        return s_ico;
+    }
+}
 
 namespace yq::mithril::column {
     IdColumn    fragment_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::fragment_id();
-        ret.label       = "ID";
+        ret.fnDisplay           = displayFN::fragment_id();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.label               = "ID";
         return ret;
     }
     
     IdColumn    fragment_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::fragment_key();
-        ret.label       = "Key";
+        ret.fnDisplay           = displayFN::fragment_key();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.label               = "Key";
         return ret;
     }
     
     IdColumn    fragment_name(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::fragment_name();
-        ret.label       = "Name";
+        ret.fnDisplay           = displayFN::fragment_name();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.label               = "Name";
         return ret;
     }
 
     IdColumn    fragment_path(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::fragment_path();
-        ret.label       = "Path";
+        ret.fnDisplay           = displayFN::fragment_path();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.label               = "Path";
         return ret;
     }
 
@@ -52,6 +69,16 @@ namespace yq::mithril::column {
         IdColumn::declare<Fragment>(Column::Path,       fragment_path);
     }
 }
+
+namespace yq::mithril::decorationFN {
+    IdColumn::VariantFN  fragment_icon()
+    {
+        return [](Id i) -> QVariant {
+            return qIcon(i.as<Fragment>());
+        };
+    }
+}
+
 
 namespace yq::mithril::displayFN {
     IdColumn::VariantFN  fragment_id()

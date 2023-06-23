@@ -56,6 +56,9 @@ namespace yq::mithril::cdb {
 
     //! Key of root_dir (already on structure)
     std::string                key(const RootDir*);
+    
+    //! Key of root
+    std::string                key(Root);
 
     //! Resolves the path, optionally creating the directories
     std::filesystem::path      path(const RootDir*, std::string_view , bool fMakePath=false);

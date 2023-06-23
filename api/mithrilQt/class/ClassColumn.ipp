@@ -71,7 +71,6 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  class_icon()
     {
-        static QIcon    qico(":/generic/class.svg");
         return [](Id i) -> QVariant {
             return qIcon(i.as<Class>());
         };

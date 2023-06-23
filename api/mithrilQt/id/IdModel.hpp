@@ -95,6 +95,7 @@ namespace yq::mithril {
 
         class EndCue;
         
+        //! If you're doing something big... reset and save the end-cue to destruct (it'll call end())
         [[nodiscard]] EndCue   resetModel();
 
         IdModel(Type, Id, IdProvider&&, QObject*parent=nullptr);

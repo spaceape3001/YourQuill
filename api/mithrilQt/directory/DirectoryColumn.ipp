@@ -10,29 +10,45 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/directory/DirectoryCDB.hpp>
+#include <QIcon>
+
+namespace yq::mithril {
+    QIcon qIcon(Directory)
+    {
+        static QIcon s_ico(":/generic/directory.svg");
+        return s_ico;
+    }
+}
+
 
 namespace yq::mithril::column {
     IdColumn    directory_hidden(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::directory_hidden();
-        ret.label       = "Hidden";
+        ret.fnDisplay           = displayFN::directory_hidden();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::directory_icon();
+        ret.label               = "Hidden";
         return ret;
     }
     
     IdColumn    directory_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::directory_id();
-        ret.label       = "ID";
+        ret.fnDisplay           = displayFN::directory_id();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::directory_icon();
+        ret.label               = "ID";
         return ret;
     }
     
     IdColumn    directory_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::directory_key();
-        ret.label       = "Key";
+        ret.fnDisplay           = displayFN::directory_key();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::directory_icon();
+        ret.label               = "Key";
         return ret;
     }
     
@@ -47,8 +63,10 @@ namespace yq::mithril::column {
     IdColumn    directory_path(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::directory_path();
-        ret.label       = "Path";
+        ret.fnDisplay           = displayFN::directory_path();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::directory_icon();
+        ret.label               = "Path";
         return ret;
     }
 
@@ -59,6 +77,15 @@ namespace yq::mithril::column {
         IdColumn::declare<Directory>(Column::Key,        directory_key);
         IdColumn::declare<Directory>(Column::Name,       directory_name);
         IdColumn::declare<Directory>(Column::Path,       directory_path);
+    }
+}
+
+namespace yq::mithril::decorationFN {
+    IdColumn::VariantFN  directory_icon()
+    {
+        return [](Id i) -> QVariant {
+            return qIcon(i.as<Directory>());
+        };
     }
 }
 

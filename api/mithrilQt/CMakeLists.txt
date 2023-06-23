@@ -138,6 +138,8 @@ add_library(${PROJECT_NAME} SHARED
 
     id/IdColumn.hpp
     id/IdColumn.ipp
+    id/IdFunctor.hpp
+    id/IdFunctor.cpp
     id/IdList.hpp
     id/IdList.ipp
     id/IdListView.hpp

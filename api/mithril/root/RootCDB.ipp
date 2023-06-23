@@ -160,6 +160,11 @@ namespace yq::mithril::cdb {
         return rt->key;
     }
     
+    std::string                key(Root rt)
+    {
+        return key(root_dir(rt));
+    }
+
     std::filesystem::path   path(const RootDir*rt, std::string_view z, bool fMakePath)
     {
         std::filesystem::path   p =  rt -> resolve(z);
