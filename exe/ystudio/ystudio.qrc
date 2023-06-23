@@ -1,6 +1,14 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
     <file alias="yquill.svg">res/yquill.svg</file>
+
+    <file alias="icon/back.svg">res/arrow-left-3.svg</file>
+    <file alias="icon/browser.svg">res/applications-internet-5.svg</file>
+    <file alias="icon/fore.svg">res/arrow-right-3.svg</file>
+    <file alias="icon/home.svg">res/go-home-5.svg</file>
+    <file alias="icon/refresh.svg">res/view-refresh-7.svg</file>
+    <file alias="icon/stop.svg">res/edit-delete-6.svg</file>
+
 </qresource>
 </RCC>
 

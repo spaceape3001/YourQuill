@@ -131,7 +131,19 @@ bool    ignore(Folder f, std::string_view n)
         return true;
     if(ends(n, ".bck"))
         return true;
+    if(ends(n, ".tmp"))
+        return true;
     if(ends(n, ".disable"))
+        return true;
+    if(ends(n, "-disable"))
+        return true;
+    if(ends(n, "-old"))
+        return true;
+    if(ends(n, ".old"))
+        return true;
+    if(ends(n, ".openicon"))
+        return true;
+    if(ends(n, ".svgrepo"))
         return true;
     if(ends(n, ".bad"))
         return true;
@@ -158,7 +170,8 @@ void    stage1_scan()
         
         dir::for_all_children(dq.path, dir::HIDDEN, [&](const std::filesystem::path& p){
             auto n  = p.filename().string();
-            if(ignore(dq.folder, n))
+            auto ln = to_lower(n);
+            if(ignore(dq.folder, ln))
                 return;
                 
             if(std::filesystem::is_directory(p)){
@@ -395,7 +408,8 @@ void    stage6_sweep()
         
         dir::for_all_children(dq.path, dir::HIDDEN, [&](const std::filesystem::path& p){
             auto n  = p.filename().string();
-            if(ignore(dq.folder, n))
+            auto ln = to_lower(n);
+            if(ignore(dq.folder, ln))
                 return;
             
             //  TODO.... not copy & paste

@@ -75,6 +75,18 @@ namespace yq::mithril {
             addColumn(c);
     }
 
+    
+    void            IdModel::addFilter(IdFilter&&filter)
+    {
+        m_filters.push_back(std::move(filter));
+    }
+    
+    void            IdModel::addFilter(const QModelIndex&idx, IdFilter&&filter)
+    {
+        Node* n = node(idx);
+        n->filters.push_back(std::move(filter));
+    }
+
     const IdColumn* IdModel::column(size_t n) const
     {
         if(n<m_columns.size())
@@ -275,17 +287,21 @@ namespace yq::mithril {
             
         return false;
     }
-    
 
     void            IdModel::setFilters(std::vector<IdFilter>&& filters)
     {
-        m_root.filters  = std::move(filters);
+        m_filters       = std::move(filters);
     }
 
     void            IdModel::setFilters(const QModelIndex&idx, std::vector<IdFilter>&&filters)
     {
         Node*   n   = node(idx);
         n->filters  = std::move(filters);
+    }
+
+    void            IdModel::setProvider(IdProvider&& prov)
+    {
+        m_root.provider = std::move(prov);
     }
     
     void            IdModel::update(const QModelIndex&)
@@ -366,7 +382,7 @@ namespace yq::mithril {
         std::vector<Id> ret;
         if(provider){
             std::vector<Id> them    = provider();
-            if(filters.empty()){
+            if(filters.empty() && model->m_filters.empty()){
                 ret = std::move(them);
             } else {
                 ret.reserve(them.size());
@@ -376,6 +392,14 @@ namespace yq::mithril {
                         if(!f(i)){
                             rej = true;
                             break;
+                        }
+                    }
+                    if(!rej){
+                        for(auto& f : model->m_filters){
+                            if(!f(i)){
+                                rej = true;
+                                break;
+                            }
                         }
                     }
                     if(!rej)

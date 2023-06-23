@@ -16,7 +16,7 @@ namespace yq::mithril {
     public:
         IdTreeView(IdModel*, QWidget*parent=nullptr);
         ~IdTreeView();
-    private:
+    protected:
         IdModel*    m_model = nullptr;
     };
 }

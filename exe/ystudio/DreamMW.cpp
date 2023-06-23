@@ -9,7 +9,8 @@
 #include <basic/Logging.hpp>
 #include <gluon/core/Logging.hpp>
 
-#include <mithrilApp/web/WebBrowser.hpp>
+#include "XFiles.hpp"
+#include "WebBrowser.hpp"
 
 #include <mithrilQt/atom/AtomTable.hpp>
 #include <mithrilQt/book/BookTable.hpp>
@@ -45,6 +46,10 @@ DreamMW::DreamMW()
     enableClosableTabs();
     enableDetachableTabs();
     enableAutoEnableCmds();
+    
+    m_files = new XFiles;
+    addDock(Qt::LeftDockWidgetArea, m_files);
+    
     resize(1920,1080);
     updateTitle();
     

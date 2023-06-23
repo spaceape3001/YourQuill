@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include "XFiles.hpp"
+#include <mithrilQt/id/IdModel.hpp>
+
+
+class XFiles::Model : public yq::mithril::IdModel {
+    Q_OBJECT
+public:
+    Model(QObject* parent=nullptr);
+    ~Model();
+};

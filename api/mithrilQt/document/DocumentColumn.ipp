@@ -12,13 +12,14 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithrilQt/image/ImageUtils.hpp>
+#include <QFile>
 #include <QIcon>
 
 namespace yq::mithril {
     QIcon qIcon(Document doc)
     {
-        static QIcon                        qico(":/generic/document.svg");
-        static std::map<std::string, QIcon> qrepo;
+        static QIcon                                qico(":/generic/document.svg");
+        static std::map<std::string, QIcon, IgCase> qrepo;
         
         if(!doc)
             return QIcon();
@@ -29,12 +30,14 @@ namespace yq::mithril {
         
         cdb::Extension   ext = cdb::suffix(doc);
         if(!ext.ext.empty()){
-            auto [i,f]  = qrepo.try_emplace(ext.ext, QIcon());
+            auto [i,f]  = qrepo.try_emplace(ext.ext, qico);
             if(f){
                 QString     fname   = QString(":/ext/%1.svg").arg(QString::fromStdString(ext.ext)).toLower();
-                i->second   = QIcon(fname);
-                if(i->second.isNull())
-                    i->second   = qico;
+                if(QFile::exists(fname)){
+                    i->second   = QIcon(fname);
+                    if(i->second.isNull())
+                        i->second   = qico;
+                }
             }
             return i->second;
         }

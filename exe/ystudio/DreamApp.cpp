@@ -8,7 +8,7 @@
 
 #include <QWebEngineSettings>
 
-#include <mithrilApp/web/WebBrowser.hpp>
+#include "WebBrowser.hpp"
 
 #include <basic/Url.hpp>
 #include <gluon/core/Logging.hpp>

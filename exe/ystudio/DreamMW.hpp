@@ -8,6 +8,9 @@
 
 #include <gluon/app/MainWindow.hpp>
 
+//class Explorer;
+class XFiles;
+
 class DreamMW : public yq::gluon::MainWindow {
     Q_OBJECT
 public:
@@ -38,4 +41,8 @@ public slots:
     void    newRootTable();
     void    newTagList();
     void    newTagTable();
+    
+private:
+    XFiles*     m_files = nullptr;
+    //Explorer*       m_explorer = nullptr;
 };

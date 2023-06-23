@@ -25,7 +25,7 @@ namespace yq::mithril {
     public:
     
         using TreeDetector          = std::function<bool(Id)>;
-        using ProviderGenerator     = std::function<IdProvider&&(Id)>;
+        using ProviderGenerator     = std::function<IdProvider(Id)>;
         using VariantFN             = IdColumn::VariantFN;
     
         enum class AddPolicy {
@@ -74,13 +74,30 @@ namespace yq::mithril {
 
         void            setColumns(std::vector<IdColumn>&&);
         
-        //! Sets new filters (for the root node)
+        //! Sets new filters (for all queries)
         //! \note Call a reload after setting filters
         void            setFilters(std::vector<IdFilter>&&);
+        
+        //! Sets new filters for specific node
         void            setFilters(const QModelIndex&, std::vector<IdFilter>&&);
+        
+        //! Adds a filter to all queries
+        void            addFilter(IdFilter&&);
+        
+        //! Adds a filter to a specific node
+        void            addFilter(const QModelIndex&, IdFilter&&);
+
+        //! Reset on this!
+        void            setProvider(IdProvider&&);
 
         const std::vector<IdColumn>& columns() const { return m_columns; }
 
+
+        class EndCue;
+        
+        [[nodiscard]] EndCue   resetModel();
+
+        IdModel(Type, Id, IdProvider&&, QObject*parent=nullptr);
 
     public slots:
         //! Reload/reset the list with current data
@@ -98,7 +115,7 @@ namespace yq::mithril {
             Id const                    id;
             IdModel* const              model;
             Node* const                 parent;
-            IdProvider const            provider;
+            IdProvider                  provider;
             
             std::vector<Node*>          children;
             std::set<Id>                ids;
@@ -122,6 +139,7 @@ namespace yq::mithril {
         ProviderGenerator               m_treeGenerator;
         Node                            m_root;
         std::vector<IdColumn>           m_columns;
+        std::vector<IdFilter>           m_filters;
         AddPolicy                       m_addPolicy     = AddPolicy::None;
         bool                            m_readOnly      = false;
         bool                            m_anyColAdd     = false;    // true if ANY column can trigger adds
@@ -137,11 +155,7 @@ namespace yq::mithril {
         const Node*     node(const QModelIndex&) const;
         
         
-        class EndCue;
         
-        [[nodiscard]] EndCue   resetModel();
-        
-        IdModel(Type, Id, IdProvider&&, QObject*parent=nullptr);
 
         void            _load();
         void            _updateCols();
