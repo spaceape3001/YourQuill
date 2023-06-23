@@ -6,18 +6,13 @@
 
 #include "DreamMW.hpp"
 #include "DreamApp.hpp"
+#include <gluon/core/Utilities.hpp>
 //#include <QtWebEngineQuick>
 
 //  MOTTO:  Detangling Photons
 
-namespace yq::resources {
-    void    initialize();
-}
-
-
 int main(int argc, char* argv[])
 {
-    yq::resources::initialize();
     QCoreApplication::setOrganizationName("YourQuill");
     //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     //QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -30,6 +25,8 @@ int main(int argc, char* argv[])
 
 
     app.finalize();
+    
+    //yq::gluon::logAllResources();
     (new DreamMW) -> show();
     
     return app.exec();

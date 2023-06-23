@@ -15,7 +15,6 @@ public:
     DreamMW();
     ~DreamMW();
     
-    
     yq::gluon::MainWindow*   newMain() override;
     
 public slots:

@@ -6,6 +6,9 @@
 
 #include "DreamMW.hpp"
 
+#include <basic/Logging.hpp>
+#include <gluon/core/Logging.hpp>
+
 #include <mithrilApp/web/WebBrowser.hpp>
 
 #include <mithrilQt/atom/AtomTable.hpp>
@@ -28,6 +31,7 @@
 
 #include <mithril/wksp/Workspace.hpp>
 #include <gluon/core/Utilities.hpp>
+
 #include <format>
 
 using namespace yq;
@@ -91,6 +95,12 @@ DreamMW::DreamMW()
     makeMenu("view", "View",
         QStringList() << "refresh"
     );
+ 
+    //  I do *NOT* know why this isn't working on X11.  
+    //  Qt will otherwise render it, but *NOT* as a window icon. 
+    //  Figure it's something in the file, but I know not what that is.
+    //  However, it's distracting from what I'm working on
+    setWindowIcon(QIcon(":/yquill.svg"));
 }
 
 DreamMW::~DreamMW()
