@@ -15,6 +15,7 @@ namespace yq::mithril {
         Atom                atom(Book);
         Book                book(Atom);
         Class               book_class();
+        Image               icon(Book);
         std::string         key(Book);
         std::string         title(Book);
         bool                exists(Book);

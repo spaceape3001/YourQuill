@@ -10,6 +10,7 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/image/Image.hpp>
 #include <mithrilQt/image/ImageUtils.hpp>
 #include <QIcon>
 
@@ -57,7 +58,7 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  class_icon()
     {
-        static QIcon    qico(":/yq/generic/class.svg");
+        static QIcon    qico(":/generic/class.svg");
         return [](Id i) -> QVariant {
             Class   a   = i.as<Class>();
             if(!a)

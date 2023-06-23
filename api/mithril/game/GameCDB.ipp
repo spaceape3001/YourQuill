@@ -37,6 +37,11 @@ namespace yq::mithril::cdb {
         return is(Atom(ch.id), game_class());
     }
 
+    Image               icon(Game g)
+    {
+        return icon(atom(g));
+    }
+
     std::string         key(Game g)
     {
         return key(atom(g));

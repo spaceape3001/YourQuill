@@ -10,29 +10,38 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/tag/TagCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithrilQt/image/ImageUtils.hpp>
+#include <QIcon>
 
 namespace yq::mithril::column {
     IdColumn    tag_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::tag_id();
-        ret.label       = "ID";
+        ret.fnDisplay           = displayFN::tag_id();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::tag_icon();
+        ret.label               = "ID";
         return ret;
     }
     
     IdColumn    tag_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::tag_key();
-        ret.label       = "Key";
+        ret.fnDisplay           = displayFN::tag_key();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::tag_icon();
+        ret.label               = "Key";
         return ret;
     }
     
     IdColumn    tag_name(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::tag_name();
-        ret.label       = "Name";
+        ret.fnDisplay           = displayFN::tag_name();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::tag_icon();
+        ret.label               = "Name";
         return ret;
     }
 
@@ -45,6 +54,23 @@ namespace yq::mithril::column {
     
     YQ_INVOKE(reg_tag_columns();)
 }
+
+namespace yq::mithril::decorationFN {
+    IdColumn::VariantFN  tag_icon()
+    {
+        static QIcon    qico(":/generic/tag.svg");
+        return [](Id i) -> QVariant {
+            Tag   a   = i.as<Tag>();
+            if(!a)
+                return QVariant();
+            Image   img = cdb::icon(a);
+            if(img)
+                return qIcon(img);
+            return qico;
+        };
+    }
+}
+
 
 namespace yq::mithril::displayFN {
     IdColumn::VariantFN  tag_id()

@@ -9,30 +9,39 @@
 #include "CategoryColumn.hpp"
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
+#include <mithril/image/Image.hpp>
 #include <mithril/category/CategoryCDB.hpp>
+#include <mithrilQt/image/ImageUtils.hpp>
+#include <QIcon>
 
 namespace yq::mithril::column {
     IdColumn    category_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::category_id();
-        ret.label   = "ID";
+        ret.fnDisplay           = displayFN::category_id();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::category_icon();
+        ret.label               = "ID";
         return ret;
     }
     
     IdColumn    category_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::category_key();
-        ret.label       = "Key";
+        ret.fnDisplay           = displayFN::category_key();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::category_icon();
+        ret.label               = "Key";
         return ret;
     }
     
     IdColumn    category_name(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::category_name();
-        ret.label       = "Name";
+        ret.fnDisplay           = displayFN::category_name();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::category_icon();
+        ret.label               = "Name";
         return ret;
     }
 
@@ -44,6 +53,22 @@ namespace yq::mithril::column {
     }
     
     YQ_INVOKE(reg_category_columns();)
+}
+
+namespace yq::mithril::decorationFN {
+    IdColumn::VariantFN  category_icon()
+    {
+        static QIcon    qico(":/generic/category.svg");
+        return [](Id i) -> QVariant {
+            Category   a   = i.as<Category>();
+            if(!a)
+                return QVariant();
+            Image   img = cdb::icon(a);
+            if(img)
+                return qIcon(img);
+            return qico;
+        };
+    }
 }
 
 namespace yq::mithril::displayFN {

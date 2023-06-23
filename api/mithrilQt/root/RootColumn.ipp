@@ -12,6 +12,8 @@
 #include <mithril/root/Root.hpp>
 #include <mithril/root/RootCDB.hpp>
 #include <mithril/root/RootDir.hpp>
+#include <mithrilQt/image/ImageUtils.hpp>
+#include <QIcon>
 
 namespace yq::mithril::column {
     IdColumn    root_id(ColOpts opts)

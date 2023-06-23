@@ -37,6 +37,11 @@ namespace yq::mithril::cdb {
         return is(Atom(ch.id), event_class());
     }
 
+    Image               icon(Event evt)
+    {
+        return Image(atom(evt));
+    }
+
     std::string         key(Event evt)
     {
         return key(atom(evt));

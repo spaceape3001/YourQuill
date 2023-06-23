@@ -15,6 +15,9 @@ namespace yq::mithril {
         IdColumn  folder_key(ColOpts opts=ColOpts());
         IdColumn  folder_name(ColOpts opts=ColOpts());
     }
+    namespace decorationFN {
+        IdColumn::VariantFN  folder_icon();
+    }
     namespace displayFN {
         IdColumn::VariantFN  folder_id();
         IdColumn::VariantFN  folder_key();

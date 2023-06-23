@@ -10,29 +10,38 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/folder/FolderCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithrilQt/image/ImageUtils.hpp>
+#include <QIcon>
 
 namespace yq::mithril::column {
     IdColumn    folder_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::folder_id();
-        ret.label       = "ID";
+        ret.fnDisplay           = displayFN::folder_id();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::folder_icon();
+        ret.label               = "ID";
         return ret;
     }
     
     IdColumn    folder_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::folder_key();
-        ret.label       = "Key";
+        ret.fnDisplay           = displayFN::folder_key();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::folder_icon();
+        ret.label               = "Key";
         return ret;
     }
     
     IdColumn    folder_name(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::folder_name();
-        ret.label       = "Name";
+        ret.fnDisplay           = displayFN::folder_name();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::folder_icon();
+        ret.label               = "Name";
         return ret;
     }
 
@@ -45,6 +54,24 @@ namespace yq::mithril::column {
     
     YQ_INVOKE(reg_folder_columns();)
 }
+
+
+namespace yq::mithril::decorationFN {
+    IdColumn::VariantFN  folder_icon()
+    {
+        static QIcon    qico(":/generic/folder.svg");
+        return [](Id i) -> QVariant {
+            Folder   a   = i.as<Folder>();
+            if(!a)
+                return QVariant();
+            Image   img = cdb::icon(a);
+            if(img)
+                return qIcon(img);
+            return qico;
+        };
+    }
+}
+
 
 namespace yq::mithril::displayFN {
     IdColumn::VariantFN  folder_id()

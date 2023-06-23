@@ -37,6 +37,11 @@ namespace yq::mithril::cdb {
         return is(Atom(ch.id), book_class());
     }
 
+    Image               icon(Book b)
+    {
+        return icon(atom(b));
+    }
+    
     std::string         key(Book b)
     {
         return key(atom(b));

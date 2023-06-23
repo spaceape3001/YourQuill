@@ -58,7 +58,7 @@ namespace yq::mithril::column {
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  atom_icon()
     {
-        static QIcon    qico(":/yq/generic/atom.svg");
+        static QIcon    qico(":/generic/atom.svg");
         return [](Id i) -> QVariant {
             Atom   a   = i.as<Atom>();
             if(!a)

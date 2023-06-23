@@ -17,6 +17,7 @@ namespace yq::mithril {
         Class               event_class();
         bool                exists(Event);
         bool                exists_event(uint64_t);
+        Image               icon(Event);
         std::string         key(Event);
         std::string         title(Event);
     }

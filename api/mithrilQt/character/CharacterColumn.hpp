@@ -16,6 +16,9 @@ namespace yq::mithril {
         IdColumn  character_key(ColOpts opts=ColOpts());
         IdColumn  character_name(ColOpts opts=ColOpts());
     }
+    namespace decorationFN {
+        IdColumn::VariantFN  character_icon();
+    }
     namespace displayFN {
         IdColumn::VariantFN  character_id();
         IdColumn::VariantFN  character_key();

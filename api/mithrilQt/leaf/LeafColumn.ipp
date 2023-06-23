@@ -10,29 +10,38 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithrilQt/image/ImageUtils.hpp>
+#include <QIcon>
 
 namespace yq::mithril::column {
     IdColumn    leaf_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::leaf_id();
-        ret.label       = "ID";
+        ret.fnDisplay           = displayFN::leaf_id();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::leaf_icon();
+        ret.label               = "ID";
         return ret;
     }
     
     IdColumn    leaf_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::leaf_key();
-        ret.label       = "Key";
+        ret.fnDisplay           = displayFN::leaf_key();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::leaf_icon();
+        ret.label               = "Key";
         return ret;
     }
     
     IdColumn    leaf_title(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::leaf_title();
-        ret.label       = "Title";
+        ret.fnDisplay           = displayFN::leaf_title();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::leaf_icon();
+        ret.label               = "Title";
         return ret;
     }
 
@@ -45,6 +54,23 @@ namespace yq::mithril::column {
     
     YQ_INVOKE(reg_leaf_columns();)
 }
+
+namespace yq::mithril::decorationFN {
+    IdColumn::VariantFN  leaf_icon()
+    {
+        static QIcon    qico(":/generic/leaf.svg");
+        return [](Id i) -> QVariant {
+            Leaf   a   = i.as<Leaf>();
+            if(!a)
+                return QVariant();
+            Image   img = cdb::icon(a);
+            if(img)
+                return qIcon(img);
+            return qico;
+        };
+    }
+}
+
 
 namespace yq::mithril::displayFN {
     IdColumn::VariantFN  leaf_id()

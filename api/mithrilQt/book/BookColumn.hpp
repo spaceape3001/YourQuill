@@ -16,6 +16,9 @@ namespace yq::mithril {
         IdColumn  book_title(ColOpts opts=ColOpts());
     }
 
+    namespace decorationFN {
+        IdColumn::VariantFN  book_icon();
+    }
     namespace displayFN {
         IdColumn::VariantFN  book_id();
         IdColumn::VariantFN  book_key();

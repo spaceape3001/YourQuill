@@ -15,6 +15,9 @@ namespace yq::mithril {
         IdColumn  game_key(ColOpts opts=ColOpts());
         IdColumn  game_title(ColOpts opts=ColOpts());
     }
+    namespace decorationFN {
+        IdColumn::VariantFN  game_icon();
+    }
     namespace displayFN {
         IdColumn::VariantFN  game_id();
         IdColumn::VariantFN  game_key();

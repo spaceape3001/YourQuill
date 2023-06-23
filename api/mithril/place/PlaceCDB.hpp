@@ -15,6 +15,7 @@ namespace yq::mithril {
         Atom                atom(Place);
         bool                exists(Place);
         bool                exists_place(uint64_t);
+        Image               icon(Place);
         std::string         key(Place);
         std::string         name(Place);
         Place               place(Atom);

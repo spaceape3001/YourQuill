@@ -15,6 +15,9 @@ namespace yq::mithril {
         IdColumn  leaf_key(ColOpts opts=ColOpts());
         IdColumn  leaf_title(ColOpts opts=ColOpts());
     }
+    namespace decorationFN {
+        IdColumn::VariantFN  leaf_icon();
+    }
     namespace displayFN {
         IdColumn::VariantFN  leaf_id();
         IdColumn::VariantFN  leaf_key();

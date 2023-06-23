@@ -15,6 +15,9 @@ namespace yq::mithril {
         IdColumn  tag_key(ColOpts opts=ColOpts());
         IdColumn  tag_name(ColOpts opts=ColOpts());
     }
+    namespace decorationFN {
+        IdColumn::VariantFN  tag_icon();
+    }
     namespace displayFN {
         IdColumn::VariantFN  tag_id();
         IdColumn::VariantFN  tag_key();

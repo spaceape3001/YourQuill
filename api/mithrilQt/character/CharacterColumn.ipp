@@ -10,29 +10,38 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/character/CharacterCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithrilQt/image/ImageUtils.hpp>
+#include <QIcon>
 
 namespace yq::mithril::column {
     IdColumn    character_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::character_id();
-        ret.label       = "ID";
+        ret.fnDisplay           = displayFN::character_id();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::character_icon();
+        ret.label               = "ID";
         return ret;
     }
     
     IdColumn    character_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::character_key();
-        ret.label       = "Key";
+        ret.fnDisplay           = displayFN::character_key();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::character_icon();
+        ret.label               = "Key";
         return ret;
     }
     
     IdColumn    character_name(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::character_name();
-        ret.label       = "Name";
+        ret.fnDisplay           = displayFN::character_name();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::character_icon();
+        ret.label               = "Name";
         return ret;
     }
 
@@ -44,6 +53,22 @@ namespace yq::mithril::column {
     }
     
     YQ_INVOKE(reg_character_columns();)
+}
+
+namespace yq::mithril::decorationFN {
+    IdColumn::VariantFN  character_icon()
+    {
+        static QIcon    qico(":/generic/character.svg");
+        return [](Id i) -> QVariant {
+            Character   a   = i.as<Character>();
+            if(!a)
+                return QVariant();
+            Image   img = cdb::icon(a);
+            if(img)
+                return qIcon(img);
+            return qico;
+        };
+    }
 }
 
 namespace yq::mithril::displayFN {

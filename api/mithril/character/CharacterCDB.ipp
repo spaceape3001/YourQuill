@@ -38,6 +38,11 @@ namespace yq::mithril::cdb {
         return is(Atom(ch.id), character_class());
     }
 
+    Image                       icon(Character ch)
+    {
+        return icon(atom(ch));
+    }
+
     std::string                 key(Character ch)
     {
         return key(atom(ch));

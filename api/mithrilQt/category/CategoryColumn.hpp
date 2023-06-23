@@ -10,11 +10,13 @@
 #include <mithrilQt/id/IdColumn.hpp>
 
 namespace yq::mithril {
-    struct IdColumn;
     namespace column {
         IdColumn  category_id(ColOpts opts=ColOpts());
         IdColumn  category_key(ColOpts opts=ColOpts());
         IdColumn  category_name(ColOpts opts=ColOpts());
+    }
+    namespace decorationFN {
+        IdColumn::VariantFN  category_icon();
     }
     namespace displayFN {
         IdColumn::VariantFN  category_id();
