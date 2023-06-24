@@ -37,9 +37,14 @@ namespace yq::mithril {
 
     
     
-    template <typename S>
+    template <IdType S>
     class IdTableT : public IdTable {
     public:
+    
+        IdTableT(all_t, QWidget* parent=nullptr) :
+            IdTable( new IdModelT<S>(IdModel::Type::Table, ALL), parent )
+        {
+        }
     
         IdTableT(std::function<std::vector<S>()> fn, QWidget*parent)  : 
             IdTable( new IdModelT<S>(IdModel::Type::Table, IdModelT<S>::toProvider(fn)), parent )

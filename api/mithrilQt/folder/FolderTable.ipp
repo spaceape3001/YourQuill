@@ -7,8 +7,6 @@
 #pragma once
 
 #include "FolderTable.hpp"
-#include "FolderModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  FolderTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     FolderTable::FolderTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Folder>(new FolderModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Folder>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     FolderTable::~FolderTable()
     {
-    }
-    
-    
-    FolderModel*          FolderTable::model()
-    {
-        return static_cast<FolderModel*>(m_model);
-    }
-    
-    const FolderModel*    FolderTable::model() const
-    {
-        return static_cast<const FolderModel*>(m_model);
     }
 }
 

@@ -7,8 +7,6 @@
 #pragma once
 
 #include "TagTable.hpp"
-#include "TagModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  TagTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     TagTable::TagTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Tag>(new TagModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Tag>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -39,15 +37,5 @@ namespace yq::mithril {
     {
     }
     
-    
-    TagModel*          TagTable::model()
-    {
-        return static_cast<TagModel*>(m_model);
-    }
-    
-    const TagModel*    TagTable::model() const
-    {
-        return static_cast<const TagModel*>(m_model);
-    }
 }
 

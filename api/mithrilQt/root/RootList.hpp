@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdList.hpp>
 
 namespace yq::mithril {
-    class RootModel;
     class RootList : public IdListT<Root> {
         Q_OBJECT
     public:
@@ -19,8 +18,5 @@ namespace yq::mithril {
         RootList(all_t, QWidget*parent=nullptr);
         RootList(all_t, Column col, QWidget*parent=nullptr);
         ~RootList();
-        
-        RootModel*          model();
-        const RootModel*    model() const;
     };
 }

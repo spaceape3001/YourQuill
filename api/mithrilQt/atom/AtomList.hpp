@@ -19,8 +19,5 @@ namespace yq::mithril {
         AtomList(all_t, QWidget*parent=nullptr);
         AtomList(all_t, Column col, QWidget*parent=nullptr);
         ~AtomList();
-        
-        AtomModel*          model();
-        const AtomModel*    model() const;
     };
 }

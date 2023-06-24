@@ -7,8 +7,6 @@
 #pragma once
 
 #include "ClassTable.hpp"
-#include "ClassModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  ClassTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     ClassTable::ClassTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Class>(new ClassModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Class>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     ClassTable::~ClassTable()
     {
-    }
-    
-    
-    ClassModel*          ClassTable::model()
-    {
-        return static_cast<ClassModel*>(m_model);
-    }
-    
-    const ClassModel*    ClassTable::model() const
-    {
-        return static_cast<const ClassModel*>(m_model);
     }
 }
 

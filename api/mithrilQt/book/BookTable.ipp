@@ -7,7 +7,6 @@
 #pragma once
 
 #include "BookTable.hpp"
-#include "BookModel.hpp"
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  BookTable::defColumns() 
@@ -27,7 +26,7 @@ namespace yq::mithril {
     }
     
     BookTable::BookTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Book>(new BookModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Book>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -36,16 +35,6 @@ namespace yq::mithril {
 
     BookTable::~BookTable()
     {
-    }
-    
-    BookModel*          BookTable::model()
-    {
-        return static_cast<BookModel*>(m_model);
-    }
-    
-    const BookModel*    BookTable::model() const
-    {
-        return static_cast<const BookModel*>(m_model);
     }
 }
 

@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdList.hpp>
 
 namespace yq::mithril {
-    class EventModel;
     class EventList : public IdListT<Event> {
         Q_OBJECT
     public:
@@ -19,8 +18,5 @@ namespace yq::mithril {
         EventList(all_t, QWidget*parent=nullptr);
         EventList(all_t, Column col, QWidget*parent=nullptr);
         ~EventList();
-        
-        EventModel*          model();
-        const EventModel*    model() const;
     };
 }

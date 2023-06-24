@@ -7,8 +7,6 @@
 #pragma once
 
 #include "EventTable.hpp"
-#include "EventModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  EventTable::defColumns() 
@@ -27,7 +25,7 @@ namespace yq::mithril {
     }
     
     EventTable::EventTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Event>(new EventModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Event>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -36,17 +34,6 @@ namespace yq::mithril {
 
     EventTable::~EventTable()
     {
-    }
-    
-    
-    EventModel*          EventTable::model()
-    {
-        return static_cast<EventModel*>(m_model);
-    }
-    
-    const EventModel*    EventTable::model() const
-    {
-        return static_cast<const EventModel*>(m_model);
     }
 }
 

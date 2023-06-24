@@ -9,6 +9,7 @@
 #include <QAbstractItemModel>
 #include <gluon/delegate/Delegate.hpp>
 #include <mithril/id/Id.hpp>
+#include <mithril/id/IdCDB.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 #include <gluon/core/Utilities.hpp>
 
@@ -17,8 +18,6 @@ class QVariant;
 
 namespace yq::mithril {
     class IdColumn;
-    class IdTable;
-    template <typename> class IdTableT;
     
     class IdModel : public QAbstractItemModel {
         Q_OBJECT
@@ -70,7 +69,7 @@ namespace yq::mithril {
             \param[in]  label   Name of the column
             \param[in]  fn      Functor giving data for S
         */
-        template <cdb_object S, typename T>
+        template <IdType S, typename T>
         void            addColumn(std::string_view label, std::function<T(S)> fn);
 
         /*! \brief Adds the specified columns
@@ -146,7 +145,7 @@ namespace yq::mithril {
             \note Unknown will be reflected for models supporing MULTIPLE 
                     ID types -- thus it's not an error or warning to be unknown.
         */
-        IdType          idType() const { return m_idType; }
+        IdTypeId        idType() const { return m_idType; }
         
         //! Index (structure, see QAbstractItemModel)
         QModelIndex     index(int row, int column, const QModelIndex&parent) const override;
@@ -239,9 +238,6 @@ namespace yq::mithril {
         void            update(const QModelIndex& idx=QModelIndex());
 
     protected:
-    
-        friend class IdTable;
-        template <typename> friend class IdTableT;
         
         
         enum class F {
@@ -296,7 +292,7 @@ namespace yq::mithril {
         AddPolicy                       m_addPolicy     = AddPolicy::None;
         Flags<F>                        m_flags         = {};
         VariantFN                       m_vHeader;
-        IdType                          m_idType        = IdType::Unknown;
+        IdTypeId                        m_idType        = 0;
         
         
         Node*           node(const QModelIndex&);
@@ -331,14 +327,14 @@ namespace yq::mithril {
         void _move(EndCue&&);
     };
 
-    template <cdb_object S, typename T>
+    template <IdType S, typename T>
     void    IdModel::addColumn(std::string_view label, std::function<T(S)> fn)
     {
         using namespace yq::gluon;
         IdColumn    col;
         col.label       = QString::fromUtf8(label.data(), label.size());
         col.fnDisplay   = [fn](Id d) -> QVariant {
-            if( d.type() != id_type_v<S> )
+            if( d.type() != S::ID )
                 return QVariant();
             S   s(d.id());
             if constexpr (std::is_same_v<T,std::string_view> || std::is_same_v<T,std::string>){
@@ -361,7 +357,7 @@ namespace yq::mithril {
         addColumn(std::move(col));
     }
     
-    template <typename S>
+    template <IdType S>
     class IdModelT : public IdModel {
     public:
         static IdProvider toProvider(std::function<std::vector<S>()> fn)
@@ -377,6 +373,17 @@ namespace yq::mithril {
                 return ids(fn(rt));
             };
         }
+        
+        static IdProvider   allProvider()
+        {
+            return []() -> std::vector<Id> {
+                return cdb::all(S::ID, Sorted::YES);
+            };
+        }
+        
+        IdModelT(Type t, all_t, QObject* parent=nullptr) :
+            IdModelT(t, S(), allProvider(), parent) {}
+        
 
         IdModelT(Type t, IdProvider&& p, QObject*parent=nullptr) :
             IdModelT(t, S(), std::move(p), parent) {}
@@ -384,7 +391,7 @@ namespace yq::mithril {
         IdModelT(Type t, S s, IdProvider&& p, QObject*parent=nullptr) :
             IdModel(t, s, std::move(p), parent) 
         {
-            m_idType    = id_type_v<S>;
+            m_idType    = S::ID;
         }
 
         void    setVHeader(std::function<QVariant(S)>fn)

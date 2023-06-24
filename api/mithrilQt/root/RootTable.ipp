@@ -7,8 +7,6 @@
 #pragma once
 
 #include "RootTable.hpp"
-#include "RootModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  RootTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     RootTable::RootTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Root>(new RootModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Root>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     RootTable::~RootTable()
     {
-    }
-    
-    
-    RootModel*          RootTable::model()
-    {
-        return static_cast<RootModel*>(m_model);
-    }
-    
-    const RootModel*    RootTable::model() const
-    {
-        return static_cast<const RootModel*>(m_model);
     }
 }
 

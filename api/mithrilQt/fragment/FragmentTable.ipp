@@ -7,8 +7,6 @@
 #pragma once
 
 #include "FragmentTable.hpp"
-#include "FragmentModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  FragmentTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     FragmentTable::FragmentTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Fragment>(new FragmentModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Fragment>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -39,15 +37,5 @@ namespace yq::mithril {
     {
     }
     
-    
-    FragmentModel*          FragmentTable::model()
-    {
-        return static_cast<FragmentModel*>(m_model);
-    }
-    
-    const FragmentModel*    FragmentTable::model() const
-    {
-        return static_cast<const FragmentModel*>(m_model);
-    }
 }
 

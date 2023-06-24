@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdList.hpp>
 
 namespace yq::mithril {
-    class PlaceModel;
     class PlaceList : public IdListT<Place> {
         Q_OBJECT
     public:
@@ -19,8 +18,5 @@ namespace yq::mithril {
         PlaceList(all_t, QWidget*parent=nullptr);
         PlaceList(all_t, Column col, QWidget*parent=nullptr);
         ~PlaceList();
-        
-        PlaceModel*          model();
-        const PlaceModel*    model() const;
     };
 }

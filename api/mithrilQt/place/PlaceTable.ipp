@@ -7,8 +7,6 @@
 #pragma once
 
 #include "PlaceTable.hpp"
-#include "PlaceModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  PlaceTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     PlaceTable::PlaceTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Place>(new PlaceModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Place>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     PlaceTable::~PlaceTable()
     {
-    }
-    
-    
-    PlaceModel*          PlaceTable::model()
-    {
-        return static_cast<PlaceModel*>(m_model);
-    }
-    
-    const PlaceModel*    PlaceTable::model() const
-    {
-        return static_cast<const PlaceModel*>(m_model);
     }
 }
 

@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class EventModel;
     class EventTable : public IdTableT<Event> {
         Q_OBJECT
     public:
@@ -20,8 +19,5 @@ namespace yq::mithril {
         EventTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         EventTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~EventTable();
-        
-        EventModel*          model();
-        const EventModel*    model() const;
     };
 }

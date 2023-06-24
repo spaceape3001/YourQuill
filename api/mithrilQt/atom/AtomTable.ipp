@@ -7,7 +7,6 @@
 #pragma once
 
 #include "AtomTable.hpp"
-#include "AtomModel.hpp"
 
 
 namespace yq::mithril {
@@ -28,7 +27,7 @@ namespace yq::mithril {
     }
     
     AtomTable::AtomTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Atom>(new AtomModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Atom>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -39,15 +38,5 @@ namespace yq::mithril {
     {
     }
     
-    
-    AtomModel*          AtomTable::model()
-    {
-        return static_cast<AtomModel*>(m_model);
-    }
-    
-    const AtomModel*    AtomTable::model() const
-    {
-        return static_cast<const AtomModel*>(m_model);
-    }
 }
 

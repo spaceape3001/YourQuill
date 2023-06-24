@@ -52,14 +52,14 @@ namespace yq::mithril {
 
         using CreateFN      = IdColumn (*)(ColOpts);
         
-        static bool                     hasColumn(IdType, Column);
-        static std::optional<IdColumn>  create(IdType, Column, ColOpts opts={});
-        static void                     declare(IdType, Column, CreateFN);
+        static bool                     hasColumn(IdTypeId, Column);
+        static std::optional<IdColumn>  create(IdTypeId, Column, ColOpts opts={});
+        static void                     declare(IdTypeId, Column, CreateFN);
         
-        template <cdb_object S>
+        template <IdType S>
         static void                     declare(Column col, CreateFN fn)
         {
-            declare(id_type_v<S>, col, fn);
+            declare(S::ID, col, fn);
         }
         
         struct Repo;

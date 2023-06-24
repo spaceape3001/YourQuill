@@ -7,8 +7,6 @@
 #pragma once
 
 #include "DocumentTable.hpp"
-#include "DocumentModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  DocumentTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     DocumentTable::DocumentTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Document>(new DocumentModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Document>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -39,15 +37,5 @@ namespace yq::mithril {
     {
     }
     
-    
-    DocumentModel*          DocumentTable::model()
-    {
-        return static_cast<DocumentModel*>(m_model);
-    }
-    
-    const DocumentModel*    DocumentTable::model() const
-    {
-        return static_cast<const DocumentModel*>(m_model);
-    }
 }
 

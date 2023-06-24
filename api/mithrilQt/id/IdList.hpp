@@ -37,10 +37,15 @@ namespace yq::mithril {
 
     
     
-    template <typename S>
+    template <IdType S>
     class IdListT : public IdList {
     public:
     
+        IdListT(all_t, QWidget*parent)  : 
+            IdList( new IdModelT<S>(IdModel::Type::List, ALL), parent )
+        {
+        }
+
         IdListT(std::function<std::vector<S>()> fn, QWidget*parent)  : 
             IdList( new IdModelT<S>(IdModel::Type::List, IdModelT<S>::toProvider(fn)), parent )
         {
@@ -50,7 +55,6 @@ namespace yq::mithril {
             IdList( new IdModelT<S>(root, IdModel::Type::List, IdModelT<S>::toProvider(fn)), parent )
         {
         }
-        
 
         IdModelT<S>*            model() { return static_cast<IdModelT<S>*>(m_model); }
         const IdModelT<S>*      model() const { return static_cast<IdModelT<S>*>(m_model); }

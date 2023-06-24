@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdList.hpp>
 
 namespace yq::mithril {
-    class FragmentModel;
     class FragmentList : public IdListT<Fragment> {
         Q_OBJECT
     public:
@@ -20,7 +19,5 @@ namespace yq::mithril {
         FragmentList(all_t, Column col, QWidget*parent=nullptr);
         ~FragmentList();
         
-        FragmentModel*          model();
-        const FragmentModel*    model() const;
     };
 }

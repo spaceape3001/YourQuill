@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdList.hpp>
 
 namespace yq::mithril {
-    class BookModel;
     class BookList : public IdListT<Book> {
         Q_OBJECT
     public:
@@ -19,8 +18,5 @@ namespace yq::mithril {
         BookList(all_t, QWidget*parent=nullptr);
         BookList(all_t, Column col, QWidget*parent=nullptr);
         ~BookList();
-        
-        BookModel*          model();
-        const BookModel*    model() const;
     };
 }

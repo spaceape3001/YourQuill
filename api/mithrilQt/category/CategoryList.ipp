@@ -7,7 +7,6 @@
 #pragma once
 
 #include "CategoryList.hpp"
-#include "CategoryModel.hpp"
 
 namespace yq::mithril {
     CategoryList::CategoryList(all_t, QWidget*parent) : CategoryList(ALL, defColumn, parent)
@@ -15,7 +14,7 @@ namespace yq::mithril {
     }
     
     CategoryList::CategoryList(all_t, Column col, QWidget*parent) : 
-        IdListT<Category>(new CategoryModel(IdModel::Type::List, ALL), parent)
+        IdListT<Category>(ALL, parent)
     {
         model()->setColumn(col);
         model()->reload();
@@ -24,16 +23,6 @@ namespace yq::mithril {
 
     CategoryList::~CategoryList()
     {
-    }
-    
-    CategoryModel*          CategoryList::model()
-    {
-        return static_cast<CategoryModel*>(m_model);
-    }
-    
-    const CategoryModel*    CategoryList::model() const
-    {
-        return static_cast<const CategoryModel*>(m_model);
     }
 }
 

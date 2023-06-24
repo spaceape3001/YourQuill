@@ -7,8 +7,6 @@
 #pragma once
 
 #include "GameTable.hpp"
-#include "GameModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  GameTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     GameTable::GameTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Game>(new GameModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Game>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     GameTable::~GameTable()
     {
-    }
-    
-    
-    GameModel*          GameTable::model()
-    {
-        return static_cast<GameModel*>(m_model);
-    }
-    
-    const GameModel*    GameTable::model() const
-    {
-        return static_cast<const GameModel*>(m_model);
     }
 }
 

@@ -7,7 +7,6 @@
 #pragma once
 
 #include "RootList.hpp"
-#include "RootModel.hpp"
 
 namespace yq::mithril {
     RootList::RootList(all_t, QWidget*parent) : RootList(ALL, defColumn, parent)
@@ -15,7 +14,7 @@ namespace yq::mithril {
     }
     
     RootList::RootList(all_t, Column col, QWidget*parent) : 
-        IdListT<Root>(new RootModel(IdModel::Type::List, ALL), parent)
+        IdListT<Root>(ALL, parent)
     {
         model()->setColumn(col);
         model()->reload();
@@ -24,16 +23,6 @@ namespace yq::mithril {
 
     RootList::~RootList()
     {
-    }
-    
-    RootModel*          RootList::model()
-    {
-        return static_cast<RootModel*>(m_model);
-    }
-    
-    const RootModel*    RootList::model() const
-    {
-        return static_cast<const RootModel*>(m_model);
     }
 }
 

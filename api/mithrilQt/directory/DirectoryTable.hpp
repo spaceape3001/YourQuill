@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class DirectoryModel;
     class DirectoryTable : public IdTableT<Directory> {
         Q_OBJECT
     public:
@@ -20,8 +19,5 @@ namespace yq::mithril {
         DirectoryTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         DirectoryTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~DirectoryTable();
-        
-        DirectoryModel*          model();
-        const DirectoryModel*    model() const;
     };
 }

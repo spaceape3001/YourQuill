@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class FolderModel;
     class FolderTable : public IdTableT<Folder> {
         Q_OBJECT
     public:
@@ -21,8 +20,5 @@ namespace yq::mithril {
         FolderTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         FolderTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~FolderTable();
-        
-        FolderModel*          model();
-        const FolderModel*    model() const;
     };
 }

@@ -7,8 +7,6 @@
 #pragma once
 
 #include "CategoryTable.hpp"
-#include "CategoryModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  CategoryTable::defColumns() 
@@ -27,7 +25,7 @@ namespace yq::mithril {
     }
     
     CategoryTable::CategoryTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Category>(new CategoryModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Category>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -36,17 +34,6 @@ namespace yq::mithril {
 
     CategoryTable::~CategoryTable()
     {
-    }
-    
-    
-    CategoryModel*          CategoryTable::model()
-    {
-        return static_cast<CategoryModel*>(m_model);
-    }
-    
-    const CategoryModel*    CategoryTable::model() const
-    {
-        return static_cast<const CategoryModel*>(m_model);
     }
 }
 

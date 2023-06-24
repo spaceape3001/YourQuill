@@ -7,8 +7,6 @@
 #pragma once
 
 #include "LeafTable.hpp"
-#include "LeafModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  LeafTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     LeafTable::LeafTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Leaf>(new LeafModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Leaf>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     LeafTable::~LeafTable()
     {
-    }
-    
-    
-    LeafModel*          LeafTable::model()
-    {
-        return static_cast<LeafModel*>(m_model);
-    }
-    
-    const LeafModel*    LeafTable::model() const
-    {
-        return static_cast<const LeafModel*>(m_model);
     }
 }
 

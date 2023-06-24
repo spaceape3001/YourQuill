@@ -105,9 +105,18 @@ for i in items:
     if not hasParents:
         print("WARNING... type '%(name)s' has no PARENTS!" % i.args)
 
+def writeIfChanged(fname, text):
+    f   = open(fname, 'r')
+    old = f.read()
+    f.close();
+    if old != text:
+        f   = open(fname, 'w')
+        f.write(text)
+        f.close()
 
-with open('id/id_auto.ipp','w') as f:
-    f.write("""////////////////////////////////////////////////////////////////////////////////
+################################################################################
+
+mith  = """////////////////////////////////////////////////////////////////////////////////
 //
 //  YOUR QUILL
 //
@@ -119,27 +128,30 @@ with open('id/id_auto.ipp','w') as f:
     WARNING... this file is auto generated!
 */
 
-""")
-    for i in items:
-        f.write("""
+"""
+
+for i in items:
+    mith += """
 #include <mithril/%(hroot)s.hpp>
 #include <mithril/%(hroot)sCDB.hpp>   
-""" % i.args) 
+""" % i.args 
 
-    f.write("""
+mith += """
 namespace yq::mithril {
     static constexpr const IdTypeId HIGH_ID = %d;
-    """ % n)
+    """ % n
     
-    f.write("""
+mith += """
     std::string_view  Id::type_name(IdTypeId ct)
     {
-        switch(ct){""")
-    for i in items:
-        f.write("""
+        switch(ct){"""
+
+for i in items:
+    mith += """
         case %(name)s::ID:
-            return "%(name)s"sv;""" % i.args)
-    f.write("""
+            return "%(name)s"sv;""" % i.args
+
+mith += """
         default:
             return "Unknown"sv;
         }
@@ -147,12 +159,14 @@ namespace yq::mithril {
     
     const TypeInfo*  Id::type_info(IdTypeId ct)
     {
-        switch(ct){""")
-    for i in items:
-        f.write("""
+        switch(ct){"""
+        
+for i in items:
+    mith += """
         case %(name)s::ID:
-            return &meta<%(name)s>();""" % i.args)
-    f.write("""
+            return &meta<%(name)s>();""" % i.args
+
+mith +="""
         default:
             return nullptr;
         }
@@ -160,37 +174,39 @@ namespace yq::mithril {
     
     IdTypes  Id::base_types(IdTypeId ct)
     {
-        switch(ct){""")
-    for i in items:
-        f.write("""
+        switch(ct){"""
+        
+for i in items:
+    mith += """
         case %(name)s::ID:
-            return %(name)s::PARENTS;""" % i.args)
+            return %(name)s::PARENTS;""" % i.args
     
-    f.write("""
+mith += """
         default:
             return {};
         }
     }
-    """)
+    """
 
-    f.write("""
+mith += """
     IdTypeId  Id::max_type()
     {
         return HIGH_ID - 1;
     }
-    """)
+    """
 
-    f.write("""
+mith += """
     std::string  Id::key() const
     {
         switch(type()){
-    """)
+    """
     
-    for i in items:
-        f.write("""
+for i in items:
+    mith += """
         case %(name)s::ID:
-            return cdb::key(%(name)s(id()));""" % i.args)
-    f.write("""
+            return cdb::key(%(name)s(id()));""" % i.args
+            
+mith += """
         default:
             return std::string();
         }
@@ -200,20 +216,38 @@ namespace yq::mithril {
 namespace yq::mithril::cdb {
     std::vector<Id>     all(IdTypeId ct, Sorted sorted)
     {
-        switch(ct){""")
-    for i in items:
-        f.write("""
-        case %(name)s::ID:
-            return ids<%(name)s>(all_%(plural)s(sorted));""" % i.args)
+        switch(ct){"""
         
-    f.write("""
+for i in items:
+    mith += """
+        case %(name)s::ID:
+            return ids<%(name)s>(all_%(plural)s(sorted));""" % i.args
+        
+mith += """
         default:
             return std::vector<Id>();
         }
     }
 }    
-""")
+"""
 
+writeIfChanged('id/id_auto.ipp', mith)
 
+################################################################################
 
+mith = """////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+/*
+    WARNING... this file is auto generated!
+*/
+
+"""
+
+writeIfChanged('../mithrilQt/id/id_auto.ipp', mith)
 

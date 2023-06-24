@@ -10,8 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class CategoryModel;
-    
     class CategoryTable : public IdTableT<Category> {
         Q_OBJECT
     public:
@@ -22,8 +20,5 @@ namespace yq::mithril {
         CategoryTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         CategoryTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~CategoryTable();
-        
-        CategoryModel*          model();
-        const CategoryModel*    model() const;
     };
 }

@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdList.hpp>
 
 namespace yq::mithril {
-    class DirectoryModel;
     class DirectoryList : public IdListT<Directory> {
         Q_OBJECT
     public:
@@ -19,8 +18,5 @@ namespace yq::mithril {
         DirectoryList(all_t, QWidget*parent=nullptr);
         DirectoryList(all_t, Column col, QWidget*parent=nullptr);
         ~DirectoryList();
-        
-        DirectoryModel*          model();
-        const DirectoryModel*    model() const;
     };
 }

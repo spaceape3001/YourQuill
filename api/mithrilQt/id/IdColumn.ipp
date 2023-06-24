@@ -4,15 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <tbb/spin_rw_mutex.h>  // first to avoid emit issues
 #include "IdColumn.hpp"
 #include <map>
 
 namespace yq::mithril {
 
     struct IdColumn::Key {
-        IdType  type;
-        Column  column;
+        IdTypeId    type;
+        Column      column;
         constexpr auto operator<=>(const Key&) const noexcept = default;
     };
 
@@ -26,27 +25,24 @@ namespace yq::mithril {
         return s_repo;
     }
     
-    #define REPO    \
-        Repo&   _r  = repo();
-
-    bool             IdColumn::hasColumn(IdType t, Column c)
+    bool             IdColumn::hasColumn(IdTypeId t, Column c)
     {
-        REPO
+        Repo& _r = repo();
         return _r.columns.contains({t,c});
     }
     
-    std::optional<IdColumn>    IdColumn::create(IdType t, Column c, ColOpts opts)
+    std::optional<IdColumn>    IdColumn::create(IdTypeId t, Column c, ColOpts opts)
     {
-        REPO
+        Repo& _r = repo();
         auto i = _r.columns.find({t,c});
         if(i != _r.columns.end())
             return (i->second)(opts);
         return {};
     }
     
-    void             IdColumn::declare(IdType t, Column c, CreateFN fn)
+    void             IdColumn::declare(IdTypeId t, Column c, CreateFN fn)
     {
-        REPO
+        Repo& _r = repo();
         _r.columns[{t,c}]   = std::move(fn);
     }
 

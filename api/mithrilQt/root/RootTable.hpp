@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class RootModel;
     class RootTable : public IdTableT<Root> {
         Q_OBJECT
     public:
@@ -20,8 +19,5 @@ namespace yq::mithril {
         RootTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         RootTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~RootTable();
-        
-        RootModel*          model();
-        const RootModel*    model() const;
     };
 }

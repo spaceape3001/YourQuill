@@ -7,8 +7,6 @@
 #pragma once
 
 #include "DirectoryTable.hpp"
-#include "DirectoryModel.hpp"
-
 
 namespace yq::mithril {
 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     DirectoryTable::DirectoryTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Directory>(new DirectoryModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Directory>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     DirectoryTable::~DirectoryTable()
     {
-    }
-    
-    
-    DirectoryModel*          DirectoryTable::model()
-    {
-        return static_cast<DirectoryModel*>(m_model);
-    }
-    
-    const DirectoryModel*    DirectoryTable::model() const
-    {
-        return static_cast<const DirectoryModel*>(m_model);
     }
 }
 

@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class FieldModel;
     class FieldTable : public IdTableT<Field> {
         Q_OBJECT
     public:
@@ -21,8 +20,5 @@ namespace yq::mithril {
         FieldTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         FieldTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~FieldTable();
-        
-        FieldModel*          model();
-        const FieldModel*    model() const;
     };
 }

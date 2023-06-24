@@ -133,40 +133,7 @@ namespace yq::mithril::displayFN {
     IdColumn::VariantFN     id_key()
     {
         return [](Id i) -> QVariant {
-            switch(i.type()){
-            case IdType::Atom:
-                return qString(cdb::key(Atom(i.id())));
-            case IdType::Book:
-                return qString(cdb::key(Book(i.id())));
-            case IdType::Category:
-                return qString(cdb::key(Category(i.id())));
-            case IdType::Class:
-                return qString(cdb::key(Class(i.id())));
-            case IdType::Directory:
-                return qString(cdb::key(Directory(i.id())));
-            case IdType::Document:
-                return qString(cdb::key(Document(i.id())));
-            case IdType::Event:
-                return qString(cdb::key(Event(i.id())));
-            case IdType::Field:
-                return qString(cdb::key(Field(i.id())));
-            case IdType::Folder:
-                return qString(cdb::key(Folder(i.id())));
-            case IdType::Fragment:
-                return qString(cdb::key(Fragment(i.id())));
-            case IdType::Game:
-                return qString(cdb::key(Game(i.id())));
-            case IdType::Leaf:
-                return qString(cdb::key(Leaf(i.id())));
-            case IdType::Place:
-                return qString(cdb::key(Place(i.id())));
-            case IdType::Root:
-                return qString(cdb::key(Root(i.id())));
-            case IdType::Tag:
-                return qString(cdb::key(Tag(i.id())));
-            default:
-                return QString("??");
-            }
+            qString(i.key());
         };
     }
     

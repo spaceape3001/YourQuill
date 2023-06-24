@@ -12,19 +12,19 @@
 
 namespace yq::mithril {
     struct Id::Repo {
-        std::vector<IdTypes>                    compat;
+        IdTypes                                 compat[HIGH_ID];
         std::unordered_map<id_t, CountU8>       locks;
         tbb::spin_mutex                         mutex;
         
         Repo()
         {
-            compat.resize(HIGH_ID, IdTypes{});
-            for(IdTypeId i=0;i<HIGH_ID;++i)
-                compat[i]    = base_types(i);
+            compat[0] = {};
+            for(IdTypeId i=1;i<HIGH_ID;++i)
+                compat[i]    = base_types(i) | (IdTypeId) i;
                 
             for(size_t n=0;n<5;++n){    // allow for five levels of parentage
-                for(IdTypeId i=0;i<HIGH_ID;++i){     // yeah, O(N^2)... but only one time cost
-                    for(IdTypeId j=0;j<HIGH_ID;++j){
+                for(IdTypeId i=1;i<HIGH_ID;++i){     // yeah, O(N^2)... but only one time cost
+                    for(IdTypeId j=1;j<HIGH_ID;++j){
                         if(compat[i][j])
                             compat[i] |= compat[j];
                     }
@@ -71,6 +71,11 @@ namespace yq::mithril {
         return s_repo;
     }
 
+    bool        Id::compatible(IdTypeId from, IdTypeId to)
+    {
+        Repo& _r = repo();
+        return from && to && (from < HIGH_ID) && (to < HIGH_ID) && _r.compat[from][to];
+    }
 
     Id::Lock    Id::lock(bool rw) const
     {

@@ -21,8 +21,5 @@ namespace yq::mithril {
         BookTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         BookTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~BookTable();
-        
-        BookModel*          model();
-        const BookModel*    model() const;
     };
 }

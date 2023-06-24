@@ -7,8 +7,6 @@
 #pragma once
 
 #include "FieldTable.hpp"
-#include "FieldModel.hpp"
-
 
 namespace yq::mithril {
     std::span<const ColumnSpec>  FieldTable::defColumns() 
@@ -28,7 +26,7 @@ namespace yq::mithril {
     }
     
     FieldTable::FieldTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent) : 
-        IdTableT<Field>(new FieldModel(IdModel::Type::Table, ALL), parent)
+        IdTableT<Field>(ALL, parent)
     {
         model()->addColumns(columns);
         model()->reload();
@@ -37,17 +35,6 @@ namespace yq::mithril {
 
     FieldTable::~FieldTable()
     {
-    }
-    
-    
-    FieldModel*          FieldTable::model()
-    {
-        return static_cast<FieldModel*>(m_model);
-    }
-    
-    const FieldModel*    FieldTable::model() const
-    {
-        return static_cast<const FieldModel*>(m_model);
     }
 }
 

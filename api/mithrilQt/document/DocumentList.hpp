@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdList.hpp>
 
 namespace yq::mithril {
-    class DocumentModel;
     class DocumentList : public IdListT<Document> {
         Q_OBJECT
     public:
@@ -19,8 +18,5 @@ namespace yq::mithril {
         DocumentList(all_t, QWidget*parent=nullptr);
         DocumentList(all_t, Column col, QWidget*parent=nullptr);
         ~DocumentList();
-        
-        DocumentModel*          model();
-        const DocumentModel*    model() const;
     };
 }

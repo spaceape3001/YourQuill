@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class DocumentModel;
     class DocumentTable : public IdTableT<Document> {
         Q_OBJECT
     public:
@@ -20,8 +19,5 @@ namespace yq::mithril {
         DocumentTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         DocumentTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~DocumentTable();
-        
-        DocumentModel*          model();
-        const DocumentModel*    model() const;
     };
 }

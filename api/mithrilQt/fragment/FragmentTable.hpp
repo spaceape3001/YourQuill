@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class FragmentModel;
     class FragmentTable : public IdTableT<Fragment> {
         Q_OBJECT
     public:
@@ -21,8 +20,5 @@ namespace yq::mithril {
         FragmentTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         FragmentTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~FragmentTable();
-        
-        FragmentModel*          model();
-        const FragmentModel*    model() const;
     };
 }

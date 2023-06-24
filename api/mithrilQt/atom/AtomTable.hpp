@@ -10,7 +10,6 @@
 #include <mithrilQt/id/IdTable.hpp>
 
 namespace yq::mithril {
-    class AtomModel;
     class AtomTable : public IdTableT<Atom> {
         Q_OBJECT
     public:
@@ -20,8 +19,5 @@ namespace yq::mithril {
         AtomTable(all_t, std::initializer_list<ColumnSpec> columns, QWidget*parent=nullptr);
         AtomTable(all_t, std::span<const ColumnSpec> columns, QWidget*parent=nullptr);
         ~AtomTable();
-        
-        AtomModel*          model();
-        const AtomModel*    model() const;
     };
 }

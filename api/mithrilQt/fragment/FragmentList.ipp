@@ -7,7 +7,6 @@
 #pragma once
 
 #include "FragmentList.hpp"
-#include "FragmentModel.hpp"
 
 namespace yq::mithril {
     FragmentList::FragmentList(all_t, QWidget*parent) : FragmentList(ALL, defColumn, parent)
@@ -15,7 +14,7 @@ namespace yq::mithril {
     }
     
     FragmentList::FragmentList(all_t, Column col, QWidget*parent) : 
-        IdListT<Fragment>(new FragmentModel(IdModel::Type::List, ALL), parent)
+        IdListT<Fragment>(ALL, parent)
     {
         model()->setColumn(col);
         model()->reload();
@@ -24,16 +23,6 @@ namespace yq::mithril {
 
     FragmentList::~FragmentList()
     {
-    }
-    
-    FragmentModel*          FragmentList::model()
-    {
-        return static_cast<FragmentModel*>(m_model);
-    }
-    
-    const FragmentModel*    FragmentList::model() const
-    {
-        return static_cast<const FragmentModel*>(m_model);
     }
 }
 
