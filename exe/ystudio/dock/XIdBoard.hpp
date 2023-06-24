@@ -17,17 +17,16 @@ using yq::mithril::IdModel;
 using yq::mithril::IdTableView;
 
 
-class XClipboard : public Dock {
+class XIdBoard : public Dock {
     Q_OBJECT
-    YQ_OBJECT_DECLARE(XClipboard, Dock)
 public:    
 
 
     class Model;
     class View;
 
-    XClipboard(QWidget*parent=nullptr);
-    ~XClipboard();
+    XIdBoard(QWidget*parent=nullptr);
+    ~XIdBoard();
 
     Model*          model() { return m_model; }
     const Model*    model() const { return m_model; }
@@ -44,14 +43,14 @@ private:
 };
 
 
-class XClipboard::Model : public IdModel {
+class XIdBoard::Model : public IdModel {
     Q_OBJECT
 public:
     Model(IdProvider&&, QObject* parent=nullptr);
     ~Model();
 };
 
-class XClipboard::View : public IdTableView {
+class XIdBoard::View : public IdTableView {
     Q_OBJECT
 public:
     View(Model*, QWidget*parent=nullptr);

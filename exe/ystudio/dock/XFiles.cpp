@@ -17,8 +17,6 @@ using namespace yq;
 using namespace yq::gluon;
 using namespace yq::mithril;
 
-YQ_OBJECT_IMPLEMENT(XFiles)
-
 namespace {
 
     bool        accept_document(Document d)
@@ -91,9 +89,7 @@ namespace {
     
     void    reg_xfiles()
     {
-        auto w = writer<XFiles>();
-        w.label("File Explorer");
-        w.autoStart();
+        register_dock<XFiles>("File Explorer").autoStart();
     }
     YQ_INVOKE(reg_xfiles();)
 }
@@ -106,8 +102,6 @@ XFiles::XFiles(QWidget*parent) : Dock(parent)
     m_model = new Model();
     m_view  = new View(m_model);
     setWidget(m_view);
-    
-    setWindowTitle("Files");
 }
 
 XFiles::~XFiles()

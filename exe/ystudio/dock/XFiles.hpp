@@ -13,7 +13,6 @@
 
 class XFiles : public Dock {
     Q_OBJECT
-    YQ_OBJECT_DECLARE(XFiles, Dock)
 public:    
 
     class Model;

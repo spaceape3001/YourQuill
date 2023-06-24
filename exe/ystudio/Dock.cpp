@@ -11,31 +11,37 @@
 using namespace yq;
 using namespace yq::gluon;
 
-YQ_OBJECT_IMPLEMENT(Dock)
+struct Dock::Repo {
+    std::vector<Creator>    all;
+};
 
-namespace {
-    struct DockInfoRepo {
-        std::vector<const DockInfo*>    all;
-    
-    };
-    
-    DockInfoRepo& dockRepo()
-    {
-        static DockInfoRepo s_repo;
-        return s_repo;
-    }
+Dock::Repo& Dock::repo()
+{
+    static Repo s_repo;
+    return s_repo;
 }
 
-const std::vector<const DockInfo*>&  DockInfo::all()
+const std::vector<Dock::Creator>&  Dock::all()
 {
-    return dockRepo().all;
+    return repo().all;
 }
 
-
-DockInfo::DockInfo(std::string_view name, const ObjectInfo&parent, const std::source_location& sl) : ObjectInfo(name, parent, sl)
+Dock::Creator::Writer      Dock::reg(const QString& lab, CreateFN&& fn)
 {
-    dockRepo().all.push_back(this);
-    m_label = qString(name);
+    if(lab.isEmpty() || !fn)
+        return { nullptr };
+    
+    Repo& _r    = repo();
+    Creator     cinfo;
+    cinfo.fnCreate  = std::move(fn);
+    cinfo.label     = lab;
+    _r.all.push_back(std::move(cinfo));
+    return { &_r.all.back() };
+}
+
+Dock::Creator::Writer   register_dock(const QString&label, Dock::CreateFN&& fn)
+{
+    return Dock::reg(label, std::move(fn));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

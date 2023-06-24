@@ -20,17 +20,16 @@ add_executable(${PROJECT_NAME}
     DreamMW.hpp 
     DreamMW.cpp
 
-
     #Explorer.cpp
     #Explorer.hpp
 
     WebBrowser.hpp
     WebBrowser.cpp
 
-    dock/XClipboard.hpp
-    dock/XClipboard.cpp
     dock/XFiles.hpp
     dock/XFiles.cpp
+    dock/XIdBoard.hpp
+    dock/XIdBoard.cpp
 
     main.cpp 
     ystudio.qrc

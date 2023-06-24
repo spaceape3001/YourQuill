@@ -51,29 +51,25 @@ DreamMW::DreamMW()
     updateTitle();
     
     std::vector<QAction*>   dockActions;
-    for(const DockInfo* di : DockInfo::all()){
-        if(!di->isCreatable())
-            continue;
-        Object* obj = di->create();
-        if(!obj)
-            continue;
-        
-        Dock*   d   = static_cast<Dock*>(obj);
+    for(const auto& di : Dock::all()){
+    
+        Dock*   d   = (di.fnCreate)(nullptr);
         
         QAction* act    = new QAction;
         d->m_action = act;
 
-        act->setText(di->label());
-        act->setIcon(di->icon());
-        act->setShortcut(di->shortcut());
-        act->setToolTip(di->toolTip());
+        act->setText(di.label);
+        act->setIcon(di.icon);
+        act->setShortcut(di.shortcut);
+        act->setToolTip(di.toolTip);
         act->setCheckable(true);
-        act->setChecked(di->isAutoStart());
-        d->setVisible(di->isAutoStart());
-        d->setAllowedAreas(di->allowedAreas());
+        act->setChecked(di.autoStart);
+        d->setVisible(di.autoStart);
+        d->setAllowedAreas(di.allowedAreas);
+        d->setWindowTitle(di.label);
 
         connect(act, &QAction::triggered, d, &Dock::triggered);
-        addDock(di->startArea(), d);
+        addDock(di.startArea, d);
         dockActions.push_back(act);
     }
     
