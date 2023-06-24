@@ -16,11 +16,6 @@ using namespace yq::mithril;
 YQ_OBJECT_IMPLEMENT(XClipboard)
 
 namespace {
-    std::vector<Id> empty_provider()
-    {
-        return std::vector<Id>();
-    }
-
     void    reg_xclipboard()
     {
         auto w = writer<XClipboard>();
@@ -33,7 +28,21 @@ namespace {
 
 XClipboard::XClipboard(QWidget*parent) : Dock(parent)
 {
-    m_model = new Model();
+    m_model = new Model([this]()->std::vector<Id>{
+        return m_data;
+    });
+    
+    auto kCol   = column::id_key(ColOpt::Icon);
+    auto nCol   = column::id_label();
+    
+    kCol.fnDropId   = nCol.fnDropId = [this](Id, std::span<const Id> ids) -> std::error_code {
+        this -> append(ids);
+        return std::error_code();
+    };
+    
+    m_model -> addColumn(std::move(kCol));
+    m_model -> addColumn(std::move(nCol));
+    
     m_view  = new View(m_model);
     setWidget(m_view);
     
@@ -44,14 +53,21 @@ XClipboard::~XClipboard()
 {
 }
 
+void        XClipboard::append(std::span<const Id> ids)
+{
+    std::set<Id>    lut(m_data.begin(), m_data.end());
+    for(Id i : ids){
+        auto [j,b]  = lut.insert(i);
+        if(b)
+            m_data.push_back(i);
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XClipboard::Model::Model(QObject* parent) : IdModel(Type::Table, Id(), empty_provider)
+XClipboard::Model::Model(IdProvider&&prov, QObject* parent) : IdModel(Type::Table, Id(), std::move(prov))
 {
-    m_enableReload  = false;
-    addColumn(column::id_key(ColOpt::Icon));
-    addColumn(column::id_label());
 }
 
 XClipboard::Model::~Model()

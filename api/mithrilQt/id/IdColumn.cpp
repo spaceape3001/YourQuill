@@ -4,8 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
+#include <tbb/spin_rw_mutex.h>  // first to avoid emit issues
 #include "IdColumn.hpp"
 #include <map>
 

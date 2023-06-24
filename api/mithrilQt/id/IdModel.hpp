@@ -41,38 +41,162 @@ namespace yq::mithril {
             Tree
         };
 
-        void            addColumn(ColumnSpec);
+        /*! \brief Adds a column
+        
+            This is the main column-adding routine.  It blindly
+            accepts the given column, moving it into the vector
+            of columns.
+        */
         void            addColumn(IdColumn&&);
-        void            addColumn(Column, ColOpts={});
-        void            addColumn(size_t before, IdColumn&&);
 
+        /*! \brief Adds a column
+        
+            This is a convience function for adding a column by 
+            specification.  It'll call IdColumn::create() for
+            you, append it in.
+        */
+        void            addColumn(ColumnSpec);
+
+        /*! \brief Adds a column
+        
+            This adds a template based column, giving data back.  
+            
+            \note   This has less granular control than the IdColumn&&
+                    method, but good for fast & dirty
+            
+            \tparam S   Type of ID object
+            \tparam T   Data type
+            
+            \param[in]  label   Name of the column
+            \param[in]  fn      Functor giving data for S
+        */
         template <cdb_object S, typename T>
-        void            addColumn(std::string_view label, std::function<T(S)>);
+        void            addColumn(std::string_view label, std::function<T(S)> fn);
 
+        /*! \brief Adds the specified columns
+        */
         void            addColumns(std::span<const Column>);
-        void            addColumns(std::span<const ColumnSpec>);
-    
-        const IdColumn* column(size_t) const;
-        size_t          columnCount() const;
-        int             columnCount(const QModelIndex&) const override;
-        QVariant        data(const QModelIndex&, int role) const override;
-        Qt::ItemFlags   flags(const QModelIndex&) const override;
-        QVariant        headerData(int, Qt::Orientation, int) const override;
-        QModelIndex     index(int row, int column, const QModelIndex&parent) const override;
-        QModelIndex     parent(const QModelIndex&) const override;
-        int             rowCount(const QModelIndex& idx=QModelIndex()) const override;
-        bool            setData(const QModelIndex&, const QVariant&, int ) override;
 
+        /*! \brief Adds the specified columns
+        */
+        void            addColumns(std::span<const ColumnSpec>);
+        
+        bool            addEnabled() const;
+        
+        //! Current add policy
+        AddPolicy       addPolicy() const { return m_addPolicy; }
+        
+        /*! \brief Gets the specified column
+        
+            \note Ownership is not transferred, and the pointer may
+                become invalid with the next column add/insert.
+                
+            \param[in] n    0...N-1 (column count) index into the column vector
+            \return Pointer to that element, nullptr if out-of-bounds
+        */
+        const IdColumn* column(size_t n) const;
+        
+        //! \brief Number of columns
+        size_t          columnCount() const;
+
+        //! \brief Number of columns (see QAbstractItemModel)
+        int             columnCount(const QModelIndex&) const override;
+        
+        //! Reference to our column vector
+        const std::vector<IdColumn>& columns() const { return m_columns; }
+
+        //! Data of the model (see QAbstractItemModel)
+        QVariant        data(const QModelIndex&, int role) const override;
+
+        bool            dropEnabled() const;
+        
+        /*! \brief Drop Policy
+        
+            This is the drop policy, an enable/disable flag.  It stil
+            requires that columns/handlers support dropping.
+        */
+        bool            dropPolicy() const;
+
+        /*! \brief Item flags for cell
+        
+            \note Needed for QAbstractItemModel
+        */
+        Qt::ItemFlags   flags(const QModelIndex&) const override;
+
+        /*! \brief Horizontal Header Enabled
+        
+            TRUE if the horizontal header's been enabled
+        */
+        bool            hasHorizontalHeader() const;
+
+        /*! \brief Vertical Header Enabled
+        
+            TRUE if the vertical header's been enabled
+        */
+        bool            hasVerticalHeader() const;
+
+        //! Header data (see QAbstractItemModel)
+        QVariant        headerData(int, Qt::Orientation, int) const override;
+        
+        //! Id for given cell
+        Id              id(const QModelIndex&) const;
+        
+        /*! \brief Id Type of this model
+        
+            \note Unknown will be reflected for models supporing MULTIPLE 
+                    ID types -- thus it's not an error or warning to be unknown.
+        */
+        IdType          idType() const { return m_idType; }
+        
+        //! Index (structure, see QAbstractItemModel)
+        QModelIndex     index(int row, int column, const QModelIndex&parent) const override;
+
+        /*! \brief Inserts a column
+            
+            Inserts a column before the specified index.
+            *IF* before is too high, this will be equivalent to "add"
+        */
+        void            insertColumn(size_t before, IdColumn&&);
+
+        //! TRUE if this is a list model
         bool            isList() const { return m_type == Type::List; }
+        
+        //! TRUE if this is a table model
         bool            isTable() const { return m_type == Type::Table; }
+        
+        //! TRUE if this is a tree model
         bool            isTree() const { return m_type == Type::Tree; }
 
+        //! Parent node (structure, see QAbstractItemModel)
+        QModelIndex     parent(const QModelIndex&) const override;
+        
+        //! TRUE if read-only is enabled
+        bool            readOnly() const;
+
+        //! True if the reload capability is enabled
+        bool            reloadEnabled() const;
+
+        Id              rootId() const;
+
+        //! Row count (see QAbstractItemModel)
+        int             rowCount(const QModelIndex& idx=QModelIndex()) const override;
+
+        //! Sets the FIRST column
         void            setColumn(ColumnSpec);
-        void            setColumn(Column, ColOpts={});
+        //! Sets the FIRST column
         void            setColumn(IdColumn&&);
+
+        //! Sets the specified column
         void            setColumn(size_t, IdColumn&&);
 
+        //! Sets ALL the columns
         void            setColumns(std::vector<IdColumn>&&);
+        
+        //! Sets data (see QAbstractItemModel)
+        bool            setData(const QModelIndex&, const QVariant&, int ) override;
+        
+        //! Sets the drop policy
+        void            setDropPolicy(bool);
         
         //! Sets new filters (for all queries)
         //! \note Call a reload after setting filters
@@ -90,7 +214,12 @@ namespace yq::mithril {
         //! Reset on this!
         void            setProvider(IdProvider&&);
 
-        const std::vector<IdColumn>& columns() const { return m_columns; }
+
+        //! Enabled the showing of horizontal header data
+        void            showHorizontalHeader(bool);
+
+        //! Enabled the showing of vertical  header data
+        void            showVerticalHeader(bool);
 
 
         class EndCue;
@@ -98,7 +227,9 @@ namespace yq::mithril {
         //! If you're doing something big... reset and save the end-cue to destruct (it'll call end())
         [[nodiscard]] EndCue   resetModel();
 
+
         IdModel(Type, Id, IdProvider&&, QObject*parent=nullptr);
+        virtual ~IdModel();
 
     public slots:
         //! Reload/reset the list with current data
@@ -111,6 +242,27 @@ namespace yq::mithril {
     
         friend class IdTable;
         template <typename> friend class IdTableT;
+        
+        
+        enum class F {
+            //! Obvious, in read only mode
+            ReadOnly    = 0,
+            
+            ReloadEnabled,
+            
+            //! TRUE if any columns are detected to be add-capable
+            AnyAdd,     
+            
+            //! TRUE if any columns are detected to be drop-capable
+            AnyDrop,
+            
+            DropPolicy,
+            
+            HorizontalHeader,
+            VerticalHeader
+            
+        };
+        
         
         struct Node {
             Id const                    id;
@@ -142,26 +294,16 @@ namespace yq::mithril {
         std::vector<IdColumn>           m_columns;
         std::vector<IdFilter>           m_filters;
         AddPolicy                       m_addPolicy     = AddPolicy::None;
-        bool                            m_readOnly      = false;
-        bool                            m_anyColAdd     = false;    // true if ANY column can trigger adds
-        bool                            m_dropEnabled   = false;
-        bool                            m_showVHeader   = true;
-        bool                            m_showHHeader   = true;
-        bool                            m_enableReload  = true;
+        Flags<F>                        m_flags         = {};
         VariantFN                       m_vHeader;
         IdType                          m_idType        = IdType::Unknown;
         
-        virtual ~IdModel();
         
         Node*           node(const QModelIndex&);
         const Node*     node(const QModelIndex&) const;
         
-        
-        
-
         void            _load();
         void            _updateCols();
-
     };
     
     class IdModel::EndCue {

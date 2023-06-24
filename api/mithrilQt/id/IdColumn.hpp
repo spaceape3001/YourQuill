@@ -24,16 +24,20 @@ namespace yq::mithril {
         using UPtr      = std::unique_ptr<const IdColumn>;
 
         using VariantFN     = std::function<QVariant(Id)>;
-        using AddFN         = std::function<Id(QVariant)>;
-        using SetFN         = std::function<std::error_code(Id, QVariant)>;
-        using DropFN        = std::function<std::error_code(Id, std::span<const Id>)>;
+        using AddFN         = std::function<Id(const QVariant&)>;
+        using SetFN         = std::function<std::error_code(Id, const QVariant&)>;
+        using DropIdFN      = std::function<std::error_code(Id, std::span<const Id>)>;
+        using DropFN        = std::function<std::error_code(Id, const QVariant&)>;
+        using MimeListFN    = std::function<QStringList(Id)>;
         using DelegateFN    = std::function<Delegate*()>;
 
         AddFN           fnAdd;              //!< Call if column is add-aware
         VariantFN       fnDecoration;       //!< Decoration data
         VariantFN       fnDisplay;          //!< Display data (mandatory)
         DelegateFN      fnDelegate;         //!< Delegate creator (can be non-existent)
-        DropFN          fnDrop;             //!< Drop data here
+        DropIdFN        fnDropId;           //!< Drop Id data here
+        DropFN          fnDrop;             //!< Drop other data here
+        MimeListFN      fnDropMime;         //!< Type of mimes allowed
         VariantFN       fnEdit;             //!< Edit data expected
         SetFN           fnSet;              //!< May work
         VariantFN       fnSort;             //!< Overrides display

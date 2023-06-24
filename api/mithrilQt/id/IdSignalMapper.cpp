@@ -44,3 +44,4 @@ namespace yq::mithril {
     }
 }
 
+#include "moc_IdSignalMapper.cpp"

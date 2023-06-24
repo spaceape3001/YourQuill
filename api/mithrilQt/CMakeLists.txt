@@ -137,7 +137,7 @@ add_library(${PROJECT_NAME} SHARED
     game/game.cpp
 
     id/IdColumn.hpp
-    id/IdColumn.ipp
+    id/IdColumn.cpp
     id/IdFunctor.hpp
     id/IdFunctor.cpp
     id/IdList.hpp
@@ -147,9 +147,9 @@ add_library(${PROJECT_NAME} SHARED
     id/IdMimeList.hpp
     id/IdMimeList.ipp
     id/IdModel.hpp
-    id/IdModel.ipp
+    id/IdModel.cpp
     id/IdSignalMapper.hpp
-    id/IdSignalMapper.ipp
+    id/IdSignalMapper.cpp
     id/IdTable.hpp
     id/IdTable.ipp
     id/IdTableView.hpp
