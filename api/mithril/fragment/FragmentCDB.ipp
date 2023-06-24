@@ -10,7 +10,6 @@
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/db/IDLock.hpp>
 #include <mithril/directory/DirectoryCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/root/RootDir.hpp>
@@ -156,9 +155,9 @@ namespace yq::mithril::cdb {
     ByteArray           frag_bytes(Fragment f, cdb_options_t opts)
     {
         std::filesystem::path   p = path(f);
-        Fragment::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk = Fragment::Lock::read(f);
+            lk = Id(f).lock(false);
             if(!lk){
                 cdbWarning << "Unable to get read lock on fragment: " << p;
                 return ByteArray();
@@ -182,9 +181,9 @@ namespace yq::mithril::cdb {
     std::string              frag_string(Fragment f, cdb_options_t opts)
     {
         std::filesystem::path   p = path(f);
-        Fragment::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk = Fragment::Lock::read(f);
+            lk = Id(f).lock(false);
             if(!lk){
                 cdbWarning << "Unable to get read lock on fragment: " << p;
                 return std::string();

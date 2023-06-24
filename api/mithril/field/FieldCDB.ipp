@@ -13,8 +13,7 @@
 #include <meta/TypeInfo.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldFile.hpp>
-#include <mithril/db/NKI.hpp>
-#include <mithril/db/IDLock.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
@@ -29,7 +28,7 @@ namespace yq::mithril::cdb {
     namespace {
         inline std::string field_filename(std::string_view k)
         {
-            return make_filename(k, Field::szExtension);
+            return make_filename(k, Field::EXTENSION);
         }
     }
 
@@ -195,9 +194,9 @@ namespace yq::mithril::cdb {
             return Field::SharedFile();
             
         std::filesystem::path       fp  = path(f);
-        Fragment::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk  = Fragment::Lock::read(f);
+            lk  = Id(f).lock(false);
             if(!lk){
                 yWarning() << "Unable to get read lock on fragment: " << fp;
                 return Field::SharedFile();
@@ -304,9 +303,9 @@ namespace yq::mithril::cdb {
             
         if(fragments_count(doc))
             return f;
-        Field::Lock   lk;
+        Id::Lock   lk;
         if(!(opts & DONT_LOCK))
-            lk  = Field::Lock::write(f);
+            lk  = Id(f).lock(true);
 
         Field::SharedFile    td  = writable(f, rt, DONT_LOCK);
         td -> name      = kf;

@@ -19,7 +19,7 @@ namespace yq {
         
         namespace cdb {
                 //! Returns a vector of all images in the cache
-            std::vector<Image>      all_images();
+            std::vector<Image>      all_images(Sorted sorted=Sorted{});
             
                 //! Returns a count of the available images
             size_t                  all_images_count();
@@ -54,6 +54,9 @@ namespace yq {
                 //! Icon for root_dir
             Image                   icon(const RootDir*);
 
+                //! For meta-generated code... pretty close to a NOP
+            Image                   icon(Image);
+
                 //! Returns an image from a document, if it already exists in the cache
             Image                   image(Document);
             
@@ -72,12 +75,15 @@ namespace yq {
                 //! TRUE if it's a raster type
             bool                    is_raster(Image);
 
+            std::string             key(Image);
+
                 //! Mime type for image
             ContentType             mime_type(Image);
             
             //! Last Modified time code
             uint64_t                modified(Image);
 
+            std::string             name(Image);
             
                 //! Thumnail for image
             Thumbnail               thumbnail(Image, SizeDesc sz=SizeDesc::Small);

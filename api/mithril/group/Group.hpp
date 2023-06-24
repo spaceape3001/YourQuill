@@ -7,15 +7,17 @@
 #pragma once
 
 #include <cstdint>
-#include <mithril/preamble.hpp>
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
     /*! \brief Group (of entities/etc) in the cache database */
     struct Group {
-        using Lock = IDLock<Group>;
+        static constexpr const IdTypeId ID      = 16;
+        static constexpr const IdTypes  PARENTS = Atom::ID;
+
         uint64_t            id = 0ULL;
         constexpr auto    operator<=>(const Group&rhs) const = default; 
-        constexpr operator bool() const { return id; }
+        constexpr operator uint64_t() const { return id; }
     };
 }
 YQ_TYPE_DECLARE(yq::mithril::Group)

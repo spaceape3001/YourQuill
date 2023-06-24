@@ -10,7 +10,7 @@
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/db/NKI.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/Fragment.hpp>
 #include <mithril/root/RootDir.hpp>

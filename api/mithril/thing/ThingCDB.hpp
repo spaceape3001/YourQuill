@@ -13,9 +13,12 @@ namespace yq::mithril {
     namespace cdb {
         std::vector<Thing>  all_things(Sorted sorted=Sorted());
         Atom                atom(Thing);
-        Thing               thing(Atom);
-        Class               thing_class();
         bool                exists(Thing);
         bool                exists_thing(uint64_t);
+        Image               icon(Thing);
+        std::string         key(Thing);
+        std::string         name(Thing);
+        Thing               thing(Atom);
+        Class               thing_class();
     }
 }

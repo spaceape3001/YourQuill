@@ -11,7 +11,7 @@
 #include <initializer_list>
 #include <mithril/enum/SizeDesc.hpp>
 #include <math/shape/Size2.hpp>
-#include <mithril/preamble.hpp>
+#include <mithril/fragment/Fragment.hpp>
 
 namespace yq {
     namespace mithril {
@@ -19,9 +19,11 @@ namespace yq {
         /*! \brief Represents an image in the database
         */
         struct Image {
-            static constexpr const Size2U    kSmall  = { 32, 24 };
-            static constexpr const Size2U    kMedium = { 64, 48 };
-            static constexpr const Size2U    kLarge  = { 128, 96 };
+            static constexpr const IdTypeId ID      = 17;
+            static constexpr const IdTypes  PARENTS  = Fragment::ID;
+            static constexpr const Size2U   kSmall  = { 32, 24 };
+            static constexpr const Size2U   kMedium = { 64, 48 };
+            static constexpr const Size2U   kLarge  = { 128, 96 };
             
             static constexpr const std::initializer_list<const char*>   kSupportedExtensions = {
                 "svg", "png", "gif", "jpg", "bmp", "tif", "tiff" 

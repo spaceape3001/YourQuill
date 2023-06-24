@@ -6,21 +6,21 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
 
 namespace yq::mithril {
-    template <typename> class IDLock;
-
     /*! User in the cache database
     */
     struct User {
-        static constexpr const char*    szExtension = "user";
+        static constexpr const IdTypeId ID          = 24;
+        static constexpr const IdTypes  PARENTS     = Document::ID;
+
+        static constexpr const char*    EXTENSION = "user";
         struct Info;
         struct Data;
         class File;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
-        using Lock = IDLock<User>;
         
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const User&rhs) const noexcept = default;

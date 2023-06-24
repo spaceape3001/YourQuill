@@ -6,15 +6,17 @@
 
 #pragma once
 
-#include <cstdint>
-#include <mithril/preamble.hpp>
+#include <mithril/entity/Entity.hpp>
 
 namespace yq::mithril {
     /*! \brief Character in the cache database */
     struct Character {
-        uint64_t            id = 0ULL;
+        static constexpr const IdTypeId ID      = 5;
+        static constexpr const IdTypes  PARENTS = Entity::ID;
+
+        uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Character&rhs) const = default; 
-        constexpr operator bool() const { return id; }
+        constexpr operator uint64_t() const { return id; }
     };
 }
 YQ_TYPE_DECLARE(yq::mithril::Character)

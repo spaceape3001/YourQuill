@@ -24,12 +24,12 @@ class Dock : public QDockWidget {
     Q_OBJECT
 public:
 
-    using CreateFN  = std::function<Dock*(QWidget*)>;
+    using FNCreate  = std::function<Dock*()>;
 
-    struct Creator {
+    struct Info {
         class Writer;
     
-        CreateFN            fnCreate;
+        FNCreate            fnCreate;
         QString             label;
         QString             toolTip;
         QKeySequence        shortcut;
@@ -39,8 +39,8 @@ public:
         bool                autoStart       = false;
     };
 
-    static Creator::Writer  reg(const QString&, CreateFN&&);
-    static const std::vector<Creator>&  all();
+    static Info::Writer  reg(const QString&, FNCreate&&);
+    static const std::vector<Info>&  all();
 
 
     Dock(QWidget*parent=nullptr);
@@ -63,7 +63,7 @@ private:
     static Repo&    repo();
 };
 
-class Dock::Creator::Writer {
+class Dock::Info::Writer {
 public:
 
     Writer(){}
@@ -107,21 +107,21 @@ public:
 private:
     friend class Dock;
     
-    Writer(Dock::Creator* c) : m_info(c) {}
+    Writer(Dock::Info* c) : m_info(c) {}
     
-    Creator*    m_info  = nullptr;
+    Info*    m_info  = nullptr;
 
 };
 
 template <typename D>
 concept Dockable = (std::derived_from<D,Dock> && !std::same_as<D,Dock>); 
 
-Dock::Creator::Writer   register_dock(const QString&, Dock::CreateFN&&);
+Dock::Info::Writer   register_dock(const QString&, Dock::FNCreate&&);
 
 template <Dockable D>
-Dock::Creator::Writer   register_dock(const QString& label)
+Dock::Info::Writer   register_dock(const QString& label)
 {
-    return register_dock(label, [](QWidget*parent) -> Dock* { return new D(parent); });
+    return register_dock(label, []() -> Dock* { return new D; });
 }
 
 

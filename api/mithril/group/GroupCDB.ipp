@@ -21,6 +21,16 @@ namespace yq::mithril::cdb {
         return Atom{ ch.id };
     }
 
+    bool  exists(Group ch)
+    {
+        return exists_group(ch.id);
+    }
+
+    bool  exists_group(uint64_t i)
+    {
+        return is(Atom(i), group_class());
+    }
+
     Group  group(Atom at)
     {
         return is(at, group_class()) ? Group(at.id) : Group();
@@ -32,9 +42,19 @@ namespace yq::mithril::cdb {
         return cls;
     }
 
-    bool  exists(Group ch)
+    Image               icon(Group g)
     {
-        return is(Atom(ch.id), group_class());
+        return icon(atom(g));
+    }
+
+    std::string         key(Group g)
+    {
+        return key(atom(g));
+    }
+    
+    std::string         name(Group g)
+    {
+        return name(atom(g));
     }
     
 }

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
 
 namespace yq::mithril {
 
@@ -15,11 +15,12 @@ namespace yq::mithril {
         This structure represents an atom classification in the cache
     */
     struct Category {
-        static constexpr const char*    szExtension = "cat";
+        static constexpr const IdTypeId ID          = 4;
+        static constexpr const IdTypes  PARENTS     = Document::ID;
+        static constexpr const char*    EXTENSION   = "cat";
         struct Info;
         struct File;
         struct Data;
-        using Lock = IDLock<Category>;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
         

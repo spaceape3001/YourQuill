@@ -18,38 +18,38 @@ namespace yq::mithril {
     public:
         CacheStatement();
 
-        template <cdb_object U>
+        template <IdType U>
         U           as()
         {
             return U{u64()};
         }
         
-        template <cdb_object U>
+        template <IdType U>
         U           as(uint64_t i)
         {
             return U{u64(i)};
         }
 
-        template <cdb_object U>
+        template <IdType U>
         U           as(uint64_t i, uint64_t j)
         {
             return U{u64(i, j)};
         }
 
-        template <cdb_object U>
+        template <IdType U>
         U           as(uint64_t i, std::string_view j)
         {
             return U{u64(i, j)};
         }
 
 
-        template <cdb_object U>
+        template <IdType U>
         U           as(std::string_view  i)
         {
             return U{u64(i)};
         }
 
-        template <cdb_object U>
+        template <IdType U>
         U           as(const std::filesystem::path& i)
         {
             return U{u64(i)};
@@ -138,7 +138,7 @@ namespace yq::mithril {
         string_set_t   sset();
         string_set_t   sset(uint64_t);
         
-        template <cdb_object U>
+        template <IdType U>
         std::vector<U>   vec()
         {
             std::vector<U>  ret;
@@ -149,7 +149,7 @@ namespace yq::mithril {
             return ret;
         }
         
-        template <cdb_object U>
+        template <IdType U>
         std::vector<U>   vec(uint64_t i)
         {
             std::vector<U>  ret;
@@ -161,7 +161,7 @@ namespace yq::mithril {
             return ret;
         }
         
-        template <cdb_object U>
+        template <IdType U>
         std::vector<U>   vec(uint64_t i, uint64_t j)
         {
             std::vector<U>  ret;
@@ -174,7 +174,7 @@ namespace yq::mithril {
             return ret;
         }
 
-        template <cdb_object U>
+        template <IdType U>
         std::vector<U>   vec(uint64_t i, std::string_view  j)
         {
             std::vector<U>  ret;
@@ -187,7 +187,7 @@ namespace yq::mithril {
             return ret;
         }
 
-        template <cdb_object U>
+        template <IdType U>
         std::vector<U>   vec(std::string_view  i)
         {
             std::vector<U>  ret;

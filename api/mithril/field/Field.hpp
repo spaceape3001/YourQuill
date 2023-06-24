@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
 
 namespace yq::mithril {
 
@@ -20,12 +20,13 @@ namespace yq::mithril {
         it's file name and it's class id in the cdb will be 0.  
     */
     struct Field {
-        static constexpr const char*    szExtension = "field";
+        static constexpr const IdTypeId ID          = 11;
+        static constexpr const IdTypes  PARENTS     = Document::ID;
+        static constexpr const char*    EXTENSION   = "field";
         struct Info;
         struct Data;
         struct Rank;
         class File;
-        using Lock = IDLock<Field>;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
 

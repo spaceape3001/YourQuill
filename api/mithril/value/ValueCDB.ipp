@@ -12,6 +12,12 @@
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
+    std::vector<Value>      all_values(Sorted sorted)
+    {
+        static thread_local CacheQuery s("SELECT id FROM Vals");
+        return s.vec<Value>();
+    }
+
     std::string     brief(Value v)
     {
         static thread_local CacheQuery s("SELECT brief FROM Vals WHERE id=?");
@@ -71,6 +77,11 @@ namespace yq::mithril::cdb {
         static thread_local CacheQuery s("SELECT field FROM Vals WHERE id=?");
         return s.as<Field>(v.id);
     }
+
+    Image                   icon(Value)
+    {
+        return Image(); // TODO
+    }
     
     Value::Info     info(Value v)
     {
@@ -85,6 +96,16 @@ namespace yq::mithril::cdb {
             ret.data    = s.v_string(3);
         }
         return ret;
+    }
+    
+    std::string     key(Value)
+    {
+        return std::string(); // TODO
+    }
+    
+    std::string     name(Value)
+    {
+        return std::string(); // TODO
     }
     
     Value           value(uint64_t i)

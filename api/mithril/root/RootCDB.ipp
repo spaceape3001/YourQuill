@@ -56,7 +56,7 @@ namespace yq::mithril::cdb {
         return s.size(rt->id);
     }
 
-    std::vector<Root>           all_roots()
+    std::vector<Root>           all_roots(Sorted sorted)
     {
         size_t  n   = all_roots_count();
         std::vector<Root>   ret;
@@ -153,6 +153,11 @@ namespace yq::mithril::cdb {
         return child_fragments(directory(rt), sorted);
     }
 
+    Image                       icon(Root)
+    {
+        return Image();     // TODO
+    }
+
     std::string             key(const RootDir*rt)
     {
         if(!rt)
@@ -163,6 +168,12 @@ namespace yq::mithril::cdb {
     std::string                key(Root rt)
     {
         return key(root_dir(rt));
+    }
+
+    std::string                 name(Root rt)
+    {
+        const RootDir* r    = root_dir(rt);
+        return r ? r -> name : std::string();
     }
 
     std::filesystem::path   path(const RootDir*rt, std::string_view z, bool fMakePath)

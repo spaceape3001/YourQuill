@@ -11,8 +11,7 @@
 #include <io/FileUtils.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/field/Field.hpp>
-#include <mithril/db/NKI.hpp>
-#include <mithril/db/IDLock.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
@@ -25,7 +24,7 @@ namespace yq::mithril::cdb {
     namespace {
         inline std::string category_filename(std::string_view k)
         {
-            return make_filename(k, Category::szExtension);
+            return make_filename(k, Category::EXTENSION);
         }
     }
 
@@ -88,9 +87,9 @@ namespace yq::mithril::cdb {
             
         std::filesystem::path       fp  = path(f);
         
-        Fragment::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk  = Fragment::Lock::read(f);
+            lk  = Id(f).lock(false);
             if(!lk){
                 yWarning() << "Unable to get read lock on fragment: " << fp;
                 return Category::SharedFile();
@@ -251,9 +250,9 @@ namespace yq::mithril::cdb {
         if(fragments_count(doc))
             return t;
             
-        Category::Lock   lk;
+        Id::Lock   lk;
         if(!(opts & DONT_LOCK))
-            lk  = Category::Lock::write(t);
+            lk  = Id(t).lock(true);
         
             // prelude, we're first....
         Category::SharedFile td  = write(t, rt, opts);
@@ -273,9 +272,9 @@ namespace yq::mithril::cdb {
         if(!t)
             return Category::SharedData();
         
-        Category::Lock   lk;
+        Id::Lock   lk;
         if(!(opts & DONT_LOCK)){
-            lk   = Category::Lock::read(t);
+            lk   = Id(t).lock(false);
             if(!lk){
                 yWarning() << "Unable to acquire read lock on category: " << key(t);
                 return Category::SharedData();

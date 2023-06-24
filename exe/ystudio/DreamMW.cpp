@@ -53,7 +53,7 @@ DreamMW::DreamMW()
     std::vector<QAction*>   dockActions;
     for(const auto& di : Dock::all()){
     
-        Dock*   d   = (di.fnCreate)(nullptr);
+        Dock*   d   = di.fnCreate();
         
         QAction* act    = new QAction;
         d->m_action = act;

@@ -6,17 +6,18 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
     /*! \brief Attribute of documents
     */
     struct Attribute {
+        static constexpr const IdTypeId ID      = 2;
+        static constexpr const IdTypes  PARENTS = {};
         struct Info;
         struct Diff;
         struct Report;
         struct KVUA;
-        using Lock = IDLock<Attribute>;
 
         uint64_t    id  = 0ULL;
         constexpr auto    operator<=>(const Attribute&rhs) const noexcept = default; 

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
     /*! \brief Document in the cache
@@ -15,6 +15,8 @@ namespace yq::mithril {
         fused across all matching fragments in the workspace
     */
     struct Document {
+        static constexpr const IdTypeId  ID      = 8;
+        static constexpr const IdTypes    PARENTS = {};
         struct Info;
         uint64_t  id = 0ULL;
         constexpr auto    operator<=>(const Document&rhs) const noexcept = default;

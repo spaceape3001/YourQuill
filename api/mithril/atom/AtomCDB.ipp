@@ -12,7 +12,7 @@
 
 #include <basic/TextUtils.hpp>
 #include <mithril/class/Class.hpp>
-#include <mithril/db/NKI.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/field/Field.hpp>
 #include <mithril/image/Image.hpp>

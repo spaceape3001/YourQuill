@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
 
@@ -15,6 +15,9 @@ namespace yq::mithril {
         Folder represents a fusion of the same named directory across the root_dirs of the worksapce (case insensitive).
     */
     struct Folder {
+        static constexpr const IdTypeId ID          = 12;
+        static constexpr const IdTypes  PARENTS     = {};
+
         struct Info;
         uint64_t  id = 0ULL;
         constexpr auto    operator<=>(const Folder&rhs) const noexcept = default;

@@ -14,5 +14,3 @@
 #include <mithril/class/ClassHtml.hpp>
 #include <mithril/class/ClassPost.hpp>
 #include <mithril/class/ClassProvider.hpp>
-
-#include <mithril/db/IDLock.hpp>

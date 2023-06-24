@@ -6,3 +6,9 @@
 
 #pragma once
 
+#include <mithril/id/Id.hpp>
+
+namespace yq::mithril {
+    
+}
+

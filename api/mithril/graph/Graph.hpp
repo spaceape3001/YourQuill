@@ -7,10 +7,13 @@
 #pragma once
 
 #include <compare>
-#include <cstdint>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
     struct Graph {
+        static constexpr const IdTypeId  ID      = 15;
+        static constexpr const IdTypes    PARENTS = {};
+
         uint64_t  id = 0ULL;
         constexpr auto    operator<=>(const Graph& rhs) const noexcept = default;
         constexpr operator uint64_t () const noexcept { return id; }

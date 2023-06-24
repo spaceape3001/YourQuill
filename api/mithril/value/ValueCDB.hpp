@@ -17,6 +17,9 @@ namespace yq::mithril {
     };
 
     namespace cdb {
+        
+        std::vector<Value>      all_values(Sorted sorted=Sorted{});
+    
         std::string             brief(Value);
         std::string             data(Value);
     
@@ -27,6 +30,10 @@ namespace yq::mithril {
         
         Field                   field(Value);
         Value::Info             info(Value);
+        
+        std::string             key(Value);
+        std::string             name(Value);
+        Image                   icon(Value);
         
         Value                   value(uint64_t);
         std::vector<Value>      values(Field, Sorted=Sorted{});

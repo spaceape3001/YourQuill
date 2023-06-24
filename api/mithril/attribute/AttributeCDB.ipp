@@ -10,7 +10,7 @@
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
-    std::vector<Attribute>   all_attributes()
+    std::vector<Attribute>   all_attributes(Sorted)
     {
         static thread_local CacheQuery s("SELECT id FROM Attributes");
         return s.vec<Attribute>();

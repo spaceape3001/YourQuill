@@ -6,16 +6,17 @@
 
 #pragma once
 
-#include <cstdint>
-#include <mithril/preamble.hpp>
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
     /*! \brief Game in the cache database */
     struct Game {
+        static constexpr const IdTypeId  ID      = 14;
+        static constexpr const IdTypes   PARENTS = Atom::ID;
+
         uint64_t            id = 0ULL;
-        using Lock = IDLock<Game>;
         constexpr auto    operator<=>(const Game&rhs) const = default; 
-        constexpr operator bool() const { return id; }
+        constexpr operator uint64_t() const { return id; }
     };
 }
 

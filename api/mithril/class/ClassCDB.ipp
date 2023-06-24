@@ -12,8 +12,6 @@
 #include <io/FileUtils.hpp>
 #include <mithril/class/ClassFile.hpp>
 #include <mithril/field/Field.hpp>
-#include <mithril/db/NKI.hpp>
-#include <mithril/db/IDLock.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
@@ -29,7 +27,7 @@ namespace yq::mithril::cdb {
     namespace {
         inline std::string class_filename(std::string_view k)
         {
-            return make_filename(k, Class::szExtension);
+            return make_filename(k, Class::EXTENSION);
         }
         
         inline std::vector<Class::Rank>     exec_class_rank_vector(SQ& s)
@@ -157,9 +155,9 @@ namespace yq::mithril::cdb {
             return Class::SharedFile();
             
         std::filesystem::path       fp  = path(f);
-        Fragment::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk  = Fragment::Lock::read(f);
+            lk  = Id(f).lock(false);
             if(!lk){
                 yWarning() << "Unable to get read lock on fragment: " << fp;
                 return Class::SharedFile();
@@ -654,9 +652,9 @@ namespace yq::mithril::cdb {
             
         if(fragments_count(doc))
             return c;
-        Class::Lock   lk;
+        Id::Lock   lk;
         if(!(opts & DONT_LOCK))
-            lk  = Class::Lock::write(c);
+            lk  = Id(c).lock(true);
 
         Class::SharedFile    td  = writable(c, rt, DONT_LOCK);
         td -> name      = k;

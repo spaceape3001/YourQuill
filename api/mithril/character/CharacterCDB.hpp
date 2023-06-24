@@ -14,7 +14,9 @@ namespace yq::mithril {
         std::vector<Character>      all_characters(Sorted sorted=Sorted());
         Atom                        atom(Character);
         Character                   character(Atom);
+        Character                   character(Entity);
         Class                       character_class();
+        Entity                      entity(Character);
         bool                        exists(Character);
         bool                        exists_character(uint64_t);
         Image                       icon(Character);

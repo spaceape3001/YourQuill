@@ -12,4 +12,3 @@
 #include <mithril/book/BookHtml.hpp>
 //#include <mithril/book/BookPost.hpp>
 #include <mithril/book/BookProvider.hpp>
-#include <mithril/db/IDLock.hpp>

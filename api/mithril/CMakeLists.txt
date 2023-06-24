@@ -7,36 +7,8 @@
 project(mithril)
 
 add_library(${PROJECT_NAME} SHARED
-    atom.cpp
-    attribute.cpp
-    bit.cpp
-    book.cpp
-    category.cpp
-    character.cpp
-    class.cpp
-    directories.cpp
-    directory.cpp
-    document.cpp
-    enum.cpp
-    event.cpp
-    field.cpp
-    folder.cpp
-    fragment.cpp
-    game.cpp
-    group.cpp
-    id.cpp
-    image.cpp
-    leaf.cpp
-    meta.cpp
-    mithril.cpp
-    place.cpp
-    quill.cpp
-    root.cpp
-    tag.cpp
-    thing.cpp
-    user.cpp
-    value.cpp
 
+    mithril.cpp
     html/XEntry.cpp
     web/web_unity.cpp
     wksp/Workspace.cpp

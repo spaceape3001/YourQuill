@@ -6,12 +6,15 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
     /*! Tag in the cache database
     */
     struct Root {
+        static constexpr const IdTypeId ID      = 21;
+        static constexpr const IdTypes  PARENTS = {};
+
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Root&rhs) const noexcept = default;
         constexpr operator uint64_t() const noexcept { return id; }

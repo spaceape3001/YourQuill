@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
     /*! \brief Predefined value for a field
@@ -14,6 +14,9 @@ namespace yq::mithril {
         This is a predefined attribute value for a field
     */
     struct Value {
+        static constexpr const IdTypeId  ID        = 25;
+        static constexpr const IdTypes    PARENTS    = {};
+
         struct Data;
         struct Info;
         struct ListData;

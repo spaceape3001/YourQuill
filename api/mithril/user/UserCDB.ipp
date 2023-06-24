@@ -10,8 +10,7 @@
 
 #include <basic/ByteArray.hpp>
 #include <basic/Logging.hpp>
-#include <mithril/db/IDLock.hpp>
-//#include <mithril/db/NKI.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
@@ -24,7 +23,7 @@ namespace yq::mithril::cdb {
     namespace {
         inline std::string user_filename(std::string_view k)
         {
-            return make_filename(k, User::szExtension);
+            return make_filename(k, User::EXTENSION);
         }
     }
 
@@ -215,9 +214,9 @@ namespace yq::mithril::cdb {
         if(!u)
             return User::SharedData();
         
-        User::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk      = User::Lock::read(u);
+            lk      = Id(u).lock(false);
             if(!lk){
                 yWarning() << "Unable to get read lock on user: " << key(u);
                 return User::SharedData();
@@ -292,9 +291,9 @@ namespace yq::mithril::cdb {
             
         std::filesystem::path   fp  = path(f);
 
-        Fragment::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk      = Fragment::Lock::read(f);
+            lk      = Id(f).lock(false);
             if(!lk){
                 yWarning() << "Unable to obtain read lock on fragment: " << fp;
                 return User::SharedFile();

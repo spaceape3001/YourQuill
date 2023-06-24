@@ -16,14 +16,39 @@ namespace yq::mithril::cdb {
         return blind_remap(all_atoms(thing_class(), sorted), Thing());
     }
     
-    Atom  atom(Thing ch)
+    Atom  atom(Thing th)
     {
-        return Atom{ ch.id };
+        return Atom{ th.id };
     }
 
+    bool  exists(Thing th)
+    {
+        return exists_thing(th.id);
+    }
+    
+    bool  exists_thing(uint64_t i)
+    {
+        return is(Atom(i), thing_class());
+    }
+    
+    Image               icon(Thing t)
+    {
+        return image(atom(t));
+    }
+    
+    std::string         key(Thing t)
+    {
+        return key(atom(t));
+    }
+    
+    std::string         name(Thing t)
+    {
+        return name(atom(t));
+    }
+    
     Thing  thing(Atom at)
     {
-        return is(at, thing_class()) ? Thing(at.id) : Thing();
+        return exists_thing(at.id) ? Thing(at.id) : Thing();
     }
 
     Class  thing_class()
@@ -32,9 +57,4 @@ namespace yq::mithril::cdb {
         return cls;
     }
 
-    bool  exists(Thing ch)
-    {
-        return is(Atom(ch.id), thing_class());
-    }
-    
 }

@@ -9,7 +9,7 @@
 #include "FolderCDB.hpp"
 #include <io/DirUtils.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithril/db/NKI.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/directory/Directory.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/fragment/Fragment.hpp>

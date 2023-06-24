@@ -29,7 +29,7 @@ namespace yq::mithril {
 
         /*! \brief Gets ALL attributes
         */
-        std::vector<Attribute>  all_attributes();
+        std::vector<Attribute>  all_attributes(Sorted sorted={});
 
         /*! \brief Gets ALL attributes for given document
         */

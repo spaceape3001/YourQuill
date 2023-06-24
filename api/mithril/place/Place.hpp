@@ -6,14 +6,15 @@
 
 #pragma once
 
-#include <cstdint>
-#include <mithril/preamble.hpp>
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
     /*! \brief Place in the cache database */
     struct Place {
+        static constexpr const IdTypeId ID      = 20;
+        static constexpr const IdTypes  PARENTS = Atom::ID;
+
         uint64_t            id = 0ULL;
-        using Lock = IDLock<Place>;
         constexpr auto    operator<=>(const Place&rhs) const = default; 
         constexpr operator bool() const { return id; }
     };

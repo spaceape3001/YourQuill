@@ -9,6 +9,7 @@
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/character/CharacterCDB.hpp>
+#include <mithril/entity/Entity.hpp>
 #include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
@@ -19,12 +20,17 @@ namespace yq::mithril::cdb {
     
     Atom                        atom(Character ch)
     {
-        return Atom{ ch.id };
+        return Atom(ch.id);
     }
 
     Character                   character(Atom at)
     {
-        return is(at, character_class()) ? Character(at.id) : Character();
+        return exists_character(at.id) ? Character(at.id) : Character();
+    }
+
+    Character                   character(Entity at)
+    {
+        return exists_character(at.id) ? Character(at.id) : Character();
     }
 
     Class   character_class()
@@ -33,10 +39,21 @@ namespace yq::mithril::cdb {
         return cls;
     }
 
+    Entity                      entity(Character ch)
+    {
+        return Entity(ch.id);
+    }
+
     bool                        exists(Character ch)
     {
-        return is(Atom(ch.id), character_class());
+        return exists_character(ch.id);
     }
+
+    bool                        exists_character(uint64_t ch)
+    {
+        return is(Atom(ch), character_class());
+    }
+
 
     Image                       icon(Character ch)
     {

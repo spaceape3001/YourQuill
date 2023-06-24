@@ -6,22 +6,23 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
 
 namespace yq::mithril {
-    template <typename> class IDLock;
 
     /*! \brief Atom class in the cache
 
         This structure represents an atom classification in the cache
     */
     struct Class {
-        static constexpr const char*    szExtension = "class";
+        static constexpr const IdTypeId ID          = 6;
+        static constexpr const IdTypes  PARENTS     = Document::ID;
+        static constexpr const char*    EXTENSION   = "class";
+        
         struct Info;
         struct File;
         struct Data;
         struct Rank;
-        using Lock = IDLock<Class>;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
         

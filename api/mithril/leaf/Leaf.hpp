@@ -6,28 +6,25 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <mithril/document/Document.hpp>
 
-namespace yq {
-    namespace mithril {
-        template <typename> class IDLock;
+namespace yq::mithril {
 
-        struct Leaf {
-
-            static constexpr const char*    szExtension = "y";
-            struct Info;
-            struct KV;
-            struct Data;
-            struct File;
-            using SharedData = std::shared_ptr<Data>;
-            using SharedFile = std::shared_ptr<File>;
-            using Lock = IDLock<Leaf>;
-            
-            uint64_t  id  = 0ULL;
-            constexpr auto    operator<=>(const Leaf&rhs) const noexcept = default;
-            constexpr operator uint64_t () const noexcept { return id; }
-        };
-    }
+    struct Leaf {
+        static constexpr const IdTypeId ID          = 18;
+        static constexpr const IdTypes  PARENTS     = Document::ID;
+        static constexpr const char*    EXTENSION   = "y";
+        struct Info;
+        struct KV;
+        struct Data;
+        struct File;
+        using SharedData = std::shared_ptr<Data>;
+        using SharedFile = std::shared_ptr<File>;
+        
+        uint64_t  id  = 0ULL;
+        constexpr auto    operator<=>(const Leaf&rhs) const noexcept = default;
+        constexpr operator uint64_t () const noexcept { return id; }
+    };
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Leaf)

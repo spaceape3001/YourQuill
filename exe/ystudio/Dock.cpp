@@ -12,7 +12,7 @@ using namespace yq;
 using namespace yq::gluon;
 
 struct Dock::Repo {
-    std::vector<Creator>    all;
+    std::vector<Info>    all;
 };
 
 Dock::Repo& Dock::repo()
@@ -21,25 +21,25 @@ Dock::Repo& Dock::repo()
     return s_repo;
 }
 
-const std::vector<Dock::Creator>&  Dock::all()
+const std::vector<Dock::Info>&  Dock::all()
 {
     return repo().all;
 }
 
-Dock::Creator::Writer      Dock::reg(const QString& lab, CreateFN&& fn)
+Dock::Info::Writer      Dock::reg(const QString& lab, FNCreate&& fn)
 {
     if(lab.isEmpty() || !fn)
         return { nullptr };
     
     Repo& _r    = repo();
-    Creator     cinfo;
+    Info     cinfo;
     cinfo.fnCreate  = std::move(fn);
     cinfo.label     = lab;
     _r.all.push_back(std::move(cinfo));
     return { &_r.all.back() };
 }
 
-Dock::Creator::Writer   register_dock(const QString&label, Dock::CreateFN&& fn)
+Dock::Info::Writer   register_dock(const QString&label, Dock::FNCreate&& fn)
 {
     return Dock::reg(label, std::move(fn));
 }

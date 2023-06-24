@@ -10,8 +10,7 @@
 #include <basic/ByteArray.hpp>
 #include <io/FileUtils.hpp>
 #include <basic/Set.hpp>
-#include <mithril/db/IDLock.hpp>
-#include <mithril/db/NKI.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
@@ -25,7 +24,7 @@ namespace yq::mithril::cdb {
     namespace {
         inline std::string tag_filename(std::string_view k)
         {
-            return make_filename(k, Tag::szExtension);
+            return make_filename(k, Tag::EXTENSION);
         }
     }
 
@@ -332,9 +331,9 @@ namespace yq::mithril::cdb {
         if(fragments_count(doc))
             return t;
             
-        Tag::Lock   lk;
+        Id::Lock   lk;
         if(!(opts & DONT_LOCK))
-            lk  = Tag::Lock::write(t);
+            lk  = Id(t).lock(true);
         
             // prelude, we're first....
         Tag::SharedFile td  = write(t, rt, opts);
@@ -348,9 +347,9 @@ namespace yq::mithril::cdb {
         if(!t)
             return Tag::SharedData();
         
-        Tag::Lock   lk;
+        Id::Lock   lk;
         if(!(opts & DONT_LOCK)){
-            lk   = Tag::Lock::read(t);
+            lk   = Id(t).lock(false);
             if(!lk){
                 yWarning() << "Unable to acquire read lock on tag: " << key(t);
                 return Tag::SharedData();
@@ -430,9 +429,9 @@ namespace yq::mithril::cdb {
             return Tag::SharedFile();
             
         std::filesystem::path       fp  = path(f);
-        Fragment::Lock  lk;
+        Id::Lock  lk;
         if(!(opts & DONT_LOCK)){
-            lk  = Fragment::Lock::read(f);
+            lk  = Id(f).lock(false);
             if(!lk){
                 yWarning() << "Unable to get read lock on fragment: " << fp;
                 return Tag::SharedFile();
