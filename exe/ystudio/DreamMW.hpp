@@ -7,17 +7,18 @@
 #pragma once
 
 #include <gluon/app/MainWindow.hpp>
+#include "ystudio.hpp"
 
-class Dock;
+using yq::gluon::MainWindow;
 
-class DreamMW : public yq::gluon::MainWindow {
+class DreamMW : public MainWindow {
     Q_OBJECT
 public:
 
     DreamMW();
     ~DreamMW();
     
-    yq::gluon::MainWindow*   newMain() override;
+    MainWindow*   newMain() override;
     
 public slots:
     void    updateTitle();
@@ -41,6 +42,13 @@ public slots:
     void    newTagList();
     void    newTagTable();
     
+private slots:
+    void    popupRequested(Id);
+    void    openRequested(Id);
+    
+protected:
+    virtual QDockWidget*    addDock(Qt::DockWidgetArea, QWidget*) override;
+    virtual void            reconnect(QWidget*) override;    
 private:
     std::vector<Dock*>  m_docks;
 };

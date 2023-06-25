@@ -13,7 +13,6 @@ set(CMAKE_AUTORCC ON)
 
 add_executable(${PROJECT_NAME} 
     Dock.hpp
-    Dock.cpp
 
     DreamApp.hpp 
     DreamApp.cpp 
@@ -25,6 +24,7 @@ add_executable(${PROJECT_NAME}
 
     WebBrowser.hpp
     WebBrowser.cpp
+    Window.hpp
 
     dock/XFiles.hpp
     dock/XFiles.cpp

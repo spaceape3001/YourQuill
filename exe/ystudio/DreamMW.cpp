@@ -9,8 +9,11 @@
 #include <basic/Logging.hpp>
 #include <gluon/core/Logging.hpp>
 
+#include "Action.hpp"
+#include "Command.hpp"
 #include "Dock.hpp"
 #include "WebBrowser.hpp"
+#include "Window.hpp"
 
 #include <mithrilQt/atom/AtomTable.hpp>
 #include <mithrilQt/book/BookTable.hpp>
@@ -55,18 +58,14 @@ DreamMW::DreamMW()
     
         Dock*   d   = di.fnCreate();
         
-        QAction* act    = new QAction;
+        ActionInfo  ai  = di.action;
+        ai.checkable    = true;
+        
+        QAction* act    = createAction(ai);
         d->m_action = act;
-
-        act->setText(di.label);
-        act->setIcon(di.icon);
-        act->setShortcut(di.shortcut);
-        act->setToolTip(di.toolTip);
-        act->setCheckable(true);
-        act->setChecked(di.autoStart);
-        d->setVisible(di.autoStart);
+        d->setVisible(ai.checked);
         d->setAllowedAreas(di.allowedAreas);
-        d->setWindowTitle(di.label);
+        d->setWindowTitle(ai.label);
 
         connect(act, &QAction::triggered, d, &Dock::triggered);
         addDock(di.startArea, d);
@@ -170,6 +169,19 @@ DreamMW::~DreamMW()
 {
 }
 
+QDockWidget*    DreamMW::addDock(Qt::DockWidgetArea dwa, QWidget*q)
+{
+    QDockWidget* dw = MainWindow::addDock(dwa, q);
+    
+    Dock*   d   = qobject_cast<Dock*>(q);
+    if(d){
+        connect(d, &Dock::popupRequested, this, &DreamMW::popupRequested);
+        connect(d, &Dock::openRequested,  this, &DreamMW::openRequested);
+    }
+    return dw;
+}
+
+
 void    DreamMW::newAtomTable()
 {
     addWindow(new AtomTable(ALL));
@@ -270,6 +282,32 @@ void    DreamMW::updateTitle()
     setWindowTitle(tr("YStudio -- %1").arg(qString(wksp::name())));
 }
 
+void    DreamMW::popupRequested(Id i)
+{
+}
+
+void            DreamMW::reconnect(QWidget* qw) 
+{
+    MainWindow::reconnect(qw);
+    Window*w    = qobject_cast<Window*>(qw);
+    if(w){
+        connect(w, &Window::popupRequested, this, &DreamMW::popupRequested);
+        connect(w, &Window::openRequested,  this, &DreamMW::openRequested);
+    }
+}
+
+void    DreamMW::openRequested(Id i)
+{
+}
+
+
+#include "Action.ipp"
+#include "Command.ipp"
+#include "Dock.ipp"
+#include "Window.ipp"
+
 
 #include "moc_DreamMW.cpp"
+#include "moc_Dock.cpp"
+#include "moc_Window.cpp"
 

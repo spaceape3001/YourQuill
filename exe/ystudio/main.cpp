@@ -27,7 +27,13 @@ int main(int argc, char* argv[])
     app.finalize();
     
     //yq::gluon::logAllResources();
-    (new DreamMW) -> show();
+    {
+        DreamMW *   w   = new DreamMW;
+        w -> newBrowser();
+        w -> show();
+    }
     
     return app.exec();
 }
+
+

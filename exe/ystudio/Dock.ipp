@@ -33,8 +33,8 @@ Dock::Info::Writer      Dock::reg(const QString& lab, FNCreate&& fn)
     
     Repo& _r    = repo();
     Info     cinfo;
-    cinfo.fnCreate  = std::move(fn);
-    cinfo.label     = lab;
+    cinfo.fnCreate          = std::move(fn);
+    cinfo.action.label      = lab;
     _r.all.push_back(std::move(cinfo));
     return { &_r.all.back() };
 }
@@ -87,6 +87,3 @@ void        Dock::triggered(bool f)
     _update();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
-#include "moc_Dock.cpp"

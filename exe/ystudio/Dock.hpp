@@ -6,11 +6,12 @@
 
 #pragma once
 
+#include "ystudio.hpp"
+#include "Action.hpp"
 #include <basic/Flags.hpp>
 #include <QDockWidget>
 #include <QIcon>
 #include <QKeySequence>
-
 
 class DreamMW;
 class QAction;
@@ -30,13 +31,9 @@ public:
         class Writer;
     
         FNCreate            fnCreate;
-        QString             label;
-        QString             toolTip;
-        QKeySequence        shortcut;
-        QIcon               icon;
+        ActionInfo          action;
         Qt::DockWidgetArea  startArea       = Qt::LeftDockWidgetArea;
         Qt::DockWidgetAreas allowedAreas    = Qt::AllDockWidgetAreas;
-        bool                autoStart       = false;
     };
 
     static Info::Writer  reg(const QString&, FNCreate&&);
@@ -45,6 +42,10 @@ public:
 
     Dock(QWidget*parent=nullptr);
     ~Dock();
+    
+signals:
+    void        popupRequested(Id);
+    void        openRequested(Id);
     
 protected:
     void        closeEvent(QCloseEvent*) override;
@@ -79,28 +80,28 @@ public:
     Writer& autoStart()
     {
         if(m_info)
-            m_info -> autoStart = true;
+            m_info -> action.checked  = true;
         return *this;
     }
 
     Writer& icon(const QIcon& ico)
     {
         if(m_info)
-            m_info -> icon    = ico;
+            m_info -> action.icon    = ico;
         return *this;
     }
     
     Writer& shortcut(const QKeySequence& ks)
     {
         if(m_info)
-            m_info -> shortcut = ks;
+            m_info -> action.shortcut = ks;
         return *this;
     }
     
     Writer& toolTip(const QString& s)
     {
         if(m_info)
-            m_info -> toolTip = s;
+            m_info -> action.toolTip = s;
         return *this;
     }
 
