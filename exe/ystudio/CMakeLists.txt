@@ -22,19 +22,44 @@ add_executable(${PROJECT_NAME}
     #Explorer.cpp
     #Explorer.hpp
 
+    IdList.hpp
+    IdList.cpp
+    IdTable.hpp
+    IdTable.cpp
+
     WebBrowser.hpp
     WebBrowser.cpp
     Window.hpp
-
-    atom/atom.cpp
 
     dock/XFiles.hpp
     dock/XFiles.cpp
     dock/XIdBoard.hpp
     dock/XIdBoard.cpp
 
+    wksp/atom.cpp
+    wksp/attribute.cpp
+    wksp/book.cpp
+    wksp/category.cpp
+    wksp/class.cpp
+    wksp/directory.cpp
+    wksp/document.cpp
+    wksp/entity.cpp
+    wksp/event.cpp
+    wksp/field.cpp
+    wksp/folder.cpp
+    wksp/fragment.cpp
+    wksp/game.cpp
+    wksp/group.cpp
+    wksp/leaf.cpp
+    wksp/organization.cpp
+    wksp/place.cpp
+    wksp/root.cpp
+    wksp/tag.cpp
+    wksp/user.cpp
+
     main.cpp 
     ystudio.qrc
+
 )
 
 target_link_libraries(${PROJECT_NAME} 

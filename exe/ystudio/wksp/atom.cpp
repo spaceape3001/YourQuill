@@ -6,7 +6,9 @@
 
 #include "Command.hpp"
 #include "DreamMW.hpp"
-#include <mithrilQt/atom/AtomTable.hpp>
+#include "IdTable.hpp"
+
+#include <mithril/atom/Atom.hpp>
 #include <basic/DelayInit.hpp>
 
 using namespace yq;
@@ -16,7 +18,12 @@ namespace {
     void    reg_atoms()
     {
         Command::reg("Atom Table", [](DreamMW* mw){
-            mw->addWindow(new AtomTable(ALL));
+        
+            auto * w    = new IdTableT<Atom>(ALL);
+            w -> setWindowTitle("Atoms");
+            w -> model() -> addColumns(DEFAULT);
+            w -> model() -> reload();
+            mw->addWindow(w);
         }).menu("studio");
     }
     

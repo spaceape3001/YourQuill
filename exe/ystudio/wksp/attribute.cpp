@@ -1,0 +1,33 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "Command.hpp"
+#include "DreamMW.hpp"
+#include "IdTable.hpp"
+
+#include <mithril/attribute/Attribute.hpp>
+#include <basic/DelayInit.hpp>
+
+using namespace yq;
+using namespace yq::mithril;
+
+namespace {
+    void    reg_attributes()
+    {
+        Command::reg("Attribute Table", [](DreamMW* mw){
+        
+            auto * w    = new IdTableT<Attribute>(ALL);
+            w -> setWindowTitle("Attributes");
+            w -> model() -> addColumns(DEFAULT);
+            w -> model() -> reload();
+            mw->addWindow(w);
+        }).menu("studio");
+    }
+    
+    YQ_INVOKE(reg_attributes();)
+}
+
+
