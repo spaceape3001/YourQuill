@@ -34,6 +34,8 @@ namespace yq::mithril {
         Template,
         //! Title
         Title,
+        //! Type of item
+        Type,
         //! Value
         Value
     };

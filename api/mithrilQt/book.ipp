@@ -13,7 +13,7 @@
 #include <mithril/book/BookCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/image/Image.hpp>
-#include <mithrilQt/image/ImageUtils.hpp>
+#include <mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

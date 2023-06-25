@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/image/Image.hpp>
-#include <mithrilQt/image/ImageUtils.hpp>
+#include <mithrilQt/image.hpp>
 #include <QFile>
 #include <QIcon>
 

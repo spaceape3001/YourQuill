@@ -326,6 +326,65 @@ namespace yq::mithril {
             return std::string();
         }
     }
+    
+    std::string Id::name() const
+    {
+        switch(type()){
+    
+        case Atom::ID:
+            return cdb::name(Atom(id()));
+        case Attribute::ID:
+            return cdb::name(Attribute(id()));
+        case Book::ID:
+            return cdb::name(Book(id()));
+        case Category::ID:
+            return cdb::name(Category(id()));
+        case Character::ID:
+            return cdb::name(Character(id()));
+        case Class::ID:
+            return cdb::name(Class(id()));
+        case Directory::ID:
+            return cdb::name(Directory(id()));
+        case Document::ID:
+            return cdb::name(Document(id()));
+        case Entity::ID:
+            return cdb::name(Entity(id()));
+        case Event::ID:
+            return cdb::name(Event(id()));
+        case Field::ID:
+            return cdb::name(Field(id()));
+        case Folder::ID:
+            return cdb::name(Folder(id()));
+        case Fragment::ID:
+            return cdb::name(Fragment(id()));
+        case Game::ID:
+            return cdb::name(Game(id()));
+        case Graph::ID:
+            return cdb::name(Graph(id()));
+        case Group::ID:
+            return cdb::name(Group(id()));
+        case Image::ID:
+            return cdb::name(Image(id()));
+        case Leaf::ID:
+            return cdb::name(Leaf(id()));
+        case Organization::ID:
+            return cdb::name(Organization(id()));
+        case Place::ID:
+            return cdb::name(Place(id()));
+        case Root::ID:
+            return cdb::name(Root(id()));
+        case Tag::ID:
+            return cdb::name(Tag(id()));
+        case Thing::ID:
+            return cdb::name(Thing(id()));
+        case User::ID:
+            return cdb::name(User(id()));
+        case Value::ID:
+            return cdb::name(Value(id()));
+        default:
+            return std::string();
+        }
+    }
 }
 
 namespace yq::mithril::cdb {

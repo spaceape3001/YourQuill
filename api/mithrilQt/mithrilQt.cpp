@@ -61,7 +61,10 @@
 #include "game/GameList.ipp"
 #include "game/GameTable.ipp"
 
+#include "graph.ipp"
 #include "group.ipp"
+
+#include "id.ipp"
 
 
 #include "id/IdColumn.ipp"
@@ -70,10 +73,12 @@
 #include "id/IdListView.ipp"
 #include "id/IdMimeList.ipp"
 #include "id/IdModel.ipp"
+#include "id/IdSignalMapper.ipp"
 #include "id/IdTable.ipp"
 #include "id/IdTableView.ipp"
 #include "id/IdTreeView.ipp"
 
+#include "image.ipp"
 
 #include "leaf.ipp"
 #include "leaf/LeafList.ipp"
@@ -94,8 +99,11 @@
 #include "tag/TagList.ipp"
 #include "tag/TagTable.ipp"
 
+#include "thing.ipp"
 #include "user.ipp"
 #include "value.ipp"
+
+#include "id_auto.ipp"
 
 #include "atom/moc_AtomList.cpp"
 #include "atom/moc_AtomTable.cpp"
@@ -138,6 +146,7 @@
 #include "id/moc_IdListView.cpp"
 #include "id/moc_IdMimeList.cpp"
 #include "id/moc_IdModel.cpp"
+#include "id/moc_IdSignalMapper.cpp"
 #include "id/moc_IdTable.cpp"
 #include "id/moc_IdTableView.cpp"
 #include "id/moc_IdTreeView.cpp"

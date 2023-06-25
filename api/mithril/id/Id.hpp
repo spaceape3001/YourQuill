@@ -84,6 +84,7 @@ namespace yq::mithril {
         constexpr operator  uint64_t() const noexcept { return m_value; }
         
         std::string         key() const;
+        std::string         name() const;
 
         constexpr auto operator<=>(const Id&) const noexcept = default;
         

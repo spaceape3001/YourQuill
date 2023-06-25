@@ -80,6 +80,10 @@ namespace yq::mithril {
         */
         void            addColumns(std::span<const ColumnSpec>);
         
+        /*! \brief Adds the default table columns
+        */
+        void            addColumns(default_t);
+        
         bool            addEnabled() const;
         
         //! Current add policy
@@ -179,6 +183,9 @@ namespace yq::mithril {
 
         //! Row count (see QAbstractItemModel)
         int             rowCount(const QModelIndex& idx=QModelIndex()) const override;
+
+        //! Sets the default list column
+        void            setColumn(default_t);
 
         //! Sets the FIRST column
         void            setColumn(ColumnSpec);

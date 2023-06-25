@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "ImageUtils.hpp"
+#include "image.hpp"
 #include <basic/ThreadId.hpp>
 #include <gluon/core/IgCaseQ.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>

@@ -19,6 +19,7 @@ namespace yq::mithril {
         bool                exists_game(uint64_t);
         Image               icon(Game);
         std::string         key(Game);
+        std::string         name(Game);
         std::string         title(Game);
     }
 }

@@ -124,6 +124,9 @@ namespace yq::mithril {
         */
         Leaf::SharedData            merged(Leaf, cdb_options_t opts=0);
         
+        //! Title for the leaf
+        std::string                 name(Leaf);
+
         /*! \brief Name/Key/Icon for leaf
         
             This returns the Name, Key, & Icon for a leaf, using a single SQL statement.

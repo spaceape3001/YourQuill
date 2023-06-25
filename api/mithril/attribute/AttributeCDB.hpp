@@ -68,6 +68,9 @@ namespace yq::mithril {
         //! Used in the change detection
         std::vector<Attribute::KVUA>    kvua(Document);
         
+        //! Just the key, but rename for auto-id
+        std::string             name(Attribute);
+
         Attribute               parent(Attribute);
         
         std::string             uid(Attribute);

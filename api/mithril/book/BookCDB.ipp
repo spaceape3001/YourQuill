@@ -47,6 +47,11 @@ namespace yq::mithril::cdb {
         return key(atom(b));
     }
     
+    std::string         name(Book b)
+    {
+        return name(atom(b));
+    }
+
     std::string         title(Book b)
     {
         return name(atom(b));

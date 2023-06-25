@@ -47,6 +47,11 @@ namespace yq::mithril::cdb {
         return key(atom(g));
     }
     
+    std::string         name(Game g)
+    {
+        return name(atom(g));
+    }
+
     std::string         title(Game g)
     {
         return name(atom(g));

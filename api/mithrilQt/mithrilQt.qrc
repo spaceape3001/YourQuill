@@ -42,11 +42,15 @@
     <file alias="generic/folder.svg">res/folder.svg</file>
     <file alias="generic/fragment.svg">res/fragment.svg</file>
     <file alias="generic/game.svg">res/game.svg</file>
+    <file alias="generic/graph.svg">res/graph.svg</file>
+    <file alias="generic/group.svg">res/group.svg</file>
     <file alias="generic/leaf.svg">res/leaf.svg</file>
+    <file alias="generic/organization.svg">res/organization.svg</file>
     <file alias="generic/place.svg">res/place.svg</file>
-    <file alias="generic/unknown.svg">res/question.svg</file>
     <file alias="generic/root.svg">res/root.svg</file>
     <file alias="generic/tag.svg">res/tag.svg</file>
+    <file alias="generic/unknown.svg">res/question.svg</file>
+    <file alias="generic/user.svg">res/user.svg</file>
 
 </qresource>
 </RCC>

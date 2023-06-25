@@ -11,7 +11,7 @@
 #include <gluon/core/Utilities.hpp>
 #include <mithril/event/EventCDB.hpp>
 #include <mithril/image/Image.hpp>
-#include <mithrilQt/image/ImageUtils.hpp>
+#include <mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

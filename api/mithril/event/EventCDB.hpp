@@ -19,6 +19,7 @@ namespace yq::mithril {
         bool                exists_event(uint64_t);
         Image               icon(Event);
         std::string         key(Event);
+        std::string         name(Event);
         std::string         title(Event);
     }
 }

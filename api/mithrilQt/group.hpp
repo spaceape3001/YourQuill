@@ -7,7 +7,6 @@
 #pragma once
 
 #include <mithril/group/Group.hpp>
-#include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
 class QIcon;

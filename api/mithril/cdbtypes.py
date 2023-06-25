@@ -213,6 +213,22 @@ mith += """
             return std::string();
         }
     }
+    
+    std::string Id::name() const
+    {
+        switch(type()){
+    """
+
+for i in items:
+    mith += """
+        case %(name)s::ID:
+            return cdb::name(%(name)s(id()));""" % i.args
+
+mith += """
+        default:
+            return std::string();
+        }
+    }
 }
 
 namespace yq::mithril::cdb {
@@ -256,11 +272,26 @@ for i in items:
 #include <mithrilQt/%(lname)s.hpp>""" % i.args
 
 mith += """
+#include <mithrilQt/id.hpp>
+#include <QIcon>
 
 namespace yq::mithril {
+    QIcon       id_qIcon(Id i)
+    {
+        static QIcon s_ico(":/generic/unknown.svg");
+        switch(i.type()){
 """
 
+for i in items:
+    mith += """
+        case %(name)s::ID:
+            return qIcon(%(name)s(i.id()));""" % i.args
+
 mith += """
+        default:
+            return s_ico;
+        }
+    }
 }
 """
 

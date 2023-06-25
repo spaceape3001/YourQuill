@@ -54,23 +54,14 @@ add_library(${PROJECT_NAME} SHARED
     game/GameList.hpp
     game/GameTable.hpp
 
-    id/IdFunctor.hpp
     id/IdList.hpp
     id/IdListView.hpp
     id/IdMimeList.hpp
     id/IdModel.hpp
     id/IdSignalMapper.hpp
-    id/IdSignalMapper.cpp
     id/IdTable.hpp
-    id/IdTable.ipp
     id/IdTableView.hpp
-    id/IdTableView.ipp
     id/IdTreeView.hpp
-    id/IdTreeView.ipp
-    
-    image/ImageUtils.hpp
-    image/ImageUtils.ipp
-    image/image.cpp
     
     leaf/LeafList.hpp
     leaf/LeafTable.hpp

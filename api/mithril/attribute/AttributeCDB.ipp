@@ -165,6 +165,11 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
+    std::string          name(Attribute a)
+    {
+        return key(a);
+    }
+    
     Attribute           parent(Attribute a)
     {
         static thread_local CacheQuery s("SELECT parent FROM Attributes WHERE id=?");

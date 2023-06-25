@@ -36,7 +36,67 @@
 #include <mithrilQt/thing.hpp>
 #include <mithrilQt/user.hpp>
 #include <mithrilQt/value.hpp>
+#include <mithrilQt/id.hpp>
+#include <QIcon>
 
 namespace yq::mithril {
+    QIcon       id_qIcon(Id i)
+    {
+        static QIcon s_ico(":/generic/unknown.svg");
+        switch(i.type()){
 
+        case Atom::ID:
+            return qIcon(Atom(i.id()));
+        case Attribute::ID:
+            return qIcon(Attribute(i.id()));
+        case Book::ID:
+            return qIcon(Book(i.id()));
+        case Category::ID:
+            return qIcon(Category(i.id()));
+        case Character::ID:
+            return qIcon(Character(i.id()));
+        case Class::ID:
+            return qIcon(Class(i.id()));
+        case Directory::ID:
+            return qIcon(Directory(i.id()));
+        case Document::ID:
+            return qIcon(Document(i.id()));
+        case Entity::ID:
+            return qIcon(Entity(i.id()));
+        case Event::ID:
+            return qIcon(Event(i.id()));
+        case Field::ID:
+            return qIcon(Field(i.id()));
+        case Folder::ID:
+            return qIcon(Folder(i.id()));
+        case Fragment::ID:
+            return qIcon(Fragment(i.id()));
+        case Game::ID:
+            return qIcon(Game(i.id()));
+        case Graph::ID:
+            return qIcon(Graph(i.id()));
+        case Group::ID:
+            return qIcon(Group(i.id()));
+        case Image::ID:
+            return qIcon(Image(i.id()));
+        case Leaf::ID:
+            return qIcon(Leaf(i.id()));
+        case Organization::ID:
+            return qIcon(Organization(i.id()));
+        case Place::ID:
+            return qIcon(Place(i.id()));
+        case Root::ID:
+            return qIcon(Root(i.id()));
+        case Tag::ID:
+            return qIcon(Tag(i.id()));
+        case Thing::ID:
+            return qIcon(Thing(i.id()));
+        case User::ID:
+            return qIcon(User(i.id()));
+        case Value::ID:
+            return qIcon(Value(i.id()));
+        default:
+            return s_ico;
+        }
+    }
 }

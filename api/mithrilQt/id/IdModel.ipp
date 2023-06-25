@@ -67,6 +67,11 @@ namespace yq::mithril {
             addColumn(c);
     }
 
+    void            IdModel::addColumns(default_t)
+    {
+        addColumns(IdColumn::defaultTable(m_idType));
+    }
+
     bool            IdModel::addEnabled() const
     {
         return (m_addPolicy != AddPolicy::None) && m_flags[F::AnyAdd];
@@ -296,6 +301,11 @@ namespace yq::mithril {
         std::optional<IdColumn> cc  = IdColumn::create(m_idType, cspec.column, cspec.options);
         if(cc)
             setColumn(std::move(*cc));
+    }
+
+    void    IdModel::setColumn(default_t)
+    {
+        setColumn(IdColumn::defaultList(m_idType));
     }
 
     void    IdModel::setColumn(IdColumn&&col)

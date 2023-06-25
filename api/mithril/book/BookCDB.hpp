@@ -17,6 +17,7 @@ namespace yq::mithril {
         Class               book_class();
         Image               icon(Book);
         std::string         key(Book);
+        std::string         name(Book);
         std::string         title(Book);
         bool                exists(Book);
         bool                exists_book(uint64_t);

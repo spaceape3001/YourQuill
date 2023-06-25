@@ -11,7 +11,7 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
-#include <mithrilQt/image/ImageUtils.hpp>
+#include <mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

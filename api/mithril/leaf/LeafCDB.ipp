@@ -280,6 +280,10 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
+    std::string             name(Leaf l)
+    {
+        return title(l);
+    }
 
     NKI                 nki(Leaf l, bool autoKey)
     {
