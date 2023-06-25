@@ -26,6 +26,8 @@ add_executable(${PROJECT_NAME}
     WebBrowser.cpp
     Window.hpp
 
+    atom/atom.cpp
+
     dock/XFiles.hpp
     dock/XFiles.cpp
     dock/XIdBoard.hpp

@@ -39,8 +39,9 @@ const Command*               Command::get(uint64_t i)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Command::Command(const QString&kLabel) : m_id(repo().count()), m_label(kLabel)
+Command::Command(const QString&kLabel) : m_id(repo().count())
 {
+    m_action.label  = kLabel;
     repo().all.push_back(this);
 }
 
@@ -54,7 +55,6 @@ namespace {
         CommandDW(const QString& lab, FN&& fn) : Command(lab), m_function(std::move(fn))
         {
             m_flavor    = ArgFlavor::Main;
-            m_types     = ~ IdTypes();
         }
 
         void        invoke(DreamMW* dw, Id) const
@@ -64,7 +64,7 @@ namespace {
         
         bool        accept(Id i) const 
         {
-            return m_types[i.type()];
+            return m_idTypes[i.type()];
         }
         
     };
@@ -84,7 +84,6 @@ namespace {
         CommandId(const QString& lab, FN&& fn) : Command(lab), m_function(std::move(fn))
         {
             m_flavor    = ArgFlavor::Id;
-            m_types     = ~IdTypes();
         }
         void        invoke(DreamMW* dw, Id i) const
         {
@@ -93,7 +92,7 @@ namespace {
         
         bool        accept(Id i) const 
         {
-            return m_types[i.type()];
+            return m_idTypes[i.type()];
         }
     };
 }
@@ -115,7 +114,6 @@ namespace {
             Command(lab), m_function(std::move(fn)), m_filter(std::move(fnf))
         {
             m_flavor    = ArgFlavor::Id;
-            m_types     = ~IdTypes();
         }
         void        invoke(DreamMW* dw, Id i) const
         {
@@ -124,14 +122,14 @@ namespace {
         
         bool        accept(Id i) const 
         {
-            if(! m_types[i.type()])
+            if(! m_idTypes[i.type()])
                 return false;
             return m_filter(i);
         }
     };
 }
 
-Command::Writer     Command::reg( const QString&label, std::function<void(DreamMW*,Id)>&&fn, std::function<bool(Id)>&& fnF)
+Command::Writer     Command::reg( const QString&label, std::function<bool(Id)>&& fnF, std::function<void(DreamMW*,Id)>&&fn)
 {
     if(!fn)
         return Writer();

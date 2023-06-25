@@ -7,15 +7,20 @@
 #pragma once
 
 #include "ystudio.hpp"
-
-#include <QString>
-#include <QIcon>
-#include <QKeySequence>
+#include "Action.hpp"
 
 class DreamMW;
 
 class Command {
 public:
+
+    enum class Type {
+        //! Generic non-command
+        None    = 0,
+        View,
+        Edit
+    };
+
     class Writer;
     
     virtual void        invoke(DreamMW*, Id) const = 0;
@@ -23,23 +28,27 @@ public:
 
     
     ArgFlavor           flavor() const { return m_flavor; }
+    Type                type() const { return m_type; }
+
+    const ActionInfo&   action() const { return m_action; }
 
     uint64_t            id() const { return m_id; }
     const QString&      menu() const { return m_menu; }
-    const QString&      label() const { return m_label; }
-    const QIcon&        icon() const { return m_icon; }
-    const QKeySequence& shortcut() const { return m_shortcut; }
-    const QString&      toolTip() const { return m_toolTip; }
+    const QString&      label() const { return m_action.label; }
+    const QIcon&        icon() const { return m_action.icon; }
+    const QKeySequence& shortcut() const { return m_action.shortcut; }
+    const QString&      toolTip() const { return m_action.toolTip; }
     int                 gravity() const { return m_gravity; }
     
     //  This command "opens" the specified type, if accepted
     IdTypeId            opener() const { return m_opens; }
+    IdTypes             idTypes() const { return m_idTypes; }
     
     static std::vector<const Command*>  all();
     static const Command*               get(uint64_t);
     static Writer                       reg( const QString&, std::function<void(DreamMW*)>&& );
     static Writer                       reg( const QString&, std::function<void(DreamMW*,Id)>&& );
-    static Writer                       reg( const QString&, std::function<void(DreamMW*,Id)>&&, std::function<bool(Id)>&& );
+    static Writer                       reg( const QString&, std::function<bool(Id)>&&, std::function<void(DreamMW*,Id)>&& );
     
     template <yq::mithril::IdType S>
     static Writer                       reg( const QString& l, std::function<void(DreamMW*,S)>&& fn);
@@ -47,14 +56,12 @@ public:
 protected:
     const uint64_t  m_id;
     ArgFlavor       m_flavor    = ArgFlavor::Dead;
-    IdTypes         m_types     = ~IdTypes{};
+    IdTypes         m_idTypes   = ~IdTypes{};
     QString         m_menu;
-    QString         m_label;
-    QString         m_toolTip;
-    QIcon           m_icon;
-    QKeySequence    m_shortcut;
+    ActionInfo      m_action;
     int             m_gravity   = 0;    // used for ordering items
     IdTypeId        m_opens     = 0;
+    Type            m_type      = Type::None;
 
     Command(const QString&);
     
@@ -82,28 +89,28 @@ public:
     Writer&     toolTip(const QString& s)
     {
         if(m_cmd)
-            m_cmd -> m_toolTip = s;
+            m_cmd -> m_action.toolTip = s;
         return *this;
     }
 
     Writer&     tooltip(const QString& s)
     {
         if(m_cmd)
-            m_cmd -> m_toolTip = s;
+            m_cmd -> m_action.toolTip = s;
         return *this;
     }
     
     Writer& shortcut(const QKeySequence& ks)
     {
         if(m_cmd)
-            m_cmd -> m_shortcut = ks;
+            m_cmd -> m_action.shortcut = ks;
         return *this;
     }
     
     Writer& icon(const QIcon& ico)
     {
         if(m_cmd)
-            m_cmd -> m_icon = ico;
+            m_cmd -> m_action.icon = ico;
         return *this;
     }
     
@@ -118,16 +125,30 @@ public:
     Writer& types(IdTypes t)
     {
         if(m_cmd)
-            m_cmd -> m_types    = t;
+            m_cmd -> m_idTypes    = t;
         return *this;
     }
     
+    //! Marks this as a viewer for specified type (assuming it's accepted)
     template <yq::mithril::IdType S>
-    Writer& opener()
+    Writer& viewer()
     {
         if(m_cmd){
-            m_cmd -> m_opens = S::ID;
-            m_cmd -> m_types = IdTypes(S::ID);
+            m_cmd -> m_opens    = S::ID;
+            m_cmd -> m_idTypes  = IdTypes(S::ID);
+            m_cmd -> m_type     = Type::View;
+        }
+        return *this;
+    }
+
+    //! Marks this as a editor for specified type (assuming it's accepted)
+    template <yq::mithril::IdType S>
+    Writer& editor()
+    {
+        if(m_cmd){
+            m_cmd -> m_opens    = S::ID;
+            m_cmd -> m_idTypes  = IdTypes(S::ID);
+            m_cmd -> m_type     = Type::Edit;
         }
         return *this;
     }

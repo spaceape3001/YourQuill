@@ -7,7 +7,10 @@
 #include "DreamMW.hpp"
 
 #include <basic/Logging.hpp>
+#include <basic/Map.hpp>
+#include <basic/Vector.hpp>
 #include <gluon/core/Logging.hpp>
+#include <gluon/util/UInt64SignalMapper.hpp>
 
 #include "Action.hpp"
 #include "Command.hpp"
@@ -37,10 +40,17 @@
 #include <gluon/core/Utilities.hpp>
 
 #include <QMenu>
+#include <QMenuBar>
 
 using namespace yq;
 using namespace yq::gluon;
 using namespace yq::mithril;
+
+struct KCmdData {
+    const Command*  cmd = nullptr;
+    QAction*        act = nullptr;
+};
+
 
 
 DreamMW::DreamMW()
@@ -76,6 +86,32 @@ DreamMW::DreamMW()
         return QString::compare(a->text(), b->text(), Qt::CaseInsensitive) < 0;
     });
     
+    
+    UInt64SignalMapper*     cmdMapper   = new UInt64SignalMapper(this);
+    connect(cmdMapper, &UInt64SignalMapper::mapped, this, &DreamMW::commandTriggered);
+    
+    std::vector<const Command*>   commands;
+    for(const Command* cmd : Command::all()){
+        if(!cmd)
+            continue;
+        commands.push_back(cmd);
+    }
+    
+    std::sort(commands.begin(), commands.end(), [](const Command* a, const Command* b) -> bool {
+        if(a->gravity() < b->gravity())
+            return true;
+        if(a->gravity() > b->gravity())
+            return false;
+        return QString::compare(a->label(), b->label(), Qt::CaseInsensitive) < 0;
+    });
+            
+    for(const Command *cmd : commands){
+        QAction*    act = createAction(cmd->action());
+        connect(act, &QAction::triggered, cmdMapper, &UInt64SignalMapper::map);
+        cmdMapper->setMapping(act, cmd->id());
+        m_cmdActions[cmd->id()]     = act;
+    }
+    
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
     addAction("refresh", "Refresh").icon(QIcon(":/icon/refresh.svg")).shortcut("F5");
 
@@ -103,7 +139,11 @@ DreamMW::DreamMW()
     QMenu* studioMenu   = makeMenu("studio", "Studio");
     QMenu* windowMenu   = makeMenu("window", "Window");
     QMenu* helpMenu     = makeMenu("help", "Help");
+    
+    menuBar()->addSeparator();
     QMenu* debugMenu    = makeMenu("debug", "Debug");
+    
+        //  ALL THOSE *BEFORE* automatics
 
     addToMenu(fileMenu,
         QStringList()
@@ -118,13 +158,54 @@ DreamMW::DreamMW()
 
     addToMenu(viewMenu,
         QStringList()
+    );
+        
+    addToMenu(studioMenu,
+        QStringList() 
+            << "browser" 
+            << "--"
+    );
+    
+    addToMenu(windowMenu,
+        QStringList()
+    );
+    
+    addToMenu(helpMenu,
+        QStringList()
+    );
+    
+    addToMenu(debugMenu,
+        QStringList()
+    );
+    
+
+        //  COMMANDS
+        
+
+    //  Add them to the menu... if advertised and argless...
+    for(const Command* cmd : commands){
+        if(cmd->flavor() == ArgFlavor::Id) // requires id-argument, skip
+            continue;
+        if(cmd->menu().isEmpty())       // no menu... popup only
+            continue;
+        
+        QMenu*  m   = menu(cmd->menu());
+        if(!m)
+            continue;
+        m->addAction(m_cmdActions[cmd->id()]);
+    }
+    
+        // POST-PEND
+
+
+    addToMenu(viewMenu,
+        QStringList()
             << "--"
             << "refresh"
     );
     
-    addToMenu(studioMenu,
-        QStringList() 
-            << "browser" 
+    
+    #if 0
             << "--" 
             << "atomTable" 
             << "bookTable"
@@ -145,6 +226,7 @@ DreamMW::DreamMW()
             << "--"
             << "tagList"
     );
+    #endif
     
     addToMenu(windowMenu,
         QStringList()
@@ -181,6 +263,15 @@ QDockWidget*    DreamMW::addDock(Qt::DockWidgetArea dwa, QWidget*q)
     return dw;
 }
 
+void    DreamMW::commandTriggered(uint64_t id)
+{
+    const Command*  cmd = Command::get(id);
+    if(cmd){
+        if(cmd->accept(m_idForCmd))
+            cmd->invoke(this, m_idForCmd);
+    }
+    m_idForCmd      = Id();
+}
 
 void    DreamMW::newAtomTable()
 {
