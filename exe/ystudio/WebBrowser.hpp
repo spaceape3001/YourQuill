@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <gluon/app/SubWindow.hpp>
+#include "Window.hpp"
 #include <QUrl>
 #include <QWebEnginePage>
 #include <QWebEngineView>
@@ -16,7 +16,7 @@ class QLineEdit;
 using namespace yq;
 
 
-class WebBrowser : public yq::gluon::SubWindow {
+class WebBrowser : public Window {
     Q_OBJECT
 public:
 

@@ -108,7 +108,7 @@ WebBrowser::WebBrowser(QWebEngineProfile*profile, QWidget* parent) : WebBrowser(
 {
 }
 
-WebBrowser::WebBrowser(const QUrl& location, QWebEngineProfile*profile, QWidget* parent) : SubWindow(parent)
+WebBrowser::WebBrowser(const QUrl& location, QWebEngineProfile*profile, QWidget* parent) : Window(parent)
 {
     m_page          = new Page(profile);
     m_view          = new View(m_page);
