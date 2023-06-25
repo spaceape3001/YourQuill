@@ -81,6 +81,8 @@ namespace yq::mithril::column {
         IdColumn::set_defaultList<Directory>({ Column::Key, ColOpt::Icon });
         IdColumn::set_defaultTable<Directory>({{ Column::Key, ColOpt::Icon },  Column::Hidden, Column::Path });
     }
+    
+    YQ_INVOKE(reg_directory_columns();)
 }
 
 namespace yq::mithril::decorationFN {

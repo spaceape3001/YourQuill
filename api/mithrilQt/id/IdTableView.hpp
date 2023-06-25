@@ -16,7 +16,13 @@ namespace yq::mithril {
     public:
         IdTableView(IdModel*, QWidget*parent=nullptr);
         ~IdTableView();
+
+    signals:
+        void    popupRequested(Id);
+
     protected:
         IdModel*    m_model = nullptr;
+
+        void contextMenuEvent(QContextMenuEvent*) override;
     };
 }

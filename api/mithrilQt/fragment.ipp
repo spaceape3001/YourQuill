@@ -71,6 +71,8 @@ namespace yq::mithril::column {
         IdColumn::set_defaultList<Fragment>({ Column::Key, ColOpt::Icon });
         IdColumn::set_defaultTable<Fragment>({{ Column::Key, ColOpt::Icon }, Column::Path });
     }
+
+    YQ_INVOKE(reg_fragment_columns();)
 }
 
 namespace yq::mithril::decorationFN {

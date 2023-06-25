@@ -18,7 +18,6 @@ namespace {
     void    reg_documents()
     {
         Command::reg("Document Table", [](DreamMW* mw){
-        
             auto * w    = new IdTableT<Document>(ALL);
             w -> setWindowTitle("Documents");
             w -> model() -> addColumns(DEFAULT);
