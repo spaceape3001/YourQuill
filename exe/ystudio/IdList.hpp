@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "Window.hpp"
 #include <mithrilQt/id/IdModel.hpp>
 #include <QWidget>
 #include <functional>
@@ -17,7 +18,7 @@ namespace yq::mithril {
 using namespace yq;
 using namespace yq::mithril;
 
-class IdList : public QWidget {
+class IdList : public Window {
     Q_OBJECT
 public:
 

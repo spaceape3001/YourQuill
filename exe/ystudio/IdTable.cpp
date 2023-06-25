@@ -8,7 +8,7 @@
 #include <mithrilQt/id/IdTableView.hpp>
 #include <QVBoxLayout>
 
-IdTable::IdTable(IdModel* mdl, QWidget* parent) : QWidget(parent)
+IdTable::IdTable(IdModel* mdl, QWidget* parent) : Window(parent)
 {
     m_model = mdl;
     m_model->setParent(this);

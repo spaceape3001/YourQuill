@@ -8,7 +8,7 @@
 #include <mithrilQt/id/IdListView.hpp>
 #include <QVBoxLayout>
 
-IdList::IdList(IdModel* mdl, QWidget* parent) : QWidget(parent)
+IdList::IdList(IdModel* mdl, QWidget* parent) : Window(parent)
 {
     m_model = mdl;
     m_model->setParent(this);
