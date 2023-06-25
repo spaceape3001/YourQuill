@@ -11,4 +11,3 @@
 #include <mithril/group/GroupHtml.hpp>
 //#include <mithril/group/GroupPost.hpp>
 #include <mithril/group/GroupCDB.hpp>
-#include <mithril/db/IDLock.hpp>

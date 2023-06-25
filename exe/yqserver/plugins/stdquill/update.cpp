@@ -1386,9 +1386,9 @@ namespace {
 
             std::filesystem::path   fp  = cdb::path(frag);
 
-            Fragment::Lock lk;
+            Id::Lock lk;
             if(!(opts&cdb::DONT_LOCK)){
-                lk = Fragment::Lock::read(frag);
+                lk = Id(frag).lock(false);
                 if(!lk){
                     yWarning() << "Unable to get fragment lock for " << fp;
                     return;

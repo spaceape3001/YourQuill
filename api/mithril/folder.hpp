@@ -12,5 +12,3 @@
 #include <mithril/folder/FolderHtml.hpp>
 #include <mithril/folder/FolderPost.hpp>
 #include <mithril/folder/FolderProvider.hpp>
-
-#include <mithril/db/IDLock.hpp>

@@ -11,4 +11,3 @@
 #include <mithril/attribute/AttributeHtml.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/attribute/AttributeDiff.hpp>
-#include <mithril/db/IDLock.hpp>

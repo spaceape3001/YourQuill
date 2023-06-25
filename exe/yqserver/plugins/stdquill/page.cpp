@@ -36,7 +36,7 @@
 #include <io/stream/Text.hpp>
 
 #include <mithril/bit/Copyright.hpp>
-#include <mithril/db/NKI.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
