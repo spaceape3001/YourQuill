@@ -45,17 +45,16 @@ namespace yq::mithril {
             IdTable( new IdModelT<S>(IdModel::Type::Table, ALL), parent )
         {
         }
+
+        IdTableT(all_t, std::span<const ColumnSpec>, QWidget* parent=nullptr) :
+            IdTable( new IdModelT<S>(IdModel::Type::Table, ALL), parent )
+        {
+        }
     
         IdTableT(std::function<std::vector<S>()> fn, QWidget*parent)  : 
             IdTable( new IdModelT<S>(IdModel::Type::Table, IdModelT<S>::toProvider(fn)), parent )
         {
         }
-        
-        IdTableT(S root, std::function<std::vector<S>(S)> fn, QWidget*parent)  : 
-            IdTable( new IdModelT<S>(root, IdModel::Type::Table, IdModelT<S>::toProvider(fn)), parent )
-        {
-        }
-        
 
         IdModelT<S>*            model() { return static_cast<IdModelT<S>*>(m_model); }
         const IdModelT<S>*      model() const { return static_cast<IdModelT<S>*>(m_model); }

@@ -16,7 +16,13 @@ namespace yq::mithril {
     };
 
     struct IdColumn::Repo {
-        std::map<Key, CreateFN>     columns;
+        std::map<Key, CreateFN>                     columns;
+        std::map<IdTypeId, ColumnSpec>              defList;
+        std::map<IdTypeId, std::vector<ColumnSpec>> defTable;
+        
+        Repo() 
+        {
+        }
     };
     
     IdColumn::Repo& IdColumn::repo()
@@ -45,6 +51,38 @@ namespace yq::mithril {
         Repo& _r = repo();
         _r.columns[{t,c}]   = std::move(fn);
     }
+
+    ColumnSpec               IdColumn::defaultList(IdTypeId t)
+    {
+        Repo& _r = repo();
+        auto i = _r.defList.find(t);
+        if(i != _r.defList.end())
+            return i->second;
+        return ColumnSpec{};
+    }
+    
+    std::span<const ColumnSpec>  IdColumn::defaultTable(IdTypeId t)
+    {
+        Repo& _r = repo();
+        auto i = _r.defTable.find(t);
+        if(i != _r.defTable.end())
+            return i->second;
+        return {};
+    }
+    
+
+    void    IdColumn::set_defaultList(IdTypeId t, ColumnSpec cspec)
+    {
+        Repo& _r = repo();
+        _r.defList[t]   = cspec;
+    }
+    
+    void    IdColumn::set_defaultTable(IdTypeId t, std::initializer_list<ColumnSpec> cols)
+    {
+        Repo& _r = repo();
+        _r.defTable[t]  = std::vector<ColumnSpec>(cols.begin(), cols.end());
+    }
+    
 
     ////////////////////////////////////////////////////////////////////////////////
 

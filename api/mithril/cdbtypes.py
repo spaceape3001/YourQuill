@@ -106,9 +106,11 @@ for i in items:
         print("WARNING... type '%(name)s' has no PARENTS!" % i.args)
 
 def writeIfChanged(fname, text):
-    f   = open(fname, 'r')
-    old = f.read()
-    f.close();
+    old = ''
+    if Path(fname).exists():
+        f   = open(fname, 'r')
+        old = f.read()
+        f.close();
     if old != text:
         f   = open(fname, 'w')
         f.write(text)
@@ -249,5 +251,18 @@ mith = """//////////////////////////////////////////////////////////////////////
 
 """
 
-writeIfChanged('../mithrilQt/id/id_auto.ipp', mith)
+for i in items:
+    mith += """
+#include <mithrilQt/%(lname)s.hpp>""" % i.args
+
+mith += """
+
+namespace yq::mithril {
+"""
+
+mith += """
+}
+"""
+
+writeIfChanged('../mithrilQt/id_auto.ipp', mith)
 

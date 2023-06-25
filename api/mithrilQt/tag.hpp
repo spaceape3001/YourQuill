@@ -6,8 +6,26 @@
 
 #pragma once
 
-#include <mithril/tag.hpp>
-#include <mithrilQt/tag/TagColumn.hpp>
-#include <mithrilQt/tag/TagModel.hpp>
-#include <mithrilQt/tag/TagTable.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithrilQt/id/IdColumn.hpp>
+
+class QIcon;
+
+namespace yq::mithril {
+    QIcon   qIcon(Tag);
+    
+    namespace column {
+        IdColumn  tag_id(ColOpts opts=ColOpts());
+        IdColumn  tag_key(ColOpts opts=ColOpts());
+        IdColumn  tag_name(ColOpts opts=ColOpts());
+    }
+    namespace decorationFN {
+        IdColumn::VariantFN  tag_icon();
+    }
+    namespace displayFN {
+        IdColumn::VariantFN  tag_id();
+        IdColumn::VariantFN  tag_key();
+        IdColumn::VariantFN  tag_name();
+    }
+}
 

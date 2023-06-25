@@ -29,6 +29,7 @@
     <file alias="ext/y.svg">res/leaf.svg</file>
     
     <file alias="generic/atom.svg">res/atom.svg</file>
+    <file alias="generic/attribute.svg">res/attribute.svg</file>
     <file alias="generic/book.svg">res/book.svg</file>
     <file alias="generic/category.svg">res/category.svg</file>
     <file alias="generic/character.svg">res/character.svg</file>
@@ -36,6 +37,7 @@
     <file alias="generic/directory.svg">res/directory.svg</file>
     <file alias="generic/document.svg">res/document.svg</file>
     <file alias="generic/event.svg">res/event.svg</file>
+    <file alias="generic/entity.svg">res/entity.svg</file>
     <file alias="generic/field.svg">res/field.svg</file>
     <file alias="generic/folder.svg">res/folder.svg</file>
     <file alias="generic/fragment.svg">res/fragment.svg</file>

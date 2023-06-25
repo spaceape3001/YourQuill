@@ -42,18 +42,28 @@ namespace yq::mithril {
     public:
     
         IdListT(all_t, QWidget*parent)  : 
-            IdList( new IdModelT<S>(IdModel::Type::List, ALL), parent )
+            IdListT(ALL, IdColumn::defaultList<S>(), parent)
         {
         }
 
+        IdListT(all_t, ColumnSpec cs, QWidget*parent)  : 
+            IdList( new IdModelT<S>(IdModel::Type::List, ALL), parent )
+        {
+            m_model -> setColumn(cs);
+            m_model -> reload();
+        }
+
+
         IdListT(std::function<std::vector<S>()> fn, QWidget*parent)  : 
-            IdList( new IdModelT<S>(IdModel::Type::List, IdModelT<S>::toProvider(fn)), parent )
+            IdListT(std::move(fn), IdColumn::defaultList<S>(), parent )
         {
         }
-        
-        IdListT(S root, std::function<std::vector<S>(S)> fn, QWidget*parent)  : 
-            IdList( new IdModelT<S>(root, IdModel::Type::List, IdModelT<S>::toProvider(fn)), parent )
+
+        IdListT(std::function<std::vector<S>()> fn, ColumnSpec cs, QWidget*parent)  : 
+            IdList( new IdModelT<S>(IdModel::Type::List, IdModelT<S>::toProvider(fn)), parent )
         {
+            m_model -> setColumn(cs);
+            m_model -> reload();
         }
 
         IdModelT<S>*            model() { return static_cast<IdModelT<S>*>(m_model); }

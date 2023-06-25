@@ -54,12 +54,44 @@ namespace yq::mithril {
         
         static bool                     hasColumn(IdTypeId, Column);
         static std::optional<IdColumn>  create(IdTypeId, Column, ColOpts opts={});
+
         static void                     declare(IdTypeId, Column, CreateFN);
-        
         template <IdType S>
         static void                     declare(Column col, CreateFN fn)
         {
             declare(S::ID, col, fn);
+        }
+        
+        
+        static ColumnSpec               defaultList(IdTypeId);
+        
+        template <IdType S>
+        static ColumnSpec               defaultList()
+        {
+            return defaultList(S::ID);
+        }
+        
+        static std::span<const ColumnSpec>  defaultTable(IdTypeId);
+        
+        template <IdType S>
+        static std::span<const ColumnSpec>  defaultTable()
+        {
+            return defaultTable(S::ID);
+        }
+        
+        static void                     set_defaultList(IdTypeId, ColumnSpec);
+        static void                     set_defaultTable(IdTypeId, std::initializer_list<ColumnSpec>);
+
+        template <IdType S>
+        static void                     set_defaultList(ColumnSpec spec)
+        {
+            set_defaultList(S::ID, spec);
+        }
+        
+        template <IdType S>
+        static void                     set_defaultTable(std::initializer_list<ColumnSpec> spec)
+        {
+            set_defaultTable(S::ID, spec);
         }
         
         struct Repo;

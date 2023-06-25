@@ -78,9 +78,14 @@ namespace yq::mithril::cdb {
         return s.as<Field>(v.id);
     }
 
-    Image                   icon(Value)
+    std::string     key(Value v)
     {
-        return Image(); // TODO
+        return key(field(v));
+    }
+    
+    Image                   icon(Value v)
+    {
+        return icon(field(v));
     }
     
     Value::Info     info(Value v)
@@ -98,14 +103,9 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
-    std::string     key(Value)
+    std::string     name(Value v)
     {
-        return std::string(); // TODO
-    }
-    
-    std::string     name(Value)
-    {
-        return std::string(); // TODO
+        return name(field(v));
     }
     
     Value           value(uint64_t i)
