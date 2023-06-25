@@ -9,6 +9,8 @@
 #include "ystudio.hpp"
 #include <gluon/app/SubWindow.hpp>
 
+class DreamMW;
+
 class Window : public yq::gluon::SubWindow {
     Q_OBJECT
 public:
@@ -35,6 +37,8 @@ signals:
 protected:
     Window(QWidget*parent=nullptr);
     ~Window();
+    
+    DreamMW*    dream() const;
 
         // Set the below to advertise
     Id      m_item = {};

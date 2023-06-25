@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Dock.hpp"
+#include "DreamMW.hpp"
 #include <QCloseEvent>
 #include <gluon/core/Utilities.hpp>
 
@@ -67,6 +68,11 @@ void        Dock::closeEvent(QCloseEvent*evt)
     hide();
     _update();
     evt -> ignore();
+}
+
+DreamMW*    Dock::dream() const
+{
+    return static_cast<DreamMW*>(DreamMW::mainWinFor(const_cast<Dock*>(this)));
 }
 
 void        Dock::hideEvent(QHideEvent*evt) 

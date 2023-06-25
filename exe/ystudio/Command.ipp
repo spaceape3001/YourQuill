@@ -36,6 +36,12 @@ const Command*               Command::get(uint64_t i)
     return nullptr;
 }
 
+uint64_t     Command::count()
+{
+    return repo().all.size();
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 

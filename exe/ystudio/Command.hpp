@@ -18,7 +18,9 @@ public:
         //! Generic non-command
         None    = 0,
         View,
-        Edit
+        Edit,
+        Delete,
+        Properties
     };
 
     class Writer;
@@ -52,6 +54,8 @@ public:
     
     template <yq::mithril::IdType S>
     static Writer                       reg( const QString& l, std::function<void(DreamMW*,S)>&& fn);
+    
+    static uint64_t     count();
 
 protected:
     const uint64_t  m_id;
@@ -149,6 +153,28 @@ public:
             m_cmd -> m_opens    = S::ID;
             m_cmd -> m_idTypes  = IdTypes(S::ID);
             m_cmd -> m_type     = Type::Edit;
+        }
+        return *this;
+    }
+
+    template <yq::mithril::IdType S>
+    Writer& deletes()
+    {
+        if(m_cmd){
+            m_cmd -> m_opens    = S::ID;
+            m_cmd -> m_idTypes  = IdTypes(S::ID);
+            m_cmd -> m_type     = Type::Delete;
+        }
+        return *this;
+    }
+    
+    template <yq::mithril::IdType S>
+    Writer& properties()
+    {
+        if(m_cmd){
+            m_cmd -> m_opens    = S::ID;
+            m_cmd -> m_idTypes  = IdTypes(S::ID);
+            m_cmd -> m_type     = Type::Properties;
         }
         return *this;
     }

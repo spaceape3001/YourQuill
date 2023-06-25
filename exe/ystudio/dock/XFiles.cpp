@@ -80,6 +80,8 @@ XFiles::XFiles(QWidget*parent) : Dock(parent)
     m_model = new Model();
     m_view  = new View(m_model);
     setWidget(m_view);
+    
+    connect(m_view, &IdTreeView::popupRequested, this, &XFiles::popupRequested);
 }
 
 XFiles::~XFiles()

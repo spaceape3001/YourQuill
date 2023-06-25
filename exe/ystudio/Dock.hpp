@@ -15,6 +15,7 @@
 
 class DreamMW;
 class QAction;
+class Window;
 
 /*! \brief Singular dock
 
@@ -51,7 +52,9 @@ protected:
     void        closeEvent(QCloseEvent*) override;
     void        showEvent(QShowEvent*) override;
     void        hideEvent(QHideEvent*) override;
-    
+
+    DreamMW*    dream() const;
+
 private slots:
     void        triggered(bool);
 private:

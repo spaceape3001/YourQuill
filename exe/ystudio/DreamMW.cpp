@@ -10,6 +10,7 @@
 #include <basic/Map.hpp>
 #include <basic/Vector.hpp>
 #include <gluon/core/Logging.hpp>
+#include <gluon/core/Utilities.hpp>
 #include <gluon/util/UInt64SignalMapper.hpp>
 
 #include "Action.hpp"
@@ -18,27 +19,10 @@
 #include "WebBrowser.hpp"
 #include "Window.hpp"
 
-//#include <mithrilQt/atom/AtomTable.hpp>
-//#include <mithrilQt/book/BookTable.hpp>
-//#include <mithrilQt/category/CategoryTable.hpp>
-//#include <mithrilQt/character/CharacterTable.hpp>
-//#include <mithrilQt/class/ClassTable.hpp>
-//#include <mithrilQt/directory/DirectoryTable.hpp>
-//#include <mithrilQt/document/DocumentTable.hpp>
-//#include <mithrilQt/event/EventTable.hpp>
-//#include <mithrilQt/field/FieldTable.hpp>
-//#include <mithrilQt/folder/FolderTable.hpp>
-//#include <mithrilQt/fragment/FragmentTable.hpp>
-//#include <mithrilQt/game/GameTable.hpp>
-//#include <mithrilQt/leaf/LeafTable.hpp>
-//#include <mithrilQt/place/PlaceTable.hpp>
-//#include <mithrilQt/root/RootTable.hpp>
-//#include <mithrilQt/tag/TagList.hpp>
-//#include <mithrilQt/tag/TagTable.hpp>
-
 #include <mithril/wksp/Workspace.hpp>
 #include <gluon/core/Utilities.hpp>
 
+#include <QCursor>
 #include <QMenu>
 #include <QMenuBar>
 
@@ -52,6 +36,36 @@ struct KCmdData {
 };
 
 
+namespace {
+
+    std::vector<const Command*> make_commands()
+    {
+        std::vector<const Command*>     ret;
+        for(const Command* cmd : Command::all()){
+            if(!cmd)
+                continue;
+            ret.push_back(cmd);
+        }
+
+        std::sort(ret.begin(), ret.end(), [](const Command* a, const Command* b) -> bool {
+            if(a->gravity() < b->gravity())
+                return true;
+            if(a->gravity() > b->gravity())
+                return false;
+            return QString::compare(a->label(), b->label(), Qt::CaseInsensitive) < 0;
+        });
+        
+        return ret;
+    }
+
+    const std::vector<const Command*>& commands()
+    {
+        static const std::vector<const Command*>    s_ret   = make_commands();
+        return s_ret;
+    }
+    
+
+}
 
 DreamMW::DreamMW()
 {
@@ -87,25 +101,12 @@ DreamMW::DreamMW()
     });
     
     
+    m_cmdActions.resize(Command::count(), nullptr);
+    
     UInt64SignalMapper*     cmdMapper   = new UInt64SignalMapper(this);
     connect(cmdMapper, &UInt64SignalMapper::mapped, this, &DreamMW::commandTriggered);
     
-    std::vector<const Command*>   commands;
-    for(const Command* cmd : Command::all()){
-        if(!cmd)
-            continue;
-        commands.push_back(cmd);
-    }
-    
-    std::sort(commands.begin(), commands.end(), [](const Command* a, const Command* b) -> bool {
-        if(a->gravity() < b->gravity())
-            return true;
-        if(a->gravity() > b->gravity())
-            return false;
-        return QString::compare(a->label(), b->label(), Qt::CaseInsensitive) < 0;
-    });
-            
-    for(const Command *cmd : commands){
+    for(const Command *cmd : commands()){
         QAction*    act = createAction(cmd->action());
         connect(act, &QAction::triggered, cmdMapper, &UInt64SignalMapper::map);
         cmdMapper->setMapping(act, cmd->id());
@@ -114,24 +115,20 @@ DreamMW::DreamMW()
     
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
     addAction("refresh", "Refresh").icon(QIcon(":/icon/refresh.svg")).shortcut("F5");
+    
+    m_actView   = new QAction("View", this);
+    connect(m_actView, &QAction::triggered, this, &DreamMW::cmd_view);
+    
+    m_actEdit   = new QAction("Edit", this);
+    connect(m_actEdit, &QAction::triggered, this, &DreamMW::cmd_edit);
+    
+    m_actDelete = new QAction("Delete", this);
+    connect(m_actDelete, &QAction::triggered, this, &DreamMW::cmd_delete);
+    
+    m_actProperties = new QAction("Properties", this);
+    connect(m_actProperties, &QAction::triggered, this, &DreamMW::cmd_properties);
 
-    //addAction("atomTable", "Atoms").connect(this, &DreamMW::newAtomTable);
-    //addAction("bookTable", "Books").connect(this, &DreamMW::newBookTable);
-    //addAction("categoryTable", "Categories").connect(this, &DreamMW::newCategoryTable);
-    //addAction("characterTable", "Characters").connect(this, &DreamMW::newCharacterTable);
-    //addAction("classTable", "Classes").connect(this, &DreamMW::newClassTable);
-    //addAction("directoryTable", "Directories").connect(this, &DreamMW::newDirectoryTable);
-    //addAction("documentTable", "Documents").connect(this, &DreamMW::newDocumentTable);
-    //addAction("eventTable", "Events").connect(this, &DreamMW::newEventTable);
-    //addAction("fieldTable", "Fields").connect(this, &DreamMW::newFieldTable);
-    //addAction("folderTable", "Folders").connect(this, &DreamMW::newFolderTable);
-    //addAction("fragmentTable", "Fragments").connect(this, &DreamMW::newFragmentTable);
-    //addAction("gameTable", "Games").connect(this, &DreamMW::newGameTable);
-    //addAction("leafTable", "Leafs").connect(this, &DreamMW::newLeafTable);
-    //addAction("placeTable", "Places").connect(this, &DreamMW::newPlaceTable);
-    //addAction("rootTable", "Roots").connect(this, &DreamMW::newRootTable);
-    //addAction("tagTable", "Tags").connect(this, &DreamMW::newTagTable);
-    //addAction("tagList", "Tag List").connect(this, &DreamMW::newTagList);
+    m_popupMenu     = new QMenu;
     
     QMenu* fileMenu     = makeMenu("file", "File");
     QMenu* editMenu     = makeMenu("edit", "Edit");
@@ -183,7 +180,7 @@ DreamMW::DreamMW()
         
 
     //  Add them to the menu... if advertised and argless...
-    for(const Command* cmd : commands){
+    for(const Command* cmd : commands()){
         if(cmd->flavor() == ArgFlavor::Id) // requires id-argument, skip
             continue;
         if(cmd->menu().isEmpty())       // no menu... popup only
@@ -204,29 +201,6 @@ DreamMW::DreamMW()
             << "refresh"
     );
     
-    
-    #if 0
-            << "--" 
-            << "atomTable" 
-            << "bookTable"
-            << "categoryTable"
-            << "characterTable"
-            << "classTable"
-            << "directoryTable"
-            << "documentTable"
-            << "eventTable"
-            << "fieldTable"
-            << "folderTable"
-            << "fragmentTable"
-            << "gameTable"
-            << "leafTable"
-            << "placeTable"
-            << "rootTable"
-            << "tagTable"
-            << "--"
-            << "tagList"
-    );
-    #endif
     
     addToMenu(windowMenu,
         QStringList()
@@ -249,6 +223,7 @@ DreamMW::DreamMW()
 
 DreamMW::~DreamMW()
 {
+    m_popupMenu -> deleteLater();
 }
 
 QDockWidget*    DreamMW::addDock(Qt::DockWidgetArea dwa, QWidget*q)
@@ -263,6 +238,30 @@ QDockWidget*    DreamMW::addDock(Qt::DockWidgetArea dwa, QWidget*q)
     return dw;
 }
 
+void    DreamMW::cmd_delete()
+{
+    if(m_cmdDelete && m_idForCmd)
+        m_cmdDelete -> invoke(this, m_idForCmd);
+}
+
+void    DreamMW::cmd_edit()
+{
+    if(m_cmdEdit && m_idForCmd)
+        m_cmdEdit -> invoke(this, m_idForCmd);
+}
+
+void    DreamMW::cmd_properties()
+{
+    if(m_cmdProperties && m_idForCmd)
+        m_cmdProperties -> invoke(this, m_idForCmd);
+}
+
+void    DreamMW::cmd_view()
+{
+    if(m_cmdView && m_idForCmd)
+        m_cmdView -> invoke(this, m_idForCmd);
+}
+
 void    DreamMW::commandTriggered(uint64_t id)
 {
     const Command*  cmd = Command::get(id);
@@ -273,108 +272,126 @@ void    DreamMW::commandTriggered(uint64_t id)
     m_idForCmd      = Id();
 }
 
-//void    DreamMW::newAtomTable()
-//{
-    //addWindow(new AtomTable(ALL));
-//}
-
-//void    DreamMW::newBookTable()
-//{
-    //addWindow(new BookTable(ALL));
-//}
-
 void    DreamMW::newBrowser()
 {
     addWindow(new WebBrowser);
 }
-
-//void    DreamMW::newCategoryTable()
-//{
-    //addWindow(new CategoryTable(ALL));
-//}
-
-//void    DreamMW::newCharacterTable()
-//{
-    //addWindow(new CharacterTable(ALL));
-//}
-
-//void    DreamMW::newClassTable()
-//{
-    //addWindow(new ClassTable(ALL));
-//}
-
-//void    DreamMW::newDirectoryTable()
-//{
-    //addWindow(new DirectoryTable(ALL));
-//}
-
-//void    DreamMW::newDocumentTable()
-//{
-    //addWindow(new DocumentTable(ALL));
-//}
-
-//void    DreamMW::newEventTable()
-//{
-    //addWindow(new EventTable(ALL));
-//}
-
-//void    DreamMW::newFieldTable()
-//{
-    //addWindow(new FieldTable(ALL));
-//}
-
-//void    DreamMW::newFolderTable()
-//{
-    //addWindow(new FolderTable(ALL));
-//}
-
-//void    DreamMW::newFragmentTable()
-//{
-    //addWindow(new FragmentTable(ALL));
-//}
-
-//void    DreamMW::newGameTable()
-//{
-    //addWindow(new GameTable(ALL));
-//}
-
-//void    DreamMW::newLeafTable()
-//{
-    //addWindow(new LeafTable(ALL));
-//}
 
 MainWindow*  DreamMW::newMain()
 {
     return new DreamMW;
 }
 
-//void    DreamMW::newPlaceTable()
-//{
-    //addWindow(new PlaceTable(ALL));
-//}
 
-//void    DreamMW::newRootTable()
-//{
-    //addWindow(new RootTable(ALL));
-//}
-
-//void    DreamMW::newTagList()
-//{
-    //addWindow(new TagList(ALL));
-//}
-
-//void    DreamMW::newTagTable()
-//{
-    //addWindow(new TagTable(ALL));
-//}
-
-void    DreamMW::updateTitle()
+void    DreamMW::openRequested(Id i)
 {
-    setWindowTitle(tr("YStudio -- %1").arg(qString(wksp::name())));
+    for(const Command* cmd : Command::all()){
+        if(cmd -> flavor() != ArgFlavor::Id)    // command's not ID triggered... cycle
+            continue;
+        if(cmd -> type() != Command::Type::View)
+            continue;
+        if(!cmd -> accept(i))                   // give the command a chance to reject
+            continue;
+        cmd -> invoke(this, i);
+        break;
+    }
 }
 
 void    DreamMW::popupRequested(Id i)
 {
+    /*
+        A popup has been requested by the user (in wherever).  
+        As this menu's dynamic, we'll be forming it dynamically.
+    */
+
+    // Set the ID for all subsequent actions
+    m_idForCmd      = i;
+    
+    // Reset the view/edit/delete commands
+    m_cmdView       = m_cmdEdit = m_cmdDelete = m_cmdProperties = nullptr;
+
+    // Clear the old menu
+    m_popupMenu -> clear();
+    
+    // Need to know the actions to populate (between view/edit & delete)
+    std::vector<QAction*>   actions;
+    
+    for(const Command* cmd : commands()){
+        if(cmd -> flavor() != ArgFlavor::Id)    // command's not ID triggered... cycle
+            continue;
+        if(!cmd -> accept(i))                   // give the command a chance to reject
+            continue;
+            
+        switch(cmd -> type()){                  // search for view/edit/delete
+        case Command::Type::View:
+            if(!m_cmdView){
+                m_cmdView   = cmd;
+                m_actView->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
+                continue;
+            }
+            break;
+        case Command::Type::Edit:
+            if(!m_cmdEdit){
+                m_cmdEdit   = cmd;
+                m_actEdit->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
+                continue;
+            }
+            break;
+        case Command::Type::Delete:
+            if(!m_cmdDelete){
+                m_cmdDelete = cmd;
+                m_actDelete->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
+                continue;
+            }
+            break;
+        case Command::Type::Properties:
+            if(!m_cmdProperties){
+                m_cmdProperties = cmd;
+                m_actProperties->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
+                continue;
+            }
+            break;
+        default:
+            break;
+        }
+        
+        //  if it reaches here... it'll go on the list
+        actions.push_back(m_cmdActions[cmd->id()]);
+    }
+    
+    //  Now we'll add the items, start with view & edit
+    if(m_cmdView || m_cmdEdit){
+        if(m_cmdView)
+            m_popupMenu -> addAction(m_actView);
+        if(m_cmdEdit)
+            m_popupMenu -> addAction(m_actEdit);
+        
+        if(!actions.empty() || m_cmdDelete || m_cmdProperties)
+            m_popupMenu -> addSeparator();
+    }
+    
+    //  Add the non-conforming options
+    if(!actions.empty()){
+        for(QAction* a : actions)
+            m_popupMenu -> addAction(a);
+        if(m_cmdDelete || m_cmdProperties)
+            m_popupMenu -> addSeparator();
+    }
+    
+    //  Delete goes last
+    if(m_cmdDelete){
+        m_popupMenu -> addAction(m_actDelete);
+        if(m_cmdProperties)
+            m_popupMenu -> addSeparator();
+    }
+    
+    if(m_cmdProperties)
+        m_popupMenu -> addAction(m_actProperties);
+    
+    if(m_popupMenu->actions().isEmpty())
+        m_popupMenu->addAction("No actions available");
+    
+    m_popupMenu->exec(QCursor::pos());
 }
 
 void            DreamMW::reconnect(QWidget* qw) 
@@ -387,8 +404,9 @@ void            DreamMW::reconnect(QWidget* qw)
     }
 }
 
-void    DreamMW::openRequested(Id i)
+void    DreamMW::updateTitle()
 {
+    setWindowTitle(tr("YStudio -- %1").arg(qString(wksp::name())));
 }
 
 
