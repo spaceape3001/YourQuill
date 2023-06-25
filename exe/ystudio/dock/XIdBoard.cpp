@@ -7,7 +7,7 @@
 #include "XIdBoard.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/TextUtils.hpp>
-#include <mithrilQt/id/IdFunctor.hpp>
+#include <mithrilQt/id.hpp>
 
 using namespace yq;
 using namespace yq::gluon;
@@ -30,7 +30,7 @@ XIdBoard::XIdBoard(QWidget*parent) : Dock(parent)
     });
     
     auto kCol   = column::id_key(ColOpt::Icon);
-    auto nCol   = column::id_label();
+    auto nCol   = column::id_name();
     
     kCol.fnDropId   = nCol.fnDropId = [this](Id, std::span<const Id> ids) -> std::error_code {
         this -> append(ids);

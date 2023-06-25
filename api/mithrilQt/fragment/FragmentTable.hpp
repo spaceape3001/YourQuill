@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/fragment/Fragment.hpp>
 
 namespace yq::mithril {
     class FragmentTable : public IdTableT<Fragment> {

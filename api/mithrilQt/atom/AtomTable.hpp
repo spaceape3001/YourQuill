@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
     class AtomTable : public IdTableT<Atom> {

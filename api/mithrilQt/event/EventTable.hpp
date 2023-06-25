@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/event/Event.hpp>
 
 namespace yq::mithril {
     class EventTable : public IdTableT<Event> {

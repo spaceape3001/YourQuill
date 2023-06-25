@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/leaf/Leaf.hpp>
 
 namespace yq::mithril {
     class LeafTable : public IdTableT<Leaf> {

@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/tag/Tag.hpp>
 
 namespace yq::mithril {
     class TagTable : public IdTableT<Tag> {

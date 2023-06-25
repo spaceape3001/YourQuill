@@ -10,8 +10,9 @@
 #include <gluon/core/Utilities.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
-#include <mithrilQt/document/DocumentColumn.hpp>
-#include <mithrilQt/folder/FolderColumn.hpp>
+#include <mithrilQt/document.hpp>
+#include <mithrilQt/folder.hpp>
+#include <mithrilQt/id.hpp>
 
 using namespace yq;
 using namespace yq::gluon;
@@ -36,9 +37,9 @@ namespace {
     bool        accept_filter(Id i)
     {
         switch(i.type()){
-        case IdType::Folder:
+        case Folder::ID:
             return accept_folder(Folder(i.id()));
-        case IdType::Document:
+        case Document::ID:
             return accept_document(Document(i.id()));
         default:
             return false;
@@ -63,30 +64,7 @@ namespace {
         return files_provider(cdb::top_folder());
     }
     
-    QVariant    fd_label(Id i)
-    {
-        switch(i.type()){
-        case IdType::Folder:
-            return qString(cdb::name(Folder(i.id())));
-        case IdType::Document:
-            return qString(cdb::name(Document(i.id())));
-        default:
-            return QVariant();
-        }
-    }
-    
-    QVariant    fd_icon(Id i)
-    {
-        switch(i.type()){
-        case IdType::Folder:
-            return qIcon(Folder(i.id()));
-        case IdType::Document:
-            return qIcon(Document(i.id()));
-        default:
-            return QVariant();
-        }
-    }
-    
+
     void    reg_xfiles()
     {
         register_dock<XFiles>("File Explorer").autoStart();
@@ -120,14 +98,14 @@ XFiles::Model::Model(QObject* parent) : IdModel(Type::Tree, cdb::top_folder(), f
         return files_provider(f);
     };
     m_treeDetect    = [](Id i) -> bool {
-        return i.type() == IdType::Folder;
+        return i.type() == Folder::ID;
     };
     
     addFilter(accept_filter);
     
     IdColumn    col;
-    col.fnDisplay     = fd_label;
-    col.fnDecoration  = fd_icon;
+    col.fnDisplay     = displayFN::id_name();
+    col.fnDecoration  = decorationFN::id_icon();
     addColumn(std::move(col));
     reload();
 }

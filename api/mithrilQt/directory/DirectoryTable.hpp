@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/directory/Directory.hpp>
 
 namespace yq::mithril {
     class DirectoryTable : public IdTableT<Directory> {

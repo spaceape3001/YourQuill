@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/class/Class.hpp>
 
 namespace yq::mithril {
     class ClassTable : public IdTableT<Class> {

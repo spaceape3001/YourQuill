@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/root/Root.hpp>
 
 namespace yq::mithril {
     class RootTable : public IdTableT<Root> {

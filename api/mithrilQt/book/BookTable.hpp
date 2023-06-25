@@ -8,10 +8,9 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/book/Book.hpp>
 
 namespace yq::mithril {
-    class BookModel;
-    
     class BookTable : public IdTableT<Book> {
         Q_OBJECT
     public:

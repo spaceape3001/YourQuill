@@ -8,6 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithrilQt/id/IdTable.hpp>
+#include <mithril/document/Document.hpp>
 
 namespace yq::mithril {
     class DocumentTable : public IdTableT<Document> {
