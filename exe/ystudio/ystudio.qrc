@@ -4,11 +4,21 @@
 
     <file alias="icon/back.svg">res/arrow-left-3.svg</file>
     <file alias="icon/browser.svg">res/applications-internet-5.svg</file>
+    <file alias="icon/cancel.svg">res/edit-delete-4.svg</file>
+    <file alias="icon/clear.svg">res/edit-clear-4.svg</file>
+    <file alias="icon/copy.svg">res/edit-copy-6.svg</file>
+    <file alias="icon/cut.svg">res/edit-cut-4.svg</file>
+    <file alias="icon/find.svg">res/edit-find-3.svg</file>
     <file alias="icon/fore.svg">res/arrow-right-3.svg</file>
+    <file alias="icon/fullscreen.svg">res/view-fullscreen-4.svg</file>
     <file alias="icon/home.svg">res/go-home-5.svg</file>
+    <file alias="icon/paste.svg">res/edit-paste-3.svg</file>
+    <file alias="icon/print.svg">res/document-print-2.svg</file>
     <file alias="icon/refresh.svg">res/view-refresh-7.svg</file>
-    <file alias="icon/stop.svg">res/edit-delete-6.svg</file>
-
+    <file alias="icon/save.svg">res/document-save-5.svg</file>
+    <file alias="icon/stop.svg">res/process-stop-4.svg</file>
+    <file alias="icon/zoomIn.svg">res/zoom-in-3.svg</file>
+    <file alias="icon/zoomOut.svg">res/zoom-out-3.svg</file>
 </qresource>
 </RCC>
 
