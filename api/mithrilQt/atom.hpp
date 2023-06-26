@@ -13,6 +13,7 @@ class QIcon;
 
 namespace yq::mithril {
     QIcon   qIcon(Atom);
+    QIcon   qIcon(Atom::Property);
     
     namespace column {
         IdColumn  atom_id(ColOpts opts=ColOpts());

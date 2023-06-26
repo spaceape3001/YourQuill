@@ -14,6 +14,7 @@ namespace yq::mithril {
     struct Folder;
     struct Class;
     struct Fragment;
+    struct Id;
     
     struct AtomSpec {
         enum Type {
@@ -35,9 +36,10 @@ namespace yq::mithril {
         Class   class_() const;
         Field   field() const;
         
-        
+        bool    match(Id) const;
         bool    match(Class) const;
         bool    match(Field) const;
+        
         bool    match_field(std::string_view) const;
         bool    match_class(std::string_view) const;
     };

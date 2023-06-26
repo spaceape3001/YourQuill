@@ -11,7 +11,7 @@
 namespace yq::mithril {
     /*! \brief Character in the cache database */
     struct Character {
-        static constexpr const IdTypeId ID      = 5;
+        static constexpr const IdTypeId ID      = 6;
         static constexpr const IdTypes  PARENTS = Entity::ID;
 
         uint64_t  id  = 0ULL;

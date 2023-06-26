@@ -15,7 +15,7 @@ namespace yq::mithril {
         This structure represents an atom classification in the cache
     */
     struct Class {
-        static constexpr const IdTypeId ID          = 6;
+        static constexpr const IdTypeId ID          = 7;
         static constexpr const IdTypes  PARENTS     = Document::ID;
         static constexpr const char*    EXTENSION   = "class";
         

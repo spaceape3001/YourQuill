@@ -12,7 +12,7 @@ namespace yq::mithril {
     /*! \brief Attribute of documents
     */
     struct Attribute {
-        static constexpr const IdTypeId ID      = 2;
+        static constexpr const IdTypeId ID      = 3;
         static constexpr const IdTypes  PARENTS = {};
         struct Info;
         struct Diff;

@@ -15,7 +15,7 @@ namespace yq::mithril {
         fused across all matching fragments in the workspace
     */
     struct Document {
-        static constexpr const IdTypeId  ID      = 8;
+        static constexpr const IdTypeId  ID      = 9;
         static constexpr const IdTypes    PARENTS = {};
         struct Info;
         uint64_t  id = 0ULL;

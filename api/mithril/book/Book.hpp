@@ -11,7 +11,7 @@
 namespace yq::mithril {
     /*! \brief Book in the cache database */
     struct Book {
-        static constexpr const IdTypeId ID      = 3;
+        static constexpr const IdTypeId ID      = 4;
         static constexpr const IdTypes  PARENTS = Atom::ID;
 
         uint64_t            id = 0ULL;

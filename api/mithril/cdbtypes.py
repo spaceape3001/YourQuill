@@ -23,22 +23,54 @@ def pluralize(s):
         return s + 'es'
     return s + 's'
     
+def writeIfChanged(fname, text):
+    old = ''
+    if Path(fname).exists():
+        f   = open(fname, 'r')
+        old = f.read()
+        f.close();
+    if old != text:
+        print("Writing to %s" % fname)
+        f   = open(fname, 'w')
+        f.write(text)
+        f.close()
+
 
 items   = []
 class Item:
-    def __init__(self, x):
-        self.dir            = x
-        self.name           = x.name.capitalize()
-        self.hroot          = x.name + '/' + self.name 
-        self.hname          = self.name + ".hpp"
-        self.header         = x / self.hname
-        self.parent         = 0
+    def __init__(self, x, sub=None):
         self.id             = 0
-        self.args           = dict()
-        self.args['name']   = self.name
-        self.args['lname']  = self.name.lower()
-        self.args['hroot']  = self.hroot
-        self.args['plural'] = pluralize(self.name.lower())
+        self.args           = dict();
+
+        if isinstance(x, Item):
+            assert sub is not None
+            self.main           = x
+            self.args           = x.args.copy()
+            self.dir            = x.dir
+            self.name           = x.name + '::' + sub
+            self.hroot          = x.hroot
+            self.hname          = x.hname
+            self.header         = x.header
+            self.sub            = sub
+            self.args['sub']    = sub
+            self.args['plural'] = pluralize(self.sub.lower())
+
+        else:
+            assert isinstance(x, Path)
+            assert sub is None
+            
+            self.args           = dict()
+            self.dir            = x
+            self.name           = x.name.capitalize()
+            self.hroot          = x.name + '/' + self.name 
+            self.hname          = self.name + ".hpp"
+            self.header         = x / self.hname
+            self.sub            = None
+            self.args['name']   = self.name
+            self.args['lname']  = self.name.lower()
+            self.args['hroot']  = self.hroot
+            self.args['plural'] = pluralize(self.name.lower())
+            
 
 root    = Path('.')
 for x in root.iterdir():
@@ -59,6 +91,8 @@ for x in root.iterdir():
     
 items.sort(key=lambda i: i.name)
 
+subitems    = []
+
 n           = 1
 for i in items:
     i.id        = n
@@ -71,22 +105,32 @@ for i in items:
     chg         = False
     hasId       = False
     hasParents  = False
+    struct      = ''
+    sub         = None
     
     for l in lines:
+        if 'struct' in l:
+            s  = re.match(r"\s*struct\s+(\w+)\:\:(\w+)\s*{", l)
+            if s is not None:
+                sub  = s.group(2)
+    
         if ('IdTypes' in l) and ('PARENTS' in l):
             hasParents  = True
 
-        if spew:
-            output += l
-            continue
-
         if ('IdTypeId' in l) and ('ID' in l):
+            use = i.id
+            if sub is not None:
+                x       = Item(i, sub)
+                x.id    = n
+                n = n + 1
+                subitems.append(x)
+                use     = x.id
+        
             oldtxt  = re.search(r"\d+", l).group(0)
             oldnum  = int(oldtxt)
-            if oldnum != i.id:
-                newtxt  = str(i.id)
+            if oldnum != use:
+                newtxt  = str(use)
                 output += l.replace(oldtxt,newtxt)
-                chg = True
                 print("%s is being altered" % i.name)
             else:
                 output += l
@@ -95,26 +139,16 @@ for i in items:
         else:
             output += l
 
-    if chg:
-        f   = open(i.header, 'w')
-        f.write(output)
-        f.close()
+    writeIfChanged(i.header, output)
     
     if not hasId:
         print("WARNING... type '%(name)s' has no ID!" % i.args)
     if not hasParents:
         print("WARNING... type '%(name)s' has no PARENTS!" % i.args)
 
-def writeIfChanged(fname, text):
-    old = ''
-    if Path(fname).exists():
-        f   = open(fname, 'r')
-        old = f.read()
-        f.close();
-    if old != text:
-        f   = open(fname, 'w')
-        f.write(text)
-        f.close()
+items.extend(subitems);
+items.sort(key=lambda i: i.id)
+
 
 ################################################################################
 
@@ -133,7 +167,8 @@ mith  = """/////////////////////////////////////////////////////////////////////
 """
 
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
 #include <mithril/%(hroot)s.hpp>
 #include <mithril/%(hroot)sCDB.hpp>   
 """ % i.args 
@@ -149,9 +184,14 @@ mith += """
         switch(ct){"""
 
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
         case %(name)s::ID:
             return "%(name)s"sv;""" % i.args
+    else:
+        mith += """
+        case %(name)s::%(sub)s::ID:
+            return "%(name)s::%(sub)s"sv;""" % i.args
 
 mith += """
         default:
@@ -164,9 +204,14 @@ mith += """
         switch(ct){"""
         
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
         case %(name)s::ID:
             return &meta<%(name)s>();""" % i.args
+    else:
+        mith += """
+        case %(name)s::%(sub)s::ID:
+            return &meta<%(name)s::%(sub)s>();""" % i.args
 
 mith +="""
         default:
@@ -179,9 +224,14 @@ mith +="""
         switch(ct){"""
         
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
         case %(name)s::ID:
             return %(name)s::PARENTS;""" % i.args
+    else:
+        mith += """
+        case %(name)s::%(sub)s::ID:
+            return %(name)s::%(sub)s::PARENTS;""" % i.args
     
 mith += """
         default:
@@ -204,8 +254,13 @@ mith += """
     """
     
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
         case %(name)s::ID:
+            return cdb::key(%(name)s(id()));""" % i.args
+    else:
+        mith += """
+        case %(name)s::%(sub)s::ID:
             return cdb::key(%(name)s(id()));""" % i.args
             
 mith += """
@@ -220,9 +275,14 @@ mith += """
     """
 
 for i in items:
-    mith += """
-        case %(name)s::ID:
-            return cdb::name(%(name)s(id()));""" % i.args
+    if i.sub is None:
+        mith += """
+            case %(name)s::ID:
+                return cdb::name(%(name)s(id()));""" % i.args
+    else:
+        mith += """
+            case %(name)s::%(sub)s::ID:
+                return cdb::name(%(name)s::%(sub)s(id()));""" % i.args
 
 mith += """
         default:
@@ -237,7 +297,8 @@ namespace yq::mithril::cdb {
         switch(ct){"""
         
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
         case %(name)s::ID:
             return ids<%(name)s>(all_%(plural)s(sorted));""" % i.args
         
@@ -268,7 +329,8 @@ mith = """//////////////////////////////////////////////////////////////////////
 """
 
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
 #include <mithrilQt/%(lname)s.hpp>""" % i.args
 
 mith += """
@@ -283,9 +345,14 @@ namespace yq::mithril {
 """
 
 for i in items:
-    mith += """
+    if i.sub is None:
+        mith += """
         case %(name)s::ID:
             return qIcon(%(name)s(i.id()));""" % i.args
+    else:
+        mith += """
+        case %(name)s::%(sub)s::ID:
+            return qIcon(%(name)s::%(sub)s(i.id()));""" % i.args
 
 mith += """
         default:

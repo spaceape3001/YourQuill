@@ -271,6 +271,7 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 
 //  ID TYPES
 YQ_TYPE_IMPLEMENT(yq::mithril::Atom)
+YQ_TYPE_IMPLEMENT(yq::mithril::Atom::Property)
 YQ_TYPE_IMPLEMENT(yq::mithril::Attribute)
 YQ_TYPE_IMPLEMENT(yq::mithril::Book)
 YQ_TYPE_IMPLEMENT(yq::mithril::Category)

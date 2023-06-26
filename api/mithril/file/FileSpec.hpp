@@ -15,6 +15,7 @@ namespace yq::mithril {
     struct Folder;
     struct Class;
     struct Fragment;
+    struct Id;
     
     struct FileSpec {
         enum Type {
@@ -33,7 +34,9 @@ namespace yq::mithril {
         uint64_t                u64     = 0;
         Type                    type    = Never;
         
-        bool    match(Fragment) const;
+        bool    match(Id) const;
+        
+        //bool    match(Fragment) const;
         bool    match(Folder, std::string_view) const;
         bool    match(const std::filesystem::path&) const;
     };

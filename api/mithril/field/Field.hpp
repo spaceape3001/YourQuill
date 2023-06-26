@@ -20,7 +20,7 @@ namespace yq::mithril {
         it's file name and it's class id in the cdb will be 0.  
     */
     struct Field {
-        static constexpr const IdTypeId ID          = 11;
+        static constexpr const IdTypeId ID          = 12;
         static constexpr const IdTypes  PARENTS     = Document::ID;
         static constexpr const char*    EXTENSION   = "field";
         struct Info;

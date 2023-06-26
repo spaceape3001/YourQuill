@@ -14,7 +14,7 @@
 #include <mithril/class/Class.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
-#include <mithril/field/Field.hpp>
+#include <mithril/field/FieldCDB.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/tag/Tag.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
@@ -402,6 +402,16 @@ namespace yq::mithril::cdb {
             ret.target = Atom(s.v_uint64(5));
         }
         return ret;
+    }
+
+    std::string             key(Atom::Property p)
+    {
+        return key(field(p)) + '#' + to_string(p.id);
+    }
+    
+    std::string             name(Atom::Property p)
+    {
+        return name(field(p));
     }
     
     Atom                    source(Atom::Property p)

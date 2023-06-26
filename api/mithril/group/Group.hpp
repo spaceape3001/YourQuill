@@ -12,7 +12,7 @@
 namespace yq::mithril {
     /*! \brief Group (of entities/etc) in the cache database */
     struct Group {
-        static constexpr const IdTypeId ID      = 16;
+        static constexpr const IdTypeId ID      = 17;
         static constexpr const IdTypes  PARENTS = Atom::ID;
 
         uint64_t            id = 0ULL;

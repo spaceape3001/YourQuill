@@ -33,6 +33,10 @@ namespace yq::mithril {
     };
     
     struct Atom::Property {
+
+        static constexpr const IdTypeId ID      = 2;
+        static constexpr const IdTypes  PARENTS = {};
+
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Property&rhs) const noexcept = default; 
         constexpr operator uint64_t() const noexcept { return id; }
@@ -40,4 +44,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Atom)
+YQ_TYPE_DECLARE(yq::mithril::Atom::Property)
 

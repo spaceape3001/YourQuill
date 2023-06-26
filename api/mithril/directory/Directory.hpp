@@ -16,7 +16,7 @@ namespace yq::mithril {
         cache database.
     */
     struct Directory {
-        static constexpr const IdTypeId    ID      = 7;
+        static constexpr const IdTypeId    ID      = 8;
         static constexpr const IdTypes      PARENTS = {};
 
         struct Info;

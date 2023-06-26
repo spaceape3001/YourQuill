@@ -210,6 +210,9 @@ namespace yq::mithril::cdb {
     
     Atom::PropertyInfo      info(Atom::Property);
     
+    std::string             key(Atom::Property);
+    std::string             name(Atom::Property);
+    
     Atom                    source(Atom::Property);
     Atom                    target(Atom::Property);
     

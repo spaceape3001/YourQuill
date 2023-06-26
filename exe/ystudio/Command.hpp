@@ -9,6 +9,12 @@
 #include "ystudio.hpp"
 #include "Action.hpp"
 
+namespace yq::mithril {
+    class AtomSpec;
+    class FileSpec;
+}
+
+
 class DreamMW;
 
 class Command {
@@ -53,6 +59,8 @@ public:
     static Writer                       reg( const QString&, std::function<void(DreamMW*)>&& );
     static Writer                       reg( const QString&, std::function<void(DreamMW*,Id)>&& );
     static Writer                       reg( const QString&, std::function<bool(Id)>&&, std::function<void(DreamMW*,Id)>&& );
+    static Writer                       reg( const QString&, yq::mithril::AtomSpec&&, std::function<void(DreamMW*,Id)>&& );
+    static Writer                       reg( const QString&, yq::mithril::FileSpec&&, std::function<void(DreamMW*,Id)>&& );
     
     template <yq::mithril::IdType S>
     static Writer                       reg( const QString& l, std::function<void(DreamMW*,S)>&& fn);

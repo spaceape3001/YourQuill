@@ -11,7 +11,7 @@
 
 namespace yq::mithril {
     struct Graph {
-        static constexpr const IdTypeId  ID      = 15;
+        static constexpr const IdTypeId  ID      = 16;
         static constexpr const IdTypes    PARENTS = {};
 
         uint64_t  id = 0ULL;

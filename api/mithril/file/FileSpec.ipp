@@ -9,8 +9,10 @@
 #include <io/FileUtils.hpp>
 #include <basic/TextUtils.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/Folder.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
     FileSpec        by_file(const std::filesystem::path&fp)
@@ -83,9 +85,17 @@ namespace yq::mithril {
         //return ret;
     //}
 
-    bool    FileSpec::match(Fragment frag) const
+    bool    FileSpec::match(Id id) const
     {
-        return match(cdb::folder(frag), cdb::name(frag));
+        Fragment    frag    = id.as<Fragment>();
+        if(frag)
+            return match(cdb::folder(frag), cdb::name(frag));
+        
+        Document    doc     = id.as<Document>();
+        if(doc)
+            return match(cdb::folder(doc), cdb::name(doc));
+            
+        return false;
     }
 
     bool    FileSpec::match(Folder fo, std::string_view k) const

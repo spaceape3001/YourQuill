@@ -5,9 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <basic/TextUtils.hpp>
+#include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomSpec.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
+#include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
     AtomSpec        by_class(std::string_view k)
@@ -76,6 +78,29 @@ namespace yq::mithril {
         }
     }
     
+    bool    AtomSpec::match(Id id) const
+    {
+        Class   c   = id.as<Class>();
+        if(c)
+            return match(c);
+        Field   f   = id.as<Field>();
+        if(f)
+            return match(f);
+        
+        Atom    a   = id.as<Atom>();
+        if(a){
+            for(Class c : cdb::classes(a)){
+                if(match(c))
+                    return true;
+            }
+            return false;
+        }
+        
+        return false;
+        
+    }
+
+
     bool    AtomSpec::match(Class c) const
     {
         switch(type){

@@ -47,6 +47,8 @@ namespace yq::mithril {
 
         case Atom::ID:
             return qIcon(Atom(i.id()));
+        case Atom::Property::ID:
+            return qIcon(Atom::Property(i.id()));
         case Attribute::ID:
             return qIcon(Attribute(i.id()));
         case Book::ID:

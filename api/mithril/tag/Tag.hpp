@@ -12,7 +12,7 @@ namespace yq::mithril {
     /*! Tag in the cache database
     */
     struct Tag {
-        static constexpr const IdTypeId ID          = 22;
+        static constexpr const IdTypeId ID          = 23;
         static constexpr const IdTypes  PARENTS     = Document::ID;
         static constexpr const char*    EXTENSION = "tag";
         

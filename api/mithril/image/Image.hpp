@@ -19,7 +19,7 @@ namespace yq {
         /*! \brief Represents an image in the database
         */
         struct Image {
-            static constexpr const IdTypeId ID      = 17;
+            static constexpr const IdTypeId ID      = 18;
             static constexpr const IdTypes  PARENTS  = Fragment::ID;
             static constexpr const Size2U   kSmall  = { 32, 24 };
             static constexpr const Size2U   kMedium = { 64, 48 };

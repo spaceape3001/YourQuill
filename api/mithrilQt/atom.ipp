@@ -11,6 +11,7 @@
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/atom/AtomCDB.hpp>
+#include <mithrilQt/field.hpp>
 #include <mithrilQt/image.hpp>
 #include <QIcon>
 
@@ -24,6 +25,11 @@ namespace yq::mithril {
         if(img)
             return qIcon(img);
         return qico;
+    }
+
+    QIcon   qIcon(Atom::Property p)
+    {
+        return qIcon(cdb::field(p));
     }
 }
 

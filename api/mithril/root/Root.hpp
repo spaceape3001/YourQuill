@@ -12,7 +12,7 @@ namespace yq::mithril {
     /*! Tag in the cache database
     */
     struct Root {
-        static constexpr const IdTypeId ID      = 21;
+        static constexpr const IdTypeId ID      = 22;
         static constexpr const IdTypes  PARENTS = {};
 
         uint64_t  id  = 0ULL;
