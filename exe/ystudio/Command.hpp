@@ -20,6 +20,11 @@ class DreamMW;
 class Command {
 public:
 
+    using DwInvokeFN    = std::function<void(DreamMW*)>;
+    using DwIdInvokeFN  = std::function<void(DreamMW*,Id)>;
+    using IdInvokeFN    = std::function<void(Id)>;
+    using FilterFN      = std::function<bool(Id)>;
+
     enum class Type {
         //! Generic non-command
         None    = 0,
@@ -56,11 +61,17 @@ public:
     
     static std::vector<const Command*>  all();
     static const Command*               get(uint64_t);
-    static Writer                       reg( const QString&, std::function<void(DreamMW*)>&& );
-    static Writer                       reg( const QString&, std::function<void(DreamMW*,Id)>&& );
-    static Writer                       reg( const QString&, std::function<bool(Id)>&&, std::function<void(DreamMW*,Id)>&& );
-    static Writer                       reg( const QString&, yq::mithril::AtomSpec&&, std::function<void(DreamMW*,Id)>&& );
-    static Writer                       reg( const QString&, yq::mithril::FileSpec&&, std::function<void(DreamMW*,Id)>&& );
+    static Writer                       reg( const QString&, DwInvokeFN&& );
+    static Writer                       reg( const QString&, DwIdInvokeFN&& );
+    static Writer                       reg( const QString&, FilterFN&&, DwIdInvokeFN&& );
+    
+    /*! \brief Registers an atom spec for the filter
+    */
+    static Writer                       reg( const QString&, yq::mithril::AtomSpec&&, DwIdInvokeFN&& );
+
+    /*! \brief Registers a file spec for the filter
+    */
+    static Writer                       reg( const QString&, yq::mithril::FileSpec&&, DwIdInvokeFN&& );
     
     template <yq::mithril::IdType S>
     static Writer                       reg( const QString& l, std::function<void(DreamMW*,S)>&& fn);

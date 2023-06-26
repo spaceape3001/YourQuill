@@ -16,7 +16,6 @@
 #include <io/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <sql/SqlLite.hpp>
-#include <io/PluginLoader.hpp>
 #include <nlohmann/json.hpp>
 
 using namespace yq;
@@ -92,7 +91,6 @@ bool    DreamApp::configure()
     
     WebBrowser::setHomeUrl(m_home);
     
-    load_plugin_dir("plugin");
     //load_plugin_dir("plugin/ystudio");
     return true;
 }

@@ -5,6 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Command.hpp"
+#include <mithril/atom/AtomSpec.hpp>
+#include <mithril/file/FileSpec.hpp>
+
+using namespace yq;
+using namespace yq::mithril;
 
 struct Command::Repo {
     std::vector<const Command*>     all;
@@ -55,10 +60,9 @@ Command::Command(const QString&kLabel) : m_id(repo().count())
 
 namespace {
     struct CommandDW : public Command {
-        using FN    = std::function<void(DreamMW*)>;
-        FN          m_function;
+        DwInvokeFN      m_function;
     
-        CommandDW(const QString& lab, FN&& fn) : Command(lab), m_function(std::move(fn))
+        CommandDW(const QString& lab, DwInvokeFN&& fn) : Command(lab), m_function(std::move(fn))
         {
             m_flavor    = ArgFlavor::Main;
         }
@@ -76,7 +80,7 @@ namespace {
     };
 }
 
-Command::Writer Command::reg( const QString&label, std::function<void(DreamMW*)>&& fn)
+Command::Writer Command::reg( const QString&label, DwInvokeFN&& fn)
 {
     if(!fn)
         return Writer();
@@ -85,9 +89,8 @@ Command::Writer Command::reg( const QString&label, std::function<void(DreamMW*)>
 
 namespace {
     struct CommandId : public Command {
-        using FN    = std::function<void(DreamMW*, Id)>;
-        FN m_function;
-        CommandId(const QString& lab, FN&& fn) : Command(lab), m_function(std::move(fn))
+        DwIdInvokeFN    m_function;
+        CommandId(const QString& lab, DwIdInvokeFN&& fn) : Command(lab), m_function(std::move(fn))
         {
             m_flavor    = ArgFlavor::Id;
         }
@@ -103,7 +106,7 @@ namespace {
     };
 }
 
-Command::Writer Command::reg( const QString&label, std::function<void(DreamMW*,Id)>&& fn)
+Command::Writer Command::reg( const QString&label, DwIdInvokeFN&& fn)
 {
     if(!fn)
         return Writer();
@@ -112,15 +115,15 @@ Command::Writer Command::reg( const QString&label, std::function<void(DreamMW*,I
 
 namespace {
     struct CommandIdF : public Command {
-        using FN    = std::function<void(DreamMW*, Id)>;
-        using FNF   = std::function<bool(Id)>;
-        FN          m_function;
-        FNF         m_filter;
-        CommandIdF(const QString& lab, FN&& fn, FNF&& fnf) : 
-            Command(lab), m_function(std::move(fn)), m_filter(std::move(fnf))
+        FilterFN         m_filter;
+        DwIdInvokeFN     m_function;
+        
+        CommandIdF(const QString& lab, FilterFN&& fil, DwIdInvokeFN&& fn) : 
+            Command(lab), m_filter(std::move(fil)), m_function(std::move(fn))
         {
             m_flavor    = ArgFlavor::Id;
         }
+        
         void        invoke(DreamMW* dw, Id i) const
         {
             m_function(dw, i);
@@ -135,12 +138,75 @@ namespace {
     };
 }
 
-Command::Writer     Command::reg( const QString&label, std::function<bool(Id)>&& fnF, std::function<void(DreamMW*,Id)>&&fn)
+Command::Writer     Command::reg( const QString&label, FilterFN&& fnF, DwIdInvokeFN&&fn)
 {
     if(!fn)
         return Writer();
     if(!fnF)
         return Writer();
-    return Writer(new CommandIdF(label, std::move(fn), std::move(fnF)));
+    return Writer(new CommandIdF(label, std::move(fnF), std::move(fn)));
 }
 
+namespace {
+    struct CommandAtomSpec : public Command {
+        AtomSpec        m_filter;
+        DwIdInvokeFN    m_function;
+        
+        CommandAtomSpec(const QString&label, const AtomSpec&& spec, DwIdInvokeFN&& fn) : 
+            Command(label), m_filter(std::move(spec)), m_function(std::move(fn))
+        {
+            m_flavor    = ArgFlavor::Id;
+        }
+        
+        void        invoke(DreamMW* dw, Id i) const
+        {
+            m_function(dw, i);
+        }
+        
+        bool        accept(Id i) const 
+        {
+            if(! m_idTypes[i.type()])
+                return false;
+            return m_filter.match(i);
+        }
+    };
+}
+
+Command::Writer     Command::reg( const QString&label, AtomSpec&&spec, DwIdInvokeFN&& fn)
+{
+    if(!fn)
+        return Writer();
+    return Writer(new CommandAtomSpec(label, std::move(spec), std::move(fn)));
+}
+
+namespace {
+    struct CommandFileSpec : public Command {
+        FileSpec        m_filter;
+        DwIdInvokeFN    m_function;
+        
+        CommandFileSpec(const QString&label, const FileSpec&& spec, DwIdInvokeFN&& fn) : 
+            Command(label), m_filter(std::move(spec)), m_function(std::move(fn))
+        {
+            m_flavor    = ArgFlavor::Id;
+        }
+        
+        void        invoke(DreamMW* dw, Id i) const
+        {
+            m_function(dw, i);
+        }
+        
+        bool        accept(Id i) const 
+        {
+            if(!m_idTypes[i.type()])
+                return false;
+            return m_filter.match(i);
+        }
+    };
+}
+
+Command::Writer     Command::reg( const QString&label, FileSpec&&spec, DwIdInvokeFN&& fn)
+{
+    if(!fn)
+        return Writer();
+    return Writer(new CommandFileSpec(label, std::move(spec), std::move(fn)));
+}
