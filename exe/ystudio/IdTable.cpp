@@ -14,8 +14,10 @@ IdTable::IdTable(IdModel* mdl, QWidget* parent) : Window(parent)
     m_model->setParent(this);
     m_view  = new IdTableView(m_model);
     
-    connect(m_view, &IdTableView::popupRequested, this, &IdTable::popupRequested);
-    
+    connect(m_view, &IdTableView::popupRequested, [this](Id i){ 
+        popupRequested(i);
+    });
+
     QVBoxLayout*    lay = new QVBoxLayout;
     lay->setContentsMargins(0,0,0,0);
     lay->addWidget(m_view);

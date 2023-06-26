@@ -116,19 +116,26 @@ DreamMW::DreamMW()
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
     addAction("refresh", "Refresh").icon(QIcon(":/icon/refresh.svg")).shortcut("F5");
     
-    m_actView   = new QAction("View", this);
-    connect(m_actView, &QAction::triggered, this, &DreamMW::cmd_view);
     
-    m_actEdit   = new QAction("Edit", this);
-    connect(m_actEdit, &QAction::triggered, this, &DreamMW::cmd_edit);
+    //  popups....
+    UInt64SignalMapper*     popupMapper   = new UInt64SignalMapper(this);
+    connect(popupMapper, &UInt64SignalMapper::mapped, this, &DreamMW::popupCommand);
     
-    m_actDelete = new QAction("Delete", this);
-    connect(m_actDelete, &QAction::triggered, this, &DreamMW::cmd_delete);
+    for(uint64_t i=0;i<(uint64_t) Command::Type::COUNT; ++i){
+        PopupItem   pi;
+        if(i){
+            pi.act  = new QAction(this);
+            connect(pi.act, &QAction::triggered, popupMapper, &UInt64SignalMapper::map);
+            popupMapper->setMapping(pi.act, i);
+        }
+        m_popupItems.push_back(pi);
+    }
     
-    m_actProperties = new QAction("Properties", this);
-    connect(m_actProperties, &QAction::triggered, this, &DreamMW::cmd_properties);
-
-    m_popupMenu     = new QMenu;
+    m_popupItems[(size_t) Command::Type::View      ].separator  = true;
+    m_popupItems[(size_t) Command::Type::Delete    ].separator  = true;
+    m_popupItems[(size_t) Command::Type::Delete    ].last       = true;
+    m_popupItems[(size_t) Command::Type::Properties].separator  = true;
+    
     
     QMenu* fileMenu     = makeMenu("file", "File");
     QMenu* editMenu     = makeMenu("edit", "Edit");
@@ -223,7 +230,6 @@ DreamMW::DreamMW()
 
 DreamMW::~DreamMW()
 {
-    m_popupMenu -> deleteLater();
 }
 
 QDockWidget*    DreamMW::addDock(Qt::DockWidgetArea dwa, QWidget*q)
@@ -236,30 +242,6 @@ QDockWidget*    DreamMW::addDock(Qt::DockWidgetArea dwa, QWidget*q)
         connect(d, &Dock::openRequested,  this, &DreamMW::openRequested);
     }
     return dw;
-}
-
-void    DreamMW::cmd_delete()
-{
-    if(m_cmdDelete && m_idForCmd)
-        m_cmdDelete -> invoke(this, m_idForCmd);
-}
-
-void    DreamMW::cmd_edit()
-{
-    if(m_cmdEdit && m_idForCmd)
-        m_cmdEdit -> invoke(this, m_idForCmd);
-}
-
-void    DreamMW::cmd_properties()
-{
-    if(m_cmdProperties && m_idForCmd)
-        m_cmdProperties -> invoke(this, m_idForCmd);
-}
-
-void    DreamMW::cmd_view()
-{
-    if(m_cmdView && m_idForCmd)
-        m_cmdView -> invoke(this, m_idForCmd);
 }
 
 void    DreamMW::commandTriggered(uint64_t id)
@@ -282,7 +264,6 @@ MainWindow*  DreamMW::newMain()
     return new DreamMW;
 }
 
-
 void    DreamMW::openRequested(Id i)
 {
     for(const Command* cmd : Command::all()){
@@ -297,7 +278,49 @@ void    DreamMW::openRequested(Id i)
     }
 }
 
-void    DreamMW::popupRequested(Id i)
+struct PopupHelper {
+    QMenu*      menu        = nullptr;
+    bool        separator   = false;
+    bool        triggered   = false;
+    bool        keep        = false;
+    
+    PopupHelper(QMenu*m) : menu(m)
+    {
+        if(menu){
+            separator   = triggered = keep = true;
+        } else
+            menu        = new QMenu;
+    }
+    
+    ~PopupHelper()
+    {
+        if(!keep)
+            menu -> deleteLater();
+    }
+    
+    void    add(QAction* act)
+    {
+        if(separator){
+            menu -> addSeparator();
+            separator = false;
+        }
+        menu -> addAction(act);
+        triggered   = true;
+    }
+};
+
+void    DreamMW::popupCommand(uint64_t n)
+{
+    if(n >= m_popupItems.size())
+        return ;
+    
+    PopupItem& pi   = m_popupItems[n];
+    if(pi.cmd && m_idForCmd)
+        pi.cmd -> invoke(this, m_idForCmd);
+}
+
+
+void    DreamMW::popupRequested(Id i, QMenu*m)
 {
     /*
         A popup has been requested by the user (in wherever).  
@@ -307,11 +330,13 @@ void    DreamMW::popupRequested(Id i)
     // Set the ID for all subsequent actions
     m_idForCmd      = i;
     
-    // Reset the view/edit/delete commands
-    m_cmdView       = m_cmdEdit = m_cmdDelete = m_cmdProperties = nullptr;
+    for(auto& pi : m_popupItems)
+        pi.cmd      = nullptr;
+    
 
     // Clear the old menu
-    m_popupMenu -> clear();
+    PopupHelper     popup(m);
+    
     
     // Need to know the actions to populate (between view/edit & delete)
     std::vector<QAction*>   actions;
@@ -321,77 +346,49 @@ void    DreamMW::popupRequested(Id i)
             continue;
         if(!cmd -> accept(i))                   // give the command a chance to reject
             continue;
-            
-        switch(cmd -> type()){                  // search for view/edit/delete
-        case Command::Type::View:
-            if(!m_cmdView){
-                m_cmdView   = cmd;
-                m_actView->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
-                continue;
-            }
-            break;
-        case Command::Type::Edit:
-            if(!m_cmdEdit){
-                m_cmdEdit   = cmd;
-                m_actEdit->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
-                continue;
-            }
-            break;
-        case Command::Type::Delete:
-            if(!m_cmdDelete){
-                m_cmdDelete = cmd;
-                m_actDelete->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
-                continue;
-            }
-            break;
-        case Command::Type::Properties:
-            if(!m_cmdProperties){
-                m_cmdProperties = cmd;
-                m_actProperties->setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
-                continue;
-            }
-            break;
-        default:
-            break;
+        PopupItem& pi = m_popupItems[(size_t) cmd->type()];
+        if(pi.act && !pi.cmd){
+            pi.cmd  = cmd;
+            pi.act -> setText(QString("%2 %1").arg(qString(i.name())).arg(cmd->label()));
+            continue;
         }
-        
+
         //  if it reaches here... it'll go on the list
         actions.push_back(m_cmdActions[cmd->id()]);
     }
     
+    
     //  Now we'll add the items, start with view & edit
-    if(m_cmdView || m_cmdEdit){
-        if(m_cmdView)
-            m_popupMenu -> addAction(m_actView);
-        if(m_cmdEdit)
-            m_popupMenu -> addAction(m_actEdit);
-        
-        if(!actions.empty() || m_cmdDelete || m_cmdProperties)
-            m_popupMenu -> addSeparator();
+    for(PopupItem& pi : m_popupItems){
+        if(pi.last)
+            break;
+        if(pi.separator)
+            popup.separator = true;
+        if(pi.cmd && pi.act)
+            popup.add(pi.act);
     }
     
     //  Add the non-conforming options
-    if(!actions.empty()){
-        for(QAction* a : actions)
-            m_popupMenu -> addAction(a);
-        if(m_cmdDelete || m_cmdProperties)
-            m_popupMenu -> addSeparator();
+    for(QAction* a : actions)
+        popup.add(a);
+    
+    popup.separator = true;
+    
+    bool    inLast  = false;
+    for(PopupItem& pi : m_popupItems){
+        if(pi.last)
+            inLast  = true;
+        if(!inLast)
+            continue;
+        if(pi.separator)
+            popup.separator = true;
+        if(pi.cmd && pi.act)
+            popup.add(pi.act);
     }
     
-    //  Delete goes last
-    if(m_cmdDelete){
-        m_popupMenu -> addAction(m_actDelete);
-        if(m_cmdProperties)
-            m_popupMenu -> addSeparator();
-    }
-    
-    if(m_cmdProperties)
-        m_popupMenu -> addAction(m_actProperties);
-    
-    if(m_popupMenu->actions().isEmpty())
-        m_popupMenu->addAction("No actions available");
-    
-    m_popupMenu->exec(QCursor::pos());
+    if(!popup.triggered)
+        popup.menu->addAction("No actions available");
+    popup.menu->exec(QCursor::pos());
 }
 
 void            DreamMW::reconnect(QWidget* qw) 

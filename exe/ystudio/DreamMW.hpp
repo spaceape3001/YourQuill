@@ -8,6 +8,7 @@
 
 #include <gluon/app/MainWindow.hpp>
 #include <basic/Hash.hpp>
+#include <basic/Map.hpp>
 #include "ystudio.hpp"
 
 using MainWindow            = yq::gluon::MainWindow;
@@ -27,14 +28,11 @@ public slots:
     void    newBrowser();
     
 private slots:
-    void    popupRequested(Id);
+    void    popupRequested(Id, QMenu*m=nullptr);
     void    openRequested(Id);
     void    commandTriggered(uint64_t);
     
-    void    cmd_delete();
-    void    cmd_edit();
-    void    cmd_properties();
-    void    cmd_view();
+    void    popupCommand(uint64_t);
     
 protected:
     virtual QDockWidget*    addDock(Qt::DockWidgetArea, QWidget*) override;
@@ -44,13 +42,14 @@ private:
     std::vector<Dock*>      m_docks;
     std::vector<QAction*>   m_cmdActions;
     Id                      m_idForCmd      = Id();
-    QAction*                m_actEdit       = nullptr;
-    QAction*                m_actView       = nullptr;
-    QAction*                m_actDelete     = nullptr;
-    QAction*                m_actProperties = nullptr;
-    QMenu*                  m_popupMenu     = nullptr;
-    const Command*          m_cmdEdit       = nullptr;
-    const Command*          m_cmdView       = nullptr;
-    const Command*          m_cmdDelete     = nullptr;
-    const Command*          m_cmdProperties = nullptr;
+
+    struct PopupItem {
+        const Command*      cmd         = nullptr;
+        QAction*            act         = nullptr;
+        bool                last        = false;
+        bool                separator   = false;
+        void                set(Id);
+    };
+    
+    std::vector<PopupItem>  m_popupItems;
 };

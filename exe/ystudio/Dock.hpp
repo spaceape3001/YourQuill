@@ -45,7 +45,7 @@ public:
     ~Dock();
     
 signals:
-    void        popupRequested(Id);
+    void        popupRequested(Id, QMenu*m=nullptr);
     void        openRequested(Id);
     
 protected:

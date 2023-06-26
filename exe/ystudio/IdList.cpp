@@ -19,7 +19,9 @@ IdList::IdList(IdModel* mdl, QWidget* parent) : Window(parent)
     lay->addWidget(m_view);
     setLayout(lay);
 
-    connect(m_view, &IdListView::popupRequested, this, &IdList::popupRequested);
+    connect(m_view, &IdListView::popupRequested, [this](Id i){ 
+        popupRequested(i);
+    });
 }
 
 IdList::~IdList()

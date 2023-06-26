@@ -20,7 +20,9 @@ public:
         View,
         Edit,
         Delete,
-        Properties
+        Properties,
+        
+        COUNT
     };
 
     class Writer;
