@@ -33,6 +33,8 @@ add_executable(${PROJECT_NAME}
 
     dock/XDocuments.hpp
     dock/XDocuments.cpp
+    dock/XFragments.hpp
+    dock/XFragments.cpp
     dock/XIdBoard.hpp
     dock/XIdBoard.cpp
 

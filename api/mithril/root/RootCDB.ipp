@@ -106,6 +106,12 @@ namespace yq::mithril::cdb {
         }
     }
 
+    Directory                  directory(Root r)
+    {
+        return directory(root_dir(r));
+    }
+
+
     Directory           directory(const RootDir*rt)
     {
         if(!rt)

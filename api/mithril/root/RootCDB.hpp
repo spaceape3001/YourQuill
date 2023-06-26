@@ -37,6 +37,10 @@ namespace yq::mithril::cdb {
 
     //! Top Directory for root_dir
     Directory                  directory(const RootDir*);
+
+    //! Top Directory for root_dir
+    Directory                  directory(Root);
+
     //Directory                  directory(const RootDir*, std::string_view);
     
     //! Top directories for root_dir (should be one)
