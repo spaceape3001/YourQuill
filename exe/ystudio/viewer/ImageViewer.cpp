@@ -82,6 +82,11 @@ namespace {
         return false;
     }
     
+    bool    acceptDocument(Document doc)
+    {
+        return acceptFragment(cdb::fragment(doc));
+    }
+    
     bool    accept(Id i)
     {
         switch(i.type()){
@@ -89,6 +94,8 @@ namespace {
             return acceptImage(Image(i.id()));
         case Fragment::ID:
             return acceptFragment(Fragment(i.id()));
+        case Document::ID:
+            return acceptDocument(Document(i.id()));
         default:
             return false;
         }
@@ -105,6 +112,9 @@ namespace {
         case Fragment::ID:
             img     = cdb::image(Fragment(i.id()));
             break;
+        case Document::ID:
+            img     = cdb::image(cdb::fragment(Document(i.id())));
+            break;
         default:
             break;
         }
@@ -120,7 +130,7 @@ namespace {
 
     void    reg_imageViewer()
     {
-        Command::reg("Image Viewer", &accept, &create).viewer<Image>().type<Fragment>();
+        Command::reg("Image Viewer", &accept, &create).viewer<Image>().type<Fragment>().type<Document>();
     }
 
     YQ_INVOKE(reg_imageViewer();)
