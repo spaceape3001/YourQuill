@@ -11,15 +11,15 @@
 #include <mithrilQt/id/IdTreeView.hpp>
 
 
-class XFiles : public Dock {
+class XDocuments : public Dock {
     Q_OBJECT
 public:    
 
     class Model;
     class View;
 
-    XFiles(QWidget*parent=nullptr);
-    ~XFiles();
+    XDocuments(QWidget*parent=nullptr);
+    ~XDocuments();
     
     Model*          model() { return m_model; }
     const Model*    model() const { return m_model; }
@@ -32,14 +32,14 @@ private:
     View*       m_view  = nullptr;
 };
 
-class XFiles::Model : public yq::mithril::IdModel {
+class XDocuments::Model : public yq::mithril::IdModel {
     Q_OBJECT
 public:
     Model(QObject* parent=nullptr);
     ~Model();
 };
 
-class XFiles::View : public yq::mithril::IdTreeView {
+class XDocuments::View : public yq::mithril::IdTreeView {
     Q_OBJECT
 public:
     View(Model*, QWidget*parent=nullptr);

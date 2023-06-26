@@ -31,8 +31,8 @@ add_executable(${PROJECT_NAME}
     WebBrowser.cpp
     Window.hpp
 
-    dock/XFiles.hpp
-    dock/XFiles.cpp
+    dock/XDocuments.hpp
+    dock/XDocuments.cpp
     dock/XIdBoard.hpp
     dock/XIdBoard.cpp
 

@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "XFiles.hpp"
+#include "XDocuments.hpp"
 #include <basic/DelayInit.hpp>
 #include <basic/TextUtils.hpp>
 #include <gluon/core/Utilities.hpp>
@@ -65,17 +65,17 @@ namespace {
     }
     
 
-    void    reg_xfiles()
+    void    reg_xdocuments()
     {
-        register_dock<XFiles>("File Explorer").autoStart();
+        register_dock<XDocuments>("Documents").autoStart();
     }
-    YQ_INVOKE(reg_xfiles();)
+    YQ_INVOKE(reg_xdocuments();)
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XFiles::XFiles(QWidget*parent) : Dock(parent)
+XDocuments::XDocuments(QWidget*parent) : Dock(parent)
 {
     m_model = new Model();
     m_view  = new View(m_model);
@@ -86,14 +86,14 @@ XFiles::XFiles(QWidget*parent) : Dock(parent)
     });
 }
 
-XFiles::~XFiles()
+XDocuments::~XDocuments()
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XFiles::Model::Model(QObject* parent) : IdModel(Type::Tree, cdb::top_folder(), files_provider())
+XDocuments::Model::Model(QObject* parent) : IdModel(Type::Tree, cdb::top_folder(), files_provider())
 {
     m_treeGenerator = [](Id i) -> IdProvider {
         Folder  f   = i.as<Folder>();
@@ -114,30 +114,30 @@ XFiles::Model::Model(QObject* parent) : IdModel(Type::Tree, cdb::top_folder(), f
     reload();
 }
 
-XFiles::Model::~Model()
+XDocuments::Model::~Model()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XFiles::View::View(Model*m, QWidget*parent) : IdTreeView(m)
+XDocuments::View::View(Model*m, QWidget*parent) : IdTreeView(m)
 {
 }
 
-XFiles::View::~View()
+XDocuments::View::~View()
 {
 }
 
-XFiles::Model*          XFiles::View::model()
+XDocuments::Model*          XDocuments::View::model()
 {
     return static_cast<Model*>(m_model);
 }
 
-const XFiles::Model*    XFiles::View::model() const
+const XDocuments::Model*    XDocuments::View::model() const
 {
     return static_cast<const Model*>(m_model);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "moc_XFiles.cpp"
+#include "moc_XDocuments.cpp"
