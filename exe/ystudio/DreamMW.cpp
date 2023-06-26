@@ -114,18 +114,18 @@ DreamMW::DreamMW()
     }
     
     addAction("browser", "New Browser").connect(this, &DreamMW::newBrowser);
-    addAction("copy", "Copy").icon(":/icon/copy.svg").shortcut(QKeySequence::Copy);
-    addAction("cut", "Cut").icon(":/icon/cut.svg").shortcut(QKeySequence::Cut);
-    addAction("clear", "Clear").icon(":/icon/clear.svg").shortcut(QKeySequence::Delete);
-    addAction("find", "Find").icon(":/icon/find.svg").shortcut(QKeySequence::Find);
-    addAction("paste", "Paste").icon(":/icon/paste.svg").shortcut(QKeySequence::Paste);
-    addAction("print", "Print").icon(":/icon/print.svg").shortcut(QKeySequence::Print);
-    addAction("redo", "Redo").icon(":/icon/redo.svg").shortcut(QKeySequence::Redo);
-    addAction("refresh", "Refresh").icon(":/icon/refresh.svg").shortcut(QKeySequence::Refresh);
-    addAction("save", "Save").icon(":/icon/save.svg").shortcut(QKeySequence::Save);
-    addAction("undo", "Undo").icon(":/icon/undo.svg").shortcut(QKeySequence::Undo);
-    addAction("zoomIn", "Zoom In").icon(":/icon/zoomIn.svg").shortcut(QKeySequence::ZoomIn);
-    addAction("zoomOut", "Zoom In").icon(":/icon/zoomOut.svg").shortcut(QKeySequence::ZoomOut);
+    addAction("copy", "Copy").icon(QIcon(":/icon/copy.svg")).shortcut(QKeySequence::Copy);
+    addAction("cut", "Cut").icon(QIcon(":/icon/cut.svg")).shortcut(QKeySequence::Cut);
+    addAction("clear", "Clear").icon(QIcon(":/icon/clear.svg")).shortcut(QKeySequence::Delete);
+    addAction("find", "Find").icon(QIcon(":/icon/find.svg")).shortcut(QKeySequence::Find);
+    addAction("paste", "Paste").icon(QIcon(":/icon/paste.svg")).shortcut(QKeySequence::Paste);
+    addAction("print", "Print").icon(QIcon(":/icon/print.svg")).shortcut(QKeySequence::Print);
+    addAction("redo", "Redo").icon(QIcon(":/icon/redo.svg")).shortcut(QKeySequence::Redo);
+    addAction("refresh", "Refresh").icon(QIcon(":/icon/refresh.svg")).shortcut(QKeySequence::Refresh);
+    addAction("save", "Save").icon(QIcon(":/icon/save.svg")).shortcut(QKeySequence::Save);
+    addAction("undo", "Undo").icon(QIcon(":/icon/undo.svg")).shortcut(QKeySequence::Undo);
+    addAction("zoomIn", "Zoom In").icon(QIcon(":/icon/zoomIn.svg")).shortcut(QKeySequence::ZoomIn);
+    addAction("zoomOut", "Zoom In").icon(QIcon(":/icon/zoomOut.svg")).shortcut(QKeySequence::ZoomOut);
     
     
     //  popups....

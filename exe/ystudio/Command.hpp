@@ -146,6 +146,21 @@ public:
         return *this;
     }
     
+    Writer& type(IdTypeId t)
+    {
+        if(m_cmd)
+            m_cmd -> m_idTypes   |= t;
+        return *this;
+    }
+
+    template <yq::mithril::IdType S>
+    Writer& type()
+    {
+        if(m_cmd)
+            m_cmd -> m_idTypes   |= S::ID;
+        return *this;
+    }
+
 
     Writer& types(IdTypes t)
     {

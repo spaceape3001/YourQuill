@@ -37,6 +37,9 @@ add_executable(${PROJECT_NAME}
     dock/XFragments.cpp
     dock/XIdBoard.hpp
     dock/XIdBoard.cpp
+    
+    viewer/ImageViewer.hpp
+    viewer/ImageViewer.cpp
 
     wksp/atom.cpp
     wksp/attribute.cpp
