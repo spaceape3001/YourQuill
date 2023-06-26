@@ -17,6 +17,23 @@ namespace yq::mithril {
     using IdTypeId      = uint8_t;
     using IdTypes       = Flags<IdTypeId, uint64_t>;
 
+    namespace impl {
+        template <typename T>
+        concept HasIdMember    = requires(T a)
+        {
+            { a.id       } -> std::convertible_to<id_t>;
+        };
+
+        template <typename T>
+        concept HasIDStatic     = requires
+        {
+            { T::ID } -> std::same_as<IdTypeId>;
+        };
+    }
+
+    template <typename T>
+    concept IdType      = impl::HasIdMember<T> || impl::HasIDStatic<T>;
+
     struct Id {
         static bool         compatible(IdTypeId from, IdTypeId to);
     

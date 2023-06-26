@@ -79,12 +79,6 @@ namespace yq::mithril {
 
     //! Generic options bitmask
     using cdb_options_t         = uint64_t;
-
-    template <typename T>
-    concept IdType    = requires(T a)
-    {
-        { a.id       } -> std::convertible_to<id_t>;
-    };
     
     class CacheStatement;
     class CacheQuery;
