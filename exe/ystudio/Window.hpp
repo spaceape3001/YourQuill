@@ -31,7 +31,7 @@ public:
     Mode    mode() const { return m_mode; }
 
 signals:
-    void    popupRequested(Id, QMenu*m=nullptr);
+    void    popupRequested(Id, const QActionList& acts = QActionList());
     void    openRequested(Id);
     
 protected:

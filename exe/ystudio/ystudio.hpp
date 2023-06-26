@@ -9,6 +9,7 @@
 #include <QObject>
 #include <concepts>
 #include <mithril/id/Id.hpp>
+#include <QList>
 
 using IdFilter  = yq::mithril::IdFilter;
 using IdTypeId  = yq::mithril::IdTypeId;
@@ -32,3 +33,6 @@ enum class ArgFlavor {
     //! Id matters
     Id
 };
+
+using QActionList = QList<QAction*>;
+

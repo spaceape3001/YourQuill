@@ -28,7 +28,7 @@ public slots:
     void    newBrowser();
     
 private slots:
-    void    popupRequested(Id, QMenu*m=nullptr);
+    void    popupRequested(Id, const QActionList& acts = QActionList());
     void    openRequested(Id);
     void    commandTriggered(uint64_t);
     

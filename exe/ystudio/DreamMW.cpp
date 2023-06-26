@@ -282,20 +282,15 @@ struct PopupHelper {
     QMenu*      menu        = nullptr;
     bool        separator   = false;
     bool        triggered   = false;
-    bool        keep        = false;
     
-    PopupHelper(QMenu*m) : menu(m)
+    PopupHelper() 
     {
-        if(menu){
-            separator   = triggered = keep = true;
-        } else
-            menu        = new QMenu;
+        menu        = new QMenu;
     }
     
     ~PopupHelper()
     {
-        if(!keep)
-            menu -> deleteLater();
+        menu -> deleteLater();
     }
     
     void    add(QAction* act)
@@ -320,7 +315,7 @@ void    DreamMW::popupCommand(uint64_t n)
 }
 
 
-void    DreamMW::popupRequested(Id i, QMenu*m)
+void    DreamMW::popupRequested(Id i, const QActionList& useActs)
 {
     /*
         A popup has been requested by the user (in wherever).  
@@ -333,9 +328,8 @@ void    DreamMW::popupRequested(Id i, QMenu*m)
     for(auto& pi : m_popupItems)
         pi.cmd      = nullptr;
     
-
-    // Clear the old menu
-    PopupHelper     popup(m);
+    // The menu
+    PopupHelper     popup;
     
     
     // Need to know the actions to populate (between view/edit & delete)
@@ -367,6 +361,13 @@ void    DreamMW::popupRequested(Id i, QMenu*m)
         if(pi.cmd && pi.act)
             popup.add(pi.act);
     }
+
+    popup.separator = true;
+    
+    for(QAction* a : useActs)
+        popup.add(a);
+
+    popup.separator = true;
     
     //  Add the non-conforming options
     for(QAction* a : actions)
