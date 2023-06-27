@@ -22,7 +22,8 @@ namespace {
             auto * w    = new IdTableT<Tag>(ALL);
             w -> setWindowTitle("Tags");
             w -> model() -> addColumns(DEFAULT);
-            w -> model() -> reload();
+            w -> refresh();
+            w -> finalize();
             mw->addWindow(w);
         }).menu("studio");
     }

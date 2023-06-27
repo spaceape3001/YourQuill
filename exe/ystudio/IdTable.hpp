@@ -29,6 +29,8 @@ public:
     IdTableView*        view() { return m_view; }
     const IdTableView*  view() const { return m_view; }
     
+    void                finalize();
+    
 public slots:
     void            refresh();
     void            update();

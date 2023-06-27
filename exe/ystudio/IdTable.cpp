@@ -38,4 +38,9 @@ void    IdTable::update()
     m_model -> update();
 }
 
+void    IdTable::finalize()
+{
+    m_view -> finalize();
+}
+
 #include "moc_IdTable.cpp"

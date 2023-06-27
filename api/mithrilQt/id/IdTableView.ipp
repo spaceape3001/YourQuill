@@ -9,6 +9,9 @@
 #include "IdModel.hpp"
 #include "IdTableView.hpp"
 #include <QContextMenuEvent>
+#include <gluon/delegate/Delegate.hpp>
+
+using namespace yq::gluon;
 
 namespace yq::mithril {
     IdTableView::IdTableView(IdModel*m, QWidget*parent) : QTableView(parent), m_model(m)
@@ -31,6 +34,19 @@ namespace yq::mithril {
         if(!i)
             return ;
         emit popupRequested(i);
+    }
+
+    void IdTableView::finalize()
+    {
+        for(const IdColumn& col : m_model->columns()){
+            if(!col.fnDelegate)
+                continue;
+            Delegate* d = col.fnDelegate();
+            if(!d)
+                continue;
+            d->setParent(this);
+            setItemDelegateForColumn(col.number, d);
+        }
     }
 }
 

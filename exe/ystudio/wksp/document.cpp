@@ -22,7 +22,8 @@ namespace {
             w -> setWindowTitle("Documents");
             w -> model() -> addColumns(DEFAULT);
             w -> model() -> reload();
-            mw->addWindow(w);
+            w -> refresh();
+            w -> finalize();
         }).menu("studio");
     }
     

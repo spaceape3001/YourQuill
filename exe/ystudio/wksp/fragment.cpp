@@ -21,7 +21,8 @@ namespace {
             auto * w    = new IdTableT<Fragment>(ALL);
             w -> setWindowTitle("Fragments");
             w -> model() -> addColumns(DEFAULT);
-            w -> model() -> reload();
+            w -> refresh();
+            w -> finalize();
             mw->addWindow(w);
         }).menu("studio");
     }

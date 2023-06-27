@@ -22,7 +22,8 @@ namespace {
             auto * w    = new IdTableT<Character>(ALL);
             w -> setWindowTitle("Characters");
             w -> model() -> addColumns(DEFAULT);
-            w -> model() -> reload();
+            w -> refresh();
+            w -> finalize();
             mw->addWindow(w);
         }).menu("studio");
     }

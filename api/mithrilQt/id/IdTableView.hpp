@@ -17,6 +17,9 @@ namespace yq::mithril {
         IdTableView(IdModel*, QWidget*parent=nullptr);
         ~IdTableView();
 
+        //  call when the columns have all been defined
+        void    finalize();
+
     signals:
         void    popupRequested(Id);
 

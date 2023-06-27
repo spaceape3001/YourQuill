@@ -22,7 +22,8 @@ namespace {
             auto * w    = new IdTableT<Group>(ALL);
             w -> setWindowTitle("Groups");
             w -> model() -> addColumns(DEFAULT);
-            w -> model() -> reload();
+            w -> refresh();
+            w -> finalize();
             mw->addWindow(w);
         }).menu("studio");
     }
