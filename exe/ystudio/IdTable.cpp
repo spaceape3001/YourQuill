@@ -7,12 +7,15 @@
 #include "IdTable.hpp"
 #include <mithrilQt/id/IdTableView.hpp>
 #include <QVBoxLayout>
+#include <QHeaderView>
 
 IdTable::IdTable(IdModel* mdl, QWidget* parent) : Window(parent)
 {
     m_model = mdl;
     m_model->setParent(this);
     m_view  = new IdTableView(m_model);
+    m_view -> setAlternatingRowColors(true);
+    m_view -> setSortingEnabled(true);
     
     connect(m_view, &IdTableView::popupRequested, [this](Id i){ 
         popupRequested(i);
@@ -50,6 +53,7 @@ void    IdTable::update()
 
 void    IdTable::finalize()
 {
+    m_view -> horizontalHeader() -> setStretchLastSection(true);
     m_view -> finalize();
 }
 

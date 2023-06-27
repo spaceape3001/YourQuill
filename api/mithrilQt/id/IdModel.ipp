@@ -6,6 +6,9 @@
 
 #include "IdModel.hpp"
 #include "IdColumn.hpp"
+#include <gluon/core/Utilities.hpp>
+
+using namespace yq::gluon;
 
 namespace yq::mithril {
 
@@ -19,6 +22,17 @@ namespace yq::mithril {
     
     IdModel::~IdModel()
     {
+    }
+
+    void    IdModel::_changed()
+    {
+        if((!m_root.children.empty()) && (!m_columns.empty())){
+            size_t  nm1 =   m_root.children.size()-1;
+            emit dataChanged(
+                createIndex(0,0,m_root.children[0]),
+                createIndex(nm1, m_columns.size()-1, m_root.children[nm1])
+            );
+        }
     }
     
     void    IdModel::_load()
@@ -104,6 +118,18 @@ namespace yq::mithril {
     int             IdModel::columnCount(const QModelIndex&) const 
     {
         return m_columns.size();
+    }
+
+    Delegate*       IdModel::createDelegate(int cid) const
+    {
+        const IdColumn* col = column((size_t) cid);
+        if(!col)
+            return nullptr;
+        if(col->fnDelegate)
+            return (col->fnDelegate)();
+        if(col->qtType)
+            return Delegate::make(col->qtType);
+        return nullptr;
     }
     
     QVariant        IdModel::data(const QModelIndex&idx, int role) const 
@@ -366,6 +392,26 @@ namespace yq::mithril {
     {
         m_root.provider = std::move(prov);
     }
+
+    void 	        IdModel::sort(int colid, Qt::SortOrder order)
+    {
+        const IdColumn* col = column(colid);
+        if(!col)
+            return ;
+
+        Delegate*   del = createDelegate(colid);
+        
+        auto sorter = [&](Node*a, Node*b) -> bool {
+            QVariant    va  = (col->fnSort) ? col->fnSort(a->id) : col->fnDisplay(a->id);
+            QVariant    vb  = (col->fnSort) ? col->fnSort(b->id) : col->fnDisplay(b->id);
+            Compare cmp = del ? del->compare(va, vb) : yq::gluon::compare(va, vb);
+            return (order == Qt::AscendingOrder) ? (cmp == Compare::LESSER) : (cmp == Compare::GREATER);
+        };
+        
+        std::sort(m_root.children.begin(), m_root.children.end(), sorter);
+        _changed();
+    }
+    
     
     void            IdModel::update(const QModelIndex&)
     {

@@ -86,6 +86,12 @@ namespace yq::mithril {
         
         bool            addEnabled() const;
         
+        //! Adds a filter to all queries
+        void            addFilter(IdFilter&&);
+        
+        //! Adds a filter to a specific node
+        void            addFilter(const QModelIndex&, IdFilter&&);
+
         //! Current add policy
         AddPolicy       addPolicy() const { return m_addPolicy; }
         
@@ -107,6 +113,9 @@ namespace yq::mithril {
         
         //! Reference to our column vector
         const std::vector<IdColumn>& columns() const { return m_columns; }
+
+        //! Creates a delegate for the specified column, hands over ownership
+        gluon::Delegate*    createDelegate(int col) const;
 
         //! Data of the model (see QAbstractItemModel)
         QVariant        data(const QModelIndex&, int role) const override;
@@ -211,12 +220,6 @@ namespace yq::mithril {
         //! Sets new filters for specific node
         void            setFilters(const QModelIndex&, std::vector<IdFilter>&&);
         
-        //! Adds a filter to all queries
-        void            addFilter(IdFilter&&);
-        
-        //! Adds a filter to a specific node
-        void            addFilter(const QModelIndex&, IdFilter&&);
-
         //! Reset on this!
         void            setProvider(IdProvider&&);
 
@@ -227,6 +230,7 @@ namespace yq::mithril {
         //! Enabled the showing of vertical  header data
         void            showVerticalHeader(bool);
 
+        void 	        sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
         class EndCue;
         
@@ -307,6 +311,7 @@ namespace yq::mithril {
         
         void            _load();
         void            _updateCols();
+        void            _changed();
     };
     
     class IdModel::EndCue {

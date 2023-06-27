@@ -38,14 +38,12 @@ namespace yq::mithril {
 
     void IdTableView::finalize()
     {
-        for(const IdColumn& col : m_model->columns()){
-            if(!col.fnDelegate)
+        for(size_t n=0;n<m_model->columnCount();++n){
+            Delegate*   del = m_model -> createDelegate(n);
+            if(!del)
                 continue;
-            Delegate* d = col.fnDelegate();
-            if(!d)
-                continue;
-            d->setParent(this);
-            setItemDelegateForColumn(col.number, d);
+            del->setParent(this);
+            setItemDelegateForColumn(n, del);
         }
     }
 }

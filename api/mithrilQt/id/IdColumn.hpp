@@ -45,7 +45,8 @@ namespace yq::mithril {
         QVariant        addMsg;             //!< Add message
         QVariant        label;              //!< Header label
         QVariant        defVal;             //!< Value if the ID is bad
-        unsigned int    number = 0;         //!< Column number, tracked by IdModel
+        unsigned int    number  = 0;        //!< Column number, tracked by IdModel
+        int             qtType  = 0;        //!< Qt data type
 
         IdColumn();
         ~IdColumn();
