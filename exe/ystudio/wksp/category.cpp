@@ -20,7 +20,7 @@ namespace {
         Command::reg("Category Table", [](DreamMW* mw){
         
             auto * w    = new IdTableT<Category>(ALL);
-            w -> setWindowTitle("Categorys");
+            w -> setWindowTitle("Categories");
             w -> model() -> addColumns(DEFAULT);
             w -> refresh();
             w -> finalize();
