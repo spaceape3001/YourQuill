@@ -8,6 +8,8 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithril/id/Id.hpp>
+#include <basic/Compare.hpp>
+
 #include <QVariant>
 #include <functional>
 #include <optional>
@@ -42,7 +44,7 @@ namespace yq::mithril {
         VariantFN       fnEdit;             //!< Edit data expected
         SetFN           fnSet;              //!< May work
         VariantFN       fnSort;             //!< Overrides display
-        ComparenFN      fnCompare;          //!< Comparison of two things, overrides fnSort
+        CompareFN       fnCompare;          //!< Comparison of two things, overrides fnSort
 
         QVariant        addMsg;             //!< Add message
         QVariant        label;              //!< Header label
