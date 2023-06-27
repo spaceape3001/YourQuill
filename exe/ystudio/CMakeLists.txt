@@ -6,7 +6,7 @@
 
 project(ystudio)
 
-find_package(Qt6 COMPONENTS Core Gui Widgets Network WebEngineCore WebEngineWidgets)
+find_package(Qt6 COMPONENTS Core Gui Widgets Network Svg SvgWidgets WebEngineCore WebEngineWidgets)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -40,6 +40,8 @@ add_executable(${PROJECT_NAME}
     
     viewer/ImageViewer.hpp
     viewer/ImageViewer.cpp
+    viewer/SvgViewer.hpp
+    viewer/SvgViewer.cpp
 
     wksp/atom.cpp
     wksp/attribute.cpp
@@ -73,6 +75,8 @@ target_link_libraries(${PROJECT_NAME}
     mithrilQt
     yqtoolbox
     Qt6::Network
+    Qt6::Svg
+    Qt6::SvgWidgets
     Qt6::WebEngineCore
     Qt6::WebEngineWidgets
 )
