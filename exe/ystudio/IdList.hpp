@@ -32,6 +32,9 @@ public:
 public slots:
     void            refresh();
     void            update();
+
+private slots:
+    void            doubleClicked(const QModelIndex&);
     
 protected:
     IdList(IdModel*, QWidget* parent=nullptr);

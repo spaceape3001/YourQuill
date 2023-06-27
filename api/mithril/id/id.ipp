@@ -77,6 +77,8 @@ namespace yq::mithril {
         return from && to && (from < HIGH_ID) && (to < HIGH_ID) && _r.compat[from][to];
     }
 
+////////////////////////////////////////////////////////////////////////////////
+
     Id::Lock    Id::lock(bool rw) const
     {
         Repo&   _r  = repo();
@@ -87,6 +89,11 @@ namespace yq::mithril {
         }
     }
 
+    std::string_view         Id::type_name() const
+    {
+        return type_name(type());
+    }
+    
 ////////////////////////////////////////////////////////////////////////////////
     Id::Lock::Lock(Lock&&mv)
     {

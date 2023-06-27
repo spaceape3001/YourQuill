@@ -100,6 +100,8 @@ namespace yq::mithril {
         constexpr uint64_t  id() const noexcept { return id_of(m_value); }
         constexpr operator  uint64_t() const noexcept { return m_value; }
         
+        std::string_view    type_name() const;
+        
         std::string         key() const;
         std::string         name() const;
 

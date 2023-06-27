@@ -294,15 +294,48 @@ MainWindow*  DreamMW::newMain()
 
 void    DreamMW::openRequested(Id i)
 {
+    const Command*  edit    = nullptr;
+    const Command*  view    = nullptr;
+    
     for(const Command* cmd : Command::all()){
         if(cmd -> flavor() != ArgFlavor::Id)    // command's not ID triggered... cycle
             continue;
-        if(cmd -> type() != Command::Type::View)
+        
+        switch(cmd->type()){
+        case Command::Type::Edit:
+            if(edit)
+                continue;
+            break;
+        case Command::Type::View:
+            if(view)
+                continue;
+            break;
+        default:
             continue;
+        }
+        
         if(!cmd -> accept(i))                   // give the command a chance to reject
             continue;
+            
+        if(cmd->type() == Command::Type::Edit)
+            edit    = cmd;
+        else
+            view    = cmd;
+            
         cmd -> invoke(this, i);
-        break;
+        return;
+    }
+
+        // if both view & edit, let gravity override
+    if(edit && view && (view->gravity() < edit->gravity()))
+        edit    = nullptr;
+    
+    if(edit){
+        edit -> invoke(this, i);
+    } else if(view){
+        view -> invoke(this, i);
+    } else {
+        yInfo() << "Unable to open " << i.type_name() << ":" << i.id();
     }
 }
 

@@ -35,6 +35,9 @@ public slots:
     void            refresh();
     void            update();
     
+private slots:
+    void            doubleClicked(const QModelIndex&);
+
 protected:
     IdTable(IdModel*, QWidget* parent=nullptr);
 

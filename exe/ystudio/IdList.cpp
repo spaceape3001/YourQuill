@@ -22,10 +22,19 @@ IdList::IdList(IdModel* mdl, QWidget* parent) : Window(parent)
     connect(m_view, &IdListView::popupRequested, [this](Id i){ 
         popupRequested(i);
     });
+
+    connect(m_view, &IdListView::doubleClicked, this, &IdList::doubleClicked);
 }
 
 IdList::~IdList()
 {
+}
+
+void    IdList::doubleClicked(const QModelIndex&idx)
+{
+    Id i    = m_model->id(idx);
+    if(i)
+        emit openRequested(i);
 }
 
 void    IdList::refresh()

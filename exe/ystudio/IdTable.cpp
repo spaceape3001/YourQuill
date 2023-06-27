@@ -17,6 +17,8 @@ IdTable::IdTable(IdModel* mdl, QWidget* parent) : Window(parent)
     connect(m_view, &IdTableView::popupRequested, [this](Id i){ 
         popupRequested(i);
     });
+    
+    connect(m_view, &IdTableView::doubleClicked, this, &IdTable::doubleClicked);
 
     QVBoxLayout*    lay = new QVBoxLayout;
     lay->setContentsMargins(0,0,0,0);
@@ -27,6 +29,14 @@ IdTable::IdTable(IdModel* mdl, QWidget* parent) : Window(parent)
 IdTable::~IdTable()
 {
 }
+
+void    IdTable::doubleClicked(const QModelIndex&idx)
+{
+    Id i    = m_model->id(idx);
+    if(i)
+        emit openRequested(i);
+}
+
 
 void    IdTable::refresh()
 {
