@@ -398,17 +398,27 @@ namespace yq::mithril {
         const IdColumn* col = column(colid);
         if(!col)
             return ;
+            
+        if(col->fnCompare){
+            auto sorter = [&](Node*a, Node*b) -> bool {
+                Compare cmp = col->fnCompare(a->id, b->id);
+                return (order == Qt::AscendingOrder) ? (cmp == Compare::LESSER) : (cmp == Compare::GREATER);
+            };
 
-        Delegate*   del = createDelegate(colid);
-        
-        auto sorter = [&](Node*a, Node*b) -> bool {
-            QVariant    va  = (col->fnSort) ? col->fnSort(a->id) : col->fnDisplay(a->id);
-            QVariant    vb  = (col->fnSort) ? col->fnSort(b->id) : col->fnDisplay(b->id);
-            Compare cmp = del ? del->compare(va, vb) : yq::gluon::compare(va, vb);
-            return (order == Qt::AscendingOrder) ? (cmp == Compare::LESSER) : (cmp == Compare::GREATER);
-        };
-        
-        std::sort(m_root.children.begin(), m_root.children.end(), sorter);
+            std::sort(m_root.children.begin(), m_root.children.end(), sorter);
+        } else {
+            Delegate*   del = createDelegate(colid);
+            auto sorter = [&](Node*a, Node*b) -> bool {
+                QVariant    va  = (col->fnSort) ? col->fnSort(a->id) : col->fnDisplay(a->id);
+                QVariant    vb  = (col->fnSort) ? col->fnSort(b->id) : col->fnDisplay(b->id);
+                Compare cmp = del ? del->compare(va, vb) : yq::gluon::compare(va, vb);
+                return (order == Qt::AscendingOrder) ? (cmp == Compare::LESSER) : (cmp == Compare::GREATER);
+            };
+            
+            std::sort(m_root.children.begin(), m_root.children.end(), sorter);
+            if(del)
+                del -> deleteLater();
+        }
         _changed();
     }
     

@@ -30,6 +30,7 @@ namespace yq::mithril {
         using DropFN        = std::function<std::error_code(Id, const QVariant&)>;
         using MimeListFN    = std::function<QStringList(Id)>;
         using DelegateFN    = std::function<Delegate*()>;
+        using CompareFN     = std::function<Compare(Id,Id)>;
 
         AddFN           fnAdd;              //!< Call if column is add-aware
         VariantFN       fnDecoration;       //!< Decoration data
@@ -41,6 +42,7 @@ namespace yq::mithril {
         VariantFN       fnEdit;             //!< Edit data expected
         SetFN           fnSet;              //!< May work
         VariantFN       fnSort;             //!< Overrides display
+        ComparenFN      fnCompare;          //!< Comparison of two things, overrides fnSort
 
         QVariant        addMsg;             //!< Add message
         QVariant        label;              //!< Header label
