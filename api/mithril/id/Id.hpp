@@ -14,7 +14,7 @@
 
 namespace yq::mithril {
 
-    using IdTypeId      = uint8_t;
+    using IdTypeId      = uint16_t;
     using IdTypes       = Flags<IdTypeId, uint64_t>;
 
     namespace impl {
@@ -37,8 +37,8 @@ namespace yq::mithril {
     struct Id {
         static bool         compatible(IdTypeId from, IdTypeId to);
     
-        static constexpr    uint64_t    MASK    = 0x00FF'FFFF'FFFF'FFFFULL; // current max ID is 56-bits
-        static constexpr    uint64_t    SHIFT   = 56ULL;
+        static constexpr    uint64_t    MASK    = 0x0000'FFFF'FFFF'FFFFULL; // current max ID is 56-bits
+        static constexpr    uint64_t    SHIFT   = 48ULL;
 
         static constexpr uint64_t       encode(IdTypeId type, uint64_t id) noexcept
         {
