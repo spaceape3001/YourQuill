@@ -19,6 +19,11 @@ namespace yq::mithril {
         IdColumn  graph_key(ColOpts opts=ColOpts());
         IdColumn  graph_name(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN graph_id();
+        IdColumn::CompareFN graph_key();
+        IdColumn::CompareFN graph_name();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  graph_icon();
     }

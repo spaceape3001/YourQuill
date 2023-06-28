@@ -19,6 +19,11 @@ namespace yq::mithril {
         IdColumn  field_key(ColOpts opts=ColOpts());
         IdColumn  field_name(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN field_id();
+        IdColumn::CompareFN field_key();
+        IdColumn::CompareFN field_name();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  field_icon();
     }

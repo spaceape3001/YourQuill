@@ -34,6 +34,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::category_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::category_icon();
+        ret.fnCompare           = compareFN::category_id();
         ret.label               = "ID";
         return ret;
     }
@@ -44,6 +45,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::category_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::category_icon();
+        ret.fnCompare           = compareFN::category_key();
         ret.label               = "Key";
         return ret;
     }
@@ -54,6 +56,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::category_name();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::category_icon();
+        ret.fnCompare           = compareFN::category_name();
         ret.label               = "Name";
         return ret;
     }
@@ -70,6 +73,31 @@ namespace yq::mithril::column {
     
     YQ_INVOKE(reg_category_columns();)
 }
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN category_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Category>().id, b.as<Category>().id);
+        };
+    }
+    
+    IdColumn::CompareFN category_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Category>()), cdb::key(b.as<Category>()));
+        };
+    }
+    
+    IdColumn::CompareFN category_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Category>()), cdb::name(b.as<Category>()));
+        };
+    }
+}
+
+
 
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  category_icon()

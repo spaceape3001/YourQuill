@@ -21,6 +21,13 @@ namespace yq::mithril {
         IdColumn  directory_name(ColOpts opts=ColOpts());
         IdColumn  directory_path(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN directory_hidden();
+        IdColumn::CompareFN directory_id();
+        IdColumn::CompareFN directory_key();
+        IdColumn::CompareFN directory_name();
+        IdColumn::CompareFN directory_path();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  directory_icon();
     }

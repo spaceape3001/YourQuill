@@ -30,6 +30,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::root_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::root_icon();
+        ret.fnCompare           = compareFN::root_id();
         ret.label               = "ID";
         return ret;
     }
@@ -40,6 +41,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::root_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::root_icon();
+        ret.fnCompare           = compareFN::root_key();
         ret.label               = "Key";
         return ret;
     }
@@ -50,6 +52,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::root_name();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::root_icon();
+        ret.fnCompare           = compareFN::root_name();
         ret.label               = "Name";
         return ret;
     }
@@ -60,6 +63,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::root_path();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::root_icon();
+        ret.fnCompare           = compareFN::root_path();
         ret.label               = "Path";
         return ret;
     }
@@ -70,6 +74,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::root_template();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::root_icon();
+        ret.fnCompare           = compareFN::root_template();
         ret.label               = "Template";
         return ret;
     }
@@ -87,6 +92,45 @@ namespace yq::mithril::column {
     }
     
     YQ_INVOKE(reg_root_columns();)
+}
+
+
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN root_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Root>().id, b.as<Root>().id);
+        };
+    }
+
+    IdColumn::CompareFN root_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Root>()), cdb::key(b.as<Root>()));
+        };
+    }
+    
+    IdColumn::CompareFN root_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Root>()), cdb::name(b.as<Root>()));
+        };
+    }
+
+    IdColumn::CompareFN root_path()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(cdb::path(a.as<Root>()), cdb::path(b.as<Root>()));
+        };
+    }
+
+    IdColumn::CompareFN root_template()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(cdb::is_template(a.as<Root>()), cdb::is_template(b.as<Root>()));
+        };
+    }
 }
 
 namespace yq::mithril::decorationFN {

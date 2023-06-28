@@ -21,6 +21,13 @@ namespace yq::mithril {
         IdColumn  root_path(ColOpts opts=ColOpts());
         IdColumn  root_template(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN     root_id();
+        IdColumn::CompareFN     root_key();
+        IdColumn::CompareFN     root_name();
+        IdColumn::CompareFN     root_path();
+        IdColumn::CompareFN     root_template();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  root_icon();
     }

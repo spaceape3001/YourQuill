@@ -28,6 +28,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::directory_hidden();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::directory_icon();
+        ret.fnCompare           = compareFN::directory_hidden();
         ret.label               = "Hidden";
         return ret;
     }
@@ -38,6 +39,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::directory_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::directory_icon();
+        ret.fnCompare           = compareFN::directory_id();
         ret.label               = "ID";
         return ret;
     }
@@ -48,6 +50,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::directory_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::directory_icon();
+        ret.fnCompare           = compareFN::directory_key();
         ret.label               = "Key";
         return ret;
     }
@@ -55,8 +58,11 @@ namespace yq::mithril::column {
     IdColumn    directory_name(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay   = displayFN::directory_name();
-        ret.label       = "Name";
+        ret.fnDisplay           = displayFN::directory_name();
+        if(opts[ColOpt::Icon])
+            ret.fnDecoration    = decorationFN::directory_icon();
+        ret.fnCompare           = compareFN::directory_name();
+        ret.label               = "Name";
         return ret;
     }
     
@@ -66,6 +72,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::directory_path();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::directory_icon();
+        ret.fnCompare           = compareFN::directory_path();
         ret.label               = "Path";
         return ret;
     }
@@ -83,6 +90,43 @@ namespace yq::mithril::column {
     }
     
     YQ_INVOKE(reg_directory_columns();)
+}
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN directory_hidden()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(cdb::hidden(a.as<Directory>()), cdb::hidden(b.as<Directory>()));
+        };
+    }
+    
+    IdColumn::CompareFN directory_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Directory>().id, b.as<Directory>().id);
+        };
+    }
+
+    IdColumn::CompareFN directory_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Directory>()), cdb::key(b.as<Directory>()));
+        };
+    }
+    
+    IdColumn::CompareFN directory_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Directory>()), cdb::name(b.as<Directory>()));
+        };
+    }
+
+    IdColumn::CompareFN directory_path()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(cdb::path(a.as<Directory>()), cdb::path(b.as<Directory>()));
+        };
+    }
 }
 
 namespace yq::mithril::decorationFN {

@@ -35,6 +35,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::leaf_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::leaf_icon();
+        ret.fnCompare           = compareFN::leaf_id();
         ret.label               = "ID";
         return ret;
     }
@@ -45,6 +46,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::leaf_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::leaf_icon();
+        ret.fnCompare           = compareFN::leaf_key();
         ret.label               = "Key";
         return ret;
     }
@@ -55,6 +57,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::leaf_title();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::leaf_icon();
+        ret.fnCompare           = compareFN::leaf_title();
         ret.label               = "Title";
         return ret;
     }
@@ -70,6 +73,29 @@ namespace yq::mithril::column {
     }
     
     YQ_INVOKE(reg_leaf_columns();)
+}
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN leaf_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Leaf>().id, b.as<Leaf>().id);
+        };
+    }
+    
+    IdColumn::CompareFN leaf_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Leaf>()), cdb::key(b.as<Leaf>()));
+        };
+    }
+    
+    IdColumn::CompareFN leaf_title()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::title(a.as<Leaf>()), cdb::title(b.as<Leaf>()));
+        };
+    }
 }
 
 namespace yq::mithril::decorationFN {

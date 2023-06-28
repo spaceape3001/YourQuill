@@ -19,6 +19,11 @@ namespace yq::mithril {
         IdColumn  user_key(ColOpts opts=ColOpts());
         IdColumn  user_name(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN user_id();
+        IdColumn::CompareFN user_key();
+        IdColumn::CompareFN user_name();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  user_icon();
     }

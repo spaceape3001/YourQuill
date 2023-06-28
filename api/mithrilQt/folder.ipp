@@ -34,6 +34,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::folder_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::folder_icon();
+        ret.fnCompare           = compareFN::folder_id();
         ret.label               = "ID";
         return ret;
     }
@@ -44,6 +45,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::folder_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::folder_icon();
+        ret.fnCompare           = compareFN::folder_key();
         ret.label               = "Key";
         return ret;
     }
@@ -54,6 +56,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::folder_name();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::folder_icon();
+        ret.fnCompare           = compareFN::folder_name();
         ret.label               = "Name";
         return ret;
     }
@@ -71,6 +74,28 @@ namespace yq::mithril::column {
     YQ_INVOKE(reg_folder_columns();)
 }
 
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN folder_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Folder>().id, b.as<Folder>().id);
+        };
+    }
+    
+    IdColumn::CompareFN folder_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Folder>()), cdb::key(b.as<Folder>()));
+        };
+    }
+    
+    IdColumn::CompareFN folder_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Folder>()), cdb::name(b.as<Folder>()));
+        };
+    }
+}
 
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  folder_icon()

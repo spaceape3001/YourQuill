@@ -19,6 +19,11 @@ namespace yq::mithril {
         IdColumn  game_key(ColOpts opts=ColOpts());
         IdColumn  game_title(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN game_id();
+        IdColumn::CompareFN game_key();
+        IdColumn::CompareFN game_title();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  game_icon();
     }

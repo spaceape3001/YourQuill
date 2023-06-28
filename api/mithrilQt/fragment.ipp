@@ -27,6 +27,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::fragment_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.fnCompare           = compareFN::fragment_id();
         ret.label               = "ID";
         return ret;
     }
@@ -37,6 +38,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::fragment_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.fnCompare           = compareFN::fragment_key();
         ret.label               = "Key";
         return ret;
     }
@@ -47,6 +49,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::fragment_name();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.fnCompare           = compareFN::fragment_name();
         ret.label               = "Name";
         return ret;
     }
@@ -57,6 +60,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::fragment_path();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::fragment_icon();
+        ret.fnCompare           = compareFN::fragment_path();
         ret.label               = "Path";
         return ret;
     }
@@ -73,6 +77,37 @@ namespace yq::mithril::column {
     }
 
     YQ_INVOKE(reg_fragment_columns();)
+}
+
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN fragment_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Fragment>().id, b.as<Fragment>().id);
+        };
+    }
+
+    IdColumn::CompareFN fragment_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Fragment>()), cdb::key(b.as<Fragment>()));
+        };
+    }
+    
+    IdColumn::CompareFN fragment_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Fragment>()), cdb::name(b.as<Fragment>()));
+        };
+    }
+
+    IdColumn::CompareFN fragment_path()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(cdb::path(a.as<Fragment>()), cdb::path(b.as<Fragment>()));
+        };
+    }
 }
 
 namespace yq::mithril::decorationFN {

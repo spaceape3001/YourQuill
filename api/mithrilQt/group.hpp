@@ -18,6 +18,11 @@ namespace yq::mithril {
         IdColumn  group_key(ColOpts opts=ColOpts());
         IdColumn  group_name(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN group_id();
+        IdColumn::CompareFN group_key();
+        IdColumn::CompareFN group_name();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  group_icon();
     }

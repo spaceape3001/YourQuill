@@ -71,6 +71,29 @@ namespace yq::mithril::column {
     YQ_INVOKE(reg_graph_columns();)
 }
 
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN graph_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Graph>().id, b.as<Graph>().id);
+        };
+    }
+    
+    IdColumn::CompareFN graph_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Graph>()), cdb::key(b.as<Graph>()));
+        };
+    }
+    
+    IdColumn::CompareFN graph_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Graph>()), cdb::name(b.as<Graph>()));
+        };
+    }
+}
+
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  graph_icon()
     {

@@ -19,6 +19,11 @@ namespace yq::mithril {
         IdColumn  document_key(ColOpts opts=ColOpts());
         IdColumn  document_name(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN document_id();
+        IdColumn::CompareFN document_key();
+        IdColumn::CompareFN document_name();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  document_icon();
     }

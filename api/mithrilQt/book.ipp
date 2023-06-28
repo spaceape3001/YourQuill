@@ -36,6 +36,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::book_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::book_icon();
+        ret.fnCompare           = compareFN::book_id();
         ret.label               = "ID";
         return ret;
     }
@@ -46,6 +47,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::book_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::book_icon();
+        ret.fnCompare           = compareFN::book_key();
         ret.label               = "Key";
         return ret;
     }
@@ -56,6 +58,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::book_title();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::book_icon();
+        ret.fnCompare           = compareFN::book_title();
         ret.label               = "Title";
         return ret;
     }
@@ -71,6 +74,29 @@ namespace yq::mithril::column {
     }
     
     YQ_INVOKE(reg_book_columns();)
+}
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN book_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Book>().id, b.as<Book>().id);
+        };
+    }
+    
+    IdColumn::CompareFN book_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Book>()), cdb::key(b.as<Book>()));
+        };
+    }
+    
+    IdColumn::CompareFN book_title()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::title(a.as<Book>()), cdb::title(b.as<Book>()));
+        };
+    }
 }
 
 namespace yq::mithril::decorationFN {

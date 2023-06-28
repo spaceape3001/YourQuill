@@ -34,6 +34,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::group_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::group_icon();
+        ret.fnCompare           = compareFN::group_id();
         ret.label               = "ID";
         return ret;
     }
@@ -44,6 +45,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::group_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::group_icon();
+        ret.fnCompare           = compareFN::group_key();
         ret.label               = "Key";
         return ret;
     }
@@ -55,6 +57,7 @@ namespace yq::mithril::column {
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::group_icon();
         ret.label               = "Name";
+        ret.fnCompare           = compareFN::group_name();
         return ret;
     }
 
@@ -70,6 +73,30 @@ namespace yq::mithril::column {
     
     YQ_INVOKE(reg_group_columns();)
 }
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN group_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Group>().id, b.as<Group>().id);
+        };
+    }
+    
+    IdColumn::CompareFN group_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Group>()), cdb::key(b.as<Group>()));
+        };
+    }
+    
+    IdColumn::CompareFN group_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Group>()), cdb::name(b.as<Group>()));
+        };
+    }
+}
+
 
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  group_icon()

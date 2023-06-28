@@ -20,6 +20,12 @@ namespace yq::mithril {
         IdColumn  book_title(ColOpts opts=ColOpts());
     }
 
+    namespace compareFN {
+        IdColumn::CompareFN book_id();
+        IdColumn::CompareFN book_key();
+        IdColumn::CompareFN book_title();
+    }
+
     namespace decorationFN {
         IdColumn::VariantFN  book_icon();
     }

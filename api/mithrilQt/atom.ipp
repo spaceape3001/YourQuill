@@ -40,6 +40,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::atom_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::atom_icon();
+        ret.fnCompare           = compareFN::atom_id();
         ret.label               = "ID";
         return ret;
     }
@@ -50,6 +51,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::atom_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::atom_icon();
+        ret.fnCompare           = compareFN::atom_key();
         ret.label               = "Key";
         return ret;
     }
@@ -60,6 +62,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::atom_name();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::atom_icon();
+        ret.fnCompare           = compareFN::atom_name();
         ret.label               = "Name";
         return ret;
     }
@@ -76,6 +79,30 @@ namespace yq::mithril::column {
     
     YQ_INVOKE(reg_atom();)
 }
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN atom_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Atom>().id, b.as<Atom>().id);
+        };
+    }
+    
+    IdColumn::CompareFN atom_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Atom>()), cdb::key(b.as<Atom>()));
+        };
+    }
+    
+    IdColumn::CompareFN atom_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Atom>()), cdb::name(b.as<Atom>()));
+        };
+    }
+}
+
 
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  atom_icon()

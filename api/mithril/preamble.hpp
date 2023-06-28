@@ -26,6 +26,8 @@ namespace yq {
 
 namespace yq::mithril {
     using id_t      = uint64_t;
+    
+    struct Id;
 
     struct Atom;
     struct Attribute;

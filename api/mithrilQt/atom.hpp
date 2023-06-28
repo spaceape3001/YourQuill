@@ -20,6 +20,12 @@ namespace yq::mithril {
         IdColumn  atom_key(ColOpts opts=ColOpts());
         IdColumn  atom_name(ColOpts opts=ColOpts());
     }
+    
+    namespace compareFN {
+        IdColumn::CompareFN atom_id();
+        IdColumn::CompareFN atom_key();
+        IdColumn::CompareFN atom_name();
+    }
 
     namespace decorationFN {
         IdColumn::VariantFN  atom_icon();

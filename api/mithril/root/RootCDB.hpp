@@ -59,6 +59,8 @@ namespace yq::mithril::cdb {
     std::vector<Fragment>      fragments(const RootDir*, Sorted sorted=Sorted());
     
     Image                       icon(Root);
+    
+    bool                        is_template(Root);
 
     //! Key of root_dir (already on structure)
     std::string                 key(const RootDir*);
@@ -67,11 +69,13 @@ namespace yq::mithril::cdb {
     std::string                 key(Root);
 
     std::string                 name(Root);
+    
+    std::filesystem::path       path(Root);
 
     //! Resolves the path, optionally creating the directories
-    std::filesystem::path      path(const RootDir*, std::string_view , bool fMakePath=false);
-
+    std::filesystem::path       path(const RootDir*, std::string_view , bool fMakePath=false);
+    
     //! Resolves the path, optionally creating the directories
-    std::filesystem::path      path(const RootDir*, Document, bool fMakePath=false);          // goes to root_dir
+    std::filesystem::path       path(const RootDir*, Document, bool fMakePath=false);          // goes to root_dir
 
 }

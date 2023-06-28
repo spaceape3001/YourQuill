@@ -34,6 +34,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::game_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::game_icon();
+        ret.fnCompare           = compareFN::game_id();
         ret.label               = "ID";
         return ret;
     }
@@ -44,6 +45,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::game_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::game_icon();
+        ret.fnCompare           = compareFN::game_key();
         ret.label               = "Key";
         return ret;
     }
@@ -54,6 +56,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::game_title();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::game_icon();
+        ret.fnCompare           = compareFN::game_title();
         ret.label               = "Title";
         return ret;
     }
@@ -69,6 +72,29 @@ namespace yq::mithril::column {
     }
     
     YQ_INVOKE(reg_game_columns();)
+}
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN game_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Game>().id, b.as<Game>().id);
+        };
+    }
+    
+    IdColumn::CompareFN game_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Game>()), cdb::key(b.as<Game>()));
+        };
+    }
+    
+    IdColumn::CompareFN game_title()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::title(a.as<Game>()), cdb::title(b.as<Game>()));
+        };
+    }
 }
 
 namespace yq::mithril::decorationFN {

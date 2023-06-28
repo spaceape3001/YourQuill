@@ -20,6 +20,12 @@ namespace yq::mithril {
         IdColumn  attribute_value(ColOpts opts=ColOpts());
     }
 
+    namespace compareFN {
+        IdColumn::CompareFN attribute_id();
+        IdColumn::CompareFN attribute_key();
+        IdColumn::CompareFN attribute_value();
+    }
+
     namespace decorationFN {
         IdColumn::VariantFN  attribute_icon();
     }

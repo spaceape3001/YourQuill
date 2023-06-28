@@ -34,6 +34,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::value_id();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::value_icon();
+        ret.fnCompare           = compareFN::value_id();
         ret.label               = "ID";
         return ret;
     }
@@ -44,6 +45,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::value_key();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::value_icon();
+        ret.fnCompare           = compareFN::value_key();
         ret.label               = "Key";
         return ret;
     }
@@ -54,6 +56,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::value_name();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::value_icon();
+        ret.fnCompare           = compareFN::value_name();
         ret.label               = "Name";
         return ret;
     }
@@ -64,6 +67,7 @@ namespace yq::mithril::column {
         ret.fnDisplay           = displayFN::value_value();
         if(opts[ColOpt::Icon])
             ret.fnDecoration    = decorationFN::value_icon();
+        ret.fnCompare           = compareFN::value_value();
         ret.label               = "Value";
         return ret;
     }
@@ -81,6 +85,38 @@ namespace yq::mithril::column {
     
     YQ_INVOKE(reg_value_columns();)
 }
+
+namespace yq::mithril::compareFN {
+    IdColumn::CompareFN value_id()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare(a.as<Value>().id, b.as<Value>().id);
+        };
+    }
+    
+    IdColumn::CompareFN value_key()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::key(a.as<Value>()), cdb::key(b.as<Value>()));
+        };
+    }
+    
+    IdColumn::CompareFN value_name()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::name(a.as<Value>()), cdb::name(b.as<Value>()));
+        };
+    }
+
+    IdColumn::CompareFN value_value()
+    {
+        return [](Id a, Id b) -> Compare {
+            return compare_igCase(cdb::data(a.as<Value>()), cdb::data(b.as<Value>()));
+        };
+    }
+}
+
+
 
 namespace yq::mithril::decorationFN {
     IdColumn::VariantFN  value_icon()

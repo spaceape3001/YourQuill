@@ -18,6 +18,11 @@ namespace yq::mithril {
         IdColumn  category_key(ColOpts opts=ColOpts());
         IdColumn  category_name(ColOpts opts=ColOpts());
     }
+    namespace compareFN {
+        IdColumn::CompareFN category_id();
+        IdColumn::CompareFN category_key();
+        IdColumn::CompareFN category_name();
+    }
     namespace decorationFN {
         IdColumn::VariantFN  category_icon();
     }

@@ -47,6 +47,7 @@ add_executable(${PROJECT_NAME}
     wksp/attribute.cpp
     wksp/book.cpp
     wksp/category.cpp
+    wksp/character.cpp
     wksp/class.cpp
     wksp/directory.cpp
     wksp/document.cpp

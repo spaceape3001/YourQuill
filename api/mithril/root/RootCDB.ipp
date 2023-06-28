@@ -164,6 +164,12 @@ namespace yq::mithril::cdb {
         return Image();     // TODO
     }
 
+    bool                    is_template(Root rt)
+    {
+        const RootDir* r    = root_dir(rt);
+        return r ? r -> is_template : false;
+    }
+    
     std::string             key(const RootDir*rt)
     {
         if(!rt)
@@ -182,8 +188,16 @@ namespace yq::mithril::cdb {
         return r ? r -> name : std::string();
     }
 
+    std::filesystem::path   path(Root rt)
+    {
+        const RootDir* r =  root_dir(rt);
+        return r ? r -> path : std::filesystem::path();
+    }
+    
     std::filesystem::path   path(const RootDir*rt, std::string_view z, bool fMakePath)
     {
+        if(!rt)
+            return std::filesystem::path();
         std::filesystem::path   p =  rt -> resolve(z);
         if(fMakePath && !p.empty())
             make_parent_path(p);
