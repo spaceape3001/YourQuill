@@ -6,5 +6,5 @@
 
 #pragma once
 
-#include <mithril/graph/Graph.hpp>
-#include <mithril/graph/GraphCDB.hpp>
+#include <mithril/graphviz/Graphviz.hpp>
+#include <mithril/graphviz/GraphvizCDB.hpp>

@@ -53,8 +53,8 @@
 #include <mithril/game/Game.hpp>
 #include <mithril/game/GameCDB.hpp>   
 
-#include <mithril/graph/Graph.hpp>
-#include <mithril/graph/GraphCDB.hpp>   
+#include <mithril/graphviz/Graphviz.hpp>
+#include <mithril/graphviz/GraphvizCDB.hpp>   
 
 #include <mithril/group/Group.hpp>
 #include <mithril/group/GroupCDB.hpp>   
@@ -122,8 +122,8 @@ namespace yq::mithril {
             return "Fragment"sv;
         case Game::ID:
             return "Game"sv;
-        case Graph::ID:
-            return "Graph"sv;
+        case Graphviz::ID:
+            return "Graphviz"sv;
         case Group::ID:
             return "Group"sv;
         case Image::ID:
@@ -182,8 +182,8 @@ namespace yq::mithril {
             return &meta<Fragment>();
         case Game::ID:
             return &meta<Game>();
-        case Graph::ID:
-            return &meta<Graph>();
+        case Graphviz::ID:
+            return &meta<Graphviz>();
         case Group::ID:
             return &meta<Group>();
         case Image::ID:
@@ -242,8 +242,8 @@ namespace yq::mithril {
             return Fragment::PARENTS;
         case Game::ID:
             return Game::PARENTS;
-        case Graph::ID:
-            return Graph::PARENTS;
+        case Graphviz::ID:
+            return Graphviz::PARENTS;
         case Group::ID:
             return Group::PARENTS;
         case Image::ID:
@@ -308,8 +308,8 @@ namespace yq::mithril {
             return cdb::key(Fragment(id()));
         case Game::ID:
             return cdb::key(Game(id()));
-        case Graph::ID:
-            return cdb::key(Graph(id()));
+        case Graphviz::ID:
+            return cdb::key(Graphviz(id()));
         case Group::ID:
             return cdb::key(Group(id()));
         case Image::ID:
@@ -369,8 +369,8 @@ namespace yq::mithril {
                 return cdb::name(Fragment(id()));
             case Game::ID:
                 return cdb::name(Game(id()));
-            case Graph::ID:
-                return cdb::name(Graph(id()));
+            case Graphviz::ID:
+                return cdb::name(Graphviz(id()));
             case Group::ID:
                 return cdb::name(Group(id()));
             case Image::ID:
@@ -429,8 +429,8 @@ namespace yq::mithril::cdb {
             return ids<Fragment>(all_fragments(sorted));
         case Game::ID:
             return ids<Game>(all_games(sorted));
-        case Graph::ID:
-            return ids<Graph>(all_graphs(sorted));
+        case Graphviz::ID:
+            return ids<Graphviz>(all_graphvizs(sorted));
         case Group::ID:
             return ids<Group>(all_groups(sorted));
         case Image::ID:

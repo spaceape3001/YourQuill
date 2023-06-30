@@ -128,7 +128,7 @@
 //#include "game/GamePost.ipp"
 #include "game/GameProvider.ipp"
 
-#include "graph/GraphCDB.ipp"
+#include "graphviz/GraphvizCDB.ipp"
 
 //#include "group/GroupArg.ipp"
 #include "group/GroupCDB.ipp"
@@ -285,7 +285,7 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Field)
 YQ_TYPE_IMPLEMENT(yq::mithril::Folder)
 YQ_TYPE_IMPLEMENT(yq::mithril::Fragment)
 YQ_TYPE_IMPLEMENT(yq::mithril::Game)
-YQ_TYPE_IMPLEMENT(yq::mithril::Graph)
+YQ_TYPE_IMPLEMENT(yq::mithril::Graphviz)
 YQ_TYPE_IMPLEMENT(yq::mithril::Group)
 YQ_TYPE_IMPLEMENT(yq::mithril::Image)
 YQ_TYPE_IMPLEMENT(yq::mithril::Leaf)

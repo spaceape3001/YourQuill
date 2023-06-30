@@ -6,18 +6,18 @@
 
 #pragma once
 
-#include "graph.hpp"
+#include "graphviz.hpp"
 #include <basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
-#include <mithril/graph/GraphCDB.hpp>
+#include <mithril/graphviz/GraphvizCDB.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {
-    QIcon   qIcon(Graph t)
+    QIcon   qIcon(Graphviz t)
     {
-        static QIcon    qico(":/generic/graph.svg");
+        static QIcon    qico(":/generic/graphviz.svg");
         //if(!t)
             //return QIcon();
         //Image   img = cdb::icon(t);
@@ -28,107 +28,107 @@ namespace yq::mithril {
 }
 
 namespace yq::mithril::column {
-    IdColumn    graph_id(ColOpts opts)
+    IdColumn    graphviz_id(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay           = displayFN::graph_id();
+        ret.fnDisplay           = displayFN::graphviz_id();
         if(opts[ColOpt::Icon])
-            ret.fnDecoration    = decorationFN::graph_icon();
+            ret.fnDecoration    = decorationFN::graphviz_icon();
         ret.label               = "ID";
         return ret;
     }
     
-    IdColumn    graph_key(ColOpts opts)
+    IdColumn    graphviz_key(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay           = displayFN::graph_key();
+        ret.fnDisplay           = displayFN::graphviz_key();
         if(opts[ColOpt::Icon])
-            ret.fnDecoration    = decorationFN::graph_icon();
+            ret.fnDecoration    = decorationFN::graphviz_icon();
         ret.label               = "Key";
         return ret;
     }
     
-    IdColumn    graph_name(ColOpts opts)
+    IdColumn    graphviz_name(ColOpts opts)
     {
         IdColumn    ret;
-        ret.fnDisplay           = displayFN::graph_name();
+        ret.fnDisplay           = displayFN::graphviz_name();
         if(opts[ColOpt::Icon])
-            ret.fnDecoration    = decorationFN::graph_icon();
+            ret.fnDecoration    = decorationFN::graphviz_icon();
         ret.label               = "Name";
         return ret;
     }
 
-    void    reg_graph_columns()
+    void    reg_graphviz_columns()
     {
-        IdColumn::declare<Graph>(Column::Id,    graph_id);
-        IdColumn::declare<Graph>(Column::Key,   graph_key);
-        IdColumn::declare<Graph>(Column::Name,  graph_name);
+        IdColumn::declare<Graphviz>(Column::Id,    graphviz_id);
+        IdColumn::declare<Graphviz>(Column::Key,   graphviz_key);
+        IdColumn::declare<Graphviz>(Column::Name,  graphviz_name);
 
-        IdColumn::set_defaultList<Graph>({ Column::Key, ColOpt::Icon });
-        IdColumn::set_defaultTable<Graph>({{ Column::Key, ColOpt::Icon }, Column::Name });
+        IdColumn::set_defaultList<Graphviz>({ Column::Key, ColOpt::Icon });
+        IdColumn::set_defaultTable<Graphviz>({{ Column::Key, ColOpt::Icon }, Column::Name });
     }
     
-    YQ_INVOKE(reg_graph_columns();)
+    YQ_INVOKE(reg_graphviz_columns();)
 }
 
 namespace yq::mithril::compareFN {
-    IdColumn::CompareFN graph_id()
+    IdColumn::CompareFN graphviz_id()
     {
         return [](Id a, Id b) -> Compare {
-            return compare(a.as<Graph>().id, b.as<Graph>().id);
+            return compare(a.as<Graphviz>().id, b.as<Graphviz>().id);
         };
     }
     
-    IdColumn::CompareFN graph_key()
+    IdColumn::CompareFN graphviz_key()
     {
         return [](Id a, Id b) -> Compare {
-            return compare_igCase(cdb::key(a.as<Graph>()), cdb::key(b.as<Graph>()));
+            return compare_igCase(cdb::key(a.as<Graphviz>()), cdb::key(b.as<Graphviz>()));
         };
     }
     
-    IdColumn::CompareFN graph_name()
+    IdColumn::CompareFN graphviz_name()
     {
         return [](Id a, Id b) -> Compare {
-            return compare_igCase(cdb::name(a.as<Graph>()), cdb::name(b.as<Graph>()));
+            return compare_igCase(cdb::name(a.as<Graphviz>()), cdb::name(b.as<Graphviz>()));
         };
     }
 }
 
 namespace yq::mithril::decorationFN {
-    IdColumn::VariantFN  graph_icon()
+    IdColumn::VariantFN  graphviz_icon()
     {
         return [](Id i) -> QVariant {
-            return qIcon(i.as<Graph>());
+            return qIcon(i.as<Graphviz>());
         };
     }
 }
 
 
 namespace yq::mithril::displayFN {
-    IdColumn::VariantFN  graph_id()
+    IdColumn::VariantFN  graphviz_id()
     {
         return [](Id i) -> QVariant {
-            Graph    a   = i.as<Graph>();
+            Graphviz    a   = i.as<Graphviz>();
             if(!a)
                 return QVariant();
             return (quint64) a.id;
         };
     }
     
-    IdColumn::VariantFN  graph_key()
+    IdColumn::VariantFN  graphviz_key()
     {
         return [](Id i) -> QVariant {
-            Graph    a   = i.as<Graph>();
+            Graphviz    a   = i.as<Graphviz>();
             if(!a)
                 return QVariant();
             return gluon::qString(cdb::key(a));
         };
     }
     
-    IdColumn::VariantFN  graph_name()
+    IdColumn::VariantFN  graphviz_name()
     {
         return [](Id i) -> QVariant {
-            Graph    a   = i.as<Graph>();
+            Graphviz    a   = i.as<Graphviz>();
             if(!a)
                 return QVariant();
             return gluon::qString(cdb::name(a));

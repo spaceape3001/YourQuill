@@ -14,7 +14,7 @@ import os, sys, os.path, re
 from pathlib import Path
 
 #   Directories to exclude
-EXCLUDE = [ 'id', 'html', 'rule' ]
+EXCLUDE = [ 'dtn', 'id', 'html', 'rule' ]
 
 def pluralize(s):
     if s.endswith('y'):

@@ -22,7 +22,7 @@
 #include "folder.ipp"
 #include "fragment.ipp"
 #include "game.ipp"
-#include "graph.ipp"
+#include "graphviz.ipp"
 #include "group.ipp"
 
 #include "id.ipp"

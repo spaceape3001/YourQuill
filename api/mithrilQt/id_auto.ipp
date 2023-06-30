@@ -25,7 +25,7 @@
 #include <mithrilQt/folder.hpp>
 #include <mithrilQt/fragment.hpp>
 #include <mithrilQt/game.hpp>
-#include <mithrilQt/graph.hpp>
+#include <mithrilQt/graphviz.hpp>
 #include <mithrilQt/group.hpp>
 #include <mithrilQt/image.hpp>
 #include <mithrilQt/leaf.hpp>
@@ -75,8 +75,8 @@ namespace yq::mithril {
             return qIcon(Fragment(i.id()));
         case Game::ID:
             return qIcon(Game(i.id()));
-        case Graph::ID:
-            return qIcon(Graph(i.id()));
+        case Graphviz::ID:
+            return qIcon(Graphviz(i.id()));
         case Group::ID:
             return qIcon(Group(i.id()));
         case Image::ID:
