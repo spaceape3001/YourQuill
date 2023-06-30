@@ -297,7 +297,7 @@ void    DreamMW::openRequested(Id i)
     const Command*  edit    = nullptr;
     const Command*  view    = nullptr;
     
-    for(const Command* cmd : Command::all()){
+    for(const Command* cmd : commands()){
         if(cmd -> flavor() != ArgFlavor::Id)    // command's not ID triggered... cycle
             continue;
         
