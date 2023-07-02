@@ -7,7 +7,6 @@
 project(mithril)
 
 add_library(${PROJECT_NAME} SHARED
-
     mithril.cpp
     dtn/dtn.cpp
     html/XEntry.cpp
@@ -18,7 +17,6 @@ add_library(${PROJECT_NAME} SHARED
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         yqtoolbox
-        photon
     PRIVATE
         asio
 )
