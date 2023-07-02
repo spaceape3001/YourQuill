@@ -4,35 +4,41 @@
 ##
 ################################################################################
 
-project(mithril)
+project(photonQt)
+
+
+find_package(Qt6 COMPONENTS Core Gui Widgets)
+find_package(TBB REQUIRED)
+
+set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTORCC ON)
 
 add_library(${PROJECT_NAME} SHARED
 
-    mithril.cpp
-    dtn/dtn.cpp
-    html/XEntry.cpp
-    web/web_unity.cpp
-    wksp/Workspace.cpp
+    photonQt.cpp
+    #photonQt.qrc
 )
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         yqtoolbox
-        photon
+        gluon
+        
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Widgets
+
     PRIVATE
-        asio
+        ${LOG4CPP_LIBRARIES} 
+        ${TBB_LIBRARIES}
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/..
-)
-
-target_compile_definitions(${PROJECT_NAME}
     PRIVATE
-        -DDEV_BUILD=1
-        "-DYQ_BUILD_ROOT=\"${CMAKE_SOURCE_DIR}\"" 
-        "-DYQ_SHARE_DIRS=\"${CMAKE_SOURCE_DIR}/share\"" 
+        ${TBB_INCLUDE_DIR}
+        ${LOG4CPP_INCLUDE_DIR}
 )
 
 LinkTest(${PROJECT_NAME})

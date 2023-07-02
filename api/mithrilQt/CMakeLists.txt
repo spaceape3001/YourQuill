@@ -32,6 +32,8 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         yqtoolbox
         mithril
+        photon
+        photonQt
         gluon
         
         Qt6::Core
