@@ -10,7 +10,7 @@ namespace yq::mithril {
     
     WebPage::WebPage(HttpOps _methods, std::string_view p, const std::source_location& sl) : Meta(p, sl)
     {
-        set_option(WEB);
+        set({Flag::WEB, Flag::PAGE});
         
         m_methods   = _methods;
         
@@ -26,30 +26,30 @@ namespace yq::mithril {
 
     bool  WebPage::anonymouse_posting() const
     {
-        return static_cast<bool>(flags() & POST_ANON);
+        return has(Flag::POST_ANON);
     }
 
     bool  WebPage::local_only() const
     {
-        return static_cast<bool>(flags() & LOCAL_ONLY);
+        return has(Flag::LOCAL_ONLY);
     }
     
     bool  WebPage::login_required() const
     {
-        return static_cast<bool>(flags() & LOGIN_REQ);
+        return has(Flag::LOGIN_REQ);
     }
     
     bool  WebPage::no_expansion() const
     {
-        return static_cast<bool>(flags() & NO_EXPAND);
+        return has(Flag::NO_EXPAND);
     }
 
     void    WebPage::seal()
     {
-        if(flags() & SEALED)
+        if(is_sealed())
             return ;
             
-        if(!(flags() & DISABLE_REG)){
+        if(!has(Flag::DISABLE_REG)){
             std::string_view    p   = path();
             if((!p.empty()) && (m_role == Role())){
                 switch(p[0]){
@@ -106,7 +106,7 @@ namespace yq::mithril {
             }
         }
         
-        set_option(SEALED);
+        set(Flag::SEALED);
     }
 
 
@@ -147,7 +147,7 @@ namespace yq::mithril {
     WebPage::Writer&  WebPage::Writer::anon_post()
     {
         if(m_page)
-            m_page -> set_option(POST_ANON);
+            m_page -> set(Flag::POST_ANON);
         return *this;
     }
 
@@ -176,7 +176,7 @@ namespace yq::mithril {
     WebPage::Writer&  WebPage::Writer::disable_reg()
     {
         if(m_page)
-            m_page -> set_option(DISABLE_REG);
+            m_page -> set(Flag::DISABLE_REG);
         return *this;
     }
     
@@ -191,7 +191,7 @@ namespace yq::mithril {
     WebPage::Writer&  WebPage::Writer::local()
     {
         if(m_page){
-            m_page -> set_option(LOCAL_ONLY);
+            m_page -> set(Flag::LOCAL_ONLY);
             if(!m_page->local_only())
                 yWarning() << "Page " << m_page->path() << " failed to set local-only flag";
         }
@@ -201,7 +201,7 @@ namespace yq::mithril {
     WebPage::Writer&  WebPage::Writer::login()
     {
         if(m_page)
-            m_page -> set_option(LOGIN_REQ);
+            m_page -> set(Flag::LOGIN_REQ);
         return *this;
     }
     
@@ -209,7 +209,7 @@ namespace yq::mithril {
     WebPage::Writer&  WebPage::Writer::no_expand()
     {
         if(m_page)
-            m_page -> set_option(NO_EXPAND);
+            m_page -> set(Flag::NO_EXPAND);
         return *this;
     }
 
@@ -259,7 +259,7 @@ namespace yq::mithril {
         if(w && m_page){
             for(HttpOp h : HttpOp::all_values()){
                 if(m.is_set(h)){
-                    m_page -> set_option(HAS_SUBS);
+                    m_page -> set(Flag::HAS_SUBS);
                     m_page -> m_subs[h][p]  = w;
                 }
             }
