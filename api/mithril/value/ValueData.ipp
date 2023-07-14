@@ -22,14 +22,14 @@ namespace yq::mithril {
     }
 
     
-    Value::Data x_value(const XmlNode*xn)
+    Value::Data x_value(const XmlNode&xn)
     {
         Value::Data ret;
         read_xn(ret, xn);
         return ret;
     }
     
-    bool    read_xn(Value::Data&ret, const XmlNode*xn)
+    bool    read_xn(Value::Data&ret, const XmlNode&xn)
     {
         ret.notes   = read_child(xn, szNotes, x_string);
         ret.brief   = read_child(xn, szBrief, x_string);
@@ -37,7 +37,7 @@ namespace yq::mithril {
         return true;
     }
     
-    void    write_xn(XmlNode*xn, const Value::Data&v)
+    void    write_xn(XmlNode&xn, const Value::Data&v)
     {
         write_child(xn, szData, v.data);
         if(!v.brief.empty())

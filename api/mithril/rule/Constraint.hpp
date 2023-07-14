@@ -18,8 +18,8 @@ namespace yq::mithril {
         virtual void    constraint() const = 0;
     };
 
-    Ref<Constraint>     x_constraint(const XmlNode* xn);
-    void    write_xn(XmlNode* xn, const Ref<Constraint>&);
+    Ref<Constraint>     x_constraint(const XmlNode& xn);
+    void    write_xn(XmlNode& xn, const Ref<Constraint>&);
 
 }
 

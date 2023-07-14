@@ -16,9 +16,9 @@ namespace yq::mithril {
         Data&   merge(const Data&, bool fOverride);
     };
     
-    Value::Data x_value(const XmlNode*);
-    bool    read_xn(Value::Data&, const XmlNode*);
-    void    write_xn(XmlNode*, const Value::Data&);
+    Value::Data x_value(const XmlNode&);
+    bool    read_xn(Value::Data&, const XmlNode&);
+    void    write_xn(XmlNode&, const Value::Data&);
     
     struct Value::ListData {
         Vector<Data>   values;

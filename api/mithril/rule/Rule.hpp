@@ -30,9 +30,9 @@ namespace yq::mithril {
         //Rule&       merge(const Rule&, bool fOverride);
     };
     
-    Ref<Rule>   x_rule(const XmlNode*);
-    //bool        read_xn(Rule&, const XmlNode*);
-    void        write_xn(XmlNode*, const Ref<Rule>&);
+    Ref<Rule>   x_rule(const XmlNode&);
+    //bool        read_xn(Rule&, const XmlNode&);
+    void        write_xn(XmlNode&, const Ref<Rule>&);
     
 }
 

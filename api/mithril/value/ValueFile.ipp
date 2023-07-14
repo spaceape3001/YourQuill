@@ -22,16 +22,16 @@ namespace yq::mithril {
             return errors::xml_no_root_element();
         }
         
-        values  = read_children(xn, szValue, x_value);
+        values  = read_children(*xn, szValue, x_value);
         return std::error_code();
     }
     
     std::error_code Value::ListFile::write(XmlDocument&doc) const
     {
-        XmlNode*  xroot  = doc.allocate_node(rapidxml::node_element, szYQUser);
+        XmlNode*  xroot  = doc.allocate_element(szYQUser);
         doc.append_node(xroot);
         
-        write_children(xroot, szValue, values);
+        write_children(*xroot, szValue, values);
         return std::error_code();
     }
 }

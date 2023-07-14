@@ -44,7 +44,7 @@ namespace yq::mithril {
         write_children(xn, szAction, v.actions);
     }
 */
-    Ref<Rule>     x_rule(const XmlNode* xn)
+    Ref<Rule>     x_rule(const XmlNode& xn)
     {
         const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
         if(!oi)
@@ -58,7 +58,7 @@ namespace yq::mithril {
         return Ref<Rule>();
     }
     
-    void    write_xn(XmlNode* xn, const Ref<Rule>&v)
+    void    write_xn(XmlNode& xn, const Ref<Rule>&v)
     {
         if(v.valid()){
             write_attribute(xn, szType, v->metaInfo().name());

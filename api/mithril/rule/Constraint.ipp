@@ -12,7 +12,7 @@
 #include <io/XmlUtils.hpp>
 
 namespace yq::mithril {
-    Ref<Constraint>     x_constraint(const XmlNode* xn)
+    Ref<Constraint>     x_constraint(const XmlNode& xn)
     {
         const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
         if(!oi)
@@ -26,7 +26,7 @@ namespace yq::mithril {
         return Ref<Constraint>();
     }
     
-    void    write_xn(XmlNode* xn, const Ref<Constraint>&v)
+    void    write_xn(XmlNode& xn, const Ref<Constraint>&v)
     {
         if(v.valid()){
             write_attribute(xn, szType, v->metaInfo().name());

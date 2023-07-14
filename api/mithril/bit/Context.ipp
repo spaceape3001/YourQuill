@@ -13,24 +13,24 @@
 #include <io/stream/Text.hpp>
 
 namespace yq::mithril {
-    bool        read_xn(Context&ret, const XmlNode*xn)
+    bool        read_xn(Context&ret, const XmlNode& xn)
     {
         ret.title   = read_attribute(xn, szTitle, x_string);
         ret.icon    = read_attribute(xn, szIcon, x_string);
         ret.order   = read_attribute(xn, szOrder, x_integer).value_or(0);
         ret.format  = read_attribute(xn, szFormat, x_enum<Format>).value_or(Format());
-        ret.data    = to_string(xn);
+        ret.data    = std::string(xn.value());
         return true;
     }
 
-    Context     x_context(const XmlNode* xn)
+    Context     x_context(const XmlNode& xn)
     {
         Context ret;
         read_xn(ret, xn);
         return ret;
     }
 
-    void                write_xn(XmlNode* xn, const Context&v)
+    void                write_xn(XmlNode& xn, const Context&v)
     {
         if(v.format != Format())
             write_attribute(xn, szFormat, v.format);
@@ -41,10 +41,8 @@ namespace yq::mithril {
         if(v.order)
             write_attribute(xn, szOrder, v.order);
         if(!v.data.empty()){
-            xn->append_node(
-                xn->document()->allocate_node(
-                    rapidxml::node_cdata, nullptr, v.data.c_str(), 0ULL, v.data.size()
-                )
+            xn.append_node(
+                xn.document()->allocate_cdata(v.data)
             );
         }
     }

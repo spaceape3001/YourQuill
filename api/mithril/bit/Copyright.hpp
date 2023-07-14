@@ -37,6 +37,6 @@ namespace yq::mithril {
         void    merge(const Copyright&);
     };
 
-    Expect<Copyright>   x_copyright(const XmlNode*);
-    void                write_xn(XmlNode* xb, const Copyright&);
+    Expect<Copyright>   x_copyright(const XmlNode&);
+    void                write_xn(XmlNode& xb, const Copyright&);
 }

@@ -12,7 +12,7 @@
 #include <io/XmlUtils.hpp>
 
 namespace yq::mithril {
-    Ref<Trigger>     x_trigger(const XmlNode* xn)
+    Ref<Trigger>     x_trigger(const XmlNode& xn)
     {
         const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
         if(!oi)
@@ -26,7 +26,7 @@ namespace yq::mithril {
         return Ref<Trigger>();
     }
     
-    void    write_xn(XmlNode* xn, const Ref<Trigger>&v)
+    void    write_xn(XmlNode& xn, const Ref<Trigger>&v)
     {
         if(v.valid()){
             write_attribute(xn, szType, v->metaInfo().name());

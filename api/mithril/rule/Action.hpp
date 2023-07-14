@@ -18,7 +18,7 @@ namespace yq::mithril {
         virtual void    action() const = 0;
     };
 
-    Ref<Action>     x_action(const XmlNode* xn);
-    void    write_xn(XmlNode* xn, const Ref<Action>&);
+    Ref<Action>     x_action(const XmlNode& xn);
+    void    write_xn(XmlNode& xn, const Ref<Action>&);
 
 }

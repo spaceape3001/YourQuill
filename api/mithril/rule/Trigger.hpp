@@ -18,7 +18,7 @@ namespace yq::mithril {
         virtual bool    trigger() const = 0;
     };
 
-    Ref<Trigger>     x_trigger(const XmlNode* xn);
-    void    write_xn(XmlNode* xn, const Ref<Trigger>&);
+    Ref<Trigger>     x_trigger(const XmlNode& xn);
+    void    write_xn(XmlNode& xn, const Ref<Trigger>&);
 
 }

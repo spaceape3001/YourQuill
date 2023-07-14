@@ -42,7 +42,7 @@ namespace yq::mithril {
     }
 
 
-    Expect<Copyright>   x_copyright(const XmlNode* xn)
+    Expect<Copyright>   x_copyright(const XmlNode& xn)
     {
         auto    stance  = read_attribute(xn, szStance, x_enum<AssertDeny>);
         if(!stance)
@@ -58,11 +58,11 @@ namespace yq::mithril {
         res.stance  = *stance;
         res.from    = *from;
         res.to      = *to;
-        res.text    = to_string(xn);
+        res.text    = std::string(xn.value());
         return res;
     }
 
-    void                write_xn(XmlNode* xb, const Copyright&v)
+    void                write_xn(XmlNode& xb, const Copyright&v)
     {
         if(v.stance != AssertDeny())
             write_attribute(xb, szStance, v.stance);
@@ -71,6 +71,6 @@ namespace yq::mithril {
         if(v.to)
             write_attribute(xb, szTo, v.to);
         if(!v.text.empty())
-            xb -> value(v.text.c_str(), v.text.size());
+            xb.value(v.text);
     }
 }
