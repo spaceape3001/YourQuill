@@ -10,20 +10,12 @@
 #include <mithril/class/ClassCDB.hpp>
 
 namespace yq::mithril::update {
-    UClass&  UClass::get(Class c)
+    UClass&  UClass::get(Class x)
     {
-        static constexpr const size_t       kMinAlloc   = 1024uz;
-        static std::vector<UClass*>      s_lookup(kMinAlloc, nullptr);
-        if(s_lookup.size() <= c.id)
-            s_lookup.resize(c.id+kMinAlloc, nullptr);
-        
-        auto& u = s_lookup[c.id];
-        if(!u)
-            u   = new UClass(c);
-        return *u;
+        return lookup<UClass,1024>(x);
     }
 
-    UClass::UClass(Class c) : class_(c), id(c.id), key(cdb::key(c)) 
+    UClass::UClass(Class x) : U<Class>(x, cdb::key(x)), doc(cdb::document(x))
     {
     }
 

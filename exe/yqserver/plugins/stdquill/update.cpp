@@ -5,14 +5,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "uAtom.ipp"
-#include "uCategory.ipp"
 #include "uClass.ipp"
 #include "uField.ipp"
 #include "uImage.ipp"
 #include "uLeaf.ipp"
 #include "uRoot.ipp"
-#include "uTag.ipp"
 #include "uUser.ipp"
+
+#include <update/uCategory.hpp>
+#include <update/uTag.hpp>
 
 //#include <basic/BasicApp.hpp>
 //#include <basic/CollectionUtils.hpp>
@@ -108,6 +109,7 @@ struct Sigma {
 
 using namespace yq;
 using namespace yq::mithril;
+using namespace yq::mithril::update;
 //using namespace yq::mithril::cdb;
 
 
@@ -252,8 +254,8 @@ namespace {
             auto    tags_lookup     = by_cache(tags_folder(), "*.tag");
             
                 //  Organization & users
-            on_stage3<u_category_stage3>(by_cache(categories_folder(), "*.cat"));
-            on_stage3<u_tag_stage3>(tags_lookup);
+            on_stage3<UCategory::s3>(by_cache(categories_folder(), "*.cat"));
+            on_stage3<UTag::s3>(tags_lookup);
             on_stage3<u_user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
@@ -267,7 +269,7 @@ namespace {
                 //  LEAFS & atoms
             on_stage3<s3_leaf_pass1>(leafs_lookup);
             on_stage3<s3_leaf_pass2>(leafs_lookup);
-            on_stage3<u_tag_stage3_leaf>(tags_lookup);
+            on_stage3<UTag::s3_leaf>(tags_lookup);
 
         
                 //  STAGE 4 global related
@@ -289,11 +291,11 @@ namespace {
             on_change<page_update>(by_file(gSharedPageFile));
             on_change<page_update>(by_cache(top_folder(), ".page"));
                 
-            on_change<u_category_notify>(by_cache(categories_folder(), "*.cat"));
+            on_change<UCategory::notify>(by_cache(categories_folder(), "*.cat"));
             on_change<u_class_notify>(classes_lookup);
             on_change<u_field_notify>(fields_lookup);
             on_change<u_leaf_notify>(leafs_lookup);
-            on_change<u_tag_notify>(tags_lookup);
+            on_change<UTag::notify>(tags_lookup);
             on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
@@ -302,8 +304,8 @@ namespace {
                 on_change<u_leaf_notify_icons>(by_cache(z));
                 on_change<u_user_notify_icons>(by_cache(users_folder(), z));
 
-                on_change<u_category_notify_icons>(by_cache(categories_folder(), z));
-                on_change<u_tag_notify_icons>(by_cache(tags_folder(), z));
+                on_change<UCategory::icons>(by_cache(categories_folder(), z));
+                on_change<UTag::icons>(by_cache(tags_folder(), z));
             }
         }
 

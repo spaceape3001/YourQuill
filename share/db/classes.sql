@@ -20,7 +20,7 @@ CREATE TABLE Classes (
 CREATE TABLE CAlias (
     class       INTEGER NOT NULL,
     alias       VARCHAR(255) NOT NULL,
-    UNIQUE(class, alias)
+    UNIQUE(class, alias) ON CONFLICT IGNORE
 );
 
 CREATE TABLE CDepends (

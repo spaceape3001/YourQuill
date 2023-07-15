@@ -1,0 +1,18 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <update/preamble.hpp>
+#include <mithril/atom/Atom.hpp>
+
+namespace yq::mithril::update {
+    struct UAtom : public U<Atom>{
+        static UAtom&      get(Atom t);
+
+        UAtom(Atom);
+    };
+}

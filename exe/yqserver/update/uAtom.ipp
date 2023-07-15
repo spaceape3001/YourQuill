@@ -4,16 +4,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uField.hpp"
-#include <mithril/field/FieldCDB.hpp>
+#include "uAtom.hpp"
+#include <mithril/atom/AtomCDB.hpp>
 
 namespace yq::mithril::update {
-    UField&  UField::get(Field x)
+    UAtom&  UAtom::get(Atom x)
     {
-        return lookup<UField,2048>(x);
+        return lookup<UAtom, 65536>(x);
     }
 
-    UField::UField(Field x) : U<Field>(x, cdb::key(x)), doc(cdb::document(x))
+    UAtom::UAtom(Atom x) : U<Atom>(x, cdb::key(x))
     {
     }
 }
