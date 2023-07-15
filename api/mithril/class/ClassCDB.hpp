@@ -18,6 +18,8 @@
 
 
 namespace yq::mithril::cdb {
+    string_set_t                aliases(Class);
+
     /*! \brief All classes in the cache database
     
         \param[in]  sorted  Yes/No to sort by key (default is no)
@@ -28,6 +30,7 @@ namespace yq::mithril::cdb {
     /*! \brief Count of all classes declared in the cache
     */
     size_t                      all_classes_count();
+    
     
     //! Alternative keys for class
     string_set_t                alternative_keys(Class);

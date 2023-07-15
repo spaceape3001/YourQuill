@@ -7,6 +7,7 @@
 #pragma once
 
 #include <basic/CollectionUtils.hpp>
+#include <basic/TextUtils.hpp>
 
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
@@ -18,10 +19,48 @@
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
+//#include <generator> // NOPE, GCC doesn't support this
+
 using namespace yq;
 using namespace yq::mithril;
 
 namespace {
+
+    //  switch to generator once available... using interrim std::vector until then :(
+    // std::generator<std::string>
+    std::vector<std::string>     all_aliases(const std::string& k, const Class::Data& data)
+    {
+        std::vector<std::string>    ret;
+        for(auto& a : data.aliases)
+            ret.push_back(capitalize(a));
+        for(auto& p : data.prefixes)
+            ret.push_back(capitalize(p+k));
+
+        for(auto& p : data.prefixes)
+            for(auto& s : data.suffixes)
+                ret.push_back(capitalize(p+k+s));
+        
+        for(auto& s : data.suffixes)
+            ret.push_back(capitalize(k+s));
+            
+            //  sample for generator:
+            //  co_yield k+s;
+        
+        for(auto& aa : data.aliases)
+            for(auto& p : data.prefixes)
+                ret.push_back(capitalize(p+aa));
+                
+        for(auto& aa : data.aliases)
+            for(auto& p : data.prefixes)
+                for(auto& s : data.suffixes)
+                    ret.push_back(capitalize(p+aa+s));
+
+        for(auto& aa : data.aliases)
+            for(auto& s : data.suffixes)
+                ret.push_back(capitalize(aa+s));
+
+        return ret;
+    }
 
 
     void                u_class_erase(Class x)
@@ -103,6 +142,13 @@ namespace {
         
         static thread_local CacheQuery iTag("INSERT INTO CTags (class, tag) VALUES (?,?)");
         static thread_local CacheQuery dTag("DELETE FROM CTags WHERE class=? AND tag=?");
+        
+        static thread_local CacheQuery iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
+        static thread_local CacheQuery dAlias("DELETE FROM CAlias WHERE class=? AND alias=?");
+
+        std::string     k   = cdb::key(x);
+
+        string_set_t    new_aliases = make_set(all_aliases(k, *data), IgCase());
 
         std::set<Tag>   new_tags = cdb::find_tags_set(data->tags, true);
         
@@ -110,6 +156,8 @@ namespace {
             u_class_icon(x);
             for(Tag t : new_tags)
                 iTag.exec(x.id, t.id);
+            for(const std::string& s : new_aliases)
+                iAlias.exec(x.id, s);
 
             //  TODO inheritance....
             
@@ -120,7 +168,17 @@ namespace {
                 iTag.exec(x.id, t.id);
             for(Tag t : ch_tag.removed)
                 dTag.exec(x.id, t.id);
-                
+
+            string_set_t    old_aliases = cdb::aliases(x);
+            auto ch_alias   = add_remove(old_aliases, new_aliases);
+            for(const std::string& s : ch_alias.added)
+                iAlias.exec(x.id, s);
+            for(const std::string& s : ch_alias.removed)
+                dAlias.exec(x.id, s);
+            
+            
+
+
             // Do class analysis here
 
             //  TODO inheritance....
@@ -187,40 +245,8 @@ namespace {
         }
         
         static thread_local CacheQuery iAlias("INSERT INTO CAlias (class, alias) VALUES (?,?)");
-        
-        for(auto& p : dp->prefixes){
-            std::string a   = p+k;
-            iAlias.exec(x.id, a);
-         
-            for(auto& s : dp->suffixes){
-                a   = p+k+s;
-                iAlias.exec(x.id, a);
-            }
-        }
-        
-        for(auto& s : dp->suffixes){
-            std::string a   = k+s;
-            iAlias.exec(x.id, a);
-        }
-        
-        for(auto& aa : dp->aliases){
-            iAlias.exec(x.id, aa);
-
-            for(auto& p : dp->prefixes){
-                std::string a   = p+aa;
-                iAlias.exec(x.id, a);
-             
-                for(auto& s : dp->suffixes){
-                    a   = p+aa+s;
-                    iAlias.exec(x.id, a);
-                }
-            }
-            
-            for(auto& s : dp->suffixes){
-                std::string a   = aa+s;
-                iAlias.exec(x.id, a);
-            }
-        }
+        for(auto&& s : all_aliases(k, *dp))
+            iAlias.exec(x.id, s);
         
         static thread_local CacheQuery iPrefix("INSERT INTO CPrefix (class, prefix) VALUES (?,?)");
         for(auto& p : dp->prefixes)
@@ -339,6 +365,7 @@ namespace {
         ClassCountMap   bases  = cdb::make_count_map(cdb::base_classes_ranked(x));
         
     }
+
 
 #if 0
     void    u_class_update(Class x)

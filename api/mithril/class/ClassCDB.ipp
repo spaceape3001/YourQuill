@@ -24,6 +24,13 @@
 
 namespace yq::mithril::cdb {
 
+
+    string_set_t                 aliases(Class c)
+    {
+        static thread_local SQ   s("SELECT alias FROM CAlias WHERE class=?");
+        return s.sset(c.id);
+    }
+
     namespace {
         inline std::string class_filename(std::string_view k)
         {
@@ -48,7 +55,6 @@ namespace yq::mithril::cdb {
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>();
     }
-
     size_t  all_classes_count()
     {
         static thread_local SQ    s("SELECT COUNT(1) FROM Classes");

@@ -24,6 +24,7 @@ target_include_directories( stdquill
 target_link_libraries( stdquill 
     PUBLIC 
         yqtoolbox 
+        yqupdate
         mithril
         asio
         ${ImageMagick_LIBRARIES}

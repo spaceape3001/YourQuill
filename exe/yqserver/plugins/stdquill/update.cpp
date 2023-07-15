@@ -4,14 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uLeaf.ipp"
-
-
 #include "uAtom.ipp"
 #include "uCategory.ipp"
 #include "uClass.ipp"
 #include "uField.ipp"
 #include "uImage.ipp"
+#include "uLeaf.ipp"
 #include "uRoot.ipp"
 #include "uTag.ipp"
 #include "uUser.ipp"
@@ -112,34 +110,6 @@ using namespace yq;
 using namespace yq::mithril;
 //using namespace yq::mithril::cdb;
 
-struct UClass;
-struct UField;
-
-static constexpr const size_t       kMinAlloc   = 1024uz;
-
-//  configured at stage 3... only
-
-#if 0
-struct UField {
-    static UField&  get(Field f)
-    {
-        static std::vector<UField>      s_lookup(kMinAlloc);
-        if(s_lookup.size() <= f.id)
-            s_lookup.resize(f.id+kMinAlloc);
-        return s_lookup[f.id];
-    }
-};
-
-struct UClass {
-    static UClass&  get(Class c)
-    {
-        static std::vector<UClass>      s_lookup(kMinAlloc);
-        if(s_lookup.size() <= c.id)
-            s_lookup.resize(c.id+kMinAlloc);
-        return s_lookup[c.id];
-    }
-};
-#endif
 
 namespace {
     void    page__(cdb_options_t opts=0)
@@ -169,13 +139,6 @@ namespace {
     {
         page__();
     }
-
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  FORWARD DECLARATIONS
-    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    using ClsHopsMap   = std::map<Class,uint64_t>;
-
 
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

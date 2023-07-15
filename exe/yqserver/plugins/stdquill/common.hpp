@@ -20,16 +20,8 @@
 #include <mithril/web/Template.hpp>
 
 
-
-//#include <db/html_common.hpp>
-
-
-//#include <mithril/atom/Atom.hpp>
-//#include <mithril/atom/Class.hpp>
-//#include <mithril/atom/Field.hpp>
 #include <mithril/bit/Copyright.hpp>
 #include <mithril/enum/Submit.hpp>
-//#include <mithril/leaf/Leaf.hpp>
 
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
