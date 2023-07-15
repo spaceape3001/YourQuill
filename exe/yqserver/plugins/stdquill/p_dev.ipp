@@ -1055,7 +1055,7 @@ namespace {
         h.kvrow("Key") << i.key;
         h.kvrow("Brief") << i.brief;
         h.kvrow("Document") << dev(i.doc);
-        h.kvrow("Leaf"); //  << dev(leaf(x_tag));
+        h.kvrow("Leaf") << dev(leaf(x));
         h.kvrow("Image");
     }
     

@@ -36,6 +36,7 @@ namespace yq::mithril::update {
     void    UTag::notify(Fragment frag,Change chg)
     {
         Document    doc = cdb::document(frag);
+        
         if(chg == Change::Removed){
             if(cdb::fragments_count(doc) <= 1){
                 Tag    x   = cdb::find_tag(doc);
@@ -47,6 +48,7 @@ namespace yq::mithril::update {
         }
         
         auto [u,cr] = create(doc);
+
         u.reload();
         u.u_info();
         u.u_leaf();
@@ -120,6 +122,7 @@ namespace yq::mithril::update {
 
         static thread_local CacheQuery uLeaf("UPDATE Tags SET leaf=? WHERE id=?");
         Leaf l      = cdb::leaf(def->leaf);
+        
         if(l != leaf){
             uLeaf.exec(l.id, id);
             leaf    = l;
