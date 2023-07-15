@@ -3,3 +3,6 @@ plural  Parent
 brief   An entity's parents
 is      Kin
 reverse child
+alias   Mother
+alias   Father
+

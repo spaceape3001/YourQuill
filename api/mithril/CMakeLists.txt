@@ -8,7 +8,6 @@ project(mithril)
 
 add_library(${PROJECT_NAME} SHARED
     mithril.cpp
-    dtn/dtn.cpp
     html/XEntry.cpp
     web/web_unity.cpp
     wksp/Workspace.cpp
