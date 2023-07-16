@@ -37,9 +37,15 @@ namespace yq::mithril::update {
         
         //! Deduce all target, sources, fields, etc
         static void             s3_deduce(Document);
+        
+        //! Maybe final pass, propagate to the remaining...
+        static void             s3_propagate(Document);
+        
+        struct Target { Class tgt; };
+        struct Source { Class src; };
+        struct Node { Class cls; }
 
-
-        using Resolve       = std::variant<std::monostate,Class,Field>;
+        using Resolve       = std::variant<std::monostate,Node,Field,Target,Source>;
         using ResolveMap    = std::map<std::string,Resolve,IgCase>;
 
         const Document      doc;
@@ -55,6 +61,7 @@ namespace yq::mithril::update {
         DD<Class>           sources;
         DD<Class>           inbounds;
         DD<Class>           outbounds;
+        std::string_view    binding;
         
         //  This is what can reverses *this* class
         DD<Class>           reverses;
@@ -66,10 +73,14 @@ namespace yq::mithril::update {
         void                u_alias();
         void                u_bases();
         void                u_derives();
-        void                u_info();
-        void                u_icon();
+        void                u_edge();
         void                u_fields();
+        void                u_icon();
+        void                u_inbounds();
+        void                u_info();
+        void                u_outbounds();
         void                u_reverses();
+        void                u_resolves();
         void                u_sources();
         void                u_tags();
         void                u_targets();

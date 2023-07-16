@@ -268,6 +268,7 @@ namespace {
             on_stage3<UField::s3>(fields_lookup);
             
             on_stage3<UClass::s3_deduce>(classes_lookup);
+            on_stage3<UClass::s3_propagate>(classes_lookup);
 
                 //  LEAFS & atoms
             on_stage3<s3_leaf_pass1>(leafs_lookup);

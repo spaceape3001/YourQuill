@@ -97,9 +97,18 @@ namespace yq::mithril::update {
         u.u_fields();
         u.u_sources();
         u.u_targets();
+        u.u_edge();
         u.u_reverses();
     }
     
+    void    UClass::s3_propagate(Document doc)
+    {
+        auto [u,cr] = create(doc);
+        u.u_inbounds();
+        u.u_outbounds();
+        u.u_resolves();
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     UClass::UClass(Class x) : U<Class>(x, cdb::key(x)), doc(cdb::document(x))
@@ -328,6 +337,11 @@ namespace yq::mithril::update {
     void    UClass::reload()
     {
         def     = cdb::merged(x, cdb::DONT_LOCK|cdb::IS_UPDATE);
+        if(def){
+            binding = def->binding;
+        } else {
+            binding = {};
+        }
     }
 
     void    UClass::i0_reverses()
@@ -461,7 +475,19 @@ namespace yq::mithril::update {
         if(!x)
             return;
         for(auto& cr : cdb::derived_classes_ranked(x))
-            derives.hop[cr.cls]   = { (hop_t) cr.rank };
+            derives.hop[cr.cls].set_smaller({ (hop_t) cr.rank });
+    }
+
+    void    UClass::u_edge()
+    {
+        if(!x)
+            return ;
+            
+        bool    isEdge  = !(sources.hop.empty() || target.hop.empty());
+        static thread_local CacheQuery sql("UPDATE Fields SET edge=? WHERE id=?");
+        sql.bind(1, isEdge);
+        sql.bind(2, id);
+        sql.exec();
     }
 
     void    UClass::u_fields()
@@ -515,6 +541,14 @@ namespace yq::mithril::update {
         }
     }
 
+    void    UClass::u_inbounds()
+    {
+        if(!x)
+            return;
+        for(auto& cr : cdb::inbound_classes_ranked(x))
+            inbounds.hop[cr.cls].set_smaller({ (hop_t) cr.rank });
+    }
+
     void    UClass::u_info()
     {
         if(!x)
@@ -544,6 +578,19 @@ namespace yq::mithril::update {
         uInfo.bind(7, def->dev_url);
         uInfo.bind(8, id);
         uInfo.exec();
+    }
+
+    void    UClass::u_outbounds()
+    {
+        if(!x)
+            return;
+        for(auto& cr : cdb::outbound_classes_ranked(x))
+            outbounds.hop[cr.cls].set_smaller({ (hop_t) cr.rank });
+    }
+
+    void    UClass::u_resolves()
+    {
+        // TODO (mapping strings -> actions for attributes)
     }
 
     void    UClass::u_reverses()
