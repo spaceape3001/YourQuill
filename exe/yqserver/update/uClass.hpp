@@ -45,13 +45,16 @@ namespace yq::mithril::update {
         TagSet              tags;
         string_set_t        aliases;
         ClassSet            use;
-        ClassHCountMap      base;
-        ClassHCountMap      derive;
-        ClassHCountMap      targets;    // target (node) classes
-        ClassHCountMap      inbound;    // edge classes that can be inbound
-        ClassHCountMap      sources;    // source (node) classes
-        ClassHCountMap      outbound;   // edge classes that can be outbound
-        ClassHCountMap      reverses;   // classes that are reverse of this edge
+        ClassHopMap         bases;
+        ClassHopMap         derives;
+        ClassHopMap         targets;    // target (node) classes
+        ClassHopMap         inbounds;   // edge classes that can be inbound
+        ClassHopMap         sources;    // source (node) classes
+        ClassHopMap         outbounds;  // edge classes that can be outbound
+        ClassHopMap         reverses;   // classes that are reverse of this edge
+        FieldHopMap         fields;     // field hops
+        FieldSet            fields_direct;   // fields from direct
+        FieldSet            fields_all;      // fields from indirect (ALL)
         
         UClass(Class);
         
@@ -60,6 +63,7 @@ namespace yq::mithril::update {
         void                u_info();
         void                u_icon();
         void                u_tags();
+        void                u_fields();
         
         void                x_erase();
         
@@ -77,18 +81,10 @@ namespace yq::mithril::update {
         
         //!     Deducing ALL bases/derives...
         void                i1_bases();
-        void                i1_bases(Class,uint16_t);
+        void                i1_bases(Class,hop_t);
         
         string_set_t        enum_aliases() const;
-        
-        template <typename Pred>
-        void    foreachUse(Pred pred) const
-        {
-            for(auto& i : base){
-                if(!i.second)
-                    pred(i.first);
-            }
-        }
+        FieldHopMap         enum_fields() const;
         
         
         //void                flash(FF);

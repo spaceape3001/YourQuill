@@ -9,6 +9,7 @@
 #include <basic/preamble.hpp>
 #include <basic/Flags.hpp>
 #include <math/Counter.hpp>
+#include <meta/TypeInfo.hpp>
 #include <mithril/id/Id.hpp>
 #include <unordered_map>
 
@@ -18,13 +19,12 @@ namespace yq::mithril {
 }
 
 namespace yq::mithril::update {
-    using StringZCountMap       = std::map<std::string,CountU16,IgCase>;
-    using ClassZCountMap        = std::map<Class,CountU16>;
-    using FieldZCountMap        = std::map<Field,CountU16>;
-    
-    using StringHCountMap       = std::map<std::string,HCountU16,IgCase>;
-    using ClassHCountMap        = std::map<Class,HCountU16>;
-    using FieldHCountMap        = std::map<Field,HCountU16>;
+
+    using HopCount              = HCountI8;
+    using hop_t                 = int8_t;
+
+    using ClassHopMap           = std::map<Class,HopCount>;
+    using FieldHopMap           = std::map<Field,HopCount>;
 
     struct UClass;
     struct UField;
@@ -44,6 +44,23 @@ namespace yq::mithril::update {
         T   all;
     };
     
+    struct ById {
+        static Meta::id_t   id_for(const TypeInfo* t)
+        {
+            return t ? t->id() : 0;
+        }
+        
+        bool    operator()(const TypeInfo* a, const TypeInfo* b) const
+        {
+            return id_for(a) < id_for(b);
+        }
+        
+        template <IdType T>
+        constexpr bool    operator()(T a, T b) const
+        {
+            return a.id < b.id;
+        }
+    };
     
     template <IdType T>
     class U {

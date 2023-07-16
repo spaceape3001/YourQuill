@@ -13,6 +13,7 @@
 
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/field/FieldCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
 
 namespace yq::mithril::update {
@@ -87,6 +88,7 @@ namespace yq::mithril::update {
     void    UClass::s3_deduce(Document doc)
     {
         auto [u,cr] = create(doc);
+        u.u_fields();
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -129,6 +131,25 @@ namespace yq::mithril::update {
             for(auto& aa : def->aliases)
                 for(auto& s : def->suffixes)
                     ret.insert(capitalize(aa+s));
+        }
+        return ret;
+    }
+
+    FieldHopMap     UClass::enum_fields() const
+    {
+        FieldHopMap ret;
+        if(x){
+            for(Field f : fields_direct)
+                ret[f]  = { 0 };
+            for(auto& j : bases){
+                UClass& u   = get(j.first);
+                HopCount    hc  = j.second;
+                ++hc;
+                for(Field f : u.fields_direct)
+                    ret.try_emplace(f, hc);
+            }
+            for(Field f : fields_all)
+                ret.try_emplace(f, HopCount( -1 ));
         }
         return ret;
     }
@@ -184,7 +205,7 @@ namespace yq::mithril::update {
             iSource.exec();
             
             sources[y]          = { 0 };
-            get(y).outbound[x]  = { 0 };
+            get(y).outbounds[x] = { 0 };
         }
     }
 
@@ -209,7 +230,7 @@ namespace yq::mithril::update {
             iTarget.exec();
             
             targets[y]          = { 0 };
-            get(y).inbound[x]   = { 0 };
+            get(y).inbounds[x]  = { 0 };
         }
     }
     
@@ -231,10 +252,10 @@ namespace yq::mithril::update {
         }
     }
 
-    void    UClass::i1_bases(Class y,uint16_t d)
+    void    UClass::i1_bases(Class y,hop_t d)
     {
-        auto i = base.find(y);
-        if((i != base.end()) && (i->second <= d))
+        auto i = bases.find(y);
+        if((i != bases.end()) && (i->second <= d))
             return ;
         
         UClass& u   = get(y);
@@ -242,11 +263,11 @@ namespace yq::mithril::update {
         static thread_local CacheQuery iUse("INSERT OR REPLACE INTO CDepends (class, base, hops) VALUES (?,?,?)");
         iUse.bind(1, id);
         iUse.bind(2, y.id);
-        iUse.bind(3, d);
+        iUse.bind(3, (int) d);
         iUse.exec();
         
-        base[y]     = { d };
-        u.derive[x] = { d };
+        bases[y]     = { d };
+        u.derives[x] = { d };
         
         for(Class c : u.use)
             i1_bases(c, d+1);
@@ -279,6 +300,41 @@ namespace yq::mithril::update {
         for(const std::string& s : chg.removed)
             dAlias.exec(id, s);
         aliases = them;
+    }
+
+    void    UClass::u_fields()
+    {
+        if(!x)
+            return ;
+        
+        static thread_local CacheQuery iField("INSERT INTO CFields (field, class, hops) VALUES (?, ?, ?)");
+        static thread_local CacheQuery uField("UPDATE CFields SET hops=? WHERE class=? AND field=?");
+        static thread_local CacheQuery dField("DELETE FROM CFields WHERE class=? AND field=?");
+        
+        FieldHopMap them   = enum_fields();
+        map_difference_exec(fields, them, 
+            [&](const FieldHopMap::value_type& j){
+                //  deletes
+                dField.bind(1, id);
+                dField.bind(2, j.first.id);
+                dField.exec();
+            }, 
+            [&](const FieldHopMap::value_type& j){
+                //  modifications
+                uField.bind(1, (int) j.second.cnt);
+                uField.bind(2, id);
+                uField.bind(3, j.first.id);
+                uField.exec();
+            }, 
+            [&](const FieldHopMap::value_type& j){
+                //  inserts
+                iField.bind(1, j.first.id);
+                iField.bind(2, id);
+                iField.bind(3, (int) j.second.cnt);
+                iField.exec();
+            }
+        );
+        fields  = them;
     }
 
     void    UClass::u_icon()
