@@ -43,6 +43,13 @@ namespace yq::mithril::update {
         T   local;
         T   all;
     };
+
+    template <IdType T>
+    struct DD {
+        std::map<T,HopCount>    hop;
+        std::set<T>             all;        //  All (for fields)
+        std::set<T>             direct;
+    };
     
     struct ById {
         static Meta::id_t   id_for(const TypeInfo* t)

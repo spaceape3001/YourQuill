@@ -3,3 +3,4 @@ plural Kin
 is     edge
 target Character
 source Character
+reverse Kin

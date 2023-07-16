@@ -97,7 +97,7 @@ namespace yq::mithril::update {
                 Class   y   = cdb::db_class(s);
                 ret[y]  = { 0 };
                 UClass& u   = UClass::get(y);
-                for(auto& d : u.derives){
+                for(auto& d : u.derives.hop){
                     HopCount    hc  = d.second;
                     ++hc;
                     ret[d.first].set_smaller(hc);
@@ -140,10 +140,10 @@ namespace yq::mithril::update {
         if(anycls){
             for(Class c : all){
                 auto& u = UClass::get(c);
-                u.fields_all.insert(x);
+                u.fields.all.insert(x);
             }
         } else {
-            UClass::get(cls).fields_direct.insert(x);
+            UClass::get(cls).fields.direct.insert(x);
             
             uStmt.bind(1, cls.id);
             uStmt.bind(2, subkey);

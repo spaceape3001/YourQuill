@@ -233,6 +233,17 @@ namespace {
         h.title() << "Class (" << label(x) << "): Inbound";
         dev_table(h, inbound_classes_ranked(x, Sorted::YES), "Hops");
     }
+    
+    void    p_dev_class_reverses(WebHtml&h)
+    {
+        Class   x   = class_(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+
+        h.title() << "Class (" << label(x) << "): Reverses";
+        dev_table(h, reverse_classes_ranked(x, Sorted::YES), "Hops");
+    }
+    
 
     void    p_dev_class_outbound(WebHtml&h)
     {
@@ -264,14 +275,15 @@ namespace {
         dev_table(h, tags(c, Sorted::YES));
         
     }
+    
     void    p_dev_class_targets(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
             throw HttpStatus::BadArgument;
 
-        h.title() << "Class (" << label(x) << "): Sources";
-        dev_table(h, source_classes_ranked(x, Sorted::YES), "Hops");
+        h.title() << "Class (" << label(x) << "): Targets";
+        dev_table(h, target_classes_ranked(x, Sorted::YES), "Hops");
     }
 
     
@@ -1184,6 +1196,7 @@ namespace {
             reg_webpage<p_dev_class_targets>("/dev/class/targets").argument("id", "Class ID").label("Targets"),
             reg_webpage<p_dev_class_inbound>("/dev/class/inbound").argument("id", "Class ID").label("Inbound"),
             reg_webpage<p_dev_class_outbound>("/dev/class/outbound").argument("id", "Class ID").label("Outbound"),
+            reg_webpage<p_dev_class_reverses>("/dev/class/reverses").argument("id", "Class ID").label("Reverses"),
             reg_webpage<p_dev_class_tags>("/dev/class/tags").argument("id", "Class ID").label("Tags"),
             reg_webpage<p_dev_class_fields>("/dev/class/fields").argument("id", "Class ID").label("Fields"),
             //reg_webpage<p_dev_class_def_fields>("/dev/class/def_fields").argument("id", "Class ID").label("Def Fields"),

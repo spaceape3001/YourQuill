@@ -82,13 +82,22 @@ namespace yq::mithril::update {
     void    UClass::s3_extend(Document doc)
     {
         auto [u,cr] = create(doc);
-        u.i1_bases();
+        u.u_bases();
+    }
+    
+    void    UClass::s3_derives(Document doc)
+    {
+        auto [u,cr] = create(doc);
+        u.u_derives();
     }
 
     void    UClass::s3_deduce(Document doc)
     {
         auto [u,cr] = create(doc);
         u.u_fields();
+        u.u_sources();
+        u.u_targets();
+        u.u_reverses();
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -135,21 +144,183 @@ namespace yq::mithril::update {
         return ret;
     }
 
+
+    void            UClass::enum_base(ClassHopMap& ret, Class c, hop_t d)
+    {
+        auto    j   = ret.find(c);
+        if((j != ret.end()) && (j->second <= d))
+            return ;
+        j->second       = {d};
+        for(Class cc : get(c).bases.direct){
+            if(cc == c)
+                continue;
+            enum_base(ret, cc, d+1);
+        }
+    }
+
+    ClassHopMap     UClass::enum_bases() const
+    {
+        ClassHopMap ret;
+        if(x){
+            for(Class c : bases.direct)
+                enum_base(ret, c, 0);
+        }
+        return ret;
+    }
+
     FieldHopMap     UClass::enum_fields() const
     {
         FieldHopMap ret;
         if(x){
-            for(Field f : fields_direct)
+            for(Field f : fields.direct)
                 ret[f]  = { 0 };
-            for(auto& j : bases){
+            for(auto& j : bases.hop){
                 UClass& u   = get(j.first);
                 HopCount    hc  = j.second;
                 ++hc;
-                for(Field f : u.fields_direct)
-                    ret.try_emplace(f, hc);
+                for(Field f : u.fields.direct)
+                    ret[f].set_smaller(hc);
             }
-            for(Field f : fields_all)
+            for(Field f : fields.all)
                 ret.try_emplace(f, HopCount( -1 ));
+        }
+        return ret;
+    }
+
+    ClassHopMap UClass::enum_reverses() const
+    {
+        ClassHopMap ret;
+        if(x){
+            for(Class c : reverses.direct){
+                ret[c]  = { 0 };
+                UClass&uu   = get(c);
+                for(Class d : uu.derives.direct)    // all their derives
+                    ret[d].set_smaller(HopCount(1));
+            }
+                
+            #if 0
+            for(auto& j : bases.hop){                   // our base classes
+                UClass& u   = get(j.first);
+                HopCount    hc  = j.second;
+                ++hc;
+                for(Class c : u.reverses.direct){    // their targets
+                    ret[c].set_smaller(hc);
+                    UClass&uu   = get(c);
+                    HopCount    hd = hc;
+                    ++hd;
+                    for(Class d : uu.derives.direct)    // and all their derives
+                        ret[d].set_smaller(hd);
+                }
+            }
+            #endif
+
+            #if 1
+            for(auto& j : derives.hop){                   // our base classes
+                UClass& u   = get(j.first);
+                HopCount    hc  = j.second;
+                ++hc;
+                for(Class c : u.reverses.direct){    // their targets
+                    ret[c].set_smaller(hc);
+                    UClass&uu   = get(c);
+                    HopCount    hd = hc;
+                    ++hd;
+                    for(Class d : uu.derives.direct)    // and all their derives
+                        ret[d].set_smaller(hd);
+                }
+            }
+            #endif
+        }
+        return ret;
+    }
+
+    ClassHopMap UClass::enum_sources() const
+    {
+        ClassHopMap ret;
+        if(x){
+            for(Class c : sources.direct){
+                ret[c]  = { 0 };
+                UClass&uu   = get(c);
+                for(Class d : uu.derives.direct)    // all their derives
+                    ret[d].set_smaller(HopCount(1));
+            }
+                
+            #if 1
+            for(auto& j : bases.hop){                   // our base classes
+                UClass& u   = get(j.first);
+                HopCount    hc  = j.second;
+                ++hc;
+                for(Class c : u.sources.direct){    // their targets
+                    ret[c].set_smaller(hc);
+                    UClass&uu   = get(c);
+                    HopCount    hd = hc;
+                    ++hd;
+                    for(Class d : uu.derives.direct)    // and all their derives
+                        ret[d].set_smaller(hd);
+                }
+            }
+            #endif
+
+            #if 0
+            for(auto& j : derives.hop){                   // our base classes
+                UClass& u   = get(j.first);
+                HopCount    hc  = j.second;
+                ++hc;
+                for(Class c : u.sources.direct){    // their targets
+                    ret[c].set_smaller(hc);
+                    UClass&uu   = get(c);
+                    HopCount    hd = hc;
+                    ++hd;
+                    for(Class d : uu.derives.direct)    // and all their derives
+                        ret[d].set_smaller(hd);
+                }
+            }
+            #endif
+        }
+        return ret;
+    }
+
+    ClassHopMap UClass::enum_targets() const
+    {
+        ClassHopMap ret;
+        if(x){
+            for(Class c : targets.direct){
+                ret[c]  = { 0 };
+                UClass&uu   = get(c);
+                for(Class d : uu.derives.direct)    // all their derives
+                    ret[d].set_smaller(HopCount(1));
+            }
+            
+            #if 1
+            for(auto& j : bases.hop){                   // our base classes
+                UClass& u   = get(j.first);
+                HopCount    hc  = j.second;
+                ++hc;
+                for(Class c : u.targets.direct){    // their targets
+                    ret[c].set_smaller(hc);
+                    UClass&uu   = get(c);
+                    HopCount    hd = hc;
+                    ++hd;
+                    for(Class d : uu.derives.direct)    // and all their derives
+                        ret[d].set_smaller(hd);
+                }
+            }
+            #endif
+
+            #if 0
+            for(auto& j : derives.hop){                   // our base classes
+                UClass& u   = get(j.first);
+                HopCount    hc  = j.second;
+                ++hc;
+                for(Class c : u.targets.direct){    // their targets
+                    ret[c].set_smaller(hc);
+                    UClass&uu   = get(c);
+                    HopCount    hd = hc;
+                    ++hd;
+                    for(Class d : uu.derives.direct)    // and all their derives
+                        ret[d].set_smaller(hd);
+                }
+            }
+            #endif
         }
         return ret;
     }
@@ -166,8 +337,6 @@ namespace yq::mithril::update {
         if(!def)
             return ;
 
-        static thread_local CacheQuery iReverse("INSERT INTO CReverses (class, reverse) VALUES (?,?)");
-
         for(std::string_view ck : def->reverse){
             Class   y   = cdb::db_class(ck);
             if(!y){
@@ -175,12 +344,8 @@ namespace yq::mithril::update {
                 continue;
             }
         
-            iReverse.bind(1, id);
-            iReverse.bind(2, y.id);
-            iReverse.exec();
-            
-            reverses[y]         = { 0 };
-            get(y).reverses[x]  = { 0 };
+            reverses.direct.insert(y);
+            get(y).reverses.direct.insert(y);
         }
     }
 
@@ -191,8 +356,6 @@ namespace yq::mithril::update {
         if(!def)
             return ;
 
-        static thread_local CacheQuery iSource("INSERT INTO CSources (class, source) VALUES (?,?)");
-
         for(std::string_view ck : def->sources){
             Class   y   = cdb::db_class(ck);
             if(!y){
@@ -200,12 +363,8 @@ namespace yq::mithril::update {
                 continue;
             }
         
-            iSource.bind(1, id);
-            iSource.bind(2, y.id);
-            iSource.exec();
-            
-            sources[y]          = { 0 };
-            get(y).outbounds[x] = { 0 };
+            sources.direct.insert(y);
+            get(y).outbounds.direct.insert(x);
         }
     }
 
@@ -216,21 +375,15 @@ namespace yq::mithril::update {
         if(!def)
             return ;
 
-        static thread_local CacheQuery iTarget("INSERT INTO CTargets (class, target) VALUES (?,?)");
-
         for(std::string_view ck : def->targets){
             Class   y   = cdb::db_class(ck);
             if(!y){
                 yWarning() << "Uncreatable TARGET " << ck << " referenced in class " << key;
                 continue;
             }
-        
-            iTarget.bind(1, id);
-            iTarget.bind(2, y.id);
-            iTarget.exec();
             
-            targets[y]          = { 0 };
-            get(y).inbounds[x]  = { 0 };
+            targets.direct.insert(y);
+            get(y).inbounds.direct.insert(x);
         }
     }
     
@@ -248,39 +401,9 @@ namespace yq::mithril::update {
                 continue;
             }
     
-            use.insert(y);
+            bases.direct.insert(y);
+            get(y).derives.direct.insert(x);
         }
-    }
-
-    void    UClass::i1_bases(Class y,hop_t d)
-    {
-        auto i = bases.find(y);
-        if((i != bases.end()) && (i->second <= d))
-            return ;
-        
-        UClass& u   = get(y);
-    
-        static thread_local CacheQuery iUse("INSERT OR REPLACE INTO CDepends (class, base, hops) VALUES (?,?,?)");
-        iUse.bind(1, id);
-        iUse.bind(2, y.id);
-        iUse.bind(3, (int) d);
-        iUse.exec();
-        
-        bases[y]     = { d };
-        u.derives[x] = { d };
-        
-        for(Class c : u.use)
-            i1_bases(c, d+1);
-    }
-
-    void    UClass::i1_bases()
-    {
-        if(!x)
-            return ;
-        if(!def)
-            return ;
-        for(Class c : use)
-            i1_bases(c, 0);
     }
 
     void    UClass::u_alias()
@@ -302,39 +425,77 @@ namespace yq::mithril::update {
         aliases = them;
     }
 
+    void    UClass::u_bases()
+    {
+        if(!x)
+            return ;
+            
+        ClassHopMap them   = enum_bases();
+        map_difference_exec(bases.hop, them, 
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery  sql("DELETE FROM CDepends WHERE class=? AND base=?");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("UPDATE CDepends SET hops=? WHERE class=? AND base=?");
+                sql.bind(1, (int) j.second.cnt);
+                sql.bind(2, id);
+                sql.bind(3, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("INSERT INTO CDepends (class, base, hops) VALUES (?,?,?)");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.bind(3, (int) j.second.cnt);
+                sql.exec();
+            }
+        );
+        bases.hop   = them;
+    }
+
+    void    UClass::u_derives()
+    {
+        if(!x)
+            return;
+        for(auto& cr : cdb::derived_classes_ranked(x))
+            derives.hop[cr.cls]   = { (hop_t) cr.rank };
+    }
+
     void    UClass::u_fields()
     {
         if(!x)
             return ;
         
-        static thread_local CacheQuery iField("INSERT INTO CFields (field, class, hops) VALUES (?, ?, ?)");
-        static thread_local CacheQuery uField("UPDATE CFields SET hops=? WHERE class=? AND field=?");
-        static thread_local CacheQuery dField("DELETE FROM CFields WHERE class=? AND field=?");
-        
         FieldHopMap them   = enum_fields();
-        map_difference_exec(fields, them, 
+        map_difference_exec(fields.hop, them, 
             [&](const FieldHopMap::value_type& j){
                 //  deletes
-                dField.bind(1, id);
-                dField.bind(2, j.first.id);
-                dField.exec();
+                static thread_local CacheQuery sql("DELETE FROM CFields WHERE class=? AND field=?");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.exec();
             }, 
             [&](const FieldHopMap::value_type& j){
                 //  modifications
-                uField.bind(1, (int) j.second.cnt);
-                uField.bind(2, id);
-                uField.bind(3, j.first.id);
-                uField.exec();
+                static thread_local CacheQuery sql("UPDATE CFields SET hops=? WHERE class=? AND field=?");
+                sql.bind(1, (int) j.second.cnt);
+                sql.bind(2, id);
+                sql.bind(3, j.first.id);
+                sql.exec();
             }, 
             [&](const FieldHopMap::value_type& j){
                 //  inserts
-                iField.bind(1, j.first.id);
-                iField.bind(2, id);
-                iField.bind(3, (int) j.second.cnt);
-                iField.exec();
+                static thread_local CacheQuery sql("INSERT INTO CFields (field, class, hops) VALUES (?, ?, ?)");
+                sql.bind(1, j.first.id);
+                sql.bind(2, id);
+                sql.bind(3, (int) j.second.cnt);
+                sql.exec();
             }
         );
-        fields  = them;
+        fields.hop  = them;
     }
 
     void    UClass::u_icon()
@@ -385,6 +546,70 @@ namespace yq::mithril::update {
         uInfo.exec();
     }
 
+    void    UClass::u_reverses()
+    {
+        if(!x)
+            return ;
+            
+        ClassHopMap     them    = enum_reverses();
+        map_difference_exec(reverses.hop, them, 
+            [&](const ClassHopMap::value_type& j){
+                //  deletes
+                static thread_local CacheQuery sql("DELETE FROM CReverses WHERE class=? AND reverse=?");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("UPDATE CReverses SET hops=? WHERE class=? AND reverse=?");
+                sql.bind(1, (int) j.second.cnt);
+                sql.bind(2, id);
+                sql.bind(3, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("INSERT INTO CReverses (class, reverse, hops) VALUES (?,?,?)");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.bind(3, (int) j.second.cnt);
+                sql.exec();
+            }
+        );
+        reverses.hop = them;
+    }
+
+    void    UClass::u_sources()
+    {
+        if(!x)
+            return ;
+            
+        ClassHopMap     them    = enum_sources();
+        map_difference_exec(sources.hop, them, 
+            [&](const ClassHopMap::value_type& j){
+                //  deletes
+                static thread_local CacheQuery sql("DELETE FROM CSources WHERE class=? AND source=?");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("UPDATE CSources SET hops=? WHERE class=? AND source=?");
+                sql.bind(1, (int) j.second.cnt);
+                sql.bind(2, id);
+                sql.bind(3, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("INSERT INTO CSources (class, source, hops) VALUES (?,?,?)");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.bind(3, (int) j.second.cnt);
+                sql.exec();
+            }
+        );
+        sources.hop = them;
+    }
+
     void    UClass::u_tags()
     {
         if(!x)
@@ -402,6 +627,38 @@ namespace yq::mithril::update {
         for(Tag t : chg.removed)
             dTag.exec(x.id, t.id);
         tags    = new_tags;
+    }
+
+    void    UClass::u_targets()
+    {
+        if(!x)
+            return ;
+            
+        ClassHopMap     them    = enum_targets();
+        map_difference_exec(targets.hop, them, 
+            [&](const ClassHopMap::value_type& j){
+                //  deletes
+                static thread_local CacheQuery sql("DELETE FROM CTargets (class, target) WHERE class=? AND target=?");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("UPDATE CTargets SET hops=? WHERE class=? AND target=?");
+                sql.bind(1, (int) j.second.cnt);
+                sql.bind(2, id);
+                sql.bind(3, j.first.id);
+                sql.exec();
+            },
+            [&](const ClassHopMap::value_type& j){
+                static thread_local CacheQuery sql("INSERT INTO CTargets (class, target, hops) VALUES (?,?,?)");
+                sql.bind(1, id);
+                sql.bind(2, j.first.id);
+                sql.bind(3, (int) j.second.cnt);
+                sql.exec();
+            }
+        );
+        targets.hop = them;
     }
 
     void    UClass::x_erase()

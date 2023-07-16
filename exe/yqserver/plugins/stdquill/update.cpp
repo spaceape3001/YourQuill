@@ -263,6 +263,7 @@ namespace {
             on_stage3<UClass::s3>(classes_lookup);
             on_stage3<UClass::s3_bind>(classes_lookup);
             on_stage3<UClass::s3_extend>(classes_lookup);
+            on_stage3<UClass::s3_derives>(classes_lookup);
             
             on_stage3<UField::s3>(fields_lookup);
             

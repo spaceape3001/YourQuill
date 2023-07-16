@@ -48,20 +48,6 @@ CREATE TABLE CFields (
     UNIQUE(class, field)
 );
 
--- alternative keys
-CREATE TABLE CLookup (
-    class       INTEGER NOT NULL,
-    k           VARCHAR(255) NOT NULL COLLATE NOCASE,
-    priority    INTEGER NOT NULL DEFAULT 0,
-    UNIQUE(class,k)
-);
-
-CREATE TABLE CPrefix (
-    class       INTEGER NOT NULL,
-    prefix      VARCHAR(255) NOT NULL,
-    UNIQUE(class, prefix)
-);
-
 CREATE TABLE CReverses (
     class       INTEGER NOT NULL,
     reverse     INTEGER NOT NULL,
@@ -74,15 +60,8 @@ CREATE TABLE CSources (
     class       INTEGER NOT NULL,
     source      INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
-    hops_cls    INTEGER NOT NULL DEFAULT 0,
-    hops_src    INTEGER NOT NULL DEFAULT 0,
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,source) ON CONFLICT IGNORE
-);
-
-CREATE TABLE CSuffix (
-    class       INTEGER NOT NULL,
-    suffix      VARCHAR(255) NOT NULL,
-    UNIQUE(class, suffix)
 );
 
 CREATE TABLE CTags (
@@ -94,9 +73,7 @@ CREATE TABLE CTags (
 CREATE TABLE CTargets (
     class       INTEGER NOT NULL,
     target      INTEGER NOT NULL,
-    -- number of indirects (zero is what's in the file)
-    hops_cls    INTEGER NOT NULL DEFAULT 0,
-    hops_tgt    INTEGER NOT NULL DEFAULT 0,
+    hops        INTEGER NOT NULL DEFAULT 0,
     UNIQUE(class,target) ON CONFLICT IGNORE
 );
 

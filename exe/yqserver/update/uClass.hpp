@@ -14,6 +14,8 @@
 #include <mithril/tag/Tag.hpp>
 
 namespace yq::mithril::update {
+
+
     struct UClass : public U<Class> {
         static UClass&      get(Class);
         static std::pair<UClass&, bool>  create(Document);
@@ -27,8 +29,11 @@ namespace yq::mithril::update {
         //! Bind the immediate classes (ie, use, targets, sources)
         static void             s3_bind(Document);
         
-        //! Extend the use to base/derived
+        //! Binds base classes
         static void             s3_extend(Document);
+
+        //! Binds derive classes
+        static void             s3_derives(Document);
         
         //! Deduce all target, sources, fields, etc
         static void             s3_deduce(Document);
@@ -44,26 +49,30 @@ namespace yq::mithril::update {
         Image               icon;
         TagSet              tags;
         string_set_t        aliases;
-        ClassSet            use;
-        ClassHopMap         bases;
-        ClassHopMap         derives;
-        ClassHopMap         targets;    // target (node) classes
-        ClassHopMap         inbounds;   // edge classes that can be inbound
-        ClassHopMap         sources;    // source (node) classes
-        ClassHopMap         outbounds;  // edge classes that can be outbound
-        ClassHopMap         reverses;   // classes that are reverse of this edge
-        FieldHopMap         fields;     // field hops
-        FieldSet            fields_direct;   // fields from direct
-        FieldSet            fields_all;      // fields from indirect (ALL)
+        DD<Class>           bases;
+        DD<Class>           derives;
+        DD<Class>           targets;
+        DD<Class>           sources;
+        DD<Class>           inbounds;
+        DD<Class>           outbounds;
+        
+        //  This is what can reverses *this* class
+        DD<Class>           reverses;
+        DD<Field>           fields;
         
         UClass(Class);
         
         void                reload();
         void                u_alias();
+        void                u_bases();
+        void                u_derives();
         void                u_info();
         void                u_icon();
-        void                u_tags();
         void                u_fields();
+        void                u_reverses();
+        void                u_sources();
+        void                u_tags();
+        void                u_targets();
         
         void                x_erase();
         
@@ -79,12 +88,14 @@ namespace yq::mithril::update {
         //!     Initial seeding of reverses (startup only)
         void                i0_reverses();
         
-        //!     Deducing ALL bases/derives...
-        void                i1_bases();
-        void                i1_bases(Class,hop_t);
-        
         string_set_t        enum_aliases() const;
+        ClassHopMap         enum_bases() const;
         FieldHopMap         enum_fields() const;
+        ClassHopMap         enum_reverses() const;
+        ClassHopMap         enum_sources() const;
+        ClassHopMap         enum_targets() const;
+        
+        static void         enum_base(ClassHopMap&, Class, hop_t);
         
         
         //void                flash(FF);

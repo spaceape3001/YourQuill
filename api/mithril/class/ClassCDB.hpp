@@ -87,32 +87,6 @@ namespace yq::mithril::cdb {
     //! Creates all classes
     std::vector<Class>           db_classes(const string_set_t&);
     
-    //! Defined aliases for class
-    //string_set_t                def_aliases(Class);
-    
-    //! Defined derived classes for class
-    //std::vector<Class>          def_derived(Class, Sorted sorted=Sorted());
-    
-    //! Defined fields for class
-    //std::vector<Field>          def_fields(Class c, Sorted sorted=Sorted{});
-    
-    //! Defined reverses for class
-    //std::vector<Class>          def_reverse(Class, Sorted sorted=Sorted());
-    
-    //! Defined prefixes for class
-    //string_set_t                def_prefixes(Class);
-    
-    //! Defined sources for class
-    //std::vector<Class>          def_source(Class, Sorted sorted=Sorted());
-    
-    //! Defined suffixes for class
-    //string_set_t                def_suffixes(Class);
-    
-    //! Defined targets for class
-    //std::vector<Class>          def_target(Class, Sorted sorted=Sorted());
-    
-    //! Defined use (ie bases) for class
-    //std::vector<Class>          def_use(Class, Sorted sorted=Sorted());
     
     //Graph                   dep_graph(Class);
 
@@ -187,7 +161,10 @@ namespace yq::mithril::cdb {
     std::vector<ClassFragDoc>   reads(Class, cdb_options_t opts=0);
     std::vector<ClassFragDoc>   reads(Class, class RootDir*, cdb_options_t opts=0);
 
-    std::vector<Class>          reverses(Class, Sorted sorted=Sorted());
+    std::vector<Class>          reverse_classes(Class, Sorted sorted=Sorted());
+    size_t                      reverse_classes_count(Class c);
+    std::vector<Class::Rank>    reverse_classes_ranked(Class, Sorted sorted=Sorted());
+    std::vector<Class::Rank>    reverse_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
     
     std::vector<Class>          source_classes(Class, Sorted sorted=Sorted());
     size_t                      source_classes_count(Class);
@@ -201,6 +178,8 @@ namespace yq::mithril::cdb {
 
     std::vector<Class>          target_classes(Class, Sorted sorted=Sorted());
     size_t                      target_classes_count(Class);
+    std::vector<Class::Rank>    target_classes_ranked(Class, Sorted sorted=Sorted());
+    std::vector<Class::Rank>    target_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
 
     //! Returns the URL path for the class type
     std::string                 url(Class);
