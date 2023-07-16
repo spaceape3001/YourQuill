@@ -10,7 +10,7 @@
 namespace yq::mithril::update {
     ULeaf&  ULeaf::get(Leaf x)
     {
-        return lookup<ULeaf,4096>(x);
+        return lookup<ULeaf>(x);
     }
 
     ULeaf::ULeaf(Leaf x) : U<Leaf>(x, cdb::key(x)), doc(cdb::document(x))

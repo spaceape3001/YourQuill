@@ -14,7 +14,7 @@
 namespace yq::mithril::update {
     UTag&  UTag::get(Tag x)
     {
-        return lookup<UTag, 512>(x);
+        return lookup<UTag>(x);
     }
 
     std::pair<UTag&, bool>  UTag::create(Document doc)
@@ -36,7 +36,6 @@ namespace yq::mithril::update {
     void    UTag::notify(Fragment frag,Change chg)
     {
         Document    doc = cdb::document(frag);
-        
         if(chg == Change::Removed){
             if(cdb::fragments_count(doc) <= 1){
                 Tag    x   = cdb::find_tag(doc);

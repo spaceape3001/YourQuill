@@ -13,7 +13,7 @@
 namespace yq::mithril::update {
     UCategory&  UCategory::get(Category x)
     {
-        return lookup<UCategory, 512>(x);
+        return lookup<UCategory>(x);
     }
 
     std::pair<UCategory&, bool>  UCategory::create(Document doc)

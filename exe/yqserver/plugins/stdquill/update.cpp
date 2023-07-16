@@ -259,12 +259,13 @@ namespace {
             on_stage3<u_user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
-            on_stage3<u_class_stage3_pass1_create>(classes_lookup);
-            on_stage3<u_class_stage3_pass2_bind>(classes_lookup);
-            on_stage3<u_class_stage3_pass3_extend>(classes_lookup);
+            on_stage3<UClass::s3>(classes_lookup);
+            on_stage3<UClass::s3_bind>(classes_lookup);
+            on_stage3<UClass::s3_extend>(classes_lookup);
             
             on_stage3<u_field_stage3>(fields_lookup);
             
+            on_stage3<UClass::s3_deduce>(classes_lookup);
 
                 //  LEAFS & atoms
             on_stage3<s3_leaf_pass1>(leafs_lookup);
@@ -292,14 +293,14 @@ namespace {
             on_change<page_update>(by_cache(top_folder(), ".page"));
                 
             on_change<UCategory::notify>(by_cache(categories_folder(), "*.cat"));
-            on_change<u_class_notify>(classes_lookup);
+            on_change<UClass::notify>(classes_lookup);
             on_change<u_field_notify>(fields_lookup);
             on_change<u_leaf_notify>(leafs_lookup);
             on_change<UTag::notify>(tags_lookup);
             on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
-                on_change<u_class_notify_icons>(by_cache(classes_folder(), z));
+                on_change<UClass::icons>(by_cache(classes_folder(), z));
                 on_change<u_field_notify_icons>(by_cache(fields_folder(), z));
                 on_change<u_leaf_notify_icons>(by_cache(z));
                 on_change<u_user_notify_icons>(by_cache(users_folder(), z));

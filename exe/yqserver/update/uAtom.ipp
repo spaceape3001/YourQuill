@@ -10,7 +10,7 @@
 namespace yq::mithril::update {
     UAtom&  UAtom::get(Atom x)
     {
-        return lookup<UAtom, 65536>(x);
+        return lookup<UAtom>(x);
     }
 
     UAtom::UAtom(Atom x) : U<Atom>(x, cdb::key(x))
