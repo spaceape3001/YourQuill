@@ -32,6 +32,9 @@ namespace yq::mithril::update {
     
     enum class F {
         LOCK,
+        NOTIFY,
+        
+        
         LOAD,
         INFO,
         ICON,

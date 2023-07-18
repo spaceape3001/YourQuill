@@ -16,6 +16,7 @@
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
     UClass&  UClass::get(Class x)

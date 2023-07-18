@@ -16,10 +16,13 @@
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
+#include <update/uAtom.hpp>
+
 using namespace yq;
 using namespace yq::mithril;
+using namespace yq::mithril::update;
 
-#include "uAtom.hpp"
+//#include "uAtom.hpp"
 
 namespace {
 
@@ -117,6 +120,7 @@ namespace {
     }
     #endif
 
+    #if 0
     void    u_leaf_erase(Leaf x)
     {
         static thread_local CacheQuery  stmts[] = {
@@ -126,6 +130,7 @@ namespace {
         for(auto& sq : stmts)
             sq.exec(x.id);
     }
+    #endif
 
     #if 0
     //  UNUSED
@@ -168,7 +173,9 @@ namespace {
             return ;
         }
         
-        u_atom(dp->attrs, doc);
+        UAtom::changed(dp->attrs, doc);
+        
+        //u_atom(dp->attrs, doc);
         
         //  if there's any context stuff, do it here.....
     }
@@ -211,9 +218,12 @@ namespace {
         
         u_leaf_title(x, dp);
         
-        Atom xa = s3_atom_create(dp->attrs, doc);
-        s3_atom_bind(xa);
-        s3_atom_notify(xa);
+        Atom xa = UAtom::s3_create(dp->attrs, doc);
+        
+        //Atom xa = s3_atom_create(dp->attrs, doc);
+        UAtom::s3_bind(doc);
+        UAtom::s3_notify(doc);
+        //s3_atom_notify(xa);
         
         static thread_local CacheQuery u("UPDATE Leafs SET atom=? WHERE id=?");
         auto u_af = u.af();
@@ -231,7 +241,10 @@ namespace {
         if(!xa)
             return;
             
-        s3_atom_bind(xa);
-        s3_atom_notify(xa);
+        UAtom::s3_bind(doc);
+        UAtom::s3_notify(doc);
+
+        //s3_atom_bind(xa);
+        //s3_atom_notify(xa);
     }
 }

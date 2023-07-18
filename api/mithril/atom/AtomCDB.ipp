@@ -8,7 +8,7 @@
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomInfo.hpp>
-#include <mithril/attribute/Attribute.hpp>
+#include <mithril/attribute/AttributeCDB.hpp>
 
 #include <basic/TextUtils.hpp>
 #include <mithril/class/Class.hpp>
@@ -362,11 +362,59 @@ namespace yq::mithril::cdb {
         static thread_local CacheQuery s("SELECT atom FROM AProperties WHERE id=?");
         return s.as<Atom>(p);
     }
+
+    Atom::Property          atom_property(Atom a, Attribute at, Field f)
+    {
+        static thread_local CacheQuery s("SELECT id FROM AProperties WHERE atom=? AND attr=? AND field=?");
+        auto af = s.af();
+        s.bind(1, a.id);
+        s.bind(2, at.id);
+        s.bind(3, f.id);
+        if(s.step() == SQResult::Row)
+            return Atom::Property(s.v_uint64(1));
+        return Atom::Property();
+    }
     
     Attribute               attribute(Atom::Property p)
     {
         static thread_local CacheQuery s("SELECT attr FROM AProperties WHERE id=?");
         return s.as<Attribute>(p);
+    }
+
+    Atom::Property          db_atom_property(Atom a, Attribute at, bool *wasCreated)
+    {
+        return db_atom_property(a, at, Field(), wasCreated);
+    }
+
+    Atom::Property          db_atom_property(Atom a, Attribute at, Field f, bool *wasCreated)
+    {
+        static thread_local CacheQuery s("SELECT id FROM AProperties WHERE atom=? AND attr=? AND field=?");
+        static thread_local CacheQuery i("INSERT INTO AProperties (atom, attr, field) VALUES (?,?,?)");
+        
+        auto i_af = i.af();
+
+        i.bind(1, a.id);
+        i.bind(2, at.id);
+        i.bind(3, f.id);
+        if(i.exec()){
+            if(wasCreated)
+                *wasCreated = true;
+            return Atom::Property(i.last_id());
+        }
+        
+        if(wasCreated)
+            *wasCreated = false;
+            
+        auto    s_af    = s.af();
+        s.bind(1, a.id);
+        s.bind(2, at.id);
+        s.bind(3, f.id);
+        
+        if(s.step() == SQResult::Row)
+            return Atom::Property(s.v_uint64(1));
+
+        yError() << "Unable to get the atom's property from the database: " << key(a) << " " << key(at);
+        return Atom::Property();
     }
 
     bool                    exists_atom_property(uint64_t i)

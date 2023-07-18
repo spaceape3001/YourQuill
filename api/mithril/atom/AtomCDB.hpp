@@ -201,7 +201,13 @@ namespace yq::mithril::cdb {
     
     Atom                    atom(Atom::Property);
     
+    Atom::Property          atom_property(Atom, Attribute, Field);
+
+    
     Attribute               attribute(Atom::Property);
+
+    Atom::Property          db_atom_property(Atom, Attribute, bool *wasCreated=nullptr);
+    Atom::Property          db_atom_property(Atom, Attribute, Field, bool *wasCreated=nullptr);
     
     bool                    exists_atom_property(uint64_t);
     bool                    exists(Atom::Property);
