@@ -7,6 +7,7 @@
 #pragma once
 
 #include "uClass.hpp"
+#include "uField.hpp"
 
 #include <basic/CollectionUtils.hpp>
 #include <basic/TextUtils.hpp>
@@ -483,8 +484,8 @@ namespace yq::mithril::update {
         if(!x)
             return ;
             
-        bool    isEdge  = !(sources.hop.empty() || target.hop.empty());
-        static thread_local CacheQuery sql("UPDATE Fields SET edge=? WHERE id=?");
+        isEdge  = !(sources.hop.empty() || targets.hop.empty());
+        static thread_local CacheQuery sql("UPDATE Classes SET edge=? WHERE id=?");
         sql.bind(1, isEdge);
         sql.bind(2, id);
         sql.exec();
@@ -590,7 +591,33 @@ namespace yq::mithril::update {
 
     void    UClass::u_resolves()
     {
-        // TODO (mapping strings -> actions for attributes)
+        //  NODES
+        for(Class c : cdb::all_classes(Sorted::YES)){
+            auto& u     = get(c);
+            if(!u.isEdge){
+                resolve[u.key]  = Node{ c };
+                for(auto& a : u.aliases)
+                    resolve[a]  = Node{ c };
+            }
+        }
+        
+        //  EDGES
+        for(auto& j : outbounds.hop){
+            Class c = j.first;
+            auto& u = get(c);
+            resolve[u.key]      = Outbound{ c };
+            for(auto& a : u.aliases)
+                resolve[a]  = Outbound{ c };
+        }
+        
+        //  FIELDS
+        for(auto& j : fields.hop){
+            Field f = j.first;
+            auto& u     = UField::get(f);
+            resolve[u.key]  = f;
+            for(auto& a : u.aliases)
+                resolve[a]  = f;
+        }
     }
 
     void    UClass::u_reverses()

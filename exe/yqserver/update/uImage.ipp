@@ -12,98 +12,85 @@
 #define MAGICKCORE_HDRI_ENABLE MAGICKCORE_HDRI_ENABLE_OBSOLETE_IN_H
 #include <Magick++.h>
 
+#include "uImage.hpp"
+
 #include <basic/BasicApp.hpp>
+#include <basic/Logging.hpp>
+
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/enum/Change.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
+
 #include <math/shape/Size2.hxx>
 
-using namespace yq;
-using namespace yq::mithril;
 
-
-namespace {
-    void    u_image_thumbnails(Image img, cdb_options_t opts=0);
-
-    yq::Size2U    size_for(const Magick::Geometry& sz)
+namespace yq::mithril::update {
+    Size2U    size_for(const Magick::Geometry& sz)
     {
         return { (unsigned) sz.width(), (unsigned) sz.height() };
     }
 
-
-    void    u_image_erase(Image x)
+    UImage   UImage::get(Image img)
     {
-        if(!x)
-            return ;
-            
-        static thread_local CacheQuery stmts[] = {
-            CacheQuery("UPDATE Atoms SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Categories SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Classes SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Documents SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Fields SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Leafs SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Tags SET icon=0 WHERE icon=?"),
-            CacheQuery("DELETE FROM Images WHERE id=?")
-        };
-        
-        if(!x)
-            return ;
-            
-        for(auto& sq : stmts)
-            sq.exec(x.id);
+        return UImage(img);
+    }
+    
+    UImage   UImage::get(Fragment frag)
+    {
+        return UImage(cdb::image(frag));
     }
 
-    void    u_image_erase(Fragment frag)
+    void     UImage::s2()
     {
-        u_image_erase(cdb::image(frag));
+        Magick::InitializeMagick( BasicApp::app_name().data());
     }
-
-    void    u_image_notify(Fragment frag, Change chg)
+    
+    void     UImage::s3(Document doc)
+    {
+        for(Fragment frag : cdb::fragments(doc))
+            get(cdb::db_image(frag)).u_thumbnail();
+    }
+    
+    void     UImage::notify(Fragment frag,Change chg)
     {
         switch(chg){
         case Change::Added:
         case Change::Modified:
-            u_image_thumbnails(cdb::db_image(frag));
+            get(frag).u_thumbnail({F::LOCK});
             break;
         case Change::Removed:
-            u_image_erase(frag);
+            get(cdb::image(frag)).x_erase();
             break;
         default:
             break;
         }
     }
 
-    void    u_image_stage2()
+    ////////////////////////////////////////////////////////////////////////////
+
+    UImage::UImage(Image img) : x(img), id(img), frag(img.id)
     {
-        Magick::InitializeMagick( BasicApp::app_name().data());
     }
 
-    void    u_image_stage3(Document doc)
+    void    UImage::u_thumbnail(FF flags)
     {
-        for(Fragment frag : cdb::fragments(doc))
-            u_image_thumbnails(cdb::db_image(frag), cdb::DONT_LOCK|cdb::IS_UPDATE);
-    }
-
-    void    u_image_thumbnails(Image img, cdb_options_t opts)
-    {
-        if(!img)
+        if(!x)
             return;
-        if(!cdb::is_raster(img))
+        if(!cdb::is_raster(x))
             return ;
 
         Magick::Blob            bS, bM, bL;
-        Fragment                frag = cdb::fragment(img);
         
         static thread_local CacheQuery u("UPDATE Images SET small=?,medium=?,large=? WHERE id=?");
         auto u_af = u.af();
 
         std::filesystem::path   fp  = cdb::path(frag);
+        cdb::update(frag);
 
         Id::Lock lk;
-        if(!(opts&cdb::DONT_LOCK)){
+        if(flags[F::LOCK]){
             lk = Id(frag).lock(false);
             if(!lk){
                 yWarning() << "Unable to get fragment lock for " << fp;
@@ -160,7 +147,27 @@ namespace {
         else
             u.bind(3);
         
-        u.bind(4, img.id);
+        u.bind(4, id);
         u.exec();
+    }
+    
+    void    UImage::x_erase()
+    {
+        if(!x)
+            return ;
+            
+        static thread_local CacheQuery stmts[] = {
+            CacheQuery("UPDATE Atoms SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE Categories SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE Classes SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE Documents SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE Fields SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE Leafs SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE Tags SET icon=0 WHERE icon=?"),
+            CacheQuery("DELETE FROM Images WHERE id=?")
+        };
+            
+        for(auto& sq : stmts)
+            sq.exec(id);
     }
 }

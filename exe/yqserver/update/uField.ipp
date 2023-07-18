@@ -135,10 +135,9 @@ namespace yq::mithril::update {
             return ;
             
         static thread_local CacheQuery uStmt("UPDATE Fields SET class=?, ck=? WHERE id=?");
-        static const ClassSet     all = make_set(cdb::all_classes());
             
         if(anycls){
-            for(Class c : all){
+            for(Class c : cdb::all_classes(Sorted::YES)){
                 auto& u = UClass::get(c);
                 u.fields.all.insert(x);
             }

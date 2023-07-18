@@ -41,11 +41,12 @@ namespace yq::mithril::update {
         //! Maybe final pass, propagate to the remaining...
         static void             s3_propagate(Document);
         
-        struct Target { Class tgt; };
-        struct Source { Class src; };
-        struct Node { Class cls; }
+        struct Outbound { Class cls; };
+        struct Node { Class cls; };
 
-        using Resolve       = std::variant<std::monostate,Node,Field,Target,Source>;
+        using Resolve       = std::variant<std::monostate,Node,Field,Outbound>;
+
+        //  ResolveMap *might* become multimap
         using ResolveMap    = std::map<std::string,Resolve,IgCase>;
 
         const Document      doc;
@@ -62,6 +63,7 @@ namespace yq::mithril::update {
         DD<Class>           inbounds;
         DD<Class>           outbounds;
         std::string_view    binding;
+        bool                isEdge          = false;
         
         //  This is what can reverses *this* class
         DD<Class>           reverses;

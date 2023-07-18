@@ -12,12 +12,12 @@
 
 namespace yq::mithril::update {
     struct ULeaf : public U<Leaf> {
-        static ULeaf&      get(Leaf);
+        static ULeaf       get(Leaf);
         
         const Document      doc;
-        //Leaf::SharedData  def;
+        Leaf::SharedData    def;
 
         ULeaf(Leaf);
-        void                flash(FF);
+        //void                flash(FF);
     };
 }

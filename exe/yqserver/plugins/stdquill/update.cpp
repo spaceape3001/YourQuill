@@ -6,13 +6,14 @@
 
 #include "uAtom.ipp"
 //#include "uField.ipp"
-#include "uImage.ipp"
+//#include "uImage.ipp"
 #include "uLeaf.ipp"
 #include "uRoot.ipp"
 #include "uUser.ipp"
 
 #include <update/uCategory.hpp>
 #include <update/uClass.hpp>
+#include <update/uImage.hpp>
 #include <update/uField.hpp>
 #include <update/uTag.hpp>
 
@@ -26,10 +27,14 @@
 #include <basic/TextUtils.hpp>
 #include <basic/Vector.hpp>
 
-#include <meta/TypeInfo.hpp>
-
 #include <io/stream/Bytes.hpp>
 #include <io/stream/Text.hpp>
+
+//#include <meta/TypeInfo.hpp>
+
+
+#include <mithril/fragment/FragmentCDB.hpp>
+
 
 //#include <mithril/atom/AtomCDB.hpp>
 //#include <mithril/class/ClassCDB.hpp>
@@ -243,11 +248,11 @@ namespace {
             gSharedPageFile     = wksp::shared(kStdPage);
 
                 //  I wanna get this separate, but for now....
-            on_stage2<u_image_stage2>();
+            on_stage2<UImage::s2>();
             
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_stage3<u_image_stage3>(by_cache(z));
+                on_stage3<UImage::s3>(by_cache(z));
 
             auto    classes_lookup  = by_cache(classes_folder(), "*.class");
             auto    fields_lookup   = by_cache(fields_folder(), "*.field");
@@ -284,7 +289,7 @@ namespace {
             
                 // Images change first (for icon changes)
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_change<u_image_notify>(by_cache(z));
+                on_change<UImage::notify>(by_cache(z));
 
                 // Rest are less order dependent... 
 

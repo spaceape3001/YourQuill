@@ -432,8 +432,8 @@ namespace yq::mithril::cdb {
     
     std::vector<Class::Rank>      inbound_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class,hops_cls FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY hops_cls,Classes.K");
-        static thread_local SQ qu("SELECT class,hops_cls FROM CTargets WHERE target=?");
+        static thread_local SQ qs("SELECT class,hops FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY hops,Classes.K");
+        static thread_local SQ qu("SELECT class,hops FROM CTargets WHERE target=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
         return exec_class_rank_vector(s);
@@ -605,8 +605,8 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>     outbound_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class,hops_cls FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY hops_cls,Classes.K");
-        static thread_local SQ qu("SELECT class,hops_cls FROM CSources WHERE source=?");
+        static thread_local SQ qs("SELECT class,hops FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY hops,Classes.K");
+        static thread_local SQ qu("SELECT class,hops FROM CSources WHERE source=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
         return exec_class_rank_vector(s);

@@ -10,6 +10,7 @@
 #include <basic/Flags.hpp>
 #include <math/Counter.hpp>
 #include <meta/TypeInfo.hpp>
+#include <mithril/enum/Change.hpp>
 #include <mithril/id/Id.hpp>
 #include <unordered_map>
 
@@ -30,6 +31,7 @@ namespace yq::mithril::update {
     struct UField;
     
     enum class F {
+        LOCK,
         LOAD,
         INFO,
         ICON,
