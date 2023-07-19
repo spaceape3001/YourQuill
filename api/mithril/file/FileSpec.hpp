@@ -10,6 +10,7 @@
 #include <string>
 #include <string_view>
 #include <mithril/preamble.hpp>
+#include <mithril/keywords.hpp>
 
 namespace yq::mithril {
     struct Folder;
@@ -33,6 +34,15 @@ namespace yq::mithril {
         std::string             str;
         uint64_t                u64     = 0;
         Type                    type    = Never;
+        
+        constexpr FileSpec() noexcept = default;
+        
+        explicit FileSpec(const std::filesystem::path&);
+        FileSpec(cache_t, std::string_view);
+        FileSpec(cache_t, Folder);
+        FileSpec(cache_t, Folder, std::string_view);
+        
+        
         
         bool    match(Id) const;
         

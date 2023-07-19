@@ -41,6 +41,8 @@ namespace yq::mithril::update {
         //! Maybe final pass, propagate to the remaining...
         static void             s3_propagate(Document);
         
+        static const FileSpec&  lookup();
+        
         struct Outbound { Class cls; };
         struct Node { Class cls; };
 

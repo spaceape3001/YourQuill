@@ -11,10 +11,12 @@
 #include "uRoot.ipp"
 #include "uUser.ipp"
 
+#include <update/uAtom.hpp>
 #include <update/uCategory.hpp>
 #include <update/uClass.hpp>
-#include <update/uImage.hpp>
 #include <update/uField.hpp>
+#include <update/uImage.hpp>
+#include <update/uLeaf.hpp>
 #include <update/uTag.hpp>
 
 //#include <basic/BasicApp.hpp>
@@ -253,32 +255,27 @@ namespace {
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
                 on_stage3<UImage::s3>(by_cache(z));
-
-            auto    classes_lookup  = by_cache(classes_folder(), "*.class");
-            auto    fields_lookup   = by_cache(fields_folder(), "*.field");
-            auto    leafs_lookup    = by_cache("*.y");
-            auto    tags_lookup     = by_cache(tags_folder(), "*.tag");
             
                 //  Organization & users
-            on_stage3<UCategory::s3>(by_cache(categories_folder(), "*.cat"));
-            on_stage3<UTag::s3>(tags_lookup);
+            on_stage3<UCategory::s3>(UCategory::lookup());
+            on_stage3<UTag::s3>(UTag::lookup());
             on_stage3<u_user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
-            on_stage3<UClass::s3>(classes_lookup);
-            on_stage3<UClass::s3_bind>(classes_lookup);
-            on_stage3<UClass::s3_extend>(classes_lookup);
-            on_stage3<UClass::s3_derives>(classes_lookup);
+            on_stage3<UClass::s3>(UClass::lookup());
+            on_stage3<UClass::s3_bind>(UClass::lookup());
+            on_stage3<UClass::s3_extend>(UClass::lookup());
+            on_stage3<UClass::s3_derives>(UClass::lookup());
             
-            on_stage3<UField::s3>(fields_lookup);
+            on_stage3<UField::s3>(UField::lookup());
             
-            on_stage3<UClass::s3_deduce>(classes_lookup);
-            on_stage3<UClass::s3_propagate>(classes_lookup);
+            on_stage3<UClass::s3_deduce>(UClass::lookup());
+            on_stage3<UClass::s3_propagate>(UClass::lookup());
 
                 //  LEAFS & atoms
-            on_stage3<s3_leaf_pass1>(leafs_lookup);
-            on_stage3<s3_leaf_pass2>(leafs_lookup);
-            on_stage3<UTag::s3_leaf>(tags_lookup);
+            on_stage3<s3_leaf_pass1>(ULeaf::lookup());
+            on_stage3<s3_leaf_pass2>(ULeaf::lookup());
+            on_stage3<UTag::s3_leaf>(UTag::lookup());
 
         
                 //  STAGE 4 global related
@@ -294,27 +291,26 @@ namespace {
                 // Rest are less order dependent... 
 
                 
-            on_change<css_update>(by_file(gSharedCssFile));
+            on_change<css_update>(FileSpec(gSharedCssFile));
             on_change<css_update>(by_cache(top_folder(), ".css"));
 
-            on_change<page_update>(by_file(gSharedPageFile));
+            on_change<page_update>(FileSpec(gSharedPageFile));
             on_change<page_update>(by_cache(top_folder(), ".page"));
                 
-            on_change<UCategory::notify>(by_cache(categories_folder(), "*.cat"));
-            on_change<UClass::notify>(classes_lookup);
-            on_change<UField::notify>(fields_lookup);
-            on_change<u_leaf_notify>(leafs_lookup);
-            on_change<UTag::notify>(tags_lookup);
+            on_change<UCategory::notify>(UCategory::lookup());
+            on_change<UClass::notify>(UClass::lookup());
+            on_change<UField::notify>(UField::lookup());
+            on_change<u_leaf_notify>(ULeaf::lookup());
+            on_change<UTag::notify>(UTag::lookup());
             on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
+                on_change<UCategory::icons>(by_cache(categories_folder(), z));
                 on_change<UClass::icons>(by_cache(classes_folder(), z));
                 on_change<UField::icons>(by_cache(fields_folder(), z));
-                on_change<u_leaf_notify_icons>(by_cache(z));
-                on_change<u_user_notify_icons>(by_cache(users_folder(), z));
-
-                on_change<UCategory::icons>(by_cache(categories_folder(), z));
+                on_change<ULeaf::icons>(by_cache(z));
                 on_change<UTag::icons>(by_cache(tags_folder(), z));
+                on_change<u_user_notify_icons>(by_cache(users_folder(), z));
             }
         }
 

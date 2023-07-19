@@ -7,13 +7,15 @@
 #include "uCategory.hpp"
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/file/FileSpec.hpp>
+#include <mithril/folder/FolderCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
     UCategory&  UCategory::get(Category x)
     {
-        return lookup<UCategory>(x);
+        return U<Category>::lookup<UCategory>(x);
     }
 
     std::pair<UCategory&, bool>  UCategory::create(Document doc)
@@ -29,6 +31,12 @@ namespace yq::mithril::update {
         if(!x)
             return ;
         get(x).u_icon();
+    }
+
+    const FileSpec&  UCategory::lookup()
+    {
+        static const FileSpec s_ret(CACHE, cdb::categories_folder(), "*.cat");
+        return s_ret;
     }
 
     void             UCategory::notify(Fragment frag,Change chg)

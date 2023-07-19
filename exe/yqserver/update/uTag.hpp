@@ -18,8 +18,9 @@ namespace yq::mithril::update {
         static UTag&                    get(Tag t);
         static std::pair<UTag&, bool>   create(Document);
 
-        static void             notify(Fragment,Change);
         static void             icons(Fragment,Change);
+        static const FileSpec&  lookup();
+        static void             notify(Fragment,Change);
         static void             s3(Document);
         static void             s3_leaf(Document);
 

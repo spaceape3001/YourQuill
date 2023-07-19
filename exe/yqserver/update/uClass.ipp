@@ -14,14 +14,18 @@
 
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
+#include <mithril/file/FileSpec.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
     UClass&  UClass::get(Class x)
     {
-        return lookup<UClass>(x);
+        return U<Class>::lookup<UClass>(x);
     }
 
     std::pair<UClass&, bool>  UClass::create(Document doc)
@@ -37,6 +41,12 @@ namespace yq::mithril::update {
         if(!x)
             return ;
         get(x).u_icon();
+    }
+
+    const FileSpec&  UClass::lookup()
+    {
+        static const FileSpec   s_ret(CACHE, cdb::classes_folder(), "*.class");
+        return s_ret;
     }
 
     void    UClass::notify(Fragment frag,Change chg)

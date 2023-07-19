@@ -11,7 +11,11 @@
 
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/document/DocumentCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
+#include <mithril/file/FileSpec.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
@@ -19,7 +23,7 @@
 namespace yq::mithril::update {
     UField&  UField::get(Field x)
     {
-        return lookup<UField>(x);
+        return U<Field>::lookup<UField>(x);
     }
 
     std::pair<UField&, bool>  UField::create(Document doc)
@@ -27,6 +31,12 @@ namespace yq::mithril::update {
         bool created = false;
         Field    x   = cdb::db_field(doc,&created);
         return { get(x), created };
+    }
+
+    const FileSpec&  UField::lookup()
+    {
+        static const FileSpec s_ret(CACHE, cdb::fields_folder(), "*.field");
+        return s_ret;
     }
 
     void    UField::notify(Fragment frag,Change chg)

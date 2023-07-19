@@ -17,6 +17,7 @@ namespace yq::mithril {
     struct KVTree; 
     struct AtomChangeData;
     struct AtomNotifier;
+    struct Image;
 }
 
 namespace yq::mithril::update {
@@ -49,6 +50,8 @@ namespace yq::mithril::update {
         
         //! Updates the abbreviation, returns TRUE if it's been changed
         bool                u_abbr(const KVTree& attrs);
+        
+        void                u_icon(Image);
 
 
         //  ---- Class

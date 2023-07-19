@@ -15,58 +15,71 @@
 #include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
+    FileSpec::FileSpec(const std::filesystem::path& fp)
+    {
+        type    = ByFile;
+        str     = fp.string();
+    }
+
+    FileSpec::FileSpec(cache_t, std::string_view sv)
+    {
+        if(sv.empty()){
+            type    = Never;
+        } else if(sv == "*"){
+            type    = Always;
+        } else if(starts(sv, "*.")){
+            type    = ByCacheExt;
+            str     = sv.substr(2);
+        } else {
+            type    = ByCacheDoc;
+            str     = sv;
+        }
+    }
+    
+    FileSpec::FileSpec(cache_t, Folder f)
+    {
+        type    = ByFolder;
+        u64     = f.id;
+    }
+    
+    FileSpec::FileSpec(cache_t, Folder f, std::string_view sv) : FileSpec(CACHE, sv)
+    {
+        u64     = f.id;
+        switch(type){
+        case Always:
+            type    = ByFolder;
+            break;
+        case ByCacheExt:
+            type    = ByFolderExt;
+            break;
+        case ByCacheDoc:
+            type    = ByFolderDoc;
+            break;
+        default:
+            break;
+        }
+    }
+    
+
     FileSpec        by_file(const std::filesystem::path&fp)
     {
-        FileSpec    ret;
-        ret.type    = FileSpec::ByFile;
-        ret.str     = fp.string();
-        return ret;
+        return FileSpec(fp);
     }
     
     FileSpec        by_cache(std::string_view sv)
     {
-        FileSpec    ret;
-        if(sv.empty()){
-            ret.type    = FileSpec::Never;
-        } else if(sv == "*"){
-            ret.type    = FileSpec::Always;
-        } else if(starts(sv, "*.")){
-            ret.type    = FileSpec::ByCacheExt;
-            ret.str     = sv.substr(2);
-        } else {
-            ret.type    = FileSpec::ByCacheDoc;
-            ret.str     = sv;
-        }
-        return ret;
+        return FileSpec(CACHE, sv);
     }
 
     FileSpec        by_cache(Folder f)
     {
-        FileSpec    ret;
-        ret.type    = FileSpec::ByFolder;
-        ret.u64     = f.id;
-        return ret;
+        return FileSpec(CACHE, f);
     }
     
         
     FileSpec        by_cache(Folder f, std::string_view sv)
     {
-        FileSpec    ret = by_cache(sv);
-        ret.u64     = f.id;
-        switch(ret.type){
-        case FileSpec::Always:
-            ret.type    = FileSpec::ByFolder;
-            break;
-        case FileSpec::ByCacheExt:
-            ret.type    = FileSpec::ByFolderExt;
-            break;
-        case FileSpec::ByCacheDoc:
-            ret.type    = FileSpec::ByFolderDoc;
-            break;
-        default:
-            break;
-        }
-        return ret;
+        return FileSpec(CACHE, f);
     }
     
     //FileSpec        by_class(std::string_view sv)

@@ -134,6 +134,11 @@ namespace yq::mithril::update {
     {
     }
 
+    void    UAtom::u_icon(Image img)
+    {
+        static thread_local CacheQuery uIcon("UPDATE Atoms SET icon=? WHERE id=?");
+        uIcon.exec(img.id, id);
+    }
 
     void    UAtom::i_atom(KVTree&attrs)
     {

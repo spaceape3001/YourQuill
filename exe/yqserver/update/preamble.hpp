@@ -17,6 +17,7 @@
 namespace yq::mithril {
     struct Class;
     struct Field;
+    struct FileSpec;
 }
 
 namespace yq::mithril::update {

@@ -20,6 +20,7 @@ namespace yq::mithril::update {
         static UField&      get(Field f);
         static std::pair<UField&, bool>  create(Document);
         
+        static const FileSpec&  lookup();
         static void     notify(Fragment,Change);
         static void     icons(Fragment,Change);
         static void     s3(Document);

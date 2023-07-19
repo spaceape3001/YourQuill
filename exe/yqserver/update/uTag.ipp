@@ -6,6 +6,8 @@
 
 #include "uTag.hpp"
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/file/FileSpec.hpp>
+#include <mithril/folder/FolderCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
@@ -14,7 +16,7 @@
 namespace yq::mithril::update {
     UTag&  UTag::get(Tag x)
     {
-        return lookup<UTag>(x);
+        return U<Tag>::lookup<UTag>(x);
     }
 
     std::pair<UTag&, bool>  UTag::create(Document doc)
@@ -32,6 +34,11 @@ namespace yq::mithril::update {
         get(x).u_icon();
     }
     
+    const FileSpec&  UTag::lookup()
+    {
+        static const FileSpec s_ret(CACHE, cdb::tags_folder(), "*.tag");
+        return s_ret;
+    }
 
     void    UTag::notify(Fragment frag,Change chg)
     {
