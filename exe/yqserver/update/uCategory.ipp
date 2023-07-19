@@ -9,15 +9,11 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
-    UCategory&  UCategory::get(Category x)
-    {
-        return U<Category>::lookup<UCategory>(x);
-    }
-
     std::pair<UCategory&, bool>  UCategory::create(Document doc)
     {
         bool created = false;
@@ -25,8 +21,17 @@ namespace yq::mithril::update {
         return { get(x), created };
     }
 
-    void             UCategory::icons(Fragment frag,Change chg)
+    UCategory&  UCategory::get(Category x)
     {
+        return U<Category>::lookup<UCategory>(x);
+    }
+
+    void             UCategory::icons(Fragment frag, [[maybe_unused]] Change chg)
+    {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UCategory::icons('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
         Category    x   = cdb::category(cdb::document(frag), true);
         if(!x)
             return ;
@@ -41,6 +46,10 @@ namespace yq::mithril::update {
 
     void             UCategory::notify(Fragment frag,Change chg)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UCategory::notify('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
         Document    doc = cdb::document(frag);
         if(chg == Change::Removed){
             if(cdb::fragments_count(doc) <= 1){
@@ -61,6 +70,10 @@ namespace yq::mithril::update {
     
     void             UCategory::s3(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UCategory::s3('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.reload();
         u.u_info();

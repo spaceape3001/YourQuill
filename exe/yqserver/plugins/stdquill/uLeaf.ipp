@@ -140,6 +140,7 @@ namespace {
     }
     #endif
 
+#if 0
     void    u_leaf_icon(Leaf x)
     {
         if(!x)
@@ -155,6 +156,7 @@ namespace {
             u2.exec(doc.id, x.id);
         }
     }
+#endif
 
     void    u_leaf_notify(Fragment frag, Change chg)
     {
@@ -180,11 +182,14 @@ namespace {
         //  if there's any context stuff, do it here.....
     }
 
+#if 0
     void    u_leaf_notify_icons(Fragment frag, Change)
     {
         u_leaf_icon(cdb::leaf(cdb::document(frag), true));
     }
-    
+#endif
+
+#if 0    
     void    u_leaf_title(Leaf x, Leaf::SharedData dp)
     {
         auto t = dp->title();
@@ -196,6 +201,7 @@ namespace {
             u.exec();
         }
     }
+#endif     
         
     void    s3_leaf_pass1(Document doc)
     {
@@ -208,8 +214,13 @@ namespace {
             return;
         }
 
-        u_leaf_icon(x);
+        ULeaf&  u   = ULeaf::get(x);
+        u.reload();
+        u.u_icon();
+        u.u_info();
+        //u_leaf_icon(x);
         
+        #if 0
         auto dp   = cdb::merged(x, cdb::IS_UPDATE | cdb::DONT_LOCK);
         if(!dp){
             yWarning() << "Unable to load leaf data for '" << cdb::key(doc) << "'";
@@ -217,6 +228,7 @@ namespace {
         }
         
         u_leaf_title(x, dp);
+        #endif
         
         Atom xa = UAtom::s3_create(dp->attrs, doc);
         

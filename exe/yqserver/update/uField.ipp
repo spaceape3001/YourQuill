@@ -21,16 +21,28 @@
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
-    UField&  UField::get(Field x)
-    {
-        return U<Field>::lookup<UField>(x);
-    }
-
     std::pair<UField&, bool>  UField::create(Document doc)
     {
         bool created = false;
         Field    x   = cdb::db_field(doc,&created);
         return { get(x), created };
+    }
+
+    UField&  UField::get(Field x)
+    {
+        return U<Field>::lookup<UField>(x);
+    }
+
+    void    UField::icons(Fragment frag, [[maybe_unused]] Change chg)
+    {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UField::icons('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
+        Field    x   = cdb::field(cdb::document(frag), true);
+        if(!x)
+            return ;
+        get(x).u_icon();
     }
 
     const FileSpec&  UField::lookup()
@@ -41,6 +53,10 @@ namespace yq::mithril::update {
 
     void    UField::notify(Fragment frag,Change chg)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UField::notify('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
         Document    doc = cdb::document(frag);
         if(chg == Change::Removed){
             if(cdb::fragments_count(doc) <= 1){
@@ -61,17 +77,13 @@ namespace yq::mithril::update {
         u.u_atomTypes();
     }
     
-    void    UField::icons(Fragment frag,Change)
-    {
-        Field    x   = cdb::field(cdb::document(frag), true);
-        if(!x)
-            return ;
-        get(x).u_icon();
-    }
-
 
     void     UField::s3(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UField::s3('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.reload();
         u.i_class();

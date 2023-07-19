@@ -23,11 +23,6 @@
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
-    UClass&  UClass::get(Class x)
-    {
-        return U<Class>::lookup<UClass>(x);
-    }
-
     std::pair<UClass&, bool>  UClass::create(Document doc)
     {
         bool created = false;
@@ -35,8 +30,17 @@ namespace yq::mithril::update {
         return { get(x), created };
     }
 
-    void    UClass::icons(Fragment frag,Change)
+    UClass&  UClass::get(Class x)
     {
+        return U<Class>::lookup<UClass>(x);
+    }
+
+    void    UClass::icons(Fragment frag, [[maybe_unused]] Change chg)
+    {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::icons('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
         Class    x   = cdb::class_(cdb::document(frag), true);
         if(!x)
             return ;
@@ -51,6 +55,10 @@ namespace yq::mithril::update {
 
     void    UClass::notify(Fragment frag,Change chg)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::notify('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+    
         Document    doc = cdb::document(frag);
         if(chg == Change::Removed){
             if(cdb::fragments_count(doc) <= 1){
@@ -74,6 +82,10 @@ namespace yq::mithril::update {
 
     void    UClass::s3(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::s3('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.reload();
         u.u_info();
@@ -84,6 +96,10 @@ namespace yq::mithril::update {
     
     void    UClass::s3_bind(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::s3_bind('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.i0_uses();
         u.i0_sources();
@@ -93,18 +109,30 @@ namespace yq::mithril::update {
 
     void    UClass::s3_extend(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::s3_extend('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.u_bases();
     }
     
     void    UClass::s3_derives(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::s3_derives('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.u_derives();
     }
 
     void    UClass::s3_deduce(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::s3_deduce('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.u_fields();
         u.u_sources();
@@ -115,6 +143,10 @@ namespace yq::mithril::update {
     
     void    UClass::s3_propagate(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UClass::s3_propagate('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.u_inbounds();
         u.u_outbounds();

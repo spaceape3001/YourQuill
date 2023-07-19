@@ -4,10 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-//#include "uAtom.ipp"
-//#include "uField.ipp"
-//#include "uImage.ipp"
-#include "uLeaf.ipp"
+//#include "uLeaf.ipp"
 #include "uRoot.ipp"
 #include "uUser.ipp"
 
@@ -42,6 +39,7 @@
 //#include <mithril/class/ClassCDB.hpp>
 //#include <mithril/folder/FolderCDB.hpp>
 //#include <mithril/field/FieldCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
 //#include <mithril/value/ValueCDB.hpp>
 //#include <mithril/attribute/AttributeCDB.hpp>
 //#include <mithril/document/DocumentCDB.hpp>
@@ -273,8 +271,7 @@ namespace {
             on_stage3<UClass::s3_propagate>(UClass::lookup());
 
                 //  LEAFS & atoms
-            on_stage3<s3_leaf_pass1>(ULeaf::lookup());
-            on_stage3<s3_leaf_pass2>(ULeaf::lookup());
+            on_stage3<ULeaf::s3>(ULeaf::lookup());
             on_stage3<UTag::s3_leaf>(UTag::lookup());
 
         
@@ -282,6 +279,10 @@ namespace {
 
             on_stage4<css_stage4>();        // <---  Must come AFTER background stage4
             on_stage4<page_stage4>();
+            
+            on_stage4<UAtom::s4>();
+            
+            
             //on_stage4<u_leaf_stage4_cleanup>();
             
                 // Images change first (for icon changes)
@@ -300,7 +301,7 @@ namespace {
             on_change<UCategory::notify>(UCategory::lookup());
             on_change<UClass::notify>(UClass::lookup());
             on_change<UField::notify>(UField::lookup());
-            on_change<u_leaf_notify>(ULeaf::lookup());
+            on_change<ULeaf::notify>(ULeaf::lookup());
             on_change<UTag::notify>(UTag::lookup());
             on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             

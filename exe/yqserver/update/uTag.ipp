@@ -8,17 +8,13 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/folder/FolderCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
-    UTag&  UTag::get(Tag x)
-    {
-        return U<Tag>::lookup<UTag>(x);
-    }
-
     std::pair<UTag&, bool>  UTag::create(Document doc)
     {
         bool created = false;
@@ -26,8 +22,17 @@ namespace yq::mithril::update {
         return { get(x), created };
     }
 
-    void    UTag::icons(Fragment frag,Change)
+    UTag&  UTag::get(Tag x)
     {
+        return U<Tag>::lookup<UTag>(x);
+    }
+
+    void    UTag::icons(Fragment frag, [[maybe_unused]] Change chg)
+    {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UTag::icons('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
         Tag    x   = cdb::find_tag(cdb::document(frag), true);
         if(!x)
             return ;
@@ -40,8 +45,12 @@ namespace yq::mithril::update {
         return s_ret;
     }
 
-    void    UTag::notify(Fragment frag,Change chg)
+    void    UTag::notify(Fragment frag, Change chg)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UTag::notify('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
         Document    doc = cdb::document(frag);
         if(chg == Change::Removed){
             if(cdb::fragments_count(doc) <= 1){
@@ -64,6 +73,10 @@ namespace yq::mithril::update {
     
     void    UTag::s3(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UTag::s3('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.reload();
         u.u_info();
@@ -72,6 +85,10 @@ namespace yq::mithril::update {
     
     void    UTag::s3_leaf(Document doc)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UTag::s3_leaf('" << cdb::key(doc) << "')";
+        #endif
+
         auto [u,cr] = create(doc);
         u.u_leaf();
     }

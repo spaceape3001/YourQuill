@@ -4,25 +4,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "uDocument.hpp"
 #include "uLeaf.hpp"
 #include <mithril/document/DocumentCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/file/FileSpec.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
-    ULeaf&  ULeaf::get(Leaf x)
+    Atom ULeaf::i_atom(Leaf x)
     {
-        return U<Leaf>::lookup<ULeaf>(x);
+        Document doc    = cdb::document(x);
+        Atom    at      = cdb::db_atom(doc);
+        
+        static thread_local CacheQuery sql("UPDATE Leafs SET atom=? WHERE id=?");
+        sql.exec(at.id, x.id);
+        return at;
     }
 
-    std::pair<ULeaf&,bool>   ULeaf::create(Document doc)
+    void             ULeaf::icons(Fragment frag, [[maybe_unused]] Change chg)
     {
-        bool created = false;
-        Leaf    x   = cdb::db_leaf(doc,&created);
-        return { get(x), created };
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "ULeaf::icons('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+    
+        Leaf    x   = cdb::leaf(cdb::document(frag), true);
+        if(!x)
+            return ;
+        u_icon(x);
     }
     
     const FileSpec&  ULeaf::lookup()
@@ -33,119 +44,154 @@ namespace yq::mithril::update {
 
     void             ULeaf::notify(Fragment frag,Change chg)
     {
-        auto [u,cr] = create(cdb::document(frag));
-        u.reload();
-        u.u_info();
-        u.u_tags();
-        if(cr)
-            u.u_icon();
-        // TODO
-    }
-    
-    void             ULeaf::icons(Fragment frag,Change)
-    {
-        Leaf    x   = cdb::leaf(cdb::document(frag), true);
-        if(!x)
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "ULeaf::notify('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+        
+        Document    doc = cdb::document(frag);
+        if(cdb::hidden(cdb::folder(doc)))
+            return;
+
+        if(chg == Change::Removed){
+            if(cdb::fragments_count(doc) <= 1){
+                Leaf        x   = cdb::leaf(doc);
+                if(x){
+                    x_erase(x);
+                }
+                return ;
+            }
+        }
+        
+        bool    cr  = false;
+        Leaf    x   = cdb::db_leaf(doc, &cr);
+        auto    def = reload(x);
+        if(!def)
             return ;
-        get(x).u_icon();
-    }
-    
-    void             ULeaf::s3(Document doc)
-    {
-        auto [u,cr] = create(doc);
-        u.reload();
-        u.u_info();
-        u.u_tags();
-        u.u_icon();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-
-    ULeaf::ULeaf(Leaf x) : U<Leaf>(x, cdb::key(x)), 
-        doc(cdb::document(x)), 
-        atom(cdb::db_atom(doc))
-    {
-    }
-
-    void    ULeaf::reload()
-    {
-        if(!x)
-            return ;
-        def     = cdb::merged(x, { cdb::IS_UPDATE | cdb::IGNORE_CONTEXT });
-    }
-
-    void    ULeaf::u_icon()
-    {
-        if(!x)
-            return ;
-
-        static thread_local CacheQuery u1("UPDATE Leafs SET icon=? WHERE id=?");
-        static thread_local CacheQuery u2("UPDATE Documents SET icon=? WHERE id=?");
-        static thread_local CacheQuery u3("UPDATE Atoms SET icon=? WHERE id=?");
-
-        Image       img     = cdb::best_image(doc);
-        if(img != icon){
-                // we'll eventually do inheritance....
-            u1.exec(img.id, id);
-            u2.exec(img.id, doc.id);
-            u3.exec(img.id, atom.id);
-            icon        = img;
+        Atom    at;
+        
+        if(cr){
+            at      = i_atom(x);
+            u_icon(x);
+        } else {
+            at      = cdb::atom(x);
+        }
+        
+        u_info(x, *def);
+        u_tags(x, *def);
+        
+        if(cr){
+            UAtom::i_atom(at, std::move(def->attrs));
+            
+            //  binding.... 
+            
+            UAtom::i_notify(at, true);
+        } else {
+            UAtom::u_atom(at, std::move(def->attrs));
         }
     }
+    
+    Leaf::SharedData ULeaf::reload(Leaf x)
+    {
+        return cdb::merged(x, { cdb::IS_UPDATE | cdb::IGNORE_CONTEXT });
+    }
 
-    void    ULeaf::u_info()
+    void             ULeaf::s3(Document doc)
+    {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "ULeaf::s3('" << cdb::key(doc) << "')";
+        #endif
+
+        if(cdb::hidden(cdb::folder(doc)))
+            return;
+        
+        Leaf x      = cdb::db_leaf(doc);
+        Atom at     = i_atom(x);
+        auto def    = reload(x);
+        if(!def)
+            return ;
+        
+        u_icon(x);
+        u_info(x, *def);
+        u_tags(x, *def);
+        UAtom::i_atom(at, std::move(def->attrs));
+    }
+
+    void         ULeaf::u_icon(Leaf x, Image img)
+    {
+        static thread_local CacheQuery sql("UPDATE Leafs SET icon=? WHERE id=?");
+        sql.exec(img.id, x.id);
+    }
+    
+    void         ULeaf::u_icon(Leaf x)
+    {
+        Document    doc     = cdb::document(x);
+        if(!doc)
+            return ;
+
+        Atom        atom    = cdb::atom(x);
+        Image       icon    = cdb::icon(x);
+        Image       img     = cdb::best_image(doc);
+        
+        if(img != icon){
+            ULeaf::u_icon(x, img);
+            UDocument::u_icon(doc, img);
+            UAtom::u_icon(atom, img);
+        }
+    }
+    
+    void ULeaf::u_info(Leaf x, const Leaf::Data &def)
     {
         if(!x)
             return;
-        if(!def)
-            return;
-            
+
+        std::string     key;
+
         static thread_local CacheQuery uInfo("UPDATE Leafs SET title=?, abbr=?, brief=? WHERE id=?");
-        std::string_view title   = def->title();
-        std::string_view abbr    = def->abbr();
-        std::string_view brief   = def->brief();
+        std::string_view title   = def.title();
+        std::string_view abbr    = def.abbr();
+        std::string_view brief   = def.brief();
         if(title.empty())
-            title       = def->attrs.value(kv::key({"nick", "name"}));
+            title                = def.attrs.value(kv::key({"nick", "name"}));
         
         if(title.empty()){
+            key     = cdb::key(x);
             uInfo.bind(1, key);     // fall back (for now) 
                                     // TODO ... make this smarter (later)
         } else 
             uInfo.bind(1, title);
+
         uInfo.bind(2, abbr);
         uInfo.bind(3, brief);
-        uInfo.bind(4, id);
+        uInfo.bind(4, x.id);
         uInfo.exec();
     }
-
-    void    ULeaf::u_tags()
+    
+    void ULeaf::u_tags(Leaf x, const Leaf::Data& def)
     {
         if(!x)
             return ;
-        if(!def)
-            return ;
     
-        TagSet  new_tags = cdb::find_tags_set(def->tags(), true);
-        auto    chg = add_remove(tags, new_tags);
+        TagSet  old_tags    = cdb::tags_set(x);
+        TagSet  new_tags    = cdb::find_tags_set(def.tags(), true);
+        auto    chg         = add_remove(old_tags, new_tags);
         
         static thread_local CacheQuery dTag("DELETE FROM LTags WHERE leaf=? AND tag=?");
         static thread_local CacheQuery iTag("INSERT INTO LTags (leaf, tag) VALUES (?,?)");
         
         for(Tag t : chg.added)
-            iTag.exec(id, t.id);
+            iTag.exec(x.id, t.id);
         for(Tag t : chg.removed)
-            dTag.exec(id, t.id);
-        tags    = new_tags;
+            dTag.exec(x.id, t.id);
     }
 
-    void    ULeaf::x_erase()
+    void    ULeaf::x_erase(Leaf x)
     {
         static thread_local CacheQuery  stmts[] = {
             CacheQuery( "DELETE FROM LTags WHERE leaf=?" ),
             CacheQuery( "DELETE FROM Leafs WHERE id=?" )
         };
         for(auto& sq : stmts)
-            sq.exec(id);
+            sq.exec(x.id);
     }
 }
 

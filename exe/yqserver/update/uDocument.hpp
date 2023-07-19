@@ -4,12 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uDocument.ipp"
+#pragma once
 
-#include "uAtom.ipp"
-#include "uCategory.ipp"
-#include "uClass.ipp"
-#include "uField.ipp"
-#include "uImage.ipp"
-#include "uLeaf.ipp"
-#include "uTag.ipp"
+#include <update/preamble.hpp>
+
+namespace yq::mithril::update {
+    class UDocument {
+    public:
+        static void u_icon(Document,Image);
+    };
+}
+
+

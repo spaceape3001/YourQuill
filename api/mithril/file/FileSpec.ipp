@@ -79,7 +79,7 @@ namespace yq::mithril {
         
     FileSpec        by_cache(Folder f, std::string_view sv)
     {
-        return FileSpec(CACHE, f);
+        return FileSpec(CACHE, f, sv);
     }
     
     //FileSpec        by_class(std::string_view sv)

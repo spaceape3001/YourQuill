@@ -42,19 +42,12 @@ namespace yq::mithril::update {
         return UImage(cdb::image(frag));
     }
 
-    void     UImage::s2()
-    {
-        Magick::InitializeMagick( BasicApp::app_name().data());
-    }
-    
-    void     UImage::s3(Document doc)
-    {
-        for(Fragment frag : cdb::fragments(doc))
-            get(cdb::db_image(frag)).u_thumbnail();
-    }
-    
     void     UImage::notify(Fragment frag,Change chg)
     {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UImage::notify('" << cdb::path(frag) << "', " << chg.key() << ")";
+        #endif
+
         switch(chg){
         case Change::Added:
         case Change::Modified:
@@ -67,6 +60,26 @@ namespace yq::mithril::update {
             break;
         }
     }
+
+    void     UImage::s2()
+    {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UImage::s2()";
+        #endif
+
+        Magick::InitializeMagick( BasicApp::app_name().data());
+    }
+    
+    void     UImage::s3(Document doc)
+    {
+        #ifdef YQ_UPDATE_ECHO_STEPS
+            YQ_UPDATE_ECHO_STEPS << "UImage::s3('" << cdb::key(doc) << "')";
+        #endif
+
+        for(Fragment frag : cdb::fragments(doc))
+            get(cdb::db_image(frag)).u_thumbnail();
+    }
+    
 
     ////////////////////////////////////////////////////////////////////////////
 

@@ -14,8 +14,17 @@
 #include <mithril/id/Id.hpp>
 #include <unordered_map>
 
+// Use to set echo steps
+
+/*
+    A rather annoying macro, if defined, set the logger 
+    output to log out *EVERY* call to an update routine
+*/
+#if !defined(NDEBUG)
+    #define YQ_UPDATE_ECHO_STEPS        yNotice()
+#endif
+
 namespace yq::mithril {
-    struct Class;
     struct Field;
     struct FileSpec;
 }
