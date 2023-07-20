@@ -23,7 +23,7 @@
     output to log out *EVERY* call to an update routine
 */
 #if !defined(NDEBUG)
-    #define YQ_UPDATE_ECHO_STEPS        yNotice()
+    //#define YQ_UPDATE_ECHO_STEPS        yNotice()
 #endif
 
 namespace yq::mithril {
@@ -111,12 +111,20 @@ namespace yq::mithril::update {
         
     };
 
-    struct Outbound { Class cls; };
-    struct Node { Class cls; };
+    struct Outbound { 
+        Class cls; 
+        constexpr bool operator==(const Outbound&) const noexcept = default;
+    };
+    
+    struct Node { 
+        Class cls; 
+        constexpr bool operator==(const Node&) const noexcept = default;
+    };
 
     using Resolve       = std::variant<std::monostate,Node,Field,Outbound>;
 
     //  ResolveMap *might* become multimap
     using ResolveMap    = std::map<std::string,Resolve,IgCase>;
+    using ResolveMMap   = std::multimap<std::string,Resolve,IgCase>;
     
 }

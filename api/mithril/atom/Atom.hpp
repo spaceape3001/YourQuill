@@ -30,6 +30,10 @@ namespace yq::mithril {
             \param[in] ck   Sub-key for the atom
         */
         static std::string  full_key(Document doc, std::string_view ck);
+        static std::string  full_key(Atom at, std::string_view ck);
+        
+        //! Full subkey for given atom/child (no '#' is included)
+        static std::string  sub_key(Atom at, std::string_view ck);
     };
     
     struct Atom::Property {

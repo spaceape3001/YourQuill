@@ -28,5 +28,28 @@ namespace yq::mithril {
         }
         return dk;
     }
+
+    std::string         Atom::full_key(Atom at, std::string_view ck)
+    {
+        std::string     kk  = cdb::key(at);
+        if(!ck.empty()){
+            if(cdb::is_document(at)){
+                kk += '#';
+            } else {
+                kk += '.';
+            }
+            kk += ck;
+        }
+        return kk;
+    }
+
+    std::string  Atom::sub_key(Atom at, std::string_view ck)
+    {
+        std::string     kk  = cdb::skey(at);
+        if(!kk.empty())
+            kk += '.';
+        kk += ck;
+        return kk;
+    }
 }
 

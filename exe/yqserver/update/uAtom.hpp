@@ -57,7 +57,7 @@ namespace yq::mithril::update {
         void                        i_abbr(KVTree& attrs);
         void                        i_classes(const ClassSet&);
         void                        i_classes(KVTree&attrs, Class c=Class());
-        Atom::Property              i_prop(Attribute::Diff&);
+        void                        i_prop(Attribute::Diff&);
         void                        i_props(std::span<Attribute::Diff>);
         void                        i_tags(const TagSet& tags);
         void                        i_tags(KVTree&attrs);
@@ -71,6 +71,7 @@ namespace yq::mithril::update {
         SetChanges<Class>           u_classes(KVTree&, Class c=Class());
         void                        u_prop(Attribute::Diff&);
         void                        u_props(std::span<Attribute::Diff>);
+        void                        u_resolve();
         SetChanges<Tag>             u_tags(const TagSet&);
         SetChanges<Tag>             u_tags(KVTree&);
         bool                        u_title(KVTree& attrs);
@@ -83,5 +84,6 @@ namespace yq::mithril::update {
         const id_t                  m_id;
         ClassSet                    m_classes;
         ResolveMap                  m_resolve;
+        bool                        m_resolved = false;
     };
 }

@@ -25,7 +25,8 @@ namespace {
         h.kvrow("Key") << i.key;
         h.kvrow("Abbreviation") << i.abbr;
         h.kvrow("Brief") << i.brief;
-        //h.kvrow("Leaf") << dev(i.leaf);
+        h.kvrow("Leaf") << dev(i.leaf);
+        h.kvrow("Parent") << dev(i.parent);
     }
     
     void p_dev_atom_attributes(WebHtml& h)
@@ -78,6 +79,7 @@ namespace {
         h.kvrow("Field") << dev(i.field);
         h.kvrow("Source") << dev(i.source);
         h.kvrow("Target") << dev(i.target);
+        h.kvrow("Child") << dev(i.child);
     }
 
     void p_dev_atom_properties(WebHtml& h)

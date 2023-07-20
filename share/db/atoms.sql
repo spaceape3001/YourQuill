@@ -28,8 +28,17 @@ CREATE TABLE AProperties (
     atom    INTEGER NOT NULL,
     attr    INTEGER NOT NULL,
     
+        -- child key (if needed)
+    ck      VARCHAR(255),
+    
         -- if empty, means the fields not been assigned
     field   INTEGER NOT NULL DEFAULT 0,
+    
+        -- class that applies
+    class   INTEGER NOT NULL DEFAULT 0,
+    
+        -- child atom spawned
+    child   INTEGER NOT NULL DEFAULT 0,
     
         -- if this is an edge, the originating source
     source  INTEGER NOT NULL DEFAULT 0,
@@ -37,7 +46,7 @@ CREATE TABLE AProperties (
         -- if this is an edge, the resulting target
     target  INTEGER NOT NULL DEFAULT 0,
     
-    UNIQUE(atom,attr,field) ON CONFLICT IGNORE
+    UNIQUE(atom,attr) ON CONFLICT IGNORE
 );
 
 CREATE TABLE AClasses (
@@ -63,13 +72,16 @@ CREATE TABLE ATags (
     --  note, the edge's parent is the source, always defined
 CREATE TABLE AEdges (
     --  source atom
-    source  INTEGER NOT NULL,
+    source  INTEGER NOT NULL DEFAULT 0,
     
     --  edge atom
     edge    INTEGER NOT NULL,
     
     --  target atom
     target  INTEGER NOT NULL DEFAULT 0,
+    
+    --  attribute that triggered this edge
+    attr    INTEGER NOT NULL DEFAULT 0,
 
     --  target specification (for when the target's not resolved)
     tgtspec VARCHAR(255)

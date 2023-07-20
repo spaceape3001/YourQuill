@@ -20,6 +20,7 @@ namespace yq::mithril {
         Leaf            leaf; 
         std::string     name;
         Image           icon;
+        Atom            parent;
         bool operator==(const Info&) const = default;
     };
 
@@ -29,6 +30,7 @@ namespace yq::mithril {
         Field           field;
         Atom            source;
         Atom            target;
+        Atom            child;
         bool operator==(const PropertyInfo&) const = default;
     };
 }

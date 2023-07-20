@@ -192,6 +192,11 @@ namespace yq::mithril {
         return (size_t) u64(i);
     }
 
+    size_t      CacheStatement::size(uint64_t i,std::string_view ck)
+    {
+        return (size_t) u64(i, ck);
+    }
+
     string_set_t  CacheStatement::sset()
     {
         string_set_t  ret;

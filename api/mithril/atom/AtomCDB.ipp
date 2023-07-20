@@ -182,8 +182,6 @@ namespace yq::mithril::cdb {
         static thread_local CacheQuery s("SELECT 1 FROM Atoms WHERE id=?");
         return s.present(i);
     }
-    
-    
 
     Image               icon(Atom a) 
     {
@@ -195,7 +193,7 @@ namespace yq::mithril::cdb {
     {
         Atom::Info    ret;
         
-        static thread_local CacheQuery s("SELECT k, abbr, brief, name, leaf FROM Atoms WHERE id=?");
+        static thread_local CacheQuery s("SELECT k, abbr, brief, name, leaf, parent FROM Atoms WHERE id=?");
         auto s_af = s.af();
         s.bind(1, a);
         if(s.step() == SQResult::Row){
@@ -204,6 +202,7 @@ namespace yq::mithril::cdb {
             ret.brief       = s.v_string(3);
             ret.name        = s.v_string(4);
             ret.brief       = Leaf{s.v_uint64(5)};
+            ret.parent      = Atom{s.v_uint64(6)};
         }
         return ret;
     }
@@ -224,6 +223,11 @@ namespace yq::mithril::cdb {
     {
         static thread_local CacheQuery s("SELECT is_edge FROM Atoms WHERE id=?");
         return s.boolean(a);
+    }
+
+    bool                is_document(Atom a)
+    {
+        return skey(a).empty();
     }
 
     bool                is_leaf(Atom a) 
@@ -363,13 +367,12 @@ namespace yq::mithril::cdb {
         return s.as<Atom>(p);
     }
 
-    Atom::Property          atom_property(Atom a, Attribute at, Field f)
+    Atom::Property          atom_property(Atom a, Attribute at)
     {
-        static thread_local CacheQuery s("SELECT id FROM AProperties WHERE atom=? AND attr=? AND field=?");
+        static thread_local CacheQuery s("SELECT id FROM AProperties WHERE atom=? AND attr=?");
         auto af = s.af();
         s.bind(1, a.id);
         s.bind(2, at.id);
-        s.bind(3, f.id);
         if(s.step() == SQResult::Row)
             return Atom::Property(s.v_uint64(1));
         return Atom::Property();
@@ -381,21 +384,39 @@ namespace yq::mithril::cdb {
         return s.as<Attribute>(p);
     }
 
-    Atom::Property          db_atom_property(Atom a, Attribute at, bool *wasCreated)
+    Atom                    child(Atom::Property p)
     {
-        return db_atom_property(a, at, Field(), wasCreated);
+        static thread_local CacheQuery s("SELECT child FROM AProperties WHERE id=?");
+        return s.as<Atom>(p);
     }
 
-    Atom::Property          db_atom_property(Atom a, Attribute at, Field f, bool *wasCreated)
+    std::string             child_key(Atom::Property p)
     {
-        static thread_local CacheQuery s("SELECT id FROM AProperties WHERE atom=? AND attr=? AND field=?");
-        static thread_local CacheQuery i("INSERT INTO AProperties (atom, attr, field) VALUES (?,?,?)");
+        static thread_local CacheQuery s("SELECT ck FROM AProperties WHERE id=?");
+        return s.str(p);
+    }
+
+    Class                   class_(Atom::Property p)
+    {
+        static thread_local CacheQuery s("SELECT class FROM AProperties WHERE id=?");
+        return s.as<Class>(p);
+    }
+
+    size_t                  count_properties(Atom a, std::string_view k)
+    {
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM AProperties INNER JOIN Attributes ON AProperties.attr = Attributes.id WHERE atom=? AND k=?");
+        return s.size(a, k);
+    }
+
+    Atom::Property          db_atom_property(Atom a, Attribute at, bool *wasCreated)
+    {
+        static thread_local CacheQuery s("SELECT id FROM AProperties WHERE atom=? AND attr=?");
+        static thread_local CacheQuery i("INSERT INTO AProperties (atom, attr) VALUES (?,?)");
         
         auto i_af = i.af();
 
         i.bind(1, a.id);
         i.bind(2, at.id);
-        i.bind(3, f.id);
         if(i.exec()){
             if(wasCreated)
                 *wasCreated = true;
@@ -408,7 +429,6 @@ namespace yq::mithril::cdb {
         auto    s_af    = s.af();
         s.bind(1, a.id);
         s.bind(2, at.id);
-        s.bind(3, f.id);
         
         if(s.step() == SQResult::Row)
             return Atom::Property(s.v_uint64(1));
@@ -439,15 +459,16 @@ namespace yq::mithril::cdb {
     Atom::PropertyInfo      info(Atom::Property p)
     {
         Atom::PropertyInfo  ret;
-        static thread_local CacheQuery s("SELECT atom, attr, field, source, target FROM AProperties WHERE id=?");
+        static thread_local CacheQuery s("SELECT atom, attr, field, source, target, child FROM AProperties WHERE id=?");
         auto s_af = s.af();
         s.bind(1, p.id);
         if(s.step() == SQResult::Row){
-            ret.atom   = Atom(s.v_uint64(1));
-            ret.attr   = Attribute(s.v_uint64(2));
-            ret.field  = Field(s.v_uint64(3));
-            ret.source = Atom(s.v_uint64(4));
-            ret.target = Atom(s.v_uint64(5));
+            ret.atom    = Atom(s.v_uint64(1));
+            ret.attr    = Attribute(s.v_uint64(2));
+            ret.field   = Field(s.v_uint64(3));
+            ret.source  = Atom(s.v_uint64(4));
+            ret.target  = Atom(s.v_uint64(5));
+            ret.child   = Atom(s.v_uint64(6));
         }
         return ret;
     }
@@ -506,6 +527,19 @@ namespace yq::mithril::cdb {
             ret[Class{s.v_uint64(1)}] = { s.v_uint64(2)};
         
         return ret;
+    }
+
+    Atom                db_atom(Atom atom, std::string_view ck, bool* wasCreated)
+    {
+        Document    doc     = cdb::document(atom);
+        std::string skey    = Atom::sub_key(atom, ck);
+        
+        Atom        x       = db_atom(doc, skey, wasCreated);
+        if(wasCreated){
+            static thread_local CacheQuery  u("UPDATE Atoms SET parent=? WHERE id=?");
+            u.exec(atom, x);
+        }
+        return x;
     }
 
     Atom                db_atom(Document d, bool* wasCreated)

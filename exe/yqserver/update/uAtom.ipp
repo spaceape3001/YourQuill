@@ -8,7 +8,9 @@
 #include "uClass.hpp"
 #include "uField.hpp"
 
+#include <basic/CollectionUtils.hpp>
 #include <basic/Logging.hpp>
+#include <basic/TextUtils.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
@@ -137,8 +139,10 @@ namespace yq::mithril::update {
         u.i_props(rep.items);
         u.u_props(rep.items);
         rep.exec_reindex();
-        u.x_props(rep.items);
-        rep.exec_removals();
+        
+        //  temp disable
+        //u.x_props(rep.items);
+        //rep.exec_removals();
         
         acd.diffs       = rep.items;
         
@@ -198,20 +202,55 @@ namespace yq::mithril::update {
     }
 
 
-    Atom::Property  UAtom::i_prop(Attribute::Diff& i)
+    void  UAtom::i_prop(Attribute::Diff& i)
     {
-        if(!i.attr)
-            return Atom::Property();
+        u_resolve();
+
+
         
-//        ClassSet    classes = cdb::classes(x);
-        
-        
-        Atom::Property ap = cdb::db_atom_property(m_atom, i.attr, Field());
-        
-        //  TODO....
-        
-        return ap;
+        auto ap = cdb::db_atom_property(m_atom, i.attr);
+        static thread_local CacheQuery uChild("UPDATE AProperties SET ck=?, child=? WHERE id=?");
+        static thread_local CacheQuery uField("UPDATE AProperties SET field=? WHERE id=?");
+        static thread_local CacheQuery uClass("UPDATE AProperties SET class=? WHERE id=?");
+        static thread_local CacheQuery uTarget("UPDATE AProperties SET target=? WHERE id=?");
+        //static thread_local CacheQuery uSource("UPDATE AProperties SET source=? WHERE id=?");
+
+        std::string ck;
+        auto    mkChild     = [&](Class c) {
+            ck              = i.key;
+            size_t      cnt = cdb::count_properties(m_atom, i.key);
+            if(cnt > 1)
+                ck += to_string(cnt);
+
+            Atom    a   = cdb::db_atom(m_atom, ck);
+            
+            auto af = uChild.af();
+            uChild.bind(1, ck);
+            uChild.bind(2, a.id);
+            uChild.bind(3, ap.id);
+            uChild.exec();
+            uClass.exec(c.id, ap.id);
+            
+            return a;
+        };
+
+        auto j  = m_resolve.find(i.key);
+        if(j != m_resolve.end()){
+            if(auto p = std::get_if<Node>(&j->second)){
+                Node    n   = *p;
+                mkChild(n.cls);
+            }
+            if(auto p = std::get_if<Outbound>(&j->second)){
+                Outbound out = *p;
+                Atom a = mkChild(out.cls);
+            }
+            if(auto p = std::get_if<Field>(&j->second)){
+                Field   f   = *p;
+                uField.exec(f, ap);
+            }
+        }
     }
+
 
     void    UAtom::i_props(std::span<Attribute::Diff> rep)
     {
@@ -338,6 +377,19 @@ namespace yq::mithril::update {
         }
     }
 
+    void                UAtom::u_resolve()
+    {
+        if(m_resolved)
+            return ;
+        for(Class c : m_classes){
+            UClass&     u   = UClass::get(c);
+            for(auto& r : u.resolve)
+                m_resolve[r.first]  = r.second;
+        }
+        m_resolved  = true;
+    }
+
+   
     SetChanges<Tag>     UAtom::u_tags(const TagSet& tags)
     {
         TagSet              otags   = make_set(cdb::tags(m_atom));

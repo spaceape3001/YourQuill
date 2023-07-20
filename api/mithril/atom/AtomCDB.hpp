@@ -144,6 +144,9 @@ namespace yq::mithril::cdb {
     //! TRUE if atom has been tagged with given tag
     bool                 is(Atom,Tag);
     
+    //! TRUE if the atom is document-scope
+    bool                 is_document(Atom);
+    
     //! TRUE if the atom is an edge
     bool                 is_edge(Atom);
 
@@ -205,9 +208,16 @@ namespace yq::mithril::cdb {
 
     
     Attribute               attribute(Atom::Property);
+    
+    Atom                    child(Atom::Property);
+    
+    std::string             child_key(Atom::Property);
+    
+    Class                   class_(Atom::Property);
+
+    size_t                  count_properties(Atom, std::string_view);
 
     Atom::Property          db_atom_property(Atom, Attribute, bool *wasCreated=nullptr);
-    Atom::Property          db_atom_property(Atom, Attribute, Field, bool *wasCreated=nullptr);
     
     bool                    exists_atom_property(uint64_t);
     bool                    exists(Atom::Property);
@@ -252,6 +262,8 @@ namespace yq::mithril::cdb {
     */
     Atom                    db_atom(Document doc, std::string_view k, bool* wasCreated=nullptr);
     
+    Atom                    db_atom(Atom atom, std::string_view k, bool* wasCreated=nullptr);
+
     //! Documents that define this atom
     //std::vector<Document>   documents(Atom, Sorted sorted=Sorted{});
     

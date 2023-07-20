@@ -62,13 +62,14 @@ namespace yq::mithril::html {
     void        dev_table(WebHtml& h, const std::vector<Atom::Property>& props)
     {
         auto t = h.table();
-        h << "<tr><th>ID</th><th colspan=\"2\">Atom</th><th colspan=\"2\">Attr</th><th colspan=\"2\">Field</th><th colspan=\"2\">Source</th><th colspan=\"2\">Target</th></tr>\n";
+        h << "<tr><th>ID</th><th colspan=\"2\">Atom</th><th colspan=\"2\">Attr</th><th colspan=\"2\">Field</th><th colspan=\"2\">Child</th><th colspan=\"2\">Source</th><th colspan=\"2\">Target</th></tr>\n";
         for(Atom::Property p : props){
             auto i = cdb::info(p);
             h   << "<tr><td>"  << p.id 
                 << "</td><td>" << dev_id(i.atom)  << "</td><td>" << dev(i.atom) 
                 << "</td><td>" << dev_id(i.attr)  << "</td><td>" << dev(i.attr) 
                 << "</td><td>" << dev_id(i.field)  << "</td><td>" << dev(i.field) 
+                << "</td><td>" << dev_id(i.child)  << "</td><td>" << dev(i.child) 
                 << "</td><td>" << dev_id(i.source)  << "</td><td>" << dev(i.source) 
                 << "</td><td>" << dev_id(i.target)  << "</td><td>" << dev(i.target) 
                 << "</td></tr>\n";
