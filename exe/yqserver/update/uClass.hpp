@@ -15,7 +15,6 @@
 
 namespace yq::mithril::update {
 
-
     struct UClass : public U<Class> {
         static UClass&      get(Class);
         static std::pair<UClass&, bool>  create(Document);
@@ -43,13 +42,6 @@ namespace yq::mithril::update {
         
         static const FileSpec&  lookup();
         
-        struct Outbound { Class cls; };
-        struct Node { Class cls; };
-
-        using Resolve       = std::variant<std::monostate,Node,Field,Outbound>;
-
-        //  ResolveMap *might* become multimap
-        using ResolveMap    = std::map<std::string,Resolve,IgCase>;
 
         const Document      doc;
 

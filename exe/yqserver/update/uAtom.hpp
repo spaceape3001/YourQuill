@@ -34,43 +34,54 @@ namespace yq::mithril::update {
         //! final S4 for atoms, converting things into edges, etc
         static void                 s4();
 
-        static void                 i_atom(Atom, KVTree&&, Class c=Class(), bool notify=false);
+        //! Inserts into atoms attributes (ie, leaf)
+        //! \note YES, reference, assume the tree is trashed on return
+        static void                 i_atom(Atom, KVTree&, Class c=Class(), bool notify=false);
         static void                 i_notify(Atom, bool recursive=false);
 
-        static void                 u_atom(Atom, KVTree&&, Class c=Class());
+        //! Updates atoms attributes
+        //! \note YES, reference, assume the tree is trashed on return
+        static void                 u_atom(Atom, KVTree&, Class c=Class());
         static void                 u_icon(Atom, Image);
         
         static void                 x_atom(Atom);
+
+        UAtom(Atom);
+        
 
     private:
         static bool                 triggered(const AtomChangeData&acd, const AtomNotifier& an);
         static void                 execute(const AtomChangeData&acd);
 
 
-        static void                 i_abbr(Atom, KVTree& attrs);
-        static void                 i_classes(Atom, const ClassSet&);
-        static ClassSet             i_classes(Atom, KVTree&attrs, Class c=Class());
-        static Atom::Property       i_prop(Atom, Attribute::Diff&);
-        static void                 i_props(Atom, std::span<Attribute::Diff>);
-        static void                 i_tags(Atom, const TagSet& tags);
-        static TagSet               i_tags(Atom, KVTree&attrs);
-        static void                 i_title(Atom, KVTree& attrs);
+        void                        i_abbr(KVTree& attrs);
+        void                        i_classes(const ClassSet&);
+        void                        i_classes(KVTree&attrs, Class c=Class());
+        Atom::Property              i_prop(Attribute::Diff&);
+        void                        i_props(std::span<Attribute::Diff>);
+        void                        i_tags(const TagSet& tags);
+        void                        i_tags(KVTree&attrs);
+        void                        i_title(KVTree& attrs);
         
-        static std::string          q_abbr(Atom, KVTree&);
-        static std::string          q_title(Atom, KVTree&);
+        std::string                 q_abbr(KVTree&) const;
+        std::string                 q_title(KVTree&) const;
         
-        static bool                 u_abbr(Atom, KVTree& attrs);
-        static SetChanges<Class>    u_classes(Atom, const ClassSet&);
-        static SetChanges<Class>    u_classes(Atom, KVTree&, Class c=Class());
-        static void                 u_prop(Atom, Attribute::Diff&);
-        static void                 u_props(Atom, std::span<Attribute::Diff>);
-        static SetChanges<Tag>      u_tags(Atom, const TagSet&);
-        static SetChanges<Tag>      u_tags(Atom, KVTree&);
-        static bool                 u_title(Atom, KVTree& attrs);
+        bool                        u_abbr(KVTree& attrs);
+        SetChanges<Class>           u_classes(const ClassSet&);
+        SetChanges<Class>           u_classes(KVTree&, Class c=Class());
+        void                        u_prop(Attribute::Diff&);
+        void                        u_props(std::span<Attribute::Diff>);
+        SetChanges<Tag>             u_tags(const TagSet&);
+        SetChanges<Tag>             u_tags(KVTree&);
+        bool                        u_title(KVTree& attrs);
 
-        static void                 x_prop(Atom, Attribute::Diff&);
-        static void                 x_props(Atom, Attribute);
-        static void                 x_props(Atom, std::span<Attribute::Diff>);
+        void                        x_prop(Attribute::Diff&);
+        void                        x_props(Attribute);
+        void                        x_props(std::span<Attribute::Diff>);
 
+        const Atom                  m_atom;
+        const id_t                  m_id;
+        ClassSet                    m_classes;
+        ResolveMap                  m_resolve;
     };
 }

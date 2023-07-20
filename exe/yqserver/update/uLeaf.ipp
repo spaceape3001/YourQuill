@@ -80,13 +80,13 @@ namespace yq::mithril::update {
         u_tags(x, *def);
         
         if(cr){
-            UAtom::i_atom(at, std::move(def->attrs));
+            UAtom::i_atom(at, def->attrs);
             
             //  binding.... 
             
             UAtom::i_notify(at, true);
         } else {
-            UAtom::u_atom(at, std::move(def->attrs));
+            UAtom::u_atom(at, def->attrs);
         }
     }
     
@@ -113,7 +113,7 @@ namespace yq::mithril::update {
         u_icon(x);
         u_info(x, *def);
         u_tags(x, *def);
-        UAtom::i_atom(at, std::move(def->attrs));
+        UAtom::i_atom(at, def->attrs);
     }
 
     void         ULeaf::u_icon(Leaf x, Image img)

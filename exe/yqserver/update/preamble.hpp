@@ -10,7 +10,9 @@
 #include <basic/Flags.hpp>
 #include <math/Counter.hpp>
 #include <meta/TypeInfo.hpp>
+#include <mithril/class/Class.hpp>
 #include <mithril/enum/Change.hpp>
+#include <mithril/field/Field.hpp>
 #include <mithril/id/Id.hpp>
 #include <unordered_map>
 
@@ -108,5 +110,13 @@ namespace yq::mithril::update {
         }
         
     };
+
+    struct Outbound { Class cls; };
+    struct Node { Class cls; };
+
+    using Resolve       = std::variant<std::monostate,Node,Field,Outbound>;
+
+    //  ResolveMap *might* become multimap
+    using ResolveMap    = std::map<std::string,Resolve,IgCase>;
     
 }
