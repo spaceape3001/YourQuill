@@ -1181,6 +1181,7 @@ namespace {
         });
         reg_webpage<p_dev_atom_property>("/dev/atom_property").argument("id", "Atom Property ID");
         reg_webpage<p_dev_atoms>("/dev/atoms");
+        reg_webpage<p_dev_attribute>("/dev/attribute");
         reg_webpage<p_dev_attributes>("/dev/attributes");
 
         reg_webpage<p_dev_categories>("/dev/categories"); 

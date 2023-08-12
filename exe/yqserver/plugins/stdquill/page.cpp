@@ -24,6 +24,7 @@
 #include <basic/DelayInit.hpp>
 #include <io/DirUtils.hpp>
 #include <io/FileUtils.hpp>
+#include <gis/Date.hpp>
 #include <basic/Logging.hpp>
 #include <sql/SqlLite.hpp>
 #include <sql/SqlQuery.hpp>
@@ -386,6 +387,25 @@ namespace {
             ctx.return_to_sender();
         }
     }
+    
+    json    p_api_easter(WebContext& ctx)
+    {
+        std::string     arg_string = ctx.find_query("year");
+        if(arg_string.empty())
+            throw HttpStatus::BadArgument;
+        auto    x   = to_int16(arg_string);
+        if(!x)
+            throw HttpStatus::BadArgument;
+            
+        int16_t y   = *x;
+        Date    d   = easter(y);
+        
+        json    ret{
+            { "month", to_string(d.month) },
+            { "day", to_string(d.day) }
+        };
+        return ret;
+    }
 
     json    p_api_wksp(WebContext&ctx)
     {
@@ -561,6 +581,7 @@ namespace {
         reg_webpage<p_admin_user>("/admin/user").argument("id", "User ID");
         reg_webpage<p_admin_users_create>(hPost, "/admin/users/create");
         
+        reg_webpage<p_api_easter>("/api/easter"sv);
         reg_webpage<p_api_wksp>("/api/wksp"sv); 
         reg_webpage<p_api_wksp_quill>("/api/wksp/quill"sv); 
 
