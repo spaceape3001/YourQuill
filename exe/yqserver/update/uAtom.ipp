@@ -206,12 +206,10 @@ namespace yq::mithril::update {
     {
         u_resolve();
 
-
         
         auto ap = cdb::db_atom_property(m_atom, i.attr);
-        static thread_local CacheQuery uChild("UPDATE AProperties SET ck=?, child=? WHERE id=?");
+        static thread_local CacheQuery uChild("UPDATE AProperties SET ck=?, child=?, class=? WHERE id=?");
         static thread_local CacheQuery uField("UPDATE AProperties SET field=? WHERE id=?");
-        static thread_local CacheQuery uClass("UPDATE AProperties SET class=? WHERE id=?");
         static thread_local CacheQuery uTarget("UPDATE AProperties SET target=? WHERE id=?");
         //static thread_local CacheQuery uSource("UPDATE AProperties SET source=? WHERE id=?");
 
@@ -227,10 +225,13 @@ namespace yq::mithril::update {
             auto af = uChild.af();
             uChild.bind(1, ck);
             uChild.bind(2, a.id);
-            uChild.bind(3, ap.id);
+            uChild.bind(3, c.id);
+            uChild.bind(4, ap.id);
             uChild.exec();
-            uClass.exec(c.id, ap.id);
             
+            UClass& uc  = UClass::get(c);
+            UAtom   ua(a);
+
             return a;
         };
 
@@ -238,11 +239,15 @@ namespace yq::mithril::update {
         if(j != m_resolve.end()){
             if(auto p = std::get_if<Node>(&j->second)){
                 Node    n   = *p;
-                mkChild(n.cls);
+                Atom a = mkChild(n.cls);
+                
+                
+                
             }
             if(auto p = std::get_if<Outbound>(&j->second)){
                 Outbound out = *p;
                 Atom a = mkChild(out.cls);
+
             }
             if(auto p = std::get_if<Field>(&j->second)){
                 Field   f   = *p;

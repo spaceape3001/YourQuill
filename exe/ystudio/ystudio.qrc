@@ -8,6 +8,7 @@
     <file alias="icon/clear.svg">res/edit-clear-4.svg</file>
     <file alias="icon/copy.svg">res/edit-copy-6.svg</file>
     <file alias="icon/cut.svg">res/edit-cut-4.svg</file>
+    <file alias="icon/dice.svg">res/dice-6.svg</file>
     <file alias="icon/find.svg">res/edit-find-3.svg</file>
     <file alias="icon/fore.svg">res/arrow-right-3.svg</file>
     <file alias="icon/fullscreen.svg">res/view-fullscreen-4.svg</file>

@@ -31,6 +31,9 @@ add_executable(${PROJECT_NAME}
     WebBrowser.cpp
     Window.hpp
 
+    dock/DateGen.hpp
+    dock/DateGen.cpp
+
     dock/XDocuments.hpp
     dock/XDocuments.cpp
     dock/XFragments.hpp
