@@ -8,7 +8,6 @@
 
 #include "Dock.hpp"
 #include <QDialog>
-//#include "NpRandomExport.hpp"
 
 class QDateEdit;
 class QLineEdit;

@@ -33,6 +33,8 @@ add_executable(${PROJECT_NAME}
 
     dock/DateGen.hpp
     dock/DateGen.cpp
+    dock/TimeGen.hpp
+    dock/TimeGen.cpp
 
     dock/XDocuments.hpp
     dock/XDocuments.cpp
