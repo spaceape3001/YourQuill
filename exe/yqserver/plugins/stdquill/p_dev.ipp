@@ -678,6 +678,58 @@ namespace {
         }
     }
  
+    void p_dev_graphviz(WebHtml&h)
+    {
+        Graphviz    gv  = graphviz(h);
+        if(!gv)
+            throw HttpStatus::BadArgument;
+        
+        auto t = h.table();
+        h.kvrow("Name") << cdb::name(gv);
+        h.kvrow("Dot Size") << cdb::dot_size(gv);
+        h.kvrow("Html Size") << cdb::html_size(gv);
+        h.kvrow("SVG Size") << cdb::svg_size(gv);
+    }
+    
+    void    p_dev_graphviz_html(WebHtml&h)
+    {
+        Graphviz    gv  = graphviz(h);
+        if(!gv)
+            throw HttpStatus::BadArgument;
+        h.title("HTML");
+        std::string txt = cdb::html_text(gv);
+        h << "<pre>\n";
+        html_escape_write(h, txt);
+        h << "</pre>\n";
+    }
+
+    void    p_dev_graphviz_dot(WebHtml&h)
+    {
+        Graphviz    gv  = graphviz(h);
+        if(!gv)
+            throw HttpStatus::BadArgument;
+        h.title("DOT");
+        std::string txt = cdb::dot_text(gv);
+        h << "<pre>\n";
+        html_escape_write(h, txt);
+        h << "</pre>\n";
+    }
+
+    void    p_dev_graphviz_svg(WebHtml&h)
+    {
+        Graphviz    gv  = graphviz(h);
+        if(!gv)
+            throw HttpStatus::BadArgument;
+        h.title("SVG");
+        h << gv;
+    }
+    
+    void p_dev_graphvizs(WebHtml& h)
+    {
+        h.title("All Graphvizs");
+        dev_table(h, all_graphvizs());
+    }
+
     void    p_dev_hello(WebHtml& out)
     {
         out.title("HELLO WORLD!");
@@ -690,6 +742,7 @@ namespace {
         for(auto& hv : out.context().rx_headers)
             out.kvrow(hv.first) << hv.second;
     }
+    
     
     void p_dev_image(WebHtml& h)
     {
@@ -1247,6 +1300,14 @@ namespace {
         reg_webpage<p_dev_fragments>("/dev/fragments");
  
         reg_webpage<p_dev_globals>("/dev/globals").local();
+ 
+        reg_webgroup({
+            reg_webpage<p_dev_graphviz>("/dev/graphviz").description("Info for a graphviz").argument("id", "Graphviz ID").label("Info"),
+            reg_webpage<p_dev_graphviz_dot>("/dev/graphviz/dot").description("DOT for a graphviz").argument("id", "Graphviz ID").label("DOT"),
+            reg_webpage<p_dev_graphviz_html>("/dev/graphviz/html").description("HTML for a graphviz").argument("id", "Graphviz ID").label("HTML"),
+            reg_webpage<p_dev_graphviz_svg>("/dev/graphviz/svg").description("SVG for a graphviz").argument("id", "Graphviz ID").label("SVG")
+        });
+        reg_webpage<p_dev_graphvizs>("/dev/graphvizs");
  
         reg_webpage<p_dev_hello>("/dev/hello");
 

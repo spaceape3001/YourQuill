@@ -129,8 +129,10 @@
 #include "game/GameProvider.ipp"
 
 #include "graphviz/Graphviz.ipp"
+#include "graphviz/GraphvizArg.ipp"
 #include "graphviz/GraphvizBuilder.ipp"
 #include "graphviz/GraphvizCDB.ipp"
+#include "graphviz/GraphvizHtml.ipp"
 
 //#include "group/GroupArg.ipp"
 #include "group/GroupCDB.ipp"

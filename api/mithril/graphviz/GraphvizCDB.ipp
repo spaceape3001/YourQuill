@@ -40,10 +40,22 @@ namespace yq::mithril::cdb {
             return Graphviz();
     }
     
-    std::string             dot(Graphviz g)
+    ByteArray               dot_bytes(Graphviz g)
     {
         static thread_local CacheQuery s("SELECT dot FROM Graphs WHERE id=?");
-        return s.str(g);
+        return s.bytes(g.id);
+    }
+    
+    size_t                  dot_size(Graphviz g)
+    {
+        static thread_local CacheQuery s("SELECT LENGTH(dot) FROM Graphs WHERE id=?");
+        return s.size(g.id);
+    }
+
+    std::string             dot_text(Graphviz g)
+    {
+        static thread_local CacheQuery s("SELECT dot FROM Graphs WHERE id=?");
+        return s.str(g.id);
     }
     
     bool                    exists(Graphviz g)
@@ -62,10 +74,22 @@ namespace yq::mithril::cdb {
         return exists_graphviz(i) ? Graphviz{i} : Graphviz{};
     }
     
+    ByteArray               html_bytes(Graphviz g)
+    {
+        static thread_local CacheQuery s("SELECT html FROM Graphs WHERE id=?");
+        return s.bytes(g.id);
+    }
+
+    size_t                  html_size(Graphviz g)
+    {
+        static thread_local CacheQuery s("SELECT LENGTH(html) FROM Graphs WHERE id=?");
+        return s.size(g.id);
+    }
+
     std::string             html_text(Graphviz g)
     {
         static thread_local CacheQuery s("SELECT html FROM Graphs WHERE id=?");
-        return s.str(g);
+        return s.str(g.id);
     }
     
     std::string             key(Graphviz)
@@ -76,12 +100,24 @@ namespace yq::mithril::cdb {
     std::string             name(Graphviz g)
     {
         static thread_local CacheQuery s("SELECT name FROM Graphs WHERE id=?");
-        return s.str(g);
+        return s.str(g.id);
     }
     
-    std::string             svg(Graphviz g)
+    ByteArray               svg_bytes(Graphviz g)
     {
         static thread_local CacheQuery s("SELECT svg FROM Graphs WHERE id=?");
-        return s.str(g);
+        return s.bytes(g.id);
+    }
+
+    size_t                  svg_size(Graphviz g)
+    {
+        static thread_local CacheQuery s("SELECT LENGTH(svg) FROM Graphs WHERE id=?");
+        return s.size(g.id);
+    }
+
+    std::string             svg_text(Graphviz g)
+    {
+        static thread_local CacheQuery s("SELECT svg FROM Graphs WHERE id=?");
+        return s.str(g.id);
     }
 }

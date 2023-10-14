@@ -98,6 +98,23 @@ namespace yq::mithril {
         return false;
     }
 
+    ByteArray   CacheStatement::bytes()
+    {
+        auto _af = af();
+        if(step() == SQResult::Row)
+            return v_bytes(1);
+        return ByteArray();
+    }
+    
+    ByteArray   CacheStatement::bytes(uint64_t i)
+    {
+        auto _af = af();
+        bind(1, (int64_t) i);
+        if(step() == SQResult::Row)
+            return v_bytes(1);
+        return ByteArray();
+    }
+
     bool        CacheStatement::exec()
     {
         auto _af = af();

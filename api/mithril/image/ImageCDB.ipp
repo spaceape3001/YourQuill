@@ -65,31 +65,19 @@ namespace yq::mithril::cdb {
         ByteArray           bytes_large(Image img)
         {
             static thread_local CacheQuery s("SELECT large FROM Images WHERE id=?");
-            auto s_af   = s.af();
-            s.bind(1, img.id);
-            if(s.step() == SQResult::Row)
-                return s.v_bytes(1);
-            return ByteArray();
+            return s.bytes(img);
         }
 
         ByteArray           bytes_medium(Image img)
         {
             static thread_local CacheQuery s("SELECT medium FROM Images WHERE id=?");
-            auto s_af   = s.af();
-            s.bind(1, img.id);
-            if(s.step() == SQResult::Row)
-                return s.v_bytes(1);
-            return ByteArray();
+            return s.bytes(img);
         }
 
         ByteArray          bytes_small(Image img)
         {
             static thread_local CacheQuery s("SELECT small FROM Images WHERE id=?");
-            auto s_af   = s.af();
-            s.bind(1, img.id);
-            if(s.step() == SQResult::Row)
-                return s.v_bytes(1);
-            return ByteArray();
+            return s.bytes(img);
         }
     }
     

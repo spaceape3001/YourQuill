@@ -44,7 +44,8 @@ namespace yq::mithril {
     struct Folder;
     struct Fragment;
     struct Game;
-    struct Graph;
+    struct Graph;       //< TBD
+    struct Graphviz;    //< Prerendered graphviz graphs
     struct Group;
     struct Image;
     struct Leaf;

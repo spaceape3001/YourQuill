@@ -65,6 +65,10 @@ namespace yq::mithril {
         bool        boolean(uint64_t, uint64_t);
         bool        boolean(uint64_t, std::string_view );
         
+        ByteArray   bytes();
+        ByteArray   bytes(uint64_t);
+
+        
             // used to execute where id=? style statements
         bool        exec(uint64_t);
             // summarizes step & output check

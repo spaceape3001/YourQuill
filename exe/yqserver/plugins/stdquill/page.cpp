@@ -13,6 +13,7 @@
 #include <mithril/folder.hpp>
 #include <mithril/field.hpp>
 #include <mithril/fragment.hpp>
+#include <mithril/graphviz.hpp>
 #include <mithril/image.hpp>
 #include <mithril/leaf.hpp>
 #include <mithril/meta.hpp>
@@ -474,7 +475,14 @@ namespace {
         ctx.tx_content = gCss;
     }
 
-
+    void    p_graphviz(WebContext& ctx)
+    {
+        Graphviz    gviz = graphviz(ctx);
+        if(!gviz)
+            throw HttpStatus::BadArgument;
+        ctx.tx_content_type = ContentType::svg;
+        ctx.tx_content      = std::make_shared<ByteArray>(cdb::svg_bytes(gviz));
+    }
 
     void    p_image(WebContext& ctx)
     {
@@ -600,6 +608,8 @@ namespace {
 
 
         reg_explorer();
+        
+        reg_webpage<p_graphviz>("/graphviz").argument("id", "ID for the graphviz").description("Graphviz SVG");
         
         reg_webpage<p_image>("/image").argument("id", "ID for the image");
         
