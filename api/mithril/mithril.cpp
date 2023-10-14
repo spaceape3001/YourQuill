@@ -128,6 +128,8 @@
 //#include "game/GamePost.ipp"
 #include "game/GameProvider.ipp"
 
+#include "graphviz/Graphviz.ipp"
+#include "graphviz/GraphvizBuilder.ipp"
 #include "graphviz/GraphvizCDB.ipp"
 
 //#include "group/GroupArg.ipp"

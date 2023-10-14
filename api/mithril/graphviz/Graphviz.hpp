@@ -17,6 +17,13 @@ namespace yq::mithril {
         uint64_t  id = 0ULL;
         constexpr auto    operator<=>(const Graphviz& rhs) const noexcept = default;
         constexpr operator uint64_t () const noexcept { return id; }
+        
+        struct Node;
+        struct Edge;
+        struct Builder;
+        
+        static std::string      dot2html(std::string_view);
+        static std::string      dot2svg(std::string_view);
     };
 }
 YQ_TYPE_DECLARE(yq::mithril::Graphviz)

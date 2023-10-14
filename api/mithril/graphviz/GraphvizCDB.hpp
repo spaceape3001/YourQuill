@@ -23,7 +23,7 @@ namespace yq {
             std::string             html_text(Graphviz);
             std::string             key(Graphviz);
             std::string             name(Graphviz);
-            ByteArray               svg(Graphviz);
+            std::string             svg(Graphviz);
         }
     }
 }
