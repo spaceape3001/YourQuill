@@ -32,6 +32,7 @@
 #include <mithril/notify/Stage2.hpp>
 #include <mithril/notify/Stage3.hpp>
 #include <mithril/notify/Stage4.hpp>
+#include <mithril/notify/Stage5.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
@@ -269,6 +270,26 @@ void    stage4_finalize()
         h->invoke();
 }
 
+std::vector<const Stage5*>  makeS5Handlers()
+{
+    std::vector<const Stage5*>   handlers    = Stage5::all();
+    std::stable_sort(handlers.begin(), handlers.end(), [](const Stage5*a, const Stage5*b) -> bool {
+        return a->order() < b->order();
+    });
+    return handlers;
+}
+
+void    stage5_runtime()
+{
+    static std::vector<const Stage5*>       handlers = makeS5Handlers();
+    std::vector<Stage5::OneTime>            onces;
+    Stage5::swap_one_times(onces);
+    for(const Stage5* h : handlers)
+        h->invoke();
+    for(auto&& ot : onces)
+        ot();
+}
+
 std::string_view    filename(std::string_view fn)
 {
     size_t  n = fn.find_last_of('/');
@@ -496,6 +517,7 @@ void        run_scanner(Vector<std::thread>& threads)
 
         while(gQuit == Quit::No){
             std::this_thread::sleep_for(10ms);
+            stage5_runtime();
             stage6_sweep();
             stage6_watch();
             db.checkpoint();

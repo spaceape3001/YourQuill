@@ -176,6 +176,7 @@
 #include "notify/Stage2.ipp"
 #include "notify/Stage3.ipp"
 #include "notify/Stage4.ipp"
+#include "notify/Stage5.ipp"
 
 #include "organization/OrganizationCDB.ipp"
 
