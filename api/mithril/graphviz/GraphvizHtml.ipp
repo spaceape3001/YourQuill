@@ -19,7 +19,7 @@ namespace yq::mithril::html {
     {
         std::string n   = cdb::name(i);
         n   = html_escape(n);
-        h << "<img src=\"/graphviz?id=" << i.id << "\" alt=\"" << n << "\" usemap=\"#" << n << "\">";
+        h << "<img src=\"/graphviz/svg?id=" << i.id << "\" alt=\"" << n << "\" usemap=\"#" << n << "\">";
         h << cdb::html_text(i);
         h << '\n';
         return h;

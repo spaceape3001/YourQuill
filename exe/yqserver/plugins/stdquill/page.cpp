@@ -475,7 +475,16 @@ namespace {
         ctx.tx_content = gCss;
     }
 
-    void    p_graphviz(WebContext& ctx)
+    void    p_graphviz(WebHtml& h)
+    {
+        Graphviz    gviz = graphviz(h);
+        if(!gviz)
+            throw HttpStatus::BadArgument;
+        h.title() << cdb::name(gviz);
+        h << gviz;
+    }
+
+    void    p_graphviz_svg(WebContext& ctx)
     {
         Graphviz    gviz = graphviz(ctx);
         if(!gviz)
@@ -609,7 +618,8 @@ namespace {
 
         reg_explorer();
         
-        reg_webpage<p_graphviz>("/graphviz").argument("id", "ID for the graphviz").description("Graphviz SVG");
+        reg_webpage<p_graphviz>("/graphviz").argument("id", "ID for the graphviz").description("Shows a graphviz graph");
+        reg_webpage<p_graphviz_svg>("/graphviz/svg").argument("id", "ID for the graphviz").description("Graphviz SVG");
         
         reg_webpage<p_image>("/image").argument("id", "ID for the image");
         

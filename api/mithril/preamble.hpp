@@ -76,6 +76,7 @@ namespace yq::mithril {
     using ClassU64Pair  = std::pair<Class,uint64_t>;
     using TagSet        = std::set<Tag>;
     using FieldSet      = std::set<Field>;
+    using ClassPairSet  = std::set<ClassPair>;
     
     using ClassCxn      = Connection<Class,Class>;
     using ClassU64Map   = std::map<Class,uint64_t>;
