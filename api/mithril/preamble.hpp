@@ -17,7 +17,7 @@
 #include <vector>
 #include <meta/InfoBinder.hpp>
 #include <math/preamble.hpp>
-#include <mithril/keywords.hpp>
+#include <keywords.hpp>
 
 namespace yq {
     class ByteArray;

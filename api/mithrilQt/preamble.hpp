@@ -9,8 +9,6 @@
 #include <basic/Flags.hpp>
 
 namespace yq::mithril {
-    struct default_t {};
-    static constexpr const default_t DEFAULT;
 
 
     /*! Enumerated list of columns 
