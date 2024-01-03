@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "TimeGen.hpp"
-#include <basic/DelayInit.hpp>
-#include <basic/Random.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/basic/Random.hpp>
 
 #include <QDate>
 #include <QDateEdit>

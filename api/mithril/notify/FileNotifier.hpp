@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <basic/EnumMap.hpp>
+#include <0/basic/EnumMap.hpp>
 #include <mithril/enum/Change.hpp>
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/folder/Folder.hpp>
-#include <basic/Flag.hpp>
+#include <0/basic/Flag.hpp>
 #include <filesystem>
 #include <source_location>
 

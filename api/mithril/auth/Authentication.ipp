@@ -12,7 +12,7 @@
 #include "AuthReject.hpp"
 #include "AuthSimple.hpp"
 
-#include <meta/ObjectInfoWriter.hpp>
+#include <0/meta/ObjectInfoWriter.hpp>
 
 
 YQ_OBJECT_IMPLEMENT(yq::mithril::Authentication)

@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Markdown.hpp"
-#include <basic/Compare.hpp>
-#include <io/StreamOps.hpp>
-#include <io/Stream.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/Compare.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/io/Stream.hpp>
+#include <0/basic/TextUtils.hpp>
 
 /*
     Crediting https://github.com/progsource/maddy for the guidance in how-to, however, the code

@@ -7,19 +7,19 @@
 #include "config.hpp"
 #include "yquill.hpp"
 
-#include <basic/BasicApp.hpp>
-#include <basic/DelayInit.hpp>
-#include <io/DirUtils.hpp>
-#include <io/FileUtils.hpp>
-#include <basic/Logging.hpp>
-#include <io/PluginLoader.hpp>
-#include <sql/SqlLite.hpp>
-#include <sql/SqlQuery.hpp>
-#include <sql/SqlUtils.hpp>
-#include <basic/TextUtils.hpp>
-#include <basic/ThreadId.hpp>
+#include <0/basic/BasicApp.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/io/DirUtils.hpp>
+#include <0/io/FileUtils.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/io/PluginLoader.hpp>
+#include <0/sql/SqlLite.hpp>
+#include <0/sql/SqlQuery.hpp>
+#include <0/sql/SqlUtils.hpp>
+#include <0/basic/TextUtils.hpp>
+#include <0/basic/ThreadId.hpp>
 
-#include <meta/Meta.hpp>
+#include <0/meta/Meta.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 #include <iostream>

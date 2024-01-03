@@ -8,7 +8,7 @@
 
 #include "attribute.hpp"
 
-#include <basic/DelayInit.hpp>
+#include <0/basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithrilQt/image.hpp>

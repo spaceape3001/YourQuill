@@ -7,8 +7,8 @@
 #pragma once
 
 #include "ValueData.hpp"
-#include <basic/TextUtils.hpp>
-#include <io/XmlUtils.hpp>
+#include <0/basic/TextUtils.hpp>
+#include <0/io/XmlUtils.hpp>
 #include <mithril/io/Strings.hpp>
 
 namespace yq::mithril {

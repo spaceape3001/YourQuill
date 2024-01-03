@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <basic/HttpParser.hpp>
+#include <0/basic/HttpParser.hpp>
 #include "JsonAdapter.hpp"
 #include "TypedBytes.hpp"
 #include "PageTemplate.hpp"
@@ -19,17 +19,17 @@
 #include "WebVariable.hpp"
 //#include "NetWriter.hpp"
 
-#include <basic/Random.hpp>
-#include <basic/Safety.hpp>
-#include <basic/EnumMap.hpp>
-#include <basic/Map.hpp>
-#include <io/FileUtils.hpp>
-#include <basic/Logging.hpp>
-#include <io/stream/Bytes.hpp>
-#include <io/StreamOps.hpp>
-#include <io/stream/Text.hpp>
-#include <basic/Encode64.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/Random.hpp>
+#include <0/basic/Safety.hpp>
+#include <0/basic/EnumMap.hpp>
+#include <0/basic/Map.hpp>
+#include <0/io/FileUtils.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/io/stream/Bytes.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/io/stream/Text.hpp>
+#include <0/basic/Encode64.hpp>
+#include <0/basic/TextUtils.hpp>
 
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Stage4.hpp>

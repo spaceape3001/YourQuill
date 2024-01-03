@@ -12,7 +12,7 @@
 #include "AtomProvider.ipp"
 #include "AtomSpec.ipp"
 
-#include <meta/Init.hpp>
+#include <0/meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Atom)
 

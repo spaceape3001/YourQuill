@@ -7,12 +7,12 @@
 #pragma once
 
 //#include <mithril/enum/change.hpp>
-#include <trait/not_copyable.hpp>
-#include <basic/EnumMap.hpp>
-#include <meta/Meta.hpp>
-#include <meta/MetaWriter.hpp>
-#include <basic/Http.hpp>
-#include <basic/Flag.hpp>
+#include <0/trait/not_copyable.hpp>
+#include <0/basic/EnumMap.hpp>
+#include <0/meta/Meta.hpp>
+#include <0/meta/MetaWriter.hpp>
+#include <0/basic/Http.hpp>
+#include <0/basic/Flag.hpp>
 
 #include <functional>
 #include <source_location>

@@ -7,8 +7,8 @@
 #pragma once
 
 #include "ImageCDB.hpp"
-#include <basic/ByteArray.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/ByteArray.hpp>
+#include <0/basic/TextUtils.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>

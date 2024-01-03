@@ -9,8 +9,8 @@
 #include <mithril/atom/Atom.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 
-#include <io/FileUtils.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/io/FileUtils.hpp>
+#include <0/basic/TextUtils.hpp>
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 

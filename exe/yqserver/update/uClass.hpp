@@ -12,13 +12,21 @@
 #include <mithril/field/Field.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/tag/Tag.hpp>
+#include <0/basic/Flags.hpp>
 
 namespace yq::mithril::update {
+    enum class What {
+        REMOVED,
+        CLASS
+    };
 
     struct UClass : public U<Class> {
+    
+    
         static UClass&      get(Class);
         static std::pair<UClass&, bool>  create(Document);
         
+        static Flags<What>      on_notify(Fragment,Change);
         static void             notify(Fragment,Change);
         static void             icons(Fragment,Change);
         
@@ -115,6 +123,5 @@ namespace yq::mithril::update {
         StringCountMap  suffix;
         ClassCountMap   target;
     #endif
-
     };
 }

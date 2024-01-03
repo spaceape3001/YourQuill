@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <basic/ByteArray.hpp>
-#include <basic/DelayInit.hpp>
-#include <basic/Guarded.hpp>
-#include <basic/Logging.hpp>
-#include <io/StreamOps.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/ByteArray.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/basic/Guarded.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/basic/TextUtils.hpp>
 
 #include <mithril/preamble.hpp>
 
@@ -39,6 +39,7 @@ extern Guarded<std::string>         gTextColor, gBkColor;
 extern std::atomic<bool>            gHasBackground;
 extern Guarded<SharedByteArray>     gCss;
 extern std::filesystem::path        gSharedCssFile, gSharedPageFile;
+extern std::atomic<uint64_t>        gClassGraph;
 
 
 void    update_css();

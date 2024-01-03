@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <basic/DelayInit.hpp>
-#include <basic/Logging.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/basic/Logging.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/Class.hpp>

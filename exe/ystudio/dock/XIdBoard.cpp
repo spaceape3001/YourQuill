@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XIdBoard.hpp"
-#include <basic/DelayInit.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/basic/TextUtils.hpp>
 #include <mithrilQt/id.hpp>
 
 using namespace yq;

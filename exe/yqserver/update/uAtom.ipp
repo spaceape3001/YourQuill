@@ -8,9 +8,9 @@
 #include "uClass.hpp"
 #include "uField.hpp"
 
-#include <basic/CollectionUtils.hpp>
-#include <basic/Logging.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/CollectionUtils.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/basic/TextUtils.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>

@@ -10,8 +10,8 @@
 #include <mithril/bit/Policy.hpp>
 #include <mithril/enum/Access.hpp>
 #include <mithril/enum/Vcs.hpp>
-#include <basic/EnumMap.hpp>
-#include <basic/Flag.hpp>
+#include <0/basic/EnumMap.hpp>
+#include <0/basic/Flag.hpp>
 
 
 namespace yq::mithril {

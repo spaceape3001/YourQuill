@@ -6,15 +6,15 @@
 
 #pragma once
 
-#include <basic/Url.hpp>
-#include <io/StreamOps.hpp>
-#include <io/Stream.hpp>
-#include <basic/ByteArray.hpp>
-#include <basic/Ref.hpp>
-#include <trait/not_copyable.hpp>
+#include <0/basic/Url.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/io/Stream.hpp>
+#include <0/basic/ByteArray.hpp>
+#include <0/basic/Ref.hpp>
+#include <0/trait/not_copyable.hpp>
 #include <functional>
 #include <mithril/preamble.hpp>
-#include <math/preamble.hpp>
+#include <0/math/preamble.hpp>
 
 namespace yq::mithril {
     

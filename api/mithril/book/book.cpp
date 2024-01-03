@@ -10,6 +10,6 @@
 //#include "book/BookPost.ipp"
 #include "book/BookProvider.ipp"
 
-#include <meta/Init.hpp>
+#include <0/meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Book)

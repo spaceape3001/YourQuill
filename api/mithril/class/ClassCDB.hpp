@@ -12,7 +12,7 @@
 #include <mithril/document/Document.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/category/Category.hpp>
-#include <math/Counter.hpp>
+#include <0/math/Counter.hpp>
 
 //#include "Graph.hpp"
 
@@ -88,7 +88,7 @@ namespace yq::mithril::cdb {
     std::vector<Class>           db_classes(const string_set_t&);
     
     
-    //Graph                   dep_graph(Class);
+    Graphviz                    dep_graph(Class);
 
     //! all derives for this class
     std::vector<Class>          derived_classes(Class, Sorted sorted=Sorted());

@@ -8,6 +8,7 @@
 
 #include <mithril/graphviz/GraphvizBuilder.hpp>
 #include <mithril/graphviz/GraphvizCDB.hpp> // placebo to get cdb::key & name into scope
+#include <0/basic/TextUtils.hpp>
 #include <variant>
 #include <functional>
 #include <vector>
@@ -26,8 +27,9 @@ namespace yq::mithril {
         std::vector<S>      nodes;
         std::vector<IdEdge> edges;
         S                   focus;
-        std::string         background;     // color, etc.... for entire image
+        std::string         background;     // color.... for entire image
         std::string         rank            = "RL";
+        bool                nameWithKey     = true;
         FlexString          url;
         FlexString          textColor;      // Text color
         FlexString          boxColor;       // Box backgrounds
@@ -36,6 +38,7 @@ namespace yq::mithril {
         void                build_to(Graphviz::Builder& ret) const
         {
             ret.m_rank      = rank;
+            ret.m_bgcolor   = background;
             
             const std::string* const  url_s     = std::get_if<std::string>(&url);
             const StrFunction* const  url_fn    = std::get_if<StrFunction>(&url);
@@ -54,6 +57,14 @@ namespace yq::mithril {
                 std::string t   = cdb::name(c);
                 if(t.empty())
                     t   = k;
+                
+                std::string kk;
+                if(nameWithKey){
+                    kk      = "k_" + k;
+                } else {
+                    kk      = "k_";
+                    kk += to_integer(c.id);
+                }
                 
                 auto& n = ret.node("k_" + k, t);
 

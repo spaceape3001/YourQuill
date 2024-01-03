@@ -9,8 +9,8 @@
 #include <mithril/attribute/AttributeDiff.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 
-#include <basic/DiffEngine.hpp>
-#include <basic/IntRange.hpp>
+#include <0/basic/DiffEngine.hpp>
+#include <0/basic/IntRange.hpp>
 
 #include <mithril/bit/KeyValue.hpp>
 #include <mithril/wksp/CacheQuery.hpp>

@@ -21,21 +21,21 @@
 #include <mithril/tag.hpp>
 #include <mithril/user.hpp>
 
-#include <basic/CollectionUtils.hpp>
-#include <basic/DelayInit.hpp>
-#include <io/DirUtils.hpp>
-#include <io/FileUtils.hpp>
-#include <gis/Date.hpp>
-#include <basic/Logging.hpp>
-#include <sql/SqlLite.hpp>
-#include <sql/SqlQuery.hpp>
-#include <io/StreamOps.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/CollectionUtils.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/io/DirUtils.hpp>
+#include <0/io/FileUtils.hpp>
+#include <0/gis/Date.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/sql/SqlLite.hpp>
+#include <0/sql/SqlQuery.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/basic/TextUtils.hpp>
 
-#include <meta/ObjectInfo.hpp>
-#include <meta/TypeInfo.hpp>
+#include <0/meta/ObjectInfo.hpp>
+#include <0/meta/TypeInfo.hpp>
 
-#include <io/stream/Text.hpp>
+#include <0/io/stream/Text.hpp>
 
 #include <mithril/bit/Copyright.hpp>
 #include <mithril/bit/NKI.hpp>

@@ -10,7 +10,7 @@
 #include <mithril/atom/AtomInfo.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 
-#include <basic/TextUtils.hpp>
+#include <0/basic/TextUtils.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
@@ -18,7 +18,7 @@
 #include <mithril/image/Image.hpp>
 #include <mithril/tag/Tag.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
-#include <math/Counter.hpp>
+#include <0/math/Counter.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Atom>   all_atoms(Sorted sorted)

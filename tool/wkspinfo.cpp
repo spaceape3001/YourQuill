@@ -8,10 +8,10 @@
 
 #include <iostream>
 
-#include <basic/BasicApp.hpp>
-#include <basic/Logging.hpp>
-#include <meta/Meta.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/BasicApp.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/meta/Meta.hpp>
+#include <0/basic/TextUtils.hpp>
 
 #include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/Workspace.hpp>

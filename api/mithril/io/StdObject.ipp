@@ -8,8 +8,8 @@
 
 #include "StdObject.hpp"
 #include <mithril/bit/KeyValue.hpp>
-#include <meta/Init.hpp>
-#include <io/stream/Text.hpp>
+#include <0/meta/Init.hpp>
+#include <0/io/stream/Text.hpp>
 
 namespace yq::mithril {
     Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)

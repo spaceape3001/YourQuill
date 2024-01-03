@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <basic/preamble.hpp>
-#include <basic/Flags.hpp>
-#include <math/Counter.hpp>
-#include <meta/TypeInfo.hpp>
+#include <0/basic/preamble.hpp>
+#include <0/basic/Flags.hpp>
+#include <0/math/Counter.hpp>
+#include <0/meta/TypeInfo.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/enum/Change.hpp>
 #include <mithril/field/Field.hpp>

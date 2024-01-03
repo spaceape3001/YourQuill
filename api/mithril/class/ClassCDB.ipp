@@ -7,9 +7,9 @@
 #pragma once
 
 #include "ClassCDB.hpp"
-#include <basic/ByteArray.hpp>
-#include <basic/CollectionUtils.hpp>
-#include <io/FileUtils.hpp>
+#include <0/basic/ByteArray.hpp>
+#include <0/basic/CollectionUtils.hpp>
+#include <0/io/FileUtils.hpp>
 #include <mithril/class/ClassFile.hpp>
 #include <mithril/field/Field.hpp>
 #include <mithril/wksp/CacheQuery.hpp>

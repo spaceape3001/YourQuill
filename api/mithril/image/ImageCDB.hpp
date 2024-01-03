@@ -9,7 +9,7 @@
 #include <mithril/preamble.hpp>
 #include <mithril/enum/SizeDesc.hpp>
 #include <mithril/image/Image.hpp>
-#include <basic/ContentType.hpp>
+#include <0/basic/ContentType.hpp>
 
 
 namespace yq {

@@ -10,18 +10,18 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include <basic/DelayInit.hpp>
-#include <basic/CollectionUtils.hpp>
-#include <io/FixedBuffer.hpp>
-#include <basic/HttpParser.hpp>
-#include <basic/Logging.hpp>
-#include <basic/Random.hpp>
-#include <basic/Ref.hpp>
-#include <io/StreamOps.hpp>
-#include <basic/TextUtils.hpp>
-#include <basic/ThreadId.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/basic/CollectionUtils.hpp>
+#include <0/io/FixedBuffer.hpp>
+#include <0/basic/HttpParser.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/basic/Random.hpp>
+#include <0/basic/Ref.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/basic/TextUtils.hpp>
+#include <0/basic/ThreadId.hpp>
 
-#include <io/stream/Text.hpp>
+#include <0/io/stream/Text.hpp>
 
 #include <mithril/web/WebAdapters.hpp>
 #include <mithril/web/WebContext.hpp>

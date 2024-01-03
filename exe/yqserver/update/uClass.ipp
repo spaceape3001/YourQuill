@@ -9,8 +9,8 @@
 #include "uClass.hpp"
 #include "uField.hpp"
 
-#include <basic/CollectionUtils.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/basic/CollectionUtils.hpp>
+#include <0/basic/TextUtils.hpp>
 
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
@@ -53,7 +53,13 @@ namespace yq::mithril::update {
         return s_ret;
     }
 
+
     void    UClass::notify(Fragment frag,Change chg)
+    {
+        on_notify(frag, chg);
+    }
+    
+    Flags<What>    UClass::on_notify(Fragment frag,Change chg)
     {
         #ifdef YQ_UPDATE_ECHO_STEPS
             YQ_UPDATE_ECHO_STEPS << "UClass::notify('" << cdb::path(frag) << "', " << chg.key() << ")";
@@ -66,7 +72,7 @@ namespace yq::mithril::update {
                 if(x){
                     get(x).x_erase();
                 }
-                return ;
+                return What::REMOVED;
             }
         }
         
@@ -78,6 +84,8 @@ namespace yq::mithril::update {
         u.u_alias();
         if(cr)
             u.u_icon();
+
+        return {};
     }
 
     void    UClass::s3(Document doc)

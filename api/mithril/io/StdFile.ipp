@@ -8,10 +8,10 @@
 
 #include "StdFile.hpp"
 
-#include <io/errors.hpp>
+#include <0/io/errors.hpp>
 #include <mithril/bit/KeyValue.hpp>
-#include <io/stream/Text.hpp>
-#include <basic/ByteArray.hpp>
+#include <0/io/stream/Text.hpp>
+#include <0/basic/ByteArray.hpp>
 
 #include <rapidxml.hpp>
 

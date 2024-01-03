@@ -10,13 +10,14 @@
 
 #include "WebBrowser.hpp"
 
-#include <basic/Url.hpp>
+#include <0/basic/Url.hpp>
 #include <gluon/core/Logging.hpp>
-#include <io/Curl.hpp>
-#include <io/PluginLoader.hpp>
+#include <0/io/Curl.hpp>
+#include <0/io/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>
-#include <sql/SqlLite.hpp>
+#include <0/sql/SqlLite.hpp>
 #include <nlohmann/json.hpp>
+#include <QFont>
 
 using namespace yq;
 using namespace yq::gluon;
@@ -90,6 +91,12 @@ bool    DreamApp::configure()
     m_home.setPath("/");
     
     WebBrowser::setHomeUrl(m_home);
+    
+    //  HACK to increase font size... change this to a config type of file
+    //  Try a simpe 50% scaling
+    QFont   f   = font();
+    f.setPointSize((f.pointSize() * 3) >> 1);
+    setFont(f);
     
     //load_plugin_dir("plugin/ystudio");
     return true;

@@ -7,12 +7,12 @@
 #pragma once
 
 #include <mithril/meta/MetaHtml.hpp>
-#include <meta/ArgInfo.hpp>
-#include <meta/MethodInfo.hpp>
-#include <meta/ObjectInfo.hpp>
-#include <meta/PropertyInfo.hpp>
-#include <meta/TypeInfo.hpp>
-#include <basic/TextUtils.hpp>
+#include <0/meta/ArgInfo.hpp>
+#include <0/meta/MethodInfo.hpp>
+#include <0/meta/ObjectInfo.hpp>
+#include <0/meta/PropertyInfo.hpp>
+#include <0/meta/TypeInfo.hpp>
+#include <0/basic/TextUtils.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/web/WebPage.hpp>

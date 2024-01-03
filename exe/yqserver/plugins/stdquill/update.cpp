@@ -16,20 +16,20 @@
 #include <update/uLeaf.hpp>
 #include <update/uTag.hpp>
 
-//#include <basic/BasicApp.hpp>
-//#include <basic/CollectionUtils.hpp>
-#include <basic/DelayInit.hpp>
-#include <io/DirUtils.hpp>
-#include <io/FileUtils.hpp>
-#include <basic/Logging.hpp>
-#include <io/StreamOps.hpp>
-#include <basic/TextUtils.hpp>
-#include <basic/Vector.hpp>
+//#include <0/basic/BasicApp.hpp>
+//#include <0/basic/CollectionUtils.hpp>
+#include <0/basic/DelayInit.hpp>
+#include <0/io/DirUtils.hpp>
+#include <0/io/FileUtils.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/basic/TextUtils.hpp>
+#include <0/basic/Vector.hpp>
 
-#include <io/stream/Bytes.hpp>
-#include <io/stream/Text.hpp>
+#include <0/io/stream/Bytes.hpp>
+#include <0/io/stream/Text.hpp>
 
-//#include <meta/TypeInfo.hpp>
+//#include <0/meta/TypeInfo.hpp>
 
 
 #include <mithril/fragment/FragmentCDB.hpp>
@@ -73,6 +73,9 @@
 //#include <mithril/folder.hpp>
 //#include <mithril/fragment.hpp>
 
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/graphviz/GraphvizBuilder.hpp>
+
 //#include <mithril/leaf.hpp>
 //#include <mithril/root.hpp>
 
@@ -86,6 +89,7 @@ alignas(64) std::atomic<bool>           gHasBackground{false};
 alignas(64) Guarded<SharedByteArray>    gCss;
 alignas(64) std::filesystem::path       gSharedCssFile;
 alignas(64) std::filesystem::path       gSharedPageFile;
+alignas(64) std::atomic<uint64_t>       gClassGraph{0};
 
 namespace {
     static constexpr const char*    kPage               = ".page";
@@ -148,6 +152,21 @@ namespace {
         page__();
     }
 
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  CLASS
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+        void    class_graph_update()
+        {
+        }
+    
+    
+        void    class_notify(Fragment frag,Change chg)
+        {
+            UClass::notify(frag, chg);
+            class_graph_update();
+        }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  CSS
@@ -279,7 +298,8 @@ namespace {
 
             on_stage4<css_stage4>();        // <---  Must come AFTER background stage4
             on_stage4<page_stage4>();
-            
+
+            on_stage4<class_graph_update>();
             on_stage4<UAtom::s4>();
             
             
@@ -299,7 +319,7 @@ namespace {
             on_change<page_update>(by_cache(top_folder(), ".page"));
                 
             on_change<UCategory::notify>(UCategory::lookup());
-            on_change<UClass::notify>(UClass::lookup());
+            on_change<class_notify>(UClass::lookup());
             on_change<UField::notify>(UField::lookup());
             on_change<ULeaf::notify>(ULeaf::lookup());
             on_change<UTag::notify>(UTag::lookup());

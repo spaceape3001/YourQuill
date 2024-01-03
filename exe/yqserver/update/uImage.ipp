@@ -14,8 +14,8 @@
 
 #include "uImage.hpp"
 
-#include <basic/BasicApp.hpp>
-#include <basic/Logging.hpp>
+#include <0/basic/BasicApp.hpp>
+#include <0/basic/Logging.hpp>
 
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/enum/Change.hpp>
@@ -23,7 +23,7 @@
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
-#include <math/shape/Size2.hxx>
+#include <0/math/shape/Size2.hxx>
 
 
 namespace yq::mithril::update {
