@@ -646,9 +646,9 @@ namespace yq::mithril::update {
         for(Class c : cdb::all_classes(Sorted::YES)){
             auto& u     = get(c);
             if(!u.isEdge){
-                resolve[u.key]  = Node{ c };
+                resolve[u.key]  = NodeClass{ c };
                 for(auto& a : u.aliases)
-                    resolve[a]  = Node{ c };
+                    resolve[a]  = NodeClass{ c };
             }
         }
         
@@ -656,9 +656,9 @@ namespace yq::mithril::update {
         for(auto& j : outbounds.hop){
             Class c = j.first;
             auto& u = get(c);
-            resolve[u.key]      = Outbound{ c };
+            resolve[u.key]      = OutClass{ c };
             for(auto& a : u.aliases)
-                resolve[a]  = Outbound{ c };
+                resolve[a]  = OutClass{ c };
         }
         
         //  FIELDS

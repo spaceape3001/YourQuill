@@ -237,16 +237,16 @@ namespace yq::mithril::update {
 
         auto j  = m_resolve.find(i.key);
         if(j != m_resolve.end()){
-            if(auto p = std::get_if<Node>(&j->second)){
-                Node    n   = *p;
-                Atom a = mkChild(n.cls);
+            if(auto p = std::get_if<NodeClass>(&j->second)){
+                NodeClass    n   = *p;
+                Atom a = mkChild(n);
                 
                 
                 
             }
-            if(auto p = std::get_if<Outbound>(&j->second)){
-                Outbound out = *p;
-                Atom a = mkChild(out.cls);
+            if(auto p = std::get_if<OutClass>(&j->second)){
+                OutClass out = *p;
+                Atom a = mkChild(out);
 
             }
             if(auto p = std::get_if<Field>(&j->second)){

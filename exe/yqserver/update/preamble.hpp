@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/update/preamble.hpp>
+#include <mithril/update/dependency.hpp>
+
 #include <0/basic/preamble.hpp>
 #include <0/basic/Flags.hpp>
 #include <0/math/Counter.hpp>
@@ -17,57 +20,14 @@
 #include <mithril/update/AllLocal.hpp>
 #include <mithril/update/ById.hpp>
 #include <mithril/update/U.hpp>
-#include <unordered_map>
-
-// Use to set echo steps
-
-/*
-    A rather annoying macro, if defined, set the logger 
-    output to log out *EVERY* call to an update routine
-*/
-#if !defined(NDEBUG)
-    //#define YQ_UPDATE_ECHO_STEPS        yNotice()
-#endif
-
-namespace yq::mithril {
-    struct Field;
-    struct FileSpec;
-}
 
 namespace yq::mithril::update {
 
-    using HopCount              = HCountI8;
-    using hop_t                 = int8_t;
+    using OutClass  = dependency::Outbound<Class>;
+    using OutField  = dependency::Outbound<Field>;
+    using NodeClass = dependency::Node<Class>;
 
-    using ClassHopMap           = std::map<Class,HopCount>;
-    using FieldHopMap           = std::map<Field,HopCount>;
-
-    struct UClass;
-    struct UField;
-    
-    enum class F {
-        LOCK,
-        NOTIFY,
-        
-        
-        LOAD,
-        INFO,
-        ICON,
-        TAGS     
-    };
-    
-    using FF        = Flags<F>;
-    
-    template <typename T>
-    using AL = AllLocal<T>;
-
-    template <IdType T>
-    struct DD {
-        std::map<T,HopCount>    hop;
-        std::set<T>             all;        //  All (for fields)
-        std::set<T>             direct;
-    };
-    
+#if 0
 
     struct Outbound { 
         Class cls; 
@@ -78,8 +38,9 @@ namespace yq::mithril::update {
         Class cls; 
         constexpr bool operator==(const Node&) const noexcept = default;
     };
+#endif
 
-    using Resolve       = std::variant<std::monostate,Node,Field,Outbound>;
+    using Resolve       = std::variant<std::monostate,NodeClass,Field,OutClass>;
 
     //  ResolveMap *might* become multimap
     using ResolveMap    = std::map<std::string,Resolve,IgCase>;
