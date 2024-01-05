@@ -12,7 +12,7 @@
 #include <update/uCategory.hpp>
 #include <update/uClass.hpp>
 #include <update/uField.hpp>
-#include <update/uImage.hpp>
+#include <mithril/image/ImageUpdate.hpp>
 #include <update/uLeaf.hpp>
 #include <mithril/tag/TagUpdate.hpp>
 

@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include <update/preamble.hpp>
+#include <mithril/update/U.hpp>
+#include <mithril/update/preamble.hpp>
 #include <mithril/fragment/Fragment.hpp>
 #include <mithril/image/Image.hpp>
 

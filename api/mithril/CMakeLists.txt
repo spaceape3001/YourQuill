@@ -18,11 +18,14 @@ target_link_libraries(${PROJECT_NAME}
         yqtoolbox
     PRIVATE
         asio
+        ${ImageMagick_LIBRARIES}
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/..
+    PRIVATE
+        ${ImageMagick_INCLUDE_DIRS}
 )
 
 target_compile_definitions(${PROJECT_NAME}

@@ -148,6 +148,7 @@
 #include "image/ImageCDB.ipp"
 #include "image/ImageHtml.ipp"
 #include "image/ImagePost.ipp"
+#include "image/ImageUpdate.ipp"
 
 #include "io/StdFile.ipp"
 #include "io/StdObject.ipp"

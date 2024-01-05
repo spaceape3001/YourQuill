@@ -12,7 +12,7 @@
 #define MAGICKCORE_HDRI_ENABLE MAGICKCORE_HDRI_ENABLE_OBSOLETE_IN_H
 #include <Magick++.h>
 
-#include "uImage.hpp"
+#include <mithril/image/ImageUpdate.hpp>
 
 #include <0/basic/BasicApp.hpp>
 #include <0/basic/Logging.hpp>
