@@ -212,11 +212,14 @@
 #include "tag/TagHtml.ipp"
 #include "tag/TagPost.ipp"
 #include "tag/TagProvider.ipp"
+#include "tag/TagUpdate.ipp"
 
 //#include "thing/ThingArg.ipp"
 #include "thing/ThingCDB.ipp"
 #include "thing/ThingHtml.ipp"
 //#include "thing/ThingPost.ipp"
+
+#include "update/U.hxx"
 
 #include "user/UserArg.ipp"
 #include "user/UserCDB.ipp"

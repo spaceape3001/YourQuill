@@ -4,7 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uTag.hpp"
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/folder/FolderCDB.hpp>
@@ -12,6 +11,7 @@
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
+#include <mithril/tag/TagUpdate.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
