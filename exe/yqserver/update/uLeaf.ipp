@@ -4,9 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uDocument.hpp"
 #include "uLeaf.hpp"
+
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/document/DocumentUpdate.hpp>
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>

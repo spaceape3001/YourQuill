@@ -6,8 +6,6 @@
 
 #include <mithril/update/U.hxx>
 
-#include "uDocument.ipp"
-
 #include "uAtom.ipp"
 #include "uClass.ipp"
 #include "uField.ipp"

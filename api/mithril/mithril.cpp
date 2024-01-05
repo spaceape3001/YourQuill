@@ -75,6 +75,7 @@
 #include "document/DocumentHtml.ipp"
 #include "document/DocumentPost.ipp"
 #include "document/DocumentProvider.ipp"
+#include "document/DocumentUpdate.ipp"
 
 #include "entity/EntityCDB.ipp"
 

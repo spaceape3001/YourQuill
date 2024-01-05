@@ -6,9 +6,8 @@
 
 #pragma once
 
-#include "uDocument.hpp"
-
 #include <mithril/document/Document.hpp>
+#include <mithril/document/DocumentUpdate.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 

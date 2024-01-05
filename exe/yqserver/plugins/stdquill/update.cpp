@@ -11,6 +11,7 @@
 #include <update/uAtom.hpp>
 #include <mithril/category/CategoryUpdate.hpp>
 #include <update/uClass.hpp>
+#include <mithril/document/DocumentUpdate.hpp>
 #include <update/uField.hpp>
 #include <mithril/image/ImageUpdate.hpp>
 #include <update/uLeaf.hpp>
