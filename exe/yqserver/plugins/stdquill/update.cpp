@@ -9,7 +9,7 @@
 #include "uUser.ipp"
 
 #include <update/uAtom.hpp>
-#include <update/uCategory.hpp>
+#include <mithril/category/CategoryUpdate.hpp>
 #include <update/uClass.hpp>
 #include <update/uField.hpp>
 #include <mithril/image/ImageUpdate.hpp>

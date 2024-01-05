@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uCategory.hpp"
+#include <mithril/category/CategoryUpdate.hpp>
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/file/FileSpec.hpp>

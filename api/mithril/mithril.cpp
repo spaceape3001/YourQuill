@@ -45,6 +45,7 @@
 #include "category/CategoryHtml.ipp"
 #include "category/CategoryPost.ipp"
 #include "category/CategoryProvider.ipp"
+#include "category/CategoryUpdate.ipp"
 
 //#include "character/CharacterArg.ipp"
 #include "character/CharacterCDB.ipp"

@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include <update/preamble.hpp>
+#include <mithril/update/preamble.hpp>
+#include <mithril/update/U.hpp>
 #include <mithril/category/CategoryData.hpp>
 #include <mithril/document/Document.hpp>
 #include <mithril/enum/Change.hpp>

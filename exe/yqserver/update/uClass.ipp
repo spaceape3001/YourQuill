@@ -19,6 +19,7 @@
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
