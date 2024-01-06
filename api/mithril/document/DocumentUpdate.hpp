@@ -12,9 +12,12 @@
 #include <mithril/image/Image.hpp>
 
 namespace yq::mithril::update {
-    class UDocument {
+    class UDocument : public U<Document> {
     public:
         static void u_icon(Document,Image);
+        
+    private:
+        UDocument(Document);
     };
 }
 

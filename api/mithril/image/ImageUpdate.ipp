@@ -83,7 +83,7 @@ namespace yq::mithril::update {
 
     ////////////////////////////////////////////////////////////////////////////
 
-    UImage::UImage(Image img) : x(img), id(img), frag(img.id)
+    UImage::UImage(Image img) : U<Image>(img, {}), frag(img.id)
     {
     }
 

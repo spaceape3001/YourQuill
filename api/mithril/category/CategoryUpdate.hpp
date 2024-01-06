@@ -14,7 +14,8 @@
 #include <mithril/image/Image.hpp>
 
 namespace yq::mithril::update {
-    struct UCategory : public U<Category>{
+    class UCategory : public U<Category>{
+    public:
         static UCategory&                   get(Category t);
         static std::pair<UCategory&, bool>  create(Document);
         static const FileSpec&  lookup();

@@ -12,7 +12,8 @@
 #include <mithril/image/Image.hpp>
 
 namespace yq::mithril::update {
-    struct UImage {
+    class UImage : public U<Image> {
+    public:
         static UImage   get(Image);
         static UImage   get(Fragment);
         
@@ -22,8 +23,6 @@ namespace yq::mithril::update {
     
         UImage(Image);
 
-        const Image     x;
-        const id_t      id;
         const Fragment  frag;
         
         void    u_thumbnail(FF flags={});
