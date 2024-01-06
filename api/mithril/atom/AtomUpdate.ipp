@@ -4,19 +4,18 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "uAtom.hpp"
-#include "uClass.hpp"
-#include "uField.hpp"
-
 #include <0/basic/CollectionUtils.hpp>
 #include <0/basic/Logging.hpp>
 #include <0/basic/TextUtils.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
+#include <mithril/atom/AtomUpdate.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/bit/KeyValue.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/class/ClassUpdate.hpp>
 #include <mithril/field/FieldCDB.hpp>
+#include <mithril/field/FieldUpdate.hpp>
 #include <mithril/io/Strings.hpp>
 #include <mithril/notify/AtomNotifier.hpp>
 #include <mithril/tag/TagCDB.hpp>

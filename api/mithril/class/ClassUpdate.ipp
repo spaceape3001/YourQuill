@@ -6,16 +6,15 @@
 
 #pragma once
 
-#include "uClass.hpp"
-#include "uField.hpp"
-
 #include <0/basic/CollectionUtils.hpp>
 #include <0/basic/TextUtils.hpp>
 
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/class/ClassUpdate.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
+#include <mithril/field/FieldUpdate.hpp>
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>

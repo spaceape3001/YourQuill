@@ -8,8 +8,11 @@
 
 #include <0/basic/Flags.hpp>
 #include <0/math/Counter.hpp>
-#include <mithril/update/AllLocal.hpp>
+
+#include <mithril/field/Field.hpp>
 #include <mithril/id/Id.hpp>
+#include <mithril/update/dependency.hpp>
+#include <mithril/update/AllLocal.hpp>
 
 // Use to set echo steps
 
@@ -58,13 +61,43 @@ namespace yq::mithril::update {
         std::set<T>             direct;
     };
     
-    struct UAtom;
-    struct UClass;
-    struct UField;
-    struct UImage;
-    struct ULeaf;
-    struct UTag;
+    class UAtom;
+    class UCategory;
+    class UClass;
+    class UDirectory;
+    class UDocument;
+    class UField;
+    class UFolder;
+    class UFragment;
+    class UImage;
+    class ULeaf;
+    class UTag;
+    class UUser;
     
+    ////////////////////////////////////////////////////////////////////////////////////
+    //  OLD UPDATE BELOW
 
+    using OutClass  = dependency::Outbound<Class>;
+    using OutField  = dependency::Outbound<Field>;
+    using NodeClass = dependency::Node<Class>;
+
+#if 0
+
+    struct Outbound { 
+        Class cls; 
+        constexpr bool operator==(const Outbound&) const noexcept = default;
+    };
+    
+    struct Node { 
+        Class cls; 
+        constexpr bool operator==(const Node&) const noexcept = default;
+    };
+#endif
+
+    using Resolve       = std::variant<std::monostate,NodeClass,Field,OutClass>;
+
+    //  ResolveMap *might* become multimap
+    using ResolveMap    = std::map<std::string,Resolve,IgCase>;
+    using ResolveMMap   = std::multimap<std::string,Resolve,IgCase>;
 }
 

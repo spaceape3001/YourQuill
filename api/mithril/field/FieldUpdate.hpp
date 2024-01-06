@@ -6,17 +6,19 @@
 
 #pragma once
 
-#include <update/preamble.hpp>
 #include <mithril/document/Document.hpp>
 #include <mithril/field/FieldData.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/tag/Tag.hpp>
+#include <mithril/update/ById.hpp>
+#include <mithril/update/U.hpp>
 
 namespace yq::mithril::update {
 
     using TypeInfoSet   = std::set<const TypeInfo*, ById>;
 
-    struct UField : public U<Field> {
+    class UField : public U<Field> {
+    public:
         static UField&      get(Field f);
         static std::pair<UField&, bool>  create(Document);
         

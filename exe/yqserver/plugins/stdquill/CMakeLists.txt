@@ -19,15 +19,15 @@ add_library( stdquill SHARED ${stdquill_SOURCES} )
 target_include_directories( stdquill 
     PRIVATE 
         . 
-        ${ImageMagick_INCLUDE_DIRS}
+        #${ImageMagick_INCLUDE_DIRS}
 ) 
 target_link_libraries( stdquill 
     PUBLIC 
         yqtoolbox 
-        yqupdate
+        # yqupdate
         mithril
         asio
-        ${ImageMagick_LIBRARIES}
+        #${ImageMagick_LIBRARIES}
 )
 
 LinkTest(stdquill)

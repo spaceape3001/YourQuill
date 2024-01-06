@@ -6,16 +6,17 @@
 
 #pragma once
 
-#include <update/preamble.hpp>
 #include <mithril/atom/Atom.hpp>
 #include <mithril/document/Document.hpp>
 #include <mithril/enum/Change.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/leaf/LeafData.hpp>
 #include <mithril/tag/Tag.hpp>
+#include <mithril/update/U.hpp>
 
 namespace yq::mithril::update {
-    struct ULeaf {
+    class ULeaf {
+    public:
         //static ULeaf&                   get(Leaf);
         //static std::pair<ULeaf&,bool>   create(Document);
 

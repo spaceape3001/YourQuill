@@ -6,13 +6,14 @@
 
 #pragma once
 
-#include <update/preamble.hpp>
+#include <0/basic/Flags.hpp>
+
 #include <mithril/class/ClassData.hpp>
 #include <mithril/document/Document.hpp>
 #include <mithril/field/Field.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/tag/Tag.hpp>
-#include <0/basic/Flags.hpp>
+#include <mithril/update/U.hpp>
 
 namespace yq::mithril::update {
     enum class What {
@@ -20,7 +21,8 @@ namespace yq::mithril::update {
         CLASS
     };
 
-    struct UClass : public U<Class> {
+    class UClass : public U<Class> {
+    public:
     
     
         static UClass&      get(Class);

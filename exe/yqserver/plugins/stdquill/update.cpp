@@ -8,13 +8,13 @@
 #include "uRoot.ipp"
 #include "uUser.ipp"
 
-#include <update/uAtom.hpp>
+#include <mithril/atom/AtomUpdate.hpp>
 #include <mithril/category/CategoryUpdate.hpp>
-#include <update/uClass.hpp>
+#include <mithril/class/ClassUpdate.hpp>
 #include <mithril/document/DocumentUpdate.hpp>
-#include <update/uField.hpp>
+#include <mithril/field/FieldUpdate.hpp>
 #include <mithril/image/ImageUpdate.hpp>
-#include <update/uLeaf.hpp>
+#include <mithril/leaf/LeafUpdate.hpp>
 #include <mithril/tag/TagUpdate.hpp>
 
 //#include <0/basic/BasicApp.hpp>
