@@ -42,11 +42,11 @@
 #include "category/CategoryArg.ipp"
 #include "category/CategoryCDB.ipp"
 #include "category/CategoryData.ipp"
+#include "category/CategoryDiff.hpp"        // syntax check
 #include "category/CategoryFile.ipp"
 #include "category/CategoryHtml.ipp"
 #include "category/CategoryPost.ipp"
 #include "category/CategoryProvider.ipp"
-#include "category/CategoryUpdate.ipp"
 
 //#include "character/CharacterArg.ipp"
 #include "character/CharacterCDB.ipp"
@@ -216,6 +216,7 @@
 #include "tag/TagArg.ipp"
 #include "tag/TagCDB.ipp"
 #include "tag/TagData.ipp"
+#include "tag/TagDiff.hpp"  // syntax check
 #include "tag/TagFile.ipp"
 #include "tag/TagHtml.ipp"
 #include "tag/TagPost.ipp"
@@ -314,6 +315,7 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Value)
 
 
 namespace yq::mithril {
+    template class Notifier<const Category::Diff&>;
     template class Notifier<const Tag::Diff&>;
 }
 
