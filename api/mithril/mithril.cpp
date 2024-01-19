@@ -233,6 +233,7 @@
 #include "user/UserArg.ipp"
 #include "user/UserCDB.ipp"
 #include "user/UserData.ipp"
+#include "user/UserDiff.hpp"
 #include "user/UserFile.ipp"
 #include "user/UserHtml.ipp"
 #include "user/UserPost.ipp"
@@ -319,6 +320,7 @@ namespace yq::mithril {
     template class Notifier<const Category::Diff&>;
     template class Notifier<const Image::Diff&>;
     template class Notifier<const Tag::Diff&>;
+    template class Notifier<const User::Diff&>;
 }
 
 

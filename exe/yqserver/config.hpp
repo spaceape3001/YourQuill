@@ -60,7 +60,7 @@ struct ConfigParams {
     uint16_t            port            = 0;
     
     //! Top level things to not ingest into the scanner system
-    svlist_t            topFolder_exclude = { ".cache", ".db", ".git", ".help", ".img", ".js", ".logs", ".quill", ".svn", ".users", ".yquill" };
+    svlist_t            topFolder_exclude = { ".cache", ".db", ".git", ".help", ".img", ".js", ".logs", ".quill", ".svn", ".yquill" };
     
     ConfigParams();
     ~ConfigParams();

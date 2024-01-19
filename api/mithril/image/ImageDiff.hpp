@@ -20,5 +20,10 @@ namespace yq::mithril {
         
         ContentType     type;
         Changed<Size2U> dim;
+
+        constexpr operator bool() const noexcept 
+        {
+            return type || dim;
+        }
     };
 }

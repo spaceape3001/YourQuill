@@ -17,7 +17,8 @@ CREATE TABLE Users (
     is_owner    INTEGER DEFAULT 0,
     is_admin    INTEGER DEFAULT 0,
     is_writer   INTEGER DEFAULT 0,
-    is_reader   INTEGER DEFAULT 0
+    is_reader   INTEGER DEFAULT 0,
+    is_guest    INTEGER DEFAULT 0
 );
 
 

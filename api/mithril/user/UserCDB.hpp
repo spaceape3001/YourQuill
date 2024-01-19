@@ -22,6 +22,7 @@ namespace yq::mithril {
         bool            is_admin    = false;
         bool            is_writer   = false;
         bool            is_reader   = false;
+        bool            is_guest   = false;
         bool operator==(const Info&) const = default;
     };
 
@@ -69,17 +70,20 @@ namespace yq::mithril::cdb {
     //! User information (one stop)
     User::Info              info(User, bool autoKeyToName=false);
     
-    //! TRUE if user is marked as owner
-    bool                    is_owner(User);
-
     //! TRUE if user is marked as administrator
     bool                    is_admin(User);
 
-    //! TRUE if user is marked as writer
-    bool                    is_writer(User);
+    //! TRUE if user is marked as guest
+    bool                    is_guest(User);
+
+    //! TRUE if user is marked as owner
+    bool                    is_owner(User);
 
     //! TRUE if user is marked as reader
     bool                    is_reader(User);
+
+    //! TRUE if user is marked as writer
+    bool                    is_writer(User);
 
     //! Key of user
     std::string             key(User);

@@ -120,7 +120,7 @@ namespace yq::mithril::cdb {
     User::Info              info(User u, bool autoKeyToName)
     {
         User::Info  ret;
-        static thread_local CacheQuery  s("SELECT k,name,icon,brief,is_admin,is_owner,is_reader,is_writer FROM Users WHERE id=?");
+        static thread_local CacheQuery  s("SELECT k,name,icon,brief,is_admin,is_owner,is_reader,is_writer,is_guest FROM Users WHERE id=?");
         auto s_af = s.af();
         s.bind(1, u.id);
         if(s.step() == SQResult::Row){
@@ -135,6 +135,7 @@ namespace yq::mithril::cdb {
             ret.is_owner    = s.v_bool(6);
             ret.is_reader   = s.v_bool(7);
             ret.is_writer   = s.v_bool(8);
+            ret.is_guest    = s.v_bool(9);
         }
         return ret;
     }
@@ -146,12 +147,18 @@ namespace yq::mithril::cdb {
         return s.boolean(u.id);
     }
     
+    bool                    is_guest(User u)
+    {
+        static thread_local CacheQuery s("SELECT is_guest FROM Users WHERE id=?");
+        return s.boolean(u.id);
+    }
+    
     bool                    is_owner(User u)
     {
         static thread_local CacheQuery s("SELECT is_owner FROM Users WHERE id=?");
         return s.boolean(u.id);
     }
-    
+
     bool                    is_reader(User u)
     {
         static thread_local CacheQuery s("SELECT is_reader FROM Users WHERE id=?");

@@ -45,6 +45,9 @@
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/tag/TagData.hpp>
 #include <mithril/tag/TagDiff.hpp>
+#include <mithril/user/UserCDB.hpp>
+#include <mithril/user/UserData.hpp>
+#include <mithril/user/UserDiff.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
@@ -52,8 +55,7 @@ using namespace yq;
 using namespace yq::mithril;
 
 //#include "uLeaf.ipp"
-#include "uRoot.ipp"
-#include "uUser.ipp"
+//#include "uRoot.ipp"
 
 #include <mithril/atom/AtomUpdate.hpp>
 #include <mithril/class/ClassUpdate.hpp>
@@ -196,12 +198,18 @@ namespace {
             }
             
             Document doc    = cdb::document(t);
-            auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
-            
-            x.icon.to       = cdb::best_image(doc);
-            x.name.to       = std::move(def->name);
-            x.brief.to      = std::move(def->brief);
-            x.notes         = std::move(def->notes);
+            if(chg != Change::Removed){
+                auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
+                if(!def){
+                    yInfo() << "Category " << x.key << " cannot be read.";
+                    return;
+                }
+                
+                x.icon.to       = cdb::best_image(doc);
+                x.name.to       = std::move(def->name);
+                x.brief.to      = std::move(def->brief);
+                x.notes         = std::move(def->notes);
+            }
 
             static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
             static thread_local CacheQuery uCategoryInfo("UPDATE Categories SET name=?,icon=?,brief=? WHERE id=?");
@@ -230,6 +238,14 @@ namespace {
                     sq.exec(t.id);
             }
         }
+
+        void    s3_category(Document doc)
+        {
+            bool        created     = false;
+            Category x       = cdb::db_category(doc, &created);
+            u_category(x, Change::Added);
+        }
+        
 
         void    s5_category(Fragment f, Change chg)
         {
@@ -260,13 +276,6 @@ namespace {
             if(!x)
                 return ;
             u_category(x, Change::Modified);
-        }
-        
-        void    s3_category(Document doc)
-        {
-            bool        created     = false;
-            Category x       = cdb::db_category(doc, &created);
-            u_category(x, Change::Added);
         }
         
     
@@ -533,15 +542,6 @@ namespace {
                 x.brief.from    = std::move(ii.brief);
             }
             
-            Document doc    = cdb::document(t);
-            auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
-            
-            x.icon.to       = cdb::best_image(doc);
-            x.name.to       = std::move(def->name);
-            x.leaf.to       = cdb::leaf(def->leaf);
-            x.brief.to      = std::move(def->brief);
-            x.notes         = std::move(def->notes);
-
             static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
             static thread_local CacheQuery uTagInfo("UPDATE Tags SET name=?,icon=?,leaf=?,brief=? WHERE id=?");
             static thread_local CacheQuery xTagStmts[] = {
@@ -551,11 +551,24 @@ namespace {
                 CacheQuery( "DELETE FROM Tags WHERE id=?" )
             };
 
+            Document doc    = cdb::document(t);
             if(chg != Change::Removed){
+                auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
+                if(!def){
+                    yInfo() << "Tag " << x.key << " cannot be read.";
+                    return;
+                }
+                
+                x.icon.to       = cdb::best_image(doc);
+                x.name.to       = std::move(def->name);
+                x.leaf.to       = cdb::leaf(def->leaf);
+                x.brief.to      = std::move(def->brief);
+                x.notes         = std::move(def->notes);
+
+                if(x.icon)
+                    uDocIcon.exec(x.icon.to.id, doc.id);
+
                 if(x){
-                    if(x.icon)
-                        uDocIcon.exec(x.icon.to.id, doc.id);
-                    
                     uTagInfo.bind(1, x.name.to);
                     uTagInfo.bind(2, x.icon.to.id);
                     uTagInfo.bind(3, x.leaf.to.id);
@@ -571,6 +584,21 @@ namespace {
                 for(auto& sq : xTagStmts)
                     sq.exec(t.id);
             }
+        }
+
+        void    s3_tag(Document doc)
+        {
+            bool        created     = false;
+            Tag x       = cdb::db_tag(doc, &created);
+            u_tag(x, Change::Added);
+        }
+        
+        void    s3_tag_leaf(Document doc)
+        {
+            Tag    x   = cdb::tag(doc);
+            if(!x)
+                return ;
+            u_tag(x, Change::Modified);
         }
 
         void    s5_tag(Fragment f, Change chg)
@@ -604,21 +632,118 @@ namespace {
             u_tag(x, Change::Modified);
         }
         
-        void    s3_tag(Document doc)
+        
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  USER
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+        void    u_user(User u, Change chg)
+        {
+            User::Diff   x { 
+                .x = u, 
+                .chg = chg, 
+                .key = cdb::key(u)
+            };
+            
+            if(chg != Change::Added){
+                User::Info       ii  = cdb::info(u);
+                x.icon.from     = ii.icon;
+                x.name.from     = std::move(ii.name);
+                x.brief.from    = std::move(ii.brief);
+                x.owner.from    = ii.is_owner;
+                x.admin.from    = ii.is_admin;
+                x.writer.from   = ii.is_writer;
+                x.reader.from   = ii.is_reader;
+                x.guest.from    = ii.is_guest;
+            }
+            
+            static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+            static thread_local CacheQuery uInfo("UPDATE Users SET name=?,icon=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=?,is_guest=? WHERE id=?");
+
+            Document    doc     = cdb::document(u);
+            if(chg != Change::Removed){
+                auto def        = cdb::merged(u, cdb::DONT_LOCK|cdb::IS_UPDATE);
+                if(!def){
+                    yInfo() << "User " << x.key << " cannot be read.";
+                    return;
+                }
+                
+                x.icon.to       = cdb::best_image(doc);
+                x.name.to       = std::move(def->name);
+                x.brief.to      = std::move(def->brief);
+                x.owner.to      = def->permissions(Permission::Owner);
+                x.admin.to      = def->permissions(Permission::Admin);
+                x.writer.to     = def->permissions(Permission::Writer);
+                x.reader.to     = def->permissions(Permission::Reader);
+                x.guest.to      = def->permissions(Permission::Guest);
+                
+                if(x.icon)
+                    uDocIcon.exec(x.icon.to.id, doc.id);
+                
+                if(x){
+                    uInfo.bind(1, x.name.to);
+                    uInfo.bind(2, x.icon.to.id);
+                    uInfo.bind(3, x.brief.to);
+                    uInfo.bind(4, x.owner.to);
+                    uInfo.bind(5, x.admin.to);
+                    uInfo.bind(6, x.writer.to);
+                    uInfo.bind(7, x.reader.to);
+                    uInfo.bind(8, x.guest.to);
+                    uInfo.bind(9, u.id);
+                    uInfo.exec();
+                }
+            }
+            
+            User::Notify::notify(x);
+            
+            static thread_local CacheQuery xUserStmts[] = {
+                CacheQuery( "DELETE FROM Users WHERE id=?" )
+            };
+
+            if(chg == Change::Removed){
+                for(auto& sq : xUserStmts)
+                    sq.exec(u.id);
+            }
+        }
+        
+        void    s3_user(Document doc)
         {
             bool        created     = false;
-            Tag x       = cdb::db_tag(doc, &created);
-            u_tag(x, Change::Added);
+            User x       = cdb::db_user(doc, &created);
+            u_user(x, Change::Added);
         }
         
-        void    s3_tag_leaf(Document doc)
+        void    s5_user(Fragment frag, Change chg)
         {
-            Tag    x   = cdb::tag(doc);
+            Document    doc = cdb::document(frag);
+            if(chg == Change::Removed){
+                if(cdb::fragments_count(doc) <= 1){
+                    User x = cdb::user(doc);
+                    if(x){
+                        u_user(x, Change::Removed);
+                    }
+                    return ;
+                }
+                
+                chg = Change::Modified;
+            }
+            
+            bool        created     = false;
+            User x       = cdb::db_user(doc, &created);
+            if(created){
+                u_user(x, Change::Added);
+            } else
+                u_user(x, Change::Modified);
+        }
+        
+        void    s5_user_icons(Fragment frag, Change chg)
+        {
+            User    x   = cdb::user(cdb::document(frag), true);
             if(!x)
                 return ;
-            u_tag(x, Change::Modified);
+            u_user(x, Change::Modified);
         }
-        
+    
     
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -648,7 +773,7 @@ namespace {
                 //  Organization & users
             on_stage3<s3_category>(FileSpec(CACHE, cdb::categories_folder(), "*.cat"));
             on_stage3<s3_tag>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
-            on_stage3<u_user_stage3>(by_cache(users_folder(), "*.user"));
+            on_stage3<s3_user>(FileSpec(CACHE, cdb::users_folder(), "*.user"));
             
                 //  Classes & fields
             on_stage3<UClass::s3>(UClass::lookup());
@@ -695,7 +820,7 @@ namespace {
             on_change<UField::notify>(UField::lookup());
             on_change<ULeaf::notify>(ULeaf::lookup());
             on_change<s5_tag>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
-            on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
+            on_change<s5_user>(FileSpec(CACHE, cdb::users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
                 on_change<s5_category_icons>(by_cache(categories_folder(), z));
@@ -703,7 +828,7 @@ namespace {
                 on_change<UField::icons>(by_cache(fields_folder(), z));
                 on_change<ULeaf::icons>(by_cache(z));
                 on_change<s5_tag_icons>(FileSpec(CACHE, tags_folder(), z));
-                on_change<u_user_notify_icons>(by_cache(users_folder(), z));
+                on_change<s5_user_icons>(FileSpec(CACHE, users_folder(), z));
             }
         }
 

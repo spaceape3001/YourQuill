@@ -18,9 +18,12 @@ namespace yq::mithril {
         static constexpr const char*    EXTENSION = "user";
         struct Info;
         struct Data;
+        struct Diff;
         class File;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
+        
+        using Notify    = Notifier<const Diff&>;
         
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const User&rhs) const noexcept = default;
