@@ -57,6 +57,8 @@ namespace yq::mithril {
     struct User;
 
     template <typename F, typename T> struct Connection;
+    template <typename...>  class Notifier;
+    template <typename> struct Changed;
 
     struct NKI;
 

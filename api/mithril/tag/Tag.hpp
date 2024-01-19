@@ -18,13 +18,18 @@ namespace yq::mithril {
         
         struct Info;
         struct Data;
+        struct Delta;
+        
         class File;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
         
+        
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Tag&rhs) const noexcept = default;
         constexpr operator uint64_t() const noexcept { return id; }
+
+        using Notify    = Notifier<Tag, const Delta&>;
     };
 }
 

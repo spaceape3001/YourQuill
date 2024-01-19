@@ -180,6 +180,7 @@
 #include "notify/FunctionalNotifier.ipp"
 #include "notify/FunctionalStage4.ipp"
 #include "notify/FileNotifier.ipp"
+#include "notify/Notifier.hxx"
 #include "notify/Stage2.ipp"
 #include "notify/Stage3.ipp"
 #include "notify/Stage4.ipp"

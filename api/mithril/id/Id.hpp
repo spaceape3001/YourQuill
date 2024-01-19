@@ -84,6 +84,7 @@ namespace yq::mithril {
         static Repo& repo();
         
         class  Lock;
+        
     
         //  ..............................
     
@@ -106,7 +107,7 @@ namespace yq::mithril {
         std::string         name() const;
 
         constexpr auto operator<=>(const Id&) const noexcept = default;
-        
+
         template <IdType S>
         S   as() const noexcept
         {
@@ -114,6 +115,7 @@ namespace yq::mithril {
         }
         Lock        lock(bool rw=false) const;
     };
+
 
 
     using IdProvider    = std::function<std::vector<Id>()>;
