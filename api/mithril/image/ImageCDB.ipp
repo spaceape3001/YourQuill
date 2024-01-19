@@ -177,6 +177,20 @@ namespace yq::mithril::cdb {
         return bytes(img, sz);
     }
 
+    Image::Info         info(Image img)
+    {
+        static thread_local CacheQuery s("SELECT type, width, height FROM Images WHERE id=?");
+        auto s_af = s.af();
+        s.bind(1, img.id);
+        Image::Info     ret{};
+        if(s.step() == SQResult::Row){
+            ret.type    = ContentType( s.v_int(1) );
+            ret.dim.x   = s.v_int(2);
+            ret.dim.y   = s.v_int(3);
+        }
+        return ret;
+    }
+
     bool                is_raster(ContentType ct)
     {
         switch(ct){

@@ -10,12 +10,19 @@
 #include <mithril/enum/SizeDesc.hpp>
 #include <mithril/image/Image.hpp>
 #include <0/basic/ContentType.hpp>
+#include <0/math/shape/Size2.hpp>
 
 
 namespace yq {
     class ByteArray;
     namespace mithril {
         struct Thumbnail;
+        
+        struct Image::Info {
+            Document        doc;
+            Size2U          dim;
+            ContentType     type;
+        };
         
         namespace cdb {
                 //! Returns a vector of all images in the cache
@@ -68,6 +75,8 @@ namespace yq {
 
                 //! Returns an image from a document, if it already exists in the cache
             Image                   image(uint64_t);
+            
+            Image::Info             info(Image);
 
                 //! TRUE if it's a raster type
             bool                    is_raster(ContentType);

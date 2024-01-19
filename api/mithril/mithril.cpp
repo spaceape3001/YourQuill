@@ -151,9 +151,10 @@
 
 #include "image/ImageArg.ipp"
 #include "image/ImageCDB.ipp"
+#include "image/ImageDiff.hpp"  // syntax check
 #include "image/ImageHtml.ipp"
 #include "image/ImagePost.ipp"
-#include "image/ImageUpdate.ipp"
+//#include "image/ImageUpdate.ipp"
 
 #include "io/StdFile.ipp"
 #include "io/StdObject.ipp"
@@ -316,6 +317,7 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Value)
 
 namespace yq::mithril {
     template class Notifier<const Category::Diff&>;
+    template class Notifier<const Image::Diff&>;
     template class Notifier<const Tag::Diff&>;
 }
 

@@ -4,6 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <MagickCore/magick-baseconfig.h>
+//  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning
+#define MAGICKCORE_QUANTUM_DEPTH MAGICKCORE_QUANTUM_DEPTH_OBSOLETE_IN_H
+#define MAGICKCORE_HDRI_ENABLE MAGICKCORE_HDRI_ENABLE_OBSOLETE_IN_H
+#include <Magick++.h>
+
+#include <0/basic/BasicApp.hpp>
 #include <0/basic/DelayInit.hpp>
 #include <0/basic/Logging.hpp>
 #include <0/basic/TextUtils.hpp>
@@ -13,6 +20,7 @@
 #include <0/io/StreamOps.hpp>
 #include <0/io/stream/Bytes.hpp>
 #include <0/io/stream/Text.hpp>
+#include <0/math/shape/Size2.hxx>
 
 #include <mithril/category/Category.hpp>
 #include <mithril/category/CategoryCDB.hpp>
@@ -23,7 +31,9 @@
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/graphviz/GraphvizBuilder.hpp>
+#include <mithril/image/Image.hpp>
 #include <mithril/image/ImageCDB.hpp>
+#include <mithril/image/ImageDiff.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/notify/FileWatch.hpp>
 #include <mithril/notify/FileNotifyAdapters.hpp>
@@ -49,7 +59,6 @@ using namespace yq::mithril;
 #include <mithril/class/ClassUpdate.hpp>
 #include <mithril/document/DocumentUpdate.hpp>
 #include <mithril/field/FieldUpdate.hpp>
-#include <mithril/image/ImageUpdate.hpp>
 #include <mithril/leaf/LeafUpdate.hpp>
 
 //#include <0/basic/BasicApp.hpp>
@@ -171,96 +180,95 @@ namespace {
     //  CATEGORY
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    void    u_category(Category t, Change chg)
-    {
-        Category::Diff   x { 
-            .x = t, 
-            .chg = chg, 
-            .key = cdb::key(t)
-        };
-        
-        if(chg != Change::Added){
-            Category::Info ii  = cdb::info(t);
-            x.icon.from     = ii.icon;
-            x.name.from     = std::move(ii.name);
-            x.brief.from    = std::move(ii.brief);
-        }
-        
-        Document doc    = cdb::document(t);
-        auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
-        
-        x.icon.to       = cdb::best_image(doc);
-        x.name.to       = std::move(def->name);
-        x.brief.to      = std::move(def->brief);
-        x.notes         = std::move(def->notes);
-
-        static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
-        static thread_local CacheQuery uCategoryInfo("UPDATE Categories SET name=?,icon=?,brief=? WHERE id=?");
-        static thread_local CacheQuery xCategoryStmts[] = {
-            CacheQuery( "UPDATE Classes SET category=0 WHERE category=?" ),
-            CacheQuery( "DELETE FROM Categories WHERE id=?" )
-        };
-
-        if(chg != Change::Removed){
-            if(x){
-                if(x.icon)
-                    uDocIcon.exec(x.icon.to.id, doc.id);
-                
-                uCategoryInfo.bind(1, x.name.to);
-                uCategoryInfo.bind(2, x.icon.to.id);
-                uCategoryInfo.bind(3, x.brief.to);
-                uCategoryInfo.bind(4, t.id);
-                uCategoryInfo.exec();
-            } 
-        }
-        
-        Category::Notify::notify(x);
-        
-        if(chg == Change::Removed){
-            for(auto& sq : xCategoryStmts)
-                sq.exec(t.id);
-        }
-    }
-
-    void    s5_category(Fragment f, Change chg)
-    {
-        Document    doc = cdb::document(f);
-        if(chg == Change::Removed){
-            if(cdb::fragments_count(doc) <= 1){
-                Category x = cdb::category(doc);
-                if(x){
-                    u_category(x, Change::Removed);
-                }
-                return ;
+        void    u_category(Category t, Change chg)
+        {
+            Category::Diff   x { 
+                .x = t, 
+                .chg = chg, 
+                .key = cdb::key(t)
+            };
+            
+            if(chg != Change::Added){
+                Category::Info ii  = cdb::info(t);
+                x.icon.from     = ii.icon;
+                x.name.from     = std::move(ii.name);
+                x.brief.from    = std::move(ii.brief);
             }
             
-            chg = Change::Modified;
+            Document doc    = cdb::document(t);
+            auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
+            
+            x.icon.to       = cdb::best_image(doc);
+            x.name.to       = std::move(def->name);
+            x.brief.to      = std::move(def->brief);
+            x.notes         = std::move(def->notes);
+
+            static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+            static thread_local CacheQuery uCategoryInfo("UPDATE Categories SET name=?,icon=?,brief=? WHERE id=?");
+            static thread_local CacheQuery xCategoryStmts[] = {
+                CacheQuery( "UPDATE Classes SET category=0 WHERE category=?" ),
+                CacheQuery( "DELETE FROM Categories WHERE id=?" )
+            };
+
+            if(chg != Change::Removed){
+                if(x){
+                    if(x.icon)
+                        uDocIcon.exec(x.icon.to.id, doc.id);
+                    
+                    uCategoryInfo.bind(1, x.name.to);
+                    uCategoryInfo.bind(2, x.icon.to.id);
+                    uCategoryInfo.bind(3, x.brief.to);
+                    uCategoryInfo.bind(4, t.id);
+                    uCategoryInfo.exec();
+                } 
+            }
+            
+            Category::Notify::notify(x);
+            
+            if(chg == Change::Removed){
+                for(auto& sq : xCategoryStmts)
+                    sq.exec(t.id);
+            }
+        }
+
+        void    s5_category(Fragment f, Change chg)
+        {
+            Document    doc = cdb::document(f);
+            if(chg == Change::Removed){
+                if(cdb::fragments_count(doc) <= 1){
+                    Category x = cdb::category(doc);
+                    if(x){
+                        u_category(x, Change::Removed);
+                    }
+                    return ;
+                }
+                
+                chg = Change::Modified;
+            }
+            
+            bool        created     = false;
+            Category x       = cdb::db_category(doc, &created);
+            if(created){
+                u_category(x, Change::Added);
+            } else
+                u_category(x, Change::Modified);
         }
         
-        bool        created     = false;
-        Category x       = cdb::db_category(doc, &created);
-        if(created){
-            u_category(x, Change::Added);
-        } else
+        void    s5_category_icons(Fragment f, Change chg)
+        {
+            Category    x   = cdb::category(cdb::document(f), true);
+            if(!x)
+                return ;
             u_category(x, Change::Modified);
-    }
-    
-    void    s5_category_icons(Fragment f, Change chg)
-    {
-        Category    x   = cdb::category(cdb::document(f), true);
-        if(!x)
-            return ;
-        u_category(x, Change::Modified);
-    }
-    
-    void    s3_category(Document doc)
-    {
-        bool        created     = false;
-        Category x       = cdb::db_category(doc, &created);
-        u_category(x, Change::Added);
-    }
-    
+        }
+        
+        void    s3_category(Document doc)
+        {
+            bool        created     = false;
+            Category x       = cdb::db_category(doc, &created);
+            u_category(x, Change::Added);
+        }
+        
     
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  CLASS
@@ -360,111 +368,257 @@ namespace {
         }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  IMAGE
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Size2U    size_for(const Magick::Geometry& sz)
+        {
+            return { (unsigned) sz.width(), (unsigned) sz.height() };
+        }
+        
+        Size2U    u_thumbnail(Image x)
+        {
+            if(!x)
+                return ZERO;
+            if(!cdb::is_raster(x))
+                return ZERO;
+            
+            Magick::Blob            bS, bM, bL;
+            Size2U                  isize;
+            
+            static thread_local CacheQuery u("UPDATE Images SET small=?,medium=?,large=?,width=?,height=? WHERE id=?");
+            auto u_af = u.af();
+            
+            Fragment                frag    = cdb::fragment(x);
+            std::filesystem::path   fp  = cdb::path(frag);
+            cdb::update(frag);
+            
+            try {
+                Magick::Image theImage( fp.string());
+                
+                std::string magickString    = theImage.magick();    // needed for saving
+
+                isize          = size_for(theImage.size());
+                Size2U ssize   = shrink_to_fit_within(isize, Image::kSmall);
+                Size2U msize   = shrink_to_fit_within(isize, Image::kMedium);
+                Size2U lsize   = shrink_to_fit_within(isize, Image::kLarge);
+                
+                if(ssize != isize){
+                    Magick::Image   imgSmall    = theImage;
+                    imgSmall.resize(Magick::Geometry(ssize.x, ssize.y));
+                    imgSmall.write(&bS);
+                } else
+                    theImage.write(&bS);
+
+                if(msize != isize){
+                    Magick::Image   imgMedium   = theImage;
+                    imgMedium.resize(Magick::Geometry(msize.x, msize.y));
+                    imgMedium.write(&bM);
+                } else
+                    theImage.write(&bM);
+                
+                if(lsize != isize){
+                    Magick::Image   imgLarge    = theImage;
+                    imgLarge.resize(Magick::Geometry(lsize.x, lsize.y));
+                    imgLarge.write(&bL);
+                } else
+                    theImage.write(&bL);
+            }
+            catch( Magick::Exception& error_)
+            {
+                yError()  << "Caught exception: " << error_.what();
+                return {};
+            }
+            
+            if(bS.length() != 0)
+                u.bind(1, bS.data(), bS.length());
+            else
+                u.bind(1);
+            if(bM.length() != 0)
+                u.bind(2, bM.data(), bM.length());
+            else
+                u.bind(2);
+            if(bL.length() != 0)
+                u.bind(3, bL.data(), bL.length());
+            else
+                u.bind(3);
+            u.bind(4, (int) isize.x);
+            u.bind(5, (int) isize.y);
+            u.bind(6, x.id);
+            u.exec();
+
+            return isize;
+        }
+        
+        void    u_image(Image v, Change chg)
+        {
+            static thread_local CacheQuery xImage[] = {
+                CacheQuery("UPDATE Atoms SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Categories SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Classes SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Documents SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Fields SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Leafs SET icon=0 WHERE icon=?"),
+                CacheQuery("UPDATE Tags SET icon=0 WHERE icon=?"),
+                CacheQuery("DELETE FROM Images WHERE id=?")
+            };
+        
+            Image::Diff     x{.x = v, .chg = chg};
+            
+            if(chg != Change::Added){
+                Image::Info     ii  = cdb::info(v);
+                x.type              = ii.type;
+                x.dim.from          = ii.dim;
+            }
+            
+            if(chg != Change::Removed)
+                x.dim.to            = u_thumbnail(v);
+
+            Image::Notify::notify(x);
+        
+            if(chg == Change::Removed){
+                for(auto& sq : xImage)
+                    sq.exec(v.id);
+            }
+        }
+        
+
+        void    s2_image()
+        {
+            Magick::InitializeMagick( BasicApp::app_name().data());
+        }
+        
+        void    s3_image(Document doc)
+        {
+            for(Fragment frag : cdb::fragments(doc))
+                u_image(cdb::db_image(frag), Change::Added);
+        }
+
+        void    s5_image(Fragment frag, Change chg)
+        {
+            Image   v;
+            switch(chg){
+            case Change::Added:
+            case Change::Modified:
+                u_image(cdb::db_image(frag), chg);
+                break;
+            case Change::Removed:
+                v   = cdb::image(frag);
+                if(v)
+                    u_image(v, chg);
+                break;
+            default:
+                break;
+            }
+        }
+
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  TAG
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    void    u_tag(Tag t, Change chg)
-    {
-        Tag::Diff   x { 
-            .x = t, 
-            .chg = chg, 
-            .key = cdb::key(t)
-        };
-        
-        if(chg != Change::Added){
-            Tag::Info       ii  = cdb::info(t);
-            x.leaf.from     = ii.leaf;
-            x.icon.from     = ii.icon;
-            x.name.from     = std::move(ii.name);
-            x.brief.from    = std::move(ii.brief);
-        }
-        
-        Document doc    = cdb::document(t);
-        auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
-        
-        x.icon.to       = cdb::best_image(doc);
-        x.name.to       = std::move(def->name);
-        x.leaf.to       = cdb::leaf(def->leaf);
-        x.brief.to      = std::move(def->brief);
-        x.notes         = std::move(def->notes);
-
-        static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
-        static thread_local CacheQuery uTagInfo("UPDATE Tags SET name=?,icon=?,leaf=?,brief=? WHERE id=?");
-        static thread_local CacheQuery xTagStmts[] = {
-            CacheQuery( "DELETE FROM CTags WHERE tag=?" ),
-            CacheQuery( "DELETE FROM FTags WHERE tag=?" ),
-            CacheQuery( "DELETE FROM LTags WHERE tag=?" ),
-            CacheQuery( "DELETE FROM Tags WHERE id=?" )
-        };
-
-        if(chg != Change::Removed){
-            if(x){
-                if(x.icon)
-                    uDocIcon.exec(x.icon.to.id, doc.id);
-                
-                uTagInfo.bind(1, x.name.to);
-                uTagInfo.bind(2, x.icon.to.id);
-                uTagInfo.bind(3, x.leaf.to.id);
-                uTagInfo.bind(4, x.brief.to);
-                uTagInfo.bind(5, t.id);
-                uTagInfo.exec();
-            } 
-        }
-        
-        Tag::Notify::notify(x);
-        
-        if(chg == Change::Removed){
-            for(auto& sq : xTagStmts)
-                sq.exec(t.id);
-        }
-    }
-
-    void    s5_tag(Fragment f, Change chg)
-    {
-        Document    doc = cdb::document(f);
-        if(chg == Change::Removed){
-            if(cdb::fragments_count(doc) <= 1){
-                Tag x = cdb::find_tag(doc);
-                if(x){
-                    u_tag(x, Change::Removed);
-                }
-                return ;
+        void    u_tag(Tag t, Change chg)
+        {
+            Tag::Diff   x { 
+                .x = t, 
+                .chg = chg, 
+                .key = cdb::key(t)
+            };
+            
+            if(chg != Change::Added){
+                Tag::Info       ii  = cdb::info(t);
+                x.leaf.from     = ii.leaf;
+                x.icon.from     = ii.icon;
+                x.name.from     = std::move(ii.name);
+                x.brief.from    = std::move(ii.brief);
             }
             
-            chg = Change::Modified;
+            Document doc    = cdb::document(t);
+            auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
+            
+            x.icon.to       = cdb::best_image(doc);
+            x.name.to       = std::move(def->name);
+            x.leaf.to       = cdb::leaf(def->leaf);
+            x.brief.to      = std::move(def->brief);
+            x.notes         = std::move(def->notes);
+
+            static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+            static thread_local CacheQuery uTagInfo("UPDATE Tags SET name=?,icon=?,leaf=?,brief=? WHERE id=?");
+            static thread_local CacheQuery xTagStmts[] = {
+                CacheQuery( "DELETE FROM CTags WHERE tag=?" ),
+                CacheQuery( "DELETE FROM FTags WHERE tag=?" ),
+                CacheQuery( "DELETE FROM LTags WHERE tag=?" ),
+                CacheQuery( "DELETE FROM Tags WHERE id=?" )
+            };
+
+            if(chg != Change::Removed){
+                if(x){
+                    if(x.icon)
+                        uDocIcon.exec(x.icon.to.id, doc.id);
+                    
+                    uTagInfo.bind(1, x.name.to);
+                    uTagInfo.bind(2, x.icon.to.id);
+                    uTagInfo.bind(3, x.leaf.to.id);
+                    uTagInfo.bind(4, x.brief.to);
+                    uTagInfo.bind(5, t.id);
+                    uTagInfo.exec();
+                } 
+            }
+            
+            Tag::Notify::notify(x);
+            
+            if(chg == Change::Removed){
+                for(auto& sq : xTagStmts)
+                    sq.exec(t.id);
+            }
+        }
+
+        void    s5_tag(Fragment f, Change chg)
+        {
+            Document    doc = cdb::document(f);
+            if(chg == Change::Removed){
+                if(cdb::fragments_count(doc) <= 1){
+                    Tag x = cdb::find_tag(doc);
+                    if(x){
+                        u_tag(x, Change::Removed);
+                    }
+                    return ;
+                }
+                
+                chg = Change::Modified;
+            }
+            
+            bool        created     = false;
+            Tag x       = cdb::db_tag(doc, &created);
+            if(created){
+                u_tag(x, Change::Added);
+            } else
+                u_tag(x, Change::Modified);
         }
         
-        bool        created     = false;
-        Tag x       = cdb::db_tag(doc, &created);
-        if(created){
-            u_tag(x, Change::Added);
-        } else
+        void    s5_tag_icons(Fragment f, Change chg)
+        {
+            Tag    x   = cdb::find_tag(cdb::document(f), true);
+            if(!x)
+                return ;
             u_tag(x, Change::Modified);
-    }
-    
-    void    s5_tag_icons(Fragment f, Change chg)
-    {
-        Tag    x   = cdb::find_tag(cdb::document(f), true);
-        if(!x)
-            return ;
-        u_tag(x, Change::Modified);
-    }
-    
-    void    s3_tag(Document doc)
-    {
-        bool        created     = false;
-        Tag x       = cdb::db_tag(doc, &created);
-        u_tag(x, Change::Added);
-    }
-    
-    void    s3_tag_leaf(Document doc)
-    {
-        Tag    x   = cdb::tag(doc);
-        if(!x)
-            return ;
-        u_tag(x, Change::Modified);
-    }
-    
+        }
+        
+        void    s3_tag(Document doc)
+        {
+            bool        created     = false;
+            Tag x       = cdb::db_tag(doc, &created);
+            u_tag(x, Change::Added);
+        }
+        
+        void    s3_tag_leaf(Document doc)
+        {
+            Tag    x   = cdb::tag(doc);
+            if(!x)
+                return ;
+            u_tag(x, Change::Modified);
+        }
+        
     
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -485,11 +639,11 @@ namespace {
             gSharedPageFile     = wksp::shared(kStdPage);
 
                 //  I wanna get this separate, but for now....
-            on_stage2<UImage::s2>();
+            on_stage2<s2_image>();
             
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_stage3<UImage::s3>(by_cache(z));
+                on_stage3<s3_image>(by_cache(z));
             
                 //  Organization & users
             on_stage3<s3_category>(FileSpec(CACHE, cdb::categories_folder(), "*.cat"));
@@ -525,7 +679,7 @@ namespace {
             
                 // Images change first (for icon changes)
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_change<UImage::notify>(by_cache(z));
+                on_change<s5_image>(by_cache(z));
 
                 // Rest are less order dependent... 
 
