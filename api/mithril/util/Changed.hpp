@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+namespace yq::mithril {
+    template <typename T>
+    struct Changed {
+        T       from;
+        T       to;
+        
+        constexpr operator bool () const noexcept { return from != to; }
+    };
+}

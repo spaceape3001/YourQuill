@@ -11,6 +11,12 @@
 
 namespace yq::mithril {
     template <typename ... Args>
+    struct Notifier<Args...>::Handler {
+        FNExecute           execute = {};
+        Id                  origin  = Id();
+    };
+    
+    template <typename ... Args>
     struct Notifier<Args...>::Repo {
         std::vector<Handler>        handlers;
         
@@ -28,12 +34,18 @@ namespace yq::mithril {
     }
     
     template <typename ... Args>
-    size_t   Notifier<Args...>::add(Handler&&h)
+    size_t   Notifier<Args...>::add(Id i, FNExecute&& fn)
     {
         auto& _r    = repo();
         size_t  s   = _r.handlers.size();
-        _r.handlers.push_back(std::move(h));
+        _r.handlers.push_back({ .execute = std::move(fn), .origin=i });
         return s;
+    }
+    
+    template <typename ... Args>
+    size_t   Notifier<Args...>::add(FNExecute&& fn)
+    {
+        return add(Id(), std::move(fn));
     }
 
     template <typename ... Args>
@@ -55,17 +67,13 @@ namespace yq::mithril {
     }
 
     template <typename ... Args>
-    void     Notifier<Args...>::notify(Change chg, Args...args)
+    void     Notifier<Args...>::notify(Args...args)
     {
         auto& _r    = repo();
         for(auto& h : _r.handlers){
             if(!h.execute)
                 continue;
-            if(!h.change(chg))
-                continue;
-            if(h.trigger && !h.trigger(chg, args...))
-                continue;
-            h.execute(chg, args...);
+            h.execute(args...);
         }
     }
     

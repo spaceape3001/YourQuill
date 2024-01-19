@@ -168,6 +168,8 @@ namespace yq::mithril::cdb {
     */
     bool                    set_notes(Tag, std::string_view, class RootDir* rt=nullptr);
     
+    Tag                     tag(Document);
+    
     //! \brief Tag File (&Data) for fragment
     Tag::SharedFile         tag_doc(Fragment, cdb_options_t opts=0);
 

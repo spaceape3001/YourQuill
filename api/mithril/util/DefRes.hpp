@@ -6,14 +6,14 @@
 
 #pragma once
 
-namespace yq::mithril::update {
-    /*! \brief Used for distinguishing all vs locally defined resources
+namespace yq::mithril {
+    /*! \brief Used for distinguishing defined vs resolved resources
     */
     template <typename T>
-    struct AllLocal {
-        T   all;
-        T   local;
+    struct DefRes {
+        T   defined;
+        T   resolved;
         
-        constexpr bool    operator==(const AllLocal&) const noexcept = default;
+        constexpr bool    operator==(const DefRes&) const noexcept = default;
     };
 }

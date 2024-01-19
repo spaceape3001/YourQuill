@@ -14,22 +14,17 @@ namespace yq::mithril {
     class Notifier {
     public:
         
-        using FNExecute = std::function<void(Change, Args...)>;
-        using FNTrigger = std::function<bool(Change, Args...)>;
+        using FNExecute = std::function<void(Args...)>;
         
-        struct Handler {
-            Id              origin  = {};
-            ChangeFlags     change  = ChangeFlags({ Change::Added, Change::Modified, Change::Removed });
-            FNTrigger       trigger;
-            FNExecute       execute;
-        };
-        
-        static size_t   add(Handler&&);
+        static size_t   add(Id, FNExecute&&);
+        static size_t   add(FNExecute&&);
         static void     erase(size_t);
         static void     erase_all(Id);
-        static void     notify(Change, Args...);
+        static void     notify(Args...);
         
     private:
+    
+        struct Handler;
         struct Repo;
         static Repo& repo();
     };

@@ -9,7 +9,7 @@
 #include <0/meta/TypeInfo.hpp>
 #include <mithril/id/Id.hpp>
 
-namespace yq::mithril::update {
+namespace yq::mithril {
 
     /*! \brief Lookup comparison
     

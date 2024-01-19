@@ -422,6 +422,12 @@ namespace yq::mithril::cdb {
     }
     
 
+    Tag                     tag(Document doc)
+    {
+        if(exists_tag(doc.id))
+            return Tag(doc.id);
+        return Tag();
+    }
 
     Tag::SharedFile      tag_doc(Fragment f, cdb_options_t opts)
     {

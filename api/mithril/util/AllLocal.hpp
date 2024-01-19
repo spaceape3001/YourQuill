@@ -7,11 +7,13 @@
 #pragma once
 
 namespace yq::mithril {
+    /*! \brief Used for distinguishing all vs locally defined resources
+    */
     template <typename T>
-    struct Changed {
-        T       from;
-        T       to;
+    struct AllLocal {
+        T   all;
+        T   local;
         
-        constexpr bool changed() const noexcept { return from != to; }
+        constexpr bool    operator==(const AllLocal&) const noexcept = default;
     };
 }

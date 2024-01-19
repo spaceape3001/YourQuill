@@ -4,6 +4,22 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <mithril/document/DocumentCDB.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/leaf/LeafCDB.hpp>
+#include <mithril/notify/Notifier.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithril/tag/TagCDB.hpp>
+#include <mithril/tag/TagData.hpp>
+#include <mithril/tag/TagDiff.hpp>
+#include <mithril/wksp/CacheQuery.hpp>
+
+using namespace yq;
+using namespace yq::mithril;
+
+#include "uTag.ipp"
+
 //#include "uLeaf.ipp"
 #include "uRoot.ipp"
 #include "uUser.ipp"
@@ -15,7 +31,6 @@
 #include <mithril/field/FieldUpdate.hpp>
 #include <mithril/image/ImageUpdate.hpp>
 #include <mithril/leaf/LeafUpdate.hpp>
-#include <mithril/tag/TagUpdate.hpp>
 
 //#include <0/basic/BasicApp.hpp>
 //#include <0/basic/CollectionUtils.hpp>
@@ -59,7 +74,6 @@
 //#include <mithril/tag/TagCDB.hpp>
 //#include <mithril/user/User.hpp>
 //#include <mithril/user/UserCDB.hpp>
-//#include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 #include "common.hpp"
@@ -257,6 +271,8 @@ namespace {
         void reg_me()
         {
             using namespace yq::mithril::cdb;
+            
+            //static constexpr FileSpec   tagsLookup(CACHE, cdb::tags_folder(), "*.tag");
         
             //  -----------------------------------------------
             //  WARNING... the following can be order dependent
@@ -276,7 +292,7 @@ namespace {
             
                 //  Organization & users
             on_stage3<UCategory::s3>(UCategory::lookup());
-            on_stage3<UTag::s3>(UTag::lookup());
+            on_stage3<s3_tag>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
             on_stage3<u_user_stage3>(by_cache(users_folder(), "*.user"));
             
                 //  Classes & fields
@@ -292,7 +308,7 @@ namespace {
 
                 //  LEAFS & atoms
             on_stage3<ULeaf::s3>(ULeaf::lookup());
-            on_stage3<UTag::s3_leaf>(UTag::lookup());
+            on_stage3<s3_tag_leaf>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
 
         
                 //  STAGE 4 global related
@@ -323,7 +339,7 @@ namespace {
             on_change<class_notify>(UClass::lookup());
             on_change<UField::notify>(UField::lookup());
             on_change<ULeaf::notify>(ULeaf::lookup());
-            on_change<UTag::notify>(UTag::lookup());
+            on_change<s5_tag>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
             on_change<u_user_notify>(by_cache(users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
@@ -331,7 +347,7 @@ namespace {
                 on_change<UClass::icons>(by_cache(classes_folder(), z));
                 on_change<UField::icons>(by_cache(fields_folder(), z));
                 on_change<ULeaf::icons>(by_cache(z));
-                on_change<UTag::icons>(by_cache(tags_folder(), z));
+                on_change<s5_tag_icons>(FileSpec(CACHE, tags_folder(), z));
                 on_change<u_user_notify_icons>(by_cache(users_folder(), z));
             }
         }

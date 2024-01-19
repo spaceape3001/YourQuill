@@ -18,7 +18,7 @@ namespace yq::mithril {
         
         struct Info;
         struct Data;
-        struct Delta;
+        struct Diff;
         
         class File;
         using SharedData = std::shared_ptr<Data>;
@@ -29,7 +29,7 @@ namespace yq::mithril {
         constexpr auto    operator<=>(const Tag&rhs) const noexcept = default;
         constexpr operator uint64_t() const noexcept { return id; }
 
-        using Notify    = Notifier<Tag, const Delta&>;
+        using Notify    = Notifier<const Diff&>;
     };
 }
 

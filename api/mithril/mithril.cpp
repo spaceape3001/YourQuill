@@ -220,7 +220,6 @@
 #include "tag/TagHtml.ipp"
 #include "tag/TagPost.ipp"
 #include "tag/TagProvider.ipp"
-#include "tag/TagUpdate.ipp"
 
 //#include "thing/ThingArg.ipp"
 #include "thing/ThingCDB.ipp"
@@ -312,6 +311,11 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Tag)
 YQ_TYPE_IMPLEMENT(yq::mithril::Thing)
 YQ_TYPE_IMPLEMENT(yq::mithril::User)
 YQ_TYPE_IMPLEMENT(yq::mithril::Value)
+
+
+namespace yq::mithril {
+    template class Notifier<const Tag::Diff&>;
+}
 
 
 
