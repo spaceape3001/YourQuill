@@ -11,6 +11,7 @@
 #include "atom/Atom.ipp"
 #include "atom/AtomArg.ipp"
 #include "atom/AtomCDB.ipp"
+#include "atom/AtomDiff.hpp"    // syntax check
 #include "atom/AtomHtml.ipp"
 #include "atom/AtomPost.ipp"
 #include "atom/AtomProvider.ipp"
@@ -58,6 +59,7 @@
 #include "class/ClassArg.ipp"
 #include "class/ClassCDB.ipp"
 #include "class/ClassData.ipp"
+#include "class/ClassDiff.hpp"          // syntax check
 #include "class/ClassFile.ipp"
 #include "class/ClassHtml.ipp"
 #include "class/ClassPost.ipp"
@@ -107,6 +109,7 @@
 #include "field/FieldArg.ipp"
 #include "field/FieldCDB.ipp"
 #include "field/FieldData.ipp"
+#include "field/FieldDiff.hpp"      // syntax check
 #include "field/FieldFile.ipp"
 #include "field/FieldHtml.ipp"
 #include "field/FieldPost.ipp"
@@ -166,6 +169,7 @@
 #include "leaf/LeafArg.ipp"
 #include "leaf/LeafCDB.ipp"
 #include "leaf/LeafData.ipp"
+#include "leaf/LeafDiff.hpp"    // syntax check
 #include "leaf/LeafFile.ipp"
 #include "leaf/LeafHtml.ipp"
 #include "leaf/LeafPost.ipp"
@@ -317,8 +321,12 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Value)
 
 
 namespace yq::mithril {
+    template class Notifier<const Atom::Diff&>;
     template class Notifier<const Category::Diff&>;
+    template class Notifier<const Class::Diff&>;
+    template class Notifier<const Field::Diff&>;
     template class Notifier<const Image::Diff&>;
+    template class Notifier<const Leaf::Diff&>;
     template class Notifier<const Tag::Diff&>;
     template class Notifier<const User::Diff&>;
 }

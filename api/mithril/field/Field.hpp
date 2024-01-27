@@ -29,6 +29,9 @@ namespace yq::mithril {
         class File;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
+        struct Diff;
+        
+        using Notify = Notifier<const Diff&>;
 
         static bool less_key(Field a, Field b);
         static bool less_label(Field a, Field b);

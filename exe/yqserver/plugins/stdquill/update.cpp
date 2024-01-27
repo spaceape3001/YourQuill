@@ -22,12 +22,19 @@
 #include <0/io/stream/Text.hpp>
 #include <0/math/shape/Size2.hxx>
 
+#include <mithril/atom/AtomCDB.hpp>
+#include <mithril/atom/AtomDiff.hpp>
 #include <mithril/category/Category.hpp>
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/category/CategoryData.hpp>
 #include <mithril/category/CategoryDiff.hpp>
 #include <mithril/class/ClassCDB.hpp>
+#include <mithril/class/ClassData.hpp>
+#include <mithril/class/ClassDiff.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/field/FieldCDB.hpp>
+#include <mithril/field/FieldData.hpp>
+#include <mithril/field/FieldDiff.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/graphviz/GraphvizBuilder.hpp>
@@ -35,6 +42,8 @@
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/image/ImageDiff.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
+#include <mithril/leaf/LeafData.hpp>
+#include <mithril/leaf/LeafDiff.hpp>
 #include <mithril/notify/FileWatch.hpp>
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Notifier.hpp>
@@ -57,11 +66,11 @@ using namespace yq::mithril;
 //#include "uLeaf.ipp"
 //#include "uRoot.ipp"
 
-#include <mithril/atom/AtomUpdate.hpp>
-#include <mithril/class/ClassUpdate.hpp>
-#include <mithril/document/DocumentUpdate.hpp>
-#include <mithril/field/FieldUpdate.hpp>
-#include <mithril/leaf/LeafUpdate.hpp>
+//#include <mithril/atom/AtomUpdate.hpp>
+//#include <mithril/class/ClassUpdate.hpp>
+//#include <mithril/document/DocumentUpdate.hpp>
+//#include <mithril/field/FieldUpdate.hpp>
+//#include <mithril/leaf/LeafUpdate.hpp>
 
 //#include <0/basic/BasicApp.hpp>
 //#include <0/basic/CollectionUtils.hpp>
@@ -145,7 +154,7 @@ struct Sigma {
 
 using namespace yq;
 using namespace yq::mithril;
-using namespace yq::mithril::update;
+//using namespace yq::mithril::update;
 //using namespace yq::mithril::cdb;
 
 
@@ -177,6 +186,15 @@ namespace {
     {
         page__();
     }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  ATOMS
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void    s4_atom()
+        {
+            //  assimilate edges
+        }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  CATEGORY
@@ -283,16 +301,131 @@ namespace {
     //  CLASS
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-        void    class_graph_update()
+        void    class_graph_redraw(bool trigger=false)
+        {
+            static bool     s_ready = false;
+            
+            if(!s_ready){
+                if(!trigger)
+                    return ;
+                    
+                s_ready = true;
+            }
+            
+                
+        }
+    
+        void    u_class(Class c, Change chg)
+        {
+            Class::Diff   x { 
+                .x = c, 
+                .chg = chg, 
+                .key = cdb::key(c)
+            };
+            
+            Document doc    = cdb::document(c);
+            
+            if(chg != Change::Added){
+                Class::Info     ii  = cdb::info(c);
+                x.category.from     = ii.category;
+                x.icon.from         = ii.icon;
+                x.name.from         = std::move(ii.name);
+                x.plural.from       = std::move(ii.plural);
+                x.brief.from        = std::move(ii.brief);
+            }
+            
+            if(chg != Change::Removed){
+                auto def        = cdb::merged(c, cdb::DONT_LOCK|cdb::IS_UPDATE);
+                if(!def){
+                    yInfo() << "Class " << x.key << " cannot be read.";
+                    return;
+                }
+
+                x.icon.to           = cdb::best_image(doc);
+                x.category.to       = cdb::category(def->category);
+                x.name.to           = std::move(def->name);
+                x.plural.to         = std::move(def->plural);
+                x.brief.to          = std::move(def->brief);
+                
+                
+            }
+            
+        }
+        
+            //  Classes go differently....
+        
+        void    s3_class(Document doc)
+        {
+            u_class(cdb::db_class(doc), Change::Added);
+        }
+
+        void    s3_class_info(Document doc)
         {
         }
     
-    
-        void    class_notify(Fragment frag,Change chg)
+        void    s3_class_bind(Document doc)
         {
-            UClass::notify(frag, chg);
-            class_graph_update();
         }
+
+        void    s3_class_extend(Document doc)
+        {
+        }
+
+        void    s3_class_derives(Document doc)
+        {
+        }
+
+        void    s3_class_deduce(Document doc)
+        {
+        }
+
+        void    s3_class_propagate(Document doc)
+        {
+        }
+        
+        void    s4_class()
+        {
+            class_graph_redraw();
+            //  sends out notifications?
+        }
+
+        void    s5_class(Fragment frag, Change chg)
+        {
+            Document    doc = cdb::document(frag);
+            if(chg == Change::Removed){
+                if(cdb::fragments_count(doc) <= 1){
+                    Class x = cdb::class_(doc);
+                    if(x){
+                        u_class(x, Change::Removed);
+                    }
+                    return ;
+                }
+                
+                chg = Change::Modified;
+            }
+            
+            bool        created     = false;
+            Class x       = cdb::db_class(doc, &created);
+            if(created){
+                u_class(x, Change::Added);
+            } else
+                u_class(x, Change::Modified);
+        }
+        
+        void    s5_class_icons(Fragment frag, Change chg)
+        {
+            Class    x   = cdb::class_(cdb::document(frag), true);
+            if(!x)
+                return ;
+            u_class(x, Change::Modified);
+        }
+    
+    
+        //void    class_notify(Fragment frag,Change chg)
+        //{
+            //UClass::notify(frag, chg);
+            //class_graph_redraw();
+        //}
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  CSS
@@ -374,6 +507,55 @@ namespace {
         void    css_update()
         {
             css__();
+        }
+
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  FIELD
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void    u_field(Field f, Change chg)
+        {
+            Field::Diff   x { 
+                .x = f, 
+                .chg = chg, 
+                .key = cdb::key(f)
+            };
+            
+        }
+        
+        void    s3_field(Document doc)
+        {
+        }
+        
+        void    s5_field(Fragment frag, Change chg)
+        {
+            Document    doc = cdb::document(frag);
+            if(chg == Change::Removed){
+                if(cdb::fragments_count(doc) <= 1){
+                    Field x = cdb::field(doc);
+                    if(x){
+                        u_field(x, Change::Removed);
+                    }
+                    return ;
+                }
+                
+                chg = Change::Modified;
+            }
+            
+            bool        created     = false;
+            Field x       = cdb::db_field(doc, &created);
+            if(created){
+                u_field(x, Change::Added);
+            } else
+                u_field(x, Change::Modified);
+        }
+
+        void    s5_field_icons(Fragment frag, Change chg)
+        {
+            Field    x   = cdb::field(cdb::document(frag), true);
+            if(!x)
+                return ;
+            u_field(x, Change::Modified);
         }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -521,6 +703,58 @@ namespace {
             }
         }
 
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  LEAF
+    //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void    u_leaf(Leaf l, Change chg)
+        {
+            Leaf::Diff   x { 
+                .x = l, 
+                .chg = chg, 
+                .key = cdb::key(l)
+            };
+            
+            
+        }
+        
+        void    s3_leaf(Document doc)
+        {
+            bool        created     = false;
+            Leaf x       = cdb::db_leaf(doc, &created);
+            u_leaf(x, Change::Added);
+        }
+        
+        void    s5_leaf(Fragment frag, Change chg)
+        {
+            Document    doc = cdb::document(frag);
+            if(chg == Change::Removed){
+                if(cdb::fragments_count(doc) <= 1){
+                    Leaf x = cdb::leaf(doc);
+                    if(x){
+                        u_leaf(x, Change::Removed);
+                    }
+                    return ;
+                }
+                
+                chg = Change::Modified;
+            }
+            
+            bool        created     = false;
+            Leaf x       = cdb::db_leaf(doc, &created);
+            if(created){
+                u_leaf(x, Change::Added);
+            } else
+                u_leaf(x, Change::Modified);
+        }
+
+        void    s5_leaf_icons(Fragment frag, Change chg)
+        {
+            Leaf    x   = cdb::leaf(cdb::document(frag), true);
+            if(!x)
+                return ;
+            u_leaf(x, Change::Modified);
+        }
 
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  TAG
@@ -752,7 +986,12 @@ namespace {
         {
             using namespace yq::mithril::cdb;
             
-            //static constexpr FileSpec   tagsLookup(CACHE, cdb::tags_folder(), "*.tag");
+            const FileSpec   fsCategory(CACHE, cdb::categories_folder(), "*.cat");
+            const FileSpec   fsClass(CACHE, cdb::classes_folder(), "*.cls");
+            const FileSpec   fsField(CACHE, cdb::fields_folder(), "*.fld");
+            const FileSpec   fsLeaf(CACHE, "*.y");
+            const FileSpec   fsTag(CACHE, cdb::tags_folder(), "*.tag");
+            const FileSpec   fsUser(CACHE, cdb::users_folder(), "*.usr");
         
             //  -----------------------------------------------
             //  WARNING... the following can be order dependent
@@ -768,27 +1007,28 @@ namespace {
             
                 // needed first for icon detection
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_stage3<s3_image>(by_cache(z));
+                on_stage3<s3_image>(FileSpec(CACHE, z));
             
                 //  Organization & users
-            on_stage3<s3_category>(FileSpec(CACHE, cdb::categories_folder(), "*.cat"));
-            on_stage3<s3_tag>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
-            on_stage3<s3_user>(FileSpec(CACHE, cdb::users_folder(), "*.user"));
+            on_stage3<s3_category>(fsCategory);
+            on_stage3<s3_tag>(fsTag);
+            on_stage3<s3_user>(fsUser);
             
                 //  Classes & fields
-            on_stage3<UClass::s3>(UClass::lookup());
-            on_stage3<UClass::s3_bind>(UClass::lookup());
-            on_stage3<UClass::s3_extend>(UClass::lookup());
-            on_stage3<UClass::s3_derives>(UClass::lookup());
+            on_stage3<s3_class>(fsClass);
+            on_stage3<s3_class_info>(fsClass);
+            on_stage3<s3_class_bind>(fsClass);
+            on_stage3<s3_class_extend>(fsClass);
+            on_stage3<s3_class_derives>(fsClass);
             
-            on_stage3<UField::s3>(UField::lookup());
+            on_stage3<s3_field>(fsField);
             
-            on_stage3<UClass::s3_deduce>(UClass::lookup());
-            on_stage3<UClass::s3_propagate>(UClass::lookup());
-
+            on_stage3<s3_class_deduce>(fsClass);
+            on_stage3<s3_class_propagate>(fsClass);
+            
                 //  LEAFS & atoms
-            on_stage3<ULeaf::s3>(ULeaf::lookup());
-            on_stage3<s3_tag_leaf>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
+            on_stage3<s3_leaf>(fsLeaf);
+            on_stage3<s3_tag_leaf>(fsTag);
 
         
                 //  STAGE 4 global related
@@ -796,37 +1036,38 @@ namespace {
             on_stage4<css_stage4>();        // <---  Must come AFTER background stage4
             on_stage4<page_stage4>();
 
-            on_stage4<class_graph_update>();
-            on_stage4<UAtom::s4>();
+            on_stage4<s4_class>();
+            //on_stage4<s4_class_graph>();
+            on_stage4<s4_atom>();
             
             
             //on_stage4<u_leaf_stage4_cleanup>();
             
                 // Images change first (for icon changes)
             for(const char* z : Image::kSupportedExtensionWildcards)
-                on_change<s5_image>(by_cache(z));
+                on_change<s5_image>(FileSpec(CACHE, z));
 
                 // Rest are less order dependent... 
 
                 
             on_change<css_update>(FileSpec(gSharedCssFile));
-            on_change<css_update>(by_cache(top_folder(), ".css"));
+            on_change<css_update>(FileSpec(CACHE, top_folder(), ".css"));
 
             on_change<page_update>(FileSpec(gSharedPageFile));
-            on_change<page_update>(by_cache(top_folder(), ".page"));
+            on_change<page_update>(FileSpec(CACHE, top_folder(), ".page"));
                 
             on_change<s5_category>(FileSpec(CACHE, cdb::categories_folder(), "*.cat"));
-            on_change<class_notify>(UClass::lookup());
-            on_change<UField::notify>(UField::lookup());
-            on_change<ULeaf::notify>(ULeaf::lookup());
+            on_change<s5_class>(fsClass);
+            on_change<s5_field>(fsField);
+            on_change<s5_leaf>(fsLeaf);
             on_change<s5_tag>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
             on_change<s5_user>(FileSpec(CACHE, cdb::users_folder(), "*.user"));
             
             for(const char* z : Image::kSupportedExtensionWildcards){
-                on_change<s5_category_icons>(by_cache(categories_folder(), z));
-                on_change<UClass::icons>(by_cache(classes_folder(), z));
-                on_change<UField::icons>(by_cache(fields_folder(), z));
-                on_change<ULeaf::icons>(by_cache(z));
+                on_change<s5_category_icons>(FileSpec(CACHE, categories_folder(), z));
+                on_change<s5_class_icons>(FileSpec(CACHE, classes_folder(), z));
+                on_change<s5_field_icons>(FileSpec(CACHE, fields_folder(), z));
+                on_change<s5_leaf_icons>(FileSpec(CACHE, z));
                 on_change<s5_tag_icons>(FileSpec(CACHE, tags_folder(), z));
                 on_change<s5_user_icons>(FileSpec(CACHE, users_folder(), z));
             }

@@ -23,8 +23,11 @@ namespace yq::mithril {
         struct File;
         struct Data;
         struct Rank;
+        struct Diff;
         using SharedData = std::shared_ptr<Data>;
         using SharedFile = std::shared_ptr<File>;
+        
+        using Notify = Notifier<const Diff&>;
         
 
         static bool less_key(Class a, Class b);

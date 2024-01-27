@@ -20,6 +20,9 @@ namespace yq::mithril {
         struct Info;
         struct Property;
         struct PropertyInfo;
+        struct Diff;
+        
+        using Notify  = Notifier<const Diff&>;
         
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Atom&rhs) const noexcept = default; 
