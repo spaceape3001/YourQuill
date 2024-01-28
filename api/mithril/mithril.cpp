@@ -176,6 +176,7 @@
 #include "leaf/LeafProvider.ipp"
 #include "leaf/LeafUpdate.ipp"
 
+#include "meta/MetaCDB.ipp"
 #include "meta/MetaHtml.ipp"
 #include "meta/MetaObjectArg.ipp"
 #include "meta/MetaTypeArg.ipp"
@@ -311,6 +312,7 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Graphviz)
 YQ_TYPE_IMPLEMENT(yq::mithril::Group)
 YQ_TYPE_IMPLEMENT(yq::mithril::Image)
 YQ_TYPE_IMPLEMENT(yq::mithril::Leaf)
+YQ_TYPE_IMPLEMENT(yq::mithril::Meta)
 YQ_TYPE_IMPLEMENT(yq::mithril::Organization)
 YQ_TYPE_IMPLEMENT(yq::mithril::Place)
 YQ_TYPE_IMPLEMENT(yq::mithril::Root)

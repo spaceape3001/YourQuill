@@ -21,10 +21,13 @@
 namespace yq {
     class ByteArray;
     class Stream;
+    class Meta;
 }
 
 namespace yq::mithril {
     using id_t      = uint64_t;
+    
+    using MetaBase = yq::Meta;
     
     struct Id;
 
@@ -48,6 +51,7 @@ namespace yq::mithril {
     struct Group;
     struct Image;
     struct Leaf;
+    struct Meta;
     struct Place;
     struct Property;
     struct Root;

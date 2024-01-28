@@ -38,7 +38,7 @@ namespace yq::mithril {
         variable for it, that allows for the text to be delayed 
         and computed at demand time.  (ie, it can change between invocations)
     */
-    class WebVariable : public Meta {
+    class WebVariable : public MetaBase {
     public:
     
         
@@ -53,7 +53,7 @@ namespace yq::mithril {
     private:
     };
     
-    class WebVariable::Writer : public Meta::Writer {
+    class WebVariable::Writer : public MetaBase::Writer {
     public:
         //! Sets the description
         Writer&  description(std::string_view);

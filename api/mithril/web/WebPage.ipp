@@ -8,7 +8,7 @@
 
 namespace yq::mithril {
     
-    WebPage::WebPage(HttpOps _methods, std::string_view p, const std::source_location& sl) : Meta(p, sl)
+    WebPage::WebPage(HttpOps _methods, std::string_view p, const std::source_location& sl) : MetaBase(p, sl)
     {
         set({Flag::WEB, Flag::PAGE});
         
@@ -111,11 +111,11 @@ namespace yq::mithril {
 
 
     //  ----------------------------------------------------------------------------------------------------------------
-    WebPage::Writer::Writer(WebPage*p) : Meta::Writer(p), m_page(p)
+    WebPage::Writer::Writer(WebPage*p) : MetaBase::Writer(p), m_page(p)
     {
     }
 
-    WebPage::Writer::Writer(Writer&& mv) : Meta::Writer(std::move(mv)), m_page(mv.m_page)
+    WebPage::Writer::Writer(Writer&& mv) : MetaBase::Writer(std::move(mv)), m_page(mv.m_page)
     {
         mv.m_page = nullptr;
     }
@@ -169,7 +169,7 @@ namespace yq::mithril {
     WebPage::Writer&  WebPage::Writer::description(std::string_view sv)
     {
         if(m_page)
-            Meta::Writer::description(sv);
+            MetaBase::Writer::description(sv);
         return *this;
     }
     

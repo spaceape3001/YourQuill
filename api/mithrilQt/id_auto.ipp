@@ -29,6 +29,7 @@
 #include <mithrilQt/group.hpp>
 #include <mithrilQt/image.hpp>
 #include <mithrilQt/leaf.hpp>
+#include <mithrilQt/meta.hpp>
 #include <mithrilQt/organization.hpp>
 #include <mithrilQt/place.hpp>
 #include <mithrilQt/root.hpp>
@@ -83,6 +84,8 @@ namespace yq::mithril {
             return qIcon(Image(i.id()));
         case Leaf::ID:
             return qIcon(Leaf(i.id()));
+        case Meta::ID:
+            return qIcon(Meta(i.id()));
         case Organization::ID:
             return qIcon(Organization(i.id()));
         case Place::ID:

@@ -39,6 +39,7 @@
 
 #include "image.ipp"
 #include "leaf.ipp"
+#include "meta.ipp"
 #include "organization.ipp"
 
 #include "place.ipp"

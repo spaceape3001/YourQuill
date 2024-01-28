@@ -65,6 +65,9 @@
 #include <mithril/leaf/Leaf.hpp>
 #include <mithril/leaf/LeafCDB.hpp>   
 
+#include <mithril/meta/Meta.hpp>
+#include <mithril/meta/MetaCDB.hpp>   
+
 #include <mithril/organization/Organization.hpp>
 #include <mithril/organization/OrganizationCDB.hpp>   
 
@@ -87,7 +90,7 @@
 #include <mithril/value/ValueCDB.hpp>   
 
 namespace yq::mithril {
-    static constexpr const IdTypeId HIGH_ID = 27;
+    static constexpr const IdTypeId HIGH_ID = 28;
     
     std::string_view  Id::type_name(IdTypeId ct)
     {
@@ -130,6 +133,8 @@ namespace yq::mithril {
             return "Image"sv;
         case Leaf::ID:
             return "Leaf"sv;
+        case Meta::ID:
+            return "Meta"sv;
         case Organization::ID:
             return "Organization"sv;
         case Place::ID:
@@ -190,6 +195,8 @@ namespace yq::mithril {
             return &meta<Image>();
         case Leaf::ID:
             return &meta<Leaf>();
+        case Meta::ID:
+            return &meta<Meta>();
         case Organization::ID:
             return &meta<Organization>();
         case Place::ID:
@@ -250,6 +257,8 @@ namespace yq::mithril {
             return Image::PARENTS;
         case Leaf::ID:
             return Leaf::PARENTS;
+        case Meta::ID:
+            return Meta::PARENTS;
         case Organization::ID:
             return Organization::PARENTS;
         case Place::ID:
@@ -316,6 +325,8 @@ namespace yq::mithril {
             return cdb::key(Image(id()));
         case Leaf::ID:
             return cdb::key(Leaf(id()));
+        case Meta::ID:
+            return cdb::key(Meta(id()));
         case Organization::ID:
             return cdb::key(Organization(id()));
         case Place::ID:
@@ -377,6 +388,8 @@ namespace yq::mithril {
                 return cdb::name(Image(id()));
             case Leaf::ID:
                 return cdb::name(Leaf(id()));
+            case Meta::ID:
+                return cdb::name(Meta(id()));
             case Organization::ID:
                 return cdb::name(Organization(id()));
             case Place::ID:
@@ -437,6 +450,8 @@ namespace yq::mithril::cdb {
             return ids<Image>(all_images(sorted));
         case Leaf::ID:
             return ids<Leaf>(all_leafs(sorted));
+        case Meta::ID:
+            return ids<Meta>(all_metas(sorted));
         case Organization::ID:
             return ids<Organization>(all_organizations(sorted));
         case Place::ID:

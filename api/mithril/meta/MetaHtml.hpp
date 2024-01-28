@@ -26,8 +26,8 @@ namespace yq::mithril {
     class WebHtml;
     
     namespace html {
-        WebHtml&    operator<<(WebHtml&, DevID<const Meta*>);
-        WebHtml&    operator<<(WebHtml&, Dev<const Meta*>);
+        WebHtml&    operator<<(WebHtml&, DevID<const MetaBase*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const MetaBase*>);
     }
 
     namespace html {

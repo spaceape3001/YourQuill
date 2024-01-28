@@ -11,7 +11,7 @@
 namespace yq::mithril {
     /*! \brief Thing in the cache database */
     struct Thing {
-        static constexpr const IdTypeId ID      = 24;
+        static constexpr const IdTypeId ID      = 25;
         static constexpr const IdTypes  PARENTS  = Atom::ID;
 
         uint64_t            id = 0ULL;

@@ -14,6 +14,8 @@
 #include <0/basic/Http.hpp>
 #include <0/basic/Flag.hpp>
 
+#include <mithril/preamble.hpp>
+
 #include <functional>
 #include <source_location>
 
@@ -83,7 +85,7 @@ namespace yq::mithril {
             Startign with '*.' signifies it's a custom file handler for extension which 
             standard directory handlers will utilize.
     */
-    class WebPage : public Meta {
+    class WebPage : public MetaBase {
         friend struct WebGroup;
     public:
     
@@ -155,7 +157,7 @@ namespace yq::mithril {
         std::string_view  description;
     };
     
-    class WebPage::Writer : public Meta::Writer, public yq::not_copyable {
+    class WebPage::Writer : public MetaBase::Writer, public yq::not_copyable {
     public:
         
         //! Allows for an alternate path (if we're pure-page no extensions)
@@ -220,7 +222,7 @@ namespace yq::mithril {
         Writer(Writer&&);
         Writer& operator=(Writer&&);
         ~Writer();
-        Writer() : Meta::Writer(nullptr) {}
+        Writer() : MetaBase::Writer(nullptr) {}
         
         operator WebPage* () const { return m_page; }
         

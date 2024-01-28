@@ -25,7 +25,7 @@ namespace yq::mithril {
 ////////////////////////////////////////////////////////////////////////////////
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Dev<const Meta*>v)
+        WebHtml&    operator<<(WebHtml&h, Dev<const MetaBase*>v)
         {
             if(v.data){
                 h << v.data->name();
@@ -36,7 +36,7 @@ namespace yq::mithril {
             return h;
         }
 
-        WebHtml&    operator<<(WebHtml&h, DevID<const Meta*>v)
+        WebHtml&    operator<<(WebHtml&h, DevID<const MetaBase*>v)
         {
             if(v.data){
                 h << v.data->id();

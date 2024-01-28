@@ -7,7 +7,7 @@
 #pragma once
 
 namespace yq::mithril {
-    WebVariable::WebVariable(std::string_view n, const std::source_location& sl) : Meta(n, sl)
+    WebVariable::WebVariable(std::string_view n, const std::source_location& sl) : MetaBase(n, sl)
     {
         WLOCK
         if(_r.openReg){
@@ -22,11 +22,11 @@ namespace yq::mithril {
 
 //  ------------------------------------------------
 
-    WebVariable::Writer::Writer(WebVariable*p) : Meta::Writer(p), m_var(p)
+    WebVariable::Writer::Writer(WebVariable*p) : MetaBase::Writer(p), m_var(p)
     {
     }
 
-    WebVariable::Writer::Writer(Writer&& mv) : Meta::Writer(std::move(mv)), m_var(mv.m_var)
+    WebVariable::Writer::Writer(Writer&& mv) : MetaBase::Writer(std::move(mv)), m_var(mv.m_var)
     {
         mv.m_var = nullptr;
     }
@@ -51,7 +51,7 @@ namespace yq::mithril {
     WebVariable::Writer&  WebVariable::Writer::description(std::string_view sv)
     {
         if(m_var)
-            Meta::Writer::description(sv);
+            MetaBase::Writer::description(sv);
         return *this;
     }
 }

@@ -16,7 +16,7 @@ namespace yq::mithril {
         Used for maps, the lookup for an ID type of key.
     */
     struct ById {
-        static Meta::id_t   id_for(const TypeInfo* t)
+        static MetaBase::id_t   id_for(const TypeInfo* t)
         {
             return t ? t->id() : 0;
         }

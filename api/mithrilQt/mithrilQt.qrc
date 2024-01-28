@@ -45,6 +45,7 @@
     <file alias="generic/graph.svg">res/graph.svg</file>
     <file alias="generic/group.svg">res/group.svg</file>
     <file alias="generic/leaf.svg">res/leaf.svg</file>
+    <file alias="generic/meta.svg">res/meta.svg</file>
     <file alias="generic/organization.svg">res/organization.svg</file>
     <file alias="generic/place.svg">res/place.svg</file>
     <file alias="generic/root.svg">res/root.svg</file>
