@@ -141,6 +141,14 @@ namespace yq::mithril {
         return exec();
     }
         
+    int         CacheStatement::integer(uint64_t i)
+    {
+        auto _af = af();
+        bind(1, (int64_t) i);
+        if(step() == SQResult::Row)
+            return v_int(1);
+        return 0;
+    }
 
     std::filesystem::path   CacheStatement::path()
     {
@@ -260,7 +268,7 @@ namespace yq::mithril {
             return v_uint64(1);
         return 0ULL;
     }
-    
+
     uint64_t    CacheStatement::u64(uint64_t i)
     {
         auto _af = af();

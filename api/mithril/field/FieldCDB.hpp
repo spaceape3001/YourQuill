@@ -7,6 +7,8 @@
 #pragma once
 
 #include <mithril/class/Class.hpp>
+#include <mithril/enum/Multiplicity.hpp>
+#include <mithril/enum/Restriction.hpp>
 #include <mithril/field/FieldFile.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/category/Category.hpp>
@@ -20,6 +22,10 @@ namespace yq::mithril {
             std::string     brief;
             std::string     key, pkey;
             std::string     name, plural;
+            std::string     expected;
+            Restriction     restriction;
+            Multiplicity    multiplicity;
+            uint64_t        max_count   = 0;
             bool operator==(const Info&) const = default;
         };
 
@@ -93,9 +99,12 @@ namespace yq::mithril::cdb {
     
     Field                   make_field(std::string_view, Class, const RootDir* rt=nullptr, cdb_options_t opts=0, bool *wasCreated=nullptr);
     
+    uint64_t                max_count(Field);
 
     Field::SharedData       merged(Field, cdb_options_t opts=0);
     //Class                   make_class(std::string_view , const RootDir* rt=nullptr);
+    
+    Multiplicity            multiplicity(Field);
 
     std::string             name(Field);
     
@@ -113,6 +122,10 @@ namespace yq::mithril::cdb {
 
     std::vector<FieldFragDoc>   reads(Field, cdb_options_t opts=0);
     std::vector<FieldFragDoc>   reads(Field, class RootDir*, cdb_options_t opts=0);
+    
+    Restriction             restriction(Field);
+    
+    std::string             skey(Field);
 
     std::vector<Tag>            tags(Field, Sorted sorted=Sorted());
     size_t                      tags_count(Field);

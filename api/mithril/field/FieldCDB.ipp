@@ -103,17 +103,20 @@ namespace yq::mithril::cdb {
         std::string_view    ck  = k;
         Class               cls;
         size_t  n   = ck.find('.');
+        bool    anycls  = true;
         if(n != std::string_view::npos){
             cls = class_(ck.substr(0,n));
             ck  = ck.substr(n+1);
+            anycls  = false;
         }
 
-        static thread_local CacheQuery i("INSERT INTO Fields (id, k, class, ck) VALUES (?,?,?,?)");
+        static thread_local CacheQuery i("INSERT INTO Fields (id, k, class, ck, anycls) VALUES (?,?,?,?,?)");
         auto i_af = i.af();
         i.bind(1, doc.id);
         i.bind(2, k);
         i.bind(3, cls.id);
         i.bind(4, ck);
+        i.bind(5, anycls);
         if(i.exec()){
             if(wasCreated)
                 *wasCreated = true;
@@ -231,23 +234,33 @@ namespace yq::mithril::cdb {
     Field::Info         info(Field f, bool autoKey)
     {
         Field::Info        ret;
-        static thread_local CacheQuery s("SELECT k, class, name, pkey, plural, brief, category FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT k, class, name, pkey, plural, brief, category, restrict, multi, maxcnt, expected FROM Fields WHERE id=?");
         auto s_af = s.af();
         s.bind(1, f.id);
         if(s.step() == SQResult::Row){
-            ret.key     = s.v_string(1);
-            ret.class_  = Class(s.v_uint64(2));
-            ret.name    = s.v_string(3);
-            ret.pkey    = s.v_string(4);
-            ret.plural  = s.v_string(5);
-            ret.brief   = s.v_string(6);
+            ret.key             = s.v_string(1);
+            ret.class_          = Class(s.v_uint64(2));
+            ret.name            = s.v_string(3);
+            ret.pkey            = s.v_string(4);
+            ret.plural          = s.v_string(5);
+            ret.brief           = s.v_string(6);
+            ret.category        = Category{ s.v_uint64(7)};
+            ret.restriction     = (Restriction) s.v_int(8);
+            ret.multiplicity    = (Multiplicity) s.v_int(9);
+            ret.max_count       = s.v_uint64(10);
+            ret.expected        = s.v_string(11);
             if(autoKey && ret.name.empty())
-                ret.name    = ret.key;
-            ret.category = Category{ s.v_uint64(7)};
+                ret.name        = ret.key;
         }
         return ret;
     }
     
+    bool                    is_any(Field f)
+    {
+        static thread_local CacheQuery s("SELECT anycls FROM Fields WHERE id=?");
+        return s.boolean(f.id);
+    }
+
     std::string             key(Field f)
     {
         static thread_local CacheQuery s("SELECT k FROM Fields WHERE id=?");
@@ -324,8 +337,18 @@ namespace yq::mithril::cdb {
         }
         return ret;
     }
-    
 
+    uint64_t                max_count(Field f)
+    {
+        static thread_local CacheQuery    s("SELECT maxcnt FROM Fields WHERE id=?");
+        return s.u64(f);
+    }
+    
+    Multiplicity            multiplicity(Field f)
+    {
+        static thread_local CacheQuery    s("SELECT multi FROM Fields WHERE id=?");
+        return Multiplicity(s.integer(f));
+    }
 
     std::string             name(Field f)
     {
@@ -396,6 +419,19 @@ namespace yq::mithril::cdb {
         }
         return ret;
     }
+
+    Restriction             restriction(Field f)
+    {
+        static thread_local CacheQuery    s("SELECT restrict FROM Fields WHERE id=?");
+        return Restriction(s.integer(f));
+    }
+
+    std::string             skey(Field f)
+    {
+        static thread_local CacheQuery s("SELECT ck FROM Fields WHERE id=?");
+        return s.str(f.id);
+    }
+
 
     std::vector<Tag>  tags(Field f, Sorted sorted)
     {

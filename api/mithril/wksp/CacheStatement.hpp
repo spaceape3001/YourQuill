@@ -78,6 +78,8 @@ namespace yq::mithril {
         bool        exec(uint64_t arg1, uint64_t arg2);
         bool        exec(uint64_t arg1, std::string_view arg2);
         
+        int         integer(uint64_t);
+        
         std::filesystem::path   path();
         std::filesystem::path   path(uint64_t);
         
