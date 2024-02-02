@@ -65,7 +65,7 @@ namespace yq::mithril {
         brief           = attrs.value("brief");
         notes           = attrs.value("notes");
         category        = attrs.value("category");
-        usurpes        += attrs.values_set("usurp");
+        usurps         += attrs.values_set("usurp");
         aliases        += attrs.values_set("alias");
         tags           += attrs.values_set("tag");
         classes        += attrs.values_set("class");
@@ -94,8 +94,8 @@ namespace yq::mithril {
             attrs.set("category", category);
         if(!classes.empty())
             attrs.set("class", join(classes, ","));
-        if(!usurpes.empty())
-            attrs.set("usurp", join(usurpes, ","));
+        if(!usurps.empty())
+            attrs.set("usurp", join(usurps, ","));
         if(!aliases.empty())
             attrs.set("alias", join(aliases, ","));
         if(!tags.empty())

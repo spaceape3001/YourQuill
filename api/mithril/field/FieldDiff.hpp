@@ -26,9 +26,12 @@ namespace yq::mithril {
         const bool                  anycls;
         
         Changed<string_set_t>       aliases;
+        Changed<ClassHopMap>        atom_types;
         Changed<std::string>        brief;
         Changed<Category>           category;
-        Changed<std::string>        expected;
+        Changed<ClassSet>           classes;
+        Changed<std::set<uint64_t>> data_types;
+        Changed<Id>                 expected;
         Changed<Image>              icon;
         Changed<uint64_t>           max_count;
         Changed<Multiplicity>       multiplicity;
@@ -37,5 +40,6 @@ namespace yq::mithril {
         Changed<std::string>        plural;
         Changed<Restriction>        restriction;
         Changed<TagSet>             tags;
+        Changed<string_set_t>       usurps;
     };
 }

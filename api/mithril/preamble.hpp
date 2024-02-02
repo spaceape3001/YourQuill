@@ -66,26 +66,33 @@ namespace yq::mithril {
 
     struct NKI;
 
-    using ClassPair     = std::pair<Class,Class>;
-    using DirOrFrag     = std::variant<bool,Directory,Fragment>;
-    using DocOrFold     = std::variant<bool,Document,Folder>;
-    using DocOrFolder   = std::variant<bool,Document,Folder>;
-    using DirOrFragStr  = std::pair<DirOrFrag,std::string>;
-    using DocOrFoldStr  = std::pair<DocOrFold,std::string>;
-    using DirString     = std::pair<Directory,std::string>;
-    using DocString     = std::pair<Document,std::string>;
-    using DocStr        = std::pair<Document,std::string>;
-    using FolderStr     = std::pair<Folder,std::string>;
-    using FragmentStr   = std::pair<Fragment,std::string>;
-    using ClassSet      = std::set<Class>;
-    using ClassU64Pair  = std::pair<Class,uint64_t>;
-    using TagSet        = std::set<Tag>;
-    using FieldSet      = std::set<Field>;
-    using ClassPairSet  = std::set<ClassPair>;
+    using ClassPair             = std::pair<Class,Class>;
+    using DirOrFrag             = std::variant<bool,Directory,Fragment>;
+    using DocOrFold             = std::variant<bool,Document,Folder>;
+    using DocOrFolder           = std::variant<bool,Document,Folder>;
+    using DirOrFragStr          = std::pair<DirOrFrag,std::string>;
+    using DocOrFoldStr          = std::pair<DocOrFold,std::string>;
+    using DirString             = std::pair<Directory,std::string>;
+    using DocString             = std::pair<Document,std::string>;
+    using DocStr                = std::pair<Document,std::string>;
+    using FolderStr             = std::pair<Folder,std::string>;
+    using FragmentStr           = std::pair<Fragment,std::string>;
+    using ClassSet              = std::set<Class>;
+    using ClassU64Pair          = std::pair<Class,uint64_t>;
+    using TagSet                = std::set<Tag>;
+    using FieldSet              = std::set<Field>;
+    using ClassPairSet          = std::set<ClassPair>;
     
-    using ClassCxn      = Connection<Class,Class>;
-    using ClassU64Map   = std::map<Class,uint64_t>;
-    using ClassCountMap = std::map<Class,HCountU64>;
+    using ClassCxn              = Connection<Class,Class>;
+    using ClassU64Map           = std::map<Class,uint64_t>;
+    using ClassCountMap         = std::map<Class,HCountU64>;
+
+    using HopCount              = HCountI8;
+    using hop_t                 = int8_t;
+
+    using ClassHopMap           = std::map<Class,HopCount>;
+    using FieldHopMap           = std::map<Field,HopCount>;
+
 
     //! Generic options bitmask
     using cdb_options_t         = uint64_t;

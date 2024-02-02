@@ -52,6 +52,16 @@ namespace yq::mithril::cdb {
         return s.size();
     }
     
+    ClassHopMap             atom_types(Field f)
+    {
+        ClassHopMap ret;
+        static thread_local CacheQuery s("SELECT class, hops FROM CFields WHERE field=?");
+        auto af = s.af();
+        s.bind(1, f.id);
+        while(s.step() == SQResult::Row)
+            ret[Class(s.v_uint64(1))] = { (int8_t) s.v_int(2) };
+        return ret;
+    }
     
     std::string             brief(Field f)
     {
@@ -128,25 +138,13 @@ namespace yq::mithril::cdb {
             return Field{};
         }
     }
-    
-    
-    namespace {
-        std::vector<Class>           def_classes_sorted(Field f)
-        {
-            static thread_local CacheQuery s("SELECT class FROM CFields INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
-            return s.vec<Class>(f.id);
-        }
 
-        std::vector<Class>           def_classes_unsorted(Field f)
-        {
-            static thread_local CacheQuery s("SELECT class FROM CFields WHERE field=?");
-            return s.vec<Class>(f.id);
-        }
-    }
-    
     std::vector<Class>           def_classes(Field f, Sorted sorted)
     {
-        return sorted ? def_classes_sorted(f) : def_classes_unsorted(f);
+        static thread_local CacheQuery qs("SELECT class FROM CFields INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
+        static thread_local CacheQuery qu("SELECT class FROM CFields WHERE field=?");
+        auto& q = sorted ? qs : qu;
+        return q.vec<Class>(f.id);
     }
 
     Document                document(Field f)
@@ -165,6 +163,12 @@ namespace yq::mithril::cdb {
     {
         static thread_local CacheQuery s("SELECT 1 FROM Fields WHERE id=?");
         return s.present(i);
+    }
+
+    Id                  expected(Field f)
+    {
+        static thread_local CacheQuery    s("SELECT expected FROM Fields WHERE id=?");
+        return Id{s.u64(f.id)};
     }
 
     Field               field(uint64_t i)
@@ -248,7 +252,7 @@ namespace yq::mithril::cdb {
             ret.restriction     = (Restriction) s.v_int(8);
             ret.multiplicity    = (Multiplicity) s.v_int(9);
             ret.max_count       = s.v_uint64(10);
-            ret.expected        = s.v_string(11);
+            ret.expected        = Id{ s.v_uint64(11) };
             if(autoKey && ret.name.empty())
                 ret.name        = ret.key;
         }

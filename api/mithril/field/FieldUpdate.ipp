@@ -333,12 +333,12 @@ namespace yq::mithril::update {
         static thread_local CacheQuery iUsurp("INSERT OR REPLACE INTO FAlias (field, alias, usurp) VALUES (?,?,1)");
         static thread_local CacheQuery dUsurp("DELETE FROM FAlias WHERE field=? AND alias=? AND usurp=1");
 
-        auto chg    = add_remove(usurps, def->usurpes);
+        auto chg    = add_remove(usurps, def->usurps);
         for(const std::string& s : chg.added)
             iUsurp.exec(id, s);
         for(const std::string& s : chg.removed)
             dUsurp.exec(id, s);
-        usurps = def->usurpes;
+        usurps  = def->usurps;
     }
     
     void    UField::x_erase()

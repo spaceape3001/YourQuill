@@ -21,6 +21,7 @@
 #include <0/io/stream/Bytes.hpp>
 #include <0/io/stream/Text.hpp>
 #include <0/math/shape/Size2.hxx>
+#include <0/meta/TypeInfo.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomDiff.hpp>
@@ -44,6 +45,7 @@
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/leaf/LeafData.hpp>
 #include <mithril/leaf/LeafDiff.hpp>
+#include <mithril/meta/Meta.hpp>
 #include <mithril/notify/FileWatch.hpp>
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Notifier.hpp>

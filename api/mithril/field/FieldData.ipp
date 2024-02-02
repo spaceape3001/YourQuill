@@ -18,7 +18,7 @@ namespace yq::mithril {
         set_if_empty(brief, b.brief, fOverride);
         set_if_empty(notes, b.notes, fOverride);
         set_if_empty(category, b.category, fOverride);
-        usurpes += b.usurpes;
+        usurps  += b.usurps;
         aliases += b.aliases;
         //type.set_if(b.type, fOverride);
         types += b.types;

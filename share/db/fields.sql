@@ -14,7 +14,7 @@ CREATE TABLE Fields (
     ck          VARCHAR(255) COLLATE NOCASE,
     
     -- nominal type
-    expected    VARCHAR(255) COLLATE NOCASE,
+    expected    INTEGER NOT NULL DEFAULT 0,
 
     -- icon
     icon        INTEGER NOT NULL DEFAULT 0,

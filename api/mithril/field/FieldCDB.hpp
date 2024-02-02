@@ -22,7 +22,7 @@ namespace yq::mithril {
             std::string     brief;
             std::string     key, pkey;
             std::string     name, plural;
-            std::string     expected;
+            Id              expected;
             Restriction     restriction;
             Multiplicity    multiplicity;
             uint64_t        max_count   = 0;
@@ -40,9 +40,10 @@ namespace yq::mithril::cdb {
     
     string_set_t            aliases(Field);
 
-    std::vector<Field>           all_fields(Sorted sorted=Sorted());
+    std::vector<Field>      all_fields(Sorted sorted=Sorted());
     size_t                  all_fields_count();
     
+    ClassHopMap             atom_types(Field);
 
     std::string             brief(Field);
     
@@ -72,6 +73,8 @@ namespace yq::mithril::cdb {
 
     bool                    exists(Field);
     bool                    exists_field(uint64_t);
+    
+    Id                      expected(Field);
 
     Field                   field(uint64_t);
     
