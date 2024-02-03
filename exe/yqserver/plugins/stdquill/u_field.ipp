@@ -115,7 +115,7 @@ namespace {
             uInfo.bind(1, x.name.to);
             uInfo.bind(2, x.plural.to);
             uInfo.bind(3, x.pkey.to);
-            uInfo.bind(4, x.expected.to.m_value);
+            uInfo.bind(4, x.expected.to);
             uInfo.bind(5, x.brief.to);
             uInfo.bind(6, (int) x.multiplicity.to);
             uInfo.bind(7, (int) x.restriction.to);

@@ -34,46 +34,76 @@ namespace yq::mithril {
     template <typename T>
     concept IdType      = impl::HasIdMember<T> || impl::HasIDStatic<T>;
 
+    /*! \brief Unified identifier
+    
+        Given the size of the user-created data, it's reasonable to assume small
+        data sets.  Therefore, this identifier couples a type with the numeric 
+        identifier.  Uniqueness is preserved *UNTIL* an actual ID (in that type) 
+        goes above the mask value, at which point, collisions will exist.
+        
+        This is needed for the Qt that restricts user data to 64-bits (and to avoid 
+        a s-ton of special allocations).
+    */
     struct Id {
+    
+        //! Tests to see if it's okay to blindly convert ID types
         static bool         compatible(IdTypeId from, IdTypeId to);
     
-        static constexpr    uint64_t    MASK    = 0x0000'FFFF'FFFF'FFFFULL; // current max ID is 56-bits
-        static constexpr    uint64_t    SHIFT   = 48ULL;
+        //! Mask for the ID values
+        static constexpr    uint64_t    MASK    = 0x00FF'FFFF'FFFF'FFFFULL;
+        
+        //! Shift for the type ID
+        //! \note SHIFT and MASK must match to the ID type (currently 64 bits)
+        static constexpr    uint64_t    SHIFT   = 56ULL;
 
+
+        //! Mixes type & identifier to a single 64-bit value
         static constexpr uint64_t       encode(IdTypeId type, uint64_t id) noexcept
         {
             return (((uint64_t) type) << SHIFT) | (id & MASK);
         }
-        
+
+        //! Encodes from a specified type
         template <IdType S>
         static constexpr uint64_t       encode(S s) noexcept
         {
             return encode(S::ID, s.id);
         }
 
+        //! Extracts the type-of from a value
         static constexpr IdTypeId        type_of(uint64_t v) noexcept
         {
             return (IdTypeId) (v >> SHIFT);
         }
         
+        //! Extracts the numerical ID from a value
         static constexpr uint64_t       id_of(uint64_t v) noexcept
         {
             return v & MASK;
         }
 
+        //! Decodes a value to an ID type
         template <IdType S>
         static S                        decode(uint64_t v) noexcept
         {
             return compatible(type_of(v), S::ID) ? S(id_of(v)) : S(0ULL);
         }
 
+        //! Basic "semi-valid" test for a type and numeric identifier
         static constexpr bool           valid(uint64_t v) noexcept
         {
-            return v && type_of(v);
+            return id_of(v) && type_of(v);
         }
         
+        //! Name to Id Type
+        //! \note may be empty
         static std::string_view         type_name(IdTypeId);
+        
+        //! TypeInfo for id type
+        //! \note may come back NULL
         static const TypeInfo*          type_info(IdTypeId);
+        
+        //! Base types for id type
         static IdTypes                  base_types(IdTypeId);
         
         //! Highest valid type id
@@ -97,22 +127,35 @@ namespace yq::mithril {
         
         explicit constexpr Id(uint64_t v) noexcept  : m_value(v) {}
 
+        //! Type of the Id
         constexpr IdTypeId  type() const noexcept { return type_of(m_value); }
+        
+        //! Numeric identifier number
         constexpr uint64_t  id() const noexcept { return id_of(m_value); }
+        
+        //! Our value
         constexpr operator  uint64_t() const noexcept { return m_value; }
         
+        //! Type name of this id
         std::string_view    type_name() const;
         
+        //! Our key (db-call, might be empty)
         std::string         key() const;
+        
+        //! Our data's name (db-call, might be empty)
         std::string         name() const;
 
+        //! Defaulted comparison operator
         constexpr auto operator<=>(const Id&) const noexcept = default;
 
+        //! Extracts the ID to the specified type
         template <IdType S>
         S   as() const noexcept
         {
             return decode<S>(m_value);
         }
+        
+        //! Locking mechanism
         Lock        lock(bool rw=false) const;
     };
 
