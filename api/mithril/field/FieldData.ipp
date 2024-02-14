@@ -23,7 +23,6 @@ namespace yq::mithril {
         //type.set_if(b.type, fOverride);
         types += b.types;
         //atom.set_if(b.atom, fOverride);
-        atoms += b.atoms;
         tags += b.tags;
         set_if_empty(expected, b.expected, fOverride);
         if((fOverride?b.multiplicity:multiplicity) != Multiplicity())

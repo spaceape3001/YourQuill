@@ -10,11 +10,6 @@ namespace {
 
     using MetaId = yq::mithril::Meta;
 
-    Id      resolve_expected(std::string_view sv)
-    {
-        return Id();
-    }
-
     void    u_field(Field f, Change chg)
     {
         Field::Diff   x { 
@@ -29,14 +24,14 @@ namespace {
         static thread_local CacheQuery uInfo("UPDATE Fields SET name=?, plural=?, pkey=?, expected=?, brief=?, multi=?, restrict=?, category=?, maxcnt=?, icon=? WHERE id=?");
         static thread_local CacheQuery iAlias("INSERT INTO FAlias (field, alias, usurp) VALUES (?,?,0)");
         static thread_local CacheQuery dAlias("DELETE FROM FAlias WHERE field=? AND alias=? AND usurp=0");
-        static thread_local CacheQuery sAlias("SELECT FROM FAlias WHERE usurp=0");
-        static thread_local CacheQuery sUsurp("SELECT FROM FAlias WHERE usurp=1");
+        static thread_local CacheQuery sAlias("SELECT alias FROM FAlias WHERE field=? AND usurp=0");
+        static thread_local CacheQuery sUsurp("SELECT alias FROM FAlias WHERE field=? AND usurp=1");
         static thread_local CacheQuery iUsurp("INSERT INTO FAlias (field, alias, usurp) VALUES (?,?,1)");
         static thread_local CacheQuery dUsurp("DELETE FROM FAlias WHERE field=? AND alias=? AND usurp=1");
         static thread_local CacheQuery iTag("INSERT INTO FTags (field, tag) VALUES (?,?)");
         static thread_local CacheQuery dTag("DELETE FROM FTags WHERE field=? AND tag=?");
-        static thread_local CacheQuery iDataType("INSERT INTO FDataTypes (field, type) VALUES (?,?)");
-        static thread_local CacheQuery dDataType("DELETE FROM FDataTypes WHERE field=? AND type=?");
+        static thread_local CacheQuery iType("INSERT INTO FTypes (field, type) VALUES (?,?)");
+        static thread_local CacheQuery dType("DELETE FROM FTypes WHERE field=? AND type=?");
 
         if(chg != Change::Added){
             Field::Info  ii         = cdb::info(f);
@@ -54,9 +49,8 @@ namespace {
             
             x.aliases.from          = sAlias.sset(f.id);
             x.usurps.from           = sUsurp.sset(f.id);
-            x.data_types.from       = cdb::data_types(f);
+            x.types.from            = make_set(cdb::types(f));
             x.tags.from             = cdb::tags_set(f);
-            x.atom_types.from       = cdb::atom_types(f);
         }
 
 
@@ -71,13 +65,26 @@ namespace {
                 return;
             }
             
-            std::map<std::string,Id,IgCase>     xResolve;
             for(auto & s : def->types){
+                bool    fSet    = is_similar(s, def->expected);
+                
+                auto decl = [&](Id i) {
+                    if(!i)
+                        return ;
+                    if(fSet)
+                        x.expected.to   = i;
+                    x.types.to.insert(i);
+                };
+            
+                Class   fc  = cdb::class_(s);
+                if(fc)
+                    decl(fc);
+                for(Class c2 : cdb::derived_classes(fc))
+                    x.types.to.insert(c2);
+                
                 const TypeInfo* ti  = TypeInfo::find(s);
-                if(!ti)
-                    continue;
-                xResolve[s]         = MetaId(ti->id());
-                x.data_types.to.insert(ti->id());
+                if(ti)
+                    decl(MetaId(ti->id()));
             }
             
             
@@ -86,7 +93,6 @@ namespace {
             x.brief.to              = std::move(def->brief);
             if(!def->category.empty())
                 x.category.to       = cdb::db_category(def->category);
-            x.expected.to           = resolve_expected(def->expected);
             x.icon.to               = cdb::best_image(doc);
             x.max_count.to          = def->max_count;
             x.multiplicity.to       = def->multiplicity;
@@ -132,10 +138,10 @@ namespace {
                 iAlias.exec(f.id, s);
                 
             
-            // Data Types
-            x.data_types.analyze();
-            for(uint64_t u : x.data_types.added)
-                iDataType.exec(f.id, u);
+            // Types
+            x.types.analyze();
+            for(Id u : x.types.added)
+                iType.exec(f.id, u.m_value);
 
             // Tags
             x.tags.to           = cdb::find_tags_set(def->tags, true);
@@ -153,9 +159,8 @@ namespace {
 
         if(chg == Change::Removed){
             x.aliases.removed       = x.aliases.from;
-            x.atom_types.removed    = x.atom_types.from;
+            x.types.removed         = x.types.from;
             x.classes.removed       = x.classes.from;
-            x.data_types.removed    = x.data_types.from;
             x.tags.removed          = x.tags.from;
             x.usurps.removed        = x.usurps.from;
         }
@@ -165,8 +170,8 @@ namespace {
         if(chg != Change::Removed){
             for(const std::string& s : x.aliases.removed)
                 dAlias.exec(f.id, s);
-            for(uint64_t u : x.data_types.removed)
-                dDataType.exec(f.id, u);
+            for(Id u : x.types.removed)
+                dType.exec(f.id, u.m_value);
             for(Tag t : x.tags.removed)
                 dTag.exec(f.id, t.id);
             for(const std::string& s : x.usurps.removed)
@@ -177,8 +182,7 @@ namespace {
                 CacheQuery("DELETE FROM FTags WHERE field=?"),
                 CacheQuery("DELETE FROM Fields WHERE id=?"),
                 CacheQuery("DELETE FROM FAlias WHERE field=?"),
-                CacheQuery("DELETE FROM FDataTypes WHERE field=?"),
-                CacheQuery("DELETE FROM FAtomTypes WHERE field=?")
+                CacheQuery("DELETE FROM FTypes WHERE field=?")
             };
             for(auto& sq : stmts)
                 sq.exec(f.id);

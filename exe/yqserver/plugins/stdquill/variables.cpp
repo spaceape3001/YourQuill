@@ -232,7 +232,7 @@ namespace {
                 h << "</a></td>";
             }
         }
-        h << "</td></table>\n";
+        h << "</tr></table>\n";
     }
     
     void    var_tag_count(WebHtml& h)

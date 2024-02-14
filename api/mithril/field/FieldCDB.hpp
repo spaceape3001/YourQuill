@@ -43,7 +43,7 @@ namespace yq::mithril::cdb {
     std::vector<Field>      all_fields(Sorted sorted=Sorted());
     size_t                  all_fields_count();
     
-    ClassHopMap             atom_types(Field);
+    //ClassHopMap             atom_types(Field);
 
     std::string             brief(Field);
     
@@ -59,7 +59,7 @@ namespace yq::mithril::cdb {
     
     /*! \brief All data types this field can use
     */
-    std::set<uint64_t>      data_types(Field);
+    //std::set<uint64_t>      data_types(Field);
     
     //Field                   db_field(Class c, std::string_view k, bool *wasCreated=nullptr);
     Field                   db_field(Document, bool *wasCreated=nullptr);
@@ -135,6 +135,8 @@ namespace yq::mithril::cdb {
     std::set<Tag>               tags_set(Field);
 
     bool                    tagged(Field, Tag);
+    
+    std::vector<Id>         types(Field);
 
 
     //!  \brief   Returns a writable document

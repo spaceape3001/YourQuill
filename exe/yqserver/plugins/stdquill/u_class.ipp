@@ -38,8 +38,12 @@ namespace {
             x.name.from         = std::move(ii.name);
             x.plural.from       = std::move(ii.plural);
             x.brief.from        = std::move(ii.brief);
+            x.tags.from         = cdb::tag_set(c);
         }
         
+        static thread_local CacheQuery uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=?, url=?, devurl=?, icon=? WHERE id=?");
+        static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+
         if(chg != Change::Removed){
             auto def        = cdb::merged(c, cdb::DONT_LOCK|cdb::IS_UPDATE);
             if(!def){
@@ -52,8 +56,18 @@ namespace {
             x.name.to           = std::move(def->name);
             x.plural.to         = std::move(def->plural);
             x.brief.to          = std::move(def->brief);
+            x.tags.to           = make_set(cdb::db_tags(def->tags));
             
-            
+            uInfo.bind(1, x.name.to);
+            uInfo.bind(2, x.plural.to);
+            uInfo.bind(3, x.brief.to);
+            uInfo.bind(4, x.category.to);
+            uInfo.bind(5, def->binding);
+            uInfo.bind(6, def->url);
+            uInfo.bind(7, def->dev_url);
+            uInfo.bind(8, x.icon.to);
+            uInfo.bind(9, c);
+            uInfo.exec();
         }
         
     }

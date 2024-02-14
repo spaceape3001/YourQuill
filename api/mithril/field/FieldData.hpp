@@ -28,8 +28,7 @@ namespace yq::mithril {
         string_set_t            tags;           //!< List tof tags applied to this field
         string_set_t            classes;        //!< Classes *WE* support
 
-        string_set_t            types;          //!< Permitted data types
-        string_set_t            atoms;          //!< Atom types allowed here
+        string_set_t            types;          //!< Permitted data/atom types
         std::string             expected;       //!< Expected type/atom
 
         Multiplicity            multiplicity;

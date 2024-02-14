@@ -23,5 +23,7 @@ namespace yq::mithril {
         Changed<std::string>    name;
         Changed<std::string>    plural;
         Changed<std::string>    brief;
+
+        Changed<TagSet>         tags;
     };
 }

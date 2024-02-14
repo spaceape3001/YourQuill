@@ -52,16 +52,16 @@ namespace yq::mithril::cdb {
         return s.size();
     }
     
-    ClassHopMap             atom_types(Field f)
-    {
-        ClassHopMap ret;
-        static thread_local CacheQuery s("SELECT class, hops FROM CFields WHERE field=?");
-        auto af = s.af();
-        s.bind(1, f.id);
-        while(s.step() == SQResult::Row)
-            ret[Class(s.v_uint64(1))] = { (int8_t) s.v_int(2) };
-        return ret;
-    }
+    //ClassHopMap             atom_types(Field f)
+    //{
+        //ClassHopMap ret;
+        //static thread_local CacheQuery s("SELECT class, hops FROM CFields WHERE field=?");
+        //auto af = s.af();
+        //s.bind(1, f.id);
+        //while(s.step() == SQResult::Row)
+            //ret[Class(s.v_uint64(1))] = { (int8_t) s.v_int(2) };
+        //return ret;
+    //}
     
     std::string             brief(Field f)
     {
@@ -90,11 +90,11 @@ namespace yq::mithril::cdb {
         return s.vec<Class>(f.id);
     }
 
-    std::set<uint64_t>        data_types(Field f)
-    {
-        static thread_local CacheQuery    s("SELECT type FROM FDataTypes WHERE field=?");
-        return s.set<uint64_t>(f.id);
-    }
+    //std::set<uint64_t>        data_types(Field f)
+    //{
+        //static thread_local CacheQuery    s("SELECT type FROM FDataTypes WHERE field=?");
+        //return s.set<uint64_t>(f.id);
+    //}
 
     Field               db_field(Document doc, bool *wasCreated)
     {
@@ -456,6 +456,12 @@ namespace yq::mithril::cdb {
     {
         static thread_local CacheQuery s("SELECT tag FROM FTags WHERE field=?");
         return s.set<Tag>(f.id);
+    }
+
+    std::vector<Id>         types(Field f)
+    {
+        static thread_local CacheQuery s("SELECT type FROM FTypes WHERE field=?");
+        return s.vec<Id>(f.id);
     }
 
     Field::SharedFile        writable(Field f, const RootDir* rt, cdb_options_t opts)

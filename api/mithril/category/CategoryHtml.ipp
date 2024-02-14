@@ -8,13 +8,14 @@
 
 #include "CategoryHtml.hpp"
 #include <0/basic/TextUtils.hpp>
+#include <mithril/category/CategoryCDB.hpp>
 #include <mithril/document/DocumentHtml.hpp>
+#include <mithril/html/HtmlLayout.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/image/ImageHtml.hpp>
 #include <mithril/root/RootHtml.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/html/HtmlLayout.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml& h, Category v)
@@ -52,6 +53,7 @@ namespace yq::mithril::html {
             h << "</a>";
         return h;
     }
+#include <mithril/image/ImageHtml.hpp>
 
     void        admin_table(WebHtml&h, const std::vector<Category>& categories)
     {
@@ -62,6 +64,7 @@ namespace yq::mithril::html {
             {
                 if(c){
                     Image   i   = cdb::icon(c);
+yInfo() << "Admin table ... category " << cdb::key(c) << " icon " << i.id;
                     if(i){
                         h << cdb::thumbnail(i, iz);
                     } else

@@ -7,20 +7,20 @@
 #pragma once
 
 #include "ClassHtml.hpp"
-#include <0/io/StreamOps.hpp>
 #include <0/basic/TextUtils.hpp>
+#include <0/io/StreamOps.hpp>
 #include <0/io/stream/Text.hpp>
+#include <mithril/class/Class.hpp>
 #include <mithril/class/ClassArg.hpp>
+#include <mithril/class/ClassCDB.hpp>
 #include <mithril/document/DocumentHtml.hpp>
+#include <mithril/html/HtmlLayout.hpp>
+#include <mithril/image/ImageCDB.hpp>
+#include <mithril/image/ImageHtml.hpp>
+#include <mithril/root/RootDir.hpp>
 #include <mithril/root/RootHtml.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageHtml.hpp>
-#include <mithril/html/HtmlLayout.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Class v)

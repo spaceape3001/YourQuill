@@ -73,18 +73,12 @@ CREATE TABLE FAlias (
 );
 
 -- note string is always implicit
-CREATE TABLE FDataTypes (
+CREATE TABLE FTypes (
     field       INTEGER NOT NULL,
-        -- this comes out of the meta system
+        -- this is the ID (meta, class, etc)
     type        INTEGER NOT NULL,
-    UNIQUE(field,type)
-);
-
-CREATE TABLE FAtomTypes (
-    field       INTEGER NOT NULL,
-    class       INTEGER NOT NULL,
     hops        INTEGER NOT NULL,
-    UNIQUE(field,class)
+    UNIQUE(field,type)
 );
 
 CREATE TABLE FTags (

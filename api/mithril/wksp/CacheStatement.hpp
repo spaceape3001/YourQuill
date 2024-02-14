@@ -155,7 +155,7 @@ namespace yq::mithril {
             return ret;
         }
         
-        template <IdType U>
+        template <typename U>
         std::vector<U>   vec(uint64_t i)
         {
             std::vector<U>  ret;

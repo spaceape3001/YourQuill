@@ -47,7 +47,6 @@ namespace yq::mithril {
         aliases         = read_child_string_set(xn, szAlias);
         classes         = read_child_string_set(xn, szClass);
         types           = read_child_string_set(xn, szType);
-        atoms           = read_child_string_set(xn, szAtom);
         expected        = read_child(xn, szExpected, x_string);
         tags            = read_child_string_set(xn, szTag);
         multiplicity    = read_child(xn, szMultiple, x_enum<Multiplicity>);
@@ -70,7 +69,6 @@ namespace yq::mithril {
         tags           += attrs.values_set("tag");
         classes        += attrs.values_set("class");
         types          += attrs.values_set("type");
-        atoms          += attrs.values_set("atom");
         expected        = attrs.value(kv::key({ "expect", "expected"}));
         multiplicity    = Multiplicity(attrs.value(kv::key({"allow", "multiple"})));
         restriction     = Restriction(attrs.value(kv::key({"control", "restrict"})));
@@ -102,8 +100,6 @@ namespace yq::mithril {
             attrs.set("tag", join(tags, ","));
         if(!types.empty())
             attrs.set("type", join(types, ","));
-        if(!atoms.empty())
-            attrs.set("atom", join(atoms, ","));
         if(!expected.empty())
             attrs.set("expect", expected);
         if(multiplicity != Multiplicity())
