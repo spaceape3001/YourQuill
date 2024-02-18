@@ -11,6 +11,7 @@ namespace {
     {
         Category::Diff   x { 
             .x = t, 
+            .id = t.id,
             .chg = chg, 
             .key = cdb::key(t)
         };
@@ -45,7 +46,7 @@ namespace {
             uCategoryInfo.bind(1, x.name.to);
             uCategoryInfo.bind(2, x.icon.to.id);
             uCategoryInfo.bind(3, x.brief.to);
-            uCategoryInfo.bind(4, t.id);
+            uCategoryInfo.bind(4, x.id);
             uCategoryInfo.exec();
         }
 
@@ -58,7 +59,7 @@ namespace {
         
         if(chg == Change::Removed){
             for(auto& sq : xCategoryStmts)
-                sq.exec(t.id);
+                sq.exec(x.id);
         }
     }
 

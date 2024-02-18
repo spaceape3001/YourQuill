@@ -15,6 +15,7 @@
 namespace yq::mithril {
     struct Class::Diff {
         const Class             x;
+        const uint64_t          id;
         const Change            chg;
         const std::string       key;
         

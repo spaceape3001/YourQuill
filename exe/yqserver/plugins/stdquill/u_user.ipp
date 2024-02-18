@@ -11,6 +11,7 @@ namespace {
     {
         User::Diff   x { 
             .x = u, 
+            .id = u.id,
             .chg = chg, 
             .key = cdb::key(u)
         };
@@ -59,7 +60,7 @@ namespace {
                 uInfo.bind(6, x.writer.to);
                 uInfo.bind(7, x.reader.to);
                 uInfo.bind(8, x.guest.to);
-                uInfo.bind(9, u.id);
+                uInfo.bind(9, x.id);
                 uInfo.exec();
             }
         }
@@ -72,7 +73,7 @@ namespace {
 
         if(chg == Change::Removed){
             for(auto& sq : xUserStmts)
-                sq.exec(u.id);
+                sq.exec(x.id);
         }
     }
     

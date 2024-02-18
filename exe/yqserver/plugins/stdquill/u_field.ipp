@@ -14,6 +14,7 @@ namespace {
     {
         Field::Diff   x { 
             .x      = f, 
+            .id     = f.id,
             .chg    = chg, 
             .key    = cdb::key(f),
             .subkey = cdb::skey(f),

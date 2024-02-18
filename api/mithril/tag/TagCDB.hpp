@@ -128,6 +128,13 @@ namespace yq::mithril::cdb {
     std::vector<Tag>        db_tags(const string_set_t&);
 
     
+    /*! \brief Creates tags by keys
+    */
+    std::set<Tag>           db_tags_set(const string_view_set_t&);
+
+    /*! \brief Creates tags by keys
+    */
+    std::set<Tag>           db_tags_set(const string_set_t&);
 
     
     //bool                    is_tagged(Field, Tag);

@@ -15,11 +15,12 @@
 
 namespace yq::mithril {
     struct Image::Diff {
-        const Image     x;
-        const Change    chg;
+        const Image         x;
+        const uint64_t      id;
+        const Change        chg;
         
-        ContentType     type;
-        Changed<Size2U> dim;
+        ContentType         type;
+        Changed<Size2U>     dim;
 
         constexpr operator bool() const noexcept 
         {

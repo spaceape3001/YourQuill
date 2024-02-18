@@ -23,12 +23,9 @@ namespace {
         }
         return std::string_view();
     }
-
-    void    p_wiki_view(WebHtml& h)
+    
+    void    leaf_page(WebHtml& h, Leaf x)
     {
-        Leaf    x   = leaf(h.context());
-        if(!x)
-            throw HttpStatus::BadArgument;
         
         auto i      = info(x);
         auto dp     = merged(x);
@@ -72,6 +69,23 @@ namespace {
             }
         }
     }
+
+    void    p_wiki_view(WebHtml& h)
+    {
+        Leaf    x   = leaf(h.context());
+        if(!x)
+            throw HttpStatus::BadArgument;
+        leaf_page(h, x);
+    }
+    
+    void    p_wiki_glob(WebHtml& h)
+    {
+        Leaf    x   = cdb::leaf(h.context().truncated_path);
+        if(!x)
+            throw HttpStatus::BadArgument;
+        leaf_page(h, x);
+    }
+    
     
     void    p_wiki_browse(WebHtml& h)
     {
@@ -138,8 +152,10 @@ namespace {
 
     void    reg_wiki()
     {
+        reg_webpage<p_wiki_view>("/leaf").argument("id", "Leaf ID").argument("key", "Key");
         reg_webpage<p_wiki_view>("/wiki/view").argument("id", "Leaf ID").argument("key", "Key");
         reg_webpage<p_wiki_browse>("/wiki/browse").argument("folder", "Folder ID");
         reg_webpage<p_wiki_random>("/wiki/random").argument("id", "Leaf ID").argument("key", "Key");
+        reg_webpage<p_wiki_glob>("/w/**");
     }
 }

@@ -25,6 +25,7 @@ namespace {
     {
         Class::Diff   x { 
             .x = c, 
+            .id = c.id,
             .chg = chg, 
             .key = cdb::key(c)
         };

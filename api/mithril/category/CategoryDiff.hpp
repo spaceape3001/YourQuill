@@ -14,6 +14,7 @@
 namespace yq::mithril {
     struct Category::Diff {
         const Category          x;
+        const uint64_t          id;
         const Change            chg;
         const std::string       key;
         

@@ -14,6 +14,7 @@
 namespace yq::mithril {
     struct User::Diff {
         const User              x;
+        const uint64_t          id;
         const Change            chg;
         const std::string       key;
         

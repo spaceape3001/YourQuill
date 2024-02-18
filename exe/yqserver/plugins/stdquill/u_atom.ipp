@@ -7,6 +7,10 @@
 #pragma once
 
 namespace {
+    void    u_atom(Atom a, AttributeDiffSpan attrs, Change chg, Image icon={})
+    {
+    }
+
     void    s4_atom()
     {
         //  assimilate edges

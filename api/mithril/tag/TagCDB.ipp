@@ -299,6 +299,22 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
+    std::set<Tag>           db_tags_set(const string_set_t&all)
+    {
+        std::set<Tag>     ret;
+        for(const std::string& s:all)
+            ret.insert(db_tag(s));
+        return ret;
+    }
+
+    std::set<Tag>           db_tags_set(const string_view_set_t& all)
+    {
+        std::set<Tag>     ret;
+        for(const std::string_view& s:all)
+            ret.insert(db_tag(s));
+        return ret;
+    }
+
 
     Tag                     make_tag(std::string_view k, const RootDir* rt, cdb_options_t opts, bool* wasCreated)
     {

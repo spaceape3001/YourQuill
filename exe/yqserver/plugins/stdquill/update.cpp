@@ -25,6 +25,7 @@
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomDiff.hpp>
+#include <mithril/attribute/AttributeDiff.hpp>
 #include <mithril/category/Category.hpp>
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/category/CategoryData.hpp>

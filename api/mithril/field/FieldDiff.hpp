@@ -19,6 +19,7 @@
 namespace yq::mithril {
     struct Field::Diff {
         const Field                 x;
+        const uint64_t              id;
         const Change                chg;
         const std::string           key;
         const std::string           subkey;

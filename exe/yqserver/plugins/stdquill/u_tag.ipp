@@ -11,6 +11,7 @@ namespace {
     {
         Tag::Diff   x { 
             .x = t, 
+            .id = t.id,
             .chg = chg, 
             .key = cdb::key(t)
         };
@@ -54,7 +55,7 @@ namespace {
                 uTagInfo.bind(2, x.icon.to.id);
                 uTagInfo.bind(3, x.leaf.to.id);
                 uTagInfo.bind(4, x.brief.to);
-                uTagInfo.bind(5, t.id);
+                uTagInfo.bind(5, x.id);
                 uTagInfo.exec();
             } 
         }

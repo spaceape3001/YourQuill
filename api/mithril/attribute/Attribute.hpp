@@ -23,6 +23,8 @@ namespace yq::mithril {
         constexpr auto    operator<=>(const Attribute&rhs) const noexcept = default; 
         constexpr operator uint64_t() const noexcept { return id; }
     };
+
+    using AttributeDiffSpan    = std::span<const Attribute::Diff>;
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Attribute)

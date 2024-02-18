@@ -99,7 +99,11 @@ namespace {
             CacheQuery("DELETE FROM Images WHERE id=?")
         };
     
-        Image::Diff     x{.x = v, .chg = chg};
+        Image::Diff     x{
+            .x   = v, 
+            .id  = v.id, 
+            .chg = chg
+        };
         
         if(chg != Change::Added){
             Image::Info     ii  = cdb::info(v);
