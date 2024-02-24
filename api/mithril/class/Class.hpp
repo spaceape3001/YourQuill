@@ -17,7 +17,7 @@ namespace yq::mithril {
     struct Class {
         static constexpr const IdTypeId ID          = 7;
         static constexpr const IdTypes  PARENTS     = Document::ID;
-        static constexpr const char*    EXTENSION   = "class";
+        static constexpr const char*    EXTENSION   = "cls";
         
         struct Info;
         struct File;

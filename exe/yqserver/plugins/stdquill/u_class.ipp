@@ -59,11 +59,6 @@ namespace {
                 yInfo() << "Class " << x.key << " cannot be read.";
                 return;
             }
-            
-            yInfo() << "Class '" << x.key << "' Updating";
-            if(x.key.empty())
-                yInfo() << "Class " << x.id << " has empty key";
-            
 
             x.icon.to           = cdb::best_image(doc);
             x.category.to       = cdb::category(def->category);
