@@ -9,6 +9,9 @@
 namespace {
     void    u_user(User u, Change chg)
     {
+        if(!u)
+            return ;
+            
         User::Diff   x { 
             .x = u, 
             .id = u.id,

@@ -12,6 +12,9 @@ namespace {
 
     void    u_field(Field f, Change chg)
     {
+        if(!f)
+            return ;
+    
         Field::Diff   x { 
             .x      = f, 
             .id     = f.id,
@@ -136,20 +139,20 @@ namespace {
             //  Aliases
             x.aliases.analyze();
             for(const std::string& s : x.aliases.added)
-                iAlias.exec(f.id, s);
+                iAlias.exec(x.id, s);
                 
             
             // Types
             x.types.analyze();
             for(Id u : x.types.added)
-                iType.exec(f.id, u.m_value);
+                iType.exec(x.id, u.m_value);
 
             // Tags
             x.tags.to           = cdb::find_tags_set(def->tags, true);
             x.tags.analyze();
             
             for(Tag t : x.tags.added)
-                iTag.exec(f.id, t.id);
+                iTag.exec(x.id, t.id);
             
             
             //  Usurps

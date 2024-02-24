@@ -85,7 +85,7 @@ namespace yq::mithril::cdb {
     std::vector<Class>          db_classes(const string_view_set_t&);
 
     //! Creates all classes
-    std::vector<Class>           db_classes(const string_set_t&);
+    std::vector<Class>          db_classes(const string_set_t&);
     
     
     Graphviz                    dep_graph(Class);
@@ -161,6 +161,10 @@ namespace yq::mithril::cdb {
     std::vector<ClassFragDoc>   reads(Class, cdb_options_t opts=0);
     std::vector<ClassFragDoc>   reads(Class, class RootDir*, cdb_options_t opts=0);
 
+    std::set<Class>             rev_use_set(Class);
+    std::vector<Class>          rev_uses(Class, Sorted sorted=Sorted());
+    size_t                      rev_uses_count(Class);
+
     std::vector<Class>          reverse_classes(Class, Sorted sorted=Sorted());
     size_t                      reverse_classes_count(Class c);
     std::vector<Class::Rank>    reverse_classes_ranked(Class, Sorted sorted=Sorted());
@@ -185,6 +189,12 @@ namespace yq::mithril::cdb {
     std::string                 url(Class);
 
 
+    //! All classes that were listed in the file
+    std::set<Class>             use_set(Class);
+    std::vector<Class>          uses(Class, Sorted sorted=Sorted());
+    size_t                      uses_count(Class);
+
+    
     //!  \brief   Returns a writable document
     //!
     //!     \note the path will be CREATED by this method.

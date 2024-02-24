@@ -9,6 +9,9 @@
 namespace {
     void    u_leaf(Leaf l, Change chg)
     {
+        if(!l)
+            return ;
+            
         Document doc = cdb::document(l);
     
         Leaf::Diff   x { 

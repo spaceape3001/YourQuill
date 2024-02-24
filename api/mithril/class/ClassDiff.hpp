@@ -25,6 +25,7 @@ namespace yq::mithril {
         Changed<std::string>    plural;
         Changed<std::string>    brief;
 
+        Changed<ClassSet>       uses;
         Changed<TagSet>         tags;
     };
 }

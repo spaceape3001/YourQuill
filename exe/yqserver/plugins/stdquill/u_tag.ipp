@@ -9,6 +9,9 @@
 namespace {
     void    u_tag(Tag t, Change chg)
     {
+        if(!t)
+            return ;
+            
         Tag::Diff   x { 
             .x = t, 
             .id = t.id,
@@ -27,7 +30,7 @@ namespace {
         static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
         static thread_local CacheQuery uTagInfo("UPDATE Tags SET name=?,icon=?,leaf=?,brief=? WHERE id=?");
         static thread_local CacheQuery xTagStmts[] = {
-            CacheQuery( "DELETE FROM CTags WHERE tag=?" ),
+            CacheQuery( "DELETE FROM Class$Tags WHERE tag=?" ),
             CacheQuery( "DELETE FROM FTags WHERE tag=?" ),
             CacheQuery( "DELETE FROM LTags WHERE tag=?" ),
             CacheQuery( "DELETE FROM Tags WHERE id=?" )

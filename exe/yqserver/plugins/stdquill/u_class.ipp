@@ -23,6 +23,9 @@ namespace {
 
     void    u_class(Class c, Change chg)
     {
+        if(!c)
+            return ;
+    
         Class::Diff   x { 
             .x = c, 
             .id = c.id,
@@ -40,10 +43,15 @@ namespace {
             x.plural.from       = std::move(ii.plural);
             x.brief.from        = std::move(ii.brief);
             x.tags.from         = cdb::tag_set(c);
+            x.uses.from         = cdb::use_set(c);
         }
         
         static thread_local CacheQuery uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=?, url=?, devurl=?, icon=? WHERE id=?");
         static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+        static thread_local CacheQuery iTag("INSERT INTO Class$Tags (class, tag) VALUES (?,?)");
+        static thread_local CacheQuery dTag("DELETE FROM Class$Tags WHERE class=? AND tag=?");
+        static thread_local CacheQuery iUse("INSERT INTO Class$Uses (class, use) VALUES (?,?)");
+        static thread_local CacheQuery dUse("DELETE FROM Class$Uses WHERE class=? AND use=?");
 
         if(chg != Change::Removed){
             auto def        = cdb::merged(c, cdb::DONT_LOCK|cdb::IS_UPDATE);
@@ -51,13 +59,21 @@ namespace {
                 yInfo() << "Class " << x.key << " cannot be read.";
                 return;
             }
+            
+            yInfo() << "Class '" << x.key << "' Updating";
+            if(x.key.empty())
+                yInfo() << "Class " << x.id << " has empty key";
+            
 
             x.icon.to           = cdb::best_image(doc);
             x.category.to       = cdb::category(def->category);
             x.name.to           = std::move(def->name);
+            if(x.name.to.empty())
+                x.name.to       = x.key;
             x.plural.to         = std::move(def->plural);
             x.brief.to          = std::move(def->brief);
             x.tags.to           = make_set(cdb::db_tags(def->tags));
+            x.uses.to           = make_set(cdb::db_classes(def->use));
             
             uInfo.bind(1, x.name.to);
             uInfo.bind(2, x.plural.to);
@@ -69,6 +85,39 @@ namespace {
             uInfo.bind(8, x.icon.to);
             uInfo.bind(9, c);
             uInfo.exec();
+            
+            
+            // Tags
+            x.tags.analyze();
+            
+            for(Tag t : x.tags.added)
+                iTag.exec(x.id, t.id);
+
+            // Uses
+            x.uses.analyze();
+            for(Class u : x.uses.added)
+                iUse.exec(x.id, u.id);
+        }
+        
+        Class::Notify::notify(x);
+
+        if(chg != Change::Removed){
+            for(Tag t : x.tags.removed)
+                dTag.exec(x.id, t.id);
+            for(Class u : x.uses.removed)
+                dUse.exec(x.id, u.id);
+        } else {
+            static thread_local CacheQuery stmts[] = {
+                CacheQuery("DELETE FROM CAlias WHERE class=?"),
+                CacheQuery("DELETE FROM CPrefix WHERE class=?"),
+                CacheQuery("DELETE FROM CSuffix WHERE class=?"),
+                CacheQuery("DELETE FROM Class$Tags WHERE class=?"),
+                CacheQuery("DELETE FROM Class$Uses WHERE class=?"),
+                CacheQuery("DELETE FROM CLookup WHERE class=? AND priority=1"),
+                CacheQuery("DELETE FROM Classes WHERE id=?")
+            };
+            for(auto& sq : stmts)
+                sq.exec(x.id);
         }
         
     }

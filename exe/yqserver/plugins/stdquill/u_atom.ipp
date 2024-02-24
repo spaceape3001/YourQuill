@@ -9,6 +9,8 @@
 namespace {
     void    u_atom(Atom a, AttributeDiffSpan attrs, Change chg, Image icon={})
     {
+        if(!a)
+            return ;
     }
 
     void    s4_atom()

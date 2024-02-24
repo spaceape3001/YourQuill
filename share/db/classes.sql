@@ -11,11 +11,19 @@ CREATE TABLE Classes (
     url         VARCHAR(255),
     devurl      VARCHAR(255),
     
-        -- dependency graph!
+        -- dependency graph ID!
     deps        INTEGER,
     plural      VARCHAR(255),
     brief       VARCHAR(255)
 );
+
+    -- USES as defined in the file
+CREATE TABLE Class$Uses (
+    class       INTEGER NOT NULL,
+    use         INTEGER NOT NULL,
+    UNIQUE(class, use) ON CONFLICT IGNORE
+);
+
 
 CREATE TABLE CAlias (
     class       INTEGER NOT NULL,
@@ -64,7 +72,7 @@ CREATE TABLE CSources (
     UNIQUE(class,source) ON CONFLICT IGNORE
 );
 
-CREATE TABLE CTags (
+CREATE TABLE Class$Tags (
     class       INTEGER NOT NULL,
     tag         INTEGER NOT NULL,
     UNIQUE(class,tag) ON CONFLICT IGNORE

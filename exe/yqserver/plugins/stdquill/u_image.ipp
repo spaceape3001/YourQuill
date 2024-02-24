@@ -88,6 +88,9 @@ namespace {
     
     void    u_image(Image v, Change chg)
     {
+        if(!v)
+            return ;
+    
         static thread_local CacheQuery xImage[] = {
             CacheQuery("UPDATE Atoms SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE Categories SET icon=0 WHERE icon=?"),

@@ -9,6 +9,9 @@
 namespace {
     void    u_category(Category t, Change chg)
     {
+        if(!t)
+            return ;
+            
         Category::Diff   x { 
             .x = t, 
             .id = t.id,

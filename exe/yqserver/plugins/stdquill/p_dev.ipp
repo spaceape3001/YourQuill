@@ -196,13 +196,13 @@ namespace {
         dev_table(h, all_atoms(c, Sorted::YES));
     }
     
-    void    p_dev_class_base(WebHtml&h)
+    void    p_dev_class_bases(WebHtml&h)
     {
         Class   x   = class_(h);
         if(!x)
             throw HttpStatus::BadArgument;
         
-        h.title() << "Class (" << label(x) << "): Base";
+        h.title() << "Class (" << label(x) << "): Bases";
         dev_table(h, base_classes_ranked(x, Sorted::YES), "Hops");
     }
     
@@ -236,6 +236,27 @@ namespace {
         dev_table(h, inbound_classes_ranked(x, Sorted::YES), "Hops");
     }
     
+    void    p_dev_class_outbound(WebHtml&h)
+    {
+        Class   x   = class_(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+
+        h.title() << "Class (" << label(x) << "): Outbound";
+        dev_table(h, outbound_classes_ranked(x, Sorted::YES), "Hops");
+    }
+
+    void    p_dev_class_rev_uses(WebHtml& h)
+    {
+        Class   c   = class_(h);
+        if(!c)
+            throw HttpStatus::BadArgument;
+            
+        h.title() << "Class (" << label(c) << "): Used By";
+        dev_table(h, rev_uses(c, Sorted::YES));
+        
+    }
+
     void    p_dev_class_reverses(WebHtml&h)
     {
         Class   x   = class_(h);
@@ -246,16 +267,6 @@ namespace {
         dev_table(h, reverse_classes_ranked(x, Sorted::YES), "Hops");
     }
     
-
-    void    p_dev_class_outbound(WebHtml&h)
-    {
-        Class   x   = class_(h);
-        if(!x)
-            throw HttpStatus::BadArgument;
-
-        h.title() << "Class (" << label(x) << "): Outbound";
-        dev_table(h, outbound_classes_ranked(x, Sorted::YES), "Hops");
-    }
 
     void    p_dev_class_sources(WebHtml&h)
     {
@@ -288,6 +299,17 @@ namespace {
         dev_table(h, target_classes_ranked(x, Sorted::YES), "Hops");
     }
 
+    
+    void    p_dev_class_uses(WebHtml& h)
+    {
+        Class   c   = class_(h);
+        if(!c)
+            throw HttpStatus::BadArgument;
+            
+        h.title() << "Class (" << label(c) << "): Uses";
+        dev_table(h, uses(c, Sorted::YES));
+        
+    }
     
     /*
     void    p_dev_class_def_fields(WebHtml&h)
@@ -1246,7 +1268,9 @@ namespace {
 
         reg_webgroup({
             reg_webpage<p_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),
-            reg_webpage<p_dev_class_base>("/dev/class/base").argument("id", "Class ID").label("Base"),
+            reg_webpage<p_dev_class_bases>("/dev/class/base").argument("id", "Class ID").label("Base"),
+            reg_webpage<p_dev_class_uses>("/dev/class/uses").argument("id", "Class ID").label("Uses"),
+            reg_webpage<p_dev_class_rev_uses>("/dev/class/used").argument("id", "Class ID").label("Used"),
             reg_webpage<p_dev_class_derived>("/dev/class/derived").argument("id", "Class ID").label("Derived"),
             reg_webpage<p_dev_class_sources>("/dev/class/sources").argument("id", "Class ID").label("Sources"),
             reg_webpage<p_dev_class_targets>("/dev/class/targets").argument("id", "Class ID").label("Targets"),

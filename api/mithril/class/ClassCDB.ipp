@@ -304,7 +304,6 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
-
     // disabled until graphs are working
     //Graph               dep_graph(Class c)
     //{   
@@ -644,6 +643,27 @@ namespace yq::mithril::cdb {
         }
         return ret;
     }
+
+    std::set<Class>             rev_use_set(Class c)
+    {
+        static thread_local SQ  s("SELECT class FROM Class$Uses WHERE use=?");
+        return s.set<Class>(c.id);
+    }
+    
+    std::vector<Class>          rev_uses(Class c, Sorted sorted)
+    {
+        static thread_local SQ qs("SELECT use FROM Class$Uses INNER JOIN Classes ON Class$Uses.class=Classes.id WHERE use=? ORDER BY Classes.K");
+        static thread_local SQ qu("SELECT use FROM Class$Uses WHERE use=?");
+        SQ& s = sorted ? qs : qu;
+        return s.vec<Class>(c.id);
+    }
+    
+    size_t                      rev_uses_count(Class c)
+    {
+        static thread_local SQ s("SELECT COUNT(1) FROM Class$Uses WHERE use=?");
+        return s.size(c.id);
+    }
+
     
     std::vector<Class>       reverse_classes(Class c, Sorted sorted)
     {
@@ -715,20 +735,20 @@ namespace yq::mithril::cdb {
 
     std::set<Tag>               tag_set(Class c)
     {
-        static thread_local SQ s("SELECT tag FROM CTags WHERE class=?");
+        static thread_local SQ s("SELECT tag FROM Class$Tags WHERE class=?");
         return s.set<Tag>(c.id);
     }
 
     bool  tagged(Class c, Tag t)
     {
-        static thread_local SQ s("SELECT 1 FROM CTags WHERE class=? AND tag=?");
+        static thread_local SQ s("SELECT 1 FROM Class$Tags WHERE class=? AND tag=?");
         return s.present(c.id, t.id);
     }
 
     std::vector<Tag>  tags(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT tag FROM CTags INNER JOIN Tags ON CTags.tag=Tags.id WHERE class=? ORDER BY Tags.K");
-        static thread_local SQ qu("SELECT tag FROM CTags WHERE class=?");
+        static thread_local SQ qs("SELECT tag FROM Class$Tags INNER JOIN Tags ON Class$Tags.tag=Tags.id WHERE class=? ORDER BY Tags.K");
+        static thread_local SQ qu("SELECT tag FROM Class$Tags WHERE class=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Tag>(c.id);
     }
@@ -736,7 +756,7 @@ namespace yq::mithril::cdb {
     
     size_t  tags_count(Class c)
     {
-        static thread_local SQ s("SELECT COUNT(1) FROM CTags WHERE class=?");
+        static thread_local SQ s("SELECT COUNT(1) FROM Class$Tags WHERE class=?");
         return s.size(c.id);
     }
 
@@ -783,6 +803,27 @@ namespace yq::mithril::cdb {
     {
         static thread_local SQ    s("SELECT devurl FROM Classes WHERE class=?");
         return s.str(c.id);
+    }
+    
+
+    std::set<Class>             use_set(Class c)
+    {
+        static thread_local SQ  s("SELECT use FROM Class$Uses WHERE class=?");
+        return s.set<Class>(c.id);
+    }
+
+    std::vector<Class>          uses(Class c, Sorted sorted)
+    {
+        static thread_local SQ qs("SELECT use FROM Class$Uses INNER JOIN Classes ON Class$Uses.use=Classes.id WHERE class=? ORDER BY Classes.K");
+        static thread_local SQ qu("SELECT use FROM Class$Uses WHERE class=?");
+        SQ& s = sorted ? qs : qu;
+        return s.vec<Class>(c.id);
+    }
+    
+    size_t                      uses_count(Class c)
+    {
+        static thread_local SQ s("SELECT COUNT(1) FROM Class$Uses WHERE class=?");
+        return s.size(c.id);
     }
     
 
