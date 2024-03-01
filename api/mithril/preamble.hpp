@@ -87,8 +87,8 @@ namespace yq::mithril {
     using ClassU64Map           = std::map<Class,uint64_t>;
     using ClassCountMap         = std::map<Class,HCountU64>;
 
-    using HopCount              = HCountI8;
-    using hop_t                 = int8_t;
+    using HopCount              = HCountU8;
+    using hop_t                 = uint8_t;
 
     using ClassHopMap           = std::map<Class,HopCount>;
     using FieldHopMap           = std::map<Field,HopCount>;

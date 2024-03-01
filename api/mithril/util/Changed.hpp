@@ -80,13 +80,13 @@ namespace yq::mithril {
         {
             map_difference_exec2(from, to, 
                 [&](const typename map_t::value_type& j){
-                    added.insert(j);
+                    removed.insert(j);
                 }, [&](const typename map_t::value_type& j){
                     modified.insert(j);
                 }, [&](const typename map_t::value_type& j){
                     same.insert(j);
                 }, [&](const typename map_t::value_type& j){
-                    removed.insert(j);
+                    added.insert(j);
                 }
             );
         }
@@ -109,13 +109,13 @@ namespace yq::mithril {
         {
             map_difference_exec2(from, to, 
                 [&](const typename map_t::value_type& j){
-                    added.insert(j);
+                    removed.insert(j);
                 }, [&](const typename map_t::value_type& j){
                     modified.insert(j);
                 }, [&](const typename map_t::value_type& j){
                     same.insert(j);
                 }, [&](const typename map_t::value_type& j){
-                    removed.insert(j);
+                    added.insert(j);
                 }
             );
         }

@@ -27,5 +27,7 @@ namespace yq::mithril {
 
         Changed<ClassSet>       uses;
         Changed<TagSet>         tags;
+        Changed<ClassHopMap>    bases;
+        Changed<ClassHopMap>    deriveds;
     };
 }

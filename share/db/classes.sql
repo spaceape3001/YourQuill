@@ -31,7 +31,7 @@ CREATE TABLE CAlias (
     UNIQUE(class, alias) ON CONFLICT IGNORE
 );
 
-CREATE TABLE CDepends (
+CREATE TABLE Class$Depends (
     class       INTEGER NOT NULL,
     base        INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)

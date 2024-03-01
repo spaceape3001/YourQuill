@@ -20,6 +20,32 @@ namespace {
         
             
     }
+    
+    template <typename T, typename I=hop_t>
+    std::map<T, HCount<I>>   enumerate_hops(T c, std::function<std::set<T>(T)> fn)
+    {
+        std::map<T, HCount<I>>  ret;
+        std::set<T>             checked, check;
+        checked.insert(c);
+        check = fn(c);
+        
+        for(I cnt=0;;++cnt){
+            
+            std::set<T> tmp  = check - checked;
+            if(tmp.empty())    // usual exit
+                break;
+
+            check.clear();
+            for(T cc : tmp){
+                ret[cc] = { cnt };
+                check += fn(cc);
+            }
+        }
+        
+        
+        return ret;
+    }
+    
 
     void    u_class(Class c, Change chg)
     {
@@ -44,6 +70,8 @@ namespace {
             x.brief.from        = std::move(ii.brief);
             x.tags.from         = cdb::tag_set(c);
             x.uses.from         = cdb::use_set(c);
+            x.bases.from        = cdb::base_hops(c);
+            x.deriveds.from     = cdb::derived_hops(c);
         }
         
         static thread_local CacheQuery uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=?, url=?, devurl=?, icon=? WHERE id=?");
@@ -52,6 +80,9 @@ namespace {
         static thread_local CacheQuery dTag("DELETE FROM Class$Tags WHERE class=? AND tag=?");
         static thread_local CacheQuery iUse("INSERT INTO Class$Uses (class, use) VALUES (?,?)");
         static thread_local CacheQuery dUse("DELETE FROM Class$Uses WHERE class=? AND use=?");
+        static thread_local CacheQuery iBase("INSERT OR REPLACE INTO Class$Depends (class, base, hops) VALUES (?,?,?)");
+        static thread_local CacheQuery dBase("DELETE FROM Class$Depends WHERE class=? AND base=?");
+        static thread_local CacheQuery uBase("UPDATE Class$Depends SET hops=? WHERE class=? AND base=?");
 
         if(chg != Change::Removed){
             auto def        = cdb::merged(c, cdb::DONT_LOCK|cdb::IS_UPDATE);
@@ -69,6 +100,7 @@ namespace {
             x.brief.to          = std::move(def->brief);
             x.tags.to           = make_set(cdb::db_tags(def->tags));
             x.uses.to           = make_set(cdb::db_classes(def->use));
+            
             
             uInfo.bind(1, x.name.to);
             uInfo.bind(2, x.plural.to);
@@ -92,22 +124,75 @@ namespace {
             x.uses.analyze();
             for(Class u : x.uses.added)
                 iUse.exec(x.id, u.id);
+                
+            x.bases.to      = enumerate_hops<Class,hop_t>(c, cdb::use_set);
+            x.bases.analyze();
+            
+            for(auto& j : x.bases.added){
+                iBase.bind(1, x.id);
+                iBase.bind(2, j.first.id);
+                iBase.bind(3, j.second.cnt);
+                iBase.exec();
+            }
+            for(auto& j : x.bases.modified){
+                uBase.bind(1, j.second.cnt);
+                uBase.bind(2, x.id);
+                uBase.bind(3, j.first.id);
+                uBase.exec();
+            }
+            
+            
+            x.deriveds.to   = enumerate_hops<Class,hop_t>(c, cdb::rev_use_set);
+            x.deriveds.analyze();
+
+            for(auto& j : x.deriveds.added){
+                iBase.bind(1, j.first.id);
+                iBase.bind(2, x.id);
+                iBase.bind(3, j.second.cnt);
+            }
+            for(auto& j : x.deriveds.modified){
+                uBase.bind(1, j.second.cnt);
+                uBase.bind(2, j.first.id);
+                uBase.bind(3, x.id);
+            }
+        }
+
+        if(chg == Change::Removed){
+            x.tags.removed      = x.tags.from;
+            x.uses.removed      = x.uses.from;
+            x.bases.removed     = x.bases.from;
+            x.deriveds.removed  = x.deriveds.from;
         }
         
-        Class::Notify::notify(x);
-
         if(chg != Change::Removed){
             for(Tag t : x.tags.removed)
                 dTag.exec(x.id, t.id);
             for(Class u : x.uses.removed)
                 dUse.exec(x.id, u.id);
-        } else {
+            for(auto& j : x.bases.removed){
+                dBase.bind(1, x.id);
+                dBase.bind(2, j.first.id);
+                dBase.exec();
+            }
+            for(auto& j : x.deriveds.removed){
+                dBase.bind(1, j.first.id);
+                dBase.bind(2, x.id);
+                dBase.exec();
+            }
+        }
+        
+        
+        Class::Notify::notify(x);
+
+        if(chg == Change::Removed){
             static thread_local CacheQuery stmts[] = {
                 CacheQuery("DELETE FROM CAlias WHERE class=?"),
                 CacheQuery("DELETE FROM CPrefix WHERE class=?"),
                 CacheQuery("DELETE FROM CSuffix WHERE class=?"),
                 CacheQuery("DELETE FROM Class$Tags WHERE class=?"),
                 CacheQuery("DELETE FROM Class$Uses WHERE class=?"),
+                CacheQuery("DELETE FROM Class$Depends WHERE class=?"),
+                CacheQuery("DELETE FROM Class$Depends WHERE base=?"),
                 CacheQuery("DELETE FROM CLookup WHERE class=? AND priority=1"),
                 CacheQuery("DELETE FROM Classes WHERE id=?")
             };

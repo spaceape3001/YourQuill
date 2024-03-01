@@ -69,22 +69,22 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>   base_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ    qs("SELECT base FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? ORDER BY Classes.k");
-        static thread_local SQ    qu("SELECT base FROM CDepends WHERE class=?");
+        static thread_local SQ    qs("SELECT base FROM Class$Depends INNER JOIN Classes ON Class$Depends.base=Classes.id WHERE class=? ORDER BY Classes.k");
+        static thread_local SQ    qu("SELECT base FROM Class$Depends WHERE class=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
     }
     
     size_t              base_classes_count(Class c)
     {
-        static thread_local SQ s("SELECT COUNT(1) FROM CDepends WHERE class=?");
+        static thread_local SQ s("SELECT COUNT(1) FROM Class$Depends WHERE class=?");
         return s.size(c.id);
     }
     
     std::vector<Class::Rank>    base_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? ORDER BY hops,Classes.k");
-        static thread_local SQ  qu("SELECT base,hops FROM CDepends WHERE class=?");
+        static thread_local SQ  qs("SELECT base,hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.base=Classes.id WHERE class=? ORDER BY hops,Classes.k");
+        static thread_local SQ  qu("SELECT base,hops FROM Class$Depends WHERE class=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
         return exec_class_rank_vector(s);
@@ -92,8 +92,8 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>    base_classes_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT base,hops FROM CDepends INNER JOIN Classes ON CDepends.base=Classes.id WHERE class=? AND hops<=? ORDER BY hops,Classes.k");
-        static thread_local SQ  qu("SELECT base,hops FROM CDepends WHERE class=? AND hops<=?");
+        static thread_local SQ  qs("SELECT base,hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.base=Classes.id WHERE class=? AND hops<=? ORDER BY hops,Classes.k");
+        static thread_local SQ  qu("SELECT base,hops FROM Class$Depends WHERE class=? AND hops<=?");
         SQ& s   = sorted ? qs : qu;
         s.bind(1, c.id);
         s.bind(2, maxDepth);
@@ -108,6 +108,18 @@ namespace yq::mithril::cdb {
                 ret[c]  = { 0 };
             for(Class::Rank cr : base_classes_ranked(c))
                 ret[cr.cls].set_smaller(HCountU64{(uint64_t) cr.rank});
+        }
+        return ret;
+    }
+
+    ClassHopMap                 base_hops(Class c)
+    {
+        static thread_local SQ  s("SELECT base,hops FROM Class$Depends WHERE class=?");
+        ClassHopMap ret;
+        auto af = s.af();
+        s.bind(1, c.id);
+        while(s.step() == SQResult::Row){
+            ret[Class(s.v_uint64(1))] = { (hop_t) s.v_int(2) };
         }
         return ret;
     }
@@ -313,16 +325,16 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>       derived_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ    qs("SELECT class FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY Classes.k");
-        static thread_local SQ    qu("SELECT class FROM CDepends WHERE base=?");
+        static thread_local SQ    qs("SELECT class FROM Class$Depends INNER JOIN Classes ON Class$Depends.class=Classes.id WHERE base=? ORDER BY Classes.k");
+        static thread_local SQ    qu("SELECT class FROM Class$Depends WHERE base=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
     }
     
     std::vector<Class::Rank>    derived_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT class, hops FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? ORDER BY hops, Classes.k");
-        static thread_local SQ  qu("SELECT class, hops FROM CDepends WHERE base=?");
+        static thread_local SQ  qs("SELECT class, hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.class=Classes.id WHERE base=? ORDER BY hops, Classes.k");
+        static thread_local SQ  qu("SELECT class, hops FROM Class$Depends WHERE base=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
         return exec_class_rank_vector(s);
@@ -330,8 +342,8 @@ namespace yq::mithril::cdb {
     
     std::vector<Class::Rank>    derived_classes_limited_ranked(Class c, uint64_t maxDepth, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class, hops FROM CDepends INNER JOIN Classes ON CDepends.class=Classes.id WHERE base=? AND hops<=? ORDER BY hops, Classes.k");
-        static thread_local SQ qu("SELECT class, hops FROM CDepends WHERE base=? AND hops<=?");
+        static thread_local SQ qs("SELECT class, hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.class=Classes.id WHERE base=? AND hops<=? ORDER BY hops, Classes.k");
+        static thread_local SQ qu("SELECT class, hops FROM Class$Depends WHERE base=? AND hops<=?");
         
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -347,6 +359,18 @@ namespace yq::mithril::cdb {
                 ret[c]  = { 0 };
             for(Class::Rank cr : derived_classes_ranked(c))
                 ret[cr.cls].set_smaller(HCountU64{(uint64_t) cr.rank});
+        }
+        return ret;
+    }
+
+    ClassHopMap                 derived_hops(Class c)
+    {
+        static thread_local SQ  s("SELECT class,hops FROM Class$Depends WHERE base=?");
+        ClassHopMap ret;
+        auto af = s.af();
+        s.bind(1, c.id);
+        while(s.step() == SQResult::Row){
+            ret[Class(s.v_uint64(1))] = { (hop_t) s.v_int(2) };
         }
         return ret;
     }
@@ -463,7 +487,7 @@ namespace yq::mithril::cdb {
 
     bool                is(Class d, Class b)
     {
-        static thread_local SQ    s("SELECT 1 FROM CDepends WHERE class=? AND base=?");
+        static thread_local SQ    s("SELECT 1 FROM Class$Depends WHERE class=? AND base=?");
         return s.present(d.id, b.id);
     }
     

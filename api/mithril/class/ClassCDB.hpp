@@ -40,6 +40,8 @@ namespace yq::mithril::cdb {
     std::vector<Class::Rank>    base_classes_ranked(Class, Sorted sorted=Sorted());
     std::vector<Class::Rank>    base_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
     ClassCountMap               base_classes_ranked_merged_map(const ClassSet&, bool inSet=false);
+    
+    ClassHopMap                 base_hops(Class);
 
     //! Binding for class?
     std::string                 binding(Class);
@@ -92,6 +94,8 @@ namespace yq::mithril::cdb {
 
     //! all derives for this class
     std::vector<Class>          derived_classes(Class, Sorted sorted=Sorted());
+    
+    ClassHopMap                 derived_hops(Class);
 
             //  Rank here is number of hops
     std::vector<Class::Rank>    derived_classes_ranked(Class, Sorted sorted=Sorted());

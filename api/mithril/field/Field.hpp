@@ -22,7 +22,7 @@ namespace yq::mithril {
     struct Field {
         static constexpr const IdTypeId ID          = 12;
         static constexpr const IdTypes  PARENTS     = Document::ID;
-        static constexpr const char*    EXTENSION   = "field";
+        static constexpr const char*    EXTENSION   = "fld";
         struct Info;
         struct Data;
         struct Rank;

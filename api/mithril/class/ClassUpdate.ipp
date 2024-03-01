@@ -499,20 +499,20 @@ namespace yq::mithril::update {
         ClassHopMap them   = enum_bases();
         map_difference_exec(bases.hop, them, 
             [&](const ClassHopMap::value_type& j){
-                static thread_local CacheQuery  sql("DELETE FROM CDepends WHERE class=? AND base=?");
+                static thread_local CacheQuery  sql("DELETE FROM Class$Depends WHERE class=? AND base=?");
                 sql.bind(1, id);
                 sql.bind(2, j.first.id);
                 sql.exec();
             },
             [&](const ClassHopMap::value_type& j){
-                static thread_local CacheQuery sql("UPDATE CDepends SET hops=? WHERE class=? AND base=?");
+                static thread_local CacheQuery sql("UPDATE Class$Depends SET hops=? WHERE class=? AND base=?");
                 sql.bind(1, (int) j.second.cnt);
                 sql.bind(2, id);
                 sql.bind(3, j.first.id);
                 sql.exec();
             },
             [&](const ClassHopMap::value_type& j){
-                static thread_local CacheQuery sql("INSERT INTO CDepends (class, base, hops) VALUES (?,?,?)");
+                static thread_local CacheQuery sql("INSERT INTO Class$Depends (class, base, hops) VALUES (?,?,?)");
                 sql.bind(1, id);
                 sql.bind(2, j.first.id);
                 sql.bind(3, (int) j.second.cnt);
