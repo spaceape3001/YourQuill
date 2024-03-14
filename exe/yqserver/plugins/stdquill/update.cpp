@@ -240,10 +240,6 @@ namespace {
             
                 //  Classes & fields
             on_stage3<s3_class>(fsClass);
-            on_stage3<s3_class_info>(fsClass);
-            on_stage3<s3_class_bind>(fsClass);
-            on_stage3<s3_class_extend>(fsClass);
-            on_stage3<s3_class_derives>(fsClass);
             
             on_stage3<s3_field>(fsField);
             

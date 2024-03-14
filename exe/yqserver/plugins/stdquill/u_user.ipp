@@ -31,7 +31,7 @@ namespace {
             x.guest.from    = ii.is_guest;
         }
         
-        static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+        static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
         static thread_local CacheQuery uInfo("UPDATE Users SET name=?,icon=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=?,is_guest=? WHERE id=?");
 
         Document    doc     = cdb::document(u);

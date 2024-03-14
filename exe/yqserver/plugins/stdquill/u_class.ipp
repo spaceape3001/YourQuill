@@ -74,12 +74,12 @@ namespace {
             x.deriveds.from     = cdb::derived_hops(c);
         }
         
-        static thread_local CacheQuery uInfo("UPDATE Classes SET name=?, plural=?, brief=?, category=?, binding=?, url=?, devurl=?, icon=? WHERE id=?");
-        static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+        static thread_local CacheQuery uInfo("UPDATE " TBL_CLASSES " SET name=?, plural=?, brief=?, category=?, binding=?, url=?, devurl=?, icon=? WHERE id=?");
+        static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
         static thread_local CacheQuery iTag("INSERT INTO Class$Tags (class, tag) VALUES (?,?)");
         static thread_local CacheQuery dTag("DELETE FROM Class$Tags WHERE class=? AND tag=?");
-        static thread_local CacheQuery iUse("INSERT INTO Class$Uses (class, use) VALUES (?,?)");
-        static thread_local CacheQuery dUse("DELETE FROM Class$Uses WHERE class=? AND use=?");
+        static thread_local CacheQuery iUse("INSERT INTO ClsDefUse (class, use) VALUES (?,?)");
+        static thread_local CacheQuery dUse("DELETE FROM ClsDefUse WHERE class=? AND use=?");
         static thread_local CacheQuery iBase("INSERT OR REPLACE INTO Class$Depends (class, base, hops) VALUES (?,?,?)");
         static thread_local CacheQuery dBase("DELETE FROM Class$Depends WHERE class=? AND base=?");
         static thread_local CacheQuery uBase("UPDATE Class$Depends SET hops=? WHERE class=? AND base=?");
@@ -190,11 +190,11 @@ namespace {
                 CacheQuery("DELETE FROM CPrefix WHERE class=?"),
                 CacheQuery("DELETE FROM CSuffix WHERE class=?"),
                 CacheQuery("DELETE FROM Class$Tags WHERE class=?"),
-                CacheQuery("DELETE FROM Class$Uses WHERE class=?"),
+                CacheQuery("DELETE FROM ClsDef$Uses WHERE class=?"),
                 CacheQuery("DELETE FROM Class$Depends WHERE class=?"),
                 CacheQuery("DELETE FROM Class$Depends WHERE base=?"),
                 CacheQuery("DELETE FROM CLookup WHERE class=? AND priority=1"),
-                CacheQuery("DELETE FROM Classes WHERE id=?")
+                CacheQuery("DELETE FROM " TBL_CLASSES " WHERE id=?")
             };
             for(auto& sq : stmts)
                 sq.exec(x.id);
@@ -202,28 +202,13 @@ namespace {
         
     }
     
-        //  Classes go differently....
+        //  " TBL_CLASSES " go differently....
     
     void    s3_class(Document doc)
     {
         u_class(cdb::db_class(doc), Change::Added);
     }
 
-    void    s3_class_info(Document doc)
-    {
-    }
-
-    void    s3_class_bind(Document doc)
-    {
-    }
-
-    void    s3_class_extend(Document doc)
-    {
-    }
-
-    void    s3_class_derives(Document doc)
-    {
-    }
 
     void    s3_class_deduce(Document doc)
     {

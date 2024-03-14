@@ -95,7 +95,7 @@ namespace {
             CacheQuery("UPDATE Atoms SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE Categories SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE Classes SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Documents SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE " TBL_DOCUMENTS " SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE Fields SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE Leafs SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE Tags SET icon=0 WHERE icon=?"),

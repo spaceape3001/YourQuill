@@ -18,7 +18,7 @@ CREATE TABLE Classes (
 );
 
     -- USES as defined in the file
-CREATE TABLE Class$Uses (
+CREATE TABLE ClsDefUse (
     class       INTEGER NOT NULL,
     use         INTEGER NOT NULL,
     UNIQUE(class, use) ON CONFLICT IGNORE

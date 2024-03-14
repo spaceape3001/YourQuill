@@ -26,7 +26,7 @@ namespace {
             x.brief.from    = std::move(ii.brief);
         }
 
-        static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+        static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
         static thread_local CacheQuery uCategoryInfo("UPDATE Categories SET name=?,icon=?,brief=? WHERE id=?");
         
         Document doc    = cdb::document(t);

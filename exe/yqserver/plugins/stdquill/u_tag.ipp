@@ -27,7 +27,7 @@ namespace {
             x.brief.from    = std::move(ii.brief);
         }
         
-        static thread_local CacheQuery uDocIcon("UPDATE Documents SET icon=? WHERE id=?");
+        static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
         static thread_local CacheQuery uTagInfo("UPDATE Tags SET name=?,icon=?,leaf=?,brief=? WHERE id=?");
         static thread_local CacheQuery xTagStmts[] = {
             CacheQuery( "DELETE FROM Class$Tags WHERE tag=?" ),

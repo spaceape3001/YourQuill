@@ -16,6 +16,12 @@
 
 //#include "Graph.hpp"
 
+#define TBL_CLASSES             "Classes"
+#define TBL_CLASS_ALIAS         "CAlias"
+#define TBL_CLASS_DEF_USE       "ClsDefUse"
+#define TBL_CLASS_DEPENDENCY    "Class$Depends"
+
+
 
 namespace yq::mithril::cdb {
     string_set_t                aliases(Class);
@@ -89,8 +95,26 @@ namespace yq::mithril::cdb {
     //! Creates all classes
     std::vector<Class>          db_classes(const string_set_t&);
     
+    //! All classes that "used" this class
+    std::vector<Class>          def_rev_use(Class, Sorted sorted=Sorted{});
+    
+    //! All classes that "used" this class (as a set)
+    std::set<Class>             def_rev_use_set(Class);
+    
+    //! Count of classes "used" this class
+    uint64_t                    def_rev_use_count(Class);
+
+    //! All classes that were defined "use" for this class
+    std::vector<Class>          def_use(Class, Sorted sorted=Sorted{});
+    
+    //! All classes that were defined "use" for this class (as a set)
+    std::set<Class>             def_use_set(Class);
+    
+    //! Count of classes that were defined "use" for this class
+    uint64_t                    def_use_count(Class);
     
     Graphviz                    dep_graph(Class);
+    
 
     //! all derives for this class
     std::vector<Class>          derived_classes(Class, Sorted sorted=Sorted());

@@ -13,6 +13,8 @@
 #include <mithril/image/Image.hpp>
 #include <0/basic/Http.hpp>
 
+#define TBL_DOCUMENTS "Documents"
+
 namespace yq::mithril {
 
     struct Document::Info {

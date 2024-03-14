@@ -27,7 +27,7 @@ namespace yq::mithril::cdb {
 
     string_set_t                 aliases(Class c)
     {
-        static thread_local SQ   s("SELECT alias FROM CAlias WHERE class=?");
+        static thread_local SQ   s("SELECT alias FROM " TBL_CLASS_ALIAS " WHERE class=?");
         return s.sset(c.id);
     }
 
@@ -50,14 +50,15 @@ namespace yq::mithril::cdb {
 
     std::vector<Class>  all_classes(Sorted sorted)
     {
-        static thread_local SQ    qs("SELECT id FROM Classes ORDER BY K");
-        static thread_local SQ    qu("SELECT id FROM Classes");
+        static thread_local SQ    qs("SELECT id FROM ORDER BY K");
+        static thread_local SQ    qu("SELECT id FROM " TBL_CLASSES "");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>();
     }
+    
     size_t  all_classes_count()
     {
-        static thread_local SQ    s("SELECT COUNT(1) FROM Classes");
+        static thread_local SQ    s("SELECT COUNT(1) FROM " TBL_CLASSES "");
         return s.size();
     }
 
@@ -69,22 +70,22 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>   base_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ    qs("SELECT base FROM Class$Depends INNER JOIN Classes ON Class$Depends.base=Classes.id WHERE class=? ORDER BY Classes.k");
-        static thread_local SQ    qu("SELECT base FROM Class$Depends WHERE class=?");
+        static thread_local SQ    qs("SELECT base FROM " TBL_CLASS_DEPENDENCY " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPENDENCY ".base=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".k");
+        static thread_local SQ    qu("SELECT base FROM " TBL_CLASS_DEPENDENCY " WHERE class=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
     }
     
     size_t              base_classes_count(Class c)
     {
-        static thread_local SQ s("SELECT COUNT(1) FROM Class$Depends WHERE class=?");
+        static thread_local SQ s("SELECT COUNT(1) FROM " TBL_CLASS_DEPENDENCY " WHERE class=?");
         return s.size(c.id);
     }
     
     std::vector<Class::Rank>    base_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT base,hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.base=Classes.id WHERE class=? ORDER BY hops,Classes.k");
-        static thread_local SQ  qu("SELECT base,hops FROM Class$Depends WHERE class=?");
+        static thread_local SQ  qs("SELECT base,hops FROM " TBL_CLASS_DEPENDENCY " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPENDENCY ".base=" TBL_CLASSES ".id WHERE class=? ORDER BY hops," TBL_CLASSES ".k");
+        static thread_local SQ  qu("SELECT base,hops FROM " TBL_CLASS_DEPENDENCY " WHERE class=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
         return exec_class_rank_vector(s);
@@ -92,8 +93,8 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>    base_classes_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT base,hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.base=Classes.id WHERE class=? AND hops<=? ORDER BY hops,Classes.k");
-        static thread_local SQ  qu("SELECT base,hops FROM Class$Depends WHERE class=? AND hops<=?");
+        static thread_local SQ  qs("SELECT base,hops FROM " TBL_CLASS_DEPENDENCY " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPENDENCY ".base=" TBL_CLASSES ".id WHERE class=? AND hops<=? ORDER BY hops," TBL_CLASSES ".k");
+        static thread_local SQ  qu("SELECT base,hops FROM " TBL_CLASS_DEPENDENCY " WHERE class=? AND hops<=?");
         SQ& s   = sorted ? qs : qu;
         s.bind(1, c.id);
         s.bind(2, maxDepth);
@@ -114,7 +115,7 @@ namespace yq::mithril::cdb {
 
     ClassHopMap                 base_hops(Class c)
     {
-        static thread_local SQ  s("SELECT base,hops FROM Class$Depends WHERE class=?");
+        static thread_local SQ  s("SELECT base,hops FROM " TBL_CLASS_DEPENDENCY " WHERE class=?");
         ClassHopMap ret;
         auto af = s.af();
         s.bind(1, c.id);
@@ -126,19 +127,19 @@ namespace yq::mithril::cdb {
 
     std::string  binding(Class c)
     {
-        static thread_local SQ  s("SELECT binding FROM Classes WHERE id=?");
+        static thread_local SQ  s("SELECT binding FROM " TBL_CLASSES " WHERE id=?");
         return s.str(c.id);
     }
 
     std::string  brief(Class c)
     {
-        static thread_local SQ    s("SELECT brief FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT brief FROM " TBL_CLASSES " WHERE id=?");
         return s.str(c.id);
     }
     
     Category  category(Class c)
     {
-        static thread_local SQ s("SELECT category FROM Classes WHERE id=?");
+        static thread_local SQ s("SELECT category FROM " TBL_CLASSES " WHERE id=?");
         return s.as<Category>(c.id);
     }
 
@@ -163,7 +164,7 @@ namespace yq::mithril::cdb {
     
     Class  class_(std::string_view  k)
     {
-        static thread_local SQ s("SELECT id FROM Classes WHERE k=?");
+        static thread_local SQ s("SELECT id FROM " TBL_CLASSES " WHERE k=?");
         return s.as<Class>(k);
     }
 
@@ -259,7 +260,7 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>          classes_with_tag(Tag x, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class FROM CTags INNER JOIN Classes ON CTags.class=Classes.id WHERE tag=? ORDER BY Classes.k");
+        static thread_local SQ qs("SELECT class FROM CTags INNER JOIN " TBL_CLASSES " ON CTags.class=" TBL_CLASSES ".id WHERE tag=? ORDER BY " TBL_CLASSES ".k");
         static thread_local SQ qu("SELECT class FROM CTags WHERE tag=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(x.id);
@@ -281,7 +282,7 @@ namespace yq::mithril::cdb {
         if(k.empty())
             return Class();
     
-        static thread_local SQ    i("INSERT OR FAIL INTO Classes (id,k) VALUES (?,?)");
+        static thread_local SQ    i("INSERT OR FAIL INTO " TBL_CLASSES " (id,k) VALUES (?,?)");
         auto i_lk   = i.af();
 
         i.bind(1, doc.id);
@@ -319,22 +320,22 @@ namespace yq::mithril::cdb {
     // disabled until graphs are working
     //Graph               dep_graph(Class c)
     //{   
-        //static thread_local SQ    s("SELECT deps FROM Classes WHERE id=?");
+        //static thread_local SQ    s("SELECT deps FROM " TBL_CLASSES " WHERE id=?");
         //return s.as<Graph>(c.id);
     //}
     
     std::vector<Class>       derived_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ    qs("SELECT class FROM Class$Depends INNER JOIN Classes ON Class$Depends.class=Classes.id WHERE base=? ORDER BY Classes.k");
-        static thread_local SQ    qu("SELECT class FROM Class$Depends WHERE base=?");
+        static thread_local SQ    qs("SELECT class FROM " TBL_CLASS_DEPENDENCY " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPENDENCY ".class=" TBL_CLASSES ".id WHERE base=? ORDER BY " TBL_CLASSES ".k");
+        static thread_local SQ    qu("SELECT class FROM " TBL_CLASS_DEPENDENCY " WHERE base=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
     }
     
     std::vector<Class::Rank>    derived_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT class, hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.class=Classes.id WHERE base=? ORDER BY hops, Classes.k");
-        static thread_local SQ  qu("SELECT class, hops FROM Class$Depends WHERE base=?");
+        static thread_local SQ  qs("SELECT class, hops FROM " TBL_CLASS_DEPENDENCY " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPENDENCY ".class=" TBL_CLASSES ".id WHERE base=? ORDER BY hops, " TBL_CLASSES ".k");
+        static thread_local SQ  qu("SELECT class, hops FROM " TBL_CLASS_DEPENDENCY " WHERE base=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
         return exec_class_rank_vector(s);
@@ -342,8 +343,8 @@ namespace yq::mithril::cdb {
     
     std::vector<Class::Rank>    derived_classes_limited_ranked(Class c, uint64_t maxDepth, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class, hops FROM Class$Depends INNER JOIN Classes ON Class$Depends.class=Classes.id WHERE base=? AND hops<=? ORDER BY hops, Classes.k");
-        static thread_local SQ qu("SELECT class, hops FROM Class$Depends WHERE base=? AND hops<=?");
+        static thread_local SQ qs("SELECT class, hops FROM " TBL_CLASS_DEPENDENCY " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPENDENCY ".class=" TBL_CLASSES ".id WHERE base=? AND hops<=? ORDER BY hops, " TBL_CLASSES ".k");
+        static thread_local SQ qu("SELECT class, hops FROM " TBL_CLASS_DEPENDENCY " WHERE base=? AND hops<=?");
         
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -365,7 +366,7 @@ namespace yq::mithril::cdb {
 
     ClassHopMap                 derived_hops(Class c)
     {
-        static thread_local SQ  s("SELECT class,hops FROM Class$Depends WHERE base=?");
+        static thread_local SQ  s("SELECT class,hops FROM " TBL_CLASS_DEPENDENCY " WHERE base=?");
         ClassHopMap ret;
         auto af = s.af();
         s.bind(1, c.id);
@@ -390,7 +391,7 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>      edge_classes_in(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY Classes.K");
+        static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN " TBL_CLASSES " ON CTargets.class=" TBL_CLASSES ".id WHERE target=? ORDER BY " TBL_CLASSES ".K");
         static thread_local SQ qu("SELECT class FROM CTargets WHERE target=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
@@ -398,7 +399,7 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>      edge_classes_out(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
+        static thread_local SQ qs("SELECT class FROM CSources INNER JOIN " TBL_CLASSES " ON CSources.class=" TBL_CLASSES ".id WHERE source=? ORDER BY " TBL_CLASSES ".K");
         static thread_local SQ qu("SELECT class FROM CSources WHERE source=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
@@ -414,7 +415,7 @@ namespace yq::mithril::cdb {
 
     bool                exists_class(uint64_t i)
     {
-        static thread_local SQ s("SELECT 1 FROM Classes WHERE id=?");
+        static thread_local SQ s("SELECT 1 FROM " TBL_CLASSES " WHERE id=?");
         return s.present(i);
     }
     
@@ -441,13 +442,13 @@ namespace yq::mithril::cdb {
     
     Image               icon(Class c)
     {
-        static thread_local SQ    s("SELECT icon FROM Classes WHERE id=? LIMIT 1");
+        static thread_local SQ    s("SELECT icon FROM " TBL_CLASSES " WHERE id=? LIMIT 1");
         return s.as<Image>(c.id);
     }
     
     std::vector<Class>           inbound_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY Classes.K");
+        static thread_local SQ qs("SELECT class FROM CTargets INNER JOIN " TBL_CLASSES " ON CTargets.class=" TBL_CLASSES ".id WHERE target=? ORDER BY " TBL_CLASSES ".K");
         static thread_local SQ qu("SELECT class FROM CTargets WHERE target=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
@@ -455,7 +456,7 @@ namespace yq::mithril::cdb {
     
     std::vector<Class::Rank>      inbound_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class,hops FROM CTargets INNER JOIN Classes ON CTargets.class=Classes.id WHERE target=? ORDER BY hops,Classes.K");
+        static thread_local SQ qs("SELECT class,hops FROM CTargets INNER JOIN " TBL_CLASSES " ON CTargets.class=" TBL_CLASSES ".id WHERE target=? ORDER BY hops," TBL_CLASSES ".K");
         static thread_local SQ qu("SELECT class,hops FROM CTargets WHERE target=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -465,7 +466,7 @@ namespace yq::mithril::cdb {
     Class::Info         info(Class c, bool autoKey)
     {
         Class::Info    ret;
-        static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps, category, binding FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT k, edge, name, plural, brief, icon, deps, category, binding FROM " TBL_CLASSES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, c.id);
         if(s.step() == SQResult::Row){
@@ -487,7 +488,7 @@ namespace yq::mithril::cdb {
 
     bool                is(Class d, Class b)
     {
-        static thread_local SQ    s("SELECT 1 FROM Class$Depends WHERE class=? AND base=?");
+        static thread_local SQ    s("SELECT 1 FROM " TBL_CLASS_DEPENDENCY " WHERE class=? AND base=?");
         return s.present(d.id, b.id);
     }
     
@@ -510,13 +511,13 @@ namespace yq::mithril::cdb {
 
     bool                is_edge(Class c)
     {
-        static thread_local SQ    s("SELECT edge FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT edge FROM " TBL_CLASSES " WHERE id=?");
         return s.boolean(c.id);
     }
     
     std::string             key(Class c)
     {
-        static thread_local SQ    s("SELECT k FROM Classes WHERE id=? LIMIT 1");
+        static thread_local SQ    s("SELECT k FROM " TBL_CLASSES " WHERE id=? LIMIT 1");
         return s.str(c.id);
     }
     
@@ -528,7 +529,7 @@ namespace yq::mithril::cdb {
             s   = key(c);
         return s;
 
-        //static thread_local SQ    s("SELECT ifnull(name,k) FROM Classes WHERE id=?");
+        //static thread_local SQ    s("SELECT ifnull(name,k) FROM " TBL_CLASSES " WHERE id=?");
         //return s.str(c.id);
     }
 
@@ -596,13 +597,13 @@ namespace yq::mithril::cdb {
 
     std::string             name(Class c)
     {
-        static thread_local SQ    s("SELECT name FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT name FROM " TBL_CLASSES " WHERE id=?");
         return s.str(c.id);
     }
 
     NKI                 nki(Class c, bool autoKey)
     {
-        static thread_local SQ    s("SELECT name,icon,k FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT name,icon,k FROM " TBL_CLASSES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, c.id);
         if(s.step() == SQResult::Row){
@@ -620,7 +621,7 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>           outbound_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY Classes.K");
+        static thread_local SQ qs("SELECT class FROM CSources INNER JOIN " TBL_CLASSES " ON CSources.class=" TBL_CLASSES ".id WHERE source=? ORDER BY " TBL_CLASSES ".K");
         static thread_local SQ qu("SELECT class FROM CSources WHERE source=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
@@ -628,7 +629,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>     outbound_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT class,hops FROM CSources INNER JOIN Classes ON CSources.class=Classes.id WHERE source=? ORDER BY hops,Classes.K");
+        static thread_local SQ qs("SELECT class,hops FROM CSources INNER JOIN " TBL_CLASSES " ON CSources.class=" TBL_CLASSES ".id WHERE source=? ORDER BY hops," TBL_CLASSES ".K");
         static thread_local SQ qu("SELECT class,hops FROM CSources WHERE source=?");
         SQ& s = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -637,7 +638,7 @@ namespace yq::mithril::cdb {
     
     std::string             plural(Class c)
     {
-        static thread_local SQ    s("SELECT plural FROM Classes WHERE id=?");
+        static thread_local SQ    s("SELECT plural FROM " TBL_CLASSES " WHERE id=?");
         return s.str(c.id);
     }
 
@@ -670,28 +671,28 @@ namespace yq::mithril::cdb {
 
     std::set<Class>             rev_use_set(Class c)
     {
-        static thread_local SQ  s("SELECT class FROM Class$Uses WHERE use=?");
+        static thread_local SQ  s("SELECT class FROM " TBL_CLASS_DEF_USE " WHERE use=?");
         return s.set<Class>(c.id);
     }
     
     std::vector<Class>          rev_uses(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT use FROM Class$Uses INNER JOIN Classes ON Class$Uses.class=Classes.id WHERE use=? ORDER BY Classes.K");
-        static thread_local SQ qu("SELECT use FROM Class$Uses WHERE use=?");
+        static thread_local SQ qs("SELECT use FROM " TBL_CLASS_DEF_USE " INNER JOIN " TBL_CLASSES " ON Class$Uses.class=" TBL_CLASSES ".id WHERE use=? ORDER BY " TBL_CLASSES ".K");
+        static thread_local SQ qu("SELECT use FROM " TBL_CLASS_DEF_USE " WHERE use=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
     }
     
     size_t                      rev_uses_count(Class c)
     {
-        static thread_local SQ s("SELECT COUNT(1) FROM Class$Uses WHERE use=?");
+        static thread_local SQ s("SELECT COUNT(1) FROM " TBL_CLASS_DEF_USE " WHERE use=?");
         return s.size(c.id);
     }
 
     
     std::vector<Class>       reverse_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ    qs("SELECT reverse FROM CReverses INNER JOIN Classes ON CReverses.reverse=Classes.id WHERE class=? ORDER BY Classes.K");
+        static thread_local SQ    qs("SELECT reverse FROM CReverses INNER JOIN " TBL_CLASSES " ON CReverses.reverse=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
         static thread_local SQ    qu("SELECT reverse FROM CReverses WHERE class=?");
         SQ& s   = sorted ? qs : qu;
         return s.vec<Class>(c.id);
@@ -705,7 +706,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>    reverse_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT reverse, hops FROM CReverses INNER JOIN Classes ON CReverses.reverse=Classes.id WHERE class=? ORDER BY hops, Classes.k");
+        static thread_local SQ  qs("SELECT reverse, hops FROM CReverses INNER JOIN " TBL_CLASSES " ON CReverses.reverse=" TBL_CLASSES ".id WHERE class=? ORDER BY hops, " TBL_CLASSES ".k");
         static thread_local SQ  qu("SELECT reverse, hops FROM CReverses WHERE class=?");
         SQ&     s   = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -714,7 +715,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>    reverse_classes_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT reverse, hops FROM CReverses INNER JOIN Classes ON CReverses.reverse=Classes.id WHERE class=? AND hops<=? ORDER BY hops, Classes.k");
+        static thread_local SQ  qs("SELECT reverse, hops FROM CReverses INNER JOIN " TBL_CLASSES " ON CReverses.reverse=" TBL_CLASSES ".id WHERE class=? AND hops<=? ORDER BY hops, " TBL_CLASSES ".k");
         static thread_local SQ  qu("SELECT reverse, hops FROM CReverses WHERE class=? AND hops<=?");
         SQ&     s   = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -725,7 +726,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class>  sources(Class c, Sorted sorted)
     {
-        static thread_local SQ    qs("SELECT source FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY Classes.K");
+        static thread_local SQ    qs("SELECT source FROM CSources INNER JOIN " TBL_CLASSES " ON CSources.source=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
         static thread_local SQ    qu("SELECT source FROM CSources WHERE class=?");
 
         SQ& s   = sorted ? qs : qu;
@@ -740,7 +741,7 @@ namespace yq::mithril::cdb {
     
     std::vector<Class::Rank>    source_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? ORDER BY hops, Classes.k");
+        static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN " TBL_CLASSES " ON CSources.source=" TBL_CLASSES ".id WHERE class=? ORDER BY hops, " TBL_CLASSES ".k");
         static thread_local SQ  qu("SELECT source, hops FROM CSources WHERE class=?");
         SQ&     s   = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -749,7 +750,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>    source_classes_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN Classes ON CSources.source=Classes.id WHERE class=? AND hops<=? ORDER BY hops, Classes.k");
+        static thread_local SQ  qs("SELECT source, hops FROM CSources INNER JOIN " TBL_CLASSES " ON CSources.source=" TBL_CLASSES ".id WHERE class=? AND hops<=? ORDER BY hops, " TBL_CLASSES ".k");
         static thread_local SQ  qu("SELECT source, hops FROM CSources WHERE class=? AND hops<=?");
         SQ&     s   = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -786,7 +787,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class>       target_classes(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT target FROM CTargets INNER JOIN Classes ON CTargets.target=Classes.id WHERE class=? ORDER BY Classes.k");
+        static thread_local SQ  qs("SELECT target FROM CTargets INNER JOIN " TBL_CLASSES " ON CTargets.target=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".k");
         static thread_local SQ  qu("SELECT target FROM CTargets WHERE class=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
@@ -800,7 +801,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>    target_classes_ranked(Class c, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT target, hops FROM CTargets INNER JOIN Classes ON CTargets.target=Classes.id WHERE class=? ORDER BY hops, Classes.k");
+        static thread_local SQ  qs("SELECT target, hops FROM CTargets INNER JOIN " TBL_CLASSES " ON CTargets.target=" TBL_CLASSES ".id WHERE class=? ORDER BY hops, " TBL_CLASSES ".k");
         static thread_local SQ  qu("SELECT target, hops FROM CTargets WHERE class=?");
         SQ&     s   = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -809,7 +810,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class::Rank>    target_classes_ranked_limited(Class c, uint64_t maxDepth, Sorted sorted)
     {
-        static thread_local SQ  qs("SELECT target, hops FROM CTargets INNER JOIN Classes ON CTargets.target=Classes.id WHERE class=? AND hops<=? ORDER BY hops, Classes.k");
+        static thread_local SQ  qs("SELECT target, hops FROM CTargets INNER JOIN " TBL_CLASSES " ON CTargets.target=" TBL_CLASSES ".id WHERE class=? AND hops<=? ORDER BY hops, " TBL_CLASSES ".k");
         static thread_local SQ  qu("SELECT target, hops FROM CTargets WHERE class=? AND hops<=?");
         SQ&     s   = sorted ? qs : qu;
         s.bind(1, c.id);
@@ -819,34 +820,34 @@ namespace yq::mithril::cdb {
     
     std::string                 url(Class c)
     {
-        static thread_local SQ    s("SELECT url FROM Classes WHERE class=?");
+        static thread_local SQ    s("SELECT url FROM " TBL_CLASSES " WHERE class=?");
         return s.str(c.id);
     }
 
     std::string                 url_dev(Class c)
     {
-        static thread_local SQ    s("SELECT devurl FROM Classes WHERE class=?");
+        static thread_local SQ    s("SELECT devurl FROM " TBL_CLASSES " WHERE class=?");
         return s.str(c.id);
     }
     
 
     std::set<Class>             use_set(Class c)
     {
-        static thread_local SQ  s("SELECT use FROM Class$Uses WHERE class=?");
+        static thread_local SQ  s("SELECT use FROM " TBL_CLASS_DEF_USE " WHERE class=?");
         return s.set<Class>(c.id);
     }
 
     std::vector<Class>          uses(Class c, Sorted sorted)
     {
-        static thread_local SQ qs("SELECT use FROM Class$Uses INNER JOIN Classes ON Class$Uses.use=Classes.id WHERE class=? ORDER BY Classes.K");
-        static thread_local SQ qu("SELECT use FROM Class$Uses WHERE class=?");
+        static thread_local SQ qs("SELECT use FROM " TBL_CLASS_DEF_USE " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEF_USE ".use=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
+        static thread_local SQ qu("SELECT use FROM " TBL_CLASS_DEF_USE " WHERE class=?");
         SQ& s = sorted ? qs : qu;
         return s.vec<Class>(c.id);
     }
     
     size_t                      uses_count(Class c)
     {
-        static thread_local SQ s("SELECT COUNT(1) FROM Class$Uses WHERE class=?");
+        static thread_local SQ s("SELECT COUNT(1) FROM " TBL_CLASS_DEF_USE " WHERE class=?");
         return s.size(c.id);
     }
     
