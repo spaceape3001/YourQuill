@@ -11,6 +11,8 @@
 #include <mithril/image/Image.hpp>
 #include <vector>
 
+#define TBL_FOLDERS "Folders"
+
 namespace yq::mithril {
     struct Folder::Info {
         std::string     brief;

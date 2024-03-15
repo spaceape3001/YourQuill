@@ -13,6 +13,9 @@
 #include <mithril/image/Image.hpp>
 #include <mithril/category/Category.hpp>
 
+#define TBL_FIELDS      "Fields"
+#define TBL_FIELD_TAG   "FldTag"
+
 namespace yq::mithril {
 
         struct Field::Info {

@@ -14,6 +14,8 @@
 #include <mithril/tag/TagInfo.hpp>
 #include <mithril/tag/TagFile.hpp>
 
+#define TBL_TAGS    "Tags"
+
 namespace yq::mithril {
         using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
 }

@@ -76,13 +76,13 @@ namespace {
         
         static thread_local CacheQuery uInfo("UPDATE " TBL_CLASSES " SET name=?, plural=?, brief=?, category=?, binding=?, url=?, devurl=?, icon=? WHERE id=?");
         static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
-        static thread_local CacheQuery iTag("INSERT INTO Class$Tags (class, tag) VALUES (?,?)");
-        static thread_local CacheQuery dTag("DELETE FROM Class$Tags WHERE class=? AND tag=?");
-        static thread_local CacheQuery iUse("INSERT INTO ClsDefUse (class, use) VALUES (?,?)");
-        static thread_local CacheQuery dUse("DELETE FROM ClsDefUse WHERE class=? AND use=?");
-        static thread_local CacheQuery iBase("INSERT OR REPLACE INTO Class$Depends (class, base, hops) VALUES (?,?,?)");
-        static thread_local CacheQuery dBase("DELETE FROM Class$Depends WHERE class=? AND base=?");
-        static thread_local CacheQuery uBase("UPDATE Class$Depends SET hops=? WHERE class=? AND base=?");
+        static thread_local CacheQuery iTag("INSERT INTO " TBL_CLASS_TAG " (class, tag) VALUES (?,?)");
+        static thread_local CacheQuery dTag("DELETE FROM " TBL_CLASS_TAG " WHERE class=? AND tag=?");
+        static thread_local CacheQuery iUse("INSERT INTO " TBL_CLASS_USE " (class, use) VALUES (?,?)");
+        static thread_local CacheQuery dUse("DELETE FROM " TBL_CLASS_USE " WHERE class=? AND use=?");
+        static thread_local CacheQuery iBase("INSERT OR REPLACE INTO " TBL_CLASS_DEPEND " (class, base, hops) VALUES (?,?,?)");
+        static thread_local CacheQuery dBase("DELETE FROM " TBL_CLASS_DEPEND " WHERE class=? AND base=?");
+        static thread_local CacheQuery uBase("UPDATE " TBL_CLASS_DEPEND " SET hops=? WHERE class=? AND base=?");
 
         if(chg != Change::Removed){
             auto def        = cdb::merged(c, cdb::DONT_LOCK|cdb::IS_UPDATE);
@@ -186,13 +186,13 @@ namespace {
 
         if(chg == Change::Removed){
             static thread_local CacheQuery stmts[] = {
-                CacheQuery("DELETE FROM CAlias WHERE class=?"),
+                CacheQuery("DELETE FROM " TBL_CLASS_ALIAS " WHERE class=?"),
                 CacheQuery("DELETE FROM CPrefix WHERE class=?"),
                 CacheQuery("DELETE FROM CSuffix WHERE class=?"),
-                CacheQuery("DELETE FROM Class$Tags WHERE class=?"),
-                CacheQuery("DELETE FROM ClsDef$Uses WHERE class=?"),
-                CacheQuery("DELETE FROM Class$Depends WHERE class=?"),
-                CacheQuery("DELETE FROM Class$Depends WHERE base=?"),
+                CacheQuery("DELETE FROM " TBL_CLASS_DEPEND " WHERE class=?"),
+                CacheQuery("DELETE FROM " TBL_CLASS_DEPEND " WHERE base=?"),
+                CacheQuery("DELETE FROM " TBL_CLASS_TAG " WHERE class=?"),
+                CacheQuery("DELETE FROM " TBL_CLASS_USE " WHERE class=?"),
                 CacheQuery("DELETE FROM CLookup WHERE class=? AND priority=1"),
                 CacheQuery("DELETE FROM " TBL_CLASSES " WHERE id=?")
             };

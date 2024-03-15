@@ -92,13 +92,13 @@ namespace {
             return ;
     
         static thread_local CacheQuery xImage[] = {
-            CacheQuery("UPDATE Atoms SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Categories SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Classes SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE " TBL_ATOMS " SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE " TBL_CATEGORIES " SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE " TBL_CLASSES " SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE " TBL_DOCUMENTS " SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Fields SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE " TBL_FIELDS " SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE Leafs SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Tags SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE " TBL_TAGS " SET icon=0 WHERE icon=?"),
             CacheQuery("DELETE FROM Images WHERE id=?")
         };
     

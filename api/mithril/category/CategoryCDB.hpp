@@ -13,6 +13,8 @@
 #include <mithril/category/CategoryData.hpp>
 #include <mithril/category/CategoryFile.hpp>
 
+#define TBL_CATEGORIES  "Categories"
+
 namespace yq::mithril {
 
     

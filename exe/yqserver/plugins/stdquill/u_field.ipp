@@ -25,15 +25,15 @@ namespace {
             .anycls = cdb::is_any(f)
         };
         
-        static thread_local CacheQuery uInfo("UPDATE Fields SET name=?, plural=?, pkey=?, expected=?, brief=?, multi=?, restrict=?, category=?, maxcnt=?, icon=? WHERE id=?");
+        static thread_local CacheQuery uInfo("UPDATE " TBL_FIELDS " SET name=?, plural=?, pkey=?, expected=?, brief=?, multi=?, restrict=?, category=?, maxcnt=?, icon=? WHERE id=?");
         static thread_local CacheQuery iAlias("INSERT INTO FAlias (field, alias, usurp) VALUES (?,?,0)");
         static thread_local CacheQuery dAlias("DELETE FROM FAlias WHERE field=? AND alias=? AND usurp=0");
         static thread_local CacheQuery sAlias("SELECT alias FROM FAlias WHERE field=? AND usurp=0");
         static thread_local CacheQuery sUsurp("SELECT alias FROM FAlias WHERE field=? AND usurp=1");
         static thread_local CacheQuery iUsurp("INSERT INTO FAlias (field, alias, usurp) VALUES (?,?,1)");
         static thread_local CacheQuery dUsurp("DELETE FROM FAlias WHERE field=? AND alias=? AND usurp=1");
-        static thread_local CacheQuery iTag("INSERT INTO FTags (field, tag) VALUES (?,?)");
-        static thread_local CacheQuery dTag("DELETE FROM FTags WHERE field=? AND tag=?");
+        static thread_local CacheQuery iTag("INSERT INTO " TBL_FIELD_TAG " (field, tag) VALUES (?,?)");
+        static thread_local CacheQuery dTag("DELETE FROM " TBL_FIELD_TAG " WHERE field=? AND tag=?");
         static thread_local CacheQuery iType("INSERT INTO FTypes (field, type) VALUES (?,?)");
         static thread_local CacheQuery dType("DELETE FROM FTypes WHERE field=? AND type=?");
 
@@ -183,10 +183,10 @@ namespace {
         } else {
             static thread_local CacheQuery stmts[] = {
                 CacheQuery("DELETE FROM CFields WHERE field=?"),
-                CacheQuery("DELETE FROM FTags WHERE field=?"),
-                CacheQuery("DELETE FROM Fields WHERE id=?"),
+                CacheQuery("DELETE FROM " TBL_FIELD_TAG " WHERE field=?"),
                 CacheQuery("DELETE FROM FAlias WHERE field=?"),
-                CacheQuery("DELETE FROM FTypes WHERE field=?")
+                CacheQuery("DELETE FROM FTypes WHERE field=?"),
+                CacheQuery("DELETE FROM " TBL_FIELDS " WHERE id=?")
             };
             for(auto& sq : stmts)
                 sq.exec(f.id);

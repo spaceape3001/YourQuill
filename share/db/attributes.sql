@@ -12,7 +12,7 @@ CREATE TABLE Attributes (
     idx         INTEGER,
         -- key
     k           VARCHAR(255) NOT NULL COLLATE NOCASE,
-        -- user defined ID (file)
+        -- user defined ID (in file)
     uid         VARCHAR(255) COLLATE NOCASE,
         -- value of the attribute (generic text)
     value       VARCHAR(255) COLLATE NOCASE,

@@ -21,21 +21,21 @@
 namespace yq::mithril::cdb {
     std::vector<Folder>      all_folders(Sorted sorted)
     {
-        static thread_local CacheQuery    qs("SELECT id FROM Folders ORDER BY k");
-        static thread_local CacheQuery    qu("SELECT id FROM Folders");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_FOLDERS " ORDER BY k");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_FOLDERS "");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Folder>();
     }
     
     size_t              all_folders_count()
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Folders");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_FOLDERS "");
         return s.size();
     }
 
     std::string             brief(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT brief FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT brief FROM " TBL_FOLDERS " WHERE id=?");
         return s.str(f.id);
     }
     
@@ -161,7 +161,7 @@ namespace yq::mithril::cdb {
 
     Folder              child_folder(Folder f, std::string_view ck)
     {
-        static thread_local CacheQuery    s("SELECT id FROM Folders WHERE parent=? AND ck=? LIMIT 1");
+        static thread_local CacheQuery    s("SELECT id FROM " TBL_FOLDERS " WHERE parent=? AND ck=? LIMIT 1");
         return s.as<Folder>(f.id, ck);
     }
 
@@ -172,10 +172,10 @@ namespace yq::mithril::cdb {
 
     Folder                          child_folder(Folder f, uint64_t n, unsigned int opts)
     {
-        static thread_local CacheQuery  qsh("SELECT id FROM Folders WHERE parent=? ORDER BY sk LIMIT 1,?");
-        static thread_local CacheQuery  qsv("SELECT id FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk LIMIT 1,?");
-        static thread_local CacheQuery  quh("SELECT id FROM Folders WHERE parent=? LIMIT 1,?");
-        static thread_local CacheQuery  quv("SELECT id FROM Folders WHERE parent=? AND hidden=0 LIMIT 1,?");
+        static thread_local CacheQuery  qsh("SELECT id FROM " TBL_FOLDERS " WHERE parent=? ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  qsv("SELECT id FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0 ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  quh("SELECT id FROM " TBL_FOLDERS " WHERE parent=? LIMIT 1,?");
+        static thread_local CacheQuery  quv("SELECT id FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0 LIMIT 1,?");
 
         CacheQuery& s   = (opts & BEST_SORT) ? ((opts & HIDDEN) ? qsh : qsv) : ((opts & HIDDEN) ? quh : quv);
         auto af = s.af();
@@ -189,10 +189,10 @@ namespace yq::mithril::cdb {
 
     std::vector<Folder>      child_folders(Folder f, unsigned opts)
     {
-        static thread_local CacheQuery    s1("SELECT id FROM Folders WHERE parent=? ORDER BY sk");
-        static thread_local CacheQuery    s2("SELECT id FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk");
-        static thread_local CacheQuery    s3("SELECT id FROM Folders WHERE parent=?");
-        static thread_local CacheQuery    s4("SELECT id FROM Folders WHERE parent=? AND hidden=0");
+        static thread_local CacheQuery    s1("SELECT id FROM " TBL_FOLDERS " WHERE parent=? ORDER BY sk");
+        static thread_local CacheQuery    s2("SELECT id FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0 ORDER BY sk");
+        static thread_local CacheQuery    s3("SELECT id FROM " TBL_FOLDERS " WHERE parent=?");
+        static thread_local CacheQuery    s4("SELECT id FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0");
         
         CacheQuery& s   = (opts&HIDDEN)?((opts&BEST_SORT)?s1:s3):((opts&BEST_SORT)?s2:s4);
         return s.vec<Folder>(f.id);
@@ -207,20 +207,20 @@ namespace yq::mithril::cdb {
     size_t              child_folders_count(Folder f, unsigned opts)
     {
         if(opts & HIDDEN){
-            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Folders WHERE parent=?");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_FOLDERS " WHERE parent=?");
             return s.size(f.id);
         } else {
-            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Folders WHERE parent=? AND hidden=0");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0");
             return s.size(f.id);
         }
     }
 
     std::vector<FolderStr>          child_folders_with_skey(Folder f, unsigned int opts)
     {
-        static thread_local CacheQuery      s1("SELECT id, sk FROM Folders WHERE parent=? AND hidden=0 ORDER BY sk");
-        static thread_local CacheQuery      s2("SELECT id, sk FROM Folders WHERE parent=? ORDER BY sk");
-        static thread_local CacheQuery      s3("SELECT id, sk FROM Folders WHERE parent=? AND hidden=0");
-        static thread_local CacheQuery      s4("SELECT id, sk FROM Folders WHERE parent=?");
+        static thread_local CacheQuery      s1("SELECT id, sk FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0 ORDER BY sk");
+        static thread_local CacheQuery      s2("SELECT id, sk FROM " TBL_FOLDERS " WHERE parent=? ORDER BY sk");
+        static thread_local CacheQuery      s3("SELECT id, sk FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0");
+        static thread_local CacheQuery      s4("SELECT id, sk FROM " TBL_FOLDERS " WHERE parent=?");
         CacheQuery& s   = (opts&HIDDEN)?((opts&BEST_SORT)?s2:s4):((opts&BEST_SORT)?s1:s3);
         std::vector<FolderStr>      ret;
         auto   s_af = s.af();
@@ -237,15 +237,15 @@ namespace yq::mithril::cdb {
 
     std::vector<Fragment>    child_fragments(Folder f, Sorted sorted)
     {
-        static thread_local CacheQuery    qs("SELECT id FROM Fragments WHERE folder=? ORDER BY path");
-        static thread_local CacheQuery    qu("SELECT id FROM Fragments WHERE folder=?");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_FRAGMENTS " WHERE folder=? ORDER BY path");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_FRAGMENTS " WHERE folder=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Fragment>(f.id);
     }
     
     size_t              child_fragments_count(Folder f)
     {
-        static thread_local CacheQuery        s("SELECT COUNT(1) FROM Fragments WHERE folder=?");
+        static thread_local CacheQuery        s("SELECT COUNT(1) FROM " TBL_FRAGMENTS " WHERE folder=?");
         return s.size(f.id);
     }
 
@@ -271,8 +271,8 @@ namespace yq::mithril::cdb {
             k += ck;
         }
             
-        static thread_local CacheQuery    i("INSERT OR FAIL INTO Folders (k,sk,name,parent,hidden) VALUES (?,?,?,?,?)");
-        static thread_local CacheQuery    s("SELECT id FROM Folders WHERE k=?");
+        static thread_local CacheQuery    i("INSERT OR FAIL INTO " TBL_FOLDERS " (k,sk,name,parent,hidden) VALUES (?,?,?,?,?)");
+        static thread_local CacheQuery    s("SELECT id FROM " TBL_FOLDERS " WHERE k=?");
 
         auto s_lk   = s.af();
         auto i_lk   = i.af();
@@ -301,15 +301,15 @@ namespace yq::mithril::cdb {
     
     std::vector<Directory>   directories(Folder f, Sorted sorted)
     {
-        static thread_local CacheQuery    qs("SELECT id FROM Directories WHERE folder=? ORDER BY name");
-        static thread_local CacheQuery    qu("SELECT id FROM Directories WHERE folder=?");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_DIRECTORIES " WHERE folder=? ORDER BY name");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_DIRECTORIES " WHERE folder=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Directory>(f.id);
     }
     
     size_t              directories_count(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT COUNT(1) FROM Directories WHERE folder=?");
+        static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_DIRECTORIES " WHERE folder=?");
         return s.size(f.id);
     }
     
@@ -323,13 +323,13 @@ namespace yq::mithril::cdb {
         if(!rt)
             return false;
             
-        static thread_local CacheQuery s("SELECT 1 FROM Directories WHERE folder=? AND root=? LIMIT 1");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_DIRECTORIES " WHERE folder=? AND root=? LIMIT 1");
         return s.present(fo.id, rt->id);
     }
 
     bool                exists_folder(uint64_t i)
     {
-        static thread_local CacheQuery s("SELECT 1 FROM Folders WHERE id=? LIMIT 1");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_FOLDERS " WHERE id=? LIMIT 1");
         return s.present(i);
     }
 
@@ -337,7 +337,7 @@ namespace yq::mithril::cdb {
     {
         if(!fo)
             return Directory();
-        static thread_local CacheQuery  s("SELECT id FROM Directories WHERE folder=? LIMIT 1");
+        static thread_local CacheQuery  s("SELECT id FROM " TBL_DIRECTORIES " WHERE folder=? LIMIT 1");
         return s.as<Directory>(fo.id);
     }
     
@@ -348,7 +348,7 @@ namespace yq::mithril::cdb {
         if(!fo)
             return Directory();
         
-        static thread_local CacheQuery s("SELECT id FROM Directories WHERE folder=? AND root=? LIMIT 1");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_DIRECTORIES " WHERE folder=? AND root=? LIMIT 1");
         auto af = s.af();
         s.bind(1, fo.id);
         s.bind(2, r->id);
@@ -384,7 +384,7 @@ namespace yq::mithril::cdb {
     
     Folder              folder(std::string_view k)
     {
-        static thread_local CacheQuery    s("SELECT id FROM Folders WHERE k=? LIMIT 1");
+        static thread_local CacheQuery    s("SELECT id FROM " TBL_FOLDERS " WHERE k=? LIMIT 1");
         return s.as<Folder>(k);
     }
 
@@ -398,20 +398,20 @@ namespace yq::mithril::cdb {
     
     bool                hidden(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT hidden FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT hidden FROM " TBL_FOLDERS " WHERE id=?");
         return s.boolean(f.id);
     }
     
     Image               icon(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT icon FROM Folders WHERE id=? LIMIT 1");
+        static thread_local CacheQuery    s("SELECT icon FROM " TBL_FOLDERS " WHERE id=? LIMIT 1");
         return s.as<Image>(f.id);
     }
     
     Folder::Info        info(Folder f)
     {
         Folder::Info        ret;
-        static thread_local CacheQuery    s("SELECT k, sk, parent, name, brief, hidden, removed, icon FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT k, sk, parent, name, brief, hidden, removed, icon FROM " TBL_FOLDERS " WHERE id=?");
         s.bind(1,f.id);
         if(s.step() == SQResult::Row){
             ret.key         = s.v_text(1);
@@ -429,7 +429,7 @@ namespace yq::mithril::cdb {
     
     std::string             key(Folder f) 
     {
-        static thread_local CacheQuery    s("SELECT k FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT k FROM " TBL_FOLDERS " WHERE id=?");
         return s.str(f.id);
     }
 
@@ -449,13 +449,13 @@ namespace yq::mithril::cdb {
 
     std::string             name(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT name FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name FROM " TBL_FOLDERS " WHERE id=?");
         return s.str(f.id);
     }
 
     NKI                 nki(Folder f, bool autoKey)
     {
-        static thread_local CacheQuery    s("SELECT name,icon,k FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name,icon,k FROM " TBL_FOLDERS " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, f.id);
         if(s.step() == SQResult::Row){
@@ -472,20 +472,20 @@ namespace yq::mithril::cdb {
     
     Folder              parent(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT parent FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT parent FROM " TBL_FOLDERS " WHERE id=?");
         return s.as<Folder>(f.id);
     }
     
     bool                removed(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT removed FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT removed FROM " TBL_FOLDERS " WHERE id=?");
         return s.boolean(f.id);
     }
     
     std::vector<const RootDir*> root_dirs(Folder f)
     {
         std::vector<const RootDir*> ret;
-        static thread_local CacheQuery    s("SELECT DISTINCT root FROM Directories WHERE folder=?");
+        static thread_local CacheQuery    s("SELECT DISTINCT root FROM " TBL_DIRECTORIES " WHERE folder=?");
         auto s_af       = s.af();
         s.bind(1, f.id);
         while(s.step() == SQResult::Row){
@@ -498,13 +498,13 @@ namespace yq::mithril::cdb {
     
     size_t              roots_count(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT COUNT(DISTINCT root) FROM Directories WHERE folder=?");
+        static thread_local CacheQuery    s("SELECT COUNT(DISTINCT root) FROM " TBL_DIRECTORIES " WHERE folder=?");
         return s.size(f.id);
     }
 
     std::string             skey(Folder f)
     {
-        static thread_local CacheQuery    s("SELECT sk FROM Folders WHERE id=?");
+        static thread_local CacheQuery    s("SELECT sk FROM " TBL_FOLDERS " WHERE id=?");
         return s.str(f.id);
     }
     

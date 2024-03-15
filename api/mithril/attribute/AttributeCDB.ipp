@@ -12,57 +12,57 @@
 namespace yq::mithril::cdb {
     std::vector<Attribute>   all_attributes(Sorted)
     {
-        static thread_local CacheQuery s("SELECT id FROM Attributes");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_ATTRIBUTES "");
         return s.vec<Attribute>();
     }
     
     std::vector<Attribute>   all_attributes(Document d) 
     {
-        static thread_local CacheQuery s("SELECT id FROM Attributes WHERE doc=?");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_ATTRIBUTES " WHERE doc=?");
         return s.vec<Attribute>(d.id);
     }
     
     size_t              all_attributes_count()
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Attributes");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_ATTRIBUTES "");
         return s.size();
     }
     
     size_t              all_attributes_count(Document d)
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Attributes WHERE doc=?");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_ATTRIBUTES " WHERE doc=?");
         return s.size(d.id);
     }
 
     //! Gets top-level attirbutes
     std::vector<Attribute>   attributes(Document d)
     {
-        static thread_local CacheQuery s("SELECT id FROM Attributes WHERE doc=? AND parent=0 ORDER BY idx");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_ATTRIBUTES " WHERE doc=? AND parent=0 ORDER BY idx");
         return s.vec<Attribute>(d.id);
     }
     
     
     size_t              attributes_count(Document d)
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Attributes WHERE doc=? AND parent=0");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_ATTRIBUTES " WHERE doc=? AND parent=0");
         return s.size(d.id);
     }
 
     std::vector<Attribute>   child_attributes(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT id FROM Attributes WHERE parent=? ORDER BY idx");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_ATTRIBUTES " WHERE parent=? ORDER BY idx");
         return s.vec<Attribute>(a.id);
     }
 
     size_t              child_attributes_count(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Attributes WHERE parent=?");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_ATTRIBUTES " WHERE parent=?");
         return s.size(a.id);
     }
 
     Attribute db_attribute(Document doc, Attribute par, uint64_t idx, std::string_view k, std::string_view uid, std::string_view val)
     {
-        static thread_local CacheQuery i("INSERT INTO Attributes (doc,parent,idx,k,uid,value) VALUES (?,?,?,?,?,?)");
+        static thread_local CacheQuery i("INSERT INTO " TBL_ATTRIBUTES " (doc,parent,idx,k,uid,value) VALUES (?,?,?,?,?,?)");
         i.bind(1, doc.id);
         i.bind(2, par.id);
         i.bind(3, idx);
@@ -76,13 +76,13 @@ namespace yq::mithril::cdb {
 
     Document            document(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT doc FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT doc FROM " TBL_ATTRIBUTES " WHERE id=?");
         return s.as<Document>(a.id);
     }
     
     void                erase_all_attributes(Document doc)
     {
-        static thread_local CacheQuery x("DELETE FROM Attributes WHERE doc=?");
+        static thread_local CacheQuery x("DELETE FROM " TBL_ATTRIBUTES " WHERE doc=?");
         x.exec(doc.id);
     }
 
@@ -93,14 +93,14 @@ namespace yq::mithril::cdb {
     
     bool                exists_attribute(uint64_t i)
     {
-        static thread_local CacheQuery s("SELECT 1 FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_ATTRIBUTES " WHERE id=?");
         return s.present(i);
     }
 
     //! Index in the file's list
     uint64_t            index(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT idx FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT idx FROM " TBL_ATTRIBUTES " WHERE id=?");
         return s.u64(a.id);
     }
     
@@ -108,7 +108,7 @@ namespace yq::mithril::cdb {
     Attribute::Info         info(Attribute a)
     {
         Attribute::Info     ret;
-        static thread_local CacheQuery s("SELECT k,value,uid,idx,doc,parent FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT k,value,uid,idx,doc,parent FROM " TBL_ATTRIBUTES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, a.id);
         if(s.step() == SQResult::Row){
@@ -124,14 +124,14 @@ namespace yq::mithril::cdb {
 
     std::string          key(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT k FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT k FROM " TBL_ATTRIBUTES " WHERE id=?");
         return s.str(a.id);
     }
 
     std::vector<Attribute::KVUA>    kvua(Attribute a)
     {
         std::vector<Attribute::KVUA> ret;
-        static thread_local CacheQuery s("SELECT k,value,uid,id,idx FROM Attributes WHERE parent=? ORDER BY idx");
+        static thread_local CacheQuery s("SELECT k,value,uid,id,idx FROM " TBL_ATTRIBUTES " WHERE parent=? ORDER BY idx");
         auto s_af = s.af();
         s.bind(1, a.id);
         while(s.step() == SQResult::Row){
@@ -150,7 +150,7 @@ namespace yq::mithril::cdb {
     std::vector<Attribute::KVUA>    kvua(Document d)
     {
         std::vector<Attribute::KVUA> ret;
-        static thread_local CacheQuery s("SELECT k,value,uid,id,idx FROM Attributes WHERE doc=? AND parent=0 ORDER BY idx");
+        static thread_local CacheQuery s("SELECT k,value,uid,id,idx FROM " TBL_ATTRIBUTES " WHERE doc=? AND parent=0 ORDER BY idx");
         auto s_af = s.af();
         s.bind(1, d.id);
         while(s.step() == SQResult::Row){
@@ -172,19 +172,19 @@ namespace yq::mithril::cdb {
     
     Attribute           parent(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT parent FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT parent FROM " TBL_ATTRIBUTES " WHERE id=?");
         return s.as<Attribute>(a.id);
     }
 
     std::string             uid(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT uid FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT uid FROM " TBL_ATTRIBUTES " WHERE id=?");
         return s.str(a.id);
     }
     
     std::string             value(Attribute a)
     {
-        static thread_local CacheQuery s("SELECT value FROM Attributes WHERE id=?");
+        static thread_local CacheQuery s("SELECT value FROM " TBL_ATTRIBUTES " WHERE id=?");
         return s.str(a.id);
     }
 }

@@ -12,6 +12,11 @@
 #include <mithril/leaf/Leaf.hpp>
 #include <vector>
 
+#define TBL_ATOMS           "Atoms"
+#define TBL_ATOM_CLASS      "AtomClass"
+#define TBL_ATOM_PROPERTY   "AtomProperty"
+#define TBL_ATOM_TAG        "AtomTag"
+
 namespace yq::mithril::cdb {
     /*! \brief Returns all atoms in the cache database
         \param[in] sorted   Yes/no for sorting by key. (default is no)

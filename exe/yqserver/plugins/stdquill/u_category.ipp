@@ -27,7 +27,7 @@ namespace {
         }
 
         static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
-        static thread_local CacheQuery uCategoryInfo("UPDATE Categories SET name=?,icon=?,brief=? WHERE id=?");
+        static thread_local CacheQuery uCategoryInfo("UPDATE " TBL_CATEGORIES " SET name=?,icon=?,brief=? WHERE id=?");
         
         Document doc    = cdb::document(t);
         if(chg != Change::Removed){
@@ -54,8 +54,8 @@ namespace {
         }
 
         static thread_local CacheQuery xCategoryStmts[] = {
-            CacheQuery( "UPDATE Classes SET category=0 WHERE category=?" ),
-            CacheQuery( "DELETE FROM Categories WHERE id=?" )
+            CacheQuery( "UPDATE " TBL_CLASSES " SET category=0 WHERE category=?" ),
+            CacheQuery( "DELETE FROM " TBL_CATEGORIES " WHERE id=?" )
         };
         
         Category::Notify::notify(x);

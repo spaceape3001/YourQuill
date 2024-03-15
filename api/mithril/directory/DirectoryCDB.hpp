@@ -14,6 +14,8 @@
 #include <filesystem>
 #include <vector>
 
+#define TBL_DIRECTORIES "Directories"
+
 namespace yq::mithril {
 
     /*! \brief Information fro a directory

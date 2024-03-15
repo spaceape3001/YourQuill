@@ -17,9 +17,10 @@
 //#include "Graph.hpp"
 
 #define TBL_CLASSES             "Classes"
-#define TBL_CLASS_ALIAS         "CAlias"
-#define TBL_CLASS_DEF_USE       "ClsDefUse"
-#define TBL_CLASS_DEPENDENCY    "Class$Depends"
+#define TBL_CLASS_ALIAS         "ClsAlias"
+#define TBL_CLASS_DEPEND        "ClsDepend"
+#define TBL_CLASS_TAG           "ClsTag"
+#define TBL_CLASS_USE           "ClsUse"
 
 
 

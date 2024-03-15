@@ -11,6 +11,8 @@
 #include <mithril/image/Image.hpp>
 #include <mithril/user/UserFile.hpp>
 
+#define TBL_USERS "Users"
+
 namespace yq::mithril {        
     struct User::Info {
         Document        doc;

@@ -32,27 +32,27 @@ namespace yq::mithril::cdb {
 
     std::vector<Tag>    all_tags(Sorted sorted)
     {
-        static thread_local CacheQuery    qs("SELECT id FROM Tags ORDER BY k");
-        static thread_local CacheQuery    qu("SELECT id FROM Tags");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_TAGS " ORDER BY k");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_TAGS "");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Tag>();
     }
     
     size_t              count_tags()
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Tags");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_TAGS "");
         return s.size();
     }
 
     bool                exists_tag(uint64_t i)
     {
-        static thread_local CacheQuery s("SELECT 1 FROM Tags WHERE id=? LIMIT 1");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_TAGS " WHERE id=? LIMIT 1");
         return s.present(i);
     }
 
     Tag                 find_tag(std::string_view k)
     {
-        static thread_local CacheQuery    s("SELECT id FROM Tags WHERE k=?");
+        static thread_local CacheQuery    s("SELECT id FROM " TBL_TAGS " WHERE k=?");
         return s.as<Tag>(k);
     }
     
@@ -158,7 +158,7 @@ namespace yq::mithril::cdb {
 
     std::string                 brief(Tag t)
     {
-        static thread_local CacheQuery    s("SELECT brief FROM Tags WHERE id=?");
+        static thread_local CacheQuery    s("SELECT brief FROM " TBL_TAGS " WHERE id=?");
         return s.str(t.id);
     }
 
@@ -169,7 +169,7 @@ namespace yq::mithril::cdb {
 
     Image               icon(Tag t)
     {
-        static thread_local CacheQuery    s("SELECT icon FROM Tags WHERE id=? LIMIT 1");
+        static thread_local CacheQuery    s("SELECT icon FROM " TBL_TAGS " WHERE id=? LIMIT 1");
         return s.as<Image>(t.id);
     }
     
@@ -177,7 +177,7 @@ namespace yq::mithril::cdb {
     Tag::Info           info(Tag t, bool autoKey)
     {
         Tag::Info    ret;
-        static thread_local CacheQuery    s("SELECT brief,k,name,icon,leaf FROM Tags WHERE id=?");
+        static thread_local CacheQuery    s("SELECT brief,k,name,icon,leaf FROM " TBL_TAGS " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, t.id);
         if(s.step() == SQResult::Row){
@@ -196,32 +196,32 @@ namespace yq::mithril::cdb {
 
     std::string key(Tag t)
     {
-        static thread_local CacheQuery    s("SELECT k FROM Tags WHERE id=?");
+        static thread_local CacheQuery    s("SELECT k FROM " TBL_TAGS " WHERE id=?");
         return s.str(t.id);
     }
     
     std::string label(Tag t)
     {
-        static thread_local CacheQuery    s("SELECT ifnull(name,k) FROM Tags WHERE id=?");
+        static thread_local CacheQuery    s("SELECT ifnull(name,k) FROM " TBL_TAGS " WHERE id=?");
         return s.str(t.id);
     }
     
     Leaf                leaf(Tag t)
     {
-        static thread_local CacheQuery    s("SELECT leaf FROM Tags WHERE id=?");
+        static thread_local CacheQuery    s("SELECT leaf FROM " TBL_TAGS " WHERE id=?");
         return s.as<Leaf>(t.id);
     }
     
     std::string    name(Tag t)
     {
-        static thread_local CacheQuery    s("SELECT name FROM Tags WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name FROM " TBL_TAGS " WHERE id=?");
         return s.str(t.id);
     }
     
     
     NKI                 nki(Tag t, bool autoKey)
     {
-        static thread_local CacheQuery    s("SELECT name,icon,k FROM Tags WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name,icon,k FROM " TBL_TAGS " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, t.id);
         if(s.step() == SQResult::Row){
@@ -255,7 +255,7 @@ namespace yq::mithril::cdb {
         if(k.empty())
             return Tag();
         
-        static thread_local CacheQuery    i("INSERT OR FAIL INTO Tags (k,id) VALUES (?,?)");
+        static thread_local CacheQuery    i("INSERT OR FAIL INTO " TBL_TAGS " (k,id) VALUES (?,?)");
         auto i_lk   = i.af();
         
         i.bind(1, k);

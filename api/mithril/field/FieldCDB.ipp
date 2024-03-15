@@ -40,15 +40,15 @@ namespace yq::mithril::cdb {
     
     std::vector<Field>           all_fields(Sorted sorted)
     {
-        static thread_local CacheQuery qs("SELECT id FROM Fields ORDER BY k");
-        static thread_local CacheQuery qu("SELECT id FROM Fields");
+        static thread_local CacheQuery qs("SELECT id FROM " TBL_FIELDS " ORDER BY k");
+        static thread_local CacheQuery qu("SELECT id FROM " TBL_FIELDS "");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Field>();
     }
     
     size_t              all_fields_count()
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Fields");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_FIELDS "");
         return s.size();
     }
     
@@ -65,19 +65,19 @@ namespace yq::mithril::cdb {
     
     std::string             brief(Field f)
     {
-        static thread_local CacheQuery s("SELECT brief FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT brief FROM " TBL_FIELDS " WHERE id=?");
         return s.str(f.id);
     }
 
     Category  category(Field f)
     {
-        static thread_local CacheQuery s("SELECT category FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT category FROM " TBL_FIELDS " WHERE id=?");
         return s.as<Category>(f.id);
     }
     
     Class               class_(Field f)
     {
-        static thread_local CacheQuery s("SELECT class FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT class FROM " TBL_FIELDS " WHERE id=?");
         return s.as<Class>(f.id);
     }
 
@@ -120,7 +120,7 @@ namespace yq::mithril::cdb {
             anycls  = false;
         }
 
-        static thread_local CacheQuery i("INSERT INTO Fields (id, k, class, ck, anycls) VALUES (?,?,?,?,?)");
+        static thread_local CacheQuery i("INSERT INTO " TBL_FIELDS " (id, k, class, ck, anycls) VALUES (?,?,?,?,?)");
         auto i_af = i.af();
         i.bind(1, doc.id);
         i.bind(2, k);
@@ -161,13 +161,13 @@ namespace yq::mithril::cdb {
 
     bool                exists_field(uint64_t i)
     {
-        static thread_local CacheQuery s("SELECT 1 FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_FIELDS " WHERE id=?");
         return s.present(i);
     }
 
     Id                  expected(Field f)
     {
-        static thread_local CacheQuery    s("SELECT expected FROM Fields WHERE id=?");
+        static thread_local CacheQuery    s("SELECT expected FROM " TBL_FIELDS " WHERE id=?");
         return Id{s.u64(f.id)};
     }
 
@@ -191,7 +191,7 @@ namespace yq::mithril::cdb {
 
     Field                   field(std::string_view k)
     {
-        static thread_local CacheQuery s("SELECT 1 FROM Fields WHERE k=?");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_FIELDS " WHERE k=?");
         return s.as<Field>(k);
     }
 
@@ -230,7 +230,7 @@ namespace yq::mithril::cdb {
 
     Image               icon(Field f)
     {
-        static thread_local CacheQuery    s("SELECT icon FROM Fields WHERE id=?");
+        static thread_local CacheQuery    s("SELECT icon FROM " TBL_FIELDS " WHERE id=?");
         return s.as<Image>(f.id);
     }
     
@@ -238,7 +238,7 @@ namespace yq::mithril::cdb {
     Field::Info         info(Field f, bool autoKey)
     {
         Field::Info        ret;
-        static thread_local CacheQuery s("SELECT k, class, name, pkey, plural, brief, category, restrict, multi, maxcnt, expected FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT k, class, name, pkey, plural, brief, category, restrict, multi, maxcnt, expected FROM " TBL_FIELDS " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, f.id);
         if(s.step() == SQResult::Row){
@@ -261,13 +261,13 @@ namespace yq::mithril::cdb {
     
     bool                    is_any(Field f)
     {
-        static thread_local CacheQuery s("SELECT anycls FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT anycls FROM " TBL_FIELDS " WHERE id=?");
         return s.boolean(f.id);
     }
 
     std::string             key(Field f)
     {
-        static thread_local CacheQuery s("SELECT k FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT k FROM " TBL_FIELDS " WHERE id=?");
         return s.str(f.id);
     }
     
@@ -344,25 +344,25 @@ namespace yq::mithril::cdb {
 
     uint64_t                max_count(Field f)
     {
-        static thread_local CacheQuery    s("SELECT maxcnt FROM Fields WHERE id=?");
+        static thread_local CacheQuery    s("SELECT maxcnt FROM " TBL_FIELDS " WHERE id=?");
         return s.u64(f);
     }
     
     Multiplicity            multiplicity(Field f)
     {
-        static thread_local CacheQuery    s("SELECT multi FROM Fields WHERE id=?");
+        static thread_local CacheQuery    s("SELECT multi FROM " TBL_FIELDS " WHERE id=?");
         return Multiplicity(s.integer(f));
     }
 
     std::string             name(Field f)
     {
-        static thread_local CacheQuery    s("SELECT name FROM Fields WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name FROM " TBL_FIELDS " WHERE id=?");
         return s.str(f.id);
     }
 
     NKI                     nki(Field f, bool autoKeyToName)
     {
-        static thread_local CacheQuery    s("SELECT name,icon,k FROM Fields WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name,icon,k FROM " TBL_FIELDS " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, f.id);
         if(s.step() == SQResult::Row){
@@ -386,13 +386,13 @@ namespace yq::mithril::cdb {
     
     std::string             pkey(Field f)
     {
-        static thread_local CacheQuery s("SELECT pkey FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT pkey FROM " TBL_FIELDS " WHERE id=?");
         return s.str(f.id);
     }
     
     std::string             plural(Field f)
     {
-        static thread_local CacheQuery s("SELECT plural FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT plural FROM " TBL_FIELDS " WHERE id=?");
         return s.str(f.id);
     }
     
@@ -426,21 +426,21 @@ namespace yq::mithril::cdb {
 
     Restriction             restriction(Field f)
     {
-        static thread_local CacheQuery    s("SELECT restrict FROM Fields WHERE id=?");
+        static thread_local CacheQuery    s("SELECT restrict FROM " TBL_FIELDS " WHERE id=?");
         return Restriction(s.integer(f));
     }
 
     std::string             skey(Field f)
     {
-        static thread_local CacheQuery s("SELECT ck FROM Fields WHERE id=?");
+        static thread_local CacheQuery s("SELECT ck FROM " TBL_FIELDS " WHERE id=?");
         return s.str(f.id);
     }
 
 
     std::vector<Tag>  tags(Field f, Sorted sorted)
     {
-        static thread_local CacheQuery qs("SELECT tag FROM FTags INNER JOIN Tags ON FTags.tag=Tags.id WHERE field=? ORDER BY Tags.K");
-        static thread_local CacheQuery qu("SELECT tag FROM FTags WHERE field=?");
+        static thread_local CacheQuery qs("SELECT tag FROM " TBL_FIELD_TAG " INNER JOIN " TBL_TAGS " ON FTags.tag=" TBL_TAGS ".id WHERE field=? ORDER BY " TBL_TAGS ".K");
+        static thread_local CacheQuery qu("SELECT tag FROM " TBL_FIELD_TAG " WHERE field=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Tag>(f.id);
     }
@@ -448,13 +448,13 @@ namespace yq::mithril::cdb {
     
     size_t  tags_count(Field f)
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM FTags WHERE field=?");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_FIELD_TAG " WHERE field=?");
         return s.size(f.id);
     }
 
     std::set<Tag>            tags_set(Field f)
     {
-        static thread_local CacheQuery s("SELECT tag FROM FTags WHERE field=?");
+        static thread_local CacheQuery s("SELECT tag FROM " TBL_FIELD_TAG " WHERE field=?");
         return s.set<Tag>(f.id);
     }
 

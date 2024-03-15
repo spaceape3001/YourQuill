@@ -30,15 +30,15 @@ namespace yq::mithril::cdb {
 
     std::vector<Category>         all_categories(Sorted sorted)
     {
-        static thread_local CacheQuery    qs("SELECT id FROM Categories ORDER BY k");
-        static thread_local CacheQuery    qu("SELECT id FROM Categories");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_CATEGORIES " ORDER BY k");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_CATEGORIES "");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Category>();
     }
     
     size_t                      all_categories_count()
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Categories");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_CATEGORIES "");
         return s.size();
     }
 
@@ -52,13 +52,13 @@ namespace yq::mithril::cdb {
 
     std::string                 brief(Category t)
     {
-        static thread_local CacheQuery    s("SELECT brief FROM Categories WHERE id=?");
+        static thread_local CacheQuery    s("SELECT brief FROM " TBL_CATEGORIES " WHERE id=?");
         return s.str(t.id);
     }
 
     Category                 category(std::string_view k)
     {
-        static thread_local CacheQuery    s("SELECT id FROM Categories WHERE k=?");
+        static thread_local CacheQuery    s("SELECT id FROM " TBL_CATEGORIES " WHERE k=?");
         return s.as<Category>(k);
     }
     
@@ -115,7 +115,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Class>  classes(Category cat)
     {
-        static thread_local CacheQuery s("SELECT id FROM Classes WHERE category=?");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_CLASSES " WHERE category=?");
         return s.vec<Class>(cat.id);
     }
 
@@ -131,7 +131,7 @@ namespace yq::mithril::cdb {
         if(k.empty())
             return Category();
         
-        static thread_local CacheQuery    i("INSERT OR FAIL INTO Categories (k,id) VALUES (?,?)");
+        static thread_local CacheQuery    i("INSERT OR FAIL INTO " TBL_CATEGORIES " (k,id) VALUES (?,?)");
         auto i_lk   = i.af();
         
         i.bind(1, k);
@@ -172,19 +172,19 @@ namespace yq::mithril::cdb {
 
     bool                exists_category(uint64_t i)
     {
-        static thread_local CacheQuery s("SELECT 1 FROM Categories WHERE id=? LIMIT 1");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_CATEGORIES " WHERE id=? LIMIT 1");
         return s.present(i);
     }
 
     std::vector<Field>      fields(Category cat)
     {
-        static thread_local CacheQuery s("SELECT id FROM Fields WHERE category=?");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_FIELDS " WHERE category=?");
         return s.vec<Field>(cat.id);
     }
 
     Image               icon(Category t)
     {
-        static thread_local CacheQuery    s("SELECT icon FROM Categories WHERE id=? LIMIT 1");
+        static thread_local CacheQuery    s("SELECT icon FROM " TBL_CATEGORIES " WHERE id=? LIMIT 1");
         return s.as<Image>(t.id);
     }
     
@@ -192,7 +192,7 @@ namespace yq::mithril::cdb {
     Category::Info           info(Category t, bool autoKey)
     {
         Category::Info    ret;
-        static thread_local CacheQuery    s("SELECT brief,k,name,icon FROM Categories WHERE id=?");
+        static thread_local CacheQuery    s("SELECT brief,k,name,icon FROM " TBL_CATEGORIES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, t.id);
         if(s.step() == SQResult::Row){
@@ -210,13 +210,13 @@ namespace yq::mithril::cdb {
 
     std::string key(Category t)
     {
-        static thread_local CacheQuery    s("SELECT k FROM Categories WHERE id=?");
+        static thread_local CacheQuery    s("SELECT k FROM " TBL_CATEGORIES " WHERE id=?");
         return s.str(t.id);
     }
     
     std::string label(Category t)
     {
-        static thread_local CacheQuery    s("SELECT ifnull(name,k) FROM Categories WHERE id=?");
+        static thread_local CacheQuery    s("SELECT ifnull(name,k) FROM " TBL_CATEGORIES " WHERE id=?");
         return s.str(t.id);
     }
     
@@ -292,14 +292,14 @@ namespace yq::mithril::cdb {
     
     std::string    name(Category t)
     {
-        static thread_local CacheQuery    s("SELECT name FROM Categories WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name FROM " TBL_CATEGORIES " WHERE id=?");
         return s.str(t.id);
     }
     
     
     NKI                 nki(Category t, bool autoKey)
     {
-        static thread_local CacheQuery    s("SELECT name,icon,k FROM Categories WHERE id=?");
+        static thread_local CacheQuery    s("SELECT name,icon,k FROM " TBL_CATEGORIES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, t.id);
         if(s.step() == SQResult::Row){

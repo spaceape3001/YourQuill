@@ -15,6 +15,8 @@
 
 #include <filesystem>
 
+#define TBL_FRAGMENTS "Fragments"
+
 namespace yq::mithril {
     struct Fragment::Info {
         Document                document;

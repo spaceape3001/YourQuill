@@ -11,6 +11,8 @@
 #include <mithril/document/Document.hpp>
 #include <vector>
 
+#define TBL_ATTRIBUTES      "Attributes"
+
 namespace yq::mithril {
     struct Attribute::Info {
         std::string     key, value, uid;

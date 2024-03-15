@@ -32,7 +32,7 @@ namespace {
         }
         
         static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
-        static thread_local CacheQuery uInfo("UPDATE Users SET name=?,icon=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=?,is_guest=? WHERE id=?");
+        static thread_local CacheQuery uInfo("UPDATE " TBL_USERS " SET name=?,icon=?,brief=?,is_owner=?,is_admin=?,is_writer=?,is_reader=?,is_guest=? WHERE id=?");
 
         Document    doc     = cdb::document(u);
         if(chg != Change::Removed){
@@ -71,7 +71,7 @@ namespace {
         User::Notify::notify(x);
         
         static thread_local CacheQuery xUserStmts[] = {
-            CacheQuery( "DELETE FROM Users WHERE id=?" )
+            CacheQuery( "DELETE FROM " TBL_USERS " WHERE id=?" )
         };
 
         if(chg == Change::Removed){

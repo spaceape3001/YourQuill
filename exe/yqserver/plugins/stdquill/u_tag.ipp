@@ -28,12 +28,12 @@ namespace {
         }
         
         static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
-        static thread_local CacheQuery uTagInfo("UPDATE Tags SET name=?,icon=?,leaf=?,brief=? WHERE id=?");
+        static thread_local CacheQuery uTagInfo("UPDATE " TBL_TAGS " SET name=?,icon=?,leaf=?,brief=? WHERE id=?");
         static thread_local CacheQuery xTagStmts[] = {
-            CacheQuery( "DELETE FROM Class$Tags WHERE tag=?" ),
-            CacheQuery( "DELETE FROM FTags WHERE tag=?" ),
+            CacheQuery( "DELETE FROM " TBL_CLASS_TAG " WHERE tag=?" ),
+            CacheQuery( "DELETE FROM " TBL_FIELD_TAG " WHERE tag=?" ),
             CacheQuery( "DELETE FROM LTags WHERE tag=?" ),
-            CacheQuery( "DELETE FROM Tags WHERE id=?" )
+            CacheQuery( "DELETE FROM " TBL_TAGS " WHERE id=?" )
         };
 
         Document doc    = cdb::document(t);

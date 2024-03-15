@@ -23,7 +23,20 @@ CREATE TABLE Atoms (
 	name        VARCHAR(255)
 );
 
-CREATE TABLE AProperties (
+
+CREATE TABLE AtomClass (
+        -- atom of interest
+    atom    INTEGER NOT NULL,
+        -- class of interest
+    class   INTEGER NOT NULL,
+    
+        -- how direct the definition is (ie, how many other class definitions it must reach through.
+    hops    INTEGER DEFAULT 0,
+    
+    UNIQUE(atom,class) ON CONFLICT IGNORE
+);
+
+CREATE TABLE AtomProperty (
     id      INTEGER PRIMARY KEY,
     atom    INTEGER NOT NULL,
     attr    INTEGER NOT NULL,
@@ -48,20 +61,7 @@ CREATE TABLE AProperties (
     
     UNIQUE(atom,attr) ON CONFLICT IGNORE
 );
-
-CREATE TABLE AClasses (
-        -- atom of interest
-    atom    INTEGER NOT NULL,
-        -- class of interest
-    class   INTEGER NOT NULL,
-    
-        -- how direct the definition is (ie, how many other class definitions it must reach through.
-    hops    INTEGER DEFAULT 0,
-    
-    UNIQUE(atom,class) ON CONFLICT IGNORE
-);
-
-CREATE TABLE ATags (
+CREATE TABLE AtomTag (
         -- atom of interest
     atom    INTEGER NOT NULL,
         -- tag of interest
