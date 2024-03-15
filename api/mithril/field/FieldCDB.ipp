@@ -55,7 +55,7 @@ namespace yq::mithril::cdb {
     //ClassHopMap             atom_types(Field f)
     //{
         //ClassHopMap ret;
-        //static thread_local CacheQuery s("SELECT class, hops FROM CFields WHERE field=?");
+        //static thread_local CacheQuery s("SELECT class, hops FROM " TBL_CLASS_FIELD " WHERE field=?");
         //auto af = s.af();
         //s.bind(1, f.id);
         //while(s.step() == SQResult::Row)
@@ -84,8 +84,8 @@ namespace yq::mithril::cdb {
     
     std::vector<Class>       classes(Field f, Sorted sorted)
     {
-        static thread_local CacheQuery qs("SELECT class FROM CFields INNER JOIN Classes ON CFields.class=Classes.id WHERE field=? ORDER BY Classes.k");
-        static thread_local CacheQuery qu("SELECT class FROM CFields WHERE field=?");
+        static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_FIELD " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_FIELD ".class=" TBL_CLASSES ".id WHERE field=? ORDER BY " TBL_CLASSES ".k");
+        static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_FIELD " WHERE field=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Class>(f.id);
     }
@@ -139,13 +139,13 @@ namespace yq::mithril::cdb {
         }
     }
 
-    std::vector<Class>           def_classes(Field f, Sorted sorted)
-    {
-        static thread_local CacheQuery qs("SELECT class FROM CFields INNER JOIN Classes ON FDefClass.class=Classes.id WHERE field=? ORDER BY Classes.K");
-        static thread_local CacheQuery qu("SELECT class FROM CFields WHERE field=?");
-        auto& q = sorted ? qs : qu;
-        return q.vec<Class>(f.id);
-    }
+    //std::vector<Class>           def_classes(Field f, Sorted sorted)
+    //{
+        //static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_FIELD " INNER JOIN " TBL_CLASSES " ON FDefClass.class=" TBL_CLASSES ".id WHERE field=? ORDER BY " TBL_CLASSES ".K");
+        //static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_FIELD " WHERE field=?");
+        //auto& q = sorted ? qs : qu;
+        //return q.vec<Class>(f.id);
+    //}
 
     Document                document(Field f)
     {
@@ -439,7 +439,7 @@ namespace yq::mithril::cdb {
 
     std::vector<Tag>  tags(Field f, Sorted sorted)
     {
-        static thread_local CacheQuery qs("SELECT tag FROM " TBL_FIELD_TAG " INNER JOIN " TBL_TAGS " ON FTags.tag=" TBL_TAGS ".id WHERE field=? ORDER BY " TBL_TAGS ".K");
+        static thread_local CacheQuery qs("SELECT tag FROM " TBL_FIELD_TAG " INNER JOIN " TBL_TAGS " ON " TBL_FIELD_TAG ".tag=" TBL_TAGS ".id WHERE field=? ORDER BY " TBL_TAGS ".K");
         static thread_local CacheQuery qu("SELECT tag FROM " TBL_FIELD_TAG " WHERE field=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Tag>(f.id);

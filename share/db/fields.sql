@@ -81,7 +81,7 @@ CREATE TABLE FTypes (
     UNIQUE(field,type)
 );
 
-CREATE TABLE FldTag (
+CREATE TABLE FieldTag (
     field       INTEGER NOT NULL,
     tag         INTEGER NOT NULL,
     UNIQUE(field, tag) 

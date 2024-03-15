@@ -34,9 +34,9 @@ namespace {
             x.tags.from         = cdb::tags_set(l);
         }
 
-        static thread_local CacheQuery uInfo("UPDATE Leafs SET title=?, abbr=?, brief=?, icon=?, atom=? WHERE id=?");
-        static thread_local CacheQuery dTag("DELETE FROM LTags WHERE leaf=? AND tag=?");
-        static thread_local CacheQuery iTag("INSERT INTO LTags (leaf, tag) VALUES (?,?)");
+        static thread_local CacheQuery uInfo("UPDATE " TBL_LEAFS " SET title=?, abbr=?, brief=?, icon=?, atom=? WHERE id=?");
+        static thread_local CacheQuery dTag("DELETE FROM " TBL_LEAF_TAG " WHERE leaf=? AND tag=?");
+        static thread_local CacheQuery iTag("INSERT INTO " TBL_LEAF_TAG " (leaf, tag) VALUES (?,?)");
         
         if(chg != Change::Removed){
             auto def        = cdb::merged(l, cdb::DONT_LOCK|cdb::IS_UPDATE);
@@ -97,8 +97,8 @@ namespace {
                 dTag.exec(x.id, t.id);
         } else {
             static thread_local CacheQuery stmts[] = {
-                CacheQuery( "DELETE FROM LTags WHERE leaf=?" ),
-                CacheQuery( "DELETE FROM Leafs WHERE id=?" )
+                CacheQuery( "DELETE FROM " TBL_LEAF_TAG " WHERE leaf=?" ),
+                CacheQuery( "DELETE FROM " TBL_LEAFS " WHERE id=?" )
             };
             for(auto& sq : stmts)
                 sq.exec(x.id);

@@ -1,6 +1,6 @@
 
 
-CREATE TABLE RootIcons (
+CREATE TABLE Roots (
     root        PRIMARY KEY,
     icon        INTEGER
 );

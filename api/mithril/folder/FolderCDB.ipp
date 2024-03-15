@@ -57,7 +57,7 @@ namespace yq::mithril::cdb {
 
     Document            child_document(Folder f, std::string_view k)
     {
-        static thread_local CacheQuery s("SELECT id FROM Documents WHERE folder=? AND sk=?");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND sk=?");
         return s.as<Document>(f.id, k);
     }
 
@@ -68,10 +68,10 @@ namespace yq::mithril::cdb {
 
     Document        child_document(Folder f, uint64_t n, unsigned opts)
     {
-        static thread_local CacheQuery  qsh("SELECT id FROM Documents WHERE folder=? ORDER BY sk LIMIT 1,?");
-        static thread_local CacheQuery  qsv("SELECT id FROM Documents WHERE folder=? AND hidden=0 ORDER BY sk LIMIT 1,?");
-        static thread_local CacheQuery  quh("SELECT id FROM Documents WHERE folder=? LIMIT 1,?");
-        static thread_local CacheQuery  quv("SELECT id FROM Documents WHERE folder=? AND hidden=0 LIMIT 1,?");
+        static thread_local CacheQuery  qsh("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  qsv("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND hidden=0 ORDER BY sk LIMIT 1,?");
+        static thread_local CacheQuery  quh("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? LIMIT 1,?");
+        static thread_local CacheQuery  quv("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND hidden=0 LIMIT 1,?");
 
         CacheQuery& s   = (opts & BEST_SORT) ? ((opts & HIDDEN) ? qsh : qsv) : ((opts & HIDDEN) ? quh : quv);
         auto af = s.af();
@@ -88,18 +88,18 @@ namespace yq::mithril::cdb {
     {
         if(opts & BEST_SORT){
             if(opts & HIDDEN){
-                static thread_local CacheQuery    s("SELECT id FROM Documents WHERE folder=? ORDER BY sk");
+                static thread_local CacheQuery    s("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? ORDER BY sk");
                 return s.vec<Document>(f.id);
             } else {
-                static thread_local CacheQuery    s("SELECT id FROM Documents WHERE folder=? AND hidden=0 ORDER BY sk");
+                static thread_local CacheQuery    s("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND hidden=0 ORDER BY sk");
                 return s.vec<Document>(f.id);
             }
         } else {
             if(opts & HIDDEN){
-                static thread_local CacheQuery    s("SELECT id FROM Documents WHERE folder=?");
+                static thread_local CacheQuery    s("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=?");
                 return s.vec<Document>(f.id);
             } else {
-                static thread_local CacheQuery    s("SELECT id FROM Documents WHERE folder=? AND hidden=0");
+                static thread_local CacheQuery    s("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND hidden=0");
                 return s.vec<Document>(f.id);
             }
         }
@@ -113,26 +113,26 @@ namespace yq::mithril::cdb {
     size_t              child_documents_count(Folder f, unsigned opts)
     {
         if(opts & HIDDEN){
-            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Documents WHERE folder=?");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_DOCUMENTS " WHERE folder=?");
             return s.size(f.id);
         } else {
-            static thread_local CacheQuery    s("SELECT COUNT(1) FROM Documents WHERE folder=? AND hidden=0");
+            static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_DOCUMENTS " WHERE folder=? AND hidden=0");
             return s.size(f.id);
         }
     }
     
     std::vector<Document>    child_documents_by_suffix(Folder f, std::string_view sfx, Sorted sorted)
     {
-        static thread_local CacheQuery    qs("SELECT id FROM Documents WHERE folder=? AND suffix=? ORDER BY k");
-        static thread_local CacheQuery    qu("SELECT id FROM Documents WHERE folder=? AND suffix=?");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND suffix=? ORDER BY k");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND suffix=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Document>(f.id, sfx);
     }
     
     std::vector<Document>    child_documents_by_suffix_excluding(Folder f, std::string_view sfx, Sorted sorted)
     {
-        static thread_local CacheQuery    qs("SELECT id FROM Documents WHERE folder!=? AND suffix=? ORDER BY k");
-        static thread_local CacheQuery    qu("SELECT id FROM Documents WHERE folder!=? AND suffix=?");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_DOCUMENTS " WHERE folder!=? AND suffix=? ORDER BY k");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_DOCUMENTS " WHERE folder!=? AND suffix=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Document>(f.id, sfx);
     }
@@ -140,10 +140,10 @@ namespace yq::mithril::cdb {
     //! Gets all documents & keys of folder
     std::vector<DocString>          child_documents_with_skey(Folder f, unsigned opts)
     {
-        static thread_local CacheQuery  s1("SELECT id, sk FROM Documents WHERE folder=? AND hidden=0");
-        static thread_local CacheQuery  s2("SELECT id, sk FROM Documents WHERE folder=? AND hidden=0 ORDER BY sk");
-        static thread_local CacheQuery  s3("SELECT id, sk FROM Documents WHERE folder=?");
-        static thread_local CacheQuery  s4("SELECT id, sk FROM Documents WHERE folder=? ORDER BY sk");
+        static thread_local CacheQuery  s1("SELECT id, sk FROM " TBL_DOCUMENTS " WHERE folder=? AND hidden=0");
+        static thread_local CacheQuery  s2("SELECT id, sk FROM " TBL_DOCUMENTS " WHERE folder=? AND hidden=0 ORDER BY sk");
+        static thread_local CacheQuery  s3("SELECT id, sk FROM " TBL_DOCUMENTS " WHERE folder=?");
+        static thread_local CacheQuery  s4("SELECT id, sk FROM " TBL_DOCUMENTS " WHERE folder=? ORDER BY sk");
         
         CacheQuery& s = (opts & HIDDEN) ? ((opts & BEST_SORT) ? s4 : s3 ) : ((opts & BEST_SORT) ? s2 : s1);
         auto s_af = s.af();

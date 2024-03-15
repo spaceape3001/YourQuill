@@ -28,7 +28,7 @@ namespace yq::mithril {
         std::filesystem::path   path;
         bool                    removed     = false;
         bool                    rescan      = false;
-        const RootDir*             root_dir        = nullptr;
+        const RootDir*          root_dir    = nullptr;
         size_t                  size        = 0;
         
         bool operator==(const Info&) const = default;

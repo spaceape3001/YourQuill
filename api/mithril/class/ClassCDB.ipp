@@ -427,15 +427,15 @@ namespace yq::mithril::cdb {
     
     std::vector<Field>       fields(Class c, Sorted sorted)
     {
-        static thread_local CacheQuery  qs("SELECT field FROM CFields INNER JOIN " TBL_FIELDS " ON CFields.field=" TBL_FIELDS ".id WHERE CFields.class=? ORDER BY " TBL_FIELDS ".K");
-        static thread_local CacheQuery  qu("SELECT field FROM CFields WHERE class=?");
+        static thread_local CacheQuery  qs("SELECT field FROM " TBL_CLASS_FIELD " INNER JOIN " TBL_FIELDS " ON " TBL_CLASS_FIELD ".field=" TBL_FIELDS ".id WHERE " TBL_CLASS_FIELD ".class=? ORDER BY " TBL_FIELDS ".K");
+        static thread_local CacheQuery  qu("SELECT field FROM " TBL_CLASS_FIELD " WHERE class=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Field>(c.id);
     }
     
     size_t          fields_count(Class c)
     {
-        static thread_local CacheQuery    s("SELECT COUNT(1) FROM CFields WHERE class=?");
+        static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_CLASS_FIELD " WHERE class=?");
         return s.size(c.id);
     }
     

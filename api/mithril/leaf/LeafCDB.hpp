@@ -13,6 +13,9 @@
 #include <mithril/leaf/Leaf.hpp>
 #include <vector>
 
+#define TBL_LEAFS    "Leafs"
+#define TBL_LEAF_TAG "LeafTag"
+
 namespace yq::mithril {
 
     struct Leaf::Info {

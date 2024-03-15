@@ -97,9 +97,9 @@ namespace {
             CacheQuery("UPDATE " TBL_CLASSES " SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE " TBL_DOCUMENTS " SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE " TBL_FIELDS " SET icon=0 WHERE icon=?"),
-            CacheQuery("UPDATE Leafs SET icon=0 WHERE icon=?"),
+            CacheQuery("UPDATE " TBL_LEAFS " SET icon=0 WHERE icon=?"),
             CacheQuery("UPDATE " TBL_TAGS " SET icon=0 WHERE icon=?"),
-            CacheQuery("DELETE FROM Images WHERE id=?")
+            CacheQuery("DELETE FROM " TBL_IMAGES " WHERE id=?")
         };
     
         Image::Diff     x{

@@ -9,6 +9,8 @@
 #include <mithril/preamble.hpp>
 #include <filesystem>
 
+#define TBL_ROOTS       "Roots"
+
 namespace yq::mithril::cdb {
 
     /*! \brief All directories for root_dir

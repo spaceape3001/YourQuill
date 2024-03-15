@@ -12,6 +12,7 @@
 #include <0/basic/ContentType.hpp>
 #include <0/math/shape/Size2.hpp>
 
+#define TBL_IMAGES "Images"
 
 namespace yq {
     class ByteArray;

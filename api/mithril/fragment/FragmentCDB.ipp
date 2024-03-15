@@ -123,7 +123,7 @@ namespace yq::mithril::cdb {
         
         size_t  fc  = fragments_count(doc);
         if(!fc){
-            static thread_local CacheQuery d("DELETE FROM Documents WHERE id=?");
+            static thread_local CacheQuery d("DELETE FROM " TBL_DOCUMENTS " WHERE id=?");
             d.bind(1, doc.id);
             d.step();
             d.reset();

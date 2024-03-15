@@ -12,19 +12,20 @@
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/root/RootCDB.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Image>      all_images(Sorted sorted)
     {
-        static thread_local CacheQuery s("SELECT id FROM Images");
+        static thread_local CacheQuery s("SELECT id FROM " TBL_IMAGES "");
         return s.vec<Image>();
     }
     
     size_t                  all_images_count()
     {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Images");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_IMAGES "");
         return s.size();
     }
 
@@ -64,19 +65,19 @@ namespace yq::mithril::cdb {
         
         ByteArray           bytes_large(Image img)
         {
-            static thread_local CacheQuery s("SELECT large FROM Images WHERE id=?");
+            static thread_local CacheQuery s("SELECT large FROM " TBL_IMAGES " WHERE id=?");
             return s.bytes(img);
         }
 
         ByteArray           bytes_medium(Image img)
         {
-            static thread_local CacheQuery s("SELECT medium FROM Images WHERE id=?");
+            static thread_local CacheQuery s("SELECT medium FROM " TBL_IMAGES " WHERE id=?");
             return s.bytes(img);
         }
 
         ByteArray          bytes_small(Image img)
         {
-            static thread_local CacheQuery s("SELECT small FROM Images WHERE id=?");
+            static thread_local CacheQuery s("SELECT small FROM " TBL_IMAGES " WHERE id=?");
             return s.bytes(img);
         }
     }
@@ -101,7 +102,7 @@ namespace yq::mithril::cdb {
 
     Image               db_image(Fragment frag, bool *wasCreated)
     {
-        static thread_local CacheQuery i("INSERT OR FAIL INTO Images (id,type) VALUES (?,?)");
+        static thread_local CacheQuery i("INSERT OR FAIL INTO " TBL_IMAGES " (id,type) VALUES (?,?)");
         
         auto ext    = suffix(frag).ext;
         auto i_af   = i.af();
@@ -130,7 +131,7 @@ namespace yq::mithril::cdb {
 
     bool                exists_image(uint64_t i)
     {
-        static thread_local CacheQuery s("SELECT 1 FROM Images WHERE id=? LIMIT 1");
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_IMAGES " WHERE id=? LIMIT 1");
         return s.present(i);
     }
 
@@ -143,7 +144,7 @@ namespace yq::mithril::cdb {
     {
         if(!rt)
             return Image();
-        static thread_local CacheQuery s("SELECT icon FROM RootIcons WHERE root=?");
+        static thread_local CacheQuery s("SELECT icon FROM " TBL_ROOTS " WHERE root=?");
         return s.as<Image>(rt->id);
     }
 
@@ -179,7 +180,7 @@ namespace yq::mithril::cdb {
 
     Image::Info         info(Image img)
     {
-        static thread_local CacheQuery s("SELECT type, width, height FROM Images WHERE id=?");
+        static thread_local CacheQuery s("SELECT type, width, height FROM " TBL_IMAGES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, img.id);
         Image::Info     ret{};
@@ -216,7 +217,7 @@ namespace yq::mithril::cdb {
 
     ContentType         mime_type(Image i)
     {
-        static thread_local CacheQuery s("SELECT type FROM Images WHERE id=?");
+        static thread_local CacheQuery s("SELECT type FROM " TBL_IMAGES " WHERE id=?");
         auto s_af   = s.af();
         s.bind(1, i.id);
         if(s.step() == SQResult::Row)

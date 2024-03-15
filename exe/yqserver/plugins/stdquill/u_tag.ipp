@@ -32,7 +32,7 @@ namespace {
         static thread_local CacheQuery xTagStmts[] = {
             CacheQuery( "DELETE FROM " TBL_CLASS_TAG " WHERE tag=?" ),
             CacheQuery( "DELETE FROM " TBL_FIELD_TAG " WHERE tag=?" ),
-            CacheQuery( "DELETE FROM LTags WHERE tag=?" ),
+            CacheQuery( "DELETE FROM " TBL_LEAF_TAG " WHERE tag=?" ),
             CacheQuery( "DELETE FROM " TBL_TAGS " WHERE id=?" )
         };
 

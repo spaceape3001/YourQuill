@@ -14,7 +14,7 @@
 #include <mithril/category/Category.hpp>
 
 #define TBL_FIELDS      "Fields"
-#define TBL_FIELD_TAG   "FldTag"
+#define TBL_FIELD_TAG   "FieldTag"
 
 namespace yq::mithril {
 
@@ -70,7 +70,7 @@ namespace yq::mithril::cdb {
     //Field                   db_field(std::string_view , bool *wasCreated=nullptr);
     //Field                   db_field(Document, bool *wasCreated=nullptr);
     
-    std::vector<Class>           def_classes(Field, Sorted sorted=Sorted());
+    //std::vector<Class>           def_classes(Field, Sorted sorted=Sorted());
     
     Document                document(Field);
 

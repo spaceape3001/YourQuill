@@ -18,21 +18,21 @@ CREATE TABLE Classes (
 );
 
     -- USES as defined in the class file
-CREATE TABLE ClsUse (
+CREATE TABLE ClassUse (
     class       INTEGER NOT NULL,
     use         INTEGER NOT NULL,
     UNIQUE(class, use) ON CONFLICT IGNORE
 );
 
     -- Aliases as defined in the class file
-CREATE TABLE ClsAlias (
+CREATE TABLE ClassAlias (
     class       INTEGER NOT NULL,
     alias       VARCHAR(255) NOT NULL,
     UNIQUE(class, alias) ON CONFLICT IGNORE
 );
 
     -- Dependencies as analyzed
-CREATE TABLE ClsDepend (
+CREATE TABLE ClassDepend (
     class       INTEGER NOT NULL,
     base        INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
@@ -49,7 +49,7 @@ CREATE TABLE CEdges (
     UNIQUE(class,source,target) ON CONFLICT IGNORE
 );
 
-CREATE TABLE CFields (
+CREATE TABLE ClassField (
     class       INTEGER NOT NULL,
     field       INTEGER NOT NULL,
     -- number of indirects (zero is what's in the file)
@@ -73,7 +73,7 @@ CREATE TABLE CSources (
     UNIQUE(class,source) ON CONFLICT IGNORE
 );
 
-CREATE TABLE ClsTag (
+CREATE TABLE ClassTag (
     class       INTEGER NOT NULL,
     tag         INTEGER NOT NULL,
     UNIQUE(class,tag) ON CONFLICT IGNORE

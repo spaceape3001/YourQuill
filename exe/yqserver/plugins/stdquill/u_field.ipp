@@ -182,7 +182,7 @@ namespace {
                 dUsurp.exec(f.id, s);
         } else {
             static thread_local CacheQuery stmts[] = {
-                CacheQuery("DELETE FROM CFields WHERE field=?"),
+                CacheQuery("DELETE FROM " TBL_CLASS_FIELD " WHERE field=?"),
                 CacheQuery("DELETE FROM " TBL_FIELD_TAG " WHERE field=?"),
                 CacheQuery("DELETE FROM FAlias WHERE field=?"),
                 CacheQuery("DELETE FROM FTypes WHERE field=?"),

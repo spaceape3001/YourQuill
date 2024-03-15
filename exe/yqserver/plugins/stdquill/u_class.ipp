@@ -194,6 +194,7 @@ namespace {
                 CacheQuery("DELETE FROM " TBL_CLASS_TAG " WHERE class=?"),
                 CacheQuery("DELETE FROM " TBL_CLASS_USE " WHERE class=?"),
                 CacheQuery("DELETE FROM CLookup WHERE class=? AND priority=1"),
+                CacheQuery("DELETE FROM " TBL_CLASS_FIELD " WHERE class=?"),
                 CacheQuery("DELETE FROM " TBL_CLASSES " WHERE id=?")
             };
             for(auto& sq : stmts)

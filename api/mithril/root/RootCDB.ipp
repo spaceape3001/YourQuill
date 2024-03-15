@@ -23,8 +23,8 @@ namespace yq::mithril::cdb {
         if(!rt)
             return std::vector<Directory>();
 
-        static thread_local CacheQuery    qs("SELECT id FROM Directories WHERE root=? ORDER BY path");
-        static thread_local CacheQuery    qu("SELECT id FROM Directories WHERE root=?");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_DIRECTORIES " WHERE root=? ORDER BY path");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_DIRECTORIES " WHERE root=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Directory>(rt->id);
     }
@@ -34,7 +34,7 @@ namespace yq::mithril::cdb {
         if(!rt)
             return 0;
 
-        static thread_local CacheQuery    s("SELECT COUNT(1) FROM Directories WHERE root=?");
+        static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_DIRECTORIES " WHERE root=?");
         return s.size(rt->id);
     }
     
@@ -42,8 +42,8 @@ namespace yq::mithril::cdb {
     {
         if(!rt)
             return std::vector<Fragment>();
-        static thread_local CacheQuery qs("SELECT id FROM Fragments WHERE root=? ORDER BY path");
-        static thread_local CacheQuery qu("SELECT id FROM Fragments WHERE root=?");
+        static thread_local CacheQuery qs("SELECT id FROM " TBL_FRAGMENTS " WHERE root=? ORDER BY path");
+        static thread_local CacheQuery qu("SELECT id FROM " TBL_FRAGMENTS " WHERE root=?");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Fragment>(rt->id);
     }
@@ -52,7 +52,7 @@ namespace yq::mithril::cdb {
     {
         if(!rt)
             return 0;
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM Fragments WHERE root=?");
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_FRAGMENTS " WHERE root=?");
         return s.size(rt->id);
     }
 
@@ -85,8 +85,8 @@ namespace yq::mithril::cdb {
         if(!rt)
             return Directory();
             
-        static thread_local CacheQuery    i("INSERT OR FAIL INTO Directories (path,root,folder,parent) VALUES (?,?,1,0)");
-        static thread_local CacheQuery    s("SELECT id FROM Directories WHERE path=?");
+        static thread_local CacheQuery    i("INSERT OR FAIL INTO " TBL_DIRECTORIES " (path,root,folder,parent) VALUES (?,?,1,0)");
+        static thread_local CacheQuery    s("SELECT id FROM " TBL_DIRECTORIES " WHERE path=?");
         
         auto s_lk   = s.af();
         auto i_lk   = i.af();
@@ -124,8 +124,8 @@ namespace yq::mithril::cdb {
         if(!rt)
             return std::vector<Directory>();
             
-        static thread_local CacheQuery    qs("SELECT id FROM Directories WHERE parent=0 AND root=?");
-        static thread_local CacheQuery    qu("SELECT id FROM Directories WHERE parent=0 AND root=? ORDER BY NAME");
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_DIRECTORIES " WHERE parent=0 AND root=?");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_DIRECTORIES " WHERE parent=0 AND root=? ORDER BY NAME");
         CacheQuery& s = sorted ? qs : qu;
         return s.vec<Directory>(rt->id);
     }
@@ -134,7 +134,7 @@ namespace yq::mithril::cdb {
     {
         if(!rt)
             return 0;
-        static thread_local CacheQuery    s("SELECT COUNT(1) FROM Directories WHERE parent=0 AND root=?");
+        static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_DIRECTORIES " WHERE parent=0 AND root=?");
         return s.size(rt->id);
     }
     
