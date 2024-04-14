@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <0/basic/Comma.hpp>
 #include <mithril/atom/AtomHtml.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/attribute/AttributeHtml.hpp>
@@ -26,6 +27,26 @@ namespace yq::mithril::html {
         h << cdb::label(v.data);
         if(v.data)
             h << "</a>";
+        return h;
+    }
+
+    WebHtml&    operator<<(WebHtml&h, const Dev<std::vector<Atom>>& vdata)
+    {
+        Comma   comma(", ");
+        for(Atom v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml&h, const Dev<std::set<Atom>>& vdata)
+    {
+        Comma   comma(", ");
+        for(Atom v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
         return h;
     }
     

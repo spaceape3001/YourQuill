@@ -35,3 +35,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Category)
+YQ_TYPE_DECLARE(yq::mithril::CategorySet)
+YQ_TYPE_DECLARE(yq::mithril::CategoryVector)

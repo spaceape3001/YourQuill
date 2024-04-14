@@ -20,4 +20,7 @@ namespace yq::mithril {
         constexpr operator uint64_t() const { return id; }
     };
 }
+
 YQ_TYPE_DECLARE(yq::mithril::Group)
+YQ_TYPE_DECLARE(yq::mithril::GroupSet)
+YQ_TYPE_DECLARE(yq::mithril::GroupVector)

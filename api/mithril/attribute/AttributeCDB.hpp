@@ -31,21 +31,21 @@ namespace yq::mithril {
 
         /*! \brief Gets ALL attributes
         */
-        std::vector<Attribute>  all_attributes(Sorted sorted={});
+        AttributeVector         all_attributes(Sorted sorted={});
 
         /*! \brief Gets ALL attributes for given document
         */
-        std::vector<Attribute>  all_attributes(Document);
+        AttributeVector         all_attributes(Document);
         size_t                  all_attributes_count();
         size_t                  all_attributes_count(Document);
 
         /*! \brief Top level attributes for given document
         */
-        std::vector<Attribute>  attributes(Document);
+        AttributeVector         attributes(Document);
         size_t                  attributes_count(Document);
 
 
-        std::vector<Attribute>  child_attributes(Attribute);
+        AttributeVector         child_attributes(Attribute);
         size_t                  child_attributes_count(Attribute);
         
         Attribute               db_attribute(Document doc, Attribute par, uint64_t idx, std::string_view k, std::string_view uid, std::string_view val);

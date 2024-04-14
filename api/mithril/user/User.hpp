@@ -32,3 +32,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::User)
+YQ_TYPE_DECLARE(yq::mithril::UserSet)
+YQ_TYPE_DECLARE(yq::mithril::UserVector)

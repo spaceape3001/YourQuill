@@ -46,3 +46,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Field)
+YQ_TYPE_DECLARE(yq::mithril::FieldSet)
+YQ_TYPE_DECLARE(yq::mithril::FieldVector)

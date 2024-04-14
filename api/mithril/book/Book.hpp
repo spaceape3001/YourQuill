@@ -21,3 +21,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Book)
+YQ_TYPE_DECLARE(yq::mithril::BookSet)
+YQ_TYPE_DECLARE(yq::mithril::BookVector)

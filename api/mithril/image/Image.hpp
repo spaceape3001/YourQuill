@@ -52,3 +52,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Image)
+YQ_TYPE_DECLARE(yq::mithril::ImageSet)
+YQ_TYPE_DECLARE(yq::mithril::ImageVector)

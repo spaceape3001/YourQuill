@@ -38,4 +38,6 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Folder)
+YQ_TYPE_DECLARE(yq::mithril::FolderSet)
+YQ_TYPE_DECLARE(yq::mithril::FolderVector)
 

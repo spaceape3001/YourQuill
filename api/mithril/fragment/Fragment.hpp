@@ -24,3 +24,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Fragment)
+YQ_TYPE_DECLARE(yq::mithril::FragmentSet)
+YQ_TYPE_DECLARE(yq::mithril::FragmentVector)

@@ -21,3 +21,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Event)
+YQ_TYPE_DECLARE(yq::mithril::EventSet)
+YQ_TYPE_DECLARE(yq::mithril::EventVector)

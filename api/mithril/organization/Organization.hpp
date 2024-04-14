@@ -21,3 +21,5 @@ namespace yq::mithril {
     };
 }
 YQ_TYPE_DECLARE(yq::mithril::Organization)
+YQ_TYPE_DECLARE(yq::mithril::OrganizationSet)
+YQ_TYPE_DECLARE(yq::mithril::OrganizationVector)

@@ -29,3 +29,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Value)
+YQ_TYPE_DECLARE(yq::mithril::ValueSet)
+YQ_TYPE_DECLARE(yq::mithril::ValueVector)

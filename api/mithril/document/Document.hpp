@@ -25,3 +25,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Document)
+YQ_TYPE_DECLARE(yq::mithril::DocumentSet)
+YQ_TYPE_DECLARE(yq::mithril::DocumentVector)

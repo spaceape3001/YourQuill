@@ -1,7 +1,7 @@
-%       child
-plural  child
+%       Child
+plural  Children
 is      Cognate
-reverse parent
+reverse Parent
 alias   Son
 alias   Daughter
 prefix  Step

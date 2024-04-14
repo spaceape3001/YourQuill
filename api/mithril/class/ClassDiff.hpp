@@ -25,8 +25,16 @@ namespace yq::mithril {
         Changed<std::string>    plural;
         Changed<std::string>    brief;
 
-        Changed<ClassSet>       uses;
+        Changed<string_set_t>   def_aliases;
+        Changed<string_set_t>   def_prefixes;
+        Changed<ClassSet>       def_reverses;
+        Changed<ClassSet>       def_sources;
+        Changed<string_set_t>   def_suffixes;
+        Changed<ClassSet>       def_targets;
+        Changed<ClassSet>       def_uses;
+
         Changed<TagSet>         tags;
+        Changed<string_set_t>   lookups;
         Changed<ClassHopMap>    bases;
         Changed<ClassHopMap>    deriveds;
     };

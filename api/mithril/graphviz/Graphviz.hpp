@@ -26,4 +26,7 @@ namespace yq::mithril {
         static std::string      dot2svg(std::string_view);
     };
 }
+
 YQ_TYPE_DECLARE(yq::mithril::Graphviz)
+YQ_TYPE_DECLARE(yq::mithril::GraphvizSet)
+YQ_TYPE_DECLARE(yq::mithril::GraphvizVector)

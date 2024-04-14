@@ -17,16 +17,27 @@
 //#include "Graph.hpp"
 
 #define TBL_CLASSES             "Classes"
+
 #define TBL_CLASS_ALIAS         "ClassAlias"
 #define TBL_CLASS_DEPEND        "ClassDepend"
 #define TBL_CLASS_FIELD         "ClassField"
+#define TBL_CLASS_LOOKUP        "ClassLookup"
+#define TBL_CLASS_PREFIX        "ClassPrefix"
+#define TBL_CLASS_SUFFIX        "ClassSuffix"
 #define TBL_CLASS_TAG           "ClassTag"
-#define TBL_CLASS_USE           "ClassUse"
+
+#define TBL_CLSDEF_ALIAS        "ClsDefAlias"
+#define TBL_CLSDEF_PREFIX       "ClsDefPrefix"
+#define TBL_CLSDEF_REVERSE      "ClsDefReverse"
+#define TBL_CLSDEF_SOURCE       "ClsDefSource"
+#define TBL_CLSDEF_SUFFIX       "ClsDefSuffix"
+#define TBL_CLSDEF_TARGET       "ClsDefTarget"
+#define TBL_CLSDEF_USE          "ClsDefUse"
 
 
 
 namespace yq::mithril::cdb {
-    string_set_t                aliases(Class);
+    string_set_t                aliases_set(Class);
 
     /*! \brief All classes in the cache database
     
@@ -97,6 +108,14 @@ namespace yq::mithril::cdb {
     //! Creates all classes
     std::vector<Class>          db_classes(const string_set_t&);
     
+    string_set_t                def_alias_set(Class);
+    
+    string_set_t                def_prefix_set(Class);
+
+    std::set<Class>             def_reverse_set(Class);
+    
+    std::set<Class>             def_rev_reverse_set(Class);
+
     //! All classes that "used" this class
     std::vector<Class>          def_rev_use(Class, Sorted sorted=Sorted{});
     
@@ -105,6 +124,12 @@ namespace yq::mithril::cdb {
     
     //! Count of classes "used" this class
     uint64_t                    def_rev_use_count(Class);
+
+    std::set<Class>             def_source_set(Class);
+
+    string_set_t                def_suffix_set(Class);
+
+    std::set<Class>             def_target_set(Class);
 
     //! All classes that were defined "use" for this class
     std::vector<Class>          def_use(Class, Sorted sorted=Sorted{});
@@ -191,9 +216,9 @@ namespace yq::mithril::cdb {
     std::vector<ClassFragDoc>   reads(Class, cdb_options_t opts=0);
     std::vector<ClassFragDoc>   reads(Class, class RootDir*, cdb_options_t opts=0);
 
-    std::set<Class>             rev_use_set(Class);
-    std::vector<Class>          rev_uses(Class, Sorted sorted=Sorted());
-    size_t                      rev_uses_count(Class);
+    //std::set<Class>             rev_use_set(Class);
+    //std::vector<Class>          rev_uses(Class, Sorted sorted=Sorted());
+    //size_t                      rev_uses_count(Class);
 
     std::vector<Class>          reverse_classes(Class, Sorted sorted=Sorted());
     size_t                      reverse_classes_count(Class c);
@@ -220,9 +245,9 @@ namespace yq::mithril::cdb {
 
 
     //! All classes that were listed in the file
-    std::set<Class>             use_set(Class);
-    std::vector<Class>          uses(Class, Sorted sorted=Sorted());
-    size_t                      uses_count(Class);
+    //std::set<Class>             use_set(Class);
+    //std::vector<Class>          uses(Class, Sorted sorted=Sorted());
+    //size_t                      uses_count(Class);
 
     
     //!  \brief   Returns a writable document

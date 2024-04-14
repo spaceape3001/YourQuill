@@ -21,3 +21,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Game)
+YQ_TYPE_DECLARE(yq::mithril::GameSet)
+YQ_TYPE_DECLARE(yq::mithril::GameVector)

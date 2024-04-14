@@ -49,3 +49,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Class)
+YQ_TYPE_DECLARE(yq::mithril::ClassSet)
+YQ_TYPE_DECLARE(yq::mithril::ClassVector)

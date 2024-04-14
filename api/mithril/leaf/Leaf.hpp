@@ -31,3 +31,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Leaf)
+YQ_TYPE_DECLARE(yq::mithril::LeafSet)
+YQ_TYPE_DECLARE(yq::mithril::LeafVector)

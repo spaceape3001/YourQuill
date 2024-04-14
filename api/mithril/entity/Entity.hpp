@@ -21,3 +21,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Entity)
+YQ_TYPE_DECLARE(yq::mithril::EntitySet)
+YQ_TYPE_DECLARE(yq::mithril::EntityVector)

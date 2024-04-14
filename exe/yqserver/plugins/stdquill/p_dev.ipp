@@ -180,9 +180,14 @@ namespace {
         h.kvrow("Plural") << i.plural;
         h.kvrow("Category") << dev(i.category);
         h.kvrow("Brief") << i.brief;
-        //h.kvrow("Aliases") << join(def_aliases(c), ", ");
-        //h.kvrow("Prefixes") << join(def_prefixes(c), ", ");
-        //h.kvrow("Suffixes") << join(def_suffixes(c), ", ");
+        h.kvrow("Aliases") << join(cdb::def_alias_set(c), ", ");
+        h.kvrow("Prefixes") << join(cdb::def_prefix_set(c), ", ");
+        h.kvrow("Reverses") << dev(cdb::def_reverse_set(c));
+        h.kvrow("Sources") << dev(cdb::def_source_set(c));
+        h.kvrow("Suffixes") << join(cdb::def_suffix_set(c), ", ");
+        h.kvrow("Targets") << dev(cdb::def_target_set(c));
+        h.kvrow("Uses") << dev(cdb::def_use_set(c));
+        h.kvrow("Used") << dev(cdb::def_rev_use_set(c));
         h.kvrow("Binding") << i.binding;
     }
     
@@ -253,7 +258,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Class (" << label(c) << "): Used By";
-        dev_table(h, rev_uses(c, Sorted::YES));
+        dev_table(h, cdb::def_rev_use(c, Sorted::YES));
         
     }
 
@@ -307,7 +312,7 @@ namespace {
             throw HttpStatus::BadArgument;
             
         h.title() << "Class (" << label(c) << "): Uses";
-        dev_table(h, uses(c, Sorted::YES));
+        dev_table(h, def_use(c, Sorted::YES));
         
     }
     
@@ -1269,8 +1274,8 @@ namespace {
         reg_webgroup({
             reg_webpage<p_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),
             reg_webpage<p_dev_class_bases>("/dev/class/base").argument("id", "Class ID").label("Base"),
-            reg_webpage<p_dev_class_uses>("/dev/class/uses").argument("id", "Class ID").label("Uses"),
-            reg_webpage<p_dev_class_rev_uses>("/dev/class/used").argument("id", "Class ID").label("Used"),
+            //reg_webpage<p_dev_class_uses>("/dev/class/uses").argument("id", "Class ID").label("Uses"),
+            //reg_webpage<p_dev_class_rev_uses>("/dev/class/used").argument("id", "Class ID").label("Used"),
             reg_webpage<p_dev_class_derived>("/dev/class/derived").argument("id", "Class ID").label("Derived"),
             reg_webpage<p_dev_class_sources>("/dev/class/sources").argument("id", "Class ID").label("Sources"),
             reg_webpage<p_dev_class_targets>("/dev/class/targets").argument("id", "Class ID").label("Targets"),

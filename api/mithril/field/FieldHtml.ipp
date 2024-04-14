@@ -7,8 +7,9 @@
 #pragma once
 
 #include "FieldHtml.hpp"
-#include <0/io/StreamOps.hpp>
+#include <0/basic/Comma.hpp>
 #include <0/basic/TextUtils.hpp>
+#include <0/io/StreamOps.hpp>
 #include <mithril/class/ClassHtml.hpp>
 #include <mithril/root/RootHtml.hpp>
 #include <mithril/web/WebContext.hpp>
@@ -38,6 +39,46 @@ namespace yq::mithril::html {
         h << cdb::label(v.data);
         if(v.data)
             h << "</a>";
+        return h;
+    }
+
+    WebHtml&    operator<<(WebHtml&h, const std::set<Field>&vdata)
+    {
+        Comma   comma(", ");
+        for(Field v : vdata){
+            h << comma.text() << v;
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml&h, const std::vector<Field>&vdata)
+    {
+        Comma   comma(", ");
+        for(Field v : vdata){
+            h << comma.text() << v;
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml&h, const Dev<std::set<Field>>&vdata)
+    {
+        Comma   comma(", ");
+        for(Field v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml&h, const Dev<std::vector<Field>>&vdata)
+    {
+        Comma   comma(", ");
+        for(Field v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
         return h;
     }
     

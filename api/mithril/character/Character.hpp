@@ -20,3 +20,5 @@ namespace yq::mithril {
     };
 }
 YQ_TYPE_DECLARE(yq::mithril::Character)
+YQ_TYPE_DECLARE(yq::mithril::CharacterSet)
+YQ_TYPE_DECLARE(yq::mithril::CharacterVector)

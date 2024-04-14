@@ -15,6 +15,8 @@ namespace yq::mithril {
     namespace html {
         WebHtml&    operator<<(WebHtml&, Atom);
         WebHtml&    operator<<(WebHtml&, Dev<Atom>);
+        WebHtml&    operator<<(WebHtml&, const Dev<std::vector<Atom>>&);
+        WebHtml&    operator<<(WebHtml&, const Dev<std::set<Atom>>&);
         WebHtml&    operator<<(WebHtml&, DevID<Atom>);
         WebHtml&    operator<<(WebHtml&, DevID<Atom::Property>);
         void        dev_table(WebHtml&, const std::vector<Atom>&);

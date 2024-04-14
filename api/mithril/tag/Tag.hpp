@@ -34,3 +34,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Tag)
+YQ_TYPE_DECLARE(yq::mithril::TagSet)
+YQ_TYPE_DECLARE(yq::mithril::TagVector)

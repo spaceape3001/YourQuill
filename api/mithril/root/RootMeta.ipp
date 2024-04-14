@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include <0/meta/TypeInfoWriter.hpp>
+#include "RootCDB.hpp"
+
+namespace {
+    void reg_root_meta()
+    {
+        using namespace yq;
+        using namespace yq::mithril;
+        
+        {
+            auto w  = writer<Root>();
+            w.property("id", READ_ONLY, &Root::id);
+            w.property("key", (std::string(*)(Root)) cdb::key);
+        }
+    }
+}

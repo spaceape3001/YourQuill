@@ -24,6 +24,9 @@ namespace yq::mithril {
         
         using Notify  = Notifier<const Diff&>;
         
+        using PropertySet       = std::set<Property>;
+        using PropertyVector    = std::vector<Property>;
+        
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Atom&rhs) const noexcept = default; 
         constexpr operator uint64_t() const noexcept { return id; }
@@ -39,6 +42,8 @@ namespace yq::mithril {
         static std::string  sub_key(Atom at, std::string_view ck);
     };
     
+    /*! \brief Property of the atoms
+    */
     struct Atom::Property {
 
         static constexpr const IdTypeId ID      = 2;
@@ -51,5 +56,9 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Atom)
+YQ_TYPE_DECLARE(yq::mithril::AtomSet)
+YQ_TYPE_DECLARE(yq::mithril::AtomVector)
 YQ_TYPE_DECLARE(yq::mithril::Atom::Property)
+YQ_TYPE_DECLARE(yq::mithril::Atom::PropertySet)
+YQ_TYPE_DECLARE(yq::mithril::Atom::PropertyVector)
 

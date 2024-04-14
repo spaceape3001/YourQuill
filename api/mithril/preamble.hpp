@@ -52,6 +52,7 @@ namespace yq::mithril {
     struct Image;
     struct Leaf;
     struct Meta;
+    struct Organization;
     struct Place;
     struct Property;
     struct Root;
@@ -59,39 +60,110 @@ namespace yq::mithril {
     struct Tag;
     struct Thing;
     struct User;
+    struct Value;
 
     template <typename F, typename T> struct Connection;
     template <typename...>  class Notifier;
     template <typename> struct Changed;
 
     struct NKI;
-
-    using ClassPair             = std::pair<Class,Class>;
-    using DirOrFrag             = std::variant<bool,Directory,Fragment>;
-    using DocOrFold             = std::variant<bool,Document,Folder>;
-    using DocOrFolder           = std::variant<bool,Document,Folder>;
-    using DirOrFragStr          = std::pair<DirOrFrag,std::string>;
-    using DocOrFoldStr          = std::pair<DocOrFold,std::string>;
-    using DirString             = std::pair<Directory,std::string>;
-    using DocString             = std::pair<Document,std::string>;
-    using DocStr                = std::pair<Document,std::string>;
-    using FolderStr             = std::pair<Folder,std::string>;
-    using FragmentStr           = std::pair<Fragment,std::string>;
-    using ClassSet              = std::set<Class>;
-    using ClassU64Pair          = std::pair<Class,uint64_t>;
-    using TagSet                = std::set<Tag>;
-    using FieldSet              = std::set<Field>;
-    using ClassPairSet          = std::set<ClassPair>;
-    
-    using ClassCxn              = Connection<Class,Class>;
-    using ClassU64Map           = std::map<Class,uint64_t>;
-    using ClassCountMap         = std::map<Class,HCountU64>;
-
     using HopCount              = HCountU8;
     using hop_t                 = uint8_t;
 
+
+    using AtomSet               = std::set<Atom>;
+    using AtomVector            = std::vector<Atom>;
+    
+    using AttributeSet          = std::set<Attribute>;
+    using AttributeVector       = std::vector<Attribute>;
+    
+    using BookSet               = std::set<Book>;
+    using BookVector            = std::vector<Book>;
+    
+    using CategorySet           = std::set<Category>;
+    using CategoryVector        = std::vector<Category>;
+    
+    using CharacterSet          = std::set<Character>;
+    using CharacterVector       = std::vector<Character>;
+
+    using ClassCountMap         = std::map<Class,HCountU64>;
+    using ClassCxn              = Connection<Class,Class>;
     using ClassHopMap           = std::map<Class,HopCount>;
+    using ClassPair             = std::pair<Class,Class>;
+    using ClassPairSet          = std::set<ClassPair>;
+    using ClassSet              = std::set<Class>;
+    using ClassU64Pair          = std::pair<Class,uint64_t>;
+    using ClassVector           = std::vector<Class>;
+    using ClassU64Map           = std::map<Class,uint64_t>;
+    
+    using DirectorySet          = std::set<Directory>;
+    using DirectoryVector       = std::vector<Directory>;
+    
+    using DirOrFrag             = std::variant<bool,Directory,Fragment>;
+    using DirOrFragStr          = std::pair<DirOrFrag,std::string>;
+    using DirString             = std::pair<Directory,std::string>;
+    
+    using DocumentSet           = std::set<Document>;
+    using DocumentVector        = std::vector<Document>;
+
+    using DocOrFold             = std::variant<bool,Document,Folder>;
+    using DocOrFolder           = std::variant<bool,Document,Folder>;
+    using DocOrFoldStr          = std::pair<DocOrFold,std::string>;
+    using DocString             = std::pair<Document,std::string>;
+    using DocStr                = std::pair<Document,std::string>;
+    
+    using EntitySet             = std::set<Entity>;
+    using EntityVector          = std::vector<Entity>;
+    
+    using EventSet              = std::set<Event>;
+    using EventVector           = std::vector<Event>;
+
     using FieldHopMap           = std::map<Field,HopCount>;
+    using FieldSet              = std::set<Field>;
+    using FieldVector           = std::vector<Field>;
+
+    using FolderSet             = std::set<Folder>;
+    using FolderStr             = std::pair<Folder,std::string>;
+    using FolderVector          = std::vector<Folder>;
+    
+    using FragmentSet           = std::set<Fragment>;
+    using FragmentStr           = std::pair<Fragment,std::string>;
+    using FragmentVector        = std::vector<Fragment>;
+    
+    using GameSet               = std::set<Game>;
+    using GameVector            = std::vector<Game>;
+    
+    using GraphvizSet           = std::set<Graphviz>;
+    using GraphvizVector        = std::vector<Graphviz>;
+    
+    using GroupSet              = std::set<Group>;
+    using GroupVector           = std::vector<Group>;
+    
+    using ImageSet              = std::set<Image>;
+    using ImageVector           = std::vector<Image>;
+    
+    using LeafSet               = std::set<Leaf>;
+    using LeafVector            = std::vector<Leaf>;
+    
+    using OrganizationSet       = std::set<Organization>;
+    using OrganizationVector    = std::vector<Organization>;
+    
+    using PlaceSet              = std::set<Place>;
+    using PlaceVector           = std::vector<Place>;
+
+    using TagSet                = std::set<Tag>;
+    using TagVector             = std::vector<Tag>;
+    
+    using ThingSet              = std::set<Thing>;
+    using ThingVector           = std::vector<Thing>;
+    
+    using UserSet               = std::set<User>;
+    using UserVector            = std::vector<User>;
+    
+    using ValueSet              = std::set<Value>;
+    using ValueVector           = std::vector<Value>;
+
+
 
 
     //! Generic options bitmask

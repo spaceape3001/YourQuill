@@ -7,6 +7,7 @@
 #pragma once
 
 #include "ClassHtml.hpp"
+#include <0/basic/Comma.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <0/io/StreamOps.hpp>
 #include <0/io/stream/Text.hpp>
@@ -54,6 +55,46 @@ namespace yq::mithril::html {
         h << v.data.id;
         if(v.data)
             h << "</a>";
+        return h;
+    }
+
+    WebHtml&    operator<<(WebHtml&h, const std::set<Class>&vdata)
+    {
+        Comma   comma(", ");
+        for(Class v : vdata){
+            h << comma.text() << v;
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml&h, const std::vector<Class>&vdata)
+    {
+        Comma   comma(", ");
+        for(Class v : vdata){
+            h << comma.text() << v;
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml&h, const Dev<std::set<Class>>&vdata)
+    {
+        Comma   comma(", ");
+        for(Class v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml&h, const Dev<std::vector<Class>>&vdata)
+    {
+        Comma   comma(", ");
+        for(Class v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
         return h;
     }
 

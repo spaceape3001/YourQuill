@@ -144,6 +144,11 @@ namespace yq::mithril::cdb {
         return s.vec<Atom>(a);
     }
     
+    AtomVector           children(Atom a)
+    {
+        return children(a, Sorted{});
+    }
+
     size_t              children_count(Atom a) 
     {
         static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_ATOMS " WHERE parent=?");
@@ -297,6 +302,11 @@ namespace yq::mithril::cdb {
         return s.vec<Atom::Property>(a);
     }
 
+    Atom::PropertyVector properties(Atom a)
+    {
+        return properties(a, Sorted{});
+    }
+
     std::vector<Atom::Property> properties(Atom a, Attribute attr, Sorted sorted)
     {
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOM_PROPERTY " WHERE atom=? AND attr=?");
@@ -334,6 +344,11 @@ namespace yq::mithril::cdb {
     {
         static thread_local CacheQuery s("SELECT sk FROM " TBL_ATOMS " WHERE id=?");
         return s.str(a);
+    }
+
+    TagVector           tags(Atom a)
+    {
+        return tags(a, Sorted{});
     }
     
     std::vector<Tag>    tags(Atom a, Sorted sorted) 
@@ -595,3 +610,4 @@ namespace yq::mithril::cdb {
         return s.vec<Atom>(a.id);
     }
 }
+

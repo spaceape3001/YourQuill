@@ -21,3 +21,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Place)
+YQ_TYPE_DECLARE(yq::mithril::PlaceSet)
+YQ_TYPE_DECLARE(yq::mithril::PlaceVector)

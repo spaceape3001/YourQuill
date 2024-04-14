@@ -117,19 +117,20 @@ namespace yq::mithril::cdb {
     */
     std::string          abbreviation(Atom a);
 
-    std::vector<Attribute>  attributes(Atom, Sorted sorted=Sorted{});
+    AttributeVector     attributes(Atom, Sorted sorted=Sorted{});
 
     //! Brief description of atom
     std::string          brief(Atom a);
 
     //! Child atoms of specified parent
-    std::vector<Atom>    children(Atom a,Sorted sorted=Sorted{});
+    AtomVector           children(Atom a);
+    AtomVector           children(Atom a,Sorted sorted);
 
     //! Counts child atoms of specified parent
     size_t               children_count(Atom a);
 
     //! Classes of the atom
-    std::vector<Class>   classes(Atom a,Sorted sorted=Sorted{});
+    ClassVector         classes(Atom a,Sorted sorted=Sorted{});
 
     //! Count of classes for atom
     size_t               classes_count(Atom a);
@@ -180,9 +181,10 @@ namespace yq::mithril::cdb {
     //! parent for atom
     Atom                 parent(Atom);
 
-    std::vector<Atom::Property> properties(Atom, Sorted sorted=Sorted{});
-    std::vector<Atom::Property> properties(Atom, Attribute, Sorted sorted=Sorted{});
-    std::vector<Atom::Property> properties(Atom, Field, Sorted sorted=Sorted{});
+    Atom::PropertyVector properties(Atom);
+    Atom::PropertyVector properties(Atom, Sorted sorted);
+    Atom::PropertyVector properties(Atom, Attribute, Sorted sorted=Sorted{});
+    Atom::PropertyVector properties(Atom, Field, Sorted sorted=Sorted{});
 
     size_t                  properties_count(Atom);
     size_t                  properties_count(Atom, Attribute);
@@ -192,7 +194,8 @@ namespace yq::mithril::cdb {
     std::string          skey(Atom);
 
     //! Tags for atom
-    std::vector<Tag>     tags(Atom,Sorted sorted=Sorted{});
+    TagVector           tags(Atom,Sorted sorted);
+    TagVector           tags(Atom);
 
 
     //! Count of tags for atom
@@ -277,10 +280,10 @@ namespace yq::mithril::cdb {
 
     
     //! Inbound edges for atom
-    std::vector<Atom>            inbound(Atom);
+    AtomVector            inbound(Atom);
 
     
     //! Outbound edges for atom
-    std::vector<Atom>            outbound(Atom);
+    AtomVector            outbound(Atom);
     
 }

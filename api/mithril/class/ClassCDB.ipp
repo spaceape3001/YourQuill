@@ -25,7 +25,7 @@
 namespace yq::mithril::cdb {
 
 
-    string_set_t                 aliases(Class c)
+    string_set_t                 aliases_set(Class c)
     {
         static thread_local CacheQuery   s("SELECT alias FROM " TBL_CLASS_ALIAS " WHERE class=?");
         return s.sset(c.id);
@@ -315,6 +315,90 @@ namespace yq::mithril::cdb {
         for(std::string_view  s: all)
             ret.push_back(db_class(s));
         return ret;
+    }
+
+    string_set_t                def_alias_set(Class c)
+    {
+        static thread_local CacheQuery s("SELECT alias FROM " TBL_CLSDEF_ALIAS " WHERE class=?");
+        return s.sset(c.id);
+    }
+    
+    
+    string_set_t                def_prefix_set(Class c)
+    {
+        static thread_local CacheQuery s("SELECT prefix FROM " TBL_CLSDEF_PREFIX " WHERE class=?");
+        return s.sset(c.id);
+    }
+
+    std::set<Class>             def_reverse_set(Class c)
+    {
+        static thread_local CacheQuery  s("SELECT reverse FROM " TBL_CLSDEF_REVERSE " WHERE class=?");
+        return s.set<Class>(c.id);
+    }
+    
+    std::set<Class>             def_rev_reverse_set(Class c)
+    {
+        static thread_local CacheQuery  s("SELECT class FROM " TBL_CLSDEF_REVERSE " WHERE reverse=?");
+        return s.set<Class>(c.id);
+    }
+
+    std::vector<Class>          def_rev_use(Class c, Sorted sorted)
+    {
+        static thread_local CacheQuery qs("SELECT use FROM " TBL_CLSDEF_USE " INNER JOIN " TBL_CLASSES " ON " TBL_CLSDEF_USE ".class=" TBL_CLASSES ".id WHERE use=? ORDER BY " TBL_CLASSES ".K");
+        static thread_local CacheQuery qu("SELECT use FROM " TBL_CLSDEF_USE " WHERE use=?");
+        CacheQuery& s = sorted ? qs : qu;
+        return s.vec<Class>(c.id);
+    }
+
+    std::set<Class>             def_rev_use_set(Class c)
+    {
+        static thread_local CacheQuery  s("SELECT class FROM " TBL_CLSDEF_USE " WHERE use=?");
+        return s.set<Class>(c.id);
+    }
+    
+    
+    size_t                      def_rev_use_count(Class c)
+    {
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_CLSDEF_USE " WHERE use=?");
+        return s.size(c.id);
+    }
+
+    std::set<Class>             def_source_set(Class c)
+    {
+        static thread_local CacheQuery  s("SELECT source FROM " TBL_CLSDEF_SOURCE " WHERE class=?");
+        return s.set<Class>(c.id);
+    }
+
+    string_set_t                def_suffix_set(Class c)
+    {
+        static thread_local CacheQuery s("SELECT suffix FROM " TBL_CLSDEF_SUFFIX " WHERE class=?");
+        return s.sset(c.id);
+    }
+
+    std::set<Class>             def_target_set(Class c)
+    {
+        static thread_local CacheQuery  s("SELECT target FROM " TBL_CLSDEF_TARGET " WHERE class=?");
+        return s.set<Class>(c.id);
+    }
+
+    std::set<Class>             def_use_set(Class c)
+    {
+        static thread_local CacheQuery  s("SELECT use FROM " TBL_CLSDEF_USE " WHERE class=?");
+        return s.set<Class>(c.id);
+    }
+
+    std::vector<Class>          def_use(Class c, Sorted sorted)
+    {
+        static thread_local CacheQuery qs("SELECT use FROM " TBL_CLSDEF_USE " INNER JOIN " TBL_CLASSES " ON " TBL_CLSDEF_USE ".use=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
+        static thread_local CacheQuery qu("SELECT use FROM " TBL_CLSDEF_USE " WHERE class=?");
+        CacheQuery& s = sorted ? qs : qu;
+        return s.vec<Class>(c.id);
+    }
+    
+    size_t                      def_use_count(Class c)
+    {
+        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_CLSDEF_USE " WHERE class=?");
+        return s.size(c.id);
     }
     
     // disabled until graphs are working
@@ -669,26 +753,6 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::set<Class>             rev_use_set(Class c)
-    {
-        static thread_local CacheQuery  s("SELECT class FROM " TBL_CLASS_USE " WHERE use=?");
-        return s.set<Class>(c.id);
-    }
-    
-    std::vector<Class>          rev_uses(Class c, Sorted sorted)
-    {
-        static thread_local CacheQuery qs("SELECT use FROM " TBL_CLASS_USE " INNER JOIN " TBL_CLASSES " ON Class$Uses.class=" TBL_CLASSES ".id WHERE use=? ORDER BY " TBL_CLASSES ".K");
-        static thread_local CacheQuery qu("SELECT use FROM " TBL_CLASS_USE " WHERE use=?");
-        CacheQuery& s = sorted ? qs : qu;
-        return s.vec<Class>(c.id);
-    }
-    
-    size_t                      rev_uses_count(Class c)
-    {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_CLASS_USE " WHERE use=?");
-        return s.size(c.id);
-    }
-
     
     std::vector<Class>       reverse_classes(Class c, Sorted sorted)
     {
@@ -828,27 +892,6 @@ namespace yq::mithril::cdb {
     {
         static thread_local CacheQuery    s("SELECT devurl FROM " TBL_CLASSES " WHERE class=?");
         return s.str(c.id);
-    }
-    
-
-    std::set<Class>             use_set(Class c)
-    {
-        static thread_local CacheQuery  s("SELECT use FROM " TBL_CLASS_USE " WHERE class=?");
-        return s.set<Class>(c.id);
-    }
-
-    std::vector<Class>          uses(Class c, Sorted sorted)
-    {
-        static thread_local CacheQuery qs("SELECT use FROM " TBL_CLASS_USE " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_USE ".use=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
-        static thread_local CacheQuery qu("SELECT use FROM " TBL_CLASS_USE " WHERE class=?");
-        CacheQuery& s = sorted ? qs : qu;
-        return s.vec<Class>(c.id);
-    }
-    
-    size_t                      uses_count(Class c)
-    {
-        static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_CLASS_USE " WHERE class=?");
-        return s.size(c.id);
     }
     
 

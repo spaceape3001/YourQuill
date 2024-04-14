@@ -21,3 +21,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Thing)
+YQ_TYPE_DECLARE(yq::mithril::ThingSet)
+YQ_TYPE_DECLARE(yq::mithril::ThingVector)

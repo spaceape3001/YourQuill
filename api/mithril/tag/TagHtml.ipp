@@ -7,6 +7,7 @@
 #pragma once
 
 #include "TagHtml.hpp"
+#include <0/basic/Comma.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <mithril/document/DocumentHtml.hpp>
 #include <mithril/root/RootHtml.hpp>
@@ -35,6 +36,46 @@ namespace yq::mithril::html {
         h << "<a href=\"/dev/tag?id=" << v.data.id << "\">";
         h << "[" << v.data.id << "] " << cdb::label(v.data);
         h << "</a>";
+        return h;
+    }
+
+    WebHtml&    operator<<(WebHtml& h, const std::set<Tag>& vdata)
+    {
+        Comma   comma(", ");
+        for(Tag v : vdata){
+            h << comma.text() << v;
+            ++comma;
+        }
+        return h;
+    }
+    
+    WebHtml&    operator<<(WebHtml& h, const std::vector<Tag>& vdata)
+    {
+        Comma   comma(", ");
+        for(Tag v : vdata){
+            h << comma.text() << v;
+            ++comma;
+        }
+        return h;
+    }
+
+    WebHtml&    operator<<(WebHtml& h, const Dev<std::set<Tag>>& vdata)
+    {
+        Comma   comma(", ");
+        for(Tag v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
+        return h;
+    }
+
+    WebHtml&    operator<<(WebHtml& h, const Dev<std::vector<Tag>>& vdata)
+    {
+        Comma   comma(", ");
+        for(Tag v : vdata.data){
+            h << comma.text() << dev(v);
+            ++comma;
+        }
         return h;
     }
 

@@ -40,6 +40,9 @@ namespace yq::mithril {
         */
         size_t                  all_categories_count();
         
+        //! Brief for category
+        std::string             brief(Category);
+
         /*! \brief Gets category by ID
         */
         Category                category(uint64_t);

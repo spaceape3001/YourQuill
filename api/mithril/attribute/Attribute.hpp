@@ -28,3 +28,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Attribute)
+YQ_TYPE_DECLARE(yq::mithril::AttributeSet)
+YQ_TYPE_DECLARE(yq::mithril::AttributeVector)

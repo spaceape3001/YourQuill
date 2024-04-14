@@ -27,3 +27,5 @@ namespace yq::mithril {
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Directory)
+YQ_TYPE_DECLARE(yq::mithril::DirectorySet)
+YQ_TYPE_DECLARE(yq::mithril::DirectoryVector)
