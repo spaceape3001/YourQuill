@@ -48,14 +48,14 @@ namespace yq::mithril {
         size_t m   = 0;
         
         if(n == std::string_view::npos){        // no variables... gotcha
-            m_bits << Token{ data, false };
+            m_bits.push_back(Token{ data, false });
             return;
         }
         
         while(n < data.size()){
             if(n > m){
                 //  There's some content before "{{", capture it
-                m_bits << Token{ data.substr(m, n-m), false };
+                m_bits.push_back(Token{ data.substr(m, n-m), false });
             }
 
             n += 2;
@@ -66,8 +66,8 @@ namespace yq::mithril {
             }
 
             std::string_view     k = data.substr(n, m-n);
-            m_bits << Token{ k, true };
-            m_vars << k;
+            m_bits.push_back(Token{ k, true });
+            m_vars.insert(k);
             
             if(m>=data.size())
                 break;
@@ -78,7 +78,7 @@ namespace yq::mithril {
         
         if(m < data.size()){
                 // no more, so push the remainder on
-            m_bits << Token{ data.substr(m), false };
+            m_bits.push_back(Token{ data.substr(m), false });
         }
 
             // YES, possible to lose between "{{NAME" and end if there's no "}}", but that's ill-formed

@@ -8,8 +8,6 @@
 
 #include <0/trait/not_copyable.hpp>
 #include <0/trait/not_moveable.hpp>
-#include <0/basic/Set.hpp>
-#include <0/basic/Vector.hpp>
 #include <0/basic/Http.hpp>
 #include <0/basic/Ref.hpp>
 
@@ -44,7 +42,7 @@ namespace yq::mithril {
         friend class WebHtml;
     
         std::string                 m_data;
-        Vector<Token>               m_bits;
+        std::vector<Token>          m_bits;
         string_view_set_t           m_vars;
         ContentType                 m_type;
     };
