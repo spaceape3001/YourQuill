@@ -52,6 +52,23 @@ CREATE TABLE ClassPrefix (
     UNIQUE(class,prefix) ON CONFLICT IGNORE
 );
 
+
+CREATE TABLE ClassReverse (
+    class       INTEGER NOT NULL,
+    reverse     INTEGER NOT NULL,
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(class,reverse) ON CONFLICT IGNORE
+);
+
+CREATE TABLE ClassSource (
+    class       INTEGER NOT NULL,
+    source      INTEGER NOT NULL,
+    -- number of indirects (zero is what's in the file)
+    hops        INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(class,source) ON CONFLICT IGNORE
+);
+
     -- suffixes as defined by the class definiton
 CREATE TABLE ClassSuffix (
     class       INTEGER NOT NULL,
@@ -63,6 +80,13 @@ CREATE TABLE ClassTag (
     class       INTEGER NOT NULL,
     tag         INTEGER NOT NULL,
     UNIQUE(class,tag) ON CONFLICT IGNORE
+);
+
+CREATE TABLE ClassTarget (
+    class       INTEGER NOT NULL,
+    target      INTEGER NOT NULL,
+    hops        INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(class,target) ON CONFLICT IGNORE
 );
 
 

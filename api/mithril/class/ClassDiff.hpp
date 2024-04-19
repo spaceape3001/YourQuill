@@ -25,16 +25,31 @@ namespace yq::mithril {
         Changed<std::string>    plural;
         Changed<std::string>    brief;
 
-        Changed<string_set_t>   def_aliases;
-        Changed<string_set_t>   def_prefixes;
-        Changed<ClassSet>       def_reverses;
-        Changed<ClassSet>       def_sources;
-        Changed<string_set_t>   def_suffixes;
-        Changed<ClassSet>       def_targets;
-        Changed<ClassSet>       def_uses;
+        //! Aliases as DEFINED in the file
+        Changed<string_set_t>   aliases;
+        
+        //! Prefixes as DEFINED in the file
+        Changed<string_set_t>   prefixes;
 
+        //! Reverses as DEFINED in the file
+        Changed<ClassSet>       reverses;
+        
+        //! Sources as DEFINED in the file
+        Changed<ClassSet>       sources;
+        
+        //! Suffixes as DEFINED in the file
+        Changed<string_set_t>   suffixes;
+        
+        //! TAGS (these aren't propagated)
         Changed<TagSet>         tags;
-        Changed<string_set_t>   lookups;
+        
+        //! Targets as DEFINED in the file
+        Changed<ClassSet>       targets;
+        
+        //! Uses as DEFINED in the file
+        Changed<ClassSet>       uses;
+
+        //Changed<string_set_t>   lookups;
         Changed<ClassHopMap>    bases;
         Changed<ClassHopMap>    deriveds;
     };

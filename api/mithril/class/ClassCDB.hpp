@@ -23,8 +23,11 @@
 #define TBL_CLASS_FIELD         "ClassField"
 #define TBL_CLASS_LOOKUP        "ClassLookup"
 #define TBL_CLASS_PREFIX        "ClassPrefix"
+#define TBL_CLASS_REVERSE       "ClassReverse"
+#define TBL_CLASS_SOURCE        "ClassSource"
 #define TBL_CLASS_SUFFIX        "ClassSuffix"
 #define TBL_CLASS_TAG           "ClassTag"
+#define TBL_CLASS_TARGET        "ClassTarget"
 
 #define TBL_CLSDEF_ALIAS        "ClsDefAlias"
 #define TBL_CLSDEF_PREFIX       "ClsDefPrefix"

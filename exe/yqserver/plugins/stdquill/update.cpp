@@ -240,10 +240,8 @@ namespace {
             
                 //  Classes & fields
             on_stage3<s3_class>(fsClass);
-            
             on_stage3<s3_field>(fsField);
             
-            on_stage3<s3_class_deduce>(fsClass);
             on_stage3<s3_class_propagate>(fsClass);
             
                 //  LEAFS & atoms

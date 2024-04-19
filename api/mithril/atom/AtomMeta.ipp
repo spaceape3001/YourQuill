@@ -8,6 +8,7 @@
 
 #include <0/meta/TypeInfoWriter.hpp>
 #include "AtomCDB.hpp"
+#include "AtomHtml.hpp"
 
 namespace  {
     void    reg_atom_meta()

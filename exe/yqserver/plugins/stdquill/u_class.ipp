@@ -47,7 +47,7 @@ namespace {
     }
     
 
-    void    u_class(Class c, Change chg)
+    void    u_class(Class c, Change chg, bool s5=false)
     {
         if(!c)
             return ;
@@ -72,13 +72,13 @@ namespace {
             x.deriveds.from         = cdb::derived_hops(c);
             x.tags.from             = cdb::tag_set(c);
 
-            x.def_aliases.from      = cdb::def_alias_set(c);
-            x.def_prefixes.from     = cdb::def_prefix_set(c);
-            x.def_sources.from      = cdb::def_source_set(c);
-            x.def_reverses.from     = cdb::def_reverse_set(c);
-            x.def_suffixes.from     = cdb::def_suffix_set(c);
-            x.def_targets.from      = cdb::def_target_set(c);
-            x.def_uses.from         = cdb::def_use_set(c);
+            x.aliases.from          = cdb::def_alias_set(c);
+            x.prefixes.from         = cdb::def_prefix_set(c);
+            x.sources.from          = cdb::def_source_set(c);
+            x.reverses.from         = cdb::def_reverse_set(c);
+            x.suffixes.from         = cdb::def_suffix_set(c);
+            x.targets.from          = cdb::def_target_set(c);
+            x.uses.from             = cdb::def_use_set(c);
         }
         
         static thread_local CacheQuery iBase("INSERT OR REPLACE INTO " TBL_CLASS_DEPEND " (class, base, hops) VALUES (?,?,?)");
@@ -120,13 +120,13 @@ namespace {
             x.brief.to              = std::move(def->brief);
             x.tags.to               = make_set(cdb::db_tags(def->tags));
             
-            x.def_aliases.to        = std::move(def->aliases);
-            x.def_prefixes.to       = std::move(def->prefixes);
-            x.def_reverses.to       = make_set(cdb::db_classes(def->reverse));
-            x.def_sources.to        = make_set(cdb::db_classes(def->sources));
-            x.def_suffixes.to       = std::move(def->suffixes);
-            x.def_targets.to        = make_set(cdb::db_classes(def->targets));
-            x.def_uses.to           = make_set(cdb::db_classes(def->use));
+            x.aliases.to            = std::move(def->aliases);
+            x.prefixes.to           = std::move(def->prefixes);
+            x.reverses.to           = make_set(cdb::db_classes(def->reverse));
+            x.sources.to            = make_set(cdb::db_classes(def->sources));
+            x.suffixes.to           = std::move(def->suffixes);
+            x.targets.to            = make_set(cdb::db_classes(def->targets));
+            x.uses.to               = make_set(cdb::db_classes(def->use));
             
             uInfo.bind(1, x.name.to);
             uInfo.bind(2, x.plural.to);
@@ -141,28 +141,28 @@ namespace {
             
             
             // Aliases
-            x.def_aliases.analyze();
-            for(auto& s : x.def_aliases.added)
+            x.aliases.analyze();
+            for(auto& s : x.aliases.added)
                 iDefAlias.exec(x.id, s);
                 
             // Prefixes
-            x.def_prefixes.analyze();
-            for(auto& s : x.def_prefixes.added)
+            x.prefixes.analyze();
+            for(auto& s : x.prefixes.added)
                 iDefPrefix.exec(x.id, s);
 
             // Reverses
-            x.def_reverses.analyze();
-            for(Class c : x.def_reverses.added)
+            x.reverses.analyze();
+            for(Class c : x.reverses.added)
                 iDefReverse.exec(x.id, c);
 
             // Sources
-            x.def_sources.analyze();
-            for(Class c : x.def_sources.added)
+            x.sources.analyze();
+            for(Class c : x.sources.added)
                 iDefSource.exec(x.id, c);
 
             // Suffixes
-            x.def_suffixes.analyze();
-            for(auto& s : x.def_suffixes.added)
+            x.suffixes.analyze();
+            for(auto& s : x.suffixes.added)
                 iDefSuffix.exec(x.id, s);
 
             // Tags
@@ -171,13 +171,13 @@ namespace {
                 iTag.exec(x.id, t.id);
                 
             // Targets
-            x.def_targets.analyze();
-            for(Class c : x.def_targets.added)
+            x.targets.analyze();
+            for(Class c : x.targets.added)
                 iDefTarget.exec(x.id, c);
 
             // Uses
-            x.def_uses.analyze();
-            for(Class u : x.def_uses.added)
+            x.uses.analyze();
+            for(Class u : x.uses.added)
                 iDefUse.exec(x.id, u.id);
             
                 
@@ -219,13 +219,13 @@ namespace {
             x.deriveds.removed      = x.deriveds.from;
             x.tags.removed          = x.tags.from;
             
-            x.def_aliases.removed   = x.def_aliases.from;
-            x.def_prefixes.removed  = x.def_prefixes.from;
-            x.def_reverses.removed  = x.def_reverses.from;
-            x.def_sources.removed   = x.def_sources.from;
-            x.def_suffixes.removed  = x.def_suffixes.from;
-            x.def_targets.removed   = x.def_targets.from;
-            x.def_uses.removed      = x.def_uses.from;
+            x.aliases.removed       = x.aliases.from;
+            x.prefixes.removed      = x.prefixes.from;
+            x.reverses.removed      = x.reverses.from;
+            x.sources.removed       = x.sources.from;
+            x.suffixes.removed      = x.suffixes.from;
+            x.targets.removed       = x.targets.from;
+            x.uses.removed          = x.uses.from;
         }
         
         if(chg != Change::Removed){
@@ -236,19 +236,19 @@ namespace {
             for(auto& j : x.deriveds.removed)
                 dBase.bind(j.first.id, x.id);
             
-            for(auto& s : x.def_aliases.removed)
+            for(auto& s : x.aliases.removed)
                 dDefAlias.exec(x.id, s);
-            for(auto& s : x.def_prefixes.removed)
+            for(auto& s : x.prefixes.removed)
                 dDefPrefix.exec(x.id, s);
-            for(Class u : x.def_reverses.removed)
+            for(Class u : x.reverses.removed)
                 dDefReverse.exec(x.id, u.id);
-            for(Class u : x.def_sources.removed)
+            for(Class u : x.sources.removed)
                 dDefSource.exec(x.id, u.id);
-            for(auto& s : x.def_suffixes.removed)
+            for(auto& s : x.suffixes.removed)
                 dDefSuffix.exec(x.id, s);
-            for(Class u : x.def_targets.removed)
+            for(Class u : x.targets.removed)
                 dDefTarget.exec(x.id, u.id);
-            for(Class u : x.def_uses.removed)
+            for(Class u : x.uses.removed)
                 dDefUse.exec(x.id, u.id);
         }
         
@@ -274,6 +274,7 @@ namespace {
         
     }
     
+    
         //  " TBL_CLASSES " go differently....
     
     void    s3_class(Document doc)
@@ -282,12 +283,138 @@ namespace {
     }
 
 
-    void    s3_class_deduce(Document doc)
-    {
-    }
-
     void    s3_class_propagate(Document doc)
     {
+        Class       c   = cdb::class_(doc);
+        if(!c)
+            return ;
+            
+        std::string k   = cdb::key(c);
+            
+        //  
+        //  Correct the inheritance
+        //
+            auto bases      = enumerate_hops<Class,hop_t>(c, cdb::def_use_set);
+            auto derives    = enumerate_hops<Class,hop_t>(c, cdb::def_rev_use_set);
+            
+            static thread_local CacheQuery iBase("INSERT OR REPLACE INTO " TBL_CLASS_DEPEND " (class, base, hops) VALUES (?,?,?)");        
+            
+            for(auto& j : bases){
+                iBase.bind(1, c.id);
+                iBase.bind(2, j.first.id);
+                iBase.bind(3, j.second.cnt);
+                iBase.exec();
+            }
+            
+            for(auto& j : derives){
+                iBase.bind(1, j.first.id);
+                iBase.bind(2, c.id);
+                iBase.bind(3, j.second.cnt);
+            }
+
+    
+        //
+        //  Fields
+        //
+        
+            static thread_local CacheQuery  sField("SELECT id FROM " TBL_FIELDS " WHERE class=?");
+            
+            FieldSet        fields;
+            fields  = sField.set<Field>(0ULL);
+            fields += sField.set<Field>(c.id);
+            for(auto& j : bases)
+                fields += sField.set<Field>(j.first.id);
+
+            static thread_local CacheQuery  iField("INSERT INTO " TBL_CLASS_FIELD " (class,field) VALUES (?,?)");
+            for(Field f : fields)
+                iField.exec(c.id, f.id);
+                
+        //
+        //  Sources
+        //
+        
+            ClassSet    sources = cdb::def_source_set(c);
+            for(auto& j : bases)
+                sources += cdb::def_source_set(j.first);
+            sources.erase(c);
+                
+            static thread_local CacheQuery  iSource("INSERT INTO " TBL_CLASS_SOURCE " (class,source) VALUES (?,?)");
+            for(Class x : sources)
+                iSource.exec(c.id, x.id);
+                
+        //
+        //  Targets
+        //
+        
+            ClassSet    targets = cdb::def_target_set(c);
+            for(auto& j : bases)
+                targets += cdb::def_target_set(j.first);
+            targets.erase(c);
+            static thread_local CacheQuery  iTarget("INSERT INTO " TBL_CLASS_TARGET " (class,target) VALUES (?,?)");
+            for(Class x : targets)
+                iTarget.exec(c.id, x.id);
+            
+        //
+        //  Reverses
+        //
+        
+            ClassSet    reverses = cdb::def_reverse_set(c);
+            for(auto& j : bases)
+                reverses += cdb::def_reverse_set(j.first);
+            reverses.erase(c);
+            static thread_local CacheQuery  iReverse("INSERT INTO " TBL_CLASS_REVERSE " (class,reverse) VALUES (?,?)");
+            for(Class x : reverses)
+                iReverse.exec(c.id, x.id);
+            
+        //
+        //  LOOKUPS
+        //
+            
+            string_set_t  aliases   = cdb::def_alias_set(c);
+            for(auto& j : bases)
+                aliases += cdb::def_alias_set(j.first);
+            aliases.erase(k);
+            
+            string_set_t  prefixes   = cdb::def_prefix_set(c);
+            for(auto& j : bases)
+                prefixes += cdb::def_prefix_set(j.first);
+
+            string_set_t  suffixes   = cdb::def_suffix_set(c);
+            for(auto& j : bases)
+                suffixes += cdb::def_suffix_set(j.first);
+                
+            string_set_t    lookups;
+            
+            for(auto& a : aliases)
+                lookups.insert(capitalize(a));
+
+            for(auto& p : prefixes)
+                lookups.insert(capitalize(p+k));
+
+            for(auto& p : prefixes)
+                for(auto& s : suffixes)
+                    lookups.insert(capitalize(p+k+s));
+            
+            for(auto& s : suffixes)
+                lookups.insert(capitalize(k+s));
+
+            for(auto& aa : aliases)
+                for(auto& p : prefixes)
+                    lookups.insert(capitalize(p+aa));
+                    
+            for(auto& aa : aliases)
+                for(auto& p : prefixes)
+                    for(auto& s : suffixes)
+                        lookups.insert(capitalize(p+aa+s));
+
+            for(auto& aa : aliases)
+                for(auto& s : suffixes)
+                    lookups.insert(capitalize(aa+s));
+            
+            static thread_local CacheQuery iLookup("INSERT INTO " TBL_CLASS_LOOKUP " (class,alias) VALUES (?,?)");
+            for(auto& s : lookups)
+                iLookup.exec(c.id, s);
+            
     }
     
     void    s4_class()
@@ -303,7 +430,7 @@ namespace {
             if(cdb::fragments_count(doc) <= 1){
                 Class x = cdb::class_(doc);
                 if(x){
-                    u_class(x, Change::Removed);
+                    u_class(x, Change::Removed, true);
                 }
                 return ;
             }
@@ -314,9 +441,9 @@ namespace {
         bool        created     = false;
         Class x       = cdb::db_class(doc, &created);
         if(created){
-            u_class(x, Change::Added);
+            u_class(x, Change::Added, true);
         } else
-            u_class(x, Change::Modified);
+            u_class(x, Change::Modified, true);
     }
     
     void    s5_class_icons(Fragment frag, Change chg)
@@ -324,7 +451,7 @@ namespace {
         Class    x   = cdb::class_(cdb::document(frag), true);
         if(!x)
             return ;
-        u_class(x, Change::Modified);
+        u_class(x, Change::Modified, true);
     }
 
 
