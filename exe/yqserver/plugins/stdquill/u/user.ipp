@@ -6,6 +6,12 @@
 
 #pragma once
 
+#include <mithril/user/User.hpp>
+#include <mithril/user/UserCDB.hpp>
+#include <mithril/user/UserData.hpp>
+#include <mithril/user/UserDiff.hpp>
+#include <mithril/user/UserInfo.hpp>
+
 namespace {
     void    u_user(User u, Change chg)
     {

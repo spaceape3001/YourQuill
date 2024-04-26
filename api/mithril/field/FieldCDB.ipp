@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include "FieldCDB.hpp"
 #include <0/basic/ByteArray.hpp>
 #include <0/basic/CollectionUtils.hpp>
 #include <0/io/FileUtils.hpp>
@@ -15,6 +14,8 @@
 #include <mithril/field/FieldFile.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/field/FieldInfo.hpp>
+#include <mithril/field/FieldCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/root/RootDir.hpp>

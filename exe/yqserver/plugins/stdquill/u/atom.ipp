@@ -6,7 +6,11 @@
 
 #pragma once
 
+#include <mithril/atom/Atom.hpp>
 #include <mithril/atom/AtomCDB.hpp>
+#include <mithril/atom/AtomDiff.hpp>
+
+#include <mithril/attribute/Attribute.hpp>
 
 namespace {
     void    u_atom(Atom a, std::span<Attribute::Diff> attrs, Change chg, Image icon={})

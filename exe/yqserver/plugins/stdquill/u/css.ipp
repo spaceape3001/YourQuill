@@ -6,9 +6,19 @@
 
 #pragma once
 
+#include <mithril/fragment/FragmentCDB.hpp>
+
+#include <0/basic/Map.hpp>
+#include <0/basic/TextUtils.hpp>
+#include <0/io/StreamOps.hpp>
+#include <0/io/stream/Bytes.hpp>
+
 namespace {
     void    css__(cdb_options_t opts=0)
     {
+        using namespace yq;
+        using namespace yq::mithril;
+    
         std::string       css;
         for(Fragment f : cdb::fragments(".css", DataRole::Style)){
             css += cdb::frag_string(f, opts);

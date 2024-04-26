@@ -9,6 +9,7 @@
 #include "CategoryHtml.hpp"
 #include <0/basic/TextUtils.hpp>
 #include <mithril/category/CategoryCDB.hpp>
+#include <mithril/category/CategoryInfo.hpp>
 #include <mithril/document/DocumentHtml.hpp>
 #include <mithril/html/HtmlLayout.hpp>
 #include <mithril/image/ImageCDB.hpp>
@@ -53,7 +54,7 @@ namespace yq::mithril::html {
             h << "</a>";
         return h;
     }
-#include <mithril/image/ImageHtml.hpp>
+
 
     void        admin_table(WebHtml&h, const std::vector<Category>& categories)
     {

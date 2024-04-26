@@ -11,32 +11,16 @@
 #include <mithril/enum/Restriction.hpp>
 #include <mithril/field/FieldFile.hpp>
 #include <mithril/image/Image.hpp>
-#include <mithril/category/Category.hpp>
 
 #define TBL_FIELDS      "Fields"
 #define TBL_FIELD_TAG   "FieldTag"
 
 namespace yq::mithril {
-
-        struct Field::Info {
-            Class           class_;
-            Image           icon;
-            Category        category;
-            std::string     brief;
-            std::string     key, pkey;
-            std::string     name, plural;
-            Id              expected;
-            Restriction     restriction;
-            Multiplicity    multiplicity;
-            uint64_t        max_count   = 0;
-            bool operator==(const Info&) const = default;
-        };
-
-        struct Field::Rank {
-            Field           field;
-            uint64_t        rank = 0;
-            constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
-       };
+    struct Field::Rank {
+        Field           field;
+        uint64_t        rank = 0;
+        constexpr auto    operator<=>(const Rank&rhs) const noexcept = default;
+   };
 }
 
 namespace yq::mithril::cdb {

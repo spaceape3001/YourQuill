@@ -6,6 +6,12 @@
 
 #pragma once
 
+#include <mithril/category/Category.hpp>
+#include <mithril/category/CategoryCDB.hpp>
+#include <mithril/category/CategoryData.hpp>
+#include <mithril/category/CategoryDiff.hpp>
+#include <mithril/category/CategoryInfo.hpp>
+
 namespace {
     void    u_category(Category t, Change chg)
     {

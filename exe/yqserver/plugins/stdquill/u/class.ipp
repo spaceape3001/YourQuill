@@ -6,6 +6,12 @@
 
 #pragma once
 
+#include <mithril/class/Class.hpp>
+#include <mithril/class/ClassCDB.hpp>
+#include <mithril/class/ClassData.hpp>
+#include <mithril/class/ClassDiff.hpp>
+#include <mithril/class/ClassInfo.hpp>
+
 namespace {
     void    class_graph_redraw(bool trigger=false)
     {

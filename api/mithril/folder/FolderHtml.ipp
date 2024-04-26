@@ -8,6 +8,7 @@
 
 #include "FolderHtml.hpp"
 #include <mithril/folder/FolderCDB.hpp>
+#include <mithril/folder/FolderInfo.hpp>
 #include <mithril/image/ImageCDB.hpp>
 
 namespace yq::mithril::html {

@@ -6,12 +6,13 @@
 
 #pragma once
 
-#include "FolderCDB.hpp"
 #include <0/io/DirUtils.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/directory/Directory.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/folder/FolderCDB.hpp>
+#include <mithril/folder/FolderInfo.hpp>
 #include <mithril/fragment/Fragment.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/CacheQuery.hpp>

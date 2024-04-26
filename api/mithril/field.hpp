@@ -12,5 +12,6 @@
 #include <mithril/field/FieldData.hpp>
 #include <mithril/field/FieldFile.hpp>
 #include <mithril/field/FieldHtml.hpp>
+#include <mithril/field/FieldInfo.hpp>
 #include <mithril/field/FieldPost.hpp>
 #include <mithril/field/FieldProvider.hpp>

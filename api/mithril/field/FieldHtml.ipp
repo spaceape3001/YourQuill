@@ -15,6 +15,7 @@
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/field/FieldCDB.hpp>
+#include <mithril/field/FieldInfo.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/html/HtmlLayout.hpp>
 

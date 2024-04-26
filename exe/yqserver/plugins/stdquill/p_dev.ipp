@@ -7,6 +7,8 @@
 #pragma once
 
 #include <0/basic/Global.hpp>
+#include <mithril/field/FieldInfo.hpp>
+#include <mithril/folder/FolderInfo.hpp>
 
 namespace {
     void p_dev_atom(WebHtml& h)

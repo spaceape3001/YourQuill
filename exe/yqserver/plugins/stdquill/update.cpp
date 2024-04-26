@@ -4,6 +4,30 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <0/basic/ByteArray.hpp>
+#include <0/basic/Guarded.hpp>
+#include <atomic>
+#include <filesystem>
+
+#include "common.hpp"
+
+alignas(64) Guarded<std::string>        gTextColor;
+alignas(64) Guarded<std::string>        gBkColor;
+alignas(64) std::atomic<bool>           gHasBackground{false};
+alignas(64) Guarded<SharedByteArray>    gCss;
+alignas(64) std::filesystem::path       gSharedCssFile;
+alignas(64) std::filesystem::path       gSharedPageFile;
+alignas(64) std::atomic<uint64_t>       gClassGraph{0};
+
+namespace {
+    static constexpr const char*    kPage               = ".page";
+    static const std::string_view       kStdCSS         = "www/css";
+    static const std::string_view       kStdPage        = "www/page.ht";
+}
+
+
+
+
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning
 #define MAGICKCORE_QUANTUM_DEPTH MAGICKCORE_QUANTUM_DEPTH_OBSOLETE_IN_H
@@ -101,8 +125,6 @@ using namespace yq::mithril;
 //#include <mithril/user/User.hpp>
 //#include <mithril/user/UserCDB.hpp>
 
-#include "common.hpp"
-
 //#include <mithril/atom.hpp>
 //#include <mithril/attribute.hpp>
 
@@ -119,21 +141,6 @@ using namespace yq::mithril;
 
 //#include <mithril/user.hpp>
 //#include <mithril/value.hpp>
-
-
-alignas(64) Guarded<std::string>        gTextColor;
-alignas(64) Guarded<std::string>        gBkColor;
-alignas(64) std::atomic<bool>           gHasBackground{false};
-alignas(64) Guarded<SharedByteArray>    gCss;
-alignas(64) std::filesystem::path       gSharedCssFile;
-alignas(64) std::filesystem::path       gSharedPageFile;
-alignas(64) std::atomic<uint64_t>       gClassGraph{0};
-
-namespace {
-    static constexpr const char*    kPage               = ".page";
-    static const std::string_view       kStdCSS         = "www/css";
-    static const std::string_view       kStdPage        = "www/page.ht";
-}
 
 
 struct Sigma {
@@ -192,16 +199,16 @@ namespace {
 }
 
 
-#include "u_atom.ipp"
-#include "u_category.ipp"
-#include "u_class.ipp"
-#include "u_css.ipp"
-#include "u_field.ipp"
-#include "u_image.ipp"
-#include "u_leaf.ipp"
-#include "u_style.ipp"
-#include "u_tag.ipp"
-#include "u_user.ipp"
+#include "u/atom.ipp"
+#include "u/category.ipp"
+#include "u/class.ipp"
+#include "u/css.ipp"
+#include "u/field.ipp"
+#include "u/image.ipp"
+#include "u/leaf.ipp"
+#include "u/style.ipp"
+#include "u/tag.ipp"
+#include "u/user.ipp"
     
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

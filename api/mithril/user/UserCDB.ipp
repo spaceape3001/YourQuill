@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include "UserCDB.hpp"
-
 #include <0/basic/ByteArray.hpp>
 #include <0/basic/Logging.hpp>
 #include <mithril/bit/NKI.hpp>
@@ -16,6 +14,8 @@
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
+#include <mithril/user/UserCDB.hpp>
+#include <mithril/user/UserInfo.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
 

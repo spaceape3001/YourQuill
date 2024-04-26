@@ -29,6 +29,8 @@ namespace yq::mithril {
         constexpr auto    operator<=>(const User&rhs) const noexcept = default;
         constexpr operator uint64_t() const noexcept { return id; }
     };
+
+    using UserFragDoc  = std::pair<Fragment, User::SharedFile>;
 }
 
 YQ_TYPE_DECLARE(yq::mithril::User)

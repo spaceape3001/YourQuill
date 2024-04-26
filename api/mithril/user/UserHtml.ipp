@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include "UserHtml.hpp"
 #include <0/basic/TextUtils.hpp>
 #include <mithril/document/DocumentHtml.hpp>
 #include <mithril/root/RootHtml.hpp>
@@ -14,6 +13,8 @@
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/user/UserCDB.hpp>
+#include <mithril/user/UserHtml.hpp>
+#include <mithril/user/UserInfo.hpp>
 #include <mithril/html/HtmlLayout.hpp>
 
 namespace yq::mithril::html {
