@@ -23,7 +23,7 @@
 #include <0/math/Counter.hpp>
 
 namespace yq::mithril::cdb {
-    std::vector<Atom>   all_atoms(Sorted sorted)
+    AtomVector  all_atoms(Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_ATOMS " ORDER BY k");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOMS "");
@@ -31,7 +31,7 @@ namespace yq::mithril::cdb {
         return s.vec<Atom>();
     }
     
-    std::vector<Atom>   all_atoms(Class cls, Sorted sorted)
+    AtomVector  all_atoms(Class cls, Sorted sorted)
     {
                 // I think this SQL is right.....
         static thread_local CacheQuery qs("SELECT atom FROM " TBL_ATOM_CLASS " INNER JOIN " TBL_CLASSES " ON " TBL_ATOM_CLASS ".class=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".k");
@@ -40,7 +40,7 @@ namespace yq::mithril::cdb {
         return s.vec<Atom>(cls);
     }
     
-    std::vector<Atom>   all_atoms(Document doc, Sorted sorted)
+    AtomVector  all_atoms(Document doc, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_ATOMS " WHERE doc=? ORDER BY " TBL_ATOMS ".k");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOMS " WHERE doc=?");
@@ -48,7 +48,7 @@ namespace yq::mithril::cdb {
         return s.vec<Atom>(doc);
     }
 
-    std::vector<Atom>   all_atoms(Tag tag, Sorted sorted)
+    AtomVector  all_atoms(Tag tag, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT atom FROM " TBL_ATOM_TAG " INNER JOIN " TBL_ATOMS " ON " TBL_ATOM_TAG ".atom=" TBL_ATOMS ".id WHERE tag=? ORDER BY " TBL_ATOMS ".k");
         static thread_local CacheQuery qu("SELECT atom FROM " TBL_ATOM_TAG " WHERE tag=?");
@@ -106,7 +106,7 @@ namespace yq::mithril::cdb {
         return s.as<Atom>(doc, ck);
     }
 
-    std::vector<Atom>    named_atoms(std::string_view n, Sorted sorted)
+    AtomVector   named_atoms(std::string_view n, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_ATOMS " WHERE name=? ORDER BY k");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOMS " WHERE name=?");
@@ -122,7 +122,7 @@ namespace yq::mithril::cdb {
         return s.str(a);
     }
     
-    std::vector<Attribute>  attributes(Atom a, Sorted sorted)
+    AttributeVector  attributes(Atom a, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT attr FROM " TBL_ATOM_PROPERTY " INNER JOIN " TBL_ATTRIBUTES " ON " TBL_ATOM_PROPERTY ".attr=" TBL_ATTRIBUTES ".id WHERE atom=? ORDER BY " TBL_ATTRIBUTES ".k");
         static thread_local CacheQuery qu("SELECT attr FROM " TBL_ATOM_PROPERTY " WHERE atom=?");
@@ -136,7 +136,7 @@ namespace yq::mithril::cdb {
         return s.str(a);
     }
     
-    std::vector<Atom>   children(Atom a, Sorted sorted) 
+    AtomVector   children(Atom a, Sorted sorted) 
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_ATOMS " WHERE parent=? ORDER BY k");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOMS " WHERE parent=?");
@@ -155,7 +155,7 @@ namespace yq::mithril::cdb {
         return s.size(a);
     }
 
-    std::vector<Class>  classes(Atom a, Sorted sorted) 
+    ClassVector classes(Atom a, Sorted sorted) 
     {
         static thread_local CacheQuery qs("SELECT class FROM " TBL_ATOM_CLASS " INNER JOIN " TBL_CLASSES " ON " TBL_ATOM_CLASS ".class=" TBL_CLASSES ".id WHERE atom=? ORDER BY " TBL_CLASSES ".k");
         static thread_local CacheQuery qu("SELECT class FROM " TBL_ATOM_CLASS " WHERE atom=?");
@@ -169,6 +169,12 @@ namespace yq::mithril::cdb {
         return s.size(a);
     }
     
+    ClassSet            classes_set(Atom a)
+    {
+        static thread_local CacheQuery s("SELECT class FROM " TBL_ATOM_CLASS " WHERE atom=?");
+        return s.set<Class>(a);
+    }
+
     Document            document(Atom a) 
     {
         static thread_local CacheQuery s("SELECT doc FROM " TBL_ATOMS " WHERE id=?");
@@ -295,7 +301,7 @@ namespace yq::mithril::cdb {
         return s.as<Atom>(a);
     }
 
-    std::vector<Atom::Property> properties(Atom a, Sorted)
+    Atom::PropertyVector properties(Atom a, Sorted)
     {
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOM_PROPERTY " WHERE atom=?");
         CacheQuery& s = qu; // sorted ? qs : qu;
@@ -307,14 +313,14 @@ namespace yq::mithril::cdb {
         return properties(a, Sorted{});
     }
 
-    std::vector<Atom::Property> properties(Atom a, Attribute attr, Sorted sorted)
+    Atom::PropertyVector properties(Atom a, Attribute attr, Sorted sorted)
     {
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOM_PROPERTY " WHERE atom=? AND attr=?");
         CacheQuery& s = qu; // sorted ? qs : qu;
         return s.vec<Atom::Property>(a, attr);
     }
     
-    std::vector<Atom::Property> properties(Atom a, Field f, Sorted sorted)
+    Atom::PropertyVector properties(Atom a, Field f, Sorted sorted)
     {
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOM_PROPERTY " WHERE atom=? AND field=?");
         CacheQuery& s = qu; // sorted ? qs : qu;
@@ -351,7 +357,7 @@ namespace yq::mithril::cdb {
         return tags(a, Sorted{});
     }
     
-    std::vector<Tag>    tags(Atom a, Sorted sorted) 
+    TagVector    tags(Atom a, Sorted sorted) 
     {
         static thread_local CacheQuery qs("SELECT tag FROM " TBL_ATOM_TAG " INNER JOIN " TBL_TAGS " ON " TBL_ATOM_TAG ".tag=" TBL_TAGS ".id WHERE atom=? ORDER BY " TBL_TAGS ".k");
         static thread_local CacheQuery qu("SELECT tag FROM " TBL_ATOM_TAG " WHERE atom=?");
@@ -365,6 +371,12 @@ namespace yq::mithril::cdb {
         return s.size(a);
     }
     
+    TagSet              tags_set(Atom a)
+    {
+        static thread_local CacheQuery s("SELECT tag FROM " TBL_ATOM_TAG " WHERE atom=?");
+        return s.set<Tag>(a);
+    }
+
     std::string         title(Atom a)
     {
         return label(a);
@@ -597,14 +609,14 @@ namespace yq::mithril::cdb {
         }
     }
     
-    std::vector<Atom>   inbound(Atom a)
+    AtomVector   inbound(Atom a)
     {
         static thread_local CacheQuery s("SELECT edge FROM AEdges WHERE target=?");
         return s.vec<Atom>(a.id);
     }
 
 
-    std::vector<Atom>   outbound(Atom a)
+    AtomVector   outbound(Atom a)
     {
         static thread_local CacheQuery s("SELECT target FROM AEdges WHERE atom=? AND tgtid!=0");
         return s.vec<Atom>(a.id);

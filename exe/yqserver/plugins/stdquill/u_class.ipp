@@ -81,6 +81,7 @@ namespace {
             x.uses.from             = cdb::def_use_set(c);
         }
         
+        static thread_local CacheQuery iLookup("INSERT OR REPLACE INTO " TBL_CLASS_LOOKUP " (class, alias, priority) VALUES (?,?,0)");
         static thread_local CacheQuery iBase("INSERT OR REPLACE INTO " TBL_CLASS_DEPEND " (class, base, hops) VALUES (?,?,?)");
         static thread_local CacheQuery dBase("DELETE FROM " TBL_CLASS_DEPEND " WHERE class=? AND base=?");
         static thread_local CacheQuery uBase("UPDATE " TBL_CLASS_DEPEND " SET hops=? WHERE class=? AND base=?");
@@ -105,6 +106,9 @@ namespace {
         static thread_local CacheQuery dDefUse("DELETE FROM " TBL_CLSDEF_USE " WHERE class=? AND use=?");
 
         if(chg != Change::Removed){
+        
+            iLookup.exec(x.id, x.key);
+        
             auto def        = cdb::merged(c, cdb::DONT_LOCK|cdb::IS_UPDATE);
             if(!def){
                 yInfo() << "Class " << x.key << " cannot be read.";
@@ -411,7 +415,7 @@ namespace {
                 for(auto& s : suffixes)
                     lookups.insert(capitalize(aa+s));
             
-            static thread_local CacheQuery iLookup("INSERT INTO " TBL_CLASS_LOOKUP " (class,alias) VALUES (?,?)");
+            static thread_local CacheQuery iLookup("INSERT OR IGNORE INTO " TBL_CLASS_LOOKUP " (class,alias,priority) VALUES (?,?,1)");
             for(auto& s : lookups)
                 iLookup.exec(c.id, s);
             

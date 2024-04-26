@@ -22,7 +22,7 @@ namespace yq::mithril::cdb {
         \param[in] sorted   Yes/no for sorting by key. (default is no)
         \return std::vector of the found atoms
     */
-    std::vector<Atom>    all_atoms(Sorted sorted=Sorted{});
+    AtomVector          all_atoms(Sorted sorted=Sorted{});
 
     /*! \brief Returns all atoms in the cache database for given class
     
@@ -33,7 +33,7 @@ namespace yq::mithril::cdb {
         \param[in] sorted   Yes/no for sorting by key (default is no)
         \return std::vector of the found atoms
     */
-    std::vector<Atom>    all_atoms(Class cls, Sorted sorted=Sorted{});
+    AtomVector          all_atoms(Class cls, Sorted sorted=Sorted{});
 
     /*! \brief Returns all atoms in the cache database defined by the given document
     
@@ -41,7 +41,7 @@ namespace yq::mithril::cdb {
         \param[in] sorted   Yes/no for sorting by key (default is no)
         \return std::vector of the found atoms
     */
-    std::vector<Atom>    all_atoms(Document doc, Sorted sorted=Sorted{});
+    AtomVector          all_atoms(Document doc, Sorted sorted=Sorted{});
 
     /*! \brief Returns all atoms in the cache database with the given tag
     
@@ -52,12 +52,12 @@ namespace yq::mithril::cdb {
         \param[in] sorted   Yes/no for sorting by key (default is no)
         \return std::vector of the found atoms
     */
-    std::vector<Atom>    all_atoms(Tag tag, Sorted sorted=Sorted{});
+    AtomVector          all_atoms(Tag tag, Sorted sorted=Sorted{});
 
     /*! \brief Counts the number of atoms in the database
         \return The count
     */
-    size_t               count_atoms();
+    size_t              count_atoms();
 
     /*! \brief Counts the number of atoms in the database for the given class
     
@@ -67,7 +67,7 @@ namespace yq::mithril::cdb {
         \param[in] cls      Class to select for
         \return The count
     */
-    size_t               count_atoms(Class cls);
+    size_t              count_atoms(Class cls);
 
     /*! \brief Counts the number of atoms in the database defined by the specified document
     
@@ -76,7 +76,7 @@ namespace yq::mithril::cdb {
         \param[in] doc      Containing document
         \return The count
     */
-    size_t               count_atoms(Document doc);
+    size_t              count_atoms(Document doc);
 
     /*! \brief Counts the number of atoms in the database tagged by the given tag
     
@@ -86,26 +86,26 @@ namespace yq::mithril::cdb {
         \param[in] tag      Tag to select for
         \return The count
     */
-    size_t               count_atoms(Tag tag);
+    size_t              count_atoms(Tag tag);
     //Atom                 create(Document);
     
     bool                exists(Atom a);
-    bool                 exists_atom(uint64_t);
+    bool                exists_atom(uint64_t);
 
     //! Gets atom by ID
-    Atom                 find_atom(uint64_t);
+    Atom                find_atom(uint64_t);
 
     //! Gets atom by key
-    Atom                 find_atom(std::string_view);
+    Atom                find_atom(std::string_view);
 
     //! Gets first atom defined by document
-    Atom                 find_atom(Document doc);
+    Atom                find_atom(Document doc);
 
     //! Gets atom by document and sub-key
-    Atom                 find_atom(Document doc, std::string_view ck);
+    Atom                find_atom(Document doc, std::string_view ck);
 
     //! All atoms with name
-    std::vector<Atom>    named_atoms(std::string_view n, Sorted sorted=Sorted{});
+    AtomVector          named_atoms(std::string_view n, Sorted sorted=Sorted{});
 
     // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  To distinguish the ones taking in a Atom as a primary argument
@@ -115,28 +115,31 @@ namespace yq::mithril::cdb {
         \param[in]  a   Atom of interest
         \return The standard abbreviation
     */
-    std::string          abbreviation(Atom a);
+    std::string         abbreviation(Atom a);
 
     AttributeVector     attributes(Atom, Sorted sorted=Sorted{});
 
     //! Brief description of atom
-    std::string          brief(Atom a);
+    std::string         brief(Atom a);
 
     //! Child atoms of specified parent
-    AtomVector           children(Atom a);
-    AtomVector           children(Atom a,Sorted sorted);
+    AtomVector          children(Atom a);
+    AtomVector          children(Atom a, Sorted sorted);
 
     //! Counts child atoms of specified parent
-    size_t               children_count(Atom a);
+    size_t              children_count(Atom a);
 
     //! Classes of the atom
     ClassVector         classes(Atom a,Sorted sorted=Sorted{});
 
+
     //! Count of classes for atom
-    size_t               classes_count(Atom a);
+    size_t              classes_count(Atom a);
+
+    ClassSet            classes_set(Atom a);
     
     //! Defining document for atom
-    Document             document(Atom);
+    Document            document(Atom);
 
     //! Icon for atom
     Image                icon(Atom);
@@ -197,6 +200,7 @@ namespace yq::mithril::cdb {
     TagVector           tags(Atom,Sorted sorted);
     TagVector           tags(Atom);
 
+    TagSet              tags_set(Atom);
 
     //! Count of tags for atom
     size_t               tags_count(Atom);
