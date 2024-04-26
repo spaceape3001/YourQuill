@@ -7,7 +7,8 @@
 #pragma once
 
 #include <mithril/rule/Rule.hpp>
-#include <0/meta/ObjectInfoWriter.hpp>
+#include <mithril/io/Strings.hpp>
+#include <0/io/XmlUtils.hpp>
 
 namespace yq::mithril {    
 /*
@@ -66,13 +67,7 @@ namespace yq::mithril {
         }
     }
 
-    YQ_INVOKE(
-        auto w = writer<Rule>();
-        w.label("Generic Rule");
-        w.property("name", &Rule::name);
-    )
 
 }
 
-YQ_OBJECT_IMPLEMENT(yq::mithril::Rule)
 

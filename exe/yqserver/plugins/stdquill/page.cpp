@@ -18,6 +18,7 @@
 #include <mithril/leaf.hpp>
 #include <mithril/meta.hpp>
 #include <mithril/root.hpp>
+#include <mithril/style.hpp>
 #include <mithril/tag.hpp>
 #include <mithril/user.hpp>
 

@@ -57,6 +57,7 @@ namespace yq::mithril {
     struct Property;
     struct Root;
     struct RootDir;
+    struct Style;
     struct Tag;
     struct Thing;
     struct User;
@@ -150,6 +151,9 @@ namespace yq::mithril {
     
     using PlaceSet              = std::set<Place>;
     using PlaceVector           = std::vector<Place>;
+    
+    using StyleSet              = std::set<Style>;
+    using StyleVector           = std::vector<Style>;
 
     using TagSet                = std::set<Tag>;
     using TagVector             = std::vector<Tag>;

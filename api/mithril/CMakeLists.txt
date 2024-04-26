@@ -7,6 +7,10 @@
 project(mithril)
 
 add_library(${PROJECT_NAME} SHARED
+    all_cdb.cpp
+    all_ipc.cpp
+    all_meta.cpp
+    directories.cpp
     mithril.cpp
     html/XEntry.cpp
     web/web_unity.cpp

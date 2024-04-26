@@ -8,7 +8,6 @@
 
 #include <mithril/rule/Trigger.hpp>
 #include <mithril/io/Strings.hpp>
-#include <0/meta/ObjectInfoWriter.hpp>
 #include <0/io/XmlUtils.hpp>
 
 namespace yq::mithril {
@@ -34,6 +33,4 @@ namespace yq::mithril {
         }
     }
 }
-
-YQ_OBJECT_IMPLEMENT(yq::mithril::Trigger)
 

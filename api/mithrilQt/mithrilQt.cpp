@@ -44,6 +44,7 @@
 
 #include "place.ipp"
 #include "root.ipp"
+#include "style.ipp"
 #include "tag.ipp"
 #include "thing.ipp"
 #include "user.ipp"

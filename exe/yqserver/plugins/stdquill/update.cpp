@@ -199,6 +199,7 @@ namespace {
 #include "u_field.ipp"
 #include "u_image.ipp"
 #include "u_leaf.ipp"
+#include "u_style.ipp"
 #include "u_tag.ipp"
 #include "u_user.ipp"
     
@@ -214,6 +215,7 @@ namespace {
             const FileSpec   fsClass(CACHE, cdb::classes_folder(), "*.cls");
             const FileSpec   fsField(CACHE, cdb::fields_folder(), "*.fld");
             const FileSpec   fsLeaf(CACHE, "*.y");
+            const FileSpec   fsStyle(CACHE, cdb::styles_folder(), "*.sty");
             const FileSpec   fsTag(CACHE, cdb::tags_folder(), "*.tag");
             const FileSpec   fsUser(CACHE, cdb::users_folder(), "*.usr");
         
@@ -235,6 +237,7 @@ namespace {
             
                 //  Organization & users
             on_stage3<s3_category>(fsCategory);
+            on_stage3<s3_style>(fsStyle);
             on_stage3<s3_tag>(fsTag);
             on_stage3<s3_user>(fsUser);
             
@@ -269,23 +272,25 @@ namespace {
 
                 
             on_change<css_update>(FileSpec(gSharedCssFile));
-            on_change<css_update>(FileSpec(CACHE, top_folder(), ".css"));
+            on_change<css_update>(FileSpec(CACHE, cdb::top_folder(), ".css"));
 
             on_change<page_update>(FileSpec(gSharedPageFile));
-            on_change<page_update>(FileSpec(CACHE, top_folder(), ".page"));
+            on_change<page_update>(FileSpec(CACHE, cdb::top_folder(), ".page"));
                 
             on_change<s5_category>(FileSpec(CACHE, cdb::categories_folder(), "*.cat"));
             on_change<s5_class>(fsClass);
             on_change<s5_field>(fsField);
             on_change<s5_leaf>(fsLeaf);
-            on_change<s5_tag>(FileSpec(CACHE, cdb::tags_folder(), "*.tag"));
-            on_change<s5_user>(FileSpec(CACHE, cdb::users_folder(), "*.user"));
+            on_change<s5_style>(fsStyle);
+            on_change<s5_tag>(fsTag);
+            on_change<s5_user>(fsUser);
             
             for(const char* z : Image::kSupportedExtensionWildcards){
                 on_change<s5_category_icons>(FileSpec(CACHE, categories_folder(), z));
                 on_change<s5_class_icons>(FileSpec(CACHE, classes_folder(), z));
                 on_change<s5_field_icons>(FileSpec(CACHE, fields_folder(), z));
                 on_change<s5_leaf_icons>(FileSpec(CACHE, z));
+                on_change<s5_style_icons>(FileSpec(CACHE, styles_folder(), z));
                 on_change<s5_tag_icons>(FileSpec(CACHE, tags_folder(), z));
                 on_change<s5_user_icons>(FileSpec(CACHE, users_folder(), z));
             }

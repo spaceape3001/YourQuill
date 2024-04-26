@@ -77,8 +77,9 @@ INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (2, '.config',  1, '.con
 INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (3, '.categories',  1, '.categories',  'Categories', 1);
 INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (4, '.classes',  1, '.classes',  'Classes', 1);
 INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (5, '.fields',  1, '.fields',  'Fields', 1);
-INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (6, '.tags',  1, '.tags',  'Tags', 1);
-INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (7, '.users',    1, '.users',    'Users', 1);
+INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (6, '.styles',  1, '.styles',  'Styles', 1);
+INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (7, '.tags',  1, '.tags',  'Tags', 1);
+INSERT INTO Folders (id,k,parent,sk,name,hidden) VALUES (8, '.users',    1, '.users',    'Users', 1);
 
 
 

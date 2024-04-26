@@ -77,6 +77,9 @@
 #include <mithril/root/Root.hpp>
 #include <mithril/root/RootCDB.hpp>   
 
+#include <mithril/style/Style.hpp>
+#include <mithril/style/StyleCDB.hpp>   
+
 #include <mithril/tag/Tag.hpp>
 #include <mithril/tag/TagCDB.hpp>   
 
@@ -90,7 +93,7 @@
 #include <mithril/value/ValueCDB.hpp>   
 
 namespace yq::mithril {
-    static constexpr const IdTypeId HIGH_ID = 28;
+    static constexpr const IdTypeId HIGH_ID = 29;
     
     std::string_view  Id::type_name(IdTypeId ct)
     {
@@ -141,6 +144,8 @@ namespace yq::mithril {
             return "Place"sv;
         case Root::ID:
             return "Root"sv;
+        case Style::ID:
+            return "Style"sv;
         case Tag::ID:
             return "Tag"sv;
         case Thing::ID:
@@ -203,6 +208,8 @@ namespace yq::mithril {
             return &meta<Place>();
         case Root::ID:
             return &meta<Root>();
+        case Style::ID:
+            return &meta<Style>();
         case Tag::ID:
             return &meta<Tag>();
         case Thing::ID:
@@ -265,6 +272,8 @@ namespace yq::mithril {
             return Place::PARENTS;
         case Root::ID:
             return Root::PARENTS;
+        case Style::ID:
+            return Style::PARENTS;
         case Tag::ID:
             return Tag::PARENTS;
         case Thing::ID:
@@ -333,6 +342,8 @@ namespace yq::mithril {
             return cdb::key(Place(id()));
         case Root::ID:
             return cdb::key(Root(id()));
+        case Style::ID:
+            return cdb::key(Style(id()));
         case Tag::ID:
             return cdb::key(Tag(id()));
         case Thing::ID:
@@ -396,6 +407,8 @@ namespace yq::mithril {
                 return cdb::name(Place(id()));
             case Root::ID:
                 return cdb::name(Root(id()));
+            case Style::ID:
+                return cdb::name(Style(id()));
             case Tag::ID:
                 return cdb::name(Tag(id()));
             case Thing::ID:
@@ -458,6 +471,8 @@ namespace yq::mithril::cdb {
             return ids<Place>(all_places(sorted));
         case Root::ID:
             return ids<Root>(all_roots(sorted));
+        case Style::ID:
+            return ids<Style>(all_styles(sorted));
         case Tag::ID:
             return ids<Tag>(all_tags(sorted));
         case Thing::ID:

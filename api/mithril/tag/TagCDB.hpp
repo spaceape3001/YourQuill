@@ -17,7 +17,7 @@
 #define TBL_TAGS    "Tags"
 
 namespace yq::mithril {
-        using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
+    using TagFragDoc    = std::pair<Fragment, Tag::SharedFile>;
 }
 
         
@@ -26,7 +26,7 @@ namespace yq::mithril::cdb {
     /*! \brief Get all tags
         \param[in] sorted   Set to have tags sorted by key
     */
-    std::vector<Tag>        all_tags(Sorted sorted=Sorted());
+    TagVector               all_tags(Sorted sorted=Sorted());
     
     /*! \brief Total number of tags
     */
@@ -49,16 +49,16 @@ namespace yq::mithril::cdb {
     Tag                     find_tag(Document, bool calc=false);
 
     /*! \brief Tags for key-set */
-    std::vector<Tag>        find_tags(const string_set_t&, bool noisy=false);
+    TagVector               find_tags(const string_set_t&, bool noisy=false);
     
     /*! \brief Tags for key-set */
-    std::vector<Tag>        find_tags(const string_view_set_t&, bool noisy=false);
+    TagVector               find_tags(const string_view_set_t&, bool noisy=false);
 
     /*! \brief Tags for key-set */
-    std::set<Tag>           find_tags_set(const string_set_t&, bool noisy=false);
+    TagSet                  find_tags_set(const string_set_t&, bool noisy=false);
     
     /*! \brief Tags for key-set */
-    std::set<Tag>           find_tags_set(const string_view_set_t&, bool noisy=false);
+    TagSet                  find_tags_set(const string_view_set_t&, bool noisy=false);
 
     // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     //  To distinguish the ones taking in a Tag as a primary argument
@@ -123,20 +123,20 @@ namespace yq::mithril::cdb {
 
     /*! \brief Creates tags by keys
     */
-    std::vector<Tag>        db_tags(const string_view_set_t&);
+    TagVector               db_tags(const string_view_set_t&);
 
     /*! \brief Creates tags by keys
     */
-    std::vector<Tag>        db_tags(const string_set_t&);
+    TagVector               db_tags(const string_set_t&);
 
     
     /*! \brief Creates tags by keys
     */
-    std::set<Tag>           db_tags_set(const string_view_set_t&);
+    TagSet                  db_tags_set(const string_view_set_t&);
 
     /*! \brief Creates tags by keys
     */
-    std::set<Tag>           db_tags_set(const string_set_t&);
+    TagSet                  db_tags_set(const string_set_t&);
 
     
     //bool                    is_tagged(Field, Tag);

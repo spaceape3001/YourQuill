@@ -28,8 +28,9 @@ namespace yq::mithril {
         static constexpr const uint64_t CATEGORIES  = 3ULL;
         static constexpr const uint64_t CLASSES     = 4ULL;
         static constexpr const uint64_t FIELDS      = 5ULL;
-        static constexpr const uint64_t TAGS        = 6ULL;
-        static constexpr const uint64_t USERS       = 7ULL;
+        static constexpr const uint64_t STYLES      = 6ULL;
+        static constexpr const uint64_t TAGS        = 7ULL;
+        static constexpr const uint64_t USERS       = 8ULL;
     };
 
     namespace cdb {

@@ -223,6 +223,9 @@ namespace yq::mithril {
 
         std::string                     skeyb(Folder);    //!< Key inside the directory (w/o extensions)
 
+        //! Folder for style definitions
+        consteval Folder                styles_folder() { return Folder{Folder::STYLES}; }
+
         //! Folder for tag definitions
         consteval Folder                tags_folder() { return Folder{Folder::TAGS}; }
         

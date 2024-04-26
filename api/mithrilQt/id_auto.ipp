@@ -33,6 +33,7 @@
 #include <mithrilQt/organization.hpp>
 #include <mithrilQt/place.hpp>
 #include <mithrilQt/root.hpp>
+#include <mithrilQt/style.hpp>
 #include <mithrilQt/tag.hpp>
 #include <mithrilQt/thing.hpp>
 #include <mithrilQt/user.hpp>
@@ -92,6 +93,8 @@ namespace yq::mithril {
             return qIcon(Place(i.id()));
         case Root::ID:
             return qIcon(Root(i.id()));
+        case Style::ID:
+            return qIcon(Style(i.id()));
         case Tag::ID:
             return qIcon(Tag(i.id()));
         case Thing::ID:

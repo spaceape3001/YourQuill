@@ -7,7 +7,8 @@
 #pragma once
 
 #include <0/meta/TypeInfoWriter.hpp>
-#include "RootCDB.hpp"
+#include <mithril/root/Root.hpp>
+#include <mithril/root/RootCDB.hpp>
 
 namespace {
     void reg_root_meta()

@@ -1125,6 +1125,36 @@ namespace {
             out.li() << "<a href=\"/dev/sql/table?table=" << web_encode(s) << "\">" << s << "</a>\n";
     }
     
+    void    dev_title(WebHtml& h, Style x, std::string_view extra=std::string_view())
+    {
+        auto t = h.title();
+        auto i = nki(x);
+        h << "Style \"" << i.name << "\" (" << i.key << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+    
+
+    void    p_dev_style(WebHtml& h)
+    {
+        Style   x = style(h);
+        if(!x)
+            throw HttpStatus::BadArgument;
+        auto i = cdb::info(x);
+        dev_title(h, x);
+        auto ta = h.table();
+        h.kvrow("ID") << x.id;
+        h.kvrow("Name") << i.name;
+        h.kvrow("Key") << i.key;
+        h.kvrow("Brief") << i.brief;
+        h.kvrow("Document") << dev(i.doc);
+    }
+
+    void    p_dev_styles(WebHtml& out)
+    {
+        out.title("All Styles");
+        dev_table(out, all_styles());
+    }
 
     void    dev_title(WebHtml& h, Tag x, std::string_view extra=std::string_view())
     {
@@ -1134,6 +1164,7 @@ namespace {
         if(!extra.empty())
             h << ": " << extra;
     }
+    
 
     void    p_dev_tag(WebHtml& h)
     {
@@ -1379,6 +1410,9 @@ namespace {
 
         reg_webpage<p_dev_sql_table>("/dev/sql/table").local().argument("table", "SQL Table Name");
         reg_webpage<p_dev_sql_tables>("/dev/sql/tables", "SQL Tables").local();
+        
+        reg_webpage<p_dev_style>("/dev/style").local().argument("id", "Style id (number)");
+        reg_webpage<p_dev_styles>("/dev/styles");
 
         reg_webgroup({
             reg_webpage<p_dev_tag>("/dev/tag")

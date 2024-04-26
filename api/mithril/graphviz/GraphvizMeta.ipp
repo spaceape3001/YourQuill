@@ -7,7 +7,8 @@
 #pragma once
 
 #include <0/meta/TypeInfoWriter.hpp>
-#include "GraphvizCDB.hpp"
+#include <mithril/graphviz/Graphviz.hpp>
+#include <mithril/graphviz/GraphvizCDB.hpp>
 
 namespace {
     void reg_graphviz_meta()

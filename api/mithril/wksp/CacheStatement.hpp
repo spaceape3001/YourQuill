@@ -7,6 +7,8 @@
 #pragma once
 
 #include <mithril/preamble.hpp>
+#include <mithril/id/Id.hpp>
+#include <0/basic/ByteArray.hpp>
 #include <0/sql/SqlStatement.hpp>
 #include <filesystem>
 #include <set>
