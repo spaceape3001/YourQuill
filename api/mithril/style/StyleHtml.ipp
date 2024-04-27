@@ -48,6 +48,31 @@ namespace yq::mithril::html {
         return h;
     }
 
+    void    admin_table(WebHtml&h, const StyleVector&styles)
+    {
+        auto tac = h.table();
+        auto iz = h.context().session.icon_size;
+        html::columns(h, styles, 
+            [&](Style c)
+            {
+                if(c){
+                    Image   i   = cdb::icon(c);
+                    if(i){
+                        h << cdb::thumbnail(i, iz);
+                    } else
+                        h << "<img src=\"/img/generic.svg\" class=\"" << iz << "\">";
+                }
+            },
+            [&](Style c)
+            {
+                if(c){
+                    h << "<a href=\"/admin/style?id=" << c.id << "\">" << cdb::label(c) << "</a>";
+                }
+            }
+        );
+    }
+
+
     void        dev_table(WebHtml&h, const StyleVector&styles)
     {
         auto t=h.table();
@@ -57,5 +82,21 @@ namespace yq::mithril::html {
             h << "<tr><td>" << dev_id(l) << "</td><td><a href=\"/style?id=" << l.id << "\">"
                 << i.key << "<a></td><td>" << i.name << "</td></tr>\n";
         }
+    }
+
+    void        new_style_control(WebHtml&h, std::string_view npath)
+    {
+        Url url;
+        url.path=copy(npath);
+        h << html::form_start(url, false);
+        h << "Add Style:<br>";
+        h << ikey();
+        h << "<br><hr width=\"10%\">\n";
+        h << iroot( DataRole::Config );
+        h << "<hr width=\"10%\">\n";
+        h << iedit();
+        h << "<hr width=\"10%\">\n";
+        h << Submit(Submit::Create);
+        h << "</form>\n";
     }
 }

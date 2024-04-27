@@ -145,75 +145,47 @@ namespace yq::mithril::cdb {
         return s.str(l.id);
     }
     
-    
-    Style                style(uint64_t i)
-    {
-        return exists_style(i) ? Style{i} : Style();
-    }
 
-    Style                style(std::string_view  k)
+    Style                     make_style(std::string_view k, const RootDir* rt, cdb_options_t opts, bool* wasCreated)
     {
-        static thread_local CacheQuery s("SELECT id FROM " TBL_STYLES " WHERE k=?");
-        return s.as<Style>(k);
-    }
-
-    Style                style(Document d, bool calc)
-    {
-        if(!d)
+        if(wasCreated)
+            *wasCreated = false;
+        if(k.empty()){
+            yError() << "Cannot create a BLANK style.";
             return Style();
-        if(exists_style(d.id))
-            return Style(d.id);
-        if(calc){
-            std::string k   = key(folder(d)) + "/" + skeyb(d);
-            return style(k);
         }
-        return Style();
-    }
     
-    #if 0
-    Style                style(Folder f)
-    {
-        return style(key(f));
-    }
-    #endif
-    
-    Style::SharedFile         style_doc(Fragment f, cdb_options_t opts)
-    {
-        if(!f)
-            return Style::SharedFile();
-
-        std::filesystem::path       fp  = path(f);
-
-        const RootDir* rt  = root_dir(f);
         if(!rt)
-            yWarning() << "No root_dir for: " << fp;
-
-        Id::Lock  lk;
-        if(!(opts & DONT_LOCK)){
-            lk  = Id(f).lock(false);
-            if(!lk){
-                yWarning() << "Unable to get read lock on fragment: " << fp;
-                return Style::SharedFile();
-            }
-        }
-
-        auto    ch   = file_bytes(fp);
-        lk.free();
-        if(ch.empty()){
-            if(opts & ALLOW_EMPTY)
-                return std::make_shared<Style::File>() ;
-            return Style::SharedFile();
+            rt  = wksp::root_first(DataRole::Config);
+        if(!rt){
+            yError() << "No root_dir specified to create the style in!";
+            return Style{};
         }
         
-        Style::SharedFile     td  = std::make_shared<Style::File>();
-        if(td->load(std::move(ch), fp) != std::error_code()){
-            yError() << "Unable to read " << fp;
-            return Style::SharedFile();
+        std::string     tfn = style_filename(k);
+        Document    doc = db_document(styles_folder(), tfn);
+        bool            was = false;
+        Style         t   = db_style(doc, &was);
+        if(!t){
+            yWarning() << "Unable to create/find style: " << k;
+            return t;
         }
-        td -> set_file(fp);
-        //for(auto& ctx : td -> context)
-            //ctx.root_dir    = rt;
-        return td;
+        if(wasCreated)
+            *wasCreated = was;
+        if(!was)
+            return t;
+        if(fragments_count(doc))
+            return t;
+            
+        Id::Lock   lk;
+        if(!(opts & DONT_LOCK))
+            lk  = Id(t).lock(true);
+        
+            // prelude, we're first....
+        Style::SharedFile td  = write(t, rt, opts);
+        td -> name  = k;
+        td -> save();
+        return t;
     }
 
     
@@ -288,6 +260,79 @@ namespace yq::mithril::cdb {
                 ret.push_back(StyleFragDoc(f,p));
         }
         return ret;
+    }
+
+
+
+    
+    Style                style(uint64_t i)
+    {
+        return exists_style(i) ? Style{i} : Style();
+    }
+
+    Style                style(std::string_view  k)
+    {
+        static thread_local CacheQuery s("SELECT id FROM " TBL_STYLES " WHERE k=?");
+        return s.as<Style>(k);
+    }
+
+    Style                style(Document d, bool calc)
+    {
+        if(!d)
+            return Style();
+        if(exists_style(d.id))
+            return Style(d.id);
+        if(calc){
+            std::string k   = key(folder(d)) + "/" + skeyb(d);
+            return style(k);
+        }
+        return Style();
+    }
+    
+    #if 0
+    Style                style(Folder f)
+    {
+        return style(key(f));
+    }
+    #endif
+    
+    Style::SharedFile         style_doc(Fragment f, cdb_options_t opts)
+    {
+        if(!f)
+            return Style::SharedFile();
+
+        std::filesystem::path       fp  = path(f);
+
+        const RootDir* rt  = root_dir(f);
+        if(!rt)
+            yWarning() << "No root_dir for: " << fp;
+
+        Id::Lock  lk;
+        if(!(opts & DONT_LOCK)){
+            lk  = Id(f).lock(false);
+            if(!lk){
+                yWarning() << "Unable to get read lock on fragment: " << fp;
+                return Style::SharedFile();
+            }
+        }
+
+        auto    ch   = file_bytes(fp);
+        lk.free();
+        if(ch.empty()){
+            if(opts & ALLOW_EMPTY)
+                return std::make_shared<Style::File>() ;
+            return Style::SharedFile();
+        }
+        
+        Style::SharedFile     td  = std::make_shared<Style::File>();
+        if(td->load(std::move(ch), fp) != std::error_code()){
+            yError() << "Unable to read " << fp;
+            return Style::SharedFile();
+        }
+        td -> set_file(fp);
+        //for(auto& ctx : td -> context)
+            //ctx.root_dir    = rt;
+        return td;
     }
 
 

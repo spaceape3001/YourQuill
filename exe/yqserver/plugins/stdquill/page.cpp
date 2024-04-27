@@ -164,6 +164,7 @@ namespace {
             reg_webpage<p_admin_categories>("/admin/categories").label("Categories"),
             reg_webpage<p_admin_classes>("/admin/classes").label("Classes"),
             reg_webpage<p_admin_fields>("/admin/fields").label("Fields"),
+            reg_webpage<p_admin_styles>("/admin/styles").label("Styles"),
             reg_webpage<p_admin_tags>("/admin/tags").label("Tags"),
             reg_webpage<p_admin_users>("/admin/users").label("Users")
         });

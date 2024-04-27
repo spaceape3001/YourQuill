@@ -30,7 +30,7 @@ namespace yq::mithril::cdb {
 
     // ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    std::vector<Tag>    all_tags(Sorted sorted)
+    TagVector    all_tags(Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_TAGS " ORDER BY k");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_TAGS "");
@@ -74,9 +74,9 @@ namespace yq::mithril::cdb {
         return Tag{};
     }
 
-    std::vector<Tag>             find_tags(const string_set_t&keys, bool noisy)
+    TagVector             find_tags(const string_set_t&keys, bool noisy)
     {
-        std::vector<Tag> ret;
+        TagVector ret;
         for(const std::string& s : keys){
             if(s.empty())
                 continue;
@@ -92,9 +92,9 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::vector<Tag>             find_tags(const string_view_set_t&keys, bool noisy)
+    TagVector             find_tags(const string_view_set_t&keys, bool noisy)
     {
-        std::vector<Tag> ret;
+        TagVector ret;
         for(const std::string_view& s : keys){
             if(s.empty())
                 continue;
@@ -110,9 +110,9 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::set<Tag>           find_tags_set(const string_set_t& keys, bool noisy)
+    TagSet           find_tags_set(const string_set_t& keys, bool noisy)
     {
-        std::set<Tag> ret;
+        TagSet ret;
         for(const std::string& s : keys){
             if(s.empty())
                 continue;
@@ -128,9 +128,9 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::set<Tag>           find_tags_set(const string_view_set_t& keys, bool noisy)
+    TagSet           find_tags_set(const string_view_set_t& keys, bool noisy)
     {
-        std::set<Tag> ret;
+        TagSet ret;
         for(std::string_view s : keys){
             if(s.empty())
                 continue;
@@ -283,33 +283,33 @@ namespace yq::mithril::cdb {
         return db_tag(db_document(tags_folder(), tfn), wasCreated);
     }
     
-    std::vector<Tag>    db_tags(const string_set_t&all)
+    TagVector    db_tags(const string_set_t&all)
     {
-        std::vector<Tag>     ret;
+        TagVector     ret;
         for(const std::string& s:all)
             ret.push_back(db_tag(s));
         return ret;
     }
     
-    std::vector<Tag>    db_tags(const string_view_set_t&all)
+    TagVector    db_tags(const string_view_set_t&all)
     {
-        std::vector<Tag>     ret;
+        TagVector     ret;
         for(const std::string_view& s:all)
             ret.push_back(db_tag(s));
         return ret;
     }
 
-    std::set<Tag>           db_tags_set(const string_set_t&all)
+    TagSet           db_tags_set(const string_set_t&all)
     {
-        std::set<Tag>     ret;
+        TagSet     ret;
         for(const std::string& s:all)
             ret.insert(db_tag(s));
         return ret;
     }
 
-    std::set<Tag>           db_tags_set(const string_view_set_t& all)
+    TagSet           db_tags_set(const string_view_set_t& all)
     {
-        std::set<Tag>     ret;
+        TagSet     ret;
         for(const std::string_view& s:all)
             ret.insert(db_tag(s));
         return ret;

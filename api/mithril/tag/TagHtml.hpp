@@ -16,8 +16,8 @@ namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&, DevID<Tag>);
     WebHtml&    operator<<(WebHtml&, const TagSet&);
     WebHtml&    operator<<(WebHtml&, const TagVector&);
-    WebHtml&    operator<<(WebHtml&, const Dev<std::set<Tag>>&);
-    WebHtml&    operator<<(WebHtml&, const Dev<std::vector<Tag>>&);
+    WebHtml&    operator<<(WebHtml&, const Dev<TagSet>&);
+    WebHtml&    operator<<(WebHtml&, const Dev<TagVector>&);
     void        admin_table(WebHtml&, const TagVector&);
     void        dev_table(WebHtml&, const TagVector&);
 

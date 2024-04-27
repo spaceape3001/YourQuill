@@ -438,7 +438,7 @@ namespace yq::mithril::cdb {
     }
 
 
-    std::vector<Tag>  tags(Field f, Sorted sorted)
+    TagVector  tags(Field f, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT tag FROM " TBL_FIELD_TAG " INNER JOIN " TBL_TAGS " ON " TBL_FIELD_TAG ".tag=" TBL_TAGS ".id WHERE field=? ORDER BY " TBL_TAGS ".K");
         static thread_local CacheQuery qu("SELECT tag FROM " TBL_FIELD_TAG " WHERE field=?");
@@ -453,7 +453,7 @@ namespace yq::mithril::cdb {
         return s.size(f.id);
     }
 
-    std::set<Tag>            tags_set(Field f)
+    TagSet            tags_set(Field f)
     {
         static thread_local CacheQuery s("SELECT tag FROM " TBL_FIELD_TAG " WHERE field=?");
         return s.set<Tag>(f.id);

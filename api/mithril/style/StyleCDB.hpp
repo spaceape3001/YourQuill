@@ -66,6 +66,9 @@ namespace yq::mithril::cdb {
     std::string                 label(Style);
     
     
+    /*! \brief Makes a style
+    */
+    Style                     make_style(std::string_view, const RootDir* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
     
     /*! \brief Merged Style structure
      *  
@@ -121,7 +124,7 @@ namespace yq::mithril::cdb {
      *  This loads a SINGLE fragment into a style structure.
      *  \note This may be incomplete as there can be multiple fragments to a style.
      */
-    Style::SharedFile            style_doc(Fragment, unsigned int options=0);
+    Style::SharedFile            style_doc(Fragment, cdb_options_t options={});
 
 
     //!  \brief   Returns a writable document
@@ -129,6 +132,6 @@ namespace yq::mithril::cdb {
     //!     \note the path will be CREATED by this method.
     //!
     //!     If the document already exists, it will be read in.
-    Style::SharedFile            write(Style, const RootDir*, cdb_options_t opts=0);
+    Style::SharedFile            write(Style, const RootDir*, cdb_options_t opts={});
 
 }

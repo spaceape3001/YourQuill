@@ -117,9 +117,9 @@ namespace yq::mithril::cdb {
     
     std::string             skey(Field);
 
-    std::vector<Tag>            tags(Field, Sorted sorted=Sorted());
+    TagVector            tags(Field, Sorted sorted=Sorted());
     size_t                      tags_count(Field);
-    std::set<Tag>               tags_set(Field);
+    TagSet               tags_set(Field);
 
     bool                    tagged(Field, Tag);
     

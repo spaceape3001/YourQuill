@@ -143,19 +143,19 @@ namespace yq::mithril::cdb {
 
     /*! \brief Makes a tag
     */
-    Tag                     make_tag(std::string_view, const RootDir* rt=nullptr, cdb_options_t opts=0, bool* wasCreated=nullptr);
+    Tag                     make_tag(std::string_view, const RootDir* rt=nullptr, cdb_options_t opts={}, bool* wasCreated=nullptr);
     
     /*! \brief Merged data for tag
     
         Fuses the data from all roots and fragments, returns it.
     */
-    Tag::SharedData         merged(Tag, cdb_options_t opts=0);
+    Tag::SharedData         merged(Tag, cdb_options_t opts={});
     
 
     //! \brief Returns the FIRST tag fragment that qualifies
     //! 
     //!     Will not create a fragment, though (so can return NULL)
-    Tag::SharedFile         read(Tag, const RootDir*, cdb_options_t opts=0);
+    Tag::SharedFile         read(Tag, const RootDir*, cdb_options_t opts={});
     
     /*! \brief All fragments for tag
     */
@@ -163,7 +163,7 @@ namespace yq::mithril::cdb {
 
     /*! \brief Fragments for tag in root_dir
     */
-    std::vector<TagFragDoc> reads(Tag, class RootDir*, cdb_options_t opts=0);
+    std::vector<TagFragDoc> reads(Tag, class RootDir*, cdb_options_t opts={});
     
     /*! \brief Sets the brief information for tag
     */
@@ -180,7 +180,7 @@ namespace yq::mithril::cdb {
     Tag                     tag(Document);
     
     //! \brief Tag File (&Data) for fragment
-    Tag::SharedFile         tag_doc(Fragment, cdb_options_t opts=0);
+    Tag::SharedFile         tag_doc(Fragment, cdb_options_t opts={});
 
 
     //!  \brief   Returns a writable document
@@ -188,5 +188,5 @@ namespace yq::mithril::cdb {
     //!     \note the path will be CREATED by this method.
     //!
     //!     If the document already exists, it will be read in.
-    Tag::SharedFile         write(Tag, const RootDir*, cdb_options_t opts=0);
+    Tag::SharedFile         write(Tag, const RootDir*, cdb_options_t opts={});
 };

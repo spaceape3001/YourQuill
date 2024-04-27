@@ -39,7 +39,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    WebHtml&    operator<<(WebHtml& h, const std::set<Tag>& vdata)
+    WebHtml&    operator<<(WebHtml& h, const TagSet& vdata)
     {
         Comma   comma(", ");
         for(Tag v : vdata){
@@ -49,7 +49,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    WebHtml&    operator<<(WebHtml& h, const std::vector<Tag>& vdata)
+    WebHtml&    operator<<(WebHtml& h, const TagVector& vdata)
     {
         Comma   comma(", ");
         for(Tag v : vdata){
@@ -59,7 +59,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    WebHtml&    operator<<(WebHtml& h, const Dev<std::set<Tag>>& vdata)
+    WebHtml&    operator<<(WebHtml& h, const Dev<TagSet>& vdata)
     {
         Comma   comma(", ");
         for(Tag v : vdata.data){
@@ -69,7 +69,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    WebHtml&    operator<<(WebHtml& h, const Dev<std::vector<Tag>>& vdata)
+    WebHtml&    operator<<(WebHtml& h, const Dev<TagVector>& vdata)
     {
         Comma   comma(", ");
         for(Tag v : vdata.data){
@@ -89,7 +89,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void    admin_table(WebHtml&h, const std::vector<Tag>&tags)
+    void    admin_table(WebHtml&h, const TagVector&tags)
     {
         auto tac = h.table();
         auto iz = h.context().session.icon_size;
@@ -113,7 +113,7 @@ namespace yq::mithril::html {
         );
     }
 
-    void    dev_table(WebHtml& h, const std::vector<Tag>&tags)
+    void    dev_table(WebHtml& h, const TagVector&tags)
     {
         auto ta = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Doc</th><th>Leaf</th><th>Brief</th></tr>\n";

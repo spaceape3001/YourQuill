@@ -234,8 +234,8 @@ namespace yq::mithril::cdb {
     std::vector<Class::Rank>    source_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
     
     
-    std::set<Tag>               tag_set(Class);
-    std::vector<Tag>            tags(Class, Sorted sorted=Sorted());
+    TagSet               tag_set(Class);
+    TagVector            tags(Class, Sorted sorted=Sorted());
     size_t                      tags_count(Class);
 
     std::vector<Class>          target_classes(Class, Sorted sorted=Sorted());

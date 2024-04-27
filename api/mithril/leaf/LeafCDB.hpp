@@ -161,10 +161,10 @@ namespace yq::mithril {
         bool                        tagged(Leaf, Tag);
         
         //! All tags for leaf
-        std::vector<Tag>            tags(Leaf);
+        TagVector            tags(Leaf);
 
         //! All tags for leaf as a set
-        std::set<Tag>               tags_set(Leaf);
+        TagSet               tags_set(Leaf);
 
         //! Title for the leaf
         std::string                 title(Leaf);

@@ -822,7 +822,7 @@ namespace yq::mithril::cdb {
         return exec_class_rank_vector(s);
     }
 
-    std::set<Tag>               tag_set(Class c)
+    TagSet               tag_set(Class c)
     {
         static thread_local CacheQuery s("SELECT tag FROM " TBL_CLASS_TAG " WHERE class=?");
         return s.set<Tag>(c.id);
@@ -834,7 +834,7 @@ namespace yq::mithril::cdb {
         return s.present(c.id, t.id);
     }
 
-    std::vector<Tag>  tags(Class c, Sorted sorted)
+    TagVector  tags(Class c, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT tag FROM " TBL_CLASS_TAG " INNER JOIN " TBL_TAGS " ON " TBL_CLASS_TAG ".tag=" TBL_TAGS ".id WHERE class=? ORDER BY " TBL_TAGS ".K");
         static thread_local CacheQuery qu("SELECT tag FROM " TBL_CLASS_TAG " WHERE class=?");

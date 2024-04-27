@@ -335,13 +335,13 @@ namespace yq::mithril::cdb {
         return s.present(l.id, t.id);
     }
     
-    std::vector<Tag>            tags(Leaf l)
+    TagVector            tags(Leaf l)
     {
         static thread_local CacheQuery s("SELECT tag FROM " TBL_LEAF_TAG " WHERE leaf=?");
         return s.vec<Tag>(l.id);
     }
     
-    std::set<Tag>               tags_set(Leaf l)
+    TagSet               tags_set(Leaf l)
     {
         static thread_local CacheQuery s("SELECT tag FROM " TBL_LEAF_TAG " WHERE leaf=?");
         return s.set<Tag>(l.id);
