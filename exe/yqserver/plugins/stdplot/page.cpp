@@ -38,126 +38,25 @@ using namespace yq::mithril;
 using namespace yq::mithril::cdb;
 using namespace yq::mithril::html;
 
-#include "p_dev.ipp"
+#include "p/book.ipp"
+#include "p/character.ipp"
+#include "p/event.ipp"
+#include "p/group.ipp"
+#include "p/organization.ipp"
+#include "p/place.ipp"
+#include "p/thing.ipp"
 
 namespace {
-    void p_books(WebHtml& h)
-    {
-        //  Search parameters go here... execute the search
-        std::vector<Book>  books   = all_books(Sorted::YES);
-        
-        
-        //  Form the title... 
-        h.title() << "Books";
-        
-        h << "<p><i>(Search Bar will go here)</i></p>\n";
-        
-        //  And results
-        
-        
-        
-        dev_table(h, books);
-    }
-
-    void    p_characters(WebHtml& h)
-    {
-        //  Search parameters go here... execute the search
-        std::vector<Character>  chars   = all_characters(Sorted::YES);
-        
-        
-        //  Form the title... 
-        h.title() << "Characters";
-        
-        h << "<p><i>(Search Bar will go here)</i></p>\n";
-        
-        //  And results
-        
-        
-        dev_table(h, chars);
-    }
-
-    void p_events(WebHtml& h)
-    {
-        //  Search parameters go here... execute the search
-        std::vector<Event>  events   = all_events(Sorted::YES);
-        
-        
-        //  Form the title... 
-        h.title() << "Events";
-        
-        h << "<p><i>(Search Bar will go here)</i></p>\n";
-        
-        //  And results
-        
-        
-        
-        dev_table(h, events);
-    }
-
-    void p_groups(WebHtml& h)
-    {
-        //  Search parameters go here... execute the search
-        std::vector<Group>  groups   = all_groups(Sorted::YES);
-        
-        
-        //  Form the title... 
-        h.title() << "Groups";
-        
-        h << "<p><i>(Search Bar will go here)</i></p>\n";
-        
-        //  And results
-        
-        
-        
-        dev_table(h, groups);
-    }
-
-    void p_places(WebHtml& h)
-    {
-        //  Search parameters go here... execute the search
-        std::vector<Place>  places   = all_places(Sorted::YES);
-        
-        
-        //  Form the title... 
-        h.title() << "Places";
-        
-        h << "<p><i>(Search Bar will go here)</i></p>\n";
-        
-        //  And results
-        
-        
-        
-        dev_table(h, places);
-    }
-
-    void p_things(WebHtml& h)
-    {
-        //  Search parameters go here... execute the search
-        std::vector<Thing>  things   = all_things(Sorted::YES);
-        
-        
-        //  Form the title... 
-        h.title() << "Things";
-        
-        h << "<p><i>(Search Bar will go here)</i></p>\n";
-        
-        //  And results
-        
-        
-        
-        dev_table(h, things);
-    }
 
     void    reg_me()
     {
-        reg_webpage<p_books>("/books");
-        reg_webpage<p_characters>("/characters");
-        reg_webpage<p_events>("/events");
-        reg_webpage<p_groups>("/groups");
-        reg_webpage<p_places>("/places");
-        reg_webpage<p_things>("/things");
-
-        reg_dev();
+        reg_book_pages();
+        reg_character_pages();
+        reg_event_pages();
+        reg_group_pages();
+        reg_organization_pages();
+        reg_place_pages();
+        reg_thing_pages();
 
     
         yInfo() << "Standard plot pages registered";
