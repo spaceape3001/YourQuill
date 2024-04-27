@@ -72,21 +72,27 @@ namespace yq::mithril {
     using hop_t                 = uint8_t;
 
 
+    using AtomCSpan             = std::span<const Atom>;
     using AtomSet               = std::set<Atom>;
     using AtomVector            = std::vector<Atom>;
     
+    using AttributeCSpan        = std::span<const Attribute>;
     using AttributeSet          = std::set<Attribute>;
     using AttributeVector       = std::vector<Attribute>;
     
+    using BookCSpan             = std::span<const Book>;
     using BookSet               = std::set<Book>;
     using BookVector            = std::vector<Book>;
     
+    using CategoryCSpan         = std::span<const Category>;
     using CategorySet           = std::set<Category>;
     using CategoryVector        = std::vector<Category>;
     
+    using CharacterCSpan        = std::span<const Character>;
     using CharacterSet          = std::set<Character>;
     using CharacterVector       = std::vector<Character>;
 
+    using ClassCSpan            = std::span<const Class>;
     using ClassCountMap         = std::map<Class,HCountU64>;
     using ClassCxn              = Connection<Class,Class>;
     using ClassHopMap           = std::map<Class,HopCount>;
@@ -97,6 +103,7 @@ namespace yq::mithril {
     using ClassVector           = std::vector<Class>;
     using ClassU64Map           = std::map<Class,uint64_t>;
     
+    using DirectoryCSpan        = std::span<const Directory>;
     using DirectorySet          = std::set<Directory>;
     using DirectoryVector       = std::vector<Directory>;
     
@@ -104,6 +111,7 @@ namespace yq::mithril {
     using DirOrFragStr          = std::pair<DirOrFrag,std::string>;
     using DirString             = std::pair<Directory,std::string>;
     
+    using DocumentCSpan         = std::span<const Document>;
     using DocumentSet           = std::set<Document>;
     using DocumentVector        = std::vector<Document>;
 
@@ -113,57 +121,74 @@ namespace yq::mithril {
     using DocString             = std::pair<Document,std::string>;
     using DocStr                = std::pair<Document,std::string>;
     
+    using EntityCSpan           = std::span<const Entity>;
     using EntitySet             = std::set<Entity>;
     using EntityVector          = std::vector<Entity>;
     
+    using EventCSpan            = std::span<const Event>;
     using EventSet              = std::set<Event>;
     using EventVector           = std::vector<Event>;
 
+    using FieldCSpan            = std::span<const Field>;
     using FieldHopMap           = std::map<Field,HopCount>;
     using FieldSet              = std::set<Field>;
     using FieldVector           = std::vector<Field>;
 
+    using FolderCSpan           = std::span<const Folder>;
     using FolderSet             = std::set<Folder>;
     using FolderStr             = std::pair<Folder,std::string>;
     using FolderVector          = std::vector<Folder>;
     
+    using FragmentCSpan         = std::span<const Fragment>;
     using FragmentSet           = std::set<Fragment>;
     using FragmentStr           = std::pair<Fragment,std::string>;
     using FragmentVector        = std::vector<Fragment>;
     
+    using GameCSpan             = std::span<const Game>;
     using GameSet               = std::set<Game>;
     using GameVector            = std::vector<Game>;
     
+    using GraphvizCSpan         = std::span<const Graphviz>;
     using GraphvizSet           = std::set<Graphviz>;
     using GraphvizVector        = std::vector<Graphviz>;
     
+    using GroupCSpan            = std::span<const Group>;
     using GroupSet              = std::set<Group>;
     using GroupVector           = std::vector<Group>;
     
+    using ImageCSpan            = std::span<const Image>;
     using ImageSet              = std::set<Image>;
     using ImageVector           = std::vector<Image>;
     
+    using LeafCSpan             = std::span<const Leaf>;
     using LeafSet               = std::set<Leaf>;
     using LeafVector            = std::vector<Leaf>;
     
+    using OrganizationCSpan     = std::span<const Organization>;
     using OrganizationSet       = std::set<Organization>;
     using OrganizationVector    = std::vector<Organization>;
     
+    using PlaceCSpan            = std::span<const Place>;
     using PlaceSet              = std::set<Place>;
     using PlaceVector           = std::vector<Place>;
     
+    using StyleCSpan            = std::span<const Style>;
     using StyleSet              = std::set<Style>;
     using StyleVector           = std::vector<Style>;
 
+    using TagCSpan              = std::span<const Tag>;
     using TagSet                = std::set<Tag>;
     using TagVector             = std::vector<Tag>;
     
+    using ThingCSpan            = std::span<const Thing>;
     using ThingSet              = std::set<Thing>;
     using ThingVector           = std::vector<Thing>;
     
+    using UserCSpan             = std::span<const User>;
     using UserSet               = std::set<User>;
     using UserVector            = std::vector<User>;
     
+    using ValueCSpan            = std::span<const Value>;
     using ValueSet              = std::set<Value>;
     using ValueVector           = std::vector<Value>;
 

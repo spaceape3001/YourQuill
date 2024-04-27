@@ -53,7 +53,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    WebHtml&    operator<<(WebHtml&h, const std::vector<Field>&vdata)
+    WebHtml&    operator<<(WebHtml&h, const FieldVector&vdata)
     {
         Comma   comma(", ");
         for(Field v : vdata){
@@ -73,7 +73,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    WebHtml&    operator<<(WebHtml&h, const Dev<std::vector<Field>>&vdata)
+    WebHtml&    operator<<(WebHtml&h, const Dev<FieldVector>&vdata)
     {
         Comma   comma(", ");
         for(Field v : vdata.data){
@@ -93,7 +93,8 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void        admin_table(WebHtml&h, const std::vector<Field>&fields)
+
+    void        admin_table(WebHtml&h, const FieldVector&fields)
     {
         auto tac = h.table();
         auto iz = h.context().session.icon_size;
@@ -117,7 +118,7 @@ namespace yq::mithril::html {
         );
     }
     
-    void        dev_table(WebHtml&h, const std::vector<Field>& fields)
+    void      dev_table(WebHtml&h, const FieldVector& fields)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Class</th><th>Key</th><th>Name</th><th>Brief</th>\n";
@@ -128,8 +129,17 @@ namespace yq::mithril::html {
                 << i.brief <<"</td></tr>\n";
         }
     }
+    
+    void    dev_title(WebHtml& h, Field x, std::string_view extra)
+    {
+        auto t = h.title();
+        auto i = cdb::nki(x);
+        h << "Field \"" << i.name << "\" (" << x.id << " &mdash; " << i.key << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
 
-    void        new_field_control(WebHtml&h, std::string_view npath, Class c)
+    void     new_field_control(WebHtml&h, std::string_view npath, Class c)
     {
         Url url;
         url.path=copy(npath);
@@ -148,4 +158,5 @@ namespace yq::mithril::html {
         
         h << "</form>\n";
     }
+
 }

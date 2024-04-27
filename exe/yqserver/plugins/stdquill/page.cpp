@@ -66,6 +66,7 @@ using namespace yq::mithril::arg;
 using namespace yq::mithril::cdb;
 using namespace yq::mithril::html;
 
+
 #include "p/atom.ipp"
 #include "p/attribute.ipp"
 #include "p/category.ipp"
@@ -185,6 +186,7 @@ namespace {
         
         reg_webtemplate("/files", wksp::shared("www/files.ht"sv));
         reg_webtemplate("/help", wksp::shared("www/help.ht"sv));
+        reg_webpage("/beta/**", make_dir_set(".beta"sv, "www/beta"sv));
         reg_webpage("/help/**", make_dir_set(".help"sv, "www/help"sv));
         reg_webpage("/img/**", make_dir_set(".img", "www/img"sv));
         reg_webpage("/img/yquill.svg", wksp::shared("www/img/yquill.svg"sv));   // precaching

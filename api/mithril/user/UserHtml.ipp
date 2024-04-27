@@ -7,6 +7,7 @@
 #pragma once
 
 #include <0/basic/TextUtils.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentHtml.hpp>
 #include <mithril/root/RootHtml.hpp>
 #include <mithril/web/WebContext.hpp>
@@ -94,6 +95,14 @@ namespace yq::mithril::html {
                 << i.name << "</td><td>" << dev(i.doc) << "</td><td>" << i.brief << "</td></tr>\n";
         }
     }    
+
+    void    dev_title(WebHtml& h, User x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "User \"" << cdb::name(x) << "\" (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
 
     void        new_user_control(WebHtml&h, std::string_view npath)
     {

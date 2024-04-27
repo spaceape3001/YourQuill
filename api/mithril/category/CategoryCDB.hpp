@@ -21,7 +21,7 @@ namespace yq::mithril::cdb {
     /*! \brief All categories
         \param[in] sorted   Sort by key
     */
-    std::vector<Category>   all_categories(Sorted sorted=Sorted());
+    CategoryVector   all_categories(Sorted sorted=Sorted());
     
     /*! \brief Number of categories
     */
@@ -48,7 +48,7 @@ namespace yq::mithril::cdb {
     
     /*! \brief All classes under category
     */
-    std::vector<Class>      classes(Category);
+    ClassVector      classes(Category);
     
     /*! \brief Gets/Creates category by document
     */
@@ -71,7 +71,7 @@ namespace yq::mithril::cdb {
     bool                    exists_category(uint64_t);
 
     //! All fields under category
-    std::vector<Field>      fields(Category);
+    FieldVector      fields(Category);
     
     //! Icon for category
     Image                   icon(Category);

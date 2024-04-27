@@ -11,14 +11,6 @@ namespace {
     //  -----------------------------------------------------------------------
     //      UTILITIES
     //  -----------------------------------------------------------------------
-
-        void    dev_title(WebHtml& h, Fragment x, std::string_view extra=std::string_view())
-        {
-            auto t = h.title();
-            h << "Fragment (" << x.id << " &mdash; " << path(x) << ")";
-            if(!extra.empty())
-                h << ": " << extra;
-        }
     
     //  -----------------------------------------------------------------------
     //      REST API

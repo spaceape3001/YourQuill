@@ -48,7 +48,7 @@ namespace yq::mithril::cdb {
     }
 
 
-    std::vector<Class>  all_classes(Sorted sorted)
+    ClassVector  all_classes(Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_CLASSES " ORDER BY K");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_CLASSES "");
@@ -68,7 +68,7 @@ namespace yq::mithril::cdb {
         return s.sset(c.id);
     }
     
-    std::vector<Class>   base_classes(Class c, Sorted sorted)
+    ClassVector   base_classes(Class c, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT base FROM " TBL_CLASS_DEPEND " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPEND ".base=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".k");
         static thread_local CacheQuery    qu("SELECT base FROM " TBL_CLASS_DEPEND " WHERE class=?");
@@ -201,9 +201,9 @@ namespace yq::mithril::cdb {
     }
     
 
-    std::vector<Class>       classes(const string_set_t& sset, bool noisy)
+    ClassVector       classes(const string_set_t& sset, bool noisy)
     {
-        std::vector<Class>   ret;
+        ClassVector   ret;
         for(const std::string& s : sset){
             if(s.empty())
                 continue;
@@ -258,7 +258,7 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
-    std::vector<Class>          classes_with_tag(Tag x, Sorted sorted)
+    ClassVector          classes_with_tag(Tag x, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_TAG " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_TAG ".class=" TBL_CLASSES ".id WHERE tag=? ORDER BY " TBL_CLASSES ".k");
         static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_TAG " WHERE tag=?");
@@ -299,18 +299,18 @@ namespace yq::mithril::cdb {
         }
     }
 
-    std::vector<Class>            db_classes(const string_set_t& all)
+    ClassVector            db_classes(const string_set_t& all)
     {
-        std::vector<Class>   ret;
+        ClassVector   ret;
         ret.reserve(all.size());
         for(std::string_view  s: all)
             ret.push_back(db_class(s));
         return ret;
     }
 
-    std::vector<Class>             db_classes(const string_view_set_t& all)
+    ClassVector             db_classes(const string_view_set_t& all)
     {
-        std::vector<Class>   ret;
+        ClassVector   ret;
         ret.reserve(all.size());
         for(std::string_view  s: all)
             ret.push_back(db_class(s));
@@ -342,7 +342,7 @@ namespace yq::mithril::cdb {
         return s.set<Class>(c.id);
     }
 
-    std::vector<Class>          def_rev_use(Class c, Sorted sorted)
+    ClassVector          def_rev_use(Class c, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT use FROM " TBL_CLSDEF_USE " INNER JOIN " TBL_CLASSES " ON " TBL_CLSDEF_USE ".class=" TBL_CLASSES ".id WHERE use=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery qu("SELECT use FROM " TBL_CLSDEF_USE " WHERE use=?");
@@ -387,7 +387,7 @@ namespace yq::mithril::cdb {
         return s.set<Class>(c.id);
     }
 
-    std::vector<Class>          def_use(Class c, Sorted sorted)
+    ClassVector          def_use(Class c, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT use FROM " TBL_CLSDEF_USE " INNER JOIN " TBL_CLASSES " ON " TBL_CLSDEF_USE ".use=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery qu("SELECT use FROM " TBL_CLSDEF_USE " WHERE class=?");
@@ -408,7 +408,7 @@ namespace yq::mithril::cdb {
         //return s.as<Graph>(c.id);
     //}
     
-    std::vector<Class>       derived_classes(Class c, Sorted sorted)
+    ClassVector       derived_classes(Class c, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT class FROM " TBL_CLASS_DEPEND " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_DEPEND ".class=" TBL_CLASSES ".id WHERE base=? ORDER BY " TBL_CLASSES ".k");
         static thread_local CacheQuery    qu("SELECT class FROM " TBL_CLASS_DEPEND " WHERE base=?");
@@ -473,7 +473,7 @@ namespace yq::mithril::cdb {
     
 
     
-    std::vector<Class>      edge_classes_in(Class c, Sorted sorted)
+    ClassVector      edge_classes_in(Class c, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_TARGET " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_TARGET ".class=" TBL_CLASSES ".id WHERE target=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_TARGET " WHERE target=?");
@@ -481,7 +481,7 @@ namespace yq::mithril::cdb {
         return s.vec<Class>(c.id);
     }
     
-    std::vector<Class>      edge_classes_out(Class c, Sorted sorted)
+    ClassVector      edge_classes_out(Class c, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_SOURCE " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_SOURCE ".class=" TBL_CLASSES ".id WHERE source=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_SOURCE " WHERE source=?");
@@ -509,7 +509,7 @@ namespace yq::mithril::cdb {
         return s.as<Field>(c.id, k);
     }
     
-    std::vector<Field>       fields(Class c, Sorted sorted)
+    FieldVector       fields(Class c, Sorted sorted)
     {
         static thread_local CacheQuery  qs("SELECT field FROM " TBL_CLASS_FIELD " INNER JOIN " TBL_FIELDS " ON " TBL_CLASS_FIELD ".field=" TBL_FIELDS ".id WHERE " TBL_CLASS_FIELD ".class=? ORDER BY " TBL_FIELDS ".K");
         static thread_local CacheQuery  qu("SELECT field FROM " TBL_CLASS_FIELD " WHERE class=?");
@@ -530,7 +530,7 @@ namespace yq::mithril::cdb {
         return s.as<Image>(c.id);
     }
     
-    std::vector<Class>           inbound_classes(Class c, Sorted sorted)
+    ClassVector           inbound_classes(Class c, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_TARGET " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_TARGET ".class=" TBL_CLASSES ".id WHERE target=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_TARGET " WHERE target=?");
@@ -703,7 +703,7 @@ namespace yq::mithril::cdb {
     }
     
     
-    std::vector<Class>           outbound_classes(Class c, Sorted sorted)
+    ClassVector           outbound_classes(Class c, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_SOURCE " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_SOURCE ".class=" TBL_CLASSES ".id WHERE source=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_SOURCE " WHERE source=?");
@@ -754,7 +754,7 @@ namespace yq::mithril::cdb {
     }
 
     
-    std::vector<Class>       reverse_classes(Class c, Sorted sorted)
+    ClassVector       reverse_classes(Class c, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT reverse FROM " TBL_CLASS_REVERSE " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_REVERSE ".reverse=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery    qu("SELECT reverse FROM " TBL_CLASS_REVERSE " WHERE class=?");
@@ -788,7 +788,7 @@ namespace yq::mithril::cdb {
     }
 
 
-    std::vector<Class>  sources(Class c, Sorted sorted)
+    ClassVector  sources(Class c, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT source FROM " TBL_CLASS_SOURCE " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_SOURCE ".source=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".K");
         static thread_local CacheQuery    qu("SELECT source FROM " TBL_CLASS_SOURCE " WHERE class=?");
@@ -849,7 +849,7 @@ namespace yq::mithril::cdb {
         return s.size(c.id);
     }
 
-    std::vector<Class>       target_classes(Class c, Sorted sorted)
+    ClassVector       target_classes(Class c, Sorted sorted)
     {
         static thread_local CacheQuery  qs("SELECT target FROM " TBL_CLASS_TARGET " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_TARGET ".target=" TBL_CLASSES ".id WHERE class=? ORDER BY " TBL_CLASSES ".k");
         static thread_local CacheQuery  qu("SELECT target FROM " TBL_CLASS_TARGET " WHERE class=?");

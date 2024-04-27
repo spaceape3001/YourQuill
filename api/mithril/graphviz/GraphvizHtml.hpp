@@ -15,7 +15,8 @@ namespace yq::mithril {
         WebHtml&    operator<<(WebHtml&, Graphviz);
         WebHtml&    operator<<(WebHtml&, Dev<Graphviz>);
         WebHtml&    operator<<(WebHtml&, DevID<Graphviz>);
-        void        dev_table(WebHtml&, const std::vector<Graphviz>&);
+        void dev_table(WebHtml&, const std::vector<Graphviz>&);
+        void dev_title(WebHtml&, Graphviz x, std::string_view extra=std::string_view());
     }
 }
 

@@ -29,7 +29,7 @@ namespace yq::mithril::cdb {
         }
     }
 
-    std::vector<Category>         all_categories(Sorted sorted)
+    CategoryVector         all_categories(Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_CATEGORIES " ORDER BY k");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_CATEGORIES "");
@@ -114,7 +114,7 @@ namespace yq::mithril::cdb {
         return td;
     }
 
-    std::vector<Class>  classes(Category cat)
+    ClassVector  classes(Category cat)
     {
         static thread_local CacheQuery s("SELECT id FROM " TBL_CLASSES " WHERE category=?");
         return s.vec<Class>(cat.id);
@@ -177,7 +177,7 @@ namespace yq::mithril::cdb {
         return s.present(i);
     }
 
-    std::vector<Field>      fields(Category cat)
+    FieldVector      fields(Category cat)
     {
         static thread_local CacheQuery s("SELECT id FROM " TBL_FIELDS " WHERE category=?");
         return s.vec<Field>(cat.id);

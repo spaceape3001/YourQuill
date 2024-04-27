@@ -124,6 +124,15 @@ namespace yq::mithril::html {
         }
     }
 
+    void    dev_title(WebHtml& h, Tag x, std::string_view extra)
+    {
+        auto t = h.title();
+        auto i = cdb::nki(x);
+        h << "Tag \"" << i.name << "\" (" << x.id << " &mdash; " << i.key << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+
     void        new_tag_control(WebHtml&h, std::string_view npath)
     {
         Url url;

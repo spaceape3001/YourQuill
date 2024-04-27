@@ -72,12 +72,20 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void        dev_table(WebHtml& h, const std::vector<Image>& images)
+    void        dev_table(WebHtml& h, const ImageVector& images)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Thumb</th><th>Fragment</th></tr>\n";
         for(Image i : images)
             h << "<tr><td>" << dev_id(i) << "</td><td>" << cdb::thumbnail(i, SizeDesc::Small) << "</td><td>" 
                 << dev(cdb::fragment(i)) << "</td></tr>\n";
+    }
+
+    void    dev_title(WebHtml& h, Image x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Image (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
     }
 }

@@ -39,7 +39,7 @@ namespace yq::mithril::cdb {
         return s.sset(f.id);
     }
     
-    std::vector<Field>           all_fields(Sorted sorted)
+    FieldVector           all_fields(Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_FIELDS " ORDER BY k");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_FIELDS "");
@@ -83,7 +83,7 @@ namespace yq::mithril::cdb {
     }
 
     
-    std::vector<Class>       classes(Field f, Sorted sorted)
+    ClassVector       classes(Field f, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_FIELD " INNER JOIN " TBL_CLASSES " ON " TBL_CLASS_FIELD ".class=" TBL_CLASSES ".id WHERE field=? ORDER BY " TBL_CLASSES ".k");
         static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_FIELD " WHERE field=?");
@@ -140,7 +140,7 @@ namespace yq::mithril::cdb {
         }
     }
 
-    //std::vector<Class>           def_classes(Field f, Sorted sorted)
+    //ClassVector           def_classes(Field f, Sorted sorted)
     //{
         //static thread_local CacheQuery qs("SELECT class FROM " TBL_CLASS_FIELD " INNER JOIN " TBL_CLASSES " ON FDefClass.class=" TBL_CLASSES ".id WHERE field=? ORDER BY " TBL_CLASSES ".K");
         //static thread_local CacheQuery qu("SELECT class FROM " TBL_CLASS_FIELD " WHERE field=?");

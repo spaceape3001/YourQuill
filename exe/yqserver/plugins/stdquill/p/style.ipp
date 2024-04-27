@@ -11,15 +11,6 @@ namespace {
     //  -----------------------------------------------------------------------
     //      UTILITIES
     //  -----------------------------------------------------------------------
-
-        void    dev_title(WebHtml& h, Style x, std::string_view extra=std::string_view())
-        {
-            auto t = h.title();
-            auto i = cdb::nki(x);
-            h << "Style \"" << i.name << "\" (" << x.id << " &mdash; " << i.key << ")";
-            if(!extra.empty())
-                h << ": " << extra;
-        }
     
     //  -----------------------------------------------------------------------
     //      REST API

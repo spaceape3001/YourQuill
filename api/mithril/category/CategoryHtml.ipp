@@ -55,8 +55,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-
-    void        admin_table(WebHtml&h, const std::vector<Category>& categories)
+    void        admin_table(WebHtml&h, const CategoryVector& categories)
     {
         auto tac = h.table();
         auto iz = h.context().session.icon_size;
@@ -65,7 +64,6 @@ namespace yq::mithril::html {
             {
                 if(c){
                     Image   i   = cdb::icon(c);
-yInfo() << "Admin table ... category " << cdb::key(c) << " icon " << i.id;
                     if(i){
                         h << cdb::thumbnail(i, iz);
                     } else
@@ -81,15 +79,23 @@ yInfo() << "Admin table ... category " << cdb::key(c) << " icon " << i.id;
         );
     }
 
-    void    dev_table(WebHtml& h, const std::vector<Category>&categorys)
+    void    dev_table(WebHtml& h, const CategoryVector&categories)
     {
         auto ta = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Doc</th><th>Brief</th></tr>\n";
-        for(Category t : categorys){
+        for(Category t : categories){
             auto i  = cdb::info(t);
             h << "<tr><td>" << dev_id(t) << "</td><td>" << i.key << "</td><td>" << i.name
                 << "</td><td>" << dev(i.doc) << "</td><td>" << i.brief << "</td></tr>\n";
         }
+    }
+
+    void    dev_title(WebHtml& h, Category x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Category \"" << cdb::label(x) << "\" (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
     }
 
     void        new_category_control(WebHtml&h, std::string_view npath)

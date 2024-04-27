@@ -55,4 +55,12 @@ namespace yq::mithril::html {
                 << i.key << "<a></td><td>" << i.title << "</td></tr>\n";
         }
     }
+
+    void    dev_title(WebHtml& h, Leaf x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Leaf \"" << cdb::label(x) << "\" (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
 }

@@ -57,7 +57,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void    dev_table(WebHtml& h, const std::vector<Document>& documents)
+    void    dev_table(WebHtml& h, const DocumentVector& documents)
     {
         auto _tab = h.table();
         h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
@@ -66,6 +66,14 @@ namespace yq::mithril::html {
             h << "<tr><td>" << dev_id(a)  << "</td><td>" << cdb::fragments_count(a) 
               << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" << i.suffix << "</td></tr>\n";
         }
+    }
+
+    void    dev_title(WebHtml& h, Document x, std::string_view extra)
+    {
+        auto t = h.title();
+        h.title() << "Document (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
     }
 
     string_map_t    make_file_extension_icons()

@@ -11,6 +11,7 @@
 #include <0/basic/TextUtils.hpp>
 #include <0/io/StreamOps.hpp>
 #include <0/io/stream/Text.hpp>
+#include <mithril/bit/NKI.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/class/ClassArg.hpp>
 #include <mithril/class/ClassCDB.hpp>
@@ -68,7 +69,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    WebHtml&    operator<<(WebHtml&h, const std::vector<Class>&vdata)
+    WebHtml&    operator<<(WebHtml&h, const ClassVector&vdata)
     {
         Comma   comma(", ");
         for(Class v : vdata){
@@ -88,7 +89,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    WebHtml&    operator<<(WebHtml&h, const Dev<std::vector<Class>>&vdata)
+    WebHtml&    operator<<(WebHtml&h, const Dev<ClassVector>&vdata)
     {
         Comma   comma(", ");
         for(Class v : vdata.data){
@@ -139,7 +140,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void        admin_table(WebHtml&h, const std::vector<Class>&classes)
+    void    admin_table(WebHtml&h, const ClassVector& classes)
     {
         auto tac = h.table();
         auto iz = h.context().session.icon_size;
@@ -162,9 +163,9 @@ namespace yq::mithril::html {
             }
         );
     }
-    
 
-    void        dev_table(WebHtml&h, const std::vector<Class>& classes)
+
+    void    dev_table(WebHtml&h, const ClassVector& classes)
     {
         auto ta = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Doc</th><th>Brief</th></tr>\n";
@@ -175,7 +176,7 @@ namespace yq::mithril::html {
         }
     }
 
-    void        dev_table(WebHtml& h, const std::vector<Class::Rank>&data, std::string_view rankName)
+    void    dev_table(WebHtml& h, const std::vector<Class::Rank>&data, std::string_view rankName)
     {
         auto ta = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>" << rankName << "</th></tr>\n";
@@ -184,6 +185,15 @@ namespace yq::mithril::html {
             h << "<tr><td>" << dev_id(cr.cls) << "</td><td>" << i.key << "</td><td>" << i.name 
                 << "</td><td>" << cr.rank << "</td></tr>\n";
         }
+    }
+    
+    void    dev_title(WebHtml& h, Class x, std::string_view extra)
+    {
+        auto t = h.title();
+        auto i = cdb::nki(x);
+        h << "Class \"" << i.name << "\" (" << x.id << " &mdash; " << i.key << ")";
+        if(!extra.empty())
+            h << ": " << extra;
     }
 
     void        new_class_control(WebHtml&h, std::string_view npath)

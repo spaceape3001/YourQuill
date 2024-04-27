@@ -28,7 +28,7 @@ namespace yq::mithril::cdb {
         }
     }
     
-    std::vector<Atom>        all_leaf_atoms(Sorted sorted)
+    AtomVector        all_leaf_atoms(Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_ATOMS " WHERE isLeaf=1 ORDER BY k");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_ATOMS " WHERE leaf!=0");

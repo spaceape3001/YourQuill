@@ -38,7 +38,7 @@ namespace yq::mithril {
             This returns all atoms that are also associated with leafs.
             \param[in] sorted   Set to YES to have result sorted by key
         */
-        std::vector<Atom>           all_leaf_atoms(Sorted sorted=Sorted());
+        AtomVector           all_leaf_atoms(Sorted sorted=Sorted());
         
         /*! \brief Count of atoms that are the primary from a leaf
         */

@@ -56,7 +56,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void    dev_table(WebHtml& h, const std::vector<Folder>&folders)
+    void    dev_table(WebHtml& h, const FolderVector&folders)
     {
         auto _tab = h.table();
         h << "<tr><th><ID></th><th>key</th><th>Name</th><th>Documents</th><th>Children</th><th>Brief</th></tr>\n";
@@ -67,4 +67,13 @@ namespace yq::mithril::html {
               << "</td><td>" << i.brief << "</td</tr>\n";
         }
     }
+
+    void    dev_title(WebHtml& h, Folder x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Folder (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+
 }

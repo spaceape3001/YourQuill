@@ -24,6 +24,7 @@ namespace yq::mithril {
         
         using Notify  = Notifier<const Diff&>;
         
+        using PropertyCSpan     = std::span<const Property>;
         using PropertySet       = std::set<Property>;
         using PropertyVector    = std::vector<Property>;
         

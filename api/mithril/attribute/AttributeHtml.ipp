@@ -30,7 +30,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void    dev_table(WebHtml&h, const std::vector<Attribute>&table)
+    void    dev_table(WebHtml&h, const AttributeVector& table)
     {
         auto ta = h.table();
         ta << "<TR><TH>ID</TH><TH>Key</TH><TH>Value</TH></TR>\n";
@@ -41,4 +41,13 @@ namespace yq::mithril::html {
             ta << "</td></tr>\n";
         }
     }
+
+    void    dev_title(WebHtml& h, Attribute x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Attribute \"" << cdb::name(x) << "\" (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+    
 }

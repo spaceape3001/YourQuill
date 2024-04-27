@@ -84,6 +84,15 @@ namespace yq::mithril::html {
         }
     }
 
+    void    dev_title(WebHtml& h, Style x, std::string_view extra)
+    {
+        auto t = h.title();
+        auto i = cdb::nki(x);
+        h << "Style \"" << i.name << "\" (" << x.id << " &mdash; " << i.key << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+
     void        new_style_control(WebHtml&h, std::string_view npath)
     {
         Url url;

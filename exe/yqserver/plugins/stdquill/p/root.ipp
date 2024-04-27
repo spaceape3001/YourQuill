@@ -11,14 +11,6 @@ namespace {
     //  -----------------------------------------------------------------------
     //      UTILITIES
     //  -----------------------------------------------------------------------
-
-        void    dev_title(WebHtml& h, const RootDir* rt, std::string_view extra=std::string_view())
-        {
-            auto t = h.title();
-            h << "Root \"" << rt->name << " (" << rt->id << " &mdash; " << rt->path  << ")";
-            if(!extra.empty())
-                h << ": " << extra;
-        }
     
     //  -----------------------------------------------------------------------
     //      REST API

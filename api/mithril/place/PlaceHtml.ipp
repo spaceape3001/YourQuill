@@ -39,7 +39,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    void        dev_table(WebHtml&h, const std::vector<Place>& places)
+    void        dev_table(WebHtml&h, const PlaceVector& places)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Brief</th></tr>\n";

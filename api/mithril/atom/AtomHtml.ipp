@@ -30,7 +30,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    WebHtml&    operator<<(WebHtml&h, const Dev<std::vector<Atom>>& vdata)
+    WebHtml&    operator<<(WebHtml&h, const Dev<AtomVector>& vdata)
     {
         Comma   comma(", ");
         for(Atom v : vdata.data){
@@ -40,7 +40,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    WebHtml&    operator<<(WebHtml&h, const Dev<std::set<Atom>>& vdata)
+    WebHtml&    operator<<(WebHtml&h, const Dev<AtomSet>& vdata)
     {
         Comma   comma(", ");
         for(Atom v : vdata.data){
@@ -70,7 +70,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void        dev_table(WebHtml&h, const std::vector<Atom>& atoms)
+    void        dev_table(WebHtml&h, const AtomVector& atoms)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th>Key</th><th>Brief</th></tr>\n";
@@ -80,7 +80,7 @@ namespace yq::mithril::html {
         }
     }
 
-    void        dev_table(WebHtml& h, const std::vector<Atom::Property>& props)
+    void        dev_table(WebHtml& h, const Atom::PropertyVector& props)
     {
         auto t = h.table();
         h << "<tr><th>ID</th><th colspan=\"2\">Atom</th><th colspan=\"2\">Attr</th><th colspan=\"2\">Field</th><th colspan=\"2\">Child</th><th colspan=\"2\">Source</th><th colspan=\"2\">Target</th></tr>\n";
@@ -96,4 +96,13 @@ namespace yq::mithril::html {
                 << "</td></tr>\n";
         }
     }
+    
+    void    dev_title(WebHtml& h, Atom x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Atom \"" << cdb::label(x) << "\" (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+
 }

@@ -8,6 +8,8 @@
 
 #include "DirectoryHtml.hpp"
 #include <mithril/directory/DirectoryCDB.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/root/RootCDB.hpp>
 
 namespace yq::mithril::html {
     //WebHtml&    operator<<(WebHtml&, Directory);
@@ -35,7 +37,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    void    dev_table(WebHtml& h, const std::vector<Directory>& dirs)
+    void    dev_table(WebHtml& h, const DirectoryVector& dirs)
     {
         auto _tab = h.table();
             h << "<tr><th>ID</th><th>Fragments</th><th>Children</th><th>Path</th></tr>\n";
@@ -45,5 +47,19 @@ namespace yq::mithril::html {
         }
     }
 
+
+    void    dev_title(WebHtml& h, Directory x, std::string_view extra)
+    {
+        auto t = h.title();
+        const RootDir* rt  = cdb::root_dir(x);
+        
+        h << "Directory ";
+        if(rt)
+            h << '[' << rt->key << ']';
+        h << '(' << x.id << " &mdash; " << cdb::key(x) << ')';
+        if(!extra.empty()){
+            h << ": " << extra;
+        }
+    }
 
 }

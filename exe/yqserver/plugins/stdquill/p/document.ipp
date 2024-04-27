@@ -11,14 +11,6 @@ namespace {
     //  -----------------------------------------------------------------------
     //      UTILITIES
     //  -----------------------------------------------------------------------
-
-        void    dev_title(WebHtml& h, Document x, std::string_view extra=std::string_view())
-        {
-            auto t = h.title();
-            h.title() << "Document (" << x.id << " &mdash; " << key(x) << ")";
-            if(!extra.empty())
-                h << ": " << extra;
-        }
         
     //  -----------------------------------------------------------------------
     //      REST API

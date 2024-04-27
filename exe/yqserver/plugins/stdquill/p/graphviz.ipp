@@ -12,14 +12,6 @@ namespace {
     //      UTILITIES
     //  -----------------------------------------------------------------------
 
-        void    dev_title(WebHtml& h, Graphviz x, std::string_view extra=std::string_view())
-        {
-            auto t = h.title();
-            h << "Graphviz \"" << name(x) << "\" (" << x.id << " &mdash; " << key(x) << ")";
-            if(!extra.empty())
-                h << ": " << extra;
-        }
-    
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------

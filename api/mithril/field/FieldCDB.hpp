@@ -27,7 +27,7 @@ namespace yq::mithril::cdb {
     
     string_set_t            aliases(Field);
 
-    std::vector<Field>      all_fields(Sorted sorted=Sorted());
+    FieldVector      all_fields(Sorted sorted=Sorted());
     size_t                  all_fields_count();
     
     //ClassHopMap             atom_types(Field);
@@ -42,7 +42,7 @@ namespace yq::mithril::cdb {
 
     /*! \brief ALL classes this field can be in
     */
-    std::vector<Class>       classes(Field, Sorted sorted=Sorted());
+    ClassVector       classes(Field, Sorted sorted=Sorted());
     
     /*! \brief All data types this field can use
     */
@@ -54,7 +54,7 @@ namespace yq::mithril::cdb {
     //Field                   db_field(std::string_view , bool *wasCreated=nullptr);
     //Field                   db_field(Document, bool *wasCreated=nullptr);
     
-    //std::vector<Class>           def_classes(Field, Sorted sorted=Sorted());
+    //ClassVector           def_classes(Field, Sorted sorted=Sorted());
     
     Document                document(Field);
 

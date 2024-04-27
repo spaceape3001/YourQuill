@@ -12,6 +12,7 @@
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/graphviz/Graphviz.hpp>
 #include <mithril/graphviz/GraphvizCDB.hpp>
 
 namespace yq::mithril::html {
@@ -49,4 +50,13 @@ namespace yq::mithril::html {
                 << "</td></tr>\n";
         }
     }
+
+    void    dev_title(WebHtml& h, Graphviz x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Graphviz \"" << cdb::name(x) << "\" (" << x.id << " &mdash; " << cdb::key(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
+
 }

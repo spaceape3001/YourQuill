@@ -20,7 +20,7 @@
 #include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
-    std::vector<Folder>      all_folders(Sorted sorted)
+    FolderVector      all_folders(Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_FOLDERS " ORDER BY k");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_FOLDERS "");
@@ -188,7 +188,7 @@ namespace yq::mithril::cdb {
     }
     
 
-    std::vector<Folder>      child_folders(Folder f, unsigned opts)
+    FolderVector      child_folders(Folder f, unsigned opts)
     {
         static thread_local CacheQuery    s1("SELECT id FROM " TBL_FOLDERS " WHERE parent=? ORDER BY sk");
         static thread_local CacheQuery    s2("SELECT id FROM " TBL_FOLDERS " WHERE parent=? AND hidden=0 ORDER BY sk");
@@ -199,7 +199,7 @@ namespace yq::mithril::cdb {
         return s.vec<Folder>(f.id);
     }
 
-    std::vector<Folder>      child_folders(Folder f, Sorted sorted)
+    FolderVector      child_folders(Folder f, Sorted sorted)
     {
         return child_folders(f, HIDDEN | (sorted ? BEST_SORT : 0));
     }
@@ -236,7 +236,7 @@ namespace yq::mithril::cdb {
         return child_folders_with_skey(f, HIDDEN | (sorted ? BEST_SORT : 0));
     }
 
-    std::vector<Fragment>    child_fragments(Folder f, Sorted sorted)
+    FragmentVector    child_fragments(Folder f, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_FRAGMENTS " WHERE folder=? ORDER BY path");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_FRAGMENTS " WHERE folder=?");
@@ -389,12 +389,12 @@ namespace yq::mithril::cdb {
         return s.as<Folder>(k);
     }
 
-    std::vector<Folder>      folder_path(Folder folder)
+    FolderVector      folder_path(Folder folder)
     {
-        std::vector<Folder>  ret;
+        FolderVector  ret;
         for(Folder f = parent(folder); f; f = parent(f))
             ret.push_back(f);
-        return std::vector<Folder>(ret.rbegin(), ret.rend());
+        return FolderVector(ret.rbegin(), ret.rend());
     }
     
     bool                hidden(Folder f)

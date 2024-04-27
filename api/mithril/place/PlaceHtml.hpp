@@ -14,7 +14,7 @@ namespace yq::mithril {
         WebHtml&    operator<<(WebHtml&, Place);
         WebHtml&    operator<<(WebHtml&, Dev<Place>);
         WebHtml&    operator<<(WebHtml&, DevID<Place>);
-        void        dev_table(WebHtml&, const std::vector<Place>&);
+        void        dev_table(WebHtml&, const PlaceVector&);
         
     }
 }

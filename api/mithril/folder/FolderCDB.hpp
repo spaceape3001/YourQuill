@@ -19,7 +19,7 @@ namespace yq::mithril::cdb {
         \param[in] sorted   Flag to sort the results by key
         \return std::vector of all folders (warning, can be huge)
     */
-    std::vector<Folder>             all_folders(Sorted sorted=Sorted());
+    FolderVector             all_folders(Sorted sorted=Sorted());
     
     /*! \brief Count of folders in the cache
     */
@@ -76,10 +76,10 @@ namespace yq::mithril::cdb {
     Folder                          child_folder(Folder, uint64_t, unsigned int opts=0);
     
     //! Gets all child folders
-    std::vector<Folder>             child_folders(Folder, unsigned int opts=0);
+    FolderVector             child_folders(Folder, unsigned int opts=0);
 
     //! Gets all child folders
-    std::vector<Folder>             child_folders(Folder, Sorted sorted);
+    FolderVector             child_folders(Folder, Sorted sorted);
     
     //! Counts numbers of child folders
     size_t                          child_folders_count(Folder, unsigned int opts=0);
@@ -91,7 +91,7 @@ namespace yq::mithril::cdb {
     std::vector<FolderStr>          child_folders_with_skey(Folder, Sorted sorted);
 
     //! Gets child fragments
-    std::vector<Fragment>           child_fragments(Folder, Sorted sorted=Sorted());
+    FragmentVector           child_fragments(Folder, Sorted sorted=Sorted());
     
     
     //! Gets number of child fragments
@@ -164,7 +164,7 @@ namespace yq::mithril::cdb {
     Folder                          folder(std::string_view );
     
     //! List of folders reaching specified folder
-    std::vector<Folder>             folder_path(Folder);
+    FolderVector             folder_path(Folder);
     
 
     //! TRUE if folder is hidden
