@@ -220,9 +220,9 @@ namespace yq::mithril::cdb {
         return ret;
     }
 
-    std::set<Class>     classes_set(const string_set_t&sset, bool noisy)
+    ClassSet     classes_set(const string_set_t&sset, bool noisy)
     {
-        std::set<Class>   ret;
+        ClassSet   ret;
         for(const std::string& s : sset){
             if(s.empty())
                 continue;
@@ -239,9 +239,9 @@ namespace yq::mithril::cdb {
         return ret;
     }
     
-    std::set<Class>     classes_set(const string_view_set_t&sset, bool noisy)
+    ClassSet     classes_set(const string_view_set_t&sset, bool noisy)
     {
-        std::set<Class>   ret;
+        ClassSet   ret;
         for(std::string_view s : sset){
             if(s.empty())
                 continue;
@@ -330,13 +330,13 @@ namespace yq::mithril::cdb {
         return s.sset(c.id);
     }
 
-    std::set<Class>             def_reverse_set(Class c)
+    ClassSet             def_reverse_set(Class c)
     {
         static thread_local CacheQuery  s("SELECT reverse FROM " TBL_CLSDEF_REVERSE " WHERE class=?");
         return s.set<Class>(c.id);
     }
     
-    std::set<Class>             def_rev_reverse_set(Class c)
+    ClassSet             def_rev_reverse_set(Class c)
     {
         static thread_local CacheQuery  s("SELECT class FROM " TBL_CLSDEF_REVERSE " WHERE reverse=?");
         return s.set<Class>(c.id);
@@ -350,7 +350,7 @@ namespace yq::mithril::cdb {
         return s.vec<Class>(c.id);
     }
 
-    std::set<Class>             def_rev_use_set(Class c)
+    ClassSet             def_rev_use_set(Class c)
     {
         static thread_local CacheQuery  s("SELECT class FROM " TBL_CLSDEF_USE " WHERE use=?");
         return s.set<Class>(c.id);
@@ -363,7 +363,7 @@ namespace yq::mithril::cdb {
         return s.size(c.id);
     }
 
-    std::set<Class>             def_source_set(Class c)
+    ClassSet             def_source_set(Class c)
     {
         static thread_local CacheQuery  s("SELECT source FROM " TBL_CLSDEF_SOURCE " WHERE class=?");
         return s.set<Class>(c.id);
@@ -375,13 +375,13 @@ namespace yq::mithril::cdb {
         return s.sset(c.id);
     }
 
-    std::set<Class>             def_target_set(Class c)
+    ClassSet             def_target_set(Class c)
     {
         static thread_local CacheQuery  s("SELECT target FROM " TBL_CLSDEF_TARGET " WHERE class=?");
         return s.set<Class>(c.id);
     }
 
-    std::set<Class>             def_use_set(Class c)
+    ClassSet             def_use_set(Class c)
     {
         static thread_local CacheQuery  s("SELECT use FROM " TBL_CLSDEF_USE " WHERE class=?");
         return s.set<Class>(c.id);

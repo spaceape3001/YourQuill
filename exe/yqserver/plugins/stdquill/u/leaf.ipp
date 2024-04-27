@@ -85,7 +85,7 @@ namespace {
         diffrep.exec_inserts();
         diffrep.exec_reindex();
         
-        u_atom(x.atom, diffrep.items, chg, x.icon.to);
+        u_atom(x.atom, diffrep.items, chg, {.icon = x.icon.to, .startup=true} );
 
         //  Get the atom too
         Leaf::Notify::notify(x);

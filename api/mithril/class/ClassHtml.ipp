@@ -59,7 +59,7 @@ namespace yq::mithril::html {
         return h;
     }
 
-    WebHtml&    operator<<(WebHtml&h, const std::set<Class>&vdata)
+    WebHtml&    operator<<(WebHtml&h, const ClassSet&vdata)
     {
         Comma   comma(", ");
         for(Class v : vdata){
@@ -79,7 +79,7 @@ namespace yq::mithril::html {
         return h;
     }
     
-    WebHtml&    operator<<(WebHtml&h, const Dev<std::set<Class>>&vdata)
+    WebHtml&    operator<<(WebHtml&h, const Dev<ClassSet>&vdata)
     {
         Comma   comma(", ");
         for(Class v : vdata.data){

@@ -42,11 +42,12 @@ namespace yq::mithril::html {
     void        dev_table(WebHtml&h, const std::vector<Character>& chars)
     {
         auto t = h.table();
-        h << "<tr><th>ID</th><th>Key</th><th>Brief</th></tr>\n";
+        h << "<tr><th>ID</th><th>Key</th><th>Name</th><th>Brief</th></tr>\n";
         for(Character ch : chars){
             Atom a = cdb::atom(ch);  // temporary hack
             auto i = cdb::info(a);
-            h << "<tr><td>" << dev_id(a) << "</td><td>" << i.key << "</td><td>" << i.brief << "</td></tr>\n";
+            h << "<tr><td>" << dev_id(a) << "</td><td>" << i.key << "</td><td>" 
+                << i.name << "</td><td>" << i.brief << "</td></tr>\n";
         }
     }
 }

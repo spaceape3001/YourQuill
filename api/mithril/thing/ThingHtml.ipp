@@ -46,7 +46,8 @@ namespace yq::mithril::html {
         for(Thing bk : things){
             Atom a = cdb::atom(bk);  // temporary hack
             auto i = cdb::info(a);
-            h << "<tr><td>" << dev_id(a) << "</td><td>" << i.key << "</td><td>" << i.brief << "</td></tr>\n";
+            h << "<tr><td>" << dev_id(a) << "</td><td>" << i.key << "</td><td>" 
+                << i.name << "</td><td>" << i.brief << "</td></tr>\n";
         }
     }
 }

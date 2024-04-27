@@ -57,7 +57,7 @@ namespace yq::mithril::cdb {
     //! Alternative keys for class
     string_set_t                alternative_keys(Class);
     
-    ClassVector          base_classes(Class, Sorted sorted=Sorted());
+    ClassVector                 base_classes(Class, Sorted sorted=Sorted());
     size_t                      base_classes_count(Class);
     std::vector<Class::Rank>    base_classes_ranked(Class, Sorted sorted=Sorted());
     std::vector<Class::Rank>    base_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
@@ -87,17 +87,17 @@ namespace yq::mithril::cdb {
     Class::SharedFile           class_doc(Fragment, cdb_options_t opts=0);
     
     //! Gets all classes matching the set of keys
-    ClassVector          classes(const string_set_t&, bool noisy=false);
+    ClassVector                 classes(const string_set_t&, bool noisy=false);
     
     
     //! Gets all classes matching the set of keys as a set
-    std::set<Class>             classes_set(const string_set_t&, bool noisy=false);
+    ClassSet                    classes_set(const string_set_t&, bool noisy=false);
 
     //! Gets all classes matching the set of keys as a set
-    std::set<Class>             classes_set(const string_view_set_t&, bool noisy=false);
+    ClassSet                    classes_set(const string_view_set_t&, bool noisy=false);
     
     //! Gets all classes that are tagged
-    ClassVector          classes_with_tag(Tag, Sorted sorted=Sorted{});
+    ClassVector                 classes_with_tag(Tag, Sorted sorted=Sorted{});
 
     //! Creates the specified class from document
     Class                       db_class(Document, bool *wasCreated=nullptr);
@@ -106,39 +106,39 @@ namespace yq::mithril::cdb {
     Class                       db_class(std::string_view, bool *wasCreated=nullptr);
     
     //! Creates all classes
-    ClassVector          db_classes(const string_view_set_t&);
+    ClassVector                 db_classes(const string_view_set_t&);
 
     //! Creates all classes
-    ClassVector          db_classes(const string_set_t&);
+    ClassVector                 db_classes(const string_set_t&);
     
     string_set_t                def_alias_set(Class);
     
     string_set_t                def_prefix_set(Class);
 
-    std::set<Class>             def_reverse_set(Class);
+    ClassSet                    def_reverse_set(Class);
     
-    std::set<Class>             def_rev_reverse_set(Class);
+    ClassSet                    def_rev_reverse_set(Class);
 
     //! All classes that "used" this class
-    ClassVector          def_rev_use(Class, Sorted sorted=Sorted{});
+    ClassVector                 def_rev_use(Class, Sorted sorted=Sorted{});
     
     //! All classes that "used" this class (as a set)
-    std::set<Class>             def_rev_use_set(Class);
+    ClassSet                    def_rev_use_set(Class);
     
     //! Count of classes "used" this class
     uint64_t                    def_rev_use_count(Class);
 
-    std::set<Class>             def_source_set(Class);
+    ClassSet                    def_source_set(Class);
 
     string_set_t                def_suffix_set(Class);
 
-    std::set<Class>             def_target_set(Class);
+    ClassSet                    def_target_set(Class);
 
     //! All classes that were defined "use" for this class
-    ClassVector          def_use(Class, Sorted sorted=Sorted{});
+    ClassVector                 def_use(Class, Sorted sorted=Sorted{});
     
     //! All classes that were defined "use" for this class (as a set)
-    std::set<Class>             def_use_set(Class);
+    ClassSet                    def_use_set(Class);
     
     //! Count of classes that were defined "use" for this class
     uint64_t                    def_use_count(Class);
@@ -147,7 +147,7 @@ namespace yq::mithril::cdb {
     
 
     //! all derives for this class
-    ClassVector          derived_classes(Class, Sorted sorted=Sorted());
+    ClassVector                 derived_classes(Class, Sorted sorted=Sorted());
     
     ClassHopMap                 derived_hops(Class);
 
@@ -166,21 +166,21 @@ namespace yq::mithril::cdb {
     //Document                document(Atom);
     Document                    document(Class);
     
-    ClassVector          edge_classes_in(Class, Sorted sorted=Sorted());
-    ClassVector          edge_classes_out(Class, Sorted sorted=Sorted());
+    ClassVector                 edge_classes_in(Class, Sorted sorted=Sorted());
+    ClassVector                 edge_classes_out(Class, Sorted sorted=Sorted());
   
   
     bool                        exists(Class);
 
     bool                        exists_class(uint64_t);
     Field                       field(Class, std::string_view);
-    FieldVector          fields(Class, Sorted sorted=Sorted());
+    FieldVector                 fields(Class, Sorted sorted=Sorted());
     size_t                      fields_count(Class);
 
     Image                       icon(Class);
     
     //AtomVector            inbound(Atom);
-    ClassVector          inbound_classes(Class, Sorted sorted=Sorted());
+    ClassVector                 inbound_classes(Class, Sorted sorted=Sorted());
     std::vector<Class::Rank>    inbound_classes_ranked(Class, Sorted sorted=Sorted());
 
     Class::Info                 info(Class, bool autoKeyToName=false);
@@ -205,7 +205,7 @@ namespace yq::mithril::cdb {
     NKI                         nki(Class, bool autoKeyToName=false);
     
     //AtomVector            outbound(Atom);
-    ClassVector          outbound_classes(Class, Sorted sorted=Sorted());
+    ClassVector                 outbound_classes(Class, Sorted sorted=Sorted());
     std::vector<Class::Rank>    outbound_classes_ranked(Class, Sorted sorted=Sorted());
     
     std::string                 plural(Class);
@@ -219,26 +219,26 @@ namespace yq::mithril::cdb {
     std::vector<ClassFragDoc>   reads(Class, cdb_options_t opts=0);
     std::vector<ClassFragDoc>   reads(Class, class RootDir*, cdb_options_t opts=0);
 
-    //std::set<Class>             rev_use_set(Class);
+    //ClassSet             rev_use_set(Class);
     //ClassVector          rev_uses(Class, Sorted sorted=Sorted());
     //size_t                      rev_uses_count(Class);
 
-    ClassVector          reverse_classes(Class, Sorted sorted=Sorted());
+    ClassVector                 reverse_classes(Class, Sorted sorted=Sorted());
     size_t                      reverse_classes_count(Class c);
     std::vector<Class::Rank>    reverse_classes_ranked(Class, Sorted sorted=Sorted());
     std::vector<Class::Rank>    reverse_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
     
-    ClassVector          source_classes(Class, Sorted sorted=Sorted());
+    ClassVector                 source_classes(Class, Sorted sorted=Sorted());
     size_t                      source_classes_count(Class);
     std::vector<Class::Rank>    source_classes_ranked(Class, Sorted sorted=Sorted());
     std::vector<Class::Rank>    source_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
     
     
-    TagSet               tag_set(Class);
-    TagVector            tags(Class, Sorted sorted=Sorted());
+    TagSet                      tag_set(Class);
+    TagVector                   tags(Class, Sorted sorted=Sorted());
     size_t                      tags_count(Class);
 
-    ClassVector          target_classes(Class, Sorted sorted=Sorted());
+    ClassVector                 target_classes(Class, Sorted sorted=Sorted());
     size_t                      target_classes_count(Class);
     std::vector<Class::Rank>    target_classes_ranked(Class, Sorted sorted=Sorted());
     std::vector<Class::Rank>    target_classes_ranked_limited(Class, uint64_t, Sorted sorted=Sorted());
@@ -248,7 +248,7 @@ namespace yq::mithril::cdb {
 
 
     //! All classes that were listed in the file
-    //std::set<Class>             use_set(Class);
+    //ClassSet             use_set(Class);
     //ClassVector          uses(Class, Sorted sorted=Sorted());
     //size_t                      uses_count(Class);
 

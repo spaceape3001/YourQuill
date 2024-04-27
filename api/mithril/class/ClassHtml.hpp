@@ -14,9 +14,9 @@ namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&, Dev<Class>);
     WebHtml&    operator<<(WebHtml&, DevID<Class>);
     WebHtml&    operator<<(WebHtml&, const Edit<Class>& );
-    WebHtml&    operator<<(WebHtml&, const std::set<Class>&);
+    WebHtml&    operator<<(WebHtml&, const ClassSet&);
     WebHtml&    operator<<(WebHtml&, const ClassVector&);
-    WebHtml&    operator<<(WebHtml&, const Dev<std::set<Class>>&);
+    WebHtml&    operator<<(WebHtml&, const Dev<ClassSet>&);
     WebHtml&    operator<<(WebHtml&, const Dev<ClassVector>&);
     //WebHtml&    operator<<(WebHtml&, const LinkKey<Class>& );
     //WebHtml&    operator<<(WebHtml&, const LinkLabel<Class>& );
