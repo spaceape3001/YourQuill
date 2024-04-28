@@ -19,7 +19,7 @@
 #include <mithril/atom/Atom.hpp>
 #include <mithril/category/Category.hpp>
 #include <mithril/class/Class.hpp>
-#include <mithril/drafter/Drafter.hpp>
+#include <mithril/doodle/Doodle.hpp>
 #include <mithril/field/Field.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/leaf/Leaf.hpp>
@@ -32,7 +32,7 @@ namespace yq::mithril {
     template class Notifier<const Atom::Diff&>;
     template class Notifier<const Category::Diff&>;
     template class Notifier<const Class::Diff&>;
-    template class Notifier<const Drafter::Diff&>;
+    template class Notifier<const Doodle::Diff&>;
     template class Notifier<const Field::Diff&>;
     template class Notifier<const Image::Diff&>;
     template class Notifier<const Leaf::Diff&>;

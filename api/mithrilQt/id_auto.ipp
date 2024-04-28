@@ -19,7 +19,7 @@
 #include <mithrilQt/class.hpp>
 #include <mithrilQt/directory.hpp>
 #include <mithrilQt/document.hpp>
-#include <mithrilQt/drafter.hpp>
+#include <mithrilQt/doodle.hpp>
 #include <mithrilQt/entity.hpp>
 #include <mithrilQt/event.hpp>
 #include <mithrilQt/field.hpp>
@@ -66,8 +66,8 @@ namespace yq::mithril {
             return qIcon(Directory(i.id()));
         case Document::ID:
             return qIcon(Document(i.id()));
-        case Drafter::ID:
-            return qIcon(Drafter(i.id()));
+        case Doodle::ID:
+            return qIcon(Doodle(i.id()));
         case Entity::ID:
             return qIcon(Entity(i.id()));
         case Event::ID:

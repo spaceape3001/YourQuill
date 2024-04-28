@@ -40,7 +40,7 @@ namespace yq::mithril {
     struct Class;
     struct Directory;
     struct Document;
-    struct Drafter;
+    struct Doodle;
     struct Edge;
     struct Entity;
     struct Event;
@@ -128,9 +128,9 @@ namespace yq::mithril {
     using DocString             = std::pair<Document,std::string>;
     using DocStr                = std::pair<Document,std::string>;
     
-    using DrafterCSpan          = std::span<const Drafter>;
-    using DrafterSet            = std::set<Drafter>;
-    using DrafterVector         = std::vector<Drafter>;
+    using DoodleCSpan          = std::span<const Doodle>;
+    using DoodleSet            = std::set<Doodle>;
+    using DoodleVector         = std::vector<Doodle>;
     
     using EntityCSpan           = std::span<const Entity>;
     using EntitySet             = std::set<Entity>;

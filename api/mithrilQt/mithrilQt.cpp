@@ -16,7 +16,7 @@
 #include "class.ipp"
 #include "directory.ipp"
 #include "document.ipp"
-#include "drafter.ipp"
+#include "doodle.ipp"
 #include "entity.ipp"
 #include "event.ipp"
 #include "field.ipp"

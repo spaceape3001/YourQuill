@@ -27,8 +27,8 @@
 #include "document/DocumentArg.ipp"
 #include "document/DocumentPost.ipp"
 
-#include "drafter/DrafterArg.ipp"
-#include "drafter/DrafterPost.ipp"
+#include "doodle/DoodleArg.ipp"
+#include "doodle/DoodlePost.ipp"
 
 #include "field/FieldArg.ipp"
 #include "field/FieldPost.ipp"

@@ -15,7 +15,7 @@ add_library(${PROJECT_NAME} SHARED
     all_provider.cpp
     bit.cpp
     directories.cpp
-    drafter.cpp
+    doodle.cpp
     mithril.cpp
     notify.cpp
     html/XEntry.cpp

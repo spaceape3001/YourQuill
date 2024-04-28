@@ -35,7 +35,7 @@
 #include "class/ClassMeta.ipp"
 #include "directory/DirectoryMeta.ipp"
 #include "document/DocumentMeta.ipp"
-#include "drafter/DrafterMeta.ipp"
+#include "doodle/DoodleMeta.ipp"
 #include "entity/EntityMeta.ipp"
 #include "event/EventMeta.ipp"
 #include "field/FieldMeta.ipp"
@@ -109,9 +109,9 @@ YQ_TYPE_IMPLEMENT(yq::mithril::DirectoryVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Document)
 YQ_TYPE_IMPLEMENT(yq::mithril::DocumentSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::DocumentVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Drafter)
-YQ_TYPE_IMPLEMENT(yq::mithril::DrafterSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::DrafterVector)
+YQ_TYPE_IMPLEMENT(yq::mithril::Doodle)
+YQ_TYPE_IMPLEMENT(yq::mithril::DoodleSet)
+YQ_TYPE_IMPLEMENT(yq::mithril::DoodleVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Entity)
 YQ_TYPE_IMPLEMENT(yq::mithril::EntitySet)
 YQ_TYPE_IMPLEMENT(yq::mithril::EntityVector)
@@ -190,7 +190,7 @@ namespace {
         reg_class_meta();
         reg_directory_meta();
         reg_document_meta();
-        reg_drafter_meta();
+        reg_doodle_meta();
         reg_entity_meta();
         reg_event_meta();
         reg_field_meta();

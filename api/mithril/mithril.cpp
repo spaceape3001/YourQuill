@@ -26,8 +26,8 @@
 #include "class/ClassDiff.hpp"          // syntax check
 #include "class/ClassFile.ipp"
 
-#include "drafter/DrafterData.ipp"
-#include "drafter/DrafterFile.ipp"
+#include "doodle/DoodleData.ipp"
+#include "doodle/DoodleFile.ipp"
 
 #include "field/FieldData.ipp"
 #include "field/FieldDiff.hpp"      // syntax check

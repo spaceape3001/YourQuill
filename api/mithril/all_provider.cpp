@@ -13,7 +13,7 @@
 #include "class/ClassProvider.ipp"
 #include "directory/DirectoryProvider.ipp"
 #include "document/DocumentProvider.ipp"
-#include "drafter/DrafterProvider.ipp"
+#include "doodle/DoodleProvider.ipp"
 #include "event/EventProvider.ipp"
 #include "field/FieldProvider.ipp"
 #include "folder/FolderProvider.ipp"
