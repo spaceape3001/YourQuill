@@ -6,11 +6,9 @@
 
 #pragma once
 
-#include <initializer_list>
-#include <string_view>
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
-    struct Atom;
     struct WebContext;
     
     namespace arg {

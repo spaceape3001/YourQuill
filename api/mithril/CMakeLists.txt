@@ -7,13 +7,17 @@
 project(mithril)
 
 add_library(${PROJECT_NAME} SHARED
+    all_arg.cpp
     all_cdb.cpp
     all_html.cpp
     all_ipc.cpp
     all_meta.cpp
+    all_provider.cpp
+    bit.cpp
     directories.cpp
     drafter.cpp
     mithril.cpp
+    notify.cpp
     html/XEntry.cpp
     web/web_unity.cpp
     wksp/Workspace.cpp

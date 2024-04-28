@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include <mithril/root/RootProvider.hpp>
+#include <mithril/root/Root.hpp>
 #include <mithril/root/RootCDB.hpp>
+#include <mithril/root/RootProvider.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_roots()

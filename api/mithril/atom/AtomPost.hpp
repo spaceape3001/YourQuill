@@ -6,13 +6,10 @@
 
 #pragma once
 
-#include <initializer_list>
-#include <string_view>
-#include <mithril/html/Post.hpp>
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
     struct WebContext;
-    struct Atom;
     
     namespace post {
         //! Finds atom, by ID
