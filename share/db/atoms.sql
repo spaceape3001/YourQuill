@@ -70,7 +70,7 @@ CREATE TABLE AtomTag (
 );
 
     --  note, the edge's parent is the source, always defined
-CREATE TABLE AEdges (
+CREATE TABLE AtomEdge (
     --  source atom
     source  INTEGER NOT NULL DEFAULT 0,
     

@@ -15,7 +15,7 @@ namespace yq::mithril {
         Folder represents a fusion of the same named directory across the root_dirs of the worksapce (case insensitive).
     */
     struct Folder {
-        static constexpr const IdTypeId ID          = 13;
+        static constexpr const IdTypeId ID          = 14;
         static constexpr const IdTypes  PARENTS     = {};
 
         struct Info;

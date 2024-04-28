@@ -13,7 +13,7 @@ namespace yq::mithril {
     /*! \brief Represents single fragment
     */
     struct Fragment {
-        static constexpr const IdTypeId  ID      = 14;
+        static constexpr const IdTypeId  ID      = 15;
         static constexpr const IdTypes   PARENTS = {};
 
         struct Info;

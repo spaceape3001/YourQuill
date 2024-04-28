@@ -203,6 +203,7 @@ namespace {
 #include "u/category.ipp"
 #include "u/class.ipp"
 #include "u/css.ipp"
+#include "u/drafter.ipp"
 #include "u/field.ipp"
 #include "u/image.ipp"
 #include "u/leaf.ipp"
@@ -225,6 +226,7 @@ namespace {
             const FileSpec   fsStyle(CACHE, cdb::styles_folder(), "*.sty");
             const FileSpec   fsTag(CACHE, cdb::tags_folder(), "*.tag");
             const FileSpec   fsUser(CACHE, cdb::users_folder(), "*.usr");
+            const FileSpec   fsDrafter(CACHE, "*.d3x");
         
             //  -----------------------------------------------
             //  WARNING... the following can be order dependent
@@ -257,7 +259,7 @@ namespace {
                 //  LEAFS & atoms
             on_stage3<s3_leaf>(fsLeaf);
             on_stage3<s3_tag_leaf>(fsTag);
-
+            on_stage3<s3_drafter>(fsDrafter);
         
                 //  STAGE 4 global related
 
@@ -286,6 +288,7 @@ namespace {
                 
             on_change<s5_category>(FileSpec(CACHE, cdb::categories_folder(), "*.cat"));
             on_change<s5_class>(fsClass);
+            on_change<s5_drafter>(fsDrafter);
             on_change<s5_field>(fsField);
             on_change<s5_leaf>(fsLeaf);
             on_change<s5_style>(fsStyle);

@@ -11,7 +11,7 @@
 namespace yq::mithril {
     /*! \brief Event in the cache database */
     struct Event {
-        static constexpr const IdTypeId  ID      = 11;
+        static constexpr const IdTypeId  ID      = 12;
         static constexpr const IdTypes    PARENTS = Atom::ID;
 
         uint64_t            id = 0ULL;

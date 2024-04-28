@@ -13,6 +13,7 @@
 #include "class/ClassHtml.ipp"
 #include "directory/DirectoryHtml.ipp"
 #include "document/DocumentHtml.ipp"
+#include "drafter/DrafterHtml.ipp"
 #include "event/EventHtml.ipp"
 #include "field/FieldHtml.ipp"
 #include "folder/FolderHtml.ipp"

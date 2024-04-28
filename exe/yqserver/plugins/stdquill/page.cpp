@@ -10,6 +10,7 @@
 #include <mithril/class.hpp>
 #include <mithril/directory.hpp>
 #include <mithril/document.hpp>
+#include <mithril/drafter.hpp>
 #include <mithril/folder.hpp>
 #include <mithril/field.hpp>
 #include <mithril/fragment.hpp>
@@ -73,6 +74,7 @@ using namespace yq::mithril::html;
 #include "p/class.ipp"
 #include "p/directory.ipp"
 #include "p/document.ipp"
+#include "p/drafter.ipp"
 #include "p/explorer.ipp"
 #include "p/field.ipp"
 #include "p/folder.ipp"
@@ -140,6 +142,7 @@ namespace {
         reg_class_pages();
         reg_directory_pages();
         reg_document_pages();
+        reg_drafter_pages();
         reg_explorer_pages();
         reg_field_pages();
         reg_folder_pages();

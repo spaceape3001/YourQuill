@@ -22,6 +22,7 @@ namespace yq {
     class ByteArray;
     class Stream;
     class Meta;
+    template <typename> class Ref;
 }
 
 namespace yq::mithril {
@@ -39,6 +40,7 @@ namespace yq::mithril {
     struct Class;
     struct Directory;
     struct Document;
+    struct Drafter;
     struct Edge;
     struct Entity;
     struct Event;
@@ -63,9 +65,14 @@ namespace yq::mithril {
     struct User;
     struct Value;
 
+    class D3Object;
+
     template <typename F, typename T> struct Connection;
     template <typename...>  class Notifier;
     template <typename> struct Changed;
+    
+    using D3CPtr                = Ref<const D3Object>;
+    using D3Ptr                 = Ref<D3Object>;
 
     struct NKI;
     using HopCount              = HCountU8;
@@ -102,7 +109,7 @@ namespace yq::mithril {
     using ClassU64Pair          = std::pair<Class,uint64_t>;
     using ClassVector           = std::vector<Class>;
     using ClassU64Map           = std::map<Class,uint64_t>;
-    
+   
     using DirectoryCSpan        = std::span<const Directory>;
     using DirectorySet          = std::set<Directory>;
     using DirectoryVector       = std::vector<Directory>;
@@ -120,6 +127,10 @@ namespace yq::mithril {
     using DocOrFoldStr          = std::pair<DocOrFold,std::string>;
     using DocString             = std::pair<Document,std::string>;
     using DocStr                = std::pair<Document,std::string>;
+    
+    using DrafterCSpan          = std::span<const Drafter>;
+    using DrafterSet            = std::set<Drafter>;
+    using DrafterVector         = std::vector<Drafter>;
     
     using EntityCSpan           = std::span<const Entity>;
     using EntitySet             = std::set<Entity>;

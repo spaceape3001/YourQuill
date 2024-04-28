@@ -611,14 +611,14 @@ namespace yq::mithril::cdb {
     
     AtomVector   inbound(Atom a)
     {
-        static thread_local CacheQuery s("SELECT edge FROM AEdges WHERE target=?");
+        static thread_local CacheQuery s("SELECT edge FROM " TBL_ATOM_EDGE " WHERE target=?");
         return s.vec<Atom>(a.id);
     }
 
 
     AtomVector   outbound(Atom a)
     {
-        static thread_local CacheQuery s("SELECT target FROM AEdges WHERE atom=? AND tgtid!=0");
+        static thread_local CacheQuery s("SELECT edge FROM " TBL_ATOM_EDGE " WHERE source=?");
         return s.vec<Atom>(a.id);
     }
 }

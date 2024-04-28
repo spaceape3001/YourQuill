@@ -14,6 +14,7 @@
 
 #define TBL_ATOMS           "Atoms"
 #define TBL_ATOM_CLASS      "AtomClass"
+#define TBL_ATOM_EDGE       "AtomEdge"
 #define TBL_ATOM_PROPERTY   "AtomProperty"
 #define TBL_ATOM_TAG        "AtomTag"
 

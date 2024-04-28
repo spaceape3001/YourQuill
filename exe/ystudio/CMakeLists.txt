@@ -56,6 +56,7 @@ add_executable(${PROJECT_NAME}
     wksp/class.cpp
     wksp/directory.cpp
     wksp/document.cpp
+    wksp/drafter.cpp
     wksp/entity.cpp
     wksp/event.cpp
     wksp/field.cpp

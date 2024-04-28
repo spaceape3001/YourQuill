@@ -97,6 +97,7 @@ namespace {
             x.tags.from         = cdb::tags_set(a);
             x.name.from         = cdb::name(a);
             x.abbreviation.from = cdb::abbreviation(a);
+            //x.attributes.from   = cdb::attributes(a);
         }
         
         static thread_local CacheQuery  uAtom("UPDATE Atoms SET name=?,brief=?,abbr=?,icon=? WHERE id=?");

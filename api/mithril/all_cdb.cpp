@@ -16,6 +16,7 @@
 #include "class/ClassCDB.ipp"
 #include "directory/DirectoryCDB.ipp"
 #include "document/DocumentCDB.ipp"
+#include "drafter/DrafterCDB.ipp"
 #include "entity/EntityCDB.ipp"
 #include "event/EventCDB.ipp"
 #include "field/FieldCDB.ipp"

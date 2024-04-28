@@ -16,7 +16,7 @@ namespace yq::mithril {
         This allows for an id of the metatype
     */
     struct Meta {
-        static constexpr const IdTypeId ID          = 20;
+        static constexpr const IdTypeId ID          = 21;
         static constexpr const IdTypes  PARENTS     = {};
 
         uint64_t  id  = 0ULL;

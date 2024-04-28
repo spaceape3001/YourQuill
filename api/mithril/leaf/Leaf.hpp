@@ -11,7 +11,7 @@
 namespace yq::mithril {
 
     struct Leaf {
-        static constexpr const IdTypeId ID          = 19;
+        static constexpr const IdTypeId ID          = 20;
         static constexpr const IdTypes  PARENTS     = Document::ID;
         static constexpr const char*    EXTENSION   = "y";
         struct Info;

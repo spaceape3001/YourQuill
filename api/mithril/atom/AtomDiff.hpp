@@ -25,10 +25,11 @@ namespace yq::mithril {
         Changed<TagSet>             tags;
         Changed<ClassSet>           classes;
         Changed<FieldSet>           fields;
+        Changed<AttributeSet>       attributes;
         Changed<std::string>        name;
         Changed<std::string>        brief;
         Changed<std::string>        abbreviation;
         
-        std::span<Attribute::Diff>  diffs;  //< Will be empty for STARTUP
+        std::span<const Attribute::Diff>  diffs;
     };
 }

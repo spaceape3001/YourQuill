@@ -62,6 +62,12 @@
 #include "document/DocumentProvider.ipp"
 #include "document/DocumentUpdate.ipp"
 
+#include "drafter/DrafterArg.ipp"
+#include "drafter/DrafterData.ipp"
+#include "drafter/DrafterFile.ipp"
+#include "drafter/DrafterPost.ipp"
+#include "drafter/DrafterProvider.ipp"
+
 #include "event/EventProvider.ipp"
 
 #include "field/FieldArg.ipp"
@@ -177,6 +183,7 @@ namespace yq::mithril {
     template class Notifier<const Atom::Diff&>;
     template class Notifier<const Category::Diff&>;
     template class Notifier<const Class::Diff&>;
+    template class Notifier<const Drafter::Diff&>;
     template class Notifier<const Field::Diff&>;
     template class Notifier<const Image::Diff&>;
     template class Notifier<const Leaf::Diff&>;

@@ -35,6 +35,9 @@
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentCDB.hpp>   
 
+#include <mithril/drafter/Drafter.hpp>
+#include <mithril/drafter/DrafterCDB.hpp>   
+
 #include <mithril/entity/Entity.hpp>
 #include <mithril/entity/EntityCDB.hpp>   
 
@@ -93,7 +96,7 @@
 #include <mithril/value/ValueCDB.hpp>   
 
 namespace yq::mithril {
-    static constexpr const IdTypeId HIGH_ID = 29;
+    static constexpr const IdTypeId HIGH_ID = 30;
     
     std::string_view  Id::type_name(IdTypeId ct)
     {
@@ -116,6 +119,8 @@ namespace yq::mithril {
             return "Directory"sv;
         case Document::ID:
             return "Document"sv;
+        case Drafter::ID:
+            return "Drafter"sv;
         case Entity::ID:
             return "Entity"sv;
         case Event::ID:
@@ -180,6 +185,8 @@ namespace yq::mithril {
             return &meta<Directory>();
         case Document::ID:
             return &meta<Document>();
+        case Drafter::ID:
+            return &meta<Drafter>();
         case Entity::ID:
             return &meta<Entity>();
         case Event::ID:
@@ -244,6 +251,8 @@ namespace yq::mithril {
             return Directory::PARENTS;
         case Document::ID:
             return Document::PARENTS;
+        case Drafter::ID:
+            return Drafter::PARENTS;
         case Entity::ID:
             return Entity::PARENTS;
         case Event::ID:
@@ -314,6 +323,8 @@ namespace yq::mithril {
             return cdb::key(Directory(id()));
         case Document::ID:
             return cdb::key(Document(id()));
+        case Drafter::ID:
+            return cdb::key(Drafter(id()));
         case Entity::ID:
             return cdb::key(Entity(id()));
         case Event::ID:
@@ -379,6 +390,8 @@ namespace yq::mithril {
                 return cdb::name(Directory(id()));
             case Document::ID:
                 return cdb::name(Document(id()));
+            case Drafter::ID:
+                return cdb::name(Drafter(id()));
             case Entity::ID:
                 return cdb::name(Entity(id()));
             case Event::ID:
@@ -443,6 +456,8 @@ namespace yq::mithril::cdb {
             return ids<Directory>(all_directories(sorted));
         case Document::ID:
             return ids<Document>(all_documents(sorted));
+        case Drafter::ID:
+            return ids<Drafter>(all_drafters(sorted));
         case Entity::ID:
             return ids<Entity>(all_entities(sorted));
         case Event::ID:
