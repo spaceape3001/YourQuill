@@ -17,7 +17,7 @@ namespace yq::mithril {
     struct Doodle {
         static constexpr const IdTypeId ID          = 10;
         static constexpr const IdTypes  PARENTS     = Document::ID;
-        static constexpr const char*    EXTENSION   = "d3x";
+        static constexpr const char*    EXTENSION   = "d";
         
         struct Info;
         struct Data;
