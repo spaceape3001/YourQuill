@@ -7,6 +7,8 @@
 #pragma once
 
 #include <doodle/Py.hpp>
+#include <0/math/preamble.hpp>
+#include <0/math/unit/declare.hpp>
 
 namespace yq::doodle {
     class Py2Info : public PyInfo {
@@ -25,13 +27,26 @@ namespace yq::doodle {
         YQ_OBJECT_DECLARE(Py2, Py)
     public:
     
+        //! Position interface
+        struct Position {
+            virtual Vector2D    get_position() const = 0;
+            virtual void        set_position(const Vector2D&) = 0;
+        };
+    
+        //! Orientation interface
+        struct Orientation {
+            virtual Radian      get_orientation() const = 0;
+            virtual void        set_orientation(Radian) = 0;
+        };
+    
+    
     protected:
         Py2(Project&);
         Py2(Project&, const Py2&);
         ~Py2();
 
         //! Remap IDs/pointers appropriately
-        virtual void        remap(const Remapper&) = 0;
+        virtual void        remap(const Remapper&);
         
         
     private:

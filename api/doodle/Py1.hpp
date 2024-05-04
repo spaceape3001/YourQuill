@@ -31,7 +31,7 @@ namespace yq::doodle {
         ~Py1();
 
         //! Remap IDs/pointers appropriately
-        virtual void        remap(const Remapper&) = 0;
+        virtual void        remap(const Remapper&);
         
         
     private:

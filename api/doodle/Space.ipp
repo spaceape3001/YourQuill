@@ -11,7 +11,7 @@
 namespace yq::doodle {
     SpaceInfo::SpaceInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
     {
-        set(Flag::SPACE);
+        set(Flag::D2);
     }
 
     ////////////////////////////////////////////////////////////////////////////
