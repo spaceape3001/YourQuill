@@ -13,21 +13,16 @@ namespace yq::doodle {
     {
         set(Flag::CONSTRAINT);
     }
-
-    Constraint* ConstraintInfo::createC(DObject* parent) const
-    {
-        return static_cast<Constraint*>(createD(parent));
-    }
     
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
 
-    Constraint::Constraint(DObject* parent) : DObject(parent)
+    Constraint::Constraint(Project&prj) : DObject(prj)
     {
     }
     
-    Constraint::Constraint(const Constraint&cp) : DObject(cp)
+    Constraint::Constraint(Project& prj, const Constraint& cp) : DObject(prj, cp)
     {
     }
     
@@ -36,12 +31,9 @@ namespace yq::doodle {
     }
 
 
-
-    //! Remap IDs/pointers appropriately
     void        Constraint::remap(const Remapper&rMap)
     {
         DObject::remap(rMap);
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::Constraint)

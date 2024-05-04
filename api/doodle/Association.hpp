@@ -13,8 +13,6 @@ namespace yq::doodle {
     public:
         template <typename T> class Writer;
         AssociationInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Association* createA(DObject* parent=nullptr) const;
     };
     
 
@@ -28,15 +26,15 @@ namespace yq::doodle {
     public:
     
     protected:
-        Association(DObject* parent=nullptr);
-        Association(const Association&);
+        Association(Project&);
+        Association(Project&, const Association&);
         ~Association();
 
         //! Remap IDs/pointers appropriately
-        virtual void        remap(const Remapper&) = 0;
-        
+        virtual void        remap(const Remapper&);
         
     private:
+        Association(const Association&) = delete;
         Association(Association&&) = delete;
         Association& operator=(const Association&) = delete;
         Association& operator=(Association&&) = delete;

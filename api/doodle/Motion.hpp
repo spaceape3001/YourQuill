@@ -13,8 +13,6 @@ namespace yq::doodle {
     public:
         template <typename T> class Writer;
         MotionInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Motion* createM(DObject* parent=nullptr) const;
     };
     
 
@@ -28,8 +26,8 @@ namespace yq::doodle {
     public:
     
     protected:
-        Motion(DObject* parent=nullptr);
-        Motion(const Motion&);
+        Motion(Project&);
+        Motion(Project&, const Motion&);
         ~Motion();
 
         //! Remap IDs/pointers appropriately
@@ -37,6 +35,7 @@ namespace yq::doodle {
         
         
     private:
+        Motion(const Motion&) = delete;
         Motion(Motion&&) = delete;
         Motion& operator=(const Motion&) = delete;
         Motion& operator=(Motion&&) = delete;

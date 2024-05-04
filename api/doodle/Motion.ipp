@@ -14,28 +14,21 @@ namespace yq::doodle {
         set(Flag::MOTION);
     }
 
-    Motion* MotionInfo::createM(DObject* parent) const
-    {
-        return static_cast<Motion*>(createD(parent));
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
 
-    Motion::Motion(DObject* parent) : DObject(parent)
+    Motion::Motion(Project& prj) : DObject(prj)
     {
     }
     
-    Motion::Motion(const Motion&cp) : DObject(cp)
+    Motion::Motion(Project& prj, const Motion& cp) : DObject(prj, cp)
     {
     }
     
     Motion::~Motion()
     {
     }
-
-
 
     //! Remap IDs/pointers appropriately
     void        Motion::remap(const Remapper&rMap)
@@ -44,4 +37,3 @@ namespace yq::doodle {
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::Motion)

@@ -13,8 +13,6 @@ namespace yq::doodle {
     public:
         template <typename T> class Writer;
         LightInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Light* createC(DObject* parent=nullptr) const;
     };
     
 
@@ -28,8 +26,8 @@ namespace yq::doodle {
     public:
     
     protected:
-        Light(DObject* parent=nullptr);
-        Light(const Light&);
+        Light(Project&);
+        Light(Project&, const Light&);
         ~Light();
 
         //! Remap IDs/pointers appropriately
@@ -37,6 +35,7 @@ namespace yq::doodle {
         
         
     private:
+        Light(const Light&) = delete;
         Light(Light&&) = delete;
         Light& operator=(const Light&) = delete;
         Light& operator=(Light&&) = delete;

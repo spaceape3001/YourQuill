@@ -13,8 +13,6 @@ namespace yq::doodle {
     public:
         template <typename T> class Writer;
         CameraInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Camera* createC(DObject* parent=nullptr) const;
     };
     
 
@@ -26,15 +24,16 @@ namespace yq::doodle {
     public:
     
     protected:
-        Camera(DObject* parent=nullptr);
-        Camera(const Camera&);
+        Camera(Project&);
+        Camera(Project&, const Camera&);
         ~Camera();
 
         //! Remap IDs/pointers appropriately
-        virtual void        remap(const Remapper&) = 0;
+        virtual void        remap(const Remapper&);
         
         
     private:
+        Camera(const Camera&) = delete;
         Camera(Camera&&) = delete;
         Camera& operator=(const Camera&) = delete;
         Camera& operator=(Camera&&) = delete;

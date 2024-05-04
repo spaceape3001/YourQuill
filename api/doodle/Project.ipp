@@ -6,47 +6,47 @@
 
 #pragma once
 
-#include "Project.hpp"
+#include <doodle/Project.hpp>
 
 namespace yq::doodle {
-    ProjectInfo::ProjectInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
+    Project::Project() : m_revision{0ULL}
     {
-        set(Flag::PROJECT);
-    }
-
-    Project* ProjectInfo::createP(DObject* parent) const
-    {
-        return static_cast<Project*>(createD(parent));
+        m_objects.push_back(nullptr);
     }
     
-    ////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////
-
-
-    Project::Project(DObject* parent) : DObject(parent)
-    {
-    }
-    
-    Project::Project(const Project&cp) : DObject(cp)
-    {
-    }
     
     Project::~Project()
     {
     }
 
-
-
-    //! Remap IDs/pointers appropriately
-    void        Project::remap(const Remapper&rMap)
+    D    Project::_insert(DObject*obj)
     {
-        DObject::remap(rMap);
+        D    n   = {(id_t) m_objects.size()};
+        m_objects.push_back(obj);
+        return n;
+    }
+
+    DObject*            Project::object(D i)
+    {
+        if((size_t) i.id >= m_objects.size())
+            return nullptr;
+        return m_objects[i.id];
     }
     
-    static void reg_project()
+    const DObject*      Project::object(D  i) const
     {
-        auto w = writer<Project>();
+        if((size_t) i.id >= m_objects.size())
+            return nullptr;
+        return m_objects[i.id];
+    }
+
+    uint64_t            Project::revision() const
+    {
+        return m_revision;
+    }
+    
+    void                Project::bump()
+    {
+        ++m_revision;
     }
 }
-
-YQ_OBJECT_IMPLEMENT(yq::doodle::Project)

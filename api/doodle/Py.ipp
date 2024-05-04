@@ -14,27 +14,20 @@ namespace yq::doodle {
         set(Flag::PHYSICAL);
     }
 
-    Py* PyInfo::createP(DObject* parent) const
-    {
-        return static_cast<Py*>(createD(parent));
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+    Py::Py(Project& prj) : DObject(prj)
+    {
+    }
+    
+    Py::Py(Project& prj, const Py&cp) : DObject(prj, cp)
+    {
+    }
 
-    Py::Py(DObject* parent) : DObject(parent)
-    {
-    }
-    
-    Py::Py(const Py&cp) : DObject(cp)
-    {
-    }
-    
     Py::~Py()
     {
     }
-
 
     //! Remap IDs/pointers appropriately
     void        Py::remap(const Remapper&rMap)
@@ -43,4 +36,3 @@ namespace yq::doodle {
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::Py)

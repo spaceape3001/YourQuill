@@ -13,8 +13,6 @@ namespace yq::doodle {
     public:
         template <typename T> class Writer;
         ConstraintInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Constraint* createC(DObject* parent=nullptr) const;
     };
     
 
@@ -28,8 +26,8 @@ namespace yq::doodle {
     public:
     
     protected:
-        Constraint(DObject* parent=nullptr);
-        Constraint(const Constraint&);
+        Constraint(Project&);
+        Constraint(Project&, const Constraint&);
         ~Constraint();
 
         //! Remap IDs/pointers appropriately
@@ -38,6 +36,7 @@ namespace yq::doodle {
         
     private:
         Constraint(Constraint&&) = delete;
+        Constraint(const Constraint&) = delete;
         Constraint& operator=(const Constraint&) = delete;
         Constraint& operator=(Constraint&&) = delete;
     };

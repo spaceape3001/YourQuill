@@ -14,27 +14,20 @@ namespace yq::doodle {
         set(Flag::SPACE);
     }
 
-    Space* SpaceInfo::createS(DObject* parent) const
-    {
-        return static_cast<Space*>(createD(parent));
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+    Space::Space(Project&prj) : DObject(prj)
+    {
+    }
+    
+    Space::Space(Project&prj, const Space&cp) : DObject(prj, cp)
+    {
+    }
 
-    Space::Space(DObject* parent) : DObject(parent)
-    {
-    }
-    
-    Space::Space(const Space&cp) : DObject(cp)
-    {
-    }
-    
     Space::~Space()
     {
     }
-
 
 
     //! Remap IDs/pointers appropriately
@@ -44,4 +37,3 @@ namespace yq::doodle {
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::Space)

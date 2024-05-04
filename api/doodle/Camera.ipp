@@ -14,20 +14,14 @@ namespace yq::doodle {
         set(Flag::CAMERA);
     }
 
-    Camera* CameraInfo::createC(DObject* parent) const
-    {
-        return static_cast<Camera*>(createD(parent));
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
-
-    Camera::Camera(DObject* parent) : DObject(parent)
+    Camera::Camera(Project&prj) : DObject(prj)
     {
     }
     
-    Camera::Camera(const Camera&cp) : DObject(cp)
+    Camera::Camera(Project& prj, const Camera&cp) : DObject(prj, cp)
     {
     }
     
@@ -35,13 +29,9 @@ namespace yq::doodle {
     {
     }
 
-
-
-    //! Remap IDs/pointers appropriately
     void        Camera::remap(const Remapper&rMap)
     {
         DObject::remap(rMap);
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::Camera)

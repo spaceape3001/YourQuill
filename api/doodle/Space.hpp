@@ -13,8 +13,6 @@ namespace yq::doodle {
     public:
         template <typename T> class Writer;
         SpaceInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Space* createS(DObject* parent=nullptr) const;
     };
     
 
@@ -28,8 +26,8 @@ namespace yq::doodle {
     public:
     
     protected:
-        Space(DObject* parent=nullptr);
-        Space(const Space&);
+        Space(Project&);
+        Space(Project&, const Space&);
         ~Space();
 
         //! Remap IDs/pointers appropriately
@@ -37,6 +35,7 @@ namespace yq::doodle {
         
         
     private:
+        Space(const Space&) = delete;
         Space(Space&&) = delete;
         Space& operator=(const Space&) = delete;
         Space& operator=(Space&&) = delete;

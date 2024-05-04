@@ -14,28 +14,20 @@ namespace yq::doodle {
         set(Flag::ASSOCIATION);
     }
 
-    Association* AssociationInfo::createA(DObject* parent) const
-    {
-        return static_cast<Association*>(createD(parent));
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+    Association::Association(Project& prj) : DObject(prj)
+    {
+    }
+    
+    Association::Association(Project& prj, const Association& assn) : DObject(prj, assn)
+    {
+    }
 
-    Association::Association(DObject* parent) : DObject(parent)
-    {
-    }
-    
-    Association::Association(const Association&cp) : DObject(cp)
-    {
-    }
-    
     Association::~Association()
     {
     }
-
-
 
     //! Remap IDs/pointers appropriately
     void        Association::remap(const Remapper&rMap)
@@ -44,4 +36,3 @@ namespace yq::doodle {
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::Association)

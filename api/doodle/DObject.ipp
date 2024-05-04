@@ -6,12 +6,13 @@
 
 #pragma once
 
-#include "DObject.hpp"
+#include <doodle/DObject.hpp>
+#include <doodle/Project.hpp>
 
 namespace yq::doodle {
 
-    DObjectInfo::DObjectInfo(std::string_view zName, const MetaObjectInfo& base, const std::source_location& sl) : 
-        MetaObjectInfo(zName, base, sl)
+    DObjectInfo::DObjectInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) : 
+        ObjectInfo(zName, base, sl)
     {
         set(Flag::DOODLE);
     }
@@ -90,63 +91,95 @@ namespace yq::doodle {
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
-    DObject::DObject(DObject* parent) : m_parent(parent)
+    DObject::DObject(Project&prj) : m_project(prj), m_id(prj._insert(this))
     {
     }
     
-    DObject::DObject(const DObject&cp) 
+    
+    DObject::DObject(Project&prj, const DObject&cp) : DObject(prj)
     {
-        // nothing to copy
+        m_parent    = cp.m_parent;
+        m_children  = cp.m_children;
+        m_title     = cp.m_title;
+        m_notes     = cp.m_notes;
     }
 
     DObject::~DObject()
     {
         m_children.clear();
-        m_parent    = nullptr;
+        m_parent    = {};
     }
 
-    Ref<DObject> DObject::_clone(Remapper& rmap) const
+    void    DObject::bump()
     {
-        Ref<DObject>    ret = metaInfo().createCopyD(*this);
-        rmap[id()]  = ret->id();
-        for(const DObject* ch : m_children){
-            Ref<DObject>    rch = ch -> _clone(rmap);
-            assert(rch);
-            if(rch){
-                rch -> m_parent = ret.ptr();
-                ret->m_children.push_back(rch);
-            }
-        }
-        return ret;
+        m_project.bump();
     }
 
-    Ref<DObject>    DObject::clone() const
+    DObject*   DObject::create_child(const DObjectInfo& info)
     {
-        Remapper        remap;
-        Ref<DObject>    ret = _clone(remap);
-        ret -> remap(remap);
-        return ret;
+        DObject*  newD    = info.createD(m_project);
+        if(!newD)
+            return nullptr;
+        m_children.push_back(newD->id());
+        return newD;
     }
+
+    //Ref<DObject> DObject::_clone(Remapper& rmap) const
+    //{
+        //Ref<DObject>    ret = metaInfo().createCopyD(*this);
+        //rmap[id()]  = ret->id();
+        //for(const DObject* ch : m_children){
+            //Ref<DObject>    rch = ch -> _clone(rmap);
+            //assert(rch);
+            //if(rch){
+                //rch -> m_parent = ret.ptr();
+                //ret->m_children.push_back(rch);
+            //}
+        //}
+        //return ret;
+    //}
+
+    //Ref<DObject>    DObject::clone() const
+    //{
+        //Remapper        remap;
+        //Ref<DObject>    ret = _clone(remap);
+        //ret -> remap(remap);
+        //return ret;
+    //}
 
     void        DObject::remap(const Remapper& theMap)
     {
-        for(auto& dobj : m_children){
-            assert(dobj && "NULL pointer in child vector detected!");
-            dobj -> remap(theMap);
+        m_parent    = theMap(m_parent);
+        
+        for(D& i : m_children){
+            i   = theMap(i);
+            DObject*    dob = m_project.object(i);
+            if(dob)
+                dob -> remap(theMap);
         }
     }
     
     void    DObject::set_notes(const std::string&v)
     {
         m_notes = v;
-        changed();
+        bump();
     }
 
-    static void    reg_dobject()
+    void    DObject::set_title(const std::string&v)
     {
-        auto w = writer<DObject>();
-        w.property<std::string>("notes", &DObject::notes).setter(&DObject::set_notes);
+        m_title = v;
+        bump();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+    D Remapper::operator()(D i) const
+    {
+        auto j = data.find(i.id);
+        if(j != data.end())
+            return { j->second };
+        return i;
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::DObject)

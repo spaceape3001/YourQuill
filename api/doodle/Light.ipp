@@ -13,21 +13,16 @@ namespace yq::doodle {
     {
         set(Flag::LIGHT);
     }
-
-    Light* LightInfo::createC(DObject* parent) const
-    {
-        return static_cast<Light*>(createD(parent));
-    }
     
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
 
-    Light::Light(DObject* parent) : DObject(parent)
+    Light::Light(Project& prj) : DObject(prj)
     {
     }
     
-    Light::Light(const Light&cp) : DObject(cp)
+    Light::Light(Project& prj, const Light& cp) : DObject(prj, cp)
     {
     }
     
@@ -44,4 +39,3 @@ namespace yq::doodle {
     }
 }
 
-YQ_OBJECT_IMPLEMENT(yq::doodle::Light)

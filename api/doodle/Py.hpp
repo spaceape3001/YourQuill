@@ -13,8 +13,6 @@ namespace yq::doodle {
     public:
         template <typename T> class Writer;
         PyInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Py* createP(DObject* parent=nullptr) const;
     };
     
 
@@ -28,8 +26,8 @@ namespace yq::doodle {
     public:
     
     protected:
-        Py(DObject* parent=nullptr);
-        Py(const Py&);
+        Py(Project&);
+        Py(Project&, const Py&);
         ~Py();
 
         //! Remap IDs/pointers appropriately
@@ -37,6 +35,7 @@ namespace yq::doodle {
         
         
     private:
+        Py(const Py&) = delete;
         Py(Py&&) = delete;
         Py& operator=(const Py&) = delete;
         Py& operator=(Py&&) = delete;

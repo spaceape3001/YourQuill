@@ -6,56 +6,44 @@
 
 #pragma once
 
-#include <doodle/DObject.hpp>
+#include <doodle/preamble.hpp>
+#include <0/basic/Ref.hpp>
+#include <functional>
 
 namespace yq::doodle {
-    class ProjectInfo : public DObjectInfo {
-    public:
-        template <typename T> class Writer;
-        ProjectInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
-    
-        Project* createP(DObject* parent=nullptr) const;
-    };
     
 
     /*! \brief A camera
     */
-    class Project : public DObject {
-        YQ_OBJECT_INFO(ProjectInfo)
-        YQ_OBJECT_DECLARE(Project, DObject)
+    class Project : public RefCount  {
     public:
+
+        Project();
+        ~Project();
     
         const std::string&  title() const { return m_title; }
         void                set_title(const std::string&);
-    
-    protected:
-        Project(DObject* parent=nullptr);
-        Project(const Project&);
-        ~Project();
-
-        //! Remap IDs/pointers appropriately
-        virtual void        remap(const Remapper&) = 0;
         
+        uint64_t            revision() const;
+        void                bump();
+        
+        DObject*            object(D);
+        const DObject*      object(D) const;
+        
+        class Xml;
         
     private:
+        friend class DObject;
+        
         Project(Project&&) = delete;
+        Project(const Project&) = delete;
         Project& operator=(const Project&) = delete;
         Project& operator=(Project&&) = delete;
 
-        std::string                             m_title;
-        std::unordered_map<uint64_t, DObject*>  m_objects;
-    };
-
-    template <typename T>
-    class ProjectInfo::Writer : public DObjectInfo::Writer<T> {
-    public:
-        Writer(ProjectInfo* pInfo) : DObjectInfo::Writer<T>(pInfo)
-        {
-        }
+        std::string                 m_title;
+        std::vector<DObject*>       m_objects;
+        std::atomic<uint64_t>       m_revision;
         
-        Writer(ProjectInfo& pInfo) : Writer(&pInfo)
-        {
-        }
+        D       _insert(DObject*);
     };
-
 }
