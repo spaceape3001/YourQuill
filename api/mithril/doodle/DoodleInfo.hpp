@@ -12,9 +12,9 @@
 
 namespace yq::mithril {
     struct Doodle::Info {
-        Doodle          doodle;       
-        Document        doc;
-        std::string     key;
+        //Doodle          doodle;       
+        //Document        doc;
+        //std::string     key;
         //std::string     brief;
         std::string     name;
         Image           icon;

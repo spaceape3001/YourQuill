@@ -212,7 +212,7 @@ namespace yq::mithril::cdb {
     
     std::string             key(Image i)
     {
-        return to_string(i.id);
+        return key(document(i));
     }
 
     ContentType         mime_type(Image i)

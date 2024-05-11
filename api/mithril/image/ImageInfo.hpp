@@ -10,7 +10,7 @@
 
 namespace yq::mithril {
     struct Image::Info {
-        Document        doc;
+        //Document        doc;
         Size2U          dim;
         ContentType     type;
     };

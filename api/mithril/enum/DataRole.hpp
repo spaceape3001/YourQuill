@@ -34,7 +34,9 @@ namespace yq {
             Users,
             
             //! Images
-            Image
+            Image,
+            
+            Doodles
         )
 
     }
