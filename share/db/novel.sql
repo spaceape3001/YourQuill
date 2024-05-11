@@ -1,6 +1,6 @@
 
 CREATE TABLE Novels (
-                -- This ID will be the corresponding document ID
+        -- This ID will be the corresponding fragment ID
 	id			INTEGER PRIMARY KEY,
 	k			VARCHAR(255) NOT NULL UNIQUE COLLATE NOCASE,
 	icon        INTEGER,

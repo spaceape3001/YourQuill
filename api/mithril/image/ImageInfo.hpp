@@ -5,8 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <mithril/id/Id.hpp>
 
-namespace yq::mithril::provider {
-    IdProvider  all_novels();
+#include <mithril/image/Image.hpp>
+
+namespace yq::mithril {
+    struct Image::Info {
+        Document        doc;
+        Size2U          dim;
+        ContentType     type;
+    };
 }
+
