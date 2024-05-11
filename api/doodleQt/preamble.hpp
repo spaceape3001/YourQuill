@@ -7,5 +7,5 @@
 #pragma once
 
 namespace yq::doodle {
-    
+    class QProject;
 }

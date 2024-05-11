@@ -41,6 +41,7 @@
 #include "image.ipp"
 #include "leaf.ipp"
 #include "meta.ipp"
+#include "novel.ipp"
 #include "organization.ipp"
 
 #include "place.ipp"

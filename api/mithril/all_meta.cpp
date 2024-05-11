@@ -47,6 +47,7 @@
 #include "image/ImageMeta.ipp"
 #include "leaf/LeafMeta.ipp"
 #include "meta/MetaMeta.ipp"
+#include "novel/NovelMeta.ipp"
 #include "organization/OrganizationMeta.ipp"
 #include "place/PlaceMeta.ipp"
 #include "root/RootMeta.ipp"
@@ -143,6 +144,9 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Leaf)
 YQ_TYPE_IMPLEMENT(yq::mithril::LeafSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::LeafVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Meta)
+YQ_TYPE_IMPLEMENT(yq::mithril::Novel)
+YQ_TYPE_IMPLEMENT(yq::mithril::NovelSet)
+YQ_TYPE_IMPLEMENT(yq::mithril::NovelVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Organization)
 YQ_TYPE_IMPLEMENT(yq::mithril::OrganizationSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::OrganizationVector)
@@ -202,6 +206,7 @@ namespace {
         reg_image_meta();
         reg_leaf_meta();
         reg_meta_meta();
+        reg_novel_meta();
         reg_organization_meta();
         reg_place_meta();
         reg_root_meta();

@@ -58,6 +58,9 @@
 #include "meta/MetaObjectArg.ipp"
 #include "meta/MetaTypeArg.ipp"
 
+#include "novel/NovelArg.ipp"
+#include "novel/NovelPost.ipp"
+
 //#include "place/PlaceArg.ipp"
 //#include "place/PlacePost.ipp"
 

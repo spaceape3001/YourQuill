@@ -20,6 +20,7 @@
 #include "fragment/FragmentProvider.ipp"
 #include "game/GameProvider.ipp"
 #include "leaf/LeafProvider.ipp"
+#include "novel/NovelProvider.ipp"
 #include "place/PlaceProvider.ipp"
 #include "root/RootProvider.ipp"
 #include "style/StyleProvider.ipp"

@@ -15,7 +15,7 @@ namespace yq::mithril {
         Style is the physical/graphical/textual presentation on the screen.  
     */ 
     struct Style {
-        static constexpr const IdTypeId ID          = 25;
+        static constexpr const IdTypeId ID          = 26;
         static constexpr const IdTypes  PARENTS     = Document::ID;
         static constexpr const char*    EXTENSION   = "sty";
         struct Info;

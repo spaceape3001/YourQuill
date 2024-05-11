@@ -25,6 +25,7 @@
 #include "image/ImageHtml.ipp"
 #include "leaf/LeafHtml.ipp"
 #include "meta/MetaHtml.ipp"
+#include "novel/NovelHtml.ipp"
 #include "place/PlaceHtml.ipp"
 #include "root/RootHtml.ipp"
 #include "style/StyleHtml.ipp"

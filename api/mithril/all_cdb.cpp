@@ -28,6 +28,7 @@
 #include "image/ImageCDB.ipp"
 #include "leaf/LeafCDB.ipp"
 #include "meta/MetaCDB.ipp"
+#include "novel/NovelCDB.ipp"
 #include "organization/OrganizationCDB.ipp"
 #include "place/PlaceCDB.ipp"
 #include "root/RootCDB.ipp"

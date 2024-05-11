@@ -26,6 +26,11 @@ namespace yq::doodle {
         return n;
     }
 
+    void                Project::bump()
+    {
+        ++m_revision;
+    }
+
     DObject*            Project::object(D i)
     {
         if((size_t) i.id >= m_objects.size())
@@ -45,8 +50,10 @@ namespace yq::doodle {
         return m_revision;
     }
     
-    void                Project::bump()
+    void                Project::set_title(const std::string&v)
     {
-        ++m_revision;
+        m_title = v;
+        bump();
     }
+
 }

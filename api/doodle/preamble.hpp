@@ -7,11 +7,13 @@
 #pragma once
 
 #include <0/basic/preamble.hpp>
+#include <0/meta/InfoBinder.hpp>
 #include <unordered_map>
 
 namespace yq {
     class TypeInfo;
 }
+
 
 namespace yq::doodle {
 

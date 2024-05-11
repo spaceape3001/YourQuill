@@ -12,7 +12,7 @@ namespace yq::mithril {
     /*! User in the cache database
     */
     struct User {
-        static constexpr const IdTypeId ID          = 28;
+        static constexpr const IdTypeId ID          = 29;
         static constexpr const IdTypes  PARENTS     = Document::ID;
 
         static constexpr const char*    EXTENSION = "user";

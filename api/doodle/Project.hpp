@@ -7,17 +7,15 @@
 #pragma once
 
 #include <doodle/preamble.hpp>
-#include <0/basic/Ref.hpp>
-#include <functional>
+//#include <functional>
 
 namespace yq::doodle {
     
 
     /*! \brief A camera
     */
-    class Project : public RefCount  {
+    class Project {
     public:
-
         Project();
         ~Project();
     
@@ -47,3 +45,4 @@ namespace yq::doodle {
         D       _insert(DObject*);
     };
 }
+

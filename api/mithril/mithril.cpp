@@ -49,6 +49,10 @@
 #include "leaf/LeafDiff.hpp"    // syntax check
 #include "leaf/LeafFile.ipp"
 
+#include "novel/NovelData.ipp"
+#include "novel/NovelDiff.hpp"    // syntax check
+#include "novel/NovelFile.ipp"
+
 #include "quill/QuillData.ipp"
 #include "quill/QuillFile.ipp"
 

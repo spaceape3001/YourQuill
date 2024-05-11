@@ -13,12 +13,19 @@ set(CMAKE_AUTORCC ON)
 
 add_library(${PROJECT_NAME} SHARED
     doodleQt.cpp
+    QProject.cpp
+    QProject.hpp
 )
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         yqtoolbox
         doodle
+        gluon
+        
+        Qt6::Core 
+        Qt6::Gui 
+        Qt6::Widgets
 )
 
 target_include_directories(${PROJECT_NAME}

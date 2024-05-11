@@ -54,6 +54,7 @@ namespace yq::mithril {
     struct Image;
     struct Leaf;
     struct Meta;
+    struct Novel;
     struct Organization;
     struct Place;
     struct Property;
@@ -175,6 +176,10 @@ namespace yq::mithril {
     using LeafSet               = std::set<Leaf>;
     using LeafVector            = std::vector<Leaf>;
     
+    using NovelCSpan            = std::span<const Novel>;
+    using NovelSet              = std::set<Novel>;
+    using NovelVector           = std::vector<Novel>;
+
     using OrganizationCSpan     = std::span<const Organization>;
     using OrganizationSet       = std::set<Organization>;
     using OrganizationVector    = std::vector<Organization>;

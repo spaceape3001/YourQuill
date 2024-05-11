@@ -18,6 +18,7 @@
 #include <mithril/image.hpp>
 #include <mithril/leaf.hpp>
 #include <mithril/meta.hpp>
+#include <mithril/novel.hpp>
 #include <mithril/root.hpp>
 #include <mithril/style.hpp>
 #include <mithril/tag.hpp>
@@ -67,7 +68,6 @@ using namespace yq::mithril::arg;
 using namespace yq::mithril::cdb;
 using namespace yq::mithril::html;
 
-
 #include "p/atom.ipp"
 #include "p/attribute.ipp"
 #include "p/category.ipp"
@@ -84,6 +84,7 @@ using namespace yq::mithril::html;
 #include "p/leaf.ipp"
 #include "p/meta.ipp"
 #include "p/misc.ipp"
+#include "p/novel.ipp"
 #include "p/quill.ipp"
 #include "p/root.ipp"
 #include "p/server.ipp"
@@ -152,6 +153,7 @@ namespace {
         reg_leaf_pages();
         reg_meta_pages();
         reg_misc_pages();
+        reg_novel_pages();
         reg_quill_pages();
         reg_root_pages();
         reg_server_pages();

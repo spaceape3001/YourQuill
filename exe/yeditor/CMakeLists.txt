@@ -65,6 +65,7 @@ add_executable(${PROJECT_NAME}
     wksp/game.cpp
     wksp/group.cpp
     wksp/leaf.cpp
+    wksp/novel.cpp
     wksp/organization.cpp
     wksp/place.cpp
     wksp/root.cpp

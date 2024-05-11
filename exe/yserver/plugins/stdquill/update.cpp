@@ -77,6 +77,8 @@ namespace {
 #include <mithril/notify/Stage2.hpp>
 #include <mithril/notify/Stage3.hpp>
 #include <mithril/notify/Stage4.hpp>
+#include <mithril/novel/NovelCDB.hpp>
+#include <mithril/novel/NovelData.hpp>
 #include <mithril/tag/Tag.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/tag/TagData.hpp>
@@ -207,6 +209,7 @@ namespace {
 #include "u/field.ipp"
 #include "u/image.ipp"
 #include "u/leaf.ipp"
+#include "u/novel.ipp"
 #include "u/style.ipp"
 #include "u/tag.ipp"
 #include "u/user.ipp"
@@ -223,6 +226,7 @@ namespace {
             const FileSpec   fsClass(CACHE, cdb::classes_folder(), "*.cls");
             const FileSpec   fsField(CACHE, cdb::fields_folder(), "*.fld");
             const FileSpec   fsLeaf(CACHE, "*.y");
+            const FileSpec   fsNovel(CACHE, "*.nw");
             const FileSpec   fsStyle(CACHE, cdb::styles_folder(), "*.sty");
             const FileSpec   fsTag(CACHE, cdb::tags_folder(), "*.tag");
             const FileSpec   fsUser(CACHE, cdb::users_folder(), "*.usr");
@@ -260,6 +264,8 @@ namespace {
             on_stage3<s3_leaf>(fsLeaf);
             on_stage3<s3_tag_leaf>(fsTag);
             on_stage3<s3_doodle>(fsDoodle);
+
+            on_stage3<s3_novel>(fsNovel);
         
                 //  STAGE 4 global related
 
@@ -291,6 +297,7 @@ namespace {
             on_change<s5_doodle>(fsDoodle);
             on_change<s5_field>(fsField);
             on_change<s5_leaf>(fsLeaf);
+            on_change<s5_novel>(fsNovel);
             on_change<s5_style>(fsStyle);
             on_change<s5_tag>(fsTag);
             on_change<s5_user>(fsUser);
@@ -300,6 +307,7 @@ namespace {
                 on_change<s5_class_icons>(FileSpec(CACHE, classes_folder(), z));
                 on_change<s5_field_icons>(FileSpec(CACHE, fields_folder(), z));
                 on_change<s5_leaf_icons>(FileSpec(CACHE, z));
+                on_change<s5_novel_icons>(FileSpec(CACHE, z));
                 on_change<s5_style_icons>(FileSpec(CACHE, styles_folder(), z));
                 on_change<s5_tag_icons>(FileSpec(CACHE, tags_folder(), z));
                 on_change<s5_user_icons>(FileSpec(CACHE, users_folder(), z));
