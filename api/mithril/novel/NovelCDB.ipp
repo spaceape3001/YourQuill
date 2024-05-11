@@ -16,7 +16,7 @@
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
-#include <mithril/novel/NovelFile.hpp>
+//#include <mithril/novel/NovelFile.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
@@ -209,6 +209,8 @@ namespace yq::mithril::cdb {
         return s.as<Novel>(k);
     }
     
+#if 0
+    
     Novel::SharedFile         novel_doc(Fragment f, cdb_options_t opts)
     {
         if(!f)
@@ -282,7 +284,8 @@ namespace yq::mithril::cdb {
         return ret;
         #endif
     }
-    
+#endif
+
     std::string             name(Novel l)
     {
         return title(l);
@@ -305,6 +308,7 @@ namespace yq::mithril::cdb {
         return NKI{};
     }
 
+#if 0
     Novel::SharedFile         read(Novel l, const RootDir* rt, cdb_options_t opts)
     {
         return novel_doc(fragment(document(l), rt), opts);
@@ -331,6 +335,7 @@ namespace yq::mithril::cdb {
         }
         return ret;
     }
+#endif
 
     bool                        tagged(Novel l, Tag t)
     {
@@ -357,7 +362,7 @@ namespace yq::mithril::cdb {
     }
 
 
-
+#if 0
     Novel::SharedFile         write(Novel l, const RootDir* rt, cdb_options_t opts)
     {
         yWarning() << "NOVEL LOADING is not yet supported.";
@@ -390,5 +395,5 @@ namespace yq::mithril::cdb {
         return ptr;
         #endif
     }
-
+#endif
 }

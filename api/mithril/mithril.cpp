@@ -26,8 +26,8 @@
 #include "class/ClassDiff.hpp"          // syntax check
 #include "class/ClassFile.ipp"
 
-#include "doodle/DoodleData.ipp"
-#include "doodle/DoodleFile.ipp"
+//#include "doodle/DoodleData.ipp"
+//#include "doodle/DoodleFile.ipp"
 
 #include "field/FieldData.ipp"
 #include "field/FieldDiff.hpp"      // syntax check
@@ -49,9 +49,9 @@
 #include "leaf/LeafDiff.hpp"    // syntax check
 #include "leaf/LeafFile.ipp"
 
-#include "novel/NovelData.ipp"
-#include "novel/NovelDiff.hpp"    // syntax check
-#include "novel/NovelFile.ipp"
+//#include "novel/NovelData.ipp"
+//#include "novel/NovelDiff.hpp"    // syntax check
+//#include "novel/NovelFile.ipp"
 
 #include "quill/QuillData.ipp"
 #include "quill/QuillFile.ipp"

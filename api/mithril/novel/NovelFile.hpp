@@ -6,6 +6,8 @@
 
 #pragma once
 
+#error "Do NOT include (for now)"
+
 #include <mithril/io/StdFile.hpp>
 #include <mithril/novel/NovelData.hpp>
 

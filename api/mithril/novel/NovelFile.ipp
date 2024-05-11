@@ -6,6 +6,8 @@
 
 #pragma once
 
+#error "Do NOT include (for now)"
+
 #include "NovelFile.hpp"
 #include <0/io/StreamOps.hpp>
 

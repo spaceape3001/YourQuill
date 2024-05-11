@@ -12,10 +12,10 @@
 
 namespace yq::mithril {
     struct Doodle::Info {
-        Doodle           doodle;       
+        Doodle          doodle;       
         Document        doc;
         std::string     key;
-        std::string     brief;
+        //std::string     brief;
         std::string     name;
         Image           icon;
         bool operator==(const Info&) const = default;

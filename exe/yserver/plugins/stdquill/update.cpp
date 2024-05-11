@@ -78,7 +78,7 @@ namespace {
 #include <mithril/notify/Stage3.hpp>
 #include <mithril/notify/Stage4.hpp>
 #include <mithril/novel/NovelCDB.hpp>
-#include <mithril/novel/NovelData.hpp>
+//#include <mithril/novel/NovelData.hpp>
 #include <mithril/tag/Tag.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/tag/TagData.hpp>

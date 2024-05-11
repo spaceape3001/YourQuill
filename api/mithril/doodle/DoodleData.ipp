@@ -6,6 +6,8 @@
 
 #pragma once
 
+#error "Do NOT include (for now)"
+
 #include "DoodleData.hpp"
 #include <0/basic/CollectionUtils.hpp>
 #include <0/basic/TextUtils.hpp>

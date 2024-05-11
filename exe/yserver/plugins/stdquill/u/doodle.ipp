@@ -8,16 +8,17 @@
 
 #include <mithril/doodle/Doodle.hpp>
 #include <mithril/doodle/DoodleCDB.hpp>
-#include <mithril/doodle/DoodleDiff.hpp>
+//#include <mithril/doodle/DoodleDiff.hpp>
 #include <mithril/doodle/DoodleInfo.hpp>
-#include <mithril/doodle/DoodleData.hpp>
+//#include <mithril/doodle/DoodleData.hpp>
 
 namespace {
     void    u_doodle(Doodle t, Change chg)
     {
         if(!t)
             return ;
-            
+        
+        #if 0
         Doodle::Diff   x { 
             .x = t, 
             .id = t.id,
@@ -68,6 +69,8 @@ namespace {
             for(auto& sq : xDoodleStmts)
                 sq.exec(t.id);
         }
+        
+        #endif
     }
 
     void    s3_doodle(Document doc)

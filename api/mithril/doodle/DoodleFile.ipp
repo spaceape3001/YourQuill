@@ -7,6 +7,8 @@
 
 #pragma once
 
+#error "Do NOT include (for now)"
+
 #include "DoodleFile.hpp"
 #include <mithril/bit/KeyValue.hpp>
 #include <0/basic/ErrorDB.hpp>

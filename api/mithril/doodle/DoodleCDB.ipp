@@ -16,7 +16,7 @@
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
-#include <mithril/doodle/DoodleFile.hpp>
+//#include <mithril/doodle/DoodleFile.hpp>
 #include <mithril/doodle/DoodleInfo.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
@@ -139,7 +139,7 @@ namespace yq::mithril::cdb {
     Doodle::Info          info(Doodle l, bool autoKey)
     {
         Doodle::Info    ret;
-        static thread_local CacheQuery s("SELECT k, name, icon, brief FROM " TBL_DOODLES " WHERE id=?");
+        static thread_local CacheQuery s("SELECT k, name, icon FROM " TBL_DOODLES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, l.id);
         if(s.step() == SQResult::Row){
@@ -149,7 +149,7 @@ namespace yq::mithril::cdb {
             if(autoKey && ret.name.empty())
                 ret.name   = ret.key;
             ret.icon    = { s.v_uint64(3) };
-            ret.brief   = s.v_string(4);
+            //ret.brief   = s.v_string(4);
         }
         return ret;
     }
@@ -212,6 +212,7 @@ namespace yq::mithril::cdb {
         //return t;
     //}
 
+#if 0
     
     Doodle::SharedData         merged(Doodle l, cdb_options_t opts)
     {
@@ -235,6 +236,7 @@ namespace yq::mithril::cdb {
         }
         return ret;
     }
+#endif
     
     std::string             name(Doodle l)
     {
@@ -259,6 +261,7 @@ namespace yq::mithril::cdb {
         return NKI{};
     }
 
+#if 0
     Doodle::SharedFile         read(Doodle l, const RootDir* rt, cdb_options_t opts)
     {
         return doodle_doc(fragment(document(l), rt), opts);
@@ -285,7 +288,7 @@ namespace yq::mithril::cdb {
         }
         return ret;
     }
-
+#endif
 
 
     
@@ -296,6 +299,7 @@ namespace yq::mithril::cdb {
     }
     #endif
     
+    #if 0
     Doodle::SharedFile         doodle_doc(Fragment f, cdb_options_t opts)
     {
         if(!f)
@@ -334,8 +338,9 @@ namespace yq::mithril::cdb {
             //ctx.root_dir    = rt;
         return td;
     }
+    #endif
 
-
+#if 0
     Doodle::SharedFile         write(Doodle l, const RootDir* rt, cdb_options_t opts)
     {
         if(!l)
@@ -362,5 +367,5 @@ namespace yq::mithril::cdb {
         ptr -> reload();
         return ptr;
     }
-
+#endif
 }

@@ -15,13 +15,13 @@ namespace yq::mithril {
         static constexpr const char*    EXTENSION   = "nw";
         struct Info;
         //struct KV;
-        struct Data;
-        struct Diff;
-        struct File;
-        using SharedData = std::shared_ptr<Data>;
-        using SharedFile = std::shared_ptr<File>;
+        //struct Data;
+        //struct Diff;
+        //struct File;
+        //using SharedData = std::shared_ptr<Data>;
+        //using SharedFile = std::shared_ptr<File>;
         
-        using Notify = Notifier<const Diff&>;
+        //using Notify = Notifier<const Diff&>;
         
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Novel&rhs) const noexcept = default;

@@ -6,6 +6,8 @@
 
 #pragma once
 
+#error "Do NOT include (for now)"
+
 #include <mithril/novel/Novel.hpp>
 #include <mithril/bit/Context.hpp>
 #include <mithril/bit/KeyValue.hpp>

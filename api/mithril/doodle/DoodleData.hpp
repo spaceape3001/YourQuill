@@ -6,6 +6,8 @@
 
 #pragma once
 
+#error "Do NOT include (for now)"
+
 #include <mithril/doodle/Doodle.hpp>
 #include <mithril/bit/Context.hpp>
 #include <mithril/bit/KeyValue.hpp>

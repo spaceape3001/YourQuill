@@ -6,6 +6,8 @@
 
 #pragma once
 
+#error "Do NOT include (for now)"
+
 #include <mithril/enum/Change.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/novel/Novel.hpp>

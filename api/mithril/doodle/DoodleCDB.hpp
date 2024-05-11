@@ -17,7 +17,7 @@
 
 namespace yq::mithril::cdb {
 
-    using DoodleFragDoc = std::pair<Fragment,Doodle::SharedFile>;
+    //using DoodleFragDoc = std::pair<Fragment,Doodle::SharedFile>;
 
 
     /*! \brief All doodles
@@ -71,7 +71,7 @@ namespace yq::mithril::cdb {
      *  
      *  This FUSES all fragments together for a single, cohesive view of the doodle.
     */
-    Doodle::SharedData            merged(Doodle, cdb_options_t opts=0);
+    //Doodle::SharedData            merged(Doodle, cdb_options_t opts=0);
     
     //! Title for the doodle
     std::string                 name(Doodle);
@@ -86,13 +86,13 @@ namespace yq::mithril::cdb {
     //! \brief Returns the FIRST doodle fragment that qualifies
     //! 
     //!     Will not create a fragment, though (so can return NULL)
-    Doodle::SharedFile            read(Doodle, const RootDir*, cdb_options_t opts=0);
+    //Doodle::SharedFile            read(Doodle, const RootDir*, cdb_options_t opts=0);
     
     /*! \brief Returns ALL doodle fragments
     
         This returns a vector of ALL doodle fragments for doodle.  (No merging)
     */
-    std::vector<DoodleFragDoc>    reads(Doodle, cdb_options_t opts=0);
+    //std::vector<DoodleFragDoc>    reads(Doodle, cdb_options_t opts=0);
 
     /*! \brief Returns doodle fragments for given root_dir
     
@@ -101,7 +101,7 @@ namespace yq::mithril::cdb {
         \note this will only be one, at most on a case-insensitive file system.  However, on a case sensitive
         file system, this may be multiple.
     */
-    std::vector<DoodleFragDoc>    reads(Doodle, class RootDir*, cdb_options_t opts=0);
+    //std::vector<DoodleFragDoc>    reads(Doodle, class RootDir*, cdb_options_t opts=0);
 
     /*! \brief ID to doodle
      *      
@@ -121,7 +121,7 @@ namespace yq::mithril::cdb {
      *  This loads a SINGLE fragment into a doodle structure.
      *  \note This may be incomplete as there can be multiple fragments to a doodle.
      */
-    Doodle::SharedFile            doodle_doc(Fragment, cdb_options_t options={});
+    //Doodle::SharedFile            doodle_doc(Fragment, cdb_options_t options={});
 
 
     //!  \brief   Returns a writable document
@@ -129,6 +129,6 @@ namespace yq::mithril::cdb {
     //!     \note the path will be CREATED by this method.
     //!
     //!     If the document already exists, it will be read in.
-    Doodle::SharedFile            write(Doodle, const RootDir*, cdb_options_t opts={});
+    //Doodle::SharedFile            write(Doodle, const RootDir*, cdb_options_t opts={});
 
 }

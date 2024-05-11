@@ -31,7 +31,7 @@ namespace yq::mithril {
 
     namespace cdb {
 
-        using NovelFragDoc = std::pair<Fragment,Novel::SharedFile>;
+        //using NovelFragDoc = std::pair<Fragment,Novel::SharedFile>;
 
         /*! \brief All atoms that are novels
         
@@ -119,13 +119,13 @@ namespace yq::mithril {
          *  This loads a SINGLE fragment into a novel structure.
          *  \note This may be incomplete as there can be multiple fragments to a novel.
          */
-        Novel::SharedFile            novel_doc(Fragment, unsigned int options=0);
+        //Novel::SharedFile            novel_doc(Fragment, unsigned int options=0);
         
         /*! \brief Merged Novel structure
          *  
          *  This FUSES all fragments together for a single, cohesive view of the novel.
         */
-        Novel::SharedData            merged(Novel, cdb_options_t opts=0);
+        //Novel::SharedData            merged(Novel, cdb_options_t opts=0);
         
         //! Title for the novel
         std::string                 name(Novel);
@@ -140,13 +140,13 @@ namespace yq::mithril {
         //! \brief Returns the FIRST novel fragment that qualifies
         //! 
         //!     Will not create a fragment, though (so can return NULL)
-        Novel::SharedFile            read(Novel, const RootDir*, cdb_options_t opts=0);
+        //Novel::SharedFile            read(Novel, const RootDir*, cdb_options_t opts=0);
         
         /*! \brief Returns ALL novel fragments
         
             This returns a vector of ALL novel fragments for novel.  (No merging)
         */
-        std::vector<NovelFragDoc>    reads(Novel, cdb_options_t opts=0);
+        //std::vector<NovelFragDoc>    reads(Novel, cdb_options_t opts=0);
 
         /*! \brief Returns novel fragments for given root_dir
         
@@ -155,7 +155,7 @@ namespace yq::mithril {
             \note this will only be one, at most on a case-insensitive file system.  However, on a case sensitive
             file system, this may be multiple.
         */
-        std::vector<NovelFragDoc>    reads(Novel, class RootDir*, cdb_options_t opts=0);
+        //std::vector<NovelFragDoc>    reads(Novel, class RootDir*, cdb_options_t opts=0);
 
         //! Tests if given novel has the given tag
         bool                        tagged(Novel, Tag);
@@ -174,7 +174,7 @@ namespace yq::mithril {
         //!     \note the path will be CREATED by this method.
         //!
         //!     If the document already exists, it will be read in.
-        Novel::SharedFile            write(Novel, const RootDir*, cdb_options_t opts=0);
+        //Novel::SharedFile            write(Novel, const RootDir*, cdb_options_t opts=0);
 
     }
 }
