@@ -33,6 +33,16 @@ namespace yq::mithril::cdb {
         return exists_character(at.id) ? Character(at.id) : Character();
     }
 
+    Character                   character(std::string_view k)
+    {
+        return character(atom(k));  // TODO... name lookups
+    }
+    
+    Character                   character(uint64_t i)
+    {
+        return exists_character(i) ? Character{i} : Character{};
+    }
+
     Class   character_class()
     {
         static const Class  cls = db_class("Character");

@@ -10,20 +10,16 @@
 #include <string_view>
 
 #include <mithril/enum/SizeDesc.hpp>
+#include <mithril/preamble.hpp>
 
-namespace yq::mithril {
-    struct Image;
-    struct WebContext;
+namespace yq::mithril::arg {
+    //! Finds image by ID
+    Image image(std::string_view arg_string);
+    Image image(const WebContext&, bool *detected=nullptr);
+    Image image(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
+    Image image(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
 
-    namespace arg {
-        //! Finds image by ID
-        Image image(std::string_view arg_string);
-        Image image(const WebContext&, bool *detected=nullptr);
-        Image image(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Image image(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    
-        SizeDesc    size_desc(std::string_view);
-        SizeDesc    size_desc(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        SizeDesc    size_desc(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
+    SizeDesc    size_desc(std::string_view);
+    SizeDesc    size_desc(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
+    SizeDesc    size_desc(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
 }

@@ -26,6 +26,11 @@ namespace yq::mithril::cdb {
         return is(Atom(ch.id), place_class());
     }
 
+    bool  exists_place(uint64_t id)
+    {
+        return is(Atom(id), place_class());
+    }
+
     Image               icon(Place p)
     {
         return icon(atom(p));
@@ -45,6 +50,17 @@ namespace yq::mithril::cdb {
     {
         return is(at, place_class()) ? Place(at.id) : Place();
     }
+    
+    Place               place(std::string_view k)
+    {
+        return place(atom(k));  // TODO -- better lookup
+    }
+    
+    Place               place(uint64_t id)
+    {
+        return exists_place(id) ? Place(id) : Place();
+    }
+
 
     Class  place_class()
     {

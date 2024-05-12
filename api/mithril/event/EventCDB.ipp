@@ -26,15 +26,30 @@ namespace yq::mithril::cdb {
         return is(at, event_class()) ? Event(at.id) : Event();
     }
 
+    Event   event(std::string_view k)
+    {
+        return event(atom(k));  // TODO -- better lookups
+    }
+    
+    Event   event(uint64_t i)
+    {
+        return exists_event(i) ? Event(i) : Event();
+    }
+
     Class  event_class()
     {
         static const Class  cls = db_class("Event");
         return cls;
     }
 
-    bool  exists(Event ch)
+    bool  exists(Event evt)
     {
-        return is(Atom(ch.id), event_class());
+        return exists_event(evt.id);
+    }
+
+    bool  exists_event(uint64_t i)
+    {
+        return is(Atom(i), event_class());
     }
 
     Image  icon(Event evt)

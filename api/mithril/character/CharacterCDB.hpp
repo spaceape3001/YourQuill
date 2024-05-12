@@ -15,6 +15,8 @@ namespace yq::mithril {
         Atom                        atom(Character);
         Character                   character(Atom);
         Character                   character(Entity);
+        Character                   character(std::string_view);
+        Character                   character(uint64_t);
         Class                       character_class();
         Entity                      entity(Character);
         bool                        exists(Character);

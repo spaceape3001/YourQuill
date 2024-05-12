@@ -36,6 +36,21 @@ namespace yq::mithril::cdb {
         return is(at, group_class()) ? Group(at.id) : Group();
     }
 
+    Group               group(Entity e)
+    {
+        return exists_group(e.id) ? Group(e.id) : Group();
+    }
+    
+    Group               group(std::string_view k)
+    {
+        return group(atom(k)); // TODO -- better lookup
+    }
+    
+    Group               group(uint64_t id)
+    {
+        return exists_group(id) ? Group(id) : Group();
+    }
+
     Class  group_class()
     {
         static const Class  cls = db_class("Group");

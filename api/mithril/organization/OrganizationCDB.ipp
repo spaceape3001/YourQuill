@@ -73,6 +73,16 @@ namespace yq::mithril::cdb {
         return exists_organization(g.id) ? Organization(g.id) : Organization();
     }
 
+    Organization            organization(std::string_view k)
+    {
+        return organization(atom(k)); // TODO -- better lookup
+    }
+    
+    Organization            organization(uint64_t id)
+    {
+        return exists_organization(id) ? Organization(id) : Organization();
+    }
+
     Class                   organization_class()
     {
         static const Class  cls = db_class("Organization");

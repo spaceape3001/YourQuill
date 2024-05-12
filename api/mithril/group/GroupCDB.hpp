@@ -16,6 +16,9 @@ namespace yq::mithril {
         bool                exists(Group);
         bool                exists_group(uint64_t);
         Group               group(Atom);
+        Group               group(Entity);
+        Group               group(std::string_view);
+        Group               group(uint64_t);
         Class               group_class();
         Image               icon(Group);
         std::string         key(Group);

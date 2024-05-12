@@ -21,6 +21,8 @@ namespace yq::mithril::cdb {
     Organization                organization(Atom);
     Organization                organization(Entity);
     Organization                organization(Group);
+    Organization                organization(std::string_view);
+    Organization                organization(uint64_t);
     Class                       organization_class();
 }
 

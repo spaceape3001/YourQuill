@@ -14,6 +14,8 @@ namespace yq::mithril {
         std::vector<Game>   all_games(Sorted sorted=Sorted());
         Atom                atom(Game);
         Game                game(Atom);
+        Game                game(std::string_view);
+        Game                game(uint64_t);
         Class               game_class();
         bool                exists(Game);
         bool                exists_game(uint64_t);

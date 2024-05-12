@@ -19,6 +19,8 @@ namespace yq::mithril {
         std::string         key(Thing);
         std::string         name(Thing);
         Thing               thing(Atom);
+        Thing               thing(std::string_view);
+        Thing               thing(uint64_t);
         Class               thing_class();
     }
 }

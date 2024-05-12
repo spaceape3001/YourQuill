@@ -18,5 +18,7 @@ namespace yq::mithril::cdb {
     std::string         key(Place);
     std::string         name(Place);
     Place               place(Atom);
+    Place               place(std::string_view);
+    Place               place(uint64_t);
     Class               place_class();
 }

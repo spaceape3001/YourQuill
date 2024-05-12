@@ -122,6 +122,17 @@ namespace yq::mithril::cdb {
         return s.str(a);
     }
     
+    Atom                atom(uint64_t id)
+    {
+        return find_atom(id);
+    }
+
+    Atom                atom(std::string_view k)
+    {
+        return find_atom(k);
+    }
+
+
     AttributeVector  attributes(Atom a, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT attr FROM " TBL_ATOM_PROPERTY " INNER JOIN " TBL_ATTRIBUTES " ON " TBL_ATOM_PROPERTY ".attr=" TBL_ATTRIBUTES ".id WHERE atom=? ORDER BY " TBL_ATTRIBUTES ".k");

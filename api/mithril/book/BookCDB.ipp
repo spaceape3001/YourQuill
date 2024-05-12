@@ -26,6 +26,16 @@ namespace yq::mithril::cdb {
         return is(at, book_class()) ? Book(at.id) : Book();
     }
 
+    Book  book(std::string_view sv)
+    {
+        return book(atom(sv));
+    }
+
+    Book  book(uint64_t i)
+    {
+        return exists_book(i) ? Book(i) : Book{};
+    }
+
     Class  book_class()
     {
         static const Class  cls = db_class("Book");
@@ -35,6 +45,11 @@ namespace yq::mithril::cdb {
     bool  exists(Book ch)
     {
         return is(Atom(ch.id), book_class());
+    }
+
+    bool  exists_book(uint64_t i)
+    {
+        return is(atom(i), book_class());
     }
 
     Image               icon(Book b)

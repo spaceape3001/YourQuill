@@ -55,6 +55,12 @@ namespace yq::mithril::cdb {
     */
     AtomVector          all_atoms(Tag tag, Sorted sorted=Sorted{});
 
+    //! Gets atom by ID
+    Atom                atom(uint64_t);
+
+    //! Gets atom by key
+    Atom                atom(std::string_view);
+
     /*! \brief Counts the number of atoms in the database
         \return The count
     */

@@ -21,6 +21,16 @@ namespace yq::mithril::cdb {
         return Atom{ ch.id };
     }
 
+    bool  exists(Game ch)
+    {
+        return is(Atom(ch.id), game_class());
+    }
+
+    bool  exists_game(uint64_t id)
+    {
+        return is(Atom(id), game_class());
+    }
+
     Game  game(Atom at)
     {
         return is(at, game_class()) ? Game(at.id) : Game();
@@ -32,9 +42,14 @@ namespace yq::mithril::cdb {
         return cls;
     }
 
-    bool  exists(Game ch)
+    Game    game(std::string_view k)
     {
-        return is(Atom(ch.id), game_class());
+        return game(atom(k));   // TODO -- better lookups
+    }
+    
+    Game    game(uint64_t id)
+    {
+        return exists_game(id) ? Game(id) : Game();
     }
 
     Image               icon(Game g)

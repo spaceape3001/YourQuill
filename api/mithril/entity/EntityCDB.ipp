@@ -26,6 +26,16 @@ namespace yq::mithril::cdb {
         return exists_entity(a.id) ? Entity(a.id) : Entity();
     }
     
+    Entity                  entity(std::string_view k)
+    {
+        return entity(atom(k)); // TODO better name lookups
+    }
+    
+    Entity                  entity(uint64_t i)
+    {
+        return exists_entity(i) ? Entity{i} : Entity{};
+    }
+
     Class                   entity_class()
     {
         static const Class  cls = db_class("Entity");
