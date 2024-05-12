@@ -32,10 +32,14 @@ namespace yq::mithril::cdb {
     /*! \brief All leafs
         \param[in] sorted   Set to YES to have result sorted by key
     */
-    std::vector<Leaf>           all_leafs(Sorted sorted=Sorted());
-    
+    LeafVector                  all_leafs(Sorted sorted=Sorted());
+
     //! \brief  Count of leafs
     size_t                      all_leafs_count();
+
+    LeafVector                  all_leafs(Folder, Sorted sorted=Sorted());
+    
+    LeafVector                  all_leafs(Tag, Sorted sorted=Sorted());
     
     //! \brief Primary atom for the leaf
     Atom                        atom(Leaf);
@@ -63,6 +67,8 @@ namespace yq::mithril::cdb {
 
     //! \brief Tests for existence of leaf
     bool                        exists_leaf(uint64_t);
+    
+    Folder                      folder(Leaf);
     
     //! \brief Icon for leaf
     Image                       icon(Leaf);

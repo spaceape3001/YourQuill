@@ -9,6 +9,5 @@
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    bool            search(WebSearcher<Class>&, category_t);
-    ClassVector     search(WebContext&, class_t);
+    TagVector  search(WebContext&, tag_t);
 }

@@ -20,7 +20,7 @@ namespace yq::mithril {
         
         Category x = arg::category(s);
         if(x){
-            if(ws.first && !ws.data.empty()){
+            if(ws.first && ws.data.empty()){
                 ws.data     = cdb::all_classes(x, Sorted::YES);
             } else {
                 std::erase_if(ws.data, 
@@ -40,7 +40,7 @@ namespace yq::mithril {
     {
         WebSearcher<Class>   ws(ctx);
         search(ws, CATEGORY);
-        if(ws.first)
+        if(ws.first && ws.data.empty())
             ws.data  = cdb::all_classes(Sorted::YES);
         return ws.data;
     }

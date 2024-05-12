@@ -8,3 +8,5 @@
 
 #include "atom/AtomJson.ipp"
 #include "class/ClassJson.ipp"
+#include "leaf/LeafJson.ipp"
+#include "tag/TagJson.ipp"

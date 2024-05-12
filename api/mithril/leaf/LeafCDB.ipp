@@ -42,23 +42,12 @@ namespace yq::mithril::cdb {
         return s.size();
     }
     
-    namespace {
-        std::vector<Leaf>    all_leafs_sorted()
-        {
-            static thread_local CacheQuery s("SELECT id FROM " TBL_LEAFS " ORDER BY k");
-            return s.vec<Leaf>();
-        }
-
-        std::vector<Leaf>    all_leafs_unsorted()
-        {
-            static thread_local CacheQuery s("SELECT id FROM " TBL_LEAFS "");
-            return s.vec<Leaf>();
-        }
-    }
-    
     std::vector<Leaf>        all_leafs(Sorted sorted)
     {
-        return sorted ? all_leafs_sorted() : all_leafs_unsorted();
+        static thread_local CacheQuery qs("SELECT id FROM " TBL_LEAFS " ORDER BY k");
+        static thread_local CacheQuery qu("SELECT id FROM " TBL_LEAFS "");
+        CacheQuery& s = sorted ? qs : qu;
+        return s.vec<Leaf>();
     }
     
     size_t              all_leafs_count()
@@ -67,6 +56,22 @@ namespace yq::mithril::cdb {
         return s.size();
     }
     
+
+    std::vector<Leaf>           all_leafs(Folder f, Sorted sorted)
+    {
+        static thread_local CacheQuery qu("SELECT " TBL_LEAFS ".id FROM " TBL_LEAFS " INNER JOIN " TBL_DOCUMENTS " ON " TBL_LEAFS ".id=" TBL_DOCUMENTS ".id WHERE " TBL_DOCUMENTS ".folder=?");
+        static thread_local CacheQuery qs("SELECT " TBL_LEAFS ".id FROM " TBL_LEAFS " INNER JOIN " TBL_DOCUMENTS " ON " TBL_LEAFS ".id=" TBL_DOCUMENTS ".id WHERE " TBL_DOCUMENTS ".folder=? ORDER BY " TBL_DOCUMENTS ".sk" );
+        CacheQuery& s = sorted ? qs : qu;
+        return s.vec<Leaf>(f.id);
+    }
+
+    LeafVector                  all_leafs(Tag t, Sorted sorted)
+    {
+        static thread_local CacheQuery qu("SELECT leaf FROM " TBL_LEAF_TAG " WHERE tag=?");
+        static thread_local CacheQuery qs("SELECT leaf FROM " TBL_LEAF_TAG " INNER JOIN " TBL_TAGS " ON " TBL_LEAF_TAG ".tag=" TBL_TAGS ".id WHERE tag=? ORDER BY " TBL_TAGS ".k");
+        CacheQuery& s = sorted ? qs : qu;
+        return s.vec<Leaf>(t.id);
+    }
 
     Atom                atom(Leaf l)
     {
@@ -136,6 +141,10 @@ namespace yq::mithril::cdb {
         return s.present(i);
     }
 
+    Folder              folder(Leaf l)
+    {
+        return folder(document(l));
+    }
     
     Image               icon(Leaf l)
     {

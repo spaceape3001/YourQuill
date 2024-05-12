@@ -19,50 +19,38 @@
 namespace yq::mithril {
     bool        search(WebSearcher<Atom>&ws, class_t)
     {
-        std::string s   = ws.ctx.find_query("class");
-        if(s.empty())
-            return false;
-        
-        Class x = arg::class_(s);
-        if(x){
-            if(ws.first && !ws.data.empty()){
-                ws.data     = cdb::all_atoms(x, Sorted::YES);
-            } else {
-                std::erase_if(ws.data, 
-                    [x](Atom a) -> bool 
-                    { 
-                        return !cdb::is(a, x); 
-                    }
-                );
+        return search(ws, "class", 
+            [](std::string_view s) -> Class 
+            { 
+                return arg::class_(s);
+            },
+            [](Class c) -> auto 
+            {
+                return cdb::all_atoms(c, Sorted::YES);
+            },
+            [](Class c, Atom a) -> bool
+            {
+                return !cdb::is(a,c);
             }
-        } else
-            ws.data.clear();
-        ws.first    = true;
-        return true;
+        );
     }
     
     bool        search(WebSearcher<Atom>&ws, tag_t)
     {
-        std::string s   = ws.ctx.find_query("tag");
-        if(s.empty())
-            return false;
-        
-        Tag x = arg::tag(s);
-        if(x){
-            if(ws.first && !ws.data.empty()){
-                ws.data     = cdb::all_atoms(x, Sorted::YES);
-            } else {
-                std::erase_if(ws.data, 
-                    [x](Atom a) -> bool 
-                    { 
-                        return !cdb::is(a, x); 
-                    }
-                );
+        return search(ws, "tag",
+            [](std::string_view s) -> Tag
+            {
+                return arg::tag(s);
+            }, 
+            [](Tag t) -> auto
+            {
+                return cdb::all_atoms(t, Sorted::YES);
+            },
+            [](Tag t, Atom a) -> bool 
+            {
+                return !cdb::is(a, t);
             }
-        } else
-            ws.data.clear();
-        ws.first    = true;
-        return true;
+        );
     }
 
     AtomVector  search(WebContext&ctx, atom_t)
@@ -70,7 +58,7 @@ namespace yq::mithril {
         WebSearcher<Atom>   ws(ctx);
         search(ws, TAG);
         search(ws, CLASS);
-        if(ws.first)
+        if(ws.first && ws.data.empty())
             ws.data  = cdb::all_atoms(Sorted::YES);
         return ws.data;
     }

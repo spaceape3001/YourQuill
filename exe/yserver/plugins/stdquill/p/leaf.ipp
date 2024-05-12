@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/leaf/LeafJson.hpp>
+#include <mithril/leaf/LeafSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_leaf(WebContext& ctx)
+        {
+            Leaf    v   = arg::leaf(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_leaf_key(WebContext& ctx)
+        {
+            Leaf    v   = arg::leaf(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_leafs(WebContext& ctx)
+        {
+            LeafVector  ret = search(ctx, LEAF);
+            return json{
+                { "leafs", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -201,6 +231,10 @@ namespace {
 
         void reg_leaf_pages()
         {
+            reg_webpage<p_api_leaf>("/api/leaf").argument("ID", "Leaf ID");
+            reg_webpage<p_api_leaf_key>("/api/leaf/key").argument("ID", "Leaf ID");
+            reg_webpage<p_api_leafs>("/api/leafs");
+
             reg_webpage<p_wiki_view>("/leaf").argument("id", "Leaf ID").argument("key", "Key");
             reg_webpage<p_wiki_view>("/wiki/view").argument("id", "Leaf ID").argument("key", "Key");
             reg_webpage<p_wiki_browse>("/wiki/browse").argument("folder", "Folder ID");

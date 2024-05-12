@@ -26,13 +26,22 @@ namespace yq {
     
     struct atom_t {};
     struct category_t {};
+    struct document_t {};
+    struct directory_t {};
+    struct field_t {};
+    struct folder_t {};
+    struct fragment_t {};
     struct leaf_t {};
     struct tag_t {};
     
-    static constexpr atom_t     ATOM;
-    static constexpr category_t CATEGORY;
-    static constexpr leaf_t     LEAF;
-    static constexpr tag_t      TAG;
+    static constexpr atom_t         ATOM;
+    static constexpr category_t     CATEGORY;
+    static constexpr directory_t    DIRECTORY;
+    static constexpr document_t     DOCUMENT;
+    static constexpr folder_t       FOLDER;
+    static constexpr fragment_t     FRAGMENT;
+    static constexpr leaf_t         LEAF;
+    static constexpr tag_t          TAG;
 }
 
 namespace yq::mithril {

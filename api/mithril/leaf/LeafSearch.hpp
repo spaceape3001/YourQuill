@@ -9,6 +9,7 @@
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    bool            search(WebSearcher<Class>&, category_t);
-    ClassVector     search(WebContext&, class_t);
+    bool        search(WebSearcher<Leaf>&, folder_t);
+    bool        search(WebSearcher<Leaf>&, tag_t);
+    LeafVector  search(WebContext&, leaf_t);
 }

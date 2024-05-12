@@ -6,16 +6,45 @@
 
 #pragma once
 
+#include <mithril/tag/TagJson.hpp>
+#include <mithril/tag/TagSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
     //      UTILITIES
     //  -----------------------------------------------------------------------
 
-    
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_tag(WebContext& ctx)
+        {
+            Tag    v   = arg::tag(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_tag_key(WebContext& ctx)
+        {
+            Tag    v   = arg::tag(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_tags(WebContext& ctx)
+        {
+            TagVector  ret = search(ctx, TAG);
+            return json{
+                { "tags", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -145,6 +174,10 @@ namespace {
 
         void reg_tag_pages()
         {
+            reg_webpage<p_api_tag>("/api/tag").argument("ID", "Tag ID");
+            reg_webpage<p_api_tag_key>("/api/tag/key").argument("ID", "Tag ID");
+            reg_webpage<p_api_tags>("/api/tags");
+
             reg_webpage<p_admin_tag>("/admin/tag").argument("id", "Tag ID");
             //  reg_webpage<p_admin_tags>("/admin/tags");  // registered in page.cpp
             reg_webpage<p_admin_tags_create>(hPost, "/admin/tags/create");

@@ -140,7 +140,7 @@ namespace {
         void p_dev_atoms(WebHtml&h)
         {
             h.title() << "All Atoms";
-            dev_table(h, search(h.context(), ATOM));
+            dev_table(h, all_atoms(Sorted::YES));
         }
     
     //  -----------------------------------------------------------------------

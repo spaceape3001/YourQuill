@@ -6,9 +6,10 @@
 
 #pragma once
 
+#include <0/json_fwd.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    bool            search(WebSearcher<Class>&, category_t);
-    ClassVector     search(WebContext&, class_t);
+    json json_(Leaf);
+    json json_(const LeafVector&);
 }
