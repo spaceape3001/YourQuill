@@ -73,7 +73,7 @@ namespace yq::mithril::cdb {
     Novel                        novel(Document);
 
     //! \brief Novel for a fragment
-    Novel                        novel(Fragment);
+    Novel                        novel(Fragment, bool calc=false);
 
 
     //! \brief Novel by a title

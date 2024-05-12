@@ -7,16 +7,16 @@
 #pragma once
 
 #include <gluon/app/MainWindow.hpp>
-#include <doodleQt/QProject.hpp>
+#include <doodlerQt/QProject.hpp>
 
 class DoodleMW : public yq::gluon::MainWindow {
     Q_OBJECT
 public:
-    DoodleMW(yq::doodle::QProjectPtr qpp={});
+    DoodleMW(yq::doodler::QProjectPtr qpp={});
     ~DoodleMW();
     
     virtual DoodleMW* newMain();
     
 private:
-    yq::doodle::QProjectPtr      m_project;
+    yq::doodler::QProjectPtr      m_project;
 };

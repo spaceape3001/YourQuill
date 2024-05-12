@@ -8,104 +8,103 @@
 
 #include <mithril/doodle/Doodle.hpp>
 #include <mithril/doodle/DoodleCDB.hpp>
-//#include <mithril/doodle/DoodleDiff.hpp>
+#include <mithril/doodle/DoodleDiff.hpp>
 #include <mithril/doodle/DoodleInfo.hpp>
-//#include <mithril/doodle/DoodleData.hpp>
 
 namespace {
-    void    u_doodle(Doodle t, Change chg)
+    void    u_doodle(Doodle v, Change chg)
     {
-        if(!t)
+        if(!v)
             return ;
+            
         
-        #if 0
         Doodle::Diff   x { 
-            .x = t, 
-            .id = t.id,
-            .chg = chg, 
-            .key = cdb::key(t)
+            .x      = v, 
+            .id     = v.id,
+            .frag   = cdb::fragment(v),
+            .doc    = cdb::document(v),
+            .chg    = chg
         };
         
         if(chg != Change::Added){
-            Doodle::Info       ii  = cdb::info(t);
-            x.icon.from     = ii.icon;
-            x.name.from     = std::move(ii.name);
-            x.brief.from    = std::move(ii.brief);
+            x.title.from    = cdb::title(v);
+            x.tags.from     = cdb::tags_set(v);
         }
         
-        static thread_local CacheQuery uDocIcon("UPDATE " TBL_DOCUMENTS " SET icon=? WHERE id=?");
-        static thread_local CacheQuery uDoodleInfo("UPDATE " TBL_DOODLES " SET name=?,icon=?,brief=? WHERE id=?");
-        static thread_local CacheQuery xDoodleStmts[] = {
-            CacheQuery( "DELETE FROM " TBL_DOODLES " WHERE id=?" )
+        static thread_local CacheQuery xDoodle[] = {
+            CacheQuery( "DELETE FROM " TBL_DOODLES " WHERE id=?" ),
+            CacheQuery( "DELETE FROM " TBL_DOODLE_TAG " WHERE doodle=?" )
         };
+        static thread_local CacheQuery uInfo("UPDATE " TBL_DOODLES " SET title=?,icon=? WHERE id=?");
+        static thread_local CacheQuery dTag("DELETE FROM " TBL_DOODLE_TAG " WHERE doodle=? AND tag=?");
+        static thread_local CacheQuery iTag("INSERT INTO " TBL_DOODLE_TAG " (doodle, tag) VALUES (?,?)");
 
-        Document doc    = cdb::document(t);
         if(chg != Change::Removed){
-            auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
-            if(!def){
-                yInfo() << "Doodle " << x.key << " cannot be read.";
-                return;
-            }
+            #if 0
+                auto def        = cdb::merged(t, cdb::DONT_LOCK|cdb::IS_UPDATE);
+                if(!def){
+                    yInfo() << "Doodle " << x.key << " cannot be read.";
+                    return;
+                }
+            #endif
+
+            //  Load the doodle here....
+            //  Tags....
             
-            x.icon.to       = cdb::best_image(doc);
-            x.name.to       = std::move(def->name);
-            x.brief.to      = std::move(def->brief);
+            uInfo.bind(1, x.title.to);
+            uInfo.bind(2, x.icon.to);
+            uInfo.bind(3, x.id);
+            uInfo.exec();
+            
+            //x.tags.to = 
+            x.tags.analyze();
+            for(Tag t : x.tags.added)
+                iTag.exec(x.id, t.id);
+            
+        }
 
-            if(x.icon)
-                uDocIcon.exec(x.icon.to.id, doc.id);
-
-            if(x){
-                uDoodleInfo.bind(1, x.name.to);
-                uDoodleInfo.bind(2, x.icon.to.id);
-                uDoodleInfo.bind(3, x.brief.to);
-                uDoodleInfo.bind(4, x.id);
-                uDoodleInfo.exec();
-            } 
+        if(chg == Change::Removed){
+            x.tags.removed  = x.tags.from;
         }
         
         Doodle::Notify::notify(x);
         
-        if(chg == Change::Removed){
-            for(auto& sq : xDoodleStmts)
-                sq.exec(t.id);
+        if(chg != Change::Removed){
+            for(Tag t : x.tags.removed)
+                dTag.exec(x.id, t.id);
+        } else {
+            for(auto& sq : xDoodle)
+                sq.exec(v.id);
         }
-        
-        #endif
     }
 
     void    s3_doodle(Document doc)
     {
-        bool        created     = false;
-        Doodle x       = cdb::db_doodle(doc, &created);
-        u_doodle(x, Change::Added);
+        for(Fragment frag : cdb::fragments(doc))
+            u_doodle(cdb::db_doodle(frag), Change::Added);
     }
 
-    void    s5_doodle(Fragment f, Change chg)
+    void    s5_doodle(Fragment frag, Change chg)
     {
-        Document    doc = cdb::document(f);
-        if(chg == Change::Removed){
-            if(cdb::fragments_count(doc) <= 1){
-                Doodle x = cdb::doodle(doc);
-                if(x){
-                    u_doodle(x, Change::Removed);
-                }
-                return ;
-            }
-            
-            chg = Change::Modified;
+        Doodle  v;
+        switch(chg){
+        case Change::Added:
+        case Change::Modified:
+            u_doodle(cdb::db_doodle(frag), chg);
+            break;
+        case Change::Removed:
+            v   = cdb::doodle(frag);
+            if(v)
+                u_doodle(v, chg);
+            break;
+        default:
+            break;
         }
-        
-        bool        created     = false;
-        Doodle x       = cdb::db_doodle(doc, &created);
-        if(created){
-            u_doodle(x, Change::Added);
-        } else
-            u_doodle(x, Change::Modified);
     }
     
     void    s5_doodle_icons(Fragment f, Change chg)
     {
-        Doodle    x   = cdb::doodle(cdb::document(f), true);
+        Doodle    x   = cdb::doodle(f, true);
         if(!x)
             return ;
         u_doodle(x, Change::Modified);

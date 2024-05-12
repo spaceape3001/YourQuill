@@ -51,15 +51,15 @@ namespace {
             if(!x)
                 throw HttpStatus::BadArgument;
             
-            auto i = info(x);
+            auto i = nki(x);
 
             dev_title(h, x);
             auto t = h.table();
             h.kvrow("ID") << x.id;
             h.kvrow("Key") << i.key;
-            h.kvrow("Title") << i.title;
+            h.kvrow("Title") << i.name;
             //h.kvrow("Brief") << i.brief;
-            h.kvrow("Document") << dev(i.doc);
+            h.kvrow("Fragment") << dev(fragment(x));
             //h.kvrow("Atom") << dev(i.atom);
        }
         

@@ -822,12 +822,6 @@ namespace yq::mithril::cdb {
         return exec_class_rank_vector(s);
     }
 
-    TagSet               tag_set(Class c)
-    {
-        static thread_local CacheQuery s("SELECT tag FROM " TBL_CLASS_TAG " WHERE class=?");
-        return s.set<Tag>(c.id);
-    }
-
     bool  tagged(Class c, Tag t)
     {
         static thread_local CacheQuery s("SELECT 1 FROM " TBL_CLASS_TAG " WHERE class=? AND tag=?");
@@ -848,6 +842,13 @@ namespace yq::mithril::cdb {
         static thread_local CacheQuery s("SELECT COUNT(1) FROM " TBL_CLASS_TAG " WHERE class=?");
         return s.size(c.id);
     }
+
+    TagSet               tags_set(Class c)
+    {
+        static thread_local CacheQuery s("SELECT tag FROM " TBL_CLASS_TAG " WHERE class=?");
+        return s.set<Tag>(c.id);
+    }
+
 
     ClassVector       target_classes(Class c, Sorted sorted)
     {

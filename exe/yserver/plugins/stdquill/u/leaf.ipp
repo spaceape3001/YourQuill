@@ -78,7 +78,7 @@ namespace {
         } 
         
         if(chg == Change::Removed){
-            diffrep = diff::changes(doc, {});
+            diffrep         = diff::changes(doc, {});
             x.tags.removed  = x.tags.from;
         }
 

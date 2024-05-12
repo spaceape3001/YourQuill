@@ -12,12 +12,12 @@
 #include <0/basic/TextUtils.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/doodle/DoodleInfo.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/image/ImageCDB.hpp>
-//#include <mithril/doodle/DoodleFile.hpp>
-#include <mithril/doodle/DoodleInfo.hpp>
+#include <mithril/tag/Tag.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
@@ -90,8 +90,9 @@ namespace yq::mithril::cdb {
         return doodle(first_fragment(d, DataRole::Doodles));
     }
 
-    Doodle                doodle(Fragment frag)
+    Doodle                doodle(Fragment frag, bool calc)
     {
+        //   calc TBD
         return doodle(frag.id);
     }
     
@@ -123,7 +124,7 @@ namespace yq::mithril::cdb {
     Doodle::Info          info(Doodle l, bool autoKey)
     {
         Doodle::Info    ret;
-        static thread_local CacheQuery s("SELECT name, icon FROM " TBL_DOODLES " WHERE id=?");
+        static thread_local CacheQuery s("SELECT title, icon FROM " TBL_DOODLES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, l.id);
         if(s.step() == SQResult::Row){
@@ -151,13 +152,12 @@ namespace yq::mithril::cdb {
     
     std::string             name(Doodle l)
     {
-        static thread_local CacheQuery    s("SELECT name FROM " TBL_DOODLES " WHERE id=?");
-        return s.str(l);
+        return title(l);
     }
-
+    
     NKI                 nki(Doodle l, bool autoKey)
     {
-        static thread_local CacheQuery    s("SELECT name,icon FROM " TBL_DOODLES " WHERE id=?");
+        static thread_local CacheQuery    s("SELECT title, icon FROM " TBL_DOODLES " WHERE id=?");
         auto s_af = s.af();
         s.bind(1, l.id);
         if(s.step() == SQResult::Row){
@@ -171,4 +171,29 @@ namespace yq::mithril::cdb {
         }
         return NKI{};
     }
+
+    bool                        tagged(Doodle l, Tag t)
+    {
+        static thread_local CacheQuery s("SELECT 1 FROM " TBL_DOODLE_TAG " WHERE doodle=? AND tag=? LIMIT 1");
+        return s.present(l.id, t.id);
+    }
+    
+    TagVector            tags(Doodle l)
+    {
+        static thread_local CacheQuery s("SELECT tag FROM " TBL_DOODLE_TAG " WHERE doodle=?");
+        return s.vec<Tag>(l.id);
+    }
+    
+    TagSet               tags_set(Doodle l)
+    {
+        static thread_local CacheQuery s("SELECT tag FROM " TBL_DOODLE_TAG " WHERE doodle=?");
+        return s.set<Tag>(l.id);
+    }
+
+    std::string             title(Doodle l)
+    {
+        static thread_local CacheQuery    s("SELECT title FROM " TBL_DOODLES " WHERE id=?");
+        return s.str(l);
+    }
+
 }

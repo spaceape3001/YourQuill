@@ -25,6 +25,8 @@ target_link_libraries( stdquill
     PUBLIC 
         yqtoolbox 
         mithril
+        doodler
+        #noveler
         asio
         ${ImageMagick_LIBRARIES}
 )

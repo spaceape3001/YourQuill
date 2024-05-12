@@ -22,12 +22,12 @@ namespace yq::mithril {
         struct Info;
         //struct Data;
         //struct File;
-        //struct Diff;
+        struct Diff;
 
         //using SharedData = std::shared_ptr<Data>;
         //using SharedFile = std::shared_ptr<File>;
         
-        //using Notify = Notifier<const Diff&>;
+        using Notify = Notifier<const Diff&>;
         
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Doodle&rhs) const noexcept = default;

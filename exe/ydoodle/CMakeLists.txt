@@ -21,8 +21,8 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         yqtoolbox
         gluon
-        doodle
-        doodleQt
+        doodler
+        doodlerQt
 )
 
 

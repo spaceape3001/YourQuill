@@ -144,8 +144,9 @@ namespace yq::mithril::cdb {
         return novel(first_fragment(d, DataRole::Novels));
     }
     
-    Novel               novel(Fragment frag)
+    Novel               novel(Fragment frag, bool calc)
     {
+        // TODO -- the calc bit
         return novel(frag.id);
     }
     

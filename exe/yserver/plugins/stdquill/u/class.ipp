@@ -76,7 +76,7 @@ namespace {
             x.brief.from            = std::move(ii.brief);
             x.bases.from            = cdb::base_hops(c);
             x.deriveds.from         = cdb::derived_hops(c);
-            x.tags.from             = cdb::tag_set(c);
+            x.tags.from             = cdb::tags_set(c);
 
             x.aliases.from          = cdb::def_alias_set(c);
             x.prefixes.from         = cdb::def_prefix_set(c);

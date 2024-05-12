@@ -58,6 +58,7 @@ namespace {
 #include <mithril/class/ClassData.hpp>
 #include <mithril/class/ClassDiff.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/doodle/DoodleCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
 #include <mithril/field/FieldData.hpp>
 #include <mithril/field/FieldDiff.hpp>

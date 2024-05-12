@@ -15,6 +15,10 @@ namespace yq::mithril {
         static constexpr const char*    EXTENSION   = "nw";
         struct Info;
         
+        struct Diff;
+
+        using Notify = Notifier<const Diff&>;
+        
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Novel&rhs) const noexcept = default;
         constexpr operator uint64_t () const noexcept { return id; }

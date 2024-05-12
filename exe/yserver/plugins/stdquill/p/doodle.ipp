@@ -34,14 +34,13 @@ namespace {
             Doodle   x = doodle(h);
             if(!x)
                 throw HttpStatus::BadArgument;
-            auto i = cdb::info(x);
+            auto i = cdb::nki(x);
             dev_title(h, x);
             auto ta = h.table();
             h.kvrow("ID") << x.id;
-            h.kvrow("Name") << i.name;
+            h.kvrow("Title") << i.name;
             h.kvrow("Key") << i.key;
-            h.kvrow("Brief") << i.brief;
-            h.kvrow("Document") << dev(i.doc);
+            h.kvrow("Fragment") << dev(cdb::fragment(x));
         }
 
         void    p_dev_doodles(WebHtml& out)

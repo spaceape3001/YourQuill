@@ -6,10 +6,10 @@
 
 #include "DoodleMW.hpp"
 
-DoodleMW::DoodleMW(yq::doodle::QProjectPtr qpp) : m_project(qpp)
+DoodleMW::DoodleMW(yq::doodler::QProjectPtr qpp) : m_project(qpp)
 {
     if(!m_project)
-        m_project   = new yq::doodle::QProject;
+        m_project   = new yq::doodler::QProject;
         
         
     makeMenu("file", "&File");

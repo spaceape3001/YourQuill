@@ -13,7 +13,8 @@
 #include <mithril/doodle/Doodle.hpp>
 #include <vector>
 
-#define TBL_DOODLES   "Doodles"
+#define TBL_DOODLES     "Doodles"
+#define TBL_DOODLE_TAG  "DoodleTag"
 
 namespace yq::mithril::cdb {
 
@@ -52,7 +53,7 @@ namespace yq::mithril::cdb {
     Doodle                        doodle(Document);
 
     //! Doodle for a fragment
-    Doodle                        doodle(Fragment);
+    Doodle                        doodle(Fragment, bool calc=false);
     
     //! \brief Tests for existence of doodle
     bool                        exists(Doodle);
@@ -85,4 +86,15 @@ namespace yq::mithril::cdb {
     */
     NKI                         nki(Doodle, bool autoKeyToName=false);
 
+   //! Tests if given doodle has the given tag
+    bool                        tagged(Doodle, Tag);
+    
+    //! All tags for doodle
+    TagVector                   tags(Doodle);
+
+    //! All tags for doodle as a set
+    TagSet                      tags_set(Doodle);
+
+    //! Title for the doodle
+    std::string                 title(Doodle);
 }
