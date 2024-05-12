@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/class/ClassJson.hpp>
+#include <mithril/class/ClassSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,32 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_class(WebContext& ctx)
+        {
+            Class    v   = arg::class_(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+
+        json p_api_class_key(WebContext& ctx)
+        {
+            Class    v   = arg::class_(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json{
+                { "key", cdb::key(v) }
+            };
+        }
+
+        json p_api_classes(WebContext& ctx)
+        {
+            ClassVector ret = search(ctx, CLASS);
+            return json{
+                { "classes", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -292,6 +321,10 @@ namespace {
             reg_webpage<p_admin_class>("/admin/class").argument("id", "Class ID");
             // reg_webpage<p_admin_classes>("/admin/classes"); // registered in page.cpp
             reg_webpage<p_admin_classes_create>(hPost, "/admin/classes/create");
+
+            reg_webpage<p_api_class>("/api/class");
+            reg_webpage<p_api_class_key>("/api/class/key");
+            reg_webpage<p_api_classes>("/api/classes");
 
             reg_webgroup({
                 reg_webpage<p_class>("/class").argument("ID", "Class ID").label("Overview"),

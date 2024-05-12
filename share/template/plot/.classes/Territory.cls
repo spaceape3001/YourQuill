@@ -1,3 +1,4 @@
 %      Territory
-plural Territory
-is      place,group
+plural Territories
+is      place
+is	group

@@ -47,7 +47,9 @@ namespace yq::mithril::cdb {
         \param[in]  sorted  Yes/No to sort by key (default is no)
         \return vector of classes
     */
-    ClassVector          all_classes(Sorted sorted=Sorted{});
+    ClassVector                 all_classes(Sorted sorted=Sorted{});
+
+    ClassVector                 all_classes(Category, Sorted sorted=Sorted{});
     
     /*! \brief Count of all classes declared in the cache
     */

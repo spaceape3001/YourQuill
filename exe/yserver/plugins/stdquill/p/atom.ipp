@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/atom/AtomJson.hpp>
+#include <mithril/atom/AtomSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -20,16 +23,16 @@ namespace {
         json p_api_atom(WebContext& ctx)
         {
             Atom    v   = arg::atom(ctx);
-            json j{
-                { "id", v.id },
-                { "key", cdb::key(v) }
-            };
-            return j;
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
         }
         
         json p_api_atom_key(WebContext& ctx)
         {
             Atom    v   = arg::atom(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
             json j{
                 { "key", cdb::key(v) }
             };
@@ -39,17 +42,9 @@ namespace {
         json p_api_atoms(WebContext& ctx)
         {
             AtomVector  ret = search(ctx, ATOM);
-            json j;
-            {
-                auto& ats   = j["atoms"];
-                for(Atom a : ret){
-                    ats.push_back(json{
-                        { "id", a.id },
-                        { "key", cdb::key(a) }
-                    });
-                }
-            }
-            return j;
+            return json{
+                { "atoms", json_(ret) }
+            };
         }
 
     //  -----------------------------------------------------------------------

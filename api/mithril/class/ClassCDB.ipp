@@ -56,6 +56,14 @@ namespace yq::mithril::cdb {
         return s.vec<Class>();
     }
     
+    ClassVector                 all_classes(Category c, Sorted sorted)
+    {
+        static thread_local CacheQuery    qs("SELECT id FROM " TBL_CLASSES " WHERE category=? ORDER BY K");
+        static thread_local CacheQuery    qu("SELECT id FROM " TBL_CLASSES " WHERE category=?");
+        CacheQuery& s = sorted ? qs : qu;
+        return s.vec<Class>(c.id);
+    }
+
     size_t  all_classes_count()
     {
         static thread_local CacheQuery    s("SELECT COUNT(1) FROM " TBL_CLASSES "");

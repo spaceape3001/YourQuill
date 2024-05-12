@@ -1,3 +1,3 @@
 %      Vehicle
-plural Vehicle
+plural Vehicles
 is     thing

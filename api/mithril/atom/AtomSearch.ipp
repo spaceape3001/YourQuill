@@ -25,7 +25,7 @@ namespace yq::mithril {
         
         Class x = arg::class_(s);
         if(x){
-            if(ws.first){
+            if(ws.first && !ws.data.empty()){
                 ws.data     = cdb::all_atoms(x, Sorted::YES);
             } else {
                 std::erase_if(ws.data, 
@@ -49,7 +49,7 @@ namespace yq::mithril {
         
         Tag x = arg::tag(s);
         if(x){
-            if(ws.first){
+            if(ws.first && !ws.data.empty()){
                 ws.data     = cdb::all_atoms(x, Sorted::YES);
             } else {
                 std::erase_if(ws.data, 

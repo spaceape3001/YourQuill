@@ -11,6 +11,7 @@ add_library(${PROJECT_NAME} SHARED
     all_cdb.cpp
     all_html.cpp
     all_ipc.cpp
+    all_json.cpp
     all_meta.cpp
     all_provider.cpp
     all_search.cpp

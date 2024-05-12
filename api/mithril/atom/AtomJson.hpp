@@ -4,5 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "atom/AtomSearch.ipp"
-#include "class/ClassSearch.ipp"
+#pragma once
+
+#include <0/json_fwd.hpp>
+#include <mithril/preamble.hpp>
+
+namespace yq::mithril {
+    json json_(Atom);
+    json json_(const AtomVector&);
+}

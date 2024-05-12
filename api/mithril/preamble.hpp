@@ -25,10 +25,12 @@ namespace yq {
     template <typename> class Ref;
     
     struct atom_t {};
+    struct category_t {};
     struct leaf_t {};
     struct tag_t {};
     
     static constexpr atom_t     ATOM;
+    static constexpr category_t CATEGORY;
     static constexpr leaf_t     LEAF;
     static constexpr tag_t      TAG;
 }

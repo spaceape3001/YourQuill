@@ -4,5 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "atom/AtomSearch.ipp"
-#include "class/ClassSearch.ipp"
+#include <0/json.hpp>
+
+#include "atom/AtomJson.ipp"
+#include "class/ClassJson.ipp"
