@@ -23,6 +23,14 @@ namespace yq {
     class Stream;
     class Meta;
     template <typename> class Ref;
+    
+    struct atom_t {};
+    struct leaf_t {};
+    struct tag_t {};
+    
+    static constexpr atom_t     ATOM;
+    static constexpr leaf_t     LEAF;
+    static constexpr tag_t      TAG;
 }
 
 namespace yq::mithril {
@@ -71,7 +79,8 @@ namespace yq::mithril {
     template <typename F, typename T> struct Connection;
     template <typename...>  class Notifier;
     template <typename> struct Changed;
-    
+    template <typename> struct WebSearcher;
+
     using D3CPtr                = Ref<const D3Object>;
     using D3Ptr                 = Ref<D3Object>;
 

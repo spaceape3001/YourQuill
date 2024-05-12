@@ -12,9 +12,45 @@ namespace {
     //      UTILITIES
     //  -----------------------------------------------------------------------
 
+
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_atom(WebContext& ctx)
+        {
+            Atom    v   = arg::atom(ctx);
+            json j{
+                { "id", v.id },
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_atom_key(WebContext& ctx)
+        {
+            Atom    v   = arg::atom(ctx);
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_atoms(WebContext& ctx)
+        {
+            AtomVector  ret = search(ctx, ATOM);
+            json j;
+            {
+                auto& ats   = j["atoms"];
+                for(Atom a : ret){
+                    ats.push_back(json{
+                        { "id", a.id },
+                        { "key", cdb::key(a) }
+                    });
+                }
+            }
+            return j;
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -109,7 +145,7 @@ namespace {
         void p_dev_atoms(WebHtml&h)
         {
             h.title() << "All Atoms";
-            dev_table(h, all_atoms(Sorted::YES));
+            dev_table(h, search(h.context(), ATOM));
         }
     
     //  -----------------------------------------------------------------------
@@ -147,6 +183,10 @@ namespace {
     
         void reg_atom_pages()
         {
+            reg_webpage<p_api_atom>("/api/atom").argument("ID", "Atom ID");
+            reg_webpage<p_api_atom_key>("/api/atom/key").argument("ID", "Atom ID");
+            reg_webpage<p_api_atoms>("/api/atoms");
+        
             reg_webpage<p_atom>("/atom").argument("ID", "Atom ID");
             reg_webpage<p_atoms>("/atoms");
         

@@ -5,12 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <mithril/id/Id.hpp>
+
+#include <mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
-    namespace provider {
-        IdProvider  all_atoms();
-        IdProvider  all_atoms(Class);
-        IdProvider  all_atoms(Tag);
-    }
+    bool        search(WebSearcher<Atom>&, class_t);
+    bool        search(WebSearcher<Atom>&, tag_t);
+    AtomVector  search(WebContext&, atom_t);
 }

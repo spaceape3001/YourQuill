@@ -13,4 +13,5 @@
 #include <mithril/atom/AtomInfo.hpp>
 #include <mithril/atom/AtomPost.hpp>
 #include <mithril/atom/AtomProvider.hpp>
+#include <mithril/atom/AtomSearch.hpp>
 

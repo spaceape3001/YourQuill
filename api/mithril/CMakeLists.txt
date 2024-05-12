@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME} SHARED
     all_ipc.cpp
     all_meta.cpp
     all_provider.cpp
+    all_search.cpp
     bit.cpp
     directories.cpp
     doodle.cpp
