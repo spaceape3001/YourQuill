@@ -90,6 +90,10 @@ namespace yq::mithril::cdb {
         return doodle(first_fragment(d, DataRole::Doodles));
     }
 
+    Doodle                doodle(Fragment frag)
+    {
+        return doodle(frag.id);
+    }
     
     bool                exists(Doodle l)
     {

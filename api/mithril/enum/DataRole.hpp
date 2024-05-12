@@ -36,7 +36,11 @@ namespace yq {
             //! Images
             Image,
             
-            Doodles
+            //! Doodles/Diagrams
+            Doodles,
+            
+            //! Writings
+            Novels
         )
 
     }

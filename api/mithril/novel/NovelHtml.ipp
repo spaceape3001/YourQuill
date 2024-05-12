@@ -50,9 +50,9 @@ namespace yq::mithril::html {
         auto t=h.table();
         h << "<tr><th><ID></th><th>key</th><th>Title</th></tr>\n";
         for(Novel l : novels){
-            auto    i   = cdb::info(l);
+            auto    i   = cdb::nki(l);
             h << "<tr><td>" << dev_id(l) << "</td><td><a href=\"/novel?id=" << l.id << "\">"
-                << i.key << "<a></td><td>" << i.title << "</td></tr>\n";
+                << i.key << "<a></td><td>" << i.name << "</td></tr>\n";
         }
     }
 

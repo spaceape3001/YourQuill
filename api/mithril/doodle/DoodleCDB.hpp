@@ -50,6 +50,9 @@ namespace yq::mithril::cdb {
 
     //! \brief First doodle for a document
     Doodle                        doodle(Document);
+
+    //! Doodle for a fragment
+    Doodle                        doodle(Fragment);
     
     //! \brief Tests for existence of doodle
     bool                        exists(Doodle);
