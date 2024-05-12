@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/field/FieldJson.hpp>
+#include <mithril/field/FieldSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_field(WebContext& ctx)
+        {
+            Field    v   = arg::field(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_field_key(WebContext& ctx)
+        {
+            Field    v   = arg::field(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_fields(WebContext& ctx)
+        {
+            FieldVector  ret = search(ctx, FIELD);
+            return json{
+                { "fields", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -133,6 +163,10 @@ namespace {
 
         void reg_field_pages()
         {
+            reg_webpage<p_api_field>("/api/field").argument("ID", "Field ID");
+            reg_webpage<p_api_field_key>("/api/field/key").argument("ID", "Field ID");
+            reg_webpage<p_api_fields>("/api/fields");
+
             reg_webpage<p_admin_field>("/admin/field").argument("id", "Field ID");
             // reg_webpage<p_admin_fields>("/admin/fields"); // registered in page.cpp
             reg_webpage<p_admin_fields_create>(hPost, "/admin/fields/create");

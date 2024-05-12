@@ -32,6 +32,8 @@ namespace yq {
     struct document_t {};
     struct directory_t {};
     struct doodle_t {};
+    struct entity_t {};
+    struct event_t {};
     struct field_t {};
     struct folder_t {};
     struct fragment_t {};
@@ -61,6 +63,9 @@ namespace yq {
     static constexpr directory_t    DIRECTORY;
     static constexpr document_t     DOCUMENT;
     static constexpr doodle_t       DOODLE;
+    static constexpr entity_t       ENTITY;
+    static constexpr event_t        EVENT;
+    static constexpr field_t        FIELD;
     static constexpr folder_t       FOLDER;
     static constexpr fragment_t     FRAGMENT;
     static constexpr game_t         GAME;

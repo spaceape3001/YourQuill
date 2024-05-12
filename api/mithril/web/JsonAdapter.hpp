@@ -8,12 +8,12 @@
 
 #include "WebPage.hpp"
 #include "WebContext.hpp"
-#include <nlohmann/json.hpp>
+#include <0/json.hpp>
 #include <0/io/preamble.hpp>
 
 namespace yq::mithril {
 
-    template <nlohmann::json (*FN)(WebContext&)>
+    template <json (*FN)(WebContext&)>
     class JSONWebAdapter : public WebPage {
     public:
         JSONWebAdapter(HttpOps _methods, std::string_view _path, const std::source_location& _sl) : WebPage(_methods, _path, _sl)
@@ -31,13 +31,13 @@ namespace yq::mithril {
         }
     };
 
-    template <nlohmann::json (*FN)(WebContext&)>
+    template <json (*FN)(WebContext&)>
     WebPage::Writer     reg_webpage(std::string_view path, const std::source_location& sl = std::source_location::current())
     {
         return WebPage::Writer( new JSONWebAdapter<FN>(hGet, path, sl) );
     }
     
-    template <nlohmann::json (*FN)(WebContext&)>
+    template <json (*FN)(WebContext&)>
     WebPage::Writer     reg_webpage(HttpOps methods, std::string_view path, const std::source_location& sl = std::source_location::current())
     {
         return WebPage::Writer( new JSONWebAdapter<FN>(methods, path, sl) );

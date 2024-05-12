@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/book/BookJson.hpp>
+#include <mithril/book/BookSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_book(WebContext& ctx)
+        {
+            Book    v   = arg::book(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_book_key(WebContext& ctx)
+        {
+            Book    v   = arg::book(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_books(WebContext& ctx)
+        {
+            BookVector  ret = search(ctx, BOOK);
+            return json{
+                { "books", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -60,6 +90,10 @@ namespace {
 
         void reg_book_pages()
         {
+            reg_webpage<p_api_book>("/api/book"sv).argument("ID", "Book ID");
+            reg_webpage<p_api_book_key>("/api/book/key"sv).argument("ID", "Book ID");
+            reg_webpage<p_api_books>("/api/books"sv);
+            
             reg_webpage<p_books>("/books");
             reg_webpage<p_dev_books>("/dev/books");
         }

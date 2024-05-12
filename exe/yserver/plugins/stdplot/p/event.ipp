@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/event/EventJson.hpp>
+#include <mithril/event/EventSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -16,6 +19,33 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
+        json p_api_event(WebContext& ctx)
+        {
+            Event    v   = arg::event(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_event_key(WebContext& ctx)
+        {
+            Event    v   = arg::event(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_events(WebContext& ctx)
+        {
+            EventVector  ret = search(ctx, EVENT);
+            return json{
+                { "events", json_(ret) }
+            };
+        }
+        
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
@@ -59,6 +89,10 @@ namespace {
 
         void reg_event_pages()
         {
+            reg_webpage<p_api_event>("/api/event").argument("ID", "Event ID");
+            reg_webpage<p_api_event_key>("/api/event/key").argument("ID", "Event ID");
+            reg_webpage<p_api_events>("/api/events");
+
             reg_webpage<p_events>("/events");
             
             reg_webpage<p_dev_events>("/dev/events");

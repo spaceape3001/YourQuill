@@ -6,6 +6,10 @@
 
 #pragma once
 
+#include <mithril/image/ImageJson.hpp>
+#include <mithril/image/ImageSearch.hpp>
+
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -16,6 +20,33 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
+        json p_api_image(WebContext& ctx)
+        {
+            Image    v   = arg::image(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_image_key(WebContext& ctx)
+        {
+            Image    v   = arg::image(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_images(WebContext& ctx)
+        {
+            ImageVector  ret = search(ctx, IMAGE);
+            return json{
+                { "images", json_(ret) }
+            };
+        }
+        
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
@@ -85,6 +116,10 @@ namespace {
     
         void reg_image_pages()
         {
+            reg_webpage<p_api_image>("/api/image").argument("ID", "Image ID");
+            reg_webpage<p_api_image_key>("/api/image/key").argument("ID", "Image ID");
+            reg_webpage<p_api_images>("/api/images");
+
             reg_webpage<p_image>("/image").argument("id", "ID for the image");
             reg_webpage<p_thumbnail>("/thumbnail").argument("id", "ID for the image");
 

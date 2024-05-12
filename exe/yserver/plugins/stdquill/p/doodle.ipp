@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/doodle/DoodleJson.hpp>
+#include <mithril/doodle/DoodleSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_doodle(WebContext& ctx)
+        {
+            Doodle    v   = arg::doodle(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_doodle_key(WebContext& ctx)
+        {
+            Doodle    v   = arg::doodle(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_doodles(WebContext& ctx)
+        {
+            DoodleVector  ret = search(ctx, DOODLE);
+            return json{
+                { "doodles", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -55,6 +85,10 @@ namespace {
 
         void reg_doodle_pages()
         {
+            reg_webpage<p_api_doodle>("/api/doodle").argument("ID", "Doodle ID");
+            reg_webpage<p_api_doodle_key>("/api/doodle/key").argument("ID", "Doodle ID");
+            reg_webpage<p_api_doodles>("/api/doodles");
+
             reg_webpage<p_dev_doodle>("/dev/doodle").local().argument("id", "Doodle id (number)");
             reg_webpage<p_dev_doodles>("/dev/doodles");
         }

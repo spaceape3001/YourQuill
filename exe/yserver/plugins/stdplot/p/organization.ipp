@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/organization/OrganizationJson.hpp>
+#include <mithril/organization/OrganizationSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -16,6 +19,33 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
+        json p_api_organization(WebContext& ctx)
+        {
+            Organization    v   = arg::organization(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_organization_key(WebContext& ctx)
+        {
+            Organization    v   = arg::organization(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_organizations(WebContext& ctx)
+        {
+            OrganizationVector  ret = search(ctx, ORGANIZATION);
+            return json{
+                { "organizations", json_(ret) }
+            };
+        }
+        
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
@@ -40,6 +70,10 @@ namespace {
 
         void reg_organization_pages()
         {
+            reg_webpage<p_api_organization>("/api/organization").argument("ID", "Organization ID");
+            reg_webpage<p_api_organization_key>("/api/organization/key").argument("ID", "Organization ID");
+            reg_webpage<p_api_organizations>("/api/organizations");
+
             reg_webpage<p_dev_organizations>("/dev/organizations");
         }
 }

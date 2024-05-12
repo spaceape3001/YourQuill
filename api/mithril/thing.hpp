@@ -7,8 +7,8 @@
 #pragma once
 
 #include <mithril/thing/Thing.hpp>
-//#include <mithril/thing/ThingArg.hpp>
+#include <mithril/thing/ThingArg.hpp>
 #include <mithril/thing/ThingHtml.hpp>
-//#include <mithril/thing/ThingPost.hpp>
+#include <mithril/thing/ThingPost.hpp>
 #include <mithril/thing/ThingCDB.hpp>
 

@@ -106,6 +106,8 @@ namespace {
         void    reg_wksp_pages()
         {
             reg_webpage<p_api_wksp>("/api/wksp"sv); 
+            reg_webpage<p_api_wksp_author>("/api/wksp/author"sv); 
+            reg_webpage<p_api_wksp_name>("/api/wksp/name"sv); 
             reg_webpage<p_api_wksp_quill>("/api/wksp/quill"sv); 
 
             reg_webgroup({

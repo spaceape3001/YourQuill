@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/category/CategoryJson.hpp>
+#include <mithril/category/CategorySearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_category(WebContext& ctx)
+        {
+            Category    v   = arg::category(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_category_key(WebContext& ctx)
+        {
+            Category    v   = arg::category(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_categories(WebContext& ctx)
+        {
+            CategoryVector  ret = search(ctx, CATEGORY);
+            return json{
+                { "categories", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -143,6 +173,10 @@ namespace {
 
         void reg_category_pages()
         {
+            reg_webpage<p_api_category>("/api/category").argument("ID", "Category ID");
+            reg_webpage<p_api_category_key>("/api/category/key").argument("ID", "Category ID");
+            reg_webpage<p_api_categories>("/api/categories");
+
             //reg_webpage<p_admin_categories>(hPost, "/admin/categories");  // registered in page.cpp
             reg_webpage<p_admin_categories_create>(hPost, "/admin/categories/create");
             reg_webpage<p_admin_category>("/admin/category").argument("id", "Category ID");

@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/user/UserJson.hpp>
+#include <mithril/user/UserSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_user(WebContext& ctx)
+        {
+            User    v   = arg::user(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_user_key(WebContext& ctx)
+        {
+            User    v   = arg::user(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_users(WebContext& ctx)
+        {
+            UserVector  ret = search(ctx, USER);
+            return json{
+                { "users", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -131,6 +161,10 @@ namespace {
 
         void reg_user_pages()
         {
+            reg_webpage<p_api_user>("/api/user").argument("ID", "User ID");
+            reg_webpage<p_api_user_key>("/api/user/key").argument("ID", "User ID");
+            reg_webpage<p_api_users>("/api/users");
+
             reg_webpage<p_user>("/user");
 
             reg_webpage<p_admin_user>("/admin/user").argument("id", "User ID");

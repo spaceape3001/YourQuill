@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/group/GroupJson.hpp>
-#include <mithril/group/GroupSearch.hpp>
+#include <mithril/game/GameJson.hpp>
+#include <mithril/game/GameSearch.hpp>
 
 namespace {
 
@@ -19,17 +19,17 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
-        json p_api_group(WebContext& ctx)
+        json p_api_game(WebContext& ctx)
         {
-            Group    v   = arg::group(ctx);
+            Game    v   = arg::game(ctx);
             if(!v)
                 throw HttpStatus::BadArgument;
             return json_(v);
         }
         
-        json p_api_group_key(WebContext& ctx)
+        json p_api_game_key(WebContext& ctx)
         {
-            Group    v   = arg::group(ctx);
+            Game    v   = arg::game(ctx);
             if(!v)
                 throw HttpStatus::BadArgument;
             json j{
@@ -38,11 +38,11 @@ namespace {
             return j;
         }
         
-        json p_api_groups(WebContext& ctx)
+        json p_api_games(WebContext& ctx)
         {
-            GroupVector  ret = search(ctx, GROUP);
+            GameVector  ret = search(ctx, GAME);
             return json{
-                { "groups", json_(ret) }
+                { "games", json_(ret) }
             };
         }
         
@@ -50,25 +50,6 @@ namespace {
     //      PAGES
     //  -----------------------------------------------------------------------
     
-        void p_groups(WebHtml& h)
-        {
-            //  Search parameters go here... execute the search
-            std::vector<Group>  groups   = all_groups(Sorted::YES);
-            
-            
-            //  Form the title... 
-            h.title() << "Groups";
-            
-            h << "<p><i>(Search Bar will go here)</i></p>\n";
-            
-            //  And results
-            
-            
-            
-            dev_table(h, groups);
-        }
-
-
     //  -----------------------------------------------------------------------
     //      ADMIN
     //  -----------------------------------------------------------------------
@@ -77,23 +58,14 @@ namespace {
     //      DEV
     //  -----------------------------------------------------------------------
 
-        void    p_dev_groups(WebHtml& h)
-        {
-            h.title() << "All Groups";
-            dev_table(h, all_groups(Sorted::YES));
-        }
-
     //  -----------------------------------------------------------------------
     //      REGISTRATION
     //  -----------------------------------------------------------------------
 
-        void reg_group_pages()
+        void reg_game_pages()
         {
-            reg_webpage<p_api_group>("/api/group").argument("ID", "Group ID");
-            reg_webpage<p_api_group_key>("/api/group/key").argument("ID", "Group ID");
-            reg_webpage<p_api_groups>("/api/groups");
-
-            reg_webpage<p_groups>("/groups");
-            reg_webpage<p_dev_groups>("/dev/groups");
+            reg_webpage<p_api_game>("/api/game").argument("ID", "Game ID");
+            reg_webpage<p_api_game_key>("/api/game/key").argument("ID", "Game ID");
+            reg_webpage<p_api_games>("/api/games");
         }
 }

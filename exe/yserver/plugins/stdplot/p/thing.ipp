@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/thing/ThingJson.hpp>
+#include <mithril/thing/ThingSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_thing(WebContext& ctx)
+        {
+            Thing    v   = arg::thing(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_thing_key(WebContext& ctx)
+        {
+            Thing    v   = arg::thing(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_things(WebContext& ctx)
+        {
+            ThingVector  ret = search(ctx, THING);
+            return json{
+                { "things", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -58,6 +88,10 @@ namespace {
 
         void reg_thing_pages()
         {
+            reg_webpage<p_api_thing>("/api/thing").argument("ID", "Thing ID");
+            reg_webpage<p_api_thing_key>("/api/thing/key").argument("ID", "Thing ID");
+            reg_webpage<p_api_things>("/api/things");
+
             reg_webpage<p_things>("/things");
             
             reg_webpage<p_dev_things>("/dev/things");

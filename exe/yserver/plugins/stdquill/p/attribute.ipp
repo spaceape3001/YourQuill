@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/attribute/AttributeJson.hpp>
+#include <mithril/attribute/AttributeSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_attribute(WebContext& ctx)
+        {
+            Attribute    v   = arg::attribute(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_attribute_key(WebContext& ctx)
+        {
+            Attribute    v   = arg::attribute(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_attributes(WebContext& ctx)
+        {
+            AttributeVector  ret = search(ctx, ATTRIBUTE);
+            return json{
+                { "attributes", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -51,6 +81,10 @@ namespace {
 
         void reg_attribute_pages()
         {
+            reg_webpage<p_api_attribute>("/api/attribute").argument("ID", "Attribute ID");
+            reg_webpage<p_api_attribute_key>("/api/attribute/key").argument("ID", "Attribute ID");
+            reg_webpage<p_api_attributes>("/api/attributes");
+
             reg_webpage<p_dev_attribute>("/dev/attribute");
             reg_webpage<p_dev_attributes>("/dev/attributes");
         }

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/group/Group.hpp>
-//#include <mithril/group/GroupArg.hpp>
+#include <mithril/group/GroupArg.hpp>
 #include <mithril/group/GroupHtml.hpp>
-//#include <mithril/group/GroupPost.hpp>
+#include <mithril/group/GroupPost.hpp>
 #include <mithril/group/GroupCDB.hpp>

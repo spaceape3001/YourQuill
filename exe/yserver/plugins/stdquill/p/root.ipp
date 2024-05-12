@@ -151,6 +151,7 @@ namespace {
         {
             reg_webpage<p_api_root>("/api/root").argument("ID", "Root ID");
             reg_webpage<p_api_root_key>("/api/root/key").argument("ID", "Root ID");
+            reg_webpage<p_api_root_path>("/api/root/path").argument("ID", "Root ID");
             reg_webpage<p_api_roots>("/api/roots");
 
             reg_webgroup({

@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/character/CharacterJson.hpp>
+#include <mithril/character/CharacterSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -16,6 +19,33 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
+        json p_api_character(WebContext& ctx)
+        {
+            Character    v   = arg::character(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_character_key(WebContext& ctx)
+        {
+            Character    v   = arg::character(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_characters(WebContext& ctx)
+        {
+            CharacterVector  ret = search(ctx, CHARACTER);
+            return json{
+                { "characters", json_(ret) }
+            };
+        }
+        
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
@@ -57,6 +87,10 @@ namespace {
 
         void reg_character_pages()
         {
+            reg_webpage<p_api_character>("/api/character").argument("ID", "Character ID");
+            reg_webpage<p_api_character_key>("/api/character/key").argument("ID", "Character ID");
+            reg_webpage<p_api_characters>("/api/characters");
+
             reg_webpage<p_characters>("/characters");
 
             reg_webpage<p_dev_characters>("/dev/characters");

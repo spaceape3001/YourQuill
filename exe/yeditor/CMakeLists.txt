@@ -71,6 +71,7 @@ add_executable(${PROJECT_NAME}
     wksp/root.cpp
     wksp/style.cpp
     wksp/tag.cpp
+    wksp/thing.cpp
     wksp/user.cpp
 
     main.cpp 

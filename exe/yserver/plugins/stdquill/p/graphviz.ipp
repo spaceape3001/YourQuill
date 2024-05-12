@@ -6,6 +6,10 @@
 
 #pragma once
 
+#include <mithril/graphviz/GraphvizJson.hpp>
+#include <mithril/graphviz/GraphvizSearch.hpp>
+
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -16,6 +20,33 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
+        json p_api_graphviz(WebContext& ctx)
+        {
+            Graphviz    v   = arg::graphviz(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_graphviz_key(WebContext& ctx)
+        {
+            Graphviz    v   = arg::graphviz(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_graphvizs(WebContext& ctx)
+        {
+            GraphvizVector  ret = search(ctx, GRAPHVIZ);
+            return json{
+                { "graphvizs", json_(ret) }
+            };
+        }
+        
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
@@ -106,6 +137,10 @@ namespace {
 
         void reg_graphviz_pages()
         {
+            reg_webpage<p_api_graphviz>("/api/graphviz").argument("ID", "Graphviz ID");
+            reg_webpage<p_api_graphviz_key>("/api/graphviz/key").argument("ID", "Graphviz ID");
+            reg_webpage<p_api_graphvizs>("/api/graphvizs");
+
             reg_webpage<p_graphviz>("/graphviz").argument("id", "ID for the graphviz").description("Shows a graphviz graph");
             reg_webpage<p_graphviz_svg>("/graphviz/svg").argument("id", "ID for the graphviz").description("Graphviz SVG");
 
