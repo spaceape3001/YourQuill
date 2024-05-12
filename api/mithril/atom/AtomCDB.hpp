@@ -278,7 +278,7 @@ namespace yq::mithril::cdb {
     Atom                    db_atom(Atom atom, std::string_view k, bool* wasCreated=nullptr);
 
     //! Documents that define this atom
-    //std::vector<Document>   documents(Atom, Sorted sorted=Sorted{});
+    //DocumentVector   documents(Atom, Sorted sorted=Sorted{});
     
     //! Count of documents defining/mentioning atom
     //size_t                  documents_count(Atom);

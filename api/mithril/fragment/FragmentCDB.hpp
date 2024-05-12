@@ -37,13 +37,13 @@ namespace yq::mithril {
     namespace cdb {
     
         //! List of all fragments
-        std::vector<Fragment>           all_fragments(Sorted sorted=Sorted());
+        FragmentVector                  all_fragments(Sorted sorted=Sorted());
         
         //! Count of all fragments
         size_t                          all_fragments_count();
         
         //! All fragments with given suffix
-        std::vector<Fragment>           all_fragments_suffix(std::string_view, Sorted sorted=Sorted());
+        FragmentVector                  all_fragments_suffix(std::string_view, Sorted sorted=Sorted());
 
         //! Base key (no-suffix) of fragment
         std::string                     base_key(Fragment);
@@ -76,7 +76,7 @@ namespace yq::mithril {
         Folder                          folder(Fragment);
         
         //! Path in folders to fragment
-        std::vector<Folder>             folder_path(Fragment);
+        FolderVector                    folder_path(Fragment);
         
         //! Gets the fragment's contents as a byte array
         ByteArray                       frag_bytes(Fragment, cdb_options_t opts=0);                    // reads the specified fragment
@@ -104,10 +104,10 @@ namespace yq::mithril {
         Fragment                        fragment(uint64_t);
         
         //! Fragments for key
-        std::vector<Fragment>           fragments(std::string_view, Sorted sorted=Sorted());
+        FragmentVector                  fragments(std::string_view, Sorted sorted=Sorted());
         
         //! Fragments for key
-        std::vector<Fragment>           fragments(std::string_view, DataRole, Sorted sorted=Sorted());
+        FragmentVector                  fragments(std::string_view, DataRole, Sorted sorted=Sorted());
         
         //! TRUE if the fragment is hidden
         bool                            hidden(Fragment);

@@ -35,13 +35,13 @@ namespace yq::mithril {
     
 
     namespace cdb {
-        std::vector<Document>           all_documents(Sorted sorted=Sorted());
+        DocumentVector                  all_documents(Sorted sorted=Sorted());
         size_t                          all_documents_count();
-        std::vector<Document>           all_documents_suffix(std::string_view , Sorted sorted=Sorted());
+        DocumentVector                  all_documents_suffix(std::string_view , Sorted sorted=Sorted());
         
-        std::vector<Document>           all_similar(Document, Sorted=Sorted{});
-        std::vector<Document>           all_similar(Document, const std::vector<Extension>&, Sorted=Sorted{});
-        std::vector<Document>           all_similar(Document, const std::vector<ExtensionView>&, Sorted=Sorted{});
+        DocumentVector                  all_similar(Document, Sorted=Sorted{});
+        DocumentVector                  all_similar(Document, const std::vector<Extension>&, Sorted=Sorted{});
+        DocumentVector                  all_similar(Document, const std::vector<ExtensionView>&, Sorted=Sorted{});
 
         std::string                     base_key(Document);         //!< key w/o final extensions
 
@@ -75,7 +75,7 @@ namespace yq::mithril {
 
         Folder                          folder(Document);
         
-        std::vector<Folder>             folder_path(Document);
+        FolderVector                    folder_path(Document);
         
         /*! \brief Returns the first fragmment found for the given document
         */
@@ -83,9 +83,9 @@ namespace yq::mithril {
         Fragment                        fragment(Document, const RootDir*);
         Fragment                        fragment(Document, DataRole);
         
-        std::vector<Fragment>           fragments(Document, Sorted sorted=Sorted());
-        std::vector<Fragment>           fragments(Document, const RootDir*, Sorted sorted=Sorted());
-        std::vector<Fragment>           fragments(Document, DataRole, Sorted sorted=Sorted());
+        FragmentVector                  fragments(Document, Sorted sorted=Sorted());
+        FragmentVector                  fragments(Document, const RootDir*, Sorted sorted=Sorted());
+        FragmentVector                  fragments(Document, DataRole, Sorted sorted=Sorted());
 
         size_t                          fragments_count(Document);
         size_t                          fragments_count(Document, const RootDir*);

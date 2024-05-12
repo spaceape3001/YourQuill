@@ -6,6 +6,10 @@
 
 #pragma once
 
+#include <mithril/fragment/FragmentArg.hpp>
+#include <mithril/fragment/FragmentJson.hpp>
+#include <mithril/fragment/FragmentSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +19,44 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_fragment(WebContext& ctx)
+        {
+            Fragment    v   = arg::fragment(ctx, nullptr);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_fragment_key(WebContext& ctx)
+        {
+            Fragment    v   = arg::fragment(ctx, nullptr);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_fragment_path(WebContext& ctx)
+        {
+            Fragment    v   = arg::fragment(ctx, nullptr);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "path", cdb::path(v).string() }
+            };
+            return j;
+        }
+
+        json p_api_fragments(WebContext& ctx)
+        {
+            FragmentVector  ret = search(ctx, FRAGMENT);
+            return json{
+                { "fragments", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -104,6 +146,17 @@ namespace {
 
         void reg_fragment_pages()
         {
+            reg_webpage<p_api_fragment>("/api/fragment").argument("ID", "Fragment ID");
+            reg_webpage<p_api_fragment_key>("/api/fragment/key").argument("ID", "Fragment ID");
+            reg_webpage<p_api_fragment_path>("/api/fragment/path").argument("ID", "Fragment ID");
+            reg_webpage<p_api_fragments>("/api/fragments")
+                .argument("directory", "Specify the owning directory (same as parent)")
+                .argument("document", "Specify the document")
+                .argument("folder", "Speccify the folder")
+                .argument("parent", "Specify the parent directory (same as directory)")
+                .argument("root", "Specify the root directory")
+            ;
+
             reg_webgroup({
                 reg_webpage<p_dev_fragment>("/dev/fragment").description("Developer info for a fragment").argument("id", "Fragment ID").label("Info"),
                 reg_webpage<p_dev_fragment_content>("/dev/fragment/content").description("Content for fragment").argument("id", "Fragment ID").label("Content")

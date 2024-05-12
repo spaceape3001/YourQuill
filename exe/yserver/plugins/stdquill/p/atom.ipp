@@ -180,7 +180,11 @@ namespace {
         {
             reg_webpage<p_api_atom>("/api/atom").argument("ID", "Atom ID");
             reg_webpage<p_api_atom_key>("/api/atom/key").argument("ID", "Atom ID");
-            reg_webpage<p_api_atoms>("/api/atoms");
+            reg_webpage<p_api_atoms>("/api/atoms")
+                .argument("class", "Specify class")
+                .argument("tag", "Specify tag")
+                .description("List of atoms meeting search criteria, or ALL atoms (default)")
+            ;
         
             reg_webpage<p_atom>("/atom").argument("ID", "Atom ID");
             reg_webpage<p_atoms>("/atoms");

@@ -42,7 +42,7 @@ namespace yq::mithril::arg {
             return fragment_id(k);
         }
         
-        k   = ctx.find_query("root_dir");
+        k   = ctx.find_query("root");
         if(!k.empty())
             rt  = root_dir(k);
 

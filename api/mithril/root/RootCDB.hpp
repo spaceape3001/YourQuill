@@ -15,13 +15,15 @@ namespace yq::mithril::cdb {
 
     /*! \brief All directories for root_dir
     */
-    std::vector<Directory>     all_directories(const RootDir*, Sorted sorted=Sorted());
+    DirectoryVector             all_directories(const RootDir*, Sorted sorted=Sorted());
     
+    DirectoryVector             all_directories(Root, Sorted sorted=Sorted());
+
     //! \brief Count of directories under root_dir
     size_t                     all_directories_count(const RootDir*);
 
     //! \brief All fragments for root_dir
-    std::vector<Fragment>      all_fragments(const RootDir*,Sorted sorted=Sorted());
+    FragmentVector              all_fragments(const RootDir*,Sorted sorted=Sorted());
     
     //! \brief Count of all fragments for root_dir.
     size_t                     all_fragments_count(const RootDir*);
@@ -46,7 +48,7 @@ namespace yq::mithril::cdb {
     //Directory                  directory(const RootDir*, std::string_view);
     
     //! Top directories for root_dir (should be one)
-    std::vector<Directory>     directories(const RootDir*, Sorted sorted=Sorted());
+    DirectoryVector             directories(const RootDir*, Sorted sorted=Sorted());
     
     //! Count of top directories for root_dir (should be one)
     size_t                     directories_count(const RootDir*);
@@ -58,7 +60,7 @@ namespace yq::mithril::cdb {
     Fragment                   fragment(const RootDir*, std::string_view );
     
     //! Child fragments for root_dir top directory
-    std::vector<Fragment>      fragments(const RootDir*, Sorted sorted=Sorted());
+    FragmentVector              fragments(const RootDir*, Sorted sorted=Sorted());
     
     Image                       icon(Root);
     

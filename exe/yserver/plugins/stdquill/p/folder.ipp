@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/folder/FolderJson.hpp>
+#include <mithril/folder/FolderSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,33 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_folder(WebContext& ctx)
+        {
+            Folder    v   = arg::folder(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_folder_key(WebContext& ctx)
+        {
+            Folder    v   = arg::folder(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_folders(WebContext& ctx)
+        {
+            FolderVector  ret = search(ctx, FOLDER);
+            return json{
+                { "folders", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -106,6 +136,12 @@ namespace {
 
         void reg_folder_pages()
         {
+            reg_webpage<p_api_folder>("/api/folder").argument("ID", "Folder ID");
+            reg_webpage<p_api_folder_key>("/api/folder/key").argument("ID", "Folder ID");
+            reg_webpage<p_api_folders>("/api/folders")
+                .argument("parent", "Specify owning folder")
+            ;
+
             reg_webgroup({
                 reg_webpage<p_dev_folder>("/dev/folder").label("Info"),
                 reg_webpage<p_dev_folder_directories>("/dev/folder/dirs").label("Dirs"),

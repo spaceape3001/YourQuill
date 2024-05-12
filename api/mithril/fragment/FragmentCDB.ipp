@@ -18,7 +18,7 @@
 #include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
-    std::vector<Fragment>    all_fragments(Sorted sorted)
+    FragmentVector   all_fragments(Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_FRAGMENTS " ORDER BY path");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_FRAGMENTS "");
@@ -32,7 +32,7 @@ namespace yq::mithril::cdb {
         return s.size();
     }
     
-    std::vector<Fragment>    all_fragments_suffix(std::string_view sfx, Sorted sorted)
+    FragmentVector   all_fragments_suffix(std::string_view sfx, Sorted sorted)
     {
         static thread_local CacheQuery qs("SELECT id FROM " TBL_FRAGMENTS " WHERE suffix=? ORDER BY path");
         static thread_local CacheQuery qu("SELECT id FROM " TBL_FRAGMENTS " WHERE suffix=?");
@@ -147,7 +147,7 @@ namespace yq::mithril::cdb {
         return s.as<Folder>(f.id);
     }
 
-    std::vector<Folder>      folder_path(Fragment f)
+    FolderVector      folder_path(Fragment f)
     {
         return folder_path(document(f));
     }
@@ -221,12 +221,12 @@ namespace yq::mithril::cdb {
     }
     
     
-    std::vector<Fragment>    fragments(std::string_view k, Sorted sorted)
+    FragmentVector      fragments(std::string_view k, Sorted sorted)
     {
         return fragments(document(k),sorted);
     }
     
-    std::vector<Fragment>    fragments(std::string_view k, DataRole dr, Sorted sorted)
+    FragmentVector      fragments(std::string_view k, DataRole dr, Sorted sorted)
     {
         return fragments(document(k), dr, sorted);
     }

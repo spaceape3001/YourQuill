@@ -44,7 +44,7 @@ namespace yq::mithril::arg {
             return directory_id(k);
         }
         
-        k   = ctx.find_query("root_dir");
+        k   = ctx.find_query("root");
         if(!k.empty())
             rt  = root_dir(k);
 

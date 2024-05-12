@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/document/DocumentJson.hpp>
+#include <mithril/document/DocumentSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -16,6 +19,33 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
+        json p_api_document(WebContext& ctx)
+        {
+            Document    v   = arg::document(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_document_key(WebContext& ctx)
+        {
+            Document    v   = arg::document(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_documents(WebContext& ctx)
+        {
+            DocumentVector  ret = search(ctx, DOCUMENT);
+            return json{
+                { "documents", json_(ret) }
+            };
+        }
+        
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
@@ -104,6 +134,10 @@ namespace {
 
         void reg_document_pages()
         {
+            reg_webpage<p_api_document>("/api/document").argument("ID", "Document ID");
+            reg_webpage<p_api_document_key>("/api/document/key").argument("ID", "Document ID");
+            reg_webpage<p_api_documents>("/api/documents");
+
             reg_webgroup({
                 reg_webpage<p_dev_document>("/dev/document").argument("id", "Document ID").label("Info"),
                 reg_webpage<p_dev_document_attributes>("/dev/document/attributes").argument("id", "Document ID").label("Attributes"),

@@ -324,7 +324,10 @@ namespace {
 
             reg_webpage<p_api_class>("/api/class");
             reg_webpage<p_api_class_key>("/api/class/key");
-            reg_webpage<p_api_classes>("/api/classes");
+            reg_webpage<p_api_classes>("/api/classes")
+                .argument("category", "Specify category")
+                .description("Lists out classes according to search criteria, or ALL classes by default")
+            ;
 
             reg_webgroup({
                 reg_webpage<p_class>("/class").argument("ID", "Class ID").label("Overview"),

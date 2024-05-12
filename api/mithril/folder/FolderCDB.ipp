@@ -85,7 +85,7 @@ namespace yq::mithril::cdb {
         return Document();
     }
 
-    std::vector<Document>    child_documents(Folder f, unsigned opts)
+    DocumentVector    child_documents(Folder f, unsigned opts)
     {
         if(opts & BEST_SORT){
             if(opts & HIDDEN){
@@ -106,7 +106,7 @@ namespace yq::mithril::cdb {
         }
     }
     
-    std::vector<Document>    child_documents(Folder f, Sorted sorted)
+    DocumentVector    child_documents(Folder f, Sorted sorted)
     {
         return child_documents(f, HIDDEN | (sorted ? BEST_SORT : 0));
     }
@@ -122,7 +122,7 @@ namespace yq::mithril::cdb {
         }
     }
     
-    std::vector<Document>    child_documents_by_suffix(Folder f, std::string_view sfx, Sorted sorted)
+    DocumentVector    child_documents_by_suffix(Folder f, std::string_view sfx, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND suffix=? ORDER BY k");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_DOCUMENTS " WHERE folder=? AND suffix=?");
@@ -130,7 +130,7 @@ namespace yq::mithril::cdb {
         return s.vec<Document>(f.id, sfx);
     }
     
-    std::vector<Document>    child_documents_by_suffix_excluding(Folder f, std::string_view sfx, Sorted sorted)
+    DocumentVector    child_documents_by_suffix_excluding(Folder f, std::string_view sfx, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_DOCUMENTS " WHERE folder!=? AND suffix=? ORDER BY k");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_DOCUMENTS " WHERE folder!=? AND suffix=?");
@@ -300,7 +300,7 @@ namespace yq::mithril::cdb {
         }    
     }
     
-    std::vector<Directory>   directories(Folder f, Sorted sorted)
+    DirectoryVector   directories(Folder f, Sorted sorted)
     {
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_DIRECTORIES " WHERE folder=? ORDER BY name");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_DIRECTORIES " WHERE folder=?");

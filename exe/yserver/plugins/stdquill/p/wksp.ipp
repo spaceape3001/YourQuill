@@ -15,6 +15,7 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+    
         json    p_api_wksp(WebContext&ctx)
         {
             json    ret{
@@ -33,6 +34,20 @@ namespace {
                 ret["cache"] = wksp::cache().string();
             }
             return ret;
+        }
+        
+        json        p_api_wksp_author(WebContext&)
+        {
+            return json{
+                { "author", wksp::author() }
+            };
+        }
+
+        json        p_api_wksp_name(WebContext&)
+        {
+            return json{
+                { "name", wksp::name() }
+            };
         }
 
         json    p_api_wksp_quill(WebContext&ctx)

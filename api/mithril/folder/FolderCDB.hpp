@@ -47,19 +47,19 @@ namespace yq::mithril::cdb {
     Document                        child_document(Folder, uint64_t, unsigned opts=0);
 
     //! Gets all documents of folder
-    std::vector<Document>           child_documents(Folder, unsigned opts=0);
+    DocumentVector           child_documents(Folder, unsigned opts=0);
 
     //! Gets all documents of folder
-    std::vector<Document>           child_documents(Folder, Sorted sorted);
+    DocumentVector           child_documents(Folder, Sorted sorted);
 
     //! Gets count of child documents for folder
     size_t                          child_documents_count(Folder, unsigned opts=0);
     
     //! Gets child documents with given suffix
-    std::vector<Document>           child_documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
+    DocumentVector           child_documents_by_suffix(Folder, std::string_view , Sorted sorted=Sorted());
     
     //! Gets child documens excluding given suffix
-    std::vector<Document>           child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
+    DocumentVector           child_documents_by_suffix_excluding(Folder, std::string_view , Sorted sorted=Sorted());
 
     //! Gets all documents & keys of folder
     std::vector<DocString>          child_documents_with_skey(Folder, unsigned opts=0);
@@ -114,17 +114,17 @@ namespace yq::mithril::cdb {
     Folder                          db_folder(Folder, std::string_view , bool *wasCreated=nullptr);
     
     //! All directories that make this folder (not children)
-    std::vector<Directory>          directories(Folder, Sorted sorted=Sorted());
+    DirectoryVector          directories(Folder, Sorted sorted=Sorted());
 
     //! Directories that make this folder under specific root_dir (not children)
-    std::vector<Directory>          directories(Folder, const RootDir*, Sorted sorted=Sorted());
+    DirectoryVector          directories(Folder, const RootDir*, Sorted sorted=Sorted());
     
     //! Number of directories making this folder
     size_t                          directories_count(Folder);
 
     //! Number of directories making this folder under specific root_dir
     //! \note On Windows, this will be no more than one, however, this can be many on any case-sensitive file system
-    std::vector<Directory>          directories_count(Folder, const RootDir*);
+    DirectoryVector          directories_count(Folder, const RootDir*);
     
 
     //! Checks for folder existence

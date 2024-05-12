@@ -41,14 +41,14 @@ namespace yq::mithril {
             \param[in]  opts  Options to search for
             \return std::vector of directories
         */
-        std::vector<Directory>  all_directories(unsigned opts=0);
+        DirectoryVector  all_directories(unsigned opts=0);
 
         /*! \brief Returns all directories in the cache
         
             \param[in]  sorted  Yes/No to sort by path (default is no)
             \return std::vector of directories
         */
-        std::vector<Directory>  all_directories(Sorted sorted);
+        DirectoryVector  all_directories(Sorted sorted);
         
         //! \brief Full count of directories in the search
         size_t  all_directories_count();
@@ -69,7 +69,7 @@ namespace yq::mithril {
             \param[in] par      Parent directory;
             \param[in] sorted   Flag to sort by name
         */
-        std::vector<Directory>  child_directories(Directory par, Sorted sorted=Sorted());
+        DirectoryVector  child_directories(Directory par, Sorted sorted=Sorted());
         
         /*! \brief Number of sub-directories of the directory
             \param[in] par      Parent directory;
@@ -110,7 +110,7 @@ namespace yq::mithril {
             \param[in] sorted   Flag to sort by name
             \return VECTOR of fragments
         */
-        std::vector<Fragment>           child_fragments(Directory par, Sorted sorted=Sorted());
+        FragmentVector          child_fragments(Directory par, Sorted sorted=Sorted());
         
         /*! \brief Number of fragments for directory
             \param[in] par      Parent directory
@@ -158,7 +158,7 @@ namespace yq::mithril {
         */
         Directory                       directory(const std::filesystem::path& p);
         
-            //std::vector<Document>      documents(Directory);   // TODO
+            //DocumentVector      documents(Directory);   // TODO
 
         /*! \brief Erases the directory
         
@@ -192,7 +192,7 @@ namespace yq::mithril {
         */
         Folder                          folder(Directory d);
         
-        std::vector<Folder>             folder_path(Directory);
+        FolderVector             folder_path(Directory);
 
         /*! \brief TRUE if the directory is marked as hidden
         */

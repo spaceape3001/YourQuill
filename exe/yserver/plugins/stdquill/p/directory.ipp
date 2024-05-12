@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/directory/DirectoryJson.hpp>
+#include <mithril/directory/DirectorySearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -16,6 +19,45 @@ namespace {
     //      REST API
     //  -----------------------------------------------------------------------
 
+        json p_api_directory(WebContext& ctx)
+        {
+            Directory    v   = arg::directory(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_directory_key(WebContext& ctx)
+        {
+            Directory    v   = arg::directory(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", cdb::key(v) }
+            };
+            return j;
+        }
+        
+        json p_api_directory_path(WebContext& ctx)
+        {
+            Directory    v   = arg::directory(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "path", cdb::path(v) }
+            };
+            return j;
+        }
+        
+
+        json p_api_directories(WebContext& ctx)
+        {
+            DirectoryVector  ret = search(ctx, DIRECTORY);
+            return json{
+                { "directories", json_(ret) }
+            };
+        }
+        
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
@@ -81,6 +123,15 @@ namespace {
 
         void reg_directory_pages()
         {
+            reg_webpage<p_api_directory>("/api/directory").argument("ID", "Directory ID");
+            reg_webpage<p_api_directory_key>("/api/directory/key").argument("ID", "Directory ID");
+            reg_webpage<p_api_directory_path>("/api/directory/path").argument("ID", "Directory ID");
+            reg_webpage<p_api_directories>("/api/directories")
+                .argument("folder", "Specify folder")
+                .argument("parent", "Specify parent")
+                .argument("root", "Specify root directory")
+                .description("Lists directories according to search criteria (or ALL directories w/o search terms)");
+
             reg_webpage<p_dev_directories>("/dev/directories");
             reg_webgroup({
                 reg_webpage<p_dev_directory>("/dev/directory").argument("id", "Directory ID").label("Info"),

@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <mithril/root/RootJson.hpp>
+#include <mithril/root/RootSearch.hpp>
+
 namespace {
 
     //  -----------------------------------------------------------------------
@@ -15,6 +18,44 @@ namespace {
     //  -----------------------------------------------------------------------
     //      REST API
     //  -----------------------------------------------------------------------
+
+        json p_api_root(WebContext& ctx)
+        {
+            const RootDir*    v   = arg::root_dir(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            return json_(v);
+        }
+        
+        json p_api_root_key(WebContext& ctx)
+        {
+            const RootDir*    v   = arg::root_dir(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "key", v->key }
+            };
+            return j;
+        }
+        
+        json p_api_root_path(WebContext& ctx)
+        {
+            const RootDir*    v   = arg::root_dir(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            json j{
+                { "path", v->path.string() }
+            };
+            return j;
+        }
+
+        json p_api_roots(WebContext& ctx)
+        {
+            RootDirVector  ret = search(ctx, ROOT);
+            return json{
+                { "roots", json_(ret) }
+            };
+        }
 
     //  -----------------------------------------------------------------------
     //      PAGES
@@ -108,6 +149,10 @@ namespace {
 
         void reg_root_pages()
         {
+            reg_webpage<p_api_root>("/api/root").argument("ID", "Root ID");
+            reg_webpage<p_api_root_key>("/api/root/key").argument("ID", "Root ID");
+            reg_webpage<p_api_roots>("/api/roots");
+
             reg_webgroup({
                 reg_webpage<p_dev_root>("/dev/root").argument("id", "RootDir ID").label("Info"),
                 reg_webpage<p_dev_root_directories>("/dev/root/dirs").argument("id", "RootDir ID").label("Dirs"),

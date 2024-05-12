@@ -239,11 +239,14 @@ namespace yq::mithril {
         {
             auto    t   = out.table();
             for(auto& i : remapToActionMethods(wm)){
+                const WebPage*get = nullptr;
                 out << "<TR><TH align=\"left\">" << i.first << "</TH>";
                 for(HttpOp h : HttpOp::all_values()){
                     out << "<TD>";
                     const WebPage*pg = i.second[h];
                     if(pg){
+                        if(h == hGet)
+                            get = pg;
                         if(links && (h == hGet)){
                             out << "<a href=\"" << i.first << "\">" << h << "</a>";
                         } else 
@@ -256,6 +259,11 @@ namespace yq::mithril {
                     }
                     out << "</TD>";
                 }
+                out << "<TD>";
+                if(get){
+                    out << get->description();
+                }
+                out << "</TD>";
                 out << "</TR>\n";
             }
         } 

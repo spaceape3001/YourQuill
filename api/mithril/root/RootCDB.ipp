@@ -18,10 +18,10 @@
 #include <mithril/wksp/CacheLogging.hpp>
 
 namespace yq::mithril::cdb {
-    std::vector<Directory>   all_directories(const RootDir*rt, Sorted sorted)
+    DirectoryVector   all_directories(const RootDir*rt, Sorted sorted)
     {
         if(!rt)
-            return std::vector<Directory>();
+            return DirectoryVector();
 
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_DIRECTORIES " WHERE root=? ORDER BY path");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_DIRECTORIES " WHERE root=?");
@@ -29,6 +29,11 @@ namespace yq::mithril::cdb {
         return s.vec<Directory>(rt->id);
     }
     
+    DirectoryVector     all_directories(Root rt, Sorted sorted)
+    {
+        return all_directories(root_dir(rt), sorted);
+    }
+
     size_t              all_directories_count(const RootDir*rt)
     {
         if(!rt)
@@ -38,7 +43,7 @@ namespace yq::mithril::cdb {
         return s.size(rt->id);
     }
     
-    std::vector<Fragment>    all_fragments(const RootDir*rt, Sorted sorted)
+    FragmentVector   all_fragments(const RootDir*rt, Sorted sorted)
     {
         if(!rt)
             return std::vector<Fragment>();
@@ -119,10 +124,10 @@ namespace yq::mithril::cdb {
         return directory(rt->path);
     }
     
-    std::vector<Directory>   directories(const RootDir*rt, Sorted sorted)
+    DirectoryVector   directories(const RootDir*rt, Sorted sorted)
     {
         if(!rt)
-            return std::vector<Directory>();
+            return DirectoryVector();
             
         static thread_local CacheQuery    qs("SELECT id FROM " TBL_DIRECTORIES " WHERE parent=0 AND root=?");
         static thread_local CacheQuery    qu("SELECT id FROM " TBL_DIRECTORIES " WHERE parent=0 AND root=? ORDER BY NAME");
@@ -154,7 +159,7 @@ namespace yq::mithril::cdb {
     }
 
     
-    std::vector<Fragment>    fragments(const RootDir*rt, Sorted sorted)
+    FragmentVector   fragments(const RootDir*rt, Sorted sorted)
     {
         return child_fragments(directory(rt), sorted);
     }

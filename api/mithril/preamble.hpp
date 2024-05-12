@@ -32,7 +32,12 @@ namespace yq {
     struct folder_t {};
     struct fragment_t {};
     struct leaf_t {};
+    struct parent_t {};
+    struct root_t {};
+    struct suffix_t {};
     struct tag_t {};
+    struct template_t {};
+    struct user_t {};
     
     static constexpr atom_t         ATOM;
     static constexpr category_t     CATEGORY;
@@ -41,7 +46,12 @@ namespace yq {
     static constexpr folder_t       FOLDER;
     static constexpr fragment_t     FRAGMENT;
     static constexpr leaf_t         LEAF;
+    static constexpr parent_t       PARENT;
+    static constexpr root_t         ROOT;
+    static constexpr suffix_t       SUFFIX;
     static constexpr tag_t          TAG;
+    static constexpr template_t     TEMPLATE;
+    static constexpr user_t         USER;
 }
 
 namespace yq::mithril {
@@ -207,6 +217,10 @@ namespace yq::mithril {
     using PlaceCSpan            = std::span<const Place>;
     using PlaceSet              = std::set<Place>;
     using PlaceVector           = std::vector<Place>;
+
+    using RootDirVector         = std::vector<const RootDir*>;
+    
+    using RootVector            = std::vector<Root>;
     
     using StyleCSpan            = std::span<const Style>;
     using StyleSet              = std::set<Style>;
@@ -230,7 +244,6 @@ namespace yq::mithril {
 
 
 
-
     //! Generic options bitmask
     using cdb_options_t         = uint64_t;
     
@@ -251,9 +264,9 @@ namespace yq::mithril {
         //  Note, this is done as a structure so we can do the operator bool() on it
         enum Value : uint8_t { NO = 0, YES };
         Value   value;
-        constexpr Sorted() : value(NO) {}
-        constexpr Sorted(Value v) : value(v) {}
-        operator bool() const { return value != NO; }
+        consteval Sorted() noexcept : value(NO) {}
+        constexpr Sorted(Value v) noexcept: value(v) {}
+        constexpr operator bool() const noexcept { return value != NO; }
     };
     
     namespace cdb {
