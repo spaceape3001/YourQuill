@@ -31,6 +31,7 @@
 #include "root/RootProvider.ipp"
 #include "style/StyleProvider.ipp"
 #include "tag/TagProvider.ipp"
+#include "thing/ThingProvider.ipp"
 #include "user/UserProvider.ipp"
 #include "value/ValueProvider.ipp"
 

@@ -58,6 +58,12 @@ namespace {
     //      DEV
     //  -----------------------------------------------------------------------
 
+        void    p_dev_entities(WebHtml& h)
+        {
+            h.title() << "All Entities";
+            dev_table(h, all_entities(Sorted::YES));
+        }
+
     //  -----------------------------------------------------------------------
     //      REGISTRATION
     //  -----------------------------------------------------------------------
@@ -67,5 +73,7 @@ namespace {
             reg_webpage<p_api_entity>("/api/entity").argument("ID", "Entity ID");
             reg_webpage<p_api_entity_key>("/api/entity/key").argument("ID", "Entity ID");
             reg_webpage<p_api_entities>("/api/entities");
+            
+            reg_webpage<p_dev_entities>("/dev/entities");
         }
 }

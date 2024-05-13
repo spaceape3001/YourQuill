@@ -61,7 +61,7 @@ namespace {
         void    p_dev_organizations(WebHtml& h)
         {
             h.title() << "All Organizations";
-            h << "(still under construction)";
+            dev_table(h, all_organizations(Sorted::YES));
         }
 
     //  -----------------------------------------------------------------------

@@ -58,6 +58,13 @@ namespace {
     //      DEV
     //  -----------------------------------------------------------------------
 
+        void    p_dev_games(WebHtml& h)
+        {
+            h.title() << "All Games";
+            dev_table(h, all_games(Sorted::YES));
+        }
+        
+
     //  -----------------------------------------------------------------------
     //      REGISTRATION
     //  -----------------------------------------------------------------------
@@ -67,5 +74,7 @@ namespace {
             reg_webpage<p_api_game>("/api/game").argument("ID", "Game ID");
             reg_webpage<p_api_game_key>("/api/game/key").argument("ID", "Game ID");
             reg_webpage<p_api_games>("/api/games");
+            
+            reg_webpage<p_dev_games>("/dev/games");
         }
 }
