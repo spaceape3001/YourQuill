@@ -9,15 +9,12 @@
 #include <initializer_list>
 #include <string_view>
 
-namespace yq::mithril {
-    struct Attribute;
-    struct WebContext;
+#include <mithril/preamble.hpp>
 
-    namespace arg {
-        //! Finds attribute by ID
-        Attribute attribute(std::string_view arg_string);
-        Attribute attribute(const WebContext&, bool *detected=nullptr);
-        Attribute attribute(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
-        Attribute attribute(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
-    }
+namespace yq::mithril::arg {
+    //! Finds attribute by ID
+    Attribute attribute(std::string_view arg_string);
+    Attribute attribute(const WebContext&, bool *detected=nullptr);
+    Attribute attribute(const WebContext&, std::string_view arg_name, bool *detected=nullptr);
+    Attribute attribute(const WebContext&, std::initializer_list<std::string_view> arg_names, bool *detected=nullptr);
 }

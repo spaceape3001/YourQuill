@@ -5,8 +5,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <mithril/id/Id.hpp>
+
+#include <mithril/user/UserProvider.hpp>
+#include <mithril/user/UserCDB.hpp>
 
 namespace yq::mithril::provider {
-    IdProvider  all_characters();
+    IdProvider all_users()
+    {
+        return [](){
+            return ids(cdb::all_users(Sorted::YES));
+        };
+    }
 }
+

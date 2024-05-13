@@ -5,8 +5,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <mithril/id/Id.hpp>
+
+#include <mithril/group/GroupProvider.hpp>
+#include <mithril/group/GroupCDB.hpp>
 
 namespace yq::mithril::provider {
-    IdProvider  all_characters();
+    IdProvider all_groups()
+    {
+        return [](){
+            return ids(cdb::all_groups(Sorted::YES));
+        };
+    }
 }
+

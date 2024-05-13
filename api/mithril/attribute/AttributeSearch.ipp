@@ -24,7 +24,7 @@ namespace yq::mithril {
             },
             [](Document d) -> auto
             {
-                return cdb::all_attributes(d, Sorted::YES);
+                return cdb::all_attributes(d);
             },
             [](Document d, Attribute a) -> bool
             {
@@ -39,7 +39,7 @@ namespace yq::mithril {
         WebSearcher<Attribute>   ws(ctx);
         search(ws, DOCUMENT);
         if(ws.first && ws.data.empty())
-            ws.data  = cdb::all_attributes(Sorted::YES);
+            ws.data  = cdb::all_attributes();
         return ws.data;
     }
 }

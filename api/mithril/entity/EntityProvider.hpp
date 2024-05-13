@@ -8,5 +8,5 @@
 #include <mithril/id/Id.hpp>
 
 namespace yq::mithril::provider {
-    IdProvider  all_characters();
+    IdProvider  all_entities();
 }

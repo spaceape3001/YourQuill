@@ -10,19 +10,15 @@
 #include <mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
-    std::vector<Attribute>   all_attributes(Sorted sorted)
+    std::vector<Attribute>   all_attributes(Sorted)
     {
-        static thread_local CacheQuery qu("SELECT id FROM " TBL_ATTRIBUTES "");
-        static thread_local CacheQuery qs("SELECT id FROM " TBL_ATTRIBUTES " ORDER BY k");
-        CacheQuery& s = sorted ? qs : qu;
+        static thread_local CacheQuery s("SELECT id FROM " TBL_ATTRIBUTES "");
         return s.vec<Attribute>();
     }
     
-    std::vector<Attribute>   all_attributes(Document d, Sorted sorted) 
+    std::vector<Attribute>   all_attributes(Document d) 
     {
-        static thread_local CacheQuery qu("SELECT id FROM " TBL_ATTRIBUTES " WHERE doc=?");
-        static thread_local CacheQuery qs("SELECT id FROM " TBL_ATTRIBUTES " WHERE doc=? ORDER BY k");
-        CacheQuery& s = sorted ? qs : qu;
+        static thread_local CacheQuery s("SELECT id FROM " TBL_ATTRIBUTES " WHERE doc=?");
         return s.vec<Attribute>(d.id);
     }
     

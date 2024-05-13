@@ -7,8 +7,6 @@
 #pragma once
 #include <mithril/id/Id.hpp>
 
-namespace yq::mithril {
-    namespace provider {
-        IdProvider  all_books();
-    }
+namespace yq::mithril::provider {
+    IdProvider  all_books();
 }

@@ -35,7 +35,7 @@ namespace yq::mithril {
 
         /*! \brief Gets ALL attributes for given document
         */
-        AttributeVector         all_attributes(Document, Sorted sorted={});
+        AttributeVector         all_attributes(Document);
         size_t                  all_attributes_count();
         size_t                  all_attributes_count(Document);
 
