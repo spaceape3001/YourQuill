@@ -11,6 +11,10 @@
 #include <0/basic/Ref.hpp>
 
 namespace yq::doodler {
+    class QProject;
+
+    using QProjectPtr   = Ref<QProject>;
+
     class QProject : public QObject, public Project, public RefCount {
         Q_OBJECT
     public:
@@ -18,15 +22,22 @@ namespace yq::doodler {
         QProject(QObject*parent=nullptr);
         virtual ~QProject();
         
+        QString     fileName() const;
         QString     title() const;
         
+        static QProjectPtr  load(const QString&);
+        
     signals:
-        void    titleChanged(const QString&);
+        void        titleChanged(const QString&);
+        void        fileChanged(const QString&);
         
     public slots:
-        void    setTitle(const QString&);
+        void        setTitle(const QString&);
+        
+        void        saveTo(const QString&) const;
+        void        saveAs(const QString&);
+        
     };
     
-    using QProjectPtr   = Ref<QProject>;
 }
 
