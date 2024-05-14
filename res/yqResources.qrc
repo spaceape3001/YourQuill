@@ -1,0 +1,23 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="icon/back.svg">arrow-left-3.svg</file>
+    <file alias="icon/cancel.svg">edit-delete-4.svg</file>
+    <file alias="icon/clear.svg">edit-clear-4.svg</file>
+    <file alias="icon/copy.svg">edit-copy-6.svg</file>
+    <file alias="icon/cut.svg">edit-cut-4.svg</file>
+    <file alias="icon/find.svg">edit-find-3.svg</file>
+    <file alias="icon/fore.svg">arrow-right-3.svg</file>
+    <file alias="icon/fullscreen.svg">view-fullscreen-4.svg</file>
+    <file alias="icon/home.svg">go-home-5.svg</file>
+    <file alias="icon/paste.svg">edit-paste-3.svg</file>
+    <file alias="icon/print.svg">document-print-2.svg</file>
+    <file alias="icon/redo.svg">edit-redo-3.svg</file>
+    <file alias="icon/refresh.svg">view-refresh-7.svg</file>
+    <file alias="icon/save.svg">document-save-5.svg</file>
+    <file alias="icon/stop.svg">process-stop-4.svg</file>
+    <file alias="icon/undo.svg">edit-undo-3.svg</file>
+    <file alias="icon/zoomIn.svg">zoom-in-3.svg</file>
+    <file alias="icon/zoomOut.svg">zoom-out-3.svg</file>
+</qresource>
+</RCC>
+

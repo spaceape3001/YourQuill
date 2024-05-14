@@ -58,7 +58,7 @@ endif()
 
 include_directories(api)
 
-
+add_subdirectory(res)
 add_subdirectory(api)
 add_subdirectory(plugins)
 add_subdirectory(test)

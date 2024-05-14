@@ -1,18 +1,9 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file alias="yquill.svg">res/yquill.svg</file>
-
-    <file alias="icon/back.svg">res/arrow-left-3.svg</file>
-    <file alias="icon/browser.svg">res/applications-internet-5.svg</file>
-    <file alias="icon/cancel.svg">res/edit-delete-4.svg</file>
     <file alias="icon/clear.svg">res/edit-clear-4.svg</file>
     <file alias="icon/copy.svg">res/edit-copy-6.svg</file>
     <file alias="icon/cut.svg">res/edit-cut-4.svg</file>
-    <file alias="icon/dice.svg">res/dice-6.svg</file>
     <file alias="icon/find.svg">res/edit-find-3.svg</file>
-    <file alias="icon/fore.svg">res/arrow-right-3.svg</file>
-    <file alias="icon/fullscreen.svg">res/view-fullscreen-4.svg</file>
-    <file alias="icon/home.svg">res/go-home-5.svg</file>
     <file alias="icon/paste.svg">res/edit-paste-3.svg</file>
     <file alias="icon/print.svg">res/document-print-2.svg</file>
     <file alias="icon/redo.svg">res/edit-redo-3.svg</file>

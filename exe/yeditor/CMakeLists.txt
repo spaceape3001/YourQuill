@@ -75,7 +75,7 @@ add_executable(${PROJECT_NAME}
     wksp/user.cpp
 
     main.cpp 
-    ystudio.qrc
+    yeditor.qrc
 
 )
 
@@ -84,6 +84,8 @@ target_link_libraries(${PROJECT_NAME}
     mithril 
     mithrilQt
     yqtoolbox
+    yqresources
+    
     Qt6::Network
     Qt6::Svg
     Qt6::SvgWidgets

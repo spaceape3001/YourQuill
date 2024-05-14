@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="yquill.svg">res/yquill.svg</file>
+
+    <file alias="icon/browser.svg">res/applications-internet-5.svg</file>
+    <file alias="icon/dice.svg">res/dice-6.svg</file>
+</qresource>
+</RCC>
+
