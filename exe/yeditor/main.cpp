@@ -11,12 +11,13 @@
 #include <0/meta/Meta.hpp>
 #include <yqResources.hpp>
 
-using namespace yq;
 
 //  MOTTO:  Detangling Photons
 
 int main(int argc, char* argv[])
 {
+    using namespace yq;
+    
     QCoreApplication::setOrganizationName("YourQuill");
 
     DreamApp    app(argc, argv);

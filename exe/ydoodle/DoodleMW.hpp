@@ -17,6 +17,21 @@ public:
     
     virtual DoodleMW* newMain();
     
+private slots:
+    void        cmdClear();
+    void        cmdCopy();
+    void        cmdCut();
+    void        cmdFind();
+    void        cmdOpen();
+    void        cmdPaste();
+    void        cmdPrint();
+    void        cmdRedo();
+    void        cmdSave();
+    void        cmdSaveAs();
+    void        cmdSetTitle();
+    void        cmdUndo();
+    void        updateTitle();
+    
 private:
     yq::doodler::QProjectPtr      m_project;
 };

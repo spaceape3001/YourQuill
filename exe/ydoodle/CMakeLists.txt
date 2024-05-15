@@ -23,6 +23,7 @@ target_link_libraries(${PROJECT_NAME}
         gluon
         doodler
         doodlerQt
+        yqresources
 )
 
 
