@@ -4,9 +4,6 @@
 ##
 ################################################################################
 
-add_executable(kvtree kvtree.cpp)
-target_link_libraries(kvtree mithril)
-
 add_executable(metavalues metavalues.cpp)
 target_link_libraries(metavalues mithril yqtoolbox)
 

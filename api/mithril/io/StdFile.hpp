@@ -12,11 +12,11 @@
 namespace yq {
     class Stream;
     class ByteArray;
+    class KVTree;
 }
 
 
 namespace yq::mithril {
-    class KVTree;
 
     class StdFile : public AbstractFile {
     public:
@@ -55,5 +55,7 @@ namespace yq::mithril {
         
         //! Override to read from XML instead
         virtual std::error_code     read(const XmlDocument&, std::string_view fname);
+        
+        virtual std::error_code     write(XmlDocument&) const;
     };
 }

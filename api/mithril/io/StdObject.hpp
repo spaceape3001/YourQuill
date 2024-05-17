@@ -9,8 +9,11 @@
 #include <0/basic/Object.hpp>
 #include <0/basic/Ref.hpp>
 
-namespace yq::mithril {
+namespace yq {
     struct KeyValue;
+}
+
+namespace yq::mithril {
 
     /*!  A "Standard Object"
     

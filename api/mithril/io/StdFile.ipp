@@ -9,7 +9,7 @@
 #include "StdFile.hpp"
 
 #include <0/io/errors.hpp>
-#include <mithril/bit/KeyValue.hpp>
+#include <0/io/KeyValue.hpp>
 #include <0/io/stream/Text.hpp>
 #include <0/basic/ByteArray.hpp>
 
@@ -82,7 +82,7 @@ namespace yq::mithril {
     
     std::error_code  StdFile::read(const XmlDocument&, std::string_view) 
     { 
-        return errors::none();
+        return errors::todo();
     }
 
     std::error_code    StdFile::write(yq::Stream& buffer) const
@@ -105,5 +105,10 @@ namespace yq::mithril {
         if(!body.empty())
             buffer << '\n' << body;
         return errors::none();
+    }
+
+    std::error_code     StdFile::write(XmlDocument&) const
+    {
+        return errors::todo();
     }
 }

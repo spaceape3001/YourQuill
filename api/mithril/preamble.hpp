@@ -22,6 +22,7 @@ namespace yq {
     class ByteArray;
     class Stream;
     class Meta;
+    struct KeyValue;
     template <typename> class Ref;
     
     struct atom_t {};

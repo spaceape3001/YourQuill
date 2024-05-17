@@ -8,9 +8,12 @@
 
 #include <mithril/attribute/AttributeCDB.hpp>
 
-namespace yq::mithril {        
+namespace yq {
     struct KVTree;
     struct KeyValue;
+}
+
+namespace yq::mithril {        
     
     
     /*! \brief Used for reporting the merged attributes between new and old

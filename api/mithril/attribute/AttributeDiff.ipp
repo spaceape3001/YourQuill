@@ -11,8 +11,8 @@
 
 #include <0/basic/DiffEngine.hpp>
 #include <0/basic/IntRange.hpp>
+#include <0/io/KeyValue.hpp>
 
-#include <mithril/bit/KeyValue.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 
 #include <cassert>
