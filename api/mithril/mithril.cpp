@@ -42,7 +42,6 @@
 
 #include "image/ImageDiff.hpp"  // syntax check
 
-#include "io/StdFile.ipp"
 #include "io/StdObject.ipp"
 
 #include "leaf/LeafData.ipp"
