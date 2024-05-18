@@ -7,13 +7,13 @@
 #include <boost/ut.hpp>
 #include <0/basic/Logging.hpp>
 #include <0/basic/CollectionUtils.hpp>
-#include <b3/grammar.hpp>
+#include <doodler/b3/grammar.hpp>
 #include <iostream>
 
 namespace ut = boost::ut;
 using namespace ut;
 using namespace yq;
-using namespace yq::b3;
+using namespace yq::doodler;
 
 
 ut::suite tests = []{
@@ -48,7 +48,7 @@ static const std::string_view kComments[] = {
         auto ret    = B3Line::decode("simple 1 2 3 4 5");
         expect(true == ret.has_value());
         B3Line b  = *ret;
-        expect(b.tokens == arg_vector_t{ "simple", "1", "2", "3", "4", "5" });
+        expect(b.tokens == string_vector_t{ "simple", "1", "2", "3", "4", "5" });
     };
 
     "semi simple line"_test = []{
@@ -57,7 +57,7 @@ static const std::string_view kComments[] = {
 )");
         expect(true == ret.has_value());
         B3Line b  = *ret;
-        expect(b.tokens == arg_vector_t{ "simple", "1", "2", "3", "4", "5" });
+        expect(b.tokens == string_vector_t{ "simple", "1", "2", "3", "4", "5" });
         expect(b.indent == 8);
     };
     
@@ -69,7 +69,7 @@ static const std::string_view kComments[] = {
 
         expect(true == ret.has_value());
         B3Line b  = *ret;
-        expect(b.tokens == arg_vector_t{ "utter", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+        expect(b.tokens == string_vector_t{ "utter", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
         expect(b.indent == 8);
     
     };
@@ -81,7 +81,7 @@ static const std::string_view kComments[] = {
 
         expect(true == ret.has_value());
         B3Line b  = *ret;
-        expect(b.tokens == arg_vector_t{ "udder", "foo=1", "bar=2", "spartan=1 2 3" });
+        expect(b.tokens == string_vector_t{ "udder", "foo=1", "bar=2", "spartan=1 2 3" });
         expect(b.indent == 4);
 
     };

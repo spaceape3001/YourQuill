@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include <b3/preamble.hpp>
+#include <doodler/preamble.hpp>
 #include <0/basic/preamble.hpp>
 #include <0/basic/Flags.hpp>
 #include <utility>
 
-namespace yq::b3 {
+namespace yq::doodler {
     struct B3Line {
-        arg_vector_t    tokens;                     //!< arguments 0, 1, 2...
+        string_vector_t tokens;
         uint32_t        line        = 0;            //!< Line number
         uint16_t        indent      = 0;            //!< Line indent
         
@@ -23,6 +23,7 @@ namespace yq::b3 {
         bool    empty() const { return tokens.empty(); }
     };
     
+    #if 0
     struct B3Error {
         std::string     message;
         uint32_t        line    = 0;
@@ -45,5 +46,6 @@ namespace yq::b3 {
         static std::pair<B3Document,std::error_code>    load(const std::filesystem::path&);
         static std::pair<B3Document,std::error_code>    load(std::string_view);
     };
+    #endif
 
 }

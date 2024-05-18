@@ -4,7 +4,6 @@
 ##
 ################################################################################
 
-add_subdirectory(b3)
 add_subdirectory(doodler)
 add_subdirectory(noveler)
 add_subdirectory(mithril)

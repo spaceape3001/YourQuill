@@ -20,6 +20,8 @@
 #include "Space.ipp"
 #include "Space2.ipp"
 
+#include "b3/grammar.ipp"
+
 #include "shape2/Py2Point.ipp"
 #include "shape3/Py3Point.ipp"
 #include "shape4/Py4Point.ipp"

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <b3/grammar.hpp>
+#include <doodler/b3/grammar.hpp>
 #include <0/basic/errors.hpp>
 #include <0/basic/TextUtils.hpp>
 
@@ -16,7 +16,7 @@ namespace yq::errors {
     using blank_line    = error_db::entry<"Blank line">;
 }
 
-namespace yq::b3 {
+namespace yq::doodler {
 
     Expect<B3Line>  B3Line::decode(const char*& text, const char* end, uint32_t& line)
     {
