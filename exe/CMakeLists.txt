@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-
+add_subdirectory(3x)
 add_subdirectory(yserver)
 
 if(Feature_Vulkan)

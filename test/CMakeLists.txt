@@ -16,6 +16,14 @@
 #    add_test(NAME ${name} COMMAND test_${name} ${ARGN})
 #endmacro()
 
+macro(b3test name)
+    add_executable(test_${name} ${name}.cpp)
+    target_link_libraries(test_${name} PRIVATE b3 ${TBB_LIBRARIES} BoostUT)
+    add_test(NAME ${name} COMMAND test_${name} ${ARGN})
+endmacro()
+
+b3test(b3parse)
+
 macro(mithtest name)
     add_executable(test_${name} ${name}.cpp)
     target_link_libraries(test_${name} PRIVATE mithril ${TBB_LIBRARIES} BoostUT)
@@ -23,4 +31,3 @@ macro(mithtest name)
 endmacro()
 
 mithtest(graphviz_builder)
-
