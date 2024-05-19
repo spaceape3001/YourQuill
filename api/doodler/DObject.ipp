@@ -151,7 +151,7 @@ namespace yq::doodler {
     {
         m_parent    = theMap(m_parent);
         
-        for(D& i : m_children){
+        for(ID& i : m_children){
             i   = theMap(i);
             DObject*    dob = m_project.object(i);
             if(dob)
@@ -171,10 +171,17 @@ namespace yq::doodler {
         bump();
     }
 
+    void    DObject::set_uid(const std::string& v)
+    {
+        m_uid       = v;
+        bump();
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     
-    D Remapper::operator()(D i) const
+    ID Remapper::operator()(ID i) const
     {
         auto j = data.find(i.id);
         if(j != data.end())

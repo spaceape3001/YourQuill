@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XEntry.hpp"
+#include <0/basic/CollectionUtils.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
@@ -115,7 +116,7 @@ namespace yq::mithril {
             if(icon != Image{}){
                 h << Thumbnail{ icon.id, dt.icon_size };
             } else {
-                std::string k   = icons.get(suffix);
+                std::string k   = get_value(icons, suffix);
                 if(!k.empty()){
                     h << "<img src=\"" << k << "\" class=\"" << dt.icon_size << "\">";
                 } else {

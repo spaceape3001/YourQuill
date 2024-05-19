@@ -149,7 +149,7 @@ namespace yq::mithril::wksp {
         std::string             app_name;       // Name of application
         std::string             author;         // Author of the workspace
         Set<uint16_t>           aux;            // Auxillary ports
-        string_set_t            available;      // Available templates
+        StringSet               available;      // Available templates
         std::filesystem::path   cache;          // Cache location
         Copyright               copyright;      // Copyright info of the workspace
         FNDbFlags               db_flags = nullptr;
@@ -187,7 +187,7 @@ namespace yq::mithril::wksp {
         std::string             start_file;     // FILE style
         std::filesystem::path   subversion;     // Subversion executable location
         path_vector_t           template_dirs;  // Directories of templates....
-        string_set_t            templates;      // Templates in use
+        StringSet               templates;      // Templates in use
         unsigned int            threads = 0;    // Desired thread count
         std::filesystem::path   tmp;            // Temporary directory
         
@@ -396,7 +396,7 @@ namespace yq::mithril::wksp {
 
         oracle.type = Oracle::DB;   // TODO ... curl
 
-        string_set_t    rSeen;
+        StringSet    rSeen;
         RootDir*           rt  = new RootDir(qdir, PolicyMap(Access::ReadWrite));
         root_dirs << rt;
         rpath["."sv]              = rt;
@@ -680,7 +680,7 @@ namespace yq::mithril::wksp {
         for(const std::filesystem::path& p : template_dirs){
             std::filesystem::path    p2  = p / templateName;
             if(dir_type(p2) != BadDir)
-                ret << p2;
+                ret.push_back(p2);
         }
         return ret;
     }
@@ -1002,7 +1002,7 @@ namespace yq::mithril::wksp {
         for(const std::filesystem::path& p : impl().template_dirs){
             std::filesystem::path    p2  = p / templateName;
             if(dir_type(p2) != BadDir)
-                ret << p2;
+                ret.push_back(p2);
         }
         return ret;
     }

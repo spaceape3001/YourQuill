@@ -8,16 +8,17 @@
 #include "yquill.hpp"
 
 #include <0/basic/BasicApp.hpp>
+#include <0/basic/CollectionUtils.hpp>
 #include <0/basic/DelayInit.hpp>
+#include <0/basic/Logging.hpp>
+#include <0/basic/TextUtils.hpp>
+#include <0/basic/ThreadId.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/io/FileUtils.hpp>
-#include <0/basic/Logging.hpp>
 #include <0/io/PluginLoader.hpp>
 #include <0/sql/SqlLite.hpp>
 #include <0/sql/SqlQuery.hpp>
 #include <0/sql/SqlUtils.hpp>
-#include <0/basic/TextUtils.hpp>
-#include <0/basic/ThreadId.hpp>
 
 #include <0/meta/Meta.hpp>
 #include <mithril/wksp/Workspace.hpp>

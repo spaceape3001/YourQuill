@@ -13,7 +13,8 @@ namespace yq::doodler {
     
     enum class DFormat : uint8_t {
         AUTO,
-        XML
+        XML,
+        B3
     };
     
     struct Census {
@@ -36,8 +37,8 @@ namespace yq::doodler {
         
         const std::filesystem::path&   file() const { return m_file; }
         
-        DObject*            object(D);
-        const DObject*      object(D) const;
+        DObject*            object(ID);
+        const DObject*      object(ID) const;
         
         static std::unique_ptr<Project>    load(const std::filesystem::path&, DFormat fmt=DFormat::AUTO);
         
@@ -54,6 +55,7 @@ namespace yq::doodler {
 
         std::error_code     load_impl(const std::filesystem::path&, DFormat fmt=DFormat::AUTO);
         std::error_code     load_xml(const std::filesystem::path&);
+        std::error_code     load_b3(const std::filesystem::path&);
         std::error_code     save_xml(const std::filesystem::path&) const;
         
     private:
@@ -70,7 +72,7 @@ namespace yq::doodler {
         std::filesystem::path       m_file;
         DFormat                     m_format    = DFormat::AUTO;
         
-        D       _insert(DObject*);
+        ID       _insert(DObject*);
     };
 }
 

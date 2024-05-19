@@ -17,12 +17,12 @@ namespace yq {
 
 namespace yq::doodler {
 
-    struct D {
+    struct ID {
         using id_t      = uint32_t;
         using Remapper  = std::unordered_map<id_t,id_t>;
         id_t    id  = {};
         constexpr operator id_t () const noexcept { return id; }
-        constexpr auto operator<=>(const D&) const noexcept = default;
+        constexpr auto operator<=>(const ID&) const noexcept = default;
     };
     
     class DObject;
@@ -47,4 +47,4 @@ namespace yq::doodler {
     
 }
 
-YQ_TYPE_DECLARE(yq::doodler::D)
+YQ_TYPE_DECLARE(yq::doodler::ID)

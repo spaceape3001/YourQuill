@@ -77,9 +77,9 @@ namespace yq::doodler {
     {
     }
 
-    D    Project::_insert(DObject*obj)
+    ID    Project::_insert(DObject*obj)
     {
-        D    n   = {(id_t) m_objects.size()};
+        ID    n   = {(id_t) m_objects.size()};
         m_objects.push_back(obj);
         return n;
     }
@@ -100,6 +100,9 @@ namespace yq::doodler {
         case DFormat::XML:
             ec  = load_xml(fp);
             break;
+        case DFormat::B3:
+            ec  = load_b3(fp);
+            break;
         default:
             break;
         }
@@ -112,30 +115,14 @@ namespace yq::doodler {
         return ec;
     }
 
-    std::error_code     Project::load_xml(const std::filesystem::path&fp)
-    {
-        XmlDocument     doc;
-        
-        std::error_code ec  = read_file(doc, fp);
-        if(ec != std::error_code())
-            return ec;
-        
-        const XmlNode*  top = doc.first_node(szYQDoodle);
-        if(!top)
-            return errors::no_doodle_element();
-        
-        
-        return errors::todo();
-    }
-
-    DObject*            Project::object(D i)
+    DObject*            Project::object(ID i)
     {
         if((size_t) i.id >= m_objects.size())
             return nullptr;
         return m_objects[i.id];
     }
     
-    const DObject*      Project::object(D  i) const
+    const DObject*      Project::object(ID  i) const
     {
         if((size_t) i.id >= m_objects.size())
             return nullptr;
@@ -180,6 +167,41 @@ namespace yq::doodler {
         }
     }
     
+    void                Project::set_title(const std::string&v)
+    {
+        m_title = v;
+        bump();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  B3 LOADING
+    ////////////////////////////////////////////////////////////////////////////
+    
+    std::error_code     Project::load_b3(const std::filesystem::path&)
+    {
+        return errors::todo();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //  XML SAVE/LOADING
+    ////////////////////////////////////////////////////////////////////////////
+
+    std::error_code     Project::load_xml(const std::filesystem::path&fp)
+    {
+        XmlDocument     doc;
+        
+        std::error_code ec  = read_file(doc, fp);
+        if(ec != std::error_code())
+            return ec;
+        
+        const XmlNode*  top = doc.first_node(szYQDoodle);
+        if(!top)
+            return errors::no_doodle_element();
+        
+        
+        return errors::todo();
+    }
+
     std::error_code     Project::save_xml(const std::filesystem::path&fp) const
     {
         XmlDocument doc;
@@ -191,11 +213,4 @@ namespace yq::doodler {
         return save_file(doc, fp);
     }
     
-    void                Project::set_title(const std::string&v)
-    {
-        m_title = v;
-        bump();
-    }
-    
-
 }

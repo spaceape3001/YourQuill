@@ -30,7 +30,7 @@
 #include <0/meta/Init.hpp>
 
 
-YQ_TYPE_IMPLEMENT(yq::doodler::D)
+YQ_TYPE_IMPLEMENT(yq::doodler::ID)
 
 YQ_OBJECT_IMPLEMENT(yq::doodler::Association)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Camera)

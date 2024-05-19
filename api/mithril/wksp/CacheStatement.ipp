@@ -227,7 +227,7 @@ namespace yq::mithril {
         string_set_t  ret;
         auto _af = af();
         while(step() == SQResult::Row){
-            ret << copy(v_text(1));
+            ret.insert(copy(v_text(1)));
         }
         return ret;
     }
@@ -238,7 +238,7 @@ namespace yq::mithril {
         auto _af = af();
         bind(1, (int64_t) i);
         while(step() == SQResult::Row){
-            ret << copy(v_text(1));
+            ret.insert(copy(v_text(1)));
         }
         return ret;
     }
