@@ -10,3 +10,6 @@
 [submodule "qt-utilities"]
 	path = qt-utilities
 	url = https://github.com/spaceape3001/qt-utilities.git
+[submodule "yq-webserver"]
+	path = yq-webserver
+	url = https://github.com/spaceape3001/yq-webserver.git
