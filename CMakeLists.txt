@@ -9,6 +9,7 @@ project(YourQuill VERSION 0.0.0.3 LANGUAGES CXX)
 
 option(Feature_Qt6 "Deploy Qt6 (API and Apps)" ON)
 option(Feature_Vulkan "Deploy Vulkan (API and Apps)" ON)
+option(Feature_WebServer "Web Server" ON)
 
 include(yq-toolbox/configure.cmake)
 add_subdirectory(yq-toolbox)
@@ -19,8 +20,11 @@ if(Feature_Qt6)
     add_definitions(-DYQ_USE_QT)
     add_subdirectory(qt-utilities)
 endif()
-add_subdirectory(3rd)
-
+if(Feature_WebServer)
+    include(yq-webserver/configure.cmake)
+    add_subdirectory(yq-webserver)
+endif()
+# add_subdirectory(3rd)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
@@ -35,8 +39,6 @@ find_package(ImageMagick COMPONENTS Magick++)
 #   Qt's got issues, want to remove it....
 
 
-#   WARNING DEFINITIONS
-add_definitions(-DASIO_STANDALONE)
 
 if(Developer_Build)
     add_definitions(-DDEV_BUILD=1)
