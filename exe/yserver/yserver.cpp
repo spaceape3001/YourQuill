@@ -17,10 +17,11 @@
 #include <0/basic/Logging.hpp>
 #include <0/basic/Random.hpp>
 #include <0/basic/Ref.hpp>
-#include <0/io/StreamOps.hpp>
+#include <0/basic/Result.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <0/basic/ThreadId.hpp>
 
+#include <0/io/StreamOps.hpp>
 #include <0/io/stream/Text.hpp>
 
 #include <mithril/web/WebAdapters.hpp>

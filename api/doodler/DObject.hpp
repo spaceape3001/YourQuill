@@ -63,7 +63,11 @@ namespace yq::doodler {
     concept DObjectType = std::derived_from<Obj,DObject>;
     
 
-    //! A doodle object, can be associations, constraints, or a physical thing
+    /*! \brief A doodle object
+    
+        Attributes are user-defined (and 
+        may be needed by end designs)
+    */
     class DObject : public Object {
         YQ_OBJECT_INFO(DObjectInfo)
         YQ_OBJECT_FIXER(DObjectFixer)
@@ -81,6 +85,12 @@ namespace yq::doodler {
 
         const std::string&      title() const { return m_title; }
         void                    set_title(const std::string&);
+        
+        const string_map_t&     attributes() const { return m_attributes; }
+        
+        void                    set_attribute(const std::string& key, const std::string& value);
+        std::string             attribute(const std::string&) const;
+        
         
         const std::string&      uid() const { return m_uid; }
         void                    set_uid(const std::string&);
@@ -118,6 +128,7 @@ namespace yq::doodler {
         std::string             m_title;
         std::string             m_uid;
         std::string             m_notes;
+        string_map_t            m_attributes;
     };
     
     struct Remapper {
@@ -125,44 +136,6 @@ namespace yq::doodler {
         ID operator()(ID) const;
     };
     
-
-#if 0    
-    
-    : public Object {
-        template <typename> friend class Ref;
-    public:
-    
-        //! Deep copy of the object, the preferred way
-        Ref<DObject>        clone() const;
-        
-        //! Ad-hoc "notes"
-        const std::string&  notes() const { return m_notes; }
-        void                set_notes(const std::string&);
-    
-    protected:
-        DObject(DObject* parent=nullptr);
-        //! Copies this object but does *NOT* deep copy the children
-        DObject(const DObject&);
-        ~DObject();
-        
-        
-        
-        
-    private:
-        id_t                        m_parent = 0;
-        std::vector<id_t>           m_children;
-        std::string                 m_notes;
-        
-        
-        DObject*                    m_parent;
-        std::vector<Ref<DObject>>   m_children;
-        std::string                 m_notes;
-        
-        Ref<DObject>            _clone(Remapper&) const;
-
-    };
-#endif    
-
     template <typename C>
     class DObjectInfo::Writer : public ObjectInfo::Writer<C> {
     public:

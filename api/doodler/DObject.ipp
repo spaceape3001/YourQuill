@@ -8,6 +8,7 @@
 
 #include <doodler/DObject.hpp>
 #include <doodler/Project.hpp>
+#include <0/basic/CollectionUtils.hpp>
 
 namespace yq::doodler {
 
@@ -110,6 +111,11 @@ namespace yq::doodler {
         m_parent    = {};
     }
 
+    std::string DObject::attribute(const std::string& k) const
+    {
+        return get_value(m_attributes, k);
+    }
+
     void    DObject::bump()
     {
         m_project.bump();
@@ -159,6 +165,12 @@ namespace yq::doodler {
         }
     }
     
+    void    DObject::set_attribute(const std::string& key, const std::string& value)
+    {
+        m_attributes[key]   = value;
+        bump();
+    }
+
     void    DObject::set_notes(const std::string&v)
     {
         m_notes = v;
