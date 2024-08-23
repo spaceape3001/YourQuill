@@ -156,6 +156,16 @@ namespace {
             dev_table(h, type->methods());
         }
         
+        void    p_dev_meta_type_operators(WebHtml& h)
+        {
+            const TypeInfo* type    = type_info(h);
+            if(!type)
+                throw HttpStatus::BadArgument;
+            
+            h.title() << "Type Info (" << type->name() << "): Operators";
+            dev_table(h, type->operators());
+        }
+
         void    p_dev_meta_type_properties(WebHtml& h)
         {
             const TypeInfo* type    = type_info(h);
@@ -200,6 +210,7 @@ namespace {
             reg_webgroup({
                 reg_webpage<p_dev_meta_type>("/dev/meta/type").label("Info"),
                 reg_webpage<p_dev_meta_type_methods>("/dev/meta/methods").label("Methods"),
+                reg_webpage<p_dev_meta_type_operators>("/dev/meta/operators").label("Operators"),
                 reg_webpage<p_dev_meta_type_properties>("/dev/meta/type/properties").label("Properties")
             });
             reg_webpage<p_dev_meta_types>("/dev/meta/types");

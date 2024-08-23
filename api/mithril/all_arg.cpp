@@ -62,7 +62,11 @@
 #include "leaf/LeafArg.ipp"
 #include "leaf/LeafPost.ipp"
 
+#include "meta/MetaArgArg.ipp"
+#include "meta/MetaMethodArg.ipp"
 #include "meta/MetaObjectArg.ipp"
+#include "meta/MetaOperatorArg.ipp"
+#include "meta/MetaPropertyArg.ipp"
 #include "meta/MetaTypeArg.ipp"
 
 #include "novel/NovelArg.ipp"

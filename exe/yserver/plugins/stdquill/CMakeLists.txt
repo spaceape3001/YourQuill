@@ -4,6 +4,8 @@
 ##
 ################################################################################
 
+find_package(ImageMagick)
+
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${PLUGIN_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PLUGIN_DIR})
 

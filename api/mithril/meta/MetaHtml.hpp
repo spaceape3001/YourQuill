@@ -38,6 +38,12 @@ namespace yq::mithril {
     }
 
     namespace html {
+        WebHtml&    operator<<(WebHtml&, DevID<const OperatorInfo*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const OperatorInfo*>);
+        void    dev_table(WebHtml&, const std::vector<const OperatorInfo*>&);
+    }
+
+    namespace html {
         WebHtml&    operator<<(WebHtml&, DevID<const MethodInfo*>);
         WebHtml&    operator<<(WebHtml&, Dev<const MethodInfo*>);
         void    dev_table(WebHtml&, const std::vector<const MethodInfo*>&);

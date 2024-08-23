@@ -27,7 +27,7 @@ namespace {
 
 
 
-
+//#include <magick/magick-baseconfig.h>
 #include <MagickCore/magick-baseconfig.h>
 //  Know this is obsolete, however, there's no good way to automate it otherwise w/o tolerating the warning
 #define MAGICKCORE_QUANTUM_DEPTH MAGICKCORE_QUANTUM_DEPTH_OBSOLETE_IN_H
