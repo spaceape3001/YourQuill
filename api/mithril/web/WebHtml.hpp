@@ -11,7 +11,7 @@
 #include <0/io/Stream.hpp>
 #include <0/basic/ByteArray.hpp>
 #include <0/basic/Ref.hpp>
-#include <0/trait/not_copyable.hpp>
+#include <yq/trait/not_copyable.hpp>
 #include <functional>
 #include <mithril/preamble.hpp>
 #include <0/math/preamble.hpp>

@@ -8,8 +8,8 @@
 
 #include "Template.hpp"
 
-#include <0/trait/not_copyable.hpp>
-#include <0/trait/not_moveable.hpp>
+#include <yq/trait/not_copyable.hpp>
+#include <yq/trait/not_moveable.hpp>
 #include <0/basic/Ref.hpp>
 
 namespace yq::mithril {

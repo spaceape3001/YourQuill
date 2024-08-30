@@ -8,7 +8,7 @@
 
 #include "WebPage.hpp"
 #include "WebContext.hpp"
-#include <0/json.hpp>
+#include <yq/config/json.hpp>
 #include <0/io/preamble.hpp>
 
 namespace yq::mithril {
