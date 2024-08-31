@@ -9,7 +9,7 @@
 #include <mithril/graphviz/Graphviz.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <0/io/Execute.hpp>
-#include <0/basic/ErrorDB.hpp>
+#include <yq/basic/ErrorDB.hpp>
 
 namespace yq::mithril {
     namespace {

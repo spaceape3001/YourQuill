@@ -10,7 +10,7 @@
 #include <0/basic/Logging.hpp>
 #include <0/io/KeyValue.hpp>
 #include <mithril/io/Strings.hpp>
-#include <0/basic/ErrorDB.hpp>
+#include <yq/basic/ErrorDB.hpp>
 
 namespace yq::errors {
     using unable_to_load_authentication = error_db::entry<"Unable to load the authentication from the file">;

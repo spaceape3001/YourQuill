@@ -9,7 +9,7 @@
 #include <doodler/Project.hpp>
 #include <0/io/XmlFile.hpp>
 #include <0/io/XmlUtils.hpp>
-#include <0/basic/errors.hpp>
+#include <yq/basic/errors.hpp>
 #include <doodler/IOStrings.hpp>
 
 namespace yq::errors {

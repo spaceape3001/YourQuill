@@ -7,7 +7,7 @@
 #pragma once
 
 #include <0/basic/XmlObject.hpp>
-#include <0/basic/Ref.hpp>
+#include <yq/basic/Ref.hpp>
 
 namespace yq::mithril {        
     class Trigger : public XmlObject, public RefCount {

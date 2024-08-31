@@ -26,7 +26,7 @@
 #include "shape3/Py3Point.ipp"
 #include "shape4/Py4Point.ipp"
 
-#include <0/basic/DelayInit.hpp>
+#include <yq/basic/DelayInit.hpp>
 #include <0/meta/Init.hpp>
 
 

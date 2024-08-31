@@ -8,8 +8,8 @@
 
 #include <cstdint>
 #include <string>
-#include <0/basic/trait/not_copyable.hpp>
-#include <0/basic/trait/not_moveable.hpp>
+#include <yq/basic/trait/not_copyable.hpp>
+#include <yq/basic/trait/not_moveable.hpp>
 #include <mithril/db/CacheFwd.hpp>
 #include <mithril/db/SQ.hpp>
 #include <0/math/Counter.hpp>

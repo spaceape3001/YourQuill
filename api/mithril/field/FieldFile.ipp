@@ -10,10 +10,10 @@
 #include <0/io/XmlUtils.hpp>
 #include <0/io/KeyValue.hpp>
 #include <mithril/io/Strings.hpp>
-#include <0/basic/ErrorDB.hpp>
+#include <yq/basic/ErrorDB.hpp>
 
 namespace yq::errors {
-        using no_field_in_file  = error_db::entry<"No field found in file">;
+    using no_field_in_file  = error_db::entry<"No field found in file">;
 }
 
 namespace yq::mithril {

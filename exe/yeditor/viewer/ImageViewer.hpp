@@ -9,7 +9,6 @@
 #include "ystudio.hpp"
 #include "Window.hpp"
 
-#include <0/basic/DelayInit.hpp>
 #include <mithril/image/Image.hpp>
 
 using yq::mithril::Image;

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <0/basic/ByteArray.hpp>
-#include <0/basic/Guarded.hpp>
+#include <yq/basic/Guarded.hpp>
 #include <atomic>
 #include <filesystem>
 
@@ -35,7 +35,7 @@ namespace {
 #include <Magick++.h>
 
 #include <0/basic/BasicApp.hpp>
-#include <0/basic/DelayInit.hpp>
+#include <yq/basic/DelayInit.hpp>
 #include <0/basic/Logging.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <0/basic/Vector.hpp>

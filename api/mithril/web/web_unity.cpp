@@ -19,8 +19,8 @@
 #include "WebVariable.hpp"
 //#include "NetWriter.hpp"
 
-#include <0/basic/Random.hpp>
-#include <0/basic/Safety.hpp>
+#include <yq/basic/Random.hpp>
+#include <yq/basic/Safety.hpp>
 #include <0/basic/EnumMap.hpp>
 #include <0/basic/Map.hpp>
 #include <0/io/FileUtils.hpp>

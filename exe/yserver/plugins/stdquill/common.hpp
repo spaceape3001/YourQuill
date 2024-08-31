@@ -7,8 +7,8 @@
 #pragma once
 
 #include <0/basic/ByteArray.hpp>
-#include <0/basic/DelayInit.hpp>
-#include <0/basic/Guarded.hpp>
+#include <yq/basic/DelayInit.hpp>
+#include <yq/basic/Guarded.hpp>
 #include <0/basic/Logging.hpp>
 #include <0/io/StreamOps.hpp>
 #include <0/basic/TextUtils.hpp>

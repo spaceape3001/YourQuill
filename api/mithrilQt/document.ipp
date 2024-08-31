@@ -7,7 +7,7 @@
 #pragma once
 
 #include "document.hpp"
-#include <0/basic/DelayInit.hpp>
+#include <yq/basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/image/Image.hpp>

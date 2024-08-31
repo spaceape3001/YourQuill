@@ -10,7 +10,7 @@
 #include <mithril/attribute/AttributeCDB.hpp>
 
 #include <0/basic/DiffEngine.hpp>
-#include <0/basic/IntRange.hpp>
+#include <yq/basic/IntRange.hpp>
 #include <0/io/KeyValue.hpp>
 
 #include <mithril/wksp/CacheQuery.hpp>

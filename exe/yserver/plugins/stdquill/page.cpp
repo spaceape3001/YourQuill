@@ -26,9 +26,9 @@
 #include <mithril/value.hpp>
 
 #include <0/basic/CollectionUtils.hpp>
-#include <0/basic/DelayInit.hpp>
+#include <yq/basic/DelayInit.hpp>
 #include <0/basic/Global.hpp>
-#include <0/basic/Random.hpp>
+#include <yq/basic/Random.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/io/FileUtils.hpp>
 #include <0/gis/Date.hpp>
