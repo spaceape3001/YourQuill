@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Markdown.hpp"
-#include <0/basic/Compare.hpp>
+#include <yq/basic/Compare.hpp>
 #include <0/io/StreamOps.hpp>
 #include <yq/io/Stream.hpp>
 #include <0/basic/TextUtils.hpp>

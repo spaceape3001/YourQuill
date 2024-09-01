@@ -7,7 +7,7 @@
 #include "config.hpp"
 #include "yquill.hpp"
 
-#include <0/basic/Compare.hpp>
+#include <yq/basic/Compare.hpp>
 #include <yq/container/Deque.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/basic/EnumMap.hpp>

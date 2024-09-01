@@ -14,6 +14,7 @@
 #include <mithrilQt/field.hpp>
 #include <mithrilQt/image.hpp>
 #include <QIcon>
+#include <yq/text/match.hpp>
 
 namespace yq::mithril {
     QIcon   qIcon(Atom a)
