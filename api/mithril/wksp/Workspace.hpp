@@ -7,9 +7,11 @@
 #pragma once
 
 #include <mithril/root/RootFwd.hpp>
-#include <0/basic/Enum.hpp>
-#include <0/basic/Flag.hpp>
+#include <yq/basic/Enum.hpp>
+#include <yq/basic/Flag.hpp>
 #include <functional>
+#include <filesystem>
+#include <0/basic/preamble.hpp>
 
 namespace yq {
     class SqlLite;

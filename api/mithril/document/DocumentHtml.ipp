@@ -8,6 +8,7 @@
 
 #include "DocumentHtml.hpp"
 #include <0/io/DirUtils.hpp>
+#include <yq/typedef/string.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/Workspace.hpp>

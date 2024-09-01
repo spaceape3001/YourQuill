@@ -6,10 +6,11 @@
 
 #include <yq/basic/DelayInit.hpp>
 #include <0/io/FileUtils.hpp>
-#include <0/basic/Http.hpp>
-#include <0/basic/Logging.hpp>
+#include <yq/basic/Http.hpp>
+#include <yq/basic/Logging.hpp>
 #include <0/io/StreamOps.hpp>
 #include <0/basic/TextUtils.hpp>
+#include <yq/typedef/string.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>

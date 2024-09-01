@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include <0/basic/BasicApp.hpp>
-#include <0/basic/Logging.hpp>
+#include <yq/basic/Logging.hpp>
 #include <0/meta/Meta.hpp>
 #include <0/basic/TextUtils.hpp>
 

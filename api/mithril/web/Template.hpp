@@ -6,9 +6,7 @@
 
 #pragma once
 
-#include <yq/trait/not_copyable.hpp>
-#include <yq/trait/not_moveable.hpp>
-#include <0/basic/Http.hpp>
+#include <yq/basic/Http.hpp>
 #include <yq/basic/Ref.hpp>
 
 

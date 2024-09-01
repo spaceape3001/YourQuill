@@ -21,15 +21,16 @@
 
 #include <yq/basic/Random.hpp>
 #include <yq/basic/Safety.hpp>
-#include <0/basic/EnumMap.hpp>
+#include <yq/container/EnumMap.hpp>
 #include <yq/container/Map.hpp>
 #include <0/io/FileUtils.hpp>
-#include <0/basic/Logging.hpp>
+#include <yq/basic/Logging.hpp>
 #include <yq/io/stream/Bytes.hpp>
 #include <0/io/StreamOps.hpp>
 #include <yq/io/stream/Text.hpp>
 #include <yq/basic/Encode64.hpp>
 #include <0/basic/TextUtils.hpp>
+#include <yq/typedef/string.hpp>
 
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Stage4.hpp>

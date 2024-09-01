@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/bit/Policy.hpp>
-#include <0/basic/EnumMap.hpp>
+#include <yq/container/EnumMap.hpp>
 #include <yq/errors.hpp>
 
 namespace yq::mithril {

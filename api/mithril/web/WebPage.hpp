@@ -8,11 +8,11 @@
 
 //#include <mithril/enum/change.hpp>
 #include <yq/trait/not_copyable.hpp>
-#include <0/basic/EnumMap.hpp>
+#include <yq/container/EnumMap.hpp>
 #include <0/meta/Meta.hpp>
 #include <0/meta/MetaWriter.hpp>
-#include <0/basic/Http.hpp>
-#include <0/basic/Flag.hpp>
+#include <yq/basic/Http.hpp>
+#include <yq/basic/Flag.hpp>
 
 #include <mithril/preamble.hpp>
 

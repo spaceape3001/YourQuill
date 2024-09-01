@@ -14,7 +14,7 @@
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
-#include <0/basic/Logging.hpp>
+#include <yq/basic/Logging.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, const Escape&v)

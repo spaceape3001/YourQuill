@@ -9,7 +9,7 @@
 #include <yq/container/ByteArray.hpp>
 #include <yq/basic/DelayInit.hpp>
 #include <yq/basic/Guarded.hpp>
-#include <0/basic/Logging.hpp>
+#include <yq/basic/Logging.hpp>
 #include <0/io/StreamOps.hpp>
 #include <0/basic/TextUtils.hpp>
 
