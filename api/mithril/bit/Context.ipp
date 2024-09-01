@@ -10,7 +10,7 @@
 #include <mithril/io/Strings.hpp>
 #include <0/io/XmlUtils.hpp>
 #include <0/io/StreamOps.hpp>
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Text.hpp>
 
 namespace yq::mithril {
     bool        read_xn(Context&ret, const XmlNode& xn)

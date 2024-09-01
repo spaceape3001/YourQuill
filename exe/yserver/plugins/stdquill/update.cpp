@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <0/basic/ByteArray.hpp>
+#include <yq/container/ByteArray.hpp>
 #include <yq/basic/Guarded.hpp>
 #include <atomic>
 #include <filesystem>
@@ -38,12 +38,12 @@ namespace {
 #include <yq/basic/DelayInit.hpp>
 #include <0/basic/Logging.hpp>
 #include <0/basic/TextUtils.hpp>
-#include <0/basic/Vector.hpp>
+#include <yq/container/Vector.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/io/FileUtils.hpp>
 #include <0/io/StreamOps.hpp>
-#include <0/io/stream/Bytes.hpp>
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Bytes.hpp>
+#include <yq/io/stream/Text.hpp>
 #include <0/math/shape/Size2.hxx>
 #include <0/meta/TypeInfo.hpp>
 

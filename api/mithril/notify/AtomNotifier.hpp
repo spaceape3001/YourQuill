@@ -11,9 +11,9 @@
 #include <span>
 #include <vector>
 
-#include <0/basic/CollectionUtils.hpp>
 #include <0/basic/EnumMap.hpp>
-#include <0/basic/Vector.hpp>
+#include <yq/container/SetChanges.hpp>
+#include <yq/container/Vector.hpp>
 #include <mithril/atom/Atom.hpp>
 #include <mithril/atom/AtomSpec.hpp>
 #include <mithril/class/Class.hpp>

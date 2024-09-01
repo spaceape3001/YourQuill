@@ -22,12 +22,12 @@
 #include <yq/basic/Random.hpp>
 #include <yq/basic/Safety.hpp>
 #include <0/basic/EnumMap.hpp>
-#include <0/basic/Map.hpp>
+#include <yq/container/Map.hpp>
 #include <0/io/FileUtils.hpp>
 #include <0/basic/Logging.hpp>
-#include <0/io/stream/Bytes.hpp>
+#include <yq/io/stream/Bytes.hpp>
 #include <0/io/StreamOps.hpp>
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Text.hpp>
 #include <0/basic/Encode64.hpp>
 #include <0/basic/TextUtils.hpp>
 

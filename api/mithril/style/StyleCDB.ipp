@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StyleCDB.hpp"
-#include <0/basic/ByteArray.hpp>
+#include <yq/container/ByteArray.hpp>
 #include <0/io/FileUtils.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <mithril/bit/NKI.hpp>

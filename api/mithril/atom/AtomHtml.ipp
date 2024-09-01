@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/basic/Comma.hpp>
+#include <yq/text/Comma.hpp>
 #include <mithril/atom/AtomHtml.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/attribute/AttributeHtml.hpp>

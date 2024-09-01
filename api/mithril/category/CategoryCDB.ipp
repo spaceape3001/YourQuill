@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <0/basic/ByteArray.hpp>
+#include <yq/container/ByteArray.hpp>
 #include <0/io/FileUtils.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/field/Field.hpp>

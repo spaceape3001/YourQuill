@@ -7,7 +7,7 @@
 #include "Markdown.hpp"
 #include <0/basic/Compare.hpp>
 #include <0/io/StreamOps.hpp>
-#include <0/io/Stream.hpp>
+#include <yq/io/Stream.hpp>
 #include <0/basic/TextUtils.hpp>
 
 /*

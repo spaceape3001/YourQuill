@@ -5,7 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XEntry.hpp"
-#include <0/basic/CollectionUtils.hpp>
+//#include <0/basic/CollectionUtils.hpp>
+#include <yq/container/map_utils.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>

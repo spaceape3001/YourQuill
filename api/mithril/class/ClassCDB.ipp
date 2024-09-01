@@ -7,8 +7,8 @@
 #pragma once
 
 #include "ClassCDB.hpp"
-#include <0/basic/ByteArray.hpp>
-#include <0/basic/CollectionUtils.hpp>
+#include <yq/container/ByteArray.hpp>
+//#include <0/basic/CollectionUtils.hpp>
 #include <0/io/FileUtils.hpp>
 #include <mithril/class/ClassFile.hpp>
 #include <mithril/field/Field.hpp>

@@ -8,8 +8,8 @@
 
 #include <0/basic/Url.hpp>
 #include <0/io/StreamOps.hpp>
-#include <0/io/Stream.hpp>
-#include <0/basic/ByteArray.hpp>
+#include <yq/io/Stream.hpp>
+#include <yq/container/ByteArray.hpp>
 #include <yq/basic/Ref.hpp>
 #include <yq/trait/not_copyable.hpp>
 #include <functional>

@@ -7,10 +7,10 @@
 #pragma once
 
 #include "ClassHtml.hpp"
-#include <yq/basic/Comma.hpp>
+#include <yq/text/Comma.hpp>
 #include <0/basic/TextUtils.hpp>
 #include <0/io/StreamOps.hpp>
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Text.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/class/ClassArg.hpp>

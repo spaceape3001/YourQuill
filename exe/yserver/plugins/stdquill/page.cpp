@@ -25,7 +25,7 @@
 #include <mithril/user.hpp>
 #include <mithril/value.hpp>
 
-#include <0/basic/CollectionUtils.hpp>
+//#include <0/basic/CollectionUtils.hpp>
 #include <yq/basic/DelayInit.hpp>
 #include <0/basic/Global.hpp>
 #include <yq/basic/Random.hpp>
@@ -41,7 +41,7 @@
 #include <0/meta/ObjectInfo.hpp>
 #include <0/meta/TypeInfo.hpp>
 
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Text.hpp>
 
 #include <mithril/bit/Copyright.hpp>
 #include <mithril/bit/NKI.hpp>

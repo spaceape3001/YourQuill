@@ -8,7 +8,7 @@
 
 #include <mithril/graphviz/GraphvizBuilder.hpp>
 #include <mithril/graphviz/GraphvizCDB.hpp>
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Text.hpp>
 
 namespace yq::mithril {
     Graphviz::Node&             Graphviz::Builder::node(std::string_view k, std::string_view txt)

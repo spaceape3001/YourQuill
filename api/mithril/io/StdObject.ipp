@@ -9,7 +9,7 @@
 #include "StdObject.hpp"
 #include <0/io/KeyValue.hpp>
 #include <0/meta/Init.hpp>
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Text.hpp>
 
 namespace yq::mithril {
     Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)

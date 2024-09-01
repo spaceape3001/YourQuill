@@ -7,7 +7,7 @@
 #pragma once
 
 #include "StyleData.hpp"
-#include <0/basic/CollectionUtils.hpp>
+//#include <0/basic/CollectionUtils.hpp>
 #include <0/basic/TextUtils.hpp>
 
 namespace yq::mithril {

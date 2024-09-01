@@ -8,7 +8,7 @@
 #include "yquill.hpp"
 
 #include <0/basic/BasicApp.hpp>
-#include <0/basic/CollectionUtils.hpp>
+#include <yq/container/vector_utils.hpp>
 #include <yq/basic/DelayInit.hpp>
 #include <0/basic/Logging.hpp>
 #include <0/basic/TextUtils.hpp>

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <string_view>
-#include <yq/basic/Stack.hpp>
+#include <yq/container/Stack.hpp>
 
 namespace yq {
     class Stream;

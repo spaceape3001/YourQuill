@@ -11,8 +11,8 @@
 #include <asio/ts/internet.hpp>
 
 #include <yq/basic/DelayInit.hpp>
-#include <0/basic/CollectionUtils.hpp>
-#include <0/io/FixedBuffer.hpp>
+//#include <0/basic/CollectionUtils.hpp>
+#include <yq/io/FixedBuffer.hpp>
 #include <0/basic/HttpParser.hpp>
 #include <0/basic/Logging.hpp>
 #include <yq/basic/Random.hpp>
@@ -22,7 +22,7 @@
 #include <yq/basic/ThreadId.hpp>
 
 #include <0/io/StreamOps.hpp>
-#include <0/io/stream/Text.hpp>
+#include <yq/io/stream/Text.hpp>
 
 #include <mithril/web/WebAdapters.hpp>
 #include <mithril/web/WebContext.hpp>

@@ -7,6 +7,7 @@
 #pragma once
 
 #include <mithril/enum/Format.hpp>
+#include <yq/config/xml_fwd.hpp>
 #include <0/basic/preamble.hpp>
 #include <vector>
 

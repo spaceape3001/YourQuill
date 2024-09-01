@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <0/basic/ByteArray.hpp>
+#include <yq/container/ByteArray.hpp>
 #include <0/basic/Logging.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
