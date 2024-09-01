@@ -10,7 +10,7 @@
 
 #include "WebBrowser.hpp"
 
-#include <0/basic/Url.hpp>
+#include <yq/basic/Url.hpp>
 #include <gluon/core/Logging.hpp>
 #include <0/io/Curl.hpp>
 #include <0/io/PluginLoader.hpp>

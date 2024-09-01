@@ -13,8 +13,8 @@
 #include <mithril/enum/DataRole.hpp>
 #include <mithril/enum/SizeDesc.hpp>
 #include <0/basic/Http.hpp>
-#include <0/basic/Url.hpp>
-#include <0/basic/VersionSpec.hpp>
+#include <yq/basic/Url.hpp>
+#include <yq/basic/VersionSpec.hpp>
 // #include <mithril/text/KV.hpp>
 #include <yq/container/ByteArray.hpp>
 //#include <mithril/web/HttpHeader.hpp>
