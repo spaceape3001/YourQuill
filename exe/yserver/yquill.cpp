@@ -15,7 +15,7 @@
 #include <yq/basic/ThreadId.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/io/FileUtils.hpp>
-#include <0/io/PluginLoader.hpp>
+#include <yq/io/PluginLoader.hpp>
 #include <0/sql/SqlLite.hpp>
 #include <0/sql/SqlQuery.hpp>
 #include <0/sql/SqlUtils.hpp>

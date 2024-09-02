@@ -35,7 +35,7 @@
 #include <yq/basic/Logging.hpp>
 #include <0/sql/SqlLite.hpp>
 #include <0/sql/SqlQuery.hpp>
-#include <0/io/StreamOps.hpp>
+#include <yq/io/StreamOps.hpp>
 #include <0/basic/TextUtils.hpp>
 
 #include <0/meta/ObjectInfo.hpp>

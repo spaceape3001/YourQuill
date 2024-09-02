@@ -13,7 +13,7 @@
 #include <yq/basic/Url.hpp>
 #include <gluon/core/Logging.hpp>
 #include <0/io/Curl.hpp>
-#include <0/io/PluginLoader.hpp>
+#include <yq/io/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <0/sql/SqlLite.hpp>
 #include <nlohmann/json.hpp>

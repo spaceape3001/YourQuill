@@ -9,7 +9,7 @@
 #include <mithril/bit/Context.hpp>
 #include <mithril/io/Strings.hpp>
 #include <0/io/XmlUtils.hpp>
-#include <0/io/StreamOps.hpp>
+#include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Text.hpp>
 
 namespace yq::mithril {

@@ -10,7 +10,7 @@
 
 #include <yq/container/Map.hpp>
 #include <0/basic/TextUtils.hpp>
-#include <0/io/StreamOps.hpp>
+#include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Bytes.hpp>
 
 namespace {

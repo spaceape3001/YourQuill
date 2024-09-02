@@ -22,7 +22,7 @@
 #include <yq/basic/ThreadId.hpp>
 #include <yq/typedef/string.hpp>
 
-#include <0/io/StreamOps.hpp>
+#include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Text.hpp>
 
 #include <mithril/web/WebAdapters.hpp>

@@ -15,7 +15,7 @@
 #include <mithril/notify/FileWatch.hpp>
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Stage4.hpp>
-#include <0/io/StreamOps.hpp>
+#include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Text.hpp>
 
 namespace yq::mithril {

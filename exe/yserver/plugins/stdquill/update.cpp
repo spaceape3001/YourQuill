@@ -41,7 +41,7 @@ namespace {
 #include <yq/container/Vector.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/io/FileUtils.hpp>
-#include <0/io/StreamOps.hpp>
+#include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Bytes.hpp>
 #include <yq/io/stream/Text.hpp>
 #include <0/math/shape/Size2.hxx>
