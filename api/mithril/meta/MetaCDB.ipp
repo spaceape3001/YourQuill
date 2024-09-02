@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/meta/Meta.hpp>
-#include <0/meta/Meta.hpp>
+#include <yq/meta/Meta.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Meta>   all_metas(Sorted sorted)

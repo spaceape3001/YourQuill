@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <0/meta/TypeInfoWriter.hpp>
+#include <yq/meta/TypeInfoWriter.hpp>
 #include "DocumentCDB.hpp"
 #include <mithril/attribute/AttributeCDB.hpp>
 

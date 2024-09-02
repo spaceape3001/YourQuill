@@ -9,7 +9,7 @@
 #include <mithril/meta/MetaHtml.hpp>
 #include <mithril/meta/MetaObjectArg.hpp>
 #include <mithril/meta/MetaTypeArg.hpp>
-#include <0/meta/ObjectInfo.hpp>
-#include <0/meta/PropertyInfo.hpp>
-#include <0/meta/TypeInfo.hpp>
+#include <yq/meta/ObjectInfo.hpp>
+#include <yq/meta/PropertyInfo.hpp>
+#include <yq/meta/TypeInfo.hpp>
 

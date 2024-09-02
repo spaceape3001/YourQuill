@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <0/meta/ObjectInfoWriter.hpp>
+#include <yq/meta/ObjectInfoWriter.hpp>
 
 
 #include "enum/Access.hpp"
@@ -59,7 +59,7 @@
 #include "value/ValueMeta.ipp"
 
 
-#include <0/meta/Init.hpp>
+#include <yq/meta/Init.hpp>
 
 
 //  ENUM TYPES

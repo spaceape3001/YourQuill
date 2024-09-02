@@ -7,9 +7,9 @@
 #pragma once
 
 #include <mithril/meta/MetaPropertyArg.hpp>
-#include <0/meta/ArgInfo.hpp>
-#include <0/meta/PropertyInfo.hpp>
-#include <0/meta/Meta.hpp>
+#include <yq/meta/ArgInfo.hpp>
+#include <yq/meta/PropertyInfo.hpp>
+#include <yq/meta/Meta.hpp>
 
 #include <mithril/web/WebContext.hpp>
 

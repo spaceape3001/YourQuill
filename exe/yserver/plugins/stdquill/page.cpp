@@ -27,7 +27,7 @@
 
 //#include <0/basic/CollectionUtils.hpp>
 #include <yq/basic/DelayInit.hpp>
-#include <0/basic/Global.hpp>
+#include <yq/basic/Global.hpp>
 #include <yq/basic/Random.hpp>
 #include <yq/io/DirUtils.hpp>
 #include <yq/io/FileUtils.hpp>
@@ -38,8 +38,8 @@
 #include <yq/io/StreamOps.hpp>
 
 
-#include <0/meta/ObjectInfo.hpp>
-#include <0/meta/TypeInfo.hpp>
+#include <yq/meta/ObjectInfo.hpp>
+#include <yq/meta/TypeInfo.hpp>
 
 #include <yq/io/stream/Text.hpp>
 

@@ -9,7 +9,7 @@
 #include <yq/container/ByteArray.hpp>
 //#include <0/basic/CollectionUtils.hpp>
 #include <yq/io/FileUtils.hpp>
-#include <0/meta/TypeInfo.hpp>
+#include <yq/meta/TypeInfo.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldFile.hpp>
 #include <mithril/bit/NKI.hpp>

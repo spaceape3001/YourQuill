@@ -9,8 +9,8 @@
 //#include <mithril/enum/change.hpp>
 #include <yq/trait/not_copyable.hpp>
 #include <yq/container/EnumMap.hpp>
-#include <0/meta/Meta.hpp>
-#include <0/meta/MetaWriter.hpp>
+#include <yq/meta/Meta.hpp>
+#include <yq/meta/MetaWriter.hpp>
 #include <yq/basic/Http.hpp>
 #include <yq/basic/Flag.hpp>
 

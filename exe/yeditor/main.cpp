@@ -8,7 +8,7 @@
 #include "DreamApp.hpp"
 #include <gluon/core/Utilities.hpp>
 #include <yq/io/PluginLoader.hpp>
-#include <0/meta/Meta.hpp>
+#include <yq/meta/Meta.hpp>
 #include <yqResources.hpp>
 
 
