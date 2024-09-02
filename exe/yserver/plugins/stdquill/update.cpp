@@ -34,7 +34,7 @@ namespace {
 #define MAGICKCORE_HDRI_ENABLE MAGICKCORE_HDRI_ENABLE_OBSOLETE_IN_H
 #include <Magick++.h>
 
-#include <0/basic/BasicApp.hpp>
+#include <yq/basic/BasicApp.hpp>
 #include <yq/basic/DelayInit.hpp>
 #include <yq/basic/Logging.hpp>
 
@@ -102,7 +102,7 @@ using namespace yq::mithril;
 //#include <mithril/field/FieldUpdate.hpp>
 //#include <mithril/leaf/LeafUpdate.hpp>
 
-//#include <0/basic/BasicApp.hpp>
+//#include <yq/basic/BasicApp.hpp>
 //#include <0/basic/CollectionUtils.hpp>
 
 //#include <yq/meta/TypeInfo.hpp>

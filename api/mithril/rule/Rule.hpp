@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <0/basic/XmlObject.hpp>
+#include <yq/basic/XmlObject.hpp>
 #include <yq/basic/Ref.hpp>
 
 namespace yq::mithril {
