@@ -36,7 +36,7 @@
 #include <0/sql/SqlLite.hpp>
 #include <0/sql/SqlQuery.hpp>
 #include <yq/io/StreamOps.hpp>
-#include <0/basic/TextUtils.hpp>
+
 
 #include <0/meta/ObjectInfo.hpp>
 #include <0/meta/TypeInfo.hpp>

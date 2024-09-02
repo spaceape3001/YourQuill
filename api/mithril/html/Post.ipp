@@ -7,8 +7,9 @@
 #pragma once
 
 #include "Post.hpp"
-#include <0/basic/TextUtils.hpp>
+
 #include <mithril/web/WebContext.hpp>
+#include <yq/text/match.hpp>
 
 namespace yq::mithril::post {
     std::string     key(WebContext&ctx)

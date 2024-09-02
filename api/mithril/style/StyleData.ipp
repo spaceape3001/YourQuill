@@ -8,7 +8,7 @@
 
 #include "StyleData.hpp"
 //#include <0/basic/CollectionUtils.hpp>
-#include <0/basic/TextUtils.hpp>
+
 
 namespace yq::mithril {
     Style::Data&      Style::Data::merge(const Style::Data&b, bool fOverride)

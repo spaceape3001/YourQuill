@@ -8,7 +8,10 @@
 #include <yq/basic/Compare.hpp>
 #include <yq/io/StreamOps.hpp>
 #include <yq/io/Stream.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/count.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/transform.hpp>
+
 
 /*
     Crediting https://github.com/progsource/maddy for the guidance in how-to, however, the code

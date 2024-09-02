@@ -9,9 +9,10 @@
 #include <mithril/fragment/FragmentCDB.hpp>
 
 #include <yq/container/Map.hpp>
-#include <0/basic/TextUtils.hpp>
 #include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Bytes.hpp>
+#include <yq/text/chars.hpp>
+#include <yq/text/vsplit.hpp>
 
 namespace {
     void    css__(cdb_options_t opts=0)

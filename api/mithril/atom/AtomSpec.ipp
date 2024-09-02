@@ -4,12 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <0/basic/TextUtils.hpp>
+
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomSpec.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldCDB.hpp>
 #include <mithril/id/Id.hpp>
+#include <yq/text/copy.hpp>
+#include <yq/text/match.hpp>
 
 namespace yq::mithril {
     AtomSpec        by_class(std::string_view k)

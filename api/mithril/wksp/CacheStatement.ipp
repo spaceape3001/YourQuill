@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/container/Set.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/copy.hpp>
 #include <mithril/wksp/CacheStatement.hpp>
 #include <mithril/wksp/Workspace.hpp>
 

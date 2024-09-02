@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/preamble.hpp>
-#include <0/basic/TextUtils.hpp>
 #include <0/meta/TypeInfo.hpp>
+#include <yq/text/basic.hpp>
 
 namespace yq::mithril::cdb {
     std::string make_filename(std::string_view k, const char* ext)

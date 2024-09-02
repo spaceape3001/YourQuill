@@ -10,7 +10,7 @@
 
 #include <yq/container/vector_utils.hpp>
 //#include <0/basic/CollectionUtils.hpp>
-#include <0/basic/TextUtils.hpp>
+
 
 namespace yq::mithril {
     User::Data&  User::Data::merge(const Data&b, bool fOverride)

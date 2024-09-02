@@ -11,7 +11,8 @@
 #include <algorithm>
 
 #include <0/basic/Any.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/copy.hpp>
+
 #include <yq/container/Vector.hpp>
 
 using namespace yq;

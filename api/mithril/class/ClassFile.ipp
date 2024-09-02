@@ -9,6 +9,7 @@
 #include "ClassFile.hpp"
 #include <0/io/XmlUtils.hpp>
 #include <yq/io/KeyValue.hpp>
+#include <yq/text/join.hpp>
 #include <mithril/io/Strings.hpp>
 
 namespace yq::errors {

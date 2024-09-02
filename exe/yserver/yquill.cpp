@@ -11,7 +11,7 @@
 #include <yq/container/vector_utils.hpp>
 #include <yq/basic/DelayInit.hpp>
 #include <yq/basic/Logging.hpp>
-#include <0/basic/TextUtils.hpp>
+
 #include <yq/basic/ThreadId.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/io/FileUtils.hpp>
@@ -19,6 +19,7 @@
 #include <0/sql/SqlLite.hpp>
 #include <0/sql/SqlQuery.hpp>
 #include <0/sql/SqlUtils.hpp>
+#include <yq/text/match.hpp>
 #include <yq/typedef/string.hpp>
 
 #include <0/meta/Meta.hpp>

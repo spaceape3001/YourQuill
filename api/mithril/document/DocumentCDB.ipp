@@ -8,9 +8,9 @@
 
 #include "DocumentCDB.hpp"
 
-//#include <0/basic/CollectionUtils.hpp>
 #include <yq/container/vector_utils.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/chars.hpp>
+
 #include <mithril/bit/NKI.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/Fragment.hpp>

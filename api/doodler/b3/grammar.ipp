@@ -8,7 +8,7 @@
 
 #include <doodler/b3/grammar.hpp>
 #include <yq/errors.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/chars.hpp>
 
 #include <iostream>
 

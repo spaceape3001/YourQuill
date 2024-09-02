@@ -11,6 +11,11 @@
 #include <0/io/XmlUtils.hpp>
 #include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Text.hpp>
+#include <yq/text/chars.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/parse.hpp>
+#include <yq/text/transform.hpp>
+#include <yq/text/vsplit.hpp>
 
 namespace yq::mithril {
     bool        read_xn(Context&ret, const XmlNode& xn)

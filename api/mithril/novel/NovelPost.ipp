@@ -7,7 +7,7 @@
 #pragma once
 
 #include "NovelPost.hpp"
-#include <0/basic/TextUtils.hpp>
+
 #include <mithril/novel/NovelArg.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/novel/Novel.hpp>

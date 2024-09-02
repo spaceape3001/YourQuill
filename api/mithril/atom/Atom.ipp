@@ -10,7 +10,8 @@
 #include <mithril/atom/AtomCDB.hpp>
 
 #include <0/io/FileUtils.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/transform.hpp>
+
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 

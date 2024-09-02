@@ -29,7 +29,9 @@
 #include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Text.hpp>
 #include <yq/basic/Encode64.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/basic.hpp>
+#include <yq/text/chars.hpp>
+#include <yq/text/match.hpp>
 #include <yq/typedef/string.hpp>
 
 #include <mithril/notify/FileNotifyAdapters.hpp>

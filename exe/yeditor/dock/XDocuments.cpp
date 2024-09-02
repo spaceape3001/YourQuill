@@ -6,7 +6,8 @@
 
 #include "XDocuments.hpp"
 #include <yq/basic/DelayInit.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/match.hpp>
+
 #include <gluon/core/Utilities.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>

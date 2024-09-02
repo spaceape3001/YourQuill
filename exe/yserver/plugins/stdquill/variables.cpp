@@ -9,7 +9,8 @@
 #include <yq/basic/Http.hpp>
 #include <yq/basic/Logging.hpp>
 #include <yq/io/StreamOps.hpp>
-#include <0/basic/TextUtils.hpp>
+
+#include <yq/text/join.hpp>
 #include <yq/typedef/string.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>

@@ -13,7 +13,7 @@
 #include <0/meta/ObjectInfo.hpp>
 #include <0/meta/PropertyInfo.hpp>
 #include <0/meta/TypeInfo.hpp>
-#include <0/basic/TextUtils.hpp>
+
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/web/WebPage.hpp>

@@ -11,7 +11,8 @@
 #include <0/basic/BasicApp.hpp>
 #include <yq/basic/Logging.hpp>
 #include <0/meta/Meta.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/join.hpp>
+
 
 #include <mithril/root/RootDir.hpp>
 #include <mithril/wksp/Workspace.hpp>

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "ValueData.hpp"
-#include <0/basic/TextUtils.hpp>
+
 #include <0/io/XmlUtils.hpp>
 #include <mithril/io/Strings.hpp>
 

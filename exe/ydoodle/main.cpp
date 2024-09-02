@@ -6,8 +6,8 @@
 
 #include <QApplication>
 #include <gluon/app/Application.hpp>
-#include <0/basic/TextUtils.hpp>
 #include <cstdlib>
+#include <yq/text/match.hpp>
 #include <yqResources.hpp>
 
 #include "DoodleMW.hpp"

@@ -7,9 +7,10 @@
 #pragma once
 
 #include <mithril/atom/AtomArg.hpp>
-#include <0/basic/TextUtils.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/atom/AtomCDB.hpp>
+#include <yq/text/parse.hpp>
+#include <yq/text/transform.hpp>
 
 namespace yq::mithril::arg {
     Atom atom(std::string_view  arg_string)

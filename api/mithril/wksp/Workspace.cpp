@@ -7,14 +7,16 @@
 #include "Workspace.hpp"
 
 #include <0/basic/BasicApp.hpp>
-#include <yq/basic/DelayInit.hpp>
 #include <0/io/DirUtils.hpp>
 #include <0/io/FileUtils.hpp>
-#include <yq/basic/Logging.hpp>
 #include <0/meta/Init.hpp>
 #include <0/sql/SqlLite.hpp>
-#include <0/basic/TextUtils.hpp>
+
+#include <yq/basic/DelayInit.hpp>
+#include <yq/basic/Logging.hpp>
 #include <yq/basic/ThreadId.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/vsplit.hpp>
 #include <yq/typedef/string.hpp>
 
 //#include <mithril/config/DirConfig.hpp>

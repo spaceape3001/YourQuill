@@ -5,9 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XEntry.hpp"
-//#include <0/basic/CollectionUtils.hpp>
 #include <yq/container/map_utils.hpp>
-#include <0/basic/TextUtils.hpp>
+#include <yq/text/join.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/transform.hpp>
+
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
