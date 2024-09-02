@@ -9,7 +9,7 @@
 #include <mithril/attribute/AttributeDiff.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 
-#include <0/basic/DiffEngine.hpp>
+#include <yq/basic/DiffEngine.hpp>
 #include <yq/basic/IntRange.hpp>
 #include <yq/io/KeyValue.hpp>
 
