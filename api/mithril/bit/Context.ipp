@@ -8,7 +8,7 @@
 
 #include <mithril/bit/Context.hpp>
 #include <mithril/io/Strings.hpp>
-#include <0/io/XmlUtils.hpp>
+#include <yq/io/XmlUtils.hpp>
 #include <yq/io/StreamOps.hpp>
 #include <yq/io/stream/Text.hpp>
 #include <yq/text/chars.hpp>

@@ -7,14 +7,15 @@
 #include "Workspace.hpp"
 
 #include <0/basic/BasicApp.hpp>
-#include <0/io/DirUtils.hpp>
-#include <0/io/FileUtils.hpp>
 #include <0/meta/Init.hpp>
-#include <0/sql/SqlLite.hpp>
 
 #include <yq/basic/DelayInit.hpp>
 #include <yq/basic/Logging.hpp>
 #include <yq/basic/ThreadId.hpp>
+#include <yq/container/set_utils.hpp>
+#include <yq/io/DirUtils.hpp>
+#include <yq/io/FileUtils.hpp>
+#include <yq/sql/SqlLite.hpp>
 #include <yq/text/match.hpp>
 #include <yq/text/vsplit.hpp>
 #include <yq/typedef/string.hpp>
@@ -313,7 +314,9 @@ namespace yq::mithril::wksp {
         #endif
 
         template_dirs   = dir::all_children(shared_dirs, "template");
-        available       = dir::subdirectory_names_set(template_dirs);
+
+        auto xavail     = dir::subdirectory_names_set(template_dirs);
+        available       = make_set(xavail, IgCase());
         auto perl_dirs  = dir::all_children(shared_dirs, "perl");
         
         markdown        = dir::first_child(perl_dirs, "Markdown.pl");

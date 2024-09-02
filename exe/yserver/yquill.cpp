@@ -13,12 +13,12 @@
 #include <yq/basic/Logging.hpp>
 
 #include <yq/basic/ThreadId.hpp>
-#include <0/io/DirUtils.hpp>
-#include <0/io/FileUtils.hpp>
+#include <yq/io/DirUtils.hpp>
+#include <yq/io/FileUtils.hpp>
 #include <yq/io/PluginLoader.hpp>
-#include <0/sql/SqlLite.hpp>
-#include <0/sql/SqlQuery.hpp>
-#include <0/sql/SqlUtils.hpp>
+#include <yq/sql/SqlLite.hpp>
+#include <yq/sql/SqlQuery.hpp>
+#include <yq/sql/SqlUtils.hpp>
 #include <yq/text/match.hpp>
 #include <yq/typedef/string.hpp>
 

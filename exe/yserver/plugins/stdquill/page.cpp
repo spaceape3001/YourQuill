@@ -29,12 +29,12 @@
 #include <yq/basic/DelayInit.hpp>
 #include <0/basic/Global.hpp>
 #include <yq/basic/Random.hpp>
-#include <0/io/DirUtils.hpp>
-#include <0/io/FileUtils.hpp>
+#include <yq/io/DirUtils.hpp>
+#include <yq/io/FileUtils.hpp>
 #include <0/gis/Date.hpp>
 #include <yq/basic/Logging.hpp>
-#include <0/sql/SqlLite.hpp>
-#include <0/sql/SqlQuery.hpp>
+#include <yq/sql/SqlLite.hpp>
+#include <yq/sql/SqlQuery.hpp>
 #include <yq/io/StreamOps.hpp>
 
 

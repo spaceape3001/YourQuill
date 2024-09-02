@@ -15,7 +15,7 @@
 #include <0/io/Curl.hpp>
 #include <yq/io/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>
-#include <0/sql/SqlLite.hpp>
+#include <yq/sql/SqlLite.hpp>
 #include <nlohmann/json.hpp>
 #include <QFont>
 

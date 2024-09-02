@@ -8,7 +8,7 @@
 
 #include <mithril/rule/Trigger.hpp>
 #include <mithril/io/Strings.hpp>
-#include <0/io/XmlUtils.hpp>
+#include <yq/io/XmlUtils.hpp>
 
 namespace yq::mithril {
     Ref<Trigger>     x_trigger(const XmlNode& xn)
