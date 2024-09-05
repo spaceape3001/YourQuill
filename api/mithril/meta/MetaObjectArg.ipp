@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/meta/MetaObjectArg.hpp>
-#include <yq/meta/ObjectInfo.hpp>
+#include <yq-toolbox/meta/ObjectInfo.hpp>
 
 #include <mithril/web/WebContext.hpp>
 

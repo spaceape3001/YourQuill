@@ -9,8 +9,8 @@
 #include <mithril/atom/Atom.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 
-#include <yq/io/FileUtils.hpp>
-#include <yq/text/transform.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq-toolbox/text/transform.hpp>
 
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentCDB.hpp>

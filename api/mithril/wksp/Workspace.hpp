@@ -7,10 +7,10 @@
 #pragma once
 
 #include <mithril/root/RootFwd.hpp>
-#include <yq/basic/Enum.hpp>
-#include <yq/basic/Flag.hpp>
+#include <yq-toolbox/basic/Enum.hpp>
+#include <yq-toolbox/basic/Flag.hpp>
 #include <functional>
-#include <yq/typedef/filesystem_path.hpp>
+#include <yq-toolbox/typedef/filesystem_path.hpp>
 #include <0/basic/preamble.hpp>
 
 namespace yq {

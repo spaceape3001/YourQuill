@@ -8,10 +8,10 @@
 
 #include <iostream>
 
-#include <yq/basic/BasicApp.hpp>
-#include <yq/basic/Logging.hpp>
-#include <yq/meta/Meta.hpp>
-#include <yq/text/join.hpp>
+#include <yq-toolbox/basic/BasicApp.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/meta/Meta.hpp>
+#include <yq-toolbox/text/join.hpp>
 
 
 #include <mithril/root/RootDir.hpp>

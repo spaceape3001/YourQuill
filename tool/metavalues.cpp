@@ -10,10 +10,10 @@
 #include <stdio.h>
 #include <algorithm>
 
-#include <yq/basic/Any.hpp>
-#include <yq/text/copy.hpp>
+#include <yq-toolbox/basic/Any.hpp>
+#include <yq-toolbox/text/copy.hpp>
 
-#include <yq/container/Vector.hpp>
+#include <yq-toolbox/container/Vector.hpp>
 
 using namespace yq;
 

@@ -11,9 +11,9 @@
 #include <span>
 #include <vector>
 
-#include <yq/container/EnumMap.hpp>
-#include <yq/container/SetChanges.hpp>
-#include <yq/container/Vector.hpp>
+#include <yq-toolbox/container/EnumMap.hpp>
+#include <yq-toolbox/container/SetChanges.hpp>
+#include <yq-toolbox/container/Vector.hpp>
 #include <mithril/atom/Atom.hpp>
 #include <mithril/atom/AtomSpec.hpp>
 #include <mithril/class/Class.hpp>

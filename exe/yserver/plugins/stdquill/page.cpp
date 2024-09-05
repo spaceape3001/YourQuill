@@ -26,22 +26,22 @@
 #include <mithril/value.hpp>
 
 //#include <0/basic/CollectionUtils.hpp>
-#include <yq/basic/DelayInit.hpp>
-#include <yq/basic/Global.hpp>
-#include <yq/basic/Random.hpp>
-#include <yq/io/DirUtils.hpp>
-#include <yq/io/FileUtils.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/Global.hpp>
+#include <yq-toolbox/basic/Random.hpp>
+#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
 #include <0/gis/Date.hpp>
-#include <yq/basic/Logging.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/sql/SqlQuery.hpp>
-#include <yq/io/StreamOps.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/sql/SqlLite.hpp>
+#include <yq-toolbox/sql/SqlQuery.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
 
 
-#include <yq/meta/ObjectInfo.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq-toolbox/meta/ObjectInfo.hpp>
+#include <yq-toolbox/meta/TypeInfo.hpp>
 
-#include <yq/io/stream/Text.hpp>
+#include <yq-toolbox/io/stream/Text.hpp>
 
 #include <mithril/bit/Copyright.hpp>
 #include <mithril/bit/NKI.hpp>

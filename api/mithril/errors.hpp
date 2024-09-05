@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/basic/ErrorDB.hpp>
-#include <yq/errors.hpp>
+#include <yq-toolbox/basic/ErrorDB.hpp>
+#include <yq-toolbox/errors.hpp>
 
 namespace yq::errors {
     using bad_copyright_stance  = error_db::entry<"Bad copyright stance">;

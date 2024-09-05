@@ -7,10 +7,10 @@
 #pragma once
 
 #include "FieldHtml.hpp"
-#include <yq/text/Comma.hpp>
-#include <yq/text/format.hpp>
+#include <yq-toolbox/text/Comma.hpp>
+#include <yq-toolbox/text/format.hpp>
 //
-#include <yq/io/StreamOps.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
 #include <mithril/class/ClassHtml.hpp>
 #include <mithril/root/RootHtml.hpp>
 #include <mithril/web/WebContext.hpp>

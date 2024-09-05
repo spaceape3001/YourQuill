@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/text/join.hpp>
+#include <yq-toolbox/text/join.hpp>
 
 namespace yq::mithril {
     Template::Template(ContentType ct) : m_type(ct)

@@ -8,8 +8,8 @@
 
 #include <mithril/leaf/Leaf.hpp>
 #include <mithril/bit/Context.hpp>
-#include <yq/typedef/string.hpp>
-#include <yq/io/KeyValue.hpp>
+#include <yq-toolbox/typedef/string.hpp>
+#include <yq-toolbox/io/KeyValue.hpp>
 
 namespace yq::mithril {
 

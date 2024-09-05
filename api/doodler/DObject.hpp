@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/basic/Flags.hpp>
-#include <yq/basic/MetaObject.hpp>
+#include <yq-toolbox/basic/Flags.hpp>
+#include <yq-toolbox/basic/MetaObject.hpp>
 #include <doodler/preamble.hpp>
 
 namespace yq::doodler {

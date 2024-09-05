@@ -11,7 +11,7 @@
 #include <mithril/class/ClassData.hpp>
 #include <mithril/class/ClassDiff.hpp>
 #include <mithril/class/ClassInfo.hpp>
-#include <yq/container/map_utils.hpp>
+#include <yq-toolbox/container/map_utils.hpp>
 
 namespace {
     void    class_graph_redraw(bool trigger=false)

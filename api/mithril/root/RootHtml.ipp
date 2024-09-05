@@ -7,7 +7,7 @@
 #pragma once
 
 #include "RootHtml.hpp"
-#include <yq/basic/HttpParser.hpp>
+#include <yq-toolbox/basic/HttpParser.hpp>
 #include <mithril/root/RootArg.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>

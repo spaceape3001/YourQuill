@@ -8,7 +8,7 @@
 
 #include <QObject>
 #include <doodler/Project.hpp>
-#include <yq/basic/Ref.hpp>
+#include <yq-toolbox/basic/Ref.hpp>
 
 namespace yq::doodler {
     class QProject;

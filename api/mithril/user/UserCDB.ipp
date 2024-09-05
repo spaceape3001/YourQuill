@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/container/ByteArray.hpp>
-#include <yq/basic/Logging.hpp>
+#include <yq-toolbox/container/ByteArray.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>

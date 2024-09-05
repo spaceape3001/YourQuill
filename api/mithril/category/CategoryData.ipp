@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CategoryData.hpp"
-#include <yq/text/misc.hpp>
+#include <yq-toolbox/text/misc.hpp>
 
 namespace yq::mithril {
     Category::Data&   Category::Data::merge(const Data&b, bool fOverride)

@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq/basic/HttpParser.hpp>
+#include <yq-toolbox/basic/HttpParser.hpp>
 #include "JsonAdapter.hpp"
 #include "TypedBytes.hpp"
 #include "PageTemplate.hpp"
@@ -19,20 +19,20 @@
 #include "WebVariable.hpp"
 //#include "NetWriter.hpp"
 
-#include <yq/basic/Random.hpp>
-#include <yq/basic/Safety.hpp>
-#include <yq/container/EnumMap.hpp>
-#include <yq/container/Map.hpp>
-#include <yq/io/FileUtils.hpp>
-#include <yq/basic/Logging.hpp>
-#include <yq/io/stream/Bytes.hpp>
-#include <yq/io/StreamOps.hpp>
-#include <yq/io/stream/Text.hpp>
-#include <yq/basic/Encode64.hpp>
-#include <yq/text/basic.hpp>
-#include <yq/text/chars.hpp>
-#include <yq/text/match.hpp>
-#include <yq/typedef/string.hpp>
+#include <yq-toolbox/basic/Random.hpp>
+#include <yq-toolbox/basic/Safety.hpp>
+#include <yq-toolbox/container/EnumMap.hpp>
+#include <yq-toolbox/container/Map.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/io/stream/Bytes.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
+#include <yq-toolbox/io/stream/Text.hpp>
+#include <yq-toolbox/basic/Encode64.hpp>
+#include <yq-toolbox/text/basic.hpp>
+#include <yq-toolbox/text/chars.hpp>
+#include <yq-toolbox/text/match.hpp>
+#include <yq-toolbox/typedef/string.hpp>
 
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Stage4.hpp>

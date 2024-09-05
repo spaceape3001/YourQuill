@@ -8,7 +8,7 @@
 
 #include <mithril/rule/Constraint.hpp>
 #include <mithril/io/Strings.hpp>
-#include <yq/io/XmlUtils.hpp>
+#include <yq-toolbox/io/XmlUtils.hpp>
 
 namespace yq::mithril {
     Ref<Constraint>     x_constraint(const XmlNode& xn)

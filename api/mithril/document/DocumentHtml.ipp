@@ -7,9 +7,9 @@
 #pragma once
 
 #include "DocumentHtml.hpp"
-#include <yq/io/DirUtils.hpp>
-#include <yq/text/match.hpp>
-#include <yq/typedef/string.hpp>
+#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq-toolbox/text/match.hpp>
+#include <yq-toolbox/typedef/string.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/wksp/Workspace.hpp>

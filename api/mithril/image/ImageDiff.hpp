@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/basic/ContentType.hpp>
+#include <yq-toolbox/basic/ContentType.hpp>
 #include <0/math/shape/Size2.hpp>
 
 #include <mithril/enum/Change.hpp>

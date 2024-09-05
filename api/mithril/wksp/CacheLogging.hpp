@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/basic/Logging.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
 
 #define cdbAlert           yAlert("cdb")
 #define cdbCritical        yCritical("cdb")

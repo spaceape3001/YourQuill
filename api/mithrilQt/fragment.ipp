@@ -7,7 +7,7 @@
 #pragma once
 
 #include "fragment.hpp"
-#include <yq/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <QIcon>

@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq/container/ByteArray.hpp>
-#include <yq/basic/Guarded.hpp>
+#include <yq-toolbox/container/ByteArray.hpp>
+#include <yq-toolbox/basic/Guarded.hpp>
 #include <atomic>
 #include <filesystem>
 
@@ -34,18 +34,18 @@ namespace {
 #define MAGICKCORE_HDRI_ENABLE MAGICKCORE_HDRI_ENABLE_OBSOLETE_IN_H
 #include <Magick++.h>
 
-#include <yq/basic/BasicApp.hpp>
-#include <yq/basic/DelayInit.hpp>
-#include <yq/basic/Logging.hpp>
+#include <yq-toolbox/basic/BasicApp.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
 
-#include <yq/container/Vector.hpp>
-#include <yq/io/DirUtils.hpp>
-#include <yq/io/FileUtils.hpp>
-#include <yq/io/StreamOps.hpp>
-#include <yq/io/stream/Bytes.hpp>
-#include <yq/io/stream/Text.hpp>
+#include <yq-toolbox/container/Vector.hpp>
+#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
+#include <yq-toolbox/io/stream/Bytes.hpp>
+#include <yq-toolbox/io/stream/Text.hpp>
 #include <0/math/shape/Size2.hxx>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq-toolbox/meta/TypeInfo.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomDiff.hpp>
@@ -102,10 +102,10 @@ using namespace yq::mithril;
 //#include <mithril/field/FieldUpdate.hpp>
 //#include <mithril/leaf/LeafUpdate.hpp>
 
-//#include <yq/basic/BasicApp.hpp>
+//#include <yq-toolbox/basic/BasicApp.hpp>
 //#include <0/basic/CollectionUtils.hpp>
 
-//#include <yq/meta/TypeInfo.hpp>
+//#include <yq-toolbox/meta/TypeInfo.hpp>
 
 
 

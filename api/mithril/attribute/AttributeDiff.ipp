@@ -9,9 +9,9 @@
 #include <mithril/attribute/AttributeDiff.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 
-#include <yq/basic/DiffEngine.hpp>
-#include <yq/basic/IntRange.hpp>
-#include <yq/io/KeyValue.hpp>
+#include <yq-toolbox/basic/DiffEngine.hpp>
+#include <yq-toolbox/basic/IntRange.hpp>
+#include <yq-toolbox/io/KeyValue.hpp>
 
 #include <mithril/wksp/CacheQuery.hpp>
 

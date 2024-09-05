@@ -9,9 +9,9 @@
 #include <mithril/bit/Copyright.hpp>
 #include <mithril/bit/Policy.hpp>
 #include <mithril/enum/Vcs.hpp>
-#include <yq/container/EnumMap.hpp>
-#include <yq/container/Set.hpp>
-#include <yq/container/Vector.hpp>
+#include <yq-toolbox/container/EnumMap.hpp>
+#include <yq-toolbox/container/Set.hpp>
+#include <yq-toolbox/container/Vector.hpp>
 
 namespace yq::mithril {
     struct Copyright;

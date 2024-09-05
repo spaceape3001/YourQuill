@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/basic/Http.hpp>
-#include <yq/container/ByteArray.hpp>
-#include <yq/basic/Ref.hpp>
+#include <yq-toolbox/basic/Http.hpp>
+#include <yq-toolbox/container/ByteArray.hpp>
+#include <yq-toolbox/basic/Ref.hpp>
 
 namespace yq::mithril {
     struct TypedBytes : public RefCount {

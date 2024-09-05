@@ -8,7 +8,7 @@
 
 #include <doodler/Py.hpp>
 #include <0/math/preamble.hpp>
-#include <yq/math/unit/declare.hpp>
+#include <yq-toolbox/unit/declare.hpp>
 
 namespace yq::doodler {
     class Py3Info : public PyInfo {

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/basic/Logging.hpp>
-#include <yq/sql/SqlQueryMap.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/sql/SqlQueryMap.hpp>
 #include <mithril/wksp/CacheStatement.hpp>
 
 #include <set>

@@ -6,9 +6,9 @@
 
 #include "DreamMW.hpp"
 
-#include <yq/basic/Logging.hpp>
-#include <yq/container/Map.hpp>
-#include <yq/container/Vector.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/container/Map.hpp>
+#include <yq-toolbox/container/Vector.hpp>
 #include <gluon/core/Logging.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <gluon/util/UInt64SignalMapper.hpp>

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/basic/Object.hpp>
-#include <yq/basic/Ref.hpp>
+#include <yq-toolbox/basic/Object.hpp>
+#include <yq-toolbox/basic/Ref.hpp>
 
 namespace yq {
     struct KeyValue;

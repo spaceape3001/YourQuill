@@ -9,7 +9,7 @@
 #include "Post.hpp"
 
 #include <mithril/web/WebContext.hpp>
-#include <yq/text/match.hpp>
+#include <yq-toolbox/text/match.hpp>
 
 namespace yq::mithril::post {
     std::string     key(WebContext&ctx)

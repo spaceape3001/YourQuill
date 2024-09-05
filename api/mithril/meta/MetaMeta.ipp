@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq-toolbox/meta/TypeInfoWriter.hpp>
 #include "MetaCDB.hpp"
 
 namespace {

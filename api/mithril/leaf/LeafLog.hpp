@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/basic/Logging.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
 
 #define leafAlert           yAlert("leaf")
 #define leafCritical        yCritical("leaf")

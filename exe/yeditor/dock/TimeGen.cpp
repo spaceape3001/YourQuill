@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "TimeGen.hpp"
-#include <yq/basic/DelayInit.hpp>
-#include <yq/basic/Random.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/Random.hpp>
 
 #include <QDate>
 #include <QDateEdit>

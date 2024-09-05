@@ -10,25 +10,25 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include <yq/basic/DelayInit.hpp>
-#include <yq/basic/ThreadId.hpp>
-#include <yq/basic/HttpParser.hpp>
-#include <yq/basic/Logging.hpp>
-#include <yq/basic/Random.hpp>
-#include <yq/basic/Ref.hpp>
-#include <yq/basic/Result.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/ThreadId.hpp>
+#include <yq-toolbox/basic/HttpParser.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/basic/Random.hpp>
+#include <yq-toolbox/basic/Ref.hpp>
+#include <yq-toolbox/basic/Result.hpp>
 
 
-#include <yq/io/FixedBuffer.hpp>
-#include <yq/io/StreamOps.hpp>
-#include <yq/io/stream/Text.hpp>
+#include <yq-toolbox/io/FixedBuffer.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
+#include <yq-toolbox/io/stream/Text.hpp>
 
-#include <yq/text/basic.hpp>
-#include <yq/text/format.hpp>
-#include <yq/text/match.hpp>
-#include <yq/text/parse.hpp>
-#include <yq/text/vsplit.hpp>
-#include <yq/typedef/string.hpp>
+#include <yq-toolbox/text/basic.hpp>
+#include <yq-toolbox/text/format.hpp>
+#include <yq-toolbox/text/match.hpp>
+#include <yq-toolbox/text/parse.hpp>
+#include <yq-toolbox/text/vsplit.hpp>
+#include <yq-toolbox/typedef/string.hpp>
 
 #include <mithril/web/WebAdapters.hpp>
 #include <mithril/web/WebContext.hpp>

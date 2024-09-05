@@ -8,7 +8,7 @@
 
 #include <mithril/book/BookJson.hpp>
 #include <mithril/book/BookSearch.hpp>
-#include <yq/typedef/string.hpp>
+#include <yq-toolbox/typedef/string.hpp>
 
 namespace {
 

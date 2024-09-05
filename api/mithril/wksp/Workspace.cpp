@@ -6,19 +6,19 @@
 
 #include "Workspace.hpp"
 
-#include <yq/basic/BasicApp.hpp>
-#include <yq/meta/Init.hpp>
+#include <yq-toolbox/basic/BasicApp.hpp>
+#include <yq-toolbox/meta/Init.hpp>
 
-#include <yq/basic/DelayInit.hpp>
-#include <yq/basic/Logging.hpp>
-#include <yq/basic/ThreadId.hpp>
-#include <yq/container/set_utils.hpp>
-#include <yq/io/DirUtils.hpp>
-#include <yq/io/FileUtils.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/text/match.hpp>
-#include <yq/text/vsplit.hpp>
-#include <yq/typedef/string.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/basic/ThreadId.hpp>
+#include <yq-toolbox/container/set_utils.hpp>
+#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq-toolbox/sql/SqlLite.hpp>
+#include <yq-toolbox/text/match.hpp>
+#include <yq-toolbox/text/vsplit.hpp>
+#include <yq-toolbox/typedef/string.hpp>
 
 //#include <mithril/config/DirConfig.hpp>
 

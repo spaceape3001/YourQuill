@@ -10,12 +10,12 @@
 
 #include "WebBrowser.hpp"
 
-#include <yq/basic/Url.hpp>
+#include <yq-toolbox/basic/Url.hpp>
 #include <gluon/core/Logging.hpp>
-#include <yq/io/Curl.hpp>
-#include <yq/io/PluginLoader.hpp>
+#include <yq-toolbox/io/Curl.hpp>
+#include <yq-toolbox/io/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>
-#include <yq/sql/SqlLite.hpp>
+#include <yq-toolbox/sql/SqlLite.hpp>
 #include <nlohmann/json.hpp>
 #include <QFont>
 

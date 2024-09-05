@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/basic/XmlObject.hpp>
-#include <yq/basic/Ref.hpp>
+#include <yq-toolbox/basic/XmlObject.hpp>
+#include <yq-toolbox/basic/Ref.hpp>
 
 namespace yq::mithril {
     //  Still a work in progress....

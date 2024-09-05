@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq/typedef/json.hpp>
+#include <yq-toolbox/typedef/json.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {

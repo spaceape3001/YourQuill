@@ -6,7 +6,7 @@
 
 #include "FileSpec.hpp"
 
-#include <yq/io/FileUtils.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
 
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/document/DocumentCDB.hpp>

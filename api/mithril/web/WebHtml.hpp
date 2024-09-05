@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <yq/basic/Url.hpp>
-#include <yq/io/StreamOps.hpp>
-#include <yq/io/Stream.hpp>
-#include <yq/container/ByteArray.hpp>
-#include <yq/basic/Ref.hpp>
-#include <yq/trait/not_copyable.hpp>
+#include <yq-toolbox/basic/Url.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
+#include <yq-toolbox/io/Stream.hpp>
+#include <yq-toolbox/container/ByteArray.hpp>
+#include <yq-toolbox/basic/Ref.hpp>
+#include <yq-toolbox/trait/not_copyable.hpp>
 #include <functional>
 #include <mithril/preamble.hpp>
 #include <0/math/preamble.hpp>

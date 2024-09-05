@@ -7,10 +7,10 @@
 #pragma once
 
 #include "UserFile.hpp"
-#include <yq/basic/Logging.hpp>
-#include <yq/io/KeyValue.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/io/KeyValue.hpp>
 #include <mithril/io/Strings.hpp>
-#include <yq/basic/ErrorDB.hpp>
+#include <yq-toolbox/basic/ErrorDB.hpp>
 
 namespace yq::errors {
     using unable_to_load_authentication = error_db::entry<"Unable to load the authentication from the file">;

@@ -7,7 +7,7 @@
 #pragma once
 
 #include "class.hpp"
-#include <yq/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/image/Image.hpp>

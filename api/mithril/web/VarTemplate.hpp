@@ -11,7 +11,7 @@
 
 #include <mithril/preamble.hpp>
 #include <mithril/folder/Folder.hpp>
-#include <yq/basic/Guarded.hpp>
+#include <yq-toolbox/basic/Guarded.hpp>
 
 namespace yq::mithril {
     class VarTemplate : public WebVariable {

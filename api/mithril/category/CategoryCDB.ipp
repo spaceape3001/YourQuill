@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq/container/ByteArray.hpp>
-#include <yq/io/FileUtils.hpp>
+#include <yq-toolbox/container/ByteArray.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/field/Field.hpp>
 #include <mithril/bit/NKI.hpp>

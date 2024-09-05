@@ -7,7 +7,7 @@
 #pragma once
 
 #include "LeafFile.hpp"
-#include <yq/io/StreamOps.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
 
 
 namespace yq::mithril {

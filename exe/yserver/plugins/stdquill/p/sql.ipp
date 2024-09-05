@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <yq/text/chars.hpp>
-#include <yq/text/misc.hpp>
+#include <yq-toolbox/text/chars.hpp>
+#include <yq-toolbox/text/misc.hpp>
 
 namespace {
 

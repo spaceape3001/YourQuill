@@ -8,7 +8,7 @@
 
 #include <mithrilQt/preamble.hpp>
 #include <mithril/id/Id.hpp>
-#include <yq/basic/Compare.hpp>
+#include <yq-toolbox/basic/Compare.hpp>
 
 #include <QVariant>
 #include <functional>

@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq/basic/DelayInit.hpp>
-#include <yq/basic/Logging.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/Class.hpp>

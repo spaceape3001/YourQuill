@@ -10,7 +10,7 @@
 #include "Constraint.hpp"
 #include "Rule.hpp"
 #include "Trigger.hpp"
-#include <yq/meta/ObjectInfoWriter.hpp>
+#include <yq-toolbox/meta/ObjectInfoWriter.hpp>
 
 namespace {
     void    reg_rule_meta() 

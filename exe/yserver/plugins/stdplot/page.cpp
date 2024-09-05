@@ -5,14 +5,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //#include <0/basic/CollectionUtils.hpp>
-#include <yq/basic/DelayInit.hpp>
-#include <yq/io/DirUtils.hpp>
-#include <yq/io/FileUtils.hpp>
-#include <yq/basic/Logging.hpp>
-#include <yq/io/StreamOps.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
 
 
-#include <yq/io/stream/Text.hpp>
+#include <yq-toolbox/io/stream/Text.hpp>
 
 #include <mithril/html/HtmlLayout.hpp>
 

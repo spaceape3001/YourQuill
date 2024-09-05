@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <yq/basic/Flags.hpp>
+#include <yq-toolbox/basic/Flags.hpp>
 #include <mithril/preamble.hpp>
 #include <functional>
 #include <memory>
-#include <yq/trait/always_false.hpp>
+#include <yq-toolbox/trait/always_false.hpp>
 
 namespace yq::mithril {
 

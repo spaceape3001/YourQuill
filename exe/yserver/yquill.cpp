@@ -7,22 +7,22 @@
 #include "config.hpp"
 #include "yquill.hpp"
 
-#include <yq/basic/BasicApp.hpp>
-#include <yq/container/vector_utils.hpp>
-#include <yq/basic/DelayInit.hpp>
-#include <yq/basic/Logging.hpp>
+#include <yq-toolbox/basic/BasicApp.hpp>
+#include <yq-toolbox/container/vector_utils.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
 
-#include <yq/basic/ThreadId.hpp>
-#include <yq/io/DirUtils.hpp>
-#include <yq/io/FileUtils.hpp>
-#include <yq/io/PluginLoader.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/sql/SqlQuery.hpp>
-#include <yq/sql/SqlUtils.hpp>
-#include <yq/text/match.hpp>
-#include <yq/typedef/string.hpp>
+#include <yq-toolbox/basic/ThreadId.hpp>
+#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq-toolbox/io/PluginLoader.hpp>
+#include <yq-toolbox/sql/SqlLite.hpp>
+#include <yq-toolbox/sql/SqlQuery.hpp>
+#include <yq-toolbox/sql/SqlUtils.hpp>
+#include <yq-toolbox/text/match.hpp>
+#include <yq-toolbox/typedef/string.hpp>
 
-#include <yq/meta/Meta.hpp>
+#include <yq-toolbox/meta/Meta.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 #include <iostream>

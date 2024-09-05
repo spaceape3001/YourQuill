@@ -7,19 +7,19 @@
 #include "config.hpp"
 #include "yquill.hpp"
 
-#include <yq/basic/Compare.hpp>
-#include <yq/basic/Logging.hpp>
-#include <yq/basic/ThreadId.hpp>
-#include <yq/container/Deque.hpp>
-#include <yq/container/EnumMap.hpp>
-#include <yq/container/Set.hpp>
-#include <yq/container/Vector.hpp>
-#include <yq/io/DirUtils.hpp>
-#include <yq/io/FileUtils.hpp>
-#include <yq/sql/SqlLite.hpp>
-#include <yq/sql/SqlQuery.hpp>
-#include <yq/text/chars.hpp>
-#include <yq/text/match.hpp>
+#include <yq-toolbox/basic/Compare.hpp>
+#include <yq-toolbox/basic/Logging.hpp>
+#include <yq-toolbox/basic/ThreadId.hpp>
+#include <yq-toolbox/container/Deque.hpp>
+#include <yq-toolbox/container/EnumMap.hpp>
+#include <yq-toolbox/container/Set.hpp>
+#include <yq-toolbox/container/Vector.hpp>
+#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq-toolbox/sql/SqlLite.hpp>
+#include <yq-toolbox/sql/SqlQuery.hpp>
+#include <yq-toolbox/text/chars.hpp>
+#include <yq-toolbox/text/match.hpp>
 
 
 #include <mithril/directory/DirectoryCDB.hpp>

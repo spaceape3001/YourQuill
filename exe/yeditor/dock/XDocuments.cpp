@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XDocuments.hpp"
-#include <yq/basic/DelayInit.hpp>
-#include <yq/text/match.hpp>
+#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq-toolbox/text/match.hpp>
 
 #include <gluon/core/Utilities.hpp>
 #include <mithril/document/DocumentCDB.hpp>
