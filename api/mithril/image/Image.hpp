@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <initializer_list>
 #include <mithril/enum/SizeDesc.hpp>
-#include <0/math/shape/Size2.hpp>
+#include <yq-toolbox/shape/Size2.hpp>
 #include <mithril/fragment/Fragment.hpp>
 
 namespace yq::mithril {

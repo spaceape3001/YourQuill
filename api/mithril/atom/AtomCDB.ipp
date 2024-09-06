@@ -20,7 +20,7 @@
 #include <mithril/tag/Tag.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
-#include <0/math/Counter.hpp>
+#include <yq-toolbox/math/Counter.hpp>
 
 namespace yq::mithril::cdb {
     AtomVector  all_atoms(Sorted sorted)

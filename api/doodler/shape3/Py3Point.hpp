@@ -7,7 +7,7 @@
 #pragma once
 
 #include <doodler/Py3.hpp>
-#include <0/math/vector/Vector3.hpp>
+#include <yq-toolbox/vector/Vector3.hpp>
 
 namespace yq::doodler {
     class Py3Point : public Py3, public Py3::Position {

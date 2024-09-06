@@ -44,7 +44,7 @@ namespace {
 #include <yq-toolbox/io/StreamOps.hpp>
 #include <yq-toolbox/io/stream/Bytes.hpp>
 #include <yq-toolbox/io/stream/Text.hpp>
-#include <0/math/shape/Size2.hxx>
+#include <yq-toolbox/shape/Size2.hxx>
 #include <yq-toolbox/meta/TypeInfo.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>

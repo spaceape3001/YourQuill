@@ -8,6 +8,7 @@
 
 #include <mithril/graphviz/GraphvizBuilder.hpp>
 #include <mithril/graphviz/GraphvizCDB.hpp>
+#include <yq-toolbox/io/StreamOps.hpp>
 #include <yq-toolbox/io/stream/Text.hpp>
 
 namespace yq::mithril {

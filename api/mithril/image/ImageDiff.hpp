@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq-toolbox/basic/ContentType.hpp>
-#include <0/math/shape/Size2.hpp>
+#include <yq-toolbox/shape/Size2.hpp>
 
 #include <mithril/enum/Change.hpp>
 #include <mithril/image/Image.hpp>

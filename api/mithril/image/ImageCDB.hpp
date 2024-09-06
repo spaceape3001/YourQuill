@@ -11,7 +11,7 @@
 #include <mithril/image/Image.hpp>
 #include <mithril/image/ImageInfo.hpp>
 #include <yq-toolbox/basic/ContentType.hpp>
-#include <0/math/shape/Size2.hpp>
+#include <yq-toolbox/shape/Size2.hpp>
 
 #define TBL_IMAGES "Images"
 
