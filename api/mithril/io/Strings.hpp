@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <0/basic/preamble.hpp>
+
 #include <yq-toolbox/typedef/string.hpp>
+#include <yq-toolbox/typedef/string_initlists.hpp>
 
 namespace yq::mithril {
-
     static constexpr const char*    szAbbr              = "abbr";
     static constexpr const char*    szAbbreviation      = "abbreviation";
     static constexpr const char*    szAbstract          = "abstract";

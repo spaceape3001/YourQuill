@@ -45,6 +45,7 @@
 
 using namespace yq;
 using namespace yq::mithril;
+using namespace std::literals::chrono_literals;
 
 static constexpr const bool         kScanMetrics        = false;
 static constexpr const unsigned int kScanTickInterval   = 100;
