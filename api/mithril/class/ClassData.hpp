@@ -9,7 +9,7 @@
 #include <mithril/class/Class.hpp>
 #include <yq-toolbox/container/Map.hpp>
 #include <yq-toolbox/container/Set.hpp>
-#include <yq-toolbox/typedef/string_sets.hpp>
+#include <yq/typedef/string_sets.hpp>
 #include <memory>
 
 namespace yq::mithril {

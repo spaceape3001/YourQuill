@@ -7,7 +7,7 @@
 #pragma once
 
 #include <doodler/Py.hpp>
-#include <yq-toolbox/typedef/vector3.hpp>
+#include <yq/typedef/vector3.hpp>
 #include <yq-toolbox/unit/declare.hpp>
 
 namespace yq::doodler {

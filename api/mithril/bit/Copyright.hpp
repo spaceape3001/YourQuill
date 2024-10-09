@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/enum/AssertDeny.hpp>
-#include <yq-toolbox/typedef/xml.hpp>
+#include <yq/typedef/xml.hpp>
 
 
 namespace yq::mithril {

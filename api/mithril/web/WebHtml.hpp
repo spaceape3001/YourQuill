@@ -11,10 +11,10 @@
 #include <yq-toolbox/io/Stream.hpp>
 #include <yq-toolbox/container/ByteArray.hpp>
 #include <yq-toolbox/basic/Ref.hpp>
-#include <yq-toolbox/trait/not_copyable.hpp>
-#include <yq-toolbox/typedef/size2.hpp>
-#include <yq-toolbox/typedef/string_maps.hpp>
-#include <yq-toolbox/typedef/string_vectors.hpp>
+#include <yq/trait/not_copyable.hpp>
+#include <yq/typedef/size2.hpp>
+#include <yq/typedef/string_maps.hpp>
+#include <yq/typedef/string_vectors.hpp>
 #include <functional>
 #include <mithril/preamble.hpp>
 

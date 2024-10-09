@@ -32,7 +32,7 @@
 #include <yq-toolbox/text/basic.hpp>
 #include <yq-toolbox/text/chars.hpp>
 #include <yq-toolbox/text/match.hpp>
-#include <yq-toolbox/typedef/string.hpp>
+#include <yq/typedef/string.hpp>
 
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Stage4.hpp>

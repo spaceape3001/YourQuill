@@ -12,8 +12,8 @@
 #include <yq-toolbox/container/EnumMap.hpp>
 #include <yq-toolbox/meta/Meta.hpp>
 #include <yq-toolbox/meta/MetaWriter.hpp>
-#include <yq-toolbox/trait/not_copyable.hpp>
-#include <yq-toolbox/typedef/filesystem_path.hpp>
+#include <yq/trait/not_copyable.hpp>
+#include <yq/typedef/filesystem_path.hpp>
 
 #include <mithril/preamble.hpp>
 

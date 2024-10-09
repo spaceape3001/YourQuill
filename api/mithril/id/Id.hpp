@@ -10,7 +10,7 @@
 #include <mithril/preamble.hpp>
 #include <functional>
 #include <memory>
-#include <yq-toolbox/trait/always_false.hpp>
+#include <yq/trait/always_false.hpp>
 
 namespace yq::mithril {
 

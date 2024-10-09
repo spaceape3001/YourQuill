@@ -11,7 +11,7 @@
 #include <yq-toolbox/io/StreamOps.hpp>
 
 #include <yq-toolbox/text/join.hpp>
-#include <yq-toolbox/typedef/string.hpp>
+#include <yq/typedef/string.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>

@@ -10,8 +10,8 @@
 #include <yq-toolbox/basic/Enum.hpp>
 #include <yq-toolbox/basic/Flag.hpp>
 #include <functional>
-#include <yq-toolbox/typedef/filesystem_path.hpp>
-#include <yq-toolbox/typedef/string_sets.hpp>
+#include <yq/typedef/filesystem_path.hpp>
+#include <yq/typedef/string_sets.hpp>
 //
 
 namespace yq {

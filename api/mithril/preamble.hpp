@@ -17,7 +17,7 @@
 #include <variant>
 #include <vector>
 #include <yq-toolbox/meta/InfoBinder.hpp>
-#include <yq-toolbox/typedef/counter.hpp>
+#include <yq/typedef/counter.hpp>
 
 namespace yq {
     class ByteArray;

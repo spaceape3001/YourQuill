@@ -10,7 +10,7 @@
 #include "Window.hpp"
 
 #include <mithril/image/Image.hpp>
-#include <yq-toolbox/typedef/filesystem_path.hpp>
+#include <yq/typedef/filesystem_path.hpp>
 
 using yq::mithril::Image;
 namespace yq::gluon {

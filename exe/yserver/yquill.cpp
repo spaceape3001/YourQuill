@@ -20,7 +20,7 @@
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/sql/SqlUtils.hpp>
 #include <yq-toolbox/text/match.hpp>
-#include <yq-toolbox/typedef/string.hpp>
+#include <yq/typedef/string.hpp>
 
 #include <yq-toolbox/meta/Meta.hpp>
 #include <mithril/wksp/Workspace.hpp>

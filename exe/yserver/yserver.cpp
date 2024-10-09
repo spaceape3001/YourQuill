@@ -28,7 +28,7 @@
 #include <yq-toolbox/text/match.hpp>
 #include <yq-toolbox/text/parse.hpp>
 #include <yq-toolbox/text/vsplit.hpp>
-#include <yq-toolbox/typedef/string.hpp>
+#include <yq/typedef/string.hpp>
 
 #include <mithril/web/WebAdapters.hpp>
 #include <mithril/web/WebContext.hpp>
