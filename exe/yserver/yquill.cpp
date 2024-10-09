@@ -16,9 +16,9 @@
 #include <yq-toolbox/io/DirUtils.hpp>
 #include <yq-toolbox/io/FileUtils.hpp>
 #include <yq-toolbox/io/PluginLoader.hpp>
-#include <yq-toolbox/sql/SqlLite.hpp>
-#include <yq-toolbox/sql/SqlQuery.hpp>
-#include <yq-toolbox/sql/SqlUtils.hpp>
+#include <yq/sql/SqlLite.hpp>
+#include <yq/sql/SqlQuery.hpp>
+#include <yq/sql/SqlUtils.hpp>
 #include <yq-toolbox/text/match.hpp>
 #include <yq-toolbox/typedef/string.hpp>
 

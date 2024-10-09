@@ -15,7 +15,7 @@
 #include <yq-toolbox/container/set_utils.hpp>
 #include <yq-toolbox/io/DirUtils.hpp>
 #include <yq-toolbox/io/FileUtils.hpp>
-#include <yq-toolbox/sql/SqlLite.hpp>
+#include <yq/sql/SqlLite.hpp>
 #include <yq-toolbox/text/match.hpp>
 #include <yq-toolbox/text/vsplit.hpp>
 #include <yq-toolbox/typedef/string.hpp>

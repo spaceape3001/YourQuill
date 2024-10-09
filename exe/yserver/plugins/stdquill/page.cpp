@@ -33,8 +33,8 @@
 #include <yq-toolbox/io/FileUtils.hpp>
 #include <yq-toolbox/date/Date.hpp>
 #include <yq-toolbox/basic/Logging.hpp>
-#include <yq-toolbox/sql/SqlLite.hpp>
-#include <yq-toolbox/sql/SqlQuery.hpp>
+#include <yq/sql/SqlLite.hpp>
+#include <yq/sql/SqlQuery.hpp>
 #include <yq-toolbox/io/StreamOps.hpp>
 
 

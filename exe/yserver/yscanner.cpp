@@ -16,8 +16,8 @@
 #include <yq-toolbox/container/Vector.hpp>
 #include <yq-toolbox/io/DirUtils.hpp>
 #include <yq-toolbox/io/FileUtils.hpp>
-#include <yq-toolbox/sql/SqlLite.hpp>
-#include <yq-toolbox/sql/SqlQuery.hpp>
+#include <yq/sql/SqlLite.hpp>
+#include <yq/sql/SqlQuery.hpp>
 #include <yq-toolbox/text/chars.hpp>
 #include <yq-toolbox/text/match.hpp>
 
