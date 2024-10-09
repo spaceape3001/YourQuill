@@ -26,6 +26,7 @@ target_include_directories( stdquill
 target_link_libraries( stdquill 
     PUBLIC 
         yqtoolbox 
+        yq_date
         mithril
         doodler
         #noveler
