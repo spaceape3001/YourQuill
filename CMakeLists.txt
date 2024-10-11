@@ -7,30 +7,43 @@
 cmake_minimum_required(VERSION 3.26.0)
 project(YourQuill VERSION 0.0.0.3 LANGUAGES CXX)
 
-option(Feature_Qt6 "Deploy Qt6 (API and Apps)" ON)
-option(Feature_Vulkan "Deploy Vulkan (API and Apps)" ON)
-option(Feature_WebServer "Web Server" ON)
+#   User features
+
+option(Feature_BuildTime    "Print out build times" ON)
+# option(Feature_Experimental "Enable Experimental Features" OFF)
+option(Feature_Qt6          "Enable Qt6 (API and Apps)" ON)
+option(Feature_SDK          "Enable SDK (Apps)" ON)
+option(Feature_UnitTests    "Enable Unit Tests" ON)
+option(Feature_Vulkan       "Enable Vulkan (API and Apps)" ON)
+# option(Feature_WebServer    "Enable Web Server" ON)
+
+#   Translate features to build flags
+#   (doing this so features/build can be decoupled, if necessary
+
+set(Build_ASIO          ON)
+set(Build_CURL          ON)
+set(Build_Doxygen       OFF)
+set(Build_GLM           ${Feature_Vulkan})
+set(Build_Qt6           ${Feature_Qt6})
+set(Build_SDK           ${Feature_SDK})
+set(Build_SQL           ON)
+set(Build_Timing        ${Feature_BuildTime})
+set(Build_UnitTests     ${Feature_UnitTests})
+set(Build_Vulkan        ${Feature_Vulkan})
 
 include(yq-toolbox/configure.cmake)
+
 add_subdirectory(yq-toolbox)
-if(Feature_Vulkan)
+if(${Build_Vulkan})
     add_subdirectory(yq-vulqan)
 endif()
-if(Feature_Qt6)
-    add_definitions(-DYQ_USE_QT)
+if(${Build_Qt6})
     add_subdirectory(qt-utilities)
 endif()
-if(Feature_WebServer)
-    include(yq-webserver/configure.cmake)
-    add_subdirectory(yq-webserver)
-endif()
+
 # add_subdirectory(3rd)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-
-option(Feature_Experimental "Enable Experimental Features" OFF)
-
-
 
 find_package(Graphviz)
 find_package(ImageMagick COMPONENTS Magick++)
@@ -38,43 +51,22 @@ find_package(ImageMagick COMPONENTS Magick++)
 # find_package(libzip REQUIRED)
 #   Qt's got issues, want to remove it....
 
-
-
-if(Developer_Build)
-    add_definitions(-DDEV_BUILD=1)
-endif()
-
-if(Feature_ApiDocumentation)
-    find_package(Doxygen REQUIRED)
-    if(DOXYGEN_FOUND)
-    
-    endif()
-endif()
-
-
-
     #   We add support for "experimental" directories, either "s->x" or x appended.
     #   These won't be added to the main git, but allow for local experimentation
 
-#set(CMAKE_RELEASE_POSTFIX YQ)
-
 include_directories(api)
+    
+if(Build_Qt6)
+    add_subdirectory(res)
+endif()
 
-add_subdirectory(res)
 add_subdirectory(api)
 add_subdirectory(plugins)
-add_subdirectory(test)
+if(Build_UnitTests)
+    add_subdirectory(test)
+endif()
 add_subdirectory(tool)
-if(Feature_Experimental AND EXISTS toolx)
-    #add_subdirectory(toolx)
-endif()
 add_subdirectory(exe)
-if(Feature_Experimental AND EXISTS exex)
-    add_subdirectory(exex)
-endif()
-if(Feature_Experimental AND EXISTS play)
-    add_subdirectory(play)
-endif()
 
 
 
