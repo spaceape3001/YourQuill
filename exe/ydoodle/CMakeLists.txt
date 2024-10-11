@@ -19,9 +19,9 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} 
     PUBLIC
-        gluon
-        doodler
-        doodlerQt
+        yq_doodler
+        yq_doodlerQt
+        yq_gluon
         yq_resources
 )
 

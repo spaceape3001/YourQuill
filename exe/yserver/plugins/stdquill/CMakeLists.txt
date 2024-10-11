@@ -26,10 +26,10 @@ target_include_directories( stdquill
 target_link_libraries( stdquill 
     PUBLIC 
         yq_date
-        mithril
-        doodler
+        yq_mithril
+        yq_doodler
         #noveler
-        asio
+        yq_asio
         ${ImageMagick_LIBRARIES}
 )
 

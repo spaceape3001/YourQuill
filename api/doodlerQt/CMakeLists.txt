@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-project(doodlerQt)
+project(yq_doodlerQt)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets)
 
@@ -19,8 +19,8 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        doodler
-        gluon
+        yq_doodler
+        yq_gluon
         
         Qt6::Core 
         Qt6::Gui 

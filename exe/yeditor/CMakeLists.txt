@@ -80,12 +80,12 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} 
-    gluon 
-    mithril 
-    mithrilQt
     
+    yq_gluon 
     yq_math
-    yq_network
+    yq_mithril 
+    yq_mithrilQt
+    yq_net
     yq_process
     yq_resources
     

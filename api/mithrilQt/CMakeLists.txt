@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-project(mithrilQt)
+project(yq_mithrilQt)
 
 
 find_package(Qt6 COMPONENTS Core Gui Widgets)
@@ -30,8 +30,8 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        mithril
-        gluon
+        yq_gluon
+        yq_mithril
         
         Qt6::Core
         Qt6::Gui

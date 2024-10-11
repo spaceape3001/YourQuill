@@ -14,8 +14,8 @@ add_executable(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} 
     PUBLIC 
-        mithril 
-        asio 
+        yq_mithril 
+        yq_asio 
         yq_math
 )
 

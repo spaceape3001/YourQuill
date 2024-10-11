@@ -10,7 +10,7 @@
 #   Two libraries... this one is about data, formats, algorithms.  Qt one is
 #   about display widgets (for Qt)
 
-project(doodler)
+project(yq_doodler)
 
 add_library(${PROJECT_NAME} SHARED
     doodle.cpp

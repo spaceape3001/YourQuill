@@ -16,8 +16,8 @@ add_library( stdplot SHARED ${stdplot_SOURCES} )
 target_include_directories( stdplot PRIVATE . ) 
 target_link_libraries( stdplot 
     PUBLIC 
-        mithril
-        asio
+        yq_mithril
+        yq_asio
 )
 
 LinkTest(stdplot)

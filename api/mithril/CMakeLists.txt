@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-project(mithril)
+project(yq_mithril)
 
 add_library(${PROJECT_NAME} SHARED
     all_arg.cpp
@@ -29,13 +29,13 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         yq_core
         yq_keyv
-        yq_network
+        yq_net
         yq_process
         yq_sql
         yq_xml
         
     PRIVATE
-        asio
+        yq_asio
         #${ImageMagick_LIBRARIES}
 )
 
