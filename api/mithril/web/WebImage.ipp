@@ -15,8 +15,8 @@
 #include <mithril/notify/FileWatch.hpp>
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Stage4.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
-#include <yq-toolbox/io/stream/Text.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <yq/stream/Text.hpp>
 
 namespace yq::mithril {
     WebImage::WebImage(std::string_view kpath, const std::filesystem::path& f0, Folder folder, std::string_view prefix, const std::source_location&sl) : 

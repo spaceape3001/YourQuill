@@ -10,10 +10,10 @@
 
 #include "WebBrowser.hpp"
 
-#include <yq-toolbox/basic/Url.hpp>
+#include <yq/net/Url.hpp>
 #include <gluon/core/Logging.hpp>
-#include <yq-toolbox/io/Curl.hpp>
-#include <yq-toolbox/io/PluginLoader.hpp>
+#include <yq/net/Curl.hpp>
+#include <yq/process/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <nlohmann/json.hpp>

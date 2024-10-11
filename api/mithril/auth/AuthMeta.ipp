@@ -12,7 +12,7 @@
 #include "AuthReject.hpp"
 #include "AuthSimple.hpp"
 
-#include <yq-toolbox/meta/ObjectInfoWriter.hpp>
+#include <yq/meta/ObjectInfoWriter.hpp>
 
 
 namespace  {        

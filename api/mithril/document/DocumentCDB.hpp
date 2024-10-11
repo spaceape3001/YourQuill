@@ -11,7 +11,7 @@
 #include <mithril/document/Document.hpp>
 #include <mithril/folder/Folder.hpp>
 #include <mithril/image/Image.hpp>
-#include <yq-toolbox/basic/Http.hpp>
+#include <yq/net/Http.hpp>
 
 #define TBL_DOCUMENTS "Documents"
 

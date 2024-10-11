@@ -7,7 +7,7 @@
 #pragma once
 
 #include "user.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/user/UserCDB.hpp>
 #include <mithril/image/Image.hpp>

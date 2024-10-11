@@ -5,12 +5,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Markdown.hpp"
-#include <yq-toolbox/basic/Compare.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
-#include <yq-toolbox/io/Stream.hpp>
-#include <yq-toolbox/text/count.hpp>
-#include <yq-toolbox/text/match.hpp>
-#include <yq-toolbox/text/transform.hpp>
+#include <yq/core/Compare.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <yq/core/Stream.hpp>
+#include <yq/text/count.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/transform.hpp>
 
 
 /*

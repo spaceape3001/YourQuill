@@ -7,7 +7,7 @@
 #include <boost/ut.hpp>
 #include <mithril/graphviz/Graphviz.hpp>
 #include <mithril/graphviz/GraphvizBuilder.hpp>
-#include <yq-toolbox/basic/Logging.hpp>
+#include <yq/core/Logging.hpp>
 
 namespace ut = boost::ut;
 using namespace ut;

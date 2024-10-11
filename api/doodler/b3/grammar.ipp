@@ -7,8 +7,8 @@
 #pragma once
 
 #include <doodler/b3/grammar.hpp>
-#include <yq-toolbox/errors.hpp>
-#include <yq-toolbox/text/chars.hpp>
+#include <yq/errors.hpp>
+#include <yq/text/chars.hpp>
 
 #include <iostream>
 

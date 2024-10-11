@@ -7,7 +7,7 @@
 #pragma once
 
 #include "ImageCDB.hpp"
-#include <yq-toolbox/container/ByteArray.hpp>
+#include <yq/container/ByteArray.hpp>
 
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>

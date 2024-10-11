@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq-toolbox/io/DirUtils.hpp>
+#include <yq/file/DirUtils.hpp>
 
 #include <mithril/bit/NKI.hpp>
 #include <mithril/directory/Directory.hpp>

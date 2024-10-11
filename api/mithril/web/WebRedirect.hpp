@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq-toolbox/basic/Http.hpp>
-#include <yq-toolbox/basic/Url.hpp>
+#include <yq/net/Http.hpp>
+#include <yq/net/Url.hpp>
     
 namespace yq::mithril {
 

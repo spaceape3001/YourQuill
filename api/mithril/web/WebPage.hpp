@@ -7,11 +7,11 @@
 #pragma once
 
 //#include <mithril/enum/change.hpp>
-#include <yq-toolbox/basic/Http.hpp>
-#include <yq-toolbox/basic/Flag.hpp>
-#include <yq-toolbox/container/EnumMap.hpp>
-#include <yq-toolbox/meta/Meta.hpp>
-#include <yq-toolbox/meta/MetaWriter.hpp>
+#include <yq/net/Http.hpp>
+#include <yq/core/Flag.hpp>
+#include <yq/container/EnumMap.hpp>
+#include <yq/meta/Meta.hpp>
+#include <yq/meta/MetaWriter.hpp>
 #include <yq/trait/not_copyable.hpp>
 #include <yq/typedef/filesystem_path.hpp>
 

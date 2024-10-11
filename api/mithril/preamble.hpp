@@ -16,7 +16,7 @@
 #include <utility>
 #include <variant>
 #include <vector>
-#include <yq-toolbox/meta/InfoBinder.hpp>
+#include <yq/meta/InfoBinder.hpp>
 #include <yq/typedef/counter.hpp>
 
 namespace yq {

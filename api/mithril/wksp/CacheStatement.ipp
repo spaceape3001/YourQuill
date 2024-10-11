@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq-toolbox/container/Set.hpp>
-#include <yq-toolbox/text/copy.hpp>
+#include <yq/container/Set.hpp>
+#include <yq/text/copy.hpp>
 #include <mithril/wksp/CacheStatement.hpp>
 #include <mithril/wksp/Workspace.hpp>
 

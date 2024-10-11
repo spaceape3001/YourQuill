@@ -7,7 +7,7 @@
 #pragma once
 
 #include "group.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/group/GroupCDB.hpp>
 #include <mithril/image/Image.hpp>

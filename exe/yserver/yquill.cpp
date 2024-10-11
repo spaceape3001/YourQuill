@@ -7,22 +7,22 @@
 #include "config.hpp"
 #include "yquill.hpp"
 
-#include <yq-toolbox/basic/BasicApp.hpp>
-#include <yq-toolbox/container/vector_utils.hpp>
-#include <yq-toolbox/basic/DelayInit.hpp>
-#include <yq-toolbox/basic/Logging.hpp>
+#include <yq/container/vector_utils.hpp>
+#include <yq/core/BasicApp.hpp>
+#include <yq/core/DelayInit.hpp>
+#include <yq/core/Logging.hpp>
 
-#include <yq-toolbox/basic/ThreadId.hpp>
-#include <yq-toolbox/io/DirUtils.hpp>
-#include <yq-toolbox/io/FileUtils.hpp>
-#include <yq-toolbox/io/PluginLoader.hpp>
+#include <yq/core/ThreadId.hpp>
+#include <yq/file/DirUtils.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/process/PluginLoader.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/sql/SqlQuery.hpp>
 #include <yq/sql/SqlUtils.hpp>
-#include <yq-toolbox/text/match.hpp>
+#include <yq/text/match.hpp>
 #include <yq/typedef/string.hpp>
 
-#include <yq-toolbox/meta/Meta.hpp>
+#include <yq/meta/Meta.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 #include <iostream>

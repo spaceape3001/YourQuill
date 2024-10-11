@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <yq-toolbox/container/ByteArray.hpp>
-#include <yq-toolbox/basic/DelayInit.hpp>
-#include <yq-toolbox/basic/Guarded.hpp>
-#include <yq-toolbox/basic/Logging.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
+#include <yq/container/ByteArray.hpp>
+#include <yq/core/DelayInit.hpp>
+#include <yq/core/Guarded.hpp>
+#include <yq/core/Logging.hpp>
+#include <yq/core/StreamOps.hpp>
 
 
 #include <mithril/preamble.hpp>

@@ -8,7 +8,7 @@
 
 #include <mithril/style/Style.hpp>
 #include <mithril/bit/Context.hpp>
-#include <yq-toolbox/io/KeyValue.hpp>
+#include <yq/keyv/KeyValue.hpp>
 
 namespace yq::mithril {
 

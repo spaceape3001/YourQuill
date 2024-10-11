@@ -7,11 +7,11 @@
 #pragma once
 
 #include "ValueFile.hpp"
-#include <yq-toolbox/basic/Logging.hpp>
-#include <yq-toolbox/io/XmlUtils.hpp>
+#include <yq/core/Logging.hpp>
+#include <yq/xml/XmlUtils.hpp>
 #include <mithril/io/Strings.hpp>
 #include <mithril/errors.hpp>
-#include <yq-toolbox/errors.hpp>
+#include <yq/errors.hpp>
 
 namespace yq::mithril {
     std::error_code Value::ListFile::read(const XmlDocument&doc, std::string_view fname)

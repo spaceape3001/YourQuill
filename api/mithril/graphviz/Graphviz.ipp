@@ -8,8 +8,8 @@
 
 #include <mithril/graphviz/Graphviz.hpp>
 #include <mithril/wksp/Workspace.hpp>
-#include <yq-toolbox/io/Execute.hpp>
-#include <yq-toolbox/basic/ErrorDB.hpp>
+#include <yq/process/Execute.hpp>
+#include <yq/core/ErrorDB.hpp>
 
 namespace yq::mithril {
     namespace {

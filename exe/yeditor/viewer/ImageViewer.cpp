@@ -8,7 +8,7 @@
 #include "Command.hpp"
 #include "DreamMW.hpp"
 
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Logging.hpp>
 #include <gluon/widget/GraphicsView.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>

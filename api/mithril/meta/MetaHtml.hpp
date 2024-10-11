@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/html/Html.hpp>
-#include <yq-toolbox/basic/Http.hpp>
+#include <yq/net/Http.hpp>
 #include <mithril/web/WebPage.hpp>
 #include <mithril/web/WebVariable.hpp>
 

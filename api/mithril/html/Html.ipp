@@ -8,13 +8,13 @@
 
 #include "Html.hpp"
 #include "HtmlLayout.hpp"
-#include <yq-toolbox/io/Execute.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <yq/process/Execute.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
-#include <yq-toolbox/basic/Logging.hpp>
+#include <yq/core/Logging.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, const Escape&v)

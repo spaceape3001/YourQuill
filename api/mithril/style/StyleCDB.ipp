@@ -7,8 +7,8 @@
 #pragma once
 
 #include "StyleCDB.hpp"
-#include <yq-toolbox/container/ByteArray.hpp>
-#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq/container/ByteArray.hpp>
+#include <yq/file/FileUtils.hpp>
 
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>

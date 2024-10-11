@@ -7,9 +7,9 @@
 #pragma once
 
 #include <mithril/meta/MetaOperatorArg.hpp>
-#include <yq-toolbox/meta/ArgInfo.hpp>
-#include <yq-toolbox/meta/OperatorInfo.hpp>
-#include <yq-toolbox/meta/Meta.hpp>
+#include <yq/meta/ArgInfo.hpp>
+#include <yq/meta/OperatorInfo.hpp>
+#include <yq/meta/Meta.hpp>
 
 #include <mithril/web/WebContext.hpp>
 

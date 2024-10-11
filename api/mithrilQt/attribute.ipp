@@ -8,7 +8,7 @@
 
 #include "attribute.hpp"
 
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithrilQt/image.hpp>

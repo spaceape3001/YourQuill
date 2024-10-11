@@ -7,10 +7,10 @@
 #pragma once
 
 #include "FieldFile.hpp"
-#include <yq-toolbox/io/XmlUtils.hpp>
-#include <yq-toolbox/io/KeyValue.hpp>
+#include <yq/xml/XmlUtils.hpp>
+#include <yq/keyv/KeyValue.hpp>
 #include <mithril/io/Strings.hpp>
-#include <yq-toolbox/basic/ErrorDB.hpp>
+#include <yq/core/ErrorDB.hpp>
 
 namespace yq::errors {
     using no_field_in_file  = error_db::entry<"No field found in file">;

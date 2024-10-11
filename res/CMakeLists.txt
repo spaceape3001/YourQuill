@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-project(yqresources)
+project(yq_resources)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets)
 set(CMAKE_AUTORCC ON)

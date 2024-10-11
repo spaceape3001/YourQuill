@@ -7,7 +7,7 @@
 #pragma once
 
 #include <doodler/Py2.hpp>
-#include <yq-toolbox/vector/Vector2.hpp>
+#include <yq/vector/Vector2.hpp>
 
 namespace yq::doodler {
     class Py2Point : public Py2, public Py2::Position {

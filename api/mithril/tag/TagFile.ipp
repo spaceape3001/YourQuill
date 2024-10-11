@@ -7,8 +7,8 @@
 #pragma once
 
 #include "TagFile.hpp"
-#include <yq-toolbox/io/KeyValue.hpp>
-#include <yq-toolbox/basic/ErrorDB.hpp>
+#include <yq/keyv/KeyValue.hpp>
+#include <yq/core/ErrorDB.hpp>
 
 namespace yq::errors {
     using no_tag_in_file    = error_db::entry<"No tag found in file">;

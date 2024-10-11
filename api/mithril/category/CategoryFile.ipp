@@ -7,7 +7,7 @@
 #pragma once
 
 #include "CategoryFile.hpp"
-#include <yq-toolbox/io/KeyValue.hpp>
+#include <yq/keyv/KeyValue.hpp>
 #include <mithril/io/Strings.hpp>
 
 namespace yq::mithril {        

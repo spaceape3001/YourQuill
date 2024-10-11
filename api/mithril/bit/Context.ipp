@@ -8,14 +8,14 @@
 
 #include <mithril/bit/Context.hpp>
 #include <mithril/io/Strings.hpp>
-#include <yq-toolbox/io/XmlUtils.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
-#include <yq-toolbox/io/stream/Text.hpp>
-#include <yq-toolbox/text/chars.hpp>
-#include <yq-toolbox/text/match.hpp>
-#include <yq-toolbox/text/parse.hpp>
-#include <yq-toolbox/text/transform.hpp>
-#include <yq-toolbox/text/vsplit.hpp>
+#include <yq/xml/XmlUtils.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <yq/stream/Text.hpp>
+#include <yq/text/chars.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/parse.hpp>
+#include <yq/text/transform.hpp>
+#include <yq/text/vsplit.hpp>
 
 namespace yq::mithril {
     bool        read_xn(Context&ret, const XmlNode& xn)

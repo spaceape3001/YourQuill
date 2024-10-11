@@ -7,9 +7,9 @@
 #pragma once
 
 #include <doodler/Project.hpp>
-#include <yq-toolbox/io/XmlFile.hpp>
-#include <yq-toolbox/io/XmlUtils.hpp>
-#include <yq-toolbox/errors.hpp>
+#include <yq/xml/XmlFile.hpp>
+#include <yq/xml/XmlUtils.hpp>
+#include <yq/errors.hpp>
 #include <doodler/IOStrings.hpp>
 
 namespace yq::errors {

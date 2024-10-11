@@ -8,7 +8,7 @@
 
 #include "CategoryHtml.hpp"
 
-#include <yq-toolbox/text/copy.hpp>
+#include <yq/text/copy.hpp>
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/category/CategoryInfo.hpp>
 #include <mithril/document/DocumentHtml.hpp>

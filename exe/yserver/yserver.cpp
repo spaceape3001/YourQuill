@@ -10,24 +10,22 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
-#include <yq-toolbox/basic/DelayInit.hpp>
-#include <yq-toolbox/basic/ThreadId.hpp>
-#include <yq-toolbox/basic/HttpParser.hpp>
-#include <yq-toolbox/basic/Logging.hpp>
-#include <yq-toolbox/basic/Random.hpp>
-#include <yq-toolbox/basic/Ref.hpp>
-#include <yq-toolbox/basic/Result.hpp>
+#include <yq/core/DelayInit.hpp>
+#include <yq/core/ThreadId.hpp>
+#include <yq/core/Logging.hpp>
+#include <yq/core/Ref.hpp>
+#include <yq/core/Result.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <yq/math/Random.hpp>
+#include <yq/net/HttpParser.hpp>
+#include <yq/stream/FixedBuffer.hpp>
+#include <yq/stream/Text.hpp>
 
-
-#include <yq-toolbox/io/FixedBuffer.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
-#include <yq-toolbox/io/stream/Text.hpp>
-
-#include <yq-toolbox/text/basic.hpp>
-#include <yq-toolbox/text/format.hpp>
-#include <yq-toolbox/text/match.hpp>
-#include <yq-toolbox/text/parse.hpp>
-#include <yq-toolbox/text/vsplit.hpp>
+#include <yq/text/basic.hpp>
+#include <yq/text/format.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/parse.hpp>
+#include <yq/text/vsplit.hpp>
 #include <yq/typedef/string.hpp>
 
 #include <mithril/web/WebAdapters.hpp>
@@ -52,7 +50,7 @@ namespace asio {
     }
     
     template <uint64_t N>
-    const_buffer    buffer(const FixedBuffer<N>& dp)
+    const_buffer    buffer(const stream::FixedBuffer<N>& dp)
     {
         return buffer(dp.data(), dp.size());
     }
@@ -87,7 +85,7 @@ struct Context : public WebContext, public RefCount {
         Pass            // passed
     };
     
-    FixedBuffer<8192>   rx, tx;
+    stream::FixedBuffer<8192>   rx, tx;
     
     Context(asio::io_context& _io_ctx);
     

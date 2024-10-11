@@ -10,8 +10,8 @@
 #include <mithril/enum/SizeDesc.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/image/ImageInfo.hpp>
-#include <yq-toolbox/basic/ContentType.hpp>
-#include <yq-toolbox/shape/Size2.hpp>
+#include <yq/net/ContentType.hpp>
+#include <yq/shape/Size2.hpp>
 
 #define TBL_IMAGES "Images"
 

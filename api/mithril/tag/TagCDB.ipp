@@ -7,9 +7,9 @@
 #pragma once
 
 #include "TagCDB.hpp"
-#include <yq-toolbox/container/ByteArray.hpp>
-#include <yq-toolbox/io/FileUtils.hpp>
-#include <yq-toolbox/container/Set.hpp>
+#include <yq/container/ByteArray.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/container/Set.hpp>
 #include <mithril/bit/NKI.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>

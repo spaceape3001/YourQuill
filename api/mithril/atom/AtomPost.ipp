@@ -10,7 +10,7 @@
 #include <mithril/atom/AtomArg.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/atom/Atom.hpp>
-#include <yq-toolbox/text/copy.hpp>
+#include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {
     Atom atom(WebContext&ctx, bool *detected)

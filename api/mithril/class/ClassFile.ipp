@@ -7,9 +7,9 @@
 #pragma once
 
 #include "ClassFile.hpp"
-#include <yq-toolbox/io/XmlUtils.hpp>
-#include <yq-toolbox/io/KeyValue.hpp>
-#include <yq-toolbox/text/join.hpp>
+#include <yq/xml/XmlUtils.hpp>
+#include <yq/keyv/KeyValue.hpp>
+#include <yq/text/join.hpp>
 #include <mithril/io/Strings.hpp>
 
 namespace yq::errors {

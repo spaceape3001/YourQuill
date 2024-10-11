@@ -8,7 +8,7 @@
 
 #include <mithril/class/ClassJson.hpp>
 #include <mithril/class/ClassSearch.hpp>
-#include <yq-toolbox/text/join.hpp>
+#include <yq/text/join.hpp>
 
 namespace {
 

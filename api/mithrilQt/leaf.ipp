@@ -7,7 +7,7 @@
 #pragma once
 
 #include "leaf.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/image/Image.hpp>

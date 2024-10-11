@@ -7,7 +7,7 @@
 #pragma once
 
 #include "folder.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/image/Image.hpp>

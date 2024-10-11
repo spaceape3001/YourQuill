@@ -7,9 +7,9 @@
 #pragma once
 
 #include "ClassCDB.hpp"
-#include <yq-toolbox/container/ByteArray.hpp>
-#include <yq-toolbox/text/transform.hpp>
-#include <yq-toolbox/io/FileUtils.hpp>
+#include <yq/container/ByteArray.hpp>
+#include <yq/text/transform.hpp>
+#include <yq/file/FileUtils.hpp>
 #include <mithril/class/ClassFile.hpp>
 #include <mithril/field/Field.hpp>
 #include <mithril/wksp/CacheQuery.hpp>

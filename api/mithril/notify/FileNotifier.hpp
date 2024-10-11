@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <yq-toolbox/container/EnumMap.hpp>
+#include <yq/container/EnumMap.hpp>
 #include <mithril/enum/Change.hpp>
 #include <mithril/file/FileSpec.hpp>
 #include <mithril/folder/Folder.hpp>
-#include <yq-toolbox/basic/Flag.hpp>
+#include <yq/core/Flag.hpp>
 #include <filesystem>
 #include <source_location>
 

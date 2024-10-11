@@ -7,7 +7,7 @@
 #pragma once
 
 #include "directory.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/directory/DirectoryCDB.hpp>
 #include <QIcon>

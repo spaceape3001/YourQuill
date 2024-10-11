@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq-toolbox/basic/XmlObject.hpp>
-#include <yq-toolbox/basic/Ref.hpp>
+#include <yq/xml/XmlObject.hpp>
+#include <yq/core/Ref.hpp>
 
 namespace yq::mithril {        
     class Constraint : public XmlObject, public RefCount {

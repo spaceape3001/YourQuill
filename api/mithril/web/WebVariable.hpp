@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq-toolbox/meta/Meta.hpp>
-#include <yq-toolbox/meta/MetaWriter.hpp>
+#include <yq/meta/Meta.hpp>
+#include <yq/meta/MetaWriter.hpp>
 
 namespace yq {
     class Stream;

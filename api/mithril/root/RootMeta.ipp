@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq-toolbox/meta/TypeInfoWriter.hpp>
+#include <yq/meta/TypeInfoWriter.hpp>
 #include <mithril/root/Root.hpp>
 #include <mithril/root/RootCDB.hpp>
 

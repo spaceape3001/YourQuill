@@ -7,9 +7,9 @@
 #pragma once
 
 #include "StdObject.hpp"
-#include <yq-toolbox/io/KeyValue.hpp>
-#include <yq-toolbox/meta/Init.hpp>
-#include <yq-toolbox/io/stream/Text.hpp>
+#include <yq/keyv/KeyValue.hpp>
+#include <yq/meta/Init.hpp>
+#include <yq/stream/Text.hpp>
 
 namespace yq::mithril {
     Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)

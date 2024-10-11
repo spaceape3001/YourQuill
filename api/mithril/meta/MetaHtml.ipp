@@ -7,12 +7,12 @@
 #pragma once
 
 #include <mithril/meta/MetaHtml.hpp>
-#include <yq-toolbox/meta/ArgInfo.hpp>
-#include <yq-toolbox/meta/MethodInfo.hpp>
-#include <yq-toolbox/meta/OperatorInfo.hpp>
-#include <yq-toolbox/meta/ObjectInfo.hpp>
-#include <yq-toolbox/meta/PropertyInfo.hpp>
-#include <yq-toolbox/meta/TypeInfo.hpp>
+#include <yq/meta/ArgInfo.hpp>
+#include <yq/meta/MethodInfo.hpp>
+#include <yq/meta/OperatorInfo.hpp>
+#include <yq/meta/ObjectInfo.hpp>
+#include <yq/meta/PropertyInfo.hpp>
+#include <yq/meta/TypeInfo.hpp>
 
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>

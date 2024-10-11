@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <yq-toolbox/container/ByteArray.hpp>
+#include <yq/container/ByteArray.hpp>
 //#include <0/basic/CollectionUtils.hpp>
-#include <yq-toolbox/io/FileUtils.hpp>
-#include <yq-toolbox/meta/TypeInfo.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/meta/TypeInfo.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldFile.hpp>
 #include <mithril/bit/NKI.hpp>

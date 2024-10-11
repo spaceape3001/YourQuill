@@ -8,11 +8,11 @@
 
 #include <mithril/fragment/FragmentCDB.hpp>
 
-#include <yq-toolbox/container/Map.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
-#include <yq-toolbox/io/stream/Bytes.hpp>
-#include <yq-toolbox/text/chars.hpp>
-#include <yq-toolbox/text/vsplit.hpp>
+#include <yq/container/Map.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <yq/stream/Bytes.hpp>
+#include <yq/text/chars.hpp>
+#include <yq/text/vsplit.hpp>
 
 namespace {
     void    css__(cdb_options_t opts=0)

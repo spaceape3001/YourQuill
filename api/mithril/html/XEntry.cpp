@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XEntry.hpp"
-#include <yq-toolbox/container/map_utils.hpp>
-#include <yq-toolbox/text/join.hpp>
-#include <yq-toolbox/text/match.hpp>
-#include <yq-toolbox/text/transform.hpp>
+#include <yq/container/map_utils.hpp>
+#include <yq/text/join.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/transform.hpp>
 
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>

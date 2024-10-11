@@ -7,7 +7,7 @@
 #pragma once
 
 #include "category.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/category/CategoryCDB.hpp>

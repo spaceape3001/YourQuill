@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/image/Image.hpp>
-#include <yq-toolbox/basic/ContentType.hpp>
+#include <yq/net/ContentType.hpp>
 
 namespace yq::mithril {
     struct Image::Info {

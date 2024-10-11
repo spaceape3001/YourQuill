@@ -9,7 +9,7 @@
 #include "IdTable.hpp"
 
 #include <mithril/book/Book.hpp>
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 
 using namespace yq;
 using namespace yq::mithril;

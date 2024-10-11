@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "XIdBoard.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 
 #include <mithrilQt/id.hpp>
 

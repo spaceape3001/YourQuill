@@ -8,9 +8,9 @@
 
 #include <map>
 #include <set>
-#include <yq-toolbox/container/set_utils.hpp>
-#include <yq-toolbox/container/Map.hpp>
-#include <yq-toolbox/container/Set.hpp>
+#include <yq/container/set_utils.hpp>
+#include <yq/container/Map.hpp>
+#include <yq/container/Set.hpp>
 
 namespace yq::mithril {
     template <typename T>

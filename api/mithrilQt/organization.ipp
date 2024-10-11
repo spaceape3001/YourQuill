@@ -7,7 +7,7 @@
 #pragma once
 
 #include "organization.hpp"
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/organization/OrganizationCDB.hpp>
 #include <mithril/image/Image.hpp>

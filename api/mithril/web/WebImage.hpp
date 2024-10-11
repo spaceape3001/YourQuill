@@ -8,7 +8,7 @@
 
 #include "WebPage.hpp"
 #include <mithril/folder/Folder.hpp>
-#include <yq-toolbox/basic/Guarded.hpp>
+#include <yq/core/Guarded.hpp>
 #include "TypedBytes.hpp"
 #include <vector>
 

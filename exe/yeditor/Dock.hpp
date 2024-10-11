@@ -8,7 +8,7 @@
 
 #include "ystudio.hpp"
 #include "Action.hpp"
-#include <yq-toolbox/basic/Flags.hpp>
+#include <yq/core/Flags.hpp>
 #include <QDockWidget>
 #include <QIcon>
 #include <QKeySequence>

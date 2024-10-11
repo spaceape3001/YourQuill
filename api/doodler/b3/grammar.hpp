@@ -7,7 +7,7 @@
 #pragma once
 
 #include <doodler/preamble.hpp>
-#include <yq-toolbox/basic/Flags.hpp>
+#include <yq/core/Flags.hpp>
 #include <yq/typedef/string_vectors.hpp>
 #include <utility>
 

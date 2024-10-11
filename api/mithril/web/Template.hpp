@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq-toolbox/basic/Http.hpp>
-#include <yq-toolbox/basic/Ref.hpp>
+#include <yq/net/Http.hpp>
+#include <yq/core/Ref.hpp>
 #include <yq/typedef/string_sets.hpp>
 
 

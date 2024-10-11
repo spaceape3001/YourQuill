@@ -7,8 +7,8 @@
 #pragma once
 
 #include <mithril/meta/MetaTypeArg.hpp>
-#include <yq-toolbox/meta/ArgInfo.hpp>
-#include <yq-toolbox/meta/TypeInfo.hpp>
+#include <yq/meta/ArgInfo.hpp>
+#include <yq/meta/TypeInfo.hpp>
 
 #include <mithril/web/WebContext.hpp>
 

@@ -7,7 +7,7 @@
 #pragma once
 
 //
-#include <yq-toolbox/meta/InfoBinder.hpp>
+#include <yq/meta/InfoBinder.hpp>
 #include <unordered_map>
 
 namespace yq {

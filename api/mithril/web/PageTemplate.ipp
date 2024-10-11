@@ -7,9 +7,9 @@
 #pragma once
 
 #include "PageTemplate.hpp"
-#include <yq-toolbox/text/match.hpp>
-#include <yq-toolbox/text/transform.hpp>
-#include <yq-toolbox/text/vsplit.hpp>
+#include <yq/text/match.hpp>
+#include <yq/text/transform.hpp>
+#include <yq/text/vsplit.hpp>
 
 namespace yq::mithril {
     PageTemplate::PageTemplate(std::string&&data) : m_data(std::move(data))

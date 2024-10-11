@@ -8,7 +8,7 @@
 
 #include "ValueData.hpp"
 
-#include <yq-toolbox/io/XmlUtils.hpp>
+#include <yq/xml/XmlUtils.hpp>
 #include <mithril/io/Strings.hpp>
 
 namespace yq::mithril {

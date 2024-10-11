@@ -6,11 +6,12 @@
 
 #pragma once
 
-#include <yq-toolbox/basic/Url.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
-#include <yq-toolbox/io/Stream.hpp>
-#include <yq-toolbox/container/ByteArray.hpp>
-#include <yq-toolbox/basic/Ref.hpp>
+#include <yq/container/ByteArray.hpp>
+#include <yq/core/Ref.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <yq/core/Stream.hpp>
+#include <yq/net/Url.hpp>
+#include <yq/net/Url.hxx>
 #include <yq/trait/not_copyable.hpp>
 #include <yq/typedef/size2.hpp>
 #include <yq/typedef/string_maps.hpp>

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <yq-toolbox/basic/Ref.hpp>
-#include <yq-toolbox/container/Set.hpp>
+#include <yq/core/Ref.hpp>
+#include <yq/container/Set.hpp>
 
 #include <mithril/bit/Context.hpp>
 #include <mithril/enum/Permission.hpp>

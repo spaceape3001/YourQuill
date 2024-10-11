@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq-toolbox/basic/Flags.hpp>
+#include <yq/core/Flags.hpp>
 #include <mithril/preamble.hpp>
 #include <functional>
 #include <memory>

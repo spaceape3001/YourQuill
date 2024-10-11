@@ -7,7 +7,7 @@
 #include <QApplication>
 #include <gluon/app/Application.hpp>
 #include <cstdlib>
-#include <yq-toolbox/text/match.hpp>
+#include <yq/text/match.hpp>
 #include <yqResources.hpp>
 
 #include "DoodleMW.hpp"

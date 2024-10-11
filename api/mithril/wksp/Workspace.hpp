@@ -7,8 +7,8 @@
 #pragma once
 
 #include <mithril/root/RootFwd.hpp>
-#include <yq-toolbox/basic/Enum.hpp>
-#include <yq-toolbox/basic/Flag.hpp>
+#include <yq/core/Enum.hpp>
+#include <yq/core/Flag.hpp>
 #include <functional>
 #include <yq/typedef/filesystem_path.hpp>
 #include <yq/typedef/string_sets.hpp>

@@ -4,13 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq-toolbox/basic/DelayInit.hpp>
-#include <yq-toolbox/io/FileUtils.hpp>
-#include <yq-toolbox/basic/Http.hpp>
-#include <yq-toolbox/basic/Logging.hpp>
-#include <yq-toolbox/io/StreamOps.hpp>
+#include <yq/core/DelayInit.hpp>
+#include <yq/file/FileUtils.hpp>
+#include <yq/net/Http.hpp>
+#include <yq/core/Logging.hpp>
+#include <yq/core/StreamOps.hpp>
 
-#include <yq-toolbox/text/join.hpp>
+#include <yq/text/join.hpp>
 #include <yq/typedef/string.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>

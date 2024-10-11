@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <0/basic/CollectionUtils.hpp>
-#include <yq-toolbox/basic/Logging.hpp>
+#include <yq/core/Logging.hpp>
 
 
 #include <mithril/atom/AtomCDB.hpp>

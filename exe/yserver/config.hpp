@@ -9,7 +9,7 @@
 #include <ctime>
 #include <string>
 #include <vector>
-#include <yq-toolbox/basic/VersionSpec.hpp>
+#include <yq/net/VersionSpec.hpp>
 
 struct ConfigParams {
     using svlist_t = std::vector<std::string_view>;

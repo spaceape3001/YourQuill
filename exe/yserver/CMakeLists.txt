@@ -12,7 +12,12 @@ add_executable(${PROJECT_NAME}
     yscanner.cpp
     yserver.cpp
 )
-target_link_libraries(${PROJECT_NAME} yqtoolbox mithril asio )
+target_link_libraries(${PROJECT_NAME} 
+    PUBLIC 
+        mithril 
+        asio 
+        yq_math
+)
 
 #add_library(yqupdate SHARED
 #    update/update.cpp

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <yq-toolbox/basic/Logging.hpp>
+#include <yq/core/Logging.hpp>
 #include <yq/sql/SqlQueryMap.hpp>
 #include <mithril/wksp/CacheStatement.hpp>
 

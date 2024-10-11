@@ -27,8 +27,12 @@ add_library(${PROJECT_NAME} SHARED
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        yqtoolbox
+        yq_core
+        yq_keyv
+        yq_network
+        yq_process
         yq_sql
+        yq_xml
         
     PRIVATE
         asio

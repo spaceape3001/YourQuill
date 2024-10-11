@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithril/class/ClassData.hpp>
-#include <yq-toolbox/io/StdFile.hpp>
+#include <yq/keyv/StdFile.hpp>
 
 #define CLASS_XML_RESAVE 0
 

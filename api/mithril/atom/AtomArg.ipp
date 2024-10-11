@@ -9,8 +9,8 @@
 #include <mithril/atom/AtomArg.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/atom/AtomCDB.hpp>
-#include <yq-toolbox/text/parse.hpp>
-#include <yq-toolbox/text/transform.hpp>
+#include <yq/text/parse.hpp>
+#include <yq/text/transform.hpp>
 
 namespace yq::mithril::arg {
     Atom atom(std::string_view  arg_string)

@@ -8,8 +8,8 @@
 
 #include "DocumentCDB.hpp"
 
-#include <yq-toolbox/container/vector_utils.hpp>
-#include <yq-toolbox/text/chars.hpp>
+#include <yq/container/vector_utils.hpp>
+#include <yq/text/chars.hpp>
 
 #include <mithril/bit/NKI.hpp>
 #include <mithril/folder/FolderCDB.hpp>

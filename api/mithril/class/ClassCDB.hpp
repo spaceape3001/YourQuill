@@ -12,7 +12,7 @@
 #include <mithril/document/Document.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/category/Category.hpp>
-#include <yq-toolbox/math/Counter.hpp>
+#include <yq/math/Counter.hpp>
 
 //#include "Graph.hpp"
 

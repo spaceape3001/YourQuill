@@ -8,13 +8,13 @@
 
 #include "atom.hpp"
 
-#include <yq-toolbox/basic/DelayInit.hpp>
+#include <yq/core/DelayInit.hpp>
 #include <gluon/core/Utilities.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithrilQt/field.hpp>
 #include <mithrilQt/image.hpp>
 #include <QIcon>
-#include <yq-toolbox/text/match.hpp>
+#include <yq/text/match.hpp>
 
 namespace yq::mithril {
     QIcon   qIcon(Atom a)

@@ -83,8 +83,11 @@ target_link_libraries(${PROJECT_NAME}
     gluon 
     mithril 
     mithrilQt
-    yqtoolbox
-    yqresources
+    
+    yq_math
+    yq_network
+    yq_process
+    yq_resources
     
     Qt6::Network
     Qt6::Svg
