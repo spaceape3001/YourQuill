@@ -6,9 +6,10 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    bool            search(WebSearcher<Class>&, category_t);
-    ClassVector     search(WebContext&, class_t);
+    bool            search(WebSearcher<Class>&, category_k);
+    ClassVector     search(WebContext&, class_k);
 }

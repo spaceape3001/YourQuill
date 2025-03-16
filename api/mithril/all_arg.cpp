@@ -13,20 +13,20 @@
 //#include "book/BookArg.ipp"
 //#include "book/BookPost.ipp"
 
-#include "category/CategoryArg.ipp"
-#include "category/CategoryPost.ipp"
+//#include "category/CategoryArg.ipp"
+//#include "category/CategoryPost.ipp"
 
-#include "character/CharacterArg.ipp"
-#include "character/CharacterPost.ipp"
+//#include "character/CharacterArg.ipp"
+//#include "character/CharacterPost.ipp"
 
-#include "class/ClassArg.ipp"
-#include "class/ClassPost.ipp"
+//#include "class/ClassArg.ipp"
+//#include "class/ClassPost.ipp"
 
-#include "directory/DirectoryArg.ipp"
-#include "directory/DirectoryPost.ipp"
+//#include "directory/DirectoryArg.ipp"
+//#include "directory/DirectoryPost.ipp"
 
-#include "document/DocumentArg.ipp"
-#include "document/DocumentPost.ipp"
+//#include "document/DocumentArg.ipp"
+//#include "document/DocumentPost.ipp"
 
 #include "doodle/DoodleArg.ipp"
 #include "doodle/DoodlePost.ipp"

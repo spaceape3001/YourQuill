@@ -15,14 +15,14 @@
 
 //#include "attribute/AttributeDiff.ipp"
 
-#include "category/CategoryData.ipp"
-#include "category/CategoryDiff.hpp"        // syntax check
-#include "category/CategoryFile.ipp"
+//#include "category/CategoryData.ipp"
+//#include "category/CategoryDiff.hpp"        // syntax check
+//#include "category/CategoryFile.ipp"
 
-#include "class/Class.ipp"
-#include "class/ClassData.ipp"
-#include "class/ClassDiff.hpp"          // syntax check
-#include "class/ClassFile.ipp"
+//#include "class/Class.ipp"
+//#include "class/ClassData.ipp"
+//#include "class/ClassDiff.hpp"          // syntax check
+//#include "class/ClassFile.ipp"
 
 //#include "doodle/DoodleData.ipp"
 //#include "doodle/DoodleFile.ipp"
@@ -67,7 +67,7 @@
 #include "user/UserDiff.hpp"
 #include "user/UserFile.ipp"
 
-#include "util/Markdown.ipp"
+//#include "util/Markdown.ipp"
 
 #include "value/ValueData.ipp"
 #include "value/ValueFile.ipp"

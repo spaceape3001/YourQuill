@@ -10,6 +10,7 @@
 #include <yq/container/Map.hpp>
 #include <yq/container/Set.hpp>
 #include <yq/typedef/string_sets.hpp>
+#include <yq/text/IgCase.hpp>
 #include <memory>
 
 namespace yq::mithril {

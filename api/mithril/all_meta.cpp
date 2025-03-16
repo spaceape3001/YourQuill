@@ -30,11 +30,11 @@
 //#include "attribute/AttributeMeta.ipp"
 //#include "auth/AuthMeta.ipp"
 //#include "book/BookMeta.ipp"
-#include "category/CategoryMeta.ipp"
-#include "character/CharacterMeta.ipp"
-#include "class/ClassMeta.ipp"
-#include "directory/DirectoryMeta.ipp"
-#include "document/DocumentMeta.ipp"
+//#include "category/CategoryMeta.ipp"
+//#include "character/CharacterMeta.ipp"
+//#include "class/ClassMeta.ipp"
+//#include "directory/DirectoryMeta.ipp"
+//#include "document/DocumentMeta.ipp"
 #include "doodle/DoodleMeta.ipp"
 #include "entity/EntityMeta.ipp"
 #include "event/EventMeta.ipp"
@@ -92,21 +92,21 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Book)
 //YQ_TYPE_IMPLEMENT(yq::mithril::BookSet)
 //YQ_TYPE_IMPLEMENT(yq::mithril::BookVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Category)
-YQ_TYPE_IMPLEMENT(yq::mithril::CategorySet)
-YQ_TYPE_IMPLEMENT(yq::mithril::CategoryVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Character)
-YQ_TYPE_IMPLEMENT(yq::mithril::CharacterSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::CharacterVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Class)
-YQ_TYPE_IMPLEMENT(yq::mithril::ClassSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::ClassVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Directory)
-YQ_TYPE_IMPLEMENT(yq::mithril::DirectorySet)
-YQ_TYPE_IMPLEMENT(yq::mithril::DirectoryVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Document)
-YQ_TYPE_IMPLEMENT(yq::mithril::DocumentSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::DocumentVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Category)
+//YQ_TYPE_IMPLEMENT(yq::mithril::CategorySet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::CategoryVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Character)
+//YQ_TYPE_IMPLEMENT(yq::mithril::CharacterSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::CharacterVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Class)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ClassSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ClassVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Directory)
+//YQ_TYPE_IMPLEMENT(yq::mithril::DirectorySet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::DirectoryVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Document)
+//YQ_TYPE_IMPLEMENT(yq::mithril::DocumentSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::DocumentVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Doodle)
 YQ_TYPE_IMPLEMENT(yq::mithril::DoodleSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::DoodleVector)
@@ -186,11 +186,11 @@ namespace {
         //reg_attribute_meta();
         //reg_authentication_meta();
         //reg_book_meta();
-        reg_category_meta();
-        reg_character_meta();
-        reg_class_meta();
-        reg_directory_meta();
-        reg_document_meta();
+        //reg_category_meta();
+        //reg_character_meta();
+        //reg_class_meta();
+        //reg_directory_meta();
+        //reg_document_meta();
         reg_doodle_meta();
         reg_entity_meta();
         reg_event_meta();

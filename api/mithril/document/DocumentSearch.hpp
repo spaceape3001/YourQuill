@@ -6,9 +6,10 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    bool            search(WebSearcher<Document>&, folder_t);
-    DocumentVector  search(WebContext&, document_t);
+    bool            search(WebSearcher<Document>&, folder_k);
+    DocumentVector  search(WebContext&, document_k);
 }

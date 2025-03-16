@@ -12,7 +12,7 @@
 #include <mithril/enum/Vcs.hpp>
 #include <yq/container/EnumMap.hpp>
 #include <yq/core/Flag.hpp>
-
+#include <filesystem>
 
 namespace yq::mithril {
     namespace wksp { struct Impl; }

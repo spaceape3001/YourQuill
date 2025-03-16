@@ -6,8 +6,9 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    CharacterVector  search(WebContext&, character_t);
+    CharacterVector  search(WebContext&, character_k);
 }

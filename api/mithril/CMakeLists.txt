@@ -45,7 +45,58 @@ add_library(${PROJECT_NAME} SHARED
     book/BookProvider.cpp
     book/BookSearch.cpp
     
+    category/Category.cpp
+    category/CategoryArg.cpp
+    category/CategoryCDB.cpp
+    category/CategoryData.cpp
+    category/CategoryFile.cpp
+    category/CategoryHtml.cpp
+    category/CategoryJson.cpp
+    category/CategoryPost.cpp
+    category/CategoryProvider.cpp
+    category/CategorySearch.cpp
+    
+    character/Character.cpp
+    character/CharacterArg.cpp
+    character/CharacterCDB.cpp
+    character/CharacterHtml.cpp
+    character/CharacterJson.cpp
+    character/CharacterPost.cpp
+    character/CharacterProvider.cpp
+    character/CharacterSearch.cpp
+    
+    class/Class.cpp
+    class/ClassArg.cpp
+    class/ClassCDB.cpp
+    class/ClassData.cpp
+    class/ClassFile.cpp
+    class/ClassHtml.cpp
+    class/ClassJson.cpp
+    class/ClassPost.cpp
+    class/ClassProvider.cpp
+    class/ClassSearch.cpp
+    #class/ClassUpdate.cpp
+    
     db/DBUtils.cpp
+    
+    directory/Directory.cpp
+    directory/DirectoryArg.cpp
+    directory/DirectoryCDB.cpp
+    directory/DirectoryHtml.cpp
+    directory/DirectoryJson.cpp
+    directory/DirectoryPost.cpp
+    directory/DirectoryProvider.cpp
+    directory/DirectorySearch.cpp
+    
+    document/Document.cpp
+    document/DocumentArg.cpp
+    document/DocumentCDB.cpp
+    document/DocumentHtml.cpp
+    document/DocumentJson.cpp
+    document/DocumentPost.cpp
+    document/DocumentProvider.cpp
+    document/DocumentSearch.cpp
+    #document/DocumentUpdate.cpp
     
     file/FileSpec.cpp
     
@@ -56,6 +107,9 @@ add_library(${PROJECT_NAME} SHARED
     
     ipc/DirWatcher.cpp
     ipc/ipcSocket.cpp
+    
+    
+    util/Markdown.cpp
     
     web/PageTemplate.cpp
     web/Template.cpp
