@@ -7,6 +7,32 @@
 project(yq_mithril)
 
 add_library(${PROJECT_NAME} SHARED
+    atom/AtomArg.cpp
+    atom/AtomCDB.cpp
+    atom/AtomHtml.cpp
+    atom/AtomJson.cpp
+    atom/AtomPost.cpp
+    atom/AtomSearch.cpp
+    atom/AtomSpec.cpp
+    #atom/AtomUpdate.cpp
+    
+    file/FileSpec.cpp
+    
+    web/PageTemplate.cpp
+    web/Template.cpp
+    web/TypedBytes.cpp
+    web/VarTemplate.cpp
+    web/WebAdapters.cpp
+    web/WebAutoClose.cpp
+    web/WebContext.cpp
+    web/WebHtml.cpp
+    web/WebImage.cpp
+    web/WebPage.cpp
+    web/WebRedirect.cpp
+    web/WebRepo.cpp
+    web/WebTemplate.cpp
+    web/WebVariable.cpp
+
     all_arg.cpp
     all_cdb.cpp
     all_html.cpp

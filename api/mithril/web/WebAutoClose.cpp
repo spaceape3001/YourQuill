@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "WebHtml.hpp"
 
 namespace yq::mithril {
     WebAutoClose::WebAutoClose(WebHtml&wh, std::string_view sv) : 

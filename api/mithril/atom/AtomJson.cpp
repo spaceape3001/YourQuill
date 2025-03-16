@@ -4,11 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomInfo.hpp>
 #include <mithril/atom/AtomJson.hpp>
+
+#include <yq/typedef/json.hpp>
+#include <nlohmann/json.hpp>
 
 namespace yq::mithril {
     json json_(Atom x)

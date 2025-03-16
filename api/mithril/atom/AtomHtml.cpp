@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <yq/text/Comma.hpp>
 #include <mithril/atom/AtomHtml.hpp>
 #include <mithril/atom/AtomCDB.hpp>

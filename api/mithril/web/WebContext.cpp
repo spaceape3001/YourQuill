@@ -4,14 +4,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
+#include "WebContext.hpp"
 #include <mithril/wksp/Workspace.hpp>
 #include <string_view>
 #include <yq/core/Result.hpp>
+#include <yq/text/basic.hpp>
 #include <yq/text/copy.hpp>
 #include <yq/text/misc.hpp>
+#include <yq/text/match.hpp>
 #include <yq/text/parse.hpp>
+#include <yq/text/vsplit.hpp>
+#include <yq/net/HttpParser.hpp>
 
 namespace yq::mithril {
     WebContext::WebContext(asio::io_context& _io_ctx) :io_ctx(_io_ctx)

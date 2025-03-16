@@ -5,9 +5,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+
 #include <yq/net/Http.hpp>
 #include <yq/container/ByteArray.hpp>
 #include <yq/core/Ref.hpp>
+#include <memory>
+#include <filesystem>
 
 namespace yq::mithril {
     struct TypedBytes : public RefCount {

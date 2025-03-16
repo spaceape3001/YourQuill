@@ -92,7 +92,7 @@ namespace yq::mithril {
         void            pre(std::string_view);
 
         HtmlTable     table();
-        HtmlTable     table(class_t, std::string_view);
+        HtmlTable     table(class_k, std::string_view);
         WebAutoClose  title();
         WebAutoClose  u();
         WebAutoClose  underline();
@@ -208,9 +208,9 @@ WebHtml*    z_html() const { return m_html; }
         Row&   header(std::string_view);
         Row&   cell(std::string_view);
         
-        WebAutoClose    header(class_t, std::string_view);
-        WebAutoClose    cell(class_t, std::string_view);
-        WebAutoClose    cell(class_t, std::string_view, const Size2U&);
+        WebAutoClose    header(class_k, std::string_view);
+        WebAutoClose    cell(class_k, std::string_view);
+        WebAutoClose    cell(class_k, std::string_view, const Size2U&);
 
         WebAutoClose    header();
         WebAutoClose    cell();

@@ -4,12 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomInfo.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
-
 
 #include <mithril/class/Class.hpp>
 #include <mithril/class/ClassCDB.hpp>
@@ -21,6 +18,8 @@
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <yq/math/Counter.hpp>
+#include <yq/text/format.hpp>
+#include <yq/text/transform.hpp>
 
 namespace yq::mithril::cdb {
     AtomVector  all_atoms(Sorted sorted)

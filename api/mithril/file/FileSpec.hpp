@@ -37,9 +37,9 @@ namespace yq::mithril {
         constexpr FileSpec() noexcept = default;
         
         explicit FileSpec(const std::filesystem::path&);
-        FileSpec(cache_t, std::string_view);
-        FileSpec(cache_t, Folder);
-        FileSpec(cache_t, Folder, std::string_view);
+        FileSpec(cache_k, std::string_view);
+        FileSpec(cache_k, Folder);
+        FileSpec(cache_k, Folder, std::string_view);
         
         
         

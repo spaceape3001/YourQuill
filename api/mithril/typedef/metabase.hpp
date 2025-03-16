@@ -6,10 +6,11 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+namespace yq {
+    class Meta;
+}
 
 namespace yq::mithril {
-    bool        search(WebSearcher<Atom>&, class_k);
-    bool        search(WebSearcher<Atom>&, tag_k);
-    AtomVector  search(WebContext&, atom_k);
+    using MetaBase = yq::Meta;
 }
+

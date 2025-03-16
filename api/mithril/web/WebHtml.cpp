@@ -4,10 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/web/WebHtml.hpp>
 #include <yq/shape/Size2.hpp>
+#include "WebContext.hpp"
+#include <yq/text/copy.hpp>
+#include <yq/core/StreamOps.hpp>
+#include "WebPage.hpp"
+#include "Template.hpp"
 
 namespace yq::mithril {
 

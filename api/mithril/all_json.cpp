@@ -7,7 +7,7 @@
 #include <yq/typedef/json.hpp>
 #include <nlohmann/json.hpp>
 
-#include "atom/AtomJson.ipp"
+//#include "atom/AtomJson.ipp"
 #include "attribute/AttributeJson.ipp"
 #include "book/BookJson.ipp"
 #include "category/CategoryJson.ipp"

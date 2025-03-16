@@ -8,7 +8,7 @@
 #include "wksp/CacheQuery.ipp"
 #include "wksp/CacheStatement.ipp"
 
-#include "atom/AtomCDB.ipp"
+//#include "atom/AtomCDB.ipp"
 #include "attribute/AttributeCDB.ipp"
 #include "book/BookCDB.ipp"
 #include "category/CategoryCDB.ipp"

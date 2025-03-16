@@ -13,6 +13,7 @@
 #include <mithril/folder/Folder.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/id/Id.hpp>
+#include <yq/text/match.hpp>
 
 namespace yq::mithril {
     FileSpec::FileSpec(const std::filesystem::path& fp)
@@ -21,7 +22,7 @@ namespace yq::mithril {
         str     = fp.string();
     }
 
-    FileSpec::FileSpec(cache_t, std::string_view sv)
+    FileSpec::FileSpec(cache_k, std::string_view sv)
     {
         if(sv.empty()){
             type    = Never;
@@ -36,13 +37,13 @@ namespace yq::mithril {
         }
     }
     
-    FileSpec::FileSpec(cache_t, Folder f)
+    FileSpec::FileSpec(cache_k, Folder f)
     {
         type    = ByFolder;
         u64     = f.id;
     }
     
-    FileSpec::FileSpec(cache_t, Folder f, std::string_view sv) : FileSpec(CACHE, sv)
+    FileSpec::FileSpec(cache_k, Folder f, std::string_view sv) : FileSpec(CACHE, sv)
     {
         u64     = f.id;
         switch(type){

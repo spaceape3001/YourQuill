@@ -43,8 +43,6 @@
 #include <tbb/spin_rw_mutex.h>
 #include <unistd.h>
 
-#include "WebRepo.ipp"
-
 namespace yq::mithril {
     namespace {
         const Set<std::string_view, IgCase>&     httpEntities()
@@ -242,16 +240,3 @@ namespace yq::mithril {
 
 }
 
-#include "PageTemplate.ipp"
-#include "Template.ipp"
-#include "TypedBytes.ipp"
-#include "VarTemplate.ipp"
-#include "WebAdapters.ipp"
-#include "WebAutoClose.ipp"
-#include "WebContext.ipp"
-#include "WebHtml.ipp"
-#include "WebImage.ipp"
-#include "WebPage.ipp"
-#include "WebRedirect.ipp"
-#include "WebTemplate.ipp"
-#include "WebVariable.ipp"

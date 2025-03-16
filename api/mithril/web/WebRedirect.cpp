@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "WebRedirect.hpp"
+#include <yq/net/Url.hpp>
+#include <yq/core/Result.hpp>
 
 namespace yq::mithril {
     namespace redirect {

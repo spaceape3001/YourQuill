@@ -4,8 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "atom/AtomArg.ipp"
-#include "atom/AtomPost.ipp"
+//#include "atom/AtomArg.ipp"
+//#include "atom/AtomPost.ipp"
+
 #include "attribute/AttributeArg.ipp"
 
 

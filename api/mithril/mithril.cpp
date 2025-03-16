@@ -7,9 +7,9 @@
 #include <mithril/preamble.hpp>
 
 
-#include "atom/Atom.ipp"
-#include "atom/AtomDiff.hpp"    // syntax check
-#include "atom/AtomSpec.ipp"
+//#include "atom/Atom.ipp"
+//#include "atom/AtomDiff.hpp"    // syntax check
+//#include "atom/AtomSpec.ipp"
 
 //#include "atom/Property.hpp"
 
@@ -33,7 +33,7 @@
 #include "field/FieldDiff.hpp"      // syntax check
 #include "field/FieldFile.ipp"
 
-#include "file/FileSpec.ipp"
+//#include "file/FileSpec.ipp"
 
 #include "graphviz/Graphviz.ipp"
 #include "graphviz/GraphvizBuilder.ipp"

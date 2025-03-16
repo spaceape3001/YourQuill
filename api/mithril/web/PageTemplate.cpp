@@ -4,9 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "PageTemplate.hpp"
+#include "WebHtml.hpp"
 #include <yq/text/match.hpp>
 #include <yq/text/transform.hpp>
 #include <yq/text/vsplit.hpp>

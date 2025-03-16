@@ -4,14 +4,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "WebImage.hpp"
+#include "WebContext.hpp"
 
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/fragment/Fragment.hpp>
+#include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/Image.hpp>
+#include <mithril/image/ImageCDB.hpp>
 #include <mithril/notify/FileWatch.hpp>
 #include <mithril/notify/FileNotifyAdapters.hpp>
 #include <mithril/notify/Stage4.hpp>

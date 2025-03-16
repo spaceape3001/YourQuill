@@ -16,6 +16,7 @@
 #include <yq/typedef/filesystem_path.hpp>
 
 #include <mithril/preamble.hpp>
+#include <mithril/typedef/metabase.hpp>
 
 #include <functional>
 #include <source_location>

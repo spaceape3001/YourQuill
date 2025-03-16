@@ -10,7 +10,7 @@ project(YourQuill VERSION 0.0.0.3 LANGUAGES CXX)
 #   User features
 
 option(Feature_BuildTime    "Print out build times" ON)
-# option(Feature_Experimental "Enable Experimental Features" OFF)
+option(Feature_Experimental "Enable Experimental Features" ON)
 option(Feature_Qt6          "Enable Qt6 (API and Apps)" ON)
 option(Feature_SDK          "Enable SDK (Apps)" ON)
 option(Feature_UnitTests    "Enable Unit Tests" ON)
@@ -31,13 +31,20 @@ set(Build_Timing        ${Feature_BuildTime})
 set(Build_UnitTests     ${Feature_UnitTests})
 set(Build_Vulkan        ${Feature_Vulkan})
 
-include(yq-toolbox/configure.cmake)
+if(NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-toolbox)
+    message(FATAL_ERROR "YQ toolbox must be present! (use a symbolic link or junction)")
+endif()
 
+include(yq-toolbox/configure.cmake)
 add_subdirectory(yq-toolbox)
-if(${Build_Vulkan})
+
+if(${Build_Vulkan} AND EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-vulqan)
+    include(yq-vulqan/configure.cmake)
     add_subdirectory(yq-vulqan)
 endif()
-if(${Build_Qt6})
+
+
+if(${Build_Qt6} AND EXISTS ${CMAKE_CURRENT_LIST_DIR}/qt-utilities)
     add_subdirectory(qt-utilities)
 endif()
 

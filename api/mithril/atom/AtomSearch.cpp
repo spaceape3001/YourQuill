@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/atom/Atom.hpp>
 #include <mithril/atom/AtomArg.hpp>
 #include <mithril/atom/AtomCDB.hpp>
@@ -17,7 +15,7 @@
 #include <mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
-    bool        search(WebSearcher<Atom>&ws, class_t)
+    bool        search(WebSearcher<Atom>&ws, class_k)
     {
         return search(ws, "class", 
             [](std::string_view s) -> Class 
@@ -35,7 +33,7 @@ namespace yq::mithril {
         );
     }
     
-    bool        search(WebSearcher<Atom>&ws, tag_t)
+    bool        search(WebSearcher<Atom>&ws, tag_k)
     {
         return search(ws, "tag",
             [](std::string_view s) -> Tag
@@ -53,7 +51,7 @@ namespace yq::mithril {
         );
     }
 
-    AtomVector  search(WebContext&ctx, atom_t)
+    AtomVector  search(WebContext&ctx, atom_k)
     {
         WebSearcher<Atom>   ws(ctx);
         search(ws, TAG);

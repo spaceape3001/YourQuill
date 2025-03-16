@@ -8,6 +8,7 @@
 
 #include <yq/meta/Meta.hpp>
 #include <yq/meta/MetaWriter.hpp>
+#include <mithril/typedef/metabase.hpp>
 
 namespace yq {
     class Stream;
@@ -16,6 +17,7 @@ namespace yq {
 namespace yq::mithril {
     struct WebContext;
     class WebVariable;
+    class WebHtml;
     
     using WebVarMap     = Map<std::string_view, const WebVariable*, IgCase>;
     

@@ -4,7 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "WebAdapters.hpp"
+#include "WebContext.hpp"
+#include <yq/file/FileUtils.hpp>
 
 namespace yq::mithril {
 

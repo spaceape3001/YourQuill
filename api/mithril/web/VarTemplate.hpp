@@ -12,6 +12,7 @@
 #include <mithril/preamble.hpp>
 #include <mithril/folder/Folder.hpp>
 #include <yq/core/Guarded.hpp>
+#include <filesystem>
 
 namespace yq::mithril {
     class VarTemplate : public WebVariable {

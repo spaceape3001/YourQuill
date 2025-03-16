@@ -4,7 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomSpec.hpp>
 #include <mithril/class/ClassCDB.hpp>

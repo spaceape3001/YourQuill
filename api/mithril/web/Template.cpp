@@ -4,11 +4,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
 
+#include "Template.hpp"
+#include "WebHtml.hpp"
+#include "WebVariable.hpp"
 #include <yq/text/join.hpp>
+#include <yq/core/StreamOps.hpp>
+#include <mithril/logging.hpp>
 
 namespace yq::mithril {
+    static constexpr const char*    szDefaultTemplate = "<HTML><HEAD><TITLE>{{TITLE}}</TITLE></HEAD><BODY><H1>{{TITLE}}</H1>{{BODY}}</BODY></HTML>";
+    
     Template::Template(ContentType ct) : m_type(ct)
     {
         parse(szDefaultTemplate);

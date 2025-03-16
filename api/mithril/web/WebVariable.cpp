@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "WebVariable.hpp"
 
 namespace yq::mithril {
     WebVariable::WebVariable(std::string_view n, const std::source_location& sl) : MetaBase(n, sl)

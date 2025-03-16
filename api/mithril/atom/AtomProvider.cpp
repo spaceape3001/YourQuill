@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/atom/AtomProvider.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/class/Class.hpp>

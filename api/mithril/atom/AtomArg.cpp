@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/atom/AtomArg.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/atom/AtomCDB.hpp>

@@ -4,7 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include <tbb/spin_rw_mutex.h>
+#include "WebPage.hpp"
+#include "WebTemplate.hpp"
 
 
     // Conditional read lock
@@ -29,8 +31,6 @@ namespace yq::mithril {
     using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
     using WebVarMap     = Map<std::string_view, const WebVariable*, IgCase>;
 
-    static constexpr const char*    szDefaultTemplate = "<HTML><HEAD><TITLE>{{TITLE}}</TITLE></HEAD><BODY><H1>{{TITLE}}</H1>{{BODY}}</BODY></HTML>";
-    
 
     
     struct WebRepo {

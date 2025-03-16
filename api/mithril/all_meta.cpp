@@ -26,7 +26,7 @@
 
 
 
-#include "atom/AtomMeta.ipp"
+//#include "atom/AtomMeta.ipp"
 #include "attribute/AttributeMeta.ipp"
 #include "auth/AuthMeta.ipp"
 #include "book/BookMeta.ipp"
@@ -83,12 +83,12 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Submit)
 YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 
 //  ID TYPES
-YQ_TYPE_IMPLEMENT(yq::mithril::Atom)
-YQ_TYPE_IMPLEMENT(yq::mithril::AtomSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::AtomVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Atom::Property)
-YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertySet)
-YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertyVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Atom)
+//YQ_TYPE_IMPLEMENT(yq::mithril::AtomSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::AtomVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Atom::Property)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertySet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertyVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Attribute)
 YQ_TYPE_IMPLEMENT(yq::mithril::AttributeSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::AttributeVector)
@@ -185,7 +185,7 @@ YQ_OBJECT_IMPLEMENT(yq::mithril::Trigger)
 namespace {
     void        reg_mithril()
     {
-        reg_atom_meta();
+        //reg_atom_meta();
         reg_attribute_meta();
         reg_authentication_meta();
         reg_book_meta();

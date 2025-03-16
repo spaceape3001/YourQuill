@@ -4,7 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "TypedBytes.hpp"
+#include <yq/file/FileUtils.hpp>
 
 namespace yq::mithril {
     Ref<TypedBytes> TypedBytes::info(const std::filesystem::path& fp)

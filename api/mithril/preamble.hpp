@@ -18,6 +18,8 @@
 #include <vector>
 #include <yq/meta/InfoBinder.hpp>
 #include <yq/typedef/counter.hpp>
+#include <mithril/keywords.hpp>
+#include <mithril/typedef/metabase.hpp>
 
 namespace yq {
     class ByteArray;
@@ -26,67 +28,7 @@ namespace yq {
     struct KeyValue;
     template <typename> class Ref;
     
-    struct atom_t {};
-    struct attribute_t {};
-    struct book_t {};
-    struct category_t {};
-    struct character_t {};
-    struct document_t {};
-    struct directory_t {};
-    struct doodle_t {};
-    struct entity_t {};
-    struct event_t {};
-    struct field_t {};
-    struct folder_t {};
-    struct fragment_t {};
-    struct game_t {};
-    struct graphviz_t {};
-    struct group_t {};
-    struct image_t {};
-    struct leaf_t {};
-    struct organization_t {};
-    struct novel_t {};
-    struct place_t {};
-    struct parent_t {};
-    struct root_t {};
-    struct style_t {};
-    struct suffix_t {};
-    struct tag_t {};
-    struct template_t {};
-    struct thing_t {};
-    struct user_t {};
-    struct value_t {};
-    
-    static constexpr atom_t         ATOM;
-    static constexpr attribute_t    ATTRIBUTE;
-    static constexpr book_t         BOOK;
-    static constexpr category_t     CATEGORY;
-    static constexpr character_t    CHARACTER;
-    static constexpr directory_t    DIRECTORY;
-    static constexpr document_t     DOCUMENT;
-    static constexpr doodle_t       DOODLE;
-    static constexpr entity_t       ENTITY;
-    static constexpr event_t        EVENT;
-    static constexpr field_t        FIELD;
-    static constexpr folder_t       FOLDER;
-    static constexpr fragment_t     FRAGMENT;
-    static constexpr game_t         GAME;
-    static constexpr graphviz_t     GRAPHVIZ;
-    static constexpr group_t        GROUP;
-    static constexpr image_t        IMAGE;
-    static constexpr leaf_t         LEAF;
-    static constexpr novel_t        NOVEL;
-    static constexpr organization_t ORGANIZATION;
-    static constexpr parent_t       PARENT;
-    static constexpr place_t        PLACE;
-    static constexpr root_t         ROOT;
-    static constexpr style_t        STYLE;
-    static constexpr suffix_t       SUFFIX;
-    static constexpr tag_t          TAG;
-    static constexpr template_t     TEMPLATE;
-    static constexpr thing_t        THING;
-    static constexpr user_t         USER;
-    static constexpr value_t        VALUE;
+
 }
 
 namespace yq::mithril {
