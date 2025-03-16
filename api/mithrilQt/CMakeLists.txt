@@ -16,14 +16,52 @@ set(CMAKE_AUTORCC ON)
 
 add_library(${PROJECT_NAME} SHARED
 
-    mithrilQt.cpp
-
+    atom.cpp
+    attribute.cpp
+    book.cpp
+    category.cpp
+    character.cpp
+    class.cpp
+    directory.cpp
+    document.cpp
+    doodle.cpp
+    entity.cpp
+    event.cpp
+    field.cpp
+    folder.cpp
+    fragment.cpp
+    game.cpp
+    graphviz.cpp
+    game.cpp
+    group.cpp
+    id.cpp
+    id_auto.cpp
+    image.cpp
+    leaf.cpp
+    meta.cpp
+    novel.cpp
+    organization.cpp
+    place.cpp
+    root.cpp
+    style.cpp
+    tag.cpp
+    thing.cpp
+    user.cpp
+    value.cpp
+    
+    id/IdColumn.cpp
     id/IdListView.hpp
+    id/IdListView.cpp
     id/IdMimeList.hpp
+    id/IdMimeList.cpp
     id/IdModel.hpp
+    id/IdModel.cpp
     id/IdSignalMapper.hpp
+    id/IdSignalMapper.cpp
     id/IdTableView.hpp
+    id/IdTableView.cpp
     id/IdTreeView.hpp
+    id/IdTreeView.cpp
     
     mithrilQt.qrc
 )

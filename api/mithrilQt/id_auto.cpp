@@ -38,6 +38,36 @@
 #include <mithrilQt/thing.hpp>
 #include <mithrilQt/user.hpp>
 #include <mithrilQt/value.hpp>
+
+#include <mithril/atom/Atom.hpp>
+#include <mithril/attribute/Attribute.hpp>
+#include <mithril/book/Book.hpp>
+#include <mithril/category/Category.hpp>
+#include <mithril/character/Character.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/directory/Directory.hpp>
+#include <mithril/document/Document.hpp>
+#include <mithril/doodle/Doodle.hpp>
+#include <mithril/entity/Entity.hpp>
+#include <mithril/event/Event.hpp>
+#include <mithril/field/Field.hpp>
+#include <mithril/folder/Folder.hpp>
+#include <mithril/fragment/Fragment.hpp>
+#include <mithril/game/Game.hpp>
+#include <mithril/graphviz/Graphviz.hpp>
+#include <mithril/group/Group.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/leaf/Leaf.hpp>
+#include <mithril/meta/Meta.hpp>
+#include <mithril/novel/Novel.hpp>
+#include <mithril/organization/Organization.hpp>
+#include <mithril/place/Place.hpp>
+#include <mithril/root/Root.hpp>
+#include <mithril/style/Style.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithril/thing/Thing.hpp>
+#include <mithril/user/User.hpp>
+#include <mithril/value/Value.hpp>
 #include <mithrilQt/id.hpp>
 #include <QIcon>
 

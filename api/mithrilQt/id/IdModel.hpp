@@ -82,7 +82,7 @@ namespace yq::mithril {
         
         /*! \brief Adds the default table columns
         */
-        void            addColumns(default_t);
+        void            addColumns(default_k);
         
         bool            addEnabled() const;
         
@@ -194,7 +194,7 @@ namespace yq::mithril {
         int             rowCount(const QModelIndex& idx=QModelIndex()) const override;
 
         //! Sets the default list column
-        void            setColumn(default_t);
+        void            setColumn(default_k);
 
         //! Sets the FIRST column
         void            setColumn(ColumnSpec);
@@ -393,7 +393,7 @@ namespace yq::mithril {
             };
         }
         
-        IdModelT(Type t, all_t, QObject* parent=nullptr) :
+        IdModelT(Type t, all_k, QObject* parent=nullptr) :
             IdModelT(t, S(), allProvider(), parent) {}
         
 

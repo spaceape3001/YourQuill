@@ -347,6 +347,13 @@ for i in items:
         mith += """
 #include <mithrilQt/%(lname)s.hpp>""" % i.args
 
+mith += '\n'
+
+for i in items:
+    if i.sub is None:
+        mith += """
+#include <mithril/%(lname)s/%(name)s.hpp>""" % i.args
+
 mith += """
 #include <mithrilQt/id.hpp>
 #include <QIcon>
