@@ -6,8 +6,9 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    GroupVector  search(WebContext&, group_t);
+    GroupVector  search(WebContext&, group_k);
 }

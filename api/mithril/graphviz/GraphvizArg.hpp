@@ -11,6 +11,7 @@
 
 namespace yq::mithril {
     struct Graphviz;
+    class WebContext;
 
     namespace arg {
         //! Finds graphviz by ID

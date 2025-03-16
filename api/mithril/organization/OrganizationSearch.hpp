@@ -6,8 +6,9 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    OrganizationVector  search(WebContext&, organization_t);
+    OrganizationVector  search(WebContext&, organization_k);
 }

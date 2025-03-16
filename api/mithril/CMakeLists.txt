@@ -7,6 +7,8 @@
 project(yq_mithril)
 
 add_library(${PROJECT_NAME} SHARED
+    directories.cpp
+
     atom/Atom.cpp
     atom/AtomArg.cpp
     atom/AtomCDB.cpp
@@ -157,16 +159,170 @@ add_library(${PROJECT_NAME} SHARED
     fragment/FragmentProvider.cpp
     fragment/FragmentSearch.cpp
     
+    game/Game.cpp
+    game/GameArg.cpp
+    game/GameCDB.cpp
+    game/GameHtml.cpp
+    game/GameJson.cpp
+    game/GamePost.cpp
+    game/GameProvider.cpp
+    game/GameSearch.cpp
+    
+    graphviz/Graphviz.cpp
+    graphviz/GraphvizArg.cpp
+    graphviz/GraphvizBuilder.cpp
+    graphviz/GraphvizCDB.cpp
+    graphviz/GraphvizHtml.cpp
+    graphviz/GraphvizJson.cpp
+    graphviz/GraphvizPost.cpp
+    graphviz/GraphvizProvider.cpp
+    graphviz/GraphvizSearch.cpp
+    
+    group/Group.cpp
+    group/GroupArg.cpp
+    group/GroupCDB.cpp
+    group/GroupHtml.cpp
+    group/GroupJson.cpp
+    group/GroupPost.cpp
+    group/GroupProvider.cpp
+    group/GroupSearch.cpp
+    
+    html/Html.cpp
+    html/Post.cpp
+    html/XEntry.cpp
+
     id/id.cpp
     id/id_auto.cpp
+    
+    image/Image.cpp
+    image/ImageArg.cpp
+    image/ImageCDB.cpp
+    image/ImageHtml.cpp
+    image/ImageJson.cpp
+    image/ImagePost.cpp
+    image/ImageProvider.cpp
+    image/ImageSearch.cpp
     
     io/StdObject.cpp
     
     ipc/DirWatcher.cpp
     ipc/ipcSocket.cpp
     
+    leaf/Leaf.cpp
+    leaf/LeafArg.cpp
+    leaf/LeafCDB.cpp
+    leaf/LeafData.cpp
+    leaf/LeafFile.cpp
+    leaf/LeafHtml.cpp
+    leaf/LeafJson.cpp
+    leaf/LeafPost.cpp
+    leaf/LeafProvider.cpp
+    leaf/LeafSearch.cpp
+    #leaf/LeafUpdate.cpp
+    
+    meta/Meta.cpp
+    meta/MetaArgArg.cpp
+    meta/MetaCDB.cpp
+    meta/MetaHtml.cpp
+    meta/MetaMethodArg.cpp
+    meta/MetaObjectArg.cpp
+    meta/MetaOperatorArg.cpp
+    meta/MetaPropertyArg.cpp
+    meta/MetaTypeArg.cpp
+    
+    novel/Novel.cpp
+    novel/NovelArg.cpp
+    novel/NovelCDB.cpp
+    novel/NovelHtml.cpp
+    novel/NovelJson.cpp
+    novel/NovelPost.cpp
+    novel/NovelProvider.cpp
+    novel/NovelSearch.cpp
+    
+    organization/Organization.cpp
+    organization/OrganizationArg.cpp
+    organization/OrganizationCDB.cpp
+    organization/OrganizationHtml.cpp
+    organization/OrganizationJson.cpp
+    organization/OrganizationPost.cpp
+    organization/OrganizationProvider.cpp
+    organization/OrganizationSearch.cpp
+    
+    place/Place.cpp
+    place/PlaceArg.cpp
+    place/PlaceCDB.cpp
+    place/PlaceHtml.cpp
+    place/PlaceJson.cpp
+    place/PlacePost.cpp
+    place/PlaceProvider.cpp
+    place/PlaceSearch.cpp
+    
+    quill/QuillData.cpp
+    quill/QuillFile.cpp
+    
+    root/Root.cpp
+    root/RootArg.cpp
+    root/RootCDB.cpp
+    root/RootHtml.cpp
+    root/RootJson.cpp
+    root/RootPost.cpp
+    root/RootProvider.cpp
+    root/RootSearch.cpp
+    
+    style/Style.cpp
+    style/StyleArg.cpp
+    style/StyleCDB.cpp
+    style/StyleData.cpp
+    style/StyleFile.cpp
+    style/StyleHtml.cpp
+    style/StyleJson.cpp
+    style/StylePost.cpp
+    style/StyleProvider.cpp
+    style/StyleSearch.cpp
+    
+    tag/Tag.cpp
+    tag/TagArg.cpp
+    tag/TagCDB.cpp
+    tag/TagData.cpp
+    tag/TagFile.cpp
+    tag/TagHtml.cpp
+    tag/TagJson.cpp
+    tag/TagPost.cpp
+    tag/TagProvider.cpp
+    tag/TagSearch.cpp
+    
+    thing/Thing.cpp
+    thing/ThingArg.cpp
+    thing/ThingCDB.cpp
+    thing/ThingHtml.cpp
+    thing/ThingJson.cpp
+    thing/ThingPost.cpp
+    thing/ThingProvider.cpp
+    thing/ThingSearch.cpp
+    
+    user/User.cpp
+    user/UserArg.cpp
+    user/UserCDB.cpp
+    user/UserData.cpp
+    user/UserFile.cpp
+    user/UserHtml.cpp
+    user/UserJson.cpp
+    user/UserPost.cpp
+    user/UserProvider.cpp
+    user/UserSearch.cpp
     
     util/Markdown.cpp
+    
+    value/Value.cpp
+    value/ValueArg.cpp
+    value/ValueCDB.cpp
+    value/ValueData.cpp
+    value/ValueFile.cpp
+    value/ValueHtml.cpp
+    value/ValueJson.cpp
+    value/ValuePost.cpp
+    value/ValueProvider.cpp
+    value/ValueSearch.cpp
     
     web/PageTemplate.cpp
     web/Template.cpp
@@ -184,22 +340,14 @@ add_library(${PROJECT_NAME} SHARED
     web/WebVariable.cpp
     web/web_unity.cpp
     
-    wksp/CacheQuery.hpp
-    wksp/CacheStatement.hpp
+    wksp/CacheQuery.cpp
+    wksp/CacheStatement.cpp
     wksp/Workspace.cpp
 
-    all_arg.cpp
-    all_cdb.cpp
-    all_html.cpp
-    all_json.cpp
-    all_meta.cpp
-    all_provider.cpp
-    all_search.cpp
-    directories.cpp
-    doodle.cpp
-    mithril.cpp
-    notify.cpp
-    html/XEntry.cpp
+    #all_arg.cpp
+    #all_cdb.cpp
+    #all_meta.cpp
+    #notify.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

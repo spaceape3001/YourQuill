@@ -6,8 +6,9 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    UserVector  search(WebContext&, user_t);
+    UserVector  search(WebContext&, user_k);
 }

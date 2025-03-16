@@ -8,6 +8,7 @@
 
 #include <mithril/value/Value.hpp>
 #include <yq/container/Vector.hpp>
+#include <yq/typedef/xml.hpp>
 
 namespace yq::mithril {
     struct Value::Data {

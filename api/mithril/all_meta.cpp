@@ -41,23 +41,22 @@
 //#include "field/FieldMeta.ipp"
 //#include "folder/FolderMeta.ipp"
 //#include "fragment/FragmentMeta.ipp"
-#include "game/GameMeta.ipp"
-#include "graphviz/GraphvizMeta.ipp"
-#include "group/GroupMeta.ipp"
-#include "image/ImageMeta.ipp"
-#include "leaf/LeafMeta.ipp"
+//#include "game/GameMeta.ipp"
+//#include "graphviz/GraphvizMeta.ipp"
+//#include "group/GroupMeta.ipp"
+//#include "image/ImageMeta.ipp"
+//#include "leaf/LeafMeta.ipp"
 #include "meta/MetaMeta.ipp"
-#include "novel/NovelMeta.ipp"
-#include "organization/OrganizationMeta.ipp"
-#include "place/PlaceMeta.ipp"
-#include "root/RootMeta.ipp"
+//#include "novel/NovelMeta.ipp"
+//#include "organization/OrganizationMeta.ipp"
+//#include "place/PlaceMeta.ipp"
+//#include "root/RootMeta.ipp"
 #include "rule/RuleMeta.ipp"
-#include "style/StyleMeta.ipp"
-#include "tag/TagMeta.ipp"
-#include "thing/ThingMeta.ipp"
-#include "user/UserMeta.ipp"
-#include "value/ValueMeta.ipp"
-
+//#include "style/StyleMeta.ipp"
+//#include "tag/TagMeta.ipp"
+//#include "thing/ThingMeta.ipp"
+//#include "user/UserMeta.ipp"
+//#include "value/ValueMeta.ipp"
 
 #include <yq/meta/Init.hpp>
 
@@ -125,47 +124,51 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Fragment)
 //YQ_TYPE_IMPLEMENT(yq::mithril::FragmentSet)
 //YQ_TYPE_IMPLEMENT(yq::mithril::FragmentVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Game)
-YQ_TYPE_IMPLEMENT(yq::mithril::GameSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::GameVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Graphviz)
-YQ_TYPE_IMPLEMENT(yq::mithril::GraphvizSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::GraphvizVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Group)
-YQ_TYPE_IMPLEMENT(yq::mithril::GroupSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::GroupVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Image)
-YQ_TYPE_IMPLEMENT(yq::mithril::ImageSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::ImageVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Leaf)
-YQ_TYPE_IMPLEMENT(yq::mithril::LeafSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::LeafVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Game)      //reg_tag_meta();
+        //reg_thing_meta();
+        //reg_user_meta();
+        //reg_value_meta();
+
+//YQ_TYPE_IMPLEMENT(yq::mithril::GameSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::GameVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Graphviz)
+//YQ_TYPE_IMPLEMENT(yq::mithril::GraphvizSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::GraphvizVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Group)
+//YQ_TYPE_IMPLEMENT(yq::mithril::GroupSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::GroupVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Image)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ImageSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ImageVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Leaf)
+//YQ_TYPE_IMPLEMENT(yq::mithril::LeafSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::LeafVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Meta)
-YQ_TYPE_IMPLEMENT(yq::mithril::Novel)
-YQ_TYPE_IMPLEMENT(yq::mithril::NovelSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::NovelVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Organization)
-YQ_TYPE_IMPLEMENT(yq::mithril::OrganizationSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::OrganizationVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Place)
-YQ_TYPE_IMPLEMENT(yq::mithril::PlaceSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::PlaceVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Root)
-YQ_TYPE_IMPLEMENT(yq::mithril::Style)
-YQ_TYPE_IMPLEMENT(yq::mithril::StyleSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::StyleVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Tag)
-YQ_TYPE_IMPLEMENT(yq::mithril::TagSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::TagVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Thing)
-YQ_TYPE_IMPLEMENT(yq::mithril::ThingSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::ThingVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::User)
-YQ_TYPE_IMPLEMENT(yq::mithril::UserSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::UserVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Value)
-YQ_TYPE_IMPLEMENT(yq::mithril::ValueSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::ValueVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Novel)
+//YQ_TYPE_IMPLEMENT(yq::mithril::NovelSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::NovelVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Organization)
+//YQ_TYPE_IMPLEMENT(yq::mithril::OrganizationSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::OrganizationVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Place)
+//YQ_TYPE_IMPLEMENT(yq::mithril::PlaceSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::PlaceVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Root)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Style)
+//YQ_TYPE_IMPLEMENT(yq::mithril::StyleSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::StyleVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Tag)
+//YQ_TYPE_IMPLEMENT(yq::mithril::TagSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::TagVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Thing)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ThingSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ThingVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::User)
+//YQ_TYPE_IMPLEMENT(yq::mithril::UserSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::UserVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Value)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ValueSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::ValueVector)
 
 
 //YQ_OBJECT_IMPLEMENT(yq::mithril::Authentication)
@@ -197,22 +200,22 @@ namespace {
         //reg_field_meta();
         //reg_folder_meta();
         //reg_fragment_meta();
-        reg_game_meta();
-        reg_graphviz_meta();
-        reg_group_meta();
-        reg_image_meta();
-        reg_leaf_meta();
+        //reg_game_meta();
+        //reg_graphviz_meta();
+        //reg_group_meta();
+        //reg_image_meta();
+        //reg_leaf_meta();
         reg_meta_meta();
-        reg_novel_meta();
-        reg_organization_meta();
-        reg_place_meta();
-        reg_root_meta();
+        //reg_novel_meta();
+        //reg_organization_meta();
+        //reg_place_meta();
+        //reg_root_meta();
         reg_rule_meta();
-        reg_style_meta();
-        reg_tag_meta();
-        reg_thing_meta();
-        reg_user_meta();
-        reg_value_meta();
+        //reg_style_meta();
+        //reg_tag_meta();
+        //reg_thing_meta();
+        //reg_user_meta();
+        //reg_value_meta();
     }
     YQ_INVOKE(reg_mithril();)
 }

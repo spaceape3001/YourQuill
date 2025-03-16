@@ -10,6 +10,10 @@
 #include <mithril/preamble.hpp>
 #include <mithril/enum/SizeDesc.hpp>
 
+namespace yq::mithril {
+    struct Thumbnail;
+}
+
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&, Image);
     WebHtml&    operator<<(WebHtml&, Dev<Image>);

@@ -13,6 +13,7 @@
 #include <mithril/tag/Tag.hpp>
 #include <mithril/tag/TagInfo.hpp>
 #include <mithril/tag/TagFile.hpp>
+#include <yq/typedef/string_sets.hpp>
 
 #define TBL_TAGS    "Tags"
 

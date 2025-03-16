@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/document/DocumentUpdate.hpp>
