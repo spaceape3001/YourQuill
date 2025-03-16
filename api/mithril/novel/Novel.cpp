@@ -7,6 +7,7 @@
 #include "NovelCDB.hpp"
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Novel)
 YQ_TYPE_IMPLEMENT(yq::mithril::NovelSet)
@@ -23,4 +24,5 @@ namespace yq::mithril {
     }
 
     YQ_INVOKE(reg_novel_meta();)
+    template class Notifier<const Novel::Diff&>;
 }

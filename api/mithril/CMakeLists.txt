@@ -118,6 +118,8 @@ add_library(${PROJECT_NAME} SHARED
     entity/EntityProvider.cpp
     entity/EntitySearch.cpp
     
+    enum/enums.cpp
+    
     event/Event.cpp
     event/EventArg.cpp
     event/EventCDB.cpp
@@ -239,6 +241,16 @@ add_library(${PROJECT_NAME} SHARED
     novel/NovelProvider.cpp
     novel/NovelSearch.cpp
     
+    notify/AtomNotifier.cpp
+    notify/FileNotifier.cpp
+    notify/FileWatch.cpp
+    notify/FunctionalNotifier.cpp
+    notify/FunctionalStage4.cpp
+    notify/Stage2.cpp
+    notify/Stage3.cpp
+    notify/Stage4.cpp
+    notify/Stage5.cpp
+    
     organization/Organization.cpp
     organization/OrganizationArg.cpp
     organization/OrganizationCDB.cpp
@@ -268,6 +280,11 @@ add_library(${PROJECT_NAME} SHARED
     root/RootPost.cpp
     root/RootProvider.cpp
     root/RootSearch.cpp
+    
+    rule/Action.cpp
+    rule/Constraint.cpp
+    rule/Rule.cpp
+    rule/Trigger.cpp
     
     style/Style.cpp
     style/StyleArg.cpp
@@ -344,10 +361,7 @@ add_library(${PROJECT_NAME} SHARED
     wksp/CacheStatement.cpp
     wksp/Workspace.cpp
 
-    #all_arg.cpp
-    #all_cdb.cpp
     #all_meta.cpp
-    #notify.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

@@ -4,28 +4,43 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
-#include <mithril/rule/Constraint.hpp>
+#include <mithril/rule/Trigger.hpp>
 #include <mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
+#include <yq/meta/ObjectInfoWriter.hpp>
+
+YQ_OBJECT_IMPLEMENT(yq::mithril::Trigger)
 
 namespace yq::mithril {
-    Ref<Constraint>     x_constraint(const XmlNode& xn)
+    Trigger::Trigger()
+    {
+    }
+    
+    Trigger::~Trigger()
+    {
+    }
+    
+    void Trigger::init_info()
+    {
+        auto w = writer<Trigger>();
+        w.description("Trigger");
+    }
+
+    Ref<Trigger>     x_trigger(const XmlNode& xn)
     {
         const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
         if(!oi)
-            return Ref<Constraint>();
+            return Ref<Trigger>();
         Object* obj         = oi->create();
-        Ref<Constraint>     auth    = dynamic_cast<Constraint*>(obj);
-        if(auth && auth->load(xn))
-            return auth;
+        Ref<Trigger>     trig    = dynamic_cast<Trigger*>(obj);
+        if(trig && trig->load(xn))
+            return trig;
         if(obj)
             delete obj;
-        return Ref<Constraint>();
+        return Ref<Trigger>();
     }
     
-    void    write_xn(XmlNode& xn, const Ref<Constraint>&v)
+    void    write_xn(XmlNode& xn, const Ref<Trigger>&v)
     {
         if(v.valid()){
             write_attribute(xn, szType, v->metaInfo().name());
@@ -33,5 +48,4 @@ namespace yq::mithril {
         }
     }
 }
-
 

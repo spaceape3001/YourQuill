@@ -10,6 +10,7 @@
 
 #include <mithril/document/Document.hpp>
 #include <mithril/image/Image.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Category)
 YQ_TYPE_IMPLEMENT(yq::mithril::CategorySet)
@@ -31,4 +32,5 @@ namespace yq::mithril {
     }
     
     YQ_INVOKE(reg_category_meta();)
+    template class Notifier<const Category::Diff&>;
 }

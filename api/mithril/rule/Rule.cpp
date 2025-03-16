@@ -4,13 +4,29 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/rule/Rule.hpp>
 #include <mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
+#include <yq/meta/ObjectInfoWriter.hpp>
+
+YQ_OBJECT_IMPLEMENT(yq::mithril::Rule)
 
 namespace yq::mithril {    
+    Rule::Rule()
+    {
+    }
+    
+    Rule::~Rule()
+    {
+    }
+
+    void Rule::init_info()
+    {
+        auto w = writer<Rule>();
+        w.label("Generic Rule");
+        w.property("name", &Rule::name);
+    }
+
 /*
     Rule&       Rule::merge(const Rule&b, bool fOverride)
     {

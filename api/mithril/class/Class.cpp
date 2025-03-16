@@ -15,6 +15,7 @@
 
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Class)
 YQ_TYPE_IMPLEMENT(yq::mithril::ClassSet)
@@ -54,4 +55,6 @@ namespace yq::mithril {
         }
     }
     YQ_INVOKE(reg_class_meta();)
+
+    template class Notifier<const Class::Diff&>;
 }

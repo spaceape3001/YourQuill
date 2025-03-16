@@ -9,21 +9,18 @@
 #include <yq/meta/InfoBinder.hpp>
 #include <yq/core/Enum.hpp>
 
-namespace yq {
-    namespace mithril {
+namespace yq::mithril {
 
-        /*! 
-            \enum SizeDesc
-            \brief Generic size descriptor (for end users)
-        */
-        YQ_ENUM(SizeDesc, ,
-            Original,
-            Large,
-            Medium,
-            Small
-        )
-
-    }
+    /*! 
+        \enum SizeDesc
+        \brief Generic size descriptor (for end users)
+    */
+    YQ_ENUM(SizeDesc, ,
+        Original,
+        Large,
+        Medium,
+        Small
+    )
 }
 
 YQ_TYPE_DECLARE(yq::mithril::SizeDesc)

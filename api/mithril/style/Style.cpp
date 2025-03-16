@@ -7,6 +7,7 @@
 #include <mithril/style/StyleCDB.hpp>
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Style)
 YQ_TYPE_IMPLEMENT(yq::mithril::StyleSet)
@@ -23,4 +24,5 @@ namespace yq::mithril {
     }
 
     YQ_INVOKE(reg_style_meta();)
+    template class Notifier<const Style::Diff&>;
 }

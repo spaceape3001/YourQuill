@@ -14,8 +14,13 @@ namespace yq::mithril {
         YQ_OBJECT_DECLARE(Constraint, XmlObject)
     public:
     
+        Constraint();
+        virtual ~Constraint();
+    
         //  TBD....
         virtual void    constraint() const = 0;
+
+        static void init_info();
     };
 
     Ref<Constraint>     x_constraint(const XmlNode& xn);

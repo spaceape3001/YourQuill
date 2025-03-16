@@ -16,6 +16,10 @@ namespace yq::mithril {
     
         //  TBD....
         virtual bool    trigger() const = 0;
+
+        Trigger();
+        virtual ~Trigger();
+        static void init_info();
     };
 
     Ref<Trigger>     x_trigger(const XmlNode& xn);

@@ -7,6 +7,7 @@
 #include "LeafCDB.hpp"
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Leaf)
 YQ_TYPE_IMPLEMENT(yq::mithril::LeafSet)
@@ -23,4 +24,5 @@ namespace yq::mithril {
     }
 
     YQ_INVOKE(reg_leaf_meta();)
+    template class Notifier<const Leaf::Diff&>;
 }

@@ -4,28 +4,43 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
-#include <mithril/rule/Action.hpp>
+#include <mithril/rule/Constraint.hpp>
 #include <mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
+#include <yq/meta/ObjectInfoWriter.hpp>
+
+YQ_OBJECT_IMPLEMENT(yq::mithril::Constraint)
 
 namespace yq::mithril {
-    Ref<Action>     x_action(const XmlNode& xn)
+    Constraint::Constraint()
+    {
+    }
+    
+    Constraint::~Constraint()
+    {
+    }
+    
+    void Constraint::init_info()
+    {
+        auto w = writer<Constraint>();
+        w.description("Constraint");
+    }
+
+    Ref<Constraint>     x_constraint(const XmlNode& xn)
     {
         const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
         if(!oi)
-            return Ref<Action>();
+            return Ref<Constraint>();
         Object* obj         = oi->create();
-        Ref<Action>     auth    = dynamic_cast<Action*>(obj);
+        Ref<Constraint>     auth    = dynamic_cast<Constraint*>(obj);
         if(auth && auth->load(xn))
             return auth;
         if(obj)
             delete obj;
-        return Ref<Action>();
+        return Ref<Constraint>();
     }
     
-    void    write_xn(XmlNode& xn, const Ref<Action>&v)
+    void    write_xn(XmlNode& xn, const Ref<Constraint>&v)
     {
         if(v.valid()){
             write_attribute(xn, szType, v->metaInfo().name());

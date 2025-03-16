@@ -10,6 +10,7 @@
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
 #include <yq/text/match.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Field)
 YQ_TYPE_IMPLEMENT(yq::mithril::FieldSet)
@@ -41,4 +42,5 @@ namespace yq::mithril {
     }
 
     YQ_INVOKE(reg_field_meta();)
+    template class Notifier<const Field::Diff&>;
 }

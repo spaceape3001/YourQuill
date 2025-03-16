@@ -17,6 +17,7 @@
 
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Atom)
 YQ_TYPE_IMPLEMENT(yq::mithril::AtomSet)
@@ -94,5 +95,7 @@ namespace yq::mithril {
     }
     
     YQ_INVOKE(reg_atom_meta();)
+
+    template class Notifier<const Atom::Diff&>;
 }
 

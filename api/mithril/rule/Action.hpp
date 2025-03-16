@@ -14,8 +14,13 @@ namespace yq::mithril {
         YQ_OBJECT_DECLARE(Action, XmlObject)
     public:
     
+        Action();
+        virtual ~Action();
+    
         //  TBD....
         virtual void    action() const = 0;
+        
+        static void init_info();
     };
 
     Ref<Action>     x_action(const XmlNode& xn);

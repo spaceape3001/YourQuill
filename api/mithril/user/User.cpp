@@ -7,6 +7,7 @@
 #include "UserCDB.hpp"
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::User)
 YQ_TYPE_IMPLEMENT(yq::mithril::UserSet)
@@ -23,4 +24,5 @@ namespace yq::mithril {
     }
 
     YQ_INVOKE(reg_user_meta();)
+    template class Notifier<const User::Diff&>;
 }

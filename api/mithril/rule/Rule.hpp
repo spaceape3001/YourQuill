@@ -18,8 +18,13 @@ namespace yq::mithril {
 
         std::string             name;
 
+        Rule();
+        virtual ~Rule();
+
         // 
         virtual void something_todo() {}
+
+        static void init_info();
 
 
         //Vector<Ref<Action>>     actions;

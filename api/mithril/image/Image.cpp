@@ -7,6 +7,7 @@
 #include "ImageCDB.hpp"
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Image)
 YQ_TYPE_IMPLEMENT(yq::mithril::ImageSet)
@@ -23,4 +24,5 @@ namespace yq::mithril {
     }
 
     YQ_INVOKE(reg_image_meta();)
+    template class Notifier<const Image::Diff&>;
 }

@@ -7,6 +7,7 @@
 #include <mithril/doodle/DoodleCDB.hpp>
 #include <yq/meta/TypeInfoWriter.hpp>
 #include <yq/meta/Init.hpp>
+#include <mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Doodle)
 YQ_TYPE_IMPLEMENT(yq::mithril::DoodleSet)
@@ -23,4 +24,5 @@ namespace yq::mithril {
     }
 
     YQ_INVOKE(reg_doodle_meta();)
+    template class Notifier<const Doodle::Diff&>;
 }
