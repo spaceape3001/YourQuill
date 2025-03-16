@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 /*
     WARNING... this file is auto generated!
 */
@@ -98,74 +96,75 @@
 #include <mithril/value/Value.hpp>
 #include <mithril/value/ValueCDB.hpp>   
 
+
+#include "id_high.hpp"
+
 namespace yq::mithril {
-    static constexpr const IdTypeId HIGH_ID = 31;
-    
     std::string_view  Id::type_name(IdTypeId ct)
     {
         switch(ct){
         case Atom::ID:
-            return "Atom"sv;
+            return "Atom";
         case Atom::Property::ID:
-            return "Atom::Property"sv;
+            return "Atom::Property";
         case Attribute::ID:
-            return "Attribute"sv;
+            return "Attribute";
         case Book::ID:
-            return "Book"sv;
+            return "Book";
         case Category::ID:
-            return "Category"sv;
+            return "Category";
         case Character::ID:
-            return "Character"sv;
+            return "Character";
         case Class::ID:
-            return "Class"sv;
+            return "Class";
         case Directory::ID:
-            return "Directory"sv;
+            return "Directory";
         case Document::ID:
-            return "Document"sv;
+            return "Document";
         case Doodle::ID:
-            return "Doodle"sv;
+            return "Doodle";
         case Entity::ID:
-            return "Entity"sv;
+            return "Entity";
         case Event::ID:
-            return "Event"sv;
+            return "Event";
         case Field::ID:
-            return "Field"sv;
+            return "Field";
         case Folder::ID:
-            return "Folder"sv;
+            return "Folder";
         case Fragment::ID:
-            return "Fragment"sv;
+            return "Fragment";
         case Game::ID:
-            return "Game"sv;
+            return "Game";
         case Graphviz::ID:
-            return "Graphviz"sv;
+            return "Graphviz";
         case Group::ID:
-            return "Group"sv;
+            return "Group";
         case Image::ID:
-            return "Image"sv;
+            return "Image";
         case Leaf::ID:
-            return "Leaf"sv;
+            return "Leaf";
         case Meta::ID:
-            return "Meta"sv;
+            return "Meta";
         case Novel::ID:
-            return "Novel"sv;
+            return "Novel";
         case Organization::ID:
-            return "Organization"sv;
+            return "Organization";
         case Place::ID:
-            return "Place"sv;
+            return "Place";
         case Root::ID:
-            return "Root"sv;
+            return "Root";
         case Style::ID:
-            return "Style"sv;
+            return "Style";
         case Tag::ID:
-            return "Tag"sv;
+            return "Tag";
         case Thing::ID:
-            return "Thing"sv;
+            return "Thing";
         case User::ID:
-            return "User"sv;
+            return "User";
         case Value::ID:
-            return "Value"sv;
+            return "Value";
         default:
-            return "Unknown"sv;
+            return "Unknown";
         }
     }
     

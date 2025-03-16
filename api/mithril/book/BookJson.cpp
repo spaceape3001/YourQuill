@@ -4,11 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/book/Book.hpp>
 #include <mithril/book/BookCDB.hpp>
 #include <mithril/book/BookJson.hpp>
+#include <nlohmann/json.hpp>
 
 namespace yq::mithril {
     json json_(Book x)

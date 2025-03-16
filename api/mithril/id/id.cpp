@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/id/Id.hpp>
+#include <mithril/id/id_high.hpp>
 #include <yq/meta/TypeInfo.hpp>
 #include <yq/math/Counter.hpp>
 #include <tbb/spin_mutex.h>
-#include "id_auto.ipp"
 
 namespace yq::mithril {
     struct Id::Repo {

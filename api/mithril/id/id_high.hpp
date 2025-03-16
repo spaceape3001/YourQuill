@@ -4,7 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ipc/DirWatcher.ipp"
-#include "ipc/ipcPackets.hpp"
-#include "ipc/ipcSocket.ipp"
+/*
+    WARNING... this file is auto generated!
+*/
+
+namespace yq::mithril {
+    static constexpr const IdTypeId HIGH_ID = 31;
+}
 

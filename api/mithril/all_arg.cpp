@@ -10,8 +10,8 @@
 //#include "attribute/AttributeArg.ipp"
 
 
-#include "book/BookArg.ipp"
-#include "book/BookPost.ipp"
+//#include "book/BookArg.ipp"
+//#include "book/BookPost.ipp"
 
 #include "category/CategoryArg.ipp"
 #include "category/CategoryPost.ipp"

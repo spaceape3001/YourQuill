@@ -4,13 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "BookArg.hpp"
-
-
 #include <mithril/web/WebContext.hpp>
 #include <mithril/book/BookCDB.hpp>
+#include <yq/text/parse.hpp>
+#include <yq/text/transform.hpp>
 
 namespace yq::mithril::arg {
     Book book(std::string_view  arg_string)

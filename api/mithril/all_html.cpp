@@ -7,7 +7,7 @@
 
 //#include "atom/AtomHtml.ipp"
 //#include "attribute/AttributeHtml.ipp"
-#include "book/BookHtml.ipp"
+//#include "book/BookHtml.ipp"
 #include "category/CategoryHtml.ipp"
 #include "character/CharacterHtml.ipp"
 #include "class/ClassHtml.ipp"

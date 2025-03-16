@@ -29,7 +29,7 @@
 //#include "atom/AtomMeta.ipp"
 //#include "attribute/AttributeMeta.ipp"
 //#include "auth/AuthMeta.ipp"
-#include "book/BookMeta.ipp"
+//#include "book/BookMeta.ipp"
 #include "category/CategoryMeta.ipp"
 #include "character/CharacterMeta.ipp"
 #include "class/ClassMeta.ipp"
@@ -89,9 +89,9 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Atom::Property)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertySet)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertyVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Book)
-YQ_TYPE_IMPLEMENT(yq::mithril::BookSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::BookVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Book)
+//YQ_TYPE_IMPLEMENT(yq::mithril::BookSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::BookVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Category)
 YQ_TYPE_IMPLEMENT(yq::mithril::CategorySet)
 YQ_TYPE_IMPLEMENT(yq::mithril::CategoryVector)
@@ -185,7 +185,7 @@ namespace {
         //reg_atom_meta();
         //reg_attribute_meta();
         //reg_authentication_meta();
-        reg_book_meta();
+        //reg_book_meta();
         reg_category_meta();
         reg_character_meta();
         reg_class_meta();

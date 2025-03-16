@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "BookHtml.hpp"
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomHtml.hpp>

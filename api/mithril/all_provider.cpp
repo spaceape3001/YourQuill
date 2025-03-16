@@ -8,7 +8,7 @@
 
 //#include "atom/AtomProvider.ipp"
 //#include "attribute/AttributeProvider.ipp"
-#include "book/BookProvider.ipp"
+//#include "book/BookProvider.ipp"
 #include "category/CategoryProvider.ipp"
 #include "character/CharacterProvider.ipp"
 #include "class/ClassProvider.ipp"

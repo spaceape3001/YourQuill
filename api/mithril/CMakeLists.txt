@@ -36,11 +36,26 @@ add_library(${PROJECT_NAME} SHARED
     bit/Copyright.cpp
     bit/Policy.cpp
     
+    book/Book.cpp
+    book/BookArg.cpp
+    book/BookCDB.cpp
+    book/BookHtml.cpp
+    book/BookJson.cpp
+    book/BookPost.cpp
+    book/BookProvider.cpp
+    book/BookSearch.cpp
+    
     db/DBUtils.cpp
     
     file/FileSpec.cpp
     
+    id/id.cpp
+    id/id_auto.cpp
+    
     io/StdObject.cpp
+    
+    ipc/DirWatcher.cpp
+    ipc/ipcSocket.cpp
     
     web/PageTemplate.cpp
     web/Template.cpp
@@ -65,7 +80,6 @@ add_library(${PROJECT_NAME} SHARED
     all_arg.cpp
     all_cdb.cpp
     all_html.cpp
-    all_ipc.cpp
     all_json.cpp
     all_meta.cpp
     all_provider.cpp

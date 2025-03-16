@@ -4,17 +4,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
-#include <yq/meta/TypeInfoWriter.hpp>
 #include "BookCDB.hpp"
+#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/Init.hpp>
+#include <mithril/class/Class.hpp>
+#include <mithril/image/Image.hpp>
 
-namespace {
+YQ_TYPE_IMPLEMENT(yq::mithril::Book)
+YQ_TYPE_IMPLEMENT(yq::mithril::BookSet)
+YQ_TYPE_IMPLEMENT(yq::mithril::BookVector)
+
+namespace yq::mithril {
     void reg_book_meta()
     {
-        using namespace yq;
-        using namespace yq::mithril;
-        
         {
             auto w  = writer<Book>();
             w.property("atom", (Atom(*)(Book)) cdb::atom);
@@ -26,4 +28,7 @@ namespace {
             w.property("title", (std::string(*)(Book)) cdb::title);
         }
     }
+    
+    YQ_INVOKE(reg_book_meta();)
 }
+

@@ -4,13 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "BookPost.hpp"
 
 #include <mithril/book/BookArg.hpp>
 #include <mithril/web/WebContext.hpp>
 #include <mithril/book/Book.hpp>
+
+#include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {
     Book book(WebContext&ctx, bool *detected)

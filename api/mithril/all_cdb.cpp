@@ -10,7 +10,7 @@
 
 //#include "atom/AtomCDB.ipp"
 //#include "attribute/AttributeCDB.ipp"
-#include "book/BookCDB.ipp"
+//#include "book/BookCDB.ipp"
 #include "category/CategoryCDB.ipp"
 #include "character/CharacterCDB.ipp"
 #include "class/ClassCDB.ipp"

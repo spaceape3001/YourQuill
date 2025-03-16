@@ -36,7 +36,7 @@
 #include "graphviz/Graphviz.ipp"
 #include "graphviz/GraphvizBuilder.ipp"
 
-#include "id/id.ipp"        // order sensitive with id_auto.ipp
+//#include "id/id.ipp"        // order sensitive with id_auto.ipp
 
 #include "image/ImageDiff.hpp"  // syntax check
 

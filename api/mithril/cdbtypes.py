@@ -149,6 +149,25 @@ for i in items:
 items.extend(subitems);
 items.sort(key=lambda i: i.id)
 
+################################################################################
+
+mith = """////////////////////////////////////////////////////////////////////////////////
+//
+//  YOUR QUILL
+//
+////////////////////////////////////////////////////////////////////////////////
+
+/*
+    WARNING... this file is auto generated!
+*/
+
+namespace yq::mithril {
+    static constexpr const IdTypeId HIGH_ID = %d;
+}
+
+""" % n
+
+writeIfChanged('id/id_high.hpp', mith)
 
 ################################################################################
 
@@ -157,8 +176,6 @@ mith  = """/////////////////////////////////////////////////////////////////////
 //  YOUR QUILL
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-#pragma once
 
 /*
     WARNING... this file is auto generated!
@@ -174,11 +191,10 @@ for i in items:
 """ % i.args 
 
 mith += """
+
+#include "id_high.hpp"
+
 namespace yq::mithril {
-    static constexpr const IdTypeId HIGH_ID = %d;
-    """ % n
-    
-mith += """
     std::string_view  Id::type_name(IdTypeId ct)
     {
         switch(ct){"""
@@ -187,15 +203,15 @@ for i in items:
     if i.sub is None:
         mith += """
         case %(name)s::ID:
-            return "%(name)s"sv;""" % i.args
+            return "%(name)s";""" % i.args
     else:
         mith += """
         case %(name)s::%(sub)s::ID:
-            return "%(name)s::%(sub)s"sv;""" % i.args
+            return "%(name)s::%(sub)s";""" % i.args
 
 mith += """
         default:
-            return "Unknown"sv;
+            return "Unknown";
         }
     }
     
@@ -310,7 +326,7 @@ mith += """
 }    
 """
 
-writeIfChanged('id/id_auto.ipp', mith)
+writeIfChanged('id/id_auto.cpp', mith)
 
 ################################################################################
 
@@ -319,8 +335,6 @@ mith = """//////////////////////////////////////////////////////////////////////
 //  YOUR QUILL
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-#pragma once
 
 /*
     WARNING... this file is auto generated!
@@ -362,5 +376,5 @@ mith += """
 }
 """
 
-writeIfChanged('../mithrilQt/id_auto.ipp', mith)
+writeIfChanged('../mithrilQt/id_auto.cpp', mith)
 
