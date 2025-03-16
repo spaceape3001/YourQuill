@@ -4,12 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "Association.hpp"
+#include "AssociationInfoWriter.hpp"
+
+YQ_OBJECT_IMPLEMENT(yq::doodler::Association)
 
 namespace yq::doodler {
-    AssociationInfo::AssociationInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
+    AssociationInfo::AssociationInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
     {
         set(Flag::ASSOCIATION);
     }
@@ -17,6 +18,12 @@ namespace yq::doodler {
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+    void Association::init_info()
+    {
+        auto w = writer<Association>();
+        w.description("Association");
+    }
+    
     Association::Association(Project& prj) : DObject(prj)
     {
     }

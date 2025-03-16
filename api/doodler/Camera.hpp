@@ -12,7 +12,7 @@ namespace yq::doodler {
     class CameraInfo : public DObjectInfo {
     public:
         template <typename T> class Writer;
-        CameraInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
+        CameraInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -22,6 +22,8 @@ namespace yq::doodler {
         YQ_OBJECT_INFO(CameraInfo)
         YQ_OBJECT_DECLARE(Camera, DObject)
     public:
+    
+        static void init_info();
     
     protected:
         Camera(Project&);
@@ -37,18 +39,6 @@ namespace yq::doodler {
         Camera(Camera&&) = delete;
         Camera& operator=(const Camera&) = delete;
         Camera& operator=(Camera&&) = delete;
-    };
-
-    template <typename T>
-    class CameraInfo::Writer : public DObjectInfo::Writer<T> {
-    public:
-        Writer(CameraInfo* cInfo) : DObjectInfo::Writer<T>(cInfo)
-        {
-        }
-        
-        Writer(CameraInfo& cInfo) : Writer(&cInfo)
-        {
-        }
     };
 
 }

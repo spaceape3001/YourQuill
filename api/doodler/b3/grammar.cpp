@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <doodler/b3/grammar.hpp>
 #include <yq/errors.hpp>
 #include <yq/text/chars.hpp>

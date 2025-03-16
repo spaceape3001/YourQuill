@@ -13,6 +13,13 @@
 project(yq_doodler)
 
 add_library(${PROJECT_NAME} SHARED
+
+    Association.cpp
+    Camera.cpp
+    DObject.cpp
+
+    b3/grammar.cpp
+
     doodle.cpp
 )
 

@@ -4,16 +4,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
-#include <doodler/DObject.hpp>
+#include "DObject.hpp"
 #include <doodler/Project.hpp>
 //#include <0/basic/CollectionUtils.hpp>
 #include <yq/container/map_utils.hpp>
+#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/Init.hpp>
+#include "DObjectInfoWriter.hpp"
 
 namespace yq::doodler {
 
-    DObjectInfo::DObjectInfo(std::string_view zName, const ObjectInfo& base, const std::source_location& sl) : 
+    DObjectInfo::DObjectInfo(std::string_view zName, ObjectInfo& base, const std::source_location& sl) : 
         ObjectInfo(zName, base, sl)
     {
         set(Flag::DOODLE);
@@ -92,6 +93,21 @@ namespace yq::doodler {
     
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+
+    void DObject::init_info()
+    {
+        {
+            auto w = writer<DObject>();
+            w.property<std::string>("notes", &DObject::notes).setter(&DObject::set_notes);
+            w.property<std::string>("title", &DObject::title).setter(&DObject::set_title);
+            w.description("Doodler Object");
+        }
+        
+        {
+            auto w = writer<ID>();
+            w.description("Identifier");
+        }
+    }
 
     DObject::DObject(Project&prj) : m_project(prj), m_id(prj._insert(this))
     {
@@ -202,4 +218,8 @@ namespace yq::doodler {
         return i;
     }
 }
+
+
+YQ_OBJECT_IMPLEMENT(yq::doodler::DObject)
+YQ_TYPE_IMPLEMENT(yq::doodler::ID)
 

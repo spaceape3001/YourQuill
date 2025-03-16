@@ -5,10 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include "Association.ipp"
-#include "Camera.ipp"
+//#include "Association.ipp"
+//#include "Camera.ipp"
 #include "Constraint.ipp"
-#include "DObject.ipp"
 #include "Light.ipp"
 #include "Motion.ipp"
 #include "Project.ipp"
@@ -20,7 +19,7 @@
 #include "Space.ipp"
 #include "Space2.ipp"
 
-#include "b3/grammar.ipp"
+//#include "b3/grammar.ipp"
 
 #include "shape2/Py2Point.ipp"
 #include "shape3/Py3Point.ipp"
@@ -30,12 +29,7 @@
 #include <yq/meta/Init.hpp>
 
 
-YQ_TYPE_IMPLEMENT(yq::doodler::ID)
-
-YQ_OBJECT_IMPLEMENT(yq::doodler::Association)
-YQ_OBJECT_IMPLEMENT(yq::doodler::Camera)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Constraint)
-YQ_OBJECT_IMPLEMENT(yq::doodler::DObject)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Light)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Motion)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Py)
@@ -54,13 +48,7 @@ namespace {
     {
         using namespace yq;
         using namespace yq::doodler;
-        
-        {
-            auto w = writer<DObject>();
-            w.property<std::string>("notes", &DObject::notes).setter(&DObject::set_notes);
-            w.property<std::string>("title", &DObject::title).setter(&DObject::set_title);
-        }
-        
+
         {
             auto w = writer<Py2Point>();
             w.property<Vector2D>("point", &Py2Point::point).setter(&Py2Point::set_point);
