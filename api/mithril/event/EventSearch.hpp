@@ -6,8 +6,9 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    EventVector  search(WebContext&, event_t);
+    EventVector  search(WebContext&, event_k);
 }

@@ -28,23 +28,23 @@
 //#include "document/DocumentArg.ipp"
 //#include "document/DocumentPost.ipp"
 
-#include "doodle/DoodleArg.ipp"
-#include "doodle/DoodlePost.ipp"
+//#include "doodle/DoodleArg.ipp"
+//#include "doodle/DoodlePost.ipp"
 
-#include "entity/EntityArg.ipp"
-#include "entity/EntityPost.ipp"
+//#include "entity/EntityArg.ipp"
+//#include "entity/EntityPost.ipp"
 
-#include "event/EventArg.ipp"
-#include "event/EventPost.ipp"
+//#include "event/EventArg.ipp"
+//#include "event/EventPost.ipp"
 
-#include "field/FieldArg.ipp"
-#include "field/FieldPost.ipp"
+//#include "field/FieldArg.ipp"
+//#include "field/FieldPost.ipp"
 
-#include "folder/FolderArg.ipp"
-#include "folder/FolderPost.ipp"
+//#include "folder/FolderArg.ipp"
+//#include "folder/FolderPost.ipp"
 
-#include "fragment/FragmentArg.ipp"
-#include "fragment/FragmentPost.ipp"
+//#include "fragment/FragmentArg.ipp"
+//#include "fragment/FragmentPost.ipp"
 
 #include "game/GameArg.ipp"
 #include "game/GamePost.ipp"

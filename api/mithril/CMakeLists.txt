@@ -98,7 +98,64 @@ add_library(${PROJECT_NAME} SHARED
     document/DocumentSearch.cpp
     #document/DocumentUpdate.cpp
     
+    doodle/Doodle.cpp
+    doodle/DoodleArg.cpp
+    doodle/DoodleCDB.cpp
+    doodle/DoodleHtml.cpp
+    doodle/DoodleJson.cpp
+    doodle/DoodlePost.cpp
+    doodle/DoodleProvider.cpp
+    doodle/DoodleSearch.cpp
+    
+    entity/Entity.cpp
+    entity/EntityArg.cpp
+    entity/EntityCDB.cpp
+    entity/EntityHtml.cpp
+    entity/EntityJson.cpp
+    entity/EntityPost.cpp
+    entity/EntityProvider.cpp
+    entity/EntitySearch.cpp
+    
+    event/Event.cpp
+    event/EventArg.cpp
+    event/EventCDB.cpp
+    event/EventHtml.cpp
+    event/EventJson.cpp
+    event/EventPost.cpp
+    event/EventProvider.cpp
+    event/EventSearch.cpp
+    
+    field/Field.cpp
+    field/FieldArg.cpp
+    field/FieldCDB.cpp
+    field/FieldData.cpp
+    field/FieldFile.cpp
+    field/FieldHtml.cpp
+    field/FieldJson.cpp
+    field/FieldPost.cpp
+    field/FieldProvider.cpp
+    field/FieldSearch.cpp
+    #field/FieldUpdate.cpp
+    
     file/FileSpec.cpp
+    
+    folder/Folder.cpp
+    folder/FolderArg.cpp
+    folder/FolderCDB.cpp
+    folder/FolderHtml.cpp
+    folder/FolderJson.cpp
+    folder/FolderPost.cpp
+    folder/FolderProvider.cpp
+    folder/FolderSearch.cpp
+    
+    fragment/Fragment.cpp
+    fragment/FragmentArg.cpp
+    fragment/FragmentCDB.cpp
+    fragment/FragmentHtml.cpp
+    fragment/FragmentJson.cpp
+    fragment/FragmentPost.cpp
+    fragment/FragmentProvider.cpp
+    fragment/FragmentSearch.cpp
     
     id/id.cpp
     id/id_auto.cpp

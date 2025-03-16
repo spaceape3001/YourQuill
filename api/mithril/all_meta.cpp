@@ -35,12 +35,12 @@
 //#include "class/ClassMeta.ipp"
 //#include "directory/DirectoryMeta.ipp"
 //#include "document/DocumentMeta.ipp"
-#include "doodle/DoodleMeta.ipp"
-#include "entity/EntityMeta.ipp"
-#include "event/EventMeta.ipp"
-#include "field/FieldMeta.ipp"
-#include "folder/FolderMeta.ipp"
-#include "fragment/FragmentMeta.ipp"
+//#include "doodle/DoodleMeta.ipp"
+//#include "entity/EntityMeta.ipp"
+//#include "event/EventMeta.ipp"
+//#include "field/FieldMeta.ipp"
+//#include "folder/FolderMeta.ipp"
+//#include "fragment/FragmentMeta.ipp"
 #include "game/GameMeta.ipp"
 #include "graphviz/GraphvizMeta.ipp"
 #include "group/GroupMeta.ipp"
@@ -107,24 +107,24 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Document)
 //YQ_TYPE_IMPLEMENT(yq::mithril::DocumentSet)
 //YQ_TYPE_IMPLEMENT(yq::mithril::DocumentVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Doodle)
-YQ_TYPE_IMPLEMENT(yq::mithril::DoodleSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::DoodleVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Entity)
-YQ_TYPE_IMPLEMENT(yq::mithril::EntitySet)
-YQ_TYPE_IMPLEMENT(yq::mithril::EntityVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Event)
-YQ_TYPE_IMPLEMENT(yq::mithril::EventSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::EventVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Field)
-YQ_TYPE_IMPLEMENT(yq::mithril::FieldSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::FieldVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Folder)
-YQ_TYPE_IMPLEMENT(yq::mithril::FolderSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::FolderVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Fragment)
-YQ_TYPE_IMPLEMENT(yq::mithril::FragmentSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::FragmentVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Doodle)
+//YQ_TYPE_IMPLEMENT(yq::mithril::DoodleSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::DoodleVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Entity)
+//YQ_TYPE_IMPLEMENT(yq::mithril::EntitySet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::EntityVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Event)
+//YQ_TYPE_IMPLEMENT(yq::mithril::EventSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::EventVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Field)
+//YQ_TYPE_IMPLEMENT(yq::mithril::FieldSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::FieldVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Folder)
+//YQ_TYPE_IMPLEMENT(yq::mithril::FolderSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::FolderVector)
+//YQ_TYPE_IMPLEMENT(yq::mithril::Fragment)
+//YQ_TYPE_IMPLEMENT(yq::mithril::FragmentSet)
+//YQ_TYPE_IMPLEMENT(yq::mithril::FragmentVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Game)
 YQ_TYPE_IMPLEMENT(yq::mithril::GameSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::GameVector)
@@ -191,12 +191,12 @@ namespace {
         //reg_class_meta();
         //reg_directory_meta();
         //reg_document_meta();
-        reg_doodle_meta();
-        reg_entity_meta();
-        reg_event_meta();
-        reg_field_meta();
-        reg_folder_meta();
-        reg_fragment_meta();
+        //reg_doodle_meta();
+        //reg_entity_meta();
+        //reg_event_meta();
+        //reg_field_meta();
+        //reg_folder_meta();
+        //reg_fragment_meta();
         reg_game_meta();
         reg_graphviz_meta();
         reg_group_meta();

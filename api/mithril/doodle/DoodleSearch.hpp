@@ -6,8 +6,9 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    DoodleVector  search(WebContext&, doodle_t);
+    DoodleVector  search(WebContext&, doodle_k);
 }

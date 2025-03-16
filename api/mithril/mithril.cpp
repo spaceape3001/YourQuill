@@ -27,9 +27,9 @@
 //#include "doodle/DoodleData.ipp"
 //#include "doodle/DoodleFile.ipp"
 
-#include "field/FieldData.ipp"
-#include "field/FieldDiff.hpp"      // syntax check
-#include "field/FieldFile.ipp"
+//#include "field/FieldData.ipp"
+//#include "field/FieldDiff.hpp"      // syntax check
+//#include "field/FieldFile.ipp"
 
 //#include "file/FileSpec.ipp"
 
