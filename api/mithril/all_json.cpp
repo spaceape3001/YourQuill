@@ -8,7 +8,7 @@
 #include <nlohmann/json.hpp>
 
 //#include "atom/AtomJson.ipp"
-#include "attribute/AttributeJson.ipp"
+//#include "attribute/AttributeJson.ipp"
 #include "book/BookJson.ipp"
 #include "category/CategoryJson.ipp"
 #include "character/CharacterJson.ipp"

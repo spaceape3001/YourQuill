@@ -8,51 +8,15 @@
 #include "WebPage.hpp"
 #include "WebTemplate.hpp"
 
-
-    // Conditional read lock
-#define LOCK                                                        \
-    const auto& _r = webRepo();                                     \
-    tbb::spin_rw_mutex::scoped_lock     _lock;                      \
-    if(_r.openReg)                                                  \
-        _lock.acquire(_r.mutex, false);
-
-    // Unconditional read lock
-#define LLOCK                                                       \
-    const auto& _r = webRepo();                                     \
-    tbb::spin_rw_mutex::scoped_lock     _lock(_r.mutex, false);     \
-
-    // Unconditional write lock
-#define WLOCK                                                       \
-    auto& _r = webRepo();                                           \
-    tbb::spin_rw_mutex::scoped_lock     _lock(_r.mutex, true);
-
+#include "WebRepo.hxx"
+#include <yq/file/FileUtils.hpp>
 
 namespace yq::mithril {
-    using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;
-    using WebVarMap     = Map<std::string_view, const WebVariable*, IgCase>;
 
-
-    
-    struct WebRepo {
-        std::vector<const WebPage*>     allPages;
-        std::vector<const WebVariable*> allVars;
-        WebPageMap                      dirs;
-        WebPageMap                      exts;
-        WebPageMap                      globs;
-        WebPageMap                      pages;
-        WebVarMap                       variables;
-        Ref<Template>                htmlTemplate;
-        mutable tbb::spin_rw_mutex      mutex;
-        volatile bool                   openReg    = true;
-        
-            // This *IS* case sensitive!
-        //Map<std::string_view, Ref<WebSession>>  sessions;
-        
-        WebRepo()
-        {
-            htmlTemplate    = new Template;
-        }
-    };
+    WebRepo::WebRepo()
+    {
+        htmlTemplate    = new Template;
+    }
 
     WebRepo& webRepo() 
     {

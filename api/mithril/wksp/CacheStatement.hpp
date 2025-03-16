@@ -12,6 +12,7 @@
 #include <yq/sql/SqlStatement.hpp>
 #include <filesystem>
 #include <set>
+#include <yq/typedef/string_sets.hpp>
 
 namespace yq::mithril {        
     /*! \brief SQL bound against the cache 

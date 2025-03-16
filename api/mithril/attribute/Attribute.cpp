@@ -4,17 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
-#include <yq/meta/TypeInfoWriter.hpp>
 #include "AttributeCDB.hpp"
+#include <yq/core/DelayInit.hpp>
+#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/Init.hpp>
 
-namespace {
+namespace yq::mithril {
     void reg_attribute_meta()
     {
-        using namespace yq;
-        using namespace yq::mithril;
-        
         {
             auto w  = writer<Attribute>();
             w.property("children", (AttributeVector(*)(Attribute)) cdb::child_attributes);
@@ -28,4 +25,10 @@ namespace {
             w.property("value", (std::string(*)(Attribute)) cdb::value);
         }
     }
+    
+    YQ_INVOKE(reg_attribute_meta();)
 }
+
+YQ_TYPE_IMPLEMENT(yq::mithril::Attribute)
+YQ_TYPE_IMPLEMENT(yq::mithril::AttributeSet)
+YQ_TYPE_IMPLEMENT(yq::mithril::AttributeVector)

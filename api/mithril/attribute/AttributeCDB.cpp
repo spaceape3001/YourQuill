@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 

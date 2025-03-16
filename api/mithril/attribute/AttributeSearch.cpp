@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/attribute/Attribute.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/attribute/AttributeSearch.hpp>
@@ -13,9 +11,10 @@
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentArg.hpp>
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
-    bool            search(WebSearcher<Attribute>&ws, document_t)
+    bool            search(WebSearcher<Attribute>&ws, document_k)
     {
         return search(ws, "document",
             [](std::string_view s) -> Document
@@ -34,7 +33,7 @@ namespace yq::mithril {
     }
     
 
-    AttributeVector  search(WebContext&ctx, attribute_t)
+    AttributeVector  search(WebContext&ctx, attribute_k)
     {
         WebSearcher<Attribute>   ws(ctx);
         search(ws, DOCUMENT);

@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/bit/Context.hpp>
 #include <mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>

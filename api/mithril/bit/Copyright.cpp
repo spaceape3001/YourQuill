@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "Copyright.hpp"
 #include <mithril/errors.hpp>
+#include <mithril/io/Strings.hpp>
+#include <yq/xml/XmlUtils.hpp>
 
 namespace yq::mithril {
     bool    Copyright::empty() const

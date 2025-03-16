@@ -13,6 +13,11 @@ namespace yq::mithril {
         YQ_STD_OBJECT_ABSTRACT(Authentication, StdObject);
     public:
         virtual bool  accept(std::string_view) const = 0;
+
+        Authentication();
+        ~Authentication();
+
+        static void init_info();
     };
 
     //Ref<Authentication>     x_authentication(const XmlNode* xn);

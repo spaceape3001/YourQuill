@@ -27,8 +27,8 @@
 
 
 //#include "atom/AtomMeta.ipp"
-#include "attribute/AttributeMeta.ipp"
-#include "auth/AuthMeta.ipp"
+//#include "attribute/AttributeMeta.ipp"
+//#include "auth/AuthMeta.ipp"
 #include "book/BookMeta.ipp"
 #include "category/CategoryMeta.ipp"
 #include "character/CharacterMeta.ipp"
@@ -89,9 +89,6 @@ YQ_TYPE_IMPLEMENT(yq::mithril::Vcs)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Atom::Property)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertySet)
 //YQ_TYPE_IMPLEMENT(yq::mithril::Atom::PropertyVector)
-YQ_TYPE_IMPLEMENT(yq::mithril::Attribute)
-YQ_TYPE_IMPLEMENT(yq::mithril::AttributeSet)
-YQ_TYPE_IMPLEMENT(yq::mithril::AttributeVector)
 YQ_TYPE_IMPLEMENT(yq::mithril::Book)
 YQ_TYPE_IMPLEMENT(yq::mithril::BookSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::BookVector)
@@ -171,10 +168,10 @@ YQ_TYPE_IMPLEMENT(yq::mithril::ValueSet)
 YQ_TYPE_IMPLEMENT(yq::mithril::ValueVector)
 
 
-YQ_OBJECT_IMPLEMENT(yq::mithril::Authentication)
-YQ_OBJECT_IMPLEMENT(yq::mithril::auth::AutoAccept)
-YQ_OBJECT_IMPLEMENT(yq::mithril::auth::AutoReject)
-YQ_OBJECT_IMPLEMENT(yq::mithril::auth::Simple)
+//YQ_OBJECT_IMPLEMENT(yq::mithril::Authentication)
+//YQ_OBJECT_IMPLEMENT(yq::mithril::auth::AutoAccept)
+//YQ_OBJECT_IMPLEMENT(yq::mithril::auth::AutoReject)
+//YQ_OBJECT_IMPLEMENT(yq::mithril::auth::Simple)
 
 YQ_OBJECT_IMPLEMENT(yq::mithril::Action)
 YQ_OBJECT_IMPLEMENT(yq::mithril::Constraint)
@@ -186,8 +183,8 @@ namespace {
     void        reg_mithril()
     {
         //reg_atom_meta();
-        reg_attribute_meta();
-        reg_authentication_meta();
+        //reg_attribute_meta();
+        //reg_authentication_meta();
         reg_book_meta();
         reg_category_meta();
         reg_character_meta();

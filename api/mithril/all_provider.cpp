@@ -7,7 +7,7 @@
 #include <mithril/preamble.hpp>
 
 //#include "atom/AtomProvider.ipp"
-#include "attribute/AttributeProvider.ipp"
+//#include "attribute/AttributeProvider.ipp"
 #include "book/BookProvider.ipp"
 #include "category/CategoryProvider.ipp"
 #include "character/CharacterProvider.ipp"

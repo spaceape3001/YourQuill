@@ -4,11 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
+#include <mithril/wksp/CacheStatement.hpp>
 #include <yq/container/Set.hpp>
 #include <yq/text/copy.hpp>
-#include <mithril/wksp/CacheStatement.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril {        

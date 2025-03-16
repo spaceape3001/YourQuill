@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/attribute/AttributeProvider.hpp>
 #include <mithril/document/Document.hpp>

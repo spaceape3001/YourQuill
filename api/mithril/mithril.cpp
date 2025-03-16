@@ -13,9 +13,7 @@
 
 //#include "atom/Property.hpp"
 
-#include "attribute/AttributeDiff.ipp"
-
-//#include "auth/Authentication.ipp"
+//#include "attribute/AttributeDiff.ipp"
 
 #include "category/CategoryData.ipp"
 #include "category/CategoryDiff.hpp"        // syntax check
@@ -41,8 +39,6 @@
 #include "id/id.ipp"        // order sensitive with id_auto.ipp
 
 #include "image/ImageDiff.hpp"  // syntax check
-
-#include "io/StdObject.ipp"
 
 #include "leaf/LeafData.ipp"
 #include "leaf/LeafDiff.hpp"    // syntax check

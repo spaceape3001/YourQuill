@@ -7,16 +7,40 @@
 project(yq_mithril)
 
 add_library(${PROJECT_NAME} SHARED
+    atom/Atom.cpp
     atom/AtomArg.cpp
     atom/AtomCDB.cpp
     atom/AtomHtml.cpp
     atom/AtomJson.cpp
     atom/AtomPost.cpp
+    atom/AtomProvider.cpp
     atom/AtomSearch.cpp
     atom/AtomSpec.cpp
     #atom/AtomUpdate.cpp
     
+    attribute/Attribute.cpp
+    attribute/AttributeArg.cpp
+    attribute/AttributeCDB.cpp
+    attribute/AttributeDiff.cpp
+    attribute/AttributeHtml.cpp
+    attribute/AttributeJson.cpp
+    attribute/AttributeProvider.cpp
+    attribute/AttributeSearch.cpp
+    
+    auth/Authentication.cpp
+    auth/AutoAccept.cpp
+    auth/AutoReject.cpp
+    auth/Simple.cpp
+    
+    bit/Context.cpp
+    bit/Copyright.cpp
+    bit/Policy.cpp
+    
+    db/DBUtils.cpp
+    
     file/FileSpec.cpp
+    
+    io/StdObject.cpp
     
     web/PageTemplate.cpp
     web/Template.cpp
@@ -32,6 +56,11 @@ add_library(${PROJECT_NAME} SHARED
     web/WebRepo.cpp
     web/WebTemplate.cpp
     web/WebVariable.cpp
+    web/web_unity.cpp
+    
+    wksp/CacheQuery.hpp
+    wksp/CacheStatement.hpp
+    wksp/Workspace.cpp
 
     all_arg.cpp
     all_cdb.cpp
@@ -41,14 +70,11 @@ add_library(${PROJECT_NAME} SHARED
     all_meta.cpp
     all_provider.cpp
     all_search.cpp
-    bit.cpp
     directories.cpp
     doodle.cpp
     mithril.cpp
     notify.cpp
     html/XEntry.cpp
-    web/web_unity.cpp
-    wksp/Workspace.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

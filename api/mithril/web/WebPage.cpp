@@ -5,6 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "WebPage.hpp"
+#include "WebRepo.hxx"
+#include <yq/text/match.hpp>
+#include <mithril/logging.hpp>
 
 namespace yq::mithril {
     
@@ -71,7 +74,7 @@ namespace yq::mithril {
                     }
                     break;
                 default:
-                    yWarning() << "Page '" << name() << "' does NOT start with '*' or '/', bad registeration.";
+                    mithrilWarning << "Page '" << name() << "' does NOT start with '*' or '/', bad registeration.";
                     break;
                 }
             }
@@ -193,7 +196,7 @@ namespace yq::mithril {
         if(m_page){
             m_page -> set(Flag::LOCAL_ONLY);
             if(!m_page->local_only())
-                yWarning() << "Page " << m_page->path() << " failed to set local-only flag";
+                mithrilWarning << "Page " << m_page->path() << " failed to set local-only flag";
         }
         return *this;
     }

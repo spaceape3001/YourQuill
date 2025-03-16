@@ -7,7 +7,7 @@
 //#include "atom/AtomArg.ipp"
 //#include "atom/AtomPost.ipp"
 
-#include "attribute/AttributeArg.ipp"
+//#include "attribute/AttributeArg.ipp"
 
 
 #include "book/BookArg.ipp"

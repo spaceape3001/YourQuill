@@ -58,7 +58,7 @@ namespace yq::mithril {
         Ref<MyObject>         clone() const { return static_cast<MyObject*>(clone_me()); } 
     
     #define YQ_STD_OBJECT_DECLARE(name, par)        \
-        YQ_OBJECT_DECLARE(par)                      \
+        YQ_OBJECT_DECLARE(name, par)                \
         virtual name* clone_me() const override;
     
     #define YQ_STD_OBJECT_IMPLEMENT(name)           \

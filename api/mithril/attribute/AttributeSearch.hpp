@@ -6,10 +6,11 @@
 
 #pragma once
 
+#include <mithril/keywords.hpp>
 #include <mithril/preamble.hpp>
 
 namespace yq::mithril {
-    bool            search(WebSearcher<Attribute>&, document_t);
+    bool            search(WebSearcher<Attribute>&, document_k);
 
-    AttributeVector  search(WebContext&, attribute_t);
+    AttributeVector  search(WebContext&, attribute_k);
 }

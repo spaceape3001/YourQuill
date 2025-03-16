@@ -4,11 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <mithril/bit/Policy.hpp>
 #include <yq/container/EnumMap.hpp>
 #include <yq/errors.hpp>
+#include <yq/text/match.hpp>
 
 namespace yq::mithril {
 

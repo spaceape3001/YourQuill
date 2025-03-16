@@ -15,8 +15,13 @@ namespace yq::mithril::auth {
         TESTING PURPOSES, it'll be safe to have in the shipped product.
     */
     class AutoReject : public Authentication {
-        YQ_OBJECT_DECLARE(AutoReject, Authentication)
+        YQ_STD_OBJECT_DECLARE(AutoReject, Authentication)
     public:
         bool  accept(std::string_view) const override { return false; }
+
+        static void init_info();
+        
+        AutoReject();
+        ~AutoReject();
     };
 }

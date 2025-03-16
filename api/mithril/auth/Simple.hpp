@@ -16,7 +16,7 @@ namespace yq::mithril::auth {
         and DISABLED in shipped releases.
     */
     class Simple : public Authentication {
-        YQ_OBJECT_DECLARE(Simple, Authentication)
+        YQ_STD_OBJECT_DECLARE(Simple, Authentication)
     public:
         bool  accept(std::string_view k) const override 
         { 
@@ -24,5 +24,10 @@ namespace yq::mithril::auth {
         }
         
         std::string     m_password;
+        
+        Simple();
+        ~Simple();
+        
+        static void init_info();
     };
 }

@@ -6,6 +6,9 @@
 
 #include "TypedBytes.hpp"
 #include <yq/file/FileUtils.hpp>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <yq/util/Safety.hpp>
 
 namespace yq::mithril {
     Ref<TypedBytes> TypedBytes::info(const std::filesystem::path& fp)

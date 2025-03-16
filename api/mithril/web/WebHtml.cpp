@@ -100,26 +100,26 @@ namespace yq::mithril {
 
     WebAutoClose              WebHtml::b()
     {
-        *this << "<b>"sv;
-        return WebAutoClose(*this, "</b>"sv);
+        *this << "<b>";
+        return WebAutoClose(*this, "</b>");
     }
     
     WebAutoClose              WebHtml::bold()
     {
-        *this << "<b>"sv;
-        return WebAutoClose(*this, "</b>"sv);
+        *this << "<b>";
+        return WebAutoClose(*this, "</b>");
     }
     
     WebAutoClose              WebHtml::bullets()
     {
-        *this << "<ul>"sv;
-        return WebAutoClose(*this, "</ul>"sv);
+        *this << "<ul>";
+        return WebAutoClose(*this, "</ul>");
     }
 
     WebAutoClose              WebHtml::h1()
     {
-        *this << "<h1>"sv;
-        return WebAutoClose(*this, "</h1>"sv);
+        *this << "<h1>";
+        return WebAutoClose(*this, "</h1>");
     }
     
     void                WebHtml::h1(std::string_view s)
@@ -130,8 +130,8 @@ namespace yq::mithril {
     
     WebAutoClose              WebHtml::h2()
     {
-        *this << "<h2>"sv;
-        return WebAutoClose(*this, "</h2>"sv);
+        *this << "<h2>";
+        return WebAutoClose(*this, "</h2>");
     }
     
     void                WebHtml::h2(std::string_view s)
@@ -142,8 +142,8 @@ namespace yq::mithril {
     
     WebAutoClose              WebHtml::h3()
     {
-        *this << "<h3>"sv;
-        return WebAutoClose(*this, "</h3>"sv);
+        *this << "<h3>";
+        return WebAutoClose(*this, "</h3>");
     }
 
     void                WebHtml::h3(std::string_view s)
@@ -154,8 +154,8 @@ namespace yq::mithril {
    
     WebAutoClose              WebHtml::h4()
     {
-        *this << "<h4>"sv;
-        return WebAutoClose(*this, "</h4>"sv);
+        *this << "<h4>";
+        return WebAutoClose(*this, "</h4>");
     }
 
     void                WebHtml::h4(std::string_view s)
@@ -166,8 +166,8 @@ namespace yq::mithril {
     
     WebAutoClose              WebHtml::h5()
     {
-        *this << "<h5>"sv;
-        return WebAutoClose(*this, "</h5>"sv);
+        *this << "<h5>";
+        return WebAutoClose(*this, "</h5>");
     }
     
     void                WebHtml::h5(std::string_view s)
@@ -178,8 +178,8 @@ namespace yq::mithril {
     
     WebAutoClose              WebHtml::h6()
     {
-        *this << "<h6>"sv;
-        return WebAutoClose(*this, "</h6>"sv);
+        *this << "<h6>";
+        return WebAutoClose(*this, "</h6>");
     }
     
     void                WebHtml::h6(std::string_view s)
@@ -190,14 +190,14 @@ namespace yq::mithril {
     
     WebAutoClose              WebHtml::i()
     {
-        *this << "<i>"sv;
-        return WebAutoClose(*this, "</i>"sv);
+        *this << "<i>";
+        return WebAutoClose(*this, "</i>");
     }
     
     WebAutoClose              WebHtml::italic()
     {
-        *this << "<i>"sv;
-        return WebAutoClose(*this, "</i>"sv);
+        *this << "<i>";
+        return WebAutoClose(*this, "</i>");
     }
     
     WebAutoClose        WebHtml::kvrow(std::string_view key, const UrlView& url)
@@ -210,43 +210,43 @@ namespace yq::mithril {
         if(a)
             *this << "</a>";
         *this << "</th><td>";
-        return WebAutoClose(*this, "</td></tr>\n"sv);
+        return WebAutoClose(*this, "</td></tr>\n");
     }
     
     WebAutoClose              WebHtml::li()
     {
-        *this << "<li>"sv;
-        return WebAutoClose(*this, "</li>\n"sv);
+        *this << "<li>";
+        return WebAutoClose(*this, "</li>\n");
     }
     
     WebAutoClose        WebHtml::link(const UrlView& url)
     {
         *this << "<a href=\"" << url << "\">";
-        return WebAutoClose(*this, "</a>"sv);
+        return WebAutoClose(*this, "</a>");
     }
     
     WebAutoClose              WebHtml::numbers()
     {
-        *this << "<ol>"sv;
-        return WebAutoClose(*this, "</ol>"sv);
+        *this << "<ol>";
+        return WebAutoClose(*this, "</ol>");
     }
     
     WebAutoClose              WebHtml::p()
     {
-        *this << "<p>"sv;
-        return WebAutoClose(*this, "</p>"sv);
+        *this << "<p>";
+        return WebAutoClose(*this, "</p>");
     }
     
     WebAutoClose              WebHtml::paragraph()
     {
-        *this << "<p>"sv;
-        return WebAutoClose(*this, "</p>"sv);
+        *this << "<p>";
+        return WebAutoClose(*this, "</p>");
     }
     
     WebAutoClose              WebHtml::pre()
     {
-        *this << "<pre>"sv;
-        return WebAutoClose(*this, "</pre>"sv);
+        *this << "<pre>";
+        return WebAutoClose(*this, "</pre>");
     }
 
     void            WebHtml::pre(std::string_view s)
@@ -270,7 +270,7 @@ namespace yq::mithril {
         return HtmlTable(*this);
     }
     
-    HtmlTable        WebHtml::table(class_t, std::string_view cls)
+    HtmlTable        WebHtml::table(class_k, std::string_view cls)
     {
         *this << "<table";
         _class(cls);
@@ -289,14 +289,14 @@ namespace yq::mithril {
 
     WebAutoClose              WebHtml::u()
     {
-        *this << "<u>"sv;
-        return WebAutoClose(*this, "</u>"sv);
+        *this << "<u>";
+        return WebAutoClose(*this, "</u>");
     }
     
     WebAutoClose              WebHtml::underline()
     {
-        *this << "<u>"sv;
-        return WebAutoClose(*this, "</u>"sv);
+        *this << "<u>";
+        return WebAutoClose(*this, "</u>");
     }
     
     //  -----------------------------------------------
@@ -305,7 +305,7 @@ namespace yq::mithril {
     {
     }
 
-    HtmlTable::HtmlTable(WebHtml& h) : WebAutoClose(h, "</table>\n"sv)
+    HtmlTable::HtmlTable(WebHtml& h) : WebAutoClose(h, "</table>\n")
     {   
     }
     
@@ -334,7 +334,7 @@ namespace yq::mithril {
 
     //  -----------------------------------------------
 
-    HtmlTable::Row::Row(HtmlTable& h) : WebAutoClose(*(h.m_html), "</tr>\n"sv)
+    HtmlTable::Row::Row(HtmlTable& h) : WebAutoClose(*(h.m_html), "</tr>\n")
     {
     }
     
@@ -384,12 +384,12 @@ namespace yq::mithril {
         return _cell("", sz);
     }
 
-    WebAutoClose    HtmlTable::Row::cell(class_t, std::string_view clsId)
+    WebAutoClose    HtmlTable::Row::cell(class_k, std::string_view clsId)
     {
         return _cell(clsId, ZERO);
     }
 
-    WebAutoClose    HtmlTable::Row::cell(class_t, std::string_view clsId, const Size2U& sz)
+    WebAutoClose    HtmlTable::Row::cell(class_k, std::string_view clsId, const Size2U& sz)
     {
         return _cell(clsId, sz);
     }
@@ -410,7 +410,7 @@ namespace yq::mithril {
     }
     
     
-    WebAutoClose    HtmlTable::Row::header(class_t, std::string_view clsId)
+    WebAutoClose    HtmlTable::Row::header(class_k, std::string_view clsId)
     {
         return _header(clsId);
     }
