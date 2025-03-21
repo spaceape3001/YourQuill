@@ -41,6 +41,8 @@ add_executable(${PROJECT_NAME}
 
     dock/DateGen.hpp
     dock/DateGen.cpp
+    dock/Easter.hpp
+    dock/Easter.cpp
     dock/TimeGen.hpp
     dock/TimeGen.cpp
 
@@ -96,6 +98,7 @@ target_link_libraries(${PROJECT_NAME}
     yq_net
     yq_process
     yq_resources
+    yq_date
     
     Qt6::Network
     Qt6::Svg

@@ -61,7 +61,7 @@ public:
     {
     }
 
-    IdTableT(std::function<std::vector<S>()> fn, QWidget*parent)  : 
+    IdTableT(std::function<std::vector<S>()> fn, QWidget*parent=nullptr)  : 
         IdTable( new IdModelT<S>(IdModel::Type::Table, IdModelT<S>::toProvider(fn)), parent )
     {
     }
