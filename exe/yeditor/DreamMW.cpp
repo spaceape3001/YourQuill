@@ -469,13 +469,5 @@ void    DreamMW::updateTitle()
 }
 
 
-#include "Action.ipp"
-#include "Command.ipp"
-#include "Dock.ipp"
-#include "Window.ipp"
-
-
 #include "moc_DreamMW.cpp"
-#include "moc_Dock.cpp"
-#include "moc_Window.cpp"
 

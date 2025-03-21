@@ -12,7 +12,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 add_executable(${PROJECT_NAME} 
+
+    Action.cpp
+
+    Command.hpp
+    Command.cpp
+
     Dock.hpp
+    Dock.cpp
 
     DreamApp.hpp 
     DreamApp.cpp 
@@ -30,6 +37,7 @@ add_executable(${PROJECT_NAME}
     WebBrowser.hpp
     WebBrowser.cpp
     Window.hpp
+    Window.cpp
 
     dock/DateGen.hpp
     dock/DateGen.cpp

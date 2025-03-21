@@ -93,3 +93,4 @@ void        Dock::triggered(bool f)
     _update();
 }
 
+#include "moc_Dock.cpp"
