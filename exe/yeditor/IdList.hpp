@@ -49,12 +49,12 @@ template <IdType S>
 class IdListT : public IdList {
 public:
 
-    IdListT(all_t, QWidget*parent)  : 
+    IdListT(all_k, QWidget*parent)  : 
         IdListT(ALL, IdColumn::defaultList<S>(), parent)
     {
     }
 
-    IdListT(all_t, ColumnSpec cs, QWidget*parent)  : 
+    IdListT(all_k, ColumnSpec cs, QWidget*parent)  : 
         IdList( new IdModelT<S>(IdModel::Type::List, ALL), parent )
     {
         m_model -> setColumn(cs);

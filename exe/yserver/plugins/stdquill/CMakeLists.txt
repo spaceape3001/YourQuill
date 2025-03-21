@@ -27,9 +27,10 @@ target_link_libraries( stdquill
     PUBLIC 
         yq_date
         yq_mithril
-        yq_doodler
+        #yq_doodler
         #noveler
         yq_asio
+        yq_math
         ${ImageMagick_LIBRARIES}
 )
 

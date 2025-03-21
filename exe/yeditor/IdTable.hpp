@@ -51,12 +51,12 @@ template <IdType S>
 class IdTableT : public IdTable {
 public:
 
-    IdTableT(all_t, QWidget* parent=nullptr) :
+    IdTableT(all_k, QWidget* parent=nullptr) :
         IdTable( new IdModelT<S>(IdModel::Type::Table, ALL), parent )
     {
     }
 
-    IdTableT(all_t, std::span<const ColumnSpec>, QWidget* parent=nullptr) :
+    IdTableT(all_k, std::span<const ColumnSpec>, QWidget* parent=nullptr) :
         IdTable( new IdModelT<S>(IdModel::Type::Table, ALL), parent )
     {
     }
