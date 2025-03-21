@@ -7,12 +7,15 @@
 cmake_minimum_required(VERSION 3.26.0)
 project(YourQuill VERSION 0.0.0.3 LANGUAGES CXX)
 
+
 if(NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-toolbox)
     message(FATAL_ERROR "YQ toolbox must be present! (use a symbolic link or junction)")
 endif()
 
 #   User features
 option(Feature_BuildTime    "Print out build times" ON)
+
+option(Feature_Doxygen      "Build doxygen documentation" OFF)
 
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-doodle)
     option(Feature_Doodle   "Enable the doodle API and features" ON)
@@ -22,6 +25,13 @@ else()
 endif()
 
 option(Feature_Experimental "Enable Experimental Features" ON)
+
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-novel)
+    option(Feature_Novel   "Enable the novel API and features" ON)
+    set(Build_Novel ${Feature_Novel})
+else()
+    set(Build_Novel OFF)
+endif()
 
 if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/qt-utilities)
     option(Feature_Qt6      "Enable Qt6 (API and Apps)" ON)
@@ -48,7 +58,7 @@ endif()
 
 set(Build_ASIO          ON)
 set(Build_CURL          ON)
-set(Build_Doxygen       OFF)
+set(Build_Doxygen       ${Feature_Doxygen})
 set(Build_GLM           ${Feature_Vulkan})
 set(Build_Qt6           ${Feature_Qt6})
 set(Build_SDK           ${Feature_SDK})
@@ -61,18 +71,22 @@ set(Build_Vulkan        ${Feature_Vulkan})
 include(yq-toolbox/configure.cmake)
 add_subdirectory(yq-toolbox)
 
-if(${Build_Vulkan} AND EXISTS yq-vulqan)
+if(Build_Vulkan)
     include(yq-vulqan/configure.cmake)
     add_subdirectory(yq-vulqan)
 endif()
 
-if(${Build_Qt6} AND EXISTS qt-utilities)
+if(Build_Qt6)
     add_subdirectory(qt-utilities)
 endif()
 
-if(${Build_Doodle} AND EXISTS yq-doodle)
-message("Adding doodle subdirectory")
+if(Build_Doodle)
     add_subdirectory(yq-doodle)
+endif()
+
+if(Build_Novel)
+    include(yq-vulqan/configure.cmake)
+    add_subdirectory(yq-vulqan)
 endif()
 
 # add_subdirectory(3rd)
