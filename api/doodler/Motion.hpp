@@ -12,7 +12,7 @@ namespace yq::doodler {
     class MotionInfo : public DObjectInfo {
     public:
         template <typename T> class Writer;
-        MotionInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
+        MotionInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -24,6 +24,8 @@ namespace yq::doodler {
         YQ_OBJECT_INFO(MotionInfo)
         YQ_OBJECT_DECLARE(Motion, DObject)
     public:
+
+        static void init_info();
     
     protected:
         Motion(Project&);
@@ -39,18 +41,6 @@ namespace yq::doodler {
         Motion(Motion&&) = delete;
         Motion& operator=(const Motion&) = delete;
         Motion& operator=(Motion&&) = delete;
-    };
-
-    template <typename T>
-    class MotionInfo::Writer : public DObjectInfo::Writer<T> {
-    public:
-        Writer(MotionInfo* mInfo) : DObjectInfo::Writer<T>(mInfo)
-        {
-        }
-        
-        Writer(MotionInfo& mInfo) : Writer(&mInfo)
-        {
-        }
     };
 
 }

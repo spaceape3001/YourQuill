@@ -12,8 +12,9 @@ namespace yq::doodler {
     class Py1Info : public PyInfo {
     public:
         template <typename T> class Writer;
-        Py1Info(std::string_view zName, const PyInfo& base, const std::source_location& sl=std::source_location::current());
+        Py1Info(std::string_view zName, PyInfo& base, const std::source_location& sl=std::source_location::current());
     };
+    
     
 
     /*! A physical object
@@ -25,6 +26,8 @@ namespace yq::doodler {
         YQ_OBJECT_DECLARE(Py1, Py)
     public:
     
+        static void init_info();
+
     protected:
         Py1(Project&);
         Py1(Project&, const Py1&);
@@ -39,18 +42,6 @@ namespace yq::doodler {
         Py1(Py1&&) = delete;
         Py1& operator=(const Py1&) = delete;
         Py1& operator=(Py1&&) = delete;
-    };
-
-    template <typename T>
-    class Py1Info::Writer : public PyInfo::Writer<T> {
-    public:
-        Writer(Py1Info* pInfo) : PyInfo::Writer<T>(pInfo)
-        {
-        }
-        
-        Writer(Py1Info& pInfo) : Writer(&pInfo)
-        {
-        }
     };
 
 }

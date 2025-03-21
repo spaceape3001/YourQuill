@@ -14,7 +14,7 @@ namespace yq::doodler {
     class Py2Info : public PyInfo {
     public:
         template <typename T> class Writer;
-        Py2Info(std::string_view zName, const PyInfo& base, const std::source_location& sl=std::source_location::current());
+        Py2Info(std::string_view zName, PyInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -39,6 +39,7 @@ namespace yq::doodler {
             virtual void        set_orientation(Radian) = 0;
         };
     
+        static void init_info();
     
     protected:
         Py2(Project&);
@@ -55,17 +56,4 @@ namespace yq::doodler {
         Py2& operator=(const Py2&) = delete;
         Py2& operator=(Py2&&) = delete;
     };
-
-    template <typename T>
-    class Py2Info::Writer : public PyInfo::Writer<T> {
-    public:
-        Writer(Py2Info* pInfo) : PyInfo::Writer<T>(pInfo)
-        {
-        }
-        
-        Writer(Py2Info& pInfo) : Writer(&pInfo)
-        {
-        }
-    };
-
 }

@@ -4,12 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "Light.hpp"
+#include "LightInfoWriter.hpp"
+
+YQ_OBJECT_IMPLEMENT(yq::doodler::Light)
 
 namespace yq::doodler {
-    LightInfo::LightInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
+    LightInfo::LightInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
     {
         set(Flag::LIGHT);
     }
@@ -17,6 +18,11 @@ namespace yq::doodler {
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+    void Light::init_info()
+    {
+        auto w = writer<Light>();
+        w.description("Light");
+    }
 
     Light::Light(Project& prj) : DObject(prj)
     {

@@ -12,7 +12,7 @@ namespace yq::doodler {
     class ConstraintInfo : public DObjectInfo {
     public:
         template <typename T> class Writer;
-        ConstraintInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
+        ConstraintInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -24,6 +24,8 @@ namespace yq::doodler {
         YQ_OBJECT_INFO(ConstraintInfo)
         YQ_OBJECT_DECLARE(Constraint, DObject)
     public:
+    
+        static void init_info();
     
     protected:
         Constraint(Project&);
@@ -40,17 +42,4 @@ namespace yq::doodler {
         Constraint& operator=(const Constraint&) = delete;
         Constraint& operator=(Constraint&&) = delete;
     };
-
-    template <typename T>
-    class ConstraintInfo::Writer : public DObjectInfo::Writer<T> {
-    public:
-        Writer(ConstraintInfo* cInfo) : DObjectInfo::Writer<T>(cInfo)
-        {
-        }
-        
-        Writer(ConstraintInfo& cInfo) : Writer(&cInfo)
-        {
-        }
-    };
-
 }

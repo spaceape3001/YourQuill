@@ -7,14 +7,40 @@
 cmake_minimum_required(VERSION 3.26.0)
 project(YourQuill VERSION 0.0.0.3 LANGUAGES CXX)
 
-#   User features
+if(NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-toolbox)
+    message(FATAL_ERROR "YQ toolbox must be present! (use a symbolic link or junction)")
+endif()
 
+#   User features
 option(Feature_BuildTime    "Print out build times" ON)
+
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-doodle)
+    option(Feature_Doodle   "Enable the doodle API and features" ON)
+    set(Build_Doodle ${Feature_Doodle})
+else()
+    set(Build_Doodle OFF)
+endif()
+
 option(Feature_Experimental "Enable Experimental Features" ON)
-option(Feature_Qt6          "Enable Qt6 (API and Apps)" ON)
+
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/qt-utilities)
+    option(Feature_Qt6      "Enable Qt6 (API and Apps)" ON)
+    set(Build_Qt6 ${Feature_Qt6})
+else()
+    set(Build_Qt6 OFF)
+endif()
+
 option(Feature_SDK          "Enable SDK (Apps)" ON)
 option(Feature_UnitTests    "Enable Unit Tests" ON)
-option(Feature_Vulkan       "Enable Vulkan (API and Apps)" ON)
+
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-vulqan)
+    option(Feature_Vulkan   "Enable Vulkan (API and Apps)" OFF)
+    set(Build_Vulkan ${Feature_Vulkan})
+else()
+    set(Build_Vulkan OFF)
+endif()
+
+
 # option(Feature_WebServer    "Enable Web Server" ON)
 
 #   Translate features to build flags
@@ -31,21 +57,22 @@ set(Build_Timing        ${Feature_BuildTime})
 set(Build_UnitTests     ${Feature_UnitTests})
 set(Build_Vulkan        ${Feature_Vulkan})
 
-if(NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-toolbox)
-    message(FATAL_ERROR "YQ toolbox must be present! (use a symbolic link or junction)")
-endif()
 
 include(yq-toolbox/configure.cmake)
 add_subdirectory(yq-toolbox)
 
-if(${Build_Vulkan} AND EXISTS ${CMAKE_CURRENT_LIST_DIR}/yq-vulqan)
+if(${Build_Vulkan} AND EXISTS yq-vulqan)
     include(yq-vulqan/configure.cmake)
     add_subdirectory(yq-vulqan)
 endif()
 
-
-if(${Build_Qt6} AND EXISTS ${CMAKE_CURRENT_LIST_DIR}/qt-utilities)
+if(${Build_Qt6} AND EXISTS qt-utilities)
     add_subdirectory(qt-utilities)
+endif()
+
+if(${Build_Doodle} AND EXISTS yq-doodle)
+message("Adding doodle subdirectory")
+    add_subdirectory(yq-doodle)
 endif()
 
 # add_subdirectory(3rd)

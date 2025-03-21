@@ -14,7 +14,7 @@ namespace yq::doodler {
     class Py3Info : public PyInfo {
     public:
         template <typename T> class Writer;
-        Py3Info(std::string_view zName, const PyInfo& base, const std::source_location& sl=std::source_location::current());
+        Py3Info(std::string_view zName, PyInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -33,6 +33,8 @@ namespace yq::doodler {
             virtual void        set_position(const Vector3D&) = 0;
         };
     
+        static void init_info();
+
     protected:
         Py3(Project&);
         Py3(Project&, const Py3&);
@@ -47,18 +49,6 @@ namespace yq::doodler {
         Py3(Py3&&) = delete;
         Py3& operator=(const Py3&) = delete;
         Py3& operator=(Py3&&) = delete;
-    };
-
-    template <typename T>
-    class Py3Info::Writer : public PyInfo::Writer<T> {
-    public:
-        Writer(Py3Info* pInfo) : PyInfo::Writer<T>(pInfo)
-        {
-        }
-        
-        Writer(Py3Info& pInfo) : Writer(&pInfo)
-        {
-        }
     };
 
 }

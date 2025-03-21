@@ -12,7 +12,7 @@ namespace yq::doodler {
     class LightInfo : public DObjectInfo {
     public:
         template <typename T> class Writer;
-        LightInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl=std::source_location::current());
+        LightInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -24,6 +24,8 @@ namespace yq::doodler {
         YQ_OBJECT_INFO(LightInfo)
         YQ_OBJECT_DECLARE(Light, DObject)
     public:
+    
+        static void init_info();
     
     protected:
         Light(Project&);
@@ -40,17 +42,4 @@ namespace yq::doodler {
         Light& operator=(const Light&) = delete;
         Light& operator=(Light&&) = delete;
     };
-
-    template <typename T>
-    class LightInfo::Writer : public DObjectInfo::Writer<T> {
-    public:
-        Writer(LightInfo* lInfo) : DObjectInfo::Writer<T>(lInfo)
-        {
-        }
-        
-        Writer(LightInfo& lInfo) : Writer(&lInfo)
-        {
-        }
-    };
-
 }

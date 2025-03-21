@@ -2,6 +2,7 @@
 qt-utilities
 yq-toolbox
 yq-vulqan
+yq-doodle
 
 # Other source control
 .svn
@@ -9,6 +10,7 @@ yq-vulqan
 
 # Temporaries
 *.bck
+*~
 
 #  Old code dies here
 _dep

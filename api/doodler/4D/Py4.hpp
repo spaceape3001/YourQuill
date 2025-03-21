@@ -14,7 +14,7 @@ namespace yq::doodler {
     class Py4Info : public PyInfo {
     public:
         template <typename T> class Writer;
-        Py4Info(std::string_view zName, const PyInfo& base, const std::source_location& sl=std::source_location::current());
+        Py4Info(std::string_view zName, PyInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -33,6 +33,8 @@ namespace yq::doodler {
             virtual void        set_position(const Vector4D&) = 0;
         };
 
+        static void init_info();
+
     protected:
         Py4(Project&);
         Py4(Project&, const Py4&);
@@ -41,7 +43,6 @@ namespace yq::doodler {
         //! Remap IDs/pointers appropriately
         virtual void        remap(const Remapper&);
         
-        
     private:
         Py4(const Py4&) = delete;
         Py4(Py4&&) = delete;
@@ -49,16 +50,5 @@ namespace yq::doodler {
         Py4& operator=(Py4&&) = delete;
     };
 
-    template <typename T>
-    class Py4Info::Writer : public PyInfo::Writer<T> {
-    public:
-        Writer(Py4Info* pInfo) : PyInfo::Writer<T>(pInfo)
-        {
-        }
-        
-        Writer(Py4Info& pInfo) : Writer(&pInfo)
-        {
-        }
-    };
 
 }

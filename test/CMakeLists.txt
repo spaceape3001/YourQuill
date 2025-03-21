@@ -22,8 +22,6 @@ macro(doodletest name)
     add_test(NAME ${name} COMMAND test_${name} ${ARGN})
 endmacro()
 
-doodletest(b3parse)
-
 macro(mithtest name)
     add_executable(test_${name} ${name}.cpp)
     target_link_libraries(test_${name} PRIVATE yq_mithril BoostUT)

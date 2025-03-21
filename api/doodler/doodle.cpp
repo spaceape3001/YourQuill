@@ -7,15 +7,15 @@
 
 //#include "Association.ipp"
 //#include "Camera.ipp"
-#include "Constraint.ipp"
-#include "Light.ipp"
-#include "Motion.ipp"
-#include "Project.ipp"
-#include "Py.ipp"
-#include "Py1.ipp"
-#include "Py2.ipp"
-#include "Py3.ipp"
-#include "Py4.ipp"
+//#include "Constraint.ipp"
+//#include "Light.ipp"
+//#include "Motion.ipp"
+//#include "Project.ipp"
+//#include "Py.ipp"
+//#include "Py1.ipp"
+//#include "Py2.ipp"
+//#include "Py3.ipp"
+//#include "Py4.ipp"
 #include "Space.ipp"
 #include "Space2.ipp"
 
@@ -29,11 +29,6 @@
 #include <yq/meta/Init.hpp>
 
 
-YQ_OBJECT_IMPLEMENT(yq::doodler::Constraint)
-YQ_OBJECT_IMPLEMENT(yq::doodler::Light)
-YQ_OBJECT_IMPLEMENT(yq::doodler::Motion)
-YQ_OBJECT_IMPLEMENT(yq::doodler::Py)
-YQ_OBJECT_IMPLEMENT(yq::doodler::Py1)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Py2)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Py2Point)
 YQ_OBJECT_IMPLEMENT(yq::doodler::Py3)

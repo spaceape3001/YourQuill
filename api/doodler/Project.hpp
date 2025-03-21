@@ -24,7 +24,7 @@ namespace yq::doodler {
     };
 
 
-    /*! \brief A camera
+    /*! \brief A project
     */
     class Project {
     public:

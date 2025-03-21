@@ -4,12 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "Constraint.hpp"
+#include "ConstraintInfoWriter.hpp"
+
+YQ_OBJECT_IMPLEMENT(yq::doodler::Constraint)
 
 namespace yq::doodler {
-    ConstraintInfo::ConstraintInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
+    ConstraintInfo::ConstraintInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
     {
         set(Flag::CONSTRAINT);
     }
@@ -17,6 +18,11 @@ namespace yq::doodler {
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+    void Constraint::init_info()
+    {
+        auto w = writer<Constraint>();
+        w.description("Constraint");
+    }
 
     Constraint::Constraint(Project&prj) : DObject(prj)
     {

@@ -9,5 +9,5 @@
 
 add_executable(3x main.cpp)
 
-target_link_libraries(3x PRIVATE yq_doodler)
+target_link_libraries(3x PRIVATE yq_doodle)
 

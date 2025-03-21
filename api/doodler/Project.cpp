@@ -4,8 +4,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include <doodler/Project.hpp>
 #include <yq/xml/XmlFile.hpp>
 #include <yq/xml/XmlUtils.hpp>

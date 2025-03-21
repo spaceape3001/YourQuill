@@ -4,12 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "Motion.hpp"
+#include "MotionInfoWriter.hpp"
+
+YQ_OBJECT_IMPLEMENT(yq::doodler::Motion)
 
 namespace yq::doodler {
-    MotionInfo::MotionInfo(std::string_view zName, const DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
+    MotionInfo::MotionInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl) : DObjectInfo(zName, base, sl)
     {
         set(Flag::MOTION);
     }
@@ -17,6 +18,11 @@ namespace yq::doodler {
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+    void Motion::init_info()
+    {
+        auto w = writer<Motion>();
+        w.description("Motion");
+    }
 
     Motion::Motion(Project& prj) : DObject(prj)
     {

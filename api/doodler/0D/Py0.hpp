@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <doodler/DObject.hpp>
+#include <doodler/Py.hpp>
 
 namespace yq::doodler {
-    class PyInfo : public DObjectInfo {
+    class Py0Info : public PyInfo {
     public:
         template <typename T> class Writer;
-        PyInfo(std::string_view zName, DObjectInfo& base, const std::source_location& sl=std::source_location::current());
+        Py0Info(std::string_view zName, PyInfo& base, const std::source_location& sl=std::source_location::current());
     };
     
 
@@ -20,26 +20,27 @@ namespace yq::doodler {
     
         This represents a physical object, the number represents the number of coordinates needed to describe it.
     */
-    class Py : public DObject {
-        YQ_OBJECT_INFO(PyInfo)
-        YQ_OBJECT_DECLARE(Py, DObject)
+    class Py0 : public Py {
+        YQ_OBJECT_INFO(Py0Info)
+        YQ_OBJECT_DECLARE(Py0, Py)
     public:
     
         static void init_info();
-    
+
     protected:
-        Py(Project&);
-        Py(Project&, const Py&);
-        ~Py();
+        Py0(Project&);
+        Py0(Project&, const Py0&);
+        ~Py0();
 
         //! Remap IDs/pointers appropriately
         virtual void        remap(const Remapper&);
         
         
     private:
-        Py(const Py&) = delete;
-        Py(Py&&) = delete;
-        Py& operator=(const Py&) = delete;
-        Py& operator=(Py&&) = delete;
+        Py0(const Py0&) = delete;
+        Py0(Py0&&) = delete;
+        Py0& operator=(const Py0&) = delete;
+        Py0& operator=(Py0&&) = delete;
     };
+
 }
