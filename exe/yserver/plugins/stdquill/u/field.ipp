@@ -16,7 +16,7 @@ namespace {
 
     using MetaId = yq::mithril::Meta;
 
-    void    u_field(Field f, Change chg)
+    void    u_field(Field f, Change chg, bool s3=false)
     {
         if(!f)
             return ;
@@ -201,7 +201,7 @@ namespace {
     
     void    s3_field(Document doc)
     {
-        u_field(cdb::db_field(doc), Change::Added);
+        u_field(cdb::db_field(doc), Change::Added, true);
     }
     
     void    s5_field(Fragment frag, Change chg)

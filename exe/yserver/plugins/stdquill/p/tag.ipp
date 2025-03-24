@@ -6,8 +6,26 @@
 
 #pragma once
 
+#include <yq/core/DelayInit.hpp>
+#include <mithril/root/RootDir.hpp>
+#include <mithril/root/RootPost.hpp>
+#include <mithril/tag/Tag.hpp>
+#include <mithril/tag/TagArg.hpp>
+#include <mithril/tag/TagCDB.hpp>
+#include <mithril/tag/TagHtml.hpp>
 #include <mithril/tag/TagJson.hpp>
+#include <mithril/tag/TagPost.hpp>
 #include <mithril/tag/TagSearch.hpp>
+#include <mithril/web/JsonAdapter.hpp>
+#include <mithril/wksp/Workspace.hpp>
+
+#include "common.hpp"
+
+using namespace yq;
+using namespace yq::mithril;
+using namespace yq::mithril::arg;
+using namespace yq::mithril::cdb;
+using namespace yq::mithril::html;
 
 namespace {
 
@@ -192,4 +210,6 @@ namespace {
             });
             reg_webpage<p_dev_tags>("/dev/tags");
         }
+        
+        YQ_INVOKE(reg_tag_pages();)
 }

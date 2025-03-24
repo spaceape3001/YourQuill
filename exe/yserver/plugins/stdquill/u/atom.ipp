@@ -11,6 +11,7 @@
 #include <mithril/atom/Atom.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomDiff.hpp>
+#include <mithril/field/FieldCDB.hpp>
 
 #include <mithril/attribute/Attribute.hpp>
 
@@ -78,7 +79,83 @@ namespace {
         return cdb::db_tags_set(tagStr);
     }
     
-    void    u_atom(Atom a, std::span<Attribute::Diff> attrs, Change chg, const UAtomParam& uPar={})
+    void    u_atom(Atom a, std::span<Attribute::Diff> attrs, Change chg, const UAtomParam& uPar={});
+
+    void    i_attribute_field(Atom a, Class c, Field f, Atom::Diff& x, const Attribute::Diff& ad)
+    {
+        //  It's a regular field.... maybe...
+        static thread_local CacheQuery  iAttr("INSERT INTO AtomProperty (atom, attr, field, class) VALUES (?,?,?,?)");
+        iAttr.bind(1, a.id);
+        iAttr.bind(2, ad.attr.id);
+        iAttr.bind(3, f.id);
+        iAttr.bind(4, c.id);
+        iAttr.exec();
+        
+        //  Tables....? (ie, more)
+    }
+    
+    void    i_attribute_class(Atom a, Class c, Atom::Diff& x, const Attribute::Diff& ad)
+    {
+        std::string k(x.key);
+        k += '/';
+        k += to_string_view(ad.attr.id);
+
+        Atom    ca  = cdb::db_atom(a, k);
+        
+        static thread_local CacheQuery  iAttr("INSERT INTO AtomProperty (atom, attr, class) VALUES (?,?,?,?)");
+        iAttr.bind(1, a.id);
+        iAttr.bind(2, ad.attr.id);
+        iAttr.bind(3, ca.id);
+        iAttr.exec();
+        
+        static thread_local CacheQuery  iClass("INSERT INTO AtomClass (atom,class) VALUES (?,?)");
+        iClass.bind(1, a.id);
+        iClass.bind(2, ca.id);
+        iClass.exec();
+        
+
+        
+        // TODO Update the sub....
+        // u_atom(ca, x.sub, {});
+    }
+
+    void    i_attribute_plain(Atom a, Atom::Diff& x, const Attribute::Diff& ad)
+    {
+        //  It's a regular field.... maybe...
+        static thread_local CacheQuery  iAttr("INSERT INTO AtomProperty (atom, attr) VALUES (?,?)");
+        iAttr.bind(1, a.id);
+        iAttr.bind(2, ad.attr.id);
+        iAttr.exec();
+    }
+
+    void    i_attribute(Atom a, Atom::Diff& x, const Attribute::Diff& ad)
+    {
+        for(Class c : x.classes.to){
+            Field f = cdb::field(c, x.key);
+            if(f){
+                i_attribute_field(a,c,f,x,ad);
+                return;
+            }
+        }
+        
+        Class c = cdb::class_(x.key);
+        if(c){
+            i_attribute_class(a, c, x, ad);
+            return ;
+        }
+        
+        i_attribute_plain(a, x, ad);
+    }
+    
+    void    u_attribute(Atom a, Atom::Diff& x, const Attribute::Diff& ad)
+    {
+    }
+
+    void    x_attribute(Atom a, Atom::Diff& x, const Attribute::Diff& ad)
+    {
+    }
+    
+    void    u_atom(Atom a, std::span<Attribute::Diff> attrs, Change chg, const UAtomParam& uPar)
     {
         if(!a)
             return ;
@@ -97,7 +174,6 @@ namespace {
             x.tags.from         = cdb::tags_set(a);
             x.name.from         = cdb::name(a);
             x.abbreviation.from = cdb::abbreviation(a);
-            //x.attributes.from   = cdb::attributes(a);
         }
         
         static thread_local CacheQuery  uAtom("UPDATE Atoms SET name=?,brief=?,abbr=?,icon=? WHERE id=?");
@@ -107,7 +183,8 @@ namespace {
         static thread_local CacheQuery  dTag("DELETE FROM AtomTag WHERE atom=? AND tag=?");
         static thread_local CacheQuery  xAtom[] = {
             CacheQuery("DELETE FROM Atoms WHERE id=?"),
-            CacheQuery("DELETE FROM AtomClass WHERE atom=?")
+            CacheQuery("DELETE FROM AtomClass WHERE atom=?"),
+            CacheQuery("DELETE FROM AtomProperty WHERE atom=?")
         };
         
         if(chg != Change::Removed){
@@ -130,6 +207,29 @@ namespace {
             x.classes.analyze();
             for(Class j : x.classes.added)
                 iClass.exec(x.id, j);
+                
+            for(auto& ad : attrs){
+                if(ad.key[0] == '%')    // skip system attributes
+                    continue;
+                if(ad.added()){
+                    x.attributes.to.insert(ad.attr);
+                    x.attributes.added.insert(ad.attr);
+                    i_attribute(a,x,ad);
+                } else if(ad.deleted()){
+                    x.attributes.from.insert(ad.attr);
+                    x.attributes.removed.insert(ad.attr);
+                    x_attribute(a,x,ad);
+                } else if(ad.modified()){
+                    x.attributes.to.insert(ad.attr);
+                    x.attributes.from.insert(ad.attr);
+                    x.attributes.modified.insert(ad.attr);
+                    u_attribute(a,x,ad);
+                } else {
+                    x.attributes.to.insert(ad.attr);
+                    x.attributes.from.insert(ad.attr);
+                    x.attributes.same.insert(ad.attr);
+                }
+            }    
         }
         
         Atom::Notify::notify(x);

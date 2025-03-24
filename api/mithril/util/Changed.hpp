@@ -25,6 +25,7 @@ namespace yq::mithril {
     struct Changed<std::set<T,C,A>> {
         std::set<T,C,A>     added;
         std::set<T,C,A>     from;
+        std::set<T,C,A>     modified;
         std::set<T,C,A>     removed;
         std::set<T,C,A>     same;
         std::set<T,C,A>     to;
@@ -46,6 +47,7 @@ namespace yq::mithril {
     struct Changed<Set<T,C>> {
         Set<T,C>     added;
         Set<T,C>     from;
+        Set<T,C>     modified;
         Set<T,C>     removed;
         Set<T,C>     same;
         Set<T,C>     to;
