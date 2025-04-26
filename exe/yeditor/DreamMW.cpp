@@ -78,9 +78,9 @@ DreamMW::DreamMW()
     updateTitle();
     
     std::vector<QAction*>   dockActions;
-    for(const auto& di : Dock::all()){
+    for(const auto& di : ZDock::all()){
     
-        Dock*   d   = di.fnCreate();
+        ZDock*   d   = di.fnCreate();
         
         ActionInfo  ai  = di.action;
         ai.checkable    = true;
@@ -91,7 +91,7 @@ DreamMW::DreamMW()
         d->setAllowedAreas(di.allowedAreas);
         d->setWindowTitle(ai.label);
 
-        connect(act, &QAction::triggered, d, &Dock::triggered);
+        connect(act, &QAction::triggered, d, &ZDock::triggered);
         addDock(di.startArea, d);
         dockActions.push_back(act);
     }
@@ -264,10 +264,10 @@ QDockWidget*    DreamMW::addDock(Qt::DockWidgetArea dwa, QWidget*q)
 {
     QDockWidget* dw = MainWindow::addDock(dwa, q);
     
-    Dock*   d   = qobject_cast<Dock*>(q);
+    ZDock*   d   = qobject_cast<ZDock*>(q);
     if(d){
-        connect(d, &Dock::popupRequested, this, &DreamMW::popupRequested);
-        connect(d, &Dock::openRequested,  this, &DreamMW::openRequested);
+        connect(d, &ZDock::popupRequested, this, &DreamMW::popupRequested);
+        connect(d, &ZDock::openRequested,  this, &DreamMW::openRequested);
     }
     return dw;
 }

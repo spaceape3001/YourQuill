@@ -28,7 +28,7 @@ private:
     QLineEdit*                  m_result;
 };
 
-class TimeGenDock : public Dock {
+class TimeGenDock : public ZDock {
     Q_OBJECT
 public:
     TimeGenDock(QWidget*parent=nullptr);

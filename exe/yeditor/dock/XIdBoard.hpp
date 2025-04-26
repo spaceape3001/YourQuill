@@ -17,7 +17,7 @@ using yq::mithril::IdModel;
 using yq::mithril::IdTableView;
 
 
-class XIdBoard : public Dock {
+class XIdBoard : public ZDock {
     Q_OBJECT
 public:    
 

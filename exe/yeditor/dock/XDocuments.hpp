@@ -11,7 +11,7 @@
 #include <mithrilQt/id/IdTreeView.hpp>
 
 
-class XDocuments : public Dock {
+class XDocuments : public ZDock {
     Q_OBJECT
 public:    
 

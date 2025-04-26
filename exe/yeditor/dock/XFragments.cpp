@@ -105,7 +105,7 @@ namespace {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XFragments::XFragments(QWidget*parent) : Dock(parent)
+XFragments::XFragments(QWidget*parent) : ZDock(parent)
 {
     m_model = new Model();
     m_view  = new View(m_model);

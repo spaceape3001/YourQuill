@@ -76,7 +76,7 @@ namespace {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XDocuments::XDocuments(QWidget*parent) : Dock(parent)
+XDocuments::XDocuments(QWidget*parent) : ZDock(parent)
 {
     m_model = new Model();
     m_view  = new View(m_model);

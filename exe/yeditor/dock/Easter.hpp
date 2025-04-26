@@ -27,7 +27,7 @@ private:
     QSpinBox*       m_year  = nullptr;
 };
 
-class EasterDock : public Dock {
+class EasterDock : public ZDock {
     Q_OBJECT
 public:
     EasterDock(QWidget*parent=nullptr);

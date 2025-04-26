@@ -12,22 +12,22 @@
 using namespace yq;
 using namespace yq::gluon;
 
-struct Dock::Repo {
+struct ZDock::Repo {
     std::vector<Info>    all;
 };
 
-Dock::Repo& Dock::repo()
+ZDock::Repo& ZDock::repo()
 {
     static Repo s_repo;
     return s_repo;
 }
 
-const std::vector<Dock::Info>&  Dock::all()
+const std::vector<ZDock::Info>&  ZDock::all()
 {
     return repo().all;
 }
 
-Dock::Info::Writer      Dock::reg(const QString& lab, FNCreate&& fn)
+ZDock::Info::Writer      ZDock::reg(const QString& lab, FNCreate&& fn)
 {
     if(lab.isEmpty() || !fn)
         return { nullptr };
@@ -40,54 +40,54 @@ Dock::Info::Writer      Dock::reg(const QString& lab, FNCreate&& fn)
     return { &_r.all.back() };
 }
 
-Dock::Info::Writer   register_dock(const QString&label, Dock::FNCreate&& fn)
+ZDock::Info::Writer   register_dock(const QString&label, ZDock::FNCreate&& fn)
 {
-    return Dock::reg(label, std::move(fn));
+    return ZDock::reg(label, std::move(fn));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Dock::Dock(QWidget*parent) : QDockWidget(parent)
+ZDock::ZDock(QWidget*parent) : QDockWidget(parent)
 {
     setFloating(false);
     setFeatures(DockWidgetClosable|DockWidgetMovable);
 }
 
-Dock::~Dock()
+ZDock::~ZDock()
 {
 }
 
-void    Dock::_update()
+void    ZDock::_update()
 {
     if(m_action)
         m_action -> setChecked(isVisible());
 }
 
-void        Dock::closeEvent(QCloseEvent*evt)
+void        ZDock::closeEvent(QCloseEvent*evt)
 {
     hide();
     _update();
     evt -> ignore();
 }
 
-DreamMW*    Dock::dream() const
+DreamMW*    ZDock::dream() const
 {
-    return static_cast<DreamMW*>(DreamMW::mainWinFor(const_cast<Dock*>(this)));
+    return static_cast<DreamMW*>(DreamMW::mainWinFor(const_cast<ZDock*>(this)));
 }
 
-void        Dock::hideEvent(QHideEvent*evt) 
+void        ZDock::hideEvent(QHideEvent*evt) 
 {
     QDockWidget::hideEvent(evt);
     _update();
 }
 
-void        Dock::showEvent(QShowEvent*evt) 
+void        ZDock::showEvent(QShowEvent*evt) 
 {
     QDockWidget::showEvent(evt);
     _update();
 }
 
-void        Dock::triggered(bool f)
+void        ZDock::triggered(bool f)
 {
     setVisible(f);
     _update();

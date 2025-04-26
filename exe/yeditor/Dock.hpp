@@ -22,11 +22,11 @@ class Window;
     This is a singular dock for the main window.  
     It'll use singals/slots for communications to main window.
 */
-class Dock : public QDockWidget {
+class ZDock : public QDockWidget {
     Q_OBJECT
 public:
 
-    using FNCreate  = std::function<Dock*()>;
+    using FNCreate  = std::function<ZDock*()>;
 
     struct Info {
         class Writer;
@@ -41,8 +41,8 @@ public:
     static const std::vector<Info>&  all();
 
 
-    Dock(QWidget*parent=nullptr);
-    ~Dock();
+    ZDock(QWidget*parent=nullptr);
+    ~ZDock();
     
 signals:
     void        popupRequested(Id, const QActionList& acts = QActionList());
@@ -67,7 +67,7 @@ private:
     static Repo&    repo();
 };
 
-class Dock::Info::Writer {
+class ZDock::Info::Writer {
 public:
 
     Writer(){}
@@ -109,23 +109,23 @@ public:
     }
 
 private:
-    friend class Dock;
+    friend class ZDock;
     
-    Writer(Dock::Info* c) : m_info(c) {}
+    Writer(ZDock::Info* c) : m_info(c) {}
     
     Info*    m_info  = nullptr;
 
 };
 
 template <typename D>
-concept Dockable = (std::derived_from<D,Dock> && !std::same_as<D,Dock>); 
+concept Dockable = (std::derived_from<D,ZDock> && !std::same_as<D,ZDock>); 
 
-Dock::Info::Writer   register_dock(const QString&, Dock::FNCreate&&);
+ZDock::Info::Writer   register_dock(const QString&, ZDock::FNCreate&&);
 
 template <Dockable D>
-Dock::Info::Writer   register_dock(const QString& label)
+ZDock::Info::Writer   register_dock(const QString& label)
 {
-    return register_dock(label, []() -> Dock* { return new D; });
+    return register_dock(label, []() -> ZDock* { return new D; });
 }
 
 

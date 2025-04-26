@@ -23,7 +23,7 @@ namespace {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-XIdBoard::XIdBoard(QWidget*parent) : Dock(parent)
+XIdBoard::XIdBoard(QWidget*parent) : ZDock(parent)
 {
     m_model = new Model([this]()->std::vector<Id>{
         return m_data;

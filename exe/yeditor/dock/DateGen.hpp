@@ -31,7 +31,7 @@ private:
     QLineEdit*                          m_result;
 };
 
-class DateGenDock : public Dock {
+class DateGenDock : public ZDock {
     Q_OBJECT
 public:
     DateGenDock(QWidget*parent=nullptr);
