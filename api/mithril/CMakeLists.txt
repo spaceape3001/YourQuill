@@ -388,8 +388,8 @@ target_include_directories(${PROJECT_NAME}
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -DDEV_BUILD=1
-        "-DYQ_BUILD_ROOT=\"${CMAKE_SOURCE_DIR}\"" 
-        "-DYQ_SHARE_DIRS=\"${CMAKE_SOURCE_DIR}/share\"" 
+        "-DYQ_BUILD_ROOT=\"${YQ_UNIVERSE_BUILD_ROOT}\"" 
+        "-DYQ_SHARE_DIRS=\"${YQ_UNIVERSE_SHARE_DIR}\"" 
 )
 
 LinkTest(${PROJECT_NAME})
