@@ -4,7 +4,7 @@
 ##
 ################################################################################
 
-project(yeditor)
+project(yeditorQt)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets Network Svg SvgWidgets WebEngineCore WebEngineWidgets)
 
