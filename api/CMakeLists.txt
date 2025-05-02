@@ -9,6 +9,7 @@ add_subdirectory(mithril)
 
 if(Build_Vulkan)
     #   Add Vulkan things
+    add_subdirectory(mithrilVk)
 endif()
 
 if(Build_Qt6)
