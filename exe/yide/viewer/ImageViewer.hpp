@@ -14,10 +14,11 @@
 
 using yq::mithril::Image;
 namespace yq::gluon {
+    class GraphicsScene;
     class GraphicsView;
 }
+using yq::gluon::GraphicsScene;
 using yq::gluon::GraphicsView;
-class QGraphicsScene;
 class QGraphicsPixmapItem;
 
 
@@ -33,7 +34,7 @@ public:
 
 private:
 
-    QGraphicsScene*         m_scene     = nullptr;
+    GraphicsScene*          m_scene     = nullptr;
     GraphicsView*           m_view      = nullptr;
     QGraphicsPixmapItem*    m_pixmap    = nullptr;
 };

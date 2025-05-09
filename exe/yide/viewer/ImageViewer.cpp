@@ -10,11 +10,11 @@
 
 #include <yq/core/DelayInit.hpp>
 #include <gluon/core/Logging.hpp>
-#include <gluon/widget/GraphicsView.hpp>
+#include <gluon/graphics/GraphicsScene.hpp>
+#include <gluon/graphics/GraphicsView.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 
-#include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
 
 using namespace yq;
@@ -23,8 +23,10 @@ using namespace yq::mithril;
 
 ImageViewer::ImageViewer(QWidget*parent) : Window(parent)
 {
-    m_scene     = new QGraphicsScene(this);
+    m_scene     = new GraphicsScene(this);
     m_view      = new GraphicsView(m_scene);
+    m_view -> setMouseWheelZoomModifiers(Qt::ControlModifier);
+    m_view -> featureEnable(GraphicsView::Feature_MouseWheelZoom);
     setWidget(m_view);
 }
 
