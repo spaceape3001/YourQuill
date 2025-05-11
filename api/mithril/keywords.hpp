@@ -30,15 +30,12 @@ namespace yq::mithril {
     struct organization_k {};
     struct novel_k {};
     struct place_k {};
-    struct parent_k {};
-    struct root_k {};
     struct style_k {};
     struct suffix_k {};
     struct tag_k {};
     struct template_k {};
     struct thing_k {};
     struct user_k {};
-    struct value_k {};
     
     static constexpr atom_k         ATOM;
     static constexpr attribute_k    ATTRIBUTE;
@@ -60,14 +57,11 @@ namespace yq::mithril {
     static constexpr leaf_k         LEAF;
     static constexpr novel_k        NOVEL;
     static constexpr organization_k ORGANIZATION;
-    static constexpr parent_k       PARENT;
     static constexpr place_k        PLACE;
-    static constexpr root_k         ROOT;
     static constexpr style_k        STYLE;
     static constexpr suffix_k       SUFFIX;
     static constexpr tag_k          TAG;
     static constexpr template_k     TEMPLATE;
     static constexpr thing_k        THING;
     static constexpr user_k         USER;
-    static constexpr value_k        VALUE;
 }
