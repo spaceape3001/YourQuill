@@ -17,5 +17,6 @@ target_link_libraries(${PROJECT_NAME}
         yq_tachyon
 )
 
+vulqan_library(${PROJECT_NAME})
 LinkTest(${PROJECT_NAME})
 
