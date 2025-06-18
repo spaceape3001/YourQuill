@@ -18,12 +18,16 @@
 #include <mithril/notify/Stage4.hpp>
 #include <yq/core/StreamOps.hpp>
 #include <yq/stream/Text.hpp>
+#include <mithril/logging.hpp>
+
 
 namespace yq::mithril {
     WebImage::WebImage(std::string_view kpath, const std::filesystem::path& f0, Folder folder, std::string_view prefix, const std::source_location&sl) : 
         WebPage(hGet, kpath, sl), 
         m_fallback(f0)
     {
+        clear(Flag::SEALED);    // not sure why this is getting set, clear it here.
+    
         m_fallback  = f0;
         if(!folder)
             folder  = cdb::top_folder();
@@ -41,6 +45,8 @@ namespace yq::mithril {
             on_change(by_cache(folder, s), [this](){ this->update(); }, sl);
         }
     }
+
+    WebImage::Writer::~Writer() = default;
     
     void    WebImage::handle(WebContext&ctx) const 
     {

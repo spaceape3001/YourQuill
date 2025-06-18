@@ -38,6 +38,7 @@ namespace yq::mithril {
     
         Writer(WebImage*i) : WebPage::Writer(i), m_image(i) {}
         Writer&         post(std::function<void(WebImage&)>);
+        ~Writer();
         
     private:
         WebImage*       m_image = nullptr;

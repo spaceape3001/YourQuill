@@ -97,12 +97,13 @@ namespace yq::mithril {
                         _r.globs[m][p]     = this;
                 break;
             case Role::Page:
-                for(HttpOp m : HttpOp::all_values())
+                for(HttpOp m : HttpOp::all_values()){
                     if(m_methods.is_set(m)){
                         _r.pages[m][p]     = this;
                         for(std::string_view a : m_alts)
                             _r.pages[m][a]  = this;
                     }
+                }
                 break;
             default:
                 break;

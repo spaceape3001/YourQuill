@@ -223,7 +223,7 @@ namespace yq::mithril {
         Writer(WebPage*p); // : m_page(p) {}
         Writer(Writer&&);
         Writer& operator=(Writer&&);
-        ~Writer();
+        virtual ~Writer();
         Writer() : MetaBase::Writer(nullptr) {}
         
         operator WebPage* () const { return m_page; }
