@@ -358,7 +358,7 @@ namespace yq::mithril {
         
         if constexpr (QMetaTypeId<T>::Defined){
             using namespace yq::gluon;
-            const DelegateInfo* di  = DelegateInfo::byQtType(qMetaTypeId<T>());
+            const DelegateMeta* di  = DelegateMeta::byQtType(qMetaTypeId<T>());
             if(di){
                 col.fnDelegate      = [di]()->Delegate* {
                     return static_cast<Delegate*>(di->create());
