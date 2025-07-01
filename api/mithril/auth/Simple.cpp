@@ -13,7 +13,7 @@ namespace yq::mithril::auth {
     Simple::Simple(){}
     Simple::~Simple(){}
 
-    void Simple::init_info()
+    void Simple::init_meta()
     {
         auto w = writer<Simple>();
         w.label("Simple");

@@ -17,7 +17,7 @@ namespace yq::mithril {
         Authentication();
         ~Authentication();
 
-        static void init_info();
+        static void init_meta();
     };
 
     //Ref<Authentication>     x_authentication(const XmlNode* xn);

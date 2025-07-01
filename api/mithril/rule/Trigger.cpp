@@ -20,7 +20,7 @@ namespace yq::mithril {
     {
     }
     
-    void Trigger::init_info()
+    void Trigger::init_meta()
     {
         auto w = writer<Trigger>();
         w.description("Trigger");

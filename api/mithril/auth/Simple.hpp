@@ -28,6 +28,6 @@ namespace yq::mithril::auth {
         Simple();
         ~Simple();
         
-        static void init_info();
+        static void init_meta();
     };
 }

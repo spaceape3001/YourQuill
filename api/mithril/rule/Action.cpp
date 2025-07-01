@@ -20,7 +20,7 @@ namespace yq::mithril {
     {
     }
     
-    void Action::init_info()
+    void Action::init_meta()
     {
         auto w = writer<Action>();
         w.description("Action");

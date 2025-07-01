@@ -19,7 +19,7 @@ namespace yq::mithril {
     {
     }
 
-    void Authentication::init_info()
+    void Authentication::init_meta()
     {
         auto w = writer<Authentication>();
         w.description("Authentication Helper");

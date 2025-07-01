@@ -24,7 +24,7 @@ namespace yq::mithril {
         // 
         virtual void something_todo() {}
 
-        static void init_info();
+        static void init_meta();
 
 
         //Vector<Ref<Action>>     actions;

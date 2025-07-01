@@ -13,7 +13,7 @@ namespace yq::mithril::auth {
     AutoAccept::AutoAccept(){}
     AutoAccept::~AutoAccept(){}
 
-    void AutoAccept::init_info()
+    void AutoAccept::init_meta()
     {
         auto w = writer<AutoAccept>();
         w.label("Accept");

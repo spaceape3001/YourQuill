@@ -20,7 +20,7 @@ namespace yq::mithril {
     {
     }
 
-    void Rule::init_info()
+    void Rule::init_meta()
     {
         auto w = writer<Rule>();
         w.label("Generic Rule");

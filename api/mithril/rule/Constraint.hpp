@@ -20,7 +20,7 @@ namespace yq::mithril {
         //  TBD....
         virtual void    constraint() const = 0;
 
-        static void init_info();
+        static void init_meta();
     };
 
     Ref<Constraint>     x_constraint(const XmlNode& xn);

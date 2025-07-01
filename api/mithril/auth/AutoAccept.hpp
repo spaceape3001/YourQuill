@@ -23,6 +23,6 @@ namespace yq::mithril::auth {
         AutoAccept();
         ~AutoAccept();
 
-        static void init_info();
+        static void init_meta();
     };
 }

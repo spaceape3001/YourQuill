@@ -19,7 +19,7 @@ namespace yq::mithril {
 
         Trigger();
         virtual ~Trigger();
-        static void init_info();
+        static void init_meta();
     };
 
     Ref<Trigger>     x_trigger(const XmlNode& xn);

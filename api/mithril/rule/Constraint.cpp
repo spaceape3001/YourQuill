@@ -20,7 +20,7 @@ namespace yq::mithril {
     {
     }
     
-    void Constraint::init_info()
+    void Constraint::init_meta()
     {
         auto w = writer<Constraint>();
         w.description("Constraint");

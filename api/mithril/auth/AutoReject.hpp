@@ -19,7 +19,7 @@ namespace yq::mithril::auth {
     public:
         bool  accept(std::string_view) const override { return false; }
 
-        static void init_info();
+        static void init_meta();
         
         AutoReject();
         ~AutoReject();

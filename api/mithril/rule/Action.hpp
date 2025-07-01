@@ -20,7 +20,7 @@ namespace yq::mithril {
         //  TBD....
         virtual void    action() const = 0;
         
-        static void init_info();
+        static void init_meta();
     };
 
     Ref<Action>     x_action(const XmlNode& xn);

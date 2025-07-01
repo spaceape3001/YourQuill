@@ -13,7 +13,7 @@ namespace yq::mithril::auth {
     AutoReject::AutoReject(){}
     AutoReject::~AutoReject(){}
 
-    void AutoReject::init_info()
+    void AutoReject::init_meta()
     {
         auto w = writer<AutoReject>();
         w.label("Reject");
