@@ -10,7 +10,7 @@
 #include <yq/process/Execute.hpp>
 #include <yq/core/ErrorDB.hpp>
 #include <yq/container/ByteArray.hpp>
-#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 #include <filesystem>
 

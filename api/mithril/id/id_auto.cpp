@@ -168,7 +168,7 @@ namespace yq::mithril {
         }
     }
     
-    const TypeInfo*  Id::type_info(IdTypeId ct)
+    const TypeMeta*  Id::type_info(IdTypeId ct)
     {
         switch(ct){
         case Atom::ID:

@@ -7,7 +7,7 @@
 #include "Field.hpp"
 #include "FieldCDB.hpp"
 
-#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 #include <yq/text/match.hpp>
 #include <mithril/notify/Notifier.hxx>

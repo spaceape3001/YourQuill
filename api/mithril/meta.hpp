@@ -11,5 +11,5 @@
 #include <mithril/meta/MetaTypeArg.hpp>
 #include <yq/meta/ObjectInfo.hpp>
 #include <yq/meta/PropertyInfo.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq/meta/TypeMeta.hpp>
 

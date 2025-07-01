@@ -15,7 +15,7 @@
 
 namespace yq::mithril::update {
 
-    using TypeInfoSet   = std::set<const TypeInfo*, ById>;
+    using TypeMetaSet   = std::set<const TypeMeta*, ById>;
 
     class UField : public U<Field> {
     public:
@@ -37,7 +37,7 @@ namespace yq::mithril::update {
         bool                anycls  = true;
         string_set_t        aliases;
         string_set_t        usurps;
-        TypeInfoSet         dataTypes;
+        TypeMetaSet         dataTypes;
         TagSet              tags;
         ClassHopMap         atomTypes;
 
@@ -55,6 +55,6 @@ namespace yq::mithril::update {
         void    x_erase();
 
         ClassHopMap enum_atomTypes() const;
-        TypeInfoSet enum_dataTypes() const;
+        TypeMetaSet enum_dataTypes() const;
     };
 }

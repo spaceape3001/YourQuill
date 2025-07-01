@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "BookCDB.hpp"
-#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 #include <mithril/class/Class.hpp>
 #include <mithril/image/Image.hpp>

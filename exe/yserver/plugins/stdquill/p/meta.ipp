@@ -124,7 +124,7 @@ namespace {
 
         void    p_dev_meta_type(WebHtml& h)
         {
-            const TypeInfo* type    = type_info(h);
+            const TypeMeta* type    = type_info(h);
             if(!type)
                 throw HttpStatus::BadArgument;
             
@@ -150,7 +150,7 @@ namespace {
         
         void    p_dev_meta_type_methods(WebHtml& h)
         {
-            const TypeInfo* type    = type_info(h);
+            const TypeMeta* type    = type_info(h);
             if(!type)
                 throw HttpStatus::BadArgument;
             
@@ -160,7 +160,7 @@ namespace {
         
         void    p_dev_meta_type_operators(WebHtml& h)
         {
-            const TypeInfo* type    = type_info(h);
+            const TypeMeta* type    = type_info(h);
             if(!type)
                 throw HttpStatus::BadArgument;
             
@@ -170,7 +170,7 @@ namespace {
 
         void    p_dev_meta_type_properties(WebHtml& h)
         {
-            const TypeInfo* type    = type_info(h);
+            const TypeMeta* type    = type_info(h);
             if(!type)
                 throw HttpStatus::BadArgument;
             
@@ -181,7 +181,7 @@ namespace {
         void p_dev_meta_types(WebHtml&h)
         {
             h.title() << "All Type Infos";
-            dev_table(h, TypeInfo::all());
+            dev_table(h, TypeMeta::all());
         }
 
         void p_dev_mimetypes(WebHtml&h)

@@ -10,7 +10,7 @@
 #include <yq/meta/OperatorInfo.hpp>
 #include <yq/meta/ObjectInfo.hpp>
 #include <yq/meta/PropertyInfo.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq/meta/TypeMeta.hpp>
 
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
@@ -229,7 +229,7 @@ namespace yq::mithril {
 ////////////////////////////////////////////////////////////////////////////////
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Dev<const TypeInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, Dev<const TypeMeta*> v)
         {
             if(v.data){
                 h << "<a href=\"/dev/meta/type?id=" << v.data->id() << "\">" << v.data->name() << "</a>";
@@ -239,7 +239,7 @@ namespace yq::mithril {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, DevID<const TypeInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, DevID<const TypeMeta*> v)
         {
             if(v.data){
                 h << "<a href=\"/dev/meta/type?id=" << v.data->id() << "\">" << v.data->id() << "</a>";
@@ -249,11 +249,11 @@ namespace yq::mithril {
             return h;
         }
         
-        void    dev_table(WebHtml&h, const std::vector<const TypeInfo*>& types)
+        void    dev_table(WebHtml&h, const std::vector<const TypeMeta*>& types)
         {
             auto ta = h.table();
             ta.row().header("ID").header("Name").header("Size").header("Description").header("Stream?").header("Print?").header("Parse?");
-            for(const TypeInfo* ti : types){
+            for(const TypeMeta* ti : types){
                 if(!ti)
                     continue;
                 

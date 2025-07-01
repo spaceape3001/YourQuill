@@ -39,7 +39,7 @@
 
 
 #include <yq/meta/ObjectInfo.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq/meta/TypeMeta.hpp>
 
 #include <yq/stream/Text.hpp>
 

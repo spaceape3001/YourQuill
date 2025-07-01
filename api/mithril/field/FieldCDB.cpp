@@ -7,7 +7,7 @@
 #include <yq/container/ByteArray.hpp>
 //#include <0/basic/CollectionUtils.hpp>
 #include <yq/file/FileUtils.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq/meta/TypeMeta.hpp>
 #include <mithril/logging.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/field/FieldFile.hpp>

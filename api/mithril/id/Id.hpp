@@ -99,9 +99,9 @@ namespace yq::mithril {
         //! \note may be empty
         static std::string_view         type_name(IdTypeId);
         
-        //! TypeInfo for id type
+        //! TypeMeta for id type
         //! \note may come back NULL
-        static const TypeInfo*          type_info(IdTypeId);
+        static const TypeMeta*          type_info(IdTypeId);
         
         //! Base types for id type
         static IdTypes                  base_types(IdTypeId);
@@ -209,7 +209,7 @@ namespace yq::mithril {
         return ret;
     }
     
-    std::set<id_t>                  ids_for(const std::vector<const TypeInfo*>&);
+    std::set<id_t>                  ids_for(const std::vector<const TypeMeta*>&);
 
     /*! \brief Blindly remaps a vector of id-objects
     */

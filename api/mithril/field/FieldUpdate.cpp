@@ -128,12 +128,12 @@ namespace yq::mithril::update {
         return ret;
     }
 
-    TypeInfoSet UField::enum_dataTypes() const
+    TypeMetaSet UField::enum_dataTypes() const
     {
-        TypeInfoSet ret;
+        TypeMetaSet ret;
         if(def && x){
             for(std::string_view s : def->types){
-                const TypeInfo* ti  = TypeInfo::find(s);
+                const TypeMeta* ti  = TypeMeta::find(s);
                 if(!ti){
                     yInfo() << "Invalid data type '" << s << "' specified in field " << key;
                     continue;
@@ -238,11 +238,11 @@ namespace yq::mithril::update {
         static thread_local CacheQuery iDataType("INSERT INTO FDataTypes (field, type) VALUES (?,?)");
         static thread_local CacheQuery dDataType("DELETE FROM FDataTypes WHERE field=? AND type=?");
         
-        TypeInfoSet them    = enum_dataTypes();
+        TypeMetaSet them    = enum_dataTypes();
         auto chg        = add_remove(dataTypes, them);
-        for(const TypeInfo* ti : chg.added)
+        for(const TypeMeta* ti : chg.added)
             iDataType.exec(id, ti->id());
-        for(const TypeInfo* ti : chg.removed)
+        for(const TypeMeta* ti : chg.removed)
             dDataType.exec(id, ti->id());
         dataTypes = them;
     }

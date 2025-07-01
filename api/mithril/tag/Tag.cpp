@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "TagCDB.hpp"
-#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 #include <mithril/notify/Notifier.hxx>
 

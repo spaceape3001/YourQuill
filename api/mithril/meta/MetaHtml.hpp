@@ -18,7 +18,7 @@
 namespace yq {
     struct ObjectInfo;
     class PropertyInfo;
-    struct TypeInfo;
+    struct TypeMeta;
 }
 
 namespace yq::mithril {
@@ -56,9 +56,9 @@ namespace yq::mithril {
     }
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&, DevID<const TypeInfo*>);
-        WebHtml&    operator<<(WebHtml&, Dev<const TypeInfo*>);
-        void    dev_table(WebHtml&, const std::vector<const TypeInfo*>&);
+        WebHtml&    operator<<(WebHtml&, DevID<const TypeMeta*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const TypeMeta*>);
+        void    dev_table(WebHtml&, const std::vector<const TypeMeta*>&);
         
     }
 

@@ -6,7 +6,7 @@
 
 #include <mithril/id/Id.hpp>
 #include <mithril/id/id_high.hpp>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq/meta/TypeMeta.hpp>
 #include <yq/math/Counter.hpp>
 #include <tbb/spin_mutex.h>
 
@@ -129,10 +129,10 @@ namespace yq::mithril {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-    std::set<uint64_t>      ids_for(const std::vector<const TypeInfo*>&types)
+    std::set<uint64_t>      ids_for(const std::vector<const TypeMeta*>&types)
     {
         std::set<uint64_t>  ret;
-        for(const TypeInfo* ti : types){
+        for(const TypeMeta* ti : types){
             if(!ti)
                 continue;
             ret.insert(ti->id());

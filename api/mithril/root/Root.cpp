@@ -6,7 +6,7 @@
 
 #include <mithril/root/Root.hpp>
 #include <mithril/root/RootCDB.hpp>
-#include <yq/meta/TypeInfoWriter.hpp>
+#include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Root)

@@ -92,7 +92,7 @@ namespace {
                 for(Class c2 : cdb::derived_classes(fc))
                     x.types.to.insert(c2);
                 
-                const TypeInfo* ti  = TypeInfo::find(s);
+                const TypeMeta* ti  = TypeMeta::find(s);
                 if(ti)
                     decl(MetaId(ti->id()));
             }

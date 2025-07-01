@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <0/meta/TypeInfo.hpp>
+#include <0/meta/TypeMeta.hpp>
 #include <mithril/id/Id.hpp>
 
 namespace yq::mithril {
@@ -16,12 +16,12 @@ namespace yq::mithril {
         Used for maps, the lookup for an ID type of key.
     */
     struct ById {
-        static MetaBase::id_t   id_for(const TypeInfo* t)
+        static MetaBase::id_t   id_for(const TypeMeta* t)
         {
             return t ? t->id() : 0;
         }
         
-        bool    operator()(const TypeInfo* a, const TypeInfo* b) const
+        bool    operator()(const TypeMeta* a, const TypeMeta* b) const
         {
             return id_for(a) < id_for(b);
         }

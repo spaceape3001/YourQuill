@@ -45,7 +45,7 @@ namespace {
 #include <yq/stream/Bytes.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/shape/Size2.hxx>
-#include <yq/meta/TypeInfo.hpp>
+#include <yq/meta/TypeMeta.hpp>
 
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomDiff.hpp>
@@ -105,7 +105,7 @@ using namespace yq::mithril;
 //#include <yq/core/BasicApp.hpp>
 //#include <0/basic/CollectionUtils.hpp>
 
-//#include <yq/meta/TypeInfo.hpp>
+//#include <yq/meta/TypeMeta.hpp>
 
 
 
