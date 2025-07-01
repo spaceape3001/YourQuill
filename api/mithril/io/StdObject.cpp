@@ -11,9 +11,9 @@
 #include <yq/stream/Text.hpp>
 
 namespace yq::mithril {
-    Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectInfo& base)
+    Ref<StdObject>   StdObject::load(const KeyValue& keyvalue, const ObjectMeta& base)
     {
-        const ObjectInfo*   obj = ObjectInfo::find(keyvalue.data);
+        const ObjectMeta*   obj = ObjectMeta::find(keyvalue.data);
         if(!obj)
             return Ref<StdObject>();
         if(obj->is_abstract() || !obj->is_base(base))
@@ -29,7 +29,7 @@ namespace yq::mithril {
 
     bool    StdObject::read(const KeyValue& kvs)
     {
-        const ObjectInfo&   info = metaInfo();
+        const ObjectMeta&   info = metaInfo();
         for(auto * pi : info.properties(true).all){
             if(pi && pi->is_state() && !pi->is_static() && pi->setter()){
                 const KeyValue* a   = kvs.first(pi->name());
@@ -44,7 +44,7 @@ namespace yq::mithril {
     
     bool    StdObject::save(KeyValue& kvs) const
     {
-        const ObjectInfo&   info = metaInfo();
+        const ObjectMeta&   info = metaInfo();
         kvs.data        = info.name();
         
         for(auto * pi : info.properties(true).all){

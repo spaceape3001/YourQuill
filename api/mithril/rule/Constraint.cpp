@@ -7,7 +7,7 @@
 #include <mithril/rule/Constraint.hpp>
 #include <mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
-#include <yq/meta/ObjectInfoWriter.hpp>
+#include <yq/meta/ObjectMetaWriter.hpp>
 
 YQ_OBJECT_IMPLEMENT(yq::mithril::Constraint)
 
@@ -28,7 +28,7 @@ namespace yq::mithril {
 
     Ref<Constraint>     x_constraint(const XmlNode& xn)
     {
-        const ObjectInfo*   oi  = ObjectInfo::find(read_attribute(xn, szType, x_string));
+        const ObjectMeta*   oi  = ObjectMeta::find(read_attribute(xn, szType, x_string));
         if(!oi)
             return Ref<Constraint>();
         Object* obj         = oi->create();

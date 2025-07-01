@@ -31,7 +31,7 @@ namespace yq::mithril {
             \param[in] keyvalue Configuration (where "data" is assumed to be type)
             \param[in] bind     Minimum base class expected (will reject otherwise)
         */
-        static Ref<StdObject>   load(const KeyValue& keyvalue, const ObjectInfo& base = meta<StdObject>());
+        static Ref<StdObject>   load(const KeyValue& keyvalue, const ObjectMeta& base = meta<StdObject>());
         
         template <typename C>
         static Ref<C>           loadAs(const KeyValue& keyvalue)

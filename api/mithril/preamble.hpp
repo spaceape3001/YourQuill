@@ -16,7 +16,7 @@
 #include <utility>
 #include <variant>
 #include <vector>
-#include <yq/meta/InfoBinder.hpp>
+#include <yq/meta/MetaBinder.hpp>
 #include <yq/typedef/counter.hpp>
 #include <mithril/keywords.hpp>
 #include <mithril/typedef/metabase.hpp>

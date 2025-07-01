@@ -16,8 +16,8 @@
 #include <vector>
 
 namespace yq {
-    struct ObjectInfo;
-    class PropertyInfo;
+    struct ObjectMeta;
+    class PropertyMeta;
     struct TypeMeta;
 }
 
@@ -31,28 +31,28 @@ namespace yq::mithril {
     }
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&, DevID<const ObjectInfo*>);
-        WebHtml&    operator<<(WebHtml&, Dev<const ObjectInfo*>);
-        void    dev_table(WebHtml&, const std::vector<const ObjectInfo*>&);
+        WebHtml&    operator<<(WebHtml&, DevID<const ObjectMeta*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const ObjectMeta*>);
+        void    dev_table(WebHtml&, const std::vector<const ObjectMeta*>&);
         
     }
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&, DevID<const OperatorInfo*>);
-        WebHtml&    operator<<(WebHtml&, Dev<const OperatorInfo*>);
-        void    dev_table(WebHtml&, const std::vector<const OperatorInfo*>&);
+        WebHtml&    operator<<(WebHtml&, DevID<const OperatorMeta*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const OperatorMeta*>);
+        void    dev_table(WebHtml&, const std::vector<const OperatorMeta*>&);
     }
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&, DevID<const MethodInfo*>);
-        WebHtml&    operator<<(WebHtml&, Dev<const MethodInfo*>);
-        void    dev_table(WebHtml&, const std::vector<const MethodInfo*>&);
+        WebHtml&    operator<<(WebHtml&, DevID<const MethodMeta*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const MethodMeta*>);
+        void    dev_table(WebHtml&, const std::vector<const MethodMeta*>&);
     }
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&, DevID<const PropertyInfo*>);
-        WebHtml&    operator<<(WebHtml&, Dev<const PropertyInfo*>);
-        void    dev_table(WebHtml&, const std::vector<const PropertyInfo*>&);
+        WebHtml&    operator<<(WebHtml&, DevID<const PropertyMeta*>);
+        WebHtml&    operator<<(WebHtml&, Dev<const PropertyMeta*>);
+        void    dev_table(WebHtml&, const std::vector<const PropertyMeta*>&);
     }
 
     namespace html {

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "AutoReject.hpp"
-#include <yq/meta/ObjectInfoWriter.hpp>
+#include <yq/meta/ObjectMetaWriter.hpp>
 
 YQ_STD_OBJECT_IMPLEMENT(yq::mithril::auth::AutoReject)
 

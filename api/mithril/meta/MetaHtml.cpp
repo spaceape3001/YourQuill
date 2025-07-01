@@ -5,11 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/meta/MetaHtml.hpp>
-#include <yq/meta/ArgInfo.hpp>
-#include <yq/meta/MethodInfo.hpp>
-#include <yq/meta/OperatorInfo.hpp>
-#include <yq/meta/ObjectInfo.hpp>
-#include <yq/meta/PropertyInfo.hpp>
+#include <yq/meta/ArgMeta.hpp>
+#include <yq/meta/MethodMeta.hpp>
+#include <yq/meta/OperatorMeta.hpp>
+#include <yq/meta/ObjectMeta.hpp>
+#include <yq/meta/PropertyMeta.hpp>
 #include <yq/meta/TypeMeta.hpp>
 
 #include <mithril/web/WebContext.hpp>
@@ -52,7 +52,7 @@ namespace yq::mithril {
 ////////////////////////////////////////////////////////////////////////////////
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Dev<const MethodInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, Dev<const MethodMeta*> v)
         {
             if(v.data){
                 h << v.data->name();
@@ -63,7 +63,7 @@ namespace yq::mithril {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, DevID<const MethodInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, DevID<const MethodMeta*> v)
         {
             if(v.data){
                 h << v.data->id();
@@ -74,11 +74,11 @@ namespace yq::mithril {
             return h;
         }
         
-        void    dev_table(WebHtml&h, const std::vector<const MethodInfo*>& methods)
+        void    dev_table(WebHtml&h, const std::vector<const MethodMeta*>& methods)
         {
             auto ta = h.table();
             h << "<tr><th>ID</th><th>Name</th><th>Result</th><th>Const</th><th>Static</th><th>Description</th></tr>\n";
-            for(const MethodInfo* mi : methods){
+            for(const MethodMeta* mi : methods){
                 h << "<tr><td>"  << dev_id(mi) 
                   << "</td><td>" << dev(mi) 
                   << "</td><td>";
@@ -99,7 +99,7 @@ namespace yq::mithril {
 ////////////////////////////////////////////////////////////////////////////////
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Dev<const OperatorInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, Dev<const OperatorMeta*> v)
         {
             if(v.data){
                 h << v.data->name();
@@ -110,7 +110,7 @@ namespace yq::mithril {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, DevID<const OperatorInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, DevID<const OperatorMeta*> v)
         {
             if(v.data){
                 h << v.data->id();
@@ -121,11 +121,11 @@ namespace yq::mithril {
             return h;
         }
         
-        void    dev_table(WebHtml&h, const std::vector<const OperatorInfo*>& operators)
+        void    dev_table(WebHtml&h, const std::vector<const OperatorMeta*>& operators)
         {
             auto ta = h.table();
             h << "<tr><th>ID</th><th>Operator</th><th>Result</th><th>Const</th><th>Static</th><th>Description</th></tr>\n";
-            for(const OperatorInfo* mi : operators){
+            for(const OperatorMeta* mi : operators){
                 h << "<tr><td>"  << dev_id(mi) 
                   << "</td><td>" << key(mi->code())
                   << "</td><td>";
@@ -146,7 +146,7 @@ namespace yq::mithril {
 ////////////////////////////////////////////////////////////////////////////////
     
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Dev<const ObjectInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, Dev<const ObjectMeta*> v)
         {
             if(v.data){
                 h << "<a href=\"/dev/meta/object?id=" << v.data->id() << "\">" << v.data->name() << "</a>";
@@ -156,7 +156,7 @@ namespace yq::mithril {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, DevID<const ObjectInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, DevID<const ObjectMeta*> v)
         {
             if(v.data){
                 h << "<a href=\"/dev/meta/object?id=" << v.data->id() << "\">" << v.data->id() << "</a>";
@@ -166,11 +166,11 @@ namespace yq::mithril {
             return h;
         }
         
-        void    dev_table(WebHtml&h, const std::vector<const ObjectInfo*>& objects)
+        void    dev_table(WebHtml&h, const std::vector<const ObjectMeta*>& objects)
         {
             auto ta = h.table();
             h << "<tr><th>ID</th><th>Name</th><th>Base</th><th>Size</th><th>Description</th></tr>\n";
-            for(const ObjectInfo* ti : objects){
+            for(const ObjectMeta* ti : objects){
                 h << "<tr><td>"  << dev_id(ti) 
                   << "</td><td>" << dev(ti) 
                   << "</td><td>" << dev(ti->base()) 
@@ -186,7 +186,7 @@ namespace yq::mithril {
 ////////////////////////////////////////////////////////////////////////////////
 
     namespace html {
-        WebHtml&    operator<<(WebHtml&h, Dev<const PropertyInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, Dev<const PropertyMeta*> v)
         {
             if(v.data){
                 h << v.data->name();
@@ -197,7 +197,7 @@ namespace yq::mithril {
             return h;
         }
         
-        WebHtml&    operator<<(WebHtml&h, DevID<const PropertyInfo*> v)
+        WebHtml&    operator<<(WebHtml&h, DevID<const PropertyMeta*> v)
         {
             if(v.data){
                 h << v.data->id();
@@ -208,11 +208,11 @@ namespace yq::mithril {
             return h;
         }
         
-        void    dev_table(WebHtml&h, const std::vector<const PropertyInfo*>& objects)
+        void    dev_table(WebHtml&h, const std::vector<const PropertyMeta*>& objects)
         {
             auto ta = h.table();
             h << "<tr><th>ID</th><th>Name</th><th>Type</th><th>State</th><th>Static</th><th>Description</th></tr>\n";
-            for(const PropertyInfo* ti : objects){
+            for(const PropertyMeta* ti : objects){
                 h << "<tr><td>"  << dev_id(ti) 
                   << "</td><td>" << dev(ti) 
                   << "</td><td>" << dev(&ti->type()) 

@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/meta/MetaTypeArg.hpp>
-#include <yq/meta/ArgInfo.hpp>
+#include <yq/meta/ArgMeta.hpp>
 #include <yq/meta/TypeMeta.hpp>
 
 #include <mithril/web/WebContext.hpp>

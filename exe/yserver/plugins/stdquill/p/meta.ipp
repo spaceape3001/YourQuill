@@ -51,7 +51,7 @@ namespace {
 
         void p_dev_meta_object(WebHtml&h)
         {
-            const ObjectInfo*   obj = object_info(h);
+            const ObjectMeta*   obj = object_info(h);
             if(!obj)
                 throw HttpStatus::BadArgument;
                 
@@ -68,7 +68,7 @@ namespace {
         
         void p_dev_meta_object_all_base(WebHtml&h)
         {
-            const ObjectInfo*   obj = object_info(h);
+            const ObjectMeta*   obj = object_info(h);
             if(!obj)
                 throw HttpStatus::BadArgument;
                 
@@ -78,7 +78,7 @@ namespace {
 
         void p_dev_meta_object_all_derived(WebHtml&h)
         {
-            const ObjectInfo*   obj = object_info(h);
+            const ObjectMeta*   obj = object_info(h);
             if(!obj)
                 throw HttpStatus::BadArgument;
                 
@@ -88,7 +88,7 @@ namespace {
 
         void p_dev_meta_object_all_properties(WebHtml&h)
         {
-            const ObjectInfo*   obj = object_info(h);
+            const ObjectMeta*   obj = object_info(h);
             if(!obj)
                 throw HttpStatus::BadArgument;
                 
@@ -98,7 +98,7 @@ namespace {
 
         void p_dev_meta_object_derived(WebHtml&h)
         {
-            const ObjectInfo*   obj = object_info(h);
+            const ObjectMeta*   obj = object_info(h);
             if(!obj)
                 throw HttpStatus::BadArgument;
                 
@@ -108,7 +108,7 @@ namespace {
 
         void p_dev_meta_object_properties(WebHtml&h)
         {
-            const ObjectInfo*   obj = object_info(h);
+            const ObjectMeta*   obj = object_info(h);
             if(!obj)
                 throw HttpStatus::BadArgument;
                 
@@ -119,7 +119,7 @@ namespace {
         void    p_dev_meta_objects(WebHtml&h)
         {
             h.title() << "All Meta Objects";
-            dev_table(h, ObjectInfo::all());
+            dev_table(h, ObjectMeta::all());
         }
 
         void    p_dev_meta_type(WebHtml& h)

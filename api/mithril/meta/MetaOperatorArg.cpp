@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <mithril/meta/MetaOperatorArg.hpp>
-#include <yq/meta/ArgInfo.hpp>
-#include <yq/meta/OperatorInfo.hpp>
+#include <yq/meta/ArgMeta.hpp>
+#include <yq/meta/OperatorMeta.hpp>
 #include <yq/meta/Meta.hpp>
 
 #include <mithril/web/WebContext.hpp>
@@ -14,12 +14,12 @@
 #include <yq/text/transform.hpp>
 
 namespace yq::mithril::arg {
-    const OperatorInfo* operator_info(std::string_view  arg_string)
+    const OperatorMeta* operator_info(std::string_view  arg_string)
     {
         return operator_info_id(arg_string);
     }
     
-    const OperatorInfo* operator_info(const WebContext&ctx, bool *detected)
+    const OperatorMeta* operator_info(const WebContext&ctx, bool *detected)
     {
         if(detected)
             *detected   = false;
@@ -40,7 +40,7 @@ namespace yq::mithril::arg {
         return nullptr;
     }
     
-    const OperatorInfo* operator_info(const WebContext&ctx, std::string_view arg_name, bool *detected)
+    const OperatorMeta* operator_info(const WebContext&ctx, std::string_view arg_name, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -48,7 +48,7 @@ namespace yq::mithril::arg {
         return operator_info(arg_string);
     }
     
-    const OperatorInfo* operator_info(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+    const OperatorMeta* operator_info(const WebContext& ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)
@@ -56,7 +56,7 @@ namespace yq::mithril::arg {
         return operator_info(arg_string);
     }
 
-    const OperatorInfo* operator_info_id(std::string_view arg_string)
+    const OperatorMeta* operator_info_id(std::string_view arg_string)
     {
         auto vv = to_uint(arg_string);
         if(!vv)
@@ -64,12 +64,12 @@ namespace yq::mithril::arg {
             
         const yq::Meta* m   = yq::Meta::lookup(*vv);
         if(m && m->is_operator())
-            return static_cast<const OperatorInfo*>(m);
+            return static_cast<const OperatorMeta*>(m);
 
         return nullptr;
     }
 
-    const OperatorInfo* operator_info_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
+    const OperatorMeta* operator_info_id(const WebContext&ctx, std::string_view arg_name, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_name);
         if(detected)
@@ -77,7 +77,7 @@ namespace yq::mithril::arg {
         return operator_info_id(arg_string);
     }
     
-    const OperatorInfo* operator_info_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
+    const OperatorMeta* operator_info_id(const WebContext&ctx, std::initializer_list<std::string_view> arg_names, bool *detected)
     {
         std::string     arg_string = ctx.find_query(arg_names);
         if(detected)

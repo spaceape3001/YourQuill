@@ -38,7 +38,7 @@
 #include <yq/sql/SqlQuery.hpp>
 
 
-#include <yq/meta/ObjectInfo.hpp>
+#include <yq/meta/ObjectMeta.hpp>
 #include <yq/meta/TypeMeta.hpp>
 
 #include <yq/stream/Text.hpp>
