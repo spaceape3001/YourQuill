@@ -175,7 +175,7 @@ namespace {
             reg_webpage<p_admin_users>("/admin/users").label("Users")
         });
         
-
+        reg_webpage("/admin/**", make_dir_set(".admin"sv, "www/admin"sv));
 
         reg_webpage<x_markdown>("*.md");
 

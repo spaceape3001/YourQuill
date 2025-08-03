@@ -91,14 +91,14 @@ bool    initialize(const char* wfile)
     
     if(!configData.port)
         configData.port = wksp::port();
-    
 
-    size_t n = load_plugin_dir("plugin");
-    n += load_plugin_dir("plugin/yserver");
+    std::filesystem::path   plugin_dir  = BasicApp::app_dir() / "plugin" / "yserver";
+
+    size_t n = load_plugin_dir(plugin_dir);
     DelayInit::init_all();
     auto& templates = wksp::templates();
     DelayInit::init_all();
-    for_all_children("plugin/yserver", dir::NO_FILES, [&](const std::filesystem::path& subdir){
+    for_all_children(plugin_dir, dir::NO_FILES, [&](const std::filesystem::path& subdir){
         std::string s   = subdir.filename().string();
         if(templates.contains(s)){
             n += load_plugin_dir(subdir);
