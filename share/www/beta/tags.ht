@@ -1,0 +1,95 @@
+#! Tags
+
+<table id="tags">
+</table>
+
+<script>
+	var tags 	= [];
+	var	cols	= 3;
+	var layout	= TableLayout.VertFirst;
+	
+	//var title = document.getElementById('id');
+	//title.innerHTML = "Hello World!";
+	
+	function insertIconText(where, tag) {
+		
+	
+		var tdi	= document.createElement("td");
+		where.appendChild(tdi);
+		tdi.innerText = "(icon)";
+		
+		var tdn = document.createElement("td");
+		where.appendChild(tdn);
+		var name 		= tdn.appendChild(document.createElement("b"))
+							 .appendChild(document.createElement("div"));
+		name.setAttribute('id', `name${tag.id}`);
+		name.innerText	= tag.name;
+		
+		var key			= tdn.appendChild(document.createElement("pre"))
+							 .appendChild(document.createElement("div"));
+		key.setAttribute('id', `key${tag.id}`);
+		key.innerText   = tag.key;
+		
+		var brief 		= tdn.appendChild(document.createElement("small"))
+							 .appendChild(document.createElement("i"))
+							 .appendChild(document.createElement("div"));
+		brief.setAttribute('id', `brief${tag.id}`);
+		brief.innerText	= tag.brief;
+	};
+	
+	function insertDetailed(where, tag){
+	}
+	
+	function update() {
+		fetch(pathRewrite(window.location, "/api/tags"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+				tags			= document.getElementById('tags');
+				tags.innerHTML	= '';	// clear the old
+				
+				switch(layout){
+				case TableLayout.VertFirst:
+					{
+						var rcnt	= 1 + (data.tags.length/cols);
+				console.log(rcnt);
+						for(var r=0;r<rcnt;++r){
+							var trow	= document.createElement('tr');
+							tags.appendChild(trow);
+							for(var c=0;c<cols;++c){
+								var idx	= r+c*rcnt;
+								if(idx >= data.tags.length)
+									continue;
+								insertIconText(trow, data.tags[idx]);
+							}
+						}
+					}
+					break;
+				case TableLayout.WrapHorz:
+					{
+						var rcnt	= 1 + (data.tags.length/cols);
+						for(var r=0;r<rcnt;++r){
+							var trow	= document.createElement('tr');
+							tags.appendChild(trow);
+						}
+					}
+					break;
+				case TableLayout.Detailed:
+					for(var idx =0; idx<data.tags.length; ++idx){
+						var trow	= document.createElement('tr');
+						tags.appendChild(trow);
+						
+					}
+					break;
+				}
+			}
+		);
+	}
+	
+	update();
+	
+</script>
+
+
+<script>
+</script>

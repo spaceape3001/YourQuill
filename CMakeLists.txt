@@ -27,5 +27,8 @@ find_package(ImageMagick COMPONENTS Magick++)
 if(Build_Vulkan)
     vulqan_data(data)
 endif()
+if(Build_Qt6)
+    qt_data(data)
+endif()
 
 YQRepo()

@@ -42,6 +42,8 @@
 using namespace yq;
 using namespace yq::mithril;
 
+#define DEBUG_DISPATCH 1
+
 
 namespace asio {
     const_buffer    buffer(const std::shared_ptr<ByteArray>& dp)

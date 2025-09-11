@@ -6,4 +6,4 @@
 
 add_subdirectory(stdquill)
 add_subdirectory(stdplot)
-add_subdirectory(b3web)
+add_subdirectory(artweb)

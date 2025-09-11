@@ -1,0 +1,15 @@
+#! Test
+
+<h2> This is a test! </h2>
+
+Another test
+
+<div id="hideme">Hide Me</div>
+<div id="URL"></div>
+
+<script>
+	var link=document.getElementById("hideme");
+	link.style.visibility='hidden';
+	var url=document.getElementById("URL");
+	url.innerHTML = document.URL;
+</script>

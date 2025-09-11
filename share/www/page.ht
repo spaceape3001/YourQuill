@@ -36,7 +36,7 @@
 		        <DIV id="NoJavascript"><B>No Javascript: Read Only Mode</B></DIV>
 			</TR>
 			<TR>
-				<TH COLSPAN="2" ALIGN="center" VALIGN="center"><H1>{{TITLE}}</H1></TH>
+				<TH COLSPAN="2" ALIGN="center" VALIGN="center"><H1 id="title">{{TITLE}}</H1></TH>
 			</TR>
 			<TR>
 				<TD COLSPAN="3"><HR></TD>

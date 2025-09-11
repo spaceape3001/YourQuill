@@ -1,0 +1,31 @@
+#! Tag Viewer
+
+<table align="right" width="25%">
+	<tr><td>ID</td><td><span id="id" >(id)</span></td></tr>
+	<tr><td>Key</td><td><span id="key">(key)</span></td></tr>
+	<tr><td>Brief</td><td><span id="brief">(brief)</span></td></tr>
+</table>
+
+<script>
+	var url = new URL(window.location.toString());
+	url.pathname	= "/api/tag";
+	var tag;
+	
+	//var title = document.getElementById('id');
+	//title.innerHTML = "Hello World!";
+	
+	fetch(new URL(url))
+		.then((response) => response.json())
+		.then((data) => 
+		{
+			tag = data;
+			//console.log(leaf);
+			
+			document.getElementById('id').innerText		= tag.id;
+			document.getElementById('key').innerText	= tag.key;
+			document.getElementById('brief').innerText	= tag.brief;
+			//document.getElementById('title').innerText	= leaf.title;
+		}
+	);
+</script>
+
