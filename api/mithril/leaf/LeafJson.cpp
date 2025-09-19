@@ -7,7 +7,7 @@
 #include <mithril/leaf/Leaf.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/leaf/LeafJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Leaf x)

@@ -16,7 +16,10 @@
 	
 		var tdi	= document.createElement("td");
 		where.appendChild(tdi);
-		tdi.innerText = "(icon)";
+        
+        if(tag.icon){
+            tdi.innerText = "(icon)";
+        }
 		
 		var tdn = document.createElement("td");
 		where.appendChild(tdn);
@@ -39,49 +42,55 @@
 	
 	function insertDetailed(where, tag){
 	}
+    
+    
+    function relayout()
+    {
+            var tt			= document.getElementById('tags');
+            tt.innerHTML	= '';	// clear the old
+            
+            switch(layout){
+            case TableLayout.VertFirst:
+                {
+                    const rcnt	= Math.trunc((tags.length + cols - 1)/cols);
+                    for(var r=0;r<rcnt;++r){
+                        var trow	= document.createElement('tr');
+                        tt.appendChild(trow);
+                        for(var c=0;c<cols;++c){
+                            var idx	= r+c*rcnt;
+                            if(idx >= tags.length)
+                                continue;
+                            insertIconText(trow, tags[idx]);
+                        }
+                    }
+                }
+                break;
+            case TableLayout.WrapHorz:
+                {
+                    const rcnt	= Math.trunc((tags.length + cols - 1)/cols);
+                    for(var r=0;r<rcnt;++r){
+                        var trow	= document.createElement('tr');
+                        tt.appendChild(trow);
+                    }
+                }
+                break;
+            case TableLayout.Detailed:
+                for(var idx =0; idx<tags.length; ++idx){
+                    var trow	= document.createElement('tr');
+                    tt.appendChild(trow);
+                    
+                }
+                break;
+            }
+    }
 	
 	function update() {
 		fetch(pathRewrite(window.location, "/api/tags"))
 			.then((response) => response.json())
 			.then((data) => 
 			{
-				tags			= document.getElementById('tags');
-				tags.innerHTML	= '';	// clear the old
-				
-				switch(layout){
-				case TableLayout.VertFirst:
-					{
-						var rcnt	= 1 + (data.tags.length/cols);
-				console.log(rcnt);
-						for(var r=0;r<rcnt;++r){
-							var trow	= document.createElement('tr');
-							tags.appendChild(trow);
-							for(var c=0;c<cols;++c){
-								var idx	= r+c*rcnt;
-								if(idx >= data.tags.length)
-									continue;
-								insertIconText(trow, data.tags[idx]);
-							}
-						}
-					}
-					break;
-				case TableLayout.WrapHorz:
-					{
-						var rcnt	= 1 + (data.tags.length/cols);
-						for(var r=0;r<rcnt;++r){
-							var trow	= document.createElement('tr');
-							tags.appendChild(trow);
-						}
-					}
-					break;
-				case TableLayout.Detailed:
-					for(var idx =0; idx<data.tags.length; ++idx){
-						var trow	= document.createElement('tr');
-						tags.appendChild(trow);
-						
-					}
-					break;
-				}
+                tags            = data.tags;
+                relayout();
 			}
 		);
 	}

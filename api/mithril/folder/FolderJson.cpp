@@ -8,7 +8,7 @@
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithril/folder/FolderInfo.hpp>
 #include <mithril/folder/FolderJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Folder x)

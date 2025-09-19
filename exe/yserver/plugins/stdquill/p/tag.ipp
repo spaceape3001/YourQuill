@@ -7,6 +7,7 @@
 #pragma once
 
 #include <yq/core/DelayInit.hpp>
+#include <mithril/image/ImageHtml.hpp>
 #include <mithril/root/RootDir.hpp>
 #include <mithril/root/RootPost.hpp>
 #include <mithril/tag/Tag.hpp>

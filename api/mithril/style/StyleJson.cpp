@@ -8,7 +8,7 @@
 #include <mithril/style/StyleCDB.hpp>
 #include <mithril/style/StyleInfo.hpp>
 #include <mithril/style/StyleJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Style x)

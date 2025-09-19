@@ -9,7 +9,7 @@
 #include <mithril/atom/AtomJson.hpp>
 
 #include <yq/typedef/json.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Atom x)

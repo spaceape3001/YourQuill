@@ -8,7 +8,7 @@
 #include <mithril/field/FieldCDB.hpp>
 #include <mithril/field/FieldInfo.hpp>
 #include <mithril/field/FieldJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Field x)

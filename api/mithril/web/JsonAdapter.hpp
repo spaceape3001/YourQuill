@@ -9,7 +9,7 @@
 #include "WebPage.hpp"
 #include "WebContext.hpp"
 #include <yq/typedef/json.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
 

@@ -7,7 +7,7 @@
 #include <mithril/graphviz/Graphviz.hpp>
 #include <mithril/graphviz/GraphvizCDB.hpp>
 #include <mithril/graphviz/GraphvizJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Graphviz x)

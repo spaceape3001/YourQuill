@@ -7,7 +7,7 @@
 #include <mithril/group/Group.hpp>
 #include <mithril/group/GroupCDB.hpp>
 #include <mithril/group/GroupJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Group x)

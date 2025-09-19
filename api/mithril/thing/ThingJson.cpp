@@ -7,7 +7,7 @@
 #include <mithril/thing/Thing.hpp>
 #include <mithril/thing/ThingCDB.hpp>
 #include <mithril/thing/ThingJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Thing x)

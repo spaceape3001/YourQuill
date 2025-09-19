@@ -10,7 +10,7 @@
 #include <mithril/fragment/Fragment.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/fragment/FragmentJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Fragment x)

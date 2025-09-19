@@ -7,7 +7,7 @@
 #include <mithril/value/Value.hpp>
 #include <mithril/value/ValueCDB.hpp>
 #include <mithril/value/ValueJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Value x)

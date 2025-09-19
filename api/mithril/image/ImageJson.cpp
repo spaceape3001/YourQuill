@@ -7,7 +7,7 @@
 #include <mithril/image/Image.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <mithril/image/ImageJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Image x)

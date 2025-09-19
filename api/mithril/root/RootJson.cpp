@@ -8,7 +8,7 @@
 #include <mithril/root/RootDir.hpp>
 #include <mithril/root/RootCDB.hpp>
 #include <mithril/root/RootJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(const RootDir*rt)

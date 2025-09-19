@@ -7,7 +7,7 @@
 #include <mithril/character/Character.hpp>
 #include <mithril/character/CharacterCDB.hpp>
 #include <mithril/character/CharacterJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Character x)

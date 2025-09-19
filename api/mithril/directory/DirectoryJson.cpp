@@ -8,7 +8,7 @@
 #include <mithril/directory/DirectoryJson.hpp>
 #include <mithril/directory/DirectoryCDB.hpp>
 //#include <mithril/directory/DirectoryInfo.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Directory x)

@@ -7,7 +7,7 @@
 #include <mithril/place/Place.hpp>
 #include <mithril/place/PlaceCDB.hpp>
 #include <mithril/place/PlaceJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Place x)

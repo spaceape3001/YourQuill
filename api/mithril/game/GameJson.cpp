@@ -7,7 +7,7 @@
 #include <mithril/game/Game.hpp>
 #include <mithril/game/GameCDB.hpp>
 #include <mithril/game/GameJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Game x)

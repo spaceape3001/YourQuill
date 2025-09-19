@@ -8,7 +8,7 @@
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithril/category/CategoryInfo.hpp>
 #include <mithril/category/CategoryJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Category x)

@@ -7,7 +7,7 @@
 #include <mithril/tag/Tag.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/tag/TagJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Tag x)

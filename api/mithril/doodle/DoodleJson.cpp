@@ -8,7 +8,7 @@
 #include <mithril/doodle/DoodleCDB.hpp>
 #include <mithril/doodle/DoodleInfo.hpp>
 #include <mithril/doodle/DoodleJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Doodle x)

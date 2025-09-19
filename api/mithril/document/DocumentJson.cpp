@@ -7,7 +7,7 @@
 #include <mithril/document/Document.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/document/DocumentJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Document x)

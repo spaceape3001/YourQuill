@@ -7,7 +7,7 @@
 #include <mithril/organization/Organization.hpp>
 #include <mithril/organization/OrganizationCDB.hpp>
 #include <mithril/organization/OrganizationJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Organization x)

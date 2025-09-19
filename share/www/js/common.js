@@ -16,6 +16,64 @@ function pathRewrite(url, path){
 	return ret;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+
+class Obj {
+	id = 0;
+	key	= '';
+	data;
+	
+	constructor(pn, arg=false)
+	{
+	}
+};
+
+class Directory extends Obj {
+	constructor(arg = false)
+	{
+		super("/api/directory", arg);
+	}
+};
+
+
+class Tag extends Obj {
+	constructor(arg = false)
+	{
+		super("/api/tag", arg);
+	}
+};
+
+class Leaf extends Obj {
+	constructor(arg = false)
+	{
+		super("/api/leaf", arg);
+	}
+};
+
+class Document extends Obj {
+	constructor(arg = false)
+	{
+		super("/api/document", arg);
+	}
+};
+
+class Fragment extends Obj {
+	constructor(arg = false)
+	{
+		super("/api/fragment", arg);
+	}
+};
+
+class Folder extends Obj {
+	constructor(arg = false)
+	{
+		super("/api/folder", arg);
+	}
+};
+
+
+
 ////////////////////////////////////////////////////////////////////////////////
 
 function fetchJSON(url) {

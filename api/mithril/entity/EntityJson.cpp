@@ -7,7 +7,7 @@
 #include <mithril/entity/Entity.hpp>
 #include <mithril/entity/EntityCDB.hpp>
 #include <mithril/entity/EntityJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Entity x)

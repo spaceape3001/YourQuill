@@ -7,7 +7,7 @@
 #include <mithril/attribute/Attribute.hpp>
 #include <mithril/attribute/AttributeCDB.hpp>
 #include <mithril/attribute/AttributeJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Attribute x)

@@ -8,7 +8,7 @@
 #include <mithril/novel/Novel.hpp>
 #include <mithril/novel/NovelCDB.hpp>
 #include <mithril/novel/NovelJson.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Novel x)
