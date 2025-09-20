@@ -8,6 +8,7 @@
 #include <mithril/novel/Novel.hpp>
 #include <mithril/novel/NovelCDB.hpp>
 #include <mithril/novel/NovelJson.hpp>
+#include <mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

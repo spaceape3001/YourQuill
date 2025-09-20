@@ -9,6 +9,7 @@
 #include <mithril/book/BookJson.hpp>
 #include <mithril/book/BookSearch.hpp>
 #include <yq/typedef/string.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace {
 
@@ -50,25 +51,6 @@ namespace {
     //  -----------------------------------------------------------------------
     //      PAGES
     //  -----------------------------------------------------------------------
-
-        void p_books(WebHtml& h)
-        {
-            //  Search parameters go here... execute the search
-            std::vector<Book>  books   = all_books(Sorted::YES);
-            
-            
-            //  Form the title... 
-            h.title() << "Books";
-            
-            h << "<p><i>(Search Bar will go here)</i></p>\n";
-            
-            //  And results
-            
-            
-            
-            dev_table(h, books);
-        }
-
     
     //  -----------------------------------------------------------------------
     //      ADMIN
@@ -95,8 +77,9 @@ namespace {
             reg_webpage<p_api_book_key>("/api/book/key"sv).argument("ID", "Book ID");
             reg_webpage<p_api_books>("/api/books"sv);
             
-            reg_webpage<p_books>("/books");
             reg_webpage<p_dev_books>("/dev/books");
+
+            reg_webtemplate("/books", wksp::shared("www/books.ht"sv));
         }
         
 }

@@ -1,8 +1,8 @@
 
-class Tag extends Obj {
+class Event extends Obj {
 	constructor(arg = false)
 	{
-		super("/api/tag", arg);
+		super("/api/event", arg);
 	}
     
     icon(){
@@ -10,7 +10,7 @@ class Tag extends Obj {
     }
 
     title(){
-        return this.data.name;
+        return this.data.title;
     }
     
     brief(){
@@ -18,10 +18,9 @@ class Tag extends Obj {
     }
 };
 
-
-function toTags(data) {
+function toEvents(data) {
     var ret = [];
     for( const x of data)
-        ret.push(new Tag(x));
+        ret.push(new Event(x));
     return ret;
 }

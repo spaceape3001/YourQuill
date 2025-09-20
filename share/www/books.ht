@@ -1,28 +1,30 @@
-#! Classes
+#! Books
 
-<table id="classes">
+<table id="books">
+    <tr><td> LOADING...
 </table>
 
+<script src="/js/books.js"></script>
 <script>
-	var classes = [];
-	var	cols	= 3;
+	var books 	= [];
+	var	cols	= 1;
 	var layout	= TableLayout.VertFirst;
 	
     
     function relayout()
     {
-        var tt			= document.getElementById('classes');
+        var tt			= document.getElementById('books');
         tt.innerHTML	= '';	// clear the old
         
         switch(layout){
         case TableLayout.VertFirst:
-            vertFirstCardTable(tt, classes, cols);
+            vertFirstCardTable(tt, books, cols);
             break;
         case TableLayout.WrapHorz:
-            wrapHorzCardTable(tt, classes, cols);
+            wrapHorzCardTable(tt, books, cols);
             break;
         case TableLayout.Detailed:
-            for(var idx =0; idx<classes.length; ++idx){
+            for(var idx =0; idx<books.length; ++idx){
                 var trow	= document.createElement('tr');
                 tt.appendChild(trow);
                 
@@ -32,11 +34,11 @@
     }
 	
 	function update() {
-		fetch(pathRewrite(window.location, "/api/classes"))
+		fetch(pathRewrite(window.location, "/api/books"))
 			.then((response) => response.json())
 			.then((data) => 
 			{
-                classes         = toClasses(data.classes);
+                books            = toBooks(data.books);
                 relayout();
 			}
 		);

@@ -19,6 +19,11 @@ namespace yq::mithril::cdb {
         return Atom{ ch.id };
     }
 
+    std::string         brief(Place p)
+    {
+        return brief(atom(p));
+    }
+
     bool  exists(Place ch)
     {
         return is(Atom(ch.id), place_class());

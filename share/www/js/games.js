@@ -1,8 +1,8 @@
 
-class Tag extends Obj {
+class Game extends Obj {
 	constructor(arg = false)
 	{
-		super("/api/tag", arg);
+		super("/api/game", arg);
 	}
     
     icon(){
@@ -10,7 +10,7 @@ class Tag extends Obj {
     }
 
     title(){
-        return this.data.name;
+        return this.data.title;
     }
     
     brief(){
@@ -18,10 +18,10 @@ class Tag extends Obj {
     }
 };
 
-
-function toTags(data) {
+function toGames(data) {
     var ret = [];
     for( const x of data)
-        ret.push(new Tag(x));
+        ret.push(new Game(x));
     return ret;
 }
+

@@ -8,6 +8,7 @@
 
 #include <mithril/character/CharacterJson.hpp>
 #include <mithril/character/CharacterSearch.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace {
 
@@ -50,23 +51,6 @@ namespace {
     //      PAGES
     //  -----------------------------------------------------------------------
     
-        void    p_characters(WebHtml& h)
-        {
-            //  Search parameters go here... execute the search
-            std::vector<Character>  chars   = all_characters(Sorted::YES);
-            
-            
-            //  Form the title... 
-            h.title() << "Characters";
-            
-            h << "<p><i>(Search Bar will go here)</i></p>\n";
-            
-            //  And results
-            
-            
-            dev_table(h, chars);
-        }
-
     //  -----------------------------------------------------------------------
     //      ADMIN
     //  -----------------------------------------------------------------------
@@ -91,9 +75,10 @@ namespace {
             reg_webpage<p_api_character_key>("/api/character/key").argument("ID", "Character ID");
             reg_webpage<p_api_characters>("/api/characters");
 
-            reg_webpage<p_characters>("/characters");
+            //reg_webpage<p_characters>("/characters");
 
             reg_webpage<p_dev_characters>("/dev/characters");
+            reg_webtemplate("/characters", wksp::shared("www/characters.ht"sv));
         }
         
 }

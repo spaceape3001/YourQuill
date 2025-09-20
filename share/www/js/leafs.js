@@ -1,16 +1,16 @@
 
-class Tag extends Obj {
+class Leaf extends Obj {
 	constructor(arg = false)
 	{
-		super("/api/tag", arg);
+		super("/api/leaf", arg);
 	}
-    
+
     icon(){
         return this.data.icon;
     }
 
     title(){
-        return this.data.name;
+        return this.data.title;
     }
     
     brief(){
@@ -18,10 +18,9 @@ class Tag extends Obj {
     }
 };
 
-
-function toTags(data) {
+function toLeafs(data) {
     var ret = [];
     for( const x of data)
-        ret.push(new Tag(x));
+        ret.push(new Leaf(x));
     return ret;
 }

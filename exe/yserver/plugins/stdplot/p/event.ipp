@@ -50,24 +50,6 @@ namespace {
     //      PAGES
     //  -----------------------------------------------------------------------
         
-        void p_events(WebHtml& h)
-        {
-            //  Search parameters go here... execute the search
-            std::vector<Event>  events   = all_events(Sorted::YES);
-            
-            
-            //  Form the title... 
-            h.title() << "Events";
-            
-            h << "<p><i>(Search Bar will go here)</i></p>\n";
-            
-            //  And results
-            
-            
-            
-            dev_table(h, events);
-        }
-
     //  -----------------------------------------------------------------------
     //      ADMIN
     //  -----------------------------------------------------------------------
@@ -93,7 +75,7 @@ namespace {
             reg_webpage<p_api_event_key>("/api/event/key").argument("ID", "Event ID");
             reg_webpage<p_api_events>("/api/events");
 
-            reg_webpage<p_events>("/events");
+            reg_webtemplate("/events", wksp::shared("www/events.ht"sv));
             
             reg_webpage<p_dev_events>("/dev/events");
         }

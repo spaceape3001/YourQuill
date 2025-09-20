@@ -51,24 +51,6 @@ namespace {
     //      PAGES
     //  -----------------------------------------------------------------------
 
-        void p_places(WebHtml& h)
-        {
-            //  Search parameters go here... execute the search
-            std::vector<Place>  places   = all_places(Sorted::YES);
-            
-            
-            //  Form the title... 
-            h.title() << "Places";
-            
-            h << "<p><i>(Search Bar will go here)</i></p>\n";
-            
-            //  And results
-            
-            
-            
-            dev_table(h, places);
-        }
-        
     //  -----------------------------------------------------------------------
     //      ADMIN
     //  -----------------------------------------------------------------------
@@ -93,7 +75,7 @@ namespace {
             reg_webpage<p_api_place_key>("/api/place/key").argument("ID", "Place ID");
             reg_webpage<p_api_places>("/api/places");
 
-            reg_webpage<p_places>("/places");
+            reg_webtemplate("/places", wksp::shared("www/places.ht"sv));
             
             reg_webpage<p_dev_places>("/dev/places");
         }

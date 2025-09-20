@@ -20,6 +20,11 @@ namespace yq::mithril::cdb {
         return Atom{ ch.id };
     }
 
+    std::string  brief(Group g)
+    {
+        return brief(atom(g));
+    }
+
     bool  exists(Group ch)
     {
         return exists_group(ch.id);

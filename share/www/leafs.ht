@@ -1,0 +1,50 @@
+#! Leafs
+
+<table id="leafs">
+    <tr><td> LOADING...
+</table>
+
+<script src="/js/leafs.js"></script>
+<script>
+	var leafs 	= [];
+	var	cols	= 3;
+	var layout	= TableLayout.VertFirst;
+	
+    
+    function relayout()
+    {
+        var tt			= document.getElementById('leafs');
+        tt.innerHTML	= '';	// clear the old
+        
+        switch(layout){
+        case TableLayout.VertFirst:
+            vertFirstCardTable(tt, leafs, cols);
+            break;
+        case TableLayout.WrapHorz:
+            wrapHorzCardTable(tt, leafs, cols);
+            break;
+        case TableLayout.Detailed:
+            for(var idx =0; idx<leafs.length; ++idx){
+                var trow	= document.createElement('tr');
+                tt.appendChild(trow);
+                
+            }
+            break;
+        }
+    }
+	
+	function update() {
+		fetch(pathRewrite(window.location, "/api/leafs"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+                leafs            = toLeafs(data.leafs);
+                relayout();
+			}
+		);
+	}
+	
+	update();
+	
+</script>
+

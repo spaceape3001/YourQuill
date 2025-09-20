@@ -1,28 +1,29 @@
-#! Characters
+#! Games
 
-<table id="characters">
+<table id="games">
+    <tr><td> LOADING...
 </table>
 
+<script src="/js/games.js"></script>
 <script>
-	var characters 	= [];
+	var games 	= [];
 	var	cols	= 3;
 	var layout	= TableLayout.VertFirst;
 	
-    
     function relayout()
     {
-        var tt			= document.getElementById('characters');
+        var tt			= document.getElementById('games');
         tt.innerHTML	= '';	// clear the old
         
         switch(layout){
         case TableLayout.VertFirst:
-            vertFirstCardTable(tt, characters, cols);
+            vertFirstCardTable(tt, games, cols);
             break;
         case TableLayout.WrapHorz:
-            wrapHorzCardTable(tt, characters, cols);
+            wrapHorzCardTable(tt, games, cols);
             break;
         case TableLayout.Detailed:
-            for(var idx =0; idx<characters.length; ++idx){
+            for(var idx =0; idx<games.length; ++idx){
                 var trow	= document.createElement('tr');
                 tt.appendChild(trow);
                 
@@ -32,11 +33,12 @@
     }
 	
 	function update() {
-		fetch(pathRewrite(window.location, "/api/characters"))
+		fetch(pathRewrite(window.location, "/api/games"))
 			.then((response) => response.json())
 			.then((data) => 
 			{
-                characters            = toCharacters(data.characters);
+                games            = toGames(data.games);
+                console.log("Now with " + games + " games");
                 relayout();
 			}
 		);

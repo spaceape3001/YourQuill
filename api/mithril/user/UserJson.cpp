@@ -8,6 +8,7 @@
 #include <mithril/user/UserCDB.hpp>
 #include <mithril/user/UserInfo.hpp>
 #include <mithril/user/UserJson.hpp>
+#include <mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

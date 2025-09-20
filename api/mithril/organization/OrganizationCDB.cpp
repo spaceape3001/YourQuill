@@ -22,6 +22,11 @@ namespace yq::mithril::cdb {
         return Atom(org.id);
     }
     
+    std::string                 brief(Organization org)
+    {
+        return brief(atom(org));
+    }
+    
     Entity                  entity(Organization org)
     {
         return Entity(org.id );

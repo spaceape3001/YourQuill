@@ -245,5 +245,7 @@ namespace {
                 reg_webpage<p_dev_leaf>("/dev/leaf").argument("id", "Leaf ID").label("Info")
             });
             reg_webpage<p_dev_leafs>("/dev/leafs");
+
+            reg_webtemplate("/leafs", wksp::shared("www/leafs.ht"sv));
         }
 }

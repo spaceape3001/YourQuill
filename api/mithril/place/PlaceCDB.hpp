@@ -12,6 +12,7 @@
 namespace yq::mithril::cdb {
     std::vector<Place>  all_places(Sorted sorted=Sorted());
     Atom                atom(Place);
+    std::string         brief(Place);
     bool                exists(Place);
     bool                exists_place(uint64_t);
     Image               icon(Place);

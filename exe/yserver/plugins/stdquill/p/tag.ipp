@@ -69,13 +69,6 @@ namespace {
     //      PAGES
     //  -----------------------------------------------------------------------
     
-        void    p_tags(WebHtml&h)
-        {
-            h.title("Tags");
-            h << "<table id=\"tags\" />";
-            h << "<script src=\"/js/tags.js\" />";
-        }
-    
     //  -----------------------------------------------------------------------
     //      ADMIN
     //  -----------------------------------------------------------------------
@@ -220,7 +213,8 @@ namespace {
             });
             reg_webpage<p_dev_tags>("/dev/tags");
             
-            reg_webpage<p_tags>("/tags");
+            reg_webtemplate("/tags", wksp::shared("www/tags.ht"sv));
+            //reg_webpage<p_tags>("/tags");
         }
         
         YQ_INVOKE(reg_tag_pages();)

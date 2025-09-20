@@ -8,6 +8,7 @@
 
 #include <mithril/game/GameJson.hpp>
 #include <mithril/game/GameSearch.hpp>
+#include <mithril/wksp/Workspace.hpp>
 
 namespace {
 
@@ -76,5 +77,6 @@ namespace {
             reg_webpage<p_api_games>("/api/games");
             
             reg_webpage<p_dev_games>("/dev/games");
+            reg_webtemplate("/games", wksp::shared("www/games.ht"sv));
         }
 }

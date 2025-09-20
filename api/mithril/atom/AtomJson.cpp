@@ -7,6 +7,7 @@
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithril/atom/AtomInfo.hpp>
 #include <mithril/atom/AtomJson.hpp>
+#include <mithril/image/Image.hpp>
 
 #include <yq/typedef/json.hpp>
 #include <yq/net/json.hpp>
@@ -18,6 +19,7 @@ namespace yq::mithril {
         json j{
             { "abbr", i.abbr },
             { "brief", i.brief },
+            { "icon", i.icon.id },
             { "id", x.id },
             { "key", i.key },
             { "name", i.name }

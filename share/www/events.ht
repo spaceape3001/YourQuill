@@ -1,28 +1,30 @@
-#! Leafs
+#! Events
 
-<table id="leafs">
+<table id="events">
+    <tr><td> LOADING...
 </table>
 
+<script src="/js/events.js"></script>
 <script>
-	var leafs 	= [];
-	var	cols	= 3;
+	var events 	= [];
+	var	cols	= 1;
 	var layout	= TableLayout.VertFirst;
 	
     
     function relayout()
     {
-        var tt			= document.getElementById('leafs');
+        var tt			= document.getElementById('events');
         tt.innerHTML	= '';	// clear the old
         
         switch(layout){
         case TableLayout.VertFirst:
-            vertFirstCardTable(tt, leafs, cols);
+            vertFirstCardTable(tt, events, cols);
             break;
         case TableLayout.WrapHorz:
-            wrapHorzCardTable(tt, leafs, cols);
+            wrapHorzCardTable(tt, events, cols);
             break;
         case TableLayout.Detailed:
-            for(var idx =0; idx<leafs.length; ++idx){
+            for(var idx =0; idx<events.length; ++idx){
                 var trow	= document.createElement('tr');
                 tt.appendChild(trow);
                 
@@ -32,11 +34,11 @@
     }
 	
 	function update() {
-		fetch(pathRewrite(window.location, "/api/leafs"))
+		fetch(pathRewrite(window.location, "/api/events"))
 			.then((response) => response.json())
 			.then((data) => 
 			{
-                leafs            = toLeafs(data.leafs);
+                events            = toEvents(data.events);
                 relayout();
 			}
 		);

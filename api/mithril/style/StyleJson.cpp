@@ -8,6 +8,7 @@
 #include <mithril/style/StyleCDB.hpp>
 #include <mithril/style/StyleInfo.hpp>
 #include <mithril/style/StyleJson.hpp>
+#include <mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

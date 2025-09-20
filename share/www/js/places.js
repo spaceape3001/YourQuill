@@ -1,8 +1,8 @@
 
-class Tag extends Obj {
+class Place extends Obj {
 	constructor(arg = false)
 	{
-		super("/api/tag", arg);
+		super("/api/place", arg);
 	}
     
     icon(){
@@ -18,10 +18,9 @@ class Tag extends Obj {
     }
 };
 
-
-function toTags(data) {
+function toPlaces(data) {
     var ret = [];
     for( const x of data)
-        ret.push(new Tag(x));
+        ret.push(new Place(x));
     return ret;
 }
