@@ -19,6 +19,11 @@ namespace yq::mithril::cdb {
         return Atom{ ch.id };
     }
 
+    std::string         brief(Game g)
+    {
+        return brief(atom(g));
+    }
+
     bool  exists(Game ch)
     {
         return is(Atom(ch.id), game_class());

@@ -7,12 +7,15 @@
 #include <mithril/game/Game.hpp>
 #include <mithril/game/GameCDB.hpp>
 #include <mithril/game/GameJson.hpp>
+#include <mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {
     json json_(Game x)
     {
         json j{
+            { "brief", cdb::brief(x) },
+            { "icon", cdb::icon(x).id },
             { "id", x.id },
             { "key", cdb::key(x) },
             { "title", cdb::title(x) }

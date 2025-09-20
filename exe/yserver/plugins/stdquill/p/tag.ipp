@@ -69,9 +69,28 @@ namespace {
     //      PAGES
     //  -----------------------------------------------------------------------
     
+        void    p_tags(WebHtml&h)
+        {
+            h.title("Tags");
+            h << "<table id=\"tags\" />";
+            h << "<script src=\"/js/tags.js\" />";
+        }
+    
     //  -----------------------------------------------------------------------
     //      ADMIN
     //  -----------------------------------------------------------------------
+
+        void    p_admin_tag(WebHtml& h)
+        {
+            Tag     t   = arg::tag(h);
+            if(!t)
+                throw HttpStatus::BadArgument;
+                
+            h.title() << "Tag (" << key(t) << ")";
+            
+            
+            h << "TODO... tag " << label(t);
+        }
 
         void    p_admin_tags(WebHtml& h)
         {
@@ -90,16 +109,6 @@ namespace {
 
             admin_table(h, cdb::all_tags(Sorted::YES));
 
-        }
-
-        void    p_admin_tag(WebHtml& h)
-        {
-            Tag     t   = arg::tag(h);
-            if(!t)
-                throw HttpStatus::BadArgument;
-                
-            h.title() << "Tag (" << key(t) << ")";
-            h << "TODO... tag " << label(t);
         }
 
         void    p_admin_tags_create(WebContext& ctx)
@@ -210,6 +219,8 @@ namespace {
                 reg_webpage<p_dev_tag_classes>("/dev/tag/classes").argument("id", "Tag id (number)").label("Classes")
             });
             reg_webpage<p_dev_tags>("/dev/tags");
+            
+            reg_webpage<p_tags>("/tags");
         }
         
         YQ_INVOKE(reg_tag_pages();)

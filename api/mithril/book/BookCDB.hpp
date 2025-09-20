@@ -16,6 +16,7 @@ namespace yq::mithril::cdb {
     Book                book(std::string_view);
     Book                book(uint64_t);
     Class               book_class();
+    std::string         brief(Book);
     Image               icon(Book);
     std::string         key(Book);
     std::string         name(Book);

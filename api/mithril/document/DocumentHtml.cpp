@@ -10,6 +10,7 @@
 #include <yq/typedef/string.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
+#include <mithril/image/ImageHtml.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::html {

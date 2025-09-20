@@ -38,6 +38,7 @@ namespace yq::mithril {
         uint64_t  id = 0ULL;
         constexpr auto    operator<=>(const Image& rhs) const noexcept = default;
         constexpr operator uint64_t () const noexcept { return id; }
+        constexpr bool valid() const { return static_cast<bool>(id); }
     };
 
     struct Thumbnail {
@@ -46,7 +47,7 @@ namespace yq::mithril {
         std::string alt;
         
         bool operator==(const Thumbnail&) const = default;
-        operator bool() const { return img != Image{}; }
+        constexpr bool valid() const { return img != Image{}; }
     };
 
 }

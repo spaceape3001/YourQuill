@@ -31,6 +31,7 @@ namespace yq::mithril {
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Atom&rhs) const noexcept = default; 
         constexpr operator uint64_t() const noexcept { return id; }
+        constexpr bool valid() const { return static_cast<bool>(id); }
                 
         /*! Computes a full key based on document and sub-key
             \param[in] doc  Document of interest
@@ -53,6 +54,7 @@ namespace yq::mithril {
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Property&rhs) const noexcept = default; 
         constexpr operator uint64_t() const noexcept { return id; }
+        constexpr bool valid() const { return static_cast<bool>(id); }
     };
 }
 

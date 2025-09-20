@@ -16,7 +16,7 @@
 #include <yq/process/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>
 #include <yq/sql/SqlLite.hpp>
-#include <nlohmann/json.hpp>
+#include <yq/net/json.hpp>
 #include <QFont>
 
 using namespace yq;

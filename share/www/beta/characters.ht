@@ -1,0 +1,48 @@
+#! Characters
+
+<table id="characters">
+</table>
+
+<script>
+	var characters 	= [];
+	var	cols	= 3;
+	var layout	= TableLayout.VertFirst;
+	
+    
+    function relayout()
+    {
+        var tt			= document.getElementById('characters');
+        tt.innerHTML	= '';	// clear the old
+        
+        switch(layout){
+        case TableLayout.VertFirst:
+            vertFirstCardTable(tt, characters, cols);
+            break;
+        case TableLayout.WrapHorz:
+            wrapHorzCardTable(tt, characters, cols);
+            break;
+        case TableLayout.Detailed:
+            for(var idx =0; idx<characters.length; ++idx){
+                var trow	= document.createElement('tr');
+                tt.appendChild(trow);
+                
+            }
+            break;
+        }
+    }
+	
+	function update() {
+		fetch(pathRewrite(window.location, "/api/characters"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+                characters            = toCharacters(data.characters);
+                relayout();
+			}
+		);
+	}
+	
+	update();
+	
+</script>
+

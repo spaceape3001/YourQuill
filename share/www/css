@@ -169,3 +169,9 @@ img.large {
     max-height: 96px;
 }
 
+img.icon {
+    max-width: 64px;
+    max-height: 48px;
+}
+
+

@@ -13,6 +13,7 @@ namespace yq::mithril {
     namespace cdb {
         std::vector<Character>      all_characters(Sorted sorted=Sorted());
         Atom                        atom(Character);
+        std::string                 brief(Character);
         Character                   character(Atom);
         Character                   character(Entity);
         Character                   character(std::string_view);

@@ -17,6 +17,7 @@ namespace yq::mithril {
         uint64_t            id = 0ULL;
         constexpr auto    operator<=>(const Entity&rhs) const = default; 
         constexpr operator bool() const { return id; }
+        constexpr bool valid() const { return static_cast<bool>(id); }
     };
 }
 

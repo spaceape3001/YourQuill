@@ -13,6 +13,7 @@ namespace yq::mithril {
     namespace cdb {
         std::vector<Game>   all_games(Sorted sorted=Sorted());
         Atom                atom(Game);
+        std::string         brief(Game);
         Game                game(Atom);
         Game                game(std::string_view);
         Game                game(uint64_t);

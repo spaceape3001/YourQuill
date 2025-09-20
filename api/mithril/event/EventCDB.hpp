@@ -13,6 +13,7 @@ namespace yq::mithril {
     namespace cdb {
         std::vector<Event>  all_events(Sorted sorted=Sorted());
         Atom                atom(Event);
+        std::string         brief(Event);
         Event               event(Atom);
         Event               event(std::string_view);
         Event               event(uint64_t);

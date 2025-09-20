@@ -37,6 +37,8 @@ namespace yq::mithril {
         uint64_t  id  = 0ULL;
         constexpr auto    operator<=>(const Class&rhs) const noexcept = default;
         constexpr operator uint64_t() const noexcept { return id; }
+        
+        constexpr bool valid() const { return static_cast<bool>(id); }
     };
 
     struct Class::Rank {

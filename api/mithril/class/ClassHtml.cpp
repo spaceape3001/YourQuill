@@ -30,7 +30,7 @@ namespace yq::mithril::html {
         if(v)
             h << "<a href=\"/class?key=" << cdb::key(v) << "\">";
         //  start the url (later)
-        if(th)
+        if(th.valid())
             h << th << " ";
         h << cdb::label(v);
         if(v)
@@ -131,7 +131,7 @@ namespace yq::mithril::html {
         if(v.data)
             h << "<a href=\"/atoms?class=" << cdb::key(v.data) << "\">";
         //  start the url (later)
-        if(th)
+        if(th.valid())
             h << th << " ";
         h << cdb::label(v.data);
         if(v.data)

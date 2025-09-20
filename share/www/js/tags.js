@@ -1,0 +1,39 @@
+var tags 	= [];
+var	cols	= 3;
+var layout	= TableLayout.VertFirst;
+
+
+function relayout()
+{
+    var tt			= document.getElementById('tags');
+    tt.innerHTML	= '';	// clear the old
+    
+    switch(layout){
+    case TableLayout.VertFirst:
+        vertFirstCardTable(tt, tags, cols);
+        break;
+    case TableLayout.WrapHorz:
+        wrapHorzCardTable(tt, tags, cols);
+        break;
+    case TableLayout.Detailed:
+        for(var idx =0; idx<tags.length; ++idx){
+            var trow	= document.createElement('tr');
+            tt.appendChild(trow);
+            
+        }
+        break;
+    }
+}
+
+function update() {
+    fetch(pathRewrite(window.location, "/api/tags"))
+        .then((response) => response.json())
+        .then((data) => 
+        {
+            tags            = toTags(data.tags);
+            relayout();
+        }
+    );
+}
+
+update();

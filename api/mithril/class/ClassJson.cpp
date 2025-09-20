@@ -17,6 +17,7 @@ namespace yq::mithril {
         
         json j{
             { "brief", i.brief },
+            { "icon", i.icon.id },
             { "id", x.id },
             { "key", i.key },
             { "name", i.name },

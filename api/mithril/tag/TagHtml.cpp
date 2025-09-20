@@ -13,6 +13,7 @@
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/image/ImageCDB.hpp>
+#include <mithril/image/ImageHtml.hpp>
 #include <mithril/tag/TagCDB.hpp>
 #include <mithril/html/HtmlLayout.hpp>
 #include <yq/text/copy.hpp>
@@ -23,7 +24,7 @@ namespace yq::mithril::html {
         Thumbnail th = cdb::thumbnail(cdb::icon(t), h.context().session.icon_size);
         
         //  start the url (later)
-        if(th)
+        if(th.valid())
             h << th << " ";
         
         h << cdb::label(t);

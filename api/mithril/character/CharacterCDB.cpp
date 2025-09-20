@@ -21,6 +21,11 @@ namespace yq::mithril::cdb {
         return Atom(ch.id);
     }
 
+    std::string                 brief(Character ch)
+    {
+        return brief(atom(ch));
+    }
+
     Character                   character(Atom at)
     {
         return exists_character(at.id) ? Character(at.id) : Character();

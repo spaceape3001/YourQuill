@@ -1,0 +1,48 @@
+#! Games
+
+<table id="games">
+</table>
+
+<script>
+	var games 	= [];
+	var	cols	= 3;
+	var layout	= TableLayout.VertFirst;
+	
+    
+    function relayout()
+    {
+        var tt			= document.getElementById('games');
+        tt.innerHTML	= '';	// clear the old
+        
+        switch(layout){
+        case TableLayout.VertFirst:
+            vertFirstCardTable(tt, games, cols);
+            break;
+        case TableLayout.WrapHorz:
+            wrapHorzCardTable(tt, games, cols);
+            break;
+        case TableLayout.Detailed:
+            for(var idx =0; idx<games.length; ++idx){
+                var trow	= document.createElement('tr');
+                tt.appendChild(trow);
+                
+            }
+            break;
+        }
+    }
+	
+	function update() {
+		fetch(pathRewrite(window.location, "/api/games"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+                games            = toGames(data.games);
+                relayout();
+			}
+		);
+	}
+	
+	update();
+	
+</script>
+

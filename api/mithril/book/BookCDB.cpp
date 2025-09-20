@@ -40,6 +40,11 @@ namespace yq::mithril::cdb {
         return cls;
     }
 
+    std::string brief(Book b)
+    {
+        return brief(atom(b));
+    }
+
     bool  exists(Book ch)
     {
         return is(Atom(ch.id), book_class());

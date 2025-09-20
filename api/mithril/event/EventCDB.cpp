@@ -20,6 +20,11 @@ namespace yq::mithril::cdb {
         return Atom{ ch.id };
     }
 
+    std::string         brief(Event ev)
+    {
+        return brief(atom(ev));
+    }
+
     Event  event(Atom at)
     {
         return is(at, event_class()) ? Event(at.id) : Event();

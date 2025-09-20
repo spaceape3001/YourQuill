@@ -42,13 +42,13 @@
 				<TD COLSPAN="3"><HR></TD>
 			</TR>
 			<TR id="tabbar-row">
-				<TD COLSPAN="3" WIDTH="100%">{{TABBAR}}</TD>
+				<TD COLSPAN="3" WIDTH="100%" ID="tabbar">{{TABBAR}}</TD>
 			</TR>
 			<TR id="tabbar-hr">
 				<TD COLSPAN="3"><HR></TD>
 			</TR>
 			<TR>
-			    <TD>NAVBAR</TD>
+			    <TD id="navbar">NAVBAR</TD>
 				<TD COLSPAN="2">{{BODY}}</TD>
 			</TR>
 			<TR>

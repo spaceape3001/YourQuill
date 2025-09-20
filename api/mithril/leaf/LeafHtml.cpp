@@ -8,6 +8,7 @@
 #include <mithril/web/WebContext.hpp>
 #include <mithril/web/WebHtml.hpp>
 #include <mithril/image/ImageCDB.hpp>
+#include <mithril/image/ImageHtml.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 
 namespace yq::mithril::html {
@@ -18,7 +19,7 @@ namespace yq::mithril::html {
         h << "<a href=\"/wiki/view?leaf=";
         html_escape_write(h, cdb::key(l));
         h  << "\">";
-        if(th)
+        if(th.valid())
             h << th << " ";
         h << cdb::label(l);
         h << "</a>";

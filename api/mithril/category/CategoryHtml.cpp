@@ -23,7 +23,7 @@ namespace yq::mithril::html {
         Thumbnail th = cdb::thumbnail(cdb::icon(v), h.context().session.icon_size);
         
         //  start the url (later)
-        if(th)
+        if(th.valid())
             h << th << " ";
         
         h << cdb::label(v);

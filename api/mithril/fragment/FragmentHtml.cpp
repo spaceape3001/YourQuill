@@ -6,6 +6,8 @@
 
 #include "FragmentHtml.hpp"
 #include <mithril/fragment/FragmentCDB.hpp>
+#include <mithril/image/Image.hpp>
+#include <mithril/image/ImageHtml.hpp>
 
 namespace yq::mithril::html {
     //WebHtml&    operator<<(WebHtml&, Fragment);
@@ -34,22 +36,22 @@ namespace yq::mithril::html {
     }
 
 
-        void    dev_table(WebHtml& h, const FragmentVector& fragments)
-        {
-            auto _tab = h.table();
-            h << "<tr><th>ID</th><th>Name</th><th>Size</th><th>Path</th>\n";
-            for(Fragment f : fragments){
-                auto i = cdb::info(f);
-                h << "<tr><td>" << dev_id(f) << "</td><td>" << i.name 
-                    << "</td><td>" << i.size << "</td><td>" << i.path << "</td></tr>\n";
-            }
+    void    dev_table(WebHtml& h, const FragmentVector& fragments)
+    {
+        auto _tab = h.table();
+        h << "<tr><th>ID</th><th>Name</th><th>Size</th><th>Path</th>\n";
+        for(Fragment f : fragments){
+            auto i = cdb::info(f);
+            h << "<tr><td>" << dev_id(f) << "</td><td>" << i.name 
+                << "</td><td>" << i.size << "</td><td>" << i.path << "</td></tr>\n";
         }
+    }
 
-        void    dev_title(WebHtml& h, Fragment x, std::string_view extra)
-        {
-            auto t = h.title();
-            h << "Fragment (" << x.id << " &mdash; " << cdb::path(x) << ")";
-            if(!extra.empty())
-                h << ": " << extra;
-        }
+    void    dev_title(WebHtml& h, Fragment x, std::string_view extra)
+    {
+        auto t = h.title();
+        h << "Fragment (" << x.id << " &mdash; " << cdb::path(x) << ")";
+        if(!extra.empty())
+            h << ": " << extra;
+    }
 }

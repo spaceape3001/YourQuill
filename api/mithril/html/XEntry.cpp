@@ -11,11 +11,12 @@
 #include <yq/text/transform.hpp>
 
 #include <mithril/document/DocumentCDB.hpp>
+#include <mithril/document/DocumentHtml.hpp>
 #include <mithril/folder/FolderCDB.hpp>
+#include <mithril/image/ImageHtml.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/wksp/CacheQuery.hpp>
 #include <mithril/wksp/Workspace.hpp>
-#include <mithril/document/DocumentHtml.hpp>
 
 namespace yq::mithril {
 
@@ -101,6 +102,8 @@ namespace yq::mithril {
 
     void    XEntry::write_thumbnail(class WebHtml&h, const Details& dt) const
     {
+        using namespace html;
+        
         static const auto& icons  = html::file_extension_icons();
         
         if(icon != Image{}){
