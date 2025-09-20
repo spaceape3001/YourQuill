@@ -20,6 +20,11 @@ namespace yq::mithril::cdb {
         return Atom{ th.id };
     }
 
+    std::string         brief(Thing th)
+    {
+        return brief(atom(th));
+    }
+
     bool  exists(Thing th)
     {
         return exists_thing(th.id);

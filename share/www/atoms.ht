@@ -1,0 +1,48 @@
+#! Atoms
+
+<table id="atoms">
+    <tr><td> LOADING...
+</table>
+
+<script src="/js/atoms.js"></script>
+<script>
+    var atoms 	= [];
+    var	cols	= 3;
+    var layout	= TableLayout.VertFirst;
+
+
+    function relayout()
+    {
+        var tt			= document.getElementById('atoms');
+        tt.innerHTML	= '';	// clear the old
+        
+        switch(layout){
+        case TableLayout.VertFirst:
+            vertFirstCardTable(tt, atoms, cols);
+            break;
+        case TableLayout.WrapHorz:
+            wrapHorzCardTable(tt, atoms, cols);
+            break;
+        case TableLayout.Detailed:
+            for(var idx =0; idx<atoms.length; ++idx){
+                var trow	= document.createElement('tr');
+                tt.appendChild(trow);
+                
+            }
+            break;
+        }
+    }
+
+    function update() {
+        fetch(pathRewrite(window.location, "/api/atoms"))
+            .then((response) => response.json())
+            .then((data) => 
+            {
+                atoms            = toAtoms(data.atoms);
+                relayout();
+            }
+        );
+    }
+
+    update();
+</script>

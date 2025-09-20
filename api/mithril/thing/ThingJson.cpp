@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <mithril/image/Image.hpp>
 #include <mithril/thing/Thing.hpp>
 #include <mithril/thing/ThingCDB.hpp>
 #include <mithril/thing/ThingJson.hpp>
@@ -13,6 +14,8 @@ namespace yq::mithril {
     json json_(Thing x)
     {
         json j{
+            { "brief", cdb::brief(x) },
+            { "icon", cdb::icon(x).id },
             { "id", x.id },
             { "key", cdb::key(x) },
             { "name", cdb::name(x) }

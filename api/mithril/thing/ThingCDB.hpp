@@ -13,6 +13,7 @@ namespace yq::mithril {
     namespace cdb {
         std::vector<Thing>  all_things(Sorted sorted=Sorted());
         Atom                atom(Thing);
+        std::string         brief(Thing);
         bool                exists(Thing);
         bool                exists_thing(uint64_t);
         Image               icon(Thing);

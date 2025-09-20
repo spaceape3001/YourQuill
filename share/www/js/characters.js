@@ -16,6 +16,10 @@ class Character extends Obj {
     brief(){
         return this.data.brief;
     }
+
+    url(){
+        return `/dev/atom?id=${this.id}`;
+    }
 };
 
 function toCharacters(data) {

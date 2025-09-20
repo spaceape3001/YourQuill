@@ -92,7 +92,7 @@ namespace {
             reg_webpage<p_api_thing_key>("/api/thing/key").argument("ID", "Thing ID");
             reg_webpage<p_api_things>("/api/things");
 
-            reg_webpage<p_things>("/things");
+            reg_webtemplate("/things", wksp::shared("www/things.ht"sv));
             
             reg_webpage<p_dev_things>("/dev/things");
         }

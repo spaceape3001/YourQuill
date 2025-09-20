@@ -1,10 +1,10 @@
 
-class Atom extends Obj {
+class Organization extends Obj {
 	constructor(arg = false)
 	{
-		super("/api/atom", arg);
+		super("/api/organization", arg);
 	}
-
+    
     icon(){
         return this.data.icon;
     }
@@ -18,10 +18,9 @@ class Atom extends Obj {
     }
 };
 
-
-function toAtoms(data) {
+function toOrganizations(data) {
     var ret = [];
     for( const x of data)
-        ret.push(new Atom(x));
+        ret.push(new Organization(x));
     return ret;
 }

@@ -187,7 +187,8 @@ namespace {
             ;
         
             reg_webpage<p_atom>("/atom").argument("ID", "Atom ID");
-            reg_webpage<p_atoms>("/atoms");
+
+            reg_webtemplate("/atoms", wksp::shared("www/atoms.ht"sv));
         
             reg_webgroup({
                 reg_webpage<p_dev_atom>("/dev/atom").argument("id", "Atom ID").label("Info"),

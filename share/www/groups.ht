@@ -1,0 +1,50 @@
+#! Groups
+
+<table id="groups">
+    <tr><td> LOADING...
+</table>
+
+<script src="/js/groups.js"></script>
+<script>
+	var groups 	= [];
+	var	cols	= 1;
+	var layout	= TableLayout.VertFirst;
+	
+    
+    function relayout()
+    {
+        var tt			= document.getElementById('groups');
+        tt.innerHTML	= '';	// clear the old
+        
+        switch(layout){
+        case TableLayout.VertFirst:
+            vertFirstCardTable(tt, groups, cols);
+            break;
+        case TableLayout.WrapHorz:
+            wrapHorzCardTable(tt, groups, cols);
+            break;
+        case TableLayout.Detailed:
+            for(var idx =0; idx<groups.length; ++idx){
+                var trow	= document.createElement('tr');
+                tt.appendChild(trow);
+                
+            }
+            break;
+        }
+    }
+	
+	function update() {
+		fetch(pathRewrite(window.location, "/api/groups"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+                groups            = toGroups(data.groups);
+                relayout();
+			}
+		);
+	}
+	
+	update();
+	
+</script>
+

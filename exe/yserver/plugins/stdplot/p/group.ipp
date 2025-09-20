@@ -50,24 +50,6 @@ namespace {
     //      PAGES
     //  -----------------------------------------------------------------------
     
-        void p_groups(WebHtml& h)
-        {
-            //  Search parameters go here... execute the search
-            std::vector<Group>  groups   = all_groups(Sorted::YES);
-            
-            
-            //  Form the title... 
-            h.title() << "Groups";
-            
-            h << "<p><i>(Search Bar will go here)</i></p>\n";
-            
-            //  And results
-            
-            
-            
-            dev_table(h, groups);
-        }
-
 
     //  -----------------------------------------------------------------------
     //      ADMIN
@@ -93,7 +75,7 @@ namespace {
             reg_webpage<p_api_group_key>("/api/group/key").argument("ID", "Group ID");
             reg_webpage<p_api_groups>("/api/groups");
 
-            reg_webpage<p_groups>("/groups");
+            reg_webtemplate("/groups", wksp::shared("www/groups.ht"sv));
             reg_webpage<p_dev_groups>("/dev/groups");
         }
 }

@@ -1,0 +1,50 @@
+#! Organizations
+
+<table id="organizations">
+    <tr><td> LOADING...
+</table>
+
+<script src="/js/organizations.js"></script>
+<script>
+	var organizations 	= [];
+	var	cols	= 1;
+	var layout	= TableLayout.VertFirst;
+	
+    
+    function relayout()
+    {
+        var tt			= document.getElementById('organizations');
+        tt.innerHTML	= '';	// clear the old
+        
+        switch(layout){
+        case TableLayout.VertFirst:
+            vertFirstCardTable(tt, organizations, cols);
+            break;
+        case TableLayout.WrapHorz:
+            wrapHorzCardTable(tt, organizations, cols);
+            break;
+        case TableLayout.Detailed:
+            for(var idx =0; idx<organizations.length; ++idx){
+                var trow	= document.createElement('tr');
+                tt.appendChild(trow);
+                
+            }
+            break;
+        }
+    }
+	
+	function update() {
+		fetch(pathRewrite(window.location, "/api/organizations"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+                organizations            = toOrganizations(data.organizations);
+                relayout();
+			}
+		);
+	}
+	
+	update();
+	
+</script>
+

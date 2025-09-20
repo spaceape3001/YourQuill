@@ -73,6 +73,8 @@ namespace {
             reg_webpage<p_api_entity>("/api/entity").argument("ID", "Entity ID");
             reg_webpage<p_api_entity_key>("/api/entity/key").argument("ID", "Entity ID");
             reg_webpage<p_api_entities>("/api/entities");
+
+            reg_webtemplate("/entities", wksp::shared("www/entities.ht"sv));
             
             reg_webpage<p_dev_entities>("/dev/entities");
         }

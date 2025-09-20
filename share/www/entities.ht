@@ -1,0 +1,50 @@
+#! Entities
+
+<table id="entities">
+    <tr><td> LOADING...
+</table>
+
+<script src="/js/entities.js"></script>
+<script>
+	var entities 	= [];
+	var	cols	= 2;
+	var layout	= TableLayout.VertFirst;
+	
+    
+    function relayout()
+    {
+        var tt			= document.getElementById('entities');
+        tt.innerHTML	= '';	// clear the old
+        
+        switch(layout){
+        case TableLayout.VertFirst:
+            vertFirstCardTable(tt, entities, cols);
+            break;
+        case TableLayout.WrapHorz:
+            wrapHorzCardTable(tt, entities, cols);
+            break;
+        case TableLayout.Detailed:
+            for(var idx =0; idx<entities.length; ++idx){
+                var trow	= document.createElement('tr');
+                tt.appendChild(trow);
+                
+            }
+            break;
+        }
+    }
+	
+	function update() {
+		fetch(pathRewrite(window.location, "/api/entities"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+                entities            = toEntities(data.entities);
+                relayout();
+			}
+		);
+	}
+	
+	update();
+	
+</script>
+

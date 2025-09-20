@@ -75,5 +75,6 @@ namespace {
             reg_webpage<p_api_organizations>("/api/organizations");
 
             reg_webpage<p_dev_organizations>("/dev/organizations");
+            reg_webtemplate("/organizations", wksp::shared("www/organizations.ht"sv));
         }
 }
