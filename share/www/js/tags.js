@@ -16,6 +16,10 @@ class Tag extends Obj {
     brief(){
         return this.data.brief;
     }
+
+    url(){
+        return `/tag?id=${this.id}`;
+    }
 };
 
 

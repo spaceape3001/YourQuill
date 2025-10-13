@@ -1,3 +1,5 @@
-%      Entity
-plural Entity
-is      Ownable,Named
+%       Entity
+plural  Entities
+is      Ownable
+is      Named
+

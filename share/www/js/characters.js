@@ -18,7 +18,7 @@ class Character extends Obj {
     }
 
     url(){
-        return `/dev/atom?id=${this.id}`;
+        return `/character?id=${this.id}`;
     }
 };
 

@@ -1,0 +1,21 @@
+#! (No Character)
+
+<script src="/js/characters.js"></script>
+
+This is the page for a character.
+
+<table>
+    <tr><td>
+        <table>
+        </table>
+    <td><img src="" />
+</table>
+
+
+<script>
+
+    function update() {
+    }
+    update();
+
+</script>

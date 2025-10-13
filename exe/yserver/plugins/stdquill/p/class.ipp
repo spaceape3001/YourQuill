@@ -335,6 +335,7 @@ namespace {
                 reg_webpage<p_class_atoms>("/class/atoms").argument("ID", "Class ID").label("Atoms")
             });
 
+            reg_webtemplate("/classes", wksp::shared("www/classes.ht"sv));
 
             reg_webgroup({
                 reg_webpage<p_dev_class>("/dev/class").argument("id", "Class ID").label("Info"),

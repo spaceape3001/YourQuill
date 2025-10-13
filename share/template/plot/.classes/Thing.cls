@@ -1,3 +1,5 @@
-%      Thing
-plural Thing
-is      ownable,named
+%       Thing
+plural  Things
+is      Ownable
+is      Named
+

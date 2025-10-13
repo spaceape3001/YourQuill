@@ -16,6 +16,10 @@ class Class extends Obj {
     brief(){
         return this.data.brief;
     }
+
+    url(){
+        return `/class?id=${this.id}`;
+    }
 };
 
 function toClasses(data) {

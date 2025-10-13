@@ -1,3 +1,5 @@
-%      Restaurant
-plural Restaurant
-is      place,business
+%       Restaurant
+plural  Restaurant
+is      Place
+is      Business
+

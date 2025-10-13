@@ -1,3 +1,6 @@
-%      Province
-plural Province
-is      group, place,government
+%       Province
+plural  Provinces
+is      Government
+is      Group
+is      Place
+

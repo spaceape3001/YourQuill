@@ -78,6 +78,7 @@ namespace {
             //reg_webpage<p_characters>("/characters");
 
             reg_webpage<p_dev_characters>("/dev/characters");
+            reg_webtemplate("/character", wksp::shared("www/character.ht"sv));
             reg_webtemplate("/characters", wksp::shared("www/characters.ht"sv));
         }
         

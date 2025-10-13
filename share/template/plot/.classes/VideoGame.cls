@@ -1,2 +1,4 @@
 %  Video Game
-is  Game,Software
+is  Game
+is  Software
+

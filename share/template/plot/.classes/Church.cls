@@ -1,3 +1,6 @@
-%      Church
-plural Church
-is      place,group
+%       Church
+plural  Churches
+is      Place
+is      Organization
+
+

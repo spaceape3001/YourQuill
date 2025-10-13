@@ -1,3 +1,6 @@
-%      Nation
-plural Nation
-is      group, place,Government
+%       Nation
+plural  Nation
+is      Government
+is      Group
+is      Place
+

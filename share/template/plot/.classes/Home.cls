@@ -1,3 +1,4 @@
-%      Home
-plural Home
-is     place
+%       Home
+alias	House
+plural  Home
+is      place

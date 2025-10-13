@@ -213,6 +213,7 @@ namespace {
             });
             reg_webpage<p_dev_tags>("/dev/tags");
             
+            reg_webtemplate("/tag", wksp::shared("www/tag.ht"sv));
             reg_webtemplate("/tags", wksp::shared("www/tags.ht"sv));
             //reg_webpage<p_tags>("/tags");
         }
