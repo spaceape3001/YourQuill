@@ -10,7 +10,7 @@
 #include <yq/gluon/core/Utilities.hpp>
 #include <yq/mithril/character/CharacterCDB.hpp>
 #include <yq/mithril/image/Image.hpp>
-#include <mithrilQt/image.hpp>
+#include <yq/mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

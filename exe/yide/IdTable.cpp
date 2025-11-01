@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IdTable.hpp"
-#include <mithrilQt/id/IdTableView.hpp>
+#include <yq/mithrilQt/id/IdTableView.hpp>
 #include <QVBoxLayout>
 #include <QHeaderView>
 

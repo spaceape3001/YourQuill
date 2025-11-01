@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/mithril/book/Book.hpp>
-#include <mithrilQt/id/IdColumn.hpp>
+#include <yq/mithrilQt/id/IdColumn.hpp>
 
 class QIcon;
 

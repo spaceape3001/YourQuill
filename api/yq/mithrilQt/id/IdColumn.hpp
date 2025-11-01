@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithrilQt/preamble.hpp>
+#include <yq/mithrilQt/preamble.hpp>
 #include <yq/mithril/id/Id.hpp>
 #include <yq/core/Compare.hpp>
 

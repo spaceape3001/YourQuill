@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "IdList.hpp"
-#include <mithrilQt/id/IdListView.hpp>
+#include <yq/mithrilQt/id/IdListView.hpp>
 #include <QVBoxLayout>
 
 IdList::IdList(IdModel* mdl, QWidget* parent) : Window(parent)

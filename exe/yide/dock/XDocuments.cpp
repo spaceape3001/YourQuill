@@ -11,9 +11,9 @@
 #include <yq/gluon/core/Utilities.hpp>
 #include <yq/mithril/document/DocumentCDB.hpp>
 #include <yq/mithril/folder/FolderCDB.hpp>
-#include <mithrilQt/document.hpp>
-#include <mithrilQt/folder.hpp>
-#include <mithrilQt/id.hpp>
+#include <yq/mithrilQt/document.hpp>
+#include <yq/mithrilQt/folder.hpp>
+#include <yq/mithrilQt/id.hpp>
 
 using namespace yq;
 using namespace yq::gluon;

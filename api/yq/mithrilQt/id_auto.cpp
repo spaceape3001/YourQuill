@@ -9,35 +9,35 @@
 */
 
 
-#include <mithrilQt/atom.hpp>
-#include <mithrilQt/attribute.hpp>
-#include <mithrilQt/book.hpp>
-#include <mithrilQt/category.hpp>
-#include <mithrilQt/character.hpp>
-#include <mithrilQt/class.hpp>
-#include <mithrilQt/directory.hpp>
-#include <mithrilQt/document.hpp>
-#include <mithrilQt/doodle.hpp>
-#include <mithrilQt/entity.hpp>
-#include <mithrilQt/event.hpp>
-#include <mithrilQt/field.hpp>
-#include <mithrilQt/folder.hpp>
-#include <mithrilQt/fragment.hpp>
-#include <mithrilQt/game.hpp>
-#include <mithrilQt/graphviz.hpp>
-#include <mithrilQt/group.hpp>
-#include <mithrilQt/image.hpp>
-#include <mithrilQt/leaf.hpp>
-#include <mithrilQt/meta.hpp>
-#include <mithrilQt/novel.hpp>
-#include <mithrilQt/organization.hpp>
-#include <mithrilQt/place.hpp>
-#include <mithrilQt/root.hpp>
-#include <mithrilQt/style.hpp>
-#include <mithrilQt/tag.hpp>
-#include <mithrilQt/thing.hpp>
-#include <mithrilQt/user.hpp>
-#include <mithrilQt/value.hpp>
+#include <yq/mithrilQt/atom.hpp>
+#include <yq/mithrilQt/attribute.hpp>
+#include <yq/mithrilQt/book.hpp>
+#include <yq/mithrilQt/category.hpp>
+#include <yq/mithrilQt/character.hpp>
+#include <yq/mithrilQt/class.hpp>
+#include <yq/mithrilQt/directory.hpp>
+#include <yq/mithrilQt/document.hpp>
+#include <yq/mithrilQt/doodle.hpp>
+#include <yq/mithrilQt/entity.hpp>
+#include <yq/mithrilQt/event.hpp>
+#include <yq/mithrilQt/field.hpp>
+#include <yq/mithrilQt/folder.hpp>
+#include <yq/mithrilQt/fragment.hpp>
+#include <yq/mithrilQt/game.hpp>
+#include <yq/mithrilQt/graphviz.hpp>
+#include <yq/mithrilQt/group.hpp>
+#include <yq/mithrilQt/image.hpp>
+#include <yq/mithrilQt/leaf.hpp>
+#include <yq/mithrilQt/meta.hpp>
+#include <yq/mithrilQt/novel.hpp>
+#include <yq/mithrilQt/organization.hpp>
+#include <yq/mithrilQt/place.hpp>
+#include <yq/mithrilQt/root.hpp>
+#include <yq/mithrilQt/style.hpp>
+#include <yq/mithrilQt/tag.hpp>
+#include <yq/mithrilQt/thing.hpp>
+#include <yq/mithrilQt/user.hpp>
+#include <yq/mithrilQt/value.hpp>
 
 #include <yq/mithril/atom/Atom.hpp>
 #include <yq/mithril/attribute/Attribute.hpp>
@@ -68,7 +68,7 @@
 #include <yq/mithril/thing/Thing.hpp>
 #include <yq/mithril/user/User.hpp>
 #include <yq/mithril/value/Value.hpp>
-#include <mithrilQt/id.hpp>
+#include <yq/mithrilQt/id.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

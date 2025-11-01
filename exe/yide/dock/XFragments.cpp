@@ -14,9 +14,9 @@
 #include <yq/mithril/directory/DirectoryCDB.hpp>
 #include <yq/mithril/root/Root.hpp>
 #include <yq/mithril/root/RootCDB.hpp>
-#include <mithrilQt/fragment.hpp>
-#include <mithrilQt/directory.hpp>
-#include <mithrilQt/id.hpp>
+#include <yq/mithrilQt/fragment.hpp>
+#include <yq/mithrilQt/directory.hpp>
+#include <yq/mithrilQt/id.hpp>
 
 using namespace yq;
 using namespace yq::gluon;

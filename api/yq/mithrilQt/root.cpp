@@ -11,7 +11,7 @@
 #include <yq/mithril/root/Root.hpp>
 #include <yq/mithril/root/RootCDB.hpp>
 #include <yq/mithril/root/RootDir.hpp>
-#include <mithrilQt/image.hpp>
+#include <yq/mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

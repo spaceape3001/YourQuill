@@ -7,7 +7,7 @@
 #include "XIdBoard.hpp"
 #include <yq/core/DelayInit.hpp>
 
-#include <mithrilQt/id.hpp>
+#include <yq/mithrilQt/id.hpp>
 
 using namespace yq;
 using namespace yq::gluon;

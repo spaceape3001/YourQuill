@@ -11,7 +11,7 @@
 #include <yq/mithril/book/BookCDB.hpp>
 #include <yq/mithril/class/ClassCDB.hpp>
 #include <yq/mithril/image/Image.hpp>
-#include <mithrilQt/image.hpp>
+#include <yq/mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

@@ -7,8 +7,8 @@
 #pragma once
 
 #include "Dock.hpp"
-#include <mithrilQt/id/IdModel.hpp>
-#include <mithrilQt/id/IdTreeView.hpp>
+#include <yq/mithrilQt/id/IdModel.hpp>
+#include <yq/mithrilQt/id/IdTreeView.hpp>
 
 
 class XFragments : public ZDock {

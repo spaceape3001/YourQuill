@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Window.hpp"
-#include <mithrilQt/id/IdModel.hpp>
+#include <yq/mithrilQt/id/IdModel.hpp>
 #include <QWidget>
 #include <functional>
 

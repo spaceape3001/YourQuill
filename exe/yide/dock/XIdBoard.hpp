@@ -7,8 +7,8 @@
 #pragma once
 
 #include "Dock.hpp"
-#include <mithrilQt/id/IdModel.hpp>
-#include <mithrilQt/id/IdTableView.hpp>
+#include <yq/mithrilQt/id/IdModel.hpp>
+#include <yq/mithrilQt/id/IdTableView.hpp>
 
 
 using yq::mithril::Id;

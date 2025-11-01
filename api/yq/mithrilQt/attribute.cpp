@@ -10,7 +10,7 @@
 #include <yq/text/match.hpp>
 #include <yq/gluon/core/Utilities.hpp>
 #include <yq/mithril/attribute/AttributeCDB.hpp>
-#include <mithrilQt/image.hpp>
+#include <yq/mithrilQt/image.hpp>
 #include <QIcon>
 
 namespace yq::mithril {
