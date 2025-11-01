@@ -7,7 +7,7 @@
 #include "book.hpp"
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/book/BookCDB.hpp>
 #include <mithril/class/ClassCDB.hpp>
 #include <mithril/image/Image.hpp>

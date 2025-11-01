@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <gluon/app/Application.hpp>
+#include <yq/gluon/app/Application.hpp>
 #include <QUrl>
 
 class DreamApp : public yq::gluon::Application {

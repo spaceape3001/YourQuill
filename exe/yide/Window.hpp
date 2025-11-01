@@ -7,7 +7,7 @@
 #pragma once
 
 #include "ystudio.hpp"
-#include <gluon/app/SubWindow.hpp>
+#include <yq/gluon/app/SubWindow.hpp>
 
 class DreamMW;
 

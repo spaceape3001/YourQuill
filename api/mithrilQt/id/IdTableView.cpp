@@ -7,7 +7,7 @@
 #include "IdModel.hpp"
 #include "IdTableView.hpp"
 #include <QContextMenuEvent>
-#include <gluon/delegate/Delegate.hpp>
+#include <yq/gluon/delegate/Delegate.hpp>
 
 using namespace yq::gluon;
 

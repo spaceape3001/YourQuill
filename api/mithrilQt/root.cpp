@@ -7,7 +7,7 @@
 #include "root.hpp"
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/root/Root.hpp>
 #include <mithril/root/RootCDB.hpp>
 #include <mithril/root/RootDir.hpp>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <gluon/app/MainWindow.hpp>
+#include <yq/gluon/app/MainWindow.hpp>
 #include <yq/container/Hash.hpp>
 #include <yq/container/Map.hpp>
 #include "ystudio.hpp"

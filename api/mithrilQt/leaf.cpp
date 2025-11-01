@@ -7,7 +7,7 @@
 #include "leaf.hpp"
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/leaf/LeafCDB.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithrilQt/image.hpp>

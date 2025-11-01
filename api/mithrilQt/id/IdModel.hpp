@@ -7,11 +7,11 @@
 #pragma once
 
 #include <QAbstractItemModel>
-#include <gluon/delegate/Delegate.hpp>
+#include <yq/gluon/delegate/Delegate.hpp>
 #include <mithril/id/Id.hpp>
 #include <mithril/id/IdCDB.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 
 class QModelIndex;
 class QVariant;

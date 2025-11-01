@@ -6,9 +6,9 @@
 
 #include "WebBrowser.hpp"
 
-#include <gluon/app/MainWindow.hpp>
-#include <gluon/core/Logging.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/app/MainWindow.hpp>
+#include <yq/gluon/core/Logging.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/wksp/Workspace.hpp>
 
 #include <QWebEngineProfile>

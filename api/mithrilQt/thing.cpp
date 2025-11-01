@@ -6,7 +6,7 @@
 
 #include "thing.hpp"
 #include <yq/core/DelayInit.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/thing/ThingCDB.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithrilQt/image.hpp>

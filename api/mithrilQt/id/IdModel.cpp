@@ -6,7 +6,7 @@
 
 #include "IdModel.hpp"
 #include "IdColumn.hpp"
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 
 using namespace yq::gluon;
 

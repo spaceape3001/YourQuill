@@ -11,7 +11,7 @@
 #include "WebBrowser.hpp"
 
 #include <yq/net/Url.hpp>
-#include <gluon/core/Logging.hpp>
+#include <yq/gluon/core/Logging.hpp>
 #include <yq/net/Curl.hpp>
 #include <yq/process/PluginLoader.hpp>
 #include <mithril/wksp/Workspace.hpp>

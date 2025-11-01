@@ -7,7 +7,7 @@
 #include "atom.hpp"
 
 #include <yq/core/DelayInit.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/atom/AtomCDB.hpp>
 #include <mithrilQt/field.hpp>
 #include <mithrilQt/image.hpp>

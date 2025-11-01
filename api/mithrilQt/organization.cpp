@@ -7,7 +7,7 @@
 #include "organization.hpp"
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/organization/OrganizationCDB.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithrilQt/image.hpp>

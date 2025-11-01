@@ -8,7 +8,7 @@
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
 
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/document/DocumentCDB.hpp>
 #include <mithril/folder/FolderCDB.hpp>
 #include <mithrilQt/document.hpp>

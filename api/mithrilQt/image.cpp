@@ -6,7 +6,7 @@
 
 #include "image.hpp"
 #include <yq/core/ThreadId.hpp>
-#include <gluon/core/IgCaseQ.hpp>
+#include <yq/gluon/core/IgCaseQ.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 #include <QIcon>

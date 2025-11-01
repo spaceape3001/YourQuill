@@ -9,9 +9,9 @@
 #include <yq/core/Logging.hpp>
 #include <yq/container/Map.hpp>
 #include <yq/container/Vector.hpp>
-#include <gluon/core/Logging.hpp>
-#include <gluon/core/Utilities.hpp>
-#include <gluon/util/UInt64SignalMapper.hpp>
+#include <yq/gluon/core/Logging.hpp>
+#include <yq/gluon/core/Utilities.hpp>
+#include <yq/gluon/util/UInt64SignalMapper.hpp>
 
 #include "Action.hpp"
 #include "Command.hpp"
@@ -20,7 +20,7 @@
 #include "Window.hpp"
 
 #include <mithril/wksp/Workspace.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 
 #include <QCursor>
 #include <QMenu>

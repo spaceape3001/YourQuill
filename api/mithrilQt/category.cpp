@@ -7,7 +7,7 @@
 #include "category.hpp"
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <mithril/image/Image.hpp>
 #include <mithril/category/CategoryCDB.hpp>
 #include <mithrilQt/image.hpp>

@@ -9,9 +9,9 @@
 #include "DreamMW.hpp"
 
 #include <yq/core/DelayInit.hpp>
-#include <gluon/core/Logging.hpp>
-#include <gluon/graphics/GraphicsScene.hpp>
-#include <gluon/graphics/GraphicsView.hpp>
+#include <yq/gluon/core/Logging.hpp>
+#include <yq/gluon/graphics/GraphicsScene.hpp>
+#include <yq/gluon/graphics/GraphicsView.hpp>
 #include <mithril/fragment/FragmentCDB.hpp>
 #include <mithril/image/ImageCDB.hpp>
 

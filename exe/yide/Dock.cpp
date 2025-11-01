@@ -7,7 +7,7 @@
 #include "Dock.hpp"
 #include "DreamMW.hpp"
 #include <QCloseEvent>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 
 using namespace yq;
 using namespace yq::gluon;

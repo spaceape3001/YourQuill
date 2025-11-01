@@ -6,7 +6,7 @@
 
 #include "id.hpp"
 #include <yq/text/match.hpp>
-#include <gluon/core/Utilities.hpp>
+#include <yq/gluon/core/Utilities.hpp>
 #include <QIcon>
 
 using namespace yq::gluon;
