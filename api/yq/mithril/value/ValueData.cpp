@@ -7,7 +7,7 @@
 #include "ValueData.hpp"
 
 #include <yq/xml/XmlUtils.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/io/Strings.hpp>
 #include <yq/text/misc.hpp>
 
 namespace yq::mithril {

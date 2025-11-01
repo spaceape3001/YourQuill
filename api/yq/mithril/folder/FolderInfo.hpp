@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/folder/Folder.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/folder/Folder.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <vector>
 
 

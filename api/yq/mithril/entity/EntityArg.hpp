@@ -8,7 +8,7 @@
 
 #include <initializer_list>
 #include <string_view>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril::arg {
     //! Finds entity, tries key first, then by ID

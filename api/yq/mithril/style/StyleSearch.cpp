@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/style/Style.hpp>
-#include <mithril/style/StyleCDB.hpp>
-#include <mithril/style/StyleSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/style/Style.hpp>
+#include <yq/mithril/style/StyleCDB.hpp>
+#include <yq/mithril/style/StyleSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     StyleVector  search(WebContext&ctx, style_k)

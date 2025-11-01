@@ -8,15 +8,15 @@
 #include <yq/container/ByteArray.hpp>
 #include <yq/file/FileUtils.hpp>
 
-#include <mithril/bit/NKI.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/image/ImageCDB.hpp>
-//#include <mithril/novel/NovelFile.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+//#include <yq/mithril/novel/NovelFile.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
     namespace {

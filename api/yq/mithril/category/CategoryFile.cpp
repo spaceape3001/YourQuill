@@ -6,7 +6,7 @@
 
 #include "CategoryFile.hpp"
 #include <yq/keyv/KeyValue.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/io/Strings.hpp>
 
 namespace yq::mithril {        
     void    Category::File::reset() 

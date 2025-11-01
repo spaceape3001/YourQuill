@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/document/Document.hpp>
-#include <mithril/leaf/Leaf.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/tag/Tag.hpp>
-#include <mithril/tag/TagInfo.hpp>
-#include <mithril/tag/TagFile.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/leaf/Leaf.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/TagInfo.hpp>
+#include <yq/mithril/tag/TagFile.hpp>
 #include <yq/typedef/string_sets.hpp>
 
 #define TBL_TAGS    "Tags"

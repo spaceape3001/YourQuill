@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/doodle/DoodleJson.hpp>
-#include <mithril/doodle/DoodleSearch.hpp>
+#include <yq/mithril/doodle/DoodleJson.hpp>
+#include <yq/mithril/doodle/DoodleSearch.hpp>
 
 namespace {
 

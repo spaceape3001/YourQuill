@@ -9,7 +9,7 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril {
     struct Folder;

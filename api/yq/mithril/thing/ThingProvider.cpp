@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/thing/ThingProvider.hpp>
-#include <mithril/thing/ThingCDB.hpp>
+#include <yq/mithril/thing/ThingProvider.hpp>
+#include <yq/mithril/thing/ThingCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_things()

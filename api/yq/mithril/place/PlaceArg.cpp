@@ -6,8 +6,8 @@
 
 
 #include "PlaceArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/place/PlaceCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/place/PlaceCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

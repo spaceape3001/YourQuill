@@ -7,7 +7,7 @@
 #include "WebPage.hpp"
 #include "WebRepo.hxx"
 #include <yq/text/match.hpp>
-#include <mithril/logging.hpp>
+#include <yq/mithril/logging.hpp>
 
 namespace yq::mithril {
     

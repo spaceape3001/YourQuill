@@ -18,8 +18,8 @@
 #include <vector>
 #include <yq/meta/MetaBinder.hpp>
 #include <yq/typedef/counter.hpp>
-#include <mithril/keywords.hpp>
-#include <mithril/typedef/metabase.hpp>
+#include <yq/mithril/keywords.hpp>
+#include <yq/mithril/typedef/metabase.hpp>
 
 namespace yq {
     class ByteArray;

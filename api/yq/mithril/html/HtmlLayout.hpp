@@ -8,8 +8,8 @@
 
 #include <yq/trait/always_false.hpp>
 #include <yq/container/Array.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
 
 
 namespace yq::mithril {

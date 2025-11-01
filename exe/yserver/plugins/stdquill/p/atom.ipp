@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/atom/AtomJson.hpp>
-#include <mithril/atom/AtomSearch.hpp>
+#include <yq/mithril/atom/AtomJson.hpp>
+#include <yq/mithril/atom/AtomSearch.hpp>
 
 namespace {
 

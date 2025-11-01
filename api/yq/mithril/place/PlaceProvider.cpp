@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/place/PlaceProvider.hpp>
-#include <mithril/place/PlaceCDB.hpp>
+#include <yq/mithril/place/PlaceProvider.hpp>
+#include <yq/mithril/place/PlaceCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_places()

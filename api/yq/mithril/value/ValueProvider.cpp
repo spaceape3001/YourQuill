@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/value/ValueProvider.hpp>
-#include <mithril/value/ValueCDB.hpp>
+#include <yq/mithril/value/ValueProvider.hpp>
+#include <yq/mithril/value/ValueCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_values()

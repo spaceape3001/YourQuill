@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/novel/NovelJson.hpp>
-#include <mithril/novel/NovelSearch.hpp>
+#include <yq/mithril/novel/NovelJson.hpp>
+#include <yq/mithril/novel/NovelSearch.hpp>
 
 
 namespace {

@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/game/Game.hpp>
-#include <mithril/game/GameCDB.hpp>
-#include <mithril/game/GameJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/game/Game.hpp>
+#include <yq/mithril/game/GameCDB.hpp>
+#include <yq/mithril/game/GameJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

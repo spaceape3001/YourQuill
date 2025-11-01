@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/group/Group.hpp>
-#include <mithril/group/GroupArg.hpp>
-#include <mithril/group/GroupHtml.hpp>
-#include <mithril/group/GroupPost.hpp>
-#include <mithril/group/GroupCDB.hpp>
+#include <yq/mithril/group/Group.hpp>
+#include <yq/mithril/group/GroupArg.hpp>
+#include <yq/mithril/group/GroupHtml.hpp>
+#include <yq/mithril/group/GroupPost.hpp>
+#include <yq/mithril/group/GroupCDB.hpp>

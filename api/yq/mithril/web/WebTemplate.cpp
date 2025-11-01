@@ -6,13 +6,13 @@
 
 #include "WebHtml.hpp"
 #include "WebTemplate.hpp"
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
 #include <yq/file/FileUtils.hpp>
-#include <mithril/notify/FileNotifyAdapters.hpp>
-#include <mithril/notify/FileWatch.hpp>
-#include <mithril/notify/Stage4.hpp>
+#include <yq/mithril/notify/FileNotifyAdapters.hpp>
+#include <yq/mithril/notify/FileWatch.hpp>
+#include <yq/mithril/notify/Stage4.hpp>
 
 namespace yq::mithril {
 

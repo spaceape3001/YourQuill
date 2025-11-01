@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "GameHtml.hpp"
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomHtml.hpp>
-#include <mithril/game/GameCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomHtml.hpp>
+#include <yq/mithril/game/GameCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Game v)

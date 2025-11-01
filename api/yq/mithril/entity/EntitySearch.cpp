@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/entity/Entity.hpp>
-#include <mithril/entity/EntityCDB.hpp>
-#include <mithril/entity/EntitySearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/entity/Entity.hpp>
+#include <yq/mithril/entity/EntityCDB.hpp>
+#include <yq/mithril/entity/EntitySearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     EntityVector  search(WebContext&ctx, entity_k)

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/group/GroupJson.hpp>
-#include <mithril/group/GroupSearch.hpp>
+#include <yq/mithril/group/GroupJson.hpp>
+#include <yq/mithril/group/GroupSearch.hpp>
 
 namespace {
 

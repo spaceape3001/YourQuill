@@ -8,7 +8,7 @@
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

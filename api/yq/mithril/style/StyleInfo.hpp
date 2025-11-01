@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/document/Document.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/style/Style.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/style/Style.hpp>
 
 namespace yq::mithril {
     struct Style::Info {

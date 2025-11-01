@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril {        
     CacheQuery::CacheQuery(std::string_view sql, bool isPersistent)

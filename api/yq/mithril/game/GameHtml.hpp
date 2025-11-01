@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/html/Html.hpp>
+#include <yq/mithril/html/Html.hpp>
 
 namespace yq::mithril {
     struct Game;

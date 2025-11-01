@@ -34,8 +34,8 @@
 #include <yq/typedef/string.hpp>
 #include <yq/util/Safety.hpp>
 
-#include <mithril/notify/FileNotifyAdapters.hpp>
-#include <mithril/notify/Stage4.hpp>
+#include <yq/mithril/notify/FileNotifyAdapters.hpp>
+#include <yq/mithril/notify/Stage4.hpp>
 
 
 #include <asio/write.hpp>

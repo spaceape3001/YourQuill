@@ -6,9 +6,9 @@
 
 #include "DocumentPost.hpp"
 
-#include <mithril/document/DocumentArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/document/Document.hpp>
+#include <yq/mithril/document/DocumentArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/document/Document.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

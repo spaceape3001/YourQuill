@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/doodle/Doodle.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
-#include <mithril/doodle/DoodleInfo.hpp>
-#include <mithril/doodle/DoodleJson.hpp>
+#include <yq/mithril/doodle/Doodle.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/doodle/DoodleInfo.hpp>
+#include <yq/mithril/doodle/DoodleJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

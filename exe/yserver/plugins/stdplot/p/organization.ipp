@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/organization/OrganizationJson.hpp>
-#include <mithril/organization/OrganizationSearch.hpp>
+#include <yq/mithril/organization/OrganizationJson.hpp>
+#include <yq/mithril/organization/OrganizationSearch.hpp>
 
 namespace {
 

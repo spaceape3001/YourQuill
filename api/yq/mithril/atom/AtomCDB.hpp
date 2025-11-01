@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/atom/Atom.hpp>
-#include <mithril/atom/AtomInfo.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/leaf/Leaf.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/AtomInfo.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/leaf/Leaf.hpp>
 #include <vector>
 
 #define TBL_ATOMS           "Atoms"

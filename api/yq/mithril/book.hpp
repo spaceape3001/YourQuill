@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/book/Book.hpp>
-#include <mithril/book/BookArg.hpp>
-#include <mithril/book/BookCDB.hpp>
-#include <mithril/book/BookHtml.hpp>
-#include <mithril/book/BookPost.hpp>
-#include <mithril/book/BookProvider.hpp>
+#include <yq/mithril/book/Book.hpp>
+#include <yq/mithril/book/BookArg.hpp>
+#include <yq/mithril/book/BookCDB.hpp>
+#include <yq/mithril/book/BookHtml.hpp>
+#include <yq/mithril/book/BookPost.hpp>
+#include <yq/mithril/book/BookProvider.hpp>

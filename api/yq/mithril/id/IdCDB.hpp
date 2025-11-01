@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/id/Id.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Id>     all(IdTypeId, Sorted sorted=Sorted{});

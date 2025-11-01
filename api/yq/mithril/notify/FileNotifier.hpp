@@ -7,9 +7,9 @@
 #pragma once
 
 #include <yq/container/EnumMap.hpp>
-#include <mithril/enum/Change.hpp>
-#include <mithril/file/FileSpec.hpp>
-#include <mithril/folder/Folder.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/file/FileSpec.hpp>
+#include <yq/mithril/folder/Folder.hpp>
 #include <yq/core/Flag.hpp>
 #include <filesystem>
 #include <source_location>

@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/novel/Novel.hpp>
-#include <mithril/novel/NovelCDB.hpp>
-#include <mithril/novel/NovelDiff.hpp>
+#include <yq/mithril/novel/Novel.hpp>
+#include <yq/mithril/novel/NovelCDB.hpp>
+#include <yq/mithril/novel/NovelDiff.hpp>
 
 
 namespace {

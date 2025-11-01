@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/place/PlaceCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/place/PlaceCDB.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Place>      all_places(Sorted sorted)

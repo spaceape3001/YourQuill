@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomPost.hpp>
-#include <mithril/atom/AtomArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/AtomPost.hpp>
+#include <yq/mithril/atom/AtomArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/atom/Atom.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

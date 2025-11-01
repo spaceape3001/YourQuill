@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/category/Category.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/enum/Change.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/util/Changed.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/util/Changed.hpp>
 
 namespace yq::mithril {
     struct Class::Diff {

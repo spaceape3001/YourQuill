@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/graphviz/Graphviz.hpp>
-#include <mithril/graphviz/GraphvizCDB.hpp>
-#include <mithril/graphviz/GraphvizJson.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/GraphvizCDB.hpp>
+#include <yq/mithril/graphviz/GraphvizJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

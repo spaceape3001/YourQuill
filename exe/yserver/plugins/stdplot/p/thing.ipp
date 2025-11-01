@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/thing/ThingJson.hpp>
-#include <mithril/thing/ThingSearch.hpp>
+#include <yq/mithril/thing/ThingJson.hpp>
+#include <yq/mithril/thing/ThingSearch.hpp>
 
 namespace {
 

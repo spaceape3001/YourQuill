@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/folder/FolderProvider.hpp>
-#include <mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/folder/FolderProvider.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_folders()

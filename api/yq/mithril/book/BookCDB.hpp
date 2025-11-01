@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/book/Book.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/book/Book.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Book>   all_books(Sorted sorted=Sorted());

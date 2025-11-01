@@ -9,11 +9,11 @@
 #include <yq/text/match.hpp>
 
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
-#include <mithril/root/Root.hpp>
-#include <mithril/root/RootCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/root/Root.hpp>
+#include <yq/mithril/root/RootCDB.hpp>
 #include <mithrilQt/fragment.hpp>
 #include <mithrilQt/directory.hpp>
 #include <mithrilQt/id.hpp>

@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/value/Value.hpp>
-#include <mithril/value/ValueCDB.hpp>
-#include <mithril/value/ValueJson.hpp>
+#include <yq/mithril/value/Value.hpp>
+#include <yq/mithril/value/ValueCDB.hpp>
+#include <yq/mithril/value/ValueJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

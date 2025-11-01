@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "UserArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/user/UserCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/user/UserCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

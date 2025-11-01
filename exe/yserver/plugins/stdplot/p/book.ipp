@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/book/BookJson.hpp>
-#include <mithril/book/BookSearch.hpp>
+#include <yq/mithril/book/BookJson.hpp>
+#include <yq/mithril/book/BookSearch.hpp>
 #include <yq/typedef/string.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace {
 

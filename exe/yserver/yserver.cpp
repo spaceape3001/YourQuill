@@ -28,12 +28,12 @@
 #include <yq/text/vsplit.hpp>
 #include <yq/typedef/string.hpp>
 
-#include <mithril/web/WebAdapters.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/web/WebPage.hpp>
-#include <mithril/web/WebRedirect.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/web/WebAdapters.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebPage.hpp>
+#include <yq/mithril/web/WebRedirect.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 #include <fstream>
 #include <syncstream>

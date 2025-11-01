@@ -7,8 +7,8 @@
 #include "tag.hpp"
 #include <yq/core/DelayInit.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <mithrilQt/image.hpp>
 #include <yq/text/match.hpp>
 #include <QIcon>

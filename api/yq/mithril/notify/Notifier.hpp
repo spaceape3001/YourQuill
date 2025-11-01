@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <mithril/enum/Change.hpp>
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/id/Id.hpp>
 #include <functional>
 
 namespace yq::mithril {

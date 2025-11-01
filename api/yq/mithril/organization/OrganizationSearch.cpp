@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/organization/Organization.hpp>
-#include <mithril/organization/OrganizationCDB.hpp>
-#include <mithril/organization/OrganizationSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/organization/Organization.hpp>
+#include <yq/mithril/organization/OrganizationCDB.hpp>
+#include <yq/mithril/organization/OrganizationSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     OrganizationVector  search(WebContext&ctx, organization_k)

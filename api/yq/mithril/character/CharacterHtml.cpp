@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CharacterHtml.hpp"
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomHtml.hpp>
-#include <mithril/character/CharacterCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomHtml.hpp>
+#include <yq/mithril/character/CharacterCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Character v)

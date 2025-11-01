@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
     /*! \brief Book in the cache database */

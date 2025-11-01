@@ -9,7 +9,7 @@
 #include <yq/gluon/app/MainWindow.hpp>
 #include <yq/gluon/core/Logging.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>

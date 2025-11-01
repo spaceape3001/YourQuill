@@ -47,48 +47,48 @@ namespace {
 #include <yq/shape/Size2.hxx>
 #include <yq/meta/TypeMeta.hpp>
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomDiff.hpp>
-#include <mithril/attribute/AttributeDiff.hpp>
-#include <mithril/category/Category.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/category/CategoryData.hpp>
-#include <mithril/category/CategoryDiff.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/class/ClassData.hpp>
-#include <mithril/class/ClassDiff.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
-#include <mithril/field/FieldCDB.hpp>
-#include <mithril/field/FieldData.hpp>
-#include <mithril/field/FieldDiff.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/graphviz/GraphvizBuilder.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageDiff.hpp>
-#include <mithril/leaf/LeafCDB.hpp>
-#include <mithril/leaf/LeafData.hpp>
-#include <mithril/leaf/LeafDiff.hpp>
-#include <mithril/meta/Meta.hpp>
-#include <mithril/notify/FileWatch.hpp>
-#include <mithril/notify/FileNotifyAdapters.hpp>
-#include <mithril/notify/Notifier.hpp>
-#include <mithril/notify/Stage2.hpp>
-#include <mithril/notify/Stage3.hpp>
-#include <mithril/notify/Stage4.hpp>
-#include <mithril/novel/NovelCDB.hpp>
-//#include <mithril/novel/NovelData.hpp>
-#include <mithril/tag/Tag.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/tag/TagData.hpp>
-#include <mithril/tag/TagDiff.hpp>
-#include <mithril/user/UserCDB.hpp>
-#include <mithril/user/UserData.hpp>
-#include <mithril/user/UserDiff.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomDiff.hpp>
+#include <yq/mithril/attribute/AttributeDiff.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/category/CategoryData.hpp>
+#include <yq/mithril/category/CategoryDiff.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/class/ClassData.hpp>
+#include <yq/mithril/class/ClassDiff.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
+#include <yq/mithril/field/FieldData.hpp>
+#include <yq/mithril/field/FieldDiff.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/graphviz/GraphvizBuilder.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageDiff.hpp>
+#include <yq/mithril/leaf/LeafCDB.hpp>
+#include <yq/mithril/leaf/LeafData.hpp>
+#include <yq/mithril/leaf/LeafDiff.hpp>
+#include <yq/mithril/meta/Meta.hpp>
+#include <yq/mithril/notify/FileWatch.hpp>
+#include <yq/mithril/notify/FileNotifyAdapters.hpp>
+#include <yq/mithril/notify/Notifier.hpp>
+#include <yq/mithril/notify/Stage2.hpp>
+#include <yq/mithril/notify/Stage3.hpp>
+#include <yq/mithril/notify/Stage4.hpp>
+#include <yq/mithril/novel/NovelCDB.hpp>
+//#include <yq/mithril/novel/NovelData.hpp>
+#include <yq/mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/tag/TagData.hpp>
+#include <yq/mithril/tag/TagDiff.hpp>
+#include <yq/mithril/user/UserCDB.hpp>
+#include <yq/mithril/user/UserData.hpp>
+#include <yq/mithril/user/UserDiff.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 using namespace yq;
 using namespace yq::mithril;
@@ -96,11 +96,11 @@ using namespace yq::mithril;
 //#include "uLeaf.ipp"
 //#include "uRoot.ipp"
 
-//#include <mithril/atom/AtomUpdate.hpp>
-//#include <mithril/class/ClassUpdate.hpp>
-//#include <mithril/document/DocumentUpdate.hpp>
-//#include <mithril/field/FieldUpdate.hpp>
-//#include <mithril/leaf/LeafUpdate.hpp>
+//#include <yq/mithril/atom/AtomUpdate.hpp>
+//#include <yq/mithril/class/ClassUpdate.hpp>
+//#include <yq/mithril/document/DocumentUpdate.hpp>
+//#include <yq/mithril/field/FieldUpdate.hpp>
+//#include <yq/mithril/leaf/LeafUpdate.hpp>
 
 //#include <yq/core/BasicApp.hpp>
 //#include <0/basic/CollectionUtils.hpp>
@@ -110,40 +110,40 @@ using namespace yq::mithril;
 
 
 
-//#include <mithril/atom/AtomCDB.hpp>
-//#include <mithril/class/ClassCDB.hpp>
-//#include <mithril/folder/FolderCDB.hpp>
-//#include <mithril/field/FieldCDB.hpp>
-//#include <mithril/value/ValueCDB.hpp>
-//#include <mithril/attribute/AttributeCDB.hpp>
-//#include <mithril/document/DocumentCDB.hpp>
-//#include <mithril/root/RootDir.hpp>
-//#include <mithril/image/ImageCDB.hpp>
-//#include <mithril/io/Strings.hpp>
-//#include <mithril/leaf/LeafCDB.hpp>
-//#include <mithril/leaf/LeafData.hpp>
-//#include <mithril/notify/AtomNotifier.hpp>
-//#include <mithril/category/CategoryCDB.hpp>
-//#include <mithril/tag/TagCDB.hpp>
-//#include <mithril/user/User.hpp>
-//#include <mithril/user/UserCDB.hpp>
+//#include <yq/mithril/atom/AtomCDB.hpp>
+//#include <yq/mithril/class/ClassCDB.hpp>
+//#include <yq/mithril/folder/FolderCDB.hpp>
+//#include <yq/mithril/field/FieldCDB.hpp>
+//#include <yq/mithril/value/ValueCDB.hpp>
+//#include <yq/mithril/attribute/AttributeCDB.hpp>
+//#include <yq/mithril/document/DocumentCDB.hpp>
+//#include <yq/mithril/root/RootDir.hpp>
+//#include <yq/mithril/image/ImageCDB.hpp>
+//#include <yq/mithril/io/Strings.hpp>
+//#include <yq/mithril/leaf/LeafCDB.hpp>
+//#include <yq/mithril/leaf/LeafData.hpp>
+//#include <yq/mithril/notify/AtomNotifier.hpp>
+//#include <yq/mithril/category/CategoryCDB.hpp>
+//#include <yq/mithril/tag/TagCDB.hpp>
+//#include <yq/mithril/user/User.hpp>
+//#include <yq/mithril/user/UserCDB.hpp>
 
-//#include <mithril/atom.hpp>
-//#include <mithril/attribute.hpp>
+//#include <yq/mithril/atom.hpp>
+//#include <yq/mithril/attribute.hpp>
 
-//#include <mithril/class.hpp>
-//#include <mithril/directory.hpp>
-//#include <mithril/document.hpp>
-//#include <mithril/field.hpp>
-//#include <mithril/folder.hpp>
-//#include <mithril/fragment.hpp>
+//#include <yq/mithril/class.hpp>
+//#include <yq/mithril/directory.hpp>
+//#include <yq/mithril/document.hpp>
+//#include <yq/mithril/field.hpp>
+//#include <yq/mithril/folder.hpp>
+//#include <yq/mithril/fragment.hpp>
 
 
-//#include <mithril/leaf.hpp>
-//#include <mithril/root.hpp>
+//#include <yq/mithril/leaf.hpp>
+//#include <yq/mithril/root.hpp>
 
-//#include <mithril/user.hpp>
-//#include <mithril/value.hpp>
+//#include <yq/mithril/user.hpp>
+//#include <yq/mithril/value.hpp>
 
 
 struct Sigma {

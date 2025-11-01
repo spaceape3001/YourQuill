@@ -7,9 +7,9 @@
 #include "CharacterCDB.hpp"
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/atom/Atom.hpp>
-#include <mithril/entity/Entity.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/entity/Entity.hpp>
+#include <yq/mithril/image/Image.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Character)
 YQ_TYPE_IMPLEMENT(yq::mithril::CharacterSet)

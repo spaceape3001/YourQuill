@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/event/Event.hpp>
+#include <yq/mithril/event/Event.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
 class QIcon;

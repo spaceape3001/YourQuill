@@ -6,7 +6,7 @@
 
 #pragma once
 
-//#include <mithril/enum/change.hpp>
+//#include <yq/mithril/enum/change.hpp>
 #include <yq/net/Http.hpp>
 #include <yq/core/Flag.hpp>
 #include <yq/container/EnumMap.hpp>
@@ -15,8 +15,8 @@
 #include <yq/trait/not_copyable.hpp>
 #include <yq/typedef/filesystem_path.hpp>
 
-#include <mithril/preamble.hpp>
-#include <mithril/typedef/metabase.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/typedef/metabase.hpp>
 
 #include <functional>
 #include <source_location>

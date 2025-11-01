@@ -13,21 +13,21 @@
 #include <yq/core/StreamOps.hpp>
 
 
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 
-#include <mithril/web/PageTemplate.hpp>
-#include <mithril/web/TypedBytes.hpp>
-#include <mithril/web/Template.hpp>
+#include <yq/mithril/web/PageTemplate.hpp>
+#include <yq/mithril/web/TypedBytes.hpp>
+#include <yq/mithril/web/Template.hpp>
 
 
-#include <mithril/bit/Copyright.hpp>
-#include <mithril/enum/Submit.hpp>
+#include <yq/mithril/bit/Copyright.hpp>
+#include <yq/mithril/enum/Submit.hpp>
 
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/web/WebPage.hpp>
-#include <mithril/web/WebAdapters.hpp>
-#include <mithril/web/WebTemplate.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebPage.hpp>
+#include <yq/mithril/web/WebAdapters.hpp>
+#include <yq/mithril/web/WebTemplate.hpp>
 
 
 using namespace yq;

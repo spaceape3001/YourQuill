@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "NovelArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/novel/NovelCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/novel/NovelCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

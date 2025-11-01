@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "GroupHtml.hpp"
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomHtml.hpp>
-#include <mithril/group/GroupCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomHtml.hpp>
+#include <yq/mithril/group/GroupCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Group v)

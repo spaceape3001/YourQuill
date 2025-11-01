@@ -4,25 +4,25 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/directory/Directory.hpp>
-#include <mithril/directory/DirectoryArg.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/directory/Directory.hpp>
+#include <yq/mithril/directory/DirectoryArg.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
 
-#include <mithril/document/Document.hpp>
-#include <mithril/document/DocumentArg.hpp>
-#include <mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/document/DocumentArg.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
 
-#include <mithril/folder/Folder.hpp>
-#include <mithril/folder/FolderArg.hpp>
-#include <mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/folder/Folder.hpp>
+#include <yq/mithril/folder/FolderArg.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
 
-#include <mithril/fragment/Fragment.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/fragment/FragmentSearch.hpp>
+#include <yq/mithril/fragment/Fragment.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/fragment/FragmentSearch.hpp>
 
-#include <mithril/root/RootArg.hpp>
-#include <mithril/root/RootCDB.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/root/RootArg.hpp>
+#include <yq/mithril/root/RootCDB.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     bool            search(WebSearcher<Fragment>&ws, directory_k)

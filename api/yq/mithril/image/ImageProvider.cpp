@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/image/ImageProvider.hpp>
-#include <mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageProvider.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_images()

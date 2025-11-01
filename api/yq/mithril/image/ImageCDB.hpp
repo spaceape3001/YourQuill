@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/enum/SizeDesc.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/image/ImageInfo.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/enum/SizeDesc.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/image/ImageInfo.hpp>
 #include <yq/net/ContentType.hpp>
 #include <yq/shape/Size2.hpp>
 

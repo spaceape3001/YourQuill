@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/event/Event.hpp>
-#include <mithril/event/EventCDB.hpp>
-#include <mithril/event/EventSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/event/Event.hpp>
+#include <yq/mithril/event/EventCDB.hpp>
+#include <yq/mithril/event/EventSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     EventVector  search(WebContext&ctx, event_k)

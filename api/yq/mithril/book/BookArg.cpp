@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "BookArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/book/BookCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/book/BookCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

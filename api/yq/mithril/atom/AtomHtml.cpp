@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <yq/text/Comma.hpp>
-#include <mithril/atom/AtomHtml.hpp>
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/attribute/AttributeHtml.hpp>
-#include <mithril/field/FieldHtml.hpp>
+#include <yq/mithril/atom/AtomHtml.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/attribute/AttributeHtml.hpp>
+#include <yq/mithril/field/FieldHtml.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Atom v)

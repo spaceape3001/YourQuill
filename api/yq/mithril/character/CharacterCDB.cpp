@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/character/CharacterCDB.hpp>
-#include <mithril/entity/Entity.hpp>
-#include <mithril/logging.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/character/CharacterCDB.hpp>
+#include <yq/mithril/entity/Entity.hpp>
+#include <yq/mithril/logging.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Character>      all_characters(Sorted sorted)

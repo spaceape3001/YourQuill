@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/place/Place.hpp>
-#include <mithril/place/PlaceCDB.hpp>
-#include <mithril/place/PlaceJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/place/Place.hpp>
+#include <yq/mithril/place/PlaceCDB.hpp>
+#include <yq/mithril/place/PlaceJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

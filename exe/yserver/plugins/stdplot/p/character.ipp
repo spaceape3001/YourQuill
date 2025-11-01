@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/character/CharacterJson.hpp>
-#include <mithril/character/CharacterSearch.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/character/CharacterJson.hpp>
+#include <yq/mithril/character/CharacterSearch.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace {
 

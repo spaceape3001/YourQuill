@@ -6,14 +6,14 @@
 
 #include "DirectoryCDB.hpp"
 
-#include <mithril/folder/Folder.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/Fragment.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
-#include <mithril/logging.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/folder/Folder.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/Fragment.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
+#include <yq/mithril/logging.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::cdb {

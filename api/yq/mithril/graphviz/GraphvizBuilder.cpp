@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/graphviz/GraphvizBuilder.hpp>
-#include <mithril/graphviz/GraphvizCDB.hpp>
+#include <yq/mithril/graphviz/GraphvizBuilder.hpp>
+#include <yq/mithril/graphviz/GraphvizCDB.hpp>
 #include <yq/core/StreamOps.hpp>
 #include <yq/stream/Text.hpp>
 

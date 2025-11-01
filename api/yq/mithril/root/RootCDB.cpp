@@ -6,14 +6,14 @@
 
 #include "RootCDB.hpp"
 #include <yq/file/DirUtils.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/Root.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
-#include <mithril/logging.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/root/Root.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
+#include <yq/mithril/logging.hpp>
 
 namespace yq::mithril::cdb {
     DirectoryVector   all_directories(const RootDir*rt, Sorted sorted)

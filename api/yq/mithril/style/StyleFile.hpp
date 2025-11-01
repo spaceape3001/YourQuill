@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/style/StyleData.hpp>
+#include <yq/mithril/style/StyleData.hpp>
 #include <yq/keyv/StdFile.hpp>
 
 #define TAG_XML_RESAVE  0

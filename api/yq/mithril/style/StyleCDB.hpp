@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/atom/Atom.hpp>
-#include <mithril/document/Document.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/style/Style.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/style/Style.hpp>
 #include <vector>
 
 #define TBL_STYLES   "Styles"

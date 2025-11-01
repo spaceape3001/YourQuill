@@ -8,7 +8,7 @@
 
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/folder/Folder.hpp>
+#include <yq/mithril/folder/Folder.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Directory)
 YQ_TYPE_IMPLEMENT(yq::mithril::DirectorySet)

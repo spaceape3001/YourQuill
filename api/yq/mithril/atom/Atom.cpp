@@ -4,20 +4,20 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/Atom.hpp>
-#include <mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
 
 #include <yq/file/FileUtils.hpp>
 #include <yq/text/transform.hpp>
 
-#include <mithril/document/Document.hpp>
-#include <mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
 
-#include <mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/Tag.hpp>
 
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/notify/Notifier.hxx>
+#include <yq/mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Atom)
 YQ_TYPE_IMPLEMENT(yq::mithril::AtomSet)

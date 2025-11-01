@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/graphviz/GraphvizBuilder.hpp>
-#include <mithril/graphviz/GraphvizCDB.hpp> // placebo to get cdb::key & name into scope
+#include <yq/mithril/graphviz/GraphvizBuilder.hpp>
+#include <yq/mithril/graphviz/GraphvizCDB.hpp> // placebo to get cdb::key & name into scope
 #include <0/basic/TextUtils.hpp>
 #include <variant>
 #include <functional>

@@ -5,12 +5,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ImageHtml.hpp"
-#include <mithril/fragment/FragmentHtml.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
+#include <yq/mithril/fragment/FragmentHtml.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml& h, Image i)

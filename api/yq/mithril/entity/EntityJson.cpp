@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/entity/Entity.hpp>
-#include <mithril/entity/EntityCDB.hpp>
-#include <mithril/entity/EntityJson.hpp>
+#include <yq/mithril/entity/Entity.hpp>
+#include <yq/mithril/entity/EntityCDB.hpp>
+#include <yq/mithril/entity/EntityJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

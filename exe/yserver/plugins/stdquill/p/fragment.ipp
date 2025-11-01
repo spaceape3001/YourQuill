@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/fragment/FragmentArg.hpp>
-#include <mithril/fragment/FragmentJson.hpp>
-#include <mithril/fragment/FragmentSearch.hpp>
+#include <yq/mithril/fragment/FragmentArg.hpp>
+#include <yq/mithril/fragment/FragmentJson.hpp>
+#include <yq/mithril/fragment/FragmentSearch.hpp>
 
 namespace {
 

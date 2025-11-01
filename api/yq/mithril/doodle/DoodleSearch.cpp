@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/doodle/Doodle.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
-#include <mithril/doodle/DoodleSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/doodle/Doodle.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/doodle/DoodleSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     DoodleVector  search(WebContext&ctx, doodle_k)

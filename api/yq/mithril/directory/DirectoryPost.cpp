@@ -6,9 +6,9 @@
 
 #include "DirectoryPost.hpp"
 
-#include <mithril/directory/DirectoryArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/directory/Directory.hpp>
+#include <yq/mithril/directory/DirectoryArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/directory/Directory.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/doodle/Doodle.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
-#include <mithril/doodle/DoodleDiff.hpp>
-#include <mithril/doodle/DoodleInfo.hpp>
+#include <yq/mithril/doodle/Doodle.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/doodle/DoodleDiff.hpp>
+#include <yq/mithril/doodle/DoodleInfo.hpp>
 
 namespace {
     void    u_doodle(Doodle v, Change chg)

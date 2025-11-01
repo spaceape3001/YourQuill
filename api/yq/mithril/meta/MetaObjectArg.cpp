@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/meta/MetaObjectArg.hpp>
+#include <yq/mithril/meta/MetaObjectArg.hpp>
 #include <yq/meta/ObjectMeta.hpp>
 
-#include <mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebContext.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

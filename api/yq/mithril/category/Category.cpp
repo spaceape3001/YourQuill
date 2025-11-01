@@ -8,9 +8,9 @@
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 
-#include <mithril/document/Document.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/notify/Notifier.hxx>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Category)
 YQ_TYPE_IMPLEMENT(yq::mithril::CategorySet)

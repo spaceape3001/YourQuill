@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/folder/Folder.hpp>
-#include <mithril/folder/FolderArg.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/folder/FolderSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/folder/Folder.hpp>
+#include <yq/mithril/folder/FolderArg.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/folder/FolderSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     bool          search(WebSearcher<Folder>&ws, parent_k)

@@ -10,7 +10,7 @@
 #include "WebVariable.hpp"
 #include <yq/text/join.hpp>
 #include <yq/core/StreamOps.hpp>
-#include <mithril/logging.hpp>
+#include <yq/mithril/logging.hpp>
 
 namespace yq::mithril {
     static constexpr const char*    szDefaultTemplate = "<HTML><HEAD><TITLE>{{TITLE}}</TITLE></HEAD><BODY><H1>{{TITLE}}</H1>{{BODY}}</BODY></HTML>";

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cstdint>
-#include <mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/Atom.hpp>
 
 namespace yq::mithril {
     /*! \brief Group (of entities/etc) in the cache database */

@@ -6,9 +6,9 @@
 
 #include "FragmentPost.hpp"
 
-#include <mithril/fragment/FragmentArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/fragment/Fragment.hpp>
+#include <yq/mithril/fragment/FragmentArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/fragment/Fragment.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

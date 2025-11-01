@@ -13,28 +13,28 @@
 #include <yq/text/join.hpp>
 #include <yq/typedef/string.hpp>
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/field/FieldCDB.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/RootCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/leaf/LeafCDB.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/user/UserCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/root/RootCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/leaf/LeafCDB.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/user/UserCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
-#include <mithril/web/VarTemplate.hpp>
-#include <mithril/web/WebAdapters.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebVariable.hpp>
+#include <yq/mithril/web/VarTemplate.hpp>
+#include <yq/mithril/web/WebAdapters.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebVariable.hpp>
 
 using namespace yq;
 using namespace yq::mithril;

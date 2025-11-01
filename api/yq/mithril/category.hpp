@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <mithril/category/Category.hpp>
-#include <mithril/category/CategoryArg.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/category/CategoryData.hpp>
-#include <mithril/category/CategoryFile.hpp>
-#include <mithril/category/CategoryHtml.hpp>
-#include <mithril/category/CategoryInfo.hpp>
-#include <mithril/category/CategoryPost.hpp>
-#include <mithril/category/CategoryProvider.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/category/CategoryArg.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/category/CategoryData.hpp>
+#include <yq/mithril/category/CategoryFile.hpp>
+#include <yq/mithril/category/CategoryHtml.hpp>
+#include <yq/mithril/category/CategoryInfo.hpp>
+#include <yq/mithril/category/CategoryPost.hpp>
+#include <yq/mithril/category/CategoryProvider.hpp>
 

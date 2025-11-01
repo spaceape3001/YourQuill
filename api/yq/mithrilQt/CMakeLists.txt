@@ -82,7 +82,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR}/..
+        ${YQUILL_API_DIR}
     PRIVATE
         ${TBB_INCLUDE_DIR}
         ${LOG4CPP_INCLUDE_DIR}

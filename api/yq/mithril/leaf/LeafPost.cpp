@@ -6,9 +6,9 @@
 
 #include "LeafPost.hpp"
 
-#include <mithril/leaf/LeafArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/leaf/Leaf.hpp>
+#include <yq/mithril/leaf/LeafArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/leaf/Leaf.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

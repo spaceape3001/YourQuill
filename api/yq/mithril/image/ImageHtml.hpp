@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/html/Html.hpp>
-#include <mithril/preamble.hpp>
-#include <mithril/enum/SizeDesc.hpp>
+#include <yq/mithril/html/Html.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/enum/SizeDesc.hpp>
 
 namespace yq::mithril {
     struct Thumbnail;

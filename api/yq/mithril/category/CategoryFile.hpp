@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/category/CategoryData.hpp>
+#include <yq/mithril/category/CategoryData.hpp>
 #include <yq/keyv/StdFile.hpp>
 
 namespace yq::mithril {

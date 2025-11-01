@@ -8,21 +8,21 @@
 //#include <0/basic/CollectionUtils.hpp>
 #include <yq/file/FileUtils.hpp>
 #include <yq/meta/TypeMeta.hpp>
-#include <mithril/logging.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/field/FieldFile.hpp>
-#include <mithril/bit/NKI.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/field/FieldInfo.hpp>
-#include <mithril/field/FieldCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/logging.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/field/FieldFile.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/field/FieldInfo.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::cdb {
     namespace {

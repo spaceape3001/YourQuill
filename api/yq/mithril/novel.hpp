@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/novel/Novel.hpp>
-#include <mithril/novel/NovelArg.hpp>
-#include <mithril/novel/NovelCDB.hpp>
-#include <mithril/novel/NovelHtml.hpp>
-#include <mithril/novel/NovelPost.hpp>
-#include <mithril/novel/NovelProvider.hpp>
+#include <yq/mithril/novel/Novel.hpp>
+#include <yq/mithril/novel/NovelArg.hpp>
+#include <yq/mithril/novel/NovelCDB.hpp>
+#include <yq/mithril/novel/NovelHtml.hpp>
+#include <yq/mithril/novel/NovelPost.hpp>
+#include <yq/mithril/novel/NovelProvider.hpp>
 
 

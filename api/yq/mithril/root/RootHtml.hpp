@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/html/Html.hpp>
-#include <mithril/enum/Access.hpp>
-#include <mithril/enum/DataRole.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/html/Html.hpp>
+#include <yq/mithril/enum/Access.hpp>
+#include <yq/mithril/enum/DataRole.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&, const RootDir*);

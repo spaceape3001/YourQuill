@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <mithril/attribute/AttributeArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

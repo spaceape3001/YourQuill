@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/folder/FolderJson.hpp>
-#include <mithril/folder/FolderSearch.hpp>
+#include <yq/mithril/folder/FolderJson.hpp>
+#include <yq/mithril/folder/FolderSearch.hpp>
 
 namespace {
 

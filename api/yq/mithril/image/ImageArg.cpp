@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ImageArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/image/ImageCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

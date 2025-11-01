@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/style/Style.hpp>
-#include <mithril/style/StyleCDB.hpp>
-#include <mithril/style/StyleDiff.hpp>
-#include <mithril/style/StyleInfo.hpp>
-#include <mithril/style/StyleData.hpp>
+#include <yq/mithril/style/Style.hpp>
+#include <yq/mithril/style/StyleCDB.hpp>
+#include <yq/mithril/style/StyleDiff.hpp>
+#include <yq/mithril/style/StyleInfo.hpp>
+#include <yq/mithril/style/StyleData.hpp>
 
 namespace {
     void    u_style(Style t, Change chg)

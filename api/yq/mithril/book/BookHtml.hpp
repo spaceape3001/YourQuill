@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/html/Html.hpp>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/html/Html.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&, Book);

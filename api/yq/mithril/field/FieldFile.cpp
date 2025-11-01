@@ -7,7 +7,7 @@
 #include "FieldFile.hpp"
 #include <yq/xml/XmlUtils.hpp>
 #include <yq/keyv/KeyValue.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/io/Strings.hpp>
 #include <yq/core/ErrorDB.hpp>
 #include <yq/text/join.hpp>
 

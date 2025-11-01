@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/entity/EntityJson.hpp>
-#include <mithril/entity/EntitySearch.hpp>
+#include <yq/mithril/entity/EntityJson.hpp>
+#include <yq/mithril/entity/EntitySearch.hpp>
 
 namespace {
 

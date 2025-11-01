@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/directory/DirectoryProvider.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/directory/DirectoryProvider.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_directories()

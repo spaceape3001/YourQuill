@@ -9,18 +9,18 @@
 //
 #include <yq/core/StreamOps.hpp>
 #include <yq/stream/Text.hpp>
-#include <mithril/bit/NKI.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/class/ClassArg.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/document/DocumentHtml.hpp>
-#include <mithril/html/HtmlLayout.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageHtml.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/root/RootHtml.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/class/ClassArg.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/document/DocumentHtml.hpp>
+#include <yq/mithril/html/HtmlLayout.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageHtml.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/root/RootHtml.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::html {

@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <mithril/atom/Atom.hpp>
-#include <mithril/atom/AtomArg.hpp>
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomHtml.hpp>
-#include <mithril/atom/AtomInfo.hpp>
-#include <mithril/atom/AtomPost.hpp>
-#include <mithril/atom/AtomProvider.hpp>
-#include <mithril/atom/AtomSearch.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/AtomArg.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomHtml.hpp>
+#include <yq/mithril/atom/AtomInfo.hpp>
+#include <yq/mithril/atom/AtomPost.hpp>
+#include <yq/mithril/atom/AtomProvider.hpp>
+#include <yq/mithril/atom/AtomSearch.hpp>
 

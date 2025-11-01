@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/group/GroupProvider.hpp>
-#include <mithril/group/GroupCDB.hpp>
+#include <yq/mithril/group/GroupProvider.hpp>
+#include <yq/mithril/group/GroupCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_groups()

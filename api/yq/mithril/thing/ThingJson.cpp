@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/image/Image.hpp>
-#include <mithril/thing/Thing.hpp>
-#include <mithril/thing/ThingCDB.hpp>
-#include <mithril/thing/ThingJson.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/thing/Thing.hpp>
+#include <yq/mithril/thing/ThingCDB.hpp>
+#include <yq/mithril/thing/ThingJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

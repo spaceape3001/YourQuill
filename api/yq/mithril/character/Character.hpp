@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/entity/Entity.hpp>
+#include <yq/mithril/entity/Entity.hpp>
 
 namespace yq::mithril {
     /*! \brief Character in the cache database */

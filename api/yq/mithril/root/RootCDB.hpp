@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 #include <filesystem>
 
 #define TBL_ROOTS       "Roots"

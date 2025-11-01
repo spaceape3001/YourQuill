@@ -9,7 +9,7 @@
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
 #include <mithrilQt/image.hpp>
 #include <QIcon>
 

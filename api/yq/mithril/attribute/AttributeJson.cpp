@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/attribute/Attribute.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/attribute/AttributeJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

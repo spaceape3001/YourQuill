@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/enum/Format.hpp>
+#include <yq/mithril/enum/Format.hpp>
 #include <yq/typedef/xml.hpp>
 #include <vector>
 

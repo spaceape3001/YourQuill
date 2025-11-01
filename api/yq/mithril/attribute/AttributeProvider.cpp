@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/attribute/AttributeProvider.hpp>
-#include <mithril/document/Document.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeProvider.hpp>
+#include <yq/mithril/document/Document.hpp>
 
 namespace yq::mithril::provider {
     IdProvider  all_attributes()

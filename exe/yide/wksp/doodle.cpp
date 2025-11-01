@@ -8,7 +8,7 @@
 #include "DreamMW.hpp"
 #include "IdTable.hpp"
 
-#include <mithril/doodle/Doodle.hpp>
+#include <yq/mithril/doodle/Doodle.hpp>
 #include <yq/core/DelayInit.hpp>
 
 using namespace yq;

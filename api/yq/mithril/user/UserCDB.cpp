@@ -6,16 +6,16 @@
 
 #include <yq/container/ByteArray.hpp>
 #include <yq/core/Logging.hpp>
-#include <mithril/bit/NKI.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/user/UserCDB.hpp>
-#include <mithril/user/UserInfo.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/user/UserCDB.hpp>
+#include <yq/mithril/user/UserInfo.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::cdb {
     namespace {

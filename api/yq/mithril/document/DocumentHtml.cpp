@@ -8,10 +8,10 @@
 #include <yq/file/DirUtils.hpp>
 #include <yq/text/match.hpp>
 #include <yq/typedef/string.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageHtml.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageHtml.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::html {
     //WebHtml&    operator<<(WebHtml&, Document);

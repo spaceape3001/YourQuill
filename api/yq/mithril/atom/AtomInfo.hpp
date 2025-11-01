@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/atom/Atom.hpp>
-#include <mithril/attribute/Attribute.hpp>
-#include <mithril/field/Field.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/leaf/Leaf.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
+#include <yq/mithril/field/Field.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/leaf/Leaf.hpp>
 
 namespace yq::mithril {
     struct Atom::Info {

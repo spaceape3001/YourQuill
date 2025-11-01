@@ -6,7 +6,7 @@
 
 #include "Graphviz.hpp"
 #include "GraphvizCDB.hpp"
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Graphviz>      all_graphvizs(Sorted sorted)

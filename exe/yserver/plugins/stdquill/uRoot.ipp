@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/image/Image.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 using namespace yq;
 using namespace yq::mithril;

@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/document/Document.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/document/DocumentJson.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/document/DocumentJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Copyright.hpp"
-#include <mithril/errors.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/errors.hpp>
+#include <yq/mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
 
 namespace yq::mithril {

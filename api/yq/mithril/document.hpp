@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/document/Document.hpp>
-#include <mithril/document/DocumentArg.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/document/DocumentHtml.hpp>
-#include <mithril/document/DocumentPost.hpp>
-#include <mithril/document/DocumentProvider.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/document/DocumentArg.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/document/DocumentHtml.hpp>
+#include <yq/mithril/document/DocumentPost.hpp>
+#include <yq/mithril/document/DocumentProvider.hpp>
 

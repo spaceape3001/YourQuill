@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "RootArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/root/RootCDB.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/root/RootCDB.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

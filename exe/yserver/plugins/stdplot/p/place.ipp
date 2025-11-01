@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/place/PlaceJson.hpp>
-#include <mithril/place/PlaceSearch.hpp>
+#include <yq/mithril/place/PlaceJson.hpp>
+#include <yq/mithril/place/PlaceSearch.hpp>
 
 namespace {
 

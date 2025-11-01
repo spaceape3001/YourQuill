@@ -9,8 +9,8 @@
 #include "Template.hpp"
 #include "WebVariable.hpp"
 
-#include <mithril/preamble.hpp>
-#include <mithril/folder/Folder.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/folder/Folder.hpp>
 #include <yq/core/Guarded.hpp>
 #include <filesystem>
 

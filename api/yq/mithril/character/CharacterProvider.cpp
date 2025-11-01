@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/character/CharacterProvider.hpp>
-#include <mithril/character/CharacterCDB.hpp>
+#include <yq/mithril/character/CharacterProvider.hpp>
+#include <yq/mithril/character/CharacterCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_characters()

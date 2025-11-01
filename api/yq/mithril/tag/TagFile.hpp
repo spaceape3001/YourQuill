@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/tag/TagData.hpp>
+#include <yq/mithril/tag/TagData.hpp>
 #include <yq/keyv/StdFile.hpp>
 
 #define TAG_XML_RESAVE  0

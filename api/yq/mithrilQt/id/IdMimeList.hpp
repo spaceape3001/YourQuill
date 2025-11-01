@@ -7,7 +7,7 @@
 #pragma once
 
 #include <QMimeData>
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/id/Id.hpp>
 #include <QStringList>
 
 namespace yq::mithril {

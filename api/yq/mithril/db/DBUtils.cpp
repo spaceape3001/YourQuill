@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 #include <yq/meta/TypeMeta.hpp>
 #include <yq/text/basic.hpp>
 

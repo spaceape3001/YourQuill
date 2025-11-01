@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <mithril/attribute/AttributeHtml.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeHtml.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Dev<Attribute> v)

@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/document/Document.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/document/DocumentUpdate.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/document/DocumentUpdate.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
     void UDocument::u_icon(Document x,Image img)

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/class/Class.hpp>
+#include <yq/mithril/class/Class.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
 class QIcon;

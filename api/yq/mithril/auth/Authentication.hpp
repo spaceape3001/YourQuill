@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <mithril/io/StdObject.hpp>
+#include <yq/mithril/io/StdObject.hpp>
 
 
 namespace yq::mithril {        

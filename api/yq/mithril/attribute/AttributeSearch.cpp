@@ -4,14 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/attribute/Attribute.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/attribute/AttributeSearch.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeSearch.hpp>
 
-#include <mithril/document/Document.hpp>
-#include <mithril/document/DocumentArg.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/document/DocumentArg.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     bool            search(WebSearcher<Attribute>&ws, document_k)

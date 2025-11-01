@@ -6,20 +6,20 @@
 
 #include <iostream>
 
-#include <mithril/ShareDir.hpp>
-#include <mithril/Wksp.hpp>
+#include <yq/mithril/ShareDir.hpp>
+#include <yq/mithril/Wksp.hpp>
 
 #include <srv/Page.hpp>
 #include <srv/Scanner.hpp>
 #include <srv/Session.hpp>
 #include <srv/TLSGlobals.hpp>
 
-#include <mithril/CmdArgs.hpp>
-#include <mithril/FileUtils.hpp>
-#include <mithril/LogFile.hpp>
-#include <mithril/Logging.hpp>
-#include <mithril/Safety.hpp>
-#include <mithril/SqlUtils.hpp>
+#include <yq/mithril/CmdArgs.hpp>
+#include <yq/mithril/FileUtils.hpp>
+#include <yq/mithril/LogFile.hpp>
+#include <yq/mithril/Logging.hpp>
+#include <yq/mithril/Safety.hpp>
+#include <yq/mithril/SqlUtils.hpp>
 
 #include <httpserver/httpcookie.h>
 #include <httpserver/httplistener.h>

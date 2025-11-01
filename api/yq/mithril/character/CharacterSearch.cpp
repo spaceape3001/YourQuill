@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/character/Character.hpp>
-#include <mithril/character/CharacterCDB.hpp>
-#include <mithril/character/CharacterSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/character/Character.hpp>
+#include <yq/mithril/character/CharacterCDB.hpp>
+#include <yq/mithril/character/CharacterSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     CharacterVector  search(WebContext&ctx, character_k)

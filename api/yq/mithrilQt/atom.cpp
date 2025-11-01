@@ -8,7 +8,7 @@
 
 #include <yq/core/DelayInit.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
 #include <mithrilQt/field.hpp>
 #include <mithrilQt/image.hpp>
 #include <QIcon>

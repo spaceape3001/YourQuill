@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/place/Place.hpp>
-#include <mithril/place/PlaceArg.hpp>
-#include <mithril/place/PlaceCDB.hpp>
-#include <mithril/place/PlaceHtml.hpp>
-#include <mithril/place/PlacePost.hpp>
-#include <mithril/place/PlaceProvider.hpp>
+#include <yq/mithril/place/Place.hpp>
+#include <yq/mithril/place/PlaceArg.hpp>
+#include <yq/mithril/place/PlaceCDB.hpp>
+#include <yq/mithril/place/PlaceHtml.hpp>
+#include <yq/mithril/place/PlacePost.hpp>
+#include <yq/mithril/place/PlaceProvider.hpp>

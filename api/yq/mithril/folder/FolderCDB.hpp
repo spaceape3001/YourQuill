@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/folder/Folder.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/folder/Folder.hpp>
 #include <vector>
 
 #define TBL_FOLDERS "Folders"

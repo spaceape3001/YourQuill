@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "WebContext.hpp"
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 #include <string_view>
 #include <yq/core/Result.hpp>
 #include <yq/text/basic.hpp>

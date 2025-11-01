@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/category/Category.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/category/CategorySearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/category/CategorySearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     CategoryVector  search(WebContext&ctx, category_k)

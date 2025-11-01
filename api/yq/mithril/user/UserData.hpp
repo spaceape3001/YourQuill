@@ -9,10 +9,10 @@
 #include <yq/core/Ref.hpp>
 #include <yq/container/Set.hpp>
 
-#include <mithril/bit/Context.hpp>
-#include <mithril/enum/Permission.hpp>
-#include <mithril/auth/Authentication.hpp>
-#include <mithril/user/User.hpp>
+#include <yq/mithril/bit/Context.hpp>
+#include <yq/mithril/enum/Permission.hpp>
+#include <yq/mithril/auth/Authentication.hpp>
+#include <yq/mithril/user/User.hpp>
 
 #include <memory>
 #include <vector>

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/web/WebContext.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/web/WebContext.hpp>
 
 namespace yq::mithril {
     template <typename T>

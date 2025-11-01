@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/class/Class.hpp>
+#include <yq/mithril/class/Class.hpp>
 #include <yq/container/Map.hpp>
 #include <yq/container/Set.hpp>
 #include <yq/typedef/string_sets.hpp>

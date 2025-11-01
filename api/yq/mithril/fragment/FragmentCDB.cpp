@@ -8,12 +8,12 @@
 #include <yq/container/ByteArray.hpp>
 #include <yq/file/FileUtils.hpp>
 
-#include <mithril/directory/DirectoryCDB.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
-#include <mithril/logging.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
+#include <yq/mithril/logging.hpp>
 #include <yq/text/chars.hpp>
 #include <yq/text/copy.hpp>
 

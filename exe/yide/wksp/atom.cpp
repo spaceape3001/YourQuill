@@ -8,10 +8,10 @@
 #include "DreamMW.hpp"
 #include "IdTable.hpp"
 
-#include <mithril/atom/Atom.hpp>
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/class/ClassCDB.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
 #include <yq/core/DelayInit.hpp>
 
 using namespace yq;

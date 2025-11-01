@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/document/DocumentJson.hpp>
-#include <mithril/document/DocumentSearch.hpp>
+#include <yq/mithril/document/DocumentJson.hpp>
+#include <yq/mithril/document/DocumentSearch.hpp>
 
 namespace {
 

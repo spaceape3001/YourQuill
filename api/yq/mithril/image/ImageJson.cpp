@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/image/Image.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageJson.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

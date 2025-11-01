@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/core/Flags.hpp>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 #include <functional>
 #include <memory>
 #include <yq/trait/always_false.hpp>

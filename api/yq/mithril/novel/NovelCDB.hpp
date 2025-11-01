@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/novel/Novel.hpp>
-#include <mithril/novel/NovelInfo.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/novel/Novel.hpp>
+#include <yq/mithril/novel/NovelInfo.hpp>
 #include <vector>
 
 #define TBL_NOVELS    "Novels"

@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/enum/DataRole.hpp>
-#include <mithril/document/Document.hpp>
-#include <mithril/folder/Folder.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/enum/DataRole.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/folder/Folder.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/Http.hpp>
 
 #define TBL_DOCUMENTS "Documents"

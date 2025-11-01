@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/character/Character.hpp>
-#include <mithril/character/CharacterCDB.hpp>
-#include <mithril/character/CharacterJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/character/Character.hpp>
+#include <yq/mithril/character/CharacterCDB.hpp>
+#include <yq/mithril/character/CharacterJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

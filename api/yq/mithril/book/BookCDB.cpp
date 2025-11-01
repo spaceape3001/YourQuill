@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/book/BookCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/book/BookCDB.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Book>      all_books(Sorted sorted)

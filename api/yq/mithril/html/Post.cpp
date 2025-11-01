@@ -6,7 +6,7 @@
 
 #include "Post.hpp"
 
-#include <mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebContext.hpp>
 #include <yq/text/match.hpp>
 
 namespace yq::mithril::post {

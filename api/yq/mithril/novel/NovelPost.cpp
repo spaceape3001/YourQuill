@@ -6,9 +6,9 @@
 
 #include "NovelPost.hpp"
 
-#include <mithril/novel/NovelArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/novel/Novel.hpp>
+#include <yq/mithril/novel/NovelArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/novel/Novel.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

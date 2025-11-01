@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

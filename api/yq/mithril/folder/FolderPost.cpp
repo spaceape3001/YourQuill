@@ -6,9 +6,9 @@
 
 #include "FolderPost.hpp"
 
-#include <mithril/folder/FolderArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/folder/Folder.hpp>
+#include <yq/mithril/folder/FolderArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/folder/Folder.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

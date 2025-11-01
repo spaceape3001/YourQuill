@@ -6,9 +6,9 @@
 
 #include "OrganizationPost.hpp"
 
-#include <mithril/organization/OrganizationArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/organization/Organization.hpp>
+#include <yq/mithril/organization/OrganizationArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/organization/Organization.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

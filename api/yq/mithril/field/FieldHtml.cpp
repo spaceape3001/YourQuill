@@ -9,16 +9,16 @@
 #include <yq/text/format.hpp>
 //
 #include <yq/core/StreamOps.hpp>
-#include <mithril/bit/NKI.hpp>
-#include <mithril/class/ClassHtml.hpp>
-#include <mithril/root/RootHtml.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/field/FieldCDB.hpp>
-#include <mithril/field/FieldInfo.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageHtml.hpp>
-#include <mithril/html/HtmlLayout.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/class/ClassHtml.hpp>
+#include <yq/mithril/root/RootHtml.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
+#include <yq/mithril/field/FieldInfo.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageHtml.hpp>
+#include <yq/mithril/html/HtmlLayout.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::html {

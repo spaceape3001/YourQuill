@@ -4,12 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/meta/MetaPropertyArg.hpp>
+#include <yq/mithril/meta/MetaPropertyArg.hpp>
 #include <yq/meta/ArgMeta.hpp>
 #include <yq/meta/PropertyMeta.hpp>
 #include <yq/meta/Meta.hpp>
 
-#include <mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebContext.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

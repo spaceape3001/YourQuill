@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/class/Class.hpp>
-#include <mithril/enum/Multiplicity.hpp>
-#include <mithril/enum/Restriction.hpp>
-#include <mithril/field/FieldFile.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/enum/Multiplicity.hpp>
+#include <yq/mithril/enum/Restriction.hpp>
+#include <yq/mithril/field/FieldFile.hpp>
+#include <yq/mithril/image/Image.hpp>
 
 #define TBL_FIELDS      "Fields"
 #define TBL_FIELD_TAG   "FieldTag"

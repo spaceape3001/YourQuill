@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/field/FieldJson.hpp>
-#include <mithril/field/FieldSearch.hpp>
+#include <yq/mithril/field/FieldJson.hpp>
+#include <yq/mithril/field/FieldSearch.hpp>
 
 namespace {
 

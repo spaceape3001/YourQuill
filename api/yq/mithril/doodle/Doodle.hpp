@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/id/Id.hpp>
-#include <mithril/document/Document.hpp>
+#include <yq/mithril/id/Id.hpp>
+#include <yq/mithril/document/Document.hpp>
 
 namespace yq::mithril {
 

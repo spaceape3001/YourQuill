@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <boost/ut.hpp>
-#include <mithril/graphviz/Graphviz.hpp>
-#include <mithril/graphviz/GraphvizBuilder.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/GraphvizBuilder.hpp>
 #include <yq/core/Logging.hpp>
 
 namespace ut = boost::ut;

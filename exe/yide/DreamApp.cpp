@@ -14,7 +14,7 @@
 #include <yq/gluon/core/Logging.hpp>
 #include <yq/net/Curl.hpp>
 #include <yq/process/PluginLoader.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 #include <yq/sql/SqlLite.hpp>
 #include <yq/net/json.hpp>
 #include <QFont>

@@ -6,9 +6,9 @@
 
 #include "PlacePost.hpp"
 
-#include <mithril/place/PlaceArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/place/Place.hpp>
+#include <yq/mithril/place/PlaceArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/place/Place.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

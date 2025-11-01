@@ -9,7 +9,7 @@
 #include "ystudio.hpp"
 #include "Window.hpp"
 
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/typedef/filesystem_path.hpp>
 
 using yq::mithril::Image;

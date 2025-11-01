@@ -6,9 +6,9 @@
 
 #include "GamePost.hpp"
 
-#include <mithril/game/GameArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/game/Game.hpp>
+#include <yq/mithril/game/GameArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/game/Game.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

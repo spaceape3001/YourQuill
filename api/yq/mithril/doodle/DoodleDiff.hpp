@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/doodle/Doodle.hpp>
-#include <mithril/enum/Change.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/util/Changed.hpp>
+#include <yq/mithril/doodle/Doodle.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/util/Changed.hpp>
 
 
 namespace yq::mithril {

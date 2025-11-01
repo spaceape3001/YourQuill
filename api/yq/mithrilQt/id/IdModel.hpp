@@ -8,8 +8,8 @@
 
 #include <QAbstractItemModel>
 #include <yq/gluon/delegate/Delegate.hpp>
-#include <mithril/id/Id.hpp>
-#include <mithril/id/IdCDB.hpp>
+#include <yq/mithril/id/Id.hpp>
+#include <yq/mithril/id/IdCDB.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 #include <yq/gluon/core/Utilities.hpp>
 

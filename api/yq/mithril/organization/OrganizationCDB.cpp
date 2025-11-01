@@ -5,11 +5,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "OrganizationCDB.hpp"
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/entity/EntityCDB.hpp>
-#include <mithril/group/GroupCDB.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/entity/EntityCDB.hpp>
+#include <yq/mithril/group/GroupCDB.hpp>
+#include <yq/mithril/image/Image.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Organization>     all_organizations(Sorted sorted)

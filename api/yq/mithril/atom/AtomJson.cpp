@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomInfo.hpp>
-#include <mithril/atom/AtomJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomInfo.hpp>
+#include <yq/mithril/atom/AtomJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 
 #include <yq/typedef/json.hpp>
 #include <yq/net/json.hpp>

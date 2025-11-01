@@ -8,9 +8,9 @@
 #include "HtmlLayout.hpp"
 #include <yq/core/StreamOps.hpp>
 #include <yq/process/Execute.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 #include <yq/core/Logging.hpp>
 

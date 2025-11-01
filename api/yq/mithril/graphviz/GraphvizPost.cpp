@@ -6,9 +6,9 @@
 
 #include "GraphvizPost.hpp"
 
-#include <mithril/graphviz/GraphvizArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/GraphvizArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

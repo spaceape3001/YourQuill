@@ -8,7 +8,7 @@
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
 #include <QIcon>
 
 namespace yq::mithril {

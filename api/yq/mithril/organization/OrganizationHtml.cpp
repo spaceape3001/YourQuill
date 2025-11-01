@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "OrganizationHtml.hpp"
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomHtml.hpp>
-#include <mithril/organization/OrganizationCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomHtml.hpp>
+#include <yq/mithril/organization/OrganizationCDB.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Organization v)

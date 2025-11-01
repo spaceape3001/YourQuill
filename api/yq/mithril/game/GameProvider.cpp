@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/game/GameProvider.hpp>
-#include <mithril/game/GameCDB.hpp>
+#include <yq/mithril/game/GameProvider.hpp>
+#include <yq/mithril/game/GameCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_games()

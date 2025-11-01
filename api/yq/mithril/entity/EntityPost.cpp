@@ -6,9 +6,9 @@
 
 #include "EntityPost.hpp"
 
-#include <mithril/entity/EntityArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/entity/Entity.hpp>
+#include <yq/mithril/entity/EntityArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/entity/Entity.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

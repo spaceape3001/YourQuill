@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/game/GameJson.hpp>
-#include <mithril/game/GameSearch.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/game/GameJson.hpp>
+#include <yq/mithril/game/GameSearch.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace {
 

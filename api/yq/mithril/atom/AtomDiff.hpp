@@ -5,12 +5,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include <mithril/atom/Atom.hpp>
-#include <mithril/attribute/Attribute.hpp>
-#include <mithril/attribute/AttributeDiff.hpp>
-#include <mithril/enum/Change.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/util/Changed.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
+#include <yq/mithril/attribute/AttributeDiff.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/util/Changed.hpp>
 
 namespace yq::mithril {
     struct Atom::Diff {

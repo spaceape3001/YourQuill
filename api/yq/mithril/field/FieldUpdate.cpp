@@ -7,17 +7,17 @@
 #include <0/basic/CollectionUtils.hpp>
 
 
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/field/FieldCDB.hpp>
-#include <mithril/field/FieldUpdate.hpp>
-#include <mithril/file/FileSpec.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
+#include <yq/mithril/field/FieldUpdate.hpp>
+#include <yq/mithril/file/FileSpec.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
     std::pair<UField&, bool>  UField::create(Document doc)

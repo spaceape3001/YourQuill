@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/update/U.hpp>
+#include <yq/mithril/update/U.hpp>
 #include <unordered_map>
 
 namespace yq::mithril::update {

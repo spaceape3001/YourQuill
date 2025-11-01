@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/keyv/StdFile.hpp>
-#include <mithril/leaf/LeafData.hpp>
+#include <yq/mithril/leaf/LeafData.hpp>
 
 namespace yq::mithril {
 

@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/entity/EntityCDB.hpp>
-#include <mithril/group/GroupCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/entity/EntityCDB.hpp>
+#include <yq/mithril/group/GroupCDB.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Group>      all_groups(Sorted sorted)

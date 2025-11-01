@@ -6,8 +6,8 @@
 
 #include "DoodleArg.hpp"
 
-#include <mithril/web/WebContext.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/novel/NovelProvider.hpp>
-#include <mithril/novel/NovelCDB.hpp>
+#include <yq/mithril/novel/NovelProvider.hpp>
+#include <yq/mithril/novel/NovelCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_novels()

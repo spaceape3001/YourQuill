@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/rule/Action.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/rule/Action.hpp>
+#include <yq/mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
 #include <yq/meta/ObjectMetaWriter.hpp>
 

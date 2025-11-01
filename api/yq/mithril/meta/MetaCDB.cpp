@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/meta/Meta.hpp>
+#include <yq/mithril/meta/Meta.hpp>
 #include <yq/meta/Meta.hpp>
 
 namespace yq::mithril::cdb {

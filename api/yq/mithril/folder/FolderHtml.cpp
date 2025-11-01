@@ -5,10 +5,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FolderHtml.hpp"
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/folder/FolderInfo.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageHtml.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/folder/FolderInfo.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageHtml.hpp>
 
 namespace yq::mithril::html {
     //WebHtml&    operator<<(WebHtml&, Folder);

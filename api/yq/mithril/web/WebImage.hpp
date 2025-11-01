@@ -7,7 +7,7 @@
 #pragma once
 
 #include "WebPage.hpp"
-#include <mithril/folder/Folder.hpp>
+#include <yq/mithril/folder/Folder.hpp>
 #include <yq/core/Guarded.hpp>
 #include "TypedBytes.hpp"
 #include <vector>

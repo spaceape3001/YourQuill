@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/class/Class.hpp>
-#include <mithril/enum/Multiplicity.hpp>
-#include <mithril/enum/Restriction.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/category/Category.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/enum/Multiplicity.hpp>
+#include <yq/mithril/enum/Restriction.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/category/Category.hpp>
 
 namespace yq::mithril {
     struct Field::Info {

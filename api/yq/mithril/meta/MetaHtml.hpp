@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/html/Html.hpp>
+#include <yq/mithril/html/Html.hpp>
 #include <yq/net/Http.hpp>
-#include <mithril/web/WebPage.hpp>
-#include <mithril/web/WebVariable.hpp>
+#include <yq/mithril/web/WebPage.hpp>
+#include <yq/mithril/web/WebVariable.hpp>
 
 #include <initializer_list>
 #include <string_view>

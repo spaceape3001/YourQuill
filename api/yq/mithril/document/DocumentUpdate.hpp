@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/update/preamble.hpp>
-#include <mithril/update/U.hpp>
-#include <mithril/document/Document.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/update/preamble.hpp>
+#include <yq/mithril/update/U.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/image/Image.hpp>
 
 namespace yq::mithril::update {
     class UDocument : public U<Document> {

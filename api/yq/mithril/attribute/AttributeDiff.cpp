@@ -4,14 +4,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/attribute/AttributeDiff.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeDiff.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
 
 #include <yq/algorithm/DiffEngine.hpp>
 #include <yq/core/IntRange.hpp>
 #include <yq/keyv/KeyValue.hpp>
 
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 #include <cassert>
 

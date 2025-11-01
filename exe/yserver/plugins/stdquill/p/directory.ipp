@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/directory/DirectoryJson.hpp>
-#include <mithril/directory/DirectorySearch.hpp>
+#include <yq/mithril/directory/DirectoryJson.hpp>
+#include <yq/mithril/directory/DirectorySearch.hpp>
 
 namespace {
 

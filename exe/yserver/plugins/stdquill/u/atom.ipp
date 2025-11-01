@@ -8,12 +8,12 @@
 
 //#include <0/basic/CollectionUtils.hpp>
 
-#include <mithril/atom/Atom.hpp>
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomDiff.hpp>
-#include <mithril/field/FieldCDB.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomDiff.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
 
-#include <mithril/attribute/Attribute.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
 
 namespace {
     struct UAtomParam {

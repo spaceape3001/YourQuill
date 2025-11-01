@@ -8,11 +8,11 @@
 
 #include <yq/file/FileUtils.hpp>
 
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/Folder.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/Folder.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/id/Id.hpp>
 #include <yq/text/match.hpp>
 
 namespace yq::mithril {

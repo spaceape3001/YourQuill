@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/thing/Thing.hpp>
-#include <mithril/thing/ThingCDB.hpp>
-#include <mithril/thing/ThingSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/thing/Thing.hpp>
+#include <yq/mithril/thing/ThingCDB.hpp>
+#include <yq/mithril/thing/ThingSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     ThingVector  search(WebContext&ctx, thing_k)

@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include <mithril/novel/Novel.hpp>
-#include <mithril/enum/Change.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/util/Changed.hpp>
+#include <yq/mithril/novel/Novel.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/util/Changed.hpp>
 
 namespace yq::mithril {
     struct Novel::Diff {

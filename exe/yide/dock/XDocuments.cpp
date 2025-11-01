@@ -9,8 +9,8 @@
 #include <yq/text/match.hpp>
 
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
 #include <mithrilQt/document.hpp>
 #include <mithrilQt/folder.hpp>
 #include <mithrilQt/id.hpp>

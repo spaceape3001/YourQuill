@@ -7,9 +7,9 @@
 
 #include "ValuePost.hpp"
 
-#include <mithril/value/ValueArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/value/Value.hpp>
+#include <yq/mithril/value/ValueArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/value/Value.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

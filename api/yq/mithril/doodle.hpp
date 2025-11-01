@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <mithril/doodle/Doodle.hpp>
-#include <mithril/doodle/DoodleArg.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
-#include <mithril/doodle/DoodleDiff.hpp>
-#include <mithril/doodle/DoodleHtml.hpp>
-#include <mithril/doodle/DoodleInfo.hpp>
-#include <mithril/doodle/DoodlePost.hpp>
-#include <mithril/doodle/DoodleProvider.hpp>
+#include <yq/mithril/doodle/Doodle.hpp>
+#include <yq/mithril/doodle/DoodleArg.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/doodle/DoodleDiff.hpp>
+#include <yq/mithril/doodle/DoodleHtml.hpp>
+#include <yq/mithril/doodle/DoodleInfo.hpp>
+#include <yq/mithril/doodle/DoodlePost.hpp>
+#include <yq/mithril/doodle/DoodleProvider.hpp>
 
 

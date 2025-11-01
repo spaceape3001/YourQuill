@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/entity/EntityProvider.hpp>
-#include <mithril/entity/EntityCDB.hpp>
+#include <yq/mithril/entity/EntityProvider.hpp>
+#include <yq/mithril/entity/EntityCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_entities()

@@ -10,7 +10,7 @@
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 #include <yq/text/match.hpp>
-#include <mithril/notify/Notifier.hxx>
+#include <yq/mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Field)
 YQ_TYPE_IMPLEMENT(yq::mithril::FieldSet)

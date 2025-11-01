@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/document/Document.hpp>
+#include <yq/mithril/document/Document.hpp>
 
 namespace yq::mithril {
     /*! Tag in the cache database

@@ -8,18 +8,18 @@
 #include <yq/core/Logging.hpp>
 
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomUpdate.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/bit/KeyValue.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/class/ClassUpdate.hpp>
-#include <mithril/field/FieldCDB.hpp>
-#include <mithril/field/FieldUpdate.hpp>
-#include <mithril/io/Strings.hpp>
-#include <mithril/notify/AtomNotifier.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomUpdate.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/bit/KeyValue.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/class/ClassUpdate.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
+#include <yq/mithril/field/FieldUpdate.hpp>
+#include <yq/mithril/io/Strings.hpp>
+#include <yq/mithril/notify/AtomNotifier.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::update {
     void    UAtom::execute(const AtomChangeData&acd)

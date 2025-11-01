@@ -22,21 +22,21 @@
 #include <yq/text/match.hpp>
 
 
-#include <mithril/directory/DirectoryCDB.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/root/RootCDB.hpp>
-#include <mithril/ipc/DirWatcher.hpp>
-#include <mithril/notify/FileWatch.hpp>
-#include <mithril/notify/FileNotifier.hpp>
-#include <mithril/notify/Stage2.hpp>
-#include <mithril/notify/Stage3.hpp>
-#include <mithril/notify/Stage4.hpp>
-#include <mithril/notify/Stage5.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/root/RootCDB.hpp>
+#include <yq/mithril/ipc/DirWatcher.hpp>
+#include <yq/mithril/notify/FileWatch.hpp>
+#include <yq/mithril/notify/FileNotifier.hpp>
+#include <yq/mithril/notify/Stage2.hpp>
+#include <yq/mithril/notify/Stage3.hpp>
+#include <yq/mithril/notify/Stage4.hpp>
+#include <yq/mithril/notify/Stage5.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 
 #include <chrono>

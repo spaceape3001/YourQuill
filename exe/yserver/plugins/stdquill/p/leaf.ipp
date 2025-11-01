@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/leaf/LeafJson.hpp>
-#include <mithril/leaf/LeafSearch.hpp>
+#include <yq/mithril/leaf/LeafJson.hpp>
+#include <yq/mithril/leaf/LeafSearch.hpp>
 
 namespace {
 

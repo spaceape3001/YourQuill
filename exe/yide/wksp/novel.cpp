@@ -8,7 +8,7 @@
 #include "DreamMW.hpp"
 #include "IdTable.hpp"
 
-#include <mithril/novel/Novel.hpp>
+#include <yq/mithril/novel/Novel.hpp>
 #include <yq/core/DelayInit.hpp>
 
 using namespace yq;

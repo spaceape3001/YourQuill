@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "GameArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/game/GameCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/game/GameCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

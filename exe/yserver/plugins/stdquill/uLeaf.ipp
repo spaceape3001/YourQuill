@@ -6,15 +6,15 @@
 
 #pragma once
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/enum/Change.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/leaf/LeafCDB.hpp>
-#include <mithril/leaf/LeafData.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/leaf/LeafCDB.hpp>
+#include <yq/mithril/leaf/LeafData.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 #include <update/uAtom.hpp>
 

@@ -8,7 +8,7 @@
 #include "DreamMW.hpp"
 #include "IdTable.hpp"
 
-#include <mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/Tag.hpp>
 #include <yq/core/DelayInit.hpp>
 
 using namespace yq;

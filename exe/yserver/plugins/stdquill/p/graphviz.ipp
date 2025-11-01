@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/graphviz/GraphvizJson.hpp>
-#include <mithril/graphviz/GraphvizSearch.hpp>
+#include <yq/mithril/graphviz/GraphvizJson.hpp>
+#include <yq/mithril/graphviz/GraphvizSearch.hpp>
 
 
 namespace {

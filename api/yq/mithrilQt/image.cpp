@@ -7,8 +7,8 @@
 #include "image.hpp"
 #include <yq/core/ThreadId.hpp>
 #include <yq/gluon/core/IgCaseQ.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
 #include <QIcon>
 #include <unordered_map>
 

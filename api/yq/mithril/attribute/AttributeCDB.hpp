@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/attribute/Attribute.hpp>
-#include <mithril/preamble.hpp>
-#include <mithril/document/Document.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/document/Document.hpp>
 #include <vector>
 
 #define TBL_ATTRIBUTES      "Attributes"

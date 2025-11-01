@@ -7,7 +7,7 @@
 #include "ImageCDB.hpp"
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/notify/Notifier.hxx>
+#include <yq/mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Image)
 YQ_TYPE_IMPLEMENT(yq::mithril::ImageSet)

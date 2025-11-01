@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "DirWatcher.hpp"
-#include <mithril/ipc/ipcBuffer.hpp>
+#include <yq/mithril/ipc/ipcBuffer.hpp>
 #include <yq/core/Logging.hpp>
 
 #include <vector>

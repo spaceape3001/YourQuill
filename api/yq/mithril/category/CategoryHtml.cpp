@@ -7,15 +7,15 @@
 #include "CategoryHtml.hpp"
 
 #include <yq/text/copy.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/category/CategoryInfo.hpp>
-#include <mithril/document/DocumentHtml.hpp>
-#include <mithril/html/HtmlLayout.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/image/ImageHtml.hpp>
-#include <mithril/root/RootHtml.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/category/CategoryInfo.hpp>
+#include <yq/mithril/document/DocumentHtml.hpp>
+#include <yq/mithril/html/HtmlLayout.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/image/ImageHtml.hpp>
+#include <yq/mithril/root/RootHtml.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml& h, Category v)

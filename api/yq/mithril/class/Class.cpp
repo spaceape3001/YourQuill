@@ -7,15 +7,15 @@
 #include "Class.hpp"
 #include "ClassCDB.hpp"
 
-#include <mithril/category/Category.hpp>
-#include <mithril/document/Document.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/image/Image.hpp>
 
 #include <yq/text/match.hpp>
 
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/notify/Notifier.hxx>
+#include <yq/mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Class)
 YQ_TYPE_IMPLEMENT(yq::mithril::ClassSet)

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/keyv/StdFile.hpp>
-#include <mithril/quill/QuillData.hpp>
+#include <yq/mithril/quill/QuillData.hpp>
 
 namespace yq::mithril {
     class QuillFile : public StdFile, public QuillData {

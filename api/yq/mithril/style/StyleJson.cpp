@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/style/Style.hpp>
-#include <mithril/style/StyleCDB.hpp>
-#include <mithril/style/StyleInfo.hpp>
-#include <mithril/style/StyleJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/style/Style.hpp>
+#include <yq/mithril/style/StyleCDB.hpp>
+#include <yq/mithril/style/StyleInfo.hpp>
+#include <yq/mithril/style/StyleJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

@@ -7,9 +7,9 @@
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
 #include "DocumentCDB.hpp"
-#include <mithril/attribute/Attribute.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/folder/Folder.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/folder/Folder.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Document)
 YQ_TYPE_IMPLEMENT(yq::mithril::DocumentSet)

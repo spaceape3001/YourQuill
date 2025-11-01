@@ -6,9 +6,9 @@
 
 #include "UserPost.hpp"
 
-#include <mithril/user/UserArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/user/User.hpp>
+#include <yq/mithril/user/UserArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/user/User.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

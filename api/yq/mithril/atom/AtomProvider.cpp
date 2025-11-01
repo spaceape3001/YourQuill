@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomProvider.hpp>
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/tag/Tag.hpp>
+#include <yq/mithril/atom/AtomProvider.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/tag/Tag.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_atoms()

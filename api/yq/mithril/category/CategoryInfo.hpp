@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/document/Document.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/category/Category.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/category/Category.hpp>
 
 namespace yq::mithril {
     struct Category::Info {

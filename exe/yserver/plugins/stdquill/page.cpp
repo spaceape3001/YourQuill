@@ -4,26 +4,26 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <mithril/atom.hpp>
-#include <mithril/attribute.hpp>
-#include <mithril/category.hpp>
-#include <mithril/class.hpp>
-#include <mithril/directory.hpp>
-#include <mithril/document.hpp>
-#include <mithril/doodle.hpp>
-#include <mithril/folder.hpp>
-#include <mithril/field.hpp>
-#include <mithril/fragment.hpp>
-#include <mithril/graphviz.hpp>
-#include <mithril/image.hpp>
-#include <mithril/leaf.hpp>
-#include <mithril/meta.hpp>
-#include <mithril/novel.hpp>
-#include <mithril/root.hpp>
-#include <mithril/style.hpp>
-#include <mithril/tag.hpp>
-#include <mithril/user.hpp>
-#include <mithril/value.hpp>
+#include <yq/mithril/atom.hpp>
+#include <yq/mithril/attribute.hpp>
+#include <yq/mithril/category.hpp>
+#include <yq/mithril/class.hpp>
+#include <yq/mithril/directory.hpp>
+#include <yq/mithril/document.hpp>
+#include <yq/mithril/doodle.hpp>
+#include <yq/mithril/folder.hpp>
+#include <yq/mithril/field.hpp>
+#include <yq/mithril/fragment.hpp>
+#include <yq/mithril/graphviz.hpp>
+#include <yq/mithril/image.hpp>
+#include <yq/mithril/leaf.hpp>
+#include <yq/mithril/meta.hpp>
+#include <yq/mithril/novel.hpp>
+#include <yq/mithril/root.hpp>
+#include <yq/mithril/style.hpp>
+#include <yq/mithril/tag.hpp>
+#include <yq/mithril/user.hpp>
+#include <yq/mithril/value.hpp>
 
 //#include <0/basic/CollectionUtils.hpp>
 #include <yq/core/DelayInit.hpp>
@@ -43,22 +43,22 @@
 
 #include <yq/stream/Text.hpp>
 
-#include <mithril/bit/Copyright.hpp>
-#include <mithril/bit/NKI.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/bit/Copyright.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
-#include <mithril/html/HtmlLayout.hpp>
-#include <mithril/util/Markdown.hpp>
-#include <mithril/web/JsonAdapter.hpp>
-#include <mithril/web/WebAdapters.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/web/WebImage.hpp>
-#include <mithril/web/WebPage.hpp>
-#include <mithril/web/WebRedirect.hpp>
-#include <mithril/web/WebTemplate.hpp>
-#include <mithril/web/Template.hpp>
+#include <yq/mithril/html/HtmlLayout.hpp>
+#include <yq/mithril/util/Markdown.hpp>
+#include <yq/mithril/web/JsonAdapter.hpp>
+#include <yq/mithril/web/WebAdapters.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebImage.hpp>
+#include <yq/mithril/web/WebPage.hpp>
+#include <yq/mithril/web/WebRedirect.hpp>
+#include <yq/mithril/web/WebTemplate.hpp>
+#include <yq/mithril/web/Template.hpp>
 
 #include "common.hpp"
 

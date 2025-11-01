@@ -6,9 +6,9 @@
 
 #include "CategoryPost.hpp"
 
-#include <mithril/category/CategoryArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/category/Category.hpp>
+#include <yq/mithril/category/CategoryArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/category/Category.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

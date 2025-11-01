@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/user/UserProvider.hpp>
-#include <mithril/user/UserCDB.hpp>
+#include <yq/mithril/user/UserProvider.hpp>
+#include <yq/mithril/user/UserCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_users()

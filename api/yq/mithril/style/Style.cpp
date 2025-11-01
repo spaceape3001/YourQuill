@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/style/StyleCDB.hpp>
+#include <yq/mithril/style/StyleCDB.hpp>
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/notify/Notifier.hxx>
+#include <yq/mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Style)
 YQ_TYPE_IMPLEMENT(yq::mithril::StyleSet)

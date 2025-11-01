@@ -7,18 +7,18 @@
 #include <yq/core/DelayInit.hpp>
 #include <yq/core/Logging.hpp>
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/character.hpp>
-#include <mithril/event.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/character.hpp>
+#include <yq/mithril/event.hpp>
 
-#include <mithril/notify/AtomNotifier.hpp>
-#include <mithril/notify/FileWatch.hpp>
-#include <mithril/notify/FileNotifyAdapters.hpp>
-#include <mithril/notify/Stage2.hpp>
-#include <mithril/notify/Stage3.hpp>
-#include <mithril/notify/Stage4.hpp>
+#include <yq/mithril/notify/AtomNotifier.hpp>
+#include <yq/mithril/notify/FileWatch.hpp>
+#include <yq/mithril/notify/FileNotifyAdapters.hpp>
+#include <yq/mithril/notify/Stage2.hpp>
+#include <yq/mithril/notify/Stage3.hpp>
+#include <yq/mithril/notify/Stage4.hpp>
 
 using namespace yq;
 using namespace yq::mithril;

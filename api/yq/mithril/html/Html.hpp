@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <mithril/enum/SizeDesc.hpp>
-#include <mithril/enum/Submit.hpp>
-#include <mithril/enum/Reset.hpp>
-#include <mithril/web/WebHtml.hpp>
+#include <yq/mithril/enum/SizeDesc.hpp>
+#include <yq/mithril/enum/Submit.hpp>
+#include <yq/mithril/enum/Reset.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
 #include <optional>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril::html {
 

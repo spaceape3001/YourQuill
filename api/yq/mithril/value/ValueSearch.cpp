@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/value/Value.hpp>
-#include <mithril/value/ValueCDB.hpp>
-#include <mithril/value/ValueSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/value/Value.hpp>
+#include <yq/mithril/value/ValueCDB.hpp>
+#include <yq/mithril/value/ValueSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     ValueVector  search(WebContext&ctx, value_k)

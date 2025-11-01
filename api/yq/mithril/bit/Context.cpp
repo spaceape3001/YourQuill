@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/bit/Context.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/bit/Context.hpp>
+#include <yq/mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
 #include <yq/core/StreamOps.hpp>
 #include <yq/stream/Text.hpp>

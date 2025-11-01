@@ -8,7 +8,7 @@
 
 #include <QObject>
 #include <concepts>
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/id/Id.hpp>
 #include <QList>
 
 using IdFilter  = yq::mithril::IdFilter;

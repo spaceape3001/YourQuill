@@ -10,11 +10,11 @@
 #include <string>
 #include <yq/core/trait/not_copyable.hpp>
 #include <yq/core/trait/not_moveable.hpp>
-#include <mithril/db/CacheFwd.hpp>
-#include <mithril/db/SQ.hpp>
+#include <yq/mithril/db/CacheFwd.hpp>
+#include <yq/mithril/db/SQ.hpp>
 #include <0/math/Counter.hpp>
-#include <mithril/update/DefRes.hpp>
-#include <mithril/bit/Connection.hpp>
+#include <yq/mithril/update/DefRes.hpp>
+#include <yq/mithril/bit/Connection.hpp>
 
 /*
     The UPDATE is here because this analysis can suck in a database, therefore the updater needs a parallel

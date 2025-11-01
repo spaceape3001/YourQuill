@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/category/Category.hpp>
-#include <mithril/category/CategoryArg.hpp>
-#include <mithril/class/ClassSearch.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/category/CategoryArg.hpp>
+#include <yq/mithril/class/ClassSearch.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     bool            search(WebSearcher<Class>&ws, category_k)

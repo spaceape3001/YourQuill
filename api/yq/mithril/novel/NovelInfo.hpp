@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/image/Image.hpp>
-#include <mithril/novel/Novel.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/novel/Novel.hpp>
 
 namespace yq::mithril {
     struct Novel::Info {

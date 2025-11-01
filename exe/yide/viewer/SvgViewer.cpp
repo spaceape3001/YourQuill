@@ -12,8 +12,8 @@
 #include <yq/gluon/core/Logging.hpp>
 #include <yq/gluon/graphics/GraphicsScene.hpp>
 #include <yq/gluon/graphics/GraphicsView.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
 
 #include <QGraphicsSvgItem>
 

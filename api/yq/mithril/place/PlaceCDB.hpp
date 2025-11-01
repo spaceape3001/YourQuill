@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/place/Place.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/place/Place.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Place>  all_places(Sorted sorted=Sorted());

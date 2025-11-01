@@ -8,7 +8,7 @@
 #include "DreamMW.hpp"
 #include "IdTable.hpp"
 
-#include <mithril/place/Place.hpp>
+#include <yq/mithril/place/Place.hpp>
 #include <yq/core/DelayInit.hpp>
 
 using namespace yq;

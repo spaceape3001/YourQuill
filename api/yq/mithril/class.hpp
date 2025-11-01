@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <mithril/class/Class.hpp>
-#include <mithril/class/ClassArg.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/class/ClassData.hpp>
-#include <mithril/class/ClassFile.hpp>
-#include <mithril/class/ClassHtml.hpp>
-#include <mithril/class/ClassPost.hpp>
-#include <mithril/class/ClassProvider.hpp>
-#include <mithril/class/ClassSearch.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/class/ClassArg.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/class/ClassData.hpp>
+#include <yq/mithril/class/ClassFile.hpp>
+#include <yq/mithril/class/ClassHtml.hpp>
+#include <yq/mithril/class/ClassPost.hpp>
+#include <yq/mithril/class/ClassProvider.hpp>
+#include <yq/mithril/class/ClassSearch.hpp>

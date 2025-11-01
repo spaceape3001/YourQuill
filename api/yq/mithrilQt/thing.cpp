@@ -7,8 +7,8 @@
 #include "thing.hpp"
 #include <yq/core/DelayInit.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/thing/ThingCDB.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/thing/ThingCDB.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <mithrilQt/image.hpp>
 #include <yq/text/match.hpp>
 #include <QIcon>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/leaf/Leaf.hpp>
+#include <yq/mithril/leaf/Leaf.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
 class QIcon;

@@ -8,7 +8,7 @@
 
 #include <yq/meta/Meta.hpp>
 #include <yq/meta/MetaWriter.hpp>
-#include <mithril/typedef/metabase.hpp>
+#include <yq/mithril/typedef/metabase.hpp>
 
 namespace yq {
     class Stream;

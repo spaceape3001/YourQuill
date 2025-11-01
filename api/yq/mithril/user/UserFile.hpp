@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/keyv/StdFile.hpp>
-#include <mithril/user/UserData.hpp>
+#include <yq/mithril/user/UserData.hpp>
 
 namespace yq::mithril {        
     class User::File : public StdFile, public User::Data {

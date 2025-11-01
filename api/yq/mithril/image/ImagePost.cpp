@@ -6,9 +6,9 @@
 
 #include "ImagePost.hpp"
 
-#include <mithril/image/ImageArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/image/ImageArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/root/RootJson.hpp>
-#include <mithril/root/RootSearch.hpp>
+#include <yq/mithril/root/RootJson.hpp>
+#include <yq/mithril/root/RootSearch.hpp>
 
 namespace {
 

@@ -6,9 +6,9 @@
 
 #include "BookPost.hpp"
 
-#include <mithril/book/BookArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/book/Book.hpp>
+#include <yq/mithril/book/BookArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/book/Book.hpp>
 
 #include <yq/text/copy.hpp>
 

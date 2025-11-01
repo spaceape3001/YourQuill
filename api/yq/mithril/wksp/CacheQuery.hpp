@@ -8,7 +8,7 @@
 
 #include <yq/core/Logging.hpp>
 #include <yq/sql/SqlQueryMap.hpp>
-#include <mithril/wksp/CacheStatement.hpp>
+#include <yq/mithril/wksp/CacheStatement.hpp>
 
 #include <set>
 #include <vector>

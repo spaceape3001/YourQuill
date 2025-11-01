@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/document/Document.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/category/Category.hpp>
-#include <mithril/category/CategoryData.hpp>
-#include <mithril/category/CategoryFile.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/document/Document.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/category/CategoryData.hpp>
+#include <yq/mithril/category/CategoryFile.hpp>
 
 #define TBL_CATEGORIES  "Categories"
 

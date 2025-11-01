@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "UserFile.hpp"
-#include <mithril/logging.hpp>
+#include <yq/mithril/logging.hpp>
 #include <yq/keyv/KeyValue.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/io/Strings.hpp>
 #include <yq/core/ErrorDB.hpp>
 
 namespace yq::errors {

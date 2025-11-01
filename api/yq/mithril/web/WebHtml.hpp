@@ -17,7 +17,7 @@
 #include <yq/typedef/string_maps.hpp>
 #include <yq/typedef/string_vectors.hpp>
 #include <functional>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 
 
 namespace yq::mithril {

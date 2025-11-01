@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/notify/Notifier.hxx>
+#include <yq/mithril/notify/Notifier.hxx>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Doodle)
 YQ_TYPE_IMPLEMENT(yq::mithril::DoodleSet)

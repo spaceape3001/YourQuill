@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/game/Game.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/game/Game.hpp>
 
 namespace yq::mithril {        
     namespace cdb {

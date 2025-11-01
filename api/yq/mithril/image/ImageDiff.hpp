@@ -9,9 +9,9 @@
 #include <yq/net/ContentType.hpp>
 #include <yq/shape/Size2.hpp>
 
-#include <mithril/enum/Change.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/util/Changed.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/util/Changed.hpp>
 
 namespace yq::mithril {
     struct Image::Diff {

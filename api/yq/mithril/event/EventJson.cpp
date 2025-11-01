@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/event/Event.hpp>
-#include <mithril/event/EventCDB.hpp>
-#include <mithril/event/EventJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/event/Event.hpp>
+#include <yq/mithril/event/EventCDB.hpp>
+#include <yq/mithril/event/EventJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

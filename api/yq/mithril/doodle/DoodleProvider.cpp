@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/doodle/DoodleProvider.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/doodle/DoodleProvider.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_doodles()

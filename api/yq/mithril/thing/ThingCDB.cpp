@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/image/ImageCDB.hpp>
-#include <mithril/thing/ThingCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/image/ImageCDB.hpp>
+#include <yq/mithril/thing/ThingCDB.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Thing>      all_things(Sorted sorted)

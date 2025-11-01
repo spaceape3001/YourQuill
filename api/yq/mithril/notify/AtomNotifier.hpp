@@ -14,12 +14,12 @@
 #include <yq/container/EnumMap.hpp>
 #include <yq/container/SetChanges.hpp>
 #include <yq/container/Vector.hpp>
-#include <mithril/atom/Atom.hpp>
-#include <mithril/atom/AtomSpec.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/field/Field.hpp>
-#include <mithril/attribute/AttributeDiff.hpp>
-#include <mithril/enum/Change.hpp>
+#include <yq/mithril/atom/Atom.hpp>
+#include <yq/mithril/atom/AtomSpec.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/field/Field.hpp>
+#include <yq/mithril/attribute/AttributeDiff.hpp>
+#include <yq/mithril/enum/Change.hpp>
 
 namespace yq::mithril {
 

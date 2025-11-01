@@ -6,8 +6,8 @@
 
 #include "FolderArg.hpp"
 
-#include <mithril/web/WebContext.hpp>
-#include <mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

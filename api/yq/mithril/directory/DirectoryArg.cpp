@@ -6,11 +6,11 @@
 
 #include "DirectoryArg.hpp"
 
-#include <mithril/folder/FolderArg.hpp>
-#include <mithril/root/RootArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/folder/FolderArg.hpp>
+#include <yq/mithril/root/RootArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

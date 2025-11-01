@@ -5,9 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "GraphvizArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/graphviz/Graphviz.hpp>
-#include <mithril/graphviz/GraphvizCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/GraphvizCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

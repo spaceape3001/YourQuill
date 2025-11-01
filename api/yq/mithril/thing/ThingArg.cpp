@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ThingArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/thing/ThingCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/thing/ThingCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

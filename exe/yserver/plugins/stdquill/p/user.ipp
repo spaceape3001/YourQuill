@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/user/UserJson.hpp>
-#include <mithril/user/UserSearch.hpp>
+#include <yq/mithril/user/UserJson.hpp>
+#include <yq/mithril/user/UserSearch.hpp>
 
 namespace {
 

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril {
     bool        search(WebSearcher<Atom>&, class_k);

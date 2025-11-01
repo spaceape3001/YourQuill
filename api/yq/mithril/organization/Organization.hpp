@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/entity/Entity.hpp>
-#include <mithril/group/Group.hpp>
+#include <yq/mithril/entity/Entity.hpp>
+#include <yq/mithril/group/Group.hpp>
 
 namespace yq::mithril {
     /*! \brief Organization (of entities/etc) in the cache database */

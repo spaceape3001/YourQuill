@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/value/ValueData.hpp>
+#include <yq/mithril/value/ValueData.hpp>
 #include <yq/xml/XmlFile.hpp>
 
 namespace yq::mithril {

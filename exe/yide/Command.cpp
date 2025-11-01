@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Command.hpp"
-#include <mithril/atom/AtomSpec.hpp>
-#include <mithril/file/FileSpec.hpp>
+#include <yq/mithril/atom/AtomSpec.hpp>
+#include <yq/mithril/file/FileSpec.hpp>
 
 using namespace yq;
 using namespace yq::mithril;

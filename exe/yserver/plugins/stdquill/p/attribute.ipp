@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/attribute/AttributeJson.hpp>
-#include <mithril/attribute/AttributeSearch.hpp>
+#include <yq/mithril/attribute/AttributeJson.hpp>
+#include <yq/mithril/attribute/AttributeSearch.hpp>
 
 namespace {
 

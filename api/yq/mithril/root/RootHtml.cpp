@@ -6,12 +6,12 @@
 
 #include "RootHtml.hpp"
 #include <yq/net/HttpParser.hpp>
-#include <mithril/root/RootArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/root/RootCDB.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/root/RootArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/root/RootCDB.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril::html {
     WebHtml&    operator<<(WebHtml&h, Dev<const RootDir*> v)

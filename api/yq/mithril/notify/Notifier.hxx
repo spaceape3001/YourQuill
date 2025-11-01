@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/notify/Notifier.hpp>
+#include <yq/mithril/notify/Notifier.hpp>
 #include <vector>
 
 namespace yq::mithril {

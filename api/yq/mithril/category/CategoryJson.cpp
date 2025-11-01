@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/category/Category.hpp>
-#include <mithril/category/CategoryCDB.hpp>
-#include <mithril/category/CategoryInfo.hpp>
-#include <mithril/category/CategoryJson.hpp>
+#include <yq/mithril/category/Category.hpp>
+#include <yq/mithril/category/CategoryCDB.hpp>
+#include <yq/mithril/category/CategoryInfo.hpp>
+#include <yq/mithril/category/CategoryJson.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

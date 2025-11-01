@@ -6,9 +6,9 @@
 
 #include "StylePost.hpp"
 
-#include <mithril/style/StyleArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/style/Style.hpp>
+#include <yq/mithril/style/StyleArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/style/Style.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

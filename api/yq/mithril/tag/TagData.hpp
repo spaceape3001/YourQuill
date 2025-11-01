@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/Tag.hpp>
 
 namespace yq::mithril {
     struct Tag::Data {

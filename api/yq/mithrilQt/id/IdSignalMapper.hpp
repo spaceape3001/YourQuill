@@ -8,7 +8,7 @@
 
 #include <QObject>
 #include <map>
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/id/Id.hpp>
 
 namespace yq::mithril {
     class IdSignalMapper : public QObject {

@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/thing/Thing.hpp>
-#include <mithril/thing/ThingArg.hpp>
-#include <mithril/thing/ThingHtml.hpp>
-#include <mithril/thing/ThingPost.hpp>
-#include <mithril/thing/ThingCDB.hpp>
+#include <yq/mithril/thing/Thing.hpp>
+#include <yq/mithril/thing/ThingArg.hpp>
+#include <yq/mithril/thing/ThingHtml.hpp>
+#include <yq/mithril/thing/ThingPost.hpp>
+#include <yq/mithril/thing/ThingCDB.hpp>
 

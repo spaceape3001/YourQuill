@@ -7,7 +7,7 @@
 #pragma once
 
 #include <mithrilQt/preamble.hpp>
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/id/Id.hpp>
 #include <yq/core/Compare.hpp>
 
 #include <QVariant>

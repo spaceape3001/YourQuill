@@ -8,8 +8,8 @@
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
 #include <yq/gluon/core/Utilities.hpp>
-#include <mithril/novel/NovelCDB.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/novel/NovelCDB.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <mithrilQt/image.hpp>
 #include <QIcon>
 

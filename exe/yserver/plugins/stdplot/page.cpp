@@ -14,27 +14,27 @@
 
 #include <yq/stream/Text.hpp>
 
-#include <mithril/html/HtmlLayout.hpp>
+#include <yq/mithril/html/HtmlLayout.hpp>
 
-#include <mithril/web/JsonAdapter.hpp>
-#include <mithril/web/WebAdapters.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/web/WebImage.hpp>
-#include <mithril/web/WebPage.hpp>
-#include <mithril/web/WebRedirect.hpp>
-#include <mithril/web/WebTemplate.hpp>
-#include <mithril/web/Template.hpp>
+#include <yq/mithril/web/JsonAdapter.hpp>
+#include <yq/mithril/web/WebAdapters.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebImage.hpp>
+#include <yq/mithril/web/WebPage.hpp>
+#include <yq/mithril/web/WebRedirect.hpp>
+#include <yq/mithril/web/WebTemplate.hpp>
+#include <yq/mithril/web/Template.hpp>
 
-#include <mithril/book.hpp>
-#include <mithril/character.hpp>
-#include <mithril/entity.hpp>
-#include <mithril/event.hpp>
-#include <mithril/game.hpp>
-#include <mithril/group.hpp>
-#include <mithril/organization.hpp>
-#include <mithril/place.hpp>
-#include <mithril/thing.hpp>
+#include <yq/mithril/book.hpp>
+#include <yq/mithril/character.hpp>
+#include <yq/mithril/entity.hpp>
+#include <yq/mithril/event.hpp>
+#include <yq/mithril/game.hpp>
+#include <yq/mithril/group.hpp>
+#include <yq/mithril/organization.hpp>
+#include <yq/mithril/place.hpp>
+#include <yq/mithril/thing.hpp>
 
 using namespace yq;
 //using namespace yq::arg;

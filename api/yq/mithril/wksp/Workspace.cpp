@@ -20,12 +20,12 @@
 #include <yq/text/vsplit.hpp>
 #include <yq/typedef/string.hpp>
 
-//#include <mithril/config/DirConfig.hpp>
+//#include <yq/mithril/config/DirConfig.hpp>
 
-#include <mithril/directories.hpp>
-#include <mithril/root/Root.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/quill/QuillFile.hpp>
+#include <yq/mithril/directories.hpp>
+#include <yq/mithril/root/Root.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/quill/QuillFile.hpp>
 
 #include <atomic>
 #include <pwd.h>

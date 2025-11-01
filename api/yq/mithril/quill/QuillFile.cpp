@@ -7,7 +7,7 @@
 #include "QuillFile.hpp"
 
 #include <yq/keyv/KeyValue.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/io/Strings.hpp>
 #include <yq/text/join.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>

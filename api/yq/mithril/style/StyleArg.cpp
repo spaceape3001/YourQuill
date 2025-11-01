@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "StyleArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/style/StyleCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/style/StyleCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

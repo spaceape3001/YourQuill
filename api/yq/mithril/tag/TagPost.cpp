@@ -6,9 +6,9 @@
 
 #include "TagPost.hpp"
 
-#include <mithril/tag/TagArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/TagArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/tag/Tag.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

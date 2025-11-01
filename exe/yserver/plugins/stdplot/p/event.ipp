@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/event/EventJson.hpp>
-#include <mithril/event/EventSearch.hpp>
+#include <yq/mithril/event/EventJson.hpp>
+#include <yq/mithril/event/EventSearch.hpp>
 
 namespace {
 

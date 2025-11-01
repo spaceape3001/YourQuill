@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/book/BookProvider.hpp>
-#include <mithril/book/BookCDB.hpp>
+#include <yq/mithril/book/BookProvider.hpp>
+#include <yq/mithril/book/BookCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_books()

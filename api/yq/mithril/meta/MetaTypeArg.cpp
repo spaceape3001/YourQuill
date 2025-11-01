@@ -4,11 +4,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/meta/MetaTypeArg.hpp>
+#include <yq/mithril/meta/MetaTypeArg.hpp>
 #include <yq/meta/ArgMeta.hpp>
 #include <yq/meta/TypeMeta.hpp>
 
-#include <mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebContext.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <compare>
-#include <mithril/id/Id.hpp>
+#include <yq/mithril/id/Id.hpp>
 
 namespace yq::mithril {
     struct Graphviz {

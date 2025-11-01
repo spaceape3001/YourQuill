@@ -6,9 +6,9 @@
 
 #include "EntityArg.hpp"
 
-#include <mithril/web/WebContext.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/entity/EntityCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/entity/EntityCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

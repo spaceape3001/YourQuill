@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/event/EventProvider.hpp>
-#include <mithril/event/EventCDB.hpp>
+#include <yq/mithril/event/EventProvider.hpp>
+#include <yq/mithril/event/EventCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_events()

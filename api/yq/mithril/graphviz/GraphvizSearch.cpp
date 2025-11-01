@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/graphviz/Graphviz.hpp>
-#include <mithril/graphviz/GraphvizCDB.hpp>
-#include <mithril/graphviz/GraphvizSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/GraphvizCDB.hpp>
+#include <yq/mithril/graphviz/GraphvizSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     GraphvizVector  search(WebContext&ctx, graphviz_k)

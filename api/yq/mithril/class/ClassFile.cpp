@@ -8,7 +8,7 @@
 #include <yq/xml/XmlUtils.hpp>
 #include <yq/keyv/KeyValue.hpp>
 #include <yq/text/join.hpp>
-#include <mithril/io/Strings.hpp>
+#include <yq/mithril/io/Strings.hpp>
 
 namespace yq::errors {
     using no_class_in_file  = error_db::entry<"No class found in the file.">;

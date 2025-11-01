@@ -5,19 +5,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include <mithril/root.hpp>
-#include <mithril/html/HtmlLayout.hpp>
-#include <mithril/util/Markdown.hpp>
-#include <mithril/web/JsonAdapter.hpp>
-#include <mithril/web/WebAdapters.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/web/WebImage.hpp>
-#include <mithril/web/WebPage.hpp>
-#include <mithril/web/WebRedirect.hpp>
-#include <mithril/web/WebTemplate.hpp>
-#include <mithril/web/Template.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/root.hpp>
+#include <yq/mithril/html/HtmlLayout.hpp>
+#include <yq/mithril/util/Markdown.hpp>
+#include <yq/mithril/web/JsonAdapter.hpp>
+#include <yq/mithril/web/WebAdapters.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebImage.hpp>
+#include <yq/mithril/web/WebPage.hpp>
+#include <yq/mithril/web/WebRedirect.hpp>
+#include <yq/mithril/web/WebTemplate.hpp>
+#include <yq/mithril/web/Template.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 #include <yq/core/DelayInit.hpp>
 #include <yq/file/DirUtils.hpp>

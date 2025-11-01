@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/class/ClassInfo.hpp>
-#include <mithril/class/ClassJson.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/class/ClassInfo.hpp>
+#include <yq/mithril/class/ClassJson.hpp>
 
 #include <yq/net/json.hpp>
 

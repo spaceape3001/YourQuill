@@ -6,9 +6,9 @@
 
 #include "ClassPost.hpp"
 
-#include <mithril/class/ClassArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/class/Class.hpp>
+#include <yq/mithril/class/ClassArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/class/Class.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

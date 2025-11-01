@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/preamble.hpp>
-#include <mithril/character/Character.hpp>
+#include <yq/mithril/preamble.hpp>
+#include <yq/mithril/character/Character.hpp>
 
 namespace yq::mithril {        
     namespace cdb {

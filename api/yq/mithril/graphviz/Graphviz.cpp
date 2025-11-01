@@ -4,9 +4,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/graphviz/Graphviz.hpp>
-#include <mithril/graphviz/GraphvizCDB.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/GraphvizCDB.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 #include <yq/process/Execute.hpp>
 #include <yq/core/ErrorDB.hpp>
 #include <yq/container/ByteArray.hpp>

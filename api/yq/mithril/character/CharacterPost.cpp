@@ -6,9 +6,9 @@
 
 #include "CharacterPost.hpp"
 
-#include <mithril/character/CharacterArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/character/Character.hpp>
+#include <yq/mithril/character/CharacterArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/character/Character.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

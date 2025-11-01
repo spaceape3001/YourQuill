@@ -5,8 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "GroupArg.hpp"
-#include <mithril/web/WebContext.hpp>
-#include <mithril/group/GroupCDB.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/group/GroupCDB.hpp>
 #include <yq/text/parse.hpp>
 #include <yq/text/transform.hpp>
 

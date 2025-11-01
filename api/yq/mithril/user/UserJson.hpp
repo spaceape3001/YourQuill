@@ -7,7 +7,7 @@
 #pragma once
 
 #include <yq/typedef/json.hpp>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril {
     json json_(User);

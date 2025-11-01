@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/game/Game.hpp>
-#include <mithril/game/GameCDB.hpp>
-#include <mithril/game/GameSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/game/Game.hpp>
+#include <yq/mithril/game/GameCDB.hpp>
+#include <yq/mithril/game/GameSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     GameVector  search(WebContext&ctx, game_k)

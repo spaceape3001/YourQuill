@@ -8,8 +8,8 @@
 
 #include <initializer_list>
 #include <string_view>
-#include <mithril/html/Post.hpp>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/html/Post.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril::post {
     //! Finds root_dir, by ID

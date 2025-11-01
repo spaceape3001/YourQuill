@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/class/Class.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/class/ClassData.hpp>
-#include <mithril/class/ClassDiff.hpp>
-#include <mithril/class/ClassInfo.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/class/ClassData.hpp>
+#include <yq/mithril/class/ClassDiff.hpp>
+#include <yq/mithril/class/ClassInfo.hpp>
 #include <yq/container/map_utils.hpp>
 
 namespace {

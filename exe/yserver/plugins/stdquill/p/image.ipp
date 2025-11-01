@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/image/ImageJson.hpp>
-#include <mithril/image/ImageSearch.hpp>
+#include <yq/mithril/image/ImageJson.hpp>
+#include <yq/mithril/image/ImageSearch.hpp>
 
 
 namespace {

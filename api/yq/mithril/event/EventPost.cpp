@@ -6,9 +6,9 @@
 
 #include "EventPost.hpp"
 
-#include <mithril/event/EventArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/event/Event.hpp>
+#include <yq/mithril/event/EventArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/event/Event.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/category/CategoryJson.hpp>
-#include <mithril/category/CategorySearch.hpp>
+#include <yq/mithril/category/CategoryJson.hpp>
+#include <yq/mithril/category/CategorySearch.hpp>
 
 namespace {
 

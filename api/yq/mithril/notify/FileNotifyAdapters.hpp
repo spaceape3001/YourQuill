@@ -7,7 +7,7 @@
 #pragma once
 
 #include "FileNotifier.hpp"
-#include <mithril/fragment/Fragment.hpp>
+#include <yq/mithril/fragment/Fragment.hpp>
 #include <functional>
 
 namespace yq::mithril {

@@ -10,13 +10,13 @@
 #include <yq/text/match.hpp>
 #include <yq/text/transform.hpp>
 
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/document/DocumentHtml.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/image/ImageHtml.hpp>
-#include <mithril/leaf/LeafCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/document/DocumentHtml.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/image/ImageHtml.hpp>
+#include <yq/mithril/leaf/LeafCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 namespace yq::mithril {
 

@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/organization/OrganizationProvider.hpp>
-#include <mithril/organization/OrganizationCDB.hpp>
+#include <yq/mithril/organization/OrganizationProvider.hpp>
+#include <yq/mithril/organization/OrganizationCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_organizations()

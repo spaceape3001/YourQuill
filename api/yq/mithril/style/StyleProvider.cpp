@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/style/StyleProvider.hpp>
-#include <mithril/style/StyleCDB.hpp>
+#include <yq/mithril/style/StyleProvider.hpp>
+#include <yq/mithril/style/StyleCDB.hpp>
 
 namespace yq::mithril::provider {
     IdProvider all_styles()

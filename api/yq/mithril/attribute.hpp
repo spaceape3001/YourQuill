@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/attribute/Attribute.hpp>
-#include <mithril/attribute/AttributeArg.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/attribute/AttributeDiff.hpp>
-#include <mithril/attribute/AttributeHtml.hpp>
+#include <yq/mithril/attribute/Attribute.hpp>
+#include <yq/mithril/attribute/AttributeArg.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/attribute/AttributeDiff.hpp>
+#include <yq/mithril/attribute/AttributeHtml.hpp>

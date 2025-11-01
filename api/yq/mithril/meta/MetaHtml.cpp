@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/meta/MetaHtml.hpp>
+#include <yq/mithril/meta/MetaHtml.hpp>
 #include <yq/meta/ArgMeta.hpp>
 #include <yq/meta/MethodMeta.hpp>
 #include <yq/meta/OperatorMeta.hpp>
@@ -12,10 +12,10 @@
 #include <yq/meta/PropertyMeta.hpp>
 #include <yq/meta/TypeMeta.hpp>
 
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/web/WebPage.hpp>
-#include <mithril/web/WebVariable.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/web/WebPage.hpp>
+#include <yq/mithril/web/WebVariable.hpp>
 
 namespace yq::mithril {
 

@@ -6,9 +6,9 @@
 
 #include "GroupPost.hpp"
 
-#include <mithril/group/GroupArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/group/Group.hpp>
+#include <yq/mithril/group/GroupArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/group/Group.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

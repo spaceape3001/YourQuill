@@ -6,9 +6,9 @@
 
 #include "DoodlePost.hpp"
 
-#include <mithril/doodle/DoodleArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/doodle/Doodle.hpp>
+#include <yq/mithril/doodle/DoodleArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/doodle/Doodle.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

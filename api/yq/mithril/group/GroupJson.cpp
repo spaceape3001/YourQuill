@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/group/Group.hpp>
-#include <mithril/group/GroupCDB.hpp>
-#include <mithril/group/GroupJson.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/group/Group.hpp>
+#include <yq/mithril/group/GroupCDB.hpp>
+#include <yq/mithril/group/GroupJson.hpp>
+#include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {

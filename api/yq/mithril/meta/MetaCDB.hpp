@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/meta/Meta.hpp>
+#include <yq/mithril/meta/Meta.hpp>
 
 /*
     Now that we've made Meta an ID type, we need the CDB stuff too

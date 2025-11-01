@@ -4,8 +4,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/attribute/AttributeCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 
 namespace yq::mithril::cdb {
     std::vector<Attribute>   all_attributes(Sorted)

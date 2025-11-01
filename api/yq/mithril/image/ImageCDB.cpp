@@ -7,12 +7,12 @@
 #include "ImageCDB.hpp"
 #include <yq/container/ByteArray.hpp>
 
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/folder/FolderCDB.hpp>
-#include <mithril/fragment/FragmentCDB.hpp>
-#include <mithril/root/RootCDB.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/folder/FolderCDB.hpp>
+#include <yq/mithril/fragment/FragmentCDB.hpp>
+#include <yq/mithril/root/RootCDB.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 #include <yq/text/format.hpp>
 
 namespace yq::mithril::cdb {

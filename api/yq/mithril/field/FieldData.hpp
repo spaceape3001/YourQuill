@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/field/Field.hpp>
-#include <mithril/enum/Multiplicity.hpp>
-#include <mithril/enum/Restriction.hpp>
+#include <yq/mithril/field/Field.hpp>
+#include <yq/mithril/enum/Multiplicity.hpp>
+#include <yq/mithril/enum/Restriction.hpp>
 #include <yq/container/Map.hpp>
 #include <yq/container/Set.hpp>
 #include <yq/typedef/string_sets.hpp>

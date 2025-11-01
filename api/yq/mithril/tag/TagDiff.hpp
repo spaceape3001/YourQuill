@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <mithril/enum/Change.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/leaf/Leaf.hpp>
-#include <mithril/tag/Tag.hpp>
-#include <mithril/util/Changed.hpp>
+#include <yq/mithril/enum/Change.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/leaf/Leaf.hpp>
+#include <yq/mithril/tag/Tag.hpp>
+#include <yq/mithril/util/Changed.hpp>
 
 namespace yq::mithril {
     struct Tag::Diff {

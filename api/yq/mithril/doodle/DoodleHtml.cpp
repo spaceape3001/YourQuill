@@ -4,12 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/bit/NKI.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/web/WebHtml.hpp>
-#include <mithril/doodle/DoodleCDB.hpp>
-#include <mithril/doodle/DoodleHtml.hpp>
-#include <mithril/doodle/DoodleInfo.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/web/WebHtml.hpp>
+#include <yq/mithril/doodle/DoodleCDB.hpp>
+#include <yq/mithril/doodle/DoodleHtml.hpp>
+#include <yq/mithril/doodle/DoodleInfo.hpp>
 
 namespace yq::mithril::html {
 

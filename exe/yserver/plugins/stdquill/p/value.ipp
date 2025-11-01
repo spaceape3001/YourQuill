@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/value/ValueJson.hpp>
-#include <mithril/value/ValueSearch.hpp>
+#include <yq/mithril/value/ValueJson.hpp>
+#include <yq/mithril/value/ValueSearch.hpp>
 
 
 namespace {

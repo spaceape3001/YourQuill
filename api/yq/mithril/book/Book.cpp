@@ -7,8 +7,8 @@
 #include "BookCDB.hpp"
 #include <yq/meta/TypeMetaWriter.hpp>
 #include <yq/meta/Init.hpp>
-#include <mithril/class/Class.hpp>
-#include <mithril/image/Image.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/image/Image.hpp>
 
 YQ_TYPE_IMPLEMENT(yq::mithril::Book)
 YQ_TYPE_IMPLEMENT(yq::mithril::BookSet)

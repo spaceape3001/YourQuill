@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/keywords.hpp>
-#include <mithril/preamble.hpp>
+#include <yq/mithril/keywords.hpp>
+#include <yq/mithril/preamble.hpp>
 
 namespace yq::mithril {
     ImageVector  search(WebContext&, image_k);

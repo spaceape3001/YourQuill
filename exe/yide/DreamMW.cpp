@@ -19,7 +19,7 @@
 #include "WebBrowser.hpp"
 #include "Window.hpp"
 
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 #include <yq/gluon/core/Utilities.hpp>
 
 #include <QCursor>

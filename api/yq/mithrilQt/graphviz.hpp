@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
 #include <mithrilQt/id/IdColumn.hpp>
 
 class QIcon;

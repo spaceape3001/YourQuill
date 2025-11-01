@@ -9,9 +9,9 @@
 #include <compare>
 #include <cstdint>
 #include <initializer_list>
-#include <mithril/enum/SizeDesc.hpp>
+#include <yq/mithril/enum/SizeDesc.hpp>
 #include <yq/shape/Size2.hpp>
-#include <mithril/fragment/Fragment.hpp>
+#include <yq/mithril/fragment/Fragment.hpp>
 
 namespace yq::mithril {
 

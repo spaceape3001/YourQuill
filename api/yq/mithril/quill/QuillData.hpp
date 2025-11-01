@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <mithril/bit/Copyright.hpp>
-#include <mithril/bit/Policy.hpp>
-#include <mithril/enum/Vcs.hpp>
+#include <yq/mithril/bit/Copyright.hpp>
+#include <yq/mithril/bit/Policy.hpp>
+#include <yq/mithril/enum/Vcs.hpp>
 #include <yq/container/EnumMap.hpp>
 #include <yq/container/Set.hpp>
 #include <yq/container/Vector.hpp>

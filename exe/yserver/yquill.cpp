@@ -23,7 +23,7 @@
 #include <yq/typedef/string.hpp>
 
 #include <yq/meta/Meta.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 #include <iostream>
 

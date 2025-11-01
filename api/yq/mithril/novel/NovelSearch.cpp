@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/novel/Novel.hpp>
-#include <mithril/novel/NovelCDB.hpp>
-#include <mithril/novel/NovelSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/novel/Novel.hpp>
+#include <yq/mithril/novel/NovelCDB.hpp>
+#include <yq/mithril/novel/NovelSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     NovelVector  search(WebContext&ctx, novel_k)

@@ -7,18 +7,18 @@
 #pragma once
 
 #include <yq/core/DelayInit.hpp>
-#include <mithril/image/ImageHtml.hpp>
-#include <mithril/root/RootDir.hpp>
-#include <mithril/root/RootPost.hpp>
-#include <mithril/tag/Tag.hpp>
-#include <mithril/tag/TagArg.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/tag/TagHtml.hpp>
-#include <mithril/tag/TagJson.hpp>
-#include <mithril/tag/TagPost.hpp>
-#include <mithril/tag/TagSearch.hpp>
-#include <mithril/web/JsonAdapter.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/image/ImageHtml.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/root/RootPost.hpp>
+#include <yq/mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/TagArg.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/tag/TagHtml.hpp>
+#include <yq/mithril/tag/TagJson.hpp>
+#include <yq/mithril/tag/TagPost.hpp>
+#include <yq/mithril/tag/TagSearch.hpp>
+#include <yq/mithril/web/JsonAdapter.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 #include "common.hpp"
 

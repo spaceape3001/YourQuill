@@ -4,19 +4,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/atom/AtomCDB.hpp>
-#include <mithril/atom/AtomInfo.hpp>
-#include <mithril/attribute/AttributeCDB.hpp>
+#include <yq/mithril/atom/AtomCDB.hpp>
+#include <yq/mithril/atom/AtomInfo.hpp>
+#include <yq/mithril/attribute/AttributeCDB.hpp>
 
-#include <mithril/class/Class.hpp>
-#include <mithril/class/ClassCDB.hpp>
-#include <mithril/bit/NKI.hpp>
-#include <mithril/document/DocumentCDB.hpp>
-#include <mithril/field/FieldCDB.hpp>
-#include <mithril/image/Image.hpp>
-#include <mithril/tag/Tag.hpp>
-#include <mithril/tag/TagCDB.hpp>
-#include <mithril/wksp/CacheQuery.hpp>
+#include <yq/mithril/class/Class.hpp>
+#include <yq/mithril/class/ClassCDB.hpp>
+#include <yq/mithril/bit/NKI.hpp>
+#include <yq/mithril/document/DocumentCDB.hpp>
+#include <yq/mithril/field/FieldCDB.hpp>
+#include <yq/mithril/image/Image.hpp>
+#include <yq/mithril/tag/Tag.hpp>
+#include <yq/mithril/tag/TagCDB.hpp>
+#include <yq/mithril/wksp/CacheQuery.hpp>
 #include <yq/math/Counter.hpp>
 #include <yq/text/format.hpp>
 #include <yq/text/transform.hpp>

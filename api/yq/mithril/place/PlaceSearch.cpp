@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/place/Place.hpp>
-#include <mithril/place/PlaceCDB.hpp>
-#include <mithril/place/PlaceSearch.hpp>
-#include <mithril/web/WebSearcher.hpp>
+#include <yq/mithril/place/Place.hpp>
+#include <yq/mithril/place/PlaceCDB.hpp>
+#include <yq/mithril/place/PlaceSearch.hpp>
+#include <yq/mithril/web/WebSearcher.hpp>
 
 namespace yq::mithril {
     PlaceVector  search(WebContext&ctx, place_k)

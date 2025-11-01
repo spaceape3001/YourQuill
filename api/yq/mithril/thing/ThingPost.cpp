@@ -6,9 +6,9 @@
 
 #include "ThingPost.hpp"
 
-#include <mithril/thing/ThingArg.hpp>
-#include <mithril/web/WebContext.hpp>
-#include <mithril/thing/Thing.hpp>
+#include <yq/mithril/thing/ThingArg.hpp>
+#include <yq/mithril/web/WebContext.hpp>
+#include <yq/mithril/thing/Thing.hpp>
 #include <yq/text/copy.hpp>
 
 namespace yq::mithril::post {

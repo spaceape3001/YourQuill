@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <mithril/graphviz/Graphviz.hpp>
-#include <mithril/graphviz/GraphvizBuilder.hpp>
-#include <mithril/graphviz/GraphvizArg.hpp>
-#include <mithril/graphviz/GraphvizCDB.hpp>
-#include <mithril/graphviz/GraphvizHtml.hpp>
+#include <yq/mithril/graphviz/Graphviz.hpp>
+#include <yq/mithril/graphviz/GraphvizBuilder.hpp>
+#include <yq/mithril/graphviz/GraphvizArg.hpp>
+#include <yq/mithril/graphviz/GraphvizCDB.hpp>
+#include <yq/mithril/graphviz/GraphvizHtml.hpp>

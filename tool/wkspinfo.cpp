@@ -14,8 +14,8 @@
 #include <yq/text/join.hpp>
 
 
-#include <mithril/root/RootDir.hpp>
-#include <mithril/wksp/Workspace.hpp>
+#include <yq/mithril/root/RootDir.hpp>
+#include <yq/mithril/wksp/Workspace.hpp>
 
 using namespace yq;
 using namespace yq::mithril;

@@ -4,10 +4,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <mithril/directory/Directory.hpp>
-#include <mithril/directory/DirectoryJson.hpp>
-#include <mithril/directory/DirectoryCDB.hpp>
-//#include <mithril/directory/DirectoryInfo.hpp>
+#include <yq/mithril/directory/Directory.hpp>
+#include <yq/mithril/directory/DirectoryJson.hpp>
+#include <yq/mithril/directory/DirectoryCDB.hpp>
+//#include <yq/mithril/directory/DirectoryInfo.hpp>
 #include <yq/net/json.hpp>
 
 namespace yq::mithril {
