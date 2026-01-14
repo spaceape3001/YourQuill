@@ -47,4 +47,8 @@ Future dependencies....
 * Graphviz
 * Vulkan Memory Allocator
 
+## Known Bugs
+*   Qt WebEngine may crash with a complaint about GBM.  If so
+    `setenv QTWEBENGINE_FORCE_USE_GBM 0` (or similar for your shell) should fix it
+
 
