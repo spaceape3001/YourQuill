@@ -8,7 +8,7 @@
 
 #include <yq/core/DelayInit.hpp>
 #include <yq/text/match.hpp>
-#include <yq/gluon/core/Utilities.hpp>
+#include <yq/gluon/core/ustring.hpp>
 #include <yq/mithril/attribute/AttributeCDB.hpp>
 #include <yq/mithrilQt/image.hpp>
 #include <QIcon>
@@ -123,7 +123,7 @@ namespace yq::mithril::displayFN {
             Attribute    a   = i.as<Attribute>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -133,7 +133,7 @@ namespace yq::mithril::displayFN {
             Attribute    a   = i.as<Attribute>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::value(a));
+            return qString(cdb::value(a));
         };
     }
     

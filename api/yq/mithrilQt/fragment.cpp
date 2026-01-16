@@ -136,7 +136,7 @@ namespace yq::mithril::displayFN {
             Fragment    a   = i.as<Fragment>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -146,7 +146,7 @@ namespace yq::mithril::displayFN {
             Fragment    a   = i.as<Fragment>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::name(a));
+            return qString(cdb::name(a));
         };
     }
     
@@ -156,7 +156,7 @@ namespace yq::mithril::displayFN {
             Fragment    a   = i.as<Fragment>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::path(a).string());
+            return qString(cdb::path(a).string());
         };
     }
 }

@@ -6,7 +6,7 @@
 
 #include "IdModel.hpp"
 #include "IdColumn.hpp"
-#include <yq/gluon/core/Utilities.hpp>
+#include <yq/gluon/core/ucompare.hpp>
 
 using namespace yq::gluon;
 
@@ -411,7 +411,7 @@ namespace yq::mithril {
             auto sorter = [&](Node*a, Node*b) -> bool {
                 QVariant    va  = (col->fnSort) ? col->fnSort(a->id) : col->fnDisplay(a->id);
                 QVariant    vb  = (col->fnSort) ? col->fnSort(b->id) : col->fnDisplay(b->id);
-                Compare cmp = del ? del->compare(va, vb) : yq::gluon::compare(va, vb);
+                Compare cmp = del ? del->compare(va, vb) : yq::compare(va, vb);
                 return (order == Qt::AscendingOrder) ? (cmp == Compare::LESSER) : (cmp == Compare::GREATER);
             };
             

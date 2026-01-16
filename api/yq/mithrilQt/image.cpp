@@ -7,12 +7,13 @@
 #include "image.hpp"
 #include <yq/core/ThreadId.hpp>
 #include <yq/gluon/core/IgCaseQ.hpp>
+#include <yq/gluon/core/ustring.hpp>
 #include <yq/mithril/fragment/FragmentCDB.hpp>
 #include <yq/mithril/image/ImageCDB.hpp>
 #include <QIcon>
 #include <unordered_map>
 
-using namespace yq::gluon;
+//using namespace yq::gluon;
 
 namespace yq::mithril {
     namespace {
@@ -45,7 +46,7 @@ namespace yq::mithril {
         std::filesystem::path   p   = cdb::path(frag);
         if(p.empty())
             return QIcon();
-        ii.icon = QIcon(QString::fromStdString(p.string()));
+        ii.icon = QIcon(qString(p.string()));
         return ii.icon;
     }
 }

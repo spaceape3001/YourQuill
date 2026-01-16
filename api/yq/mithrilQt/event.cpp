@@ -122,7 +122,7 @@ namespace yq::mithril::displayFN {
             Event    a   = i.as<Event>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -132,7 +132,7 @@ namespace yq::mithril::displayFN {
             Event    a   = i.as<Event>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::title(a));
+            return qString(cdb::title(a));
         };
     }
 }

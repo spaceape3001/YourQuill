@@ -118,7 +118,7 @@ namespace yq::mithril::displayFN {
             Meta    a   = i.as<Meta>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -128,7 +128,7 @@ namespace yq::mithril::displayFN {
             Meta    a   = i.as<Meta>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::name(a));
+            return qString(cdb::name(a));
         };
     }
 }

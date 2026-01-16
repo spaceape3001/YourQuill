@@ -144,7 +144,7 @@ namespace yq::mithril::displayFN {
             Value    a   = i.as<Value>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -154,7 +154,7 @@ namespace yq::mithril::displayFN {
             Value    a   = i.as<Value>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::name(a));
+            return qString(cdb::name(a));
         };
     }
 
@@ -164,7 +164,7 @@ namespace yq::mithril::displayFN {
             Value    a   = i.as<Value>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::data(a));
+            return qString(cdb::data(a));
         };
     }
 }

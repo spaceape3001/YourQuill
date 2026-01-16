@@ -100,6 +100,10 @@ target_link_libraries(${PROJECT_NAME}
     yq_resources
     yq_date
     
+    #   Want to bring these in... will take craftsmanship
+    #yq_tachyon
+    #yq_vkqt
+    
     Qt6::Network
     Qt6::Svg
     Qt6::SvgWidgets

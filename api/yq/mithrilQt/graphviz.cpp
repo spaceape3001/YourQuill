@@ -120,7 +120,7 @@ namespace yq::mithril::displayFN {
             Graphviz    a   = i.as<Graphviz>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -130,7 +130,7 @@ namespace yq::mithril::displayFN {
             Graphviz    a   = i.as<Graphviz>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::name(a));
+            return qString(cdb::name(a));
         };
     }
 }

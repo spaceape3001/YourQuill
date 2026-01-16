@@ -123,7 +123,7 @@ namespace yq::mithril::displayFN {
             Book    a   = i.as<Book>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -133,7 +133,7 @@ namespace yq::mithril::displayFN {
             Book    a   = i.as<Book>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::title(a));
+            return qString(cdb::title(a));
         };
     }
 }

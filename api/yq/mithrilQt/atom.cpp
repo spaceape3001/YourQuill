@@ -129,7 +129,7 @@ namespace yq::mithril::displayFN {
             Atom    a   = i.as<Atom>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::key(a));
+            return qString(cdb::key(a));
         };
     }
     
@@ -139,7 +139,7 @@ namespace yq::mithril::displayFN {
             Atom    a   = i.as<Atom>();
             if(!a)
                 return QVariant();
-            return gluon::qString(cdb::name(a));
+            return qString(cdb::name(a));
         };
     }
     

@@ -162,7 +162,7 @@ namespace yq::mithril::displayFN {
             const RootDir*  rt  = root_dir(a);
             if(!rt)
                 return QVariant();
-            return gluon::qString(rt->key);
+            return qString(rt->key);
         };
     }
     
@@ -175,7 +175,7 @@ namespace yq::mithril::displayFN {
             const RootDir*  rt  = root_dir(a);
             if(!rt)
                 return QVariant();
-            return gluon::qString(rt->name);
+            return qString(rt->name);
         };
     }
     
@@ -188,7 +188,7 @@ namespace yq::mithril::displayFN {
             const RootDir*  rt  = root_dir(a);
             if(!rt)
                 return QVariant();
-            return gluon::qString(rt->path.string());
+            return qString(rt->path.string());
         };
     }
     
