@@ -24,6 +24,8 @@ endif()
 find_package(Graphviz)
 find_package(ImageMagick COMPONENTS Magick++)
 
+yq_data(data)
+
 if(Build_Vulkan)
     vulqan_data(data)
 endif()

@@ -18,5 +18,6 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 vulqan_library(${PROJECT_NAME})
+yq_vklib(${PROJECT_NAME})
 LinkTest(${PROJECT_NAME})
 
