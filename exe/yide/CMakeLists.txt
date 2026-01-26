@@ -92,6 +92,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
     
     yq_gluon 
+    yq_graphicsQt
     yq_math
     yq_mithril 
     yq_mithrilQt

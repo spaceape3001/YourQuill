@@ -10,8 +10,8 @@
 
 #include <yq/core/DelayInit.hpp>
 #include <yq/gluon/core/Logging.hpp>
-#include <yq/gluon/graphics/GraphicsScene.hpp>
-#include <yq/gluon/graphics/GraphicsView.hpp>
+#include <yq/graphicsQt/GraphicsScene.hpp>
+#include <yq/graphicsQt/GraphicsView.hpp>
 #include <yq/mithril/fragment/FragmentCDB.hpp>
 #include <yq/mithril/image/ImageCDB.hpp>
 
