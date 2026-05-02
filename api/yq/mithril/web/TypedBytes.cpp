@@ -8,6 +8,7 @@
 #include <yq/file/FileUtils.hpp>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <yq/util/Safety.hpp>
 
 namespace yq::mithril {

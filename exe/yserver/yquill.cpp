@@ -26,6 +26,7 @@
 #include <yq/mithril/wksp/Workspace.hpp>
 
 #include <iostream>
+#include <unistd.h>
 
 
 using namespace yq;
