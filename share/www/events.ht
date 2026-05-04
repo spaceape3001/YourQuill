@@ -1,5 +1,6 @@
 #! Events
 
+<input id="colcnt" type="range" min="1" max="10" value="3"/>
 <table id="events">
     <tr><td> LOADING...
 </table>
@@ -9,7 +10,6 @@
 	var events 	= [];
 	var	cols	= 1;
 	var layout	= TableLayout.VertFirst;
-	
     
     function relayout()
     {

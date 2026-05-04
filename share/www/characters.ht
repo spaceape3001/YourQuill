@@ -1,5 +1,6 @@
 #! Characters
 
+<input id="colcnt" type="range" min="1" max="10" value="3"/>
 <table id="characters">
     <tr><td> LOADING...
 </table>
@@ -7,13 +8,16 @@
 <script src="/js/characters.js"></script>
 <script>
 	var characters 	= [];
-	var	cols	= 3;
 	var layout	= TableLayout.VertFirst;
-	
+    
+    const colcnt = document.getElementById("colcnt");
+    colcnt.addEventListener("colcnt", relayout());
     
     function relayout()
     {
-        var tt			= document.getElementById('characters');
+        var tt		= document.getElementById("characters");
+
+        var cols    = parseInt(colcnt.value);
         tt.innerHTML	= '';	// clear the old
         
         switch(layout){
