@@ -90,6 +90,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} 
+PRIVATE
     
     yq_gluon 
     yq_graphicsQt
@@ -117,4 +118,19 @@ PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
+if(Build_Vulkan)
+    target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        yq_tachyon
+    )
+    
+    target_sources(${PROJECT_NAME}
+    PRIVATE
+    )
+
+    target_compile_definitions(${PROJECT_NAME}
+    PRIVATE 
+        YIDE_VULKAN
+    )
+endif()
 

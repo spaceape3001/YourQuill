@@ -61,11 +61,13 @@ namespace yq::mithril::html {
     void    dev_table(WebHtml& h, const DocumentVector& documents)
     {
         auto _tab = h.table();
-        h << "<tr><th>ID</th><th>Fragments</th><th>Key</th><th>Name</th><th>Suffix</th>\n";
+        h << "<tr><th>ID</th><th>Frags</th><th>Icon</th><th align=\"left\">Key</th><th align=\"left\">Name</th><th align=\"left\">Suffix</th>\n";
         for(Document a : documents){
             auto i = cdb::info(a);
-            h << "<tr><td>" << dev_id(a)  << "</td><td>" << cdb::fragments_count(a) 
-              << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" << i.suffix << "</td></tr>\n";
+            h << "<tr><td>" << dev_id(a)  << "</td><td>" << cdb::fragments_count(a) << "</td><td>";
+            if(i.icon)
+                h << cdb::thumbnail(i.icon);
+            h  << "</td><td>" << i.key << "</td><td>" << i.name << "</td><td>" << i.suffix << "</td></tr>\n";
         }
     }
 
