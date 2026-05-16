@@ -109,6 +109,11 @@ namespace yq::mithril {
 
         Folder                          parent(Document);
 
+       /*! Bit between the extensions... 
+        
+            ie foo.bar.fred.txt  => "bar.fred"
+        */
+        std::string                     qualifier(Document);
 
         bool                            removed(Document);
 
@@ -133,6 +138,7 @@ namespace yq::mithril {
 
         std::string                     skeyc(Document);  //!< Key inside the directory (w/o final extension)
 
+ 
         Extension                       suffix(Document);
 
         Fragment                        writable(Document, DataRole);

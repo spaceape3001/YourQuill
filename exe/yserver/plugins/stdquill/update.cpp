@@ -279,6 +279,7 @@ namespace {
             on_stage4<s4_class>();
             //on_stage4<s4_class_graph>();
             on_stage4<s4_atom>();
+            on_stage4<s4_atom_icons>();
             
             
             //on_stage4<u_leaf_stage4_cleanup>();

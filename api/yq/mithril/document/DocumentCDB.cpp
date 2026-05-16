@@ -377,6 +377,20 @@ namespace yq::mithril::cdb {
         return folder(d);
     }
     
+    std::string     qualifier(Document d)
+    {
+        static thread_local CacheQuery  s("SELECT skb, skc FROM " TBL_DOCUMENTS " WHERE id=?");
+        auto s_af   = s.af();
+        s.bind(1, d.id);
+        if(s.step() != SQResult::Row)
+            return {};
+        std::string skb = s.v_string(1);
+        std::string skc = s.v_string(2);
+        if(skc.size() <= skb.size())
+            return {};
+        return skc.substr(skb.size()+1);
+    }
+
     bool                removed(Document d)
     {
         static thread_local CacheQuery    s("SELECT removed FROM " TBL_DOCUMENTS " WHERE id=?");

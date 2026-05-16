@@ -122,6 +122,8 @@ if(Build_Vulkan)
     target_link_libraries(${PROJECT_NAME}
     PRIVATE
         yq_tachyon
+        yq_tedit
+        yq_vkqt
     )
     
     target_sources(${PROJECT_NAME}
