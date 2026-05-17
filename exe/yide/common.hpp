@@ -8,6 +8,10 @@
 
 #include <yq/net/Curl.hpp>
 
+//  spot to disable (to test) the vulkan
+// #undef YIDE_VULKAN
+
+
 #ifdef YIDE_VULKAN
 namespace yq::tachyon {
     class TEManager;

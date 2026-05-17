@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "common.hpp"
 #include "DreamApp.hpp"
 
 #include <QWebEngineSettings>
@@ -24,8 +25,6 @@ using namespace yq;
 using namespace yq::gluon;
 using namespace yq::mithril;
 
-
-#undef YIDE_VULKAN
 
 DreamApp*    DreamApp::s_app    = nullptr;
 

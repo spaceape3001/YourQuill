@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "common.hpp"
 #include "DreamApp.hpp"
 #include "DreamMW.hpp"
 
@@ -172,9 +173,12 @@ int main(int argc, char* argv[])
     yq::Meta::init();
 
     #ifdef YIDE_VULKAN
-    //app.vulqan_libraries(LOAD);
-    //yq::Meta::init();
+    app.vulqan_libraries(LOAD);
+    yq::Meta::init();
     #endif
+
+    load_plugin_dir("plugin");
+    yq::Meta::init();
     
     for(auto z : zPluginDirs){
         load_plugin_dir(z);
@@ -182,7 +186,6 @@ int main(int argc, char* argv[])
     }
 
 
-    load_plugin_dir("plugin");
     app.start();
     yq::resources::load_standard();
     yq::Meta::freeze();
@@ -197,8 +200,10 @@ int main(int argc, char* argv[])
         return -1;
     
     #ifdef YIDE_VULKAN
-    #endif
-
+    app.run();
+    return 0;
+    #else
     return app.qtApp()->exec();
+    #endif
 }
 
