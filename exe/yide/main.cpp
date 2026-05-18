@@ -28,10 +28,10 @@
 #ifdef YIDE_VULKAN
 #include <yq/assetvk/io/FileIOManager.hpp>
 #include <yq/resource/Resource.hpp>
-#include <yq/tachyon/api/Tachyon.hxx>
 #include <yq/tedit/TEManager.hpp>
 #include <yq/tedit/app/TEApp.hpp>
 #include <yq/vkqt/app/YApp.hpp>
+#include <yq/tachyon/api/Tachyon.hxx>
 #endif
 
 using namespace yq;
@@ -187,8 +187,16 @@ int main(int argc, char* argv[])
 
 
     app.start();
+    if(!app.qtApp())
+        return -1;
+
     yq::resources::load_standard();
     yq::Meta::freeze();
+
+    #ifdef YIDE_VULKAN
+    G::te_manager   = Tachyon::create<TEManager>();
+    G::file_io      = Tachyon::create_on<FileIOManager>(IO)->typed_id();
+    #endif
     
     {
         DreamMW *   w   = new DreamMW;
@@ -196,8 +204,6 @@ int main(int argc, char* argv[])
         w -> show();
     }
     
-    if(!app.qtApp())
-        return -1;
     
     #ifdef YIDE_VULKAN
     app.run();
