@@ -8,7 +8,7 @@
 
 //#include <yq/mithril/enum/change.hpp>
 #include <yq/net/Http.hpp>
-#include <yq/core/Flag.hpp>
+#include <yq/core/Flags.hpp>
 #include <yq/container/EnumMap.hpp>
 #include <yq/meta/Meta.hpp>
 #include <yq/meta/MetaWriter.hpp>
@@ -29,8 +29,8 @@ namespace yq::mithril {
     struct WebSession;
     class Template;
     
-    using HttpOps       = Flag<HttpOp>;
-    using ContentTypes  = Flag<ContentType>;
+    using HttpOps       = Flags<HttpOp>;
+    using ContentTypes  = Flags<ContentType>;
     
     class WebPage;
     using WebPageMap    = EnumMap<HttpOp, Map<std::string_view, const WebPage*, IgCase>>;

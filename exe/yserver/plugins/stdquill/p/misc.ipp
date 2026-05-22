@@ -53,7 +53,7 @@ namespace {
             
             auto _t     = out.table();
             
-            out.kvrow("Method") << out.context().method.key() << "\n";
+            out.kvrow("Method") << key_of(out.context().method) << "\n";
             out.kvrow("URL") << out.context().url << "\n";
             out.kvrow("Client HTTP") << out.context().version << "</td></tr>\n";
             for(auto& hv : out.context().rx_headers)

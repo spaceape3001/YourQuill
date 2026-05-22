@@ -24,7 +24,7 @@ namespace yq::mithril {
 
         constexpr operator bool() const noexcept 
         {
-            return type || dim;
+            return (type != ContentType::unknown) || dim;
         }
     };
 }

@@ -91,7 +91,7 @@ bool    configureWorkspace(int argc, char* argv[])
     
     HttpStatus hs   = contact.exec();
     if(!isSuccessful(hs)){
-        yCritical() << "Unable to query workspace: " << hs.value() << " (" << statusMessage(hs) << ")";
+        yCritical() << "Unable to query workspace: " << (int) hs << " (" << statusMessage(hs) << ")";
         return false;
     }
    

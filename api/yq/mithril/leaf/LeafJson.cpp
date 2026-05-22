@@ -35,6 +35,18 @@ namespace yq::mithril {
     }
     
     namespace {
+        std::string_view lx_key_for(const json& j)
+        {
+            auto x = j.find("key");
+            if(x == j.end())
+                return {};
+            if(!x->is_string())
+                return {};
+            
+            static thread_local std::string s   = x->get<std::string>();
+            return s;
+        }
+    
         void apply_attrs(json& j, const KVTree& tree)
         {
             j = json::array();
@@ -51,11 +63,9 @@ namespace yq::mithril {
                 j.push_back(std::move(j2));
             }
             
-            /*
             std::stable_sort(j.begin(), j.end(), [](const json& a, const json& b) -> bool {
-                return is_less_igCase(*(a["key"].string_t), *(b["key"].string_t));
+                return is_less_igCase(lx_key_for(a), lx_key_for(b));
             });
-            */
         }
         
         void apply_context(json&j, const std::vector<Context>& context)

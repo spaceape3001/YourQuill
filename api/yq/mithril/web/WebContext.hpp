@@ -37,7 +37,7 @@ namespace yq::mithril {
     struct SessionData {
         std::string_view    ssid;
         std::string         username;
-        const RootDir*         def_root        = nullptr;
+        const RootDir*      def_root        = nullptr;
         unsigned int        columns         = 0;
         SizeDesc            icon_size       = SizeDesc::Small;
         bool                auto_edit       = false;

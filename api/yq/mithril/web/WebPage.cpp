@@ -82,22 +82,22 @@ namespace yq::mithril {
             WLOCK
             switch(m_role){
             case Role::Directory:
-                for(HttpOp m : HttpOp::all_values())
+                for(HttpOp m : values_of<HttpOp>())
                     if(m_methods.is_set(m))
                         _r.dirs[m][p]     = this;
                 break;
             case Role::Extension:
-                for(HttpOp m : HttpOp::all_values())
+                for(HttpOp m : values_of<HttpOp>())
                     if(m_methods.is_set(m))
                         _r.exts[m][p]     = this;
                 break;
             case Role::Glob:
-                for(HttpOp m : HttpOp::all_values())
+                for(HttpOp m : values_of<HttpOp>())
                     if(m_methods.is_set(m))
                         _r.globs[m][p]     = this;
                 break;
             case Role::Page:
-                for(HttpOp m : HttpOp::all_values()){
+                for(HttpOp m : values_of<HttpOp>()){
                     if(m_methods.is_set(m)){
                         _r.pages[m][p]     = this;
                         for(std::string_view a : m_alts)
@@ -261,7 +261,7 @@ namespace yq::mithril {
     WebPage::Writer& WebPage::Writer::sub(HttpOps m, std::string_view p, const WebPage*w)
     {
         if(w && m_page){
-            for(HttpOp h : HttpOp::all_values()){
+            for(HttpOp h : values_of<HttpOp>()){
                 if(m.is_set(h)){
                     m_page -> set(Flag::HAS_SUBS);
                     m_page -> m_subs[h][p]  = w;

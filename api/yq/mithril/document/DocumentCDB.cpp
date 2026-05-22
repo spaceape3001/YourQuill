@@ -89,7 +89,7 @@ namespace yq::mithril::cdb {
         i.bind(5,sfx);
         i.bind(6,base);
         i.bind(7,ak[0] == '.');
-        i.bind(8,mimeTypeForExt(sfx).value());
+        i.bind(8,mimeTypeForExt(sfx));
         i.bind(9,skc);
         
         if(is_good(i.step(false))){
@@ -344,7 +344,7 @@ namespace yq::mithril::cdb {
         auto af = s.af();
         s.bind(1, d.id);
         if(s.step() == SQResult::Row){
-            return (ContentType::enum_t) s.v_int(1);
+            return (ContentType) s.v_int(1);
         } else 
             return ContentType();
     }
@@ -420,7 +420,7 @@ namespace yq::mithril::cdb {
     void                set_mime_type(Document doc, ContentType ct)
     {
         static thread_local CacheQuery  u("UPDATE " TBL_DOCUMENTS " SET mime=? WHERE id=?");
-        u.bind(1, ct.value());
+        u.bind(1, ct);
         u.bind(2, doc.id);
         u.step(true);
         u.reset();

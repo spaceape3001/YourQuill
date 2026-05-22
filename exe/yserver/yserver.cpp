@@ -10,7 +10,9 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
+#include <yq/container/initlist_utils.hpp>
 #include <yq/core/DelayInit.hpp>
+#include <yq/core/Enumeration.hpp>
 #include <yq/core/ThreadId.hpp>
 #include <yq/core/Logging.hpp>
 #include <yq/core/Ref.hpp>
@@ -125,13 +127,13 @@ namespace {
 
     void                genStatus()
     {
-        for(HttpStatus hs : HttpStatus::all_values()){
+        for(HttpStatus hs : values_of<HttpStatus>()){
             StatusQ&    sq  = gStatusMessages[hs];
             sq.source       = statusMessage(hs);
             
             {
                 stream::Text    text(sq.reply_data);
-                text << config.version.protocol << '/' << config.version.major << '.' << config.version.minor << ' ' << hs.value() << ' ' << sq.source << "\r\n";
+                text << config.version.protocol << '/' << config.version.major << '.' << config.version.minor << ' ' << (int) hs << ' ' << sq.source << "\r\n";
             }
 
             // check for error messages (shared & workspace)... if not, the default is....
@@ -149,7 +151,7 @@ namespace {
                 else if(isServerError(hs))
                     cat = "SERVER ERROR";
                 text << "<html><head><title>" << cat << "</title></head><body><h1>" 
-                    << cat << " (" << hs.value() << "): " << sq.source << "</h1></body></html>";
+                    << cat << " (" << (int) hs << "): " << sq.source << "</h1></body></html>";
             }
             
             sq.reply_asio   = asio::buffer(sq.reply_data);
@@ -599,10 +601,6 @@ public:
             {
                 ctx->status  = s;
             }
-            catch(HttpStatus::enum_t s)
-            {
-                ctx->status = s;
-            }
             catch(WebRedirect wr)
             {
                 ctx -> tx_redirect  = wr.where;
@@ -616,7 +614,7 @@ public:
             catch(int ex)
             {
                 if((ex >= 0) && (ex < 600)){
-                    ctx->status = (HttpStatus::enum_t) ex;
+                    ctx->status = (HttpStatus) ex;
                 } else 
                     ctx->status = HttpStatus::InternalError;
             }
@@ -637,14 +635,14 @@ public:
         
         // log it.
         access_log << ctx->remote_addr.to_string() 
-            << " - [" << ctx->timestamp  << "] \"" << ctx->method.key() << " " << ctx->url.path << " " << ctx->version
-            << "\" " << ctx->status.value() << " " << ctx->tx_content_size() << "\n";
+            << " - [" << ctx->timestamp  << "] \"" << key_of(ctx->method) << " " << ctx->url.path << " " << ctx->version
+            << "\" " << (int) ctx->status << " " << ctx->tx_content_size() << "\n";
         access_log.flush();
         
         #ifndef NDEBUG
         yInfo() << ctx->remote_addr.to_string() 
-            << " - [" << ctx->timestamp  << "] \"" << ctx->method << " " << ctx->url.path << " " << ctx->version
-            << "\" " << ctx->status.value() << " " << ctx->tx_content_size();
+            << " - [" << ctx->timestamp  << "] \"" << key_of(ctx->method) << " " << ctx->url.path << " " << ctx->version
+            << "\" " << (int) ctx->status << " " << ctx->tx_content_size();
         #endif
     }
     
@@ -807,7 +805,7 @@ public:
                 m_current -> rx_body.resize(*t);
             }
         } else if(is_similar(hv.key, "Content-Type")){
-            m_current -> rx_content_type         = ContentType(hv.value);
+            m_current -> rx_content_type    = enumeration<ContentType>().decode(hv.value);
         } else if(is_similar(hv.key, "Cookie")){
             rxCookie(hv.value);
         }
@@ -820,14 +818,14 @@ public:
             return;
 
         MethodUriVersion  muri      = parse_method_uri(v);
-        auto m = HttpOp::value_for(muri.method);
-        if(!m){
+        auto m = enumeration<HttpOp>().value(muri.method);
+        if(!m.good){
             dispatch(HttpStatus::MethodNotAllowed);
             m_rxMode    = RxError;
             return ;
         }
         
-        m_current -> method   = *m;
+        m_current -> method   = m.value;
         if(muri.uri.empty()){
             dispatch(HttpStatus::MissingURI);
             m_rxMode    = RxError;
