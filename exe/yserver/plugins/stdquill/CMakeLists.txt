@@ -10,7 +10,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  ${PLUGIN_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PLUGIN_DIR})
 
 set(stdquill_SOURCES 
-    #./imaging.cpp
     #common.cpp
     ./variables.cpp
     ./page.cpp

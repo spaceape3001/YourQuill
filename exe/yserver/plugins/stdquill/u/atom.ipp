@@ -251,4 +251,9 @@ namespace {
     {
         //  assimilate edges
     }
+    
+    void    s4_atom_icons()
+    {
+        //  update atom icons
+    }
 }

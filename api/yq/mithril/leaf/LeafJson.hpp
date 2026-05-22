@@ -11,5 +11,6 @@
 
 namespace yq::mithril {
     json json_(Leaf);
+    json json_(Leaf, all_k);
     json json_(const LeafVector&);
 }

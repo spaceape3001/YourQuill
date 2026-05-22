@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <yq/core/Enumeration.hpp>
 #include <yq/mithril/image/Image.hpp>
 #include <yq/mithril/image/ImageCDB.hpp>
 #include <yq/mithril/image/ImageJson.hpp>
@@ -20,7 +21,7 @@ namespace yq::mithril {
             { "height", i.dim.y },
             { "mime", mimeType(i.type) },
             { "raster", cdb::is_raster(i.type) },
-            { "type", i.type.key() },
+            { "type", key_of(i.type) },
             { "width", i.dim.x }
         };
         return j;

@@ -189,8 +189,8 @@ namespace {
             h.title("Mime Types");
             auto ta = h.table();
             h << "<tr><th>ID</th><th>KEY</th><th>MIME-TYPE</th></tr>\n";
-            for(ContentType ct : ContentType::all_values())
-                h << "<tr><td>" << ct.value() << "</td><td>" << ct.key() << "</td><td>" << mimeType(ct) << "</td></tr>\n";
+            for(ContentType ct : values_of<ContentType>())
+                h << "<tr><td>" << (int) ct << "</td><td>" << key_of(ct) << "</td><td>" << mimeType(ct) << "</td></tr>\n";
         }
 
     //  -----------------------------------------------------------------------

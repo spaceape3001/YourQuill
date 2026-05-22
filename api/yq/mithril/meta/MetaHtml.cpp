@@ -273,7 +273,7 @@ namespace yq::mithril {
     WebActionMethodPageMap  remapToActionMethods(const WebPageMap&wm)
     {
         WebActionMethodPageMap  ret;
-        for(HttpOp h : HttpOp::all_values()){
+        for(HttpOp h : values_of<HttpOp>()){
             for(auto& itr : wm[h])
                 ret[itr.first][h] = itr.second;
         }
@@ -287,7 +287,7 @@ namespace yq::mithril {
             for(auto& i : remapToActionMethods(wm)){
                 const WebPage*get = nullptr;
                 out << "<TR><TH align=\"left\">" << i.first << "</TH>";
-                for(HttpOp h : HttpOp::all_values()){
+                for(HttpOp h : values_of<HttpOp>()){
                     out << "<TD>";
                     const WebPage*pg = i.second[h];
                     if(pg){

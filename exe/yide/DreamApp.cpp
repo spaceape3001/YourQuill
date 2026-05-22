@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "common.hpp"
 #include "DreamApp.hpp"
 
 #include <QWebEngineSettings>
@@ -11,6 +12,7 @@
 #include "WebBrowser.hpp"
 
 #include <yq/net/Url.hpp>
+#include <yq/gluon/app/Application.hpp>
 #include <yq/gluon/core/Logging.hpp>
 #include <yq/net/Curl.hpp>
 #include <yq/process/PluginLoader.hpp>
@@ -26,7 +28,7 @@ using namespace yq::mithril;
 
 DreamApp*    DreamApp::s_app    = nullptr;
 
-DreamApp::DreamApp(int& argc, char**argv) : yq::gluon::Application(argc, argv)
+DreamApp::DreamApp(int& argc, char**argv, const DreamAppConfig& aci) : DreamAppBase(argc, argv, aci), m_argc(argc), m_argv(argv)
 {
     if(!s_app)
         s_app   = this;
@@ -38,70 +40,33 @@ DreamApp::DreamApp(int& argc, char**argv) : yq::gluon::Application(argc, argv)
 
 DreamApp::~DreamApp()
 {
+    #ifndef YIDE_VULKAN
+    delete m_qApp;
+    #endif
+    m_qApp  = nullptr;
+
     if(s_app == this)
         s_app = nullptr;
 }
 
-bool    DreamApp::configure()
+bool    DreamApp::start()
 {
-    QStringList args    = arguments();
-    if(args.size() < 2){
-        yCritical() << "Insufficient arguments, expecting one... the port number";
+    #ifdef YIDE_VULKAN
+    if(!DreamAppBase::start())
         return false;
-    }
-    
-    uint16_t    pp = args[1].toUShort();
-    if(((pp < 1024) && (pp != 80) && (pp != 443)) || (pp > 49151)){
-        yCritical() << "Invalid port number";
-        return false;
-    }
-    
-    Url     u;
-    u.scheme    = "http";
-    u.host      = "localhost";
-    u.path      = "/api/wksp/quill";
-    u.port      = (uint16_t) pp;
-    
-    Curl        contact;
-    contact.set_url(u);
-    
-    HttpStatus hs   = contact.exec();
-    if(!isSuccessful(hs)){
-        yCritical() << "Unable to query workspace: " << hs.value() << " (" << statusMessage(hs) << ")";
-        return false;
-    }
-   
-    nlohmann::json  j   = contact.rx_json();
-    std::string where   = j["quill"].get<std::string>();
-    if(where.empty()){
-        yCritical() << "No meaningful workspace discovered!";
-        return false;
-    }
-    
-    wksp::Config        cfg;
-    cfg.spec        = where;
-    cfg.app         = wksp::App::EDITOR;
-    cfg.db_flags    = []() -> int { return SqlLite::ReadOnly; };
-    if(!wksp::initialize(cfg))
-        return false;
-        
-    m_home.setScheme("http");
-    m_home.setHost("localhost");
-    m_home.setPort(pp);
-    m_home.setPath("/");
-    
-    WebBrowser::setHomeUrl(m_home);
-    
+    m_qApp  = dynamic_cast<gluon::Application*>(app_thread());
+    #else 
+    m_qApp  = new gluon::Application(m_argc, m_argv);
+    #endif
+
     //  HACK to increase font size... change this to a config type of file
-    //  Try a simpe 50% scaling
-    QFont   f   = font();
+    //  Try a simple 50% scaling
+    QFont   f   = QApplication::font();
     f.setPointSize((f.pointSize() * 3) >> 1);
-    setFont(f);
-    
-    //load_plugin_dir("plugin/ystudio");
+    QApplication::setFont(f);
+
     return true;
 }
 
 
 
-#include "moc_DreamApp.cpp"

@@ -27,6 +27,31 @@ namespace {
                 throw HttpStatus::BadArgument;
             return json_(v);
         }
+
+#if 0        
+        json p_api_atom_context(WebContext& ctx)
+        {
+            Atom    v   = arg::atom(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+            
+            Leaf    l   = cdb::leaf(v);
+            if(!l)
+                return {};
+                
+            auto doc    = cdb::leaf_merged(l);
+            if(!doc)
+                return {};
+            
+            
+            
+            json j;
+            if(l){
+                j["context"]    = cdb::context(ctx);
+            }
+            return j;
+        }
+#endif
         
         json p_api_atom_key(WebContext& ctx)
         {

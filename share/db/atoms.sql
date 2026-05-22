@@ -36,6 +36,13 @@ CREATE TABLE AtomClass (
     UNIQUE(atom,class) ON CONFLICT IGNORE
 );
 
+CREATE TABLE AtomImage (
+    atom    INTEGER PRIMARY KEY,
+    image   INTEGER NOT NULL DEFAULT 0,
+        -- child key
+    ck      VARCHAR(255)
+);
+
 CREATE TABLE AtomProperty (
     id      INTEGER PRIMARY KEY,
     atom    INTEGER NOT NULL,

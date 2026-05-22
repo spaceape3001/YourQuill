@@ -10,6 +10,7 @@
 //#include "WebSession.hpp"
 #include <asio/ip/address.hpp>
 #include <yq/container/MultiMap.hpp>
+#include <yq/core/Enumeration.hpp>
 #include <yq/mithril/enum/DataRole.hpp>
 #include <yq/mithril/enum/SizeDesc.hpp>
 #include <yq/net/Http.hpp>
@@ -37,7 +38,7 @@ namespace yq::mithril {
     struct SessionData {
         std::string_view    ssid;
         std::string         username;
-        const RootDir*         def_root        = nullptr;
+        const RootDir*      def_root        = nullptr;
         unsigned int        columns         = 0;
         SizeDesc            icon_size       = SizeDesc::Small;
         bool                auto_edit       = false;
@@ -72,7 +73,7 @@ namespace yq::mithril {
         //MarkdownContext                 markdown;
 
         //! Method of the request
-        HttpOp                          method;
+        HttpOp                          method          = enumeration<HttpOp>().value(DEFAULT);
         
         //! Our webpage....
         const WebPage*                  page            = nullptr;
@@ -92,7 +93,7 @@ namespace yq::mithril {
         //! The received content
         Vector<char>                    rx_body;
 
-        ContentType                     rx_content_type;
+        ContentType                     rx_content_type = enumeration<ContentType>().value(DEFAULT);
 
         //! Headers received
         StringViewMultiMap              rx_headers;
@@ -120,8 +121,7 @@ namespace yq::mithril {
         SessionData                     session;
 
         //! Status to reply with
-        HttpStatus                      status;
-        
+        HttpStatus                      status = enumeration<HttpStatus>().value(DEFAULT);
 
         //! Time of dispatch
         time_t                          time;
@@ -135,7 +135,7 @@ namespace yq::mithril {
         std::shared_ptr<ByteArray>      tx_content;
 
         //! Type of the data being returned
-        ContentType                     tx_content_type;
+        ContentType                     tx_content_type = enumeration<ContentType>().value(DEFAULT);
 
         //! Used for redirects....
         Url                             tx_redirect;

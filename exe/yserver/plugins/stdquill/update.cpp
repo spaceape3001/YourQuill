@@ -206,6 +206,7 @@ namespace {
 #include "u/category.ipp"
 #include "u/class.ipp"
 #include "u/css.ipp"
+#include "u/document.ipp"
 #include "u/doodle.ipp"
 #include "u/field.ipp"
 #include "u/image.ipp"
@@ -272,10 +273,13 @@ namespace {
 
             on_stage4<css_stage4>();        // <---  Must come AFTER background stage4
             on_stage4<page_stage4>();
+            
+            on_stage4<s4_doc_images>();
 
             on_stage4<s4_class>();
             //on_stage4<s4_class_graph>();
             on_stage4<s4_atom>();
+            on_stage4<s4_atom_icons>();
             
             
             //on_stage4<u_leaf_stage4_cleanup>();

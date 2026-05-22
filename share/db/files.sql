@@ -49,8 +49,8 @@ CREATE TABLE Documents (
     -- sk w/o final suffix
 	skc         VARCHAR(255) COLLATE NOCASE,
 	mime        INTEGER,
-	folder      INTEGER,
-	icon        INTEGER,
+	folder      INTEGER NOT NULL DEFAULT 0,
+	icon        INTEGER NOT NULL DEFAULT 0,
 	suffix      VARCHAR(255),
     hidden      BOOLEAN NOT NULL DEFAULT 0,
 	removed     BOOLEAN NOT NULL DEFAULT 0

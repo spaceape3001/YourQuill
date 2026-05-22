@@ -136,7 +136,7 @@ namespace {
         for(Fragment frag : cdb::fragments(doc))
             u_image(cdb::db_image(frag), Change::Added);
     }
-
+    
     void    s5_image(Fragment frag, Change chg)
     {
         Image   v;

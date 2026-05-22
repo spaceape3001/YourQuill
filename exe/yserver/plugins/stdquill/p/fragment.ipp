@@ -107,7 +107,7 @@ namespace {
             ContentType     ct = mimeTypeForExt( sfx);
             if(isImage(ct)){
                 h << "<img src=\"/dev/fragment/image?" << h.context().url.query << "\" alt=\"Raw Image\">";
-            } else if(isTextual(ct) || !ct){
+            } else if(isTextual(ct) || (ct == ContentType::unknown)){
                 if(!is_similar(sfx, "user")){ // blank out user files (avoid passwords)
                     h << "<pre>";
                     std::string s = frag_string(x);

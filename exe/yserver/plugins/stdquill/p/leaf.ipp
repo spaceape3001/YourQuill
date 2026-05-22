@@ -27,6 +27,15 @@ namespace {
             return json_(v);
         }
         
+        json p_api_leaf_data(WebContext& ctx)
+        {
+            Leaf    v   = arg::leaf(ctx);
+            if(!v)
+                throw HttpStatus::BadArgument;
+                
+            return json_(v, ALL);
+        }
+        
         json p_api_leaf_key(WebContext& ctx)
         {
             Leaf    v   = arg::leaf(ctx);
@@ -232,6 +241,7 @@ namespace {
         void reg_leaf_pages()
         {
             reg_webpage<p_api_leaf>("/api/leaf").argument("ID", "Leaf ID");
+            reg_webpage<p_api_leaf_data>("/api/leaf/data").argument("ID", "Leaf ID");
             reg_webpage<p_api_leaf_key>("/api/leaf/key").argument("ID", "Leaf ID");
             reg_webpage<p_api_leafs>("/api/leafs");
 

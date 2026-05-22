@@ -24,6 +24,7 @@ namespace {
             w -> model() -> reload();
             w -> refresh();
             w -> finalize();
+            mw -> addWindow(w);
         }).menu("studio");
     }
     

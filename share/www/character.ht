@@ -2,19 +2,37 @@
 
 <script src="/js/characters.js"></script>
 
-This is the page for a character.
 
 <table>
-    <tr><td>
-        <table>
-        </table>
-    <td><img src="" />
+    <tr><td width="75%" align="left">
+    This is the page for a character.  Seriously, don't look!
+    <td width="25%" align="right"><img id="bio" alt="bio" src="http://localhost" />
 </table>
 
 
 <script>
 
+    var img = document.getElementById("bio");
+    var char    = null;
+
+    function relayout()
+    {
+        var title               = document.getElementById("title");
+        title.innerText         = char.title();
+        document.title          = char.title();
+    }
+
     function update() {
+		fetch(pathRewrite(window.location, "/api/character"))
+			.then((response) => response.json())
+			.then((data) => 
+			{
+                char    = new Character(data);
+                console.log(char)
+
+                relayout();
+			}
+		);
     }
     update();
 
