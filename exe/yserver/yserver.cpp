@@ -819,13 +819,13 @@ public:
 
         MethodUriVersion  muri      = parse_method_uri(v);
         auto m = enumeration<HttpOp>().value(muri.method);
-        if(!m.good){
+        if(!m){
             dispatch(HttpStatus::MethodNotAllowed);
             m_rxMode    = RxError;
             return ;
         }
         
-        m_current -> method   = m.value;
+        m_current -> method   = *m;
         if(muri.uri.empty()){
             dispatch(HttpStatus::MissingURI);
             m_rxMode    = RxError;
