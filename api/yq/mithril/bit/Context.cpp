@@ -4,10 +4,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <yq/mithril/bit/Context.hpp>
+#include "Context.hpp"
+
+#include <yq/core/Enumeration.hpp>
+#include <yq/core/StreamOps.hpp>
+
 #include <yq/mithril/io/Strings.hpp>
 #include <yq/xml/XmlUtils.hpp>
-#include <yq/core/StreamOps.hpp>
 #include <yq/stream/Text.hpp>
 #include <yq/text/chars.hpp>
 #include <yq/text/match.hpp>
@@ -75,7 +78,7 @@ namespace yq::mithril {
                 } else if(is_similar(cmd, szTitle)){
                     cur.title       = std::string(arg);
                 } else if(is_similar(cmd, szFormat)){
-                    cur.format      = Format(arg);
+                    cur.format      = enumeration<Format>().decode(arg);
                 } else if(is_similar(cmd, szOrder)){
                     cur.order       = to_uint(arg).value_or(0);
                 } else if(is_similar(cmd, szIcon)){
@@ -115,7 +118,7 @@ namespace yq::mithril {
             if(ctx.order)
                 pipe << "#! " << szOrder << '\t' << ctx.order << '\n';
             if(ctx.format != Format())
-                pipe << "#! " << szFormat << '\t' << ctx.format.key() << '\n';
+                pipe << "#! " << szFormat << '\t' << key_of(ctx.format) << '\n';
         }
     }
     

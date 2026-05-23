@@ -6,9 +6,9 @@
 
 #pragma once
 
+#include <yq/core/Expect.hpp>
 #include <yq/mithril/enum/AssertDeny.hpp>
 #include <yq/typedef/xml.hpp>
-
 
 namespace yq::mithril {
     struct Copyright {

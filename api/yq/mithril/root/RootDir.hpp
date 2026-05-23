@@ -50,7 +50,7 @@ namespace yq::mithril {
         const std::filesystem::path path;
         
         //! Detected version control systems active for the root_dir
-        Flag<Vcs>                   vcs;
+        VcsFlags                    vcs;
         
         //! Look up the root_dir by key
         static const RootDir*  by_key(const std::string_view&);

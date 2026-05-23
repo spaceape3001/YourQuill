@@ -4,10 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "FieldJson.hpp"
+
+#include <yq/core/Enumeration.hpp>
 #include <yq/mithril/field/Field.hpp>
 #include <yq/mithril/field/FieldCDB.hpp>
 #include <yq/mithril/field/FieldInfo.hpp>
-#include <yq/mithril/field/FieldJson.hpp>
 #include <yq/mithril/image/Image.hpp>
 #include <yq/net/json.hpp>
 
@@ -24,7 +26,7 @@ namespace yq::mithril {
             { "id", x.id },
             { "key", i.key },
             { "max", i.max_count },
-            { "multiplicity", i.multiplicity.key() },
+            { "multiplicity", key_of(i.multiplicity) },
             { "name", i.name },
             { "pkey", i.pkey },
             { "plural", i.plural },

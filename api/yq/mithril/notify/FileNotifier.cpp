@@ -3,7 +3,10 @@
 //  YOUR QUILL
 //
 ////////////////////////////////////////////////////////////////////////////////
+
 #include "FileNotifier.hpp"
+
+#include <yq/core/Enumeration.hpp>
 
 namespace yq::mithril {
     struct FileNotifier::Repo {
@@ -28,7 +31,7 @@ namespace yq::mithril {
     }
     
 
-    FileNotifier::FileNotifier(Flag<Change> changeMask, const FileSpec& _spec, int _order, const std::source_location& sl)
+    FileNotifier::FileNotifier(ChangeFlags changeMask, const FileSpec& _spec, int _order, const std::source_location& sl)
     {
         m_source    = sl;
         m_change    = changeMask;
@@ -37,7 +40,7 @@ namespace yq::mithril {
 
         Repo&   _r = repo();
         _r.all.push_back(this);
-        for(Change c : Change::all_values())
+        for(Change c : values_of<Change>())
             if(changeMask.is_set(c))
                 _r.byChange[c] << this;
     }

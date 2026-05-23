@@ -8,6 +8,7 @@
 #include "yquill.hpp"
 
 #include <yq/core/Compare.hpp>
+#include <yq/core/Enumeration.hpp>
 #include <yq/core/Logging.hpp>
 #include <yq/core/ThreadId.hpp>
 #include <yq/container/Deque.hpp>
@@ -306,7 +307,7 @@ std::string_view    filename(std::string_view fn)
 EnumMap<Change,Vector<const FileNotifier*>> change_map()
 {
     EnumMap<Change,Vector<const FileNotifier*>> ret = FileNotifier::change_map();
-    for(Change c : Change::all_values()){
+    for(Change c : values_of<Change>()){
         ret[c].stable_sort([](const FileNotifier*a, const FileNotifier*b) -> bool {
             return a->order() < b->order();
         });

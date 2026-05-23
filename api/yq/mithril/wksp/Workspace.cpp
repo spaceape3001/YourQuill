@@ -10,6 +10,7 @@
 #include <yq/meta/Init.hpp>
 
 #include <yq/core/DelayInit.hpp>
+#include <yq/core/Enumeration.hpp>
 #include <yq/core/Logging.hpp>
 #include <yq/core/ThreadId.hpp>
 #include <yq/container/set_utils.hpp>
@@ -419,7 +420,7 @@ namespace yq::mithril::wksp {
         copyright               = doc.copyright;
         if(!copyright.from)
             qs.copyfrom         = 0;
-        if(!copyright.stance)
+        if(copyright.stance != AssertDeny())
             qs.copystance       = 0;
         if(!copyright.text.empty())
             qs.copytext         = 0;
@@ -455,7 +456,7 @@ namespace yq::mithril::wksp {
         for(RootDir* r2 : eroots){  // give everything IDs and record the keys
             r2 -> id = ++i;
             if(dir_type(r2 -> path) != WriteDir){
-                for(DataRole dr : DataRole::all_values())
+                for(DataRole dr : values_of<DataRole>())
                     r2 -> access[dr]    = moderate(r2 -> access[dr], Access::ReadOnly);
             }
             keys << r2 -> key;
@@ -485,7 +486,7 @@ namespace yq::mithril::wksp {
         }
         
         //  Sort out the writers
-        for(DataRole dr : DataRole::all_values()){
+        for(DataRole dr : values_of<DataRole>()){
             bool    hasFirst    = false;
             for(RootDir* r3 : eroots){
                 if(r3->access[dr] == Access::WriteFirst){
@@ -551,7 +552,7 @@ namespace yq::mithril::wksp {
                 std::tie(rt,rcre)   = make_root(t);
                 if(rcre)
                     rt -> depth   = depth;
-                for(DataRole dr : DataRole::all_values()){
+                for(DataRole dr : values_of<DataRole>()){
                     if(pm2[dr] == Access::Default)
                         pm2[dr] = tPolicy[dr];
                     rt -> access[dr]     = pm2[dr];
@@ -597,7 +598,7 @@ namespace yq::mithril::wksp {
                 if(rcre)
                     rt -> depth   = depth;
                     
-                for(DataRole dr : DataRole::all_values()){
+                for(DataRole dr : values_of<DataRole>()){
                     if(pm2[dr] == Access::Default)
                         pm2[dr] = rPolicy[dr];
                     rt -> access[dr]    = pm2[dr];

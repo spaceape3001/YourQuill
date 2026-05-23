@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
+#include <yq/core/Enumeration.hpp>
 
 namespace {
 
@@ -23,7 +24,7 @@ namespace {
                 { "abbreviation", wksp::abbreviation() },
                 { "bkcolor", gBkColor },
                 { "copyright", wksp::copyright().text },
-                { "c_stance", wksp::copyright().stance.key() },
+                { "c_stance", key_of(wksp::copyright().stance) },
                 { "c_from", wksp::copyright().from },
                 { "c_to", wksp::copyright().to },
                 { "color", gTextColor },

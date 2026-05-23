@@ -7,20 +7,16 @@
 #pragma once
 
 #include <yq/meta/MetaBinder.hpp>
-#include <yq/core/Enum.hpp>
 
-namespace yq {
+namespace yq::mithril {
 
-    namespace mithril {
-
-        /*! \brief File Type 
-        */
-        YQ_ENUM(FileType, ,
-            Default,
-            KeyValue,
-            Xml
-        )
-    }
+    /*! \brief File Type 
+    */
+    enum class FileType {
+        Default,
+        KeyValue,
+        Xml
+    };
 }
 
 YQ_TYPE_DECLARE(yq::mithril::FileType)

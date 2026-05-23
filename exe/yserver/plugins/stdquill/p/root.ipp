@@ -8,6 +8,7 @@
 
 #include <yq/mithril/root/RootJson.hpp>
 #include <yq/mithril/root/RootSearch.hpp>
+#include <yq/core/Enumeration.hpp>
 
 namespace {
 
@@ -89,10 +90,10 @@ namespace {
             h.kvrow("Total Fragments") << all_fragments_count(rt);
             h <<"<tr><td colspan=\"2\"><hr></td></tr>\n";
             
-            for(DataRole dr : DataRole::all_values()){
+            for(DataRole dr : values_of<DataRole>()){
                 std::string n   = "Policy ";
-                n += dr.key();
-                h.kvrow(n) << rt->policy(dr).key();
+                n += key_of(dr);
+                h.kvrow(n) << key_of(rt->policy(dr));
             }
             
         }

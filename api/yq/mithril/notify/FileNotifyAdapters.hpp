@@ -17,7 +17,7 @@ namespace yq::mithril {
     class SingleFileNotifier : public FileNotifier {
     public:
     
-        SingleFileNotifier(Flag<Change> ch, const FileSpec& spec, int _order, const std::source_location&sl) :
+        SingleFileNotifier(ChangeFlags ch, const FileSpec& spec, int _order, const std::source_location&sl) :
             FileNotifier(ch, spec, _order, sl)
         {
             
@@ -33,13 +33,13 @@ namespace yq::mithril {
     template <void (*FN)()> 
     FileNotifier::Writer    on_change(const FileSpec&spec, const std::source_location& sl = std::source_location::current())
     {
-        return FileNotifier::Writer{new SingleFileNotifier<FN>(all_set<Change>(), spec, 0, sl)};
+        return FileNotifier::Writer{new SingleFileNotifier<FN>(ALL, spec, 0, sl)};
     }
 
     template <void (*FN)()> 
     FileNotifier::Writer    on_change(int order, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return FileNotifier::Writer{new SingleFileNotifier<FN>(all_set<Change>(), spec, order, sl)};
+        return FileNotifier::Writer{new SingleFileNotifier<FN>(ALL, spec, order, sl)};
     }
 
     FileNotifier::Writer    on_change(const FileSpec&, std::function<void()>, const std::source_location& sl = std::source_location::current());
@@ -50,7 +50,7 @@ namespace yq::mithril {
     template <void(*FN)(Fragment)>
     class FragmentFileNotifier : public FileNotifier {
     public:
-        FragmentFileNotifier(Flag<Change> ch, const FileSpec& spec, int _order, const std::source_location&sl) :
+        FragmentFileNotifier(ChangeFlags ch, const FileSpec& spec, int _order, const std::source_location&sl) :
             FileNotifier(ch, spec, _order, sl)
         {
         }
@@ -65,7 +65,7 @@ namespace yq::mithril {
     template <void (*FN)(Fragment)> 
     FileNotifier::Writer    on_change(const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return FileNotifier::Writer{new FragmentFileNotifier<FN>(all_set<Change>(), spec, 0, sl)};
+        return FileNotifier::Writer{new FragmentFileNotifier<FN>(ALL, spec, 0, sl)};
     }
 
     template <void (*FN)(Fragment)> 
@@ -77,7 +77,7 @@ namespace yq::mithril {
     template <void (*FN)(Fragment)> 
     FileNotifier::Writer    on_change(int order, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return FileNotifier::Writer{new FragmentFileNotifier<FN>(all_set<Change>(), spec, order, sl)};
+        return FileNotifier::Writer{new FragmentFileNotifier<FN>(ALL, spec, order, sl)};
     }
 
     template <void (*FN)(Fragment)> 
@@ -92,7 +92,7 @@ namespace yq::mithril {
     template <void(*FN)(Fragment,Change)>
     class FragmentChangeFileNotifier : public FileNotifier {
     public:
-        FragmentChangeFileNotifier(Flag<Change> ch, const FileSpec& spec, int _order, const std::source_location&sl) :
+        FragmentChangeFileNotifier(ChangeFlags ch, const FileSpec& spec, int _order, const std::source_location&sl) :
             FileNotifier(ch, spec, _order, sl)
         {
         }
@@ -107,7 +107,7 @@ namespace yq::mithril {
     template <void (*FN)(Fragment, Change)> 
     FileNotifier::Writer    on_change(const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return FileNotifier::Writer{new FragmentChangeFileNotifier<FN>(all_set<Change>(), spec, 0, sl)};
+        return FileNotifier::Writer{new FragmentChangeFileNotifier<FN>(ALL, spec, 0, sl)};
     }
 
     template <void (*FN)(Fragment, Change)> 
@@ -119,7 +119,7 @@ namespace yq::mithril {
     template <void (*FN)(Fragment, Change)> 
     FileNotifier::Writer    on_change(int order, const FileSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return FileNotifier::Writer{new FragmentChangeFileNotifier<FN>(all_set<Change>(), spec, order, sl)};
+        return FileNotifier::Writer{new FragmentChangeFileNotifier<FN>(ALL, spec, order, sl)};
     }
 
     template <void (*FN)(Fragment, Change)> 

@@ -13,7 +13,7 @@ namespace yq::mithril {
 
     Expect<Access>      decode_access(std::string_view arg)
     {
-        auto    ac  = Access::value_for(arg);
+        auto    ac  = enumeration<Access>().value(arg);
         if(ac)
             return *ac;
         if(is_similar(arg, "first"))
@@ -77,7 +77,7 @@ namespace yq::mithril {
     PolicyMap   moderate(Access a, const PolicyMap& b)
     {
         PolicyMap   ret;
-        for(DataRole dr : DataRole::all_values())
+        for(DataRole dr : values_of<DataRole>())
             ret[dr] = moderate(a, b[dr]);
         return ret;
     }
@@ -85,7 +85,7 @@ namespace yq::mithril {
     PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b)
     {
         PolicyMap   ret;
-        for(DataRole dr : DataRole::all_values())
+        for(DataRole dr : values_of<DataRole>())
             ret[dr] = moderate(a[dr], b[dr]);
         return ret;
     }
@@ -93,7 +93,7 @@ namespace yq::mithril {
     PolicyMap   moderate(const PolicyMap& a, const PolicyMap& b, Access limit)
     {
         PolicyMap   ret;
-        for(DataRole dr : DataRole::all_values())
+        for(DataRole dr : values_of<DataRole>())
             ret[dr] = moderate(a[dr], b[dr], limit);
         return ret;
     }

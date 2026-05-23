@@ -34,7 +34,7 @@ namespace yq::mithril {
         
         std::string_view                description() const { return m_description; }
        
-        Flag<Change>                    change() const { return m_change; }
+        ChangeFlags                    change() const { return m_change; }
         const std::source_location&     source() const { return m_source; }
         int                             order() const { return m_order; }
         
@@ -43,14 +43,14 @@ namespace yq::mithril {
         static const EnumMap<Change,Vector<const FileNotifier*>>&     change_map();
 
     protected:
-        FileNotifier(Flag<Change>, const FileSpec&, int order, const std::source_location&);
+        FileNotifier(ChangeFlags, const FileSpec&, int order, const std::source_location&);
         ~FileNotifier();
 
     private:
         FileSpec                m_spec;
         std::string             m_description;
         std::source_location    m_source;
-        Flag<Change>            m_change;
+        ChangeFlags             m_change;
         int                     m_order;
         
         struct Repo;

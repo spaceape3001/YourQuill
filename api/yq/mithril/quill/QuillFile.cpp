@@ -6,6 +6,7 @@
 
 #include "QuillFile.hpp"
 
+#include <yq/core/Enumeration.hpp>
 #include <yq/keyv/KeyValue.hpp>
 #include <yq/mithril/io/Strings.hpp>
 #include <yq/text/join.hpp>
@@ -25,11 +26,11 @@ namespace yq::mithril {
             ret.path    = trimmed(a.data);
             ret.key     = trimmed(a.value(kv::key( "key", "k" )));
             ret.color   = a.value(kv::key("color"));
-            ret.vcs     = Vcs(a.value(kv::key("vcs")));
+            ret.vcs     = enumeration<Vcs>().decode(a.value(kv::key("vcs")));
             ret.name    = a.value(kv::key("name"));
             ret.icon    = a.value(kv::key("icon"));
-            for(DataRole dr : DataRole::all_values())
-                ret.policy[dr]  = Access(a.value(dr.key()));
+            for(DataRole dr : values_of<DataRole>())
+                ret.policy[dr]  = enumeration<Access>().decode(a.value(key_of(dr)));
             return ret;
         }
     }
@@ -87,10 +88,10 @@ namespace yq::mithril {
             if(!r.icon.empty())
                 a << KeyValue(szIcon, r.icon);
             if(r.vcs != Vcs())
-                a << KeyValue(szVcs, r.vcs.key());
-            for(DataRole dr : DataRole::all_values()){
+                a << KeyValue(szVcs, key_of(r.vcs));
+            for(DataRole dr : values_of<DataRole>()){
                 if(r.policy[dr] != Access())
-                    a << KeyValue(dr.key(), r.policy[dr].key());
+                    a << KeyValue(key_of(dr), key_of(r.policy[dr]));
             }
         }
     }

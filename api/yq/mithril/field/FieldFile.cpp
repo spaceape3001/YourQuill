@@ -5,6 +5,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "FieldFile.hpp"
+
+#include <yq/core/Enumeration.hpp>
 #include <yq/xml/XmlUtils.hpp>
 #include <yq/keyv/KeyValue.hpp>
 #include <yq/mithril/io/Strings.hpp>
@@ -69,7 +71,7 @@ namespace yq::mithril {
         classes        += attrs.values_set("class");
         types          += attrs.values_set("type");
         expected        = attrs.value(kv::key({ "expect", "expected"}));
-        multiplicity    = Multiplicity(attrs.value(kv::key({"allow", "multiple"})));
+        multiplicity    = enumeration<Multiplicity>().decode(attrs.value(kv::key({"allow", "multiple"})));
         restriction     = Restriction(attrs.value(kv::key({"control", "restrict"})));
         max_count       = to_uint(attrs.value("max")).value_or(0);
         return std::error_code();
@@ -102,7 +104,7 @@ namespace yq::mithril {
         if(!expected.empty())
             attrs.set("expect", expected);
         if(multiplicity != Multiplicity())
-            attrs.set("allow", multiplicity.key());
+            attrs.set("allow", key_of(multiplicity));
         if(restriction != Restriction())
             attrs.set("control", restriction.key());
         if(max_count)

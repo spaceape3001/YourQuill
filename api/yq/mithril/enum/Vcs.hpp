@@ -6,22 +6,19 @@
 
 #pragma once
 
+#include <yq/core/Flags.hpp>
 #include <yq/meta/MetaBinder.hpp>
-#include <yq/core/Enum.hpp>
-#include <yq/core/Flag.hpp>
 
-namespace yq {
-    namespace mithril {
+namespace yq::mithril {
 
-        YQ_ENUM(Vcs, , 
-            None,       //!< No VCS
-            RCS,        //!< RCS
-            SVN,        //!< Subversion
-            GIT         //!< GIT
-        )
+    enum class Vcs {
+        None,       //!< No VCS
+        RCS,        //!< RCS
+        SVN,        //!< Subversion
+        GIT         //!< GIT
+    };
 
-        using VcsFlags      = Flag<Vcs>;
-    }
+    using VcsFlags      = Flags<Vcs,uint8_t>;
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Vcs)

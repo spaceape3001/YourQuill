@@ -46,19 +46,19 @@ namespace yq::mithril {
         struct Writer;
         
         std::string_view                description() const { return m_description; }
-        Flag<Change>                    change() const { return m_change; }
+        ChangeFlags                     change() const { return m_change; }
         const std::source_location&     source() const { return m_source; }
         const AtomSpec&                 spec() const { return m_spec; }
     
         static const EnumMap<Change,Vector<const AtomNotifier*>>&     change_map();
         
     protected:
-        AtomNotifier(Flag<Change>, const AtomSpec&, const std::source_location&);
+        AtomNotifier(ChangeFlags, const AtomSpec&, const std::source_location&);
         ~AtomNotifier();
         
     private:
         AtomSpec                m_spec;
-        Flag<Change>            m_change;
+        ChangeFlags             m_change;
         std::string             m_description;
         std::source_location    m_source;
         
@@ -76,7 +76,7 @@ namespace yq::mithril {
     template <void (*FN)(const AtomChangeData&)>
     class ACDAtomNofiierAdapter : public AtomNotifier {
     public:
-        ACDAtomNofiierAdapter(Flag<Change> ch, const AtomSpec& spec, const std::source_location& sl) :
+        ACDAtomNofiierAdapter(ChangeFlags ch, const AtomSpec& spec, const std::source_location& sl) :
             AtomNotifier(ch, spec, sl)
         {
         }
@@ -90,7 +90,7 @@ namespace yq::mithril {
     template <void (*FN)(const AtomChangeData&)>
     AtomNotifier::Writer on_change(const AtomSpec& spec, const std::source_location& sl = std::source_location::current())
     {
-        return AtomNotifier::Writer(new ACDAtomNofiierAdapter<FN>(all_set<Change>(), spec, sl));
+        return AtomNotifier::Writer(new ACDAtomNofiierAdapter<FN>(ALL, spec, sl));
     }
 
     template <void (*FN)(const AtomChangeData&)>

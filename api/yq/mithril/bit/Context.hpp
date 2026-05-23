@@ -8,6 +8,7 @@
 
 #include <yq/mithril/enum/Format.hpp>
 #include <yq/typedef/xml.hpp>
+#include <system_error>
 #include <vector>
 
 namespace yq {

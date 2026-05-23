@@ -7,25 +7,22 @@
 #pragma once
 
 #include <yq/meta/MetaBinder.hpp>
-#include <yq/core/Enum.hpp>
 
-namespace yq {
-    namespace mithril {
+namespace yq::mithril {
 
-        /*! \enum AssertDeny
-            \brief Assert/Deny something
-            
-            \var AssertDeny::Neither
-            \brief No assertion/denial is being made, inherit it where possible
-            
-            \var AssertDeny::Deny
-            \brief Explicity deny the thing
-            
-            \var AssertDeny::Assert
-            \brief Explicity assert the thing
-        */
-        YQ_ENUM(AssertDeny, , Neither, Deny, Assert)
-    }
+    /*! \enum AssertDeny
+        \brief Assert/Deny something
+        
+        \var AssertDeny::Neither
+        \brief No assertion/denial is being made, inherit it where possible
+        
+        \var AssertDeny::Deny
+        \brief Explicity deny the thing
+        
+        \var AssertDeny::Assert
+        \brief Explicity assert the thing
+    */
+    enum class AssertDeny { Neither, Deny, Assert };
 }
 
 YQ_TYPE_DECLARE(yq::mithril::AssertDeny)

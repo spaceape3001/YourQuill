@@ -6,30 +6,26 @@
 
 #pragma once
 
+#include <yq/core/Flags.hpp>
 #include <yq/meta/MetaBinder.hpp>
-#include <yq/core/Enum.hpp>
-#include <yq/core/Flag.hpp>
 
-namespace yq {
-
-    namespace mithril {
-        /*! \brief Access amount 
-        */
-        YQ_ENUM(Permission, ,
-            //! Website owner
-            Owner,
-            //! Administrative rights
-            Admin,
-            //! Author rights
-            Writer,
-            //! Reading rights
-            Reader,
-            //! Guest role
-            Guest
-        )
-        
-        using Permissions  = Flag<Permission>;
-    }
+namespace yq::mithril {
+    /*! \brief Access amount 
+    */
+    enum class Permission : uint8_t {
+        //! Website owner
+        Owner,
+        //! Administrative rights
+        Admin,
+        //! Author rights
+        Writer,
+        //! Reading rights
+        Reader,
+        //! Guest role
+        Guest
+    };
+    
+    using Permissions  = Flags<Permission, uint8_t>;
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Permission)

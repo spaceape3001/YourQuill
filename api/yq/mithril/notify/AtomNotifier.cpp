@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "AtomNotifier.hpp"
+#include <yq/core/Enumeration.hpp>
 
 namespace yq::mithril {
     struct AtomNotifier::Repo {
@@ -29,7 +30,7 @@ namespace yq::mithril {
         return repo().byChange;
     }
 
-    AtomNotifier::AtomNotifier(Flag<Change> changeMask, const AtomSpec& spec, const std::source_location& sl)
+    AtomNotifier::AtomNotifier(ChangeFlags changeMask, const AtomSpec& spec, const std::source_location& sl)
     {
         m_source        = sl;
         m_change        = changeMask;
@@ -37,7 +38,7 @@ namespace yq::mithril {
         
         Repo& _r = repo();
         _r.all.push_back(this);
-        for(Change c : Change::all_values())
+        for(Change c : values_of<Change>())
             if(changeMask.is_set(c))
                 _r.byChange[c] << this;
     }
@@ -58,7 +59,7 @@ namespace yq::mithril {
     class FunctionalAtomNotifyAdapter : public AtomNotifier {
     public:
     
-        FunctionalAtomNotifyAdapter(std::function<void(const AtomChangeData&)> fn, Flag<Change> ch, const AtomSpec& spec, const std::source_location& sl) :
+        FunctionalAtomNotifyAdapter(std::function<void(const AtomChangeData&)> fn, ChangeFlags ch, const AtomSpec& spec, const std::source_location& sl) :
             AtomNotifier(ch, spec, sl), m_function(fn)
         {
         }
@@ -74,7 +75,7 @@ namespace yq::mithril {
 
     AtomNotifier::Writer on_change(const AtomSpec&spec, std::function<void(const AtomChangeData&)>fn, const std::source_location& sl)
     {
-        return AtomNotifier::Writer(new FunctionalAtomNotifyAdapter(fn, all_set<Change>(), spec, sl));
+        return AtomNotifier::Writer(new FunctionalAtomNotifyAdapter(fn, ALL, spec, sl));
     }
     
     AtomNotifier::Writer on_change(ChangeFlags chg, const AtomSpec& spec, std::function<void(const AtomChangeData&)>fn, const std::source_location& sl)

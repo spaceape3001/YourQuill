@@ -7,23 +7,20 @@
 #pragma once
 
 #include <yq/meta/MetaBinder.hpp>
-#include <yq/core/Enum.hpp>
 
-namespace yq {
-    namespace mithril {
+namespace yq::mithril {
 
-        /*! \brief Access amount 
-        */
-        YQ_ENUM(Access, ,
-            Default,
-            NoAccess,
-            ReadOnly,
-            ReadWrite,
-                //  if set, prefer to write in this location *first* on specified
-                //  information
-            WriteFirst
-        )
-    }
+    /*! \brief Access amount 
+    */
+    enum class Access : uint8_t {
+        Default,
+        NoAccess,
+        ReadOnly,
+        ReadWrite,
+            //  if set, prefer to write in this location *first* on specified
+            //  information
+        WriteFirst
+    };
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Access)

@@ -4,10 +4,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "LeafJson.hpp"
+
+#include <yq/core/Enumeration.hpp>
 #include <yq/mithril/leaf/Leaf.hpp>
 #include <yq/mithril/leaf/LeafCDB.hpp>
 #include <yq/mithril/leaf/LeafData.hpp>
-#include <yq/mithril/leaf/LeafJson.hpp>
 #include <yq/net/json.hpp>
 #include <yq/text/match.hpp>
 
@@ -74,7 +76,7 @@ namespace yq::mithril {
             for(auto& ctx : context){
                 json j2{
                     { "data", ctx.data },
-                    { "format", ctx.format.key() },
+                    { "format", key_of(ctx.format) },
                     { "icon", ctx.icon },
                     { "title", ctx.title }
                 };
