@@ -4,6 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <yq/core/Enumeration.hpp>
 #include <yq/mithril/meta/MetaHtml.hpp>
 #include <yq/meta/ArgMeta.hpp>
 #include <yq/meta/MethodMeta.hpp>
@@ -127,7 +128,7 @@ namespace yq::mithril {
             h << "<tr><th>ID</th><th>Operator</th><th>Result</th><th>Const</th><th>Static</th><th>Description</th></tr>\n";
             for(const OperatorMeta* mi : operators){
                 h << "<tr><td>"  << dev_id(mi) 
-                  << "</td><td>" << key(mi->code())
+                  << "</td><td>" << key_of(mi->code())
                   << "</td><td>";
                   
                 if(mi->result())
