@@ -10,6 +10,8 @@
 #include <yq/mithril/io/Strings.hpp>
 #include <yq/core/ErrorDB.hpp>
 
+#include <yq/core/Flags.hxx>
+
 namespace yq::errors {
     using unable_to_load_authentication = error_db::entry<"Unable to load the authentication from the file">;
 }
