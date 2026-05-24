@@ -78,7 +78,7 @@ namespace yq::mithril {
                 } else if(is_similar(cmd, szTitle)){
                     cur.title       = std::string(arg);
                 } else if(is_similar(cmd, szFormat)){
-                    cur.format      = enumeration<Format>().decode(arg);
+                    cur.format      = value_of<Format>(arg, DEFAULT);
                 } else if(is_similar(cmd, szOrder)){
                     cur.order       = to_uint(arg).value_or(0);
                 } else if(is_similar(cmd, szIcon)){

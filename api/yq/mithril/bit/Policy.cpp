@@ -13,7 +13,7 @@ namespace yq::mithril {
 
     Expect<Access>      decode_access(std::string_view arg)
     {
-        auto    ac  = enumeration<Access>().value(arg);
+        auto    ac  = value_of<Access>(arg);
         if(ac)
             return *ac;
         if(is_similar(arg, "first"))

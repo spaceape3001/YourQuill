@@ -805,7 +805,7 @@ public:
                 m_current -> rx_body.resize(*t);
             }
         } else if(is_similar(hv.key, "Content-Type")){
-            m_current -> rx_content_type    = enumeration<ContentType>().decode(hv.value);
+            m_current -> rx_content_type    = value_of<ContentType>(hv.value, DEFAULT);
         } else if(is_similar(hv.key, "Cookie")){
             rxCookie(hv.value);
         }
@@ -818,7 +818,7 @@ public:
             return;
 
         MethodUriVersion  muri      = parse_method_uri(v);
-        auto m = enumeration<HttpOp>().value(muri.method);
+        auto m = value_of<HttpOp>(muri.method);
         if(!m){
             dispatch(HttpStatus::MethodNotAllowed);
             m_rxMode    = RxError;

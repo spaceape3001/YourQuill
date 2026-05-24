@@ -30,7 +30,7 @@ namespace yq::mithril {
             { "name", i.name },
             { "pkey", i.pkey },
             { "plural", i.plural },
-            { "restriction", i.restriction.key() }
+            { "restriction", key_of(i.restriction) }
         };
         return j;
     }

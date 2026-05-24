@@ -19,7 +19,13 @@ namespace yq::mithril {
         ReadWrite,
             //  if set, prefer to write in this location *first* on specified
             //  information
-        WriteFirst
+        WriteFirst,
+        
+        First=WriteFirst,
+        Write=ReadWrite,
+        Read=ReadOnly,
+        Deny=NoAccess,
+        None=NoAccess
     };
 }
 

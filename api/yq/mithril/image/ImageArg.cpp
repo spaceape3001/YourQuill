@@ -5,6 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ImageArg.hpp"
+#include <yq/core/Enumeration.hpp>
 #include <yq/mithril/web/WebContext.hpp>
 #include <yq/mithril/image/ImageCDB.hpp>
 #include <yq/text/parse.hpp>
@@ -54,7 +55,7 @@ namespace yq::mithril::arg {
 
     SizeDesc    size_desc(std::string_view k)
     {
-        return SizeDesc(k);
+        return value_of<SizeDesc>(k, DEFAULT);
     }
     
     SizeDesc    size_desc(const WebContext&ctx, std::string_view arg_name, bool *detected)

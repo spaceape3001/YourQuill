@@ -7,15 +7,11 @@
 #pragma once
 
 #include <yq/meta/MetaBinder.hpp>
-#include <yq/core/Enum.hpp>
 
-namespace yq {
-    namespace mithril {
-
-        YQ_ENUM(Reset,,
-            Default
-        )
-    }
+namespace yq::mithril {
+    enum class Reset { 
+        Default
+    };
 }
 
 YQ_TYPE_DECLARE(yq::mithril::Reset)

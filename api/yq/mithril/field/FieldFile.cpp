@@ -71,8 +71,8 @@ namespace yq::mithril {
         classes        += attrs.values_set("class");
         types          += attrs.values_set("type");
         expected        = attrs.value(kv::key({ "expect", "expected"}));
-        multiplicity    = enumeration<Multiplicity>().decode(attrs.value(kv::key({"allow", "multiple"})));
-        restriction     = Restriction(attrs.value(kv::key({"control", "restrict"})));
+        multiplicity    = value_of<Multiplicity>(attrs.value(kv::key({"allow", "multiple"})), DEFAULT);
+        restriction     = value_of<Restriction>(attrs.value(kv::key({"control", "restrict"})), DEFAULT);
         max_count       = to_uint(attrs.value("max")).value_or(0);
         return std::error_code();
     }
@@ -106,7 +106,7 @@ namespace yq::mithril {
         if(multiplicity != Multiplicity())
             attrs.set("allow", key_of(multiplicity));
         if(restriction != Restriction())
-            attrs.set("control", restriction.key());
+            attrs.set("control", key_of(restriction));
         if(max_count)
             attrs.set("max", to_string(max_count));
         return std::error_code();

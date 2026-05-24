@@ -26,11 +26,11 @@ namespace yq::mithril {
             ret.path    = trimmed(a.data);
             ret.key     = trimmed(a.value(kv::key( "key", "k" )));
             ret.color   = a.value(kv::key("color"));
-            ret.vcs     = enumeration<Vcs>().decode(a.value(kv::key("vcs")));
+            ret.vcs     = value_of<Vcs>(a.value(kv::key("vcs")),DEFAULT);
             ret.name    = a.value(kv::key("name"));
             ret.icon    = a.value(kv::key("icon"));
             for(DataRole dr : values_of<DataRole>())
-                ret.policy[dr]  = enumeration<Access>().decode(a.value(key_of(dr)));
+                ret.policy[dr] = value_of<Access>(a.value(key_of(dr)), DEFAULT);
             return ret;
         }
     }

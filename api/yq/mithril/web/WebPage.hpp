@@ -91,7 +91,7 @@ namespace yq::mithril {
         friend struct WebGroup;
     public:
     
-        YQ_ENUM(Role, ,
+        enum class Role {
             //! WebPage Role unknown/other
             Unknown = 0,
             //! It's a web-page     /path/to/resource
@@ -102,7 +102,7 @@ namespace yq::mithril {
             Directory,
             //! Recursive Directory handler /path/to/**
             Glob
-        );
+        };
     
         class Writer;
         struct Arg;

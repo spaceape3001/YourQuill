@@ -73,7 +73,7 @@ namespace yq::mithril {
         //MarkdownContext                 markdown;
 
         //! Method of the request
-        HttpOp                          method          = enumeration<HttpOp>().value(DEFAULT);
+        HttpOp                          method          = default_of<HttpOp>();
         
         //! Our webpage....
         const WebPage*                  page            = nullptr;
@@ -93,7 +93,7 @@ namespace yq::mithril {
         //! The received content
         Vector<char>                    rx_body;
 
-        ContentType                     rx_content_type = enumeration<ContentType>().value(DEFAULT);
+        ContentType                     rx_content_type = default_of<ContentType>();
 
         //! Headers received
         StringViewMultiMap              rx_headers;
@@ -121,7 +121,7 @@ namespace yq::mithril {
         SessionData                     session;
 
         //! Status to reply with
-        HttpStatus                      status = enumeration<HttpStatus>().value(DEFAULT);
+        HttpStatus                      status = default_of<HttpStatus>();
 
         //! Time of dispatch
         time_t                          time;
@@ -135,7 +135,7 @@ namespace yq::mithril {
         std::shared_ptr<ByteArray>      tx_content;
 
         //! Type of the data being returned
-        ContentType                     tx_content_type = enumeration<ContentType>().value(DEFAULT);
+        ContentType                     tx_content_type = default_of<ContentType>();
 
         //! Used for redirects....
         Url                             tx_redirect;

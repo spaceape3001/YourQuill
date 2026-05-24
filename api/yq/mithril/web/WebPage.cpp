@@ -8,6 +8,9 @@
 #include "WebRepo.hxx"
 #include <yq/text/match.hpp>
 #include <yq/mithril/logging.hpp>
+#include <yq/core/Enumeration.hxx>
+
+YQ_ENUM_IMPLEMENT(yq::mithril::WebPage::Role)
 
 namespace yq::mithril {
     
