@@ -7,6 +7,9 @@
 #pragma once
 
 #include <yq/mithril/enum/DataRole.hpp>
+#include <yq/container/Map.hpp>
+#include <yq/container/Vector.hpp>
+#include <yq/text/IgCase.hpp>
 
 namespace yq {
     template <typename E, typename V> class EnumMap;

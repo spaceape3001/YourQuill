@@ -8,6 +8,7 @@
 
 #include <yq/net/Http.hpp>
 #include <yq/core/Ref.hpp>
+#include <yq/text/IgCase.hpp>
 #include <yq/typedef/string_sets.hpp>
 
 

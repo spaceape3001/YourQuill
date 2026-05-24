@@ -11,6 +11,7 @@
 #include <yq/mithril/document/DocumentCDB.hpp>
 #include <yq/mithril/image/Image.hpp>
 #include <yq/mithrilQt/image.hpp>
+#include <yq/text/IgCase.hpp>
 #include <QFile>
 #include <QIcon>
 

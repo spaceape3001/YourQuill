@@ -7,7 +7,6 @@
 #pragma once
 
 #include <yq/meta/MetaBinder.hpp>
-#include <yq/core/Enum.hpp>
 
 namespace yq::mithril {
 

@@ -8,6 +8,7 @@
 #include "ipcBuffer.hpp"
 #include "ipcSocket.hpp"
 #include <yq/core/Logging.hpp>
+#include <cstring>
 
 namespace yq::mithril::ipc {
 

@@ -8,6 +8,8 @@
 
 #include <yq/mithril/enum/Access.hpp>
 #include <yq/mithril/enum/DataRole.hpp>
+#include <yq/core/Expect.hpp>
+#include <yq/container/EnumMap.hpp>
 
 namespace yq::mithril {
 
