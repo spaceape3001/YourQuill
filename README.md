@@ -15,13 +15,13 @@ Your Quill is about world building for stories, universes, D&D campaigns, or eve
 
 ### Building
 
-Your Quill uses CMake for build management and C++20 as the language standard.  On linux, the build type is determined based on the final directory name (ie build/Debug vs build/Release).  
+Your Quill uses CMake for build management and C++26 as the language standard.  On linux, the build type is determined based on the final directory name (ie build/Debug vs build/Release).  
 
 ### Contributing
 
 ### Dependencies
 
-* C++ 23 compiler
+* C++ 26 compiler
 * Intel TBB (thread building blocks)
 * Graphviz
 * Log4Cpp
