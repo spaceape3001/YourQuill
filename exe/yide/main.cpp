@@ -26,7 +26,7 @@
 #include "WebBrowser.hpp"
 
 #ifdef YIDE_VULKAN
-#include <yq/assetvk/io/FileIOManager.hpp>
+#include <yq/asset/io/FileIOManager.hpp>
 #include <yq/resource/Resource.hpp>
 #include <yq/tedit/TEManager.hpp>
 #include <yq/tedit/app/TEApp.hpp>
