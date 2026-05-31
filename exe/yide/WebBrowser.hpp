@@ -16,7 +16,7 @@ class QLineEdit;
 using namespace yq;
 
 
-class WebBrowser : public Window {
+class WebBrowser : public ::Window {
     Q_OBJECT
 public:
 
